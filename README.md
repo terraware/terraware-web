@@ -93,3 +93,5 @@ This will create the file `src/api/types/generated-schema.ts`
 ### TreeLocator API
 
 The Swagger documentation can be accesed [here](http://localhost:8008/docs)
+
+
