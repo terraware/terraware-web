@@ -1,7 +1,8 @@
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import React from 'react';
-import { useRecoilValue } from 'recoil';
+import React, { useEffect } from 'react';
+import { useRecoilState } from 'recoil';
+import { getSummaryUpdates } from '../api/summary';
 import { summaryData } from '../recoil/atoms';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -17,7 +18,14 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function Summary(): JSX.Element {
   const classes = useStyles();
-  const data = useRecoilValue(summaryData);
+  const [data, setData] = useRecoilState(summaryData);
+
+  useEffect(() => {
+    (async () => {
+      const res = await getSummaryUpdates();
+      setData(res);
+    })();
+  }, []);
 
   return (
     <main className={classes.content}>
