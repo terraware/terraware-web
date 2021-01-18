@@ -1,3 +1,4 @@
+
 [![Deployment](https://github.com/terraware/tree-location-web/actions/workflows/workflow.yml/badge.svg)](https://github.com/terraware/tree-location-web/actions/workflows/workflow.yml)
 
 # Plant Locator App
@@ -21,6 +22,13 @@ python -c 'import os,base64; print(base64.urlsafe_b64encode(os.urandom(16)).deco
 
 ### Step 2: Login to Docker hub
 
+# Seedbank App
+
+## Running the app in development mode
+
+### Step 1: Login to Docker hub
+>>>>>>> Adds React, ReactRouter, MaterialUI, Recoil and Docker
+
 To be able to access the Docker registry, you must first login:
 
 ```shell
@@ -28,6 +36,7 @@ docker login
 ```
 
 Just type your username and password and you will be set.
+
 
 ### Step 3: Install dependencies
 
@@ -58,9 +67,21 @@ yarn docker:stop
 
 ## Run Linter
 
+### Step 2: Launch the containers
+
+Execute the following command:
+
+```shell
+npm run docker:start
+```
+
+### Step 3: Start the app
+>>>>>>> Adds React, ReactRouter, MaterialUI, Recoil and Docker
+
 Execute the following commands:
 
 ```shell
+
 yarn lint
 ```
 
@@ -81,10 +102,20 @@ yarn e2e:report
 ```
 
 ### Generating endpoint types
+=======
+docker exec -it seedbank-app-dev bash
+npm start
+```
+
+The app can be accesed [here](http://localhost:3000)
+
+### Update api container
+>>>>>>> Adds React, ReactRouter, MaterialUI, Recoil and Docker
 
 Execute the following command:
 
 ```shell
+
 yarn generate-types
 ```
 
@@ -95,3 +126,13 @@ This will create the file `src/api/types/generated-schema.ts`
 The Swagger documentation can be accesed [here](http://localhost:8008/docs)
 
 
+
+npm run docker:update
+```
+
+### SeedBank API
+
+The Swagger documentation can be accesed [here](http://localhost:8080/swagger-ui.html)
+
+The API schema can be fetched from [here](http://localhost:8080/v3/api-docs)
+>>>>>>> Adds React, ReactRouter, MaterialUI, Recoil and Docker

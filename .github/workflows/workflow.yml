@@ -1,6 +1,7 @@
 # This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
+<<<<<<< HEAD
 name: Deployment
 
 on:
@@ -8,6 +9,14 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+=======
+name: Node.js CI
+
+on:
+  push:
+  pull_request:
+    branches: [ master ]
+>>>>>>> Adds React, ReactRouter, MaterialUI, Recoil and Docker
 
 jobs:
   deploy:
@@ -16,6 +25,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+<<<<<<< HEAD
       - name: Setup Node
         uses: actions/setup-node@v1
         with:
@@ -71,3 +81,13 @@ jobs:
       #   with:
       #     url: ${{ secrets.STAGING_NOTIFY_URL }}
       #     method: POST
+=======
+      - name: install dependencies
+        run: npm ci
+
+      - name: lint
+        run: npm run lint
+
+      - name: test
+        run: npm test
+>>>>>>> Adds React, ReactRouter, MaterialUI, Recoil and Docker

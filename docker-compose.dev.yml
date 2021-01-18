@@ -1,0 +1,31 @@
+version: '2'
+
+services:
+  postgres:
+    image: 'postgres:12'
+    environment:
+      POSTGRES_DB: 'seedbank'
+      POSTGRES_PASSWORD: 'seedbank'
+
+  seedbank-server:
+    image: 'terraware/seedbank-server'
+    ports:
+      - '8080:8080'
+    environment:
+      DATABASE_URL: 'jdbc:postgresql://postgres:5432/seedbank'
+      DATABASE_PASSWORD: 'seedbank'
+    depends_on:
+      - 'postgres'
+  seedbank-app-dev:
+    build:
+      context: ./
+      dockerfile: 'Dockerfile-dev'
+    image: 'terraware/seedbank-app-dev'
+    container_name: 'seedbank-app-dev'
+    ports:
+      - 3000:3000
+    volumes:
+      - './:/app'
+    env_file:
+      - ./.env
+    command: 'sleep infinity'

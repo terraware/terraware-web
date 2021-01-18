@@ -1,6 +1,11 @@
 {
+<<<<<<< HEAD
   "short_name": "Tree Location App",
   "name": "Tree Location App",
+=======
+  "short_name": "React App",
+  "name": "Create React App Sample",
+>>>>>>> Adds React, ReactRouter, MaterialUI, Recoil and Docker
   "icons": [
     {
       "src": "favicon.ico",
