@@ -136,6 +136,7 @@ yarn e2e:report
 ### Generating endpoint types
 =======
 docker exec -it seedbank-app-dev bash
+npm i
 npm start
 ```
 
@@ -159,6 +160,22 @@ The Swagger documentation can be accesed [here](http://localhost:8008/docs)
 
 
 npm run docker:update
+```
+
+### Run the Unit Test
+
+Execute the following command:
+
+```shell
+npm test
+```
+
+### Run Linter
+
+Execute the following command:
+
+```shell
+npm run lint
 ```
 
 ### SeedBank API
