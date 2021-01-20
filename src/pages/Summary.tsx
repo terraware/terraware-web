@@ -1,37 +1,21 @@
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import React, { useEffect } from 'react';
-import { useRecoilState } from 'recoil';
-import { getSummaryUpdates } from '../api/summary';
-import { summaryData } from '../recoil/atoms';
+import { createStyles, makeStyles } from '@material-ui/core/styles';
+import React from 'react';
+import PageHeader from '../components/PageHeader';
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(() =>
   createStyles({
-    toolbar: theme.mixins.toolbar,
-    content: {
-      flexGrow: 1,
-      backgroundColor: theme.palette.background.default,
-      padding: theme.spacing(3),
-    },
+    container: {},
+    content: {},
   })
 );
 
 export default function Summary(): JSX.Element {
   const classes = useStyles();
-  const [data, setData] = useRecoilState(summaryData);
-
-  useEffect(() => {
-    (async () => {
-      const res = await getSummaryUpdates();
-      setData(res);
-    })();
-  }, []);
 
   return (
-    <main className={classes.content}>
-      <div className={classes.toolbar} />
-      <Typography variant="h2">Summary</Typography>
-      <Typography variant="h4">{JSON.stringify(data)}</Typography>
+    <main className={classes.container}>
+      <PageHeader title="Summary" subtitle="Welcome and happy seeding!" />
+      <div className={classes.content}>Content</div>
     </main>
   );
 }
