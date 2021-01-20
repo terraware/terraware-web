@@ -10,6 +10,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: build
+        run: npm run build
+
       - name: Docker login
         env:
           DOCKER_USER: ${{secrets.DOCKER_USER}}
