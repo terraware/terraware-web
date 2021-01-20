@@ -31,7 +31,7 @@ export default function Summary(): JSX.Element {
     <main className={classes.content}>
       <div className={classes.toolbar} />
       <Typography variant="h2">Summary</Typography>
-      {JSON.stringify(data)}
+      <Typography variant="h4">{JSON.stringify(data)}</Typography>
     </main>
   );
 }
