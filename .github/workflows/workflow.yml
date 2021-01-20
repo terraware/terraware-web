@@ -1,22 +1,14 @@
 # This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
-<<<<<<< HEAD
+
 name: Deployment
-
 on:
   push:
     branches: [main]
   pull_request:
     branches: [main]
-=======
-name: Node.js CI
 
-on:
-  push:
-  pull_request:
-    branches: [ master ]
->>>>>>> Adds React, ReactRouter, MaterialUI, Recoil and Docker
 
 jobs:
   deploy:
@@ -25,7 +17,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-<<<<<<< HEAD
       - name: Setup Node
         uses: actions/setup-node@v1
         with:
@@ -81,7 +72,7 @@ jobs:
       #   with:
       #     url: ${{ secrets.STAGING_NOTIFY_URL }}
       #     method: POST
-=======
+
       - name: install dependencies
         run: npm ci
 
@@ -90,4 +81,18 @@ jobs:
 
       - name: test
         run: npm test
->>>>>>> Adds React, ReactRouter, MaterialUI, Recoil and Docker
+
+
+      - name: Docker login
+        env:
+          DOCKER_USER: ${{secrets.DOCKER_USER}}
+          DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
+        run: |
+          docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+
+      - name: Build the docker image
+        run: docker build . --file Dockerfile --tag constanzauanini/seedbank-app:$(date +%s)
+
+      - name: Docker push
+        run: docker push ${{secrets.DOCKER_USER}}/seedbank-app
+
