@@ -99,8 +99,7 @@ jobs:
           docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
 
       - name: Build the docker image
-        run: docker build . --file Dockerfile --tag constanzauanini/seedbank-app:$(date +%s)
+        run: docker build . --file Dockerfile
 
       - name: Docker push
         run: docker push ${{secrets.DOCKER_USER}}/seedbank-app
-
