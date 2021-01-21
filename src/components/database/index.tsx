@@ -1,6 +1,6 @@
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React from 'react';
-import PageHeader from '../components/PageHeader';
+import PageHeader from '../PageHeader';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -14,7 +14,7 @@ export default function Summary(): JSX.Element {
 
   return (
     <main className={classes.container}>
-      <PageHeader title="Summary" subtitle="Welcome and happy seeding!" />
+      <PageHeader title="Database" subtitle="" />
       <div className={classes.content}>Content</div>
     </main>
   );
