@@ -7,12 +7,12 @@ describe("Summary page", () => {
   });
 
   it("has the summary title", () => {
-    cy.get('.MuiTypography-h2').contains("Summary");
+    cy.get('.jss12').contains("Summary");
   });
 
-  it.skip("display endpoint result", () => {
+  it("display endpoint result", () => {
     cy.wait(500)
-    cy.get('.MuiTypography-h4').contains('{"droppedOff":100,"processed":70,"dried":50,"withdrawn":10}');
+    cy.get('#result').contains('{"activeAccessions":{"current":500,"lastWeek":550},"species":{"current":180,"lastWeek":150},"families":{"current":95,"lastWeek":90},"overduePendingAccessions":100,"overdueProcessedAccessions":70,"overdueDriedAccessions":50,"recentlyWithdrawnAccessions":10}');
   });
 
   context("navigation", () => {

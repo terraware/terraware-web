@@ -16,16 +16,3 @@ services:
       DATABASE_PASSWORD: 'seedbank'
     depends_on:
       - 'postgres'
-  seedbank-app-dev:
-    build:
-      context: ./
-      dockerfile: 'Dockerfile-dev'
-    image: 'terraware/seedbank-app-dev'
-    container_name: 'seedbank-app-dev'
-    ports:
-      - 3000:3000
-    volumes:
-      - './:/app'
-    env_file:
-      - ./.env
-    command: 'sleep infinity'
