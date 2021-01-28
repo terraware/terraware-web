@@ -17,7 +17,7 @@ describe("Summary page", () => {
 
   context("navigation", () => {
     it("navigates to database page", () => {
-      cy.get('[href="/database"]').click().url().should("contain", "/database");
+      cy.get('[href="/accessions"]').click().url().should("contain", "/accessions");
     });
   });
 

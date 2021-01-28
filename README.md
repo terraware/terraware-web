@@ -183,3 +183,6 @@ npm run lint
 The Swagger documentation can be accesed [here](http://localhost:8080/swagger-ui.html)
 
 The API schema can be fetched from [here](http://localhost:8080/v3/api-docs)
+
+The Database can be accessed [here](http://localhost:8081) (engine: `PostgreSQL` user: `postgres`, password: `seedbank`, database: `seedbank`)
+
