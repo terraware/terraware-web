@@ -1,7 +1,7 @@
-import { Box, Divider, Paper, Typography } from '@material-ui/core';
+import { Box, Divider, Link, Paper, Typography } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React from 'react';
-import { useParams, useRouteMatch } from 'react-router-dom';
+import { Link as RouterLink, useParams, useRouteMatch } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -10,9 +10,10 @@ const useStyles = makeStyles((theme) =>
     },
     bold: {
       fontWeight: 600,
+      color: theme.palette.common.black,
     },
     link: {
-      cursor: 'pointer',
+      color: theme.palette.common.black,
     },
   })
 );
@@ -44,10 +45,6 @@ export default function DetailsMenu(): JSX.Element {
     },
   ];
 
-  const goTo = (route: string) => {
-    window.location.href = `/accessions/${id}/${route}`;
-  };
-
   return (
     <Paper className={classes.paper}>
       <Typography variant='h6' className={classes.bold}>
@@ -57,15 +54,19 @@ export default function DetailsMenu(): JSX.Element {
       <Divider light />
       <Box mt={1} />
       {paths.map(({ title, active, route }) => (
-        <Typography
+        <Link
+          component={RouterLink}
           key={title}
-          onClick={() => !active && goTo(route)}
-          component='p'
-          variant='body1'
-          className={active ? classes.bold : classes.link}
+          to={`/accessions/${id}/${route}`}
         >
-          {title}
-        </Typography>
+          <Typography
+            component='p'
+            variant='body1'
+            className={active ? classes.bold : classes.link}
+          >
+            {title}
+          </Typography>
+        </Link>
       ))}
     </Paper>
   );

@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) =>
       margin: theme.spacing(1),
     },
     popover: {
-      maxWidth: '400px',
+      width: '350px',
     },
     noHover: {
       '&:hover': {
@@ -152,7 +152,7 @@ export default function NotificationsDropdown({
                   component={Link}
                   to={
                     type === 'Date'
-                      ? `/accessions/${accessionNumber}`
+                      ? `/accessions/${accessionNumber}/seed-collection`
                       : `/accessions?state=${state}`
                   }
                 >

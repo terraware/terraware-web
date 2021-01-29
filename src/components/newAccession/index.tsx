@@ -14,6 +14,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 import React, { useState } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import { emptyAccession } from '../../api/fixture/accession';
 import { Accession } from '../../api/types/accessions';
 import Checkbox from '../common/Checkbox';
@@ -360,13 +361,16 @@ export function NewAccessionForm({ accession }: Props): JSX.Element {
         <Grid container spacing={4}>
           <Grid item className={classes.right}>
             {!record.id && (
-              <Chip
-                className={classes.cancel}
-                label='Cancel'
-                clickable
-                onClick={() => (window.location.href = '/')}
-              />
+              <Link component={RouterLink} to='/'>
+                <Chip
+                  className={classes.cancel}
+                  label='Cancel'
+                  clickable
+                  onClick={() => (window.location.href = '/')}
+                />
+              </Link>
             )}
+
             <Chip
               className={classes.submit}
               label={record.id ? 'Save changes' : 'Create accession'}

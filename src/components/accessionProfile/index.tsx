@@ -28,7 +28,6 @@ const useStyles = makeStyles((theme) =>
 
 export default function AccessionProfile(): JSX.Element {
   const classes = useStyles();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { id } = useParams<{ id: string }>();
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -38,7 +37,7 @@ export default function AccessionProfile(): JSX.Element {
 
   return (
     <main>
-      <AccessionPageHeader accession={accession} />
+      <AccessionPageHeader accession={{ ...accession, id }} />
       <Container maxWidth='lg' className={classes.mainContainer}>
         <Grid container spacing={3}>
           <Grid item xs={3}>

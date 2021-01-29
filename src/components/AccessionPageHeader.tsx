@@ -6,6 +6,7 @@ import EcoIcon from '@material-ui/icons/Eco';
 import FiberManualRecord from '@material-ui/icons/FiberManualRecord';
 import moment from 'moment';
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Accession } from '../api/types/accessions';
 import StateChip from './common/StateChip';
 
@@ -65,7 +66,8 @@ export default function AccessionPageHeader({ accession }: Props): JSX.Element {
               size='small'
               aria-label='close'
               className={classes.backIcon}
-              onClick={() => (window.location.href = '/')}
+              component={Link}
+              to='/'
             >
               <ArrowBackIcon />
             </Fab>
