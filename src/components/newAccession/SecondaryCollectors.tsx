@@ -4,13 +4,15 @@ import React from 'react';
 import TextField from '../common/TextField';
 
 interface Props {
+  id: string;
   secondaryCollectors: string[];
-  onChange: (value: string[]) => void;
+  onChange: (id: string, value: string[]) => void;
 }
 
 const preventDefault = (event: React.SyntheticEvent) => event.preventDefault();
 
 export default function SecondaryCollectors({
+  id,
   secondaryCollectors,
   onChange,
 }: Props): JSX.Element {
@@ -18,22 +20,19 @@ export default function SecondaryCollectors({
     const updatedSecondaryCollectors = [...secondaryCollectors];
     updatedSecondaryCollectors.push('');
 
-    onChange(updatedSecondaryCollectors);
+    onChange(id, updatedSecondaryCollectors);
   };
 
-  const onCollectorChange = (
-    event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>,
-    index: number
-  ) => {
+  const onCollectorChange = (value: unknown, index: number) => {
     const updatedSecondaryCollectors = [...secondaryCollectors];
-    updatedSecondaryCollectors[index] = event.target.value;
-    onChange(updatedSecondaryCollectors);
+    updatedSecondaryCollectors[index] = value as string;
+    onChange(id, updatedSecondaryCollectors);
   };
 
   const onDeleteCollector = (index: number) => {
     const updatedSecondaryCollectors = [...secondaryCollectors];
     updatedSecondaryCollectors.splice(index, 1);
-    onChange(updatedSecondaryCollectors);
+    onChange(id, updatedSecondaryCollectors);
   };
 
   return (
@@ -43,7 +42,7 @@ export default function SecondaryCollectors({
           <TextField
             id={`secondaryCollectors[${index}]`}
             value={collector}
-            onChange={(event) => onCollectorChange(event, index)}
+            onChange={(id, value) => onCollectorChange(value, index)}
             label={index === 0 && 'Secondary collector'}
           />
           {index !== 0 && (

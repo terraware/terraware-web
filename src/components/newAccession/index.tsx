@@ -1,6 +1,5 @@
 import MomentUtils from '@date-io/moment';
 import {
-  Box,
   Chip,
   Container,
   Grid,
@@ -12,7 +11,6 @@ import Fab from '@material-ui/core/Fab';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
-import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 import React, { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { emptyAccession } from '../../api/fixture/accession';
@@ -20,6 +18,7 @@ import { Accession } from '../../api/types/accessions';
 import Checkbox from '../common/Checkbox';
 import DatePicker from '../common/DatePicker';
 import Divisor from '../common/Divisor';
+import Note from '../common/Note';
 import TextArea from '../common/TextArea';
 import TextField from '../common/TextField';
 import PageHeader from '../PageHeader';
@@ -46,12 +45,6 @@ const useStyles = makeStyles((theme) =>
     },
     cancel: {
       backgroundColor: theme.palette.grey[200],
-    },
-    note: {
-      borderRadius: 8,
-      backgroundColor: theme.palette.grey[300],
-      marginBottom: theme.spacing(3),
-      padding: theme.spacing(2),
     },
     listItem: {
       marginBottom: theme.spacing(1),
@@ -106,34 +99,8 @@ export function NewAccessionForm({ accession }: Props): JSX.Element {
   const classes = useStyles();
   const [record, setRecord] = useState(accession);
 
-  const onTextChange = (
-    event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-  ) => {
-    setRecord({ ...record, [event.target.id]: event.target.value });
-  };
-
-  const onBooleanChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    checked: boolean
-  ) => {
-    setRecord({
-      ...record,
-      [event.target.id]: checked,
-    });
-  };
-
-  const onDateChange = (id: string, date: MaterialUiPickersDate) => {
-    setRecord({
-      ...record,
-      [id]: date?.toISOString(),
-    });
-  };
-
-  const onSecondaryCollectorsChange = (value: string[]) => {
-    setRecord({
-      ...record,
-      secondaryCollectors: value,
-    });
+  const onChange = (id: string, value: unknown) => {
+    setRecord({ ...record, [id]: value });
   };
 
   return (
@@ -152,7 +119,7 @@ export function NewAccessionForm({ accession }: Props): JSX.Element {
             <TextField
               id='species'
               value={record.species || ''}
-              onChange={onTextChange}
+              onChange={onChange}
               label='Species'
             />
           </Grid>
@@ -160,7 +127,7 @@ export function NewAccessionForm({ accession }: Props): JSX.Element {
             <TextField
               id='family'
               value={record.family || ''}
-              onChange={onTextChange}
+              onChange={onChange}
               label='Family'
             />
           </Grid>
@@ -169,7 +136,7 @@ export function NewAccessionForm({ accession }: Props): JSX.Element {
             <TextField
               id='trees'
               value={record.trees || ''}
-              onChange={onTextChange}
+              onChange={onChange}
               type='number'
               label='Number of trees'
             />
@@ -178,7 +145,7 @@ export function NewAccessionForm({ accession }: Props): JSX.Element {
             <TextField
               id='founder'
               value={record.founder || ''}
-              onChange={onTextChange}
+              onChange={onChange}
               label='Founder ID'
             />
           </Grid>
@@ -189,21 +156,21 @@ export function NewAccessionForm({ accession }: Props): JSX.Element {
               name='endangered'
               label='Endangered'
               value={record.endangered || false}
-              onChange={onBooleanChange}
+              onChange={onChange}
             />
             <Checkbox
               id='rare'
               name='rare'
               label='Rare'
               value={record.rare || false}
-              onChange={onBooleanChange}
+              onChange={onChange}
             />
           </Grid>
           <Grid item xs={12}>
             <TextArea
               id='fieldNotes'
               value={record.fieldNotes || ''}
-              onChange={onTextChange}
+              onChange={onChange}
               label='Field notes'
             />
           </Grid>
@@ -214,22 +181,18 @@ export function NewAccessionForm({ accession }: Props): JSX.Element {
             <DatePicker
               id='collectedOn'
               value={record.collectedOn}
-              onChange={(date) => onDateChange('collectedOn', date)}
+              onChange={onChange}
               label='Collected on'
-              KeyboardButtonProps={{
-                'aria-label': 'collected on',
-              }}
+              aria-label='collected on'
             />
           </Grid>
           <Grid item xs={4}>
             <DatePicker
               id='receivedOn'
               value={record.receivedOn}
-              onChange={(date) => onDateChange('receivedOn', date)}
+              onChange={onChange}
               label='Received on'
-              KeyboardButtonProps={{
-                'aria-label': 'received on',
-              }}
+              aria-label='received on'
             />
           </Grid>
           <Grid item xs={4}></Grid>
@@ -240,14 +203,15 @@ export function NewAccessionForm({ accession }: Props): JSX.Element {
             <TextField
               id='primaryCollector'
               value={record.primaryCollector || ''}
-              onChange={onTextChange}
+              onChange={onChange}
               label='Primary collector'
             />
           </Grid>
           <Grid item xs={4}>
             <SecondaryCollectors
+              id='secondaryCollectors'
               secondaryCollectors={record.secondaryCollectors}
-              onChange={onSecondaryCollectorsChange}
+              onChange={onChange}
             />
           </Grid>
         </Grid>
@@ -257,7 +221,7 @@ export function NewAccessionForm({ accession }: Props): JSX.Element {
             <TextField
               id='site'
               value={record.site || ''}
-              onChange={onTextChange}
+              onChange={onChange}
               label='Site'
             />
           </Grid>
@@ -265,7 +229,7 @@ export function NewAccessionForm({ accession }: Props): JSX.Element {
             <TextField
               id='landowner'
               value={record.landowner || ''}
-              onChange={onTextChange}
+              onChange={onChange}
               label='Landowner'
             />
           </Grid>
@@ -274,21 +238,19 @@ export function NewAccessionForm({ accession }: Props): JSX.Element {
             <TextArea
               id='notes'
               value={record.notes || ''}
-              onChange={onTextChange}
+              onChange={onChange}
               label='Environmental notes'
             />
           </Grid>
         </Grid>
         <Divisor />
         {!record.id && (
-          <Box className={classes.note}>
-            <Typography component='p'>
-              Information like Seed Bags, Photos and Geolocations can only be
-              added via the Seed Collector Android app. All the other
-              information about processing, drying, storage and withdrawals can
-              be added after first creating the accession.
-            </Typography>
-          </Box>
+          <Note>
+            Information like Seed Bags, Photos and Geolocations can only be
+            added via the Seed Collector Android app. All the other information
+            about processing, drying, storage and withdrawals can be added after
+            first creating the accession.
+          </Note>
         )}
         {record.id && (
           <Grid container spacing={4}>
