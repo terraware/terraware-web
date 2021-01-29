@@ -1,29 +1,4 @@
-export type NotificationType = 'Alert' | 'Date' | 'State';
+import { components } from "./generated-schema";
 
-export interface NotificationPayload {
-  id: string;
-  timestamp: string;
-  type: NotificationType;
-  read: boolean;
-  text: string;
-  accessionNumber: 'string';
-  state: 'string';
-}
-
-export interface SimpleSuccessResponsePayload {
-  status: string;
-}
-
-export interface SimpleErrorResponsePayload {
-  status: string;
-  error: ErrorDetails;
-}
-
-export interface ErrorDetails {
-  message: string;
-}
-
-export interface NotificationListResponse {
-  notifications: NotificationPayload[];
-  status: string;
-}
+export type NotificationListResponse = components["schemas"]["NotificationListResponse"];
+export type NotificationType = components["schemas"]["NotificationPayload"]['type'];
