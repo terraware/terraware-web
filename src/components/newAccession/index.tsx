@@ -4,6 +4,7 @@ import {
   Chip,
   Container,
   Grid,
+  Link,
   Paper,
   Typography,
 } from '@material-ui/core';
@@ -14,6 +15,7 @@ import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 import React, { useState } from 'react';
 import { emptyAccession } from '../../api/fixture/accession';
+import { Accession } from '../../api/types/accessions';
 import Checkbox from '../common/Checkbox';
 import DatePicker from '../common/DatePicker';
 import Divisor from '../common/Divisor';
@@ -50,11 +52,20 @@ const useStyles = makeStyles((theme) =>
       marginBottom: theme.spacing(3),
       padding: theme.spacing(2),
     },
+    listItem: {
+      marginBottom: theme.spacing(1),
+    },
   })
 );
 
+const preventDefault = (event: React.SyntheticEvent) => event.preventDefault();
 export default function NewAccessionWrapper(): JSX.Element {
   const classes = useStyles();
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const onSubmit = (record: Accession): void => {
+    //
+  };
 
   return (
     <main>
@@ -76,7 +87,7 @@ export default function NewAccessionWrapper(): JSX.Element {
         <Grid container spacing={3}>
           <Grid item xs={1}></Grid>
           <Grid item xs={10}>
-            <AccessionProfile />
+            <NewAccessionForm accession={emptyAccession} onSubmit={onSubmit} />
           </Grid>
           <Grid item xs={1}></Grid>
         </Grid>
@@ -85,9 +96,14 @@ export default function NewAccessionWrapper(): JSX.Element {
   );
 }
 
-export function AccessionProfile(): JSX.Element {
+interface Props {
+  accession: Accession;
+  onSubmit: (record: Accession) => void;
+}
+
+export function NewAccessionForm({ accession }: Props): JSX.Element {
   const classes = useStyles();
-  const [record, setRecord] = useState(emptyAccession);
+  const [record, setRecord] = useState(accession);
 
   const onTextChange = (
     event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
@@ -263,25 +279,97 @@ export function AccessionProfile(): JSX.Element {
           </Grid>
         </Grid>
         <Divisor />
-        <Box className={classes.note}>
-          <Typography component='p'>
-            Information like Seed Bags, Photos and Geolocations can only be
-            added via the Seed Collector Android app. All the other information
-            about processing, drying, storage and withdrawals can be added after
-            first creating the accession.
-          </Typography>
-        </Box>
+        {!record.id && (
+          <Box className={classes.note}>
+            <Typography component='p'>
+              Information like Seed Bags, Photos and Geolocations can only be
+              added via the Seed Collector Android app. All the other
+              information about processing, drying, storage and withdrawals can
+              be added after first creating the accession.
+            </Typography>
+          </Box>
+        )}
+        {record.id && (
+          <Grid container spacing={4}>
+            <Grid item xs={4}>
+              <Typography
+                component='p'
+                variant='body1'
+                className={classes.listItem}
+              >
+                Seed bags
+              </Typography>
+              {record.bags?.map((bag, index) => (
+                <Typography
+                  key={index}
+                  component='p'
+                  variant='body2'
+                  className={classes.listItem}
+                >
+                  {bag}
+                </Typography>
+              ))}
+            </Grid>
+            <Grid item xs={4}>
+              <Typography
+                component='p'
+                variant='body1'
+                className={classes.listItem}
+              >
+                Photos
+              </Typography>
+              {record.photos?.map((photo, index) => (
+                <Link
+                  key={index}
+                  href='#'
+                  onClick={(event: React.SyntheticEvent) => {
+                    preventDefault(event);
+                  }}
+                >
+                  <Typography
+                    component='p'
+                    variant='body2'
+                    className={classes.listItem}
+                  >
+                    {photo}
+                  </Typography>
+                </Link>
+              ))}
+            </Grid>
+            <Grid item xs={4}>
+              <Typography
+                component='p'
+                variant='body1'
+                className={classes.listItem}
+              >
+                Geolocations
+              </Typography>
+              {record.geolocations?.map((geolocation, index) => (
+                <Typography
+                  key={index}
+                  component='p'
+                  variant='body2'
+                  className={classes.listItem}
+                >
+                  {geolocation}
+                </Typography>
+              ))}
+            </Grid>
+          </Grid>
+        )}
         <Grid container spacing={4}>
           <Grid item className={classes.right}>
-            <Chip
-              className={classes.cancel}
-              label='Cancel'
-              clickable
-              onClick={() => (window.location.href = '/')}
-            />
+            {!record.id && (
+              <Chip
+                className={classes.cancel}
+                label='Cancel'
+                clickable
+                onClick={() => (window.location.href = '/')}
+              />
+            )}
             <Chip
               className={classes.submit}
-              label='Create accession'
+              label={record.id ? 'Save changes' : 'Create accession'}
               clickable
               color='primary'
               onClick={() => {

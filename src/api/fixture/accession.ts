@@ -26,13 +26,16 @@ export const accession: Accession = {
   endangered: null,
   rare: null,
   fieldNotes: null,
-  collectedOn: '2020-12-25',
-  receivedOn: null,
+  collectedOn: null,
+  receivedOn: '2020-12-25',
   primaryCollector: null,
   secondaryCollectors: [''],
   site: null,
   landowner: null,
   notes: null,
   state: 'processing',
-  status: 'active'
+  status: 'active',
+  bags: ['7690876843685332', '4506798231292344'],
+  photos: ['IMG-02302349.jpg', 'IMG-02302350.jpg'],
+  geolocations: [`41°24'12.2"N 2°10'26.5"E`]
 }

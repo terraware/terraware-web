@@ -27,4 +27,7 @@ export interface Accession {
   notes: string | null;
   status?: AccessionStatus;
   state?: AccessionState;
+  bags?: string[];
+  photos?: string[];
+  geolocations?: string[]
 }

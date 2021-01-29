@@ -12,6 +12,11 @@ const useStyles = makeStyles(() =>
       paddingLeft: '165px',
       border: '0.5px solid rgba(33, 37, 41, 0.06)',
     },
+    firstLine: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+    },
     title: {
       paddingTop: '32px',
       fontFamily: 'Basier Square',
