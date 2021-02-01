@@ -102,7 +102,12 @@ interface Props {
 
 export function NewAccessionForm({ accession, onSubmit }: Props): JSX.Element {
   const classes = useStyles();
-  const [record, onChange] = useForm(accession);
+  const [record, onChange] = useForm({
+    ...accession,
+    secondaryCollectors: accession.secondaryCollectors && [
+      ...accession.secondaryCollectors,
+    ],
+  });
 
   return (
     <MuiPickersUtilsProvider utils={MomentUtils}>

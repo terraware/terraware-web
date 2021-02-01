@@ -47,6 +47,7 @@ export default function SecondaryCollectors({
           />
           {index !== 0 && (
             <IconButton
+              id={`delete-secondaryCollectors[${index}]`}
               aria-label='delete'
               size='small'
               onClick={() => onDeleteCollector(index)}
