@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) =>
 
 export default function DetailsMenu(): JSX.Element {
   const classes = useStyles();
-  const { id } = useParams<{ id: string }>();
+  const { accessionNumber } = useParams<{ accessionNumber: string }>();
 
   const paths = [
     {
@@ -57,7 +57,7 @@ export default function DetailsMenu(): JSX.Element {
         <Link
           component={RouterLink}
           key={title}
-          to={`/accessions/${id}/${route}`}
+          to={`/accessions/${accessionNumber}/${route}`}
         >
           <Typography
             component='p'

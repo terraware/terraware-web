@@ -14,7 +14,6 @@ import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import React from 'react';
 import { Link as RouterLink, useHistory } from 'react-router-dom';
 import { postAccession } from '../../api/accession';
-import { emptyAccession } from '../../api/fixture/accession';
 import { Accession, NewAccession } from '../../api/types/accessions';
 import useForm from '../../utils/useForm';
 import Checkbox from '../common/Checkbox';
@@ -65,6 +64,8 @@ export default function NewAccessionWrapper(): JSX.Element {
     history.push(`/accessions/${accessionNumber}/seed-collection`);
   };
 
+  const emptyAccession: NewAccession = {};
+
   return (
     <main>
       <PageHeader
@@ -102,12 +103,7 @@ interface Props {
 
 export function NewAccessionForm({ accession, onSubmit }: Props): JSX.Element {
   const classes = useStyles();
-  const [record, onChange] = useForm({
-    ...accession,
-    secondaryCollectors: accession.secondaryCollectors && [
-      ...accession.secondaryCollectors,
-    ],
-  });
+  const [record, onChange] = useForm(accession);
 
   return (
     <MuiPickersUtilsProvider utils={MomentUtils}>

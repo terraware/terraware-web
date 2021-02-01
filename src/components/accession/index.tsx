@@ -1,7 +1,13 @@
 import { Container, Grid } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import {
+  Route,
+  Switch,
+  useHistory,
+  useLocation,
+  useParams,
+} from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { putAccession } from '../../api/accession';
 import {
@@ -13,9 +19,9 @@ import getAccessionRequestIdAtom from '../../state/atoms/getAccessionRequestId';
 import getAccessionSelector from '../../state/selectors/getAccession';
 import useRecoilCurl from '../../utils/useRecoilCurl';
 import AccessionPageHeader from '../AccessionPageHeader';
-import DetailsMenu from '../DetailsMenu';
 import ErrorBoundary from '../ErrorBoundary';
-import { NewAccessionForm } from '../newAccession';
+import AccessionProfile from './AccessionProfile';
+import DetailsMenu from './DetailsMenu';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -23,19 +29,10 @@ const useStyles = makeStyles((theme) =>
       paddingTop: theme.spacing(4),
       paddingBottom: theme.spacing(4),
     },
-    paper: {
-      padding: theme.spacing(2),
-    },
-    bold: {
-      fontWeight: 600,
-    },
-    link: {
-      cursor: 'pointer',
-    },
   })
 );
 
-export default function AccessionProfile(): JSX.Element {
+export default function AccessionPage(): JSX.Element {
   const requestId = useRecoilCurl(getAccessionRequestIdAtom);
 
   return (
@@ -55,32 +52,54 @@ function Content({ requestId }: { requestId: number }): JSX.Element {
   const classes = useStyles();
   const { accessionNumber } = useParams<{ accessionNumber: string }>();
   const history = useHistory();
+  const location = useLocation();
 
   const accession = useRecoilValue(
     getAccessionSelector({ accessionNumber, requestId })
   );
 
+  const clonedAccession = {
+    ...accession,
+    secondaryCollectors: accession.secondaryCollectors && [
+      ...accession.secondaryCollectors,
+    ],
+  };
+
   const onSubmit = async (record: NewAccession | Accession) => {
     if (isAccession(record)) {
+      const path = location.pathname;
       await putAccession(record);
       history.push('/');
-      history.push(`/accessions/${accessionNumber}/seed-collection`);
+      history.push(path);
     }
   };
 
   return (
-    <>
-      <AccessionPageHeader accession={{ ...accession }} />
+    <main>
+      <AccessionPageHeader accession={clonedAccession} />
       <Container maxWidth='lg' className={classes.mainContainer}>
         <Grid container spacing={3}>
           <Grid item xs={3}>
             <DetailsMenu />
           </Grid>
           <Grid item xs={9}>
-            <NewAccessionForm accession={accession} onSubmit={onSubmit} />
+            <Switch>
+              <Route exact path='/accessions/:accessionNumber/seed-collection'>
+                <AccessionProfile
+                  accession={clonedAccession}
+                  onSubmit={onSubmit}
+                />
+              </Route>
+              <Route
+                exact
+                path='/accessions/:accessionNumber/processing-drying'
+              >
+                <DetailsMenu />
+              </Route>
+            </Switch>
           </Grid>
         </Grid>
       </Container>
-    </>
+    </main>
   );
 }
