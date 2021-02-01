@@ -11,10 +11,11 @@ import Fab from '@material-ui/core/Fab';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
-import React, { useState } from 'react';
+import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { emptyAccession } from '../../api/fixture/accession';
 import { Accession } from '../../api/types/accessions';
+import useForm from '../../utils/useForm';
 import Checkbox from '../common/Checkbox';
 import DatePicker from '../common/DatePicker';
 import Divisor from '../common/Divisor';
@@ -71,7 +72,8 @@ export default function NewAccessionWrapper(): JSX.Element {
             size='small'
             aria-label='close'
             className={classes.closeIcon}
-            onClick={() => (window.location.href = '/')}
+            component={RouterLink}
+            to='/'
           >
             <CloseIcon />
           </Fab>
@@ -97,11 +99,7 @@ interface Props {
 
 export function NewAccessionForm({ accession }: Props): JSX.Element {
   const classes = useStyles();
-  const [record, setRecord] = useState(accession);
-
-  const onChange = (id: string, value: unknown) => {
-    setRecord({ ...record, [id]: value });
-  };
+  const [record, onChange] = useForm(accession);
 
   return (
     <MuiPickersUtilsProvider utils={MomentUtils}>
@@ -324,12 +322,7 @@ export function NewAccessionForm({ accession }: Props): JSX.Element {
           <Grid item className={classes.right}>
             {!record.id && (
               <Link component={RouterLink} to='/'>
-                <Chip
-                  className={classes.cancel}
-                  label='Cancel'
-                  clickable
-                  onClick={() => (window.location.href = '/')}
-                />
+                <Chip className={classes.cancel} label='Cancel' clickable />
               </Link>
             )}
 

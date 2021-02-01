@@ -12,7 +12,7 @@ export default function TextArea(props: Props): JSX.Element {
   return (
     <MUITextField
       id={props.id}
-      value={props.value}
+      value={props.value ?? ''}
       onChange={onChange}
       type={props.type}
       label={props.label}

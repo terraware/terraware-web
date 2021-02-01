@@ -5,7 +5,7 @@ interface Props {
   id: string;
   name: string;
   label: React.ReactNode;
-  value: boolean;
+  value?: boolean | null;
   onChange: (id: string, value: boolean) => void;
 }
 
@@ -20,7 +20,7 @@ export default function Checkbox(props: Props): JSX.Element {
   return (
     <FormControlLabel
       id={props.id}
-      value={props.value}
+      value={props.value ?? false}
       onChange={onChange}
       label={props.label}
       control={<MUICheckbox color='primary' />}

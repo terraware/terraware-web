@@ -5,7 +5,7 @@ import TextField from '../common/TextField';
 
 interface Props {
   id: string;
-  secondaryCollectors: string[];
+  secondaryCollectors?: string[];
   onChange: (id: string, value: string[]) => void;
 }
 
@@ -13,7 +13,7 @@ const preventDefault = (event: React.SyntheticEvent) => event.preventDefault();
 
 export default function SecondaryCollectors({
   id,
-  secondaryCollectors,
+  secondaryCollectors = [''],
   onChange,
 }: Props): JSX.Element {
   const onAddCollector = () => {

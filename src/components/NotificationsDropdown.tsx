@@ -23,7 +23,7 @@ import {
   postAllNotificationsAsRead,
   postNotificationAsRead,
 } from '../api/notification';
-import { NotificationListResponse } from '../api/types/notification';
+import { NotificationList } from '../api/types/notification';
 import notificationAtom from '../state/atoms/notifications';
 import NotificationIcon from './NotificationIcon';
 
@@ -59,7 +59,7 @@ const useStyles = makeStyles((theme) =>
 const preventDefault = (event: React.SyntheticEvent) => event.preventDefault();
 
 interface Props {
-  notificationLoadable: Loadable<NotificationListResponse>;
+  notificationLoadable: Loadable<NotificationList>;
 }
 
 export default function NotificationsDropdown({
@@ -93,7 +93,7 @@ export default function NotificationsDropdown({
   };
 
   const getUnreadNotifications = () => {
-    const unreadNotifications = contents?.notifications.filter(
+    const unreadNotifications = contents?.filter(
       (notification) => !notification.read
     );
     return unreadNotifications?.length;
@@ -140,7 +140,7 @@ export default function NotificationsDropdown({
           {state === 'hasError' && 'An error ocurred'}
           {state === 'loading' && <CircularProgress />}
           {contents &&
-            contents.notifications.map(
+            contents.map(
               ({ id, state, type, accessionNumber, read, text, timestamp }) => (
                 <ListItem
                   key={id}
