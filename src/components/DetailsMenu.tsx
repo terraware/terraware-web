@@ -26,22 +26,22 @@ export default function DetailsMenu(): JSX.Element {
     {
       title: 'Seed Collection',
       route: 'seed-collection',
-      active: useRouteMatch('/accessions/:id/seed-collection'),
+      active: useRouteMatch('/accessions/:accessionNumber/seed-collection'),
     },
     {
       title: 'Processing & Drying',
       route: 'processing-drying',
-      active: useRouteMatch('/accessions/:id/processing-drying'),
+      active: useRouteMatch('/accessions/:accessionNumber/processing-drying'),
     },
     {
       title: 'Storage',
       route: 'storage',
-      active: useRouteMatch('/accessions/:id/storage'),
+      active: useRouteMatch('/accessions/:accessionNumber/storage'),
     },
     {
       title: 'Withdrawal',
       route: 'withdrawal',
-      active: useRouteMatch('/accessions/:id/withdrawal'),
+      active: useRouteMatch('/accessions/:accessionNumber/withdrawal'),
     },
   ];
 

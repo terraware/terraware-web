@@ -48,13 +48,13 @@ const useStyles = makeStyles((theme) =>
 );
 
 interface Props {
-  accession?: Accession;
+  accession: Accession;
 }
 
 export default function AccessionPageHeader({ accession }: Props): JSX.Element {
   const classes = useStyles();
 
-  const status = accession?.status ?? 'active';
+  const status = accession.status ?? 'active';
 
   return (
     <Grid container spacing={3} className={classes.container}>
@@ -63,6 +63,7 @@ export default function AccessionPageHeader({ accession }: Props): JSX.Element {
         <Box display='flex' alignItems='flex-start'>
           <Box display='flex'>
             <Fab
+              id='close'
               size='small'
               aria-label='close'
               className={classes.backIcon}
@@ -80,7 +81,7 @@ export default function AccessionPageHeader({ accession }: Props): JSX.Element {
             >
               <EcoIcon color='primary' className={classes.ecoIcon} />
               <Typography variant='h4' className={classes.title}>
-                {accession?.id}
+                {accession.accessionNumber}
               </Typography>
             </Box>
             <Box
@@ -95,13 +96,11 @@ export default function AccessionPageHeader({ accession }: Props): JSX.Element {
               <Typography variant='subtitle1' className={classes.subtitle}>
                 {status.charAt(0).toUpperCase() + status.slice(1)}
                 <DetailDivisor />
-                {accession?.species}
+                {accession.species}
                 <DetailDivisor />
-                {accession?.receivedOn
-                  ? moment(accession.receivedOn).format('MM/DD/YYYY')
-                  : ''}
+                {moment(accession.receivedDate).format('MM/DD/YYYY')}
                 <DetailDivisor />
-                <StateChip state={accession?.state} />
+                <StateChip state={accession.state} />
               </Typography>
             </Box>
           </Box>

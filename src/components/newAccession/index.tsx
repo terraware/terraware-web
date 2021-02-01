@@ -12,9 +12,10 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useHistory } from 'react-router-dom';
+import { postAccession } from '../../api/accession';
 import { emptyAccession } from '../../api/fixture/accession';
-import { Accession } from '../../api/types/accessions';
+import { Accession, NewAccession } from '../../api/types/accessions';
 import useForm from '../../utils/useForm';
 import Checkbox from '../common/Checkbox';
 import DatePicker from '../common/DatePicker';
@@ -56,10 +57,12 @@ const useStyles = makeStyles((theme) =>
 const preventDefault = (event: React.SyntheticEvent) => event.preventDefault();
 export default function NewAccessionWrapper(): JSX.Element {
   const classes = useStyles();
+  const history = useHistory();
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const onSubmit = (record: Accession): void => {
-    //
+  const onSubmit = async (record: NewAccession) => {
+    const res = await postAccession(record);
+    const { accessionNumber } = res.accession;
+    history.push(`/accessions/${accessionNumber}/seed-collection`);
   };
 
   return (
@@ -93,11 +96,11 @@ export default function NewAccessionWrapper(): JSX.Element {
 }
 
 interface Props {
-  accession: Accession;
-  onSubmit: (record: Accession) => void;
+  accession: NewAccession | Accession;
+  onSubmit: (record: NewAccession | Accession) => void;
 }
 
-export function NewAccessionForm({ accession }: Props): JSX.Element {
+export function NewAccessionForm({ accession, onSubmit }: Props): JSX.Element {
   const classes = useStyles();
   const [record, onChange] = useForm(accession);
 
@@ -116,7 +119,7 @@ export function NewAccessionForm({ accession }: Props): JSX.Element {
           <Grid item xs={4}>
             <TextField
               id='species'
-              value={record.species || ''}
+              value={record.species}
               onChange={onChange}
               label='Species'
             />
@@ -124,7 +127,7 @@ export function NewAccessionForm({ accession }: Props): JSX.Element {
           <Grid item xs={4}>
             <TextField
               id='family'
-              value={record.family || ''}
+              value={record.family}
               onChange={onChange}
               label='Family'
             />
@@ -132,8 +135,8 @@ export function NewAccessionForm({ accession }: Props): JSX.Element {
           <Grid item xs={4}></Grid>
           <Grid item xs={4}>
             <TextField
-              id='trees'
-              value={record.trees || ''}
+              id='numberOfTrees'
+              value={record.numberOfTrees}
               onChange={onChange}
               type='number'
               label='Number of trees'
@@ -141,8 +144,8 @@ export function NewAccessionForm({ accession }: Props): JSX.Element {
           </Grid>
           <Grid item xs={4}>
             <TextField
-              id='founder'
-              value={record.founder || ''}
+              id='founderId'
+              value={record.founderId}
               onChange={onChange}
               label='Founder ID'
             />
@@ -153,21 +156,21 @@ export function NewAccessionForm({ accession }: Props): JSX.Element {
               id='endangered'
               name='endangered'
               label='Endangered'
-              value={record.endangered || false}
+              value={record.endangered}
               onChange={onChange}
             />
             <Checkbox
               id='rare'
               name='rare'
               label='Rare'
-              value={record.rare || false}
+              value={record.rare}
               onChange={onChange}
             />
           </Grid>
           <Grid item xs={12}>
             <TextArea
               id='fieldNotes'
-              value={record.fieldNotes || ''}
+              value={record.fieldNotes}
               onChange={onChange}
               label='Field notes'
             />
@@ -177,8 +180,8 @@ export function NewAccessionForm({ accession }: Props): JSX.Element {
         <Grid container spacing={4}>
           <Grid item xs={4}>
             <DatePicker
-              id='collectedOn'
-              value={record.collectedOn}
+              id='collectedDate'
+              value={record.collectedDate}
               onChange={onChange}
               label='Collected on'
               aria-label='collected on'
@@ -186,8 +189,8 @@ export function NewAccessionForm({ accession }: Props): JSX.Element {
           </Grid>
           <Grid item xs={4}>
             <DatePicker
-              id='receivedOn'
-              value={record.receivedOn}
+              id='receivedDate'
+              value={record.receivedDate}
               onChange={onChange}
               label='Received on'
               aria-label='received on'
@@ -200,7 +203,7 @@ export function NewAccessionForm({ accession }: Props): JSX.Element {
           <Grid item xs={4}>
             <TextField
               id='primaryCollector'
-              value={record.primaryCollector || ''}
+              value={record.primaryCollector}
               onChange={onChange}
               label='Primary collector'
             />
@@ -217,8 +220,8 @@ export function NewAccessionForm({ accession }: Props): JSX.Element {
         <Grid container spacing={4}>
           <Grid item xs={4}>
             <TextField
-              id='site'
-              value={record.site || ''}
+              id='siteLocation'
+              value={record.siteLocation}
               onChange={onChange}
               label='Site'
             />
@@ -226,7 +229,7 @@ export function NewAccessionForm({ accession }: Props): JSX.Element {
           <Grid item xs={4}>
             <TextField
               id='landowner'
-              value={record.landowner || ''}
+              value={record.landowner}
               onChange={onChange}
               label='Landowner'
             />
@@ -234,15 +237,15 @@ export function NewAccessionForm({ accession }: Props): JSX.Element {
           <Grid item xs={4}></Grid>
           <Grid item xs={12}>
             <TextArea
-              id='notes'
-              value={record.notes || ''}
+              id='environmentalNotes'
+              value={record.environmentalNotes}
               onChange={onChange}
               label='Environmental notes'
             />
           </Grid>
         </Grid>
         <Divisor />
-        {!record.id && (
+        {!record.accessionNumber && (
           <Note>
             Information like Seed Bags, Photos and Geolocations can only be
             added via the Seed Collector Android app. All the other information
@@ -250,7 +253,7 @@ export function NewAccessionForm({ accession }: Props): JSX.Element {
             first creating the accession.
           </Note>
         )}
-        {record.id && (
+        {record.accessionNumber && (
           <Grid container spacing={4}>
             <Grid item xs={4}>
               <Typography
@@ -260,7 +263,7 @@ export function NewAccessionForm({ accession }: Props): JSX.Element {
               >
                 Seed bags
               </Typography>
-              {record.bags?.map((bag, index) => (
+              {record.bagNumbers?.map((bag, index) => (
                 <Typography
                   key={index}
                   component='p'
@@ -279,7 +282,7 @@ export function NewAccessionForm({ accession }: Props): JSX.Element {
               >
                 Photos
               </Typography>
-              {record.photos?.map((photo, index) => (
+              {record.photoFilenames?.map((photo, index) => (
                 <Link
                   key={index}
                   href='#'
@@ -320,20 +323,26 @@ export function NewAccessionForm({ accession }: Props): JSX.Element {
         )}
         <Grid container spacing={4}>
           <Grid item className={classes.right}>
-            {!record.id && (
+            {!record.accessionNumber && (
               <Link component={RouterLink} to='/'>
-                <Chip className={classes.cancel} label='Cancel' clickable />
+                <Chip
+                  id='cancel'
+                  className={classes.cancel}
+                  label='Cancel'
+                  clickable
+                />
               </Link>
             )}
 
             <Chip
+              id='submit'
               className={classes.submit}
-              label={record.id ? 'Save changes' : 'Create accession'}
+              label={
+                record.accessionNumber ? 'Save changes' : 'Create accession'
+              }
               clickable
               color='primary'
-              onClick={() => {
-                /* */
-              }}
+              onClick={() => onSubmit(record)}
             />
           </Grid>
         </Grid>

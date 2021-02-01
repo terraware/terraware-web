@@ -1,33 +1,6 @@
-export type AccessionStatus = 'active' | 'inactive';
+import { components } from "./generated-schema";
 
-export type AccessionState =
-  | 'pending'
-  | 'processing'
-  | 'processed'
-  | 'drying'
-  | 'dried'
-  | 'stored'
-  | 'withdrawn';
-
-export interface Accession {
-  id?: string | null;
-  species: string | null;
-  family: string | null;
-  trees: number | null;
-  founder: string | null;
-  endangered: boolean | null;
-  rare: boolean | null;
-  fieldNotes: string | null;
-  collectedOn: string | null;
-  receivedOn: string | null;
-  primaryCollector: string | null;
-  secondaryCollectors: string[];
-  site: string | null;
-  landowner: string | null;
-  notes: string | null;
-  status?: AccessionStatus;
-  state?: AccessionState;
-  bags?: string[];
-  photos?: string[];
-  geolocations?: string[]
-}
+export type AccessionStatus = components["schemas"]["AccessionPayload"]["status"];
+export type AccessionState = components["schemas"]["AccessionPayload"]["state"]
+export type Accession = components["schemas"]["AccessionPayload"];
+export type NewAccession = components["schemas"]["CreateAccessionRequestPayload"];
