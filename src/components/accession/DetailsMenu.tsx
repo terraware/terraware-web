@@ -55,6 +55,7 @@ export default function DetailsMenu(): JSX.Element {
       <Box mt={1} />
       {paths.map(({ title, active, route }) => (
         <Link
+          id={route}
           component={RouterLink}
           key={title}
           to={`/accessions/${accessionNumber}/${route}`}

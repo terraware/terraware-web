@@ -20,6 +20,7 @@ import getAccessionSelector from '../../state/selectors/getAccession';
 import useRecoilCurl from '../../utils/useRecoilCurl';
 import AccessionPageHeader from '../AccessionPageHeader';
 import ErrorBoundary from '../ErrorBoundary';
+import ProcessingAndDrying from '../processingAndDrying';
 import AccessionProfile from './AccessionProfile';
 import DetailsMenu from './DetailsMenu';
 
@@ -94,7 +95,10 @@ function Content({ requestId }: { requestId: number }): JSX.Element {
                 exact
                 path='/accessions/:accessionNumber/processing-drying'
               >
-                <DetailsMenu />
+                <ProcessingAndDrying
+                  accession={clonedAccession}
+                  onSubmit={onSubmit}
+                />
               </Route>
             </Switch>
           </Grid>

@@ -83,6 +83,51 @@ describe("Accessions", () => {
       cy.get('#secondaryCollectors\\[1\\]').should('not.exist');
       cy.get('#primaryCollector').should('have.value', 'Leann');
     })
+
+    it("should add processing and drying information", () => {
+      cy.get('#processing-drying > .MuiTypography-root').click().url().should("match", /accessions\/[A-Za-z0-9]+\/processing-drying/);
+      cy.get('#processingStartDate').type("01/01/2021");
+      cy.get('#processingMethod').click()
+      cy.get('.MuiList-root > [tabindex="0"]').click()
+      cy.get('#seedsCounted').type(300);
+      cy.get('#dryingStartDate').type("01/01/2021");
+      cy.get('#dryingEndDate').type("01/01/2021");
+      cy.get('#dryingMoveDate').type("01/01/2021");
+      cy.get('#processingNotes').type("A processing note");
+      cy.get('#processingStaffResponsible').type("Constanza");
+
+      cy.get('#submit').click();
+      cy.wait(2000);
+
+      cy.get('#processingStartDate').should('have.value', '01 / 01 / 2021');
+      cy.get('#processingMethod + input').should('have.value', 'Count');
+      cy.get('#seedsCounted').should('have.value', '300');
+      cy.get('#dryingStartDate').should('have.value', '01 / 01 / 2021');
+      cy.get('#dryingEndDate').should('have.value', '01 / 01 / 2021');
+      cy.get('#dryingMoveDate').should('have.value', '01 / 01 / 2021');
+      cy.get('#processingNotes').should('have.value', 'A processing note');
+      cy.get('#processingStaffResponsible').should('have.value', 'Constanza');
+    })
+
+    it("should clear textfield if changing dropdown", () => {
+      cy.get('#processingMethod').click();
+      cy.get('.MuiList-root > [tabindex="-1"]').click();
+      cy.get('#subsetWeightGrams').type(500);
+
+      cy.get('#submit').click();
+      cy.wait(2000);
+      cy.get('#subsetWeightGrams').should('have.value', '500');
+
+      cy.get('#processingMethod').click();
+      cy.get('.MuiList-root > [tabindex="-1"]').click();
+      cy.get('#seedsCounted').should('have.value', '');
+      cy.get('#seedsCounted').type(400);
+      cy.get('#processingMethod').click();
+      cy.get('.MuiList-root > [tabindex="-1"]').click();
+      cy.get('#subsetWeightGrams').should('have.value', '');
+      cy.get('.MuiList-root > [tabindex="-1"]').click();
+      cy.get('#seedsCounted').should('have.value', '');
+    });
   });
 
 });
