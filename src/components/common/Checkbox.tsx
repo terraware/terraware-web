@@ -20,10 +20,9 @@ export default function Checkbox(props: Props): JSX.Element {
   return (
     <FormControlLabel
       id={props.id}
-      value={props.value ?? false}
       onChange={onChange}
       label={props.label}
-      control={<MUICheckbox color='primary' />}
+      control={<MUICheckbox color='primary' checked={props.value ?? false} />}
     />
   );
 }
