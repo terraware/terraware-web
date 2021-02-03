@@ -65,6 +65,20 @@ export default function ProcessingAndDrying({
     }
   };
 
+  const calculteEstimatedSeedCount = (): number | undefined => {
+    if (
+      record.subsetCount &&
+      record.totalWeightGrams &&
+      record.subsetWeightGrams
+    ) {
+      return (
+        (record.subsetCount * record.totalWeightGrams) /
+        record.subsetWeightGrams
+      );
+    }
+    return undefined;
+  };
+
   return (
     <MuiPickersUtilsProvider utils={MomentUtils}>
       <Paper className={classes.paper}>
@@ -139,7 +153,8 @@ export default function ProcessingAndDrying({
               <Grid item xs={4} className={classes.alignMiddle}>
                 <TextField
                   id='estimatedSeedCount'
-                  value={record.estimatedSeedCount}
+                  value={calculteEstimatedSeedCount()}
+                  disabled={true}
                   onChange={onChange}
                   label='Total seeds count estimation'
                 />
@@ -148,7 +163,7 @@ export default function ProcessingAndDrying({
           )}
         </Grid>
         <Divisor />
-        <Grid container spacing={1}>
+        <Grid container spacing={4}>
           <Grid item xs={12}>
             <Typography component='p' variant='body1'>
               Viability test types
@@ -177,7 +192,7 @@ export default function ProcessingAndDrying({
           </Grid>
         </Grid>
         <Divisor />
-        <Grid container spacing={2}>
+        <Grid container spacing={4}>
           <Grid item xs={4}>
             <DatePicker
               id='dryingStartDate'
@@ -196,6 +211,8 @@ export default function ProcessingAndDrying({
               aria-label='Drying end date'
             />
           </Grid>
+        </Grid>
+        <Grid container spacing={4}>
           <Grid item xs={8}>
             <DatePicker
               id='dryingMoveDate'
@@ -214,7 +231,7 @@ export default function ProcessingAndDrying({
           </Grid>
         </Grid>
         <Divisor />
-        <Grid container spacing={2}>
+        <Grid container spacing={4}>
           <Grid item xs={12}>
             <TextArea
               id='processingNotes'
@@ -233,7 +250,7 @@ export default function ProcessingAndDrying({
           </Grid>
         </Grid>
         <Divisor />
-        <Grid container spacing={2}>
+        <Grid container spacing={4}>
           <Grid item xs={12}>
             <Note>
               By adding information about the processing/drying and saving the

@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) =>
         backgroundColor: 'transparent',
       },
     },
-    unreadNotification: {
+    readNotification: {
       backgroundColor: grey[400],
       '&:hover': {
         backgroundColor: grey[400],
@@ -146,7 +146,7 @@ export default function NotificationsDropdown({
                   key={id}
                   button
                   className={
-                    !read ? `${classes.unreadNotification}` : classes.noHover
+                    read ? `${classes.readNotification}` : classes.noHover
                   }
                   onClick={() => onNotificationClick(id)}
                   component={Link}

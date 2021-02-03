@@ -113,6 +113,9 @@ describe("Accessions", () => {
       cy.get('#processingMethod').click();
       cy.get('.MuiList-root > [tabindex="-1"]').click();
       cy.get('#subsetWeightGrams').type(500);
+      cy.get('#subsetCount').type(500);
+      cy.get('#totalWeightGrams').type(500);
+      cy.get('#estimatedSeedCount').should('have.value', '500');
 
       cy.get('#submit').click();
       cy.wait(2000);
