@@ -10,18 +10,14 @@ import {
 } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { putAccession } from '../../api/accession';
-import {
-  Accession,
-  isAccession,
-  NewAccession,
-} from '../../api/types/accessions';
+import { Accession } from '../../api/types/accessions';
 import getAccessionRequestIdAtom from '../../state/atoms/getAccessionRequestId';
 import getAccessionSelector from '../../state/selectors/getAccession';
 import useRecoilCurl from '../../utils/useRecoilCurl';
 import AccessionPageHeader from '../AccessionPageHeader';
 import ErrorBoundary from '../ErrorBoundary';
+import { AccessionForm } from '../newAccession';
 import ProcessingAndDrying from '../processingAndDrying';
-import AccessionProfile from './AccessionProfile';
 import DetailsMenu from './DetailsMenu';
 
 const useStyles = makeStyles((theme) =>
@@ -66,13 +62,11 @@ function Content({ requestId }: { requestId: number }): JSX.Element {
     ],
   };
 
-  const onSubmit = async (record: NewAccession | Accession) => {
-    if (isAccession(record)) {
-      const path = location.pathname;
-      await putAccession(record);
-      history.push('/');
-      history.push(path);
-    }
+  const onSubmit = async (record: Accession) => {
+    const path = location.pathname;
+    await putAccession(record);
+    history.push('/');
+    history.push(path);
   };
 
   return (
@@ -86,7 +80,7 @@ function Content({ requestId }: { requestId: number }): JSX.Element {
           <Grid item xs={9}>
             <Switch>
               <Route exact path='/accessions/:accessionNumber/seed-collection'>
-                <AccessionProfile
+                <AccessionForm
                   accession={clonedAccession}
                   onSubmit={onSubmit}
                 />

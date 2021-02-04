@@ -76,9 +76,8 @@ describe("Accessions", () => {
       cy.get('#primaryCollector').clear().type("Leann");
       cy.get('#fieldNotes').clear().type("Other notes");
 
-      cy.get('#submit').click().url().should("match", /accessions\/[A-Za-z0-9]+\/seed-collection/);
-  
-      cy.wait(2000);
+      cy.get('#submit').click().url().should("match", /accessions\/[A-Za-z0-9]+\/seed-collection/).wait(2000);
+
       cy.get('#fieldNotes').contains('Other notes');
       cy.get('#secondaryCollectors\\[1\\]').should('not.exist');
       cy.get('#primaryCollector').should('have.value', 'Leann');
@@ -96,8 +95,7 @@ describe("Accessions", () => {
       cy.get('#processingNotes').type("A processing note");
       cy.get('#processingStaffResponsible').type("Constanza");
 
-      cy.get('#submit').click();
-      cy.wait(2000);
+      cy.get('#submit').click().wait(2000);
 
       cy.get('#processingStartDate').should('have.value', '01 / 01 / 2021');
       cy.get('#processingMethod + input').should('have.value', 'Count');
@@ -110,25 +108,31 @@ describe("Accessions", () => {
     })
 
     it("should clear textfield if changing dropdown", () => {
-      cy.get('#processingMethod').click();
+      cy.get('#processingMethod').click().wait(500);
       cy.get('.MuiList-root > [tabindex="-1"]').click();
+      
       cy.get('#subsetWeightGrams').type(500);
       cy.get('#subsetCount').type(500);
       cy.get('#totalWeightGrams').type(500);
       cy.get('#estimatedSeedCount').should('have.value', '500');
 
-      cy.get('#submit').click();
-      cy.wait(2000);
+      cy.get('#submit').click().wait(2000);
       cy.get('#subsetWeightGrams').should('have.value', '500');
 
-      cy.get('#processingMethod').click();
+      cy.get('#processingMethod').click().wait(500);
       cy.get('.MuiList-root > [tabindex="-1"]').click();
+
       cy.get('#seedsCounted').should('have.value', '');
       cy.get('#seedsCounted').type(400);
-      cy.get('#processingMethod').click();
+      
+      cy.get('#processingMethod').click().wait(500);
       cy.get('.MuiList-root > [tabindex="-1"]').click();
+
       cy.get('#subsetWeightGrams').should('have.value', '');
+
+      cy.get('#processingMethod').click().wait(500);
       cy.get('.MuiList-root > [tabindex="-1"]').click();
+
       cy.get('#seedsCounted').should('have.value', '');
     });
   });

@@ -9,6 +9,6 @@ export default selectorFamily({
     if (process.env.REACT_APP_DELAY_QUERIES === 'true') {
       await delay(2000);
     }
-    return (await getAccession(params.accessionNumber)).accession;
+    return (await getAccession(params.accessionNumber));
   },
 });

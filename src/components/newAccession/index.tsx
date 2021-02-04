@@ -12,9 +12,9 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import React from 'react';
-import { Link as RouterLink, useHistory } from 'react-router-dom';
+import { Link as RouterLink, Redirect } from 'react-router-dom';
 import { postAccession } from '../../api/accession';
-import { Accession, NewAccession } from '../../api/types/accessions';
+import { NewAccession } from '../../api/types/accessions';
 import useForm from '../../utils/useForm';
 import Checkbox from '../common/Checkbox';
 import DatePicker from '../common/DatePicker';
@@ -55,16 +55,20 @@ const useStyles = makeStyles((theme) =>
 
 const preventDefault = (event: React.SyntheticEvent) => event.preventDefault();
 export default function NewAccessionWrapper(): JSX.Element {
+  const [accessionNumber, setAccessionNumber] = React.useState<string>();
   const classes = useStyles();
-  const history = useHistory();
 
   const onSubmit = async (record: NewAccession) => {
-    const res = await postAccession(record);
-    const { accessionNumber } = res.accession;
-    history.push(`/accessions/${accessionNumber}/seed-collection`);
+    const accession = await postAccession(record);
+    const { accessionNumber } = accession;
+    setAccessionNumber(accessionNumber);
   };
 
   const emptyAccession: NewAccession = {};
+
+  if (accessionNumber) {
+    return <Redirect to={`/accessions/${accessionNumber}/seed-collection`} />;
+  }
 
   return (
     <main>
@@ -87,7 +91,7 @@ export default function NewAccessionWrapper(): JSX.Element {
         <Grid container spacing={3}>
           <Grid item xs={1}></Grid>
           <Grid item xs={10}>
-            <NewAccessionForm accession={emptyAccession} onSubmit={onSubmit} />
+            <AccessionForm accession={emptyAccession} onSubmit={onSubmit} />
           </Grid>
           <Grid item xs={1}></Grid>
         </Grid>
@@ -96,12 +100,15 @@ export default function NewAccessionWrapper(): JSX.Element {
   );
 }
 
-interface Props {
-  accession: NewAccession | Accession;
-  onSubmit: (record: NewAccession | Accession) => void;
+interface Props<T extends NewAccession> {
+  accession: T;
+  onSubmit: (record: T) => void;
 }
 
-export function NewAccessionForm({ accession, onSubmit }: Props): JSX.Element {
+export function AccessionForm<T extends NewAccession>({
+  accession,
+  onSubmit,
+}: Props<T>): JSX.Element {
   const classes = useStyles();
   const [record, , onChange] = useForm(accession);
 
