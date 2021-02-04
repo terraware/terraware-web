@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) =>
 
 interface Props {
   accession: Accession;
-  onSubmit: (record: Accession) => Promise<void>;
+  onSubmit: (record: Accession) => void;
 }
 
 export default function ProcessingAndDrying({
@@ -120,6 +120,7 @@ export default function ProcessingAndDrying({
                 value={record.seedsCounted}
                 onChange={onChange}
                 label='Seeds Count'
+                type='Number'
               />
             </Grid>
           )}

@@ -18,6 +18,7 @@ import AccessionPageHeader from '../AccessionPageHeader';
 import ErrorBoundary from '../ErrorBoundary';
 import { AccessionForm } from '../newAccession';
 import ProcessingAndDrying from '../processingAndDrying';
+import Storage from '../storage';
 import DetailsMenu from './DetailsMenu';
 
 const useStyles = makeStyles((theme) =>
@@ -94,6 +95,13 @@ function Content({ requestId }: { requestId: number }): JSX.Element {
                 <ProcessingAndDrying
                   accession={clonedAccession}
                   onSubmit={onSubmit}
+                />
+              </Route>
+              <Route exact path='/accessions/:accessionNumber/storage'>
+                <Storage
+                  accession={clonedAccession}
+                  onSubmit={onSubmit}
+                  requestId={requestId}
                 />
               </Route>
             </Switch>

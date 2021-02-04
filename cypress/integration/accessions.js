@@ -135,6 +135,31 @@ describe("Accessions", () => {
 
       cy.get('#seedsCounted').should('have.value', '');
     });
+
+    it("should add storage information", () => {
+      cy.get('#storage > .MuiTypography-root').click().url().should("match", /accessions\/[A-Za-z0-9]+\/storage/).wait(2000);
+      cy.get('#storageStartDate').type("02/04/2021");
+      cy.get('#storagePackets').type("5");
+      cy.get('#storageLocation').click().wait(500);
+      cy.get('[data-value="Freezer 1"]').click().wait(500);
+      cy.get('#storageCondition').should('have.value', 'Freezer');
+
+      cy.get('#storageLocation').click().wait(500);
+      cy.get('[data-value="Freezer 2"]').click().wait(500);
+      cy.get('#storageCondition').should('have.value', 'Freezer');
+
+      cy.get('#storageNotes').type("A storage note");
+      cy.get('#storageStaffResponsible').type("Constanza");
+
+      cy.get('#submit').click().wait(4000);
+
+      cy.get('#storageStartDate').should('have.value', '02 / 04 / 2021');
+      cy.get('#storagePackets').should('have.value', '5');
+      cy.get('#storageLocation + input').should('have.value', 'Freezer 2');
+      cy.get('#storageCondition').should('have.value', 'Freezer');
+      cy.get('#storageNotes').should('have.value', 'A storage note');
+      cy.get('#storageStaffResponsible').should('have.value', 'Constanza');
+    });
   });
 
 });
