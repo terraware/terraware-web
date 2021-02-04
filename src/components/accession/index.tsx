@@ -81,6 +81,8 @@ function Content({ requestId }: { requestId: number }): JSX.Element {
             <Switch>
               <Route exact path='/accessions/:accessionNumber/seed-collection'>
                 <AccessionForm
+                  updating={true}
+                  photoFilenames={clonedAccession.photoFilenames}
                   accession={clonedAccession}
                   onSubmit={onSubmit}
                 />

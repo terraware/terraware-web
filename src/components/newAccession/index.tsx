@@ -64,8 +64,6 @@ export default function NewAccessionWrapper(): JSX.Element {
     setAccessionNumber(accessionNumber);
   };
 
-  const emptyAccession: NewAccession = {};
-
   if (accessionNumber) {
     return <Redirect to={`/accessions/${accessionNumber}/seed-collection`} />;
   }
@@ -91,7 +89,7 @@ export default function NewAccessionWrapper(): JSX.Element {
         <Grid container spacing={3}>
           <Grid item xs={1}></Grid>
           <Grid item xs={10}>
-            <AccessionForm accession={emptyAccession} onSubmit={onSubmit} />
+            <AccessionForm accession={{}} onSubmit={onSubmit} />
           </Grid>
           <Grid item xs={1}></Grid>
         </Grid>
@@ -101,11 +99,15 @@ export default function NewAccessionWrapper(): JSX.Element {
 }
 
 interface Props<T extends NewAccession> {
+  updating?: boolean;
+  photoFilenames?: string[];
   accession: T;
   onSubmit: (record: T) => void;
 }
 
 export function AccessionForm<T extends NewAccession>({
+  updating,
+  photoFilenames,
   accession,
   onSubmit,
 }: Props<T>): JSX.Element {
@@ -253,7 +255,7 @@ export function AccessionForm<T extends NewAccession>({
           </Grid>
         </Grid>
         <Divisor />
-        {!record.accessionNumber && (
+        {!updating && (
           <Note>
             Information like Seed Bags, Photos and Geolocations can only be
             added via the Seed Collector Android app. All the other information
@@ -261,7 +263,7 @@ export function AccessionForm<T extends NewAccession>({
             first creating the accession.
           </Note>
         )}
-        {record.accessionNumber && (
+        {updating && (
           <Grid container spacing={4}>
             <Grid item xs={4}>
               <Typography
@@ -290,7 +292,7 @@ export function AccessionForm<T extends NewAccession>({
               >
                 Photos
               </Typography>
-              {record.photoFilenames?.map((photo, index) => (
+              {photoFilenames?.map((photo, index) => (
                 <Link
                   key={index}
                   href='#'
@@ -331,7 +333,7 @@ export function AccessionForm<T extends NewAccession>({
         )}
         <Grid container spacing={4}>
           <Grid item className={classes.right}>
-            {!record.accessionNumber && (
+            {!updating && (
               <Link component={RouterLink} to='/'>
                 <Chip
                   id='cancel'
@@ -345,9 +347,7 @@ export function AccessionForm<T extends NewAccession>({
             <Chip
               id='submit'
               className={classes.submit}
-              label={
-                record.accessionNumber ? 'Save changes' : 'Create accession'
-              }
+              label={updating ? 'Save changes' : 'Create accession'}
               clickable
               color='primary'
               onClick={() => onSubmit(record)}
