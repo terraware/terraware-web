@@ -118,6 +118,7 @@ describe("Accessions", () => {
 
       cy.get('#submit').click().wait(2000);
       cy.get('#subsetWeightGrams').should('have.value', '500');
+      cy.get('#estimatedSeedCount').should('have.value', '500');
 
       cy.get('#processingMethod').click().wait(500);
       cy.get('.MuiList-root > [tabindex="-1"]').click();
@@ -145,8 +146,8 @@ describe("Accessions", () => {
       cy.get('#storageCondition').should('have.value', 'Freezer');
 
       cy.get('#storageLocation').click().wait(500);
-      cy.get('[data-value="Freezer 2"]').click().wait(500);
-      cy.get('#storageCondition').should('have.value', 'Freezer');
+      cy.get('[data-value="Refrigerator 2"]').click().wait(500);
+      cy.get('#storageCondition').should('have.value', 'Refrigerator');
 
       cy.get('#storageNotes').type("A storage note");
       cy.get('#storageStaffResponsible').type("Constanza");
@@ -155,8 +156,8 @@ describe("Accessions", () => {
 
       cy.get('#storageStartDate').should('have.value', '02 / 04 / 2021');
       cy.get('#storagePackets').should('have.value', '5');
-      cy.get('#storageLocation + input').should('have.value', 'Freezer 2');
-      cy.get('#storageCondition').should('have.value', 'Freezer');
+      cy.get('#storageLocation + input').should('have.value', 'Refrigerator 2');
+      cy.get('#storageCondition').should('have.value', 'Refrigerator');
       cy.get('#storageNotes').should('have.value', 'A storage note');
       cy.get('#storageStaffResponsible').should('have.value', 'Constanza');
     });

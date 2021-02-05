@@ -66,16 +66,24 @@ export default function ProcessingAndDrying({
     }
   };
 
-  const calculteEstimatedSeedCount = (): number | undefined => {
-    if (
-      record.subsetCount &&
-      record.totalWeightGrams &&
-      record.subsetWeightGrams
-    ) {
-      return (
-        (record.subsetCount * record.totalWeightGrams) /
-        record.subsetWeightGrams
-      );
+  const onChangeWeightFields = (id: string, value: unknown) => {
+    const newRecord = {
+      ...record,
+      [id]: value,
+    };
+
+    newRecord.estimatedSeedCount = calculteEstimatedSeedCount(newRecord);
+    setRecord(newRecord);
+  };
+
+  const calculteEstimatedSeedCount = (
+    latestRecord: Accession
+  ): number | undefined => {
+    const subsetCount = latestRecord.subsetCount;
+    const totalWeightGrams = latestRecord.totalWeightGrams;
+    const subsetWeightGrams = latestRecord.subsetWeightGrams;
+    if (subsetCount && totalWeightGrams && subsetWeightGrams) {
+      return (subsetCount * totalWeightGrams) / subsetWeightGrams;
     }
     return undefined;
   };
@@ -130,7 +138,7 @@ export default function ProcessingAndDrying({
                 <TextField
                   id='subsetWeightGrams'
                   value={record.subsetWeightGrams}
-                  onChange={onChange}
+                  onChange={onChangeWeightFields}
                   label='Subset’s weight'
                 />
               </Grid>
@@ -138,7 +146,7 @@ export default function ProcessingAndDrying({
                 <TextField
                   id='subsetCount'
                   value={record.subsetCount}
-                  onChange={onChange}
+                  onChange={onChangeWeightFields}
                   label='Seeds on subset weighted'
                 />
               </Grid>
@@ -147,14 +155,14 @@ export default function ProcessingAndDrying({
                 <TextField
                   id='totalWeightGrams'
                   value={record.totalWeightGrams}
-                  onChange={onChange}
+                  onChange={onChangeWeightFields}
                   label='Total weight of seeds'
                 />
               </Grid>
               <Grid item xs={4} className={classes.alignMiddle}>
                 <TextField
                   id='estimatedSeedCount'
-                  value={calculteEstimatedSeedCount()}
+                  value={record.estimatedSeedCount}
                   disabled={true}
                   onChange={onChange}
                   label='Total seeds count estimation'
