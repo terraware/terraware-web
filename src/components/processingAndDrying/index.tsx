@@ -1,4 +1,4 @@
-import MomentUtils from '@date-io/moment';
+import DayJSUtils from '@date-io/dayjs';
 import { Chip, Grid, Paper, Typography } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
@@ -89,7 +89,7 @@ export default function ProcessingAndDrying({
   };
 
   return (
-    <MuiPickersUtilsProvider utils={MomentUtils}>
+    <MuiPickersUtilsProvider utils={DayJSUtils}>
       <Paper className={classes.paper}>
         <Typography variant='h6' className={classes.bold}>
           Processing & Drying

@@ -15,7 +15,6 @@ import grey from '@material-ui/core/colors/grey';
 import IconButton from '@material-ui/core/IconButton';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import NotificationsIcon from '@material-ui/icons/Notifications';
-import { now } from 'moment';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Loadable, useSetRecoilState } from 'recoil';
@@ -83,12 +82,12 @@ export default function NotificationsDropdown({
 
   const onNotificationClick = async (id: string) => {
     await postNotificationAsRead(id);
-    setNotificationTimestamp(now());
+    setNotificationTimestamp(Date.now());
   };
 
   const markAllAsRead = async () => {
     await postAllNotificationsAsRead();
-    setNotificationTimestamp(now());
+    setNotificationTimestamp(Date.now());
   };
 
   const getUnreadNotifications = () => {

@@ -4,7 +4,6 @@ import Typography from '@material-ui/core/Typography';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import EcoIcon from '@material-ui/icons/Eco';
 import FiberManualRecord from '@material-ui/icons/FiberManualRecord';
-import moment from 'moment';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Accession } from '../api/types/accessions';
@@ -98,7 +97,13 @@ export default function AccessionPageHeader({ accession }: Props): JSX.Element {
                 <DetailDivisor />
                 {accession.species}
                 <DetailDivisor />
-                {moment(accession.receivedDate).format('MM/DD/YYYY')}
+                {accession.receivedDate &&
+                  new Date(accession.receivedDate).toLocaleDateString('en-US', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric',
+                    timeZone: 'UTC',
+                  })}
                 <DetailDivisor />
                 <StateChip state={accession.state} />
               </Typography>

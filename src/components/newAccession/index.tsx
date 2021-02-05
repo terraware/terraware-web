@@ -1,4 +1,4 @@
-import MomentUtils from '@date-io/moment';
+import DayJSUtils from '@date-io/dayjs';
 import {
   Chip,
   Container,
@@ -118,7 +118,7 @@ export function AccessionForm<T extends NewAccession>({
   const [record, , onChange] = useForm(accession);
 
   return (
-    <MuiPickersUtilsProvider utils={MomentUtils}>
+    <MuiPickersUtilsProvider utils={DayJSUtils}>
       <Paper className={classes.paper}>
         <Typography variant='h6' className={classes.bold}>
           Seed Collection
