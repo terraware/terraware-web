@@ -25,6 +25,7 @@ import {
 } from '../api/notification';
 import { NotificationList } from '../api/types/notification';
 import notificationAtom from '../state/atoms/notifications';
+import preventDefaultEvent from '../utils/preventDefaultEvent';
 import NotificationIcon from './NotificationIcon';
 
 const useStyles = makeStyles((theme) =>
@@ -55,8 +56,6 @@ const useStyles = makeStyles((theme) =>
     },
   })
 );
-
-const preventDefault = (event: React.SyntheticEvent) => event.preventDefault();
 
 interface Props {
   notificationLoadable: Loadable<NotificationList>;
@@ -129,7 +128,7 @@ export default function NotificationsDropdown({
             <LinkMui
               href='#'
               onClick={(event: React.SyntheticEvent) => {
-                preventDefault(event);
+                preventDefaultEvent(event);
                 markAllAsRead();
               }}
             >

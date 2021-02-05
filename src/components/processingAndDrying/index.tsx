@@ -32,6 +32,9 @@ const useStyles = makeStyles((theme) =>
     caption: {
       paddingLeft: theme.spacing(1),
     },
+    bold: {
+      fontWeight: theme.typography.fontWeightBold,
+    },
   })
 );
 
@@ -48,20 +51,18 @@ export default function ProcessingAndDrying({
   const [record, setRecord, onChange] = useForm(accession);
 
   const OnProcessingMethodChange = (id: string, value: unknown) => {
-    if (id === 'processingMethod') {
-      if (value === 'Count') {
-        setRecord({
-          ...record,
-          [id]: value,
-          subsetWeightGrams: undefined,
-          subsetCount: undefined,
-          totalWeightGrams: undefined,
-          estimatedSeedCount: undefined,
-        });
-      }
-      if (value === 'Weight') {
-        setRecord({ ...record, [id]: value, seedsCounted: undefined });
-      }
+    if (value === 'Count') {
+      setRecord({
+        ...record,
+        [id]: value,
+        subsetWeightGrams: undefined,
+        subsetCount: undefined,
+        totalWeightGrams: undefined,
+        estimatedSeedCount: undefined,
+      });
+    }
+    if (value === 'Weight') {
+      setRecord({ ...record, [id]: value, seedsCounted: undefined });
     }
   };
 
@@ -82,10 +83,9 @@ export default function ProcessingAndDrying({
   return (
     <MuiPickersUtilsProvider utils={MomentUtils}>
       <Paper className={classes.paper}>
-        <Typography component='p' variant='h6'>
+        <Typography variant='h6' className={classes.bold}>
           Processing & Drying
         </Typography>
-        <Typography component='p'>Description</Typography>
         <Divisor />
         <Grid container spacing={4}>
           <Grid item xs={4}>

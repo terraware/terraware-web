@@ -15,6 +15,7 @@ import React from 'react';
 import { Link as RouterLink, Redirect } from 'react-router-dom';
 import { postAccession } from '../../api/accession';
 import { NewAccession } from '../../api/types/accessions';
+import preventDefaultEvent from '../../utils/preventDefaultEvent';
 import useForm from '../../utils/useForm';
 import Checkbox from '../common/Checkbox';
 import DatePicker from '../common/DatePicker';
@@ -50,10 +51,12 @@ const useStyles = makeStyles((theme) =>
     listItem: {
       marginBottom: theme.spacing(1),
     },
+    bold: {
+      fontWeight: theme.typography.fontWeightBold,
+    },
   })
 );
 
-const preventDefault = (event: React.SyntheticEvent) => event.preventDefault();
 export default function NewAccessionWrapper(): JSX.Element {
   const [accessionNumber, setAccessionNumber] = React.useState<string>();
   const classes = useStyles();
@@ -117,7 +120,7 @@ export function AccessionForm<T extends NewAccession>({
   return (
     <MuiPickersUtilsProvider utils={MomentUtils}>
       <Paper className={classes.paper}>
-        <Typography component='p' variant='h6'>
+        <Typography variant='h6' className={classes.bold}>
           Seed Collection
         </Typography>
         <Typography component='p'>
@@ -297,7 +300,7 @@ export function AccessionForm<T extends NewAccession>({
                   key={index}
                   href='#'
                   onClick={(event: React.SyntheticEvent) => {
-                    preventDefault(event);
+                    preventDefaultEvent(event);
                   }}
                 >
                   <Typography

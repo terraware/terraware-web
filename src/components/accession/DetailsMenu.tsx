@@ -9,7 +9,7 @@ const useStyles = makeStyles((theme) =>
       padding: theme.spacing(2),
     },
     bold: {
-      fontWeight: 600,
+      fontWeight: theme.typography.fontWeightBold,
       color: theme.palette.common.black,
     },
     link: {

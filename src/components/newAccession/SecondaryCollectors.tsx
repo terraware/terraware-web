@@ -1,6 +1,7 @@
 import { Box, IconButton, Link } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import React from 'react';
+import preventDefaultEvent from '../../utils/preventDefaultEvent';
 import TextField from '../common/TextField';
 
 interface Props {
@@ -8,8 +9,6 @@ interface Props {
   secondaryCollectors?: string[];
   onChange: (id: string, value: string[]) => void;
 }
-
-const preventDefault = (event: React.SyntheticEvent) => event.preventDefault();
 
 export default function SecondaryCollectors({
   id,
@@ -60,7 +59,7 @@ export default function SecondaryCollectors({
       <Link
         href='#'
         onClick={(event: React.SyntheticEvent) => {
-          preventDefault(event);
+          preventDefaultEvent(event);
           onAddCollector();
         }}
       >

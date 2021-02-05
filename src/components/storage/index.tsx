@@ -35,6 +35,9 @@ const useStyles = makeStyles((theme) =>
     caption: {
       paddingLeft: theme.spacing(1),
     },
+    bold: {
+      fontWeight: theme.typography.fontWeightBold,
+    },
   })
 );
 
@@ -85,10 +88,9 @@ export default function Storage({
   return (
     <MuiPickersUtilsProvider utils={MomentUtils}>
       <Paper className={classes.paper}>
-        <Typography component='p' variant='h6'>
+        <Typography variant='h6' className={classes.bold}>
           Storage
         </Typography>
-        <Typography component='p'>Description</Typography>
         <Divisor />
         <Grid container spacing={4}>
           <Grid item xs={4}>
