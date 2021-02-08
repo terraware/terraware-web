@@ -50,6 +50,11 @@ describe("Accessions", () => {
   
       cy.get('#submit').click().url().should("match", /accessions\/[A-Za-z0-9]+\/seed-collection/);
 
+      cy.get('.MuiBox-root-97 > .MuiTypography-root').contains("Active");
+      cy.get('.MuiBox-root-97 > .MuiTypography-root').contains("Kousa Dogwoord");
+      cy.get('.MuiBox-root-97 > .MuiTypography-root').contains("02/03/2021");
+      cy.get('.MuiBox-root-97 > .MuiTypography-root').contains("Pending");
+
       cy.get('#species').should('have.value', "Kousa Dogwoord");
       cy.get('#family').should('have.value', "Cornaceae");
       cy.get('#numberOfTrees').should('have.value', "3");

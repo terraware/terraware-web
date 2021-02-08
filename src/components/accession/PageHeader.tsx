@@ -6,8 +6,8 @@ import EcoIcon from '@material-ui/icons/Eco';
 import FiberManualRecord from '@material-ui/icons/FiberManualRecord';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Accession } from '../api/types/accessions';
-import StateChip from './common/StateChip';
+import { Accession } from '../../api/types/accessions';
+import StateChip from '../common/StateChip';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -83,20 +83,16 @@ export default function AccessionPageHeader({ accession }: Props): JSX.Element {
                 {accession.accessionNumber}
               </Typography>
             </Box>
-            <Box
-              display='flex'
-              justifyContent='space-between'
-              alignItems='center'
-            >
+            <Box display='flex' alignItems='center'>
               <FiberManualRecord
                 color={status ? 'primary' : 'disabled'}
                 className={classes.statusIndicator}
               />
               <Typography variant='subtitle1' className={classes.subtitle}>
                 {status.charAt(0).toUpperCase() + status.slice(1)}
-                <DetailDivisor />
+                {accession.species && <DetailDivisor />}
                 {accession.species}
-                <DetailDivisor />
+                {accession.receivedDate && <DetailDivisor />}
                 {accession.receivedDate &&
                   new Date(accession.receivedDate).toLocaleDateString('en-US', {
                     day: '2-digit',

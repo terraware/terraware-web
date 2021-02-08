@@ -14,12 +14,12 @@ import { Accession } from '../../api/types/accessions';
 import getAccessionRequestIdAtom from '../../state/atoms/getAccessionRequestId';
 import getAccessionSelector from '../../state/selectors/getAccession';
 import useRecoilCurl from '../../utils/useRecoilCurl';
-import AccessionPageHeader from '../AccessionPageHeader';
 import ErrorBoundary from '../ErrorBoundary';
 import { AccessionForm } from '../newAccession';
 import ProcessingAndDrying from '../processingAndDrying';
 import Storage from '../storage';
 import DetailsMenu from './DetailsMenu';
+import AccessionPageHeader from './PageHeader';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
