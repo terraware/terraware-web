@@ -22,7 +22,13 @@ export default function Checkbox(props: Props): JSX.Element {
       id={props.id}
       onChange={onChange}
       label={props.label}
-      control={<MUICheckbox color='primary' checked={props.value ?? false} />}
+      control={
+        <MUICheckbox
+          id={'check-' + props.id}
+          color='primary'
+          checked={props.value ?? false}
+        />
+      }
     />
   );
 }

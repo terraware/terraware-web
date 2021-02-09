@@ -59,8 +59,8 @@ describe("Accessions", () => {
       cy.get('#family').should('have.value', "Cornaceae");
       cy.get('#numberOfTrees').should('have.value', "3");
       cy.get('#founderId').should('have.value', "234908098");
-      cy.get('#endangered > .MuiButtonBase-root > .MuiIconButton-label > .PrivateSwitchBase-input-54').should('have.checked', "true");
-      cy.get('#rare > .MuiButtonBase-root > .MuiIconButton-label > .PrivateSwitchBase-input-54').should('have.checked', "true");
+      cy.get('#check-endangered').should('have.checked', "true");
+      cy.get('#check-rare').should('have.checked', "true");
 
       cy.get('#fieldNotes').should('have.value', "Some notes");
   

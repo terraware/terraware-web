@@ -91,7 +91,7 @@ export default function ProcessingAndDrying({
   return (
     <MuiPickersUtilsProvider utils={DayJSUtils}>
       <Paper className={classes.paper}>
-        <Typography variant='h6' className={classes.bold}>
+        <Typography component='p' variant='h6' className={classes.bold}>
           Processing & Drying
         </Typography>
         <Divisor />

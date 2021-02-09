@@ -18,6 +18,7 @@ import ErrorBoundary from '../ErrorBoundary';
 import { AccessionForm } from '../newAccession';
 import ProcessingAndDrying from '../processingAndDrying';
 import Storage from '../storage';
+import Withdrawal from '../withdrawal';
 import DetailsMenu from './DetailsMenu';
 import AccessionPageHeader from './PageHeader';
 
@@ -103,6 +104,9 @@ function Content({ requestId }: { requestId: number }): JSX.Element {
                   onSubmit={onSubmit}
                   requestId={requestId}
                 />
+              </Route>
+              <Route exact path='/accessions/:accessionNumber/withdrawal'>
+                <Withdrawal accession={clonedAccession} onSubmit={onSubmit} />
               </Route>
             </Switch>
           </Grid>
