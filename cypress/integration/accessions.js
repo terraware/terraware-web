@@ -94,6 +94,8 @@ describe("Accessions", () => {
       cy.get('#processingMethod').click()
       cy.get('.MuiList-root > [tabindex="0"]').click()
       cy.get('#seedsCounted').type(300);
+      cy.get('#Nursery > .MuiButtonBase-root > .MuiIconButton-label > input').click();
+      cy.get('#Nursery > .MuiButtonBase-root').should('have.class', 'Mui-checked');
       cy.get('#dryingStartDate').type("01/01/2021");
       cy.get('#dryingEndDate').type("01/01/2021");
       cy.get('#dryingMoveDate').type("01/01/2021");
@@ -105,6 +107,7 @@ describe("Accessions", () => {
       cy.get('#processingStartDate').should('have.value', '01 / 01 / 2021');
       cy.get('#processingMethod + input').should('have.value', 'Count');
       cy.get('#seedsCounted').should('have.value', '300');
+      cy.get('#Nursery > .MuiButtonBase-root').should('have.class', 'Mui-checked');
       cy.get('#dryingStartDate').should('have.value', '01 / 01 / 2021');
       cy.get('#dryingEndDate').should('have.value', '01 / 01 / 2021');
       cy.get('#dryingMoveDate').should('have.value', '01 / 01 / 2021');

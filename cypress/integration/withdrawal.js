@@ -87,8 +87,8 @@ describe("Withdrawal", () => {
     it("should delete the withdrawal ", () => {
       cy.get('.MuiLink-root > .MuiBox-root').click().wait(500);
       cy.get('.MuiGrid-grid-xs-12 > .MuiBox-root').contains("290")
-      
-      cy.get('.MuiBox-root-356 > .MuiLink-root > .MuiTypography-root').click().wait(2000);
+
+      cy.get('.MuiLink-root > .MuiTypography-body2').click().wait(2000);
 
       cy.get(':nth-child(6) > :nth-child(2) > .MuiBox-root').contains("0")
       cy.get(':nth-child(3) > .MuiBox-root').contains("300")

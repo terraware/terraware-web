@@ -28,8 +28,9 @@ const useStyles = makeStyles((theme) =>
 );
 
 interface Props {
+  id?: string;
   title: string;
-  value: number;
+  value: number | string;
   variant?: 'default' | 'available' | 'zero';
 }
 
@@ -37,6 +38,7 @@ export default function SummaryBox({
   title,
   value,
   variant = 'default',
+  id,
 }: Props): JSX.Element {
   const classes = useStyles();
 
@@ -48,7 +50,7 @@ export default function SummaryBox({
       : classes.summaryZero;
 
   return (
-    <Box className={style}>
+    <Box className={style} id={id}>
       <Typography component='p'>{title}</Typography>
       <Typography component='p' variant='h6' className={classes.bold}>
         {value}

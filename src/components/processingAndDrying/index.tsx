@@ -5,6 +5,7 @@ import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import React from 'react';
 import { Accession } from '../../api/types/accessions';
 import useForm from '../../utils/useForm';
+import Checkbox from '../common/Checkbox';
 import DatePicker from '../common/DatePicker';
 import Divisor from '../common/Divisor';
 import Dropdown from '../common/Dropdown';
@@ -86,6 +87,34 @@ export default function ProcessingAndDrying({
       return (subsetCount * totalWeightGrams) / subsetWeightGrams;
     }
     return undefined;
+  };
+
+  type GerminationTestType = 'Lab' | 'Nursery';
+
+  const onChangeGerminationTestType = (id: string, value: unknown) => {
+    let germinationTestTypes = record.germinationTestTypes
+      ? [...record.germinationTestTypes]
+      : undefined;
+    if (germinationTestTypes) {
+      const index = germinationTestTypes.indexOf(id as GerminationTestType, 0);
+      if (index !== -1 && value === false) {
+        germinationTestTypes.splice(index, 1);
+      }
+
+      if (index == -1 && value === true) {
+        germinationTestTypes.push(id as GerminationTestType);
+      }
+    } else {
+      if (value === true) {
+        germinationTestTypes = [id as GerminationTestType];
+      }
+    }
+    setRecord({ ...record, germinationTestTypes: germinationTestTypes });
+  };
+
+  const isChecked = (id: GerminationTestType) => {
+    const germinationTestTypes = record.germinationTestTypes;
+    return germinationTestTypes?.includes(id);
   };
 
   return (
@@ -184,6 +213,22 @@ export default function ProcessingAndDrying({
               you save the changes.
             </Typography>
           </Grid>
+        </Grid>
+        <Grid item xs={12}>
+          <Checkbox
+            id='Nursery'
+            name='nurseryGermination'
+            label='Nursery Germination'
+            value={isChecked('Nursery' as GerminationTestType)}
+            onChange={onChangeGerminationTestType}
+          />
+          <Checkbox
+            id='Lab'
+            name='labGermination'
+            label='Lab Germination'
+            value={isChecked('Lab' as GerminationTestType)}
+            onChange={onChangeGerminationTestType}
+          />
         </Grid>
         <Divisor />
         <Grid container spacing={4}>
