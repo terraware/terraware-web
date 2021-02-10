@@ -11,8 +11,9 @@ import {
 import { useRecoilValue } from 'recoil';
 import { putAccession } from '../../api/accession';
 import { Accession } from '../../api/types/accessions';
-import getAccessionRequestIdAtom from '../../state/atoms/getAccessionRequestId';
-import getAccessionSelector from '../../state/selectors/getAccession';
+import getAccessionSelector, {
+  getAccessionRequestIdAtom,
+} from '../../state/selectors/getAccession';
 import useRecoilCurl from '../../utils/useRecoilCurl';
 import ErrorBoundary from '../ErrorBoundary';
 import { AccessionForm } from '../newAccession';

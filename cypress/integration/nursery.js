@@ -16,16 +16,16 @@ describe("Nursery", () => {
         cy.get('#Nursery > .MuiButtonBase-root > .MuiIconButton-label > input').click();
         cy.get('#submit').click().wait(2000);
 
-        cy.get('#nursery > .MuiTypography-root').click().url().should("match", /accessions\/[A-Za-z0-9]+\/nursery/).wait(2000);
+        cy.get('#nursery > .MuiTypography-root').click().url().should("match", /accessions\/[A-Za-z0-9]+\/nursery/);
         });
     it("should create a new test", () => {
-        cy.get('#submit').click().wait(200);
+        cy.get('#submit').click();
         cy.get('#startDate').type("02/09/2021");
-        cy.get('#seedType').click().wait(500);
+        cy.get('#seedType').click();
         cy.get('.MuiList-root > [tabindex="-1"]').click();
-        cy.get('#substrate').click().wait(500);
+        cy.get('#substrate').click();
         cy.get('[data-value="Paper Petri Dish"]').click();
-        cy.get('#treatment').click().wait(500);
+        cy.get('#treatment').click();
         cy.get('[data-value="Scarify"]').click();
         cy.get('#seedsSown').type("100");
         cy.get('#seedsGerminated').type("50");
@@ -50,8 +50,8 @@ describe("Nursery", () => {
     });
 
     it("should modify test", () => {
-        cy.get(':nth-child(1) > :nth-child(9) > .MuiLink-root > .MuiBox-root > .MuiTypography-root').click().wait(200);
-        cy.get('#substrate').click().wait(500);
+        cy.get(':nth-child(1) > :nth-child(9) > .MuiLink-root > .MuiBox-root > .MuiTypography-root').click();
+        cy.get('#substrate').click();
         cy.get('[data-value="Nursery Media"]').click();
         cy.get('#seedsGerminated').clear().type("70");
         cy.get('#recordingDate').clear().type("02/10/2021");
@@ -73,13 +73,13 @@ describe("Nursery", () => {
     });
 
     it("should create another test", () => {
-        cy.get('#submit').click().wait(200);
+        cy.get('#submit').click();
         cy.get('#startDate').type("02/12/2021");
-        cy.get('#seedType').click().wait(500);
+        cy.get('#seedType').click();
         cy.get('.MuiList-root > [tabindex="-1"]').click();
-        cy.get('#substrate').click().wait(500);
+        cy.get('#substrate').click();
         cy.get('[data-value="Agar Petri Dish"]').click();
-        cy.get('#treatment').click().wait(500);
+        cy.get('#treatment').click();
         cy.get('[data-value="Soak"]').click();
         cy.get('#seedsSown').type("200");
         cy.get('#seedsGerminated').type("100");
@@ -90,13 +90,13 @@ describe("Nursery", () => {
     });
 
     it("should create another test", () => {
-        cy.get('#submit').click().wait(200);
+        cy.get('#submit').click();
         cy.get('#startDate').type("02/01/2021");
-        cy.get('#seedType').click().wait(500);
+        cy.get('#seedType').click();
         cy.get('[data-value="Fresh"]').click();
-        cy.get('#substrate').click().wait(500);
+        cy.get('#substrate').click();
         cy.get('[data-value="Other"]').click();
-        cy.get('#treatment').click().wait(500);
+        cy.get('#treatment').click();
         cy.get('[data-value="Other"]').click();
         cy.get('#seedsSown').type("50");
         cy.get('#seedsGerminated').type("45");
@@ -112,7 +112,7 @@ describe("Nursery", () => {
         cy.get('.MuiTableBody-root > :nth-child(3) > :nth-child(1)').contains("02/01/2021");
   
         // by start date
-        cy.get('.MuiTableRow-root > :nth-child(1) > .MuiButtonBase-root').click().wait(200);
+        cy.get('.MuiTableRow-root > :nth-child(1) > .MuiButtonBase-root').click();
         cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(1)').contains("02/01/2021");
         cy.get('.MuiTableBody-root > :nth-child(2) > :nth-child(1)').contains("02/09/2021");
          cy.get('.MuiTableBody-root > :nth-child(3) > :nth-child(1)').contains("02/12/2021");
@@ -156,7 +156,7 @@ describe("Nursery", () => {
     })
 
     it("should delete test", () => {
-        cy.get(':nth-child(2) > :nth-child(9) > .MuiLink-root > .MuiBox-root > .MuiTypography-root').click().wait(200);
+        cy.get(':nth-child(2) > :nth-child(9) > .MuiLink-root > .MuiBox-root > .MuiTypography-root').click();
         cy.get('.MuiTypography-body2').click().wait(2000);
         cy.get('.MuiTableBody-root').children().should('have.length', 2);
     })

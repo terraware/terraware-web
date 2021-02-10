@@ -15,7 +15,7 @@ describe("Withdrawal", () => {
       cy.get('#seedsCounted').type(300);
       cy.get('#submit').click().wait(2000);
 
-      cy.get('#withdrawal > .MuiTypography-root').click().url().should("match", /accessions\/[A-Za-z0-9]+\/withdrawal/).wait(2000);
+      cy.get('#withdrawal > .MuiTypography-root').click().url().should("match", /accessions\/[A-Za-z0-9]+\/withdrawal/);
     });
 
     it("should display the initial values", () => {
@@ -25,7 +25,7 @@ describe("Withdrawal", () => {
     })
 
     it("should create a withdrawal ", () => {
-      cy.get('#submit').click().wait(500);
+      cy.get('#submit').click();
       cy.get('.MuiBox-root > #submit').contains('Withdraw seeds')
       cy.get(':nth-child(3) > .MuiTypography-root').contains('You can schedule a date by selecting a future date.')
       cy.get('.MuiGrid-grid-xs-12 > .MuiBox-root').contains("300")
@@ -59,7 +59,7 @@ describe("Withdrawal", () => {
     })
 
     it("should edit a withdrawal ", () => {
-      cy.get('.MuiLink-root > .MuiBox-root').click().wait(500);
+      cy.get('.MuiLink-root > .MuiBox-root').click();
       cy.get('.MuiBox-root > #submit').contains('Save changes')
       cy.get('.MuiGrid-grid-xs-12 > .MuiBox-root').contains("250")
       
@@ -85,7 +85,7 @@ describe("Withdrawal", () => {
     })
 
     it("should delete the withdrawal ", () => {
-      cy.get('.MuiLink-root > .MuiBox-root').click().wait(500);
+      cy.get('.MuiLink-root > .MuiBox-root').click();
       cy.get('.MuiGrid-grid-xs-12 > .MuiBox-root').contains("290")
 
       cy.get('.MuiLink-root > .MuiTypography-body2').click().wait(2000);
@@ -98,7 +98,7 @@ describe("Withdrawal", () => {
 
 
     it("should do the right math when adding withdrawals", () => {
-      cy.get('#submit').click().wait(500);
+      cy.get('#submit').click();
       cy.get('.MuiGrid-grid-xs-12 > .MuiBox-root').contains("300")
       
       cy.get('#quantity').type("50");
@@ -113,7 +113,7 @@ describe("Withdrawal", () => {
       cy.get(':nth-child(3) > .MuiBox-root').contains("250")
       cy.get(':nth-child(3) > .MuiBox-root').should('have.css', 'background-color', 'rgb(117, 117, 117)')
 
-      cy.get('#submit').click().wait(500);
+      cy.get('#submit').click();
       cy.get('.MuiGrid-grid-xs-12 > .MuiBox-root').contains("250")
       cy.get('#quantity').type("150");
       cy.get('#date').clear().type("01/31/2020");
@@ -127,7 +127,7 @@ describe("Withdrawal", () => {
       cy.get(':nth-child(3) > .MuiBox-root').contains("100")
       cy.get(':nth-child(3) > .MuiBox-root').should('have.css', 'background-color', 'rgb(117, 117, 117)')
 
-      cy.get('#submit').click().wait(500);
+      cy.get('#submit').click();
       cy.get('.MuiGrid-grid-xs-12 > .MuiBox-root').contains("100")
       cy.get('#quantity').type("100");
       cy.get('#date').clear().type("03/28/2020");
@@ -141,7 +141,7 @@ describe("Withdrawal", () => {
       cy.get(':nth-child(3) > .MuiBox-root').should('have.css', 'background-color', 'rgb(203, 94, 60)')
 
       cy.get('#submit').should('have.css', 'background-color', 'rgb(158, 158, 158)')
-      cy.get('#submit').click().wait(500);
+      cy.get('#submit').click();
       cy.get('.MuiGrid-grid-xs-12 > .MuiBox-root').should('not.exist');
     })
   });
@@ -160,7 +160,7 @@ describe("Withdrawal", () => {
       cy.get('#totalWeightGrams').type(100);
       cy.get('#submit').click().wait(2000);
 
-      cy.get('#withdrawal > .MuiTypography-root').click().wait(2000);
+      cy.get('#withdrawal > .MuiTypography-root').click();
     });
 
     it("should display the initial values", () => {
@@ -170,7 +170,7 @@ describe("Withdrawal", () => {
     })
 
     it("should create a withdrawal ", () => {
-      cy.get('#submit').click().wait(500);
+      cy.get('#submit').click();
       cy.get('.MuiGrid-grid-xs-12 > .MuiBox-root').contains("10")
       cy.get('#quantityType').contains("seed count")
       cy.get('#quantityType').click()
@@ -199,7 +199,7 @@ describe("Withdrawal", () => {
     })
 
     it("should edit a withdrawal ", () => {
-      cy.get('.MuiLink-root > .MuiBox-root').click().wait(500);
+      cy.get('.MuiLink-root > .MuiBox-root').click();
       cy.get('.MuiGrid-grid-xs-12 > .MuiBox-root').contains("8")
       
       cy.get('#quantityType').click()
@@ -228,7 +228,7 @@ describe("Withdrawal", () => {
     })
 
     it("should do the right math when adding withdrawals", () => {
-      cy.get('#submit').click().wait(500);
+      cy.get('#submit').click();
       cy.get('.MuiGrid-grid-xs-12 > .MuiBox-root').contains("7")
       
       cy.get('#quantity').type("3");
@@ -243,7 +243,7 @@ describe("Withdrawal", () => {
       cy.get(':nth-child(3) > .MuiBox-root').contains("4")
       cy.get(':nth-child(3) > .MuiBox-root').should('have.css', 'background-color', 'rgb(117, 117, 117)')
 
-      cy.get('#submit').click().wait(500);
+      cy.get('#submit').click();
       cy.get('.MuiGrid-grid-xs-12 > .MuiBox-root').contains("4")
       cy.get('#quantity').type("1");
       cy.get('#date').clear().type("01/31/2020");
@@ -257,7 +257,7 @@ describe("Withdrawal", () => {
       cy.get(':nth-child(3) > .MuiBox-root').contains("3")
       cy.get(':nth-child(3) > .MuiBox-root').should('have.css', 'background-color', 'rgb(117, 117, 117)')
 
-      cy.get('#submit').click().wait(500);
+      cy.get('#submit').click();
       cy.get('.MuiGrid-grid-xs-12 > .MuiBox-root').contains("3")
       cy.get('#quantityType').click()
       cy.get('.MuiList-root > [tabindex="-1"]').click()
@@ -273,7 +273,7 @@ describe("Withdrawal", () => {
       cy.get(':nth-child(3) > .MuiBox-root').should('have.css', 'background-color', 'rgb(203, 94, 60)')
 
       cy.get('#submit').should('have.css', 'background-color', 'rgb(158, 158, 158)')
-      cy.get('#submit').click().wait(500);
+      cy.get('#submit').click();
       cy.get('.MuiGrid-grid-xs-12 > .MuiBox-root').should('not.exist');
     })
 

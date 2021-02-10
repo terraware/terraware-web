@@ -1,7 +1,11 @@
-import { selectorFamily } from 'recoil';
+import { atom, selectorFamily } from 'recoil';
 import { getAccession } from '../../api/accession';
 import delay from '../../utils/delay';
 
+export const getAccessionRequestIdAtom = atom({
+  key: 'getAccessionRequestId',
+  default: 0,
+});
 
 export default selectorFamily({
   key: 'getAccessionSelector',

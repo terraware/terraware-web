@@ -116,7 +116,7 @@ describe("Accessions", () => {
     })
 
     it("should clear textfield if changing dropdown", () => {
-      cy.get('#processingMethod').click().wait(500);
+      cy.get('#processingMethod').click();
       cy.get('.MuiList-root > [tabindex="-1"]').click();
       
       cy.get('#subsetWeightGrams').type(500);
@@ -128,39 +128,39 @@ describe("Accessions", () => {
       cy.get('#subsetWeightGrams').should('have.value', '500');
       cy.get('#estimatedSeedCount').should('have.value', '500');
 
-      cy.get('#processingMethod').click().wait(500);
+      cy.get('#processingMethod').click();
       cy.get('.MuiList-root > [tabindex="-1"]').click();
 
       cy.get('#seedsCounted').should('have.value', '');
       cy.get('#seedsCounted').type(400);
       
-      cy.get('#processingMethod').click().wait(500);
+      cy.get('#processingMethod').click();
       cy.get('.MuiList-root > [tabindex="-1"]').click();
 
       cy.get('#subsetWeightGrams').should('have.value', '');
 
-      cy.get('#processingMethod').click().wait(500);
+      cy.get('#processingMethod').click();
       cy.get('.MuiList-root > [tabindex="-1"]').click();
 
       cy.get('#seedsCounted').should('have.value', '');
     });
 
     it("should add storage information", () => {
-      cy.get('#storage > .MuiTypography-root').click().url().should("match", /accessions\/[A-Za-z0-9]+\/storage/).wait(2000);
+      cy.get('#storage > .MuiTypography-root').click().url().should("match", /accessions\/[A-Za-z0-9]+\/storage/);
       cy.get('#storageStartDate').type("02/04/2021");
       cy.get('#storagePackets').type("5");
-      cy.get('#storageLocation').click().wait(500);
-      cy.get('[data-value="Freezer 1"]').click().wait(500);
+      cy.get('#storageLocation').click();
+      cy.get('[data-value="Freezer 1"]').click();
       cy.get('#storageCondition').should('have.value', 'Freezer');
 
-      cy.get('#storageLocation').click().wait(500);
-      cy.get('[data-value="Refrigerator 2"]').click().wait(500);
+      cy.get('#storageLocation').click();
+      cy.get('[data-value="Refrigerator 2"]').click();
       cy.get('#storageCondition').should('have.value', 'Refrigerator');
 
       cy.get('#storageNotes').type("A storage note");
       cy.get('#storageStaffResponsible').type("Constanza");
 
-      cy.get('#submit').click().wait(4000);
+      cy.get('#submit').click().wait(2000);
 
       cy.get('#storageStartDate').should('have.value', '02 / 04 / 2021');
       cy.get('#storagePackets').should('have.value', '5');
