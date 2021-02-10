@@ -22,8 +22,9 @@ import {
   postAllNotificationsAsRead,
   postNotificationAsRead,
 } from '../api/notification';
-import notificationAtom from '../state/atoms/notifications';
-import notifications from '../state/selectors/notifications';
+import notificationsSelector, {
+  notificationAtom,
+} from '../state/selectors/notifications';
 import preventDefaultEvent from '../utils/preventDefaultEvent';
 import NotificationIcon from './NotificationIcon';
 
@@ -59,7 +60,7 @@ const useStyles = makeStyles((theme) =>
 export default function NotificationsDropdown(): JSX.Element {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState<Element | null>(null);
-  const notificationLoadable = useRecoilValueLoadable(notifications);
+  const notificationLoadable = useRecoilValueLoadable(notificationsSelector);
   const setNotificationTimestamp = useSetRecoilState(notificationAtom);
 
   const contents = notificationLoadable.valueMaybe();

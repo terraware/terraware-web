@@ -36,7 +36,7 @@ jobs:
           TERRAWARE_KEYCLOAK_REALM: dummy
           TERRAWARE_KEYCLOAK_SERVER_URL: http://dummy/
 
-      - name: Run server
+      - name: download and start backend
         run: yarn docker:start
 
       - name: E-2-E
