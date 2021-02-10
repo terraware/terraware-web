@@ -140,18 +140,9 @@ describe("Withdrawal", () => {
       cy.get(':nth-child(3) > .MuiBox-root').contains("0")
       cy.get(':nth-child(3) > .MuiBox-root').should('have.css', 'background-color', 'rgb(203, 94, 60)')
 
+      cy.get('#submit').should('have.css', 'background-color', 'rgb(158, 158, 158)')
       cy.get('#submit').click().wait(500);
-      cy.get('.MuiGrid-grid-xs-12 > .MuiBox-root').contains("0")
-      cy.get('#quantity').type("5");
-      cy.get('#date').clear().type("03/21/2020");
-      cy.get('#destination').type("Germany");
-      cy.get('#purpose').click()
-      cy.get('[data-value="Propagation"]').click()
-      cy.get('#staffResponsible').type("Constanza");
-      cy.get('.MuiBox-root > #submit').click().wait(2000);
-      cy.get(':nth-child(6) > :nth-child(2) > .MuiBox-root').contains("305")
-      cy.get(':nth-child(3) > .MuiBox-root').contains("-5")
-      cy.get(':nth-child(3) > .MuiBox-root').should('have.css', 'background-color', 'rgb(203, 94, 60)')
+      cy.get('.MuiGrid-grid-xs-12 > .MuiBox-root').should('not.exist');
     })
   });
 
@@ -281,33 +272,22 @@ describe("Withdrawal", () => {
       cy.get(':nth-child(3) > .MuiBox-root').contains("0")
       cy.get(':nth-child(3) > .MuiBox-root').should('have.css', 'background-color', 'rgb(203, 94, 60)')
 
+      cy.get('#submit').should('have.css', 'background-color', 'rgb(158, 158, 158)')
       cy.get('#submit').click().wait(500);
-      cy.get('.MuiGrid-grid-xs-12 > .MuiBox-root').contains("0")
-      cy.get('#quantity').type("5");
-      cy.get('#date').clear().type("03/21/2020");
-      cy.get('#destination').type("Germany");
-      cy.get('#purpose').click()
-      cy.get('[data-value="Propagation"]').click()
-      cy.get('#staffResponsible').type("Constanza");
-      cy.get('.MuiBox-root > #submit').click().wait(2000);
-      cy.get(':nth-child(6) > :nth-child(2) > .MuiBox-root').contains("15")
-      cy.get(':nth-child(3) > .MuiBox-root').contains("-5")
-      cy.get(':nth-child(3) > .MuiBox-root').should('have.css', 'background-color', 'rgb(203, 94, 60)')
+      cy.get('.MuiGrid-grid-xs-12 > .MuiBox-root').should('not.exist');
     })
 
     it("should display the records in the right order", () => {
       cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(1)').contains("01/29/2020")
       cy.get('.MuiTableBody-root > :nth-child(2) > :nth-child(1)').contains("01/31/2020")
-      cy.get('.MuiTableBody-root > :nth-child(3) > :nth-child(1)').contains("03/21/2020")
-      cy.get('.MuiTableBody-root > :nth-child(4) > :nth-child(1)').contains("03/28/2020")
-      cy.get('.MuiTableBody-root > :nth-child(5) > :nth-child(1) > :nth-child(1)').contains("Scheduled for")
-      cy.get('.MuiTableBody-root > :nth-child(5) > :nth-child(1) > :nth-child(2)').contains("01/31/2030")
+      cy.get('.MuiTableBody-root > :nth-child(3) > :nth-child(1)').contains("03/28/2020")
+      cy.get('.MuiTableBody-root > :nth-child(4) > :nth-child(1) > :nth-child(1)').contains("Scheduled for")
+      cy.get('.MuiTableBody-root > :nth-child(4) > :nth-child(1) > :nth-child(2)').contains("01/31/2030")
 
       // by date
       cy.get('[aria-sort="ascending"] > .MuiButtonBase-root').click();
-      cy.get('.MuiTableBody-root > :nth-child(5) > :nth-child(1)').contains("01/29/2020")
-      cy.get('.MuiTableBody-root > :nth-child(4) > :nth-child(1)').contains("01/31/2020")
-      cy.get('.MuiTableBody-root > :nth-child(3) > :nth-child(1)').contains("03/21/2020")
+      cy.get('.MuiTableBody-root > :nth-child(4) > :nth-child(1)').contains("01/29/2020")
+      cy.get('.MuiTableBody-root > :nth-child(3) > :nth-child(1)').contains("01/31/2020")
       cy.get('.MuiTableBody-root > :nth-child(2) > :nth-child(1)').contains("03/28/2020")
       cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(1) > :nth-child(1)').contains("Scheduled for")
       cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(1) > :nth-child(2)').contains("01/31/2030")
@@ -318,23 +298,21 @@ describe("Withdrawal", () => {
       cy.get('.MuiTableBody-root > :nth-child(2) > :nth-child(2)').contains("30g")
       cy.get('.MuiTableBody-root > :nth-child(3) > :nth-child(2)').contains("1 seeds")
       cy.get('.MuiTableBody-root > :nth-child(4) > :nth-child(2)').contains("3 seeds")
-      cy.get('.MuiTableBody-root > :nth-child(5) > :nth-child(2)').contains("5 seeds")
 
       // by destination
       cy.get('.MuiTableRow-root > :nth-child(3) > .MuiButtonBase-root').click()
-      cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(3)').contains("Germany")
-      cy.get('.MuiTableBody-root > :nth-child(2) > :nth-child(3)').contains("Panama")
-      cy.get('.MuiTableBody-root > :nth-child(3) > :nth-child(3)').contains("Paris")
+      cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(3)').contains("Panama")
+      cy.get('.MuiTableBody-root > :nth-child(2) > :nth-child(3)').contains("Paris")
+      cy.get('.MuiTableBody-root > :nth-child(3) > :nth-child(3)').contains("USA")
       cy.get('.MuiTableBody-root > :nth-child(4) > :nth-child(3)').contains("USA")
-      cy.get('.MuiTableBody-root > :nth-child(5) > :nth-child(3)').contains("USA")
 
       // by Purpose
       cy.get(':nth-child(4) > .MuiButtonBase-root').click();
-      cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(4)').contains("Outreach or Education")
-      cy.get('.MuiTableBody-root > :nth-child(2) > :nth-child(4)').contains("Propagation")
+      cy.get(':nth-child(4) > .MuiButtonBase-root').click();
+      cy.get('.MuiTableBody-root > :nth-child(4) > :nth-child(4)').contains("Outreach or Education")
       cy.get('.MuiTableBody-root > :nth-child(3) > :nth-child(4)').contains("Propagation")
-      cy.get('.MuiTableBody-root > :nth-child(4) > :nth-child(4)').contains("Research")
-      cy.get('.MuiTableBody-root > :nth-child(5) > :nth-child(4)').contains("Research")
+      cy.get('.MuiTableBody-root > :nth-child(2) > :nth-child(4)').contains("Research")
+      cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(4)').contains("Research")
 
       // by staff
       cy.get(':nth-child(5) > .MuiButtonBase-root').click();
@@ -342,8 +320,7 @@ describe("Withdrawal", () => {
       cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(5)').contains("Leann")
       cy.get('.MuiTableBody-root > :nth-child(2) > :nth-child(5)').contains("Leann")
       cy.get('.MuiTableBody-root > :nth-child(3) > :nth-child(5)').contains("Constanza")
-      cy.get('.MuiTableBody-root > :nth-child(4) > :nth-child(5)').contains("Constanza")
-      cy.get('.MuiTableBody-root > :nth-child(5) > :nth-child(5)').contains("Carlos")
+      cy.get('.MuiTableBody-root > :nth-child(4) > :nth-child(5)').contains("Carlos")
     })
   });
 

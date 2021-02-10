@@ -31,6 +31,10 @@ const useStyles = makeStyles((theme) =>
     greenChip: {
       color: theme.palette.common.white,
     },
+    grayChip: {
+      backgroundColor: theme.palette.grey[500],
+      color: theme.palette.common.white,
+    },
   })
 );
 
@@ -167,12 +171,14 @@ export default function WithdrawalView({
             <Grid item className={classes.right}>
               <Chip
                 id='submit'
-                className={classes.greenChip}
+                className={
+                  seedsAvailable > 0 ? classes.greenChip : classes.grayChip
+                }
                 label='New withdrawal'
-                clickable
+                clickable={seedsAvailable > 0}
                 deleteIcon={<AddIcon classes={newWithdrawalChipStyles()} />}
-                color={seedsAvailable !== 0 ? 'primary' : undefined}
-                onClick={onNewWithdrawal}
+                color={seedsAvailable > 0 ? 'primary' : undefined}
+                onClick={seedsAvailable > 0 ? onNewWithdrawal : undefined}
                 onDelete={onNewWithdrawal}
               />
             </Grid>
