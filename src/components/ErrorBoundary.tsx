@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 
 interface Props {
@@ -22,6 +21,7 @@ export default class ErrorBoundary extends Component<Props, State> {
 
   // when an error ocurred log the message
   public componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
+    // eslint-disable-next-line no-console
     console.log('Uncaught error:', error, errorInfo);
   }
 

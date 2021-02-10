@@ -54,12 +54,11 @@ export default function Storage({
 }: Props): JSX.Element {
   const classes = useStyles();
   const [record, setRecord, onChange] = useForm(accession);
-  const locationsLodable = useRecoilValueLoadable(locationsSelector(requestId));
+  const locationsLoadable = useRecoilValueLoadable(
+    locationsSelector(requestId)
+  );
 
-  const contents =
-    locationsLodable.state === 'hasValue'
-      ? locationsLodable.contents
-      : undefined;
+  const contents = locationsLoadable.getValue();
 
   const generateLocationsValues = contents?.map((location: Location) => {
     return {

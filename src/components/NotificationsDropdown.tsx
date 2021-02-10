@@ -17,13 +17,13 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Loadable, useSetRecoilState } from 'recoil';
+import { useRecoilValueLoadable, useSetRecoilState } from 'recoil';
 import {
   postAllNotificationsAsRead,
   postNotificationAsRead,
 } from '../api/notification';
-import { NotificationList } from '../api/types/notification';
 import notificationAtom from '../state/atoms/notifications';
+import notifications from '../state/selectors/notifications';
 import preventDefaultEvent from '../utils/preventDefaultEvent';
 import NotificationIcon from './NotificationIcon';
 
@@ -56,21 +56,13 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-interface Props {
-  notificationLoadable: Loadable<NotificationList>;
-}
-
-export default function NotificationsDropdown({
-  notificationLoadable,
-}: Props): JSX.Element {
-  const { state } = notificationLoadable;
-  const contents =
-    notificationLoadable.state === 'hasValue'
-      ? notificationLoadable.contents
-      : undefined;
+export default function NotificationsDropdown(): JSX.Element {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState<Element | null>(null);
+  const notificationLoadable = useRecoilValueLoadable(notifications);
   const setNotificationTimestamp = useSetRecoilState(notificationAtom);
+
+  const contents = notificationLoadable.valueMaybe();
 
   const onIconClick = (event: React.MouseEvent<any>) => {
     setAnchorEl(event.currentTarget);
@@ -91,17 +83,17 @@ export default function NotificationsDropdown({
   };
 
   const getUnreadNotifications = () => {
-    const unreadNotifications = contents?.filter(
-      (notification) => !notification.read
-    );
-    return unreadNotifications?.length;
+    const unreadNotifications = contents
+      ? contents.filter((notification) => !notification.read)
+      : [];
+    return unreadNotifications.length;
   };
 
   return (
     <div>
       <IconButton onClick={onIconClick}>
         <Badge
-          badgeContent={contents && getUnreadNotifications()}
+          badgeContent={contents ? getUnreadNotifications() : undefined}
           color='secondary'
         >
           <NotificationsIcon />
@@ -135,8 +127,8 @@ export default function NotificationsDropdown({
             </LinkMui>
           </ListSubheader>
           <Divider />
-          {state === 'hasError' && 'An error ocurred'}
-          {state === 'loading' && <CircularProgress />}
+          {notificationLoadable.state === 'hasError' && 'An error ocurred'}
+          {notificationLoadable.state === 'loading' && <CircularProgress />}
           {contents &&
             contents.map(
               ({ id, state, type, accessionNumber, read, text, timestamp }) => (

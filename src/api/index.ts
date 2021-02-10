@@ -1,6 +1,8 @@
-/* eslint-disable no-console */
 import axios from 'axios';
-import delay from '../utils/delay';
+
+function delay(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(() => resolve(), ms));
+}
 
 let handler = {};
 
