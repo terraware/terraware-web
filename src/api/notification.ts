@@ -1,5 +1,4 @@
-/* eslint-disable no-console */
-import axios from 'axios';
+import axios from '.';
 import { SimpleErrorResponsePayload, SimpleSuccessResponsePayload } from './types';
 import { Notifications } from './types/notification';
 

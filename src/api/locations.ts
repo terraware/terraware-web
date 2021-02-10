@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from '.';
 import { Locations } from './types/locations';
 
 export const getLocations = async (): Promise<Locations> => {
