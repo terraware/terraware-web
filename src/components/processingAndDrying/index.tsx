@@ -206,8 +206,6 @@ export default function ProcessingAndDrying({
             <Typography component='p' variant='body1'>
               Viability test types
             </Typography>
-          </Grid>
-          <Grid item xs={12}>
             <Typography component='p' variant='body2'>
               Selecting either one will unlock a new option on the sidebar after
               you save the changes.
