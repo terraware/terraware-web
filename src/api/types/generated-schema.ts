@@ -11,10 +11,22 @@ export interface paths {
     get: operations["read_feature_list_api_v1_features_get"];
     post: operations["create_feature_api_v1_features_post"];
   };
+<<<<<<< HEAD
   "/api/v1/features/{feature_id}": {
     get: operations["read_feature_api_v1_features__feature_id__get"];
     put: operations["update_feature_api_v1_features__feature_id__put"];
     delete: operations["delete_feature_api_v1_features__feature_id__delete"];
+=======
+  "/api/v1/seedbank/accession/{accessionNumber}/photo": {
+    get: operations["listPhotos"];
+  };
+  "/api/v1/seedbank/accession/{accessionNumber}/photo/{photoFilename}": {
+    get: operations["getPhoto"];
+    post: operations["uploadPhoto"];
+  };
+  "/api/v1/seedbank/notification": {
+    get: operations["listAll"];
+>>>>>>> FE: Implement searchbar (#42)
   };
   "/api/v1/layers": {
     get: operations["read_layer_list_api_v1_layers_get"];
@@ -253,6 +265,7 @@ export interface components {
       created_time?: string;
       modified_time?: string;
     };
+<<<<<<< HEAD
     Plant: {
       feature_id: number;
       label?: string;
@@ -261,11 +274,30 @@ export interface components {
       date_planted?: string;
       created_time?: string;
       modified_time?: string;
+=======
+    ListPhotosResponseElement: {
+      filename: string;
+      size: number;
+      capturedTime: string;
+      latitude?: number;
+      longitude?: number;
+      /** GPS accuracy in meters. */
+      gpsAccuracy?: number;
+    };
+    ListPhotosResponsePayload: {
+      photos: components["schemas"]["ListPhotosResponseElement"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    NotificationListResponse: {
+      notifications: components["schemas"]["NotificationPayload"][];
+      status: components["schemas"]["SuccessOrError"];
+>>>>>>> FE: Implement searchbar (#42)
     };
     PlantObservation: {
       id?: number;
       feature_id?: number;
       timestamp: string;
+<<<<<<< HEAD
       health_state_id?: number;
       flowers?: boolean;
       seeds?: boolean;
@@ -276,6 +308,190 @@ export interface components {
       modified_time?: string;
     };
     Project: {
+=======
+      type: "Alert" | "State" | "Date";
+      /** If true, this notification has been marked as read. */
+      read: boolean;
+      /** Plain-text body of notification. */
+      text: string;
+      /** For accession notifications, which accession caused the notification. */
+      accessionNumber?: string;
+      /** For state notifications, which state is being summarized. */
+      state?:
+        | "Pending"
+        | "Processing"
+        | "Processed"
+        | "Drying"
+        | "Dried"
+        | "In Storage"
+        | "Withdrawn";
+    };
+    PhotoMetadata: {
+      capturedTime: string;
+      latitude?: number;
+      longitude?: number;
+      /** GPS accuracy in meters. */
+      gpsAccuracy?: number;
+    };
+    SearchField:
+      | "accessionNumber"
+      | "collectedDate"
+      | "collectionNotes"
+      | "cutTestSeedsCompromised"
+      | "cutTestSeedsEmpty"
+      | "cutTestSeedsFilled"
+      | "dryingEndDate"
+      | "dryingMoveDate"
+      | "dryingStartDate"
+      | "endangered"
+      | "estimatedSeeds"
+      | "estimatedSeedsIncoming"
+      | "family"
+      | "geolocation"
+      | "germinationPercentGerminated"
+      | "germinationSeedType"
+      | "germinationSeedsGerminated"
+      | "germinationSeedsSown"
+      | "germinationStartDate"
+      | "germinationSubstrate"
+      | "germinationTestNotes"
+      | "germinationTestType"
+      | "germinationTreatment"
+      | "landowner"
+      | "latestGerminationTestDate"
+      | "latestViabilityPercent"
+      | "primaryCollector"
+      | "processingMethod"
+      | "processingNotes"
+      | "processingStartDate"
+      | "rare"
+      | "receivedDate"
+      | "seedsCounted"
+      | "siteLocation"
+      | "species"
+      | "state"
+      | "status"
+      | "storageCondition"
+      | "storageLocation"
+      | "storageNotes"
+      | "storagePackets"
+      | "storageStartDate"
+      | "targetStorageCondition"
+      | "totalViabilityPercent"
+      | "treesCollectedFrom"
+      | "withdrawalDate"
+      | "withdrawalDestination"
+      | "withdrawalGrams"
+      | "withdrawalNotes"
+      | "withdrawalPurpose"
+      | "withdrawalSeeds"
+      | "withdrawalSeedsRemaining";
+    SearchFilter: {
+      field: components["schemas"]["SearchField"];
+      values: string[];
+      type: "Exact" | "Fuzzy" | "Range";
+    };
+    SearchRequestPayload: {
+      fields: components["schemas"]["SearchField"][];
+      sortOrder?: components["schemas"]["SearchSortOrderElement"][];
+      filters?: components["schemas"]["SearchFilter"][];
+      cursor?: string;
+      count: number;
+    };
+    SearchResponsePayload: {
+      results: { [key: string]: string }[];
+      cursor?: string;
+    };
+    SearchSortOrderElement: {
+      field: components["schemas"]["SearchField"];
+      direction?: "Ascending" | "Descending";
+    };
+    SimpleErrorResponsePayload: {
+      error: components["schemas"]["ErrorDetails"];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    SimpleSuccessResponsePayload: {
+      status: components["schemas"]["SuccessOrError"];
+    };
+    StorageLocationDetails: {
+      storageLocation: string;
+      storageCondition: "Refrigerator" | "Freezer";
+    };
+    StorageLocationsResponsePayload: {
+      locations: components["schemas"]["StorageLocationDetails"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    /** Indicates of success or failure of the requested operation. */
+    SuccessOrError: "ok" | "error";
+    /** Summary of important statistics about the seed bank for the Summary page. */
+    SummaryResponse: {
+      activeAccessions: components["schemas"]["SummaryStatistic"];
+      species: components["schemas"]["SummaryStatistic"];
+      families: components["schemas"]["SummaryStatistic"];
+      /** Number of accessions in Pending state overdue for processing */
+      overduePendingAccessions: number;
+      /** Number of accessions in Processed state overdue for drying */
+      overdueProcessedAccessions: number;
+      /** Number of accessions in Dried state overdue for storage */
+      overdueDriedAccessions: number;
+      /** Number of accessions withdrawn so far this week */
+      recentlyWithdrawnAccessions: number;
+    };
+    /** The current value and value as of last week for a summary statistic */
+    SummaryStatistic: {
+      current: number;
+      lastWeek: number;
+    };
+    UpdateAccessionRequestPayload: {
+      species?: string;
+      family?: string;
+      numberOfTrees?: number;
+      founderId?: string;
+      endangered?: boolean;
+      rare?: boolean;
+      fieldNotes?: string;
+      collectedDate?: string;
+      receivedDate?: string;
+      primaryCollector?: string;
+      secondaryCollectors?: string[];
+      siteLocation?: string;
+      landowner?: string;
+      environmentalNotes?: string;
+      processingStartDate?: string;
+      processingMethod?: "Count" | "Weight";
+      seedsCounted?: number;
+      subsetWeightGrams?: number;
+      totalWeightGrams?: number;
+      subsetCount?: number;
+      estimatedSeedCount?: number;
+      targetStorageCondition?: "Refrigerator" | "Freezer";
+      dryingStartDate?: string;
+      dryingEndDate?: string;
+      dryingMoveDate?: string;
+      processingNotes?: string;
+      processingStaffResponsible?: string;
+      bagNumbers?: string[];
+      storageStartDate?: string;
+      storagePackets?: number;
+      storageLocation?: string;
+      storageNotes?: string;
+      storageStaffResponsible?: string;
+      photoFilenames?: string[];
+      geolocations?: components["schemas"]["Geolocation"][];
+      germinationTestTypes?: ("Lab" | "Nursery")[];
+      cutTestSeedsCompromised?: number;
+      cutTestSeedsEmpty?: number;
+      cutTestSeedsFilled?: number;
+      germinationTests?: components["schemas"]["GerminationTestPayload"][];
+      withdrawals?: components["schemas"]["WithdrawalPayload"][];
+    };
+    UpdateAccessionResponsePayload: {
+      accession: components["schemas"]["AccessionPayload"];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    WithdrawalPayload: {
+      /** Server-assigned unique ID of this withdrawal, its ID. Omit when creating a new withdrawal. */
+>>>>>>> FE: Implement searchbar (#42)
       id?: number;
       organization_id: number;
       name: string;
@@ -464,7 +680,84 @@ export interface operations {
       };
     };
   };
+<<<<<<< HEAD
   read_layer_list_api_v1_layers_get: {
+=======
+  listPhotos: {
+    parameters: {
+      path: {
+        accessionNumber: string;
+      };
+    };
+    responses: {
+      /** The accession's photos are listed in the response. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListPhotosResponsePayload"];
+        };
+      };
+      /** The accession does not exist. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  getPhoto: {
+    parameters: {
+      path: {
+        accessionNumber: string;
+        photoFilename: string;
+      };
+    };
+    responses: {
+      /** The photo was successfully retrieved. */
+      200: {
+        content: {
+          "image/jpeg": string;
+        };
+      };
+      /** The accession does not exist, or does not have a photo with the requested filename. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  uploadPhoto: {
+    parameters: {
+      path: {
+        accessionNumber: string;
+        photoFilename: string;
+      };
+    };
+    responses: {
+      /** The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** The specified accession does not exist. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "multipart/form-data": {
+          file?: string;
+          metadata?: components["schemas"]["PhotoMetadata"];
+        };
+      };
+    };
+  };
+  listAll: {
+>>>>>>> FE: Implement searchbar (#42)
     parameters: {
       query: {
         site_id: number;
