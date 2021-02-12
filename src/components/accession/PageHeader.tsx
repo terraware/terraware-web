@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) =>
     subtitle: {
       fontWeight: theme.typography.fontWeightLight,
     },
-    statusIndicator: {
+    activeIndicator: {
       marginRight: theme.spacing(1),
       fontSize: theme.typography.h6.fontSize,
     },
@@ -52,8 +52,6 @@ interface Props {
 
 export default function AccessionPageHeader({ accession }: Props): JSX.Element {
   const classes = useStyles();
-
-  const status = accession.status ?? 'active';
 
   return (
     <Grid container spacing={3} className={classes.container}>
@@ -85,11 +83,11 @@ export default function AccessionPageHeader({ accession }: Props): JSX.Element {
             </Box>
             <Box display='flex' alignItems='center'>
               <FiberManualRecord
-                color={status ? 'primary' : 'disabled'}
-                className={classes.statusIndicator}
+                color={accession.active === 'Active' ? 'primary' : 'disabled'}
+                className={classes.activeIndicator}
               />
               <Typography variant='subtitle1' className={classes.subtitle}>
-                {status.charAt(0).toUpperCase() + status.slice(1)}
+                {accession.active}
                 {accession.species && <DetailDivisor />}
                 {accession.species}
                 {accession.receivedDate && <DetailDivisor />}
