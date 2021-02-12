@@ -169,6 +169,7 @@ export default function ProcessingAndDrying({
                   value={record.subsetWeightGrams}
                   onChange={onChangeWeightFields}
                   label='Subset’s weight'
+                  type='number'
                 />
               </Grid>
               <Grid item xs={4} className={classes.alignMiddle}>
@@ -177,6 +178,7 @@ export default function ProcessingAndDrying({
                   value={record.subsetCount}
                   onChange={onChangeWeightFields}
                   label='Seeds on subset weighted'
+                  type='number'
                 />
               </Grid>
               <Grid item xs={4}></Grid>
@@ -186,6 +188,7 @@ export default function ProcessingAndDrying({
                   value={record.totalWeightGrams}
                   onChange={onChangeWeightFields}
                   label='Total weight of seeds'
+                  type='number'
                 />
               </Grid>
               <Grid item xs={4} className={classes.alignMiddle}>
@@ -195,6 +198,7 @@ export default function ProcessingAndDrying({
                   disabled={true}
                   onChange={onChange}
                   label='Total seeds count estimation'
+                  type='number'
                 />
               </Grid>
             </>

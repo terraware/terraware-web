@@ -30,12 +30,18 @@ import NotificationIcon from './NotificationIcon';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
+    subheader: {
+      paddingLeft: 0,
+      paddingRight: 0,
+    },
     mainTitle: {
       display: 'flex',
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
       paddingLeft: theme.spacing(3),
+      paddingRight: theme.spacing(3),
+      backgroundColor: theme.palette.common.white,
     },
     action: {
       margin: theme.spacing(1),
@@ -115,19 +121,21 @@ export default function NotificationsDropdown(): JSX.Element {
         }}
       >
         <List className={classes.popover}>
-          <ListSubheader inset className={classes.mainTitle}>
-            <Typography>Notifications</Typography>
-            <LinkMui
-              href='#'
-              onClick={(event: React.SyntheticEvent) => {
-                preventDefaultEvent(event);
-                markAllAsRead();
-              }}
-            >
-              Mark all as read
-            </LinkMui>
+          <ListSubheader inset className={classes.subheader}>
+            <div className={classes.mainTitle}>
+              <Typography>Notifications</Typography>
+              <LinkMui
+                href='#'
+                onClick={(event: React.SyntheticEvent) => {
+                  preventDefaultEvent(event);
+                  markAllAsRead();
+                }}
+              >
+                Mark all as read
+              </LinkMui>
+            </div>
+            <Divider />
           </ListSubheader>
-          <Divider />
           {notificationLoadable.state === 'hasError' && 'An error ocurred'}
           {notificationLoadable.state === 'loading' && <CircularProgress />}
           {contents &&

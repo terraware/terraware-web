@@ -77,7 +77,11 @@ export default function AccessionPageHeader({ accession }: Props): JSX.Element {
               className={classes.titleBox}
             >
               <EcoIcon color='primary' className={classes.ecoIcon} />
-              <Typography variant='h4' className={classes.title}>
+              <Typography
+                variant='h4'
+                className={classes.title}
+                id='accessionId'
+              >
                 {accession.accessionNumber}
               </Typography>
             </Box>

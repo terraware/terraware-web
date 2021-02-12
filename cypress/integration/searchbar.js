@@ -8,7 +8,7 @@ describe("Searchbar", () => {
       cy.visit("/accessions/new")      
       cy.get('#submit').click();
 
-      cy.get('.MuiBox-root-82 > .MuiTypography-root').then(($accessionNumberElement) => {
+      cy.get('#accessionId').then(($accessionNumberElement) => {
         const accessionNumber = $accessionNumberElement.text()
         cy.visit("/")  
         cy.get('#search-bar').type(accessionNumber);
