@@ -13,9 +13,8 @@ import CloseIcon from '@material-ui/icons/Close';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import React from 'react';
 import { Link as RouterLink, Redirect } from 'react-router-dom';
-import { postAccession } from '../../api/accession';
-import { NewAccession } from '../../api/types/accessions';
-import preventDefaultEvent from '../../utils/preventDefaultEvent';
+import { getPhotoEndpoint, postAccession } from '../../api/accession';
+import { Accession, NewAccession } from '../../api/types/accessions';
 import useForm from '../../utils/useForm';
 import Checkbox from '../common/Checkbox';
 import DatePicker from '../common/DatePicker';
@@ -268,7 +267,7 @@ export function AccessionForm<T extends NewAccession>({
         )}
         {updating && (
           <Grid container spacing={4}>
-            <Grid item xs={4}>
+            <Grid item xs={3}>
               <Typography
                 component='p'
                 variant='body1'
@@ -287,7 +286,7 @@ export function AccessionForm<T extends NewAccession>({
                 </Typography>
               ))}
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={5}>
               <Typography
                 component='p'
                 variant='body1'
@@ -297,11 +296,13 @@ export function AccessionForm<T extends NewAccession>({
               </Typography>
               {photoFilenames?.map((photo, index) => (
                 <Link
+                  id={`photo-${index}`}
                   key={index}
-                  href='#'
-                  onClick={(event: React.SyntheticEvent) => {
-                    preventDefaultEvent(event);
-                  }}
+                  target='_blank'
+                  href={getPhotoEndpoint(
+                    ((record as unknown) as Accession).accessionNumber,
+                    photo
+                  )}
                 >
                   <Typography
                     component='p'
@@ -328,7 +329,7 @@ export function AccessionForm<T extends NewAccession>({
                   variant='body2'
                   className={classes.listItem}
                 >
-                  {geolocation}
+                  {`${geolocation.latitude}, ${geolocation.longitude}`}
                 </Typography>
               ))}
             </Grid>

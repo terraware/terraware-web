@@ -23,3 +23,7 @@ export const putAccession = async (
   const endpoint = `${BASE_URL}/${accession.accessionNumber}`;
   return (await axios.put(endpoint, accession)).data.accession;
 };
+
+export const getPhotoEndpoint = (accessionNumber: string, photoFilename: string): string => {
+  return `${BASE_URL}/${accessionNumber}/photo/${photoFilename}`
+}
