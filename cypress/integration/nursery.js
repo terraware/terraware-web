@@ -60,7 +60,7 @@ describe("Nursery", () => {
         cy.get('.MuiBox-root > #submit').click().wait(2000);
 
         cy.get('.MuiTableBody-root').children().should('have.length', 1);
-        cy.get('#totalViabilityPercent').should('contain', '60%');
+        cy.get('#totalViabilityPercent').should('contain', '70%');
 
         cy.get('.MuiTableRow-root > :nth-child(1) > .MuiTypography-root').should('contain', '02/09/2021');
         cy.get('.MuiTableRow-root > :nth-child(2) > .MuiTypography-root').should('contain', 'Stored');

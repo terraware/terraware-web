@@ -86,7 +86,16 @@ export default function WithdrawalView({
       const newWithdrawals = !accession.withdrawals
         ? []
         : [...accession.withdrawals];
-      newWithdrawals.push(value);
+
+      if (selectedRecord) {
+        const index = newWithdrawals.findIndex(
+          (withdrawal) => withdrawal.id === selectedRecord.id
+        );
+        newWithdrawals.splice(index, 1, value);
+      } else {
+        newWithdrawals.push(value);
+      }
+
       accession.withdrawals = newWithdrawals;
       onSubmit(accession);
     }

@@ -41,7 +41,7 @@ export default function AccessionPage(): JSX.Element {
     <main>
       {requestId && (
         <ErrorBoundary>
-          <React.Suspense fallback={<div>Loading</div>}>
+          <React.Suspense fallback={<div></div>}>
             <Content requestId={requestId} />
           </React.Suspense>
         </ErrorBoundary>

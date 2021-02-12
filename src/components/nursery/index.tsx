@@ -65,7 +65,16 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
       const newGerminationTests = !accession.germinationTests
         ? []
         : [...accession.germinationTests];
-      newGerminationTests.push(value);
+
+      if (selectedRecord) {
+        const index = newGerminationTests.findIndex(
+          (test) => test.id === selectedRecord.id
+        );
+        newGerminationTests.splice(index, 1, value);
+      } else {
+        newGerminationTests.push(value);
+      }
+
       accession.germinationTests = newGerminationTests;
       onSubmit(accession);
     }
