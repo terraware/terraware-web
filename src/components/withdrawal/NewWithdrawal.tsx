@@ -64,18 +64,18 @@ const preventDefault = (event: React.SyntheticEvent) => event.preventDefault();
 export default function NewWithdrawalDialog(props: Props): JSX.Element {
   const classes = useStyles();
   const { onClose, open, onDelete } = props;
+
   const [record, setRecord, onChange] = useForm<AccessionWithdrawal>(
     initWithdrawal(props.value)
   );
-
-  const [withdrawalType, setWithdrawalType] = React.useState(
-    props.value?.gramsWithdrawn ? 'weight' : 'count'
-  );
-
   React.useEffect(() => {
     setRecord(initWithdrawal(props.value));
     setWithdrawalType(props.value?.gramsWithdrawn ? 'weight' : 'count');
   }, [props.value]);
+
+  const [withdrawalType, setWithdrawalType] = React.useState(
+    props.value?.gramsWithdrawn ? 'weight' : 'count'
+  );
 
   const handleCancel = () => {
     setRecord(initWithdrawal(props.value));

@@ -114,7 +114,11 @@ export function AccessionForm<T extends NewAccession>({
   onSubmit,
 }: Props<T>): JSX.Element {
   const classes = useStyles();
-  const [record, , onChange] = useForm(accession);
+
+  const [record, setRecord, onChange] = useForm(accession);
+  React.useEffect(() => {
+    setRecord(accession);
+  }, [accession]);
 
   return (
     <MuiPickersUtilsProvider utils={DayJSUtils}>

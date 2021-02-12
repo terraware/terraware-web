@@ -53,10 +53,14 @@ export default function Storage({
   requestId,
 }: Props): JSX.Element {
   const classes = useStyles();
-  const [record, setRecord, onChange] = useForm(accession);
   const locationsLoadable = useRecoilValueLoadable(
     locationsSelector(requestId)
   );
+
+  const [record, setRecord, onChange] = useForm(accession);
+  React.useEffect(() => {
+    setRecord(accession);
+  }, [accession]);
 
   const contents = locationsLoadable.getValue();
 

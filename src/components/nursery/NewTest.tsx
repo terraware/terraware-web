@@ -52,10 +52,10 @@ const preventDefault = (event: React.SyntheticEvent) => event.preventDefault();
 export default function NewTestDialog(props: Props): JSX.Element {
   const classes = useStyles();
   const { onClose, open, onDelete } = props;
+
   const [record, setRecord, onChange] = useForm<GerminationTest>(
     initTest(props.value)
   );
-
   React.useEffect(() => {
     setRecord(initTest(props.value));
   }, [props.value]);

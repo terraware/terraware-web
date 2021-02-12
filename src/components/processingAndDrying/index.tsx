@@ -49,7 +49,11 @@ export default function ProcessingAndDrying({
   onSubmit,
 }: Props): JSX.Element {
   const classes = useStyles();
+
   const [record, setRecord, onChange] = useForm(accession);
+  React.useEffect(() => {
+    setRecord(accession);
+  }, [accession]);
 
   const OnProcessingMethodChange = (id: string, value: unknown) => {
     if (value === 'Count') {
