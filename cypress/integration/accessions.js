@@ -180,12 +180,12 @@ describe("Accessions", () => {
       cy.get('.MuiGrid-grid-xs-4 > .MuiTypography-body2').contains("9.03, -79.53");
 
       cy.get('#photo-0').contains("accession1.jpg")
-      cy.get('#photo-0').should('have.attr', 'href', 'http://localhost:8080/api/v1/seedbank/accession/AAF4D49R3E/photo/accession1.jpg').should('have.attr', 'target', '_blank')
+      cy.get('#photo-0').should('have.attr', 'href', 'http://seedbank-server:8080/api/v1/seedbank/accession/AAF4D49R3E/photo/accession1.jpg').should('have.attr', 'target', '_blank')
       cy.get('#photo-1').contains("accession2.jpg");
-      cy.get('#photo-1').should('have.attr', 'href', 'http://localhost:8080/api/v1/seedbank/accession/AAF4D49R3E/photo/accession2.jpg').should('have.attr', 'target', '_blank')
+      cy.get('#photo-1').should('have.attr', 'href', 'http://seedbank-server:8080/api/v1/seedbank/accession/AAF4D49R3E/photo/accession2.jpg').should('have.attr', 'target', '_blank')
 
-      cy.request("http://localhost:8080/api/v1/seedbank/accession/AAF4D49R3E/photo/accession1.jpg").its('status').should('eq', 200);
-      cy.request("http://localhost:8080/api/v1/seedbank/accession/AAF4D49R3E/photo/accession2.jpg").its('status').should('eq', 200);
+      cy.request("http://seedbank-server:8080/api/v1/seedbank/accession/AAF4D49R3E/photo/accession1.jpg").its('status').should('eq', 200);
+      cy.request("http://seedbank-server:8080/api/v1/seedbank/accession/AAF4D49R3E/photo/accession2.jpg").its('status').should('eq', 200);
     });
   });
 
