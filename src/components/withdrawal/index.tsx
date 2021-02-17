@@ -67,7 +67,7 @@ export default function WithdrawalView({
       acum = acum + (value?.seedsWithdrawn ?? 0);
       return acum;
     }, 0) ?? 0;
-  const seedsAvailable = seedsTotal - seedsWithdrawn;
+  const seedsAvailable = accession.seedsRemaining ?? 0;
 
   const allowWithdrawalInGrams = Boolean(accession.estimatedSeedCount);
 

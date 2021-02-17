@@ -55,6 +55,10 @@ export default function ProcessingAndDrying({
     setRecord(accession);
   }, [accession]);
 
+  const [estimatedSeedCount, setEstimatedSeedCount] = React.useState(
+    calculteEstimatedSeedCount(record)
+  );
+
   const OnProcessingMethodChange = (id: string, value: unknown) => {
     if (value === 'Count') {
       setRecord({
@@ -63,7 +67,6 @@ export default function ProcessingAndDrying({
         subsetWeightGrams: undefined,
         subsetCount: undefined,
         totalWeightGrams: undefined,
-        estimatedSeedCount: undefined,
       });
     }
     if (value === 'Weight') {
@@ -77,20 +80,8 @@ export default function ProcessingAndDrying({
       [id]: value,
     };
 
-    newRecord.estimatedSeedCount = calculteEstimatedSeedCount(newRecord);
+    setEstimatedSeedCount(calculteEstimatedSeedCount(newRecord));
     setRecord(newRecord);
-  };
-
-  const calculteEstimatedSeedCount = (
-    latestRecord: Accession
-  ): number | undefined => {
-    const subsetCount = latestRecord.subsetCount;
-    const totalWeightGrams = latestRecord.totalWeightGrams;
-    const subsetWeightGrams = latestRecord.subsetWeightGrams;
-    if (subsetCount && totalWeightGrams && subsetWeightGrams) {
-      return (subsetCount * totalWeightGrams) / subsetWeightGrams;
-    }
-    return undefined;
   };
 
   type GerminationTestType = 'Lab' | 'Nursery';
@@ -198,7 +189,7 @@ export default function ProcessingAndDrying({
               <Grid item xs={4} className={classes.alignMiddle}>
                 <TextField
                   id='estimatedSeedCount'
-                  value={record.estimatedSeedCount}
+                  value={estimatedSeedCount}
                   disabled={true}
                   onChange={onChange}
                   label='Total seeds count estimation'
@@ -336,3 +327,15 @@ export default function ProcessingAndDrying({
     </MuiPickersUtilsProvider>
   );
 }
+
+const calculteEstimatedSeedCount = (
+  latestRecord: Accession
+): number | undefined => {
+  const subsetCount = latestRecord.subsetCount;
+  const totalWeightGrams = latestRecord.totalWeightGrams;
+  const subsetWeightGrams = latestRecord.subsetWeightGrams;
+  if (subsetCount && totalWeightGrams && subsetWeightGrams) {
+    return (subsetCount * totalWeightGrams) / subsetWeightGrams;
+  }
+  return undefined;
+};
