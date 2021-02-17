@@ -35,9 +35,10 @@ export default function GerminationMenu({
     'Nursery'
   );
 
-  const typographyClass = useRouteMatch('/accessions/:accessionNumber/nursery')
-    ? classes.bold
-    : classes.link;
+  const hasLabGerminationTest = accession.germinationTestTypes?.includes('Lab');
+
+  const typographyClass = (route: string) =>
+    useRouteMatch(route) ? classes.bold : classes.link;
 
   if (!accession.germinationTestTypes) {
     return null;
@@ -55,8 +56,27 @@ export default function GerminationMenu({
           component={RouterLink}
           to={`/accessions/${accessionNumber}/nursery`}
         >
-          <Typography component='p' variant='body1' className={typographyClass}>
+          <Typography
+            component='p'
+            variant='body1'
+            className={typographyClass('/accessions/:accessionNumber/nursery')}
+          >
             Nursery
+          </Typography>
+        </Link>
+      )}
+      {hasLabGerminationTest && (
+        <Link
+          id='lab'
+          component={RouterLink}
+          to={`/accessions/${accessionNumber}/lab`}
+        >
+          <Typography
+            component='p'
+            variant='body1'
+            className={typographyClass('/accessions/:accessionNumber/lab')}
+          >
+            Lab
           </Typography>
         </Link>
       )}

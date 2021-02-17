@@ -24,6 +24,13 @@ const useStyles = makeStyles((theme) =>
       padding: theme.spacing(2),
       color: theme.palette.common.white,
     },
+    full: {
+      borderRadius: 8,
+      backgroundColor: theme.palette.grey[300],
+      padding: theme.spacing(2),
+      height: '100%',
+      boxSizing: 'border-box',
+    },
   })
 );
 
@@ -31,7 +38,7 @@ interface Props {
   id?: string;
   title: string;
   value: number | string;
-  variant?: 'default' | 'available' | 'zero';
+  variant?: 'default' | 'available' | 'zero' | 'full';
 }
 
 export default function SummaryBox({
@@ -47,6 +54,8 @@ export default function SummaryBox({
       ? classes.summaryDefault
       : variant === 'available'
       ? classes.summaryAvailable
+      : variant === 'full'
+      ? classes.full
       : classes.summaryZero;
 
   return (

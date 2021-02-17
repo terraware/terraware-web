@@ -9,5 +9,5 @@ INSERT INTO "collection_event" ("id", "accession_id", "created_time", "latitude"
 (1001,	1002,	'2021-02-12 17:21:33.62729+00',	9.0300000,	-79.5300000,	NULL);
 
 INSERT INTO "accession_photo" ("id", "accession_id", "filename", "uploaded_time", "captured_time", "content_type", "size", "latitude", "longitude", "gps_accuracy") VALUES
-(1,	1002,	'accession1.jpg',	'2021-02-12 18:36:15.842405+00',	'2021-02-03 11:33:44+00',	'image/jpeg',	6441,	NULL,	NULL,	NULL),
-(2,	1002,	'accession2.jpg',	'2021-02-12 18:36:15.903768+00',	'2021-02-03 11:33:44+00',	'image/jpeg',	6539,	NULL,	NULL,	NULL);
+(1001,	1002,	'accession1.jpg',	'2021-02-12 18:36:15.842405+00',	'2021-02-03 11:33:44+00',	'image/jpeg',	6441,	NULL,	NULL,	NULL),
+(1002,	1002,	'accession2.jpg',	'2021-02-12 18:36:15.903768+00',	'2021-02-03 11:33:44+00',	'image/jpeg',	6539,	NULL,	NULL,	NULL);

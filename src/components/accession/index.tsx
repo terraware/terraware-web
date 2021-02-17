@@ -16,6 +16,7 @@ import getAccessionSelector, {
 } from '../../state/selectors/getAccession';
 import useRecoilCurl from '../../utils/useRecoilCurl';
 import ErrorBoundary from '../ErrorBoundary';
+import Lab from '../lab';
 import { AccessionForm } from '../newAccession';
 import Nursery from '../nursery';
 import ProcessingAndDrying from '../processingAndDrying';
@@ -111,6 +112,13 @@ function Content({ requestId }: { requestId: number }): JSX.Element {
               </Route>
               <Route exact path='/accessions/:accessionNumber/nursery'>
                 <Nursery
+                  accession={clonedAccession}
+                  onSubmit={onSubmit}
+                  requestId={requestId}
+                />
+              </Route>
+              <Route exact path='/accessions/:accessionNumber/lab'>
+                <Lab
                   accession={clonedAccession}
                   onSubmit={onSubmit}
                   requestId={requestId}
