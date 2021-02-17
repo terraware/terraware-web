@@ -12,7 +12,7 @@ import Table from '../common/table';
 import { descendingComparator } from '../common/table/sort';
 import { TableRowType } from '../common/table/TableCellRenderer';
 import NewTest from './NewTest';
-import TableCellRenderer from './TableCellRenderer';
+import NurseryCellRenderer from './TableCellRenderer';
 import { COLUMNS } from './types';
 
 const useStyles = makeStyles((theme) =>
@@ -128,9 +128,9 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
                 columns={COLUMNS}
                 rows={getNurseryRows()}
                 defaultSort='date'
-                Renderer={TableCellRenderer}
+                Renderer={NurseryCellRenderer}
                 onSelect={onEdit}
-                sorting={sortComparator}
+                sortComparator={sortComparator}
               />
             </Grid>
           </Grid>

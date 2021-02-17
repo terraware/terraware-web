@@ -172,7 +172,7 @@ export default function WithdrawalView({
                 defaultSort='date'
                 Renderer={WithdrawalCellRenderer}
                 onSelect={onEdit}
-                sorting={sortComparator}
+                sortComparator={sortComparator}
               />
             </Grid>
           </Grid>

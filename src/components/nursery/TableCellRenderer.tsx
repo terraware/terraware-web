@@ -3,7 +3,7 @@ import { GerminationTest } from '../../api/types/tests';
 import CellRenderer from '../common/table/TableCellRenderer';
 import { RendererProps } from '../common/table/types';
 
-export default function WithdrawalCellRenderer(
+export default function NurseryCellRenderer(
   props: RendererProps<GerminationTest>
 ): JSX.Element {
   const { column, row } = props;

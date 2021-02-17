@@ -5,7 +5,7 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import EcoIcon from '@material-ui/icons/Eco';
 import FiberManualRecord from '@material-ui/icons/FiberManualRecord';
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { Accession } from '../../api/types/accessions';
 import StateChip from '../common/StateChip';
 
@@ -52,6 +52,7 @@ interface Props {
 
 export default function AccessionPageHeader({ accession }: Props): JSX.Element {
   const classes = useStyles();
+  const history = useHistory();
 
   return (
     <Grid container spacing={3} className={classes.container}>
@@ -64,8 +65,9 @@ export default function AccessionPageHeader({ accession }: Props): JSX.Element {
               size='small'
               aria-label='close'
               className={classes.backIcon}
-              component={Link}
-              to='/'
+              onClick={() => {
+                history.goBack();
+              }}
             >
               <ArrowBackIcon />
             </Fab>

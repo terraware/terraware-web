@@ -10,7 +10,7 @@ import Divisor from '../common/Divisor';
 import SummaryBox from '../common/SummaryBox';
 import Table from '../common/table';
 import { TableRowType } from '../common/table/TableCellRenderer';
-import TableCellRenderer from '../lab/TableCellRenderer';
+import LabCellRenderer from '../lab/TableCellRenderer';
 import CutTestCellRenderer from './CutTestCellRenderer';
 import EnhancedTableDetails from './EnhacedTableDetails';
 import NewCutTest from './NewCutTest';
@@ -220,7 +220,7 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
                 columns={TEST_COLUMNS}
                 rows={labRows}
                 defaultSort='date'
-                Renderer={TableCellRenderer}
+                Renderer={LabCellRenderer}
                 onSelect={onEditTest}
                 DetailsRenderer={({ row, index }) => (
                   <EnhancedTableDetails
@@ -229,7 +229,7 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
                     rowName='germinations'
                     columns={TEST_ENTRY_COLUMNS}
                     defaultSort='recordingDate'
-                    Renderer={TableCellRenderer}
+                    Renderer={LabCellRenderer}
                     expandText='See entries'
                     onClick={onNewTestEntry}
                     onSelect={onEditTestEntry}

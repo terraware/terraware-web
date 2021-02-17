@@ -367,6 +367,7 @@ export interface components {
       | "rare"
       | "receivedDate"
       | "seedsCounted"
+      | "seedsRemaining"
       | "siteLocation"
       | "species"
       | "state"
@@ -384,8 +385,7 @@ export interface components {
       | "withdrawalGrams"
       | "withdrawalNotes"
       | "withdrawalPurpose"
-      | "withdrawalSeeds"
-      | "withdrawalSeedsRemaining";
+      | "withdrawalSeeds";
     SearchFilter: {
       field: components["schemas"]["SearchField"];
       values: string[];

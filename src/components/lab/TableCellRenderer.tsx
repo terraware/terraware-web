@@ -2,7 +2,7 @@ import React from 'react';
 import CellRenderer, { TableRowType } from '../common/table/TableCellRenderer';
 import { RendererProps } from '../common/table/types';
 
-export default function cellRenderer(
+export default function LabCellRenderer(
   props: RendererProps<TableRowType>
 ): JSX.Element {
   const { column, row } = props;
