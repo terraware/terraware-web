@@ -1,11 +1,13 @@
 import {
   Box,
+  Chip,
   CircularProgress,
   Container,
   Grid,
   Paper,
 } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import EditIcon from '@material-ui/icons/Edit';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { useRecoilValueLoadable } from 'recoil';
@@ -14,12 +16,14 @@ import {
   SearchFilter,
   SearchRequestPayload,
   SearchResponseResults,
+  SearchSortOrderElement,
 } from '../../api/types/search';
 import searchSelector from '../../state/selectors/search';
 import Table from '../common/table';
 import { Order } from '../common/table/sort';
 import PageHeader from '../PageHeader';
-import { COLUMNS } from './columns';
+import { COLUMNS, defaultPreset } from './columns';
+import EditColumns from './EditColumns';
 import Filters from './Filters';
 import SearchCellRenderer from './TableCellRenderer';
 
@@ -34,23 +38,31 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function Database(): JSX.Element {
   const classes = useStyles();
+  const [open, setOpen] = React.useState(false);
 
   const history = useHistory();
-  const [sortField, setSortField] = React.useState<SearchField>(
-    'accessionNumber'
-  );
-  const [sortOrder, setSortOrder] = React.useState<'Ascending' | 'Descending'>(
-    'Ascending'
+  const [sort, setSort] = React.useState<SearchSortOrderElement>({
+    field: 'accessionNumber',
+    direction: 'Ascending',
+  });
+  const [visibleColumns, setVisibleColumns] = React.useState<
+    Record<SearchField, boolean>
+  >(
+    defaultPreset.fields.reduce((acum, field) => {
+      acum[field] = true;
+      return acum;
+    }, {} as Record<SearchField, boolean>)
   );
   const [filters, setFilters] = React.useState<SearchFilter[]>([]);
 
-  const searchParams: SearchRequestPayload = {
-    fields: COLUMNS.map((c) => c.key as SearchField),
-    sortOrder: [{ field: sortField, direction: sortOrder }],
-    filters,
-    count: 10000,
-  };
+  const tableColumns = COLUMNS.filter((c) => visibleColumns[c.key]);
 
+  const searchParams: SearchRequestPayload = {
+    fields: tableColumns.map((c) => c.key),
+    sortOrder: [{ field: sort.field, direction: sort.direction }],
+    filters,
+    count: 1000,
+  };
   const resultsLoadable = useRecoilValueLoadable(
     searchSelector({ searchParams })
   );
@@ -64,7 +76,6 @@ export default function Database(): JSX.Element {
   } else if (resultsLoadable.state === 'hasError') {
     return <div>An error ocurred</div>;
   }
-
   const results = resultsLoadable.contents.results;
 
   const onSelect = (row: SearchResponseResults) => {
@@ -73,21 +84,54 @@ export default function Database(): JSX.Element {
     }
   };
 
-  const onSort = (order: Order, orderBy: string) => {
-    setSortField(orderBy as SearchField);
-    setSortOrder(order === 'asc' ? 'Ascending' : 'Descending');
+  const onSortChange = (order: Order, orderBy: string) => {
+    setSort({
+      field: orderBy as SearchField,
+      direction: order === 'asc' ? 'Ascending' : 'Descending',
+    });
   };
 
   const onFilterChange = (newFilters: SearchFilter[]) => {
     setFilters(newFilters);
   };
 
+  const onOpenEditColumnsModal = () => {
+    setOpen(true);
+  };
+
+  const onCloseEditColumnsModal = (columns?: Record<SearchField, boolean>) => {
+    if (columns) {
+      setVisibleColumns(columns);
+      const newFilters = filters.filter((f) => columns[f.field]);
+      setFilters(newFilters);
+    }
+    setOpen(false);
+  };
+
   return (
     <main>
-      <PageHeader title='Database' subtitle={`${results.length} total`}>
+      <EditColumns
+        open={open}
+        value={visibleColumns}
+        onClose={onCloseEditColumnsModal}
+      />
+      <PageHeader
+        title='Database'
+        subtitle={`${results.length} total`}
+        rightComponent={
+          <Chip
+            id='edit-columns'
+            variant='outlined'
+            size='medium'
+            label='Edit columns'
+            onClick={onOpenEditColumnsModal}
+            icon={<EditIcon />}
+          />
+        }
+      >
         <Filters
           filters={filters}
-          columns={COLUMNS}
+          columns={tableColumns}
           onChange={onFilterChange}
         />
       </PageHeader>
@@ -96,12 +140,12 @@ export default function Database(): JSX.Element {
           <Grid container spacing={4}>
             <Grid item xs={12}>
               <Table
-                columns={COLUMNS}
+                columns={tableColumns}
                 rows={results}
                 defaultSort='accessionNumber'
                 Renderer={SearchCellRenderer}
                 onSelect={onSelect}
-                sortHandler={onSort}
+                sortHandler={onSortChange}
               />
             </Grid>
           </Grid>
