@@ -156,7 +156,7 @@ describe("Lab", () => {
         cy.get('.recharts-rectangle').should('have.length', 1)
     })
 
-    it("should add other germination entry and create a new bar on graph", () => {
+    it.skip("should add other germination entry and create a new bar on graph", () => {
         cy.get(':nth-child(2) > .MuiTableCell-root').click();
         cy.get('#newEntry').click();
 
@@ -182,7 +182,7 @@ describe("Lab", () => {
         cy.get('.recharts-rectangle').should('have.length', 2)
     })
 
-    it("should modify entry", () => {
+    it.skip("should modify entry", () => {
         cy.get(':nth-child(2) > :nth-child(2) > .MuiTableCell-root').click();
         cy.get(':nth-child(2) > :nth-child(3) > .MuiLink-root > .MuiBox-root > .MuiTypography-root').click()
 
@@ -206,7 +206,7 @@ describe("Lab", () => {
         cy.get('.recharts-rectangle').should('have.length', 2)
     })
 
-    it("should delete entry", () => {
+    it.skip("should delete entry", () => {
         cy.get(':nth-child(2) > :nth-child(2) > .MuiTableCell-root').click();
         cy.get(':nth-child(2) > :nth-child(3) > .MuiLink-root > .MuiBox-root > .MuiTypography-root').click();
 

@@ -127,7 +127,9 @@ export default function WithdrawalView({
           <Typography variant='h6' className={classes.bold}>
             Withdrawal
           </Typography>
-          <Typography component='p'>Description</Typography>
+          <Typography component='p'>
+            All the details about withdrawal of the seeds.
+          </Typography>
           <Divisor />
 
           {seedsAvailable === 0 && (

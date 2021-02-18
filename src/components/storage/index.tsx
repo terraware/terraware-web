@@ -94,6 +94,9 @@ export default function Storage({
         <Typography variant='h6' className={classes.bold}>
           Storage
         </Typography>
+        <Typography component='p'>
+          All the details about storing the seeds.
+        </Typography>
         <Divisor />
         <Grid container spacing={4}>
           <Grid item xs={4}>

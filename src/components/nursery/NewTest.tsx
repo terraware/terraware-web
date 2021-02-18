@@ -8,6 +8,7 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import React from 'react';
 import { Germination, GerminationTest } from '../../api/types/tests';
+import preventDefault from '../../utils/preventDefaultEvent';
 import useForm from '../../utils/useForm';
 import DatePicker from '../common/DatePicker';
 import Divisor from '../common/Divisor';
@@ -48,7 +49,6 @@ function initTest(test?: GerminationTest): GerminationTest {
   );
 }
 
-const preventDefault = (event: React.SyntheticEvent) => event.preventDefault();
 export default function NewTestDialog(props: Props): JSX.Element {
   const classes = useStyles();
   const { onClose, open, onDelete } = props;

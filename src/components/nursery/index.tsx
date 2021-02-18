@@ -111,7 +111,10 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
           <Typography variant='h6' className={classes.bold}>
             Nursery
           </Typography>
-          <Typography component='p'>Description</Typography>
+          <Typography component='p'>
+            All the details about nursery germination tests conducted on the
+            seeds.
+          </Typography>
           <Divisor />
           <Grid item xs={12}>
             <SummaryBox

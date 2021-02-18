@@ -118,6 +118,9 @@ export default function ProcessingAndDrying({
         <Typography component='p' variant='h6' className={classes.bold}>
           Processing & Drying
         </Typography>
+        <Typography component='p'>
+          All the details about processing and drying the seeds.
+        </Typography>
         <Divisor />
         <Grid container spacing={4}>
           <Grid item xs={4}>

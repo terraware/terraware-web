@@ -16,6 +16,7 @@ import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import dayjs from 'dayjs';
 import React from 'react';
 import { AccessionWithdrawal } from '../../api/types/accessions';
+import preventDefault from '../../utils/preventDefaultEvent';
 import useForm from '../../utils/useForm';
 import DatePicker from '../common/DatePicker';
 import Divisor from '../common/Divisor';
@@ -60,7 +61,6 @@ function initWithdrawal(withdrawal?: AccessionWithdrawal): AccessionWithdrawal {
   );
 }
 
-const preventDefault = (event: React.SyntheticEvent) => event.preventDefault();
 export default function NewWithdrawalDialog(props: Props): JSX.Element {
   const classes = useStyles();
   const { onClose, open, onDelete } = props;
