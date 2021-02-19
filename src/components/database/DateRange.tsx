@@ -63,7 +63,7 @@ export default function DateRange(props: Props): JSX.Element {
   );
 
   return (
-    <div className={classes.box}>
+    <div id={'search' + props.field} className={classes.box}>
       <Grid container spacing={4}>
         <Grid item xs={5}>
           <DatePicker

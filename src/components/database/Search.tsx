@@ -45,7 +45,7 @@ export default function Search(props: Props): JSX.Element {
   const [search, setSearch] = React.useState(props.values[0] || '');
 
   return (
-    <div className={classes.box} id='searchFilter'>
+    <div id={'search' + props.field} className={classes.box}>
       <TextField
         placeholder='Search'
         variant='outlined'

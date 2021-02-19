@@ -58,7 +58,7 @@ export default function NumberRange(props: Props): JSX.Element {
   const [maxValue, setMaxValue] = React.useState(props.values[1] || '0');
 
   return (
-    <div className={classes.box}>
+    <div id={'search' + props.field} className={classes.box}>
       <Grid container spacing={4}>
         <Grid item xs={5}>
           <TextField

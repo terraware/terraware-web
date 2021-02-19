@@ -39,17 +39,17 @@ export interface Props {
   value: Record<SearchField, boolean>;
 }
 
-export default function NewWithdrawalDialog(props: Props): JSX.Element {
+export default function EditColumnsDialog(props: Props): JSX.Element {
   const classes = useStyles();
   const { onClose, open } = props;
-  const [preset, setPreset] = React.useState<Preset>(searchPresets[0]);
+  const [preset, setPreset] = React.useState<Preset>();
 
   const [record, setRecord, onChange] = useForm<Record<SearchField, boolean>>(
     props.value
   );
   React.useEffect(() => {
     setRecord(props.value);
-    setPreset(searchPresets[0]);
+    setPreset(undefined);
   }, [props.value]);
 
   const handleCancel = () => {
@@ -99,7 +99,7 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
                     id={p.name}
                     name={p.name}
                     label={p.name}
-                    value={p.name === preset.name}
+                    value={p.name === preset?.name}
                     onChange={() => onSelectPreset(p)}
                   />
                 </Grid>

@@ -27,8 +27,23 @@ interface Props {
 export default function MultipleSelection(props: Props): JSX.Element {
   const classes = useStyles();
 
+  const filter = React.useRef<SearchFilter>();
+  const [selections, setSelections] = React.useState<string[]>(props.values);
+
+  React.useEffect(() => {
+    setSelections(props.values);
+  }, [props.values]);
+
+  React.useEffect(() => {
+    return () => {
+      if (filter.current) {
+        props.onChange(filter.current);
+      }
+    };
+  }, []);
+
   const handleChange = (value: string) => {
-    const updatesValues = [...props.values];
+    const updatesValues = [...selections];
 
     const valueIndex = updatesValues.findIndex((v) => v === value);
     if (valueIndex < 0) {
@@ -37,24 +52,24 @@ export default function MultipleSelection(props: Props): JSX.Element {
       updatesValues.splice(valueIndex, 1);
     }
 
-    const newFilter: SearchFilter = {
+    filter.current = {
       field: props.field,
       values: updatesValues,
       type: 'Exact',
     };
 
-    props.onChange(newFilter);
+    setSelections(updatesValues);
   };
 
   return (
-    <div className={classes.box}>
+    <div id={'search' + props.field} className={classes.box}>
       {props.options.map(({ label, value }) => (
         <div key={value} className={classes.item}>
           <Checkbox
             id={value}
             name={value}
             label={label}
-            value={props.values.includes(value)}
+            value={selections.includes(value)}
             onChange={() => handleChange(value)}
           />
         </div>

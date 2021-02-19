@@ -456,9 +456,7 @@ describe('Database', () => {
       cy.get(
         '.MuiContainer-root > :nth-child(2) > :nth-child(1) > .MuiButtonBase-root'
       ).click();
-      cy.get(
-        ':nth-child(2) > .MuiListItemText-root > .MuiTypography-root'
-      ).click();
+      cy.get('.MuiList-root > :nth-child(1)').click();
 
       cy.wait(3000);
       cy.get('#subtitle').should('contain', '7 total');
@@ -476,7 +474,9 @@ describe('Database', () => {
 
     it('Should filter by Processing state', () => {
       cy.get(':nth-child(3) > :nth-child(1) > .MuiButtonBase-root').click();
-      cy.get('.MuiPaper-root #Processing .MuiCheckbox-root').click();
+      cy.get('.MuiPaper-root #Processing .MuiCheckbox-root')
+        .click()
+        .type('{esc}');
 
       cy.wait(3000);
       cy.get('#subtitle').contains('1 total');
@@ -490,7 +490,7 @@ describe('Database', () => {
       cy.get('#subtitle').should('contain', '9 total');
     });
 
-    it('Should search by specie', () => {
+    it.skip('Should search by specie', () => {
       cy.get(':nth-child(4) > :nth-child(1) > .MuiButtonBase-root').click();
       cy.get(
         '#searchFilter > .MuiFormControl-root > .MuiInputBase-root > .MuiInputBase-input'
@@ -518,12 +518,50 @@ describe('Database', () => {
       cy.wait(3000);
       cy.get('#subtitle').contains('9 total');
     });
-    it("Should download report", () => {
+
+    it('Should download report', () => {
       cy.intercept('POST', '/api/v1/seedbank/search/export').as('postReport');
       cy.get('#download-report').click();
-      cy.get('#reportName').type('report')
+      cy.get('#reportName').type('report');
       cy.get('#submit').click();
       cy.wait('@postReport');
+    });
+
+    it('Should combine filters', () => {
+      // checking state list
+      cy.get(':nth-child(3) > :nth-child(1) > .MuiButtonBase-root').click();
+      cy.get('#searchstate').children().should('have.length', 5);
+      cy.get('#searchstate').type('{esc}');
+
+      // selecting status
+      cy.get(
+        '.MuiContainer-root > :nth-child(2) > :nth-child(1) > .MuiButtonBase-root'
+      ).click();
+      cy.get('.MuiList-root > :nth-child(1)').click();
+
+      cy.wait(3000);
+      cy.get('#subtitle').should('contain', '7 total');
+
+      // checking state list
+      cy.get(':nth-child(3) > :nth-child(1) > .MuiButtonBase-root').click();
+      cy.get('#searchstate').children().should('have.length', 4);
+      cy.get('#searchstate').type('{esc}');
+
+      // entering site location
+      cy.get(':nth-child(7) > :nth-child(1) > .MuiButtonBase-root').click();
+      cy.get(
+        '#searchsiteLocation > .MuiFormControl-root > .MuiInputBase-root > .MuiInputBase-input'
+      )
+        .type('Sunset')
+        .type('{enter}');
+
+      cy.wait(3000);
+      cy.get('#subtitle').should('contain', '1 total');
+
+      // checking state list
+      cy.get(':nth-child(3) > :nth-child(1) > .MuiButtonBase-root').click();
+      cy.get('#searchstate').children().should('have.length', 1);
+      cy.get('#searchstate').type('{esc}');
     });
   });
 });

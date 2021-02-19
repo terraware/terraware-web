@@ -9,9 +9,13 @@ import {
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import ArrowDropDown from '@material-ui/icons/ArrowDropDown';
 import React from 'react';
-import { SearchField, SearchFilter } from '../../api/types/search';
+import {
+  FieldValuesPayload,
+  SearchField,
+  SearchFilter,
+} from '../../api/types/search';
 import preventDefaultEvent from '../../utils/preventDefaultEvent';
-import { DatabaseColumn } from './columns';
+import { DatabaseColumn, Option } from './columns';
 import DateRange from './DateRange';
 import MultipleSelection from './MultipleSelection';
 import NumberRange from './NumberRange';
@@ -57,6 +61,7 @@ const useStyles = makeStyles((theme) =>
 interface Props {
   columns: DatabaseColumn[];
   filters: SearchFilter[];
+  availableValues: FieldValuesPayload;
   onChange: (filters: SearchFilter[]) => void;
 }
 
@@ -100,7 +105,7 @@ export default function Filters(props: Props): JSX.Element {
                     props.filters.find((f) => f.field === col.key)?.values ?? []
                   }
                   onChange={onChange}
-                  options={col.filter.options ?? []}
+                  options={getOptions(col, props.availableValues)}
                 />
               )}
               {col.filter?.type === 'single_selection' && (
@@ -110,7 +115,7 @@ export default function Filters(props: Props): JSX.Element {
                     props.filters.find((f) => f.field === col.key)?.values ?? []
                   }
                   onChange={onChange}
-                  options={col.filter.options ?? []}
+                  options={getOptions(col, props.availableValues)}
                 />
               )}
               {col.filter?.type === 'search' && (
@@ -158,6 +163,16 @@ export default function Filters(props: Props): JSX.Element {
       </div>
     </Container>
   );
+}
+
+function getOptions(
+  col: DatabaseColumn,
+  availableValues: FieldValuesPayload
+): Option[] {
+  return availableValues[col.key].values.map((v) => ({
+    label: v,
+    value: v,
+  }));
 }
 
 interface ChipPopoverProps {

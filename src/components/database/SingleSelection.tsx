@@ -40,7 +40,7 @@ export default function SingleSelection(props: Props): JSX.Element {
   };
 
   return (
-    <div className={classes.box}>
+    <div id={'search' + props.field} className={classes.box}>
       <List>
         {props.options.map(({ label, value }) => (
           <ListItem
@@ -49,10 +49,15 @@ export default function SingleSelection(props: Props): JSX.Element {
             onClick={() => handleChange(value)}
             selected={props.values.includes(value)}
           >
-            <ListItemText primary={label} />
+            <ListItemText primary={formatLabel(label)} />
           </ListItem>
         ))}
       </List>
     </div>
   );
+}
+
+function formatLabel(label: string): string {
+  if (label === null) return '-Empty-';
+  return label;
 }

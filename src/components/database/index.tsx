@@ -14,6 +14,7 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { useRecoilValueLoadable } from 'recoil';
 import {
+  ListFieldValuesRequestPayload,
   SearchField,
   SearchFilter,
   SearchRequestPayload,
@@ -21,6 +22,7 @@ import {
   SearchSortOrderElement,
 } from '../../api/types/search';
 import searchSelector from '../../state/selectors/search';
+import searchValues from '../../state/selectors/searchValues';
 import Table from '../common/table';
 import { Order } from '../common/table/sort';
 import PageHeader from '../PageHeader';
@@ -76,20 +78,43 @@ export default function Database(): JSX.Element {
     filters,
     count: 1000,
   };
-  const resultsLoadable = useRecoilValueLoadable(
+  const searchResultsLoadable = useRecoilValueLoadable(
     searchSelector({ searchParams })
   );
+  const searchValuesParams: ListFieldValuesRequestPayload = {
+    fields: tableColumns.reduce((acum, c) => {
+      if (
+        ['multiple_selection', 'single_selection'].includes(
+          c.filter?.type ?? ''
+        )
+      ) {
+        acum.push(c.key);
+      }
+      return acum;
+    }, [] as any[]),
+    filters,
+  };
+  const searchValuesResultsLoadable = useRecoilValueLoadable(
+    searchValues({ searchValuesParams })
+  );
 
-  if (resultsLoadable.state === 'loading') {
+  if (
+    searchResultsLoadable.state === 'loading' ||
+    searchValuesResultsLoadable.state === 'loading'
+  ) {
     return (
       <Box display='flex' justifyContent='center'>
         <CircularProgress />
       </Box>
     );
-  } else if (resultsLoadable.state === 'hasError') {
+  } else if (
+    searchResultsLoadable.state === 'hasError' ||
+    searchValuesResultsLoadable.state === 'hasError'
+  ) {
     return <div>An error ocurred</div>;
   }
-  const results = resultsLoadable.contents.results;
+  const results = searchResultsLoadable.contents.results;
+  const availableValues = searchValuesResultsLoadable.contents.results;
 
   const onSelect = (row: SearchResponseResults) => {
     if (row.accessionNumber) {
@@ -168,6 +193,7 @@ export default function Database(): JSX.Element {
         >
           <Filters
             filters={filters}
+            availableValues={availableValues}
             columns={tableColumns}
             onChange={onFilterChange}
           />

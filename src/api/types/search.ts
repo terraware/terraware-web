@@ -6,3 +6,7 @@ export type SearchFilter = components["schemas"]["SearchFilter"];
 export type SearchSortOrderElement = components["schemas"]["SearchSortOrderElement"];
 export type SearchResponsePayload = components["schemas"]["SearchResponsePayload"];
 export type SearchResponseResults = components["schemas"]["SearchResponsePayload"]["results"][0];
+
+export type ListFieldValuesRequestPayload = components["schemas"]["ListFieldValuesRequestPayload"];
+export type ListFieldValuesResponsePayload = components["schemas"]["ListFieldValuesResponsePayload"];
+export type FieldValuesPayload = { [key: string]: components["schemas"]["FieldValuesPayload"] };
