@@ -564,4 +564,54 @@ describe('Database', () => {
       cy.get('#searchstate').type('{esc}');
     });
   });
+
+  context('Sort', () => {
+    it('Should be able to sort by status', () => {
+      cy.get('.MuiTableRow-root > :nth-child(2) > .MuiButtonBase-root').click();
+      cy.wait(3000);
+
+      cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(2)').contains(
+        'Active'
+      );
+      cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(3)').contains(
+        'Processed'
+      );
+
+      cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(4)').contains(
+        'Kousa'
+      );
+    });
+
+    it('Should be able to sort by state', () => {
+      cy.get('.MuiTableRow-root > :nth-child(3) > .MuiButtonBase-root').click();
+      cy.wait(3000);
+
+      cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(2)').contains(
+        'Active'
+      );
+      cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(3)').contains(
+        'In Storage'
+      );
+      cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(5)').contains(
+        '02/03/2021'
+      );
+    });
+
+    it('Should be able to sort by state, descending', () => {
+      cy.get('.MuiTableRow-root > :nth-child(3) > .MuiButtonBase-root').click();
+      cy.wait(3000);
+      cy.get('.MuiTableRow-root > :nth-child(3) > .MuiButtonBase-root').click();
+      cy.wait(3000);
+
+      cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(2)').contains(
+        'Inactive'
+      );
+      cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(3)').contains(
+        'Withdrawn'
+      );
+      cy.get('.MuiTableBody-root > :nth-child(3) > :nth-child(4)').contains(
+        'Dogwood'
+      );
+    });
+  });
 });

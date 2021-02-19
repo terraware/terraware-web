@@ -221,7 +221,7 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
               <Table
                 columns={TEST_COLUMNS}
                 rows={labRows}
-                defaultSort='date'
+                orderBy='date'
                 Renderer={LabCellRenderer}
                 onSelect={onEditTest}
                 DetailsRenderer={({ row, index }) => (
@@ -266,7 +266,7 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
               <Table
                 columns={CUT_TEST_COLUMNS}
                 rows={createCutTestRow()}
-                defaultSort='date'
+                orderBy='date'
                 Renderer={CutTestCellRenderer}
                 onSelect={onEditCutTest}
               />

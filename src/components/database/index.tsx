@@ -205,7 +205,8 @@ export default function Database(): JSX.Element {
                 <Table
                   columns={tableColumns}
                   rows={results}
-                  defaultSort='accessionNumber'
+                  orderBy={sort.field}
+                  order={sort.direction === 'Ascending' ? 'asc' : 'desc'}
                   Renderer={SearchCellRenderer}
                   onSelect={onSelect}
                   sortHandler={onSortChange}

@@ -171,7 +171,7 @@ export default function WithdrawalView({
               <Table
                 columns={COLUMNS}
                 rows={accession.withdrawals ?? []}
-                defaultSort='date'
+                orderBy='date'
                 Renderer={WithdrawalCellRenderer}
                 onSelect={onEdit}
                 sortComparator={sortComparator}

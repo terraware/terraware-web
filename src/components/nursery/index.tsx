@@ -130,7 +130,7 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
               <Table
                 columns={COLUMNS}
                 rows={getNurseryRows()}
-                defaultSort='date'
+                orderBy='date'
                 Renderer={NurseryCellRenderer}
                 onSelect={onEdit}
                 sortComparator={sortComparator}
