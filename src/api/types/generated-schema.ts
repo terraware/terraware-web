@@ -344,7 +344,6 @@ export interface components {
       | "dryingMoveDate"
       | "dryingStartDate"
       | "endangered"
-      | "estimatedSeeds"
       | "estimatedSeedsIncoming"
       | "family"
       | "geolocation"

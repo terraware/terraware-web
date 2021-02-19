@@ -188,12 +188,6 @@ export const COLUMNS: DatabaseColumn[] = [
     filter: { type: 'date_range' },
   },
   {
-    key: 'estimatedSeeds',
-    name: 'Estimated number of seeds (weight)',
-    type: 'number',
-    filter: { type: 'number_range' },
-  },
-  {
     key: 'dryingStartDate',
     name: 'Drying start date',
     type: 'date',

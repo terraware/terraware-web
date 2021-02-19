@@ -188,38 +188,38 @@ const sections: Section[] = [
   {
     name: 'Processing and Drying',
     options: [
-      [COLUMNS[14], COLUMNS[15], COLUMNS[16]],
-      [COLUMNS[17], COLUMNS[18]],
-      [COLUMNS[19], COLUMNS[20]],
+      [COLUMNS[14], COLUMNS[15]],
+      [COLUMNS[16], COLUMNS[17]],
+      [COLUMNS[18], COLUMNS[19]],
     ],
   },
 
   {
     name: 'Storing',
     options: [
-      [COLUMNS[21], COLUMNS[22]],
-      [COLUMNS[23]],
-      [COLUMNS[24], COLUMNS[25]],
+      [COLUMNS[20], COLUMNS[21]],
+      [COLUMNS[22]],
+      [COLUMNS[23], COLUMNS[24]],
     ],
   },
   {
     name: 'Withdrawal',
     options: [
-      [COLUMNS[26], COLUMNS[27]],
-      [COLUMNS[28], COLUMNS[29]],
-      [COLUMNS[30], COLUMNS[31], COLUMNS[32]],
+      [COLUMNS[25], COLUMNS[26]],
+      [COLUMNS[27], COLUMNS[28]],
+      [COLUMNS[29], COLUMNS[30], COLUMNS[31]],
     ],
   },
   {
     name: 'Germination Testing',
     options: [
-      [COLUMNS[33], COLUMNS[34], COLUMNS[35], COLUMNS[36], COLUMNS[37]],
-      [COLUMNS[38], COLUMNS[39], COLUMNS[40], COLUMNS[41]],
-      [COLUMNS[42], COLUMNS[43], COLUMNS[44], COLUMNS[45]],
+      [COLUMNS[32], COLUMNS[33], COLUMNS[34], COLUMNS[35], COLUMNS[36]],
+      [COLUMNS[37], COLUMNS[38], COLUMNS[39], COLUMNS[40]],
+      [COLUMNS[41], COLUMNS[42], COLUMNS[43], COLUMNS[44]],
     ],
   },
   {
     name: 'Viability',
-    options: [[COLUMNS[46]], [COLUMNS[47]]],
+    options: [[COLUMNS[45]], [COLUMNS[46]]],
   },
 ];
