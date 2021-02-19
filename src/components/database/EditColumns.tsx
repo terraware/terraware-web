@@ -193,7 +193,6 @@ const sections: Section[] = [
       [COLUMNS[18], COLUMNS[19]],
     ],
   },
-
   {
     name: 'Storing',
     options: [

@@ -518,5 +518,12 @@ describe('Database', () => {
       cy.wait(3000);
       cy.get('#subtitle').contains('9 total');
     });
+    it("Should download report", () => {
+      cy.intercept('POST', '/api/v1/seedbank/search/export').as('postReport');
+      cy.get('#download-report').click();
+      cy.get('#reportName').type('report')
+      cy.get('#submit').click();
+      cy.wait('@postReport');
+    });
   });
 });

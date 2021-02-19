@@ -25,6 +25,7 @@ import Table from '../common/table';
 import { Order } from '../common/table/sort';
 import PageHeader from '../PageHeader';
 import { COLUMNS, defaultPreset } from './columns';
+import DownloadReportModal from './DownloadReportModal';
 import EditColumns from './EditColumns';
 import Filters from './Filters';
 import SearchCellRenderer from './TableCellRenderer';
@@ -35,12 +36,22 @@ const useStyles = makeStyles((theme: Theme) =>
       paddingTop: theme.spacing(8),
       paddingBottom: theme.spacing(4),
     },
+    downloadReport: {
+      background: theme.palette.common.black,
+      color: theme.palette.common.white,
+      marginLeft: theme.spacing(2),
+      '&:hover, &:focus': {
+        backgroundColor: `${theme.palette.common.black}!important`,
+      },
+    },
   })
 );
 
 export default function Database(): JSX.Element {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
+
+  const [reportModalOpen, setReportModalOpen] = React.useState(false);
 
   const history = useHistory();
   const [sort, setSort] = React.useState<SearchSortOrderElement>({
@@ -101,6 +112,10 @@ export default function Database(): JSX.Element {
     setOpen(true);
   };
 
+  const onDownloadReport = () => {
+    setReportModalOpen(true);
+  };
+
   const onCloseEditColumnsModal = (columns?: Record<SearchField, boolean>) => {
     if (columns) {
       setVisibleColumns(columns);
@@ -108,6 +123,10 @@ export default function Database(): JSX.Element {
       setFilters(newFilters);
     }
     setOpen(false);
+  };
+
+  const onCloseDownloadReportModal = () => {
+    setReportModalOpen(false);
   };
 
   return (
@@ -118,18 +137,33 @@ export default function Database(): JSX.Element {
           value={visibleColumns}
           onClose={onCloseEditColumnsModal}
         />
+        <DownloadReportModal
+          open={reportModalOpen}
+          onClose={onCloseDownloadReportModal}
+          searchParams={searchParams}
+        />
         <PageHeader
           title='Database'
           subtitle={`${results.length} total`}
           rightComponent={
-            <Chip
-              id='edit-columns'
-              variant='outlined'
-              size='medium'
-              label='Edit columns'
-              onClick={onOpenEditColumnsModal}
-              icon={<EditIcon />}
-            />
+            <div>
+              <Chip
+                id='edit-columns'
+                variant='outlined'
+                size='medium'
+                label='Edit columns'
+                onClick={onOpenEditColumnsModal}
+                icon={<EditIcon />}
+              />
+              <Chip
+                id='download-report'
+                variant='outlined'
+                size='medium'
+                label='Download as report'
+                onClick={onDownloadReport}
+                className={classes.downloadReport}
+              />
+            </div>
           }
         >
           <Filters
