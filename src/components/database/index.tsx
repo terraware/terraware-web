@@ -1,3 +1,4 @@
+import DayJSUtils from '@date-io/dayjs';
 import {
   Box,
   Chip,
@@ -8,6 +9,7 @@ import {
 } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import EditIcon from '@material-ui/icons/Edit';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { useRecoilValueLoadable } from 'recoil';
@@ -109,48 +111,50 @@ export default function Database(): JSX.Element {
   };
 
   return (
-    <main>
-      <EditColumns
-        open={open}
-        value={visibleColumns}
-        onClose={onCloseEditColumnsModal}
-      />
-      <PageHeader
-        title='Database'
-        subtitle={`${results.length} total`}
-        rightComponent={
-          <Chip
-            id='edit-columns'
-            variant='outlined'
-            size='medium'
-            label='Edit columns'
-            onClick={onOpenEditColumnsModal}
-            icon={<EditIcon />}
-          />
-        }
-      >
-        <Filters
-          filters={filters}
-          columns={tableColumns}
-          onChange={onFilterChange}
+    <MuiPickersUtilsProvider utils={DayJSUtils}>
+      <main>
+        <EditColumns
+          open={open}
+          value={visibleColumns}
+          onClose={onCloseEditColumnsModal}
         />
-      </PageHeader>
-      <Container maxWidth='lg' className={classes.mainContainer}>
-        <Paper>
-          <Grid container spacing={4}>
-            <Grid item xs={12}>
-              <Table
-                columns={tableColumns}
-                rows={results}
-                defaultSort='accessionNumber'
-                Renderer={SearchCellRenderer}
-                onSelect={onSelect}
-                sortHandler={onSortChange}
-              />
+        <PageHeader
+          title='Database'
+          subtitle={`${results.length} total`}
+          rightComponent={
+            <Chip
+              id='edit-columns'
+              variant='outlined'
+              size='medium'
+              label='Edit columns'
+              onClick={onOpenEditColumnsModal}
+              icon={<EditIcon />}
+            />
+          }
+        >
+          <Filters
+            filters={filters}
+            columns={tableColumns}
+            onChange={onFilterChange}
+          />
+        </PageHeader>
+        <Container maxWidth='lg' className={classes.mainContainer}>
+          <Paper>
+            <Grid container spacing={4}>
+              <Grid item xs={12}>
+                <Table
+                  columns={tableColumns}
+                  rows={results}
+                  defaultSort='accessionNumber'
+                  Renderer={SearchCellRenderer}
+                  onSelect={onSelect}
+                  sortHandler={onSortChange}
+                />
+              </Grid>
             </Grid>
-          </Grid>
-        </Paper>
-      </Container>
-    </main>
+          </Paper>
+        </Container>
+      </main>
+    </MuiPickersUtilsProvider>
   );
 }

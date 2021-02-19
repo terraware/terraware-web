@@ -189,4 +189,58 @@ describe("Database", () => {
     
   })
 
+  context("Filters", () => {
+    it("Should filter by Active Status", () => {
+      cy.get('.MuiContainer-root > :nth-child(2) > :nth-child(1) > .MuiButtonBase-root').click();
+      cy.get(':nth-child(2) > .MuiListItemText-root > .MuiTypography-root').click();
+
+      cy.wait(3000);
+      cy.get('#subtitle').should('contain', '4 total');
+    });
+    it("Should clear Status filter", () => {
+      cy.get('.MuiContainer-root > :nth-child(2) > :nth-child(1) > .MuiButtonBase-root').click();
+      cy.get('#clear').click();
+
+      cy.wait(3000);
+      cy.get('#subtitle').should('contain', '4 total');
+    });
+    it("Should filter by Processing state", () => {
+      cy.get(':nth-child(3) > :nth-child(1) > .MuiButtonBase-root').click();
+      cy.get('.MuiPaper-root #Processing .MuiCheckbox-root').click();
+
+      cy.wait(3000);
+      cy.get('#subtitle').contains('1 total');
+    });
+    it("Should clear state filter", () => {
+      cy.get(':nth-child(3) > :nth-child(1) > .MuiButtonBase-root').click();
+      cy.get('#clear').click();
+
+      cy.wait(3000);
+      cy.get('#subtitle').should('contain', '4 total');
+    });
+    it("Should search by specie", () => {
+      cy.get(':nth-child(4) > :nth-child(1) > .MuiButtonBase-root').click();
+      cy.get('#searchFilter > .MuiFormControl-root > .MuiInputBase-root > .MuiInputBase-input').type('kousa');
+      cy.get('#searchFilter > .MuiFormControl-root > .MuiInputBase-root > .MuiInputAdornment-root > .MuiSvgIcon-root').click()
+
+      cy.wait(3000);
+      cy.get('#subtitle').should('contain', '3 total');
+    });
+    it("Should search by Received on", () => {
+      cy.get(':nth-child(5) > :nth-child(1) > .MuiButtonBase-root').click();
+      cy.get('#startDate').clear().type('02/03/2021');
+      cy.get('#endDate').clear().type('02/04/2021').type('{enter}');
+
+      cy.wait(3000);
+      cy.get('#subtitle').should('contain', '1 total');
+    });
+    it("Should clear all filters", () => {
+      cy.get('#clearAll').click();
+
+      cy.wait(3000);
+      cy.get('#subtitle').contains('4 total');
+    });
+
+  });
+
 })

@@ -1,0 +1,94 @@
+import { createStyles, Grid, makeStyles } from '@material-ui/core';
+import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
+import dayjs from 'dayjs';
+import React from 'react';
+import { SearchField, SearchFilter } from '../../api/types/search';
+import DatePicker from '../common/DatePicker';
+
+interface Props {
+  field: SearchField;
+  onChange: (filter: SearchFilter) => void;
+  values: string[];
+}
+
+const useStyles = makeStyles((theme) =>
+  createStyles({
+    box: {
+      padding: theme.spacing(1.75),
+    },
+    flexContainer: {
+      alignItems: 'center',
+      display: 'flex',
+      justifyContent: 'center',
+    },
+  })
+);
+
+export default function DateRange(props: Props): JSX.Element {
+  const classes = useStyles();
+  const onChangeDate = (id: string, value?: string) => {
+    const formatedValue = dayjs(value).format('YYYY-MM-DD');
+    const newValues = props.values.length
+      ? [...props.values]
+      : [startDate, endDate];
+    if (id === 'startDate' && value) {
+      setStartDate(formatedValue);
+      newValues[0] = formatedValue;
+    }
+    if (id === 'endDate' && value) {
+      setEndDate(formatedValue);
+      newValues[1] = formatedValue;
+    }
+  };
+
+  const onEnter = (e: React.KeyboardEvent<Element>) => {
+    if (e.key === 'Enter') {
+      const newValues = [startDate, endDate];
+
+      const newFilter: SearchFilter = {
+        field: props.field,
+        values: newValues,
+        type: 'Range',
+      };
+
+      props.onChange(newFilter);
+    }
+  };
+
+  const [startDate, setStartDate] = React.useState(
+    props.values[0] || dayjs().format('YYYY-MM-DD')
+  );
+  const [endDate, setEndDate] = React.useState(
+    props.values[1] || dayjs().format('YYYY-MM-DD')
+  );
+
+  return (
+    <div className={classes.box}>
+      <Grid container spacing={4}>
+        <Grid item xs={5}>
+          <DatePicker
+            id='startDate'
+            value={startDate}
+            onChange={onChangeDate}
+            label='Start'
+            aria-label='Start date'
+            onKeyPress={(e) => onEnter(e)}
+          />
+        </Grid>
+        <Grid item xs={1} className={classes.flexContainer}>
+          <ArrowForwardIcon />
+        </Grid>
+        <Grid item xs={5}>
+          <DatePicker
+            id='endDate'
+            value={endDate}
+            onChange={onChangeDate}
+            label='End'
+            aria-label='End date'
+            onKeyPress={(e) => onEnter(e)}
+          />
+        </Grid>
+      </Grid>
+    </div>
+  );
+}
