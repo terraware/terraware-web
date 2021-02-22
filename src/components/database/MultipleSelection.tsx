@@ -21,14 +21,16 @@ interface Props {
   field: SearchField;
   onChange: (filter: SearchFilter) => void;
   options: Option[];
-  values: string[];
+  values: (string | null)[];
 }
 
 export default function MultipleSelection(props: Props): JSX.Element {
   const classes = useStyles();
 
   const filter = React.useRef<SearchFilter>();
-  const [selections, setSelections] = React.useState<string[]>(props.values);
+  const [selections, setSelections] = React.useState<(string | null)[]>(
+    props.values
+  );
 
   React.useEffect(() => {
     setSelections(props.values);
@@ -66,11 +68,11 @@ export default function MultipleSelection(props: Props): JSX.Element {
       {props.options.map(({ label, value }) => (
         <div key={value} className={classes.item}>
           <Checkbox
-            id={value}
-            name={value}
+            id={value || ''}
+            name={value || ''}
             label={label}
             value={selections.includes(value)}
-            onChange={() => handleChange(value)}
+            onChange={() => handleChange(value || '')}
           />
         </div>
       ))}

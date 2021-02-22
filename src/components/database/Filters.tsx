@@ -116,6 +116,9 @@ export default function Filters(props: Props): JSX.Element {
                   }
                   onChange={onChange}
                   options={getOptions(col, props.availableValues)}
+                  isBoolean={Boolean(
+                    props.columns.find((c) => c.type === 'boolean')
+                  )}
                 />
               )}
               {col.filter?.type === 'search' && (

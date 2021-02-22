@@ -21,14 +21,33 @@ interface Props {
   field: SearchField;
   onChange: (filter: SearchFilter) => void;
   options: Option[];
-  values: string[];
+  values: (string | null)[];
+  isBoolean: boolean;
 }
 
 export default function SingleSelection(props: Props): JSX.Element {
   const classes = useStyles();
 
-  const handleChange = (value: string) => {
-    const updatesValues = [value];
+  const options = [...props.options];
+  if (props.isBoolean) {
+    if (
+      options.find((o) => o.value === null) &&
+      !options.find((o) => o.value === 'false')
+    ) {
+      options.push({ label: 'false', value: 'false' });
+    }
+  }
+  options.sort((a, b) =>
+    a.value && b.value ? a.value.localeCompare(b.value) : 0
+  );
+
+  const handleChange = (value: string | null) => {
+    let updatesValues = [value];
+    if (props.isBoolean) {
+      if (value === 'false') {
+        updatesValues = [null, 'false'];
+      }
+    }
 
     const newFilter: SearchFilter = {
       field: props.field,
@@ -42,7 +61,7 @@ export default function SingleSelection(props: Props): JSX.Element {
   return (
     <div id={'search' + props.field} className={classes.box}>
       <List>
-        {props.options.map(({ label, value }) => (
+        {options.map(({ label, value }) => (
           <ListItem
             button
             key={label}
@@ -57,7 +76,8 @@ export default function SingleSelection(props: Props): JSX.Element {
   );
 }
 
-function formatLabel(label: string): string {
-  if (label === null) return '-Empty-';
+function formatLabel(label: string | null): string | null {
+  if (label === 'true') return 'Yes';
+  if (label === 'false') return 'No';
   return label;
 }

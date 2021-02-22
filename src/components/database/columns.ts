@@ -2,8 +2,8 @@ import { SearchField } from '../../api/types/search';
 import { TableColumnType } from '../common/table/types';
 
 export interface Option {
-  label: string;
-  value: string
+  label: string | null;
+  value: string | null;
 }
 
 type DatabaseColumnFilterType =

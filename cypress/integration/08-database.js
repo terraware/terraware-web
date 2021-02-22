@@ -453,32 +453,46 @@ describe('Database', () => {
 
   context('Filters', () => {
     it('Should filter by Active Status', () => {
+      cy.intercept('POST', '/api/v1/seedbank/search').as('search');
+      cy.intercept('POST', '/api/v1/seedbank/values').as('values');
+
       cy.get(
         '.MuiContainer-root > :nth-child(2) > :nth-child(1) > .MuiButtonBase-root'
       ).click();
       cy.get('.MuiList-root > :nth-child(1)').click();
 
-      cy.wait(3000);
+      cy.wait('@search');
+      cy.wait('@values');
+      cy.url().should('match', /accessions/);
+
       cy.get('#subtitle').should('contain', '7 total');
     });
 
     it('Should clear Status filter', () => {
+      cy.intercept('POST', '/api/v1/seedbank/search').as('search');
+      cy.intercept('POST', '/api/v1/seedbank/values').as('values');
+
       cy.get(
         '.MuiContainer-root > :nth-child(2) > :nth-child(1) > .MuiButtonBase-root'
       ).click();
       cy.get('#clear').click();
 
-      cy.wait(3000);
       cy.get('#subtitle').should('contain', '9 total');
     });
 
     it('Should filter by Processing state', () => {
+      cy.intercept('POST', '/api/v1/seedbank/search').as('search');
+      cy.intercept('POST', '/api/v1/seedbank/values').as('values');
+
       cy.get(':nth-child(3) > :nth-child(1) > .MuiButtonBase-root').click();
       cy.get('.MuiPaper-root #Processing .MuiCheckbox-root')
         .click()
         .type('{esc}');
 
-      cy.wait(3000);
+      cy.wait('@search');
+      cy.wait('@values');
+      cy.url().should('match', /accessions/);
+
       cy.get('#subtitle').contains('1 total');
     });
 
@@ -486,11 +500,13 @@ describe('Database', () => {
       cy.get(':nth-child(3) > :nth-child(1) > .MuiButtonBase-root').click();
       cy.get('#clear').click();
 
-      cy.wait(3000);
       cy.get('#subtitle').should('contain', '9 total');
     });
 
     it.skip('Should search by specie', () => {
+      cy.intercept('POST', '/api/v1/seedbank/search').as('search');
+      cy.intercept('POST', '/api/v1/seedbank/values').as('values');
+
       cy.get(':nth-child(4) > :nth-child(1) > .MuiButtonBase-root').click();
       cy.get(
         '#searchFilter > .MuiFormControl-root > .MuiInputBase-root > .MuiInputBase-input'
@@ -499,23 +515,31 @@ describe('Database', () => {
         '#searchFilter > .MuiFormControl-root > .MuiInputBase-root > .MuiInputAdornment-root > .MuiSvgIcon-root'
       ).click();
 
-      cy.wait(3000);
+      cy.wait('@search');
+      cy.wait('@values');
+      cy.url().should('match', /accessions/);
+
       cy.get('#subtitle').should('contain', '3 total');
     });
 
     it('Should search by Received on', () => {
+      cy.intercept('POST', '/api/v1/seedbank/search').as('search');
+      cy.intercept('POST', '/api/v1/seedbank/values').as('values');
+
       cy.get(':nth-child(5) > :nth-child(1) > .MuiButtonBase-root').click();
       cy.get('#startDate').clear().type('02/03/2021');
       cy.get('#endDate').clear().type('02/04/2021').type('{enter}');
 
-      cy.wait(3000);
+      cy.wait('@search');
+      cy.wait('@values');
+      cy.url().should('match', /accessions/);
+
       cy.get('#subtitle').should('contain', '1 total');
     });
 
     it('Should clear all filters', () => {
       cy.get('#clearAll').click();
 
-      cy.wait(3000);
       cy.get('#subtitle').contains('9 total');
     });
 
@@ -528,6 +552,9 @@ describe('Database', () => {
     });
 
     it('Should combine filters', () => {
+      cy.intercept('POST', '/api/v1/seedbank/search').as('search');
+      cy.intercept('POST', '/api/v1/seedbank/values').as('values');
+
       // checking state list
       cy.get(':nth-child(3) > :nth-child(1) > .MuiButtonBase-root').click();
       cy.get('#searchstate').children().should('have.length', 5);
@@ -539,13 +566,19 @@ describe('Database', () => {
       ).click();
       cy.get('.MuiList-root > :nth-child(1)').click();
 
-      cy.wait(3000);
+      cy.wait('@search');
+      cy.wait('@values');
+      cy.url().should('match', /accessions/);
+
       cy.get('#subtitle').should('contain', '7 total');
 
       // checking state list
       cy.get(':nth-child(3) > :nth-child(1) > .MuiButtonBase-root').click();
       cy.get('#searchstate').children().should('have.length', 4);
       cy.get('#searchstate').type('{esc}');
+
+      cy.intercept('POST', '/api/v1/seedbank/search').as('search2');
+      cy.intercept('POST', '/api/v1/seedbank/values').as('values2');
 
       // entering site location
       cy.get(':nth-child(7) > :nth-child(1) > .MuiButtonBase-root').click();
@@ -555,7 +588,10 @@ describe('Database', () => {
         .type('Sunset')
         .type('{enter}');
 
-      cy.wait(3000);
+      cy.wait('@search2');
+      cy.wait('@values2');
+      cy.url().should('match', /accessions/);
+
       cy.get('#subtitle').should('contain', '1 total');
 
       // checking state list
@@ -566,25 +602,29 @@ describe('Database', () => {
   });
 
   context('Sort', () => {
-    it('Should be able to sort by status', () => {
-      cy.get('.MuiTableRow-root > :nth-child(2) > .MuiButtonBase-root').click();
-      cy.wait(3000);
+    it('Should be able to sort by species', () => {
+      cy.intercept('POST', '/api/v1/seedbank/search').as('search');
 
-      cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(2)').contains(
-        'Active'
-      );
-      cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(3)').contains(
-        'Processed'
-      );
+      cy.get('.MuiTableRow-root > :nth-child(4) > .MuiButtonBase-root').click();
 
-      cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(4)').contains(
+      cy.wait('@search');
+      cy.url().should('match', /accessions/);
+
+      cy.get(':nth-child(9) > :nth-child(4) > .MuiTypography-root').contains(
+        'Other Dogwood'
+      );
+      cy.get(':nth-child(8) > :nth-child(4) > .MuiTypography-root').contains(
         'Kousa'
       );
     });
 
     it('Should be able to sort by state', () => {
+      cy.intercept('POST', '/api/v1/seedbank/search').as('search');
+
       cy.get('.MuiTableRow-root > :nth-child(3) > .MuiButtonBase-root').click();
-      cy.wait(3000);
+
+      cy.wait('@search');
+      cy.url().should('match', /accessions/);
 
       cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(2)').contains(
         'Active'
@@ -598,10 +638,19 @@ describe('Database', () => {
     });
 
     it('Should be able to sort by state, descending', () => {
+      cy.intercept('POST', '/api/v1/seedbank/search').as('search');
+
       cy.get('.MuiTableRow-root > :nth-child(3) > .MuiButtonBase-root').click();
-      cy.wait(3000);
+
+      cy.wait('@search');
+      cy.url().should('match', /accessions/);
+
+      cy.intercept('POST', '/api/v1/seedbank/search').as('search2');
+
       cy.get('.MuiTableRow-root > :nth-child(3) > .MuiButtonBase-root').click();
-      cy.wait(3000);
+
+      cy.wait('@search2');
+      cy.url().should('match', /accessions/);
 
       cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(2)').contains(
         'Inactive'

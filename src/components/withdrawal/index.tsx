@@ -60,8 +60,7 @@ export default function WithdrawalView({
     setSelectedRecord,
   ] = React.useState<AccessionWithdrawal>();
 
-  const seedsTotal =
-    accession.seedsCounted ?? accession.estimatedSeedCount ?? 0;
+  const seedsTotal = accession.effectiveSeedCount ?? 0;
   const seedsWithdrawn =
     accession.withdrawals?.reduce((acum, value) => {
       acum = acum + (value?.seedsWithdrawn ?? 0);

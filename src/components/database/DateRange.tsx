@@ -5,12 +5,6 @@ import React from 'react';
 import { SearchField, SearchFilter } from '../../api/types/search';
 import DatePicker from '../common/DatePicker';
 
-interface Props {
-  field: SearchField;
-  onChange: (filter: SearchFilter) => void;
-  values: string[];
-}
-
 const useStyles = makeStyles((theme) =>
   createStyles({
     box: {
@@ -23,6 +17,12 @@ const useStyles = makeStyles((theme) =>
     },
   })
 );
+
+interface Props {
+  field: SearchField;
+  onChange: (filter: SearchFilter) => void;
+  values: (string | null)[];
+}
 
 export default function DateRange(props: Props): JSX.Element {
   const classes = useStyles();

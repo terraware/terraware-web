@@ -8,12 +8,6 @@ import SearchIcon from '@material-ui/icons/Search';
 import React from 'react';
 import { SearchField, SearchFilter } from '../../api/types/search';
 
-interface Props {
-  field: SearchField;
-  onChange: (filter: SearchFilter) => void;
-  values: string[];
-}
-
 const useStyles = makeStyles((theme) =>
   createStyles({
     box: {
@@ -21,6 +15,12 @@ const useStyles = makeStyles((theme) =>
     },
   })
 );
+
+interface Props {
+  field: SearchField;
+  onChange: (filter: SearchFilter) => void;
+  values: (string | null)[];
+}
 
 export default function Search(props: Props): JSX.Element {
   const classes = useStyles();
