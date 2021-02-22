@@ -102,5 +102,23 @@ describe('Summary page', () => {
         .url()
         .should('contain', '/accessions');
     });
+
+    it('navigates to database page filtered by pending state when clickin on Most recent update', () => {
+      cy.get(':nth-child(1) > :nth-child(1) > .MuiChip-root')
+        .click()
+        .url()
+        .should('contain', '/accessions');
+        cy.get('#subtitle').should('contain', '3 total');
+    });
+
+    it('navigates to database page filtered by proessed state when clickin on Most recent update', () => {
+      cy.get('[href="/accessions?state=Processed"]')
+        .click()
+        .url()
+        .should('contain', '/accessions');
+        cy.get('#subtitle').should('contain', '2 total');
+
+        
+    });
   });
 });

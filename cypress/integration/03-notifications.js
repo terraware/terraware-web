@@ -27,6 +27,10 @@ describe('Summary page - Notifications', () => {
       .wait(2000)
       .url()
       .should('contain', '/accessions?state');
+      cy.get('#subtitle').should('contain', '0 total');
+
+      cy.get('[href="/accessions?state=In Storage"]').click().wait(2000);
+      cy.get('#subtitle').should('contain', '1 total');
   });
 
   it('go to accesion page when clicking Date notification', () => {
@@ -38,8 +42,8 @@ describe('Summary page - Notifications', () => {
       .should('contain', '/accessions/XYZ');
   });
 
-  it('has 8 notifications unread after clicking', () => {
+  it('has 7 notifications unread after clicking', () => {
     cy.get(':nth-child(2) > .MuiButtonBase-root').click().wait(2000);
-    cy.get('.MuiBadge-badge').contains('8');
+    cy.get('.MuiBadge-badge').contains('7');
   });
 });

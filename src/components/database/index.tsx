@@ -11,7 +11,7 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import EditIcon from '@material-ui/icons/Edit';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { useRecoilValueLoadable } from 'recoil';
 import {
   ListFieldValuesRequestPayload,
@@ -49,11 +49,15 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
+const useQuery = () => new URLSearchParams(useLocation().search);
+
 export default function Database(): JSX.Element {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
   const [reportModalOpen, setReportModalOpen] = React.useState(false);
+
+  const query = useQuery();
 
   const history = useHistory();
   const [sort, setSort] = React.useState<SearchSortOrderElement>({
@@ -68,7 +72,26 @@ export default function Database(): JSX.Element {
       return acum;
     }, {} as Record<SearchField, boolean>)
   );
-  const [filters, setFilters] = React.useState<SearchFilter[]>([]);
+  const initializeFilters = () => {
+    const filters: SearchFilter[] = [];
+    const values: string[] = [];
+    if (query.get('state')) {
+      values.push(query.get('state') || '');
+      filters.push({
+        field: 'state',
+        values: values,
+        type: 'Exact',
+      });
+    }
+    return filters;
+  };
+  const [filters, setFilters] = React.useState<SearchFilter[]>(
+    initializeFilters
+  );
+
+  React.useEffect(() => {
+    setFilters(initializeFilters);
+  }, [query.get('state')]);
 
   const tableColumns = COLUMNS.filter((c) => visibleColumns[c.key]);
 
