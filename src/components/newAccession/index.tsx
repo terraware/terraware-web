@@ -13,8 +13,10 @@ import CloseIcon from '@material-ui/icons/Close';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import React from 'react';
 import { Link as RouterLink, Redirect } from 'react-router-dom';
+import { useSetRecoilState } from 'recoil';
 import { getPhotoEndpoint, postAccession } from '../../api/accession';
 import { Accession, NewAccession } from '../../api/types/accessions';
+import snackbarAtom from '../../state/atoms/snackbar';
 import useForm from '../../utils/useForm';
 import Checkbox from '../common/Checkbox';
 import DatePicker from '../common/DatePicker';
@@ -58,12 +60,21 @@ const useStyles = makeStyles((theme) =>
 
 export default function NewAccessionWrapper(): JSX.Element {
   const [accessionNumber, setAccessionNumber] = React.useState<string>();
+  const setSnackbar = useSetRecoilState(snackbarAtom);
   const classes = useStyles();
 
   const onSubmit = async (record: NewAccession) => {
-    const accession = await postAccession(record);
-    const { accessionNumber } = accession;
-    setAccessionNumber(accessionNumber);
+    try {
+      const accession = await postAccession(record);
+      const { accessionNumber } = accession;
+      setAccessionNumber(accessionNumber);
+      setSnackbar({ type: 'success', msg: 'Accession saved' });
+    } catch (ex) {
+      setSnackbar({
+        type: 'error',
+        msg: 'An error occurred when saving the accession.',
+      });
+    }
   };
 
   if (accessionNumber) {

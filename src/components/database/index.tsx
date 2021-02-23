@@ -12,7 +12,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import React from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import {
   SearchField,
   SearchFilter,
@@ -23,6 +23,7 @@ import {
   searchSortAtom,
   searchVisibleColumnsAtom,
 } from '../../state/atoms/search';
+import snackbarAtom from '../../state/atoms/snackbar';
 import searchSelector, {
   searchTableColumnsSelector,
 } from '../../state/selectors/search';
@@ -54,8 +55,16 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export default function Database(): JSX.Element {
+  const setSnackbar = useSetRecoilState(snackbarAtom);
+  const errorHandler = () => {
+    setSnackbar({
+      type: 'error',
+      msg: 'An error occurred when fetching accessions.',
+    });
+  };
+
   return (
-    <ErrorBoundary>
+    <ErrorBoundary handler={errorHandler}>
       <React.Suspense
         fallback={
           <Box display='flex' justifyContent='center'>

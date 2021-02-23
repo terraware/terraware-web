@@ -1,129 +1,171 @@
 /* eslint-disable no-undef */
 /// <reference types="cypress" />
 
-describe("Accessions", () => {
-  context("Navigation", () => {
+describe('Accessions', () => {
+  context('Navigation', () => {
     beforeEach(() => {
-      cy.visit("/");
+      cy.visit('/');
     });
 
-    it("should navigate in and out of the new accession page", () => {
-      cy.get('.MuiTypography-root > .MuiButtonBase-root').click().url().should("contain", "/accessions/new");
-      cy.get('.MuiBox-root > .MuiButtonBase-root').click().url().should("contain", "/");
-  
-      cy.get('.MuiTypography-root > .MuiButtonBase-root').click().url().should("contain", "/accessions/new");
-      cy.get('#cancel').click().url().should("contain", "/");
+    it('should navigate in and out of the new accession page', () => {
+      cy.get('.MuiTypography-root > .MuiButtonBase-root')
+        .click()
+        .url()
+        .should('contain', '/accessions/new');
+      cy.get('.MuiBox-root > .MuiButtonBase-root')
+        .click()
+        .url()
+        .should('contain', '/');
+
+      cy.get('.MuiTypography-root > .MuiButtonBase-root')
+        .click()
+        .url()
+        .should('contain', '/accessions/new');
+      cy.get('#cancel').click().url().should('contain', '/');
     });
-  
-    it("should handle the cancel button", () => {
-      cy.get('.MuiTypography-root > .MuiButtonBase-root').click().url().should("contain", "/accessions/new");
-      cy.get('.MuiTypography-root > .MuiButtonBase-root').click().url().should("contain", "/");
+
+    it('should handle the cancel button', () => {
+      cy.get('.MuiTypography-root > .MuiButtonBase-root')
+        .click()
+        .url()
+        .should('contain', '/accessions/new');
+      cy.get('.MuiTypography-root > .MuiButtonBase-root')
+        .click()
+        .url()
+        .should('contain', '/');
     });
   });
 
-  context("Accessions", () => {
-    it("should create the accession", () => {
-      cy.visit("/");
-      cy.get('.MuiTypography-root > .MuiButtonBase-root').click().url().should("contain", "/accessions/new");
-  
-      cy.get('#species').type("Kousa Dogwoord");
-      cy.get('#family').type("Cornaceae");
-      cy.get('#numberOfTrees').type("3");
-      cy.get('#founderId').type("234908098");
-      cy.get('#endangered > .MuiButtonBase-root > .MuiIconButton-label').click();
+  context('Accessions', () => {
+    it('should create the accession', () => {
+      cy.visit('/');
+      cy.get('.MuiTypography-root > .MuiButtonBase-root')
+        .click()
+        .url()
+        .should('contain', '/accessions/new');
+
+      cy.get('#species').type('Kousa Dogwoord');
+      cy.get('#family').type('Cornaceae');
+      cy.get('#numberOfTrees').type('3');
+      cy.get('#founderId').type('234908098');
+      cy.get(
+        '#endangered > .MuiButtonBase-root > .MuiIconButton-label'
+      ).click();
       cy.get('#rare > .MuiButtonBase-root > .MuiIconButton-label').click();
-  
-      cy.get('#fieldNotes').type("Some notes");
-  
-      cy.get('#collectedDate').type("02/01/2021");
-      cy.get('#receivedDate').type("02/03/2021");
-  
-      cy.get('#primaryCollector').type("Carlos");
-      cy.get('#secondaryCollectors\\[0\\]').type("Constanza");
-      cy.get(':nth-child(14) > :nth-child(2) > .MuiTypography-root').click()
-      cy.get('#secondaryCollectors\\[1\\]').type("Leann");
-  
-      cy.get('#siteLocation').type("Sunset Overdrive");
-      cy.get('#landowner').type("Yacin");
-      cy.get('#environmentalNotes').type("Cold day");
-  
-      cy.get('#submit').click().url().should("match", /accessions\/[A-Za-z0-9]+\/seed-collection/);
 
-      cy.get('.MuiTypography-subtitle1.MuiTypography-root').contains("Active");
-      cy.get('.MuiTypography-subtitle1.MuiTypography-root').contains("Kousa Dogwoord");
-      cy.get('.MuiTypography-subtitle1.MuiTypography-root').contains("02/03/2021");
-      cy.get('.MuiTypography-subtitle1.MuiTypography-root').contains("Pending");
+      cy.get('#fieldNotes').type('Some notes');
 
-      cy.get('#species').should('have.value', "Kousa Dogwoord");
-      cy.get('#family').should('have.value', "Cornaceae");
-      cy.get('#numberOfTrees').should('have.value', "3");
-      cy.get('#founderId').should('have.value', "234908098");
-      cy.get('#check-endangered').should('have.checked', "true");
-      cy.get('#check-rare').should('have.checked', "true");
+      cy.get('#collectedDate').type('02/01/2021');
+      cy.get('#receivedDate').type('02/03/2021');
 
-      cy.get('#fieldNotes').should('have.value', "Some notes");
-  
-      cy.get('#collectedDate').should('have.value', "02 / 01 / 2021");
-      cy.get('#receivedDate').should('have.value', "02 / 03 / 2021");
-  
-      cy.get('#primaryCollector').should('have.value', "Carlos");
-      cy.get('#secondaryCollectors\\[0\\]').should('have.value', "Constanza");
-      cy.get('#secondaryCollectors\\[1\\]').should('have.value', "Leann");
-  
-      cy.get('#siteLocation').should('have.value', "Sunset Overdrive");
-      cy.get('#landowner').should('have.value', "Yacin");
-      cy.get('#environmentalNotes').should('have.value', "Cold day");
+      cy.get('#primaryCollector').type('Carlos');
+      cy.get('#secondaryCollectors\\[0\\]').type('Constanza');
+      cy.get(':nth-child(14) > :nth-child(2) > .MuiTypography-root').click();
+      cy.get('#secondaryCollectors\\[1\\]').type('Leann');
+
+      cy.get('#siteLocation').type('Sunset Overdrive');
+      cy.get('#landowner').type('Yacin');
+      cy.get('#environmentalNotes').type('Cold day');
+
+      cy.get('#submit').click();
+      cy.get('#snackbar').contains('Accession saved');
+      cy.get('#snackbar').should('not.exist');
+      cy.url().should('match', /accessions\/[A-Za-z0-9]+\/seed-collection/);
+
+      cy.get('.MuiTypography-subtitle1.MuiTypography-root').contains('Active');
+      cy.get('.MuiTypography-subtitle1.MuiTypography-root').contains(
+        'Kousa Dogwoord'
+      );
+      cy.get('.MuiTypography-subtitle1.MuiTypography-root').contains(
+        '02/03/2021'
+      );
+      cy.get('.MuiTypography-subtitle1.MuiTypography-root').contains('Pending');
+
+      cy.get('#species').should('have.value', 'Kousa Dogwoord');
+      cy.get('#family').should('have.value', 'Cornaceae');
+      cy.get('#numberOfTrees').should('have.value', '3');
+      cy.get('#founderId').should('have.value', '234908098');
+      cy.get('#check-endangered').should('have.checked', 'true');
+      cy.get('#check-rare').should('have.checked', 'true');
+
+      cy.get('#fieldNotes').should('have.value', 'Some notes');
+
+      cy.get('#collectedDate').should('have.value', '02 / 01 / 2021');
+      cy.get('#receivedDate').should('have.value', '02 / 03 / 2021');
+
+      cy.get('#primaryCollector').should('have.value', 'Carlos');
+      cy.get('#secondaryCollectors\\[0\\]').should('have.value', 'Constanza');
+      cy.get('#secondaryCollectors\\[1\\]').should('have.value', 'Leann');
+
+      cy.get('#siteLocation').should('have.value', 'Sunset Overdrive');
+      cy.get('#landowner').should('have.value', 'Yacin');
+      cy.get('#environmentalNotes').should('have.value', 'Cold day');
     });
-  
-    it("should update the accession", () => {
-      cy.get('#delete-secondaryCollectors\\[1\\]').click();
-      cy.get('#primaryCollector').clear().type("Leann");
-      cy.get('#fieldNotes').clear().type("Other notes");
 
-      cy.get('#submit').click().url().should("match", /accessions\/[A-Za-z0-9]+\/seed-collection/).wait(2000);
+    it('should update the accession', () => {
+      cy.get('#delete-secondaryCollectors\\[1\\]').click();
+      cy.get('#primaryCollector').clear().type('Leann');
+      cy.get('#fieldNotes').clear().type('Other notes');
+
+      cy.get('#submit').click();
+      cy.get('#snackbar').contains('Accession saved');
 
       cy.get('#fieldNotes').contains('Other notes');
       cy.get('#secondaryCollectors\\[1\\]').should('not.exist');
       cy.get('#primaryCollector').should('have.value', 'Leann');
-    })
+    });
 
-    it("should add processing and drying information", () => {
-      cy.get('#processing-drying > .MuiTypography-root').click().url().should("match", /accessions\/[A-Za-z0-9]+\/processing-drying/);
-      cy.get('#processingStartDate').type("01/01/2021");
-      cy.get('#processingMethod').click()
-      cy.get('.MuiList-root > [tabindex="0"]').click()
+    it('should add processing and drying information', () => {
+      cy.get('#processing-drying > .MuiTypography-root')
+        .click()
+        .url()
+        .should('match', /accessions\/[A-Za-z0-9]+\/processing-drying/);
+      cy.get('#processingStartDate').type('01/01/2021');
+      cy.get('#processingMethod').click();
+      cy.get('.MuiList-root > [tabindex="0"]').click();
       cy.get('#seedsCounted').type(300);
-      cy.get('#Nursery > .MuiButtonBase-root > .MuiIconButton-label > input').click();
-      cy.get('#Nursery > .MuiButtonBase-root').should('have.class', 'Mui-checked');
-      cy.get('#dryingStartDate').type("01/01/2021");
-      cy.get('#dryingEndDate').type("01/01/2021");
-      cy.get('#dryingMoveDate').type("01/01/2021");
-      cy.get('#processingNotes').type("A processing note");
-      cy.get('#processingStaffResponsible').type("Constanza");
+      cy.get(
+        '#Nursery > .MuiButtonBase-root > .MuiIconButton-label > input'
+      ).click();
+      cy.get('#Nursery > .MuiButtonBase-root').should(
+        'have.class',
+        'Mui-checked'
+      );
+      cy.get('#dryingStartDate').type('01/01/2021');
+      cy.get('#dryingEndDate').type('01/01/2021');
+      cy.get('#dryingMoveDate').type('01/01/2021');
+      cy.get('#processingNotes').type('A processing note');
+      cy.get('#processingStaffResponsible').type('Constanza');
 
-      cy.get('#submit').click().wait(2000);
+      cy.get('#submit').click();
+      cy.get('#snackbar').contains('Accession saved');
 
       cy.get('#processingStartDate').should('have.value', '01 / 01 / 2021');
       cy.get('#processingMethod + input').should('have.value', 'Count');
       cy.get('#seedsCounted').should('have.value', '300');
-      cy.get('#Nursery > .MuiButtonBase-root').should('have.class', 'Mui-checked');
+      cy.get('#Nursery > .MuiButtonBase-root').should(
+        'have.class',
+        'Mui-checked'
+      );
       cy.get('#dryingStartDate').should('have.value', '01 / 01 / 2021');
       cy.get('#dryingEndDate').should('have.value', '01 / 01 / 2021');
       cy.get('#dryingMoveDate').should('have.value', '01 / 01 / 2021');
       cy.get('#processingNotes').should('have.value', 'A processing note');
       cy.get('#processingStaffResponsible').should('have.value', 'Constanza');
-    })
+    });
 
-    it("should clear textfield if changing dropdown", () => {
+    it('should clear textfield if changing dropdown', () => {
       cy.get('#processingMethod').click();
       cy.get('.MuiList-root > [tabindex="-1"]').click();
-      
+
       cy.get('#subsetWeightGrams').type(500);
       cy.get('#subsetCount').type(500);
       cy.get('#totalWeightGrams').type(500);
       cy.get('#estimatedSeedCount').should('have.value', '500');
 
-      cy.get('#submit').click().wait(2000);
+      cy.get('#submit').click();
+      cy.get('#snackbar').contains('Accession saved');
+
       cy.get('#subsetWeightGrams').should('have.value', '500');
       cy.get('#estimatedSeedCount').should('have.value', '500');
 
@@ -132,7 +174,7 @@ describe("Accessions", () => {
 
       cy.get('#seedsCounted').should('have.value', '');
       cy.get('#seedsCounted').type(400);
-      
+
       cy.get('#processingMethod').click();
       cy.get('.MuiList-root > [tabindex="-1"]').click();
 
@@ -144,10 +186,13 @@ describe("Accessions", () => {
       cy.get('#seedsCounted').should('have.value', '');
     });
 
-    it("should add storage information", () => {
-      cy.get('#storage > .MuiTypography-root').click().url().should("match", /accessions\/[A-Za-z0-9]+\/storage/);
-      cy.get('#storageStartDate').type("02/04/2021");
-      cy.get('#storagePackets').type("5");
+    it('should add storage information', () => {
+      cy.get('#storage > .MuiTypography-root')
+        .click()
+        .url()
+        .should('match', /accessions\/[A-Za-z0-9]+\/storage/);
+      cy.get('#storageStartDate').type('02/04/2021');
+      cy.get('#storagePackets').type('5');
       cy.get('#storageLocation').click();
       cy.get('[data-value="Freezer 1"]').click();
       cy.get('#storageCondition').should('have.value', 'Freezer');
@@ -156,10 +201,11 @@ describe("Accessions", () => {
       cy.get('[data-value="Refrigerator 2"]').click();
       cy.get('#storageCondition').should('have.value', 'Refrigerator');
 
-      cy.get('#storageNotes').type("A storage note");
-      cy.get('#storageStaffResponsible').type("Constanza");
+      cy.get('#storageNotes').type('A storage note');
+      cy.get('#storageStaffResponsible').type('Constanza');
 
-      cy.get('#submit').click().wait(2000);
+      cy.get('#submit').click();
+      cy.get('#snackbar').contains('Accession saved');
 
       cy.get('#storageStartDate').should('have.value', '02 / 04 / 2021');
       cy.get('#storagePackets').should('have.value', '5');
@@ -170,23 +216,44 @@ describe("Accessions", () => {
     });
   });
 
-  context("Mobile dropoff", () => {
-    it("should show the mobile imported info", () => {
-      cy.visit("/accessions/AAF4D49R3E/seed-collection");
+  context('Mobile dropoff', () => {
+    it('should show the mobile imported info', () => {
+      cy.visit('/accessions/AAF4D49R3E/seed-collection');
 
-      cy.get('.MuiGrid-grid-xs-3 > :nth-child(2)').contains("ABCD001237");
-      cy.get('.MuiGrid-grid-xs-3 > :nth-child(3)').contains("ABCD001238");
+      cy.get('.MuiGrid-grid-xs-3 > :nth-child(2)').contains('ABCD001237');
+      cy.get('.MuiGrid-grid-xs-3 > :nth-child(3)').contains('ABCD001238');
 
-      cy.get('.MuiGrid-grid-xs-4 > .MuiTypography-body2').contains("9.03, -79.53");
+      cy.get('.MuiGrid-grid-xs-4 > .MuiTypography-body2').contains(
+        '9.03, -79.53'
+      );
 
-      cy.get('#photo-0').contains("accession1.jpg")
-      cy.get('#photo-0').should('have.attr', 'href', 'http://seedbank-server:8080/api/v1/seedbank/accession/AAF4D49R3E/photo/accession1.jpg').should('have.attr', 'target', '_blank')
-      cy.get('#photo-1').contains("accession2.jpg");
-      cy.get('#photo-1').should('have.attr', 'href', 'http://seedbank-server:8080/api/v1/seedbank/accession/AAF4D49R3E/photo/accession2.jpg').should('have.attr', 'target', '_blank')
+      cy.get('#photo-0').contains('accession1.jpg');
+      cy.get('#photo-0')
+        .should(
+          'have.attr',
+          'href',
+          'http://seedbank-server:8080/api/v1/seedbank/accession/AAF4D49R3E/photo/accession1.jpg'
+        )
+        .should('have.attr', 'target', '_blank');
+      cy.get('#photo-1').contains('accession2.jpg');
+      cy.get('#photo-1')
+        .should(
+          'have.attr',
+          'href',
+          'http://seedbank-server:8080/api/v1/seedbank/accession/AAF4D49R3E/photo/accession2.jpg'
+        )
+        .should('have.attr', 'target', '_blank');
 
-      cy.request("http://seedbank-server:8080/api/v1/seedbank/accession/AAF4D49R3E/photo/accession1.jpg").its('status').should('eq', 200);
-      cy.request("http://seedbank-server:8080/api/v1/seedbank/accession/AAF4D49R3E/photo/accession2.jpg").its('status').should('eq', 200);
+      cy.request(
+        'http://seedbank-server:8080/api/v1/seedbank/accession/AAF4D49R3E/photo/accession1.jpg'
+      )
+        .its('status')
+        .should('eq', 200);
+      cy.request(
+        'http://seedbank-server:8080/api/v1/seedbank/accession/AAF4D49R3E/photo/accession2.jpg'
+      )
+        .its('status')
+        .should('eq', 200);
     });
   });
-
 });

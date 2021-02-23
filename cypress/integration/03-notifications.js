@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 /// <reference types="cypress" />
 
-describe('Summary page - Notifications', () => {
+describe('Notifications', () => {
   beforeEach(() => {
     cy.visit('/');
   });
@@ -24,26 +24,27 @@ describe('Summary page - Notifications', () => {
     cy.get(':nth-child(2) > .MuiButtonBase-root').click();
     cy.get('.MuiList-root > :nth-child(5)')
       .click()
-      .wait(2000)
       .url()
-      .should('contain', '/accessions?state');
-      cy.get('#subtitle').should('contain', '0 total');
+      .should('contain', '/accessions?state=Dried');
+    cy.get('#subtitle').should('contain', '0 total');
 
-      cy.get('[href="/accessions?state=In Storage"]').click().wait(2000);
-      cy.get('#subtitle').should('contain', '1 total');
+    cy.get('[href="/accessions?state=In Storage"]')
+      .click()
+      .url()
+      .should('contain', '/accessions?state=In%20Storage');
+    cy.get('#subtitle').should('contain', '1 total');
   });
 
   it('go to accesion page when clicking Date notification', () => {
     cy.get(':nth-child(2) > .MuiButtonBase-root').click();
     cy.get('.MuiList-root > :nth-child(10)')
       .click()
-      .wait(2000)
       .url()
       .should('contain', '/accessions/XYZ');
   });
 
   it('has 7 notifications unread after clicking', () => {
-    cy.get(':nth-child(2) > .MuiButtonBase-root').click().wait(2000);
+    cy.get(':nth-child(2) > .MuiButtonBase-root').click();
     cy.get('.MuiBadge-badge').contains('7');
   });
 });

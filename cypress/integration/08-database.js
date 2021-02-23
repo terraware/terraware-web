@@ -465,7 +465,7 @@ describe('Database', () => {
       cy.wait('@values');
       cy.url().should('match', /accessions/);
 
-      cy.get('#subtitle').should('contain', '7 total');
+      cy.get('#subtitle').should('contain', '9 total');
     });
 
     it('Should clear Status filter', () => {
@@ -477,7 +477,7 @@ describe('Database', () => {
       ).click();
       cy.get('#clear').click();
 
-      cy.get('#subtitle').should('contain', '9 total');
+      cy.get('#subtitle').should('contain', '11 total');
     });
 
     it('Should filter by Processing state', () => {
@@ -500,7 +500,7 @@ describe('Database', () => {
       cy.get(':nth-child(3) > :nth-child(1) > .MuiButtonBase-root').click();
       cy.get('#clear').click();
 
-      cy.get('#subtitle').should('contain', '9 total');
+      cy.get('#subtitle').should('contain', '11 total');
     });
 
     it('Should search by specie', () => {
@@ -525,7 +525,7 @@ describe('Database', () => {
       cy.get(':nth-child(3) > :nth-child(1) > .MuiButtonBase-root').click();
       cy.get('#clear').click();
 
-      cy.get('#subtitle').should('contain', '9 total');
+      cy.get('#subtitle').should('contain', '11 total');
     });
 
     it('Should search by Received on', () => {
@@ -546,7 +546,7 @@ describe('Database', () => {
     it('Should clear all filters', () => {
       cy.get('#clearAll').click();
 
-      cy.get('#subtitle').contains('9 total');
+      cy.get('#subtitle').contains('11 total');
     });
 
     it('Should download report', () => {
@@ -577,7 +577,7 @@ describe('Database', () => {
       cy.wait('@values');
       cy.url().should('match', /accessions/);
 
-      cy.get('#subtitle').should('contain', '7 total');
+      cy.get('#subtitle').should('contain', '9 total');
 
       // checking state list
       cy.get(
@@ -620,7 +620,7 @@ describe('Database', () => {
       cy.wait('@search');
       cy.url().should('match', /accessions/);
 
-      cy.get(':nth-child(9) > :nth-child(4) > .MuiTypography-root').contains(
+      cy.get(':nth-child(11) > :nth-child(4) > .MuiTypography-root').contains(
         'Other Dogwood'
       );
       cy.get(':nth-child(8) > :nth-child(4) > .MuiTypography-root').contains(

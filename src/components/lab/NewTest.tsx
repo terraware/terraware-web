@@ -57,8 +57,10 @@ export default function NewTestDialog(props: Props): JSX.Element {
   );
 
   React.useEffect(() => {
-    setRecord(initTest(props.value));
-  }, [props.value]);
+    if (props.open) {
+      setRecord(initTest(props.value));
+    }
+  }, [props.open]);
 
   const handleCancel = () => {
     setRecord(initTest(props.value));

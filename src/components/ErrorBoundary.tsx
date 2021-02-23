@@ -2,6 +2,7 @@ import React, { Component, ErrorInfo, ReactNode } from 'react';
 
 interface Props {
   children: ReactNode;
+  handler?: () => void;
 }
 
 interface State {
@@ -23,11 +24,19 @@ export default class ErrorBoundary extends Component<Props, State> {
   public componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
     // eslint-disable-next-line no-console
     console.log('Uncaught error:', error, errorInfo);
+
+    if (this.props.handler) {
+      this.props.handler();
+    }
   }
 
   public render(): ReactNode {
     if (this.state.hasError) {
-      return <div>An error ocurred</div>;
+      if (this.props.handler) {
+        return <div></div>;
+      } else {
+        return <div>An error ocurred</div>;
+      }
     }
 
     return this.props.children;

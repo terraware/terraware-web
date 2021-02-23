@@ -56,8 +56,10 @@ export default function NewGermination(props: Props): JSX.Element {
   }
 
   React.useEffect(() => {
-    setRecord(initEntry(props.value));
-  }, [props.value]);
+    if (props.open) {
+      setRecord(initEntry(props.value));
+    }
+  }, [props.open]);
 
   const handleCancel = () => {
     setRecord(initEntry(props.value));

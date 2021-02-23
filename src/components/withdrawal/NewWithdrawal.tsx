@@ -71,7 +71,7 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
   React.useEffect(() => {
     setRecord(initWithdrawal(props.value));
     setWithdrawalType(props.value?.gramsWithdrawn ? 'weight' : 'count');
-  }, [props.value]);
+  }, [props.open]);
 
   const [withdrawalType, setWithdrawalType] = React.useState(
     props.value?.gramsWithdrawn ? 'weight' : 'count'

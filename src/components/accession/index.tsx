@@ -1,16 +1,11 @@
 import { Container, Grid } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React from 'react';
-import {
-  Route,
-  Switch,
-  useHistory,
-  useLocation,
-  useParams,
-} from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
+import { Route, Switch, useParams } from 'react-router-dom';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { putAccession } from '../../api/accession';
 import { Accession } from '../../api/types/accessions';
+import snackbarAtom from '../../state/atoms/snackbar';
 import getAccessionSelector, {
   getAccessionRequestIdAtom,
 } from '../../state/selectors/getAccession';
@@ -38,10 +33,18 @@ const useStyles = makeStyles((theme) =>
 export default function AccessionPage(): JSX.Element {
   const requestId = useRecoilCurl(getAccessionRequestIdAtom);
 
+  const setSnackbar = useSetRecoilState(snackbarAtom);
+  const errorHandler = () => {
+    setSnackbar({
+      type: 'error',
+      msg: 'An error occurred when getting the accession.',
+    });
+  };
+
   return (
     <main>
       {requestId && (
-        <ErrorBoundary>
+        <ErrorBoundary handler={errorHandler}>
           <React.Suspense fallback={<div></div>}>
             <Content requestId={requestId} />
           </React.Suspense>
@@ -54,8 +57,8 @@ export default function AccessionPage(): JSX.Element {
 function Content({ requestId }: { requestId: number }): JSX.Element {
   const classes = useStyles();
   const { accessionNumber } = useParams<{ accessionNumber: string }>();
-  const history = useHistory();
-  const location = useLocation();
+  const setSnackbar = useSetRecoilState(snackbarAtom);
+  const setRequestId = useSetRecoilState(getAccessionRequestIdAtom);
 
   const accession = useRecoilValue(
     getAccessionSelector({ accessionNumber, requestId })
@@ -69,10 +72,16 @@ function Content({ requestId }: { requestId: number }): JSX.Element {
   };
 
   const onSubmit = async (record: Accession) => {
-    const path = location.pathname;
-    await putAccession(record);
-    history.push('/');
-    history.push(path);
+    try {
+      await putAccession(record);
+      setSnackbar({ type: 'success', msg: 'Accession saved' });
+      setRequestId(requestId + 1);
+    } catch (ex) {
+      setSnackbar({
+        type: 'error',
+        msg: 'An error occurred when saving the accession.',
+      });
+    }
   };
 
   return (

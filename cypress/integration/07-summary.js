@@ -23,15 +23,14 @@ describe('Summary page', () => {
     cy.get(
       '.MuiTableCell-root > .MuiCircularProgress-root > .MuiCircularProgress-svg'
     ).should('have.class', 'MuiCircularProgress-svg');
-    cy.wait(2000);
 
-    cy.get(':nth-child(1) > .MuiPaper-root > .MuiTypography-h4').contains('7');
+    cy.get(':nth-child(1) > .MuiPaper-root > .MuiTypography-h4').contains('9');
     cy.get(':nth-child(1) > .MuiPaper-root .MuiSvgIcon-root').should(
       'have.class',
       'MuiSvgIcon-colorPrimary'
     );
     cy.get(':nth-child(1) > .MuiPaper-root .MuiTypography-root').contains(
-      '133% since last week'
+      '200% since last week'
     );
     cy.get(':nth-child(2) > .MuiPaper-root > .MuiTypography-h4').contains('3');
     cy.get(':nth-child(2) > .MuiPaper-root > .makeStyles-flex-32')
@@ -108,7 +107,7 @@ describe('Summary page', () => {
         .click()
         .url()
         .should('contain', '/accessions');
-        cy.get('#subtitle').should('contain', '3 total');
+      cy.get('#subtitle').should('contain', '5 total');
     });
 
     it('navigates to database page filtered by proessed state when clickin on Most recent update', () => {
@@ -116,9 +115,7 @@ describe('Summary page', () => {
         .click()
         .url()
         .should('contain', '/accessions');
-        cy.get('#subtitle').should('contain', '2 total');
-
-        
+      cy.get('#subtitle').should('contain', '2 total');
     });
   });
 });

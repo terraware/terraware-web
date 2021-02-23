@@ -41,8 +41,10 @@ export default function NewCutTest(props: Props): JSX.Element {
   const [record, setRecord, onChange] = useForm<Accession>(props.accession);
 
   React.useEffect(() => {
-    setRecord(props.accession);
-  }, [props.accession]);
+    if (props.open) {
+      setRecord(props.accession);
+    }
+  }, [props.open]);
 
   const handleCancel = () => {
     if (props.accession) {

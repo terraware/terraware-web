@@ -58,7 +58,7 @@ export default function NewTestDialog(props: Props): JSX.Element {
   );
   React.useEffect(() => {
     setRecord(initTest(props.value));
-  }, [props.value]);
+  }, [props.open]);
 
   const handleCancel = () => {
     setRecord(initTest(props.value));
@@ -83,7 +83,7 @@ export default function NewTestDialog(props: Props): JSX.Element {
         ? props.value.germinations[0].seedsGerminated
         : undefined
     );
-  }, [props.value]);
+  }, [props.open]);
 
   const onChangeGerminations = (id: string, value: unknown) => {
     let newRecordingDate = recordingDate;
