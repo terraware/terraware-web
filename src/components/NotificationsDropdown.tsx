@@ -152,7 +152,9 @@ export default function NotificationsDropdown(): JSX.Element {
                   to={
                     type === 'Date'
                       ? `/accessions/${accessionNumber}/seed-collection`
-                      : `/accessions?state=${state}`
+                      : type === 'State'
+                      ? `/accessions?state=${state}`
+                      : ''
                   }
                 >
                   <ListItemIcon>

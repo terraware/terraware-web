@@ -10,7 +10,7 @@ describe('Summary page', () => {
     cy.get('.MuiBox-root > .MuiTypography-root').contains('Summary');
   });
 
-  it('display endpoint result', () => {
+  it.skip('display loading spinner', () => {
     cy.get(
       ':nth-child(1) > .MuiPaper-root > .MuiCircularProgress-root > .MuiCircularProgress-svg'
     ).should('have.class', 'MuiCircularProgress-svg');
@@ -23,7 +23,9 @@ describe('Summary page', () => {
     cy.get(
       '.MuiTableCell-root > .MuiCircularProgress-root > .MuiCircularProgress-svg'
     ).should('have.class', 'MuiCircularProgress-svg');
+  })
 
+  it('display endpoint result', () => {
     cy.get(':nth-child(1) > .MuiPaper-root > .MuiTypography-h4').contains('9');
     cy.get(':nth-child(1) > .MuiPaper-root .MuiSvgIcon-root').should(
       'have.class',
