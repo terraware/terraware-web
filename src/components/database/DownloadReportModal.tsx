@@ -4,9 +4,10 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React from 'react';
+import { useRecoilValue } from 'recoil';
 import { downloadReport } from '../../api/downloadReport';
 import { ExportRequestPayload } from '../../api/types/report';
-import { SearchRequestPayload } from '../../api/types/search';
+import { searchParamsSelector } from '../../state/selectors/search';
 import TextField from '../common/TextField';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -34,13 +35,14 @@ const useStyles = makeStyles((theme: Theme) =>
 export interface Props {
   open: boolean;
   onClose: () => void;
-  searchParams: SearchRequestPayload;
 }
 
 export default function DownloadReportModal(props: Props): JSX.Element {
   const classes = useStyles();
   const { onClose, open } = props;
   const [name, setName] = React.useState('');
+
+  const searchParams = useRecoilValue(searchParamsSelector);
 
   const handleCancel = () => {
     setName('');
@@ -49,9 +51,9 @@ export default function DownloadReportModal(props: Props): JSX.Element {
 
   const handleOk = async () => {
     const reportParams: ExportRequestPayload = {
-      fields: props.searchParams.fields,
-      sortOrder: props.searchParams.sortOrder,
-      filters: props.searchParams.filters,
+      fields: searchParams.fields,
+      sortOrder: searchParams.sortOrder,
+      filters: searchParams.filters,
     };
 
     const reponse = await downloadReport(reportParams);

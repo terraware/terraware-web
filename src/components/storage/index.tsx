@@ -3,7 +3,7 @@ import { Chip, Grid, Paper, Typography } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import React from 'react';
-import { useRecoilValueLoadable } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { Accession } from '../../api/types/accessions';
 import { ConditionType, Location } from '../../api/types/locations';
 import locationsSelector from '../../state/selectors/locations';
@@ -53,16 +53,12 @@ export default function Storage({
   requestId,
 }: Props): JSX.Element {
   const classes = useStyles();
-  const locationsLoadable = useRecoilValueLoadable(
-    locationsSelector(requestId)
-  );
+  const contents = useRecoilValue(locationsSelector(requestId));
 
   const [record, setRecord, onChange] = useForm(accession);
   React.useEffect(() => {
     setRecord(accession);
   }, [accession]);
-
-  const contents = locationsLoadable.getValue();
 
   const generateLocationsValues = contents?.map((location: Location) => {
     return {

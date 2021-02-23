@@ -12,21 +12,25 @@ import EditIcon from '@material-ui/icons/Edit';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import React from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
-import { useRecoilValueLoadable } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import {
-  ListFieldValuesRequestPayload,
   SearchField,
   SearchFilter,
-  SearchRequestPayload,
   SearchResponseResults,
-  SearchSortOrderElement,
 } from '../../api/types/search';
-import searchSelector from '../../state/selectors/search';
-import searchValues from '../../state/selectors/searchValues';
+import {
+  searchFilterAtom,
+  searchSortAtom,
+  searchVisibleColumnsAtom,
+} from '../../state/atoms/search';
+import searchSelector, {
+  searchTableColumnsSelector,
+} from '../../state/selectors/search';
+import searchValuesSelector from '../../state/selectors/searchValues';
 import Table from '../common/table';
 import { Order } from '../common/table/sort';
+import ErrorBoundary from '../ErrorBoundary';
 import PageHeader from '../PageHeader';
-import { COLUMNS, defaultPreset } from './columns';
 import DownloadReportModal from './DownloadReportModal';
 import EditColumns from './EditColumns';
 import Filters from './Filters';
@@ -49,29 +53,39 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const useQuery = () => new URLSearchParams(useLocation().search);
-
 export default function Database(): JSX.Element {
-  const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
+  return (
+    <ErrorBoundary>
+      <React.Suspense
+        fallback={
+          <Box display='flex' justifyContent='center'>
+            <CircularProgress />
+          </Box>
+        }
+      >
+        <Content />
+      </React.Suspense>
+    </ErrorBoundary>
+  );
+}
 
+function Content(): JSX.Element {
+  const classes = useStyles();
+  const history = useHistory();
+  const [editColumnsModalOpen, setEditColumnsModalOpen] = React.useState(false);
   const [reportModalOpen, setReportModalOpen] = React.useState(false);
 
-  const query = useQuery();
-
-  const history = useHistory();
-  const [sort, setSort] = React.useState<SearchSortOrderElement>({
-    field: 'accessionNumber',
-    direction: 'Ascending',
-  });
-  const [visibleColumns, setVisibleColumns] = React.useState<
-    Record<SearchField, boolean>
-  >(
-    defaultPreset.fields.reduce((acum, field) => {
-      acum[field] = true;
-      return acum;
-    }, {} as Record<SearchField, boolean>)
+  const [filters, setFilters] = useRecoilState(searchFilterAtom);
+  const [sort, setSort] = useRecoilState(searchSortAtom);
+  const [visibleColumns, setVisibleColumns] = useRecoilState(
+    searchVisibleColumnsAtom
   );
+  const tableColumns = useRecoilValue(searchTableColumnsSelector);
+  const results = useRecoilValue(searchSelector).results;
+  const availableValues = useRecoilValue(searchValuesSelector).results;
+
+  const useQuery = () => new URLSearchParams(useLocation().search);
+  const query = useQuery();
   const initializeFilters = () => {
     const filters: SearchFilter[] = [];
     const values: string[] = [];
@@ -85,59 +99,12 @@ export default function Database(): JSX.Element {
     }
     return filters;
   };
-  const [filters, setFilters] = React.useState<SearchFilter[]>(
-    initializeFilters
-  );
 
   React.useEffect(() => {
-    setFilters(initializeFilters);
+    if (query.get('state')) {
+      setFilters(initializeFilters);
+    }
   }, [query.get('state')]);
-
-  const tableColumns = COLUMNS.filter((c) => visibleColumns[c.key]);
-
-  const searchParams: SearchRequestPayload = {
-    fields: tableColumns.map((c) => c.key),
-    sortOrder: [{ field: sort.field, direction: sort.direction }],
-    filters,
-    count: 1000,
-  };
-  const searchResultsLoadable = useRecoilValueLoadable(
-    searchSelector({ searchParams })
-  );
-  const searchValuesParams: ListFieldValuesRequestPayload = {
-    fields: tableColumns.reduce((acum, c) => {
-      if (
-        ['multiple_selection', 'single_selection'].includes(
-          c.filter?.type ?? ''
-        )
-      ) {
-        acum.push(c.key);
-      }
-      return acum;
-    }, [] as any[]),
-    filters,
-  };
-  const searchValuesResultsLoadable = useRecoilValueLoadable(
-    searchValues({ searchValuesParams })
-  );
-
-  if (
-    searchResultsLoadable.state === 'loading' ||
-    searchValuesResultsLoadable.state === 'loading'
-  ) {
-    return (
-      <Box display='flex' justifyContent='center'>
-        <CircularProgress />
-      </Box>
-    );
-  } else if (
-    searchResultsLoadable.state === 'hasError' ||
-    searchValuesResultsLoadable.state === 'hasError'
-  ) {
-    return <div>An error ocurred</div>;
-  }
-  const results = searchResultsLoadable.contents.results;
-  const availableValues = searchValuesResultsLoadable.contents.results;
 
   const onSelect = (row: SearchResponseResults) => {
     if (row.accessionNumber) {
@@ -157,7 +124,7 @@ export default function Database(): JSX.Element {
   };
 
   const onOpenEditColumnsModal = () => {
-    setOpen(true);
+    setEditColumnsModalOpen(true);
   };
 
   const onDownloadReport = () => {
@@ -170,7 +137,7 @@ export default function Database(): JSX.Element {
       const newFilters = filters.filter((f) => columns[f.field]);
       setFilters(newFilters);
     }
-    setOpen(false);
+    setEditColumnsModalOpen(false);
   };
 
   const onCloseDownloadReportModal = () => {
@@ -181,14 +148,13 @@ export default function Database(): JSX.Element {
     <MuiPickersUtilsProvider utils={DayJSUtils}>
       <main>
         <EditColumns
-          open={open}
+          open={editColumnsModalOpen}
           value={visibleColumns}
           onClose={onCloseEditColumnsModal}
         />
         <DownloadReportModal
           open={reportModalOpen}
           onClose={onCloseDownloadReportModal}
-          searchParams={searchParams}
         />
         <PageHeader
           title='Database'

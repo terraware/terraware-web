@@ -503,23 +503,29 @@ describe('Database', () => {
       cy.get('#subtitle').should('contain', '9 total');
     });
 
-    it.skip('Should search by specie', () => {
+    it('Should search by specie', () => {
       cy.intercept('POST', '/api/v1/seedbank/search').as('search');
       cy.intercept('POST', '/api/v1/seedbank/values').as('values');
 
       cy.get(':nth-child(4) > :nth-child(1) > .MuiButtonBase-root').click();
       cy.get(
-        '#searchFilter > .MuiFormControl-root > .MuiInputBase-root > .MuiInputBase-input'
-      ).type('kousa');
-      cy.get(
-        '#searchFilter > .MuiFormControl-root > .MuiInputBase-root > .MuiInputAdornment-root > .MuiSvgIcon-root'
-      ).click();
+        '#searchspecies > .MuiFormControl-root > .MuiInputBase-root > .MuiInputBase-input'
+      )
+        .type('kousa')
+        .type('{enter}');
 
       cy.wait('@search');
       cy.wait('@values');
       cy.url().should('match', /accessions/);
 
       cy.get('#subtitle').should('contain', '3 total');
+    });
+
+    it('Should clear state filter', () => {
+      cy.get(':nth-child(3) > :nth-child(1) > .MuiButtonBase-root').click();
+      cy.get('#clear').click();
+
+      cy.get('#subtitle').should('contain', '9 total');
     });
 
     it('Should search by Received on', () => {
@@ -565,6 +571,7 @@ describe('Database', () => {
         '.MuiContainer-root > :nth-child(2) > :nth-child(1) > .MuiButtonBase-root'
       ).click();
       cy.get('.MuiList-root > :nth-child(1)').click();
+      cy.get('#searchactive').type('{esc}');
 
       cy.wait('@search');
       cy.wait('@values');
@@ -573,7 +580,9 @@ describe('Database', () => {
       cy.get('#subtitle').should('contain', '7 total');
 
       // checking state list
-      cy.get(':nth-child(3) > :nth-child(1) > .MuiButtonBase-root').click();
+      cy.get(
+        '.MuiContainer-root > :nth-child(3) > :nth-child(1) > .MuiButtonBase-root'
+      ).click();
       cy.get('#searchstate').children().should('have.length', 4);
       cy.get('#searchstate').type('{esc}');
 
@@ -586,7 +595,8 @@ describe('Database', () => {
         '#searchsiteLocation > .MuiFormControl-root > .MuiInputBase-root > .MuiInputBase-input'
       )
         .type('Sunset')
-        .type('{enter}');
+        .type('{enter}')
+        .type('{esc}');
 
       cy.wait('@search2');
       cy.wait('@values2');
@@ -660,6 +670,68 @@ describe('Database', () => {
       );
       cy.get('.MuiTableBody-root > :nth-child(3) > :nth-child(4)').contains(
         'Dogwood'
+      );
+    });
+  });
+
+  context('Stage management', () => {
+    it('Should remember filters, sorting and selected columns when switching pages', () => {
+      cy.intercept('POST', '/api/v1/seedbank/search').as('search');
+      cy.intercept('POST', '/api/v1/seedbank/values').as('values');
+
+      cy.get('#edit-columns').click();
+      cy.get('#rare').click();
+
+      cy.get('#submit').click();
+      cy.wait('@search');
+      cy.wait('@values');
+
+      cy.intercept('POST', '/api/v1/seedbank/search').as('search2');
+      cy.intercept('POST', '/api/v1/seedbank/values').as('values2');
+
+      cy.get(
+        '.MuiContainer-root > :nth-child(4) > :nth-child(1) > .MuiButtonBase-root'
+      ).click();
+      cy.get(
+        '#searchspecies > .MuiFormControl-root > .MuiInputBase-root > .MuiInputBase-input'
+      )
+        .type('dogwood')
+        .type('{enter}');
+
+      cy.wait('@search2');
+      cy.wait('@values2');
+      cy.get('#searchspecies').type('{esc}');
+
+      cy.get('#subtitle').should('contain', '4 total');
+
+      cy.get(':nth-child(4) > .MuiButtonBase-root').click();
+      cy.get(':nth-child(4) > .MuiButtonBase-root').click();
+
+      cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(4)').contains(
+        'Other Dogwood'
+      );
+
+      cy.get(':nth-child(8) > :nth-child(1) > .MuiButtonBase-root').contains(
+        'Rare'
+      );
+
+      // Should remember the filters
+
+      cy.get('.MuiTableBody-root > :nth-child(1)')
+        .click()
+        .url()
+        .should('match', /accessions\/[A-Za-z0-9]+\/seed-collection/);
+
+      cy.get('#close').click();
+
+      cy.get('#subtitle').should('contain', '4 total');
+
+      cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(4)').contains(
+        'Other Dogwood'
+      );
+
+      cy.get(':nth-child(8) > :nth-child(1) > .MuiButtonBase-root').contains(
+        'Rare'
       );
     });
   });
