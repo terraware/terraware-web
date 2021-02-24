@@ -232,7 +232,7 @@ describe('Accessions', () => {
         .should(
           'have.attr',
           'href',
-          'http://seedbank-server:8080/api/v1/seedbank/accession/AAF4D49R3E/photo/accession1.jpg'
+          '/api/v1/seedbank/accession/AAF4D49R3E/photo/accession1.jpg'
         )
         .should('have.attr', 'target', '_blank');
       cy.get('#photo-1').contains('accession2.jpg');
@@ -240,18 +240,14 @@ describe('Accessions', () => {
         .should(
           'have.attr',
           'href',
-          'http://seedbank-server:8080/api/v1/seedbank/accession/AAF4D49R3E/photo/accession2.jpg'
+          '/api/v1/seedbank/accession/AAF4D49R3E/photo/accession2.jpg'
         )
         .should('have.attr', 'target', '_blank');
 
-      cy.request(
-        'http://seedbank-server:8080/api/v1/seedbank/accession/AAF4D49R3E/photo/accession1.jpg'
-      )
+      cy.request('/api/v1/seedbank/accession/AAF4D49R3E/photo/accession1.jpg')
         .its('status')
         .should('eq', 200);
-      cy.request(
-        'http://seedbank-server:8080/api/v1/seedbank/accession/AAF4D49R3E/photo/accession2.jpg'
-      )
+      cy.request('/api/v1/seedbank/accession/AAF4D49R3E/photo/accession2.jpg')
         .its('status')
         .should('eq', 200);
     });
