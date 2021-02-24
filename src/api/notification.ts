@@ -2,7 +2,7 @@ import axios from '.';
 import { SimpleErrorResponsePayload, SimpleSuccessResponsePayload } from './types';
 import { Notifications } from './types/notification';
 
-const BASE_URL = '/api/v1/seedbank/notification';
+const BASE_URL = `${process.env.REACT_APP_SEED_BANK_API}/api/v1/seedbank/notification`
 
 export const postNotificationAsRead = async (
   id: string

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { ListFieldValuesRequestPayload, ListFieldValuesResponsePayload, SearchRequestPayload, SearchResponsePayload } from './types/search';
 
-const BASE_URL = '/api/v1/seedbank';
+const BASE_URL = `${process.env.REACT_APP_SEED_BANK_API}/api/v1/seedbank`
 
 export const search = async (params: SearchRequestPayload): Promise<SearchResponsePayload> => {
   const endpoint = `${BASE_URL}/search`;

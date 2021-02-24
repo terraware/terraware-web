@@ -1,7 +1,7 @@
 import axios from '.';
 import { Accession, NewAccession } from './types/accessions';
 
-const BASE_URL = '/api/v1/seedbank/accession';
+const BASE_URL = `${process.env.REACT_APP_SEED_BANK_API}/api/v1/seedbank/accession`
 
 export const getAccession = async (
   accessionNumber: string
