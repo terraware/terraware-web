@@ -16,11 +16,11 @@ import {
 } from '../../api/types/search';
 import preventDefaultEvent from '../../utils/preventDefaultEvent';
 import { DatabaseColumn, Option } from './columns';
-import DateRange from './DateRange';
-import MultipleSelection from './MultipleSelection';
-import NumberRange from './NumberRange';
-import Search from './Search';
-import SingleSelection from './SingleSelection';
+import DateRange from './FilterDateRange';
+import MultipleSelection from './FilterMultipleSelection';
+import NumberRange from './FilterNumberRange';
+import Search from './FilterSearch';
+import SingleSelection from './FilterSingleSelection';
 
 const useStyles = makeStyles((theme) =>
   createStyles({

@@ -30,11 +30,12 @@ export default function SingleSelection(props: Props): JSX.Element {
 
   const options = [...props.options];
   if (props.isBoolean) {
-    if (
-      options.find((o) => o.value === null) &&
-      !options.find((o) => o.value === 'false')
-    ) {
-      options.push({ label: 'false', value: 'false' });
+    const indexNull = options.findIndex((o) => o.value === null);
+    if (indexNull >= 0) {
+      if (!options.find((o) => o.value === 'false')) {
+        options.push({ label: 'false', value: 'false' });
+      }
+      options.splice(indexNull, 1);
     }
   }
   options.sort((a, b) =>
