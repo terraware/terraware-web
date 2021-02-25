@@ -24,6 +24,12 @@ interface Props {
 
 export default function Search(props: Props): JSX.Element {
   const classes = useStyles();
+  const [search, setSearch] = React.useState(props.values[0] || '');
+
+  React.useEffect(() => {
+    setSearch(props.values[0] || '');
+  }, [props.values]);
+
   const onSearchClick = () => {
     const values = [search];
 
@@ -41,8 +47,6 @@ export default function Search(props: Props): JSX.Element {
       onSearchClick();
     }
   };
-
-  const [search, setSearch] = React.useState(props.values[0] || '');
 
   return (
     <div id={'search' + props.field} className={classes.box}>

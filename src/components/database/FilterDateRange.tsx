@@ -26,6 +26,14 @@ interface Props {
 
 export default function DateRange(props: Props): JSX.Element {
   const classes = useStyles();
+  const [startDate, setStartDate] = React.useState(props.values[0]);
+  const [endDate, setEndDate] = React.useState(props.values[1]);
+
+  React.useEffect(() => {
+    setStartDate(props.values[0] || '');
+    setEndDate(props.values[1] || '');
+  }, [props.values]);
+
   const onChangeDate = (id: string, value?: string) => {
     const formatedValue = dayjs(value).format('YYYY-MM-DD');
     const newValues = props.values.length
@@ -43,24 +51,19 @@ export default function DateRange(props: Props): JSX.Element {
 
   const onEnter = (e: React.KeyboardEvent<Element>) => {
     if (e.key === 'Enter') {
-      const newValues = [startDate, endDate];
+      if (startDate && endDate) {
+        const newValues = [startDate, endDate];
 
-      const newFilter: SearchFilter = {
-        field: props.field,
-        values: newValues,
-        type: 'Range',
-      };
+        const newFilter: SearchFilter = {
+          field: props.field,
+          values: newValues,
+          type: 'Range',
+        };
 
-      props.onChange(newFilter);
+        props.onChange(newFilter);
+      }
     }
   };
-
-  const [startDate, setStartDate] = React.useState(
-    props.values[0] || dayjs().format('YYYY-MM-DD')
-  );
-  const [endDate, setEndDate] = React.useState(
-    props.values[1] || dayjs().format('YYYY-MM-DD')
-  );
 
   return (
     <div id={'search' + props.field} className={classes.box}>

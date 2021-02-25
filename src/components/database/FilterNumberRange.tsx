@@ -25,6 +25,14 @@ interface Props {
 
 export default function NumberRange(props: Props): JSX.Element {
   const classes = useStyles();
+  const [minValue, setMinValue] = React.useState(props.values[0] || '');
+  const [maxValue, setMaxValue] = React.useState(props.values[1] || '');
+
+  React.useEffect(() => {
+    setMinValue(props.values[0] || '');
+    setMaxValue(props.values[1] || '');
+  }, [props.values]);
+
   const onChange = (id: string, value?: unknown) => {
     const newValues = props.values.length
       ? [...props.values]
@@ -42,20 +50,19 @@ export default function NumberRange(props: Props): JSX.Element {
 
   const onEnter = (e: React.KeyboardEvent<Element>) => {
     if (e.key === 'Enter') {
-      const newValues = [minValue, maxValue];
+      if (minValue && maxValue) {
+        const newValues = [minValue, maxValue];
 
-      const newFilter: SearchFilter = {
-        field: props.field,
-        values: newValues,
-        type: 'Range',
-      };
+        const newFilter: SearchFilter = {
+          field: props.field,
+          values: newValues,
+          type: 'Range',
+        };
 
-      props.onChange(newFilter);
+        props.onChange(newFilter);
+      }
     }
   };
-
-  const [minValue, setMinValue] = React.useState(props.values[0] || '0');
-  const [maxValue, setMaxValue] = React.useState(props.values[1] || '0');
 
   return (
     <div id={'search' + props.field} className={classes.box}>
