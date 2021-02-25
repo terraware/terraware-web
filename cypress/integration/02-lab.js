@@ -216,7 +216,9 @@ describe('Lab', () => {
       ':nth-child(7) > :nth-child(8) > .MuiLink-root > .MuiBox-root > .MuiTypography-root'
     ).click();
 
+    cy.intercept('GET', '/api/v1/seedbank/accession/**').as('getAccession');
     cy.get('.MuiTypography-body2').click();
+    cy.wait('@getAccession');
     cy.get('#snackbar').contains('Accession saved');
 
     cy.get('.MuiTableBody-root > :nth-child(7)').should('not.exist');
@@ -266,8 +268,7 @@ describe('Lab', () => {
     cy.get(
       ':nth-child(4) > .MuiTable-root > .MuiTableBody-root > :nth-child(1) > :nth-child(2) > .MuiTypography-root'
     ).should('contain', '02/09/2021');
-    cy.get('.recharts-surface').should('exist');
-    cy.get('.recharts-rectangle').should('have.length', 1);
+    cy.get('#myChart').should('exist');
   });
 
   it('should add other germination entry and create a new bar on graph', () => {
@@ -316,8 +317,7 @@ describe('Lab', () => {
     cy.get(
       ':nth-child(4) > .MuiTable-root > .MuiTableBody-root > :nth-child(2) > :nth-child(2) > .MuiTypography-root'
     ).contains('05/09/2021');
-    cy.get('.recharts-surface').should('exist');
-    cy.get('.recharts-rectangle').should('have.length', 2);
+    cy.get('#myChart').should('exist');
   });
 
   it('should modify entry', () => {
@@ -364,8 +364,7 @@ describe('Lab', () => {
     cy.get(
       ':nth-child(4) > .MuiTable-root > .MuiTableBody-root > :nth-child(2) > :nth-child(2) > .MuiTypography-root'
     ).contains('05/09/2021');
-    cy.get('.recharts-surface').should('exist');
-    cy.get('.recharts-rectangle').should('have.length', 2);
+    cy.get('#myChart').should('exist');
   });
 
   it('should delete entry', () => {
@@ -407,8 +406,7 @@ describe('Lab', () => {
     cy.get(
       ':nth-child(4) > .MuiTable-root > .MuiTableBody-root > :nth-child(2)'
     ).should('not.exist');
-    cy.get('.recharts-surface').should('exist');
-    cy.get('.recharts-rectangle').should('have.length', 1);
+    cy.get('#myChart').should('exist');
   });
 
   it('should add cut test', () => {
