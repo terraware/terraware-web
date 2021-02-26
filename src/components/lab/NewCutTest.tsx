@@ -107,7 +107,7 @@ export default function NewCutTest(props: Props): JSX.Element {
               onClick={handleCancel}
             />
             <Chip
-              id='submit'
+              id='saveCutTest'
               className={classes.submit}
               label='Save changes'
               clickable

@@ -145,6 +145,7 @@ export default function WithdrawalView({
           <Grid container spacing={4}>
             <Grid item xs={4}>
               <SummaryBox
+                id='total-seeds'
                 title='Total seeds'
                 value={seedsTotal}
                 variant='default'
@@ -152,6 +153,7 @@ export default function WithdrawalView({
             </Grid>
             <Grid item xs={4}>
               <SummaryBox
+                id='seeds-withdrawn'
                 title='Seeds withdrawn'
                 value={seedsWithdrawn}
                 variant='default'
@@ -159,6 +161,7 @@ export default function WithdrawalView({
             </Grid>
             <Grid item xs={4}>
               <SummaryBox
+                id='seeds-available'
                 title='Seeds available'
                 value={seedsAvailable}
                 variant={seedsAvailable <= 0 ? 'zero' : 'available'}
@@ -180,7 +183,7 @@ export default function WithdrawalView({
           <Grid container spacing={4}>
             <Grid item className={classes.right}>
               <Chip
-                id='submit'
+                id='new-withdrawal-button'
                 className={
                   seedsAvailable > 0 ? classes.greenChip : classes.grayChip
                 }

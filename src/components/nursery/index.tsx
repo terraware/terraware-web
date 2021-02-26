@@ -140,7 +140,7 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
           <Grid container spacing={4}>
             <Grid item className={classes.right}>
               <Chip
-                id='submit'
+                id='newTest'
                 className={classes.greenChip}
                 label='New test'
                 clickable

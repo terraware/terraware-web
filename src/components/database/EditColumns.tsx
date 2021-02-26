@@ -73,6 +73,7 @@ export default function EditColumnsDialog(props: Props): JSX.Element {
 
   return (
     <Dialog
+      id='editColumnsDialog'
       disableBackdropClick
       disableEscapeKeyDown
       open={open}
@@ -147,7 +148,7 @@ export default function EditColumnsDialog(props: Props): JSX.Element {
               onClick={handleCancel}
             />
             <Chip
-              id='submit'
+              id='saveColumnsButton'
               className={classes.submit}
               label='Save changes'
               clickable

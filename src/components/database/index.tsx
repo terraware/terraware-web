@@ -68,7 +68,7 @@ export default function Database(): JSX.Element {
       <React.Suspense
         fallback={
           <Box display='flex' justifyContent='center'>
-            <CircularProgress />
+            <CircularProgress id='spinner-database' />
           </Box>
         }
       >

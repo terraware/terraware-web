@@ -161,7 +161,7 @@ export default function Storage({
           </Grid>
           <Grid item className={classes.right}>
             <Chip
-              id='submit'
+              id='saveAccession'
               className={classes.submit}
               label='Save changes'
               clickable

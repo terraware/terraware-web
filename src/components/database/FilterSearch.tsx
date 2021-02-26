@@ -49,8 +49,9 @@ export default function Search(props: Props): JSX.Element {
   };
 
   return (
-    <div id={'search' + props.field} className={classes.box}>
+    <div className={classes.box}>
       <TextField
+        id={props.field ?? ''}
         placeholder='Search'
         variant='outlined'
         value={search}

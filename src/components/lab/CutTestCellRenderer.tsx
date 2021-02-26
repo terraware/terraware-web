@@ -5,7 +5,7 @@ import { RendererProps } from '../common/table/types';
 export default function cellRenderer(
   props: RendererProps<TableRowType>
 ): JSX.Element {
-  const { column, row } = props;
+  const { column, row, index } = props;
   if (
     typeof row['compromisedSeeds'] === 'number' &&
     typeof row['emptySeeds'] === 'number' &&
@@ -20,6 +20,7 @@ export default function cellRenderer(
         row['compromisedSeeds'] + row['emptySeeds'] + row['filledSeeds'];
       return (
         <CellRenderer
+          index={index}
           column={column}
           value={`${row[column.key]} (${Math.round(
             (row[column.key] / total) * 100

@@ -3,121 +3,74 @@
 
 describe('Summary page', () => {
   beforeEach(() => {
+    cy.intercept('GET', '/api/v1/seedbank/notification').as('notification');
+    cy.intercept('GET', '/api/v1/seedbank/summary').as('summary');
     cy.visit('/');
+    cy.wait('@notification');
+    cy.wait('@summary');
   });
 
   it('has the summary title', () => {
-    cy.get('.MuiBox-root > .MuiTypography-root').contains('Summary');
+    cy.get('#title').contains('Summary');
   });
 
-  it.skip('display loading spinner', () => {
-    cy.get(
-      ':nth-child(1) > .MuiPaper-root > .MuiCircularProgress-root > .MuiCircularProgress-svg'
-    ).should('have.class', 'MuiCircularProgress-svg');
-    cy.get(
-      ':nth-child(2) > .MuiPaper-root > .MuiCircularProgress-root > .MuiCircularProgress-svg'
-    ).should('have.class', 'MuiCircularProgress-svg');
-    cy.get(
-      ':nth-child(3) > .MuiPaper-root > .MuiCircularProgress-root > .MuiCircularProgress-svg'
-    ).should('have.class', 'MuiCircularProgress-svg');
-    cy.get(
-      '.MuiTableCell-root > .MuiCircularProgress-root > .MuiCircularProgress-svg'
-    ).should('have.class', 'MuiCircularProgress-svg');
-  })
-
   it('display endpoint result', () => {
-    cy.get(':nth-child(1) > .MuiPaper-root > .MuiTypography-h4').contains('9');
-    cy.get(':nth-child(1) > .MuiPaper-root .MuiSvgIcon-root').should(
-      'have.class',
-      'MuiSvgIcon-colorPrimary'
-    );
-    cy.get(':nth-child(1) > .MuiPaper-root .MuiTypography-root').contains(
-      '200% since last week'
-    );
-    cy.get(':nth-child(2) > .MuiPaper-root > .MuiTypography-h4').contains('3');
-    cy.get(':nth-child(2) > .MuiPaper-root > .makeStyles-flex-32')
-      .children()
-      .should('have.length', 1);
-    cy.get(':nth-child(2) > .MuiPaper-root .MuiTypography-root').should(
-      'have.value',
-      ''
-    );
-    cy.get(':nth-child(3) > .MuiPaper-root > .MuiTypography-h4').contains('2');
-    cy.get(':nth-child(3) > .MuiPaper-root > .makeStyles-flex-32')
-      .children()
-      .should('have.length', 1);
-    cy.get(':nth-child(3) > .MuiPaper-root .MuiTypography-root').should(
-      'have.value',
-      ''
-    );
-    cy.get('.MuiGrid-grid-xs-8 > .MuiPaper-root').contains(
-      'Most recent updates'
-    );
-    cy.get(
-      '.MuiGrid-grid-xs-8 > .MuiPaper-root > .MuiTable-root .MuiTableBody-root'
-    )
-      .children()
-      .should('have.length', 4);
-    cy.get(
-      ':nth-child(1) > :nth-child(1) > .MuiChip-root > .MuiChip-label'
-    ).contains('Pending');
-    cy.get(
-      '.MuiGrid-grid-xs-8 > .MuiPaper-root > .MuiTable-root > .MuiTableBody-root > :nth-child(1) > :nth-child(1) .MuiChip-root'
-    ).should('have.css', 'background-color', 'rgb(183, 231, 219)');
-    cy.get(
-      '.MuiGrid-grid-xs-8 > .MuiPaper-root > .MuiTable-root > .MuiTableBody-root > :nth-child(1) > :nth-child(2)'
-    ).contains(0);
-    cy.get(
-      ':nth-child(2) > :nth-child(1) > .MuiChip-root > .MuiChip-label'
-    ).contains('Processed');
-    cy.get(
-      '.MuiGrid-grid-xs-8 > .MuiPaper-root > .MuiTable-root > .MuiTableBody-root > :nth-child(2) > :nth-child(1) .MuiChip-root'
-    ).should('have.css', 'background-color', 'rgb(230, 237, 253)');
-    cy.get(
-      '.MuiGrid-grid-xs-8 > .MuiPaper-root > .MuiTable-root > .MuiTableBody-root > :nth-child(2) > :nth-child(2)'
-    ).contains(0);
-    cy.get(
-      ':nth-child(3) > :nth-child(1) > .MuiChip-root > .MuiChip-label'
-    ).contains('Dried');
-    cy.get(
-      '.MuiGrid-grid-xs-8 > .MuiPaper-root > .MuiTable-root > .MuiTableBody-root > :nth-child(3) > :nth-child(1) .MuiChip-root'
-    ).should('have.css', 'background-color', 'rgb(255, 206, 190)');
-    cy.get(
-      '.MuiGrid-grid-xs-8 > .MuiPaper-root > .MuiTable-root > .MuiTableBody-root > :nth-child(3) > :nth-child(2)'
-    ).contains(0);
-    cy.get(
-      ':nth-child(4) > :nth-child(1) > .MuiChip-root > .MuiChip-label'
-    ).contains('Withdrawn');
-    cy.get(
-      '.MuiGrid-grid-xs-8 > .MuiPaper-root > .MuiTable-root > .MuiTableBody-root > :nth-child(4) > :nth-child(1) .MuiChip-root'
-    ).should('have.css', 'background-color', 'rgb(108, 117, 125)');
-    cy.get(
-      '.MuiGrid-grid-xs-8 > .MuiPaper-root > .MuiTable-root > .MuiTableBody-root > :nth-child(4) > :nth-child(2)'
-    ).contains(2);
+    cy.get('#sessions-current').contains('9');
+    cy.get('#sessions-change').contains('200% since last week');
+    cy.get('#sessions-arrow-increase').should('exist');
+
+    cy.get('#species-current').contains('3');
+    cy.get('#species-details').children().should('have.length', 0);
+
+    cy.get('#families-current').contains('2');
+    cy.get('#families-details').children().should('have.length', 0);
+
+    cy.get('#update-row-Pending').contains('0 seed collection');
+    cy.get('#update-row-Processed').contains('0 accessions');
+    cy.get('#update-row-Dried').contains('0 accessions');
+    cy.get('#update-row-Withdrawn').contains('2 accessions');
   });
 
   context('navigation', () => {
     it('navigates to database page', () => {
-      cy.get('[href="/accessions"]')
-        .click()
-        .url()
-        .should('contain', '/accessions');
+      cy.get('#tab-database').click().url().should('contain', '/accessions');
     });
 
-    it('navigates to database page filtered by pending state when clickin on Most recent update', () => {
-      cy.get(':nth-child(1) > :nth-child(1) > .MuiChip-root')
-        .click()
-        .url()
-        .should('contain', '/accessions');
+    it('navigates to database page filtered by pending state when clicking on Most recent update', () => {
+      cy.get('#update-Pending').click().url().should('contain', '/accessions');
       cy.get('#subtitle').should('contain', '5 total');
     });
 
-    it('navigates to database page filtered by proessed state when clickin on Most recent update', () => {
-      cy.get('[href="/accessions?state=Processed"]')
+    it('navigates to database page filtered by processed state when clickin on Most recent update', () => {
+      cy.get('#update-Processed')
         .click()
         .url()
         .should('contain', '/accessions');
       cy.get('#subtitle').should('contain', '2 total');
     });
+  });
+});
+
+describe('Summary page - Spinners', () => {
+  it('display loading spinner', () => {
+    cy.intercept('GET', '/api/v1/seedbank/notification').as('notification');
+    cy.intercept('GET', '/api/v1/seedbank/summary').as('summary');
+
+    cy.visit('/');
+
+    cy.get('#spinner-summary-sessions').should('exist');
+    cy.get('#spinner-summary-species').should('exist');
+    cy.get('#spinner-summary-families').should('exist');
+    cy.get('#spinner-alerts').should('exist');
+    cy.get('#spinner-updates').should('exist');
+
+    cy.wait('@notification');
+    cy.wait('@summary');
+
+    cy.get('#spinner-summary-sessions').should('not.exist');
+    cy.get('#spinner-summary-species').should('not.exist');
+    cy.get('#spinner-summary-families').should('not.exist');
+    cy.get('#spinner-alerts').should('not.exist');
+    cy.get('#spinner-updates').should('not.exist');
   });
 });

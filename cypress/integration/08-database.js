@@ -2,451 +2,305 @@
 /// <reference types="cypress" />
 
 describe('Database', () => {
-  beforeEach(() => {
-    cy.visit('/accessions');
-  });
-
   context('Customize columns', () => {
     it('should display the default columns', () => {
-      cy.get('.MuiTableHead-root > .MuiTableRow-root')
-        .children()
-        .should('have.length', 7);
-      cy.get('[aria-sort="ascending"]').should('contain', 'ACCESSION');
-      cy.get('.MuiTableHead-root > .MuiTableRow-root > :nth-child(2)').should(
-        'contain',
-        'STATUS'
-      );
-      cy.get('.MuiTableHead-root > .MuiTableRow-root > :nth-child(3)').should(
-        'contain',
-        'STATE'
-      );
-      cy.get('.MuiTableHead-root > .MuiTableRow-root > :nth-child(4)').should(
-        'contain',
-        'SPECIES'
-      );
-      cy.get('.MuiTableHead-root > .MuiTableRow-root > :nth-child(5)').should(
-        'contain',
-        'RECEIVED ON'
-      );
-      cy.get('.MuiTableHead-root > .MuiTableRow-root > :nth-child(6)').should(
-        'contain',
-        'COLLECTED ON'
-      );
-      cy.get('.MuiTableHead-root > .MuiTableRow-root > :nth-child(7)').should(
-        'contain',
-        'SITE LOCATION'
-      );
+      cy.visit('/accessions');
+      cy.get('#table-header').children().should('have.length', 7);
+      cy.get('#table-header-accessionNumber').contains('ACCESSION');
+      cy.get('#table-header-active').contains('STATUS');
+      cy.get('#table-header-state').contains('STATE');
+      cy.get('#table-header-species').contains('SPECIES');
+      cy.get('#table-header-receivedDate').contains('RECEIVED ON');
+      cy.get('#table-header-collectedDate').contains('COLLECTED ON');
+      cy.get('#table-header-siteLocation').contains('SITE LOCATION');
     });
 
     it('should handle cancel edit columns action', () => {
       cy.get('#edit-columns').click();
-      cy.get('#cancel').click();
 
-      cy.get('.MuiTableHead-root > .MuiTableRow-root')
-        .children()
-        .should('have.length', 7);
-      cy.get('[aria-sort="ascending"]').should('contain', 'ACCESSION');
-      cy.get('.MuiTableHead-root > .MuiTableRow-root > :nth-child(2)').should(
-        'contain',
-        'STATUS'
-      );
-      cy.get('.MuiTableHead-root > .MuiTableRow-root > :nth-child(3)').should(
-        'contain',
-        'STATE'
-      );
-      cy.get('.MuiTableHead-root > .MuiTableRow-root > :nth-child(4)').should(
-        'contain',
-        'SPECIES'
-      );
-      cy.get('.MuiTableHead-root > .MuiTableRow-root > :nth-child(5)').should(
-        'contain',
-        'RECEIVED ON'
-      );
-      cy.get('.MuiTableHead-root > .MuiTableRow-root > :nth-child(6)').should(
-        'contain',
-        'COLLECTED ON'
-      );
-      cy.get('.MuiTableHead-root > .MuiTableRow-root > :nth-child(7)').should(
-        'contain',
-        'SITE LOCATION'
-      );
+      cy.get('#cancel').click();
+      cy.get('#editColumnsDialog').should('not.exist');
+
+      cy.get('#table-header').children().should('have.length', 7);
+      cy.get('#table-header-accessionNumber').contains('ACCESSION');
+      cy.get('#table-header-active').contains('STATUS');
+      cy.get('#table-header-state').contains('STATE');
+      cy.get('#table-header-species').contains('SPECIES');
+      cy.get('#table-header-receivedDate').contains('RECEIVED ON');
+      cy.get('#table-header-collectedDate').contains('COLLECTED ON');
+      cy.get('#table-header-siteLocation').contains('SITE LOCATION');
     });
 
     it('should be able to select the columns', () => {
+      cy.intercept('POST', '/api/v1/seedbank/search').as('search');
+      cy.intercept('POST', '/api/v1/seedbank/values').as('values');
+
       cy.get('#edit-columns').click();
 
       cy.get('#species').click();
       cy.get('#receivedDate').click();
       cy.get('#collectedDate').click();
       cy.get('#primaryCollector').click();
-      cy.get('#submit').click();
+      cy.get('#saveColumnsButton').click();
+      cy.get('#editColumnsDialog').should('not.exist');
 
-      cy.get('.MuiTableHead-root > .MuiTableRow-root')
-        .children()
-        .should('have.length', 5);
-      cy.get('[aria-sort="ascending"]').should('contain', 'ACCESSION');
-      cy.get('.MuiTableHead-root > .MuiTableRow-root > :nth-child(2)').should(
-        'contain',
-        'STATUS'
-      );
-      cy.get('.MuiTableHead-root > .MuiTableRow-root > :nth-child(3)').should(
-        'contain',
-        'STATE'
-      );
-      cy.get('.MuiTableHead-root > .MuiTableRow-root > :nth-child(4)').should(
-        'contain',
-        'COLLECTOR'
-      );
-      cy.get('.MuiTableHead-root > .MuiTableRow-root > :nth-child(5)').should(
-        'contain',
-        'SITE LOCATION'
-      );
+      cy.wait('@search');
+      cy.wait('@values');
+
+      cy.get('#table-header').children().should('have.length', 5);
+      cy.get('#table-header-accessionNumber').contains('ACCESSION');
+      cy.get('#table-header-active').contains('STATUS');
+      cy.get('#table-header-state').contains('STATE');
+      cy.get('#table-header-primaryCollector').contains('COLLECTOR');
+      cy.get('#table-header-siteLocation').contains('SITE LOCATION');
     });
 
     context('Presets', () => {
       it('General Inventory', () => {
-        cy.get('#edit-columns').click();
-        cy.get('#General\\ Inventory').click();
-        cy.get('#submit').click();
+        cy.intercept('POST', '/api/v1/seedbank/search').as('search');
+        cy.intercept('POST', '/api/v1/seedbank/values').as('values');
+        cy.visit('/accessions');
+        cy.wait('@search');
+        cy.wait('@values');
 
-        cy.get('.MuiTableHead-root > .MuiTableRow-root')
-          .children()
-          .should('have.length', 19);
-        cy.get('[aria-sort="ascending"]').should('contain', 'ACCESSION');
-        cy.get('.MuiTableHead-root > .MuiTableRow-root > :nth-child(2)').should(
-          'contain',
-          'STATUS'
+        cy.intercept('POST', '/api/v1/seedbank/search').as('search2');
+        cy.intercept('POST', '/api/v1/seedbank/values').as('values2');
+
+        cy.get('#edit-columns').click();
+
+        cy.get('#General\\ Inventory').click();
+        cy.get('#saveColumnsButton').click();
+        cy.get('#editColumnsDialog').should('not.exist');
+
+        cy.wait('@search2');
+        cy.wait('@values2');
+
+        cy.get('#table-header').children().should('have.length', 19);
+        cy.get('#table-header-accessionNumber').contains('ACCESSION');
+        cy.get('#table-header-active').contains('STATUS');
+        cy.get('#table-header-state').contains('STATE');
+        cy.get('#table-header-species').contains('SPECIES');
+        cy.get('#table-header-receivedDate').contains('RECEIVED ON');
+        cy.get('#table-header-collectedDate').contains('COLLECTED ON');
+        cy.get('#table-header-primaryCollector').contains('COLLECTOR');
+        cy.get('#table-header-siteLocation').contains('SITE LOCATION');
+        cy.get('#table-header-endangered').contains('ENDANGERED');
+        cy.get('#table-header-rare').contains('RARE');
+        cy.get('#table-header-treesCollectedFrom').contains(
+          'TREES COLLECTED FROM'
         );
-        cy.get('.MuiTableHead-root > .MuiTableRow-root > :nth-child(3)').should(
-          'contain',
-          'STATE'
+        cy.get('#table-header-estimatedSeedsIncoming').contains(
+          'ESTIMATED SEEDS INCOMING'
         );
-        cy.get('.MuiTableHead-root > .MuiTableRow-root > :nth-child(4)').should(
-          'contain',
-          'SPECIES'
+        cy.get('#table-header-landowner').contains('LANDOWNER');
+        cy.get('#table-header-storageCondition').contains('STORAGE CONDITION');
+        cy.get('#table-header-withdrawalSeeds').contains(
+          'NUMBER OF SEEDS WITHDRAWN'
         );
-        cy.get('.MuiTableHead-root > .MuiTableRow-root > :nth-child(5)').should(
-          'contain',
-          'RECEIVED ON'
+        cy.get('#table-header-seedsRemaining').contains(
+          'NUMBER OF SEEDS REMAINING'
         );
-        cy.get('.MuiTableHead-root > .MuiTableRow-root > :nth-child(6)').should(
-          'contain',
-          'COLLECTED ON'
+        cy.get('#table-header-latestGerminationTestDate').contains(
+          'MOST RECENT GERMINATION TEST DATE'
         );
-        cy.get('.MuiTableHead-root > .MuiTableRow-root > :nth-child(7)').should(
-          'contain',
-          'COLLECTOR'
+        cy.get('#table-header-latestViabilityPercent').contains(
+          'MOST RECENT % VIABILITY'
         );
-        cy.get('.MuiTableHead-root > .MuiTableRow-root > :nth-child(8)').should(
-          'contain',
-          'SITE LOCATION'
+        cy.get('#table-header-totalViabilityPercent').contains(
+          'TOTAL ESTIMATED % VIABILITY'
         );
-        cy.get('.MuiTableHead-root > .MuiTableRow-root > :nth-child(9)').should(
-          'contain',
-          'ENDANGERED'
-        );
-        cy.get(
-          '.MuiTableHead-root > .MuiTableRow-root > :nth-child(10)'
-        ).should('contain', 'RARE');
-        cy.get(
-          '.MuiTableHead-root > .MuiTableRow-root > :nth-child(11)'
-        ).should('contain', 'TREES COLLECTED FROM');
-        cy.get(
-          '.MuiTableHead-root > .MuiTableRow-root > :nth-child(12)'
-        ).should('contain', 'ESTIMATED SEEDS INCOMING');
-        cy.get(
-          '.MuiTableHead-root > .MuiTableRow-root > :nth-child(13)'
-        ).should('contain', 'LANDOWNER');
-        cy.get(
-          '.MuiTableHead-root > .MuiTableRow-root > :nth-child(14)'
-        ).should('contain', 'STORAGE CONDITION');
-        cy.get(
-          '.MuiTableHead-root > .MuiTableRow-root > :nth-child(15)'
-        ).should('contain', 'NUMBER OF SEEDS WITHDRAWN');
-        cy.get(
-          '.MuiTableHead-root > .MuiTableRow-root > :nth-child(16)'
-        ).should('contain', 'NUMBER OF SEEDS REMAINING');
-        cy.get(
-          '.MuiTableHead-root > .MuiTableRow-root > :nth-child(17)'
-        ).should('contain', 'MOST RECENT GERMINATION TEST DATE');
-        cy.get(
-          '.MuiTableHead-root > .MuiTableRow-root > :nth-child(18)'
-        ).should('contain', 'MOST RECENT % VIABILITY');
-        cy.get(
-          '.MuiTableHead-root > .MuiTableRow-root > :nth-child(19)'
-        ).should('contain', 'TOTAL ESTIMATED % VIABILITY');
       });
 
       it('Default', () => {
+        cy.intercept('POST', '/api/v1/seedbank/search').as('search');
+        cy.intercept('POST', '/api/v1/seedbank/values').as('values');
+
         cy.get('#edit-columns').click();
+
         cy.get('#General\\ Inventory').click();
         cy.get('#Default').click();
-        cy.get('#submit').click();
+        cy.get('#saveColumnsButton').click();
+        cy.get('#editColumnsDialog').should('not.exist');
 
-        cy.get('.MuiTableHead-root > .MuiTableRow-root')
-          .children()
-          .should('have.length', 7);
-        cy.get('[aria-sort="ascending"]').should('contain', 'ACCESSION');
-        cy.get('.MuiTableHead-root > .MuiTableRow-root > :nth-child(2)').should(
-          'contain',
-          'STATUS'
-        );
-        cy.get('.MuiTableHead-root > .MuiTableRow-root > :nth-child(3)').should(
-          'contain',
-          'STATE'
-        );
-        cy.get('.MuiTableHead-root > .MuiTableRow-root > :nth-child(4)').should(
-          'contain',
-          'SPECIES'
-        );
-        cy.get('.MuiTableHead-root > .MuiTableRow-root > :nth-child(5)').should(
-          'contain',
-          'RECEIVED ON'
-        );
-        cy.get('.MuiTableHead-root > .MuiTableRow-root > :nth-child(6)').should(
-          'contain',
-          'COLLECTED ON'
-        );
-        cy.get('.MuiTableHead-root > .MuiTableRow-root > :nth-child(7)').should(
-          'contain',
-          'SITE LOCATION'
-        );
+        cy.wait('@search');
+        cy.wait('@values');
+
+        cy.get('#table-header').children().should('have.length', 7);
+        cy.get('#table-header-accessionNumber').contains('ACCESSION');
+        cy.get('#table-header-active').contains('STATUS');
+        cy.get('#table-header-state').contains('STATE');
+        cy.get('#table-header-species').contains('SPECIES');
+        cy.get('#table-header-receivedDate').contains('RECEIVED ON');
+        cy.get('#table-header-collectedDate').contains('COLLECTED ON');
+        cy.get('#table-header-siteLocation').contains('SITE LOCATION');
       });
 
       it('Seed Storage Status', () => {
-        cy.get('#edit-columns').click();
-        cy.get('#Seed\\ Storage\\ Status').click();
-        cy.get('#submit').click();
+        cy.intercept('POST', '/api/v1/seedbank/search').as('search');
+        cy.intercept('POST', '/api/v1/seedbank/values').as('values');
 
-        cy.get('.MuiTableHead-root > .MuiTableRow-root')
-          .children()
-          .should('have.length', 14);
-        cy.get('[aria-sort="ascending"]').should('contain', 'ACCESSION');
-        cy.get('.MuiTableHead-root > .MuiTableRow-root > :nth-child(2)').should(
-          'contain',
-          'STATUS'
-        );
-        cy.get('.MuiTableHead-root > .MuiTableRow-root > :nth-child(3)').should(
-          'contain',
-          'STATE'
-        );
-        cy.get('.MuiTableHead-root > .MuiTableRow-root > :nth-child(4)').should(
-          'contain',
-          'SPECIES'
-        );
-        cy.get('.MuiTableHead-root > .MuiTableRow-root > :nth-child(5)').should(
-          'contain',
-          'RECEIVED ON'
-        );
-        cy.get('.MuiTableHead-root > .MuiTableRow-root > :nth-child(6)').should(
-          'contain',
-          'COLLECTED ON'
-        );
-        cy.get('.MuiTableHead-root > .MuiTableRow-root > :nth-child(7)').should(
+        cy.get('#edit-columns').click();
+
+        cy.get('#Seed\\ Storage\\ Status').click();
+        cy.get('#saveColumnsButton').click();
+        cy.get('#editColumnsDialog').should('not.exist');
+
+        cy.wait('@search');
+        cy.wait('@values');
+
+        cy.get('#table-header').children().should('have.length', 14);
+        cy.get('#table-header-accessionNumber').contains('ACCESSION');
+        cy.get('#table-header-active').contains('STATUS');
+        cy.get('#table-header-state').contains('STATE');
+        cy.get('#table-header-species').contains('SPECIES');
+        cy.get('#table-header-receivedDate').contains('RECEIVED ON');
+        cy.get('#table-header-collectedDate').contains('COLLECTED ON');
+        cy.get('#table-header-estimatedSeedsIncoming').should(
           'contain',
           'ESTIMATED SEEDS INCOMING'
         );
-        cy.get('.MuiTableHead-root > .MuiTableRow-root > :nth-child(8)').should(
+        cy.get('#table-header-storageStartDate').should(
           'contain',
           'STORING START DATE'
         );
-        cy.get('.MuiTableHead-root > .MuiTableRow-root > :nth-child(9)').should(
-          'contain',
-          'STORAGE CONDITION'
+        cy.get('#table-header-storageCondition').contains('STORAGE CONDITION');
+        cy.get('#table-header-storageLocation').contains('STORAGE LOCATION');
+        cy.get('#table-header-storagePackets').contains(
+          'NUMBER OF STORAGE PACKETS'
         );
-        cy.get(
-          '.MuiTableHead-root > .MuiTableRow-root > :nth-child(10)'
-        ).should('contain', 'STORAGE LOCATION');
-        cy.get(
-          '.MuiTableHead-root > .MuiTableRow-root > :nth-child(11)'
-        ).should('contain', 'NUMBER OF STORAGE PACKETS');
-        cy.get(
-          '.MuiTableHead-root > .MuiTableRow-root > :nth-child(12)'
-        ).should('contain', 'NOTES');
-        cy.get(
-          '.MuiTableHead-root > .MuiTableRow-root > :nth-child(13)'
-        ).should('contain', 'NUMBER OF SEEDS REMAINING');
-        cy.get(
-          '.MuiTableHead-root > .MuiTableRow-root > :nth-child(14)'
-        ).should('contain', 'MOST RECENT % VIABILITY');
+        cy.get('#table-header-storageNotes').contains('NOTES');
+        cy.get('#table-header-seedsRemaining').contains(
+          'NUMBER OF SEEDS REMAINING'
+        );
+        cy.get('#table-header-latestViabilityPercent').contains(
+          'MOST RECENT % VIABILITY'
+        );
       });
 
       it('Viability Summary', () => {
-        cy.get('#edit-columns').click();
-        cy.get('#Viability\\ Summary').click();
-        cy.get('#submit').click();
+        cy.intercept('POST', '/api/v1/seedbank/search').as('search');
+        cy.intercept('POST', '/api/v1/seedbank/values').as('values');
 
-        cy.get('.MuiTableHead-root > .MuiTableRow-root')
-          .children()
-          .should('have.length', 18);
-        cy.get('[aria-sort="ascending"]').should('contain', 'ACCESSION');
-        cy.get('.MuiTableHead-root > .MuiTableRow-root > :nth-child(2)').should(
-          'contain',
-          'STATUS'
-        );
-        cy.get('.MuiTableHead-root > .MuiTableRow-root > :nth-child(3)').should(
-          'contain',
-          'STATE'
-        );
-        cy.get('.MuiTableHead-root > .MuiTableRow-root > :nth-child(4)').should(
-          'contain',
-          'SPECIES'
-        );
-        cy.get('.MuiTableHead-root > .MuiTableRow-root > :nth-child(5)').should(
-          'contain',
-          'COLLECTED ON'
-        );
-        cy.get('.MuiTableHead-root > .MuiTableRow-root > :nth-child(6)').should(
-          'contain',
+        cy.get('#edit-columns').click();
+
+        cy.get('#Viability\\ Summary').click();
+        cy.get('#saveColumnsButton').click();
+        cy.get('#editColumnsDialog').should('not.exist');
+
+        cy.wait('@search');
+        cy.wait('@values');
+
+        cy.get('#table-header').children().should('have.length', 18);
+        cy.get('#table-header-accessionNumber').contains('ACCESSION');
+        cy.get('#table-header-active').contains('STATUS');
+        cy.get('#table-header-state').contains('STATE');
+        cy.get('#table-header-species').contains('SPECIES');
+        cy.get('#table-header-collectedDate').contains('COLLECTED ON');
+        cy.get('#table-header-germinationTestType').contains(
           'GERMINATION TEST TYPE'
         );
-        cy.get('.MuiTableHead-root > .MuiTableRow-root > :nth-child(7)').should(
-          'contain',
-          'SEED TYPE'
-        );
-        cy.get('.MuiTableHead-root > .MuiTableRow-root > :nth-child(8)').should(
-          'contain',
+        cy.get('#table-header-germinationSeedType').contains('SEED TYPE');
+        cy.get('#table-header-germinationTreatment').contains(
           'GERMINATION TREATMENT'
         );
-        cy.get('.MuiTableHead-root > .MuiTableRow-root > :nth-child(9)').should(
-          'contain',
+        cy.get('#table-header-cutTestSeedsFilled').contains(
           'NUMBER OF SEEDS FILLED'
         );
-        cy.get(
-          '.MuiTableHead-root > .MuiTableRow-root > :nth-child(10)'
-        ).should('contain', 'NOTES');
-        cy.get(
-          '.MuiTableHead-root > .MuiTableRow-root > :nth-child(11)'
-        ).should('contain', 'NUMBER OF SEEDS SOWN');
-        cy.get(
-          '.MuiTableHead-root > .MuiTableRow-root > :nth-child(12)'
-        ).should('contain', 'TOTAL OF SEEDS GERMINATED');
-        cy.get(
-          '.MuiTableHead-root > .MuiTableRow-root > :nth-child(13)'
-        ).should('contain', 'NUMBER OF SEEDS EMPTY');
-        cy.get(
-          '.MuiTableHead-root > .MuiTableRow-root > :nth-child(14)'
-        ).should('contain', 'GERMINATION SUBSTRATE');
-        cy.get(
-          '.MuiTableHead-root > .MuiTableRow-root > :nth-child(15)'
-        ).should('contain', 'TOTAL % OF SEEDS GERMINATED');
-        cy.get(
-          '.MuiTableHead-root > .MuiTableRow-root > :nth-child(16)'
-        ).should('contain', 'NUMBER OF SEEDS COMPROMISED');
-        cy.get(
-          '.MuiTableHead-root > .MuiTableRow-root > :nth-child(17)'
-        ).should('contain', 'MOST RECENT % VIABILITY');
-        cy.get(
-          '.MuiTableHead-root > .MuiTableRow-root > :nth-child(18)'
-        ).should('contain', 'TOTAL ESTIMATED % VIABILITY');
+        cy.get('#table-header-germinationTestNotes').contains('NOTES');
+        cy.get('#table-header-germinationSeedsSown').contains(
+          'NUMBER OF SEEDS SOWN'
+        );
+        cy.get('#table-header-germinationSeedsGerminated').contains(
+          'TOTAL OF SEEDS GERMINATED'
+        );
+        cy.get('#table-header-cutTestSeedsEmpty').contains(
+          'NUMBER OF SEEDS EMPTY'
+        );
+        cy.get('#table-header-germinationSubstrate').contains(
+          'GERMINATION SUBSTRATE'
+        );
+        cy.get('#table-header-germinationPercentGerminated').contains(
+          'TOTAL % OF SEEDS GERMINATED'
+        );
+        cy.get('#table-header-cutTestSeedsCompromised').contains(
+          'NUMBER OF SEEDS COMPROMISED'
+        );
+        cy.get('#table-header-latestViabilityPercent').contains(
+          'MOST RECENT % VIABILITY'
+        );
+        cy.get('#table-header-totalViabilityPercent').contains(
+          'TOTAL ESTIMATED % VIABILITY'
+        );
       });
 
       it('Germination Testing To Do', () => {
-        cy.get('#edit-columns').click();
-        cy.get('#Germination\\ Testing\\ To\\ Do').click();
-        cy.get('#submit').click();
+        cy.intercept('POST', '/api/v1/seedbank/search').as('search');
+        cy.intercept('POST', '/api/v1/seedbank/values').as('values');
 
-        cy.get('.MuiTableHead-root > .MuiTableRow-root')
-          .children()
-          .should('have.length', 11);
-        cy.get('[aria-sort="ascending"]').should('contain', 'ACCESSION');
-        cy.get('.MuiTableHead-root > .MuiTableRow-root > :nth-child(2)').should(
-          'contain',
-          'STATUS'
-        );
-        cy.get('.MuiTableHead-root > .MuiTableRow-root > :nth-child(3)').should(
-          'contain',
-          'STATE'
-        );
-        cy.get('.MuiTableHead-root > .MuiTableRow-root > :nth-child(4)').should(
-          'contain',
-          'SPECIES'
-        );
-        cy.get('.MuiTableHead-root > .MuiTableRow-root > :nth-child(5)').should(
-          'contain',
-          'COLLECTED ON'
-        );
-        cy.get('.MuiTableHead-root > .MuiTableRow-root > :nth-child(6)').should(
-          'contain',
-          'STORAGE CONDITION'
-        );
-        cy.get('.MuiTableHead-root > .MuiTableRow-root > :nth-child(7)').should(
-          'contain',
-          'STORAGE LOCATION'
-        );
-        cy.get('.MuiTableHead-root > .MuiTableRow-root > :nth-child(8)').should(
-          'contain',
+        cy.get('#edit-columns').click();
+
+        cy.get('#Germination\\ Testing\\ To\\ Do').click();
+        cy.get('#saveColumnsButton').click();
+        cy.get('#editColumnsDialog').should('not.exist');
+
+        cy.wait('@search');
+        cy.wait('@values');
+
+        cy.get('#table-header').children().should('have.length', 11);
+        cy.get('#table-header-accessionNumber').contains('ACCESSION');
+        cy.get('#table-header-active').contains('STATUS');
+        cy.get('#table-header-state').contains('STATE');
+        cy.get('#table-header-species').contains('SPECIES');
+        cy.get('#table-header-collectedDate').contains('COLLECTED ON');
+        cy.get('#table-header-storageCondition').contains('STORAGE CONDITION');
+        cy.get('#table-header-storageLocation').contains('STORAGE LOCATION');
+        cy.get('#table-header-storagePackets').contains(
           'NUMBER OF STORAGE PACKETS'
         );
-        cy.get('.MuiTableHead-root > .MuiTableRow-root > :nth-child(9)').should(
-          'contain',
-          'NOTES'
+        cy.get('#table-header-storageNotes').contains('NOTES');
+        cy.get('#table-header-germinationTestType').contains(
+          'GERMINATION TEST TYPE'
         );
-        cy.get(
-          '.MuiTableHead-root > .MuiTableRow-root > :nth-child(10)'
-        ).should('contain', 'GERMINATION TEST TYPE');
-        cy.get(
-          '.MuiTableHead-root > .MuiTableRow-root > :nth-child(11)'
-        ).should('contain', 'GERMINATION START DATE');
+        cy.get('#table-header-germinationStartDate').contains(
+          'GERMINATION START DATE'
+        );
       });
 
       it('Custom columns', () => {
-        cy.get('#edit-columns').click();
-        cy.get('#Germination\\ Testing\\ To\\ Do').click();
+        cy.intercept('POST', '/api/v1/seedbank/search').as('search');
+        cy.intercept('POST', '/api/v1/seedbank/values').as('values');
 
+        cy.get('#edit-columns').click();
+
+        cy.get('#Germination\\ Testing\\ To\\ Do').click();
         cy.get('#primaryCollector').click();
         cy.get('#rare').click();
+        cy.get('#saveColumnsButton').click();
+        cy.get('#editColumnsDialog').should('not.exist');
 
-        cy.get('#submit').click();
+        cy.wait('@search');
+        cy.wait('@values');
 
-        cy.get('.MuiTableHead-root > .MuiTableRow-root')
-          .children()
-          .should('have.length', 13);
-        cy.get('[aria-sort="ascending"]').should('contain', 'ACCESSION');
-        cy.get('.MuiTableHead-root > .MuiTableRow-root > :nth-child(2)').should(
-          'contain',
-          'STATUS'
+        cy.get('#table-header').children().should('have.length', 13);
+        cy.get('#table-header-accessionNumber').contains('ACCESSION');
+        cy.get('#table-header-active').contains('STATUS');
+        cy.get('#table-header-state').contains('STATE');
+        cy.get('#table-header-species').contains('SPECIES');
+        cy.get('#table-header-collectedDate').contains('COLLECTED ON');
+        cy.get('#table-header-primaryCollector').contains('COLLECTOR');
+        cy.get('#table-header-rare').contains('RARE');
+        cy.get('#table-header-storageCondition').contains('STORAGE CONDITION');
+        cy.get('#table-header-storageLocation').contains('STORAGE LOCATION');
+        cy.get('#table-header-storagePackets').contains(
+          'NUMBER OF STORAGE PACKETS'
         );
-        cy.get('.MuiTableHead-root > .MuiTableRow-root > :nth-child(3)').should(
-          'contain',
-          'STATE'
+        cy.get('#table-header-storageNotes').contains('NOTES');
+        cy.get('#table-header-germinationTestType').contains(
+          'GERMINATION TEST TYPE'
         );
-        cy.get('.MuiTableHead-root > .MuiTableRow-root > :nth-child(4)').should(
-          'contain',
-          'SPECIES'
+        cy.get('#table-header-germinationStartDate').contains(
+          'GERMINATION START DATE'
         );
-        cy.get('.MuiTableHead-root > .MuiTableRow-root > :nth-child(5)').should(
-          'contain',
-          'COLLECTED ON'
-        );
-        cy.get('.MuiTableHead-root > .MuiTableRow-root > :nth-child(6)').should(
-          'contain',
-          'COLLECTOR'
-        );
-        cy.get('.MuiTableHead-root > .MuiTableRow-root > :nth-child(7)').should(
-          'contain',
-          'RARE'
-        );
-        cy.get('.MuiTableHead-root > .MuiTableRow-root > :nth-child(8)').should(
-          'contain',
-          'STORAGE CONDITION'
-        );
-        cy.get('.MuiTableHead-root > .MuiTableRow-root > :nth-child(9)').should(
-          'contain',
-          'STORAGE LOCATION'
-        );
-        cy.get(
-          '.MuiTableHead-root > .MuiTableRow-root > :nth-child(10)'
-        ).should('contain', 'NUMBER OF STORAGE PACKETS');
-        cy.get(
-          '.MuiTableHead-root > .MuiTableRow-root > :nth-child(11)'
-        ).should('contain', 'NOTES');
-        cy.get(
-          '.MuiTableHead-root > .MuiTableRow-root > :nth-child(12)'
-        ).should('contain', 'GERMINATION TEST TYPE');
-        cy.get(
-          '.MuiTableHead-root > .MuiTableRow-root > :nth-child(13)'
-        ).should('contain', 'GERMINATION START DATE');
       });
     });
   });
@@ -455,16 +309,21 @@ describe('Database', () => {
     it('Should filter by Active Status', () => {
       cy.intercept('POST', '/api/v1/seedbank/search').as('search');
       cy.intercept('POST', '/api/v1/seedbank/values').as('values');
-
-      cy.get(
-        '.MuiContainer-root > :nth-child(2) > :nth-child(1) > .MuiButtonBase-root'
-      ).click();
-      cy.get('.MuiList-root > :nth-child(1)').click();
-
+      cy.visit('/accessions');
       cy.wait('@search');
       cy.wait('@values');
-      cy.url().should('match', /accessions/);
 
+      cy.intercept('POST', '/api/v1/seedbank/search').as('search2');
+      cy.intercept('POST', '/api/v1/seedbank/values').as('values2');
+
+      cy.get('#filter-active').click();
+      cy.get('#filter-list-active').should('be.visible');
+      cy.get('#Active').click();
+
+      cy.wait('@search2');
+      cy.wait('@values2');
+
+      cy.get('#filter-list-active').should('not.exist');
       cy.get('#subtitle').should('contain', '9 total');
     });
 
@@ -472,11 +331,14 @@ describe('Database', () => {
       cy.intercept('POST', '/api/v1/seedbank/search').as('search');
       cy.intercept('POST', '/api/v1/seedbank/values').as('values');
 
-      cy.get(
-        '.MuiContainer-root > :nth-child(2) > :nth-child(1) > .MuiButtonBase-root'
-      ).click();
+      cy.get('#filter-active').click();
+      cy.get('#filter-list-active').should('be.visible');
       cy.get('#clear').click();
 
+      cy.wait('@search');
+      cy.wait('@values');
+
+      cy.get('#filter-list-active').should('not.exist');
       cy.get('#subtitle').should('contain', '11 total');
     });
 
@@ -484,22 +346,31 @@ describe('Database', () => {
       cy.intercept('POST', '/api/v1/seedbank/search').as('search');
       cy.intercept('POST', '/api/v1/seedbank/values').as('values');
 
-      cy.get(':nth-child(3) > :nth-child(1) > .MuiButtonBase-root').click();
-      cy.get('.MuiPaper-root #Processing .MuiCheckbox-root')
-        .click()
-        .type('{esc}');
+      cy.get('#filter-state').click();
+      cy.get('#filter-list-state').should('be.visible');
+      cy.get('#check-Processing').click();
+      cy.get('#Processing').type('{esc}');
 
       cy.wait('@search');
       cy.wait('@values');
-      cy.url().should('match', /accessions/);
 
+      cy.get('#filter-list-state').should('not.exist');
       cy.get('#subtitle').contains('1 total');
     });
 
     it('Should clear state filter', () => {
-      cy.get(':nth-child(3) > :nth-child(1) > .MuiButtonBase-root').click();
-      cy.get('#clear').click();
+      cy.intercept('POST', '/api/v1/seedbank/search').as('search');
+      cy.intercept('POST', '/api/v1/seedbank/values').as('values');
 
+      cy.get('#filter-state').click();
+      cy.get('#filter-list-state').should('be.visible');
+      cy.get('#clear').click();
+      cy.get('#filter-list-state').type('{esc}');
+
+      cy.wait('@search');
+      cy.wait('@values');
+
+      cy.get('#filter-list-state').should('not.exist');
       cy.get('#subtitle').should('contain', '11 total');
     });
 
@@ -507,24 +378,29 @@ describe('Database', () => {
       cy.intercept('POST', '/api/v1/seedbank/search').as('search');
       cy.intercept('POST', '/api/v1/seedbank/values').as('values');
 
-      cy.get(':nth-child(4) > :nth-child(1) > .MuiButtonBase-root').click();
-      cy.get(
-        '#searchspecies > .MuiFormControl-root > .MuiInputBase-root > .MuiInputBase-input'
-      )
-        .type('kousa')
-        .type('{enter}');
+      cy.get('#filter-species').click();
+      cy.get('#species').should('be.visible');
+      cy.get('#species').type('kousa').type('{enter}');
 
       cy.wait('@search');
       cy.wait('@values');
-      cy.url().should('match', /accessions/);
 
+      cy.get('#species').should('not.exist');
       cy.get('#subtitle').should('contain', '3 total');
     });
 
     it('Should clear state filter', () => {
-      cy.get(':nth-child(3) > :nth-child(1) > .MuiButtonBase-root').click();
+      cy.intercept('POST', '/api/v1/seedbank/search').as('search');
+      cy.intercept('POST', '/api/v1/seedbank/values').as('values');
+
+      cy.get('#filter-species').click();
+      cy.get('#species').should('be.visible');
       cy.get('#clear').click();
 
+      cy.wait('@search');
+      cy.wait('@values');
+
+      cy.get('#species').should('not.exist');
       cy.get('#subtitle').should('contain', '11 total');
     });
 
@@ -532,28 +408,37 @@ describe('Database', () => {
       cy.intercept('POST', '/api/v1/seedbank/search').as('search');
       cy.intercept('POST', '/api/v1/seedbank/values').as('values');
 
-      cy.get(':nth-child(5) > :nth-child(1) > .MuiButtonBase-root').click();
+      cy.get('#filter-receivedDate').click();
+      cy.get('#startDate').should('be.visible');
       cy.get('#startDate').clear().type('02/03/2021');
       cy.get('#endDate').clear().type('02/04/2021').type('{enter}');
 
       cy.wait('@search');
       cy.wait('@values');
-      cy.url().should('match', /accessions/);
 
+      cy.get('#startDate').should('not.exist');
       cy.get('#subtitle').should('contain', '1 total');
     });
 
     it('Should clear all filters', () => {
+      cy.intercept('POST', '/api/v1/seedbank/search').as('search');
+      cy.intercept('POST', '/api/v1/seedbank/values').as('values');
+
       cy.get('#clearAll').click();
+
+      cy.wait('@search');
+      cy.wait('@values');
 
       cy.get('#subtitle').contains('11 total');
     });
 
     it('Should download report', () => {
       cy.intercept('POST', '/api/v1/seedbank/search/export').as('postReport');
+
       cy.get('#download-report').click();
       cy.get('#reportName').type('report');
-      cy.get('#submit').click();
+
+      cy.get('#downloadButton').click();
       cy.wait('@postReport');
     });
 
@@ -562,115 +447,86 @@ describe('Database', () => {
       cy.intercept('POST', '/api/v1/seedbank/values').as('values');
 
       // checking state list
-      cy.get(':nth-child(3) > :nth-child(1) > .MuiButtonBase-root').click();
-      cy.get('#searchstate').children().should('have.length', 5);
-      cy.get('#searchstate').type('{esc}');
+      cy.get('#filter-state').click();
+      cy.get('#filter-list-state').should('be.visible');
+      cy.get('#filter-list-state').children().should('have.length', 5);
+      cy.get('#filter-list-state').type('{esc}');
+      cy.get('#filter-list-state').should('not.exist');
 
-      // selecting status
-      cy.get(
-        '.MuiContainer-root > :nth-child(2) > :nth-child(1) > .MuiButtonBase-root'
-      ).click();
-      cy.get('.MuiList-root > :nth-child(1)').click();
-      cy.get('#searchactive').type('{esc}');
+      cy.get('#filter-active').click();
+      cy.get('#filter-list-active').should('be.visible');
+      cy.get('#Active').click();
+      cy.get('#filter-list-active').type('{esc}');
 
       cy.wait('@search');
       cy.wait('@values');
-      cy.url().should('match', /accessions/);
 
+      cy.get('#filter-list-active').should('not.exist');
       cy.get('#subtitle').should('contain', '9 total');
 
-      // checking state list
-      cy.get(
-        '.MuiContainer-root > :nth-child(3) > :nth-child(1) > .MuiButtonBase-root'
-      ).click();
-      cy.get('#searchstate').children().should('have.length', 4);
-      cy.get('#searchstate').type('{esc}');
+      // re-checking state list
+      cy.get('#filter-state').click();
+      cy.get('#filter-list-state').should('be.visible');
+      cy.get('#filter-list-state').children().should('have.length', 4);
+      cy.get('#filter-list-state').type('{esc}');
+      cy.get('#filter-list-state').should('not.exist');
 
       cy.intercept('POST', '/api/v1/seedbank/search').as('search2');
       cy.intercept('POST', '/api/v1/seedbank/values').as('values2');
 
-      // entering site location
-      cy.get(':nth-child(7) > :nth-child(1) > .MuiButtonBase-root').click();
-      cy.get(
-        '#searchsiteLocation > .MuiFormControl-root > .MuiInputBase-root > .MuiInputBase-input'
-      )
-        .type('Sunset')
-        .type('{enter}')
-        .type('{esc}');
+      cy.get('#filter-siteLocation').click();
+      cy.get('#siteLocation').should('be.visible');
+      cy.get('#siteLocation').type('Sunset').type('{enter}');
 
       cy.wait('@search2');
       cy.wait('@values2');
-      cy.url().should('match', /accessions/);
 
+      cy.get('#siteLocation').should('not.exist');
       cy.get('#subtitle').should('contain', '1 total');
 
-      // checking state list
-      cy.get(':nth-child(3) > :nth-child(1) > .MuiButtonBase-root').click();
-      cy.get('#searchstate').children().should('have.length', 1);
-      cy.get('#searchstate').type('{esc}');
+      // re-checking state list
+      cy.get('#filter-state').click();
+      cy.get('#filter-list-state').should('be.visible');
+      cy.get('#filter-list-state').children().should('have.length', 1);
+      cy.get('#filter-list-state').type('{esc}');
+      cy.get('#filter-list-state').should('not.exist');
     });
   });
 
   context('Sort', () => {
     it('Should be able to sort by species', () => {
       cy.intercept('POST', '/api/v1/seedbank/search').as('search');
-
-      cy.get('.MuiTableRow-root > :nth-child(4) > .MuiButtonBase-root').click();
-
+      cy.intercept('POST', '/api/v1/seedbank/values').as('values');
+      cy.visit('/accessions');
       cy.wait('@search');
-      cy.url().should('match', /accessions/);
+      cy.wait('@values');
 
-      cy.get(':nth-child(11) > :nth-child(4) > .MuiTypography-root').contains(
-        'Other Dogwood'
-      );
-      cy.get(':nth-child(8) > :nth-child(4) > .MuiTypography-root').contains(
-        'Kousa'
-      );
+      cy.intercept('POST', '/api/v1/seedbank/search').as('search2');
+      cy.get('#table-header-species').click();
+      cy.wait('@search2');
+
+      cy.get('#row11-species').contains('Other Dogwood');
+      cy.get('#row8-species').contains('Kousa');
     });
 
     it('Should be able to sort by state', () => {
       cy.intercept('POST', '/api/v1/seedbank/search').as('search');
-
-      cy.get('.MuiTableRow-root > :nth-child(3) > .MuiButtonBase-root').click();
-
+      cy.get('#table-header-state').click();
       cy.wait('@search');
-      cy.url().should('match', /accessions/);
 
-      cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(2)').contains(
-        'Active'
-      );
-      cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(3)').contains(
-        'In Storage'
-      );
-      cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(5)').contains(
-        '02/03/2021'
-      );
+      cy.get('#row1-active').contains('Active');
+      cy.get('#row1-state').contains('In Storage');
+      cy.get('#row1-receivedDate').contains('02/03/2021');
     });
 
     it('Should be able to sort by state, descending', () => {
       cy.intercept('POST', '/api/v1/seedbank/search').as('search');
-
-      cy.get('.MuiTableRow-root > :nth-child(3) > .MuiButtonBase-root').click();
-
+      cy.get('#table-header-state').click();
       cy.wait('@search');
-      cy.url().should('match', /accessions/);
 
-      cy.intercept('POST', '/api/v1/seedbank/search').as('search2');
-
-      cy.get('.MuiTableRow-root > :nth-child(3) > .MuiButtonBase-root').click();
-
-      cy.wait('@search2');
-      cy.url().should('match', /accessions/);
-
-      cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(2)').contains(
-        'Inactive'
-      );
-      cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(3)').contains(
-        'Withdrawn'
-      );
-      cy.get('.MuiTableBody-root > :nth-child(3) > :nth-child(4)').contains(
-        'Dogwood'
-      );
+      cy.get('#row1-active').contains('Inactive');
+      cy.get('#row1-state').contains('Withdrawn');
+      cy.get('#row3-species').contains('Dogwood');
     });
   });
 
@@ -678,61 +534,57 @@ describe('Database', () => {
     it('Should remember filters, sorting and selected columns when switching pages', () => {
       cy.intercept('POST', '/api/v1/seedbank/search').as('search');
       cy.intercept('POST', '/api/v1/seedbank/values').as('values');
-
-      cy.get('#edit-columns').click();
-      cy.get('#rare').click();
-
-      cy.get('#submit').click();
+      cy.visit('/accessions');
       cy.wait('@search');
       cy.wait('@values');
 
       cy.intercept('POST', '/api/v1/seedbank/search').as('search2');
       cy.intercept('POST', '/api/v1/seedbank/values').as('values2');
 
-      cy.get(
-        '.MuiContainer-root > :nth-child(4) > :nth-child(1) > .MuiButtonBase-root'
-      ).click();
-      cy.get(
-        '#searchspecies > .MuiFormControl-root > .MuiInputBase-root > .MuiInputBase-input'
-      )
-        .type('dogwood')
-        .type('{enter}');
+      cy.get('#edit-columns').click();
+      cy.get('#rare').click();
+      cy.get('#saveColumnsButton').click();
+      cy.get('#editColumnsDialog').should('not.exist');
 
       cy.wait('@search2');
       cy.wait('@values2');
-      cy.get('#searchspecies').type('{esc}');
 
+      cy.intercept('POST', '/api/v1/seedbank/search').as('search3');
+      cy.intercept('POST', '/api/v1/seedbank/values').as('values3');
+
+      cy.get('#filter-species').click();
+      cy.get('#species').should('be.visible');
+      cy.get('#species').type('dogwood').type('{enter}');
+
+      cy.wait('@search3');
+      cy.wait('@values3');
+
+      cy.get('#species').should('not.exist');
       cy.get('#subtitle').should('contain', '4 total');
 
-      cy.get(':nth-child(4) > .MuiButtonBase-root').click();
-      cy.get(':nth-child(4) > .MuiButtonBase-root').click();
+      cy.intercept('POST', '/api/v1/seedbank/search').as('search4');
+      cy.get('#table-header-species').click();
+      cy.wait('@search4');
 
-      cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(4)').contains(
-        'Other Dogwood'
-      );
+      cy.intercept('POST', '/api/v1/seedbank/search').as('search5');
+      cy.get('#table-header-species').click();
+      cy.wait('@search5');
 
-      cy.get(':nth-child(8) > :nth-child(1) > .MuiButtonBase-root').contains(
-        'Rare'
-      );
+      cy.get('#row1-species').contains('Other Dogwood');
+
+      cy.get('#filter-rare').should('exist');
 
       // Should remember the filters
 
-      cy.get('.MuiTableBody-root > :nth-child(1)')
+      cy.get('#row1')
         .click()
         .url()
         .should('match', /accessions\/[A-Za-z0-9]+\/seed-collection/);
-
       cy.get('#close').click();
 
       cy.get('#subtitle').should('contain', '4 total');
-
-      cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(4)').contains(
-        'Other Dogwood'
-      );
-
-      cy.get(':nth-child(8) > :nth-child(1) > .MuiButtonBase-root').contains(
-        'Rare'
-      );
+      cy.get('#row1-species').contains('Other Dogwood');
+      cy.get('#filter-rare').contains('Rare');
     });
   });
 });

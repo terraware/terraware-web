@@ -317,7 +317,7 @@ export default function ProcessingAndDrying({
         <Grid container spacing={4}>
           <Grid item className={classes.right}>
             <Chip
-              id='submit'
+              id='saveAccession'
               className={classes.submit}
               label='Save changes'
               clickable

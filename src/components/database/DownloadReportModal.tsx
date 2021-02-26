@@ -104,7 +104,7 @@ export default function DownloadReportModal(props: Props): JSX.Element {
               onClick={handleCancel}
             />
             <Chip
-              id='submit'
+              id='downloadButton'
               className={classes.submit}
               label='Download'
               clickable

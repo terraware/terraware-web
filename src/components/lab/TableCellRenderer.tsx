@@ -5,10 +5,11 @@ import { RendererProps } from '../common/table/types';
 export default function LabCellRenderer(
   props: RendererProps<TableRowType>
 ): JSX.Element {
-  const { column, row } = props;
+  const { column, row, index } = props;
   if (column.key === 'seedsGerminated') {
     return (
       <CellRenderer
+        index={index}
         column={column}
         value={`${row[column.key]} seeds germinated`}
         row={row}

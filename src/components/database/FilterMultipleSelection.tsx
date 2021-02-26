@@ -64,7 +64,7 @@ export default function MultipleSelection(props: Props): JSX.Element {
   };
 
   return (
-    <div id={'search' + props.field} className={classes.box}>
+    <div id={`filter-list-${props.field}`} className={classes.box}>
       {props.options.map(({ label, value }) => (
         <div key={value} className={classes.item}>
           <Checkbox

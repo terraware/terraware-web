@@ -142,6 +142,7 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
           <Grid container spacing={4}>
             <Grid item xs={12}>
               <SummaryBox
+                id='modal-seeds-available'
                 title='Seeds available'
                 value={props.seedsAvailable}
                 variant={props.seedsAvailable === 0 ? 'zero' : 'default'}
@@ -177,7 +178,7 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
                 label='Withdraw on'
                 aria-label='Withdraw date'
               />
-              <Typography component='p' variant='body2'>
+              <Typography id='date-tip' component='p' variant='body2'>
                 {dateSubtext}
               </Typography>
             </Grid>
@@ -237,6 +238,7 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
         <Box width={record.id && '100%'} className={classes.actions}>
           {record.id && (
             <Link
+              id='delete-withdrawn-button'
               color='secondary'
               href='#'
               onClick={(event: React.SyntheticEvent) => {
@@ -258,7 +260,7 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
               onClick={handleCancel}
             />
             <Chip
-              id='submit'
+              id='save-withdrawn-button'
               className={classes.submit}
               label={submitText}
               clickable

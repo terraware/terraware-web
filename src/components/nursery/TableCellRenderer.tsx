@@ -6,11 +6,12 @@ import { RendererProps } from '../common/table/types';
 export default function NurseryCellRenderer(
   props: RendererProps<GerminationTest>
 ): JSX.Element {
-  const { column, row } = props;
+  const { column, row, index } = props;
   if (column.key === 'recordingDate' || column.key === 'seedsGerminated') {
     if (row.germinations) {
       return (
         <CellRenderer
+          index={index}
           column={column}
           value={row.germinations[0][column.key]}
           row={row}

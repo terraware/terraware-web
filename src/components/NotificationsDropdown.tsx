@@ -98,8 +98,9 @@ export default function NotificationsDropdown(): JSX.Element {
 
   return (
     <div>
-      <IconButton onClick={onIconClick}>
+      <IconButton id='notifications-button' onClick={onIconClick}>
         <Badge
+          id='notifications-badge'
           badgeContent={contents ? getUnreadNotifications() : undefined}
           color='secondary'
         >
@@ -120,7 +121,7 @@ export default function NotificationsDropdown(): JSX.Element {
           horizontal: 'center',
         }}
       >
-        <List className={classes.popover}>
+        <List id='notifications-popover' className={classes.popover}>
           <ListSubheader inset className={classes.subheader}>
             <div className={classes.mainTitle}>
               <Typography>Notifications</Typography>
@@ -137,11 +138,17 @@ export default function NotificationsDropdown(): JSX.Element {
             <Divider />
           </ListSubheader>
           {notificationLoadable.state === 'hasError' && 'An error ocurred'}
-          {notificationLoadable.state === 'loading' && <CircularProgress />}
+          {notificationLoadable.state === 'loading' && (
+            <CircularProgress id='spinner-notifications' />
+          )}
           {contents &&
             contents.map(
-              ({ id, state, type, accessionNumber, read, text, timestamp }) => (
+              (
+                { id, state, type, accessionNumber, read, text, timestamp },
+                index
+              ) => (
                 <ListItem
+                  id={`notification${index + 1}`}
                   key={id}
                   button
                   className={

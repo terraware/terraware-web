@@ -10,11 +10,12 @@ import { RendererProps } from '../common/table/types';
 export default function WithdrawalCellRenderer(
   props: RendererProps<AccessionWithdrawal>
 ): JSX.Element {
-  const { column, value, row } = props;
+  const { column, value, row, index } = props;
   if (column.key === 'quantity') {
     if (row.gramsWithdrawn) {
       return (
         <CellRenderer
+          index={index}
           column={column}
           value={`${row.gramsWithdrawn}g`}
           row={row}
@@ -23,20 +24,24 @@ export default function WithdrawalCellRenderer(
     } else if (row.seedsWithdrawn) {
       return (
         <CellRenderer
+          index={index}
           column={column}
           value={`${row.seedsWithdrawn} seeds`}
           row={row}
         />
       );
     } else {
-      return <CellRenderer column={column} value={''} row={row} />;
+      return (
+        <CellRenderer index={index} column={column} value={''} row={row} />
+      );
     }
   }
   if (column.type === 'date' && typeof value === 'string' && value) {
+    const id = `row${index}-${column.key}`;
     const date = new Date(value);
     if (date > new Date()) {
       return (
-        <TableCell align='left'>
+        <TableCell id={id} align='left'>
           <Typography component='p' variant='body1'>
             Scheduled for
           </Typography>
@@ -46,7 +51,7 @@ export default function WithdrawalCellRenderer(
         </TableCell>
       );
     }
-    return <CellDateRenderer value={value} />;
+    return <CellDateRenderer id={id} value={value} />;
   }
   return <CellRenderer {...props} />;
 }

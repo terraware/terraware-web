@@ -65,7 +65,7 @@ export default function NumberRange(props: Props): JSX.Element {
   };
 
   return (
-    <div id={'search' + props.field} className={classes.box}>
+    <div className={classes.box}>
       <Grid container spacing={4}>
         <Grid item xs={5}>
           <TextField

@@ -103,6 +103,7 @@ export default function EnhancedTableDetails<T>({
       {!open[index] && (
         <TableRow>
           <TableCell
+            id={`row${index + 1}-expand`}
             className={classes.expander}
             colSpan={12}
             onClick={() => {
@@ -157,7 +158,11 @@ export default function EnhancedTableDetails<T>({
                     <Divisor></Divisor>
                   </Grid>
                   <Grid item xs={12}>
-                    <Table size='small' aria-label='purchases'>
+                    <Table
+                      size='small'
+                      aria-label='purchases'
+                      id={`row${index + 1}-details`}
+                    >
                       <TableBody>
                         {row[rowName] &&
                           stableSort(
@@ -168,9 +173,13 @@ export default function EnhancedTableDetails<T>({
                               ? () => onSelect(subRow, row)
                               : undefined;
                             return (
-                              <TableRow tabIndex={-1} key={subRowIndex}>
+                              <TableRow
+                                id={`row${subRowIndex + 1}`}
+                                key={subRowIndex}
+                              >
                                 {columns.map((column) => (
                                   <Renderer
+                                    index={subRowIndex + 1}
                                     key={column.key}
                                     row={subRow as T}
                                     column={column}

@@ -4,452 +4,312 @@
 describe('Lab', () => {
   it('should not create Lab menu if not selecting any test', () => {
     cy.visit('/accessions/new');
-    cy.get('#submit').click();
+    cy.get('#saveAccession').click();
+    cy.get('#snackbar').contains('Accession saved');
 
     cy.get('#lab').should('not.exist');
   });
   it('should create the accession with lab test and navigate to lab section', () => {
     cy.visit('/accessions/new');
-    cy.get('#submit').click();
-
-    cy.get('#processing-drying > .MuiTypography-root').click();
-    cy.get('#Lab > .MuiButtonBase-root > .MuiIconButton-label > input').click();
-
-    cy.get('#submit').click();
+    cy.get('#saveAccession').click();
     cy.get('#snackbar').contains('Accession saved');
 
-    cy.get('#lab > .MuiTypography-root')
+    cy.get('#menu-processing-drying').click();
+    cy.get('#Lab').click();
+
+    cy.get('#saveAccession').click();
+    cy.get('#snackbar').contains('Accession saved');
+
+    cy.get('#lab')
       .click()
       .url()
       .should('match', /accessions\/[A-Za-z0-9]+\/lab/);
   });
   it('should create a new test', () => {
-    cy.get('#submit').click();
+    cy.get('#newTest').click();
     cy.get('#startDate').type('02/09/2021');
     cy.get('#seedType').click();
-    cy.get('.MuiList-root > [tabindex="-1"]').click();
+    cy.get('#Stored').click();
     cy.get('#substrate').click();
-    cy.get('[data-value="Paper Petri Dish"]').click();
+    cy.get('#Paper\\ Petri\\ Dish').click();
     cy.get('#treatment').click();
-    cy.get('[data-value="Scarify"]').click();
+    cy.get('#Scarify').click();
     cy.get('#seedsSown').type('100');
     cy.get('#notes').type('A lab test note');
     cy.get('#staffResponsible').type('Constanza');
 
-    cy.get('.MuiBox-root > #submit').click();
+    cy.get('#saveTest').click();
     cy.get('#snackbar').contains('Accession saved');
 
-    cy.get(
-      ':nth-child(7) > .MuiGrid-root > .MuiTableContainer-root > .MuiTable-root > .MuiTableBody-root > [tabindex="-1"] > :nth-child(1) > .MuiTypography-root'
-    ).should('contain', '02/09/2021');
-    cy.get(
-      ':nth-child(7) > .MuiGrid-root > .MuiTableContainer-root > .MuiTable-root > .MuiTableBody-root > [tabindex="-1"] > :nth-child(2) > .MuiTypography-root'
-    ).should('contain', 'Stored');
-    cy.get(
-      ':nth-child(7) > .MuiGrid-root > .MuiTableContainer-root > .MuiTable-root > .MuiTableBody-root > [tabindex="-1"] > :nth-child(3) > .MuiTypography-root'
-    ).should('contain', 'Paper Petri Dish');
-    cy.get(
-      ':nth-child(7) > .MuiGrid-root > .MuiTableContainer-root > .MuiTable-root > .MuiTableBody-root > [tabindex="-1"] > :nth-child(4) > .MuiTypography-root'
-    ).should('contain', 'Scarify');
-    cy.get(
-      ':nth-child(7) > .MuiGrid-root > .MuiTableContainer-root > .MuiTable-root > .MuiTableBody-root > [tabindex="-1"] > :nth-child(5) > .MuiTypography-root'
-    ).should('contain', '100');
-    cy.get(
-      ':nth-child(7) > .MuiGrid-root > .MuiTableContainer-root > .MuiTable-root > .MuiTableBody-root > [tabindex="-1"] > :nth-child(6) > .MuiTypography-root'
-    ).should('contain', 'Constanza');
-    cy.get(
-      ':nth-child(7) > .MuiGrid-root > .MuiTableContainer-root > .MuiTable-root > .MuiTableBody-root > [tabindex="-1"] > :nth-child(7) > .MuiTypography-root'
-    )
-      .children()
-      .should('have.length', 1);
+    cy.get('#row1-startDate').should('contain','02/09/2021');
+    cy.get('#row1-seedType').should('contain','Stored');
+    cy.get('#row1-substrate').should('contain','Paper Petri Dish');
+    cy.get('#row1-treatment').should('contain','Scarify');
+    cy.get('#row1-seedsSown').should('contain','100');
+    cy.get('#row1-staffResponsible').should('contain', 'Constanza');
+    cy.get('#row1-notes > .MuiTypography-root > .MuiSvgIcon-root').should('exist');
   });
 
   it('should modify test', () => {
-    cy.get(
-      ':nth-child(8) > .MuiLink-root > .MuiBox-root > .MuiTypography-root'
-    ).click();
+    cy.get('#row1-edit-button').click();
     cy.get('#substrate').click();
-    cy.get('[data-value="Nursery Media"]').click();
+    cy.get('#Nursery\\ Media').click();
     cy.get('#notes').clear();
 
-    cy.get('.MuiBox-root > #submit').click();
+    cy.get('#saveTest').click();
     cy.get('#snackbar').contains('Accession saved');
 
-    cy.get(
-      ':nth-child(7) > .MuiGrid-root > .MuiTableContainer-root > .MuiTable-root > .MuiTableBody-root > [tabindex="-1"] > :nth-child(1) > .MuiTypography-root'
-    ).should('contain', '02/09/2021');
-    cy.get(
-      ':nth-child(7) > .MuiGrid-root > .MuiTableContainer-root > .MuiTable-root > .MuiTableBody-root > [tabindex="-1"] > :nth-child(2) > .MuiTypography-root'
-    ).should('contain', 'Stored');
-    cy.get(
-      ':nth-child(7) > .MuiGrid-root > .MuiTableContainer-root > .MuiTable-root > .MuiTableBody-root > [tabindex="-1"] > :nth-child(3) > .MuiTypography-root'
-    ).should('contain', 'Nursery Media');
-    cy.get(
-      ':nth-child(7) > .MuiGrid-root > .MuiTableContainer-root > .MuiTable-root > .MuiTableBody-root > [tabindex="-1"] > :nth-child(4) > .MuiTypography-root'
-    ).should('contain', 'Scarify');
-    cy.get(
-      ':nth-child(7) > .MuiGrid-root > .MuiTableContainer-root > .MuiTable-root > .MuiTableBody-root > [tabindex="-1"] > :nth-child(5) > .MuiTypography-root'
-    ).should('contain', '100');
-    cy.get(
-      ':nth-child(7) > .MuiGrid-root > .MuiTableContainer-root > .MuiTable-root > .MuiTableBody-root > [tabindex="-1"] > :nth-child(6) > .MuiTypography-root'
-    ).should('contain', 'Constanza');
-    cy.get(
-      ':nth-child(7) > .MuiGrid-root > .MuiTableContainer-root > .MuiTable-root > .MuiTableBody-root > [tabindex="-1"] > :nth-child(7) > .MuiTypography-root'
-    )
-      .children()
-      .should('have.length', 0);
+    cy.get('#row1-startDate').should('contain','02/09/2021');
+    cy.get('#row1-seedType').should('contain','Stored');
+    cy.get('#row1-substrate').should('contain','Nursery Media');
+    cy.get('#row1-treatment').should('contain','Scarify');
+    cy.get('#row1-seedsSown').should('contain','100');
+    cy.get('#row1-staffResponsible').should('contain', 'Constanza');
+    cy.get('#row1-notes > .MuiTypography-root > .MuiSvgIcon-root').should('not.exist');
   });
 
   it('should create another test', () => {
-    cy.get('#submit').click();
+    cy.get('#newTest').click();
     cy.get('#startDate').type('02/12/2021');
     cy.get('#seedType').click();
-    cy.get('.MuiList-root > [tabindex="-1"]').click();
+    cy.get('#Stored').click();
     cy.get('#substrate').click();
-    cy.get('[data-value="Agar Petri Dish"]').click();
+    cy.get('#Agar\\ Petri\\ Dish').click();
     cy.get('#treatment').click();
-    cy.get('[data-value="Soak"]').click();
+    cy.get('#Soak').click();
     cy.get('#seedsSown').type('200');
 
-    cy.get('.MuiBox-root > #submit').click();
+    cy.get('#saveTest').click();
     cy.get('#snackbar').contains('Accession saved');
   });
 
   it('should create another test', () => {
-    cy.get('#submit').click();
+    cy.get('#newTest').click();
     cy.get('#startDate').type('02/01/2021');
     cy.get('#seedType').click();
-    cy.get('[data-value="Fresh"]').click();
+    cy.get('#Fresh').click();
     cy.get('#substrate').click();
-    cy.get('[data-value="Other"]').click();
+    cy.get('#Other').click();
     cy.get('#treatment').click();
-    cy.get('[data-value="Other"]').click();
+    cy.get('#Other').click();
     cy.get('#seedsSown').type('50');
 
-    cy.get('.MuiBox-root > #submit').click();
+    cy.get('#saveTest').click();
     cy.get('#snackbar').contains('Accession saved');
   });
 
   it('should display the records in the right order', () => {
-    cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(1)').contains(
-      '02/09/2021'
-    );
-    cy.get('.MuiTableBody-root > :nth-child(4) > :nth-child(1)').contains(
-      '02/12/2021'
-    );
-    cy.get('.MuiTableBody-root > :nth-child(7) > :nth-child(1)').contains(
-      '02/01/2021'
-    );
+    cy.get('#row1-startDate').contains('02/09/2021');
+    cy.get('#row2-startDate').contains('02/12/2021');
+    cy.get('#row3-startDate').contains('02/01/2021');
 
     // by start date
-    cy.get(
-      ':nth-child(7) > .MuiGrid-root > .MuiTableContainer-root > .MuiTable-root > .MuiTableHead-root > .MuiTableRow-root > :nth-child(1) > .MuiButtonBase-root'
-    ).click();
-    cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(1)').contains(
-      '02/01/2021'
-    );
-    cy.get('.MuiTableBody-root > :nth-child(4) > :nth-child(1)').contains(
-      '02/09/2021'
-    );
-    cy.get('.MuiTableBody-root > :nth-child(7) > :nth-child(1)').contains(
-      '02/12/2021'
-    );
+    cy.get('#table-header-startDate').click();
+    cy.get('#row1-startDate').contains('02/01/2021');
+    cy.get('#row2-startDate').contains('02/09/2021');
+    cy.get('#row3-startDate').contains('02/12/2021');
 
     // by seed type
-
-    cy.get(
-      ':nth-child(7) > .MuiGrid-root > .MuiTableContainer-root > .MuiTable-root > .MuiTableHead-root > .MuiTableRow-root > :nth-child(2) > .MuiButtonBase-root'
-    ).click();
-    cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(2)').contains(
-      'Fresh'
-    );
-    cy.get('.MuiTableBody-root > :nth-child(4) > :nth-child(2)').contains(
-      'Stored'
-    );
-    cy.get('.MuiTableBody-root > :nth-child(7) > :nth-child(2)').contains(
-      'Stored'
-    );
+    cy.get('#table-header-seedType').click();
+    cy.get('#row1-seedType').contains('Fresh');
+    cy.get('#row2-seedType').contains('Stored');
+    cy.get('#row3-seedType').contains('Stored');
 
     // by substrate
-    cy.get(
-      ':nth-child(7) > .MuiGrid-root > .MuiTableContainer-root > .MuiTable-root > .MuiTableHead-root > .MuiTableRow-root > :nth-child(3) > .MuiButtonBase-root'
-    ).click();
-    cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(3)').contains(
-      'Agar Petri Dish'
-    );
-    cy.get('.MuiTableBody-root > :nth-child(4) > :nth-child(3)').contains(
-      'Nursery Media'
-    );
-    cy.get('.MuiTableBody-root > :nth-child(7) > :nth-child(3)').contains(
-      'Other'
-    );
+    cy.get('#table-header-substrate').click();
+    cy.get('#row1-substrate').contains('Agar Petri Dish');
+    cy.get('#row2-substrate').contains('Nursery Media');
+    cy.get('#row3-substrate').contains('Other');
 
     // by Treatment
-    cy.get(
-      ':nth-child(7) > .MuiGrid-root > .MuiTableContainer-root > .MuiTable-root > .MuiTableHead-root > .MuiTableRow-root > :nth-child(4) > .MuiButtonBase-root'
-    ).click();
-    cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(4)').contains(
-      'Other'
-    );
-    cy.get('.MuiTableBody-root > :nth-child(4) > :nth-child(4)').contains(
-      'Scarify'
-    );
-    cy.get('.MuiTableBody-root > :nth-child(7) > :nth-child(4)').contains(
-      'Soak'
-    );
+    cy.get('#table-header-treatment').click();
+    cy.get('#row1-treatment').contains('Other');
+    cy.get('#row2-treatment').contains('Scarify');
+    cy.get('#row3-treatment').contains('Soak');
 
     // by sown
-    cy.get(
-      ':nth-child(7) > .MuiGrid-root > .MuiTableContainer-root > .MuiTable-root > .MuiTableHead-root > .MuiTableRow-root > :nth-child(5) > .MuiButtonBase-root'
-    ).click();
-    cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(5)').contains('50');
-    cy.get('.MuiTableBody-root > :nth-child(4) > :nth-child(5)').contains(
-      '100'
-    );
-    cy.get('.MuiTableBody-root > :nth-child(7) > :nth-child(5)').contains(
-      '200'
-    );
+    cy.get('#table-header-seedsSown').click();
+    cy.get('#row1-seedsSown').contains('50');
+    cy.get('#row2-seedsSown').contains('100');
+    cy.get('#row3-seedsSown').contains('200');
   });
 
   it('should delete test', () => {
-    cy.get(
-      ':nth-child(7) > :nth-child(8) > .MuiLink-root > .MuiBox-root > .MuiTypography-root'
-    ).click();
+    cy.get('#row3-edit-button').click();
 
+    cy.intercept('PUT', '/api/v1/seedbank/accession/**').as('putAccession');
     cy.intercept('GET', '/api/v1/seedbank/accession/**').as('getAccession');
-    cy.get('.MuiTypography-body2').click();
-    cy.wait('@getAccession');
+    cy.get('#deleteTest').click();
+    cy.wait('@putAccession');
     cy.get('#snackbar').contains('Accession saved');
+    cy.wait('@getAccession');
 
-    cy.get('.MuiTableBody-root > :nth-child(7)').should('not.exist');
+    cy.get('#row3-edit-button').should('not.exist');
   });
 
   it('should add germination entry and create bar in graph', () => {
-    cy.get(':nth-child(5) > .MuiTableCell-root').click();
+    cy.get('#row2-expand').click();
     cy.get('#newEntry').click();
 
+    cy.intercept('PUT', '/api/v1/seedbank/accession/**').as('putAccession');
+    cy.intercept('GET', '/api/v1/seedbank/accession/**').as('getAccession');
     cy.get('#seedsGerminated').type('10');
     cy.get('#recordingDate').clear().type('02/09/2021');
 
-    cy.get('.MuiBox-root > #submit').click();
+    cy.get('#saveGermination').click();
+    cy.wait('@putAccession');
     cy.get('#snackbar').contains('Accession saved');
+    cy.wait('@getAccession');
 
-    cy.get(
-      ':nth-child(7) > .MuiGrid-root > .MuiTableContainer-root > .MuiTable-root > .MuiTableBody-root > [tabindex="-1"] > :nth-child(1) > .MuiTypography-root'
-    ).should('contain', '02/09/2021');
-    cy.get(
-      ':nth-child(7) > .MuiGrid-root > .MuiTableContainer-root > .MuiTable-root > .MuiTableBody-root > [tabindex="-1"] > :nth-child(2) > .MuiTypography-root'
-    ).should('contain', 'Stored');
-    cy.get(
-      ':nth-child(7) > .MuiGrid-root > .MuiTableContainer-root > .MuiTable-root > .MuiTableBody-root > [tabindex="-1"] > :nth-child(3) > .MuiTypography-root'
-    ).should('contain', 'Nursery Media');
-    cy.get(
-      ':nth-child(7) > .MuiGrid-root > .MuiTableContainer-root > .MuiTable-root > .MuiTableBody-root > [tabindex="-1"] > :nth-child(4) > .MuiTypography-root'
-    ).should('contain', 'Scarify');
-    cy.get(
-      ':nth-child(7) > .MuiGrid-root > .MuiTableContainer-root > .MuiTable-root > .MuiTableBody-root > [tabindex="-1"] > :nth-child(5) > .MuiTypography-root'
-    ).should('contain', '100');
-    cy.get(
-      ':nth-child(7) > .MuiGrid-root > .MuiTableContainer-root > .MuiTable-root > .MuiTableBody-root > [tabindex="-1"] > :nth-child(6) > .MuiTypography-root'
-    ).should('contain', 'Constanza');
-    cy.get(
-      ':nth-child(7) > .MuiGrid-root > .MuiTableContainer-root > .MuiTable-root > .MuiTableBody-root > [tabindex="-1"] > :nth-child(7) > .MuiTypography-root'
-    )
-      .children()
-      .should('have.length', 0);
+    cy.get('#row2-startDate').should('contain','02/09/2021');
+    cy.get('#row2-seedType').should('contain','Stored');
+    cy.get('#row2-substrate').should('contain','Nursery Media');
+    cy.get('#row2-treatment').should('contain','Scarify');
+    cy.get('#row2-seedsSown').should('contain','100');
+    cy.get('#row2-staffResponsible').should('contain', 'Constanza');
+    cy.get('#row2-notes > .MuiTypography-root > .MuiSvgIcon-root').should('not.exist');
 
     cy.get('#totalViabilityPercent').contains('6%');
-    cy.get(':nth-child(5) > .MuiTableCell-root').click();
+    cy.get('#row2-expand').click();
     cy.get('#totalSeedsGerminated').contains('10 (10%)');
 
-    cy.get(
-      ':nth-child(4) > .MuiTable-root > .MuiTableBody-root > :nth-child(1) > :nth-child(1) > .MuiTypography-root'
-    ).should('contain', '10 seeds germinated');
-    cy.get(
-      ':nth-child(4) > .MuiTable-root > .MuiTableBody-root > :nth-child(1) > :nth-child(2) > .MuiTypography-root'
-    ).should('contain', '02/09/2021');
+    cy.get('#row2-details #row1-seedsGerminated').should('contain', '10 seeds germinated');
+    cy.get('#row2-details #row1-recordingDate').should('contain', '02/09/2021');
     cy.get('#myChart').should('exist');
   });
 
   it('should add other germination entry and create a new bar on graph', () => {
-    cy.get(':nth-child(5) > .MuiTableCell-root').click();
     cy.get('#totalSeedsGerminated').should('be.visible');
     cy.get('#newEntry').click();
     cy.get('.MuiDialogTitle-root').should('be.visible');
 
+    cy.intercept('PUT', '/api/v1/seedbank/accession/**').as('putAccession');
+    cy.intercept('GET', '/api/v1/seedbank/accession/**').as('getAccession');
     cy.get('#seedsGerminated').clear().type('15');
     cy.get('#recordingDate').clear().type('05/09/2021');
 
-    cy.get('.MuiBox-root > #submit').click();
+    cy.get('#saveGermination').click();
+    cy.wait('@putAccession');
     cy.get('#snackbar').contains('Accession saved');
+    cy.wait('@getAccession');
 
-    cy.get(
-      ':nth-child(7) > .MuiGrid-root > .MuiTableContainer-root > .MuiTable-root > .MuiTableBody-root > [tabindex="-1"] > :nth-child(1) > .MuiTypography-root'
-    ).should('contain', '02/09/2021');
-    cy.get(
-      ':nth-child(7) > .MuiGrid-root > .MuiTableContainer-root > .MuiTable-root > .MuiTableBody-root > [tabindex="-1"] > :nth-child(2) > .MuiTypography-root'
-    ).should('contain', 'Stored');
-    cy.get(
-      ':nth-child(7) > .MuiGrid-root > .MuiTableContainer-root > .MuiTable-root > .MuiTableBody-root > [tabindex="-1"] > :nth-child(3) > .MuiTypography-root'
-    ).should('contain', 'Nursery Media');
-    cy.get(
-      ':nth-child(7) > .MuiGrid-root > .MuiTableContainer-root > .MuiTable-root > .MuiTableBody-root > [tabindex="-1"] > :nth-child(4) > .MuiTypography-root'
-    ).should('contain', 'Scarify');
-    cy.get(
-      ':nth-child(7) > .MuiGrid-root > .MuiTableContainer-root > .MuiTable-root > .MuiTableBody-root > [tabindex="-1"] > :nth-child(5) > .MuiTypography-root'
-    ).should('contain', '100');
-    cy.get(
-      ':nth-child(7) > .MuiGrid-root > .MuiTableContainer-root > .MuiTable-root > .MuiTableBody-root > [tabindex="-1"] > :nth-child(6) > .MuiTypography-root'
-    ).should('contain', 'Constanza');
-    cy.get(
-      ':nth-child(7) > .MuiGrid-root > .MuiTableContainer-root > .MuiTable-root > .MuiTableBody-root > [tabindex="-1"] > :nth-child(7) > .MuiTypography-root'
-    )
-      .children()
-      .should('have.length', 0);
+    cy.get('#row2-startDate').should('contain','02/09/2021');
+    cy.get('#row2-seedType').should('contain','Stored');
+    cy.get('#row2-substrate').should('contain','Nursery Media');
+    cy.get('#row2-treatment').should('contain','Scarify');
+    cy.get('#row2-seedsSown').should('contain','100');
+    cy.get('#row2-staffResponsible').should('contain', 'Constanza');
+    cy.get('#row2-notes > .MuiTypography-root > .MuiSvgIcon-root').should('not.exist');
 
     cy.get('#totalViabilityPercent').contains('16%');
-    cy.get(':nth-child(5) > .MuiTableCell-root').click();
+    cy.get('#row2-expand').click();
     cy.get('#totalSeedsGerminated').contains('25 (25%)');
 
-    cy.get(
-      ':nth-child(4) > .MuiTable-root > .MuiTableBody-root > :nth-child(2) > :nth-child(1) > .MuiTypography-root'
-    ).contains('15 seeds germinated');
-    cy.get(
-      ':nth-child(4) > .MuiTable-root > .MuiTableBody-root > :nth-child(2) > :nth-child(2) > .MuiTypography-root'
-    ).contains('05/09/2021');
+    cy.get('#row2-details #row2-seedsGerminated').contains('15 seeds germinated');
+    cy.get('#row2-details #row2-recordingDate').contains('05/09/2021');
     cy.get('#myChart').should('exist');
   });
 
   it('should modify entry', () => {
-    cy.get(':nth-child(5) > .MuiTableCell-root').click();
-    cy.get(
-      ':nth-child(2) > :nth-child(3) > .MuiLink-root > .MuiBox-root > .MuiTypography-root'
-    ).click();
+    cy.get('#row2-details #row2-edit-button').click();
 
+    cy.intercept('PUT', '/api/v1/seedbank/accession/**').as('putAccession');
+    cy.intercept('GET', '/api/v1/seedbank/accession/**').as('getAccession');
     cy.get('#seedsGerminated').clear().type('25');
 
-    cy.get('.MuiBox-root > #submit').click();
+    cy.get('#saveGermination').click();
+    cy.wait('@putAccession');
     cy.get('#snackbar').contains('Accession saved');
+    cy.wait('@getAccession');
 
-    cy.get(
-      ':nth-child(7) > .MuiGrid-root > .MuiTableContainer-root > .MuiTable-root > .MuiTableBody-root > [tabindex="-1"] > :nth-child(1) > .MuiTypography-root'
-    ).should('contain', '02/09/2021');
-    cy.get(
-      ':nth-child(7) > .MuiGrid-root > .MuiTableContainer-root > .MuiTable-root > .MuiTableBody-root > [tabindex="-1"] > :nth-child(2) > .MuiTypography-root'
-    ).should('contain', 'Stored');
-    cy.get(
-      ':nth-child(7) > .MuiGrid-root > .MuiTableContainer-root > .MuiTable-root > .MuiTableBody-root > [tabindex="-1"] > :nth-child(3) > .MuiTypography-root'
-    ).should('contain', 'Nursery Media');
-    cy.get(
-      ':nth-child(7) > .MuiGrid-root > .MuiTableContainer-root > .MuiTable-root > .MuiTableBody-root > [tabindex="-1"] > :nth-child(4) > .MuiTypography-root'
-    ).should('contain', 'Scarify');
-    cy.get(
-      ':nth-child(7) > .MuiGrid-root > .MuiTableContainer-root > .MuiTable-root > .MuiTableBody-root > [tabindex="-1"] > :nth-child(5) > .MuiTypography-root'
-    ).should('contain', '100');
-    cy.get(
-      ':nth-child(7) > .MuiGrid-root > .MuiTableContainer-root > .MuiTable-root > .MuiTableBody-root > [tabindex="-1"] > :nth-child(6) > .MuiTypography-root'
-    ).should('contain', 'Constanza');
-    cy.get(
-      ':nth-child(7) > .MuiGrid-root > .MuiTableContainer-root > .MuiTable-root > .MuiTableBody-root > [tabindex="-1"] > :nth-child(7) > .MuiTypography-root'
-    )
-      .children()
-      .should('have.length', 0);
+    cy.get('#row2-startDate').should('contain','02/09/2021');
+    cy.get('#row2-seedType').should('contain','Stored');
+    cy.get('#row2-substrate').should('contain','Nursery Media');
+    cy.get('#row2-treatment').should('contain','Scarify');
+    cy.get('#row2-seedsSown').should('contain','100');
+    cy.get('#row2-staffResponsible').should('contain', 'Constanza');
+    cy.get('#row2-notes > .MuiTypography-root > .MuiSvgIcon-root').should('not.exist');
 
     cy.get('#totalViabilityPercent').contains('23%');
-    cy.get(':nth-child(5) > .MuiTableCell-root').click();
+    cy.get('#row2-expand').click();
 
-    cy.get(
-      ':nth-child(4) > .MuiTable-root > .MuiTableBody-root > :nth-child(2) > :nth-child(1) > .MuiTypography-root'
-    ).contains('25 seeds germinated');
-    cy.get(
-      ':nth-child(4) > .MuiTable-root > .MuiTableBody-root > :nth-child(2) > :nth-child(2) > .MuiTypography-root'
-    ).contains('05/09/2021');
+    cy.get('#row2-details #row2-seedsGerminated').contains('25 seeds germinated');
+    cy.get('#row2-details #row2-recordingDate').contains('05/09/2021');
     cy.get('#myChart').should('exist');
   });
 
   it('should delete entry', () => {
-    cy.get(':nth-child(5) > .MuiTableCell-root').click();
-    cy.get(
-      ':nth-child(2) > :nth-child(3) > .MuiLink-root > .MuiBox-root > .MuiTypography-root'
-    ).click();
+    cy.get('#row2-details #row2-edit-button').click();
 
-    cy.get('.MuiLink-root > .MuiTypography-body2').click();
+    cy.intercept('PUT', '/api/v1/seedbank/accession/**').as('putAccession');
+    cy.intercept('GET', '/api/v1/seedbank/accession/**').as('getAccession');
+    cy.get('#deleteGermination').click();
+    cy.wait('@putAccession');
     cy.get('#snackbar').contains('Accession saved');
+    cy.wait('@getAccession');
 
-    cy.get(
-      ':nth-child(7) > .MuiGrid-root > .MuiTableContainer-root > .MuiTable-root > .MuiTableBody-root > [tabindex="-1"] > :nth-child(1) > .MuiTypography-root'
-    ).should('contain', '02/09/2021');
-    cy.get(
-      ':nth-child(7) > .MuiGrid-root > .MuiTableContainer-root > .MuiTable-root > .MuiTableBody-root > [tabindex="-1"] > :nth-child(2) > .MuiTypography-root'
-    ).should('contain', 'Stored');
-    cy.get(
-      ':nth-child(7) > .MuiGrid-root > .MuiTableContainer-root > .MuiTable-root > .MuiTableBody-root > [tabindex="-1"] > :nth-child(3) > .MuiTypography-root'
-    ).should('contain', 'Nursery Media');
-    cy.get(
-      ':nth-child(7) > .MuiGrid-root > .MuiTableContainer-root > .MuiTable-root > .MuiTableBody-root > [tabindex="-1"] > :nth-child(4) > .MuiTypography-root'
-    ).should('contain', 'Scarify');
-    cy.get(
-      ':nth-child(7) > .MuiGrid-root > .MuiTableContainer-root > .MuiTable-root > .MuiTableBody-root > [tabindex="-1"] > :nth-child(5) > .MuiTypography-root'
-    ).should('contain', '100');
-    cy.get(
-      ':nth-child(7) > .MuiGrid-root > .MuiTableContainer-root > .MuiTable-root > .MuiTableBody-root > [tabindex="-1"] > :nth-child(6) > .MuiTypography-root'
-    ).should('contain', 'Constanza');
-    cy.get(
-      ':nth-child(7) > .MuiGrid-root > .MuiTableContainer-root > .MuiTable-root > .MuiTableBody-root > [tabindex="-1"] > :nth-child(7) > .MuiTypography-root'
-    )
-      .children()
-      .should('have.length', 0);
+    cy.get('#row2-startDate').should('contain','02/09/2021');
+    cy.get('#row2-seedType').should('contain','Stored');
+    cy.get('#row2-substrate').should('contain','Nursery Media');
+    cy.get('#row2-treatment').should('contain','Scarify');
+    cy.get('#row2-seedsSown').should('contain','100');
+    cy.get('#row2-staffResponsible').should('contain', 'Constanza');
+    cy.get('#row2-notes > .MuiTypography-root > .MuiSvgIcon-root').should('not.exist');
 
     cy.get('#totalViabilityPercent').contains('6%');
 
-    cy.get(':nth-child(5) > .MuiTableCell-root').click();
-    cy.get(
-      ':nth-child(4) > .MuiTable-root > .MuiTableBody-root > :nth-child(2)'
-    ).should('not.exist');
-    cy.get('#myChart').should('exist');
+    cy.get('#row2-expand').click();
+    cy.get('#row2-details #row2-seedsGerminated').should('not.exist');
   });
 
   it('should add cut test', () => {
-    cy.get(
-      ':nth-child(4) > .MuiLink-root > .MuiBox-root > .MuiTypography-root'
-    ).click();
+    cy.get('#cutTest #row1-edit').click();
 
     cy.get('#cutTestSeedsFilled').type('15');
     cy.get('#cutTestSeedsEmpty').type('50');
     cy.get('#cutTestSeedsCompromised').type('10');
 
-    cy.get('.MuiBox-root > #submit').click();
+    cy.get('#saveCutTest').click();
     cy.get('#snackbar').contains('Accession saved');
 
-    cy.get(
-      ':nth-child(10) > .MuiGrid-root > .MuiTableContainer-root > .MuiTable-root > .MuiTableBody-root > .MuiTableRow-root > :nth-child(1) > .MuiTypography-root'
-    ).contains('15');
-    cy.get(
-      ':nth-child(10) > .MuiGrid-root > .MuiTableContainer-root > .MuiTable-root > .MuiTableBody-root > .MuiTableRow-root > :nth-child(2) > .MuiTypography-root'
-    ).contains('50');
-    cy.get(
-      ':nth-child(10) > .MuiGrid-root > .MuiTableContainer-root > .MuiTable-root > .MuiTableBody-root > .MuiTableRow-root > :nth-child(3) > .MuiTypography-root'
-    ).contains('10');
+    cy.get('#row1-filledSeeds').should('contain','15');
+    cy.get('#row1-emptySeeds').should('contain','50');
+    cy.get('#row1-compromisedSeeds').should('contain','10');
   });
 
   it('should modify cut test', () => {
-    cy.get(
-      ':nth-child(4) > .MuiLink-root > .MuiBox-root > .MuiTypography-root'
-    ).click();
+    cy.get('#cutTest #row1-edit').click();
 
     cy.get('#cutTestSeedsFilled').clear().type('500');
 
-    cy.get('.MuiBox-root > #submit').click();
+    cy.get('#saveCutTest').click();
     cy.get('#snackbar').contains('Accession saved');
 
-    cy.get(
-      ':nth-child(10) > .MuiGrid-root > .MuiTableContainer-root > .MuiTable-root > .MuiTableBody-root > .MuiTableRow-root > :nth-child(1) > .MuiTypography-root'
-    ).contains('500');
-    cy.get(
-      ':nth-child(10) > .MuiGrid-root > .MuiTableContainer-root > .MuiTable-root > .MuiTableBody-root > .MuiTableRow-root > :nth-child(2) > .MuiTypography-root'
-    ).contains('50');
-    cy.get(
-      ':nth-child(10) > .MuiGrid-root > .MuiTableContainer-root > .MuiTable-root > .MuiTableBody-root > .MuiTableRow-root > :nth-child(3) > .MuiTypography-root'
-    ).contains('10');
+    cy.get('#row1-filledSeeds').should('contain','500');
+    cy.get('#row1-emptySeeds').should('contain','50');
+    cy.get('#row1-compromisedSeeds').should('contain','10');
+  });
+
+  context('Summary End Results', () => {
+    it('has the right summary results', () => {
+      cy.intercept('GET', '/api/v1/seedbank/summary').as('summary');
+      cy.visit('/');
+      cy.wait('@summary');
+
+      cy.get('#sessions-current').contains('6');
+      cy.get('#sessions-change').contains('100% since last week');
+      cy.get('#sessions-arrow-increase').should('exist');
+
+      cy.get('#species-current').contains('3');
+      cy.get('#species-details').children().should('have.length', 0);
+
+      cy.get('#families-current').contains('2');
+      cy.get('#families-details').children().should('have.length', 0);
+
+      cy.get('#update-row-Pending').contains('0 seed collection');
+      cy.get('#update-row-Processed').contains('0 accessions');
+      cy.get('#update-row-Dried').contains('0 accessions');
+      cy.get('#update-row-Withdrawn').contains('0 accessions');
+    });
   });
 });

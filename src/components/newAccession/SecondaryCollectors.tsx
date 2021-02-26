@@ -39,14 +39,14 @@ export default function SecondaryCollectors({
       {secondaryCollectors?.map((collector, index) => (
         <Box key={index} mb={2} display='flex' alignItems='center'>
           <TextField
-            id={`secondaryCollectors[${index}]`}
+            id={`secondaryCollectors${index}`}
             value={collector}
             onChange={(id, value) => onCollectorChange(value, index)}
             label={index === 0 && 'Secondary collector'}
           />
           {index !== 0 && (
             <IconButton
-              id={`delete-secondaryCollectors[${index}]`}
+              id={`delete-secondaryCollectors${index}`}
               aria-label='delete'
               size='small'
               onClick={() => onDeleteCollector(index)}
@@ -58,6 +58,7 @@ export default function SecondaryCollectors({
       ))}
       <Link
         href='#'
+        id='addCollectorButton'
         onClick={(event: React.SyntheticEvent) => {
           preventDefaultEvent(event);
           onAddCollector();

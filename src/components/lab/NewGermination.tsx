@@ -101,6 +101,7 @@ export default function NewGermination(props: Props): JSX.Element {
         <Box width={props.value && '100%'} className={classes.actions}>
           {props.value && (
             <Link
+              id='deleteGermination'
               color='secondary'
               href='#'
               onClick={(event: React.SyntheticEvent) => {
@@ -122,7 +123,7 @@ export default function NewGermination(props: Props): JSX.Element {
               onClick={handleCancel}
             />
             <Chip
-              id='submit'
+              id='saveGermination'
               className={classes.submit}
               label={props.value ? 'Save changes' : 'Create entry'}
               clickable

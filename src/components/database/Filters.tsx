@@ -67,6 +67,7 @@ interface Props {
 
 export default function Filters(props: Props): JSX.Element {
   const classes = useStyles();
+  const [open, setOpen] = React.useState(false);
 
   const onChange = (filter: SearchFilter) => {
     const field = filter.field;
@@ -85,6 +86,7 @@ export default function Filters(props: Props): JSX.Element {
     }
 
     props.onChange(updatedFilters);
+    setOpen(false);
   };
 
   const clearAllFilters = () => {
@@ -97,7 +99,13 @@ export default function Filters(props: Props): JSX.Element {
       {props.columns.map((col) => {
         return (
           <div key={col.key} className={classes.pill}>
-            <SimplePopover label={col.name} onClear={onChange} field={col.key}>
+            <SimplePopover
+              open={open}
+              onModalOpen={() => setOpen(true)}
+              label={col.name}
+              onClear={onChange}
+              field={col.key}
+            >
               {col.filter?.type === 'multiple_selection' && (
                 <MultipleSelection
                   field={col.key}
@@ -179,6 +187,8 @@ function getOptions(
 }
 
 interface ChipPopoverProps {
+  open: boolean;
+  onModalOpen: () => void;
   label: string;
   children: React.ReactNode;
   onClear: (filter: SearchFilter) => void;
@@ -186,6 +196,8 @@ interface ChipPopoverProps {
 }
 
 export function SimplePopover({
+  open,
+  onModalOpen,
   label,
   children,
   onClear,
@@ -194,7 +206,14 @@ export function SimplePopover({
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState<HTMLDivElement | null>(null);
 
+  React.useEffect(() => {
+    if (!open) {
+      setAnchorEl(null);
+    }
+  }, [open]);
+
   const handleClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    onModalOpen();
     setAnchorEl(event.currentTarget);
   };
 
@@ -215,6 +234,7 @@ export function SimplePopover({
   return (
     <div>
       <Chip
+        id={`filter-${field}`}
         variant='outlined'
         size='medium'
         label={label}

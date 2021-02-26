@@ -88,6 +88,7 @@ export default function NewAccessionWrapper(): JSX.Element {
         subtitle='An accession number will be generated once you create the accession.'
         rightComponent={
           <Fab
+            id='closenewAccession'
             size='small'
             aria-label='close'
             className={classes.closeIcon}
@@ -292,6 +293,7 @@ export function AccessionForm<T extends NewAccession>({
               </Typography>
               {record.bagNumbers?.map((bag, index) => (
                 <Typography
+                  id={`bag${index}`}
                   key={index}
                   component='p'
                   variant='body2'
@@ -339,6 +341,7 @@ export function AccessionForm<T extends NewAccession>({
               </Typography>
               {record.geolocations?.map((geolocation, index) => (
                 <Typography
+                  id={`location${index}`}
                   key={index}
                   component='p'
                   variant='body2'
@@ -355,7 +358,7 @@ export function AccessionForm<T extends NewAccession>({
             {!updating && (
               <Link component={RouterLink} to='/'>
                 <Chip
-                  id='cancel'
+                  id='cancelButton'
                   className={classes.cancel}
                   label='Cancel'
                   clickable
@@ -364,7 +367,7 @@ export function AccessionForm<T extends NewAccession>({
             )}
 
             <Chip
-              id='submit'
+              id='saveAccession'
               className={classes.submit}
               label={updating ? 'Save changes' : 'Create accession'}
               clickable

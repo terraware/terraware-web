@@ -82,7 +82,7 @@ export default function AccessionPageHeader({ accession }: Props): JSX.Element {
               <Typography
                 variant='h4'
                 className={classes.title}
-                id='accessionId'
+                id='header-accessionNumber'
               >
                 {accession.accessionNumber}
               </Typography>
@@ -93,19 +93,25 @@ export default function AccessionPageHeader({ accession }: Props): JSX.Element {
                 className={classes.activeIndicator}
               />
               <Typography variant='subtitle1' className={classes.subtitle}>
-                {accession.active}
+                <span id='header-status'>{accession.active}</span>
                 {accession.species && <DetailDivisor />}
-                {accession.species}
+                <span id='header-species'>{accession.species}</span>
                 {accession.receivedDate && <DetailDivisor />}
-                {accession.receivedDate &&
-                  new Date(accession.receivedDate).toLocaleDateString('en-US', {
-                    day: '2-digit',
-                    month: '2-digit',
-                    year: 'numeric',
-                    timeZone: 'UTC',
-                  })}
+                {accession.receivedDate && (
+                  <span id='header-date'>
+                    {new Date(accession.receivedDate).toLocaleDateString(
+                      'en-US',
+                      {
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric',
+                        timeZone: 'UTC',
+                      }
+                    )}
+                  </span>
+                )}
                 <DetailDivisor />
-                <StateChip state={accession.state} />
+                <StateChip id='header-state' state={accession.state} />
               </Typography>
             </Box>
           </Box>

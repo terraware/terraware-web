@@ -243,7 +243,7 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
           <Grid container spacing={4}>
             <Grid item className={classes.right}>
               <Chip
-                id='submit'
+                id='newTest'
                 className={classes.greenChip}
                 label='New test'
                 clickable
@@ -262,7 +262,7 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
             </Grid>
           </Grid>
           <Grid container justify='center' alignItems='center' spacing={4}>
-            <Grid item xs={11}>
+            <Grid item xs={11} id='cutTest'>
               <Table
                 columns={CUT_TEST_COLUMNS}
                 rows={createCutTestRow()}

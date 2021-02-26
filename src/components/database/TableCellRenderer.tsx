@@ -32,14 +32,15 @@ const statusStyles = makeStyles((theme) =>
 export default function SearchCellRenderer(
   props: RendererProps<SearchResponseResults>
 ): JSX.Element {
-  const { column, value } = props;
+  const { column, value, index } = props;
 
+  const id = `row${index}-${column.key}`;
   if (column.key === 'active' && typeof value === 'string' && value) {
     const classes = statusStyles();
     const active = value === 'Active';
 
     return (
-      <TableCell align='left'>
+      <TableCell id={id} align='left'>
         <div className={classes.flex}>
           <FiberManualRecord
             color={active ? 'primary' : 'disabled'}
@@ -53,7 +54,7 @@ export default function SearchCellRenderer(
     );
   } else if (column.key === 'state' && typeof value === 'string' && value) {
     return (
-      <TableCell align='left'>
+      <TableCell id={id} align='left'>
         <StateChip state={value as AccessionState} />
       </TableCell>
     );

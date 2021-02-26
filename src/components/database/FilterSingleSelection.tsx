@@ -60,7 +60,7 @@ export default function SingleSelection(props: Props): JSX.Element {
   };
 
   return (
-    <div id={'search' + props.field} className={classes.box}>
+    <div id={`filter-list-${props.field}`} className={classes.box}>
       <List>
         {options.map(({ label, value }) => (
           <ListItem
@@ -69,7 +69,7 @@ export default function SingleSelection(props: Props): JSX.Element {
             onClick={() => handleChange(value)}
             selected={props.values.includes(value)}
           >
-            <ListItemText primary={formatLabel(label)} />
+            <ListItemText id={value ?? ''} primary={formatLabel(label)} />
           </ListItem>
         ))}
       </List>

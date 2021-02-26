@@ -3,48 +3,60 @@
 
 describe('Notifications', () => {
   beforeEach(() => {
+    cy.intercept('GET', '/api/v1/seedbank/notification').as('notification');
     cy.visit('/');
+    cy.wait('@notification');
   });
 
   it('display endpoint result', () => {
-    cy.get(
-      ':nth-child(4) > .MuiPaper-root > .MuiTable-root > .MuiTableBody-root'
-    )
-      .children()
-      .should('have.length', 1);
-    cy.get(
-      ':nth-child(4) > .MuiPaper-root > .MuiTable-root > .MuiTableBody-root > .MuiTableRow-root > :nth-child(1) > .MuiButtonBase-root'
-    ).should('have.class', 'MuiFab-secondary');
-    cy.get(':nth-child(2) > .MuiButtonBase-root').click();
-    cy.get('.MuiList-root').should('be.visible');
-    cy.get('.MuiList-root').children().should('have.length', 11);
+    cy.get('#alerts-table').children().should('have.length', 1);
+    cy.get('#notifications-button').click();
+    cy.get('#notifications-popover').should('be.visible');
+    cy.get('#notifications-popover').children().should('have.length', 11);
+    cy.get('#notifications-badge').contains('10');
   });
 
   it('go to accesions filtered by state when clicking State notification', () => {
-    cy.get(':nth-child(2) > .MuiButtonBase-root').click();
-    cy.get('.MuiList-root > :nth-child(5)')
+    cy.get('#notifications-button').click();
+
+    cy.intercept('POST', '/api/v1/seedbank/notification/**/markRead').as(
+      'markRead'
+    );
+    cy.intercept('POST', '/api/v1/seedbank/notification').as('notification');
+    cy.get('#notification4')
       .click()
       .url()
       .should('contain', '/accessions?state=Dried');
     cy.get('#subtitle').should('contain', '0 total');
+    cy.wait('@markRead');
+    cy.wait('@notification');
 
-    cy.get('[href="/accessions?state=In Storage"]')
+    cy.intercept('POST', '/api/v1/seedbank/notification/**/markRead').as(
+      'markRead2'
+    );
+    cy.intercept('POST', '/api/v1/seedbank/notification').as('notification2');
+    cy.get('#notification3')
       .click()
       .url()
       .should('contain', '/accessions?state=In%20Storage');
     cy.get('#subtitle').should('contain', '1 total');
+    cy.wait('@markRead2');
+    cy.wait('@notification2');
   });
 
   it('go to accesion page when clicking Date notification', () => {
-    cy.get(':nth-child(2) > .MuiButtonBase-root').click();
-    cy.get('.MuiList-root > :nth-child(10)')
-      .click()
-      .url()
-      .should('contain', '/accessions/XYZ');
+    cy.get('#notifications-button').click();
+
+    cy.intercept('POST', '/api/v1/seedbank/notification/**/markRead').as(
+      'markRead'
+    );
+    cy.intercept('POST', '/api/v1/seedbank/notification').as('notification');
+    cy.get('#notification9').click().url().should('contain', '/accessions/XYZ');
+    cy.wait('@markRead');
+    cy.wait('@notification');
   });
 
   it('has 7 notifications unread after clicking', () => {
-    cy.get(':nth-child(2) > .MuiButtonBase-root').click();
-    cy.get('.MuiBadge-badge').contains('7');
+    cy.get('#notifications-badge').contains('7');
   });
 });

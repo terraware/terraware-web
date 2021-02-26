@@ -242,6 +242,7 @@ export default function NewTestDialog(props: Props): JSX.Element {
         <Box width={record?.id && '100%'} className={classes.actions}>
           {record?.id && (
             <Link
+              id='deleteTest'
               color='secondary'
               href='#'
               onClick={(event: React.SyntheticEvent) => {
@@ -263,7 +264,7 @@ export default function NewTestDialog(props: Props): JSX.Element {
               onClick={handleCancel}
             />
             <Chip
-              id='submit'
+              id='saveTest'
               className={classes.submit}
               label={props.value ? 'Save changes' : 'Create test'}
               clickable
