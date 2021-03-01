@@ -365,7 +365,6 @@ describe('Database', () => {
       cy.get('#filter-state').click();
       cy.get('#filter-list-state').should('be.visible');
       cy.get('#clear').click();
-      cy.get('#filter-list-state').type('{esc}');
 
       cy.wait('@search');
       cy.wait('@values');
@@ -456,7 +455,6 @@ describe('Database', () => {
       cy.get('#filter-active').click();
       cy.get('#filter-list-active').should('be.visible');
       cy.get('#Active').click();
-      cy.get('#filter-list-active').type('{esc}');
 
       cy.wait('@search');
       cy.wait('@values');

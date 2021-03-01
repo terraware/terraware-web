@@ -9,18 +9,14 @@ import {
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import ArrowDropDown from '@material-ui/icons/ArrowDropDown';
 import React from 'react';
-import {
-  FieldValuesPayload,
-  SearchField,
-  SearchFilter,
-} from '../../api/types/search';
+import { FieldValuesPayload, SearchFilter } from '../../api/types/search';
 import preventDefaultEvent from '../../utils/preventDefaultEvent';
 import { DatabaseColumn, Option } from './columns';
-import DateRange from './FilterDateRange';
-import MultipleSelection from './FilterMultipleSelection';
-import NumberRange from './FilterNumberRange';
-import Search from './FilterSearch';
-import SingleSelection from './FilterSingleSelection';
+import DateRange from './filters/FilterDateRange';
+import MultipleSelection from './filters/FilterMultipleSelection';
+import NumberRange from './filters/FilterNumberRange';
+import Search from './filters/FilterSearch';
+import SingleSelection from './filters/FilterSingleSelection';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -67,7 +63,7 @@ interface Props {
 
 export default function Filters(props: Props): JSX.Element {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
+  const [popover, setPopover] = React.useState<FilterPopover>();
 
   const onChange = (filter: SearchFilter) => {
     const field = filter.field;
@@ -84,9 +80,8 @@ export default function Filters(props: Props): JSX.Element {
         updatedFilters.splice(filterIndex, 1);
       }
     }
-
     props.onChange(updatedFilters);
-    setOpen(false);
+    setPopover(undefined);
   };
 
   const clearAllFilters = () => {
@@ -94,69 +89,38 @@ export default function Filters(props: Props): JSX.Element {
     props.onChange(updatedFilters);
   };
 
+  const handleClick = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    col: DatabaseColumn
+  ) => {
+    setPopover({ anchor: event.currentTarget, col });
+  };
+
+  const onClosePopover = () => {
+    setPopover(undefined);
+  };
+
   return (
     <Container maxWidth='lg' className={classes.mainContainer}>
+      <SimplePopover
+        popover={popover}
+        columns={props.columns}
+        filters={props.filters}
+        availableValues={props.availableValues}
+        onFilterChange={onChange}
+        onClose={onClosePopover}
+      />
       {props.columns.map((col) => {
         return (
           <div key={col.key} className={classes.pill}>
-            <SimplePopover
-              open={open}
-              onModalOpen={() => setOpen(true)}
+            <Chip
+              id={`filter-${col.key}`}
+              variant='outlined'
+              size='medium'
               label={col.name}
-              onClear={onChange}
-              field={col.key}
-            >
-              {col.filter?.type === 'multiple_selection' && (
-                <MultipleSelection
-                  field={col.key}
-                  values={
-                    props.filters.find((f) => f.field === col.key)?.values ?? []
-                  }
-                  onChange={onChange}
-                  options={getOptions(col, props.availableValues)}
-                />
-              )}
-              {col.filter?.type === 'single_selection' && (
-                <SingleSelection
-                  field={col.key}
-                  values={
-                    props.filters.find((f) => f.field === col.key)?.values ?? []
-                  }
-                  onChange={onChange}
-                  options={getOptions(col, props.availableValues)}
-                  isBoolean={Boolean(
-                    props.columns.find((c) => c.type === 'boolean')
-                  )}
-                />
-              )}
-              {col.filter?.type === 'search' && (
-                <Search
-                  field={col.key}
-                  onChange={onChange}
-                  values={
-                    props.filters.find((f) => f.field === col.key)?.values ?? []
-                  }
-                />
-              )}
-              {col.filter?.type === 'date_range' && (
-                <DateRange
-                  field={col.key}
-                  onChange={onChange}
-                  values={
-                    props.filters.find((f) => f.field === col.key)?.values ?? []
-                  }
-                />
-              )}
-              {col.filter?.type === 'number_range' && (
-                <NumberRange
-                  field={col.key}
-                  onChange={onChange}
-                  values={
-                    props.filters.find((f) => f.field === col.key)?.values ?? []
-                  }
-                />
-              )}
-            </SimplePopover>
+              onClick={(event) => handleClick(event, col)}
+              icon={<ArrowDropDown />}
+            />
           </div>
         );
       })}
@@ -186,91 +150,116 @@ function getOptions(
   }));
 }
 
+type FilterPopover = { col: DatabaseColumn; anchor: HTMLDivElement | null };
+
 interface ChipPopoverProps {
-  open: boolean;
-  onModalOpen: () => void;
-  label: string;
-  children: React.ReactNode;
-  onClear: (filter: SearchFilter) => void;
-  field: SearchField;
+  popover?: FilterPopover;
+  columns: DatabaseColumn[];
+  filters: SearchFilter[];
+  availableValues: FieldValuesPayload;
+  onFilterChange: (filter: SearchFilter) => void;
+  onClose: () => void;
 }
 
 export function SimplePopover({
-  open,
-  onModalOpen,
-  label,
-  children,
-  onClear,
-  field,
+  popover,
+  availableValues,
+  filters,
+  columns,
+  onFilterChange,
+  onClose,
 }: ChipPopoverProps): JSX.Element {
   const classes = useStyles();
-  const [anchorEl, setAnchorEl] = React.useState<HTMLDivElement | null>(null);
-
-  React.useEffect(() => {
-    if (!open) {
-      setAnchorEl(null);
-    }
-  }, [open]);
-
-  const handleClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    onModalOpen();
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
 
   const clearFilter = () => {
-    const newFilter: SearchFilter = {
-      field: field,
-      values: [],
-      type: 'Exact',
-    };
+    if (popover) {
+      const newFilter: SearchFilter = {
+        field: popover.col.key,
+        values: [],
+        type: 'Exact',
+      };
 
-    onClear(newFilter);
+      onFilterChange(newFilter);
+    }
   };
 
   return (
-    <div>
-      <Chip
-        id={`filter-${field}`}
-        variant='outlined'
-        size='medium'
-        label={label}
-        onClick={handleClick}
-        icon={<ArrowDropDown />}
-      />
-      <Popover
-        id='filter-popover'
-        open={Boolean(anchorEl)}
-        anchorEl={anchorEl}
-        onClose={handleClose}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'left',
-        }}
-      >
-        <div className={classes.mainTitle}>
-          <Typography variant='caption'>{label}</Typography>
-          <Link
-            id='clear'
-            href='#'
-            onClick={(event: React.SyntheticEvent) => {
-              preventDefaultEvent(event);
-              clearFilter();
-            }}
-          >
-            Clear
-          </Link>
-        </div>
-        <Divider />
-        {children}
-      </Popover>
-    </div>
+    <Popover
+      id='filter-popover'
+      open={Boolean(popover?.anchor)}
+      anchorEl={popover?.anchor}
+      onClose={onClose}
+      anchorOrigin={{
+        vertical: 'bottom',
+        horizontal: 'left',
+      }}
+      transformOrigin={{
+        vertical: 'top',
+        horizontal: 'left',
+      }}
+    >
+      <div className={classes.mainTitle}>
+        <Typography variant='caption'>{popover?.col.name}</Typography>
+        <Link
+          id='clear'
+          href='#'
+          onClick={(event: React.SyntheticEvent) => {
+            preventDefaultEvent(event);
+            clearFilter();
+          }}
+        >
+          Clear
+        </Link>
+      </div>
+      <Divider />
+      {popover?.col.filter?.type === 'multiple_selection' && (
+        <MultipleSelection
+          field={popover?.col.key}
+          values={
+            filters.find((f) => f.field === popover?.col.key)?.values ?? []
+          }
+          onChange={onFilterChange}
+          options={getOptions(popover?.col, availableValues)}
+        />
+      )}
+      {popover?.col.filter?.type === 'single_selection' && (
+        <SingleSelection
+          field={popover?.col.key}
+          values={
+            filters.find((f) => f.field === popover?.col.key)?.values ?? []
+          }
+          onChange={onFilterChange}
+          options={getOptions(popover?.col, availableValues)}
+          isBoolean={Boolean(columns.find((c) => c.type === 'boolean'))}
+        />
+      )}
+      {popover?.col.filter?.type === 'search' && (
+        <Search
+          field={popover?.col.key}
+          onChange={onFilterChange}
+          values={
+            filters.find((f) => f.field === popover?.col.key)?.values ?? []
+          }
+        />
+      )}
+      {popover?.col.filter?.type === 'date_range' && (
+        <DateRange
+          field={popover?.col.key}
+          onChange={onFilterChange}
+          values={
+            filters.find((f) => f.field === popover?.col.key)?.values ?? []
+          }
+        />
+      )}
+      {popover?.col.filter?.type === 'number_range' && (
+        <NumberRange
+          field={popover?.col.key}
+          onChange={onFilterChange}
+          values={
+            filters.find((f) => f.field === popover?.col.key)?.values ?? []
+          }
+        />
+      )}
+    </Popover>
   );
 }

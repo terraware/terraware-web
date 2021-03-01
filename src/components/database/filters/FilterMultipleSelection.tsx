@@ -1,8 +1,8 @@
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React from 'react';
-import { SearchField, SearchFilter } from '../../api/types/search';
-import Checkbox from '../common/Checkbox';
-import { Option } from './columns';
+import { SearchField, SearchFilter } from '../../../api/types/search';
+import Checkbox from '../../common/Checkbox';
+import { Option } from '../columns';
 
 const useStyles = makeStyles((theme) =>
   createStyles({

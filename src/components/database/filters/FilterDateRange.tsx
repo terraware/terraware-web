@@ -2,8 +2,8 @@ import { createStyles, Grid, makeStyles } from '@material-ui/core';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import dayjs from 'dayjs';
 import React from 'react';
-import { SearchField, SearchFilter } from '../../api/types/search';
-import DatePicker from '../common/DatePicker';
+import { SearchField, SearchFilter } from '../../../api/types/search';
+import DatePicker from '../../common/DatePicker';
 
 const useStyles = makeStyles((theme) =>
   createStyles({

@@ -6,7 +6,7 @@ import {
 } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import React from 'react';
-import { SearchField, SearchFilter } from '../../api/types/search';
+import { SearchField, SearchFilter } from '../../../api/types/search';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
