@@ -431,6 +431,38 @@ describe('Database', () => {
       cy.get('#subtitle').contains('11 total');
     });
 
+    it("Should filter by seeds counted", () => {
+      cy.intercept('POST', '/api/v1/seedbank/search').as('search');
+      cy.intercept('POST', '/api/v1/seedbank/values').as('values');
+      cy.get('#edit-columns').click();
+      cy.get('#seedsCounted').click();
+      cy.get('#saveColumnsButton').click();
+      cy.get('#filter-seedsCounted').click();
+      cy.get('#minValue').type('200');
+      cy.get('#maxValue').type('400').type('{enter}');
+
+      cy.wait('@search');
+      cy.wait('@values');
+
+      cy.get('#maxValue').should('not.exist');
+      cy.get('#subtitle').should('contain', '1 total');      
+    });
+
+    it('Should clear seeds counted filter', () => {
+      cy.intercept('POST', '/api/v1/seedbank/search').as('search');
+      cy.intercept('POST', '/api/v1/seedbank/values').as('values');
+
+      cy.get('#filter-seedsCounted').click();
+      cy.get('#minValue').should('be.visible');
+      cy.get('#clear').click();
+
+      cy.wait('@search');
+      cy.wait('@values');
+
+      cy.get('#minValue').should('not.exist');
+      cy.get('#subtitle').should('contain', '11 total');
+    });
+
     it('Should download report', () => {
       cy.intercept('POST', '/api/v1/seedbank/search/export').as('postReport');
 
