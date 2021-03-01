@@ -188,8 +188,8 @@ describe('Nursery', () => {
       cy.visit('/');
       cy.wait('@summary');
 
-      cy.get('#sessions-current').contains('8');
-      cy.get('#sessions-change').contains('167% since last week');
+      cy.get('#sessions-current').contains('10');
+      cy.get('#sessions-change').contains('233% since last week');
       cy.get('#sessions-arrow-increase').should('exist');
 
       cy.get('#species-current').contains('3');

@@ -39,7 +39,7 @@ describe('Notifications', () => {
       .click()
       .url()
       .should('contain', '/accessions?state=In%20Storage');
-    cy.get('#subtitle').should('contain', '1 total');
+    cy.get('#subtitle').should('contain', '0 total');
     cy.wait('@markRead2');
     cy.wait('@notification2');
   });

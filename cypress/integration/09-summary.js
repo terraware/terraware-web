@@ -15,8 +15,8 @@ describe('Summary page', () => {
   });
 
   it('display endpoint result', () => {
-    cy.get('#sessions-current').contains('9');
-    cy.get('#sessions-change').contains('200% since last week');
+    cy.get('#sessions-current').contains('11');
+    cy.get('#sessions-change').contains('267% since last week');
     cy.get('#sessions-arrow-increase').should('exist');
 
     cy.get('#species-current').contains('3');
@@ -38,7 +38,7 @@ describe('Summary page', () => {
 
     it('navigates to database page filtered by pending state when clicking on Most recent update', () => {
       cy.get('#update-Pending').click().url().should('contain', '/accessions');
-      cy.get('#subtitle').should('contain', '5 total');
+      cy.get('#subtitle').should('contain', '7 total');
     });
 
     it('navigates to database page filtered by processed state when clickin on Most recent update', () => {

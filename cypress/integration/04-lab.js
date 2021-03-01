@@ -296,8 +296,8 @@ describe('Lab', () => {
       cy.visit('/');
       cy.wait('@summary');
 
-      cy.get('#sessions-current').contains('6');
-      cy.get('#sessions-change').contains('100% since last week');
+      cy.get('#sessions-current').contains('8');
+      cy.get('#sessions-change').contains('167% since last week');
       cy.get('#sessions-arrow-increase').should('exist');
 
       cy.get('#species-current').contains('3');

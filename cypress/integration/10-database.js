@@ -324,7 +324,7 @@ describe('Database', () => {
       cy.wait('@values2');
 
       cy.get('#filter-list-active').should('not.exist');
-      cy.get('#subtitle').should('contain', '9 total');
+      cy.get('#subtitle').should('contain', '11 total');
     });
 
     it('Should clear Status filter', () => {
@@ -339,18 +339,16 @@ describe('Database', () => {
       cy.wait('@values');
 
       cy.get('#filter-list-active').should('not.exist');
-      cy.get('#subtitle').should('contain', '11 total');
+      cy.get('#subtitle').should('contain', '13 total');
     });
 
     it('Should filter by Processing state', () => {
       cy.intercept('POST', '/api/v1/seedbank/search').as('search');
       cy.intercept('POST', '/api/v1/seedbank/values').as('values');
-
       cy.get('#filter-state').click();
       cy.get('#filter-list-state').should('be.visible');
       cy.get('#check-Processing').click();
-      cy.get('#Processing').type('{esc}');
-
+      cy.get('#filter-list-state').type('{esc}');
       cy.wait('@search');
       cy.wait('@values');
 
@@ -370,7 +368,7 @@ describe('Database', () => {
       cy.wait('@values');
 
       cy.get('#filter-list-state').should('not.exist');
-      cy.get('#subtitle').should('contain', '11 total');
+      cy.get('#subtitle').should('contain', '13 total');
     });
 
     it('Should search by specie', () => {
@@ -400,7 +398,7 @@ describe('Database', () => {
       cy.wait('@values');
 
       cy.get('#species').should('not.exist');
-      cy.get('#subtitle').should('contain', '11 total');
+      cy.get('#subtitle').should('contain', '13 total');
     });
 
     it('Should search by Received on', () => {
@@ -428,7 +426,7 @@ describe('Database', () => {
       cy.wait('@search');
       cy.wait('@values');
 
-      cy.get('#subtitle').contains('11 total');
+      cy.get('#subtitle').contains('13 total');
     });
 
     it("Should filter by seeds counted", () => {
@@ -460,7 +458,7 @@ describe('Database', () => {
       cy.wait('@values');
 
       cy.get('#minValue').should('not.exist');
-      cy.get('#subtitle').should('contain', '11 total');
+      cy.get('#subtitle').should('contain', '13 total');
     });
 
     it('Should download report', () => {
@@ -492,7 +490,7 @@ describe('Database', () => {
       cy.wait('@values');
 
       cy.get('#filter-list-active').should('not.exist');
-      cy.get('#subtitle').should('contain', '9 total');
+      cy.get('#subtitle').should('contain', '11 total');
 
       // re-checking state list
       cy.get('#filter-state').click();
@@ -535,8 +533,8 @@ describe('Database', () => {
       cy.get('#table-header-species').click();
       cy.wait('@search2');
 
-      cy.get('#row11-species').contains('Other Dogwood');
-      cy.get('#row8-species').contains('Kousa');
+      cy.get('#row13-species').contains('Other Dogwood');
+      cy.get('#row10-species').contains('Kousa');
     });
 
     it('Should be able to sort by state', () => {
@@ -545,8 +543,7 @@ describe('Database', () => {
       cy.wait('@search');
 
       cy.get('#row1-active').contains('Active');
-      cy.get('#row1-state').contains('In Storage');
-      cy.get('#row1-receivedDate').contains('02/03/2021');
+      cy.get('#row1-state').contains('Drying');
     });
 
     it('Should be able to sort by state, descending', () => {

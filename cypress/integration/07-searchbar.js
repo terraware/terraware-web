@@ -25,8 +25,8 @@ describe('Searchbar', () => {
       cy.visit('/');
       cy.wait('@summary');
 
-      cy.get('#sessions-current').contains('9');
-      cy.get('#sessions-change').contains('200% since last week');
+      cy.get('#sessions-current').contains('11');
+      cy.get('#sessions-change').contains('267% since last week');
       cy.get('#sessions-arrow-increase').should('exist');
 
       cy.get('#species-current').contains('3');
