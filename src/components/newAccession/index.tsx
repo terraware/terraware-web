@@ -11,6 +11,7 @@ import Fab from '@material-ui/core/Fab';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import dayjs from 'dayjs';
 import React from 'react';
 import { Link as RouterLink, Redirect } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
@@ -213,6 +214,7 @@ export function AccessionForm<T extends NewAccession>({
               onChange={onChange}
               label='Collected on'
               aria-label='collected on'
+              maxDate={dayjs().format('YYYY-MM-DD')}
             />
           </Grid>
           <Grid item xs={4}>
@@ -222,6 +224,7 @@ export function AccessionForm<T extends NewAccession>({
               onChange={onChange}
               label='Received on'
               aria-label='received on'
+              maxDate={dayjs().format('YYYY-MM-DD')}
             />
           </Grid>
           <Grid item xs={4}></Grid>
