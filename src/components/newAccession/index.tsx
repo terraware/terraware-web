@@ -104,7 +104,12 @@ export default function NewAccessionWrapper(): JSX.Element {
         <Grid container spacing={3}>
           <Grid item xs={1}></Grid>
           <Grid item xs={10}>
-            <AccessionForm accession={{}} onSubmit={onSubmit} />
+            <AccessionForm
+              accession={{
+                receivedDate: dayjs().format('YYYY-MM-DD'),
+              }}
+              onSubmit={onSubmit}
+            />
           </Grid>
           <Grid item xs={1}></Grid>
         </Grid>

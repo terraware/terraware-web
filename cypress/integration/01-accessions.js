@@ -62,7 +62,7 @@ describe('Accessions', () => {
 
       cy.get('#fieldNotes').type('Some notes');
       cy.get('#collectedDate').type('02/01/2021');
-      cy.get('#receivedDate').type('02/03/2021');
+      cy.get('#receivedDate').clear().type('02/03/2021');
       cy.get('#primaryCollector').type('Carlos');
       cy.get('#secondaryCollectors0').type('Constanza');
       cy.get('#addCollectorButton').click();
