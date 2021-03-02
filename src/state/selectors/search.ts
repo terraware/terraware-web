@@ -1,16 +1,27 @@
-import { selector } from "recoil";
+import { atom, DefaultValue, selector } from "recoil";
 import { search } from "../../api/search";
-import { SearchRequestPayload } from "../../api/types/search";
+import { SearchRequestPayload, SearchResponsePayload } from "../../api/types/search";
 import { COLUMNS } from '../../components/database/columns';
 import { searchFilterAtom, searchSortAtom, searchVisibleColumnsAtom } from "../atoms/search";
 
-export default selector({
+const searchTrigger = atom({
+  key: 'searchResultsAtom',
+  default: 0,
+});
+
+export default selector<SearchResponsePayload>({
   key: 'searchSelector',
   get: async ({ get }) => {
+    get(searchTrigger);
     const searchParams = get(searchParamsSelector);
 
     return (await search(searchParams));
   },
+  set: ({ set }, newValue) => {
+    if (newValue instanceof DefaultValue) {
+      set(searchTrigger, v => v + 1);
+    }
+  }
 });
 
 export const searchTableColumnsSelector = selector({

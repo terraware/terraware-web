@@ -2,13 +2,14 @@ import { Container, Grid } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 import { Route, Switch, useParams } from 'react-router-dom';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil';
 import { putAccession } from '../../api/accession';
 import { Accession } from '../../api/types/accessions';
 import snackbarAtom from '../../state/atoms/snackbar';
 import getAccessionSelector, {
   getAccessionRequestIdAtom,
 } from '../../state/selectors/getAccession';
+import searchSelector from '../../state/selectors/search';
 import useRecoilCurl from '../../utils/useRecoilCurl';
 import ErrorBoundary from '../ErrorBoundary';
 import Lab from '../lab';
@@ -59,6 +60,7 @@ function Content({ requestId }: { requestId: number }): JSX.Element {
   const { accessionNumber } = useParams<{ accessionNumber: string }>();
   const setSnackbar = useSetRecoilState(snackbarAtom);
   const setRequestId = useSetRecoilState(getAccessionRequestIdAtom);
+  const resetSearch = useResetRecoilState(searchSelector);
 
   const accession = useRecoilValue(
     getAccessionSelector({ accessionNumber, requestId })
@@ -74,6 +76,7 @@ function Content({ requestId }: { requestId: number }): JSX.Element {
   const onSubmit = async (record: Accession) => {
     try {
       await putAccession(record);
+      resetSearch();
       setSnackbar({ type: 'success', msg: 'Accession saved' });
       setRequestId(requestId + 1);
     } catch (ex) {

@@ -14,10 +14,11 @@ import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import dayjs from 'dayjs';
 import React from 'react';
 import { Link as RouterLink, Redirect } from 'react-router-dom';
-import { useSetRecoilState } from 'recoil';
+import { useResetRecoilState, useSetRecoilState } from 'recoil';
 import { getPhotoEndpoint, postAccession } from '../../api/accession';
 import { Accession, NewAccession } from '../../api/types/accessions';
 import snackbarAtom from '../../state/atoms/snackbar';
+import searchSelector from '../../state/selectors/search';
 import useForm from '../../utils/useForm';
 import Checkbox from '../common/Checkbox';
 import DatePicker from '../common/DatePicker';
@@ -62,11 +63,13 @@ const useStyles = makeStyles((theme) =>
 export default function NewAccessionWrapper(): JSX.Element {
   const [accessionNumber, setAccessionNumber] = React.useState<string>();
   const setSnackbar = useSetRecoilState(snackbarAtom);
+  const resetSearch = useResetRecoilState(searchSelector);
   const classes = useStyles();
 
   const onSubmit = async (record: NewAccession) => {
     try {
       const accession = await postAccession(record);
+      resetSearch();
       const { accessionNumber } = accession;
       setAccessionNumber(accessionNumber);
       setSnackbar({ type: 'success', msg: 'Accession saved' });
