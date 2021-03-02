@@ -17,6 +17,8 @@ const useStyles = makeStyles((theme) =>
       minHeight: '156px',
       paddingTop: theme.spacing(4),
       paddingBottom: theme.spacing(4),
+      maxWidth: '100%',
+      margin: '0',
     },
     backIcon: {
       marginRight: theme.spacing(4),
