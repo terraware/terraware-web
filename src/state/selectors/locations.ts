@@ -1,9 +1,21 @@
-import { selectorFamily } from 'recoil';
+import { atom, DefaultValue, selector } from 'recoil';
 import { getLocations } from '../../api/locations';
+import { Locations } from '../../api/types/locations';
 
-export default selectorFamily({
+const locationsAtom = atom({
+  key: 'locationsTrigger',
+  default: 0,
+});
+
+export default selector<Locations>({
   key: 'locationsSelector',
-  get: (_requestId: number) => async () => {
+  get: async ({ get }) => {
+    get(locationsAtom);
     return await getLocations();
   },
+  set: ({ set }, newValue) => {
+    if (newValue instanceof DefaultValue) {
+      set(locationsAtom, v => v + 1);
+    }
+  }
 });

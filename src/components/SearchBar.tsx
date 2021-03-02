@@ -4,7 +4,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { useRecoilValueLoadable } from 'recoil';
+import { useRecoilValueLoadable, useResetRecoilState } from 'recoil';
 import searchSelector from '../state/selectors/searchByAccessionNumber';
 
 const useStyles = makeStyles((theme) =>
@@ -25,12 +25,8 @@ export default function NavBar(): JSX.Element {
 <<<<<<< HEAD
 =======
 
-  const loadableResults = useRecoilValueLoadable(
-    searchSelector({
-      searchInput: input,
-      requestId: Math.trunc(Date.now() / 60000),
-    })
-  );
+  const loadableResults = useRecoilValueLoadable(searchSelector(input));
+  const resetResults = useResetRecoilState(searchSelector(input));
   const history = useHistory();
 
   const results =
@@ -61,6 +57,7 @@ export default function NavBar(): JSX.Element {
         onChange={(event, value) => {
           if (value) {
             history.push(`/accessions/${value}/seed-collection`);
+            resetResults();
             setInput('');
           }
         }}

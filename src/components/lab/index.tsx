@@ -44,7 +44,6 @@ const newWithdrawalChipStyles = makeStyles((theme) => ({
 interface Props {
   accession: Accession;
   onSubmit: (record: Accession) => void;
-  requestId: number;
 }
 
 export default function Nursery({ accession, onSubmit }: Props): JSX.Element {

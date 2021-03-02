@@ -6,11 +6,8 @@ import { useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil';
 import { putAccession } from '../../api/accession';
 import { Accession } from '../../api/types/accessions';
 import snackbarAtom from '../../state/atoms/snackbar';
-import getAccessionSelector, {
-  getAccessionRequestIdAtom,
-} from '../../state/selectors/getAccession';
+import getAccessionSelector from '../../state/selectors/accession';
 import searchSelector from '../../state/selectors/search';
-import useRecoilCurl from '../../utils/useRecoilCurl';
 import ErrorBoundary from '../ErrorBoundary';
 import Lab from '../lab';
 import { AccessionForm } from '../newAccession';
@@ -32,8 +29,6 @@ const useStyles = makeStyles((theme) =>
 );
 
 export default function AccessionPage(): JSX.Element {
-  const requestId = useRecoilCurl(getAccessionRequestIdAtom);
-
   const setSnackbar = useSetRecoilState(snackbarAtom);
   const errorHandler = () => {
     setSnackbar({
@@ -43,28 +38,30 @@ export default function AccessionPage(): JSX.Element {
   };
 
   return (
-    <main>
-      {requestId && (
-        <ErrorBoundary handler={errorHandler}>
-          <React.Suspense fallback={<div></div>}>
-            <Content requestId={requestId} />
-          </React.Suspense>
-        </ErrorBoundary>
-      )}
-    </main>
+    <ErrorBoundary handler={errorHandler}>
+      <React.Suspense fallback={<div></div>}>
+        <Content />
+      </React.Suspense>
+    </ErrorBoundary>
   );
 }
 
-function Content({ requestId }: { requestId: number }): JSX.Element {
+function Content(): JSX.Element {
   const classes = useStyles();
   const { accessionNumber } = useParams<{ accessionNumber: string }>();
   const setSnackbar = useSetRecoilState(snackbarAtom);
-  const setRequestId = useSetRecoilState(getAccessionRequestIdAtom);
   const resetSearch = useResetRecoilState(searchSelector);
 
-  const accession = useRecoilValue(
-    getAccessionSelector({ accessionNumber, requestId })
+  const accession = useRecoilValue(getAccessionSelector(accessionNumber));
+  const resetAccession = useResetRecoilState(
+    getAccessionSelector(accessionNumber)
   );
+
+  React.useEffect(() => {
+    return () => {
+      resetAccession();
+    };
+  }, []);
 
   const clonedAccession = {
     ...accession,
@@ -77,8 +74,8 @@ function Content({ requestId }: { requestId: number }): JSX.Element {
     try {
       await putAccession(record);
       resetSearch();
+      resetAccession();
       setSnackbar({ type: 'success', msg: 'Accession saved' });
-      setRequestId(requestId + 1);
     } catch (ex) {
       setSnackbar({
         type: 'error',
@@ -116,25 +113,13 @@ function Content({ requestId }: { requestId: number }): JSX.Element {
                 />
               </Route>
               <Route exact path='/accessions/:accessionNumber/storage'>
-                <Storage
-                  accession={clonedAccession}
-                  onSubmit={onSubmit}
-                  requestId={requestId}
-                />
+                <Storage accession={clonedAccession} onSubmit={onSubmit} />
               </Route>
               <Route exact path='/accessions/:accessionNumber/nursery'>
-                <Nursery
-                  accession={clonedAccession}
-                  onSubmit={onSubmit}
-                  requestId={requestId}
-                />
+                <Nursery accession={clonedAccession} onSubmit={onSubmit} />
               </Route>
               <Route exact path='/accessions/:accessionNumber/lab'>
-                <Lab
-                  accession={clonedAccession}
-                  onSubmit={onSubmit}
-                  requestId={requestId}
-                />
+                <Lab accession={clonedAccession} onSubmit={onSubmit} />
               </Route>
               <Route exact path='/accessions/:accessionNumber/withdrawal'>
                 <Withdrawal accession={clonedAccession} onSubmit={onSubmit} />

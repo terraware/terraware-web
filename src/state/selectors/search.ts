@@ -4,22 +4,22 @@ import { SearchRequestPayload, SearchResponsePayload } from "../../api/types/sea
 import { COLUMNS } from '../../components/database/columns';
 import { searchFilterAtom, searchSortAtom, searchVisibleColumnsAtom } from "../atoms/search";
 
-const searchTrigger = atom({
-  key: 'searchResultsAtom',
+const searchAtom = atom({
+  key: 'searchTrigger',
   default: 0,
 });
 
 export default selector<SearchResponsePayload>({
   key: 'searchSelector',
   get: async ({ get }) => {
-    get(searchTrigger);
+    get(searchAtom);
     const searchParams = get(searchParamsSelector);
 
     return (await search(searchParams));
   },
   set: ({ set }, newValue) => {
     if (newValue instanceof DefaultValue) {
-      set(searchTrigger, v => v + 1);
+      set(searchAtom, v => v + 1);
     }
   }
 });

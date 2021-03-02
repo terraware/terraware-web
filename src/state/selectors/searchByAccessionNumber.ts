@@ -1,11 +1,17 @@
-import { selectorFamily } from "recoil";
+import { atom, DefaultValue, selectorFamily } from "recoil";
 import { search } from "../../api/search";
-import { SearchRequestPayload } from "../../api/types/search";
+import { SearchRequestPayload, SearchResponsePayload } from "../../api/types/search";
 
-export default selectorFamily({
+const searchAccessionNumberAtom = atom({
+  key: 'searchAccessionNumberTrigger',
+  default: 0,
+});
+
+export default selectorFamily<SearchResponsePayload, string>({
   key: 'searchAccessionNumber',
-  get: (params: { searchInput: string, requestId: number }) => async () => {
-    if (params.searchInput.length === 0) {
+  get: (searchInput) => async ({ get }) => {
+    get(searchAccessionNumberAtom);
+    if (searchInput.length === 0) {
       return {
         results: []
       }
@@ -17,7 +23,7 @@ export default selectorFamily({
       filters: [
         {
           field: "accessionNumber",
-          values: [params.searchInput],
+          values: [searchInput],
           type: "Fuzzy"
         }
       ],
@@ -26,4 +32,9 @@ export default selectorFamily({
 
     return (await search(searchParams));
   },
+  set: () => ({ set }, newValue) => {
+    if (newValue instanceof DefaultValue) {
+      set(searchAccessionNumberAtom, v => v + 1);
+    }
+  }
 });

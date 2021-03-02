@@ -1,15 +1,21 @@
-import { atom, selector } from 'recoil';
+import { atom, DefaultValue, selector } from 'recoil';
 import { getNotifications } from '../../api/notification';
+import { Notifications } from '../../api/types/notification';
 
-export const notificationAtom = atom({
-  key: 'notificationsAtom',
+const notificationAtom = atom({
+  key: 'notificationsTrigger',
   default: 0,
 });
 
-export default selector({
+export default selector<Notifications>({
   key: 'notificationsSelector',
   get: async ({ get }) => {
     get(notificationAtom);
     return await getNotifications();
   },
+  set: ({ set }, newValue) => {
+    if (newValue instanceof DefaultValue) {
+      set(notificationAtom, v => v + 1);
+    }
+  }
 });

@@ -3,7 +3,7 @@ import { Chip, Grid, Paper, Typography } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import React from 'react';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useResetRecoilState } from 'recoil';
 import { Accession } from '../../api/types/accessions';
 import { ConditionType, Location } from '../../api/types/locations';
 import locationsSelector from '../../state/selectors/locations';
@@ -44,23 +44,25 @@ const useStyles = makeStyles((theme) =>
 interface Props {
   accession: Accession;
   onSubmit: (record: Accession) => void;
-  requestId: number;
 }
 
-export default function Storage({
-  accession,
-  onSubmit,
-  requestId,
-}: Props): JSX.Element {
+export default function Storage({ accession, onSubmit }: Props): JSX.Element {
   const classes = useStyles();
-  const contents = useRecoilValue(locationsSelector(requestId));
+  const locations = useRecoilValue(locationsSelector);
+  const resetLocations = useResetRecoilState(locationsSelector);
+
+  React.useEffect(() => {
+    return () => {
+      resetLocations();
+    };
+  }, []);
 
   const [record, setRecord, onChange] = useForm(accession);
   React.useEffect(() => {
     setRecord(accession);
   }, [accession]);
 
-  const generateLocationsValues = contents?.map((location: Location) => {
+  const generateLocationsValues = locations?.map((location: Location) => {
     return {
       label: location.storageLocation,
       value: location.storageLocation,
@@ -70,7 +72,7 @@ export default function Storage({
   const getConditionValue = (
     locationSelected: string
   ): ConditionType | undefined => {
-    const location = contents?.find((location: Location) => {
+    const location = locations?.find((location: Location) => {
       return location.storageLocation === locationSelected;
     });
     return location?.storageCondition;

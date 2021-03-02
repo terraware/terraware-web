@@ -17,14 +17,12 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useRecoilValueLoadable, useSetRecoilState } from 'recoil';
+import { useRecoilValueLoadable, useResetRecoilState } from 'recoil';
 import {
   postAllNotificationsAsRead,
   postNotificationAsRead,
 } from '../api/notification';
-import notificationsSelector, {
-  notificationAtom,
-} from '../state/selectors/notifications';
+import notificationsSelector from '../state/selectors/notifications';
 import preventDefaultEvent from '../utils/preventDefaultEvent';
 import NotificationIcon from './NotificationIcon';
 
@@ -67,7 +65,7 @@ export default function NotificationsDropdown(): JSX.Element {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState<Element | null>(null);
   const notificationLoadable = useRecoilValueLoadable(notificationsSelector);
-  const setNotificationTimestamp = useSetRecoilState(notificationAtom);
+  const resetNotifications = useResetRecoilState(notificationsSelector);
 
   const contents = notificationLoadable.valueMaybe();
 
@@ -81,12 +79,12 @@ export default function NotificationsDropdown(): JSX.Element {
 
   const onNotificationClick = async (id: string) => {
     await postNotificationAsRead(id);
-    setNotificationTimestamp(Date.now());
+    resetNotifications();
   };
 
   const markAllAsRead = async () => {
     await postAllNotificationsAsRead();
-    setNotificationTimestamp(Date.now());
+    resetNotifications();
   };
 
   const getUnreadNotifications = () => {
