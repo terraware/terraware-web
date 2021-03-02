@@ -164,6 +164,23 @@ export function AccessionForm<T extends NewAccession>({
     onChange(id, value);
   };
 
+  const onChangeDate = (id: string, value: unknown) => {
+    const newErrors = [...errors];
+    const errorIndex = newErrors.findIndex((error) => error.id === id);
+    if (dayjs(value as string).isAfter(dayjs())) {
+      if (errorIndex < 0) {
+        newErrors.push({
+          id: id,
+          msg: 'No future dates allowed',
+        });
+      }
+    } else {
+      newErrors.splice(errorIndex, 1);
+    }
+    setErrors(newErrors);
+    onChange(id, value);
+  };
+
   const getErrorText = (id: string) => {
     const error = errors.find((error) => error.id === id);
     return error ? error.msg : '';
@@ -250,20 +267,24 @@ export function AccessionForm<T extends NewAccession>({
             <DatePicker
               id='collectedDate'
               value={record.collectedDate}
-              onChange={onChange}
+              onChange={onChangeDate}
               label='Collected on'
               aria-label='collected on'
               maxDate={dayjs().format('YYYY-MM-DD')}
+              helperText={getErrorText('collectedDate')}
+              error={getErrorText('collectedDate') ? true : false}
             />
           </Grid>
           <Grid item xs={4}>
             <DatePicker
               id='receivedDate'
               value={record.receivedDate}
-              onChange={onChange}
+              onChange={onChangeDate}
               label='Received on'
               aria-label='received on'
               maxDate={dayjs().format('YYYY-MM-DD')}
+              helperText={getErrorText('receivedDate')}
+              error={getErrorText('receivedDate') ? true : false}
             />
           </Grid>
           <Grid item xs={4}></Grid>
