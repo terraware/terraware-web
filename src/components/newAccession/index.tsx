@@ -128,6 +128,10 @@ interface Props<T extends NewAccession> {
   onSubmit: (record: T) => void;
 }
 
+type FieldError = {
+  id: string;
+  msg: string;
+};
 export function AccessionForm<T extends NewAccession>({
   updating,
   photoFilenames,
@@ -137,9 +141,33 @@ export function AccessionForm<T extends NewAccession>({
   const classes = useStyles();
 
   const [record, setRecord, onChange] = useForm(accession);
+  const [errors, setErrors] = React.useState<FieldError[]>([]);
+
   React.useEffect(() => {
     setRecord(accession);
   }, [accession]);
+
+  const OnNumberOfTreesChange = (id: string, value: unknown) => {
+    const newErrors = [...errors];
+    const errorIndex = newErrors.findIndex((error) => error.id === id);
+    if (Number(value) < 0) {
+      if (errorIndex < 0) {
+        newErrors.push({
+          id: id,
+          msg: 'No negative numbers allowed',
+        });
+      }
+    } else {
+      newErrors.splice(errorIndex, 1);
+    }
+    setErrors(newErrors);
+    onChange(id, value);
+  };
+
+  const getErrorText = (id: string) => {
+    const error = errors.find((error) => error.id === id);
+    return error ? error.msg : '';
+  };
 
   return (
     <MuiPickersUtilsProvider utils={DayJSUtils}>
@@ -174,9 +202,12 @@ export function AccessionForm<T extends NewAccession>({
             <TextField
               id='numberOfTrees'
               value={record.numberOfTrees}
-              onChange={onChange}
+              onChange={OnNumberOfTreesChange}
               type='number'
               label='Number of trees'
+              min={0}
+              helperText={getErrorText('numberOfTrees')}
+              error={getErrorText('numberOfTrees') ? true : false}
             />
           </Grid>
           <Grid item xs={4}>
@@ -384,6 +415,7 @@ export function AccessionForm<T extends NewAccession>({
               clickable
               color='primary'
               onClick={() => onSubmit(record)}
+              disabled={errors.length > 0}
             />
           </Grid>
         </Grid>
