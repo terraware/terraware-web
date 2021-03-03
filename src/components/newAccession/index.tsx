@@ -13,7 +13,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import dayjs from 'dayjs';
 import React from 'react';
-import { Link as RouterLink, Redirect } from 'react-router-dom';
+import { Link as RouterLink, Redirect, useHistory } from 'react-router-dom';
 import { useResetRecoilState, useSetRecoilState } from 'recoil';
 import { getPhotoEndpoint, postAccession } from '../../api/accession';
 import { Accession, NewAccession } from '../../api/types/accessions';
@@ -65,6 +65,7 @@ export default function NewAccessionWrapper(): JSX.Element {
   const setSnackbar = useSetRecoilState(snackbarAtom);
   const resetSearch = useResetRecoilState(searchSelector);
   const classes = useStyles();
+  const history = useHistory();
 
   const onSubmit = async (record: NewAccession) => {
     try {
@@ -96,8 +97,9 @@ export default function NewAccessionWrapper(): JSX.Element {
             size='small'
             aria-label='close'
             className={classes.closeIcon}
-            component={RouterLink}
-            to='/'
+            onClick={() => {
+              history.goBack();
+            }}
           >
             <CloseIcon />
           </Fab>
