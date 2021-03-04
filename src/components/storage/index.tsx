@@ -123,7 +123,7 @@ export default function Storage({ accession, onSubmit }: Props): JSX.Element {
             <Dropdown
               id='storageLocation'
               label='Location'
-              selected={record.storageLocation || 'Refrigerator 1'}
+              selected={record.storageLocation || ''}
               values={generateLocationsValues}
               onChange={onStorageLocationChange}
             />
