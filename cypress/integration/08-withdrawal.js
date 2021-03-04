@@ -137,7 +137,7 @@ describe('Withdrawal', () => {
       cy.get('#seeds-available').should(
         'have.css',
         'background-color',
-        'rgb(117, 117, 117)'
+        'rgb(73, 80, 87)'
       );
 
       cy.get('#new-withdrawal-button').click();
@@ -159,7 +159,7 @@ describe('Withdrawal', () => {
       cy.get('#seeds-available').should(
         'have.css',
         'background-color',
-        'rgb(117, 117, 117)'
+        'rgb(73, 80, 87)'
       );
 
       cy.get('#new-withdrawal-button').click();
@@ -180,13 +180,13 @@ describe('Withdrawal', () => {
       cy.get('#seeds-available').should(
         'have.css',
         'background-color',
-        'rgb(203, 94, 60)'
+        'rgb(205, 91, 56)'
       );
 
       cy.get('#new-withdrawal-button').should(
         'have.css',
         'background-color',
-        'rgb(158, 158, 158)'
+        'rgb(173, 181, 189)'
       );
       cy.get('#new-withdrawal-button').click();
       cy.get('#modal-seeds-available').should('not.exist');
@@ -309,7 +309,7 @@ describe('Withdrawal', () => {
       cy.get('#seeds-available').should(
         'have.css',
         'background-color',
-        'rgb(117, 117, 117)'
+        'rgb(73, 80, 87)'
       );
 
       cy.get('#new-withdrawal-button').click();
@@ -331,7 +331,7 @@ describe('Withdrawal', () => {
       cy.get('#seeds-available').should(
         'have.css',
         'background-color',
-        'rgb(117, 117, 117)'
+        'rgb(73, 80, 87)'
       );
 
       cy.get('#new-withdrawal-button').click();
@@ -354,13 +354,13 @@ describe('Withdrawal', () => {
       cy.get('#seeds-available').should(
         'have.css',
         'background-color',
-        'rgb(203, 94, 60)'
+        'rgb(205, 91, 56)'
       );
 
       cy.get('#new-withdrawal-button').should(
         'have.css',
         'background-color',
-        'rgb(158, 158, 158)'
+        'rgb(173, 181, 189)'
       );
       cy.get('#new-withdrawal-button').click();
       cy.get('#modal-seeds-available').should('not.exist');

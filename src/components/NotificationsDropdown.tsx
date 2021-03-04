@@ -11,7 +11,6 @@ import {
   Typography,
 } from '@material-ui/core';
 import Badge from '@material-ui/core/Badge';
-import grey from '@material-ui/core/colors/grey';
 import IconButton from '@material-ui/core/IconButton';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import NotificationsIcon from '@material-ui/icons/Notifications';
@@ -53,9 +52,9 @@ const useStyles = makeStyles((theme) =>
       },
     },
     readNotification: {
-      backgroundColor: grey[400],
+      backgroundColor: theme.palette.neutral[200],
       '&:hover': {
-        backgroundColor: grey[400],
+        backgroundColor: theme.palette.neutral[200],
       },
     },
   })

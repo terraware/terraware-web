@@ -1,6 +1,4 @@
 import { Fab } from '@material-ui/core';
-import indigo from '@material-ui/core/colors/indigo';
-import orange from '@material-ui/core/colors/orange';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
 import WarningIcon from '@material-ui/icons/Warning';
@@ -8,17 +6,26 @@ import WifiTetheringIcon from '@material-ui/icons/WifiTethering';
 import React from 'react';
 import { NotificationType } from '../api/types/notification';
 
-const useStyles = makeStyles(() =>
+const useStyles = makeStyles((theme) =>
   createStyles({
     fab: {
       width: '36px',
       height: '36px',
+      '&:hover': {
+        backgroundColor: theme.palette.secondary,
+      },
     },
     stateNotification: {
-      backgroundColor: indigo[900],
+      backgroundColor: theme.palette.accent[1],
+      '&:hover': {
+        backgroundColor: theme.palette.accent[1],
+      },
     },
     dateNotification: {
-      backgroundColor: orange[800],
+      backgroundColor: theme.palette.accent[2],
+      '&:hover': {
+        backgroundColor: theme.palette.accent[2],
+      },
     },
   })
 );

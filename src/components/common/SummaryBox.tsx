@@ -9,24 +9,24 @@ const useStyles = makeStyles((theme) =>
     },
     summaryDefault: {
       borderRadius: 8,
-      backgroundColor: theme.palette.grey[300],
+      backgroundColor: theme.palette.neutral[200],
       padding: theme.spacing(2),
     },
     summaryAvailable: {
       borderRadius: 8,
-      backgroundColor: theme.palette.grey[600],
+      backgroundColor: theme.palette.neutral[700],
       padding: theme.spacing(2),
       color: theme.palette.common.white,
     },
     summaryZero: {
       borderRadius: 8,
-      backgroundColor: theme.palette.secondary.light,
+      backgroundColor: theme.palette.state[5],
       padding: theme.spacing(2),
       color: theme.palette.common.white,
     },
     full: {
       borderRadius: 8,
-      backgroundColor: theme.palette.grey[300],
+      backgroundColor: theme.palette.neutral[200],
       padding: theme.spacing(2),
       height: '100%',
       boxSizing: 'border-box',

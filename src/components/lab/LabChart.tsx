@@ -1,5 +1,4 @@
-import { createStyles, makeStyles } from '@material-ui/core';
-import blue from '@material-ui/core/colors/blue';
+import { createStyles, makeStyles, useTheme } from '@material-ui/core';
 import Chart from 'chart.js';
 import React from 'react';
 import { Germination } from '../../api/types/tests';
@@ -34,6 +33,7 @@ export default function LabChart<T>({
   const [order] = React.useState<Order>('asc');
   const [orderBy] = React.useState(defaultSort);
   const chartRef = React.useRef<HTMLCanvasElement>(null);
+  const theme = useTheme();
 
   React.useEffect(() => {
     const ctx = chartRef?.current?.getContext('2d');
@@ -46,7 +46,7 @@ export default function LabChart<T>({
           labels: data().map((entry) => entry.recordingDate),
           datasets: [
             {
-              backgroundColor: blue[700],
+              backgroundColor: theme.palette.accent[4],
               data: data().map((entry) => entry.seedsGerminated),
               barThickness: 30,
             },

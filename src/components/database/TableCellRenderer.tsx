@@ -22,7 +22,7 @@ const statusStyles = makeStyles((theme) =>
     inactive: {
       display: 'flex',
       alignItems: 'center',
-      color: theme.palette.grey[600],
+      color: theme.palette.neutral[600],
     },
   })
 );

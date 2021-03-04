@@ -49,10 +49,17 @@ const useStyles = makeStyles((theme) =>
       color: theme.palette.common.white,
     },
     cancel: {
-      backgroundColor: theme.palette.grey[200],
+      backgroundColor: theme.palette.common.white,
+      borderColor: theme.palette.neutral[400],
+      borderWidth: 1,
     },
     listItem: {
       marginBottom: theme.spacing(1),
+    },
+    photoLink: {
+      marginBottom: theme.spacing(1),
+      color: theme.palette.neutral[800],
+      textDecoration: 'underline',
     },
     bold: {
       fontWeight: theme.typography.fontWeightBold,
@@ -351,7 +358,7 @@ export function AccessionForm<T extends NewAccession>({
             <Grid item xs={3}>
               <Typography
                 component='p'
-                variant='body1'
+                variant='body2'
                 className={classes.listItem}
               >
                 Seed bags
@@ -361,7 +368,7 @@ export function AccessionForm<T extends NewAccession>({
                   id={`bag${index}`}
                   key={index}
                   component='p'
-                  variant='body2'
+                  variant='body1'
                   className={classes.listItem}
                 >
                   {bag}
@@ -371,7 +378,7 @@ export function AccessionForm<T extends NewAccession>({
             <Grid item xs={5}>
               <Typography
                 component='p'
-                variant='body1'
+                variant='body2'
                 className={classes.listItem}
               >
                 Photos
@@ -388,8 +395,8 @@ export function AccessionForm<T extends NewAccession>({
                 >
                   <Typography
                     component='p'
-                    variant='body2'
-                    className={classes.listItem}
+                    variant='body1'
+                    className={classes.photoLink}
                   >
                     {photo}
                   </Typography>
@@ -399,7 +406,7 @@ export function AccessionForm<T extends NewAccession>({
             <Grid item xs={4}>
               <Typography
                 component='p'
-                variant='body1'
+                variant='body2'
                 className={classes.listItem}
               >
                 Geolocations
@@ -409,7 +416,7 @@ export function AccessionForm<T extends NewAccession>({
                   id={`location${index}`}
                   key={index}
                   component='p'
-                  variant='body2'
+                  variant='body1'
                   className={classes.listItem}
                 >
                   {`${geolocation.latitude}, ${geolocation.longitude}`}
@@ -427,6 +434,7 @@ export function AccessionForm<T extends NewAccession>({
                   className={classes.cancel}
                   label='Cancel'
                   clickable
+                  variant='outlined'
                 />
               </Link>
             )}

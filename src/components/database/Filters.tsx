@@ -6,7 +6,6 @@ import {
   Popover,
   Typography,
 } from '@material-ui/core';
-import grey from '@material-ui/core/colors/grey';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import ArrowDropDown from '@material-ui/icons/ArrowDropDown';
 import React from 'react';
@@ -53,7 +52,7 @@ const useStyles = makeStyles((theme) =>
       paddingTop: theme.spacing(1),
     },
     selectedFilter: {
-      border: `2px solid ${grey[600]}`,
+      border: `2px solid ${theme.palette.neutral[600]}`,
     },
   })
 );

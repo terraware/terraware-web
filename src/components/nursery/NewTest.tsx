@@ -31,7 +31,9 @@ const useStyles = makeStyles((theme: Theme) =>
       color: theme.palette.common.white,
     },
     cancel: {
-      backgroundColor: theme.palette.grey[200],
+      backgroundColor: theme.palette.common.white,
+      borderColor: theme.palette.neutral[400],
+      borderWidth: 1,
     },
     actions: {
       display: 'flex',
@@ -43,7 +45,7 @@ const useStyles = makeStyles((theme: Theme) =>
       position: 'absolute',
       right: theme.spacing(1),
       top: theme.spacing(1),
-      color: theme.palette.grey[500],
+      color: theme.palette.neutral[600],
     },
   })
 );
@@ -290,6 +292,7 @@ export default function NewTestDialog(props: Props): JSX.Element {
               label='Cancel'
               clickable
               onClick={handleCancel}
+              variant='outlined'
             />
             <Chip
               id='saveTest'

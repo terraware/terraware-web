@@ -7,7 +7,6 @@ import {
   makeStyles,
   TableCell,
 } from '@material-ui/core';
-import grey from '@material-ui/core/colors/grey';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
@@ -46,9 +45,9 @@ const useStyles = makeStyles((theme) =>
       marginTop: theme.spacing(3),
       marginLeft: theme.spacing(2),
       marginBottom: theme.spacing(2),
-      backgroundColor: grey[800],
+      backgroundColor: theme.palette.neutral[700],
       '&:hover': {
-        backgroundColor: grey[800],
+        backgroundColor: theme.palette.neutral[700],
       },
     },
   })

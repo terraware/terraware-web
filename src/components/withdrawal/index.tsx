@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) =>
       color: theme.palette.common.white,
     },
     grayChip: {
-      backgroundColor: theme.palette.grey[500],
+      backgroundColor: theme.palette.neutral[500],
       color: theme.palette.common.white,
     },
   })

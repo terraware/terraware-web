@@ -6,7 +6,7 @@ const useStyles = makeStyles((theme) =>
   createStyles({
     note: {
       borderRadius: 8,
-      backgroundColor: theme.palette.grey[300],
+      backgroundColor: theme.palette.neutral[200],
       marginBottom: theme.spacing(3),
       padding: theme.spacing(2),
     },
