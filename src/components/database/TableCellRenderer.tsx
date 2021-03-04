@@ -6,9 +6,7 @@ import {
 } from '@material-ui/core';
 import FiberManualRecord from '@material-ui/icons/FiberManualRecord';
 import React from 'react';
-import { AccessionState } from '../../api/types/accessions';
 import { SearchResponseResults } from '../../api/types/search';
-import StateChip from '../common/StateChip';
 import CellRenderer from '../common/table/TableCellRenderer';
 import { RendererProps } from '../common/table/types';
 
@@ -50,12 +48,6 @@ export default function SearchCellRenderer(
             {value}
           </Typography>
         </div>
-      </TableCell>
-    );
-  } else if (column.key === 'state' && typeof value === 'string' && value) {
-    return (
-      <TableCell id={id} align='left'>
-        <StateChip state={value as AccessionState} />
       </TableCell>
     );
   }

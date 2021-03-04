@@ -5,9 +5,8 @@ describe('Database', () => {
   context('Customize columns', () => {
     it('should display the default columns', () => {
       cy.visit('/accessions');
-      cy.get('#table-header').children().should('have.length', 7);
+      cy.get('#table-header').children().should('have.length', 6);
       cy.get('#table-header-accessionNumber').contains('ACCESSION');
-      cy.get('#table-header-active').contains('STATUS');
       cy.get('#table-header-state').contains('STATE');
       cy.get('#table-header-species').contains('SPECIES');
       cy.get('#table-header-receivedDate').contains('RECEIVED ON');
@@ -21,9 +20,8 @@ describe('Database', () => {
       cy.get('#cancel').click();
       cy.get('#editColumnsDialog').should('not.exist');
 
-      cy.get('#table-header').children().should('have.length', 7);
+      cy.get('#table-header').children().should('have.length', 6);
       cy.get('#table-header-accessionNumber').contains('ACCESSION');
-      cy.get('#table-header-active').contains('STATUS');
       cy.get('#table-header-state').contains('STATE');
       cy.get('#table-header-species').contains('SPECIES');
       cy.get('#table-header-receivedDate').contains('RECEIVED ON');
@@ -42,14 +40,12 @@ describe('Database', () => {
       cy.get('#collectedDate').click();
       cy.get('#primaryCollector').click();
       cy.get('#saveColumnsButton').click();
-      cy.get('#editColumnsDialog').should('not.exist');
-
       cy.wait('@search');
       cy.wait('@values');
+      cy.get('#editColumnsDialog').should('not.exist');
 
-      cy.get('#table-header').children().should('have.length', 5);
+      cy.get('#table-header').children().should('have.length', 4);
       cy.get('#table-header-accessionNumber').contains('ACCESSION');
-      cy.get('#table-header-active').contains('STATUS');
       cy.get('#table-header-state').contains('STATE');
       cy.get('#table-header-primaryCollector').contains('COLLECTOR');
       cy.get('#table-header-siteLocation').contains('SITE LOCATION');
@@ -70,10 +66,9 @@ describe('Database', () => {
 
         cy.get('#General\\ Inventory').click();
         cy.get('#saveColumnsButton').click();
-        cy.get('#editColumnsDialog').should('not.exist');
-
         cy.wait('@search2');
         cy.wait('@values2');
+        cy.get('#editColumnsDialog').should('not.exist');
 
         cy.get('#table-header').children().should('have.length', 19);
         cy.get('#table-header-accessionNumber').contains('ACCESSION');
@@ -120,14 +115,12 @@ describe('Database', () => {
         cy.get('#General\\ Inventory').click();
         cy.get('#Default').click();
         cy.get('#saveColumnsButton').click();
-        cy.get('#editColumnsDialog').should('not.exist');
-
         cy.wait('@search');
         cy.wait('@values');
+        cy.get('#editColumnsDialog').should('not.exist');
 
-        cy.get('#table-header').children().should('have.length', 7);
+        cy.get('#table-header').children().should('have.length', 6);
         cy.get('#table-header-accessionNumber').contains('ACCESSION');
-        cy.get('#table-header-active').contains('STATUS');
         cy.get('#table-header-state').contains('STATE');
         cy.get('#table-header-species').contains('SPECIES');
         cy.get('#table-header-receivedDate').contains('RECEIVED ON');
@@ -143,10 +136,9 @@ describe('Database', () => {
 
         cy.get('#Seed\\ Storage\\ Status').click();
         cy.get('#saveColumnsButton').click();
-        cy.get('#editColumnsDialog').should('not.exist');
-
         cy.wait('@search');
         cy.wait('@values');
+        cy.get('#editColumnsDialog').should('not.exist');
 
         cy.get('#table-header').children().should('have.length', 14);
         cy.get('#table-header-accessionNumber').contains('ACCESSION');
@@ -185,10 +177,9 @@ describe('Database', () => {
 
         cy.get('#Viability\\ Summary').click();
         cy.get('#saveColumnsButton').click();
-        cy.get('#editColumnsDialog').should('not.exist');
-
         cy.wait('@search');
         cy.wait('@values');
+        cy.get('#editColumnsDialog').should('not.exist');
 
         cy.get('#table-header').children().should('have.length', 18);
         cy.get('#table-header-accessionNumber').contains('ACCESSION');
@@ -241,10 +232,9 @@ describe('Database', () => {
 
         cy.get('#Germination\\ Testing\\ To\\ Do').click();
         cy.get('#saveColumnsButton').click();
-        cy.get('#editColumnsDialog').should('not.exist');
-
         cy.wait('@search');
         cy.wait('@values');
+        cy.get('#editColumnsDialog').should('not.exist');
 
         cy.get('#table-header').children().should('have.length', 11);
         cy.get('#table-header-accessionNumber').contains('ACCESSION');
@@ -276,10 +266,9 @@ describe('Database', () => {
         cy.get('#primaryCollector').click();
         cy.get('#rare').click();
         cy.get('#saveColumnsButton').click();
-        cy.get('#editColumnsDialog').should('not.exist');
-
         cy.wait('@search');
         cy.wait('@values');
+        cy.get('#editColumnsDialog').should('not.exist');
 
         cy.get('#table-header').children().should('have.length', 13);
         cy.get('#table-header-accessionNumber').contains('ACCESSION');
@@ -312,6 +301,15 @@ describe('Database', () => {
       cy.visit('/accessions');
       cy.wait('@search');
       cy.wait('@values');
+
+      cy.intercept('POST', '/api/v1/seedbank/search').as('search-c');
+      cy.intercept('POST', '/api/v1/seedbank/values').as('values-c');
+      cy.get('#edit-columns').click();
+      cy.get('#active').click();
+      cy.get('#saveColumnsButton').click();
+      cy.wait('@search-c');
+      cy.wait('@values-c');
+      cy.get('#editColumnsDialog').should('not.exist');
 
       cy.intercept('POST', '/api/v1/seedbank/search').as('search2');
       cy.intercept('POST', '/api/v1/seedbank/values').as('values2');
@@ -528,6 +526,15 @@ describe('Database', () => {
       cy.visit('/accessions');
       cy.wait('@search');
       cy.wait('@values');
+
+      cy.intercept('POST', '/api/v1/seedbank/search').as('search-c');
+      cy.intercept('POST', '/api/v1/seedbank/values').as('values-c');
+      cy.get('#edit-columns').click();
+      cy.get('#active').click();
+      cy.get('#saveColumnsButton').click();
+      cy.wait('@search-c');
+      cy.wait('@values-c');
+      cy.get('#editColumnsDialog').should('not.exist');
 
       cy.intercept('POST', '/api/v1/seedbank/search').as('search2');
       cy.get('#table-header-species').click();

@@ -292,7 +292,7 @@ export interface Preset {
 export const defaultPreset: Preset = {
   name: 'Default',
   fields: [
-    'accessionNumber', 'species', 'siteLocation', 'active', 'state', 'collectedDate', 'receivedDate'
+    'accessionNumber', 'species', 'siteLocation', 'state', 'collectedDate', 'receivedDate'
   ]
 }
 
