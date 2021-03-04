@@ -26,7 +26,6 @@ interface Props {
 
 export default function MultipleSelection(props: Props): JSX.Element {
   const classes = useStyles();
-
   const filter = React.useRef<SearchFilter>();
   const [selections, setSelections] = React.useState<(string | null)[]>(
     props.values
@@ -44,7 +43,7 @@ export default function MultipleSelection(props: Props): JSX.Element {
     };
   }, []);
 
-  const handleChange = (value: string) => {
+  const handleChange = (value: string | null) => {
     const updatesValues = [...selections];
 
     const valueIndex = updatesValues.findIndex((v) => v === value);
@@ -63,16 +62,28 @@ export default function MultipleSelection(props: Props): JSX.Element {
     setSelections(updatesValues);
   };
 
+  const options = [...props.options];
+  const indexNull = options.findIndex((o) => o.value === null);
+  if (indexNull >= 0) {
+    if (options.find((o) => o.value === null)) {
+      options.push({ label: 'None', value: null });
+    }
+    options.splice(indexNull, 1);
+  }
+  options.sort((a, b) =>
+    a.value && b.value ? a.value.localeCompare(b.value) : 0
+  );
+
   return (
     <div id={`filter-list-${props.field}`} className={classes.box}>
-      {props.options.map(({ label, value }) => (
+      {options.map(({ label, value }) => (
         <div key={value} className={classes.item}>
           <Checkbox
             id={value || ''}
             name={value || ''}
             label={label}
             value={selections.includes(value)}
-            onChange={() => handleChange(value || '')}
+            onChange={() => handleChange(value)}
           />
         </div>
       ))}

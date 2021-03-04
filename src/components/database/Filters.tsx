@@ -6,6 +6,7 @@ import {
   Popover,
   Typography,
 } from '@material-ui/core';
+import grey from '@material-ui/core/colors/grey';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import ArrowDropDown from '@material-ui/icons/ArrowDropDown';
 import React from 'react';
@@ -50,6 +51,9 @@ const useStyles = makeStyles((theme) =>
       display: 'flex',
       marginLeft: 'auto',
       paddingTop: theme.spacing(1),
+    },
+    selectedFilter: {
+      border: `2px solid ${grey[600]}`,
     },
   })
 );
@@ -100,6 +104,18 @@ export default function Filters(props: Props): JSX.Element {
     setPopover(undefined);
   };
 
+  const getLabel = (col: DatabaseColumn): string => {
+    const filter = props.filters.find((filter) => filter.field === col.key);
+    return filter?.values.length
+      ? `${col.name} (${filter?.values.length})`
+      : col.name;
+  };
+
+  const isFilterSelected = (colKey: string): boolean => {
+    const filter = props.filters.find((filter) => filter.field === colKey);
+    return filter ? filter.values.length > 0 : false;
+  };
+
   return (
     <Container maxWidth='lg' className={classes.mainContainer}>
       <SimplePopover
@@ -117,9 +133,12 @@ export default function Filters(props: Props): JSX.Element {
               id={`filter-${col.key}`}
               variant='outlined'
               size='medium'
-              label={col.name}
+              label={getLabel(col)}
               onClick={(event) => handleClick(event, col)}
               icon={<ArrowDropDown />}
+              className={
+                isFilterSelected(col.key) ? classes.selectedFilter : ''
+              }
             />
           </div>
         );

@@ -29,14 +29,18 @@ export default function SingleSelection(props: Props): JSX.Element {
   const classes = useStyles();
 
   const options = [...props.options];
-  if (props.isBoolean) {
-    const indexNull = options.findIndex((o) => o.value === null);
-    if (indexNull >= 0) {
+  const indexNull = options.findIndex((o) => o.value === null);
+  if (indexNull >= 0) {
+    if (props.isBoolean) {
       if (!options.find((o) => o.value === 'false')) {
         options.push({ label: 'false', value: 'false' });
       }
-      options.splice(indexNull, 1);
+    } else {
+      if (options.find((o) => o.value === null)) {
+        options.push({ label: 'None', value: null });
+      }
     }
+    options.splice(indexNull, 1);
   }
   options.sort((a, b) =>
     a.value && b.value ? a.value.localeCompare(b.value) : 0
