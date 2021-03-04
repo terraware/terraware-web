@@ -89,8 +89,10 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
     setTestEntryOpen(true);
   };
 
-  const onCloseCutTestModal = (value: Accession) => {
-    onSubmit(value);
+  const onCloseCutTestModal = (value?: Accession) => {
+    if (value) {
+      onSubmit(value);
+    }
     setCutTestOpen(false);
   };
 

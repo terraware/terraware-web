@@ -1,9 +1,10 @@
-import { Box, Chip, Grid, Typography } from '@material-ui/core';
+import { Box, Chip, Grid, IconButton, Typography } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import CloseIcon from '@material-ui/icons/Close';
 import React from 'react';
 import { SearchField } from '../../api/types/search';
 import useForm from '../../utils/useForm';
@@ -29,6 +30,12 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     bold: {
       fontWeight: theme.typography.fontWeightBold,
+    },
+    closeButton: {
+      position: 'absolute',
+      right: theme.spacing(1),
+      top: theme.spacing(1),
+      color: theme.palette.grey[500],
     },
   })
 );
@@ -74,11 +81,11 @@ export default function EditColumnsDialog(props: Props): JSX.Element {
   return (
     <Dialog
       id='editColumnsDialog'
-      disableBackdropClick
       disableEscapeKeyDown
       open={open}
       maxWidth='md'
       fullWidth={true}
+      onClose={handleCancel}
     >
       <DialogTitle>
         <Typography component='p' variant='h6' className={classes.bold}>
@@ -87,6 +94,13 @@ export default function EditColumnsDialog(props: Props): JSX.Element {
         <Typography component='p'>
           Select columns you want to add. Deselect columns you want to remove.
         </Typography>
+        <IconButton
+          aria-label='close'
+          className={classes.closeButton}
+          onClick={handleCancel}
+        >
+          <CloseIcon />
+        </IconButton>
       </DialogTitle>
 
       <DialogContent>

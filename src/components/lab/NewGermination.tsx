@@ -1,10 +1,18 @@
 import DayJSUtils from '@date-io/dayjs';
-import { Box, Chip, Grid, Link, Typography } from '@material-ui/core';
+import {
+  Box,
+  Chip,
+  Grid,
+  IconButton,
+  Link,
+  Typography,
+} from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import CloseIcon from '@material-ui/icons/Close';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import dayjs from 'dayjs';
 import React from 'react';
@@ -28,6 +36,12 @@ const useStyles = makeStyles((theme: Theme) =>
       justifyContent: 'space-between',
       alignItems: 'center',
       paddingLeft: theme.spacing(2),
+    },
+    closeButton: {
+      position: 'absolute',
+      right: theme.spacing(1),
+      top: theme.spacing(1),
+      color: theme.palette.grey[500],
     },
   })
 );
@@ -71,8 +85,22 @@ export default function NewGermination(props: Props): JSX.Element {
   };
 
   return (
-    <Dialog disableBackdropClick disableEscapeKeyDown open={open} maxWidth='sm'>
-      <DialogTitle>New entry</DialogTitle>
+    <Dialog
+      onClose={handleCancel}
+      disableEscapeKeyDown
+      open={open}
+      maxWidth='sm'
+    >
+      <DialogTitle>
+        <Typography variant='h6'>New entry</Typography>
+        <IconButton
+          aria-label='close'
+          className={classes.closeButton}
+          onClick={handleCancel}
+        >
+          <CloseIcon />
+        </IconButton>
+      </DialogTitle>
       <DialogContent dividers>
         <MuiPickersUtilsProvider utils={DayJSUtils}>
           <Grid container spacing={4}>

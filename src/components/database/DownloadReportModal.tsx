@@ -1,8 +1,16 @@
-import { Box, Chip, DialogTitle, Grid, Typography } from '@material-ui/core';
+import {
+  Box,
+  Chip,
+  DialogTitle,
+  Grid,
+  IconButton,
+  Typography,
+} from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import CloseIcon from '@material-ui/icons/Close';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 import { downloadReport } from '../../api/downloadReport';
@@ -28,6 +36,12 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     bold: {
       fontWeight: theme.typography.fontWeightBold,
+    },
+    closeButton: {
+      position: 'absolute',
+      right: theme.spacing(1),
+      top: theme.spacing(1),
+      color: theme.palette.grey[500],
     },
   })
 );
@@ -68,7 +82,12 @@ export default function DownloadReportModal(props: Props): JSX.Element {
   };
 
   return (
-    <Dialog disableBackdropClick disableEscapeKeyDown open={open} maxWidth='sm'>
+    <Dialog
+      onClose={handleCancel}
+      disableEscapeKeyDown
+      open={open}
+      maxWidth='sm'
+    >
       <DialogTitle>
         <Typography component='p' variant='h6' className={classes.bold}>
           Report
@@ -77,6 +96,13 @@ export default function DownloadReportModal(props: Props): JSX.Element {
           You are about to download this datatable as a report. This csv file
           can be found in your Downloads. Please name your report below.
         </Typography>
+        <IconButton
+          aria-label='close'
+          className={classes.closeButton}
+          onClick={handleCancel}
+        >
+          <CloseIcon />
+        </IconButton>
       </DialogTitle>
       <DialogContent dividers>
         <Grid container spacing={4}>

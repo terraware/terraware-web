@@ -1,10 +1,11 @@
 import DayJSUtils from '@date-io/dayjs';
-import { Box, Chip, Grid } from '@material-ui/core';
+import { Box, Chip, Grid, IconButton, Typography } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import CloseIcon from '@material-ui/icons/Close';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import React from 'react';
 import { Accession } from '../../api/types/accessions';
@@ -26,13 +27,19 @@ const useStyles = makeStyles((theme: Theme) =>
       alignItems: 'center',
       paddingLeft: theme.spacing(2),
     },
+    closeButton: {
+      position: 'absolute',
+      right: theme.spacing(1),
+      top: theme.spacing(1),
+      color: theme.palette.grey[500],
+    },
   })
 );
 
 export interface Props {
   accession: Accession;
   open: boolean;
-  onClose: (value: Accession) => void;
+  onClose: (value?: Accession) => void;
 }
 
 export default function NewCutTest(props: Props): JSX.Element {
@@ -47,10 +54,7 @@ export default function NewCutTest(props: Props): JSX.Element {
   }, [props.open]);
 
   const handleCancel = () => {
-    if (props.accession) {
-      setRecord(props.accession);
-    }
-    onClose(props.accession);
+    onClose();
   };
 
   const handleOk = () => {
@@ -58,8 +62,22 @@ export default function NewCutTest(props: Props): JSX.Element {
   };
 
   return (
-    <Dialog disableBackdropClick disableEscapeKeyDown open={open} maxWidth='sm'>
-      <DialogTitle>Cut test</DialogTitle>
+    <Dialog
+      onClose={handleCancel}
+      disableEscapeKeyDown
+      open={open}
+      maxWidth='sm'
+    >
+      <DialogTitle>
+        <Typography variant='h6'>Cut test</Typography>
+        <IconButton
+          aria-label='close'
+          className={classes.closeButton}
+          onClick={handleCancel}
+        >
+          <CloseIcon />
+        </IconButton>
+      </DialogTitle>
       <DialogContent dividers>
         <MuiPickersUtilsProvider utils={DayJSUtils}>
           <Grid container spacing={4}>
