@@ -1,21 +1,15 @@
-import {
-  Box,
-  Chip,
-  DialogTitle,
-  Grid,
-  IconButton,
-  Typography,
-} from '@material-ui/core';
+import { Box, Chip, DialogTitle, Grid, Typography } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import CloseIcon from '@material-ui/icons/Close';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 import { downloadReport } from '../../api/downloadReport';
 import { ExportRequestPayload } from '../../api/types/report';
 import { searchParamsSelector } from '../../state/selectors/search';
+import CancelButton from '../common/CancelButton';
+import DialogCloseButton from '../common/DialogCloseButton';
 import TextField from '../common/TextField';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -23,11 +17,6 @@ const useStyles = makeStyles((theme: Theme) =>
     submit: {
       marginLeft: theme.spacing(2),
       color: theme.palette.common.white,
-    },
-    cancel: {
-      backgroundColor: theme.palette.common.white,
-      borderColor: theme.palette.neutral[400],
-      borderWidth: 1,
     },
     actions: {
       display: 'flex',
@@ -38,12 +27,6 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     bold: {
       fontWeight: theme.typography.fontWeightBold,
-    },
-    closeButton: {
-      position: 'absolute',
-      right: theme.spacing(1),
-      top: theme.spacing(1),
-      color: theme.palette.neutral[600],
     },
   })
 );
@@ -98,13 +81,7 @@ export default function DownloadReportModal(props: Props): JSX.Element {
           You are about to download this datatable as a report. This csv file
           can be found in your Downloads. Please name your report below.
         </Typography>
-        <IconButton
-          aria-label='close'
-          className={classes.closeButton}
-          onClick={handleCancel}
-        >
-          <CloseIcon />
-        </IconButton>
+        <DialogCloseButton onClick={handleCancel} />
       </DialogTitle>
       <DialogContent dividers>
         <Grid container spacing={4}>
@@ -124,14 +101,7 @@ export default function DownloadReportModal(props: Props): JSX.Element {
       <DialogActions>
         <Box width={'100%'} className={classes.actions}>
           <Box>
-            <Chip
-              id='cancel'
-              className={classes.cancel}
-              label='Cancel'
-              clickable
-              onClick={handleCancel}
-              variant='outlined'
-            />
+            <CancelButton onClick={handleCancel} />
             <Chip
               id='downloadButton'
               className={classes.submit}

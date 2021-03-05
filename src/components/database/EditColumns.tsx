@@ -1,14 +1,15 @@
-import { Box, Chip, Grid, IconButton, Typography } from '@material-ui/core';
+import { Box, Chip, Grid, Typography } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import CloseIcon from '@material-ui/icons/Close';
 import React from 'react';
 import { SearchField } from '../../api/types/search';
 import useForm from '../../utils/useForm';
+import CancelButton from '../common/CancelButton';
 import Checkbox from '../common/Checkbox';
+import DialogCloseButton from '../common/DialogCloseButton';
 import Divisor from '../common/Divisor';
 import RadioButton from '../common/RadioButton';
 import { COLUMNS, Preset, searchPresets } from './columns';
@@ -19,11 +20,6 @@ const useStyles = makeStyles((theme: Theme) =>
       marginLeft: theme.spacing(2),
       color: theme.palette.common.white,
     },
-    cancel: {
-      backgroundColor: theme.palette.common.white,
-      borderColor: theme.palette.neutral[400],
-      borderWidth: 1,
-    },
     actions: {
       display: 'flex',
       justifyContent: 'space-between',
@@ -32,12 +28,6 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     bold: {
       fontWeight: theme.typography.fontWeightBold,
-    },
-    closeButton: {
-      position: 'absolute',
-      right: theme.spacing(1),
-      top: theme.spacing(1),
-      color: theme.palette.neutral[600],
     },
   })
 );
@@ -96,13 +86,7 @@ export default function EditColumnsDialog(props: Props): JSX.Element {
         <Typography component='p'>
           Select columns you want to add. Deselect columns you want to remove.
         </Typography>
-        <IconButton
-          aria-label='close'
-          className={classes.closeButton}
-          onClick={handleCancel}
-        >
-          <CloseIcon />
-        </IconButton>
+        <DialogCloseButton onClick={handleCancel} />
       </DialogTitle>
 
       <DialogContent>
@@ -156,14 +140,7 @@ export default function EditColumnsDialog(props: Props): JSX.Element {
       <DialogActions>
         <Box className={classes.actions}>
           <Box>
-            <Chip
-              id='cancel'
-              className={classes.cancel}
-              label='Cancel'
-              clickable
-              onClick={handleCancel}
-              variant='outlined'
-            />
+            <CancelButton onClick={handleCancel} />
             <Chip
               id='saveColumnsButton'
               className={classes.submit}
