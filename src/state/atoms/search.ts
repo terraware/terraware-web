@@ -10,8 +10,8 @@ export const searchFilterAtom = atom({
 export const searchSortAtom = atom({
   key: 'searchSortAtom',
   default: {
-    field: 'accessionNumber',
-    direction: 'Ascending',
+    field: 'receivedDate',
+    direction: 'Descending',
   } as SearchSortOrderElement,
 });
 

@@ -174,7 +174,7 @@ function Content(): JSX.Element {
                 id='edit-columns'
                 variant='outlined'
                 size='medium'
-                label='Edit columns'
+                label='Edit Columns'
                 onClick={onOpenEditColumnsModal}
                 icon={<EditIcon />}
               />
@@ -182,7 +182,7 @@ function Content(): JSX.Element {
                 id='download-report'
                 variant='outlined'
                 size='medium'
-                label='Download as report'
+                label='Download as Report'
                 onClick={onDownloadReport}
                 className={classes.downloadReport}
               />

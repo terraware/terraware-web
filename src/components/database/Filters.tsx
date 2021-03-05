@@ -151,7 +151,7 @@ export default function Filters(props: Props): JSX.Element {
             clearAllFilters();
           }}
         >
-          Clear filters
+          Clear Filters
         </Link>
       </div>
     </Container>
