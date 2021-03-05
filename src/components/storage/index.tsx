@@ -1,19 +1,22 @@
 import DayJSUtils from '@date-io/dayjs';
-import { Chip, Grid, Paper, Typography } from '@material-ui/core';
+import {
+  Chip,
+  CircularProgress,
+  Grid,
+  Paper,
+  Typography,
+} from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
-import React from 'react';
-import { useRecoilValue, useResetRecoilState } from 'recoil';
+import React, { Suspense } from 'react';
 import { Accession } from '../../api/types/accessions';
-import { ConditionType, Location } from '../../api/types/locations';
-import locationsSelector from '../../state/selectors/locations';
 import useForm from '../../utils/useForm';
 import DatePicker from '../common/DatePicker';
 import Divisor from '../common/Divisor';
-import Dropdown from '../common/Dropdown';
 import Note from '../common/Note';
 import TextArea from '../common/TextArea';
 import TextField from '../common/TextField';
+import LocationDropdown from './LocationDropdown';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -48,43 +51,11 @@ interface Props {
 
 export default function Storage({ accession, onSubmit }: Props): JSX.Element {
   const classes = useStyles();
-  const locations = useRecoilValue(locationsSelector);
-  const resetLocations = useResetRecoilState(locationsSelector);
-
-  React.useEffect(() => {
-    return () => {
-      resetLocations();
-    };
-  }, []);
 
   const [record, setRecord, onChange] = useForm(accession);
   React.useEffect(() => {
     setRecord(accession);
   }, [accession]);
-
-  const generateLocationsValues = locations?.map((location: Location) => {
-    return {
-      label: location.storageLocation,
-      value: location.storageLocation,
-    };
-  });
-
-  const getConditionValue = (
-    locationSelected: string
-  ): ConditionType | undefined => {
-    const location = locations?.find((location: Location) => {
-      return location.storageLocation === locationSelected;
-    });
-    return location?.storageCondition;
-  };
-
-  const onStorageLocationChange = (id: string, value: string) => {
-    setRecord({
-      ...record,
-      [id]: value,
-      storageCondition: getConditionValue(value),
-    });
-  };
 
   return (
     <MuiPickersUtilsProvider utils={DayJSUtils}>
@@ -119,24 +90,15 @@ export default function Storage({ accession, onSubmit }: Props): JSX.Element {
           </Grid>
           <Grid item xs={4}></Grid>
           <Grid item xs={4}></Grid>
-          <Grid item xs={4}>
-            <Dropdown
-              id='storageLocation'
-              label='Location'
-              selected={record.storageLocation || ''}
-              values={generateLocationsValues}
-              onChange={onStorageLocationChange}
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <TextField
-              id='storageCondition'
-              value={record.storageCondition}
-              onChange={onChange}
-              label='Condition'
-              disabled={true}
-            />
-          </Grid>
+          <Suspense
+            fallback={
+              <Grid item xs={12}>
+                <CircularProgress />
+              </Grid>
+            }
+          >
+            <LocationDropdown accession={accession} />
+          </Suspense>
           <Grid item xs={12}>
             <TextArea
               id='storageNotes'
