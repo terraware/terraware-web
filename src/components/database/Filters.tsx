@@ -116,7 +116,7 @@ export default function Filters(props: Props): JSX.Element {
   };
 
   return (
-    <Container maxWidth='lg' className={classes.mainContainer}>
+    <Container maxWidth={false} className={classes.mainContainer}>
       <SimplePopover
         popover={popover}
         columns={props.columns}

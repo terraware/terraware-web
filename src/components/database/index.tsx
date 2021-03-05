@@ -196,22 +196,28 @@ function Content(): JSX.Element {
             onChange={onFilterChange}
           />
         </PageHeader>
-        <Container maxWidth='lg' className={classes.mainContainer}>
-          <Paper>
-            <Grid container spacing={4}>
-              <Grid item xs={12}>
-                <Table
-                  columns={tableColumns}
-                  rows={results}
-                  orderBy={sort.field}
-                  order={sort.direction === 'Ascending' ? 'asc' : 'desc'}
-                  Renderer={SearchCellRenderer}
-                  onSelect={onSelect}
-                  sortHandler={onSortChange}
-                />
-              </Grid>
+        <Container maxWidth={false} className={classes.mainContainer}>
+          <Grid container spacing={3}>
+            <Grid item xs={1} />
+            <Grid item xs={10}>
+              <Paper>
+                <Grid container spacing={4}>
+                  <Grid item xs={12}>
+                    <Table
+                      columns={tableColumns}
+                      rows={results}
+                      orderBy={sort.field}
+                      order={sort.direction === 'Ascending' ? 'asc' : 'desc'}
+                      Renderer={SearchCellRenderer}
+                      onSelect={onSelect}
+                      sortHandler={onSortChange}
+                    />
+                  </Grid>
+                </Grid>
+              </Paper>
             </Grid>
-          </Paper>
+            <Grid item xs={1} />
+          </Grid>
         </Container>
       </main>
     </MuiPickersUtilsProvider>
