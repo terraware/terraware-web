@@ -6,6 +6,7 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { useRecoilValueLoadable, useResetRecoilState } from 'recoil';
 import searchSelector from '../state/selectors/searchByAccessionNumber';
+import useStateLocation, { getLocation } from '../utils/useStateLocation';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -35,6 +36,8 @@ export default function NavBar(): JSX.Element {
       : [];
 >>>>>>> FE: Implement searchbar (#42)
 
+  const location = useStateLocation();
+
   return (
     <div className={classes.search}>
       <Autocomplete
@@ -56,7 +59,9 @@ export default function NavBar(): JSX.Element {
         value=''
         onChange={(event, value) => {
           if (value) {
-            history.push(`/accessions/${value}/seed-collection`);
+            history.push(
+              getLocation(`/accessions/${value}/seed-collection`, location)
+            );
             resetResults();
             setInput('');
           }

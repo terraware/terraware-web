@@ -23,6 +23,7 @@ import {
 } from '../api/notification';
 import notificationsSelector from '../state/selectors/notifications';
 import preventDefaultEvent from '../utils/preventDefaultEvent';
+import useStateLocation, { getLocation } from '../utils/useStateLocation';
 import NotificationIcon from './NotificationIcon';
 
 const useStyles = makeStyles((theme) =>
@@ -93,6 +94,19 @@ export default function NotificationsDropdown(): JSX.Element {
     return unreadNotifications.length;
   };
 
+  const location = useStateLocation();
+
+  const seedCollectionLocation = (accessionNumber: string) => {
+    return getLocation(
+      `/accessions/${accessionNumber}/seed-collection`,
+      location
+    );
+  };
+
+  const databaseLocation = (state: string) => {
+    return getLocation('/accessions', location, `?state=${state}`);
+  };
+
   return (
     <div>
       <IconButton id='notifications-button' onClick={onIconClick}>
@@ -155,9 +169,9 @@ export default function NotificationsDropdown(): JSX.Element {
                   component={Link}
                   to={
                     type === 'Date'
-                      ? `/accessions/${accessionNumber}/seed-collection`
+                      ? seedCollectionLocation(accessionNumber || '')
                       : type === 'State'
-                      ? `/accessions?state=${state}`
+                      ? databaseLocation(state || '')
                       : ''
                   }
                 >

@@ -117,7 +117,11 @@ function Content(): JSX.Element {
 
   const onSelect = (row: SearchResponseResults) => {
     if (row.accessionNumber) {
-      history.push(`/accessions/${row.accessionNumber}/seed-collection`);
+      const seedCollectionLocation = {
+        pathname: `/accessions/${row.accessionNumber}/seed-collection`,
+        state: { from: location.pathname },
+      };
+      history.push(seedCollectionLocation);
     }
   };
 

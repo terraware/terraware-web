@@ -3,6 +3,7 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 import { Link as RouterLink, useParams, useRouteMatch } from 'react-router-dom';
 import { Accession } from '../../api/types/accessions';
+import useStateLocation from '../../utils/useStateLocation';
 import Divisor from '../common/Divisor';
 
 const useStyles = makeStyles((theme) =>
@@ -44,6 +45,8 @@ export default function GerminationMenu({
     return null;
   }
 
+  const location = useStateLocation();
+
   return (
     <Paper className={classes.paper}>
       <Typography variant='h6' className={classes.bold}>
@@ -54,7 +57,12 @@ export default function GerminationMenu({
         <Link
           id='nursery'
           component={RouterLink}
-          to={`/accessions/${accessionNumber}/nursery`}
+          to={{
+            pathname: `/accessions/${accessionNumber}/nursery`,
+            state: {
+              from: location.state?.from ?? '',
+            },
+          }}
         >
           <Typography
             component='p'
@@ -69,7 +77,10 @@ export default function GerminationMenu({
         <Link
           id='lab'
           component={RouterLink}
-          to={`/accessions/${accessionNumber}/lab`}
+          to={{
+            pathname: `/accessions/${accessionNumber}/lab`,
+            state: { from: location.state?.from ?? '' },
+          }}
         >
           <Typography
             component='p'

@@ -20,6 +20,7 @@ import { Accession, NewAccession } from '../../api/types/accessions';
 import snackbarAtom from '../../state/atoms/snackbar';
 import searchSelector from '../../state/selectors/search';
 import useForm from '../../utils/useForm';
+import useStateLocation, { getLocation } from '../../utils/useStateLocation';
 import Checkbox from '../common/Checkbox';
 import DatePicker from '../common/DatePicker';
 import Divisor from '../common/Divisor';
@@ -73,6 +74,7 @@ export default function NewAccessionWrapper(): JSX.Element {
   const resetSearch = useResetRecoilState(searchSelector);
   const classes = useStyles();
   const history = useHistory();
+  const location = useStateLocation();
 
   const onSubmit = async (record: NewAccession) => {
     try {
@@ -90,7 +92,14 @@ export default function NewAccessionWrapper(): JSX.Element {
   };
 
   if (accessionNumber) {
-    return <Redirect to={`/accessions/${accessionNumber}/seed-collection`} />;
+    return (
+      <Redirect
+        to={getLocation(
+          `/accessions/${accessionNumber}/seed-collection`,
+          location
+        )}
+      />
+    );
   }
 
   return (

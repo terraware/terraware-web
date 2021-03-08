@@ -2,6 +2,7 @@ import { Box, Divider, Link, Paper, Typography } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 import { Link as RouterLink, useParams, useRouteMatch } from 'react-router-dom';
+import useStateLocation from '../../utils/useStateLocation';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -44,6 +45,7 @@ export default function DetailsMenu(): JSX.Element {
       active: useRouteMatch('/accessions/:accessionNumber/withdrawal'),
     },
   ];
+  const location = useStateLocation();
 
   return (
     <Paper className={classes.paper}>
@@ -58,7 +60,12 @@ export default function DetailsMenu(): JSX.Element {
           id={`menu-${route}`}
           component={RouterLink}
           key={title}
-          to={`/accessions/${accessionNumber}/${route}`}
+          to={{
+            pathname: `/accessions/${accessionNumber}/${route}`,
+            state: {
+              from: location.state?.from ?? '',
+            },
+          }}
         >
           <Typography
             component='p'
