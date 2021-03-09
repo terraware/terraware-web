@@ -1,6 +1,7 @@
 import DayJSUtils from '@date-io/dayjs';
 import {
   Chip,
+  CircularProgress,
   Container,
   Grid,
   Link,
@@ -12,7 +13,7 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import dayjs from 'dayjs';
-import React from 'react';
+import React, { Suspense } from 'react';
 import { Link as RouterLink, Redirect, useHistory } from 'react-router-dom';
 import { useResetRecoilState, useSetRecoilState } from 'recoil';
 import { getPhotoEndpoint, postAccession } from '../../api/accession';
@@ -22,12 +23,12 @@ import searchSelector from '../../state/selectors/search';
 import useForm from '../../utils/useForm';
 import useStateLocation, { getLocation } from '../../utils/useStateLocation';
 import Checkbox from '../common/Checkbox';
-import DatePicker from '../common/DatePicker';
 import Divisor from '../common/Divisor';
 import Note from '../common/Note';
 import TextArea from '../common/TextArea';
 import TextField from '../common/TextField';
 import PageHeader from '../PageHeader';
+import { AccessionDates } from './AccessionDates';
 import SecondaryCollectors from './SecondaryCollectors';
 
 const useStyles = makeStyles((theme) =>
@@ -176,24 +177,9 @@ export function AccessionForm<T extends NewAccession>({
         });
       }
     } else {
-      newErrors.splice(errorIndex, 1);
-    }
-    setErrors(newErrors);
-    onChange(id, value);
-  };
-
-  const onChangeDate = (id: string, value: unknown) => {
-    const newErrors = [...errors];
-    const errorIndex = newErrors.findIndex((error) => error.id === id);
-    if (dayjs(value as string).isAfter(dayjs())) {
-      if (errorIndex < 0) {
-        newErrors.push({
-          id: id,
-          msg: 'No future dates allowed',
-        });
+      if (errorIndex >= 0) {
+        newErrors.splice(errorIndex, 1);
       }
-    } else {
-      newErrors.splice(errorIndex, 1);
     }
     setErrors(newErrors);
     onChange(id, value);
@@ -202,6 +188,27 @@ export function AccessionForm<T extends NewAccession>({
   const getErrorText = (id: string) => {
     const error = errors.find((error) => error.id === id);
     return error ? error.msg : '';
+  };
+
+  const refreshErrors = (newErrors: FieldError[]) => {
+    const previousErrors = [...errors];
+    previousErrors.map((error, index) => {
+      if (error.id === 'collectedDate' || error.id === 'receivedDate') {
+        if (newErrors.findIndex((error2) => error2.id === error.id) < 0) {
+          previousErrors.splice(index, 1);
+        }
+      }
+    });
+
+    const combinedErrors = [...previousErrors, ...newErrors].filter(
+      (error, index, self) =>
+        index ===
+        self.findIndex(
+          (otherError) =>
+            otherError.id === error.id && otherError.msg === error.msg
+        )
+    );
+    setErrors(combinedErrors);
   };
 
   return (
@@ -280,33 +287,20 @@ export function AccessionForm<T extends NewAccession>({
           </Grid>
         </Grid>
         <Divisor />
-        <Grid container spacing={4}>
-          <Grid item xs={4}>
-            <DatePicker
-              id='collectedDate'
-              value={record.collectedDate}
-              onChange={onChangeDate}
-              label='Collected on'
-              aria-label='collected on'
-              maxDate={dayjs().format('YYYY-MM-DD')}
-              helperText={getErrorText('collectedDate')}
-              error={getErrorText('collectedDate') ? true : false}
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <DatePicker
-              id='receivedDate'
-              value={record.receivedDate}
-              onChange={onChangeDate}
-              label='Received on'
-              aria-label='received on'
-              maxDate={dayjs().format('YYYY-MM-DD')}
-              helperText={getErrorText('receivedDate')}
-              error={getErrorText('receivedDate') ? true : false}
-            />
-          </Grid>
-          <Grid item xs={4}></Grid>
-        </Grid>
+        <Suspense
+          fallback={
+            <Grid item xs={12}>
+              <CircularProgress />
+            </Grid>
+          }
+        >
+          <AccessionDates
+            collectedDate={record.collectedDate}
+            receivedDate={record.receivedDate}
+            refreshErrors={refreshErrors}
+            onChange={onChange}
+          ></AccessionDates>
+        </Suspense>
         <Divisor />
         <Grid container spacing={4}>
           <Grid item xs={4}>

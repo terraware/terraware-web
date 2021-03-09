@@ -1,18 +1,22 @@
 import { Grid } from '@material-ui/core';
 import React from 'react';
 import { useRecoilValue, useResetRecoilState } from 'recoil';
-import { Accession } from '../../api/types/accessions';
 import { ConditionType, Location } from '../../api/types/locations';
 import locationsSelector from '../../state/selectors/locations';
-import useForm from '../../utils/useForm';
 import Dropdown from '../common/Dropdown';
 import TextField from '../common/TextField';
 
 interface Props {
-  accession: Accession;
+  onChange: (id: string, value: unknown) => void;
+  storageLocation?: string;
+  storageCondition?: string;
 }
 
-export default function LocationDropdown({ accession }: Props): JSX.Element {
+export default function LocationDropdown({
+  onChange,
+  storageLocation,
+  storageCondition,
+}: Props): JSX.Element {
   const locations = useRecoilValue(locationsSelector);
   const resetLocations = useResetRecoilState(locationsSelector);
 
@@ -22,10 +26,11 @@ export default function LocationDropdown({ accession }: Props): JSX.Element {
     };
   }, []);
 
-  const [record, setRecord, onChange] = useForm(accession);
   React.useEffect(() => {
-    setRecord(accession);
-  }, [accession]);
+    if (storageLocation) {
+      onChange('storageCondition', getConditionValue(storageLocation) || '');
+    }
+  }, [storageLocation]);
 
   const generateLocationsValues = locations?.map((location: Location) => {
     return {
@@ -44,11 +49,7 @@ export default function LocationDropdown({ accession }: Props): JSX.Element {
   };
 
   const onStorageLocationChange = (id: string, value: string) => {
-    setRecord({
-      ...record,
-      [id]: value,
-      storageCondition: getConditionValue(value),
-    });
+    onChange(id, value);
   };
 
   return (
@@ -57,7 +58,7 @@ export default function LocationDropdown({ accession }: Props): JSX.Element {
         <Dropdown
           id='storageLocation'
           label='Location'
-          selected={record.storageLocation || ''}
+          selected={storageLocation}
           values={generateLocationsValues}
           onChange={onStorageLocationChange}
         />
@@ -65,7 +66,7 @@ export default function LocationDropdown({ accession }: Props): JSX.Element {
       <Grid item xs={4}>
         <TextField
           id='storageCondition'
-          value={record.storageCondition}
+          value={storageCondition}
           onChange={onChange}
           label='Condition'
           disabled={true}
