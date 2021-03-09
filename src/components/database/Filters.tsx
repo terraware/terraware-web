@@ -61,6 +61,7 @@ interface Props {
   columns: DatabaseColumn[];
   filters: SearchFilter[];
   availableValues: FieldValuesPayload;
+  allValues: FieldValuesPayload;
   onChange: (filters: SearchFilter[]) => void;
 }
 
@@ -105,8 +106,16 @@ export default function Filters(props: Props): JSX.Element {
 
   const getLabel = (col: DatabaseColumn): string => {
     const filter = props.filters.find((filter) => filter.field === col.key);
-    return filter?.values.length
-      ? `${col.name} (${filter?.values.length})`
+    let totalFilteredValues = filter?.values.length;
+    const isBoolean = col.type === 'boolean';
+    if (filter && totalFilteredValues && isBoolean) {
+      const indexNull = filter.values.findIndex((value) => value === null);
+      if (indexNull > -1) {
+        totalFilteredValues = totalFilteredValues - 1;
+      }
+    }
+    return totalFilteredValues
+      ? `${col.name} (${totalFilteredValues})`
       : col.name;
   };
 
@@ -122,6 +131,7 @@ export default function Filters(props: Props): JSX.Element {
         columns={props.columns}
         filters={props.filters}
         availableValues={props.availableValues}
+        allValues={props.allValues}
         onFilterChange={onChange}
         onClose={onClosePopover}
       />
@@ -160,12 +170,19 @@ export default function Filters(props: Props): JSX.Element {
 
 function getOptions(
   col: DatabaseColumn,
-  availableValues: FieldValuesPayload
+  availableValues: FieldValuesPayload,
+  allValues: FieldValuesPayload
 ): Option[] {
-  return availableValues[col.key].values.map((v) => ({
-    label: v,
-    value: v,
-  }));
+  const map1 = allValues[col.key].values.map((v) => {
+    return {
+      label: v,
+      value: v,
+      disabled:
+        availableValues[col.key].values.findIndex((value) => v === value) ===
+        -1,
+    };
+  });
+  return map1;
 }
 
 type FilterPopover = { col: DatabaseColumn; anchor: HTMLDivElement | null };
@@ -175,6 +192,7 @@ interface ChipPopoverProps {
   columns: DatabaseColumn[];
   filters: SearchFilter[];
   availableValues: FieldValuesPayload;
+  allValues: FieldValuesPayload;
   onFilterChange: (filter: SearchFilter) => void;
   onClose: () => void;
 }
@@ -182,8 +200,8 @@ interface ChipPopoverProps {
 export function SimplePopover({
   popover,
   availableValues,
+  allValues,
   filters,
-  columns,
   onFilterChange,
   onClose,
 }: ChipPopoverProps): JSX.Element {
@@ -237,7 +255,7 @@ export function SimplePopover({
             filters.find((f) => f.field === popover?.col.key)?.values ?? []
           }
           onChange={onFilterChange}
-          options={getOptions(popover?.col, availableValues)}
+          options={getOptions(popover?.col, availableValues, allValues)}
         />
       )}
       {popover?.col.filter?.type === 'single_selection' && (
@@ -247,8 +265,8 @@ export function SimplePopover({
             filters.find((f) => f.field === popover?.col.key)?.values ?? []
           }
           onChange={onFilterChange}
-          options={getOptions(popover?.col, availableValues)}
-          isBoolean={Boolean(columns.find((c) => c.type === 'boolean'))}
+          options={getOptions(popover?.col, availableValues, allValues)}
+          isBoolean={Boolean(popover?.col.type === 'boolean')}
         />
       )}
       {popover?.col.filter?.type === 'search' && (

@@ -66,7 +66,7 @@ export default function MultipleSelection(props: Props): JSX.Element {
   const indexNull = options.findIndex((o) => o.value === null);
   if (indexNull >= 0) {
     if (options.find((o) => o.value === null)) {
-      options.push({ label: 'None', value: null });
+      options.push({ label: 'None', value: null, disabled: false });
     }
     options.splice(indexNull, 1);
   }
@@ -76,7 +76,7 @@ export default function MultipleSelection(props: Props): JSX.Element {
 
   return (
     <div id={`filter-list-${props.field}`} className={classes.box}>
-      {options.map(({ label, value }) => (
+      {options.map(({ label, value, disabled }) => (
         <div key={value} className={classes.item}>
           <Checkbox
             id={value || ''}
@@ -84,6 +84,7 @@ export default function MultipleSelection(props: Props): JSX.Element {
             label={label}
             value={selections.includes(value)}
             onChange={() => handleChange(value)}
+            disabled={disabled}
           />
         </div>
       ))}

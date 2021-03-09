@@ -27,6 +27,7 @@ import snackbarAtom from '../../state/atoms/snackbar';
 import searchSelector, {
   searchTableColumnsSelector,
 } from '../../state/selectors/search';
+import searchAllValuesSelector from '../../state/selectors/searchAllValues';
 import searchValuesSelector from '../../state/selectors/searchValues';
 import Table from '../common/table';
 import { Order } from '../common/table/sort';
@@ -92,6 +93,7 @@ function Content(): JSX.Element {
   const tableColumns = useRecoilValue(searchTableColumnsSelector);
   const results = useRecoilValue(searchSelector).results;
   const availableValues = useRecoilValue(searchValuesSelector).results;
+  const allValues = useRecoilValue(searchAllValuesSelector).results;
 
   const useQuery = () => new URLSearchParams(useLocation().search);
   const query = useQuery();
@@ -196,6 +198,7 @@ function Content(): JSX.Element {
           <Filters
             filters={filters}
             availableValues={availableValues}
+            allValues={allValues}
             columns={tableColumns}
             onChange={onFilterChange}
           />

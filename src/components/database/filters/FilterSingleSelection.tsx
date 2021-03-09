@@ -29,18 +29,30 @@ export default function SingleSelection(props: Props): JSX.Element {
   const classes = useStyles();
 
   const options = [...props.options];
-  const indexNull = options.findIndex((o) => o.value === null);
-  if (indexNull >= 0) {
+  const indexEnabledNull = options.findIndex(
+    (o) => o.value === null && o.disabled === false
+  );
+  if (indexEnabledNull >= 0) {
     if (props.isBoolean) {
-      if (!options.find((o) => o.value === 'false')) {
-        options.push({ label: 'false', value: 'false' });
+      const falseOption = options.find(
+        (o) => o.value === 'false' && o.disabled
+      );
+      if (falseOption) {
+        falseOption.disabled = false;
       }
     } else {
       if (options.find((o) => o.value === null)) {
-        options.push({ label: 'None', value: null });
+        options.push({ label: 'None', value: null, disabled: false });
       }
     }
-    options.splice(indexNull, 1);
+    options.splice(indexEnabledNull, 1);
+  } else {
+    const indexDisabledNull = options.findIndex(
+      (o) => o.value === null && o.disabled
+    );
+    if (indexDisabledNull >= 0) {
+      options.splice(indexDisabledNull, 1);
+    }
   }
   options.sort((a, b) =>
     a.value && b.value ? a.value.localeCompare(b.value) : 0
@@ -66,12 +78,13 @@ export default function SingleSelection(props: Props): JSX.Element {
   return (
     <div id={`filter-list-${props.field}`} className={classes.box}>
       <List>
-        {options.map(({ label, value }) => (
+        {options.map(({ label, value, disabled }) => (
           <ListItem
             button
             key={label}
             onClick={() => handleChange(value)}
             selected={props.values.includes(value)}
+            disabled={disabled}
           >
             <ListItemText id={value ?? ''} primary={formatLabel(label)} />
           </ListItem>

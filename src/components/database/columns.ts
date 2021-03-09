@@ -4,6 +4,7 @@ import { TableColumnType } from '../common/table/types';
 export interface Option {
   label: string | null;
   value: string | null;
+  disabled: boolean;
 }
 
 type DatabaseColumnFilterType =
@@ -14,7 +15,7 @@ type DatabaseColumnFilterType =
   | 'number_range';
 export interface DatabaseColumn extends Omit<TableColumnType, 'key'> {
   key: SearchField;
-  filter?: { type: DatabaseColumnFilterType, options?: Option[] }
+  filter?: { type: DatabaseColumnFilterType; options?: Option[] };
 }
 
 export const COLUMNS: DatabaseColumn[] = [
@@ -73,8 +74,8 @@ export const COLUMNS: DatabaseColumn[] = [
     filter: {
       type: 'single_selection',
       options: [
-        { label: 'Yes', value: 'true' },
-        { label: 'No', value: 'false' },
+        { label: 'Yes', value: 'true', disabled: false },
+        { label: 'No', value: 'false', disabled: false },
       ],
     },
   },
@@ -85,8 +86,8 @@ export const COLUMNS: DatabaseColumn[] = [
     filter: {
       type: 'single_selection',
       options: [
-        { label: 'Yes', value: 'true' },
-        { label: 'No', value: 'false' },
+        { label: 'Yes', value: 'true', disabled: false },
+        { label: 'No', value: 'false', disabled: false },
       ],
     },
   },
@@ -286,59 +287,112 @@ export const COLUMNS: DatabaseColumn[] = [
 
 export interface Preset {
   name: string;
-  fields: SearchField[]
+  fields: SearchField[];
 }
 
 export const defaultPreset: Preset = {
   name: 'Default',
   fields: [
-    'accessionNumber', 'species', 'siteLocation', 'state', 'collectedDate', 'receivedDate', 'primaryCollector'
-  ]
-}
+    'accessionNumber',
+    'species',
+    'siteLocation',
+    'state',
+    'collectedDate',
+    'receivedDate',
+    'primaryCollector',
+  ],
+};
 
 const generalInventoryPreset: Preset = {
   name: 'General Inventory',
   fields: [
-    'accessionNumber', 'species', 'siteLocation', 'landowner', 'active', 'state', 'collectedDate', 'receivedDate',
-    'primaryCollector', 'endangered', 'rare', 'treesCollectedFrom', 'estimatedSeedsIncoming', 'storageCondition',
-    'withdrawalSeeds', 'seedsRemaining', 'latestGerminationTestDate', 'latestViabilityPercent', 'totalViabilityPercent'
-  ]
-}
-
+    'accessionNumber',
+    'species',
+    'siteLocation',
+    'landowner',
+    'active',
+    'state',
+    'collectedDate',
+    'receivedDate',
+    'primaryCollector',
+    'endangered',
+    'rare',
+    'treesCollectedFrom',
+    'estimatedSeedsIncoming',
+    'storageCondition',
+    'withdrawalSeeds',
+    'seedsRemaining',
+    'latestGerminationTestDate',
+    'latestViabilityPercent',
+    'totalViabilityPercent',
+  ],
+};
 
 const seedStoragePreset: Preset = {
   name: 'Seed Storage Status',
   fields: [
-    'accessionNumber', 'species', 'active', 'state', 'collectedDate', 'receivedDate', 'estimatedSeedsIncoming',
-    'storageStartDate', 'storagePackets', 'storageCondition', 'storageLocation', 'storageNotes', 'seedsRemaining',
-    'latestViabilityPercent'
-  ]
-}
+    'accessionNumber',
+    'species',
+    'active',
+    'state',
+    'collectedDate',
+    'receivedDate',
+    'estimatedSeedsIncoming',
+    'storageStartDate',
+    'storagePackets',
+    'storageCondition',
+    'storageLocation',
+    'storageNotes',
+    'seedsRemaining',
+    'latestViabilityPercent',
+  ],
+};
 
 const viabilitySummaryPreset: Preset = {
   name: 'Viability Summary',
   fields: [
-    'accessionNumber', 'species', 'active', 'state', 'collectedDate', 'germinationTestType', 'germinationSeedType',
-    'germinationSeedsSown', 'germinationSubstrate', 'germinationTreatment', 'germinationTestNotes', 'germinationSeedsGerminated',
-    'germinationPercentGerminated', 'cutTestSeedsFilled', 'cutTestSeedsEmpty', 'cutTestSeedsCompromised', 'latestViabilityPercent',
-    'totalViabilityPercent'
-  ]
-
-}
+    'accessionNumber',
+    'species',
+    'active',
+    'state',
+    'collectedDate',
+    'germinationTestType',
+    'germinationSeedType',
+    'germinationSeedsSown',
+    'germinationSubstrate',
+    'germinationTreatment',
+    'germinationTestNotes',
+    'germinationSeedsGerminated',
+    'germinationPercentGerminated',
+    'cutTestSeedsFilled',
+    'cutTestSeedsEmpty',
+    'cutTestSeedsCompromised',
+    'latestViabilityPercent',
+    'totalViabilityPercent',
+  ],
+};
 
 const germinationTestingPreset: Preset = {
   name: 'Germination Testing To Do',
   fields: [
-    'accessionNumber', 'species', 'active', 'state', 'collectedDate', 'storagePackets', 'storageCondition', 'storageLocation',
-    'storageNotes', 'germinationTestType', 'germinationStartDate'
-  ]
-
-}
+    'accessionNumber',
+    'species',
+    'active',
+    'state',
+    'collectedDate',
+    'storagePackets',
+    'storageCondition',
+    'storageLocation',
+    'storageNotes',
+    'germinationTestType',
+    'germinationStartDate',
+  ],
+};
 
 export const searchPresets = [
   defaultPreset,
   generalInventoryPreset,
   seedStoragePreset,
   viabilitySummaryPreset,
-  germinationTestingPreset
-]
+  germinationTestingPreset,
+];
