@@ -159,6 +159,10 @@ function Content(): JSX.Element {
     setReportModalOpen(false);
   };
 
+  const isInactive = (row: SearchResponseResults) => {
+    return row.active === 'Inactive';
+  };
+
   return (
     <MuiPickersUtilsProvider utils={DayJSUtils}>
       <main>
@@ -218,6 +222,7 @@ function Content(): JSX.Element {
                       Renderer={SearchCellRenderer}
                       onSelect={onSelect}
                       sortHandler={onSortChange}
+                      isInactive={isInactive}
                     />
                   </Grid>
                 </Grid>
