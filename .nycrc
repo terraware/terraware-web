@@ -1,0 +1,6 @@
+{
+  "exclude": [
+    "src/theme.ts",
+    "src/reportWebVitals.ts"
+  ]
+}
