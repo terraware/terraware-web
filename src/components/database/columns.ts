@@ -18,7 +18,7 @@ export interface DatabaseColumn extends Omit<TableColumnType, 'key'> {
   filter?: { type: DatabaseColumnFilterType; options?: Option[] };
 }
 
-export const COLUMNS: DatabaseColumn[] = [
+const COLUMNS: DatabaseColumn[] = [
   {
     key: 'accessionNumber',
     name: 'Accession',

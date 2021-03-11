@@ -11,7 +11,7 @@ import Checkbox from '../common/Checkbox';
 import DialogCloseButton from '../common/DialogCloseButton';
 import Divisor from '../common/Divisor';
 import RadioButton from '../common/RadioButton';
-import { COLUMNS, Preset, searchPresets } from './columns';
+import { COLUMNS_INDEXED, Preset, searchPresets } from './columns';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -172,50 +172,101 @@ interface Section {
 const sections: Section[] = [
   {
     name: 'General',
-    options: [[{ ...COLUMNS[0], disabled: true }], [COLUMNS[1]], [COLUMNS[2]]],
+    options: [
+      [{ ...COLUMNS_INDEXED['accessionNumber'], disabled: true }],
+      [COLUMNS_INDEXED['active']],
+      [COLUMNS_INDEXED['state']],
+    ],
   },
   {
     name: 'Seed Collection',
     options: [
-      [COLUMNS[3], COLUMNS[4], COLUMNS[5], COLUMNS[6]],
-      [COLUMNS[7], COLUMNS[8], COLUMNS[9], COLUMNS[47]],
-      [COLUMNS[10], COLUMNS[11], COLUMNS[12], COLUMNS[13]],
+      [
+        COLUMNS_INDEXED['species'],
+        COLUMNS_INDEXED['receivedDate'],
+        COLUMNS_INDEXED['collectedDate'],
+        COLUMNS_INDEXED['primaryCollector'],
+      ],
+      [
+        COLUMNS_INDEXED['siteLocation'],
+        COLUMNS_INDEXED['endangered'],
+        COLUMNS_INDEXED['rare'],
+        COLUMNS_INDEXED['bagNumber'],
+      ],
+      [
+        COLUMNS_INDEXED['treesCollectedFrom'],
+        COLUMNS_INDEXED['estimatedSeedsIncoming'],
+        COLUMNS_INDEXED['landowner'],
+        COLUMNS_INDEXED['collectionNotes'],
+      ],
     ],
   },
   {
     name: 'Processing and Drying',
     options: [
-      [COLUMNS[14], COLUMNS[15]],
-      [COLUMNS[16], COLUMNS[17]],
-      [COLUMNS[18], COLUMNS[19]],
+      [
+        COLUMNS_INDEXED['processingStartDate'],
+        COLUMNS_INDEXED['dryingStartDate'],
+      ],
+      [COLUMNS_INDEXED['processingMethod'], COLUMNS_INDEXED['dryingEndDate']],
+      [COLUMNS_INDEXED['seedsCounted'], COLUMNS_INDEXED['processingNotes']],
     ],
   },
   {
     name: 'Storing',
     options: [
-      [COLUMNS[20], COLUMNS[21]],
-      [COLUMNS[22]],
-      [COLUMNS[23], COLUMNS[24]],
+      [
+        COLUMNS_INDEXED['storageStartDate'],
+        COLUMNS_INDEXED['storageCondition'],
+      ],
+      [COLUMNS_INDEXED['storageLocation']],
+      [COLUMNS_INDEXED['storagePackets'], COLUMNS_INDEXED['storageNotes']],
     ],
   },
   {
     name: 'Withdrawal',
     options: [
-      [COLUMNS[25], COLUMNS[26]],
-      [COLUMNS[27], COLUMNS[28]],
-      [COLUMNS[29], COLUMNS[30], COLUMNS[31]],
+      [COLUMNS_INDEXED['withdrawalDate'], COLUMNS_INDEXED['withdrawalSeeds']],
+      [
+        COLUMNS_INDEXED['withdrawalDestination'],
+        COLUMNS_INDEXED['seedsRemaining'],
+      ],
+      [
+        COLUMNS_INDEXED['withdrawalPurpose'],
+        COLUMNS_INDEXED['targetStorageCondition'],
+        COLUMNS_INDEXED['withdrawalNotes'],
+      ],
     ],
   },
   {
     name: 'Germination Testing',
     options: [
-      [COLUMNS[32], COLUMNS[33], COLUMNS[34], COLUMNS[35], COLUMNS[36]],
-      [COLUMNS[37], COLUMNS[38], COLUMNS[39], COLUMNS[40]],
-      [COLUMNS[41], COLUMNS[42], COLUMNS[43], COLUMNS[44]],
+      [
+        COLUMNS_INDEXED['germinationTestType'],
+        COLUMNS_INDEXED['germinationSeedType'],
+        COLUMNS_INDEXED['germinationTreatment'],
+        COLUMNS_INDEXED['cutTestSeedsFilled'],
+        COLUMNS_INDEXED['germinationTestNotes'],
+      ],
+      [
+        COLUMNS_INDEXED['germinationStartDate'],
+        COLUMNS_INDEXED['germinationSeedsSown'],
+        COLUMNS_INDEXED['germinationSeedsGerminated'],
+        COLUMNS_INDEXED['cutTestSeedsEmpty'],
+      ],
+      [
+        COLUMNS_INDEXED['latestGerminationTestDate'],
+        COLUMNS_INDEXED['germinationSubstrate'],
+        COLUMNS_INDEXED['germinationPercentGerminated'],
+        COLUMNS_INDEXED['cutTestSeedsCompromised'],
+      ],
     ],
   },
   {
     name: 'Viability',
-    options: [[COLUMNS[45]], [COLUMNS[46]]],
+    options: [
+      [COLUMNS_INDEXED['latestViabilityPercent']],
+      [COLUMNS_INDEXED['totalViabilityPercent']],
+    ],
   },
 ];
