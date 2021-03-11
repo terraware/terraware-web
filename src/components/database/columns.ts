@@ -283,6 +283,12 @@ export const COLUMNS: DatabaseColumn[] = [
     type: 'number',
     filter: { type: 'number_range' },
   },
+  {
+    key: 'bagNumber',
+    name: 'Bag number',
+    type: 'string',
+    filter: { type: 'search' },
+  },
 ];
 
 export interface Preset {

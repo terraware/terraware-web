@@ -176,7 +176,7 @@ const sections: Section[] = [
     name: 'Seed Collection',
     options: [
       [COLUMNS[3], COLUMNS[4], COLUMNS[5], COLUMNS[6]],
-      [COLUMNS[7], COLUMNS[8], COLUMNS[9]],
+      [COLUMNS[7], COLUMNS[8], COLUMNS[9], COLUMNS[47]],
       [COLUMNS[10], COLUMNS[11], COLUMNS[12], COLUMNS[13]],
     ],
   },
