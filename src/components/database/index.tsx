@@ -19,14 +19,13 @@ import {
   SearchResponseResults,
 } from '../../api/types/search';
 import {
+  columnsAtom,
   searchFilterAtom,
+  searchSelectedColumnsAtom,
   searchSortAtom,
-  searchVisibleColumnsAtom,
 } from '../../state/atoms/search';
 import snackbarAtom from '../../state/atoms/snackbar';
-import searchSelector, {
-  searchTableColumnsSelector,
-} from '../../state/selectors/search';
+import searchSelector, { columnsSelector } from '../../state/selectors/search';
 import searchAllValuesSelector from '../../state/selectors/searchAllValues';
 import searchValuesSelector from '../../state/selectors/searchValues';
 import Table from '../common/table';
@@ -87,10 +86,9 @@ function Content(): JSX.Element {
 
   const [filters, setFilters] = useRecoilState(searchFilterAtom);
   const [sort, setSort] = useRecoilState(searchSortAtom);
-  const [visibleColumns, setVisibleColumns] = useRecoilState(
-    searchVisibleColumnsAtom
-  );
-  const tableColumns = useRecoilValue(searchTableColumnsSelector);
+  const setSearchSelectedColumns = useSetRecoilState(searchSelectedColumnsAtom);
+  const [columns, setColumns] = useRecoilState(columnsAtom);
+  const tableColumns = useRecoilValue(columnsSelector);
   const results = useRecoilValue(searchSelector).results;
   const availableValues = useRecoilValue(searchValuesSelector).results;
   const allValues = useRecoilValue(searchAllValuesSelector).results;
@@ -146,10 +144,16 @@ function Content(): JSX.Element {
     setReportModalOpen(true);
   };
 
-  const onCloseEditColumnsModal = (columns?: Record<SearchField, boolean>) => {
+  const onCloseEditColumnsModal = (columns?: SearchField[]) => {
     if (columns) {
-      setVisibleColumns(columns);
-      const newFilters = filters.filter((f) => columns[f.field]);
+      const selectedColumns = columns.reduce((acum, value) => {
+        acum[value] = true;
+        return acum;
+      }, {} as Record<SearchField, boolean>);
+
+      setSearchSelectedColumns(columns);
+      setColumns(columns);
+      const newFilters = filters.filter((f) => selectedColumns[f.field]);
       setFilters(newFilters);
     }
     setEditColumnsModalOpen(false);
@@ -162,13 +166,24 @@ function Content(): JSX.Element {
   const isInactive = (row: SearchResponseResults) => {
     return row.active === 'Inactive';
   };
+  const onReorderEnd = React.useCallback(
+    ({ oldIndex, newIndex }) => {
+      if (newIndex !== 0 && oldIndex !== 0) {
+        const newOrder = [...columns];
+        const moved = newOrder.splice(oldIndex, 1);
+        newOrder.splice(newIndex, 0, moved[0]);
+        setColumns(newOrder);
+      }
+    },
+    [columns]
+  );
 
   return (
     <MuiPickersUtilsProvider utils={DayJSUtils}>
       <main>
         <EditColumns
           open={editColumnsModalOpen}
-          value={visibleColumns}
+          value={columns}
           onClose={onCloseEditColumnsModal}
         />
         <DownloadReportModal
@@ -223,6 +238,7 @@ function Content(): JSX.Element {
                       onSelect={onSelect}
                       sortHandler={onSortChange}
                       isInactive={isInactive}
+                      onReorderEnd={onReorderEnd}
                     />
                   </Grid>
                 </Grid>

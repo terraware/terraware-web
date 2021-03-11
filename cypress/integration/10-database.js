@@ -40,15 +40,17 @@ describe('Database', () => {
       cy.get('#receivedDate').click();
       cy.get('#collectedDate').click();
       cy.get('#primaryCollector').click();
+      cy.get('#active').click();
       cy.get('#saveColumnsButton').click();
       cy.wait('@search');
       cy.wait('@values');
       cy.get('#editColumnsDialog').should('not.exist');
 
-      cy.get('#table-header').children().should('have.length', 3);
-      cy.get('#table-header-accessionNumber').contains('ACCESSION');
-      cy.get('#table-header-state').contains('STATE');
-      cy.get('#table-header-siteLocation').contains('SITE LOCATION');
+      cy.get('#table-header').children().should('have.length', 4);
+      cy.get('#table-header > :nth-child(1)').contains('ACCESSION');
+      cy.get('#table-header > :nth-child(2)').contains('SITE LOCATION');
+      cy.get('#table-header > :nth-child(3)').contains('STATE');
+      cy.get('#table-header > :nth-child(4)').contains('STATUS');
     });
 
     context('Presets', () => {
@@ -272,25 +274,19 @@ describe('Database', () => {
         cy.get('#editColumnsDialog').should('not.exist');
 
         cy.get('#table-header').children().should('have.length', 13);
-        cy.get('#table-header-accessionNumber').contains('ACCESSION');
-        cy.get('#table-header-active').contains('STATUS');
-        cy.get('#table-header-state').contains('STATE');
-        cy.get('#table-header-species').contains('SPECIES');
-        cy.get('#table-header-collectedDate').contains('COLLECTED ON');
-        cy.get('#table-header-primaryCollector').contains('COLLECTOR');
-        cy.get('#table-header-rare').contains('RARE');
-        cy.get('#table-header-storageCondition').contains('STORAGE CONDITION');
-        cy.get('#table-header-storageLocation').contains('STORAGE LOCATION');
-        cy.get('#table-header-storagePackets').contains(
-          'NUMBER OF STORAGE PACKETS'
-        );
-        cy.get('#table-header-storageNotes').contains('NOTES');
-        cy.get('#table-header-germinationTestType').contains(
-          'GERMINATION TEST TYPE'
-        );
-        cy.get('#table-header-germinationStartDate').contains(
-          'GERMINATION START DATE'
-        );
+        cy.get('#table-header > :nth-child(1)').contains('ACCESSION');
+        cy.get('#table-header > :nth-child(2)').contains('SPECIES');
+        cy.get('#table-header > :nth-child(3)').contains('STATUS');
+        cy.get('#table-header > :nth-child(4)').contains('STATE');
+        cy.get('#table-header > :nth-child(5)').contains('COLLECTED ON');
+        cy.get('#table-header > :nth-child(6)').contains('NUMBER OF STORAGE PACKETS');
+        cy.get('#table-header > :nth-child(7)').contains('STORAGE CONDITION');
+        cy.get('#table-header > :nth-child(8)').contains('STORAGE LOCATION');
+        cy.get('#table-header > :nth-child(9)').contains('NOTES');
+        cy.get('#table-header > :nth-child(10)').contains('GERMINATION TEST TYPE');
+        cy.get('#table-header > :nth-child(11)').contains('GERMINATION START DATE');
+        cy.get('#table-header > :nth-child(12)').contains('COLLECTOR');
+        cy.get('#table-header > :nth-child(13)').contains('RARE');
       });
     });
   });

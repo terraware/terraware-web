@@ -6,7 +6,6 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React from 'react';
 import { SearchField } from '../../api/types/search';
-import useForm from '../../utils/useForm';
 import CancelButton from '../common/CancelButton';
 import Checkbox from '../common/Checkbox';
 import DialogCloseButton from '../common/DialogCloseButton';
@@ -34,8 +33,8 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export interface Props {
   open: boolean;
-  onClose: (columns?: Record<SearchField, boolean>) => void;
-  value: Record<SearchField, boolean>;
+  onClose: (columns?: SearchField[]) => void;
+  value: SearchField[];
 }
 
 export default function EditColumnsDialog(props: Props): JSX.Element {
@@ -43,11 +42,10 @@ export default function EditColumnsDialog(props: Props): JSX.Element {
   const { onClose, open } = props;
   const [preset, setPreset] = React.useState<Preset>();
 
-  const [record, setRecord, onChange] = useForm<Record<SearchField, boolean>>(
-    props.value
-  );
+  const [value, setValue] = React.useState(props.value ?? []);
+
   React.useEffect(() => {
-    setRecord(props.value);
+    setValue(props.value);
     setPreset(undefined);
   }, [props.value]);
 
@@ -56,18 +54,22 @@ export default function EditColumnsDialog(props: Props): JSX.Element {
   };
 
   const handleOk = () => {
-    onClose(record);
+    onClose(value);
   };
 
   const onSelectPreset = (updatedPreset: Preset) => {
     setPreset(updatedPreset);
+    setValue([...updatedPreset.fields]);
+  };
 
-    const updatedRecords = updatedPreset.fields.reduce((acum, field) => {
-      acum[field] = true;
-      return acum;
-    }, {} as Record<SearchField, boolean>);
-
-    setRecord(updatedRecords);
+  const onChange = (id: string, checked: boolean) => {
+    if (checked) {
+      const newValue = [...value];
+      newValue.push(id as SearchField);
+      setValue(newValue);
+    } else {
+      setValue(value.filter((v) => v !== id));
+    }
   };
 
   return (
@@ -124,7 +126,7 @@ export default function EditColumnsDialog(props: Props): JSX.Element {
                           id={key}
                           name={key}
                           label={name}
-                          value={record[key]}
+                          value={value.includes(key)}
                           onChange={(id, value) => onChange(key, value)}
                         />
                       </Grid>

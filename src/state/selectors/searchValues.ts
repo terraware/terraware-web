@@ -1,17 +1,18 @@
 import { selector } from "recoil";
 import { searchValues } from "../../api/search";
 import { ListFieldValuesRequestPayload } from "../../api/types/search";
-import { searchFilterAtom } from "../atoms/search";
-import { searchTableColumnsSelector } from "./search";
+import { COLUMNS_INDEXED } from "../../components/database/columns";
+import { searchFilterAtom, searchSelectedColumnsAtom } from "../atoms/search";
 
 export default selector({
   key: 'searchValuesSelector',
   get: async ({ get }) => {
-    const tableColumns = get(searchTableColumnsSelector);
+    const columns = get(searchSelectedColumnsAtom);
     const filters = get(searchFilterAtom);
 
     const params = {
-      fields: tableColumns.reduce((acum, c) => {
+      fields: columns.reduce((acum, value) => {
+        const c = COLUMNS_INDEXED[value];
         if (
           ['multiple_selection', 'single_selection'].includes(
             c.filter?.type ?? ''
