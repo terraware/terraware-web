@@ -1,6 +1,5 @@
 import DayJSUtils from '@date-io/dayjs';
 import {
-  Box,
   Chip,
   CircularProgress,
   Container,
@@ -12,7 +11,11 @@ import EditIcon from '@material-ui/icons/Edit';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import React from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import {
+  useRecoilState,
+  useRecoilValueLoadable,
+  useSetRecoilState,
+} from 'recoil';
 import {
   SearchField,
   SearchFilter,
@@ -24,13 +27,11 @@ import {
   searchSelectedColumnsAtom,
   searchSortAtom,
 } from '../../state/atoms/search';
-import snackbarAtom from '../../state/atoms/snackbar';
 import searchSelector, { columnsSelector } from '../../state/selectors/search';
 import searchAllValuesSelector from '../../state/selectors/searchAllValues';
 import searchValuesSelector from '../../state/selectors/searchValues';
 import Table from '../common/table';
 import { Order } from '../common/table/sort';
-import ErrorBoundary from '../ErrorBoundary';
 import PageHeader from '../PageHeader';
 import DownloadReportModal from './DownloadReportModal';
 import EditColumns from './EditColumns';
@@ -55,43 +56,35 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export default function Database(): JSX.Element {
-  const setSnackbar = useSetRecoilState(snackbarAtom);
-  const errorHandler = () => {
-    setSnackbar({
-      type: 'error',
-      msg: 'An error occurred when fetching accessions.',
-    });
-  };
-
-  return (
-    <ErrorBoundary handler={errorHandler}>
-      <React.Suspense
-        fallback={
-          <Box display='flex' justifyContent='center'>
-            <CircularProgress id='spinner-database' />
-          </Box>
-        }
-      >
-        <Content />
-      </React.Suspense>
-    </ErrorBoundary>
-  );
-}
-
-function Content(): JSX.Element {
   const classes = useStyles();
   const history = useHistory();
   const [editColumnsModalOpen, setEditColumnsModalOpen] = React.useState(false);
   const [reportModalOpen, setReportModalOpen] = React.useState(false);
-
   const [filters, setFilters] = useRecoilState(searchFilterAtom);
   const [sort, setSort] = useRecoilState(searchSortAtom);
   const setSearchSelectedColumns = useSetRecoilState(searchSelectedColumnsAtom);
   const [columns, setColumns] = useRecoilState(columnsAtom);
-  const tableColumns = useRecoilValue(columnsSelector);
-  const results = useRecoilValue(searchSelector).results;
-  const availableValues = useRecoilValue(searchValuesSelector).results;
-  const allValues = useRecoilValue(searchAllValuesSelector).results;
+
+  const tableColumnsLodable = useRecoilValueLoadable(columnsSelector);
+  const tableColumns =
+    tableColumnsLodable.state === 'hasValue'
+      ? tableColumnsLodable.contents
+      : undefined;
+  const resultsLodable = useRecoilValueLoadable(searchSelector);
+  const results =
+    resultsLodable.state === 'hasValue'
+      ? resultsLodable.contents.results
+      : undefined;
+  const availableValuesLodable = useRecoilValueLoadable(searchValuesSelector);
+  const availableValues =
+    availableValuesLodable.state === 'hasValue'
+      ? availableValuesLodable.contents.results
+      : undefined;
+  const allValuesLodable = useRecoilValueLoadable(searchAllValuesSelector);
+  const allValues =
+    allValuesLodable.state === 'hasValue'
+      ? allValuesLodable.contents.results
+      : undefined;
 
   const useQuery = () => new URLSearchParams(useLocation().search);
   const query = useQuery();
@@ -178,6 +171,18 @@ function Content(): JSX.Element {
     [columns]
   );
 
+  const getSubtitle = () => {
+    if (results) {
+      return `${results.length} total`;
+    }
+    if (resultsLodable.state === 'loading') {
+      return <CircularProgress />;
+    }
+    if (resultsLodable.state === 'hasError') {
+      return 'An error ocurred';
+    }
+  };
+
   return (
     <MuiPickersUtilsProvider utils={DayJSUtils}>
       <main>
@@ -192,7 +197,7 @@ function Content(): JSX.Element {
         />
         <PageHeader
           title='Database'
-          subtitle={`${results.length} total`}
+          subtitle={getSubtitle()}
           rightComponent={
             <div>
               <Chip
@@ -214,13 +219,22 @@ function Content(): JSX.Element {
             </div>
           }
         >
-          <Filters
-            filters={filters}
-            availableValues={availableValues}
-            allValues={allValues}
-            columns={tableColumns}
-            onChange={onFilterChange}
-          />
+          {availableValues && allValues && tableColumns && (
+            <Filters
+              filters={filters}
+              availableValues={availableValues}
+              allValues={allValues}
+              columns={tableColumns}
+              onChange={onFilterChange}
+            />
+          )}
+          {(allValuesLodable.state === 'loading' ||
+            availableValuesLodable.state === 'loading' ||
+            tableColumnsLodable.state === 'loading') && <CircularProgress />}
+          {(allValuesLodable.state === 'hasError' ||
+            availableValuesLodable.state === 'hasError' ||
+            tableColumnsLodable.state === 'hasError') &&
+            'An error ocurred'}
         </PageHeader>
         <Container maxWidth={false} className={classes.mainContainer}>
           <Grid container spacing={3}>
@@ -229,17 +243,26 @@ function Content(): JSX.Element {
               <Paper>
                 <Grid container spacing={4}>
                   <Grid item xs={12}>
-                    <Table
-                      columns={tableColumns}
-                      rows={results}
-                      orderBy={sort.field}
-                      order={sort.direction === 'Ascending' ? 'asc' : 'desc'}
-                      Renderer={SearchCellRenderer}
-                      onSelect={onSelect}
-                      sortHandler={onSortChange}
-                      isInactive={isInactive}
-                      onReorderEnd={onReorderEnd}
-                    />
+                    {results && tableColumns && (
+                      <Table
+                        columns={tableColumns}
+                        rows={results}
+                        orderBy={sort.field}
+                        order={sort.direction === 'Ascending' ? 'asc' : 'desc'}
+                        Renderer={SearchCellRenderer}
+                        onSelect={onSelect}
+                        sortHandler={onSortChange}
+                        isInactive={isInactive}
+                        onReorderEnd={onReorderEnd}
+                      />
+                    )}
+                    {(resultsLodable.state === 'loading' ||
+                      tableColumnsLodable.state === 'loading') && (
+                      <CircularProgress />
+                    )}
+                    {(resultsLodable.state === 'hasError' ||
+                      tableColumnsLodable.state === 'hasError') &&
+                      'An error ocurred'}
                   </Grid>
                 </Grid>
               </Paper>

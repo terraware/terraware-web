@@ -23,25 +23,29 @@ describe('Notifications', () => {
       'markRead'
     );
     cy.intercept('POST', '/api/v1/seedbank/notification').as('notification');
+    cy.intercept('POST', '/api/v1/seedbank/values').as('search');
     cy.get('#notification4')
       .click()
       .url()
       .should('contain', '/accessions?state=Dried');
-    cy.get('#subtitle').should('contain', '0 total');
-    cy.wait('@markRead');
-    cy.wait('@notification');
-
+      cy.wait('@markRead');
+      cy.wait('@notification');
+      cy.wait('@search')
+      
+      cy.get('#subtitle').should('contain', '0 total');
     cy.intercept('POST', '/api/v1/seedbank/notification/**/markRead').as(
       'markRead2'
     );
+    cy.intercept('POST', '/api/v1/seedbank/values').as('search2');
     cy.intercept('POST', '/api/v1/seedbank/notification').as('notification2');
     cy.get('#notification3')
       .click()
       .url()
       .should('contain', '/accessions?state=In%20Storage');
-    cy.get('#subtitle').should('contain', '0 total');
-    cy.wait('@markRead2');
-    cy.wait('@notification2');
+      cy.wait('@markRead2');
+      cy.wait('@notification2');
+      cy.wait('@search2')
+      cy.get('#subtitle').should('contain', '0 total');
   });
 
   it('go to accesion page when clicking Date notification', () => {

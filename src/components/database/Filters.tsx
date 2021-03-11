@@ -24,11 +24,11 @@ const useStyles = makeStyles((theme) =>
       margin: theme.spacing(2, 0, 3, 0),
       padding: theme.spacing(0),
       display: 'flex',
-      flexWrap: 'wrap',
     },
     pill: {
       margin: theme.spacing(0, 1.5, 0, 0),
       height: '48px',
+      display: 'inline-block',
     },
     stateBox: {
       width: '264px',
@@ -47,12 +47,15 @@ const useStyles = makeStyles((theme) =>
       backgroundColor: theme.palette.common.white,
     },
     link: {
-      display: 'flex',
-      marginLeft: 'auto',
+      flex: 2,
       paddingTop: theme.spacing(1),
     },
     selectedFilter: {
       border: `2px solid ${theme.palette.neutral[600]}`,
+    },
+    filtersContainer: {
+      minHeight: '48px',
+      flex: '8 0 600px',
     },
   })
 );
@@ -126,32 +129,34 @@ export default function Filters(props: Props): JSX.Element {
 
   return (
     <Container maxWidth={false} className={classes.mainContainer}>
-      <SimplePopover
-        popover={popover}
-        columns={props.columns}
-        filters={props.filters}
-        availableValues={props.availableValues}
-        allValues={props.allValues}
-        onFilterChange={onChange}
-        onClose={onClosePopover}
-      />
-      {props.columns.map((col) => {
-        return (
-          <div key={col.key} className={classes.pill}>
-            <Chip
-              id={`filter-${col.key}`}
-              variant='outlined'
-              size='medium'
-              label={getLabel(col)}
-              onClick={(event) => handleClick(event, col)}
-              icon={<ArrowDropDown />}
-              className={
-                isFilterSelected(col.key) ? classes.selectedFilter : ''
-              }
-            />
-          </div>
-        );
-      })}
+      <div className={classes.filtersContainer}>
+        <SimplePopover
+          popover={popover}
+          columns={props.columns}
+          filters={props.filters}
+          availableValues={props.availableValues}
+          allValues={props.allValues}
+          onFilterChange={onChange}
+          onClose={onClosePopover}
+        />
+        {props.columns.map((col) => {
+          return (
+            <div key={col.key} className={classes.pill}>
+              <Chip
+                id={`filter-${col.key}`}
+                variant='outlined'
+                size='medium'
+                label={getLabel(col)}
+                onClick={(event) => handleClick(event, col)}
+                icon={<ArrowDropDown />}
+                className={
+                  isFilterSelected(col.key) ? classes.selectedFilter : ''
+                }
+              />
+            </div>
+          );
+        })}
+      </div>
       <div className={classes.link}>
         <Link
           id='clearAll'

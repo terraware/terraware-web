@@ -6,6 +6,7 @@ describe('Searchbar', () => {
     it('should redirect the user to the correct page', () => {
       cy.visit('/accessions/new');
       cy.get('#saveAccession').click();
+      cy.get('#snackbar').contains('Accession saved');
 
       cy.get('#header-accessionNumber').then(($accessionNumberElement) => {
         const accessionNumber = $accessionNumberElement.text();
