@@ -8,7 +8,6 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { Accession } from '../../api/types/accessions';
 import useStateLocation, { getLocation } from '../../utils/useStateLocation';
-import StateChip from '../common/StateChip';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -124,7 +123,7 @@ export default function AccessionPageHeader({ accession }: Props): JSX.Element {
                   </span>
                 )}
                 <DetailDivisor />
-                <StateChip id='header-state' state={accession.state} />
+                <span id='header-state'>{accession.state}</span>
               </Typography>
             </Box>
           </Box>

@@ -299,6 +299,7 @@ export function AccessionForm<T extends NewAccession>({
             receivedDate={record.receivedDate}
             refreshErrors={refreshErrors}
             onChange={onChange}
+            disabled={accession.deviceInfo !== undefined}
           ></AccessionDates>
         </Suspense>
         <Divisor />

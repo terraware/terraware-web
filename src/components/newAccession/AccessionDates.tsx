@@ -10,6 +10,7 @@ interface Props {
   refreshErrors: (newErrors: FieldError[]) => void;
   collectedDate?: string;
   receivedDate?: string;
+  disabled: boolean;
 }
 
 type FieldError = {
@@ -21,6 +22,7 @@ export function AccessionDates({
   refreshErrors,
   collectedDate,
   receivedDate,
+  disabled,
 }: Props): JSX.Element {
   const [dateErrors, setDateErrors] = React.useState<FieldError[]>([]);
   const date = useRecoilValue(timeSelector);
@@ -69,6 +71,7 @@ export function AccessionDates({
           maxDate={dayjs(date).format('YYYY-MM-DD')}
           helperText={getErrorText('collectedDate')}
           error={getErrorText('collectedDate') ? true : false}
+          disabled={disabled}
         />
       </Grid>
       <Grid item xs={4}>
@@ -81,6 +84,7 @@ export function AccessionDates({
           maxDate={dayjs(date).format('YYYY-MM-DD')}
           helperText={getErrorText('receivedDate')}
           error={getErrorText('receivedDate') ? true : false}
+          disabled={disabled}
         />
       </Grid>
       <Grid item xs={4}></Grid>
