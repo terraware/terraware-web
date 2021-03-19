@@ -1,16 +1,11 @@
 import DayJSUtils from '@date-io/dayjs';
-import {
-  Chip,
-  CircularProgress,
-  Grid,
-  Paper,
-  Typography,
-} from '@material-ui/core';
+import { CircularProgress, Grid, Paper, Typography } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import React, { Suspense } from 'react';
 import { Accession } from '../../api/types/accessions';
 import useForm from '../../utils/useForm';
+import FooterButtons from '../accession/FooterButtons';
 import DatePicker from '../common/DatePicker';
 import Divisor from '../common/Divisor';
 import Note from '../common/Note';
@@ -25,10 +20,6 @@ const useStyles = makeStyles((theme) =>
     },
     right: {
       marginLeft: 'auto',
-    },
-    submit: {
-      marginLeft: theme.spacing(2),
-      color: theme.palette.common.white,
     },
     alignMiddle: {
       display: 'flex',
@@ -53,9 +44,35 @@ export default function Storage({ accession, onSubmit }: Props): JSX.Element {
   const classes = useStyles();
 
   const [record, setRecord, onChange] = useForm(accession);
+  const [isEditing, setIsEditing] = React.useState(false);
+  const [isSaving, setIsSaving] = React.useState(false);
+  const [isSaved, setIsSaved] = React.useState(false);
+
   React.useEffect(() => {
     setRecord(accession);
+    if (isSaving) {
+      setIsSaving(false);
+      setIsSaved(true);
+      setTimeout(() => setIsSaved(false), 1000);
+    }
   }, [accession]);
+
+  React.useEffect(() => {
+    if (accession !== record) {
+      setIsEditing(true);
+    }
+  }, [record]);
+
+  const handleCancel = () => {
+    setIsEditing(false);
+    setRecord(accession);
+  };
+
+  const onSubmitHandler = () => {
+    setIsEditing(false);
+    setIsSaving(true);
+    setTimeout(() => onSubmit(record), 1000);
+  };
 
   return (
     <MuiPickersUtilsProvider utils={DayJSUtils}>
@@ -128,13 +145,15 @@ export default function Storage({ accession, onSubmit }: Props): JSX.Element {
             </Note>
           </Grid>
           <Grid item className={classes.right}>
-            <Chip
-              id='saveAccession'
-              className={classes.submit}
-              label='Save changes'
-              clickable
-              color='primary'
-              onClick={() => onSubmit(record)}
+            <FooterButtons
+              updating={true}
+              isEditing={isEditing}
+              isSaving={isSaving}
+              isSaved={isSaved}
+              nextStepTo='withdrawal'
+              nextStep='Next: Withdrawal'
+              onSubmitHandler={onSubmitHandler}
+              handleCancel={handleCancel}
             />
           </Grid>
         </Grid>

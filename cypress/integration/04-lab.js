@@ -17,8 +17,9 @@ describe('Lab', () => {
     cy.get('#menu-processing-drying').click();
     cy.get('#Lab').click();
 
+    cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
     cy.get('#saveAccession').click();
-    cy.get('#snackbar').contains('Accession saved');
+    cy.wait('@getAccession');
 
     cy.get('#lab')
       .click()
@@ -38,8 +39,10 @@ describe('Lab', () => {
     cy.get('#notes').type('A lab test note');
     cy.get('#staffResponsible').type('Constanza');
 
+    cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
     cy.get('#saveTest').click();
-    cy.get('#snackbar').contains('Accession saved');
+    cy.wait('@getAccession');
+    
 
     cy.get('#row1-startDate').should('contain','02/09/2021');
     cy.get('#row1-seedType').should('contain','Stored');
@@ -56,8 +59,9 @@ describe('Lab', () => {
     cy.get('#Nursery\\ Media').click();
     cy.get('#notes').clear();
 
+    cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
     cy.get('#saveTest').click();
-    cy.get('#snackbar').contains('Accession saved');
+    cy.wait('@getAccession');
 
     cy.get('#row1-startDate').should('contain','02/09/2021');
     cy.get('#row1-seedType').should('contain','Stored');
@@ -79,8 +83,9 @@ describe('Lab', () => {
     cy.get('#Soak').click();
     cy.get('#seedsSown').type('200');
 
+    cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
     cy.get('#saveTest').click();
-    cy.get('#snackbar').contains('Accession saved');
+    cy.wait('@getAccession');
   });
 
   it('should create another test', () => {
@@ -94,8 +99,9 @@ describe('Lab', () => {
     cy.get('#Other').click();
     cy.get('#seedsSown').type('50');
 
+    cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
     cy.get('#saveTest').click();
-    cy.get('#snackbar').contains('Accession saved');
+    cy.wait('@getAccession');
   });
 
   it('should display the records in the right order', () => {
@@ -141,7 +147,6 @@ describe('Lab', () => {
     cy.intercept('GET', '/api/v1/seedbank/accession/**').as('getAccession');
     cy.get('#deleteTest').click();
     cy.wait('@putAccession');
-    cy.get('#snackbar').contains('Accession saved');
     cy.wait('@getAccession');
 
     cy.get('#row3-edit-button').should('not.exist');
@@ -158,7 +163,6 @@ describe('Lab', () => {
 
     cy.get('#saveGermination').click();
     cy.wait('@putAccession');
-    cy.get('#snackbar').contains('Accession saved');
     cy.wait('@getAccession');
 
     cy.get('#row2-startDate').should('contain','02/09/2021');
@@ -190,7 +194,6 @@ describe('Lab', () => {
 
     cy.get('#saveGermination').click();
     cy.wait('@putAccession');
-    cy.get('#snackbar').contains('Accession saved');
     cy.wait('@getAccession');
 
     cy.get('#row2-startDate').should('contain','02/09/2021');
@@ -219,7 +222,6 @@ describe('Lab', () => {
 
     cy.get('#saveGermination').click();
     cy.wait('@putAccession');
-    cy.get('#snackbar').contains('Accession saved');
     cy.wait('@getAccession');
 
     cy.get('#row2-startDate').should('contain','02/09/2021');
@@ -245,7 +247,6 @@ describe('Lab', () => {
     cy.intercept('GET', '/api/v1/seedbank/accession/**').as('getAccession');
     cy.get('#deleteGermination').click();
     cy.wait('@putAccession');
-    cy.get('#snackbar').contains('Accession saved');
     cy.wait('@getAccession');
 
     cy.get('#row2-startDate').should('contain','02/09/2021');
@@ -269,8 +270,9 @@ describe('Lab', () => {
     cy.get('#cutTestSeedsEmpty').type('50');
     cy.get('#cutTestSeedsCompromised').type('10');
 
+    cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
     cy.get('#saveCutTest').click();
-    cy.get('#snackbar').contains('Accession saved');
+    cy.wait('@getAccession');
 
     cy.get('#row1-filledSeeds').should('contain','15');
     cy.get('#row1-emptySeeds').should('contain','50');
@@ -282,8 +284,9 @@ describe('Lab', () => {
 
     cy.get('#cutTestSeedsFilled').clear().type('500');
 
+    cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
     cy.get('#saveCutTest').click();
-    cy.get('#snackbar').contains('Accession saved');
+    cy.wait('@getAccession');
 
     cy.get('#row1-filledSeeds').should('contain','500');
     cy.get('#row1-emptySeeds').should('contain','50');

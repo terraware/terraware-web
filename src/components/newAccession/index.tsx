@@ -1,6 +1,5 @@
 import DayJSUtils from '@date-io/dayjs';
 import {
-  Chip,
   CircularProgress,
   Container,
   Grid,
@@ -14,7 +13,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import dayjs from 'dayjs';
 import React, { Suspense } from 'react';
-import { Link as RouterLink, Redirect, useHistory } from 'react-router-dom';
+import { Redirect, useHistory } from 'react-router-dom';
 import { useResetRecoilState, useSetRecoilState } from 'recoil';
 import { getPhotoEndpoint, postAccession } from '../../api/accession';
 import { Accession, NewAccession } from '../../api/types/accessions';
@@ -22,6 +21,7 @@ import snackbarAtom from '../../state/atoms/snackbar';
 import searchSelector from '../../state/selectors/search';
 import useForm from '../../utils/useForm';
 import useStateLocation, { getLocation } from '../../utils/useStateLocation';
+import FooterButtons from '../accession/FooterButtons';
 import Checkbox from '../common/Checkbox';
 import Divisor from '../common/Divisor';
 import Note from '../common/Note';
@@ -45,15 +45,6 @@ const useStyles = makeStyles((theme) =>
     },
     right: {
       marginLeft: 'auto',
-    },
-    submit: {
-      marginLeft: theme.spacing(2),
-      color: theme.palette.common.white,
-    },
-    cancel: {
-      backgroundColor: theme.palette.common.white,
-      borderColor: theme.palette.neutral[400],
-      borderWidth: 1,
     },
     listItem: {
       marginBottom: theme.spacing(1),
@@ -161,10 +152,35 @@ export function AccessionForm<T extends NewAccession>({
 
   const [record, setRecord, onChange] = useForm(accession);
   const [errors, setErrors] = React.useState<FieldError[]>([]);
+  const [isEditing, setIsEditing] = React.useState(false);
+  const [isSaving, setIsSaving] = React.useState(false);
+  const [isSaved, setIsSaved] = React.useState(false);
 
   React.useEffect(() => {
     setRecord(accession);
+    if (isSaving) {
+      setIsSaving(false);
+      setIsSaved(true);
+      setTimeout(() => setIsSaved(false), 1000);
+    }
   }, [accession]);
+
+  React.useEffect(() => {
+    if (accession !== record) {
+      setIsEditing(true);
+    }
+  }, [record]);
+
+  const handleCancel = () => {
+    setIsEditing(false);
+    setRecord(accession);
+  };
+
+  const onSubmitHandler = () => {
+    setIsEditing(false);
+    setIsSaving(true);
+    setTimeout(() => onSubmit(record), 1000);
+  };
 
   const OnNumberOfTreesChange = (id: string, value: unknown) => {
     const newErrors = [...errors];
@@ -431,26 +447,15 @@ export function AccessionForm<T extends NewAccession>({
         )}
         <Grid container spacing={4}>
           <Grid item className={classes.right}>
-            {!updating && (
-              <Link component={RouterLink} to='/'>
-                <Chip
-                  id='cancelButton'
-                  className={classes.cancel}
-                  label='Cancel'
-                  clickable
-                  variant='outlined'
-                />
-              </Link>
-            )}
-
-            <Chip
-              id='saveAccession'
-              className={classes.submit}
-              label={updating ? 'Save changes' : 'Create accession'}
-              clickable
-              color='primary'
-              onClick={() => onSubmit(record)}
-              disabled={errors.length > 0}
+            <FooterButtons
+              updating={updating}
+              isEditing={isEditing}
+              isSaving={isSaving}
+              isSaved={isSaved}
+              nextStepTo='processing-drying'
+              nextStep='Next: Processing & Drying'
+              onSubmitHandler={onSubmitHandler}
+              handleCancel={handleCancel}
             />
           </Grid>
         </Grid>

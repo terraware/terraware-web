@@ -75,7 +75,6 @@ function Content(): JSX.Element {
       await putAccession(record);
       resetSearch();
       resetAccession();
-      setSnackbar({ type: 'success', msg: 'Accession saved' });
     } catch (ex) {
       setSnackbar({
         type: 'error',

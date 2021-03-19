@@ -23,8 +23,9 @@ describe('Storage', () => {
     cy.get('#storageNotes').type('A storage note');
     cy.get('#storageStaffResponsible').type('Constanza');
 
+    cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
     cy.get('#saveAccession').click();
-    cy.get('#snackbar').contains('Accession saved');
+    cy.wait('@getAccession');
 
     cy.get('#storageStartDate').should('have.value', '02 / 04 / 2021');
     cy.get('#storagePackets').should('have.value', '5');

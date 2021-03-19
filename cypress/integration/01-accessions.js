@@ -103,8 +103,9 @@ describe('Accessions', () => {
       cy.get('#primaryCollector').clear().type('Leann');
       cy.get('#fieldNotes').clear().type('Other notes');
 
+      cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
       cy.get('#saveAccession').click();
-      cy.get('#snackbar').contains('Accession saved');
+      cy.wait('@getAccession');
 
       cy.get('#fieldNotes').contains('Other notes');
       cy.get('#secondaryCollectors1').should('not.exist');

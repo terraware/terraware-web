@@ -17,8 +17,9 @@ describe('Nursery', () => {
     cy.get('#menu-processing-drying').click();
     cy.get('#Nursery').click();
 
+    cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
     cy.get('#saveAccession').click();
-    cy.get('#snackbar').contains('Accession saved');
+    cy.wait('@getAccession');
 
     cy.get('#nursery')
       .click()
@@ -41,8 +42,9 @@ describe('Nursery', () => {
     cy.get('#staffResponsible').type('Constanza');
     cy.get('#saveTest').should('contain', 'Create test');
 
+    cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
     cy.get('#saveTest').click();
-    cy.get('#snackbar').contains('Accession saved');
+    cy.wait('@getAccession');
 
     cy.get('.MuiTableBody-root').children().should('have.length', 1);
     cy.get('#totalViabilityPercent').should('contain', '50%');
@@ -66,8 +68,9 @@ describe('Nursery', () => {
     cy.get('#notes').clear();
     cy.get('#saveTest').should('contain', 'Save changes');
 
+    cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
     cy.get('#saveTest').click();
-    cy.get('#snackbar').contains('Accession saved');
+    cy.wait('@getAccession');
 
     cy.get('#totalViabilityPercent').should('contain', '70%');
 
@@ -94,8 +97,9 @@ describe('Nursery', () => {
     cy.get('#seedsGerminated').type('100');
     cy.get('#recordingDate').type('02/15/2021');
 
+    cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
     cy.get('#saveTest').click();
-    cy.get('#snackbar').contains('Accession saved');
+    cy.wait('@getAccession');
 
     cy.get('.MuiTableBody-root').children().should('have.length', 2);
   });
@@ -113,8 +117,9 @@ describe('Nursery', () => {
     cy.get('#seedsGerminated').type('45');
     cy.get('#recordingDate').type('01/25/2021');
 
+    cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
     cy.get('#saveTest').click();
-    cy.get('#snackbar').contains('Accession saved');
+    cy.wait('@getAccession');
 
     cy.get('.MuiTableBody-root').children().should('have.length', 3);
   });
@@ -176,8 +181,9 @@ describe('Nursery', () => {
   it('should delete test', () => {
     cy.get('#row2-edit-button').click();
 
+    cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
     cy.get('#deleteTest').click();
-    cy.get('#snackbar').contains('Accession saved');
+    cy.wait('@getAccession');
 
     cy.get('.MuiTableBody-root').children().should('have.length', 2);
   });

@@ -21,8 +21,9 @@ describe('Processing and Drying', () => {
     cy.get('#processingNotes').type('A processing note');
     cy.get('#processingStaffResponsible').type('Constanza');
 
+    cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
     cy.get('#saveAccession').click();
-    cy.get('#snackbar').contains('Accession saved');
+    cy.wait('@getAccession');
 
     cy.get('#processingStartDate').should('have.value', '01 / 01 / 2021');
     cy.get('#processingMethod + input').should('have.value', 'Count');
@@ -44,8 +45,9 @@ describe('Processing and Drying', () => {
     cy.get('#totalWeightGrams').type(500);
     cy.get('#estimatedSeedCount').should('have.value', '500');
 
+    cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
     cy.get('#saveAccession').click();
-    cy.get('#snackbar').contains('Accession saved');
+    cy.wait('@getAccession');
 
     cy.get('#subsetWeightGrams').should('have.value', '500');
     cy.get('#estimatedSeedCount').should('have.value', '500');
