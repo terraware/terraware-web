@@ -22,8 +22,8 @@ import searchSelector from '../../state/selectors/search';
 import useForm from '../../utils/useForm';
 import useStateLocation, { getLocation } from '../../utils/useStateLocation';
 import FooterButtons from '../accession/FooterButtons';
-import Checkbox from '../common/Checkbox';
 import Divisor from '../common/Divisor';
+import Dropdown from '../common/Dropdown';
 import Note from '../common/Note';
 import TextArea from '../common/TextArea';
 import TextField from '../common/TextField';
@@ -277,19 +277,29 @@ export function AccessionForm<T extends NewAccession>({
             />
           </Grid>
           <Grid item xs={4}></Grid>
-          <Grid item xs={12}>
-            <Checkbox
+          <Grid item xs={4}>
+            <Dropdown
               id='endangered'
-              name='endangered'
               label='Endangered'
-              value={record.endangered}
+              selected={record.endangered}
+              values={[
+                { label: 'Yes', value: 'Yes' },
+                { label: 'No', value: 'No' },
+                { label: 'Unsure', value: 'Unsure' },
+              ]}
               onChange={onChange}
             />
-            <Checkbox
+          </Grid>
+          <Grid item xs={4}>
+            <Dropdown
               id='rare'
-              name='rare'
               label='Rare'
-              value={record.rare}
+              selected={record.rare}
+              values={[
+                { label: 'Yes', value: 'Yes' },
+                { label: 'No', value: 'No' },
+                { label: 'Unsure', value: 'Unsure' },
+              ]}
               onChange={onChange}
             />
           </Grid>

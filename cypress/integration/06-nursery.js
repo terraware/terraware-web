@@ -17,7 +17,7 @@ describe('Nursery', () => {
     cy.get('#menu-processing-drying').click();
     cy.get('#Nursery').click();
 
-    cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
+    cy.intercept('GET', 'api/v2/seedbank/accession/*').as('getAccession');
     cy.get('#saveAccession').click();
     cy.wait('@getAccession');
 
@@ -42,7 +42,7 @@ describe('Nursery', () => {
     cy.get('#staffResponsible').type('Constanza');
     cy.get('#saveTest').should('contain', 'Create test');
 
-    cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
+    cy.intercept('GET', 'api/v2/seedbank/accession/*').as('getAccession');
     cy.get('#saveTest').click();
     cy.wait('@getAccession');
 
@@ -68,7 +68,7 @@ describe('Nursery', () => {
     cy.get('#notes').clear();
     cy.get('#saveTest').should('contain', 'Save changes');
 
-    cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
+    cy.intercept('GET', 'api/v2/seedbank/accession/*').as('getAccession');
     cy.get('#saveTest').click();
     cy.wait('@getAccession');
 
@@ -97,7 +97,7 @@ describe('Nursery', () => {
     cy.get('#seedsGerminated').type('100');
     cy.get('#recordingDate').type('02/15/2021');
 
-    cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
+    cy.intercept('GET', 'api/v2/seedbank/accession/*').as('getAccession');
     cy.get('#saveTest').click();
     cy.wait('@getAccession');
 
@@ -117,7 +117,7 @@ describe('Nursery', () => {
     cy.get('#seedsGerminated').type('45');
     cy.get('#recordingDate').type('01/25/2021');
 
-    cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
+    cy.intercept('GET', 'api/v2/seedbank/accession/*').as('getAccession');
     cy.get('#saveTest').click();
     cy.wait('@getAccession');
 
@@ -181,7 +181,7 @@ describe('Nursery', () => {
   it('should delete test', () => {
     cy.get('#row2-edit-button').click();
 
-    cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
+    cy.intercept('GET', 'api/v2/seedbank/accession/*').as('getAccession');
     cy.get('#deleteTest').click();
     cy.wait('@getAccession');
 

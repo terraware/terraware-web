@@ -57,8 +57,10 @@ describe('Accessions', () => {
       cy.get('#family').type('Cornaceae');
       cy.get('#numberOfTrees').type('3');
       cy.get('#founderId').type('234908098');
-      cy.get('#check-endangered').click();
-      cy.get('#check-rare').click();
+      cy.get('#endangered').click();
+      cy.get('#Yes').click();
+      cy.get('#rare').click();
+      cy.get('#Yes').click();
 
       cy.get('#fieldNotes').type('Some notes');
       cy.get('#collectedDate').type('02/01/2021');
@@ -85,8 +87,8 @@ describe('Accessions', () => {
       cy.get('#family').should('have.value', 'Cornaceae');
       cy.get('#numberOfTrees').should('have.value', '3');
       cy.get('#founderId').should('have.value', '234908098');
-      cy.get('#check-endangered').should('have.checked', 'true');
-      cy.get('#check-rare').should('have.checked', 'true');
+      cy.get('#endangered + input').should('have.value', 'Yes');
+      cy.get('#rare + input').should('have.value', 'Yes');
       cy.get('#fieldNotes').should('have.value', 'Some notes');
       cy.get('#collectedDate').should('have.value', '02 / 01 / 2021');
       cy.get('#receivedDate').should('have.value', '02 / 03 / 2021');
@@ -103,7 +105,7 @@ describe('Accessions', () => {
       cy.get('#primaryCollector').clear().type('Leann');
       cy.get('#fieldNotes').clear().type('Other notes');
 
-      cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
+      cy.intercept('GET', 'api/v2/seedbank/accession/*').as('getAccession');
       cy.get('#saveAccession').click();
       cy.wait('@getAccession');
 

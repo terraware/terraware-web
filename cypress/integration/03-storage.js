@@ -23,7 +23,7 @@ describe('Storage', () => {
     cy.get('#storageNotes').type('A storage note');
     cy.get('#storageStaffResponsible').type('Constanza');
 
-    cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
+    cy.intercept('GET', 'api/v2/seedbank/accession/*').as('getAccession');
     cy.get('#saveAccession').click();
     cy.wait('@getAccession');
 
