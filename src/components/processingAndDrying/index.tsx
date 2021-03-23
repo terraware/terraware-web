@@ -67,6 +67,10 @@ export default function ProcessingAndDrying({
     }
   }, [record]);
 
+  React.useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, []);
+
   const onSubmitHandler = () => {
     setIsEditing(false);
     setIsSaving(true);

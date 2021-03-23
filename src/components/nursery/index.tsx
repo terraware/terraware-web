@@ -46,6 +46,10 @@ interface Props {
 export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
   const classes = useStyles();
 
+  React.useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, []);
+
   const [open, setOpen] = React.useState(false);
   const [selectedRecord, setSelectedRecord] = React.useState<GerminationTest>();
 

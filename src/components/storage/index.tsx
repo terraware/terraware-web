@@ -63,6 +63,10 @@ export default function Storage({ accession, onSubmit }: Props): JSX.Element {
     }
   }, [record]);
 
+  React.useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, []);
+
   const handleCancel = () => {
     setIsEditing(false);
     setRecord(accession);

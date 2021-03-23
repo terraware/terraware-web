@@ -171,6 +171,10 @@ export function AccessionForm<T extends NewAccession>({
     }
   }, [record]);
 
+  React.useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, []);
+
   const handleCancel = () => {
     setIsEditing(false);
     setRecord(accession);
