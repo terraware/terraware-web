@@ -68,28 +68,16 @@ const COLUMNS: DatabaseColumn[] = [
     filter: { type: 'search' },
   },
   {
-    key: 'endangered',
+    key: 'endangered2',
     name: 'Endangered',
-    type: 'boolean',
-    filter: {
-      type: 'single_selection',
-      options: [
-        { label: 'Yes', value: 'true', disabled: false },
-        { label: 'No', value: 'false', disabled: false },
-      ],
-    },
+    type: 'string',
+    filter: { type: 'single_selection' },
   },
   {
-    key: 'rare',
+    key: 'rare2',
     name: 'Rare',
-    type: 'boolean',
-    filter: {
-      type: 'single_selection',
-      options: [
-        { label: 'Yes', value: 'true', disabled: false },
-        { label: 'No', value: 'false', disabled: false },
-      ],
-    },
+    type: 'string',
+    filter: { type: 'single_selection' },
   },
   {
     key: 'treesCollectedFrom',
@@ -326,8 +314,8 @@ const generalInventoryPreset: Preset = {
     'collectedDate',
     'receivedDate',
     'primaryCollector',
-    'endangered',
-    'rare',
+    'endangered2',
+    'rare2',
     'treesCollectedFrom',
     'estimatedSeedsIncoming',
     'storageCondition',
