@@ -195,7 +195,6 @@ const sections: Section[] = [
       ],
       [
         COLUMNS_INDEXED['treesCollectedFrom'],
-        COLUMNS_INDEXED['estimatedSeedsIncoming'],
         COLUMNS_INDEXED['landowner'],
         COLUMNS_INDEXED['collectionNotes'],
       ],
@@ -207,6 +206,7 @@ const sections: Section[] = [
       [
         COLUMNS_INDEXED['processingStartDate'],
         COLUMNS_INDEXED['dryingStartDate'],
+        COLUMNS_INDEXED['targetStorageCondition'],
       ],
       [COLUMNS_INDEXED['processingMethod'], COLUMNS_INDEXED['dryingEndDate']],
       [COLUMNS_INDEXED['seedsCounted'], COLUMNS_INDEXED['processingNotes']],
@@ -233,7 +233,6 @@ const sections: Section[] = [
       ],
       [
         COLUMNS_INDEXED['withdrawalPurpose'],
-        COLUMNS_INDEXED['targetStorageCondition'],
         COLUMNS_INDEXED['withdrawalNotes'],
       ],
     ],

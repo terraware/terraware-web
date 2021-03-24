@@ -72,7 +72,7 @@ describe('Database', () => {
         cy.wait('@values2');
         cy.get('#editColumnsDialog').should('not.exist');
 
-        cy.get('#table-header').children().should('have.length', 19);
+        cy.get('#table-header').children().should('have.length', 20);
         cy.get('#table-header-accessionNumber').contains('ACCESSION');
         cy.get('#table-header-active').contains('STATUS');
         cy.get('#table-header-state').contains('STATE');

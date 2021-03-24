@@ -309,6 +309,7 @@ const generalInventoryPreset: Preset = {
     'species',
     'siteLocation',
     'landowner',
+    'seedsCounted',
     'active',
     'state',
     'collectedDate',
