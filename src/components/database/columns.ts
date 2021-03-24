@@ -45,19 +45,19 @@ const COLUMNS: DatabaseColumn[] = [
   },
   {
     key: 'receivedDate',
-    name: 'Received On',
+    name: 'Received Date',
     type: 'date',
     filter: { type: 'date_range' },
   },
   {
     key: 'collectedDate',
-    name: 'Collected On',
+    name: 'Collected Date',
     type: 'date',
     filter: { type: 'date_range' },
   },
   {
     key: 'primaryCollector',
-    name: 'Collector',
+    name: 'Collector Name',
     type: 'string',
     filter: { type: 'search' },
   },
@@ -81,7 +81,7 @@ const COLUMNS: DatabaseColumn[] = [
   },
   {
     key: 'treesCollectedFrom',
-    name: 'Trees Collected From',
+    name: '# of Trees',
     type: 'number',
     filter: { type: 'number_range' },
   },
@@ -273,7 +273,7 @@ const COLUMNS: DatabaseColumn[] = [
   },
   {
     key: 'bagNumber',
-    name: 'Bag number',
+    name: 'Bag IDs',
     type: 'string',
     filter: { type: 'search' },
   },

@@ -83,7 +83,7 @@ export default function EditColumnsDialog(props: Props): JSX.Element {
     >
       <DialogTitle>
         <Typography component='p' variant='h6' className={classes.bold}>
-          Edit columns
+          Add columns
         </Typography>
         <Typography component='p'>
           Select columns you want to add. Deselect columns you want to remove.

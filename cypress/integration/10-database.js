@@ -9,8 +9,8 @@ describe('Database', () => {
       cy.get('#table-header-accessionNumber').contains('ACCESSION');
       cy.get('#table-header-state').contains('STATE');
       cy.get('#table-header-species').contains('SPECIES');
-      cy.get('#table-header-receivedDate').contains('RECEIVED ON');
-      cy.get('#table-header-collectedDate').contains('COLLECTED ON');
+      cy.get('#table-header-receivedDate').contains('RECEIVED DATE');
+      cy.get('#table-header-collectedDate').contains('COLLECTED DATE');
       cy.get('#table-header-siteLocation').contains('SITE LOCATION');
     });
 
@@ -24,8 +24,8 @@ describe('Database', () => {
       cy.get('#table-header-accessionNumber').contains('ACCESSION');
       cy.get('#table-header-state').contains('STATE');
       cy.get('#table-header-species').contains('SPECIES');
-      cy.get('#table-header-receivedDate').contains('RECEIVED ON');
-      cy.get('#table-header-collectedDate').contains('COLLECTED ON');
+      cy.get('#table-header-receivedDate').contains('RECEIVED DATE');
+      cy.get('#table-header-collectedDate').contains('COLLECTED DATE');
       cy.get('#table-header-primaryCollector').contains('COLLECTOR');
       cy.get('#table-header-siteLocation').contains('SITE LOCATION');
     });
@@ -77,14 +77,14 @@ describe('Database', () => {
         cy.get('#table-header-active').contains('STATUS');
         cy.get('#table-header-state').contains('STATE');
         cy.get('#table-header-species').contains('SPECIES');
-        cy.get('#table-header-receivedDate').contains('RECEIVED ON');
-        cy.get('#table-header-collectedDate').contains('COLLECTED ON');
+        cy.get('#table-header-receivedDate').contains('RECEIVED DATE');
+        cy.get('#table-header-collectedDate').contains('COLLECTED DATE');
         cy.get('#table-header-primaryCollector').contains('COLLECTOR');
         cy.get('#table-header-siteLocation').contains('SITE LOCATION');
         cy.get('#table-header-endangered2').contains('ENDANGERED');
         cy.get('#table-header-rare2').contains('RARE');
         cy.get('#table-header-treesCollectedFrom').contains(
-          'TREES COLLECTED FROM'
+          '# OF TREES'
         );
         cy.get('#table-header-estimatedSeedsIncoming').contains(
           'ESTIMATED SEEDS INCOMING'
@@ -125,8 +125,8 @@ describe('Database', () => {
         cy.get('#table-header-accessionNumber').contains('ACCESSION');
         cy.get('#table-header-state').contains('STATE');
         cy.get('#table-header-species').contains('SPECIES');
-        cy.get('#table-header-receivedDate').contains('RECEIVED ON');
-        cy.get('#table-header-collectedDate').contains('COLLECTED ON');
+        cy.get('#table-header-receivedDate').contains('RECEIVED DATE');
+        cy.get('#table-header-collectedDate').contains('COLLECTED DATE');
         cy.get('#table-header-primaryCollector').contains('COLLECTOR');
         cy.get('#table-header-siteLocation').contains('SITE LOCATION');
       });
@@ -148,8 +148,8 @@ describe('Database', () => {
         cy.get('#table-header-active').contains('STATUS');
         cy.get('#table-header-state').contains('STATE');
         cy.get('#table-header-species').contains('SPECIES');
-        cy.get('#table-header-receivedDate').contains('RECEIVED ON');
-        cy.get('#table-header-collectedDate').contains('COLLECTED ON');
+        cy.get('#table-header-receivedDate').contains('RECEIVED DATE');
+        cy.get('#table-header-collectedDate').contains('COLLECTED DATE');
         cy.get('#table-header-estimatedSeedsIncoming').should(
           'contain',
           'ESTIMATED SEEDS INCOMING'
@@ -189,7 +189,7 @@ describe('Database', () => {
         cy.get('#table-header-active').contains('STATUS');
         cy.get('#table-header-state').contains('STATE');
         cy.get('#table-header-species').contains('SPECIES');
-        cy.get('#table-header-collectedDate').contains('COLLECTED ON');
+        cy.get('#table-header-collectedDate').contains('COLLECTED DATE');
         cy.get('#table-header-germinationTestType').contains(
           'GERMINATION TEST TYPE'
         );
@@ -244,7 +244,7 @@ describe('Database', () => {
         cy.get('#table-header-active').contains('STATUS');
         cy.get('#table-header-state').contains('STATE');
         cy.get('#table-header-species').contains('SPECIES');
-        cy.get('#table-header-collectedDate').contains('COLLECTED ON');
+        cy.get('#table-header-collectedDate').contains('COLLECTED DATE');
         cy.get('#table-header-storageCondition').contains('STORAGE CONDITION');
         cy.get('#table-header-storageLocation').contains('STORAGE LOCATION');
         cy.get('#table-header-storagePackets').contains(
@@ -278,7 +278,7 @@ describe('Database', () => {
         cy.get('#table-header > :nth-child(2)').contains('SPECIES');
         cy.get('#table-header > :nth-child(3)').contains('STATUS');
         cy.get('#table-header > :nth-child(4)').contains('STATE');
-        cy.get('#table-header > :nth-child(5)').contains('COLLECTED ON');
+        cy.get('#table-header > :nth-child(5)').contains('COLLECTED DATE');
         cy.get('#table-header > :nth-child(6)').contains('NUMBER OF STORAGE PACKETS');
         cy.get('#table-header > :nth-child(7)').contains('STORAGE CONDITION');
         cy.get('#table-header > :nth-child(8)').contains('STORAGE LOCATION');

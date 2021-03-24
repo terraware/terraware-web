@@ -168,7 +168,7 @@ export default function ProcessingAndDrying({
               selected={record.processingMethod || 'Count'}
               values={[
                 { label: 'Seeds count', value: 'Count' },
-                { label: 'Seeds weight', value: 'Weight' },
+                { label: 'Seed weight', value: 'Weight' },
               ]}
               onChange={OnProcessingMethodChange}
             />
@@ -180,7 +180,7 @@ export default function ProcessingAndDrying({
                 id='seedsCounted'
                 value={record.seedsCounted}
                 onChange={onChange}
-                label='Seeds Count'
+                label='Seed Count'
                 type='Number'
               />
             </Grid>
@@ -201,7 +201,7 @@ export default function ProcessingAndDrying({
                   id='subsetCount'
                   value={record.subsetCount}
                   onChange={onChangeWeightFields}
-                  label='Seeds on subset weighted'
+                  label='# of seeds in subset'
                   type='number'
                 />
               </Grid>
@@ -287,8 +287,8 @@ export default function ProcessingAndDrying({
               id='dryingEndDate'
               value={record.dryingEndDate}
               onChange={onChange}
-              label='Drying end date'
-              aria-label='Drying end date'
+              label='Estimated drying end date'
+              aria-label='Estimated drying end date'
             />
           </Grid>
         </Grid>
@@ -299,7 +299,7 @@ export default function ProcessingAndDrying({
               value={record.dryingMoveDate}
               onChange={onChange}
               label='Schedule date to move from racks to dry cabinets'
-              aria-label='Drying end date'
+              aria-label='Drying move date'
             />
             <Typography
               component='p'

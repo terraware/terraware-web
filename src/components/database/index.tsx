@@ -204,7 +204,7 @@ export default function Database(): JSX.Element {
                 id='edit-columns'
                 variant='outlined'
                 size='medium'
-                label='Edit Columns'
+                label='Add Columns'
                 onClick={onOpenEditColumnsModal}
                 icon={<EditIcon />}
               />
