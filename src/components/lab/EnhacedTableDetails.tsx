@@ -89,7 +89,9 @@ export default function EnhancedTableDetails<T>({
 
     setTotalSeedsGerminated(total);
     if (selectedTest.seedsSown) {
-      setPercentageTotalSeedsGerminated((total / selectedTest.seedsSown) * 100);
+      setPercentageTotalSeedsGerminated(
+        Math.round((total / selectedTest.seedsSown) * 100)
+      );
     }
   };
 

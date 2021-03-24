@@ -150,18 +150,6 @@ export default function ProcessingAndDrying({
         <Divisor />
         <Grid container spacing={4}>
           <Grid item xs={4}>
-            <DatePicker
-              id='processingStartDate'
-              value={record.processingStartDate}
-              onChange={onChange}
-              label='Processing start date'
-              aria-label='Processing start date'
-            />
-          </Grid>
-        </Grid>
-        <Divisor />
-        <Grid container spacing={4}>
-          <Grid item xs={4}>
             <Dropdown
               id='processingMethod'
               label='Quantify'

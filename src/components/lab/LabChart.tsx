@@ -41,14 +41,14 @@ export default function LabChart<T>({
       const data = barData;
       new Chart(ctx, {
         // The type of chart we want to create
-        type: 'bar',
+        type: 'line',
         data: {
           labels: data().map((entry) => entry.recordingDate),
           datasets: [
             {
               backgroundColor: theme.palette.accent[4],
               data: data().map((entry) => entry.seedsGerminated),
-              barThickness: 30,
+              fill: false,
             },
           ],
         },

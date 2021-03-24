@@ -10,7 +10,6 @@ describe('Processing and Drying', () => {
   });
 
   it('should add processing and drying information', () => {
-    cy.get('#processingStartDate').type('01/01/2021');
     cy.get('#processingMethod').click();
     cy.get('#Count').click();
     cy.get('#seedsCounted').type(300);
@@ -25,7 +24,6 @@ describe('Processing and Drying', () => {
     cy.get('#saveAccession').click();
     cy.wait('@getAccession');
 
-    cy.get('#processingStartDate').should('have.value', '01 / 01 / 2021');
     cy.get('#processingMethod + input').should('have.value', 'Count');
     cy.get('#seedsCounted').should('have.value', '300');
     cy.get('#check-Nursery').should('have.checked', 'true');
