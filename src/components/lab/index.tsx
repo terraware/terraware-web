@@ -224,6 +224,7 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
           <Grid container spacing={4}>
             <Grid item xs={12}>
               <Table
+                id='lab-table'
                 columns={TEST_COLUMNS}
                 rows={labRows}
                 orderBy='date'

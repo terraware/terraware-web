@@ -2,6 +2,7 @@ import { TableColumnType } from '../common/table/types';
 
 export const COLUMNS: TableColumnType[] = [
   { key: 'startDate', name: 'Start Date', type: 'date' },
+  { key: 'endDate', name: 'End Date', type: 'date' },
   { key: 'seedType', name: 'Seed type', type: 'string' },
   { key: 'substrate', name: 'Substrate', type: 'string' },
   { key: 'treatment', name: 'Treatment', type: 'string' },

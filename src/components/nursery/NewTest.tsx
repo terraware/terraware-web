@@ -140,6 +140,15 @@ export default function NewTestDialog(props: Props): JSX.Element {
               </Typography>
             </Grid>
             <Grid item xs={6}>
+              <DatePicker
+                id='endDate'
+                value={record?.endDate}
+                onChange={onChange}
+                label='End date'
+                aria-label='End date'
+              />
+            </Grid>
+            <Grid item xs={6}>
               <Dropdown
                 id='seedType'
                 label='Seed type'
@@ -210,7 +219,6 @@ export default function NewTestDialog(props: Props): JSX.Element {
                 type='Number'
               />
             </Grid>
-            <Grid item xs={6}></Grid>
             <Grid item xs={6}>
               <TextField
                 id='seedsGerminated'

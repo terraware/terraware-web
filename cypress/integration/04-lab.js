@@ -29,6 +29,7 @@ describe('Lab', () => {
   it('should create a new test', () => {
     cy.get('#newTest').click();
     cy.get('#startDate').type('02/09/2021');
+    cy.get('#endDate').type('03/22/2021');
     cy.get('#seedType').click();
     cy.get('#Stored').click();
     cy.get('#substrate').click();
@@ -45,6 +46,7 @@ describe('Lab', () => {
     
 
     cy.get('#row1-startDate').should('contain','02/09/2021');
+    cy.get('#row1-endDate').should('contain','03/22/2021');
     cy.get('#row1-seedType').should('contain','Stored');
     cy.get('#row1-substrate').should('contain','Paper Petri Dish');
     cy.get('#row1-treatment').should('contain','Scarify');
@@ -175,6 +177,7 @@ describe('Lab', () => {
 
     cy.get('#totalViabilityPercent').contains('6%');
     cy.get('#row2-expand').click();
+    cy.get('#lab-table').scrollTo('left');
     cy.get('#totalSeedsGerminated').contains('10 (10%)');
 
     cy.get('#row2-details #row1-seedsGerminated').should('contain', '10 seeds germinated');
