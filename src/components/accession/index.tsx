@@ -79,6 +79,7 @@ function Content(): JSX.Element {
       setSnackbar({
         type: 'error',
         msg: 'An error occurred when saving the accession.',
+        error: ex.error?.message,
       });
     }
   };
