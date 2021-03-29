@@ -46,7 +46,7 @@ describe('Withdrawal', () => {
 
       cy.get('#quantity').type('50');
       cy.get('#date').clear().type('01/31/2030');
-      cy.get('#save-withdrawn-button').contains('Schedule withdrawal');
+      cy.get('#save-withdrawn-button').contains('Schedule Withdrawal');
       cy.get('#date-tip').contains('Scheduling for: January 31st, 2030');
       cy.get('#destination').type('Panama');
       cy.get('#purpose').click();
@@ -75,7 +75,7 @@ describe('Withdrawal', () => {
     it('should edit a withdrawal ', () => {
       cy.get('#row1-edit-button').click();
 
-      cy.get('#save-withdrawn-button').contains('Save changes');
+      cy.get('#save-withdrawn-button').contains('Save Changes');
       cy.get('#modal-seeds-available').contains('250');
 
       cy.get('#quantity').clear().type('10');

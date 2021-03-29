@@ -3,6 +3,7 @@ import dayjs from 'dayjs';
 import React from 'react';
 import { useRecoilValue, useResetRecoilState } from 'recoil';
 import timeSelector from '../../state/selectors/time';
+import strings from '../../strings';
 import DatePicker from '../common/DatePicker';
 
 interface Props {
@@ -41,7 +42,7 @@ export function AccessionDates({
       if (errorIndex < 0) {
         newErrors.push({
           id: id,
-          msg: 'No future dates allowed',
+          msg: strings.NO_FUTURE_DATES,
         });
       }
     } else {
@@ -66,7 +67,7 @@ export function AccessionDates({
           id='collectedDate'
           value={collectedDate}
           onChange={onChangeDate}
-          label='Collected on'
+          label={strings.COLLECTED_ON}
           aria-label='collected on'
           maxDate={dayjs(date).format('YYYY-MM-DD')}
           helperText={getErrorText('collectedDate')}
@@ -79,7 +80,7 @@ export function AccessionDates({
           id='receivedDate'
           value={receivedDate}
           onChange={onChangeDate}
-          label='Received on'
+          label={strings.RECEIVED_ON}
           aria-label='received on'
           maxDate={dayjs(date).format('YYYY-MM-DD')}
           helperText={getErrorText('receivedDate')}

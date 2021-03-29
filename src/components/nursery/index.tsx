@@ -6,6 +6,7 @@ import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import React from 'react';
 import { Accession } from '../../api/types/accessions';
 import { Germination, GerminationTest } from '../../api/types/tests';
+import strings from '../../strings';
 import Divisor from '../common/Divisor';
 import SummaryBox from '../common/SummaryBox';
 import Table from '../common/table';
@@ -112,17 +113,14 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
         />
         <Paper className={classes.paper}>
           <Typography variant='h6' className={classes.bold}>
-            Nursery
+            {strings.NURSERY}
           </Typography>
-          <Typography component='p'>
-            All the details about nursery germination tests conducted on the
-            seeds.
-          </Typography>
+          <Typography component='p'>{strings.NURSERY_DESCRIPTION}</Typography>
           <Divisor />
           <Grid item xs={12}>
             <SummaryBox
               id='totalViabilityPercent'
-              title='Total estimated viability'
+              title={strings.TOTAL_ESTIMATED_VIABILITY}
               value={`${accession.totalViabilityPercent ?? 0}%`}
               variant='default'
             />
@@ -145,7 +143,7 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
               <Chip
                 id='newTest'
                 className={classes.greenChip}
-                label='New test'
+                label={strings.NEW_TEST}
                 clickable
                 deleteIcon={<AddIcon classes={newWithdrawalChipStyles()} />}
                 color={'primary'}

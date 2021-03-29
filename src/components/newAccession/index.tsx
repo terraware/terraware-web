@@ -19,6 +19,7 @@ import { getPhotoEndpoint, postAccession } from '../../api/accession';
 import { Accession, NewAccession } from '../../api/types/accessions';
 import snackbarAtom from '../../state/atoms/snackbar';
 import searchSelector from '../../state/selectors/search';
+import strings from '../../strings';
 import useForm from '../../utils/useForm';
 import useStateLocation, { getLocation } from '../../utils/useStateLocation';
 import FooterButtons from '../accession/FooterButtons';
@@ -74,11 +75,11 @@ export default function NewAccessionWrapper(): JSX.Element {
       resetSearch();
       const { accessionNumber } = accession;
       setAccessionNumber(accessionNumber);
-      setSnackbar({ type: 'success', msg: 'Accession saved' });
+      setSnackbar({ type: 'success', msg: strings.ACCESSION_SAVED });
     } catch (ex) {
       setSnackbar({
         type: 'error',
-        msg: 'An error occurred when saving the accession.',
+        msg: strings.SAVE_ACCESSION_ERROR,
       });
     }
   };
@@ -97,8 +98,8 @@ export default function NewAccessionWrapper(): JSX.Element {
   return (
     <main>
       <PageHeader
-        title='New Accession'
-        subtitle='An accession number will be generated once you create the accession.'
+        title={strings.NEW_ACCESSION}
+        subtitle={strings.NEW_ACCESSION_DESCRIPTION}
         rightComponent={
           <Fab
             id='closenewAccession'
@@ -193,7 +194,7 @@ export function AccessionForm<T extends NewAccession>({
       if (errorIndex < 0) {
         newErrors.push({
           id: id,
-          msg: 'No negative numbers allowed',
+          msg: strings.NO_NEGATIVE_NUMBERS,
         });
       }
     } else {
@@ -235,11 +236,10 @@ export function AccessionForm<T extends NewAccession>({
     <MuiPickersUtilsProvider utils={DayJSUtils}>
       <Paper className={classes.paper}>
         <Typography variant='h6' className={classes.bold}>
-          Seed Collection
+          {strings.SEED_COLLECTION}
         </Typography>
         <Typography component='p'>
-          All the details about the species, date collected, collectors and the
-          site location.
+          {strings.SEED_COLLECTION_DESCRIPTION}
         </Typography>
         <Divisor />
         <Grid container spacing={4}>
@@ -248,7 +248,7 @@ export function AccessionForm<T extends NewAccession>({
               id='species'
               value={record.species}
               onChange={onChange}
-              label='Species'
+              label={strings.SPECIES}
             />
           </Grid>
           <Grid item xs={4}>
@@ -256,7 +256,7 @@ export function AccessionForm<T extends NewAccession>({
               id='family'
               value={record.family}
               onChange={onChange}
-              label='Family'
+              label={strings.FAMILY}
             />
           </Grid>
           <Grid item xs={4}></Grid>
@@ -266,7 +266,7 @@ export function AccessionForm<T extends NewAccession>({
               value={record.numberOfTrees}
               onChange={OnNumberOfTreesChange}
               type='number'
-              label='Number of trees'
+              label={strings.NUMBER_OF_TREES}
               min={0}
               helperText={getErrorText('numberOfTrees')}
               error={getErrorText('numberOfTrees') ? true : false}
@@ -277,19 +277,19 @@ export function AccessionForm<T extends NewAccession>({
               id='founderId'
               value={record.founderId}
               onChange={onChange}
-              label='Founder ID'
+              label={strings.FOUNDER_ID}
             />
           </Grid>
           <Grid item xs={4}></Grid>
           <Grid item xs={4}>
             <Dropdown
               id='endangered'
-              label='Endangered'
+              label={strings.ENDANGERED}
               selected={record.endangered}
               values={[
-                { label: 'Yes', value: 'Yes' },
-                { label: 'No', value: 'No' },
-                { label: 'Unsure', value: 'Unsure' },
+                { label: strings.YES, value: 'Yes' },
+                { label: strings.NO, value: 'No' },
+                { label: strings.UNSURE, value: 'Unsure' },
               ]}
               onChange={onChange}
             />
@@ -297,12 +297,12 @@ export function AccessionForm<T extends NewAccession>({
           <Grid item xs={4}>
             <Dropdown
               id='rare'
-              label='Rare'
+              label={strings.RARE}
               selected={record.rare}
               values={[
-                { label: 'Yes', value: 'Yes' },
-                { label: 'No', value: 'No' },
-                { label: 'Unsure', value: 'Unsure' },
+                { label: strings.YES, value: 'Yes' },
+                { label: strings.NO, value: 'No' },
+                { label: strings.UNSURE, value: 'Unsure' },
               ]}
               onChange={onChange}
             />
@@ -312,7 +312,7 @@ export function AccessionForm<T extends NewAccession>({
               id='fieldNotes'
               value={record.fieldNotes}
               onChange={onChange}
-              label='Field notes'
+              label={strings.FIELD_NOTES}
             />
           </Grid>
         </Grid>
@@ -339,7 +339,7 @@ export function AccessionForm<T extends NewAccession>({
               id='primaryCollector'
               value={record.primaryCollector}
               onChange={onChange}
-              label='Primary collector'
+              label={strings.PRIMARY_COLLECTOR}
             />
           </Grid>
           <Grid item xs={4}>
@@ -357,7 +357,7 @@ export function AccessionForm<T extends NewAccession>({
               id='siteLocation'
               value={record.siteLocation}
               onChange={onChange}
-              label='Site'
+              label={strings.SITE}
             />
           </Grid>
           <Grid item xs={4}>
@@ -365,7 +365,7 @@ export function AccessionForm<T extends NewAccession>({
               id='landowner'
               value={record.landowner}
               onChange={onChange}
-              label='Landowner'
+              label={strings.LANDOWNER}
             />
           </Grid>
           <Grid item xs={4}></Grid>
@@ -374,19 +374,12 @@ export function AccessionForm<T extends NewAccession>({
               id='environmentalNotes'
               value={record.environmentalNotes}
               onChange={onChange}
-              label='Environmental notes'
+              label={strings.ENVIRONMENTAL_NOTES}
             />
           </Grid>
         </Grid>
         <Divisor />
-        {!updating && (
-          <Note>
-            Information like Seed Bags, Photos and Geolocations can only be
-            added via the Seed Collector Android app. All the other information
-            about processing, drying, storage and withdrawals can be added after
-            first creating the accession.
-          </Note>
-        )}
+        {!updating && <Note>{strings.NEW_ACCESSION_INFO}</Note>}
         {updating && (
           <Grid container spacing={4}>
             <Grid item xs={3}>
@@ -395,7 +388,7 @@ export function AccessionForm<T extends NewAccession>({
                 variant='body2'
                 className={classes.listItem}
               >
-                Seed bags
+                {strings.SEED_BAGS}
               </Typography>
               {record.bagNumbers?.map((bag, index) => (
                 <Typography
@@ -415,7 +408,7 @@ export function AccessionForm<T extends NewAccession>({
                 variant='body2'
                 className={classes.listItem}
               >
-                Photos
+                {strings.PHOTOS}
               </Typography>
               {photoFilenames?.map((photo, index) => (
                 <Link
@@ -443,7 +436,7 @@ export function AccessionForm<T extends NewAccession>({
                 variant='body2'
                 className={classes.listItem}
               >
-                Geolocations
+                {strings.GEOLOCATIONS}
               </Typography>
               {record.geolocations?.map((geolocation, index) => (
                 <Typography
@@ -467,7 +460,7 @@ export function AccessionForm<T extends NewAccession>({
               isSaving={isSaving}
               isSaved={isSaved}
               nextStepTo='processing-drying'
-              nextStep='Next: Processing & Drying'
+              nextStep={strings.NEXT_PROCESSING_AND_DRYING}
               onSubmitHandler={onSubmitHandler}
               handleCancel={handleCancel}
             />

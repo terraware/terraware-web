@@ -7,6 +7,7 @@ import {
 import SearchIcon from '@material-ui/icons/Search';
 import React from 'react';
 import { SearchField, SearchFilter } from '../../../api/types/search';
+import strings from '../../../strings';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -52,7 +53,7 @@ export default function Search(props: Props): JSX.Element {
     <div className={classes.box}>
       <TextField
         id={props.field ?? ''}
-        placeholder='Search'
+        placeholder={strings.SEARCH}
         variant='outlined'
         value={search}
         InputProps={{

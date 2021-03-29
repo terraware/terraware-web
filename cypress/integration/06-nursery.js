@@ -41,7 +41,7 @@ describe('Nursery', () => {
     cy.get('#recordingDate').type('02/09/2021');
     cy.get('#notes').type('A nursery test note');
     cy.get('#staffResponsible').type('Constanza');
-    cy.get('#saveTest').should('contain', 'Create test');
+    cy.get('#saveTest').should('contain', 'Create Test');
 
     cy.intercept('GET', 'api/v2/seedbank/accession/*').as('getAccession');
     cy.get('#saveTest').click();
@@ -68,7 +68,7 @@ describe('Nursery', () => {
     cy.get('#seedsGerminated').clear().type('70');
     cy.get('#recordingDate').clear().type('02/10/2021');
     cy.get('#notes').clear();
-    cy.get('#saveTest').should('contain', 'Save changes');
+    cy.get('#saveTest').should('contain', 'Save Changes');
 
     cy.intercept('GET', 'api/v2/seedbank/accession/*').as('getAccession');
     cy.get('#saveTest').click();

@@ -30,6 +30,7 @@ import {
 import searchSelector, { columnsSelector } from '../../state/selectors/search';
 import searchAllValuesSelector from '../../state/selectors/searchAllValues';
 import searchValuesSelector from '../../state/selectors/searchValues';
+import strings from '../../strings';
 import Table from '../common/table';
 import { Order } from '../common/table/sort';
 import PageHeader from '../PageHeader';
@@ -179,7 +180,7 @@ export default function Database(): JSX.Element {
       return <CircularProgress />;
     }
     if (resultsLodable.state === 'hasError') {
-      return 'An error ocurred';
+      return strings.GENERIC_ERROR;
     }
   };
 
@@ -234,7 +235,7 @@ export default function Database(): JSX.Element {
           {(allValuesLodable.state === 'hasError' ||
             availableValuesLodable.state === 'hasError' ||
             tableColumnsLodable.state === 'hasError') &&
-            'An error ocurred'}
+            strings.GENERIC_ERROR}
         </PageHeader>
         <Container maxWidth={false} className={classes.mainContainer}>
           <Grid container spacing={3}>
@@ -262,7 +263,7 @@ export default function Database(): JSX.Element {
                     )}
                     {(resultsLodable.state === 'hasError' ||
                       tableColumnsLodable.state === 'hasError') &&
-                      'An error ocurred'}
+                      strings.GENERIC_ERROR}
                   </Grid>
                 </Grid>
               </Paper>

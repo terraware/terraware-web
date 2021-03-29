@@ -9,6 +9,7 @@ import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import dayjs from 'dayjs';
 import React from 'react';
 import { Germination } from '../../api/types/tests';
+import strings from '../../strings';
 import preventDefault from '../../utils/preventDefaultEvent';
 import useForm from '../../utils/useForm';
 import CancelButton from '../common/CancelButton';
@@ -77,7 +78,7 @@ export default function NewGermination(props: Props): JSX.Element {
       maxWidth='sm'
     >
       <DialogTitle>
-        <Typography variant='h6'>New entry</Typography>
+        <Typography variant='h6'>{strings.NEW_ENTRY}</Typography>
         <DialogCloseButton onClick={handleCancel} />
       </DialogTitle>
       <DialogContent dividers>
@@ -88,7 +89,7 @@ export default function NewGermination(props: Props): JSX.Element {
                 id='seedsGerminated'
                 value={record.seedsGerminated}
                 onChange={onChange}
-                label='Seeds germinated'
+                label={strings.SEEDS_GERMINATED}
                 type='number'
               />
             </Grid>
@@ -97,7 +98,7 @@ export default function NewGermination(props: Props): JSX.Element {
                 id='recordingDate'
                 value={record.recordingDate}
                 onChange={onChange}
-                label='Recording date'
+                label={strings.RECORDING_DATE}
                 aria-label='Recording date'
               />
             </Grid>
@@ -117,7 +118,7 @@ export default function NewGermination(props: Props): JSX.Element {
               }}
             >
               <Typography component='p' variant='body2'>
-                Delete
+                {strings.DELETE}
               </Typography>
             </Link>
           )}
@@ -126,7 +127,7 @@ export default function NewGermination(props: Props): JSX.Element {
             <Chip
               id='saveGermination'
               className={classes.submit}
-              label={props.value ? 'Save changes' : 'Create entry'}
+              label={props.value ? strings.SAVE_CHANGES : strings.CREATE_ENTRY}
               clickable
               color='primary'
               onClick={handleOk}

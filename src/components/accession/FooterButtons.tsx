@@ -2,6 +2,7 @@ import { Chip, Link } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
+import strings from '../../strings';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -49,7 +50,7 @@ export default function FooterButtons({
           <Chip
             id='cancelButton'
             className={classes.cancel}
-            label='Cancel'
+            label={strings.CANCEL}
             clickable
             variant='outlined'
           />
@@ -58,7 +59,7 @@ export default function FooterButtons({
       {(isEditing || isSaving || isSaved) && updating && (
         <Chip
           id='cancelAccession'
-          label='Cancel'
+          label={strings.CANCEL}
           clickable
           variant='outlined'
           onClick={handleCancel}
@@ -75,9 +76,9 @@ export default function FooterButtons({
           label={
             updating
               ? isSaving
-                ? 'Saving...'
-                : 'Save changes'
-              : 'Create accession'
+                ? strings.SAVING
+                : strings.SAVE_CHANGES
+              : strings.CREATE_ACCESSION
           }
           clickable
           color='primary'
@@ -90,7 +91,7 @@ export default function FooterButtons({
           <Chip
             id='nextStep'
             className={classes.submit}
-            label={isSaved ? 'Changes Saved!' : nextStep}
+            label={isSaved ? strings.CHANGES_SAVED : nextStep}
             clickable
             color='primary'
           />

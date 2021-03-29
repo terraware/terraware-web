@@ -2,6 +2,7 @@ import { TableCell, Typography } from '@material-ui/core';
 import dayjs from 'dayjs';
 import React from 'react';
 import { AccessionWithdrawal } from '../../api/types/accessions';
+import strings from '../../strings';
 import CellRenderer, {
   CellDateRenderer,
 } from '../common/table/TableCellRenderer';
@@ -43,7 +44,7 @@ export default function WithdrawalCellRenderer(
       return (
         <TableCell id={id} align='left'>
           <Typography component='p' variant='body1'>
-            Scheduled for
+            {strings.SCHEDULED_FOR}
           </Typography>
           <Typography component='p' variant='body1'>
             {dayjs(value).format('MM/DD/YYYY')}

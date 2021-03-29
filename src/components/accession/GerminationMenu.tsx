@@ -3,6 +3,7 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 import { Link as RouterLink, useParams, useRouteMatch } from 'react-router-dom';
 import { Accession } from '../../api/types/accessions';
+import strings from '../../strings';
 import useStateLocation from '../../utils/useStateLocation';
 import Divisor from '../common/Divisor';
 
@@ -50,7 +51,7 @@ export default function GerminationMenu({
   return (
     <Paper className={classes.paper}>
       <Typography variant='h6' className={classes.bold}>
-        Germination testing
+        {strings.GERMINATION_TESTING}
       </Typography>
       <Divisor mt={1} />
       {hasNurseryGerminationTest && (
@@ -69,7 +70,7 @@ export default function GerminationMenu({
             variant='body1'
             className={typographyClass('/accessions/:accessionNumber/nursery')}
           >
-            Nursery
+            {strings.NURSERY}
           </Typography>
         </Link>
       )}
@@ -87,7 +88,7 @@ export default function GerminationMenu({
             variant='body1'
             className={typographyClass('/accessions/:accessionNumber/lab')}
           >
-            Lab
+            {strings.LAB}
           </Typography>
         </Link>
       )}

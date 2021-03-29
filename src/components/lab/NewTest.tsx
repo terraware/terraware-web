@@ -8,6 +8,7 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import React from 'react';
 import { GerminationTest } from '../../api/types/tests';
+import strings from '../../strings';
 import preventDefault from '../../utils/preventDefaultEvent';
 import useForm from '../../utils/useForm';
 import CancelButton from '../common/CancelButton';
@@ -78,7 +79,7 @@ export default function NewTestDialog(props: Props): JSX.Element {
       maxWidth='sm'
     >
       <DialogTitle>
-        <Typography variant='h6'>New test</Typography>
+        <Typography variant='h6'>{strings.NEW_TEST}</Typography>
         <DialogCloseButton onClick={handleCancel} />
       </DialogTitle>
       <DialogContent dividers>
@@ -89,11 +90,11 @@ export default function NewTestDialog(props: Props): JSX.Element {
                 id='startDate'
                 value={record?.startDate}
                 onChange={onChange}
-                label='Start date'
+                label={strings.START_DATE}
                 aria-label='Start date'
               />
               <Typography component='p' variant='caption'>
-                You can schedule a date by selecting a future date.
+                {strings.FUTURE_DATE_INFO}
               </Typography>
             </Grid>
             <Grid item xs={6}>
@@ -101,7 +102,7 @@ export default function NewTestDialog(props: Props): JSX.Element {
                 id='endDate'
                 value={record?.endDate}
                 onChange={onChange}
-                label='End date'
+                label={strings.END_DATE}
                 aria-label='End date'
               />
             </Grid>
@@ -111,9 +112,9 @@ export default function NewTestDialog(props: Props): JSX.Element {
                 label='Seed type'
                 selected={record?.seedType || ''}
                 values={[
-                  { label: 'Fresh Seeds', value: 'Fresh' },
+                  { label: strings.FRESH_SEEDS, value: 'Fresh' },
                   {
-                    label: 'Stored Seeds',
+                    label: strings.STORED_SEEDS,
                     value: 'Stored',
                   },
                 ]}
@@ -126,14 +127,17 @@ export default function NewTestDialog(props: Props): JSX.Element {
                 label='Substrate'
                 selected={record?.substrate || ''}
                 values={[
-                  { label: 'Nursery Media', value: 'Nursery Media' },
+                  { label: strings.NURSERY_MEDIA, value: 'Nursery Media' },
                   {
-                    label: 'Agar Petri Dish',
+                    label: strings.AGAR_PETRI_DISH,
                     value: 'Agar Petri Dish',
                   },
-                  { label: 'Paper Petri Dish', value: 'Paper Petri Dish' },
                   {
-                    label: 'Other',
+                    label: strings.PAPER_PETRI_DISH,
+                    value: 'Paper Petri Dish',
+                  },
+                  {
+                    label: strings.OTHER,
                     value: 'Other',
                   },
                 ]}
@@ -146,21 +150,21 @@ export default function NewTestDialog(props: Props): JSX.Element {
                 label='Treatment'
                 selected={record?.treatment || ''}
                 values={[
-                  { label: 'Soak', value: 'Soak' },
+                  { label: strings.SOAK, value: 'Soak' },
                   {
-                    label: 'Scarify',
+                    label: strings.SCARIFY,
                     value: 'Scarify',
                   },
                   {
-                    label: 'GA3',
+                    label: strings.GA3,
                     value: 'GA3',
                   },
                   {
-                    label: 'Stratification',
+                    label: strings.STRATIFICATION,
                     value: 'Stratification',
                   },
                   {
-                    label: 'Other',
+                    label: strings.OTHER,
                     value: 'Other',
                   },
                 ]}
@@ -172,7 +176,7 @@ export default function NewTestDialog(props: Props): JSX.Element {
                 id='seedsSown'
                 value={record?.seedsSown}
                 onChange={onChange}
-                label='Seeds sown'
+                label={strings.SEEDS_SOWN}
                 type='Number'
               />
             </Grid>
@@ -184,7 +188,7 @@ export default function NewTestDialog(props: Props): JSX.Element {
                 id='notes'
                 value={record?.notes}
                 onChange={onChange}
-                label='Notes'
+                label={strings.NOTES}
               />
             </Grid>
             <Grid item xs={6}>
@@ -192,7 +196,7 @@ export default function NewTestDialog(props: Props): JSX.Element {
                 id='staffResponsible'
                 value={record?.staffResponsible}
                 onChange={onChange}
-                label='Staff responsible'
+                label={strings.STAFF_RESPONSIBLE}
               />
             </Grid>
           </Grid>
@@ -211,7 +215,7 @@ export default function NewTestDialog(props: Props): JSX.Element {
               }}
             >
               <Typography component='p' variant='body2'>
-                Delete
+                {strings.DELETE}
               </Typography>
             </Link>
           )}
@@ -220,7 +224,7 @@ export default function NewTestDialog(props: Props): JSX.Element {
             <Chip
               id='saveTest'
               className={classes.submit}
-              label={props.value ? 'Save changes' : 'Create test'}
+              label={props.value ? strings.SAVE_CHANGES : strings.CREATE_TEST}
               clickable
               color='primary'
               onClick={handleOk}

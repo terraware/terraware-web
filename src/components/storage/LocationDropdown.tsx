@@ -3,6 +3,7 @@ import React from 'react';
 import { useRecoilValue, useResetRecoilState } from 'recoil';
 import { ConditionType, Location } from '../../api/types/locations';
 import locationsSelector from '../../state/selectors/locations';
+import strings from '../../strings';
 import Dropdown from '../common/Dropdown';
 import TextField from '../common/TextField';
 
@@ -57,7 +58,7 @@ export default function LocationDropdown({
       <Grid item xs={4}>
         <Dropdown
           id='storageLocation'
-          label='Location'
+          label={strings.LOCATION}
           selected={storageLocation}
           values={generateLocationsValues}
           onChange={onStorageLocationChange}
@@ -68,7 +69,7 @@ export default function LocationDropdown({
           id='storageCondition'
           value={storageCondition}
           onChange={onChange}
-          label='Condition'
+          label={strings.CONDITION}
           disabled={true}
         />
       </Grid>

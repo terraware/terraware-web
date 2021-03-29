@@ -4,6 +4,7 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import React, { Suspense } from 'react';
 import { Accession } from '../../api/types/accessions';
+import strings from '../../strings';
 import useForm from '../../utils/useForm';
 import FooterButtons from '../accession/FooterButtons';
 import DatePicker from '../common/DatePicker';
@@ -82,11 +83,9 @@ export default function Storage({ accession, onSubmit }: Props): JSX.Element {
     <MuiPickersUtilsProvider utils={DayJSUtils}>
       <Paper className={classes.paper}>
         <Typography variant='h6' className={classes.bold}>
-          Storage
+          {strings.STORAGE}
         </Typography>
-        <Typography component='p'>
-          All the details about storing the seeds.
-        </Typography>
+        <Typography component='p'>{strings.STORAGE_DESCRIPTION}</Typography>
         <Divisor />
         <Grid container spacing={4}>
           <Grid item xs={4}>
@@ -94,7 +93,7 @@ export default function Storage({ accession, onSubmit }: Props): JSX.Element {
               id='storageStartDate'
               value={record.storageStartDate}
               onChange={onChange}
-              label='Starting on'
+              label={strings.STARTING_ON}
               aria-label='Starting on'
             />
           </Grid>
@@ -105,7 +104,7 @@ export default function Storage({ accession, onSubmit }: Props): JSX.Element {
               id='storagePackets'
               value={record.storagePackets}
               onChange={onChange}
-              label='Number of packets'
+              label={strings.NUMBER_OF_PACKETS}
               type='Number'
             />
           </Grid>
@@ -129,7 +128,7 @@ export default function Storage({ accession, onSubmit }: Props): JSX.Element {
               id='storageNotes'
               value={record.storageNotes || ''}
               onChange={onChange}
-              label='Notes'
+              label={strings.NOTES}
             />
           </Grid>
           <Grid item xs={4}>
@@ -137,16 +136,12 @@ export default function Storage({ accession, onSubmit }: Props): JSX.Element {
               id='storageStaffResponsible'
               value={record.storageStaffResponsible}
               onChange={onChange}
-              label='Staff responsible'
+              label={strings.STAFF_RESPONSIBLE}
             />
           </Grid>
           <Divisor />
           <Grid item xs={12}>
-            <Note>
-              By adding information about the storage and saving the changes you
-              will be automatically changing this accession’s state from Pending
-              to Stored.
-            </Note>
+            <Note>{strings.STORAGE_INFO}</Note>
           </Grid>
           <Grid item className={classes.right}>
             <FooterButtons
@@ -155,7 +150,7 @@ export default function Storage({ accession, onSubmit }: Props): JSX.Element {
               isSaving={isSaving}
               isSaved={isSaved}
               nextStepTo='withdrawal'
-              nextStep='Next: Withdrawal'
+              nextStep={strings.NEXT_WITHDRAWAL}
               onSubmitHandler={onSubmitHandler}
               handleCancel={handleCancel}
             />

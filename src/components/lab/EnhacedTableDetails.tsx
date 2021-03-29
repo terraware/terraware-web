@@ -13,6 +13,7 @@ import TableRow from '@material-ui/core/TableRow';
 import CloseIcon from '@material-ui/icons/Close';
 import React from 'react';
 import { GerminationTest } from '../../api/types/tests';
+import strings from '../../strings';
 import Divisor from '../common/Divisor';
 import SummaryBox from '../common/SummaryBox';
 import {
@@ -141,7 +142,7 @@ export default function EnhancedTableDetails<T>({
                   <Grid item xs={4}>
                     <SummaryBox
                       id='totalSeedsGerminated'
-                      title='Total seeds germinated'
+                      title={strings.TOTAL_SEEDS_GERMINATED}
                       value={`${totalSeedsGerminated} (${percentageTotalSeedsGerminated}%)`}
                       variant='full'
                     />
@@ -198,7 +199,7 @@ export default function EnhancedTableDetails<T>({
                   <Grid item xs={3}>
                     <Chip
                       id='newEntry'
-                      label='New entry'
+                      label={strings.NEW_ENTRY}
                       clickable
                       onClick={() => onClick(row)}
                       color='secondary'

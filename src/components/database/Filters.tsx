@@ -10,6 +10,7 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 import ArrowDropDown from '@material-ui/icons/ArrowDropDown';
 import React from 'react';
 import { FieldValuesPayload, SearchFilter } from '../../api/types/search';
+import strings from '../../strings';
 import preventDefaultEvent from '../../utils/preventDefaultEvent';
 import { DatabaseColumn, Option } from './columns';
 import DateRange from './filters/FilterDateRange';
@@ -166,7 +167,7 @@ export default function Filters(props: Props): JSX.Element {
             clearAllFilters();
           }}
         >
-          Clear Filters
+          {strings.CLEAR_FILTERS}
         </Link>
       </div>
     </Container>
@@ -249,7 +250,7 @@ export function SimplePopover({
             clearFilter();
           }}
         >
-          Clear
+          {strings.CLEAR}
         </Link>
       </div>
       <Divider />

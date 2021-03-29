@@ -4,6 +4,7 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import React from 'react';
 import { Accession } from '../../api/types/accessions';
+import strings from '../../strings';
 import useForm from '../../utils/useForm';
 import FooterButtons from '../accession/FooterButtons';
 import Checkbox from '../common/Checkbox';
@@ -142,21 +143,21 @@ export default function ProcessingAndDrying({
     <MuiPickersUtilsProvider utils={DayJSUtils}>
       <Paper className={classes.paper}>
         <Typography component='p' variant='h6' className={classes.bold}>
-          Processing & Drying
+          {strings.PROCESSING_AND_DRYING}
         </Typography>
         <Typography component='p'>
-          All the details about processing and drying the seeds.
+          {strings.PROCESSING_AND_DRYING_DESCRIPTION}
         </Typography>
         <Divisor />
         <Grid container spacing={4}>
           <Grid item xs={4}>
             <Dropdown
               id='processingMethod'
-              label='Quantify'
+              label={strings.QUANTIFY}
               selected={record.processingMethod || 'Count'}
               values={[
-                { label: 'Seeds count', value: 'Count' },
-                { label: 'Seed weight', value: 'Weight' },
+                { label: strings.SEED_COUNT, value: 'Count' },
+                { label: strings.SEED_WEIGHT, value: 'Weight' },
               ]}
               onChange={OnProcessingMethodChange}
             />
@@ -168,7 +169,7 @@ export default function ProcessingAndDrying({
                 id='seedsCounted'
                 value={record.seedsCounted}
                 onChange={onChange}
-                label='Seed Count'
+                label={strings.SEED_COUNT}
                 type='Number'
               />
             </Grid>
@@ -180,7 +181,7 @@ export default function ProcessingAndDrying({
                   id='subsetWeightGrams'
                   value={record.subsetWeightGrams}
                   onChange={onChangeWeightFields}
-                  label='Subset’s weight'
+                  label={strings.SUBSET_WEIGHT}
                   type='number'
                 />
               </Grid>
@@ -189,7 +190,7 @@ export default function ProcessingAndDrying({
                   id='subsetCount'
                   value={record.subsetCount}
                   onChange={onChangeWeightFields}
-                  label='# of seeds in subset'
+                  label={strings.NUMBER_OF_SEEDS_IN_SUBSET}
                   type='number'
                 />
               </Grid>
@@ -199,7 +200,7 @@ export default function ProcessingAndDrying({
                   id='totalWeightGrams'
                   value={record.totalWeightGrams}
                   onChange={onChangeWeightFields}
-                  label='Total weight of seeds'
+                  label={strings.TOTAL_WEIGHT_OF_SEEDS}
                   type='number'
                 />
               </Grid>
@@ -209,7 +210,7 @@ export default function ProcessingAndDrying({
                   value={estimatedSeedCount}
                   disabled={true}
                   onChange={onChange}
-                  label='Total seeds count estimation'
+                  label={strings.TOTAL_SEEDS_COUNT_ESTIMATION}
                   type='number'
                 />
               </Grid>
@@ -220,11 +221,10 @@ export default function ProcessingAndDrying({
         <Grid container spacing={4}>
           <Grid item xs={12}>
             <Typography component='p' variant='body1'>
-              Viability test types
+              {strings.VIABILITY_TEST_TYPES}
             </Typography>
             <Typography component='p' variant='body2'>
-              Selecting either one will unlock a new option on the sidebar after
-              you save the changes.
+              {strings.VIABILITY_TEST_TYPES_INFO}
             </Typography>
           </Grid>
         </Grid>
@@ -232,14 +232,14 @@ export default function ProcessingAndDrying({
           <Checkbox
             id='Nursery'
             name='nurseryGermination'
-            label='Nursery Germination'
+            label={strings.NURSERY_GERMINATION}
             value={isChecked('Nursery' as GerminationTestType)}
             onChange={onChangeGerminationTestType}
           />
           <Checkbox
             id='Lab'
             name='labGermination'
-            label='Lab Germination'
+            label={strings.LAB_GERMINATION}
             value={isChecked('Lab' as GerminationTestType)}
             onChange={onChangeGerminationTestType}
           />
@@ -249,7 +249,7 @@ export default function ProcessingAndDrying({
           <Grid item xs={4}>
             <Dropdown
               id='targetStorageCondition'
-              label='Target RH'
+              label={strings.TARGET_RH}
               selected={record.targetStorageCondition || 'Refrigerator'}
               values={[
                 { label: '30% refrigerated', value: 'Refrigerator' },
@@ -266,7 +266,7 @@ export default function ProcessingAndDrying({
               id='dryingStartDate'
               value={record.dryingStartDate}
               onChange={onChange}
-              label='Drying start date'
+              label={strings.DRYING_START_DATE}
               aria-label='Drying start date'
             />
           </Grid>
@@ -275,7 +275,7 @@ export default function ProcessingAndDrying({
               id='dryingEndDate'
               value={record.dryingEndDate}
               onChange={onChange}
-              label='Estimated drying end date'
+              label={strings.ESTIMATED_DRYING_END_DATE}
               aria-label='Estimated drying end date'
             />
           </Grid>
@@ -286,7 +286,7 @@ export default function ProcessingAndDrying({
               id='dryingMoveDate'
               value={record.dryingMoveDate}
               onChange={onChange}
-              label='Schedule date to move from racks to dry cabinets'
+              label={strings.SCHEDULE_DATE_TO_MOVE}
               aria-label='Drying move date'
             />
             <Typography
@@ -294,7 +294,7 @@ export default function ProcessingAndDrying({
               variant='caption'
               className={classes.caption}
             >
-              (Only if it applies)
+              {strings.IF_APPLIES}
             </Typography>
           </Grid>
         </Grid>
@@ -305,7 +305,7 @@ export default function ProcessingAndDrying({
               id='processingNotes'
               value={record.processingNotes || ''}
               onChange={onChange}
-              label='Notes'
+              label={strings.NOTES}
             />
           </Grid>
           <Grid item xs={4}>
@@ -313,19 +313,14 @@ export default function ProcessingAndDrying({
               id='processingStaffResponsible'
               value={record.processingStaffResponsible}
               onChange={onChange}
-              label='Staff responsible'
+              label={strings.STAFF_RESPONSIBLE}
             />
           </Grid>
         </Grid>
         <Divisor />
         <Grid container spacing={4}>
           <Grid item xs={12}>
-            <Note>
-              By adding information about the processing/drying and saving the
-              changes you will be automatically changing this accession’s state
-              from Pending to, either, Processing, Processed, Drying or Dried,
-              depeending on the information you fill in.
-            </Note>
+            <Note>{strings.PROCESSING_AND_DRYING_INFO}</Note>
           </Grid>
         </Grid>
         <Grid container spacing={4}>
@@ -336,7 +331,7 @@ export default function ProcessingAndDrying({
               isSaving={isSaving}
               isSaved={isSaved}
               nextStepTo='storage'
-              nextStep='Next: Storing'
+              nextStep={strings.NEXT_STORING}
               onSubmitHandler={onSubmitHandler}
               handleCancel={handleCancel}
             />

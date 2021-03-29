@@ -3,6 +3,7 @@ import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import dayjs from 'dayjs';
 import React from 'react';
 import { SearchField, SearchFilter } from '../../../api/types/search';
+import strings from '../../../strings';
 import DatePicker from '../../common/DatePicker';
 
 const useStyles = makeStyles((theme) =>
@@ -73,7 +74,7 @@ export default function DateRange(props: Props): JSX.Element {
             id='startDate'
             value={startDate}
             onChange={onChangeDate}
-            label='Start'
+            label={strings.START}
             aria-label='Start date'
             onKeyPress={(e) => onEnter(e)}
           />
@@ -86,7 +87,7 @@ export default function DateRange(props: Props): JSX.Element {
             id='endDate'
             value={endDate}
             onChange={onChangeDate}
-            label='End'
+            label={strings.END}
             aria-label='End date'
             onKeyPress={(e) => onEnter(e)}
           />

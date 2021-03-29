@@ -16,6 +16,7 @@ import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import dayjs from 'dayjs';
 import React from 'react';
 import { AccessionWithdrawal } from '../../api/types/accessions';
+import strings from '../../strings';
 import preventDefault from '../../utils/preventDefaultEvent';
 import useForm from '../../utils/useForm';
 import CancelButton from '../common/CancelButton';
@@ -125,13 +126,16 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
 
   const schedule = new Date(record.date) > new Date();
   const dateSubtext = schedule
-    ? `Scheduling for: ${dayjs(record.date).format('MMMM Do, YYYY')}`
-    : 'You can schedule a date by selecting a future date.';
+    ? strings.formatString(
+        strings.SCHEDULING_FOR,
+        dayjs(record.date).format('MMMM Do, YYYY')
+      )
+    : strings.SCHEDULE_DATE_INFO;
   const submitText = props.value
-    ? 'Save changes'
+    ? strings.SAVE_CHANGES
     : schedule
-    ? 'Schedule withdrawal'
-    : 'Withdraw seeds';
+    ? strings.SCHEDULE_WITHDRAWAL
+    : strings.WITHDRAW_SEEDS;
 
   return (
     <Dialog
@@ -150,7 +154,7 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
             <Grid item xs={12}>
               <SummaryBox
                 id='modal-seeds-available'
-                title='Seeds available'
+                title={strings.SEEDS_AVAILABLE}
                 value={props.seedsAvailable}
                 variant={props.seedsAvailable === 0 ? 'zero' : 'default'}
               />
@@ -161,7 +165,7 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
                   id='quantity'
                   value={record.gramsWithdrawn ?? record.seedsWithdrawn}
                   onChange={onQuantityChange}
-                  label='Quantity'
+                  label={strings.QUANTITY}
                   type='number'
                   endAdornment={
                     <InputAdornment position='end'>
@@ -182,7 +186,7 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
                 id='date'
                 value={record.date}
                 onChange={onChange}
-                label='Withdraw on'
+                label={strings.WITHDRAWN_ON}
                 aria-label='Withdraw date'
               />
               <Typography id='date-tip' component='p' variant='body2'>
@@ -194,7 +198,7 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
                 id='destination'
                 value={record.destination}
                 onChange={onChange}
-                label='Destination'
+                label={strings.DESTINATION}
               />
             </Grid>
             <Grid item xs={6}>
@@ -203,18 +207,18 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
                 label='Purpose'
                 selected={record.purpose}
                 values={[
-                  { label: 'Propagation', value: 'Propagation' },
+                  { label: strings.PROPAGATION, value: 'Propagation' },
                   {
-                    label: 'Outreach or education',
+                    label: strings.OUTREACH_OR_EDUCATION,
                     value: 'Outreach or Education',
                   },
-                  { label: 'Research', value: 'Research' },
-                  { label: 'Broadcast', value: 'Broadcast' },
+                  { label: strings.RESEARCH, value: 'Research' },
+                  { label: strings.BROADCAST, value: 'Broadcast' },
                   {
-                    label: 'Share with another site',
+                    label: strings.SHARE_WITH_ANOTHER_SITE,
                     value: 'Share with Another Site',
                   },
-                  { label: 'Other', value: 'Other' },
+                  { label: strings.OTHER, value: 'Other' },
                 ]}
                 onChange={onChange}
               />
@@ -227,7 +231,7 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
                 id='notes'
                 value={record.notes}
                 onChange={onChange}
-                label='Notes'
+                label={strings.NOTES}
               />
             </Grid>
             <Grid item xs={6}>
@@ -235,7 +239,7 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
                 id='staffResponsible'
                 value={record.staffResponsible}
                 onChange={onChange}
-                label='Staff responsible'
+                label={strings.STAFF_RESPONSIBLE}
               />
             </Grid>
           </Grid>
@@ -254,7 +258,7 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
               }}
             >
               <Typography component='p' variant='body2'>
-                Delete
+                {strings.DELETE}
               </Typography>
             </Link>
           )}

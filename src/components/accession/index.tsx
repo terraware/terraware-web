@@ -8,6 +8,7 @@ import { Accession } from '../../api/types/accessions';
 import snackbarAtom from '../../state/atoms/snackbar';
 import getAccessionSelector from '../../state/selectors/accession';
 import searchSelector from '../../state/selectors/search';
+import strings from '../../strings';
 import ErrorBoundary from '../ErrorBoundary';
 import Lab from '../lab';
 import { AccessionForm } from '../newAccession';
@@ -33,7 +34,7 @@ export default function AccessionPage(): JSX.Element {
   const errorHandler = () => {
     setSnackbar({
       type: 'error',
-      msg: 'An error occurred when getting the accession.',
+      msg: strings.GET_ACCESSION_ERROR,
     });
   };
 
@@ -78,7 +79,7 @@ function Content(): JSX.Element {
     } catch (ex) {
       setSnackbar({
         type: 'error',
-        msg: 'An error occurred when saving the accession.',
+        msg: strings.SAVE_ACCESSION_ERROR,
         error: ex.error?.message,
       });
     }

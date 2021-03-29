@@ -1,4 +1,5 @@
 import React from 'react';
+import strings from '../../strings';
 import CellRenderer, { TableRowType } from '../common/table/TableCellRenderer';
 import { RendererProps } from '../common/table/types';
 
@@ -11,7 +12,7 @@ export default function LabCellRenderer(
       <CellRenderer
         index={index}
         column={column}
-        value={`${row[column.key]} seeds germinated`}
+        value={`${row[column.key]} ${strings.SEEDS_GERMINATED_LC}`}
         row={row}
       />
     );

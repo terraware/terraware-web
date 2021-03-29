@@ -5,6 +5,7 @@ import AddIcon from '@material-ui/icons/Add';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import React from 'react';
 import { Accession, AccessionWithdrawal } from '../../api/types/accessions';
+import strings from '../../strings';
 import Divisor from '../common/Divisor';
 import Note from '../common/Note';
 import SummaryBox from '../common/SummaryBox';
@@ -128,20 +129,16 @@ export default function WithdrawalView({
         />
         <Paper className={classes.paper}>
           <Typography variant='h6' className={classes.bold}>
-            Withdrawal
+            {strings.WITHDRAWAL}
           </Typography>
           <Typography component='p'>
-            All the details about withdrawal of the seeds.
+            {strings.WITHDRAWAL_DESCRIPTION}
           </Typography>
           <Divisor />
 
           {seedsAvailable === 0 && (
             <>
-              <Note>
-                All seeds were withdrawn so new withdrawals are disable and the
-                accession is automatically marked as Withdrawn and set to
-                Inactive.
-              </Note>
+              <Note>{strings.ALL_SEEDS_WITHDRAWN_MSG}</Note>
               <Divisor />
             </>
           )}
@@ -150,7 +147,7 @@ export default function WithdrawalView({
             <Grid item xs={4}>
               <SummaryBox
                 id='total-seeds'
-                title='Total seeds'
+                title={strings.TOTAL_SEEDS}
                 value={seedsTotal}
                 variant='default'
               />
@@ -158,7 +155,7 @@ export default function WithdrawalView({
             <Grid item xs={4}>
               <SummaryBox
                 id='seeds-withdrawn'
-                title='Seeds withdrawn'
+                title={strings.SEEDS_WITHDRAWN}
                 value={seedsWithdrawn}
                 variant='default'
               />
@@ -166,7 +163,7 @@ export default function WithdrawalView({
             <Grid item xs={4}>
               <SummaryBox
                 id='seeds-available'
-                title='Seeds available'
+                title={strings.SEEDS_AVAILABLE}
                 value={seedsAvailable}
                 variant={seedsAvailable <= 0 ? 'zero' : 'available'}
               />
@@ -191,7 +188,7 @@ export default function WithdrawalView({
                 className={
                   seedsAvailable > 0 ? classes.greenChip : classes.grayChip
                 }
-                label='New withdrawal'
+                label={strings.NEW_WITHDRAWAL}
                 clickable={seedsAvailable > 0}
                 deleteIcon={<AddIcon classes={newWithdrawalChipStyles()} />}
                 color={seedsAvailable > 0 ? 'primary' : undefined}
@@ -207,12 +204,12 @@ export default function WithdrawalView({
 }
 
 const COLUMNS: TableColumnType[] = [
-  { key: 'date', name: 'Date', type: 'date' },
-  { key: 'quantity', name: 'Quantity', type: 'string' },
-  { key: 'destination', name: 'Destination', type: 'string' },
-  { key: 'purpose', name: 'Purpose', type: 'string' },
-  { key: 'staffResponsible', name: 'Staff', type: 'string' },
-  { key: 'notes', name: 'Notes', type: 'notes' },
+  { key: 'date', name: strings.DATE, type: 'date' },
+  { key: 'quantity', name: strings.QUANTITY, type: 'string' },
+  { key: 'destination', name: strings.DESTINATION, type: 'string' },
+  { key: 'purpose', name: strings.PURPOSE, type: 'string' },
+  { key: 'staffResponsible', name: strings.STAFF, type: 'string' },
+  { key: 'notes', name: strings.NOTES, type: 'notes' },
   { key: 'edit', name: '', type: 'edit' },
 ];
 

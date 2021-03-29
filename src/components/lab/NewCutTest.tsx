@@ -8,6 +8,7 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import React from 'react';
 import { Accession } from '../../api/types/accessions';
+import strings from '../../strings';
 import useForm from '../../utils/useForm';
 import CancelButton from '../common/CancelButton';
 import DialogCloseButton from '../common/DialogCloseButton';
@@ -72,7 +73,7 @@ export default function NewCutTest(props: Props): JSX.Element {
                 id='cutTestSeedsFilled'
                 value={record.cutTestSeedsFilled}
                 onChange={onChange}
-                label='Filled Seeds'
+                label={strings.FILLED_SEEDS}
                 aria-label='Filled seeds'
                 type='number'
               />
@@ -82,7 +83,7 @@ export default function NewCutTest(props: Props): JSX.Element {
                 id='cutTestSeedsEmpty'
                 value={record.cutTestSeedsEmpty}
                 onChange={onChange}
-                label='Empty seeds'
+                label={strings.EMPTY_SEEDS}
                 aria-label='Empty seeds'
                 type='number'
               />
@@ -92,7 +93,7 @@ export default function NewCutTest(props: Props): JSX.Element {
                 id='cutTestSeedsCompromised'
                 value={record.cutTestSeedsCompromised}
                 onChange={onChange}
-                label='Compromised seeds'
+                label={strings.COMPROMISED_SEEDS}
                 aria-label='Compromised seeds'
                 type='number'
               />
@@ -107,7 +108,7 @@ export default function NewCutTest(props: Props): JSX.Element {
             <Chip
               id='saveCutTest'
               className={classes.submit}
-              label='Save changes'
+              label={strings.SAVE_CHANGES}
               clickable
               color='primary'
               onClick={handleOk}

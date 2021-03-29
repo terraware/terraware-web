@@ -2,6 +2,7 @@ import { List, ListItem, ListItemText } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 import { SearchField, SearchFilter } from '../../../api/types/search';
+import strings from '../../../strings';
 import { Option } from '../columns';
 
 const useStyles = makeStyles((theme) =>
@@ -94,8 +95,12 @@ export default function SingleSelection(props: Props): JSX.Element {
   );
 }
 
-function formatLabel(label: string | null): string | null {
-  if (label === 'true') return 'Yes';
-  if (label === 'false') return 'No';
+function formatLabel(label: string | null): string | undefined | null {
+  if (label === 'true') {
+    return strings.YES;
+  }
+  if (label === 'false') {
+    return strings.NO;
+  }
   return label;
 }

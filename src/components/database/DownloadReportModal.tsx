@@ -8,6 +8,7 @@ import { useRecoilValue } from 'recoil';
 import { downloadReport } from '../../api/downloadReport';
 import { ExportRequestPayload } from '../../api/types/report';
 import { searchParamsSelector } from '../../state/selectors/search';
+import strings from '../../strings';
 import CancelButton from '../common/CancelButton';
 import DialogCloseButton from '../common/DialogCloseButton';
 import TextField from '../common/TextField';
@@ -75,11 +76,10 @@ export default function DownloadReportModal(props: Props): JSX.Element {
     >
       <DialogTitle>
         <Typography component='p' variant='h6' className={classes.bold}>
-          Report
+          {strings.REPORT}
         </Typography>
         <Typography component='p'>
-          You are about to download this datatable as a report. This csv file
-          can be found in your Downloads. Please name your report below.
+          {strings.DOWNLOAD_REPORT_DESCRIPTION}
         </Typography>
         <DialogCloseButton onClick={handleCancel} />
       </DialogTitle>
@@ -92,7 +92,7 @@ export default function DownloadReportModal(props: Props): JSX.Element {
               onChange={(id, value) => {
                 setName(value as string);
               }}
-              label='Report name'
+              label={strings.REPORT_NAME}
               aria-label='Report name'
             />
           </Grid>
@@ -105,7 +105,7 @@ export default function DownloadReportModal(props: Props): JSX.Element {
             <Chip
               id='downloadButton'
               className={classes.submit}
-              label='Download'
+              label={strings.DOWNLOAD}
               clickable
               color='primary'
               onClick={handleOk}

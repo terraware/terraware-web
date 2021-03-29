@@ -1,6 +1,7 @@
 import { Box, IconButton, Link } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import React from 'react';
+import strings from '../../strings';
 import preventDefaultEvent from '../../utils/preventDefaultEvent';
 import TextField from '../common/TextField';
 
@@ -64,7 +65,7 @@ export default function SecondaryCollectors({
           onAddCollector();
         }}
       >
-        Add new
+        {strings.ADD_NEW}
       </Link>
     </>
   );

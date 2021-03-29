@@ -2,6 +2,7 @@ import { Box, Divider, Link, Paper, Typography } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 import { Link as RouterLink, useParams, useRouteMatch } from 'react-router-dom';
+import strings from '../../strings';
 import useStateLocation from '../../utils/useStateLocation';
 
 const useStyles = makeStyles((theme) =>
@@ -25,22 +26,22 @@ export default function DetailsMenu(): JSX.Element {
 
   const paths = [
     {
-      title: 'Seed Collection',
+      title: strings.SEED_COLLECTION,
       route: 'seed-collection',
       active: useRouteMatch('/accessions/:accessionNumber/seed-collection'),
     },
     {
-      title: 'Processing & Drying',
+      title: strings.PROCESSING_AND_DRYING,
       route: 'processing-drying',
       active: useRouteMatch('/accessions/:accessionNumber/processing-drying'),
     },
     {
-      title: 'Storage',
+      title: strings.STORAGE,
       route: 'storage',
       active: useRouteMatch('/accessions/:accessionNumber/storage'),
     },
     {
-      title: 'Withdrawal',
+      title: strings.WITHDRAWAL,
       route: 'withdrawal',
       active: useRouteMatch('/accessions/:accessionNumber/withdrawal'),
     },

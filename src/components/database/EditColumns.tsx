@@ -6,6 +6,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React from 'react';
 import { SearchField } from '../../api/types/search';
+import strings from '../../strings';
 import CancelButton from '../common/CancelButton';
 import Checkbox from '../common/Checkbox';
 import DialogCloseButton from '../common/DialogCloseButton';
@@ -83,16 +84,14 @@ export default function EditColumnsDialog(props: Props): JSX.Element {
     >
       <DialogTitle>
         <Typography component='p' variant='h6' className={classes.bold}>
-          Add columns
+          {strings.ADD_COLUMNS}
         </Typography>
-        <Typography component='p'>
-          Select columns you want to add. Deselect columns you want to remove.
-        </Typography>
+        <Typography component='p'>{strings.ADD_COLUMNS_DESCRIPTION}</Typography>
         <DialogCloseButton onClick={handleCancel} />
       </DialogTitle>
 
       <DialogContent>
-        <Typography component='p'>Presets</Typography>
+        <Typography component='p'>{strings.PRESETS}</Typography>
         <Grid container>
           <Grid item xs={4}>
             <Grid container>
