@@ -93,6 +93,12 @@ const COLUMNS: DatabaseColumn[] = [
     filter: { type: 'number_range' },
   },
   {
+    key: 'family',
+    name: strings.FAMILY,
+    type: 'string',
+    filter: { type: 'search' },
+  },
+  {
     key: 'landowner',
     name: strings.LANDOWNER,
     type: 'string',

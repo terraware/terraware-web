@@ -187,12 +187,13 @@ const sections: Section[] = [
         COLUMNS_INDEXED['primaryCollector'],
       ],
       [
+        COLUMNS_INDEXED['family'],
         COLUMNS_INDEXED['siteLocation'],
         COLUMNS_INDEXED['endangered2'],
         COLUMNS_INDEXED['rare2'],
-        COLUMNS_INDEXED['bagNumber'],
       ],
       [
+        COLUMNS_INDEXED['bagNumber'],
         COLUMNS_INDEXED['treesCollectedFrom'],
         COLUMNS_INDEXED['landowner'],
         COLUMNS_INDEXED['collectionNotes'],
