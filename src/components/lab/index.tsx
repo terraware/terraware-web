@@ -231,6 +231,7 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
                 onSelect={onEditTest}
                 DetailsRenderer={({ row, index }) => (
                   <EnhancedTableDetails
+                    accessionId={accession.accessionNumber}
                     row={row}
                     index={index}
                     rowName='germinations'

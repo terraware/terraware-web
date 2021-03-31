@@ -176,7 +176,6 @@ describe('Lab', () => {
     cy.get('#row2-notes > .MuiTypography-root > .MuiSvgIcon-root').should('not.exist');
 
     cy.get('#totalViabilityPercent').contains('6%');
-    cy.get('#row2-expand').click();
     cy.get('#lab-table').scrollTo('left');
     cy.get('#totalSeedsGerminated').contains('10 (10%)');
 

@@ -58,6 +58,7 @@ export default function LabChart<T>({
             padding: {
               left: 50,
               right: 50,
+              top: 10,
             },
           },
           legend: {

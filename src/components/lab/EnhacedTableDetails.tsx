@@ -55,6 +55,7 @@ const useStyles = makeStyles((theme) =>
 );
 
 export default function EnhancedTableDetails<T>({
+  accessionId,
   index,
   row,
   rowName,
@@ -100,6 +101,15 @@ export default function EnhancedTableDetails<T>({
     calculateTotalSeedsGerminated();
   });
 
+  React.useEffect(() => {
+    const previousOpen = localStorage.getItem(
+      `${accessionId}-lab-opened-entries`
+    );
+    if (previousOpen) {
+      setOpen(JSON.parse(previousOpen));
+    }
+  }, []);
+
   return (
     <>
       {!open[index] && (
@@ -112,6 +122,10 @@ export default function EnhancedTableDetails<T>({
               const prevOpens = [...open];
               prevOpens[index] = prevOpens[index] ? !prevOpens[index] : true;
               setOpen(prevOpens);
+              localStorage.setItem(
+                `${accessionId}-lab-opened-entries`,
+                JSON.stringify(prevOpens)
+              );
             }}
           >
             {expandText}
@@ -127,6 +141,10 @@ export default function EnhancedTableDetails<T>({
               const prevOpens = [...open];
               prevOpens[index] = prevOpens[index] ? !prevOpens[index] : true;
               setOpen(prevOpens);
+              localStorage.setItem(
+                `${accessionId}-lab-opened-entries`,
+                JSON.stringify(prevOpens)
+              );
             }}
           >
             <CloseIcon />
