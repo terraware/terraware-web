@@ -21,6 +21,7 @@ export default function TextArea(props: Props): JSX.Element {
       variant='outlined'
       size='small'
       fullWidth={true}
+      placeholder={props.placeholder}
     />
   );
 }

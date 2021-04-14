@@ -91,7 +91,7 @@ export default function EditColumnsDialog(props: Props): JSX.Element {
       </DialogTitle>
 
       <DialogContent>
-        <Typography component='p'>{strings.PRESETS}</Typography>
+        <Typography component='p'>{strings.TEMPLATES}</Typography>
         <Grid container>
           <Grid item xs={4}>
             <Grid container>
@@ -245,27 +245,22 @@ const sections: Section[] = [
         COLUMNS_INDEXED['germinationSeedType'],
         COLUMNS_INDEXED['germinationTreatment'],
         COLUMNS_INDEXED['cutTestSeedsFilled'],
-        COLUMNS_INDEXED['germinationTestNotes'],
+        COLUMNS_INDEXED['totalViabilityPercent'],
       ],
       [
         COLUMNS_INDEXED['germinationStartDate'],
         COLUMNS_INDEXED['germinationSeedsSown'],
         COLUMNS_INDEXED['germinationSeedsGerminated'],
         COLUMNS_INDEXED['cutTestSeedsEmpty'],
+        COLUMNS_INDEXED['latestViabilityPercent'],
       ],
       [
         COLUMNS_INDEXED['latestGerminationTestDate'],
         COLUMNS_INDEXED['germinationSubstrate'],
         COLUMNS_INDEXED['germinationPercentGerminated'],
         COLUMNS_INDEXED['cutTestSeedsCompromised'],
+        COLUMNS_INDEXED['germinationTestNotes'],
       ],
-    ],
-  },
-  {
-    name: 'Viability',
-    options: [
-      [COLUMNS_INDEXED['latestViabilityPercent']],
-      [COLUMNS_INDEXED['totalViabilityPercent']],
     ],
   },
 ];

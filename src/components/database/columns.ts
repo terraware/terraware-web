@@ -28,13 +28,13 @@ const COLUMNS: DatabaseColumn[] = [
   },
   {
     key: 'active',
-    name: strings.STATUS,
+    name: strings.ACTIVE_INACTIVE,
     type: 'string',
     filter: { type: 'single_selection' },
   },
   {
     key: 'state',
-    name: strings.STATE,
+    name: strings.STAGE,
     type: 'string',
     filter: { type: 'multiple_selection' },
   },

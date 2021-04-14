@@ -313,6 +313,7 @@ export function AccessionForm<T extends NewAccession>({
               value={record.fieldNotes}
               onChange={onChange}
               label={strings.FIELD_NOTES}
+              placeholder={strings.FIELD_NOTES_PLACEHOLDER}
             />
           </Grid>
         </Grid>
@@ -375,6 +376,7 @@ export function AccessionForm<T extends NewAccession>({
               value={record.environmentalNotes}
               onChange={onChange}
               label={strings.ENVIRONMENTAL_NOTES}
+              placeholder={strings.ENVIRONMENTAL_NOTES_PLACEHOLDER}
             />
           </Grid>
         </Grid>
@@ -388,7 +390,7 @@ export function AccessionForm<T extends NewAccession>({
                 variant='body2'
                 className={classes.listItem}
               >
-                {strings.SEED_BAGS}
+                {strings.BAG_IDS}
               </Typography>
               {record.bagNumbers?.map((bag, index) => (
                 <Typography

@@ -136,7 +136,7 @@ export default function Storage({ accession, onSubmit }: Props): JSX.Element {
               id='storageStaffResponsible'
               value={record.storageStaffResponsible}
               onChange={onChange}
-              label={strings.STAFF_RESPONSIBLE}
+              label={strings.STORED_BY}
             />
           </Grid>
           <Divisor />

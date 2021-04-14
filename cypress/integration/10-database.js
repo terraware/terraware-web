@@ -7,7 +7,7 @@ describe('Database', () => {
       cy.visit('/accessions');
       cy.get('#table-header').children().should('have.length', 7);
       cy.get('#table-header-accessionNumber').contains('ACCESSION');
-      cy.get('#table-header-state').contains('STATE');
+      cy.get('#table-header-state').contains('STAGE');
       cy.get('#table-header-species').contains('SPECIES');
       cy.get('#table-header-receivedDate').contains('RECEIVED DATE');
       cy.get('#table-header-collectedDate').contains('COLLECTED DATE');
@@ -22,7 +22,7 @@ describe('Database', () => {
 
       cy.get('#table-header').children().should('have.length', 7);
       cy.get('#table-header-accessionNumber').contains('ACCESSION');
-      cy.get('#table-header-state').contains('STATE');
+      cy.get('#table-header-state').contains('STAGE');
       cy.get('#table-header-species').contains('SPECIES');
       cy.get('#table-header-receivedDate').contains('RECEIVED DATE');
       cy.get('#table-header-collectedDate').contains('COLLECTED DATE');
@@ -49,8 +49,8 @@ describe('Database', () => {
       cy.get('#table-header').children().should('have.length', 4);
       cy.get('#table-header > :nth-child(1)').contains('ACCESSION');
       cy.get('#table-header > :nth-child(2)').contains('SITE LOCATION');
-      cy.get('#table-header > :nth-child(3)').contains('STATE');
-      cy.get('#table-header > :nth-child(4)').contains('STATUS');
+      cy.get('#table-header > :nth-child(3)').contains('STAGE');
+      cy.get('#table-header > :nth-child(4)').contains('ACTIVE/INACTIVE');
     });
 
     context('Presets', () => {
@@ -74,8 +74,8 @@ describe('Database', () => {
 
         cy.get('#table-header').children().should('have.length', 20);
         cy.get('#table-header-accessionNumber').contains('ACCESSION');
-        cy.get('#table-header-active').contains('STATUS');
-        cy.get('#table-header-state').contains('STATE');
+        cy.get('#table-header-active').contains('ACTIVE/INACTIVE');
+        cy.get('#table-header-state').contains('STAGE');
         cy.get('#table-header-species').contains('SPECIES');
         cy.get('#table-header-receivedDate').contains('RECEIVED DATE');
         cy.get('#table-header-collectedDate').contains('COLLECTED DATE');
@@ -123,7 +123,7 @@ describe('Database', () => {
 
         cy.get('#table-header').children().should('have.length', 7);
         cy.get('#table-header-accessionNumber').contains('ACCESSION');
-        cy.get('#table-header-state').contains('STATE');
+        cy.get('#table-header-state').contains('STAGE');
         cy.get('#table-header-species').contains('SPECIES');
         cy.get('#table-header-receivedDate').contains('RECEIVED DATE');
         cy.get('#table-header-collectedDate').contains('COLLECTED DATE');
@@ -145,8 +145,8 @@ describe('Database', () => {
 
         cy.get('#table-header').children().should('have.length', 14);
         cy.get('#table-header-accessionNumber').contains('ACCESSION');
-        cy.get('#table-header-active').contains('STATUS');
-        cy.get('#table-header-state').contains('STATE');
+        cy.get('#table-header-active').contains('ACTIVE/INACTIVE');
+        cy.get('#table-header-state').contains('STAGE');
         cy.get('#table-header-species').contains('SPECIES');
         cy.get('#table-header-receivedDate').contains('RECEIVED DATE');
         cy.get('#table-header-collectedDate').contains('COLLECTED DATE');
@@ -186,8 +186,8 @@ describe('Database', () => {
 
         cy.get('#table-header').children().should('have.length', 18);
         cy.get('#table-header-accessionNumber').contains('ACCESSION');
-        cy.get('#table-header-active').contains('STATUS');
-        cy.get('#table-header-state').contains('STATE');
+        cy.get('#table-header-active').contains('ACTIVE/INACTIVE');
+        cy.get('#table-header-state').contains('STAGE');
         cy.get('#table-header-species').contains('SPECIES');
         cy.get('#table-header-collectedDate').contains('COLLECTED DATE');
         cy.get('#table-header-germinationTestType').contains(
@@ -241,8 +241,8 @@ describe('Database', () => {
 
         cy.get('#table-header').children().should('have.length', 11);
         cy.get('#table-header-accessionNumber').contains('ACCESSION');
-        cy.get('#table-header-active').contains('STATUS');
-        cy.get('#table-header-state').contains('STATE');
+        cy.get('#table-header-active').contains('ACTIVE/INACTIVE');
+        cy.get('#table-header-state').contains('STAGE');
         cy.get('#table-header-species').contains('SPECIES');
         cy.get('#table-header-collectedDate').contains('COLLECTED DATE');
         cy.get('#table-header-storageCondition').contains('STORAGE CONDITION');
@@ -276,8 +276,8 @@ describe('Database', () => {
         cy.get('#table-header').children().should('have.length', 13);
         cy.get('#table-header > :nth-child(1)').contains('ACCESSION');
         cy.get('#table-header > :nth-child(2)').contains('SPECIES');
-        cy.get('#table-header > :nth-child(3)').contains('STATUS');
-        cy.get('#table-header > :nth-child(4)').contains('STATE');
+        cy.get('#table-header > :nth-child(3)').contains('ACTIVE/INACTIVE');
+        cy.get('#table-header > :nth-child(4)').contains('STAGE');
         cy.get('#table-header > :nth-child(5)').contains('COLLECTED DATE');
         cy.get('#table-header > :nth-child(6)').contains('NUMBER OF STORAGE PACKETS');
         cy.get('#table-header > :nth-child(7)').contains('STORAGE CONDITION');
@@ -557,7 +557,7 @@ describe('Database', () => {
       cy.wait('@search');
 
       cy.get('#row1-active').contains('Inactive');
-      cy.get('#row1').should('have.css', 'background-color', 'rgb(243, 244, 246)');
+      cy.get('#row1').should('have.css', 'background-color', 'rgb(248, 249, 250)');
       cy.get('#row1-state').contains('Withdrawn');
       cy.get('#row3-species').contains('Dogwood');
     });

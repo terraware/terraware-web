@@ -196,7 +196,7 @@ export default function NewTestDialog(props: Props): JSX.Element {
                 id='staffResponsible'
                 value={record?.staffResponsible}
                 onChange={onChange}
-                label={strings.STAFF_RESPONSIBLE}
+                label={strings.GERMINATION_TESTED_BY}
               />
             </Grid>
           </Grid>

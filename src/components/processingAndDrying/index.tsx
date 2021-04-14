@@ -313,7 +313,7 @@ export default function ProcessingAndDrying({
               id='processingStaffResponsible'
               value={record.processingStaffResponsible}
               onChange={onChange}
-              label={strings.STAFF_RESPONSIBLE}
+              label={strings.PROCESSED_AND_DRIED_BY}
             />
           </Grid>
         </Grid>
