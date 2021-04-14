@@ -200,7 +200,7 @@ describe('Nursery', () => {
       cy.get('#sessions-change').contains('233% since last week');
       cy.get('#sessions-arrow-increase').should('exist');
 
-      cy.get('#species-current').contains('3');
+      cy.get('#species-current').contains('4');
       cy.get('#species-details').children().should('have.length', 0);
 
       cy.get('#families-current').contains('2');

@@ -113,6 +113,42 @@ describe('Accessions', () => {
       cy.get('#secondaryCollectors1').should('not.exist');
       cy.get('#primaryCollector').should('have.value', 'Leann');
     });
+
+    it('should show autocomplete when typing and show modal when updating the specie name and create a new specie', () => {
+      cy.get('#species').clear().type('Kousa Dogwoord New');
+      cy.focused().should('have.attr', 'aria-controls', 'species-popup')
+
+      cy.get('#saveAccession').click();
+      cy.get('#speciesModal').should('exist');
+      cy.intercept('GET', 'api/v2/seedbank/accession/*').as('getAccession');
+      cy.get('#cancel').click()
+      cy.wait('@getAccession');
+
+      cy.get('#species').should('have.value', 'Kousa Dogwoord New');
+    });
+
+    it('should not show modal if updating the specie name with an existant specie', () => {
+      cy.get('#species').clear().type('Kousa Dogwoord');
+
+      cy.intercept('GET', 'api/v2/seedbank/accession/*').as('getAccession');
+      cy.get('#saveAccession').click();
+      cy.get('#speciesModal').should('not.exist');
+      cy.wait('@getAccession');
+
+      cy.get('#species').should('have.value', 'Kousa Dogwoord');
+    });
+
+    it('should show modal if updating the specie name and modify the existant specie', () => {
+      cy.get('#species').clear().type('Kousa Dogwoord Modified');
+
+      cy.get('#saveAccession').click();
+      cy.get('#speciesModal').should('exist');
+      cy.intercept('GET', 'api/v2/seedbank/accession/*').as('getAccession');
+      cy.get('#applyAll').click()
+      cy.wait('@getAccession');
+
+      cy.get('#species').should('have.value', 'Kousa Dogwoord Modified');
+    });
   });
 
   context('Mobile dropoff', () => {
@@ -168,7 +204,7 @@ describe('Accessions', () => {
       cy.get('#sessions-change').contains('33% since last week');
       cy.get('#sessions-arrow-increase').should('exist');
 
-      cy.get('#species-current').contains('3');
+      cy.get('#species-current').contains('4');
       cy.get('#species-details').children().should('have.length', 0);
 
       cy.get('#families-current').contains('2');
