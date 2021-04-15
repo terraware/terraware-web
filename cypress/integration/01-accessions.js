@@ -31,12 +31,14 @@ describe('Accessions', () => {
     });
 
     it('should navigate in and out of the new accession page', () => {
+      cy.get('#declineTour').click()
       cy.get('#newAccession')
         .click()
         .url()
         .should('contain', '/accessions/new');
       cy.get('#closenewAccession').click().url().should('contain', '/');
 
+      cy.get('#declineTour').click()
       cy.get('#newAccession')
         .click()
         .url()
@@ -48,6 +50,7 @@ describe('Accessions', () => {
   context('Accessions', () => {
     it('should create the accession', () => {
       cy.visit('/');
+      cy.get('#declineTour').click()
       cy.get('#newAccession')
         .click()
         .url()

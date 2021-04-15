@@ -11,6 +11,7 @@ describe('Searchbar', () => {
       cy.get('#header-accessionNumber').then(($accessionNumberElement) => {
         const accessionNumber = $accessionNumberElement.text();
         cy.visit('/');
+        cy.get('#declineTour').click()
         cy.get('#search-bar').type(accessionNumber);
         cy.get('#search-bar-option-0')
           .click()

@@ -15,6 +15,7 @@ describe('Summary page', () => {
   });
 
   it('display endpoint result', () => {
+    cy.get('#declineTour').click()
     cy.get('#sessions-current').contains('11');
     cy.get('#sessions-change').contains('267% since last week');
     cy.get('#sessions-arrow-increase').should('exist');
@@ -33,15 +34,18 @@ describe('Summary page', () => {
 
   context('navigation', () => {
     it('navigates to database page', () => {
+      cy.get('#declineTour').click()
       cy.get('#tab-database').click().url().should('contain', '/accessions');
     });
 
     it('navigates to database page filtered by pending state when clicking on Most recent update', () => {
+      cy.get('#declineTour').click()
       cy.get('#update-Pending').click().url().should('contain', '/accessions');
       cy.get('#subtitle').should('contain', '7 total');
     });
 
     it('navigates to database page filtered by processed state when clickin on Most recent update', () => {
+      cy.get('#declineTour').click()
       cy.get('#update-Processed')
         .click()
         .url()
