@@ -28,7 +28,7 @@ export default function Step({
         <Typography variant='h6'>{title}</Typography>
         <Typography variant='subtitle1'>{stepNumber}/5</Typography>
       </div>
-      <Typography variant='body2'>{description}]</Typography>
+      <Typography variant='body2'>{description}</Typography>
     </div>
   );
 }
