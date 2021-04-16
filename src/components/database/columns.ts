@@ -81,6 +81,12 @@ const COLUMNS: DatabaseColumn[] = [
     filter: { type: 'single_selection' },
   },
   {
+    key: 'sourcePlantOrigin',
+    name: strings.WILD_OUTPLANT,
+    type: 'string',
+    filter: { type: 'single_selection' },
+  },
+  {
     key: 'treesCollectedFrom',
     name: strings.NUMBER_OF_TREES,
     type: 'number',

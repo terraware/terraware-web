@@ -64,6 +64,8 @@ describe('Accessions', () => {
       cy.get('#Yes').click();
       cy.get('#rare').click();
       cy.get('#Yes').click();
+      cy.get('#sourcePlantOrigin').click();
+      cy.get('#Outplant').click();
 
       cy.get('#fieldNotes').type('Some notes');
       cy.get('#collectedDate').type('02/01/2021');
@@ -92,6 +94,7 @@ describe('Accessions', () => {
       cy.get('#founderId').should('have.value', '234908098');
       cy.get('#endangered + input').should('have.value', 'Yes');
       cy.get('#rare + input').should('have.value', 'Yes');
+      cy.get('#sourcePlantOrigin + input').should('have.value', 'Outplant');
       cy.get('#fieldNotes').should('have.value', 'Some notes');
       cy.get('#collectedDate').should('have.value', '02 / 01 / 2021');
       cy.get('#receivedDate').should('have.value', '02 / 03 / 2021');
