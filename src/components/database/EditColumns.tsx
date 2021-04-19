@@ -188,8 +188,8 @@ const sections: Section[] = [
         COLUMNS_INDEXED['siteLocation'],
       ],
       [
-        COLUMNS_INDEXED['endangered2'],
-        COLUMNS_INDEXED['rare2'],
+        COLUMNS_INDEXED['endangered'],
+        COLUMNS_INDEXED['rare'],
         COLUMNS_INDEXED['sourcePlantOrigin'],
         COLUMNS_INDEXED['family'],
       ],

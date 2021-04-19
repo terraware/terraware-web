@@ -81,8 +81,8 @@ describe('Database', () => {
         cy.get('#table-header-collectedDate').contains('COLLECTED DATE');
         cy.get('#table-header-primaryCollector').contains('COLLECTOR');
         cy.get('#table-header-siteLocation').contains('SITE LOCATION');
-        cy.get('#table-header-endangered2').contains('ENDANGERED');
-        cy.get('#table-header-rare2').contains('RARE');
+        cy.get('#table-header-endangered').contains('ENDANGERED');
+        cy.get('#table-header-rare').contains('RARE');
         cy.get('#table-header-treesCollectedFrom').contains(
           '# OF TREES'
         );
@@ -267,7 +267,7 @@ describe('Database', () => {
 
         cy.get('#Germination\\ Testing\\ To\\ Do').click();
         cy.get('#primaryCollector').click();
-        cy.get('#rare2').click();
+        cy.get('#rare').click();
         cy.get('#saveColumnsButton').click();
         cy.wait('@search');
         cy.wait('@values');
@@ -575,7 +575,7 @@ describe('Database', () => {
       cy.intercept('POST', '/api/v1/seedbank/values').as('values2');
 
       cy.get('#edit-columns').click();
-      cy.get('#rare2').click();
+      cy.get('#rare').click();
       cy.get('#saveColumnsButton').click();
       cy.get('#editColumnsDialog').should('not.exist');
 
@@ -605,7 +605,7 @@ describe('Database', () => {
 
       cy.get('#row1-species').contains('Other Dogwood');
 
-      cy.get('#filter-rare2').should('exist');
+      cy.get('#filter-rare').should('exist');
 
       // Should remember the filters
 
@@ -617,7 +617,7 @@ describe('Database', () => {
 
       cy.get('#subtitle').should('contain', '4 total');
       cy.get('#row1-species').contains('Other Dogwood');
-      cy.get('#filter-rare2').contains('Rare');
+      cy.get('#filter-rare').contains('Rare');
     });
   });
 });

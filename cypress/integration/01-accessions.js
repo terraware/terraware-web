@@ -111,7 +111,7 @@ describe('Accessions', () => {
       cy.get('#primaryCollector').clear().type('Leann');
       cy.get('#fieldNotes').clear().type('Other notes');
 
-      cy.intercept('GET', 'api/v2/seedbank/accession/*').as('getAccession');
+      cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
       cy.get('#saveAccession').click();
       cy.wait('@getAccession');
 
@@ -126,7 +126,7 @@ describe('Accessions', () => {
 
       cy.get('#saveAccession').click();
       cy.get('#speciesModal').should('exist');
-      cy.intercept('GET', 'api/v2/seedbank/accession/*').as('getAccession');
+      cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
       cy.get('#cancel').click()
       cy.wait('@getAccession');
 
@@ -136,7 +136,7 @@ describe('Accessions', () => {
     it('should not show modal if updating the specie name with an existant specie', () => {
       cy.get('#species').clear().type('Kousa Dogwoord');
 
-      cy.intercept('GET', 'api/v2/seedbank/accession/*').as('getAccession');
+      cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
       cy.get('#saveAccession').click();
       cy.get('#speciesModal').should('not.exist');
       cy.wait('@getAccession');
@@ -149,7 +149,7 @@ describe('Accessions', () => {
 
       cy.get('#saveAccession').click();
       cy.get('#speciesModal').should('exist');
-      cy.intercept('GET', 'api/v2/seedbank/accession/*').as('getAccession');
+      cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
       cy.get('#applyAll').click()
       cy.wait('@getAccession');
 

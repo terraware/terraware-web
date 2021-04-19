@@ -20,7 +20,7 @@ describe('Processing and Drying', () => {
     cy.get('#processingNotes').type('A processing note');
     cy.get('#processingStaffResponsible').type('Constanza');
 
-    cy.intercept('GET', 'api/v2/seedbank/accession/*').as('getAccession');
+    cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
     cy.get('#saveAccession').click();
     cy.wait('@getAccession');
 
@@ -43,7 +43,7 @@ describe('Processing and Drying', () => {
     cy.get('#totalWeightGrams').type(500);
     cy.get('#estimatedSeedCount').should('have.value', '500');
 
-    cy.intercept('GET', 'api/v2/seedbank/accession/*').as('getAccession');
+    cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
     cy.get('#saveAccession').click();
     cy.wait('@getAccession');
 
