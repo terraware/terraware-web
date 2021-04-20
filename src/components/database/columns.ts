@@ -266,7 +266,7 @@ const COLUMNS: DatabaseColumn[] = [
   },
   {
     key: 'germinationPercentGerminated',
-    name: strings.TOTAL_PERCENTAGE_OF_SEEDS_GERMINATED,
+    name: strings.PERCENTAGE_VIABILITY,
     type: 'number',
     filter: { type: 'number_range' },
   },
@@ -279,12 +279,6 @@ const COLUMNS: DatabaseColumn[] = [
   {
     key: 'latestViabilityPercent',
     name: strings.MOST_RECENT_PERCENTAGE_VIABILITY,
-    type: 'number',
-    filter: { type: 'number_range' },
-  },
-  {
-    key: 'totalViabilityPercent',
-    name: strings.TOTAL_ESTIMATED_PERCENTAGE_VIABILITY,
     type: 'number',
     filter: { type: 'number_range' },
   },
@@ -341,7 +335,6 @@ const generalInventoryPreset: Preset = {
     'seedsRemaining',
     'latestGerminationTestDate',
     'latestViabilityPercent',
-    'totalViabilityPercent',
   ],
 };
 
@@ -385,7 +378,6 @@ const viabilitySummaryPreset: Preset = {
     'cutTestSeedsEmpty',
     'cutTestSeedsCompromised',
     'latestViabilityPercent',
-    'totalViabilityPercent',
   ],
 };
 

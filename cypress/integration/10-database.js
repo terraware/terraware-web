@@ -72,7 +72,7 @@ describe('Database', () => {
         cy.wait('@values2');
         cy.get('#editColumnsDialog').should('not.exist');
 
-        cy.get('#table-header').children().should('have.length', 20);
+        cy.get('#table-header').children().should('have.length', 19);
         cy.get('#table-header-accessionNumber').contains('ACCESSION');
         cy.get('#table-header-active').contains('ACTIVE/INACTIVE');
         cy.get('#table-header-state').contains('STAGE');
@@ -102,9 +102,6 @@ describe('Database', () => {
         );
         cy.get('#table-header-latestViabilityPercent').contains(
           'MOST RECENT % VIABILITY'
-        );
-        cy.get('#table-header-totalViabilityPercent').contains(
-          'TOTAL ESTIMATED % VIABILITY'
         );
       });
 
@@ -184,7 +181,7 @@ describe('Database', () => {
         cy.wait('@values');
         cy.get('#editColumnsDialog').should('not.exist');
 
-        cy.get('#table-header').children().should('have.length', 18);
+        cy.get('#table-header').children().should('have.length', 17);
         cy.get('#table-header-accessionNumber').contains('ACCESSION');
         cy.get('#table-header-active').contains('ACTIVE/INACTIVE');
         cy.get('#table-header-state').contains('STAGE');
@@ -214,16 +211,13 @@ describe('Database', () => {
           'GERMINATION SUBSTRATE'
         );
         cy.get('#table-header-germinationPercentGerminated').contains(
-          'TOTAL % OF SEEDS GERMINATED'
+          '% VIABILITY'
         );
         cy.get('#table-header-cutTestSeedsCompromised').contains(
           'NUMBER OF SEEDS COMPROMISED'
         );
         cy.get('#table-header-latestViabilityPercent').contains(
           'MOST RECENT % VIABILITY'
-        );
-        cy.get('#table-header-totalViabilityPercent').contains(
-          'TOTAL ESTIMATED % VIABILITY'
         );
       });
 

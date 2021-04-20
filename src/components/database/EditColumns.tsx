@@ -246,7 +246,7 @@ const sections: Section[] = [
         COLUMNS_INDEXED['germinationSeedType'],
         COLUMNS_INDEXED['germinationTreatment'],
         COLUMNS_INDEXED['cutTestSeedsFilled'],
-        COLUMNS_INDEXED['totalViabilityPercent'],
+        COLUMNS_INDEXED['germinationPercentGerminated'],
       ],
       [
         COLUMNS_INDEXED['germinationStartDate'],
@@ -258,7 +258,6 @@ const sections: Section[] = [
       [
         COLUMNS_INDEXED['latestGerminationTestDate'],
         COLUMNS_INDEXED['germinationSubstrate'],
-        COLUMNS_INDEXED['germinationPercentGerminated'],
         COLUMNS_INDEXED['cutTestSeedsCompromised'],
         COLUMNS_INDEXED['germinationTestNotes'],
       ],
