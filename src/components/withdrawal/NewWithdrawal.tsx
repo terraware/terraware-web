@@ -20,6 +20,7 @@ import strings from '../../strings';
 import preventDefault from '../../utils/preventDefaultEvent';
 import useForm from '../../utils/useForm';
 import CancelButton from '../common/CancelButton';
+import Checkbox from '../common/Checkbox';
 import DatePicker from '../common/DatePicker';
 import DialogCloseButton from '../common/DialogCloseButton';
 import Divisor from '../common/Divisor';
@@ -67,6 +68,8 @@ function initWithdrawal(withdrawal?: AccessionWithdrawal): AccessionWithdrawal {
 export default function NewWithdrawalDialog(props: Props): JSX.Element {
   const classes = useStyles();
   const { onClose, open, onDelete } = props;
+  const [withdrawRemaining, setWithdrawRemaining] = React.useState(false);
+  const [remainingSeeds, setRemainingSeeds] = React.useState(0);
 
   const [record, setRecord, onChange] = useForm<AccessionWithdrawal>(
     initWithdrawal(props.value)
@@ -74,6 +77,8 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
   React.useEffect(() => {
     setRecord(initWithdrawal(props.value));
     setWithdrawalType(props.value?.gramsWithdrawn ? 'weight' : 'count');
+    setWithdrawRemaining(false);
+    setRemainingSeeds(props.seedsAvailable);
   }, [props.open]);
 
   const [withdrawalType, setWithdrawalType] = React.useState(
@@ -114,6 +119,21 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
         gramsWithdrawn: undefined,
         seedsWithdrawn: value,
       });
+      setRemainingSeeds(
+        props.seedsAvailable + (props.value?.seedsWithdrawn ?? 0) - (value ?? 0)
+      );
+    }
+  };
+
+  const onWithdrawRemaining = () => {
+    if (withdrawRemaining) {
+      setWithdrawRemaining(false);
+    } else {
+      setWithdrawRemaining(true);
+      onQuantityChange(
+        'quantity',
+        '' + (props.seedsAvailable + (props.value?.seedsWithdrawn ?? 0))
+      );
     }
   };
 
@@ -178,28 +198,52 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
             </Grid>
             <Grid item xs={6}></Grid>
             <Grid item xs={6}>
-              <Box display='flex'>
-                <TextField
-                  id='quantity'
-                  value={record.gramsWithdrawn ?? record.seedsWithdrawn}
-                  onChange={onQuantityChange}
-                  label={strings.SEEDS_WITHDRAWN}
-                  type='number'
-                  endAdornment={
-                    <InputAdornment position='end'>
-                      <Dropdown
-                        id='quantityType'
-                        label=''
-                        selected={withdrawalType}
-                        values={withdrawalOptions}
-                        onChange={OnQuantityTypeChange}
-                      />
-                    </InputAdornment>
+              <TextField
+                id='quantity'
+                value={record.gramsWithdrawn ?? record.seedsWithdrawn}
+                onChange={(id, value) => {
+                  setWithdrawRemaining(false);
+                  onQuantityChange(id, value);
+                }}
+                label={strings.SEEDS_WITHDRAWN}
+                type='number'
+                endAdornment={
+                  <InputAdornment position='end'>
+                    <Dropdown
+                      id='quantityType'
+                      label=''
+                      selected={withdrawalType}
+                      values={withdrawalOptions}
+                      onChange={OnQuantityTypeChange}
+                    />
+                  </InputAdornment>
+                }
+              />
+              {withdrawalType !== 'weight' && (
+                <Checkbox
+                  id='withdraw_remaining'
+                  name='withdraw_remaining'
+                  label={
+                    <Typography id='date-tip' component='p' variant='body2'>
+                      {strings.WITHDRAW_REMAINING_SEEDS}
+                    </Typography>
                   }
+                  value={withdrawRemaining}
+                  onChange={onWithdrawRemaining}
                 />
-              </Box>
+              )}
             </Grid>
-            <Grid item xs={6}></Grid>
+            <Grid item xs={6}>
+              {withdrawalType !== 'weight' && (
+                <TextField
+                  id='remaining'
+                  value={remainingSeeds}
+                  disabled={true}
+                  onChange={onChange}
+                  label={strings.SEEDS_REMAINING}
+                />
+              )}
+            </Grid>
 
             <Grid item xs={6}>
               <TextField

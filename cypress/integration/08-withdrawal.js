@@ -44,7 +44,9 @@ describe('Withdrawal', () => {
       cy.get('#weight').should('not.exist');
       cy.get('#count').click();
 
+      cy.get('#remaining').should('have.value', '300');
       cy.get('#quantity').type('50');
+      cy.get('#remaining').should('have.value', '250');
       cy.get('#date').clear().type('01/31/2030');
       cy.get('#save-withdrawn-button').contains('Schedule Withdrawal');
       cy.get('#date-tip').contains('Scheduling for: January 31st, 2030');
@@ -78,7 +80,11 @@ describe('Withdrawal', () => {
       cy.get('#save-withdrawn-button').contains('Save Changes');
       cy.get('#modal-seeds-available').contains('250');
 
-      cy.get('#quantity').clear().type('10');
+      cy.get('#remaining').should('have.value', '250');
+      cy.get('#quantity').clear();
+      cy.get('#remaining').should('have.value', '300');
+      cy.get('#quantity').type('10');
+      cy.get('#remaining').should('have.value', '290');
       cy.get('#date').clear().type('01/29/2020');
       cy.get('#destination').clear().type('USA');
       cy.get('#purpose').click();
@@ -126,6 +132,7 @@ describe('Withdrawal', () => {
       cy.get('#modal-seeds-available').contains('300');
 
       cy.get('#quantity').type('50');
+      cy.get('#remaining').should('have.value', '250');
       cy.get('#date').clear().type('01/31/2030');
       cy.get('#destination').type('Panama');
       cy.get('#purpose').click();
@@ -148,7 +155,9 @@ describe('Withdrawal', () => {
       cy.get('#new-withdrawal-button').click();
       cy.get('#modal-seeds-available').contains('250');
 
+      cy.get('#remaining').should('have.value', '250');
       cy.get('#quantity').type('150');
+      cy.get('#remaining').should('have.value', '100');
       cy.get('#date').clear().type('01/31/2020');
       cy.get('#destination').type('USA');
       cy.get('#purpose').click();
@@ -171,7 +180,10 @@ describe('Withdrawal', () => {
       cy.get('#new-withdrawal-button').click();
       cy.get('#modal-seeds-available').contains('100');
 
-      cy.get('#quantity').type('100');
+      cy.get('#remaining').should('have.value', '100');
+      cy.get('#withdraw_remaining').click();
+      cy.get('#quantity').should('have.value', '100');
+      cy.get('#remaining').should('have.value', '0');
       cy.get('#date').clear().type('03/28/2020');
       cy.get('#destination').type('Paris');
       cy.get('#purpose').click();
