@@ -147,7 +147,7 @@ export default function WithdrawalView({
             <Grid item xs={4}>
               <SummaryBox
                 id='total-seeds'
-                title={strings.TOTAL_SEEDS}
+                title={strings.INITIAL_SEEDS}
                 value={seedsTotal}
                 variant='default'
               />
@@ -163,7 +163,7 @@ export default function WithdrawalView({
             <Grid item xs={4}>
               <SummaryBox
                 id='seeds-available'
-                title={strings.SEEDS_AVAILABLE}
+                title={strings.SEEDS_REMAINING}
                 value={seedsAvailable}
                 variant={seedsAvailable <= 0 ? 'zero' : 'available'}
               />
@@ -205,7 +205,7 @@ export default function WithdrawalView({
 
 const COLUMNS: TableColumnType[] = [
   { key: 'date', name: strings.DATE, type: 'date' },
-  { key: 'quantity', name: strings.QUANTITY, type: 'string' },
+  { key: 'quantity', name: strings.WITHDRAWN, type: 'string' },
   { key: 'destination', name: strings.DESTINATION, type: 'string' },
   { key: 'purpose', name: strings.PURPOSE, type: 'string' },
   { key: 'staffResponsible', name: strings.STAFF, type: 'string' },

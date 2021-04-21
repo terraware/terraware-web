@@ -220,8 +220,8 @@ const sections: Section[] = [
         COLUMNS_INDEXED['storageStartDate'],
         COLUMNS_INDEXED['storageCondition'],
       ],
-      [COLUMNS_INDEXED['storageLocation']],
-      [COLUMNS_INDEXED['storagePackets'], COLUMNS_INDEXED['storageNotes']],
+      [COLUMNS_INDEXED['storagePackets'], COLUMNS_INDEXED['storageLocation']],
+      [COLUMNS_INDEXED['storageNotes']],
     ],
   },
   {

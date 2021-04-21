@@ -84,7 +84,7 @@ describe('Database', () => {
         cy.get('#table-header-endangered').contains('ENDANGERED');
         cy.get('#table-header-rare').contains('RARE');
         cy.get('#table-header-treesCollectedFrom').contains(
-          '# OF TREES'
+          'NUMBER OF TREES'
         );
         cy.get('#table-header-estimatedSeedsIncoming').contains(
           'ESTIMATED SEEDS INCOMING'
@@ -92,10 +92,10 @@ describe('Database', () => {
         cy.get('#table-header-landowner').contains('LANDOWNER');
         cy.get('#table-header-storageCondition').contains('STORAGE CONDITION');
         cy.get('#table-header-withdrawalSeeds').contains(
-          'NUMBER OF SEEDS WITHDRAWN'
+          'SEEDS WITHDRAWN'
         );
         cy.get('#table-header-seedsRemaining').contains(
-          'NUMBER OF SEEDS REMAINING'
+          'SEEDS REMAINING'
         );
         cy.get('#table-header-latestGerminationTestDate').contains(
           'MOST RECENT GERMINATION TEST DATE'
@@ -162,7 +162,7 @@ describe('Database', () => {
         );
         cy.get('#table-header-storageNotes').contains('NOTES');
         cy.get('#table-header-seedsRemaining').contains(
-          'NUMBER OF SEEDS REMAINING'
+          'SEEDS REMAINING'
         );
         cy.get('#table-header-latestViabilityPercent').contains(
           'MOST RECENT % VIABILITY'

@@ -40,6 +40,9 @@ const useStyles = makeStyles((theme: Theme) =>
       alignItems: 'center',
       paddingLeft: theme.spacing(2),
     },
+    paper: {
+      minWidth: '650px',
+    },
   })
 );
 
@@ -143,6 +146,7 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
       disableEscapeKeyDown
       open={open}
       maxWidth='sm'
+      classes={{ paper: classes.paper }}
     >
       <DialogTitle>
         <Typography variant='h6'>New withdrawal</Typography>
@@ -154,18 +158,32 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
             <Grid item xs={12}>
               <SummaryBox
                 id='modal-seeds-available'
-                title={strings.SEEDS_AVAILABLE}
+                title={strings.SEEDS_REMAINING}
                 value={props.seedsAvailable}
                 variant={props.seedsAvailable === 0 ? 'zero' : 'default'}
               />
             </Grid>
+
+            <Grid item xs={6}>
+              <DatePicker
+                id='date'
+                value={record.date}
+                onChange={onChange}
+                label={strings.WITHDRAWN_ON}
+                aria-label='Withdraw date'
+              />
+              <Typography id='date-tip' component='p' variant='body2'>
+                {dateSubtext}
+              </Typography>
+            </Grid>
+            <Grid item xs={6}></Grid>
             <Grid item xs={6}>
               <Box display='flex'>
                 <TextField
                   id='quantity'
                   value={record.gramsWithdrawn ?? record.seedsWithdrawn}
                   onChange={onQuantityChange}
-                  label={strings.QUANTITY}
+                  label={strings.SEEDS_WITHDRAWN}
                   type='number'
                   endAdornment={
                     <InputAdornment position='end'>
@@ -181,18 +199,8 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
                 />
               </Box>
             </Grid>
-            <Grid item xs={6}>
-              <DatePicker
-                id='date'
-                value={record.date}
-                onChange={onChange}
-                label={strings.WITHDRAWN_ON}
-                aria-label='Withdraw date'
-              />
-              <Typography id='date-tip' component='p' variant='body2'>
-                {dateSubtext}
-              </Typography>
-            </Grid>
+            <Grid item xs={6}></Grid>
+
             <Grid item xs={6}>
               <TextField
                 id='destination'

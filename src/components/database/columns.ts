@@ -58,7 +58,7 @@ const COLUMNS: DatabaseColumn[] = [
   },
   {
     key: 'primaryCollector',
-    name: strings.COLLECTOR_NAME,
+    name: strings.PRIMARY_COLLECTOR,
     type: 'string',
     filter: { type: 'search' },
   },

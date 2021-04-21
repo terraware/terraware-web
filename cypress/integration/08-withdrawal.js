@@ -36,7 +36,7 @@ describe('Withdrawal', () => {
       cy.get('#modal-seeds-available').contains('300');
 
       cy.get('#date-tip').contains(
-        'You can schedule a date by selecting a future date.'
+        'Schedule a date by selecting a future date.'
       );
 
       cy.get('#quantityType').contains('seed count');

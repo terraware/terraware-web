@@ -94,7 +94,7 @@ export default function NewTestDialog(props: Props): JSX.Element {
                 aria-label='Start date'
               />
               <Typography component='p' variant='caption'>
-                {strings.FUTURE_DATE_INFO}
+                {strings.SCHEDULE_DATE_INFO}
               </Typography>
             </Grid>
             <Grid item xs={6}>
