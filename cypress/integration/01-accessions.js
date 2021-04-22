@@ -120,6 +120,26 @@ describe('Accessions', () => {
       cy.get('#primaryCollector').should('have.value', 'Leann');
     });
 
+    it('should send the accession to Nursery', () => {
+      cy.get('#sendToNursery').should('contain', 'Send to Nursery');
+      cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
+      cy.get('#sendToNursery').click();
+      cy.get('#sendToNursery').should('contain', 'Sending');
+      cy.wait('@getAccession');
+
+      cy.get('#sendToNursery').should('contain', 'Sent to Nursery');
+      cy.get('#undoSendToNursery').should('exist');
+      cy.get('#goToDatabase').should('exist');
+    });
+
+    it('should unsend the accession to Nursery', () => {
+      cy.get('#undoSendToNursery').should('exist');
+      cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
+      cy.get('#undoSendToNursery').click();
+      cy.wait('@getAccession');
+      cy.get('#sendToNursery').should('exist');
+    });
+
     it('should show autocomplete when typing and show modal when updating the specie name and create a new specie', () => {
       cy.get('#species').clear().type('Kousa Dogwoord New');
       cy.focused().should('have.attr', 'aria-controls', 'species-popup')
