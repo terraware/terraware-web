@@ -28,7 +28,7 @@ describe('Summary page', () => {
 
     cy.get('#update-row-Pending').contains('0 seed collection');
     cy.get('#update-row-Processed').contains('0 accessions');
-    cy.get('#update-row-Dried').contains('0 accessions');
+    cy.get('#update-row-Dried').contains('1 accessions');
     cy.get('#update-row-Withdrawn').contains('2 accessions');
   });
 
@@ -41,7 +41,7 @@ describe('Summary page', () => {
     it('navigates to database page filtered by pending state when clicking on Most recent update', () => {
       cy.get('#declineTour').click()
       cy.get('#update-Pending').click().url().should('contain', '/accessions');
-      cy.get('#subtitle').should('contain', '7 total');
+      cy.get('#subtitle').should('contain', '6 total');
     });
 
     it('navigates to database page filtered by processed state when clickin on Most recent update', () => {

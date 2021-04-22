@@ -34,7 +34,7 @@ describe('Notifications', () => {
       cy.wait('@notification');
       cy.wait('@search')
       
-      cy.get('#subtitle').should('contain', '0 total');
+      cy.get('#subtitle').should('contain', '1 total');
     cy.intercept('POST', '/api/v1/seedbank/notification/**/markRead').as(
       'markRead2'
     );
@@ -47,7 +47,7 @@ describe('Notifications', () => {
       cy.wait('@markRead2');
       cy.wait('@notification2');
       cy.wait('@search2')
-      cy.get('#subtitle').should('contain', '0 total');
+      cy.get('#subtitle').should('contain', '1 total');
   });
 
   it('go to accesion page when clicking Date notification', () => {
