@@ -1,7 +1,12 @@
 import { Box, Divider, Link, Paper, Typography } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React from 'react';
-import { Link as RouterLink, useParams, useRouteMatch } from 'react-router-dom';
+import {
+  Link as RouterLink,
+  useHistory,
+  useParams,
+  useRouteMatch,
+} from 'react-router-dom';
 import strings from '../../strings';
 import useStateLocation from '../../utils/useStateLocation';
 
@@ -20,7 +25,7 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-export default function DetailsMenu(): JSX.Element {
+export default function DetailsMenu(): JSX.Element | null {
   const classes = useStyles();
   const { accessionNumber } = useParams<{ accessionNumber: string }>();
 
@@ -47,6 +52,11 @@ export default function DetailsMenu(): JSX.Element {
     },
   ];
   const location = useStateLocation();
+  const history = useHistory();
+
+  if (history.location.pathname.endsWith(accessionNumber)) {
+    return null;
+  }
 
   return (
     <Paper className={classes.paper}>

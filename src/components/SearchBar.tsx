@@ -57,10 +57,10 @@ export default function NavBar(): JSX.Element {
           setInput(value);
         }}
         value=''
-        onChange={(event, value) => {
-          if (value) {
+        onChange={(event, accessionNumber) => {
+          if (accessionNumber) {
             history.push(
-              getLocation(`/accessions/${value}/seed-collection`, location)
+              getLocation(`/accessions/${accessionNumber}`, location)
             );
             resetResults();
             setInput('');

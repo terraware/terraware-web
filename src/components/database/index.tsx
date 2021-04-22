@@ -112,7 +112,7 @@ export default function Database(): JSX.Element {
   const onSelect = (row: SearchResponseResults) => {
     if (row.accessionNumber) {
       const seedCollectionLocation = {
-        pathname: `/accessions/${row.accessionNumber}/seed-collection`,
+        pathname: `/accessions/${row.accessionNumber}`,
         state: { from: location.pathname },
       };
       history.push(seedCollectionLocation);

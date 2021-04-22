@@ -1,10 +1,10 @@
 import { Container, Grid } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React from 'react';
-import { Route, Switch, useParams } from 'react-router-dom';
+import { Route, Switch, useHistory, useParams } from 'react-router-dom';
 import { useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil';
 import { putAccession } from '../../api/accession';
-import { Accession } from '../../api/types/accessions';
+import { Accession, AccessionState } from '../../api/types/accessions';
 import snackbarAtom from '../../state/atoms/snackbar';
 import getAccessionSelector from '../../state/selectors/accession';
 import searchSelector from '../../state/selectors/search';
@@ -52,11 +52,27 @@ function Content(): JSX.Element {
   const { accessionNumber } = useParams<{ accessionNumber: string }>();
   const setSnackbar = useSetRecoilState(snackbarAtom);
   const resetSearch = useResetRecoilState(searchSelector);
+  const history = useHistory();
 
   const accession = useRecoilValue(getAccessionSelector(accessionNumber));
   const resetAccession = useResetRecoilState(
     getAccessionSelector(accessionNumber)
   );
+
+  React.useEffect(() => {
+    if (accession) {
+      if (history.location.pathname.endsWith(accession.accessionNumber)) {
+        const state = accession.state;
+        const newLocation = {
+          pathname: `/accessions/${
+            accession.accessionNumber
+          }/${pathDestinationForState(state)}`,
+          state: history.location.state,
+        };
+        history.replace(newLocation);
+      }
+    }
+  }, [accession, history.location]);
 
   React.useEffect(() => {
     return () => {
@@ -131,4 +147,22 @@ function Content(): JSX.Element {
       </Container>
     </main>
   );
+}
+
+function pathDestinationForState(state: AccessionState): string {
+  switch (state) {
+    case 'Pending':
+      return 'seed-collection';
+    case 'Processing':
+    case 'Processed':
+    case 'Drying':
+      return 'processing-drying';
+    case 'Dried':
+      return 'storage';
+    case 'In Storage':
+    case 'Withdrawn':
+      return 'withdrawal';
+    case 'Nursery':
+      return 'nursery';
+  }
 }

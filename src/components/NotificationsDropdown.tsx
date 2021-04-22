@@ -96,14 +96,11 @@ export default function NotificationsDropdown(): JSX.Element {
 
   const location = useStateLocation();
 
-  const seedCollectionLocation = (accessionNumber: string) => {
-    return getLocation(
-      `/accessions/${accessionNumber}/seed-collection`,
-      location
-    );
+  const getAccessionLocation = (accessionNumber: string) => {
+    return getLocation(`/accessions/${accessionNumber}`, location);
   };
 
-  const databaseLocation = (state: string) => {
+  const getDatabaseLocation = (state: string) => {
     return getLocation('/accessions', location, `?state=${state}`);
   };
 
@@ -169,9 +166,9 @@ export default function NotificationsDropdown(): JSX.Element {
                   component={Link}
                   to={
                     type === 'Date'
-                      ? seedCollectionLocation(accessionNumber || '')
+                      ? getAccessionLocation(accessionNumber || '')
                       : type === 'State'
-                      ? databaseLocation(state || '')
+                      ? getDatabaseLocation(state || '')
                       : ''
                   }
                 >

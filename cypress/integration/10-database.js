@@ -606,12 +606,54 @@ describe('Database', () => {
       cy.get('#row1')
         .click()
         .url()
-        .should('match', /accessions\/[A-Za-z0-9]+\/seed-collection/);
+        .should('match', /accessions\/[A-Za-z0-9]+\/processing-drying/);
       cy.get('#close').click();
 
       cy.get('#subtitle').should('contain', '4 total');
       cy.get('#row1-species').contains('Other Dogwood');
       cy.get('#filter-rare').contains('Rare');
+    });
+  });
+
+  context('Navigation', () => {
+    it('should handle the Pending navigation', () => {
+      cy.visit('/accessions');
+
+      cy.get('#row3-state').contains('Pending');
+      cy.get('#row3')
+        .click()
+        .url()
+        .should('match', /accessions\/[A-Za-z0-9]+\/seed-collection/);
+    });
+
+    it('should handle the Processing navigation', () => {
+      cy.visit('/accessions');
+
+      cy.get('#row12-state').contains('Processing');
+      cy.get('#row12')
+        .click()
+        .url()
+        .should('match', /accessions\/[A-Za-z0-9]+\/processing-drying/);
+    });
+
+    it('should handle the Dried navigation', () => {
+      cy.visit('/accessions');
+
+      cy.get('#row1-state').contains('Dried');
+      cy.get('#row1')
+        .click()
+        .url()
+        .should('match', /accessions\/[A-Za-z0-9]+\/storage/);
+    });
+
+    it('should handle the Withdrawn navigation', () => {
+      cy.visit('/accessions');
+
+      cy.get('#row8-state').contains('Withdrawn');
+      cy.get('#row8')
+        .click()
+        .url()
+        .should('match', /accessions\/[A-Za-z0-9]+\/withdrawal/);
     });
   });
 });

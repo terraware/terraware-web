@@ -1,7 +1,7 @@
 import { Link, Paper, Typography } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React from 'react';
-import { Link as RouterLink, useParams, useRouteMatch } from 'react-router-dom';
+import { Link as RouterLink, useHistory, useParams, useRouteMatch } from 'react-router-dom';
 import { Accession } from '../../api/types/accessions';
 import strings from '../../strings';
 import useStateLocation from '../../utils/useStateLocation';
@@ -47,6 +47,11 @@ export default function GerminationMenu({
   }
 
   const location = useStateLocation();
+  const history = useHistory();
+
+  if (history.location.pathname.endsWith(accessionNumber)) {
+    return null;
+  }
 
   return (
     <Paper className={classes.paper}>
