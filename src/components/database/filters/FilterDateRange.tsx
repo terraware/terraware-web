@@ -31,8 +31,8 @@ export default function DateRange(props: Props): JSX.Element {
   const [endDate, setEndDate] = React.useState(props.values[1]);
 
   React.useEffect(() => {
-    setStartDate(props.values[0] || '');
-    setEndDate(props.values[1] || '');
+    setStartDate(props.values[0] || null);
+    setEndDate(props.values[1] || null);
   }, [props.values]);
 
   const onChangeDate = (id: string, value?: string) => {
@@ -52,7 +52,7 @@ export default function DateRange(props: Props): JSX.Element {
 
   const onEnter = (e: React.KeyboardEvent<Element>) => {
     if (e.key === 'Enter') {
-      if (startDate && endDate) {
+      if (startDate || endDate) {
         const newValues = [startDate, endDate];
 
         const newFilter: SearchFilter = {

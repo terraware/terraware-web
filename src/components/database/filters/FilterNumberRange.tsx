@@ -25,12 +25,12 @@ interface Props {
 
 export default function NumberRange(props: Props): JSX.Element {
   const classes = useStyles();
-  const [minValue, setMinValue] = React.useState(props.values[0] || '');
-  const [maxValue, setMaxValue] = React.useState(props.values[1] || '');
+  const [minValue, setMinValue] = React.useState(props.values[0] || null);
+  const [maxValue, setMaxValue] = React.useState(props.values[1] || null);
 
   React.useEffect(() => {
-    setMinValue(props.values[0] || '');
-    setMaxValue(props.values[1] || '');
+    setMinValue(props.values[0] || null);
+    setMaxValue(props.values[1] || null);
   }, [props.values]);
 
   const onChange = (id: string, value?: unknown) => {
@@ -40,17 +40,17 @@ export default function NumberRange(props: Props): JSX.Element {
 
     if (id === 'minValue') {
       setMinValue(value as string);
-      newValues[0] = (value as string) || '0';
+      newValues[0] = (value as string) || null;
     }
     if (id === 'maxValue') {
       setMaxValue(value as string);
-      newValues[1] = (value as string) || '0';
+      newValues[1] = (value as string) || null;
     }
   };
 
   const onEnter = (e: React.KeyboardEvent<Element>) => {
     if (e.key === 'Enter') {
-      if (minValue && maxValue) {
+      if (minValue || maxValue) {
         const newValues = [minValue, maxValue];
 
         const newFilter: SearchFilter = {
