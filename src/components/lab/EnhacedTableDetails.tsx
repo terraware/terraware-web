@@ -206,7 +206,12 @@ export default function EnhancedTableDetails<T>({
                                 key={subRowIndex}
                                 classes={{ hover: classes.hover }}
                                 hover={Boolean(onSelect) && !hasEditColumn}
-                                onClick={!hasEditColumn ? onClick : undefined}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  if (onClick && !hasEditColumn) {
+                                    onClick();
+                                  }
+                                }}
                               >
                                 {columns.map((column) => (
                                   <Renderer
