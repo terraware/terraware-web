@@ -106,6 +106,14 @@ export default function WithdrawalView({
     setOpen(false);
   };
 
+  const isInactive = (row: AccessionWithdrawal) => {
+    return row.purpose === 'Germination Testing';
+  };
+
+  const isClickable = (row: AccessionWithdrawal) => {
+    return row.purpose !== 'Germination Testing';
+  };
+
   const onDelete = (value: AccessionWithdrawal) => {
     const newWithdrawals =
       accession?.withdrawals?.filter((withdrawal) => withdrawal !== value) ??
@@ -178,6 +186,8 @@ export default function WithdrawalView({
                 Renderer={WithdrawalCellRenderer}
                 onSelect={onEdit}
                 sortComparator={sortComparator}
+                isInactive={isInactive}
+                isClickable={isClickable}
               />
             </Grid>
           </Grid>
