@@ -10,7 +10,7 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import EditIcon from '@material-ui/icons/Edit';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import React from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import {
   useRecoilState,
   useRecoilValueLoadable,
@@ -86,28 +86,6 @@ export default function Database(): JSX.Element {
     allValuesLodable.state === 'hasValue'
       ? allValuesLodable.contents.results
       : undefined;
-
-  const useQuery = () => new URLSearchParams(useLocation().search);
-  const query = useQuery();
-  const initializeFilters = () => {
-    const filters: SearchFilter[] = [];
-    const values: string[] = [];
-    if (query.get('state')) {
-      values.push(query.get('state') || '');
-      filters.push({
-        field: 'state',
-        values: values,
-        type: 'Exact',
-      });
-    }
-    return filters;
-  };
-
-  React.useEffect(() => {
-    if (query.get('state')) {
-      setFilters(initializeFilters);
-    }
-  }, [query.get('state')]);
 
   const onSelect = (row: SearchResponseResults) => {
     if (row.accessionNumber) {

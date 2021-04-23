@@ -74,20 +74,7 @@ export default function Filters(props: Props): JSX.Element {
   const [popover, setPopover] = React.useState<FilterPopover>();
 
   const onChange = (filter: SearchFilter) => {
-    const field = filter.field;
-    const updatedFilters = [...props.filters];
-    const filterIndex = updatedFilters.findIndex((f) => f.field === field);
-    if (filterIndex < 0) {
-      if (filter.values.length > 0) {
-        updatedFilters.push(filter);
-      }
-    } else {
-      if (filter.values.length > 0) {
-        updatedFilters.splice(filterIndex, 1, filter);
-      } else {
-        updatedFilters.splice(filterIndex, 1);
-      }
-    }
+    const updatedFilters = getUpdatedFilters(filter, props.filters);
     props.onChange(updatedFilters);
     setPopover(undefined);
   };
@@ -172,6 +159,27 @@ export default function Filters(props: Props): JSX.Element {
       </div>
     </Container>
   );
+}
+
+export function getUpdatedFilters(
+  filter: SearchFilter,
+  filters: SearchFilter[]
+): SearchFilter[] {
+  const field = filter.field;
+  const updatedFilters = [...filters];
+  const filterIndex = updatedFilters.findIndex((f) => f.field === field);
+  if (filterIndex < 0) {
+    if (filter.values.length > 0) {
+      updatedFilters.push(filter);
+    }
+  } else {
+    if (filter.values.length > 0) {
+      updatedFilters.splice(filterIndex, 1, filter);
+    } else {
+      updatedFilters.splice(filterIndex, 1);
+    }
+  }
+  return updatedFilters;
 }
 
 function getOptions(

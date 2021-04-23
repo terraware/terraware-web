@@ -29,12 +29,20 @@ describe('Notifications', () => {
     cy.get('#notification4')
       .click()
       .url()
-      .should('contain', '/accessions?state=Dried');
+      .should('contain', '/accessions');
       cy.wait('@markRead');
       cy.wait('@notification');
       cy.wait('@search')
+      cy.get('#simple-popover > .MuiPaper-root').type('{esc}');
       
       cy.get('#subtitle').should('contain', '1 total');
+
+      cy.get('#filter-state').click();
+      cy.get('#filter-list-state').should('be.visible');
+      cy.get('#check-Dried').should('have.checked', 'true');
+      cy.get('#filter-list-state').type('{esc}');
+
+    cy.get('#notifications-button').click();
     cy.intercept('POST', '/api/v1/seedbank/notification/**/markRead').as(
       'markRead2'
     );
@@ -43,11 +51,19 @@ describe('Notifications', () => {
     cy.get('#notification3')
       .click()
       .url()
-      .should('contain', '/accessions?state=In%20Storage');
+      .should('contain', '/accessions');
       cy.wait('@markRead2');
       cy.wait('@notification2');
       cy.wait('@search2')
+      cy.get('#simple-popover > .MuiPaper-root').type('{esc}');
+      
       cy.get('#subtitle').should('contain', '1 total');
+
+      cy.get('#filter-state').click();
+      cy.get('#filter-list-state').should('be.visible');
+      cy.get('#check-In\\ Storage').should('have.checked', 'true');
+      cy.get('#filter-list-state').type('{esc}');
+
   });
 
   it('go to accesion page when clicking Date notification', () => {

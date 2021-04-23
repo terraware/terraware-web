@@ -16,14 +16,22 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useRecoilValueLoadable, useResetRecoilState } from 'recoil';
+import {
+  useRecoilState,
+  useRecoilValueLoadable,
+  useResetRecoilState,
+} from 'recoil';
 import {
   postAllNotificationsAsRead,
   postNotificationAsRead,
 } from '../api/notification';
+import { AccessionState } from '../api/types/accessions';
+import { SearchFilter } from '../api/types/search';
+import { searchFilterAtom } from '../state/atoms/search';
 import notificationsSelector from '../state/selectors/notifications';
 import preventDefaultEvent from '../utils/preventDefaultEvent';
 import useStateLocation, { getLocation } from '../utils/useStateLocation';
+import { getUpdatedFilters } from './database/Filters';
 import NotificationIcon from './NotificationIcon';
 
 const useStyles = makeStyles((theme) =>
@@ -66,6 +74,7 @@ export default function NotificationsDropdown(): JSX.Element {
   const [anchorEl, setAnchorEl] = React.useState<Element | null>(null);
   const notificationLoadable = useRecoilValueLoadable(notificationsSelector);
   const resetNotifications = useResetRecoilState(notificationsSelector);
+  const [filters, setFilters] = useRecoilState(searchFilterAtom);
 
   const contents = notificationLoadable.valueMaybe();
 
@@ -77,7 +86,17 @@ export default function NotificationsDropdown(): JSX.Element {
     setAnchorEl(null);
   };
 
-  const onNotificationClick = async (id: string) => {
+  const onNotificationClick = async (id: string, state?: AccessionState) => {
+    if (state) {
+      const filter: SearchFilter = {
+        field: 'state',
+        values: [state],
+        type: 'Exact',
+      };
+      const updatedFilters = getUpdatedFilters(filter, filters);
+      setFilters(updatedFilters);
+    }
+
     await postNotificationAsRead(id);
     resetNotifications();
   };
@@ -95,13 +114,16 @@ export default function NotificationsDropdown(): JSX.Element {
   };
 
   const location = useStateLocation();
-
-  const getAccessionLocation = (accessionNumber: string) => {
-    return getLocation(`/accessions/${accessionNumber}`, location);
-  };
-
-  const getDatabaseLocation = (state: string) => {
-    return getLocation('/accessions', location, `?state=${state}`);
+  const databaseLocation = getLocation('/accessions', location);
+  const getDestination = (
+    type: 'Alert' | 'State' | 'Date',
+    accessionNumber?: string
+  ) => {
+    return type === 'Date'
+      ? getLocation(`/accessions/${accessionNumber}`, location)
+      : type === 'State'
+      ? databaseLocation
+      : '';
   };
 
   return (
@@ -162,15 +184,9 @@ export default function NotificationsDropdown(): JSX.Element {
                   className={
                     read ? `${classes.readNotification}` : classes.noHover
                   }
-                  onClick={() => onNotificationClick(id)}
+                  onClick={() => onNotificationClick(id, state)}
                   component={Link}
-                  to={
-                    type === 'Date'
-                      ? getAccessionLocation(accessionNumber || '')
-                      : type === 'State'
-                      ? getDatabaseLocation(state || '')
-                      : ''
-                  }
+                  to={getDestination(type, accessionNumber)}
                 >
                   <ListItemIcon>
                     <NotificationIcon type={type} />

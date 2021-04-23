@@ -42,6 +42,10 @@ describe('Summary page', () => {
       cy.get('#declineTour').click()
       cy.get('#update-Pending').click().url().should('contain', '/accessions');
       cy.get('#subtitle').should('contain', '6 total');
+      cy.get('#filter-state').click();
+      cy.get('#filter-list-state').should('be.visible');
+      cy.get('#check-Pending').should('have.checked', 'true');
+      cy.get('#filter-list-state').type('{esc}');
     });
 
     it('navigates to database page filtered by processed state when clickin on Most recent update', () => {
@@ -51,6 +55,10 @@ describe('Summary page', () => {
         .url()
         .should('contain', '/accessions');
       cy.get('#subtitle').should('contain', '2 total');
+      cy.get('#filter-state').click();
+      cy.get('#filter-list-state').should('be.visible');
+      cy.get('#check-Processed').should('have.checked', 'true');
+      cy.get('#filter-list-state').type('{esc}');
     });
   });
 });
