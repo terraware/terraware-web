@@ -11,5 +11,4 @@ export const COLUMNS: TableColumnType[] = [
   { key: 'seedsGerminated', name: strings.GERMINATED, type: 'string' },
   { key: 'recordingDate', name: strings.RECORDING_DATE, type: 'date' },
   { key: 'notes', name: strings.NOTES, type: 'notes' },
-  { key: 'edit', name: '', type: 'edit' },
 ];

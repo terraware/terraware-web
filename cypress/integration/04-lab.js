@@ -56,7 +56,7 @@ describe('Lab', () => {
   });
 
   it('should modify test', () => {
-    cy.get('#row1-edit-button').click();
+    cy.get('#row1').click();
     cy.get('#substrate').click();
     cy.get('#Nursery\\ Media').click();
     cy.get('#notes').clear();
@@ -143,7 +143,7 @@ describe('Lab', () => {
   });
 
   it('should delete test', () => {
-    cy.get('#row3-edit-button').click();
+    cy.get('#row3').click();
 
     cy.intercept('PUT', '/api/v1/seedbank/accession/**').as('putAccession');
     cy.intercept('GET', '/api/v1/seedbank/accession/**').as('getAccession');
@@ -151,7 +151,7 @@ describe('Lab', () => {
     cy.wait('@putAccession');
     cy.wait('@getAccession');
 
-    cy.get('#row3-edit-button').should('not.exist');
+    cy.get('#row3').should('not.exist');
   });
 
   it('should add germination entry and create bar in graph', () => {
@@ -216,7 +216,7 @@ describe('Lab', () => {
   });
 
   it('should modify entry', () => {
-    cy.get('#row2-details #row2-edit-button').click();
+    cy.get('#row2-details #row2').click();
 
     cy.intercept('PUT', '/api/v1/seedbank/accession/**').as('putAccession');
     cy.intercept('GET', '/api/v1/seedbank/accession/**').as('getAccession');
@@ -243,7 +243,7 @@ describe('Lab', () => {
   });
 
   it('should delete entry', () => {
-    cy.get('#row2-details #row2-edit-button').click();
+    cy.get('#row2-details #row2').click();
 
     cy.intercept('PUT', '/api/v1/seedbank/accession/**').as('putAccession');
     cy.intercept('GET', '/api/v1/seedbank/accession/**').as('getAccession');

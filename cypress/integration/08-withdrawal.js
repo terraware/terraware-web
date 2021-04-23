@@ -75,7 +75,7 @@ describe('Withdrawal', () => {
     });
 
     it('should edit a withdrawal ', () => {
-      cy.get('#row1-edit-button').click();
+      cy.get('#row1').click();
 
       cy.get('#save-withdrawn-button').contains('Save Changes');
       cy.get('#modal-seeds-available').contains('250');
@@ -111,7 +111,7 @@ describe('Withdrawal', () => {
 
     it('should delete the withdrawal ', () => {
       cy.get('#row1').should('exist');
-      cy.get('#row1-edit-button').click();
+      cy.get('#row1').click();
 
       cy.get('#modal-seeds-available').contains('290');
 
@@ -278,7 +278,7 @@ describe('Withdrawal', () => {
     });
 
     it('should edit a withdrawal ', () => {
-      cy.get('#row1-edit-button').click();
+      cy.get('#row1').click();
 
       cy.get('#modal-seeds-available').contains('8');
 

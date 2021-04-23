@@ -62,7 +62,7 @@ describe('Nursery', () => {
   });
 
   it('should modify test', () => {
-    cy.get('#row1-edit-button').click();
+    cy.get('#row1').click();
     cy.get('#substrate').click();
     cy.get('#Nursery\\ Media').click();
     cy.get('#seedsGerminated').clear().type('70');
@@ -181,7 +181,7 @@ describe('Nursery', () => {
   });
 
   it('should delete test', () => {
-    cy.get('#row2-edit-button').click();
+    cy.get('#row2').click();
 
     cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
     cy.get('#deleteTest').click();

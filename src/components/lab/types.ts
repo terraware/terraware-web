@@ -10,13 +10,11 @@ export const TEST_COLUMNS: TableColumnType[] = [
   { key: 'seedsSown', name: strings.SOWN, type: 'string' },
   { key: 'staffResponsible', name: strings.STAFF, type: 'string' },
   { key: 'notes', name: strings.NOTES, type: 'notes' },
-  { key: 'edit', name: '', type: 'edit' },
 ];
 
 export const TEST_ENTRY_COLUMNS: TableColumnType[] = [
   { key: 'seedsGerminated', name: strings.GERMINATED, type: 'string' },
   { key: 'recordingDate', name: strings.RECORDING_DATE, type: 'date' },
-  { key: 'edit', name: '', type: 'edit' },
 ];
 
 export const CUT_TEST_COLUMNS: TableColumnType[] = [

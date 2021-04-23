@@ -210,7 +210,6 @@ const COLUMNS: TableColumnType[] = [
   { key: 'purpose', name: strings.PURPOSE, type: 'string' },
   { key: 'staffResponsible', name: strings.STAFF, type: 'string' },
   { key: 'notes', name: strings.NOTES, type: 'notes' },
-  { key: 'edit', name: '', type: 'edit' },
 ];
 
 function sortComparator(

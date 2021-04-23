@@ -27,6 +27,12 @@ import LabChart from './LabChart';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
+    hover: {
+      '&:hover': {
+        cursor: 'pointer',
+        backgroundColor: `${theme.palette.neutral[100]}!important`,
+      },
+    },
     expander: {
       color: theme.palette.primary.main,
       textAlign: 'center',
@@ -109,6 +115,8 @@ export default function EnhancedTableDetails<T>({
       setOpen(JSON.parse(previousOpen));
     }
   }, []);
+
+  const hasEditColumn = columns.filter((c) => c.type === 'edit').length > 0;
 
   return (
     <>
@@ -196,6 +204,9 @@ export default function EnhancedTableDetails<T>({
                               <TableRow
                                 id={`row${subRowIndex + 1}`}
                                 key={subRowIndex}
+                                classes={{ hover: classes.hover }}
+                                hover={Boolean(onSelect) && !hasEditColumn}
+                                onClick={!hasEditColumn ? onClick : undefined}
                               >
                                 {columns.map((column) => (
                                   <Renderer
