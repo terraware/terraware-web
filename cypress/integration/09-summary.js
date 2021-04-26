@@ -41,20 +41,20 @@ describe('Summary page', () => {
     it('navigates to database page filtered by pending state when clicking on Most recent update', () => {
       cy.get('#declineTour').click()
       cy.get('#update-Pending').click().url().should('contain', '/accessions');
-      cy.get('#subtitle').should('contain', '6 total');
+      cy.get('#subtitle').should('contain', '1 total');
       cy.get('#filter-state').click();
       cy.get('#filter-list-state').should('be.visible');
       cy.get('#check-Pending').should('have.checked', 'true');
       cy.get('#filter-list-state').type('{esc}');
     });
 
-    it('navigates to database page filtered by processed state when clickin on Most recent update', () => {
+    it('navigates to database page filtered by processed state when clicking on Most recent update', () => {
       cy.get('#declineTour').click()
       cy.get('#update-Processed')
         .click()
         .url()
         .should('contain', '/accessions');
-      cy.get('#subtitle').should('contain', '2 total');
+      cy.get('#subtitle').should('contain', '0 total');
       cy.get('#filter-state').click();
       cy.get('#filter-list-state').should('be.visible');
       cy.get('#check-Processed').should('have.checked', 'true');

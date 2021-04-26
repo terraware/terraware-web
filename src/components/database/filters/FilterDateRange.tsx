@@ -1,6 +1,5 @@
 import { createStyles, Grid, makeStyles } from '@material-ui/core';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
-import dayjs from 'dayjs';
 import React from 'react';
 import { SearchField, SearchFilter } from '../../../api/types/search';
 import strings from '../../../strings';
@@ -36,7 +35,7 @@ export default function DateRange(props: Props): JSX.Element {
   }, [props.values]);
 
   const onChangeDate = (id: string, value?: string) => {
-    const formatedValue = dayjs(value).format('YYYY-MM-DD');
+    const formatedValue = value ? value.substr(0, 10) : null;
     const newValues = props.values.length
       ? [...props.values]
       : [startDate, endDate];

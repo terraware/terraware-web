@@ -17,9 +17,9 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import {
-  useRecoilState,
   useRecoilValueLoadable,
   useResetRecoilState,
+  useSetRecoilState,
 } from 'recoil';
 import {
   postAllNotificationsAsRead,
@@ -31,7 +31,6 @@ import { searchFilterAtom } from '../state/atoms/search';
 import notificationsSelector from '../state/selectors/notifications';
 import preventDefaultEvent from '../utils/preventDefaultEvent';
 import useStateLocation, { getLocation } from '../utils/useStateLocation';
-import { getUpdatedFilters } from './database/Filters';
 import NotificationIcon from './NotificationIcon';
 
 const useStyles = makeStyles((theme) =>
@@ -74,7 +73,7 @@ export default function NotificationsDropdown(): JSX.Element {
   const [anchorEl, setAnchorEl] = React.useState<Element | null>(null);
   const notificationLoadable = useRecoilValueLoadable(notificationsSelector);
   const resetNotifications = useResetRecoilState(notificationsSelector);
-  const [filters, setFilters] = useRecoilState(searchFilterAtom);
+  const setFilters = useSetRecoilState(searchFilterAtom);
 
   const contents = notificationLoadable.valueMaybe();
 
@@ -93,8 +92,7 @@ export default function NotificationsDropdown(): JSX.Element {
         values: [state],
         type: 'Exact',
       };
-      const updatedFilters = getUpdatedFilters(filter, filters);
-      setFilters(updatedFilters);
+      setFilters([filter]);
     }
 
     await postNotificationAsRead(id);
