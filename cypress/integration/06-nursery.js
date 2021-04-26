@@ -48,7 +48,7 @@ describe('Nursery', () => {
     cy.wait('@getAccession');
 
     cy.get('.MuiTableBody-root').children().should('have.length', 1);
-    cy.get('#totalViabilityPercent').should('contain', '50%');
+    cy.get('#mostRecentViabiliy').should('contain', '50%');
 
     cy.get('#row1-startDate').should('contain','02/09/2021');
     cy.get('#row1-endDate').should('contain','03/22/2021');
@@ -74,7 +74,7 @@ describe('Nursery', () => {
     cy.get('#saveTest').click();
     cy.wait('@getAccession');
 
-    cy.get('#totalViabilityPercent').should('contain', '70%');
+    cy.get('#mostRecentViabiliy').should('contain', '70%');
 
     cy.get('#row1-startDate').should('contain','02/09/2021');
     cy.get('#row1-seedType').should('contain','Stored');
@@ -188,6 +188,18 @@ describe('Nursery', () => {
     cy.wait('@getAccession');
 
     cy.get('.MuiTableBody-root').children().should('have.length', 2);
+  });
+
+  it('should show schedule testing box when creating a future test', () => {
+    cy.get('#newTest').click();
+    cy.get('#startDate').type('02/09/3021');
+    cy.get('#seedsSown').type('25');
+
+    cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
+    cy.get('#saveTest').click();
+    cy.wait('@getAccession');
+
+    cy.get('#scheduledForTesting').should('contain', '25 Seeds')
   });
 
   context('Summary End Results', () => {

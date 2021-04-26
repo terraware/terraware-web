@@ -175,7 +175,7 @@ describe('Lab', () => {
     cy.get('#row2-staffResponsible').should('contain', 'Constanza');
     cy.get('#row2-notes > .MuiTypography-root > .MuiSvgIcon-root').should('not.exist');
 
-    cy.get('#totalViabilityPercent').contains('6%');
+    cy.get('#mostRecentViabiliy').contains('10%');
     cy.get('#lab-table').scrollTo('left');
     cy.get('#totalSeedsGerminated').contains('10 (10%)');
 
@@ -206,7 +206,7 @@ describe('Lab', () => {
     cy.get('#row2-staffResponsible').should('contain', 'Constanza');
     cy.get('#row2-notes > .MuiTypography-root > .MuiSvgIcon-root').should('not.exist');
 
-    cy.get('#totalViabilityPercent').contains('16%');
+    cy.get('#mostRecentViabiliy').contains('25%');
     cy.get('#row2-expand').click();
     cy.get('#totalSeedsGerminated').contains('25 (25%)');
 
@@ -234,7 +234,7 @@ describe('Lab', () => {
     cy.get('#row2-staffResponsible').should('contain', 'Constanza');
     cy.get('#row2-notes > .MuiTypography-root > .MuiSvgIcon-root').should('not.exist');
 
-    cy.get('#totalViabilityPercent').contains('23%');
+    cy.get('#mostRecentViabiliy').contains('35%');
     cy.get('#row2-expand').click();
 
     cy.get('#row2-details #row2-seedsGerminated').contains('25 seeds germinated');
@@ -259,7 +259,7 @@ describe('Lab', () => {
     cy.get('#row2-staffResponsible').should('contain', 'Constanza');
     cy.get('#row2-notes > .MuiTypography-root > .MuiSvgIcon-root').should('not.exist');
 
-    cy.get('#totalViabilityPercent').contains('6%');
+    cy.get('#mostRecentViabiliy').contains('10%');
 
     cy.get('#row2-expand').click();
     cy.get('#row2-details #row2-seedsGerminated').should('not.exist');
@@ -293,6 +293,18 @@ describe('Lab', () => {
     cy.get('#row1-filledSeeds').should('contain','500');
     cy.get('#row1-emptySeeds').should('contain','50');
     cy.get('#row1-compromisedSeeds').should('contain','10');
+  });
+
+  it('should show schedule testing box when creating a future test', () => {
+    cy.get('#newTest').click();
+    cy.get('#startDate').type('02/09/3021');
+    cy.get('#seedsSown').type('25');
+
+    cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
+    cy.get('#saveTest').click();
+    cy.wait('@getAccession');
+
+    cy.get('#scheduledForTesting').should('contain', '25 Seeds')
   });
 
   context('Summary End Results', () => {

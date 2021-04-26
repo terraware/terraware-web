@@ -22,10 +22,18 @@ const useStyles = makeStyles((theme) =>
     link: {
       color: theme.palette.common.black,
     },
+    disabled: {
+      color: theme.palette.neutral[400],
+      pointerEvents: 'none',
+    },
   })
 );
 
-export default function DetailsMenu(): JSX.Element | null {
+interface Props {
+  state: string;
+}
+
+export default function DetailsMenu({ state }: Props): JSX.Element | null {
   const classes = useStyles();
   const { accessionNumber } = useParams<{ accessionNumber: string }>();
 
@@ -34,21 +42,25 @@ export default function DetailsMenu(): JSX.Element | null {
       title: strings.SEED_COLLECTION,
       route: 'seed-collection',
       active: useRouteMatch('/accessions/:accessionNumber/seed-collection'),
+      disabled: false,
     },
     {
       title: strings.PROCESSING_AND_DRYING,
       route: 'processing-drying',
       active: useRouteMatch('/accessions/:accessionNumber/processing-drying'),
+      disabled: state === 'Nursery',
     },
     {
       title: strings.STORAGE,
       route: 'storage',
       active: useRouteMatch('/accessions/:accessionNumber/storage'),
+      disabled: state === 'Nursery' || state === 'Pending',
     },
     {
       title: strings.WITHDRAWAL,
       route: 'withdrawal',
       active: useRouteMatch('/accessions/:accessionNumber/withdrawal'),
+      disabled: state === 'Nursery' || state === 'Pending',
     },
   ];
   const location = useStateLocation();
@@ -66,27 +78,39 @@ export default function DetailsMenu(): JSX.Element | null {
       <Box mt={1} />
       <Divider light />
       <Box mt={1} />
-      {paths.map(({ title, active, route }) => (
-        <Link
-          id={`menu-${route}`}
-          component={RouterLink}
-          key={title}
-          to={{
-            pathname: `/accessions/${accessionNumber}/${route}`,
-            state: {
-              from: location.state?.from ?? '',
-            },
-          }}
-        >
-          <Typography
-            component='p'
-            variant='body1'
-            className={active ? classes.bold : classes.link}
+      {paths.map(({ title, active, route, disabled }) =>
+        disabled ? (
+          <span>
+            <Typography
+              component='p'
+              variant='body1'
+              className={classes.disabled}
+            >
+              {title}
+            </Typography>
+          </span>
+        ) : (
+          <Link
+            id={`menu-${route}`}
+            component={RouterLink}
+            key={title}
+            to={{
+              pathname: `/accessions/${accessionNumber}/${route}`,
+              state: {
+                from: location.state?.from ?? '',
+              },
+            }}
           >
-            {title}
-          </Typography>
-        </Link>
-      ))}
+            <Typography
+              component='p'
+              variant='body1'
+              className={active ? classes.bold : classes.link}
+            >
+              {title}
+            </Typography>
+          </Link>
+        )
+      )}
     </Paper>
   );
 }

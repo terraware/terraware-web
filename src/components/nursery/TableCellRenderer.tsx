@@ -1,12 +1,17 @@
+import { TableCell, Typography } from '@material-ui/core';
+import dayjs from 'dayjs';
 import React from 'react';
 import { GerminationTest } from '../../api/types/tests';
-import CellRenderer from '../common/table/TableCellRenderer';
+import strings from '../../strings';
+import CellRenderer, {
+  CellDateRenderer,
+} from '../common/table/TableCellRenderer';
 import { RendererProps } from '../common/table/types';
 
 export default function NurseryCellRenderer(
   props: RendererProps<GerminationTest>
 ): JSX.Element {
-  const { column, row, index } = props;
+  const { column, row, value, index } = props;
   if (column.key === 'recordingDate' || column.key === 'seedsGerminated') {
     if (row.germinations) {
       return (
@@ -18,6 +23,23 @@ export default function NurseryCellRenderer(
         />
       );
     }
+  }
+  if (column.type === 'date' && typeof value === 'string' && value) {
+    const id = `row${index}-${column.key}`;
+    const date = new Date(value);
+    if (date > new Date()) {
+      return (
+        <TableCell id={id} align='left'>
+          <Typography component='p' variant='body1'>
+            {strings.SCHEDULED_FOR}
+          </Typography>
+          <Typography component='p' variant='body1'>
+            {dayjs(value).format('MM/DD/YYYY')}
+          </Typography>
+        </TableCell>
+      );
+    }
+    return <CellDateRenderer id={id} value={value} />;
   }
   return <CellRenderer {...props} />;
 }

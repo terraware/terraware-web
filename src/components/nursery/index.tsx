@@ -3,9 +3,12 @@ import { Chip, Grid, Paper, Typography } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import dayjs from 'dayjs';
 import React from 'react';
+import { useRecoilValue } from 'recoil';
 import { Accession } from '../../api/types/accessions';
 import { Germination, GerminationTest } from '../../api/types/tests';
+import timeSelector from '../../state/selectors/time';
 import strings from '../../strings';
 import Divisor from '../common/Divisor';
 import SummaryBox from '../common/SummaryBox';
@@ -46,6 +49,7 @@ interface Props {
 
 export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
   const classes = useStyles();
+  const date = useRecoilValue(timeSelector);
 
   React.useEffect(() => {
     window.scrollTo({ top: 0 });
@@ -102,6 +106,23 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
     return nurseryTests ?? [];
   };
 
+  const getTotalScheduled = (): number | undefined => {
+    const total = accession.germinationTests?.reduce(
+      (acum, germinationTest) => {
+        if (
+          germinationTest.testType === 'Nursery' &&
+          dayjs(germinationTest.startDate).isAfter(date)
+        ) {
+          acum += germinationTest.seedsSown || 0;
+        }
+        return acum;
+      },
+      0
+    );
+    return total;
+  };
+
+  const total = getTotalScheduled();
   return (
     <main>
       <MuiPickersUtilsProvider utils={DayJSUtils}>
@@ -117,15 +138,28 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
           </Typography>
           <Typography component='p'>{strings.NURSERY_DESCRIPTION}</Typography>
           <Divisor />
-          <Grid item xs={12}>
-            <SummaryBox
-              id='totalViabilityPercent'
-              title={strings.TOTAL_ESTIMATED_VIABILITY}
-              value={`${accession.totalViabilityPercent ?? 0}%`}
-              variant='default'
-            />
+          <Grid container spacing={4}>
+            {total && (
+              <Grid item xs={6}>
+                <SummaryBox
+                  id='scheduledForTesting'
+                  title={strings.SCHEDULED_FOR_TESTING}
+                  value={strings
+                    .formatString(strings.SCHEDULED_SEEDS, total)
+                    .toString()}
+                  variant='default'
+                />
+              </Grid>
+            )}
+            <Grid item xs={total ? 6 : 12}>
+              <SummaryBox
+                id='mostRecentViabiliy'
+                title={strings.MOST_RECENT_PERCENTAGE_VIABILITY}
+                value={`${accession.latestViabilityPercent ?? 0}%`}
+                variant='default'
+              />
+            </Grid>
           </Grid>
-
           <Grid container spacing={4}>
             <Grid item xs={12}>
               <Table

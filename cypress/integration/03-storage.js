@@ -1,10 +1,23 @@
 /* eslint-disable no-undef */
 /// <reference types="cypress" />
 describe('Storage', () => {
-  it('should create the accession and navigate to storage section', () => {
+  it('should create the accession and navigate to storage section only when processing and drying is filled', () => {
     cy.visit('/accessions/new');
     cy.get('#saveAccession').click();
     cy.get('#snackbar').contains('Accession saved');
+    cy.get('a#menu-storage').should('not.exist')
+
+    cy.get('#menu-processing-drying').click();
+    cy.get('#processingMethod').click();
+    cy.get('#Count').click();
+    cy.get('#seedsCounted').type(10);
+    cy.get('#check-Nursery').click();
+    cy.get('#dryingStartDate').type('01/01/2021');
+    cy.get('#dryingEndDate').type('01/01/2021');
+    cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
+    cy.get('#saveAccession').click();
+    cy.wait('@getAccession');
+    cy.get('a#menu-storage').should('exist')
 
     cy.get('#menu-storage').click();
   });

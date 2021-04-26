@@ -107,7 +107,7 @@ function Content(): JSX.Element {
       <Container maxWidth='lg' className={classes.mainContainer}>
         <Grid container spacing={3}>
           <Grid item xs={3}>
-            <DetailsMenu />
+            <DetailsMenu state={clonedAccession.state} />
             <GerminationMenu accession={clonedAccession} />
           </Grid>
           <Grid item xs={9}>
