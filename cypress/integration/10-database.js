@@ -342,7 +342,7 @@ describe('Database', () => {
       cy.wait('@values');
 
       cy.get('#filter-list-state').should('not.exist');
-      cy.get('#subtitle').contains('1 total');
+      cy.get('#subtitle').contains('3 total');
     });
 
     it('Should clear state filter', () => {
@@ -553,7 +553,7 @@ describe('Database', () => {
       cy.get('#row1-active').contains('Inactive');
       cy.get('#row1').should('have.css', 'background-color', 'rgb(248, 249, 250)');
       cy.get('#row1-state').contains('Withdrawn');
-      cy.get('#row3-species').contains('Dogwood');
+      cy.get('#row5-species').contains('Dogwood');
     });
   });
 

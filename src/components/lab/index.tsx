@@ -61,13 +61,15 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
   const [testEntryOpen, setTestEntryOpen] = React.useState(false);
   const [cutTestOpen, setCutTestOpen] = React.useState(false);
   const [selectedTest, setSelectedTest] = React.useState<GerminationTest>();
+  const allowTestInGrams = Boolean(accession.estimatedSeedCount);
+  const seedsAvailable = accession.seedsRemaining ?? 0;
   const [
     selectedTestEntry,
     setSelectedTestEntry,
   ] = React.useState<Germination>();
   const date = useRecoilValue(timeSelector);
 
-  const getTotalScheduled = (): number | undefined => {
+  const getTotalScheduled = (): number => {
     const total = accession.germinationTests?.reduce(
       (acum, germinationTest) => {
         if (
@@ -80,7 +82,7 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
       },
       0
     );
-    return total;
+    return total || 0;
   };
 
   const labRows =
@@ -214,6 +216,8 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
           onClose={onCloseTestModal}
           onDelete={onDeleteTest}
           value={selectedTest}
+          allowTestInGrams={allowTestInGrams}
+          seedsAvailable={seedsAvailable}
         />
         <NewGermination
           open={testEntryOpen}
@@ -233,7 +237,7 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
           <Typography component='p'>{strings.LAB_DESCRIPTION}</Typography>
           <Divisor />
           <Grid container spacing={4}>
-            {total && (
+            {Boolean(total) && (
               <Grid item xs={6}>
                 <SummaryBox
                   id='scheduledForTesting'
@@ -272,7 +276,7 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
                     columns={TEST_ENTRY_COLUMNS}
                     defaultSort='recordingDate'
                     Renderer={LabCellRenderer}
-                    expandText={strings.SEE_ENTRIES}
+                    expandText={strings.EDIT_NUMBER_OF_GERMINATED_SEEDS}
                     onClick={onNewTestEntry}
                     onSelect={onEditTestEntry}
                   />

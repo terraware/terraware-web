@@ -57,6 +57,8 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
 
   const [open, setOpen] = React.useState(false);
   const [selectedRecord, setSelectedRecord] = React.useState<GerminationTest>();
+  const allowTestInGrams = Boolean(accession.estimatedSeedCount);
+  const seedsAvailable = accession.seedsRemaining ?? 0;
 
   const onEdit = (row: TableRowType) => {
     setSelectedRecord(row as GerminationTest);
@@ -106,7 +108,7 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
     return nurseryTests ?? [];
   };
 
-  const getTotalScheduled = (): number | undefined => {
+  const getTotalScheduled = (): number => {
     const total = accession.germinationTests?.reduce(
       (acum, germinationTest) => {
         if (
@@ -119,7 +121,7 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
       },
       0
     );
-    return total;
+    return total || 0;
   };
 
   const total = getTotalScheduled();
@@ -131,6 +133,8 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
           onClose={onCloseModal}
           onDelete={onDelete}
           value={selectedRecord}
+          allowTestInGrams={allowTestInGrams}
+          seedsAvailable={seedsAvailable}
         />
         <Paper className={classes.paper}>
           <Typography variant='h6' className={classes.bold}>
@@ -139,7 +143,7 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
           <Typography component='p'>{strings.NURSERY_DESCRIPTION}</Typography>
           <Divisor />
           <Grid container spacing={4}>
-            {total && (
+            {Boolean(total) && (
               <Grid item xs={6}>
                 <SummaryBox
                   id='scheduledForTesting'

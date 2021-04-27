@@ -15,6 +15,8 @@ describe('Nursery', () => {
     cy.get('#snackbar').contains('Accession saved');
 
     cy.get('#menu-processing-drying').click();
+    cy.get('#seedsCounted').type('500');
+
     cy.get('#Nursery').click();
 
     cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
@@ -28,8 +30,8 @@ describe('Nursery', () => {
   });
   it('should create a new test', () => {
     cy.get('#newTest').click();
+    cy.get('#seedsRemaining').should('have.value', 500)
     cy.get('#startDate').type('02/09/2021');
-    cy.get('#endDate').type('03/22/2021');
     cy.get('#seedType').click();
     cy.get('#Stored').click();
     cy.get('#substrate').click();
@@ -37,7 +39,9 @@ describe('Nursery', () => {
     cy.get('#treatment').click();
     cy.get('#Scarify').click();
     cy.get('#seedsSown').type('100');
+    cy.get('#seedsRemaining').should('have.value', '400')
     cy.get('#seedsGerminated').type('50');
+    cy.get('#viability').should('have.value', 50)
     cy.get('#recordingDate').type('02/09/2021');
     cy.get('#notes').type('A nursery test note');
     cy.get('#staffResponsible').type('Constanza');
@@ -51,7 +55,6 @@ describe('Nursery', () => {
     cy.get('#mostRecentViabiliy').should('contain', '50%');
 
     cy.get('#row1-startDate').should('contain','02/09/2021');
-    cy.get('#row1-endDate').should('contain','03/22/2021');
     cy.get('#row1-seedType').should('contain','Stored');
     cy.get('#row1-substrate').should('contain','Paper Petri Dish');
     cy.get('#row1-treatment').should('contain','Scarify');

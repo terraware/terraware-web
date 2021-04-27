@@ -16,6 +16,7 @@ describe('Lab', () => {
 
     cy.get('#menu-processing-drying').click();
     cy.get('#Lab').click();
+    cy.get('#seedsCounted').type('1000');
 
     cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
     cy.get('#saveAccession').click();
@@ -28,8 +29,8 @@ describe('Lab', () => {
   });
   it('should create a new test', () => {
     cy.get('#newTest').click();
+    cy.get('#seedsRemaining').should('have.value', 1000)
     cy.get('#startDate').type('02/09/2021');
-    cy.get('#endDate').type('03/22/2021');
     cy.get('#seedType').click();
     cy.get('#Stored').click();
     cy.get('#substrate').click();
@@ -37,6 +38,7 @@ describe('Lab', () => {
     cy.get('#treatment').click();
     cy.get('#Scarify').click();
     cy.get('#seedsSown').type('100');
+    cy.get('#seedsRemaining').should('have.value', '900')
     cy.get('#notes').type('A lab test note');
     cy.get('#staffResponsible').type('Constanza');
 
@@ -46,7 +48,6 @@ describe('Lab', () => {
     
 
     cy.get('#row1-startDate').should('contain','02/09/2021');
-    cy.get('#row1-endDate').should('contain','03/22/2021');
     cy.get('#row1-seedType').should('contain','Stored');
     cy.get('#row1-substrate').should('contain','Paper Petri Dish');
     cy.get('#row1-treatment').should('contain','Scarify');

@@ -1,5 +1,12 @@
 import DayJSUtils from '@date-io/dayjs';
-import { Box, Chip, Grid, Link, Typography } from '@material-ui/core';
+import {
+  Box,
+  Chip,
+  Grid,
+  InputAdornment,
+  Link,
+  Typography,
+} from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -39,6 +46,8 @@ export interface Props {
   open: boolean;
   onClose: (value?: GerminationTest) => void;
   onDelete: (value: GerminationTest) => void;
+  allowTestInGrams: boolean;
+  seedsAvailable: number;
 }
 
 function initTest(test?: GerminationTest): GerminationTest {
@@ -55,8 +64,22 @@ export default function NewTestDialog(props: Props): JSX.Element {
   const [record, setRecord, onChange] = useForm<GerminationTest>(
     initTest(props.value)
   );
+  const [seedsRemaining, setSeedsRemaining] = React.useState(0);
+  const [unit, setUnit] = React.useState('');
+
+  const typeOptions = props.allowTestInGrams
+    ? [
+        { label: 'seed count', value: 'count' },
+        {
+          label: 'g (gram)',
+          value: 'weight',
+        },
+      ]
+    : [{ label: 'seed count', value: 'count' }];
 
   React.useEffect(() => {
+    setUnit(props.allowTestInGrams ? '' : 'count');
+    setSeedsRemaining(props.seedsAvailable);
     if (props.open) {
       setRecord(initTest(props.value));
     }
@@ -69,6 +92,21 @@ export default function NewTestDialog(props: Props): JSX.Element {
 
   const handleOk = () => {
     onClose(record);
+  };
+
+  const OnUnitChange = (id: string, value: string) => {
+    setUnit(value);
+  };
+
+  const onQuantityChange = (id: string, _value: unknown) => {
+    const value = _value ? parseInt(_value as string) : undefined;
+    setRecord({
+      ...record,
+      seedsSown: value,
+    });
+    if (value) {
+      setSeedsRemaining(props.seedsAvailable - value);
+    }
   };
 
   return (
@@ -96,15 +134,6 @@ export default function NewTestDialog(props: Props): JSX.Element {
               <Typography component='p' variant='caption'>
                 {strings.SCHEDULE_DATE_INFO}
               </Typography>
-            </Grid>
-            <Grid item xs={6}>
-              <DatePicker
-                id='endDate'
-                value={record?.endDate}
-                onChange={onChange}
-                label={strings.END_DATE}
-                aria-label='End date'
-              />
             </Grid>
             <Grid item xs={6}>
               <Dropdown
@@ -175,11 +204,36 @@ export default function NewTestDialog(props: Props): JSX.Element {
               <TextField
                 id='seedsSown'
                 value={record?.seedsSown}
-                onChange={onChange}
+                onChange={(id, value) => {
+                  onQuantityChange(id, value);
+                }}
                 label={strings.SEEDS_SOWN}
                 type='Number'
+                endAdornment={
+                  <InputAdornment position='end'>
+                    <Dropdown
+                      id='seedsSownType'
+                      label=''
+                      selected={unit}
+                      values={typeOptions}
+                      onChange={OnUnitChange}
+                    />
+                  </InputAdornment>
+                }
               />
             </Grid>
+            {unit === 'count' && (
+              <Grid item xs={6}>
+                <TextField
+                  id='seedsRemaining'
+                  value={seedsRemaining}
+                  onChange={onChange}
+                  label={strings.SEEDS_REMAINING}
+                  disabled={true}
+                  type='Number'
+                />
+              </Grid>
+            )}
           </Grid>
           <Divisor />
           <Grid container spacing={4}>

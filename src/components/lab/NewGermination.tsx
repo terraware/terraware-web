@@ -1,5 +1,12 @@
 import DayJSUtils from '@date-io/dayjs';
-import { Box, Chip, Grid, Link, Typography } from '@material-ui/core';
+import {
+  Box,
+  Chip,
+  Grid,
+  InputAdornment,
+  Link,
+  Typography,
+} from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -91,6 +98,11 @@ export default function NewGermination(props: Props): JSX.Element {
                 onChange={onChange}
                 label={strings.SEEDS_GERMINATED}
                 type='number'
+                endAdornment={
+                  <InputAdornment position='end'>
+                    {strings.SEED_COUNT.toLowerCase()}
+                  </InputAdornment>
+                }
               />
             </Grid>
             <Grid item xs={12}>

@@ -4,6 +4,7 @@ import {
   Chip,
   DialogTitle,
   Grid,
+  InputAdornment,
   Link,
   Typography,
 } from '@material-ui/core';
@@ -45,6 +46,8 @@ export interface Props {
   open: boolean;
   onClose: (value?: GerminationTest) => void;
   onDelete: (value: GerminationTest) => void;
+  allowTestInGrams: boolean;
+  seedsAvailable: number;
 }
 
 function initTest(test?: GerminationTest): GerminationTest {
@@ -62,6 +65,10 @@ export default function NewTestDialog(props: Props): JSX.Element {
   const [record, setRecord, onChange] = useForm<GerminationTest>(
     initTest(props.value)
   );
+  const [seedsRemaining, setSeedsRemaining] = React.useState(0);
+  const [viability, setSeedsViability] = React.useState(0);
+  const [unit, setUnit] = React.useState('');
+
   React.useEffect(() => {
     setRecord(initTest(props.value));
   }, [props.open]);
@@ -78,7 +85,19 @@ export default function NewTestDialog(props: Props): JSX.Element {
   const [recordingDate, setRecordingDate] = React.useState<string>();
   const [seedsGerminated, setSeedsGerminated] = React.useState<number>();
 
+  const typeOptions = props.allowTestInGrams
+    ? [
+        { label: 'seed count', value: 'count' },
+        {
+          label: 'g (gram)',
+          value: 'weight',
+        },
+      ]
+    : [{ label: 'seed count', value: 'count' }];
+
   React.useEffect(() => {
+    setUnit(props.allowTestInGrams ? '' : 'count');
+    setSeedsRemaining(props.seedsAvailable);
     setRecordingDate(
       props.value && props.value.germinations
         ? props.value.germinations[0].recordingDate
@@ -91,6 +110,24 @@ export default function NewTestDialog(props: Props): JSX.Element {
     );
   }, [props.open]);
 
+  const OnUnitChange = (id: string, value: string) => {
+    setUnit(value);
+  };
+
+  const onQuantityChange = (id: string, _value: unknown) => {
+    const value = _value ? parseInt(_value as string) : undefined;
+    setRecord({
+      ...record,
+      seedsSown: value,
+    });
+    if (value) {
+      setSeedsRemaining(props.seedsAvailable - value);
+      if (seedsGerminated) {
+        setSeedsViability(Math.round((seedsGerminated / value) * 100));
+      }
+    }
+  };
+
   const onChangeGerminations = (id: string, value: unknown) => {
     let newRecordingDate = recordingDate;
     let newSeedsGerminated = seedsGerminated;
@@ -101,6 +138,13 @@ export default function NewTestDialog(props: Props): JSX.Element {
     } else if (id === 'seedsGerminated') {
       newSeedsGerminated = value as number;
       setSeedsGerminated(newSeedsGerminated);
+      if (record.seedsSown && record.seedsSown > 0) {
+        setSeedsViability(
+          Math.round((newSeedsGerminated / record.seedsSown) * 100)
+        );
+      } else {
+        setSeedsViability(0);
+      }
     }
 
     if (newRecordingDate && newSeedsGerminated) {
@@ -139,15 +183,6 @@ export default function NewTestDialog(props: Props): JSX.Element {
               <Typography component='p' variant='caption'>
                 {strings.SCHEDULE_DATE_INFO}
               </Typography>
-            </Grid>
-            <Grid item xs={6}>
-              <DatePicker
-                id='endDate'
-                value={record?.endDate}
-                onChange={onChange}
-                label='End date'
-                aria-label='End date'
-              />
             </Grid>
             <Grid item xs={6}>
               <Dropdown
@@ -215,11 +250,36 @@ export default function NewTestDialog(props: Props): JSX.Element {
               <TextField
                 id='seedsSown'
                 value={record?.seedsSown}
-                onChange={onChange}
+                onChange={(id, value) => {
+                  onQuantityChange(id, value);
+                }}
                 label={strings.SEEDS_SOWN}
                 type='Number'
+                endAdornment={
+                  <InputAdornment position='end'>
+                    <Dropdown
+                      id='seedsSownType'
+                      label=''
+                      selected={unit}
+                      values={typeOptions}
+                      onChange={OnUnitChange}
+                    />
+                  </InputAdornment>
+                }
               />
             </Grid>
+            {unit === 'count' && (
+              <Grid item xs={6}>
+                <TextField
+                  id='seedsRemaining'
+                  value={seedsRemaining}
+                  onChange={onChange}
+                  label={strings.SEEDS_REMAINING}
+                  disabled={true}
+                  type='Number'
+                />
+              </Grid>
+            )}
             <Grid item xs={6}>
               <TextField
                 id='seedsGerminated'
@@ -227,6 +287,17 @@ export default function NewTestDialog(props: Props): JSX.Element {
                 onChange={onChangeGerminations}
                 label={strings.SEEDS_GERMINATED}
                 type='Number'
+                endAdornment={
+                  <InputAdornment position='end'>
+                    <Dropdown
+                      id='germinatedType'
+                      label=''
+                      selected={unit}
+                      values={typeOptions}
+                      onChange={OnUnitChange}
+                    />
+                  </InputAdornment>
+                }
               />
             </Grid>
             <Grid item xs={6}>
@@ -237,6 +308,19 @@ export default function NewTestDialog(props: Props): JSX.Element {
                 label={strings.RECORDING_DATE}
                 aria-label='Recording date'
               />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                id='viability'
+                value={viability}
+                onChange={onChange}
+                label={strings.PERCENTAGE_VIABILITY}
+                disabled={true}
+                type='Number'
+              />
+              <Typography component='p' variant='caption'>
+                {strings.AUTOCALCULATED}
+              </Typography>
             </Grid>
           </Grid>
           <Divisor />
