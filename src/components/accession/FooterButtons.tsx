@@ -30,6 +30,7 @@ interface Props {
   handleCancel: () => void;
   nextStep: string;
   nextStepTo: string;
+  errors?: boolean;
 }
 
 export default function FooterButtons({
@@ -41,6 +42,7 @@ export default function FooterButtons({
   handleCancel,
   nextStep,
   nextStepTo,
+  errors,
 }: Props): JSX.Element {
   const classes = useStyles();
   return (
@@ -83,7 +85,7 @@ export default function FooterButtons({
           clickable
           color='primary'
           onClick={() => onSubmitHandler()}
-          disabled={(!isEditing || isSaving) && updating}
+          disabled={errors || ((!isEditing || isSaving) && updating)}
         />
       )}
       {((!isEditing && !isSaving) || isSaved) && updating && (

@@ -14,6 +14,7 @@ import Dropdown from '../common/Dropdown';
 import Note from '../common/Note';
 import TextArea from '../common/TextArea';
 import TextField from '../common/TextField';
+import { FieldError } from '../newAccession';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -52,6 +53,7 @@ export default function ProcessingAndDrying({
   const [isEditing, setIsEditing] = React.useState(false);
   const [isSaving, setIsSaving] = React.useState(false);
   const [isSaved, setIsSaved] = React.useState(false);
+  const [errors, setErrors] = React.useState<FieldError[]>([]);
 
   React.useEffect(() => {
     setRecord(accession);
@@ -73,9 +75,13 @@ export default function ProcessingAndDrying({
   }, []);
 
   const onSubmitHandler = () => {
-    setIsEditing(false);
-    setIsSaving(true);
-    setTimeout(() => onSubmit(record), 1000);
+    if (record.processingMethod === 'Weight' && !record.totalWeightGrams) {
+      onTotalWeightGramsChange('totalWeightGrams', '');
+    } else {
+      setIsEditing(false);
+      setIsSaving(true);
+      setTimeout(() => onSubmit(record), 1000);
+    }
   };
 
   const handleCancel = () => {
@@ -88,6 +94,7 @@ export default function ProcessingAndDrying({
 
   const OnProcessingMethodChange = (id: string, value: unknown) => {
     if (value === 'Count') {
+      setErrors([]);
       setRecord({
         ...record,
         [id]: value,
@@ -99,6 +106,25 @@ export default function ProcessingAndDrying({
     if (value === 'Weight') {
       setRecord({ ...record, [id]: value, seedsCounted: undefined });
     }
+  };
+
+  const onTotalWeightGramsChange = (id: string, value: unknown) => {
+    const newErrors = [...errors];
+    const errorIndex = newErrors.findIndex((error) => error.id === id);
+    if (!value) {
+      if (errorIndex < 0) {
+        newErrors.push({
+          id: id,
+          msg: strings.REQUIRED_FIELD,
+        });
+      }
+    } else {
+      if (errorIndex >= 0) {
+        newErrors.splice(errorIndex, 1);
+      }
+    }
+    setErrors(newErrors);
+    onChangeWeightFields(id, value);
   };
 
   const onChangeWeightFields = (id: string, value: unknown) => {
@@ -139,6 +165,11 @@ export default function ProcessingAndDrying({
     return germinationTestTypes?.includes(id);
   };
 
+  const getErrorText = (id: string) => {
+    const error = errors.find((error) => error.id === id);
+    return error ? error.msg : '';
+  };
+
   return (
     <MuiPickersUtilsProvider utils={DayJSUtils}>
       <Paper className={classes.paper}>
@@ -162,6 +193,20 @@ export default function ProcessingAndDrying({
               onChange={OnProcessingMethodChange}
             />
           </Grid>
+          {record.processingMethod === 'Weight' && (
+            <Grid item xs={4}>
+              <Dropdown
+                id='processingUnit'
+                label={strings.UNITS}
+                selected=''
+                values={[
+                  { label: strings.GR, value: 'Gr' },
+                  { label: strings.KGR, value: 'Kgr' },
+                ]}
+                onChange={() => true}
+              />
+            </Grid>
+          )}
           {(record.processingMethod === 'Count' ||
             !record.processingMethod) && (
             <Grid item xs={4} className={classes.alignMiddle}>
@@ -176,7 +221,31 @@ export default function ProcessingAndDrying({
           )}
           {record.processingMethod === 'Weight' && (
             <>
-              <Grid item xs={4} className={classes.alignMiddle}>
+              <Grid item xs={4}></Grid>
+              <Grid
+                item
+                xs={4}
+                justify='center'
+                alignItems='center'
+                wrap='nowrap'
+                direction='column'
+              >
+                <Grid item>
+                  <TextField
+                    id='totalWeightGrams'
+                    value={record.totalWeightGrams}
+                    onChange={onTotalWeightGramsChange}
+                    label={strings.TOTAL_WEIGHT_OF_SEEDS}
+                    type='number'
+                    required={true}
+                    helperText={
+                      getErrorText('totalWeightGrams') || strings.REQUIRED_FIELD
+                    }
+                    error={getErrorText('totalWeightGrams') ? true : false}
+                  />
+                </Grid>
+              </Grid>
+              <Grid item xs={4}>
                 <TextField
                   id='subsetWeightGrams'
                   value={record.subsetWeightGrams}
@@ -185,22 +254,12 @@ export default function ProcessingAndDrying({
                   type='number'
                 />
               </Grid>
-              <Grid item xs={4} className={classes.alignMiddle}>
+              <Grid item xs={4}>
                 <TextField
                   id='subsetCount'
                   value={record.subsetCount}
                   onChange={onChangeWeightFields}
                   label={strings.NUMBER_OF_SEEDS_IN_SUBSET}
-                  type='number'
-                />
-              </Grid>
-              <Grid item xs={4}></Grid>
-              <Grid item xs={4} className={classes.alignMiddle}>
-                <TextField
-                  id='totalWeightGrams'
-                  value={record.totalWeightGrams}
-                  onChange={onChangeWeightFields}
-                  label={strings.TOTAL_WEIGHT_OF_SEEDS}
                   type='number'
                 />
               </Grid>
@@ -326,6 +385,7 @@ export default function ProcessingAndDrying({
         <Grid container spacing={4}>
           <Grid item className={classes.right}>
             <FooterButtons
+              errors={errors.length > 0}
               updating={true}
               isEditing={isEditing}
               isSaving={isSaving}
