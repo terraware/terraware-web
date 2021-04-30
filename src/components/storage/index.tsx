@@ -7,12 +7,13 @@ import { Accession } from '../../api/types/accessions';
 import strings from '../../strings';
 import useForm from '../../utils/useForm';
 import FooterButtons from '../accession/FooterButtons';
-import DatePicker from '../common/DatePicker';
 import Divisor from '../common/Divisor';
 import Note from '../common/Note';
 import TextArea from '../common/TextArea';
 import TextField from '../common/TextField';
+import { FieldError } from '../newAccession';
 import LocationDropdown from './LocationDropdown';
+import { StorageStartDate } from './StorageStartDate';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -48,6 +49,7 @@ export default function Storage({ accession, onSubmit }: Props): JSX.Element {
   const [isEditing, setIsEditing] = React.useState(false);
   const [isSaving, setIsSaving] = React.useState(false);
   const [isSaved, setIsSaved] = React.useState(false);
+  const [errors, setErrors] = React.useState<FieldError[]>([]);
 
   React.useEffect(() => {
     setRecord(accession);
@@ -79,6 +81,27 @@ export default function Storage({ accession, onSubmit }: Props): JSX.Element {
     setTimeout(() => onSubmit(record), 1000);
   };
 
+  const refreshErrors = (newErrors: FieldError[]) => {
+    const previousErrors = [...errors];
+    previousErrors.map((error, index) => {
+      if (error.id === 'storageStartDate') {
+        if (newErrors.findIndex((error2) => error2.id === error.id) < 0) {
+          previousErrors.splice(index, 1);
+        }
+      }
+    });
+
+    const combinedErrors = [...previousErrors, ...newErrors].filter(
+      (error, index, self) =>
+        index ===
+        self.findIndex(
+          (otherError) =>
+            otherError.id === error.id && otherError.msg === error.msg
+        )
+    );
+    setErrors(combinedErrors);
+  };
+
   return (
     <MuiPickersUtilsProvider utils={DayJSUtils}>
       <Paper className={classes.paper}>
@@ -88,15 +111,11 @@ export default function Storage({ accession, onSubmit }: Props): JSX.Element {
         <Typography component='p'>{strings.STORAGE_DESCRIPTION}</Typography>
         <Divisor />
         <Grid container spacing={4}>
-          <Grid item xs={4}>
-            <DatePicker
-              id='storageStartDate'
-              value={record.storageStartDate}
-              onChange={onChange}
-              label={strings.STARTING_ON}
-              aria-label='Starting on'
-            />
-          </Grid>
+          <StorageStartDate
+            onChange={onChange}
+            refreshErrors={refreshErrors}
+            storageDate={record.storageStartDate}
+          />
           <Grid item xs={4}></Grid>
           <Grid item xs={4}></Grid>
           <Grid item xs={4}>
@@ -153,6 +172,7 @@ export default function Storage({ accession, onSubmit }: Props): JSX.Element {
               nextStep={strings.NEXT_WITHDRAWAL}
               onSubmitHandler={onSubmitHandler}
               handleCancel={handleCancel}
+              errors={errors.length > 0}
             />
           </Grid>
         </Grid>
