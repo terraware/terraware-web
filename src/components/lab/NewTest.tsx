@@ -25,6 +25,7 @@ import Divisor from '../common/Divisor';
 import Dropdown from '../common/Dropdown';
 import TextArea from '../common/TextArea';
 import TextField from '../common/TextField';
+import { FieldError } from '../newAccession';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -37,6 +38,9 @@ const useStyles = makeStyles((theme: Theme) =>
       justifyContent: 'space-between',
       alignItems: 'center',
       paddingLeft: theme.spacing(2),
+    },
+    adornment: {
+      marginRight: theme.spacing(1),
     },
   })
 );
@@ -66,6 +70,7 @@ export default function NewTestDialog(props: Props): JSX.Element {
   );
   const [seedsRemaining, setSeedsRemaining] = React.useState(0);
   const [unit, setUnit] = React.useState('');
+  const [errors, setErrors] = React.useState<FieldError[]>([]);
 
   const typeOptions = props.allowTestInGrams
     ? [
@@ -78,8 +83,13 @@ export default function NewTestDialog(props: Props): JSX.Element {
     : [{ label: 'seed count', value: 'count' }];
 
   React.useEffect(() => {
-    setUnit(props.allowTestInGrams ? '' : 'count');
-    setSeedsRemaining(props.seedsAvailable);
+    setErrors([]);
+    setUnit(props.allowTestInGrams ? 'weight' : 'count');
+    if (!props.allowTestInGrams) {
+      setSeedsRemaining(props.seedsAvailable);
+    } else {
+      setSeedsRemaining(0);
+    }
     if (props.open) {
       setRecord(initTest(props.value));
     }
@@ -104,8 +114,40 @@ export default function NewTestDialog(props: Props): JSX.Element {
       ...record,
       seedsSown: value,
     });
-    if (value) {
+    if (!props.allowTestInGrams && value) {
       setSeedsRemaining(props.seedsAvailable - value);
+    }
+  };
+
+  const onSeedsRemainingChange = (id: string, value: unknown) => {
+    const newErrors = [...errors];
+    const errorIndex = newErrors.findIndex((error) => error.id === id);
+    if (!value) {
+      if (errorIndex < 0) {
+        newErrors.push({
+          id: id,
+          msg: strings.REQUIRED_FIELD,
+        });
+      }
+    } else {
+      if (errorIndex >= 0) {
+        newErrors.splice(errorIndex, 1);
+      }
+    }
+    setErrors(newErrors);
+    setSeedsRemaining(value as number);
+  };
+
+  const getErrorText = (id: string) => {
+    const error = errors.find((error) => error.id === id);
+    return error ? error.msg : '';
+  };
+
+  const onSubmitHandler = () => {
+    if (unit === 'weight' && !seedsRemaining) {
+      onSeedsRemainingChange('seedsRemaining', '');
+    } else {
+      handleOk();
     }
   };
 
@@ -210,14 +252,8 @@ export default function NewTestDialog(props: Props): JSX.Element {
                 label={strings.SEEDS_SOWN}
                 type='Number'
                 endAdornment={
-                  <InputAdornment position='end'>
-                    <Dropdown
-                      id='seedsSownType'
-                      label=''
-                      selected={unit}
-                      values={typeOptions}
-                      onChange={OnUnitChange}
-                    />
+                  <InputAdornment position='end' className={classes.adornment}>
+                    {strings.SEED_COUNT.toLowerCase()}
                   </InputAdornment>
                 }
               />
@@ -231,6 +267,33 @@ export default function NewTestDialog(props: Props): JSX.Element {
                   label={strings.SEEDS_REMAINING}
                   disabled={true}
                   type='Number'
+                />
+              </Grid>
+            )}
+            {unit === 'weight' && (
+              <Grid item xs={6}>
+                <TextField
+                  id='seedsRemaining'
+                  value={seedsRemaining}
+                  onChange={onChange}
+                  label={strings.SEEDS_REMAINING}
+                  type='Number'
+                  endAdornment={
+                    <InputAdornment position='end'>
+                      <Dropdown
+                        id='seedRemainingType'
+                        label=''
+                        selected={unit}
+                        values={typeOptions}
+                        onChange={OnUnitChange}
+                      />
+                    </InputAdornment>
+                  }
+                  required={true}
+                  helperText={
+                    getErrorText('seedsRemaining') || strings.REQUIRED_FIELD
+                  }
+                  error={getErrorText('seedsRemaining') ? true : false}
                 />
               </Grid>
             )}
@@ -281,7 +344,8 @@ export default function NewTestDialog(props: Props): JSX.Element {
               label={props.value ? strings.SAVE_CHANGES : strings.CREATE_TEST}
               clickable
               color='primary'
-              onClick={handleOk}
+              disabled={errors.length > 0}
+              onClick={onSubmitHandler}
             />
           </Box>
         </Box>
