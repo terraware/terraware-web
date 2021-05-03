@@ -28,6 +28,7 @@ import Dropdown from '../common/Dropdown';
 import SummaryBox from '../common/SummaryBox';
 import TextArea from '../common/TextArea';
 import TextField from '../common/TextField';
+import { FieldError } from '../newAccession';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -70,20 +71,25 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
   const { onClose, open, onDelete } = props;
   const [withdrawRemaining, setWithdrawRemaining] = React.useState(false);
   const [remainingSeeds, setRemainingSeeds] = React.useState(0);
+  const [errors, setErrors] = React.useState<FieldError[]>([]);
+  const [withdrawalType, setWithdrawalType] = React.useState(
+    props.allowWithdrawalInGrams ? 'weight' : 'count'
+  );
 
   const [record, setRecord, onChange] = useForm<AccessionWithdrawal>(
     initWithdrawal(props.value)
   );
   React.useEffect(() => {
     setRecord(initWithdrawal(props.value));
-    setWithdrawalType(props.value?.gramsWithdrawn ? 'weight' : 'count');
+    setWithdrawalType(props.allowWithdrawalInGrams ? 'weight' : 'count');
+    setErrors([]);
+    if (!props.allowWithdrawalInGrams) {
+      setRemainingSeeds(props.seedsAvailable);
+    } else {
+      setRemainingSeeds(0);
+    }
     setWithdrawRemaining(false);
-    setRemainingSeeds(props.seedsAvailable);
   }, [props.open]);
-
-  const [withdrawalType, setWithdrawalType] = React.useState(
-    props.value?.gramsWithdrawn ? 'weight' : 'count'
-  );
 
   const handleCancel = () => {
     setRecord(initWithdrawal(props.value));
@@ -92,17 +98,6 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
 
   const handleOk = () => {
     onClose(record);
-  };
-
-  const OnQuantityTypeChange = (id: string, value: string) => {
-    const newRecord = {
-      ...record,
-      seedsWithdrawn: undefined,
-      gramsWithdrawn: undefined,
-    };
-
-    setWithdrawalType(value);
-    setRecord(newRecord);
   };
 
   const onQuantityChange = (id: string, _value: unknown) => {
@@ -160,6 +155,38 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
     ? strings.SCHEDULE_WITHDRAWAL
     : strings.WITHDRAW_SEEDS;
 
+  const getErrorText = (id: string) => {
+    const error = errors.find((error) => error.id === id);
+    return error ? error.msg : '';
+  };
+
+  const onSeedsRemainingChange = (id: string, value: unknown) => {
+    const newErrors = [...errors];
+    const errorIndex = newErrors.findIndex((error) => error.id === id);
+    if (!value) {
+      if (errorIndex < 0) {
+        newErrors.push({
+          id: id,
+          msg: strings.REQUIRED_FIELD,
+        });
+      }
+    } else {
+      if (errorIndex >= 0) {
+        newErrors.splice(errorIndex, 1);
+      }
+    }
+    setErrors(newErrors);
+    setRemainingSeeds(value as number);
+  };
+
+  const onSubmitHandler = () => {
+    if (withdrawalType === 'weight' && !remainingSeeds) {
+      onSeedsRemainingChange('remainingSeeds', '');
+    } else {
+      handleOk();
+    }
+  };
+
   return (
     <Dialog
       onClose={handleCancel}
@@ -214,7 +241,7 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
                       label=''
                       selected={withdrawalType}
                       values={withdrawalOptions}
-                      onChange={OnQuantityTypeChange}
+                      onChange={() => true}
                     />
                   </InputAdornment>
                 }
@@ -243,8 +270,32 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
                   label={strings.SEEDS_REMAINING}
                 />
               )}
+              {withdrawalType === 'weight' && (
+                <TextField
+                  id='remainingSeeds'
+                  value={remainingSeeds}
+                  onChange={onSeedsRemainingChange}
+                  label={strings.SEEDS_REMAINING}
+                  type='Number'
+                  endAdornment={
+                    <InputAdornment position='end'>
+                      <Dropdown
+                        id='seedRemainingType'
+                        label=''
+                        selected={withdrawalType}
+                        values={withdrawalOptions}
+                        onChange={() => true}
+                      />
+                    </InputAdornment>
+                  }
+                  required={true}
+                  helperText={
+                    getErrorText('remainingSeeds') || strings.REQUIRED_FIELD
+                  }
+                  error={getErrorText('remainingSeeds') ? true : false}
+                />
+              )}
             </Grid>
-
             <Grid item xs={6}>
               <TextField
                 id='destination'
@@ -322,7 +373,8 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
               label={submitText}
               clickable
               color='primary'
-              onClick={handleOk}
+              disabled={errors.length > 0}
+              onClick={onSubmitHandler}
             />
           </Box>
         </Box>
