@@ -52,7 +52,7 @@ export default function Onboarding({ isOpen, onClose }: Props): JSX.Element {
       ),
     },
     {
-      selector: '#notifications-button',
+      selector: '#help-button',
       style: { backgroundColor: theme.palette.primary.main },
       content: () => (
         <Step

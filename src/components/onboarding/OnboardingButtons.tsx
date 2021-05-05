@@ -62,7 +62,7 @@ export default function OnboardingButtons({
             clickable
             color='default'
             className={classes.nextStep}
-            onClick={() => close()}
+            onClick={close}
           />
         )}
         {current !== totalSteps - 1 && (
@@ -81,7 +81,7 @@ export default function OnboardingButtons({
               clickable
               color='primary'
               className={classes.skipTour}
-              onClick={() => close()}
+              onClick={close}
             />
           </>
         )}
