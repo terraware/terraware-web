@@ -1,4 +1,4 @@
-import DayJSUtils from '@date-io/dayjs';
+import MomentUtils from '@date-io/moment';
 import {
   Box,
   Chip,
@@ -13,7 +13,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
-import dayjs from 'dayjs';
+import moment from 'moment';
 import React from 'react';
 import { AccessionWithdrawal } from '../../api/types/accessions';
 import strings from '../../strings';
@@ -60,7 +60,7 @@ export interface Props {
 function initWithdrawal(withdrawal?: AccessionWithdrawal): AccessionWithdrawal {
   return (
     withdrawal ?? {
-      date: dayjs().format('YYYY-MM-DD'),
+      date: moment().format('YYYY-MM-DD'),
       purpose: 'Propagation',
     }
   );
@@ -146,7 +146,7 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
   const dateSubtext = schedule
     ? strings.formatString(
         strings.SCHEDULING_FOR,
-        dayjs(record.date).format('MMMM Do, YYYY')
+        moment(record.date).format('MMMM Do, YYYY')
       )
     : strings.SCHEDULE_DATE_INFO;
   const submitText = props.value
@@ -200,7 +200,7 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
         <DialogCloseButton onClick={handleCancel} />
       </DialogTitle>
       <DialogContent dividers>
-        <MuiPickersUtilsProvider utils={DayJSUtils}>
+        <MuiPickersUtilsProvider utils={MomentUtils}>
           <Grid container spacing={4}>
             <Grid item xs={12}>
               <SummaryBox

@@ -1,4 +1,4 @@
-import DayJSUtils from '@date-io/dayjs';
+import MomentUtils from '@date-io/moment';
 import { Chip, Grid, Paper, Typography } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
@@ -126,7 +126,7 @@ export default function WithdrawalView({
 
   return (
     <main>
-      <MuiPickersUtilsProvider utils={DayJSUtils}>
+      <MuiPickersUtilsProvider utils={MomentUtils}>
         <NewWithdrawal
           open={open}
           onClose={onCloseModal}

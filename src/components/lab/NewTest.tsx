@@ -1,4 +1,4 @@
-import DayJSUtils from '@date-io/dayjs';
+import MomentUtils from '@date-io/moment';
 import {
   Box,
   Chip,
@@ -163,7 +163,7 @@ export default function NewTestDialog(props: Props): JSX.Element {
         <DialogCloseButton onClick={handleCancel} />
       </DialogTitle>
       <DialogContent dividers>
-        <MuiPickersUtilsProvider utils={DayJSUtils}>
+        <MuiPickersUtilsProvider utils={MomentUtils}>
           <Grid container spacing={4}>
             <Grid item xs={6}>
               <DatePicker

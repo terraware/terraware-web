@@ -1,5 +1,5 @@
 import { Grid } from '@material-ui/core';
-import dayjs from 'dayjs';
+import moment from 'moment';
 import React from 'react';
 import { useRecoilValue, useResetRecoilState } from 'recoil';
 import timeSelector from '../../state/selectors/time';
@@ -38,7 +38,7 @@ export function AccessionDates({
   const onChangeDate = (id: string, value: unknown) => {
     const newErrors = [...dateErrors];
     const errorIndex = newErrors.findIndex((error) => error.id === id);
-    if (dayjs(value as string).isAfter(date)) {
+    if (moment(value as string).isAfter(date)) {
       if (errorIndex < 0) {
         newErrors.push({
           id: id,
@@ -69,7 +69,7 @@ export function AccessionDates({
           onChange={onChangeDate}
           label={strings.COLLECTED_ON}
           aria-label='collected on'
-          maxDate={dayjs(date).format('YYYY-MM-DD')}
+          maxDate={moment(date).format('YYYY-MM-DD')}
           helperText={getErrorText('collectedDate')}
           error={getErrorText('collectedDate') ? true : false}
           disabled={disabled}
@@ -82,7 +82,7 @@ export function AccessionDates({
           onChange={onChangeDate}
           label={strings.RECEIVED_ON}
           aria-label='received on'
-          maxDate={dayjs(date).format('YYYY-MM-DD')}
+          maxDate={moment(date).format('YYYY-MM-DD')}
           helperText={getErrorText('receivedDate')}
           error={getErrorText('receivedDate') ? true : false}
           disabled={disabled}

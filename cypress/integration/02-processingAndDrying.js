@@ -27,9 +27,9 @@ describe('Processing and Drying', () => {
     cy.get('#processingMethod + input').should('have.value', 'Count');
     cy.get('#seedsCounted').should('have.value', '300');
     cy.get('#check-Nursery').should('have.checked', 'true');
-    cy.get('#dryingStartDate').should('have.value', '01 / 01 / 2021');
-    cy.get('#dryingEndDate').should('have.value', '01 / 01 / 2021');
-    cy.get('#dryingMoveDate').should('have.value', '01 / 01 / 2021');
+    cy.get('#dryingStartDate').should('have.value', '01/01/2021');
+    cy.get('#dryingEndDate').should('have.value', '01/01/2021');
+    cy.get('#dryingMoveDate').should('have.value', '01/01/2021');
     cy.get('#processingNotes').should('have.value', 'A processing note');
     cy.get('#processingStaffResponsible').should('have.value', 'Constanza');
   });

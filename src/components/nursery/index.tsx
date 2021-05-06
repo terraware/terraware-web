@@ -1,9 +1,9 @@
-import DayJSUtils from '@date-io/dayjs';
+import MomentUtils from '@date-io/moment';
 import { Chip, Grid, Paper, Typography } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
-import dayjs from 'dayjs';
+import moment from 'moment';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 import { Accession } from '../../api/types/accessions';
@@ -113,7 +113,7 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
       (acum, germinationTest) => {
         if (
           germinationTest.testType === 'Nursery' &&
-          dayjs(germinationTest.startDate).isAfter(date)
+          moment(germinationTest.startDate).isAfter(date)
         ) {
           acum += germinationTest.seedsSown || 0;
         }
@@ -127,7 +127,7 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
   const total = getTotalScheduled();
   return (
     <main>
-      <MuiPickersUtilsProvider utils={DayJSUtils}>
+      <MuiPickersUtilsProvider utils={MomentUtils}>
         <NewTest
           open={open}
           onClose={onCloseModal}

@@ -1,4 +1,4 @@
-import DayJSUtils from '@date-io/dayjs';
+import MomentUtils from '@date-io/moment';
 import {
   Box,
   Chip,
@@ -13,7 +13,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
-import dayjs from 'dayjs';
+import moment from 'moment';
 import React from 'react';
 import { Germination } from '../../api/types/tests';
 import strings from '../../strings';
@@ -57,7 +57,7 @@ export default function NewGermination(props: Props): JSX.Element {
     return (
       entry ?? {
         seedsGerminated: 0,
-        recordingDate: dayjs().format('YYYY-MM-DD'),
+        recordingDate: moment().format('YYYY-MM-DD'),
       }
     );
   }
@@ -89,7 +89,7 @@ export default function NewGermination(props: Props): JSX.Element {
         <DialogCloseButton onClick={handleCancel} />
       </DialogTitle>
       <DialogContent dividers>
-        <MuiPickersUtilsProvider utils={DayJSUtils}>
+        <MuiPickersUtilsProvider utils={MomentUtils}>
           <Grid container spacing={4}>
             <Grid item xs={12}>
               <TextField

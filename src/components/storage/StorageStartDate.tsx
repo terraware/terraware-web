@@ -1,5 +1,5 @@
 import { Grid } from '@material-ui/core';
-import dayjs from 'dayjs';
+import moment from 'moment';
 import React from 'react';
 import { useRecoilValue, useResetRecoilState } from 'recoil';
 import timeSelector from '../../state/selectors/time';
@@ -34,7 +34,7 @@ export function StorageStartDate({
   const onChangeDate = (id: string, value: unknown) => {
     const newErrors = [...dateErrors];
     const errorIndex = newErrors.findIndex((error) => error.id === id);
-    if (dayjs(value as string).isAfter(date)) {
+    if (moment(value as string).isAfter(date)) {
       if (errorIndex < 0) {
         newErrors.push({
           id: id,
@@ -64,7 +64,7 @@ export function StorageStartDate({
         onChange={onChangeDate}
         label={strings.STARTING_ON}
         aria-label='Starting on'
-        maxDate={dayjs(date).format('YYYY-MM-DD')}
+        maxDate={moment(date).format('YYYY-MM-DD')}
         helperText={getErrorText('storageStartDate')}
         error={getErrorText('storageStartDate') ? true : false}
       />

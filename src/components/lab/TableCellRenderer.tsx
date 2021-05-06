@@ -1,5 +1,5 @@
 import { TableCell, Typography } from '@material-ui/core';
-import dayjs from 'dayjs';
+import moment from 'moment';
 import React from 'react';
 import strings from '../../strings';
 import CellRenderer, {
@@ -32,7 +32,7 @@ export default function LabCellRenderer(
             {strings.SCHEDULED_FOR}
           </Typography>
           <Typography component='p' variant='body1'>
-            {dayjs(value).format('MM/DD/YYYY')}
+            {moment(value).format('L')}
           </Typography>
         </TableCell>
       );

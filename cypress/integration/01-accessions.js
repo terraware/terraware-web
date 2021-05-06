@@ -96,8 +96,8 @@ describe('Accessions', () => {
       cy.get('#rare + input').should('have.value', 'Yes');
       cy.get('#sourcePlantOrigin + input').should('have.value', 'Outplant');
       cy.get('#fieldNotes').should('have.value', 'Some notes');
-      cy.get('#collectedDate').should('have.value', '02 / 01 / 2021');
-      cy.get('#receivedDate').should('have.value', '02 / 03 / 2021');
+      cy.get('#collectedDate').should('have.value', '02/01/2021');
+      cy.get('#receivedDate').should('have.value', '02/03/2021');
       cy.get('#primaryCollector').should('have.value', 'Carlos');
       cy.get('#secondaryCollectors0').should('have.value', 'Constanza');
       cy.get('#secondaryCollectors1').should('have.value', 'Leann');

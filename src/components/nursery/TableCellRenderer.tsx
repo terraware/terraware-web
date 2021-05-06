@@ -1,5 +1,5 @@
 import { TableCell, Typography } from '@material-ui/core';
-import dayjs from 'dayjs';
+import moment from 'moment';
 import React from 'react';
 import { GerminationTest } from '../../api/types/tests';
 import strings from '../../strings';
@@ -34,7 +34,7 @@ export default function NurseryCellRenderer(
             {strings.SCHEDULED_FOR}
           </Typography>
           <Typography component='p' variant='body1'>
-            {dayjs(value).format('MM/DD/YYYY')}
+            {moment(value).format('L')}
           </Typography>
         </TableCell>
       );

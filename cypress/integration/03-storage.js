@@ -40,7 +40,7 @@ describe('Storage', () => {
     cy.get('#saveAccession').click();
     cy.wait('@getAccession');
 
-    cy.get('#storageStartDate').should('have.value', '02 / 04 / 2021');
+    cy.get('#storageStartDate').should('have.value', '02/04/2021');
     cy.get('#storagePackets').should('have.value', '5');
     cy.get('#storageLocation + input').should('have.value', 'Refrigerator 1');
     cy.get('#storageCondition').should('have.value', 'Refrigerator');

@@ -1,4 +1,4 @@
-import DayJSUtils from '@date-io/dayjs';
+import MomentUtils from '@date-io/moment';
 import {
   Chip,
   CircularProgress,
@@ -163,7 +163,7 @@ export default function Database(): JSX.Element {
   };
 
   return (
-    <MuiPickersUtilsProvider utils={DayJSUtils}>
+    <MuiPickersUtilsProvider utils={MomentUtils}>
       <main>
         <EditColumns
           open={editColumnsModalOpen}

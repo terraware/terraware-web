@@ -1,4 +1,4 @@
-import DayJSUtils from '@date-io/dayjs';
+import MomentUtils from '@date-io/moment';
 import { Box, Chip, Grid, Typography } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -66,7 +66,7 @@ export default function NewCutTest(props: Props): JSX.Element {
         <DialogCloseButton onClick={handleCancel} />
       </DialogTitle>
       <DialogContent dividers>
-        <MuiPickersUtilsProvider utils={DayJSUtils}>
+        <MuiPickersUtilsProvider utils={MomentUtils}>
           <Grid container spacing={4}>
             <Grid item xs={12}>
               <TextField
