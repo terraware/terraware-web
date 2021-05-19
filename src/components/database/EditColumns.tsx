@@ -204,14 +204,12 @@ const sections: Section[] = [
   {
     name: 'Processing and Drying',
     options: [
+      [COLUMNS_INDEXED['dryingStartDate']],
       [
-        COLUMNS_INDEXED['remainingQuantity'],
-        COLUMNS_INDEXED['processingStartDate'],
-        COLUMNS_INDEXED['dryingStartDate'],
+        COLUMNS_INDEXED['dryingEndDate'],
         COLUMNS_INDEXED['targetStorageCondition'],
+        COLUMNS_INDEXED['processingNotes'],
       ],
-      [COLUMNS_INDEXED['processingMethod'], COLUMNS_INDEXED['dryingEndDate']],
-      [COLUMNS_INDEXED['processingNotes']],
     ],
   },
   {
@@ -229,7 +227,10 @@ const sections: Section[] = [
     name: 'Withdrawal',
     options: [
       [COLUMNS_INDEXED['withdrawalDate']],
-      [COLUMNS_INDEXED['withdrawalDestination']],
+      [
+        COLUMNS_INDEXED['withdrawalDestination'],
+        COLUMNS_INDEXED['remainingQuantity'],
+      ],
       [
         COLUMNS_INDEXED['withdrawalPurpose'],
         COLUMNS_INDEXED['withdrawalNotes'],

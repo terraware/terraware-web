@@ -141,7 +141,7 @@ const COLUMNS: DatabaseColumn[] = [
   {
     key: 'remainingQuantity',
     additionalKeys: ['remainingUnits'],
-    name: strings.NUMBER_OF_SEEDS_COUNTED,
+    name: strings.SEEDS_REMAINING,
     type: 'number',
     filter: { type: 'count_weight' },
     operation: 'or'
