@@ -1,7 +1,7 @@
 import { List, ListItem, ListItemText } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React from 'react';
-import { SearchField, SearchFilter } from '../../../api/types/search';
+import { FieldNodePayload, SearchField } from '../../../api/types/search';
 import strings from '../../../strings';
 import { Option } from '../columns';
 
@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) =>
 
 interface Props {
   field: SearchField;
-  onChange: (filter: SearchFilter) => void;
+  onChange: (filter: FieldNodePayload) => void;
   options: Option[];
   values: (string | null)[];
   isBoolean: boolean;
@@ -67,10 +67,11 @@ export default function SingleSelection(props: Props): JSX.Element {
       }
     }
 
-    const newFilter: SearchFilter = {
+    const newFilter: FieldNodePayload = {
       field: props.field,
       values: updatesValues,
       type: 'Exact',
+      operation: 'field',
     };
 
     props.onChange(newFilter);

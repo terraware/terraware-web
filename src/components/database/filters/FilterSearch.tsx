@@ -6,7 +6,7 @@ import {
 } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import React from 'react';
-import { SearchField, SearchFilter } from '../../../api/types/search';
+import { FieldNodePayload, SearchField } from '../../../api/types/search';
 import strings from '../../../strings';
 
 const useStyles = makeStyles((theme) =>
@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) =>
 
 interface Props {
   field: SearchField;
-  onChange: (filter: SearchFilter) => void;
+  onChange: (filter: FieldNodePayload) => void;
   values: (string | null)[];
 }
 
@@ -34,10 +34,11 @@ export default function Search(props: Props): JSX.Element {
   const onSearchClick = () => {
     const values = [search];
 
-    const newFilter: SearchFilter = {
+    const newFilter: FieldNodePayload = {
       field: props.field,
       values: values,
       type: 'Fuzzy',
+      operation: 'field',
     };
 
     props.onChange(newFilter);

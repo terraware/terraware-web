@@ -2,13 +2,14 @@ import { selector } from "recoil";
 import { searchValues } from "../../api/search";
 import { ListFieldValuesRequestPayload } from "../../api/types/search";
 import { COLUMNS_INDEXED } from "../../components/database/columns";
-import { searchFilterAtom, searchSelectedColumnsAtom } from "../atoms/search";
+import { searchSelectedColumnsAtom } from "../atoms/search";
+import { searchParamsSelector } from "./search";
 
 export default selector({
   key: 'searchValuesSelector',
   get: async ({ get }) => {
     const columns = get(searchSelectedColumnsAtom);
-    const filters = get(searchFilterAtom);
+    const search = get(searchParamsSelector).search;
 
     const params = {
       fields: columns.reduce((acum, value) => {
@@ -22,7 +23,7 @@ export default selector({
         }
         return acum;
       }, [] as any[]),
-      filters,
+      search,
     } as ListFieldValuesRequestPayload
 
     return (await searchValues(params));

@@ -30,7 +30,7 @@ const statusStyles = makeStyles((theme) =>
 export default function SearchCellRenderer(
   props: RendererProps<SearchResponseResults>
 ): JSX.Element {
-  const { column, value, index } = props;
+  const { column, value, index, row } = props;
 
   const id = `row${index}-${column.key}`;
   if (column.key === 'active' && typeof value === 'string' && value) {
@@ -49,6 +49,19 @@ export default function SearchCellRenderer(
           </Typography>
         </div>
       </TableCell>
+    );
+  }
+
+  if (column.key === 'remainingQuantity' && value) {
+    const units = row.remainingUnits;
+
+    return (
+      <CellRenderer
+        index={index}
+        column={column}
+        value={`${value} ${units}`}
+        row={row}
+      />
     );
   }
 

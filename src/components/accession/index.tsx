@@ -60,7 +60,7 @@ function Content(): JSX.Element {
   );
 
   React.useEffect(() => {
-    if (accession) {
+    if (accession && accession.accessionNumber) {
       if (history.location.pathname.endsWith(accession.accessionNumber)) {
         const state = accession.state;
         const newLocation = {

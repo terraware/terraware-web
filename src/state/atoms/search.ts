@@ -1,10 +1,10 @@
 import { atom } from 'recoil';
-import { SearchFilter, SearchSortOrderElement } from '../../api/types/search';
+import { SearchNodePayload, SearchSortOrderElement } from '../../api/types/search';
 import { defaultPreset } from '../../components/database/columns';
 
 export const searchFilterAtom = atom({
   key: 'searchFilterAtom',
-  default: [] as SearchFilter[],
+  default: [] as SearchNodePayload[],
 });
 
 export const searchSortAtom = atom({

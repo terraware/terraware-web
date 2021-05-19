@@ -26,9 +26,10 @@ import {
   postNotificationAsRead,
 } from '../api/notification';
 import { AccessionState } from '../api/types/accessions';
-import { SearchFilter } from '../api/types/search';
+import { FieldNodePayload } from '../api/types/search';
 import { searchFilterAtom } from '../state/atoms/search';
 import notificationsSelector from '../state/selectors/notifications';
+import strings from '../strings';
 import preventDefaultEvent from '../utils/preventDefaultEvent';
 import useStateLocation, { getLocation } from '../utils/useStateLocation';
 import NotificationIcon from './NotificationIcon';
@@ -87,10 +88,11 @@ export default function NotificationsDropdown(): JSX.Element {
 
   const onNotificationClick = async (id: string, state?: AccessionState) => {
     if (state) {
-      const filter: SearchFilter = {
+      const filter: FieldNodePayload = {
         field: 'state',
         values: [state],
         type: 'Exact',
+        operation: 'field',
       };
       setFilters([filter]);
     }
@@ -165,7 +167,7 @@ export default function NotificationsDropdown(): JSX.Element {
             </div>
             <Divider />
           </ListSubheader>
-          {notificationLoadable.state === 'hasError' && 'An error ocurred'}
+          {notificationLoadable.state === 'hasError' && strings.GENERIC_ERROR}
           {notificationLoadable.state === 'loading' && (
             <CircularProgress id='spinner-notifications' />
           )}

@@ -419,6 +419,96 @@ describe('Database', () => {
       cy.wait('@postReport');
     });
 
+    it('Should search by SeedCount', () => {
+      cy.intercept('POST', '/api/v1/seedbank/search').as('search-c');
+      cy.intercept('POST', '/api/v1/seedbank/values').as('values-c');
+      cy.get('#edit-columns').click();
+      cy.get('#remainingQuantity').click();
+      cy.get('#saveColumnsButton').click();
+      cy.wait('@search-c');
+      cy.wait('@values-c');
+      cy.get('#editColumnsDialog').should('not.exist');
+  
+      cy.intercept('POST', '/api/v1/seedbank/search').as('search');
+      cy.intercept('POST', '/api/v1/seedbank/values').as('values');
+  
+      cy.get('#filter-remainingQuantity').click();
+      cy.get('#seedCount').should('be.visible');
+      cy.get('#seedCount').click();
+  
+      cy.get('#countMinValue').clear().type('0');
+      cy.get('#countMaxValue').clear().type('10');
+      cy.get('#countMinValue').type('{esc}');
+  
+      cy.wait('@search');
+      cy.wait('@values');
+  
+      cy.get('#seedCount').should('not.exist');
+      cy.get('#subtitle').should('contain', '2 total');
+      cy.get('#row1-remainingQuantity').should('contain', '10 Seeds');
+      cy.get('#row2-remainingQuantity').should('contain', '0 Seeds');
+    });
+  
+    it('Should search by SeedCount and empty fields', () => {
+      cy.intercept('POST', '/api/v1/seedbank/search').as('search');
+      cy.intercept('POST', '/api/v1/seedbank/values').as('values');
+  
+      cy.get('#filter-remainingQuantity').click();
+      cy.get('#seedCount').should('be.visible');
+  
+      cy.get('#emptyFields').click();
+      cy.get('#countMinValue').type('{esc}');
+  
+      cy.wait('@search');
+      cy.wait('@values');
+  
+      cy.get('#seedCount').should('not.exist');
+      cy.get('#subtitle').should('contain', '9 total');
+
+      cy.get('#row1-remainingQuantity').should('contain', '10 Seeds');
+      cy.get('#row2-remainingQuantity').should('contain', '');
+    });
+
+    it('Should search by SeedWeight', () => {
+      cy.intercept('POST', '/api/v1/seedbank/search').as('search');
+      cy.intercept('POST', '/api/v1/seedbank/values').as('values');
+  
+      cy.get('#filter-remainingQuantity').click();
+      cy.get('#seedCount').should('be.visible');
+  
+      cy.get('#seedCount').click();
+      cy.get('#emptyFields').click();
+      cy.get('#seedWeight').click();
+      cy.get('#weightMinValue').clear().type('0');
+      cy.get('#weightMaxValue').clear().type('0.5');
+
+      cy.get('#processingUnit').click();
+      cy.get('#Kilograms').click();
+
+      cy.get('#countMinValue').type('{esc}');
+  
+      cy.wait('@search');
+      cy.wait('@values');
+  
+      cy.get('#seedCount').should('not.exist');
+      cy.get('#subtitle').should('contain', '2 total');
+
+      cy.get('#row1-remainingQuantity').should('contain', '500 Grams');
+      cy.get('#row2-remainingQuantity').should('contain', '0 Grams');
+    });
+  
+    it('Should clear all filters', () => {
+      cy.intercept('POST', '/api/v1/seedbank/search').as('search');
+      cy.intercept('POST', '/api/v1/seedbank/values').as('values');
+  
+      cy.get('#clearAll').click();
+  
+      cy.wait('@search');
+      cy.wait('@values');
+  
+      cy.get('#subtitle').contains('13 total');
+    });
+
     it('Should combine filters', () => {
       cy.intercept('POST', '/api/v1/seedbank/search').as('search');
       cy.intercept('POST', '/api/v1/seedbank/values').as('values');
@@ -516,7 +606,7 @@ describe('Database', () => {
     });
   });
 
-  context('Stage management', () => {
+  context('State management', () => {
     it('Should remember filters, sorting and selected columns when switching pages', () => {
       cy.intercept('POST', '/api/v1/seedbank/search').as('search');
       cy.intercept('POST', '/api/v1/seedbank/values').as('values');

@@ -13,10 +13,13 @@ type DatabaseColumnFilterType =
   | 'single_selection'
   | 'search'
   | 'date_range'
-  | 'number_range';
+  | 'number_range'
+  | 'count_weight';
 export interface DatabaseColumn extends Omit<TableColumnType, 'key'> {
   key: SearchField;
+  additionalKeys?: SearchField[];
   filter?: { type: DatabaseColumnFilterType; options?: Option[] };
+  operation?: 'or';
 }
 
 const COLUMNS: DatabaseColumn[] = [
@@ -134,6 +137,19 @@ const COLUMNS: DatabaseColumn[] = [
     name: strings.DRYING_END_DATE,
     type: 'string',
     filter: { type: 'date_range' },
+  },
+  {
+    key: 'remainingQuantity',
+    additionalKeys: ['remainingUnits'],
+    name: strings.NUMBER_OF_SEEDS_COUNTED,
+    type: 'number',
+    filter: { type: 'count_weight' },
+    operation: 'or'
+  },
+  {
+    key: 'remainingUnits',
+    name: strings.REMAINING_UNITS,
+    type: 'string',
   },
   { key: 'processingNotes', name: strings.NOTES, type: 'notes' },
   {

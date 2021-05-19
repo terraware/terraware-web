@@ -17,8 +17,9 @@ import {
   useSetRecoilState,
 } from 'recoil';
 import {
+  FieldNodePayload,
   SearchField,
-  SearchFilter,
+  SearchNodePayload,
   SearchResponseResults,
 } from '../../api/types/search';
 import {
@@ -34,6 +35,7 @@ import strings from '../../strings';
 import Table from '../common/table';
 import { Order } from '../common/table/sort';
 import PageHeader from '../PageHeader';
+import { COLUMNS_INDEXED } from './columns';
 import DownloadReportModal from './DownloadReportModal';
 import EditColumns from './EditColumns';
 import Filters from './Filters';
@@ -104,7 +106,7 @@ export default function Database(): JSX.Element {
     });
   };
 
-  const onFilterChange = (newFilters: SearchFilter[]) => {
+  const onFilterChange = (newFilters: SearchNodePayload[]) => {
     setFilters(newFilters);
   };
 
@@ -123,9 +125,30 @@ export default function Database(): JSX.Element {
         return acum;
       }, {} as Record<SearchField, boolean>);
 
-      setSearchSelectedColumns(columns);
+      const searchSelectedColumns = columns.reduce((acum, value) => {
+        acum.push(value);
+        const additionalColumns = COLUMNS_INDEXED[value].additionalKeys;
+        if (additionalColumns) {
+          return acum.concat(additionalColumns);
+        }
+        return acum;
+      }, [] as SearchField[]);
+
+      setSearchSelectedColumns(searchSelectedColumns);
       setColumns(columns);
-      const newFilters = filters.filter((f) => selectedColumns[f.field]);
+      const newFilters = filters.filter((f) => {
+        let item: FieldNodePayload | undefined = undefined;
+
+        if (f.operation === 'field') {
+          item = f;
+        } else if (f.child) {
+          item = f.child;
+        } else if (f.children && f.children.length > 0) {
+          item = f.children[0];
+        }
+
+        return item?.field ? selectedColumns[item.field] : false;
+      });
       setFilters(newFilters);
     }
     setEditColumnsModalOpen(false);

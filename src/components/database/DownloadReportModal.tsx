@@ -53,7 +53,7 @@ export default function DownloadReportModal(props: Props): JSX.Element {
     const reportParams: ExportRequestPayload = {
       fields: searchParams.fields,
       sortOrder: searchParams.sortOrder,
-      filters: searchParams.filters,
+      search: searchParams.search,
     };
 
     const reponse = await downloadReport(reportParams);

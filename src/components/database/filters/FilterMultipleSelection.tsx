@@ -1,6 +1,6 @@
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React from 'react';
-import { SearchField, SearchFilter } from '../../../api/types/search';
+import { FieldNodePayload, SearchField } from '../../../api/types/search';
 import Checkbox from '../../common/Checkbox';
 import { Option } from '../columns';
 
@@ -19,14 +19,14 @@ const useStyles = makeStyles((theme) =>
 
 interface Props {
   field: SearchField;
-  onChange: (filter: SearchFilter) => void;
+  onChange: (filter: FieldNodePayload) => void;
   options: Option[];
   values: (string | null)[];
 }
 
 export default function MultipleSelection(props: Props): JSX.Element {
   const classes = useStyles();
-  const filter = React.useRef<SearchFilter>();
+  const filter = React.useRef<FieldNodePayload>();
   const [selections, setSelections] = React.useState<(string | null)[]>(
     props.values
   );
@@ -57,6 +57,7 @@ export default function MultipleSelection(props: Props): JSX.Element {
       field: props.field,
       values: updatesValues,
       type: 'Exact',
+      operation: 'field',
     };
 
     setSelections(updatesValues);

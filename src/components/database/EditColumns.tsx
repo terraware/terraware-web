@@ -205,6 +205,7 @@ const sections: Section[] = [
     name: 'Processing and Drying',
     options: [
       [
+        COLUMNS_INDEXED['remainingQuantity'],
         COLUMNS_INDEXED['processingStartDate'],
         COLUMNS_INDEXED['dryingStartDate'],
         COLUMNS_INDEXED['targetStorageCondition'],

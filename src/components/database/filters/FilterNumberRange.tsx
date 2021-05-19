@@ -1,7 +1,7 @@
 import { createStyles, Grid, makeStyles } from '@material-ui/core';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import React from 'react';
-import { SearchField, SearchFilter } from '../../../api/types/search';
+import { FieldNodePayload, SearchField } from '../../../api/types/search';
 import TextField from '../../common/TextField';
 
 const useStyles = makeStyles((theme) =>
@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) =>
 
 interface Props {
   field: SearchField;
-  onChange: (filter: SearchFilter) => void;
+  onChange: (filter: FieldNodePayload) => void;
   values: (string | null)[];
 }
 
@@ -53,10 +53,11 @@ export default function NumberRange(props: Props): JSX.Element {
       if (minValue || maxValue) {
         const newValues = [minValue, maxValue];
 
-        const newFilter: SearchFilter = {
+        const newFilter: FieldNodePayload = {
           field: props.field,
           values: newValues,
           type: 'Range',
+          operation: 'field',
         };
 
         props.onChange(newFilter);

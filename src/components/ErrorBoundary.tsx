@@ -1,5 +1,6 @@
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 import { sendLog } from '../api/logs';
+import strings from '../strings';
 
 interface Props {
   children: ReactNode;
@@ -42,7 +43,7 @@ export default class ErrorBoundary extends Component<Props, State> {
       if (this.props.handler) {
         return <div></div>;
       } else {
-        return <div>An error ocurred</div>;
+        return <div>{strings.GENERIC_ERROR}</div>;
       }
     }
 
