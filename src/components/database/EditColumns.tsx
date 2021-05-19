@@ -210,7 +210,7 @@ const sections: Section[] = [
         COLUMNS_INDEXED['targetStorageCondition'],
       ],
       [COLUMNS_INDEXED['processingMethod'], COLUMNS_INDEXED['dryingEndDate']],
-      [COLUMNS_INDEXED['seedsCounted'], COLUMNS_INDEXED['processingNotes']],
+      [COLUMNS_INDEXED['processingNotes']],
     ],
   },
   {
@@ -227,11 +227,8 @@ const sections: Section[] = [
   {
     name: 'Withdrawal',
     options: [
-      [COLUMNS_INDEXED['withdrawalDate'], COLUMNS_INDEXED['withdrawalSeeds']],
-      [
-        COLUMNS_INDEXED['withdrawalDestination'],
-        COLUMNS_INDEXED['seedsRemaining'],
-      ],
+      [COLUMNS_INDEXED['withdrawalDate']],
+      [COLUMNS_INDEXED['withdrawalDestination']],
       [
         COLUMNS_INDEXED['withdrawalPurpose'],
         COLUMNS_INDEXED['withdrawalNotes'],

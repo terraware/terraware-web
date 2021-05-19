@@ -12,6 +12,7 @@ import SummaryBox from '../common/SummaryBox';
 import Table from '../common/table';
 import { descendingComparator } from '../common/table/sort';
 import { TableColumnType } from '../common/table/types';
+import InfoModal from './InfoModal';
 import NewWithdrawal from './NewWithdrawal';
 import WithdrawalCellRenderer from './TableCellRenderer';
 
@@ -56,24 +57,40 @@ export default function WithdrawalView({
 }: Props): JSX.Element {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
-  const [
-    selectedRecord,
-    setSelectedRecord,
-  ] = React.useState<AccessionWithdrawal>();
+  const [selectedRecord, setSelectedRecord] =
+    React.useState<AccessionWithdrawal>();
+  const [openInfoModal, setOpenInfoModal] = React.useState(false);
 
   React.useEffect(() => {
     window.scrollTo({ top: 0 });
   }, []);
 
-  const seedsTotal = accession.effectiveSeedCount ?? 0;
-  const seedsWithdrawn =
-    accession.withdrawals?.reduce((acum, value) => {
-      acum = acum + (value?.seedsWithdrawn ?? 0);
-      return acum;
-    }, 0) ?? 0;
-  const seedsAvailable = accession.seedsRemaining ?? 0;
+  const seedsTotal = accession.initialQuantity
+    ? `${accession.initialQuantity?.quantity} ${accession.initialQuantity?.units}`
+    : 0;
+  const seedsWithdrawn = `${
+    accession.totalPastWithdrawalQuantity
+      ? accession.totalPastWithdrawalQuantity?.quantity.toFixed(1)
+      : ''
+  } ${
+    accession.totalPastWithdrawalQuantity
+      ? accession.totalPastWithdrawalQuantity?.units
+      : ''
+  }\r
+   ${
+     accession.totalScheduledWithdrawalQuantity
+       ? accession.totalScheduledWithdrawalQuantity?.quantity
+       : ''
+   } ${
+    accession.totalScheduledWithdrawalQuantity
+      ? accession.totalScheduledWithdrawalQuantity?.units
+      : ''
+  } ${accession.totalScheduledWithdrawalQuantity ? strings.SCHEDULED : ''}`;
+  const seedsAvailable = accession.remainingQuantity?.quantity || 0;
 
-  const allowWithdrawalInGrams = Boolean(accession.estimatedSeedCount);
+  const allowWithdrawalInGrams = Boolean(
+    accession.processingMethod === 'Weight'
+  );
 
   const onEdit = (row: AccessionWithdrawal) => {
     setSelectedRecord(row);
@@ -106,6 +123,14 @@ export default function WithdrawalView({
     setOpen(false);
   };
 
+  const onCloseInfoModal = () => {
+    setOpenInfoModal(false);
+  };
+
+  const onOpenInfoModal = () => {
+    setOpenInfoModal(true);
+  };
+
   const isInactive = (row: AccessionWithdrawal) => {
     return row.purpose === 'Germination Testing';
   };
@@ -124,6 +149,14 @@ export default function WithdrawalView({
     setOpen(false);
   };
 
+  const hasBothWithdrawals =
+    accession.withdrawals?.some(
+      (withdrawal) => withdrawal.withdrawnQuantity?.units !== 'Seeds'
+    ) &&
+    accession.withdrawals?.some(
+      (withdrawal) => withdrawal.withdrawnQuantity?.units === 'Seeds'
+    );
+
   return (
     <main>
       <MuiPickersUtilsProvider utils={MomentUtils}>
@@ -135,6 +168,7 @@ export default function WithdrawalView({
           value={selectedRecord}
           allowWithdrawalInGrams={allowWithdrawalInGrams}
         />
+        <InfoModal open={openInfoModal} onClose={onCloseInfoModal} />
         <Paper className={classes.paper}>
           <Typography variant='h6' className={classes.bold}>
             {strings.WITHDRAWAL}
@@ -164,15 +198,21 @@ export default function WithdrawalView({
               <SummaryBox
                 id='seeds-withdrawn'
                 title={strings.SEEDS_WITHDRAWN}
-                value={seedsWithdrawn}
+                value={seedsWithdrawn.trim() || 0}
                 variant='default'
+                icon={hasBothWithdrawals}
+                onIconClick={onOpenInfoModal}
               />
             </Grid>
             <Grid item xs={4}>
               <SummaryBox
                 id='seeds-available'
                 title={strings.SEEDS_REMAINING}
-                value={seedsAvailable}
+                value={
+                  accession.remainingQuantity
+                    ? `${seedsAvailable} ${accession.remainingQuantity?.units}`
+                    : seedsAvailable
+                }
                 variant={seedsAvailable <= 0 ? 'zero' : 'available'}
               />
             </Grid>
@@ -216,6 +256,7 @@ export default function WithdrawalView({
 const COLUMNS: TableColumnType[] = [
   { key: 'date', name: strings.DATE, type: 'date' },
   { key: 'quantity', name: strings.WITHDRAWN, type: 'string' },
+  { key: 'seedsRemaining', name: strings.REMAINING, type: 'string' },
   { key: 'destination', name: strings.DESTINATION, type: 'string' },
   { key: 'purpose', name: strings.PURPOSE, type: 'string' },
   { key: 'staffResponsible', name: strings.STAFF, type: 'string' },
@@ -228,12 +269,14 @@ function sortComparator(
   orderBy: any
 ): 1 | -1 | 0 {
   if (orderBy === 'quantity') {
-    const aValue = a.gramsWithdrawn
-      ? `g ${a.gramsWithdrawn}g`
-      : `s ${a.seedsWithdrawn} seeds`;
-    const bValue = b.gramsWithdrawn
-      ? `g ${b.gramsWithdrawn}g`
-      : `s ${b.seedsWithdrawn} seeds`;
+    const aValue =
+      a.withdrawnQuantity?.units === 'Seeds'
+        ? `s ${a.withdrawnQuantity?.quantity} seeds`
+        : `g ${a.withdrawnQuantity?.grams}grams`;
+    const bValue =
+      b.withdrawnQuantity?.units === 'Seeds'
+        ? `s ${b.withdrawnQuantity?.quantity} seeds`
+        : `g ${b.withdrawnQuantity?.grams}grams`;
 
     if (bValue < aValue) {
       return -1;

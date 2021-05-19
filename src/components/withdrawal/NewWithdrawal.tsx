@@ -29,6 +29,7 @@ import SummaryBox from '../common/SummaryBox';
 import TextArea from '../common/TextArea';
 import TextField from '../common/TextField';
 import { FieldError } from '../newAccession';
+import { Unit, WEIGHT_UNITS } from '../nursery/NewTest';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -84,9 +85,11 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
     setWithdrawalType(props.allowWithdrawalInGrams ? 'weight' : 'count');
     setErrors([]);
     if (!props.allowWithdrawalInGrams) {
-      setRemainingSeeds(props.seedsAvailable);
+      setRemainingSeeds(
+        props.value?.remainingQuantity?.quantity || props.seedsAvailable
+      );
     } else {
-      setRemainingSeeds(0);
+      setRemainingSeeds(props.value?.remainingQuantity?.quantity || 0);
     }
     setWithdrawRemaining(false);
   }, [props.open]);
@@ -102,22 +105,31 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
 
   const onQuantityChange = (id: string, _value: unknown) => {
     const value = _value ? parseInt(_value as string) : undefined;
-    if (withdrawalType === 'weight') {
-      setRecord({
-        ...record,
-        seedsWithdrawn: undefined,
-        gramsWithdrawn: value,
-      });
-    } else {
-      setRecord({
-        ...record,
-        gramsWithdrawn: undefined,
-        seedsWithdrawn: value,
-      });
+    let newWithdrawnQuantity = {
+      units: record.withdrawnQuantity?.units || WEIGHT_UNITS[0].value,
+      quantity: record.withdrawnQuantity?.quantity || 0,
+      [id]: _value,
+    };
+
+    if (withdrawalType === 'count') {
+      newWithdrawnQuantity = {
+        units: record.withdrawnQuantity?.units || countUnits[0].value,
+        quantity: record.withdrawnQuantity?.quantity || 0,
+        [id]: _value,
+      };
+
       setRemainingSeeds(
-        props.seedsAvailable + (props.value?.seedsWithdrawn ?? 0) - (value ?? 0)
+        props.seedsAvailable +
+          (props.value?.withdrawnQuantity?.quantity ?? 0) -
+          (value ?? 0)
       );
     }
+    const newRecord = {
+      ...record,
+      withdrawnQuantity: newWithdrawnQuantity,
+    };
+
+    setRecord(newRecord);
   };
 
   const onWithdrawRemaining = () => {
@@ -132,15 +144,21 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
     }
   };
 
-  const withdrawalOptions = props.allowWithdrawalInGrams
-    ? [
-        { label: 'seed count', value: 'count' },
-        {
-          label: 'g (gram)',
-          value: 'weight',
-        },
-      ]
-    : [{ label: 'seed count', value: 'count' }];
+  const countUnits: Unit[] = [{ label: strings.S_SEED_COUNT, value: 'Seeds' }];
+
+  const withdrawalOptions = (includeSeedCount: boolean) => {
+    let values = [];
+    if (props.allowWithdrawalInGrams) {
+      values = [...WEIGHT_UNITS];
+
+      if (includeSeedCount) {
+        values.unshift({ label: strings.S_SEED_COUNT, value: 'Seeds' });
+      }
+    } else {
+      values = [...countUnits];
+    }
+    return values;
+  };
 
   const schedule = new Date(record.date) > new Date();
   const dateSubtext = schedule
@@ -187,6 +205,22 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
     }
   };
 
+  const onChangeRemainingQuantity = (id: string, value: unknown) => {
+    const newRemainingQuantity = {
+      units: record.remainingQuantity?.units || WEIGHT_UNITS[0].value,
+      quantity: record.remainingQuantity?.quantity || 0,
+      [id]: value,
+    };
+
+    setRecord({
+      ...record,
+      remainingQuantity: newRemainingQuantity,
+    });
+    if (id === 'quantity') {
+      onSeedsRemainingChange('remainingSeeds', value);
+    }
+  };
+
   return (
     <Dialog
       onClose={handleCancel}
@@ -206,7 +240,11 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
               <SummaryBox
                 id='modal-seeds-available'
                 title={strings.SEEDS_REMAINING}
-                value={props.seedsAvailable}
+                value={`${props.seedsAvailable} ${
+                  props.allowWithdrawalInGrams
+                    ? WEIGHT_UNITS[0].value
+                    : countUnits[0].value
+                }`}
                 variant={props.seedsAvailable === 0 ? 'zero' : 'default'}
               />
             </Grid>
@@ -224,10 +262,10 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
               </Typography>
             </Grid>
             <Grid item xs={6}></Grid>
-            <Grid item xs={6}>
+            <Grid item xs={6} id='withdrawnQuantity'>
               <TextField
                 id='quantity'
-                value={record.gramsWithdrawn ?? record.seedsWithdrawn}
+                value={record.withdrawnQuantity?.quantity}
                 onChange={(id, value) => {
                   setWithdrawRemaining(false);
                   onQuantityChange(id, value);
@@ -237,11 +275,16 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
                 endAdornment={
                   <InputAdornment position='end'>
                     <Dropdown
-                      id='quantityType'
+                      id='units'
                       label=''
-                      selected={withdrawalType}
-                      values={withdrawalOptions}
-                      onChange={() => true}
+                      selected={
+                        props.allowWithdrawalInGrams
+                          ? record.withdrawnQuantity?.units ||
+                            WEIGHT_UNITS[0].value
+                          : countUnits[0].value
+                      }
+                      values={withdrawalOptions(true)}
+                      onChange={onQuantityChange}
                     />
                   </InputAdornment>
                 }
@@ -260,31 +303,34 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
                 />
               )}
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={6} id='remainingQuantity'>
               {withdrawalType !== 'weight' && (
                 <TextField
                   id='remaining'
                   value={remainingSeeds}
                   disabled={true}
-                  onChange={onChange}
+                  onChange={onChangeRemainingQuantity}
                   label={strings.SEEDS_REMAINING}
                 />
               )}
               {withdrawalType === 'weight' && (
                 <TextField
-                  id='remainingSeeds'
-                  value={remainingSeeds}
-                  onChange={onSeedsRemainingChange}
+                  id='quantity'
+                  value={record.remainingQuantity?.quantity}
+                  onChange={onChangeRemainingQuantity}
                   label={strings.SEEDS_REMAINING}
                   type='Number'
                   endAdornment={
                     <InputAdornment position='end'>
                       <Dropdown
-                        id='seedRemainingType'
+                        id='units'
                         label=''
-                        selected={withdrawalType}
-                        values={withdrawalOptions}
-                        onChange={() => true}
+                        selected={
+                          record.remainingQuantity?.units ||
+                          WEIGHT_UNITS[0].value
+                        }
+                        values={withdrawalOptions(false)}
+                        onChange={onChangeRemainingQuantity}
                       />
                     </InputAdornment>
                   }

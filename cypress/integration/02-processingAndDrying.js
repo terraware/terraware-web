@@ -12,7 +12,7 @@ describe('Processing and Drying', () => {
   it('should add processing and drying information', () => {
     cy.get('#processingMethod').click();
     cy.get('#Count').click();
-    cy.get('#seedsCounted').type(300);
+    cy.get('#quantity').type(300);
     cy.get('#check-Nursery').click();
     cy.get('#dryingStartDate').type('01/01/2021');
     cy.get('#dryingEndDate').type('01/01/2021');
@@ -25,7 +25,7 @@ describe('Processing and Drying', () => {
     cy.wait('@getAccession');
 
     cy.get('#processingMethod + input').should('have.value', 'Count');
-    cy.get('#seedsCounted').should('have.value', '300');
+    cy.get('#quantity').should('have.value', '300');
     cy.get('#check-Nursery').should('have.checked', 'true');
     cy.get('#dryingStartDate').should('have.value', '01/01/2021');
     cy.get('#dryingEndDate').should('have.value', '01/01/2021');
@@ -38,31 +38,39 @@ describe('Processing and Drying', () => {
     cy.get('#processingMethod').click();
     cy.get('#Weight').click();
 
-    cy.get('#subsetWeightGrams').type(500);
+    cy.get('#subsetWeight').type(500);
     cy.get('#subsetCount').type(500);
-    cy.get('#totalWeightGrams').type(500);
+    cy.get('#quantity').type(500);
     cy.get('#estimatedSeedCount').should('have.value', '500');
 
     cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
     cy.get('#saveAccession').click();
     cy.wait('@getAccession');
 
-    cy.get('#subsetWeightGrams').should('have.value', '500');
+    cy.get('#subsetWeight').should('have.value', '500');
     cy.get('#estimatedSeedCount').should('have.value', '500');
 
     cy.get('#processingMethod').click();
     cy.get('#Count').click();
-    cy.get('#seedsCounted').should('have.value', '');
+    cy.get('#quantity').should('have.value', '');
 
-    cy.get('#seedsCounted').type(400);
+    cy.get('#quantity').type(400);
 
     cy.get('#processingMethod').click();
     cy.get('#Weight').click();
-    cy.get('#subsetWeightGrams').should('have.value', '');
+    cy.get('#subsetWeight').should('have.value', '');
 
     cy.get('#processingMethod').click();
     cy.get('#Count').click();
-    cy.get('#seedsCounted').should('have.value', '');
+    cy.get('#quantity').should('have.value', '');
+  });
+
+  it('should show error if processing method is weight and quantity is not filled', () => {
+    cy.get('#processingMethod').click();
+    cy.get('#Weight').click();
+
+    cy.get('#saveAccession').click()
+    cy.get('#quantity').parent().should('have.class', 'Mui-error');
   });
 
   context('Summary End Results', () => {

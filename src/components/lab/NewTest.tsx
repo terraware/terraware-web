@@ -26,6 +26,7 @@ import Dropdown from '../common/Dropdown';
 import TextArea from '../common/TextArea';
 import TextField from '../common/TextField';
 import { FieldError } from '../newAccession';
+import { WEIGHT_UNITS } from '../nursery/NewTest';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -73,22 +74,18 @@ export default function NewTestDialog(props: Props): JSX.Element {
   const [errors, setErrors] = React.useState<FieldError[]>([]);
 
   const typeOptions = props.allowTestInGrams
-    ? [
-        { label: 'seed count', value: 'count' },
-        {
-          label: 'g (gram)',
-          value: 'weight',
-        },
-      ]
-    : [{ label: 'seed count', value: 'count' }];
+    ? WEIGHT_UNITS
+    : [{ label: strings.S_SEED_COUNT, value: 'Seeds' }];
 
   React.useEffect(() => {
     setErrors([]);
     setUnit(props.allowTestInGrams ? 'weight' : 'count');
     if (!props.allowTestInGrams) {
-      setSeedsRemaining(props.seedsAvailable);
+      setSeedsRemaining(
+        props.value?.remainingQuantity?.quantity || props.seedsAvailable
+      );
     } else {
-      setSeedsRemaining(0);
+      setSeedsRemaining(props.value?.remainingQuantity?.quantity || 0);
     }
     if (props.open) {
       setRecord(initTest(props.value));
@@ -104,10 +101,6 @@ export default function NewTestDialog(props: Props): JSX.Element {
     onClose(record);
   };
 
-  const OnUnitChange = (id: string, value: string) => {
-    setUnit(value);
-  };
-
   const onQuantityChange = (id: string, _value: unknown) => {
     const value = _value ? parseInt(_value as string) : undefined;
     setRecord({
@@ -116,6 +109,24 @@ export default function NewTestDialog(props: Props): JSX.Element {
     });
     if (!props.allowTestInGrams && value) {
       setSeedsRemaining(props.seedsAvailable - value);
+    }
+  };
+
+  const onRemainingChange = (id: string, _value: unknown) => {
+    const newRemainingQuantity = {
+      units: record.remainingQuantity?.units || WEIGHT_UNITS[0].value,
+      quantity: record.remainingQuantity?.quantity || 0,
+      [id]: _value,
+    };
+
+    const newRecord = {
+      ...record,
+      remainingQuantity: newRemainingQuantity,
+    };
+
+    setRecord(newRecord);
+    if (id === 'quantity') {
+      onSeedsRemainingChange('seedsRemaining', _value);
     }
   };
 
@@ -273,19 +284,22 @@ export default function NewTestDialog(props: Props): JSX.Element {
             {unit === 'weight' && (
               <Grid item xs={6}>
                 <TextField
-                  id='seedsRemaining'
-                  value={seedsRemaining}
-                  onChange={onChange}
+                  id='quantity'
+                  value={record.remainingQuantity?.quantity}
+                  onChange={onRemainingChange}
                   label={strings.SEEDS_REMAINING}
                   type='Number'
                   endAdornment={
                     <InputAdornment position='end'>
                       <Dropdown
-                        id='seedRemainingType'
+                        id='units'
                         label=''
-                        selected={unit}
+                        selected={
+                          record.remainingQuantity?.units ||
+                          WEIGHT_UNITS[0].value
+                        }
                         values={typeOptions}
-                        onChange={OnUnitChange}
+                        onChange={onRemainingChange}
                       />
                     </InputAdornment>
                   }

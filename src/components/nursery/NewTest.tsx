@@ -70,11 +70,23 @@ export default function NewTestDialog(props: Props): JSX.Element {
     initTest(props.value)
   );
   const [seedsRemaining, setSeedsRemaining] = React.useState(0);
-  const [viability, setSeedsViability] = React.useState(0);
+  const [viability, setSeedsViability] = React.useState('');
   const [unit, setUnit] = React.useState('');
 
   React.useEffect(() => {
     setRecord(initTest(props.value));
+    if (
+      record.germinations &&
+      record.germinations[0].seedsGerminated &&
+      record.seedsSown
+    ) {
+      setSeedsViability(
+        (
+          (record.germinations[0].seedsGerminated / record.seedsSown) *
+          100
+        ).toFixed(1)
+      );
+    }
   }, [props.open]);
 
   const handleCancel = () => {
@@ -91,22 +103,18 @@ export default function NewTestDialog(props: Props): JSX.Element {
   const [errors, setErrors] = React.useState<FieldError[]>([]);
 
   const typeOptions = props.allowTestInGrams
-    ? [
-        { label: 'seed count', value: 'count' },
-        {
-          label: 'g (gram)',
-          value: 'weight',
-        },
-      ]
-    : [{ label: 'seed count', value: 'count' }];
+    ? WEIGHT_UNITS
+    : [{ label: strings.S_SEED_COUNT, value: 'Seeds' }];
 
   React.useEffect(() => {
     setErrors([]);
     setUnit(props.allowTestInGrams ? 'weight' : 'count');
     if (!props.allowTestInGrams) {
-      setSeedsRemaining(props.seedsAvailable);
+      setSeedsRemaining(
+        props.value?.remainingQuantity?.quantity || props.seedsAvailable
+      );
     } else {
-      setSeedsRemaining(0);
+      setSeedsRemaining(props.value?.remainingQuantity?.quantity || 0);
     }
     setRecordingDate(
       props.value && props.value.germinations
@@ -120,10 +128,6 @@ export default function NewTestDialog(props: Props): JSX.Element {
     );
   }, [props.open]);
 
-  const OnUnitChange = (id: string, value: string) => {
-    setUnit(value);
-  };
-
   const onQuantityChange = (id: string, _value: unknown) => {
     const value = _value ? parseInt(_value as string) : undefined;
     setRecord({
@@ -135,7 +139,7 @@ export default function NewTestDialog(props: Props): JSX.Element {
         setSeedsRemaining(props.seedsAvailable - value);
       }
       if (seedsGerminated) {
-        setSeedsViability(Math.round((seedsGerminated / value) * 100));
+        setSeedsViability(((seedsGerminated / value) * 100).toFixed(1));
       }
     }
   };
@@ -152,10 +156,10 @@ export default function NewTestDialog(props: Props): JSX.Element {
       setSeedsGerminated(newSeedsGerminated);
       if (record.seedsSown && record.seedsSown > 0) {
         setSeedsViability(
-          Math.round((newSeedsGerminated / record.seedsSown) * 100)
+          ((newSeedsGerminated / record.seedsSown) * 100).toFixed(1)
         );
       } else {
-        setSeedsViability(0);
+        setSeedsViability('');
       }
     }
 
@@ -200,6 +204,24 @@ export default function NewTestDialog(props: Props): JSX.Element {
     } else {
       handleOk();
     }
+  };
+
+  const onRemainingChange = (id: string, _value: unknown) => {
+    const newRemainingQuantity = {
+      units: record.remainingQuantity?.units || WEIGHT_UNITS[0].value,
+      quantity: record.remainingQuantity?.quantity || 0,
+      [id]: _value,
+    };
+
+    const newRecord = {
+      ...record,
+      remainingQuantity: newRemainingQuantity,
+    };
+
+    if (id === 'quantity') {
+      onSeedsRemainingChange('seedsRemaining', _value);
+    }
+    setRecord(newRecord);
   };
 
   return (
@@ -321,19 +343,22 @@ export default function NewTestDialog(props: Props): JSX.Element {
             {unit === 'weight' && (
               <Grid item xs={6}>
                 <TextField
-                  id='seedsRemaining'
-                  value={seedsRemaining}
-                  onChange={onSeedsRemainingChange}
+                  id='quantity'
+                  value={record.remainingQuantity?.quantity}
+                  onChange={onRemainingChange}
                   label={strings.SEEDS_REMAINING}
                   type='Number'
                   endAdornment={
                     <InputAdornment position='end'>
                       <Dropdown
-                        id='seedRemainingType'
+                        id='units'
                         label=''
-                        selected={unit}
+                        selected={
+                          record.remainingQuantity?.units ||
+                          WEIGHT_UNITS[0].value
+                        }
                         values={typeOptions}
-                        onChange={OnUnitChange}
+                        onChange={onRemainingChange}
                       />
                     </InputAdornment>
                   }
@@ -437,3 +462,16 @@ export default function NewTestDialog(props: Props): JSX.Element {
     </Dialog>
   );
 }
+
+export interface Unit {
+  label: string;
+  value: 'Grams' | 'Milligrams' | 'Kilograms' | 'Pounds' | 'Seeds' | 'Ounces';
+}
+
+export const WEIGHT_UNITS: Unit[] = [
+  { label: strings.G_GRAMS, value: 'Grams' },
+  { label: strings.MG_MILLIGRAMS, value: 'Milligrams' },
+  { label: strings.KG_KILOGRAMS, value: 'Kilograms' },
+  { label: strings.LB_POUNDS, value: 'Pounds' },
+  { label: strings.OZ_OUNCES, value: 'Ounces' },
+];

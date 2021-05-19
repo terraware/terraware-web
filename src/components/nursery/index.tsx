@@ -57,8 +57,8 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
 
   const [open, setOpen] = React.useState(false);
   const [selectedRecord, setSelectedRecord] = React.useState<GerminationTest>();
-  const allowTestInGrams = Boolean(accession.estimatedSeedCount);
-  const seedsAvailable = accession.seedsRemaining ?? 0;
+  const allowTestInGrams = Boolean(accession.processingMethod === 'Weight');
+  const seedsAvailable = accession.remainingQuantity?.quantity ?? 0;
 
   const onEdit = (row: TableRowType) => {
     setSelectedRecord(row as GerminationTest);

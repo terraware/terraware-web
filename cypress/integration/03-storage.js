@@ -10,7 +10,7 @@ describe('Storage', () => {
     cy.get('#menu-processing-drying').click();
     cy.get('#processingMethod').click();
     cy.get('#Count').click();
-    cy.get('#seedsCounted').type(10);
+    cy.get('#quantity').type(10);
     cy.get('#check-Nursery').click();
     cy.get('#dryingStartDate').type('01/01/2021');
     cy.get('#dryingEndDate').type('01/01/2021');

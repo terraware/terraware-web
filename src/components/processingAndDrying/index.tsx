@@ -15,6 +15,7 @@ import Note from '../common/Note';
 import TextArea from '../common/TextArea';
 import TextField from '../common/TextField';
 import { FieldError } from '../newAccession';
+import { Unit } from '../nursery/NewTest';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -75,8 +76,11 @@ export default function ProcessingAndDrying({
   }, []);
 
   const onSubmitHandler = () => {
-    if (record.processingMethod === 'Weight' && !record.totalWeightGrams) {
-      onTotalWeightGramsChange('totalWeightGrams', '');
+    if (
+      record.processingMethod === 'Weight' &&
+      !record.initialQuantity?.quantity
+    ) {
+      onTotalWeightGramsChange('quantity', '0');
     } else {
       setIsEditing(false);
       setIsSaving(true);
@@ -98,20 +102,20 @@ export default function ProcessingAndDrying({
       setRecord({
         ...record,
         [id]: value,
-        subsetWeightGrams: undefined,
+        subsetWeight: undefined,
         subsetCount: undefined,
-        totalWeightGrams: undefined,
+        initialQuantity: undefined,
       });
     }
     if (value === 'Weight') {
-      setRecord({ ...record, [id]: value, seedsCounted: undefined });
+      setRecord({ ...record, [id]: value, initialQuantity: undefined });
     }
   };
 
   const onTotalWeightGramsChange = (id: string, value: unknown) => {
     const newErrors = [...errors];
     const errorIndex = newErrors.findIndex((error) => error.id === id);
-    if (!value) {
+    if (!value || value === '0') {
       if (errorIndex < 0) {
         newErrors.push({
           id: id,
@@ -124,14 +128,28 @@ export default function ProcessingAndDrying({
       }
     }
     setErrors(newErrors);
-    onChangeWeightFields(id, value);
+    onInitialQuantityChange(id, value);
   };
 
   const onChangeWeightFields = (id: string, value: unknown) => {
-    const newRecord = {
+    let newRecord = {
       ...record,
       [id]: value,
     };
+
+    if (id === 'subsetWeight') {
+      const newSubsetWeight = {
+        units:
+          record.subsetWeight?.units ||
+          record.initialQuantity?.units ||
+          weightValues[0].value,
+        quantity: value as number,
+      };
+      newRecord = {
+        ...record,
+        subsetWeight: newSubsetWeight,
+      };
+    }
 
     setEstimatedSeedCount(calculteEstimatedSeedCount(newRecord));
     setRecord(newRecord);
@@ -170,6 +188,38 @@ export default function ProcessingAndDrying({
     return error ? error.msg : '';
   };
 
+  const onInitialQuantityChange = (id: string, value: unknown) => {
+    let newInitialQuantity = {
+      units: record.initialQuantity?.units || 'Seeds',
+      quantity: record.initialQuantity?.quantity || 0,
+      [id]: value,
+    };
+    if (record.processingMethod === 'Weight') {
+      newInitialQuantity = {
+        units: record.initialQuantity?.units || weightValues[0].value,
+        quantity: record.initialQuantity?.quantity || 0,
+        [id]: value,
+      };
+    }
+
+    const newRecord = {
+      ...record,
+      processingMethod: record.processingMethod || 'Count',
+      initialQuantity: newInitialQuantity,
+    };
+
+    setEstimatedSeedCount(calculteEstimatedSeedCount(newRecord));
+    setRecord(newRecord);
+  };
+
+  const weightValues: Unit[] = [
+    { label: strings.GRAMS, value: 'Grams' },
+    { label: strings.MILLIGRAMS, value: 'Milligrams' },
+    { label: strings.KILOGRAMS, value: 'Kilograms' },
+    { label: strings.OUNCES, value: 'Ounces' },
+    { label: strings.POUNDS, value: 'Pounds' },
+  ];
+
   return (
     <MuiPickersUtilsProvider utils={MomentUtils}>
       <Paper className={classes.paper}>
@@ -196,14 +246,13 @@ export default function ProcessingAndDrying({
           {record.processingMethod === 'Weight' && (
             <Grid item xs={4}>
               <Dropdown
-                id='processingUnit'
+                id='units'
                 label={strings.UNITS}
-                selected=''
-                values={[
-                  { label: strings.GR, value: 'Gr' },
-                  { label: strings.KGR, value: 'Kgr' },
-                ]}
-                onChange={() => true}
+                selected={
+                  record.initialQuantity?.units || weightValues[0].value
+                }
+                values={weightValues}
+                onChange={onTotalWeightGramsChange}
               />
             </Grid>
           )}
@@ -211,9 +260,9 @@ export default function ProcessingAndDrying({
             !record.processingMethod) && (
             <Grid item xs={4} className={classes.alignMiddle}>
               <TextField
-                id='seedsCounted'
-                value={record.seedsCounted}
-                onChange={onChange}
+                id='quantity'
+                value={record.initialQuantity?.quantity}
+                onChange={onInitialQuantityChange}
                 label={strings.SEED_COUNT}
                 type='Number'
               />
@@ -232,23 +281,23 @@ export default function ProcessingAndDrying({
               >
                 <Grid item>
                   <TextField
-                    id='totalWeightGrams'
-                    value={record.totalWeightGrams}
+                    id='quantity'
+                    value={record.initialQuantity?.quantity}
                     onChange={onTotalWeightGramsChange}
                     label={strings.TOTAL_WEIGHT_OF_SEEDS}
                     type='number'
                     required={true}
                     helperText={
-                      getErrorText('totalWeightGrams') || strings.REQUIRED_FIELD
+                      getErrorText('quantity') || strings.REQUIRED_FIELD
                     }
-                    error={getErrorText('totalWeightGrams') ? true : false}
+                    error={getErrorText('quantity') ? true : false}
                   />
                 </Grid>
               </Grid>
               <Grid item xs={4}>
                 <TextField
-                  id='subsetWeightGrams'
-                  value={record.subsetWeightGrams}
+                  id='subsetWeight'
+                  value={record.subsetWeight?.quantity}
                   onChange={onChangeWeightFields}
                   label={strings.SUBSET_WEIGHT}
                   type='number'
@@ -406,8 +455,8 @@ const calculteEstimatedSeedCount = (
   latestRecord: Accession
 ): number | undefined => {
   const subsetCount = latestRecord.subsetCount;
-  const totalWeightGrams = latestRecord.totalWeightGrams;
-  const subsetWeightGrams = latestRecord.subsetWeightGrams;
+  const totalWeightGrams = latestRecord.initialQuantity?.quantity;
+  const subsetWeightGrams = latestRecord.subsetWeight?.quantity;
   if (subsetCount && totalWeightGrams && subsetWeightGrams) {
     return (subsetCount * totalWeightGrams) / subsetWeightGrams;
   }

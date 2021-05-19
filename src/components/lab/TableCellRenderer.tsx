@@ -39,5 +39,25 @@ export default function LabCellRenderer(
     }
     return <CellDateRenderer id={id} value={value} />;
   }
+  if (column.key === 'seedsRemaining') {
+    return (
+      <CellRenderer
+        index={index}
+        column={column}
+        value={`${row.remainingQuantity?.quantity} ${row.remainingQuantity?.units}`}
+        row={row}
+      />
+    );
+  }
+  if (column.key === 'seedsSown') {
+    return (
+      <CellRenderer
+        index={index}
+        column={column}
+        value={`${value} Seeds`}
+        row={row}
+      />
+    );
+  }
   return <CellRenderer {...props} />;
 }

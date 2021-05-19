@@ -1,13 +1,16 @@
-import { Box, Typography } from '@material-ui/core';
+import { Box, IconButton, Typography } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
+import InfoIcon from '@material-ui/icons/Info';
 import React from 'react';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
     bold: {
       fontWeight: theme.typography.fontWeightBold,
+      whiteSpace: 'pre-line',
     },
     summaryDefault: {
+      position: 'relative',
       borderRadius: 8,
       backgroundColor: theme.palette.neutral[200],
       padding: theme.spacing(2),
@@ -31,6 +34,10 @@ const useStyles = makeStyles((theme) =>
       height: '100%',
       boxSizing: 'border-box',
     },
+    infoIcon: {
+      position: 'absolute',
+      right: theme.spacing(2),
+    },
   })
 );
 
@@ -39,6 +46,8 @@ interface Props {
   title: string;
   value: number | string;
   variant?: 'default' | 'available' | 'zero' | 'full';
+  icon?: boolean;
+  onIconClick?: () => void;
 }
 
 export default function SummaryBox({
@@ -46,6 +55,8 @@ export default function SummaryBox({
   value,
   variant = 'default',
   id,
+  icon,
+  onIconClick,
 }: Props): JSX.Element {
   const classes = useStyles();
 
@@ -60,6 +71,11 @@ export default function SummaryBox({
 
   return (
     <Box className={style} id={id}>
+      {icon && (
+        <IconButton className={classes.infoIcon} onClick={onIconClick}>
+          <InfoIcon />
+        </IconButton>
+      )}
       <Typography component='p'>{title}</Typography>
       <Typography component='p' variant='h6' className={classes.bold}>
         {value}

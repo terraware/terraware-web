@@ -12,7 +12,7 @@ export default function NurseryCellRenderer(
   props: RendererProps<GerminationTest>
 ): JSX.Element {
   const { column, row, value, index } = props;
-  if (column.key === 'recordingDate' || column.key === 'seedsGerminated') {
+  if (column.key === 'recordingDate') {
     if (row.germinations) {
       return (
         <CellRenderer
@@ -40,6 +40,59 @@ export default function NurseryCellRenderer(
       );
     }
     return <CellDateRenderer id={id} value={value} />;
+  }
+  if (column.key === 'seedsRemaining') {
+    return (
+      <CellRenderer
+        index={index}
+        column={column}
+        value={`${row.remainingQuantity?.quantity} ${row.remainingQuantity?.units}`}
+        row={row}
+      />
+    );
+  }
+  if (column.key === 'seedsGerminated') {
+    if (row.germinations) {
+      return (
+        <CellRenderer
+          index={index}
+          column={column}
+          value={`${row.germinations[0][column.key]} Seeds`}
+          row={row}
+        />
+      );
+    }
+  }
+  if (column.key === 'seedsSown') {
+    return (
+      <CellRenderer
+        index={index}
+        column={column}
+        value={`${value} Seeds`}
+        row={row}
+      />
+    );
+  }
+  if (column.key === 'viability') {
+    const id = `row${index}-${column.key}`;
+    if (
+      row.germinations &&
+      row.germinations[0].seedsGerminated &&
+      row.seedsSown
+    )
+      return (
+        <TableCell id={id} align='left'>
+          <Typography component='p' variant='body1'>
+            {`${(
+              (row.germinations[0].seedsGerminated / row.seedsSown) *
+              100
+            ).toFixed(1)}%`}
+          </Typography>
+          <Typography component='p' variant='body2' color='textSecondary'>
+            {strings.AUTOCALCULATED.toLowerCase()}
+          </Typography>
+        </TableCell>
+      );
   }
   return <CellRenderer {...props} />;
 }

@@ -135,12 +135,6 @@ const COLUMNS: DatabaseColumn[] = [
     type: 'string',
     filter: { type: 'date_range' },
   },
-  {
-    key: 'seedsCounted',
-    name: strings.NUMBER_OF_SEEDS_COUNTED,
-    type: 'number',
-    filter: { type: 'number_range' },
-  },
   { key: 'processingNotes', name: strings.NOTES, type: 'notes' },
   {
     key: 'storageStartDate',
@@ -174,21 +168,10 @@ const COLUMNS: DatabaseColumn[] = [
     filter: { type: 'date_range' },
   },
   {
-    key: 'withdrawalSeeds',
-    name: strings.NUMBER_OF_SEEDS_WITHDRAWN,
-    type: 'number',
-    filter: { type: 'number_range' },
-  },
-  {
     key: 'withdrawalDestination',
     name: strings.DESTINATION,
     type: 'string',
     filter: { type: 'multiple_selection' },
-  },
-  {
-    key: 'seedsRemaining',
-    name: strings.NUMBER_OF_SEEDS_REMAINING,
-    type: 'number',
   },
   {
     key: 'withdrawalPurpose',
@@ -320,7 +303,6 @@ const generalInventoryPreset: Preset = {
     'species',
     'siteLocation',
     'landowner',
-    'seedsCounted',
     'active',
     'state',
     'collectedDate',
@@ -331,8 +313,6 @@ const generalInventoryPreset: Preset = {
     'treesCollectedFrom',
     'estimatedSeedsIncoming',
     'storageCondition',
-    'withdrawalSeeds',
-    'seedsRemaining',
     'latestGerminationTestDate',
     'latestViabilityPercent',
   ],
@@ -353,7 +333,6 @@ const seedStoragePreset: Preset = {
     'storageCondition',
     'storageLocation',
     'storageNotes',
-    'seedsRemaining',
     'latestViabilityPercent',
   ],
 };

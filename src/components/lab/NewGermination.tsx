@@ -36,6 +36,9 @@ const useStyles = makeStyles((theme: Theme) =>
       alignItems: 'center',
       paddingLeft: theme.spacing(2),
     },
+    adornment: {
+      marginRight: theme.spacing(1),
+    },
   })
 );
 
@@ -99,7 +102,7 @@ export default function NewGermination(props: Props): JSX.Element {
                 label={strings.SEEDS_GERMINATED}
                 type='number'
                 endAdornment={
-                  <InputAdornment position='end'>
+                  <InputAdornment position='end' className={classes.adornment}>
                     {strings.SEED_COUNT.toLowerCase()}
                   </InputAdornment>
                 }

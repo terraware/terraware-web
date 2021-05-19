@@ -16,7 +16,7 @@ describe('Lab', () => {
 
     cy.get('#menu-processing-drying').click();
     cy.get('#Lab').click();
-    cy.get('#seedsCounted').type('1000');
+    cy.get('#quantity').type('1000');
 
     cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
     cy.get('#saveAccession').click();
@@ -178,7 +178,7 @@ describe('Lab', () => {
 
     cy.get('#mostRecentViabiliy').contains('10%');
     cy.get('#lab-table').scrollTo('left');
-    cy.get('#totalSeedsGerminated').contains('10 (10%)');
+    cy.get('#totalSeedsGerminated').contains('10 (10.0%)');
 
     cy.get('#row2-details #row1-seedsGerminated').should('contain', '10 seeds germinated');
     cy.get('#row2-details #row1-recordingDate').should('contain', '02/09/2021');
@@ -209,7 +209,7 @@ describe('Lab', () => {
 
     cy.get('#mostRecentViabiliy').contains('25%');
     cy.get('#row2-expand').click();
-    cy.get('#totalSeedsGerminated').contains('25 (25%)');
+    cy.get('#totalSeedsGerminated').contains('25 (25.0%)');
 
     cy.get('#row2-details #row2-seedsGerminated').contains('15 seeds germinated');
     cy.get('#row2-details #row2-recordingDate').contains('05/09/2021');

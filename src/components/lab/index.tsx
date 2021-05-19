@@ -61,12 +61,10 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
   const [testEntryOpen, setTestEntryOpen] = React.useState(false);
   const [cutTestOpen, setCutTestOpen] = React.useState(false);
   const [selectedTest, setSelectedTest] = React.useState<GerminationTest>();
-  const allowTestInGrams = Boolean(accession.estimatedSeedCount);
-  const seedsAvailable = accession.seedsRemaining ?? 0;
-  const [
-    selectedTestEntry,
-    setSelectedTestEntry,
-  ] = React.useState<Germination>();
+  const allowTestInGrams = Boolean(accession.processingMethod === 'Weight');
+  const seedsAvailable = accession.remainingQuantity?.quantity ?? 0;
+  const [selectedTestEntry, setSelectedTestEntry] =
+    React.useState<Germination>();
   const date = useRecoilValue(timeSelector);
 
   const getTotalScheduled = (): number => {

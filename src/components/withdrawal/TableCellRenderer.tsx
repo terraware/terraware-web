@@ -13,29 +13,14 @@ export default function WithdrawalCellRenderer(
 ): JSX.Element {
   const { column, value, row, index } = props;
   if (column.key === 'quantity') {
-    if (row.gramsWithdrawn) {
-      return (
-        <CellRenderer
-          index={index}
-          column={column}
-          value={`${row.gramsWithdrawn}g`}
-          row={row}
-        />
-      );
-    } else if (row.seedsWithdrawn) {
-      return (
-        <CellRenderer
-          index={index}
-          column={column}
-          value={`${row.seedsWithdrawn} seeds`}
-          row={row}
-        />
-      );
-    } else {
-      return (
-        <CellRenderer index={index} column={column} value={''} row={row} />
-      );
-    }
+    return (
+      <CellRenderer
+        index={index}
+        column={column}
+        value={`${row.withdrawnQuantity?.quantity} ${row.withdrawnQuantity?.units}`}
+        row={row}
+      />
+    );
   }
   if (column.type === 'date' && typeof value === 'string' && value) {
     const id = `row${index}-${column.key}`;
@@ -53,6 +38,16 @@ export default function WithdrawalCellRenderer(
       );
     }
     return <CellDateRenderer id={id} value={value} />;
+  }
+  if (column.key === 'seedsRemaining') {
+    return (
+      <CellRenderer
+        index={index}
+        column={column}
+        value={`${row.remainingQuantity?.quantity} ${row.remainingQuantity?.units}`}
+        row={row}
+      />
+    );
   }
   return <CellRenderer {...props} />;
 }

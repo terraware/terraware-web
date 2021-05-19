@@ -15,7 +15,7 @@ describe('Nursery', () => {
     cy.get('#snackbar').contains('Accession saved');
 
     cy.get('#menu-processing-drying').click();
-    cy.get('#seedsCounted').type('500');
+    cy.get('#quantity').type('500');
 
     cy.get('#Nursery').click();
 
@@ -41,7 +41,7 @@ describe('Nursery', () => {
     cy.get('#seedsSown').type('100');
     cy.get('#seedsRemaining').should('have.value', '400')
     cy.get('#seedsGerminated').type('50');
-    cy.get('#viability').should('have.value', 50)
+    cy.get('#viability').should('have.value', '50.0')
     cy.get('#recordingDate').type('02/09/2021');
     cy.get('#notes').type('A nursery test note');
     cy.get('#staffResponsible').type('Constanza');
@@ -65,7 +65,7 @@ describe('Nursery', () => {
   });
 
   it('should modify test', () => {
-    cy.get('#row1').click();
+    cy.get('#row1').click({force: true});
     cy.get('#substrate').click();
     cy.get('#Nursery\\ Media').click();
     cy.get('#seedsGerminated').clear().type('70');

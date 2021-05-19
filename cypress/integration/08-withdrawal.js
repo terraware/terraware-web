@@ -11,7 +11,7 @@ describe('Withdrawal', () => {
 
       cy.get('#processingMethod').click();
       cy.get('#Count').click();
-      cy.get('#seedsCounted').type(300);
+      cy.get('#quantity').type(300);
 
       cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
       cy.get('#saveAccession').click();
@@ -24,7 +24,7 @@ describe('Withdrawal', () => {
     });
 
     it('should display the initial values', () => {
-      cy.get('#total-seeds').contains('300');
+      cy.get('#total-seeds').contains('0');
       cy.get('#seeds-withdrawn').contains('0');
       cy.get('#seeds-available').contains('300');
     });
@@ -39,10 +39,10 @@ describe('Withdrawal', () => {
         'Schedule a date by selecting a future date.'
       );
 
-      cy.get('#quantityType').contains('seed count');
-      cy.get('#quantityType').click();
-      cy.get('#weight').should('not.exist');
-      cy.get('#count').click();
+      cy.get('#units').contains('seed count');
+      cy.get('#units').click();
+      cy.get('#Grams').should('not.exist');
+      cy.get('#Seeds').click();
 
       cy.get('#remaining').should('have.value', '300');
       cy.get('#quantity').type('50');
@@ -65,7 +65,7 @@ describe('Withdrawal', () => {
 
       cy.get('#row1-date').contains('Scheduled for');
       cy.get('#row1-date').contains('01/31/2030');
-      cy.get('#row1-quantity').contains('50 seeds');
+      cy.get('#row1-quantity').contains('50 Seeds');
       cy.get('#row1-destination').contains('Panama');
       cy.get('#row1-purpose').contains('Outreach or Education');
       cy.get('#row1-staffResponsible').contains('Carlos');
@@ -100,7 +100,7 @@ describe('Withdrawal', () => {
       cy.get('#seeds-available').contains('290');
 
       cy.get('#row1-date').contains('01/29/2020');
-      cy.get('#row1-quantity').contains('10 seeds');
+      cy.get('#row1-quantity').contains('10 Seeds');
       cy.get('#row1-destination').contains('USA');
       cy.get('#row1-purpose').contains('Research');
       cy.get('#row1-staffResponsible').contains('Leann');
@@ -169,7 +169,7 @@ describe('Withdrawal', () => {
       cy.get('#save-withdrawn-button').click();
       cy.wait('@getAccession');
 
-      cy.get('#seeds-withdrawn').contains('200');
+      cy.get('#seeds-withdrawn').contains('150');
       cy.get('#seeds-available').contains('100');
       cy.get('#seeds-available').should(
         'have.css',
@@ -194,7 +194,7 @@ describe('Withdrawal', () => {
       cy.get('#save-withdrawn-button').click();
       cy.wait('@getAccession');
 
-      cy.get('#seeds-withdrawn').contains('300');
+      cy.get('#seeds-withdrawn').contains('250');
       cy.get('#seeds-available').contains('0');
       cy.get('#seeds-available').should(
         'have.css',
@@ -223,9 +223,9 @@ describe('Withdrawal', () => {
       cy.get('#processingMethod').click();
       cy.get('#Weight').click();
 
-      cy.get('#subsetWeightGrams').type(100);
+      cy.get('#subsetWeight').type(100);
       cy.get('#subsetCount').type(10);
-      cy.get('#totalWeightGrams').type(100);
+      cy.get('#quantity').type(100);
 
       cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
       cy.get('#saveAccession').click();
@@ -235,7 +235,7 @@ describe('Withdrawal', () => {
     });
 
     it('should display the initial values', () => {
-      cy.get('#total-seeds').contains('10');
+      cy.get('#total-seeds').contains('0');
       cy.get('#seeds-withdrawn').contains('0');
       cy.get('#seeds-available').contains('10');
     });
@@ -245,12 +245,12 @@ describe('Withdrawal', () => {
 
       cy.get('#modal-seeds-available').contains('10');
 
-      cy.get('#quantityType').click();
-      cy.get('#weight').click();
-      cy.get('#quantityType').contains('g (gram)');
+      cy.get('#units').click();
+      cy.get('#Grams').click();
+      cy.get('#units').contains('g (grams)');
 
-      cy.get('#quantity').type('20');
-      cy.get('#remainingSeeds').type('80')
+      cy.get('#withdrawnQuantity #quantity').type('20');
+      cy.get('#remainingQuantity #quantity').type('80')
       cy.get('#date').clear().type('01/31/2030');
       cy.get('#destination').type('Panama');
       cy.get('#purpose').click();
@@ -267,7 +267,7 @@ describe('Withdrawal', () => {
 
       cy.get('#row1-date').contains('Scheduled for');
       cy.get('#row1-date').contains('01/31/2030');
-      cy.get('#row1-quantity').contains('20g');
+      cy.get('#row1-quantity').contains('20 Grams');
 
       cy.get('#row1-destination').contains('Panama');
       cy.get('#row1-purpose').contains('Outreach or Education');
@@ -282,11 +282,11 @@ describe('Withdrawal', () => {
 
       cy.get('#modal-seeds-available').contains('8');
 
-      cy.get('#quantityType').click();
-      cy.get('#weight').click();
+      cy.get('#units').click();
+      cy.get('#Grams').click();
 
-      cy.get('#quantity').clear().type('30');
-      cy.get('#remainingSeeds').type('80')
+      cy.get('#withdrawnQuantity #quantity').clear().type('30');
+      cy.get('#remainingQuantity #quantity').clear().type('7')
       cy.get('#date').clear().type('01/29/2020');
       cy.get('#destination').clear().type('USA');
       cy.get('#purpose').click();
@@ -302,7 +302,7 @@ describe('Withdrawal', () => {
       cy.get('#seeds-available').contains('7');
 
       cy.get('#row1-date').contains('01/29/2020');
-      cy.get('#row1-quantity').contains('30g');
+      cy.get('#row1-quantity').contains('30 Grams');
 
       cy.get('#row1-destination').contains('USA');
       cy.get('#row1-purpose').contains('Research');
@@ -316,8 +316,8 @@ describe('Withdrawal', () => {
       cy.get('#new-withdrawal-button').click();
       cy.get('#modal-seeds-available').contains('7');
 
-      cy.get('#quantity').type('3');
-      cy.get('#remainingSeeds').type('80')
+      cy.get('#withdrawnQuantity #quantity').type('3');
+      cy.get('#remainingQuantity #quantity').type('6')
       cy.get('#date').clear().type('01/31/2030');
       cy.get('#destination').type('Panama');
       cy.get('#purpose').click();
@@ -329,7 +329,7 @@ describe('Withdrawal', () => {
       cy.get('#save-withdrawn-button').click();
       cy.wait('@getAccession');
 
-      cy.get('#seeds-withdrawn').contains('4');
+      cy.get('#seeds-withdrawn').contains('93');
       cy.get('#seeds-available').contains('6');
       cy.get('#seeds-available').should(
         'have.css',
@@ -340,8 +340,8 @@ describe('Withdrawal', () => {
       cy.get('#new-withdrawal-button').click();
       cy.get('#modal-seeds-available').contains('6');
 
-      cy.get('#quantity').type('1');
-      cy.get('#remainingSeeds').type('80')
+      cy.get('#withdrawnQuantity #quantity').type('1');
+      cy.get('#remainingQuantity #quantity').type('5')
       cy.get('#date').clear().type('01/31/2020');
       cy.get('#destination').type('USA');
       cy.get('#purpose').click();
@@ -353,7 +353,7 @@ describe('Withdrawal', () => {
       cy.get('#save-withdrawn-button').click();
       cy.wait('@getAccession');
 
-      cy.get('#seeds-withdrawn').contains('5');
+      cy.get('#seeds-withdrawn').contains('94');
       cy.get('#seeds-available').contains('5');
       cy.get('#seeds-available').should(
         'have.css',
@@ -364,10 +364,10 @@ describe('Withdrawal', () => {
       cy.get('#new-withdrawal-button').click();
       cy.get('#modal-seeds-available').contains('5');
 
-      cy.get('#quantityType').click();
-      cy.get('#weight').click();
-      cy.get('#quantity').type('27');
-      cy.get('#remainingSeeds').type('80')
+      cy.get('#units').click();
+      cy.get('#Grams').click();
+      cy.get('#withdrawnQuantity #quantity').type('77');
+      cy.get('#remainingQuantity #quantity').type('2')
       cy.get('#date').clear().type('03/28/2020');
       cy.get('#destination').type('Paris');
       cy.get('#purpose').click();
@@ -378,16 +378,16 @@ describe('Withdrawal', () => {
       cy.get('#save-withdrawn-button').click();
       cy.wait('@getAccession');
 
-      cy.get('#seeds-withdrawn').contains('8');
+      cy.get('#seeds-withdrawn').contains('97');
       cy.get('#seeds-available').contains('2');
 
       cy.get('#new-withdrawal-button').click();
       cy.get('#modal-seeds-available').contains('2');
 
-      cy.get('#quantityType').click();
-      cy.get('#weight').click();
-      cy.get('#quantity').type('20');
-      cy.get('#remainingSeeds').type('80')
+      cy.get('#units').click();
+      cy.get('#Grams').click();
+      cy.get('#withdrawnQuantity #quantity').type('70');
+      cy.get('#remainingQuantity #quantity').type('0')
       cy.get('#date').clear().type('03/28/2020');
       cy.get('#destination').type('Paris');
       cy.get('#purpose').click();
@@ -398,7 +398,7 @@ describe('Withdrawal', () => {
       cy.get('#save-withdrawn-button').click();
       cy.wait('@getAccession');
 
-      cy.get('#seeds-withdrawn').contains('10');
+      cy.get('#seeds-withdrawn').contains('99');
       cy.get('#seeds-available').contains('0');
       cy.get('#seeds-available').should(
         'have.css',
@@ -433,10 +433,10 @@ describe('Withdrawal', () => {
 
       // by quantity
       cy.get('#table-header-quantity').click();
-      cy.get('#row1-quantity').contains('1g');
-      cy.get('#row2-quantity').contains('20g');
-      cy.get('#row4-quantity').contains('30g');
-      cy.get('#row5-quantity').contains('3g');
+      cy.get('#row1-quantity').contains('1 Grams');
+      cy.get('#row2-quantity').contains('30 Grams');
+      cy.get('#row4-quantity').contains('70 Grams');
+      cy.get('#row5-quantity').contains('77 Grams');
 
       // by destination
       cy.get('#table-header-destination').click();

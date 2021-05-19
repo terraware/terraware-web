@@ -80,10 +80,8 @@ export default function EnhancedTableDetails<T>({
   const [open, setOpen] = React.useState([false]);
 
   const [totalSeedsGerminated, setTotalSeedsGerminated] = React.useState(0);
-  const [
-    percentageTotalSeedsGerminated,
-    setPercentageTotalSeedsGerminated,
-  ] = React.useState(0);
+  const [percentageTotalSeedsGerminated, setPercentageTotalSeedsGerminated] =
+    React.useState('');
 
   const calculateTotalSeedsGerminated = () => {
     let total = 0;
@@ -98,7 +96,7 @@ export default function EnhancedTableDetails<T>({
     setTotalSeedsGerminated(total);
     if (selectedTest.seedsSown) {
       setPercentageTotalSeedsGerminated(
-        Math.round((total / selectedTest.seedsSown) * 100)
+        ((total / selectedTest.seedsSown) * 100).toFixed(1)
       );
     }
   };
