@@ -379,6 +379,7 @@ export interface components {
       | "targetStorageCondition"
       | "totalViabilityPercent"
       | "treesCollectedFrom"
+      | "viabilityTestType"
       | "withdrawalDate"
       | "withdrawalDestination"
       | "withdrawalGrams"

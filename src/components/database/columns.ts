@@ -19,7 +19,7 @@ export interface DatabaseColumn extends Omit<TableColumnType, 'key'> {
   key: SearchField;
   additionalKeys?: SearchField[];
   filter?: { type: DatabaseColumnFilterType; options?: Option[] };
-  operation?: "or" | "and" | "field" | "not";
+  operation?: 'or' | 'and' | 'field' | 'not';
 }
 
 const COLUMNS: DatabaseColumn[] = [
@@ -120,7 +120,7 @@ const COLUMNS: DatabaseColumn[] = [
     name: strings.SEEDS_TOTAL,
     type: 'number',
     filter: { type: 'count_weight' },
-    operation: 'or'
+    operation: 'or',
   },
   {
     key: 'totalUnits',
@@ -146,6 +146,12 @@ const COLUMNS: DatabaseColumn[] = [
     filter: { type: 'single_selection' },
   },
   {
+    key: 'viabilityTestType',
+    name: strings.VIABILITY_TEST_TYPE,
+    type: 'string',
+    filter: { type: 'single_selection' },
+  },
+  {
     key: 'dryingEndDate',
     name: strings.DRYING_END_DATE,
     type: 'string',
@@ -157,7 +163,7 @@ const COLUMNS: DatabaseColumn[] = [
     name: strings.SEEDS_REMAINING,
     type: 'number',
     filter: { type: 'count_weight' },
-    operation: 'or'
+    operation: 'or',
   },
   {
     key: 'remainingUnits',
@@ -196,7 +202,7 @@ const COLUMNS: DatabaseColumn[] = [
     name: strings.SEEDS_WITHDRAWN,
     type: 'number',
     filter: { type: 'count_weight' },
-    operation: 'or'
+    operation: 'or',
   },
   {
     key: 'withdrawalUnits',
