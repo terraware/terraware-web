@@ -69,24 +69,24 @@ const useStyles = makeStyles((theme) =>
 
 interface Props {
   columns: DatabaseColumn[];
-  filters: SearchNodePayload[];
+  filters: Record<string, SearchNodePayload>;
   availableValues: FieldValuesPayload;
   allValues: FieldValuesPayload;
-  onChange: (filters: SearchNodePayload[]) => void;
+  onChange: (filters: Record<string, SearchNodePayload>) => void;
 }
 
 export default function Filters(props: Props): JSX.Element {
   const classes = useStyles();
   const [popover, setPopover] = React.useState<FilterPopover>();
 
-  const onChange = (filter: SearchNodePayload) => {
-    const updatedFilters = getUpdatedFilters(filter, props.filters);
+  const onChange = (col: DatabaseColumn, filter: SearchNodePayload) => {
+    const updatedFilters = getUpdatedFilters(col, filter, props.filters);
     props.onChange(updatedFilters);
     setPopover(undefined);
   };
 
   const clearAllFilters = () => {
-    const updatedFilters: SearchNodePayload[] = [];
+    const updatedFilters: Record<string, SearchNodePayload> = {};
     props.onChange(updatedFilters);
   };
 
@@ -102,7 +102,7 @@ export default function Filters(props: Props): JSX.Element {
   };
 
   const getLabel = (col: DatabaseColumn): string => {
-    const filter = getFilter(col);
+    const filter = props.filters[col.key];
     let totalFilteredValues = filter?.values?.length ?? 0;
     const isBoolean = col.type === 'boolean';
     if (filter && totalFilteredValues && isBoolean) {
@@ -118,18 +118,6 @@ export default function Filters(props: Props): JSX.Element {
     return totalFilteredValues
       ? `${col.name} (${totalFilteredValues})`
       : col.name;
-  };
-
-  const getFilter = (col: DatabaseColumn): SearchNodePayload | undefined => {
-    const filter = props.filters.find(
-      (f) =>
-        (f.operation === 'field' &&
-          f.field === col.key &&
-          (f.values?.length ?? 0) > 0) ||
-        (f.operation === 'or' && col.operation === 'or')
-    );
-
-    return filter;
   };
 
   return (
@@ -154,7 +142,7 @@ export default function Filters(props: Props): JSX.Element {
                 label={getLabel(col)}
                 onClick={(event) => handleClick(event, col)}
                 icon={<ArrowDropDown />}
-                className={getFilter(col) ? classes.selectedFilter : ''}
+                className={props.filters[col.key] ? classes.selectedFilter : ''}
               />
             </div>
           );
@@ -177,35 +165,35 @@ export default function Filters(props: Props): JSX.Element {
 }
 
 export function getUpdatedFilters(
+  col: DatabaseColumn,
   filter: SearchNodePayload,
-  filters: SearchNodePayload[]
-): SearchNodePayload[] {
-  const updatedFilters = [...filters];
-  const filterIndex = updatedFilters.findIndex(
-    (f) =>
-      (f.operation === 'field' && f.field === filter.field) ||
-      (f.operation === 'or' && filter.operation === 'or')
-  );
-  if (filterIndex < 0) {
+  filters: Record<string, SearchNodePayload>
+): Record<string, SearchNodePayload> {
+  const updatedFilters = { ...filters };
+  const originalFilter = updatedFilters[col.key];
+
+  if (!originalFilter) {
     if (filter.operation === 'field') {
       if ((filter.values?.length ?? 0) > 0) {
-        updatedFilters.push(filter);
+        updatedFilters[col.key] = filter;
       }
     } else if (filter.operation === 'or') {
-      updatedFilters.push(filter);
+      if (filter.children.length > 0) {
+        updatedFilters[col.key] = filter;
+      }
     }
   } else {
     if (filter.operation === 'field') {
       if ((filter.values?.length ?? 0) > 0) {
-        updatedFilters.splice(filterIndex, 1, filter);
+        updatedFilters[col.key] = filter;
       } else {
-        updatedFilters.splice(filterIndex, 1);
+        delete updatedFilters[col.key];
       }
     } else if (filter.operation === 'or') {
       if (filter.children.length > 0) {
-        updatedFilters.splice(filterIndex, 1, filter);
+        updatedFilters[col.key] = filter;
       } else {
-        updatedFilters.splice(filterIndex, 1);
+        delete updatedFilters[col.key];
       }
     }
   }
@@ -234,10 +222,10 @@ type FilterPopover = { col: DatabaseColumn; anchor: HTMLDivElement | null };
 interface ChipPopoverProps {
   popover?: FilterPopover;
   columns: DatabaseColumn[];
-  filters: SearchNodePayload[];
+  filters: Record<string, SearchNodePayload>;
   availableValues: FieldValuesPayload;
   allValues: FieldValuesPayload;
-  onFilterChange: (filter: SearchNodePayload) => void;
+  onFilterChange: (col: DatabaseColumn, filter: SearchNodePayload) => void;
   onClose: () => void;
 }
 
@@ -246,7 +234,7 @@ export function SimplePopover({
   availableValues,
   allValues,
   filters,
-  onFilterChange,
+  onFilterChange: filterChange,
   onClose,
 }: ChipPopoverProps): JSX.Element {
   const classes = useStyles();
@@ -273,6 +261,12 @@ export function SimplePopover({
 
         onFilterChange(newFilter);
       }
+    }
+  };
+
+  const onFilterChange = (filter: SearchNodePayload) => {
+    if (popover?.col) {
+      filterChange(popover?.col, filter);
     }
   };
 
@@ -308,9 +302,7 @@ export function SimplePopover({
       {popover?.col.filter?.type === 'multiple_selection' && (
         <MultipleSelection
           field={popover?.col.key}
-          values={
-            filters.find((f) => f.field === popover?.col.key)?.values ?? []
-          }
+          values={filters[popover?.col.key]?.values ?? []}
           onChange={onFilterChange}
           options={getOptions(popover?.col, availableValues, allValues)}
         />
@@ -318,9 +310,7 @@ export function SimplePopover({
       {popover?.col.filter?.type === 'single_selection' && (
         <SingleSelection
           field={popover?.col.key}
-          values={
-            filters.find((f) => f.field === popover?.col.key)?.values ?? []
-          }
+          values={filters[popover?.col.key]?.values ?? []}
           onChange={onFilterChange}
           options={getOptions(popover?.col, availableValues, allValues)}
           isBoolean={Boolean(popover?.col.type === 'boolean')}
@@ -330,34 +320,28 @@ export function SimplePopover({
         <Search
           field={popover?.col.key}
           onChange={onFilterChange}
-          values={
-            filters.find((f) => f.field === popover?.col.key)?.values ?? []
-          }
+          values={filters[popover?.col.key]?.values ?? []}
         />
       )}
       {popover?.col.filter?.type === 'date_range' && (
         <DateRange
           field={popover?.col.key}
           onChange={onFilterChange}
-          values={
-            filters.find((f) => f.field === popover?.col.key)?.values ?? []
-          }
+          values={filters[popover?.col.key]?.values ?? []}
         />
       )}
       {popover?.col.filter?.type === 'number_range' && (
         <FilterNumberRange
           field={popover?.col.key}
           onChange={onFilterChange}
-          values={
-            filters.find((f) => f.field === popover?.col.key)?.values ?? []
-          }
+          values={filters[popover?.col.key]?.values ?? []}
         />
       )}
       {popover?.col.filter?.type === 'count_weight' && (
         <FilterCountWeight
           field={popover?.col.key}
           onChange={onFilterChange}
-          payloads={filters.find((f) => f.operation === 'or')?.children ?? []}
+          payloads={filters[popover?.col.key]?.children ?? []}
         />
       )}
     </Popover>

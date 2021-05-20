@@ -17,7 +17,6 @@ import {
   useSetRecoilState,
 } from 'recoil';
 import {
-  FieldNodePayload,
   SearchField,
   SearchNodePayload,
   SearchResponseResults,
@@ -106,7 +105,7 @@ export default function Database(): JSX.Element {
     });
   };
 
-  const onFilterChange = (newFilters: SearchNodePayload[]) => {
+  const onFilterChange = (newFilters: Record<string, SearchNodePayload>) => {
     setFilters(newFilters);
   };
 
@@ -120,11 +119,6 @@ export default function Database(): JSX.Element {
 
   const onCloseEditColumnsModal = (columns?: SearchField[]) => {
     if (columns) {
-      const selectedColumns = columns.reduce((acum, value) => {
-        acum[value] = true;
-        return acum;
-      }, {} as Record<SearchField, boolean>);
-
       const searchSelectedColumns = columns.reduce((acum, value) => {
         acum.push(value);
         const additionalColumns = COLUMNS_INDEXED[value].additionalKeys;
@@ -136,20 +130,7 @@ export default function Database(): JSX.Element {
 
       setSearchSelectedColumns(searchSelectedColumns);
       setColumns(columns);
-      const newFilters = filters.filter((f) => {
-        let item: FieldNodePayload | undefined = undefined;
-
-        if (f.operation === 'field') {
-          item = f;
-        } else if (f.child) {
-          item = f.child;
-        } else if (f.children && f.children.length > 0) {
-          item = f.children[0];
-        }
-
-        return item?.field ? selectedColumns[item.field] : false;
-      });
-      setFilters(newFilters);
+      setFilters(filters);
     }
     setEditColumnsModalOpen(false);
   };

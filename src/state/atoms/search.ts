@@ -4,7 +4,7 @@ import { defaultPreset } from '../../components/database/columns';
 
 export const searchFilterAtom = atom({
   key: 'searchFilterAtom',
-  default: [] as SearchNodePayload[],
+  default: {} as Record<string, SearchNodePayload>,
 });
 
 export const searchSortAtom = atom({

@@ -19,7 +19,7 @@ export interface DatabaseColumn extends Omit<TableColumnType, 'key'> {
   key: SearchField;
   additionalKeys?: SearchField[];
   filter?: { type: DatabaseColumnFilterType; options?: Option[] };
-  operation?: 'or';
+  operation?: "or" | "and" | "field" | "not";
 }
 
 const COLUMNS: DatabaseColumn[] = [

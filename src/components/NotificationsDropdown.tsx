@@ -94,7 +94,7 @@ export default function NotificationsDropdown(): JSX.Element {
         type: 'Exact',
         operation: 'field',
       };
-      setFilters([filter]);
+      setFilters({ state: filter });
     }
 
     await postNotificationAsRead(id);

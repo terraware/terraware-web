@@ -6,6 +6,7 @@ import {
   FieldNodePayload,
   OrNodePayload,
   SearchField,
+  SearchNodePayload,
 } from '../../../api/types/search';
 import strings from '../../../strings';
 import Checkbox from '../../common/Checkbox';
@@ -28,15 +29,26 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
+export type WEIGHT_QUANTITY_FIELDS = 'remainingQuantity';
+export const COUNT_WEIGHT_VALID_FIELDS: Record<
+  WEIGHT_QUANTITY_FIELDS,
+  SearchField[]
+> = {
+  remainingQuantity: ['remainingQuantity', 'remainingGrams', 'remainingUnits'],
+};
+
 interface Props {
   field: SearchField;
   onChange: (filter: OrNodePayload) => void;
-  payloads: Array<FieldNodePayload | AndNodePayload>;
+  payloads: SearchNodePayload[];
 }
 
 type Unit = 'Grams' | 'Milligrams' | 'Kilograms' | 'Pounds';
 
 export default function FilterCountWeight(props: Props): JSX.Element {
+  const fields =
+    COUNT_WEIGHT_VALID_FIELDS[props.field as WEIGHT_QUANTITY_FIELDS];
+
   const classes = useStyles();
   const filter = React.useRef<OrNodePayload>();
   const [countMinValue, setCountMinValue] = React.useState<
@@ -59,23 +71,23 @@ export default function FilterCountWeight(props: Props): JSX.Element {
   );
 
   React.useEffect(() => {
-    const remainingQuantity = props.payloads.find((p) => p.operation === 'and')
+    const quantity = props.payloads.find((p) => p.operation === 'and')
       ?.children[1].values;
 
-    const remainingGrams = props.payloads.find(
-      (p) => p.field === 'remainingGrams' && p.type === 'Range'
+    const grams = props.payloads.find(
+      (p) => p.field === fields[1] && p.type === 'Range'
     )?.values;
     const emptyFields = props.payloads.find((p) => p.type === 'Exact')?.values;
-    if (remainingQuantity) {
+    if (quantity) {
       setSeedCount(true);
-      setCountMinValue(remainingQuantity[0]);
-      setCountMaxValue(remainingQuantity[1]);
+      setCountMinValue(quantity[0]);
+      setCountMaxValue(quantity[1]);
     }
-    if (remainingGrams) {
+    if (grams) {
       setSeedWeight(true);
-      setWeightMinValue(remainingGrams[0]?.split(' ')[0]);
-      setWeightMaxValue(remainingGrams[1]?.split(' ')[0]);
-      setWeightUnit(remainingGrams[0]?.split(' ')[1] ?? WEIGHT_UNITS[0].value);
+      setWeightMinValue(grams[0]?.split(' ')[0]);
+      setWeightMaxValue(grams[1]?.split(' ')[0]);
+      setWeightUnit(grams[0]?.split(' ')[1] ?? WEIGHT_UNITS[0].value);
     }
     if (emptyFields) {
       setEmptyFields(true);
@@ -134,12 +146,12 @@ export default function FilterCountWeight(props: Props): JSX.Element {
         children: [
           {
             operation: 'field',
-            field: 'remainingUnits',
+            field: fields[2],
             values: ['Seeds'],
           },
           {
             operation: 'field',
-            field: 'remainingQuantity',
+            field: fields[0],
             type: 'Range',
             values: [
               updatedCountMinValue || null,
@@ -152,7 +164,7 @@ export default function FilterCountWeight(props: Props): JSX.Element {
     if (updatedSeedWeight && (updatedWeightMinValue || updatedWeightMaxValue)) {
       children.push({
         operation: 'field',
-        field: 'remainingGrams',
+        field: fields[1],
         type: 'Range',
         values: [
           updatedWeightMinValue
@@ -167,7 +179,7 @@ export default function FilterCountWeight(props: Props): JSX.Element {
     if (updatedEmptyFields) {
       children.push({
         operation: 'field',
-        field: 'remainingQuantity',
+        field: fields[0],
         type: 'Exact',
         values: [null],
       });
