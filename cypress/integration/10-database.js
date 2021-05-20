@@ -419,11 +419,12 @@ describe('Database', () => {
       cy.wait('@postReport');
     });
 
-    it('Should search by SeedCount', () => {
+    it('Should search by SeedsRemaining - SeedCount', () => {
       cy.intercept('POST', '/api/v1/seedbank/search').as('search-c');
       cy.intercept('POST', '/api/v1/seedbank/values').as('values-c');
       cy.get('#edit-columns').click();
       cy.get('#remainingQuantity').click();
+      cy.get('#totalQuantity').click();
       cy.get('#saveColumnsButton').click();
       cy.wait('@search-c');
       cy.wait('@values-c');
@@ -447,9 +448,10 @@ describe('Database', () => {
       cy.get('#subtitle').should('contain', '2 total');
       cy.get('#row1-remainingQuantity').should('contain', '10 Seeds');
       cy.get('#row2-remainingQuantity').should('contain', '0 Seeds');
+      cy.get('#filter-remainingQuantity').should('contain', '(1)');
     });
   
-    it('Should search by SeedCount and empty fields', () => {
+    it('Should search by SeedsRemaining - SeedCount and empty fields', () => {
       cy.intercept('POST', '/api/v1/seedbank/search').as('search');
       cy.intercept('POST', '/api/v1/seedbank/values').as('values');
   
@@ -467,9 +469,10 @@ describe('Database', () => {
 
       cy.get('#row1-remainingQuantity').should('contain', '10 Seeds');
       cy.get('#row2-remainingQuantity').should('contain', '');
+      cy.get('#filter-remainingQuantity').should('contain', '(2)');
     });
 
-    it('Should search by SeedWeight', () => {
+    it('Should search by SeedsRemaining - SeedWeight', () => {
       cy.intercept('POST', '/api/v1/seedbank/search').as('search');
       cy.intercept('POST', '/api/v1/seedbank/values').as('values');
   
@@ -495,8 +498,82 @@ describe('Database', () => {
 
       cy.get('#row1-remainingQuantity').should('contain', '500 Grams');
       cy.get('#row2-remainingQuantity').should('contain', '0 Grams');
+      cy.get('#filter-remainingQuantity').should('contain', '(1)');
     });
   
+    it('Should clear all filters', () => {
+      cy.intercept('POST', '/api/v1/seedbank/search').as('search');
+      cy.intercept('POST', '/api/v1/seedbank/values').as('values');
+  
+      cy.get('#clearAll').click();
+  
+      cy.wait('@search');
+      cy.wait('@values');
+  
+      cy.get('#subtitle').contains('13 total');
+    });
+
+    it('Should search by QuantityFfSeeds and SeedsRemaining - SeedCount', () => {
+      cy.intercept('POST', '/api/v1/seedbank/search').as('search');
+      cy.intercept('POST', '/api/v1/seedbank/values').as('values');
+  
+      cy.get('#filter-remainingQuantity').click();
+      cy.get('#seedCount').should('be.visible');
+      cy.get('#seedCount').click();
+  
+      cy.get('#countMinValue').clear().type('0');
+      cy.get('#countMaxValue').clear().type('1000');
+      cy.get('#countMinValue').type('{esc}');
+  
+      cy.wait('@search');
+      cy.wait('@values');
+  
+      cy.get('#seedCount').should('not.exist');
+      cy.get('#subtitle').should('contain', '4 total');
+      cy.get('#row1-remainingQuantity').should('contain', '10 Seeds');
+      cy.get('#row2-remainingQuantity').should('contain', '825 Seeds');
+      cy.get('#filter-remainingQuantity').should('contain', '(1)');
+
+
+      cy.intercept('POST', '/api/v1/seedbank/search').as('search');
+      cy.intercept('POST', '/api/v1/seedbank/values').as('values');
+  
+      cy.get('#filter-totalQuantity').click();
+      cy.get('#seedCount').should('be.visible');
+      cy.get('#seedCount').click();
+  
+      cy.get('#countMinValue').clear().type('200');
+      cy.get('#countMaxValue').clear().type('600');
+      cy.get('#emptyFields').click();
+      cy.get('#countMinValue').type('{esc}');
+  
+      cy.wait('@search');
+      cy.wait('@values');
+  
+      cy.get('#seedCount').should('not.exist');
+      cy.get('#subtitle').should('contain', '2 total');
+      cy.get('#row1-totalQuantity').should('contain', '500 Seeds');
+      cy.get('#row2-totalQuantity').should('contain', '300 Seeds');
+      cy.get('#filter-remainingQuantity').should('contain', '(1)');
+      cy.get('#filter-totalQuantity').should('contain', '(2)');
+
+      cy.get('#filter-totalQuantity').click();
+      cy.get('#seedCount').should('be.visible');
+      cy.get('#check-seedCount').should('have.checked', 'true');
+      cy.get('#countMinValue').should('have.value', '200');
+      cy.get('#countMaxValue').should('have.value', '600');
+      cy.get('#check-emptyFields').should('have.checked', 'true');
+      cy.get('#countMinValue').type('{esc}');
+
+      cy.get('#filter-remainingQuantity').click();
+      cy.get('#seedCount').should('be.visible');
+      cy.get('#check-seedCount').should('have.checked', 'true');
+      cy.get('#countMinValue').should('have.value', '0');
+      cy.get('#countMaxValue').should('have.value', '1000');
+      cy.get('#check-emptyFields').should('not.have.checked', 'true');
+      cy.get('#countMinValue').type('{esc}');
+    });
+
     it('Should clear all filters', () => {
       cy.intercept('POST', '/api/v1/seedbank/search').as('search');
       cy.intercept('POST', '/api/v1/seedbank/values').as('values');

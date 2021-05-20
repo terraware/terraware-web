@@ -65,5 +65,31 @@ export default function SearchCellRenderer(
     );
   }
 
+  if (column.key === 'totalQuantity' && value) {
+    const units = row.totalUnits;
+
+    return (
+      <CellRenderer
+        index={index}
+        column={column}
+        value={`${value} ${units}`}
+        row={row}
+      />
+    );
+  }
+
+  if (column.key === 'withdrawalQuantity' && value) {
+    const units = row.withdrawalUnits;
+
+    return (
+      <CellRenderer
+        index={index}
+        column={column}
+        value={`${value} ${units}`}
+        row={row}
+      />
+    );
+  }
+
   return <CellRenderer {...props} />;
 }

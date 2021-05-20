@@ -29,12 +29,21 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-export type WEIGHT_QUANTITY_FIELDS = 'remainingQuantity';
+export type WEIGHT_QUANTITY_FIELDS =
+  | 'remainingQuantity'
+  | 'totalQuantity'
+  | 'withdrawalQuantity';
 export const COUNT_WEIGHT_VALID_FIELDS: Record<
   WEIGHT_QUANTITY_FIELDS,
   SearchField[]
 > = {
   remainingQuantity: ['remainingQuantity', 'remainingGrams', 'remainingUnits'],
+  totalQuantity: ['totalQuantity', 'totalGrams', 'totalUnits'],
+  withdrawalQuantity: [
+    'withdrawalQuantity',
+    'withdrawalGrams',
+    'withdrawalUnits',
+  ],
 };
 
 interface Props {

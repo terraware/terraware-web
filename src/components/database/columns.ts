@@ -115,6 +115,19 @@ const COLUMNS: DatabaseColumn[] = [
   },
   { key: 'collectionNotes', name: strings.NOTES, type: 'notes' },
   {
+    key: 'totalQuantity',
+    additionalKeys: ['totalUnits'],
+    name: strings.SEEDS_TOTAL,
+    type: 'number',
+    filter: { type: 'count_weight' },
+    operation: 'or'
+  },
+  {
+    key: 'totalUnits',
+    name: strings.SEEDS_UNITS,
+    type: 'string',
+  },
+  {
     key: 'processingStartDate',
     name: strings.PROCESSING_START_DATE,
     type: 'date',
@@ -177,6 +190,19 @@ const COLUMNS: DatabaseColumn[] = [
     filter: { type: 'number_range' },
   },
   { key: 'storageNotes', name: strings.NOTES, type: 'notes' },
+  {
+    key: 'withdrawalQuantity',
+    additionalKeys: ['withdrawalUnits'],
+    name: strings.SEEDS_WITHDRAWN,
+    type: 'number',
+    filter: { type: 'count_weight' },
+    operation: 'or'
+  },
+  {
+    key: 'withdrawalUnits',
+    name: strings.SEEDS_WITHDRAWN_UNITS,
+    type: 'string',
+  },
   {
     key: 'withdrawalDate',
     name: strings.DATE_OF_WITHDRAWAL,
