@@ -24,15 +24,16 @@ describe('Notifications', () => {
     cy.intercept('POST', '/api/v1/seedbank/notification/**/markRead').as(
       'markRead'
     );
-    cy.intercept('POST', '/api/v1/seedbank/notification').as('notification');
     cy.intercept('POST', '/api/v1/seedbank/values').as('search');
+    cy.intercept('POST', '/api/v1/seedbank/notification').as('notification');
     cy.get('#notification4')
       .click()
       .url()
       .should('contain', '/accessions');
       cy.wait('@markRead');
-      cy.wait('@notification');
       cy.wait('@search')
+      cy.wait('@notification');
+      cy.get('#simple-popover > .MuiPaper-root').should('be.visible');
       cy.get('#simple-popover > .MuiPaper-root').type('{esc}');
       
       cy.get('#subtitle').should('contain', '1 total');
