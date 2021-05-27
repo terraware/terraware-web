@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-interface Props {
+export interface Props {
   children: string;
 }
 

@@ -1,7 +1,7 @@
 import { FormControlLabel, Radio } from '@material-ui/core';
 import React from 'react';
 
-interface Props {
+export interface Props {
   id: string;
   name: string;
   label: React.ReactNode;

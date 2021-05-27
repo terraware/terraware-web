@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-interface Props {
+export interface Props {
   id?: string;
   title: string;
   value: number | string;

@@ -117,6 +117,14 @@ Execute the following commands:
 yarn lint
 ```
 
+## Run Storybook
+
+Execute the following commands:
+
+```shell
+yarn storybook
+```
+
 ## Run End to End tests
 
 To run the test, execute the following command:

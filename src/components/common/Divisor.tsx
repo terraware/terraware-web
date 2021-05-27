@@ -1,7 +1,7 @@
 import { Box, Divider } from '@material-ui/core';
 import React from 'react';
 
-interface Props {
+export interface Props {
   mt?: number;
 }
 export default function Divisor({ mt = 3 }: Props): JSX.Element {
