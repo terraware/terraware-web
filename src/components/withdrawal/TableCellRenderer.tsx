@@ -17,7 +17,11 @@ export default function WithdrawalCellRenderer(
       <CellRenderer
         index={index}
         column={column}
-        value={`${row.withdrawnQuantity?.quantity} ${row.withdrawnQuantity?.units}`}
+        value={
+          row.withdrawnQuantity
+            ? `${row.withdrawnQuantity?.quantity} ${row.withdrawnQuantity?.units}`
+            : 0
+        }
         row={row}
       />
     );

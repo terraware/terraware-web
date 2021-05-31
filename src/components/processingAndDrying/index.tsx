@@ -241,6 +241,7 @@ export default function ProcessingAndDrying({
                 { label: strings.SEED_WEIGHT, value: 'Weight' },
               ]}
               onChange={OnProcessingMethodChange}
+              disabled={record.withdrawals && record.withdrawals.length > 0}
             />
           </Grid>
           {record.processingMethod === 'Weight' && (
