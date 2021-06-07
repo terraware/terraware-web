@@ -1,0 +1,73 @@
+import { createMuiTheme } from "@material-ui/core/styles";
+
+declare module "@material-ui/core/styles/createPalette" {
+  interface Palette {
+    neutral: Palette["grey"];
+    state: {
+      5: React.CSSProperties["color"];
+    };
+    accent: {
+      1: React.CSSProperties["color"];
+      2: React.CSSProperties["color"];
+      3: React.CSSProperties["color"];
+      4: React.CSSProperties["color"];
+    };
+  }
+  interface PaletteOptions {
+    neutral: PaletteOptions["grey"];
+    state: {
+      5: React.CSSProperties["color"];
+    };
+    accent: {
+      1: React.CSSProperties["color"];
+      2: React.CSSProperties["color"];
+      3: React.CSSProperties["color"];
+      4: React.CSSProperties["color"];
+    };
+  }
+}
+
+export default createMuiTheme({
+  overrides: {
+    MuiCssBaseline: {
+      "@global": {
+        "*::-webkit-scrollbar": {
+          "-webkit-appearance": "none",
+          width: "7px",
+          height: "7px",
+        },
+        "*::-webkit-scrollbar-thumb": {
+          borderRadius: "4px",
+          backgroundColor: "#6C757D",
+        },
+      },
+    },
+  },
+  palette: {
+    primary: {
+      main: "#00974E",
+    },
+    secondary: {
+      main: "#CD5B38",
+    },
+    state: {
+      5: "#CD5B38",
+    },
+    accent: {
+      1: "#315CAF",
+      2: "#EF9644",
+      3: "#CD5B38",
+      4: "#3F96E6",
+    },
+    neutral: {
+      50: "#F8F9FA",
+      100: "#F3F4F6",
+      200: "#E9ECEF",
+      400: "#CED4DA",
+      500: "#ADB5BD",
+      600: "#6C757D",
+      700: "#495057",
+      800: "#343A40",
+    },
+  },
+});

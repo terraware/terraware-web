@@ -1,0 +1,27 @@
+{
+    "features": [{
+      "properties": {
+        "SPECIE_ID": 960,
+        "NAME": "Coconut"
+      },
+      "geometry": {
+        "coordinates": [-75.3372987731628, 45.383321536272049]
+      }
+    }, {
+      "properties": {
+        "SPECIE_ID": 1219,
+        "NAME": "Banana"
+      },
+      "geometry": {
+        "coordinates": [-75.546518086577947, 45.467134581917357]
+      }
+    }, {
+      "properties": {
+        "SPECIE_ID": 1157,
+        "NAME": "Nicolai"
+      },
+      "geometry": {
+        "coordinates": [-75.898610599532319, 45.295014379864874]
+      }
+    }]
+  }
