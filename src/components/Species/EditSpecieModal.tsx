@@ -57,7 +57,7 @@ export default function EditSpecieModal(props: Props): JSX.Element {
     if (props.open) {
       setRecord(initSpecies(props.value));
     }
-  }, [props.open]);
+  }, [props.open, props.value, setRecord]);
 
   const handleCancel = () => {
     setRecord(initSpecies(props.value));

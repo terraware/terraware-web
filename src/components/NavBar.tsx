@@ -3,11 +3,7 @@ import AppBar from "@material-ui/core/AppBar";
 import { createStyles, makeStyles } from "@material-ui/core/styles";
 import Toolbar from "@material-ui/core/Toolbar";
 import React from "react";
-import {
-  Link as RouterLink,
-  useLocation,
-  useRouteMatch,
-} from "react-router-dom";
+import { Link as RouterLink, useRouteMatch } from "react-router-dom";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -35,13 +31,12 @@ const useStyles = makeStyles((theme) =>
 );
 
 export default function NavBar(): JSX.Element | null {
-  const location = useLocation();
   const isSpeciesRoute = useRouteMatch("/species/");
   const classes = useStyles();
   const [tabIndexSelected, setTabIndexSelected] = React.useState(0);
   React.useEffect(() => {
     setTabIndexSelected(isSpeciesRoute ? 1 : 0);
-  }, [location]);
+  }, [isSpeciesRoute]);
 
   return (
     <AppBar position="static" className={classes.appBar} elevation={1}>

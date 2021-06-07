@@ -6,7 +6,7 @@ import { SpecieMap } from "../Map";
 export default function GeolocationCellRenderer(
   props: RendererProps<SpecieMap>
 ): JSX.Element {
-  const { column, value, row, index } = props;
+  const { column, row, index } = props;
   if (column.key === "name") {
     return (
       <CellRenderer

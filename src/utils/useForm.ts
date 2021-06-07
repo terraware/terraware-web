@@ -1,8 +1,8 @@
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useState } from "react";
 
 type Handler = (id: string, value: unknown) => void;
 
-export default <T>(
+const useForm = <T>(
   originalRecord: T
 ): [T, Dispatch<SetStateAction<T>>, Handler] => {
   const [record, setRecord] = useState(originalRecord);
@@ -12,3 +12,5 @@ export default <T>(
   };
   return [record, setRecord, onChange];
 };
+
+export default useForm;
