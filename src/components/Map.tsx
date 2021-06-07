@@ -22,7 +22,9 @@ function Map() {
 
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
-    googleMapsApiKey: process.env.REACT_APP_GOOGLE_KEY || "tokyo-rider-300113",
+    googleMapsApiKey:
+      process.env.REACT_APP_GOOGLE_KEY ||
+      "AIzaSyD2fuvCA8pud6zvJxmzWpSmsImAD3uhfUE",
   });
 
   const [, setMap] = React.useState(null);
@@ -38,7 +40,13 @@ function Map() {
   }, []);
 
   return isLoaded ? (
-    <GoogleMap zoom={10} center={{ lat: 45.4211, lng: -75.6903 }}>
+    <GoogleMap
+      zoom={10}
+      center={{ lat: 45.4211, lng: -75.6903 }}
+      onLoad={onLoad}
+      onUnmount={onUnmount}
+      mapContainerStyle={{ width: "800px", height: "400px" }}
+    >
       {speciesData.features.map((specie) => (
         <Marker
           key={specie.properties.SPECIE_ID}
@@ -69,7 +77,7 @@ function Map() {
       )}
     </GoogleMap>
   ) : (
-    <></>
+    <>Test</>
   );
 }
 
