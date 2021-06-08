@@ -51,9 +51,9 @@ export default function Species(): JSX.Element {
   const [selectedSpecie, setSelectedSpecie] = React.useState<SpeciesDetail>();
 
   const results = [
-    { id: 1, name: "Specie 1", numberOfTrees: 4 },
-    { id: 2, name: "Specie 2", numberOfTrees: 9 },
-    { id: 3, name: "Specie 3", numberOfTrees: 50 },
+    { id: 1, name: "Banana", numberOfTrees: 4 },
+    { id: 2, name: "Coconut", numberOfTrees: 9 },
+    { id: 3, name: "Nicolai", numberOfTrees: 50 },
   ];
 
   const columns: TableColumnType[] = [

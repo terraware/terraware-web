@@ -62,7 +62,7 @@ export default function Dashboard(): JSX.Element {
                     color="primary"
                     gutterBottom
                   >
-                    500 Trees
+                    63 Trees
                   </Typography>
                 </Paper>
               </Grid>
@@ -74,7 +74,7 @@ export default function Dashboard(): JSX.Element {
                     color="primary"
                     gutterBottom
                   >
-                    20 Species
+                    3 Species
                   </Typography>
                 </Paper>
               </Grid>
