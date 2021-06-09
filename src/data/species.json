@@ -2,7 +2,9 @@
     "features": [{
       "properties": {
         "SPECIE_ID": 960,
-        "NAME": "Coconut"
+        "NAME": "Coconut",
+        "IMG": "https://media.istockphoto.com/photos/coconut-tree-picture-id500375401",
+        "DATE": "3/2/2020"
       },
       "geometry": {
         "coordinates": [-75.3372987731628, 45.383321536272049]
@@ -10,7 +12,9 @@
     }, {
       "properties": {
         "SPECIE_ID": 1219,
-        "NAME": "Banana"
+        "NAME": "Banana",
+        "IMG": "https://media.istockphoto.com/photos/illustration-of-banana-tree-picture-id542205736",
+        "DATE": "5/10/2020"
       },
       "geometry": {
         "coordinates": [-75.546518086577947, 45.467134581917357]
@@ -18,7 +22,9 @@
     }, {
       "properties": {
         "SPECIE_ID": 1157,
-        "NAME": "Nicolai"
+        "NAME": "Nicolai",
+        "IMG": "https://www.australianplantsonline.com.au/media/catalog/product/cache/c9a4c2319e3118c983ed47a73d21fbe0/n/i/nicolai-palm.jpg",
+        "DATE": "15/1/2021"
       },
       "geometry": {
         "coordinates": [-75.898610599532319, 45.295014379864874]

@@ -14,6 +14,8 @@ export type SpecieMap = {
   properties: {
     SPECIE_ID: number;
     NAME: string;
+    DATE: string;
+    IMG: string;
   };
 };
 
@@ -70,6 +72,12 @@ function Map() {
         >
           <div>
             <h2>{selectedSpecie.properties.NAME}</h2>
+            <h3>As of {selectedSpecie.properties.DATE}</h3>
+            <img
+              alt="Specie"
+              src={selectedSpecie.properties.IMG}
+              style={{ maxHeight: "100px" }}
+            />
           </div>
         </InfoWindow>
       )}
