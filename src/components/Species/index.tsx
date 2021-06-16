@@ -7,7 +7,6 @@ import AddIcon from "@material-ui/icons/Add";
 import React from "react";
 import Table from "../common/table";
 import { TableColumnType } from "../common/table/types";
-import SearchBar from "../SearchBar";
 import EditSpecieModal from "./EditSpecieModal";
 
 const useStyles = makeStyles((theme) =>
@@ -58,8 +57,6 @@ export default function Species(): JSX.Element {
 
   const columns: TableColumnType[] = [
     { key: "name", name: "Name", type: "string" },
-    { key: "numberOfTrees", name: "Number Of Trees", type: "string" },
-    { key: "edit", name: "", type: "edit" },
   ];
 
   const onCloseEditSpecieModal = () => {
@@ -87,7 +84,8 @@ export default function Species(): JSX.Element {
         <Grid container spacing={3}>
           <Grid item xs={1} />
           <Grid item xs={2}>
-            <SearchBar></SearchBar>
+            <h1>Species</h1>
+            {results.length ?? "0"} Total
           </Grid>
           <Grid item xs={6}></Grid>
           <Grid item xs={2}>

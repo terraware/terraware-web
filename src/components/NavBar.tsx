@@ -1,9 +1,13 @@
-import { Tab, Tabs } from "@material-ui/core";
-import AppBar from "@material-ui/core/AppBar";
+import {
+  Divider,
+  Drawer,
+  List,
+  ListItem,
+  ListItemText,
+} from "@material-ui/core";
 import { createStyles, makeStyles } from "@material-ui/core/styles";
-import Toolbar from "@material-ui/core/Toolbar";
 import React from "react";
-import { Link as RouterLink, useRouteMatch } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -27,42 +31,31 @@ const useStyles = makeStyles((theme) =>
     flex: {
       display: "flex",
     },
+    menu: {
+      width: "180px",
+    },
   })
 );
 
 export default function NavBar(): JSX.Element | null {
-  const isSpeciesRoute = useRouteMatch("/species/");
   const classes = useStyles();
-  const [tabIndexSelected, setTabIndexSelected] = React.useState(0);
-  React.useEffect(() => {
-    setTabIndexSelected(isSpeciesRoute ? 1 : 0);
-  }, [isSpeciesRoute]);
 
   return (
-    <AppBar position="static" className={classes.appBar} elevation={1}>
-      <Toolbar className={classes.grow}>
-        <div className={classes.icon} id="tf-icon">
-          <img src="/assets/logo.svg" alt="logo" />
+    <Drawer variant="permanent" open={true} classes={{ paper: classes.menu }}>
+      <div className={classes.icon} id="tf-icon">
+        <img src="/assets/logo.svg" alt="logo" />
+      </div>
+      <Divider />
+      <List>
+        <div>
+          <ListItem button component={RouterLink} to="/">
+            <ListItemText primary="Dashboard" />
+          </ListItem>
+          <ListItem button component={RouterLink} to="/species">
+            <ListItemText primary="Species" />
+          </ListItem>
         </div>
-        <Tabs
-          value={tabIndexSelected}
-          indicatorColor="primary"
-          textColor="primary"
-        >
-          <Tab
-            id="tab-dashboard"
-            label="Dashboard"
-            component={RouterLink}
-            to="/"
-          />
-          <Tab
-            id="tab-species"
-            label="Species"
-            component={RouterLink}
-            to="/species"
-          />
-        </Tabs>
-      </Toolbar>
-    </AppBar>
+      </List>
+    </Drawer>
   );
 }

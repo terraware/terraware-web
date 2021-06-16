@@ -1,16 +1,26 @@
-import { Box, Chip, Grid, Typography } from "@material-ui/core";
+import {
+  Box,
+  Chip,
+  FormControl,
+  FormControlLabel,
+  Grid,
+  Radio,
+  RadioGroup,
+  Typography,
+} from "@material-ui/core";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import React from "react";
-import { SpeciesDetail } from ".";
 import strings from "../../strings";
 import useForm from "../../utils/useForm";
 import CancelButton from "../common/CancelButton";
 import DialogCloseButton from "../common/DialogCloseButton";
 import TextField from "../common/TextField";
+import { SpeciesDetail } from "../Species";
+import { SpecieMap } from "./Map";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -35,16 +45,20 @@ const useStyles = makeStyles((theme: Theme) =>
 export interface Props {
   open: boolean;
   onClose: (specie?: SpeciesDetail) => void;
-  value?: SpeciesDetail;
+  value?: SpecieMap;
 }
 
-export default function EditSpecieModal(props: Props): JSX.Element {
-  function initSpecies(specie?: SpeciesDetail): SpeciesDetail {
-    return (
-      specie ?? {
-        name: "",
-      }
-    );
+export default function NewSpecieModal(props: Props): JSX.Element {
+  function initSpecies(specie?: SpecieMap): SpeciesDetail {
+    return specie
+      ? {
+          name:
+            specie.properties.NAME !== "Other" ? specie.properties.NAME : "",
+          id: specie.properties.SPECIE_ID,
+        }
+      : {
+          name: "",
+        };
   }
 
   const classes = useStyles();
@@ -68,6 +82,12 @@ export default function EditSpecieModal(props: Props): JSX.Element {
     onClose(record);
   };
 
+  const [value, setValue] = React.useState("female");
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setValue((event.target as HTMLInputElement).value);
+  };
+
   return (
     <Dialog
       onClose={handleCancel}
@@ -78,7 +98,9 @@ export default function EditSpecieModal(props: Props): JSX.Element {
     >
       <DialogTitle>
         <Typography variant="h6">
-          {props.value ? "Edit Species" : "Add Species"}
+          {props.value?.properties.NAME !== "Other"
+            ? "Edit Species"
+            : "Add Species"}
         </Typography>
         <DialogCloseButton onClick={handleCancel} />
       </DialogTitle>
@@ -94,6 +116,39 @@ export default function EditSpecieModal(props: Props): JSX.Element {
             />
           </Grid>
         </Grid>
+        <Grid container spacing={4}>
+          <Grid item xs={12}>
+            <p>OR</p>
+          </Grid>
+        </Grid>
+        <Grid container spacing={4}>
+          <Grid item xs={12}>
+            <FormControl component="fieldset">
+              <RadioGroup
+                aria-label="gender"
+                name="gender1"
+                value={value}
+                onChange={handleChange}
+              >
+                <FormControlLabel
+                  value="female"
+                  control={<Radio />}
+                  label="Flower"
+                />
+                <FormControlLabel
+                  value="male"
+                  control={<Radio />}
+                  label="Dododanea"
+                />
+                <FormControlLabel
+                  value="other"
+                  control={<Radio />}
+                  label="Acacia"
+                />
+              </RadioGroup>
+            </FormControl>
+          </Grid>
+        </Grid>
       </DialogContent>
       <DialogActions>
         <Box width={"100%"} className={classes.actions}>
@@ -102,7 +157,7 @@ export default function EditSpecieModal(props: Props): JSX.Element {
             <Chip
               id="saveSpecie"
               className={classes.submit}
-              label={props.value ? "Save" : "Add"}
+              label={props.value?.properties.NAME !== "Other" ? "Save" : "Add"}
               clickable
               color="primary"
               onClick={handleOk}

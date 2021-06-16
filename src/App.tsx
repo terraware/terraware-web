@@ -1,4 +1,4 @@
-import { CssBaseline, ThemeProvider } from "@material-ui/core";
+import { CssBaseline, Grid, ThemeProvider } from "@material-ui/core";
 import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Dashboard from "./components/Dashboard";
@@ -11,11 +11,17 @@ function App() {
     <Router>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <NavBar />
-        <Switch>
-          <Route exact path="/" component={Dashboard} />
-          <Route exact path="/species" component={Species} />
-        </Switch>
+        <Grid container spacing={3}>
+          <Grid item xs={1}>
+            <NavBar />
+          </Grid>
+          <Grid item xs={11}>
+            <Switch>
+              <Route exact path="/" component={Dashboard} />
+              <Route exact path="/species" component={Species} />
+            </Switch>
+          </Grid>
+        </Grid>
       </ThemeProvider>
     </Router>
   );
