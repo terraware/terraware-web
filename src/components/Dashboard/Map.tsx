@@ -1,6 +1,7 @@
-import { Chip, IconButton } from "@material-ui/core";
+import { Chip, IconButton, Typography } from "@material-ui/core";
 import { createStyles, makeStyles } from "@material-ui/core/styles";
 import AddIcon from "@material-ui/icons/Add";
+import CreateIcon from "@material-ui/icons/Create";
 import FullscreenIcon from "@material-ui/icons/Fullscreen";
 import {
   GoogleMap,
@@ -29,8 +30,27 @@ export type SpecieMap = {
 const useStyles = makeStyles((theme) =>
   createStyles({
     newSpecies: {
-      backgroundColor: theme.palette.grey[600],
-      color: theme.palette.common.white,
+      marginTop: theme.spacing(2),
+      width: "100%",
+      background: "transparent",
+      border: "1px solid",
+
+      "&:focus": {
+        background: "transparent",
+      },
+    },
+    fullscreen: {
+      background: theme.palette.common.white,
+      borderRadius: 0,
+      padding: theme.spacing(1),
+      marginRight: theme.spacing(1),
+      marginTop: theme.spacing(1),
+      "&:hover": {
+        backgroundColor: theme.palette.common.white,
+      },
+    },
+    spacing: {
+      margin: theme.spacing(1, 0),
     },
   })
 );
@@ -99,18 +119,22 @@ function Map({ onFullscreen }: Props): JSX.Element {
           zoom={10}
           center={{ lat: 45.4211, lng: -75.6903 }}
           onLoad={onLoad}
-          options={{ fullscreenControl: false }}
+          options={{ fullscreenControl: false, streetViewControl: false }}
           onUnmount={onUnmount}
           mapContainerStyle={
             isFullscreen
-              ? { width: "1300px", height: "600px" }
-              : { width: "600px", height: "600px" }
+              ? { width: "100%", height: "600px" }
+              : { width: "100%", height: "100%" }
           }
         >
           <CustomMapControl
-            position={window.google.maps.ControlPosition.TOP_RIGHT}
+            position={window.google.maps.ControlPosition.RIGHT_BOTTOM}
           >
-            <IconButton id="full-screen" onClick={onFullscreenClick}>
+            <IconButton
+              id="full-screen"
+              onClick={onFullscreenClick}
+              className={classes.fullscreen}
+            >
               <FullscreenIcon />
             </IconButton>
           </CustomMapControl>
@@ -139,12 +163,24 @@ function Map({ onFullscreen }: Props): JSX.Element {
               }}
             >
               <div>
-                <h2>{selectedSpecie.properties.NAME}</h2>
-                <h3>As of {selectedSpecie.properties.DATE}</h3>
-                <h4>
-                  {selectedSpecie.geometry.coordinates[1]},
-                  {selectedSpecie.geometry.coordinates[0]}
-                </h4>
+                <Typography component="p" variant="subtitle2">
+                  {selectedSpecie.properties.NAME}
+                </Typography>
+                <Typography
+                  component="p"
+                  variant="body2"
+                  className={classes.spacing}
+                >
+                  As of {selectedSpecie.properties.DATE}
+                </Typography>
+                <Typography
+                  component="p"
+                  variant="body2"
+                  className={classes.spacing}
+                >
+                  {selectedSpecie.geometry.coordinates[1].toFixed(6)},
+                  {selectedSpecie.geometry.coordinates[0].toFixed(6)}
+                </Typography>
                 <img
                   alt="Specie"
                   src={selectedSpecie.properties.IMG}
@@ -160,8 +196,13 @@ function Map({ onFullscreen }: Props): JSX.Element {
                   }
                   onClick={onNewSpecie}
                   className={classes.newSpecies}
-                  deleteIcon={<AddIcon />}
-                  onDelete={() => true}
+                  icon={
+                    selectedSpecie.properties.NAME !== "Other" ? (
+                      <CreateIcon />
+                    ) : (
+                      <AddIcon />
+                    )
+                  }
                 />
               </div>
             </InfoWindow>

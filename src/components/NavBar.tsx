@@ -7,12 +7,12 @@ import {
 } from "@material-ui/core";
 import { createStyles, makeStyles } from "@material-ui/core/styles";
 import React from "react";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useRouteMatch } from "react-router-dom";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
     icon: {
-      padding: theme.spacing(1, 1),
+      margin: `20px auto`,
       width: "68px",
     },
     appBar: {
@@ -24,15 +24,15 @@ const useStyles = makeStyles((theme) =>
     grow: {
       flexGrow: 1,
     },
-    addAccession: {
-      marginLeft: theme.spacing(2),
-      color: theme.palette.common.white,
-    },
     flex: {
       display: "flex",
     },
     menu: {
-      width: "180px",
+      width: "160px",
+    },
+    selected: {
+      borderLeft: "2px solid #0063C2",
+      color: "#0063C2",
     },
   })
 );
@@ -40,18 +40,30 @@ const useStyles = makeStyles((theme) =>
 export default function NavBar(): JSX.Element | null {
   const classes = useStyles();
 
+  const isSpeciesRoute = useRouteMatch("/species/");
+
   return (
     <Drawer variant="permanent" open={true} classes={{ paper: classes.menu }}>
       <div className={classes.icon} id="tf-icon">
-        <img src="/assets/logo.svg" alt="logo" />
+        <img src="/assets/logo.svg" alt="logo" width="60px" />
       </div>
       <Divider />
       <List>
         <div>
-          <ListItem button component={RouterLink} to="/">
+          <ListItem
+            button
+            component={RouterLink}
+            className={!isSpeciesRoute ? classes.selected : ""}
+            to="/"
+          >
             <ListItemText primary="Dashboard" />
           </ListItem>
-          <ListItem button component={RouterLink} to="/species">
+          <ListItem
+            button
+            component={RouterLink}
+            className={isSpeciesRoute ? classes.selected : ""}
+            to="/species"
+          >
             <ListItemText primary="Species" />
           </ListItem>
         </div>

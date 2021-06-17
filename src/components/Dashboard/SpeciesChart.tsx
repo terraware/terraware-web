@@ -17,7 +17,7 @@ export default function SpeciesChart({ isFullscreen }: Props): JSX.Element {
       newChart.destroy();
     }
     if (ctx) {
-      ctx.canvas.height = isFullscreen ? 50 : 200;
+      ctx.canvas.height = isFullscreen ? 70 : 200;
       setChart(
         new Chart(ctx, {
           type: "bar",

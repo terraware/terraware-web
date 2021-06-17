@@ -1,3 +1,10 @@
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
+} from "@material-ui/core";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
@@ -40,6 +47,18 @@ const useStyles = makeStyles((theme) =>
       display: "flex",
       height: "24px",
     },
+    cell: {
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+    },
+    border: {
+      borderRight: `1px solid ${theme.palette.grey[300]}`,
+      padding: theme.spacing(5, 1),
+    },
+    mapContainer: {
+      paddingTop: theme.spacing(5),
+    },
   })
 );
 
@@ -62,8 +81,7 @@ export default function Dashboard(): JSX.Element {
     <main>
       <Container maxWidth={false} className={classes.mainContainer}>
         <Grid container spacing={3}>
-          <Grid item xs={1} />
-          <Grid item xs={isFullscreen ? 11 : 5}>
+          <Grid item xs={isFullscreen ? 12 : 6}>
             {/* <TabContext value={value}>
               <AppBar position="static">
                 <TabList onChange={handleChange} aria-label="simple tabs">
@@ -87,57 +105,69 @@ export default function Dashboard(): JSX.Element {
             </TabContext> */}
             <Map onFullscreen={onFullscreenHandler}></Map>
           </Grid>
-          {isFullscreen && <Grid item xs={1} />}
-          <Grid item xs={isFullscreen ? 10 : 5}>
+          <Grid item xs={isFullscreen ? 12 : 6}>
             <Grid container>
-              <Grid item xs={6}>
-                <Paper className={classes.paper}>
-                  <Typography
-                    component="h2"
-                    variant="h6"
-                    color="primary"
-                    gutterBottom
-                  >
-                    63 Trees
-                  </Typography>
-                  <div className={classes.details}>
-                    <ArrowUpwardIcon color="primary" />
-                    <Typography
-                      color="textSecondary"
-                      className={classes.depositContext}
-                    >
-                      10% since last week
-                    </Typography>
-                  </div>
-                </Paper>
-              </Grid>
-              <Grid item xs={6}>
-                <Paper className={classes.paper}>
-                  <Typography
-                    component="h2"
-                    variant="h6"
-                    color="primary"
-                    gutterBottom
-                  >
-                    3 Species
-                  </Typography>
-                  <div className={classes.details}>
-                    <ArrowUpwardIcon color="primary" />
-                    <Typography
-                      color="textSecondary"
-                      className={classes.depositContext}
-                    >
-                      20% since last week
-                    </Typography>
-                  </div>
-                </Paper>
+              <Grid item xs={12}>
+                <TableContainer component={Paper}>
+                  <Table aria-label="simple table">
+                    <TableBody>
+                      <TableRow>
+                        <TableCell className={classes.border}>
+                          <div className={classes.cell}>
+                            <div>
+                              <Typography
+                                component="h2"
+                                variant="h6"
+                                gutterBottom
+                              >
+                                63 Trees
+                              </Typography>
+                              <div className={classes.details}>
+                                <ArrowUpwardIcon color="primary" />
+                                <Typography
+                                  color="textSecondary"
+                                  className={classes.depositContext}
+                                >
+                                  10% since last week
+                                </Typography>
+                              </div>
+                            </div>
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <div className={classes.cell}>
+                            <div>
+                              <Typography
+                                component="h2"
+                                variant="h6"
+                                gutterBottom
+                              >
+                                3 Species
+                              </Typography>
+                              <div className={classes.details}>
+                                <ArrowUpwardIcon color="primary" />
+                                <Typography
+                                  color="textSecondary"
+                                  className={classes.depositContext}
+                                >
+                                  20% since last week
+                                </Typography>
+                              </div>
+                            </div>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </Table>
+                </TableContainer>
               </Grid>
               <Grid item xs={12}>
-                <SpeciesChart isFullscreen={isFullscreen} />
+                <Paper className={classes.mapContainer}>
+                  <SpeciesChart isFullscreen={isFullscreen} />
+                </Paper>
               </Grid>
             </Grid>
           </Grid>
-          {isFullscreen && <Grid item xs={1} />}
         </Grid>
       </Container>
     </main>

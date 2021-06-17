@@ -1,4 +1,4 @@
-import { Chip } from "@material-ui/core";
+import { Chip, Typography } from "@material-ui/core";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
@@ -25,8 +25,14 @@ const useStyles = makeStyles((theme) =>
       height: "100%",
     },
     newSpecies: {
-      backgroundColor: theme.palette.grey[600],
+      backgroundColor: "#0063C2",
       color: theme.palette.common.white,
+      "&:focus": {
+        backgroundColor: "#0063C2",
+      },
+    },
+    mainContent: {
+      paddingTop: theme.spacing(4),
     },
   })
 );
@@ -85,7 +91,9 @@ export default function Species(): JSX.Element {
           <Grid item xs={1} />
           <Grid item xs={2}>
             <h1>Species</h1>
-            {results.length ?? "0"} Total
+            <Typography component="h4" variant="subtitle1">
+              {results.length ?? "0"} Total
+            </Typography>
           </Grid>
           <Grid item xs={6}></Grid>
           <Grid item xs={2}>
@@ -94,15 +102,14 @@ export default function Species(): JSX.Element {
               size="medium"
               label="New Species"
               onClick={onNewSpecie}
+              icon={<AddIcon classes={chipStyles()} />}
               className={classes.newSpecies}
-              deleteIcon={<AddIcon classes={chipStyles()} />}
-              onDelete={() => true}
             />
           </Grid>
           <Grid item xs={1} />
           <Grid item xs={1} />
           <Grid item xs={10}>
-            <Paper>
+            <Paper className={classes.mainContent}>
               <Grid container spacing={4}>
                 <Grid item xs={12}>
                   {results && (

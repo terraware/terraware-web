@@ -39,6 +39,12 @@ const useStyles = makeStyles((theme: Theme) =>
     paper: {
       minWidth: "500px",
     },
+    container: {
+      border: `1px solid ${theme.palette.grey[400]}`,
+      borderRadius: "4px",
+      display: "block",
+      padding: theme.spacing(1),
+    },
   })
 );
 
@@ -118,12 +124,14 @@ export default function NewSpecieModal(props: Props): JSX.Element {
         </Grid>
         <Grid container spacing={4}>
           <Grid item xs={12}>
-            <p>OR</p>
+            <Typography component="p" variant="subtitle2">
+              OR
+            </Typography>
           </Grid>
         </Grid>
         <Grid container spacing={4}>
           <Grid item xs={12}>
-            <FormControl component="fieldset">
+            <FormControl component="fieldset" className={classes.container}>
               <RadioGroup
                 aria-label="gender"
                 name="gender1"
