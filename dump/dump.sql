@@ -1,14 +1,14 @@
 -- Insert some dummy data into the database for demo purposes
-INSERT INTO organization
+INSERT INTO organizations
 VALUES (1, 'dev')
 ON CONFLICT (id) DO UPDATE SET name = excluded.name;
 
 -- A dummy site+device configuration matching the "dev" site in the terraware-sites repo
-INSERT INTO site (id, organization_id, name, latitude, longitude, locale, timezone)
+INSERT INTO sites (id, organization_id, name, latitude, longitude, locale, timezone)
 VALUES (10, 1, 'sim', 123.456789, -98.76543, 'en-US', 'US/Pacific')
 ON CONFLICT (id) DO UPDATE SET name = excluded.name;
 
-INSERT INTO site_module (id, site_id, type_id, name)
+INSERT INTO site_modules (id, site_id, type_id, name)
 VALUES (100, 10, 1, 'ohana'),
        (101, 10, 1, 'garage')
 ON CONFLICT (id) DO UPDATE SET site_id = excluded.site_id,
@@ -19,18 +19,18 @@ VALUES (10000, 'Kousa Dogwood', NOW(), NOW()),
        (10001, 'Other Dogwood', NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET name = excluded.name;
 
-INSERT INTO species_family (id, name, created_time)
+INSERT INTO species_families (id, name, created_time)
 VALUES (20000, 'Dogwood', NOW())
 ON CONFLICT (id) DO UPDATE SET name = excluded.name;
 
-INSERT INTO storage_location (id, site_module_id, name, condition_id)
+INSERT INTO storage_locations (id, site_module_id, name, condition_id)
 VALUES (1000, 100, 'Refrigerator 1', 1),
        (1001, 100, 'Freezer 1', 2),
        (1002, 100, 'Freezer 2', 2)
 ON CONFLICT (id) DO UPDATE SET name         = excluded.name,
                                condition_id = excluded.condition_id;
 
-INSERT INTO accession (id, number, state_id, site_module_id, created_time, species_id,
+INSERT INTO accessions (id, number, state_id, site_module_id, created_time, species_id,
                        species_family_id, trees_collected_from)
 VALUES (1000, 'XYZ', 30, 100, '2021-01-03T15:31:20Z', 10000, 20000, 1),
        (1001, 'ABCDEFG', 20, 100, '2021-01-10T13:08:11Z', 10001, 20000, 2)
@@ -39,7 +39,7 @@ ON CONFLICT (id) DO UPDATE SET number           = excluded.number,
                                species_id       = excluded.species_id,
                                trees_collected_from = excluded.trees_collected_from;
 
-INSERT INTO notification (id, site_id, type_id, accession_id, created_time, read, message,
+INSERT INTO notifications (id, site_id, type_id, accession_id, created_time, read, message,
                           accession_state_id)
 VALUES (100000, 10, 1, NULL, '2021-01-01T11:22:33Z', FALSE, 'This is an example alert', NULL),
        (100001, 10, 3, 1000, '2021-01-15T08:01:00Z', FALSE, 'Accession XYZ has exploded!', NULL),
@@ -58,18 +58,18 @@ ON CONFLICT (id) DO UPDATE SET type_id            = excluded.type_id,
                                message            = excluded.message,
                                accession_state_id = excluded.accession_state_id;
                                
-INSERT INTO "app_device" ("app_name", "created_time") VALUES ('cel', '2021-02-12 17:21:33.62729+00');
+INSERT INTO "app_devices" ("app_name", "created_time") VALUES ('cel', '2021-02-12 17:21:33.62729+00');
 
-INSERT INTO "accession" ("id", "site_module_id", "app_device_id", "number", "species_id", "state_id", "trees_collected_from", "species_family_id", "created_time") VALUES
+INSERT INTO "accessions" ("id", "site_module_id", "app_device_id", "number", "species_id", "state_id", "trees_collected_from", "species_family_id", "created_time") VALUES
 (1002,	100,	1,	'AAF4D49R3E',	10000,	30,	1,	20000,	'2021-01-03 15:31:20+00');
 
-INSERT INTO "bag" ("id", "accession_id", "bag_number") VALUES
+INSERT INTO "bags" ("id", "accession_id", "bag_number") VALUES
 (1001,	1002,	'ABCD001237'),
 (1002,	1002,	'ABCD001238');
 
-INSERT INTO "geolocation" ("id", "accession_id", "created_time", "latitude", "longitude", "gps_accuracy") VALUES
+INSERT INTO "geolocations" ("id", "accession_id", "created_time", "latitude", "longitude", "gps_accuracy") VALUES
 (1001,	1002,	'2021-02-12 17:21:33.62729+00',	9.0300000,	-79.5300000,	NULL);
 
-INSERT INTO "accession_photo" ("id", "accession_id", "filename", "uploaded_time", "captured_time", "content_type", "size", "latitude", "longitude", "gps_accuracy") VALUES
+INSERT INTO "accession_photos" ("id", "accession_id", "filename", "uploaded_time", "captured_time", "content_type", "size", "latitude", "longitude", "gps_accuracy") VALUES
 (1001,	1002,	'accession1.jpg',	'2021-02-12 18:36:15.842405+00',	'2021-02-03 11:33:44+00',	'image/jpeg',	6441,	NULL,	NULL,	NULL),
 (1002,	1002,	'accession2.jpg',	'2021-02-12 18:36:15.903768+00',	'2021-02-03 11:33:44+00',	'image/jpeg',	6539,	NULL,	NULL,	NULL);
