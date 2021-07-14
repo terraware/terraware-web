@@ -7,13 +7,7 @@ import {
 } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React from 'react';
-import {
-  Link as RouterLink,
-  useHistory,
-  useRouteMatch,
-} from 'react-router-dom';
-import { useResetRecoilState } from 'recoil';
-import sessionSelector from '../state/selectors/session';
+import { Link as RouterLink, useRouteMatch } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -48,13 +42,6 @@ export default function NavBar(): JSX.Element | null {
 
   const isDashboardRoute = useRouteMatch('/dashboard/');
   const isSpeciesRoute = useRouteMatch('/species/');
-  const resetSession = useResetRecoilState(sessionSelector);
-  const history = useHistory();
-
-  const logout = () => {
-    resetSession();
-    history.push('/');
-  };
 
   return (
     <Drawer variant='permanent' open={true} classes={{ paper: classes.menu }}>
@@ -79,10 +66,6 @@ export default function NavBar(): JSX.Element | null {
             to='/species'
           >
             <ListItemText primary='Species' />
-          </ListItem>
-
-          <ListItem button id='logout' onClick={logout}>
-            <ListItemText primary='Logout' />
           </ListItem>
         </div>
       </List>

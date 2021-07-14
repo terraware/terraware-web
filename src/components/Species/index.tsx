@@ -5,9 +5,6 @@ import Paper from '@material-ui/core/Paper';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import React from 'react';
-import { useRecoilValueLoadable } from 'recoil';
-import { Species as SpeciesType } from '../../api/types/species';
-import speciesSelector from '../../state/selectors/species';
 import Table from '../common/table';
 import { TableColumnType } from '../common/table/types';
 import EditSpecieModal from './EditSpecieModal';
@@ -39,11 +36,11 @@ const useStyles = makeStyles((theme) =>
     },
   })
 );
-// export type SpeciesDetail = {
-//   name: string;
-//   id?: number;
-//   numberOfTrees?: number;
-// };
+export type SpeciesDetail = {
+  name: string;
+  id?: number;
+  numberOfTrees?: number;
+};
 
 const chipStyles = makeStyles((theme) => ({
   root: {
@@ -52,22 +49,17 @@ const chipStyles = makeStyles((theme) => ({
 }));
 
 export default function Species(): JSX.Element {
-  // const resetSpecies = useResetRecoilState(speciesSelector);
-  const resultsLodable = useRecoilValueLoadable(speciesSelector);
-  const results =
-    resultsLodable.state === 'hasValue' ? resultsLodable.contents : undefined;
-
   const classes = useStyles();
 
   const [editSpecieModalOpen, setEditSpecieModalOpen] = React.useState(false);
 
-  const [selectedSpecie, setSelectedSpecie] = React.useState<SpeciesType>();
+  const [selectedSpecie, setSelectedSpecie] = React.useState<SpeciesDetail>();
 
-  // const results = [
-  //   { id: 1, name: "Banana", numberOfTrees: 4 },
-  //   { id: 2, name: "Coconut", numberOfTrees: 9 },
-  //   { id: 3, name: "Nicolai", numberOfTrees: 50 },
-  // ];
+  const results = [
+    { id: 1, name: 'Banana', numberOfTrees: 4 },
+    { id: 2, name: 'Coconut', numberOfTrees: 9 },
+    { id: 3, name: 'Nicolai', numberOfTrees: 50 },
+  ];
 
   const columns: TableColumnType[] = [
     { key: 'name', name: 'Name', type: 'string' },
@@ -77,7 +69,7 @@ export default function Species(): JSX.Element {
     setEditSpecieModalOpen(false);
   };
 
-  const onSelect = (specie: SpeciesType) => {
+  const onSelect = (specie: SpeciesDetail) => {
     setSelectedSpecie(specie);
     setEditSpecieModalOpen(true);
   };
@@ -100,7 +92,7 @@ export default function Species(): JSX.Element {
           <Grid item xs={2}>
             <h1>Species</h1>
             <Typography component='h4' variant='subtitle1'>
-              {(results && results.length) ?? '0'} Total
+              {results.length ?? '0'} Total
             </Typography>
           </Grid>
           <Grid item xs={6} />

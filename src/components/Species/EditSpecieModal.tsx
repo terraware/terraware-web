@@ -5,7 +5,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React from 'react';
-import { Species } from '../../api/types/species';
+import { SpeciesDetail } from '.';
 import strings from '../../strings';
 import useForm from '../../utils/useForm';
 import CancelButton from '../common/CancelButton';
@@ -34,22 +34,22 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export interface Props {
   open: boolean;
-  onClose: (specie?: Species) => void;
-  value?: Species;
+  onClose: (specie?: SpeciesDetail) => void;
+  value?: SpeciesDetail;
 }
 
 export default function EditSpecieModal(props: Props): JSX.Element {
-  function initSpecies(specie?: Species): Species {
+  function initSpecies(specie?: SpeciesDetail): SpeciesDetail {
     return (
       specie ?? {
-        scientific_name: '',
+        name: '',
       }
     );
   }
 
   const classes = useStyles();
   const { onClose, open } = props;
-  const [record, setRecord, onChange] = useForm<Species>(
+  const [record, setRecord, onChange] = useForm<SpeciesDetail>(
     initSpecies(props.value)
   );
 
@@ -87,7 +87,7 @@ export default function EditSpecieModal(props: Props): JSX.Element {
           <Grid item xs={12}>
             <TextField
               id='name'
-              value={record.scientific_name}
+              value={record.name}
               onChange={onChange}
               label={strings.SPECIES_NAME}
               aria-label='Species Name'
