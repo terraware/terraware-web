@@ -1,13 +1,13 @@
-import React from "react";
-import CellRenderer from "../common/table/TableCellRenderer";
-import { RendererProps } from "../common/table/types";
-import { SpecieMap } from "./Map";
+import React from 'react';
+import CellRenderer from '../common/table/TableCellRenderer';
+import { RendererProps } from '../common/table/types';
+import { SpecieMap } from './Map';
 
 export default function GeolocationCellRenderer(
   props: RendererProps<SpecieMap>
 ): JSX.Element {
   const { column, row, index } = props;
-  if (column.key === "name") {
+  if (column.key === 'name') {
     return (
       <CellRenderer
         index={index}
@@ -17,7 +17,7 @@ export default function GeolocationCellRenderer(
       />
     );
   }
-  if (column.key === "location") {
+  if (column.key === 'location') {
     return (
       <CellRenderer
         index={index}
@@ -27,5 +27,6 @@ export default function GeolocationCellRenderer(
       />
     );
   }
+
   return <CellRenderer {...props} />;
 }

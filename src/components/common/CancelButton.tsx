@@ -20,6 +20,7 @@ export interface Props {
 
 export default function CancelButton({ onClick, label }: Props): JSX.Element {
   const classes = useStyles();
+
   return (
     <Chip
       id='cancel'

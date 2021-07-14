@@ -1,18 +1,18 @@
-import { Chip, IconButton, Typography } from "@material-ui/core";
-import { createStyles, makeStyles } from "@material-ui/core/styles";
-import AddIcon from "@material-ui/icons/Add";
-import CreateIcon from "@material-ui/icons/Create";
-import FullscreenIcon from "@material-ui/icons/Fullscreen";
+import { Chip, IconButton, Typography } from '@material-ui/core';
+import { createStyles, makeStyles } from '@material-ui/core/styles';
+import AddIcon from '@material-ui/icons/Add';
+import CreateIcon from '@material-ui/icons/Create';
+import FullscreenIcon from '@material-ui/icons/Fullscreen';
 import {
   GoogleMap,
   InfoWindow,
   Marker,
   useJsApiLoader,
-} from "@react-google-maps/api";
-import React, { useState } from "react";
-import * as speciesData from "../../data/species.json";
-import CustomMapControl from "./CustomMapControl";
-import NewSpecieModal from "./NewSpecieModal";
+} from '@react-google-maps/api';
+import React, { useState } from 'react';
+import * as speciesData from '../../data/species.json';
+import CustomMapControl from './CustomMapControl';
+import NewSpecieModal from './NewSpecieModal';
 
 export type SpecieMap = {
   geometry: {
@@ -31,12 +31,12 @@ const useStyles = makeStyles((theme) =>
   createStyles({
     newSpecies: {
       marginTop: theme.spacing(2),
-      width: "100%",
-      background: "transparent",
-      border: "1px solid",
+      width: '100%',
+      background: 'transparent',
+      border: '1px solid',
 
-      "&:focus": {
-        background: "transparent",
+      '&:focus': {
+        background: 'transparent',
       },
     },
     fullscreen: {
@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) =>
       padding: theme.spacing(1),
       marginRight: theme.spacing(1),
       marginTop: theme.spacing(1),
-      "&:hover": {
+      '&:hover': {
         backgroundColor: theme.palette.common.white,
       },
     },
@@ -66,21 +66,21 @@ function Map({ onFullscreen }: Props): JSX.Element {
   const [editSpecieModalOpen, setEditSpecieModalOpen] = React.useState(false);
 
   const { isLoaded } = useJsApiLoader({
-    id: "google-map-script",
+    id: 'google-map-script',
     googleMapsApiKey:
       process.env.REACT_APP_GOOGLE_KEY ||
-      "AIzaSyD2fuvCA8pud6zvJxmzWpSmsImAD3uhfUE",
+      'AIzaSyD2fuvCA8pud6zvJxmzWpSmsImAD3uhfUE',
   });
 
   const [, setMap] = React.useState(null);
 
   const [isFullscreen, setIsFullscreen] = React.useState(false);
 
-  const onLoad = React.useCallback(function callback(map) {
+  const onLoad = React.useCallback((map) => {
     setMap(map);
   }, []);
 
-  const onUnmount = React.useCallback(function callback(map) {
+  const onUnmount = React.useCallback((map) => {
     setMap(null);
   }, []);
 
@@ -94,10 +94,10 @@ function Map({ onFullscreen }: Props): JSX.Element {
 
   const iconPin = (color?: string) => {
     return {
-      path: "M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z",
+      path: 'M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z',
       fillColor: color,
       fillOpacity: 1,
-      scale: 0.05, //to reduce the size of icons
+      scale: 0.05, // to reduce the size of icons
     };
   };
 
@@ -119,19 +119,24 @@ function Map({ onFullscreen }: Props): JSX.Element {
           zoom={10}
           center={{ lat: 45.4211, lng: -75.6903 }}
           onLoad={onLoad}
-          options={{ fullscreenControl: false, streetViewControl: false }}
+          options={{
+            fullscreenControl: false,
+            streetViewControl: false,
+            mapTypeControl: false,
+          }}
           onUnmount={onUnmount}
+          mapTypeId='satellite'
           mapContainerStyle={
             isFullscreen
-              ? { width: "100%", height: "600px" }
-              : { width: "100%", height: "100%" }
+              ? { width: '100%', height: '600px' }
+              : { width: '100%', height: '100%' }
           }
         >
           <CustomMapControl
             position={window.google.maps.ControlPosition.RIGHT_BOTTOM}
           >
             <IconButton
-              id="full-screen"
+              id='full-screen'
               onClick={onFullscreenClick}
               className={classes.fullscreen}
             >
@@ -145,7 +150,7 @@ function Map({ onFullscreen }: Props): JSX.Element {
                 lat: specie.geometry.coordinates[1],
                 lng: specie.geometry.coordinates[0],
               }}
-              onClick={(e) => {
+              onClick={() => {
                 setSelectedSpecie(specie);
               }}
               options={{ icon: iconPin(specie.properties.COLOR) }}
@@ -163,41 +168,41 @@ function Map({ onFullscreen }: Props): JSX.Element {
               }}
             >
               <div>
-                <Typography component="p" variant="subtitle2">
+                <Typography component='p' variant='subtitle2'>
                   {selectedSpecie.properties.NAME}
                 </Typography>
                 <Typography
-                  component="p"
-                  variant="body2"
+                  component='p'
+                  variant='body2'
                   className={classes.spacing}
                 >
                   As of {selectedSpecie.properties.DATE}
                 </Typography>
                 <Typography
-                  component="p"
-                  variant="body2"
+                  component='p'
+                  variant='body2'
                   className={classes.spacing}
                 >
                   {selectedSpecie.geometry.coordinates[1].toFixed(6)},
                   {selectedSpecie.geometry.coordinates[0].toFixed(6)}
                 </Typography>
                 <img
-                  alt="Specie"
+                  alt='Specie'
                   src={selectedSpecie.properties.IMG}
-                  style={{ maxHeight: "100px", display: "block" }}
+                  style={{ maxHeight: '100px', display: 'block' }}
                 />
                 <Chip
-                  id="new-species"
-                  size="medium"
+                  id='new-species'
+                  size='medium'
                   label={
-                    selectedSpecie.properties.NAME !== "Other"
-                      ? "Edit Species"
-                      : "Add Species"
+                    selectedSpecie.properties.NAME !== 'Other'
+                      ? 'Edit Species'
+                      : 'Add Species'
                   }
                   onClick={onNewSpecie}
                   className={classes.newSpecies}
                   icon={
-                    selectedSpecie.properties.NAME !== "Other" ? (
+                    selectedSpecie.properties.NAME !== 'Other' ? (
                       <CreateIcon />
                     ) : (
                       <AddIcon />
