@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@cypress/code-coverage": "^3.9.9",
+    "@cypress/instrument-cra": "^1.4.0",
     "@material-ui/core": "^4.11.4",
     "@material-ui/icons": "^4.11.2",
     "@material-ui/lab": "^4.0.0-alpha.58",
@@ -18,6 +20,7 @@
     "@types/react-router-dom": "^5.1.7",
     "axios": "^0.21.1",
     "chart.js": "^3.3.2",
+    "cypress": "^7.7.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-localization": "^1.0.17",
@@ -30,10 +33,16 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "start:dev": "react-scripts -r @cypress/instrument-cra start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "generate-types": "npx openapi-typescript https://maps.terraware.io/openapi.json  --output src/api/types/generated-schema.ts"
+    "generate-types": "npx openapi-typescript https://maps.terraware.io/openapi.json  --output src/api/types/generated-schema.ts",
+    "cy:run": "TZ=UTC cypress run",
+    "cy": "TZ=UTC cypress open",
+    "e2e": "start-server-and-test start:dev http://localhost:3000 cy:run && yarn e2e:report",
+    "e2e:report": "npx nyc report --reporter=text",
+    "lint": "tslint --project tsconfig.json"
   },
   "eslintConfig": {
     "extends": [
@@ -52,5 +61,12 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "tslint": "^6.1.3",
+    "tslint-config-prettier": "^1.18.0",
+    "tslint-eslint-rules": "^5.4.0",
+    "tslint-react": "^5.0.0",
+    "tslint-react-hooks": "^2.2.2"
   }
 }

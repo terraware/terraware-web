@@ -3,14 +3,14 @@ import {
   Drawer,
   List,
   ListItem,
-  ListItemText,
+  ListItemText
 } from "@material-ui/core";
 import { createStyles, makeStyles } from "@material-ui/core/styles";
 import React from "react";
 import {
   Link as RouterLink,
   useHistory,
-  useRouteMatch,
+  useRouteMatch
 } from "react-router-dom";
 import { useResetRecoilState } from "recoil";
 import sessionSelector from "../state/selectors/session";
@@ -81,7 +81,7 @@ export default function NavBar(): JSX.Element | null {
             <ListItemText primary="Species" />
           </ListItem>
 
-          <ListItem button onClick={logout}>
+          <ListItem button id="logout" onClick={logout}>
             <ListItemText primary="Logout" />
           </ListItem>
         </div>

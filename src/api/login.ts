@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = `http://localhost:8008/api/v1`;
+const BASE_URL = `${process.env.REACT_APP_TERRAWARE_API}/api/v1`;
 
 export type Token = {
   accessToken: string;
