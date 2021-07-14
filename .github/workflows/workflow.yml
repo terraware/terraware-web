@@ -27,11 +27,8 @@ jobs:
       - name: linter
         run: yarn lint
 
-      - name: test
-        run: yarn test
-
       - name: E-2-E
         run: yarn e2e
         env:
-          REACT_APP_TERRAWARE_API: "https://maps.terraware.io/"
+          REACT_APP_TERRAWARE_API: 'https://maps.terraware.io/'
           REACT_APP_SNACKBAR_TIMEOUT: 1000
