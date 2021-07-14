@@ -47,7 +47,13 @@
       "no-ex-assign": true,
       "no-var-keyword": true,
       "ter-prefer-arrow-callback": true,
-      "prefer-const": true
-    }
+      "prefer-const": true,
+      "jsx-boolean-value": false
+    },
+    "linterOptions": {
+      "exclude": [
+          "src/api/types/generated-schema.ts"
+      ]
+  }
   }
   

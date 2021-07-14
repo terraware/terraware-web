@@ -1,16 +1,16 @@
-import { Chip, Typography } from "@material-ui/core";
-import Container from "@material-ui/core/Container";
-import Grid from "@material-ui/core/Grid";
-import Paper from "@material-ui/core/Paper";
-import { createStyles, makeStyles } from "@material-ui/core/styles";
-import AddIcon from "@material-ui/icons/Add";
-import React from "react";
-import { useRecoilValueLoadable } from "recoil";
-import { Species as SpeciesType } from "../../api/types/species";
-import speciesSelector from "../../state/selectors/species";
-import Table from "../common/table";
-import { TableColumnType } from "../common/table/types";
-import EditSpecieModal from "./EditSpecieModal";
+import { Chip, Typography } from '@material-ui/core';
+import Container from '@material-ui/core/Container';
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
+import { createStyles, makeStyles } from '@material-ui/core/styles';
+import AddIcon from '@material-ui/icons/Add';
+import React from 'react';
+import { useRecoilValueLoadable } from 'recoil';
+import { Species as SpeciesType } from '../../api/types/species';
+import speciesSelector from '../../state/selectors/species';
+import Table from '../common/table';
+import { TableColumnType } from '../common/table/types';
+import EditSpecieModal from './EditSpecieModal';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -20,18 +20,18 @@ const useStyles = makeStyles((theme) =>
     },
     paper: {
       padding: theme.spacing(2),
-      display: "flex",
-      overflow: "auto",
-      flexDirection: "column",
+      display: 'flex',
+      overflow: 'auto',
+      flexDirection: 'column',
     },
     fixedHeight: {
-      height: "100%",
+      height: '100%',
     },
     newSpecies: {
-      backgroundColor: "#0063C2",
+      backgroundColor: '#0063C2',
       color: theme.palette.common.white,
-      "&:focus": {
-        backgroundColor: "#0063C2",
+      '&:focus': {
+        backgroundColor: '#0063C2',
       },
     },
     mainContent: {
@@ -52,10 +52,10 @@ const chipStyles = makeStyles((theme) => ({
 }));
 
 export default function Species(): JSX.Element {
-  //const resetSpecies = useResetRecoilState(speciesSelector);
+  // const resetSpecies = useResetRecoilState(speciesSelector);
   const resultsLodable = useRecoilValueLoadable(speciesSelector);
   const results =
-    resultsLodable.state === "hasValue" ? resultsLodable.contents : undefined;
+    resultsLodable.state === 'hasValue' ? resultsLodable.contents : undefined;
 
   const classes = useStyles();
 
@@ -70,7 +70,7 @@ export default function Species(): JSX.Element {
   // ];
 
   const columns: TableColumnType[] = [
-    { key: "name", name: "Name", type: "string" },
+    { key: 'name', name: 'Name', type: 'string' },
   ];
 
   const onCloseEditSpecieModal = () => {
@@ -99,16 +99,16 @@ export default function Species(): JSX.Element {
           <Grid item xs={1} />
           <Grid item xs={2}>
             <h1>Species</h1>
-            <Typography component="h4" variant="subtitle1">
-              {(results && results.length) ?? "0"} Total
+            <Typography component='h4' variant='subtitle1'>
+              {(results && results.length) ?? '0'} Total
             </Typography>
           </Grid>
-          <Grid item xs={6}></Grid>
+          <Grid item xs={6} />
           <Grid item xs={2}>
             <Chip
-              id="new-species"
-              size="medium"
-              label="New Species"
+              id='new-species'
+              size='medium'
+              label='New Species'
               onClick={onNewSpecie}
               icon={<AddIcon classes={chipStyles()} />}
               className={classes.newSpecies}
@@ -124,7 +124,7 @@ export default function Species(): JSX.Element {
                     <Table
                       columns={columns}
                       rows={results}
-                      orderBy="name"
+                      orderBy='name'
                       onSelect={onSelect}
                     />
                   )}

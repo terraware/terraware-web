@@ -7,20 +7,20 @@ import {
   Radio,
   RadioGroup,
   Typography,
-} from "@material-ui/core";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-import React from "react";
-import { Species } from "../../api/types/species";
-import strings from "../../strings";
-import useForm from "../../utils/useForm";
-import CancelButton from "../common/CancelButton";
-import DialogCloseButton from "../common/DialogCloseButton";
-import TextField from "../common/TextField";
-import { SpecieMap } from "./Map";
+} from '@material-ui/core';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import React from 'react';
+import { Species } from '../../api/types/species';
+import strings from '../../strings';
+import useForm from '../../utils/useForm';
+import CancelButton from '../common/CancelButton';
+import DialogCloseButton from '../common/DialogCloseButton';
+import TextField from '../common/TextField';
+import { SpecieMap } from './Map';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -29,20 +29,20 @@ const useStyles = makeStyles((theme: Theme) =>
       color: theme.palette.common.white,
     },
     actions: {
-      display: "flex",
-      justifyContent: "space-between",
-      alignItems: "center",
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
       paddingLeft: theme.spacing(2),
       paddingTop: theme.spacing(3),
       paddingBottom: theme.spacing(1),
     },
     paper: {
-      minWidth: "500px",
+      minWidth: '500px',
     },
     container: {
       border: `1px solid ${theme.palette.grey[400]}`,
-      borderRadius: "4px",
-      display: "block",
+      borderRadius: '4px',
+      display: 'block',
       padding: theme.spacing(1),
     },
   })
@@ -59,11 +59,11 @@ export default function NewSpecieModal(props: Props): JSX.Element {
     return specie
       ? {
           scientific_name:
-            specie.properties.NAME !== "Other" ? specie.properties.NAME : "",
+            specie.properties.NAME !== 'Other' ? specie.properties.NAME : '',
           id: specie.properties.SPECIE_ID,
         }
       : {
-          scientific_name: "",
+          scientific_name: '',
         };
   }
 
@@ -88,7 +88,7 @@ export default function NewSpecieModal(props: Props): JSX.Element {
     onClose(record);
   };
 
-  const [value, setValue] = React.useState("female");
+  const [value, setValue] = React.useState('female');
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue((event.target as HTMLInputElement).value);
@@ -99,14 +99,14 @@ export default function NewSpecieModal(props: Props): JSX.Element {
       onClose={handleCancel}
       disableEscapeKeyDown
       open={open}
-      maxWidth="md"
+      maxWidth='md'
       classes={{ paper: classes.paper }}
     >
       <DialogTitle>
-        <Typography variant="h6">
-          {props.value?.properties.NAME !== "Other"
-            ? "Edit Species"
-            : "Add Species"}
+        <Typography variant='h6'>
+          {props.value?.properties.NAME !== 'Other'
+            ? 'Edit Species'
+            : 'Add Species'}
         </Typography>
         <DialogCloseButton onClick={handleCancel} />
       </DialogTitle>
@@ -114,44 +114,44 @@ export default function NewSpecieModal(props: Props): JSX.Element {
         <Grid container spacing={4}>
           <Grid item xs={12}>
             <TextField
-              id="name"
+              id='name'
               value={record.scientific_name}
               onChange={onChange}
               label={strings.SPECIES_NAME}
-              aria-label="Species Name"
+              aria-label='Species Name'
             />
           </Grid>
         </Grid>
         <Grid container spacing={4}>
           <Grid item xs={12}>
-            <Typography component="p" variant="subtitle2">
+            <Typography component='p' variant='subtitle2'>
               OR
             </Typography>
           </Grid>
         </Grid>
         <Grid container spacing={4}>
           <Grid item xs={12}>
-            <FormControl component="fieldset" className={classes.container}>
+            <FormControl component='fieldset' className={classes.container}>
               <RadioGroup
-                aria-label="gender"
-                name="gender1"
+                aria-label='gender'
+                name='gender1'
                 value={value}
                 onChange={handleChange}
               >
                 <FormControlLabel
-                  value="female"
+                  value='female'
                   control={<Radio />}
-                  label="Flower"
+                  label='Flower'
                 />
                 <FormControlLabel
-                  value="male"
+                  value='male'
                   control={<Radio />}
-                  label="Dododanea"
+                  label='Dododanea'
                 />
                 <FormControlLabel
-                  value="other"
+                  value='other'
                   control={<Radio />}
-                  label="Acacia"
+                  label='Acacia'
                 />
               </RadioGroup>
             </FormControl>
@@ -159,15 +159,15 @@ export default function NewSpecieModal(props: Props): JSX.Element {
         </Grid>
       </DialogContent>
       <DialogActions>
-        <Box width={"100%"} className={classes.actions}>
+        <Box width={'100%'} className={classes.actions}>
           <Box>
             <CancelButton onClick={handleCancel} />
             <Chip
-              id="saveSpecie"
+              id='saveSpecie'
               className={classes.submit}
-              label={props.value?.properties.NAME !== "Other" ? "Save" : "Add"}
+              label={props.value?.properties.NAME !== 'Other' ? 'Save' : 'Add'}
               clickable
-              color="primary"
+              color='primary'
               onClick={handleOk}
             />
           </Box>

@@ -72,7 +72,9 @@ export default function EnhancedTable<T>({
     setOrder(newOrder);
     setOrderBy(property);
 
-    sortHandler && sortHandler(newOrder, property);
+    if (sortHandler) {
+      sortHandler(newOrder, property);
+    }
   };
 
   const hasEditColumn = columns.filter((c) => c.type === 'edit').length > 0;
@@ -97,6 +99,7 @@ export default function EnhancedTable<T>({
           {stableSort(rows, getComparator(order, orderBy, sortComparator)).map(
             (row, index) => {
               const onClick = onSelect ? () => onSelect(row as T) : undefined;
+
               return (
                 <React.Fragment key={index}>
                   <TableRow
@@ -155,5 +158,6 @@ export function tableSort<T>(
   if (ignore) {
     return array;
   }
+
   return stableSort(array, comparator);
 }

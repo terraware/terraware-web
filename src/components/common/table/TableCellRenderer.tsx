@@ -28,6 +28,7 @@ export default function CellRenderer(
   } else if (column.type === 'edit') {
     return <CellEditRenderer id={id} onRowClick={onRowClick} />;
   }
+
   return <CellTextRenderer id={id} value={value} />;
 }
 
@@ -118,6 +119,7 @@ export function CellEditRenderer({
   onRowClick?: () => void;
 }): JSX.Element {
   const classes = useStyles();
+
   return (
     <TableCell id={id} align='left'>
       <Link
@@ -125,7 +127,9 @@ export function CellEditRenderer({
         href='#'
         onClick={(event: React.SyntheticEvent) => {
           preventDefaultEvent(event);
-          onRowClick && onRowClick();
+          if (onRowClick) {
+            onRowClick();
+          }
         }}
       >
         <Box display='flex'>

@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from 'axios';
 
 const BASE_URL = `${process.env.REACT_APP_TERRAWARE_API}/api/v1`;
 
@@ -15,9 +15,10 @@ export type User = {
 
 export const login = async (user: User): Promise<Token> => {
   const bodyFormData = new FormData();
-  bodyFormData.append("username", user.username);
-  bodyFormData.append("password", user.password);
-  bodyFormData.append("grant_type", user.grant_type);
+  bodyFormData.append('username', user.username);
+  bodyFormData.append('password', user.password);
+  bodyFormData.append('grant_type', user.grant_type);
   const endpoint = `${BASE_URL}/token`;
+
   return (await axios.post(endpoint, bodyFormData)).data;
 };

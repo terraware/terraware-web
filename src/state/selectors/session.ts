@@ -1,17 +1,17 @@
-import { atom, DefaultValue, selector } from "recoil";
-import { Token } from "../../api/login";
+import { atom, DefaultValue, selector } from 'recoil';
+import { Token } from '../../api/login';
 
 const sessionAtom = atom({
-  key: "sessionAtom",
+  key: 'sessionAtom',
   default: 0,
 });
 
 export default selector<Token | undefined>({
-  key: "sessionSelector",
+  key: 'sessionSelector',
   get: async ({ get }) => {
     get(sessionAtom);
 
-    const session = await localStorage.getItem("session");
+    const session = await localStorage.getItem('session');
     if (session) {
       return JSON.parse(session);
     }
@@ -20,9 +20,9 @@ export default selector<Token | undefined>({
   },
   set: ({ set }, newValue) => {
     if (newValue instanceof DefaultValue) {
-      localStorage.removeItem("session");
+      localStorage.removeItem('session');
     } else {
-      localStorage.setItem("session", JSON.stringify(newValue));
+      localStorage.setItem('session', JSON.stringify(newValue));
     }
     set(sessionAtom, (v: number) => v + 1);
   },
