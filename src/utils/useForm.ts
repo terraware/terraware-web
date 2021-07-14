@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useState } from 'react';
 
 type Handler = (id: string, value: unknown) => void;
 
@@ -10,6 +10,7 @@ const useForm = <T>(
   const onChange = (id: string, value: unknown) => {
     setRecord({ ...record, [id]: value });
   };
+
   return [record, setRecord, onChange];
 };
 

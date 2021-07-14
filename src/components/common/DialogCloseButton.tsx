@@ -20,6 +20,7 @@ export interface Props {
 
 export default function DialogCloseButton({ onClick }: Props): JSX.Element {
   const classes = useStyles();
+
   return (
     <IconButton
       aria-label='close'

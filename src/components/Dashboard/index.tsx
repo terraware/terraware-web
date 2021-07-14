@@ -4,16 +4,16 @@ import {
   TableCell,
   TableContainer,
   TableRow,
-} from "@material-ui/core";
-import Container from "@material-ui/core/Container";
-import Grid from "@material-ui/core/Grid";
-import Paper from "@material-ui/core/Paper";
-import { createStyles, makeStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
-import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
-import React from "react";
-import Map from "./Map";
-import SpeciesChart from "./SpeciesChart";
+} from '@material-ui/core';
+import Container from '@material-ui/core/Container';
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
+import { createStyles, makeStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
+import React from 'react';
+import Map from './Map';
+import SpeciesChart from './SpeciesChart';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -23,17 +23,17 @@ const useStyles = makeStyles((theme) =>
     },
     paper: {
       padding: theme.spacing(2),
-      display: "flex",
-      overflow: "auto",
-      flexDirection: "column",
-      marginBottom: "30px",
+      display: 'flex',
+      overflow: 'auto',
+      flexDirection: 'column',
+      marginBottom: '30px',
     },
     fixedHeight: {
-      height: "100%",
+      height: '100%',
     },
     map: {
-      width: "100%",
-      height: "400px",
+      width: '100%',
+      height: '400px',
     },
     root: {
       flexGrow: 1,
@@ -44,13 +44,13 @@ const useStyles = makeStyles((theme) =>
       marginLeft: theme.spacing(1),
     },
     details: {
-      display: "flex",
-      height: "24px",
+      display: 'flex',
+      height: '24px',
     },
     cell: {
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
     },
     border: {
       borderRight: `1px solid ${theme.palette.grey[300]}`,
@@ -103,29 +103,29 @@ export default function Dashboard(): JSX.Element {
                 />
               </TabPanel>
             </TabContext> */}
-            <Map onFullscreen={onFullscreenHandler}></Map>
+            <Map onFullscreen={onFullscreenHandler} />
           </Grid>
           <Grid item xs={isFullscreen ? 12 : 6}>
             <Grid container>
               <Grid item xs={12}>
                 <TableContainer component={Paper}>
-                  <Table aria-label="simple table">
+                  <Table aria-label='simple table'>
                     <TableBody>
                       <TableRow>
                         <TableCell className={classes.border}>
                           <div className={classes.cell}>
                             <div>
                               <Typography
-                                component="h2"
-                                variant="h6"
+                                component='h2'
+                                variant='h6'
                                 gutterBottom
                               >
                                 63 Trees
                               </Typography>
                               <div className={classes.details}>
-                                <ArrowUpwardIcon color="primary" />
+                                <ArrowUpwardIcon color='primary' />
                                 <Typography
-                                  color="textSecondary"
+                                  color='textSecondary'
                                   className={classes.depositContext}
                                 >
                                   10% since last week
@@ -138,16 +138,16 @@ export default function Dashboard(): JSX.Element {
                           <div className={classes.cell}>
                             <div>
                               <Typography
-                                component="h2"
-                                variant="h6"
+                                component='h2'
+                                variant='h6'
                                 gutterBottom
                               >
                                 3 Species
                               </Typography>
                               <div className={classes.details}>
-                                <ArrowUpwardIcon color="primary" />
+                                <ArrowUpwardIcon color='primary' />
                                 <Typography
-                                  color="textSecondary"
+                                  color='textSecondary'
                                   className={classes.depositContext}
                                 >
                                   20% since last week
