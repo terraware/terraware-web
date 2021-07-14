@@ -119,8 +119,13 @@ function Map({ onFullscreen }: Props): JSX.Element {
           zoom={10}
           center={{ lat: 45.4211, lng: -75.6903 }}
           onLoad={onLoad}
-          options={{ fullscreenControl: false, streetViewControl: false }}
+          options={{
+            fullscreenControl: false,
+            streetViewControl: false,
+            mapTypeControl: false,
+          }}
           onUnmount={onUnmount}
+          mapTypeId="satellite"
           mapContainerStyle={
             isFullscreen
               ? { width: "100%", height: "600px" }
