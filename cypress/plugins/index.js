@@ -17,15 +17,12 @@
  * @type {Cypress.PluginConfig}
  */
 
+require('dotenv').config()
+
 module.exports = (on, config) => {
-
-  // modify env value
-  config.env = process.env
-
   config.env.user = process.env.REACT_APP_TERRAWARE_API_DEFAULT_USER
 
   config.env.pass = process.env.REACT_APP_TERRAWARE_API_DEFAULT_PASS
 
-  // return config
   return config
 }
