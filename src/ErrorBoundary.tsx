@@ -23,7 +23,7 @@ export default class ErrorBoundary extends Component<Props, State> {
 
   // when an error ocurred log the message
   public componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
-    // eslint-disable-next-line no-console
+    // tslint:disable-next-line: no-console
     console.log('Uncaught error:', error, errorInfo);
 
     if (this.props.handler) {

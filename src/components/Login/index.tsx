@@ -33,6 +33,7 @@ export default function Login(): JSX.Element {
           onChange={onChange}
           label='Username'
           aria-label='Username'
+          autocomplete='username'
         />
       </Grid>
       <Grid item xs={2}>
@@ -42,6 +43,8 @@ export default function Login(): JSX.Element {
           onChange={onChange}
           label='Password'
           aria-label='Password'
+          type='password'
+          autocomplete='current-password'
         />
       </Grid>
       <Grid item xs={2}>
