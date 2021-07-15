@@ -27,6 +27,7 @@ export interface Props {
   helperText?: string;
   placeholder?: string;
   required?: boolean;
+  autocomplete?: string;
 }
 
 export default function TextField(props: Props): JSX.Element {
@@ -62,6 +63,7 @@ export default function TextField(props: Props): JSX.Element {
       error={props.error}
       helperText={props.helperText}
       required={props.required}
+      autoComplete={props.autocomplete}
     />
   );
 }
