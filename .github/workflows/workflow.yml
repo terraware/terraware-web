@@ -30,7 +30,7 @@ jobs:
       - name: E-2-E
         run: yarn e2e
         env:
-          REACT_APP_TERRAWARE_API: 'https://maps.terraware.io/'
+          REACT_APP_TERRAWARE_API: 'https://maps.terraware.io'
           REACT_APP_SNACKBAR_TIMEOUT: 1000
           REACT_APP_TERRAWARE_API_DEFAULT_USER: ${{ secrets.REACT_APP_TERRAWARE_API_DEFAULT_USER }}
           REACT_APP_TERRAWARE_API_DEFAULT_PASS: ${{ secrets.REACT_APP_TERRAWARE_API_DEFAULT_PASS }}
