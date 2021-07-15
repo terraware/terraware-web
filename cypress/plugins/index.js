@@ -16,10 +16,16 @@
 /**
  * @type {Cypress.PluginConfig}
  */
-module.exports = (on, config) => {
-  // `on` is used to hook into various events Cypress emits
-  // `config` is the resolved Cypress config
-  require('@cypress/code-coverage/task')(on, config)
 
+module.exports = (on, config) => {
+
+  // modify env value
+  config.env = process.env
+
+  config.env.user = process.env.REACT_APP_TERRAWARE_API_DEFAULT_USER
+
+  config.env.pass = process.env.REACT_APP_TERRAWARE_API_DEFAULT_PASS
+
+  // return config
   return config
 }
