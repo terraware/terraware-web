@@ -20,9 +20,9 @@
 require('dotenv').config()
 
 module.exports = (on, config) => {
-  config.env.user = process.env.REACT_APP_TERRAWARE_API_DEFAULT_USER
+  config.env.user = process.env.TERRAWARE_API_DEFAULT_USER
 
-  config.env.pass = process.env.REACT_APP_TERRAWARE_API_DEFAULT_PASS
+  config.env.pass = process.env.TERRAWARE_API_DEFAULT_PASS
 
   return config
 }
