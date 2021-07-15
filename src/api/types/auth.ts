@@ -6,9 +6,3 @@ export type TokenResponse = {
   access_token: string;
   token_type: 'Bearer';
 };
-
-export type User = {
-  username: string;
-  password: string;
-  grant_type: string;
-};

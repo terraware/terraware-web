@@ -1,14 +1,14 @@
 import { Chip, Grid } from '@material-ui/core';
 import { useSetRecoilState } from 'recoil';
 import { login } from '../../api/auth';
-import { User } from '../../api/types/auth';
+import { TokenRequest } from '../../api/types/auth';
 import sessionSelector from '../../state/selectors/session';
 import useForm from '../../utils/useForm';
 import TextField from '../common/TextField';
 
 export default function Login(): JSX.Element {
   const setSession = useSetRecoilState(sessionSelector);
-  const [record, , onChange] = useForm<User>({
+  const [record, , onChange] = useForm<TokenRequest>({
     username: '',
     password: '',
     grant_type: 'password',

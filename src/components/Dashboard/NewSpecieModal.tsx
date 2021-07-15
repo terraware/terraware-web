@@ -54,22 +54,21 @@ export interface Props {
   value?: SpecieMap;
 }
 
+const initSpecies = (specie?: SpecieMap): Species => {
+  return specie
+    ? {
+        scientific_name:
+          specie.properties.NAME !== 'Other' ? specie.properties.NAME : '',
+        id: specie.properties.SPECIE_ID,
+      }
+    : {
+        scientific_name: '',
+      };
+};
+
 export default function NewSpecieModal(props: Props): JSX.Element {
   const classes = useStyles();
   const { onClose, open } = props;
-
-  const initSpecies = (specie?: SpecieMap): Species => {
-    return specie
-      ? {
-          scientific_name:
-            specie.properties.NAME !== 'Other' ? specie.properties.NAME : '',
-          id: specie.properties.SPECIE_ID,
-        }
-      : {
-          scientific_name: '',
-        };
-  };
-
   const [record, setRecord, onChange] = useForm<Species>(
     initSpecies(props.value)
   );
