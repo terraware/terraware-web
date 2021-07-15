@@ -33,8 +33,8 @@ const useStyles = makeStyles((theme) =>
       width: '160px',
     },
     selected: {
-      borderLeft: '2px solid #0063C2',
-      color: '#0063C2',
+      borderLeft: `2px solid ${theme.palette.blue[600]}`,
+      color: theme.palette.blue[600],
     },
   })
 );
