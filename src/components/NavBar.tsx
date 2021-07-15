@@ -7,11 +7,7 @@ import {
 } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React from 'react';
-import {
-  Link as RouterLink,
-  useHistory,
-  useRouteMatch,
-} from 'react-router-dom';
+import { Link as RouterLink, useRouteMatch } from 'react-router-dom';
 import { useResetRecoilState } from 'recoil';
 import sessionSelector from '../state/selectors/session';
 
@@ -49,11 +45,9 @@ export default function NavBar(): JSX.Element | null {
   const isDashboardRoute = useRouteMatch('/dashboard/');
   const isSpeciesRoute = useRouteMatch('/species/');
   const resetSession = useResetRecoilState(sessionSelector);
-  const history = useHistory();
 
   const logout = () => {
     resetSession();
-    history.push('/');
   };
 
   return (

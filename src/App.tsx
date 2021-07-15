@@ -14,7 +14,7 @@ import Species from './components/Species';
 import sessionSelector from './state/selectors/session';
 import theme from './theme';
 
-function App() {
+export default function App() {
   return (
     <RecoilRoot>
       <Suspense fallback={'loading'}>
@@ -26,8 +26,6 @@ function App() {
   );
 }
 
-export default App;
-
 function AppContent() {
   const session = useRecoilValue(sessionSelector);
   const history = useHistory();
@@ -35,8 +33,10 @@ function AppContent() {
   useEffect(() => {
     if (session) {
       history.push('/dashboard');
+    } else {
+      history.push('/');
     }
-  });
+  }, [session, history]);
 
   return (
     <ThemeProvider theme={theme}>

@@ -1,12 +1,12 @@
 import { atom, DefaultValue, selector } from 'recoil';
-import { Token } from '../../api/login';
+import { TokenResponse } from '../../api/types/auth';
 
 const sessionAtom = atom({
   key: 'sessionAtom',
   default: 0,
 });
 
-export default selector<Token | undefined>({
+export default selector<TokenResponse | undefined>({
   key: 'sessionSelector',
   get: async ({ get }) => {
     get(sessionAtom);

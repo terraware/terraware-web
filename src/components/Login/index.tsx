@@ -1,14 +1,13 @@
 import { Chip, Grid } from '@material-ui/core';
-import { useHistory } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
-import { login, User } from '../../api/login';
+import { login } from '../../api/auth';
+import { User } from '../../api/types/auth';
 import sessionSelector from '../../state/selectors/session';
 import useForm from '../../utils/useForm';
 import TextField from '../common/TextField';
 
 export default function Login(): JSX.Element {
   const setSession = useSetRecoilState(sessionSelector);
-
   const [record, , onChange] = useForm<User>({
     username: '',
     password: '',
@@ -16,12 +15,12 @@ export default function Login(): JSX.Element {
   });
 
   const handleOk = async () => {
-    const token = await login(record);
-    setSession(token);
-    history.push('/dashboard');
+    try {
+      const token = await login(record);
+      setSession(token);
+      // tslint:disable-next-line: no-empty
+    } catch (ex) {}
   };
-
-  const history = useHistory();
 
   return (
     <Grid container spacing={3}>

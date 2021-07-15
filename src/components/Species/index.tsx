@@ -39,11 +39,6 @@ const useStyles = makeStyles((theme) =>
     },
   })
 );
-// export type SpeciesDetail = {
-//   name: string;
-//   id?: number;
-//   numberOfTrees?: number;
-// };
 
 const chipStyles = makeStyles((theme) => ({
   root: {

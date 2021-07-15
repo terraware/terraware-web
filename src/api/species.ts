@@ -1,10 +1,10 @@
 import axios from 'axios';
 import { Species } from './types/species';
 
-const BASE_URL = `${process.env.REACT_APP_TERRAWARE_API}/api/v1`;
+const BASE_URL = `${process.env.REACT_APP_TERRAWARE_API}/api/v1/species`;
 
 export const getSpecies = async (): Promise<Species[]> => {
-  const endpoint = `${BASE_URL}/species`;
+  const endpoint = `${BASE_URL}`;
 
   return (
     await axios.get(endpoint, {

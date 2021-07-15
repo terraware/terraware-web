@@ -55,7 +55,10 @@ export interface Props {
 }
 
 export default function NewSpecieModal(props: Props): JSX.Element {
-  function initSpecies(specie?: SpecieMap): Species {
+  const classes = useStyles();
+  const { onClose, open } = props;
+
+  const initSpecies = (specie?: SpecieMap): Species => {
     return specie
       ? {
           scientific_name:
@@ -65,13 +68,12 @@ export default function NewSpecieModal(props: Props): JSX.Element {
       : {
           scientific_name: '',
         };
-  }
+  };
 
-  const classes = useStyles();
-  const { onClose, open } = props;
   const [record, setRecord, onChange] = useForm<Species>(
     initSpecies(props.value)
   );
+  const [value, setValue] = React.useState('female');
 
   React.useEffect(() => {
     if (props.open) {
@@ -87,8 +89,6 @@ export default function NewSpecieModal(props: Props): JSX.Element {
   const handleOk = () => {
     onClose(record);
   };
-
-  const [value, setValue] = React.useState('female');
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue((event.target as HTMLInputElement).value);
