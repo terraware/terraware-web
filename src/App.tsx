@@ -11,17 +11,20 @@ import Dashboard from './components/Dashboard';
 import Login from './components/Login';
 import NavBar from './components/NavBar';
 import Species from './components/Species';
+import ErrorBoundary from './ErrorBoundary';
 import sessionSelector from './state/selectors/session';
 import theme from './theme';
 
 export default function App() {
   return (
     <RecoilRoot>
-      <Suspense fallback={'loading'}>
-        <Router>
-          <AppContent />
-        </Router>
-      </Suspense>
+      <ErrorBoundary>
+        <Suspense fallback={'loading'}>
+          <Router>
+            <AppContent />
+          </Router>
+        </Suspense>
+      </ErrorBoundary>
     </RecoilRoot>
   );
 }
