@@ -14,12 +14,12 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React from 'react';
+import { Species } from '../../api/types/species';
 import strings from '../../strings';
 import useForm from '../../utils/useForm';
 import CancelButton from '../common/CancelButton';
 import DialogCloseButton from '../common/DialogCloseButton';
 import TextField from '../common/TextField';
-import { SpeciesDetail } from '../Species';
 import { SpecieMap } from './Map';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -50,28 +50,29 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export interface Props {
   open: boolean;
-  onClose: (specie?: SpeciesDetail) => void;
+  onClose: (specie?: Species) => void;
   value?: SpecieMap;
 }
 
-export default function NewSpecieModal(props: Props): JSX.Element {
-  function initSpecies(specie?: SpecieMap): SpeciesDetail {
-    return specie
-      ? {
-          name:
-            specie.properties.NAME !== 'Other' ? specie.properties.NAME : '',
-          id: specie.properties.SPECIE_ID,
-        }
-      : {
-          name: '',
-        };
-  }
+const initSpecies = (specie?: SpecieMap): Species => {
+  return specie
+    ? {
+        scientific_name:
+          specie.properties.NAME !== 'Other' ? specie.properties.NAME : '',
+        id: specie.properties.SPECIE_ID,
+      }
+    : {
+        scientific_name: '',
+      };
+};
 
+export default function NewSpecieModal(props: Props): JSX.Element {
   const classes = useStyles();
   const { onClose, open } = props;
-  const [record, setRecord, onChange] = useForm<SpeciesDetail>(
+  const [record, setRecord, onChange] = useForm<Species>(
     initSpecies(props.value)
   );
+  const [value, setValue] = React.useState('female');
 
   React.useEffect(() => {
     if (props.open) {
@@ -87,8 +88,6 @@ export default function NewSpecieModal(props: Props): JSX.Element {
   const handleOk = () => {
     onClose(record);
   };
-
-  const [value, setValue] = React.useState('female');
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue((event.target as HTMLInputElement).value);
@@ -115,7 +114,7 @@ export default function NewSpecieModal(props: Props): JSX.Element {
           <Grid item xs={12}>
             <TextField
               id='name'
-              value={record.name}
+              value={record.scientific_name}
               onChange={onChange}
               label={strings.SPECIES_NAME}
               aria-label='Species Name'

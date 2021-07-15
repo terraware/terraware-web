@@ -26,3 +26,11 @@ jobs:
 
       - name: linter
         run: yarn lint
+
+      - name: E-2-E
+        run: yarn e2e
+        env:
+          REACT_APP_TERRAWARE_API: 'https://maps.terraware.io'
+          REACT_APP_SNACKBAR_TIMEOUT: 1000
+          TERRAWARE_API_DEFAULT_USER: ${{ secrets.TERRAWARE_API_DEFAULT_USER }}
+          TERRAWARE_API_DEFAULT_PASS: ${{ secrets.TERRAWARE_API_DEFAULT_PASS }}

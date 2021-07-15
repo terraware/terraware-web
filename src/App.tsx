@@ -1,30 +1,60 @@
 import { CssBaseline, Grid, ThemeProvider } from '@material-ui/core';
-import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import React, { Suspense, useEffect } from 'react';
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  useHistory,
+} from 'react-router-dom';
+import { RecoilRoot, useRecoilValue } from 'recoil';
 import Dashboard from './components/Dashboard';
+import Login from './components/Login';
 import NavBar from './components/NavBar';
 import Species from './components/Species';
+import sessionSelector from './state/selectors/session';
 import theme from './theme';
 
-function App() {
+export default function App() {
   return (
-    <Router>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
+    <RecoilRoot>
+      <Suspense fallback={'loading'}>
+        <Router>
+          <AppContent />
+        </Router>
+      </Suspense>
+    </RecoilRoot>
+  );
+}
+
+function AppContent() {
+  const session = useRecoilValue(sessionSelector);
+  const history = useHistory();
+
+  useEffect(() => {
+    if (session) {
+      history.push('/dashboard');
+    } else {
+      history.push('/');
+    }
+  }, [session, history]);
+
+  return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      {!session && <Route exact path='/' component={Login} />}
+      {session && (
         <Grid container spacing={3}>
           <Grid item xs={1}>
             <NavBar />
           </Grid>
           <Grid item xs={11}>
             <Switch>
-              <Route exact path='/' component={Dashboard} />
+              <Route exact path='/dashboard' component={Dashboard} />
               <Route exact path='/species' component={Species} />
             </Switch>
           </Grid>
         </Grid>
-      </ThemeProvider>
-    </Router>
+      )}
+    </ThemeProvider>
   );
 }
-
-export default App;

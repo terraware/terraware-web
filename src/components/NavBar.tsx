@@ -8,6 +8,8 @@ import {
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 import { Link as RouterLink, useRouteMatch } from 'react-router-dom';
+import { useResetRecoilState } from 'recoil';
+import sessionSelector from '../state/selectors/session';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -31,8 +33,8 @@ const useStyles = makeStyles((theme) =>
       width: '160px',
     },
     selected: {
-      borderLeft: '2px solid #0063C2',
-      color: '#0063C2',
+      borderLeft: `2px solid ${theme.palette.blue[600]}`,
+      color: theme.palette.blue[600],
     },
   })
 );
@@ -42,6 +44,11 @@ export default function NavBar(): JSX.Element | null {
 
   const isDashboardRoute = useRouteMatch('/dashboard/');
   const isSpeciesRoute = useRouteMatch('/species/');
+  const resetSession = useResetRecoilState(sessionSelector);
+
+  const logout = () => {
+    resetSession();
+  };
 
   return (
     <Drawer variant='permanent' open={true} classes={{ paper: classes.menu }}>
@@ -66,6 +73,10 @@ export default function NavBar(): JSX.Element | null {
             to='/species'
           >
             <ListItemText primary='Species' />
+          </ListItem>
+
+          <ListItem button id='logout' onClick={logout}>
+            <ListItemText primary='Logout' />
           </ListItem>
         </div>
       </List>
