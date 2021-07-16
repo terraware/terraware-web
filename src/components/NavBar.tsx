@@ -9,6 +9,7 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 import { Link as RouterLink, useRouteMatch } from 'react-router-dom';
 import { useResetRecoilState } from 'recoil';
+import projectIdSelector from '../state/selectors/projectId';
 import sessionSelector from '../state/selectors/session';
 
 const useStyles = makeStyles((theme) =>
@@ -44,9 +45,11 @@ export default function NavBar(): JSX.Element | null {
 
   const isDashboardRoute = useRouteMatch('/dashboard/');
   const isSpeciesRoute = useRouteMatch('/species/');
+  const resetProjectId = useResetRecoilState(projectIdSelector);
   const resetSession = useResetRecoilState(sessionSelector);
 
   const logout = () => {
+    resetProjectId();
     resetSession();
   };
 

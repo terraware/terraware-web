@@ -2,5 +2,5 @@ import { atom } from 'recoil';
 
 export const projectIdAtom = atom({
   key: 'projectIdAtom',
-  default: '2',
+  default: 0,
 });

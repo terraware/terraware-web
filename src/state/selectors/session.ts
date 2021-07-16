@@ -1,5 +1,6 @@
 import { atom, DefaultValue, selector } from 'recoil';
 import { TokenResponse } from '../../api/types/auth';
+import projectIdSelector from './projectId';
 
 const sessionAtom = atom({
   key: 'sessionAtom',
@@ -18,9 +19,10 @@ export default selector<TokenResponse | undefined>({
 
     return undefined;
   },
-  set: ({ set }, newValue) => {
+  set: ({ set, reset }, newValue) => {
     if (newValue instanceof DefaultValue) {
       localStorage.removeItem('session');
+      reset(projectIdSelector);
     } else {
       localStorage.setItem('session', JSON.stringify(newValue));
     }

@@ -1,17 +1,14 @@
-import { selectorFamily } from 'recoil';
+import { selector } from 'recoil';
 import { getProjects } from '../../api/projects';
-import { TokenResponse } from '../../api/types/auth';
 import { Project } from '../../api/types/project';
+import sessionSelector from './session';
 
-export default selectorFamily<Project[] | undefined, TokenResponse | undefined>(
-  {
-    key: 'projectsSelector',
-    get:
-      (session: TokenResponse | undefined) =>
-      async ({ get }) => {
-        if (session) {
-          return await getProjects(session);
-        }
-      },
-  }
-);
+export default selector<Project[] | undefined>({
+  key: 'projectsSelector',
+  get: async ({ get }) => {
+    const session = get(sessionSelector);
+    if (session) {
+      return await getProjects(session);
+    }
+  },
+});
