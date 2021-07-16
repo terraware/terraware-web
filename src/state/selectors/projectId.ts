@@ -1,14 +1,18 @@
-import { DefaultValue, selector } from 'recoil';
-import { projectIdAtom } from '../atoms/projectId';
+import { atom, DefaultValue, selector } from 'recoil';
 
-export default selector<string | undefined>({
+export const projectIdAtom = atom({
+  key: 'projectIdAtom',
+  default: 0,
+});
+
+export default selector<number | undefined>({
   key: 'projectIdSelector',
   get: async ({ get }) => {
     get(projectIdAtom);
 
     const projectId = await localStorage.getItem('projectId');
     if (projectId) {
-      return JSON.parse(projectId);
+      return parseInt(projectId, 10);
     }
 
     return undefined;
@@ -17,7 +21,7 @@ export default selector<string | undefined>({
     if (newValue instanceof DefaultValue) {
       localStorage.removeItem('projectId');
     } else {
-      localStorage.setItem('projectId', JSON.stringify(newValue));
+      localStorage.setItem('projectId', '' + newValue);
     }
     set(projectIdAtom, (v: number) => v + 1);
   },

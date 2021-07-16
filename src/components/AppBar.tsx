@@ -26,10 +26,10 @@ export default function NavBar(): JSX.Element | null {
     if (projects && !projectId) {
       const firstProject = projects[0];
       if (firstProject.id) {
-        setProjectId(firstProject.id.toString());
+        setProjectId(firstProject.id);
       }
     }
-  });
+  }, [projects, projectId, setProjectId]);
 
   return (
     <AppBar className={classes.appBar}>
@@ -43,8 +43,8 @@ export default function NavBar(): JSX.Element | null {
                 value: value.id?.toString() ?? '',
                 label: value.name,
               }))}
-              onChange={(id, value) => setProjectId(value)}
-              selected={projectId ?? ''}
+              onChange={(id, value) => setProjectId(parseInt(value, 10))}
+              selected={projectId?.toString() ?? ''}
             />
           </Grid>
         </Grid>
