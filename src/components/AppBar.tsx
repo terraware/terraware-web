@@ -1,8 +1,8 @@
 import { AppBar, Grid, Toolbar } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { projectIdAtom } from '../state/atoms/project';
+import { projectIdAtom } from '../state/atoms/projectId';
 import projectsSelector from '../state/selectors/projects';
 import sessionSelector from '../state/selectors/session';
 import Dropdown from './common/Dropdown';
@@ -24,6 +24,11 @@ export default function NavBar(): JSX.Element | null {
   const projects = useRecoilValue(projectsSelector(session));
 
   const [project, setProject] = useRecoilState(projectIdAtom);
+
+  useEffect(() => {
+    console.log('hola');
+    console.log(project);
+  });
 
   return (
     <AppBar className={classes.appBar}>

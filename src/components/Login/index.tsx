@@ -17,7 +17,9 @@ export default function Login(): JSX.Element {
   const handleOk = async () => {
     try {
       const token = await login(record);
-      setSession(token);
+      const tokenType =
+        token.token_type.charAt(0).toUpperCase() + token.token_type.slice(1);
+      setSession({ ...token, token_type: tokenType });
       // tslint:disable-next-line: no-empty
     } catch (ex) {}
   };

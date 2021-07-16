@@ -7,13 +7,10 @@ const BASE_URL = `${process.env.REACT_APP_TERRAWARE_API}/api/v1/projects`;
 export const getProjects = async (token: TokenResponse): Promise<Project[]> => {
   const endpoint = `${BASE_URL}`;
 
-  const tokenType =
-    token.token_type.charAt(0).toUpperCase() + token.token_type.slice(1);
-
   return (
     await axios.get(endpoint, {
       headers: {
-        Authorization: `${tokenType} ${token.access_token}`,
+        Authorization: `${token.token_type} ${token.access_token}`,
       },
     })
   ).data.projects;
