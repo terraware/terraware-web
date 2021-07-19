@@ -1,70 +1,82 @@
-# Getting Started with Create React App
+[![Deployment](https://github.com/terraware/tree-location-web/actions/workflows/workflow.yml/badge.svg)](https://github.com/terraware/tree-location-web/actions/workflows/workflow.yml)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Tree Locator App
 
-## Available Scripts
+## Running the app in development mode
 
-In the project directory, you can run:
+### Step 1: Configure the `.env` file
 
-### `yarn start`
+```
+REACT_APP_TERRAWARE_API=http://localhost:8008
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### Step 2: Login to Docker hub
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+To be able to access the Docker registry, you must first login:
 
-### `yarn test`
+```shell
+docker login
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Just type your username and password and you will be set.
 
-### `yarn build`
+### Step 3: Install dependencies
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```
+yarn
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Step 4: Running the app
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Execute the following commands:
 
-### `yarn eject`
+```shell
+yarn docker:start
+yarn start
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### Step 5: Stopping the app
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Execute the following commands:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+```shell
+yarn docker:stop
+```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+## Run Linter
 
-## Learn More
+Execute the following commands:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```shell
+yarn lint
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Run End to End tests
 
-### Code Splitting
+To run the test, execute the following command:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+```shell
+yarn start:dev
+yarn cy
+```
 
-### Analyzing the Bundle Size
+To run the tests and generate the report:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+```shell
+yarn cy:run
+yarn e2e:report
+```
 
-### Making a Progressive Web App
+### Generating endpoint types
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+Execute the following command:
 
-### Advanced Configuration
+```shell
+yarn generate-types
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+This will create the file `src/api/types/generated-schema.ts`
 
-### Deployment
+### TreeLocator API
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+The Swagger documentation can be accesed [here](http://localhost:8008/docs)
