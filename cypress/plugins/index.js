@@ -16,13 +16,10 @@
 /**
  * @type {Cypress.PluginConfig}
  */
-
-require('dotenv').config()
-
-module.exports = (on, config) => {
-  config.env.user = process.env.TERRAWARE_API_DEFAULT_USER
-
-  config.env.pass = process.env.TERRAWARE_API_DEFAULT_PASS
+ module.exports = (on, config) => {
+  // `on` is used to hook into various events Cypress emits
+  // `config` is the resolved Cypress config
+  require('@cypress/code-coverage/task')(on, config)
 
   return config
 }

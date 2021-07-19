@@ -5,8 +5,8 @@ describe('Login', () => {
   context('Login', () => {
     it('should login and navigate to dahboard page, then logout and return to login page', () => {
       cy.visit('/');
-      cy.get('#username').type(Cypress.env('user'));
-      cy.get('#password').type(Cypress.env('pass'));
+      cy.get('#username').type('1');
+      cy.get('#password').type('test1234');
       cy.get('#login').click().url()
         .should('contain', '/dashboard');
       cy.get('#logout').click().url()
