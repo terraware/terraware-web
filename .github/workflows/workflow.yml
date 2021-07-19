@@ -60,3 +60,10 @@ jobs:
           tags: terraware/tree-locator-app:latest
           platforms: linux/amd64,linux/arm64
           push: ${{ github.ref == 'refs/heads/main' }}
+
+      # - name: Notify staging environment of update
+      #   if: github.ref == 'refs/heads/main'
+      #   uses: satak/webrequest-action@v1.2.4
+      #   with:
+      #     url: ${{ secrets.STAGING_NOTIFY_URL }}
+      #     method: POST
