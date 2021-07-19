@@ -18,7 +18,6 @@
     "@types/react-router-dom": "^5.1.7",
     "axios": "^0.21.1",
     "chart.js": "^3.3.2",
-    "dotenv": "^10.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-localization": "^1.0.17",
@@ -40,7 +39,9 @@
     "cy": "TZ=UTC cypress open",
     "e2e": "start-server-and-test start:dev http://localhost:3000 cy:run && yarn e2e:report",
     "e2e:report": "npx nyc report --reporter=text",
-    "lint": "tslint --project tsconfig.json"
+    "lint": "tslint --project tsconfig.json",
+    "docker:start": "./scripts/launch_server.sh",
+    "wait-be": "wait-on http://localhost:8008/docs"
   },
   "eslintConfig": {
     "extends": [
