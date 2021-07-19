@@ -5,9 +5,15 @@ import Paper from '@material-ui/core/Paper';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import React from 'react';
-import { useRecoilValueLoadable } from 'recoil';
-import { Species as SpeciesType } from '../../api/types/species';
-import speciesSelector from '../../state/selectors/species';
+import {
+  useRecoilValue,
+  useRecoilValueLoadable,
+  useResetRecoilState,
+} from 'recoil';
+import { postSpeciesName, putSpeciesName } from '../../api/speciesNames';
+import { SpeciesName } from '../../api/types/species';
+import sessionSelector from '../../state/selectors/session';
+import speciesNamesSelector from '../../state/selectors/speciesNames';
 import Table from '../common/table';
 import { TableColumnType } from '../common/table/types';
 import EditSpecieModal from './EditSpecieModal';
@@ -48,7 +54,7 @@ const chipStyles = makeStyles((theme) => ({
 
 export default function Species(): JSX.Element {
   // const resetSpecies = useResetRecoilState(speciesSelector);
-  const resultsLodable = useRecoilValueLoadable(speciesSelector);
+  const resultsLodable = useRecoilValueLoadable(speciesNamesSelector);
   const results =
     resultsLodable.state === 'hasValue' ? resultsLodable.contents : undefined;
 
@@ -56,23 +62,31 @@ export default function Species(): JSX.Element {
 
   const [editSpecieModalOpen, setEditSpecieModalOpen] = React.useState(false);
 
-  const [selectedSpecie, setSelectedSpecie] = React.useState<SpeciesType>();
-
-  // const results = [
-  //   { id: 1, name: "Banana", numberOfTrees: 4 },
-  //   { id: 2, name: "Coconut", numberOfTrees: 9 },
-  //   { id: 3, name: "Nicolai", numberOfTrees: 50 },
-  // ];
+  const [selectedSpecie, setSelectedSpecie] = React.useState<SpeciesName>();
 
   const columns: TableColumnType[] = [
     { key: 'name', name: 'Name', type: 'string' },
   ];
 
-  const onCloseEditSpecieModal = () => {
+  const getSession = useRecoilValue(sessionSelector);
+  const resetSpecies = useResetRecoilState(speciesNamesSelector);
+
+  const onCloseEditSpecieModal = async (
+    speciesName?: SpeciesName,
+    newSpecies?: boolean
+  ) => {
+    if (getSession && speciesName) {
+      if (newSpecies) {
+        await postSpeciesName(speciesName, getSession);
+      } else {
+        await putSpeciesName(speciesName, getSession);
+      }
+      resetSpecies();
+    }
     setEditSpecieModalOpen(false);
   };
 
-  const onSelect = (specie: SpeciesType) => {
+  const onSelect = (specie: SpeciesName) => {
     setSelectedSpecie(specie);
     setEditSpecieModalOpen(true);
   };

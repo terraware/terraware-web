@@ -5,7 +5,10 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React from 'react';
-import { Species } from '../../api/types/species';
+import { useRecoilValue } from 'recoil';
+import { postSpecies } from '../../api/species';
+import { SpeciesName } from '../../api/types/species';
+import sessionSelector from '../../state/selectors/session';
 import strings from '../../strings';
 import useForm from '../../utils/useForm';
 import CancelButton from '../common/CancelButton';
@@ -34,24 +37,26 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export interface Props {
   open: boolean;
-  onClose: (specie?: Species) => void;
-  value?: Species;
+  onClose: (speciesName?: SpeciesName, newSpecies?: boolean) => void;
+  value?: SpeciesName;
 }
 
 export default function EditSpecieModal(props: Props): JSX.Element {
-  function initSpecies(specie?: Species): Species {
+  function initSpecies(specie?: SpeciesName): SpeciesName {
     return (
       specie ?? {
-        scientific_name: '',
+        name: '',
+        species_id: 0,
       }
     );
   }
 
   const classes = useStyles();
   const { onClose, open } = props;
-  const [record, setRecord, onChange] = useForm<Species>(
+  const [record, setRecord, onChange] = useForm<SpeciesName>(
     initSpecies(props.value)
   );
+  const getSession = useRecoilValue(sessionSelector);
 
   React.useEffect(() => {
     if (props.open) {
@@ -64,8 +69,20 @@ export default function EditSpecieModal(props: Props): JSX.Element {
     onClose();
   };
 
-  const handleOk = () => {
-    onClose(record);
+  const handleDelete = () => {
+    onClose();
+  };
+
+  const handleOk = async () => {
+    let newSpecie = false;
+    if (getSession && record.species_id === 0) {
+      const specie = await postSpecies({}, getSession);
+      if (specie.id) {
+        record.species_id = specie.id;
+        newSpecie = true;
+      }
+    }
+    onClose(record, newSpecie);
   };
 
   return (
@@ -87,7 +104,7 @@ export default function EditSpecieModal(props: Props): JSX.Element {
           <Grid item xs={12}>
             <TextField
               id='name'
-              value={record.scientific_name}
+              value={record.name}
               onChange={onChange}
               label={strings.SPECIES_NAME}
               aria-label='Species Name'
@@ -107,6 +124,9 @@ export default function EditSpecieModal(props: Props): JSX.Element {
               color='primary'
               onClick={handleOk}
             />
+          </Box>
+          <Box>
+            <CancelButton label={strings.DELETE} onClick={handleDelete} />
           </Box>
         </Box>
       </DialogActions>
