@@ -1,4 +1,4 @@
-import { Box, Chip, Grid, Typography } from '@material-ui/core';
+import { Box, Chip, Typography } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -6,16 +6,12 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React from 'react';
 import { useRecoilValue, useResetRecoilState } from 'recoil';
-import { postSpecies } from '../../api/species';
-import { postSpeciesName, putSpeciesName } from '../../api/speciesNames';
+import { deleteSpeciesName } from '../../api/speciesNames';
 import { SpeciesName } from '../../api/types/species';
 import sessionSelector from '../../state/selectors/session';
 import speciesNamesSelector from '../../state/selectors/speciesNames';
-import strings from '../../strings';
-import useForm from '../../utils/useForm';
 import CancelButton from '../common/CancelButton';
 import DialogCloseButton from '../common/DialogCloseButton';
-import TextField from '../common/TextField';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -39,56 +35,23 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export interface Props {
   open: boolean;
-  onClose: (speciesName?: SpeciesName, newSpecies?: boolean) => void;
-  value?: SpeciesName;
-  onDelete: () => void;
+  onClose: () => void;
+  specieName: SpeciesName;
 }
 
-export default function EditSpecieModal(props: Props): JSX.Element {
-  function initSpecies(specie?: SpeciesName): SpeciesName {
-    return (
-      specie ?? {
-        name: '',
-        species_id: 0,
-      }
-    );
-  }
-
+export default function DeleteConfirmationModal(props: Props): JSX.Element {
   const classes = useStyles();
-  const { onClose, open, onDelete } = props;
-  const [record, setRecord, onChange] = useForm<SpeciesName>(
-    initSpecies(props.value)
-  );
+  const { onClose, open } = props;
   const session = useRecoilValue(sessionSelector);
   const resetSpecies = useResetRecoilState(speciesNamesSelector);
 
-  React.useEffect(() => {
-    if (props.open) {
-      setRecord(initSpecies(props.value));
-    }
-  }, [props.open, props.value, setRecord]);
-
   const handleCancel = () => {
-    setRecord(initSpecies(props.value));
-    onClose();
-  };
-
-  const handleDelete = () => {
-    onDelete();
     onClose();
   };
 
   const handleOk = async () => {
-    if (session) {
-      if (record.species_id === 0) {
-        const specie = await postSpecies({}, session);
-        if (specie.id) {
-          record.species_id = specie.id;
-          postSpeciesName(record, session);
-        }
-      } else {
-        await putSpeciesName(record, session);
-      }
+    if (session && props.specieName.id) {
+      await deleteSpeciesName(props.specieName.id, session);
       resetSpecies();
     }
     onClose();
@@ -103,23 +66,15 @@ export default function EditSpecieModal(props: Props): JSX.Element {
       classes={{ paper: classes.paper }}
     >
       <DialogTitle>
-        <Typography variant='h6'>
-          {props.value ? 'Edit Species' : 'Add Species'}
-        </Typography>
+        <Typography variant='h6'>Delete Species</Typography>
         <DialogCloseButton onClick={handleCancel} />
       </DialogTitle>
       <DialogContent dividers>
-        <Grid container spacing={4}>
-          <Grid item xs={12}>
-            <TextField
-              id='name'
-              value={record.name}
-              onChange={onChange}
-              label={strings.SPECIES_NAME}
-              aria-label='Species Name'
-            />
-          </Grid>
-        </Grid>
+        <Typography variant='body1'>
+          Are you sure you want to delete this species? This action cannot be
+          undone. Any plants with this species will now be categorized as
+          “Other” for its species.
+        </Typography>
       </DialogContent>
       <DialogActions>
         <Box width={'100%'} className={classes.actions}>
@@ -128,14 +83,11 @@ export default function EditSpecieModal(props: Props): JSX.Element {
             <Chip
               id='saveSpecie'
               className={classes.submit}
-              label={props.value ? 'Save' : 'Add'}
+              label='Delete'
               clickable
               color='primary'
               onClick={handleOk}
             />
-          </Box>
-          <Box>
-            <CancelButton label={strings.DELETE} onClick={handleDelete} />
           </Box>
         </Box>
       </DialogActions>

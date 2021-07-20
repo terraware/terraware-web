@@ -10,6 +10,7 @@ import { SpeciesName } from '../../api/types/species';
 import speciesNamesSelector from '../../state/selectors/speciesNames';
 import Table from '../common/table';
 import { TableColumnType } from '../common/table/types';
+import DeleteConfirmationModal from './DeleteConfirmationModal';
 import EditSpecieModal from './EditSpecieModal';
 
 const useStyles = makeStyles((theme) =>
@@ -55,6 +56,8 @@ export default function Species(): JSX.Element {
   const classes = useStyles();
 
   const [editSpecieModalOpen, setEditSpecieModalOpen] = React.useState(false);
+  const [deleteConfirmationModalOpen, setDeleteConfirmationModalOpen] =
+    React.useState(false);
 
   const [selectedSpecie, setSelectedSpecie] = React.useState<SpeciesName>();
 
@@ -62,8 +65,16 @@ export default function Species(): JSX.Element {
     { key: 'name', name: 'Name', type: 'string' },
   ];
 
+  const onCloseDeleteConfirmationModal = () => {
+    setDeleteConfirmationModalOpen(false);
+  };
+
   const onCloseEditSpecieModal = () => {
     setEditSpecieModalOpen(false);
+  };
+
+  const openDeleteConfirmationModal = () => {
+    setDeleteConfirmationModalOpen(true);
   };
 
   const onSelect = (specie: SpeciesName) => {
@@ -82,7 +93,15 @@ export default function Species(): JSX.Element {
         open={editSpecieModalOpen}
         onClose={onCloseEditSpecieModal}
         value={selectedSpecie}
+        onDelete={openDeleteConfirmationModal}
       />
+      {selectedSpecie && (
+        <DeleteConfirmationModal
+          open={deleteConfirmationModalOpen}
+          onClose={onCloseDeleteConfirmationModal}
+          specieName={selectedSpecie}
+        />
+      )}
       <Container maxWidth={false} className={classes.mainContainer}>
         <Grid container spacing={3}>
           <Grid item xs={1} />
