@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export interface Props {
   open: boolean;
-  onClose: () => void;
+  onClose: (deleted?: boolean) => void;
   specieName: SpeciesName;
 }
 
@@ -54,7 +54,7 @@ export default function DeleteConfirmationModal(props: Props): JSX.Element {
       await deleteSpeciesName(props.specieName.id, session);
       resetSpecies();
     }
-    onClose();
+    onClose(true);
   };
 
   return (
@@ -62,14 +62,14 @@ export default function DeleteConfirmationModal(props: Props): JSX.Element {
       onClose={handleCancel}
       disableEscapeKeyDown
       open={open}
-      maxWidth='md'
+      maxWidth='sm'
       classes={{ paper: classes.paper }}
     >
       <DialogTitle>
         <Typography variant='h6'>Delete Species</Typography>
         <DialogCloseButton onClick={handleCancel} />
       </DialogTitle>
-      <DialogContent dividers>
+      <DialogContent>
         <Typography variant='body1'>
           Are you sure you want to delete this species? This action cannot be
           undone. Any plants with this species will now be categorized as

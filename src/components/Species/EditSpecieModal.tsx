@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export interface Props {
   open: boolean;
-  onClose: (speciesName?: SpeciesName, newSpecies?: boolean) => void;
+  onClose: (snackbarMessage?: string) => void;
   value?: SpeciesName;
   onDelete: () => void;
 }
@@ -79,19 +79,22 @@ export default function EditSpecieModal(props: Props): JSX.Element {
   };
 
   const handleOk = async () => {
+    let snackbarMessage = '';
     if (session) {
       if (record.species_id === 0) {
         const specie = await postSpecies({}, session);
         if (specie.id) {
           record.species_id = specie.id;
           postSpeciesName(record, session);
+          snackbarMessage = 'New species added just now.';
         }
       } else {
         await putSpeciesName(record, session);
+        snackbarMessage = 'Changes saved just now.';
       }
       resetSpecies();
     }
-    onClose();
+    onClose(snackbarMessage);
   };
 
   return (

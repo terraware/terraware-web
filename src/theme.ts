@@ -15,6 +15,12 @@ declare module '@material-ui/core/styles/createPalette' {
     blue: {
       600: React.CSSProperties['color'];
     };
+    red: {
+      50: React.CSSProperties['color'];
+    };
+    green: {
+      50: React.CSSProperties['color'];
+    };
   }
   interface PaletteOptions {
     neutral: PaletteOptions['grey'];
@@ -29,6 +35,12 @@ declare module '@material-ui/core/styles/createPalette' {
     };
     blue: {
       600: React.CSSProperties['color'];
+    };
+    red: {
+      50: React.CSSProperties['color'];
+    };
+    green: {
+      50: React.CSSProperties['color'];
     };
   }
 }
@@ -77,6 +89,12 @@ export default createMuiTheme({
     },
     blue: {
       600: '#0067C8',
+    },
+    red: {
+      50: '#FFF1F1',
+    },
+    green: {
+      50: '#D6FDE5',
     },
   },
 });

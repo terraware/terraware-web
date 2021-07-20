@@ -12,6 +12,7 @@ import Table from '../common/table';
 import { TableColumnType } from '../common/table/types';
 import DeleteConfirmationModal from './DeleteConfirmationModal';
 import EditSpecieModal from './EditSpecieModal';
+import SnackbarMessage from './Snackbar';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -56,21 +57,36 @@ export default function Species(): JSX.Element {
   const classes = useStyles();
 
   const [editSpecieModalOpen, setEditSpecieModalOpen] = React.useState(false);
+  const [snackbarOpened, setSnackbarOpened] = React.useState(false);
   const [deleteConfirmationModalOpen, setDeleteConfirmationModalOpen] =
     React.useState(false);
 
   const [selectedSpecie, setSelectedSpecie] = React.useState<SpeciesName>();
+  const [snackbarText, setSnackbarText] = React.useState('');
+  const [snackbarType, setSnackbarType] = React.useState<'success' | 'delete'>(
+    'success'
+  );
 
   const columns: TableColumnType[] = [
     { key: 'name', name: 'Name', type: 'string' },
   ];
 
-  const onCloseDeleteConfirmationModal = () => {
+  const onCloseDeleteConfirmationModal = (deleted?: boolean) => {
     setDeleteConfirmationModalOpen(false);
+    if (deleted) {
+      setSnackbarText('Species deleted just now.');
+      setSnackbarType('delete');
+      setSnackbarOpened(true);
+    }
   };
 
-  const onCloseEditSpecieModal = () => {
+  const onCloseEditSpecieModal = (snackbarMessage?: string) => {
     setEditSpecieModalOpen(false);
+    if (snackbarMessage) {
+      setSnackbarText(snackbarMessage);
+      setSnackbarType('success');
+      setSnackbarOpened(true);
+    }
   };
 
   const openDeleteConfirmationModal = () => {
@@ -89,6 +105,12 @@ export default function Species(): JSX.Element {
 
   return (
     <main>
+      <SnackbarMessage
+        open={snackbarOpened}
+        onClose={() => setSnackbarOpened(false)}
+        text={snackbarText}
+        type={snackbarType}
+      />
       <EditSpecieModal
         open={editSpecieModalOpen}
         onClose={onCloseEditSpecieModal}
