@@ -5,10 +5,12 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React from 'react';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useResetRecoilState } from 'recoil';
 import { postSpecies } from '../../api/species';
+import { postSpeciesName, putSpeciesName } from '../../api/speciesNames';
 import { SpeciesName } from '../../api/types/species';
 import sessionSelector from '../../state/selectors/session';
+import speciesNamesSelector from '../../state/selectors/speciesNames';
 import strings from '../../strings';
 import useForm from '../../utils/useForm';
 import CancelButton from '../common/CancelButton';
@@ -56,7 +58,8 @@ export default function EditSpecieModal(props: Props): JSX.Element {
   const [record, setRecord, onChange] = useForm<SpeciesName>(
     initSpecies(props.value)
   );
-  const getSession = useRecoilValue(sessionSelector);
+  const session = useRecoilValue(sessionSelector);
+  const resetSpecies = useResetRecoilState(speciesNamesSelector);
 
   React.useEffect(() => {
     if (props.open) {
@@ -74,15 +77,19 @@ export default function EditSpecieModal(props: Props): JSX.Element {
   };
 
   const handleOk = async () => {
-    let newSpecie = false;
-    if (getSession && record.species_id === 0) {
-      const specie = await postSpecies({}, getSession);
-      if (specie.id) {
-        record.species_id = specie.id;
-        newSpecie = true;
+    if (session) {
+      if (record.species_id === 0) {
+        const specie = await postSpecies({}, session);
+        if (specie.id) {
+          record.species_id = specie.id;
+          postSpeciesName(record, session);
+        }
+      } else {
+        await putSpeciesName(record, session);
       }
+      resetSpecies();
     }
-    onClose(record, newSpecie);
+    onClose();
   };
 
   return (

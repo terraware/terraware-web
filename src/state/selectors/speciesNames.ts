@@ -4,7 +4,7 @@ import { SpeciesName } from '../../api/types/species';
 import sessionSelector from './session';
 
 export const speciesNamesAtom = atom({
-  key: 'speciesTrigger',
+  key: 'speciesNamesAtom',
   default: 0,
 });
 

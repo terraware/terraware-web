@@ -5,14 +5,8 @@ import Paper from '@material-ui/core/Paper';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import React from 'react';
-import {
-  useRecoilValue,
-  useRecoilValueLoadable,
-  useResetRecoilState,
-} from 'recoil';
-import { postSpeciesName, putSpeciesName } from '../../api/speciesNames';
+import { useRecoilValueLoadable } from 'recoil';
 import { SpeciesName } from '../../api/types/species';
-import sessionSelector from '../../state/selectors/session';
 import speciesNamesSelector from '../../state/selectors/speciesNames';
 import Table from '../common/table';
 import { TableColumnType } from '../common/table/types';
@@ -68,21 +62,7 @@ export default function Species(): JSX.Element {
     { key: 'name', name: 'Name', type: 'string' },
   ];
 
-  const getSession = useRecoilValue(sessionSelector);
-  const resetSpecies = useResetRecoilState(speciesNamesSelector);
-
-  const onCloseEditSpecieModal = async (
-    speciesName?: SpeciesName,
-    newSpecies?: boolean
-  ) => {
-    if (getSession && speciesName) {
-      if (newSpecies) {
-        await postSpeciesName(speciesName, getSession);
-      } else {
-        await putSpeciesName(speciesName, getSession);
-      }
-      resetSpecies();
-    }
+  const onCloseEditSpecieModal = () => {
     setEditSpecieModalOpen(false);
   };
 
