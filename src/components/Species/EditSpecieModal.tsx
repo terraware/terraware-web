@@ -7,7 +7,11 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React from 'react';
 import { useRecoilValue, useResetRecoilState } from 'recoil';
 import { postSpecies } from '../../api/species';
-import { postSpeciesName, putSpeciesName } from '../../api/speciesNames';
+import {
+  deleteSpeciesName,
+  postSpeciesName,
+  putSpeciesName,
+} from '../../api/speciesNames';
 import { SpeciesName } from '../../api/types/species';
 import sessionSelector from '../../state/selectors/session';
 import speciesNamesSelector from '../../state/selectors/speciesNames';
@@ -72,7 +76,11 @@ export default function EditSpecieModal(props: Props): JSX.Element {
     onClose();
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
+    if (session && record.id) {
+      await deleteSpeciesName(record.id, session);
+      resetSpecies();
+    }
     onClose();
   };
 

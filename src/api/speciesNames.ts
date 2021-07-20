@@ -47,3 +47,18 @@ export const putSpeciesName = async (
     })
   ).data;
 };
+
+export const deleteSpeciesName = async (
+  speciesNameId: number,
+  token: TokenResponse
+): Promise<SpeciesName[]> => {
+  const endpoint = `${BASE_URL}/${speciesNameId}`;
+
+  return (
+    await axios.delete(endpoint, {
+      headers: {
+        Authorization: `${token.token_type} ${token.access_token}`,
+      },
+    })
+  ).data;
+};
