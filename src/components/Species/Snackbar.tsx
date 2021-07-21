@@ -43,6 +43,7 @@ export default function SnackbarMessage(props: Props): JSX.Element {
       open={open}
       onClose={onClose}
       autoHideDuration={3000}
+      id='snackbar'
     >
       <div className={classes[type]}>
         {type === 'success' && <CheckIcon />}

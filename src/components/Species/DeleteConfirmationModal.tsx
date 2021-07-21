@@ -70,7 +70,7 @@ export default function DeleteConfirmationModal(props: Props): JSX.Element {
         <DialogCloseButton onClick={handleCancel} />
       </DialogTitle>
       <DialogContent>
-        <Typography variant='body1'>
+        <Typography variant='body2'>
           Are you sure you want to delete this species? This action cannot be
           undone. Any plants with this species will now be categorized as
           “Other” for its species.
@@ -78,14 +78,15 @@ export default function DeleteConfirmationModal(props: Props): JSX.Element {
       </DialogContent>
       <DialogActions>
         <Box width={'100%'} className={classes.actions}>
+          <Box />
           <Box>
             <CancelButton onClick={handleCancel} />
             <Chip
-              id='saveSpecie'
+              id='delete'
               className={classes.submit}
               label='Delete'
               clickable
-              color='primary'
+              color='secondary'
               onClick={handleOk}
             />
           </Box>

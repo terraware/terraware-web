@@ -34,6 +34,12 @@ const useStyles = makeStyles((theme: Theme) =>
     paper: {
       minWidth: '500px',
     },
+    deleteSpecies: {
+      backgroundColor: theme.palette.common.white,
+      borderColor: theme.palette.secondary.main,
+      color: theme.palette.secondary.main,
+      borderWidth: 1,
+    },
   })
 );
 
@@ -85,7 +91,7 @@ export default function EditSpecieModal(props: Props): JSX.Element {
         const specie = await postSpecies({}, session);
         if (specie.id) {
           record.species_id = specie.id;
-          postSpeciesName(record, session);
+          await postSpeciesName(record, session);
           snackbarMessage = 'New species added just now.';
         }
       } else {
@@ -127,18 +133,27 @@ export default function EditSpecieModal(props: Props): JSX.Element {
       <DialogActions>
         <Box width={'100%'} className={classes.actions}>
           <Box>
+            {props.value && (
+              <Chip
+                id='delete-specie'
+                className={classes.deleteSpecies}
+                label={strings.DELETE}
+                clickable
+                onClick={handleDelete}
+                variant='outlined'
+              />
+            )}
+          </Box>
+          <Box>
             <CancelButton onClick={handleCancel} />
             <Chip
-              id='saveSpecie'
+              id='save-specie'
               className={classes.submit}
               label={props.value ? 'Save' : 'Add'}
               clickable
               color='primary'
               onClick={handleOk}
             />
-          </Box>
-          <Box>
-            <CancelButton label={strings.DELETE} onClick={handleDelete} />
           </Box>
         </Box>
       </DialogActions>

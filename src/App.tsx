@@ -15,6 +15,7 @@ import Species from './components/Species';
 import ErrorBoundary from './ErrorBoundary';
 import sessionSelector from './state/selectors/session';
 import theme from './theme';
+import useCheckJWT from './utils/useCheckJWT';
 
 export default function App() {
   return (
@@ -33,6 +34,7 @@ export default function App() {
 function AppContent() {
   const session = useRecoilValue(sessionSelector);
   const history = useHistory();
+  const checkJWT = useCheckJWT();
 
   useEffect(() => {
     if (session) {
@@ -40,7 +42,7 @@ function AppContent() {
     } else {
       history.push('/');
     }
-  }, [session, history]);
+  }, [session, history, checkJWT]);
 
   return (
     <ThemeProvider theme={theme}>

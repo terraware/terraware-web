@@ -152,6 +152,7 @@ export default function Species(): JSX.Element {
                 <Grid item xs={12}>
                   {results && (
                     <Table
+                      id='species-table'
                       columns={columns}
                       rows={results}
                       orderBy='name'
