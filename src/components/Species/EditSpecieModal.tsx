@@ -50,16 +50,15 @@ export interface Props {
   onDelete: () => void;
 }
 
+function initSpecies(species?: SpeciesName): SpeciesName {
+  return (
+    species ?? {
+      name: '',
+      species_id: 0,
+    }
+  );
+}
 export default function EditSpecieModal(props: Props): JSX.Element {
-  function initSpecies(specie?: SpeciesName): SpeciesName {
-    return (
-      specie ?? {
-        name: '',
-        species_id: 0,
-      }
-    );
-  }
-
   const classes = useStyles();
   const { onClose, open, onDelete } = props;
   const [record, setRecord, onChange] = useForm<SpeciesName>(
@@ -92,11 +91,11 @@ export default function EditSpecieModal(props: Props): JSX.Element {
         if (specie.id) {
           record.species_id = specie.id;
           await postSpeciesName(record, session);
-          snackbarMessage = 'New species added just now.';
+          snackbarMessage = strings.SNACKBAR_MSG_NEW_SPECIES_ADDED;
         }
       } else {
         await putSpeciesName(record, session);
-        snackbarMessage = 'Changes saved just now.';
+        snackbarMessage = strings.SNACKBAR_MSG_CHANGES_SAVED;
       }
       resetSpecies();
     }
@@ -113,7 +112,7 @@ export default function EditSpecieModal(props: Props): JSX.Element {
     >
       <DialogTitle>
         <Typography variant='h6'>
-          {props.value ? 'Edit Species' : 'Add Species'}
+          {props.value ? strings.EDIT_SPECIES : strings.ADD_SPECIES}
         </Typography>
         <DialogCloseButton onClick={handleCancel} />
       </DialogTitle>
@@ -125,7 +124,7 @@ export default function EditSpecieModal(props: Props): JSX.Element {
               value={record.name}
               onChange={onChange}
               label={strings.SPECIES_NAME}
-              aria-label='Species Name'
+              aria-label={strings.SPECIES_NAME}
             />
           </Grid>
         </Grid>
@@ -149,7 +148,7 @@ export default function EditSpecieModal(props: Props): JSX.Element {
             <Chip
               id='save-specie'
               className={classes.submit}
-              label={props.value ? 'Save' : 'Add'}
+              label={props.value ? strings.SAVE : strings.ADD}
               clickable
               color='primary'
               onClick={handleOk}

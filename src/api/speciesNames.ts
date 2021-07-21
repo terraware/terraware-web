@@ -21,7 +21,7 @@ export const getSpeciesNames = async (
 export const postSpeciesName = async (
   speciesName: SpeciesName,
   token: TokenResponse
-): Promise<SpeciesName[]> => {
+): Promise<SpeciesName> => {
   const endpoint = `${BASE_URL}`;
 
   return (
@@ -36,7 +36,7 @@ export const postSpeciesName = async (
 export const putSpeciesName = async (
   speciesName: SpeciesName,
   token: TokenResponse
-): Promise<SpeciesName[]> => {
+): Promise<SpeciesName> => {
   const endpoint = `${BASE_URL}/${speciesName.id}`;
 
   return (
@@ -51,7 +51,7 @@ export const putSpeciesName = async (
 export const deleteSpeciesName = async (
   speciesNameId: number,
   token: TokenResponse
-): Promise<SpeciesName[]> => {
+): Promise<SpeciesName> => {
   const endpoint = `${BASE_URL}/${speciesNameId}`;
 
   return (

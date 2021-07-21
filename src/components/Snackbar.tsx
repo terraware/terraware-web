@@ -2,21 +2,22 @@ import { Snackbar, Typography } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { DeleteOutline } from '@material-ui/icons';
 import CheckIcon from '@material-ui/icons/Check';
-import React from 'react';
+import { useRecoilState } from 'recoil';
+import snackbarAtom from '../state/atoms/snackbar';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     success: {
       backgroundColor: theme.palette.green[50],
       display: 'flex',
-      border: '1px solid #27764E',
+      border: `1px solid ${theme.palette.green[600]}`,
       padding: '8px',
       width: '1000px',
     },
     delete: {
       backgroundColor: theme.palette.red[50],
       display: 'flex',
-      border: '1px solid #D40002',
+      border: `1px solid ${theme.palette.red[600]}`,
       padding: '8px',
       width: '1000px',
     },
@@ -26,34 +27,34 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export interface Props {
-  text: string;
-  open: boolean;
-  onClose: () => void;
-  type: 'success' | 'delete';
-}
-
-export default function SnackbarMessage(props: Props): JSX.Element {
+export default function SnackbarMessage(): JSX.Element {
   const classes = useStyles();
-  const { text, onClose, open, type } = props;
+
+  const [snackbar, setSnackbar] = useRecoilState(snackbarAtom);
+
+  const handleClose = () => {
+    if (snackbar) {
+      setSnackbar({ ...snackbar, msg: '' });
+    }
+  };
 
   return (
     <Snackbar
       anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-      open={open}
-      onClose={onClose}
+      open={Boolean(snackbar.msg && snackbar.type)}
+      onClose={handleClose}
       autoHideDuration={3000}
       id='snackbar'
     >
-      <div className={classes[type]}>
-        {type === 'success' && <CheckIcon />}
-        {type === 'delete' && <DeleteOutline />}
+      <div className={classes[snackbar.type]}>
+        {snackbar.type === 'success' && <CheckIcon />}
+        {snackbar.type === 'delete' && <DeleteOutline />}
         <Typography
           component='p'
           variant='body1'
           className={classes.snackbarText}
         >
-          {text}
+          {snackbar.msg}
         </Typography>
       </div>
     </Snackbar>

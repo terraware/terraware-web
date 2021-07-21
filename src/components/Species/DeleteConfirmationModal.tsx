@@ -4,12 +4,12 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import React from 'react';
 import { useRecoilValue, useResetRecoilState } from 'recoil';
 import { deleteSpeciesName } from '../../api/speciesNames';
 import { SpeciesName } from '../../api/types/species';
 import sessionSelector from '../../state/selectors/session';
 import speciesNamesSelector from '../../state/selectors/speciesNames';
+import strings from '../../strings';
 import CancelButton from '../common/CancelButton';
 import DialogCloseButton from '../common/DialogCloseButton';
 
@@ -36,12 +36,12 @@ const useStyles = makeStyles((theme: Theme) =>
 export interface Props {
   open: boolean;
   onClose: (deleted?: boolean) => void;
-  specieName: SpeciesName;
+  speciesName: SpeciesName;
 }
 
 export default function DeleteConfirmationModal(props: Props): JSX.Element {
   const classes = useStyles();
-  const { onClose, open } = props;
+  const { onClose, open, speciesName } = props;
   const session = useRecoilValue(sessionSelector);
   const resetSpecies = useResetRecoilState(speciesNamesSelector);
 
@@ -50,8 +50,8 @@ export default function DeleteConfirmationModal(props: Props): JSX.Element {
   };
 
   const handleOk = async () => {
-    if (session && props.specieName.id) {
-      await deleteSpeciesName(props.specieName.id, session);
+    if (session && speciesName.id) {
+      await deleteSpeciesName(speciesName.id, session);
       resetSpecies();
     }
     onClose(true);
@@ -66,14 +66,12 @@ export default function DeleteConfirmationModal(props: Props): JSX.Element {
       classes={{ paper: classes.paper }}
     >
       <DialogTitle>
-        <Typography variant='h6'>Delete Species</Typography>
+        <Typography variant='h6'>{strings.DELETE_SPECIES}</Typography>
         <DialogCloseButton onClick={handleCancel} />
       </DialogTitle>
       <DialogContent>
         <Typography variant='body2'>
-          Are you sure you want to delete this species? This action cannot be
-          undone. Any plants with this species will now be categorized as
-          “Other” for its species.
+          {strings.DELETE_CONFIRMATION_MODAL_MAIN_TEXT}
         </Typography>
       </DialogContent>
       <DialogActions>
@@ -84,7 +82,7 @@ export default function DeleteConfirmationModal(props: Props): JSX.Element {
             <Chip
               id='delete'
               className={classes.submit}
-              label='Delete'
+              label={strings.DELETE}
               clickable
               color='secondary'
               onClick={handleOk}
