@@ -5,11 +5,14 @@ import Paper from '@material-ui/core/Paper';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import React from 'react';
-import { useRecoilValueLoadable } from 'recoil';
-import { Species as SpeciesType } from '../../api/types/species';
-import speciesSelector from '../../state/selectors/species';
+import { useRecoilValueLoadable, useSetRecoilState } from 'recoil';
+import { SpeciesName } from '../../api/types/species';
+import snackbarAtom from '../../state/atoms/snackbar';
+import speciesNamesSelector from '../../state/selectors/speciesNames';
+import strings from '../../strings';
 import Table from '../common/table';
 import { TableColumnType } from '../common/table/types';
+import DeleteConfirmationModal from './DeleteConfirmationModal';
 import EditSpecieModal from './EditSpecieModal';
 
 const useStyles = makeStyles((theme) =>
@@ -28,10 +31,10 @@ const useStyles = makeStyles((theme) =>
       height: '100%',
     },
     newSpecies: {
-      backgroundColor: '#0063C2',
+      backgroundColor: theme.palette.primary.main,
       color: theme.palette.common.white,
       '&:focus': {
-        backgroundColor: '#0063C2',
+        backgroundColor: theme.palette.primary.main,
       },
     },
     mainContent: {
@@ -47,32 +50,47 @@ const chipStyles = makeStyles((theme) => ({
 }));
 
 export default function Species(): JSX.Element {
-  // const resetSpecies = useResetRecoilState(speciesSelector);
-  const resultsLodable = useRecoilValueLoadable(speciesSelector);
+  const resultsLodable = useRecoilValueLoadable(speciesNamesSelector);
+  const setSnackbar = useSetRecoilState(snackbarAtom);
   const results =
-    resultsLodable.state === 'hasValue' ? resultsLodable.contents : undefined;
+    resultsLodable.state === 'hasValue' ? resultsLodable.contents : [];
 
   const classes = useStyles();
 
   const [editSpecieModalOpen, setEditSpecieModalOpen] = React.useState(false);
+  const [deleteConfirmationModalOpen, setDeleteConfirmationModalOpen] =
+    React.useState(false);
 
-  const [selectedSpecie, setSelectedSpecie] = React.useState<SpeciesType>();
-
-  // const results = [
-  //   { id: 1, name: "Banana", numberOfTrees: 4 },
-  //   { id: 2, name: "Coconut", numberOfTrees: 9 },
-  //   { id: 3, name: "Nicolai", numberOfTrees: 50 },
-  // ];
-
+  const [selectedSpecie, setSelectedSpecie] = React.useState<SpeciesName>();
   const columns: TableColumnType[] = [
     { key: 'name', name: 'Name', type: 'string' },
   ];
 
-  const onCloseEditSpecieModal = () => {
-    setEditSpecieModalOpen(false);
+  const onCloseDeleteConfirmationModal = (deleted?: boolean) => {
+    setDeleteConfirmationModalOpen(false);
+    if (deleted) {
+      setSnackbar({
+        type: 'delete',
+        msg: strings.SNACKBAR_MSG_SPECIES_DELETED,
+      });
+    }
   };
 
-  const onSelect = (specie: SpeciesType) => {
+  const onCloseEditSpecieModal = (snackbarMessage?: string) => {
+    setEditSpecieModalOpen(false);
+    if (snackbarMessage) {
+      setSnackbar({
+        type: 'success',
+        msg: snackbarMessage,
+      });
+    }
+  };
+
+  const openDeleteConfirmationModal = () => {
+    setDeleteConfirmationModalOpen(true);
+  };
+
+  const onSelect = (specie: SpeciesName) => {
     setSelectedSpecie(specie);
     setEditSpecieModalOpen(true);
   };
@@ -88,14 +106,22 @@ export default function Species(): JSX.Element {
         open={editSpecieModalOpen}
         onClose={onCloseEditSpecieModal}
         value={selectedSpecie}
+        onDelete={openDeleteConfirmationModal}
       />
+      {selectedSpecie && (
+        <DeleteConfirmationModal
+          open={deleteConfirmationModalOpen}
+          onClose={onCloseDeleteConfirmationModal}
+          speciesName={selectedSpecie}
+        />
+      )}
       <Container maxWidth={false} className={classes.mainContainer}>
         <Grid container spacing={3}>
           <Grid item xs={1} />
           <Grid item xs={2}>
             <h1>Species</h1>
             <Typography component='h4' variant='subtitle1'>
-              {(results && results.length) ?? '0'} Total
+              {results?.length} Total
             </Typography>
           </Grid>
           <Grid item xs={6} />
@@ -103,7 +129,7 @@ export default function Species(): JSX.Element {
             <Chip
               id='new-species'
               size='medium'
-              label='New Species'
+              label={strings.NEW_SPECIES}
               onClick={onNewSpecie}
               icon={<AddIcon classes={chipStyles()} />}
               className={classes.newSpecies}
@@ -117,6 +143,7 @@ export default function Species(): JSX.Element {
                 <Grid item xs={12}>
                   {results && (
                     <Table
+                      id='species-table'
                       columns={columns}
                       rows={results}
                       orderBy='name'

@@ -11,10 +11,12 @@ import AppBar from './components/AppBar';
 import Dashboard from './components/Dashboard';
 import Login from './components/Login';
 import NavBar from './components/NavBar';
+import Snackbar from './components/Snackbar';
 import Species from './components/Species';
 import ErrorBoundary from './ErrorBoundary';
 import sessionSelector from './state/selectors/session';
 import theme from './theme';
+import useCheckJWT from './utils/useCheckJWT';
 
 export default function App() {
   return (
@@ -33,6 +35,7 @@ export default function App() {
 function AppContent() {
   const session = useRecoilValue(sessionSelector);
   const history = useHistory();
+  useCheckJWT();
 
   useEffect(() => {
     if (session) {
@@ -45,6 +48,7 @@ function AppContent() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
+      <Snackbar />
       {!session && <Route exact path='/' component={Login} />}
       {session && (
         <Grid container spacing={3}>

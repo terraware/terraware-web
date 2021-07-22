@@ -63,6 +63,7 @@ export default function NavBar(): JSX.Element | null {
             component={RouterLink}
             className={isDashboardRoute ? classes.selected : ''}
             to='/dashboard'
+            id='dashboard'
           >
             <ListItemText primary='Dashboard' />
           </ListItem>
@@ -71,6 +72,7 @@ export default function NavBar(): JSX.Element | null {
             component={RouterLink}
             className={isSpeciesRoute ? classes.selected : ''}
             to='/species'
+            id='species'
           >
             <ListItemText primary='Species' />
           </ListItem>
