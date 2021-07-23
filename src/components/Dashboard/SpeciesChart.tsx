@@ -1,6 +1,7 @@
 import Chart from 'chart.js/auto';
 import React from 'react';
-import * as speciesData from '../../data/species.json';
+import { useRecoilValue } from 'recoil';
+import speciesForChartSelector from '../../state/selectors/speciesForChart';
 
 interface Props {
   isFullscreen: boolean;
@@ -9,6 +10,11 @@ interface Props {
 export default function SpeciesChart({ isFullscreen }: Props): JSX.Element {
   const chartRef = React.useRef<HTMLCanvasElement>(null);
   const [chart, setChart] = React.useState();
+  const speciesForChart = useRecoilValue(speciesForChartSelector);
+
+  const speciesForChartArray = Object.keys(speciesForChart).map(
+    (key) => speciesForChart[parseInt(key, 10)]
+  );
 
   React.useEffect(() => {
     const ctx = chartRef?.current?.getContext('2d');
@@ -22,28 +28,24 @@ export default function SpeciesChart({ isFullscreen }: Props): JSX.Element {
         new Chart(ctx, {
           type: 'bar',
           data: {
-            labels: speciesData.features.map((entry) => entry.properties.NAME),
+            labels: speciesForChartArray.map(
+              (speciesForChartElem) => speciesForChartElem.speciesName.name
+            ),
             datasets: [
               {
                 label: '# of Trees',
-                data: speciesData.features.map(
-                  (entry) => entry.properties.NUMBER_OF_TREES
+                data: speciesForChartArray.map(
+                  (speciesForChartElem) => speciesForChartElem.numberOfTrees
                 ),
                 backgroundColor: [
-                  'rgba(255, 99, 132, 0.2)',
-                  'rgba(54, 162, 235, 0.2)',
-                  'rgba(255, 206, 86, 0.2)',
-                  'rgba(75, 192, 192, 0.2)',
-                  'rgba(153, 102, 255, 0.2)',
-                  'rgba(255, 159, 64, 0.2)',
+                  speciesForChartArray.map(
+                    (speciesForChartElem) => speciesForChartElem.color
+                  ),
                 ],
                 borderColor: [
-                  'rgba(255, 99, 132, 1)',
-                  'rgba(54, 162, 235, 1)',
-                  'rgba(255, 206, 86, 1)',
-                  'rgba(75, 192, 192, 1)',
-                  'rgba(153, 102, 255, 1)',
-                  'rgba(255, 159, 64, 1)',
+                  speciesForChartArray.map(
+                    (speciesForChartElem) => speciesForChartElem.color
+                  ),
                 ],
                 borderWidth: 1,
                 barPercentage: 0.5,

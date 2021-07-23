@@ -71,38 +71,11 @@ export default function Dashboard(): JSX.Element {
     setIsFullscreen(!isFullscreen);
   };
 
-  // const [value, setValue] = React.useState("1");
-
-  // const handleChange = (event: React.ChangeEvent<{}>, newValue: string) => {
-  //   setValue(newValue);
-  // };
-
   return (
     <main>
       <Container maxWidth={false} className={classes.mainContainer}>
         <Grid container spacing={3}>
           <Grid item xs={isFullscreen ? 12 : 6}>
-            {/* <TabContext value={value}>
-              <AppBar position="static">
-                <TabList onChange={handleChange} aria-label="simple tabs">
-                  <Tab label="Map" {...a11yProps(0)} value="1" />
-                  <Tab label="Table" {...a11yProps(1)} value="2" />
-                </TabList>
-              </AppBar>
-              <TabPanel value="1">
-                <Grid container spacing={3}>
-                  <Map></Map>
-                </Grid>
-              </TabPanel>
-              <TabPanel value="2">
-                <Table
-                  columns={columns}
-                  rows={speciesData.features}
-                  orderBy="name"
-                  Renderer={GeolocationCellRenderer}
-                />
-              </TabPanel>
-            </TabContext> */}
             <Map onFullscreen={onFullscreenHandler} />
           </Grid>
           <Grid item xs={isFullscreen ? 12 : 6}>
@@ -173,15 +146,3 @@ export default function Dashboard(): JSX.Element {
     </main>
   );
 }
-
-// const columns: TableColumnType[] = [
-//   { key: "name", name: "Name", type: "string" },
-//   { key: "location", name: "Location", type: "string" },
-// ];
-
-// function a11yProps(index: any) {
-//   return {
-//     id: `simple-tab-${index}`,
-//     "aria-controls": `simple-tabpanel-${index}`,
-//   };
-// }
