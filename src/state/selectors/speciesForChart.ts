@@ -14,18 +14,20 @@ export default selector<Record<number, SpeciesForChart>>({
     const speciesNamesBySpeciesId = get(speciesNamesBySpeciesIdSelector);
     if (session) {
       plantsPlanted?.forEach((plant) => {
-        const plantSpecies = speciesForChart[plant.species_id ?? -1];
-        if (plantSpecies) {
-          plantSpecies.numberOfTrees = plantSpecies.numberOfTrees + 1;
-        } else if (plant.species_id) {
-          const speciesToAdd = speciesNamesBySpeciesId[plant.species_id];
-          if (speciesToAdd) {
-            const speciesChartToAdd: SpeciesForChart = {
-              speciesName: speciesToAdd,
-              numberOfTrees: 1,
-              color: generateRandomColor(),
-            };
-            speciesForChart[plant.species_id ?? -1] = speciesChartToAdd;
+        if (plant) {
+          const plantSpecies = speciesForChart[plant.species_id ?? -1];
+          if (plantSpecies) {
+            plantSpecies.numberOfTrees = plantSpecies.numberOfTrees + 1;
+          } else if (plant.species_id) {
+            const speciesToAdd = speciesNamesBySpeciesId[plant.species_id];
+            if (speciesToAdd) {
+              const speciesChartToAdd: SpeciesForChart = {
+                speciesName: speciesToAdd,
+                numberOfTrees: 1,
+                color: generateRandomColor(),
+              };
+              speciesForChart[plant.species_id ?? -1] = speciesChartToAdd;
+            }
           }
         }
       });

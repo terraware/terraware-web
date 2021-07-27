@@ -12,9 +12,7 @@ export default function SpeciesChart({ isFullscreen }: Props): JSX.Element {
   const [chart, setChart] = React.useState();
   const speciesForChart = useRecoilValue(speciesForChartSelector);
 
-  const speciesForChartArray = Object.keys(speciesForChart).map(
-    (key) => speciesForChart[parseInt(key, 10)]
-  );
+  const speciesForChartArray = Object.values(speciesForChart);
 
   React.useEffect(() => {
     const ctx = chartRef?.current?.getContext('2d');
@@ -37,17 +35,9 @@ export default function SpeciesChart({ isFullscreen }: Props): JSX.Element {
                 data: speciesForChartArray.map(
                   (speciesForChartElem) => speciesForChartElem.numberOfTrees
                 ),
-                backgroundColor: [
-                  speciesForChartArray.map(
-                    (speciesForChartElem) => speciesForChartElem.color
-                  ),
-                ],
-                borderColor: [
-                  speciesForChartArray.map(
-                    (speciesForChartElem) => speciesForChartElem.color
-                  ),
-                ],
-                borderWidth: 1,
+                backgroundColor: speciesForChartArray.map(
+                  (speciesForChartElem) => speciesForChartElem.color
+                ),
                 barPercentage: 0.5,
               },
             ],
@@ -82,6 +72,11 @@ export default function SpeciesChart({ isFullscreen }: Props): JSX.Element {
                 display: false,
               },
             },
+            layout: {
+              padding: {
+                right: 100,
+              },
+            },
           },
         })
       );
@@ -89,5 +84,5 @@ export default function SpeciesChart({ isFullscreen }: Props): JSX.Element {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFullscreen]);
 
-  return <canvas id='myChart' ref={chartRef} width='400' height='400' />;
+  return <canvas id='speciesChart' ref={chartRef} width='400' height='400' />;
 }
