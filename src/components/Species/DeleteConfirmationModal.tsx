@@ -8,7 +8,7 @@ import { useRecoilValue, useResetRecoilState } from 'recoil';
 import { deleteSpeciesName } from '../../api/speciesNames';
 import { SpeciesName } from '../../api/types/species';
 import sessionSelector from '../../state/selectors/session';
-import { speciesNamesSelector } from '../../state/selectors/speciesNamesBySpeciesId';
+import speciesNamesSelector from '../../state/selectors/speciesNames';
 import strings from '../../strings';
 import CancelButton from '../common/CancelButton';
 import DialogCloseButton from '../common/DialogCloseButton';

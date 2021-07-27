@@ -10,11 +10,10 @@ interface Props {
 export default function SpeciesChart({ isFullscreen }: Props): JSX.Element {
   const chartRef = React.useRef<HTMLCanvasElement>(null);
   const speciesForChart = useRecoilValue(speciesForChartSelector);
-
-  const speciesForChartArray = Object.values(speciesForChart);
-
   const currentChartRef = React.useRef();
+
   React.useEffect(() => {
+    const speciesForChartArray = Object.values(speciesForChart);
     const names: string[] = [];
     const numberOfTrees: number[] = [];
     const colors: string[] = [];
@@ -84,7 +83,7 @@ export default function SpeciesChart({ isFullscreen }: Props): JSX.Element {
         },
       });
     }
-  }, [isFullscreen, speciesForChartArray]);
+  }, [isFullscreen, speciesForChart]);
 
   return <canvas id='speciesChart' ref={chartRef} width='400' height='400' />;
 }
