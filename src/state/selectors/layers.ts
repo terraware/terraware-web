@@ -22,7 +22,6 @@ export const plantsPlantedLayerSelector = selector<Layer | undefined>({
     const session = get(sessionSelector);
     const plantsPlantedLayerType = get(plantsPlantedLayerTypeSelector);
     const layers = get(layersSelector);
-    console.log({ session, plantsPlantedLayerType, layers });
     if (session && plantsPlantedLayerType && layers) {
       return layers.find(
         (layer) => layer.type_id === plantsPlantedLayerType.id

@@ -20,7 +20,6 @@ export const plantsPlantedSelector = selector<
         )
       );
 
-      console.log({ plants });
       return plants;
     }
   },

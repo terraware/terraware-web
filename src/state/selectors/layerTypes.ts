@@ -17,7 +17,6 @@ export const plantsPlantedLayerTypeSelector = selector({
   key: 'plantsPlantedLayerTypeSelector',
   get: async ({ get }) => {
     const layerTypes = get(layerTypesSelector);
-    console.log({ layerTypes });
 
     return layerTypes?.find((layerType) => layerType.name === 'plants planted');
   },
