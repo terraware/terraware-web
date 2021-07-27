@@ -42,8 +42,9 @@
     "e2e:report": "npx nyc report --reporter=text",
     "lint": "tslint --project tsconfig.json",
     "docker:start": "./scripts/launch_server.sh",
-    "docker:stop": "docker-compose kill",
-    "wait-be": "wait-on http://localhost:8008/docs"
+    "docker:stop": "docker-compose down",
+    "wait-be": "wait-on http://localhost:8008/docs",
+    "server:reset": "./scripts/resetdb.sh"
   },
   "eslintConfig": {
     "extends": [

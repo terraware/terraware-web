@@ -1,6 +1,8 @@
 import Chart from 'chart.js/auto';
 import React from 'react';
-import * as speciesData from '../../data/species.json';
+import { useRecoilValue } from 'recoil';
+import speciesForChartSelector from '../../state/selectors/speciesForChart';
+import strings from '../../strings';
 
 interface Props {
   isFullscreen: boolean;
@@ -8,84 +10,81 @@ interface Props {
 
 export default function SpeciesChart({ isFullscreen }: Props): JSX.Element {
   const chartRef = React.useRef<HTMLCanvasElement>(null);
-  const [chart, setChart] = React.useState();
+  const speciesForChart = useRecoilValue(speciesForChartSelector);
+  const currentChartRef = React.useRef();
 
   React.useEffect(() => {
+    const speciesForChartArray = Object.values(speciesForChart);
+    const names: string[] = [];
+    const numberOfTrees: number[] = [];
+    const colors: string[] = [];
+
+    speciesForChartArray.forEach((species) => {
+      names.push(species.speciesName.name);
+      numberOfTrees.push(species.numberOfTrees);
+      colors.push(species.color);
+    });
+
     const ctx = chartRef?.current?.getContext('2d');
-    if (chart) {
-      const newChart = chart as Chart;
-      newChart.destroy();
+    if (currentChartRef.current) {
+      const oldChart = currentChartRef.current as Chart;
+      oldChart.destroy();
+      currentChartRef.current = undefined;
     }
     if (ctx) {
       ctx.canvas.height = isFullscreen ? 70 : 200;
-      setChart(
-        new Chart(ctx, {
-          type: 'bar',
-          data: {
-            labels: speciesData.features.map((entry) => entry.properties.NAME),
-            datasets: [
-              {
-                label: '# of Trees',
-                data: speciesData.features.map(
-                  (entry) => entry.properties.NUMBER_OF_TREES
-                ),
-                backgroundColor: [
-                  'rgba(255, 99, 132, 0.2)',
-                  'rgba(54, 162, 235, 0.2)',
-                  'rgba(255, 206, 86, 0.2)',
-                  'rgba(75, 192, 192, 0.2)',
-                  'rgba(153, 102, 255, 0.2)',
-                  'rgba(255, 159, 64, 0.2)',
-                ],
-                borderColor: [
-                  'rgba(255, 99, 132, 1)',
-                  'rgba(54, 162, 235, 1)',
-                  'rgba(255, 206, 86, 1)',
-                  'rgba(75, 192, 192, 1)',
-                  'rgba(153, 102, 255, 1)',
-                  'rgba(255, 159, 64, 1)',
-                ],
-                borderWidth: 1,
-                barPercentage: 0.5,
-              },
-            ],
-          },
-          options: {
-            scales: {
-              x: {
-                title: {
-                  display: true,
-                  text: isFullscreen ? 'Species' : 'Number of Trees',
-                },
-                position: isFullscreen ? 'bottom' : 'top',
-              },
-              y: {
-                title: {
-                  display: true,
-                  text: isFullscreen ? 'Number of Trees' : 'Species',
-                },
-              },
+      currentChartRef.current = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: names,
+          datasets: [
+            {
+              label: strings.N_OF_TREES,
+              data: numberOfTrees,
+              backgroundColor: colors,
+              barPercentage: 0.5,
             },
-            indexAxis: isFullscreen ? 'x' : 'y',
-            // Elements options apply to all of the options unless overridden in a dataset
-            // In this case, we are setting the border of each horizontal bar to be 2px wide
-            elements: {
-              bar: {
-                borderWidth: 1,
+          ],
+        },
+        options: {
+          scales: {
+            x: {
+              title: {
+                display: true,
+                text: isFullscreen ? strings.SPECIES : strings.NUMBER_OF_TREES,
               },
+              position: isFullscreen ? 'bottom' : 'top',
             },
-            responsive: true,
-            plugins: {
-              legend: {
-                display: false,
+            y: {
+              title: {
+                display: true,
+                text: isFullscreen ? strings.NUMBER_OF_TREES : strings.SPECIES,
               },
             },
           },
-        })
-      );
+          indexAxis: isFullscreen ? 'x' : 'y',
+          // Elements options apply to all of the options unless overridden in a dataset
+          // In this case, we are setting the border of each horizontal bar to be 2px wide
+          elements: {
+            bar: {
+              borderWidth: 1,
+            },
+          },
+          responsive: true,
+          plugins: {
+            legend: {
+              display: false,
+            },
+          },
+          layout: {
+            padding: {
+              right: 100,
+            },
+          },
+        },
+      });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isFullscreen]);
+  }, [isFullscreen, speciesForChart]);
 
-  return <canvas id='myChart' ref={chartRef} width='400' height='400' />;
+  return <canvas id='speciesChart' ref={chartRef} width='400' height='400' />;
 }

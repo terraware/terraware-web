@@ -25,9 +25,7 @@ export default function NavBar(): JSX.Element | null {
   useEffect(() => {
     if (projects && !projectId) {
       const firstProject = projects[0];
-      if (firstProject.id) {
-        setProjectId(firstProject.id);
-      }
+      setProjectId(firstProject.id);
     }
   }, [projects, projectId, setProjectId]);
 
