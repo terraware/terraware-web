@@ -1,6 +1,6 @@
 import { atom, DefaultValue, selector } from 'recoil';
 import { TokenResponse } from '../../api/types/auth';
-import projectSelector from './project';
+import projectSelector from './projectId';
 
 const sessionAtom = atom({
   key: 'sessionAtom',

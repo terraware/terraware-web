@@ -2,8 +2,7 @@ import { AppBar, Grid, Toolbar } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React, { useEffect } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { Project } from '../api/types/project';
-import projectSelector from '../state/selectors/project';
+import projectIdSelector from '../state/selectors/projectId';
 import projectsSelector from '../state/selectors/projects';
 import Dropdown from './common/Dropdown';
 
@@ -21,18 +20,14 @@ export default function NavBar(): JSX.Element | null {
 
   const projects = useRecoilValue(projectsSelector);
 
-  const [project, setProject] = useRecoilState(projectSelector);
+  const [projectId, setProjectId] = useRecoilState(projectIdSelector);
 
   useEffect(() => {
-    if (projects && !project) {
+    if (projects && !projectId) {
       const firstProject = projects[0];
-      setProject(firstProject);
+      setProjectId(firstProject.id);
     }
-  }, [projects, project, setProject]);
-
-  const getProjectById = (id: number): Project | undefined => {
-    return projects?.find((iProject) => iProject.id === id);
-  };
+  }, [projects, projectId, setProjectId]);
 
   return (
     <AppBar className={classes.appBar}>
@@ -46,10 +41,8 @@ export default function NavBar(): JSX.Element | null {
                 value: value.id?.toString() ?? '',
                 label: value.name,
               }))}
-              onChange={(id, value) =>
-                setProject(getProjectById(parseInt(value, 10)))
-              }
-              selected={project?.id?.toString() ?? ''}
+              onChange={(id, value) => setProjectId(parseInt(value, 10))}
+              selected={projectId?.toString() ?? ''}
             />
           </Grid>
         </Grid>
