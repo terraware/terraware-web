@@ -4,9 +4,7 @@ import { Plant } from '../../api/types/plant';
 import { plantsPlantedFeaturesSelector } from './plantsPlantedFeatures';
 import sessionSelector from './session';
 
-export const plantsPlantedSelector = selector<
-  (Plant | undefined)[] | undefined
->({
+export default selector<Plant[] | undefined>({
   key: 'plantsPlantedPlantsSelector',
   get: ({ get }) => {
     const session = get(sessionSelector);
@@ -14,18 +12,25 @@ export const plantsPlantedSelector = selector<
     if (session && plantsPlantedFeatures) {
       const plants = get(
         waitForAll(
-          plantsPlantedFeatures.map((plantFeature) => {
-            return plantQuery(plantFeature.id!);
-          })
+          plantsPlantedFeatures.map((plantFeature) =>
+            plantQuery(plantFeature.id!)
+          )
         )
       );
 
-      return plants;
+      const result: Plant[] = [];
+      plants?.forEach((plant) => {
+        if (plant) {
+          result.push(plant);
+        }
+      });
+
+      return result;
     }
   },
 });
 
-const plantQuery = selectorFamily({
+const plantQuery = selectorFamily<Plant | undefined, number>({
   key: 'plantQuery',
   get:
     (plantFeatureId: number) =>

@@ -8,7 +8,7 @@ export const speciesNamesAtom = atom({
   default: 0,
 });
 
-const speciesNamesSelector = selector<SpeciesName[] | undefined>({
+export const speciesNamesSelector = selector<SpeciesName[] | undefined>({
   key: 'speciesNamesSelector',
   get: async ({ get }) => {
     get(speciesNamesAtom);
@@ -22,11 +22,7 @@ const speciesNamesSelector = selector<SpeciesName[] | undefined>({
   },
 });
 
-export default speciesNamesSelector;
-
-export const speciesNamesBySpeciesIdSelector = selector<
-  Record<number, SpeciesName>
->({
+export default selector<Record<number, SpeciesName>>({
   key: 'speciesNamesBySpeciesIdSelector',
   get: ({ get }) => {
     const speciesNames = get(speciesNamesSelector);

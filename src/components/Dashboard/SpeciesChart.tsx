@@ -14,6 +14,16 @@ export default function SpeciesChart({ isFullscreen }: Props): JSX.Element {
 
   const speciesForChartArray = Object.values(speciesForChart);
 
+  const names: string[] = [];
+  const numberOfTrees: number[] = [];
+  const colors: string[] = [];
+
+  speciesForChartArray.forEach((species) => {
+    names.push(species.speciesName.name);
+    numberOfTrees.push(species.numberOfTrees);
+    colors.push(species.color);
+  });
+
   React.useEffect(() => {
     const ctx = chartRef?.current?.getContext('2d');
     if (chart) {
@@ -26,18 +36,12 @@ export default function SpeciesChart({ isFullscreen }: Props): JSX.Element {
         new Chart(ctx, {
           type: 'bar',
           data: {
-            labels: speciesForChartArray.map(
-              (speciesForChartElem) => speciesForChartElem.speciesName.name
-            ),
+            labels: names,
             datasets: [
               {
                 label: '# of Trees',
-                data: speciesForChartArray.map(
-                  (speciesForChartElem) => speciesForChartElem.numberOfTrees
-                ),
-                backgroundColor: speciesForChartArray.map(
-                  (speciesForChartElem) => speciesForChartElem.color
-                ),
+                data: numberOfTrees,
+                backgroundColor: colors,
                 barPercentage: 0.5,
               },
             ],

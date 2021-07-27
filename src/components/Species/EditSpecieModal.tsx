@@ -10,7 +10,7 @@ import { postSpecies } from '../../api/species';
 import { postSpeciesName, putSpeciesName } from '../../api/speciesNames';
 import { SpeciesName } from '../../api/types/species';
 import sessionSelector from '../../state/selectors/session';
-import speciesNamesSelector from '../../state/selectors/speciesNames';
+import { speciesNamesSelector } from '../../state/selectors/speciesNamesBySpeciesId';
 import strings from '../../strings';
 import useForm from '../../utils/useForm';
 import CancelButton from '../common/CancelButton';

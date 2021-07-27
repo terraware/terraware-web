@@ -3,7 +3,7 @@ import { getLayersTypes } from '../../api/layer_types';
 import { LayerType } from '../../api/types/layer';
 import sessionSelector from './session';
 
-export const layerTypesSelector = selector<LayerType[] | undefined>({
+const layerTypesSelector = selector<LayerType[] | undefined>({
   key: 'layerTypesSelector',
   get: async ({ get }) => {
     const session = get(sessionSelector);
@@ -13,7 +13,7 @@ export const layerTypesSelector = selector<LayerType[] | undefined>({
   },
 });
 
-export const plantsPlantedLayerTypeSelector = selector({
+export default selector({
   key: 'plantsPlantedLayerTypeSelector',
   get: async ({ get }) => {
     const layerTypes = get(layerTypesSelector);

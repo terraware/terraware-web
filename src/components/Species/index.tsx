@@ -8,7 +8,7 @@ import React from 'react';
 import { useRecoilValueLoadable, useSetRecoilState } from 'recoil';
 import { SpeciesName } from '../../api/types/species';
 import snackbarAtom from '../../state/atoms/snackbar';
-import speciesNamesSelector from '../../state/selectors/speciesNames';
+import { speciesNamesSelector } from '../../state/selectors/speciesNamesBySpeciesId';
 import strings from '../../strings';
 import Table from '../common/table';
 import { TableColumnType } from '../common/table/types';

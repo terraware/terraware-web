@@ -1,7 +1,7 @@
 import { selector } from 'recoil';
 import { getLayers } from '../../api/layers';
 import { Layer } from '../../api/types/layer';
-import { plantsPlantedLayerTypeSelector } from './layerTypes';
+import plantsPlantedLayerTypeSelector from './layerTypes';
 import sessionSelector from './session';
 import siteSelector from './site';
 
