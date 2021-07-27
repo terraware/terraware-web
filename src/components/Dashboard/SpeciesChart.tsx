@@ -2,6 +2,7 @@ import Chart from 'chart.js/auto';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 import speciesForChartSelector from '../../state/selectors/speciesForChart';
+import strings from '../../strings';
 
 interface Props {
   isFullscreen: boolean;
@@ -38,7 +39,7 @@ export default function SpeciesChart({ isFullscreen }: Props): JSX.Element {
           labels: names,
           datasets: [
             {
-              label: '# of Trees',
+              label: strings.N_OF_TREES,
               data: numberOfTrees,
               backgroundColor: colors,
               barPercentage: 0.5,
@@ -50,14 +51,14 @@ export default function SpeciesChart({ isFullscreen }: Props): JSX.Element {
             x: {
               title: {
                 display: true,
-                text: isFullscreen ? 'Species' : 'Number of Trees',
+                text: isFullscreen ? strings.SPECIES : strings.NUMBER_OF_TREES,
               },
               position: isFullscreen ? 'bottom' : 'top',
             },
             y: {
               title: {
                 display: true,
-                text: isFullscreen ? 'Number of Trees' : 'Species',
+                text: isFullscreen ? strings.NUMBER_OF_TREES : strings.SPECIES,
               },
             },
           },

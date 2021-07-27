@@ -18,6 +18,9 @@ const strings = new LocalizedStrings({
     ADD_SPECIES: 'Add Species',
     ADD: 'Add',
     NEW_SPECIES: 'New Species',
+    N_OF_TREES: '# of Trees',
+    SPECIES: 'Species',
+    NUMBER_OF_TREES: 'Number of Trees',
   },
 });
 
