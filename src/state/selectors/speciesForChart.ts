@@ -14,11 +14,11 @@ export default selector<Record<number, SpeciesForChart>>({
     const speciesNamesBySpeciesId = get(speciesNamesBySpeciesIdSelector);
     if (session) {
       plantsPlanted?.forEach((plant) => {
-        if (plant) {
-          const plantSpecies = speciesForChart[plant.species_id ?? -1];
+        if (plant && plant.species_id) {
+          const plantSpecies = speciesForChart[plant.species_id];
           if (plantSpecies) {
             plantSpecies.numberOfTrees += 1;
-          } else if (plant.species_id) {
+          } else {
             const speciesToAdd = speciesNamesBySpeciesId[plant.species_id];
             if (speciesToAdd) {
               const speciesChartToAdd: SpeciesForChart = {
