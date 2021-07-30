@@ -117,7 +117,7 @@ function Map({ onFullscreen }: Props): JSX.Element {
   };
 
   const getCenter = () => {
-    if (features) {
+    if (features?.length) {
       let maxLat: number = getCoordinates(features[0])[1];
       let minLat: number = getCoordinates(features[0])[1];
       let maxLong: number = getCoordinates(features[0])[0];
