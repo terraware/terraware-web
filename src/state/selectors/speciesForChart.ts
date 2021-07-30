@@ -1,7 +1,7 @@
 import { selector } from 'recoil';
 import { SpeciesForChart } from '../../api/types/species';
 import generateRandomColor from '../../utils/generateRandomColor';
-import plantsPlantedSelector from './plantsPlanted';
+import { plantsPlantedSelector } from './plantsPlanted';
 import sessionSelector from './session';
 import speciesNamesBySpeciesIdSelector from './speciesNamesBySpeciesId';
 

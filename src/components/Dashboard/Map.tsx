@@ -14,9 +14,10 @@ import { useRecoilValue } from 'recoil';
 import { Feature } from '../../api/types/feature';
 import { Plant } from '../../api/types/plant';
 import { photoByFeatureIdSelector } from '../../state/selectors/photos';
-import plantsPlanted from '../../state/selectors/plantsPlanted';
+import { plantsByFeatureIdSelector } from '../../state/selectors/plantsPlanted';
 import { plantsPlantedFeaturesSelector } from '../../state/selectors/plantsPlantedFeatures';
 import speciesForChartSelector from '../../state/selectors/speciesForChart';
+import strings from '../../strings';
 import CustomMapControl from './CustomMapControl';
 import NewSpecieModal from './NewSpecieModal';
 
@@ -73,14 +74,10 @@ function Map({ onFullscreen }: Props): JSX.Element {
 
   const features = useRecoilValue(plantsPlantedFeaturesSelector);
   const speciesForChart = useRecoilValue(speciesForChartSelector);
-  const plants = useRecoilValue(plantsPlanted);
 
   const photoByFeatureId = useRecoilValue(photoByFeatureIdSelector);
 
-  const plantsByFeatureId: Record<number, Plant> = {};
-  plants?.forEach((plant) => {
-    plantsByFeatureId[plant.feature_id] = plant;
-  });
+  const plantsByFeatureId = useRecoilValue(plantsByFeatureIdSelector);
 
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
@@ -89,17 +86,7 @@ function Map({ onFullscreen }: Props): JSX.Element {
       'AIzaSyD2fuvCA8pud6zvJxmzWpSmsImAD3uhfUE',
   });
 
-  const [, setMap] = React.useState(null);
-
   const [isFullscreen, setIsFullscreen] = React.useState(false);
-
-  const onLoad = React.useCallback((map) => {
-    setMap(map);
-  }, []);
-
-  const onUnmount = React.useCallback((map) => {
-    setMap(null);
-  }, []);
 
   const onCloseEditPlantModal = () => {
     setEditPlantModalOpen(false);
@@ -123,9 +110,10 @@ function Map({ onFullscreen }: Props): JSX.Element {
     onFullscreen();
   };
 
-  const selectedPlant: Plant | undefined = selectedFeature
-    ? plantsByFeatureId[selectedFeature.id!]
-    : undefined;
+  const selectedPlant: Plant | undefined =
+    selectedFeature && plantsByFeatureId
+      ? plantsByFeatureId[selectedFeature.id!]
+      : undefined;
 
   return (
     <>
@@ -139,13 +127,11 @@ function Map({ onFullscreen }: Props): JSX.Element {
         <GoogleMap
           zoom={10}
           center={{ lat: 45.4211, lng: -75.6903 }}
-          onLoad={onLoad}
           options={{
             fullscreenControl: false,
             streetViewControl: false,
             mapTypeControl: false,
           }}
-          onUnmount={onUnmount}
           mapTypeId='satellite'
           mapContainerStyle={
             isFullscreen
@@ -153,9 +139,7 @@ function Map({ onFullscreen }: Props): JSX.Element {
               : { width: '100%', height: '100%' }
           }
         >
-          <CustomMapControl
-            position={window.google.maps.ControlPosition.RIGHT_BOTTOM}
-          >
+          <CustomMapControl position={9}>
             <IconButton
               id='full-screen'
               onClick={onFullscreenClick}
@@ -164,33 +148,34 @@ function Map({ onFullscreen }: Props): JSX.Element {
               <FullscreenIcon />
             </IconButton>
           </CustomMapControl>
-          {features?.map((feature) => {
-            const plant = plantsByFeatureId[feature.id!];
+          {plantsByFeatureId &&
+            features?.map((feature) => {
+              const plant = plantsByFeatureId[feature.id!];
 
-            const coordinates: number[] =
-              feature.geom &&
-              feature.geom.coordinates &&
-              Array.isArray(feature.geom?.coordinates)
-                ? feature.geom?.coordinates
-                : [];
-            if (coordinates.length) {
-              return (
-                <Marker
-                  key={feature.id}
-                  position={{
-                    lat: coordinates[1],
-                    lng: coordinates[0],
-                  }}
-                  options={{
-                    icon: iconPin(speciesForChart[plant.species_id!].color),
-                  }}
-                  onClick={() => setSelectedFeature(feature)}
-                />
-              );
-            }
+              const coordinates: number[] =
+                feature.geom &&
+                feature.geom.coordinates &&
+                Array.isArray(feature.geom.coordinates)
+                  ? feature.geom.coordinates
+                  : [];
+              if (coordinates.length) {
+                return (
+                  <Marker
+                    key={feature.id}
+                    position={{
+                      lat: coordinates[1],
+                      lng: coordinates[0],
+                    }}
+                    options={{
+                      icon: iconPin(speciesForChart[plant.species_id!].color),
+                    }}
+                    onClick={() => setSelectedFeature(feature)}
+                  />
+                );
+              }
 
-            return null;
-          })}
+              return null;
+            })}
 
           {selectedFeature && selectedPlant && (
             <InfoWindow
@@ -198,16 +183,12 @@ function Map({ onFullscreen }: Props): JSX.Element {
                 setSelectedFeature(undefined);
               }}
               position={{
-                lat:
-                  typeof selectedFeature.geom?.coordinates === 'object' &&
-                  Array.isArray(selectedFeature.geom?.coordinates)
-                    ? selectedFeature.geom.coordinates[1]
-                    : 0,
-                lng:
-                  typeof selectedFeature.geom?.coordinates === 'object' &&
-                  Array.isArray(selectedFeature.geom?.coordinates)
-                    ? selectedFeature.geom.coordinates[0]
-                    : 0,
+                lat: Array.isArray(selectedFeature.geom?.coordinates)
+                  ? selectedFeature.geom?.coordinates[1]
+                  : 0,
+                lng: Array.isArray(selectedFeature.geom?.coordinates)
+                  ? selectedFeature.geom?.coordinates[0]
+                  : 0,
               }}
             >
               <div>
@@ -219,21 +200,19 @@ function Map({ onFullscreen }: Props): JSX.Element {
                   variant='body2'
                   className={classes.spacing}
                 >
-                  As of {selectedPlant.date_planted}
+                  {strings.AS_OF} {selectedPlant.date_planted}
                 </Typography>
                 <Typography
                   component='p'
                   variant='body2'
                   className={classes.spacing}
                 >
-                  {typeof selectedFeature.geom?.coordinates === 'object' &&
-                  Array.isArray(selectedFeature.geom?.coordinates)
-                    ? selectedFeature.geom.coordinates[1].toFixed(6)
+                  {Array.isArray(selectedFeature.geom?.coordinates)
+                    ? selectedFeature.geom?.coordinates[1].toFixed(6)
                     : 0}
                   ,
-                  {typeof selectedFeature.geom?.coordinates === 'object' &&
-                  Array.isArray(selectedFeature.geom?.coordinates)
-                    ? selectedFeature.geom.coordinates[0].toFixed(6)
+                  {Array.isArray(selectedFeature.geom?.coordinates)
+                    ? selectedFeature.geom?.coordinates[0].toFixed(6)
                     : 0}
                 </Typography>
                 {photoByFeatureId && photoByFeatureId[selectedFeature.id!] && (
@@ -249,8 +228,8 @@ function Map({ onFullscreen }: Props): JSX.Element {
                   label={
                     speciesForChart[selectedPlant.species_id!].speciesName
                       .name !== 'Other'
-                      ? 'Edit Species'
-                      : 'Add Species'
+                      ? strings.EDIT_SPECIES
+                      : strings.ADD_SPECIES
                   }
                   onClick={onNewSpecie}
                   className={classes.newSpecies}

@@ -29,8 +29,8 @@ export const photoByFeatureIdSelector = selector<
 
       const urlCreator = window.URL || window.webkitURL;
       firstPhotos.forEach((firstPhoto) => {
-        if (firstPhoto && firstPhoto.photo) {
-          const imgSrc = urlCreator.createObjectURL(firstPhoto.photo);
+        if (firstPhoto && firstPhoto.blobPhoto) {
+          const imgSrc = urlCreator.createObjectURL(firstPhoto.blobPhoto);
           photosByFeatureIdResponse[firstPhoto?.featuredId] = imgSrc;
         }
       });
@@ -67,7 +67,7 @@ const firstPhotoQuery = selectorFamily<
         const photo = await getPhoto(session, photoArray[0].id);
 
         return {
-          photo,
+          blobPhoto: photo,
           featuredId: photoArray[0].feature_id,
         };
       }

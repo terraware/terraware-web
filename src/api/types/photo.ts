@@ -14,6 +14,6 @@ export type Photo = {
 };
 
 export type PhotoFeature = {
-  photo: Blob;
+  blobPhoto: Blob;
   featuredId: number;
 };
