@@ -81,9 +81,7 @@ function Map({ onFullscreen }: Props): JSX.Element {
 
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
-    googleMapsApiKey:
-      process.env.REACT_APP_GOOGLE_KEY ||
-      'AIzaSyD2fuvCA8pud6zvJxmzWpSmsImAD3uhfUE',
+    googleMapsApiKey: `${process.env.REACT_APP_GOOGLE_KEY}`,
   });
 
   const [isFullscreen, setIsFullscreen] = React.useState(false);
@@ -110,6 +108,31 @@ function Map({ onFullscreen }: Props): JSX.Element {
     onFullscreen();
   };
 
+  const getCoordinates = (feature: Feature) => {
+    return feature.geom &&
+      feature.geom.coordinates &&
+      Array.isArray(feature.geom.coordinates)
+      ? feature.geom.coordinates
+      : [];
+  };
+
+  const getCenter = () => {
+    const lats: number[] = [];
+    const longs: number[] = [];
+    features?.forEach((feature) => {
+      const coordinates = getCoordinates(feature);
+      lats.push(coordinates[1]);
+      longs.push(coordinates[0]);
+    });
+
+    const maxLat = Math.max(...lats);
+    const minLat = Math.min(...lats);
+    const maxLong = Math.max(...longs);
+    const minLong = Math.min(...longs);
+
+    return { lat: (maxLat + minLat) / 2, lng: (maxLong + minLong) / 2 };
+  };
+
   const selectedPlant: Plant | undefined =
     selectedFeature && plantsByFeatureId
       ? plantsByFeatureId[selectedFeature.id!]
@@ -125,8 +148,8 @@ function Map({ onFullscreen }: Props): JSX.Element {
 
       {isLoaded ? (
         <GoogleMap
-          zoom={10}
-          center={{ lat: 45.4211, lng: -75.6903 }}
+          zoom={9}
+          center={getCenter()}
           options={{
             fullscreenControl: false,
             streetViewControl: false,
@@ -152,12 +175,8 @@ function Map({ onFullscreen }: Props): JSX.Element {
             features?.map((feature) => {
               const plant = plantsByFeatureId[feature.id!];
 
-              const coordinates: number[] =
-                feature.geom &&
-                feature.geom.coordinates &&
-                Array.isArray(feature.geom.coordinates)
-                  ? feature.geom.coordinates
-                  : [];
+              const coordinates: number[] = getCoordinates(feature);
+
               if (coordinates.length) {
                 return (
                   <Marker
@@ -183,12 +202,8 @@ function Map({ onFullscreen }: Props): JSX.Element {
                 setSelectedFeature(undefined);
               }}
               position={{
-                lat: Array.isArray(selectedFeature.geom?.coordinates)
-                  ? selectedFeature.geom?.coordinates[1]
-                  : 0,
-                lng: Array.isArray(selectedFeature.geom?.coordinates)
-                  ? selectedFeature.geom?.coordinates[0]
-                  : 0,
+                lat: getCoordinates(selectedFeature)[1],
+                lng: getCoordinates(selectedFeature)[0],
               }}
             >
               <div>
@@ -207,13 +222,8 @@ function Map({ onFullscreen }: Props): JSX.Element {
                   variant='body2'
                   className={classes.spacing}
                 >
-                  {Array.isArray(selectedFeature.geom?.coordinates)
-                    ? selectedFeature.geom?.coordinates[1].toFixed(6)
-                    : 0}
-                  ,
-                  {Array.isArray(selectedFeature.geom?.coordinates)
-                    ? selectedFeature.geom?.coordinates[0].toFixed(6)
-                    : 0}
+                  {getCoordinates(selectedFeature)[1].toFixed(6)},
+                  {getCoordinates(selectedFeature)[0].toFixed(6)}
                 </Typography>
                 {photoByFeatureId && photoByFeatureId[selectedFeature.id!] && (
                   <img
