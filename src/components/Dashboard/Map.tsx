@@ -260,7 +260,7 @@ function Map({ onFullscreen }: Props): JSX.Element {
                   className={classes.newSpecies}
                   icon={
                     speciesForChart[selectedPlant.species_id!].speciesName
-                      .name !== 'Other' ? (
+                      .name !== strings.OTHER ? (
                       <CreateIcon />
                     ) : (
                       <AddIcon />
