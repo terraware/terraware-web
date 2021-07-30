@@ -66,7 +66,7 @@ export default function NewSpecieModal(props: Props): JSX.Element {
   const [record, setRecord, onChange] = useForm<Plant>(initPlant(props.value));
   const [value, setValue] = React.useState('female');
   const speciesForChart = useRecoilValue(speciesForChartSelector);
-  const specie = speciesForChart[record.feature_id];
+  const species = speciesForChart[record.feature_id];
 
   React.useEffect(() => {
     if (props.open) {
@@ -97,7 +97,7 @@ export default function NewSpecieModal(props: Props): JSX.Element {
     >
       <DialogTitle>
         <Typography variant='h6'>
-          {specie.speciesName.name !== 'Other'
+          {species?.speciesName.name !== 'Other'
             ? strings.EDIT_SPECIES
             : strings.ADD_SPECIES}
         </Typography>
@@ -159,7 +159,9 @@ export default function NewSpecieModal(props: Props): JSX.Element {
               id='saveSpecie'
               className={classes.submit}
               label={
-                specie.speciesName.name !== 'Other' ? strings.SAVE : strings.ADD
+                species?.speciesName.name !== 'Other'
+                  ? strings.SAVE
+                  : strings.ADD
               }
               clickable
               color='primary'
