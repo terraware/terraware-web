@@ -69,22 +69,18 @@ interface Props {
 function Map({ onFullscreen }: Props): JSX.Element {
   const classes = useStyles();
   const [selectedFeature, setSelectedFeature] = useState<Feature>();
-
   const [editPlantModalOpen, setEditPlantModalOpen] = React.useState(false);
+  const [isFullscreen, setIsFullscreen] = React.useState(false);
 
   const features = useRecoilValue(plantsPlantedFeaturesSelector);
   const speciesForChart = useRecoilValue(speciesForChartSelector);
-
   const photoByFeatureId = useRecoilValue(photoByFeatureIdSelector);
-
   const plantsByFeatureId = useRecoilValue(plantsByFeatureIdSelector);
 
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
     googleMapsApiKey: `${process.env.REACT_APP_GOOGLE_KEY}`,
   });
-
-  const [isFullscreen, setIsFullscreen] = React.useState(false);
 
   const onCloseEditPlantModal = () => {
     setEditPlantModalOpen(false);
