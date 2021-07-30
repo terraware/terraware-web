@@ -97,7 +97,9 @@ export default function NewSpecieModal(props: Props): JSX.Element {
     >
       <DialogTitle>
         <Typography variant='h6'>
-          {specie.speciesName.name !== 'Other' ? 'Edit Species' : 'Add Species'}
+          {specie.speciesName.name !== 'Other'
+            ? strings.EDIT_SPECIES
+            : strings.ADD_SPECIES}
         </Typography>
         <DialogCloseButton onClick={handleCancel} />
       </DialogTitle>
@@ -156,7 +158,9 @@ export default function NewSpecieModal(props: Props): JSX.Element {
             <Chip
               id='saveSpecie'
               className={classes.submit}
-              label={specie.speciesName.name !== 'Other' ? 'Save' : 'Add'}
+              label={
+                specie.speciesName.name !== 'Other' ? strings.SAVE : strings.ADD
+              }
               clickable
               color='primary'
               onClick={handleOk}
