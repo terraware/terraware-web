@@ -22,6 +22,7 @@ const strings = new LocalizedStrings({
     SPECIES: 'Species',
     NUMBER_OF_TREES: 'Number of Trees',
     AS_OF: 'As of',
+    OTHER: 'Other',
   },
 });
 

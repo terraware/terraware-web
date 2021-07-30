@@ -97,7 +97,7 @@ export default function NewSpecieModal(props: Props): JSX.Element {
     >
       <DialogTitle>
         <Typography variant='h6'>
-          {species?.speciesName.name !== 'Other'
+          {species?.speciesName.name !== strings.OTHER
             ? strings.EDIT_SPECIES
             : strings.ADD_SPECIES}
         </Typography>

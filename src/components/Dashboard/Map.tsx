@@ -108,7 +108,7 @@ function Map({ onFullscreen }: Props): JSX.Element {
     onFullscreen();
   };
 
-  const getCoordinates = (feature: Feature) => {
+  const getCoordinates = (feature: Feature): number[] => {
     return feature.geom &&
       feature.geom.coordinates &&
       Array.isArray(feature.geom.coordinates)
@@ -117,20 +117,35 @@ function Map({ onFullscreen }: Props): JSX.Element {
   };
 
   const getCenter = () => {
-    const lats: number[] = [];
-    const longs: number[] = [];
-    features?.forEach((feature) => {
-      const coordinates = getCoordinates(feature);
-      lats.push(coordinates[1]);
-      longs.push(coordinates[0]);
-    });
+    if (features) {
+      let maxLat: number = getCoordinates(features[0])[1];
+      let minLat: number = getCoordinates(features[0])[1];
+      let maxLong: number = getCoordinates(features[0])[0];
+      let minLong: number = getCoordinates(features[0])[0];
 
-    const maxLat = Math.max(...lats);
-    const minLat = Math.min(...lats);
-    const maxLong = Math.max(...longs);
-    const minLong = Math.min(...longs);
+      const featureCopy = [...features];
+      featureCopy.shift();
 
-    return { lat: (maxLat + minLat) / 2, lng: (maxLong + minLong) / 2 };
+      featureCopy.forEach((feature) => {
+        const coordinates = getCoordinates(feature);
+        if (coordinates[1] > maxLat) {
+          maxLat = coordinates[1];
+        }
+        if (coordinates[1] < minLat) {
+          minLat = coordinates[1];
+        }
+        if (coordinates[0] > maxLong) {
+          maxLong = coordinates[0];
+        }
+        if (coordinates[0] < minLong) {
+          minLong = coordinates[0];
+        }
+      });
+
+      return { lat: (maxLat + minLat) / 2, lng: (maxLong + minLong) / 2 };
+    }
+
+    return { lat: 0, lng: 0 };
   };
 
   const selectedPlant: Plant | undefined =
@@ -175,7 +190,7 @@ function Map({ onFullscreen }: Props): JSX.Element {
             features?.map((feature) => {
               const plant = plantsByFeatureId[feature.id!];
 
-              const coordinates: number[] = getCoordinates(feature);
+              const coordinates = getCoordinates(feature);
 
               if (coordinates.length) {
                 return (
@@ -237,7 +252,7 @@ function Map({ onFullscreen }: Props): JSX.Element {
                   size='medium'
                   label={
                     speciesForChart[selectedPlant.species_id!].speciesName
-                      .name !== 'Other'
+                      .name !== strings.OTHER
                       ? strings.EDIT_SPECIES
                       : strings.ADD_SPECIES
                   }
