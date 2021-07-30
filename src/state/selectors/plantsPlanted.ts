@@ -4,7 +4,7 @@ import { Plant } from '../../api/types/plant';
 import { plantsPlantedFeaturesSelector } from './plantsPlantedFeatures';
 import sessionSelector from './session';
 
-export default selector<Plant[] | undefined>({
+export const plantsPlantedSelector = selector<Plant[] | undefined>({
   key: 'plantsPlantedPlantsSelector',
   get: ({ get }) => {
     const session = get(sessionSelector);
@@ -42,4 +42,19 @@ const plantQuery = selectorFamily<Plant | undefined, number>({
         return response;
       }
     },
+});
+
+export const plantsByFeatureIdSelector = selector<
+  Record<number, Plant> | undefined
+>({
+  key: 'plantsByFeatureIdSelector',
+  get: async ({ get }) => {
+    const plants = get(plantsPlantedSelector);
+    const plantsByFeatureId: Record<number, Plant> = {};
+    plants?.forEach((plant) => {
+      plantsByFeatureId[plant.feature_id] = plant;
+    });
+
+    return plantsByFeatureId;
+  },
 });

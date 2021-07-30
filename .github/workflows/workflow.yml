@@ -37,6 +37,7 @@ jobs:
         env:
           REACT_APP_TERRAWARE_API: 'http://localhost:8008'
           REACT_APP_SNACKBAR_TIMEOUT: 1000
+          REACT_APP_GOOGLE_KEY: ${{ secrets.REACT_APP_GOOGLE_KEY }}
 
       - name: build
         run: yarn build

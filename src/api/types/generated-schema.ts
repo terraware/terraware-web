@@ -14,6 +14,7 @@ export interface paths {
   "/api/v1/features/{feature_id}": {
     get: operations["read_feature_api_v1_features__feature_id__get"];
     put: operations["update_feature_api_v1_features__feature_id__put"];
+    delete: operations["delete_feature_api_v1_features__feature_id__delete"];
   };
   "/api/v1/layers": {
     get: operations["read_layer_list_api_v1_layers_get"];
@@ -33,14 +34,22 @@ export interface paths {
   };
   "/api/v1/photos/{photo_id}": {
     get: operations["read_photo_api_v1_photos__photo_id__get"];
+    delete: operations["delete_photo_api_v1_photos__photo_id__delete"];
+  };
+  "/api/v1/plants/{feature_id}": {
+    get: operations["read_plant_api_v1_plants__feature_id__get"];
+    put: operations["update_plant_api_v1_plants__feature_id__put"];
+    delete: operations["delete_plant_api_v1_plants__feature_id__delete"];
   };
   "/api/v1/plants": {
-    get: operations["read_plant_list_api_v1_plants_get"];
     post: operations["create_item_api_v1_plants_post"];
   };
   "/api/v1/plant_observations": {
     get: operations["read_plant_observation_list_api_v1_plant_observations_get"];
     post: operations["create_item_api_v1_plant_observations_post"];
+  };
+  "/api/v1/tiles/{site_id}/{file_path}": {
+    get: operations["read_tile_api_v1_tiles__site_id___file_path__get"];
   };
   "/api/v1/accounts": {
     get: operations["read_item_list_api_v1_accounts_get"];
@@ -49,6 +58,7 @@ export interface paths {
   "/api/v1/accounts/{item_id}": {
     get: operations["read_item_api_v1_accounts__item_id__get"];
     put: operations["update_item_api_v1_accounts__item_id__put"];
+    delete: operations["delete_item_api_v1_accounts__item_id__delete"];
   };
   "/api/v1/organization_accounts": {
     get: operations["read_item_list_api_v1_organization_accounts_get"];
@@ -57,6 +67,7 @@ export interface paths {
   "/api/v1/organization_accounts/{item_id}": {
     get: operations["read_item_api_v1_organization_accounts__item_id__get"];
     put: operations["update_item_api_v1_organization_accounts__item_id__put"];
+    delete: operations["delete_item_api_v1_organization_accounts__item_id__delete"];
   };
   "/api/v1/projects": {
     get: operations["read_item_list_api_v1_projects_get"];
@@ -65,14 +76,7 @@ export interface paths {
   "/api/v1/projects/{item_id}": {
     get: operations["read_item_api_v1_projects__item_id__get"];
     put: operations["update_item_api_v1_projects__item_id__put"];
-  };
-  "/api/v1/organization_projects": {
-    get: operations["read_item_list_api_v1_organization_projects_get"];
-    post: operations["create_item_api_v1_organization_projects_post"];
-  };
-  "/api/v1/organization_projects/{item_id}": {
-    get: operations["read_item_api_v1_organization_projects__item_id__get"];
-    put: operations["update_item_api_v1_organization_projects__item_id__put"];
+    delete: operations["delete_item_api_v1_projects__item_id__delete"];
   };
   "/api/v1/sites": {
     get: operations["read_item_list_api_v1_sites_get"];
@@ -81,18 +85,22 @@ export interface paths {
   "/api/v1/sites/{item_id}": {
     get: operations["read_item_api_v1_sites__item_id__get"];
     put: operations["update_item_api_v1_sites__item_id__put"];
+    delete: operations["delete_item_api_v1_sites__item_id__delete"];
   };
   "/api/v1/layers/{item_id}": {
     get: operations["read_item_api_v1_layers__item_id__get"];
     put: operations["update_item_api_v1_layers__item_id__put"];
+    delete: operations["delete_item_api_v1_layers__item_id__delete"];
   };
   "/api/v1/plants/{item_id}": {
     get: operations["read_item_api_v1_plants__item_id__get"];
     put: operations["update_item_api_v1_plants__item_id__put"];
+    delete: operations["delete_item_api_v1_plants__item_id__delete"];
   };
   "/api/v1/plant_observations/{item_id}": {
     get: operations["read_item_api_v1_plant_observations__item_id__get"];
     put: operations["update_item_api_v1_plant_observations__item_id__put"];
+    delete: operations["delete_item_api_v1_plant_observations__item_id__delete"];
   };
   "/api/v1/species": {
     get: operations["read_item_list_api_v1_species_get"];
@@ -101,6 +109,7 @@ export interface paths {
   "/api/v1/species/{item_id}": {
     get: operations["read_item_api_v1_species__item_id__get"];
     put: operations["update_item_api_v1_species__item_id__put"];
+    delete: operations["delete_item_api_v1_species__item_id__delete"];
   };
   "/api/v1/species_names": {
     get: operations["read_item_list_api_v1_species_names_get"];
@@ -109,6 +118,7 @@ export interface paths {
   "/api/v1/species_names/{item_id}": {
     get: operations["read_item_api_v1_species_names__item_id__get"];
     put: operations["update_item_api_v1_species_names__item_id__put"];
+    delete: operations["delete_item_api_v1_species_names__item_id__delete"];
   };
   "/api/v1/account_roles": {
     get: operations["read_item_list_api_v1_account_roles_get"];
@@ -117,6 +127,7 @@ export interface paths {
   "/api/v1/account_roles/{item_id}": {
     get: operations["read_item_api_v1_account_roles__item_id__get"];
     put: operations["update_item_api_v1_account_roles__item_id__put"];
+    delete: operations["delete_item_api_v1_account_roles__item_id__delete"];
   };
   "/api/v1/project_types": {
     get: operations["read_item_list_api_v1_project_types_get"];
@@ -125,6 +136,7 @@ export interface paths {
   "/api/v1/project_types/{item_id}": {
     get: operations["read_item_api_v1_project_types__item_id__get"];
     put: operations["update_item_api_v1_project_types__item_id__put"];
+    delete: operations["delete_item_api_v1_project_types__item_id__delete"];
   };
   "/api/v1/project_statuses": {
     get: operations["read_item_list_api_v1_project_statuses_get"];
@@ -133,6 +145,7 @@ export interface paths {
   "/api/v1/project_statuses/{item_id}": {
     get: operations["read_item_api_v1_project_statuses__item_id__get"];
     put: operations["update_item_api_v1_project_statuses__item_id__put"];
+    delete: operations["delete_item_api_v1_project_statuses__item_id__delete"];
   };
   "/api/v1/layer_types": {
     get: operations["read_item_list_api_v1_layer_types_get"];
@@ -141,6 +154,7 @@ export interface paths {
   "/api/v1/layer_types/{item_id}": {
     get: operations["read_item_api_v1_layer_types__item_id__get"];
     put: operations["update_item_api_v1_layer_types__item_id__put"];
+    delete: operations["delete_item_api_v1_layer_types__item_id__delete"];
   };
   "/api/v1/health_states": {
     get: operations["read_item_list_api_v1_health_states_get"];
@@ -149,6 +163,7 @@ export interface paths {
   "/api/v1/health_states/{item_id}": {
     get: operations["read_item_api_v1_health_states__item_id__get"];
     put: operations["update_item_api_v1_health_states__item_id__put"];
+    delete: operations["delete_item_api_v1_health_states__item_id__delete"];
   };
   "/api/v1/token": {
     post: operations["login_api_v1_token_post"];
@@ -235,18 +250,9 @@ export interface components {
       created_time?: string;
       modified_time?: string;
     };
-    OrganizationProject: {
-      id?: number;
-      organization_id: number;
-      project_id: number;
-      created_time?: string;
-      modified_time?: string;
-      primary: boolean;
-    };
     Plant: {
-      id?: number;
-      label?: string;
       feature_id: number;
+      label?: string;
       species_id?: number;
       natural_regen?: boolean;
       date_planted?: string;
@@ -255,7 +261,7 @@ export interface components {
     };
     PlantObservation: {
       id?: number;
-      plant_id?: number;
+      feature_id?: number;
       timestamp: string;
       health_state_id?: number;
       flowers?: boolean;
@@ -268,6 +274,7 @@ export interface components {
     };
     Project: {
       id?: number;
+      organization_id: number;
       name: string;
       description?: string;
       location?: string;
@@ -312,7 +319,9 @@ export interface components {
     SpeciesName: {
       id?: number;
       species_id: number;
+      organization_id?: number;
       name: string;
+      is_scientific?: boolean;
       locale?: string;
       created_time?: string;
       modified_time?: string;
@@ -424,6 +433,27 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["Feature"];
+      };
+    };
+  };
+  delete_feature_api_v1_features__feature_id__delete: {
+    parameters: {
+      path: {
+        feature_id: number;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          "application/json": { [key: string]: unknown };
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
       };
     };
   };
@@ -619,10 +649,78 @@ export interface operations {
       };
     };
   };
-  read_plant_list_api_v1_plants_get: {
+  delete_photo_api_v1_photos__photo_id__delete: {
     parameters: {
-      query: {
-        site_id: number;
+      path: {
+        photo_id: number;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          "application/json": { [key: string]: unknown };
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  read_plant_api_v1_plants__feature_id__get: {
+    parameters: {
+      path: {
+        feature_id: number;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          "application/json": { [key: string]: unknown };
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  update_plant_api_v1_plants__feature_id__put: {
+    parameters: {
+      path: {
+        feature_id: number;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          "application/json": { [key: string]: unknown };
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["Plant"];
+      };
+    };
+  };
+  delete_plant_api_v1_plants__feature_id__delete: {
+    parameters: {
+      path: {
+        feature_id: number;
       };
     };
     responses: {
@@ -700,6 +798,28 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["PlantObservation"];
+      };
+    };
+  };
+  read_tile_api_v1_tiles__site_id___file_path__get: {
+    parameters: {
+      path: {
+        site_id: number;
+        file_path: string;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          "application/json": { [key: string]: unknown };
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
       };
     };
   };
@@ -781,6 +901,27 @@ export interface operations {
       };
     };
   };
+  delete_item_api_v1_accounts__item_id__delete: {
+    parameters: {
+      path: {
+        item_id: number;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          "application/json": { [key: string]: unknown };
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
   read_item_list_api_v1_organization_accounts_get: {
     responses: {
       /** Successful Response */
@@ -856,6 +997,27 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["OrganizationAccount"];
+      };
+    };
+  };
+  delete_item_api_v1_organization_accounts__item_id__delete: {
+    parameters: {
+      path: {
+        item_id: number;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          "application/json": { [key: string]: unknown };
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
       };
     };
   };
@@ -937,38 +1099,7 @@ export interface operations {
       };
     };
   };
-  read_item_list_api_v1_organization_projects_get: {
-    responses: {
-      /** Successful Response */
-      200: {
-        content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-    };
-  };
-  create_item_api_v1_organization_projects_post: {
-    responses: {
-      /** Successful Response */
-      200: {
-        content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-      /** Validation Error */
-      422: {
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["OrganizationProject"];
-      };
-    };
-  };
-  read_item_api_v1_organization_projects__item_id__get: {
+  delete_item_api_v1_projects__item_id__delete: {
     parameters: {
       path: {
         item_id: number;
@@ -986,32 +1117,6 @@ export interface operations {
         content: {
           "application/json": components["schemas"]["HTTPValidationError"];
         };
-      };
-    };
-  };
-  update_item_api_v1_organization_projects__item_id__put: {
-    parameters: {
-      path: {
-        item_id: number;
-      };
-    };
-    responses: {
-      /** Successful Response */
-      200: {
-        content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-      /** Validation Error */
-      422: {
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["OrganizationProject"];
       };
     };
   };
@@ -1093,6 +1198,27 @@ export interface operations {
       };
     };
   };
+  delete_item_api_v1_sites__item_id__delete: {
+    parameters: {
+      path: {
+        item_id: number;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          "application/json": { [key: string]: unknown };
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
   read_item_api_v1_layers__item_id__get: {
     parameters: {
       path: {
@@ -1137,6 +1263,27 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["Layer"];
+      };
+    };
+  };
+  delete_item_api_v1_layers__item_id__delete: {
+    parameters: {
+      path: {
+        item_id: number;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          "application/json": { [key: string]: unknown };
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
       };
     };
   };
@@ -1187,6 +1334,27 @@ export interface operations {
       };
     };
   };
+  delete_item_api_v1_plants__item_id__delete: {
+    parameters: {
+      path: {
+        item_id: number;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          "application/json": { [key: string]: unknown };
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
   read_item_api_v1_plant_observations__item_id__get: {
     parameters: {
       path: {
@@ -1231,6 +1399,27 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["PlantObservation"];
+      };
+    };
+  };
+  delete_item_api_v1_plant_observations__item_id__delete: {
+    parameters: {
+      path: {
+        item_id: number;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          "application/json": { [key: string]: unknown };
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
       };
     };
   };
@@ -1312,6 +1501,27 @@ export interface operations {
       };
     };
   };
+  delete_item_api_v1_species__item_id__delete: {
+    parameters: {
+      path: {
+        item_id: number;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          "application/json": { [key: string]: unknown };
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
   read_item_list_api_v1_species_names_get: {
     responses: {
       /** Successful Response */
@@ -1387,6 +1597,27 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["SpeciesName"];
+      };
+    };
+  };
+  delete_item_api_v1_species_names__item_id__delete: {
+    parameters: {
+      path: {
+        item_id: number;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          "application/json": { [key: string]: unknown };
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
       };
     };
   };
@@ -1468,6 +1699,27 @@ export interface operations {
       };
     };
   };
+  delete_item_api_v1_account_roles__item_id__delete: {
+    parameters: {
+      path: {
+        item_id: number;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          "application/json": { [key: string]: unknown };
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
   read_item_list_api_v1_project_types_get: {
     responses: {
       /** Successful Response */
@@ -1543,6 +1795,27 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["ProjectType"];
+      };
+    };
+  };
+  delete_item_api_v1_project_types__item_id__delete: {
+    parameters: {
+      path: {
+        item_id: number;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          "application/json": { [key: string]: unknown };
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
       };
     };
   };
@@ -1624,6 +1897,27 @@ export interface operations {
       };
     };
   };
+  delete_item_api_v1_project_statuses__item_id__delete: {
+    parameters: {
+      path: {
+        item_id: number;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          "application/json": { [key: string]: unknown };
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
   read_item_list_api_v1_layer_types_get: {
     responses: {
       /** Successful Response */
@@ -1702,6 +1996,27 @@ export interface operations {
       };
     };
   };
+  delete_item_api_v1_layer_types__item_id__delete: {
+    parameters: {
+      path: {
+        item_id: number;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          "application/json": { [key: string]: unknown };
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
   read_item_list_api_v1_health_states_get: {
     responses: {
       /** Successful Response */
@@ -1777,6 +2092,27 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["HealthState"];
+      };
+    };
+  };
+  delete_item_api_v1_health_states__item_id__delete: {
+    parameters: {
+      path: {
+        item_id: number;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          "application/json": { [key: string]: unknown };
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
       };
     };
   };

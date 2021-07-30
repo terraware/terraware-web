@@ -14,13 +14,15 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React from 'react';
+import { useRecoilValue } from 'recoil';
+import { Plant } from '../../api/types/plant';
 import { Species } from '../../api/types/species';
+import speciesForChartSelector from '../../state/selectors/speciesForChart';
 import strings from '../../strings';
 import useForm from '../../utils/useForm';
 import CancelButton from '../common/CancelButton';
 import DialogCloseButton from '../common/DialogCloseButton';
 import TextField from '../common/TextField';
-import { SpecieMap } from './Map';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -51,37 +53,29 @@ const useStyles = makeStyles((theme: Theme) =>
 export interface Props {
   open: boolean;
   onClose: (specie?: Species) => void;
-  value?: SpecieMap;
+  value?: Plant;
 }
 
-const initSpecies = (specie?: SpecieMap): Species => {
-  return specie
-    ? {
-        scientific_name:
-          specie.properties.NAME !== 'Other' ? specie.properties.NAME : '',
-        id: specie.properties.SPECIE_ID,
-      }
-    : {
-        scientific_name: '',
-      };
+const initPlant = (plant?: Plant): Plant => {
+  return plant ?? { feature_id: 1 };
 };
 
 export default function NewSpecieModal(props: Props): JSX.Element {
   const classes = useStyles();
   const { onClose, open } = props;
-  const [record, setRecord, onChange] = useForm<Species>(
-    initSpecies(props.value)
-  );
+  const [record, setRecord, onChange] = useForm<Plant>(initPlant(props.value));
   const [value, setValue] = React.useState('female');
+  const speciesForChart = useRecoilValue(speciesForChartSelector);
+  const species = speciesForChart[record.feature_id];
 
   React.useEffect(() => {
     if (props.open) {
-      setRecord(initSpecies(props.value));
+      setRecord(initPlant(props.value));
     }
   }, [props.open, props.value, setRecord]);
 
   const handleCancel = () => {
-    setRecord(initSpecies(props.value));
+    setRecord(initPlant(props.value));
     onClose();
   };
 
@@ -103,9 +97,9 @@ export default function NewSpecieModal(props: Props): JSX.Element {
     >
       <DialogTitle>
         <Typography variant='h6'>
-          {props.value?.properties.NAME !== 'Other'
-            ? 'Edit Species'
-            : 'Add Species'}
+          {species?.speciesName.name !== strings.OTHER
+            ? strings.EDIT_SPECIES
+            : strings.ADD_SPECIES}
         </Typography>
         <DialogCloseButton onClick={handleCancel} />
       </DialogTitle>
@@ -114,7 +108,7 @@ export default function NewSpecieModal(props: Props): JSX.Element {
           <Grid item xs={12}>
             <TextField
               id='name'
-              value={record.scientific_name}
+              value={record.label}
               onChange={onChange}
               label={strings.SPECIES_NAME}
               aria-label='Species Name'
@@ -164,7 +158,11 @@ export default function NewSpecieModal(props: Props): JSX.Element {
             <Chip
               id='saveSpecie'
               className={classes.submit}
-              label={props.value?.properties.NAME !== 'Other' ? 'Save' : 'Add'}
+              label={
+                species?.speciesName.name !== 'Other'
+                  ? strings.SAVE
+                  : strings.ADD
+              }
               clickable
               color='primary'
               onClick={handleOk}
