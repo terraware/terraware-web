@@ -6,7 +6,7 @@ TOKEN=$(curl 'http://localhost:8008/api/v1/token' -H 'Content-Type: application/
 curl 'http://localhost:8008/api/v1/features' \
   -H "Authorization: Bearer ${TOKEN}" \
   -H 'Content-Type: application/json' \
-  --data '{"layer_id":3,"shape_type_id":1}'
+  --data '{"layer_id":3,"shape_type_id":1,"geom":{"type":"Point","coordinates":[-75.546518086577947,45.467134581917357]}}'
 
 
 curl 'http://localhost:8008/api/v1/species' \
@@ -30,7 +30,7 @@ curl 'http://localhost:8008/api/v1/plants' \
 curl 'http://localhost:8008/api/v1/features' \
   -H "Authorization: Bearer ${TOKEN}" \
   -H 'Content-Type: application/json' \
-  --data '{"layer_id":3,"shape_type_id":1}'
+  --data '{"layer_id":3,"shape_type_id":1,"geom":{"type":"Point","coordinates": [-75.3372987731628, 45.383321536272049]}}'
 
 curl 'http://localhost:8008/api/v1/plants' \
   -H "Authorization: Bearer ${TOKEN}" \
@@ -40,7 +40,7 @@ curl 'http://localhost:8008/api/v1/plants' \
 curl 'http://localhost:8008/api/v1/features' \
   -H "Authorization: Bearer ${TOKEN}" \
   -H 'Content-Type: application/json' \
-  --data '{"layer_id":3,"shape_type_id":1}'
+  --data '{"layer_id":3,"shape_type_id":1,"geom":{"type":"Point","coordinates": [-75.898610599532319, 45.295014379864874]}}'
 
 curl 'http://localhost:8008/api/v1/plants' \
   -H "Authorization: Bearer ${TOKEN}" \
@@ -64,7 +64,7 @@ curl 'http://localhost:8008/api/v1/species' \
 curl 'http://localhost:8008/api/v1/features' \
   -H "Authorization: Bearer ${TOKEN}" \
   -H 'Content-Type: application/json' \
-  --data '{"layer_id":3,"shape_type_id":1}'
+  --data '{"layer_id":3,"shape_type_id":1,"geom":{"type":"Point","coordinates": [-76.898610599532319, 45.595014379864874]}}'
 
 curl 'http://localhost:8008/api/v1/plants' \
   -H "Authorization: Bearer ${TOKEN}" \

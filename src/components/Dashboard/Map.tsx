@@ -10,7 +10,13 @@ import {
   useJsApiLoader,
 } from '@react-google-maps/api';
 import React, { useState } from 'react';
-import * as speciesData from '../../data/species.json';
+import { useRecoilValue } from 'recoil';
+import { Feature } from '../../api/types/feature';
+import { Plant } from '../../api/types/plant';
+import { photoByFeatureIdSelector } from '../../state/selectors/photos';
+import plantsPlanted from '../../state/selectors/plantsPlanted';
+import { plantsPlantedFeaturesSelector } from '../../state/selectors/plantsPlantedFeatures';
+import speciesForChartSelector from '../../state/selectors/speciesForChart';
 import CustomMapControl from './CustomMapControl';
 import NewSpecieModal from './NewSpecieModal';
 
@@ -61,9 +67,20 @@ interface Props {
 
 function Map({ onFullscreen }: Props): JSX.Element {
   const classes = useStyles();
-  const [selectedSpecie, setSelectedSpecie] = useState<SpecieMap>();
+  const [selectedFeature, setSelectedFeature] = useState<Feature>();
 
-  const [editSpecieModalOpen, setEditSpecieModalOpen] = React.useState(false);
+  const [editPlantModalOpen, setEditPlantModalOpen] = React.useState(false);
+
+  const features = useRecoilValue(plantsPlantedFeaturesSelector);
+  const speciesForChart = useRecoilValue(speciesForChartSelector);
+  const plants = useRecoilValue(plantsPlanted);
+
+  const photoByFeatureId = useRecoilValue(photoByFeatureIdSelector);
+
+  const plantsByFeatureId: Record<number, Plant> = {};
+  plants?.forEach((plant) => {
+    plantsByFeatureId[plant.feature_id] = plant;
+  });
 
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
@@ -84,12 +101,12 @@ function Map({ onFullscreen }: Props): JSX.Element {
     setMap(null);
   }, []);
 
-  const onCloseEditSpecieModal = () => {
-    setEditSpecieModalOpen(false);
+  const onCloseEditPlantModal = () => {
+    setEditPlantModalOpen(false);
   };
 
   const onNewSpecie = () => {
-    setEditSpecieModalOpen(true);
+    setEditPlantModalOpen(true);
   };
 
   const iconPin = (color?: string) => {
@@ -106,12 +123,16 @@ function Map({ onFullscreen }: Props): JSX.Element {
     onFullscreen();
   };
 
+  const selectedPlant: Plant | undefined = selectedFeature
+    ? plantsByFeatureId[selectedFeature.id!]
+    : undefined;
+
   return (
     <>
       <NewSpecieModal
-        open={editSpecieModalOpen}
-        onClose={onCloseEditSpecieModal}
-        value={selectedSpecie}
+        open={editPlantModalOpen}
+        onClose={onCloseEditPlantModal}
+        value={selectedPlant}
       />
 
       {isLoaded ? (
@@ -143,66 +164,99 @@ function Map({ onFullscreen }: Props): JSX.Element {
               <FullscreenIcon />
             </IconButton>
           </CustomMapControl>
-          {speciesData.features.map((specie) => (
-            <Marker
-              key={specie.properties.SPECIE_ID}
-              position={{
-                lat: specie.geometry.coordinates[1],
-                lng: specie.geometry.coordinates[0],
-              }}
-              onClick={() => {
-                setSelectedSpecie(specie);
-              }}
-              options={{ icon: iconPin(specie.properties.COLOR) }}
-            />
-          ))}
+          {features?.map((feature) => {
+            const plant = plantsByFeatureId[feature.id!];
 
-          {selectedSpecie && (
+            const coordinates: number[] =
+              feature.geom &&
+              feature.geom.coordinates &&
+              Array.isArray(feature.geom?.coordinates)
+                ? feature.geom?.coordinates
+                : [];
+            if (coordinates.length) {
+              return (
+                <Marker
+                  key={feature.id}
+                  position={{
+                    lat: coordinates[1],
+                    lng: coordinates[0],
+                  }}
+                  options={{
+                    icon: iconPin(speciesForChart[plant.species_id!].color),
+                  }}
+                  onClick={() => setSelectedFeature(feature)}
+                />
+              );
+            }
+
+            return null;
+          })}
+
+          {selectedFeature && selectedPlant && (
             <InfoWindow
               onCloseClick={() => {
-                setSelectedSpecie(undefined);
+                setSelectedFeature(undefined);
               }}
               position={{
-                lat: selectedSpecie.geometry.coordinates[1],
-                lng: selectedSpecie.geometry.coordinates[0],
+                lat:
+                  typeof selectedFeature.geom?.coordinates === 'object' &&
+                  Array.isArray(selectedFeature.geom?.coordinates)
+                    ? selectedFeature.geom.coordinates[1]
+                    : 0,
+                lng:
+                  typeof selectedFeature.geom?.coordinates === 'object' &&
+                  Array.isArray(selectedFeature.geom?.coordinates)
+                    ? selectedFeature.geom.coordinates[0]
+                    : 0,
               }}
             >
               <div>
                 <Typography component='p' variant='subtitle2'>
-                  {selectedSpecie.properties.NAME}
+                  {speciesForChart[selectedPlant.species_id!].speciesName.name}
                 </Typography>
                 <Typography
                   component='p'
                   variant='body2'
                   className={classes.spacing}
                 >
-                  As of {selectedSpecie.properties.DATE}
+                  As of {selectedPlant.date_planted}
                 </Typography>
                 <Typography
                   component='p'
                   variant='body2'
                   className={classes.spacing}
                 >
-                  {selectedSpecie.geometry.coordinates[1].toFixed(6)},
-                  {selectedSpecie.geometry.coordinates[0].toFixed(6)}
+                  {typeof selectedFeature.geom?.coordinates === 'object' &&
+                  Array.isArray(selectedFeature.geom?.coordinates)
+                    ? selectedFeature.geom.coordinates[1].toFixed(6)
+                    : 0}
+                  ,
+                  {typeof selectedFeature.geom?.coordinates === 'object' &&
+                  Array.isArray(selectedFeature.geom?.coordinates)
+                    ? selectedFeature.geom.coordinates[0].toFixed(6)
+                    : 0}
                 </Typography>
-                <img
-                  alt='Specie'
-                  src={selectedSpecie.properties.IMG}
-                  style={{ maxHeight: '100px', display: 'block' }}
-                />
+                {photoByFeatureId && photoByFeatureId[selectedFeature.id!] && (
+                  <img
+                    alt='Specie'
+                    src={photoByFeatureId[selectedFeature.id!]}
+                    style={{ maxHeight: '100px', display: 'block' }}
+                  />
+                )}
                 <Chip
                   id='new-species'
                   size='medium'
                   label={
-                    selectedSpecie.properties.NAME !== 'Other'
+                    speciesForChart[selectedPlant.species_id!].speciesName
+                      .name !== 'Other'
                       ? 'Edit Species'
                       : 'Add Species'
                   }
                   onClick={onNewSpecie}
                   className={classes.newSpecies}
                   icon={
-                    selectedSpecie.properties.NAME !== 'Other' ? (
+                    speciesForChart[selectedPlant.species_id!].speciesName
+                      .name !== 'Other' ? (
                       <CreateIcon />
                     ) : (
                       <AddIcon />
