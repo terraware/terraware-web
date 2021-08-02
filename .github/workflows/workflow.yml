@@ -31,7 +31,7 @@ jobs:
         run: |
           yarn docker:start
           yarn wait-be
-          yarn server:reset
+          yarn server:prepare
 
       - name: E-2-E
         run: yarn e2e

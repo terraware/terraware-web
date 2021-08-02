@@ -47,7 +47,7 @@
     "docker:start": "./scripts/launch_server.sh",
     "docker:stop": "docker-compose down",
     "wait-be": "wait-on http://localhost:8008/docs",
-    "server:reset": "./scripts/resetdb.sh"
+    "server:prepare": "./scripts/preparedb.sh"
   },
   "eslintConfig": {
     "extends": [
