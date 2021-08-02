@@ -3,10 +3,15 @@ PASS=test1234
 TOKEN=$(curl 'http://localhost:8008/api/v1/token' -H 'Content-Type: application/x-www-form-urlencoded' --data-raw "grant_type=password&username=${USER}&password=${PASS}" | jq -r '.access_token')
 
 
-curl 'http://localhost:8008/api/v1/features' \
+FEATURE_ID=$(curl 'http://localhost:8008/api/v1/features' \
   -H "Authorization: Bearer ${TOKEN}" \
   -H 'Content-Type: application/json' \
-  --data '{"layer_id":3,"shape_type_id":1,"geom":{"type":"Point","coordinates":[-75.546518086577947,45.467134581917357]}}'
+  --data '{"layer_id":3,"shape_type_id":1,"geom":{"type":"Point","coordinates":[-75.546518086577947,45.467134581917357]}}' | jq -r '.id' )
+curl -X POST "http://localhost:8008/api/v1/photos?feature_id=${FEATURE_ID}&captured_time=2021-02-03T11%3A33%3A44Z" \
+  -H 'accept: application/json' \
+  -H "Authorization: Bearer ${TOKEN}" \
+  -H 'Content-Type: multipart/form-data' \
+  -F 'file=@./scripts/banana.jpeg;type=image/jpeg'
 
 
 curl 'http://localhost:8008/api/v1/species' \
@@ -27,20 +32,30 @@ curl 'http://localhost:8008/api/v1/plants' \
   -H 'Content-Type: application/json' \
   --data-raw $'{\n  "feature_id": 1,\n  "label": "Plant 1",\n  "species_id": 1\n}'
 
-curl 'http://localhost:8008/api/v1/features' \
+FEATURE_ID_2=$(curl 'http://localhost:8008/api/v1/features' \
   -H "Authorization: Bearer ${TOKEN}" \
   -H 'Content-Type: application/json' \
-  --data '{"layer_id":3,"shape_type_id":1,"geom":{"type":"Point","coordinates": [-75.3372987731628, 45.383321536272049]}}'
+  --data '{"layer_id":3,"shape_type_id":1,"geom":{"type":"Point","coordinates": [-75.3372987731628, 45.383321536272049]}}'| jq -r '.id')
+  curl -X POST "http://localhost:8008/api/v1/photos?feature_id=${FEATURE_ID_2}&captured_time=2021-02-03T11%3A33%3A44Z" \
+  -H 'accept: application/json' \
+  -H "Authorization: Bearer ${TOKEN}" \
+  -H 'Content-Type: multipart/form-data' \
+  -F 'file=@./scripts/banana.jpeg;type=image/jpeg'
 
 curl 'http://localhost:8008/api/v1/plants' \
   -H "Authorization: Bearer ${TOKEN}" \
   -H 'Content-Type: application/json' \
   --data-raw $'{\n  "feature_id": 2,\n  "label": "Plant 2",\n  "species_id": 1\n}'
 
-curl 'http://localhost:8008/api/v1/features' \
+FEATURE_ID_3=$(curl 'http://localhost:8008/api/v1/features' \
   -H "Authorization: Bearer ${TOKEN}" \
   -H 'Content-Type: application/json' \
-  --data '{"layer_id":3,"shape_type_id":1,"geom":{"type":"Point","coordinates": [-75.898610599532319, 45.295014379864874]}}'
+  --data '{"layer_id":3,"shape_type_id":1,"geom":{"type":"Point","coordinates": [-75.898610599532319, 45.295014379864874]}}'| jq -r '.id')
+  curl -X POST "http://localhost:8008/api/v1/photos?feature_id=${FEATURE_ID_3}&captured_time=2021-02-03T11%3A33%3A44Z" \
+  -H 'accept: application/json' \
+  -H "Authorization: Bearer ${TOKEN}" \
+  -H 'Content-Type: multipart/form-data' \
+  -F 'file=@./scripts/banana.jpeg;type=image/jpeg'
 
 curl 'http://localhost:8008/api/v1/plants' \
   -H "Authorization: Bearer ${TOKEN}" \
@@ -61,10 +76,15 @@ curl 'http://localhost:8008/api/v1/species' \
   --data-raw $'{\n"name":"Coconut",\n "species_id":2}\n'
 
 
-curl 'http://localhost:8008/api/v1/features' \
+FEATURE_ID_4=$(curl 'http://localhost:8008/api/v1/features' \
   -H "Authorization: Bearer ${TOKEN}" \
   -H 'Content-Type: application/json' \
-  --data '{"layer_id":3,"shape_type_id":1,"geom":{"type":"Point","coordinates": [-76.898610599532319, 45.595014379864874]}}'
+  --data '{"layer_id":3,"shape_type_id":1,"geom":{"type":"Point","coordinates": [-76.898610599532319, 45.595014379864874]}}'| jq -r '.id')
+  curl -X POST "http://localhost:8008/api/v1/photos?feature_id=${FEATURE_ID_4}&captured_time=2021-02-03T11%3A33%3A44Z" \
+  -H 'accept: application/json' \
+  -H "Authorization: Bearer ${TOKEN}" \
+  -H 'Content-Type: multipart/form-data' \
+  -F 'file=@./scripts/banana.jpeg;type=image/jpeg'
 
 curl 'http://localhost:8008/api/v1/plants' \
   -H "Authorization: Bearer ${TOKEN}" \

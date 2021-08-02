@@ -203,7 +203,11 @@ function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
             closeOnClick={false}
           >
             <div>
-              <Typography component='p' variant='subtitle2'>
+              <Typography
+                component='p'
+                variant='subtitle2'
+                id='feature-species-name'
+              >
                 {speciesForChart[selectedPlant.species_id!].speciesName.name}
               </Typography>
               <Typography
@@ -217,6 +221,7 @@ function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
                 component='p'
                 variant='body2'
                 className={classes.spacing}
+                id='feature-coordinates'
               >
                 {getCoordinates(selectedFeature)[1].toFixed(6)},
                 {getCoordinates(selectedFeature)[0].toFixed(6)}
@@ -226,6 +231,7 @@ function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
                   alt='Specie'
                   src={photoByFeatureId[selectedFeature.id!]}
                   style={{ maxHeight: '100px', display: 'block' }}
+                  id='feature-image'
                 />
               )}
               <Chip
