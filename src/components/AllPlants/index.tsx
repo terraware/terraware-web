@@ -91,7 +91,7 @@ export default function Species(): JSX.Element {
                 <Grid item xs={12}>
                   {plantsForTable() && (
                     <Table
-                      id='species-table'
+                      id='all-plants-table'
                       columns={columns}
                       rows={plantsForTable()}
                       orderBy='species'
