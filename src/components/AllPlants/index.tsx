@@ -5,6 +5,7 @@ import {
   makeStyles,
   Paper,
 } from '@material-ui/core';
+import React from 'react';
 import { useRecoilValue } from 'recoil';
 import { photoByFeatureIdSelector } from '../../state/selectors/photos';
 import { plantsByFeatureIdSelector } from '../../state/selectors/plantsPlanted';
@@ -43,7 +44,7 @@ export default function Species(): JSX.Element {
   const photoByFeature = useRecoilValue(photoByFeatureIdSelector);
   const speciesBySpeciesId = useRecoilValue(speciesNamesBySpeciesId);
 
-  const plantsForTable = (): PlantForTable[] => {
+  const plantsForTable = React.useMemo(() => {
     let plantsToReturn: PlantForTable[] = [];
     if (features && plantsByFeature && photoByFeature && speciesBySpeciesId) {
       plantsToReturn = features.map((feature) => {
@@ -73,7 +74,7 @@ export default function Species(): JSX.Element {
     }
 
     return plantsToReturn;
-  };
+  }, [features, photoByFeature, plantsByFeature, speciesBySpeciesId]);
 
   return (
     <main>
@@ -89,15 +90,13 @@ export default function Species(): JSX.Element {
             <Paper className={classes.mainContent}>
               <Grid container spacing={4}>
                 <Grid item xs={12}>
-                  {plantsForTable() && (
-                    <Table
-                      id='all-plants-table'
-                      columns={columns}
-                      rows={plantsForTable()}
-                      orderBy='species'
-                      Renderer={AllPlantsCellRenderer}
-                    />
-                  )}
+                  <Table
+                    id='all-plants-table'
+                    columns={columns}
+                    rows={plantsForTable}
+                    orderBy='species'
+                    Renderer={AllPlantsCellRenderer}
+                  />
                 </Grid>
               </Grid>
             </Paper>
