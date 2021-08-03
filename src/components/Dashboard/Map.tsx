@@ -5,7 +5,7 @@ import CreateIcon from '@material-ui/icons/Create';
 import FullscreenIcon from '@material-ui/icons/Fullscreen';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import React, { useEffect, useState } from 'react';
-import ReactMapGL, { Marker, Popup } from 'react-map-gl';
+import ReactMapGL, { Marker, NavigationControl, Popup } from 'react-map-gl';
 import { useRecoilValue } from 'recoil';
 import { Feature } from '../../api/types/feature';
 import { Plant } from '../../api/types/plant';
@@ -57,6 +57,18 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
+const navControlStyle = {
+  right: 10,
+  bottom: 10,
+};
+
+const DEFAULT_VIEWPORT = { width: '100%', height: '600px', zoom: 8 };
+
+interface Coordinate {
+  latitude: number;
+  longitude: number;
+}
+
 interface Props {
   onFullscreen: () => void;
   isFullscreen: boolean;
@@ -66,20 +78,20 @@ function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
   const classes = useStyles();
   const [selectedFeature, setSelectedFeature] = useState<Feature>();
   const [editPlantModalOpen, setEditPlantModalOpen] = React.useState(false);
+  const [viewport, setViewport] = React.useState(DEFAULT_VIEWPORT);
 
   const features = useRecoilValue(plantsPlantedFeaturesSelector);
   const speciesForChart = useRecoilValue(speciesForChartSelector);
   const photoByFeatureId = useRecoilValue(photoByFeatureIdSelector);
   const plantsByFeatureId = useRecoilValue(plantsByFeatureIdSelector);
 
-  const [viewport, setViewport] = React.useState({
-    width: '100%',
-    height: '600px',
-    zoom: 8,
-  });
+  const selectedPlant: Plant | undefined =
+    selectedFeature && plantsByFeatureId
+      ? plantsByFeatureId[selectedFeature.id!]
+      : undefined;
 
   useEffect(() => {
-    setViewport({ width: '100%', height: '600px', zoom: 8 });
+    setViewport({ ...DEFAULT_VIEWPORT });
   }, [isFullscreen]);
 
   const onCloseEditPlantModal = () => {
@@ -96,41 +108,47 @@ function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
     </svg>
   );
 
-  const onFullscreenClick = () => {
-    onFullscreen();
-  };
-
-  const getCoordinates = (feature: Feature): number[] => {
-    return feature.geom &&
+  const getCoordinates = (feature: Feature): Coordinate => {
+    if (
+      feature.geom &&
       feature.geom.coordinates &&
       Array.isArray(feature.geom.coordinates)
-      ? feature.geom.coordinates
-      : [];
+    ) {
+      return {
+        longitude: feature.geom.coordinates[0],
+        latitude: feature.geom.coordinates[1],
+      };
+    } else {
+      return {
+        latitude: 0,
+        longitude: 0,
+      };
+    }
   };
 
   const getCenter = (): { latitude: number; longitude: number } => {
     if (features?.length) {
-      let maxLat: number = getCoordinates(features[0])[1];
-      let minLat: number = getCoordinates(features[0])[1];
-      let maxLong: number = getCoordinates(features[0])[0];
-      let minLong: number = getCoordinates(features[0])[0];
+      let maxLat: number = getCoordinates(features[0]).latitude;
+      let minLat: number = getCoordinates(features[0]).latitude;
+      let maxLong: number = getCoordinates(features[0]).longitude;
+      let minLong: number = getCoordinates(features[0]).longitude;
 
       const featureCopy = [...features];
       featureCopy.shift();
 
       featureCopy.forEach((feature) => {
         const coordinates = getCoordinates(feature);
-        if (coordinates[1] > maxLat) {
-          maxLat = coordinates[1];
+        if (coordinates.latitude > maxLat) {
+          maxLat = coordinates.latitude;
         }
-        if (coordinates[1] < minLat) {
-          minLat = coordinates[1];
+        if (coordinates.latitude < minLat) {
+          minLat = coordinates.latitude;
         }
-        if (coordinates[0] > maxLong) {
-          maxLong = coordinates[0];
+        if (coordinates.longitude > maxLong) {
+          maxLong = coordinates.longitude;
         }
-        if (coordinates[0] < minLong) {
-          minLong = coordinates[0];
+        if (coordinates.longitude < minLong) {
+          minLong = coordinates.longitude;
         }
       });
 
@@ -143,10 +161,10 @@ function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
     return { latitude: 0, longitude: 0 };
   };
 
-  const selectedPlant: Plant | undefined =
-    selectedFeature && plantsByFeatureId
-      ? plantsByFeatureId[selectedFeature.id!]
-      : undefined;
+  const center = getCenter();
+  const selectedCoordinates = selectedFeature
+    ? getCoordinates(selectedFeature)
+    : undefined;
 
   return (
     <>
@@ -156,17 +174,18 @@ function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
         value={selectedPlant}
       />
       <ReactMapGL
-        latitude={getCenter().latitude}
-        longitude={getCenter().longitude}
+        latitude={center.latitude}
+        longitude={center.longitude}
         {...viewport}
         onViewportChange={setViewport}
         mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
         mapStyle='mapbox://styles/mapbox/satellite-v9'
       >
-        <div style={{ position: 'absolute', right: 20, bottom: 20 }}>
+        <NavigationControl showCompass={false} style={navControlStyle} />
+        <div style={{ position: 'absolute', right: 0, bottom: 80 }}>
           <IconButton
             id='full-screen'
-            onClick={onFullscreenClick}
+            onClick={onFullscreen}
             className={classes.fullscreen}
           >
             <FullscreenIcon />
@@ -176,12 +195,12 @@ function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
           features?.map((feature) => {
             const plant = plantsByFeatureId[feature.id!];
             const coordinates = getCoordinates(feature);
-            if (coordinates.length) {
+            if (coordinates) {
               return (
                 <Marker
                   key={feature.id}
-                  latitude={coordinates[1]}
-                  longitude={coordinates[0]}
+                  latitude={coordinates.latitude}
+                  longitude={coordinates.longitude}
                   offsetLeft={-20}
                   offsetTop={-10}
                 >
@@ -197,8 +216,8 @@ function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
             onClose={() => {
               setSelectedFeature(undefined);
             }}
-            latitude={getCoordinates(selectedFeature)[1]}
-            longitude={getCoordinates(selectedFeature)[0]}
+            latitude={selectedCoordinates ? selectedCoordinates.latitude : 0}
+            longitude={selectedCoordinates ? selectedCoordinates.longitude : 0}
             captureClick={false}
             closeOnClick={false}
           >
@@ -223,8 +242,13 @@ function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
                 className={classes.spacing}
                 id='feature-coordinates'
               >
-                {getCoordinates(selectedFeature)[1].toFixed(6)},
-                {getCoordinates(selectedFeature)[0].toFixed(6)}
+                {selectedCoordinates
+                  ? selectedCoordinates.latitude.toFixed(6)
+                  : 0}
+                ,
+                {selectedCoordinates
+                  ? selectedCoordinates.longitude.toFixed(6)
+                  : 0}
               </Typography>
               {photoByFeatureId && photoByFeatureId[selectedFeature.id!] && (
                 <img
