@@ -7,6 +7,7 @@ import {
   useHistory,
 } from 'react-router-dom';
 import { RecoilRoot, useRecoilValue } from 'recoil';
+import AllPlants from './components/AllPlants';
 import AppBar from './components/AppBar';
 import Dashboard from './components/Dashboard';
 import Login from './components/Login';
@@ -59,6 +60,7 @@ function AppContent() {
             <AppBar />
             <Switch>
               <Route exact path='/dashboard' component={Dashboard} />
+              <Route exact path='/plants' component={AllPlants} />
               <Route exact path='/species' component={Species} />
             </Switch>
           </Grid>
