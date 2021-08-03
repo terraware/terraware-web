@@ -69,7 +69,10 @@ export default function Dashboard(): JSX.Element {
       <Container maxWidth={false} className={classes.mainContainer}>
         <Grid container spacing={3}>
           <Grid item xs={isFullscreen ? 12 : 6}>
-            <Map onFullscreen={onFullscreenHandler} />
+            <Map
+              onFullscreen={onFullscreenHandler}
+              isFullscreen={isFullscreen}
+            />
           </Grid>
           <Grid item xs={isFullscreen ? 12 : 6}>
             <Grid container>

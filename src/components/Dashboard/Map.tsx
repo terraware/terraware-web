@@ -3,13 +3,9 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import CreateIcon from '@material-ui/icons/Create';
 import FullscreenIcon from '@material-ui/icons/Fullscreen';
-import {
-  GoogleMap,
-  InfoWindow,
-  Marker,
-  useJsApiLoader,
-} from '@react-google-maps/api';
-import React, { useState } from 'react';
+import 'mapbox-gl/dist/mapbox-gl.css';
+import React, { useEffect, useState } from 'react';
+import ReactMapGL, { Marker, NavigationControl, Popup } from 'react-map-gl';
 import { useRecoilValue } from 'recoil';
 import { Feature } from '../../api/types/feature';
 import { Plant } from '../../api/types/plant';
@@ -18,7 +14,6 @@ import { plantsByFeatureIdSelector } from '../../state/selectors/plantsPlanted';
 import { plantsPlantedFeaturesSelector } from '../../state/selectors/plantsPlantedFeatures';
 import speciesForChartSelector from '../../state/selectors/speciesForChart';
 import strings from '../../strings';
-import CustomMapControl from './CustomMapControl';
 import NewSpecieModal from './NewSpecieModal';
 
 export type SpecieMap = {
@@ -62,25 +57,42 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-interface Props {
-  onFullscreen: () => void;
+const navControlStyle = {
+  right: 10,
+  bottom: 10,
+};
+
+const DEFAULT_VIEWPORT = { width: '100%', height: '600px', zoom: 8 };
+
+interface Coordinate {
+  latitude: number;
+  longitude: number;
 }
 
-function Map({ onFullscreen }: Props): JSX.Element {
+interface Props {
+  onFullscreen: () => void;
+  isFullscreen: boolean;
+}
+
+function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
   const classes = useStyles();
   const [selectedFeature, setSelectedFeature] = useState<Feature>();
   const [editPlantModalOpen, setEditPlantModalOpen] = React.useState(false);
-  const [isFullscreen, setIsFullscreen] = React.useState(false);
+  const [viewport, setViewport] = React.useState(DEFAULT_VIEWPORT);
 
   const features = useRecoilValue(plantsPlantedFeaturesSelector);
   const speciesForChart = useRecoilValue(speciesForChartSelector);
   const photoByFeatureId = useRecoilValue(photoByFeatureIdSelector);
   const plantsByFeatureId = useRecoilValue(plantsByFeatureIdSelector);
 
-  const { isLoaded } = useJsApiLoader({
-    id: 'google-map-script',
-    googleMapsApiKey: `${process.env.REACT_APP_GOOGLE_KEY}`,
-  });
+  const selectedPlant: Plant | undefined =
+    selectedFeature && plantsByFeatureId
+      ? plantsByFeatureId[selectedFeature.id!]
+      : undefined;
+
+  useEffect(() => {
+    setViewport({ ...DEFAULT_VIEWPORT });
+  }, [isFullscreen]);
 
   const onCloseEditPlantModal = () => {
     setEditPlantModalOpen(false);
@@ -90,64 +102,69 @@ function Map({ onFullscreen }: Props): JSX.Element {
     setEditPlantModalOpen(true);
   };
 
-  const iconPin = (color?: string) => {
-    return {
-      path: 'M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z',
-      fillColor: color,
-      fillOpacity: 1,
-      scale: 0.05, // to reduce the size of icons
-    };
-  };
+  const iconPin = (color: string, feature: Feature) => (
+    <svg height='100' width='100' onClick={() => setSelectedFeature(feature)}>
+      <circle cx='20' cy='20' r='10' fill={color} />
+    </svg>
+  );
 
-  const onFullscreenClick = () => {
-    setIsFullscreen(!isFullscreen);
-    onFullscreen();
-  };
-
-  const getCoordinates = (feature: Feature): number[] => {
-    return feature.geom &&
+  const getCoordinates = (feature: Feature): Coordinate => {
+    if (
+      feature.geom &&
       feature.geom.coordinates &&
       Array.isArray(feature.geom.coordinates)
-      ? feature.geom.coordinates
-      : [];
+    ) {
+      return {
+        longitude: feature.geom.coordinates[0],
+        latitude: feature.geom.coordinates[1],
+      };
+    } else {
+      return {
+        latitude: 0,
+        longitude: 0,
+      };
+    }
   };
 
-  const getCenter = () => {
+  const getCenter = (): { latitude: number; longitude: number } => {
     if (features?.length) {
-      let maxLat: number = getCoordinates(features[0])[1];
-      let minLat: number = getCoordinates(features[0])[1];
-      let maxLong: number = getCoordinates(features[0])[0];
-      let minLong: number = getCoordinates(features[0])[0];
+      let maxLat: number = getCoordinates(features[0]).latitude;
+      let minLat: number = getCoordinates(features[0]).latitude;
+      let maxLong: number = getCoordinates(features[0]).longitude;
+      let minLong: number = getCoordinates(features[0]).longitude;
 
       const featureCopy = [...features];
       featureCopy.shift();
 
       featureCopy.forEach((feature) => {
         const coordinates = getCoordinates(feature);
-        if (coordinates[1] > maxLat) {
-          maxLat = coordinates[1];
+        if (coordinates.latitude > maxLat) {
+          maxLat = coordinates.latitude;
         }
-        if (coordinates[1] < minLat) {
-          minLat = coordinates[1];
+        if (coordinates.latitude < minLat) {
+          minLat = coordinates.latitude;
         }
-        if (coordinates[0] > maxLong) {
-          maxLong = coordinates[0];
+        if (coordinates.longitude > maxLong) {
+          maxLong = coordinates.longitude;
         }
-        if (coordinates[0] < minLong) {
-          minLong = coordinates[0];
+        if (coordinates.longitude < minLong) {
+          minLong = coordinates.longitude;
         }
       });
 
-      return { lat: (maxLat + minLat) / 2, lng: (maxLong + minLong) / 2 };
+      return {
+        latitude: (maxLat + minLat) / 2,
+        longitude: (maxLong + minLong) / 2,
+      };
     }
 
-    return { lat: 0, lng: 0 };
+    return { latitude: 0, longitude: 0 };
   };
 
-  const selectedPlant: Plant | undefined =
-    selectedFeature && plantsByFeatureId
-      ? plantsByFeatureId[selectedFeature.id!]
-      : undefined;
+  const center = getCenter();
+  const selectedCoordinates = selectedFeature
+    ? getCoordinates(selectedFeature)
+    : undefined;
 
   return (
     <>
@@ -156,120 +173,115 @@ function Map({ onFullscreen }: Props): JSX.Element {
         onClose={onCloseEditPlantModal}
         value={selectedPlant}
       />
-
-      {isLoaded ? (
-        <GoogleMap
-          zoom={9}
-          center={getCenter()}
-          options={{
-            fullscreenControl: false,
-            streetViewControl: false,
-            mapTypeControl: false,
-          }}
-          mapTypeId='satellite'
-          mapContainerStyle={
-            isFullscreen
-              ? { width: '100%', height: '600px' }
-              : { width: '100%', height: '100%' }
-          }
-        >
-          <CustomMapControl position={9}>
-            <IconButton
-              id='full-screen'
-              onClick={onFullscreenClick}
-              className={classes.fullscreen}
-            >
-              <FullscreenIcon />
-            </IconButton>
-          </CustomMapControl>
-          {plantsByFeatureId &&
-            features?.map((feature) => {
-              const plant = plantsByFeatureId[feature.id!];
-
-              const coordinates = getCoordinates(feature);
-
-              if (coordinates.length) {
-                return (
-                  <Marker
-                    key={feature.id}
-                    position={{
-                      lat: coordinates[1],
-                      lng: coordinates[0],
-                    }}
-                    options={{
-                      icon: iconPin(speciesForChart[plant.species_id!].color),
-                    }}
-                    onClick={() => setSelectedFeature(feature)}
-                  />
-                );
-              }
-
-              return null;
-            })}
-
-          {selectedFeature && selectedPlant && (
-            <InfoWindow
-              onCloseClick={() => {
-                setSelectedFeature(undefined);
-              }}
-              position={{
-                lat: getCoordinates(selectedFeature)[1],
-                lng: getCoordinates(selectedFeature)[0],
-              }}
-            >
-              <div>
-                <Typography component='p' variant='subtitle2'>
-                  {speciesForChart[selectedPlant.species_id!].speciesName.name}
-                </Typography>
-                <Typography
-                  component='p'
-                  variant='body2'
-                  className={classes.spacing}
+      <ReactMapGL
+        latitude={center.latitude}
+        longitude={center.longitude}
+        {...viewport}
+        onViewportChange={setViewport}
+        mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
+        mapStyle='mapbox://styles/mapbox/satellite-v9'
+      >
+        <NavigationControl showCompass={false} style={navControlStyle} />
+        <div style={{ position: 'absolute', right: 0, bottom: 80 }}>
+          <IconButton
+            id='full-screen'
+            onClick={onFullscreen}
+            className={classes.fullscreen}
+          >
+            <FullscreenIcon />
+          </IconButton>
+        </div>
+        {plantsByFeatureId &&
+          features?.map((feature) => {
+            const plant = plantsByFeatureId[feature.id!];
+            const coordinates = getCoordinates(feature);
+            if (coordinates) {
+              return (
+                <Marker
+                  key={feature.id}
+                  latitude={coordinates.latitude}
+                  longitude={coordinates.longitude}
+                  offsetLeft={-20}
+                  offsetTop={-10}
                 >
-                  {strings.AS_OF} {selectedPlant.date_planted}
-                </Typography>
-                <Typography
-                  component='p'
-                  variant='body2'
-                  className={classes.spacing}
-                >
-                  {getCoordinates(selectedFeature)[1].toFixed(6)},
-                  {getCoordinates(selectedFeature)[0].toFixed(6)}
-                </Typography>
-                {photoByFeatureId && photoByFeatureId[selectedFeature.id!] && (
-                  <img
-                    alt='Specie'
-                    src={photoByFeatureId[selectedFeature.id!]}
-                    style={{ maxHeight: '100px', display: 'block' }}
-                  />
-                )}
-                <Chip
-                  id='new-species'
-                  size='medium'
-                  label={
-                    speciesForChart[selectedPlant.species_id!].speciesName
-                      .name !== strings.OTHER
-                      ? strings.EDIT_SPECIES
-                      : strings.ADD_SPECIES
-                  }
-                  onClick={onNewSpecie}
-                  className={classes.newSpecies}
-                  icon={
-                    speciesForChart[selectedPlant.species_id!].speciesName
-                      .name !== strings.OTHER ? (
-                      <CreateIcon />
-                    ) : (
-                      <AddIcon />
-                    )
-                  }
+                  {iconPin(speciesForChart[plant.species_id!].color, feature)}
+                </Marker>
+              );
+            }
+
+            return null;
+          })}
+        {selectedFeature && selectedPlant && (
+          <Popup
+            onClose={() => {
+              setSelectedFeature(undefined);
+            }}
+            latitude={selectedCoordinates ? selectedCoordinates.latitude : 0}
+            longitude={selectedCoordinates ? selectedCoordinates.longitude : 0}
+            captureClick={false}
+            closeOnClick={false}
+          >
+            <div>
+              <Typography
+                component='p'
+                variant='subtitle2'
+                id='feature-species-name'
+              >
+                {speciesForChart[selectedPlant.species_id!].speciesName.name}
+              </Typography>
+              <Typography
+                component='p'
+                variant='body2'
+                className={classes.spacing}
+              >
+                {strings.AS_OF} {selectedPlant.date_planted}
+              </Typography>
+              <Typography
+                component='p'
+                variant='body2'
+                className={classes.spacing}
+                id='feature-coordinates'
+              >
+                {selectedCoordinates
+                  ? selectedCoordinates.latitude.toFixed(6)
+                  : 0}
+                ,
+                {selectedCoordinates
+                  ? selectedCoordinates.longitude.toFixed(6)
+                  : 0}
+              </Typography>
+              {photoByFeatureId && photoByFeatureId[selectedFeature.id!] && (
+                <img
+                  alt='Specie'
+                  src={photoByFeatureId[selectedFeature.id!]}
+                  style={{ maxHeight: '100px', display: 'block' }}
+                  id='feature-image'
                 />
-              </div>
-            </InfoWindow>
-          )}
-        </GoogleMap>
-      ) : (
-        <>Test</>
-      )}
+              )}
+              <Chip
+                id='new-species'
+                size='medium'
+                label={
+                  speciesForChart[selectedPlant.species_id!].speciesName
+                    .name !== strings.OTHER
+                    ? strings.EDIT_SPECIES
+                    : strings.ADD_SPECIES
+                }
+                onClick={onNewSpecie}
+                className={classes.newSpecies}
+                icon={
+                  speciesForChart[selectedPlant.species_id!].speciesName
+                    .name !== strings.OTHER ? (
+                    <CreateIcon />
+                  ) : (
+                    <AddIcon />
+                  )
+                }
+              />
+            </div>
+          </Popup>
+        )}
+      </ReactMapGL>
     </>
   );
 }
