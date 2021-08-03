@@ -7,12 +7,14 @@ const sessionAtom = atom({
   default: 0,
 });
 
+const LOCAL_STORAGE_KEY = 'session';
+
 export default selector<TokenResponse | undefined>({
   key: 'sessionSelector',
   get: async ({ get }) => {
     get(sessionAtom);
 
-    const session = await localStorage.getItem('session');
+    const session = await localStorage.getItem(LOCAL_STORAGE_KEY);
     if (session) {
       return JSON.parse(session);
     }
@@ -21,10 +23,10 @@ export default selector<TokenResponse | undefined>({
   },
   set: ({ set, reset }, newValue) => {
     if (newValue instanceof DefaultValue) {
-      localStorage.removeItem('session');
+      localStorage.removeItem(LOCAL_STORAGE_KEY);
       reset(projectIdSelector);
     } else {
-      localStorage.setItem('session', JSON.stringify(newValue));
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(newValue));
     }
     set(sessionAtom, (v: number) => v + 1);
   },

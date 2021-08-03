@@ -5,12 +5,14 @@ export const projectIdAtom = atom({
   default: 0,
 });
 
+const LOCAL_STORAGE_KEY = 'projectId';
+
 export default selector<number | undefined>({
   key: 'projectIdSelector',
   get: async ({ get }) => {
     get(projectIdAtom);
 
-    const projectId = await localStorage.getItem('projectId');
+    const projectId = await localStorage.getItem(LOCAL_STORAGE_KEY);
     if (projectId) {
       return parseInt(projectId, 10);
     }
@@ -19,9 +21,9 @@ export default selector<number | undefined>({
   },
   set: ({ set }, newValue) => {
     if (newValue instanceof DefaultValue) {
-      localStorage.removeItem('projectId');
+      localStorage.removeItem(LOCAL_STORAGE_KEY);
     } else {
-      localStorage.setItem('projectId', '' + newValue);
+      localStorage.setItem(LOCAL_STORAGE_KEY, '' + newValue);
     }
     set(projectIdAtom, (v: number) => v + 1);
   },
