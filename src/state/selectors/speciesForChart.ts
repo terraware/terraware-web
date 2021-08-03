@@ -1,6 +1,6 @@
 import { selector } from 'recoil';
 import { SpeciesForChart } from '../../api/types/species';
-import generateRandomColor from '../../utils/generateRandomColor';
+import colorsBySpeciesSelector from './colorsBySpecies';
 import { plantsPlantedSelector } from './plantsPlanted';
 import sessionSelector from './session';
 import speciesNamesBySpeciesIdSelector from './speciesNamesBySpeciesId';
@@ -12,6 +12,8 @@ export default selector<Record<number, SpeciesForChart>>({
     const speciesForChart: Record<number, SpeciesForChart> = {};
     const plantsPlanted = get(plantsPlantedSelector);
     const speciesNamesBySpeciesId = get(speciesNamesBySpeciesIdSelector);
+    const colorsBySpecies = get(colorsBySpeciesSelector);
+
     if (session) {
       plantsPlanted?.forEach((plant) => {
         if (plant && plant.species_id) {
@@ -24,7 +26,7 @@ export default selector<Record<number, SpeciesForChart>>({
               const speciesChartToAdd: SpeciesForChart = {
                 speciesName: speciesToAdd,
                 numberOfTrees: 1,
-                color: generateRandomColor(),
+                color: colorsBySpecies[speciesToAdd.species_id],
               };
               speciesForChart[plant.species_id] = speciesChartToAdd;
             }
