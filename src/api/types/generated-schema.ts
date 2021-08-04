@@ -36,13 +36,14 @@ export interface paths {
     get: operations["read_photo_api_v1_photos__photo_id__get"];
     delete: operations["delete_photo_api_v1_photos__photo_id__delete"];
   };
+  "/api/v1/plants": {
+    get: operations["read_plant_list_api_v1_plants_get"];
+    post: operations["create_item_api_v1_plants_post"];
+  };
   "/api/v1/plants/{feature_id}": {
     get: operations["read_plant_api_v1_plants__feature_id__get"];
     put: operations["update_plant_api_v1_plants__feature_id__put"];
     delete: operations["delete_plant_api_v1_plants__feature_id__delete"];
-  };
-  "/api/v1/plants": {
-    post: operations["create_item_api_v1_plants_post"];
   };
   "/api/v1/plant_observations": {
     get: operations["read_plant_observation_list_api_v1_plant_observations_get"];
@@ -209,6 +210,8 @@ export interface components {
       gps_horiz_accuracy?: number;
       gps_vert_accuracy?: number;
       attrib?: string;
+      notes?: string;
+      entered_time?: string;
       created_time?: string;
       modified_time?: string;
     };
@@ -351,6 +354,7 @@ export interface operations {
         layer_id: number;
         skip?: number;
         limit?: number;
+        crs?: number;
       };
     };
     responses: {
@@ -393,6 +397,9 @@ export interface operations {
     parameters: {
       path: {
         feature_id: number;
+      };
+      query: {
+        crs?: number;
       };
     };
     responses: {
@@ -670,6 +677,52 @@ export interface operations {
       };
     };
   };
+  read_plant_list_api_v1_plants_get: {
+    parameters: {
+      query: {
+        layer_id: number;
+        species_name?: string;
+        min_entered_time?: string;
+        max_entered_time?: string;
+        notes?: string;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          "application/json": { [key: string]: unknown };
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  create_item_api_v1_plants_post: {
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          "application/json": { [key: string]: unknown };
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["Plant"];
+      };
+    };
+  };
   read_plant_api_v1_plants__feature_id__get: {
     parameters: {
       path: {
@@ -735,27 +788,6 @@ export interface operations {
         content: {
           "application/json": components["schemas"]["HTTPValidationError"];
         };
-      };
-    };
-  };
-  create_item_api_v1_plants_post: {
-    responses: {
-      /** Successful Response */
-      200: {
-        content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-      /** Validation Error */
-      422: {
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["Plant"];
       };
     };
   };

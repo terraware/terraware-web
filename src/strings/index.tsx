@@ -23,6 +23,13 @@ const strings = new LocalizedStrings({
     NUMBER_OF_TREES: 'Number of Trees',
     AS_OF: 'As of',
     OTHER: 'Other',
+    DASHBOARD: 'Dashboard',
+    ALL_PLANTS: 'All Plants',
+    LOGOUT: 'Logout',
+    DATE: 'Date',
+    GEOLOCATION: 'Geolocation',
+    PHOTO: 'Photo',
+    NOTES: 'Notes',
   },
 });
 

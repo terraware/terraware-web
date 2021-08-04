@@ -10,6 +10,7 @@ import React from 'react';
 import { Link as RouterLink, useRouteMatch } from 'react-router-dom';
 import { useResetRecoilState } from 'recoil';
 import sessionSelector from '../state/selectors/session';
+import strings from '../strings';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -44,6 +45,7 @@ export default function NavBar(): JSX.Element | null {
 
   const isDashboardRoute = useRouteMatch('/dashboard/');
   const isSpeciesRoute = useRouteMatch('/species/');
+  const isPlantsRoute = useRouteMatch('/plants/');
   const resetSession = useResetRecoilState(sessionSelector);
 
   const logout = () => {
@@ -65,7 +67,16 @@ export default function NavBar(): JSX.Element | null {
             to='/dashboard'
             id='dashboard'
           >
-            <ListItemText primary='Dashboard' />
+            <ListItemText primary={strings.DASHBOARD} />
+          </ListItem>
+          <ListItem
+            button
+            component={RouterLink}
+            className={isPlantsRoute ? classes.selected : ''}
+            to='/plants'
+            id='plants'
+          >
+            <ListItemText primary={strings.ALL_PLANTS} />
           </ListItem>
           <ListItem
             button
@@ -74,11 +85,11 @@ export default function NavBar(): JSX.Element | null {
             to='/species'
             id='species'
           >
-            <ListItemText primary='Species' />
+            <ListItemText primary={strings.SPECIES} />
           </ListItem>
 
           <ListItem button id='logout' onClick={logout}>
-            <ListItemText primary='Logout' />
+            <ListItemText primary={strings.LOGOUT} />
           </ListItem>
         </div>
       </List>
