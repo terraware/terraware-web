@@ -8,7 +8,7 @@ INSERT INTO sites (id, organization_id, name, latitude, longitude, locale, timez
 VALUES (10, 1, 'sim', 123.456789, -98.76543, 'en-US', 'US/Pacific')
 ON CONFLICT (id) DO UPDATE SET name = excluded.name;
 
-INSERT INTO site_modules (id, site_id, type_id, name)
+INSERT INTO facilities (id, site_id, type_id, name)
 VALUES (100, 10, 1, 'ohana'),
        (101, 10, 1, 'garage')
 ON CONFLICT (id) DO UPDATE SET site_id = excluded.site_id,
@@ -23,14 +23,14 @@ INSERT INTO species_families (id, name, created_time)
 VALUES (20000, 'Dogwood', NOW())
 ON CONFLICT (id) DO UPDATE SET name = excluded.name;
 
-INSERT INTO storage_locations (id, site_module_id, name, condition_id)
+INSERT INTO storage_locations (id, facility_id, name, condition_id)
 VALUES (1000, 100, 'Refrigerator 1', 1),
        (1001, 100, 'Freezer 1', 2),
        (1002, 100, 'Freezer 2', 2)
 ON CONFLICT (id) DO UPDATE SET name         = excluded.name,
                                condition_id = excluded.condition_id;
 
-INSERT INTO accessions (id, number, state_id, site_module_id, created_time, species_id,
+INSERT INTO accessions (id, number, state_id, facility_id, created_time, species_id,
                        species_family_id, trees_collected_from)
 VALUES (1000, 'XYZ', 30, 100, '2021-01-03T15:31:20Z', 10000, 20000, 1),
        (1001, 'ABCDEFG', 20, 100, '2021-01-10T13:08:11Z', 10001, 20000, 2)
@@ -60,7 +60,7 @@ ON CONFLICT (id) DO UPDATE SET type_id            = excluded.type_id,
                                
 INSERT INTO "app_devices" ("app_name", "created_time") VALUES ('cel', '2021-02-12 17:21:33.62729+00');
 
-INSERT INTO "accessions" ("id", "site_module_id", "app_device_id", "number", "species_id", "state_id", "trees_collected_from", "species_family_id", "created_time") VALUES
+INSERT INTO "accessions" ("id", "facility_id", "app_device_id", "number", "species_id", "state_id", "trees_collected_from", "species_family_id", "created_time") VALUES
 (1002,	100,	1,	'AAF4D49R3E',	10000,	30,	1,	20000,	'2021-01-03 15:31:20+00');
 
 INSERT INTO "bags" ("id", "accession_id", "bag_number") VALUES
