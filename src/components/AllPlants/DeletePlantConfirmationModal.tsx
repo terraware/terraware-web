@@ -5,9 +5,9 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { useRecoilValue, useResetRecoilState } from 'recoil';
-import { deleteSpecies } from '../../api/species';
-import { deleteSpeciesName } from '../../api/speciesNames';
-import { SpeciesName } from '../../api/types/species';
+import { PlantForTable } from '.';
+import { deleteFeature } from '../../api/features';
+import { deletePlant } from '../../api/plants';
 import { plantsPlantedFeaturesSelector } from '../../state/selectors/plantsPlantedFeatures';
 import sessionSelector from '../../state/selectors/session';
 import speciesNamesSelector from '../../state/selectors/speciesNames';
@@ -38,28 +38,28 @@ const useStyles = makeStyles((theme: Theme) =>
 export interface Props {
   open: boolean;
   onClose: (deleted?: boolean) => void;
-  speciesName: SpeciesName;
+  plant: PlantForTable;
 }
 
-export default function DeleteConfirmationModal(props: Props): JSX.Element {
+export default function DeletePlantConfirmationModal(
+  props: Props
+): JSX.Element {
   const classes = useStyles();
-  const { onClose, open, speciesName } = props;
+  const { onClose, open, plant } = props;
   const session = useRecoilValue(sessionSelector);
   const resetSpecies = useResetRecoilState(speciesNamesSelector);
-  const resetPlantsPlantedFeatures = useResetRecoilState(
-    plantsPlantedFeaturesSelector
-  );
+  const resetFeatures = useResetRecoilState(plantsPlantedFeaturesSelector);
 
   const handleCancel = () => {
     onClose();
   };
 
   const handleOk = async () => {
-    if (session && speciesName.id) {
-      await deleteSpeciesName(speciesName.id, session);
-      await deleteSpecies(speciesName.species_id, session);
+    if (session && plant.featureId) {
+      await deletePlant(session, plant.featureId);
+      await deleteFeature(session, plant.featureId);
       resetSpecies();
-      resetPlantsPlantedFeatures();
+      resetFeatures();
     }
     onClose(true);
   };
@@ -73,12 +73,12 @@ export default function DeleteConfirmationModal(props: Props): JSX.Element {
       classes={{ paper: classes.paper }}
     >
       <DialogTitle>
-        <Typography variant='h6'>{strings.DELETE_SPECIES}</Typography>
+        <Typography variant='h6'>{strings.DELETE_PLANT}</Typography>
         <DialogCloseButton onClick={handleCancel} />
       </DialogTitle>
       <DialogContent>
         <Typography variant='body2'>
-          {strings.DELETE_CONFIRMATION_MODAL_MAIN_TEXT}
+          {strings.DELETE_PLANT_CONFIRMATION_MODAL_MAIN_TEXT}
         </Typography>
       </DialogContent>
       <DialogActions>

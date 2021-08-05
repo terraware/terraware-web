@@ -14,12 +14,20 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React from 'react';
-import { useRecoilValue } from 'recoil';
-import { Plant } from '../../api/types/plant';
-import { Species } from '../../api/types/species';
+import { useRecoilValue, useResetRecoilState } from 'recoil';
+import { putPlant } from '../../api/plants';
+import { postSpecies } from '../../api/species';
+import { postSpeciesName } from '../../api/speciesNames';
+import { SpeciesName } from '../../api/types/species';
+import { plantsByFeatureIdSelector } from '../../state/selectors/plantsPlanted';
+import { plantsPlantedFeaturesSelector } from '../../state/selectors/plantsPlantedFeatures';
+import sessionSelector from '../../state/selectors/session';
 import speciesForChartSelector from '../../state/selectors/speciesForChart';
+import speciesNamesSelector from '../../state/selectors/speciesNames';
+import speciesNamesBySpeciesIdSelector from '../../state/selectors/speciesNamesBySpeciesId';
 import strings from '../../strings';
 import useForm from '../../utils/useForm';
+import { PlantForTable } from '../AllPlants';
 import CancelButton from '../common/CancelButton';
 import DialogCloseButton from '../common/DialogCloseButton';
 import TextField from '../common/TextField';
@@ -47,26 +55,47 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'block',
       padding: theme.spacing(1),
     },
+    deleteSpecies: {
+      backgroundColor: theme.palette.common.white,
+      borderColor: theme.palette.secondary.main,
+      color: theme.palette.secondary.main,
+      borderWidth: 1,
+    },
   })
 );
 
 export interface Props {
   open: boolean;
-  onClose: (specie?: Species) => void;
-  value?: Plant;
+  onClose: (snackbarMessage?: string) => void;
+  value?: PlantForTable;
+  onDelete?: () => void;
 }
 
-const initPlant = (plant?: Plant): Plant => {
-  return plant ?? { feature_id: 1 };
+const initPlant = (plant?: PlantForTable): PlantForTable => {
+  return plant
+    ? {
+        ...plant,
+        speciesId: plant.speciesId ?? 0,
+      }
+    : {};
 };
 
 export default function NewSpecieModal(props: Props): JSX.Element {
   const classes = useStyles();
-  const { onClose, open } = props;
-  const [record, setRecord, onChange] = useForm<Plant>(initPlant(props.value));
-  const [value, setValue] = React.useState('female');
-  const speciesForChart = useRecoilValue(speciesForChartSelector);
-  const species = speciesForChart[record.feature_id];
+  const { onClose, open, onDelete } = props;
+  const [record, setRecord] = useForm<PlantForTable>(initPlant(props.value));
+
+  const speciesNames = useRecoilValue(speciesNamesSelector);
+  const plantsByFeature = useRecoilValue(plantsByFeatureIdSelector);
+  const session = useRecoilValue(sessionSelector);
+  const speciesNamesBySpeciesId = useRecoilValue(
+    speciesNamesBySpeciesIdSelector
+  );
+  const resetPlantsPlantedFeatures = useResetRecoilState(
+    plantsPlantedFeaturesSelector
+  );
+  const resetSpeciesForChart = useResetRecoilState(speciesForChartSelector);
+  const resetSpeciesNames = useResetRecoilState(speciesNamesSelector);
 
   React.useEffect(() => {
     if (props.open) {
@@ -79,12 +108,65 @@ export default function NewSpecieModal(props: Props): JSX.Element {
     onClose();
   };
 
-  const handleOk = () => {
-    onClose(record);
+  const handleDelete = () => {
+    if (onDelete) {
+      onDelete();
+      onClose();
+    }
+  };
+
+  const handleOk = async () => {
+    let snackbarMessage = '';
+    if (session && plantsByFeature && record.featureId) {
+      const previousPlant = plantsByFeature[record.featureId];
+      if (record.speciesId !== undefined) {
+        const newPlant = {
+          ...previousPlant,
+          species_id: record.speciesId !== 0 ? record.speciesId : undefined,
+        };
+        await putPlant(session, record.featureId, newPlant);
+      } else if (record.species) {
+        const newSpecies = await postSpecies({}, session);
+        if (newSpecies.id) {
+          const newPlant = { ...previousPlant, species_id: newSpecies.id };
+          const newSpeciesName: SpeciesName = {
+            name: record.species,
+            species_id: newSpecies.id,
+          };
+          await postSpeciesName(newSpeciesName, session);
+          await putPlant(session, record.featureId, newPlant);
+          resetSpeciesNames();
+        }
+      }
+      resetPlantsPlantedFeatures();
+      //resetPlants();
+      resetSpeciesForChart();
+      snackbarMessage = strings.SNACKBAR_MSG_CHANGES_SAVED;
+    }
+    onClose(snackbarMessage);
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValue((event.target as HTMLInputElement).value);
+    const newSpecieId = parseInt(event.target.value, 10);
+    const newRecord = {
+      ...record,
+      speciesId: newSpecieId,
+      species: speciesNamesBySpeciesId[newSpecieId]
+        ? speciesNamesBySpeciesId[newSpecieId].name
+        : undefined,
+    };
+
+    setRecord(newRecord);
+  };
+
+  const onChangeTextField = (id: string, value: unknown) => {
+    const newRecord = {
+      ...record,
+      [id]: value,
+      speciesId: undefined,
+    };
+
+    setRecord(newRecord);
   };
 
   return (
@@ -96,23 +178,59 @@ export default function NewSpecieModal(props: Props): JSX.Element {
       classes={{ paper: classes.paper }}
     >
       <DialogTitle>
-        <Typography variant='h6'>
-          {species?.speciesName.name !== strings.OTHER
-            ? strings.EDIT_SPECIES
-            : strings.ADD_SPECIES}
-        </Typography>
+        <Typography variant='h6'>{strings.EDIT_SPECIES}</Typography>
         <DialogCloseButton onClick={handleCancel} />
       </DialogTitle>
       <DialogContent dividers>
         <Grid container spacing={4}>
+          <Grid item xs={6}>
+            <Grid item xs={12}>
+              <Typography variant='body1'>{strings.PHOTO}</Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <img
+                alt='Specie'
+                src={record.photo}
+                style={{ maxHeight: '100px', display: 'block' }}
+                id='feature-image'
+              />
+            </Grid>
+          </Grid>
+          <Grid item xs={6}>
+            <Grid item xs={12}>
+              <Typography variant='body1'>{strings.NOTES}</Typography>
+            </Grid>
+            <Grid item xs={6}>
+              <Typography variant='body2'>{record.notes}</Typography>
+            </Grid>
+          </Grid>
           <Grid item xs={12}>
-            <TextField
-              id='name'
-              value={record.label}
-              onChange={onChange}
-              label={strings.SPECIES_NAME}
-              aria-label='Species Name'
-            />
+            <Typography variant='body1'>
+              {strings.EXISTING_SPECIES_MSG}
+            </Typography>
+            <FormControl component='fieldset' className={classes.container}>
+              <RadioGroup
+                aria-label='species'
+                name='species'
+                value={record.speciesId}
+                onChange={handleChange}
+              >
+                {speciesNames?.map((species) => (
+                  <FormControlLabel
+                    key={species.id}
+                    value={species.species_id}
+                    control={<Radio />}
+                    label={species.name}
+                  />
+                ))}
+                <FormControlLabel
+                  key={-1}
+                  value={0}
+                  control={<Radio />}
+                  label={strings.OTHER}
+                />
+              </RadioGroup>
+            </FormControl>
           </Grid>
         </Grid>
         <Grid container spacing={4}>
@@ -124,45 +242,36 @@ export default function NewSpecieModal(props: Props): JSX.Element {
         </Grid>
         <Grid container spacing={4}>
           <Grid item xs={12}>
-            <FormControl component='fieldset' className={classes.container}>
-              <RadioGroup
-                aria-label='gender'
-                name='gender1'
-                value={value}
-                onChange={handleChange}
-              >
-                <FormControlLabel
-                  value='female'
-                  control={<Radio />}
-                  label='Flower'
-                />
-                <FormControlLabel
-                  value='male'
-                  control={<Radio />}
-                  label='Dododanea'
-                />
-                <FormControlLabel
-                  value='other'
-                  control={<Radio />}
-                  label='Acacia'
-                />
-              </RadioGroup>
-            </FormControl>
+            <TextField
+              id='species'
+              value={record.speciesId ? '' : record.species}
+              onChange={onChangeTextField}
+              label={strings.CREATE_NEW_SPECIES}
+              aria-label='Species Name'
+            />
           </Grid>
         </Grid>
       </DialogContent>
       <DialogActions>
         <Box width={'100%'} className={classes.actions}>
           <Box>
+            {props.value && props.onDelete && (
+              <Chip
+                id='delete-specie'
+                className={classes.deleteSpecies}
+                label={strings.DELETE}
+                clickable
+                onClick={handleDelete}
+                variant='outlined'
+              />
+            )}
+          </Box>
+          <Box>
             <CancelButton onClick={handleCancel} />
             <Chip
               id='saveSpecie'
               className={classes.submit}
-              label={
-                species?.speciesName.name !== 'Other'
-                  ? strings.SAVE
-                  : strings.ADD
-              }
+              label={strings.SAVE}
               clickable
               color='primary'
               onClick={handleOk}

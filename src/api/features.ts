@@ -18,3 +18,18 @@ export const getFeatures = async (
     })
   ).data.features;
 };
+
+export const deleteFeature = async (
+  token: TokenResponse,
+  featureId: number
+): Promise<Feature> => {
+  const endpoint = `${BASE_URL}/${featureId}`;
+
+  return (
+    await axios.delete(endpoint, {
+      headers: {
+        Authorization: `${token.token_type} ${token.access_token}`,
+      },
+    })
+  ).data;
+};

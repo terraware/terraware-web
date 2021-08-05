@@ -8,7 +8,9 @@ export default selector<Record<number, string>>({
   key: 'colorsBySpeciesSelector',
   get: ({ get }) => {
     const speciesNamesBySpeciesId = get(speciesNamesBySpeciesIdSelector);
-    const speciesIds = speciesNamesBySpeciesId ? Object.keys(speciesNamesBySpeciesId) : [];
+    const speciesIds = speciesNamesBySpeciesId
+      ? Object.keys(speciesNamesBySpeciesId)
+      : [];
 
     let colorsBySpecies: Record<number, string> = {};
     const colorsJSON = localStorage.getItem(LOCAL_STORAGE_KEY);
@@ -16,7 +18,12 @@ export default selector<Record<number, string>>({
       colorsBySpecies = JSON.parse(colorsJSON);
     }
 
-    if (speciesIds.length !== Object.keys(colorsBySpecies).length) {
+    //Asign a color for OTHER species
+    if (!colorsBySpecies[0]) {
+      colorsBySpecies[0] = generateRandomColor();
+    }
+
+    if (speciesIds.length + 1 !== Object.keys(colorsBySpecies).length) {
       speciesIds.forEach((speciesId) => {
         const index = parseInt(speciesId, 10);
         if (!colorsBySpecies[index]) {
