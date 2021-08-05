@@ -1,5 +1,3 @@
-/* eslint-disable no-undef */
-/// <reference types="cypress" />
 describe('Processing and Drying', () => {
   it('should create the accession and navigate to processing and drying section', () => {
     cy.visit('/accessions/new');

@@ -1,6 +1,3 @@
-/* eslint-disable no-undef */
-/// <reference types="cypress" />
-
 describe('Onboarding test', () => {
     beforeEach(() => {
       cy.intercept('GET', '/api/v1/seedbank/notification').as('notification');

@@ -1,6 +1,3 @@
-/* eslint-disable no-undef */
-/// <reference types="cypress" />
-
 describe('Searchbar', () => {
   context('search', () => {
     it('should redirect the user to the correct page', () => {

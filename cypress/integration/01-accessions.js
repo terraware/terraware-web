@@ -1,6 +1,3 @@
-/* eslint-disable no-undef */
-/// <reference types="cypress" />
-
 describe('Accessions', () => {
   context('Summary Start Results', () => {
     it('has the right summary results', () => {
@@ -203,14 +200,18 @@ describe('Accessions', () => {
         )
         .should('have.attr', 'target', '_blank');
 
-      cy.request(
-        'http://localhost:8080/api/v1/seedbank/accession/AAF4D49R3E/photo/accession1.jpg'
-      )
+      cy.request({
+        url:
+          'http://localhost:8080/api/v1/seedbank/accession/AAF4D49R3E/photo/accession1.jpg',
+        headers: { 'X-Forwarded-User': 'dummy-auth-id' },
+      })
         .its('status')
         .should('eq', 200);
-      cy.request(
-        'http://localhost:8080/api/v1/seedbank/accession/AAF4D49R3E/photo/accession2.jpg'
-      )
+      cy.request({
+        url:
+          'http://localhost:8080/api/v1/seedbank/accession/AAF4D49R3E/photo/accession2.jpg',
+        headers: { 'X-Forwarded-User': 'dummy-auth-id' },
+      })
         .its('status')
         .should('eq', 200);
     });

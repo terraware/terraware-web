@@ -1,11 +1,29 @@
+-- Add a dummy user for CI tests. In tests, we'll bypass the login flow by passing
+-- authentication information that would normally be added by OAuth2 Proxy.
+INSERT INTO users (id, auth_id, email, super_admin, created_time, modified_time)
+VALUES (1, 'dummy-auth-id', 'nobody@terraformation.com', false, NOW(), NOW())
+ON CONFLICT (id) DO UPDATE SET auth_id = excluded.auth_id,
+                               email = excluded.email;
+
 -- Insert some dummy data into the database for demo purposes
-INSERT INTO organizations
-VALUES (1, 'dev')
+INSERT INTO organizations (id, name, created_time, modified_time)
+VALUES (1, 'Terraformation (staging)', NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET name = excluded.name;
 
--- A dummy site+device configuration matching the "dev" site in the terraware-sites repo
-INSERT INTO sites (id, organization_id, name, latitude, longitude, locale, timezone)
-VALUES (10, 1, 'sim', 123.456789, -98.76543, 'en-US', 'US/Pacific')
+INSERT INTO organization_users (user_id, organization_id, role_id, created_time, modified_time)
+VALUES (1, 1, 4, NOW(), NOW())
+ON CONFLICT (user_id, organization_id) DO UPDATE SET role_id = excluded.role_id;
+
+INSERT INTO projects (id, organization_id, name, created_time, modified_time)
+VALUES (10, 1, 'Example Project', NOW(), NOW())
+ON CONFLICT (id) DO UPDATE SET name = excluded.name;
+
+INSERT INTO project_users (user_id, project_id, created_time, modified_time)
+VALUES (1, 10, NOW(), NOW())
+ON CONFLICT DO NOTHING;
+
+INSERT INTO sites (id, project_id, name, latitude, longitude, locale, timezone)
+VALUES (10, 10, 'Example Site', 123.456789, -98.76543, 'en-US', 'US/Pacific')
 ON CONFLICT (id) DO UPDATE SET name = excluded.name;
 
 INSERT INTO facilities (id, site_id, type_id, name)
@@ -58,7 +76,7 @@ ON CONFLICT (id) DO UPDATE SET type_id            = excluded.type_id,
                                message            = excluded.message,
                                accession_state_id = excluded.accession_state_id;
                                
-INSERT INTO "app_devices" ("app_name", "created_time") VALUES ('cel', '2021-02-12 17:21:33.62729+00');
+INSERT INTO "app_devices" ("id", "app_name", "created_time") VALUES (1, 'cel', '2021-02-12 17:21:33.62729+00');
 
 INSERT INTO "accessions" ("id", "facility_id", "app_device_id", "number", "species_id", "state_id", "trees_collected_from", "species_family_id", "created_time") VALUES
 (1002,	100,	1,	'AAF4D49R3E',	10000,	30,	1,	20000,	'2021-01-03 15:31:20+00');

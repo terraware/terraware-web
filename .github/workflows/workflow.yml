@@ -40,7 +40,12 @@ jobs:
         run: |
           yarn docker:start
           yarn wait-be
-          docker exec -i seedbank-app_postgres_1 psql -d seedbank -U postgres < dump/dump.sql
+          docker exec -i seedbank-app_postgres_1 psql -d terraware -U postgres < dump/dump.sql
+        env:
+          TERRAWARE_KEYCLOAK_CLIENT_ID: dummy
+          TERRAWARE_KEYCLOAK_CLIENT_SECRET: dummy
+          TERRAWARE_KEYCLOAK_REALM: dummy
+          TERRAWARE_KEYCLOAK_SERVER_URL: http://dummy/
 
       - name: E-2-E
         run: yarn e2e

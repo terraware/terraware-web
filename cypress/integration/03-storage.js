@@ -1,5 +1,3 @@
-/* eslint-disable no-undef */
-/// <reference types="cypress" />
 describe('Storage', () => {
   it('should create the accession and navigate to storage section only when processing and drying is filled', () => {
     cy.visit('/accessions/new');

@@ -1,6 +1,3 @@
-/* eslint-disable no-undef */
-/// <reference types="cypress" />
-
 describe('Database', () => {
   context('Customize columns', () => {
     it('should display the default columns', () => {

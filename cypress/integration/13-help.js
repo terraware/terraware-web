@@ -1,6 +1,3 @@
-/* eslint-disable no-undef */
-/// <reference types="cypress" />
-
 describe('Help', () => {
   describe('Homepage', () => {
     beforeEach(() => {

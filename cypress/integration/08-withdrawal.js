@@ -1,6 +1,3 @@
-/* eslint-disable no-undef */
-/// <reference types="cypress" />
-
 describe('Withdrawal', () => {
   context('quantity by seed', () => {
     it('should create the accession', () => {

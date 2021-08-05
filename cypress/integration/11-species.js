@@ -1,6 +1,3 @@
-/* eslint-disable no-undef */
-/// <reference types="cypress" />
-
 describe('Species', () => {
   it('should exists species created when modifying', () => {
     cy.visit('/species');

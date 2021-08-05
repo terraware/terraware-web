@@ -1,6 +1,3 @@
-/* eslint-disable no-undef */
-/// <reference types="cypress" />
-
 describe('Lab', () => {
   it('should not create Lab menu if not selecting any test', () => {
     cy.visit('/accessions/new');
