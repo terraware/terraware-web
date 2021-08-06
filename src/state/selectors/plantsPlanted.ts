@@ -24,7 +24,7 @@ export const plantsPlantedSelector = selector<Plant[] | undefined>({
         )
       );
 
-      const result = plants?.filter((plant) => Boolean(plant));
+      const result = plants.filter((plant): plant is Plant => !!plant);
 
       return result;
     }
