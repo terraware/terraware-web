@@ -18,7 +18,7 @@ export default selector<Record<number, string>>({
       colorsBySpecies = JSON.parse(colorsJSON);
     }
 
-    //Asign a color for OTHER species
+    // Asign a color for OTHER species
     if (!colorsBySpecies[0]) {
       colorsBySpecies[0] = generateRandomColor();
     }

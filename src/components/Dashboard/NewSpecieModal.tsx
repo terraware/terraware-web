@@ -139,7 +139,6 @@ export default function NewSpecieModal(props: Props): JSX.Element {
         }
       }
       resetPlantsPlantedFeatures();
-      //resetPlants();
       resetSpeciesForChart();
       snackbarMessage = strings.SNACKBAR_MSG_CHANGES_SAVED;
     }
@@ -217,6 +216,7 @@ export default function NewSpecieModal(props: Props): JSX.Element {
               >
                 {speciesNames?.map((species) => (
                   <FormControlLabel
+                    id={species.name}
                     key={species.id}
                     value={species.species_id}
                     control={<Radio />}
@@ -224,6 +224,7 @@ export default function NewSpecieModal(props: Props): JSX.Element {
                   />
                 ))}
                 <FormControlLabel
+                  id='Other'
                   key={-1}
                   value={0}
                   control={<Radio />}
@@ -241,7 +242,7 @@ export default function NewSpecieModal(props: Props): JSX.Element {
           </Grid>
         </Grid>
         <Grid container spacing={4}>
-          <Grid item xs={12}>
+          <Grid item xs={12} id='new-specie-section'>
             <TextField
               id='species'
               value={record.speciesId ? '' : record.species}

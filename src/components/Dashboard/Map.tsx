@@ -6,9 +6,10 @@ import FullscreenIcon from '@material-ui/icons/Fullscreen';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import React, { useEffect, useState } from 'react';
 import ReactMapGL, { Marker, NavigationControl, Popup } from 'react-map-gl';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { Feature } from '../../api/types/feature';
 import { Plant } from '../../api/types/plant';
+import snackbarAtom from '../../state/atoms/snackbar';
 import { photoByFeatureIdSelector } from '../../state/selectors/photos';
 import { plantsByFeatureIdSelector } from '../../state/selectors/plantsPlanted';
 import { plantsPlantedFeaturesSelector } from '../../state/selectors/plantsPlantedFeatures';
@@ -84,6 +85,7 @@ function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
   const speciesForChart = useRecoilValue(speciesForChartSelector);
   const photoByFeatureId = useRecoilValue(photoByFeatureIdSelector);
   const plantsByFeatureId = useRecoilValue(plantsByFeatureIdSelector);
+  const setSnackbar = useSetRecoilState(snackbarAtom);
 
   const selectedPlant: Plant | undefined =
     selectedFeature && plantsByFeatureId
@@ -117,8 +119,14 @@ function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
     setViewport({ ...DEFAULT_VIEWPORT });
   }, [isFullscreen]);
 
-  const onCloseEditPlantModal = () => {
+  const onCloseEditPlantModal = (snackbarMessage?: string) => {
     setEditPlantModalOpen(false);
+    if (snackbarMessage) {
+      setSnackbar({
+        type: 'success',
+        msg: snackbarMessage,
+      });
+    }
   };
 
   const onNewSpecie = () => {

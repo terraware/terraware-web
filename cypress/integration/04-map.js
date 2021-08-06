@@ -32,4 +32,17 @@ describe('Map', () => {
                     .then(str => parseInt(str)).should('be.gt', initialWidth);
             })
     });
+
+    it('should change specie from map', () => {
+        cy.get('.mapboxgl-ctrl-zoom-out').click();
+        cy.get('.mapboxgl-marker svg').first().click().then(() => {
+            cy.get('#new-species').click();
+            cy.get('#Other').click();
+            cy.intercept('PUT', '/api/v1/plants/*').as('putPlant');
+            cy.get('#saveSpecie').click();
+            cy.wait('@putPlant');
+            cy.get('.overlays').click();
+            cy.get('#feature-species-name').should('contain', 'Other');
+        });
+    });
 });
