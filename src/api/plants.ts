@@ -18,3 +18,34 @@ export const getPlant = async (
     })
   ).data;
 };
+
+export const deletePlant = async (
+  token: TokenResponse,
+  featureId: number
+): Promise<Plant> => {
+  const endpoint = `${BASE_URL}/${featureId}`;
+
+  return (
+    await axios.delete(endpoint, {
+      headers: {
+        Authorization: `${token.token_type} ${token.access_token}`,
+      },
+    })
+  ).data;
+};
+
+export const putPlant = async (
+  token: TokenResponse,
+  featureId: number,
+  plant: Plant
+): Promise<Plant> => {
+  const endpoint = `${BASE_URL}/${featureId}`;
+
+  return (
+    await axios.put(endpoint, plant, {
+      headers: {
+        Authorization: `${token.token_type} ${token.access_token}`,
+      },
+    })
+  ).data;
+};

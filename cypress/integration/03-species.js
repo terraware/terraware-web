@@ -29,13 +29,4 @@ describe('Login', () => {
     cy.get('#species-table #row3-name').should('contain', 'Species 2');
     cy.get('#snackbar').should('contain', 'Changes saved just now.');
   });
-
-  it('should delete a specie', () => {
-    cy.get('#species-table #row3').click();
-    cy.get('#delete-specie').click();
-    cy.get('#delete').click();
-
-    cy.get('#species-table #row3').should('not.exist');
-    cy.get('#snackbar').should('contain', 'Species deleted just now.');
-  });
 });

@@ -1,45 +1,54 @@
-import { selector, selectorFamily, waitForAll } from 'recoil';
+import { atom, selector, selectorFamily, waitForAll } from 'recoil';
 import { getPlant } from '../../api/plants';
 import { Plant } from '../../api/types/plant';
 import { plantsPlantedFeaturesSelector } from './plantsPlantedFeatures';
 import sessionSelector from './session';
 
+export const plantsPlantedPlantsAtom = atom({
+  key: 'plantsPlantedPlantsAtom',
+  default: 0,
+});
+
 export const plantsPlantedSelector = selector<Plant[] | undefined>({
   key: 'plantsPlantedPlantsSelector',
   get: ({ get }) => {
+    get(plantsPlantedPlantsAtom);
     const session = get(sessionSelector);
     const plantsPlantedFeatures = get(plantsPlantedFeaturesSelector);
     if (session && plantsPlantedFeatures) {
       const plants = get(
         waitForAll(
           plantsPlantedFeatures.map((plantFeature) =>
-            plantQuery(plantFeature.id!)
+            plantQuerySelectorFamily(plantFeature.id!)
           )
         )
       );
 
-      const result: Plant[] = [];
-      plants?.forEach((plant) => {
-        if (plant) {
-          result.push(plant);
-        }
-      });
+      const result = plants.filter((plant): plant is Plant => !!plant);
 
       return result;
     }
   },
+  set: ({ set }) => {
+    set(plantsPlantedPlantsAtom, (v) => v + 1);
+  },
 });
 
-const plantQuery = selectorFamily<Plant | undefined, number>({
+const plantQuerySelectorFamily = selectorFamily<Plant | undefined, number>({
   key: 'plantQuery',
   get:
     (plantFeatureId: number) =>
     async ({ get }) => {
-      const session = get(sessionSelector);
-      if (session) {
-        const response = await getPlant(session, plantFeatureId);
+      get(plantsPlantedPlantsAtom);
+      try {
+        const session = get(sessionSelector);
+        if (session) {
+          const response = await getPlant(session, plantFeatureId);
 
-        return response;
+          return response;
+        }
+      } catch {
+        //
       }
     },
 });

@@ -12,7 +12,6 @@ import speciesNamesSelector from '../../state/selectors/speciesNames';
 import strings from '../../strings';
 import Table from '../common/table';
 import { TableColumnType } from '../common/table/types';
-import DeleteConfirmationModal from './DeleteConfirmationModal';
 import EditSpecieModal from './EditSpecieModal';
 
 const useStyles = makeStyles((theme) =>
@@ -58,23 +57,11 @@ export default function Species(): JSX.Element {
   const classes = useStyles();
 
   const [editSpecieModalOpen, setEditSpecieModalOpen] = React.useState(false);
-  const [deleteConfirmationModalOpen, setDeleteConfirmationModalOpen] =
-    React.useState(false);
 
   const [selectedSpecie, setSelectedSpecie] = React.useState<SpeciesName>();
   const columns: TableColumnType[] = [
     { key: 'name', name: 'Name', type: 'string' },
   ];
-
-  const onCloseDeleteConfirmationModal = (deleted?: boolean) => {
-    setDeleteConfirmationModalOpen(false);
-    if (deleted) {
-      setSnackbar({
-        type: 'delete',
-        msg: strings.SNACKBAR_MSG_SPECIES_DELETED,
-      });
-    }
-  };
 
   const onCloseEditSpecieModal = (snackbarMessage?: string) => {
     setEditSpecieModalOpen(false);
@@ -84,10 +71,6 @@ export default function Species(): JSX.Element {
         msg: snackbarMessage,
       });
     }
-  };
-
-  const openDeleteConfirmationModal = () => {
-    setDeleteConfirmationModalOpen(true);
   };
 
   const onSelect = (specie: SpeciesName) => {
@@ -106,22 +89,14 @@ export default function Species(): JSX.Element {
         open={editSpecieModalOpen}
         onClose={onCloseEditSpecieModal}
         value={selectedSpecie}
-        onDelete={openDeleteConfirmationModal}
       />
-      {selectedSpecie && (
-        <DeleteConfirmationModal
-          open={deleteConfirmationModalOpen}
-          onClose={onCloseDeleteConfirmationModal}
-          speciesName={selectedSpecie}
-        />
-      )}
       <Container maxWidth={false} className={classes.mainContainer}>
         <Grid container spacing={3}>
           <Grid item xs={1} />
           <Grid item xs={2}>
-            <h1>Species</h1>
+            <h1>{strings.SPECIES}</h1>
             <Typography component='h4' variant='subtitle1'>
-              {results?.length} Total
+              {results?.length} {strings.TOTAL}
             </Typography>
           </Grid>
           <Grid item xs={6} />

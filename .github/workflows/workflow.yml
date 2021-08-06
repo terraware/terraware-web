@@ -38,7 +38,7 @@ jobs:
         env:
           REACT_APP_TERRAWARE_API: 'http://localhost:8008'
           REACT_APP_SNACKBAR_TIMEOUT: 1000
-          REACT_APP_MAPBOX_TOKENY: ${{ secrets.REACT_APP_MAPBOX_TOKEN }}
+          REACT_APP_MAPBOX_TOKEN: ${{ secrets.REACT_APP_MAPBOX_TOKEN }}
 
       - name: build
         run: yarn build

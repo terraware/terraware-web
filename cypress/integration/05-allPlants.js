@@ -15,14 +15,38 @@ describe('All plants', () => {
         cy.get('#all-plants-table .MuiTableBody-root .MuiTableRow-root').should('have.length', 4);
 
         cy.get('#row1-date').should('contain', '07/29/2021');
-        cy.get('#row1-species').should('contain', 'Banana');
+        cy.get('#row1-species').should('contain', 'Other');
         cy.get('#row1-geolocation').should('contain', '45.467135, -75.546518');
         cy.get('#row1-photo').find("img").should('exist');
         cy.get('#row1-notes').should('contain', 'Testing notes');
     });
 
+    it('should edit species of a plant, selecting a previous existent species', () => {
+        cy.get('#row1').click();
+        cy.get('#Banana').click();
+        cy.get('#saveSpecie').click();
+
+        cy.get('#row1-species').should('contain', 'Banana');
+    });
+
     it('should order by Species name', () => {
         cy.get('#table-header-species').click();
         cy.get('#row1-species').should('contain', 'Coconut');
+    });
+
+    it('should edit species of a plant, creating a new species', () => {
+        cy.get('#row1').click();
+        cy.get('#new-specie-section #species').click().type('Acacia');
+        cy.get('#saveSpecie').click();
+
+        cy.get('#row1-species').should('contain', 'Acacia');
+    });
+
+    it('should delete plant', () => {
+        cy.get('#row1').click();
+        cy.get('#delete-specie').click();
+        cy.get('#delete').click();
+
+        cy.get('#row1-species').should('not.contain', 'Acacia');
     });
 });
