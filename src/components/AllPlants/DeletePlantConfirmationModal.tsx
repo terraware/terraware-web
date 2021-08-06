@@ -10,7 +10,6 @@ import { deleteFeature } from '../../api/features';
 import { deletePlant } from '../../api/plants';
 import { plantsPlantedFeaturesSelector } from '../../state/selectors/plantsPlantedFeatures';
 import sessionSelector from '../../state/selectors/session';
-import speciesNamesSelector from '../../state/selectors/speciesNames';
 import strings from '../../strings';
 import CancelButton from '../common/CancelButton';
 import DialogCloseButton from '../common/DialogCloseButton';
@@ -47,7 +46,6 @@ export default function DeletePlantConfirmationModal(
   const classes = useStyles();
   const { onClose, open, plant } = props;
   const session = useRecoilValue(sessionSelector);
-  const resetSpecies = useResetRecoilState(speciesNamesSelector);
   const resetFeatures = useResetRecoilState(plantsPlantedFeaturesSelector);
 
   const handleCancel = () => {
@@ -58,7 +56,6 @@ export default function DeletePlantConfirmationModal(
     if (session && plant.featureId) {
       await deletePlant(session, plant.featureId);
       await deleteFeature(session, plant.featureId);
-      resetSpecies();
       resetFeatures();
     }
     onClose(true);

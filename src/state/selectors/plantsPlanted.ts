@@ -52,8 +52,9 @@ const plantQuerySelectorFamily = selectorFamily<Plant | undefined, number>({
 
           return response;
         }
-        // tslint:disable-next-line: no-empty
-      } catch {}
+      } catch {
+        //
+      }
     },
 });
 

@@ -90,26 +90,28 @@ function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
       ? plantsByFeatureId[selectedFeature.id!]
       : undefined;
 
-  const selectedPlantForTable = {
-    date: selectedPlant?.created_time,
-    species:
-      selectedPlant && speciesForChart[selectedPlant.species_id!]
-        ? speciesForChart[selectedPlant.species_id!].speciesName.name
-        : undefined,
-    geolocation:
-      selectedFeature?.geom && Array.isArray(selectedFeature?.geom.coordinates)
-        ? `${selectedFeature?.geom.coordinates[1].toFixed(
-            6
-          )}, ${selectedFeature?.geom.coordinates[0].toFixed(6)}`
-        : undefined,
-    photo:
-      photoByFeatureId && selectedFeature
-        ? photoByFeatureId[selectedFeature.id!]
-        : undefined,
-    notes: selectedFeature?.notes,
-    featureId: selectedFeature?.id,
-    speciesId: selectedPlant?.species_id,
-  };
+  const selectedPlantForTable =
+    selectedPlant && selectedFeature
+      ? {
+          date: selectedPlant.created_time,
+          species: speciesForChart[selectedPlant.species_id!]
+            ? speciesForChart[selectedPlant.species_id!].speciesName.name
+            : undefined,
+          geolocation:
+            selectedFeature.geom &&
+            Array.isArray(selectedFeature?.geom.coordinates)
+              ? `${selectedFeature.geom.coordinates[1].toFixed(
+                  6
+                )}, ${selectedFeature.geom.coordinates[0].toFixed(6)}`
+              : undefined,
+          photo: photoByFeatureId
+            ? photoByFeatureId[selectedFeature.id!]
+            : undefined,
+          notes: selectedFeature.notes,
+          featureId: selectedFeature.id,
+          speciesId: selectedPlant.species_id,
+        }
+      : undefined;
 
   useEffect(() => {
     setViewport({ ...DEFAULT_VIEWPORT });

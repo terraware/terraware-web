@@ -5,15 +5,15 @@ import { plantsPlantedLayerSelector } from './layers';
 import { plantsPlantedSelector } from './plantsPlanted';
 import sessionSelector from './session';
 
-export const plantsPlantedAtom = atom({
-  key: 'plantsPlantedAtom',
+export const plantsPlantedFeatureAtom = atom({
+  key: 'plantsPlantedFeatureAtom',
   default: 0,
 });
 
 export const plantsPlantedFeaturesSelector = selector<Feature[] | undefined>({
   key: 'plantsPlantedFeaturesSelector',
   get: async ({ get }) => {
-    get(plantsPlantedAtom);
+    get(plantsPlantedFeatureAtom);
     const session = get(sessionSelector);
     const plantsPlantedLayer = get(plantsPlantedLayerSelector);
     if (session && plantsPlantedLayer?.id) {
@@ -21,7 +21,7 @@ export const plantsPlantedFeaturesSelector = selector<Feature[] | undefined>({
     }
   },
   set: ({ set, reset }) => {
-    set(plantsPlantedAtom, (v) => v + 1);
+    set(plantsPlantedFeatureAtom, (v) => v + 1);
     // We have to reset this selector to force the plantQuerySelectorFamily to be executed again
     reset(plantsPlantedSelector);
   },

@@ -23,36 +23,24 @@ export default selector<Record<number, SpeciesForChart>>({
 
     if (session) {
       plantsPlanted?.forEach((plant) => {
-        if (plant.species_id) {
-          const plantSpecies = speciesForChart[plant.species_id];
-          if (plantSpecies) {
-            plantSpecies.numberOfTrees += 1;
-          } else {
-            const speciesToAdd = speciesNamesBySpeciesId[plant.species_id];
-            if (speciesToAdd) {
-              const speciesChartToAdd: SpeciesForChart = {
-                speciesName: speciesToAdd,
-                numberOfTrees: 1,
-                color: colorsBySpecies[speciesToAdd.species_id],
-              };
-              speciesForChart[plant.species_id] = speciesChartToAdd;
-            }
-          }
+        const id = plant.species_id ?? 0;
+        const plantSpecies = speciesForChart[id];
+        if (plantSpecies) {
+          plantSpecies.numberOfTrees += 1;
         } else {
-          //if NO species_id, add to OTHER
-          const otherSpecies = speciesForChart[0];
-          if (otherSpecies) {
-            otherSpecies.numberOfTrees += 1;
-          } else {
-            const otherSpeciesName: SpeciesName = {
-              name: strings.OTHER,
-              species_id: 0,
-            };
-            speciesForChart[0] = {
-              speciesName: otherSpeciesName,
+          const otherSpeciesName: SpeciesName = {
+            name: strings.OTHER,
+            species_id: 0,
+          };
+          const speciesToAdd =
+            id === 0 ? otherSpeciesName : speciesNamesBySpeciesId[id];
+          if (speciesToAdd) {
+            const speciesChartToAdd: SpeciesForChart = {
+              speciesName: speciesToAdd,
               numberOfTrees: 1,
-              color: colorsBySpecies[0],
+              color: colorsBySpecies[id],
             };
+            speciesForChart[id] = speciesChartToAdd;
           }
         }
       });

@@ -36,6 +36,7 @@ const strings = new LocalizedStrings({
     NOTES: 'Notes',
     EXISTING_SPECIES_MSG: 'Choose Exisiting Species',
     CREATE_NEW_SPECIES: 'Create New Species',
+    TOTAL: 'Total',
   },
 });
 

@@ -47,7 +47,6 @@ export interface Props {
   open: boolean;
   onClose: (snackbarMessage?: string) => void;
   value?: SpeciesName;
-  onDelete: () => void;
 }
 
 function initSpecies(species?: SpeciesName): SpeciesName {
@@ -60,7 +59,7 @@ function initSpecies(species?: SpeciesName): SpeciesName {
 }
 export default function EditSpecieModal(props: Props): JSX.Element {
   const classes = useStyles();
-  const { onClose, open, onDelete } = props;
+  const { onClose, open } = props;
   const [record, setRecord, onChange] = useForm<SpeciesName>(
     initSpecies(props.value)
   );
@@ -75,11 +74,6 @@ export default function EditSpecieModal(props: Props): JSX.Element {
 
   const handleCancel = () => {
     setRecord(initSpecies(props.value));
-    onClose();
-  };
-
-  const handleDelete = () => {
-    onDelete();
     onClose();
   };
 
@@ -131,18 +125,7 @@ export default function EditSpecieModal(props: Props): JSX.Element {
       </DialogContent>
       <DialogActions>
         <Box width={'100%'} className={classes.actions}>
-          <Box>
-            {props.value && (
-              <Chip
-                id='delete-specie'
-                className={classes.deleteSpecies}
-                label={strings.DELETE}
-                clickable
-                onClick={handleDelete}
-                variant='outlined'
-              />
-            )}
-          </Box>
+          <Box />
           <Box>
             <CancelButton onClick={handleCancel} />
             <Chip

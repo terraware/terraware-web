@@ -49,12 +49,12 @@ export default function Species(): JSX.Element {
   const plantsByFeature = useRecoilValue(plantsByFeatureIdSelector);
   const photoByFeature = useRecoilValue(photoByFeatureIdSelector);
   const speciesBySpeciesId = useRecoilValue(speciesNamesBySpeciesIdSelector);
+  const setSnackbar = useSetRecoilState(snackbarAtom);
 
   const [editPlantOpen, setEditPlantOpen] = React.useState(false);
   const [selectedPlant, setSelectedPlant] = React.useState<PlantForTable>();
   const [deleteConfirmationModalOpen, setDeleteConfirmationModalOpen] =
     React.useState(false);
-  const setSnackbar = useSetRecoilState(snackbarAtom);
 
   const plantsForTable = React.useMemo(() => {
     let plantsToReturn: PlantForTable[] = [];
