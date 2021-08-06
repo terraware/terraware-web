@@ -21,6 +21,11 @@ export default selector<Record<number, SpeciesForChart>>({
     const speciesNamesBySpeciesId = get(speciesNamesBySpeciesIdSelector);
     const colorsBySpecies = get(colorsBySpeciesSelector);
 
+    const otherSpeciesName: SpeciesName = {
+      name: strings.OTHER,
+      species_id: 0,
+    };
+
     if (session) {
       plantsPlanted?.forEach((plant) => {
         const id = plant.species_id ?? 0;
@@ -28,10 +33,6 @@ export default selector<Record<number, SpeciesForChart>>({
         if (plantSpecies) {
           plantSpecies.numberOfTrees += 1;
         } else {
-          const otherSpeciesName: SpeciesName = {
-            name: strings.OTHER,
-            species_id: 0,
-          };
           const speciesToAdd =
             id === 0 ? otherSpeciesName : speciesNamesBySpeciesId[id];
           if (speciesToAdd) {

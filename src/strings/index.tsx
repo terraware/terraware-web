@@ -34,7 +34,7 @@ const strings = new LocalizedStrings({
     GEOLOCATION: 'Geolocation',
     PHOTO: 'Photo',
     NOTES: 'Notes',
-    EXISTING_SPECIES_MSG: 'Choose Exisiting Species',
+    EXISTING_SPECIES_MSG: 'Choose Existing Species',
     CREATE_NEW_SPECIES: 'Create New Species',
     TOTAL: 'Total',
   },

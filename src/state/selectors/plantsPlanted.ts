@@ -24,12 +24,7 @@ export const plantsPlantedSelector = selector<Plant[] | undefined>({
         )
       );
 
-      const result: Plant[] = [];
-      plants?.forEach((plant) => {
-        if (plant) {
-          result.push(plant);
-        }
-      });
+      const result = plants?.filter((plant) => Boolean(plant));
 
       return result;
     }

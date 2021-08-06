@@ -34,12 +34,6 @@ const useStyles = makeStyles((theme: Theme) =>
     paper: {
       minWidth: '500px',
     },
-    deleteSpecies: {
-      backgroundColor: theme.palette.common.white,
-      borderColor: theme.palette.secondary.main,
-      color: theme.palette.secondary.main,
-      borderWidth: 1,
-    },
   })
 );
 
