@@ -13,7 +13,7 @@ services:
     environment:
       - SQLALCHEMY_DATABASE_URL=postgresql://postgres:localdev1234@db:5432/gis-server
       - ACCESS_TOKEN_SECRET_KEY=test1234
-      - ACCESS_TOKEN_EXPIRE_MINUTES=30
+      - ACCESS_TOKEN_EXPIRE_MINUTES=10080
       - PHOTO_PATH=/photos
       - TEST_AUTH_CODE=test1234
       - GIS_TEST_DATA_PATH=/app
