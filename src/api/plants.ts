@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { SearchOptions } from '../components/AllPlants';
+import { SearchOptions } from '../state/selectors/plantsPlantedFiltered';
 import { TokenResponse } from './types/auth';
 import { Plant } from './types/plant';
 
@@ -51,6 +51,8 @@ export const putPlant = async (
   ).data;
 };
 
+type SearchOptionsKeys = keyof SearchOptions;
+
 export const getPlantsFiltered = async (
   token: TokenResponse,
   layerId: number,
@@ -58,21 +60,12 @@ export const getPlantsFiltered = async (
 ): Promise<Plant[]> => {
   let endpoint = `${BASE_URL}/?layer_id=${layerId}`;
 
-  if (filters.max_entered_time) {
-    endpoint = endpoint.concat(`&max_entered_time=${filters.max_entered_time}`);
-  }
-
-  if (filters.min_entered_time) {
-    endpoint = endpoint.concat(`&min_entered_time=${filters.min_entered_time}`);
-  }
-
-  if (filters.species_name) {
-    endpoint = endpoint.concat(`&species_name=${filters.species_name}`);
-  }
-
-  if (filters.min_entered_time) {
-    endpoint = endpoint.concat(`&notes=${filters.notes}`);
-  }
+  const keys = Object.keys(filters) as SearchOptionsKeys[];
+  keys.forEach((key) => {
+    if (filters[key]) {
+      endpoint = endpoint.concat(`&${key}=${filters[key]}`);
+    }
+  });
 
   return (
     await axios.get(endpoint, {

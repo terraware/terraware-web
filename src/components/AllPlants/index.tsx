@@ -18,11 +18,12 @@ import React from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import snackbarAtom from '../../state/atoms/snackbar';
 import { photoByFeatureIdSelector } from '../../state/selectors/photos';
+import { plantsPlantedFeaturesSelector } from '../../state/selectors/plantsPlantedFeatures';
 import {
   plantsByFeatureIdFilteredSelector,
   plantsPlantedFiltersAtom,
-} from '../../state/selectors/plantsPlanted';
-import { plantsPlantedFeaturesSelector } from '../../state/selectors/plantsPlantedFeatures';
+  SearchOptions,
+} from '../../state/selectors/plantsPlantedFiltered';
 import speciesNamesSelector from '../../state/selectors/speciesNames';
 import speciesNamesBySpeciesIdSelector from '../../state/selectors/speciesNamesBySpeciesId';
 import strings from '../../strings';
@@ -66,13 +67,6 @@ export type PlantForTable = {
   notes?: string;
   featureId?: number;
   speciesId?: number;
-};
-
-export type SearchOptions = {
-  species_name?: string;
-  min_entered_time?: string;
-  max_entered_time?: string;
-  notes?: string;
 };
 
 export default function Species(): JSX.Element {
@@ -242,6 +236,7 @@ export default function Species(): JSX.Element {
               </Grid>
               <Grid item xs={2}>
                 <DatePicker
+                  id='max_entered_time'
                   label={strings.TO}
                   aria-label='max_entered_time'
                   onChange={onChangeFilter}
