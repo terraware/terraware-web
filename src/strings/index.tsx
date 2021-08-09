@@ -37,6 +37,11 @@ const strings = new LocalizedStrings({
     EXISTING_SPECIES_MSG: 'Choose Existing Species',
     CREATE_NEW_SPECIES: 'Create New Species',
     TOTAL: 'Total',
+    FILTERS: 'Filters',
+    FROM: 'From',
+    TO: 'To',
+    APPLY_FILTERS: 'Apply Filters',
+    CLEAR_FILTERS: 'Clear Filters',
   },
 });
 
