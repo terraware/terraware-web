@@ -69,37 +69,34 @@ export default function Species(): JSX.Element {
 
   const [editPlantOpen, setEditPlantOpen] = React.useState(false);
   const [showFilters, setShowFilters] = React.useState(false);
-  const [search, setSearch] = React.useState('');
+  const [, setSearch] = React.useState('');
   const [selectedPlant, setSelectedPlant] = React.useState<PlantForTable>();
   const [deleteConfirmationModalOpen, setDeleteConfirmationModalOpen] =
     React.useState(false);
 
   const plantsForTable = React.useMemo(() => {
     let plantsToReturn: PlantForTable[] = [];
+
     if (features && plantsByFeature && photoByFeature && speciesBySpeciesId) {
       plantsToReturn = features.reduce((_acum, feature) => {
-        if (
-          feature.id &&
-          feature.geom &&
-          Array.isArray(feature.geom.coordinates) &&
-          plantsByFeature[feature.id]
-        ) {
+        if (feature.id && plantsByFeature[feature.id]) {
           const plant = plantsByFeature[feature.id];
-
-          const plantToAdd = {
+          const plantToAdd: PlantForTable = {
             date: plant.date_planted,
             species: plant.species_id
               ? speciesBySpeciesId[plant.species_id].name
               : undefined,
-            geolocation: `${feature.geom.coordinates[1].toFixed(
-              6
-            )}, ${feature.geom.coordinates[0].toFixed(6)}`,
             photo: photoByFeature[feature.id],
             notes: feature.notes,
             featureId: feature.id,
             speciesId: plant.species_id,
           };
 
+          if (feature.geom && Array.isArray(feature.geom.coordinates)) {
+            plantToAdd.geolocation = `${feature.geom.coordinates[1].toFixed(
+              6
+            )}, ${feature.geom.coordinates[0].toFixed(6)}`;
+          }
           _acum.push(plantToAdd);
         }
 
@@ -119,8 +116,10 @@ export default function Species(): JSX.Element {
     setShowFilters(!showFilters);
   };
 
+  // tslint:disable-next-line: no-empty
   const onSearch = () => {};
 
+  // tslint:disable-next-line: no-empty
   const onChangeFilter = (id: string, value?: string) => {};
 
   const onCloseEditPlantModal = (snackbarMessage?: string) => {
