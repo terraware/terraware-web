@@ -12,7 +12,7 @@ import { Plant } from '../../api/types/plant';
 import snackbarAtom from '../../state/atoms/snackbar';
 import { photoByFeatureIdSelector } from '../../state/selectors/photos';
 import { plantsByFeatureIdSelector } from '../../state/selectors/plantsPlanted';
-import { plantsPlantedFeaturesSelector } from '../../state/selectors/plantsPlantedFeatures';
+import { plantsPlantedFeaturesWithGeolocationSelector } from '../../state/selectors/plantsPlantedFeatures';
 import speciesForChartSelector from '../../state/selectors/speciesForChart';
 import strings from '../../strings';
 import NewSpecieModal from './NewSpecieModal';
@@ -81,7 +81,7 @@ function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
   const [editPlantModalOpen, setEditPlantModalOpen] = React.useState(false);
   const [viewport, setViewport] = React.useState(DEFAULT_VIEWPORT);
 
-  const features = useRecoilValue(plantsPlantedFeaturesSelector);
+  const features = useRecoilValue(plantsPlantedFeaturesWithGeolocationSelector);
   const speciesForChart = useRecoilValue(speciesForChartSelector);
   const photoByFeatureId = useRecoilValue(photoByFeatureIdSelector);
   const plantsByFeatureId = useRecoilValue(plantsByFeatureIdSelector);
