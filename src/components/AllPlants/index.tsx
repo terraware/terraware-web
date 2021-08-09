@@ -73,17 +73,16 @@ export default function Species(): JSX.Element {
   const classes = useStyles();
 
   const features = useRecoilValue(plantsPlantedFeaturesSelector);
-
-  const setFilters = useSetRecoilState(plantsPlantedFiltersAtom);
-
-  const [newFilters, setNewFilters] = React.useState<SearchOptions>();
-
   const photoByFeature = useRecoilValue(photoByFeatureIdSelector);
   const speciesBySpeciesId = useRecoilValue(speciesNamesBySpeciesIdSelector);
+  const speciesNames = useRecoilValue(speciesNamesSelector);
+  const plantsByFeatureFiltered = useRecoilValue(
+    plantsByFeatureIdFilteredSelector
+  );
+  const setFilters = useSetRecoilState(plantsPlantedFiltersAtom);
   const setSnackbar = useSetRecoilState(snackbarAtom);
 
-  const speciesNames = useRecoilValue(speciesNamesSelector);
-
+  const [newFilters, setNewFilters] = React.useState<SearchOptions>();
   const [editPlantOpen, setEditPlantOpen] = React.useState(false);
   const [showFilters, setShowFilters] = React.useState(false);
   const [, setSearch] = React.useState('');
@@ -95,10 +94,6 @@ export default function Species(): JSX.Element {
     label: species.name,
     value: species.name,
   }));
-
-  const plantsByFeatureFiltered = useRecoilValue(
-    plantsByFeatureIdFilteredSelector
-  );
 
   const plantsForTable = React.useMemo(() => {
     let plantsToReturn: PlantForTable[] = [];

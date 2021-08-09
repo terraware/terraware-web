@@ -11,9 +11,9 @@ export type SearchOptions = {
   notes?: string;
 };
 
-export const plantsPlantedFiltersAtom = atom({
+export const plantsPlantedFiltersAtom = atom<SearchOptions>({
   key: 'plantsPlantedFiltersAtom',
-  default: {} as SearchOptions,
+  default: {},
 });
 
 export const plantsByFeatureIdFilteredSelector = selector<
