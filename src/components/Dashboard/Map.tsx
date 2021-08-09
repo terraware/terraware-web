@@ -15,6 +15,7 @@ import { plantsByFeatureIdSelector } from '../../state/selectors/plantsPlanted';
 import { plantsPlantedFeaturesWithGeolocationSelector } from '../../state/selectors/plantsPlantedFeatures';
 import speciesForChartSelector from '../../state/selectors/speciesForChart';
 import strings from '../../strings';
+import { cellDateFormatter } from '../common/table/TableCellRenderer';
 import NewSpecieModal from './NewSpecieModal';
 
 export type SpecieMap = {
@@ -272,7 +273,7 @@ function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
                 variant='body2'
                 className={classes.spacing}
               >
-                {strings.AS_OF} {selectedPlant.date_planted}
+                {strings.AS_OF} {cellDateFormatter(selectedFeature.entered_time)}
               </Typography>
               <Typography
                 component='p'

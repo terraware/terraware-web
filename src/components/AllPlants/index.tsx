@@ -88,7 +88,7 @@ export default function Species(): JSX.Element {
         if (feature.id && plantsByFeature[feature.id]) {
           const plant = plantsByFeature[feature.id];
           const plantToAdd: PlantForTable = {
-            date: plant.date_planted,
+            date: feature.entered_time,
             species: plant.species_id
               ? speciesBySpeciesId[plant.species_id].name
               : undefined,
