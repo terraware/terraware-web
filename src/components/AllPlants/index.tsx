@@ -162,10 +162,10 @@ export default function Species(): JSX.Element {
       <Container maxWidth={false} className={classes.mainContainer}>
         <Grid container spacing={3}>
           <Grid item xs={1} />
-          <Grid item xs={2}>
+          <Grid item xs={10}>
             <h1>{strings.ALL_PLANTS}</h1>
           </Grid>
-          <Grid item xs={9} />
+          <Grid item xs={1} />
           <Grid item xs={1} />
           <Grid item xs={11}>
             <IconButton
