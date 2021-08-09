@@ -64,7 +64,7 @@ const navControlStyle = {
   bottom: 10,
 };
 
-const DEFAULT_VIEWPORT = { width: '100%', height: '600px', zoom: 8 };
+const DEFAULT_VIEWPORT = { zoom: 8 };
 
 interface Coordinate {
   latitude: number;
@@ -189,6 +189,11 @@ function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
     return { latitude: 0, longitude: 0 };
   };
 
+  const onViewportChange = (newViewport: any) => {
+    const { width, height, ...others } = newViewport;
+    setViewport(others);
+  };
+
   const center = getCenter();
   const selectedCoordinates = selectedFeature
     ? getCoordinates(selectedFeature)
@@ -204,10 +209,12 @@ function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
         />
       </React.Suspense>
       <ReactMapGL
+        width='100%'
+        height='100%'
         latitude={center.latitude}
         longitude={center.longitude}
         {...viewport}
-        onViewportChange={setViewport}
+        onViewportChange={onViewportChange}
         mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
         mapStyle='mapbox://styles/mapbox/satellite-v9'
       >
