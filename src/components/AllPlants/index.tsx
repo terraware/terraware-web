@@ -1,10 +1,19 @@
+import MomentUtils from '@date-io/moment';
 import {
+  Chip,
   Container,
   createStyles,
   Grid,
+  IconButton,
+  InputAdornment,
   makeStyles,
-  Paper
+  Paper,
+  Typography,
 } from '@material-ui/core';
+import TextField from '@material-ui/core/TextField';
+import SearchIcon from '@material-ui/icons/Search';
+import TuneIcon from '@material-ui/icons/Tune';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import React from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import snackbarAtom from '../../state/atoms/snackbar';
@@ -13,6 +22,8 @@ import { plantsByFeatureIdSelector } from '../../state/selectors/plantsPlanted';
 import { plantsPlantedFeaturesSelector } from '../../state/selectors/plantsPlantedFeatures';
 import speciesNamesBySpeciesIdSelector from '../../state/selectors/speciesNamesBySpeciesId';
 import strings from '../../strings';
+import DatePicker from '../common/DatePicker';
+import Dropdown from '../common/Dropdown';
 import Table from '../common/table';
 import { TableRowType } from '../common/table/TableCellRenderer';
 import { TableColumnType } from '../common/table/types';
@@ -28,6 +39,17 @@ const useStyles = makeStyles((theme) =>
     },
     mainContent: {
       paddingTop: theme.spacing(4),
+    },
+    filtersButton: {
+      borderRadius: 0,
+    },
+    filtersIcon: {
+      marginRight: theme.spacing(1),
+    },
+    applyFilters: {
+      border: `2px solid ${theme.palette.gray[800]}`,
+      background: 'none',
+      color: theme.palette.gray[800],
     },
   })
 );
@@ -52,6 +74,8 @@ export default function Species(): JSX.Element {
   const setSnackbar = useSetRecoilState(snackbarAtom);
 
   const [editPlantOpen, setEditPlantOpen] = React.useState(false);
+  const [showFilters, setShowFilters] = React.useState(false);
+  const [, setSearch] = React.useState('');
   const [selectedPlant, setSelectedPlant] = React.useState<PlantForTable>();
   const [deleteConfirmationModalOpen, setDeleteConfirmationModalOpen] =
     React.useState(false);
@@ -61,7 +85,6 @@ export default function Species(): JSX.Element {
 
     if (features && plantsByFeature && photoByFeature && speciesBySpeciesId) {
       plantsToReturn = features.reduce((_acum, feature) => {
-
         if (feature.id && plantsByFeature[feature.id]) {
           const plant = plantsByFeature[feature.id];
           const plantToAdd: PlantForTable = {
@@ -76,7 +99,9 @@ export default function Species(): JSX.Element {
           };
 
           if (feature.geom && Array.isArray(feature.geom.coordinates)) {
-            plantToAdd.geolocation = `${feature.geom.coordinates[1].toFixed(6)}, ${feature.geom.coordinates[0].toFixed(6)}`;
+            plantToAdd.geolocation = `${feature.geom.coordinates[1].toFixed(
+              6
+            )}, ${feature.geom.coordinates[0].toFixed(6)}`;
           }
           _acum.push(plantToAdd);
         }
@@ -92,6 +117,22 @@ export default function Species(): JSX.Element {
     setSelectedPlant(row as PlantForTable);
     setEditPlantOpen(true);
   };
+
+  const onFilterClick = () => {
+    setShowFilters(!showFilters);
+  };
+
+  // tslint:disable-next-line: no-empty
+  const onSearch = () => {};
+
+  // tslint:disable-next-line: no-empty
+  const onApplyFilters = () => {};
+
+  // tslint:disable-next-line: no-empty
+  const onClearFilters = () => {};
+
+  // tslint:disable-next-line: no-empty
+  const onChangeFilter = (id: string, value?: string) => {};
 
   const onCloseEditPlantModal = (snackbarMessage?: string) => {
     setEditPlantOpen(false);
@@ -139,6 +180,83 @@ export default function Species(): JSX.Element {
             <h1>{strings.ALL_PLANTS}</h1>
           </Grid>
           <Grid item xs={9} />
+          <Grid item xs={1} />
+          <Grid item xs={11}>
+            <IconButton
+              aria-label='filter'
+              onClick={onFilterClick}
+              className={classes.filtersButton}
+            >
+              <TuneIcon className={classes.filtersIcon} />
+              <Typography variant='h6'>{strings.FILTERS}</Typography>
+            </IconButton>
+          </Grid>
+          {showFilters && (
+            <MuiPickersUtilsProvider utils={MomentUtils}>
+              <Grid item xs={1} />
+              <Grid item xs={2}>
+                <DatePicker
+                  label={strings.FROM}
+                  id='date-from'
+                  aria-label='date-from'
+                  onChange={onChangeFilter}
+                />
+              </Grid>
+              <Grid item xs={2}>
+                <DatePicker
+                  label={strings.TO}
+                  id='date-to'
+                  aria-label='date-to'
+                  onChange={onChangeFilter}
+                />
+              </Grid>
+              <Grid item xs={2}>
+                <Dropdown
+                  id='species'
+                  label={strings.SPECIES}
+                  onChange={onChangeFilter}
+                  selected=''
+                />
+              </Grid>
+              <Grid item xs={2}>
+                <TextField
+                  id='notes'
+                  placeholder={strings.NOTES}
+                  variant='outlined'
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position='start'>
+                        <SearchIcon onClick={onSearch} />
+                      </InputAdornment>
+                    ),
+                  }}
+                  size='small'
+                  onChange={(event) => {
+                    setSearch(event.target.value);
+                  }}
+                />
+              </Grid>
+              <Grid item xs={1}>
+                <Chip
+                  id='apply-filters'
+                  size='medium'
+                  label={strings.APPLY_FILTERS}
+                  onClick={onApplyFilters}
+                  className={classes.applyFilters}
+                />
+              </Grid>
+              <Grid item xs={1}>
+                <Chip
+                  id='apply-filters'
+                  size='medium'
+                  label={strings.CLEAR_FILTERS}
+                  onClick={onClearFilters}
+                  className={classes.applyFilters}
+                />
+              </Grid>
+              <Grid item xs={1} />
+            </MuiPickersUtilsProvider>
+          )}
           <Grid item xs={1} />
           <Grid item xs={10}>
             <Paper className={classes.mainContent}>
