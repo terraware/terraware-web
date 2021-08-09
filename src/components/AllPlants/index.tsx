@@ -3,7 +3,7 @@ import {
   createStyles,
   Grid,
   makeStyles,
-  Paper,
+  Paper
 } from '@material-ui/core';
 import React from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
@@ -58,30 +58,26 @@ export default function Species(): JSX.Element {
 
   const plantsForTable = React.useMemo(() => {
     let plantsToReturn: PlantForTable[] = [];
+
     if (features && plantsByFeature && photoByFeature && speciesBySpeciesId) {
       plantsToReturn = features.reduce((_acum, feature) => {
-        if (
-          feature.id &&
-          feature.geom &&
-          Array.isArray(feature.geom.coordinates) &&
-          plantsByFeature[feature.id]
-        ) {
-          const plant = plantsByFeature[feature.id];
 
-          const plantToAdd = {
+        if (feature.id && plantsByFeature[feature.id]) {
+          const plant = plantsByFeature[feature.id];
+          const plantToAdd: PlantForTable = {
             date: plant.date_planted,
             species: plant.species_id
               ? speciesBySpeciesId[plant.species_id].name
               : undefined,
-            geolocation: `${feature.geom.coordinates[1].toFixed(
-              6
-            )}, ${feature.geom.coordinates[0].toFixed(6)}`,
             photo: photoByFeature[feature.id],
             notes: feature.notes,
             featureId: feature.id,
             speciesId: plant.species_id,
           };
 
+          if (feature.geom && Array.isArray(feature.geom.coordinates)) {
+            plantToAdd.geolocation = `${feature.geom.coordinates[1].toFixed(6)}, ${feature.geom.coordinates[0].toFixed(6)}`;
+          }
           _acum.push(plantToAdd);
         }
 
