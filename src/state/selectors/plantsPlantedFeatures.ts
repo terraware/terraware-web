@@ -26,3 +26,12 @@ export const plantsPlantedFeaturesSelector = selector<Feature[] | undefined>({
     reset(plantsPlantedSelector);
   },
 });
+
+export const plantsPlantedFeaturesWithGeolocationSelector = selector<Feature[] | undefined>({
+  key: 'plantsPlantedFeaturesWithGeolocationSelector',
+  get: ({ get }) => {
+    const features = get(plantsPlantedFeaturesSelector);
+
+    return features?.filter((feature) => feature.geom);
+  }
+});
