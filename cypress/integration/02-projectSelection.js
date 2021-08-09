@@ -1,12 +1,12 @@
 describe('Projects', () => {
-  beforeEach(() => {
-    cy.visit('/');
-    cy.get('#username').type(Cypress.env('user'));
-    cy.get('#password').type(Cypress.env('pass'));
-    cy.get('#login').click().url().should('contain', '/dashboard');
-  });
-
   context('Select project', () => {
+    beforeEach(() => {
+      cy.visit('/');
+      cy.get('#username').type(Cypress.env('user'));
+      cy.get('#password').type(Cypress.env('pass'));
+      cy.get('#login').click().url().should('contain', '/dashboard');
+    });
+
     it('should have selected first project by default', () => {
       cy.visit('/');
       cy.get('#projects').contains('Pacific Flight')
