@@ -1,12 +1,19 @@
 import { atom, selector, selectorFamily, waitForAll } from 'recoil';
-import { getPlant } from '../../api/plants';
+import { getPlant, getPlantsFiltered } from '../../api/plants';
 import { Plant } from '../../api/types/plant';
+import { SearchOptions } from '../../components/AllPlants';
+import { plantsPlantedLayerSelector } from './layers';
 import { plantsPlantedFeaturesSelector } from './plantsPlantedFeatures';
 import sessionSelector from './session';
 
 export const plantsPlantedPlantsAtom = atom({
   key: 'plantsPlantedPlantsAtom',
   default: 0,
+});
+
+export const plantsPlantedFiltersAtom = atom({
+  key: 'plantsPlantedFiltersAtom',
+  default: {} as SearchOptions,
 });
 
 export const plantsPlantedSelector = selector<Plant[] | undefined>({
@@ -65,5 +72,32 @@ export const plantsByFeatureIdSelector = selector<
     });
 
     return plantsByFeatureId;
+  },
+});
+
+export const plantsByFeatureIdFilteredSelector = selector<
+  Record<number, Plant> | undefined
+>({
+  key: 'plantsByFeatureIdFilteredSelector',
+  get: async ({ get }) => {
+    const plants = get(plantsPlantedFilteredSelector);
+    const plantsByFeatureId: Record<number, Plant> = {};
+    plants?.forEach((plant) => {
+      plantsByFeatureId[plant.feature_id] = plant;
+    });
+
+    return plantsByFeatureId;
+  },
+});
+
+export const plantsPlantedFilteredSelector = selector<Plant[] | undefined>({
+  key: 'plantsPlantedFilteredSelector',
+  get: async ({ get }) => {
+    const filters = get(plantsPlantedFiltersAtom);
+    const session = get(sessionSelector);
+    const plantsPlantedLayer = get(plantsPlantedLayerSelector);
+    if (session && plantsPlantedLayer?.id) {
+      return await getPlantsFiltered(session, plantsPlantedLayer?.id, filters);
+    }
   },
 });

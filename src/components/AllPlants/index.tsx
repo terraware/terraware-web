@@ -1,5 +1,6 @@
 import MomentUtils from '@date-io/moment';
 import {
+  Chip,
   Container,
   createStyles,
   Grid,
@@ -17,8 +18,12 @@ import React from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import snackbarAtom from '../../state/atoms/snackbar';
 import { photoByFeatureIdSelector } from '../../state/selectors/photos';
-import { plantsByFeatureIdSelector } from '../../state/selectors/plantsPlanted';
+import {
+  plantsByFeatureIdFilteredSelector,
+  plantsPlantedFiltersAtom,
+} from '../../state/selectors/plantsPlanted';
 import { plantsPlantedFeaturesSelector } from '../../state/selectors/plantsPlantedFeatures';
+import speciesNamesSelector from '../../state/selectors/speciesNames';
 import speciesNamesBySpeciesIdSelector from '../../state/selectors/speciesNamesBySpeciesId';
 import strings from '../../strings';
 import DatePicker from '../common/DatePicker';
@@ -45,6 +50,11 @@ const useStyles = makeStyles((theme) =>
     filtersIcon: {
       marginRight: theme.spacing(1),
     },
+    applyFilters: {
+      border: '2px solid #3A4445',
+      background: 'none',
+      color: '#3A4445',
+    },
   })
 );
 
@@ -58,14 +68,27 @@ export type PlantForTable = {
   speciesId?: number;
 };
 
+export type SearchOptions = {
+  species_name?: string;
+  min_entered_time?: string;
+  max_entered_time?: string;
+  notes?: string;
+};
+
 export default function Species(): JSX.Element {
   const classes = useStyles();
 
   const features = useRecoilValue(plantsPlantedFeaturesSelector);
-  const plantsByFeature = useRecoilValue(plantsByFeatureIdSelector);
+
+  const setFilters = useSetRecoilState(plantsPlantedFiltersAtom);
+
+  const [newFilters, setNewFilters] = React.useState<SearchOptions>();
+
   const photoByFeature = useRecoilValue(photoByFeatureIdSelector);
   const speciesBySpeciesId = useRecoilValue(speciesNamesBySpeciesIdSelector);
   const setSnackbar = useSetRecoilState(snackbarAtom);
+
+  const speciesNames = useRecoilValue(speciesNamesSelector);
 
   const [editPlantOpen, setEditPlantOpen] = React.useState(false);
   const [showFilters, setShowFilters] = React.useState(false);
@@ -74,13 +97,27 @@ export default function Species(): JSX.Element {
   const [deleteConfirmationModalOpen, setDeleteConfirmationModalOpen] =
     React.useState(false);
 
+  const speciesNamesValues = speciesNames?.map((species) => ({
+    label: species.name,
+    value: species.name,
+  }));
+
+  const plantsByFeatureFiltered = useRecoilValue(
+    plantsByFeatureIdFilteredSelector
+  );
+
   const plantsForTable = React.useMemo(() => {
     let plantsToReturn: PlantForTable[] = [];
 
-    if (features && plantsByFeature && photoByFeature && speciesBySpeciesId) {
+    if (
+      features &&
+      plantsByFeatureFiltered &&
+      photoByFeature &&
+      speciesBySpeciesId
+    ) {
       plantsToReturn = features.reduce((_acum, feature) => {
-        if (feature.id && plantsByFeature[feature.id]) {
-          const plant = plantsByFeature[feature.id];
+        if (feature.id && plantsByFeatureFiltered[feature.id]) {
+          const plant = plantsByFeatureFiltered[feature.id];
           const plantToAdd: PlantForTable = {
             date: plant.date_planted,
             species: plant.species_id
@@ -105,7 +142,7 @@ export default function Species(): JSX.Element {
     }
 
     return plantsToReturn;
-  }, [features, photoByFeature, plantsByFeature, speciesBySpeciesId]);
+  }, [features, photoByFeature, plantsByFeatureFiltered, speciesBySpeciesId]);
 
   const onEditPlant = (row: TableRowType) => {
     setSelectedPlant(row as PlantForTable);
@@ -116,11 +153,23 @@ export default function Species(): JSX.Element {
     setShowFilters(!showFilters);
   };
 
-  // tslint:disable-next-line: no-empty
   const onSearch = () => {};
 
-  // tslint:disable-next-line: no-empty
-  const onChangeFilter = (id: string, value?: string) => {};
+  const onApplyFilters = () => {
+    if (newFilters) {
+      setFilters(newFilters);
+    }
+  };
+
+  const onClearFilters = () => {
+    setNewFilters({});
+    setFilters({});
+  };
+
+  const onChangeFilter = (id: string, value?: string) => {
+    const newFiltersObj = { ...newFilters, [id]: value };
+    setNewFilters(newFiltersObj);
+  };
 
   const onCloseEditPlantModal = (snackbarMessage?: string) => {
     setEditPlantOpen(false);
@@ -185,7 +234,7 @@ export default function Species(): JSX.Element {
               <Grid item xs={2}>
                 <DatePicker
                   label={strings.FROM}
-                  id='date-from'
+                  id='min_entered_time'
                   aria-label='date-from'
                   onChange={onChangeFilter}
                 />
@@ -194,16 +243,17 @@ export default function Species(): JSX.Element {
                 <DatePicker
                   label={strings.TO}
                   id='date-to'
-                  aria-label='date-to'
+                  aria-label='max_entered_time'
                   onChange={onChangeFilter}
                 />
               </Grid>
               <Grid item xs={2}>
                 <Dropdown
-                  id='species'
+                  id='species_name'
                   label={strings.SPECIES}
                   onChange={onChangeFilter}
-                  selected=''
+                  selected={newFilters?.species_name ?? ''}
+                  values={speciesNamesValues}
                 />
               </Grid>
               <Grid item xs={2}>
@@ -224,7 +274,25 @@ export default function Species(): JSX.Element {
                   }}
                 />
               </Grid>
-              <Grid item xs={3} />
+              <Grid item xs={1}>
+                <Chip
+                  id='apply-filters'
+                  size='medium'
+                  label={strings.APPLY_FILTERS}
+                  onClick={onApplyFilters}
+                  className={classes.applyFilters}
+                />
+              </Grid>
+              <Grid item xs={1}>
+                <Chip
+                  id='apply-filters'
+                  size='medium'
+                  label={strings.CLEAR_FILTERS}
+                  onClick={onClearFilters}
+                  className={classes.applyFilters}
+                />
+              </Grid>
+              <Grid item xs={1} />
             </MuiPickersUtilsProvider>
           )}
           <Grid item xs={1} />
