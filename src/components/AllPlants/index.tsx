@@ -51,9 +51,9 @@ const useStyles = makeStyles((theme) =>
       marginRight: theme.spacing(1),
     },
     applyFilters: {
-      border: '2px solid #3A4445',
+      border: `2px solid ${theme.palette.gray[800]}`,
       background: 'none',
-      color: '#3A4445',
+      color: theme.palette.gray[800],
     },
   })
 );
@@ -153,6 +153,7 @@ export default function Species(): JSX.Element {
     setShowFilters(!showFilters);
   };
 
+  // tslint:disable-next-line: no-empty
   const onSearch = () => {};
 
   const onApplyFilters = () => {
@@ -242,7 +243,6 @@ export default function Species(): JSX.Element {
               <Grid item xs={2}>
                 <DatePicker
                   label={strings.TO}
-                  id='date-to'
                   aria-label='max_entered_time'
                   onChange={onChangeFilter}
                 />
