@@ -47,9 +47,9 @@ const useStyles = makeStyles((theme) =>
       marginRight: theme.spacing(1),
     },
     applyFilters: {
-      border: '2px solid #3A4445',
+      border: `2px solid ${theme.palette.gray[800]}`,
       background: 'none',
-      color: '#3A4445',
+      color: theme.palette.gray[800],
     },
   })
 );
