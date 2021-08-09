@@ -1,5 +1,6 @@
 import MomentUtils from '@date-io/moment';
 import {
+  Chip,
   Container,
   createStyles,
   Grid,
@@ -44,6 +45,11 @@ const useStyles = makeStyles((theme) =>
     },
     filtersIcon: {
       marginRight: theme.spacing(1),
+    },
+    applyFilters: {
+      border: '2px solid #3A4445',
+      background: 'none',
+      color: '#3A4445',
     },
   })
 );
@@ -118,6 +124,12 @@ export default function Species(): JSX.Element {
 
   // tslint:disable-next-line: no-empty
   const onSearch = () => {};
+
+  // tslint:disable-next-line: no-empty
+  const onApplyFilters = () => {};
+
+  // tslint:disable-next-line: no-empty
+  const onClearFilters = () => {};
 
   // tslint:disable-next-line: no-empty
   const onChangeFilter = (id: string, value?: string) => {};
@@ -224,7 +236,25 @@ export default function Species(): JSX.Element {
                   }}
                 />
               </Grid>
-              <Grid item xs={3} />
+              <Grid item xs={1}>
+                <Chip
+                  id='apply-filters'
+                  size='medium'
+                  label={strings.APPLY_FILTERS}
+                  onClick={onApplyFilters}
+                  className={classes.applyFilters}
+                />
+              </Grid>
+              <Grid item xs={1}>
+                <Chip
+                  id='apply-filters'
+                  size='medium'
+                  label={strings.CLEAR_FILTERS}
+                  onClick={onClearFilters}
+                  className={classes.applyFilters}
+                />
+              </Grid>
+              <Grid item xs={1} />
             </MuiPickersUtilsProvider>
           )}
           <Grid item xs={1} />

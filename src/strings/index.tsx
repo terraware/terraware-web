@@ -40,6 +40,8 @@ const strings = new LocalizedStrings({
     FILTERS: 'Filters',
     FROM: 'From',
     TO: 'To',
+    APPLY_FILTERS: 'Apply Filters',
+    CLEAR_FILTERS: 'Clear Filters',
   },
 });
 
