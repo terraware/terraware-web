@@ -5,11 +5,11 @@ import { Plant } from './types/plant';
 
 const BASE_URL = `${process.env.REACT_APP_TERRAWARE_API}/api/v1/plants`;
 
-export const getPlant = async (
+export const getPlants = async (
   token: TokenResponse,
-  featureId: number
-): Promise<Plant> => {
-  const endpoint = `${BASE_URL}/${featureId}`;
+  layerId: number
+): Promise<Plant[]> => {
+  const endpoint = `${BASE_URL}?layer_id=${layerId}`;
 
   return (
     await axios.get(endpoint, {
@@ -17,7 +17,7 @@ export const getPlant = async (
         Authorization: `${token.token_type} ${token.access_token}`,
       },
     })
-  ).data;
+  ).data.plants;
 };
 
 export const deletePlant = async (
