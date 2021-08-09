@@ -10,7 +10,6 @@ import Dropdown from './common/Dropdown';
 const useStyles = makeStyles((theme) =>
   createStyles({
     appBar: {
-      position: 'static',
       background: theme.palette.common.white,
     },
   })
@@ -20,10 +19,10 @@ export default function NavBar(): JSX.Element | null {
   const classes = useStyles();
 
   return (
-    <AppBar className={classes.appBar}>
+    <AppBar position='static' className={classes.appBar}>
       <Toolbar>
         <Grid container spacing={3}>
-          <Grid item xs={2}>
+          <Grid item>
             <React.Suspense fallback={strings.LOADING}>
               <ProjectsDropdown />
             </React.Suspense>
