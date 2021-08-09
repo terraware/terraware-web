@@ -1,3 +1,6 @@
+/* eslint-disable no-undef */
+/// <reference types="cypress" />
+
 describe('Map', () => {
   beforeEach(() => {
     cy.visit('/');

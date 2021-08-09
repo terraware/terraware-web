@@ -1,3 +1,6 @@
+/* eslint-disable no-undef */
+/// <reference types="cypress" />
+
 describe('Login', () => {
   context('Login', () => {
     it('should login and navigate to dahboard page, then logout and return to login page', () => {

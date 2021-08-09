@@ -71,7 +71,6 @@
     "@cypress/code-coverage": "^3.9.9",
     "@cypress/instrument-cra": "^1.4.0",
     "cypress": "^6.5.0",
-    "eslint-plugin-cypress": "^2.11.3",
     "nyc": "^15.1.0",
     "start-server-and-test": "^1.12.6",
     "tslint": "^6.1.3",
