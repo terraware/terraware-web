@@ -7,10 +7,9 @@ describe('Login', () => {
       cy.visit('/');
       cy.get('#username').type(Cypress.env('user'));
       cy.get('#password').type(Cypress.env('pass'));
-      cy.get('#login').click().url()
-        .should('contain', '/dashboard');
-      cy.get('#logout').click().url()
-        .should('contain', '/');
+
+      cy.get('#login').click().url().should('contain', '/dashboard');
+      cy.get('#logout').click().url().should('contain', '/');
     });
-  });
+  })
 });
