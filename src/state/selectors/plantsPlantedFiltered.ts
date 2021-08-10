@@ -16,6 +16,11 @@ export const plantsPlantedFiltersAtom = atom<SearchOptions>({
   default: {},
 });
 
+export const plantsPlantedFilteredAtom = atom({
+  key: 'plantsPlantedFilteredAtom',
+  default: 0,
+});
+
 export const plantsByFeatureIdFilteredSelector = selector<
   Record<number, Plant> | undefined
 >({
@@ -34,11 +39,15 @@ export const plantsByFeatureIdFilteredSelector = selector<
 export const plantsPlantedFilteredSelector = selector<Plant[] | undefined>({
   key: 'plantsPlantedFilteredSelector',
   get: async ({ get }) => {
+    get(plantsPlantedFilteredAtom);
     const filters = get(plantsPlantedFiltersAtom);
     const session = get(sessionSelector);
     const plantsPlantedLayer = get(plantsPlantedLayerSelector);
     if (session && plantsPlantedLayer?.id) {
       return await getPlantsFiltered(session, plantsPlantedLayer?.id, filters);
     }
+  },
+  set: ({ set }) => {
+    set(plantsPlantedFilteredAtom, (v) => v + 1);
   },
 });

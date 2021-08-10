@@ -21,6 +21,7 @@ import { postSpeciesName } from '../../api/speciesNames';
 import { SpeciesName } from '../../api/types/species';
 import { plantsByFeatureIdSelector } from '../../state/selectors/plantsPlanted';
 import { plantsPlantedFeaturesSelector } from '../../state/selectors/plantsPlantedFeatures';
+import { plantsPlantedFilteredSelector } from '../../state/selectors/plantsPlantedFiltered';
 import sessionSelector from '../../state/selectors/session';
 import speciesForChartSelector from '../../state/selectors/speciesForChart';
 import speciesNamesSelector from '../../state/selectors/speciesNames';
@@ -94,6 +95,9 @@ export default function NewSpecieModal(props: Props): JSX.Element {
   const resetPlantsPlantedFeatures = useResetRecoilState(
     plantsPlantedFeaturesSelector
   );
+  const resetPlantsPlantedFiltered = useResetRecoilState(
+    plantsPlantedFilteredSelector
+  );
   const resetSpeciesForChart = useResetRecoilState(speciesForChartSelector);
   const resetSpeciesNames = useResetRecoilState(speciesNamesSelector);
 
@@ -140,6 +144,7 @@ export default function NewSpecieModal(props: Props): JSX.Element {
       }
       resetPlantsPlantedFeatures();
       resetSpeciesForChart();
+      resetPlantsPlantedFiltered();
       snackbarMessage = strings.SNACKBAR_MSG_CHANGES_SAVED;
     }
     onClose(snackbarMessage);
