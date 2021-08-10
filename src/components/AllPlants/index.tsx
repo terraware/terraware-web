@@ -14,8 +14,8 @@ import TextField from '@material-ui/core/TextField';
 import SearchIcon from '@material-ui/icons/Search';
 import TuneIcon from '@material-ui/icons/Tune';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
-import React from 'react';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import React, { useEffect } from 'react';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import snackbarAtom from '../../state/atoms/snackbar';
 import { photoByFeatureIdSelector } from '../../state/selectors/photos';
 import { plantsPlantedFeaturesSelector } from '../../state/selectors/plantsPlantedFeatures';
@@ -79,16 +79,22 @@ export default function Species(): JSX.Element {
   const plantsByFeatureFiltered = useRecoilValue(
     plantsByFeatureIdFilteredSelector
   );
-  const setFilters = useSetRecoilState(plantsPlantedFiltersAtom);
+  const [filters, setFilters] = useRecoilState(plantsPlantedFiltersAtom);
   const setSnackbar = useSetRecoilState(snackbarAtom);
 
   const [newFilters, setNewFilters] = React.useState<SearchOptions>();
   const [editPlantOpen, setEditPlantOpen] = React.useState(false);
   const [showFilters, setShowFilters] = React.useState(false);
-  const [, setSearch] = React.useState('');
   const [selectedPlant, setSelectedPlant] = React.useState<PlantForTable>();
   const [deleteConfirmationModalOpen, setDeleteConfirmationModalOpen] =
     React.useState(false);
+
+  useEffect(() => {
+    if (Object.keys(filters).length > 0) {
+      setNewFilters({ ...filters });
+      setShowFilters(true);
+    }
+  }, [filters]);
 
   const speciesNamesValues = speciesNames?.map((species) => ({
     label: species.name,
@@ -141,9 +147,6 @@ export default function Species(): JSX.Element {
   const onFilterClick = () => {
     setShowFilters(!showFilters);
   };
-
-  // tslint:disable-next-line: no-empty
-  const onSearch = () => {};
 
   const onApplyFilters = () => {
     if (newFilters) {
@@ -225,8 +228,9 @@ export default function Species(): JSX.Element {
                 <DatePicker
                   label={strings.FROM}
                   id='min_entered_time'
-                  aria-label='date-from'
+                  aria-label='min_entered_time'
                   onChange={onChangeFilter}
+                  value={newFilters?.min_entered_time}
                 />
               </Grid>
               <Grid item xs={2}>
@@ -235,6 +239,7 @@ export default function Species(): JSX.Element {
                   label={strings.TO}
                   aria-label='max_entered_time'
                   onChange={onChangeFilter}
+                  value={newFilters?.max_entered_time}
                 />
               </Grid>
               <Grid item xs={2}>
@@ -254,13 +259,14 @@ export default function Species(): JSX.Element {
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position='start'>
-                        <SearchIcon onClick={onSearch} />
+                        <SearchIcon onClick={onApplyFilters} />
                       </InputAdornment>
                     ),
                   }}
+                  value={newFilters?.notes ?? ''}
                   size='small'
                   onChange={(event) => {
-                    setSearch(event.target.value);
+                    onChangeFilter('notes', event.target.value);
                   }}
                 />
               </Grid>
