@@ -28,7 +28,7 @@ jobs:
         run: yarn lint
 
       - name: download and start backend
-        run: server:reset
+        run: yarn server:reset
 
       - name: E-2-E
         run: yarn e2e
