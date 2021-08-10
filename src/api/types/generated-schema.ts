@@ -610,6 +610,8 @@ export interface operations {
       query: {
         feature_id: number;
         captured_time: string;
+        heading?: number;
+        orientation?: number;
       };
     };
     responses: {
@@ -685,6 +687,7 @@ export interface operations {
         min_entered_time?: string;
         max_entered_time?: string;
         notes?: string;
+        summary?: boolean;
       };
     };
     responses: {
