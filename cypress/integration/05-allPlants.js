@@ -13,7 +13,7 @@ describe('All plants', () => {
   it('should render the data on the table', () => {
     cy.get('#all-plants-table .MuiTableBody-root .MuiTableRow-root').should('have.length', 4);
 
-    cy.get('#row1-date').should('contain', '07/29/2021');
+    cy.get('#row1-date').should('contain', '06/29/2021');
     cy.get('#row1-species').should('contain', 'Other');
     cy.get('#row1-geolocation').should('contain', '45.467135, -75.546518');
     cy.get('#row1-photo').find("img").should('exist');
