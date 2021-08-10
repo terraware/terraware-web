@@ -75,7 +75,7 @@ function calculateGrowth(current: number, lastWeek: number): number {
   return Math.round(
     Math.abs(
       ((current - lastWeek) * 100) /
-      (lastWeek ?? 0)
+      (lastWeek ?? 1)
     )
   );
 }

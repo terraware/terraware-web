@@ -24,7 +24,7 @@ export default selectorFamily<PlantSummary[] | undefined, number>({
       return plantsSummary;
     }
   },
-  set: (daysOffset: number) => ({ set }) => {
+  set: () => ({ set }) => {
     set(plantsSummaryAtom, (v) => v + 1);
   },
 });
