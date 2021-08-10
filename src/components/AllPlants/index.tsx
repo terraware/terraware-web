@@ -213,6 +213,7 @@ export default function Species(): JSX.Element {
           <Grid item xs={1} />
           <Grid item xs={11}>
             <IconButton
+              id='show-filters'
               aria-label='filter'
               onClick={onFilterClick}
               className={classes.filtersButton}
@@ -281,7 +282,7 @@ export default function Species(): JSX.Element {
               </Grid>
               <Grid item xs={1}>
                 <Chip
-                  id='apply-filters'
+                  id='clear-filters'
                   size='medium'
                   label={strings.CLEAR_FILTERS}
                   onClick={onClearFilters}
