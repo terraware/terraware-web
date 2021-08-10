@@ -18,8 +18,13 @@ import React from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import snackbarAtom from '../../state/atoms/snackbar';
 import { photoByFeatureIdSelector } from '../../state/selectors/photos';
-import { plantsByFeatureIdSelector } from '../../state/selectors/plantsPlanted';
 import { plantsPlantedFeaturesSelector } from '../../state/selectors/plantsPlantedFeatures';
+import {
+  plantsByFeatureIdFilteredSelector,
+  plantsPlantedFiltersAtom,
+  SearchOptions,
+} from '../../state/selectors/plantsPlantedFiltered';
+import speciesNamesSelector from '../../state/selectors/speciesNames';
 import speciesNamesBySpeciesIdSelector from '../../state/selectors/speciesNamesBySpeciesId';
 import strings from '../../strings';
 import DatePicker from '../common/DatePicker';
@@ -68,11 +73,16 @@ export default function Species(): JSX.Element {
   const classes = useStyles();
 
   const features = useRecoilValue(plantsPlantedFeaturesSelector);
-  const plantsByFeature = useRecoilValue(plantsByFeatureIdSelector);
   const photoByFeature = useRecoilValue(photoByFeatureIdSelector);
   const speciesBySpeciesId = useRecoilValue(speciesNamesBySpeciesIdSelector);
+  const speciesNames = useRecoilValue(speciesNamesSelector);
+  const plantsByFeatureFiltered = useRecoilValue(
+    plantsByFeatureIdFilteredSelector
+  );
+  const setFilters = useSetRecoilState(plantsPlantedFiltersAtom);
   const setSnackbar = useSetRecoilState(snackbarAtom);
 
+  const [newFilters, setNewFilters] = React.useState<SearchOptions>();
   const [editPlantOpen, setEditPlantOpen] = React.useState(false);
   const [showFilters, setShowFilters] = React.useState(false);
   const [, setSearch] = React.useState('');
@@ -80,13 +90,23 @@ export default function Species(): JSX.Element {
   const [deleteConfirmationModalOpen, setDeleteConfirmationModalOpen] =
     React.useState(false);
 
+  const speciesNamesValues = speciesNames?.map((species) => ({
+    label: species.name,
+    value: species.name,
+  }));
+
   const plantsForTable = React.useMemo(() => {
     let plantsToReturn: PlantForTable[] = [];
 
-    if (features && plantsByFeature && photoByFeature && speciesBySpeciesId) {
+    if (
+      features &&
+      plantsByFeatureFiltered &&
+      photoByFeature &&
+      speciesBySpeciesId
+    ) {
       plantsToReturn = features.reduce((_acum, feature) => {
-        if (feature.id && plantsByFeature[feature.id]) {
-          const plant = plantsByFeature[feature.id];
+        if (feature.id && plantsByFeatureFiltered[feature.id]) {
+          const plant = plantsByFeatureFiltered[feature.id];
           const plantToAdd: PlantForTable = {
             date: feature.entered_time,
             species: plant.species_id
@@ -111,7 +131,7 @@ export default function Species(): JSX.Element {
     }
 
     return plantsToReturn;
-  }, [features, photoByFeature, plantsByFeature, speciesBySpeciesId]);
+  }, [features, photoByFeature, plantsByFeatureFiltered, speciesBySpeciesId]);
 
   const onEditPlant = (row: TableRowType) => {
     setSelectedPlant(row as PlantForTable);
@@ -125,14 +145,21 @@ export default function Species(): JSX.Element {
   // tslint:disable-next-line: no-empty
   const onSearch = () => {};
 
-  // tslint:disable-next-line: no-empty
-  const onApplyFilters = () => {};
+  const onApplyFilters = () => {
+    if (newFilters) {
+      setFilters(newFilters);
+    }
+  };
 
-  // tslint:disable-next-line: no-empty
-  const onClearFilters = () => {};
+  const onClearFilters = () => {
+    setNewFilters({});
+    setFilters({});
+  };
 
-  // tslint:disable-next-line: no-empty
-  const onChangeFilter = (id: string, value?: string) => {};
+  const onChangeFilter = (id: string, value?: string) => {
+    const newFiltersObj = { ...newFilters, [id]: value };
+    setNewFilters(newFiltersObj);
+  };
 
   const onCloseEditPlantModal = (snackbarMessage?: string) => {
     setEditPlantOpen(false);
@@ -197,25 +224,26 @@ export default function Species(): JSX.Element {
               <Grid item xs={2}>
                 <DatePicker
                   label={strings.FROM}
-                  id='date-from'
+                  id='min_entered_time'
                   aria-label='date-from'
                   onChange={onChangeFilter}
                 />
               </Grid>
               <Grid item xs={2}>
                 <DatePicker
+                  id='max_entered_time'
                   label={strings.TO}
-                  id='date-to'
-                  aria-label='date-to'
+                  aria-label='max_entered_time'
                   onChange={onChangeFilter}
                 />
               </Grid>
               <Grid item xs={2}>
                 <Dropdown
-                  id='species'
+                  id='species_name'
                   label={strings.SPECIES}
                   onChange={onChangeFilter}
-                  selected=''
+                  selected={newFilters?.species_name ?? ''}
+                  values={speciesNamesValues}
                 />
               </Grid>
               <Grid item xs={2}>
