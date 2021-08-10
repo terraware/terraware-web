@@ -1,11 +1,6 @@
 import { CssBaseline, Grid, ThemeProvider } from '@material-ui/core';
-import React, { Suspense, useEffect } from 'react';
-import {
-  BrowserRouter as Router,
-  Route,
-  Switch,
-  useHistory,
-} from 'react-router-dom';
+import React from 'react';
+import { BrowserRouter as Router, Route, Switch, useHistory } from 'react-router-dom';
 import { RecoilRoot, useRecoilValue } from 'recoil';
 import AllPlants from './components/AllPlants';
 import AppBar from './components/AppBar';
@@ -23,11 +18,11 @@ export default function App() {
   return (
     <RecoilRoot>
       <ErrorBoundary>
-        <Suspense fallback={'loading'}>
+        <React.Suspense fallback={'loading'}>
           <Router>
             <AppContent />
           </Router>
-        </Suspense>
+        </React.Suspense>
       </ErrorBoundary>
     </RecoilRoot>
   );
@@ -38,7 +33,7 @@ function AppContent() {
   const history = useHistory();
   useCheckJWT();
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (session) {
       history.push('/dashboard');
     } else {

@@ -20,8 +20,6 @@ export const plantsPlantedSelector = selector<Plant[] | undefined>({
 
       return plants;
     }
-
-    return [];
   },
   set: ({ set }) => {
     set(plantsPlantedPlantsAtom, (v) => v + 1);

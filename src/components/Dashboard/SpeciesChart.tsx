@@ -39,7 +39,7 @@ export default function SpeciesChart({ isFullscreen }: Props): JSX.Element {
           labels: names,
           datasets: [
             {
-              label: strings.N_OF_TREES,
+              label: strings.N_OF_PLANTS,
               data: numberOfTrees,
               backgroundColor: colors,
               barPercentage: 0.5,
@@ -51,14 +51,14 @@ export default function SpeciesChart({ isFullscreen }: Props): JSX.Element {
             x: {
               title: {
                 display: true,
-                text: isFullscreen ? strings.SPECIES : strings.NUMBER_OF_TREES,
+                text: isFullscreen ? strings.SPECIES : strings.NUMBER_OF_PLANTS,
               },
               position: isFullscreen ? 'bottom' : 'top',
             },
             y: {
               title: {
                 display: true,
-                text: isFullscreen ? strings.NUMBER_OF_TREES : strings.SPECIES,
+                text: isFullscreen ? strings.NUMBER_OF_PLANTS : strings.SPECIES,
               },
             },
           },
