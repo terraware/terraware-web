@@ -28,10 +28,7 @@ jobs:
         run: yarn lint
 
       - name: download and start backend
-        run: |
-          yarn docker:start
-          yarn wait-be
-          yarn server:prepare
+        run: server:reset
 
       - name: E-2-E
         run: yarn e2e
