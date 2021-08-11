@@ -252,7 +252,7 @@ export default function Species(): JSX.Element {
           <Grid item xs={1} />
           <Grid item xs={10}>
             <Paper className={classes.mainContent}>
-              <React.Suspense fallback={'loading2'}>
+              <React.Suspense fallback={strings.LOADING}>
                 <AllPlantsContent onEditPlant={onEditPlant} />
               </React.Suspense>
             </Paper>
