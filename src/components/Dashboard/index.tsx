@@ -1,19 +1,16 @@
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableRow,
-} from '@material-ui/core';
+import { Table, TableBody, TableContainer, TableRow } from '@material-ui/core';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import React from 'react';
+import { useRecoilValue } from 'recoil';
+import { PlantSummary } from '../../api/types/plant';
+import plantsSummarySelector from '../../state/selectors/plantsSummary';
+import strings from '../../strings';
 import Map from './Map';
 import SpeciesChart from './SpeciesChart';
+import SummaryCell from './SummaryCell';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -21,33 +18,9 @@ const useStyles = makeStyles((theme) =>
       paddingTop: theme.spacing(4),
       paddingBottom: theme.spacing(4),
     },
-    fixedHeight: {
-      height: '100%',
-    },
     map: {
       width: '100%',
       height: '400px',
-    },
-    root: {
-      flexGrow: 1,
-      backgroundColor: theme.palette.background.paper,
-    },
-    depositContext: {
-      flex: 1,
-      marginLeft: theme.spacing(1),
-    },
-    details: {
-      display: 'flex',
-      height: '24px',
-    },
-    cell: {
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-    },
-    border: {
-      borderRight: `1px solid ${theme.palette.grey[300]}`,
-      padding: theme.spacing(5, 1),
     },
     mapContainer: {
       paddingTop: theme.spacing(5),
@@ -57,7 +30,6 @@ const useStyles = makeStyles((theme) =>
 
 export default function Dashboard(): JSX.Element {
   const classes = useStyles();
-
   const [isFullscreen, setIsFullscreen] = React.useState(false);
 
   const onFullscreenHandler = () => {
@@ -82,52 +54,7 @@ export default function Dashboard(): JSX.Element {
                 <TableContainer component={Paper}>
                   <Table aria-label='simple table'>
                     <TableBody>
-                      <TableRow>
-                        <TableCell className={classes.border}>
-                          <div className={classes.cell}>
-                            <div>
-                              <Typography
-                                component='h2'
-                                variant='h6'
-                                gutterBottom
-                              >
-                                63 Trees
-                              </Typography>
-                              <div className={classes.details}>
-                                <ArrowUpwardIcon color='primary' />
-                                <Typography
-                                  color='textSecondary'
-                                  className={classes.depositContext}
-                                >
-                                  10% since last week
-                                </Typography>
-                              </div>
-                            </div>
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <div className={classes.cell}>
-                            <div>
-                              <Typography
-                                component='h2'
-                                variant='h6'
-                                gutterBottom
-                              >
-                                3 Species
-                              </Typography>
-                              <div className={classes.details}>
-                                <ArrowUpwardIcon color='primary' />
-                                <Typography
-                                  color='textSecondary'
-                                  className={classes.depositContext}
-                                >
-                                  20% since last week
-                                </Typography>
-                              </div>
-                            </div>
-                          </div>
-                        </TableCell>
-                      </TableRow>
+                      <SummaryRow />
                     </TableBody>
                   </Table>
                 </TableContainer>
@@ -146,3 +73,43 @@ export default function Dashboard(): JSX.Element {
     </main>
   );
 }
+
+function SummaryRow(): JSX.Element {
+  const lastWeekPlantsSummary = useRecoilValue(plantsSummarySelector(7));
+  const lastWeekSummary = getSummary(lastWeekPlantsSummary);
+
+  const currentPlantsSummary = useRecoilValue(plantsSummarySelector(0));
+  const currentSummary = getSummary(currentPlantsSummary);
+
+  return (
+    <TableRow>
+      <SummaryCell
+        title={strings.PLANTS}
+        current={currentSummary.plants}
+        lastWeek={lastWeekSummary.plants} />
+      <SummaryCell
+        title={strings.SPECIES}
+        current={currentSummary.species}
+        lastWeek={lastWeekSummary.species} />
+    </TableRow>
+  );
+}
+
+interface Summary {
+  plants: number;
+  species: number;
+}
+
+const getSummary = (plantsSummary: PlantSummary[] | undefined): Summary => {
+  const result = {
+    plants: 0,
+    species: plantsSummary?.length ?? 0
+  };
+  if (plantsSummary) {
+    plantsSummary.forEach((plant) => {
+      result.plants += plant.count;
+    });
+  }
+
+  return result;
+};

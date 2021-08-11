@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { SearchOptions } from '../state/selectors/plantsPlantedFiltered';
 import { TokenResponse } from './types/auth';
-import { Plant } from './types/plant';
+import { Plant, PlantSummary } from './types/plant';
 
 const BASE_URL = `${process.env.REACT_APP_TERRAWARE_API}/api/v1/plants`;
 
@@ -18,6 +18,22 @@ export const getPlants = async (
       },
     })
   ).data.plants;
+};
+
+export const getPlantSummary = async (
+  token: TokenResponse,
+  layerId: number,
+  maxEnteredTime: string
+): Promise<PlantSummary[]> => {
+  const endpoint = `${BASE_URL}?layer_id=${layerId}&max_entered_time=${maxEnteredTime}&summary=true`;
+
+  return (
+    await axios.get(endpoint, {
+      headers: {
+        Authorization: `${token.token_type} ${token.access_token}`,
+      },
+    })
+  ).data.species_counts;
 };
 
 export const deletePlant = async (

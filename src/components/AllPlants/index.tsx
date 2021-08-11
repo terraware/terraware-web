@@ -14,7 +14,7 @@ import TextField from '@material-ui/core/TextField';
 import SearchIcon from '@material-ui/icons/Search';
 import TuneIcon from '@material-ui/icons/Tune';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import snackbarAtom from '../../state/atoms/snackbar';
 import { photoByFeatureIdSelector } from '../../state/selectors/photos';
@@ -84,7 +84,7 @@ export default function Species(): JSX.Element {
   const [deleteConfirmationModalOpen, setDeleteConfirmationModalOpen] =
     React.useState(false);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (Object.keys(filters).length > 0) {
       setNewFilters({ ...filters });
       setShowFilters(true);

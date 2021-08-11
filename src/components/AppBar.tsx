@@ -1,9 +1,10 @@
 import { AppBar, Grid, Toolbar } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import projectIdSelector from '../state/selectors/projectId';
 import projectsSelector from '../state/selectors/projects';
+import strings from '../strings';
 import Dropdown from './common/Dropdown';
 
 const useStyles = makeStyles((theme) =>
@@ -22,7 +23,7 @@ export default function NavBar(): JSX.Element | null {
 
   const [projectId, setProjectId] = useRecoilState(projectIdSelector);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (projects && !projectId) {
       const firstProject = projects[0];
       setProjectId(firstProject.id);
@@ -35,7 +36,7 @@ export default function NavBar(): JSX.Element | null {
         <Grid container spacing={3}>
           <Grid item xs={2}>
             <Dropdown
-              label='Projects'
+              label={strings.PROJECTS}
               id='projects'
               values={projects?.map((value) => ({
                 value: value.id?.toString() ?? '',

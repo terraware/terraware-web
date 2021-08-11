@@ -1,6 +1,6 @@
 [![Deployment](https://github.com/terraware/tree-location-web/actions/workflows/workflow.yml/badge.svg)](https://github.com/terraware/tree-location-web/actions/workflows/workflow.yml)
 
-# Tree Locator App
+# Plant Locator App
 
 ## Running the app in development mode
 
