@@ -1,6 +1,6 @@
 import jwtDecode from 'jwt-decode';
 import moment from 'moment';
-import { useEffect } from 'react';
+import React from 'react';
 import { useRecoilValue, useResetRecoilState } from 'recoil';
 import sessionSelector from '../state/selectors/session';
 export interface JWToken {
@@ -10,7 +10,7 @@ export interface JWToken {
 export default function useCheckJWT() {
   const token = useRecoilValue(sessionSelector);
   const resetSession = useResetRecoilState(sessionSelector);
-  useEffect(() => {
+  React.useEffect(() => {
     let timer: NodeJS.Timeout;
     if (token) {
       const payload: JWToken = jwtDecode(token.access_token);
