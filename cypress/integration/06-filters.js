@@ -27,7 +27,6 @@ describe('Filter plants', () => {
     var dateStr = d.toLocaleDateString("en-US", { month: '2-digit', year: 'numeric', day: '2-digit'})
     
     cy.get('#show-filters').click();
-    cy.get('#min_entered_time').clear()
     cy.get('#max_entered_time').type(dateStr);
     cy.get('#apply-filters').click();
     cy.get('#all-plants-table .MuiTableBody-root .MuiTableRow-root').should('have.length', 2);

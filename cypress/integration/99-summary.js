@@ -12,8 +12,8 @@ describe('Summary', () => {
   it('has the right summary results in the first project', () => {
     cy.get('#summary-Plants').contains('3 Plants');
     cy.get('#summary-Species').contains('2 Species');
-    cy.get('#summary-Plants-value').contains('50 since last week');
-    cy.get('#summary-Species-value').contains('100 since last week');
+    cy.get('#summary-Plants-value').contains('50% since last week');
+    cy.get('#summary-Species-value').contains('100% since last week');
     cy.get('#Species-arrow-increase').should('exist');
     cy.get('#Plants-arrow-increase').should('exist');
   });
