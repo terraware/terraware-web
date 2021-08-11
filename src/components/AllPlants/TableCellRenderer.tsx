@@ -3,6 +3,7 @@ import React from 'react';
 import strings from '../../strings';
 import CellRenderer, { TableRowType } from '../common/table/TableCellRenderer';
 import { RendererProps } from '../common/table/types';
+import PlantPhoto from '../Dashboard/PlantPhoto';
 
 export default function AllPlantsCellRenderer(
   props: RendererProps<TableRowType>
@@ -12,12 +13,7 @@ export default function AllPlantsCellRenderer(
   if (column.key === 'photo') {
     return (
       <TableCell id={id} align='left'>
-        <img
-          alt='Plant'
-          src={row[column.key]}
-          style={{ maxHeight: '24px', display: 'block' }}
-          id='feature-image'
-        />
+        <PlantPhoto featureId={row.featureId as number} style={{ maxHeight: '24px' }} />
       </TableCell>
     );
   }

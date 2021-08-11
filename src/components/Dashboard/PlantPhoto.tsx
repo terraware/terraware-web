@@ -6,6 +6,7 @@ import strings from '../../strings';
 
 interface Props {
   featureId?: number;
+  style?: React.CSSProperties;
 }
 
 export default function PlantWrapper(props: Props): JSX.Element {
@@ -16,7 +17,7 @@ export default function PlantWrapper(props: Props): JSX.Element {
   );
 }
 
-function PlantPhoto({ featureId }: Props): JSX.Element {
+function PlantPhoto({ featureId, style }: Props): JSX.Element {
   const photoFeature = useRecoilValue(uniquePhotoForFeatureSelectorFamily(featureId));
 
   return (
@@ -25,7 +26,7 @@ function PlantPhoto({ featureId }: Props): JSX.Element {
         <img
           alt='Plant'
           src={photoFeature.imgSrc}
-          style={{ maxHeight: '100px', display: 'block' }}
+          style={{ maxHeight: '100px', display: 'block', ...style }}
           id='feature-image'
         />
       )}
