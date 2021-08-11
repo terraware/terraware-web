@@ -1,12 +1,25 @@
+#!/bin/sh
+
 echo "---- E2E: start ----"
 
 NOW=$(TZ=UTC date "+%Y-%m-%dT%H:%M:%SZ")
 
-if [ "$(uname)" == "Darwin" ]; then
-  LAST_WEEK=$(TZ=UTC date -v -7d "+%Y-%m-%dT%H:%M:%SZ")
-elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
-  LAST_WEEK=$(TZ=UTC date "last week" "+%Y-%m-%dT%H:%M:%SZ")
-fi
+case "$(uname -s)" in
+
+   Darwin)
+     echo 'Mac OS X'
+     LAST_WEEK=$(TZ=UTC date -v -7d "+%Y-%m-%dT%H:%M:%SZ")
+     ;;
+
+   Linux)
+     echo 'Linux'
+     LAST_WEEK=$(TZ=UTC date "last week" "+%Y-%m-%dT%H:%M:%SZ")
+     ;;
+
+   *)
+     echo 'Other OS' 
+     ;;
+esac
 
 USER=1
 PASS=test1234
