@@ -11,15 +11,24 @@ describe('Filter plants', () => {
   });
 
   it('should filter by min_entered_time', () => {
+    var d = new Date();
+    d.setDate(d.getDate()-1);
+    var dateStr = d.toLocaleDateString("en-US", { month: '2-digit', year: 'numeric', day: '2-digit'})
+
     cy.get('#show-filters').click();
-    cy.get('#min_entered_time').type('07/01/2021');
+    cy.get('#min_entered_time').type(dateStr);
     cy.get('#apply-filters').click();
     cy.get('#all-plants-table .MuiTableBody-root .MuiTableRow-root').should('have.length', 1);
   });
 
   it('should filter by max_entered_time and reset filters after', () => {
+    var d = new Date();
+    d.setDate(d.getDate()-1);
+    var dateStr = d.toLocaleDateString("en-US", { month: '2-digit', year: 'numeric', day: '2-digit'})
+    
     cy.get('#show-filters').click();
-    cy.get('#max_entered_time').type('07/01/2021');
+    cy.get('#min_entered_time').clear()
+    cy.get('#max_entered_time').type(dateStr);
     cy.get('#apply-filters').click();
     cy.get('#all-plants-table .MuiTableBody-root .MuiTableRow-root').should('have.length', 2);
 
