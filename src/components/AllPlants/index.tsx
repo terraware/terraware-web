@@ -8,7 +8,7 @@ import {
   InputAdornment,
   makeStyles,
   Paper,
-  Typography,
+  Typography
 } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import SearchIcon from '@material-ui/icons/Search';
@@ -17,12 +17,11 @@ import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import React from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import snackbarAtom from '../../state/atoms/snackbar';
-import { photoByFeatureIdSelector } from '../../state/selectors/photos';
 import { plantsPlantedFeaturesSelector } from '../../state/selectors/plantsPlantedFeatures';
 import {
   plantsByFeatureIdFilteredSelector,
   plantsPlantedFiltersAtom,
-  SearchOptions,
+  SearchOptions
 } from '../../state/selectors/plantsPlantedFiltered';
 import speciesNamesSelector from '../../state/selectors/speciesNames';
 import speciesNamesBySpeciesIdSelector from '../../state/selectors/speciesNamesBySpeciesId';
@@ -270,7 +269,6 @@ interface AllPlantsProps {
 
 function AllPlantsContent({ onEditPlant }: AllPlantsProps): JSX.Element {
   const features = useRecoilValue(plantsPlantedFeaturesSelector);
-  const photoByFeature = useRecoilValue(photoByFeatureIdSelector);
   const speciesBySpeciesId = useRecoilValue(speciesNamesBySpeciesIdSelector);
   const plantsByFeatureFiltered = useRecoilValue(
     plantsByFeatureIdFilteredSelector
@@ -282,7 +280,6 @@ function AllPlantsContent({ onEditPlant }: AllPlantsProps): JSX.Element {
     if (
       features &&
       plantsByFeatureFiltered &&
-      photoByFeature &&
       speciesBySpeciesId
     ) {
       plantsToReturn = features.reduce((_acum, feature) => {
@@ -293,7 +290,6 @@ function AllPlantsContent({ onEditPlant }: AllPlantsProps): JSX.Element {
             species: plant.species_id
               ? speciesBySpeciesId[plant.species_id].name
               : undefined,
-            photo: photoByFeature[feature.id],
             notes: feature.notes,
             featureId: feature.id,
             speciesId: plant.species_id,
@@ -312,7 +308,7 @@ function AllPlantsContent({ onEditPlant }: AllPlantsProps): JSX.Element {
     }
 
     return plantsToReturn;
-  }, [features, photoByFeature, plantsByFeatureFiltered, speciesBySpeciesId]);
+  }, [features, plantsByFeatureFiltered, speciesBySpeciesId]);
 
   return (
     <Grid container spacing={4}>
