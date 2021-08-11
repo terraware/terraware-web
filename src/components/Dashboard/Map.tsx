@@ -4,7 +4,7 @@ import AddIcon from '@material-ui/icons/Add';
 import CreateIcon from '@material-ui/icons/Create';
 import FullscreenIcon from '@material-ui/icons/Fullscreen';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import ReactMapGL, { Marker, NavigationControl, Popup } from 'react-map-gl';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { Feature } from '../../api/types/feature';
@@ -78,7 +78,7 @@ interface Props {
 
 function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
   const classes = useStyles();
-  const [selectedFeature, setSelectedFeature] = useState<Feature>();
+  const [selectedFeature, setSelectedFeature] = React.useState<Feature>();
   const [editPlantModalOpen, setEditPlantModalOpen] = React.useState(false);
   const [viewport, setViewport] = React.useState(DEFAULT_VIEWPORT);
 
@@ -116,7 +116,7 @@ function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
         }
       : undefined;
 
-  useEffect(() => {
+  React.useEffect(() => {
     setViewport({ ...DEFAULT_VIEWPORT });
   }, [isFullscreen]);
 

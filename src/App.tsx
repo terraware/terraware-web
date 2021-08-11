@@ -11,6 +11,7 @@ import Snackbar from './components/Snackbar';
 import Species from './components/Species';
 import ErrorBoundary from './ErrorBoundary';
 import sessionSelector from './state/selectors/session';
+import strings from './strings';
 import theme from './theme';
 import useCheckJWT from './utils/useCheckJWT';
 
@@ -18,7 +19,7 @@ export default function App() {
   return (
     <RecoilRoot>
       <ErrorBoundary>
-        <React.Suspense fallback={'loading'}>
+        <React.Suspense fallback={strings.LOADING}>
           <Router>
             <AppContent />
           </Router>
