@@ -45,7 +45,8 @@ const strings = new LocalizedStrings({
     CLEAR_FILTERS: 'Clear Filters',
     GROWTH_SINCE_LAST_WEEK: '{0}% since last week',
     LOADING: 'Loading...',
-    PROJECTS: 'Projects'
+    PROJECTS: 'Projects',
+    OR: 'OR'
   },
 });
 

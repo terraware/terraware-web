@@ -10,13 +10,13 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { Feature } from '../../api/types/feature';
 import { Plant } from '../../api/types/plant';
 import snackbarAtom from '../../state/atoms/snackbar';
-import { photoByFeatureIdSelector } from '../../state/selectors/photos';
 import { plantsByFeatureIdSelector } from '../../state/selectors/plantsPlanted';
 import { plantsPlantedFeaturesWithGeolocationSelector } from '../../state/selectors/plantsPlantedFeatures';
 import speciesForChartSelector from '../../state/selectors/speciesForChart';
 import strings from '../../strings';
 import { cellDateFormatter } from '../common/table/TableCellRenderer';
 import NewSpecieModal from './NewSpecieModal';
+import PlantPhoto from './PlantPhoto';
 
 export type SpecieMap = {
   geometry: {
@@ -84,7 +84,6 @@ function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
 
   const features = useRecoilValue(plantsPlantedFeaturesWithGeolocationSelector);
   const speciesForChart = useRecoilValue(speciesForChartSelector);
-  const photoByFeatureId = useRecoilValue(photoByFeatureIdSelector);
   const plantsByFeatureId = useRecoilValue(plantsByFeatureIdSelector);
   const setSnackbar = useSetRecoilState(snackbarAtom);
 
@@ -96,24 +95,21 @@ function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
   const selectedPlantForTable =
     selectedPlant && selectedFeature
       ? {
-          date: selectedPlant.created_time,
-          species: speciesForChart[selectedPlant.species_id!]
-            ? speciesForChart[selectedPlant.species_id!].speciesName.name
-            : undefined,
-          geolocation:
-            selectedFeature.geom &&
+        date: selectedPlant.created_time,
+        species: speciesForChart[selectedPlant.species_id!]
+          ? speciesForChart[selectedPlant.species_id!].speciesName.name
+          : undefined,
+        geolocation:
+          selectedFeature.geom &&
             Array.isArray(selectedFeature?.geom.coordinates)
-              ? `${selectedFeature.geom.coordinates[1].toFixed(
-                  6
-                )}, ${selectedFeature.geom.coordinates[0].toFixed(6)}`
-              : undefined,
-          photo: photoByFeatureId
-            ? photoByFeatureId[selectedFeature.id!]
+            ? `${selectedFeature.geom.coordinates[1].toFixed(
+              6
+            )}, ${selectedFeature.geom.coordinates[0].toFixed(6)}`
             : undefined,
-          notes: selectedFeature.notes,
-          featureId: selectedFeature.id,
-          speciesId: selectedPlant.species_id,
-        }
+        notes: selectedFeature.notes,
+        featureId: selectedFeature.id,
+        speciesId: selectedPlant.species_id,
+      }
       : undefined;
 
   React.useEffect(() => {
@@ -200,11 +196,13 @@ function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
 
   return (
     <>
-      <NewSpecieModal
-        open={editPlantModalOpen}
-        onClose={onCloseEditPlantModal}
-        value={selectedPlantForTable}
-      />
+      <React.Suspense fallback={strings.LOADING}>
+        <NewSpecieModal
+          open={editPlantModalOpen}
+          onClose={onCloseEditPlantModal}
+          value={selectedPlantForTable}
+        />
+      </React.Suspense>
       <ReactMapGL
         latitude={center.latitude}
         longitude={center.longitude}
@@ -250,61 +248,29 @@ function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
           })}
         {selectedFeature && selectedPlant && (
           <Popup
-            onClose={() => {
-              setSelectedFeature(undefined);
-            }}
+            onClose={() => { setSelectedFeature(undefined); }}
             latitude={selectedCoordinates ? selectedCoordinates.latitude : 0}
             longitude={selectedCoordinates ? selectedCoordinates.longitude : 0}
             captureClick={false}
             closeOnClick={false}
           >
             <div>
-              <Typography
-                component='p'
-                variant='subtitle2'
-                id='feature-species-name'
-              >
-                {selectedPlant.species_id
-                  ? speciesForChart[selectedPlant.species_id].speciesName.name
-                  : strings.OTHER}
+              <Typography component='p' variant='subtitle2' id='feature-species-name'>
+                {selectedPlant.species_id ? speciesForChart[selectedPlant.species_id].speciesName.name : strings.OTHER}
               </Typography>
-              <Typography
-                component='p'
-                variant='body2'
-                className={classes.spacing}
-              >
+              <Typography component='p' variant='body2' className={classes.spacing} >
                 {strings.AS_OF} {cellDateFormatter(selectedFeature.entered_time)}
               </Typography>
-              <Typography
-                component='p'
-                variant='body2'
-                className={classes.spacing}
-                id='feature-coordinates'
-              >
-                {selectedCoordinates
-                  ? selectedCoordinates.latitude.toFixed(6)
-                  : 0}
+              <Typography component='p' variant='body2' className={classes.spacing} id='feature-coordinates'>
+                {selectedCoordinates ? selectedCoordinates.latitude.toFixed(6) : 0}
                 ,
-                {selectedCoordinates
-                  ? selectedCoordinates.longitude.toFixed(6)
-                  : 0}
+                {selectedCoordinates ? selectedCoordinates.longitude.toFixed(6) : 0}
               </Typography>
-              {photoByFeatureId && photoByFeatureId[selectedFeature.id!] && (
-                <img
-                  alt='Specie'
-                  src={photoByFeatureId[selectedFeature.id!]}
-                  style={{ maxHeight: '100px', display: 'block' }}
-                  id='feature-image'
-                />
-              )}
+              <PlantPhoto featureId={selectedFeature?.id} />
               <Chip
                 id='new-species'
                 size='medium'
-                label={
-                  selectedPlant.species_id
-                    ? strings.EDIT_SPECIES
-                    : strings.ADD_SPECIES
-                }
+                label={selectedPlant.species_id ? strings.EDIT_SPECIES : strings.ADD_SPECIES}
                 onClick={onNewSpecie}
                 className={classes.newSpecies}
                 icon={selectedPlant.species_id ? <CreateIcon /> : <AddIcon />}

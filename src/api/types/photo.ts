@@ -12,8 +12,3 @@ export type Photo = {
   created_time?: string;
   modified_time?: string;
 };
-
-export type PhotoFeature = {
-  blobPhoto: Blob;
-  featuredId: number;
-};
