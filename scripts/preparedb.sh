@@ -13,7 +13,7 @@ case "$(uname -s)" in
 
    Linux)
      echo 'Linux'
-     LAST_WEEK=$(TZ=UTC date "last week" "+%Y-%m-%dT%H:%M:%SZ")
+     LAST_WEEK=$(TZ=UTC date -d "last week" "+%Y-%m-%dT%H:%M:%SZ")
      ;;
 
    *)
