@@ -1,13 +1,4 @@
-import {
-  Box,
-  Chip,
-  FormControl,
-  FormControlLabel,
-  Grid,
-  Radio,
-  RadioGroup,
-  Typography,
-} from '@material-ui/core';
+import { Box, Chip, FormControl, FormControlLabel, Grid, Radio, RadioGroup, Typography } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -32,6 +23,7 @@ import { PlantForTable } from '../AllPlants';
 import CancelButton from '../common/CancelButton';
 import DialogCloseButton from '../common/DialogCloseButton';
 import TextField from '../common/TextField';
+import PlantPhoto from './PlantPhoto';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -73,12 +65,7 @@ export interface Props {
 }
 
 const initPlant = (plant?: PlantForTable): PlantForTable => {
-  return plant
-    ? {
-        ...plant,
-        speciesId: plant.speciesId ?? 0,
-      }
-    : {};
+  return plant ? { ...plant, speciesId: plant.speciesId ?? 0, } : {};
 };
 
 export default function NewSpecieModal(props: Props): JSX.Element {
@@ -89,15 +76,9 @@ export default function NewSpecieModal(props: Props): JSX.Element {
   const speciesNames = useRecoilValue(speciesNamesSelector);
   const plantsByFeature = useRecoilValue(plantsByFeatureIdSelector);
   const session = useRecoilValue(sessionSelector);
-  const speciesNamesBySpeciesId = useRecoilValue(
-    speciesNamesBySpeciesIdSelector
-  );
-  const resetPlantsPlantedFeatures = useResetRecoilState(
-    plantsPlantedFeaturesSelector
-  );
-  const resetPlantsPlantedFiltered = useResetRecoilState(
-    plantsPlantedFilteredSelector
-  );
+  const speciesNamesBySpeciesId = useRecoilValue(speciesNamesBySpeciesIdSelector);
+  const resetPlantsPlantedFeatures = useResetRecoilState(plantsPlantedFeaturesSelector);
+  const resetPlantsPlantedFiltered = useResetRecoilState(plantsPlantedFilteredSelector);
   const resetSpeciesForChart = useResetRecoilState(speciesForChartSelector);
   const resetSpeciesNames = useResetRecoilState(speciesNamesSelector);
 
@@ -192,12 +173,7 @@ export default function NewSpecieModal(props: Props): JSX.Element {
               <Typography variant='body1'>{strings.PHOTO}</Typography>
             </Grid>
             <Grid item xs={12}>
-              <img
-                alt='Specie'
-                src={record.photo}
-                style={{ maxHeight: '100px', display: 'block' }}
-                id='feature-image'
-              />
+              <PlantPhoto featureId={props.value?.featureId} />
             </Grid>
           </Grid>
           <Grid item xs={6}>
@@ -242,7 +218,7 @@ export default function NewSpecieModal(props: Props): JSX.Element {
         <Grid container spacing={4}>
           <Grid item xs={12}>
             <Typography component='p' variant='subtitle2'>
-              OR
+              {strings.OR}
             </Typography>
           </Grid>
         </Grid>

@@ -19,7 +19,7 @@ export const getPhotos = async (
   ).data.photos;
 };
 
-export const getPhoto = async (
+export const getPhotoBlob = async (
   token: TokenResponse,
   photoId: number
 ): Promise<Blob> => {
