@@ -1,36 +1,31 @@
 import { selector, selectorFamily, waitForAll } from 'recoil';
-import { getPhoto, getPhotos } from '../../api/photos';
-import { Photo, PhotoFeature } from '../../api/types/photo';
+import { getPhotoBlob, getPhotos } from '../../api/photos';
 import { plantsPlantedFeaturesSelector } from './plantsPlantedFeatures';
 import sessionSelector from './session';
 
-export const photoByFeatureIdSelector = selector<
-  Record<number, string> | undefined
->({
+type PhotoFeature = {
+  imgSrc: string;
+  featuredId: number;
+};
+
+export const photoByFeatureIdSelector = selector<Record<number, string> | undefined>({
   key: 'photosByFeatureId',
   get: async ({ get }) => {
     const session = get(sessionSelector);
     const plantsPlantedFeatures = get(plantsPlantedFeaturesSelector);
     const photosByFeatureIdResponse: Record<number, string> = {};
     if (session && plantsPlantedFeatures) {
-      const photosArrays = get(
+      const firstPhotos = get(
         waitForAll(
           plantsPlantedFeatures.map((plantFeature) =>
-            arrayPhotosQuery(plantFeature.id!)
+            uniquePhotoForFeatureSelectorFamily(plantFeature.id!)
           )
         )
       );
 
-      const firstPhotos = get(
-        waitForAll(
-          photosArrays.map((photoArray) => firstPhotoQuery(photoArray))
-        )
-      );
-
-      const urlCreator = window.URL || window.webkitURL;
       firstPhotos.forEach((firstPhoto) => {
-        if (firstPhoto && firstPhoto.blobPhoto) {
-          const imgSrc = urlCreator.createObjectURL(firstPhoto.blobPhoto);
+        if (firstPhoto && firstPhoto.imgSrc) {
+          const imgSrc = firstPhoto.imgSrc;
           photosByFeatureIdResponse[firstPhoto?.featuredId] = imgSrc;
         }
       });
@@ -40,36 +35,23 @@ export const photoByFeatureIdSelector = selector<
   },
 });
 
-const arrayPhotosQuery = selectorFamily<Photo[] | undefined, number>({
-  key: 'arrayPhotosQuery',
-  get:
-    (plantFeatureId: number) =>
-    async ({ get }) => {
-      const session = get(sessionSelector);
-      if (session) {
-        const photosOfFeature = await getPhotos(session, plantFeatureId);
+export const uniquePhotoForFeatureSelectorFamily = selectorFamily<(PhotoFeature | undefined) | undefined, number | undefined>({
+  key: 'uniquePhotoForFeatureSelectorFamily',
+  get: (plantFeatureId?: number) => async ({ get }) => {
+    const session = get(sessionSelector);
+    if (session && plantFeatureId) {
+      const photosOfFeature = await getPhotos(session, plantFeatureId);
+      const firstPhoto = photosOfFeature[0];
+      if (firstPhoto) {
+        const photoBlob = await getPhotoBlob(session, firstPhoto.id);
 
-        return photosOfFeature;
-      }
-    },
-});
-
-const firstPhotoQuery = selectorFamily<
-  PhotoFeature | undefined,
-  Photo[] | undefined
->({
-  key: 'firstPhotoQuery',
-  get:
-    (photoArray: Photo[] | undefined) =>
-    async ({ get }) => {
-      const session = get(sessionSelector);
-      if (session && photoArray && photoArray.length) {
-        const photo = await getPhoto(session, photoArray[0].id);
+        const urlCreator = window.URL || window.webkitURL;
 
         return {
-          blobPhoto: photo,
-          featuredId: photoArray[0].feature_id,
+          imgSrc: urlCreator.createObjectURL(photoBlob),
+          featuredId: firstPhoto.feature_id,
         };
       }
-    },
+    }
+  },
 });
