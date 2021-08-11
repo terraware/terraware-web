@@ -2,9 +2,9 @@ import { AppBar, Grid, Toolbar } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import strings from '../../strings';
 import projectIdSelector from '../state/selectors/projectId';
 import projectsSelector from '../state/selectors/projects';
+import strings from '../strings';
 import Dropdown from './common/Dropdown';
 
 const useStyles = makeStyles((theme) =>
