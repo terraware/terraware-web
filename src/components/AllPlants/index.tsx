@@ -72,13 +72,8 @@ export type PlantForTable = {
 export default function Species(): JSX.Element {
   const classes = useStyles();
 
-  const features = useRecoilValue(plantsPlantedFeaturesSelector);
-  const photoByFeature = useRecoilValue(photoByFeatureIdSelector);
-  const speciesBySpeciesId = useRecoilValue(speciesNamesBySpeciesIdSelector);
   const speciesNames = useRecoilValue(speciesNamesSelector);
-  const plantsByFeatureFiltered = useRecoilValue(
-    plantsByFeatureIdFilteredSelector
-  );
+
   const [filters, setFilters] = useRecoilState(plantsPlantedFiltersAtom);
   const setSnackbar = useSetRecoilState(snackbarAtom);
 
@@ -100,44 +95,6 @@ export default function Species(): JSX.Element {
     label: species.name,
     value: species.name,
   }));
-
-  const plantsForTable = React.useMemo(() => {
-    let plantsToReturn: PlantForTable[] = [];
-
-    if (
-      features &&
-      plantsByFeatureFiltered &&
-      photoByFeature &&
-      speciesBySpeciesId
-    ) {
-      plantsToReturn = features.reduce((_acum, feature) => {
-        if (feature.id && plantsByFeatureFiltered[feature.id]) {
-          const plant = plantsByFeatureFiltered[feature.id];
-          const plantToAdd: PlantForTable = {
-            date: feature.entered_time,
-            species: plant.species_id
-              ? speciesBySpeciesId[plant.species_id].name
-              : undefined,
-            photo: photoByFeature[feature.id],
-            notes: feature.notes,
-            featureId: feature.id,
-            speciesId: plant.species_id,
-          };
-
-          if (feature.geom && Array.isArray(feature.geom.coordinates)) {
-            plantToAdd.geolocation = `${feature.geom.coordinates[1].toFixed(
-              6
-            )}, ${feature.geom.coordinates[0].toFixed(6)}`;
-          }
-          _acum.push(plantToAdd);
-        }
-
-        return _acum;
-      }, plantsToReturn);
-    }
-
-    return plantsToReturn;
-  }, [features, photoByFeature, plantsByFeatureFiltered, speciesBySpeciesId]);
 
   const onEditPlant = (row: TableRowType) => {
     setSelectedPlant(row as PlantForTable);
@@ -295,24 +252,81 @@ export default function Species(): JSX.Element {
           <Grid item xs={1} />
           <Grid item xs={10}>
             <Paper className={classes.mainContent}>
-              <Grid container spacing={4}>
-                <Grid item xs={12}>
-                  <Table
-                    id='all-plants-table'
-                    columns={columns}
-                    rows={plantsForTable}
-                    orderBy='species'
-                    Renderer={AllPlantsCellRenderer}
-                    onSelect={onEditPlant}
-                  />
-                </Grid>
-              </Grid>
+              <React.Suspense fallback={'loading2'}>
+                <AllPlantsContent onEditPlant={onEditPlant} />
+              </React.Suspense>
             </Paper>
           </Grid>
           <Grid item xs={1} />
         </Grid>
       </Container>
     </main>
+  );
+}
+
+interface AllPlantsProps {
+  onEditPlant: (row: TableRowType) => void;
+}
+
+function AllPlantsContent({ onEditPlant }: AllPlantsProps): JSX.Element {
+  const features = useRecoilValue(plantsPlantedFeaturesSelector);
+  const photoByFeature = useRecoilValue(photoByFeatureIdSelector);
+  const speciesBySpeciesId = useRecoilValue(speciesNamesBySpeciesIdSelector);
+  const plantsByFeatureFiltered = useRecoilValue(
+    plantsByFeatureIdFilteredSelector
+  );
+
+  const plantsForTable = React.useMemo(() => {
+    let plantsToReturn: PlantForTable[] = [];
+
+    if (
+      features &&
+      plantsByFeatureFiltered &&
+      photoByFeature &&
+      speciesBySpeciesId
+    ) {
+      plantsToReturn = features.reduce((_acum, feature) => {
+        if (feature.id && plantsByFeatureFiltered[feature.id]) {
+          const plant = plantsByFeatureFiltered[feature.id];
+          const plantToAdd: PlantForTable = {
+            date: feature.entered_time,
+            species: plant.species_id
+              ? speciesBySpeciesId[plant.species_id].name
+              : undefined,
+            photo: photoByFeature[feature.id],
+            notes: feature.notes,
+            featureId: feature.id,
+            speciesId: plant.species_id,
+          };
+
+          if (feature.geom && Array.isArray(feature.geom.coordinates)) {
+            plantToAdd.geolocation = `${feature.geom.coordinates[1].toFixed(
+              6
+            )}, ${feature.geom.coordinates[0].toFixed(6)}`;
+          }
+          _acum.push(plantToAdd);
+        }
+
+        return _acum;
+      }, plantsToReturn);
+    }
+
+    return plantsToReturn;
+  }, [features, photoByFeature, plantsByFeatureFiltered, speciesBySpeciesId]);
+
+  return (
+    <Grid container spacing={4}>
+      <Grid item xs={12}>
+        <Table
+          id='all-plants-table'
+          columns={columns}
+          rows={plantsForTable}
+          orderBy='species'
+          Renderer={AllPlantsCellRenderer}
+          onSelect={onEditPlant}
+        />
+      </Grid>
+    </Grid>
   );
 }
 

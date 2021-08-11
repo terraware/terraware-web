@@ -69,10 +69,12 @@ export default function Dashboard(): JSX.Element {
       <Container maxWidth={false} className={classes.mainContainer}>
         <Grid container spacing={3}>
           <Grid item xs={isFullscreen ? 12 : 6}>
-            <Map
-              onFullscreen={onFullscreenHandler}
-              isFullscreen={isFullscreen}
-            />
+            <React.Suspense fallback={'loading'}>
+              <Map
+                onFullscreen={onFullscreenHandler}
+                isFullscreen={isFullscreen}
+              />
+            </React.Suspense>
           </Grid>
           <Grid item xs={isFullscreen ? 12 : 6}>
             <Grid container>
@@ -132,7 +134,9 @@ export default function Dashboard(): JSX.Element {
               </Grid>
               <Grid item xs={12}>
                 <Paper className={classes.mapContainer}>
-                  <SpeciesChart isFullscreen={isFullscreen} />
+                  <React.Suspense fallback={'loading'}>
+                    <SpeciesChart isFullscreen={isFullscreen} />
+                  </React.Suspense>
                 </Paper>
               </Grid>
             </Grid>
