@@ -54,6 +54,9 @@ export default function SpeciesChart({ isFullscreen }: Props): JSX.Element {
                 text: isFullscreen ? strings.SPECIES : strings.NUMBER_OF_PLANTS,
               },
               position: isFullscreen ? 'bottom' : 'top',
+              ticks: {
+                precision: 0,
+              },
             },
             y: {
               title: {
