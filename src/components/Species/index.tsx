@@ -39,6 +39,12 @@ const useStyles = makeStyles((theme) =>
     mainContent: {
       paddingTop: theme.spacing(4),
     },
+    centered: {
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'flex-end',
+    },
   })
 );
 
@@ -89,7 +95,7 @@ export default function Species(): JSX.Element {
             <h1>{strings.SPECIES}</h1>
           </Grid>
           <Grid item xs={6} />
-          <Grid item xs={2}>
+          <Grid item xs={2} className={classes.centered}>
             <Chip
               id='new-species'
               size='medium'
