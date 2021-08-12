@@ -70,7 +70,7 @@ const initPlant = (plant?: PlantForTable): PlantForTable => {
 
 export default function NewSpecieModalWrapper(props: Props): JSX.Element {
   return (
-    <React.Suspense fallback={strings.LOADING}>
+    <React.Suspense fallback={""}>
       <NewSpecieModal {...props} />
     </React.Suspense>
   );
