@@ -196,13 +196,11 @@ function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
 
   return (
     <>
-      <React.Suspense fallback={strings.LOADING}>
-        <NewSpecieModal
-          open={editPlantModalOpen}
-          onClose={onCloseEditPlantModal}
-          value={selectedPlantForTable}
-        />
-      </React.Suspense>
+      <NewSpecieModal
+        open={editPlantModalOpen}
+        onClose={onCloseEditPlantModal}
+        value={selectedPlantForTable}
+      />
       <ReactMapGL
         latitude={center.latitude}
         longitude={center.longitude}
