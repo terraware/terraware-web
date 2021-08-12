@@ -1,12 +1,5 @@
-import {
-  Divider,
-  Drawer,
-  List,
-  ListItem,
-  ListItemText,
-} from '@material-ui/core';
+import { Divider, Drawer, List, ListItem, ListItemText } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
-import React from 'react';
 import { Link as RouterLink, useRouteMatch } from 'react-router-dom';
 import { useResetRecoilState } from 'recoil';
 import sessionSelector from '../state/selectors/session';

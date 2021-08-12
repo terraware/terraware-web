@@ -68,7 +68,15 @@ const initPlant = (plant?: PlantForTable): PlantForTable => {
   return plant ? { ...plant, speciesId: plant.speciesId ?? 0, } : {};
 };
 
-export default function NewSpecieModal(props: Props): JSX.Element {
+export default function NewSpecieModalWrapper(props: Props): JSX.Element {
+  return (
+    <React.Suspense fallback={strings.LOADING}>
+      <NewSpecieModal {...props} />
+    </React.Suspense>
+  );
+}
+
+function NewSpecieModal(props: Props): JSX.Element {
   const classes = useStyles();
   const { onClose, open, onDelete } = props;
   const [record, setRecord] = useForm<PlantForTable>(initPlant(props.value));

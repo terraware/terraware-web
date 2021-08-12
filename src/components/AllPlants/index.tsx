@@ -68,7 +68,7 @@ export type PlantForTable = {
   speciesId?: number;
 };
 
-export default function Species(): JSX.Element {
+export default function AllPlants(): JSX.Element {
   const classes = useStyles();
 
   const speciesNames = useRecoilValue(speciesNamesSelector);
