@@ -1,6 +1,11 @@
-import { CssBaseline, Grid, ThemeProvider } from '@material-ui/core';
+import { createStyles, CssBaseline, makeStyles, ThemeProvider } from '@material-ui/core';
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch, useHistory } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  useHistory
+} from 'react-router-dom';
 import { RecoilRoot, useRecoilValue } from 'recoil';
 import AllPlants from './components/AllPlants';
 import AppBar from './components/AppBar';
@@ -21,7 +26,9 @@ export default function App() {
       <ErrorBoundary>
         <React.Suspense fallback={strings.LOADING}>
           <Router>
-            <AppContent />
+            <ThemeProvider theme={theme}>
+              <AppContent />
+            </ThemeProvider>
           </Router>
         </React.Suspense>
       </ErrorBoundary>
@@ -29,7 +36,19 @@ export default function App() {
   );
 }
 
+const useStyles = makeStyles(() =>
+  createStyles({
+    menu: {
+      width: '160px',
+    },
+    content: {
+      marginLeft: '160px',
+    }
+  })
+);
+
 function AppContent() {
+  const classes = useStyles();
   const session = useRecoilValue(sessionSelector);
   const history = useHistory();
   useCheckJWT();
@@ -43,25 +62,25 @@ function AppContent() {
   }, [session, history]);
 
   return (
-    <ThemeProvider theme={theme}>
+    <>
       <CssBaseline />
       <Snackbar />
       {!session && <Route exact path='/' component={Login} />}
       {session && (
-        <Grid container spacing={3}>
-          <Grid item xs={1}>
+        <>
+          <div>
             <NavBar />
-          </Grid>
-          <Grid item xs={11}>
+          </div>
+          <div className={classes.content}>
             <AppBar />
             <Switch>
               <Route exact path='/dashboard' component={Dashboard} />
               <Route exact path='/plants' component={AllPlants} />
               <Route exact path='/species' component={Species} />
             </Switch>
-          </Grid>
-        </Grid>
+          </div>
+        </>
       )}
-    </ThemeProvider>
+    </>
   );
 }
