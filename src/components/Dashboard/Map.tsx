@@ -64,7 +64,7 @@ const navControlStyle = {
   bottom: 10,
 };
 
-const DEFAULT_VIEWPORT = { zoom: 8 };
+const DEFAULT_VIEWPORT = { zoom: 8, width: 'fit', height: '100%' };
 
 interface Coordinate {
   latitude: number;
@@ -95,21 +95,21 @@ function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
   const selectedPlantForTable =
     selectedPlant && selectedFeature
       ? {
-        date: selectedPlant.created_time,
-        species: speciesForChart[selectedPlant.species_id!]
-          ? speciesForChart[selectedPlant.species_id!].speciesName.name
-          : undefined,
-        geolocation:
-          selectedFeature.geom &&
-            Array.isArray(selectedFeature?.geom.coordinates)
-            ? `${selectedFeature.geom.coordinates[1].toFixed(
-              6
-            )}, ${selectedFeature.geom.coordinates[0].toFixed(6)}`
+          date: selectedPlant.created_time,
+          species: speciesForChart[selectedPlant.species_id!]
+            ? speciesForChart[selectedPlant.species_id!].speciesName.name
             : undefined,
-        notes: selectedFeature.notes,
-        featureId: selectedFeature.id,
-        speciesId: selectedPlant.species_id,
-      }
+          geolocation:
+            selectedFeature.geom &&
+            Array.isArray(selectedFeature?.geom.coordinates)
+              ? `${selectedFeature.geom.coordinates[1].toFixed(
+                  6
+                )}, ${selectedFeature.geom.coordinates[0].toFixed(6)}`
+              : undefined,
+          notes: selectedFeature.notes,
+          featureId: selectedFeature.id,
+          speciesId: selectedPlant.species_id,
+        }
       : undefined;
 
   React.useEffect(() => {
@@ -190,8 +190,7 @@ function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
   };
 
   const onViewportChange = (newViewport: any) => {
-    const { width, height, ...others } = newViewport;
-    setViewport(others);
+    setViewport({ ...newViewport, width: 'fit' });
   };
 
   const center = getCenter();
@@ -209,8 +208,6 @@ function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
         />
       </React.Suspense>
       <ReactMapGL
-        width='100%'
-        height='100%'
         latitude={center.latitude}
         longitude={center.longitude}
         {...viewport}
@@ -255,29 +252,55 @@ function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
           })}
         {selectedFeature && selectedPlant && (
           <Popup
-            onClose={() => { setSelectedFeature(undefined); }}
+            onClose={() => {
+              setSelectedFeature(undefined);
+            }}
             latitude={selectedCoordinates ? selectedCoordinates.latitude : 0}
             longitude={selectedCoordinates ? selectedCoordinates.longitude : 0}
             captureClick={false}
             closeOnClick={false}
           >
             <div>
-              <Typography component='p' variant='subtitle2' id='feature-species-name'>
-                {selectedPlant.species_id ? speciesForChart[selectedPlant.species_id].speciesName.name : strings.OTHER}
+              <Typography
+                component='p'
+                variant='subtitle2'
+                id='feature-species-name'
+              >
+                {selectedPlant.species_id
+                  ? speciesForChart[selectedPlant.species_id].speciesName.name
+                  : strings.OTHER}
               </Typography>
-              <Typography component='p' variant='body2' className={classes.spacing} >
-                {strings.AS_OF} {cellDateFormatter(selectedFeature.entered_time)}
+              <Typography
+                component='p'
+                variant='body2'
+                className={classes.spacing}
+              >
+                {strings.AS_OF}{' '}
+                {cellDateFormatter(selectedFeature.entered_time)}
               </Typography>
-              <Typography component='p' variant='body2' className={classes.spacing} id='feature-coordinates'>
-                {selectedCoordinates ? selectedCoordinates.latitude.toFixed(6) : 0}
+              <Typography
+                component='p'
+                variant='body2'
+                className={classes.spacing}
+                id='feature-coordinates'
+              >
+                {selectedCoordinates
+                  ? selectedCoordinates.latitude.toFixed(6)
+                  : 0}
                 ,
-                {selectedCoordinates ? selectedCoordinates.longitude.toFixed(6) : 0}
+                {selectedCoordinates
+                  ? selectedCoordinates.longitude.toFixed(6)
+                  : 0}
               </Typography>
               <PlantPhoto featureId={selectedFeature?.id} />
               <Chip
                 id='new-species'
                 size='medium'
-                label={selectedPlant.species_id ? strings.EDIT_SPECIES : strings.ADD_SPECIES}
+                label={
+                  selectedPlant.species_id
+                    ? strings.EDIT_SPECIES
+                    : strings.ADD_SPECIES
+                }
                 onClick={onNewSpecie}
                 className={classes.newSpecies}
                 icon={selectedPlant.species_id ? <CreateIcon /> : <AddIcon />}
