@@ -68,7 +68,7 @@ export type PlantForTable = {
   speciesId?: number;
 };
 
-export default function Species(): JSX.Element {
+export default function AllPlants(): JSX.Element {
   const classes = useStyles();
 
   const speciesNames = useRecoilValue(speciesNamesSelector);
@@ -146,12 +146,14 @@ export default function Species(): JSX.Element {
 
   return (
     <main>
-      <NewSpecieModal
-        open={editPlantOpen}
-        onClose={onCloseEditPlantModal}
-        onDelete={openDeleteConfirmationModal}
-        value={selectedPlant}
-      />
+      <React.Suspense fallback={strings.LOADING}>
+        <NewSpecieModal
+          open={editPlantOpen}
+          onClose={onCloseEditPlantModal}
+          onDelete={openDeleteConfirmationModal}
+          value={selectedPlant}
+        />
+      </React.Suspense>
       {selectedPlant && (
         <DeletePlantConfirmationModal
           open={deleteConfirmationModalOpen}

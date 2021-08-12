@@ -19,8 +19,29 @@ const useStyles = makeStyles((theme) =>
 export default function NavBar(): JSX.Element | null {
   const classes = useStyles();
 
-  const projects = useRecoilValue(projectsSelector);
+  return (
+    <AppBar className={classes.appBar}>
+      <Toolbar>
+        <Grid container spacing={3}>
+          <Grid item xs={2}>
+            <ProjectsDropdownWrapper />
+          </Grid>
+        </Grid>
+      </Toolbar>
+    </AppBar>
+  );
+}
 
+function ProjectsDropdownWrapper(): JSX.Element {
+  return (
+    <React.Suspense fallback={strings.LOADING}>
+      <ProjectsDropdown />
+    </React.Suspense>
+  );
+}
+
+function ProjectsDropdown(): JSX.Element {
+  const projects = useRecoilValue(projectsSelector);
   const [projectId, setProjectId] = useRecoilState(projectIdSelector);
 
   React.useEffect(() => {
@@ -31,23 +52,15 @@ export default function NavBar(): JSX.Element | null {
   }, [projects, projectId, setProjectId]);
 
   return (
-    <AppBar className={classes.appBar}>
-      <Toolbar>
-        <Grid container spacing={3}>
-          <Grid item xs={2}>
-            <Dropdown
-              label={strings.PROJECTS}
-              id='projects'
-              values={projects?.map((value) => ({
-                value: value.id?.toString() ?? '',
-                label: value.name,
-              }))}
-              onChange={(id, value) => setProjectId(parseInt(value, 10))}
-              selected={projectId?.toString() ?? ''}
-            />
-          </Grid>
-        </Grid>
-      </Toolbar>
-    </AppBar>
+    <Dropdown
+      label={strings.PROJECTS}
+      id='projects'
+      values={projects?.map((value) => ({
+        value: value.id?.toString() ?? '',
+        label: value.name,
+      }))}
+      onChange={(id, value) => setProjectId(parseInt(value, 10))}
+      selected={projectId?.toString() ?? ''}
+    />
   );
 }
