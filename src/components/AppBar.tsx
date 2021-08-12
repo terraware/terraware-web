@@ -24,19 +24,13 @@ export default function NavBar(): JSX.Element | null {
       <Toolbar>
         <Grid container spacing={3}>
           <Grid item xs={2}>
-            <ProjectsDropdownWrapper />
+            <React.Suspense fallback={strings.LOADING}>
+              <ProjectsDropdown />
+            </React.Suspense>
           </Grid>
         </Grid>
       </Toolbar>
     </AppBar>
-  );
-}
-
-function ProjectsDropdownWrapper(): JSX.Element {
-  return (
-    <React.Suspense fallback={strings.LOADING}>
-      <ProjectsDropdown />
-    </React.Suspense>
   );
 }
 
