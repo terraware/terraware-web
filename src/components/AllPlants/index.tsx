@@ -146,14 +146,12 @@ export default function AllPlants(): JSX.Element {
 
   return (
     <main>
-      <React.Suspense fallback={strings.LOADING}>
-        <NewSpecieModal
-          open={editPlantOpen}
-          onClose={onCloseEditPlantModal}
-          onDelete={openDeleteConfirmationModal}
-          value={selectedPlant}
-        />
-      </React.Suspense>
+      <NewSpecieModal
+        open={editPlantOpen}
+        onClose={onCloseEditPlantModal}
+        onDelete={openDeleteConfirmationModal}
+        value={selectedPlant}
+      />
       {selectedPlant && (
         <DeletePlantConfirmationModal
           open={deleteConfirmationModalOpen}
