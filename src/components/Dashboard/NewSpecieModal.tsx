@@ -68,15 +68,21 @@ const initPlant = (plant?: PlantForTable): PlantForTable => {
   return plant ? { ...plant, speciesId: plant.speciesId ?? 0, } : {};
 };
 
-export default function NewSpecieModal(props: Props): JSX.Element {
+export default function NewSpecieModalWrapper(props: Props): JSX.Element {
+  return (
+    <React.Suspense fallback={strings.LOADING}>
+      <NewSpecieModal {...props} />
+    </React.Suspense>
+  );
+}
+
+function NewSpecieModal(props: Props): JSX.Element {
   const classes = useStyles();
   const { onClose, open, onDelete } = props;
   const [record, setRecord] = useForm<PlantForTable>(initPlant(props.value));
 
-  const speciesNames = useRecoilValue(speciesNamesSelector);
-  const plantsByFeature = useRecoilValue(plantsByFeatureIdSelector);
   const session = useRecoilValue(sessionSelector);
-  const speciesNamesBySpeciesId = useRecoilValue(speciesNamesBySpeciesIdSelector);
+  const plantsByFeature = useRecoilValue(plantsByFeatureIdSelector);
   const resetPlantsPlantedFeatures = useResetRecoilState(plantsPlantedFeaturesSelector);
   const resetPlantsPlantedFiltered = useResetRecoilState(plantsPlantedFilteredSelector);
   const resetSpeciesForChart = useResetRecoilState(speciesForChartSelector);
@@ -101,7 +107,6 @@ export default function NewSpecieModal(props: Props): JSX.Element {
   };
 
   const handleOk = async () => {
-    let snackbarMessage = '';
     if (session && plantsByFeature && record.featureId) {
       const previousPlant = plantsByFeature[record.featureId];
       if (record.speciesId !== undefined) {
@@ -110,6 +115,11 @@ export default function NewSpecieModal(props: Props): JSX.Element {
           species_id: record.speciesId !== 0 ? record.speciesId : undefined,
         };
         await putPlant(session, record.featureId, newPlant);
+        onClose(strings.SNACKBAR_MSG_CHANGES_SAVED);
+
+        resetPlantsPlantedFeatures();
+        resetSpeciesForChart();
+        resetPlantsPlantedFiltered();
       } else if (record.species) {
         const newSpecies = await postSpecies({}, session);
         if (newSpecies.id) {
@@ -120,38 +130,17 @@ export default function NewSpecieModal(props: Props): JSX.Element {
           };
           await postSpeciesName(newSpeciesName, session);
           await putPlant(session, record.featureId, newPlant);
+          onClose(strings.SNACKBAR_MSG_CHANGES_SAVED);
+
           resetSpeciesNames();
+          resetPlantsPlantedFeatures();
+          resetSpeciesForChart();
+          resetPlantsPlantedFiltered();
         }
       }
-      resetPlantsPlantedFeatures();
-      resetSpeciesForChart();
-      resetPlantsPlantedFiltered();
-      snackbarMessage = strings.SNACKBAR_MSG_CHANGES_SAVED;
+    } else {
+      onClose('');
     }
-    onClose(snackbarMessage);
-  };
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newSpecieId = parseInt(event.target.value, 10);
-    const newRecord = {
-      ...record,
-      speciesId: newSpecieId,
-      species: speciesNamesBySpeciesId[newSpecieId]
-        ? speciesNamesBySpeciesId[newSpecieId].name
-        : undefined,
-    };
-
-    setRecord(newRecord);
-  };
-
-  const onChangeTextField = (id: string, value: unknown) => {
-    const newRecord = {
-      ...record,
-      [id]: value,
-      speciesId: undefined,
-    };
-
-    setRecord(newRecord);
   };
 
   return (
@@ -167,72 +156,7 @@ export default function NewSpecieModal(props: Props): JSX.Element {
         <DialogCloseButton onClick={handleCancel} />
       </DialogTitle>
       <DialogContent dividers>
-        <Grid container spacing={4}>
-          <Grid item xs={6}>
-            <Grid item xs={12}>
-              <Typography variant='body1'>{strings.PHOTO}</Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <PlantPhoto featureId={props.value?.featureId} />
-            </Grid>
-          </Grid>
-          <Grid item xs={6}>
-            <Grid item xs={12}>
-              <Typography variant='body1'>{strings.NOTES}</Typography>
-            </Grid>
-            <Grid item xs={6}>
-              <Typography variant='body2'>{record.notes}</Typography>
-            </Grid>
-          </Grid>
-          <Grid item xs={12}>
-            <Typography variant='body1'>
-              {strings.EXISTING_SPECIES_MSG}
-            </Typography>
-            <FormControl component='fieldset' className={classes.container}>
-              <RadioGroup
-                aria-label='species'
-                name='species'
-                value={record.speciesId}
-                onChange={handleChange}
-              >
-                {speciesNames?.map((species) => (
-                  <FormControlLabel
-                    id={species.name}
-                    key={species.id}
-                    value={species.species_id}
-                    control={<Radio />}
-                    label={species.name}
-                  />
-                ))}
-                <FormControlLabel
-                  id='Other'
-                  key={-1}
-                  value={0}
-                  control={<Radio />}
-                  label={strings.OTHER}
-                />
-              </RadioGroup>
-            </FormControl>
-          </Grid>
-        </Grid>
-        <Grid container spacing={4}>
-          <Grid item xs={12}>
-            <Typography component='p' variant='subtitle2'>
-              {strings.OR}
-            </Typography>
-          </Grid>
-        </Grid>
-        <Grid container spacing={4}>
-          <Grid item xs={12} id='new-specie-section'>
-            <TextField
-              id='species'
-              value={record.speciesId ? '' : record.species}
-              onChange={onChangeTextField}
-              label={strings.CREATE_NEW_SPECIES}
-              aria-label='Species Name'
-            />
-          </Grid>
-        </Grid>
+        <NewSpecieModalContent record={record} setRecord={setRecord} />
       </DialogContent>
       <DialogActions>
         <Box width={'100%'} className={classes.actions}>
@@ -262,5 +186,111 @@ export default function NewSpecieModal(props: Props): JSX.Element {
         </Box>
       </DialogActions>
     </Dialog>
+  );
+}
+
+interface ContentProps {
+  record: PlantForTable;
+  setRecord: (record: PlantForTable) => void;
+}
+
+function NewSpecieModalContent(props: ContentProps): JSX.Element {
+  const classes = useStyles();
+
+  const speciesNames = useRecoilValue(speciesNamesSelector);
+  const speciesNamesBySpeciesId = useRecoilValue(speciesNamesBySpeciesIdSelector);
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newSpecieId = parseInt(event.target.value, 10);
+    const newRecord = {
+      ...props.record,
+      speciesId: newSpecieId,
+      species: speciesNamesBySpeciesId[newSpecieId]
+        ? speciesNamesBySpeciesId[newSpecieId].name
+        : undefined,
+    };
+
+    props.setRecord(newRecord);
+  };
+
+  const onChangeTextField = (id: string, value: unknown) => {
+    const newRecord = {
+      ...props.record,
+      [id]: value,
+      speciesId: undefined,
+    };
+
+    props.setRecord(newRecord);
+  };
+
+  return (
+    <>
+      <Grid container spacing={4}>
+        <Grid item xs={6}>
+          <Grid item xs={12}>
+            <Typography variant='body1'>{strings.PHOTO}</Typography>
+          </Grid>
+          <Grid item xs={12}>
+            <PlantPhoto featureId={props.record.featureId} />
+          </Grid>
+        </Grid>
+        <Grid item xs={6}>
+          <Grid item xs={12}>
+            <Typography variant='body1'>{strings.NOTES}</Typography>
+          </Grid>
+          <Grid item xs={6}>
+            <Typography variant='body2'>{props.record.notes}</Typography>
+          </Grid>
+        </Grid>
+        <Grid item xs={12}>
+          <Typography variant='body1'>
+            {strings.EXISTING_SPECIES_MSG}
+          </Typography>
+          <FormControl component='fieldset' className={classes.container}>
+            <RadioGroup
+              aria-label='species'
+              name='species'
+              value={props.record.speciesId}
+              onChange={handleChange}
+            >
+              {speciesNames?.map((species) => (
+                <FormControlLabel
+                  id={species.name}
+                  key={species.id}
+                  value={species.species_id}
+                  control={<Radio />}
+                  label={species.name}
+                />
+              ))}
+              <FormControlLabel
+                id='Other'
+                key={-1}
+                value={0}
+                control={<Radio />}
+                label={strings.OTHER}
+              />
+            </RadioGroup>
+          </FormControl>
+        </Grid>
+      </Grid>
+      <Grid container spacing={4}>
+        <Grid item xs={12}>
+          <Typography component='p' variant='subtitle2'>
+            {strings.OR}
+          </Typography>
+        </Grid>
+      </Grid>
+      <Grid container spacing={4}>
+        <Grid item xs={12} id='new-specie-section'>
+          <TextField
+            id='species'
+            value={props.record.speciesId ? '' : props.record.species}
+            onChange={onChangeTextField}
+            label={strings.CREATE_NEW_SPECIES}
+            aria-label='Species Name'
+          />
+        </Grid>
+      </Grid>
+    </>
   );
 }

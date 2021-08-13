@@ -1,11 +1,11 @@
-import { Chip, Typography } from '@material-ui/core';
+import { Chip } from '@material-ui/core';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import React from 'react';
-import { useRecoilValueLoadable, useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { SpeciesName } from '../../api/types/species';
 import snackbarAtom from '../../state/atoms/snackbar';
 import speciesNamesSelector from '../../state/selectors/speciesNames';
@@ -39,6 +39,12 @@ const useStyles = makeStyles((theme) =>
     mainContent: {
       paddingTop: theme.spacing(4),
     },
+    centered: {
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'flex-end',
+    },
   })
 );
 
@@ -49,19 +55,13 @@ const chipStyles = makeStyles((theme) => ({
 }));
 
 export default function Species(): JSX.Element {
-  const resultsLodable = useRecoilValueLoadable(speciesNamesSelector);
   const setSnackbar = useSetRecoilState(snackbarAtom);
-  const results =
-    resultsLodable.state === 'hasValue' ? resultsLodable.contents : [];
 
   const classes = useStyles();
 
   const [editSpecieModalOpen, setEditSpecieModalOpen] = React.useState(false);
 
   const [selectedSpecie, setSelectedSpecie] = React.useState<SpeciesName>();
-  const columns: TableColumnType[] = [
-    { key: 'name', name: 'Name', type: 'string' },
-  ];
 
   const onCloseEditSpecieModal = (snackbarMessage?: string) => {
     setEditSpecieModalOpen(false);
@@ -72,12 +72,10 @@ export default function Species(): JSX.Element {
       });
     }
   };
-
   const onSelect = (specie: SpeciesName) => {
     setSelectedSpecie(specie);
     setEditSpecieModalOpen(true);
   };
-
   const onNewSpecie = () => {
     setSelectedSpecie(undefined);
     setEditSpecieModalOpen(true);
@@ -95,12 +93,9 @@ export default function Species(): JSX.Element {
           <Grid item xs={1} />
           <Grid item xs={2}>
             <h1>{strings.SPECIES}</h1>
-            <Typography component='h4' variant='subtitle1'>
-              {results?.length} {strings.TOTAL}
-            </Typography>
           </Grid>
           <Grid item xs={6} />
-          <Grid item xs={2}>
+          <Grid item xs={2} className={classes.centered}>
             <Chip
               id='new-species'
               size='medium'
@@ -115,17 +110,9 @@ export default function Species(): JSX.Element {
           <Grid item xs={10}>
             <Paper className={classes.mainContent}>
               <Grid container spacing={4}>
-                <Grid item xs={12}>
-                  {results && (
-                    <Table
-                      id='species-table'
-                      columns={columns}
-                      rows={results}
-                      orderBy='name'
-                      onSelect={onSelect}
-                    />
-                  )}
-                </Grid>
+                <React.Suspense fallback={strings.LOADING}>
+                  <SpeciesContent onSelect={onSelect} />
+                </React.Suspense>
               </Grid>
             </Paper>
           </Grid>
@@ -133,5 +120,31 @@ export default function Species(): JSX.Element {
         </Grid>
       </Container>
     </main>
+  );
+}
+
+interface SpeciesContentProps {
+  onSelect: (species: SpeciesName) => void;
+}
+
+function SpeciesContent({ onSelect }: SpeciesContentProps): JSX.Element {
+  const speciesNames = useRecoilValue(speciesNamesSelector);
+
+  const columns: TableColumnType[] = [
+    { key: 'name', name: 'Name', type: 'string' },
+  ];
+
+  return (
+    <Grid item xs={12}>
+      {speciesNames && (
+        <Table
+          id='species-table'
+          columns={columns}
+          rows={speciesNames}
+          orderBy='name'
+          onSelect={onSelect}
+        />
+      )}
+    </Grid>
   );
 }

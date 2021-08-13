@@ -41,10 +41,12 @@ export default function Dashboard(): JSX.Element {
       <Container maxWidth={false} className={classes.mainContainer}>
         <Grid container spacing={3}>
           <Grid item xs={isFullscreen ? 12 : 6}>
-            <Map
-              onFullscreen={onFullscreenHandler}
-              isFullscreen={isFullscreen}
-            />
+            <React.Suspense fallback={strings.LOADING}>
+              <Map
+                onFullscreen={onFullscreenHandler}
+                isFullscreen={isFullscreen}
+              />
+            </React.Suspense>
           </Grid>
           <Grid item xs={isFullscreen ? 12 : 6}>
             <Grid container>
@@ -52,14 +54,18 @@ export default function Dashboard(): JSX.Element {
                 <TableContainer component={Paper}>
                   <Table aria-label='simple table'>
                     <TableBody>
-                      <SummaryRow />
+                      <React.Suspense fallback={strings.LOADING}>
+                        <SummaryRow />
+                      </React.Suspense>
                     </TableBody>
                   </Table>
                 </TableContainer>
               </Grid>
               <Grid item xs={12}>
                 <Paper className={classes.mapContainer}>
-                  <SpeciesChart isFullscreen={isFullscreen} />
+                  <React.Suspense fallback={strings.LOADING}>
+                    <SpeciesChart isFullscreen={isFullscreen} />
+                  </React.Suspense>
                 </Paper>
               </Grid>
             </Grid>
@@ -82,11 +88,13 @@ function SummaryRow(): JSX.Element {
       <SummaryCell
         title={strings.PLANTS}
         current={currentSummary.plants}
-        lastWeek={lastWeekSummary.plants} />
+        lastWeek={lastWeekSummary.plants}
+      />
       <SummaryCell
         title={strings.SPECIES}
         current={currentSummary.species}
-        lastWeek={lastWeekSummary.species} />
+        lastWeek={lastWeekSummary.species}
+      />
     </TableRow>
   );
 }
@@ -99,7 +107,7 @@ interface Summary {
 const getSummary = (plantsSummary: PlantSummary[] | undefined): Summary => {
   const result = {
     plants: 0,
-    species: plantsSummary?.length ?? 0
+    species: plantsSummary?.length ?? 0,
   };
   if (plantsSummary) {
     plantsSummary.forEach((plant) => {
