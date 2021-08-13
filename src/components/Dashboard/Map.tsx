@@ -113,7 +113,7 @@ function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
       : undefined;
 
   React.useEffect(() => {
-    setViewport({ ...DEFAULT_VIEWPORT });
+    setViewport({ ...DEFAULT_VIEWPORT, height: '60vh' });
   }, [isFullscreen]);
 
   const onCloseEditPlantModal = (snackbarMessage?: string) => {
