@@ -1,15 +1,14 @@
-import { Chip } from '@material-ui/core';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
-import AddIcon from '@material-ui/icons/Add';
 import React from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { SpeciesName } from '../../api/types/species';
 import snackbarAtom from '../../state/atoms/snackbar';
 import speciesNamesSelector from '../../state/selectors/speciesNames';
 import strings from '../../strings';
+import Button from '../common/button/Button';
 import Table from '../common/table';
 import { TableColumnType } from '../common/table/types';
 import EditSpecieModal from './EditSpecieModal';
@@ -47,12 +46,6 @@ const useStyles = makeStyles((theme) =>
     },
   })
 );
-
-const chipStyles = makeStyles((theme) => ({
-  root: {
-    color: theme.palette.common.white,
-  },
-}));
 
 export default function Species(): JSX.Element {
   const setSnackbar = useSetRecoilState(snackbarAtom);
@@ -96,13 +89,11 @@ export default function Species(): JSX.Element {
           </Grid>
           <Grid item xs={6} />
           <Grid item xs={2} className={classes.centered}>
-            <Chip
+            <Button
               id='new-species'
-              size='medium'
               label={strings.NEW_SPECIES}
               onClick={onNewSpecie}
-              icon={<AddIcon classes={chipStyles()} />}
-              className={classes.newSpecies}
+              icon='plus'
             />
           </Grid>
           <Grid item xs={1} />

@@ -1,4 +1,4 @@
-import { Box, Chip, Typography } from '@material-ui/core';
+import { Box, Typography } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -12,15 +12,11 @@ import { plantsPlantedFeaturesSelector } from '../../state/selectors/plantsPlant
 import sessionSelector from '../../state/selectors/session';
 import speciesNamesSelector from '../../state/selectors/speciesNames';
 import strings from '../../strings';
-import CancelButton from '../common/CancelButton';
+import Button from '../common/button/Button';
 import DialogCloseButton from '../common/DialogCloseButton';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    submit: {
-      marginLeft: theme.spacing(2),
-      color: theme.palette.common.white,
-    },
     actions: {
       display: 'flex',
       justifyContent: 'space-between',
@@ -31,6 +27,9 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     paper: {
       minWidth: '500px',
+    },
+    spacing: {
+      paddingRight: theme.spacing(2),
     },
   })
 );
@@ -85,14 +84,19 @@ export default function DeleteConfirmationModal(props: Props): JSX.Element {
         <Box width={'100%'} className={classes.actions}>
           <Box />
           <Box>
-            <CancelButton onClick={handleCancel} />
-            <Chip
-              id='delete'
-              className={classes.submit}
-              label={strings.DELETE}
-              clickable
-              color='secondary'
+            <Button
+              onClick={handleCancel}
+              id='cancel'
+              label={strings.CANCEL}
+              priority='secondary'
+              type='passive'
+              className={classes.spacing}
+            />
+            <Button
               onClick={handleOk}
+              id='delete'
+              label={strings.DELETE}
+              type='destructive'
             />
           </Box>
         </Box>

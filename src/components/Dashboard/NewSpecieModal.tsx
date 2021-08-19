@@ -1,4 +1,12 @@
-import { Box, Chip, FormControl, FormControlLabel, Grid, Radio, RadioGroup, Typography } from '@material-ui/core';
+import {
+  Box,
+  FormControl,
+  FormControlLabel,
+  Grid,
+  Radio,
+  RadioGroup,
+  Typography,
+} from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -20,7 +28,7 @@ import speciesNamesBySpeciesIdSelector from '../../state/selectors/speciesNamesB
 import strings from '../../strings';
 import useForm from '../../utils/useForm';
 import { PlantForTable } from '../AllPlants';
-import CancelButton from '../common/CancelButton';
+import Button from '../common/button/Button';
 import DialogCloseButton from '../common/DialogCloseButton';
 import TextField from '../common/TextField';
 import PlantPhoto from './PlantPhoto';
@@ -54,6 +62,9 @@ const useStyles = makeStyles((theme: Theme) =>
       color: theme.palette.secondary.main,
       borderWidth: 1,
     },
+    spacing: {
+      marginRight: theme.spacing(2),
+    },
   })
 );
 
@@ -65,7 +76,7 @@ export interface Props {
 }
 
 const initPlant = (plant?: PlantForTable): PlantForTable => {
-  return plant ? { ...plant, speciesId: plant.speciesId ?? 0, } : {};
+  return plant ? { ...plant, speciesId: plant.speciesId ?? 0 } : {};
 };
 
 export default function NewSpecieModalWrapper(props: Props): JSX.Element {
@@ -83,8 +94,12 @@ function NewSpecieModal(props: Props): JSX.Element {
 
   const session = useRecoilValue(sessionSelector);
   const plantsByFeature = useRecoilValue(plantsByFeatureIdSelector);
-  const resetPlantsPlantedFeatures = useResetRecoilState(plantsPlantedFeaturesSelector);
-  const resetPlantsPlantedFiltered = useResetRecoilState(plantsPlantedFilteredSelector);
+  const resetPlantsPlantedFeatures = useResetRecoilState(
+    plantsPlantedFeaturesSelector
+  );
+  const resetPlantsPlantedFiltered = useResetRecoilState(
+    plantsPlantedFilteredSelector
+  );
   const resetSpeciesForChart = useResetRecoilState(speciesForChartSelector);
   const resetSpeciesNames = useResetRecoilState(speciesNamesSelector);
 
@@ -162,26 +177,25 @@ function NewSpecieModal(props: Props): JSX.Element {
         <Box width={'100%'} className={classes.actions}>
           <Box>
             {props.value && props.onDelete && (
-              <Chip
-                id='delete-specie'
-                className={classes.deleteSpecies}
-                label={strings.DELETE}
-                clickable
+              <Button
                 onClick={handleDelete}
-                variant='outlined'
+                id='delete-specie'
+                label={strings.DELETE}
+                type='destructive'
+                priority='secondary'
               />
             )}
           </Box>
           <Box>
-            <CancelButton onClick={handleCancel} />
-            <Chip
-              id='saveSpecie'
-              className={classes.submit}
-              label={strings.SAVE}
-              clickable
-              color='primary'
-              onClick={handleOk}
+            <Button
+              onClick={handleCancel}
+              id='cancel'
+              label={strings.CANCEL}
+              priority='secondary'
+              type='passive'
+              className={classes.spacing}
             />
+            <Button onClick={handleOk} id='saveSpecie' label={strings.SAVE} />
           </Box>
         </Box>
       </DialogActions>
@@ -198,7 +212,9 @@ function NewSpecieModalContent(props: ContentProps): JSX.Element {
   const classes = useStyles();
 
   const speciesNames = useRecoilValue(speciesNamesSelector);
-  const speciesNamesBySpeciesId = useRecoilValue(speciesNamesBySpeciesIdSelector);
+  const speciesNamesBySpeciesId = useRecoilValue(
+    speciesNamesBySpeciesIdSelector
+  );
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newSpecieId = parseInt(event.target.value, 10);
