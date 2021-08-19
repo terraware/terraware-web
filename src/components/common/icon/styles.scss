@@ -1,0 +1,43 @@
+@import '../../../../style-dictionary-dist/button_variables.scss';
+
+@font-face {
+  font-family: 'Inter';
+  src: local('Inter'), url(../../../fonts/Inter.ttf) format('truetype');
+}
+
+#spinner {
+  animation: Spin 1s infinite linear;
+}
+
+@keyframes Spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.tw-icon {
+  vertical-align: bottom;
+
+  &--small {
+    width: $tw-sz-btn-small-icon;
+    height: $tw-sz-btn-small-icon;
+  }
+
+  &--medium {
+    width: $tw-sz-btn-medium-icon;
+    height: $tw-sz-btn-medium-icon;
+  }
+
+  &--large {
+    width: $tw-sz-btn-large-icon;
+    height: $tw-sz-btn-large-icon;
+  }
+
+  &--xlarge {
+    width: $tw-sz-btn-x-large-icon;
+    height: $tw-sz-btn-x-large-icon;
+  }
+}
