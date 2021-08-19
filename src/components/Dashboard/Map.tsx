@@ -160,7 +160,6 @@ function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
   };
 
   const getCenter = (): { latitude: number; longitude: number } => {
-    console.log('entra');
     if (features?.length) {
       let maxLat: number = getCoordinates(features[0]).latitude;
       let minLat: number = getCoordinates(features[0]).latitude;
@@ -196,7 +195,6 @@ function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
   };
 
   const onViewportChange = (newViewport: any) => {
-    console.log({ newViewport });
     setViewport({ ...newViewport, width: 'fit' });
   };
 
@@ -222,7 +220,7 @@ function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
         mapStyle='mapbox://styles/mapbox/satellite-v9'
       >
         <NavigationControl showCompass={false} style={navControlStyle} />
-        <CenterMap center={center} />
+        <CenterMap center={center} setViewport={setViewport} />
         <div style={{ position: 'absolute', right: 0, bottom: 80 }}>
           <IconButton
             id='full-screen'
@@ -324,25 +322,31 @@ export default React.memo(Map);
 
 interface CenterMapProps {
   center: { latitude: number; longitude: number };
+  setViewport: React.Dispatch<
+    React.SetStateAction<{
+      zoom: number;
+      width: string;
+      height: string;
+    }>
+  >;
 }
 
-function CenterMap({ center }: CenterMapProps) {
+function CenterMap({ center, setViewport }: CenterMapProps) {
   const { map } = React.useContext(MapContext);
   const [lat, setLat] = React.useState(center.latitude);
   const [long, setLong] = React.useState(center.longitude);
 
   React.useEffect(() => {
     if (center && (center.longitude !== long || center.latitude !== lat)) {
-      console.log([center.longitude, center.latitude]);
-      console.log(map);
       map.jumpTo({
         center: [center.longitude, center.latitude],
         essential: true,
       });
+      setViewport({ ...DEFAULT_VIEWPORT, height: '60vh' });
       setLat(center.latitude);
       setLong(center.longitude);
     }
-  }, [center, map]);
+  }, [center, lat, long, map, setViewport]);
 
   return null;
 }
