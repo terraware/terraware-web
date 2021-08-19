@@ -1,6 +1,5 @@
 import MomentUtils from '@date-io/moment';
 import {
-  Chip,
   Container,
   createStyles,
   Grid,
@@ -8,7 +7,7 @@ import {
   InputAdornment,
   makeStyles,
   Paper,
-  Typography
+  Typography,
 } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import SearchIcon from '@material-ui/icons/Search';
@@ -21,11 +20,12 @@ import { plantsPlantedFeaturesSelector } from '../../state/selectors/plantsPlant
 import {
   plantsByFeatureIdFilteredSelector,
   plantsPlantedFiltersAtom,
-  SearchOptions
+  SearchOptions,
 } from '../../state/selectors/plantsPlantedFiltered';
 import speciesNamesSelector from '../../state/selectors/speciesNames';
 import speciesNamesBySpeciesIdSelector from '../../state/selectors/speciesNamesBySpeciesId';
 import strings from '../../strings';
+import Button from '../common/button/Button';
 import DatePicker from '../common/DatePicker';
 import Dropdown from '../common/Dropdown';
 import Table from '../common/table';
@@ -50,10 +50,8 @@ const useStyles = makeStyles((theme) =>
     filtersIcon: {
       marginRight: theme.spacing(1),
     },
-    applyFilters: {
-      border: `2px solid ${theme.palette.gray[800]}`,
-      background: 'none',
-      color: theme.palette.gray[800],
+    buttonSpacing: {
+      marginLeft: theme.spacing(1),
     },
   })
 );
@@ -227,22 +225,21 @@ export default function AllPlants(): JSX.Element {
                   }}
                 />
               </Grid>
-              <Grid item xs={1}>
-                <Chip
+              <Grid item xs={2}>
+                <Button
                   id='apply-filters'
-                  size='medium'
                   label={strings.APPLY_FILTERS}
                   onClick={onApplyFilters}
-                  className={classes.applyFilters}
+                  type='passive'
+                  priority='secondary'
                 />
-              </Grid>
-              <Grid item xs={1}>
-                <Chip
+                <Button
                   id='clear-filters'
-                  size='medium'
                   label={strings.CLEAR_FILTERS}
                   onClick={onClearFilters}
-                  className={classes.applyFilters}
+                  type='passive'
+                  priority='secondary'
+                  className={classes.buttonSpacing}
                 />
               </Grid>
               <Grid item xs={1} />
@@ -277,11 +274,7 @@ function AllPlantsContent({ onEditPlant }: AllPlantsProps): JSX.Element {
   const plantsForTable = React.useMemo(() => {
     let plantsToReturn: PlantForTable[] = [];
 
-    if (
-      features &&
-      plantsByFeatureFiltered &&
-      speciesBySpeciesId
-    ) {
+    if (features && plantsByFeatureFiltered && speciesBySpeciesId) {
       plantsToReturn = features.reduce((_acum, feature) => {
         if (feature.id && plantsByFeatureFiltered[feature.id]) {
           const plant = plantsByFeatureFiltered[feature.id];

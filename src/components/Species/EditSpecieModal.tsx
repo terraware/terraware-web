@@ -1,4 +1,4 @@
-import { Box, Chip, Grid, Typography } from '@material-ui/core';
+import { Box, Grid, Typography } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -13,16 +13,12 @@ import sessionSelector from '../../state/selectors/session';
 import speciesNamesSelector from '../../state/selectors/speciesNames';
 import strings from '../../strings';
 import useForm from '../../utils/useForm';
-import CancelButton from '../common/CancelButton';
+import Button from '../common/button/Button';
 import DialogCloseButton from '../common/DialogCloseButton';
 import TextField from '../common/TextField';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    submit: {
-      marginLeft: theme.spacing(2),
-      color: theme.palette.common.white,
-    },
     actions: {
       display: 'flex',
       justifyContent: 'space-between',
@@ -33,6 +29,9 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     paper: {
       minWidth: '500px',
+    },
+    spacing: {
+      marginRight: theme.spacing(2),
     },
   })
 );
@@ -121,14 +120,18 @@ export default function EditSpecieModal(props: Props): JSX.Element {
         <Box width={'100%'} className={classes.actions}>
           <Box />
           <Box>
-            <CancelButton onClick={handleCancel} />
-            <Chip
-              id='save-specie'
-              className={classes.submit}
-              label={props.value ? strings.SAVE : strings.ADD}
-              clickable
-              color='primary'
+            <Button
+              onClick={handleCancel}
+              id='cancel'
+              label={strings.CANCEL}
+              priority='secondary'
+              type='passive'
+              className={classes.spacing}
+            />
+            <Button
               onClick={handleOk}
+              id='save-specie'
+              label={props.value ? strings.SAVE : strings.ADD}
             />
           </Box>
         </Box>
