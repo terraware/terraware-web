@@ -5,7 +5,12 @@ import CreateIcon from '@material-ui/icons/Create';
 import FullscreenIcon from '@material-ui/icons/Fullscreen';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import React from 'react';
-import ReactMapGL, { Marker, NavigationControl, Popup } from 'react-map-gl';
+import ReactMapGL, {
+  MapContext,
+  Marker,
+  NavigationControl,
+  Popup,
+} from 'react-map-gl';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { Feature } from '../../api/types/feature';
 import { Plant } from '../../api/types/plant';
@@ -205,6 +210,7 @@ function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
         onClose={onCloseEditPlantModal}
         value={selectedPlantForTable}
       />
+
       <ReactMapGL
         latitude={center.latitude}
         longitude={center.longitude}
@@ -214,6 +220,7 @@ function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
         mapStyle='mapbox://styles/mapbox/satellite-v9'
       >
         <NavigationControl showCompass={false} style={navControlStyle} />
+        <CenterMap center={center} setViewport={setViewport} />
         <div style={{ position: 'absolute', right: 0, bottom: 80 }}>
           <IconButton
             id='full-screen'
@@ -312,3 +319,34 @@ function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
 }
 
 export default React.memo(Map);
+
+interface CenterMapProps {
+  center: { latitude: number; longitude: number };
+  setViewport: React.Dispatch<
+    React.SetStateAction<{
+      zoom: number;
+      width: string;
+      height: string;
+    }>
+  >;
+}
+
+function CenterMap({ center, setViewport }: CenterMapProps) {
+  const { map } = React.useContext(MapContext);
+  const [lat, setLat] = React.useState(center.latitude);
+  const [long, setLong] = React.useState(center.longitude);
+
+  React.useEffect(() => {
+    if (center && (center.longitude !== long || center.latitude !== lat)) {
+      map.jumpTo({
+        center: [center.longitude, center.latitude],
+        essential: true,
+      });
+      setViewport({ ...DEFAULT_VIEWPORT, height: '60vh' });
+      setLat(center.latitude);
+      setLong(center.longitude);
+    }
+  }, [center, lat, long, map, setViewport]);
+
+  return null;
+}
