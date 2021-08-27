@@ -31,10 +31,10 @@ export default function NavBar(): JSX.Element | null {
         selected={isDashboardRoute ? true : false}
         onClick={() => navigate('/dashboard')}
       />
-      <NavItem label='Seeds' icon='seeds' onClick={() => {}}>
+      <NavItem label='Seeds' icon='seeds'>
         <SubNavbar>
-          <NavItem label='Summary' selected={false} onClick={() => {}} />
-          <NavItem label='Accessions' selected={false} onClick={() => {}} />
+          <NavItem label='Summary' selected={false} />
+          <NavItem label='Accessions' selected={false} />
         </SubNavbar>
       </NavItem>
       <NavItem
@@ -50,15 +50,10 @@ export default function NavBar(): JSX.Element | null {
         onClick={() => navigate('/species')}
       />
       <NavSection />
-      <NavItem
-        label='Projects'
-        icon='folder'
-        selected={false}
-        onClick={() => {}}
-      />
-      <NavItem label='Sites' icon='site' selected={false} onClick={() => {}} />
+      <NavItem label='Projects' icon='folder' selected={false} />
+      <NavItem label='Sites' icon='site' selected={false} />
       <NavSection />
-      <NavItem label='Admin' icon='key' selected={false} onClick={() => {}} />
+      <NavItem label='Admin' icon='key' selected={false} />
       <NavItem
         label={strings.LOGOUT}
         icon='key'
