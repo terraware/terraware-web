@@ -54,6 +54,7 @@ const useStyles = makeStyles((theme) =>
       padding: theme.spacing(1),
       marginRight: theme.spacing(1),
       marginTop: theme.spacing(1),
+      zIndex: 10,
       '&:hover': {
         backgroundColor: theme.palette.common.white,
       },
@@ -67,6 +68,7 @@ const useStyles = makeStyles((theme) =>
 const navControlStyle = {
   right: 10,
   bottom: 10,
+  zIndex: 10,
 };
 
 const DEFAULT_VIEWPORT = { zoom: 8, width: 'fit', height: '100%' };
