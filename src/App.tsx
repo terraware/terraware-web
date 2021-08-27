@@ -1,10 +1,15 @@
-import { createStyles, CssBaseline, makeStyles, ThemeProvider } from '@material-ui/core';
+import {
+  createStyles,
+  CssBaseline,
+  makeStyles,
+  ThemeProvider,
+} from '@material-ui/core';
 import React from 'react';
 import {
   BrowserRouter as Router,
   Route,
   Switch,
-  useHistory
+  useHistory,
 } from 'react-router-dom';
 import { RecoilRoot, useRecoilValue } from 'recoil';
 import AllPlants from './components/AllPlants';
@@ -38,12 +43,9 @@ export default function App() {
 
 const useStyles = makeStyles(() =>
   createStyles({
-    menu: {
-      width: '160px',
-    },
     content: {
-      marginLeft: '160px',
-    }
+      marginLeft: '200px',
+    },
   })
 );
 
