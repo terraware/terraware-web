@@ -11,10 +11,11 @@ export interface NavItemProps {
   selected?: boolean;
   isSubItem?: boolean;
   onClick?: (open: boolean | undefined) => void;
+  id?: string;
 }
 
 export default function NavItem(props: NavItemProps): JSX.Element {
-  const { label, icon, children, selected, onClick } = props;
+  const { label, icon, children, selected, onClick, id } = props;
 
   const hasChildrenSelected = () => {
     if (children) {
@@ -61,7 +62,7 @@ export default function NavItem(props: NavItemProps): JSX.Element {
         hasChildrenSelected() ? 'nav-item--children-selected' : ''
       }`}
     >
-      <button className='nav-item-content' onClick={onClickHandler}>
+      <button className='nav-item-content' onClick={onClickHandler} id={id}>
         {icon && <Icon name={icon} className='nav-item--icon' />}
         <span className='nav-item--label'>{label}</span>
         {children && (

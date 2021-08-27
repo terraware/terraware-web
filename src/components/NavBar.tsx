@@ -30,6 +30,7 @@ export default function NavBar(): JSX.Element | null {
         icon='home'
         selected={isDashboardRoute ? true : false}
         onClick={() => navigate('/dashboard')}
+        id='dashboard'
       />
       <NavItem label='Seeds' icon='seeds'>
         <SubNavbar>
@@ -42,12 +43,14 @@ export default function NavBar(): JSX.Element | null {
         icon='restorationSite'
         selected={isPlantsRoute ? true : false}
         onClick={() => navigate('/plants')}
+        id='plants'
       />
       <NavItem
         label={strings.SPECIES}
         icon='species'
         selected={isSpeciesRoute ? true : false}
         onClick={() => navigate('/species')}
+        id='species'
       />
       <NavSection />
       <NavItem label='Projects' icon='folder' selected={false} />
@@ -59,6 +62,7 @@ export default function NavBar(): JSX.Element | null {
         icon='key'
         selected={false}
         onClick={logout}
+        id='logout'
       />
     </Navbar>
   );
