@@ -1,8 +1,11 @@
 -- Add a dummy user for CI tests. In tests, we'll bypass the login flow by passing
 -- authentication information that would normally be added by OAuth2 Proxy.
-INSERT INTO users (id, auth_id, email, super_admin, created_time, modified_time)
-VALUES (1, 'dummy-auth-id', 'nobody@terraformation.com', false, NOW(), NOW())
+INSERT INTO users (id, auth_id, email, first_name, last_name, user_type_id, created_time,
+                   modified_time)
+VALUES (1, 'dummy-auth-id', 'nobody@terraformation.com', 'Test', 'User', 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET auth_id = excluded.auth_id,
+                               first_name = excluded.first_name,
+                               last_name = excluded.last_name,
                                email = excluded.email;
 
 -- Insert some dummy data into the database for demo purposes
