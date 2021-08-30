@@ -24,7 +24,7 @@ export default function NavItem(props: NavItemProps): JSX.Element {
         if (Array.isArray(subChildren)) {
           return subChildren.some((subChild) => subChild.props.selected);
         }
-        
+
         return subChildren.props.selected;
       }
     }
