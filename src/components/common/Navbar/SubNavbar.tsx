@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { PropsWithChildren, ReactElement } from 'react';
+import { NavItemProps } from './NavItem';
 import './styles.scss';
 
 export interface SubNavbarProps {
-  children: JSX.Element | JSX.Element[];
+  children:
+    | ReactElement<PropsWithChildren<NavItemProps>>
+    | ReactElement<PropsWithChildren<NavItemProps>>[];
 }
 
 export default function SubNavbar(props: SubNavbarProps): JSX.Element {

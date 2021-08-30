@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { ReactComponent as Logo } from './logo.svg';
 import './styles.scss';
 
 export interface Props {
-  children: JSX.Element | JSX.Element[];
+  children: ReactNode;
 }
 
 export default function Navbar(props: Props): JSX.Element {
