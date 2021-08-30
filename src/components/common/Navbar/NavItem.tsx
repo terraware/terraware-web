@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, ReactElement } from 'react';
+import React, { ReactElement } from 'react';
 import Icon from '../icon/Icon';
 import { IconName } from '../icon/icons';
 import './styles.scss';
@@ -7,7 +7,7 @@ import { SubNavbarProps } from './SubNavbar';
 export interface NavItemProps {
   label: string;
   icon?: IconName;
-  children?: JSX.Element;
+  children?: ReactElement<SubNavbarProps>;
   selected?: boolean;
   isSubItem?: boolean;
   onClick?: (open: boolean | undefined) => void;
@@ -19,31 +19,20 @@ export default function NavItem(props: NavItemProps): JSX.Element {
 
   const hasChildrenSelected = () => {
     if (children) {
-      const item = children as unknown as ReactElement<
-        PropsWithChildren<SubNavbarProps>
-      >;
-      if (item.props.children) {
-        const subChildren = item.props.children;
+      if (children.props.children) {
+        const subChildren = children.props.children;
         if (Array.isArray(subChildren)) {
-          return subChildren.some((subChild) => {
-            const subItem = subChild as ReactElement<
-              PropsWithChildren<NavItemProps>
-            >;
-
-            return subItem.props.selected;
-          });
-        } else {
-          const subItem = subChildren as ReactElement<
-            PropsWithChildren<NavItemProps>
-          >;
-
-          return subItem.props.selected;
+          return subChildren.some((subChild) => subChild.props.selected);
         }
+        
+        return subChildren.props.selected;
       }
     }
 
     return false;
   };
+
+  const [open, setOpen] = React.useState(hasChildrenSelected());
 
   const onClickHandler = () => {
     if (onClick) {
@@ -53,8 +42,6 @@ export default function NavItem(props: NavItemProps): JSX.Element {
       setOpen(!open);
     }
   };
-
-  const [open, setOpen] = React.useState(hasChildrenSelected());
 
   return (
     <div
