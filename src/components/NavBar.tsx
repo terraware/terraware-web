@@ -32,6 +32,7 @@ export default function NavBar(): JSX.Element | null {
         onClick={() => navigate('/dashboard')}
         id='dashboard'
       />
+      <NavSection title={strings.FLORA} />
       <NavItem label='Seeds' icon='seeds'>
         <SubNavbar>
           <NavItem label='Summary' selected={false} />
