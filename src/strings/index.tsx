@@ -46,7 +46,8 @@ const strings = new LocalizedStrings({
     GROWTH_SINCE_LAST_WEEK: '{0}% since last week',
     LOADING: 'Loading...',
     PROJECTS: 'Projects',
-    OR: 'OR'
+    OR: 'OR',
+    FLORA: 'Flora',
   },
 });
 

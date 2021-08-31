@@ -25,6 +25,15 @@
     .divider {
       border-top: $tw-sz-dvdr-stroke solid $tw-clr-dvdr-fill;
     }
+
+    &--title {
+      font-family: $tw-fnt-nvgtn-side-nav-section-title-font-family;
+      font-size: $tw-fnt-nvgtn-side-nav-section-title-font-size;
+      font-weight: $tw-fnt-nvgtn-side-nav-section-title-font-weight;
+      line-height: $tw-fnt-nvgtn-side-nav-section-title-line-height;
+      text-transform: $tw-fnt-nvgtn-side-nav-section-title-text-transform;
+      color: $tw-clr-nvgtn-side-nav-section-title;
+    }
   }
 
   .nav-item {
@@ -92,13 +101,13 @@
 
     &--selected:before {
       content: '';
-      border: $tw-sz-nvgtn-side-nav-item-indicator solid
-        $tw-clr-nvgtn-side-nav-item-indicator-fill;
       border-bottom-right-radius: $tw-sz-nvgtn-side-nav-item-indicator;
       border-top-right-radius: $tw-sz-nvgtn-side-nav-item-indicator;
       position: absolute;
       top: 0;
       bottom: 0;
+      width: $tw-sz-nvgtn-side-nav-item-indicator;
+      background-color: $tw-clr-nvgtn-side-nav-item-indicator-fill;
     }
 
     &--icon {
@@ -112,7 +121,7 @@
     &--arrow {
       height: $tw-sz-icon-small;
       width: $tw-sz-icon-small;
-      margin-right: $tw-spc-base-x-small;
+      margin-left: $tw-spc-base-x-small;
 
       path {
         fill: $tw-clr-icon-fill-gray;

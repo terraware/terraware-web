@@ -10,8 +10,8 @@ export default function NavSection(props: Props): JSX.Element {
 
   return (
     <div className='nav-section'>
-      {title && <span>{title}</span>}
-      <div className='divider' />
+      {title && <span className='nav-section--title'>{title}</span>}
+      {!title && <div className='divider' />}
     </div>
   );
 }
