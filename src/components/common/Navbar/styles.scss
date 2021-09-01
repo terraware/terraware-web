@@ -1,4 +1,4 @@
-@import '../../../../style-dictionary-dist/system_variables.scss';
+@import '../../../../style-dictionary-dist/navbar_variables.scss';
 
 @font-face {
   font-family: 'Inter';
@@ -61,7 +61,6 @@
 
     &:hover {
       background-color: $tw-clr-nvgtn-side-nav-item-fill-hover;
-
       // .nav-item {
       //   background-color: $tw-clr-nvgtn-side-nav-item-fill-hover;
       // }
