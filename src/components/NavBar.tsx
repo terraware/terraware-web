@@ -1,5 +1,7 @@
 import { useHistory, useRouteMatch } from 'react-router-dom';
 import { useResetRecoilState } from 'recoil';
+import { plantsPlantedSelector } from '../state/selectors/plantsPlanted';
+import { plantsPlantedFilteredSelector } from '../state/selectors/plantsPlantedFiltered';
 import sessionSelector from '../state/selectors/session';
 import strings from '../strings';
 import Navbar from './common/Navbar/Navbar';
@@ -14,6 +16,10 @@ export default function NavBar(): JSX.Element | null {
   const isSpeciesRoute = useRouteMatch('/species/');
   const isPlantsRoute = useRouteMatch('/plants/');
   const resetSession = useResetRecoilState(sessionSelector);
+  const resetPlantsPlanted = useResetRecoilState(plantsPlantedSelector);
+  const resetPlantsPlantedFiltered = useResetRecoilState(
+    plantsPlantedFilteredSelector
+  );
 
   const logout = () => {
     resetSession();
@@ -23,13 +29,23 @@ export default function NavBar(): JSX.Element | null {
     history.push(url);
   };
 
+  const navigateToDashboard = () => {
+    resetPlantsPlanted();
+    navigate('/dashboard');
+  };
+
+  const navigateToAllPlants = () => {
+    resetPlantsPlantedFiltered();
+    navigate('/plants');
+  };
+
   return (
     <Navbar>
       <NavItem
         label='Home'
         icon='home'
         selected={isDashboardRoute ? true : false}
-        onClick={() => navigate('/dashboard')}
+        onClick={() => navigateToDashboard()}
         id='dashboard'
       />
       <NavSection title={strings.FLORA} />
@@ -43,7 +59,7 @@ export default function NavBar(): JSX.Element | null {
         label={strings.ALL_PLANTS}
         icon='restorationSite'
         selected={isPlantsRoute ? true : false}
-        onClick={() => navigate('/plants')}
+        onClick={() => navigateToAllPlants()}
         id='plants'
       />
       <NavItem
