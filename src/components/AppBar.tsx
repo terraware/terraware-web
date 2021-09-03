@@ -2,6 +2,7 @@ import { AppBar, Grid, Toolbar } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
+import ErrorBoundary from '../ErrorBoundary';
 import projectIdSelector from '../state/selectors/projectId';
 import projectsSelector from '../state/selectors/projects';
 import strings from '../strings';
@@ -11,6 +12,7 @@ const useStyles = makeStyles((theme) =>
   createStyles({
     appBar: {
       background: theme.palette.common.white,
+      color: theme.palette.common.black,
     },
   })
 );
@@ -23,9 +25,11 @@ export default function NavBar(): JSX.Element | null {
       <Toolbar>
         <Grid container spacing={3}>
           <Grid item>
-            <React.Suspense fallback={strings.LOADING}>
-              <ProjectsDropdown />
-            </React.Suspense>
+            <ErrorBoundary>
+              <React.Suspense fallback={strings.LOADING}>
+                <ProjectsDropdown />
+              </React.Suspense>
+            </ErrorBoundary>
           </Grid>
         </Grid>
       </Toolbar>

@@ -1,6 +1,7 @@
 import 'mapbox-gl/dist/mapbox-gl.css';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
+import ErrorBoundary from '../../ErrorBoundary';
 import { uniquePhotoForFeatureSelectorFamily } from '../../state/selectors/photos';
 import strings from '../../strings';
 
@@ -11,9 +12,11 @@ interface Props {
 
 export default function PlantWrapper(props: Props): JSX.Element {
   return (
-    <React.Suspense fallback={strings.LOADING}>
-      <PlantPhoto {...props} />
-    </React.Suspense>
+    <ErrorBoundary>
+      <React.Suspense fallback={strings.LOADING}>
+        <PlantPhoto {...props} />
+      </React.Suspense>
+    </ErrorBoundary>
   );
 }
 

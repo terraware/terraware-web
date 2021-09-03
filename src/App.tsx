@@ -75,11 +75,13 @@ function AppContent() {
           </div>
           <div className={classes.content}>
             <AppBar />
-            <Switch>
-              <Route exact path='/dashboard' component={Dashboard} />
-              <Route exact path='/plants' component={AllPlants} />
-              <Route exact path='/species' component={Species} />
-            </Switch>
+            <ErrorBoundary>
+              <Switch>
+                <Route exact path='/dashboard' component={Dashboard} />
+                <Route exact path='/plants' component={AllPlants} />
+                <Route exact path='/species' component={Species} />
+              </Switch>
+            </ErrorBoundary>
           </div>
         </>
       )}
