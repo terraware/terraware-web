@@ -20,7 +20,6 @@ describe('All plants', () => {
     cy.get('#row1-date').should('contain', dateStr);
     cy.get('#row1-species').should('contain', 'Other');
     cy.get('#row1-geolocation').should('contain', '45.467135, -75.546518');
-    cy.get('#row1-photo').find("img").should('exist');
     cy.get('#row1-notes').should('contain', 'Testing notes');
   });
 
