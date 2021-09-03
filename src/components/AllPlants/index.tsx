@@ -323,6 +323,5 @@ const columns: TableColumnType[] = [
   { key: 'date', name: strings.DATE, type: 'date' },
   { key: 'species', name: strings.SPECIES, type: 'string' },
   { key: 'geolocation', name: strings.GEOLOCATION, type: 'string' },
-  { key: 'photo', name: strings.PHOTO, type: 'string' },
   { key: 'notes', name: strings.NOTES, type: 'string' },
 ];

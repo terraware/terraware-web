@@ -8,7 +8,7 @@ export const getFeatures = async (
   token: TokenResponse,
   layerId: number
 ): Promise<Feature[]> => {
-  const endpoint = `${BASE_URL}?layer_id=${layerId}&crs=4326`;
+  const endpoint = `${BASE_URL}?layer_id=${layerId}&crs=4326&limit=5000`;
 
   return (
     await axios.get(endpoint, {
