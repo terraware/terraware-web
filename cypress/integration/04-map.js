@@ -2,6 +2,9 @@
 /// <reference types="cypress" />
 
 describe('Map', () => {
+  beforeEach(() => {
+    cy.visit('/');
+  });
   it('should render the data on the map', () => {
     cy.get('.mapboxgl-marker').should('have.length', 4);
   });

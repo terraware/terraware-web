@@ -42,7 +42,7 @@
     "generate-types": "npx openapi-typescript https://maps.terraware.io/openapi.json  --output src/api/types/generated-schema.ts",
     "cy:run": "TZ=UTC cypress run",
     "cy": "TZ=UTC cypress open",
-    "e2e": "start-server-and-test start:dev http://localhost:4000 cy:run && yarn e2e:report",
+    "e2e": "start-server-and-test start:dev http://localhost:3000 cy:run && yarn e2e:report",
     "e2e:report": "npx nyc report --reporter=text",
     "lint": "tslint --project tsconfig.json",
     "docker:start": "./scripts/launch_server.sh",

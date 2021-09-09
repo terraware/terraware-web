@@ -5,7 +5,12 @@ import {
   ThemeProvider,
 } from '@material-ui/core';
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Redirect,
+  Route,
+  Switch,
+} from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
 import AllPlants from './components/AllPlants';
 import AppBar from './components/AppBar';
@@ -56,6 +61,9 @@ function AppContent() {
           <AppBar />
           <ErrorBoundary>
             <Switch>
+              <Route exact path='/'>
+                <Redirect to='/dashboard' />
+              </Route>
               <Route exact path='/dashboard' component={Dashboard} />
               <Route exact path='/plants' component={AllPlants} />
               <Route exact path='/species' component={Species} />
