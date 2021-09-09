@@ -4,11 +4,7 @@
 describe('Summary', () => {
   beforeEach(() => {
     cy.visit('/');
-    cy.get('#username').type(Cypress.env('user'));
-    cy.get('#password').type(Cypress.env('pass'));
-    cy.get('#login').click().url().should('contain', '/dashboard');
   });
-
   it('has the right summary results in the first project', () => {
     cy.get('#summary-Plants').contains('4 Plants');
     cy.get('#summary-Species').contains('2 Species');
@@ -20,14 +16,14 @@ describe('Summary', () => {
 
   context('Changing projects', () => {
     beforeEach(() => {
-      cy.get('#projects').click()
-      cy.get('#2').click()
+      cy.get('#projects').click();
+      cy.get('#2').click();
     });
 
     it('should change project correctly', () => {
-      cy.get('#projects').contains('Future Forests')
+      cy.get('#projects').contains('Future Forests');
     });
-  
+
     it('has the right summary results in the second project', () => {
       cy.get('#summary-Plants').contains('0 Plants');
       cy.get('#summary-Species').contains('0 Species');
@@ -37,5 +33,4 @@ describe('Summary', () => {
       cy.get('#Plants-arrow-increase').should('not.exist');
     });
   });
-
 });

@@ -1,3 +1,6 @@
+/* eslint-disable no-undef */
+/// <reference types="cypress" />
+
 // ***********************************************************
 // This example support/index.js is processed and
 // loaded automatically before your test files.
@@ -14,7 +17,15 @@
 // ***********************************************************
 
 // Import commands.js using ES2015 syntax:
-import './commands'
+import './commands';
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
+
+// Make all requests look like they are properly authenticated via OAuth2 Proxy
+// so we don't have to depend on a Keycloak server to run the test suite.
+beforeEach(() => {
+  cy.intercept({ pathname: '/api/**', middleware: true }, (req) => {
+    req.headers['X-Forwarded-User'] = 'dummy-auth-id';
+  });
+});

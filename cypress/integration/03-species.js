@@ -4,9 +4,6 @@
 describe('Species', () => {
   beforeEach(() => {
     cy.visit('/');
-    cy.get('#username').type(Cypress.env('user'));
-    cy.get('#password').type(Cypress.env('pass'));
-    cy.get('#login').click().url().should('contain', '/dashboard');
     cy.get('#species').click().url().should('contain', '/species');
   });
 
