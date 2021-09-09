@@ -4,12 +4,11 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import { useRecoilValue, useResetRecoilState } from 'recoil';
+import { useResetRecoilState } from 'recoil';
 import { deleteSpecies } from '../../api/species';
 import { deleteSpeciesName } from '../../api/speciesNames';
 import { SpeciesName } from '../../api/types/species';
 import { plantsPlantedFeaturesSelector } from '../../state/selectors/plantsPlantedFeatures';
-import sessionSelector from '../../state/selectors/session';
 import speciesNamesSelector from '../../state/selectors/speciesNames';
 import strings from '../../strings';
 import Button from '../common/button/Button';
@@ -43,7 +42,6 @@ export interface Props {
 export default function DeleteConfirmationModal(props: Props): JSX.Element {
   const classes = useStyles();
   const { onClose, open, speciesName } = props;
-  const session = useRecoilValue(sessionSelector);
   const resetSpecies = useResetRecoilState(speciesNamesSelector);
   const resetPlantsPlantedFeatures = useResetRecoilState(
     plantsPlantedFeaturesSelector
@@ -54,9 +52,9 @@ export default function DeleteConfirmationModal(props: Props): JSX.Element {
   };
 
   const handleOk = async () => {
-    if (session && speciesName.id) {
-      await deleteSpeciesName(speciesName.id, session);
-      await deleteSpecies(speciesName.species_id, session);
+    if (speciesName.id) {
+      await deleteSpeciesName(speciesName.id);
+      await deleteSpecies(speciesName.species_id);
       resetSpecies();
       resetPlantsPlantedFeatures();
     }

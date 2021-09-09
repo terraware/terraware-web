@@ -2,7 +2,6 @@ import { atom, selector } from 'recoil';
 import { getPlants } from '../../api/plants';
 import { Plant } from '../../api/types/plant';
 import { plantsPlantedLayerSelector } from './layers';
-import sessionSelector from './session';
 
 export const plantsPlantedPlantsAtom = atom({
   key: 'plantsPlantedPlantsAtom',
@@ -13,10 +12,9 @@ export const plantsPlantedSelector = selector<Plant[] | undefined>({
   key: 'plantsPlantedPlantsSelector',
   get: async ({ get }) => {
     get(plantsPlantedPlantsAtom);
-    const session = get(sessionSelector);
     const plantLayer = get(plantsPlantedLayerSelector);
-    if (session && plantLayer?.id) {
-      const plants: Plant[] = await getPlants(session, plantLayer.id);
+    if (plantLayer?.id) {
+      const plants: Plant[] = await getPlants(plantLayer.id);
 
       return plants;
     }

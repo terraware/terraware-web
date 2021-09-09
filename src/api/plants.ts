@@ -1,76 +1,42 @@
 import axios from 'axios';
 import { SearchOptions } from '../state/selectors/plantsPlantedFiltered';
-import { TokenResponse } from './types/auth';
 import { Plant, PlantSummary } from './types/plant';
 
 const BASE_URL = `${process.env.REACT_APP_TERRAWARE_API}/api/v1/plants`;
 
-export const getPlants = async (
-  token: TokenResponse,
-  layerId: number
-): Promise<Plant[]> => {
+export const getPlants = async (layerId: number): Promise<Plant[]> => {
   const endpoint = `${BASE_URL}?layer_id=${layerId}`;
 
-  return (
-    await axios.get(endpoint, {
-      headers: {
-        Authorization: `${token.token_type} ${token.access_token}`,
-      },
-    })
-  ).data.plants;
+  return (await axios.get(endpoint)).data.plants;
 };
 
 export const getPlantSummary = async (
-  token: TokenResponse,
   layerId: number,
   maxEnteredTime: string
 ): Promise<PlantSummary[]> => {
   const endpoint = `${BASE_URL}?layer_id=${layerId}&max_entered_time=${maxEnteredTime}&summary=true`;
 
-  return (
-    await axios.get(endpoint, {
-      headers: {
-        Authorization: `${token.token_type} ${token.access_token}`,
-      },
-    })
-  ).data.species_counts;
+  return (await axios.get(endpoint)).data.species_counts;
 };
 
-export const deletePlant = async (
-  token: TokenResponse,
-  featureId: number
-): Promise<Plant> => {
+export const deletePlant = async (featureId: number): Promise<Plant> => {
   const endpoint = `${BASE_URL}/${featureId}`;
 
-  return (
-    await axios.delete(endpoint, {
-      headers: {
-        Authorization: `${token.token_type} ${token.access_token}`,
-      },
-    })
-  ).data;
+  return (await axios.delete(endpoint)).data;
 };
 
 export const putPlant = async (
-  token: TokenResponse,
   featureId: number,
   plant: Plant
 ): Promise<Plant> => {
   const endpoint = `${BASE_URL}/${featureId}`;
 
-  return (
-    await axios.put(endpoint, plant, {
-      headers: {
-        Authorization: `${token.token_type} ${token.access_token}`,
-      },
-    })
-  ).data;
+  return (await axios.put(endpoint, plant)).data;
 };
 
 type SearchOptionsKeys = keyof SearchOptions;
 
 export const getPlantsFiltered = async (
-  token: TokenResponse,
   layerId: number,
   filters: SearchOptions
 ): Promise<Plant[]> => {
@@ -83,11 +49,5 @@ export const getPlantsFiltered = async (
     }
   });
 
-  return (
-    await axios.get(endpoint, {
-      headers: {
-        Authorization: `${token.token_type} ${token.access_token}`,
-      },
-    })
-  ).data.plants;
+  return (await axios.get(endpoint)).data.plants;
 };

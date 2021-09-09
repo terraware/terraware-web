@@ -2,7 +2,6 @@ import { atom, selector } from 'recoil';
 import { getPlantsFiltered } from '../../api/plants';
 import { Plant } from '../../api/types/plant';
 import { plantsPlantedLayerSelector } from './layers';
-import sessionSelector from './session';
 
 export type SearchOptions = {
   species_name?: string;
@@ -41,10 +40,9 @@ export const plantsPlantedFilteredSelector = selector<Plant[] | undefined>({
   get: async ({ get }) => {
     get(plantsPlantedFilteredAtom);
     const filters = get(plantsPlantedFiltersAtom);
-    const session = get(sessionSelector);
     const plantsPlantedLayer = get(plantsPlantedLayerSelector);
-    if (session && plantsPlantedLayer?.id) {
-      return await getPlantsFiltered(session, plantsPlantedLayer?.id, filters);
+    if (plantsPlantedLayer?.id) {
+      return await getPlantsFiltered(plantsPlantedLayer?.id, filters);
     }
   },
   set: ({ set }) => {
