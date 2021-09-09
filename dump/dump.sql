@@ -35,15 +35,6 @@ VALUES (100, 10, 1, 'ohana'),
 ON CONFLICT (id) DO UPDATE SET site_id = excluded.site_id,
                                name    = excluded.name;
 
-INSERT INTO species (id, name, created_time, modified_time)
-VALUES (10000, 'Kousa Dogwood', NOW(), NOW()),
-       (10001, 'Other Dogwood', NOW(), NOW())
-ON CONFLICT (id) DO UPDATE SET name = excluded.name;
-
-INSERT INTO species_families (id, name, created_time)
-VALUES (20000, 'Dogwood', NOW())
-ON CONFLICT (id) DO UPDATE SET name = excluded.name;
-
 INSERT INTO storage_locations (id, facility_id, name, condition_id)
 VALUES (1000, 100, 'Refrigerator 1', 1),
        (1001, 100, 'Freezer 1', 2),
@@ -51,8 +42,49 @@ VALUES (1000, 100, 'Refrigerator 1', 1),
 ON CONFLICT (id) DO UPDATE SET name         = excluded.name,
                                condition_id = excluded.condition_id;
 
+DELETE FROM notifications;
+DELETE FROM accession_photos;
+DELETE FROM photos;
+DELETE FROM geolocations;
+DELETE FROM bags;
+DELETE FROM germinations;
+DELETE FROM germination_tests;
+DELETE FROM withdrawals;
+DELETE FROM accession_germination_test_types;
+DELETE FROM accession_secondary_collectors;
+DELETE FROM accession_state_history;
+DELETE FROM accessions;
+DELETE FROM app_devices;
+DELETE FROM family_names;
+DELETE FROM families;
+DELETE FROM species_names;
+DELETE FROM species;
+
+INSERT INTO species (id, name, is_scientific, created_time, modified_time)
+VALUES (10000, 'Kousa Dogwood', false, NOW(), NOW()),
+       (10001, 'Other Dogwood', false, NOW(), NOW())
+ON CONFLICT (id) DO UPDATE SET name = excluded.name,
+                               is_scientific = excluded.is_scientific;
+
+INSERT INTO species_names (species_id, name, is_scientific, created_time, modified_time)
+SELECT id, name, is_scientific, created_time, modified_time
+FROM species
+ON CONFLICT (id) DO UPDATE SET name = excluded.name,
+                               is_scientific = excluded.is_scientific;
+
+INSERT INTO families (id, name, is_scientific, created_time, modified_time)
+VALUES (20000, 'Dogwood', false, NOW(), NOW())
+ON CONFLICT (id) DO UPDATE SET name = excluded.name,
+                               is_scientific = excluded.is_scientific;
+
+INSERT INTO family_names (family_id, name, is_scientific, created_time, modified_time)
+SELECT id, name, is_scientific, created_time, modified_time
+FROM families
+ON CONFLICT (id) DO UPDATE SET name = excluded.name,
+                               is_scientific = excluded.is_scientific;
+
 INSERT INTO accessions (id, number, state_id, facility_id, created_time, species_id,
-                       species_family_id, trees_collected_from)
+                       family_id, trees_collected_from)
 VALUES (1000, 'XYZ', 30, 100, '2021-01-03T15:31:20Z', 10000, 20000, 1),
        (1001, 'ABCDEFG', 20, 100, '2021-01-10T13:08:11Z', 10001, 20000, 2)
 ON CONFLICT (id) DO UPDATE SET number           = excluded.number,
@@ -78,10 +110,10 @@ ON CONFLICT (id) DO UPDATE SET type_id            = excluded.type_id,
                                read               = excluded.read,
                                message            = excluded.message,
                                accession_state_id = excluded.accession_state_id;
-                               
+
 INSERT INTO "app_devices" ("id", "app_name", "created_time") VALUES (1, 'cel', '2021-02-12 17:21:33.62729+00');
 
-INSERT INTO "accessions" ("id", "facility_id", "app_device_id", "number", "species_id", "state_id", "trees_collected_from", "species_family_id", "created_time") VALUES
+INSERT INTO "accessions" ("id", "facility_id", "app_device_id", "number", "species_id", "state_id", "trees_collected_from", "family_id", "created_time") VALUES
 (1002,	100,	1,	'AAF4D49R3E',	10000,	30,	1,	20000,	'2021-01-03 15:31:20+00');
 
 INSERT INTO "bags" ("id", "accession_id", "bag_number") VALUES
@@ -91,6 +123,9 @@ INSERT INTO "bags" ("id", "accession_id", "bag_number") VALUES
 INSERT INTO "geolocations" ("id", "accession_id", "created_time", "latitude", "longitude", "gps_accuracy") VALUES
 (1001,	1002,	'2021-02-12 17:21:33.62729+00',	9.0300000,	-79.5300000,	NULL);
 
-INSERT INTO "accession_photos" ("id", "accession_id", "filename", "uploaded_time", "captured_time", "content_type", "size", "latitude", "longitude", "gps_accuracy") VALUES
-(1001,	1002,	'accession1.jpg',	'2021-02-12 18:36:15.842405+00',	'2021-02-03 11:33:44+00',	'image/jpeg',	6441,	NULL,	NULL,	NULL),
-(1002,	1002,	'accession2.jpg',	'2021-02-12 18:36:15.903768+00',	'2021-02-03 11:33:44+00',	'image/jpeg',	6539,	NULL,	NULL,	NULL);
+INSERT INTO photos (id, captured_time, file_name, content_type, size, created_time, modified_time,
+                    storage_url) VALUES
+(1001, '2021-02-03 11:33:44+00', 'accession1.jpg', 'image/jpeg', 6441, '2021-02-12 18:36:15.842405+00', '2021-02-12 18:36:15.842405+00', 'file:///100/A/A/F/AAF4D49R3E/accession1.jpg'),
+(1002, '2021-02-03 11:33:44+00', 'accession2.jpg', 'image/jpeg', 6539, '2021-02-12 18:36:15.903768+00', '2021-02-12 18:36:15.903768+00', 'file:///100/A/A/F/AAF4D49R3E/accession2.jpg');
+
+INSERT INTO accession_photos (photo_id, accession_id) VALUES (1001, 1002), (1002, 1002);
