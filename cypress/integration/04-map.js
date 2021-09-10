@@ -4,11 +4,7 @@
 describe('Map', () => {
   beforeEach(() => {
     cy.visit('/');
-    cy.get('#username').type(Cypress.env('user'));
-    cy.get('#password').type(Cypress.env('pass'));
-    cy.get('#login').click().url().should('contain', '/dashboard');
   });
-
   it('should render the data on the map', () => {
     cy.get('.mapboxgl-marker').should('have.length', 4);
   });

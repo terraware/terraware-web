@@ -21,7 +21,6 @@ import { SpeciesName } from '../../api/types/species';
 import { plantsByFeatureIdSelector } from '../../state/selectors/plantsPlanted';
 import { plantsPlantedFeaturesSelector } from '../../state/selectors/plantsPlantedFeatures';
 import { plantsPlantedFilteredSelector } from '../../state/selectors/plantsPlantedFiltered';
-import sessionSelector from '../../state/selectors/session';
 import speciesForChartSelector from '../../state/selectors/speciesForChart';
 import speciesNamesSelector from '../../state/selectors/speciesNames';
 import speciesNamesBySpeciesIdSelector from '../../state/selectors/speciesNamesBySpeciesId';
@@ -92,7 +91,6 @@ function NewSpecieModal(props: Props): JSX.Element {
   const { onClose, open, onDelete } = props;
   const [record, setRecord] = useForm<PlantForTable>(initPlant(props.value));
 
-  const session = useRecoilValue(sessionSelector);
   const plantsByFeature = useRecoilValue(plantsByFeatureIdSelector);
   const resetPlantsPlantedFeatures = useResetRecoilState(
     plantsPlantedFeaturesSelector
@@ -122,29 +120,29 @@ function NewSpecieModal(props: Props): JSX.Element {
   };
 
   const handleOk = async () => {
-    if (session && plantsByFeature && record.featureId) {
+    if (plantsByFeature && record.featureId) {
       const previousPlant = plantsByFeature[record.featureId];
       if (record.speciesId !== undefined) {
         const newPlant = {
           ...previousPlant,
           species_id: record.speciesId !== 0 ? record.speciesId : undefined,
         };
-        await putPlant(session, record.featureId, newPlant);
+        await putPlant(record.featureId, newPlant);
         onClose(strings.SNACKBAR_MSG_CHANGES_SAVED);
 
         resetPlantsPlantedFeatures();
         resetSpeciesForChart();
         resetPlantsPlantedFiltered();
       } else if (record.species) {
-        const newSpecies = await postSpecies({}, session);
+        const newSpecies = await postSpecies({});
         if (newSpecies.id) {
           const newPlant = { ...previousPlant, species_id: newSpecies.id };
           const newSpeciesName: SpeciesName = {
             name: record.species,
             species_id: newSpecies.id,
           };
-          await postSpeciesName(newSpeciesName, session);
-          await putPlant(session, record.featureId, newPlant);
+          await postSpeciesName(newSpeciesName);
+          await putPlant(record.featureId, newPlant);
           onClose(strings.SNACKBAR_MSG_CHANGES_SAVED);
 
           resetSpeciesNames();

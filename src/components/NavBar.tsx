@@ -3,7 +3,6 @@ import { useResetRecoilState } from 'recoil';
 import { plantsPlantedSelector } from '../state/selectors/plantsPlanted';
 import { plantsPlantedFeaturesSelector } from '../state/selectors/plantsPlantedFeatures';
 import { plantsPlantedFilteredSelector } from '../state/selectors/plantsPlantedFiltered';
-import sessionSelector from '../state/selectors/session';
 import strings from '../strings';
 import Navbar from './common/Navbar/Navbar';
 import NavItem from './common/Navbar/NavItem';
@@ -16,7 +15,6 @@ export default function NavBar(): JSX.Element | null {
   const isDashboardRoute = useRouteMatch('/dashboard/');
   const isSpeciesRoute = useRouteMatch('/species/');
   const isPlantsRoute = useRouteMatch('/plants/');
-  const resetSession = useResetRecoilState(sessionSelector);
   const resetPlantsPlanted = useResetRecoilState(plantsPlantedSelector);
   const resetPlantsPlantedFiltered = useResetRecoilState(
     plantsPlantedFilteredSelector
@@ -24,10 +22,6 @@ export default function NavBar(): JSX.Element | null {
   const resetPlantsPlantedFeatures = useResetRecoilState(
     plantsPlantedFeaturesSelector
   );
-
-  const logout = () => {
-    resetSession();
-  };
 
   const navigate = (url: string) => {
     history.push(url);
@@ -79,13 +73,6 @@ export default function NavBar(): JSX.Element | null {
       <NavItem label='Sites' icon='site' selected={false} />
       <NavSection />
       <NavItem label='Admin' icon='key' selected={false} />
-      <NavItem
-        label={strings.LOGOUT}
-        icon='key'
-        selected={false}
-        onClick={logout}
-        id='logout'
-      />
     </Navbar>
   );
 }

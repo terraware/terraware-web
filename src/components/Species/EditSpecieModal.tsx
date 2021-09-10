@@ -5,11 +5,10 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React from 'react';
-import { useRecoilValue, useResetRecoilState } from 'recoil';
+import { useResetRecoilState } from 'recoil';
 import { postSpecies } from '../../api/species';
 import { postSpeciesName, putSpeciesName } from '../../api/speciesNames';
 import { SpeciesName } from '../../api/types/species';
-import sessionSelector from '../../state/selectors/session';
 import speciesNamesSelector from '../../state/selectors/speciesNames';
 import strings from '../../strings';
 import useForm from '../../utils/useForm';
@@ -56,7 +55,6 @@ export default function EditSpecieModal(props: Props): JSX.Element {
   const [record, setRecord, onChange] = useForm<SpeciesName>(
     initSpecies(props.value)
   );
-  const session = useRecoilValue(sessionSelector);
   const resetSpecies = useResetRecoilState(speciesNamesSelector);
 
   React.useEffect(() => {
@@ -72,20 +70,18 @@ export default function EditSpecieModal(props: Props): JSX.Element {
 
   const handleOk = async () => {
     let snackbarMessage = '';
-    if (session) {
-      if (record.species_id === 0) {
-        const specie = await postSpecies({}, session);
-        if (specie.id) {
-          record.species_id = specie.id;
-          await postSpeciesName(record, session);
-          snackbarMessage = strings.SNACKBAR_MSG_NEW_SPECIES_ADDED;
-        }
-      } else {
-        await putSpeciesName(record, session);
-        snackbarMessage = strings.SNACKBAR_MSG_CHANGES_SAVED;
+    if (record.species_id === 0) {
+      const specie = await postSpecies({});
+      if (specie.id) {
+        record.species_id = specie.id;
+        await postSpeciesName(record);
+        snackbarMessage = strings.SNACKBAR_MSG_NEW_SPECIES_ADDED;
       }
-      resetSpecies();
+    } else {
+      await putSpeciesName(record);
+      snackbarMessage = strings.SNACKBAR_MSG_CHANGES_SAVED;
     }
+    resetSpecies();
     onClose(snackbarMessage);
   };
 

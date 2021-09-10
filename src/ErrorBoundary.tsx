@@ -16,8 +16,9 @@ export default class ErrorBoundary extends Component<Props, State> {
   };
 
   // when an error occurred we want to update the statee
-  public static getDerivedStateFromError(_: Error): State {
+  public static getDerivedStateFromError(_e: Error): State {
     // Update state so the next render will show the fallback UI.
+
     return { hasError: true };
   }
 

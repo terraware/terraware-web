@@ -4,7 +4,6 @@ import { Feature } from '../../api/types/feature';
 import { plantsPlantedLayerSelector } from './layers';
 import { plantsPlantedSelector } from './plantsPlanted';
 import plantsSummarySelector from './plantsSummary';
-import sessionSelector from './session';
 
 export const plantsPlantedFeatureAtom = atom({
   key: 'plantsPlantedFeatureAtom',
@@ -15,10 +14,9 @@ export const plantsPlantedFeaturesSelector = selector<Feature[] | undefined>({
   key: 'plantsPlantedFeaturesSelector',
   get: async ({ get }) => {
     get(plantsPlantedFeatureAtom);
-    const session = get(sessionSelector);
     const plantsPlantedLayer = get(plantsPlantedLayerSelector);
-    if (session && plantsPlantedLayer?.id) {
-      return await getFeatures(session, plantsPlantedLayer?.id);
+    if (plantsPlantedLayer?.id) {
+      return await getFeatures(plantsPlantedLayer?.id);
     }
   },
   set: ({ set, reset }) => {
@@ -32,11 +30,13 @@ export const plantsPlantedFeaturesSelector = selector<Feature[] | undefined>({
   },
 });
 
-export const plantsPlantedFeaturesWithGeolocationSelector = selector<Feature[] | undefined>({
+export const plantsPlantedFeaturesWithGeolocationSelector = selector<
+  Feature[] | undefined
+>({
   key: 'plantsPlantedFeaturesWithGeolocationSelector',
   get: ({ get }) => {
     const features = get(plantsPlantedFeaturesSelector);
 
     return features?.filter((feature) => feature.geom);
-  }
+  },
 });

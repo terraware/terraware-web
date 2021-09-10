@@ -4,18 +4,22 @@
 describe('All plants', () => {
   beforeEach(() => {
     cy.visit('/');
-    cy.get('#username').type(Cypress.env('user'));
-    cy.get('#password').type(Cypress.env('pass'));
-    cy.get('#login').click().url().should('contain', '/dashboard');
     cy.get('#plants').click().url().should('contain', '/plants');
   });
 
   it('should render the data on the table', () => {
-    cy.get('#all-plants-table .MuiTableBody-root .MuiTableRow-root').should('have.length', 4);
+    cy.get('#all-plants-table .MuiTableBody-root .MuiTableRow-root').should(
+      'have.length',
+      4
+    );
 
     var d = new Date();
-    d.setDate(d.getDate()-7);
-    var dateStr = d.toLocaleDateString("en-US", { month: '2-digit', year: 'numeric', day: '2-digit'})
+    d.setDate(d.getDate() - 7);
+    var dateStr = d.toLocaleDateString('en-US', {
+      month: '2-digit',
+      year: 'numeric',
+      day: '2-digit',
+    });
 
     cy.get('#row1-date').should('contain', dateStr);
     cy.get('#row1-species').should('contain', 'Other');
