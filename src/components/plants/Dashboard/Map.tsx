@@ -6,17 +6,19 @@ import FullscreenIcon from '@material-ui/icons/Fullscreen';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import React from 'react';
 import ReactMapGL, {
+  Layer,
   MapContext,
   Marker,
   NavigationControl,
-  Popup
+  Popup,
+  Source,
 } from 'react-map-gl';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { Feature } from '../../../api/types/feature';
-import { ListPlantsResponseElement } from '../../../api/types/plant';
+import { Plant } from '../../../api/types/plant';
 import snackbarAtom from '../../../state/atoms/snackbar';
-import { plantsByFeatureIdSelector } from '../../../state/selectors/plants';
-import { plantsFeaturesWithGeolocationSelector } from '../../../state/selectors/plantsFeatures';
+import { plantsByFeatureIdSelector } from '../../../state/selectors/plantsPlanted';
+import { plantsPlantedFeaturesWithGeolocationSelector } from '../../../state/selectors/plantsPlantedFeatures';
 import speciesForChartSelector from '../../../state/selectors/speciesForChart';
 import strings from '../../../strings';
 import { cellDateFormatter } from '../../common/table/TableCellRenderer';
@@ -83,18 +85,62 @@ interface Props {
   isFullscreen: boolean;
 }
 
+export const clusterLayer = {
+  id: 'clusters',
+  type: 'circle',
+  source: 'earthquakes',
+  filter: ['has', 'point_count'],
+  paint: {
+    'circle-color': [
+      'step',
+      ['get', 'point_count'],
+      '#51bbd6',
+      100,
+      '#f1f075',
+      750,
+      '#f28cb1',
+    ],
+    'circle-radius': ['step', ['get', 'point_count'], 20, 100, 30, 750, 40],
+  },
+};
+
+export const clusterCountLayer = {
+  id: 'cluster-count',
+  type: 'symbol',
+  source: 'earthquakes',
+  filter: ['has', 'point_count'],
+  layout: {
+    'text-field': '{point_count_abbreviated}',
+    'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+    'text-size': 12,
+  },
+};
+
+export const unclusteredPointLayer = {
+  id: 'unclustered-point',
+  type: 'circle',
+  source: 'earthquakes',
+  filter: ['!', ['has', 'point_count']],
+  paint: {
+    'circle-color': '#11b4da',
+    'circle-radius': 4,
+    'circle-stroke-width': 1,
+    'circle-stroke-color': '#fff',
+  },
+};
+
 function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
   const classes = useStyles();
   const [selectedFeature, setSelectedFeature] = React.useState<Feature>();
   const [editPlantModalOpen, setEditPlantModalOpen] = React.useState(false);
   const [viewport, setViewport] = React.useState(DEFAULT_VIEWPORT);
 
-  const features = useRecoilValue(plantsFeaturesWithGeolocationSelector);
+  const features = useRecoilValue(plantsPlantedFeaturesWithGeolocationSelector);
   const speciesForChart = useRecoilValue(speciesForChartSelector);
   const plantsByFeatureId = useRecoilValue(plantsByFeatureIdSelector);
   const setSnackbar = useSetRecoilState(snackbarAtom);
 
-  const selectedPlant: ListPlantsResponseElement | undefined =
+  const selectedPlant: Plant | undefined =
     selectedFeature && plantsByFeatureId
       ? plantsByFeatureId[selectedFeature.id!]
       : undefined;
@@ -102,21 +148,21 @@ function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
   const selectedPlantForTable =
     selectedPlant && selectedFeature
       ? {
-        date: selectedPlant.datePlanted,
-        species: speciesForChart[selectedPlant.speciesId!]
-          ? speciesForChart[selectedPlant.speciesId!].speciesName.name
-          : undefined,
-        geolocation:
-          selectedFeature.geom &&
-            Array.isArray(selectedFeature?.geom.coordinates)
-            ? `${selectedFeature.geom.coordinates[1].toFixed(
-              6
-            )}, ${selectedFeature.geom.coordinates[0].toFixed(6)}`
+          date: selectedPlant.created_time,
+          species: speciesForChart[selectedPlant.species_id!]
+            ? speciesForChart[selectedPlant.species_id!].speciesName.name
             : undefined,
-        notes: selectedFeature.notes,
-        featureId: selectedFeature.id,
-        speciesId: selectedPlant.speciesId,
-      }
+          geolocation:
+            selectedFeature.geom &&
+            Array.isArray(selectedFeature?.geom.coordinates)
+              ? `${selectedFeature.geom.coordinates[1].toFixed(
+                  6
+                )}, ${selectedFeature.geom.coordinates[0].toFixed(6)}`
+              : undefined,
+          notes: selectedFeature.notes,
+          featureId: selectedFeature.id,
+          speciesId: selectedPlant.species_id,
+        }
       : undefined;
 
   React.useEffect(() => {
@@ -220,7 +266,67 @@ function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
         onViewportChange={onViewportChange}
         mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
         mapStyle='mapbox://styles/mapbox/satellite-v9'
+        interactiveLayerIds={[clusterLayer.id]}
       >
+        <Source
+          id='earthquakes'
+          type='geojson'
+          data='https://docs.mapbox.com/mapbox-gl-js/assets/earthquakes.geojson'
+          cluster={true}
+          clusterMaxZoom={14}
+          clusterRadius={50}
+        >
+          <Layer
+            id='clusters'
+            type='circle'
+            source='earthquakes'
+            filter={['has', 'point_count']}
+            paint={{
+              'circle-color': [
+                'step',
+                ['get', 'point_count'],
+                '#51bbd6',
+                100,
+                '#f1f075',
+                750,
+                '#f28cb1',
+              ],
+              'circle-radius': [
+                'step',
+                ['get', 'point_count'],
+                20,
+                100,
+                30,
+                750,
+                40,
+              ],
+            }}
+          />
+          <Layer
+            id='cluster-count'
+            type='symbol'
+            source='earthquakes'
+            filter={['has', 'point_count']}
+            layout={{
+              'text-field': '{point_count_abbreviated}',
+              'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+              'text-size': 12,
+            }}
+            paint={{}}
+          />
+          <Layer
+            id='unclustered-point'
+            type='circle'
+            source='earthquakes'
+            filter={['!', ['has', 'point_count']]}
+            paint={{
+              'circle-color': '#11b4da',
+              'circle-radius': 4,
+              'circle-stroke-width': 1,
+              'circle-stroke-color': '#fff',
+            }}
+          />
+        </Source>
         <NavigationControl showCompass={false} style={navControlStyle} />
         <CenterMap center={center} setViewport={setViewport} />
         <div style={{ position: 'absolute', right: 0, bottom: 80 }}>
@@ -246,8 +352,8 @@ function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
                   offsetTop={-10}
                 >
                   {iconPin(
-                    speciesForChart[plant.speciesId!]
-                      ? speciesForChart[plant.speciesId!].color
+                    speciesForChart[plant.species_id!]
+                      ? speciesForChart[plant.species_id!].color
                       : speciesForChart[0].color,
                     feature
                   )}
@@ -273,8 +379,8 @@ function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
                 variant='subtitle2'
                 id='feature-species-name'
               >
-                {selectedPlant.speciesId
-                  ? speciesForChart[selectedPlant.speciesId].speciesName.name
+                {selectedPlant.species_id
+                  ? speciesForChart[selectedPlant.species_id].speciesName.name
                   : strings.OTHER}
               </Typography>
               <Typography
@@ -283,7 +389,7 @@ function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
                 className={classes.spacing}
               >
                 {strings.AS_OF}{' '}
-                {cellDateFormatter(selectedFeature.enteredTime)}
+                {cellDateFormatter(selectedFeature.entered_time)}
               </Typography>
               <Typography
                 component='p'
@@ -304,13 +410,13 @@ function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
                 id='new-species'
                 size='medium'
                 label={
-                  selectedPlant.speciesId
+                  selectedPlant.species_id
                     ? strings.EDIT_SPECIES
                     : strings.ADD_SPECIES
                 }
                 onClick={onNewSpecie}
                 className={classes.newSpecies}
-                icon={selectedPlant.speciesId ? <CreateIcon /> : <AddIcon />}
+                icon={selectedPlant.species_id ? <CreateIcon /> : <AddIcon />}
               />
             </div>
           </Popup>
