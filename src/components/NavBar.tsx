@@ -38,6 +38,11 @@ export default function NavBar(): JSX.Element | null {
     navigate('/plants');
   };
 
+  const onHandleLogout = () => {
+    window.location.href =
+      'https://seedbank.staging.terraware.io/oauth2/sign_out?rd=https%3A%2F%2Fauth.staging.terraware.io%2Fauth%2Frealms%2Fterraware%2Fprotocol%2Fopenid-connect%2Flogout%3Fredirect_uri%3Dhttps%3A%2F%2Fseedbank.staging.terraware.io%2F';
+  };
+
   return (
     <Navbar>
       <NavItem
@@ -73,6 +78,13 @@ export default function NavBar(): JSX.Element | null {
       <NavItem label='Sites' icon='site' selected={false} />
       <NavSection />
       <NavItem label='Admin' icon='key' selected={false} />
+      <NavItem
+        label={strings.LOGOUT}
+        icon='key'
+        selected={false}
+        onClick={onHandleLogout}
+        id='logout'
+      />
     </Navbar>
   );
 }
