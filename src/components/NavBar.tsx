@@ -40,7 +40,7 @@ export default function NavBar(): JSX.Element | null {
 
   const onHandleLogout = () => {
     window.location.href =
-      'https://seedbank.staging.terraware.io/oauth2/sign_out?rd=https%3A%2F%2Fauth.staging.terraware.io%2Fauth%2Frealms%2Fterraware%2Fprotocol%2Fopenid-connect%2Flogout%3Fredirect_uri%3Dhttps%3A%2F%2Fseedbank.staging.terraware.io%2F';
+      'https://auth.staging.terraware.io/auth/realms/terraware/protocol/openid-connect/logout?redirect_uri=http://localhost:4000/oauth2/sign_out';
   };
 
   return (
