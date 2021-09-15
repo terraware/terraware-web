@@ -7,6 +7,7 @@ import {
   InputAdornment,
   makeStyles,
   Paper,
+  TablePagination,
   Typography,
 } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
@@ -16,7 +17,7 @@ import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import React from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import snackbarAtom from '../../state/atoms/snackbar';
-import { plantsPlantedFeaturesSelector } from '../../state/selectors/plantsPlantedFeatures';
+import { plantsPlantedFeaturesPaginatedSelector } from '../../state/selectors/plantsPlantedFeatures';
 import {
   plantsByFeatureIdFilteredSelector,
   plantsPlantedFiltersAtom,
@@ -265,11 +266,25 @@ interface AllPlantsProps {
 }
 
 function AllPlantsContent({ onEditPlant }: AllPlantsProps): JSX.Element {
-  const features = useRecoilValue(plantsPlantedFeaturesSelector);
+  const [limit, setLimit] = React.useState(2);
+  const [skip, setSkip] = React.useState(0);
+  const [page, setPage] = React.useState(0);
+  const features = useRecoilValue(
+    plantsPlantedFeaturesPaginatedSelector({ limit, skip })
+  );
   const speciesBySpeciesId = useRecoilValue(speciesNamesBySpeciesIdSelector);
   const plantsByFeatureFiltered = useRecoilValue(
     plantsByFeatureIdFilteredSelector
   );
+
+  const handleChangePage = (event: unknown, newPage: number) => {
+    if (newPage > page) {
+      setSkip(skip + 2);
+    } else {
+      setSkip(skip - 2);
+    }
+    setPage(newPage);
+  };
 
   const plantsForTable = React.useMemo(() => {
     let plantsToReturn: PlantForTable[] = [];
@@ -313,6 +328,14 @@ function AllPlantsContent({ onEditPlant }: AllPlantsProps): JSX.Element {
           orderBy='species'
           Renderer={AllPlantsCellRenderer}
           onSelect={onEditPlant}
+        />
+        <TablePagination
+          component='div'
+          count={4}
+          onChangePage={handleChangePage}
+          page={page}
+          rowsPerPage={2}
+          rowsPerPageOptions={[]}
         />
       </Grid>
     </Grid>
