@@ -139,7 +139,7 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
       setWithdrawRemaining(true);
       onQuantityChange(
         'quantity',
-        '' + (props.seedsAvailable + (props.value?.seedsWithdrawn ?? 0))
+        '' + (props.seedsAvailable + (props.value?.withdrawnQuantity?.quantity ?? 0))
       );
     }
   };

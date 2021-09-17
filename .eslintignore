@@ -1,2 +1,4 @@
 **/node_modules/*
 **/build/*
+**/scripts/*
+**/src/api/types/generated-schema.ts

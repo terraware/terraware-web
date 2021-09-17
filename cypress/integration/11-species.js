@@ -5,25 +5,25 @@ describe('Species', () => {
     cy.get('#row3-name').should('contain','Kousa Dogwoord New');
   });
 
-  it('should create a new specie', () => {
+  it('should create a new species', () => {
     cy.get('#new-species').click();
     cy.get('#name').clear().type('New specie');
 
-    cy.intercept('GET', 'api/v1/seedbank/values/species').as('getSpecies');
+    cy.intercept('POST', 'api/v1/species').as('createSpecies');
     cy.get('#saveSpecie').click();
-    cy.wait('@getSpecies');
+    cy.wait('@createSpecies');
     
 
     cy.get('#row4-name').should('contain','New specie');
   });
 
-  it('should edit a specie', () => {
+  it('should edit a species', () => {
     cy.get('#row2').click();
 
     cy.get('#name').type('2');
-    cy.intercept('GET', 'api/v1/seedbank/values/species').as('getSpecies');
+    cy.intercept('PUT', 'api/v1/species/*').as('updateSpecies');
     cy.get('#saveSpecie').click();
-    cy.wait('@getSpecies');
+    cy.wait('@updateSpecies');
     
 
     cy.get('#row2-name').should('contain','Kousa Dogwoord Modified2');
