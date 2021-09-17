@@ -12,12 +12,17 @@ import {
   Switch,
 } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
+import Accession from './components/accession';
 import AllPlants from './components/AllPlants';
 import AppBar from './components/AppBar';
 import Dashboard from './components/Dashboard';
+import Database from './components/database';
+import Help from './components/help';
 import NavBar from './components/NavBar';
+import NewAccession from './components/newAccession';
 import Snackbar from './components/Snackbar';
 import Species from './components/Species';
+import Summary from './components/summary';
 import ErrorBoundary from './ErrorBoundary';
 import strings from './strings';
 import theme from './theme';
@@ -67,6 +72,15 @@ function AppContent() {
               <Route exact path='/dashboard' component={Dashboard} />
               <Route exact path='/plants' component={AllPlants} />
               <Route exact path='/species' component={Species} />
+              <Route path='/accessions/new' component={NewAccession} />
+              <Route
+                path='/accessions/:accessionNumber'
+                component={Accession}
+              />
+              <Route path='/accessions' component={Database} />
+              <Route path='/species' component={Species} />
+              <Route path='/help' component={Help} />
+              <Route exact path='/summary' component={Summary} />
             </Switch>
           </ErrorBoundary>
         </div>

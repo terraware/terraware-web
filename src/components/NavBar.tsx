@@ -15,6 +15,8 @@ export default function NavBar(): JSX.Element | null {
   const isDashboardRoute = useRouteMatch('/dashboard/');
   const isSpeciesRoute = useRouteMatch('/species/');
   const isPlantsRoute = useRouteMatch('/plants/');
+  const isAccessionsRoute = useRouteMatch('/accessions/');
+  const isSummaryRoute = useRouteMatch('/summary/');
   const resetPlantsPlanted = useResetRecoilState(plantsPlantedSelector);
   const resetPlantsPlantedFiltered = useResetRecoilState(
     plantsPlantedFilteredSelector
@@ -50,8 +52,16 @@ export default function NavBar(): JSX.Element | null {
       <NavSection title={strings.FLORA} />
       <NavItem label='Seeds' icon='seeds'>
         <SubNavbar>
-          <NavItem label='Summary' selected={false} />
-          <NavItem label='Accessions' selected={false} />
+          <NavItem
+            label='Summary'
+            selected={isSummaryRoute ? true : false}
+            onClick={() => navigate('/summary')}
+          />
+          <NavItem
+            label='Accessions'
+            selected={isAccessionsRoute ? true : false}
+            onClick={() => navigate('/accessions')}
+          />
         </SubNavbar>
       </NavItem>
       <NavItem

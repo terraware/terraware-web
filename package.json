@@ -31,7 +31,11 @@
     "recoil": "^0.3.1",
     "sass": "^1.38.0",
     "typescript": "^4.3.2",
-    "web-vitals": "^1.0.1"
+    "web-vitals": "^1.0.1",
+    "@types/reactour": "^1.18.1",
+    "cookies-js": "^1.2.3",
+    "reactour": "https://github.com/xs9627/reactour/tarball/test",
+    "styled-components": "^4.0.0"
   },
   "scripts": {
     "start": "react-scripts start",
