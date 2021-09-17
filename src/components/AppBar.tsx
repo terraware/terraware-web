@@ -1,12 +1,19 @@
-import { AppBar, Grid, Toolbar } from '@material-ui/core';
+import { AppBar, Grid, IconButton, Link, Toolbar } from '@material-ui/core';
+import Chip from '@material-ui/core/Chip';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
+import AddIcon from '@material-ui/icons/Add';
+import HelpIcon from '@material-ui/icons/Help';
 import React from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import ErrorBoundary from '../ErrorBoundary';
 import projectIdSelector from '../state/selectors/projectId';
 import projectsSelector from '../state/selectors/projects';
 import strings from '../strings';
+import useStateLocation, { getLocation } from '../utils/useStateLocation';
 import Dropdown from './common/Dropdown';
+import NotificationsDropdown from './NotificationsDropdown';
+import SearchBar from './SearchBar';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -14,11 +21,38 @@ const useStyles = makeStyles((theme) =>
       background: theme.palette.common.white,
       color: theme.palette.common.black,
     },
+    icon: {
+      padding: theme.spacing(1, 1),
+      width: '68px',
+    },
+    appBar2: {
+      backgroundColor: theme.palette.common.white,
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    grow: {
+      flexGrow: 1,
+    },
+    addAccession: {
+      marginLeft: theme.spacing(2),
+      color: theme.palette.common.white,
+    },
+    flex: {
+      display: 'flex',
+    },
   })
 );
 
+const newAccessionChipStyles = makeStyles((theme) => ({
+  root: {
+    color: theme.palette.common.white,
+  },
+}));
+
 export default function NavBar(): JSX.Element | null {
   const classes = useStyles();
+  const location = useStateLocation();
 
   return (
     <AppBar position='static' className={classes.appBar}>
@@ -30,6 +64,39 @@ export default function NavBar(): JSX.Element | null {
                 <ProjectsDropdown />
               </React.Suspense>
             </ErrorBoundary>
+          </Grid>
+          <Grid item>
+            <div className={classes.flex}>
+              <SearchBar />
+              <Link
+                id='help-button-link'
+                component={RouterLink}
+                to={getLocation('/help', location)}
+                target='_blank'
+                rel='noopener noreferrer'
+              >
+                <IconButton id='help-button' onClick={() => true}>
+                  <HelpIcon />
+                </IconButton>
+              </Link>
+              <NotificationsDropdown />
+              <Link
+                component={RouterLink}
+                to={getLocation('/accessions/new', location)}
+              >
+                <Chip
+                  id='newAccession'
+                  className={classes.addAccession}
+                  label={strings.NEW_ACCESSION}
+                  clickable={true}
+                  deleteIcon={<AddIcon classes={newAccessionChipStyles()} />}
+                  color='primary'
+                  onDelete={() => {
+                    return true;
+                  }}
+                />
+              </Link>
+            </div>
           </Grid>
         </Grid>
       </Toolbar>
