@@ -1,28 +1,35 @@
 import axios from 'axios';
-import {
-  NewSpecieType,
-  Species,
-  SpeciesDetail,
-} from './types/species-seedbank';
+import { SpeciesType } from '../types/SpeciesType';
+import { components } from './types/generated-schema-seedbank';
 
-const BASE_URL = `${process.env.REACT_APP_SEED_BANK_API}/api/v1/seedbank`;
+type SpeciesDetails = components['schemas']['SpeciesResponseElement'];
+type SpeciesRequestPayload = components['schemas']['SpeciesRequestPayload'];
 
-export const getSpecies = async (): Promise<Species> => {
-  const endpoint = `${BASE_URL}/values/species`;
-  return (await axios.get(endpoint)).data.values;
+const BASE_URL = `${process.env.REACT_APP_SEED_BANK_API}/api/v1/species`;
+
+export const getSpeciesList = async (): Promise<SpeciesType[]> => {
+  const speciesDetailsList: SpeciesDetails[] = (await axios.get(BASE_URL)).data
+    .species;
+  return speciesDetailsList.map((species: SpeciesDetails) => {
+    return {
+      id: species.id,
+      name: species.name,
+    };
+  });
 };
 
 export const postSpecies = async (
-  species: NewSpecieType
-): Promise<SpeciesDetail> => {
-  const endpoint = `${BASE_URL}/values/species`;
-  return (await axios.post(endpoint, species)).data.details;
+  species: SpeciesType
+): Promise<SpeciesType> => {
+  const createSpeciesRequest: SpeciesRequestPayload = { name: species.name };
+  const newId = (await axios.post(BASE_URL, createSpeciesRequest)).data.id;
+  return { id: newId, name: species.name };
 };
 
 export const updateSpecies = async (
-  id: number,
-  params: NewSpecieType
-): Promise<SpeciesDetail> => {
-  const endpoint = `${BASE_URL}/values/species/${id}`;
-  return (await axios.post(endpoint, params)).data.details;
+  species: SpeciesType
+): Promise<SpeciesType> => {
+  const updateSpeciesRequest: SpeciesRequestPayload = { name: species.name };
+  await axios.put(`${BASE_URL}/${species.id}`, updateSpeciesRequest);
+  return species; // api returns ok/error status, but doesn't return the data
 };

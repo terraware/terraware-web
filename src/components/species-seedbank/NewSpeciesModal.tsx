@@ -5,8 +5,8 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React from 'react';
-import { NewSpecieType } from '../../api/types/species-seedbank';
 import strings from '../../strings';
+import { SpeciesType } from '../../types/SpeciesType';
 import useForm from '../../utils/useForm';
 import CancelButton from '../common/CancelButton';
 import DialogCloseButton from '../common/DialogCloseButton';
@@ -34,28 +34,29 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export interface Props {
   open: boolean;
-  onClose: (specie?: NewSpecieType) => void;
+  onClose: (species?: SpeciesType) => void;
 }
 
-function initSpecie(): NewSpecieType {
+// Every time we open the modal, we want to start with a brand new instance
+function getEmptySpecies(): SpeciesType {
   return {
     name: '',
   };
 }
 
-export default function NewSpecieModal(props: Props): JSX.Element {
+export default function NewSpeciesModal(props: Props): JSX.Element {
   const classes = useStyles();
   const { onClose, open } = props;
-  const [record, setRecord, onChange] = useForm<NewSpecieType>(initSpecie());
+  const [record, setRecord, onChange] = useForm<SpeciesType>(getEmptySpecies());
 
   React.useEffect(() => {
     if (props.open) {
-      setRecord(initSpecie());
+      setRecord(getEmptySpecies());
     }
   }, [props.open]);
 
   const handleCancel = () => {
-    setRecord(initSpecie());
+    setRecord(getEmptySpecies());
     onClose();
   };
 

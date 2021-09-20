@@ -85,7 +85,7 @@ export default function EnhancedTableDetails<T>({
 
   const calculateTotalSeedsGerminated = () => {
     let total = 0;
-    const selectedTest = row as GerminationTest;
+    const selectedTest = row as unknown as GerminationTest;
 
     if (selectedTest.germinations) {
       selectedTest.germinations.forEach((germination) => {

@@ -285,7 +285,7 @@ export function AccessionForm<T extends NewAccession>({
   const closeModalAndUpdateSpecie = () => {
     const speciesId = (record as unknown as Accession).speciesId;
     if (speciesId && record.species) {
-      updateSpecies(speciesId, { name: record.species });
+      updateSpecies({ id: speciesId, name: record.species });
     }
     onCloseEditSpecieModal();
   };
@@ -322,7 +322,7 @@ export function AccessionForm<T extends NewAccession>({
               }
             >
               <Grid item xs={4}>
-                <Species specie={record.species} onChange={onSpeciesChanged} />
+                <Species species={record.species} onChange={onSpeciesChanged} />
               </Grid>
             </Suspense>
             <Grid item xs={4}>

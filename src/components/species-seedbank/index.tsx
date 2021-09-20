@@ -4,13 +4,13 @@ import AddIcon from '@material-ui/icons/Add';
 import React from 'react';
 import { useRecoilValueLoadable, useResetRecoilState } from 'recoil';
 import { postSpecies, updateSpecies } from '../../api/species-seedbank';
-import { NewSpecieType, SpeciesDetail } from '../../api/types/species-seedbank';
 import speciesSelector from '../../state/selectors/species';
+import { SpeciesType } from '../../types/SpeciesType';
 import Table from '../common/table';
 import { TableColumnType } from '../common/table/types';
 import PageHeader from '../PageHeader';
-import EditSpecie from './EditSpecieModal';
-import NewSpecie from './NewSpecieModal';
+import EditSpecies from './EditSpeciesModal';
+import NewSpecies from './NewSpeciesModal';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -33,47 +33,49 @@ const chipStyles = makeStyles((theme) => ({
 
 export default function Species(): JSX.Element {
   const classes = useStyles();
-  const [newSpecieModalOpen, setNewSpecieModalOpen] = React.useState(false);
-  const [editSpecieModalOpen, setEditSpecieModalOpen] = React.useState(false);
-  const [selectedSpecie, setSelectedSpecie] = React.useState<SpeciesDetail>({
+  const [isNewSpeciesModalOpen, setIsNewSpeciesModalOpen] =
+    React.useState(false);
+  const [isEditSpeciesModalOpen, setIsEditSpeciesModalOpen] =
+    React.useState(false);
+  const [selectedSpecies, setSelectedSpecies] = React.useState<SpeciesType>({
     name: '',
     id: 0,
   });
   const resetSpecies = useResetRecoilState(speciesSelector);
-  const resultsLodable = useRecoilValueLoadable(speciesSelector);
+  const resultsLoadable = useRecoilValueLoadable(speciesSelector);
   const results =
-    resultsLodable.state === 'hasValue' ? resultsLodable.contents : undefined;
+    resultsLoadable.state === 'hasValue' ? resultsLoadable.contents : undefined;
 
   const columns: TableColumnType[] = [
     { key: 'name', name: 'Species', type: 'string' },
   ];
 
-  const onSelect = (specieDetail: SpeciesDetail) => {
-    setSelectedSpecie(specieDetail);
-    setEditSpecieModalOpen(true);
+  const onSelect = (species: SpeciesType) => {
+    setSelectedSpecies(species);
+    setIsEditSpeciesModalOpen(true);
   };
 
   const onOpenNewSpecieModal = () => {
-    setNewSpecieModalOpen(true);
+    setIsNewSpeciesModalOpen(true);
   };
 
-  const onCloseEditSpecieModal = async (specie?: SpeciesDetail) => {
-    if (specie) {
-      await updateSpecies(specie.id, { name: specie.name });
+  const onCloseEditSpeciesModal = async (species?: SpeciesType) => {
+    if (species) {
+      await updateSpecies(species);
       resetSpecies();
     }
-    setEditSpecieModalOpen(false);
+    setIsEditSpeciesModalOpen(false);
   };
 
-  const onCloseNewSpecieModal = async (newSpecie?: NewSpecieType) => {
-    if (newSpecie) {
-      await postSpecies(newSpecie);
+  const onCloseNewSpeciesModal = async (newSpecies?: SpeciesType) => {
+    if (newSpecies) {
+      await postSpecies(newSpecies);
       resetSpecies();
     }
-    setNewSpecieModalOpen(false);
+    setIsNewSpeciesModalOpen(false);
   };
 
-  const getSubtitle = () => {
+  const getTotalSpeciesCount = () => {
     if (results) {
       return `${results.length} total`;
     }
@@ -81,15 +83,18 @@ export default function Species(): JSX.Element {
 
   return (
     <main>
-      <NewSpecie open={newSpecieModalOpen} onClose={onCloseNewSpecieModal} />
-      <EditSpecie
-        open={editSpecieModalOpen}
-        onClose={onCloseEditSpecieModal}
-        value={selectedSpecie}
+      <NewSpecies
+        open={isNewSpeciesModalOpen}
+        onClose={onCloseNewSpeciesModal}
+      />
+      <EditSpecies
+        open={isEditSpeciesModalOpen}
+        onClose={onCloseEditSpeciesModal}
+        value={selectedSpecies}
       />
       <PageHeader
         title='Species'
-        subtitle={getSubtitle()}
+        subtitle={getTotalSpeciesCount()}
         rightComponent={
           <div>
             <Chip

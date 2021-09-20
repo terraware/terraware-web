@@ -5,23 +5,25 @@ import strings from '../../strings';
 import Autocomplete from '../common/Autocomplete';
 
 interface Props {
-  specie?: string;
+  species?: string;
   onChange: (id: string, value: unknown, isNew: boolean) => void;
 }
 
 export default function SpeciesDropdown({
-  specie,
+  species,
   onChange,
 }: Props): JSX.Element {
-  const species = useRecoilValue(speciesSelector);
+  const speciesList = useRecoilValue(speciesSelector);
   const resetSpecies = useResetRecoilState(speciesSelector);
 
-  const onChangeHandler = (id: string, value: unknown) => {
-    const found = species.findIndex((specie) => specie.name === value);
+  const onChangeHandler = (id: string, selectedSpecies: string) => {
+    const found = speciesList.findIndex(
+      (item) => item.name === selectedSpecies
+    );
     if (found === -1) {
-      onChange(id, value, true);
+      onChange(id, selectedSpecies, true);
     } else {
-      onChange(id, value, false);
+      onChange(id, selectedSpecies, false);
     }
   };
 
@@ -34,10 +36,10 @@ export default function SpeciesDropdown({
   return (
     <Autocomplete
       id='species'
-      selected={specie}
+      selected={species}
       onChange={onChangeHandler}
       label={strings.SPECIES}
-      values={species.map((specie) => specie.name)}
+      values={speciesList.map((item) => item.name)}
     />
   );
 }

@@ -7,6 +7,71 @@ export interface paths {
   '/api/v1/device/all/config': {
     get: operations['listDeviceConfigs'];
   };
+  '/api/v1/facility': {
+    /** List all the facilities the current user can access. */
+    get: operations['listAll_2'];
+  };
+  '/api/v1/gis/features': {
+    post: operations['create_4'];
+  };
+  '/api/v1/gis/features/list/{layerId}': {
+    get: operations['list_1'];
+  };
+  '/api/v1/gis/features/{featureId}': {
+    get: operations['read_2'];
+    put: operations['update_4'];
+    delete: operations['delete_1'];
+  };
+  '/api/v1/gis/features/{featureId}/photos': {
+    get: operations['listFeaturePhotos'];
+    post: operations['createFeaturePhoto'];
+  };
+  '/api/v1/gis/features/{featureId}/photos/{photoId}': {
+    /** Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio. */
+    get: operations['downloadFeaturePhoto'];
+    delete: operations['deleteFeaturePhoto'];
+  };
+  '/api/v1/gis/features/{featureId}/photos/{photoId}/metadata': {
+    get: operations['getFeaturePhotoMetadata'];
+  };
+  '/api/v1/gis/layers': {
+    post: operations['create_3'];
+  };
+  '/api/v1/gis/layers/list/{siteId}': {
+    get: operations['list'];
+  };
+  '/api/v1/gis/layers/{layerId}': {
+    get: operations['read_1'];
+    put: operations['update_3'];
+    delete: operations['delete'];
+  };
+  '/api/v1/gis/plant_observations': {
+    post: operations['create_2'];
+  };
+  '/api/v1/gis/plant_observations/list/{featureId}': {
+    get: operations['getList'];
+  };
+  '/api/v1/gis/plant_observations/{plantObservationId}': {
+    get: operations['get_1'];
+    put: operations['update_2'];
+  };
+  '/api/v1/gis/plants': {
+    post: operations['create_1'];
+  };
+  '/api/v1/gis/plants/list/summary/{layerId}': {
+    get: operations['getPlantSummary'];
+  };
+  '/api/v1/gis/plants/list/{layerId}': {
+    get: operations['getPlantsList'];
+  };
+  '/api/v1/gis/plants/{featureId}': {
+    get: operations['get'];
+    put: operations['update_1'];
+  };
+  '/api/v1/organization': {
+    /** List all organizations the user can access. */
+    get: operations['listAll_1'];
+  };
   '/api/v1/resources': {
     post: operations['createResource'];
   };
@@ -24,6 +89,7 @@ export interface paths {
     get: operations['listPhotos'];
   };
   '/api/v1/seedbank/accession/{accessionNumber}/photo/{photoFilename}': {
+    /** Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio. */
     get: operations['getPhoto'];
     post: operations['uploadPhoto'];
   };
@@ -70,15 +136,44 @@ export interface paths {
     post: operations['listAllFieldValues'];
   };
   '/api/v1/seedbank/values/species': {
+    /** Use /api/v1/species instead. */
     get: operations['listSpecies'];
+    /** Use /api/v1/species instead. */
     post: operations['createSpecies'];
   };
   '/api/v1/seedbank/values/species/{id}': {
-    /** If the species is being renamed and the species name in the payload already exists, the existing species replaces the one in the request (thus merging the requested species into the one that already had the name) and its ID is returned. */
+    /** Use /api/v1/species instead. */
     post: operations['updateSpecies'];
   };
   '/api/v1/seedbank/values/storageLocation': {
     get: operations['getStorageLocations'];
+  };
+  '/api/v1/site/{siteId}': {
+    get: operations['getSite'];
+  };
+  '/api/v1/species': {
+    get: operations['speciesList'];
+    post: operations['speciesCreate'];
+  };
+  '/api/v1/species/names': {
+    get: operations['speciesNamesListAll'];
+    post: operations['speciesNameCreate'];
+  };
+  '/api/v1/species/names/{speciesNameId}': {
+    /** Gets information about a single species name. */
+    get: operations['speciesNameGet'];
+    /** Updates one of the names of a species. */
+    put: operations['speciesNameUpdate'];
+    /** Deletes one of the secondary names of a species. */
+    delete: operations['speciesNameDelete'];
+  };
+  '/api/v1/species/{speciesId}': {
+    get: operations['speciesRead'];
+    put: operations['speciesUpdate'];
+    delete: operations['speciesDelete'];
+  };
+  '/api/v1/species/{speciesId}/names': {
+    get: operations['speciesNamesList'];
   };
 }
 
@@ -108,9 +203,7 @@ export interface components {
       germinationTests?: components['schemas']['GerminationTestPayload'][];
       germinationTestTypes?: ('Lab' | 'Nursery')[];
       /** Initial size of accession. The units of this value must match the measurement type in "processingMethod". */
-      initialQuantity?: components['schemas']['SeedQuantityPayload'] & {
-        [key: string]: any;
-      };
+      initialQuantity?: components['schemas']['SeedQuantityPayload'];
       landowner?: string;
       latestGerminationTestDate?: string;
       latestViabilityPercent?: number;
@@ -125,9 +218,7 @@ export interface components {
       rare?: 'No' | 'Yes' | 'Unsure';
       receivedDate?: string;
       /** Number or weight of seeds remaining for withdrawal and testing. Calculated by the server when the accession's total size is known. */
-      remainingQuantity?: components['schemas']['SeedQuantityPayload'] & {
-        [key: string]: any;
-      };
+      remainingQuantity?: components['schemas']['SeedQuantityPayload'];
       secondaryCollectors?: string[];
       siteLocation?: string;
       /** Which application this accession originally came from. This is currently based on the presence of the deviceInfo field. */
@@ -154,53 +245,52 @@ export interface components {
       storageStartDate?: string;
       subsetCount?: number;
       /** Weight of subset of seeds. Units must be a weight measurement, not "Seeds". */
-      subsetWeight?: components['schemas']['SeedQuantityPayload'] & {
-        [key: string]: any;
-      };
+      subsetWeight?: components['schemas']['SeedQuantityPayload'];
       targetStorageCondition?: 'Refrigerator' | 'Freezer';
       /** Total quantity of all past withdrawals, including germination tests. */
-      totalPastWithdrawalQuantity?: components['schemas']['SeedQuantityPayload'] & {
-        [key: string]: any;
-      };
+      totalPastWithdrawalQuantity?: components['schemas']['SeedQuantityPayload'];
       /** Total quantity of scheduled withdrawals, not counting germination tests. */
-      totalScheduledNonTestQuantity?: components['schemas']['SeedQuantityPayload'] & {
-        [key: string]: any;
-      };
+      totalScheduledNonTestQuantity?: components['schemas']['SeedQuantityPayload'];
       /** Total quantity of scheduled withdrawals for germination tests. */
-      totalScheduledTestQuantity?: components['schemas']['SeedQuantityPayload'] & {
-        [key: string]: any;
-      };
+      totalScheduledTestQuantity?: components['schemas']['SeedQuantityPayload'];
       /** Total quantity of scheduled withdrawals, including germination tests. */
-      totalScheduledWithdrawalQuantity?: components['schemas']['SeedQuantityPayload'] & {
-        [key: string]: any;
-      };
+      totalScheduledWithdrawalQuantity?: components['schemas']['SeedQuantityPayload'];
       totalViabilityPercent?: number;
       /** Total quantity of all past and scheduled withdrawals, including germination tests. */
-      totalWithdrawalQuantity?: components['schemas']['SeedQuantityPayload'] & {
-        [key: string]: any;
-      };
+      totalWithdrawalQuantity?: components['schemas']['SeedQuantityPayload'];
       withdrawals?: components['schemas']['WithdrawalPayload'][];
-    } & { [key: string]: any };
+    };
     AdvanceClockRequestPayload: {
       days: number;
-    } & { [key: string]: any };
+    };
     AllFieldValuesPayload: {
       /** All the values this field could possibly have, whether or not any accessions have them. For fields that allow the user to enter arbitrary values, this is equivalent to querying the list of values without any filter criteria, that is, it's a list of all the user-entered values. */
       values: string[];
       /** If true, the list of values is too long to return in its entirety and "values" is a partial list. */
       partial: boolean;
-    } & { [key: string]: any };
+    };
     /** Search criterion that matches results that meet all of a set of other search criteria. That is, if the list of children is x, y, and z, this will require x AND y AND z. */
-    AndNodePayload: components['schemas']['SearchNodePayload'] &
-      ({
-        children?: components['schemas']['SearchNodePayload'][];
-      } & { [key: string]: any }) & { [key: string]: any };
+    AndNodePayload: components['schemas']['SearchNodePayload'] & {
+      children?: components['schemas']['SearchNodePayload'][];
+    } & {
+      children: unknown;
+    };
+    /** Coordinate reference system used for X and Y coordinates in this geometry. By default, coordinates are in WGS 84, with longitude and latitude in degrees. In that case, this element is not present. Otherwise, it specifies which coordinate system to use. */
+    CRS: {
+      type: 'name';
+      properties: components['schemas']['CRSProperties'];
+    };
+    CRSProperties: {
+      /** Name of the coordinate reference system. This must be in the form EPSG:nnnn where nnnn is the numeric identifier of a coordinate system in the EPSG dataset. A common one is 3857, the Web Mercator projection used by many mapping tools. */
+      name: string;
+    };
     CreateAccessionRequestPayload: {
       bagNumbers?: string[];
       collectedDate?: string;
       deviceInfo?: components['schemas']['DeviceInfoPayload'];
       endangered?: 'No' | 'Yes' | 'Unsure';
       environmentalNotes?: string;
+      facilityId?: number;
       family?: string;
       fieldNotes?: string;
       founderId?: string;
@@ -215,22 +305,115 @@ export interface components {
       siteLocation?: string;
       sourcePlantOrigin?: 'Wild' | 'Outplant';
       species?: string;
-    } & { [key: string]: any };
+    };
     CreateAccessionResponsePayload: {
       accession: components['schemas']['AccessionPayload'];
       status: components['schemas']['SuccessOrError'];
-    } & { [key: string]: any };
+    };
+    CreateFeaturePhotoRequestPayload: {
+      capturedTime: string;
+      /** Compass heading of phone/camera when photo was taken. */
+      heading?: number;
+      location?: components['schemas']['Point'];
+      /** Orientation of phone/camera when photo was taken. */
+      orientation?: number;
+      /** GPS horizontal accuracy in meters. */
+      gpsHorizAccuracy?: number;
+      /** GPS vertical (altitude) accuracy in meters. */
+      gpsVertAccuracy?: number;
+    };
+    CreateFeaturePhotoResponsePayload: {
+      photoId: number;
+      status: components['schemas']['SuccessOrError'];
+    };
+    CreateFeatureRequestPayload: {
+      layerId: number;
+      geom?: components['schemas']['Geometry'];
+      gpsHorizAccuracy?: number;
+      gpsVertAccuracy?: number;
+      attrib?: string;
+      notes?: string;
+      enteredTime?: string;
+    };
+    CreateFeatureResponsePayload: {
+      feature: components['schemas']['FeatureResponse'];
+      status: components['schemas']['SuccessOrError'];
+    };
+    CreateLayerRequestPayload: {
+      siteId: number;
+      layerType:
+        | 'Aerial Photos'
+        | 'Surface Color Map'
+        | 'Terrain Color Map'
+        | 'Boundaries'
+        | 'Plants Planted'
+        | 'Plants Existing'
+        | 'Irrigation'
+        | 'Infrastructure'
+        | 'Partner Input'
+        | 'Restoration Zones'
+        | 'Site Prep'
+        | 'Map notes';
+      tileSetName: string;
+      proposed: boolean;
+      hidden: boolean;
+    };
+    CreateLayerResponsePayload: {
+      layer: components['schemas']['LayerResponse'];
+      status: components['schemas']['SuccessOrError'];
+    };
+    CreateObservationRequestPayload: {
+      featureId: number;
+      timestamp: string;
+      healthState?: 'Good' | 'Moderate' | 'Poor' | 'Dead';
+      flowers?: boolean;
+      seeds?: boolean;
+      pests?: string;
+      /** Height in meters */
+      height?: number;
+      /** Diameter at breast height in meters */
+      diameterAtBreastHeight?: number;
+    };
+    CreateObservationResponsePayload: {
+      resp: components['schemas']['ObservationResponse'];
+      status: components['schemas']['SuccessOrError'];
+    };
+    CreatePlantRequestPayload: {
+      featureId: number;
+      label?: string;
+      speciesId?: number;
+      naturalRegen?: boolean;
+      datePlanted?: string;
+    };
+    CreatePlantResponsePayload: {
+      plant: components['schemas']['PlantResponse'];
+      status: components['schemas']['SuccessOrError'];
+    };
     CreateSpeciesRequestPayload: {
       name: string;
-    } & { [key: string]: any };
+    };
     CreateSpeciesResponsePayload: {
       details: components['schemas']['SpeciesDetails'];
       status: components['schemas']['SuccessOrError'];
-    } & { [key: string]: any };
+    };
+    DeleteFeatureResponsePayload: {
+      id: number;
+      status: components['schemas']['SuccessOrError'];
+    };
+    DeleteLayerResponse: {
+      id: number;
+      siteId: number;
+    };
+    DeleteLayerResponsePayload: {
+      layer: components['schemas']['DeleteLayerResponse'];
+      status: components['schemas']['SuccessOrError'];
+    };
     DeviceConfig: {
-      /** Name of site module where this device is located. */
+      /** Name of facility where this device is located. */
+      facility: string;
+      /** Copy of facility for backward compatibility. */
       siteModule: string;
-      /** Name of this device. Should be unique within the site module. */
+      /** Name of this device. Should be unique within the facility. */
       name: string;
       /** High-level type of the device. Device manager may use this in conjunction with the make and model to determine which metrics to report. */
       type: string;
@@ -247,9 +430,9 @@ export interface components {
       /** Protocol- and device-specific custom settings. Format is defined by the device manager. */
       settings?: string;
       pollingInterval?: number;
-      /** Device's resource path on the server, minus organization and site names. Currently, this is always just the site module and device name. */
+      /** Device's resource path on the server, minus organization and site names. Currently, this is always just the facility and device name. */
       serverPath: string;
-    } & { [key: string]: any };
+    };
     /** Details about the device and the application that created the accession. All these values are optional and most of them are platform-dependent. */
     DeviceInfoPayload: {
       /** Build number of application that is submitting the accession, e.g., from React Native getBuildId() */
@@ -268,43 +451,88 @@ export interface components {
       osVersion?: string;
       /** Unique identifier of the hardware device, e.g., from React Native getUniqueId(). */
       uniqueId?: string;
-    } & { [key: string]: any };
+    };
     ErrorDetails: {
       message: string;
-    } & { [key: string]: any };
+    };
     ExportRequestPayload: {
       fields: components['schemas']['SearchField'][];
       sortOrder?: components['schemas']['SearchSortOrderElement'][];
       filters?: components['schemas']['SearchFilter'][];
-      search?: (
+      search?:
         | components['schemas']['AndNodePayload']
         | components['schemas']['FieldNodePayload']
         | components['schemas']['NotNodePayload']
-        | components['schemas']['OrNodePayload']
-      ) & { [key: string]: any };
-    } & { [key: string]: any };
-    FieldNodePayload: components['schemas']['SearchNodePayload'] &
-      ({
-        field?: components['schemas']['SearchField'];
-        /** List of values to match. For exact and fuzzy searches, a list of at least one value to search for; the list may include null to match accessions where the field does not have a value. For range searches, the list must contain exactly two values, the minimum and maximum; one of the values may be null to search for all values above a minimum or below a maximum. */
-        values?: (string | null)[];
-        type?: 'Exact' | 'Fuzzy' | 'Range';
-      } & { [key: string]: any }) & { [key: string]: any };
+        | components['schemas']['OrNodePayload'];
+    };
+    FeaturePhoto: {
+      capturedTime: string;
+      contentType: string;
+      featureId: number;
+      fileName: string;
+      /** GPS horizontal accuracy in meters. */
+      gpsHorizAccuracy?: number;
+      /** GPS vertical (altitude) accuracy in meters. */
+      gpsVertAccuracy?: number;
+      /** Compass heading of phone/camera when photo was taken. */
+      heading?: number;
+      id: number;
+      location?: components['schemas']['Point'];
+      /** Orientation of phone/camera when photo was taken. */
+      orientation?: number;
+      size: number;
+    };
+    FeatureResponse: {
+      id: number;
+      layerId: number;
+      geom?: components['schemas']['Geometry'];
+      gpsHorizAccuracy?: number;
+      gpsVertAccuracy?: number;
+      attrib?: string;
+      notes?: string;
+      enteredTime?: string;
+    };
+    FieldNodePayload: components['schemas']['SearchNodePayload'] & {
+      field?: components['schemas']['SearchField'];
+      /** List of values to match. For exact and fuzzy searches, a list of at least one value to search for; the list may include null to match accessions where the field does not have a value. For range searches, the list must contain exactly two values, the minimum and maximum; one of the values may be null to search for all values above a minimum or below a maximum. */
+      values?: (string | null)[];
+      type?: 'Exact' | 'Fuzzy' | 'Range';
+    } & {
+      field: unknown;
+      type: unknown;
+      values: unknown;
+    };
     FieldValuesPayload: {
       /** List of values in the matching accessions. If there are accessions where the field has no value, this list will contain null (an actual null value, not the string "null"). */
       values: (string | null)[];
       /** If true, the list of values is too long to return in its entirety and "values" is a partial list. */
       partial: boolean;
-    } & { [key: string]: any };
+    };
     Geolocation: {
       latitude: number;
       longitude: number;
       accuracy?: number;
-    } & { [key: string]: any };
+    };
+    Geometry: {
+      type:
+        | 'Point'
+        | 'LineString'
+        | 'Polygon'
+        | 'MultiPoint'
+        | 'MultiLineString'
+        | 'MultiPolygon'
+        | 'GeometryCollection';
+      crs?: components['schemas']['CRS'];
+    };
+    GeometryCollection: components['schemas']['Geometry'] & {
+      geometries?: components['schemas']['Geometry'][];
+    } & {
+      geometries: unknown;
+    };
     GerminationPayload: {
       recordingDate: string;
       seedsGerminated: number;
-    } & { [key: string]: any };
+    };
     GerminationTestPayload: {
       /** Server-assigned unique ID of this germination test. Null when creating a new test. */
       id?: string;
@@ -321,76 +549,206 @@ export interface components {
       treatment?: 'Soak' | 'Scarify' | 'GA3' | 'Stratification' | 'Other';
       notes?: string;
       /** Quantity of seeds remaining. For weight-based accessions, this is user input and is required. For count-based accessions, it is calculated by the server and ignored on input. */
-      remainingQuantity?: components['schemas']['SeedQuantityPayload'] & {
-        [key: string]: any;
-      };
+      remainingQuantity?: components['schemas']['SeedQuantityPayload'];
       staffResponsible?: string;
       seedsSown?: number;
       totalPercentGerminated?: number;
       totalSeedsGerminated?: number;
       germinations?: components['schemas']['GerminationPayload'][];
-    } & { [key: string]: any };
+    };
     GetAccessionResponsePayload: {
       accession: components['schemas']['AccessionPayload'];
       status: components['schemas']['SuccessOrError'];
-    } & { [key: string]: any };
+    };
     GetCurrentTimeResponsePayload: {
       currentTime: string;
       status: components['schemas']['SuccessOrError'];
-    } & { [key: string]: any };
+    };
+    GetFeaturePhotoMetadataResponsePayload: {
+      photo: components['schemas']['FeaturePhoto'];
+      status: components['schemas']['SuccessOrError'];
+    };
+    GetFeatureResponsePayload: {
+      feature: components['schemas']['FeatureResponse'];
+      status: components['schemas']['SuccessOrError'];
+    };
+    GetLayerResponsePayload: {
+      layer: components['schemas']['LayerResponse'];
+      status: components['schemas']['SuccessOrError'];
+    };
+    GetObservationResponsePayload: {
+      resp: components['schemas']['ObservationResponse'];
+      status: components['schemas']['SuccessOrError'];
+    };
+    GetPlantResponsePayload: {
+      plant: components['schemas']['PlantResponse'];
+      status: components['schemas']['SuccessOrError'];
+    };
+    GetPlantSummaryPayload: {
+      minEnteredTime?: string;
+      maxEnteredTime?: string;
+    };
+    GetSiteResponse: {
+      id: number;
+      name: string;
+      latitude: string;
+      longitude: string;
+      locale?: string;
+      timezone?: string;
+    };
+    LayerResponse: {
+      id: number;
+      siteId: number;
+      layerType:
+        | 'Aerial Photos'
+        | 'Surface Color Map'
+        | 'Terrain Color Map'
+        | 'Boundaries'
+        | 'Plants Planted'
+        | 'Plants Existing'
+        | 'Irrigation'
+        | 'Infrastructure'
+        | 'Partner Input'
+        | 'Restoration Zones'
+        | 'Site Prep'
+        | 'Map notes';
+      tileSetName: string;
+      proposed: boolean;
+      hidden: boolean;
+    };
+    LineString: components['schemas']['Geometry'] & {
+      coordinates?: number[][];
+    } & {
+      coordinates: unknown;
+    };
     ListAllFieldValuesRequestPayload: {
       fields: components['schemas']['SearchField'][];
-    } & { [key: string]: any };
+    };
     ListAllFieldValuesResponsePayload: {
       results: {
         [key: string]: components['schemas']['AllFieldValuesPayload'];
       };
       status: components['schemas']['SuccessOrError'];
-    } & { [key: string]: any };
+    };
     ListDeviceConfigsResponse: {
       devices: components['schemas']['DeviceConfig'][];
       status: components['schemas']['SuccessOrError'];
-    } & { [key: string]: any };
+    };
+    ListFacilitiesElement: {
+      id: number;
+      name: string;
+      type: number;
+      role: string;
+    };
+    ListFacilitiesResponse: {
+      facilities: components['schemas']['ListFacilitiesElement'][];
+    };
+    ListFeaturePhotosResponsePayload: {
+      photos: components['schemas']['FeaturePhoto'][];
+      status: components['schemas']['SuccessOrError'];
+    };
+    ListFeaturesRequestPayload: {
+      /** Number of entries to skip in search results. Used in conjunction with limit to paginate through large results. Default is 0 (don't skip any results). */
+      skip?: number;
+      /** Maximum number of entries to return. Used in conjunction with skip to paginate through large results. The system may impose a cap on this value. */
+      limit?: number;
+    };
+    ListFeaturesResponsePayload: {
+      features: components['schemas']['FeatureResponse'][];
+      status: components['schemas']['SuccessOrError'];
+    };
     ListFieldValuesRequestPayload: {
       fields: components['schemas']['SearchField'][];
       filters?: components['schemas']['SearchFilter'][];
-      search?: (
+      search?:
         | components['schemas']['AndNodePayload']
         | components['schemas']['FieldNodePayload']
         | components['schemas']['NotNodePayload']
-        | components['schemas']['OrNodePayload']
-      ) & { [key: string]: any };
-    } & { [key: string]: any };
+        | components['schemas']['OrNodePayload'];
+    };
     ListFieldValuesResponsePayload: {
       results: { [key: string]: components['schemas']['FieldValuesPayload'] };
       status: components['schemas']['SuccessOrError'];
-    } & { [key: string]: any };
+    };
+    ListLayersResponsePayload: {
+      layers: components['schemas']['LayerResponse'][];
+      status: components['schemas']['SuccessOrError'];
+    };
+    ListObservationsResponsePayload: {
+      list: components['schemas']['ObservationResponse'][];
+      status: components['schemas']['SuccessOrError'];
+    };
+    ListOrganizationsElement: {
+      id: number;
+      name: string;
+    };
+    ListOrganizationsResponse: {
+      organizations: components['schemas']['ListOrganizationsElement'][];
+    };
     ListPhotosResponseElement: {
       filename: string;
       size: number;
       capturedTime: string;
+      /** Use location field instead. */
       latitude?: number;
+      /** Use location field instead. */
       longitude?: number;
+      location?: components['schemas']['Point'];
       /** GPS accuracy in meters. */
       gpsAccuracy?: number;
-    } & { [key: string]: any };
+    };
     ListPhotosResponsePayload: {
       photos: components['schemas']['ListPhotosResponseElement'][];
       status: components['schemas']['SuccessOrError'];
-    } & { [key: string]: any };
+    };
+    ListPlantsRequestPayload: {
+      speciesName?: string;
+      minEnteredTime?: string;
+      maxEnteredTime?: string;
+      notes?: string;
+    };
+    ListPlantsResponseElement: {
+      featureId: number;
+      label?: string;
+      speciesId?: number;
+      naturalRegen?: boolean;
+      datePlanted?: string;
+      notes?: string;
+      enteredTime?: string;
+    };
+    ListPlantsResponsePayload: {
+      list: components['schemas']['ListPlantsResponseElement'][];
+      status: components['schemas']['SuccessOrError'];
+    };
     ListSpeciesResponsePayload: {
       values: components['schemas']['SpeciesDetails'][];
       status: components['schemas']['SuccessOrError'];
-    } & { [key: string]: any };
+    };
+    MultiLineString: components['schemas']['Geometry'] & {
+      coordinates?: number[][][];
+    } & {
+      coordinates: unknown;
+    };
+    MultiPoint: components['schemas']['Geometry'] & {
+      coordinates?: number[][];
+    } & {
+      coordinates: unknown;
+    };
+    MultiPolygon: components['schemas']['Geometry'] & {
+      coordinates?: number[][][][];
+    } & {
+      coordinates: unknown;
+    };
     /** Search criterion that matches results that do not match a set of search criteria. */
-    NotNodePayload: components['schemas']['SearchNodePayload'] &
-      ({
-        child?: components['schemas']['SearchNodePayload'];
-      } & { [key: string]: any }) & { [key: string]: any };
+    NotNodePayload: components['schemas']['SearchNodePayload'] & {
+      child?: components['schemas']['SearchNodePayload'];
+    } & {
+      child: unknown;
+    };
     NotificationListResponse: {
       notifications: components['schemas']['NotificationPayload'][];
       status: components['schemas']['SuccessOrError'];
-    } & { [key: string]: any };
+    };
     NotificationPayload: {
       /** Unique identifier for this notification. Clients should treat it as opaque. */
       id: string;
@@ -412,10 +770,43 @@ export interface components {
         | 'In Storage'
         | 'Withdrawn'
         | 'Nursery';
-    } & { [key: string]: any };
+    };
+    ObservationResponse: {
+      id: number;
+      featureId: number;
+      timestamp: string;
+      healthState?: 'Good' | 'Moderate' | 'Poor' | 'Dead';
+      flowers?: boolean;
+      seeds?: boolean;
+      pests?: string;
+      /** Height in meters */
+      height?: number;
+      /** Diameter at breast height in meters */
+      diameterAtBreastHeight?: number;
+    };
     /** Search criterion that matches results that meet any of a set of other search criteria. That is, if the list of children is x, y, and z, this will require x OR y OR z. */
-    OrNodePayload: components['schemas']['SearchNodePayload'] & {
-      [key: string]: any;
+    OrNodePayload: components['schemas']['SearchNodePayload'];
+    PlantResponse: {
+      featureId: number;
+      label?: string;
+      speciesId?: number;
+      naturalRegen?: boolean;
+      datePlanted?: string;
+    };
+    PlantSummaryResponsePayload: {
+      summary: { [key: string]: number };
+      status: components['schemas']['SuccessOrError'];
+    };
+    Point: components['schemas']['Geometry'] & {
+      /** A single position. In the terraware-server API, positions must always include 3 dimensions. The X and Y dimensions use the coordinate system specified by the crs field, and the Z dimension is in meters. */
+      coordinates?: number[];
+    } & {
+      coordinates: unknown;
+    };
+    Polygon: components['schemas']['Geometry'] & {
+      coordinates?: number[][][];
+    } & {
+      coordinates: unknown;
     };
     SearchField:
       | 'accessionNumber'
@@ -487,32 +878,29 @@ export interface components {
       /** List of values to match. For exact and fuzzy searches, a list of at least one value to search for; the list may include null to match accessions where the field does not have a value. For range searches, the list must contain exactly two values, the minimum and maximum; one of the values may be null to search for all values above a minimum or below a maximum. */
       values: (string | null)[];
       type: 'Exact' | 'Fuzzy' | 'Range';
-    } & { [key: string]: any };
-    /** A search criterion. The search will return results that match this criterion. The criterion can be composed of other search criteria to form arbitrary Boolean search expressions. */
-    SearchNodePayload: {
-      operation: string;
-    } & { [key: string]: any };
+    };
+    /** A search criterion. The search will return results that match this criterion. The criterion can be composed of other search criteria to form arbitrary Boolean search expressions. TYPESCRIPT-OVERRIDE-TYPE-WITH-ANY */
+    SearchNodePayload: any;
     SearchRequestPayload: {
       fields: components['schemas']['SearchField'][];
       sortOrder?: components['schemas']['SearchSortOrderElement'][];
       filters?: components['schemas']['SearchFilter'][];
-      search?: (
+      search?:
         | components['schemas']['AndNodePayload']
         | components['schemas']['FieldNodePayload']
         | components['schemas']['NotNodePayload']
-        | components['schemas']['OrNodePayload']
-      ) & { [key: string]: any };
+        | components['schemas']['OrNodePayload'];
       cursor?: string;
       count: number;
-    } & { [key: string]: any };
+    };
     SearchResponsePayload: {
       results: { [key: string]: string }[];
       cursor?: string;
-    } & { [key: string]: any };
+    };
     SearchSortOrderElement: {
       field: components['schemas']['SearchField'];
       direction?: 'Ascending' | 'Descending';
-    } & { [key: string]: any };
+    };
     /** Represents a quantity of seeds, measured either in individual seeds or by weight. */
     SeedQuantityPayload: {
       /** Number of units of seeds. If "units" is "Seeds", this is the number of seeds and must be an integer. Otherwise it is a measurement in the weight units specified in the "units" field, and may have a fractional part. */
@@ -526,26 +914,87 @@ export interface components {
         | 'Pounds';
       /** If this quantity is a weight measurement, the weight in grams. This is not set if the "units" field is "Seeds". This is always calculated on the server side and is ignored on input. */
       grams?: number;
-    } & { [key: string]: any };
+    };
     SimpleErrorResponsePayload: {
       error: components['schemas']['ErrorDetails'];
       status: components['schemas']['SuccessOrError'];
-    } & { [key: string]: any };
+    };
     SimpleSuccessResponsePayload: {
       status: components['schemas']['SuccessOrError'];
-    } & { [key: string]: any };
+    };
+    SpeciesCreateResponsePayload: {
+      id: number;
+      status: components['schemas']['SuccessOrError'];
+    };
     SpeciesDetails: {
       id: number;
       name: string;
-    } & { [key: string]: any };
+    };
+    SpeciesGetResponsePayload: {
+      species: components['schemas']['SpeciesResponseElement'];
+      status: components['schemas']['SuccessOrError'];
+    };
+    SpeciesListResponsePayload: {
+      species: components['schemas']['SpeciesResponseElement'][];
+      status: components['schemas']['SuccessOrError'];
+    };
+    SpeciesNameCreateResponsePayload: {
+      id: number;
+      status: components['schemas']['SuccessOrError'];
+    };
+    SpeciesNameGetResponsePayload: {
+      speciesName: components['schemas']['SpeciesNamesResponseElement'];
+      status: components['schemas']['SuccessOrError'];
+    };
+    SpeciesNameRequestPayload: {
+      /** True if name is a scientific name for the species. */
+      isScientific?: boolean;
+      locale?: string;
+      name: string;
+      speciesId: number;
+    };
+    SpeciesNamesListResponsePayload: {
+      speciesNames: components['schemas']['SpeciesNamesResponseElement'][];
+      status: components['schemas']['SuccessOrError'];
+    };
+    SpeciesNamesResponseElement: {
+      id: number;
+      /** True if name is the scientific name for the species. */
+      isScientific: boolean;
+      name: string;
+      speciesId: number;
+    };
+    SpeciesRequestPayload: {
+      conservationStatus?: string;
+      familyId?: number;
+      /** True if name is the scientific name for the species. */
+      isScientific?: boolean;
+      name: string;
+      plantForm?: 'Tree' | 'Shrub' | 'Vine' | 'Liana' | 'Herbaceous';
+      rare?: 'No' | 'Yes' | 'Unsure';
+      /** Taxonomic serial number from ITIS database. */
+      tsn?: string;
+    };
+    SpeciesResponseElement: {
+      conservationStatus?: string;
+      familyId?: number;
+      id: number;
+      /** True if name is the scientific name for the species. */
+      isScientific: boolean;
+      name: string;
+      plantForm?: 'Tree' | 'Shrub' | 'Vine' | 'Liana' | 'Herbaceous';
+      rare?: 'No' | 'Yes' | 'Unsure';
+      /** Taxonomic serial number from ITIS database. */
+      tsn?: string;
+    };
     StorageLocationDetails: {
       storageLocation: string;
       storageCondition: 'Refrigerator' | 'Freezer';
-    } & { [key: string]: any };
+    };
     StorageLocationsResponsePayload: {
       locations: components['schemas']['StorageLocationDetails'][];
       status: components['schemas']['SuccessOrError'];
-    } & { [key: string]: any };
+    };
     /** Indicates of success or failure of the requested operation. */
     SuccessOrError: 'ok' | 'error';
     /** Summary of important statistics about the seed bank for the Summary page. */
@@ -561,12 +1010,12 @@ export interface components {
       overdueDriedAccessions: number;
       /** Number of accessions withdrawn so far this week */
       recentlyWithdrawnAccessions: number;
-    } & { [key: string]: any };
+    };
     /** The current value and value as of last week for a summary statistic */
     SummaryStatistic: {
       current: number;
       lastWeek: number;
-    } & { [key: string]: any };
+    };
     UpdateAccessionRequestPayload: {
       bagNumbers?: string[];
       collectedDate?: string;
@@ -585,9 +1034,7 @@ export interface components {
       germinationTestTypes?: ('Lab' | 'Nursery')[];
       germinationTests?: components['schemas']['GerminationTestPayload'][];
       /** Initial size of accession. The units of this value must match the measurement type in "processingMethod". */
-      initialQuantity?: components['schemas']['SeedQuantityPayload'] & {
-        [key: string]: any;
-      };
+      initialQuantity?: components['schemas']['SeedQuantityPayload'];
       landowner?: string;
       numberOfTrees?: number;
       nurseryStartDate?: string;
@@ -609,28 +1056,85 @@ export interface components {
       storageStartDate?: string;
       subsetCount?: number;
       /** Weight of subset of seeds. Units must be a weight measurement, not "Seeds". */
-      subsetWeight?: components['schemas']['SeedQuantityPayload'] & {
-        [key: string]: any;
-      };
+      subsetWeight?: components['schemas']['SeedQuantityPayload'];
       targetStorageCondition?: 'Refrigerator' | 'Freezer';
       withdrawals?: components['schemas']['WithdrawalPayload'][];
-    } & { [key: string]: any };
+    };
     UpdateAccessionResponsePayload: {
       accession: components['schemas']['AccessionPayload'];
       status: components['schemas']['SuccessOrError'];
-    } & { [key: string]: any };
-    UpdateSpeciesResponsePayload: {
-      /** If the requested species name already existed, the ID of the existing species. Will not be present if the requested species name did not already exist. */
-      mergedWithSpeciesId?: number;
+    };
+    UpdateFeatureRequestPayload: {
+      layerId: number;
+      geom?: components['schemas']['Geometry'];
+      gpsHorizAccuracy?: number;
+      gpsVertAccuracy?: number;
+      attrib?: string;
+      notes?: string;
+      enteredTime?: string;
+    };
+    UpdateFeatureResponsePayload: {
+      feature: components['schemas']['FeatureResponse'];
       status: components['schemas']['SuccessOrError'];
-    } & { [key: string]: any };
+    };
+    UpdateLayerRequestPayload: {
+      siteId: number;
+      layerType:
+        | 'Aerial Photos'
+        | 'Surface Color Map'
+        | 'Terrain Color Map'
+        | 'Boundaries'
+        | 'Plants Planted'
+        | 'Plants Existing'
+        | 'Irrigation'
+        | 'Infrastructure'
+        | 'Partner Input'
+        | 'Restoration Zones'
+        | 'Site Prep'
+        | 'Map notes';
+      tileSetName: string;
+      proposed: boolean;
+      hidden: boolean;
+    };
+    UpdateLayerResponsePayload: {
+      layer: components['schemas']['LayerResponse'];
+      status: components['schemas']['SuccessOrError'];
+    };
+    UpdateObservationRequestPayload: {
+      timestamp: string;
+      healthState?: 'Good' | 'Moderate' | 'Poor' | 'Dead';
+      flowers?: boolean;
+      seeds?: boolean;
+      pests?: string;
+      /** Height in meters */
+      height?: number;
+      /** Diameter at breast height in meters */
+      diameterAtBreastHeight?: number;
+    };
+    UpdateObservationResponsePayload: {
+      resp: components['schemas']['ObservationResponse'];
+      status: components['schemas']['SuccessOrError'];
+    };
+    UpdatePlantRequestPayload: {
+      label?: string;
+      speciesId?: number;
+      naturalRegen?: boolean;
+      datePlanted?: string;
+    };
+    UpdatePlantResponsePayload: {
+      plant: components['schemas']['PlantResponse'];
+      status: components['schemas']['SuccessOrError'];
+    };
     UploadPhotoMetadataPayload: {
       capturedTime: string;
+      /** Use location field instead. */
       latitude?: number;
+      /** Use location field instead. */
       longitude?: number;
+      location?: components['schemas']['Point'];
       /** GPS accuracy in meters. */
       gpsAccuracy?: number;
-    } & { [key: string]: any };
+    };
     WithdrawalPayload: {
       /** Server-assigned unique ID of this withdrawal, its ID. Omit when creating a new withdrawal. */
       id?: number;
@@ -646,25 +1150,17 @@ export interface components {
       destination?: string;
       notes?: string;
       /** Quantity of seeds remaining. For weight-based accessions, this is user input and is required. For count-based accessions, it is calculated by the server and ignored on input. */
-      remainingQuantity?: components['schemas']['SeedQuantityPayload'] & {
-        [key: string]: any;
-      };
+      remainingQuantity?: components['schemas']['SeedQuantityPayload'];
       staffResponsible?: string;
       /** If this withdrawal is of type "Germination Testing", the ID of the test it is associated with. This is always set by the server and cannot be modified. */
       germinationTestId?: number;
       /** For weight-based accessions, the difference between the weight remaining before this withdrawal and the weight remaining after it. This is a server-calculated value and is ignored on input. */
-      weightDifference?: components['schemas']['SeedQuantityPayload'] & {
-        [key: string]: any;
-      };
+      weightDifference?: components['schemas']['SeedQuantityPayload'];
       /** Quantity of seeds withdrawn. For germination testing withdrawals, this is always the same as the test's "seedsSown" value, if that value is present. Otherwise, it is a user-supplied value. For count-based accessions, the units must always be "Seeds". For weight-based accessions, the units may either be a weight measurement or "Seeds". */
-      withdrawnQuantity?: components['schemas']['SeedQuantityPayload'] & {
-        [key: string]: any;
-      };
+      withdrawnQuantity?: components['schemas']['SeedQuantityPayload'];
       /** The best estimate of the number of seeds withdrawn. This is the same as "withdrawnQuantity" if that is present, or else the same as "weightDifference" if this is a weight-based accession. If this is a count-based accession and "withdrawnQuantity" does not have a value, this field will not be present. This is a server-calculated value and is ignored on input. */
-      estimatedQuantity?: components['schemas']['SeedQuantityPayload'] & {
-        [key: string]: any;
-      };
-    } & { [key: string]: any };
+      estimatedQuantity?: components['schemas']['SeedQuantityPayload'];
+    };
   };
 }
 
@@ -675,6 +1171,511 @@ export interface operations {
       200: {
         content: {
           'application/json': components['schemas']['ListDeviceConfigsResponse'];
+        };
+      };
+    };
+  };
+  /** List all the facilities the current user can access. */
+  listAll_2: {
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          'application/json': components['schemas']['ListFacilitiesResponse'];
+        };
+      };
+    };
+  };
+  create_4: {
+    responses: {
+      /** The feature was created successfully. Response includes fields populated by the server, including the feature id. */
+      200: {
+        content: {
+          'application/json': components['schemas']['CreateFeatureResponsePayload'];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CreateFeatureRequestPayload'];
+      };
+    };
+  };
+  list_1: {
+    parameters: {
+      query: {
+        payload: components['schemas']['ListFeaturesRequestPayload'];
+      };
+      path: {
+        layerId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          'application/json': components['schemas']['ListFeaturesResponsePayload'];
+        };
+      };
+    };
+  };
+  read_2: {
+    parameters: {
+      path: {
+        featureId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          'application/json': components['schemas']['GetFeatureResponsePayload'];
+        };
+      };
+      /** The specified feature doesn't exist. */
+      404: {
+        content: {
+          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+        };
+      };
+    };
+  };
+  update_4: {
+    parameters: {
+      path: {
+        featureId: number;
+      };
+    };
+    responses: {
+      /** The feature was updated successfully. */
+      200: {
+        content: {
+          'application/json': components['schemas']['UpdateFeatureResponsePayload'];
+        };
+      };
+      /** The specified feature doesn't exist. */
+      404: {
+        content: {
+          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['UpdateFeatureRequestPayload'];
+      };
+    };
+  };
+  delete_1: {
+    parameters: {
+      path: {
+        featureId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          'application/json': components['schemas']['DeleteFeatureResponsePayload'];
+        };
+      };
+      /** The specified feature doesn't exist. */
+      404: {
+        content: {
+          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+        };
+      };
+    };
+  };
+  listFeaturePhotos: {
+    parameters: {
+      path: {
+        featureId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          'application/json': components['schemas']['ListFeaturePhotosResponsePayload'];
+        };
+      };
+    };
+  };
+  createFeaturePhoto: {
+    parameters: {
+      path: {
+        featureId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          'application/json': components['schemas']['CreateFeaturePhotoResponsePayload'];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        'multipart/form-data': {
+          metadata: components['schemas']['CreateFeaturePhotoRequestPayload'];
+          file: string;
+        };
+      };
+    };
+  };
+  /** Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio. */
+  downloadFeaturePhoto: {
+    parameters: {
+      path: {
+        featureId: number;
+        photoId: number;
+      };
+      query: {
+        maxWidth?: number;
+        maxHeight?: number;
+      };
+    };
+    responses: {
+      /** The photo was successfully retrieved. */
+      200: {
+        content: {
+          'image/jpeg': string;
+        };
+      };
+      /** The accession does not exist, or does not have a photo with the requested filename. */
+      404: {
+        content: {
+          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+        };
+      };
+    };
+  };
+  deleteFeaturePhoto: {
+    parameters: {
+      path: {
+        featureId: number;
+        photoId: number;
+      };
+    };
+    responses: {
+      /** Photo deleted. */
+      200: {
+        content: {
+          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+        };
+      };
+      /** The requested resource was not found. */
+      404: {
+        content: {
+          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+        };
+      };
+    };
+  };
+  getFeaturePhotoMetadata: {
+    parameters: {
+      path: {
+        featureId: number;
+        photoId: number;
+      };
+    };
+    responses: {
+      /** Photo metadata retrieved. */
+      200: {
+        content: {
+          'application/json': components['schemas']['GetFeaturePhotoMetadataResponsePayload'];
+        };
+      };
+      /** The requested resource was not found. */
+      404: {
+        content: {
+          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+        };
+      };
+    };
+  };
+  create_3: {
+    responses: {
+      /** The layer was created successfully. Response includes fields populated by the server, including the layer id. */
+      200: {
+        content: {
+          'application/json': components['schemas']['CreateLayerResponsePayload'];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CreateLayerRequestPayload'];
+      };
+    };
+  };
+  list: {
+    parameters: {
+      path: {
+        siteId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          'application/json': components['schemas']['ListLayersResponsePayload'];
+        };
+      };
+    };
+  };
+  read_1: {
+    parameters: {
+      path: {
+        layerId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          'application/json': components['schemas']['GetLayerResponsePayload'];
+        };
+      };
+      /** The specified layer doesn't exist. */
+      404: {
+        content: {
+          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+        };
+      };
+    };
+  };
+  update_3: {
+    parameters: {
+      path: {
+        layerId: number;
+      };
+    };
+    responses: {
+      /** The layer was updated successfully. */
+      200: {
+        content: {
+          'application/json': components['schemas']['UpdateLayerResponsePayload'];
+        };
+      };
+      /** The specified layer doesn't exist. */
+      404: {
+        content: {
+          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['UpdateLayerRequestPayload'];
+      };
+    };
+  };
+  delete: {
+    parameters: {
+      path: {
+        layerId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          'application/json': components['schemas']['DeleteLayerResponsePayload'];
+        };
+      };
+      /** The specified layer doesn't exist. */
+      404: {
+        content: {
+          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+        };
+      };
+    };
+  };
+  create_2: {
+    responses: {
+      /** The plant observation was created successfully. */
+      200: {
+        content: {
+          'application/json': components['schemas']['CreateObservationResponsePayload'];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CreateObservationRequestPayload'];
+      };
+    };
+  };
+  getList: {
+    parameters: {
+      path: {
+        featureId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          'application/json': components['schemas']['ListObservationsResponsePayload'];
+        };
+      };
+    };
+  };
+  get_1: {
+    parameters: {
+      path: {
+        plantObservationId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          'application/json': components['schemas']['GetObservationResponsePayload'];
+        };
+      };
+      /** The specified plant observation doesn't exist. */
+      404: {
+        content: {
+          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+        };
+      };
+    };
+  };
+  update_2: {
+    parameters: {
+      path: {
+        plantObservationId: number;
+      };
+    };
+    responses: {
+      /** The plant observation was updated successfully. */
+      200: {
+        content: {
+          'application/json': components['schemas']['UpdateObservationResponsePayload'];
+        };
+      };
+      /** The specified plant observation doesn't exist. */
+      404: {
+        content: {
+          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['UpdateObservationRequestPayload'];
+      };
+    };
+  };
+  create_1: {
+    responses: {
+      /** The plant was created successfully. */
+      200: {
+        content: {
+          'application/json': components['schemas']['CreatePlantResponsePayload'];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CreatePlantRequestPayload'];
+      };
+    };
+  };
+  getPlantSummary: {
+    parameters: {
+      query: {
+        payload: components['schemas']['GetPlantSummaryPayload'];
+      };
+      path: {
+        layerId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          'application/json': components['schemas']['PlantSummaryResponsePayload'];
+        };
+      };
+    };
+  };
+  getPlantsList: {
+    parameters: {
+      query: {
+        payload: components['schemas']['ListPlantsRequestPayload'];
+      };
+      path: {
+        layerId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          'application/json': components['schemas']['ListPlantsResponsePayload'];
+        };
+      };
+    };
+  };
+  get: {
+    parameters: {
+      path: {
+        featureId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          'application/json': components['schemas']['GetPlantResponsePayload'];
+        };
+      };
+      /** The specified plant doesn't exist. */
+      404: {
+        content: {
+          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+        };
+      };
+    };
+  };
+  update_1: {
+    parameters: {
+      path: {
+        featureId: number;
+      };
+    };
+    responses: {
+      /** The plant was updated successfully. */
+      200: {
+        content: {
+          'application/json': components['schemas']['UpdatePlantResponsePayload'];
+        };
+      };
+      /** The specified plant doesn't exist. */
+      404: {
+        content: {
+          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['UpdatePlantRequestPayload'];
+      };
+    };
+  };
+  /** List all organizations the user can access. */
+  listAll_1: {
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          'application/json': components['schemas']['ListOrganizationsResponse'];
         };
       };
     };
@@ -814,11 +1815,16 @@ export interface operations {
       };
     };
   };
+  /** Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio. */
   getPhoto: {
     parameters: {
       path: {
         accessionNumber: string;
         photoFilename: string;
+      };
+      query: {
+        maxWidth?: number;
+        maxHeight?: number;
       };
     };
     responses: {
@@ -866,9 +1872,9 @@ export interface operations {
     requestBody: {
       content: {
         'multipart/form-data': {
-          file?: string;
-          metadata?: components['schemas']['UploadPhotoMetadataPayload'];
-        } & { [key: string]: any };
+          file: string;
+          metadata: components['schemas']['UploadPhotoMetadataPayload'];
+        };
       };
     };
   };
@@ -911,7 +1917,7 @@ export interface operations {
     };
     requestBody: {
       content: {
-        'application/json': { [key: string]: { [key: string]: any } };
+        'application/json': { [key: string]: { [key: string]: unknown } };
       };
     };
   };
@@ -1025,6 +2031,7 @@ export interface operations {
         units?: string;
         decimalPlaces?: number;
         siteModuleId?: number;
+        facilityId?: number;
       };
     };
     responses: {
@@ -1072,6 +2079,7 @@ export interface operations {
       };
     };
   };
+  /** Use /api/v1/species instead. */
   listSpecies: {
     responses: {
       /** OK */
@@ -1082,6 +2090,7 @@ export interface operations {
       };
     };
   };
+  /** Use /api/v1/species instead. */
   createSpecies: {
     responses: {
       /** Species created. */
@@ -1103,7 +2112,7 @@ export interface operations {
       };
     };
   };
-  /** If the species is being renamed and the species name in the payload already exists, the existing species replaces the one in the request (thus merging the requested species into the one that already had the name) and its ID is returned. */
+  /** Use /api/v1/species instead. */
   updateSpecies: {
     parameters: {
       path: {
@@ -1111,10 +2120,10 @@ export interface operations {
       };
     };
     responses: {
-      /** Species updated or merged with an existing species. */
+      /** The requested operation succeeded. */
       200: {
         content: {
-          'application/json': components['schemas']['UpdateSpeciesResponsePayload'];
+          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
         };
       };
       /** The requested resource was not found. */
@@ -1140,4 +2149,261 @@ export interface operations {
       };
     };
   };
+  getSite: {
+    parameters: {
+      path: {
+        siteId: number;
+      };
+    };
+    responses: {
+      /** Client is not associated with an organization and is not a site admin */
+      400: {
+        content: {
+          'application/json': components['schemas']['GetSiteResponse'];
+        };
+      };
+      /** No site with the requested ID exists. */
+      404: {
+        content: {
+          'application/json': components['schemas']['GetSiteResponse'];
+        };
+      };
+    };
+  };
+  speciesList: {
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          'application/json': components['schemas']['SpeciesListResponsePayload'];
+        };
+      };
+    };
+  };
+  speciesCreate: {
+    responses: {
+      /** Species created. */
+      200: {
+        content: {
+          'application/json': components['schemas']['SpeciesCreateResponsePayload'];
+        };
+      };
+      /** A species with the requested name already exists. */
+      409: {
+        content: {
+          'application/json': components['schemas']['SpeciesCreateResponsePayload'];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['SpeciesRequestPayload'];
+      };
+    };
+  };
+  speciesNamesListAll: {
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          'application/json': components['schemas']['SpeciesNamesListResponsePayload'];
+        };
+      };
+    };
+  };
+  speciesNameCreate: {
+    responses: {
+      /** Species name added. */
+      200: {
+        content: {
+          'application/json': components['schemas']['SpeciesNameCreateResponsePayload'];
+        };
+      };
+      /** The species does not exist. */
+      404: {
+        content: {
+          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+        };
+      };
+      /** The species already has the requested name. */
+      409: {
+        content: {
+          'application/json': components['schemas']['SpeciesNameCreateResponsePayload'];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['SpeciesNameRequestPayload'];
+      };
+    };
+  };
+  /** Gets information about a single species name. */
+  speciesNameGet: {
+    parameters: {
+      path: {
+        speciesNameId: number;
+      };
+    };
+    responses: {
+      /** Species name retrieved. */
+      200: {
+        content: {
+          'application/json': components['schemas']['SpeciesNameGetResponsePayload'];
+        };
+      };
+      /** The requested resource was not found. */
+      404: {
+        content: {
+          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+        };
+      };
+    };
+  };
+  /** Updates one of the names of a species. */
+  speciesNameUpdate: {
+    parameters: {
+      path: {
+        speciesNameId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['SpeciesNameRequestPayload'];
+      };
+    };
+  };
+  /** Deletes one of the secondary names of a species. */
+  speciesNameDelete: {
+    parameters: {
+      path: {
+        speciesNameId: number;
+      };
+    };
+    responses: {
+      /** Species name deleted. */
+      200: {
+        content: {
+          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+        };
+      };
+      /** The requested resource was not found. */
+      404: {
+        content: {
+          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+        };
+      };
+      /** Cannot delete the primary name of a species. */
+      409: {
+        content: {
+          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+        };
+      };
+    };
+  };
+  speciesRead: {
+    parameters: {
+      path: {
+        speciesId: number;
+      };
+    };
+    responses: {
+      /** Species retrieved. */
+      200: {
+        content: {
+          'application/json': components['schemas']['SpeciesGetResponsePayload'];
+        };
+      };
+      /** The requested resource was not found. */
+      404: {
+        content: {
+          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+        };
+      };
+    };
+  };
+  speciesUpdate: {
+    parameters: {
+      path: {
+        speciesId: number;
+      };
+    };
+    responses: {
+      /** Species updated or merged with an existing species. */
+      200: {
+        content: {
+          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+        };
+      };
+      /** The requested resource was not found. */
+      404: {
+        content: {
+          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['SpeciesRequestPayload'];
+      };
+    };
+  };
+  speciesDelete: {
+    parameters: {
+      path: {
+        speciesId: number;
+      };
+    };
+    responses: {
+      /** Species deleted. */
+      200: {
+        content: {
+          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+        };
+      };
+      /** The requested resource was not found. */
+      404: {
+        content: {
+          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+        };
+      };
+      /** Cannot delete the species because it is currently in use. */
+      409: {
+        content: {
+          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+        };
+      };
+    };
+  };
+  speciesNamesList: {
+    parameters: {
+      path: {
+        speciesId: number;
+      };
+    };
+    responses: {
+      /** Species names retrieved. */
+      200: {
+        content: {
+          'application/json': components['schemas']['SpeciesNamesListResponsePayload'];
+        };
+      };
+      /** The species does not exist. */
+      404: {
+        content: {
+          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+        };
+      };
+    };
+  };
 }
+
+export interface external {}
