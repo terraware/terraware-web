@@ -1,7 +1,5 @@
 import { AppBar, Grid, IconButton, Link, Toolbar } from '@material-ui/core';
-import Chip from '@material-ui/core/Chip';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
-import AddIcon from '@material-ui/icons/Add';
 import HelpIcon from '@material-ui/icons/Help';
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
@@ -34,21 +32,14 @@ const useStyles = makeStyles((theme) =>
     grow: {
       flexGrow: 1,
     },
-    addAccession: {
-      marginLeft: theme.spacing(2),
-      color: theme.palette.common.white,
-    },
     flex: {
       display: 'flex',
     },
+    right: {
+      marginLeft: 'auto',
+    },
   })
 );
-
-const newAccessionChipStyles = makeStyles((theme) => ({
-  root: {
-    color: theme.palette.common.white,
-  },
-}));
 
 export default function NavBar(): JSX.Element | null {
   const classes = useStyles();
@@ -65,7 +56,7 @@ export default function NavBar(): JSX.Element | null {
               </React.Suspense>
             </ErrorBoundary>
           </Grid>
-          <Grid item>
+          <Grid item className={classes.right}>
             <div className={classes.flex}>
               <SearchBar />
               <Link
@@ -80,22 +71,6 @@ export default function NavBar(): JSX.Element | null {
                 </IconButton>
               </Link>
               <NotificationsDropdown />
-              <Link
-                component={RouterLink}
-                to={getLocation('/accessions/new', location)}
-              >
-                <Chip
-                  id='newAccession'
-                  className={classes.addAccession}
-                  label={strings.NEW_ACCESSION}
-                  clickable={true}
-                  deleteIcon={<AddIcon classes={newAccessionChipStyles()} />}
-                  color='primary'
-                  onDelete={() => {
-                    return true;
-                  }}
-                />
-              </Link>
             </div>
           </Grid>
         </Grid>

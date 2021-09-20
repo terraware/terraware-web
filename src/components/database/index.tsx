@@ -4,13 +4,15 @@ import {
   CircularProgress,
   Container,
   Grid,
+  Link,
   Paper,
 } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { Link as RouterLink, useHistory } from 'react-router-dom';
 import {
   useRecoilState,
   useRecoilValueLoadable,
@@ -31,6 +33,7 @@ import searchSelector, { columnsSelector } from '../../state/selectors/search';
 import searchAllValuesSelector from '../../state/selectors/searchAllValues';
 import searchValuesSelector from '../../state/selectors/searchValues';
 import strings from '../../strings';
+import useStateLocation, { getLocation } from '../../utils/useStateLocation';
 import Table from '../common/table';
 import { Order } from '../common/table/sort';
 import PageHeader from '../PageHeader';
@@ -54,8 +57,18 @@ const useStyles = makeStyles((theme: Theme) =>
         backgroundColor: `${theme.palette.common.black}!important`,
       },
     },
+    addAccession: {
+      marginLeft: theme.spacing(2),
+      color: theme.palette.common.white,
+    },
   })
 );
+
+const newAccessionChipStyles = makeStyles((theme) => ({
+  root: {
+    color: theme.palette.common.white,
+  },
+}));
 
 export default function Database(): JSX.Element {
   const classes = useStyles();
@@ -167,6 +180,7 @@ export default function Database(): JSX.Element {
     }
   };
 
+  const location = useStateLocation();
   return (
     <MuiPickersUtilsProvider utils={MomentUtils}>
       <main>
@@ -200,6 +214,22 @@ export default function Database(): JSX.Element {
                 onClick={onDownloadReport}
                 className={classes.downloadReport}
               />
+              <Link
+                component={RouterLink}
+                to={getLocation('/accessions/new', location)}
+              >
+                <Chip
+                  id='newAccession'
+                  className={classes.addAccession}
+                  label={strings.NEW_ACCESSION}
+                  clickable={true}
+                  deleteIcon={<AddIcon classes={newAccessionChipStyles()} />}
+                  color='primary'
+                  onDelete={() => {
+                    return true;
+                  }}
+                />
+              </Link>
             </div>
           }
         >
