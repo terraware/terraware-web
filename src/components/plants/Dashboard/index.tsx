@@ -6,6 +6,7 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 import { PlantSummary } from '../../../api/types/plant';
+import ErrorBoundary from '../../../ErrorBoundary';
 import plantsSummarySelector from '../../../state/selectors/plantsSummary';
 import strings from '../../../strings';
 import Map from './Map';
@@ -54,18 +55,22 @@ export default function Dashboard(): JSX.Element {
                 <TableContainer component={Paper}>
                   <Table aria-label='simple table'>
                     <TableBody>
-                      <React.Suspense fallback={strings.LOADING}>
-                        <SummaryRow />
-                      </React.Suspense>
+                      <ErrorBoundary>
+                        <React.Suspense fallback={strings.LOADING}>
+                          <SummaryRow />
+                        </React.Suspense>
+                      </ErrorBoundary>
                     </TableBody>
                   </Table>
                 </TableContainer>
               </Grid>
               <Grid item xs={12}>
                 <Paper className={classes.mapContainer}>
-                  <React.Suspense fallback={strings.LOADING}>
-                    <SpeciesChart isFullscreen={isFullscreen} />
-                  </React.Suspense>
+                  <ErrorBoundary>
+                    <React.Suspense fallback={strings.LOADING}>
+                      <SpeciesChart isFullscreen={isFullscreen} />
+                    </React.Suspense>
+                  </ErrorBoundary>
                 </Paper>
               </Grid>
             </Grid>
