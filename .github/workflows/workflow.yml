@@ -37,9 +37,6 @@ jobs:
       - name: linter
         run: yarn lint
 
-      - name: test
-        run: yarn test
-
       - name: download and start backend
         run: |
           yarn docker:start
