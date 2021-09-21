@@ -17,8 +17,10 @@
     "@types/react": "^17.0.9",
     "@types/react-dom": "^17.0.6",
     "@types/react-router-dom": "^5.1.7",
+    "@types/reactour": "^1.18.1",
     "axios": "^0.21.1",
     "chart.js": "^3.3.2",
+    "cookies-js": "^1.2.3",
     "jwt-decode": "^3.1.2",
     "mapbox-gl": "^2.4.0",
     "react": "^17.0.2",
@@ -28,14 +30,13 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
     "react-sortable-hoc": "^2.0.0",
+    "reactour": "https://github.com/xs9627/reactour/tarball/test",
     "recoil": "^0.3.1",
     "sass": "^1.38.0",
+    "styled-components": "^4.0.0",
+    "tslint-plugin-cypress": "^1.0.4",
     "typescript": "^4.3.2",
-    "web-vitals": "^1.0.1",
-    "@types/reactour": "^1.18.1",
-    "cookies-js": "^1.2.3",
-    "reactour": "https://github.com/xs9627/reactour/tarball/test",
-    "styled-components": "^4.0.0"
+    "web-vitals": "^1.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -50,11 +51,11 @@
     "e2e": "start-server-and-test start:dev http://localhost:3000 cy:run && yarn e2e:report",
     "e2e:report": "npx nyc report --reporter=text",
     "lint": "tslint --project tsconfig.json",
-    "docker:start": "./scripts/launch_server.sh",
-    "docker:stop": "docker-compose down",
-    "wait-be": "wait-on http://localhost:8008/docs",
+    "docker:start": "mkdir -p photo-data && docker-compose -f docker-compose.yml pull && docker-compose -f docker-compose.yml up -d",
+    "docker:stop": "docker-compose -f docker-compose.yml kill",
+    "wait-be": "wait-on http://localhost:8080/swagger-ui/index.html",
     "server:prepare": "./scripts/preparedb.sh",
-    "server:reset": "./scripts/resetdb.sh"
+    "server:reset": "./scripts/resetseedbankdb.sh"
   },
   "eslintConfig": {
     "extends": [

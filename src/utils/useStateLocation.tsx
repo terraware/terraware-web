@@ -25,7 +25,7 @@ export function getLocation(
       state: {
         from: location.state.from,
       },
-      search: search,
+      search,
     };
   } else {
     return {
@@ -33,7 +33,7 @@ export function getLocation(
       state: {
         from: location.pathname,
       },
-      search: search,
+      search,
     };
   }
 }

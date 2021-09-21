@@ -52,7 +52,7 @@ export default function NavBar(): JSX.Element | null {
           <Grid item>
             <ErrorBoundary>
               <React.Suspense fallback={strings.LOADING}>
-                <ProjectsDropdown />
+                {/* <ProjectsDropdown /> */}
               </React.Suspense>
             </ErrorBoundary>
           </Grid>
@@ -79,6 +79,7 @@ export default function NavBar(): JSX.Element | null {
   );
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function ProjectsDropdown(): JSX.Element {
   const projects = useRecoilValue(projectsSelector);
   const [projectId, setProjectId] = useRecoilState(projectIdSelector);

@@ -6,16 +6,16 @@ import theme from '../../theme';
 import OnboardingButtons from './OnboardingButtons';
 import Step from './Step';
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles((theme1: Theme) =>
   createStyles({
     submit: {
-      marginLeft: theme.spacing(2),
-      color: theme.palette.common.white,
+      marginLeft: theme1.spacing(2),
+      color: theme1.palette.common.white,
     },
     helper: {
       maxWidth: '560px !important',
       padding: '0 !important',
-      borderRadius: theme.spacing(1),
+      borderRadius: theme1.spacing(1),
     },
   })
 );

@@ -105,11 +105,12 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
     const nurseryTests = accession.germinationTests?.filter(
       (germinationTest) => germinationTest.testType === 'Nursery'
     );
+
     return nurseryTests ?? [];
   };
 
   const getTotalScheduled = (): number => {
-    const total = accession.germinationTests?.reduce(
+    const totali = accession.germinationTests?.reduce(
       (acum, germinationTest) => {
         if (
           germinationTest.testType === 'Nursery' &&
@@ -117,14 +118,17 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
         ) {
           acum += germinationTest.seedsSown || 0;
         }
+
         return acum;
       },
       0
     );
-    return total || 0;
+
+    return totali || 0;
   };
 
   const total = getTotalScheduled();
+
   return (
     <main>
       <MuiPickersUtilsProvider utils={MomentUtils}>
@@ -215,6 +219,7 @@ function sortComparator(
     if (bValue > aValue) {
       return 1;
     }
+
     return 0;
   }
 

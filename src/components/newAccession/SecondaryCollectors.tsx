@@ -42,7 +42,7 @@ export default function SecondaryCollectors({
           <TextField
             id={`secondaryCollectors${index}`}
             value={collector}
-            onChange={(id, value) => onCollectorChange(value, index)}
+            onChange={(_id, value) => onCollectorChange(value, index)}
             label={index === 0 && 'Secondary collector'}
           />
           {index !== 0 && (

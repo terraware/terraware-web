@@ -1,5 +1,5 @@
 {
-    "extends": ["tslint:recommended", "tslint-eslint-rules", "tslint-react", "tslint-config-prettier", "tslint-react-hooks"],
+    "extends": ["tslint:recommended", "tslint-eslint-rules", "tslint-react", "tslint-config-prettier", "tslint-react-hooks",  "tslint-plugin-cypress"],
     "jsRules": {},
     "rules": {
       "interface-name": false,
@@ -52,7 +52,8 @@
     },
     "linterOptions": {
       "exclude": [
-          "src/api/types/generated-schema.ts"
+          "src/api/types/generated-schema.ts",
+          "src/api/types/generated-schema-seedbank.ts"
       ]
   }
   }

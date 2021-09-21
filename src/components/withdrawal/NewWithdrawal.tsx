@@ -92,7 +92,13 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
       setRemainingSeeds(props.value?.remainingQuantity?.quantity || 0);
     }
     setWithdrawRemaining(false);
-  }, [props.open]);
+  }, [
+    props.allowWithdrawalInGrams,
+    props.open,
+    props.seedsAvailable,
+    props.value,
+    setRecord,
+  ]);
 
   const handleCancel = () => {
     setRecord(initWithdrawal(props.value));
@@ -104,7 +110,7 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
   };
 
   const onQuantityChange = (id: string, _value: unknown) => {
-    const value = _value ? parseInt(_value as string) : undefined;
+    const value = _value ? parseInt(_value as string, 10) : undefined;
     let newWithdrawnQuantity = {
       units: record.withdrawnQuantity?.units || WEIGHT_UNITS[0].value,
       quantity: record.withdrawnQuantity?.quantity || 0,
@@ -159,6 +165,7 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
     } else {
       values = [...countUnits];
     }
+
     return values;
   };
 
@@ -176,7 +183,8 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
     : strings.WITHDRAW_SEEDS;
 
   const getErrorText = (id: string) => {
-    const error = errors.find((error) => error.id === id);
+    const error = errors.find((_error) => _error.id === id);
+
     return error ? error.msg : '';
   };
 
@@ -186,7 +194,7 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
     if (!value) {
       if (errorIndex < 0) {
         newErrors.push({
-          id: id,
+          id,
           msg: strings.REQUIRED_FIELD,
         });
       }
@@ -263,7 +271,7 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
                 {dateSubtext}
               </Typography>
             </Grid>
-            <Grid item xs={6}></Grid>
+            <Grid item xs={6} />
             <Grid item xs={6} id='withdrawnQuantity'>
               <TextField
                 id='quantity'

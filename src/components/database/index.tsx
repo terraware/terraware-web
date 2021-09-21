@@ -131,19 +131,20 @@ export default function Database(): JSX.Element {
     setReportModalOpen(true);
   };
 
-  const onCloseEditColumnsModal = (columns?: SearchField[]) => {
-    if (columns) {
-      const searchSelectedColumns = columns.reduce((acum, value) => {
+  const onCloseEditColumnsModal = (columnsintern?: SearchField[]) => {
+    if (columnsintern) {
+      const searchSelectedColumns = columnsintern.reduce((acum, value) => {
         acum.push(value);
         const additionalColumns = COLUMNS_INDEXED[value].additionalKeys;
         if (additionalColumns) {
           return acum.concat(additionalColumns);
         }
+
         return acum;
       }, [] as SearchField[]);
 
       setSearchSelectedColumns(searchSelectedColumns);
-      setColumns(columns);
+      setColumns(columnsintern);
       setFilters(filters);
     }
     setEditColumnsModalOpen(false);
@@ -165,6 +166,7 @@ export default function Database(): JSX.Element {
         setColumns(newOrder);
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [columns]
   );
 
@@ -181,6 +183,7 @@ export default function Database(): JSX.Element {
   };
 
   const location = useStateLocation();
+
   return (
     <MuiPickersUtilsProvider utils={MomentUtils}>
       <main>

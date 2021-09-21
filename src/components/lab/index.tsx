@@ -68,7 +68,7 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
   const date = useRecoilValue(timeSelector);
 
   const getTotalScheduled = (): number => {
-    const total = accession.germinationTests?.reduce(
+    const totalS = accession.germinationTests?.reduce(
       (acum, germinationTest) => {
         if (
           germinationTest.testType === 'Lab' &&
@@ -76,11 +76,13 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
         ) {
           acum += germinationTest.seedsSown || 0;
         }
+
         return acum;
       },
       0
     );
-    return total || 0;
+
+    return totalS || 0;
   };
 
   const labRows =
@@ -202,10 +204,12 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
     };
     const cutTests = [];
     cutTests.push(cutTest);
+
     return cutTests;
   };
 
   const total = getTotalScheduled();
+
   return (
     <main>
       <MuiPickersUtilsProvider utils={MomentUtils}>

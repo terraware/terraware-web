@@ -87,6 +87,7 @@ export default function NewTestDialog(props: Props): JSX.Element {
         ).toFixed(1)
       );
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.open]);
 
   const handleCancel = () => {
@@ -126,6 +127,7 @@ export default function NewTestDialog(props: Props): JSX.Element {
         ? props.value.germinations[0].seedsGerminated
         : undefined
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.open]);
 
   const onQuantityChange = (id: string, _value: unknown) => {

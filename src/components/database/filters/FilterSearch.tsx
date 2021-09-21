@@ -36,7 +36,7 @@ export default function Search(props: Props): JSX.Element {
 
     const newFilter: FieldNodePayload = {
       field: props.field,
-      values: values,
+      values,
       type: 'Fuzzy',
       operation: 'field',
     };

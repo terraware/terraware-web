@@ -22,6 +22,7 @@ export default function Step({
   stepNumber,
 }: Props): JSX.Element {
   const classes = useStyles();
+
   return (
     <div>
       <div className={classes.flex}>

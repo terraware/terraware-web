@@ -44,7 +44,7 @@ export default function NewCutTest(props: Props): JSX.Element {
     if (props.open) {
       setRecord(props.accession);
     }
-  }, [props.open]);
+  }, [props.accession, props.open, setRecord]);
 
   const handleCancel = () => {
     onClose();

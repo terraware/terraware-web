@@ -14,6 +14,7 @@ export default selector<string[]>({
     const params: ListAllFieldValuesRequestPayload = {
       fields: ['primaryCollector'],
     };
+
     return (await searchAllValues(params)).results.primaryCollector.values;
   },
   set: ({ set }) => {

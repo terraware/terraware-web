@@ -48,6 +48,7 @@ export default function OnboardingButtons({
   close,
 }: Props): JSX.Element {
   const classes = useStyles();
+
   return (
     <div className={classes.onboarding}>
       {content}

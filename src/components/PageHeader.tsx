@@ -43,7 +43,7 @@ export default function PageHeader({
   return (
     <Container maxWidth={false} className={classes.mainContainer}>
       <Grid container spacing={3} className={classes.container}>
-        <Grid item xs={1}></Grid>
+        <Grid item xs={1} />
         <Grid item xs={10}>
           <Box
             display='flex'
@@ -61,7 +61,7 @@ export default function PageHeader({
           </Typography>
           {children}
         </Grid>
-        <Grid item xs={1}></Grid>
+        <Grid item xs={1} />
       </Grid>
     </Container>
   );

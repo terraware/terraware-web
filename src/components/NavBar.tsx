@@ -50,17 +50,19 @@ export default function NavBar(): JSX.Element | null {
         id='dashboard'
       />
       <NavSection title={strings.FLORA} />
-      <NavItem label='Seeds' icon='seeds'>
+      <NavItem label='Seeds' icon='seeds' id='seeds'>
         <SubNavbar>
           <NavItem
             label='Summary'
             selected={isSummaryRoute ? true : false}
             onClick={() => navigate('/summary')}
+            id='summary'
           />
           <NavItem
             label='Accessions'
             selected={isAccessionsRoute ? true : false}
             onClick={() => navigate('/accessions')}
+            id='accessions'
           />
         </SubNavbar>
       </NavItem>
@@ -76,7 +78,7 @@ export default function NavBar(): JSX.Element | null {
         icon='species'
         selected={isSpeciesRoute ? true : false}
         onClick={() => navigate('/species')}
-        id='species'
+        id='speciesNb'
       />
       <NavSection />
       <NavItem label='Projects' icon='folder' selected={false} />

@@ -41,6 +41,7 @@ export default function MultipleSelection(props: Props): JSX.Element {
         props.onChange(filter.current);
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleChange = (value: string | null) => {

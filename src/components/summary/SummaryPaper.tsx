@@ -36,6 +36,7 @@ export default function SummaryPaper({
   error,
 }: Props): JSX.Element {
   const classes = useStyles();
+
   return (
     <>
       <Typography component='h2' variant='h6' color='primary' gutterBottom>

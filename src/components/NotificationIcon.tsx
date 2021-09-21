@@ -60,6 +60,7 @@ export default function NotificationIcon({ type }: Props): JSX.Element {
       </Fab>
     );
   }
+
   return (
     <Fab
       color='secondary'

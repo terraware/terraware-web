@@ -58,13 +58,13 @@ export default function Storage({ accession, onSubmit }: Props): JSX.Element {
       setIsSaved(true);
       setTimeout(() => setIsSaved(false), 1000);
     }
-  }, [accession]);
+  }, [accession, isSaving, setRecord]);
 
   React.useEffect(() => {
     if (accession !== record) {
       setIsEditing(true);
     }
-  }, [record]);
+  }, [accession, record]);
 
   React.useEffect(() => {
     window.scrollTo({ top: 0 });
@@ -83,7 +83,7 @@ export default function Storage({ accession, onSubmit }: Props): JSX.Element {
 
   const refreshErrors = (newErrors: FieldError[]) => {
     const previousErrors = [...errors];
-    previousErrors.map((error, index) => {
+    previousErrors.forEach((error, index) => {
       if (error.id === 'storageStartDate') {
         if (newErrors.findIndex((error2) => error2.id === error.id) < 0) {
           previousErrors.splice(index, 1);
@@ -116,8 +116,8 @@ export default function Storage({ accession, onSubmit }: Props): JSX.Element {
             refreshErrors={refreshErrors}
             storageDate={record.storageStartDate}
           />
-          <Grid item xs={4}></Grid>
-          <Grid item xs={4}></Grid>
+          <Grid item xs={4} />
+          <Grid item xs={4} />
           <Grid item xs={4}>
             <TextField
               id='storagePackets'
@@ -127,8 +127,8 @@ export default function Storage({ accession, onSubmit }: Props): JSX.Element {
               type='Number'
             />
           </Grid>
-          <Grid item xs={4}></Grid>
-          <Grid item xs={4}></Grid>
+          <Grid item xs={4} />
+          <Grid item xs={4} />
           <Suspense
             fallback={
               <Grid item xs={12}>

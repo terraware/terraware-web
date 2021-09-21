@@ -11,9 +11,10 @@ export default selector<Notifications>({
   key: 'notificationsSelector',
   get: async ({ get }) => {
     get(notificationAtom);
+
     return await getNotifications();
   },
   set: ({ set }) => {
-    set(notificationAtom, v => v + 1);
-  }
+    set(notificationAtom, (v) => v + 1);
+  },
 });

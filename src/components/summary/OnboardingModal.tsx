@@ -101,7 +101,8 @@ export default function OnboardingModal(props: Props): JSX.Element {
           src='/assets/summaryImage.png'
           width='100%'
           className={classes.modalImage}
-        ></img>
+          alt='summary'
+        />
       </div>
     </Dialog>
   );

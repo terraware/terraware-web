@@ -10,6 +10,7 @@ export default selector<string>({
   key: 'timeSelector',
   get: async ({ get }) => {
     get(timeAtom);
+
     return await getDate();
   },
   set: ({ set }) => {

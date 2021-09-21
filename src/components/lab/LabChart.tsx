@@ -39,6 +39,7 @@ export default function LabChart<T>({
     const ctx = chartRef?.current?.getContext('2d');
     if (ctx) {
       const data = barData;
+      // tslint:disable-next-line: no-unused-expression
       new Chart(ctx, {
         // The type of chart we want to create
         type: 'line',
@@ -93,6 +94,7 @@ export default function LabChart<T>({
         },
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const barData = () => {
@@ -102,8 +104,10 @@ export default function LabChart<T>({
     ) as Germination[];
 
     let total = 0;
+
     return orderedGerminations.map((germination) => {
       total += germination.seedsGerminated;
+
       return {
         seedsGerminated: total,
         recordingDate: germination.recordingDate,
@@ -111,7 +115,5 @@ export default function LabChart<T>({
     });
   };
 
-  return (
-    <canvas id='myChart' ref={chartRef} className={classes.chart}></canvas>
-  );
+  return <canvas id='myChart' ref={chartRef} className={classes.chart} />;
 }

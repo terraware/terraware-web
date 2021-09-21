@@ -10,7 +10,6 @@ import {
   Redirect,
   Route,
   Switch,
-  useLocation,
 } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
 import Accession from './components/accession';
@@ -55,7 +54,6 @@ const useStyles = makeStyles(() =>
 
 function AppContent() {
   const classes = useStyles();
-  const location = useLocation();
   useTimer();
 
   return (

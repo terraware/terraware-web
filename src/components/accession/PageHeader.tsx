@@ -60,11 +60,11 @@ export default function AccessionPageHeader({ accession }: Props): JSX.Element {
 
   React.useEffect(() => {
     setCounter(counter - 1);
-  }, [location]);
+  }, [counter, location]);
 
   return (
     <Grid container spacing={3} className={classes.container}>
-      <Grid item xs={1}></Grid>
+      <Grid item xs={1} />
       <Grid item xs={10}>
         <Box display='flex' alignItems='flex-start'>
           <Box display='flex'>
@@ -129,7 +129,7 @@ export default function AccessionPageHeader({ accession }: Props): JSX.Element {
           </Box>
         </Box>
       </Grid>
-      <Grid item xs={1}></Grid>
+      <Grid item xs={1} />
     </Grid>
   );
 }

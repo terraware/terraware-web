@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Grid } from '@material-ui/core';
 import React from 'react';
 import { useRecoilValue, useResetRecoilState } from 'recoil';
@@ -43,9 +44,10 @@ export default function LocationDropdown({
   const getConditionValue = (
     locationSelected: string
   ): ConditionType | undefined => {
-    const location = locations?.find((location: Location) => {
-      return location.storageLocation === locationSelected;
+    const location = locations?.find((_location: Location) => {
+      return _location.storageLocation === locationSelected;
     });
+
     return location?.storageCondition;
   };
 

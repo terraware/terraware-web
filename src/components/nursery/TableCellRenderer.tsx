@@ -39,6 +39,7 @@ export default function NurseryCellRenderer(
         </TableCell>
       );
     }
+
     return <CellDateRenderer id={id} value={value} />;
   }
   if (column.key === 'seedsRemaining') {
@@ -79,7 +80,7 @@ export default function NurseryCellRenderer(
       row.germinations &&
       row.germinations[0].seedsGerminated &&
       row.seedsSown
-    )
+    ) {
       return (
         <TableCell id={id} align='left'>
           <Typography component='p' variant='body1'>
@@ -93,6 +94,8 @@ export default function NurseryCellRenderer(
           </Typography>
         </TableCell>
       );
+    }
   }
+
   return <CellRenderer {...props} />;
 }

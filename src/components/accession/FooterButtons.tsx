@@ -45,6 +45,7 @@ export default function FooterButtons({
   errors,
 }: Props): JSX.Element {
   const classes = useStyles();
+
   return (
     <>
       {!updating && (

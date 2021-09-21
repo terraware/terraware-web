@@ -103,5 +103,6 @@ function formatLabel(label: string | null): string | undefined | null {
   if (label === 'false') {
     return strings.NO;
   }
+
   return label;
 }

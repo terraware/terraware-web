@@ -63,13 +63,13 @@ export default function ProcessingAndDrying({
       setIsSaved(true);
       setTimeout(() => setIsSaved(false), 1000);
     }
-  }, [accession]);
+  }, [accession, isSaving, setRecord]);
 
   React.useEffect(() => {
     if (accession !== record) {
       setIsEditing(true);
     }
-  }, [record]);
+  }, [accession, record]);
 
   React.useEffect(() => {
     window.scrollTo({ top: 0 });
@@ -118,7 +118,7 @@ export default function ProcessingAndDrying({
     if (!value || value === '0') {
       if (errorIndex < 0) {
         newErrors.push({
-          id: id,
+          id,
           msg: strings.REQUIRED_FIELD,
         });
       }
@@ -167,7 +167,7 @@ export default function ProcessingAndDrying({
         germinationTestTypes.splice(index, 1);
       }
 
-      if (index == -1 && value === true) {
+      if (index === -1 && value === true) {
         germinationTestTypes.push(id as GerminationTestType);
       }
     } else {
@@ -175,16 +175,18 @@ export default function ProcessingAndDrying({
         germinationTestTypes = [id as GerminationTestType];
       }
     }
-    setRecord({ ...record, germinationTestTypes: germinationTestTypes });
+    setRecord({ ...record, germinationTestTypes });
   };
 
   const isChecked = (id: GerminationTestType) => {
     const germinationTestTypes = record.germinationTestTypes;
+
     return germinationTestTypes?.includes(id);
   };
 
   const getErrorText = (id: string) => {
-    const error = errors.find((error) => error.id === id);
+    const error = errors.find((_error) => _error.id === id);
+
     return error ? error.msg : '';
   };
 
@@ -271,7 +273,7 @@ export default function ProcessingAndDrying({
           )}
           {record.processingMethod === 'Weight' && (
             <>
-              <Grid item xs={4}></Grid>
+              <Grid item xs={4} />
               <Grid
                 item
                 xs={4}
@@ -461,5 +463,6 @@ const calculteEstimatedSeedCount = (
   if (subsetCount && totalWeightGrams && subsetWeightGrams) {
     return (subsetCount * totalWeightGrams) / subsetWeightGrams;
   }
+
   return undefined;
 };

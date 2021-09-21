@@ -11,9 +11,10 @@ export default selector<SummaryResponse>({
   key: 'summarySelector',
   get: async ({ get }) => {
     get(summaryAtom);
+
     return await getSummary();
   },
   set: ({ set }) => {
-    set(summaryAtom, v => v + 1);
-  }
+    set(summaryAtom, (v) => v + 1);
+  },
 });

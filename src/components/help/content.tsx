@@ -27,7 +27,7 @@ interface Content {
   }[];
 }
 
-export default (
+const helpContent = (
   classes: Classes,
   goTo: (
     id: string,
@@ -1916,3 +1916,5 @@ export default (
     },
   ],
 });
+
+export default helpContent;

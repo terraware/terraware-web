@@ -69,7 +69,7 @@ export default function NewGermination(props: Props): JSX.Element {
     if (props.open) {
       setRecord(initEntry(props.value));
     }
-  }, [props.open]);
+  }, [props.open, props.value, setRecord]);
 
   const handleCancel = () => {
     setRecord(initEntry(props.value));

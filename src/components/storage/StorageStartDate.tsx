@@ -29,7 +29,7 @@ export function StorageStartDate({
     return () => {
       resetDate();
     };
-  }, []);
+  }, [resetDate]);
 
   const onChangeDate = (id: string, value: unknown) => {
     const newErrors = [...dateErrors];
@@ -37,7 +37,7 @@ export function StorageStartDate({
     if (moment(value as string).isAfter(date)) {
       if (errorIndex < 0) {
         newErrors.push({
-          id: id,
+          id,
           msg: strings.NO_FUTURE_DATES,
         });
       }
@@ -52,7 +52,8 @@ export function StorageStartDate({
   };
 
   const getErrorText = (id: string) => {
-    const error = dateErrors.find((error) => error.id === id);
+    const error = dateErrors.find((_error) => _error.id === id);
+
     return error ? error.msg : '';
   };
 

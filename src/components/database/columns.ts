@@ -323,6 +323,7 @@ const COLUMNS: DatabaseColumn[] = [
 
 export const COLUMNS_INDEXED = COLUMNS.reduce((acum, value) => {
   acum[value.key] = value;
+
   return acum;
 }, {} as Record<SearchField, DatabaseColumn>);
 

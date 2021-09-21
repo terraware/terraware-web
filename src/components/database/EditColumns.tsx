@@ -118,15 +118,15 @@ export default function EditColumnsDialog(props: Props): JSX.Element {
               {options.map((optionsColumn, index) => (
                 <Grid key={index} item xs={4}>
                   <Grid container>
-                    {optionsColumn.map(({ key, disabled, name }) => (
+                    {optionsColumn.map(({ key, disabled, name: oName }) => (
                       <Grid key={key} item xs={12}>
                         <Checkbox
                           disabled={disabled}
                           id={key}
                           name={key}
-                          label={name}
+                          label={oName}
                           value={value.includes(key)}
-                          onChange={(id, value) => onChange(key, value)}
+                          onChange={(id, newValue) => onChange(key, newValue)}
                         />
                       </Grid>
                     ))}
@@ -172,32 +172,32 @@ const sections: Section[] = [
   {
     name: 'General',
     options: [
-      [{ ...COLUMNS_INDEXED['accessionNumber'], disabled: true }],
-      [COLUMNS_INDEXED['active']],
-      [COLUMNS_INDEXED['state']],
+      [{ ...COLUMNS_INDEXED.accessionNumber, disabled: true }],
+      [COLUMNS_INDEXED.active],
+      [COLUMNS_INDEXED.state],
     ],
   },
   {
     name: 'Seed Collection',
     options: [
       [
-        COLUMNS_INDEXED['species'],
-        COLUMNS_INDEXED['receivedDate'],
-        COLUMNS_INDEXED['collectedDate'],
-        COLUMNS_INDEXED['primaryCollector'],
-        COLUMNS_INDEXED['siteLocation'],
+        COLUMNS_INDEXED.species,
+        COLUMNS_INDEXED.receivedDate,
+        COLUMNS_INDEXED.collectedDate,
+        COLUMNS_INDEXED.primaryCollector,
+        COLUMNS_INDEXED.siteLocation,
       ],
       [
-        COLUMNS_INDEXED['endangered'],
-        COLUMNS_INDEXED['rare'],
-        COLUMNS_INDEXED['sourcePlantOrigin'],
-        COLUMNS_INDEXED['family'],
+        COLUMNS_INDEXED.endangered,
+        COLUMNS_INDEXED.rare,
+        COLUMNS_INDEXED.sourcePlantOrigin,
+        COLUMNS_INDEXED.family,
       ],
       [
-        COLUMNS_INDEXED['treesCollectedFrom'],
-        COLUMNS_INDEXED['bagNumber'],
-        COLUMNS_INDEXED['landowner'],
-        COLUMNS_INDEXED['collectionNotes'],
+        COLUMNS_INDEXED.treesCollectedFrom,
+        COLUMNS_INDEXED.bagNumber,
+        COLUMNS_INDEXED.landowner,
+        COLUMNS_INDEXED.collectionNotes,
       ],
     ],
   },
@@ -205,67 +205,58 @@ const sections: Section[] = [
     name: 'Processing and Drying',
     options: [
       [
-        COLUMNS_INDEXED['totalQuantity'],
-        COLUMNS_INDEXED['viabilityTestType'],
-        COLUMNS_INDEXED['dryingStartDate'],
+        COLUMNS_INDEXED.totalQuantity,
+        COLUMNS_INDEXED.viabilityTestType,
+        COLUMNS_INDEXED.dryingStartDate,
       ],
       [
-        COLUMNS_INDEXED['dryingEndDate'],
-        COLUMNS_INDEXED['targetStorageCondition'],
-        COLUMNS_INDEXED['processingNotes'],
+        COLUMNS_INDEXED.dryingEndDate,
+        COLUMNS_INDEXED.targetStorageCondition,
+        COLUMNS_INDEXED.processingNotes,
       ],
     ],
   },
   {
     name: 'Storing',
     options: [
-      [
-        COLUMNS_INDEXED['storageStartDate'],
-        COLUMNS_INDEXED['storageCondition'],
-      ],
-      [COLUMNS_INDEXED['storagePackets'], COLUMNS_INDEXED['storageLocation']],
-      [COLUMNS_INDEXED['storageNotes']],
+      [COLUMNS_INDEXED.storageStartDate, COLUMNS_INDEXED.storageCondition],
+      [COLUMNS_INDEXED.storagePackets, COLUMNS_INDEXED.storageLocation],
+      [COLUMNS_INDEXED.storageNotes],
     ],
   },
   {
     name: 'Withdrawal',
     options: [
+      [COLUMNS_INDEXED.withdrawalDate, COLUMNS_INDEXED.withdrawalQuantity],
       [
-        COLUMNS_INDEXED['withdrawalDate'],
-        COLUMNS_INDEXED['withdrawalQuantity'],
+        COLUMNS_INDEXED.withdrawalDestination,
+        COLUMNS_INDEXED.remainingQuantity,
       ],
-      [
-        COLUMNS_INDEXED['withdrawalDestination'],
-        COLUMNS_INDEXED['remainingQuantity'],
-      ],
-      [
-        COLUMNS_INDEXED['withdrawalPurpose'],
-        COLUMNS_INDEXED['withdrawalNotes'],
-      ],
+      [COLUMNS_INDEXED.withdrawalPurpose, COLUMNS_INDEXED.withdrawalNotes],
     ],
   },
   {
     name: 'Germination Testing',
     options: [
       [
-        COLUMNS_INDEXED['germinationTestType'],
-        COLUMNS_INDEXED['germinationSeedType'],
-        COLUMNS_INDEXED['germinationTreatment'],
-        COLUMNS_INDEXED['cutTestSeedsFilled'],
-        COLUMNS_INDEXED['germinationPercentGerminated'],
+        COLUMNS_INDEXED.germinationTestType,
+        COLUMNS_INDEXED.germinationSeedType,
+        COLUMNS_INDEXED.germinationTreatment,
+        COLUMNS_INDEXED.cutTestSeedsFilled,
+        COLUMNS_INDEXED.germinationPercentGerminated,
       ],
       [
-        COLUMNS_INDEXED['germinationStartDate'],
-        COLUMNS_INDEXED['germinationSeedsSown'],
-        COLUMNS_INDEXED['germinationSeedsGerminated'],
-        COLUMNS_INDEXED['cutTestSeedsEmpty'],
-        COLUMNS_INDEXED['latestViabilityPercent'],
+        COLUMNS_INDEXED.germinationStartDate,
+        COLUMNS_INDEXED.germinationSeedsSown,
+        COLUMNS_INDEXED.germinationSeedsGerminated,
+        COLUMNS_INDEXED.cutTestSeedsEmpty,
+        COLUMNS_INDEXED.latestViabilityPercent,
       ],
       [
-        COLUMNS_INDEXED['latestGerminationTestDate'],
-        COLUMNS_INDEXED['germinationSubstrate'],
-        COLUMNS_INDEXED['cutTestSeedsCompromised'],
-        COLUMNS_INDEXED['germinationTestNotes'],
+        COLUMNS_INDEXED.latestGerminationTestDate,
+        COLUMNS_INDEXED.germinationSubstrate,
+        COLUMNS_INDEXED.cutTestSeedsCompromised,
+        COLUMNS_INDEXED.germinationTestNotes,
       ],
     ],
   },

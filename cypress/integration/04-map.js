@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 /// <reference types="cypress" />
 
-describe('Map', () => {
+describe.skip('Map', () => {
   beforeEach(() => {
     cy.visit('/');
   });

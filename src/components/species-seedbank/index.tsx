@@ -108,7 +108,7 @@ export default function Species(): JSX.Element {
             />
           </div>
         }
-      ></PageHeader>
+      />
       <Container maxWidth={false} className={classes.mainContainer}>
         <Grid container spacing={3}>
           <Grid item xs={1} />

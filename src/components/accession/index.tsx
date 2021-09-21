@@ -40,7 +40,7 @@ export default function AccessionPage(): JSX.Element {
 
   return (
     <ErrorBoundary handler={errorHandler}>
-      <React.Suspense fallback={<div></div>}>
+      <React.Suspense fallback={<div />}>
         <Content />
       </React.Suspense>
     </ErrorBoundary>
@@ -72,13 +72,13 @@ function Content(): JSX.Element {
         history.replace(newLocation);
       }
     }
-  }, [accession, history.location]);
+  }, [accession, history, history.location]);
 
   React.useEffect(() => {
     return () => {
       resetAccession();
     };
-  }, []);
+  }, [resetAccession]);
 
   const clonedAccession = {
     ...accession,

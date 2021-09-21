@@ -20,7 +20,7 @@ export default function MainCollectorDropdown({
     return () => {
       resetCollectors();
     };
-  }, []);
+  }, [resetCollectors]);
 
   return (
     <Autocomplete

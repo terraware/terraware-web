@@ -78,8 +78,8 @@ export default function NewAccessionWrapper(): JSX.Element {
     try {
       const accession = await postAccession(record);
       resetSearch();
-      const { accessionNumber } = accession;
-      setAccessionNumber(accessionNumber);
+      const { accessionNumber: accessionNum } = accession;
+      setAccessionNumber(accessionNum);
       setSnackbar({ type: 'success', msg: strings.ACCESSION_SAVED });
     } catch (ex) {
       setSnackbar({
@@ -121,7 +121,7 @@ export default function NewAccessionWrapper(): JSX.Element {
       />
       <Container maxWidth='lg' className={classes.mainContainer}>
         <Grid container spacing={3}>
-          <Grid item xs={1}></Grid>
+          <Grid item xs={1} />
           <Grid item xs={10}>
             <AccessionForm
               accession={{
@@ -130,7 +130,7 @@ export default function NewAccessionWrapper(): JSX.Element {
               onSubmit={onSubmit}
             />
           </Grid>
-          <Grid item xs={1}></Grid>
+          <Grid item xs={1} />
         </Grid>
       </Container>
     </main>
@@ -184,13 +184,14 @@ export function AccessionForm<T extends NewAccession>({
     } else {
       setCanSendToNursery(true);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accession]);
 
   React.useEffect(() => {
     if (accession !== record) {
       setIsEditing(true);
     }
-  }, [record]);
+  }, [accession, record]);
 
   React.useEffect(() => {
     window.scrollTo({ top: 0 });
@@ -238,7 +239,7 @@ export function AccessionForm<T extends NewAccession>({
     if (Number(value) < 0) {
       if (errorIndex < 0) {
         newErrors.push({
-          id: id,
+          id,
           msg: strings.NO_NEGATIVE_NUMBERS,
         });
       }
@@ -252,13 +253,14 @@ export function AccessionForm<T extends NewAccession>({
   };
 
   const getErrorText = (id: string) => {
-    const error = errors.find((error) => error.id === id);
+    const error = errors.find((_error) => _error.id === id);
+
     return error ? error.msg : '';
   };
 
   const refreshErrors = (newErrors: FieldError[]) => {
     const previousErrors = [...errors];
-    previousErrors.map((error, index) => {
+    previousErrors.forEach((error, index) => {
       if (error.id === 'collectedDate' || error.id === 'receivedDate') {
         if (newErrors.findIndex((error2) => error2.id === error.id) < 0) {
           previousErrors.splice(index, 1);
@@ -333,7 +335,7 @@ export function AccessionForm<T extends NewAccession>({
                 label={strings.FAMILY}
               />
             </Grid>
-            <Grid item xs={4}></Grid>
+            <Grid item xs={4} />
             <Grid item xs={4}>
               <TextField
                 id='numberOfTrees'
@@ -354,7 +356,7 @@ export function AccessionForm<T extends NewAccession>({
                 label={strings.FOUNDER_ID}
               />
             </Grid>
-            <Grid item xs={4}></Grid>
+            <Grid item xs={4} />
             <Grid item xs={4}>
               <Dropdown
                 id='endangered'
@@ -381,7 +383,7 @@ export function AccessionForm<T extends NewAccession>({
                 onChange={onChange}
               />
             </Grid>
-            <Grid item xs={4}></Grid>
+            <Grid item xs={4} />
             <Grid item xs={4}>
               <Dropdown
                 id='sourcePlantOrigin'
@@ -418,7 +420,7 @@ export function AccessionForm<T extends NewAccession>({
               refreshErrors={refreshErrors}
               onChange={onChange}
               disabled={accession.deviceInfo !== undefined}
-            ></AccessionDates>
+            />
           </Suspense>
           <Divisor />
           <Grid container spacing={4}>
@@ -462,7 +464,7 @@ export function AccessionForm<T extends NewAccession>({
                 label={strings.LANDOWNER}
               />
             </Grid>
-            <Grid item xs={4}></Grid>
+            <Grid item xs={4} />
             <Grid item xs={12}>
               <TextArea
                 id='environmentalNotes'

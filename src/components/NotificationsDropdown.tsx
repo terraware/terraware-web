@@ -110,6 +110,7 @@ export default function NotificationsDropdown(): JSX.Element {
     const unreadNotifications = contents
       ? contents.filter((notification) => !notification.read)
       : [];
+
     return unreadNotifications.length;
   };
 

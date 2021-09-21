@@ -182,5 +182,6 @@ function generateUpdates(summaryResponse: SummaryResponse): Update[] {
       ),
     },
   ];
+
   return updates;
 }

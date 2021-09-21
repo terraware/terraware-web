@@ -55,6 +55,7 @@ export default function NavBar(): JSX.Element | null {
     if (isSpeciesRoute) {
       return 2;
     }
+
     return 0;
   };
   const [tabIndex, setTabIndex] = React.useState(0);

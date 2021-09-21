@@ -7,5 +7,6 @@ export const downloadReport = async (
   params: ExportRequestPayload
 ): Promise<string> => {
   const endpoint = `${BASE_URL}/search/export`;
+
   return (await axios.post(endpoint, params)).data;
 };

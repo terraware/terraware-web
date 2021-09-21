@@ -7,6 +7,7 @@ export const getAccession = async (
   accessionNumber: string
 ): Promise<Accession> => {
   const endpoint = `${BASE_URL}/${accessionNumber}`;
+
   return (await axios.get(endpoint)).data.accession;
 };
 
@@ -14,6 +15,7 @@ export const postAccession = async (
   accession: NewAccession
 ): Promise<Accession> => {
   const endpoint = `${BASE_URL}`;
+
   return (await axios.post(endpoint, accession)).data.accession;
 };
 
@@ -21,6 +23,7 @@ export const putAccession = async (
   accession: Accession
 ): Promise<Accession> => {
   const endpoint = `${BASE_URL}/${accession.accessionNumber}`;
+
   return (await axios.put(endpoint, accession)).data.accession;
 };
 

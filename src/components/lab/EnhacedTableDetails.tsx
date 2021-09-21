@@ -112,7 +112,7 @@ export default function EnhancedTableDetails<T>({
     if (previousOpen) {
       setOpen(JSON.parse(previousOpen));
     }
-  }, []);
+  }, [accessionId]);
 
   const hasEditColumn = columns.filter((c) => c.type === 'edit').length > 0;
 
@@ -181,7 +181,7 @@ export default function EnhancedTableDetails<T>({
                     )}
                   </Grid>
                   <Grid item xs={12}>
-                    <Divisor></Divisor>
+                    <Divisor />
                   </Grid>
                   <Grid item xs={12}>
                     <Table
@@ -195,9 +195,10 @@ export default function EnhancedTableDetails<T>({
                             row[rowName] as T[],
                             getComparator(order, orderBy, descendingComparator)
                           ).map((subRow, subRowIndex) => {
-                            const onClick = onSelect
+                            const newOnClick = onSelect
                               ? () => onSelect(subRow, row)
                               : undefined;
+
                             return (
                               <TableRow
                                 id={`row${subRowIndex + 1}`}
@@ -206,8 +207,8 @@ export default function EnhancedTableDetails<T>({
                                 hover={Boolean(onSelect) && !hasEditColumn}
                                 onClick={(e) => {
                                   e.stopPropagation();
-                                  if (onClick && !hasEditColumn) {
-                                    onClick();
+                                  if (newOnClick && !hasEditColumn) {
+                                    newOnClick();
                                   }
                                 }}
                               >
@@ -218,7 +219,7 @@ export default function EnhancedTableDetails<T>({
                                     row={subRow as T}
                                     column={column}
                                     value={subRow[column.key]}
-                                    onRowClick={onClick}
+                                    onRowClick={newOnClick}
                                   />
                                 ))}
                               </TableRow>
@@ -227,7 +228,7 @@ export default function EnhancedTableDetails<T>({
                       </TableBody>
                     </Table>
                   </Grid>
-                  <Grid item xs={9}></Grid>
+                  <Grid item xs={9} />
                   <Grid item xs={3}>
                     <Chip
                       id='newEntry'

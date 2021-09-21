@@ -7,17 +7,17 @@ export default function cellRenderer(
 ): JSX.Element {
   const { column, row, index } = props;
   if (
-    typeof row['compromisedSeeds'] === 'number' &&
-    typeof row['emptySeeds'] === 'number' &&
-    typeof row['filledSeeds'] === 'number'
+    typeof row.compromisedSeeds === 'number' &&
+    typeof row.emptySeeds === 'number' &&
+    typeof row.filledSeeds === 'number'
   ) {
     if (
       column.key === 'compromisedSeeds' ||
       column.key === 'emptySeeds' ||
       column.key === 'filledSeeds'
     ) {
-      const total =
-        row['compromisedSeeds'] + row['emptySeeds'] + row['filledSeeds'];
+      const total = row.compromisedSeeds + row.emptySeeds + row.filledSeeds;
+
       return (
         <CellRenderer
           index={index}
@@ -29,7 +29,9 @@ export default function cellRenderer(
         />
       );
     }
+
     return <CellRenderer {...props} />;
   }
+
   return <CellRenderer {...props} />;
 }

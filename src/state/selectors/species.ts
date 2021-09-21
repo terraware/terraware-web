@@ -11,6 +11,7 @@ export default selector<SpeciesType[]>({
   key: 'speciesSelector',
   get: async ({ get }) => {
     get(speciesAtom);
+
     return await getSpeciesList();
   },
   set: ({ set }) => {

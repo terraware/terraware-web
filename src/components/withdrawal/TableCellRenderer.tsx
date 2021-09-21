@@ -41,6 +41,7 @@ export default function WithdrawalCellRenderer(
         </TableCell>
       );
     }
+
     return <CellDateRenderer id={id} value={value} />;
   }
   if (column.key === 'seedsRemaining') {
@@ -53,5 +54,6 @@ export default function WithdrawalCellRenderer(
       />
     );
   }
+
   return <CellRenderer {...props} />;
 }

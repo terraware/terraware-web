@@ -37,6 +37,7 @@ export default function LabCellRenderer(
         </TableCell>
       );
     }
+
     return <CellDateRenderer id={id} value={value} />;
   }
   if (column.key === 'seedsRemaining') {
@@ -59,5 +60,6 @@ export default function LabCellRenderer(
       />
     );
   }
+
   return <CellRenderer {...props} />;
 }

@@ -10,6 +10,7 @@ const BASE_URL = `${process.env.REACT_APP_SEED_BANK_API}/api/v1/species`;
 export const getSpeciesList = async (): Promise<SpeciesType[]> => {
   const speciesDetailsList: SpeciesDetails[] = (await axios.get(BASE_URL)).data
     .species;
+
   return speciesDetailsList.map((species: SpeciesDetails) => {
     return {
       id: species.id,
@@ -23,6 +24,7 @@ export const postSpecies = async (
 ): Promise<SpeciesType> => {
   const createSpeciesRequest: SpeciesRequestPayload = { name: species.name };
   const newId = (await axios.post(BASE_URL, createSpeciesRequest)).data.id;
+
   return { id: newId, name: species.name };
 };
 
@@ -31,5 +33,6 @@ export const updateSpecies = async (
 ): Promise<SpeciesType> => {
   const updateSpeciesRequest: SpeciesRequestPayload = { name: species.name };
   await axios.put(`${BASE_URL}/${species.id}`, updateSpeciesRequest);
+
   return species; // api returns ok/error status, but doesn't return the data
 };

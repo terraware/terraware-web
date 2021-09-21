@@ -11,9 +11,10 @@ export default selector<Locations>({
   key: 'locationsSelector',
   get: async ({ get }) => {
     get(locationsAtom);
+
     return await getLocations();
   },
   set: ({ set }) => {
-    set(locationsAtom, v => v + 1);
-  }
+    set(locationsAtom, (v) => v + 1);
+  },
 });

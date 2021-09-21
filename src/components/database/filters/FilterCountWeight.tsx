@@ -86,7 +86,9 @@ export default function FilterCountWeight(props: Props): JSX.Element {
     const grams = props.payloads.find(
       (p) => p.field === fields[1] && p.type === 'Range'
     )?.values;
-    const emptyFields = props.payloads.find((p) => p.type === 'Exact')?.values;
+    const newEmptyFields = props.payloads.find(
+      (p) => p.type === 'Exact'
+    )?.values;
     if (quantity) {
       setSeedCount(true);
       setCountMinValue(quantity[0]);
@@ -98,10 +100,10 @@ export default function FilterCountWeight(props: Props): JSX.Element {
       setWeightMaxValue(grams[1]?.split(' ')[0]);
       setWeightUnit(grams[0]?.split(' ')[1] ?? WEIGHT_UNITS[0].value);
     }
-    if (emptyFields) {
+    if (newEmptyFields) {
       setEmptyFields(true);
     }
-  }, [props.payloads]);
+  }, [fields, props.payloads]);
 
   React.useEffect(() => {
     return () => {
@@ -109,7 +111,7 @@ export default function FilterCountWeight(props: Props): JSX.Element {
         props.onChange(filter.current);
       }
     };
-  }, []);
+  }, [props]);
 
   const onChange = (id?: string, value?: unknown) => {
     let updatedCountMinValue = countMinValue;
@@ -147,7 +149,7 @@ export default function FilterCountWeight(props: Props): JSX.Element {
       updatedEmptyFields = value as boolean;
     }
 
-    const children: Array<FieldNodePayload | AndNodePayload> = [];
+    const children: (FieldNodePayload | AndNodePayload)[] = [];
 
     if (updatedSeedCount && (updatedCountMinValue || updatedCountMaxValue)) {
       children.push({

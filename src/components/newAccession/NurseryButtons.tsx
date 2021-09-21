@@ -37,6 +37,7 @@ export default function NurseryButtons({
   handleCancel,
 }: Props): JSX.Element {
   const classes = useStyles();
+
   return (
     <>
       {canSendToNursery && !isSendingToNursery && !isSentToNursery && (
@@ -55,7 +56,9 @@ export default function NurseryButtons({
       {(isSendingToNursery || isSentToNursery) && (
         <>
           {isSentToNursery && <DoneIcon fontSize='inherit' />}
-          {isSendingToNursery && <img src='/assets/loading.gif' height={16} />}
+          {isSendingToNursery && (
+            <img src='/assets/loading.gif' height={16} alt='loading' />
+          )}
           <Link
             className={classes.submit}
             id='sendToNursery'

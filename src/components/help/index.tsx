@@ -97,7 +97,7 @@ export default function Help(): JSX.Element {
           <Grid item xs={8}>
             <Box display='flex'>
               <Box mr={2}>
-                <img src='/assets/help.svg' height='50' />
+                <img src='/assets/help.svg' height='50' alt='helpIcon' />
               </Box>
               <Typography variant='h3' component='p' className={classes.title}>
                 {strings.HELP_HEADER_TITLE}

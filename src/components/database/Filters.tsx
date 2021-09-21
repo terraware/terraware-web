@@ -115,6 +115,7 @@ export default function Filters(props: Props): JSX.Element {
     if (filter?.operation === 'or') {
       totalFilteredValues = filter.children.length;
     }
+
     return totalFilteredValues
       ? `${col.name} (${totalFilteredValues})`
       : col.name;
@@ -197,6 +198,7 @@ export function getUpdatedFilters(
       }
     }
   }
+
   return updatedFilters;
 }
 
@@ -214,6 +216,7 @@ function getOptions(
         -1,
     };
   });
+
   return map1;
 }
 

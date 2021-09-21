@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 /// <reference types="cypress" />
 
-describe('Projects', () => {
+describe.skip('Projects', () => {
   context('Select project', () => {
     it('should have selected first project by default', () => {
       cy.visit('/');

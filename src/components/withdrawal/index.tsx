@@ -284,6 +284,7 @@ function sortComparator(
     if (bValue > aValue) {
       return 1;
     }
+
     return 0;
   }
 
