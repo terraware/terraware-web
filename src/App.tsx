@@ -12,17 +12,17 @@ import {
   Switch,
 } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
-import Accession from './components/accession';
-import AllPlants from './components/AllPlants';
 import AppBar from './components/AppBar';
-import Dashboard from './components/Dashboard';
-import Database from './components/database';
-import Help from './components/help';
 import NavBar from './components/NavBar';
-import NewAccession from './components/newAccession';
+import AllPlants from './components/plants/AllPlants';
+import Dashboard from './components/plants/Dashboard';
+import Species from './components/plants/Species';
+import Accession from './components/seeds/accession';
+import Database from './components/seeds/database';
+import Help from './components/seeds/help';
+import NewAccession from './components/seeds/newAccession';
+import Summary from './components/seeds/summary';
 import Snackbar from './components/Snackbar';
-import Species from './components/Species';
-import Summary from './components/summary';
 import ErrorBoundary from './ErrorBoundary';
 import strings from './strings';
 import theme from './theme';

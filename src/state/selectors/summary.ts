@@ -1,5 +1,5 @@
 import { atom, selector } from 'recoil';
-import { getSummary } from '../../api/summary';
+import { getSummary } from '../../api/seeds/summary';
 import { SummaryResponse } from '../../api/types/summary';
 
 const summaryAtom = atom({

@@ -1,5 +1,5 @@
 import { atom, selector } from 'recoil';
-import { searchAllValues } from '../../api/search';
+import { searchAllValues } from '../../api/seeds/search';
 import { ListAllFieldValuesRequestPayload } from '../../api/types/search';
 
 const collectorsAtom = atom({

@@ -1,5 +1,5 @@
 import { atom, selector } from 'recoil';
-import { search } from '../../api/search';
+import { search } from '../../api/seeds/search';
 import {
   AndNodePayload,
   SearchRequestPayload,
@@ -8,7 +8,7 @@ import {
 import {
   COLUMNS_INDEXED,
   DatabaseColumn,
-} from '../../components/database/columns';
+} from '../../components/seeds/database/columns';
 import {
   columnsAtom,
   searchFilterAtom,

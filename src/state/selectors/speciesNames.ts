@@ -1,5 +1,5 @@
 import { atom, selector } from 'recoil';
-import { getSpeciesNames } from '../../api/speciesNames';
+import { getSpeciesNames } from '../../api/plants/speciesNames';
 import { SpeciesName } from '../../api/types/species';
 
 export const speciesNamesAtom = atom({

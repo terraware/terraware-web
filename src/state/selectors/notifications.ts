@@ -1,5 +1,5 @@
 import { atom, selector } from 'recoil';
-import { getNotifications } from '../../api/notification';
+import { getNotifications } from '../../api/seeds/notification';
 import { Notifications } from '../../api/types/notification';
 
 const notificationAtom = atom({

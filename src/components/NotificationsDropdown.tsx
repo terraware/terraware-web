@@ -24,7 +24,7 @@ import {
 import {
   postAllNotificationsAsRead,
   postNotificationAsRead,
-} from '../api/notification';
+} from '../api/seeds/notification';
 import { AccessionState } from '../api/types/accessions';
 import { FieldNodePayload } from '../api/types/search';
 import { searchFilterAtom } from '../state/atoms/search';

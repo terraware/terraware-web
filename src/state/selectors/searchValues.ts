@@ -1,7 +1,7 @@
 import { selector } from 'recoil';
-import { searchValues } from '../../api/search';
+import { searchValues } from '../../api/seeds/search';
 import { ListFieldValuesRequestPayload } from '../../api/types/search';
-import { COLUMNS_INDEXED } from '../../components/database/columns';
+import { COLUMNS_INDEXED } from '../../components/seeds/database/columns';
 import { searchSelectedColumnsAtom } from '../atoms/search';
 import { searchParamsSelector } from './search';
 

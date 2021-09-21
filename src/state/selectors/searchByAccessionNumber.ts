@@ -1,5 +1,5 @@
 import { atom, selectorFamily } from 'recoil';
-import { search } from '../../api/search';
+import { search } from '../../api/seeds/search';
 import {
   SearchRequestPayload,
   SearchResponsePayload,

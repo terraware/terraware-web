@@ -1,5 +1,5 @@
 import { selector } from 'recoil';
-import { getLayersTypes } from '../../api/layer_types';
+import { getLayersTypes } from '../../api/plants/layer_types';
 import { LayerType } from '../../api/types/layer';
 
 const layerTypesSelector = selector<LayerType[] | undefined>({

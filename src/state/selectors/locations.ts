@@ -1,5 +1,5 @@
 import { atom, selector } from 'recoil';
-import { getLocations } from '../../api/locations';
+import { getLocations } from '../../api/seeds/locations';
 import { Locations } from '../../api/types/locations';
 
 const locationsAtom = atom({

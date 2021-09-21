@@ -38,10 +38,7 @@ jobs:
         run: yarn lint
 
       - name: download and start backend
-        run: |
-          yarn docker:start
-          yarn wait-be
-          docker exec -i tree-location-web_postgres_1 psql -d terraware -U postgres < dump/dump.sql
+        run: yarn server:reset
         env:
           TERRAWARE_KEYCLOAK_CLIENT_ID: dummy
           TERRAWARE_KEYCLOAK_CLIENT_SECRET: dummy

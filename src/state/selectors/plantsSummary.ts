@@ -1,5 +1,5 @@
 import { atom, selectorFamily } from 'recoil';
-import { getPlantSummary } from '../../api/plants';
+import { getPlantSummary } from '../../api/plants/plants';
 import { PlantSummary } from '../../api/types/plant';
 import { plantsPlantedLayerSelector } from './layers';
 

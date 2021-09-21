@@ -1,5 +1,5 @@
 import { atom, selectorFamily } from 'recoil';
-import { getAccession } from '../../api/accession';
+import { getAccession } from '../../api/seeds/accession';
 import { Accession } from '../../api/types/accessions';
 
 const accessionAtom = atom({
