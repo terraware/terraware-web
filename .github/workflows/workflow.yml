@@ -76,24 +76,3 @@ jobs:
           tags: terraware/seedbank-app:latest
           platforms: linux/amd64,linux/arm64
           push: ${{ github.ref == 'refs/heads/main' }}
-
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-west-2
-
-      - name: Configure SSH
-        if: github.ref == 'refs/heads/main'
-        env:
-          SSH_HOST: ${{ secrets.STAGING_SSH_HOST }}
-          SSH_KEY: ${{ secrets.STAGING_SSH_KEY }}
-          SSH_USER: ${{ secrets.STAGING_SSH_USER }}
-        run: ./.github/scripts/ssh-config.sh
-
-      - name: Notify staging environment of update
-        if: github.ref == 'refs/heads/main'
-        env:
-          SEEDBANK_WEBHOOK_TRIGGER: ${{ secrets.SEEDBANK_WEBHOOK_TRIGGER }}
-        run: ./.github/scripts/notify-update.sh
