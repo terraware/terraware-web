@@ -131,7 +131,7 @@ export default function NewTestDialog(props: Props): JSX.Element {
   }, [props.open]);
 
   const onQuantityChange = (id: string, _value: unknown) => {
-    const value = _value ? parseInt(_value as string) : undefined;
+    const value = _value ? parseInt(_value as string, 10) : undefined;
     setRecord({
       ...record,
       seedsSown: value,
@@ -182,7 +182,7 @@ export default function NewTestDialog(props: Props): JSX.Element {
     if (!value) {
       if (errorIndex < 0) {
         newErrors.push({
-          id: id,
+          id,
           msg: strings.REQUIRED_FIELD,
         });
       }
@@ -196,7 +196,8 @@ export default function NewTestDialog(props: Props): JSX.Element {
   };
 
   const getErrorText = (id: string) => {
-    const error = errors.find((error) => error.id === id);
+    const error = errors.find((internalError) => internalError.id === id);
+
     return error ? error.msg : '';
   };
 

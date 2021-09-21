@@ -1,8 +1,20 @@
-import { atom, selector } from "recoil";
-import { search } from "../../api/search";
-import { AndNodePayload, SearchRequestPayload, SearchResponsePayload } from "../../api/types/search";
-import { COLUMNS_INDEXED, DatabaseColumn } from '../../components/database/columns';
-import { columnsAtom, searchFilterAtom, searchSelectedColumnsAtom, searchSortAtom } from "../atoms/search";
+import { atom, selector } from 'recoil';
+import { search } from '../../api/search';
+import {
+  AndNodePayload,
+  SearchRequestPayload,
+  SearchResponsePayload,
+} from '../../api/types/search';
+import {
+  COLUMNS_INDEXED,
+  DatabaseColumn,
+} from '../../components/database/columns';
+import {
+  columnsAtom,
+  searchFilterAtom,
+  searchSelectedColumnsAtom,
+  searchSortAtom,
+} from '../atoms/search';
 
 const searchAtom = atom({
   key: 'searchTrigger',
@@ -15,11 +27,11 @@ export default selector<SearchResponsePayload>({
     get(searchAtom);
     const searchParams = get(searchParamsSelector);
 
-    return (await search(searchParams));
+    return await search(searchParams);
   },
   set: ({ set }) => {
-    set(searchAtom, v => v + 1);
-  }
+    set(searchAtom, (v) => v + 1);
+  },
 });
 
 const searchFilterSelector = selector({
@@ -27,8 +39,8 @@ const searchFilterSelector = selector({
   get: ({ get }) => {
     const indexedFilters = get(searchFilterAtom);
 
-    return Object.values(indexedFilters)
-  }
+    return Object.values(indexedFilters);
+  },
 });
 
 export const columnsSelector = selector({
@@ -39,6 +51,7 @@ export const columnsSelector = selector({
     const tableColumns = columns.reduce((acum, value) => {
       const column = COLUMNS_INDEXED[value];
       acum.push(column);
+
       return acum;
     }, [] as DatabaseColumn[]);
 
@@ -53,16 +66,18 @@ export const searchParamsSelector = selector({
     const filters = get(searchFilterSelector);
     const sort = get(searchSortAtom);
 
-    const search: AndNodePayload = {
+    const internalSearch: AndNodePayload = {
       operation: 'and',
-      children: filters
-    }
+      children: filters,
+    };
 
     return {
-      fields: tableColumns.includes('active') ? tableColumns : [...tableColumns, 'active'],
+      fields: tableColumns.includes('active')
+        ? tableColumns
+        : [...tableColumns, 'active'],
       sortOrder: [{ field: sort.field, direction: sort.direction }],
-      search,
+      search: internalSearch,
       count: 1000,
-    } as SearchRequestPayload
+    } as SearchRequestPayload;
   },
 });

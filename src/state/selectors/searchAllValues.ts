@@ -19,6 +19,7 @@ export default selector({
         ) {
           acum.push(c.key);
         }
+
         return acum;
       }, [] as any[]),
     } as ListAllFieldValuesRequestPayload;

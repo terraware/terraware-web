@@ -1,9 +1,9 @@
-import { selector } from "recoil";
-import { searchValues } from "../../api/search";
-import { ListFieldValuesRequestPayload } from "../../api/types/search";
-import { COLUMNS_INDEXED } from "../../components/database/columns";
-import { searchSelectedColumnsAtom } from "../atoms/search";
-import { searchParamsSelector } from "./search";
+import { selector } from 'recoil';
+import { searchValues } from '../../api/search';
+import { ListFieldValuesRequestPayload } from '../../api/types/search';
+import { COLUMNS_INDEXED } from '../../components/database/columns';
+import { searchSelectedColumnsAtom } from '../atoms/search';
+import { searchParamsSelector } from './search';
 
 export default selector({
   key: 'searchValuesSelector',
@@ -21,11 +21,12 @@ export default selector({
         ) {
           acum.push(c.key);
         }
+
         return acum;
       }, [] as any[]),
       search,
-    } as ListFieldValuesRequestPayload
+    } as ListFieldValuesRequestPayload;
 
-    return (await searchValues(params));
+    return await searchValues(params);
   },
 });
