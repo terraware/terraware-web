@@ -21,8 +21,5 @@ module.exports = (on, config) => {
   // `config` is the resolved Cypress config
   require('@cypress/code-coverage/task')(on, config);
 
-  config.env.user = '1';
-  config.env.pass = 'test1234';
-
-  return config
-}
+  return config;
+};

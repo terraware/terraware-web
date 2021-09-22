@@ -12,15 +12,21 @@ import {
   Switch,
 } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
-import AllPlants from './components/AllPlants';
 import AppBar from './components/AppBar';
-import Dashboard from './components/Dashboard';
 import NavBar from './components/NavBar';
+import AllPlants from './components/plants/AllPlants';
+import Dashboard from './components/plants/Dashboard';
+import Species from './components/plants/Species';
+import Accession from './components/seeds/accession';
+import Database from './components/seeds/database';
+import Help from './components/seeds/help';
+import NewAccession from './components/seeds/newAccession';
+import Summary from './components/seeds/summary';
 import Snackbar from './components/Snackbar';
-import Species from './components/Species';
 import ErrorBoundary from './ErrorBoundary';
 import strings from './strings';
 import theme from './theme';
+import useTimer from './utils/useTimer';
 
 export default function App() {
   return (
@@ -48,6 +54,7 @@ const useStyles = makeStyles(() =>
 
 function AppContent() {
   const classes = useStyles();
+  useTimer();
 
   return (
     <>
@@ -67,6 +74,15 @@ function AppContent() {
               <Route exact path='/dashboard' component={Dashboard} />
               <Route exact path='/plants' component={AllPlants} />
               <Route exact path='/species' component={Species} />
+              <Route path='/accessions/new' component={NewAccession} />
+              <Route
+                path='/accessions/:accessionNumber'
+                component={Accession}
+              />
+              <Route path='/accessions' component={Database} />
+              <Route path='/species' component={Species} />
+              <Route path='/help' component={Help} />
+              <Route exact path='/summary' component={Summary} />
             </Switch>
           </ErrorBoundary>
         </div>

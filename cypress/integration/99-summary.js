@@ -1,9 +1,9 @@
 /* eslint-disable no-undef */
 /// <reference types="cypress" />
 
-describe('Summary', () => {
+describe.skip('Summary', () => {
   beforeEach(() => {
-    cy.visit('/');
+    cy.visit('/summary');
   });
 
   it('has the right summary results in the first project', () => {

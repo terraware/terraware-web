@@ -1,5 +1,5 @@
 import { selector } from 'recoil';
-import { getSites } from '../../api/sites';
+import { getSites } from '../../api/plants/sites';
 import { Site } from '../../api/types/site';
 
 export default selector<Site[] | undefined>({
