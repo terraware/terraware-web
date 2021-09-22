@@ -28,6 +28,10 @@ server {
         root   /usr/share/nginx/html;
     }
 
+    location /admin/ {
+        proxy_pass ${SERVER_URL};
+    }
+
     location /api/ {
         proxy_pass ${SERVER_URL};
     }
