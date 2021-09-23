@@ -21,4 +21,20 @@ if (process.env.REACT_APP_DELAY_QUERIES === 'true') {
   };
 }
 
+axios.defaults.withCredentials = true;
+
+axios.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response && error.response.status === 401) {
+      const redirect = encodeURIComponent(window.location.href);
+      window.location.href = `${process.env.REACT_APP_SEED_BANK_API}/api/v1/login?redirect=${redirect}`;
+
+      return null;
+    } else {
+      return Promise.reject(error);
+    }
+  }
+);
+
 export default new Proxy(axios, handler);

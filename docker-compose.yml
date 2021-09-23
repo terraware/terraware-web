@@ -16,11 +16,10 @@ services:
     environment:
       - 'DATABASE_URL=jdbc:postgresql://postgres:5432/terraware'
       - 'DATABASE_PASSWORD=terraware'
-      - 'TERRAWARE_KEYCLOAK_CLIENT_ID'
-      - 'TERRAWARE_KEYCLOAK_CLIENT_SECRET'
-      - 'TERRAWARE_KEYCLOAK_REALM'
-      - 'TERRAWARE_KEYCLOAK_SERVER_URL'
-      - 'TERRAWARE_PHOTO_DIR=/photos'
+      - 'KEYCLOAK_AUTH_SERVER_URL'
+      - 'KEYCLOAK_CREDENTIALS_SECRET'
+      - 'KEYCLOAK_REALM'
+      - 'KEYCLOAK_RESOURCE'
     volumes:
       - './photo-data:/photos'
     depends_on:

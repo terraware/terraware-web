@@ -27,6 +27,7 @@ import '@cypress/code-coverage/support';
 // so we don't have to depend on a Keycloak server to run the test suite.
 beforeEach(() => {
   cy.intercept({ pathname: '/api/**', middleware: true }, (req) => {
-    req.headers['X-Forwarded-User'] = 'dummy-auth-id';
+    req.headers['Cookie'] =
+      'SESSION=Mjc2NzE0YWQtYWIwYS00OGFhLThlZjgtZGI2NWVjMmU5NTBh';
   });
 });
