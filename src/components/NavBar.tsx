@@ -55,7 +55,12 @@ export default function NavBar(): JSX.Element | null {
         id='dashboard'
       />
       <NavSection title={strings.FLORA} />
-      <NavItem label='Seeds' icon='seeds' id='seeds'>
+      <NavItem
+        label='Seeds'
+        icon='seeds'
+        id='seeds'
+        onClick={() => navigate('/summary')}
+      >
         <SubNavbar>
           <NavItem
             label='Summary'
@@ -86,10 +91,6 @@ export default function NavBar(): JSX.Element | null {
         id='speciesNb'
       />
       <NavSection />
-      <NavItem label='Projects' icon='folder' selected={false} />
-      <NavItem label='Sites' icon='site' selected={false} />
-      <NavSection />
-      <NavItem label='Admin' icon='key' selected={false} />
       <NavItem
         label={strings.LOGOUT}
         icon='key'
