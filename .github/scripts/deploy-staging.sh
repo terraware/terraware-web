@@ -17,5 +17,8 @@ aws ec2 describe-instances --filters "Name=tag:Application,Values=terraware" \
       echo
       echo "Deploying to $_ip"
       echo
-      ssh -A bastion ssh $_ip /usr/local/bin/update.sh
+      ssh -A bastion ssh $_ip <<-EOF
+      echo "COMMIT_SHA=$COMMIT_SHA" > ~/terraware/.frontend.env
+      /usr/local/bin/update.sh frontend
+EOF
     done
