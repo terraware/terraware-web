@@ -1,6 +1,7 @@
 import { atom, selector } from 'recoil';
 import { searchAllValues } from '../../api/seeds/search';
 import { ListAllFieldValuesRequestPayload } from '../../api/types/search';
+import { facilityIdSelector } from './facility';
 
 const collectorsAtom = atom({
   key: 'collectorsTrigger',
@@ -11,7 +12,11 @@ export default selector<string[]>({
   key: 'collectorsSelector',
   get: async ({ get }) => {
     get(collectorsAtom);
+
+    const facilityId = get(facilityIdSelector);
+
     const params: ListAllFieldValuesRequestPayload = {
+      facilityId,
       fields: ['primaryCollector'],
     };
 

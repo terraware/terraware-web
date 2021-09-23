@@ -22,8 +22,8 @@ export const postAllNotificationsAsRead =
     return (await axios.post(endpoint)).data;
   };
 
-export const getNotifications = async (): Promise<Notifications> => {
-  const endpoint = `${BASE_URL}`;
+export const getNotifications = async (facilityId: number): Promise<Notifications> => {
+  const endpoint = `${BASE_URL}?facilityId=${facilityId}`;
 
   return (await axios.get(endpoint)).data.notifications;
 };

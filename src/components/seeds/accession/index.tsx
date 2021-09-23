@@ -49,23 +49,23 @@ export default function AccessionPage(): JSX.Element {
 
 function Content(): JSX.Element {
   const classes = useStyles();
-  const { accessionNumber } = useParams<{ accessionNumber: string }>();
+  const { accessionId } = useParams<{ accessionId: string }>();
   const setSnackbar = useSetRecoilState(snackbarAtom);
   const resetSearch = useResetRecoilState(searchSelector);
   const history = useHistory();
 
-  const accession = useRecoilValue(getAccessionSelector(accessionNumber));
+  const accession = useRecoilValue(getAccessionSelector(parseInt(accessionId, 10)));
   const resetAccession = useResetRecoilState(
-    getAccessionSelector(accessionNumber)
+    getAccessionSelector(parseInt(accessionId, 10))
   );
 
   React.useEffect(() => {
-    if (accession && accession.accessionNumber) {
-      if (history.location.pathname.endsWith(accession.accessionNumber)) {
+    if (accession && accession.id) {
+      if (history.location.pathname.endsWith(accession.id.toString())) {
         const state = accession.state;
         const newLocation = {
           pathname: `/accessions/${
-            accession.accessionNumber
+            accession.id
           }/${pathDestinationForState(state)}`,
           state: history.location.state,
         };
@@ -111,7 +111,7 @@ function Content(): JSX.Element {
           </Grid>
           <Grid item xs={9}>
             <Switch>
-              <Route exact path='/accessions/:accessionNumber/seed-collection'>
+              <Route exact path='/accessions/:accessionId/seed-collection'>
                 <AccessionForm
                   updating={true}
                   photoFilenames={clonedAccession.photoFilenames}
@@ -121,23 +121,23 @@ function Content(): JSX.Element {
               </Route>
               <Route
                 exact
-                path='/accessions/:accessionNumber/processing-drying'
+                path='/accessions/:accessionId/processing-drying'
               >
                 <ProcessingAndDrying
                   accession={clonedAccession}
                   onSubmit={onSubmit}
                 />
               </Route>
-              <Route exact path='/accessions/:accessionNumber/storage'>
+              <Route exact path='/accessions/:accessionId/storage'>
                 <Storage accession={clonedAccession} onSubmit={onSubmit} />
               </Route>
-              <Route exact path='/accessions/:accessionNumber/nursery'>
+              <Route exact path='/accessions/:accessionId/nursery'>
                 <Nursery accession={clonedAccession} onSubmit={onSubmit} />
               </Route>
-              <Route exact path='/accessions/:accessionNumber/lab'>
+              <Route exact path='/accessions/:accessionId/lab'>
                 <Lab accession={clonedAccession} onSubmit={onSubmit} />
               </Route>
-              <Route exact path='/accessions/:accessionNumber/withdrawal'>
+              <Route exact path='/accessions/:accessionId/withdrawal'>
                 <Withdrawal accession={clonedAccession} onSubmit={onSubmit} />
               </Route>
             </Switch>
