@@ -1,10 +1,13 @@
-import { selector } from 'recoil';
-import { getSites } from '../../api/sites';
-import { Site } from '../../api/types/site';
+import {selector} from 'recoil';
+import {getSites} from '../../api/sites';
 
-export default selector<Site[] | undefined>({
-  key: 'sitesSelector',
-  get: async ({ get }) => {
-    return await getSites();
+export const siteSelector = selector<number | undefined>({
+  key: 'siteSelector',
+  get: async ({get}) => {
+    const sites = await getSites();
+
+    return sites[0];
   },
 });
+
+export default siteSelector;

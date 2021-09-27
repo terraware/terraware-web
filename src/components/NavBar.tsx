@@ -1,8 +1,9 @@
 import { useHistory, useRouteMatch } from 'react-router-dom';
 import { useResetRecoilState } from 'recoil';
-import { plantsPlantedSelector } from '../state/selectors/plantsPlanted';
-import { plantsPlantedFeaturesSelector } from '../state/selectors/plantsPlantedFeatures';
-import { plantsPlantedFilteredSelector } from '../state/selectors/plantsPlantedFiltered';
+import {
+  plantsFilteredSelector,
+  plantsSelector
+} from '../state/selectors/plants';
 import strings from '../strings';
 import Navbar from './common/Navbar/Navbar';
 import NavItem from './common/Navbar/NavItem';
@@ -15,12 +16,9 @@ export default function NavBar(): JSX.Element | null {
   const isDashboardRoute = useRouteMatch('/dashboard/');
   const isSpeciesRoute = useRouteMatch('/species/');
   const isPlantsRoute = useRouteMatch('/plants/');
-  const resetPlantsPlanted = useResetRecoilState(plantsPlantedSelector);
+  const resetPlantsPlanted = useResetRecoilState(plantsSelector);
   const resetPlantsPlantedFiltered = useResetRecoilState(
-    plantsPlantedFilteredSelector
-  );
-  const resetPlantsPlantedFeatures = useResetRecoilState(
-    plantsPlantedFeaturesSelector
+    plantsFilteredSelector
   );
 
   const navigate = (url: string) => {
@@ -33,7 +31,6 @@ export default function NavBar(): JSX.Element | null {
   };
 
   const navigateToAllPlants = () => {
-    resetPlantsPlantedFeatures();
     resetPlantsPlantedFiltered();
     navigate('/plants');
   };

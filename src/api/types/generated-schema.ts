@@ -4,2190 +4,2439 @@
  */
 
 export interface paths {
-  "/api/v1/accounts/me": {
-    get: operations["read_accounts_me_api_v1_accounts_me_get"];
+  "/api/v1/device/all/config": {
+    get: operations["listDeviceConfigs"];
   };
-  "/api/v1/features": {
-    get: operations["read_feature_list_api_v1_features_get"];
-    post: operations["create_feature_api_v1_features_post"];
+  "/api/v1/facility": {
+    /** List all the facilities the current user can access. */
+    get: operations["listAll_2"];
   };
-  "/api/v1/features/{feature_id}": {
-    get: operations["read_feature_api_v1_features__feature_id__get"];
-    put: operations["update_feature_api_v1_features__feature_id__put"];
-    delete: operations["delete_feature_api_v1_features__feature_id__delete"];
+  "/api/v1/gis/features": {
+    post: operations["create_4"];
   };
-  "/api/v1/layers": {
-    get: operations["read_layer_list_api_v1_layers_get"];
-    post: operations["create_item_api_v1_layers_post"];
+  "/api/v1/gis/features/list/{layerId}": {
+    get: operations["list_1"];
   };
-  "/api/v1/organizations": {
-    get: operations["read_organization_list_api_v1_organizations_get"];
-    post: operations["create_organization_api_v1_organizations_post"];
+  "/api/v1/gis/features/{featureId}": {
+    get: operations["read_2"];
+    put: operations["update_4"];
+    delete: operations["delete_1"];
   };
-  "/api/v1/organizations/{organization_id}": {
-    get: operations["read_organization_api_v1_organizations__organization_id__get"];
-    put: operations["update_organization_api_v1_organizations__organization_id__put"];
+  "/api/v1/gis/features/{featureId}/photos": {
+    get: operations["listFeaturePhotos"];
+    post: operations["createFeaturePhoto"];
   };
-  "/api/v1/photos": {
-    get: operations["read_photo_list_api_v1_photos_get"];
-    post: operations["create_photo_api_v1_photos_post"];
+  "/api/v1/gis/features/{featureId}/photos/{photoId}": {
+    /** Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio. */
+    get: operations["downloadFeaturePhoto"];
+    delete: operations["deleteFeaturePhoto"];
   };
-  "/api/v1/photos/{photo_id}": {
-    get: operations["read_photo_api_v1_photos__photo_id__get"];
-    delete: operations["delete_photo_api_v1_photos__photo_id__delete"];
+  "/api/v1/gis/features/{featureId}/photos/{photoId}/metadata": {
+    get: operations["getFeaturePhotoMetadata"];
   };
-  "/api/v1/plants": {
-    get: operations["read_plant_list_api_v1_plants_get"];
-    post: operations["create_item_api_v1_plants_post"];
+  "/api/v1/gis/layers": {
+    post: operations["create_3"];
   };
-  "/api/v1/plants/{feature_id}": {
-    get: operations["read_plant_api_v1_plants__feature_id__get"];
-    put: operations["update_plant_api_v1_plants__feature_id__put"];
-    delete: operations["delete_plant_api_v1_plants__feature_id__delete"];
+  "/api/v1/gis/layers/list/{siteId}": {
+    get: operations["list"];
   };
-  "/api/v1/plant_observations": {
-    get: operations["read_plant_observation_list_api_v1_plant_observations_get"];
-    post: operations["create_item_api_v1_plant_observations_post"];
+  "/api/v1/gis/layers/{layerId}": {
+    get: operations["read_1"];
+    put: operations["update_3"];
+    delete: operations["delete"];
   };
-  "/api/v1/tiles/{site_id}/{file_path}": {
-    get: operations["read_tile_api_v1_tiles__site_id___file_path__get"];
+  "/api/v1/gis/plant_observations": {
+    post: operations["create_2"];
   };
-  "/api/v1/accounts": {
-    get: operations["read_item_list_api_v1_accounts_get"];
-    post: operations["create_item_api_v1_accounts_post"];
+  "/api/v1/gis/plant_observations/list/{featureId}": {
+    get: operations["getList"];
   };
-  "/api/v1/accounts/{item_id}": {
-    get: operations["read_item_api_v1_accounts__item_id__get"];
-    put: operations["update_item_api_v1_accounts__item_id__put"];
-    delete: operations["delete_item_api_v1_accounts__item_id__delete"];
+  "/api/v1/gis/plant_observations/{plantObservationId}": {
+    get: operations["get_1"];
+    put: operations["update_2"];
   };
-  "/api/v1/organization_accounts": {
-    get: operations["read_item_list_api_v1_organization_accounts_get"];
-    post: operations["create_item_api_v1_organization_accounts_post"];
+  "/api/v1/gis/plants": {
+    post: operations["create_1"];
   };
-  "/api/v1/organization_accounts/{item_id}": {
-    get: operations["read_item_api_v1_organization_accounts__item_id__get"];
-    put: operations["update_item_api_v1_organization_accounts__item_id__put"];
-    delete: operations["delete_item_api_v1_organization_accounts__item_id__delete"];
+  "/api/v1/gis/plants/list/summary/{layerId}": {
+    get: operations["getPlantSummary"];
   };
-  "/api/v1/projects": {
-    get: operations["read_item_list_api_v1_projects_get"];
-    post: operations["create_item_api_v1_projects_post"];
+  "/api/v1/gis/plants/list/{layerId}": {
+    get: operations["getPlantsList"];
   };
-  "/api/v1/projects/{item_id}": {
-    get: operations["read_item_api_v1_projects__item_id__get"];
-    put: operations["update_item_api_v1_projects__item_id__put"];
-    delete: operations["delete_item_api_v1_projects__item_id__delete"];
+  "/api/v1/gis/plants/{featureId}": {
+    get: operations["get"];
+    put: operations["update_1"];
   };
-  "/api/v1/sites": {
-    get: operations["read_item_list_api_v1_sites_get"];
-    post: operations["create_item_api_v1_sites_post"];
+  "/api/v1/login": {
+    /** For interactive web applications, this can be used to redirect the user to a login page to allow the application to make other API requests. The login process will set a cookie that will authenticate to the API, and will then redirect back to the application. One approach is to use this in error response handlers: if an API request returns HTTP 401 Unauthorized, set location.href to this endpoint and set "redirect" to the URL of the page the user was on so they'll return there after logging in. */
+    get: operations["login"];
   };
-  "/api/v1/sites/{item_id}": {
-    get: operations["read_item_api_v1_sites__item_id__get"];
-    put: operations["update_item_api_v1_sites__item_id__put"];
-    delete: operations["delete_item_api_v1_sites__item_id__delete"];
+  "/api/v1/organization": {
+    /** List all organizations the user can access. */
+    get: operations["listAll_1"];
   };
-  "/api/v1/layers/{item_id}": {
-    get: operations["read_item_api_v1_layers__item_id__get"];
-    put: operations["update_item_api_v1_layers__item_id__put"];
-    delete: operations["delete_item_api_v1_layers__item_id__delete"];
+  "/api/v1/resources": {
+    post: operations["createResource"];
   };
-  "/api/v1/plants/{item_id}": {
-    get: operations["read_item_api_v1_plants__item_id__get"];
-    put: operations["update_item_api_v1_plants__item_id__put"];
-    delete: operations["delete_item_api_v1_plants__item_id__delete"];
+  "/api/v1/resources/{*path}": {
+    get: operations["getResource"];
   };
-  "/api/v1/plant_observations/{item_id}": {
-    get: operations["read_item_api_v1_plant_observations__item_id__get"];
-    put: operations["update_item_api_v1_plant_observations__item_id__put"];
-    delete: operations["delete_item_api_v1_plant_observations__item_id__delete"];
+  "/api/v1/seedbank/accession": {
+    post: operations["create"];
+  };
+  "/api/v1/seedbank/accession/{accessionNumber}": {
+    get: operations["read"];
+    put: operations["update"];
+  };
+  "/api/v1/seedbank/accession/{accessionNumber}/photo": {
+    get: operations["listPhotos"];
+  };
+  "/api/v1/seedbank/accession/{accessionNumber}/photo/{photoFilename}": {
+    /** Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio. */
+    get: operations["getPhoto"];
+    post: operations["uploadPhoto"];
+  };
+  "/api/v1/seedbank/clock": {
+    /** In test environments, the clock can be advanced artificially, which will cause it to differ from the real-world date and time. */
+    get: operations["getCurrentTime"];
+  };
+  "/api/v1/seedbank/clock/advance": {
+    /** Advancing the clock causes any scheduled processes to run. Subsequent GET requests to read the current time will take the advancement into account. Only supported in test and development environments. */
+    post: operations["advanceClock"];
+  };
+  "/api/v1/seedbank/log/{tag}": {
+    post: operations["recordLogMessage"];
+  };
+  "/api/v1/seedbank/notification": {
+    get: operations["listAll"];
+  };
+  "/api/v1/seedbank/notification/all/markRead": {
+    post: operations["markAllRead"];
+  };
+  "/api/v1/seedbank/notification/all/markUnread": {
+    /** For development and testing of notifications. Not available in production. */
+    post: operations["markAllUnread"];
+  };
+  "/api/v1/seedbank/notification/{id}/markRead": {
+    post: operations["markRead"];
+  };
+  "/api/v1/seedbank/search": {
+    post: operations["search"];
+  };
+  "/api/v1/seedbank/search/export": {
+    post: operations["export"];
+  };
+  "/api/v1/seedbank/summary": {
+    get: operations["getSummary"];
+  };
+  "/api/v1/seedbank/timeseries": {
+    post: operations["reportNumericValue"];
+  };
+  "/api/v1/seedbank/values": {
+    post: operations["listFieldValues"];
+  };
+  "/api/v1/seedbank/values/all": {
+    post: operations["listAllFieldValues"];
+  };
+  "/api/v1/seedbank/values/species": {
+    /** Use /api/v1/species instead. */
+    get: operations["listSpecies"];
+    /** Use /api/v1/species instead. */
+    post: operations["createSpecies"];
+  };
+  "/api/v1/seedbank/values/species/{id}": {
+    /** Use /api/v1/species instead. */
+    post: operations["updateSpecies"];
+  };
+  "/api/v1/seedbank/values/storageLocation": {
+    get: operations["getStorageLocations"];
+  };
+  "/api/v1/site": {
+    get: operations["listSites"];
+  };
+  "/api/v1/site/{siteId}": {
+    get: operations["getSite"];
   };
   "/api/v1/species": {
-    get: operations["read_item_list_api_v1_species_get"];
-    post: operations["create_item_api_v1_species_post"];
+    get: operations["speciesList"];
+    post: operations["speciesCreate"];
   };
-  "/api/v1/species/{item_id}": {
-    get: operations["read_item_api_v1_species__item_id__get"];
-    put: operations["update_item_api_v1_species__item_id__put"];
-    delete: operations["delete_item_api_v1_species__item_id__delete"];
+  "/api/v1/species/names": {
+    get: operations["speciesNamesListAll"];
+    post: operations["speciesNameCreate"];
   };
-  "/api/v1/species_names": {
-    get: operations["read_item_list_api_v1_species_names_get"];
-    post: operations["create_item_api_v1_species_names_post"];
+  "/api/v1/species/names/{speciesNameId}": {
+    /** Gets information about a single species name. */
+    get: operations["speciesNameGet"];
+    /** Updates one of the names of a species. */
+    put: operations["speciesNameUpdate"];
+    /** Deletes one of the secondary names of a species. */
+    delete: operations["speciesNameDelete"];
   };
-  "/api/v1/species_names/{item_id}": {
-    get: operations["read_item_api_v1_species_names__item_id__get"];
-    put: operations["update_item_api_v1_species_names__item_id__put"];
-    delete: operations["delete_item_api_v1_species_names__item_id__delete"];
+  "/api/v1/species/{speciesId}": {
+    get: operations["speciesRead"];
+    put: operations["speciesUpdate"];
+    delete: operations["speciesDelete"];
   };
-  "/api/v1/account_roles": {
-    get: operations["read_item_list_api_v1_account_roles_get"];
-    post: operations["create_item_api_v1_account_roles_post"];
-  };
-  "/api/v1/account_roles/{item_id}": {
-    get: operations["read_item_api_v1_account_roles__item_id__get"];
-    put: operations["update_item_api_v1_account_roles__item_id__put"];
-    delete: operations["delete_item_api_v1_account_roles__item_id__delete"];
-  };
-  "/api/v1/project_types": {
-    get: operations["read_item_list_api_v1_project_types_get"];
-    post: operations["create_item_api_v1_project_types_post"];
-  };
-  "/api/v1/project_types/{item_id}": {
-    get: operations["read_item_api_v1_project_types__item_id__get"];
-    put: operations["update_item_api_v1_project_types__item_id__put"];
-    delete: operations["delete_item_api_v1_project_types__item_id__delete"];
-  };
-  "/api/v1/project_statuses": {
-    get: operations["read_item_list_api_v1_project_statuses_get"];
-    post: operations["create_item_api_v1_project_statuses_post"];
-  };
-  "/api/v1/project_statuses/{item_id}": {
-    get: operations["read_item_api_v1_project_statuses__item_id__get"];
-    put: operations["update_item_api_v1_project_statuses__item_id__put"];
-    delete: operations["delete_item_api_v1_project_statuses__item_id__delete"];
-  };
-  "/api/v1/layer_types": {
-    get: operations["read_item_list_api_v1_layer_types_get"];
-    post: operations["create_item_api_v1_layer_types_post"];
-  };
-  "/api/v1/layer_types/{item_id}": {
-    get: operations["read_item_api_v1_layer_types__item_id__get"];
-    put: operations["update_item_api_v1_layer_types__item_id__put"];
-    delete: operations["delete_item_api_v1_layer_types__item_id__delete"];
-  };
-  "/api/v1/health_states": {
-    get: operations["read_item_list_api_v1_health_states_get"];
-    post: operations["create_item_api_v1_health_states_post"];
-  };
-  "/api/v1/health_states/{item_id}": {
-    get: operations["read_item_api_v1_health_states__item_id__get"];
-    put: operations["update_item_api_v1_health_states__item_id__put"];
-    delete: operations["delete_item_api_v1_health_states__item_id__delete"];
-  };
-  "/api/v1/token": {
-    post: operations["login_api_v1_token_post"];
-  };
-  "/": {
-    get: operations["test_page__get"];
-  };
-  "/test": {
-    get: operations["test_page_test_get"];
+  "/api/v1/species/{speciesId}/names": {
+    get: operations["speciesNamesList"];
   };
 }
 
 export interface components {
   schemas: {
-    Account: {
-      id?: number;
-      auth_id: string;
-      super_admin: boolean;
-      created_time?: string;
-      modified_time?: string;
+    AccessionPayload: {
+      /** Server-generated unique identifier for the accession. */
+      accessionNumber?: string;
+      /** Server-calculated active indicator. This is based on the accession's state. */
+      active: "Inactive" | "Active";
+      bagNumbers?: string[];
+      collectedDate?: string;
+      deviceInfo?: components["schemas"]["DeviceInfoPayload"];
+      cutTestSeedsCompromised?: number;
+      cutTestSeedsEmpty?: number;
+      cutTestSeedsFilled?: number;
+      dryingEndDate?: string;
+      dryingMoveDate?: string;
+      dryingStartDate?: string;
+      endangered?: "No" | "Yes" | "Unsure";
+      environmentalNotes?: string;
+      estimatedSeedCount?: number;
+      family?: string;
+      fieldNotes?: string;
+      founderId?: string;
+      geolocations?: components["schemas"]["Geolocation"][];
+      germinationTests?: components["schemas"]["GerminationTestPayload"][];
+      germinationTestTypes?: ("Lab" | "Nursery")[];
+      /** Initial size of accession. The units of this value must match the measurement type in "processingMethod". */
+      initialQuantity?: components["schemas"]["SeedQuantityPayload"];
+      landowner?: string;
+      latestGerminationTestDate?: string;
+      latestViabilityPercent?: number;
+      numberOfTrees?: number;
+      nurseryStartDate?: string;
+      photoFilenames?: string[];
+      primaryCollector?: string;
+      processingMethod?: "Count" | "Weight";
+      processingNotes?: string;
+      processingStaffResponsible?: string;
+      processingStartDate?: string;
+      rare?: "No" | "Yes" | "Unsure";
+      receivedDate?: string;
+      /** Number or weight of seeds remaining for withdrawal and testing. Calculated by the server when the accession's total size is known. */
+      remainingQuantity?: components["schemas"]["SeedQuantityPayload"];
+      secondaryCollectors?: string[];
+      siteLocation?: string;
+      /** Which application this accession originally came from. This is currently based on the presence of the deviceInfo field. */
+      source?: "Web" | "SeedCollectorApp";
+      sourcePlantOrigin?: "Wild" | "Outplant";
+      species?: string;
+      /** Server-generated unique ID of the species. */
+      speciesId?: number;
+      /** Server-calculated accession state. Can change due to modifications to accession data or based on passage of time. */
+      state:
+        | "Pending"
+        | "Processing"
+        | "Processed"
+        | "Drying"
+        | "Dried"
+        | "In Storage"
+        | "Withdrawn"
+        | "Nursery";
+      storageCondition?: "Refrigerator" | "Freezer";
+      storageLocation?: string;
+      storagePackets?: number;
+      storageNotes?: string;
+      storageStaffResponsible?: string;
+      storageStartDate?: string;
+      subsetCount?: number;
+      /** Weight of subset of seeds. Units must be a weight measurement, not "Seeds". */
+      subsetWeight?: components["schemas"]["SeedQuantityPayload"];
+      targetStorageCondition?: "Refrigerator" | "Freezer";
+      /** Total quantity of all past withdrawals, including germination tests. */
+      totalPastWithdrawalQuantity?: components["schemas"]["SeedQuantityPayload"];
+      /** Total quantity of scheduled withdrawals, not counting germination tests. */
+      totalScheduledNonTestQuantity?: components["schemas"]["SeedQuantityPayload"];
+      /** Total quantity of scheduled withdrawals for germination tests. */
+      totalScheduledTestQuantity?: components["schemas"]["SeedQuantityPayload"];
+      /** Total quantity of scheduled withdrawals, including germination tests. */
+      totalScheduledWithdrawalQuantity?: components["schemas"]["SeedQuantityPayload"];
+      totalViabilityPercent?: number;
+      /** Total quantity of all past and scheduled withdrawals, including germination tests. */
+      totalWithdrawalQuantity?: components["schemas"]["SeedQuantityPayload"];
+      withdrawals?: components["schemas"]["WithdrawalPayload"][];
     };
-    AccountRole: {
-      id: number;
+    AdvanceClockRequestPayload: {
+      days: number;
+    };
+    AllFieldValuesPayload: {
+      /** All the values this field could possibly have, whether or not any accessions have them. For fields that allow the user to enter arbitrary values, this is equivalent to querying the list of values without any filter criteria, that is, it's a list of all the user-entered values. */
+      values: string[];
+      /** If true, the list of values is too long to return in its entirety and "values" is a partial list. */
+      partial: boolean;
+    };
+    /** Search criterion that matches results that meet all of a set of other search criteria. That is, if the list of children is x, y, and z, this will require x AND y AND z. */
+    AndNodePayload: components["schemas"]["SearchNodePayload"] & {
+      children?: components["schemas"]["SearchNodePayload"][];
+    } & {
+      children: unknown;
+    };
+    /** Coordinate reference system used for X and Y coordinates in this geometry. By default, coordinates are in WGS 84, with longitude and latitude in degrees. In that case, this element is not present. Otherwise, it specifies which coordinate system to use. */
+    CRS: {
+      type: "name";
+      properties: components["schemas"]["CRSProperties"];
+    };
+    CRSProperties: {
+      /** Name of the coordinate reference system. This must be in the form EPSG:nnnn where nnnn is the numeric identifier of a coordinate system in the EPSG dataset. A common one is 3857, the Web Mercator projection used by many mapping tools. */
       name: string;
     };
-    Body_create_photo_api_v1_photos_post: {
-      file: string;
+    CreateAccessionRequestPayload: {
+      bagNumbers?: string[];
+      collectedDate?: string;
+      deviceInfo?: components["schemas"]["DeviceInfoPayload"];
+      endangered?: "No" | "Yes" | "Unsure";
+      environmentalNotes?: string;
+      facilityId?: number;
+      family?: string;
+      fieldNotes?: string;
+      founderId?: string;
+      geolocations?: components["schemas"]["Geolocation"][];
+      germinationTestTypes?: ("Lab" | "Nursery")[];
+      landowner?: string;
+      numberOfTrees?: number;
+      primaryCollector?: string;
+      rare?: "No" | "Yes" | "Unsure";
+      receivedDate?: string;
+      secondaryCollectors?: string[];
+      siteLocation?: string;
+      sourcePlantOrigin?: "Wild" | "Outplant";
+      species?: string;
     };
-    Body_login_api_v1_token_post: {
-      grant_type?: string;
-      username: string;
-      password: string;
-      scope?: string;
-      client_id?: string;
-      client_secret?: string;
+    CreateAccessionResponsePayload: {
+      accession: components["schemas"]["AccessionPayload"];
+      status: components["schemas"]["SuccessOrError"];
     };
-    Feature: {
-      id?: number;
-      layer_id: number;
-      shape_type_id: number;
-      geom?: { [key: string]: unknown };
-      altitude?: number;
-      gps_horiz_accuracy?: number;
-      gps_vert_accuracy?: number;
+    CreateFeaturePhotoRequestPayload: {
+      capturedTime: string;
+      /** Compass heading of phone/camera when photo was taken. */
+      heading?: number;
+      location?: components["schemas"]["Point"];
+      /** Orientation of phone/camera when photo was taken. */
+      orientation?: number;
+      /** GPS horizontal accuracy in meters. */
+      gpsHorizAccuracy?: number;
+      /** GPS vertical (altitude) accuracy in meters. */
+      gpsVertAccuracy?: number;
+    };
+    CreateFeaturePhotoResponsePayload: {
+      photoId: number;
+      status: components["schemas"]["SuccessOrError"];
+    };
+    CreateFeatureRequestPayload: {
+      layerId: number;
+      geom?: components["schemas"]["Geometry"];
+      gpsHorizAccuracy?: number;
+      gpsVertAccuracy?: number;
       attrib?: string;
       notes?: string;
-      entered_time?: string;
-      created_time?: string;
-      modified_time?: string;
+      enteredTime?: string;
     };
-    HTTPValidationError: {
-      detail?: components["schemas"]["ValidationError"][];
+    CreateFeatureResponsePayload: {
+      feature: components["schemas"]["FeatureResponse"];
+      status: components["schemas"]["SuccessOrError"];
     };
-    HealthState: {
-      id: number;
-      name: string;
-    };
-    Layer: {
-      id?: number;
-      site_id: number;
-      type_id: number;
-      tile_set_name?: string;
+    CreateLayerRequestPayload: {
+      siteId: number;
+      layerType:
+        | "Aerial Photos"
+        | "Surface Color Map"
+        | "Terrain Color Map"
+        | "Boundaries"
+        | "Plants Planted"
+        | "Plants Existing"
+        | "Irrigation"
+        | "Infrastructure"
+        | "Partner Input"
+        | "Restoration Zones"
+        | "Site Prep"
+        | "Map notes";
+      tileSetName: string;
       proposed: boolean;
       hidden: boolean;
-      deleted: boolean;
-      created_time?: string;
-      modified_time?: string;
     };
-    LayerType: {
-      id: number;
-      name: string;
+    CreateLayerResponsePayload: {
+      layer: components["schemas"]["LayerResponse"];
+      status: components["schemas"]["SuccessOrError"];
     };
-    Organization: {
-      id?: number;
-      name: string;
-      location?: string;
-      created_time?: string;
-      modified_time?: string;
-      disabled_time?: string;
-    };
-    OrganizationAccount: {
-      id?: number;
-      account_id: number;
-      organization_id: number;
-      role_id: number;
-      created_time?: string;
-      modified_time?: string;
-    };
-    Plant: {
-      feature_id: number;
-      label?: string;
-      species_id?: number;
-      natural_regen?: boolean;
-      date_planted?: string;
-      created_time?: string;
-      modified_time?: string;
-    };
-    PlantObservation: {
-      id?: number;
-      feature_id?: number;
+    CreateObservationRequestPayload: {
+      featureId: number;
       timestamp: string;
-      health_state_id?: number;
+      healthState?: "Good" | "Moderate" | "Poor" | "Dead";
       flowers?: boolean;
       seeds?: boolean;
       pests?: string;
+      /** Height in meters */
       height?: number;
-      dbh?: number;
-      created_time?: string;
-      modified_time?: string;
+      /** Diameter at breast height in meters */
+      diameterAtBreastHeight?: number;
     };
-    Project: {
-      id?: number;
-      organization_id: number;
+    CreateObservationResponsePayload: {
+      resp: components["schemas"]["ObservationResponse"];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    CreatePlantRequestPayload: {
+      featureId: number;
+      label?: string;
+      speciesId?: number;
+      naturalRegen?: boolean;
+      datePlanted?: string;
+    };
+    CreatePlantResponsePayload: {
+      plant: components["schemas"]["PlantResponse"];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    CreateSpeciesRequestPayload: {
       name: string;
-      description?: string;
-      location?: string;
-      type_id?: number;
-      status_id?: number;
-      start_date?: string;
-      end_date?: string;
-      pm_account_id?: number;
-      created_time?: string;
-      modified_time?: string;
-      disabled_time?: string;
     };
-    ProjectStatus: {
+    CreateSpeciesResponsePayload: {
+      details: components["schemas"]["SpeciesDetails"];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    DeleteFeatureResponsePayload: {
+      id: number;
+      status: components["schemas"]["SuccessOrError"];
+    };
+    DeleteLayerResponse: {
+      id: number;
+      siteId: number;
+    };
+    DeleteLayerResponsePayload: {
+      layer: components["schemas"]["DeleteLayerResponse"];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    DeviceConfig: {
+      /** Name of facility where this device is located. */
+      facility: string;
+      /** Copy of facility for backward compatibility. */
+      siteModule: string;
+      /** Name of this device. Should be unique within the facility. */
+      name: string;
+      /** High-level type of the device. Device manager may use this in conjunction with the make and model to determine which metrics to report. */
+      type: string;
+      /** Name of device manufacturer. */
+      make: string;
+      /** Model number or model name of the device. */
+      model: string;
+      /** Device manager protocol name. */
+      protocol?: string;
+      /** Protocol-specific address of device, e.g., an IP address or a Bluetooth device ID. */
+      address?: string;
+      /** Port number if relevant for the protocol. */
+      port?: number;
+      /** Protocol- and device-specific custom settings. Format is defined by the device manager. */
+      settings?: string;
+      pollingInterval?: number;
+      /** Device's resource path on the server, minus organization and site names. Currently, this is always just the facility and device name. */
+      serverPath: string;
+    };
+    /** Details about the device and the application that created the accession. All these values are optional and most of them are platform-dependent. */
+    DeviceInfoPayload: {
+      /** Build number of application that is submitting the accession, e.g., from React Native getBuildId() */
+      appBuild?: string;
+      /** Name of application */
+      appName?: string;
+      /** Brand of device, e.g., from React Native getBrand(). */
+      brand?: string;
+      /** Model of device hardware, e.g., from React Native getDeviceId(). */
+      model?: string;
+      /** Name the user has assigned to the device, e.g., from React Native getDeviceName(). */
+      name?: string;
+      /** Type of operating system, e.g., from React Native getSystemName(). */
+      osType?: string;
+      /** Version of operating system, e.g., from React Native getSystemVersion(). */
+      osVersion?: string;
+      /** Unique identifier of the hardware device, e.g., from React Native getUniqueId(). */
+      uniqueId?: string;
+    };
+    ErrorDetails: {
+      message: string;
+    };
+    ExportRequestPayload: {
+      fields: components["schemas"]["SearchField"][];
+      sortOrder?: components["schemas"]["SearchSortOrderElement"][];
+      filters?: components["schemas"]["SearchFilter"][];
+      search?:
+        | components["schemas"]["AndNodePayload"]
+        | components["schemas"]["FieldNodePayload"]
+        | components["schemas"]["NotNodePayload"]
+        | components["schemas"]["OrNodePayload"];
+    };
+    FeaturePhoto: {
+      capturedTime: string;
+      contentType: string;
+      featureId: number;
+      fileName: string;
+      /** GPS horizontal accuracy in meters. */
+      gpsHorizAccuracy?: number;
+      /** GPS vertical (altitude) accuracy in meters. */
+      gpsVertAccuracy?: number;
+      /** Compass heading of phone/camera when photo was taken. */
+      heading?: number;
+      id: number;
+      location?: components["schemas"]["Point"];
+      /** Orientation of phone/camera when photo was taken. */
+      orientation?: number;
+      size: number;
+    };
+    FeatureResponse: {
+      id: number;
+      layerId: number;
+      geom?: components["schemas"]["Geometry"];
+      gpsHorizAccuracy?: number;
+      gpsVertAccuracy?: number;
+      attrib?: string;
+      notes?: string;
+      enteredTime?: string;
+    };
+    FieldNodePayload: components["schemas"]["SearchNodePayload"] & {
+      field?: components["schemas"]["SearchField"];
+      /** List of values to match. For exact and fuzzy searches, a list of at least one value to search for; the list may include null to match accessions where the field does not have a value. For range searches, the list must contain exactly two values, the minimum and maximum; one of the values may be null to search for all values above a minimum or below a maximum. */
+      values?: (string | null)[];
+      type?: "Exact" | "Fuzzy" | "Range";
+    } & {
+      field: unknown;
+      type: unknown;
+      values: unknown;
+    };
+    FieldValuesPayload: {
+      /** List of values in the matching accessions. If there are accessions where the field has no value, this list will contain null (an actual null value, not the string "null"). */
+      values: (string | null)[];
+      /** If true, the list of values is too long to return in its entirety and "values" is a partial list. */
+      partial: boolean;
+    };
+    Geolocation: {
+      latitude: number;
+      longitude: number;
+      accuracy?: number;
+    };
+    /** GEOMETRY-FIX-TYPE-ON-CLIENT-SIDE */
+    Geometry: {
+      type:
+        | "Point"
+        | "LineString"
+        | "Polygon"
+        | "MultiPoint"
+        | "MultiLineString"
+        | "MultiPolygon"
+        | "GeometryCollection";
+      coordinates: number[];
+      crs?: components["schemas"]["CRS"];
+    };
+    GeometryCollection: components["schemas"]["Geometry"] & {
+      geometries?: components["schemas"]["Geometry"][];
+    } & {
+      geometries: unknown;
+    };
+    GerminationPayload: {
+      recordingDate: string;
+      seedsGerminated: number;
+    };
+    GerminationTestPayload: {
+      /** Server-assigned unique ID of this germination test. Null when creating a new test. */
+      id?: string;
+      /** Which type of test is described. At most one of each test type is allowed. */
+      testType: "Lab" | "Nursery";
+      startDate?: string;
+      endDate?: string;
+      seedType?: "Fresh" | "Stored";
+      substrate?:
+        | "Nursery Media"
+        | "Agar Petri Dish"
+        | "Paper Petri Dish"
+        | "Other";
+      treatment?: "Soak" | "Scarify" | "GA3" | "Stratification" | "Other";
+      notes?: string;
+      /** Quantity of seeds remaining. For weight-based accessions, this is user input and is required. For count-based accessions, it is calculated by the server and ignored on input. */
+      remainingQuantity?: components["schemas"]["SeedQuantityPayload"];
+      staffResponsible?: string;
+      seedsSown?: number;
+      totalPercentGerminated?: number;
+      totalSeedsGerminated?: number;
+      germinations?: components["schemas"]["GerminationPayload"][];
+    };
+    GetAccessionResponsePayload: {
+      accession: components["schemas"]["AccessionPayload"];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    GetCurrentTimeResponsePayload: {
+      currentTime: string;
+      status: components["schemas"]["SuccessOrError"];
+    };
+    GetFeaturePhotoMetadataResponsePayload: {
+      photo: components["schemas"]["FeaturePhoto"];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    GetFeatureResponsePayload: {
+      feature: components["schemas"]["FeatureResponse"];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    GetLayerResponsePayload: {
+      layer: components["schemas"]["LayerResponse"];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    GetObservationResponsePayload: {
+      resp: components["schemas"]["ObservationResponse"];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    GetPlantResponsePayload: {
+      plant: components["schemas"]["PlantResponse"];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    GetSiteResponse: {
       id: number;
       name: string;
-    };
-    ProjectType: {
-      id: number;
-      name: string;
-    };
-    Site: {
-      id?: number;
-      project_id: number;
-      name: string;
+      latitude: string;
+      longitude: string;
       locale?: string;
       timezone?: string;
-      hectares?: number;
-      origin?: string;
-      created_time?: string;
-      modified_time?: string;
-      disabled_time?: string;
     };
-    Species: {
-      id?: number;
-      family_id?: number;
-      scientific_name?: string;
-      created_time?: string;
-      modified_time?: string;
-      endangered_type_id?: number;
-      rare_type_id?: number;
+    LayerResponse: {
+      id: number;
+      siteId: number;
+      layerType:
+        | "Aerial Photos"
+        | "Surface Color Map"
+        | "Terrain Color Map"
+        | "Boundaries"
+        | "Plants Planted"
+        | "Plants Existing"
+        | "Irrigation"
+        | "Infrastructure"
+        | "Partner Input"
+        | "Restoration Zones"
+        | "Site Prep"
+        | "Map notes";
+      tileSetName: string;
+      proposed: boolean;
+      hidden: boolean;
     };
-    SpeciesName: {
-      id?: number;
-      species_id: number;
-      organization_id?: number;
+    LineString: components["schemas"]["Geometry"] & {
+      coordinates?: number[][];
+    } & {
+      coordinates: unknown;
+    };
+    ListAllFieldValuesRequestPayload: {
+      fields: components["schemas"]["SearchField"][];
+    };
+    ListAllFieldValuesResponsePayload: {
+      results: {
+        [key: string]: components["schemas"]["AllFieldValuesPayload"];
+      };
+      status: components["schemas"]["SuccessOrError"];
+    };
+    ListDeviceConfigsResponse: {
+      devices: components["schemas"]["DeviceConfig"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    ListFacilitiesElement: {
+      id: number;
       name: string;
-      is_scientific?: boolean;
-      locale?: string;
-      created_time?: string;
-      modified_time?: string;
+      type: number;
+      role: string;
     };
-    ValidationError: {
-      loc: string[];
-      msg: string;
-      type: string;
+    ListFacilitiesResponse: {
+      facilities: components["schemas"]["ListFacilitiesElement"][];
+    };
+    ListFeaturePhotosResponsePayload: {
+      photos: components["schemas"]["FeaturePhoto"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    ListFeaturesRequestPayload: {
+      /** Number of entries to skip in search results. Used in conjunction with limit to paginate through large results. Default is 0 (don't skip any results). */
+      skip?: number;
+      /** Maximum number of entries to return. Used in conjunction with skip to paginate through large results. The system may impose a cap on this value. */
+      limit?: number;
+    };
+    ListFeaturesResponsePayload: {
+      features: components["schemas"]["FeatureResponse"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    ListFieldValuesRequestPayload: {
+      fields: components["schemas"]["SearchField"][];
+      filters?: components["schemas"]["SearchFilter"][];
+      search?:
+        | components["schemas"]["AndNodePayload"]
+        | components["schemas"]["FieldNodePayload"]
+        | components["schemas"]["NotNodePayload"]
+        | components["schemas"]["OrNodePayload"];
+    };
+    ListFieldValuesResponsePayload: {
+      results: { [key: string]: components["schemas"]["FieldValuesPayload"] };
+      status: components["schemas"]["SuccessOrError"];
+    };
+    ListLayersResponsePayload: {
+      layers: components["schemas"]["LayerResponse"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    ListObservationsResponsePayload: {
+      list: components["schemas"]["ObservationResponse"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    ListOrganizationsElement: {
+      id: number;
+      name: string;
+    };
+    ListOrganizationsResponse: {
+      organizations: components["schemas"]["ListOrganizationsElement"][];
+    };
+    ListPhotosResponseElement: {
+      filename: string;
+      size: number;
+      capturedTime: string;
+      /** Use location field instead. */
+      latitude?: number;
+      /** Use location field instead. */
+      longitude?: number;
+      location?: components["schemas"]["Point"];
+      /** GPS accuracy in meters. */
+      gpsAccuracy?: number;
+    };
+    ListPhotosResponsePayload: {
+      photos: components["schemas"]["ListPhotosResponseElement"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    ListPlantsResponseElement: {
+      featureId: number;
+      label?: string;
+      speciesId?: number;
+      naturalRegen?: boolean;
+      datePlanted?: string;
+      layerId: number;
+      gpsHorizAccuracy?: number;
+      gpsVertAccuracy?: number;
+      attrib?: string;
+      notes?: string;
+      enteredTime?: string;
+      geom?: components["schemas"]["Geometry"];
+    };
+    ListPlantsResponsePayload: {
+      list: components["schemas"]["ListPlantsResponseElement"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    ListSitesElement: {
+      id: number;
+      name: string;
+    };
+    ListSitesResponse: {
+      sites: components["schemas"]["ListSitesElement"][];
+    };
+    ListSpeciesResponsePayload: {
+      values: components["schemas"]["SpeciesDetails"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    MultiLineString: components["schemas"]["Geometry"] & {
+      coordinates?: number[][][];
+    } & {
+      coordinates: unknown;
+    };
+    MultiPoint: components["schemas"]["Geometry"] & {
+      coordinates?: number[][];
+    } & {
+      coordinates: unknown;
+    };
+    MultiPolygon: components["schemas"]["Geometry"] & {
+      coordinates?: number[][][][];
+    } & {
+      coordinates: unknown;
+    };
+    /** Search criterion that matches results that do not match a set of search criteria. */
+    NotNodePayload: components["schemas"]["SearchNodePayload"] & {
+      child?: components["schemas"]["SearchNodePayload"];
+    } & {
+      child: unknown;
+    };
+    NotificationListResponse: {
+      notifications: components["schemas"]["NotificationPayload"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    NotificationPayload: {
+      /** Unique identifier for this notification. Clients should treat it as opaque. */
+      id: string;
+      timestamp: string;
+      type: "Alert" | "State" | "Date";
+      /** If true, this notification has been marked as read. */
+      read: boolean;
+      /** Plain-text body of notification. */
+      text: string;
+      /** For accession notifications, which accession caused the notification. */
+      accessionNumber?: string;
+      /** For state notifications, which state is being summarized. */
+      state?:
+        | "Pending"
+        | "Processing"
+        | "Processed"
+        | "Drying"
+        | "Dried"
+        | "In Storage"
+        | "Withdrawn"
+        | "Nursery";
+    };
+    ObservationResponse: {
+      id: number;
+      featureId: number;
+      timestamp: string;
+      healthState?: "Good" | "Moderate" | "Poor" | "Dead";
+      flowers?: boolean;
+      seeds?: boolean;
+      pests?: string;
+      /** Height in meters */
+      height?: number;
+      /** Diameter at breast height in meters */
+      diameterAtBreastHeight?: number;
+    };
+    /** Search criterion that matches results that meet any of a set of other search criteria. That is, if the list of children is x, y, and z, this will require x OR y OR z. */
+    OrNodePayload: components["schemas"]["SearchNodePayload"];
+    PlantResponse: {
+      featureId: number;
+      label?: string;
+      speciesId?: number;
+      naturalRegen?: boolean;
+      datePlanted?: string;
+    };
+    PlantSummaryResponsePayload: {
+      summary: { [key: string]: number };
+      status: components["schemas"]["SuccessOrError"];
+    };
+    Point: components["schemas"]["Geometry"] & {
+      /** A single position. In the terraware-server API, positions must always include 3 dimensions. The X and Y dimensions use the coordinate system specified by the crs field, and the Z dimension is in meters. */
+      coordinates?: number[];
+    } & {
+      coordinates: unknown;
+    };
+    Polygon: components["schemas"]["Geometry"] & {
+      coordinates?: number[][][];
+    } & {
+      coordinates: unknown;
+    };
+    SearchField:
+      | "accessionNumber"
+      | "active"
+      | "bagNumber"
+      | "collectedDate"
+      | "collectionNotes"
+      | "cutTestSeedsCompromised"
+      | "cutTestSeedsEmpty"
+      | "cutTestSeedsFilled"
+      | "dryingEndDate"
+      | "dryingMoveDate"
+      | "dryingStartDate"
+      | "endangered"
+      | "estimatedSeedsIncoming"
+      | "family"
+      | "geolocation"
+      | "germinationEndDate"
+      | "germinationPercentGerminated"
+      | "germinationSeedType"
+      | "germinationSeedsGerminated"
+      | "germinationSeedsSown"
+      | "germinationStartDate"
+      | "germinationSubstrate"
+      | "germinationTestNotes"
+      | "germinationTestType"
+      | "germinationTreatment"
+      | "landowner"
+      | "latestGerminationTestDate"
+      | "latestViabilityPercent"
+      | "nurseryStartDate"
+      | "primaryCollector"
+      | "processingMethod"
+      | "processingNotes"
+      | "processingStartDate"
+      | "rare"
+      | "receivedDate"
+      | "remainingGrams"
+      | "remainingQuantity"
+      | "remainingUnits"
+      | "siteLocation"
+      | "sourcePlantOrigin"
+      | "species"
+      | "state"
+      | "storageCondition"
+      | "storageLocation"
+      | "storageNotes"
+      | "storagePackets"
+      | "storageStartDate"
+      | "targetStorageCondition"
+      | "totalGrams"
+      | "totalQuantity"
+      | "totalUnits"
+      | "totalViabilityPercent"
+      | "treesCollectedFrom"
+      | "viabilityTestType"
+      | "withdrawalDate"
+      | "withdrawalDestination"
+      | "withdrawalGrams"
+      | "withdrawalNotes"
+      | "withdrawalPurpose"
+      | "withdrawalQuantity"
+      | "withdrawalRemainingGrams"
+      | "withdrawalRemainingQuantity"
+      | "withdrawalRemainingUnits"
+      | "withdrawalUnits";
+    SearchFilter: {
+      field: components["schemas"]["SearchField"];
+      /** List of values to match. For exact and fuzzy searches, a list of at least one value to search for; the list may include null to match accessions where the field does not have a value. For range searches, the list must contain exactly two values, the minimum and maximum; one of the values may be null to search for all values above a minimum or below a maximum. */
+      values: (string | null)[];
+      type: "Exact" | "Fuzzy" | "Range";
+    };
+    /** A search criterion. The search will return results that match this criterion. The criterion can be composed of other search criteria to form arbitrary Boolean search expressions. TYPESCRIPT-OVERRIDE-TYPE-WITH-ANY */
+    SearchNodePayload: any;
+    SearchRequestPayload: {
+      fields: components["schemas"]["SearchField"][];
+      sortOrder?: components["schemas"]["SearchSortOrderElement"][];
+      filters?: components["schemas"]["SearchFilter"][];
+      search?:
+        | components["schemas"]["AndNodePayload"]
+        | components["schemas"]["FieldNodePayload"]
+        | components["schemas"]["NotNodePayload"]
+        | components["schemas"]["OrNodePayload"];
+      cursor?: string;
+      count: number;
+    };
+    SearchResponsePayload: {
+      results: { [key: string]: string }[];
+      cursor?: string;
+    };
+    SearchSortOrderElement: {
+      field: components["schemas"]["SearchField"];
+      direction?: "Ascending" | "Descending";
+    };
+    /** Represents a quantity of seeds, measured either in individual seeds or by weight. */
+    SeedQuantityPayload: {
+      /** Number of units of seeds. If "units" is "Seeds", this is the number of seeds and must be an integer. Otherwise it is a measurement in the weight units specified in the "units" field, and may have a fractional part. */
+      quantity: number;
+      units:
+        | "Seeds"
+        | "Grams"
+        | "Milligrams"
+        | "Kilograms"
+        | "Ounces"
+        | "Pounds";
+      /** If this quantity is a weight measurement, the weight in grams. This is not set if the "units" field is "Seeds". This is always calculated on the server side and is ignored on input. */
+      grams?: number;
+    };
+    SimpleErrorResponsePayload: {
+      error: components["schemas"]["ErrorDetails"];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    SimpleSuccessResponsePayload: {
+      status: components["schemas"]["SuccessOrError"];
+    };
+    SpeciesCreateResponsePayload: {
+      id: number;
+      status: components["schemas"]["SuccessOrError"];
+    };
+    SpeciesDetails: {
+      id: number;
+      name: string;
+    };
+    SpeciesGetResponsePayload: {
+      species: components["schemas"]["SpeciesResponseElement"];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    SpeciesListResponsePayload: {
+      species: components["schemas"]["SpeciesResponseElement"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    SpeciesNameCreateResponsePayload: {
+      id: number;
+      status: components["schemas"]["SuccessOrError"];
+    };
+    SpeciesNameGetResponsePayload: {
+      speciesName: components["schemas"]["SpeciesNamesResponseElement"];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    SpeciesNameRequestPayload: {
+      /** True if name is a scientific name for the species. */
+      isScientific?: boolean;
+      locale?: string;
+      name: string;
+      speciesId: number;
+    };
+    SpeciesNamesListResponsePayload: {
+      speciesNames: components["schemas"]["SpeciesNamesResponseElement"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    SpeciesNamesResponseElement: {
+      id: number;
+      /** True if name is the scientific name for the species. */
+      isScientific: boolean;
+      name: string;
+      speciesId: number;
+    };
+    SpeciesRequestPayload: {
+      conservationStatus?: string;
+      familyId?: number;
+      /** True if name is the scientific name for the species. */
+      isScientific?: boolean;
+      name: string;
+      plantForm?: "Tree" | "Shrub" | "Vine" | "Liana" | "Herbaceous";
+      rare?: "No" | "Yes" | "Unsure";
+      /** Taxonomic serial number from ITIS database. */
+      tsn?: string;
+    };
+    SpeciesResponseElement: {
+      conservationStatus?: string;
+      familyId?: number;
+      id: number;
+      /** True if name is the scientific name for the species. */
+      isScientific: boolean;
+      name: string;
+      plantForm?: "Tree" | "Shrub" | "Vine" | "Liana" | "Herbaceous";
+      rare?: "No" | "Yes" | "Unsure";
+      /** Taxonomic serial number from ITIS database. */
+      tsn?: string;
+    };
+    StorageLocationDetails: {
+      storageLocation: string;
+      storageCondition: "Refrigerator" | "Freezer";
+    };
+    StorageLocationsResponsePayload: {
+      locations: components["schemas"]["StorageLocationDetails"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    /** Indicates of success or failure of the requested operation. */
+    SuccessOrError: "ok" | "error";
+    /** Summary of important statistics about the seed bank for the Summary page. */
+    SummaryResponse: {
+      activeAccessions: components["schemas"]["SummaryStatistic"];
+      species: components["schemas"]["SummaryStatistic"];
+      families: components["schemas"]["SummaryStatistic"];
+      /** Number of accessions in Pending state overdue for processing */
+      overduePendingAccessions: number;
+      /** Number of accessions in Processed state overdue for drying */
+      overdueProcessedAccessions: number;
+      /** Number of accessions in Dried state overdue for storage */
+      overdueDriedAccessions: number;
+      /** Number of accessions withdrawn so far this week */
+      recentlyWithdrawnAccessions: number;
+    };
+    /** The current value and value as of last week for a summary statistic */
+    SummaryStatistic: {
+      current: number;
+      lastWeek: number;
+    };
+    UpdateAccessionRequestPayload: {
+      bagNumbers?: string[];
+      collectedDate?: string;
+      cutTestSeedsCompromised?: number;
+      cutTestSeedsEmpty?: number;
+      cutTestSeedsFilled?: number;
+      dryingEndDate?: string;
+      dryingMoveDate?: string;
+      dryingStartDate?: string;
+      endangered?: "No" | "Yes" | "Unsure";
+      environmentalNotes?: string;
+      family?: string;
+      fieldNotes?: string;
+      founderId?: string;
+      geolocations?: components["schemas"]["Geolocation"][];
+      germinationTestTypes?: ("Lab" | "Nursery")[];
+      germinationTests?: components["schemas"]["GerminationTestPayload"][];
+      /** Initial size of accession. The units of this value must match the measurement type in "processingMethod". */
+      initialQuantity?: components["schemas"]["SeedQuantityPayload"];
+      landowner?: string;
+      numberOfTrees?: number;
+      nurseryStartDate?: string;
+      primaryCollector?: string;
+      processingMethod?: "Count" | "Weight";
+      processingNotes?: string;
+      processingStaffResponsible?: string;
+      processingStartDate?: string;
+      rare?: "No" | "Yes" | "Unsure";
+      receivedDate?: string;
+      secondaryCollectors?: string[];
+      siteLocation?: string;
+      sourcePlantOrigin?: "Wild" | "Outplant";
+      species?: string;
+      storageLocation?: string;
+      storageNotes?: string;
+      storagePackets?: number;
+      storageStaffResponsible?: string;
+      storageStartDate?: string;
+      subsetCount?: number;
+      /** Weight of subset of seeds. Units must be a weight measurement, not "Seeds". */
+      subsetWeight?: components["schemas"]["SeedQuantityPayload"];
+      targetStorageCondition?: "Refrigerator" | "Freezer";
+      withdrawals?: components["schemas"]["WithdrawalPayload"][];
+    };
+    UpdateAccessionResponsePayload: {
+      accession: components["schemas"]["AccessionPayload"];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    UpdateFeatureRequestPayload: {
+      layerId: number;
+      geom?: components["schemas"]["Geometry"];
+      gpsHorizAccuracy?: number;
+      gpsVertAccuracy?: number;
+      attrib?: string;
+      notes?: string;
+      enteredTime?: string;
+    };
+    UpdateFeatureResponsePayload: {
+      feature: components["schemas"]["FeatureResponse"];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    UpdateLayerRequestPayload: {
+      siteId: number;
+      layerType:
+        | "Aerial Photos"
+        | "Surface Color Map"
+        | "Terrain Color Map"
+        | "Boundaries"
+        | "Plants Planted"
+        | "Plants Existing"
+        | "Irrigation"
+        | "Infrastructure"
+        | "Partner Input"
+        | "Restoration Zones"
+        | "Site Prep"
+        | "Map notes";
+      tileSetName: string;
+      proposed: boolean;
+      hidden: boolean;
+    };
+    UpdateLayerResponsePayload: {
+      layer: components["schemas"]["LayerResponse"];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    UpdateObservationRequestPayload: {
+      timestamp: string;
+      healthState?: "Good" | "Moderate" | "Poor" | "Dead";
+      flowers?: boolean;
+      seeds?: boolean;
+      pests?: string;
+      /** Height in meters */
+      height?: number;
+      /** Diameter at breast height in meters */
+      diameterAtBreastHeight?: number;
+    };
+    UpdateObservationResponsePayload: {
+      resp: components["schemas"]["ObservationResponse"];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    UpdatePlantRequestPayload: {
+      label?: string;
+      speciesId?: number;
+      naturalRegen?: boolean;
+      datePlanted?: string;
+    };
+    UpdatePlantResponsePayload: {
+      plant: components["schemas"]["PlantResponse"];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    UploadPhotoMetadataPayload: {
+      capturedTime: string;
+      /** Use location field instead. */
+      latitude?: number;
+      /** Use location field instead. */
+      longitude?: number;
+      location?: components["schemas"]["Point"];
+      /** GPS accuracy in meters. */
+      gpsAccuracy?: number;
+    };
+    WithdrawalPayload: {
+      /** Server-assigned unique ID of this withdrawal, its ID. Omit when creating a new withdrawal. */
+      id?: number;
+      date: string;
+      purpose:
+        | "Propagation"
+        | "Outreach or Education"
+        | "Research"
+        | "Broadcast"
+        | "Share with Another Site"
+        | "Other"
+        | "Germination Testing";
+      destination?: string;
+      notes?: string;
+      /** Quantity of seeds remaining. For weight-based accessions, this is user input and is required. For count-based accessions, it is calculated by the server and ignored on input. */
+      remainingQuantity?: components["schemas"]["SeedQuantityPayload"];
+      staffResponsible?: string;
+      /** If this withdrawal is of type "Germination Testing", the ID of the test it is associated with. This is always set by the server and cannot be modified. */
+      germinationTestId?: number;
+      /** For weight-based accessions, the difference between the weight remaining before this withdrawal and the weight remaining after it. This is a server-calculated value and is ignored on input. */
+      weightDifference?: components["schemas"]["SeedQuantityPayload"];
+      /** Quantity of seeds withdrawn. For germination testing withdrawals, this is always the same as the test's "seedsSown" value, if that value is present. Otherwise, it is a user-supplied value. For count-based accessions, the units must always be "Seeds". For weight-based accessions, the units may either be a weight measurement or "Seeds". */
+      withdrawnQuantity?: components["schemas"]["SeedQuantityPayload"];
+      /** The best estimate of the number of seeds withdrawn. This is the same as "withdrawnQuantity" if that is present, or else the same as "weightDifference" if this is a weight-based accession. If this is a count-based accession and "withdrawnQuantity" does not have a value, this field will not be present. This is a server-calculated value and is ignored on input. */
+      estimatedQuantity?: components["schemas"]["SeedQuantityPayload"];
     };
   };
 }
 
 export interface operations {
-  read_accounts_me_api_v1_accounts_me_get: {
+  listDeviceConfigs: {
     responses: {
-      /** Successful Response */
+      /** OK */
       200: {
         content: {
-          "application/json": { [key: string]: unknown };
+          "application/json": components["schemas"]["ListDeviceConfigsResponse"];
         };
       };
     };
   };
-  read_feature_list_api_v1_features_get: {
-    parameters: {
-      query: {
-        layer_id: number;
-        skip?: number;
-        limit?: number;
-        crs?: number;
-      };
-    };
+  /** List all the facilities the current user can access. */
+  listAll_2: {
     responses: {
-      /** Successful Response */
+      /** OK */
       200: {
         content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-      /** Validation Error */
-      422: {
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
+          "application/json": components["schemas"]["ListFacilitiesResponse"];
         };
       };
     };
   };
-  create_feature_api_v1_features_post: {
+  create_4: {
     responses: {
-      /** Successful Response */
+      /** The feature was created successfully. Response includes fields populated by the server, including the feature id. */
       200: {
         content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-      /** Validation Error */
-      422: {
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
+          "application/json": components["schemas"]["CreateFeatureResponsePayload"];
         };
       };
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["Feature"];
+        "application/json": components["schemas"]["CreateFeatureRequestPayload"];
       };
     };
   };
-  read_feature_api_v1_features__feature_id__get: {
+  list_1: {
     parameters: {
-      path: {
-        feature_id: number;
-      };
       query: {
-        crs?: number;
+        payload: components["schemas"]["ListFeaturesRequestPayload"];
+      };
+      path: {
+        layerId: number;
       };
     };
     responses: {
-      /** Successful Response */
+      /** OK */
       200: {
         content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-      /** Validation Error */
-      422: {
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
+          "application/json": components["schemas"]["ListFeaturesResponsePayload"];
         };
       };
     };
   };
-  update_feature_api_v1_features__feature_id__put: {
+  read_2: {
     parameters: {
       path: {
-        feature_id: number;
+        featureId: number;
       };
     };
     responses: {
-      /** Successful Response */
+      /** OK */
       200: {
         content: {
-          "application/json": { [key: string]: unknown };
+          "application/json": components["schemas"]["GetFeatureResponsePayload"];
         };
       };
-      /** Validation Error */
-      422: {
+      /** The specified feature doesn't exist. */
+      404: {
         content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  update_4: {
+    parameters: {
+      path: {
+        featureId: number;
+      };
+    };
+    responses: {
+      /** The feature was updated successfully. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UpdateFeatureResponsePayload"];
+        };
+      };
+      /** The specified feature doesn't exist. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["Feature"];
+        "application/json": components["schemas"]["UpdateFeatureRequestPayload"];
       };
     };
   };
-  delete_feature_api_v1_features__feature_id__delete: {
+  delete_1: {
     parameters: {
       path: {
-        feature_id: number;
+        featureId: number;
       };
     };
     responses: {
-      /** Successful Response */
+      /** OK */
       200: {
         content: {
-          "application/json": { [key: string]: unknown };
+          "application/json": components["schemas"]["DeleteFeatureResponsePayload"];
         };
       };
-      /** Validation Error */
-      422: {
+      /** The specified feature doesn't exist. */
+      404: {
         content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
   };
-  read_layer_list_api_v1_layers_get: {
+  listFeaturePhotos: {
     parameters: {
-      query: {
-        site_id: number;
+      path: {
+        featureId: number;
       };
     };
     responses: {
-      /** Successful Response */
+      /** OK */
       200: {
         content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-      /** Validation Error */
-      422: {
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
+          "application/json": components["schemas"]["ListFeaturePhotosResponsePayload"];
         };
       };
     };
   };
-  create_item_api_v1_layers_post: {
+  createFeaturePhoto: {
+    parameters: {
+      path: {
+        featureId: number;
+      };
+    };
     responses: {
-      /** Successful Response */
+      /** OK */
       200: {
         content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-      /** Validation Error */
-      422: {
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
+          "application/json": components["schemas"]["CreateFeaturePhotoResponsePayload"];
         };
       };
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["Layer"];
-      };
-    };
-  };
-  read_organization_list_api_v1_organizations_get: {
-    responses: {
-      /** Successful Response */
-      200: {
-        content: {
-          "application/json": { [key: string]: unknown };
+        "multipart/form-data": {
+          metadata: components["schemas"]["CreateFeaturePhotoRequestPayload"];
+          file: string;
         };
       };
     };
   };
-  create_organization_api_v1_organizations_post: {
+  /** Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio. */
+  downloadFeaturePhoto: {
+    parameters: {
+      path: {
+        featureId: number;
+        photoId: number;
+      };
+      query: {
+        maxWidth?: number;
+        maxHeight?: number;
+      };
+    };
     responses: {
-      /** Successful Response */
+      /** The photo was successfully retrieved. */
       200: {
         content: {
-          "application/json": { [key: string]: unknown };
+          "image/jpeg": string;
         };
       };
-      /** Validation Error */
-      422: {
+      /** The accession does not exist, or does not have a photo with the requested filename. */
+      404: {
         content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  deleteFeaturePhoto: {
+    parameters: {
+      path: {
+        featureId: number;
+        photoId: number;
+      };
+    };
+    responses: {
+      /** Photo deleted. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  getFeaturePhotoMetadata: {
+    parameters: {
+      path: {
+        featureId: number;
+        photoId: number;
+      };
+    };
+    responses: {
+      /** Photo metadata retrieved. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetFeaturePhotoMetadataResponsePayload"];
+        };
+      };
+      /** The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  create_3: {
+    responses: {
+      /** The layer was created successfully. Response includes fields populated by the server, including the layer id. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CreateLayerResponsePayload"];
         };
       };
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["Organization"];
+        "application/json": components["schemas"]["CreateLayerRequestPayload"];
       };
     };
   };
-  read_organization_api_v1_organizations__organization_id__get: {
+  list: {
     parameters: {
       path: {
-        organization_id: number;
+        siteId: number;
       };
     };
     responses: {
-      /** Successful Response */
+      /** OK */
       200: {
         content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-      /** Validation Error */
-      422: {
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
+          "application/json": components["schemas"]["ListLayersResponsePayload"];
         };
       };
     };
   };
-  update_organization_api_v1_organizations__organization_id__put: {
+  read_1: {
     parameters: {
       path: {
-        organization_id: number;
+        layerId: number;
       };
     };
     responses: {
-      /** Successful Response */
+      /** OK */
       200: {
         content: {
-          "application/json": { [key: string]: unknown };
+          "application/json": components["schemas"]["GetLayerResponsePayload"];
         };
       };
-      /** Validation Error */
-      422: {
+      /** The specified layer doesn't exist. */
+      404: {
         content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  update_3: {
+    parameters: {
+      path: {
+        layerId: number;
+      };
+    };
+    responses: {
+      /** The layer was updated successfully. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UpdateLayerResponsePayload"];
+        };
+      };
+      /** The specified layer doesn't exist. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["Organization"];
+        "application/json": components["schemas"]["UpdateLayerRequestPayload"];
       };
     };
   };
-  read_photo_list_api_v1_photos_get: {
+  delete: {
     parameters: {
-      query: {
-        feature_id: number;
+      path: {
+        layerId: number;
       };
     };
     responses: {
-      /** Successful Response */
+      /** OK */
       200: {
         content: {
-          "application/json": { [key: string]: unknown };
+          "application/json": components["schemas"]["DeleteLayerResponsePayload"];
         };
       };
-      /** Validation Error */
-      422: {
+      /** The specified layer doesn't exist. */
+      404: {
         content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
   };
-  create_photo_api_v1_photos_post: {
-    parameters: {
-      query: {
-        feature_id: number;
-        captured_time: string;
-        heading?: number;
-        orientation?: number;
-      };
-    };
+  create_2: {
     responses: {
-      /** Successful Response */
+      /** The plant observation was created successfully. */
       200: {
         content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-      /** Validation Error */
-      422: {
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
+          "application/json": components["schemas"]["CreateObservationResponsePayload"];
         };
       };
     };
     requestBody: {
       content: {
-        "multipart/form-data": components["schemas"]["Body_create_photo_api_v1_photos_post"];
+        "application/json": components["schemas"]["CreateObservationRequestPayload"];
       };
     };
   };
-  read_photo_api_v1_photos__photo_id__get: {
+  getList: {
     parameters: {
       path: {
-        photo_id: number;
-      };
-      query: {
-        image: boolean;
+        featureId: number;
       };
     };
     responses: {
-      /** Successful Response */
+      /** OK */
       200: {
         content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-      /** Validation Error */
-      422: {
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
+          "application/json": components["schemas"]["ListObservationsResponsePayload"];
         };
       };
     };
   };
-  delete_photo_api_v1_photos__photo_id__delete: {
+  get_1: {
     parameters: {
       path: {
-        photo_id: number;
+        plantObservationId: number;
       };
     };
     responses: {
-      /** Successful Response */
+      /** OK */
       200: {
         content: {
-          "application/json": { [key: string]: unknown };
+          "application/json": components["schemas"]["GetObservationResponsePayload"];
         };
       };
-      /** Validation Error */
-      422: {
+      /** The specified plant observation doesn't exist. */
+      404: {
         content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
   };
-  read_plant_list_api_v1_plants_get: {
+  update_2: {
     parameters: {
+      path: {
+        plantObservationId: number;
+      };
+    };
+    responses: {
+      /** The plant observation was updated successfully. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UpdateObservationResponsePayload"];
+        };
+      };
+      /** The specified plant observation doesn't exist. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateObservationRequestPayload"];
+      };
+    };
+  };
+  create_1: {
+    responses: {
+      /** The plant was created successfully. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CreatePlantResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreatePlantRequestPayload"];
+      };
+    };
+  };
+  getPlantSummary: {
+    parameters: {
+      path: {
+        layerId: number;
+      };
       query: {
-        layer_id: number;
-        species_name?: string;
-        min_entered_time?: string;
-        max_entered_time?: string;
+        minEnteredTime?: string;
+        maxEnteredTime?: string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["PlantSummaryResponsePayload"];
+        };
+      };
+    };
+  };
+  getPlantsList: {
+    parameters: {
+      path: {
+        layerId: number;
+      };
+      query: {
+        speciesName?: string;
+        minEnteredTime?: string;
+        maxEnteredTime?: string;
         notes?: string;
-        summary?: boolean;
       };
     };
     responses: {
-      /** Successful Response */
+      /** OK */
       200: {
         content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-      /** Validation Error */
-      422: {
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
+          "application/json": components["schemas"]["ListPlantsResponsePayload"];
         };
       };
     };
   };
-  create_item_api_v1_plants_post: {
+  get: {
+    parameters: {
+      path: {
+        featureId: number;
+      };
+    };
     responses: {
-      /** Successful Response */
+      /** OK */
       200: {
         content: {
-          "application/json": { [key: string]: unknown };
+          "application/json": components["schemas"]["GetPlantResponsePayload"];
         };
       };
-      /** Validation Error */
-      422: {
+      /** The specified plant doesn't exist. */
+      404: {
         content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  update_1: {
+    parameters: {
+      path: {
+        featureId: number;
+      };
+    };
+    responses: {
+      /** The plant was updated successfully. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UpdatePlantResponsePayload"];
+        };
+      };
+      /** The specified plant doesn't exist. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["Plant"];
+        "application/json": components["schemas"]["UpdatePlantRequestPayload"];
       };
     };
   };
-  read_plant_api_v1_plants__feature_id__get: {
-    parameters: {
-      path: {
-        feature_id: number;
-      };
-    };
-    responses: {
-      /** Successful Response */
-      200: {
-        content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-      /** Validation Error */
-      422: {
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  update_plant_api_v1_plants__feature_id__put: {
-    parameters: {
-      path: {
-        feature_id: number;
-      };
-    };
-    responses: {
-      /** Successful Response */
-      200: {
-        content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-      /** Validation Error */
-      422: {
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["Plant"];
-      };
-    };
-  };
-  delete_plant_api_v1_plants__feature_id__delete: {
-    parameters: {
-      path: {
-        feature_id: number;
-      };
-    };
-    responses: {
-      /** Successful Response */
-      200: {
-        content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-      /** Validation Error */
-      422: {
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  read_plant_observation_list_api_v1_plant_observations_get: {
+  /** For interactive web applications, this can be used to redirect the user to a login page to allow the application to make other API requests. The login process will set a cookie that will authenticate to the API, and will then redirect back to the application. One approach is to use this in error response handlers: if an API request returns HTTP 401 Unauthorized, set location.href to this endpoint and set "redirect" to the URL of the page the user was on so they'll return there after logging in. */
+  login: {
     parameters: {
       query: {
-        plant_id: number;
+        redirect: string;
       };
     };
     responses: {
-      /** Successful Response */
+      /** Redirects to a login page. After login, the user will be redirected back to the URL specified in the "redirect" parameter. */
+      302: never;
+    };
+  };
+  /** List all organizations the user can access. */
+  listAll_1: {
+    responses: {
+      /** OK */
       200: {
         content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-      /** Validation Error */
-      422: {
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
+          "application/json": components["schemas"]["ListOrganizationsResponse"];
         };
       };
     };
   };
-  create_item_api_v1_plant_observations_post: {
+  createResource: {
+    parameters: {
+      query: {
+        path: string;
+        name: string;
+        type: number;
+        data_type: number;
+        min_storage_interval?: number;
+        decimal_places?: number;
+        units?: string;
+        max_history?: number;
+      };
+    };
     responses: {
-      /** Successful Response */
+      /** The timeseries was successfully created, or it already existed so no action was needed. */
       200: {
         content: {
-          "application/json": { [key: string]: unknown };
+          "text/plain": string;
         };
       };
-      /** Validation Error */
-      422: {
+      /** No device with the given path was defined. */
+      404: {
         content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  getResource: {
+    parameters: {
+      path: {
+        path: string;
+      };
+    };
+    responses: {
+      /** The resource exists. The response body is just the string "Found". */
+      200: {
+        content: {
+          "text/plain": string;
+        };
+      };
+      /** The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  create: {
+    responses: {
+      /** The accession was created successfully. Response includes fields populated by the server, including the accession number. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CreateAccessionResponsePayload"];
         };
       };
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["PlantObservation"];
+        "application/json": components["schemas"]["CreateAccessionRequestPayload"];
       };
     };
   };
-  read_tile_api_v1_tiles__site_id___file_path__get: {
+  read: {
     parameters: {
       path: {
-        site_id: number;
-        file_path: string;
+        accessionNumber: string;
       };
     };
     responses: {
-      /** Successful Response */
+      /** OK */
       200: {
         content: {
-          "application/json": { [key: string]: unknown };
+          "application/json": components["schemas"]["GetAccessionResponsePayload"];
         };
       };
-      /** Validation Error */
-      422: {
+      /** The requested resource was not found. */
+      404: {
         content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  read_item_list_api_v1_accounts_get: {
-    responses: {
-      /** Successful Response */
-      200: {
-        content: {
-          "application/json": { [key: string]: unknown };
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
   };
-  create_item_api_v1_accounts_post: {
+  update: {
+    parameters: {
+      path: {
+        accessionNumber: string;
+      };
+      query: {
+        simulate?: boolean;
+      };
+    };
     responses: {
-      /** Successful Response */
+      /** The accession was updated successfully. Response includes fields populated or modified by the server as a result of the update. */
       200: {
         content: {
-          "application/json": { [key: string]: unknown };
+          "application/json": components["schemas"]["UpdateAccessionResponsePayload"];
         };
       };
-      /** Validation Error */
-      422: {
+      /** The specified accession doesn't exist. */
+      404: {
         content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["Account"];
+        "application/json": components["schemas"]["UpdateAccessionRequestPayload"];
       };
     };
   };
-  read_item_api_v1_accounts__item_id__get: {
+  listPhotos: {
     parameters: {
       path: {
-        item_id: number;
+        accessionNumber: string;
       };
     };
     responses: {
-      /** Successful Response */
+      /** The accession's photos are listed in the response. */
       200: {
         content: {
-          "application/json": { [key: string]: unknown };
+          "application/json": components["schemas"]["ListPhotosResponsePayload"];
         };
       };
-      /** Validation Error */
-      422: {
+      /** The accession does not exist. */
+      404: {
         content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
   };
-  update_item_api_v1_accounts__item_id__put: {
+  /** Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio. */
+  getPhoto: {
     parameters: {
       path: {
-        item_id: number;
+        accessionNumber: string;
+        photoFilename: string;
+      };
+      query: {
+        maxWidth?: number;
+        maxHeight?: number;
       };
     };
     responses: {
-      /** Successful Response */
+      /** The photo was successfully retrieved. */
       200: {
         content: {
-          "application/json": { [key: string]: unknown };
+          "image/jpeg": string;
         };
       };
-      /** Validation Error */
-      422: {
+      /** The accession does not exist, or does not have a photo with the requested filename. */
+      404: {
         content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  uploadPhoto: {
+    parameters: {
+      path: {
+        accessionNumber: string;
+        photoFilename: string;
+      };
+    };
+    responses: {
+      /** The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** The specified accession does not exist. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+      /** The requested photo already exists on the accession. */
+      409: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["Account"];
-      };
-    };
-  };
-  delete_item_api_v1_accounts__item_id__delete: {
-    parameters: {
-      path: {
-        item_id: number;
-      };
-    };
-    responses: {
-      /** Successful Response */
-      200: {
-        content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-      /** Validation Error */
-      422: {
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
+        "multipart/form-data": {
+          file: string;
+          metadata: components["schemas"]["UploadPhotoMetadataPayload"];
         };
       };
     };
   };
-  read_item_list_api_v1_organization_accounts_get: {
+  /** In test environments, the clock can be advanced artificially, which will cause it to differ from the real-world date and time. */
+  getCurrentTime: {
     responses: {
-      /** Successful Response */
+      /** OK */
       200: {
         content: {
-          "application/json": { [key: string]: unknown };
+          "application/json": components["schemas"]["GetCurrentTimeResponsePayload"];
         };
       };
     };
   };
-  create_item_api_v1_organization_accounts_post: {
+  /** Advancing the clock causes any scheduled processes to run. Subsequent GET requests to read the current time will take the advancement into account. Only supported in test and development environments. */
+  advanceClock: {
     responses: {
-      /** Successful Response */
+      /** The clock has been advanced. The response includes the newly-adjusted time. */
       200: {
         content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-      /** Validation Error */
-      422: {
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
+          "application/json": components["schemas"]["GetCurrentTimeResponsePayload"];
         };
       };
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["OrganizationAccount"];
+        "application/json": components["schemas"]["AdvanceClockRequestPayload"];
       };
     };
   };
-  read_item_api_v1_organization_accounts__item_id__get: {
+  recordLogMessage: {
     parameters: {
       path: {
-        item_id: number;
+        tag: string;
       };
     };
     responses: {
-      /** Successful Response */
+      /** OK */
+      200: unknown;
+    };
+    requestBody: {
+      content: {
+        "application/json": { [key: string]: { [key: string]: unknown } };
+      };
+    };
+  };
+  listAll: {
+    parameters: {
+      query: {
+        /** Don't return notifications older than this; default is 1 month ago */
+        since?: string;
+        /** Return at most this many notifications; default is no limit */
+        limit?: number;
+      };
+    };
+    responses: {
+      /** Notifications in reverse time order (newest first). */
       200: {
         content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-      /** Validation Error */
-      422: {
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
+          "application/json": components["schemas"]["NotificationListResponse"];
         };
       };
     };
   };
-  update_item_api_v1_organization_accounts__item_id__put: {
+  markAllRead: {
+    responses: {
+      /** All notifications have been marked as read. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /** For development and testing of notifications. Not available in production. */
+  markAllUnread: {
+    responses: {
+      /** All notifications have been marked as unread. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  markRead: {
     parameters: {
       path: {
-        item_id: number;
+        /** ID of notification to mark as read */
+        id: string;
       };
     };
     responses: {
-      /** Successful Response */
+      /** Notification has been marked as read. */
       200: {
         content: {
-          "application/json": { [key: string]: unknown };
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
-      /** Validation Error */
-      422: {
+      /** The requested notification ID was not valid. */
+      404: {
         content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  search: {
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SearchResponsePayload"];
         };
       };
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["OrganizationAccount"];
+        "application/json": components["schemas"]["SearchRequestPayload"];
       };
     };
   };
-  delete_item_api_v1_organization_accounts__item_id__delete: {
-    parameters: {
-      path: {
-        item_id: number;
-      };
-    };
+  export: {
     responses: {
-      /** Successful Response */
+      /** Export succeeded. */
       200: {
         content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-      /** Validation Error */
-      422: {
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  read_item_list_api_v1_projects_get: {
-    responses: {
-      /** Successful Response */
-      200: {
-        content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-    };
-  };
-  create_item_api_v1_projects_post: {
-    responses: {
-      /** Successful Response */
-      200: {
-        content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-      /** Validation Error */
-      422: {
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
+          "text/csv": string;
         };
       };
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["Project"];
+        "application/json": components["schemas"]["ExportRequestPayload"];
       };
     };
   };
-  read_item_api_v1_projects__item_id__get: {
-    parameters: {
-      path: {
-        item_id: number;
-      };
-    };
+  getSummary: {
     responses: {
-      /** Successful Response */
+      /** OK */
       200: {
         content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-      /** Validation Error */
-      422: {
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
+          "application/json": components["schemas"]["SummaryResponse"];
         };
       };
     };
   };
-  update_item_api_v1_projects__item_id__put: {
+  reportNumericValue: {
     parameters: {
-      path: {
-        item_id: number;
+      query: {
+        device: string;
+        timeseries: string;
+        value: number;
+        units?: string;
+        decimalPlaces?: number;
+        siteModuleId?: number;
+        facilityId?: number;
       };
     };
     responses: {
-      /** Successful Response */
+      /** Timeseries value recorded successfully. */
       200: {
         content: {
-          "application/json": { [key: string]: unknown };
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
-      /** Validation Error */
-      422: {
+      /** The requested resource was not found. */
+      404: {
         content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  listFieldValues: {
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListFieldValuesResponsePayload"];
         };
       };
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["Project"];
+        "application/json": components["schemas"]["ListFieldValuesRequestPayload"];
       };
     };
   };
-  delete_item_api_v1_projects__item_id__delete: {
-    parameters: {
-      path: {
-        item_id: number;
-      };
-    };
+  listAllFieldValues: {
     responses: {
-      /** Successful Response */
+      /** OK */
       200: {
         content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-      /** Validation Error */
-      422: {
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  read_item_list_api_v1_sites_get: {
-    responses: {
-      /** Successful Response */
-      200: {
-        content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-    };
-  };
-  create_item_api_v1_sites_post: {
-    responses: {
-      /** Successful Response */
-      200: {
-        content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-      /** Validation Error */
-      422: {
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
+          "application/json": components["schemas"]["ListAllFieldValuesResponsePayload"];
         };
       };
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["Site"];
+        "application/json": components["schemas"]["ListAllFieldValuesRequestPayload"];
       };
     };
   };
-  read_item_api_v1_sites__item_id__get: {
-    parameters: {
-      path: {
-        item_id: number;
-      };
-    };
+  /** Use /api/v1/species instead. */
+  listSpecies: {
     responses: {
-      /** Successful Response */
+      /** OK */
       200: {
         content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-      /** Validation Error */
-      422: {
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
+          "application/json": components["schemas"]["ListSpeciesResponsePayload"];
         };
       };
     };
   };
-  update_item_api_v1_sites__item_id__put: {
-    parameters: {
-      path: {
-        item_id: number;
-      };
-    };
+  /** Use /api/v1/species instead. */
+  createSpecies: {
     responses: {
-      /** Successful Response */
+      /** Species created. */
       200: {
         content: {
-          "application/json": { [key: string]: unknown };
+          "application/json": components["schemas"]["CreateSpeciesResponsePayload"];
         };
       };
-      /** Validation Error */
-      422: {
+      /** A species with the requested name already exists. */
+      409: {
         content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
+          "application/json": components["schemas"]["CreateSpeciesResponsePayload"];
         };
       };
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["Site"];
+        "application/json": components["schemas"]["CreateSpeciesRequestPayload"];
       };
     };
   };
-  delete_item_api_v1_sites__item_id__delete: {
+  /** Use /api/v1/species instead. */
+  updateSpecies: {
     parameters: {
       path: {
-        item_id: number;
+        id: number;
       };
     };
     responses: {
-      /** Successful Response */
+      /** The requested operation succeeded. */
       200: {
         content: {
-          "application/json": { [key: string]: unknown };
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
-      /** Validation Error */
-      422: {
+      /** The requested resource was not found. */
+      404: {
         content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  read_item_api_v1_layers__item_id__get: {
-    parameters: {
-      path: {
-        item_id: number;
-      };
-    };
-    responses: {
-      /** Successful Response */
-      200: {
-        content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-      /** Validation Error */
-      422: {
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  update_item_api_v1_layers__item_id__put: {
-    parameters: {
-      path: {
-        item_id: number;
-      };
-    };
-    responses: {
-      /** Successful Response */
-      200: {
-        content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-      /** Validation Error */
-      422: {
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["Layer"];
+        "application/json": components["schemas"]["CreateSpeciesRequestPayload"];
       };
     };
   };
-  delete_item_api_v1_layers__item_id__delete: {
-    parameters: {
-      path: {
-        item_id: number;
-      };
-    };
+  getStorageLocations: {
     responses: {
-      /** Successful Response */
+      /** OK */
       200: {
         content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-      /** Validation Error */
-      422: {
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
+          "application/json": components["schemas"]["StorageLocationsResponsePayload"];
         };
       };
     };
   };
-  read_item_api_v1_plants__item_id__get: {
-    parameters: {
-      path: {
-        item_id: number;
-      };
-    };
+  listSites: {
     responses: {
-      /** Successful Response */
-      200: {
+      /** Client is not associated with an organization. */
+      400: {
         content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-      /** Validation Error */
-      422: {
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
+          "application/json": components["schemas"]["ListSitesResponse"];
         };
       };
     };
   };
-  update_item_api_v1_plants__item_id__put: {
+  getSite: {
     parameters: {
       path: {
-        item_id: number;
+        siteId: number;
       };
     };
     responses: {
-      /** Successful Response */
-      200: {
+      /** Client is not associated with an organization and is not a site admin */
+      400: {
         content: {
-          "application/json": { [key: string]: unknown };
+          "application/json": components["schemas"]["GetSiteResponse"];
         };
       };
-      /** Validation Error */
-      422: {
+      /** No site with the requested ID exists. */
+      404: {
         content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
+          "application/json": components["schemas"]["GetSiteResponse"];
+        };
+      };
+    };
+  };
+  speciesList: {
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SpeciesListResponsePayload"];
+        };
+      };
+    };
+  };
+  speciesCreate: {
+    responses: {
+      /** Species created. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SpeciesCreateResponsePayload"];
+        };
+      };
+      /** A species with the requested name already exists. */
+      409: {
+        content: {
+          "application/json": components["schemas"]["SpeciesCreateResponsePayload"];
         };
       };
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["Plant"];
+        "application/json": components["schemas"]["SpeciesRequestPayload"];
       };
     };
   };
-  delete_item_api_v1_plants__item_id__delete: {
-    parameters: {
-      path: {
-        item_id: number;
-      };
-    };
+  speciesNamesListAll: {
     responses: {
-      /** Successful Response */
+      /** OK */
       200: {
         content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-      /** Validation Error */
-      422: {
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
+          "application/json": components["schemas"]["SpeciesNamesListResponsePayload"];
         };
       };
     };
   };
-  read_item_api_v1_plant_observations__item_id__get: {
-    parameters: {
-      path: {
-        item_id: number;
-      };
-    };
+  speciesNameCreate: {
     responses: {
-      /** Successful Response */
+      /** Species name added. */
       200: {
         content: {
-          "application/json": { [key: string]: unknown };
+          "application/json": components["schemas"]["SpeciesNameCreateResponsePayload"];
         };
       };
-      /** Validation Error */
-      422: {
+      /** The species does not exist. */
+      404: {
         content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
-    };
-  };
-  update_item_api_v1_plant_observations__item_id__put: {
-    parameters: {
-      path: {
-        item_id: number;
-      };
-    };
-    responses: {
-      /** Successful Response */
-      200: {
+      /** The species already has the requested name. */
+      409: {
         content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-      /** Validation Error */
-      422: {
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
+          "application/json": components["schemas"]["SpeciesNameCreateResponsePayload"];
         };
       };
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["PlantObservation"];
+        "application/json": components["schemas"]["SpeciesNameRequestPayload"];
       };
     };
   };
-  delete_item_api_v1_plant_observations__item_id__delete: {
+  /** Gets information about a single species name. */
+  speciesNameGet: {
     parameters: {
       path: {
-        item_id: number;
+        speciesNameId: number;
       };
     };
     responses: {
-      /** Successful Response */
+      /** Species name retrieved. */
       200: {
         content: {
-          "application/json": { [key: string]: unknown };
+          "application/json": components["schemas"]["SpeciesNameGetResponsePayload"];
         };
       };
-      /** Validation Error */
-      422: {
+      /** The requested resource was not found. */
+      404: {
         content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  read_item_list_api_v1_species_get: {
-    responses: {
-      /** Successful Response */
-      200: {
-        content: {
-          "application/json": { [key: string]: unknown };
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
   };
-  create_item_api_v1_species_post: {
+  /** Updates one of the names of a species. */
+  speciesNameUpdate: {
+    parameters: {
+      path: {
+        speciesNameId: number;
+      };
+    };
     responses: {
-      /** Successful Response */
+      /** OK */
       200: {
         content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-      /** Validation Error */
-      422: {
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["Species"];
+        "application/json": components["schemas"]["SpeciesNameRequestPayload"];
       };
     };
   };
-  read_item_api_v1_species__item_id__get: {
+  /** Deletes one of the secondary names of a species. */
+  speciesNameDelete: {
     parameters: {
       path: {
-        item_id: number;
+        speciesNameId: number;
       };
     };
     responses: {
-      /** Successful Response */
+      /** Species name deleted. */
       200: {
         content: {
-          "application/json": { [key: string]: unknown };
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
-      /** Validation Error */
-      422: {
+      /** The requested resource was not found. */
+      404: {
         content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+      /** Cannot delete the primary name of a species. */
+      409: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };
   };
-  update_item_api_v1_species__item_id__put: {
+  speciesRead: {
     parameters: {
       path: {
-        item_id: number;
+        speciesId: number;
       };
     };
     responses: {
-      /** Successful Response */
+      /** Species retrieved. */
       200: {
         content: {
-          "application/json": { [key: string]: unknown };
+          "application/json": components["schemas"]["SpeciesGetResponsePayload"];
         };
       };
-      /** Validation Error */
-      422: {
+      /** The requested resource was not found. */
+      404: {
         content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  speciesUpdate: {
+    parameters: {
+      path: {
+        speciesId: number;
+      };
+    };
+    responses: {
+      /** Species updated or merged with an existing species. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["Species"];
+        "application/json": components["schemas"]["SpeciesRequestPayload"];
       };
     };
   };
-  delete_item_api_v1_species__item_id__delete: {
+  speciesDelete: {
     parameters: {
       path: {
-        item_id: number;
+        speciesId: number;
       };
     };
     responses: {
-      /** Successful Response */
+      /** Species deleted. */
       200: {
         content: {
-          "application/json": { [key: string]: unknown };
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
-      /** Validation Error */
-      422: {
+      /** The requested resource was not found. */
+      404: {
         content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+      /** Cannot delete the species because it is currently in use. */
+      409: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };
   };
-  read_item_list_api_v1_species_names_get: {
-    responses: {
-      /** Successful Response */
-      200: {
-        content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-    };
-  };
-  create_item_api_v1_species_names_post: {
-    responses: {
-      /** Successful Response */
-      200: {
-        content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-      /** Validation Error */
-      422: {
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["SpeciesName"];
-      };
-    };
-  };
-  read_item_api_v1_species_names__item_id__get: {
+  speciesNamesList: {
     parameters: {
       path: {
-        item_id: number;
+        speciesId: number;
       };
     };
     responses: {
-      /** Successful Response */
+      /** Species names retrieved. */
       200: {
         content: {
-          "application/json": { [key: string]: unknown };
+          "application/json": components["schemas"]["SpeciesNamesListResponsePayload"];
         };
       };
-      /** Validation Error */
-      422: {
+      /** The species does not exist. */
+      404: {
         content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  update_item_api_v1_species_names__item_id__put: {
-    parameters: {
-      path: {
-        item_id: number;
-      };
-    };
-    responses: {
-      /** Successful Response */
-      200: {
-        content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-      /** Validation Error */
-      422: {
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["SpeciesName"];
-      };
-    };
-  };
-  delete_item_api_v1_species_names__item_id__delete: {
-    parameters: {
-      path: {
-        item_id: number;
-      };
-    };
-    responses: {
-      /** Successful Response */
-      200: {
-        content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-      /** Validation Error */
-      422: {
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  read_item_list_api_v1_account_roles_get: {
-    responses: {
-      /** Successful Response */
-      200: {
-        content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-    };
-  };
-  create_item_api_v1_account_roles_post: {
-    responses: {
-      /** Successful Response */
-      200: {
-        content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-      /** Validation Error */
-      422: {
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["AccountRole"];
-      };
-    };
-  };
-  read_item_api_v1_account_roles__item_id__get: {
-    parameters: {
-      path: {
-        item_id: number;
-      };
-    };
-    responses: {
-      /** Successful Response */
-      200: {
-        content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-      /** Validation Error */
-      422: {
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  update_item_api_v1_account_roles__item_id__put: {
-    parameters: {
-      path: {
-        item_id: number;
-      };
-    };
-    responses: {
-      /** Successful Response */
-      200: {
-        content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-      /** Validation Error */
-      422: {
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["AccountRole"];
-      };
-    };
-  };
-  delete_item_api_v1_account_roles__item_id__delete: {
-    parameters: {
-      path: {
-        item_id: number;
-      };
-    };
-    responses: {
-      /** Successful Response */
-      200: {
-        content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-      /** Validation Error */
-      422: {
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  read_item_list_api_v1_project_types_get: {
-    responses: {
-      /** Successful Response */
-      200: {
-        content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-    };
-  };
-  create_item_api_v1_project_types_post: {
-    responses: {
-      /** Successful Response */
-      200: {
-        content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-      /** Validation Error */
-      422: {
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["ProjectType"];
-      };
-    };
-  };
-  read_item_api_v1_project_types__item_id__get: {
-    parameters: {
-      path: {
-        item_id: number;
-      };
-    };
-    responses: {
-      /** Successful Response */
-      200: {
-        content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-      /** Validation Error */
-      422: {
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  update_item_api_v1_project_types__item_id__put: {
-    parameters: {
-      path: {
-        item_id: number;
-      };
-    };
-    responses: {
-      /** Successful Response */
-      200: {
-        content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-      /** Validation Error */
-      422: {
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["ProjectType"];
-      };
-    };
-  };
-  delete_item_api_v1_project_types__item_id__delete: {
-    parameters: {
-      path: {
-        item_id: number;
-      };
-    };
-    responses: {
-      /** Successful Response */
-      200: {
-        content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-      /** Validation Error */
-      422: {
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  read_item_list_api_v1_project_statuses_get: {
-    responses: {
-      /** Successful Response */
-      200: {
-        content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-    };
-  };
-  create_item_api_v1_project_statuses_post: {
-    responses: {
-      /** Successful Response */
-      200: {
-        content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-      /** Validation Error */
-      422: {
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["ProjectStatus"];
-      };
-    };
-  };
-  read_item_api_v1_project_statuses__item_id__get: {
-    parameters: {
-      path: {
-        item_id: number;
-      };
-    };
-    responses: {
-      /** Successful Response */
-      200: {
-        content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-      /** Validation Error */
-      422: {
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  update_item_api_v1_project_statuses__item_id__put: {
-    parameters: {
-      path: {
-        item_id: number;
-      };
-    };
-    responses: {
-      /** Successful Response */
-      200: {
-        content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-      /** Validation Error */
-      422: {
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["ProjectStatus"];
-      };
-    };
-  };
-  delete_item_api_v1_project_statuses__item_id__delete: {
-    parameters: {
-      path: {
-        item_id: number;
-      };
-    };
-    responses: {
-      /** Successful Response */
-      200: {
-        content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-      /** Validation Error */
-      422: {
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  read_item_list_api_v1_layer_types_get: {
-    responses: {
-      /** Successful Response */
-      200: {
-        content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-    };
-  };
-  create_item_api_v1_layer_types_post: {
-    responses: {
-      /** Successful Response */
-      200: {
-        content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-      /** Validation Error */
-      422: {
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["LayerType"];
-      };
-    };
-  };
-  read_item_api_v1_layer_types__item_id__get: {
-    parameters: {
-      path: {
-        item_id: number;
-      };
-    };
-    responses: {
-      /** Successful Response */
-      200: {
-        content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-      /** Validation Error */
-      422: {
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  update_item_api_v1_layer_types__item_id__put: {
-    parameters: {
-      path: {
-        item_id: number;
-      };
-    };
-    responses: {
-      /** Successful Response */
-      200: {
-        content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-      /** Validation Error */
-      422: {
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["LayerType"];
-      };
-    };
-  };
-  delete_item_api_v1_layer_types__item_id__delete: {
-    parameters: {
-      path: {
-        item_id: number;
-      };
-    };
-    responses: {
-      /** Successful Response */
-      200: {
-        content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-      /** Validation Error */
-      422: {
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  read_item_list_api_v1_health_states_get: {
-    responses: {
-      /** Successful Response */
-      200: {
-        content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-    };
-  };
-  create_item_api_v1_health_states_post: {
-    responses: {
-      /** Successful Response */
-      200: {
-        content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-      /** Validation Error */
-      422: {
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["HealthState"];
-      };
-    };
-  };
-  read_item_api_v1_health_states__item_id__get: {
-    parameters: {
-      path: {
-        item_id: number;
-      };
-    };
-    responses: {
-      /** Successful Response */
-      200: {
-        content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-      /** Validation Error */
-      422: {
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  update_item_api_v1_health_states__item_id__put: {
-    parameters: {
-      path: {
-        item_id: number;
-      };
-    };
-    responses: {
-      /** Successful Response */
-      200: {
-        content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-      /** Validation Error */
-      422: {
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["HealthState"];
-      };
-    };
-  };
-  delete_item_api_v1_health_states__item_id__delete: {
-    parameters: {
-      path: {
-        item_id: number;
-      };
-    };
-    responses: {
-      /** Successful Response */
-      200: {
-        content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-      /** Validation Error */
-      422: {
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  login_api_v1_token_post: {
-    responses: {
-      /** Successful Response */
-      200: {
-        content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-      /** Validation Error */
-      422: {
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/x-www-form-urlencoded": components["schemas"]["Body_login_api_v1_token_post"];
-      };
-    };
-  };
-  test_page__get: {
-    responses: {
-      /** Successful Response */
-      200: {
-        content: {
-          "application/json": { [key: string]: unknown };
-        };
-      };
-    };
-  };
-  test_page_test_get: {
-    responses: {
-      /** Successful Response */
-      200: {
-        content: {
-          "application/json": { [key: string]: unknown };
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };

@@ -1,8 +1,8 @@
 import Chart from 'chart.js/auto';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-import speciesForChartSelector from '../../state/selectors/speciesForChart';
 import strings from '../../strings';
+import {speciesForChartSelector} from '../../state/selectors/species';
 
 interface Props {
   isFullscreen: boolean;
@@ -20,7 +20,7 @@ export default function SpeciesChart({ isFullscreen }: Props): JSX.Element {
     const colors: string[] = [];
 
     speciesForChartArray.forEach((species) => {
-      names.push(species.speciesName.name);
+      names.push(species.species.name);
       numberOfTrees.push(species.numberOfTrees);
       colors.push(species.color);
     });

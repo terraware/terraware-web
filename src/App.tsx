@@ -21,8 +21,22 @@ import Species from './components/Species';
 import ErrorBoundary from './ErrorBoundary';
 import strings from './strings';
 import theme from './theme';
+import axios from 'axios';
 
 export default function App() {
+  axios.defaults.withCredentials = true;
+
+  axios.interceptors.response.use((response) => response, (error) => {
+    if (error.response && error.response.status === 401) {
+      const redirect = encodeURIComponent(window.location.href);
+      window.location.href = `${process.env.REACT_APP_TERRAWARE_API}/api/v1/login?redirect=${redirect}`;
+
+      return null;
+    } else {
+      return Promise.reject(error);
+    }
+  });
+
   return (
     <RecoilRoot>
       <ErrorBoundary>
@@ -58,7 +72,7 @@ function AppContent() {
           <NavBar />
         </div>
         <div className={classes.content}>
-          <AppBar />
+          {/*<AppBar /> TODO FIX THIS*/}
           <ErrorBoundary>
             <Switch>
               <Route exact path='/'>

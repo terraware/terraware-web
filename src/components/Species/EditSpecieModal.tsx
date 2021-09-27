@@ -6,15 +6,14 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React from 'react';
 import { useResetRecoilState } from 'recoil';
-import { postSpecies } from '../../api/species';
-import { postSpeciesName, putSpeciesName } from '../../api/speciesNames';
-import { SpeciesName } from '../../api/types/species';
-import speciesNamesSelector from '../../state/selectors/speciesNames';
+import {postSpecies, updateSpecies} from '../../api/species2';
+import {speciesSelector} from '../../state/selectors/species';
 import strings from '../../strings';
 import useForm from '../../utils/useForm';
 import Button from '../common/button/Button';
 import DialogCloseButton from '../common/DialogCloseButton';
 import TextField from '../common/TextField';
+import SpeciesType from '../../types/Species';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -38,24 +37,24 @@ const useStyles = makeStyles((theme: Theme) =>
 export interface Props {
   open: boolean;
   onClose: (snackbarMessage?: string) => void;
-  value?: SpeciesName;
+  value?: SpeciesType;
 }
 
-function initSpecies(species?: SpeciesName): SpeciesName {
+function initSpecies(species?: SpeciesType): SpeciesType {
   return (
     species ?? {
       name: '',
-      species_id: 0,
+      id: 0,
     }
   );
 }
 export default function EditSpecieModal(props: Props): JSX.Element {
   const classes = useStyles();
   const { onClose, open } = props;
-  const [record, setRecord, onChange] = useForm<SpeciesName>(
+  const [record, setRecord, onChange] = useForm<SpeciesType>(
     initSpecies(props.value)
   );
-  const resetSpecies = useResetRecoilState(speciesNamesSelector);
+  const resetSpecies = useResetRecoilState(speciesSelector);
 
   React.useEffect(() => {
     if (props.open) {
@@ -70,15 +69,11 @@ export default function EditSpecieModal(props: Props): JSX.Element {
 
   const handleOk = async () => {
     let snackbarMessage = '';
-    if (record.species_id === 0) {
-      const specie = await postSpecies({});
-      if (specie.id) {
-        record.species_id = specie.id;
-        await postSpeciesName(record);
-        snackbarMessage = strings.SNACKBAR_MSG_NEW_SPECIES_ADDED;
-      }
+    if (record.id === 0) {
+      await postSpecies(record.name);
+      snackbarMessage = strings.SNACKBAR_MSG_NEW_SPECIES_ADDED;
     } else {
-      await putSpeciesName(record);
+      await updateSpecies(record);
       snackbarMessage = strings.SNACKBAR_MSG_CHANGES_SAVED;
     }
     resetSpecies();

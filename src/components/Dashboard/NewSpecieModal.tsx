@@ -14,16 +14,12 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React from 'react';
 import { useRecoilValue, useResetRecoilState } from 'recoil';
-import { putPlant } from '../../api/plants';
-import { postSpecies } from '../../api/species';
-import { postSpeciesName } from '../../api/speciesNames';
-import { SpeciesName } from '../../api/types/species';
-import { plantsByFeatureIdSelector } from '../../state/selectors/plantsPlanted';
-import { plantsPlantedFeaturesSelector } from '../../state/selectors/plantsPlantedFeatures';
-import { plantsPlantedFilteredSelector } from '../../state/selectors/plantsPlantedFiltered';
-import speciesForChartSelector from '../../state/selectors/speciesForChart';
-import speciesNamesSelector from '../../state/selectors/speciesNames';
-import speciesNamesBySpeciesIdSelector from '../../state/selectors/speciesNamesBySpeciesId';
+import { putPlant } from '../../api/plants2';
+import {
+  plantsFilteredSelector,
+  plantsSelector
+} from '../../state/selectors/plants';
+import {speciesSelector, speciesForChartSelector} from '../../state/selectors/species';
 import strings from '../../strings';
 import useForm from '../../utils/useForm';
 import { PlantForTable } from '../AllPlants';
@@ -31,6 +27,8 @@ import Button from '../common/button/Button';
 import DialogCloseButton from '../common/DialogCloseButton';
 import TextField from '../common/TextField';
 import PlantPhoto from './PlantPhoto';
+import SpeciesType from '../../types/Species';
+import { postSpecies } from '../../api/species2';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -81,25 +79,22 @@ const initPlant = (plant?: PlantForTable): PlantForTable => {
 export default function NewSpecieModalWrapper(props: Props): JSX.Element {
   return (
     <React.Suspense fallback={strings.LOADING}>
-      <NewSpecieModal {...props} />
+      <NewSpeciesModal {...props} />
     </React.Suspense>
   );
 }
 
-function NewSpecieModal(props: Props): JSX.Element {
+function NewSpeciesModal(props: Props): JSX.Element {
   const classes = useStyles();
   const { onClose, open, onDelete } = props;
   const [record, setRecord] = useForm<PlantForTable>(initPlant(props.value));
 
-  const plantsByFeature = useRecoilValue(plantsByFeatureIdSelector);
-  const resetPlantsPlantedFeatures = useResetRecoilState(
-    plantsPlantedFeaturesSelector
-  );
+  const plants = useRecoilValue(plantsSelector);
   const resetPlantsPlantedFiltered = useResetRecoilState(
-    plantsPlantedFilteredSelector
+    plantsFilteredSelector
   );
   const resetSpeciesForChart = useResetRecoilState(speciesForChartSelector);
-  const resetSpeciesNames = useResetRecoilState(speciesNamesSelector);
+  const resetSpeciesNames = useResetRecoilState(speciesSelector);
 
   React.useEffect(() => {
     if (props.open) {
@@ -120,36 +115,27 @@ function NewSpecieModal(props: Props): JSX.Element {
   };
 
   const handleOk = async () => {
-    if (plantsByFeature && record.featureId) {
-      const previousPlant = plantsByFeature[record.featureId];
+    const previousPlant = plants ? plants.find((plant) => record.featureId === plant.featureId) : undefined;
+    if (previousPlant) {
       if (record.speciesId !== undefined) {
         const newPlant = {
           ...previousPlant,
-          species_id: record.speciesId !== 0 ? record.speciesId : undefined,
+          speciesId: record.speciesId !== 0 ? record.speciesId : undefined,
         };
-        await putPlant(record.featureId, newPlant);
+        await putPlant(newPlant);
         onClose(strings.SNACKBAR_MSG_CHANGES_SAVED);
 
-        resetPlantsPlantedFeatures();
         resetSpeciesForChart();
         resetPlantsPlantedFiltered();
       } else if (record.species) {
-        const newSpecies = await postSpecies({});
-        if (newSpecies.id) {
-          const newPlant = { ...previousPlant, species_id: newSpecies.id };
-          const newSpeciesName: SpeciesName = {
-            name: record.species,
-            species_id: newSpecies.id,
-          };
-          await postSpeciesName(newSpeciesName);
-          await putPlant(record.featureId, newPlant);
-          onClose(strings.SNACKBAR_MSG_CHANGES_SAVED);
+        const newSpecies : SpeciesType = await postSpecies(record.species);
+        const newPlant = { ...previousPlant, species_id: newSpecies.id };
+        await putPlant(newPlant);
+        onClose(strings.SNACKBAR_MSG_CHANGES_SAVED);
 
-          resetSpeciesNames();
-          resetPlantsPlantedFeatures();
-          resetSpeciesForChart();
-          resetPlantsPlantedFiltered();
-        }
+        resetSpeciesNames();
+        resetSpeciesForChart();
+        resetPlantsPlantedFiltered();
       }
     } else {
       onClose('');
@@ -209,19 +195,14 @@ interface ContentProps {
 function NewSpecieModalContent(props: ContentProps): JSX.Element {
   const classes = useStyles();
 
-  const speciesNames = useRecoilValue(speciesNamesSelector);
-  const speciesNamesBySpeciesId = useRecoilValue(
-    speciesNamesBySpeciesIdSelector
-  );
+  const species = useRecoilValue(speciesSelector);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newSpecieId = parseInt(event.target.value, 10);
     const newRecord = {
       ...props.record,
       speciesId: newSpecieId,
-      species: speciesNamesBySpeciesId[newSpecieId]
-        ? speciesNamesBySpeciesId[newSpecieId].name
-        : undefined,
+      species: species?.find((item) => item.id === newSpecieId)?.name
     };
 
     props.setRecord(newRecord);
@@ -267,13 +248,13 @@ function NewSpecieModalContent(props: ContentProps): JSX.Element {
               value={props.record.speciesId}
               onChange={handleChange}
             >
-              {speciesNames?.map((species) => (
+              {species?.map((item) => (
                 <FormControlLabel
-                  id={species.name}
-                  key={species.id}
-                  value={species.species_id}
+                  id={item.name}
+                  key={item.id}
+                  value={item.id}
                   control={<Radio />}
-                  label={species.name}
+                  label={item.name}
                 />
               ))}
               <FormControlLabel

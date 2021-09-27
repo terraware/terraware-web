@@ -1,3 +1,4 @@
+// TODO: figure out if this is still relevant
 export type Photo = {
   id: number;
   feature_id: number;

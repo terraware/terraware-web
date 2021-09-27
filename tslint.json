@@ -29,7 +29,7 @@
       "handle-callback-err": [true, "^(e|err|error)$"],
       "array-bracket-spacing": [true, "never"],
       "eofline": false,
-      "newline-before-return": true,
+      "newline-before-return": false,
       "no-trailing-whitespace": true,
       "no-duplicate-variable": true,
       "arrow-parens": true,

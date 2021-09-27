@@ -20,6 +20,10 @@ services:
       - GIS_TEST_DATA_PATH=/app
       - GIS_TEST_SITE_ID=1
       - CORS_ORIGINS=http://localhost:3000
+      - 'KEYCLOAK_AUTH_SERVER_URL'
+      - 'KEYCLOAK_CREDENTIALS_SECRET'
+      - 'KEYCLOAK_REALM'
+      - 'KEYCLOAK_RESOURCE'
     depends_on:
       - db
 

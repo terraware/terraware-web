@@ -16,14 +16,7 @@ import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import React from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import snackbarAtom from '../../state/atoms/snackbar';
-import { plantsPlantedFeaturesSelector } from '../../state/selectors/plantsPlantedFeatures';
-import {
-  plantsByFeatureIdFilteredSelector,
-  plantsPlantedFiltersAtom,
-  SearchOptions,
-} from '../../state/selectors/plantsPlantedFiltered';
-import speciesNamesSelector from '../../state/selectors/speciesNames';
-import speciesNamesBySpeciesIdSelector from '../../state/selectors/speciesNamesBySpeciesId';
+import {speciesSelector} from '../../state/selectors/species';
 import strings from '../../strings';
 import Button from '../common/button/Button';
 import DatePicker from '../common/DatePicker';
@@ -34,6 +27,11 @@ import { TableColumnType } from '../common/table/types';
 import NewSpecieModal from '../Dashboard/NewSpecieModal';
 import DeletePlantConfirmationModal from './DeletePlantConfirmationModal';
 import AllPlantsCellRenderer from './TableCellRenderer';
+import {SearchOptions} from '../../types/Plant';
+import {
+  plantsFilteredSelector,
+  plantsPlantedFiltersAtom
+} from '../../state/selectors/plants';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -69,7 +67,7 @@ export type PlantForTable = {
 export default function AllPlants(): JSX.Element {
   const classes = useStyles();
 
-  const speciesNames = useRecoilValue(speciesNamesSelector);
+  const speciesNames = useRecoilValue(speciesSelector);
 
   const [filters, setFilters] = useRecoilState(plantsPlantedFiltersAtom);
   const setSnackbar = useSetRecoilState(snackbarAtom);
@@ -185,7 +183,7 @@ export default function AllPlants(): JSX.Element {
                   id='min_entered_time'
                   aria-label='min_entered_time'
                   onChange={onChangeFilter}
-                  value={newFilters?.min_entered_time}
+                  value={newFilters?.minEnteredTime}
                 />
               </Grid>
               <Grid item xs={2}>
@@ -194,7 +192,7 @@ export default function AllPlants(): JSX.Element {
                   label={strings.TO}
                   aria-label='max_entered_time'
                   onChange={onChangeFilter}
-                  value={newFilters?.max_entered_time}
+                  value={newFilters?.maxEnteredTime}
                 />
               </Grid>
               <Grid item xs={2}>
@@ -202,7 +200,7 @@ export default function AllPlants(): JSX.Element {
                   id='species_name'
                   label={strings.SPECIES}
                   onChange={onChangeFilter}
-                  selected={newFilters?.species_name ?? ''}
+                  selected={newFilters?.speciesName ?? ''}
                   values={speciesNamesValues}
                 />
               </Grid>
@@ -265,43 +263,32 @@ interface AllPlantsProps {
 }
 
 function AllPlantsContent({ onEditPlant }: AllPlantsProps): JSX.Element {
-  const features = useRecoilValue(plantsPlantedFeaturesSelector);
-  const speciesBySpeciesId = useRecoilValue(speciesNamesBySpeciesIdSelector);
-  const plantsByFeatureFiltered = useRecoilValue(
-    plantsByFeatureIdFilteredSelector
-  );
+  const species = useRecoilValue(speciesSelector);
+  const plantsFiltered = useRecoilValue(plantsFilteredSelector);
 
   const plantsForTable = React.useMemo(() => {
     let plantsToReturn: PlantForTable[] = [];
 
-    if (features && plantsByFeatureFiltered && speciesBySpeciesId) {
-      plantsToReturn = features.reduce((_acum, feature) => {
-        if (feature.id && plantsByFeatureFiltered[feature.id]) {
-          const plant = plantsByFeatureFiltered[feature.id];
-          const plantToAdd: PlantForTable = {
-            date: feature.entered_time,
-            species: plant.species_id
-              ? speciesBySpeciesId[plant.species_id].name
-              : undefined,
-            notes: feature.notes,
-            featureId: feature.id,
-            speciesId: plant.species_id,
-          };
-
-          if (feature.geom && Array.isArray(feature.geom.coordinates)) {
-            plantToAdd.geolocation = `${feature.geom.coordinates[1].toFixed(
-              6
-            )}, ${feature.geom.coordinates[0].toFixed(6)}`;
-          }
-          _acum.push(plantToAdd);
+    if (plantsFiltered && species) {
+      plantsToReturn = plantsFiltered.map((plant) => {
+        const plantToAdd: PlantForTable = {
+          date: plant.enteredTime,
+          species: species.find((item) => item.id === plant.speciesId)?.name,
+          notes: plant.notes,
+          featureId: plant.featureId,
+          speciesId: plant.speciesId,
+        };
+        if (plant.coordinates) {
+          plantToAdd.geolocation = `${plant.coordinates.latitude.toFixed(6)},
+                                    ${plant.coordinates.longitude.toFixed(6)}`;
         }
 
-        return _acum;
-      }, plantsToReturn);
+        return plantToAdd;
+      });
     }
 
     return plantsToReturn;
-  }, [features, plantsByFeatureFiltered, speciesBySpeciesId]);
+  }, [plantsFiltered, species]);
 
   return (
     <Grid container spacing={4}>

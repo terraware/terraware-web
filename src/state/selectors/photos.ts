@@ -19,13 +19,13 @@ export const uniquePhotoForFeatureSelectorFamily = selectorFamily<
         const firstPhoto = photosOfFeature[0];
         if (firstPhoto) {
           const photoBlob = await getPhotoBlob(firstPhoto.id);
-
-          const urlCreator = window.URL || window.webkitURL;
-
-          return {
-            imgSrc: urlCreator.createObjectURL(photoBlob),
-            featuredId: firstPhoto.feature_id,
-          };
+          if (photoBlob) {
+            const urlCreator = window.URL || window.webkitURL;
+            return {
+              imgSrc: urlCreator.createObjectURL(photoBlob),
+              featuredId: firstPhoto.feature_id,
+            };
+          }
         }
       }
     },

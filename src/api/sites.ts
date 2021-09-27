@@ -1,10 +1,12 @@
 import axios from 'axios';
-import { Site } from './types/site';
+import { components } from '../api/types/generated-schema';
 
-const BASE_URL = `${process.env.REACT_APP_TERRAWARE_API}/api/v1/sites`;
+const BASE_URL = `${process.env.REACT_APP_TERRAWARE_API}/api/v1/site`;
+type ListSitesElement = components['schemas']['ListSitesElement'];
 
-export const getSites = async (): Promise<Site[]> => {
+export const getSites = async (): Promise<number[]> => {
   const endpoint = `${BASE_URL}`;
+  const sites : ListSitesElement[] = (await axios.get(endpoint)).data.sites;
 
-  return (await axios.get(endpoint)).data.sites;
+  return sites.map((site) => {return site.id;});
 };

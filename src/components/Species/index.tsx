@@ -4,14 +4,14 @@ import Paper from '@material-ui/core/Paper';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { SpeciesName } from '../../api/types/species';
 import snackbarAtom from '../../state/atoms/snackbar';
-import speciesNamesSelector from '../../state/selectors/speciesNames';
+import {speciesSelector} from '../../state/selectors/species';
 import strings from '../../strings';
 import Button from '../common/button/Button';
 import Table from '../common/table';
 import { TableColumnType } from '../common/table/types';
 import EditSpecieModal from './EditSpecieModal';
+import SpeciesType from '../../types/Species';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -54,7 +54,7 @@ export default function Species(): JSX.Element {
 
   const [editSpecieModalOpen, setEditSpecieModalOpen] = React.useState(false);
 
-  const [selectedSpecie, setSelectedSpecie] = React.useState<SpeciesName>();
+  const [selectedSpecies, setSelectedSpecies] = React.useState<SpeciesType>();
 
   const onCloseEditSpecieModal = (snackbarMessage?: string) => {
     setEditSpecieModalOpen(false);
@@ -65,12 +65,12 @@ export default function Species(): JSX.Element {
       });
     }
   };
-  const onSelect = (specie: SpeciesName) => {
-    setSelectedSpecie(specie);
+  const onSelect = (specie: SpeciesType) => {
+    setSelectedSpecies(specie);
     setEditSpecieModalOpen(true);
   };
   const onNewSpecie = () => {
-    setSelectedSpecie(undefined);
+    setSelectedSpecies(undefined);
     setEditSpecieModalOpen(true);
   };
 
@@ -79,7 +79,7 @@ export default function Species(): JSX.Element {
       <EditSpecieModal
         open={editSpecieModalOpen}
         onClose={onCloseEditSpecieModal}
-        value={selectedSpecie}
+        value={selectedSpecies}
       />
       <Container maxWidth={false} className={classes.mainContainer}>
         <Grid container spacing={3}>
@@ -115,11 +115,11 @@ export default function Species(): JSX.Element {
 }
 
 interface SpeciesContentProps {
-  onSelect: (species: SpeciesName) => void;
+  onSelect: (species: SpeciesType) => void;
 }
 
 function SpeciesContent({ onSelect }: SpeciesContentProps): JSX.Element {
-  const speciesNames = useRecoilValue(speciesNamesSelector);
+  const species = useRecoilValue(speciesSelector);
 
   const columns: TableColumnType[] = [
     { key: 'name', name: 'Name', type: 'string' },
@@ -127,11 +127,11 @@ function SpeciesContent({ onSelect }: SpeciesContentProps): JSX.Element {
 
   return (
     <Grid item xs={12}>
-      {speciesNames && (
+      {species && (
         <Table
           id='species-table'
           columns={columns}
-          rows={speciesNames}
+          rows={species}
           orderBy='name'
           onSelect={onSelect}
         />

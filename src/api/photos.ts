@@ -1,22 +1,25 @@
 import axios from 'axios';
-import { Photo } from './types/photo';
+import { Photo } from '../types/Photo';
 
 const BASE_URL = `${process.env.REACT_APP_TERRAWARE_API}/api/v1/photos`;
 
 export const getPhotos = async (featureId: number): Promise<Photo[]> => {
   const endpoint = `${BASE_URL}?feature_id=${featureId}`;
-
-  return (await axios.get(endpoint)).data.photos;
+  const apiResponse = await axios.get(endpoint);
+  return apiResponse.status === 200 ? apiResponse.data.photos : [];
 };
 
-export const getPhotoBlob = async (photoId: number): Promise<Blob> => {
+export const getPhotoBlob = async (photoId: number): Promise<Blob | null> => {
   const endpoint = `${BASE_URL}/${photoId}?image=true`;
 
   const response = await axios.get(endpoint, {
     responseType: 'arraybuffer',
   });
 
-  const blob = new Blob([response.data]);
-
-  return blob;
+  if (response.status === 200) {
+    return new Blob([response.data]);
+  } else {
+    console.error('Could not fetch Feature Photo.');
+    return null;
+  }
 };

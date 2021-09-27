@@ -6,12 +6,11 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { useResetRecoilState } from 'recoil';
 import { PlantForTable } from '.';
-import { deleteFeature } from '../../api/features';
-import { deletePlant } from '../../api/plants';
-import { plantsPlantedFeaturesSelector } from '../../state/selectors/plantsPlantedFeatures';
+import { deletePlant } from '../../api/plants2';
 import strings from '../../strings';
 import Button from '../common/button/Button';
 import DialogCloseButton from '../common/DialogCloseButton';
+import {plantsFilteredSelector} from '../../state/selectors/plants';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -43,7 +42,7 @@ export default function DeletePlantConfirmationModal(
 ): JSX.Element {
   const classes = useStyles();
   const { onClose, open, plant } = props;
-  const resetFeatures = useResetRecoilState(plantsPlantedFeaturesSelector);
+  const resetPlants = useResetRecoilState(plantsFilteredSelector);
 
   const handleCancel = () => {
     onClose();
@@ -52,8 +51,7 @@ export default function DeletePlantConfirmationModal(
   const handleOk = async () => {
     if (plant.featureId) {
       await deletePlant(plant.featureId);
-      await deleteFeature(plant.featureId);
-      resetFeatures();
+      resetPlants();
     }
     onClose(true);
   };

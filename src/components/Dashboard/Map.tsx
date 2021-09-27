@@ -12,16 +12,14 @@ import ReactMapGL, {
   Popup,
 } from 'react-map-gl';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { Feature } from '../../api/types/feature';
-import { Plant } from '../../api/types/plant';
+import Plant, { Coordinate } from '../../types/Plant';
 import snackbarAtom from '../../state/atoms/snackbar';
-import { plantsByFeatureIdSelector } from '../../state/selectors/plantsPlanted';
-import { plantsPlantedFeaturesWithGeolocationSelector } from '../../state/selectors/plantsPlantedFeatures';
-import speciesForChartSelector from '../../state/selectors/speciesForChart';
+import {plantsWithGeolocationSelector} from '../../state/selectors/plants';
 import strings from '../../strings';
 import { cellDateFormatter } from '../common/table/TableCellRenderer';
 import NewSpecieModal from './NewSpecieModal';
 import PlantPhoto from './PlantPhoto';
+import {speciesForChartSelector} from '../../state/selectors/species';
 
 export type SpecieMap = {
   geometry: {
@@ -73,11 +71,6 @@ const navControlStyle = {
 
 const DEFAULT_VIEWPORT = { zoom: 8, width: 'fit', height: '100%' };
 
-interface Coordinate {
-  latitude: number;
-  longitude: number;
-}
-
 interface Props {
   onFullscreen: () => void;
   isFullscreen: boolean;
@@ -85,37 +78,29 @@ interface Props {
 
 function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
   const classes = useStyles();
-  const [selectedFeature, setSelectedFeature] = React.useState<Feature>();
+  const [selectedPlant, setSelectedPlant] = React.useState<Plant>();
   const [editPlantModalOpen, setEditPlantModalOpen] = React.useState(false);
   const [viewport, setViewport] = React.useState(DEFAULT_VIEWPORT);
 
-  const features = useRecoilValue(plantsPlantedFeaturesWithGeolocationSelector);
+  const plants = useRecoilValue(plantsWithGeolocationSelector);
   const speciesForChart = useRecoilValue(speciesForChartSelector);
-  const plantsByFeatureId = useRecoilValue(plantsByFeatureIdSelector);
   const setSnackbar = useSetRecoilState(snackbarAtom);
 
-  const selectedPlant: Plant | undefined =
-    selectedFeature && plantsByFeatureId
-      ? plantsByFeatureId[selectedFeature.id!]
-      : undefined;
-
   const selectedPlantForTable =
-    selectedPlant && selectedFeature
+    selectedPlant
       ? {
-          date: selectedPlant.created_time,
-          species: speciesForChart[selectedPlant.species_id!]
-            ? speciesForChart[selectedPlant.species_id!].speciesName.name
+          date: selectedPlant.enteredTime,  // changed from plant.created_time
+          species: speciesForChart[selectedPlant.speciesId!]
+            ? speciesForChart[selectedPlant.speciesId!].species.name
             : undefined,
           geolocation:
-            selectedFeature.geom &&
-            Array.isArray(selectedFeature?.geom.coordinates)
-              ? `${selectedFeature.geom.coordinates[1].toFixed(
-                  6
-                )}, ${selectedFeature.geom.coordinates[0].toFixed(6)}`
+            selectedPlant.coordinates
+              ? `${selectedPlant.coordinates.latitude.toFixed(6)},
+                 ${selectedPlant.coordinates.longitude.toFixed(6)}`
               : undefined,
-          notes: selectedFeature.notes,
-          featureId: selectedFeature.id,
-          speciesId: selectedPlant.species_id,
+          notes: selectedPlant.notes,
+          featureId: selectedPlant.featureId,
+          speciesId: selectedPlant.speciesId,
         }
       : undefined;
 
@@ -137,42 +122,25 @@ function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
     setEditPlantModalOpen(true);
   };
 
-  const iconPin = (color: string, feature: Feature) => (
-    <svg height='100' width='100' onClick={() => setSelectedFeature(feature)}>
+  const iconPin = (color: string, plant: Plant) => (
+    <svg height='100' width='100' onClick={() => setSelectedPlant(plant)}>
       <circle cx='20' cy='20' r='10' fill={color} />
     </svg>
   );
 
-  const getCoordinates = (feature: Feature): Coordinate => {
-    if (
-      feature.geom &&
-      feature.geom.coordinates &&
-      Array.isArray(feature.geom.coordinates)
-    ) {
-      return {
-        longitude: feature.geom.coordinates[0],
-        latitude: feature.geom.coordinates[1],
-      };
-    } else {
-      return {
-        latitude: 0,
-        longitude: 0,
-      };
-    }
-  };
-
   const getCenter = (): { latitude: number; longitude: number } => {
-    if (features?.length) {
-      let maxLat: number = getCoordinates(features[0]).latitude;
-      let minLat: number = getCoordinates(features[0]).latitude;
-      let maxLong: number = getCoordinates(features[0]).longitude;
-      let minLong: number = getCoordinates(features[0]).longitude;
+    if (plants?.length) {
+      const firstPlantCoords = plants[0].coordinates as Coordinate;
+      let maxLat: number = firstPlantCoords.latitude;
+      let minLat: number = firstPlantCoords.latitude;
+      let maxLong: number = firstPlantCoords.longitude;
+      let minLong: number = firstPlantCoords.longitude;
 
-      const featureCopy = [...features];
+      const featureCopy = [...plants];
       featureCopy.shift();
 
       featureCopy.forEach((feature) => {
-        const coordinates = getCoordinates(feature);
+        const coordinates = feature.coordinates as Coordinate;
         if (coordinates.latitude > maxLat) {
           maxLat = coordinates.latitude;
         }
@@ -201,9 +169,7 @@ function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
   };
 
   const center = getCenter();
-  const selectedCoordinates = selectedFeature
-    ? getCoordinates(selectedFeature)
-    : undefined;
+  const selectedCoordinates = selectedPlant ? selectedPlant.coordinates : undefined;
 
   return (
     <>
@@ -232,35 +198,31 @@ function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
             <FullscreenIcon />
           </IconButton>
         </div>
-        {plantsByFeatureId &&
-          features?.map((feature) => {
-            const plant = plantsByFeatureId[feature.id!];
-            const coordinates = getCoordinates(feature);
-            if (coordinates && plant) {
-              return (
-                <Marker
-                  key={feature.id}
-                  latitude={coordinates.latitude}
-                  longitude={coordinates.longitude}
-                  offsetLeft={-20}
-                  offsetTop={-10}
-                >
-                  {iconPin(
-                    speciesForChart[plant.species_id!]
-                      ? speciesForChart[plant.species_id!].color
-                      : speciesForChart[0].color,
-                    feature
-                  )}
-                </Marker>
-              );
-            }
+        {plants &&
+          plants.map((plant) => {
+            const coordinates = plant.coordinates as Coordinate;
 
-            return null;
+            return (
+              <Marker
+                key={plant.featureId}
+                latitude={coordinates.latitude}
+                longitude={coordinates.longitude}
+                offsetLeft={-20}
+                offsetTop={-10}
+              >
+                {iconPin(
+                  speciesForChart[plant.speciesId!]
+                    ? speciesForChart[plant.speciesId!].color
+                    : speciesForChart[0].color,
+                  plant
+                )}
+              </Marker>
+            );
           })}
-        {selectedFeature && selectedPlant && (
+        {selectedPlant && (
           <Popup
             onClose={() => {
-              setSelectedFeature(undefined);
+              setSelectedPlant(undefined);
             }}
             latitude={selectedCoordinates ? selectedCoordinates.latitude : 0}
             longitude={selectedCoordinates ? selectedCoordinates.longitude : 0}
@@ -273,8 +235,8 @@ function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
                 variant='subtitle2'
                 id='feature-species-name'
               >
-                {selectedPlant.species_id
-                  ? speciesForChart[selectedPlant.species_id].speciesName.name
+                {selectedPlant.speciesId
+                  ? speciesForChart[selectedPlant.speciesId].species.name
                   : strings.OTHER}
               </Typography>
               <Typography
@@ -283,7 +245,7 @@ function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
                 className={classes.spacing}
               >
                 {strings.AS_OF}{' '}
-                {cellDateFormatter(selectedFeature.entered_time)}
+                {cellDateFormatter(selectedPlant.enteredTime)}
               </Typography>
               <Typography
                 component='p'
@@ -299,18 +261,18 @@ function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
                   ? selectedCoordinates.longitude.toFixed(6)
                   : 0}
               </Typography>
-              <PlantPhoto featureId={selectedFeature?.id} />
+              <PlantPhoto featureId={selectedPlant.featureId} />
               <Chip
                 id='new-species'
                 size='medium'
                 label={
-                  selectedPlant.species_id
+                  selectedPlant.speciesId
                     ? strings.EDIT_SPECIES
                     : strings.ADD_SPECIES
                 }
                 onClick={onNewSpecie}
                 className={classes.newSpecies}
-                icon={selectedPlant.species_id ? <CreateIcon /> : <AddIcon />}
+                icon={selectedPlant.speciesId ? <CreateIcon /> : <AddIcon />}
               />
             </div>
           </Popup>
