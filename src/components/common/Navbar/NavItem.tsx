@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useCallback } from 'react';
 import Icon from '../icon/Icon';
 import { IconName } from '../icon/icons';
 import './styles.scss';
@@ -17,7 +17,7 @@ export interface NavItemProps {
 export default function NavItem(props: NavItemProps): JSX.Element {
   const { label, icon, children, selected, onClick, id } = props;
 
-  const hasChildrenSelected = () => {
+  const hasChildrenSelected = useCallback(() => {
     if (children) {
       if (children.props.children) {
         const subChildren = children.props.children;
@@ -30,16 +30,21 @@ export default function NavItem(props: NavItemProps): JSX.Element {
     }
 
     return false;
-  };
+  }, [children]);
+
+  React.useEffect(() => {
+    if (children && hasChildrenSelected()) {
+      setOpen(true);
+    } else {
+      setOpen(false);
+    }
+  }, [children, hasChildrenSelected, selected]);
 
   const [open, setOpen] = React.useState(hasChildrenSelected());
 
   const onClickHandler = () => {
     if (onClick) {
       onClick(!open);
-    }
-    if (children) {
-      setOpen(!open);
     }
   };
 

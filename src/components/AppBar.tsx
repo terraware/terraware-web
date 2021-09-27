@@ -1,12 +1,17 @@
-import { AppBar, Grid, Toolbar } from '@material-ui/core';
+import { AppBar, Grid, IconButton, Link, Toolbar } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
+import HelpIcon from '@material-ui/icons/Help';
 import React from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import ErrorBoundary from '../ErrorBoundary';
 import projectIdSelector from '../state/selectors/projectId';
 import projectsSelector from '../state/selectors/projects';
 import strings from '../strings';
+import useStateLocation, { getLocation } from '../utils/useStateLocation';
 import Dropdown from './common/Dropdown';
+import NotificationsDropdown from './NotificationsDropdown';
+import SearchBar from './SearchBar';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -14,11 +19,31 @@ const useStyles = makeStyles((theme) =>
       background: theme.palette.common.white,
       color: theme.palette.common.black,
     },
+    icon: {
+      padding: theme.spacing(1, 1),
+      width: '68px',
+    },
+    appBar2: {
+      backgroundColor: theme.palette.common.white,
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    grow: {
+      flexGrow: 1,
+    },
+    flex: {
+      display: 'flex',
+    },
+    right: {
+      marginLeft: 'auto',
+    },
   })
 );
 
 export default function NavBar(): JSX.Element | null {
   const classes = useStyles();
+  const location = useStateLocation();
 
   return (
     <AppBar position='static' className={classes.appBar}>
@@ -27,9 +52,26 @@ export default function NavBar(): JSX.Element | null {
           <Grid item>
             <ErrorBoundary>
               <React.Suspense fallback={strings.LOADING}>
-                <ProjectsDropdown />
+                {/* <ProjectsDropdown /> */}
               </React.Suspense>
             </ErrorBoundary>
+          </Grid>
+          <Grid item className={classes.right}>
+            <div className={classes.flex}>
+              <SearchBar />
+              <Link
+                id='help-button-link'
+                component={RouterLink}
+                to={getLocation('/help', location)}
+                target='_blank'
+                rel='noopener noreferrer'
+              >
+                <IconButton id='help-button' onClick={() => true}>
+                  <HelpIcon />
+                </IconButton>
+              </Link>
+              <NotificationsDropdown />
+            </div>
           </Grid>
         </Grid>
       </Toolbar>
@@ -37,6 +79,7 @@ export default function NavBar(): JSX.Element | null {
   );
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function ProjectsDropdown(): JSX.Element {
   const projects = useRecoilValue(projectsSelector);
   const [projectId, setProjectId] = useRecoilState(projectIdSelector);

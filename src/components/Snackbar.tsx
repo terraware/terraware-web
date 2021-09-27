@@ -60,3 +60,8 @@ export default function SnackbarMessage(): JSX.Element {
     </Snackbar>
   );
 }
+export type Log = {
+  level?: string;
+  message?: string;
+  details?: string;
+};

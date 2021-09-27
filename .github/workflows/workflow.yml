@@ -16,10 +16,20 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Setup Node
-        uses: actions/setup-node@v1
+      - uses: satackey/action-docker-layer-caching@v0.0.11
+        continue-on-error: true
+
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - uses: actions/cache@v2
+        id: yarn-cache
         with:
-          node-version: 14.x
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
 
       - name: install dependencies
         run: yarn
@@ -38,14 +48,13 @@ jobs:
       - name: E-2-E
         run: yarn e2e
         env:
-          REACT_APP_TERRAWARE_API: 'http://localhost:8008'
+          REACT_APP_SEED_BANK_API: 'http://localhost:8080'
           REACT_APP_SNACKBAR_TIMEOUT: 1000
-          REACT_APP_MAPBOX_TOKEN: ${{ secrets.REACT_APP_MAPBOX_TOKEN }}
 
       - name: build
         run: yarn build
         env:
-          REACT_APP_TERRAWARE_API: ''
+          REACT_APP_SEED_BANK_API: ''
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
@@ -61,13 +70,22 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          tags: terraware/tree-locator-app:latest
+          tags: terraware/seedbank-app:latest
           platforms: linux/amd64,linux/arm64
           push: ${{ github.ref == 'refs/heads/main' }}
 
-      # - name: Notify staging environment of update
-      #   if: github.ref == 'refs/heads/main'
-      #   uses: satak/webrequest-action@v1.2.4
-      #   with:
-      #     url: ${{ secrets.STAGING_NOTIFY_URL }}
-      #     method: POST
+      - name: Configure AWS Credentials
+        if: github.ref == 'refs/heads/main'
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.STAGING_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.STAGING_AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.STAGING_AWS_REGION }}
+
+      - name: Deploy to staging environment
+        if: github.ref == 'refs/heads/main'
+        env:
+          SSH_HOST: ${{ secrets.STAGING_SSH_HOST }}
+          SSH_KEY: ${{ secrets.STAGING_SSH_KEY }}
+          SSH_USER: ${{ secrets.STAGING_SSH_USER }}
+        run: ./.github/scripts/deploy-staging.sh

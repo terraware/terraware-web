@@ -3,6 +3,10 @@ import { createStyles, fade, makeStyles } from '@material-ui/core/styles';
 import SearchIcon from '@material-ui/icons/Search';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import React from 'react';
+import { useHistory } from 'react-router-dom';
+import { useRecoilValueLoadable, useResetRecoilState } from 'recoil';
+import searchSelector from '../state/selectors/searchByAccessionNumber';
+import useStateLocation, { getLocation } from '../utils/useStateLocation';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -20,17 +24,37 @@ export default function NavBar(): JSX.Element {
   const classes = useStyles();
   const [input, setInput] = React.useState('');
 
+  const loadableResults = useRecoilValueLoadable(searchSelector(input));
+  const resetResults = useResetRecoilState(searchSelector(input));
+  const history = useHistory();
+
+  const results =
+    loadableResults.state === 'hasValue'
+      ? loadableResults.contents.results
+      : [];
+
+  const location = useStateLocation();
+
   return (
     <div className={classes.search}>
       <Autocomplete
         id='search-bar'
         freeSolo
-        options={[]}
+        options={results.map((accession) => accession.accessionNumber)}
         inputValue={input}
         onInputChange={(event, value) => {
           setInput(value);
         }}
         value=''
+        onChange={(event, accessionNumber) => {
+          if (accessionNumber) {
+            history.push(
+              getLocation(`/accessions/${accessionNumber}`, location)
+            );
+            resetResults();
+            setInput('');
+          }
+        }}
         renderInput={(params) => (
           <TextField
             {...params}

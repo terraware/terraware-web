@@ -15,6 +15,8 @@ export default function NavBar(): JSX.Element | null {
   const isDashboardRoute = useRouteMatch('/dashboard/');
   const isSpeciesRoute = useRouteMatch('/species/');
   const isPlantsRoute = useRouteMatch('/plants/');
+  const isAccessionsRoute = useRouteMatch('/accessions/');
+  const isSummaryRoute = useRouteMatch('/summary/');
   const resetPlantsPlanted = useResetRecoilState(plantsPlantedSelector);
   const resetPlantsPlantedFiltered = useResetRecoilState(
     plantsPlantedFilteredSelector
@@ -38,6 +40,11 @@ export default function NavBar(): JSX.Element | null {
     navigate('/plants');
   };
 
+  const onHandleLogout = () => {
+    window.location.href =
+      'https://auth.staging.terraware.io/auth/realms/terraware/protocol/openid-connect/logout?redirect_uri=http://localhost:4000/oauth2/sign_out';
+  };
+
   return (
     <Navbar>
       <NavItem
@@ -48,10 +55,25 @@ export default function NavBar(): JSX.Element | null {
         id='dashboard'
       />
       <NavSection title={strings.FLORA} />
-      <NavItem label='Seeds' icon='seeds'>
+      <NavItem
+        label='Seeds'
+        icon='seeds'
+        id='seeds'
+        onClick={() => navigate('/summary')}
+      >
         <SubNavbar>
-          <NavItem label='Summary' selected={false} />
-          <NavItem label='Accessions' selected={false} />
+          <NavItem
+            label='Summary'
+            selected={isSummaryRoute ? true : false}
+            onClick={() => navigate('/summary')}
+            id='summary'
+          />
+          <NavItem
+            label='Accessions'
+            selected={isAccessionsRoute ? true : false}
+            onClick={() => navigate('/accessions')}
+            id='accessions'
+          />
         </SubNavbar>
       </NavItem>
       <NavItem
@@ -66,13 +88,16 @@ export default function NavBar(): JSX.Element | null {
         icon='species'
         selected={isSpeciesRoute ? true : false}
         onClick={() => navigate('/species')}
-        id='species'
+        id='speciesNb'
       />
       <NavSection />
-      <NavItem label='Projects' icon='folder' selected={false} />
-      <NavItem label='Sites' icon='site' selected={false} />
-      <NavSection />
-      <NavItem label='Admin' icon='key' selected={false} />
+      <NavItem
+        label={strings.LOGOUT}
+        icon='key'
+        selected={false}
+        onClick={onHandleLogout}
+        id='logout'
+      />
     </Navbar>
   );
 }

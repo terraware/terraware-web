@@ -28,7 +28,17 @@ server {
         root   /usr/share/nginx/html;
     }
 
+    # Placeholder administration UI.
+    location /admin/ {
+        proxy_pass ${SERVER_URL};
+    }
+
     location /api/ {
+        proxy_pass ${SERVER_URL};
+    }
+
+    # OAuth2 redirect endpoints that are used by the login and logout flows.
+    location /sso/ {
         proxy_pass ${SERVER_URL};
     }
 }

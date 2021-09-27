@@ -1,5 +1,5 @@
 import { selector } from 'recoil';
-import { getLayers } from '../../api/layers';
+import { getLayers } from '../../api/plants/layers';
 import { Layer } from '../../api/types/layer';
 import plantsPlantedLayerTypeSelector from './layerTypes';
 import siteSelector from './site';
