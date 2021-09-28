@@ -40,11 +40,6 @@ export default function NavBar(): JSX.Element | null {
     navigate('/plants');
   };
 
-  const onHandleLogout = () => {
-    window.location.href =
-      'https://auth.staging.terraware.io/auth/realms/terraware/protocol/openid-connect/logout?redirect_uri=http://localhost:4000/oauth2/sign_out';
-  };
-
   return (
     <Navbar>
       <NavItem
@@ -89,14 +84,6 @@ export default function NavBar(): JSX.Element | null {
         selected={isSpeciesRoute ? true : false}
         onClick={() => navigate('/species')}
         id='speciesNb'
-      />
-      <NavSection />
-      <NavItem
-        label={strings.LOGOUT}
-        icon='key'
-        selected={false}
-        onClick={onHandleLogout}
-        id='logout'
       />
     </Navbar>
   );
