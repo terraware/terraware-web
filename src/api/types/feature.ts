@@ -1,4 +1,4 @@
-import { components } from './generated-schema-seedbank';
+import { components } from './generated-schema';
 
 export type FeatureListRequest = components['schemas']['ListFeaturesRequestPayload'];
 export type FeatureListResponse = components['schemas']['ListFeaturesResponsePayload'];

@@ -1,4 +1,4 @@
-import { components, operations } from './generated-schema-seedbank';
+import { components, operations } from './generated-schema';
 
 export type ListPlantsResponsePayload = components['schemas']['ListPlantsResponsePayload'];
 export type ListPlantsResponseElement = components['schemas']['ListPlantsResponseElement'];

@@ -1,4 +1,4 @@
-import { components } from './generated-schema-seedbank';
+import { components } from './generated-schema';
 
 export type LayerListResponse = components['schemas']['ListLayersResponsePayload'];
 export type LayerListResponseLayerType = components['schemas']['LayerResponse']['layerType'];
