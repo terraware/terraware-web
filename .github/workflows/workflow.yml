@@ -88,4 +88,4 @@ jobs:
           SSH_HOST: ${{ secrets.STAGING_SSH_HOST }}
           SSH_KEY: ${{ secrets.STAGING_SSH_KEY }}
           SSH_USER: ${{ secrets.STAGING_SSH_USER }}
-        run: ./.github/scripts/deploy-staging.sh
+        run: bash ./.github/scripts/deploy-staging.sh
