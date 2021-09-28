@@ -48,6 +48,9 @@ jobs:
       - name: E-2-E
         run: yarn e2e
         env:
+          # Increase timeouts to account for slow GitHub runner hosts
+          CYPRESS_DEFAULT_COMMAND_TIMEOUT: 10000
+          CYPRESS_REQUEST_TIMEOUT: 15000
           REACT_APP_SEED_BANK_API: 'http://localhost:8080'
           REACT_APP_SNACKBAR_TIMEOUT: 1000
 
@@ -70,7 +73,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          tags: terraware/seedbank-app:latest
+          tags: terraware/tree-location-app:latest
           platforms: linux/amd64,linux/arm64
           push: ${{ github.ref == 'refs/heads/main' }}
 
@@ -88,4 +91,4 @@ jobs:
           SSH_HOST: ${{ secrets.STAGING_SSH_HOST }}
           SSH_KEY: ${{ secrets.STAGING_SSH_KEY }}
           SSH_USER: ${{ secrets.STAGING_SSH_USER }}
-        run: ./.github/scripts/deploy-staging.sh
+        run: bash ./.github/scripts/deploy-staging.sh
