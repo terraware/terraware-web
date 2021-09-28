@@ -20,7 +20,7 @@ export const getPlants = async (layerId: number): Promise<ListPlantsResponseElem
 };
 
 export const getPlantSummary = async (layerId: number, maxEnteredTime: string): Promise<PlantSummary[]> => {
-  const endpoint = `${BASE_URL}/list/summary/${layerId}&maxEnteredTime=${maxEnteredTime}`;
+  const endpoint = `${BASE_URL}/list/summary/${layerId}?maxEnteredTime=${maxEnteredTime}`;
   const response: PlantSummaryResponsePayload = (await axios.get(endpoint)).data;
 
   const apiSummary = response.summary;
