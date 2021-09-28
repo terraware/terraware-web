@@ -36,7 +36,7 @@ export default function GerminationMenu({
   accession,
 }: Props): JSX.Element | null {
   const classes = useStyles();
-  const { accessionNumber } = useParams<{ accessionNumber: string }>();
+  const { accessionId } = useParams<{ accessionId: string }>();
 
   const hasNurseryGerminationTest =
     accession.germinationTestTypes?.includes('Nursery');
@@ -52,7 +52,7 @@ export default function GerminationMenu({
     return null;
   }
 
-  if (history.location.pathname.endsWith(accessionNumber)) {
+  if (history.location.pathname.endsWith(accessionId)) {
     return null;
   }
 
@@ -67,7 +67,7 @@ export default function GerminationMenu({
           id='nursery'
           component={RouterLink}
           to={{
-            pathname: `/accessions/${accessionNumber}/nursery`,
+            pathname: `/accessions/${accessionId}/nursery`,
             state: {
               from: location.state?.from ?? '',
             },
@@ -76,7 +76,7 @@ export default function GerminationMenu({
           <Typography
             component='p'
             variant='body1'
-            className={TypographyClass('/accessions/:accessionNumber/nursery')}
+            className={TypographyClass('/accessions/:accessionId/nursery')}
           >
             {strings.NURSERY}
           </Typography>
@@ -87,14 +87,14 @@ export default function GerminationMenu({
           id='lab'
           component={RouterLink}
           to={{
-            pathname: `/accessions/${accessionNumber}/lab`,
+            pathname: `/accessions/${accessionId}/lab`,
             state: { from: location.state?.from ?? '' },
           }}
         >
           <Typography
             component='p'
             variant='body1'
-            className={TypographyClass('/accessions/:accessionNumber/lab')}
+            className={TypographyClass('/accessions/:accessionId/lab')}
           >
             {strings.LAB}
           </Typography>

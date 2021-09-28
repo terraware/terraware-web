@@ -90,7 +90,7 @@ function AppContent() {
               <Route exact path='/species' component={Species} />
               <Route path='/accessions/new' component={NewAccession} />
               <Route
-                path='/accessions/:accessionNumber'
+                path='/accessions/:accessionId'
                 component={Accession}
               />
               <Route path='/accessions' component={Database} />

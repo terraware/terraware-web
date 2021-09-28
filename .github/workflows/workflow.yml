@@ -40,10 +40,10 @@ jobs:
       - name: download and start backend
         run: yarn server:reset
         env:
-          TERRAWARE_KEYCLOAK_CLIENT_ID: dummy
-          TERRAWARE_KEYCLOAK_CLIENT_SECRET: dummy
-          TERRAWARE_KEYCLOAK_REALM: dummy
-          TERRAWARE_KEYCLOAK_SERVER_URL: http://dummy/
+          KEYCLOAK_AUTH_SERVER_URL: http://dummy/
+          KEYCLOAK_CREDENTIALS_SECRET: dummy
+          KEYCLOAK_REALM: dummy
+          KEYCLOAK_RESOURCE: dummy
 
       - name: E-2-E
         run: yarn e2e

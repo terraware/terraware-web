@@ -7,14 +7,14 @@ const accessionAtom = atom({
   default: 0,
 });
 
-export default selectorFamily<Accession, string>({
+export default selectorFamily<Accession, number>({
   key: 'accessionSelector',
   get:
-    (accessionNumber: string) =>
+    (accessionId: number) =>
     async ({ get }) => {
       get(accessionAtom);
 
-      return await getAccession(accessionNumber);
+      return await getAccession(accessionId);
     },
   set:
     () =>

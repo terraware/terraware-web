@@ -7,13 +7,13 @@ describe('Searchbar', () => {
 
       cy.get('#header-accessionNumber').then(($accessionNumberElement) => {
         const accessionNumber = $accessionNumberElement.text();
-        cy.visit('/summary');
-        cy.get('#declineTour').click();
-        cy.get('#search-bar').type(accessionNumber);
-        cy.get('#search-bar-option-0')
-          .click()
-          .url()
-          .should('include', `/accessions/${accessionNumber}/seed-collection`);
+
+        cy.url().then((url) => {
+          cy.visit('/summary');
+          cy.get('#declineTour').click();
+          cy.get('#search-bar').type(accessionNumber);
+          cy.get('#search-bar-option-0').click().url().should('eq', url);
+        });
       });
     });
   });

@@ -4,6 +4,7 @@ import {
   SearchRequestPayload,
   SearchResponsePayload,
 } from '../../api/types/search';
+import { facilityIdSelector } from './facility';
 
 const searchAccessionNumberAtom = atom({
   key: 'searchAccessionNumberTrigger',
@@ -22,7 +23,10 @@ export default selectorFamily<SearchResponsePayload, string>({
         };
       }
 
+      const facilityId = get(facilityIdSelector);
+
       const searchParams: SearchRequestPayload = {
+        facilityId,
         fields: ['accessionNumber'],
         sortOrder: [{ field: 'accessionNumber', direction: 'Ascending' }],
         filters: [

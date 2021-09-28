@@ -23,10 +23,9 @@ import '@cypress/code-coverage/support';
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
 
-// Make all requests look like they are properly authenticated via OAuth2 Proxy
-// so we don't have to depend on a Keycloak server to run the test suite.
+// Make all requests look like they are associated with an existing login session
+// so we don't have to depend on a Keycloak server to run the test suite. The
+// session value here is the base64-encoded session ID from dump/dump.sql.
 beforeEach(() => {
-  cy.intercept({ pathname: '/api/**', middleware: true }, (req) => {
-    req.headers['X-Forwarded-User'] = 'dummy-auth-id';
-  });
+  cy.setCookie('SESSION', 'Mjc2NzE0YWQtYWIwYS00OGFhLThlZjgtZGI2NWVjMmU5NTBh');
 });
