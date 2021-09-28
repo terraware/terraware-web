@@ -11,7 +11,7 @@ KEYCLOAK_RESOURCE=(Keycloak client ID)
 KEYCLOAK_CREDENTIALS_SECRET=(Keycloak client secret)
 KEYCLOAK_REALM=(Keycloak realm)
 KEYCLOAK_AUTH_SERVER_URL=(Keycloak server URL)
-REACT_APP_TERRAWARE_API=http://localhost:8008
+REACT_APP_TERRAWARE_API=http://localhost:8080
 ```
 
 ### Step 2: Login to Docker hub
@@ -87,4 +87,4 @@ This will create the file `src/api/types/generated-schema.ts`
 
 ### TreeLocator API
 
-The Swagger documentation can be accesed [here](http://localhost:8008/docs)
+The Swagger documentation can be accesed [here](http://localhost:8080/docs)
