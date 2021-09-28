@@ -7,7 +7,7 @@ import {
   InputAdornment,
   makeStyles,
   Paper,
-  Typography
+  Typography,
 } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import SearchIcon from '@material-ui/icons/Search';
@@ -20,7 +20,7 @@ import snackbarAtom from '../../../state/atoms/snackbar';
 import { plantsFeaturesSelector } from '../../../state/selectors/plantsFeatures';
 import {
   plantsByFeatureIdFilteredSelector,
-  plantsFiltersAtom
+  plantsFiltersAtom,
 } from '../../../state/selectors/plantsFiltered';
 import speciesSelector from '../../../state/selectors/species';
 import speciesNamesBySpeciesIdSelector from '../../../state/selectors/speciesById';

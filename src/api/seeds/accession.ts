@@ -1,11 +1,9 @@
 import axios from '..';
 import { Accession, NewAccession } from '../types/accessions';
 
-const BASE_URL = `${process.env.REACT_APP_SEED_BANK_API}/api/v1/seedbank/accession`;
+const BASE_URL = `${process.env.REACT_APP_TERRAWARE_API}/api/v1/seedbank/accession`;
 
-export const getAccession = async (
-  accessionId: number
-): Promise<Accession> => {
+export const getAccession = async (accessionId: number): Promise<Accession> => {
   const endpoint = `${BASE_URL}/${accessionId}`;
 
   return (await axios.get(endpoint)).data.accession;

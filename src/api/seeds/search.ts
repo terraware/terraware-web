@@ -8,7 +8,7 @@ import {
   SearchResponsePayload,
 } from '../types/search';
 
-const BASE_URL = `${process.env.REACT_APP_SEED_BANK_API}/api/v1/seedbank`;
+const BASE_URL = `${process.env.REACT_APP_TERRAWARE_API}/api/v1/seedbank`;
 
 export const search = async (
   params: SearchRequestPayload

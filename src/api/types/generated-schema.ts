@@ -607,6 +607,7 @@ export interface components {
         | 'MultiPolygon'
         | 'GeometryCollection';
       crs?: components['schemas']['CRS'];
+      coordinates: number[];
     };
     GeometryCollection: components['schemas']['Geometry'] & {
       geometries?: components['schemas']['Geometry'][];

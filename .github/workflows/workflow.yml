@@ -48,13 +48,13 @@ jobs:
       - name: E-2-E
         run: yarn e2e
         env:
-          REACT_APP_SEED_BANK_API: 'http://localhost:8080'
+          REACT_APP_TERRAWARE_API: 'http://localhost:8080'
           REACT_APP_SNACKBAR_TIMEOUT: 1000
 
       - name: build
         run: yarn build
         env:
-          REACT_APP_SEED_BANK_API: ''
+          REACT_APP_TERRAWARE_API: ''
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1

@@ -52,7 +52,7 @@ export default function NavBar(): JSX.Element | null {
           <Grid item>
             <ErrorBoundary>
               <React.Suspense fallback={strings.LOADING}>
-                {/* <ProjectsDropdown /> */}
+                <ProjectsDropdown />
               </React.Suspense>
             </ErrorBoundary>
           </Grid>

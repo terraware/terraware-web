@@ -24,15 +24,18 @@ if (process.env.REACT_APP_DELAY_QUERIES === 'true') {
 axios.defaults.withCredentials = true;
 
 /*eslint no-restricted-globals: ["off", "location"]*/
-axios.interceptors.response.use((response) => response, (error) => {
-  if (error.response && error.response.status === 401) {
-    const redirect = encodeURIComponent(location.href);
-    location.href = `${process.env.REACT_APP_SEED_BANK_API}/api/v1/login?redirect=${redirect}`;
+axios.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response && error.response.status === 401) {
+      const redirect = encodeURIComponent(location.href);
+      location.href = `${process.env.REACT_APP_TERRAWARE_API}/api/v1/login?redirect=${redirect}`;
 
-    return null;
-  } else {
-    return Promise.reject(error);
+      return null;
+    } else {
+      return Promise.reject(error);
+    }
   }
-});
+);
 
 export default new Proxy(axios, handler);
