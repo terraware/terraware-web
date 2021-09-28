@@ -7,7 +7,7 @@ import {
   InputAdornment,
   makeStyles,
   Paper,
-  Typography,
+  Typography
 } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import SearchIcon from '@material-ui/icons/Search';
@@ -20,7 +20,7 @@ import snackbarAtom from '../../../state/atoms/snackbar';
 import { plantsFeaturesSelector } from '../../../state/selectors/plantsFeatures';
 import {
   plantsByFeatureIdFilteredSelector,
-  plantsFiltersAtom,
+  plantsFiltersAtom
 } from '../../../state/selectors/plantsFiltered';
 import speciesSelector from '../../../state/selectors/species';
 import speciesNamesBySpeciesIdSelector from '../../../state/selectors/speciesById';
@@ -88,9 +88,9 @@ export default function AllPlants(): JSX.Element {
     }
   }, [filters]);
 
-  const speciesNamesValues = species?.map((species) => ({
-    label: species.name,
-    value: species.name,
+  const speciesNamesValues = species?.map((sp) => ({
+    label: sp.name,
+    value: sp.name,
   }));
 
   const onEditPlant = (row: TableRowType) => {

@@ -13,6 +13,6 @@ export const getFeatures = async (layerId: number): Promise<Feature[]> => {
 export const deleteFeature = async (featureId: number): Promise<FeatureDeleteResponse> => {
   const endpoint = `${BASE_URL}/${featureId}`;
   const response: FeatureDeleteResponse = (await axios.get(endpoint)).data;
-  
+
   return response;
 };
