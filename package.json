@@ -54,6 +54,7 @@
     "docker:start": "./scripts/launch_server.sh",
     "docker:stop": "docker-compose -f docker-compose.yml kill",
     "wait-be": "wait-on http://localhost:8080/swagger-ui/index.html",
+    "server:prepare": "./scripts/preparedb.sh",
     "server:reset": "./scripts/resetdb.sh"
   },
   "eslintConfig": {

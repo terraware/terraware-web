@@ -2,7 +2,7 @@ import { components, operations } from './generated-schema';
 
 export type ListPlantsResponsePayload = components['schemas']['ListPlantsResponsePayload'];
 export type ListPlantsResponseElement = components['schemas']['ListPlantsResponseElement'];
-export type SearchOptions = operations['getPlantsList']['parameters']['query'];
+export type SearchOptions = operations['getPlantsList']['parameters']['query']['payload'];
 
 export type PlantSummaryResponsePayload = components['schemas']['PlantSummaryResponsePayload'];
 
