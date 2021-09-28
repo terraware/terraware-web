@@ -48,6 +48,9 @@ jobs:
       - name: E-2-E
         run: yarn e2e
         env:
+          # Increase timeouts to account for slow GitHub runner hosts
+          CYPRESS_DEFAULT_COMMAND_TIMEOUT: 10000
+          CYPRESS_REQUEST_TIMEOUT: 15000
           REACT_APP_SEED_BANK_API: 'http://localhost:8080'
           REACT_APP_SNACKBAR_TIMEOUT: 1000
 
