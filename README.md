@@ -7,16 +7,11 @@
 ### Step 1: Configure the `.env` file
 
 ```
-OAUTH2_PROXY_CLIENT_SECRET=(client secret for the localhost-oauth2-proxy user)
-OAUTH2_PROXY_COOKIE_SECRET=(see below)
-OAUTH2_PROXY_OIDC_ISSUER_URL=(URL of Keycloak server)
+KEYCLOAK_RESOURCE=(Keycloak client ID)
+KEYCLOAK_CREDENTIALS_SECRET=(Keycloak client secret)
+KEYCLOAK_REALM=(Keycloak realm)
+KEYCLOAK_AUTH_SERVER_URL=(Keycloak server URL)
 REACT_APP_TERRAWARE_API=http://localhost:8008
-```
-
-For the OAuth2 Proxy settings, get the client secret and OIDC issuer URL from an existing member of the team. Generate a cookie secret like this:
-
-```
-python -c 'import os,base64; print(base64.urlsafe_b64encode(os.urandom(16)).decode())'
 ```
 
 ### Step 2: Login to Docker hub

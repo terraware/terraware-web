@@ -3,6 +3,10 @@
  * Do not make direct changes to the file.
  */
 
+// tslint:disable: quotemark
+// tslint:disable: class-name
+// tslint:disable: no-empty-interface
+
 export interface paths {
   '/api/v1/device/all/config': {
     get: operations['listDeviceConfigs'];
@@ -68,6 +72,10 @@ export interface paths {
     get: operations['get'];
     put: operations['update_1'];
   };
+  '/api/v1/login': {
+    /** For interactive web applications, this can be used to redirect the user to a login page to allow the application to make other API requests. The login process will set a cookie that will authenticate to the API, and will then redirect back to the application. One approach is to use this in error response handlers: if an API request returns HTTP 401 Unauthorized, set location.href to this endpoint and set "redirect" to the URL of the page the user was on so they'll return there after logging in. */
+    get: operations['login'];
+  };
   '/api/v1/organization': {
     /** List all organizations the user can access. */
     get: operations['listAll_1'];
@@ -81,14 +89,14 @@ export interface paths {
   '/api/v1/seedbank/accession': {
     post: operations['create'];
   };
-  '/api/v1/seedbank/accession/{accessionNumber}': {
+  '/api/v1/seedbank/accession/{id}': {
     get: operations['read'];
     put: operations['update'];
   };
-  '/api/v1/seedbank/accession/{accessionNumber}/photo': {
+  '/api/v1/seedbank/accession/{id}/photo': {
     get: operations['listPhotos'];
   };
-  '/api/v1/seedbank/accession/{accessionNumber}/photo/{photoFilename}': {
+  '/api/v1/seedbank/accession/{id}/photo/{photoFilename}': {
     /** Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio. */
     get: operations['getPhoto'];
     post: operations['uploadPhoto'];
@@ -148,6 +156,9 @@ export interface paths {
   '/api/v1/seedbank/values/storageLocation': {
     get: operations['getStorageLocations'];
   };
+  '/api/v1/site': {
+    get: operations['listSites'];
+  };
   '/api/v1/site/{siteId}': {
     get: operations['getSite'];
   };
@@ -181,7 +192,7 @@ export interface components {
   schemas: {
     AccessionPayload: {
       /** Server-generated unique identifier for the accession. */
-      accessionNumber?: string;
+      accessionNumber: string;
       /** Server-calculated active indicator. This is based on the accession's state. */
       active: 'Inactive' | 'Active';
       bagNumbers?: string[];
@@ -196,12 +207,14 @@ export interface components {
       endangered?: 'No' | 'Yes' | 'Unsure';
       environmentalNotes?: string;
       estimatedSeedCount?: number;
+      facilityId: number;
       family?: string;
       fieldNotes?: string;
       founderId?: string;
       geolocations?: components['schemas']['Geolocation'][];
       germinationTests?: components['schemas']['GerminationTestPayload'][];
       germinationTestTypes?: ('Lab' | 'Nursery')[];
+      id: number;
       /** Initial size of accession. The units of this value must match the measurement type in "processingMethod". */
       initialQuantity?: components['schemas']['SeedQuantityPayload'];
       landowner?: string;
@@ -228,15 +241,7 @@ export interface components {
       /** Server-generated unique ID of the species. */
       speciesId?: number;
       /** Server-calculated accession state. Can change due to modifications to accession data or based on passage of time. */
-      state:
-        | 'Pending'
-        | 'Processing'
-        | 'Processed'
-        | 'Drying'
-        | 'Dried'
-        | 'In Storage'
-        | 'Withdrawn'
-        | 'Nursery';
+      state: 'Pending' | 'Processing' | 'Processed' | 'Drying' | 'Dried' | 'In Storage' | 'Withdrawn' | 'Nursery';
       storageCondition?: 'Refrigerator' | 'Freezer';
       storageLocation?: string;
       storagePackets?: number;
@@ -502,6 +507,13 @@ export interface components {
       type: unknown;
       values: unknown;
     };
+    FacilityPayload: {
+      id: number;
+      name: string;
+      type: 'Seed Bank' | 'Desalination' | 'Reverse Osmosis';
+      /** The name of the role the current user has at the facility. */
+      role: string;
+    };
     FieldValuesPayload: {
       /** List of values in the matching accessions. If there are accessions where the field has no value, this list will contain null (an actual null value, not the string "null"). */
       values: (string | null)[];
@@ -513,15 +525,10 @@ export interface components {
       longitude: number;
       accuracy?: number;
     };
+    /** GEOMETRY-FIX-TYPE-ON-CLIENT-SIDE */
     Geometry: {
-      type:
-        | 'Point'
-        | 'LineString'
-        | 'Polygon'
-        | 'MultiPoint'
-        | 'MultiLineString'
-        | 'MultiPolygon'
-        | 'GeometryCollection';
+      type: 'Point' | 'LineString' | 'Polygon' | 'MultiPoint' | 'MultiLineString' | 'MultiPolygon' | 'GeometryCollection';
+      coordinates: number[];
       crs?: components['schemas']['CRS'];
     };
     GeometryCollection: components['schemas']['Geometry'] & {
@@ -541,11 +548,7 @@ export interface components {
       startDate?: string;
       endDate?: string;
       seedType?: 'Fresh' | 'Stored';
-      substrate?:
-        | 'Nursery Media'
-        | 'Agar Petri Dish'
-        | 'Paper Petri Dish'
-        | 'Other';
+      substrate?: 'Nursery Media' | 'Agar Petri Dish' | 'Paper Petri Dish' | 'Other';
       treatment?: 'Soak' | 'Scarify' | 'GA3' | 'Stratification' | 'Other';
       notes?: string;
       /** Quantity of seeds remaining. For weight-based accessions, this is user input and is required. For count-based accessions, it is calculated by the server and ignored on input. */
@@ -583,10 +586,6 @@ export interface components {
     GetPlantResponsePayload: {
       plant: components['schemas']['PlantResponse'];
       status: components['schemas']['SuccessOrError'];
-    };
-    GetPlantSummaryPayload: {
-      minEnteredTime?: string;
-      maxEnteredTime?: string;
     };
     GetSiteResponse: {
       id: number;
@@ -634,14 +633,9 @@ export interface components {
       devices: components['schemas']['DeviceConfig'][];
       status: components['schemas']['SuccessOrError'];
     };
-    ListFacilitiesElement: {
-      id: number;
-      name: string;
-      type: number;
-      role: string;
-    };
     ListFacilitiesResponse: {
-      facilities: components['schemas']['ListFacilitiesElement'][];
+      facilities: components['schemas']['FacilityPayload'][];
+      status: components['schemas']['SuccessOrError'];
     };
     ListFeaturePhotosResponsePayload: {
       photos: components['schemas']['FeaturePhoto'][];
@@ -701,24 +695,30 @@ export interface components {
       photos: components['schemas']['ListPhotosResponseElement'][];
       status: components['schemas']['SuccessOrError'];
     };
-    ListPlantsRequestPayload: {
-      speciesName?: string;
-      minEnteredTime?: string;
-      maxEnteredTime?: string;
-      notes?: string;
-    };
     ListPlantsResponseElement: {
       featureId: number;
       label?: string;
       speciesId?: number;
       naturalRegen?: boolean;
       datePlanted?: string;
+      layerId: number;
+      gpsHorizAccuracy?: number;
+      gpsVertAccuracy?: number;
+      attrib?: string;
       notes?: string;
       enteredTime?: string;
+      geom?: components['schemas']['Geometry'];
     };
     ListPlantsResponsePayload: {
       list: components['schemas']['ListPlantsResponseElement'][];
       status: components['schemas']['SuccessOrError'];
+    };
+    ListSitesElement: {
+      id: number;
+      name: string;
+    };
+    ListSitesResponse: {
+      sites: components['schemas']['ListSitesElement'][];
     };
     ListSpeciesResponsePayload: {
       values: components['schemas']['SpeciesDetails'][];
@@ -761,15 +761,7 @@ export interface components {
       /** For accession notifications, which accession caused the notification. */
       accessionNumber?: string;
       /** For state notifications, which state is being summarized. */
-      state?:
-        | 'Pending'
-        | 'Processing'
-        | 'Processed'
-        | 'Drying'
-        | 'Dried'
-        | 'In Storage'
-        | 'Withdrawn'
-        | 'Nursery';
+      state?: 'Pending' | 'Processing' | 'Processed' | 'Drying' | 'Dried' | 'In Storage' | 'Withdrawn' | 'Nursery';
     };
     ObservationResponse: {
       id: number;
@@ -905,13 +897,7 @@ export interface components {
     SeedQuantityPayload: {
       /** Number of units of seeds. If "units" is "Seeds", this is the number of seeds and must be an integer. Otherwise it is a measurement in the weight units specified in the "units" field, and may have a fractional part. */
       quantity: number;
-      units:
-        | 'Seeds'
-        | 'Grams'
-        | 'Milligrams'
-        | 'Kilograms'
-        | 'Ounces'
-        | 'Pounds';
+      units: 'Seeds' | 'Grams' | 'Milligrams' | 'Kilograms' | 'Ounces' | 'Pounds';
       /** If this quantity is a weight measurement, the weight in grams. This is not set if the "units" field is "Seeds". This is always calculated on the server side and is ignored on input. */
       grams?: number;
     };
@@ -1139,14 +1125,7 @@ export interface components {
       /** Server-assigned unique ID of this withdrawal, its ID. Omit when creating a new withdrawal. */
       id?: number;
       date: string;
-      purpose:
-        | 'Propagation'
-        | 'Outreach or Education'
-        | 'Research'
-        | 'Broadcast'
-        | 'Share with Another Site'
-        | 'Other'
-        | 'Germination Testing';
+      purpose: 'Propagation' | 'Outreach or Education' | 'Research' | 'Broadcast' | 'Share with Another Site' | 'Other' | 'Germination Testing';
       destination?: string;
       notes?: string;
       /** Quantity of seeds remaining. For weight-based accessions, this is user input and is required. For count-based accessions, it is calculated by the server and ignored on input. */
@@ -1588,11 +1567,12 @@ export interface operations {
   };
   getPlantSummary: {
     parameters: {
-      query: {
-        payload: components['schemas']['GetPlantSummaryPayload'];
-      };
       path: {
         layerId: number;
+      };
+      query: {
+        minEnteredTime?: string;
+        maxEnteredTime?: string;
       };
     };
     responses: {
@@ -1606,11 +1586,14 @@ export interface operations {
   };
   getPlantsList: {
     parameters: {
-      query: {
-        payload: components['schemas']['ListPlantsRequestPayload'];
-      };
       path: {
         layerId: number;
+      };
+      query: {
+        speciesName?: string;
+        minEnteredTime?: string;
+        maxEnteredTime?: string;
+        notes?: string;
       };
     };
     responses: {
@@ -1667,6 +1650,18 @@ export interface operations {
       content: {
         'application/json': components['schemas']['UpdatePlantRequestPayload'];
       };
+    };
+  };
+  /** For interactive web applications, this can be used to redirect the user to a login page to allow the application to make other API requests. The login process will set a cookie that will authenticate to the API, and will then redirect back to the application. One approach is to use this in error response handlers: if an API request returns HTTP 401 Unauthorized, set location.href to this endpoint and set "redirect" to the URL of the page the user was on so they'll return there after logging in. */
+  login: {
+    parameters: {
+      query: {
+        redirect: string;
+      };
+    };
+    responses: {
+      /** Redirects to a login page. After login, the user will be redirected back to the URL specified in the "redirect" parameter. */
+      302: never;
     };
   };
   /** List all organizations the user can access. */
@@ -1747,7 +1742,7 @@ export interface operations {
   read: {
     parameters: {
       path: {
-        accessionNumber: string;
+        id: string;
       };
     };
     responses: {
@@ -1768,7 +1763,7 @@ export interface operations {
   update: {
     parameters: {
       path: {
-        accessionNumber: string;
+        id: string;
       };
       query: {
         simulate?: boolean;
@@ -1797,7 +1792,7 @@ export interface operations {
   listPhotos: {
     parameters: {
       path: {
-        accessionNumber: string;
+        id: string;
       };
     };
     responses: {
@@ -1819,7 +1814,7 @@ export interface operations {
   getPhoto: {
     parameters: {
       path: {
-        accessionNumber: string;
+        id: string;
         photoFilename: string;
       };
       query: {
@@ -1845,7 +1840,7 @@ export interface operations {
   uploadPhoto: {
     parameters: {
       path: {
-        accessionNumber: string;
+        id: string;
         photoFilename: string;
       };
     };
@@ -2145,6 +2140,16 @@ export interface operations {
       200: {
         content: {
           'application/json': components['schemas']['StorageLocationsResponsePayload'];
+        };
+      };
+    };
+  };
+  listSites: {
+    responses: {
+      /** Client is not associated with an organization. */
+      400: {
+        content: {
+          'application/json': components['schemas']['ListSitesResponse'];
         };
       };
     };

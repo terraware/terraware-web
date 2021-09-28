@@ -1,53 +1,63 @@
 import axios from 'axios';
-import { SearchOptions } from '../../state/selectors/plantsPlantedFiltered';
-import { Plant, PlantSummary } from '../types/plant';
+import {
+  ListPlantsResponseElement,
+  ListPlantsResponsePayload,
+  PlantResponse,
+  PlantSummary,
+  PlantSummaryResponsePayload,
+  SearchOptions,
+  UpdatePlantRequestPayload,
+  UpdatePlantResponsePayload,
+} from '../types/plant';
 
-const BASE_URL = `${process.env.REACT_APP_TERRAWARE_API}/api/v1/plants`;
+const BASE_URL = `${process.env.REACT_APP_TERRAWARE_API}/api/v1/gis/plants`;
 
-export const getPlants = async (layerId: number): Promise<Plant[]> => {
-  const endpoint = `${BASE_URL}?layer_id=${layerId}`;
+export const getPlants = async (layerId: number): Promise<ListPlantsResponseElement[]> => {
+  const endpoint = `${BASE_URL}/list/${layerId}`;
+  const response: ListPlantsResponsePayload = (await axios.get(endpoint)).data;
 
-  return (await axios.get(endpoint)).data.plants;
+  return response.list;
 };
 
-export const getPlantSummary = async (
-  layerId: number,
-  maxEnteredTime: string
-): Promise<PlantSummary[]> => {
-  const endpoint = `${BASE_URL}?layer_id=${layerId}&max_entered_time=${maxEnteredTime}&summary=true`;
+export const getPlantSummary = async (layerId: number, maxEnteredTime: string): Promise<PlantSummary[]> => {
+  const endpoint = `${BASE_URL}/list/summary/${layerId}&maxEnteredTime=${maxEnteredTime}`;
+  const response: PlantSummaryResponsePayload = (await axios.get(endpoint)).data;
 
-  return (await axios.get(endpoint)).data.species_counts;
+  const apiSummary = response.summary;
+  const apiSummaryKeys = Object.keys(apiSummary);
+
+  const plantSummary: PlantSummary[] = [];
+  for (const key of apiSummaryKeys) {
+    plantSummary.push({
+      speciesId: parseInt(key, 10),
+      count: apiSummary[key],
+    });
+  }
+
+  return plantSummary;
 };
 
-export const deletePlant = async (featureId: number): Promise<Plant> => {
+export const putPlant = async (featureId: number, plant: UpdatePlantRequestPayload): Promise<PlantResponse> => {
   const endpoint = `${BASE_URL}/${featureId}`;
+  const response: UpdatePlantResponsePayload = (await axios.put(endpoint, plant)).data;
 
-  return (await axios.delete(endpoint)).data;
-};
-
-export const putPlant = async (
-  featureId: number,
-  plant: Plant
-): Promise<Plant> => {
-  const endpoint = `${BASE_URL}/${featureId}`;
-
-  return (await axios.put(endpoint, plant)).data;
+  return response.plant;
 };
 
 type SearchOptionsKeys = keyof SearchOptions;
 
-export const getPlantsFiltered = async (
-  layerId: number,
-  filters: SearchOptions
-): Promise<Plant[]> => {
-  let endpoint = `${BASE_URL}/?layer_id=${layerId}`;
+export const getPlantsFiltered = async (layerId: number, filters: SearchOptions): Promise<ListPlantsResponseElement[]> => {
+  let endpoint = `${BASE_URL}/list/${layerId}`;
 
   const keys = Object.keys(filters) as SearchOptionsKeys[];
   keys.forEach((key) => {
     if (filters[key]) {
-      endpoint = endpoint.concat(`&${key}=${filters[key]}`);
+      endpoint = endpoint.includes('?') ? endpoint.concat('&') : endpoint.concat('?');
+      endpoint = endpoint.concat(`${key}=${filters[key]}`);
     }
   });
 
-  return (await axios.get(endpoint)).data.plants;
+  const response: ListPlantsResponsePayload = (await axios.get(endpoint)).data;
+
+  return response.list;
 };

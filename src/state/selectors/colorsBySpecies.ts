@@ -1,15 +1,15 @@
 import { selector } from 'recoil';
 import generateRandomColor from '../../utils/generateRandomColor';
-import speciesNamesBySpeciesIdSelector from './speciesNamesBySpeciesId';
+import speciesByIdSelector from './speciesById';
 
 const LOCAL_STORAGE_KEY = 'speciesColors';
 
 export default selector<Record<number, string>>({
   key: 'colorsBySpeciesSelector',
   get: ({ get }) => {
-    const speciesNamesBySpeciesId = get(speciesNamesBySpeciesIdSelector);
-    const speciesIds = speciesNamesBySpeciesId
-      ? Object.keys(speciesNamesBySpeciesId)
+    const speciesById = get(speciesByIdSelector);
+    const speciesIds = speciesById
+      ? Object.keys(speciesById)
       : [];
 
     let colorsBySpecies: Record<number, string> = {};
