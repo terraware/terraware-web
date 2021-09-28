@@ -1,6 +1,7 @@
 import { atom, selector } from 'recoil';
 import { getLocations } from '../../api/seeds/locations';
 import { Locations } from '../../api/types/locations';
+import { facilityIdSelector } from './facility';
 
 const locationsAtom = atom({
   key: 'locationsTrigger',
@@ -12,7 +13,9 @@ export default selector<Locations>({
   get: async ({ get }) => {
     get(locationsAtom);
 
-    return await getLocations();
+    const facilityId = get(facilityIdSelector);
+
+    return await getLocations(facilityId);
   },
   set: ({ set }) => {
     set(locationsAtom, (v) => v + 1);

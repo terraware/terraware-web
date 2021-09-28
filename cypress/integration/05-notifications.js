@@ -65,7 +65,7 @@ describe('Notifications', () => {
       'markRead'
     );
     cy.intercept('POST', '/api/v1/seedbank/notification').as('notification');
-    cy.get('#notification9').click().url().should('contain', '/accessions/XYZ');
+    cy.get('#notification9').click().url().should('contain', '/accessions/1000');
     cy.wait('@markRead');
     cy.wait('@notification');
   });

@@ -1,8 +1,8 @@
--- Add a dummy user for CI tests. In tests, we'll bypass the login flow by passing
--- authentication information that would normally be added by OAuth2 Proxy.
+-- Add a dummy user for CI tests. In tests, we'll bypass the login flow by pretending
+-- that we already have a valid login session.
 INSERT INTO users (id, auth_id, email, first_name, last_name, user_type_id, created_time,
                    modified_time)
-VALUES (1, 'dummy-auth-id', 'nobody@terraformation.com', 'Test', 'User', 1, NOW(), NOW())
+VALUES (1, '0d04525c-7933-4cec-9647-7b6ac2642838', 'nobody@terraformation.com', 'Test', 'User', 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET auth_id = excluded.auth_id,
                                first_name = excluded.first_name,
                                last_name = excluded.last_name,
@@ -25,8 +25,8 @@ INSERT INTO project_users (user_id, project_id, created_time, modified_time)
 VALUES (1, 10, NOW(), NOW())
 ON CONFLICT DO NOTHING;
 
-INSERT INTO sites (id, project_id, name, latitude, longitude, locale, timezone)
-VALUES (10, 10, 'Example Site', 123.456789, -98.76543, 'en-US', 'US/Pacific')
+INSERT INTO sites (id, project_id, name, location, locale, timezone, created_time, modified_time)
+VALUES (10, 10, 'Example Site', st_setsrid(st_makepoint(23.456789, -98.76543, 0), 3857), 'en-US', 'US/Pacific', NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET name = excluded.name;
 
 INSERT INTO facilities (id, site_id, type_id, name)
@@ -129,3 +129,21 @@ INSERT INTO photos (id, captured_time, file_name, content_type, size, created_ti
 (1002, '2021-02-03 11:33:44+00', 'accession2.jpg', 'image/jpeg', 6539, '2021-02-12 18:36:15.903768+00', '2021-02-12 18:36:15.903768+00', 'file:///100/A/A/F/AAF4D49R3E/accession2.jpg');
 
 INSERT INTO accession_photos (photo_id, accession_id) VALUES (1001, 1002), (1002, 1002);
+
+-- Session data. The big hex blob is a serialized Java object; it was created by logging into a
+-- real terraware-server instance using Keycloak and querying the session store, then tweaking
+-- the idle and expiration times so it will remain valid for testing.
+INSERT INTO spring_session (primary_id, session_id, creation_time, last_access_time,
+                            max_inactive_interval, expiry_time, principal_name)
+VALUES ('b84131c0-7bee-4363-827e-291becc06698', '276714ad-ab0a-48aa-8ef8-db65ec2e950a',
+        1632267607787, 1632267674313, 315360000, 3000000000000,
+        '0d04525c-7933-4cec-9647-7b6ac2642838')
+ON CONFLICT (primary_id) DO UPDATE SET session_id = excluded.session_id,
+                                       max_inactive_interval = excluded.max_inactive_interval,
+                                       expiry_time = excluded.expiry_time,
+                                       principal_name = excluded.principal_name;
+
+INSERT INTO spring_session_attributes (session_primary_id, attribute_name, attribute_bytes)
+VALUES ('b84131c0-7bee-4363-827e-291becc06698', 'SPRING_SECURITY_CONTEXT', '\xaced00057372003d6f72672e737072696e676672616d65776f726b2e73656375726974792e636f72652e636f6e746578742e5365637572697479436f6e74657874496d706c000000000000021c0200014c000e61757468656e7469636174696f6e7400324c6f72672f737072696e676672616d65776f726b2f73656375726974792f636f72652f41757468656e7469636174696f6e3b78707372005b6f72672e737072696e676672616d65776f726b2e73656375726974792e7765622e61757468656e7469636174696f6e2e707265617574682e50726541757468656e7469636174656441757468656e7469636174696f6e546f6b656e000000000000021c0200024c000b63726564656e7469616c737400124c6a6176612f6c616e672f4f626a6563743b4c00097072696e636970616c71007e0004787200476f72672e737072696e676672616d65776f726b2e73656375726974792e61757468656e7469636174696f6e2e416273747261637441757468656e7469636174696f6e546f6b656ed3aa287e6e47640e0200035a000d61757468656e746963617465644c000b617574686f7269746965737400164c6a6176612f7574696c2f436f6c6c656374696f6e3b4c000764657461696c7371007e00047870007372001f6a6176612e7574696c2e436f6c6c656374696f6e7324456d7074794c6973747ab817b43ca79ede02000078707074000564756d6d797372002c6f72672e6b6579636c6f616b2e61646170746572732e746f6d6361742e53696d706c655072696e636970616c1184d95c3f8372c90200014c00046e616d657400124c6a6176612f6c616e672f537472696e673b787074002430643034353235632d373933332d346365632d393634372d376236616332363432383338')
+ON CONFLICT (session_primary_id, attribute_name) DO UPDATE
+SET attribute_bytes = excluded.attribute_bytes;

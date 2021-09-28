@@ -81,14 +81,14 @@ export interface paths {
   '/api/v1/seedbank/accession': {
     post: operations['create'];
   };
-  '/api/v1/seedbank/accession/{accessionNumber}': {
+  '/api/v1/seedbank/accession/{id}': {
     get: operations['read'];
     put: operations['update'];
   };
-  '/api/v1/seedbank/accession/{accessionNumber}/photo': {
+  '/api/v1/seedbank/accession/{id}/photo': {
     get: operations['listPhotos'];
   };
-  '/api/v1/seedbank/accession/{accessionNumber}/photo/{photoFilename}': {
+  '/api/v1/seedbank/accession/{id}/photo/{photoFilename}': {
     /** Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio. */
     get: operations['getPhoto'];
     post: operations['uploadPhoto'];
@@ -123,7 +123,7 @@ export interface paths {
   '/api/v1/seedbank/search/export': {
     post: operations['export'];
   };
-  '/api/v1/seedbank/summary': {
+  '/api/v1/seedbank/summary/{facilityId}': {
     get: operations['getSummary'];
   };
   '/api/v1/seedbank/timeseries': {
@@ -145,7 +145,7 @@ export interface paths {
     /** Use /api/v1/species instead. */
     post: operations['updateSpecies'];
   };
-  '/api/v1/seedbank/values/storageLocation': {
+  '/api/v1/seedbank/values/storageLocation/{facilityId}': {
     get: operations['getStorageLocations'];
   };
   '/api/v1/site/{siteId}': {
@@ -196,12 +196,14 @@ export interface components {
       endangered?: 'No' | 'Yes' | 'Unsure';
       environmentalNotes?: string;
       estimatedSeedCount?: number;
+      facilityId: number;
       family?: string;
       fieldNotes?: string;
       founderId?: string;
       geolocations?: components['schemas']['Geolocation'][];
       germinationTests?: components['schemas']['GerminationTestPayload'][];
       germinationTestTypes?: ('Lab' | 'Nursery')[];
+      id: number;
       /** Initial size of accession. The units of this value must match the measurement type in "processingMethod". */
       initialQuantity?: components['schemas']['SeedQuantityPayload'];
       landowner?: string;
@@ -290,7 +292,7 @@ export interface components {
       deviceInfo?: components['schemas']['DeviceInfoPayload'];
       endangered?: 'No' | 'Yes' | 'Unsure';
       environmentalNotes?: string;
-      facilityId?: number;
+      facilityId: number;
       family?: string;
       fieldNotes?: string;
       founderId?: string;
@@ -456,6 +458,7 @@ export interface components {
       message: string;
     };
     ExportRequestPayload: {
+      facilityId: number;
       fields: components['schemas']['SearchField'][];
       sortOrder?: components['schemas']['SearchSortOrderElement'][];
       filters?: components['schemas']['SearchFilter'][];
@@ -622,6 +625,7 @@ export interface components {
       coordinates: unknown;
     };
     ListAllFieldValuesRequestPayload: {
+      facilityId: number;
       fields: components['schemas']['SearchField'][];
     };
     ListAllFieldValuesResponsePayload: {
@@ -637,7 +641,10 @@ export interface components {
     ListFacilitiesElement: {
       id: number;
       name: string;
-      type: number;
+      type:
+        | 'Seed Bank'
+        | 'Desalination'
+        | 'Reverse Osmosis';
       role: string;
     };
     ListFacilitiesResponse: {
@@ -658,6 +665,7 @@ export interface components {
       status: components['schemas']['SuccessOrError'];
     };
     ListFieldValuesRequestPayload: {
+      facilityId: number;
       fields: components['schemas']['SearchField'][];
       filters?: components['schemas']['SearchFilter'][];
       search?:
@@ -759,7 +767,9 @@ export interface components {
       /** Plain-text body of notification. */
       text: string;
       /** For accession notifications, which accession caused the notification. */
-      accessionNumber?: string;
+      accessionId: number;
+      /** For accession notifications, which accession caused the notification. */
+      accessionNumber: string;
       /** For state notifications, which state is being summarized. */
       state?:
         | 'Pending'
@@ -882,6 +892,7 @@ export interface components {
     /** A search criterion. The search will return results that match this criterion. The criterion can be composed of other search criteria to form arbitrary Boolean search expressions. TYPESCRIPT-OVERRIDE-TYPE-WITH-ANY */
     SearchNodePayload: any;
     SearchRequestPayload: {
+      facilityId: number;
       fields: components['schemas']['SearchField'][];
       sortOrder?: components['schemas']['SearchSortOrderElement'][];
       filters?: components['schemas']['SearchFilter'][];
@@ -1747,7 +1758,7 @@ export interface operations {
   read: {
     parameters: {
       path: {
-        accessionNumber: string;
+        id: number;
       };
     };
     responses: {
@@ -1768,7 +1779,7 @@ export interface operations {
   update: {
     parameters: {
       path: {
-        accessionNumber: string;
+        id: number;
       };
       query: {
         simulate?: boolean;
@@ -1797,7 +1808,7 @@ export interface operations {
   listPhotos: {
     parameters: {
       path: {
-        accessionNumber: string;
+        id: number;
       };
     };
     responses: {
@@ -1819,7 +1830,7 @@ export interface operations {
   getPhoto: {
     parameters: {
       path: {
-        accessionNumber: string;
+        id: number;
         photoFilename: string;
       };
       query: {
@@ -1845,7 +1856,7 @@ export interface operations {
   uploadPhoto: {
     parameters: {
       path: {
-        accessionNumber: string;
+        id: number;
         photoFilename: string;
       };
     };
@@ -2013,6 +2024,11 @@ export interface operations {
     };
   };
   getSummary: {
+    parameters: {
+      path: {
+        facilityId: number;
+      };
+    };
     responses: {
       /** OK */
       200: {
@@ -2140,6 +2156,11 @@ export interface operations {
     };
   };
   getStorageLocations: {
+    parameters: {
+      path: {
+        facilityId: number;
+      };
+    };
     responses: {
       /** OK */
       200: {
