@@ -12,7 +12,7 @@ describe('Accessions', () => {
       cy.get('#sessions-change').contains('0% since last week');
       cy.get('#sessions-arrow-increase').should('exist');
 
-      cy.get('#species-current').contains('2');
+      cy.get('#species-current').contains('4');
       cy.get('#species-details').children().should('have.length', 0);
 
       cy.get('#families-current').contains('1');
@@ -230,7 +230,7 @@ describe('Accessions', () => {
       cy.get('#sessions-change').contains('33% since last week');
       cy.get('#sessions-arrow-increase').should('exist');
 
-      cy.get('#species-current').contains('4');
+      cy.get('#species-current').contains('6');
       cy.get('#species-details').children().should('have.length', 0);
 
       cy.get('#families-current').contains('2');
