@@ -1,4 +1,7 @@
 describe('Processing and Drying', () => {
+  beforeEach(() => {
+    cy.window().then((win) => (win.onbeforeunload = undefined));
+  });
   it('should create the accession and navigate to processing and drying section', () => {
     cy.visit('/accessions/new');
     cy.get('#saveAccession').click();
@@ -18,9 +21,9 @@ describe('Processing and Drying', () => {
     cy.get('#processingNotes').type('A processing note');
     cy.get('#processingStaffResponsible').type('Constanza');
 
-    cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
+    cy.intercept('PUT', 'api/v1/seedbank/accession/*').as('putAccession');
     cy.get('#saveAccession').click();
-    cy.wait('@getAccession');
+    cy.wait('@putAccession');
 
     cy.get('#processingMethod + input').should('have.value', 'Count');
     cy.get('#quantity').should('have.value', '300');
@@ -81,7 +84,7 @@ describe('Processing and Drying', () => {
       cy.get('#sessions-change').contains('67% since last week');
       cy.get('#sessions-arrow-increase').should('exist');
 
-      cy.get('#species-current').contains('4');
+      cy.get('#species-current').contains('6');
       cy.get('#species-details').children().should('have.length', 0);
 
       cy.get('#families-current').contains('2');

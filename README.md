@@ -7,14 +7,12 @@
 ### Step 1: Configure the `.env` file
 
 ```
-KEYCLOAK_AUTH_SERVER_URL=(URL of Keycloak server)
-KEYCLOAK_CREDENTIALS_SECRET=(client secret for the dev-terraware-server user)
-KEYCLOAK_REALM=terraware
-KEYCLOAK_RESOURCE=dev-terraware-server
-REACT_APP_TERRAWARE_API=http://localhost:8008
+KEYCLOAK_RESOURCE=(Keycloak client ID)
+KEYCLOAK_CREDENTIALS_SECRET=(Keycloak client secret)
+KEYCLOAK_REALM=(Keycloak realm)
+KEYCLOAK_AUTH_SERVER_URL=(Keycloak server URL)
+REACT_APP_TERRAWARE_API=http://localhost:8080
 ```
-
-For the Keycloak settings, get the client secret and URL from an existing member of the team.
 
 ### Step 2: Login to Docker hub
 
@@ -93,4 +91,4 @@ This will create the file `src/api/types/generated-schema.ts`
 
 ### TreeLocator API
 
-The Swagger documentation can be accesed [here](http://localhost:8008/docs)
+The Swagger documentation can be accesed [here](http://localhost:8080/docs)

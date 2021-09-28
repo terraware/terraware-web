@@ -1,10 +1,10 @@
 import { selector } from 'recoil';
 import { getSites } from '../../api/plants/sites';
-import { Site } from '../../api/types/site';
+import { SiteElement } from '../../api/types/site';
 
-export default selector<Site[] | undefined>({
+export default selector<SiteElement[] | undefined>({
   key: 'sitesSelector',
-  get: async ({ get }) => {
+  get: async () => {
     return await getSites();
   },
 });

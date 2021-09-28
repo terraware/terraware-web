@@ -1,5 +1,6 @@
 #!/bin/sh
 docker-compose down
+yes | docker volume prune
 yarn docker:start
 if yarn wait-be; then
     docker exec -i tree-location-web_postgres_1 psql -d terraware -U postgres < dump/dump.sql
@@ -11,3 +12,4 @@ else
     docker logs tree-location-web_terraware-server_1
     exit 1
 fi
+yarn server:prepare

@@ -5,7 +5,7 @@ import {
   Grid,
   Link,
   Paper,
-  Typography,
+  Typography
 } from '@material-ui/core';
 import Fab from '@material-ui/core/Fab';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
@@ -16,7 +16,7 @@ import React, { Suspense } from 'react';
 import { Redirect, useHistory } from 'react-router-dom';
 import { useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil';
 import { getPhotoEndpoint, postAccession } from '../../../api/seeds/accession';
-import { updateSpecies } from '../../../api/seeds/species-seedbank';
+import { updateSpecies } from '../../../api/seeds/species';
 import { Accession, NewAccession } from '../../../api/types/accessions';
 import snackbarAtom from '../../../state/atoms/snackbar';
 import searchSelector from '../../../state/selectors/search';
