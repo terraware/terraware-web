@@ -52,10 +52,10 @@ curl "http://localhost:8080/api/v1/gis/features/${featureId}/photos?capturedTime
   -H 'accept: application/json' \
   -H 'Content-Type: multipart/form-data' \
   -F 'file=@./scripts/banana.jpeg;type=image/jpeg'
-# curl 'http://localhost:8080/api/v1/gis/plants' \
-#   --cookie "${COOKIE}"  \
-#   -H 'Content-Type: application/json' \
-#   --data '{"featureId": 1,"label": "Plant 1","speciesId": 1}'
+curl 'http://localhost:8080/api/v1/gis/plants' \
+  --cookie "${COOKIE}"  \
+  -H 'Content-Type: application/json' \
+  --data '{"featureId": "'"$featureId"'","label": "Plant 1","speciesId": 1}'
 
 featureId_2=$(curl 'http://localhost:8080/api/v1/features' \
   --cookie "${COOKIE}" \
@@ -66,10 +66,10 @@ curl "http://localhost:8080/api/v1/gis/features/${featureId_2}/photos?capturedTi
   -H 'accept: application/json' \
   -H 'Content-Type: multipart/form-data' \
   -F 'file=@./scripts/banana.jpeg;type=image/jpeg'
-# curl 'http://localhost:8080/api/v1/gis/plants' \
-#   --cookie "${COOKIE}"  \
-#   -H 'Content-Type: application/json' \
-#   --data '{"featureId": 2,"label": "Plant 2","speciesId": 1}'
+curl 'http://localhost:8080/api/v1/gis/plants' \
+  --cookie "${COOKIE}"  \
+  -H 'Content-Type: application/json' \
+  --data '{"featureId": "'"$featureId2"'","label": "Plant 2","speciesId": 1}'
 
 featureId_3=$(curl 'http://localhost:8080/api/v1/features' \
   --cookie "${COOKIE}" \
@@ -80,10 +80,10 @@ curl "http://localhost:8080/api/v1/gis/features/${featureId_3}/photos?capturedTi
   -H 'accept: application/json' \
   -H 'Content-Type: multipart/form-data' \
   -F 'file=@./scripts/banana.jpeg;type=image/jpeg'
-# curl 'http://localhost:8080/api/v1/gis/plants' \
-#   --cookie "${COOKIE}"  \
-#   -H 'Content-Type: application/json' \
-#   --data '{"featureId": 3,"label": "Plant 3","speciesId": 1}'
+curl 'http://localhost:8080/api/v1/gis/plants' \
+  --cookie "${COOKIE}"  \
+  -H 'Content-Type: application/json' \
+  --data '{"featureId": "'"$featureId3"'","label": "Plant 3","speciesId": 1}'
 
 featureId_4=$(curl 'http://localhost:8080/api/v1/features' \
   --cookie "${COOKIE}" \
@@ -94,9 +94,9 @@ curl "http://localhost:8080/api/v1/gis/features/${featureId_4}/photos?capturedTi
   -H 'accept: application/json' \
   -H 'Content-Type: multipart/form-data' \
   -F 'file=@./scripts/banana.jpeg;type=image/jpeg'
-# curl 'http://localhost:8080/api/v1/gis/plants' \
-#   --cookie "${COOKIE}"  \
-#   -H 'Content-Type: application/json' \
-#   --data '{"featureId": 4,"label": "Plant 4","speciesId": 2}'
+curl 'http://localhost:8080/api/v1/gis/plants' \
+  --cookie "${COOKIE}"  \
+  -H 'Content-Type: application/json' \
+  --data '{"featureId": "'"$featureId4"'","label": "Plant 4","speciesId": 2}'
 
 echo "---- E2E: finished ----"
