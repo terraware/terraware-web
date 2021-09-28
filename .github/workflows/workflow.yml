@@ -65,7 +65,7 @@ jobs:
         uses: docker/setup-buildx-action@v1
 
       - name: Docker login
-        if: ${{ env.IS_CD == true }}
+        if: env.IS_CD == true
         uses: docker/login-action@v1
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
@@ -82,7 +82,7 @@ jobs:
           push: env.IS_CD == true
 
       - name: Configure AWS Credentials
-        if: ${{ env.IS_CD == true }}
+        if: env.IS_CD == true
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets[env.AWS_ACCESS_KEY_ID_SECRET_NAME] }}
@@ -90,7 +90,7 @@ jobs:
           aws-region: ${{ secrets[env.AWS_REGION_SECRET_NAME] }}
 
       - name: Deploy
-        if: ${{ env.IS_CD == true }}
+        if: env.IS_CD == true
         env:
           SSH_HOST: ${{ secrets[env.SSH_HOST_SECRET_NAME] }}
           SSH_KEY: ${{ secrets[env.SSH_KEY_SECRET_NAME] }}
