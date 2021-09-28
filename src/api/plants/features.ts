@@ -7,7 +7,7 @@ export const getFeatures = async (layerId: number): Promise<Feature[]> => {
   const endpoint = `${BASE_URL}/list/${layerId}`;
   const response: FeatureListResponse = (await axios.get(endpoint)).data;
 
-  return response.features;
+  return response.features as Feature[];
 };
 
 export const deleteFeature = async (featureId: number): Promise<FeatureDeleteResponse> => {
