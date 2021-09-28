@@ -1,4 +1,7 @@
 describe('Processing and Drying', () => {
+  beforeEach(() => {
+    cy.window().then((win) => (win.onbeforeunload = undefined));
+  });
   it('should create the accession and navigate to processing and drying section', () => {
     cy.visit('/accessions/new');
     cy.get('#saveAccession').click();
