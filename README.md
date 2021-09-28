@@ -41,7 +41,11 @@ yarn start
 
 ### Step 5: Logging into the app
 
-You need to access the app via the authentication proxy, which will be listening on port 4000, so point your browser at [http://localhost:4000/](http://localhost:4000/).
+API endpoints will return HTTP 401 if you're not logged in. If you want to manually log in, you can use the API endpoint that redirects you to a login page. It takes a parameter to tell it where to send you after you've logged in:
+
+```
+http://localhost:8080/api/v1/login?redirect=http://localhost:3000/
+```
 
 ### Step 6: Stopping the app
 
