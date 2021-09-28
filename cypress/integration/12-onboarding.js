@@ -6,7 +6,7 @@ describe('Onboarding test', () => {
     cy.wait('@notification');
     cy.wait('@summary');
     Cypress.Cookies.debug(true);
-    Cypress.Cookies.preserveOnce('onboarding');
+    Cypress.Cookies.preserveOnce('onboarding', 'SESSION');
     Cypress.Cookies.defaults({
       preserve: ['onboarding'],
     });

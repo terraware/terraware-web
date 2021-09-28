@@ -14,7 +14,7 @@ import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import moment from 'moment';
 import React, { Suspense } from 'react';
 import { Redirect, useHistory } from 'react-router-dom';
-import { useResetRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil';
 import { getPhotoEndpoint, postAccession } from '../../../api/seeds/accession';
 import { updateSpecies } from '../../../api/seeds/species-seedbank';
 import { Accession, NewAccession } from '../../../api/types/accessions';
@@ -36,6 +36,7 @@ import MainCollector from './MainCollectorDropdown';
 import NurseryButtons from './NurseryButtons';
 import SecondaryCollectors from './SecondaryCollectors';
 import Species from './SpeciesDropdown';
+import { facilityIdSelector } from '../../../state/selectors/facility';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -67,19 +68,20 @@ const useStyles = makeStyles((theme) =>
 );
 
 export default function NewAccessionWrapper(): JSX.Element {
-  const [accessionNumber, setAccessionNumber] = React.useState<string>();
+  const [accessionId, setAccessionId] = React.useState<number>();
   const setSnackbar = useSetRecoilState(snackbarAtom);
   const resetSearch = useResetRecoilState(searchSelector);
   const classes = useStyles();
   const history = useHistory();
   const location = useStateLocation();
+  const facilityId = useRecoilValue(facilityIdSelector);
 
   const onSubmit = async (record: NewAccession) => {
     try {
       const accession = await postAccession(record);
       resetSearch();
-      const { accessionNumber: accessionNum } = accession;
-      setAccessionNumber(accessionNum);
+      const { id: newAccessionId } = accession;
+      setAccessionId(newAccessionId);
       setSnackbar({ type: 'success', msg: strings.ACCESSION_SAVED });
     } catch (ex) {
       setSnackbar({
@@ -89,11 +91,11 @@ export default function NewAccessionWrapper(): JSX.Element {
     }
   };
 
-  if (accessionNumber) {
+  if (accessionId) {
     return (
       <Redirect
         to={getLocation(
-          `/accessions/${accessionNumber}/seed-collection`,
+          `/accessions/${accessionId}/seed-collection`,
           location
         )}
       />
@@ -125,6 +127,7 @@ export default function NewAccessionWrapper(): JSX.Element {
           <Grid item xs={10}>
             <AccessionForm
               accession={{
+                facilityId,
                 receivedDate: moment().format('YYYY-MM-DD'),
               }}
               onSubmit={onSubmit}
@@ -513,7 +516,7 @@ export function AccessionForm<T extends NewAccession>({
                     key={index}
                     target='_blank'
                     href={getPhotoEndpoint(
-                      (record as unknown as Accession).accessionNumber ?? '',
+                      (record as unknown as Accession).id,
                       photo
                     )}
                   >

@@ -104,9 +104,9 @@ export default function Database(): JSX.Element {
       : undefined;
 
   const onSelect = (row: SearchResponseResults) => {
-    if (row.accessionNumber) {
+    if (row.id) {
       const seedCollectionLocation = {
-        pathname: `/accessions/${row.accessionNumber}`,
+        pathname: `/accessions/${row.id}`,
         // eslint-disable-next-line no-restricted-globals
         state: { from: location.pathname },
       };
