@@ -25,8 +25,8 @@ INSERT INTO project_users (user_id, project_id, created_time, modified_time)
 VALUES (1, 10, NOW(), NOW())
 ON CONFLICT DO NOTHING;
 
-INSERT INTO sites (id, project_id, name, latitude, longitude, locale, timezone)
-VALUES (10, 10, 'Example Site', 123.456789, -98.76543, 'en-US', 'US/Pacific')
+INSERT INTO sites (id, project_id, name, location, locale, timezone, created_time, modified_time)
+VALUES (10, 10, 'Example Site', st_setsrid(st_makepoint(23.456789, -98.76543, 0), 3857), 'en-US', 'US/Pacific', NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET name = excluded.name;
 
 INSERT INTO facilities (id, site_id, type_id, name)
