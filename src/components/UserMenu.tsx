@@ -31,8 +31,7 @@ export default function UserMenu(): JSX.Element {
   };
 
   const onHandleLogout = () => {
-    window.location.href =
-      'https://auth.staging.terraware.io/auth/realms/terraware/protocol/openid-connect/logout?redirect_uri=http://localhost:4000/oauth2/sign_out';
+    window.location.href = `${process.env.REACT_APP_TERRAWARE_API}/sso/logout`;
   };
 
   return (
