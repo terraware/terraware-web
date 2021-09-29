@@ -21,9 +21,7 @@ describe('Processing and Drying', () => {
     cy.get('#processingNotes').type('A processing note');
     cy.get('#processingStaffResponsible').type('Constanza');
 
-    cy.intercept('PUT', 'api/v1/seedbank/accession/*').as('putAccession');
     cy.get('#saveAccession').click();
-    cy.wait('@putAccession');
 
     cy.get('#processingMethod + input').should('have.value', 'Count');
     cy.get('#quantity').should('have.value', '300');
