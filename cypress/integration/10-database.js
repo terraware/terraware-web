@@ -1,4 +1,4 @@
-describe.skip('Database', () => {
+describe('Database', () => {
   context('Customize columns', () => {
     it('should display the default columns', () => {
       cy.visit('/accessions');
