@@ -1,7 +1,7 @@
 const { createProxyMiddleware } = require('http-proxy-middleware');
 
 module.exports = function(app) {
-  const server_paths = [
+  const serverPaths = [
     '/admin',
     '/api',
     '/sso',
@@ -10,7 +10,7 @@ module.exports = function(app) {
     '/v3',
   ];
 
-  server_paths.forEach((path) => {
+  serverPaths.forEach((path) => {
     app.use(path, createProxyMiddleware({target: process.env.REACT_APP_TERRAWARE_API}));
   });
 };
