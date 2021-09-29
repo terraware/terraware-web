@@ -115,20 +115,13 @@ function NewSpecieModal(props: Props): JSX.Element {
   };
 
   const handleOk = async () => {
-    console.log('handleOk');
     if (plantsByFeature && record.featureId) {
-      console.log('if');
       const previousPlant = plantsByFeature[record.featureId];
-      console.log('previous species');
-      console.log(previousPlant.speciesId);
-      console.log('new species');
-      console.log(record.speciesId);
       if (record.speciesId !== undefined) {
         const newPlant = {
           ...previousPlant,
           speciesId: record.speciesId !== 0 ? record.speciesId : undefined,
         };
-        console.log(newPlant);
         await putPlant(record.featureId, newPlant);
         onClose(strings.SNACKBAR_MSG_CHANGES_SAVED);
 
@@ -136,7 +129,6 @@ function NewSpecieModal(props: Props): JSX.Element {
         resetSpeciesForChart();
         resetplantsFiltered();
       } else if (record.species) {
-        console.log('else');
         const newSpeciesData: SpeciesType = { name: record.species };
         const newSpecies = await postSpecies(newSpeciesData);
         const newPlant = { ...previousPlant, speciesId: newSpecies.id };

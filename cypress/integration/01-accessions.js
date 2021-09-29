@@ -1,4 +1,4 @@
-describe.skip('Accessions', () => {
+describe('Accessions', () => {
   context('Summary Start Results', () => {
     beforeEach(() => {
       cy.visit('/summary');

@@ -1,4 +1,4 @@
-describe.skip('Searchbar', () => {
+describe('Searchbar', () => {
   context('search', () => {
     it('should redirect the user to the correct page', () => {
       cy.visit('/accessions/new');

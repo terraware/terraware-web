@@ -1,4 +1,4 @@
-describe.skip('Lab', () => {
+describe('Lab', () => {
   it('should not create Lab menu if not selecting any test', () => {
     cy.visit('/accessions/new');
     cy.get('#saveAccession').click();
