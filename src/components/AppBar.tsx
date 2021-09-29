@@ -45,6 +45,7 @@ const useStyles = makeStyles((theme) =>
       backgroundColor: theme.palette.gray[200],
       marginTop: '8px',
       marginRight: '16px',
+      marginLeft: '16px',
     },
   })
 );
