@@ -9,6 +9,9 @@ Host bastion
   User $SSH_USER
   IdentityFile ~/.ssh/staging.key
   StrictHostKeyChecking no
+
+Host *
+  ProxyCommand ssh -W %h:%p -q bastion
 END
 
 aws ec2 describe-instances --filters "Name=tag:Application,Values=terraware" \
@@ -17,5 +20,5 @@ aws ec2 describe-instances --filters "Name=tag:Application,Values=terraware" \
       echo
       echo "Deploying to $_ip"
       echo
-      ssh -A bastion ssh $_ip /usr/local/bin/update.sh
+      ssh $_ip /usr/local/bin/update.sh
     done
