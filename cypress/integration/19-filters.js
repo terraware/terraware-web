@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 /// <reference types="cypress" />
 
-describe.skip('Filter plants', () => {
+describe('Filter plants', () => {
   beforeEach(() => {
     cy.visit('/');
     cy.get('#plants').click().url().should('contain', '/plants');

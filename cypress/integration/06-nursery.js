@@ -1,4 +1,4 @@
-describe('Nursery', () => {
+describe.skip('Nursery', () => {
   it('should not create Germination menu if not selecting any test', () => {
     cy.visit('/accessions/new');
     cy.get('#saveAccession').click();
