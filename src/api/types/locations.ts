@@ -1,4 +1,4 @@
-import { components } from './generated-schema-seedbank';
+import { components } from './generated-schema';
 
 export type Locations = components['schemas']['StorageLocationsResponsePayload']['locations'];
 

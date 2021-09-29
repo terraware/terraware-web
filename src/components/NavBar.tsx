@@ -1,8 +1,8 @@
 import { useHistory, useRouteMatch } from 'react-router-dom';
 import { useResetRecoilState } from 'recoil';
-import { plantsPlantedSelector } from '../state/selectors/plantsPlanted';
-import { plantsPlantedFeaturesSelector } from '../state/selectors/plantsPlantedFeatures';
-import { plantsPlantedFilteredSelector } from '../state/selectors/plantsPlantedFiltered';
+import { plantsSelector } from '../state/selectors/plants';
+import { plantsFeaturesSelector } from '../state/selectors/plantsFeatures';
+import { plantsFilteredSelector } from '../state/selectors/plantsFiltered';
 import strings from '../strings';
 import Navbar from './common/Navbar/Navbar';
 import NavItem from './common/Navbar/NavItem';
@@ -17,12 +17,12 @@ export default function NavBar(): JSX.Element | null {
   const isPlantsRoute = useRouteMatch('/plants/');
   const isAccessionsRoute = useRouteMatch('/accessions/');
   const isSummaryRoute = useRouteMatch('/summary/');
-  const resetPlantsPlanted = useResetRecoilState(plantsPlantedSelector);
-  const resetPlantsPlantedFiltered = useResetRecoilState(
-    plantsPlantedFilteredSelector
+  const resetplants = useResetRecoilState(plantsSelector);
+  const resetplantsFiltered = useResetRecoilState(
+    plantsFilteredSelector
   );
-  const resetPlantsPlantedFeatures = useResetRecoilState(
-    plantsPlantedFeaturesSelector
+  const resetplantsFeatures = useResetRecoilState(
+    plantsFeaturesSelector
   );
 
   const navigate = (url: string) => {
@@ -30,19 +30,14 @@ export default function NavBar(): JSX.Element | null {
   };
 
   const navigateToDashboard = () => {
-    resetPlantsPlanted();
+    resetplants();
     navigate('/dashboard');
   };
 
   const navigateToAllPlants = () => {
-    resetPlantsPlantedFeatures();
-    resetPlantsPlantedFiltered();
+    resetplantsFeatures();
+    resetplantsFiltered();
     navigate('/plants');
-  };
-
-  const onHandleLogout = () => {
-    window.location.href =
-      'https://auth.staging.terraware.io/auth/realms/terraware/protocol/openid-connect/logout?redirect_uri=http://localhost:4000/oauth2/sign_out';
   };
 
   return (
@@ -89,14 +84,6 @@ export default function NavBar(): JSX.Element | null {
         selected={isSpeciesRoute ? true : false}
         onClick={() => navigate('/species')}
         id='speciesNb'
-      />
-      <NavSection />
-      <NavItem
-        label={strings.LOGOUT}
-        icon='key'
-        selected={false}
-        onClick={onHandleLogout}
-        id='logout'
       />
     </Navbar>
   );

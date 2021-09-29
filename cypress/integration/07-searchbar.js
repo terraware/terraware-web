@@ -7,13 +7,12 @@ describe('Searchbar', () => {
 
       cy.get('#header-accessionNumber').then(($accessionNumberElement) => {
         const accessionNumber = $accessionNumberElement.text();
-        cy.visit('/summary');
-        cy.get('#declineTour').click();
-        cy.get('#search-bar').type(accessionNumber);
-        cy.get('#search-bar-option-0')
-          .click()
-          .url()
-          .should('include', `/accessions/${accessionNumber}/seed-collection`);
+
+        cy.url().then((url) => {
+          cy.visit('/summary');
+          cy.get('#search-bar').type(accessionNumber);
+          cy.get('#search-bar-option-0').click().url().should('eq', url);
+        });
       });
     });
   });
@@ -28,7 +27,7 @@ describe('Searchbar', () => {
       cy.get('#sessions-change').contains('267% since last week');
       cy.get('#sessions-arrow-increase').should('exist');
 
-      cy.get('#species-current').contains('4');
+      cy.get('#species-current').contains('6');
       cy.get('#species-details').children().should('have.length', 0);
 
       cy.get('#families-current').contains('2');

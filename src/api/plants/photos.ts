@@ -1,22 +1,28 @@
 import axios from 'axios';
-import { Photo } from '../types/photo';
+import { FeaturePhoto, ListFeaturePhotosResponsePayload } from '../types/photo';
 
-const BASE_URL = `${process.env.REACT_APP_TERRAWARE_API}/api/v1/photos`;
+const BASE_URL = `${process.env.REACT_APP_TERRAWARE_API}/api/v1/gis/features`;
 
-export const getPhotos = async (featureId: number): Promise<Photo[]> => {
-  const endpoint = `${BASE_URL}?feature_id=${featureId}`;
+export const getPhotos = async (featureId: number): Promise<FeaturePhoto[]> => {
+  const endpoint = `${BASE_URL}/${featureId}/photos`;
 
-  return (await axios.get(endpoint)).data.photos;
+  const response: ListFeaturePhotosResponsePayload = (await axios.get(endpoint)).data;
+
+  return response.photos;
 };
 
-export const getPhotoBlob = async (photoId: number): Promise<Blob> => {
-  const endpoint = `${BASE_URL}/${photoId}?image=true`;
+export const getPhotoBlob = async (featureId: number, photoId: number): Promise<Blob | null> => {
+  const endpoint = `${BASE_URL}/${featureId}/photos/${photoId}`;
 
   const response = await axios.get(endpoint, {
     responseType: 'arraybuffer',
   });
 
-  const blob = new Blob([response.data]);
+  if (response.status === 200) {
+    return new Blob([response.data]);
+  } else {
+    console.error('Could not fetch Feature Photo.');
 
-  return blob;
+    return null;
+  }
 };

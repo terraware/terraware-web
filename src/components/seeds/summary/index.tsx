@@ -7,10 +7,8 @@ import React from 'react';
 import { useRecoilValueLoadable } from 'recoil';
 import summarySelector from '../../../state/selectors/summary';
 import strings from '../../../strings';
-import Onboarding from '../onboarding';
 import PageHeader from '../PageHeader';
 import Alerts from './Alerts';
-import OnboardingModal from './OnboardingModal';
 import SummaryPaper from './SummaryPaper';
 import Updates from './Updates';
 
@@ -45,39 +43,10 @@ export default function Summary(): JSX.Element {
     summaryResponse.state === 'hasValue' ? summaryResponse.contents : undefined;
   const isLoading = summaryResponse.state === 'loading';
   const hasError = summaryResponse.state === 'hasError';
-  const [onboardingModalOpened, setOnboardingModalOpened] =
-    React.useState(false);
-  const [isTourOpen, setIsTourOpen] = React.useState(false);
-
-  React.useEffect(() => {
-    if (!Cookies.get('onboarding') || Cookies.get('onboarding') !== 'true') {
-      setOnboardingModalOpened(true);
-    }
-  }, []);
-
-  const onDeclineOnboarding = () => {
-    setOnboardingModalOpened(false);
-  };
-
-  const onAcceptOnboarding = () => {
-    Cookies.set('onboarding', 'true');
-    setOnboardingModalOpened(false);
-    setIsTourOpen(true);
-  };
-
-  const onCloseOnboarding = () => {
-    setIsTourOpen(false);
-  };
 
   return (
     <main>
       <PageHeader title={strings.SUMMARY} subtitle={strings.WELCOME_MSG} />
-      <OnboardingModal
-        open={onboardingModalOpened}
-        onClose={onDeclineOnboarding}
-        onOk={onAcceptOnboarding}
-      />
-      <Onboarding isOpen={isTourOpen} onClose={onCloseOnboarding} />
       <Container maxWidth={false} className={classes.mainContainer}>
         <Grid container spacing={3}>
           <Grid item xs={1} />

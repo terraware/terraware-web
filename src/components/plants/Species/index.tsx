@@ -4,9 +4,9 @@ import Paper from '@material-ui/core/Paper';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { SpeciesName } from '../../../api/types/species';
+import { SpeciesType } from 'src/types/SpeciesType';
 import snackbarAtom from '../../../state/atoms/snackbar';
-import speciesNamesSelector from '../../../state/selectors/speciesNames';
+import speciesSelector from '../../../state/selectors/species';
 import strings from '../../../strings';
 import Button from '../../common/button/Button';
 import Table from '../../common/table';
@@ -54,7 +54,7 @@ export default function Species(): JSX.Element {
 
   const [editSpecieModalOpen, setEditSpecieModalOpen] = React.useState(false);
 
-  const [selectedSpecie, setSelectedSpecie] = React.useState<SpeciesName>();
+  const [selectedSpecie, setSelectedSpecie] = React.useState<SpeciesType>();
 
   const onCloseEditSpecieModal = (snackbarMessage?: string) => {
     setEditSpecieModalOpen(false);
@@ -65,7 +65,7 @@ export default function Species(): JSX.Element {
       });
     }
   };
-  const onSelect = (specie: SpeciesName) => {
+  const onSelect = (specie: SpeciesType) => {
     setSelectedSpecie(specie);
     setEditSpecieModalOpen(true);
   };
@@ -115,11 +115,11 @@ export default function Species(): JSX.Element {
 }
 
 interface SpeciesContentProps {
-  onSelect: (species: SpeciesName) => void;
+  onSelect: (species: SpeciesType) => void;
 }
 
 function SpeciesContent({ onSelect }: SpeciesContentProps): JSX.Element {
-  const speciesNames = useRecoilValue(speciesNamesSelector);
+  const species = useRecoilValue(speciesSelector);
 
   const columns: TableColumnType[] = [
     { key: 'name', name: 'Name', type: 'string' },
@@ -127,11 +127,11 @@ function SpeciesContent({ onSelect }: SpeciesContentProps): JSX.Element {
 
   return (
     <Grid item xs={12}>
-      {speciesNames && (
+      {species && (
         <Table
           id='species-table'
           columns={columns}
-          rows={speciesNames}
+          rows={species}
           orderBy='name'
           onSelect={onSelect}
         />

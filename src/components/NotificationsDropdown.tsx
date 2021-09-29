@@ -118,10 +118,10 @@ export default function NotificationsDropdown(): JSX.Element {
   const databaseLocation = getLocation('/accessions', location);
   const getDestination = (
     type: 'Alert' | 'State' | 'Date',
-    accessionNumber?: string
+    accessionId?: number
   ) => {
     return type === 'Date'
-      ? getLocation(`/accessions/${accessionNumber}`, location)
+      ? getLocation(`/accessions/${accessionId}`, location)
       : type === 'State'
       ? databaseLocation
       : '';
@@ -175,7 +175,7 @@ export default function NotificationsDropdown(): JSX.Element {
           {contents &&
             contents.map(
               (
-                { id, state, type, accessionNumber, read, text, timestamp },
+                { id, state, type, accessionId, read, text, timestamp },
                 index
               ) => (
                 <ListItem
@@ -187,7 +187,7 @@ export default function NotificationsDropdown(): JSX.Element {
                   }
                   onClick={() => onNotificationClick(id, state)}
                   component={Link}
-                  to={getDestination(type, accessionNumber)}
+                  to={getDestination(type, accessionId)}
                 >
                   <ListItemIcon>
                     <NotificationIcon type={type} />

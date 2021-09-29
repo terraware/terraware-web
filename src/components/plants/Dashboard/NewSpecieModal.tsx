@@ -5,7 +5,7 @@ import {
   Grid,
   Radio,
   RadioGroup,
-  Typography,
+  Typography
 } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -15,16 +15,15 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React from 'react';
 import { useRecoilValue, useResetRecoilState } from 'recoil';
 import { putPlant } from '../../../api/plants/plants';
-import { postSpecies } from '../../../api/plants/species';
-import { postSpeciesName } from '../../../api/plants/speciesNames';
-import { SpeciesName } from '../../../api/types/species';
-import { plantsByFeatureIdSelector } from '../../../state/selectors/plantsPlanted';
-import { plantsPlantedFeaturesSelector } from '../../../state/selectors/plantsPlantedFeatures';
-import { plantsPlantedFilteredSelector } from '../../../state/selectors/plantsPlantedFiltered';
+import { postSpecies } from '../../../api/seeds/species';
+import { plantsByFeatureIdSelector } from '../../../state/selectors/plants';
+import { plantsFeaturesSelector } from '../../../state/selectors/plantsFeatures';
+import { plantsFilteredSelector } from '../../../state/selectors/plantsFiltered';
+import speciesSelector from '../../../state/selectors/species';
+import speciesByIdSelector from '../../../state/selectors/speciesById';
 import speciesForChartSelector from '../../../state/selectors/speciesForChart';
-import speciesNamesSelector from '../../../state/selectors/speciesNames';
-import speciesNamesBySpeciesIdSelector from '../../../state/selectors/speciesNamesBySpeciesId';
 import strings from '../../../strings';
+import { SpeciesType } from '../../../types/SpeciesType';
 import useForm from '../../../utils/useForm';
 import Button from '../../common/button/Button';
 import DialogCloseButton from '../../common/DialogCloseButton';
@@ -92,14 +91,14 @@ function NewSpecieModal(props: Props): JSX.Element {
   const [record, setRecord] = useForm<PlantForTable>(initPlant(props.value));
 
   const plantsByFeature = useRecoilValue(plantsByFeatureIdSelector);
-  const resetPlantsPlantedFeatures = useResetRecoilState(
-    plantsPlantedFeaturesSelector
+  const resetplantsFeatures = useResetRecoilState(
+    plantsFeaturesSelector
   );
-  const resetPlantsPlantedFiltered = useResetRecoilState(
-    plantsPlantedFilteredSelector
+  const resetplantsFiltered = useResetRecoilState(
+    plantsFilteredSelector
   );
   const resetSpeciesForChart = useResetRecoilState(speciesForChartSelector);
-  const resetSpeciesNames = useResetRecoilState(speciesNamesSelector);
+  const resetSpecies = useResetRecoilState(speciesSelector);
 
   React.useEffect(() => {
     if (props.open) {
@@ -130,26 +129,21 @@ function NewSpecieModal(props: Props): JSX.Element {
         await putPlant(record.featureId, newPlant);
         onClose(strings.SNACKBAR_MSG_CHANGES_SAVED);
 
-        resetPlantsPlantedFeatures();
+        resetplantsFeatures();
         resetSpeciesForChart();
-        resetPlantsPlantedFiltered();
+        resetplantsFiltered();
       } else if (record.species) {
-        const newSpecies = await postSpecies({});
-        if (newSpecies.id) {
-          const newPlant = { ...previousPlant, species_id: newSpecies.id };
-          const newSpeciesName: SpeciesName = {
-            name: record.species,
-            species_id: newSpecies.id,
-          };
-          await postSpeciesName(newSpeciesName);
-          await putPlant(record.featureId, newPlant);
-          onClose(strings.SNACKBAR_MSG_CHANGES_SAVED);
+        const newSpeciesData: SpeciesType = { name: record.species };
+        const newSpecies = await postSpecies(newSpeciesData);
+        const newPlant = { ...previousPlant, species_id: newSpecies.id };
 
-          resetSpeciesNames();
-          resetPlantsPlantedFeatures();
-          resetSpeciesForChart();
-          resetPlantsPlantedFiltered();
-        }
+        await putPlant(record.featureId, newPlant);
+        onClose(strings.SNACKBAR_MSG_CHANGES_SAVED);
+
+        resetSpecies();
+        resetplantsFeatures();
+        resetSpeciesForChart();
+        resetplantsFiltered();
       }
     } else {
       onClose('');
@@ -209,9 +203,9 @@ interface ContentProps {
 function NewSpecieModalContent(props: ContentProps): JSX.Element {
   const classes = useStyles();
 
-  const speciesNames = useRecoilValue(speciesNamesSelector);
-  const speciesNamesBySpeciesId = useRecoilValue(
-    speciesNamesBySpeciesIdSelector
+  const species = useRecoilValue(speciesSelector);
+  const speciesById = useRecoilValue(
+    speciesByIdSelector
   );
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -219,8 +213,8 @@ function NewSpecieModalContent(props: ContentProps): JSX.Element {
     const newRecord = {
       ...props.record,
       speciesId: newSpecieId,
-      species: speciesNamesBySpeciesId[newSpecieId]
-        ? speciesNamesBySpeciesId[newSpecieId].name
+      species: speciesById[newSpecieId]
+        ? speciesById[newSpecieId].name
         : undefined,
     };
 
@@ -267,13 +261,13 @@ function NewSpecieModalContent(props: ContentProps): JSX.Element {
               value={props.record.speciesId}
               onChange={handleChange}
             >
-              {speciesNames?.map((species) => (
+              {species?.map((sp) => (
                 <FormControlLabel
-                  id={species.name}
-                  key={species.id}
-                  value={species.species_id}
+                  id={sp.name}
+                  key={sp.id}
+                  value={sp.id}
                   control={<Radio />}
-                  label={species.name}
+                  label={sp.name}
                 />
               ))}
               <FormControlLabel

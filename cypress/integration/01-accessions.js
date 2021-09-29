@@ -12,7 +12,7 @@ describe('Accessions', () => {
       cy.get('#sessions-change').contains('0% since last week');
       cy.get('#sessions-arrow-increase').should('exist');
 
-      cy.get('#species-current').contains('2');
+      cy.get('#species-current').contains('4');
       cy.get('#species-details').children().should('have.length', 0);
 
       cy.get('#families-current').contains('1');
@@ -176,7 +176,7 @@ describe('Accessions', () => {
 
   context('Mobile dropoff', () => {
     it('should show the mobile imported info', () => {
-      cy.visit('/accessions/AAF4D49R3E/seed-collection');
+      cy.visit('/accessions/1002/seed-collection');
 
       cy.get('#bag0').contains('ABCD001237');
       cy.get('#bag1').contains('ABCD001238');
@@ -187,7 +187,7 @@ describe('Accessions', () => {
         .should(
           'have.attr',
           'href',
-          'http://localhost:8080/api/v1/seedbank/accession/AAF4D49R3E/photo/accession1.jpg'
+          'http://localhost:8080/api/v1/seedbank/accession/1002/photo/accession1.jpg'
         )
         .should('have.attr', 'target', '_blank');
 
@@ -196,25 +196,25 @@ describe('Accessions', () => {
         .should(
           'have.attr',
           'href',
-          'http://localhost:8080/api/v1/seedbank/accession/AAF4D49R3E/photo/accession2.jpg'
+          'http://localhost:8080/api/v1/seedbank/accession/1002/photo/accession2.jpg'
         )
         .should('have.attr', 'target', '_blank');
 
       // cy.request({
-      //   url: 'http://localhost:8080/api/v1/seedbank/accession/AAF4D49R3E/photo/accession1.jpg',
+      //   url: 'http://localhost:8080/api/v1/seedbank/accession/1002/photo/accession1.jpg',
       //   headers: { 'X-Forwarded-User': 'dummy-auth-id' },
       // })
       //   .its('status')
       //   .should('eq', 200);
       // cy.request({
-      //   url: 'http://localhost:8080/api/v1/seedbank/accession/AAF4D49R3E/photo/accession2.jpg',
+      //   url: 'http://localhost:8080/api/v1/seedbank/accession/1002/photo/accession2.jpg',
       //   headers: { 'X-Forwarded-User': 'dummy-auth-id' },
       // })
       //   .its('status')
       //   .should('eq', 200);
     });
     it('should have disabled dates', () => {
-      cy.visit('/accessions/AAF4D49R3E/seed-collection');
+      cy.visit('/accessions/1002/seed-collection');
       cy.get('#collectedDate').should('have.class', 'Mui-disabled');
       cy.get('#receivedDate').should('have.class', 'Mui-disabled');
     });
@@ -230,7 +230,7 @@ describe('Accessions', () => {
       cy.get('#sessions-change').contains('33% since last week');
       cy.get('#sessions-arrow-increase').should('exist');
 
-      cy.get('#species-current').contains('4');
+      cy.get('#species-current').contains('6');
       cy.get('#species-details').children().should('have.length', 0);
 
       cy.get('#families-current').contains('2');

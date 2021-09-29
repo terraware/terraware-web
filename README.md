@@ -7,16 +7,11 @@
 ### Step 1: Configure the `.env` file
 
 ```
-OAUTH2_PROXY_CLIENT_SECRET=(client secret for the localhost-oauth2-proxy user)
-OAUTH2_PROXY_COOKIE_SECRET=(see below)
-OAUTH2_PROXY_OIDC_ISSUER_URL=(URL of Keycloak server)
-REACT_APP_TERRAWARE_API=http://localhost:8008
-```
-
-For the OAuth2 Proxy settings, get the client secret and OIDC issuer URL from an existing member of the team. Generate a cookie secret like this:
-
-```
-python -c 'import os,base64; print(base64.urlsafe_b64encode(os.urandom(16)).decode())'
+KEYCLOAK_RESOURCE=(Keycloak client ID)
+KEYCLOAK_CREDENTIALS_SECRET=(Keycloak client secret)
+KEYCLOAK_REALM=(Keycloak realm)
+KEYCLOAK_AUTH_SERVER_URL=(Keycloak server URL)
+REACT_APP_TERRAWARE_API=http://localhost:8080
 ```
 
 ### Step 2: Login to Docker hub
@@ -46,7 +41,11 @@ yarn start
 
 ### Step 5: Logging into the app
 
-You need to access the app via the authentication proxy, which will be listening on port 4000, so point your browser at [http://localhost:4000/](http://localhost:4000/).
+API endpoints will return HTTP 401 if you're not logged in. If you want to manually log in, you can use the API endpoint that redirects you to a login page. It takes a parameter to tell it where to send you after you've logged in:
+
+```
+http://localhost:8080/api/v1/login?redirect=http://localhost:3000/
+```
 
 ### Step 6: Stopping the app
 
@@ -92,4 +91,4 @@ This will create the file `src/api/types/generated-schema.ts`
 
 ### TreeLocator API
 
-The Swagger documentation can be accesed [here](http://localhost:8008/docs)
+The Swagger documentation can be accesed [here](http://localhost:8080/docs)

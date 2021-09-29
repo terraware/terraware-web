@@ -16,15 +16,15 @@ import TuneIcon from '@material-ui/icons/Tune';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import React from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { SearchOptions } from 'src/api/types/plant';
 import snackbarAtom from '../../../state/atoms/snackbar';
-import { plantsPlantedFeaturesPaginatedSelector } from '../../../state/selectors/plantsPlantedFeatures';
+import { plantsPlantedFeaturesPaginatedSelector } from '../../../state/selectors/plantsFeatures';
 import {
   plantsByFeatureIdFilteredSelector,
-  plantsPlantedFiltersAtom,
-  SearchOptions,
-} from '../../../state/selectors/plantsPlantedFiltered';
-import speciesNamesSelector from '../../../state/selectors/speciesNames';
-import speciesNamesBySpeciesIdSelector from '../../../state/selectors/speciesNamesBySpeciesId';
+  plantsFiltersAtom,
+} from '../../../state/selectors/plantsFiltered';
+import speciesSelector from '../../../state/selectors/species';
+import speciesNamesBySpeciesIdSelector from '../../../state/selectors/speciesById';
 import strings from '../../../strings';
 import Button from '../../common/button/Button';
 import DatePicker from '../../common/DatePicker';
@@ -70,9 +70,9 @@ export type PlantForTable = {
 export default function AllPlants(): JSX.Element {
   const classes = useStyles();
 
-  const speciesNames = useRecoilValue(speciesNamesSelector);
+  const species = useRecoilValue(speciesSelector);
 
-  const [filters, setFilters] = useRecoilState(plantsPlantedFiltersAtom);
+  const [filters, setFilters] = useRecoilState(plantsFiltersAtom);
   const setSnackbar = useSetRecoilState(snackbarAtom);
 
   const [newFilters, setNewFilters] = React.useState<SearchOptions>();
@@ -89,9 +89,9 @@ export default function AllPlants(): JSX.Element {
     }
   }, [filters]);
 
-  const speciesNamesValues = speciesNames?.map((species) => ({
-    label: species.name,
-    value: species.name,
+  const speciesNamesValues = species?.map((sp) => ({
+    label: sp.name,
+    value: sp.name,
   }));
 
   const onEditPlant = (row: TableRowType) => {
@@ -186,7 +186,7 @@ export default function AllPlants(): JSX.Element {
                   id='min_entered_time'
                   aria-label='min_entered_time'
                   onChange={onChangeFilter}
-                  value={newFilters?.min_entered_time}
+                  value={newFilters?.minEnteredTime}
                 />
               </Grid>
               <Grid item xs={2}>
@@ -195,7 +195,7 @@ export default function AllPlants(): JSX.Element {
                   label={strings.TO}
                   aria-label='max_entered_time'
                   onChange={onChangeFilter}
-                  value={newFilters?.max_entered_time}
+                  value={newFilters?.maxEnteredTime}
                 />
               </Grid>
               <Grid item xs={2}>
@@ -203,7 +203,7 @@ export default function AllPlants(): JSX.Element {
                   id='species_name'
                   label={strings.SPECIES}
                   onChange={onChangeFilter}
-                  selected={newFilters?.species_name ?? ''}
+                  selected={newFilters?.speciesName ?? ''}
                   values={speciesNamesValues}
                 />
               </Grid>
@@ -294,13 +294,13 @@ function AllPlantsContent({ onEditPlant }: AllPlantsProps): JSX.Element {
         if (feature.id && plantsByFeatureFiltered[feature.id]) {
           const plant = plantsByFeatureFiltered[feature.id];
           const plantToAdd: PlantForTable = {
-            date: feature.entered_time,
-            species: plant.species_id
-              ? speciesBySpeciesId[plant.species_id].name
+            date: feature.enteredTime,
+            species: plant.speciesId
+              ? speciesBySpeciesId[plant.speciesId].name
               : undefined,
             notes: feature.notes,
             featureId: feature.id,
-            speciesId: plant.species_id,
+            speciesId: plant.speciesId,
           };
 
           if (feature.geom && Array.isArray(feature.geom.coordinates)) {

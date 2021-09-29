@@ -4,3 +4,9 @@ export type SpeciesType = {
   id?: number;
   name: string;
 };
+
+export type SpeciesForChart = {
+  speciesName: SpeciesType;
+  numberOfTrees: number;
+  color: string;
+};

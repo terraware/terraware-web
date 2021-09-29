@@ -7,8 +7,7 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { useResetRecoilState } from 'recoil';
 import { PlantForTable } from '.';
 import { deleteFeature } from '../../../api/plants/features';
-import { deletePlant } from '../../../api/plants/plants';
-import { plantsPlantedFeaturesSelector } from '../../../state/selectors/plantsPlantedFeatures';
+import { plantsFeaturesSelector } from '../../../state/selectors/plantsFeatures';
 import strings from '../../../strings';
 import Button from '../../common/button/Button';
 import DialogCloseButton from '../../common/DialogCloseButton';
@@ -43,7 +42,7 @@ export default function DeletePlantConfirmationModal(
 ): JSX.Element {
   const classes = useStyles();
   const { onClose, open, plant } = props;
-  const resetFeatures = useResetRecoilState(plantsPlantedFeaturesSelector);
+  const resetFeatures = useResetRecoilState(plantsFeaturesSelector);
 
   const handleCancel = () => {
     onClose();
@@ -51,7 +50,6 @@ export default function DeletePlantConfirmationModal(
 
   const handleOk = async () => {
     if (plant.featureId) {
-      await deletePlant(plant.featureId);
       await deleteFeature(plant.featureId);
       resetFeatures();
     }

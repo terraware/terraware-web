@@ -17,7 +17,7 @@ export type EnhancedTableDetailsRow = {
 };
 
 export interface DetailsProps<T> {
-  accessionId: string;
+  accessionId: number;
   index: number;
   expandText: string;
   rowName: string;

@@ -1,11 +1,13 @@
 import axios from 'axios';
 import { SpeciesType } from '../../types/SpeciesType';
-import { components } from '../types/generated-schema-seedbank';
+import { components } from '../types/generated-schema';
 
 type SpeciesDetails = components['schemas']['SpeciesResponseElement'];
 type SpeciesRequestPayload = components['schemas']['SpeciesRequestPayload'];
+type SpeciesDeleteResponse =
+  components['schemas']['SimpleSuccessResponsePayload'];
 
-const BASE_URL = `${process.env.REACT_APP_SEED_BANK_API}/api/v1/species`;
+const BASE_URL = `${process.env.REACT_APP_TERRAWARE_API}/api/v1/species`;
 
 export const getSpeciesList = async (): Promise<SpeciesType[]> => {
   const speciesDetailsList: SpeciesDetails[] = (await axios.get(BASE_URL)).data
@@ -35,4 +37,13 @@ export const updateSpecies = async (
   await axios.put(`${BASE_URL}/${species.id}`, updateSpeciesRequest);
 
   return species; // api returns ok/error status, but doesn't return the data
+};
+
+export const deleteSpecies = async (
+  speciesId: number
+): Promise<SpeciesDeleteResponse> => {
+  const endpoint = `${BASE_URL}/${speciesId}`;
+  const response: SpeciesDeleteResponse = (await axios.delete(endpoint)).data;
+
+  return response;
 };

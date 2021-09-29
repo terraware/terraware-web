@@ -5,7 +5,7 @@ import {
 } from '../types';
 import { Notifications } from '../types/notification';
 
-const BASE_URL = `${process.env.REACT_APP_SEED_BANK_API}/api/v1/seedbank/notification`;
+const BASE_URL = `${process.env.REACT_APP_TERRAWARE_API}/api/v1/seedbank/notification`;
 
 export const postNotificationAsRead = async (
   id: string
@@ -22,8 +22,10 @@ export const postAllNotificationsAsRead =
     return (await axios.post(endpoint)).data;
   };
 
-export const getNotifications = async (): Promise<Notifications> => {
-  const endpoint = `${BASE_URL}`;
+export const getNotifications = async (
+  facilityId: number
+): Promise<Notifications> => {
+  const endpoint = `${BASE_URL}?facilityId=${facilityId}`;
 
   return (await axios.get(endpoint)).data.notifications;
 };

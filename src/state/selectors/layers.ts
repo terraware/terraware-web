@@ -1,10 +1,9 @@
 import { selector } from 'recoil';
 import { getLayers } from '../../api/plants/layers';
-import { Layer } from '../../api/types/layer';
-import plantsPlantedLayerTypeSelector from './layerTypes';
+import { LayerResponse } from '../../api/types/layer';
 import siteSelector from './site';
 
-const layersSelector = selector<Layer[] | undefined>({
+const layersSelector = selector<LayerResponse[] | undefined>({
   key: 'layersSelector',
   get: async ({ get }) => {
     const site = get(siteSelector);
@@ -14,15 +13,12 @@ const layersSelector = selector<Layer[] | undefined>({
   },
 });
 
-export const plantsPlantedLayerSelector = selector<Layer | undefined>({
-  key: 'plantsPlantedLayerSelector',
+export const plantsLayerSelector = selector<LayerResponse | undefined>({
+  key: 'plantsLayerSelector',
   get: async ({ get }) => {
-    const plantsPlantedLayerType = get(plantsPlantedLayerTypeSelector);
     const layers = get(layersSelector);
-    if (plantsPlantedLayerType && layers) {
-      return layers.find(
-        (layer) => layer.type_id === plantsPlantedLayerType.id
-      );
+    if (layers) {
+      return layers.find((layer) => layer.layerType === 'Plants Planted');
     }
   },
 });

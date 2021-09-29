@@ -1,4 +1,4 @@
-import { components } from './generated-schema-seedbank';
+import { components } from './generated-schema';
 
 export type AccessionActive = components['schemas']['AccessionPayload']['active'];
 export type AccessionState = components['schemas']['AccessionPayload']['state'];
