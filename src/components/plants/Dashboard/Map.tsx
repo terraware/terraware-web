@@ -100,25 +100,26 @@ function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
   }, [isFullscreen]);
 
   useCenterMap(center, setViewport);
-
   const geojson: GeoJSON.FeatureCollection<GeoJSON.Geometry> = React.useMemo(() => (
-    {
-      type: 'FeatureCollection',
-      features: (plantsByFeatureId && features) ? features.map((feature) => {
-        const coordinates = getCoordinates(feature);
-        const plant = plantsByFeatureId[feature.id!];
-        const properties: MapboxFeaturesProps = { feature: JSON.stringify(feature), color: speciesForChart[plant.speciesId!].color };
+    (plantsByFeatureId && features) ? features : []).reduce((acum, feature) => {
+      const coordinates = getCoordinates(feature);
+      const plant = plantsByFeatureId![feature.id!];
+      if (plant) {
+        const color = (speciesForChart[plant.speciesId ?? 0] ?? { color: 'black' }).color;
+        const properties: MapboxFeaturesProps = { feature: JSON.stringify(feature), color };
 
-        return {
+        acum.features.push({
           type: 'Feature',
           properties,
           geometry: {
             type: 'Point',
             coordinates: [coordinates.longitude, coordinates.latitude]
           }
-        };
-      }) : []
-    })
+        });
+      }
+
+      return acum;
+    }, { type: 'FeatureCollection', features: [] } as GeoJSON.FeatureCollection<GeoJSON.Geometry>)
     , [features, plantsByFeatureId, speciesForChart]);
 
   const selectedPlant = selectedFeature && plantsByFeatureId
