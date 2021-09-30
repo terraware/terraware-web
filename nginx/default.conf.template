@@ -28,17 +28,18 @@ server {
         root   /usr/share/nginx/html;
     }
 
-    # Placeholder administration UI.
-    location /admin/ {
-        proxy_pass ${SERVER_URL};
-    }
+    # Forward requests to terraware-server so clients can use the same hostname for all
+    # their requests, which can help avoid CORS issues.
+    #
+    # /admin/ = placeholder administration UI
+    # /api/ = API endpoints
+    # /sso/ = OAuth2 redirect callbacks for login and logout
+    # /swagger-ui.html = Entry point for interactive API browsing
+    # /swagger-ui/ = Interactive API browser
+    # /v3/ = OpenAPI user interface
 
-    location /api/ {
+    location ~ ^/(admin/|api/|sso/|swagger-ui|v3/) {
         proxy_pass ${SERVER_URL};
-    }
-
-    # OAuth2 redirect endpoints that are used by the login and logout flows.
-    location /sso/ {
-        proxy_pass ${SERVER_URL};
+        proxy_set_header Host $http_host;
     }
 }

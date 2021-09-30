@@ -1,4 +1,4 @@
-import { components } from './generated-schema-seedbank';
+import { components } from './generated-schema';
 
 export type Notifications = components['schemas']['NotificationListResponse']['notifications'];
 export type NotificationList = components['schemas']['NotificationPayload'][];

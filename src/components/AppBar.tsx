@@ -12,6 +12,7 @@ import useStateLocation, { getLocation } from '../utils/useStateLocation';
 import Dropdown from './common/Dropdown';
 import NotificationsDropdown from './NotificationsDropdown';
 import SearchBar from './SearchBar';
+import UserMenu from './UserMenu';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -38,6 +39,14 @@ const useStyles = makeStyles((theme) =>
     right: {
       marginLeft: 'auto',
     },
+    separator: {
+      width: '1px',
+      height: '32px',
+      backgroundColor: theme.palette.gray[200],
+      marginTop: '8px',
+      marginRight: '16px',
+      marginLeft: '16px',
+    },
   })
 );
 
@@ -52,7 +61,7 @@ export default function NavBar(): JSX.Element | null {
           <Grid item>
             <ErrorBoundary>
               <React.Suspense fallback={strings.LOADING}>
-                {/* <ProjectsDropdown /> */}
+                <ProjectsDropdown />
               </React.Suspense>
             </ErrorBoundary>
           </Grid>
@@ -71,6 +80,8 @@ export default function NavBar(): JSX.Element | null {
                 </IconButton>
               </Link>
               <NotificationsDropdown />
+              <div className={classes.separator} />
+              <UserMenu />
             </div>
           </Grid>
         </Grid>

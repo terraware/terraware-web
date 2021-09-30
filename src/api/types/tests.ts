@@ -1,4 +1,4 @@
-import { components } from './generated-schema-seedbank';
+import { components } from './generated-schema';
 
 export type GerminationTests = components['schemas']['AccessionPayload']['germinationTests'];
 

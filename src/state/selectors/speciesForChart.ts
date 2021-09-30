@@ -1,9 +1,9 @@
 import { atom, selector } from 'recoil';
-import { SpeciesForChart, SpeciesName } from '../../api/types/species';
 import strings from '../../strings';
+import { SpeciesForChart, SpeciesType } from '../../types/SpeciesType';
 import colorsBySpeciesSelector from './colorsBySpecies';
-import { plantsPlantedSelector } from './plantsPlanted';
-import speciesNamesBySpeciesIdSelector from './speciesNamesBySpeciesId';
+import { plantsSelector } from './plants';
+import speciesNamesBySpeciesIdSelector from './speciesById';
 
 export const speciesForChartAtom = atom({
   key: 'speciesForChartAtom',
@@ -15,23 +15,22 @@ export default selector<Record<number, SpeciesForChart>>({
   get: ({ get }) => {
     get(speciesForChartAtom);
     const speciesForChart: Record<number, SpeciesForChart> = {};
-    const plantsPlanted = get(plantsPlantedSelector);
+    const plants = get(plantsSelector);
     const speciesNamesBySpeciesId = get(speciesNamesBySpeciesIdSelector);
     const colorsBySpecies = get(colorsBySpeciesSelector);
 
-    const otherSpeciesName: SpeciesName = {
+    const otherSpeciesName: SpeciesType = {
       name: strings.OTHER,
-      species_id: 0,
+      id: 0,
     };
 
-    plantsPlanted?.forEach((plant) => {
-      const id = plant.species_id ?? 0;
+    plants?.forEach((plant) => {
+      const id = plant.speciesId ?? 0;
       const plantSpecies = speciesForChart[id];
       if (plantSpecies) {
         plantSpecies.numberOfTrees += 1;
       } else {
-        const speciesToAdd =
-          id === 0 ? otherSpeciesName : speciesNamesBySpeciesId[id];
+        const speciesToAdd = id === 0 ? otherSpeciesName : speciesNamesBySpeciesId[id];
         if (speciesToAdd) {
           const speciesChartToAdd: SpeciesForChart = {
             speciesName: speciesToAdd,

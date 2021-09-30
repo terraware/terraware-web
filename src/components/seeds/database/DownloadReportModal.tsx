@@ -12,6 +12,7 @@ import strings from '../../../strings';
 import CancelButton from '../../common/CancelButton';
 import DialogCloseButton from '../../common/DialogCloseButton';
 import TextField from '../../common/TextField';
+import { facilityIdSelector } from '../../../state/selectors/facility';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -43,6 +44,7 @@ export default function DownloadReportModal(props: Props): JSX.Element {
   const [name, setName] = React.useState('');
 
   const searchParams = useRecoilValue(searchParamsSelector);
+  const facilityId = useRecoilValue(facilityIdSelector);
 
   const handleCancel = () => {
     setName('');
@@ -51,6 +53,7 @@ export default function DownloadReportModal(props: Props): JSX.Element {
 
   const handleOk = async () => {
     const reportParams: ExportRequestPayload = {
+      facilityId,
       fields: searchParams.fields,
       sortOrder: searchParams.sortOrder,
       search: searchParams.search,

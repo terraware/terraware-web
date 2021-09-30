@@ -1,10 +1,10 @@
 import { selector } from 'recoil';
 import { getProjects } from '../../api/plants/projects';
-import { Project } from '../../api/types/project';
+import { ProjectPayload } from '../../api/types/project';
 
-export default selector<Project[] | undefined>({
+export default selector<ProjectPayload[] | undefined>({
   key: 'projectsSelector',
-  get: async ({ get }) => {
+  get: async () => {
     return await getProjects();
   },
 });

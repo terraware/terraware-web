@@ -6,7 +6,6 @@ describe('Notifications', () => {
   });
 
   it('display endpoint result', () => {
-    cy.get('#declineTour').click();
     cy.get('#alerts-table').children().should('have.length', 1);
     cy.get('#notifications-button').click();
     cy.get('#notifications-popover').should('be.visible');
@@ -15,7 +14,6 @@ describe('Notifications', () => {
   });
 
   it('go to accesions filtered by state when clicking State notification', () => {
-    cy.get('#declineTour').click();
     cy.get('#notifications-button').click();
 
     cy.intercept('POST', '/api/v1/seedbank/notification/**/markRead').as(
@@ -58,20 +56,21 @@ describe('Notifications', () => {
   });
 
   it('go to accesion page when clicking Date notification', () => {
-    cy.get('#declineTour').click();
     cy.get('#notifications-button').click();
 
     cy.intercept('POST', '/api/v1/seedbank/notification/**/markRead').as(
       'markRead'
     );
     cy.intercept('POST', '/api/v1/seedbank/notification').as('notification');
-    cy.get('#notification9').click().url().should('contain', '/accessions/XYZ');
+    cy.get('#notification9')
+      .click()
+      .url()
+      .should('contain', '/accessions/1000');
     cy.wait('@markRead');
     cy.wait('@notification');
   });
 
   it('has 7 notifications unread after clicking', () => {
-    cy.get('#declineTour').click();
     cy.get('#notifications-badge').contains('7');
   });
 });

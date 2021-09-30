@@ -9,14 +9,14 @@ import ReactMapGL, {
   MapContext,
   Marker,
   NavigationControl,
-  Popup,
+  Popup
 } from 'react-map-gl';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { Feature } from '../../../api/types/feature';
-import { Plant } from '../../../api/types/plant';
+import { ListPlantsResponseElement } from '../../../api/types/plant';
 import snackbarAtom from '../../../state/atoms/snackbar';
-import { plantsByFeatureIdSelector } from '../../../state/selectors/plantsPlanted';
-import { plantsPlantedFeaturesWithGeolocationSelector } from '../../../state/selectors/plantsPlantedFeatures';
+import { plantsByFeatureIdSelector } from '../../../state/selectors/plants';
+import { plantsFeaturesWithGeolocationSelector } from '../../../state/selectors/plantsFeatures';
 import speciesForChartSelector from '../../../state/selectors/speciesForChart';
 import strings from '../../../strings';
 import { cellDateFormatter } from '../../common/table/TableCellRenderer';
@@ -89,12 +89,12 @@ function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
   const [editPlantModalOpen, setEditPlantModalOpen] = React.useState(false);
   const [viewport, setViewport] = React.useState(DEFAULT_VIEWPORT);
 
-  const features = useRecoilValue(plantsPlantedFeaturesWithGeolocationSelector);
+  const features = useRecoilValue(plantsFeaturesWithGeolocationSelector);
   const speciesForChart = useRecoilValue(speciesForChartSelector);
   const plantsByFeatureId = useRecoilValue(plantsByFeatureIdSelector);
   const setSnackbar = useSetRecoilState(snackbarAtom);
 
-  const selectedPlant: Plant | undefined =
+  const selectedPlant: ListPlantsResponseElement | undefined =
     selectedFeature && plantsByFeatureId
       ? plantsByFeatureId[selectedFeature.id!]
       : undefined;
@@ -102,21 +102,21 @@ function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
   const selectedPlantForTable =
     selectedPlant && selectedFeature
       ? {
-          date: selectedPlant.created_time,
-          species: speciesForChart[selectedPlant.species_id!]
-            ? speciesForChart[selectedPlant.species_id!].speciesName.name
-            : undefined,
-          geolocation:
-            selectedFeature.geom &&
+        date: selectedPlant.datePlanted,
+        species: speciesForChart[selectedPlant.speciesId!]
+          ? speciesForChart[selectedPlant.speciesId!].speciesName.name
+          : undefined,
+        geolocation:
+          selectedFeature.geom &&
             Array.isArray(selectedFeature?.geom.coordinates)
-              ? `${selectedFeature.geom.coordinates[1].toFixed(
-                  6
-                )}, ${selectedFeature.geom.coordinates[0].toFixed(6)}`
-              : undefined,
-          notes: selectedFeature.notes,
-          featureId: selectedFeature.id,
-          speciesId: selectedPlant.species_id,
-        }
+            ? `${selectedFeature.geom.coordinates[1].toFixed(
+              6
+            )}, ${selectedFeature.geom.coordinates[0].toFixed(6)}`
+            : undefined,
+        notes: selectedFeature.notes,
+        featureId: selectedFeature.id,
+        speciesId: selectedPlant.speciesId,
+      }
       : undefined;
 
   React.useEffect(() => {
@@ -246,8 +246,8 @@ function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
                   offsetTop={-10}
                 >
                   {iconPin(
-                    speciesForChart[plant.species_id!]
-                      ? speciesForChart[plant.species_id!].color
+                    speciesForChart[plant.speciesId!]
+                      ? speciesForChart[plant.speciesId!].color
                       : speciesForChart[0].color,
                     feature
                   )}
@@ -273,8 +273,8 @@ function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
                 variant='subtitle2'
                 id='feature-species-name'
               >
-                {selectedPlant.species_id
-                  ? speciesForChart[selectedPlant.species_id].speciesName.name
+                {selectedPlant.speciesId
+                  ? speciesForChart[selectedPlant.speciesId].speciesName.name
                   : strings.OTHER}
               </Typography>
               <Typography
@@ -283,7 +283,7 @@ function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
                 className={classes.spacing}
               >
                 {strings.AS_OF}{' '}
-                {cellDateFormatter(selectedFeature.entered_time)}
+                {cellDateFormatter(selectedFeature.enteredTime)}
               </Typography>
               <Typography
                 component='p'
@@ -304,13 +304,13 @@ function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
                 id='new-species'
                 size='medium'
                 label={
-                  selectedPlant.species_id
+                  selectedPlant.speciesId
                     ? strings.EDIT_SPECIES
                     : strings.ADD_SPECIES
                 }
                 onClick={onNewSpecie}
                 className={classes.newSpecies}
-                icon={selectedPlant.species_id ? <CreateIcon /> : <AddIcon />}
+                icon={selectedPlant.speciesId ? <CreateIcon /> : <AddIcon />}
               />
             </div>
           </Popup>

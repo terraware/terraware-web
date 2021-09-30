@@ -35,38 +35,38 @@ interface Props {
 
 export default function DetailsMenu({ state }: Props): JSX.Element | null {
   const classes = useStyles();
-  const { accessionNumber } = useParams<{ accessionNumber: string }>();
+  const { accessionId } = useParams<{ accessionId: string }>();
 
   const paths = [
     {
       title: strings.SEED_COLLECTION,
       route: 'seed-collection',
-      active: useRouteMatch('/accessions/:accessionNumber/seed-collection'),
+      active: useRouteMatch('/accessions/:accessionId/seed-collection'),
       disabled: false,
     },
     {
       title: strings.PROCESSING_AND_DRYING,
       route: 'processing-drying',
-      active: useRouteMatch('/accessions/:accessionNumber/processing-drying'),
+      active: useRouteMatch('/accessions/:accessionId/processing-drying'),
       disabled: state === 'Nursery',
     },
     {
       title: strings.STORAGE,
       route: 'storage',
-      active: useRouteMatch('/accessions/:accessionNumber/storage'),
+      active: useRouteMatch('/accessions/:accessionId/storage'),
       disabled: state === 'Nursery' || state === 'Pending',
     },
     {
       title: strings.WITHDRAWAL,
       route: 'withdrawal',
-      active: useRouteMatch('/accessions/:accessionNumber/withdrawal'),
+      active: useRouteMatch('/accessions/:accessionId/withdrawal'),
       disabled: state === 'Nursery' || state === 'Pending',
     },
   ];
   const location = useStateLocation();
   const history = useHistory();
 
-  if (history.location.pathname.endsWith(accessionNumber)) {
+  if (history.location.pathname.endsWith(accessionId)) {
     return null;
   }
 
@@ -95,7 +95,7 @@ export default function DetailsMenu({ state }: Props): JSX.Element | null {
             component={RouterLink}
             key={title}
             to={{
-              pathname: `/accessions/${accessionNumber}/${route}`,
+              pathname: `/accessions/${accessionId}/${route}`,
               state: {
                 from: location.state?.from ?? '',
               },

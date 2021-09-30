@@ -4,6 +4,7 @@ import {
   makeStyles,
   ThemeProvider,
 } from '@material-ui/core';
+import axios from 'axios';
 import React from 'react';
 import {
   BrowserRouter as Router,
@@ -29,6 +30,19 @@ import theme from './theme';
 import useTimer from './utils/useTimer';
 
 export default function App() {
+  axios.defaults.withCredentials = true;
+
+  axios.interceptors.response.use((response) => response, (error) => {
+    if (error.response && error.response.status === 401) {
+      const redirect = encodeURIComponent(window.location.href);
+      window.location.href = `${process.env.REACT_APP_TERRAWARE_API}/api/v1/login?redirect=${redirect}`;
+
+      return null;
+    } else {
+      return Promise.reject(error);
+    }
+  });
+
   return (
     <RecoilRoot>
       <ErrorBoundary>
@@ -76,7 +90,7 @@ function AppContent() {
               <Route exact path='/species' component={Species} />
               <Route path='/accessions/new' component={NewAccession} />
               <Route
-                path='/accessions/:accessionNumber'
+                path='/accessions/:accessionId'
                 component={Accession}
               />
               <Route path='/accessions' component={Database} />

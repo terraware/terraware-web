@@ -1,12 +1,10 @@
 import axios from '..';
 import { Accession, NewAccession } from '../types/accessions';
 
-const BASE_URL = `${process.env.REACT_APP_SEED_BANK_API}/api/v1/seedbank/accession`;
+const BASE_URL = `${process.env.REACT_APP_TERRAWARE_API}/api/v1/seedbank/accession`;
 
-export const getAccession = async (
-  accessionNumber: string
-): Promise<Accession> => {
-  const endpoint = `${BASE_URL}/${accessionNumber}`;
+export const getAccession = async (accessionId: number): Promise<Accession> => {
+  const endpoint = `${BASE_URL}/${accessionId}`;
 
   return (await axios.get(endpoint)).data.accession;
 };
@@ -22,14 +20,14 @@ export const postAccession = async (
 export const putAccession = async (
   accession: Accession
 ): Promise<Accession> => {
-  const endpoint = `${BASE_URL}/${accession.accessionNumber}`;
+  const endpoint = `${BASE_URL}/${accession.id}`;
 
   return (await axios.put(endpoint, accession)).data.accession;
 };
 
 export const getPhotoEndpoint = (
-  accessionNumber: string,
+  accessionId: number,
   photoFilename: string
 ): string => {
-  return `${BASE_URL}/${accessionNumber}/photo/${photoFilename}`;
+  return `${BASE_URL}/${accessionId}/photo/${photoFilename}`;
 };

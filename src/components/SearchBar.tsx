@@ -40,16 +40,17 @@ export default function NavBar(): JSX.Element {
       <Autocomplete
         id='search-bar'
         freeSolo
-        options={results.map((accession) => accession.accessionNumber)}
+        options={ results.map((accession) => accession.accessionNumber) }
         inputValue={input}
         onInputChange={(event, value) => {
           setInput(value);
         }}
         value=''
-        onChange={(event, accessionNumber) => {
-          if (accessionNumber) {
+        onChange={(event, value) => {
+          const accession = results.find((result) => result.accessionNumber === value);
+          if (accession) {
             history.push(
-              getLocation(`/accessions/${accessionNumber}`, location)
+              getLocation(`/accessions/${accession.id}`, location)
             );
             resetResults();
             setInput('');

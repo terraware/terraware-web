@@ -15,6 +15,7 @@ import {
   searchSelectedColumnsAtom,
   searchSortAtom,
 } from '../atoms/search';
+import { facilityIdSelector } from './facility';
 
 const searchAtom = atom({
   key: 'searchTrigger',
@@ -71,7 +72,10 @@ export const searchParamsSelector = selector({
       children: filters,
     };
 
+    const facilityId = get(facilityIdSelector);
+
     return {
+      facilityId,
       fields: tableColumns.includes('active')
         ? tableColumns
         : [...tableColumns, 'active'],

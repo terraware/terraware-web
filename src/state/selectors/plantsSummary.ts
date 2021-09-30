@@ -1,7 +1,7 @@
 import { atom, selectorFamily } from 'recoil';
 import { getPlantSummary } from '../../api/plants/plants';
 import { PlantSummary } from '../../api/types/plant';
-import { plantsPlantedLayerSelector } from './layers';
+import { plantsLayerSelector } from './layers';
 
 export const plantsSummaryAtom = atom({
   key: 'plantsSummaryAtom',
@@ -14,15 +14,12 @@ export default selectorFamily<PlantSummary[] | undefined, number>({
     (daysOffset: number) =>
     async ({ get }) => {
       get(plantsSummaryAtom);
-      const plantLayer = get(plantsPlantedLayerSelector);
+      const plantLayer = get(plantsLayerSelector);
       if (plantLayer?.id) {
         const date = new Date();
         date.setDate(date.getDate() - daysOffset);
 
-        const plantsSummary = await getPlantSummary(
-          plantLayer.id,
-          date.toISOString()
-        );
+        const plantsSummary = await getPlantSummary(plantLayer.id, date.toISOString());
 
         return plantsSummary;
       }

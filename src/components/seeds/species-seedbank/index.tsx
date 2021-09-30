@@ -5,8 +5,8 @@ import React from 'react';
 import { useRecoilValueLoadable, useResetRecoilState } from 'recoil';
 import {
   postSpecies,
-  updateSpecies,
-} from '../../../api/seeds/species-seedbank';
+  updateSpecies
+} from '../../../api/seeds/species';
 import speciesSelector from '../../../state/selectors/species';
 import { SpeciesType } from '../../../types/SpeciesType';
 import Table from '../../common/table';

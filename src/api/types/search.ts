@@ -1,4 +1,4 @@
-import { components } from './generated-schema-seedbank';
+import { components } from './generated-schema';
 
 export type SearchField = components['schemas']['SearchField'];
 export type SearchRequestPayload = components['schemas']['SearchRequestPayload'];
@@ -19,11 +19,7 @@ export type NotNodePayload = components['schemas']['NotNodePayload'] & {
 export type OrNodePayload = components['schemas']['OrNodePayload'] & {
   operation: 'or';
 };
-export type SearchNodePayload =
-  | AndNodePayload
-  | FieldNodePayload
-  | NotNodePayload
-  | OrNodePayload;
+export type SearchNodePayload = AndNodePayload | FieldNodePayload | NotNodePayload | OrNodePayload;
 
 export type ListFieldValuesRequestPayload = components['schemas']['ListFieldValuesRequestPayload'];
 export type ListFieldValuesResponsePayload = components['schemas']['ListFieldValuesResponsePayload'];

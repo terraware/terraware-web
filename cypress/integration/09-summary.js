@@ -12,12 +12,11 @@ describe('Summary page', () => {
   });
 
   it('display endpoint result', () => {
-    cy.get('#declineTour').click();
     cy.get('#sessions-current').contains('11');
     cy.get('#sessions-change').contains('267% since last week');
     cy.get('#sessions-arrow-increase').should('exist');
 
-    cy.get('#species-current').contains('4');
+    cy.get('#species-current').contains('6');
     cy.get('#species-details').children().should('have.length', 0);
 
     cy.get('#families-current').contains('2');
@@ -31,12 +30,10 @@ describe('Summary page', () => {
 
   context('navigation', () => {
     it('navigates to database page', () => {
-      cy.get('#declineTour').click();
       cy.visit('/accessions');
     });
 
     it('navigates to database page filtered by pending state when clicking on Most recent update', () => {
-      cy.get('#declineTour').click();
       cy.get('#update-Pending').click().url().should('contain', '/accessions');
       cy.get('#subtitle').should('contain', '1 total');
       cy.get('#filter-state').click();
@@ -46,7 +43,6 @@ describe('Summary page', () => {
     });
 
     it('navigates to database page filtered by processed state when clicking on Most recent update', () => {
-      cy.get('#declineTour').click();
       cy.get('#update-Processed')
         .click()
         .url()

@@ -1,5 +1,13 @@
-import { components } from './generated-schema';
+import { components, operations } from './generated-schema';
 
-export type Plant = components['schemas']['Plant'];
+export type ListPlantsResponsePayload = components['schemas']['ListPlantsResponsePayload'];
+export type ListPlantsResponseElement = components['schemas']['ListPlantsResponseElement'];
+export type SearchOptions = operations['getPlantsList']['parameters']['query']['payload'];
 
-export type PlantSummary = { 'species_id': number; 'count': number };
+export type PlantSummaryResponsePayload = components['schemas']['PlantSummaryResponsePayload'];
+
+export type UpdatePlantRequestPayload = components['schemas']['UpdatePlantRequestPayload'];
+export type UpdatePlantResponsePayload = components['schemas']['UpdatePlantResponsePayload'];
+export type PlantResponse = components['schemas']['PlantResponse'];
+
+export type PlantSummary = { speciesId: number; count: number };
