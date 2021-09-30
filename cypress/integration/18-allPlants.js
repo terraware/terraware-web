@@ -22,9 +22,17 @@ describe('All plants', () => {
     });
 
     cy.get('#row1-date').should('contain', dateStr);
-    cy.get('#row1-species').should('contain', 'Other');
+    cy.get('#row1-species').should('contain', 'Banana');
     cy.get('#row1-geolocation').should('contain', '45.467135, -75.546518');
     cy.get('#row1-notes').should('contain', 'Testing notes');
+  });
+
+  it('should edit species selecting other', () => {
+    cy.get('#row1').click();
+    cy.get('#Other').click();
+    cy.get('#saveSpecie').click();
+
+    cy.get('#row1-species').should('contain', 'Other');
   });
 
   it('should edit species of a plant, selecting a previous existent species', () => {
