@@ -5,7 +5,7 @@ import {
   Grid,
   Radio,
   RadioGroup,
-  Typography
+  Typography,
 } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -75,6 +75,7 @@ export interface Props {
 
 const initPlant = (plant?: PlantForTable): PlantForTable => {
   return plant ? { ...plant, speciesId: plant.speciesId ?? 0 } : {};
+};
 
 export default function NewSpecieModalWrapper(props: Props): JSX.Element {
   return (
