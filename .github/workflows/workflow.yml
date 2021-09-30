@@ -82,7 +82,7 @@ jobs:
           context: .
           tags: ${{ env.DOCKER_TAGS }}
           platforms: linux/amd64,linux/arm64
-          push: env.IS_CD == 'true'
+          push: ${{ env.IS_CD == 'true' }}
 
       - name: Configure AWS Credentials
         if: env.IS_CD == 'true'
