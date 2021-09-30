@@ -114,9 +114,7 @@ export default function AllPlants(): JSX.Element {
   };
 
   const onChangeFilter = (id: string, value?: string) => {
-    console.log(id, value);
     const newFiltersObj = { ...newFilters, [id]: value };
-    console.log(newFiltersObj);
     setNewFilters(newFiltersObj);
   };
 
