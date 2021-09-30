@@ -12,7 +12,7 @@ elif [[ "$GITHUB_REF" == refs/heads/main ]]; then
     TIER=STAGING \
     IS_CD=true
 else
-  export IS_CD=false
+  echo "IS_CD=false" >> $GITHUB_ENV
   exit
 fi
 
