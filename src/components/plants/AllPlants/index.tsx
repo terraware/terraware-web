@@ -266,12 +266,14 @@ interface AllPlantsProps {
 }
 
 function AllPlantsContent({ onEditPlant }: AllPlantsProps): JSX.Element {
-  const [limit, setLimit] = React.useState(2);
+  const limit = 100;
   const [skip, setSkip] = React.useState(0);
   const [page, setPage] = React.useState(0);
-  const features = useRecoilValue(
+  const featuresList = useRecoilValue(
     plantsPlantedFeaturesPaginatedSelector({ limit, skip })
   );
+  const features = featuresList?.features;
+  const totalResults = featuresList?.totalCount;
   const speciesBySpeciesId = useRecoilValue(speciesNamesBySpeciesIdSelector);
   const plantsByFeatureFiltered = useRecoilValue(
     plantsByFeatureIdFilteredSelector
@@ -279,9 +281,9 @@ function AllPlantsContent({ onEditPlant }: AllPlantsProps): JSX.Element {
 
   const handleChangePage = (event: unknown, newPage: number) => {
     if (newPage > page) {
-      setSkip(skip + 2);
+      setSkip(skip + limit);
     } else {
-      setSkip(skip - 2);
+      setSkip(skip - limit);
     }
     setPage(newPage);
   };
@@ -331,10 +333,10 @@ function AllPlantsContent({ onEditPlant }: AllPlantsProps): JSX.Element {
         />
         <TablePagination
           component='div'
-          count={4}
+          count={totalResults || 0}
           onChangePage={handleChangePage}
           page={page}
-          rowsPerPage={2}
+          rowsPerPage={limit}
           rowsPerPageOptions={[]}
         />
       </Grid>

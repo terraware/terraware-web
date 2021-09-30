@@ -1,6 +1,6 @@
 import { atom, selector, selectorFamily } from 'recoil';
 import { getFeatures } from '../../api/plants/features';
-import { Feature } from '../../api/types/feature';
+import { Feature, FeatureListResponse } from '../../api/types/feature';
 import { plantsLayerSelector } from './layers';
 import { plantsSelector } from './plants';
 import plantsSummarySelector from './plantsSummary';
@@ -16,7 +16,9 @@ export const plantsFeaturesSelector = selector<Feature[] | undefined>({
     get(plantsFeatureAtom);
     const plantsLayer = get(plantsLayerSelector);
     if (plantsLayer?.id) {
-      return await getFeatures(plantsLayer?.id);
+      return (await (
+        await getFeatures(plantsLayer?.id)
+      ).features) as Feature[];
     }
   },
   set: ({ set, reset }) => {
@@ -36,7 +38,7 @@ export type PlantsPlantedFeaturesPaginatedOptions = {
 };
 
 export const plantsPlantedFeaturesPaginatedSelector = selectorFamily<
-  Feature[] | undefined,
+  FeatureListResponse | undefined,
   PlantsPlantedFeaturesPaginatedOptions
 >({
   key: 'plantsPlantedFeaturesPaginatedSelector',
