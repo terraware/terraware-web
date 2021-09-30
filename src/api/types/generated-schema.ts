@@ -314,7 +314,7 @@ export interface components {
       properties: components['schemas']['CRSProperties'];
     };
     CRSProperties: {
-      /** Name of the coordinate reference system. This must be in the form EPSG:nnnn where nnnn is the numeric identifier of a coordinate system in the EPSG dataset. A common one is 3857, the Web Mercator projection used by many mapping tools. */
+      /** Name of the coordinate reference system. This must be in the form EPSG:nnnn where nnnn is the numeric identifier of a coordinate system in the EPSG dataset. The default is 4326, the defined coordinate system for GeoJSON. */
       name: string;
     };
     CreateAccessionRequestPayload: {
@@ -566,6 +566,7 @@ export interface components {
       orientation?: number;
       size: number;
     };
+    /** Describes a map feature. The coordinate reference system of the "geom" field will be longitude/latitude EPSG:4326. */
     FeatureResponse: {
       id: number;
       layerId: number;
@@ -597,6 +598,7 @@ export interface components {
       longitude: number;
       accuracy?: number;
     };
+    /** GEOMETRY-FIX-TYPE-ON-CLIENT-SIDE */
     Geometry: {
       type:
         | 'Point'
@@ -606,6 +608,7 @@ export interface components {
         | 'MultiLineString'
         | 'MultiPolygon'
         | 'GeometryCollection';
+      coordinates: number[];
       crs?: components['schemas']['CRS'];
     };
     GeometryCollection: components['schemas']['Geometry'] & {
@@ -676,10 +679,6 @@ export interface components {
       plant: components['schemas']['PlantResponse'];
       status: components['schemas']['SuccessOrError'];
     };
-    GetPlantSummaryPayload: {
-      minEnteredTime?: string;
-      maxEnteredTime?: string;
-    };
     GetProjectResponsePayload: {
       project: components['schemas']['ProjectPayload'];
       status: components['schemas']['SuccessOrError'];
@@ -735,12 +734,6 @@ export interface components {
       photos: components['schemas']['FeaturePhoto'][];
       status: components['schemas']['SuccessOrError'];
     };
-    ListFeaturesRequestPayload: {
-      /** Number of entries to skip in search results. Used in conjunction with limit to paginate through large results. Default is 0 (don't skip any results). */
-      skip?: number;
-      /** Maximum number of entries to return. Used in conjunction with skip to paginate through large results. The system may impose a cap on this value. */
-      limit?: number;
-    };
     ListFeaturesResponsePayload: {
       features: components['schemas']['FeatureResponse'][];
       status: components['schemas']['SuccessOrError'];
@@ -790,20 +783,19 @@ export interface components {
       photos: components['schemas']['ListPhotosResponseElement'][];
       status: components['schemas']['SuccessOrError'];
     };
-    ListPlantsRequestPayload: {
-      speciesName?: string;
-      minEnteredTime?: string;
-      maxEnteredTime?: string;
-      notes?: string;
-    };
     ListPlantsResponseElement: {
       featureId: number;
       label?: string;
       speciesId?: number;
       naturalRegen?: boolean;
       datePlanted?: string;
+      layerId: number;
+      gpsHorizAccuracy?: number;
+      gpsVertAccuracy?: number;
+      attrib?: string;
       notes?: string;
       enteredTime?: string;
+      geom?: components['schemas']['Geometry'];
     };
     ListPlantsResponsePayload: {
       list: components['schemas']['ListPlantsResponseElement'][];
@@ -1451,7 +1443,8 @@ export interface operations {
   list_1: {
     parameters: {
       query: {
-        payload: components['schemas']['ListFeaturesRequestPayload'];
+        skip?: number;
+        limit?: number;
       };
       path: {
         layerId: number;
@@ -1836,7 +1829,8 @@ export interface operations {
   getPlantSummary: {
     parameters: {
       query: {
-        payload: components['schemas']['GetPlantSummaryPayload'];
+        minEnteredTime?: string;
+        maxEnteredTime?: string;
       };
       path: {
         layerId: number;
@@ -1854,7 +1848,10 @@ export interface operations {
   getPlantsList: {
     parameters: {
       query: {
-        payload: components['schemas']['ListPlantsRequestPayload'];
+        speciesName?: string;
+        minEnteredTime?: string;
+        maxEnteredTime?: string;
+        notes?: string;
       };
       path: {
         layerId: number;
