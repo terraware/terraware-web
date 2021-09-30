@@ -7,7 +7,7 @@ import {
   InputAdornment,
   makeStyles,
   Paper,
-  Typography
+  Typography,
 } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import SearchIcon from '@material-ui/icons/Search';
@@ -20,7 +20,7 @@ import snackbarAtom from '../../../state/atoms/snackbar';
 import { plantsFeaturesSelector } from '../../../state/selectors/plantsFeatures';
 import {
   plantsByFeatureIdFilteredSelector,
-  plantsFiltersAtom
+  plantsFiltersAtom,
 } from '../../../state/selectors/plantsFiltered';
 import speciesSelector from '../../../state/selectors/species';
 import speciesNamesBySpeciesIdSelector from '../../../state/selectors/speciesById';
@@ -182,7 +182,7 @@ export default function AllPlants(): JSX.Element {
               <Grid item xs={2}>
                 <DatePicker
                   label={strings.FROM}
-                  id='min_entered_time'
+                  id='minEnteredTime'
                   aria-label='min_entered_time'
                   onChange={onChangeFilter}
                   value={newFilters?.minEnteredTime}
@@ -190,7 +190,7 @@ export default function AllPlants(): JSX.Element {
               </Grid>
               <Grid item xs={2}>
                 <DatePicker
-                  id='max_entered_time'
+                  id='maxEnteredTime'
                   label={strings.TO}
                   aria-label='max_entered_time'
                   onChange={onChangeFilter}
@@ -199,7 +199,7 @@ export default function AllPlants(): JSX.Element {
               </Grid>
               <Grid item xs={2}>
                 <Dropdown
-                  id='species_name'
+                  id='speciesName'
                   label={strings.SPECIES}
                   onChange={onChangeFilter}
                   selected={newFilters?.speciesName ?? ''}

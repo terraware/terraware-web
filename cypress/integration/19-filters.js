@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 /// <reference types="cypress" />
 
-describe.skip('Filter plants', () => {
+describe('Filter plants', () => {
   beforeEach(() => {
     cy.visit('/');
     cy.get('#plants').click().url().should('contain', '/plants');
@@ -17,7 +17,7 @@ describe.skip('Filter plants', () => {
     });
 
     cy.get('#show-filters').click();
-    cy.get('#min_entered_time').type(dateStr);
+    cy.get('#minEnteredTime').type(dateStr);
     cy.get('#apply-filters').click();
     cy.get('#all-plants-table .MuiTableBody-root .MuiTableRow-root').should(
       'have.length',
@@ -35,7 +35,7 @@ describe.skip('Filter plants', () => {
     });
 
     cy.get('#show-filters').click();
-    cy.get('#max_entered_time').type(dateStr);
+    cy.get('#maxEnteredTime').type(dateStr);
     cy.get('#apply-filters').click();
     cy.get('#all-plants-table .MuiTableBody-root .MuiTableRow-root').should(
       'have.length',
@@ -51,7 +51,7 @@ describe.skip('Filter plants', () => {
 
   it('should filter by species', () => {
     cy.get('#show-filters').click();
-    cy.get('#species_name').click();
+    cy.get('#speciesName').click();
     cy.get('#Banana').click();
     cy.get('#apply-filters').click();
     cy.get('#all-plants-table .MuiTableBody-root .MuiTableRow-root').should(
@@ -69,7 +69,7 @@ describe.skip('Filter plants', () => {
       1
     );
 
-    cy.get('#species').click().url().should('contain', '/species');
+    cy.get('#speciesNb').click().url().should('contain', '/species');
     cy.get('#plants').click().url().should('contain', '/plants');
     cy.get('#notes').should('exist');
     cy.get('#all-plants-table .MuiTableBody-root .MuiTableRow-root').should(

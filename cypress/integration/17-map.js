@@ -1,9 +1,9 @@
 /* eslint-disable no-undef */
 /// <reference types="cypress" />
 
-describe.skip('Map', () => {
+describe('Map', () => {
   beforeEach(() => {
-    cy.visit('/');
+    cy.visit('/dashboard');
   });
   it('should render the data on the map', () => {
     cy.get('.mapboxgl-marker').should('have.length', 4);
@@ -46,7 +46,7 @@ describe.skip('Map', () => {
         cy.get('#feature-coordinates').contains('45.467135,-75.546518');
         cy.get('#new-species').click();
         cy.get('#Other').click();
-        cy.intercept('PUT', '/api/v1/plants/*').as('putPlant');
+        cy.intercept('PUT', '/api/v1/gis/plants/*').as('putPlant');
         cy.get('#saveSpecie').click();
         cy.wait('@putPlant');
         cy.get('.overlays').click();
