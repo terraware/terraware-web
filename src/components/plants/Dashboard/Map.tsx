@@ -5,36 +5,19 @@ import CreateIcon from '@material-ui/icons/Create';
 import FullscreenIcon from '@material-ui/icons/Fullscreen';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import React from 'react';
-import ReactMapGL, {
-  MapContext,
-  Marker,
-  NavigationControl,
-  Popup
-} from 'react-map-gl';
+import ReactMapGL, { MapContext, MapEvent, NavigationControl, Popup, Source } from 'react-map-gl';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { Feature } from '../../../api/types/feature';
-import { ListPlantsResponseElement } from '../../../api/types/plant';
 import snackbarAtom from '../../../state/atoms/snackbar';
 import { plantsByFeatureIdSelector } from '../../../state/selectors/plants';
 import { plantsFeaturesWithGeolocationSelector } from '../../../state/selectors/plantsFeatures';
 import speciesForChartSelector from '../../../state/selectors/speciesForChart';
 import strings from '../../../strings';
+import { getCenter, getCoordinates } from '../../../utils/maps';
 import { cellDateFormatter } from '../../common/table/TableCellRenderer';
+import MapLayers from './MapLayers';
 import NewSpecieModal from './NewSpecieModal';
 import PlantPhoto from './PlantPhoto';
-
-export type SpecieMap = {
-  geometry: {
-    coordinates: number[];
-  };
-  properties: {
-    SPECIE_ID: number;
-    NAME: string;
-    DATE: string;
-    IMG: string;
-    MARKER?: string;
-  };
-};
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -65,18 +48,33 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-const navControlStyle = {
-  right: 10,
-  bottom: 10,
-  zIndex: 10,
-};
-
-const DEFAULT_VIEWPORT = { zoom: 8, width: 'fit', height: '100%' };
-
-interface Coordinate {
-  latitude: number;
-  longitude: number;
+export interface SpecieMap {
+  geometry: {
+    coordinates: number[];
+  };
+  properties: {
+    SPECIE_ID: number;
+    NAME: string;
+    DATE: string;
+    IMG: string;
+    MARKER?: string;
+  };
 }
+
+interface ViewportProps {
+  zoom: number;
+  width: string;
+  height: string;
+}
+
+interface MapboxFeaturesProps {
+  /** A JSON string for the Terraware Feature (Mapbox internally converts all properties into strings) */
+  feature: string;
+  color: string;
+}
+
+const navControlStyle = { right: 10, bottom: 10, zIndex: 10, };
+const DEFAULT_VIEWPORT: ViewportProps = { zoom: 8, width: 'fit', height: '100%' };
 
 interface Props {
   onFullscreen: () => void;
@@ -88,40 +86,62 @@ function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
   const [selectedFeature, setSelectedFeature] = React.useState<Feature>();
   const [editPlantModalOpen, setEditPlantModalOpen] = React.useState(false);
   const [viewport, setViewport] = React.useState(DEFAULT_VIEWPORT);
+  const [selectedCoordinates, setSelectedCoordinates] = React.useState<[number, number]>();
 
   const features = useRecoilValue(plantsFeaturesWithGeolocationSelector);
   const speciesForChart = useRecoilValue(speciesForChartSelector);
   const plantsByFeatureId = useRecoilValue(plantsByFeatureIdSelector);
   const setSnackbar = useSetRecoilState(snackbarAtom);
 
-  const selectedPlant: ListPlantsResponseElement | undefined =
-    selectedFeature && plantsByFeatureId
-      ? plantsByFeatureId[selectedFeature.id!]
-      : undefined;
-
-  const selectedPlantForTable =
-    selectedPlant && selectedFeature
-      ? {
-        date: selectedPlant.datePlanted,
-        species: speciesForChart[selectedPlant.speciesId!]
-          ? speciesForChart[selectedPlant.speciesId!].speciesName.name
-          : undefined,
-        geolocation:
-          selectedFeature.geom &&
-            Array.isArray(selectedFeature?.geom.coordinates)
-            ? `${selectedFeature.geom.coordinates[1].toFixed(
-              6
-            )}, ${selectedFeature.geom.coordinates[0].toFixed(6)}`
-            : undefined,
-        notes: selectedFeature.notes,
-        featureId: selectedFeature.id,
-        speciesId: selectedPlant.speciesId,
-      }
-      : undefined;
+  const center = getCenter(features);
 
   React.useEffect(() => {
     setViewport({ ...DEFAULT_VIEWPORT, height: '60vh' });
   }, [isFullscreen]);
+
+  useCenterMap(center, setViewport);
+  const geojson: GeoJSON.FeatureCollection<GeoJSON.Geometry> = React.useMemo(() => (
+    (plantsByFeatureId && features) ? features : []).reduce((acum, feature) => {
+      const coordinates = getCoordinates(feature);
+      const plant = plantsByFeatureId![feature.id!];
+      if (plant) {
+        const color = (speciesForChart[plant.speciesId ?? 0] ?? { color: 'black' }).color;
+        const properties: MapboxFeaturesProps = { feature: JSON.stringify(feature), color };
+
+        acum.features.push({
+          type: 'Feature',
+          properties,
+          geometry: {
+            type: 'Point',
+            coordinates: [coordinates.longitude, coordinates.latitude]
+          }
+        });
+      }
+
+      return acum;
+    }, { type: 'FeatureCollection', features: [] } as GeoJSON.FeatureCollection<GeoJSON.Geometry>)
+    , [features, plantsByFeatureId, speciesForChart]);
+
+  const selectedPlant = selectedFeature && plantsByFeatureId
+    ? plantsByFeatureId[selectedFeature.id!]
+    : undefined;
+
+  const selectedPlantForTable = selectedPlant && selectedFeature ? {
+    date: selectedPlant.datePlanted,
+    species: speciesForChart[selectedPlant.speciesId!]
+      ? speciesForChart[selectedPlant.speciesId!].speciesName.name
+      : undefined,
+    geolocation:
+      selectedFeature.geom &&
+        Array.isArray(selectedFeature?.geom.coordinates)
+        ? `${selectedFeature.geom.coordinates[1].toFixed(
+          6
+        )}, ${selectedFeature.geom.coordinates[0].toFixed(6)}`
+        : undefined,
+    notes: selectedFeature.notes,
+    featureId: selectedFeature.id,
+    speciesId: selectedPlant.speciesId,
+  } : undefined;
 
   const onCloseEditPlantModal = (snackbarMessage?: string) => {
     setEditPlantModalOpen(false);
@@ -137,73 +157,32 @@ function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
     setEditPlantModalOpen(true);
   };
 
-  const iconPin = (color: string, feature: Feature) => (
-    <svg height='100' width='100' onClick={() => setSelectedFeature(feature)}>
-      <circle cx='20' cy='20' r='10' fill={color} />
-    </svg>
-  );
-
-  const getCoordinates = (feature: Feature): Coordinate => {
-    if (
-      feature.geom &&
-      feature.geom.coordinates &&
-      Array.isArray(feature.geom.coordinates)
-    ) {
-      return {
-        longitude: feature.geom.coordinates[0],
-        latitude: feature.geom.coordinates[1],
-      };
-    } else {
-      return {
-        latitude: 0,
-        longitude: 0,
-      };
-    }
-  };
-
-  const getCenter = (): { latitude: number; longitude: number } => {
-    if (features?.length) {
-      let maxLat: number = getCoordinates(features[0]).latitude;
-      let minLat: number = getCoordinates(features[0]).latitude;
-      let maxLong: number = getCoordinates(features[0]).longitude;
-      let minLong: number = getCoordinates(features[0]).longitude;
-
-      const featureCopy = [...features];
-      featureCopy.shift();
-
-      featureCopy.forEach((feature) => {
-        const coordinates = getCoordinates(feature);
-        if (coordinates.latitude > maxLat) {
-          maxLat = coordinates.latitude;
-        }
-        if (coordinates.latitude < minLat) {
-          minLat = coordinates.latitude;
-        }
-        if (coordinates.longitude > maxLong) {
-          maxLong = coordinates.longitude;
-        }
-        if (coordinates.longitude < minLong) {
-          minLong = coordinates.longitude;
-        }
-      });
-
-      return {
-        latitude: (maxLat + minLat) / 2,
-        longitude: (maxLong + minLong) / 2,
-      };
-    }
-
-    return { latitude: 0, longitude: 0 };
-  };
-
   const onViewportChange = (newViewport: any) => {
     setViewport({ ...newViewport, width: 'fit' });
   };
 
-  const center = getCenter();
-  const selectedCoordinates = selectedFeature
-    ? getCoordinates(selectedFeature)
-    : undefined;
+  const onClick = (event: MapEvent) => {
+    if (!event.features) { return; }
+
+    if (event.features && event.features.length > 0) {
+      const eventFeature = event.features[0];
+      const layerId = eventFeature.layer.id;
+
+      if (layerId === 'unclustered-point') {
+        const lngLat = event.lngLat;
+
+
+        if (eventFeature.properties) {
+          const properties: MapboxFeaturesProps = eventFeature.properties;
+          const feature = JSON.parse(properties.feature);
+
+          setSelectedCoordinates(lngLat);
+          setSelectedFeature(feature);
+        }
+
+      }
+    }
+  };
 
   return (
     <>
@@ -212,7 +191,6 @@ function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
         onClose={onCloseEditPlantModal}
         value={selectedPlantForTable}
       />
-
       <ReactMapGL
         latitude={center.latitude}
         longitude={center.longitude}
@@ -220,94 +198,53 @@ function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
         onViewportChange={onViewportChange}
         mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
         mapStyle='mapbox://styles/mapbox/satellite-v9'
+        interactiveLayerIds={['unclustered-point']}
+        onClick={onClick}
       >
+        {/* https://docs.mapbox.com/mapbox-gl-js/style-spec/sources/#geojson-clusterRadius */}
+        <Source
+          id='plants'
+          type='geojson'
+          data={geojson}
+          cluster={true}
+          clusterMaxZoom={5}
+        >
+          <MapLayers />
+        </Source>
         <NavigationControl showCompass={false} style={navControlStyle} />
-        <CenterMap center={center} setViewport={setViewport} />
         <div style={{ position: 'absolute', right: 0, bottom: 80 }}>
-          <IconButton
-            id='full-screen'
-            onClick={onFullscreen}
-            className={classes.fullscreen}
-          >
+          <IconButton id='full-screen' onClick={onFullscreen} className={classes.fullscreen}>
             <FullscreenIcon />
           </IconButton>
         </div>
-        {plantsByFeatureId &&
-          features?.map((feature) => {
-            const plant = plantsByFeatureId[feature.id!];
-            const coordinates = getCoordinates(feature);
-            if (coordinates && plant) {
-              return (
-                <Marker
-                  key={feature.id}
-                  latitude={coordinates.latitude}
-                  longitude={coordinates.longitude}
-                  offsetLeft={-20}
-                  offsetTop={-10}
-                >
-                  {iconPin(
-                    speciesForChart[plant.speciesId!]
-                      ? speciesForChart[plant.speciesId!].color
-                      : speciesForChart[0].color,
-                    feature
-                  )}
-                </Marker>
-              );
-            }
-
-            return null;
-          })}
-        {selectedFeature && selectedPlant && (
+        {selectedFeature && selectedPlant && selectedCoordinates && (
           <Popup
-            onClose={() => {
-              setSelectedFeature(undefined);
-            }}
-            latitude={selectedCoordinates ? selectedCoordinates.latitude : 0}
-            longitude={selectedCoordinates ? selectedCoordinates.longitude : 0}
+            onClose={() => { setSelectedFeature(undefined); setSelectedCoordinates(undefined); }}
+            latitude={selectedCoordinates[1]}
+            longitude={selectedCoordinates[0]}
             captureClick={false}
             closeOnClick={false}
+            anchor='top'
           >
             <div>
-              <Typography
-                component='p'
-                variant='subtitle2'
-                id='feature-species-name'
-              >
+              <Typography component='p' variant='subtitle2' id='feature-species-name'>
                 {selectedPlant.speciesId
                   ? speciesForChart[selectedPlant.speciesId].speciesName.name
                   : strings.OTHER}
               </Typography>
-              <Typography
-                component='p'
-                variant='body2'
-                className={classes.spacing}
-              >
+              <Typography component='p' variant='body2' className={classes.spacing} >
                 {strings.AS_OF}{' '}
                 {cellDateFormatter(selectedFeature.enteredTime)}
               </Typography>
-              <Typography
-                component='p'
-                variant='body2'
-                className={classes.spacing}
-                id='feature-coordinates'
-              >
-                {selectedCoordinates
-                  ? selectedCoordinates.latitude.toFixed(6)
-                  : 0}
-                ,
-                {selectedCoordinates
-                  ? selectedCoordinates.longitude.toFixed(6)
-                  : 0}
+              <Typography component='p' variant='body2' className={classes.spacing} id='feature-coordinates'>
+                {selectedCoordinates ? selectedCoordinates[1].toFixed(6) : 0},
+                {selectedCoordinates ? selectedCoordinates[0].toFixed(6) : 0}
               </Typography>
               <PlantPhoto featureId={selectedFeature?.id} />
               <Chip
                 id='new-species'
                 size='medium'
-                label={
-                  selectedPlant.speciesId
-                    ? strings.EDIT_SPECIES
-                    : strings.ADD_SPECIES
-                }
+                label={selectedPlant.speciesId ? strings.EDIT_SPECIES : strings.ADD_SPECIES}
                 onClick={onNewSpecie}
                 className={classes.newSpecies}
                 icon={selectedPlant.speciesId ? <CreateIcon /> : <AddIcon />}
@@ -322,18 +259,7 @@ function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
 
 export default React.memo(Map);
 
-interface CenterMapProps {
-  center: { latitude: number; longitude: number };
-  setViewport: React.Dispatch<
-    React.SetStateAction<{
-      zoom: number;
-      width: string;
-      height: string;
-    }>
-  >;
-}
-
-function CenterMap({ center, setViewport }: CenterMapProps) {
+function useCenterMap(center: { latitude: number; longitude: number }, setViewport: (viewport: ViewportProps) => void) {
   const { map } = React.useContext(MapContext);
   const [lat, setLat] = React.useState(center.latitude);
   const [long, setLong] = React.useState(center.longitude);
@@ -349,6 +275,4 @@ function CenterMap({ center, setViewport }: CenterMapProps) {
       setLong(center.longitude);
     }
   }, [center, lat, long, map, setViewport]);
-
-  return null;
 }
