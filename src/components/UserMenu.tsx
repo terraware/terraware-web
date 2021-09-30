@@ -31,7 +31,7 @@ export default function UserMenu(): JSX.Element {
   };
 
   const onHandleLogout = () => {
-    window.location.href = `${process.env.REACT_APP_TERRAWARE_API}/sso/logout`;
+    window.location.href = `/sso/logout`;
   };
 
   return (

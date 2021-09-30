@@ -24,7 +24,7 @@ export const deleteFeature = async (
   featureId: number
 ): Promise<FeatureDeleteResponse> => {
   const endpoint = `${BASE_URL}/${featureId}`;
-  const response: FeatureDeleteResponse = (await axios.get(endpoint)).data;
+  const response: FeatureDeleteResponse = (await axios.delete(endpoint)).data;
 
   return response;
 };
