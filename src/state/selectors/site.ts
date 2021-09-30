@@ -9,6 +9,6 @@ export default selector<SiteElement | undefined>({
     const sites = get(sitesSelector);
     const projectId = get(projectIdSelector);
 
-    return sites?.find((site) => site.id === projectId);
+    return sites?.find((site) => site.projectId === projectId);
   },
 });
