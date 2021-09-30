@@ -7,6 +7,7 @@ import {
   InputAdornment,
   makeStyles,
   Paper,
+  TablePagination,
   Typography,
 } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
@@ -17,7 +18,7 @@ import React from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { SearchOptions } from 'src/api/types/plant';
 import snackbarAtom from '../../../state/atoms/snackbar';
-import { plantsFeaturesSelector } from '../../../state/selectors/plantsFeatures';
+import { plantsPlantedFeaturesPaginatedSelector } from '../../../state/selectors/plantsFeatures';
 import {
   plantsByFeatureIdFilteredSelector,
   plantsFiltersAtom,
@@ -265,11 +266,27 @@ interface AllPlantsProps {
 }
 
 function AllPlantsContent({ onEditPlant }: AllPlantsProps): JSX.Element {
-  const features = useRecoilValue(plantsFeaturesSelector);
+  const limit = 100;
+  const [skip, setSkip] = React.useState(0);
+  const [page, setPage] = React.useState(0);
+  const featuresList = useRecoilValue(
+    plantsPlantedFeaturesPaginatedSelector({ limit, skip })
+  );
+  const features = featuresList?.features;
+  const totalResults = featuresList?.totalCount;
   const speciesBySpeciesId = useRecoilValue(speciesNamesBySpeciesIdSelector);
   const plantsByFeatureFiltered = useRecoilValue(
     plantsByFeatureIdFilteredSelector
   );
+
+  const handleChangePage = (event: unknown, newPage: number) => {
+    if (newPage > page) {
+      setSkip(skip + limit);
+    } else {
+      setSkip(skip - limit);
+    }
+    setPage(newPage);
+  };
 
   const plantsForTable = React.useMemo(() => {
     let plantsToReturn: PlantForTable[] = [];
@@ -313,6 +330,14 @@ function AllPlantsContent({ onEditPlant }: AllPlantsProps): JSX.Element {
           orderBy='species'
           Renderer={AllPlantsCellRenderer}
           onSelect={onEditPlant}
+        />
+        <TablePagination
+          component='div'
+          count={totalResults || 0}
+          onChangePage={handleChangePage}
+          page={page}
+          rowsPerPage={limit}
+          rowsPerPageOptions={[]}
         />
       </Grid>
     </Grid>
