@@ -17,7 +17,7 @@ else
 fi
 
 commit_sha="${GITHUB_SHA:0:12}"
-docker_image='terraware/terraware-server'
+docker_image='terraware/tree-location-app'
 docker_tags="${docker_image}:$commit_sha,${docker_image}:${TIER}"
 
 # Define secret names based on the tier
