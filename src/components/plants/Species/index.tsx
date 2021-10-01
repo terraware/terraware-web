@@ -11,7 +11,7 @@ import strings from '../../../strings';
 import Button from '../../common/button/Button';
 import Table from '../../common/table';
 import { TableColumnType } from '../../common/table/types';
-import EditSpecieModal from './EditSpecieModal';
+import EditSpeciesModal from './EditSpeciesModal';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -52,12 +52,12 @@ export default function Species(): JSX.Element {
 
   const classes = useStyles();
 
-  const [editSpecieModalOpen, setEditSpecieModalOpen] = React.useState(false);
+  const [editSpeciesModalOpen, setEditSpeciesModalOpen] = React.useState(false);
 
-  const [selectedSpecie, setSelectedSpecie] = React.useState<SpeciesType>();
+  const [selectedSpecies, setSelectedSpecies] = React.useState<SpeciesType>();
 
-  const onCloseEditSpecieModal = (snackbarMessage?: string) => {
-    setEditSpecieModalOpen(false);
+  const onCloseEditSpeciesModal = (snackbarMessage?: string) => {
+    setEditSpeciesModalOpen(false);
     if (snackbarMessage) {
       setSnackbar({
         type: 'success',
@@ -65,21 +65,21 @@ export default function Species(): JSX.Element {
       });
     }
   };
-  const onSelect = (specie: SpeciesType) => {
-    setSelectedSpecie(specie);
-    setEditSpecieModalOpen(true);
+  const onSelect = (species: SpeciesType) => {
+    setSelectedSpecies(species);
+    setEditSpeciesModalOpen(true);
   };
-  const onNewSpecie = () => {
-    setSelectedSpecie(undefined);
-    setEditSpecieModalOpen(true);
+  const onNewSpecies = () => {
+    setSelectedSpecies(undefined);
+    setEditSpeciesModalOpen(true);
   };
 
   return (
     <main>
-      <EditSpecieModal
-        open={editSpecieModalOpen}
-        onClose={onCloseEditSpecieModal}
-        value={selectedSpecie}
+      <EditSpeciesModal
+        open={editSpeciesModalOpen}
+        onClose={onCloseEditSpeciesModal}
+        value={selectedSpecies}
       />
       <Container maxWidth={false} className={classes.mainContainer}>
         <Grid container spacing={3}>
@@ -92,7 +92,7 @@ export default function Species(): JSX.Element {
             <Button
               id='new-species'
               label={strings.NEW_SPECIES}
-              onClick={onNewSpecie}
+              onClick={onNewSpecies}
               icon='plus'
             />
           </Grid>

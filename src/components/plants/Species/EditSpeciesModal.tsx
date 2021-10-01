@@ -48,7 +48,7 @@ function initSpecies(species?: SpeciesType): SpeciesType {
     }
   );
 }
-export default function EditSpecieModal(props: Props): JSX.Element {
+export default function EditSpeciesModal(props: Props): JSX.Element {
   const classes = useStyles();
   const { onClose, open } = props;
   const [record, setRecord, onChange] = useForm<SpeciesType>(
@@ -124,7 +124,7 @@ export default function EditSpecieModal(props: Props): JSX.Element {
             />
             <Button
               onClick={handleOk}
-              id='save-specie'
+              id='save-species'
               label={props.value ? strings.SAVE : strings.ADD}
             />
           </Box>

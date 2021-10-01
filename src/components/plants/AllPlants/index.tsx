@@ -32,7 +32,7 @@ import Dropdown from '../../common/Dropdown';
 import Table from '../../common/table';
 import { TableRowType } from '../../common/table/TableCellRenderer';
 import { TableColumnType } from '../../common/table/types';
-import NewSpecieModal from '../Dashboard/NewSpecieModal';
+import NewSpeciesModal from '../Dashboard/NewSpeciesModal';
 import DeletePlantConfirmationModal from './DeletePlantConfirmationModal';
 import AllPlantsCellRenderer from './TableCellRenderer';
 
@@ -145,7 +145,7 @@ export default function AllPlants(): JSX.Element {
 
   return (
     <main>
-      <NewSpecieModal
+      <NewSpeciesModal
         open={editPlantOpen}
         onClose={onCloseEditPlantModal}
         onDelete={openDeleteConfirmationModal}
