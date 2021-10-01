@@ -137,7 +137,7 @@ describe('Accessions', () => {
       cy.get('#sendToNursery').should('exist');
     });
 
-    it('should show autocomplete when typing and show modal when updating the specie name and create a new specie', () => {
+    it('should show autocomplete when typing and show modal when updating the species name and create a new species', () => {
       cy.get('#species').clear().type('Kousa Dogwoord New');
       cy.focused().should('have.attr', 'aria-controls', 'species-popup');
 
@@ -150,7 +150,7 @@ describe('Accessions', () => {
       cy.get('#species').should('have.value', 'Kousa Dogwoord New');
     });
 
-    it('should not show modal if updating the specie name with an existant specie', () => {
+    it('should not show modal if updating the species name with an existant species', () => {
       cy.get('#species').clear().type('Kousa Dogwoord');
 
       cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
@@ -161,7 +161,7 @@ describe('Accessions', () => {
       cy.get('#species').should('have.value', 'Kousa Dogwoord');
     });
 
-    it('should show modal if updating the specie name and modify the existant specie', () => {
+    it('should show modal if updating the species name and modify the existant species', () => {
       cy.get('#species').clear().type('Kousa Dogwoord Modified');
 
       cy.get('#saveAccession').click();

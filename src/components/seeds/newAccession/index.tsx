@@ -165,7 +165,7 @@ export function AccessionForm<T extends NewAccession>({
   const [isSaving, setIsSaving] = React.useState(false);
   const [isSaved, setIsSaved] = React.useState(false);
   const [editSpeciesModalOpen, setEditSpeciesModalOpen] = React.useState(false);
-  const [newSpecieSelected, setNewSpeciesSelected] = React.useState(false);
+  const [newSpeciesSelected, setNewSpeciesSelected] = React.useState(false);
   const [isSendingToNursery, setIsSendingToNursery] = React.useState(false);
   const [isSentToNursery, setIsSentToNursery] = React.useState(false);
   const [canSendToNursery, setCanSendToNursery] = React.useState(false);
@@ -206,7 +206,7 @@ export function AccessionForm<T extends NewAccession>({
   };
 
   const beforeSubmit = () => {
-    if (updating && accession.species !== record.species && newSpecieSelected) {
+    if (updating && accession.species !== record.species && newSpeciesSelected) {
       setEditSpeciesModalOpen(true);
     } else {
       onSubmitHandler();
@@ -282,17 +282,17 @@ export function AccessionForm<T extends NewAccession>({
     setErrors(combinedErrors);
   };
 
-  const onCloseEditSpecieModal = () => {
+  const onCloseEditSpeciesModal = () => {
     setEditSpeciesModalOpen(false);
     onSubmitHandler();
   };
 
-  const closeModalAndUpdateSpecie = () => {
+  const closeModalAndUpdateSpecies = () => {
     const speciesId = (record as unknown as Accession).speciesId;
     if (speciesId && record.species) {
       updateSpecies({ id: speciesId, name: record.species });
     }
-    onCloseEditSpecieModal();
+    onCloseEditSpeciesModal();
   };
 
   const onSpeciesChanged = (id: string, value: unknown, isNew: boolean) => {
@@ -305,8 +305,8 @@ export function AccessionForm<T extends NewAccession>({
       {updating && (
         <EditSpeciesModal
           open={editSpeciesModalOpen}
-          onClose={onCloseEditSpecieModal}
-          onOk={closeModalAndUpdateSpecie}
+          onClose={onCloseEditSpeciesModal}
+          onOk={closeModalAndUpdateSpecies}
         />
       )}
       <MuiPickersUtilsProvider utils={MomentUtils}>

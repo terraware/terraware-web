@@ -58,7 +58,7 @@ export default function Species(): JSX.Element {
     setIsEditSpeciesModalOpen(true);
   };
 
-  const onOpenNewSpecieModal = () => {
+  const onOpenNewSpeciesModal = () => {
     setIsNewSpeciesModalOpen(true);
   };
 
@@ -104,7 +104,7 @@ export default function Species(): JSX.Element {
               id='new-species'
               size='medium'
               label='New Species'
-              onClick={onOpenNewSpecieModal}
+              onClick={onOpenNewSpeciesModal}
               className={classes.newSpecies}
               deleteIcon={<AddIcon classes={chipStyles()} />}
               onDelete={() => true}
