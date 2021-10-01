@@ -10,19 +10,34 @@ describe('Processing and Drying', () => {
     cy.get('#menu-processing-drying').click();
   });
 
-  it('should add processing and drying information', () => {
+  // The following sections are split up into small chunks in an effort to work around
+  // a Cypress bug that causes test suites to hang forever.
+
+  it('should set the processing method', () => {
     cy.get('#processingMethod').click();
     cy.get('#Count').click();
+  });
+
+  it('should set the seed count', () => {
     cy.get('#quantity').type(300);
+  });
+
+  it('should add processing and drying information', () => {
     cy.get('#check-Nursery').click();
     cy.get('#dryingStartDate').type('01/01/2021');
     cy.get('#dryingEndDate').type('01/01/2021');
     cy.get('#dryingMoveDate').type('01/01/2021');
     cy.get('#processingNotes').type('A processing note');
     cy.get('#processingStaffResponsible').type('Constanza');
+  });
 
-    cy.get('#saveAccession').click();
+  it('should save the accession', () => {
+    cy.intercept('PUT', '/api/v1/seedbank/accession/*').as('saveAccession');
+    cy.get('#saveAccession', { timeout: 10000 }).click();
+    cy.wait('@saveAccession', { timeout: 10000 });
+  });
 
+  it('should display processing and drying information after saving', () => {
     cy.get('#processingMethod + input').should('have.value', 'Count');
     cy.get('#quantity').should('have.value', '300');
     cy.get('#check-Nursery').should('have.checked', 'true');
