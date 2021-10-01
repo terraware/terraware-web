@@ -1,10 +1,10 @@
 import React from 'react';
 import CellRenderer from '../../common/table/TableCellRenderer';
 import { RendererProps } from '../../common/table/types';
-import { SpecieMap } from './Map';
+import { SpeciesMap } from './Map';
 
 export default function GeolocationCellRenderer(
-  props: RendererProps<SpecieMap>
+  props: RendererProps<SpeciesMap>
 ): JSX.Element {
   const { column, row, index } = props;
   if (column.key === 'name') {

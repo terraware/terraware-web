@@ -16,7 +16,7 @@ import strings from '../../../strings';
 import { getCenter, getCoordinates } from '../../../utils/maps';
 import { cellDateFormatter } from '../../common/table/TableCellRenderer';
 import MapLayers from './MapLayers';
-import NewSpecieModal from './NewSpecieModal';
+import NewSpeciesModal from './NewSpeciesModal';
 import PlantPhoto from './PlantPhoto';
 
 const useStyles = makeStyles((theme) =>
@@ -48,12 +48,12 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-export interface SpecieMap {
+export interface SpeciesMap {
   geometry: {
     coordinates: number[];
   };
   properties: {
-    SPECIE_ID: number;
+    SPECIES_ID: number;
     NAME: string;
     DATE: string;
     IMG: string;
@@ -153,7 +153,7 @@ function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
     }
   };
 
-  const onNewSpecie = () => {
+  const onNewSpecies = () => {
     setEditPlantModalOpen(true);
   };
 
@@ -186,7 +186,7 @@ function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
 
   return (
     <>
-      <NewSpecieModal
+      <NewSpeciesModal
         open={editPlantModalOpen}
         onClose={onCloseEditPlantModal}
         value={selectedPlantForTable}
@@ -245,7 +245,7 @@ function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
                 id='new-species'
                 size='medium'
                 label={selectedPlant.speciesId ? strings.EDIT_SPECIES : strings.ADD_SPECIES}
-                onClick={onNewSpecie}
+                onClick={onNewSpecies}
                 className={classes.newSpecies}
                 icon={selectedPlant.speciesId ? <CreateIcon /> : <AddIcon />}
               />

@@ -352,7 +352,7 @@ describe('Database', () => {
       cy.get('#subtitle').should('contain', '13 total');
     });
 
-    it('Should search by specie', () => {
+    it('Should search by species', () => {
       cy.intercept('POST', '/api/v1/seedbank/search').as('search');
       cy.intercept('POST', '/api/v1/seedbank/values').as('values');
 

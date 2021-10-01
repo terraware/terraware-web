@@ -94,7 +94,7 @@ export default function NewSpeciesModal(props: Props): JSX.Element {
           <Box>
             <CancelButton onClick={handleCancel} />
             <Chip
-              id='saveSpecie'
+              id='saveSpecies'
               className={classes.submit}
               label={strings.CREATE}
               clickable

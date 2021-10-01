@@ -30,7 +30,7 @@ describe('All plants', () => {
   it('should edit species selecting other', () => {
     cy.get('#row1').click();
     cy.get('#Other').click();
-    cy.get('#saveSpecie').click();
+    cy.get('#saveSpecies').click();
 
     cy.get('#row1-species').should('contain', 'Other');
   });
@@ -38,7 +38,7 @@ describe('All plants', () => {
   it('should edit species of a plant, selecting a previous existent species', () => {
     cy.get('#row1').click();
     cy.get('#Banana').click();
-    cy.get('#saveSpecie').click();
+    cy.get('#saveSpecies').click();
 
     cy.get('#row1-species').should('contain', 'Banana');
   });
@@ -50,15 +50,15 @@ describe('All plants', () => {
 
   it('should edit species of a plant, creating a new species', () => {
     cy.get('#row1').click();
-    cy.get('#new-specie-section #species').click().type('Acacia');
-    cy.get('#saveSpecie').click();
+    cy.get('#new-species-section #species').click().type('Acacia');
+    cy.get('#saveSpecies').click();
 
     cy.get('#row1-species').should('contain', 'Acacia');
   });
 
   it('should delete plant', () => {
     cy.get('#row1').click();
-    cy.get('#delete-specie').click();
+    cy.get('#delete-species').click();
     cy.get('#delete').click();
 
     cy.get('#row1-species').should('not.contain', 'Acacia');

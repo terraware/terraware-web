@@ -77,15 +77,15 @@ const initPlant = (plant?: PlantForTable): PlantForTable => {
   return plant ? { ...plant, speciesId: plant.speciesId ?? 0 } : {};
 };
 
-export default function NewSpecieModalWrapper(props: Props): JSX.Element {
+export default function NewSpeciesModalWrapper(props: Props): JSX.Element {
   return (
     <React.Suspense fallback={strings.LOADING}>
-      <NewSpecieModal {...props} />
+      <NewSpeciesModal {...props} />
     </React.Suspense>
   );
 }
 
-function NewSpecieModal(props: Props): JSX.Element {
+function NewSpeciesModal(props: Props): JSX.Element {
   const classes = useStyles();
   const { onClose, open, onDelete } = props;
   const [record, setRecord] = useForm<PlantForTable>(initPlant(props.value));
@@ -159,7 +159,7 @@ function NewSpecieModal(props: Props): JSX.Element {
         <DialogCloseButton onClick={handleCancel} />
       </DialogTitle>
       <DialogContent dividers>
-        <NewSpecieModalContent record={record} setRecord={setRecord} />
+        <NewSpeciesModalContent record={record} setRecord={setRecord} />
       </DialogContent>
       <DialogActions>
         <Box width={'100%'} className={classes.actions}>
@@ -167,7 +167,7 @@ function NewSpecieModal(props: Props): JSX.Element {
             {props.value && props.onDelete && (
               <Button
                 onClick={handleDelete}
-                id='delete-specie'
+                id='delete-species'
                 label={strings.DELETE}
                 type='destructive'
                 priority='secondary'
@@ -183,7 +183,7 @@ function NewSpecieModal(props: Props): JSX.Element {
               type='passive'
               className={classes.spacing}
             />
-            <Button onClick={handleOk} id='saveSpecie' label={strings.SAVE} />
+            <Button onClick={handleOk} id='saveSpecies' label={strings.SAVE} />
           </Box>
         </Box>
       </DialogActions>
@@ -196,19 +196,19 @@ interface ContentProps {
   setRecord: (record: PlantForTable) => void;
 }
 
-function NewSpecieModalContent(props: ContentProps): JSX.Element {
+function NewSpeciesModalContent(props: ContentProps): JSX.Element {
   const classes = useStyles();
 
   const species = useRecoilValue(speciesSelector);
   const speciesById = useRecoilValue(speciesByIdSelector);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newSpecieId = parseInt(event.target.value, 10);
+    const newSpeciesId = parseInt(event.target.value, 10);
     const newRecord = {
       ...props.record,
-      speciesId: newSpecieId,
-      species: speciesById[newSpecieId]
-        ? speciesById[newSpecieId].name
+      speciesId: newSpeciesId,
+      species: speciesById[newSpeciesId]
+        ? speciesById[newSpeciesId].name
         : undefined,
     };
 
@@ -283,7 +283,7 @@ function NewSpecieModalContent(props: ContentProps): JSX.Element {
         </Grid>
       </Grid>
       <Grid container spacing={4}>
-        <Grid item xs={12} id='new-specie-section'>
+        <Grid item xs={12} id='new-species-section'>
           <TextField
             id='species'
             value={props.record.speciesId ? '' : props.record.species}
