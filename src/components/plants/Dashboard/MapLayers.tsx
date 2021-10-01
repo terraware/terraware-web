@@ -52,7 +52,7 @@ export default function MapLayers(): JSX.Element {
             'interpolate',
             ['linear'],
             ['zoom'],
-            9, 2, // zoom<=9
+            10, 2, // zoom<=10
             14, 4, // zoom<=14
             15, 6, // zoom>5
           ],
