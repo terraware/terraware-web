@@ -265,7 +265,7 @@ function useCenterMap(center: { latitude: number; longitude: number }, setViewpo
   const [long, setLong] = React.useState(center.longitude);
 
   React.useEffect(() => {
-    if (center && (center.longitude !== long || center.latitude !== lat)) {
+    if (map && center && (center.longitude !== long || center.latitude !== lat)) {
       map.jumpTo({
         center: [center.longitude, center.latitude],
         essential: true,
