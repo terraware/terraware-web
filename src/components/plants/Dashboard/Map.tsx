@@ -74,7 +74,7 @@ interface MapboxFeaturesProps {
 }
 
 const navControlStyle = { right: 10, bottom: 10, zIndex: 10, };
-const DEFAULT_VIEWPORT: ViewportProps = { zoom: 8, width: 'fit', height: '100%' };
+const DEFAULT_VIEWPORT: ViewportProps = { zoom: 10, width: 'fit', height: '100%' };
 
 interface Props {
   onFullscreen: () => void;
@@ -207,7 +207,7 @@ function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
           type='geojson'
           data={geojson}
           cluster={true}
-          clusterMaxZoom={5}
+          clusterMaxZoom={8}
         >
           <MapLayers />
         </Source>
@@ -265,7 +265,7 @@ function useCenterMap(center: { latitude: number; longitude: number }, setViewpo
   const [long, setLong] = React.useState(center.longitude);
 
   React.useEffect(() => {
-    if (center && (center.longitude !== long || center.latitude !== lat)) {
+    if (map && center && (center.longitude !== long || center.latitude !== lat)) {
       map.jumpTo({
         center: [center.longitude, center.latitude],
         essential: true,
