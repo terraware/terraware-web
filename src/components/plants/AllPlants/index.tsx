@@ -266,7 +266,7 @@ interface AllPlantsProps {
 }
 
 function AllPlantsContent({ onEditPlant }: AllPlantsProps): JSX.Element {
-  const limit = 100;
+  const [limit, setLimit] = React.useState(100);
   const [skip, setSkip] = React.useState(0);
   const [page, setPage] = React.useState(0);
   const featuresList = useRecoilValue(
@@ -320,6 +320,14 @@ function AllPlantsContent({ onEditPlant }: AllPlantsProps): JSX.Element {
     return plantsToReturn;
   }, [features, plantsByFeatureFiltered, speciesBySpeciesId]);
 
+  const changeRowsPerPageHandler = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setLimit(parseInt(event.target.value, 10));
+    setPage(0);
+    setSkip(0);
+  };
+
   return (
     <Grid container spacing={4}>
       <Grid item xs={12}>
@@ -334,10 +342,11 @@ function AllPlantsContent({ onEditPlant }: AllPlantsProps): JSX.Element {
         <TablePagination
           component='div'
           count={totalResults || 0}
-          onChangePage={handleChangePage}
           page={page}
+          onChangePage={handleChangePage}
           rowsPerPage={limit}
-          rowsPerPageOptions={[]}
+          rowsPerPageOptions={[10, 25, 50, 100]}
+          onChangeRowsPerPage={changeRowsPerPageHandler}
         />
       </Grid>
     </Grid>
