@@ -1,9 +1,11 @@
+/* eslint-disable import/no-webpack-loader-syntax */
 import {
   createStyles,
   CssBaseline,
   makeStyles,
   ThemeProvider,
 } from '@material-ui/core';
+import mapboxgl from 'mapbox-gl';
 import React from 'react';
 import {
   BrowserRouter as Router,
@@ -27,6 +29,11 @@ import ErrorBoundary from './ErrorBoundary';
 import strings from './strings';
 import theme from './theme';
 import useTimer from './utils/useTimer';
+
+// @ts-ignore
+mapboxgl.workerClass =
+  // tslint:disable-next-line: no-var-requires
+  require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker').default;
 
 export default function App() {
   return (
