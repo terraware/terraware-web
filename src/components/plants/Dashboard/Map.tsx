@@ -327,7 +327,6 @@ function CenterMap({ center, setViewport }: CenterMapProps) {
   const [long, setLong] = React.useState(center.longitude);
 
   React.useEffect(() => {
-    console.log(map);
     if (center && (center.longitude !== long || center.latitude !== lat)) {
       map.jumpTo({
         center: [center.longitude, center.latitude],
