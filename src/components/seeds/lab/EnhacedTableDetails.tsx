@@ -12,8 +12,8 @@ import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
 import CloseIcon from '@material-ui/icons/Close';
 import React from 'react';
-import { GerminationTest } from '../../../api/types/tests';
-import strings from '../../../strings';
+import { GerminationTest } from 'src/api/types/tests';
+import strings from 'src/strings';
 import Divisor from '../../common/Divisor';
 import SummaryBox from '../../common/SummaryBox';
 import {

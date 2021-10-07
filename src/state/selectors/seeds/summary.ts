@@ -1,6 +1,6 @@
 import { atom, selector } from 'recoil';
-import { getSummary } from '../../../api/seeds/summary';
-import { SummaryResponse } from '../../../api/types/summary';
+import { getSummary } from 'src/api/seeds/summary';
+import { SummaryResponse } from 'src/api/types/summary';
 import { facilityIdSelector } from './facility';
 
 const summaryAtom = atom({

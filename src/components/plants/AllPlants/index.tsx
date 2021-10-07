@@ -17,15 +17,15 @@ import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import React from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { SearchOptions } from 'src/api/types/plant';
-import snackbarAtom from '../../../state/atoms/snackbar';
-import { plantsPlantedFeaturesPaginatedSelector } from '../../../state/selectors/plants/plantsFeatures';
+import snackbarAtom from 'src/state/atoms/snackbar';
+import { plantsPlantedFeaturesPaginatedSelector } from 'src/state/selectors/plants/plantsFeatures';
 import {
   plantsByFeatureIdFilteredSelector,
   plantsFiltersAtom
-} from '../../../state/selectors/plants/plantsFiltered';
-import speciesSelector from '../../../state/selectors/species';
-import speciesNamesBySpeciesIdSelector from '../../../state/selectors/speciesById';
-import strings from '../../../strings';
+} from 'src/state/selectors/plants/plantsFiltered';
+import speciesSelector from 'src/state/selectors/species';
+import speciesNamesBySpeciesIdSelector from 'src/state/selectors/speciesById';
+import strings from 'src/strings';
 import Button from '../../common/button/Button';
 import DatePicker from '../../common/DatePicker';
 import Dropdown from '../../common/Dropdown';

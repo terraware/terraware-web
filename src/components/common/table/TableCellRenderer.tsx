@@ -9,7 +9,7 @@ import {
 import EditIcon from '@material-ui/icons/Edit';
 import NotesIcon from '@material-ui/icons/Notes';
 import React from 'react';
-import preventDefaultEvent from '../../../utils/preventDefaultEvent';
+import preventDefaultEvent from 'src/utils/preventDefaultEvent';
 import { RendererProps } from './types';
 
 export type TableRowType = Record<string, any>;

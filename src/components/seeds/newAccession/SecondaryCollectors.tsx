@@ -1,8 +1,8 @@
 import { Box, IconButton, Link } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import React from 'react';
-import strings from '../../../strings';
-import preventDefaultEvent from '../../../utils/preventDefaultEvent';
+import strings from 'src/strings';
+import preventDefaultEvent from 'src/utils/preventDefaultEvent';
 import TextField from '../../common/TextField';
 
 interface Props {

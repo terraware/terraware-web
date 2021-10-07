@@ -5,8 +5,8 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { useRecoilValueLoadable, useResetRecoilState } from 'recoil';
-import searchSelector from '../state/selectors/seeds/searchByAccessionNumber';
-import useStateLocation, { getLocation } from '../utils/useStateLocation';
+import searchSelector from 'src/state/selectors/seeds/searchByAccessionNumber';
+import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
 const useStyles = makeStyles((theme) =>
   createStyles({

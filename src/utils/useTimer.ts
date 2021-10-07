@@ -2,8 +2,8 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useEffect } from 'react';
 import { useResetRecoilState } from 'recoil';
-import notificationsSelector from '../state/selectors/notifications';
-import summarySelector from '../state/selectors/seeds/summary';
+import notificationsSelector from 'src/state/selectors/notifications';
+import summarySelector from 'src/state/selectors/seeds/summary';
 
 const useTimer = (delay = 60000): void => {
   if (!process.env.REACT_APP_DISABLE_RECURRENT_REQUESTS) {

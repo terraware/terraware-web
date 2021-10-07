@@ -13,13 +13,13 @@ import ReactMapGL, {
   Source,
 } from 'react-map-gl';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { Feature } from '../../../api/types/feature';
-import snackbarAtom from '../../../state/atoms/snackbar';
-import { plantsByFeatureIdSelector } from '../../../state/selectors/plants/plants';
-import { plantsFeaturesWithGeolocationSelector } from '../../../state/selectors/plants/plantsFeatures';
-import speciesForChartSelector from '../../../state/selectors/plants/speciesForChart';
-import strings from '../../../strings';
-import { getCenter, getCoordinates } from '../../../utils/maps';
+import { Feature } from 'src/api/types/feature';
+import snackbarAtom from 'src/state/atoms/snackbar';
+import { plantsByFeatureIdSelector } from 'src/state/selectors/plants/plants';
+import { plantsFeaturesWithGeolocationSelector } from 'src/state/selectors/plants/plantsFeatures';
+import speciesForChartSelector from 'src/state/selectors/plants/speciesForChart';
+import strings from 'src/strings';
+import { getCenter, getCoordinates } from 'src/utils/maps';
 import { cellDateFormatter } from '../../common/table/TableCellRenderer';
 import MapLayers from './MapLayers';
 import NewSpeciesModal from './NewSpeciesModal';

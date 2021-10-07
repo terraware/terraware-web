@@ -12,8 +12,8 @@ import TableRow from '@material-ui/core/TableRow';
 import WarningIcon from '@material-ui/icons/Warning';
 import React from 'react';
 import { useRecoilValueLoadable } from 'recoil';
-import notifications from '../../../state/selectors/notifications';
-import strings from '../../../strings';
+import notifications from 'src/state/selectors/notifications';
+import strings from 'src/strings';
 
 const useStyles = makeStyles((theme) =>
   createStyles({

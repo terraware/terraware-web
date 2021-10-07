@@ -7,8 +7,8 @@ import AddIcon from '@material-ui/icons/Add';
 import HelpIcon from '@material-ui/icons/Help';
 import React from 'react';
 import { Link as RouterLink, useRouteMatch } from 'react-router-dom';
-import strings from '../../strings';
-import useStateLocation, { getLocation } from '../../utils/useStateLocation';
+import strings from 'src/strings';
+import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import NotificationsDropdown from '../NotificationsDropdown';
 import SearchBar from '../SearchBar';
 

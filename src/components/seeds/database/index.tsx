@@ -21,21 +21,21 @@ import {
 import {
   SearchField,
   SearchNodePayload,
-  SearchResponseResults,
-} from '../../../api/types/search';
+  SearchResponseResults
+} from 'src/api/types/search';
 import {
   columnsAtom,
   searchFilterAtom,
   searchSelectedColumnsAtom,
   searchSortAtom
-} from '../../../state/atoms/seeds/search';
+} from 'src/state/atoms/seeds/search';
 import searchSelector, {
   columnsSelector
-} from '../../../state/selectors/seeds/search';
-import searchAllValuesSelector from '../../../state/selectors/seeds/searchAllValues';
-import searchValuesSelector from '../../../state/selectors/seeds/searchValues';
-import strings from '../../../strings';
-import useStateLocation, { getLocation } from '../../../utils/useStateLocation';
+} from 'src/state/selectors/seeds/search';
+import searchAllValuesSelector from 'src/state/selectors/seeds/searchAllValues';
+import searchValuesSelector from 'src/state/selectors/seeds/searchValues';
+import strings from 'src/strings';
+import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import Table from '../../common/table';
 import { Order } from '../../common/table/sort';
 import PageHeader from '../PageHeader';

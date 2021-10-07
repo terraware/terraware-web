@@ -1,6 +1,6 @@
 import { atom, selector } from 'recoil';
-import { getSpeciesList } from '../../api/seeds/species';
-import { SpeciesType } from '../../types/SpeciesType';
+import { getSpeciesList } from 'src/api/seeds/species';
+import { SpeciesType } from 'src/types/SpeciesType';
 
 export const speciesAtom = atom({
   key: 'speciesTrigger',

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useRecoilValue, useResetRecoilState } from 'recoil';
-import collectorsSelector from '../../../state/selectors/seeds/collectors';
-import strings from '../../../strings';
+import collectorsSelector from 'src/state/selectors/seeds/collectors';
+import strings from 'src/strings';
 import Autocomplete from '../../common/Autocomplete';
 
 interface Props {

@@ -6,7 +6,7 @@ import {
 } from '@material-ui/core';
 import FiberManualRecord from '@material-ui/icons/FiberManualRecord';
 import React from 'react';
-import { SearchResponseResults } from '../../../api/types/search';
+import { SearchResponseResults } from 'src/api/types/search';
 import CellRenderer from '../../common/table/TableCellRenderer';
 import { RendererProps } from '../../common/table/types';
 

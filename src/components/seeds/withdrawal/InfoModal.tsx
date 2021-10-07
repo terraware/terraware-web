@@ -4,7 +4,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React from 'react';
-import strings from '../../../strings';
+import strings from 'src/strings';
 import DialogCloseButton from '../../common/DialogCloseButton';
 
 const useStyles = makeStyles((theme: Theme) =>

@@ -1,6 +1,6 @@
 import { atom, selectorFamily } from 'recoil';
-import { getPlantSummary } from '../../../api/plants/plants';
-import { PlantSummary } from '../../../api/types/plant';
+import { getPlantSummary } from 'src/api/plants/plants';
+import { PlantSummary } from 'src/api/types/plant';
 import { plantsLayerSelector } from './layers';
 
 export const plantsSummaryAtom = atom({

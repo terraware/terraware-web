@@ -7,9 +7,9 @@ import {
   useParams,
   useRouteMatch,
 } from 'react-router-dom';
-import { Accession } from '../../../api/types/accessions';
-import strings from '../../../strings';
-import useStateLocation from '../../../utils/useStateLocation';
+import { Accession } from 'src/api/types/accessions';
+import strings from 'src/strings';
+import useStateLocation from 'src/utils/useStateLocation';
 import Divisor from '../../common/Divisor';
 
 const useStyles = makeStyles((theme) =>

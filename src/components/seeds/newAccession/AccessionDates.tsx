@@ -2,8 +2,8 @@ import { Grid } from '@material-ui/core';
 import moment from 'moment';
 import React from 'react';
 import { useRecoilValue, useResetRecoilState } from 'recoil';
-import timeSelector from '../../../state/selectors/time';
-import strings from '../../../strings';
+import timeSelector from 'src/state/selectors/time';
+import strings from 'src/strings';
 import DatePicker from '../../common/DatePicker';
 
 interface Props {

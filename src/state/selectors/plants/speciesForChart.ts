@@ -1,6 +1,6 @@
 import { atom, selector } from 'recoil';
-import strings from '../../../strings';
-import { SpeciesForChart, SpeciesType } from '../../../types/SpeciesType';
+import strings from 'src/strings';
+import { SpeciesForChart, SpeciesType } from 'src/types/SpeciesType';
 import speciesNamesBySpeciesIdSelector from '../speciesById';
 import colorsBySpeciesSelector from './colorsBySpecies';
 import { plantsSelector } from './plants';

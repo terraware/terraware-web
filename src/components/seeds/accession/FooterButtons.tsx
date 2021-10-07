@@ -2,7 +2,7 @@ import { Chip, Link } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import strings from '../../../strings';
+import strings from 'src/strings';
 
 const useStyles = makeStyles((theme) =>
   createStyles({

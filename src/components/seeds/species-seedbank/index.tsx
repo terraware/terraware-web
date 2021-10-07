@@ -6,9 +6,9 @@ import { useRecoilValueLoadable, useResetRecoilState } from 'recoil';
 import {
   postSpecies,
   updateSpecies
-} from '../../../api/seeds/species';
-import speciesSelector from '../../../state/selectors/species';
-import { SpeciesType } from '../../../types/SpeciesType';
+} from 'src/api/seeds/species';
+import speciesSelector from 'src/state/selectors/species';
+import { SpeciesType } from 'src/types/SpeciesType';
 import Table from '../../common/table';
 import { TableColumnType } from '../../common/table/types';
 import PageHeader from '../PageHeader';

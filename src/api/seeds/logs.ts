@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Log } from '../../components/Snackbar';
+import { Log } from 'src/components/Snackbar';
 
 const BASE_URL = `${process.env.REACT_APP_TERRAWARE_API}/api/v1/seedbank`;
 

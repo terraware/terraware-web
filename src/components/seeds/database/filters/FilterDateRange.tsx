@@ -1,8 +1,8 @@
 import { createStyles, Grid, makeStyles } from '@material-ui/core';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import React from 'react';
-import { FieldNodePayload, SearchField } from '../../../../api/types/search';
-import strings from '../../../../strings';
+import { FieldNodePayload, SearchField } from 'src/api/types/search';
+import strings from 'src/strings';
 import DatePicker from '../../../common/DatePicker';
 
 const useStyles = makeStyles((theme) =>

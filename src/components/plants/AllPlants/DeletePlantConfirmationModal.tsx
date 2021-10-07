@@ -5,10 +5,10 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { useResetRecoilState } from 'recoil';
+import { deleteFeature } from 'src/api/plants/features';
+import { plantsFeaturesSelector } from 'src/state/selectors/plants/plantsFeatures';
+import strings from 'src/strings';
 import { PlantForTable } from '.';
-import { deleteFeature } from '../../../api/plants/features';
-import { plantsFeaturesSelector } from '../../../state/selectors/plants/plantsFeatures';
-import strings from '../../../strings';
 import Button from '../../common/button/Button';
 import DialogCloseButton from '../../common/DialogCloseButton';
 
