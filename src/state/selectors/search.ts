@@ -13,8 +13,8 @@ import {
   columnsAtom,
   searchFilterAtom,
   searchSelectedColumnsAtom,
-  searchSortAtom,
-} from '../atoms/search';
+  searchSortAtom
+} from '../atoms/seeds/search';
 import { facilityIdSelector } from './facility';
 
 const searchAtom = atom({

@@ -10,7 +10,7 @@ import { useSetRecoilState } from 'recoil';
 import { AccessionState } from '../../../api/types/accessions';
 import { FieldNodePayload } from '../../../api/types/search';
 import { SummaryResponse } from '../../../api/types/summary';
-import { searchFilterAtom } from '../../../state/atoms/search';
+import { searchFilterAtom } from '../../../state/atoms/seeds/search';
 import strings from '../../../strings';
 
 const useStyles = makeStyles(() =>

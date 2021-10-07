@@ -27,8 +27,8 @@ import {
   columnsAtom,
   searchFilterAtom,
   searchSelectedColumnsAtom,
-  searchSortAtom,
-} from '../../../state/atoms/search';
+  searchSortAtom
+} from '../../../state/atoms/seeds/search';
 import searchSelector, {
   columnsSelector,
 } from '../../../state/selectors/search';

@@ -27,7 +27,7 @@ import {
 } from '../api/seeds/notification';
 import { AccessionState } from '../api/types/accessions';
 import { FieldNodePayload } from '../api/types/search';
-import { searchFilterAtom } from '../state/atoms/search';
+import { searchFilterAtom } from '../state/atoms/seeds/search';
 import notificationsSelector from '../state/selectors/notifications';
 import strings from '../strings';
 import preventDefaultEvent from '../utils/preventDefaultEvent';
