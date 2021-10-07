@@ -5,7 +5,7 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 import Cookies from 'cookies-js';
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import strings from '../../../strings';
+import strings from 'src/strings';
 import Divisor from '../../common/Divisor';
 import HelpAccordion from './Accordion';
 import getContent, { useContentStyles } from './content';

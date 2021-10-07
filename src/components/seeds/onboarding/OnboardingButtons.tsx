@@ -1,7 +1,7 @@
 import { Chip, createStyles, makeStyles, Theme } from '@material-ui/core';
 import React, { ReactNode } from 'react';
 import { Controls } from 'reactour';
-import strings from '../../../strings';
+import strings from 'src/strings';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

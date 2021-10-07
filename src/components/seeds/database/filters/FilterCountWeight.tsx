@@ -6,9 +6,9 @@ import {
   FieldNodePayload,
   OrNodePayload,
   SearchField,
-  SearchNodePayload,
-} from '../../../../api/types/search';
-import strings from '../../../../strings';
+  SearchNodePayload
+} from 'src/api/types/search';
+import strings from 'src/strings';
 import Checkbox from '../../../common/Checkbox';
 import Divisor from '../../../common/Divisor';
 import Dropdown from '../../../common/Dropdown';

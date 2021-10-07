@@ -1,14 +1,14 @@
 import { atom, selector } from 'recoil';
-import { search } from '../../../api/seeds/search';
+import { search } from 'src/api/seeds/search';
 import {
   AndNodePayload,
   SearchRequestPayload,
   SearchResponsePayload,
-} from '../../../api/types/search';
+} from 'src/api/types/search';
 import {
   COLUMNS_INDEXED,
   DatabaseColumn,
-} from '../../../components/seeds/database/columns';
+} from 'src/components/seeds/database/columns';
 import {
   columnsAtom,
   searchFilterAtom,

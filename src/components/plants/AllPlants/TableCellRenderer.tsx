@@ -1,6 +1,6 @@
 import { TableCell } from '@material-ui/core';
 import React from 'react';
-import strings from '../../../strings';
+import strings from 'src/strings';
 import CellRenderer, {
   TableRowType,
 } from '../../common/table/TableCellRenderer';

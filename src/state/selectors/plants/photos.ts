@@ -1,5 +1,5 @@
 import { selectorFamily } from 'recoil';
-import { getPhotoBlob, getPhotos } from '../../../api/plants/photos';
+import { getPhotoBlob, getPhotos } from 'src/api/plants/photos';
 
 type PhotoFeature = {
   imgSrc: string;

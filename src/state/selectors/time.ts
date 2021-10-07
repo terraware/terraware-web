@@ -1,5 +1,5 @@
 import { atom, selector } from 'recoil';
-import { getDate } from '../../api/seeds/clock';
+import { getDate } from 'src/api/seeds/clock';
 
 const timeAtom = atom({
   key: 'timeTrigger',

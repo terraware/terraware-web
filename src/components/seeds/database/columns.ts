@@ -1,5 +1,5 @@
-import { SearchField } from '../../../api/types/search';
-import strings from '../../../strings';
+import { SearchField } from 'src/api/types/search';
+import strings from 'src/strings';
 import { TableColumnType } from '../../common/table/types';
 
 export interface Option {

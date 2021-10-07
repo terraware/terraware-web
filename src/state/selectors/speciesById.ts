@@ -1,5 +1,5 @@
 import { selector } from 'recoil';
-import { SpeciesType } from '../../types/SpeciesType';
+import { SpeciesType } from 'src/types/SpeciesType';
 import speciesSelector from './species';
 
 export default selector<Record<number, SpeciesType>>({

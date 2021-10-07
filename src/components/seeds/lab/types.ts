@@ -1,4 +1,4 @@
-import strings from '../../../strings';
+import strings from 'src/strings';
 import { TableColumnType } from '../../common/table/types';
 
 export const TEST_COLUMNS: TableColumnType[] = [
