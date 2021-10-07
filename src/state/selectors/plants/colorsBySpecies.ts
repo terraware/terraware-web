@@ -1,6 +1,6 @@
 import { selector } from 'recoil';
-import generateRandomColor from '../../utils/generateRandomColor';
-import speciesByIdSelector from './speciesById';
+import generateRandomColor from '../../../utils/generateRandomColor';
+import speciesByIdSelector from '../speciesById';
 
 const LOCAL_STORAGE_KEY = 'speciesColors';
 

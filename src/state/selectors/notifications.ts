@@ -1,7 +1,7 @@
 import { atom, selector } from 'recoil';
 import { getNotifications } from '../../api/seeds/notification';
 import { Notifications } from '../../api/types/notification';
-import { facilityIdSelector } from './facility';
+import { facilityIdSelector } from './seeds/facility';
 
 const notificationAtom = atom({
   key: 'notificationsTrigger',

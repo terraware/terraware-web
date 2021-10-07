@@ -3,7 +3,7 @@ import { searchAllValues } from '../../../api/seeds/search';
 import { ListAllFieldValuesRequestPayload } from '../../../api/types/search';
 import { COLUMNS_INDEXED } from '../../../components/seeds/database/columns';
 import { searchSelectedColumnsAtom } from '../../atoms/seeds/search';
-import { facilityIdSelector } from '../facility';
+import { facilityIdSelector } from './facility';
 
 export default selector({
   key: 'searchAllValuesSelector',

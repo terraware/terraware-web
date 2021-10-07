@@ -18,11 +18,11 @@ import React from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { SearchOptions } from 'src/api/types/plant';
 import snackbarAtom from '../../../state/atoms/snackbar';
-import { plantsPlantedFeaturesPaginatedSelector } from '../../../state/selectors/plantsFeatures';
+import { plantsPlantedFeaturesPaginatedSelector } from '../../../state/selectors/plants/plantsFeatures';
 import {
   plantsByFeatureIdFilteredSelector,
-  plantsFiltersAtom,
-} from '../../../state/selectors/plantsFiltered';
+  plantsFiltersAtom
+} from '../../../state/selectors/plants/plantsFiltered';
 import speciesSelector from '../../../state/selectors/species';
 import speciesNamesBySpeciesIdSelector from '../../../state/selectors/speciesById';
 import strings from '../../../strings';

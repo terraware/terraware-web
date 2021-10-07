@@ -1,7 +1,7 @@
 import { atom, selector } from 'recoil';
 import { searchAllValues } from '../../../api/seeds/search';
 import { ListAllFieldValuesRequestPayload } from '../../../api/types/search';
-import { facilityIdSelector } from '../facility';
+import { facilityIdSelector } from './facility';
 
 const collectorsAtom = atom({
   key: 'collectorsTrigger',

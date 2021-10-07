@@ -7,7 +7,7 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { useResetRecoilState } from 'recoil';
 import { PlantForTable } from '.';
 import { deleteFeature } from '../../../api/plants/features';
-import { plantsFeaturesSelector } from '../../../state/selectors/plantsFeatures';
+import { plantsFeaturesSelector } from '../../../state/selectors/plants/plantsFeatures';
 import strings from '../../../strings';
 import Button from '../../common/button/Button';
 import DialogCloseButton from '../../common/DialogCloseButton';

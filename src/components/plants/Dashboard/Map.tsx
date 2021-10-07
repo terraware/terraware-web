@@ -15,9 +15,9 @@ import ReactMapGL, {
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { Feature } from '../../../api/types/feature';
 import snackbarAtom from '../../../state/atoms/snackbar';
-import { plantsByFeatureIdSelector } from '../../../state/selectors/plants';
-import { plantsFeaturesWithGeolocationSelector } from '../../../state/selectors/plantsFeatures';
-import speciesForChartSelector from '../../../state/selectors/speciesForChart';
+import { plantsByFeatureIdSelector } from '../../../state/selectors/plants/plants';
+import { plantsFeaturesWithGeolocationSelector } from '../../../state/selectors/plants/plantsFeatures';
+import speciesForChartSelector from '../../../state/selectors/plants/speciesForChart';
 import strings from '../../../strings';
 import { getCenter, getCoordinates } from '../../../utils/maps';
 import { cellDateFormatter } from '../../common/table/TableCellRenderer';

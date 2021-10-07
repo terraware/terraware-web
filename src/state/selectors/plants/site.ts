@@ -1,5 +1,5 @@
 import { selector } from 'recoil';
-import { SiteElement } from '../../api/types/site';
+import { SiteElement } from '../../../api/types/site';
 import projectIdSelector from './projectId';
 import sitesSelector from './sites';
 

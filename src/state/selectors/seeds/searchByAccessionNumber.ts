@@ -4,7 +4,7 @@ import {
   SearchRequestPayload,
   SearchResponsePayload,
 } from '../../../api/types/search';
-import { facilityIdSelector } from '../facility';
+import { facilityIdSelector } from './facility';
 
 const searchAccessionNumberAtom = atom({
   key: 'searchAccessionNumberTrigger',

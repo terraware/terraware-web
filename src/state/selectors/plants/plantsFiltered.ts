@@ -1,6 +1,9 @@
 import { atom, selector } from 'recoil';
-import { getPlantsFiltered } from '../../api/plants/plants';
-import { ListPlantsResponseElement, SearchOptions } from '../../api/types/plant';
+import { getPlantsFiltered } from '../../../api/plants/plants';
+import {
+  ListPlantsResponseElement,
+  SearchOptions,
+} from '../../../api/types/plant';
 import { plantsLayerSelector } from './layers';
 
 export const plantsFiltersAtom = atom<SearchOptions>({

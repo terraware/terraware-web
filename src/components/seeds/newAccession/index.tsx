@@ -19,7 +19,7 @@ import { getPhotoEndpoint, postAccession } from '../../../api/seeds/accession';
 import { updateSpecies } from '../../../api/seeds/species';
 import { Accession, NewAccession } from '../../../api/types/accessions';
 import snackbarAtom from '../../../state/atoms/snackbar';
-import { facilityIdSelector } from '../../../state/selectors/facility';
+import { facilityIdSelector } from '../../../state/selectors/seeds/facility';
 import searchSelector from '../../../state/selectors/seeds/search';
 import strings from '../../../strings';
 import useForm from '../../../utils/useForm';

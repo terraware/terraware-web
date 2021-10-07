@@ -1,7 +1,7 @@
 import Chart from 'chart.js/auto';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-import speciesForChartSelector from '../../../state/selectors/speciesForChart';
+import speciesForChartSelector from '../../../state/selectors/plants/speciesForChart';
 import strings from '../../../strings';
 
 interface Props {

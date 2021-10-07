@@ -7,7 +7,7 @@ import React from 'react';
 import { useRecoilValue } from 'recoil';
 import { PlantSummary } from '../../../api/types/plant';
 import ErrorBoundary from '../../../ErrorBoundary';
-import plantsSummarySelector from '../../../state/selectors/plantsSummary';
+import plantsSummarySelector from '../../../state/selectors/plants/plantsSummary';
 import strings from '../../../strings';
 import Map from './Map';
 import SpeciesChart from './SpeciesChart';

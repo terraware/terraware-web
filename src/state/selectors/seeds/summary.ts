@@ -1,7 +1,7 @@
 import { atom, selector } from 'recoil';
 import { getSummary } from '../../../api/seeds/summary';
 import { SummaryResponse } from '../../../api/types/summary';
-import { facilityIdSelector } from '../facility';
+import { facilityIdSelector } from './facility';
 
 const summaryAtom = atom({
   key: 'summaryTrigger',

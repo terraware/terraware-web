@@ -7,7 +7,7 @@ import React from 'react';
 import { useRecoilValue } from 'recoil';
 import { downloadReport } from '../../../api/seeds/downloadReport';
 import { ExportRequestPayload } from '../../../api/types/report';
-import { facilityIdSelector } from '../../../state/selectors/facility';
+import { facilityIdSelector } from '../../../state/selectors/seeds/facility';
 import { searchParamsSelector } from '../../../state/selectors/seeds/search';
 import strings from '../../../strings';
 import CancelButton from '../../common/CancelButton';

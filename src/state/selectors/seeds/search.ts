@@ -15,7 +15,7 @@ import {
   searchSelectedColumnsAtom,
   searchSortAtom,
 } from '../../atoms/seeds/search';
-import { facilityIdSelector } from '../facility';
+import { facilityIdSelector } from './facility';
 
 const searchAtom = atom({
   key: 'searchTrigger',
