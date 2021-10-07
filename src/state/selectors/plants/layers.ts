@@ -1,6 +1,6 @@
 import { selector } from 'recoil';
-import { getLayers } from '../../api/plants/layers';
-import { LayerResponse } from '../../api/types/layer';
+import { getLayers } from '../../../api/plants/layers';
+import { LayerResponse } from '../../../api/types/layer';
 import siteSelector from './site';
 
 const layersSelector = selector<LayerResponse[] | undefined>({

@@ -1,8 +1,8 @@
 import { useHistory, useRouteMatch } from 'react-router-dom';
 import { useResetRecoilState } from 'recoil';
-import { plantsSelector } from '../state/selectors/plants';
-import { plantsFeaturesSelector } from '../state/selectors/plantsFeatures';
-import { plantsFilteredSelector } from '../state/selectors/plantsFiltered';
+import { plantsSelector } from '../state/selectors/plants/plants';
+import { plantsFeaturesSelector } from '../state/selectors/plants/plantsFeatures';
+import { plantsFilteredSelector } from '../state/selectors/plants/plantsFiltered';
 import strings from '../strings';
 import Navbar from './common/Navbar/Navbar';
 import NavItem from './common/Navbar/NavItem';

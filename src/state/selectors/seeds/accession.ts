@@ -1,6 +1,6 @@
 import { atom, selectorFamily } from 'recoil';
-import { getAccession } from '../../api/seeds/accession';
-import { Accession } from '../../api/types/accessions';
+import { getAccession } from '../../../api/seeds/accession';
+import { Accession } from '../../../api/types/accessions';
 
 const accessionAtom = atom({
   key: 'accessionTrigger',

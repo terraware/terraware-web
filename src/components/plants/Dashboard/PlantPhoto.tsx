@@ -2,7 +2,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 import ErrorBoundary from '../../../ErrorBoundary';
-import { uniquePhotoForFeatureSelectorFamily } from '../../../state/selectors/photos';
+import { uniquePhotoForFeatureSelectorFamily } from '../../../state/selectors/plants/photos';
 import strings from '../../../strings';
 
 interface Props {

@@ -27,13 +27,13 @@ import {
   columnsAtom,
   searchFilterAtom,
   searchSelectedColumnsAtom,
-  searchSortAtom,
-} from '../../../state/atoms/search';
+  searchSortAtom
+} from '../../../state/atoms/seeds/search';
 import searchSelector, {
-  columnsSelector,
-} from '../../../state/selectors/search';
-import searchAllValuesSelector from '../../../state/selectors/searchAllValues';
-import searchValuesSelector from '../../../state/selectors/searchValues';
+  columnsSelector
+} from '../../../state/selectors/seeds/search';
+import searchAllValuesSelector from '../../../state/selectors/seeds/searchAllValues';
+import searchValuesSelector from '../../../state/selectors/seeds/searchValues';
 import strings from '../../../strings';
 import useStateLocation, { getLocation } from '../../../utils/useStateLocation';
 import Table from '../../common/table';

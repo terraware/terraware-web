@@ -1,6 +1,6 @@
 import React from 'react';
 import { useRecoilValue, useResetRecoilState } from 'recoil';
-import collectorsSelector from '../../../state/selectors/collectors';
+import collectorsSelector from '../../../state/selectors/seeds/collectors';
 import strings from '../../../strings';
 import Autocomplete from '../../common/Autocomplete';
 
