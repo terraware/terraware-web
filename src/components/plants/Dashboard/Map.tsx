@@ -81,7 +81,7 @@ interface MapboxFeaturesProps {
 
 const navControlStyle = { right: 10, bottom: 10, zIndex: 10 };
 const DEFAULT_VIEWPORT: ViewportProps = {
-  zoom: 10,
+  zoom: 5,
   width: 'fit',
   height: '100%',
 };
