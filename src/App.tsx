@@ -1,18 +1,8 @@
 /* eslint-disable import/no-webpack-loader-syntax */
-import {
-  createStyles,
-  CssBaseline,
-  makeStyles,
-  ThemeProvider,
-} from '@material-ui/core';
+import { createStyles, CssBaseline, makeStyles, ThemeProvider } from '@material-ui/core';
 import mapboxgl from 'mapbox-gl';
 import React from 'react';
-import {
-  BrowserRouter as Router,
-  Redirect,
-  Route,
-  Switch,
-} from 'react-router-dom';
+import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
 import AppBar from './components/AppBar';
 import NavBar from './components/NavBar';
@@ -20,6 +10,7 @@ import AllPlants from './components/plants/AllPlants';
 import Dashboard from './components/plants/Dashboard';
 import Species from './components/plants/Species';
 import Accession from './components/seeds/accession';
+import Checkin from './components/seeds/checkin';
 import Database from './components/seeds/database';
 import Help from './components/seeds/help';
 import NewAccession from './components/seeds/newAccession';
@@ -87,6 +78,7 @@ function AppContent() {
               <Route path='/species' component={Species} />
               <Route path='/help' component={Help} />
               <Route exact path='/summary' component={Summary} />
+              <Route exact path='/checkin' component={Checkin} />
             </Switch>
           </ErrorBoundary>
         </div>

@@ -11,6 +11,7 @@
       "variable-name": {
         "options": ["ban-keywords", "check-format", "allow-leading-underscore", "allow-pascal-case"]
       },
+      "max-line-length": [true, 120],
       "curly": true,
       "no-console": [true, "log"],
       "no-constant-condition": true,

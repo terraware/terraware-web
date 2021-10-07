@@ -16,14 +16,11 @@ export default function NavBar(): JSX.Element | null {
   const isSpeciesRoute = useRouteMatch('/species/');
   const isPlantsRoute = useRouteMatch('/plants/');
   const isAccessionsRoute = useRouteMatch('/accessions/');
+  const isCheckinRoute = useRouteMatch('/checkin/');
   const isSummaryRoute = useRouteMatch('/summary/');
   const resetplants = useResetRecoilState(plantsSelector);
-  const resetplantsFiltered = useResetRecoilState(
-    plantsFilteredSelector
-  );
-  const resetplantsFeatures = useResetRecoilState(
-    plantsFeaturesSelector
-  );
+  const resetplantsFiltered = useResetRecoilState(plantsFilteredSelector);
+  const resetplantsFeatures = useResetRecoilState(plantsFeaturesSelector);
 
   const navigate = (url: string) => {
     history.push(url);
@@ -50,12 +47,7 @@ export default function NavBar(): JSX.Element | null {
         id='dashboard'
       />
       <NavSection title={strings.FLORA} />
-      <NavItem
-        label='Seeds'
-        icon='seeds'
-        id='seeds'
-        onClick={() => navigate('/summary')}
-      >
+      <NavItem label='Seeds' icon='seeds' id='seeds' onClick={() => navigate('/summary')}>
         <SubNavbar>
           <NavItem
             label='Summary'
@@ -65,7 +57,7 @@ export default function NavBar(): JSX.Element | null {
           />
           <NavItem
             label='Accessions'
-            selected={isAccessionsRoute ? true : false}
+            selected={isAccessionsRoute || isCheckinRoute ? true : false}
             onClick={() => navigate('/accessions')}
             id='accessions'
           />

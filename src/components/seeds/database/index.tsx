@@ -1,37 +1,16 @@
 import MomentUtils from '@date-io/moment';
-import {
-  Chip,
-  CircularProgress,
-  Container,
-  Grid,
-  Link,
-  Paper,
-} from '@material-ui/core';
+import { Chip, CircularProgress, Container, Grid, Link, Paper } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import React from 'react';
 import { Link as RouterLink, useHistory } from 'react-router-dom';
-import {
-  useRecoilState,
-  useRecoilValueLoadable,
-  useSetRecoilState,
-} from 'recoil';
-import {
-  SearchField,
-  SearchNodePayload,
-  SearchResponseResults,
-} from '../../../api/types/search';
-import {
-  columnsAtom,
-  searchFilterAtom,
-  searchSelectedColumnsAtom,
-  searchSortAtom,
-} from '../../../state/atoms/search';
-import searchSelector, {
-  columnsSelector,
-} from '../../../state/selectors/search';
+import { useRecoilState, useRecoilValueLoadable, useSetRecoilState } from 'recoil';
+import { SearchField, SearchNodePayload, SearchResponseResults } from '../../../api/types/search';
+import Button from '../../../components/common/button/Button';
+import { columnsAtom, searchFilterAtom, searchSelectedColumnsAtom, searchSortAtom } from '../../../state/atoms/search';
+import searchSelector, { columnsSelector } from '../../../state/selectors/search';
 import searchAllValuesSelector from '../../../state/selectors/searchAllValues';
 import searchValuesSelector from '../../../state/selectors/searchValues';
 import strings from '../../../strings';
@@ -63,6 +42,9 @@ const useStyles = makeStyles((theme: Theme) =>
       marginLeft: theme.spacing(2),
       color: theme.palette.common.white,
     },
+    checkinMessage: {
+      marginBottom: theme.spacing(6),
+    },
   })
 );
 
@@ -83,25 +65,14 @@ export default function Database(): JSX.Element {
   const [columns, setColumns] = useRecoilState(columnsAtom);
 
   const tableColumnsLodable = useRecoilValueLoadable(columnsSelector);
-  const tableColumns =
-    tableColumnsLodable.state === 'hasValue'
-      ? tableColumnsLodable.contents
-      : undefined;
+  const tableColumns = tableColumnsLodable.state === 'hasValue' ? tableColumnsLodable.contents : undefined;
   const resultsLodable = useRecoilValueLoadable(searchSelector);
-  const results =
-    resultsLodable.state === 'hasValue'
-      ? resultsLodable.contents.results
-      : undefined;
+  const results = resultsLodable.state === 'hasValue' ? resultsLodable.contents.results : undefined;
   const availableValuesLodable = useRecoilValueLoadable(searchValuesSelector);
   const availableValues =
-    availableValuesLodable.state === 'hasValue'
-      ? availableValuesLodable.contents.results
-      : undefined;
+    availableValuesLodable.state === 'hasValue' ? availableValuesLodable.contents.results : undefined;
   const allValuesLodable = useRecoilValueLoadable(searchAllValuesSelector);
-  const allValues =
-    allValuesLodable.state === 'hasValue'
-      ? allValuesLodable.contents.results
-      : undefined;
+  const allValues = allValuesLodable.state === 'hasValue' ? allValuesLodable.contents.results : undefined;
 
   const onSelect = (row: SearchResponseResults) => {
     if (row.id) {
@@ -184,20 +155,17 @@ export default function Database(): JSX.Element {
     }
   };
 
+  const handleViewCollections = () => {
+    history.push('/checkin');
+  };
+
   const location = useStateLocation();
 
   return (
     <MuiPickersUtilsProvider utils={MomentUtils}>
       <main>
-        <EditColumns
-          open={editColumnsModalOpen}
-          value={columns}
-          onClose={onCloseEditColumnsModal}
-        />
-        <DownloadReportModal
-          open={reportModalOpen}
-          onClose={onCloseDownloadReportModal}
-        />
+        <EditColumns open={editColumnsModalOpen} value={columns} onClose={onCloseEditColumnsModal} />
+        <DownloadReportModal open={reportModalOpen} onClose={onCloseDownloadReportModal} />
         <PageHeader
           title='Database'
           subtitle={getSubtitle()}
@@ -219,10 +187,7 @@ export default function Database(): JSX.Element {
                 onClick={onDownloadReport}
                 className={classes.downloadReport}
               />
-              <Link
-                component={RouterLink}
-                to={getLocation('/accessions/new', location)}
-              >
+              <Link component={RouterLink} to={getLocation('/accessions/new', location)}>
                 <Chip
                   id='newAccession'
                   className={classes.addAccession}
@@ -256,6 +221,26 @@ export default function Database(): JSX.Element {
             strings.GENERIC_ERROR}
         </PageHeader>
         <Container maxWidth={false} className={classes.mainContainer}>
+          <Grid container spacing={3} className={classes.checkinMessage}>
+            <Grid item xs={1} />
+            <Grid item xs={10}>
+              <Paper>
+                <Grid container spacing={4}>
+                  <Grid item xs={12}>
+                    hola
+                    <Button
+                      onClick={handleViewCollections}
+                      id='viewCollections'
+                      label={strings.VIEW_COLLECTIONS}
+                      priority='secondary'
+                      type='passive'
+                    />
+                  </Grid>
+                </Grid>
+              </Paper>
+            </Grid>
+            <Grid item xs={1} />
+          </Grid>
           <Grid container spacing={3}>
             <Grid item xs={1} />
             <Grid item xs={10}>
@@ -275,12 +260,10 @@ export default function Database(): JSX.Element {
                         onReorderEnd={onReorderEnd}
                       />
                     )}
-                    {(resultsLodable.state === 'loading' ||
-                      tableColumnsLodable.state === 'loading') && (
+                    {(resultsLodable.state === 'loading' || tableColumnsLodable.state === 'loading') && (
                       <CircularProgress />
                     )}
-                    {(resultsLodable.state === 'hasError' ||
-                      tableColumnsLodable.state === 'hasError') &&
+                    {(resultsLodable.state === 'hasError' || tableColumnsLodable.state === 'hasError') &&
                       strings.GENERIC_ERROR}
                   </Grid>
                 </Grid>

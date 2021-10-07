@@ -1,7 +1,10 @@
-import { Box, Container, Grid } from '@material-ui/core';
+import { Box, Container, Fab, Grid } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import React from 'react';
+import { useHistory } from 'react-router-dom';
+import useStateLocation, { getLocation } from '../../utils/useStateLocation';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -22,6 +25,10 @@ const useStyles = makeStyles((theme) =>
     subtitle: {
       fontWeight: theme.typography.fontWeightLight,
     },
+    backIcon: {
+      marginRight: theme.spacing(4),
+      backgroundColor: theme.palette.common.white,
+    },
   })
 );
 
@@ -30,27 +37,40 @@ interface Props {
   subtitle: string | React.ReactNode;
   children?: React.ReactNode;
   rightComponent?: React.ReactNode;
+  back?: boolean;
+  backUrl?: string;
 }
 
-export default function PageHeader({
-  title,
-  subtitle,
-  children,
-  rightComponent,
-}: Props): JSX.Element {
+export default function PageHeader({ title, subtitle, children, rightComponent, back, backUrl }: Props): JSX.Element {
   const classes = useStyles();
+  const history = useHistory();
+  const location = useStateLocation();
 
   return (
     <Container maxWidth={false} className={classes.mainContainer}>
       <Grid container spacing={3} className={classes.container}>
         <Grid item xs={1} />
         <Grid item xs={10}>
-          <Box
-            display='flex'
-            justifyContent='space-between'
-            alignItems='center'
-            className={classes.titleSpacing}
-          >
+          {back && (
+            <Box display='flex'>
+              <Fab
+                id='close'
+                size='small'
+                aria-label='close'
+                className={classes.backIcon}
+                onClick={() => {
+                  if (backUrl) {
+                    history.push(getLocation(backUrl, location));
+                  } else {
+                    history.go(-1);
+                  }
+                }}
+              >
+                <ArrowBackIcon />
+              </Fab>
+            </Box>
+          )}
+          <Box display='flex' justifyContent='space-between' alignItems='center' className={classes.titleSpacing}>
             <Typography id='title' variant='h4' className={classes.title}>
               {title}
             </Typography>
