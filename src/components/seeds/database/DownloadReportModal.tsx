@@ -7,12 +7,12 @@ import React from 'react';
 import { useRecoilValue } from 'recoil';
 import { downloadReport } from '../../../api/seeds/downloadReport';
 import { ExportRequestPayload } from '../../../api/types/report';
-import { searchParamsSelector } from '../../../state/selectors/search';
+import { facilityIdSelector } from '../../../state/selectors/facility';
+import { searchParamsSelector } from '../../../state/selectors/seeds/search';
 import strings from '../../../strings';
 import CancelButton from '../../common/CancelButton';
 import DialogCloseButton from '../../common/DialogCloseButton';
 import TextField from '../../common/TextField';
-import { facilityIdSelector } from '../../../state/selectors/facility';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

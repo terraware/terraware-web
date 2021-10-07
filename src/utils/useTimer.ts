@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import { useResetRecoilState } from 'recoil';
 import notificationsSelector from '../state/selectors/notifications';
-import summarySelector from '../state/selectors/summary';
+import summarySelector from '../state/selectors/seeds/summary';
 
 const useTimer = (delay = 60000): void => {
   if (!process.env.REACT_APP_DISABLE_RECURRENT_REQUESTS) {

@@ -1,10 +1,10 @@
 import { atom, selectorFamily } from 'recoil';
-import { search } from '../../api/seeds/search';
+import { search } from '../../../api/seeds/search';
 import {
   SearchRequestPayload,
   SearchResponsePayload,
-} from '../../api/types/search';
-import { facilityIdSelector } from './facility';
+} from '../../../api/types/search';
+import { facilityIdSelector } from '../facility';
 
 const searchAccessionNumberAtom = atom({
   key: 'searchAccessionNumberTrigger',

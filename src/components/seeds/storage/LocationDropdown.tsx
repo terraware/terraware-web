@@ -3,7 +3,7 @@ import { Grid } from '@material-ui/core';
 import React from 'react';
 import { useRecoilValue, useResetRecoilState } from 'recoil';
 import { ConditionType, Location } from '../../../api/types/locations';
-import locationsSelector from '../../../state/selectors/locations';
+import locationsSelector from '../../../state/selectors/seeds/locations';
 import strings from '../../../strings';
 import Dropdown from '../../common/Dropdown';
 import TextField from '../../common/TextField';

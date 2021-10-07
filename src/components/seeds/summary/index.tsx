@@ -5,7 +5,7 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 import Cookies from 'cookies-js';
 import React from 'react';
 import { useRecoilValueLoadable } from 'recoil';
-import summarySelector from '../../../state/selectors/summary';
+import summarySelector from '../../../state/selectors/seeds/summary';
 import strings from '../../../strings';
 import PageHeader from '../PageHeader';
 import Alerts from './Alerts';

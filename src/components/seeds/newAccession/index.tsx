@@ -19,7 +19,8 @@ import { getPhotoEndpoint, postAccession } from '../../../api/seeds/accession';
 import { updateSpecies } from '../../../api/seeds/species';
 import { Accession, NewAccession } from '../../../api/types/accessions';
 import snackbarAtom from '../../../state/atoms/snackbar';
-import searchSelector from '../../../state/selectors/search';
+import { facilityIdSelector } from '../../../state/selectors/facility';
+import searchSelector from '../../../state/selectors/seeds/search';
 import strings from '../../../strings';
 import useForm from '../../../utils/useForm';
 import useStateLocation, { getLocation } from '../../../utils/useStateLocation';
@@ -36,7 +37,6 @@ import MainCollector from './MainCollectorDropdown';
 import NurseryButtons from './NurseryButtons';
 import SecondaryCollectors from './SecondaryCollectors';
 import Species from './SpeciesDropdown';
-import { facilityIdSelector } from '../../../state/selectors/facility';
 
 const useStyles = makeStyles((theme) =>
   createStyles({

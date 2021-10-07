@@ -1,21 +1,21 @@
 import { atom, selector } from 'recoil';
-import { search } from '../../api/seeds/search';
+import { search } from '../../../api/seeds/search';
 import {
   AndNodePayload,
   SearchRequestPayload,
   SearchResponsePayload,
-} from '../../api/types/search';
+} from '../../../api/types/search';
 import {
   COLUMNS_INDEXED,
   DatabaseColumn,
-} from '../../components/seeds/database/columns';
+} from '../../../components/seeds/database/columns';
 import {
   columnsAtom,
   searchFilterAtom,
   searchSelectedColumnsAtom,
-  searchSortAtom
-} from '../atoms/seeds/search';
-import { facilityIdSelector } from './facility';
+  searchSortAtom,
+} from '../../atoms/seeds/search';
+import { facilityIdSelector } from '../facility';
 
 const searchAtom = atom({
   key: 'searchTrigger',
