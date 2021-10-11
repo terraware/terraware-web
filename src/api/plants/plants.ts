@@ -38,7 +38,7 @@ export const getPlantSummary = async (layerId: number, maxEnteredTime: string): 
 };
 
 export const putPlant = async (featureId: number, plant: PlantUpdateRequestBody): Promise<void> => {
-  const endpoint = `${process.env.REACT_APP_TERRAWARE_API}${plantEndpoint}/${featureId}`.replace('{featureId}', `${featureId}`);
+  const endpoint = `${process.env.REACT_APP_TERRAWARE_API}${plantEndpoint}`.replace('{featureId}', `${featureId}`);
   await axios.put(endpoint, plant);
 };
 

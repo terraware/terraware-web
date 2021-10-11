@@ -11,7 +11,7 @@ export const addQueryParams = (endpoint: string, params: Record<string, unknown>
   keys.forEach((key) => {
     if (params[key]) {
       updatedEndpoint = updatedEndpoint.includes('?') ? updatedEndpoint.concat('&') : updatedEndpoint.concat('?');
-      updatedEndpoint = updatedEndpoint.concat(`${String(key)}=${params[key]}`);
+      updatedEndpoint = updatedEndpoint.concat(`${key}=${params[key]}`);
     }
   });
 
