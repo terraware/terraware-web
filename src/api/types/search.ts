@@ -1,4 +1,16 @@
-import { components } from './generated-schema';
+import { components, paths } from './generated-schema';
+
+export const searchEndpoint = '/api/v1/seedbank/search';
+export type SearchPostRequestBody = paths[typeof searchEndpoint]['post']['requestBody']['content']['application/json'];
+export type SearchPostResponse = paths[typeof searchEndpoint]['post']['responses'][200]['content']['application/json'];
+
+export const valuesEndpoint = '/api/v1/seedbank/values';
+export type ValuesPostRequestBody = paths[typeof valuesEndpoint]['post']['requestBody']['content']['application/json'];
+export type ValuesPostResponse = paths[typeof valuesEndpoint]['post']['responses'][200]['content']['application/json'];
+
+export const valuesAllEndpoint = '/api/v1/seedbank/values/all';
+export type ValuesAllPostRequestBody = paths[typeof valuesAllEndpoint]['post']['requestBody']['content']['application/json'];
+export type ValuesAllPostResponse = paths[typeof valuesAllEndpoint]['post']['responses'][200]['content']['application/json'];
 
 export type SearchField = components['schemas']['SearchField'];
 export type SearchRequestPayload = components['schemas']['SearchRequestPayload'];
@@ -21,10 +33,6 @@ export type OrNodePayload = components['schemas']['OrNodePayload'] & {
 };
 export type SearchNodePayload = AndNodePayload | FieldNodePayload | NotNodePayload | OrNodePayload;
 
-export type ListFieldValuesRequestPayload = components['schemas']['ListFieldValuesRequestPayload'];
-export type ListFieldValuesResponsePayload = components['schemas']['ListFieldValuesResponsePayload'];
-export type ListAllFieldValuesRequestPayload = components['schemas']['ListAllFieldValuesRequestPayload'];
-export type ListAllFieldValuesResponsePayload = components['schemas']['ListAllFieldValuesResponsePayload'];
 export type FieldValuesPayload = {
   [key: string]: components['schemas']['FieldValuesPayload'];
 };

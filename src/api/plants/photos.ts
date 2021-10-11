@@ -1,18 +1,16 @@
-import axios from 'axios';
-import { FeaturePhoto, ListFeaturePhotosResponsePayload } from '../types/photo';
-
-const BASE_URL = `${process.env.REACT_APP_TERRAWARE_API}/api/v1/gis/features`;
+import axios from '..';
+import { FeaturePhoto, photoEndpoint, photosEndpoint, PhotosListResponse } from '../types/photo';
 
 export const getPhotos = async (featureId: number): Promise<FeaturePhoto[]> => {
-  const endpoint = `${BASE_URL}/${featureId}/photos`;
+  const endpoint = `${process.env.REACT_APP_TERRAWARE_API}${photosEndpoint}`.replace('{featureId}', `${featureId}`);
 
-  const response: ListFeaturePhotosResponsePayload = (await axios.get(endpoint)).data;
+  const response: PhotosListResponse = (await axios.get(endpoint)).data;
 
   return response.photos;
 };
 
 export const getPhotoBlob = async (featureId: number, photoId: number): Promise<Blob | null> => {
-  const endpoint = `${BASE_URL}/${featureId}/photos/${photoId}`;
+  const endpoint = `${process.env.REACT_APP_TERRAWARE_API}${photoEndpoint}`.replace('{featureId}', `${featureId}`).replace('{photoId}', `${photoId}`);
 
   const response = await axios.get(endpoint, {
     responseType: 'arraybuffer',
