@@ -82,6 +82,7 @@
     "cypress": "^6.5.0",
     "esm": "^3.2.25",
     "http-proxy-middleware": "^2.0.1",
+    "jest-mock-axios": "^4.4.1",
     "nyc": "^15.1.0",
     "openapi-typescript": "^4.0.2",
     "start-server-and-test": "^1.12.6",

@@ -29,8 +29,6 @@
       "handle-callback-err": [true, "^(e|err|error)$"],
       "array-bracket-spacing": [true, "never"],
       "eofline": false,
-      "newline-before-return": true,
-      "no-trailing-whitespace": true,
       "no-duplicate-variable": true,
       "arrow-parens": true,
       "ter-arrow-spacing": true,
