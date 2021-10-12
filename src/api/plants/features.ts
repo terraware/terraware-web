@@ -12,6 +12,6 @@ export const getFeatures = async (layerId: number, limit?: number, skip?: number
 };
 
 export const deleteFeature = async (featureId: number): Promise<void> => {
-  const endpoint = `${process.env.REACT_APP_TERRAWARE_API}/${featureEndpoint}`.replace('{featureId}', `${featureId}`);
+  const endpoint = `${process.env.REACT_APP_TERRAWARE_API}${featureEndpoint}`.replace('{featureId}', `${featureId}`);
   await axios.delete(endpoint);
 };
