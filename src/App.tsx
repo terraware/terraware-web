@@ -6,7 +6,7 @@ import {
   ThemeProvider,
 } from '@material-ui/core';
 import mapboxgl from 'mapbox-gl';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   BrowserRouter as Router,
   Redirect,
@@ -29,6 +29,9 @@ import ErrorBoundary from './ErrorBoundary';
 import strings from './strings';
 import theme from './theme';
 import useTimer from './utils/useTimer';
+import PageHeader from './components/seeds/PageHeader';
+import PlantsDashboard from './components/plants/Dashboard';
+import PlantsList from './components/plants/AllPlants';
 
 // @ts-ignore
 mapboxgl.workerClass =
@@ -63,6 +66,14 @@ function AppContent() {
   const classes = useStyles();
   useTimer();
 
+  const [testList, setTestList] = useState([1, 2, 3, 4]);
+
+  const testFunctionAddsNumToList = () => {
+    setTestList((curr) => {
+      return [...curr, curr[curr.length - 1] + 1];
+    });
+  };
+
   return (
     <>
       <CssBaseline />
@@ -87,6 +98,9 @@ function AppContent() {
               <Route path='/species' component={Species} />
               <Route path='/help' component={Help} />
               <Route exact path='/summary' component={Summary} />
+              <Route path='/test'>
+                <TestComponent1 testList={testList} addNumToList={testFunctionAddsNumToList}/>
+              </Route>
             </Switch>
           </ErrorBoundary>
         </div>
@@ -95,3 +109,47 @@ function AppContent() {
     </>
   );
 }
+
+function TestComponent1(props: {testList: number[], addNumToList: () => void}) {
+
+  return (
+    <>
+      <h1>This is TestRoute1</h1>
+      <TestComponent4/>
+      <TestComponent2 addNumToList={props.addNumToList}/>
+      <TestComponent3 testList={props.testList}/>
+    </>
+  );
+}
+
+function TestComponent2(props: {addNumToList: () => void}) {
+  console.log('rendering TestComponent2');
+
+  return (
+    <>
+      <h2>TestRoute2 doesn't use our test list, but modifies it.</h2>
+      <button onClick={() => props.addNumToList()}>Add number to list</button>
+    </>
+  );
+
+}
+
+function TestComponent3(props: {testList: number[]}) {
+  console.log('rendering TestComponent3');
+
+  return (
+    <>
+      <h2>Here is my number list</h2>
+      <ul>
+        {props.testList.map((num) => {
+          return <li key={num}>item: {num}</li>;
+        })};
+      </ul>
+    </>
+  );
+}
+
+function TestComponent4() {
+  return <h2>I dont have anything to do with the number list</h2>;
+}
+
