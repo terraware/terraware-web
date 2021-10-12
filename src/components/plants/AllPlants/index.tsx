@@ -67,7 +67,7 @@ export type PlantForTable = {
   speciesId?: number;
 };
 
-export default function AllPlants(): JSX.Element {
+export default function PlantsList(): JSX.Element {
   const classes = useStyles();
 
   const species = useRecoilValue(speciesSelector);
@@ -162,7 +162,7 @@ export default function AllPlants(): JSX.Element {
         <Grid container spacing={3}>
           <Grid item xs={1} />
           <Grid item xs={10}>
-            <h1>{strings.ALL_PLANTS}</h1>
+            <h1>{strings.PLANTS}</h1>
           </Grid>
           <Grid item xs={1} />
           <Grid item xs={1} />

@@ -48,57 +48,29 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-type TopBarProps = {
-  projects: Project[],
-  currProjectId?: number,
-  setCurrProjectId: CallableFunction,
-};
-
-export default function TopBar(props: TopBarProps): JSX.Element | null {
-  const {projects, currProjectId, setCurrProjectId} = props;
+export default function TopBar(): JSX.Element | null {
   const classes = useStyles();
   const location = useStateLocation();
 
   return (
     <AppBar position='static' className={classes.appBar}>
-      <Toolbar>
-        <Grid container spacing={3}>
-          <Grid item>
-            <ErrorBoundary>
-              <React.Suspense fallback={strings.LOADING}>
-                <Dropdown
-                  label={strings.PROJECTS}
-                  id='projects'
-                  values={projects.map((project) => ({
-                    value: project.id?.toString() ?? '',
-                    label: project.name,
-                  }))}
-                  onChange={(id, value) => setCurrProjectId(parseInt(value, 10))}
-                  selected={currProjectId?.toString() ?? ''}
-                />
-              </React.Suspense>
-            </ErrorBoundary>
-          </Grid>
-          <Grid item className={classes.right}>
-            <div className={classes.flex}>
-              <SearchBar />
-              <Link
-                id='help-button-link'
-                component={RouterLink}
-                to={getLocation('/help', location)}
-                target='_blank'
-                rel='noopener noreferrer'
-              >
-                <IconButton id='help-button' onClick={() => true}>
-                  <HelpIcon />
-                </IconButton>
-              </Link>
-              <NotificationsDropdown />
-              <div className={classes.separator} />
-              <UserMenu />
-            </div>
-          </Grid>
-        </Grid>
+      <Toolbar className={classes.right}>
+        <div className={classes.flex}>
+          <SearchBar />
+          <Link
+            id='help-button-link'
+            component={RouterLink}
+            to={getLocation('/help', location)}
+            target='_blank'
+            rel='noopener noreferrer'>
+            <IconButton id='help-button' onClick={() => true}>
+              <HelpIcon />
+            </IconButton>
+          </Link>
+          <NotificationsDropdown />
+          <div className={classes.separator} />
+          <UserMenu />
+        </div>
       </Toolbar>
     </AppBar>
   );

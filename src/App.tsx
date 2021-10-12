@@ -6,14 +6,14 @@ import {BrowserRouter as Router, Redirect, Route, Switch,} from 'react-router-do
 import {RecoilRoot} from 'recoil';
 import TopBar from './components/TopBar';
 import NavBar from './components/NavBar';
-import AllPlants from './components/plants/AllPlants';
-import Dashboard from './components/plants/Dashboard';
+import PlantsList from './components/plants/AllPlants';
+import PlantsDashboard from './components/plants/Dashboard';
 import Species from './components/plants/Species';
 import Accession from './components/seeds/accession';
 import Database from './components/seeds/database';
 import Help from './components/seeds/help';
 import NewAccession from './components/seeds/newAccession';
-import Summary from './components/seeds/summary';
+import SeedSummary from './components/seeds/summary';
 import Snackbar from './components/Snackbar';
 import ErrorBoundary from './ErrorBoundary';
 import strings from './strings';
@@ -27,6 +27,7 @@ import {
   getPlantsAndSpecies,
   getPlantSummaries,
 } from 'src/api/plants2/plants';
+import PageHeader from './components/seeds/PageHeader';
 
 // @ts-ignore
 mapboxgl.workerClass =
@@ -70,9 +71,6 @@ function AppContent() {
 
   const [organization, setOrganization] = useState<Organization>(emptyOrg);
   const [organizationErrors, setOrganizationErrors] = useState<OrgRequestError[]>([]);
-  // Temporary state used to populate the Projects dropdown. Unclear if this state will live here
-  // after the refactor is finished.
-  const [currProjectId, setCurrProjectId] = useState<number>();
   const [plantsByLayerId, setPlantsByLayerId] = useState<PlantsByLayerId>();
   const [plantErrorByLayerId, setPlantErrorByLayerId] = useState<PlantErrorByLayerId>();
   const [speciesById, setSpeciesById] = useState<SpeciesById>();
@@ -86,10 +84,6 @@ function AppContent() {
         setOrganizationErrors(response.errors);
       }
       setOrganization(response.organization);
-      // Temporary way to choose default project for Projects dropdown.
-      if (response.organization.projects.length > 0) {
-        setCurrProjectId(response.organization.projects[0].id);
-      }
     };
 
     populateOrganizationData();
@@ -134,21 +128,47 @@ function AppContent() {
           <NavBar />
         </div>
         <div className={classes.content}>
-          {/* Also temporary since projects dropdown will probably not continue to live in the top nav bar. */}
-          <TopBar projects={organization.projects} currProjectId={currProjectId} setCurrProjectId={setCurrProjectId}/>
+          <TopBar/>
           <ErrorBoundary>
             <Switch>
-              <Route exact path='/'>
-                <Redirect to='/dashboard' />
+              {/* Routes, in order of their appearance down the side nav bar and then across the top nav bar. */}
+              <Route exact path='/home'>
+                {/* Temporary homepage. Needs to be updated with input from the Design Team. */}
+                <main><PageHeader title='Welcome to Terraware!' subtitle=''/></main>
               </Route>
-              <Route exact path='/dashboard' component={Dashboard} />
-              <Route exact path='/plants' component={AllPlants} />
-              <Route path='/species' component={Species} />
-              <Route path='/accessions/new' component={NewAccession} />
-              <Route path='/accessions/:accessionId' component={Accession} />
-              <Route path='/accessions' component={Database} />
-              <Route path='/help' component={Help} />
-              <Route exact path='/summary' component={Summary} />
+              <Route exact path='/seeds-summary'>
+                <SeedSummary />
+              </Route>
+              <Route exact path='/accessions/new'>
+                <NewAccession />
+              </Route>
+              <Route exact path='/accessions'>
+                <Database />
+              </Route>
+              <Route path='/accessions/:accessionId'>
+                <Accession />
+              </Route>
+              <Route exact path='/plants-dashboard'>
+                <PlantsDashboard />
+              </Route>
+              <Route exact path='/plants-list'>
+                <PlantsList />
+              </Route>
+              <Route exact path='/species'>
+                <Species />
+              </Route>
+              <Route path='/help' component={Help}>
+                <Help />
+              </Route>
+
+              {/* Redirects. Invalid paths will redirect to the closest valid path. */}
+              <Route path='/plants-dashboard/'><Redirect to='/plants-dashboard'/></Route>
+              <Route path='/plants-list/'><Redirect to='/plants-list'/></Route>
+              <Route path='/seeds-summary/'><Redirect to='/seeds-summary'/></Route>
+              <Route path='/accessions/new/'><Redirect to='/accessions/new'/></Route>
+              <Route path='/species/'><Redirect to='/species'/></Route>
+              <Route path='/help/'><Redirect to='/help'/></Route>
+              <Route path='/'><Redirect to='/home' /></Route>
             </Switch>
           </ErrorBoundary>
         </div>
