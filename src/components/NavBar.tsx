@@ -12,11 +12,12 @@ import SubNavbar from './common/Navbar/SubNavbar';
 export default function NavBar(): JSX.Element | null {
   const history = useHistory();
 
-  const isDashboardRoute = useRouteMatch('/dashboard/');
+  const isHomeRoute = useRouteMatch('/home/');
+  const isDashboardRoute = useRouteMatch('/plants-dashboard/');
   const isSpeciesRoute = useRouteMatch('/species/');
   const isPlantsRoute = useRouteMatch('/plants/');
   const isAccessionsRoute = useRouteMatch('/accessions/');
-  const isSummaryRoute = useRouteMatch('/summary/');
+  const isSummaryRoute = useRouteMatch('/seeds-summary/');
   const resetplants = useResetRecoilState(plantsSelector);
   const resetplantsFiltered = useResetRecoilState(
     plantsFilteredSelector
@@ -31,13 +32,13 @@ export default function NavBar(): JSX.Element | null {
 
   const navigateToDashboard = () => {
     resetplants();
-    navigate('/dashboard');
+    navigate('/plants-dashboard');
   };
 
   const navigateToAllPlants = () => {
     resetplantsFeatures();
     resetplantsFiltered();
-    navigate('/plants');
+    navigate('/plants-list');
   };
 
   return (
@@ -45,8 +46,8 @@ export default function NavBar(): JSX.Element | null {
       <NavItem
         label='Home'
         icon='home'
-        selected={isDashboardRoute ? true : false}
-        onClick={() => navigateToDashboard()}
+        selected={isHomeRoute ? true : false}
+        onClick={() => navigate('/home')}
         id='dashboard'
       />
       <NavSection title={strings.FLORA} />
@@ -54,13 +55,13 @@ export default function NavBar(): JSX.Element | null {
         label='Seeds'
         icon='seeds'
         id='seeds'
-        onClick={() => navigate('/summary')}
+        onClick={() => navigate('/seeds-summary')}
       >
         <SubNavbar>
           <NavItem
             label='Summary'
             selected={isSummaryRoute ? true : false}
-            onClick={() => navigate('/summary')}
+            onClick={() => navigate('/seeds-summary')}
             id='summary'
           />
           <NavItem
@@ -72,12 +73,30 @@ export default function NavBar(): JSX.Element | null {
         </SubNavbar>
       </NavItem>
       <NavItem
-        label={strings.ALL_PLANTS}
+        label={strings.PLANTS}
         icon='restorationSite'
-        selected={isPlantsRoute ? true : false}
-        onClick={() => navigateToAllPlants()}
+        onClick={() => navigateToDashboard()}
         id='plants'
-      />
+      >
+        <SubNavbar>
+          <NavItem
+            label={strings.DASHBOARD}
+            selected={isDashboardRoute ? true : false}
+            onClick={() => navigateToDashboard()}
+            id='dashboard'
+          />
+
+          <NavItem
+            label={strings.PLANTS_LIST}
+            selected={isPlantsRoute ? true : false}
+            onClick={() => navigateToAllPlants()}
+            id='plants-list'
+          />
+
+        </SubNavbar>
+      </NavItem>
+
+
       <NavItem
         label={strings.SPECIES}
         icon='species'

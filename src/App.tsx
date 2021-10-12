@@ -6,8 +6,8 @@ import {BrowserRouter as Router, Redirect, Route, Switch,} from 'react-router-do
 import {RecoilRoot} from 'recoil';
 import TopBar from './components/TopBar';
 import NavBar from './components/NavBar';
-import AllPlants from './components/plants/AllPlants';
-import Dashboard from './components/plants/Dashboard';
+import PlantsList from './components/plants/AllPlants';
+import PlantsDashboard from './components/plants/Dashboard';
 import Species from './components/plants/Species';
 import Accession from './components/seeds/accession';
 import Database from './components/seeds/database';
@@ -21,6 +21,7 @@ import theme from './theme';
 import useTimer from './utils/useTimer';
 import getOrganization, {getOrganizationResponse, OrgRequestError} from './api/organization/organization';
 import {Organization} from './types/Organization';
+import PageHeader from './components/seeds/PageHeader';
 
 // @ts-ignore
 mapboxgl.workerClass =
@@ -98,16 +99,29 @@ function AppContent() {
           <ErrorBoundary>
             <Switch>
               <Route exact path='/'>
-                <Redirect to='/dashboard' />
+                <Redirect to='/home' />
               </Route>
-              <Route path='/dashboard' component={Dashboard} />
-              <Route path='/plants' component={AllPlants} />
-              <Route path='/species' component={Species} />
-              <Route path='/help' component={Help} />
-              <Route path='/summary' component={Summary} />
+
+              <Route path='/home'>
+                <main><PageHeader title='Welcome to Terraware!' subtitle=''/></main>
+              </Route>
+
+              <Route path='/seeds-summary' component={Summary} />
               <Route path='/accessions/new' component={NewAccession} />
               <Route path='/accessions/:accessionId' component={Accession} />
               <Route path='/accessions' component={Database} />
+
+              <Route path='/plants-dashboard'>
+                <PlantsDashboard/>
+              </Route>
+              <Route path='/plants-list'>
+                <PlantsList/>
+              </Route>
+              <Route path='/species'>
+                <Species/>
+              </Route>
+              <Route path='/help' component={Help} />
+
             </Switch>
           </ErrorBoundary>
         </div>
