@@ -307,6 +307,9 @@ const strings = new LocalizedStrings({
     BAGS_TOTAL: 'Bags Total',
     CHECKIN_BAGS: 'Check In Bags',
     VIEW_ACCESSION: 'View accession',
+    CHECKING_IN: 'Checking In...',
+    CHECK_IN: 'Check In',
+    CHECKED_IN: 'Checked In!',
   },
 });
 

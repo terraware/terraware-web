@@ -31,6 +31,9 @@ interface Props {
   nextStep: string;
   nextStepTo: string;
   errors?: boolean;
+  pendingCheckIn?: boolean;
+  isCheckingIn?: boolean;
+  isCheckedIn?: boolean;
 }
 
 export default function FooterButtons({
@@ -43,23 +46,35 @@ export default function FooterButtons({
   nextStep,
   nextStepTo,
   errors,
+  pendingCheckIn,
+  isCheckingIn,
+  isCheckedIn,
 }: Props): JSX.Element {
   const classes = useStyles();
 
+  const showCheckIn = pendingCheckIn || isCheckedIn;
+
   return (
     <>
-      {!updating && (
+      {showCheckIn && (
+        <Chip
+          id='checkIn'
+          classes={{
+            root: classes.submit,
+            disabled: classes.disabled,
+          }}
+          label={isCheckedIn ? strings.CHECKED_IN : isCheckingIn ? strings.CHECKING_IN : strings.CHECK_IN}
+          clickable
+          color='primary'
+          onClick={() => onSubmitHandler()}
+        />
+      )}
+      {!showCheckIn && !updating && (
         <Link component={RouterLink} to='/'>
-          <Chip
-            id='cancelButton'
-            className={classes.cancel}
-            label={strings.CANCEL}
-            clickable
-            variant='outlined'
-          />
+          <Chip id='cancelButton' className={classes.cancel} label={strings.CANCEL} clickable variant='outlined' />
         </Link>
       )}
-      {(isEditing || isSaving || isSaved) && updating && (
+      {!showCheckIn && (isEditing || isSaving || isSaved) && updating && (
         <Chip
           id='cancelAccession'
           label={strings.CANCEL}
@@ -69,27 +84,21 @@ export default function FooterButtons({
           disabled={isSaving || isSaved}
         />
       )}
-      {!isSaved && (
+      {!showCheckIn && !isSaved && (
         <Chip
           id='saveAccession'
           classes={{
             root: classes.submit,
             disabled: classes.disabled,
           }}
-          label={
-            updating
-              ? isSaving
-                ? strings.SAVING
-                : strings.SAVE_CHANGES
-              : strings.CREATE_ACCESSION
-          }
+          label={updating ? (isSaving ? strings.SAVING : strings.SAVE_CHANGES) : strings.CREATE_ACCESSION}
           clickable
           color='primary'
           onClick={() => onSubmitHandler()}
           disabled={errors || ((!isEditing || isSaving) && updating)}
         />
       )}
-      {((!isEditing && !isSaving) || isSaved) && updating && (
+      {!showCheckIn && ((!isEditing && !isSaving) || isSaved) && updating && (
         <Link component={RouterLink} to={nextStepTo}>
           <Chip
             id='nextStep'
