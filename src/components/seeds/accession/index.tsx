@@ -3,7 +3,7 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 import { Route, Switch, useHistory, useParams } from 'react-router-dom';
 import { useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil';
-import { putAccession } from '../../../api/seeds/accession';
+import { checkIn, putAccession } from '../../../api/seeds/accession';
 import { Accession, AccessionState } from '../../../api/types/accessions';
 import ErrorBoundary from '../../../ErrorBoundary';
 import snackbarAtom from '../../../state/atoms/snackbar';
@@ -55,18 +55,14 @@ function Content(): JSX.Element {
   const history = useHistory();
 
   const accession = useRecoilValue(getAccessionSelector(parseInt(accessionId, 10)));
-  const resetAccession = useResetRecoilState(
-    getAccessionSelector(parseInt(accessionId, 10))
-  );
+  const resetAccession = useResetRecoilState(getAccessionSelector(parseInt(accessionId, 10)));
 
   React.useEffect(() => {
     if (accession && accession.id) {
       if (history.location.pathname.endsWith(accession.id.toString())) {
         const state = accession.state;
         const newLocation = {
-          pathname: `/accessions/${
-            accession.id
-          }/${pathDestinationForState(state)}`,
+          pathname: `/accessions/${accession.id}/${pathDestinationForState(state)}`,
           state: history.location.state,
         };
         history.replace(newLocation);
@@ -82,14 +78,25 @@ function Content(): JSX.Element {
 
   const clonedAccession = {
     ...accession,
-    secondaryCollectors: accession.secondaryCollectors && [
-      ...accession.secondaryCollectors,
-    ],
+    secondaryCollectors: accession.secondaryCollectors && [...accession.secondaryCollectors],
   };
 
   const onSubmit = async (record: Accession) => {
     try {
       await putAccession(record);
+      resetSearch();
+      resetAccession();
+    } catch (ex) {
+      setSnackbar({
+        type: 'delete',
+        msg: strings.SAVE_ACCESSION_ERROR,
+      });
+    }
+  };
+
+  const onCheckIn = async (id: number) => {
+    try {
+      await checkIn(id);
       resetSearch();
       resetAccession();
     } catch (ex) {
@@ -117,16 +124,11 @@ function Content(): JSX.Element {
                   photoFilenames={clonedAccession.photoFilenames}
                   accession={clonedAccession}
                   onSubmit={onSubmit}
+                  onCheckIn={onCheckIn}
                 />
               </Route>
-              <Route
-                exact
-                path='/accessions/:accessionId/processing-drying'
-              >
-                <ProcessingAndDrying
-                  accession={clonedAccession}
-                  onSubmit={onSubmit}
-                />
+              <Route exact path='/accessions/:accessionId/processing-drying'>
+                <ProcessingAndDrying accession={clonedAccession} onSubmit={onSubmit} />
               </Route>
               <Route exact path='/accessions/:accessionId/storage'>
                 <Storage accession={clonedAccession} onSubmit={onSubmit} />
@@ -151,6 +153,7 @@ function Content(): JSX.Element {
 function pathDestinationForState(state: AccessionState): string {
   switch (state) {
     case 'Pending':
+    case 'Awaiting Check-In':
       return 'seed-collection';
     case 'Processing':
     case 'Processed':

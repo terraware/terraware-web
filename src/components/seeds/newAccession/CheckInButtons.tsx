@@ -1,18 +1,6 @@
-import { Chip } from '@material-ui/core';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React from 'react';
+import Button from '../../../components/common/button/Button';
 import strings from '../../../strings';
-
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    submit: {
-      color: theme.palette.neutral[800],
-      textDecoration: 'underline',
-      fontWeight: theme.typography.fontWeightMedium,
-      marginLeft: theme.spacing(0.5),
-    },
-  })
-);
 
 interface Props {
   pendingCheckIn: boolean;
@@ -27,17 +15,10 @@ export default function CheckInButtons({
   isCheckedIn,
   onSubmitHandler,
 }: Props): JSX.Element {
-  const classes = useStyles();
-
   return (
-    <Chip
+    <Button
       id='checkIn'
-      classes={{
-        root: classes.submit,
-      }}
       label={isCheckedIn ? strings.CHECKED_IN : isCheckingIn ? strings.CHECKING_IN : strings.CHECK_IN}
-      clickable
-      color='primary'
       onClick={() => onSubmitHandler()}
     />
   );

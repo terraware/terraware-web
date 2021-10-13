@@ -108,6 +108,9 @@ export interface paths {
     get: operations['read'];
     put: operations['update'];
   };
+  '/api/v1/seedbank/accession/{id}/checkIn': {
+    post: operations['checkIn'];
+  };
   '/api/v1/seedbank/accession/{id}/photo': {
     get: operations['listPhotos'];
   };
@@ -215,6 +218,7 @@ export interface components {
       /** Server-calculated active indicator. This is based on the accession's state. */
       active: 'Inactive' | 'Active';
       bagNumbers?: string[];
+      checkedInTime?: string;
       collectedDate?: string;
       deviceInfo?: components['schemas']['DeviceInfoPayload'];
       cutTestSeedsCompromised?: number;
@@ -262,6 +266,7 @@ export interface components {
       speciesId?: number;
       /** Server-calculated accession state. Can change due to modifications to accession data or based on passage of time. */
       state:
+        | 'Awaiting Check-In'
         | 'Pending'
         | 'Processing'
         | 'Processed'
@@ -411,7 +416,7 @@ export interface components {
         | 'Restoration Zones'
         | 'Site Prep'
         | 'Map notes';
-      tileSetName: string;
+      tileSetName?: string;
       proposed: boolean;
       hidden: boolean;
     };
@@ -544,6 +549,7 @@ export interface components {
     };
     FacilityPayload: {
       id: number;
+      siteId: number;
       name: string;
       type: 'Seed Bank' | 'Desalination' | 'Reverse Osmosis';
       /** The name of the role the current user has at the facility. */
@@ -628,11 +634,7 @@ export interface components {
       startDate?: string;
       endDate?: string;
       seedType?: 'Fresh' | 'Stored';
-      substrate?:
-        | 'Nursery Media'
-        | 'Agar Petri Dish'
-        | 'Paper Petri Dish'
-        | 'Other';
+      substrate?: 'Nursery Media' | 'Agar Petri Dish' | 'Paper Petri Dish' | 'Other';
       treatment?: 'Soak' | 'Scarify' | 'GA3' | 'Stratification' | 'Other';
       notes?: string;
       /** Quantity of seeds remaining. For weight-based accessions, this is user input and is required. For count-based accessions, it is calculated by the server and ignored on input. */
@@ -852,6 +854,7 @@ export interface components {
       accessionId?: number;
       /** For state notifications, which state is being summarized. */
       state?:
+        | 'Awaiting Check-In'
         | 'Pending'
         | 'Processing'
         | 'Processed'
@@ -917,6 +920,7 @@ export interface components {
       | 'accessionNumber'
       | 'active'
       | 'bagNumber'
+      | 'checkedInTime'
       | 'collectedDate'
       | 'collectionNotes'
       | 'cutTestSeedsCompromised'
@@ -1001,7 +1005,74 @@ export interface components {
       count: number;
     };
     SearchResponsePayload: {
-      results: { [key: string]: string }[];
+      results: {
+        accessionNumber?: string;
+        active?: string;
+        bagNumber?: string;
+        checkedInTime?: string;
+        collectedDate?: string;
+        collectionNotes?: string;
+        cutTestSeedsCompromised?: string;
+        cutTestSeedsEmpty?: string;
+        cutTestSeedsFilled?: string;
+        dryingEndDate?: string;
+        dryingMoveDate?: string;
+        dryingStartDate?: string;
+        endangered?: string;
+        estimatedSeedsIncoming?: string;
+        family?: string;
+        geolocation?: string;
+        germinationEndDate?: string;
+        germinationPercentGerminated?: string;
+        germinationSeedType?: string;
+        germinationSeedsGerminated?: string;
+        germinationSeedsSown?: string;
+        germinationStartDate?: string;
+        germinationSubstrate?: string;
+        germinationTestNotes?: string;
+        germinationTestType?: string;
+        germinationTreatment?: string;
+        id?: string;
+        landowner?: string;
+        latestGerminationTestDate?: string;
+        latestViabilityPercent?: string;
+        nurseryStartDate?: string;
+        primaryCollector?: string;
+        processingMethod?: string;
+        processingNotes?: string;
+        processingStartDate?: string;
+        rare?: string;
+        receivedDate?: string;
+        remainingGrams?: string;
+        remainingQuantity?: string;
+        remainingUnits?: string;
+        siteLocation?: string;
+        sourcePlantOrigin?: string;
+        species?: string;
+        state?: string;
+        storageCondition?: string;
+        storageLocation?: string;
+        storageNotes?: string;
+        storagePackets?: string;
+        storageStartDate?: string;
+        targetStorageCondition?: string;
+        totalGrams?: string;
+        totalQuantity?: string;
+        totalUnits?: string;
+        totalViabilityPercent?: string;
+        treesCollectedFrom?: string;
+        viabilityTestType?: string;
+        withdrawalDate?: string;
+        withdrawalDestination?: string;
+        withdrawalGrams?: string;
+        withdrawalNotes?: string;
+        withdrawalPurpose?: string;
+        withdrawalRemainingGrams?: string;
+        withdrawalRemainingQuantity?: string;
+        withdrawalRemainingUnits?: string;
+        withdrawalQuantity?: string;
+        withdrawalUnits?: string;
+      }[];
       cursor?: string;
     };
     SearchSortOrderElement: {
@@ -1012,13 +1083,7 @@ export interface components {
     SeedQuantityPayload: {
       /** Number of units of seeds. If "units" is "Seeds", this is the number of seeds and must be an integer. Otherwise it is a measurement in the weight units specified in the "units" field, and may have a fractional part. */
       quantity: number;
-      units:
-        | 'Seeds'
-        | 'Grams'
-        | 'Milligrams'
-        | 'Kilograms'
-        | 'Ounces'
-        | 'Pounds';
+      units: 'Seeds' | 'Grams' | 'Milligrams' | 'Kilograms' | 'Ounces' | 'Pounds';
       /** If this quantity is a weight measurement, the weight in grams. This is not set if the "units" field is "Seeds". This is always calculated on the server side and is ignored on input. */
       grams?: number;
     };
@@ -1241,7 +1306,7 @@ export interface components {
         | 'Restoration Zones'
         | 'Site Prep'
         | 'Map notes';
-      tileSetName: string;
+      tileSetName?: string;
       proposed: boolean;
       hidden: boolean;
     };
@@ -2111,6 +2176,27 @@ export interface operations {
     requestBody: {
       content: {
         'application/json': components['schemas']['UpdateAccessionRequestPayload'];
+      };
+    };
+  };
+  checkIn: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          'application/json': components['schemas']['UpdateAccessionResponsePayload'];
+        };
+      };
+      /** The requested resource was not found. */
+      404: {
+        content: {
+          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+        };
       };
     };
   };

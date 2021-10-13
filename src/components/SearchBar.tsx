@@ -28,10 +28,7 @@ export default function NavBar(): JSX.Element {
   const resetResults = useResetRecoilState(searchSelector(input));
   const history = useHistory();
 
-  const results =
-    loadableResults.state === 'hasValue'
-      ? loadableResults.contents.results
-      : [];
+  const results = loadableResults.state === 'hasValue' ? loadableResults.contents.results : [];
 
   const location = useStateLocation();
 
@@ -40,7 +37,7 @@ export default function NavBar(): JSX.Element {
       <Autocomplete
         id='search-bar'
         freeSolo
-        options={ results.map((accession) => accession.accessionNumber) }
+        options={results.map((accession) => accession.accessionNumber)}
         inputValue={input}
         onInputChange={(event, value) => {
           setInput(value);
@@ -49,9 +46,7 @@ export default function NavBar(): JSX.Element {
         onChange={(event, value) => {
           const accession = results.find((result) => result.accessionNumber === value);
           if (accession) {
-            history.push(
-              getLocation(`/accessions/${accession.id}`, location)
-            );
+            history.push(getLocation(`/accessions/${accession.id}`, location));
             resetResults();
             setInput('');
           }

@@ -310,6 +310,9 @@ const strings = new LocalizedStrings({
     CHECKING_IN: 'Checking In...',
     CHECK_IN: 'Check In',
     CHECKED_IN: 'Checked In!',
+    CHECK_IN_BAGS: 'Check In Bags',
+    CHECK_IN_MESSAGE:
+      '{0} new seed collection bags should have been dropped off at the seed bank. Please verify their arrival and check them in.',
   },
 });
 

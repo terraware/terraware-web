@@ -9,25 +9,24 @@ export const getAccession = async (accessionId: number): Promise<Accession> => {
   return (await axios.get(endpoint)).data.accession;
 };
 
-export const postAccession = async (
-  accession: NewAccession
-): Promise<Accession> => {
+export const postAccession = async (accession: NewAccession): Promise<Accession> => {
   const endpoint = `${BASE_URL}`;
 
   return (await axios.post(endpoint, accession)).data.accession;
 };
 
-export const putAccession = async (
-  accession: Accession
-): Promise<Accession> => {
+export const putAccession = async (accession: Accession): Promise<Accession> => {
   const endpoint = `${BASE_URL}/${accession.id}`;
 
   return (await axios.put(endpoint, accession)).data.accession;
 };
 
-export const getPhotoEndpoint = (
-  accessionId: number,
-  photoFilename: string
-): string => {
+export const getPhotoEndpoint = (accessionId: number, photoFilename: string): string => {
   return `${BASE_URL}/${accessionId}/photo/${photoFilename}`;
+};
+
+export const checkIn = async (id: number): Promise<Accession> => {
+  const endpoint = `${BASE_URL}/${id}/checkIn`;
+
+  return (await axios.post(endpoint)).data;
 };

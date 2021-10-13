@@ -1,6 +1,5 @@
 import MomentUtils from '@date-io/moment';
 import {
-  CircularProgress,
   Container,
   Grid,
   Paper,
@@ -15,11 +14,10 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import React from 'react';
 import { useHistory } from 'react-router';
-import { useRecoilValueLoadable } from 'recoil';
+import { useRecoilValue } from 'recoil';
+import { SearchResponseResults } from 'src/api/types/search';
 import Button from '../../../components/common/button/Button';
-import searchSelector, { columnsSelector } from '../../../state/selectors/search';
-import searchAllValuesSelector from '../../../state/selectors/searchAllValues';
-import searchValuesSelector from '../../../state/selectors/searchValues';
+import { pendingAccessionsSelector } from '../../../state/selectors/pendingCheckIn';
 import strings from '../../../strings';
 import useStateLocation from '../../../utils/useStateLocation';
 import PageHeader from '../PageHeader';
@@ -51,23 +49,27 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function Checkin(): JSX.Element {
   const classes = useStyles();
   const history = useHistory();
-  const tableColumnsLodable = useRecoilValueLoadable(columnsSelector);
 
-  const resultsLodable = useRecoilValueLoadable(searchSelector);
-  const results = resultsLodable.state === 'hasValue' ? resultsLodable.contents.results : undefined;
-  const availableValuesLodable = useRecoilValueLoadable(searchValuesSelector);
+  const pendingAccessions = useRecoilValue(pendingAccessionsSelector);
 
-  const allValuesLodable = useRecoilValueLoadable(searchAllValuesSelector);
+  const transformPendingAccessions = () => {
+    const accessionsById: Record<number, SearchResponseResults> = {};
+    pendingAccessions.results?.forEach((accession) => {
+      if (accessionsById[Number(accession.id)]) {
+        accessionsById[Number(accession.id)].bagNumber += ` ${accession.bagNumber}`;
+      } else {
+        accessionsById[Number(accession.id)] = accession;
+      }
+    });
+
+    return Object.values(accessionsById);
+  };
+
+  const pendingAccessionsById = transformPendingAccessions();
 
   const getSubtitle = () => {
-    if (results) {
-      return `${results.length} ${strings.BAGS_TOTAL}`;
-    }
-    if (resultsLodable.state === 'loading') {
-      return <CircularProgress />;
-    }
-    if (resultsLodable.state === 'hasError') {
-      return strings.GENERIC_ERROR;
+    if (pendingAccessions.results) {
+      return `${pendingAccessions.results.length} ${strings.BAGS_TOTAL}`;
     }
   };
 
@@ -85,27 +87,22 @@ export default function Checkin(): JSX.Element {
   return (
     <MuiPickersUtilsProvider utils={MomentUtils}>
       <main>
-        <PageHeader title={strings.CHECKIN_BAGS} subtitle={getSubtitle()} back={true} backUrl={'/accessions'}>
-          {(allValuesLodable.state === 'loading' ||
-            availableValuesLodable.state === 'loading' ||
-            tableColumnsLodable.state === 'loading') && <CircularProgress />}
-          {(allValuesLodable.state === 'hasError' ||
-            availableValuesLodable.state === 'hasError' ||
-            tableColumnsLodable.state === 'hasError') &&
-            strings.GENERIC_ERROR}
-        </PageHeader>
+        <PageHeader title={strings.CHECKIN_BAGS} subtitle={getSubtitle()} back={true} backUrl={'/accessions'} />
         <Container maxWidth={false} className={classes.mainContainer}>
           <Grid container spacing={3}>
             <Grid item xs={1} />
-            {results && (
+            {pendingAccessionsById && (
               <Grid item xs={10}>
                 <div>
-                  {results.map((result) => {
+                  {pendingAccessionsById.map((result) => {
                     console.log(result);
                     return (
                       <TableContainer component={Paper} key={result.accessionNumber}>
                         <Table aria-label='simple table'>
                           <TableHead>
+                            <TableRow>
+                              <TableCell>{result.bagNumber}</TableCell>
+                            </TableRow>
                             <TableRow>
                               <TableCell>{strings.ACCESSION}</TableCell>
                               <TableCell align='right'>{strings.SPECIES}</TableCell>
@@ -125,7 +122,7 @@ export default function Checkin(): JSX.Element {
                               <TableCell align='right'>{result.receivedDate}</TableCell>
                               <TableCell align='right'>
                                 <Button
-                                  onClick={() => goToAccession(result.id)}
+                                  onClick={() => goToAccession(result.id!)}
                                   id='viewCollections'
                                   label={strings.VIEW_ACCESSION}
                                   priority='secondary'

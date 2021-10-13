@@ -6,10 +6,11 @@ import EditIcon from '@material-ui/icons/Edit';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import React from 'react';
 import { Link as RouterLink, useHistory } from 'react-router-dom';
-import { useRecoilState, useRecoilValueLoadable, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useRecoilValueLoadable, useSetRecoilState } from 'recoil';
 import { SearchField, SearchNodePayload, SearchResponseResults } from '../../../api/types/search';
 import Button from '../../../components/common/button/Button';
 import { columnsAtom, searchFilterAtom, searchSelectedColumnsAtom, searchSortAtom } from '../../../state/atoms/search';
+import { pendingAccessionsSelector } from '../../../state/selectors/pendingCheckIn';
 import searchSelector, { columnsSelector } from '../../../state/selectors/search';
 import searchAllValuesSelector from '../../../state/selectors/searchAllValues';
 import searchValuesSelector from '../../../state/selectors/searchValues';
@@ -45,6 +46,16 @@ const useStyles = makeStyles((theme: Theme) =>
     checkinMessage: {
       marginBottom: theme.spacing(6),
     },
+    checkInContent: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginLeft: theme.spacing(3),
+    },
+    checkInButton: {
+      marginTop: theme.spacing(2),
+      marginRight: theme.spacing(3),
+    },
   })
 );
 
@@ -64,6 +75,7 @@ export default function Database(): JSX.Element {
   const setSearchSelectedColumns = useSetRecoilState(searchSelectedColumnsAtom);
   const [columns, setColumns] = useRecoilState(columnsAtom);
 
+  const pendingAccessions = useRecoilValue(pendingAccessionsSelector);
   const tableColumnsLodable = useRecoilValueLoadable(columnsSelector);
   const tableColumns = tableColumnsLodable.state === 'hasValue' ? tableColumnsLodable.contents : undefined;
   const resultsLodable = useRecoilValueLoadable(searchSelector);
@@ -221,26 +233,32 @@ export default function Database(): JSX.Element {
             strings.GENERIC_ERROR}
         </PageHeader>
         <Container maxWidth={false} className={classes.mainContainer}>
-          <Grid container spacing={3} className={classes.checkinMessage}>
-            <Grid item xs={1} />
-            <Grid item xs={10}>
-              <Paper>
-                <Grid container spacing={4}>
-                  <Grid item xs={12}>
-                    hola
-                    <Button
-                      onClick={handleViewCollections}
-                      id='viewCollections'
-                      label={strings.VIEW_COLLECTIONS}
-                      priority='secondary'
-                      type='passive'
-                    />
+          {pendingAccessions.results.length > 0 && (
+            <Grid container spacing={3} className={classes.checkinMessage}>
+              <Grid item xs={1} />
+              <Grid item xs={10}>
+                <Paper>
+                  <Grid container spacing={4}>
+                    <Grid item xs={12} className={classes.checkInContent}>
+                      <div>
+                        <span> {strings.CHECKIN_BAGS}</span>
+                        <p>{strings.formatString(strings.CHECK_IN_MESSAGE, pendingAccessions.results.length)}</p>
+                      </div>
+                      <Button
+                        className={classes.checkInButton}
+                        onClick={handleViewCollections}
+                        id='viewCollections'
+                        label={strings.VIEW_COLLECTIONS}
+                        priority='secondary'
+                        type='passive'
+                      />
+                    </Grid>
                   </Grid>
-                </Grid>
-              </Paper>
+                </Paper>
+              </Grid>
+              <Grid item xs={1} />
             </Grid>
-            <Grid item xs={1} />
-          </Grid>
+          )}
           <Grid container spacing={3}>
             <Grid item xs={1} />
             <Grid item xs={10}>

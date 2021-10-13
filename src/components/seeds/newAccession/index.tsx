@@ -8,7 +8,7 @@ import moment from 'moment';
 import React, { Suspense } from 'react';
 import { Redirect, useHistory } from 'react-router-dom';
 import { useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil';
-import { getPhotoEndpoint, postAccession } from '../../../api/seeds/accession';
+import { checkIn, getPhotoEndpoint, postAccession } from '../../../api/seeds/accession';
 import { updateSpecies } from '../../../api/seeds/species';
 import { Accession, NewAccession } from '../../../api/types/accessions';
 import snackbarAtom from '../../../state/atoms/snackbar';
@@ -85,6 +85,19 @@ export default function NewAccessionWrapper(): JSX.Element {
     }
   };
 
+  const onCheckIn = async (id: number) => {
+    try {
+      await checkIn(id);
+      resetSearch();
+      setSnackbar({ type: 'success', msg: strings.ACCESSION_SAVED });
+    } catch (ex) {
+      setSnackbar({
+        type: 'delete',
+        msg: strings.SAVE_ACCESSION_ERROR,
+      });
+    }
+  };
+
   if (accessionId) {
     return <Redirect to={getLocation(`/accessions/${accessionId}/seed-collection`, location)} />;
   }
@@ -118,6 +131,7 @@ export default function NewAccessionWrapper(): JSX.Element {
                 receivedDate: moment().format('YYYY-MM-DD'),
               }}
               onSubmit={onSubmit}
+              onCheckIn={onCheckIn}
             />
           </Grid>
           <Grid item xs={1} />
@@ -132,6 +146,7 @@ interface Props<T extends NewAccession> {
   photoFilenames?: string[];
   accession: T;
   onSubmit: (record: T) => void;
+  onCheckIn: (id: number) => void;
 }
 
 export type FieldError = {
@@ -143,6 +158,7 @@ export function AccessionForm<T extends NewAccession>({
   photoFilenames,
   accession,
   onSubmit,
+  onCheckIn,
 }: Props<T>): JSX.Element {
   const classes = useStyles();
 
@@ -230,7 +246,7 @@ export function AccessionForm<T extends NewAccession>({
 
   const onCheckInHandler = () => {
     setIsCheckingIn(true);
-    setTimeout(() => checkIn(), 1000);
+    setTimeout(() => onCheckIn((accession as unknown as Accession).id), 1000);
   };
 
   const onUndoSendToNursery = () => {
@@ -301,7 +317,7 @@ export function AccessionForm<T extends NewAccession>({
     onChange(id, value);
   };
 
-  const showCheckIn = pendingCheckIn || isCheckedIn;
+  const showCheckIn = isPendingCheckIn || isCheckedIn;
 
   return (
     <>

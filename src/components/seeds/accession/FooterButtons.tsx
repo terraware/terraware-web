@@ -31,9 +31,6 @@ interface Props {
   nextStep: string;
   nextStepTo: string;
   errors?: boolean;
-  pendingCheckIn?: boolean;
-  isCheckingIn?: boolean;
-  isCheckedIn?: boolean;
 }
 
 export default function FooterButtons({
@@ -46,35 +43,17 @@ export default function FooterButtons({
   nextStep,
   nextStepTo,
   errors,
-  pendingCheckIn,
-  isCheckingIn,
-  isCheckedIn,
 }: Props): JSX.Element {
   const classes = useStyles();
 
-  const showCheckIn = pendingCheckIn || isCheckedIn;
-
   return (
     <>
-      {showCheckIn && (
-        <Chip
-          id='checkIn'
-          classes={{
-            root: classes.submit,
-            disabled: classes.disabled,
-          }}
-          label={isCheckedIn ? strings.CHECKED_IN : isCheckingIn ? strings.CHECKING_IN : strings.CHECK_IN}
-          clickable
-          color='primary'
-          onClick={() => onSubmitHandler()}
-        />
-      )}
-      {!showCheckIn && !updating && (
+      {!updating && (
         <Link component={RouterLink} to='/'>
           <Chip id='cancelButton' className={classes.cancel} label={strings.CANCEL} clickable variant='outlined' />
         </Link>
       )}
-      {!showCheckIn && (isEditing || isSaving || isSaved) && updating && (
+      {(isEditing || isSaving || isSaved) && updating && (
         <Chip
           id='cancelAccession'
           label={strings.CANCEL}
@@ -84,7 +63,7 @@ export default function FooterButtons({
           disabled={isSaving || isSaved}
         />
       )}
-      {!showCheckIn && !isSaved && (
+      {!isSaved && (
         <Chip
           id='saveAccession'
           classes={{
@@ -98,7 +77,7 @@ export default function FooterButtons({
           disabled={errors || ((!isEditing || isSaving) && updating)}
         />
       )}
-      {!showCheckIn && ((!isEditing && !isSaving) || isSaved) && updating && (
+      {((!isEditing && !isSaving) || isSaved) && updating && (
         <Link component={RouterLink} to={nextStepTo}>
           <Chip
             id='nextStep'
