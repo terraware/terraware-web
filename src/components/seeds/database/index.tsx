@@ -6,32 +6,16 @@ import EditIcon from '@material-ui/icons/Edit';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import React from 'react';
 import { Link as RouterLink, useHistory } from 'react-router-dom';
-import {
-  useRecoilState,
-  useRecoilValue,
-  useRecoilValueLoadable,
-  useSetRecoilState
-} from 'recoil';
-import {
-  SearchField,
-  SearchNodePayload,
-  SearchResponseResults
-} from 'src/api/types/search';
-import {
-  columnsAtom,
-  searchFilterAtom,
-  searchSelectedColumnsAtom,
-  searchSortAtom
-} from 'src/state/atoms/seeds/search';
-import searchSelector, {
-  columnsSelector
-} from 'src/state/selectors/seeds/search';
+import { useRecoilState, useRecoilValue, useRecoilValueLoadable, useSetRecoilState } from 'recoil';
+import { SearchField, SearchNodePayload, SearchResponseResults } from 'src/api/types/search';
+import { columnsAtom, searchFilterAtom, searchSelectedColumnsAtom, searchSortAtom } from 'src/state/atoms/seeds/search';
+import searchSelector, { columnsSelector } from 'src/state/selectors/seeds/search';
 import searchAllValuesSelector from 'src/state/selectors/seeds/searchAllValues';
 import searchValuesSelector from 'src/state/selectors/seeds/searchValues';
 import strings from 'src/strings';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import Button from '../../../components/common/button/Button';
-import { pendingAccessionsSelector } from '../../../state/selectors/pendingCheckIn';
+import { pendingAccessionsSelector } from '../../../state/selectors/seeds/pendingCheckIn';
 import Table from '../../common/table';
 import { Order } from '../../common/table/sort';
 import PageHeader from '../PageHeader';
@@ -97,8 +81,7 @@ export default function Database(): JSX.Element {
   const resultsLodable = useRecoilValueLoadable(searchSelector);
   const results = resultsLodable.state === 'hasValue' ? resultsLodable.contents.results : undefined;
   const availableValuesLodable = useRecoilValueLoadable(searchValuesSelector);
-  const availableValues =
-    availableValuesLodable.state === 'hasValue' ? availableValuesLodable.contents.results : undefined;
+  const availableValues = availableValuesLodable.state === 'hasValue' ? availableValuesLodable.contents.results : undefined;
   const allValuesLodable = useRecoilValueLoadable(searchAllValuesSelector);
   const allValues = allValuesLodable.state === 'hasValue' ? allValuesLodable.contents.results : undefined;
 
@@ -199,14 +182,7 @@ export default function Database(): JSX.Element {
           subtitle={getSubtitle()}
           rightComponent={
             <div>
-              <Chip
-                id='edit-columns'
-                variant='outlined'
-                size='medium'
-                label='Add Columns'
-                onClick={onOpenEditColumnsModal}
-                icon={<EditIcon />}
-              />
+              <Chip id='edit-columns' variant='outlined' size='medium' label='Add Columns' onClick={onOpenEditColumnsModal} icon={<EditIcon />} />
               <Chip
                 id='download-report'
                 variant='outlined'
@@ -232,20 +208,12 @@ export default function Database(): JSX.Element {
           }
         >
           {availableValues && allValues && tableColumns && (
-            <Filters
-              filters={filters}
-              availableValues={availableValues}
-              allValues={allValues}
-              columns={tableColumns}
-              onChange={onFilterChange}
-            />
+            <Filters filters={filters} availableValues={availableValues} allValues={allValues} columns={tableColumns} onChange={onFilterChange} />
           )}
-          {(allValuesLodable.state === 'loading' ||
-            availableValuesLodable.state === 'loading' ||
-            tableColumnsLodable.state === 'loading') && <CircularProgress />}
-          {(allValuesLodable.state === 'hasError' ||
-            availableValuesLodable.state === 'hasError' ||
-            tableColumnsLodable.state === 'hasError') &&
+          {(allValuesLodable.state === 'loading' || availableValuesLodable.state === 'loading' || tableColumnsLodable.state === 'loading') && (
+            <CircularProgress />
+          )}
+          {(allValuesLodable.state === 'hasError' || availableValuesLodable.state === 'hasError' || tableColumnsLodable.state === 'hasError') &&
             strings.GENERIC_ERROR}
         </PageHeader>
         <Container maxWidth={false} className={classes.mainContainer}>
@@ -294,11 +262,8 @@ export default function Database(): JSX.Element {
                         onReorderEnd={onReorderEnd}
                       />
                     )}
-                    {(resultsLodable.state === 'loading' || tableColumnsLodable.state === 'loading') && (
-                      <CircularProgress />
-                    )}
-                    {(resultsLodable.state === 'hasError' || tableColumnsLodable.state === 'hasError') &&
-                      strings.GENERIC_ERROR}
+                    {(resultsLodable.state === 'loading' || tableColumnsLodable.state === 'loading') && <CircularProgress />}
+                    {(resultsLodable.state === 'hasError' || tableColumnsLodable.state === 'hasError') && strings.GENERIC_ERROR}
                   </Grid>
                 </Grid>
               </Paper>

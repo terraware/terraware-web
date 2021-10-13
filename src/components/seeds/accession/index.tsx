@@ -10,7 +10,7 @@ import snackbarAtom from 'src/state/atoms/snackbar';
 import getAccessionSelector from 'src/state/selectors/seeds/accession';
 import searchSelector from 'src/state/selectors/seeds/search';
 import strings from 'src/strings';
-import { pendingAccessionsSelector } from '../../../state/selectors/pendingCheckIn';
+import { pendingAccessionsSelector } from '../../../state/selectors/seeds/pendingCheckIn';
 import Lab from '../lab';
 import { AccessionForm } from '../newAccession';
 import Nursery from '../nursery';

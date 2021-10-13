@@ -1,6 +1,6 @@
 import { atom, selector } from 'recoil';
-import { search } from '../../api/seeds/search';
-import { SearchRequestPayload, SearchResponsePayload } from '../../api/types/search';
+import { search } from '../../../api/seeds/search';
+import { SearchRequestPayload, SearchResponsePayload } from '../../../api/types/search';
 import { facilityIdSelector } from './facility';
 
 const searchPendingCheckInAtom = atom({
