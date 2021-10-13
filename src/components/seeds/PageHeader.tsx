@@ -25,9 +25,18 @@ const useStyles = makeStyles((theme) =>
     subtitle: {
       fontWeight: theme.typography.fontWeightLight,
     },
+    flex: {
+      display: 'flex',
+    },
+    back: {
+      marginTop: theme.spacing(4),
+    },
     backIcon: {
       marginRight: theme.spacing(4),
       backgroundColor: theme.palette.common.white,
+    },
+    mainContent: {
+      width: '100%',
     },
   })
 );
@@ -50,9 +59,9 @@ export default function PageHeader({ title, subtitle, children, rightComponent, 
     <Container maxWidth={false} className={classes.mainContainer}>
       <Grid container spacing={3} className={classes.container}>
         <Grid item xs={1} />
-        <Grid item xs={10}>
+        <Grid item xs={10} className={classes.flex}>
           {back && (
-            <Box display='flex'>
+            <div className={classes.back}>
               <Fab
                 id='close'
                 size='small'
@@ -68,18 +77,21 @@ export default function PageHeader({ title, subtitle, children, rightComponent, 
               >
                 <ArrowBackIcon />
               </Fab>
-            </Box>
+            </div>
           )}
-          <Box display='flex' justifyContent='space-between' alignItems='center' className={classes.titleSpacing}>
-            <Typography id='title' variant='h4' className={classes.title}>
-              {title}
+          <div className={classes.mainContent}>
+            <Box display='flex' justifyContent='space-between' alignItems='center' className={classes.titleSpacing}>
+              <Typography id='title' variant='h4' className={classes.title}>
+                {title}
+              </Typography>
+              {rightComponent}
+            </Box>
+
+            <Typography id='subtitle' variant='h6' className={classes.subtitle}>
+              {subtitle}
             </Typography>
-            {rightComponent}
-          </Box>
-          <Typography id='subtitle' variant='h6' className={classes.subtitle}>
-            {subtitle}
-          </Typography>
-          {children}
+            {children}
+          </div>
         </Grid>
         <Grid item xs={1} />
       </Grid>

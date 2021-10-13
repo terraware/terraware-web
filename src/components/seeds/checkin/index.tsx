@@ -5,12 +5,12 @@ import {
   Paper,
   Table,
   TableBody,
-  TableCell,
+  TableCell as MuiTableCell,
   TableContainer,
   TableHead,
   TableRow,
 } from '@material-ui/core';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import { createStyles, makeStyles, Theme, withStyles } from '@material-ui/core/styles';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import React from 'react';
 import { useHistory } from 'react-router';
@@ -43,8 +43,20 @@ const useStyles = makeStyles((theme: Theme) =>
     checkinMessage: {
       marginBottom: theme.spacing(6),
     },
+    title: {
+      fontSize: '18px',
+      color: theme.palette.gray[800],
+      fontWeight: 600,
+    },
   })
 );
+
+const TableCell = withStyles({
+  root: {
+    borderBottom: 'none',
+    padding: '6px',
+  },
+})(MuiTableCell);
 
 export default function Checkin(): JSX.Element {
   const classes = useStyles();
@@ -56,7 +68,10 @@ export default function Checkin(): JSX.Element {
     const accessionsById: Record<number, SearchResponseResults> = {};
     pendingAccessions.results?.forEach((accession) => {
       if (accessionsById[Number(accession.id)]) {
-        accessionsById[Number(accession.id)].bagNumber += ` ${accession.bagNumber}`;
+        accessionsById[Number(accession.id)] = {
+          ...accessionsById[Number(accession.id)],
+          bagNumber: `${accessionsById[Number(accession.id)].bagNumber}, ${accession.bagNumber}`,
+        };
       } else {
         accessionsById[Number(accession.id)] = accession;
       }
@@ -95,20 +110,23 @@ export default function Checkin(): JSX.Element {
               <Grid item xs={10}>
                 <div>
                   {pendingAccessionsById.map((result) => {
-                    console.log(result);
                     return (
-                      <TableContainer component={Paper} key={result.accessionNumber}>
+                      <TableContainer
+                        component={Paper}
+                        key={result.accessionNumber}
+                        style={{ padding: '24px', marginBottom: '32px' }}
+                      >
                         <Table aria-label='simple table'>
                           <TableHead>
                             <TableRow>
-                              <TableCell>{result.bagNumber}</TableCell>
+                              <TableCell className={classes.title}>{result.bagNumber}</TableCell>
                             </TableRow>
                             <TableRow>
                               <TableCell>{strings.ACCESSION}</TableCell>
-                              <TableCell align='right'>{strings.SPECIES}</TableCell>
-                              <TableCell align='right'>{strings.SITE_LOCATION}</TableCell>
-                              <TableCell align='right'>{strings.COLLECTED_DATE}</TableCell>
-                              <TableCell align='right'>{strings.RECEIVED_DATE}</TableCell>
+                              <TableCell>{strings.SPECIES}</TableCell>
+                              <TableCell>{strings.SITE_LOCATION}</TableCell>
+                              <TableCell>{strings.COLLECTED_DATE}</TableCell>
+                              <TableCell>{strings.RECEIVED_DATE}</TableCell>
                             </TableRow>
                           </TableHead>
                           <TableBody>
@@ -116,11 +134,11 @@ export default function Checkin(): JSX.Element {
                               <TableCell component='th' scope='row'>
                                 {result.accessionNumber}
                               </TableCell>
-                              <TableCell align='right'>{result.species}</TableCell>
-                              <TableCell align='right'>{result.siteLocation}</TableCell>
-                              <TableCell align='right'>{result.collectedDate}</TableCell>
-                              <TableCell align='right'>{result.receivedDate}</TableCell>
-                              <TableCell align='right'>
+                              <TableCell>{result.species}</TableCell>
+                              <TableCell>{result.siteLocation}</TableCell>
+                              <TableCell>{result.collectedDate}</TableCell>
+                              <TableCell>{result.receivedDate}</TableCell>
+                              <TableCell>
                                 <Button
                                   onClick={() => goToAccession(result.id!)}
                                   id='viewCollections'
