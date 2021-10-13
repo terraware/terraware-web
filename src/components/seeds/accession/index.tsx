@@ -8,6 +8,7 @@ import { Accession, AccessionState } from '../../../api/types/accessions';
 import ErrorBoundary from '../../../ErrorBoundary';
 import snackbarAtom from '../../../state/atoms/snackbar';
 import getAccessionSelector from '../../../state/selectors/accession';
+import { pendingAccessionsSelector } from '../../../state/selectors/pendingCheckIn';
 import searchSelector from '../../../state/selectors/search';
 import strings from '../../../strings';
 import Lab from '../lab';
@@ -52,6 +53,7 @@ function Content(): JSX.Element {
   const { accessionId } = useParams<{ accessionId: string }>();
   const setSnackbar = useSetRecoilState(snackbarAtom);
   const resetSearch = useResetRecoilState(searchSelector);
+  const resetPendingCheckInAccessions = useResetRecoilState(pendingAccessionsSelector);
   const history = useHistory();
 
   const accession = useRecoilValue(getAccessionSelector(parseInt(accessionId, 10)));
@@ -99,6 +101,7 @@ function Content(): JSX.Element {
       await checkIn(id);
       resetSearch();
       resetAccession();
+      resetPendingCheckInAccessions();
     } catch (ex) {
       setSnackbar({
         type: 'delete',
