@@ -16,7 +16,7 @@ import TuneIcon from '@material-ui/icons/Tune';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import React from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { SearchOptions } from 'src/api/types/plant';
+import { PlantsListQuery } from 'src/api/types/plant';
 import snackbarAtom from 'src/state/atoms/snackbar';
 import { plantsPlantedFeaturesPaginatedSelector } from 'src/state/selectors/plants/plantsFeatures';
 import {
@@ -75,7 +75,7 @@ export default function AllPlants(): JSX.Element {
   const [filters, setFilters] = useRecoilState(plantsFiltersAtom);
   const setSnackbar = useSetRecoilState(snackbarAtom);
 
-  const [newFilters, setNewFilters] = React.useState<SearchOptions>();
+  const [newFilters, setNewFilters] = React.useState<PlantsListQuery>();
   const [editPlantOpen, setEditPlantOpen] = React.useState(false);
   const [showFilters, setShowFilters] = React.useState(false);
   const [selectedPlant, setSelectedPlant] = React.useState<PlantForTable>();

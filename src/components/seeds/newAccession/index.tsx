@@ -17,7 +17,7 @@ import { Redirect, useHistory } from 'react-router-dom';
 import { useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil';
 import { getPhotoEndpoint, postAccession } from 'src/api/seeds/accession';
 import { updateSpecies } from 'src/api/seeds/species';
-import { Accession, NewAccession } from 'src/api/types/accessions';
+import { Accession, AccessionPostRequestBody } from 'src/api/types/accessions';
 import snackbarAtom from 'src/state/atoms/snackbar';
 import { facilityIdSelector } from 'src/state/selectors/seeds/facility';
 import searchSelector from 'src/state/selectors/seeds/search';
@@ -76,11 +76,10 @@ export default function NewAccessionWrapper(): JSX.Element {
   const location = useStateLocation();
   const facilityId = useRecoilValue(facilityIdSelector);
 
-  const onSubmit = async (record: NewAccession) => {
+  const onSubmit = async (record: AccessionPostRequestBody) => {
     try {
-      const accession = await postAccession(record);
+      const newAccessionId = await postAccession(record);
       resetSearch();
-      const { id: newAccessionId } = accession;
       setAccessionId(newAccessionId);
       setSnackbar({ type: 'success', msg: strings.ACCESSION_SAVED });
     } catch (ex) {
@@ -140,7 +139,7 @@ export default function NewAccessionWrapper(): JSX.Element {
   );
 }
 
-interface Props<T extends NewAccession> {
+interface Props<T extends AccessionPostRequestBody> {
   updating?: boolean;
   photoFilenames?: string[];
   accession: T;
@@ -151,7 +150,7 @@ export type FieldError = {
   id: string;
   msg: string;
 };
-export function AccessionForm<T extends NewAccession>({
+export function AccessionForm<T extends AccessionPostRequestBody>({
   updating,
   photoFilenames,
   accession,

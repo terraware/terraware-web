@@ -1,6 +1,6 @@
 import { atom, selector } from 'recoil';
 import { getNotifications } from 'src/api/seeds/notification';
-import { Notifications } from 'src/api/types/notification';
+import { Notification } from 'src/api/types/notification';
 import { facilityIdSelector } from './seeds/facility';
 
 const notificationAtom = atom({
@@ -8,7 +8,7 @@ const notificationAtom = atom({
   default: 0,
 });
 
-export default selector<Notifications>({
+export default selector<Notification[]>({
   key: 'notificationsSelector',
   get: async ({ get }) => {
     get(notificationAtom);

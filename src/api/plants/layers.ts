@@ -1,12 +1,10 @@
-import axios from 'axios';
-import { LayerListResponse, LayerResponse } from '../types/layer';
+import axios from '..';
+import { Layer, layersEndpoint, LayersListResponse } from '../types/layer';
 
-const BASE_URL = `${process.env.REACT_APP_TERRAWARE_API}/api/v1/gis/layers`;
+export const getLayers = async (siteId: number): Promise<Layer[]> => {
+  const endpoint = `${process.env.REACT_APP_TERRAWARE_API}${layersEndpoint}`.replace('{siteId}', `${siteId}`);
 
-export const getLayers = async (siteId: number): Promise<LayerResponse[]> => {
-  const endpoint = `${BASE_URL}/list/${siteId}`;
+  const response: LayersListResponse = (await axios.get(endpoint)).data;
 
-  const response: LayerListResponse = (await axios.get(endpoint)).data;
-
-  return response.layers;
+  return response.layers.map((obj) => ({ id: obj.id, layerType: obj.layerType }));
 };

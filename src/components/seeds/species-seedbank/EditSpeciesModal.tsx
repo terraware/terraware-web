@@ -5,8 +5,8 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React from 'react';
+import { Species } from 'src/api/types/species';
 import strings from 'src/strings';
-import { SpeciesType } from 'src/types/SpeciesType';
 import useForm from 'src/utils/useForm';
 import CancelButton from '../../common/CancelButton';
 import DialogCloseButton from '../../common/DialogCloseButton';
@@ -34,14 +34,14 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export interface Props {
   open: boolean;
-  onClose: (species?: SpeciesType) => void;
-  value: SpeciesType;
+  onClose: (species?: Species) => void;
+  value: Species;
 }
 
 export default function EditSpeciesModal(props: Props): JSX.Element {
   const classes = useStyles();
   const { onClose, open } = props;
-  const [record, setRecord, onChange] = useForm<SpeciesType>(props.value);
+  const [record, setRecord, onChange] = useForm<Species>(props.value);
 
   React.useEffect(() => {
     if (props.open) {

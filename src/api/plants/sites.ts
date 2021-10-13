@@ -1,12 +1,10 @@
-import axios from 'axios';
-import { ListSitesResponsePayload, SiteElement } from '../types/site';
+import axios from '..';
+import { Site, sitesEndpoint, SitesListResponse } from '../types/site';
 
-const BASE_URL = `${process.env.REACT_APP_TERRAWARE_API}/api/v1/sites`;
+export const getSites = async (): Promise<Site[]> => {
+  const endpoint = `${process.env.REACT_APP_TERRAWARE_API}${sitesEndpoint}`;
 
-export const getSites = async (): Promise<SiteElement[]> => {
-  const endpoint = `${BASE_URL}`;
+  const response: SitesListResponse = (await axios.get(endpoint)).data;
 
-  const response: ListSitesResponsePayload = (await axios.get(endpoint)).data;
-
-  return response.sites;
+  return response.sites.map((obj) => ({ id: obj.id, name: obj.name, projectId: obj.projectId }));
 };

@@ -1,6 +1,6 @@
 import { selector } from 'recoil';
 import { searchAllValues } from 'src/api/seeds/search';
-import { ListAllFieldValuesRequestPayload } from 'src/api/types/search';
+import { ValuesAllPostRequestBody } from 'src/api/types/search';
 import { COLUMNS_INDEXED } from 'src/components/seeds/database/columns';
 import { searchSelectedColumnsAtom } from '../../atoms/seeds/search';
 import { facilityIdSelector } from './facility';
@@ -11,21 +11,17 @@ export default selector({
     const columns = get(searchSelectedColumnsAtom);
     const facilityId = get(facilityIdSelector);
 
-    const params = {
+    const params: ValuesAllPostRequestBody = {
       facilityId,
       fields: columns.reduce((acum, value) => {
         const c = COLUMNS_INDEXED[value];
-        if (
-          ['multiple_selection', 'single_selection'].includes(
-            c.filter?.type ?? ''
-          )
-        ) {
+        if (['multiple_selection', 'single_selection'].includes(c.filter?.type ?? '')) {
           acum.push(c.key);
         }
 
         return acum;
       }, [] as any[]),
-    } as ListAllFieldValuesRequestPayload;
+    };
 
     return await searchAllValues(params);
   },

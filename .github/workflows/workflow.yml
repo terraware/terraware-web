@@ -39,8 +39,14 @@ jobs:
       - name: install dependencies
         run: yarn
 
+      - name: generate schemas
+        run: yarn generate-types
+
       - name: linter
         run: yarn lint
+
+      - name: typescript check
+        run: yarn ts
 
       - name: download and start backend
         run: yarn server:reset

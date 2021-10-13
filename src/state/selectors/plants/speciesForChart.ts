@@ -1,9 +1,15 @@
 import { atom, selector } from 'recoil';
+import { Species } from 'src/api/types/species';
 import strings from 'src/strings';
-import { SpeciesForChart, SpeciesType } from 'src/types/SpeciesType';
 import speciesNamesBySpeciesIdSelector from '../speciesById';
 import colorsBySpeciesSelector from './colorsBySpecies';
 import { plantsSelector } from './plants';
+
+type SpeciesForChart = {
+  speciesName: Species;
+  numberOfTrees: number;
+  color: string;
+};
 
 export const speciesForChartAtom = atom({
   key: 'speciesForChartAtom',
@@ -19,7 +25,7 @@ export default selector<Record<number, SpeciesForChart>>({
     const speciesNamesBySpeciesId = get(speciesNamesBySpeciesIdSelector);
     const colorsBySpecies = get(colorsBySpeciesSelector);
 
-    const otherSpeciesName: SpeciesType = {
+    const otherSpeciesName: Species = {
       name: strings.OTHER,
       id: 0,
     };

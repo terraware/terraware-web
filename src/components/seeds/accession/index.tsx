@@ -89,7 +89,7 @@ function Content(): JSX.Element {
 
   const onSubmit = async (record: Accession) => {
     try {
-      await putAccession(record);
+      await putAccession(record.id, record);
       resetSearch();
       resetAccession();
     } catch (ex) {

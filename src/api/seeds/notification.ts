@@ -1,31 +1,37 @@
+import { addQueryParams } from 'src/utils/api';
 import axios from '..';
 import {
-  SimpleErrorResponsePayload,
-  SimpleSuccessResponsePayload,
-} from '../types';
-import { Notifications } from '../types/notification';
+  Notification,
+  NotificationMarkAllReadPostResponse,
+  NotificationMarkReadPostResponse,
+  notificationsEndpoint,
+  NotificationsListQuery,
+  NotificationsListResponse,
+  notificationsMarkAllReadEndpoint,
+  notificationsMarkReadEndpoint,
+} from '../types/notification';
 
-const BASE_URL = `${process.env.REACT_APP_TERRAWARE_API}/api/v1/seedbank/notification`;
+export const postNotificationAsRead = async (id: string): Promise<NotificationMarkReadPostResponse> => {
+  const endpoint = `${process.env.REACT_APP_TERRAWARE_API}${notificationsMarkReadEndpoint}`.replace('{id}', id);
 
-export const postNotificationAsRead = async (
-  id: string
-): Promise<SimpleSuccessResponsePayload | SimpleErrorResponsePayload> => {
-  const endpoint = `${BASE_URL}/${id}/markRead`;
+  const response: NotificationMarkReadPostResponse = (await axios.post(endpoint)).data;
 
-  return (await axios.post(endpoint)).data;
+  return response;
 };
 
-export const postAllNotificationsAsRead =
-  async (): Promise<SimpleSuccessResponsePayload> => {
-    const endpoint = `${BASE_URL}/all/markRead`;
+export const postAllNotificationsAsRead = async (): Promise<NotificationMarkAllReadPostResponse> => {
+  const endpoint = `${process.env.REACT_APP_TERRAWARE_API}${notificationsMarkAllReadEndpoint}`;
 
-    return (await axios.post(endpoint)).data;
-  };
+  const response: NotificationMarkAllReadPostResponse = (await axios.post(endpoint)).data;
 
-export const getNotifications = async (
-  facilityId: number
-): Promise<Notifications> => {
-  const endpoint = `${BASE_URL}?facilityId=${facilityId}`;
+  return response;
+};
 
-  return (await axios.get(endpoint)).data.notifications;
+export const getNotifications = async (facilityId: number): Promise<Notification[]> => {
+  const queryParams: NotificationsListQuery = { facilityId };
+  const endpoint = `${process.env.REACT_APP_TERRAWARE_API}${notificationsEndpoint}`;
+
+  const response: NotificationsListResponse = (await axios.get(addQueryParams(endpoint, queryParams))).data;
+
+  return response.notifications;
 };
