@@ -1,6 +1,6 @@
 import { atom, selector } from 'recoil';
-import { getLocations } from '../../api/seeds/locations';
-import { Locations } from '../../api/types/locations';
+import { getLocations } from 'src/api/seeds/locations';
+import { StorageLocation } from 'src/api/types/locations';
 import { facilityIdSelector } from './facility';
 
 const locationsAtom = atom({
@@ -8,7 +8,7 @@ const locationsAtom = atom({
   default: 0,
 });
 
-export default selector<Locations>({
+export default selector<StorageLocation[]>({
   key: 'locationsSelector',
   get: async ({ get }) => {
     get(locationsAtom);

@@ -7,8 +7,8 @@ import {
   useParams,
   useRouteMatch,
 } from 'react-router-dom';
-import strings from '../../../strings';
-import useStateLocation from '../../../utils/useStateLocation';
+import strings from 'src/strings';
+import useStateLocation from 'src/utils/useStateLocation';
 
 const useStyles = makeStyles((theme) =>
   createStyles({

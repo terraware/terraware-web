@@ -23,15 +23,15 @@ import {
 } from 'recoil';
 import {
   postAllNotificationsAsRead,
-  postNotificationAsRead,
-} from '../api/seeds/notification';
-import { AccessionState } from '../api/types/accessions';
-import { FieldNodePayload } from '../api/types/search';
-import { searchFilterAtom } from '../state/atoms/search';
-import notificationsSelector from '../state/selectors/notifications';
-import strings from '../strings';
-import preventDefaultEvent from '../utils/preventDefaultEvent';
-import useStateLocation, { getLocation } from '../utils/useStateLocation';
+  postNotificationAsRead
+} from 'src/api/seeds/notification';
+import { AccessionState } from 'src/api/types/accessions';
+import { FieldNodePayload } from 'src/api/types/search';
+import { searchFilterAtom } from 'src/state/atoms/seeds/search';
+import notificationsSelector from 'src/state/selectors/notifications';
+import strings from 'src/strings';
+import preventDefaultEvent from 'src/utils/preventDefaultEvent';
+import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import NotificationIcon from './NotificationIcon';
 
 const useStyles = makeStyles((theme) =>

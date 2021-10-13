@@ -4,7 +4,7 @@ import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
 import WarningIcon from '@material-ui/icons/Warning';
 import WifiTetheringIcon from '@material-ui/icons/WifiTethering';
 import React from 'react';
-import { NotificationType } from '../api/types/notification';
+import { NotificationType } from 'src/api/types/notification';
 
 const useStyles = makeStyles((theme) =>
   createStyles({

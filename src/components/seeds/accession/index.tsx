@@ -3,14 +3,14 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 import { Route, Switch, useHistory, useParams } from 'react-router-dom';
 import { useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil';
-import { checkIn, putAccession } from '../../../api/seeds/accession';
-import { Accession, AccessionState } from '../../../api/types/accessions';
-import ErrorBoundary from '../../../ErrorBoundary';
-import snackbarAtom from '../../../state/atoms/snackbar';
-import getAccessionSelector from '../../../state/selectors/accession';
+import { checkIn, putAccession } from 'src/api/seeds/accession';
+import { Accession, AccessionState } from 'src/api/types/accessions';
+import ErrorBoundary from 'src/ErrorBoundary';
+import snackbarAtom from 'src/state/atoms/snackbar';
+import getAccessionSelector from 'src/state/selectors/seeds/accession';
+import searchSelector from 'src/state/selectors/seeds/search';
+import strings from 'src/strings';
 import { pendingAccessionsSelector } from '../../../state/selectors/pendingCheckIn';
-import searchSelector from '../../../state/selectors/search';
-import strings from '../../../strings';
 import Lab from '../lab';
 import { AccessionForm } from '../newAccession';
 import Nursery from '../nursery';
@@ -85,7 +85,7 @@ function Content(): JSX.Element {
 
   const onSubmit = async (record: Accession) => {
     try {
-      await putAccession(record);
+      await putAccession(record.id, record);
       resetSearch();
       resetAccession();
     } catch (ex) {

@@ -1,7 +1,7 @@
 import { createStyles, makeStyles, useTheme } from '@material-ui/core';
 import Chart from 'chart.js/auto';
 import React from 'react';
-import { Germination } from '../../../api/types/tests';
+import { Germination } from 'src/api/types/tests';
 import {
   descendingComparator,
   getComparator,

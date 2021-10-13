@@ -1,8 +1,8 @@
 import { TableCell, Typography } from '@material-ui/core';
 import moment from 'moment';
 import React from 'react';
-import { GerminationTest } from '../../../api/types/tests';
-import strings from '../../../strings';
+import { GerminationTest } from 'src/api/types/tests';
+import strings from 'src/strings';
 import CellRenderer, {
   CellDateRenderer,
 } from '../../common/table/TableCellRenderer';

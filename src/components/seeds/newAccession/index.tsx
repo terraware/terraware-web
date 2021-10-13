@@ -8,15 +8,15 @@ import moment from 'moment';
 import React, { Suspense } from 'react';
 import { Redirect, useHistory } from 'react-router-dom';
 import { useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil';
-import { checkIn, getPhotoEndpoint, postAccession } from '../../../api/seeds/accession';
-import { updateSpecies } from '../../../api/seeds/species';
-import { Accession, NewAccession } from '../../../api/types/accessions';
-import snackbarAtom from '../../../state/atoms/snackbar';
-import { facilityIdSelector } from '../../../state/selectors/facility';
-import searchSelector from '../../../state/selectors/search';
-import strings from '../../../strings';
-import useForm from '../../../utils/useForm';
-import useStateLocation, { getLocation } from '../../../utils/useStateLocation';
+import { checkIn, getPhotoEndpoint, postAccession } from 'src/api/seeds/accession';
+import { updateSpecies } from 'src/api/seeds/species';
+import { Accession, AccessionPostRequestBody } from 'src/api/types/accessions';
+import snackbarAtom from 'src/state/atoms/snackbar';
+import { facilityIdSelector } from 'src/state/selectors/seeds/facility';
+import searchSelector from 'src/state/selectors/seeds/search';
+import strings from 'src/strings';
+import useForm from 'src/utils/useForm';
+import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import Divisor from '../../common/Divisor';
 import Dropdown from '../../common/Dropdown';
 import Note from '../../common/Note';
@@ -70,11 +70,10 @@ export default function NewAccessionWrapper(): JSX.Element {
   const location = useStateLocation();
   const facilityId = useRecoilValue(facilityIdSelector);
 
-  const onSubmit = async (record: NewAccession) => {
+  const onSubmit = async (record: AccessionPostRequestBody) => {
     try {
-      const accession = await postAccession(record);
+      const newAccessionId = await postAccession(record);
       resetSearch();
-      const { id: newAccessionId } = accession;
       setAccessionId(newAccessionId);
       setSnackbar({ type: 'success', msg: strings.ACCESSION_SAVED });
     } catch (ex) {
@@ -141,7 +140,7 @@ export default function NewAccessionWrapper(): JSX.Element {
   );
 }
 
-interface Props<T extends NewAccession> {
+interface Props<T extends AccessionPostRequestBody> {
   updating?: boolean;
   photoFilenames?: string[];
   accession: T;
@@ -153,7 +152,7 @@ export type FieldError = {
   id: string;
   msg: string;
 };
-export function AccessionForm<T extends NewAccession>({
+export function AccessionForm<T extends AccessionPostRequestBody>({
   updating,
   photoFilenames,
   accession,

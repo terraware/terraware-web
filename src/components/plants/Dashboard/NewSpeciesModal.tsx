@@ -14,17 +14,17 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React from 'react';
 import { useRecoilValue, useResetRecoilState } from 'recoil';
-import { putPlant } from '../../../api/plants/plants';
-import { postSpecies } from '../../../api/seeds/species';
-import { plantsByFeatureIdSelector } from '../../../state/selectors/plants';
-import { plantsFeaturesSelector } from '../../../state/selectors/plantsFeatures';
-import { plantsFilteredSelector } from '../../../state/selectors/plantsFiltered';
-import speciesSelector from '../../../state/selectors/species';
-import speciesByIdSelector from '../../../state/selectors/speciesById';
-import speciesForChartSelector from '../../../state/selectors/speciesForChart';
-import strings from '../../../strings';
-import { SpeciesType } from '../../../types/SpeciesType';
-import useForm from '../../../utils/useForm';
+import { putPlant } from 'src/api/plants/plants';
+import { postSpecies } from 'src/api/seeds/species';
+import { Species } from 'src/api/types/species';
+import { plantsByFeatureIdSelector } from 'src/state/selectors/plants/plants';
+import { plantsFeaturesSelector } from 'src/state/selectors/plants/plantsFeatures';
+import { plantsFilteredSelector } from 'src/state/selectors/plants/plantsFiltered';
+import speciesForChartSelector from 'src/state/selectors/plants/speciesForChart';
+import speciesSelector from 'src/state/selectors/species';
+import speciesByIdSelector from 'src/state/selectors/speciesById';
+import strings from 'src/strings';
+import useForm from 'src/utils/useForm';
 import Button from '../../common/button/Button';
 import DialogCloseButton from '../../common/DialogCloseButton';
 import TextField from '../../common/TextField';
@@ -129,7 +129,7 @@ function NewSpeciesModal(props: Props): JSX.Element {
         resetSpeciesForChart();
         resetplantsFiltered();
       } else if (record.species) {
-        const newSpeciesData: SpeciesType = { name: record.species };
+        const newSpeciesData: Species = { name: record.species };
         const newSpecies = await postSpecies(newSpeciesData);
         const newPlant = { ...previousPlant, speciesId: newSpecies.id };
 

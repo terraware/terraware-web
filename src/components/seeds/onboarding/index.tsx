@@ -1,7 +1,7 @@
 import { createStyles, makeStyles, Theme } from '@material-ui/core';
 import React from 'react';
 import Tour from 'reactour';
-import strings from '../../../strings';
+import strings from 'src/strings';
 import theme from '../../../theme';
 import OnboardingButtons from './OnboardingButtons';
 import Step from './Step';

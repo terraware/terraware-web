@@ -2,8 +2,8 @@ import { Link } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import DoneIcon from '@material-ui/icons/Done';
 import React from 'react';
-import strings from '../../../strings';
-import preventDefaultEvent from '../../../utils/preventDefaultEvent';
+import strings from 'src/strings';
+import preventDefaultEvent from 'src/utils/preventDefaultEvent';
 
 const useStyles = makeStyles((theme) =>
   createStyles({

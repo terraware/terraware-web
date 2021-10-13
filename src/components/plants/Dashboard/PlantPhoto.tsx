@@ -1,9 +1,9 @@
 import 'mapbox-gl/dist/mapbox-gl.css';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-import ErrorBoundary from '../../../ErrorBoundary';
-import { uniquePhotoForFeatureSelectorFamily } from '../../../state/selectors/photos';
-import strings from '../../../strings';
+import ErrorBoundary from 'src/ErrorBoundary';
+import { uniquePhotoForFeatureSelectorFamily } from 'src/state/selectors/plants/photos';
+import strings from 'src/strings';
 
 interface Props {
   featureId?: number;

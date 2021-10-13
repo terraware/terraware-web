@@ -1,6 +1,6 @@
 import { atom, selector, selectorFamily } from 'recoil';
-import { getFeatures } from '../../api/plants/features';
-import { Feature, FeatureListResponse } from '../../api/types/feature';
+import { getFeatures } from 'src/api/plants/features';
+import { Feature, FeatureListResponse } from 'src/api/types/feature';
 import { plantsLayerSelector } from './layers';
 import { plantsSelector } from './plants';
 import plantsSummarySelector from './plantsSummary';

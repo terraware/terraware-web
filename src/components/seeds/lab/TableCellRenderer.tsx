@@ -1,7 +1,7 @@
 import { TableCell, Typography } from '@material-ui/core';
 import moment from 'moment';
 import React from 'react';
-import strings from '../../../strings';
+import strings from 'src/strings';
 import CellRenderer, {
   CellDateRenderer,
   TableRowType,

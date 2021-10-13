@@ -6,8 +6,8 @@ import {
 } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import React from 'react';
-import { FieldNodePayload, SearchField } from '../../../../api/types/search';
-import strings from '../../../../strings';
+import { FieldNodePayload, SearchField } from 'src/api/types/search';
+import strings from 'src/strings';
 
 const useStyles = makeStyles((theme) =>
   createStyles({

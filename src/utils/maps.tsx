@@ -1,4 +1,4 @@
-import { Feature } from '../api/types/feature';
+import { Feature } from 'src/api/types/feature';
 
 interface Props {
   color: string;

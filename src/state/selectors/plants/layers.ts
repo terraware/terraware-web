@@ -1,9 +1,9 @@
 import { selector } from 'recoil';
-import { getLayers } from '../../api/plants/layers';
-import { LayerResponse } from '../../api/types/layer';
+import { getLayers } from 'src/api/plants/layers';
+import { Layer } from 'src/api/types/layer';
 import siteSelector from './site';
 
-const layersSelector = selector<LayerResponse[] | undefined>({
+const layersSelector = selector<Layer[] | undefined>({
   key: 'layersSelector',
   get: async ({ get }) => {
     const site = get(siteSelector);
@@ -13,7 +13,7 @@ const layersSelector = selector<LayerResponse[] | undefined>({
   },
 });
 
-export const plantsLayerSelector = selector<LayerResponse | undefined>({
+export const plantsLayerSelector = selector<Layer | undefined>({
   key: 'plantsLayerSelector',
   get: async ({ get }) => {
     const layers = get(layersSelector);

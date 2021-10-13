@@ -52,6 +52,7 @@
     "e2e": "start-server-and-test start:dev http://localhost:3000 cy:run && yarn e2e:report",
     "e2e:report": "npx nyc report --reporter=text",
     "lint": "tslint --project tsconfig.json",
+    "ts": "tsc --project ./tsconfig.json",
     "docker:start": "./scripts/launch_server.sh",
     "docker:stop": "docker-compose -f docker-compose.yml kill",
     "wait-be": "wait-on -t 120000 http://localhost:8080/swagger-ui/index.html",

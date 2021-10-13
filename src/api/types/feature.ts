@@ -1,13 +1,13 @@
-import { components, operations } from './generated-schema';
+import { components, paths } from './generated-schema';
 
-export type FeatureListRequest = operations['list_1']['parameters']['query'];
-export type FeatureListResponse =
-  components['schemas']['ListFeaturesResponsePayload'];
-export type FeatureResponse = components['schemas']['FeatureResponse'];
-export type FeatureDeleteResponse =
-  components['schemas']['DeleteFeatureResponsePayload'];
-export type Point = components['schemas']['Point'];
+export const featuresEndpoint = '/api/v1/gis/features/list/{layerId}';
+export type FeatureListQuery = paths[typeof featuresEndpoint]['get']['parameters']['query'];
+export type FeatureListResponse = paths[typeof featuresEndpoint]['get']['responses'][200]['content']['application/json'];
+export type FeatureResponse = FeatureListResponse['features'][0];
 
+export const featureEndpoint = '/api/v1/gis/features/{featureId}';
+
+type Point = components['schemas']['Point'];
 export interface Feature extends FeatureResponse {
   geom: Point;
 }

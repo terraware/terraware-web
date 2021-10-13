@@ -7,11 +7,11 @@ import TableRow from '@material-ui/core/TableRow';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
-import { AccessionState } from '../../../api/types/accessions';
-import { FieldNodePayload } from '../../../api/types/search';
-import { SummaryResponse } from '../../../api/types/summary';
-import { searchFilterAtom } from '../../../state/atoms/search';
-import strings from '../../../strings';
+import { AccessionState } from 'src/api/types/accessions';
+import { FieldNodePayload } from 'src/api/types/search';
+import { SummaryGetResponse } from 'src/api/types/summary';
+import { searchFilterAtom } from 'src/state/atoms/seeds/search';
+import strings from 'src/strings';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -26,7 +26,7 @@ const useStyles = makeStyles(() =>
 );
 
 interface Props {
-  summaryResponse?: SummaryResponse;
+  summaryResponse?: SummaryGetResponse;
   loading: boolean;
   error: boolean;
 }
@@ -151,7 +151,7 @@ interface Update {
   description: string | string[];
 }
 
-function generateUpdates(summaryResponse: SummaryResponse): Update[] {
+function generateUpdates(summaryResponse: SummaryGetResponse): Update[] {
   const updates: Update[] = [
     {
       state: 'Pending',

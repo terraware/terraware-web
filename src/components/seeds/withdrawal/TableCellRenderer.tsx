@@ -1,8 +1,8 @@
 import { TableCell, Typography } from '@material-ui/core';
 import moment from 'moment';
 import React from 'react';
-import { AccessionWithdrawal } from '../../../api/types/accessions';
-import strings from '../../../strings';
+import { AccessionWithdrawal } from 'src/api/types/accessions';
+import strings from 'src/strings';
 import CellRenderer, {
   CellDateRenderer,
 } from '../../common/table/TableCellRenderer';

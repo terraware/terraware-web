@@ -1,5 +1,5 @@
 import { selector } from 'recoil';
-import { getAllFacilities } from '../../api/seeds/facilities';
+import { getAllFacilities } from 'src/api/seeds/facilities';
 
 /**
  * Placeholder implementation of a selector to get the current facility ID.

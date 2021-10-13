@@ -1,6 +1,6 @@
 import { atom, selector } from 'recoil';
-import { getSummary } from '../../api/seeds/summary';
-import { SummaryResponse } from '../../api/types/summary';
+import { getSummary } from 'src/api/seeds/summary';
+import { SummaryGetResponse } from 'src/api/types/summary';
 import { facilityIdSelector } from './facility';
 
 const summaryAtom = atom({
@@ -8,7 +8,7 @@ const summaryAtom = atom({
   default: 0,
 });
 
-export default selector<SummaryResponse>({
+export default selector<SummaryGetResponse>({
   key: 'summarySelector',
   get: async ({ get }) => {
     get(summaryAtom);

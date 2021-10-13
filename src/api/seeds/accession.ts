@@ -1,32 +1,42 @@
 import axios from '..';
-import { Accession, NewAccession } from '../types/accessions';
-
-const BASE_URL = `${process.env.REACT_APP_TERRAWARE_API}/api/v1/seedbank/accession`;
+import {
+  Accession,
+  accessionEndpoint,
+  AccessionGetResponse,
+  AccessionPostRequestBody,
+  AccessionPostResponse,
+  AccessionPutRequestBody,
+  checkInEndpoint,
+  photoEndpoint,
+  postAccessionEndpoint
+} from '../types/accessions';
 
 export const getAccession = async (accessionId: number): Promise<Accession> => {
-  const endpoint = `${BASE_URL}/${accessionId}`;
+  const endpoint = `${process.env.REACT_APP_TERRAWARE_API}${accessionEndpoint}`.replace('{id}', `${accessionId}`);
+  const response: AccessionGetResponse = (await axios.get(endpoint)).data;
 
-  return (await axios.get(endpoint)).data.accession;
+  return response.accession;
 };
 
-export const postAccession = async (accession: NewAccession): Promise<Accession> => {
-  const endpoint = `${BASE_URL}`;
+export const postAccession = async (accession: AccessionPostRequestBody): Promise<number> => {
+  const endpoint = `${process.env.REACT_APP_TERRAWARE_API}${postAccessionEndpoint}`;
+  const response: AccessionPostResponse = (await axios.post(endpoint, accession)).data;
 
-  return (await axios.post(endpoint, accession)).data.accession;
+  return response.accession.id;
 };
 
-export const putAccession = async (accession: Accession): Promise<Accession> => {
-  const endpoint = `${BASE_URL}/${accession.id}`;
-
-  return (await axios.put(endpoint, accession)).data.accession;
+export const putAccession = async (accessionId: number, accession: AccessionPutRequestBody): Promise<void> => {
+  const endpoint = `${process.env.REACT_APP_TERRAWARE_API}${accessionEndpoint}`.replace('{id}', `${accessionId}`);
+  await axios.put(endpoint, accession);
 };
 
 export const getPhotoEndpoint = (accessionId: number, photoFilename: string): string => {
-  return `${BASE_URL}/${accessionId}/photo/${photoFilename}`;
+  return `${process.env.REACT_APP_TERRAWARE_API}${photoEndpoint}`.replace('{id}', `${accessionId}`).replace('{photoFilename}', `${photoFilename}`);
 };
 
 export const checkIn = async (id: number): Promise<Accession> => {
-  const endpoint = `${BASE_URL}/${id}/checkIn`;
+
+  const endpoint = `${process.env.REACT_APP_TERRAWARE_API}${checkInEndpoint}`.replace('{id}', `${id}`);
 
   return (await axios.post(endpoint)).data;
 };

@@ -1,13 +1,13 @@
 import { atom, selector } from 'recoil';
-import { getSpeciesList } from '../../api/seeds/species';
-import { SpeciesType } from '../../types/SpeciesType';
+import { getSpeciesList } from 'src/api/seeds/species';
+import { Species } from 'src/api/types/species';
 
 export const speciesAtom = atom({
   key: 'speciesTrigger',
   default: 0,
 });
 
-export default selector<SpeciesType[]>({
+export default selector<Species[]>({
   key: 'speciesSelector',
   get: async ({ get }) => {
     get(speciesAtom);

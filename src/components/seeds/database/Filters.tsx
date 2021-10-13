@@ -13,10 +13,10 @@ import {
   FieldNodePayload,
   FieldValuesPayload,
   OrNodePayload,
-  SearchNodePayload,
-} from '../../../api/types/search';
-import strings from '../../../strings';
-import preventDefaultEvent from '../../../utils/preventDefaultEvent';
+  SearchNodePayload
+} from 'src/api/types/search';
+import strings from 'src/strings';
+import preventDefaultEvent from 'src/utils/preventDefaultEvent';
 import { DatabaseColumn, Option } from './columns';
 import FilterCountWeight from './filters/FilterCountWeight';
 import DateRange from './filters/FilterDateRange';

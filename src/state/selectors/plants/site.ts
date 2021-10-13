@@ -1,9 +1,9 @@
 import { selector } from 'recoil';
-import { SiteElement } from '../../api/types/site';
+import { Site } from 'src/api/types/site';
 import projectIdSelector from './projectId';
 import sitesSelector from './sites';
 
-export default selector<SiteElement | undefined>({
+export default selector<Site | undefined>({
   key: 'siteSelector',
   get: ({ get }) => {
     const sites = get(sitesSelector);

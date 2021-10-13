@@ -1,8 +1,8 @@
 import Chart from 'chart.js/auto';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-import speciesForChartSelector from '../../../state/selectors/speciesForChart';
-import strings from '../../../strings';
+import speciesForChartSelector from 'src/state/selectors/plants/speciesForChart';
+import strings from 'src/strings';
 
 interface Props {
   isFullscreen: boolean;
