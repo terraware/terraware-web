@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-export default function PlantsDashboard(): JSX.Element {
+export default function Dashboard(): JSX.Element {
   const classes = useStyles();
   const [isFullscreen, setIsFullscreen] = React.useState(false);
 
