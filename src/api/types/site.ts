@@ -1,4 +1,10 @@
-import { components } from './generated-schema';
+import { paths } from './generated-schema';
 
-export type ListSitesResponsePayload = components['schemas']['ListSitesResponsePayload'];
-export type SiteElement = components['schemas']['SiteElement'];
+export const sitesEndpoint = '/api/v1/sites';
+export type SitesListResponse = paths[typeof sitesEndpoint]['get']['responses'][200]['content']['application/json'];
+
+export interface Site {
+  id?: number | undefined;
+  projectId: number;
+  name: string;
+}

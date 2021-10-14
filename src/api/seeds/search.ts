@@ -1,35 +1,33 @@
-import axios from 'axios';
+import axios from '..';
 import {
-  ListAllFieldValuesRequestPayload,
-  ListAllFieldValuesResponsePayload,
-  ListFieldValuesRequestPayload,
-  ListFieldValuesResponsePayload,
-  SearchRequestPayload,
-  SearchResponsePayload,
+  searchEndpoint,
+  SearchPostRequestBody,
+  SearchPostResponse,
+  valuesAllEndpoint,
+  ValuesAllPostRequestBody,
+  ValuesAllPostResponse,
+  valuesEndpoint,
+  ValuesPostRequestBody,
+  ValuesPostResponse,
 } from '../types/search';
 
-const BASE_URL = `${process.env.REACT_APP_TERRAWARE_API}/api/v1/seedbank`;
+export const search = async (params: SearchPostRequestBody): Promise<SearchPostResponse> => {
+  const endpoint = `${process.env.REACT_APP_TERRAWARE_API}${searchEndpoint}`;
+  const response: SearchPostResponse = (await axios.post(endpoint, params)).data;
 
-export const search = async (
-  params: SearchRequestPayload
-): Promise<SearchResponsePayload> => {
-  const endpoint = `${BASE_URL}/search`;
-
-  return (await axios.post(endpoint, params)).data;
+  return response;
 };
 
-export const searchValues = async (
-  params: ListFieldValuesRequestPayload
-): Promise<ListFieldValuesResponsePayload> => {
-  const endpoint = `${BASE_URL}/values`;
+export const searchValues = async (params: ValuesPostRequestBody): Promise<ValuesPostResponse> => {
+  const endpoint = `${process.env.REACT_APP_TERRAWARE_API}${valuesEndpoint}`;
+  const response: ValuesPostResponse = (await axios.post(endpoint, params)).data;
 
-  return (await axios.post(endpoint, params)).data;
+  return response;
 };
 
-export const searchAllValues = async (
-  params: ListAllFieldValuesRequestPayload
-): Promise<ListAllFieldValuesResponsePayload> => {
-  const endpoint = `${BASE_URL}/values/all`;
+export const searchAllValues = async (params: ValuesAllPostRequestBody): Promise<ValuesAllPostResponse> => {
+  const endpoint = `${process.env.REACT_APP_TERRAWARE_API}${valuesAllEndpoint}`;
+  const response: ValuesAllPostResponse = (await axios.post(endpoint, params)).data;
 
-  return (await axios.post(endpoint, params)).data;
+  return response;
 };

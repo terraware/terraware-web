@@ -7,8 +7,8 @@ import {
   postSpecies,
   updateSpecies
 } from 'src/api/seeds/species';
+import { Species as SpeciesType } from 'src/api/types/species';
 import speciesSelector from 'src/state/selectors/species';
-import { SpeciesType } from 'src/types/SpeciesType';
 import Table from '../../common/table';
 import { TableColumnType } from '../../common/table/types';
 import PageHeader from '../PageHeader';

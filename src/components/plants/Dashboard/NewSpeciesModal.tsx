@@ -16,6 +16,7 @@ import React from 'react';
 import { useRecoilValue, useResetRecoilState } from 'recoil';
 import { putPlant } from 'src/api/plants/plants';
 import { postSpecies } from 'src/api/seeds/species';
+import { Species } from 'src/api/types/species';
 import { plantsByFeatureIdSelector } from 'src/state/selectors/plants/plants';
 import { plantsFeaturesSelector } from 'src/state/selectors/plants/plantsFeatures';
 import { plantsFilteredSelector } from 'src/state/selectors/plants/plantsFiltered';
@@ -23,7 +24,6 @@ import speciesForChartSelector from 'src/state/selectors/plants/speciesForChart'
 import speciesSelector from 'src/state/selectors/species';
 import speciesByIdSelector from 'src/state/selectors/speciesById';
 import strings from 'src/strings';
-import { SpeciesType } from 'src/types/SpeciesType';
 import useForm from 'src/utils/useForm';
 import Button from '../../common/button/Button';
 import DialogCloseButton from '../../common/DialogCloseButton';
@@ -129,7 +129,7 @@ function NewSpeciesModal(props: Props): JSX.Element {
         resetSpeciesForChart();
         resetplantsFiltered();
       } else if (record.species) {
-        const newSpeciesData: SpeciesType = { name: record.species };
+        const newSpeciesData: Species = { name: record.species };
         const newSpecies = await postSpecies(newSpeciesData);
         const newPlant = { ...previousPlant, speciesId: newSpecies.id };
 

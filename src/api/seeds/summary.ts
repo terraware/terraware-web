@@ -1,12 +1,9 @@
 import axios from '..';
-import { SummaryResponse } from '../types/summary';
+import { summaryEndpoint, SummaryGetResponse } from '../types/summary';
 
-const BASE_URL = `${process.env.REACT_APP_TERRAWARE_API}/api/v1/seedbank/summary`;
+export const getSummary = async (facilityId: number): Promise<SummaryGetResponse> => {
+  const endpoint = `${process.env.REACT_APP_TERRAWARE_API}${summaryEndpoint}`.replace('{facilityId}', `${facilityId}`);
+  const response: SummaryGetResponse = (await axios.get(endpoint)).data;
 
-export const getSummary = async (
-  facilityId: number
-): Promise<SummaryResponse> => {
-  const endpoint = `${BASE_URL}/${facilityId}`;
-
-  return (await axios.get(endpoint)).data;
+  return response;
 };

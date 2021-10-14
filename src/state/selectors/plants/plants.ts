@@ -1,6 +1,6 @@
 import { atom, selector } from 'recoil';
 import { getPlants } from 'src/api/plants/plants';
-import { ListPlantsResponseElement } from 'src/api/types/plant';
+import { PlantsListResponseElement } from 'src/api/types/plant';
 import { plantsLayerSelector } from './layers';
 
 export const plantsPlantsAtom = atom({
@@ -8,7 +8,7 @@ export const plantsPlantsAtom = atom({
   default: 0,
 });
 
-export const plantsSelector = selector<ListPlantsResponseElement[] | undefined>({
+export const plantsSelector = selector<PlantsListResponseElement[] | undefined>({
   key: 'plantsPlantsSelector',
   get: async ({ get }) => {
     get(plantsPlantsAtom);
@@ -24,11 +24,11 @@ export const plantsSelector = selector<ListPlantsResponseElement[] | undefined>(
   },
 });
 
-export const plantsByFeatureIdSelector = selector<Record<number, ListPlantsResponseElement> | undefined>({
+export const plantsByFeatureIdSelector = selector<Record<number, PlantsListResponseElement> | undefined>({
   key: 'plantsByFeatureIdSelector',
   get: async ({ get }) => {
     const plants = get(plantsSelector);
-    const plantsByFeatureId: Record<number, ListPlantsResponseElement> = {};
+    const plantsByFeatureId: Record<number, PlantsListResponseElement> = {};
     plants?.forEach((plant) => {
       plantsByFeatureId[plant.featureId] = plant;
     });

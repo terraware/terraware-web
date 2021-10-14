@@ -1,5 +1,10 @@
-import { components } from './generated-schema';
+import { paths } from './generated-schema';
 
-export type LayerListResponse = components['schemas']['ListLayersResponsePayload'];
-export type LayerListResponseLayerType = components['schemas']['LayerResponse']['layerType'];
-export type LayerResponse = components['schemas']['LayerResponse'];
+export const layersEndpoint = '/api/v1/gis/layers/list/{siteId}';
+export type LayersListResponse = paths[typeof layersEndpoint]['get']['responses'][200]['content']['application/json'];
+type LayerType = LayersListResponse['layers'][0]['layerType'];
+
+export interface Layer {
+  id?: number;
+  layerType: LayerType;
+}

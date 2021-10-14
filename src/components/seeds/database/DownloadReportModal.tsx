@@ -5,8 +5,8 @@ import DialogContent from '@material-ui/core/DialogContent';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-import { downloadReport } from 'src/api/seeds/downloadReport';
-import { ExportRequestPayload } from 'src/api/types/report';
+import { downloadReport } from 'src/api/seeds/report';
+import { SearchExportPostRequestBody } from 'src/api/types/report';
 import { facilityIdSelector } from 'src/state/selectors/seeds/facility';
 import { searchParamsSelector } from 'src/state/selectors/seeds/search';
 import strings from 'src/strings';
@@ -52,7 +52,7 @@ export default function DownloadReportModal(props: Props): JSX.Element {
   };
 
   const handleOk = async () => {
-    const reportParams: ExportRequestPayload = {
+    const reportParams: SearchExportPostRequestBody = {
       facilityId,
       fields: searchParams.fields,
       sortOrder: searchParams.sortOrder,

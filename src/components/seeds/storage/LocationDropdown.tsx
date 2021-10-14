@@ -2,7 +2,7 @@
 import { Grid } from '@material-ui/core';
 import React from 'react';
 import { useRecoilValue, useResetRecoilState } from 'recoil';
-import { ConditionType, Location } from 'src/api/types/locations';
+import { ConditionType, StorageLocation } from 'src/api/types/locations';
 import locationsSelector from 'src/state/selectors/seeds/locations';
 import strings from 'src/strings';
 import Dropdown from '../../common/Dropdown';
@@ -34,7 +34,7 @@ export default function LocationDropdown({
     }
   }, [storageLocation]);
 
-  const generateLocationsValues = locations?.map((location: Location) => {
+  const generateLocationsValues = locations?.map((location: StorageLocation) => {
     return {
       label: location.storageLocation,
       value: location.storageLocation,
@@ -44,7 +44,7 @@ export default function LocationDropdown({
   const getConditionValue = (
     locationSelected: string
   ): ConditionType | undefined => {
-    const location = locations?.find((_location: Location) => {
+    const location = locations?.find((_location: StorageLocation) => {
       return _location.storageLocation === locationSelected;
     });
 
