@@ -19,7 +19,7 @@ import ErrorBoundary from './ErrorBoundary';
 import strings from './strings';
 import theme from './theme';
 import useTimer from './utils/useTimer';
-import getOrganization, {getOrganizationResponse, OrgRequestError} from './api/organization/organization';
+import getOrganization, {GetOrganizationResponse, OrgRequestError} from './api/organization/organization';
 import {Organization} from './types/Organization';
 
 // @ts-ignore
@@ -64,21 +64,24 @@ function AppContent() {
 
   const [organizationErrors, setOrganizationErrors] = useState<OrgRequestError>();
   const [organization, setOrganization] = useState<Organization>(emptyOrg);
-  const [currProjectId, setCurrProjectId] = useState<number | undefined>();
+  const [currProjectId, setCurrProjectId] = useState<number>();
 
   useEffect(() => {
-    getOrganization()
-      .then((response: getOrganizationResponse) => {
-        if (response.error) {
-          setOrganizationErrors(response.error);
-        } else {
-          setOrganization(response.organization);
-          setCurrProjectId(response.organization.projects[0].id);
-        }
-      });
+    const populateOrganizationData = async () => {
+      const response: GetOrganizationResponse = await getOrganization();
+      if (response.error) {
+        setOrganizationErrors(response.error);
+      } else {
+        setOrganization(response.organization);
+        setCurrProjectId(response.organization.projects[0].id);
+      }
+    };
+
+    populateOrganizationData();
   }, []);
 
-  if (organizationErrors === OrgRequestError.AxiosError) {
+  // Temporary error UI. Will be made prettier once we have input from the Design Team.
+  if (organizationErrors === OrgRequestError.ErrorFetchingProjectsOrSites) {
     return <h1>Whoops! Looks like an unrecoverable internal error when fetching projects and/or sites</h1>;
   } else if (organizationErrors === OrgRequestError.NoProjects ||
              organizationErrors === OrgRequestError.NoSites) {

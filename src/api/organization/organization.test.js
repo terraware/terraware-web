@@ -38,21 +38,30 @@ const FACILITIES = [
   {
     id: 100,
     siteId: 20,
-    type: 'seed bank',
   }
 ]
 
-const SUCCESSFUL_GET_FACILITIES_RESPONSE = { data: { facilities: FACILITIES, status: 'ok'}};
+// Server response includes facility type, which is used to filter out all types except Seed Bank.
+const FACILITIES_FROM_SERVER = FACILITIES.map(facility => {
+  return {...facility, type: 'Seed Bank'}
+});
+
+const SUCCESSFUL_GET_FACILITIES_RESPONSE = { data: { facilities: FACILITIES_FROM_SERVER, status: 'ok'}};
 
 const LAYERS = [
   {
     id: 100,
     siteId: 20,
-    layerType: 'Plants Planted',
-  }
+  },
 ]
 
-const SUCCESSFUL_GET_LAYERS_RESPONSE = { data: { layers: LAYERS, status: 'ok'}};
+// Server response includes layer type, which is used to filter out all types except Plants Planted.
+const LAYERS_FROM_SERVER = LAYERS.map(layer => {
+  return {...layer, layerType: 'Plants Planted'}
+});
+
+
+const SUCCESSFUL_GET_LAYERS_RESPONSE = { data: { layers: LAYERS_FROM_SERVER, status: 'ok'}};
 const EMPTY_GET_LAYERS_RESPONSE = { data: { layers: [], status: 'ok'}};
 
 const FAILURE_RESPONSE = {request : { status: 500 }};
@@ -129,7 +138,7 @@ async function testProjectsOrSitesFailure(failure) {
     }
   });
   const response = await getOrganization();
-  expect(response.error).toEqual(OrgRequestError.AxiosError)
+  expect(response.error).toEqual(OrgRequestError.ErrorFetchingProjectsOrSites)
 }
 
 test('getOrganization() returns error on axios failure to fetch projects', () => {

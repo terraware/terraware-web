@@ -1,17 +1,14 @@
 import axios, {AxiosResponse} from 'axios';
-import { Organization, Project, Site, Facility, Layer } from '../../types/Organization';
-import { components } from '../types/generated-schema';
+import {SeedBank, Organization, PlantLayer, Project, Site} from '../../types/Organization';
+import {paths} from '../types/generated-schema';
 
-type ListProjectsResponsePayload = components['schemas']['ListProjectsResponsePayload'];
-type ListSitesResponsePayload = components['schemas']['ListSitesResponsePayload'];
-type ListFacilitiesResponse = components['schemas']['ListFacilitiesResponse'];
-type ListLayersResponsePayload = components['schemas']['ListLayersResponsePayload'];
-type LayerResponse = components['schemas']['LayerResponse'];
+const BASE_URL = `${process.env.REACT_APP_TERRAWARE_API}`;
 
-const BASE_URL = `${process.env.REACT_APP_TERRAWARE_API}/api/v1`;
+const PROJECTS = '/api/v1/projects';
+type ListProjectsResponse = paths[typeof PROJECTS]['get']['responses'][200]['content']['application/json'];
 
 const getProjects = async (): Promise<Project[]> => {
-  const response: ListProjectsResponsePayload = (await axios.get(`${BASE_URL}/projects`)).data;
+  const response: ListProjectsResponse = (await axios.get(`${BASE_URL}${PROJECTS}`)).data;
   return response.projects.map((project) => {
     return {
       id: project.id,
@@ -20,58 +17,74 @@ const getProjects = async (): Promise<Project[]> => {
   });
 };
 
+const SITES = '/api/v1/sites';
+type ListSitesResponse = paths[typeof SITES]['get']['responses'][200]['content']['application/json'];
+
 const getSites = async (): Promise<Site[]> => {
-  const sitesResponse: ListSitesResponsePayload = (await axios.get(`${BASE_URL}/sites`)).data;
-  return sitesResponse.sites.map((site) => {
-    return {
+  const sitesResponse: ListSitesResponse = (await axios.get(`${BASE_URL}${SITES}`)).data;
+  return sitesResponse.sites.map((site) => ({
       id: site.id,
       projectId: site.projectId
-    };
-  });
+    }));
 };
 
-const getLayers = async (sites: Site[]): Promise<Layer[]> => {
+const LAYERS = '/api/v1/gis/layers/list/{siteId}';
+type ListLayersResponse = paths[typeof LAYERS]['get']['responses'][200]['content']['application/json'];
+type LayerResponse = ListLayersResponse['layers'][0];
+
+const getPlantLayers = async (sites: Site[]): Promise<PlantLayer[]> => {
   // We may want to add functionality to allow fetching of some layers to fail
-  // while still returning those that could be fetched successfully
-  const axiosResponse : AxiosResponse<ListLayersResponsePayload>[] = await Promise.all(
-    sites.map((site) => axios.get(`${BASE_URL}/gis/layers/list/${site.id}`))
+  // while still returning those that were fetched successfully
+  const axiosResponse : AxiosResponse<ListLayersResponse>[] = await Promise.all(
+    sites.map((site) => axios.get(`${BASE_URL}${LAYERS}`.replace('{siteId}', `${site.id}`)))
   );
 
-  return (axiosResponse.map((response) => {
-    return response.data.layers.map((layer: LayerResponse) => {
-      return {
-        id: layer.id,
-        siteId: layer.siteId,
-        layerType: layer.layerType
-      };
+  const layers: PlantLayer[] = [];
+  axiosResponse.forEach((response) => {
+    response.data.layers.forEach((layer: LayerResponse) => {
+      if (layer.layerType === 'Plants Planted') {
+        layers.push({
+          id: layer.id,
+          siteId: layer.siteId,
+        });
+      }
     });
-  }).flat());
+  });
+
+  return layers;
 };
 
-const getFacilities = async(): Promise<Facility[]> => {
-  const facilitiesResponse: ListFacilitiesResponse = (await axios.get(`${BASE_URL}/facility`)).data;
-  return facilitiesResponse.facilities.map((facility) => {
-    return {
-      id: facility.id,
-      siteId: facility.siteId,
-      type: facility.type,
-    };
+const FACILITIES = '/api/v1/facility';
+type ListFacilitiesResponse = paths[typeof FACILITIES]['get']['responses'][200]['content']['application/json'];
+
+const getSeedBankFacilities = async(): Promise<SeedBank[]> => {
+  const facilitiesResponse: ListFacilitiesResponse = (await axios.get(`${BASE_URL}${FACILITIES}`)).data;
+  const seedBanks: SeedBank[] = [];
+  facilitiesResponse.facilities.forEach((facility) => {
+    if (facility.type === 'Seed Bank') {
+      seedBanks.push({
+        id: facility.id,
+        siteId: facility.siteId,
+      });
+    }
   });
+  return seedBanks;
 };
 
 export enum OrgRequestError {
   NoProjects = 'API_RETURNED_EMPTY_PROJECT_LIST',
   NoSites = 'API_RETURNED_EMPTY_SITE_LIST',
-  AxiosError = 'AXIOS_ERROR_FETCHING_PROJECTS_OR_SITES',
+  ErrorFetchingProjectsOrSites = 'UNRECOVERABLE_ERROR_FETCHING_PROJECTS_OR_SITES',
 }
 
-export type getOrganizationResponse = {
+export type GetOrganizationResponse = {
   organization: Organization,
   error: OrgRequestError | null,
 };
 
-const getOrganization = async (): Promise<getOrganizationResponse> => {
-  const response : getOrganizationResponse = {
+// getOrganization() always returns a promise that resolves. All errors are wrapped in the response object.
+const getOrganization = async (): Promise<GetOrganizationResponse> => {
+  const response : GetOrganizationResponse = {
     organization: {
       projects: [],
       sites: [],
@@ -94,13 +107,13 @@ const getOrganization = async (): Promise<getOrganizationResponse> => {
     response.organization.projects = projects;
     response.organization.sites = sites;
   } catch (error) {
-    console.error(`${error.request.status} error fetching projects or sites.`);
-    response.error = OrgRequestError.AxiosError;
+    console.error(error);
+    response.error = OrgRequestError.ErrorFetchingProjectsOrSites;
     return response;
   }
 
   const [facilitiesResponse, layersResponse] = await Promise.allSettled(
-    [getFacilities(), getLayers(response.organization.sites)]
+    [getSeedBankFacilities(), getPlantLayers(response.organization.sites)]
   );
   if (facilitiesResponse.status === 'fulfilled') {
     response.organization.facilities = facilitiesResponse.value;
@@ -117,7 +130,7 @@ const getOrganization = async (): Promise<getOrganizationResponse> => {
 };
 
 export const exportedForTesting = {
-  getLayers,
+  getLayers: getPlantLayers,
 };
 
 export default getOrganization;

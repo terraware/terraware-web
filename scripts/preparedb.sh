@@ -21,8 +21,7 @@ case "$(uname -s)" in
      ;;
 esac
 
-COOKIE="SESSION=MDNhOWQ4MzQtOTgyZC00NzI0LWE2MDQtY2M2NTY4YjM3NDdh"
-
+COOKIE="SESSION=Mjc2NzE0YWQtYWIwYS00OGFhLThlZjgtZGI2NWVjMmU5NTBh"
 
 echo "---- E2E: adding species records ----"
 speciesId1=$(curl 'http://localhost:8080/api/v1/species' \
@@ -41,7 +40,7 @@ layerId=$(curl 'http://localhost:8080/api/v1/gis/layers' \
   --cookie "${COOKIE}"  \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
-  --data '{"siteId":1, "layerType": "Plants Planted", "tileSetName": "Some tile set name", "proposed": "false", "hidden": "false"}' | jq -r '.layer.id')
+  --data '{"siteId":10, "layerType": "Plants Planted", "tileSetName": "Some tile set name", "proposed": "false", "hidden": "false"}' | jq -r '.layer.id')
 
 echo "---- E2E: adding features/plants/photos records ----"
 featureId=$(curl 'http://localhost:8080/api/v1/gis/features' \

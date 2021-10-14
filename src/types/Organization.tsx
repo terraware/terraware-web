@@ -8,21 +8,19 @@ export type Site = {
   projectId: number;
 };
 
-export type Facility = {
+export type SeedBank = {
   id: number;
   siteId: number;
-  type: string;
 };
 
-export type Layer = {
+export type PlantLayer = {
   id: number;
   siteId: number;
-  layerType: string;
 };
 
 export type Organization = {
   projects: Project[],
   sites: Site[],
-  facilities: Facility[],
-  layers: Layer[],
+  facilities: SeedBank[],
+  layers: PlantLayer[],
 };

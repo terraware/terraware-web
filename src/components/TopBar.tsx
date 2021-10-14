@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) =>
 
 type TopBarProps = {
   projects: Project[],
-  currProjectId: number | undefined,
+  currProjectId?: number,
   setCurrProjectId: CallableFunction,
 };
 
