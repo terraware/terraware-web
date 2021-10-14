@@ -62,8 +62,10 @@ function AppContent() {
   const classes = useStyles();
   useTimer();
 
-  const [organizationErrors, setOrganizationErrors] = useState<OrgRequestError>();
   const [organization, setOrganization] = useState<Organization>(emptyOrg);
+  const [organizationErrors, setOrganizationErrors] = useState<OrgRequestError>();
+  // Temporary state used to populate the Projects dropdown. Unclear if this state will live here
+  // after the refactor is finished.
   const [currProjectId, setCurrProjectId] = useState<number>();
 
   useEffect(() => {
@@ -97,20 +99,21 @@ function AppContent() {
           <NavBar />
         </div>
         <div className={classes.content}>
+          {/* Also temporary since projects dropdown will probably not continue to live in the top nav bar. */}
           <TopBar projects={organization.projects} currProjectId={currProjectId} setCurrProjectId={setCurrProjectId}/>
           <ErrorBoundary>
             <Switch>
               <Route exact path='/'>
                 <Redirect to='/dashboard' />
               </Route>
-              <Route path='/dashboard' component={Dashboard} />
-              <Route path='/plants' component={AllPlants} />
+              <Route exact path='/dashboard' component={Dashboard} />
+              <Route exact path='/plants' component={AllPlants} />
               <Route path='/species' component={Species} />
-              <Route path='/help' component={Help} />
-              <Route path='/summary' component={Summary} />
               <Route path='/accessions/new' component={NewAccession} />
               <Route path='/accessions/:accessionId' component={Accession} />
               <Route path='/accessions' component={Database} />
+              <Route path='/help' component={Help} />
+              <Route exact path='/summary' component={Summary} />
             </Switch>
           </ErrorBoundary>
         </div>
