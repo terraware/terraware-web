@@ -51,7 +51,7 @@ const TableCell = withStyles({
 export default function Checkin(): JSX.Element {
   const classes = useStyles();
   const history = useHistory();
-
+  const location = useStateLocation();
   const pendingAccessions = useRecoilValue(pendingAccessionsSelector);
 
   const transformPendingAccessions = () => {
@@ -70,15 +70,11 @@ export default function Checkin(): JSX.Element {
     return Object.values(accessionsById);
   };
 
-  const pendingAccessionsById = transformPendingAccessions();
-
   const getSubtitle = () => {
     if (pendingAccessions.results) {
       return `${pendingAccessions.results.length} ${strings.BAGS_TOTAL}`;
     }
   };
-
-  const location = useStateLocation();
 
   const goToAccession = (id: string) => {
     const accessionLocation = {
@@ -88,6 +84,8 @@ export default function Checkin(): JSX.Element {
     };
     history.push(accessionLocation);
   };
+
+  const pendingAccessionsById = transformPendingAccessions();
 
   return (
     <MuiPickersUtilsProvider utils={MomentUtils}>

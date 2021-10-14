@@ -86,7 +86,6 @@ export default function PageHeader({ title, subtitle, children, rightComponent, 
               </Typography>
               {rightComponent}
             </Box>
-
             <Typography id='subtitle' variant='h6' className={classes.subtitle}>
               {subtitle}
             </Typography>

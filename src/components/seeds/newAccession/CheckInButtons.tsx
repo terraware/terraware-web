@@ -19,7 +19,7 @@ export default function CheckInButtons({
     <Button
       id='checkIn'
       label={isCheckedIn ? strings.CHECKED_IN : isCheckingIn ? strings.CHECKING_IN : strings.CHECK_IN}
-      onClick={() => onSubmitHandler()}
+      onClick={onSubmitHandler}
     />
   );
 }

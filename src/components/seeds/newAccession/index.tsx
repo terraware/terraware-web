@@ -152,13 +152,7 @@ export type FieldError = {
   id: string;
   msg: string;
 };
-export function AccessionForm<T extends AccessionPostRequestBody>({
-  updating,
-  photoFilenames,
-  accession,
-  onSubmit,
-  onCheckIn,
-}: Props<T>): JSX.Element {
+export function AccessionForm<T extends AccessionPostRequestBody>({ updating, photoFilenames, accession, onSubmit, onCheckIn }: Props<T>): JSX.Element {
   const classes = useStyles();
 
   const [record, setRecord, onChange] = useForm(accession);
@@ -185,7 +179,8 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
     if (isCheckingIn) {
       setIsCheckingIn(false);
       setIsCheckedIn(true);
-      setTimeout(() => setIsCheckedIn(false), 1000);
+      const timer = setTimeout(() => setIsCheckedIn(false), 1000);
+      clearTimeout(timer);
     }
     if (isSaving) {
       setIsSaving(false);
@@ -292,8 +287,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
     });
 
     const combinedErrors = [...previousErrors, ...newErrors].filter(
-      (error, index, self) =>
-        index === self.findIndex((otherError) => otherError.id === error.id && otherError.msg === error.msg)
+      (error, index, self) => index === self.findIndex((otherError) => otherError.id === error.id && otherError.msg === error.msg)
     );
     setErrors(combinedErrors);
   };
@@ -320,13 +314,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
 
   return (
     <>
-      {updating && (
-        <EditSpeciesModal
-          open={editSpeciesModalOpen}
-          onClose={onCloseEditSpeciesModal}
-          onOk={closeModalAndUpdateSpecies}
-        />
-      )}
+      {updating && <EditSpeciesModal open={editSpeciesModalOpen} onClose={onCloseEditSpeciesModal} onOk={closeModalAndUpdateSpecies} />}
       <MuiPickersUtilsProvider utils={MomentUtils}>
         <Paper className={classes.paper}>
           <Typography variant='h6' className={classes.bold}>
@@ -445,11 +433,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
               </Grid>
             </Suspense>
             <Grid item xs={4}>
-              <SecondaryCollectors
-                id='secondaryCollectors'
-                secondaryCollectors={record.secondaryCollectors}
-                onChange={onChange}
-              />
+              <SecondaryCollectors id='secondaryCollectors' secondaryCollectors={record.secondaryCollectors} onChange={onChange} />
             </Grid>
           </Grid>
           <Divisor />
@@ -490,12 +474,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
                   {strings.PHOTOS}
                 </Typography>
                 {photoFilenames?.map((photo, index) => (
-                  <Link
-                    id={`photo-${index}`}
-                    key={index}
-                    target='_blank'
-                    href={getPhotoEndpoint((record as unknown as Accession).id, photo)}
-                  >
+                  <Link id={`photo-${index}`} key={index} target='_blank' href={getPhotoEndpoint((record as unknown as Accession).id, photo)}>
                     <Typography component='p' variant='body1' className={classes.photoLink}>
                       {photo}
                     </Typography>
@@ -507,13 +486,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
                   {strings.GEOLOCATIONS}
                 </Typography>
                 {record.geolocations?.map((geolocation, index) => (
-                  <Typography
-                    id={`location${index}`}
-                    key={index}
-                    component='p'
-                    variant='body1'
-                    className={classes.listItem}
-                  >
+                  <Typography id={`location${index}`} key={index} component='p' variant='body1' className={classes.listItem}>
                     {`${geolocation.latitude}, ${geolocation.longitude}`}
                   </Typography>
                 ))}
@@ -535,12 +508,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
             )}
             <Grid item className={classes.right}>
               {showCheckIn ? (
-                <CheckInButtons
-                  isCheckedIn={isCheckedIn}
-                  isCheckingIn={isCheckingIn}
-                  pendingCheckIn={isPendingCheckIn}
-                  onSubmitHandler={onCheckInHandler}
-                />
+                <CheckInButtons isCheckedIn={isCheckedIn} isCheckingIn={isCheckingIn} pendingCheckIn={isPendingCheckIn} onSubmitHandler={onCheckInHandler} />
               ) : (
                 <FooterButtons
                   errors={errors.length > 0}

@@ -21,7 +21,7 @@ services:
       - 'KEYCLOAK_REALM'
       - 'KEYCLOAK_RESOURCE'
       - 'TERRAWARE_PHOTO_DIR=/photos'
-      - TERRAWARE_ENABLE_AWAITING_CHECK_IN=true
+      - 'TERRAWARE_ENABLE_AWAITING_CHECK_IN=true'
     volumes:
       - './photo-data:/photos'
     depends_on:
