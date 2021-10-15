@@ -90,6 +90,7 @@ test('getOrganization() returns all data when no errors thrown', async () => {
     },
     errors: [],
   });
+  expect(true).toEqual(false);
 });
 
 test('getOrganization() returns error (and no org data) when project list is empty', async () => {
