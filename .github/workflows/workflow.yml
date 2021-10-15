@@ -48,6 +48,9 @@ jobs:
       - name: typescript check
         run: yarn ts
 
+      - name: unit and integration tests
+        run: yarn test
+
       - name: download and start backend
         run: yarn server:reset
         env:
