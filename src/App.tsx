@@ -63,7 +63,7 @@ function AppContent() {
   useTimer();
 
   const [organization, setOrganization] = useState<Organization>(emptyOrg);
-  const [organizationErrors, setOrganizationErrors] = useState<OrgRequestError>();
+  const [organizationErrors, setOrganizationErrors] = useState<OrgRequestError[]>([]);
   // Temporary state used to populate the Projects dropdown. Unclear if this state will live here
   // after the refactor is finished.
   const [currProjectId, setCurrProjectId] = useState<number>();
@@ -71,8 +71,8 @@ function AppContent() {
   useEffect(() => {
     const populateOrganizationData = async () => {
       const response: GetOrganizationResponse = await getOrganization();
-      if (response.error) {
-        setOrganizationErrors(response.error);
+      if (response.errors) {
+        setOrganizationErrors(response.errors);
       } else {
         setOrganization(response.organization);
         setCurrProjectId(response.organization.projects[0].id);
@@ -83,11 +83,11 @@ function AppContent() {
   }, []);
 
   // Temporary error UI. Will be made prettier once we have input from the Design Team.
-  if (organizationErrors === OrgRequestError.ErrorFetchingProjectsOrSites) {
+  if (organizationErrors.includes(OrgRequestError.ErrorFetchingProjectsOrSites)) {
     return <h1>Whoops! Looks like an unrecoverable internal error when fetching projects and/or sites</h1>;
-  } else if (organizationErrors === OrgRequestError.NoProjects ||
-             organizationErrors === OrgRequestError.NoSites) {
-    return <h1>You don't have access to any projects or sites!</h1>;
+  } else if (organizationErrors.includes(OrgRequestError.NoProjects) ||
+             organizationErrors.includes(OrgRequestError.NoSites)) {
+    return <h1>You don't have access to any projects and/or sites!</h1>;
   }
 
   return (

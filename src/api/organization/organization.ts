@@ -1,6 +1,6 @@
 import axios, {AxiosResponse} from 'axios';
-import {SeedBank, Organization, PlantLayer, Project, Site} from '../../types/Organization';
-import {paths} from '../types/generated-schema';
+import {SeedBank, Organization, PlantLayer, Project, Site} from 'src/types/Organization';
+import {paths} from 'src/api/types/generated-schema';
 
 const BASE_URL = `${process.env.REACT_APP_TERRAWARE_API}`;
 
@@ -9,12 +9,10 @@ type ListProjectsResponse = paths[typeof PROJECTS]['get']['responses'][200]['con
 
 const getProjects = async (): Promise<Project[]> => {
   const response: ListProjectsResponse = (await axios.get(`${BASE_URL}${PROJECTS}`)).data;
-  return response.projects.map((project) => {
-    return {
+  return response.projects.map((project) => ({
       id: project.id,
       name: project.name
-    };
-  });
+  }));
 };
 
 const SITES = '/api/v1/sites';
@@ -25,7 +23,7 @@ const getSites = async (): Promise<Site[]> => {
   return sitesResponse.sites.map((site) => ({
       id: site.id,
       projectId: site.projectId
-    }));
+  }));
 };
 
 const LAYERS = '/api/v1/gis/layers/list/{siteId}';
@@ -75,58 +73,70 @@ export enum OrgRequestError {
   NoProjects = 'API_RETURNED_EMPTY_PROJECT_LIST',
   NoSites = 'API_RETURNED_EMPTY_SITE_LIST',
   ErrorFetchingProjectsOrSites = 'UNRECOVERABLE_ERROR_FETCHING_PROJECTS_OR_SITES',
+  ErrorFetchingLayers = 'UNRECOVERABLE_ERROR_FETCHING_LAYERS',
+  ErrorFetchingFacilities = 'UNRECOVERABLE_ERROR_FETCHING_FACILITIES',
 }
 
 export type GetOrganizationResponse = {
   organization: Organization,
-  error: OrgRequestError | null,
+  errors: OrgRequestError[],
 };
 
-// getOrganization() always returns a promise that resolves. All errors are wrapped in the response object.
+/*
+ * getOrganization() always returns a promise that resolves.
+ * If we successfully fetched all organization data, the result will contain
+ *    all of the user's projects, sites, seed bank facilities, and plants planted layers
+ *    an empty errors list
+ * If we were unable to fetch all organization data, the result will contain
+ *    any data that we were able to fetch
+ *    a non-empty errors list indicating what went wrong
+ */
 const getOrganization = async (): Promise<GetOrganizationResponse> => {
-  const response : GetOrganizationResponse = {
+  const OrgResponse : GetOrganizationResponse = {
     organization: {
       projects: [],
       sites: [],
       facilities: [],
       layers: [],
     },
-    error: null,
+    errors: [],
   };
 
   try {
     const [projects, sites] = await Promise.all([getProjects(), getSites()]);
     if (projects.length === 0) {
-      response.error = OrgRequestError.NoProjects;
-      return response;
+      OrgResponse.errors.push(OrgRequestError.NoProjects);
+      return OrgResponse;
     }
+    OrgResponse.organization.projects = projects;
     if (sites.length === 0) {
-      response.error = OrgRequestError.NoSites;
-      return response;
+      OrgResponse.errors.push(OrgRequestError.NoSites);
+      return OrgResponse;
     }
-    response.organization.projects = projects;
-    response.organization.sites = sites;
+    OrgResponse.organization.sites = sites;
   } catch (error) {
     console.error(error);
-    response.error = OrgRequestError.ErrorFetchingProjectsOrSites;
-    return response;
+    OrgResponse.errors.push(OrgRequestError.ErrorFetchingProjectsOrSites);
+    return OrgResponse;
   }
 
   const [facilitiesResponse, layersResponse] = await Promise.allSettled(
-    [getSeedBankFacilities(), getPlantLayers(response.organization.sites)]
+    [getSeedBankFacilities(), getPlantLayers(OrgResponse.organization.sites)]
   );
   if (facilitiesResponse.status === 'fulfilled') {
-    response.organization.facilities = facilitiesResponse.value;
+    OrgResponse.organization.facilities = facilitiesResponse.value;
   } else {
     console.error(facilitiesResponse.reason);
+    OrgResponse.errors.push(OrgRequestError.ErrorFetchingFacilities);
   }
   if (layersResponse.status === 'fulfilled') {
-    response.organization.layers = layersResponse.value;
+    OrgResponse.organization.layers = layersResponse.value;
   } else {
     console.error(layersResponse.reason);
+    OrgResponse.errors.push(OrgRequestError.ErrorFetchingLayers);
   }
 
-  return response;
+  return OrgResponse;
 };
 
 export const exportedForTesting = {
