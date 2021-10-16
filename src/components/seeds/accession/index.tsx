@@ -148,6 +148,7 @@ function Content(): JSX.Element {
   );
 }
 
+// @ts-ignore
 function pathDestinationForState(state: AccessionState): string {
   switch (state) {
     case 'Pending':

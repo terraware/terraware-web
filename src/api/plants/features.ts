@@ -1,4 +1,4 @@
-import { addQueryParams } from 'src/utils/api';
+import addQueryParams from 'src/api/addQueryParams';
 import axios from '..';
 import { featureEndpoint, FeatureListQuery, FeatureListResponse, featuresEndpoint } from '../types/feature';
 

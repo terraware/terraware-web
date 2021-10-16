@@ -4,7 +4,8 @@
  * @param params query params to append to the endpoint
  * @returns string with the combination of the endpoint and the query params. For example endpoint?paramKey1=paramValue1&paramKey2=paramValue2
  */
-export const addQueryParams = (endpoint: string, params: Record<string, unknown>): string => {
+// TODO: remove unknown type here
+const addQueryParams = (endpoint: string, params: Record<string, unknown>): string => {
   let updatedEndpoint = endpoint;
 
   const keys = Object.keys(params);
@@ -17,3 +18,5 @@ export const addQueryParams = (endpoint: string, params: Record<string, unknown>
 
   return updatedEndpoint;
 };
+
+export default addQueryParams;

@@ -108,6 +108,9 @@ export interface paths {
     get: operations["read"];
     put: operations["update"];
   };
+  "/api/v1/seedbank/accession/{id}/checkIn": {
+    post: operations["checkIn"];
+  };
   "/api/v1/seedbank/accession/{id}/photo": {
     get: operations["listPhotos"];
   };
@@ -154,7 +157,7 @@ export interface paths {
     post: operations["createMultipleTimeseries"];
   };
   "/api/v1/seedbank/timeseries/values": {
-    post: operations["recordTimeseriesValues"];
+    post: operations["recordTimeseriesValues_1"];
   };
   "/api/v1/seedbank/values": {
     post: operations["listFieldValues"];
@@ -205,6 +208,13 @@ export interface paths {
   "/api/v1/species/{speciesId}/names": {
     get: operations["speciesNamesList"];
   };
+  "/api/v1/timeseries/create": {
+    /** If there are existing timeseries with the same names, the old definitions will be overwritten. */
+    post: operations["createMultipleTimeseries_1"];
+  };
+  "/api/v1/timeseries/values": {
+    post: operations["recordTimeseriesValues"];
+  };
 }
 
 export interface components {
@@ -215,6 +225,7 @@ export interface components {
       /** Server-calculated active indicator. This is based on the accession's state. */
       active: "Inactive" | "Active";
       bagNumbers?: string[];
+      checkedInTime?: string;
       collectedDate?: string;
       deviceInfo?: components["schemas"]["DeviceInfoPayload"];
       cutTestSeedsCompromised?: number;
@@ -262,6 +273,7 @@ export interface components {
       speciesId?: number;
       /** Server-calculated accession state. Can change due to modifications to accession data or based on passage of time. */
       state:
+        | "Awaiting Check-In"
         | "Pending"
         | "Processing"
         | "Processed"
@@ -853,6 +865,7 @@ export interface components {
       accessionId?: number;
       /** For state notifications, which state is being summarized. */
       state?:
+        | "Awaiting Check-In"
         | "Pending"
         | "Processing"
         | "Processed"
@@ -910,7 +923,7 @@ export interface components {
     /** Results of a request to record timeseries values. */
     RecordTimeseriesValuesResponsePayload: {
       /** List of values that the server failed to record. Will not be included if all the values were recorded successfully. */
-      failures?: components["schemas"]["TimeseriesValuesPayload"][];
+      failures?: components["schemas"]["TimeseriesValuesErrorPayload"][];
       status: components["schemas"]["SuccessOrError"];
       error?: components["schemas"]["ErrorDetails"];
     };
@@ -918,6 +931,7 @@ export interface components {
       | "accessionNumber"
       | "active"
       | "bagNumber"
+      | "checkedInTime"
       | "collectedDate"
       | "collectionNotes"
       | "cutTestSeedsCompromised"
@@ -1002,7 +1016,74 @@ export interface components {
       count: number;
     };
     SearchResponsePayload: {
-      results: { [key: string]: string }[];
+      results: {
+        accessionNumber?: string;
+        active?: string;
+        bagNumber?: string;
+        checkedInTime?: string;
+        collectedDate?: string;
+        collectionNotes?: string;
+        cutTestSeedsCompromised?: string;
+        cutTestSeedsEmpty?: string;
+        cutTestSeedsFilled?: string;
+        dryingEndDate?: string;
+        dryingMoveDate?: string;
+        dryingStartDate?: string;
+        endangered?: string;
+        estimatedSeedsIncoming?: string;
+        family?: string;
+        geolocation?: string;
+        germinationEndDate?: string;
+        germinationPercentGerminated?: string;
+        germinationSeedType?: string;
+        germinationSeedsGerminated?: string;
+        germinationSeedsSown?: string;
+        germinationStartDate?: string;
+        germinationSubstrate?: string;
+        germinationTestNotes?: string;
+        germinationTestType?: string;
+        germinationTreatment?: string;
+        id?: string;
+        landowner?: string;
+        latestGerminationTestDate?: string;
+        latestViabilityPercent?: string;
+        nurseryStartDate?: string;
+        primaryCollector?: string;
+        processingMethod?: string;
+        processingNotes?: string;
+        processingStartDate?: string;
+        rare?: string;
+        receivedDate?: string;
+        remainingGrams?: string;
+        remainingQuantity?: string;
+        remainingUnits?: string;
+        siteLocation?: string;
+        sourcePlantOrigin?: string;
+        species?: string;
+        state?: string;
+        storageCondition?: string;
+        storageLocation?: string;
+        storageNotes?: string;
+        storagePackets?: string;
+        storageStartDate?: string;
+        targetStorageCondition?: string;
+        totalGrams?: string;
+        totalQuantity?: string;
+        totalUnits?: string;
+        totalViabilityPercent?: string;
+        treesCollectedFrom?: string;
+        viabilityTestType?: string;
+        withdrawalDate?: string;
+        withdrawalDestination?: string;
+        withdrawalGrams?: string;
+        withdrawalNotes?: string;
+        withdrawalPurpose?: string;
+        withdrawalRemainingGrams?: string;
+        withdrawalRemainingQuantity?: string;
+        withdrawalRemainingUnits?: string;
+        withdrawalQuantity?: string;
+        withdrawalUnits?: string;
+      }[];
       cursor?: string;
     };
     SearchSortOrderElement: {
@@ -1136,6 +1217,17 @@ export interface components {
       timestamp: string;
       /** Value to record. If the timeseries is of type Numeric, this must be a decimal or integer value in string form. If the timeseries is of type Text, this can be an arbitrary string. */
       value: string;
+    };
+    /** List of values that the server failed to record. Will not be included if all the values were recorded successfully. */
+    TimeseriesValuesErrorPayload: {
+      /** Device ID as specified in the failing request. */
+      deviceId: number;
+      /** Name of timeseries as specified in the failing request. */
+      timeseriesName: string;
+      /** Values that the server was not able to successfully record. */
+      values: components["schemas"]["TimeseriesValuePayload"][];
+      /** Human-readable details about the failure. */
+      message: string;
     };
     TimeseriesValuesPayload: {
       /** ID of device that produced this value. */
@@ -2115,6 +2207,27 @@ export interface operations {
       };
     };
   };
+  checkIn: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UpdateAccessionResponsePayload"];
+        };
+      };
+      /** The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
   listPhotos: {
     parameters: {
       path: {
@@ -2365,7 +2478,7 @@ export interface operations {
       };
     };
   };
-  recordTimeseriesValues: {
+  recordTimeseriesValues_1: {
     responses: {
       /** Successfully processed the request. Note that this status will be returned even if the server was unable to record some of the values. In that case, the failed values will be returned in the response payload. */
       200: {
@@ -2755,6 +2868,37 @@ export interface operations {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
+      };
+    };
+  };
+  /** If there are existing timeseries with the same names, the old definitions will be overwritten. */
+  createMultipleTimeseries_1: {
+    responses: {
+      /** The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateTimeseriesRequestPayload"];
+      };
+    };
+  };
+  recordTimeseriesValues: {
+    responses: {
+      /** Successfully processed the request. Note that this status will be returned even if the server was unable to record some of the values. In that case, the failed values will be returned in the response payload. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["RecordTimeseriesValuesResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["RecordTimeseriesValuesRequestPayload"];
       };
     };
   };

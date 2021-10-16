@@ -21,6 +21,12 @@ import theme from './theme';
 import useTimer from './utils/useTimer';
 import getOrganization, {GetOrganizationResponse, OrgRequestError} from './api/organization/organization';
 import {Organization} from './types/Organization';
+import {PlantErrorByLayerId, PlantsByLayerId, PlantSummariesByLayerId} from './types/Plant';
+import {
+  getPlants,
+  GetPlantsResponse,
+  getPlantSummaries,
+} from './api/plants2/plants';
 
 // @ts-ignore
 mapboxgl.workerClass =
@@ -67,6 +73,10 @@ function AppContent() {
   // Temporary state used to populate the Projects dropdown. Unclear if this state will live here
   // after the refactor is finished.
   const [currProjectId, setCurrProjectId] = useState<number>();
+  const [plantsByLayerId, setPlantsByLayerId] = useState<PlantsByLayerId>();
+  const [plantErrorByLayerId, setPlantErrorByLayerId] = useState<PlantErrorByLayerId>();
+  const [plantSummariesByLayerId, setPlantSummariesByLayerId] = useState<PlantSummariesByLayerId>();
+  const [plantSummaryErrorByLayerId, setPlantSummaryErrorByLayerId] = useState<PlantErrorByLayerId>();
 
   useEffect(() => {
     const populateOrganizationData = async () => {
@@ -83,6 +93,37 @@ function AppContent() {
 
     populateOrganizationData();
   }, []);
+
+  useEffect(() => {
+    const populatePlantList = async () => {
+      const promises = organization.layers.map((layer) => (getPlants(layer.id)));
+      const plantsResponseList : GetPlantsResponse[] = await Promise.all(promises);
+
+      const currPlantsByLayerId: PlantsByLayerId = new Map();
+      const currPlantErrorByLayerId: PlantErrorByLayerId = new Map();
+      plantsResponseList.forEach((plantResponse) => {
+        if (plantResponse.error) {
+          currPlantErrorByLayerId.set(plantResponse.layerId, plantResponse.error);
+        } else {
+          currPlantsByLayerId.set(plantResponse.layerId, plantResponse.plants);
+        }
+      });
+
+      setPlantsByLayerId(currPlantsByLayerId);
+      setPlantErrorByLayerId(currPlantErrorByLayerId);
+    };
+
+    const populatePlantSummaries = async() => {
+      const response = await getPlantSummaries(organization.layers.map((layer) => (layer.id)));
+      setPlantSummariesByLayerId(response.plantSummariesByLayerId);
+      setPlantSummaryErrorByLayerId(response.plantErrorByLayerId);
+    };
+
+    if (organization.layers.length > 0) {
+      populatePlantList();
+      populatePlantSummaries();
+    }
+  }, [organization]);
 
   // Temporary error UI. Will be made prettier once we have input from the Design Team.
   if (organizationErrors.includes(OrgRequestError.ErrorFetchingProjectsOrSites)) {
