@@ -71,10 +71,12 @@ function AppContent() {
   useEffect(() => {
     const populateOrganizationData = async () => {
       const response: GetOrganizationResponse = await getOrganization();
-      if (response.errors) {
+      if (response.errors.length > 0) {
         setOrganizationErrors(response.errors);
-      } else {
-        setOrganization(response.organization);
+      }
+      setOrganization(response.organization);
+      // Temporary way to choose default project for Projects dropdown.
+      if (response.organization.projects.length > 0) {
         setCurrProjectId(response.organization.projects[0].id);
       }
     };
