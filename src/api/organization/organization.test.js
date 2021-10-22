@@ -63,7 +63,6 @@ function assertOrganizationIsEmpty(organization) {
 }
 
 test('getOrganization() returns all data when no errors thrown', async () => {
-
   axios.get.mockImplementation((url) => {
     if (url.includes('projects')) {
       return Promise.resolve(SUCCESSFUL_GET_PROJECTS_RESPONSE);
@@ -79,6 +78,9 @@ test('getOrganization() returns all data when no errors thrown', async () => {
     } else if (url.includes('gis/layers/list/10')) {
       return Promise.resolve(EMPTY_GET_LAYERS_RESPONSE);
     }
+
+    console.error('Axios mock called with an unexpected url');
+    throw Error('Axios mock called with an unexpected url');
   });
 
   await expect(getOrganization()).resolves.toEqual({
@@ -109,7 +111,11 @@ async function testProjectsOrSitesEmpty(emptyResponse) {
     } else if(url.includes('sites')) {
       return Promise.resolve(emptyResponse === 'sites' ? EMPTY_GET_SITES_RESPONSE : SUCCESSFUL_GET_SITES_RESPONSE);
     }
+
+    console.error('Axios mock called with an unexpected url');
+    throw Error('Axios mock called with an unexpected url');
   });
+
   const response = await getOrganization();
   expect(response.errors).toEqual(
       [emptyResponse === 'projects' ? OrgRequestError.NoProjects : OrgRequestError.NoSites]
@@ -146,7 +152,11 @@ async function testProjectsOrSitesFailure(failure) {
           ? Promise.reject(FAILURE_RESPONSE)
           : Promise.resolve(SUCCESSFUL_GET_SITES_RESPONSE);
     }
+
+    console.error('Axios mock called with an unexpected url');
+    throw Error('Axios mock called with an unexpected url');
   });
+
   const response = await getOrganization();
   expect(response.errors).toEqual([OrgRequestError.ErrorFetchingProjectsOrSites]);
   assertOrganizationIsEmpty(response.organization);
@@ -195,6 +205,9 @@ async function testFacilitiesAndOrLayersFailure(failure) {
           ? Promise.reject(FAILURE_RESPONSE)
           : Promise.resolve(EMPTY_GET_LAYERS_RESPONSE);
     }
+
+    console.error('Axios mock called with an unexpected url');
+    throw Error('Axios mock called with an unexpected url');
   });
 
   const expectedErrors = [];
@@ -222,6 +235,9 @@ test('getLayers() returns a rejected promise if fetching layers from any site fa
     } else if (url.includes('gis/layers/list/10')) {
       return Promise.reject(FAILURE_RESPONSE);
     }
+
+    console.error('Axios mock called with an unexpected url');
+    throw Error('Axios mock called with an unexpected url');
   });
 
   await expect(getLayers(SITES)).rejects.toEqual(FAILURE_RESPONSE);
