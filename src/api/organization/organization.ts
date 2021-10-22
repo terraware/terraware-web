@@ -1,4 +1,5 @@
-import axios, {AxiosResponse} from 'axios';
+import {AxiosResponse} from 'axios';
+import axios from 'src/api/index';
 import {SeedBank, Organization, PlantLayer, Project, Site} from 'src/types/Organization';
 import {paths} from 'src/api/types/generated-schema';
 

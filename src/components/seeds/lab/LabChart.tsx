@@ -66,6 +66,7 @@ export default function LabChart<T>({
             display: false,
           },
           scales: {
+            // @ts-ignore
             xAxes: [
               {
                 gridLines: {
@@ -73,6 +74,7 @@ export default function LabChart<T>({
                 },
               },
             ],
+            // @ts-ignore
             yAxes: [
               {
                 display: true,

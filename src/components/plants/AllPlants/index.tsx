@@ -339,6 +339,7 @@ function AllPlantsContent({ onEditPlant }: AllPlantsProps): JSX.Element {
           Renderer={AllPlantsCellRenderer}
           onSelect={onEditPlant}
         />
+        {/* @ts-ignore */}
         <TablePagination
           component='div'
           count={totalResults || 0}
