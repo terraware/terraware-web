@@ -4,11 +4,13 @@ import {
   Coordinate,
   Plant,
   PlantErrorByLayerId,
-  PlantRequestError,
+  PlantRequestError, PlantsByLayerId,
   PlantSummariesByLayerId,
   PlantSummary,
 } from 'src/types/Plant';
 import addQueryParams from 'src/api/addQueryParams';
+import {SpeciesById} from 'src/types/Species';
+import {getAllSpecies} from 'src/api/species/species';
 
 /*
  * All functions in this module ALWAYS return a promise that resolves. Any errors will be caught and
@@ -23,17 +25,21 @@ type ListPlantsResponse = paths[typeof LIST_PLANTS_ENDPOINT]['get']['responses']
 type ListPlantsResponseElement = ListPlantsResponse['list'][0];
 type Geometry = ListPlantsResponseElement['geom'];
 
+/*
+ * getPlants() will not include the species name on the Plant objects unless the caller provides speciesById.
+ */
 export type GetPlantsResponse = {
   layerId: number;
-  plants: Plant[];  // Will be empty if an error occurred.
+  plantsWithoutSpeciesName: Plant[];  // Will be empty if an error occurred.
   error: PlantRequestError | null;
 };
 
-export const getPlants = async (
+export async function getPlants(
   layerId: number,
+  speciesById?: SpeciesById,
   filters?: ListPlantsQuery, // The client code knows this type as PlantSearchOptions.
-): Promise<GetPlantsResponse> => {
-  const response: GetPlantsResponse = {layerId, plants: [], error: null};
+): Promise<GetPlantsResponse> {
+  const response: GetPlantsResponse = {layerId, plantsWithoutSpeciesName: [], error: null};
   let endpoint = `${BASE_URL}${LIST_PLANTS_ENDPOINT}`.replace('{layerId}', `${layerId}`);
   if (filters) {
     endpoint = addQueryParams(endpoint, filters);
@@ -42,11 +48,20 @@ export const getPlants = async (
   try {
     const apiList : ListPlantsResponseElement[] = (await axios.get(endpoint)).data.list;
 
-    response.plants = apiList.map((plant) => {
+    response.plantsWithoutSpeciesName = apiList.map((plant) => {
       const coords: Coordinate | undefined = plant.geom?.coordinates
         ? { longitude: plant.geom.coordinates[0],
             latitude: plant.geom.coordinates[1] }
         : undefined;
+
+      let speciesName;
+      if (plant.speciesId && speciesById) {
+        if (speciesById.has(plant.speciesId)) {
+          speciesName = speciesById.get(plant.speciesId)?.name;
+        } else {
+          console.error(`Cannot find species name for species ID ${plant.speciesId}, on feature ${plant.featureId}`);
+        }
+      }
 
       return {
         featureId: plant.featureId,
@@ -55,6 +70,7 @@ export const getPlants = async (
         notes: plant.notes,
         enteredTime: plant.enteredTime,
         speciesId: plant.speciesId,
+        speciesName,
       };
     });
   } catch(error) {
@@ -67,7 +83,75 @@ export const getPlants = async (
   }
 
   return response;
+}
+
+/*
+ * You most likely don't want to use this function directly. Prefer to use getPlantsAndSpecies(), which
+ * fetches the species map so that this function can return Plant objects that include a species name.
+ */
+export type GetAllPlantsResponse = {
+  plantsByLayerId: PlantsByLayerId;
+  plantErrorByLayerId: PlantErrorByLayerId;
 };
+
+async function getPlantsForMultipleLayers(
+  layerIds: number[],
+  speciesById?: SpeciesById,
+): Promise<GetAllPlantsResponse> {
+  const promises = layerIds.map((id) => (getPlants(id, speciesById)));
+  const plantsResponseList : GetPlantsResponse[] = await Promise.all(promises);
+
+  const response: GetAllPlantsResponse = {
+    plantsByLayerId: new Map(),
+    plantErrorByLayerId: new Map(),
+  };
+
+  plantsResponseList.forEach((plantResponse) => {
+    if (plantResponse.error) {
+      response.plantErrorByLayerId.set(plantResponse.layerId, plantResponse.error);
+    } else {
+      response.plantsByLayerId.set(plantResponse.layerId, plantResponse.plantsWithoutSpeciesName);
+    }
+  });
+
+  return response;
+}
+
+/*
+ * If we failed to fetch species names,
+ *    speciesRequestSucceeded will be false
+ *    the Plant objects in plantsByLayerId will only include species IDs, not species names
+ * If we failed to fetch plants for any of the requested layer IDs,
+ *    plantsByLayerId will not include that layer ID
+ *    plantErrorByLayerId will include an error message for that layer ID
+ */
+export type GetPlantsAndSpeciesResponse = {
+  plantsByLayerId: PlantsByLayerId;
+  plantErrorByLayerId: PlantErrorByLayerId;
+  speciesById: SpeciesById;
+  speciesRequestSucceeded: boolean;
+};
+
+export async function getPlantsAndSpecies (
+  layerIds: number[],
+): Promise<GetPlantsAndSpeciesResponse> {
+
+  // Fetch this synchronously so that we can pass the species list to getPlantsForMultipleLayers().
+  // The alternative would be to add species names to the Plant objects returned from getPlantsForMultipleLayers().
+  // However, that seems overly complicated and could take up a lot of memory because we'd be duplicating
+  // a (possibly) large map of arrays.
+  const {speciesById, requestSucceeded} = await getAllSpecies();
+  const {plantsByLayerId, plantErrorByLayerId} = await getPlantsForMultipleLayers(
+    layerIds, requestSucceeded ? speciesById : undefined
+  );
+
+  return {
+    plantsByLayerId,
+    plantErrorByLayerId,
+    speciesById,
+    speciesRequestSucceeded: requestSucceeded,
+  };
+}
 
 const PLANT_SUMMARY_ENDPOINT = '/api/v1/gis/plants/list/summary/{layerId}';
 type PlantSummaryQuery = paths[typeof PLANT_SUMMARY_ENDPOINT]['get']['parameters']['query'];
@@ -80,10 +164,10 @@ export type GetPlantSummaryResponse = {
   error: PlantRequestError | null;
 };
 
-export const getPlantSummary = async (
+export async function getPlantSummary (
   layerId: number,
   maxEnteredTime: Date,
-): Promise<GetPlantSummaryResponse> => {
+): Promise<GetPlantSummaryResponse> {
   let endpoint = `${BASE_URL}${PLANT_SUMMARY_ENDPOINT}`.replace('{layerId}', `${layerId}`);
   // Put maxEnteredTime inside an object to type check it against the autogenerated PlantSummaryQuery type.
   const queryParams: PlantSummaryQuery = {maxEnteredTime: maxEnteredTime.toISOString()};
@@ -121,7 +205,7 @@ export const getPlantSummary = async (
   }
 
   return response;
-};
+}
 
 /*
  * PlantSummaries will only be returned when we were able to fetch both this week's and last week's
@@ -134,7 +218,7 @@ export type GetPlantSummariesResponse = {
   plantErrorByLayerId: PlantErrorByLayerId;
 };
 
-export const getPlantSummaries = async (layerIds: number[]): Promise<GetPlantSummariesResponse> => {
+export async function getPlantSummaries(layerIds: number[]): Promise<GetPlantSummariesResponse> {
   const today = new Date();
   const oneWeekAgo = new Date();
   oneWeekAgo.setDate(today.getDate() - 7);
@@ -181,7 +265,7 @@ export const getPlantSummaries = async (layerIds: number[]): Promise<GetPlantSum
     plantSummariesByLayerId: currSummaries,
     plantErrorByLayerId: currSummaryErrors,
   };
-};
+}
 
 const FEATURE_ENDPOINT = '/api/v1/gis/features/{featureId}';
 type UpdateFeatureRequest = paths[typeof FEATURE_ENDPOINT]['put']['requestBody']['content']['application/json'];
@@ -207,9 +291,9 @@ export type PutPlantResponse = {
   error: PlantRequestError | null;
 };
 
-export const putPlant = async (
+export async function putPlant (
   plant: Plant
-): Promise<PutPlantResponse> => {
+): Promise<PutPlantResponse> {
   const response: PutPlantResponse = { plant, error: null };
   try {
     const featureEndpoint = `${BASE_URL}${FEATURE_ENDPOINT}`.replace('{featureId}', `${plant.featureId}`);
@@ -255,4 +339,4 @@ export const putPlant = async (
   }
 
   return response;
-};
+}

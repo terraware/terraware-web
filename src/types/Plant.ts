@@ -10,6 +10,7 @@ export type Plant = {
   notes?: string;
   enteredTime?: string;
   speciesId?: number;
+  speciesName?: string;
 };
 
 export type PlantSearchOptions = {

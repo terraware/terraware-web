@@ -90,7 +90,7 @@ test('getPlants() correctly parses geom data into the client side Coordinate typ
 
   const response = await getPlants(LAYER_ID);
   expect(response.layerId).toEqual(LAYER_ID);
-  expect(response.plants.map((plant) => { return plant.coordinates; })).toEqual(coordinates);
+  expect(response.plantsWithoutSpeciesName.map((plant) => { return plant.coordinates; })).toEqual(coordinates);
   expect(response.error).toEqual(null);
 });
 
@@ -104,7 +104,7 @@ test('getPlants() returns correct error when server throws 404', async () => {
 
   const response = await getPlants(LAYER_ID);
   expect(response.layerId).toEqual(LAYER_ID);
-  expect(response.plants).toEqual([]);
+  expect(response.plantsWithoutSpeciesName).toEqual([]);
   expect(response.error).toEqual(PlantRequestError.LayerIdNotFound);
 });
 
@@ -117,7 +117,7 @@ test('getPlants() returns correct error for all non 404 errors', async() => {
   for (let i = 0; i < numTimesAxiosWasMocked; i++) {
     const response = await getPlants(LAYER_ID);
     expect(response.layerId).toEqual(LAYER_ID);
-    expect(response.plants).toEqual([]);
+    expect(response.plantsWithoutSpeciesName).toEqual([]);
     expect(response.error).toEqual(PlantRequestError.RequestFailed);
   }
 });

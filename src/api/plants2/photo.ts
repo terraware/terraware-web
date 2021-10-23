@@ -18,7 +18,7 @@ export type GetPlantPhotoResponse = {
 /*
  * getPlantPhoto() always returns a promise that resolves. Errors will be surfaced to the caller in the response object.
  */
-export const getPlantPhoto = async (featureId: number): Promise<GetPlantPhotoResponse> => {
+export async function getPlantPhoto(featureId: number): Promise<GetPlantPhotoResponse> {
   const response: GetPlantPhotoResponse = {
     photo: {
       featureId,

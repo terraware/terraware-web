@@ -8,30 +8,30 @@ const BASE_URL = `${process.env.REACT_APP_TERRAWARE_API}`;
 const PROJECTS = '/api/v1/projects';
 type ListProjectsResponse = paths[typeof PROJECTS]['get']['responses'][200]['content']['application/json'];
 
-const getProjects = async (): Promise<Project[]> => {
+async function getProjects(): Promise<Project[]> {
   const response: ListProjectsResponse = (await axios.get(`${BASE_URL}${PROJECTS}`)).data;
   return response.projects.map((project) => ({
       id: project.id,
       name: project.name
   }));
-};
+}
 
 const SITES = '/api/v1/sites';
 type ListSitesResponse = paths[typeof SITES]['get']['responses'][200]['content']['application/json'];
 
-const getSites = async (): Promise<Site[]> => {
+async function getSites(): Promise<Site[]> {
   const sitesResponse: ListSitesResponse = (await axios.get(`${BASE_URL}${SITES}`)).data;
   return sitesResponse.sites.map((site) => ({
       id: site.id,
       projectId: site.projectId
   }));
-};
+}
 
 const LAYERS = '/api/v1/gis/layers/list/{siteId}';
 type ListLayersResponse = paths[typeof LAYERS]['get']['responses'][200]['content']['application/json'];
 type LayerResponse = ListLayersResponse['layers'][0];
 
-const getPlantLayers = async (sites: Site[]): Promise<PlantLayer[]> => {
+async function getPlantLayers(sites: Site[]): Promise<PlantLayer[]> {
   // We may want to add functionality to allow fetching of some layers to fail
   // while still returning those that were fetched successfully
   const axiosResponse : AxiosResponse<ListLayersResponse>[] = await Promise.all(
@@ -51,12 +51,12 @@ const getPlantLayers = async (sites: Site[]): Promise<PlantLayer[]> => {
   });
 
   return layers;
-};
+}
 
 const FACILITIES = '/api/v1/facility';
 type ListFacilitiesResponse = paths[typeof FACILITIES]['get']['responses'][200]['content']['application/json'];
 
-const getSeedBankFacilities = async(): Promise<SeedBank[]> => {
+async function getSeedBankFacilities(): Promise<SeedBank[]> {
   const facilitiesResponse: ListFacilitiesResponse = (await axios.get(`${BASE_URL}${FACILITIES}`)).data;
   const seedBanks: SeedBank[] = [];
   facilitiesResponse.facilities.forEach((facility) => {
@@ -68,7 +68,7 @@ const getSeedBankFacilities = async(): Promise<SeedBank[]> => {
     }
   });
   return seedBanks;
-};
+}
 
 export enum OrgRequestError {
   NoProjects = 'API_RETURNED_EMPTY_PROJECT_LIST',
@@ -92,7 +92,7 @@ export type GetOrganizationResponse = {
  *    any data that we were able to fetch
  *    a non-empty errors list indicating what went wrong
  */
-const getOrganization = async (): Promise<GetOrganizationResponse> => {
+async function getOrganization(): Promise<GetOrganizationResponse> {
   const OrgResponse : GetOrganizationResponse = {
     organization: {
       projects: [],
@@ -138,7 +138,7 @@ const getOrganization = async (): Promise<GetOrganizationResponse> => {
   }
 
   return OrgResponse;
-};
+}
 
 export const exportedForTesting = {
   getLayers: getPlantLayers,

@@ -19,14 +19,14 @@ import ErrorBoundary from './ErrorBoundary';
 import strings from './strings';
 import theme from './theme';
 import useTimer from './utils/useTimer';
-import getOrganization, {GetOrganizationResponse, OrgRequestError} from './api/organization/organization';
-import {Organization} from './types/Organization';
-import {PlantErrorByLayerId, PlantsByLayerId, PlantSummariesByLayerId} from './types/Plant';
+import getOrganization, {GetOrganizationResponse, OrgRequestError} from 'src/api/organization/organization';
+import {Organization} from 'src/types/Organization';
+import {PlantErrorByLayerId, PlantsByLayerId, PlantSummariesByLayerId} from 'src/types/Plant';
+import {SpeciesById} from 'src/types/Species';
 import {
-  getPlants,
-  GetPlantsResponse,
+  getPlantsAndSpecies,
   getPlantSummaries,
-} from './api/plants2/plants';
+} from 'src/api/plants2/plants';
 
 // @ts-ignore
 mapboxgl.workerClass =
@@ -75,6 +75,7 @@ function AppContent() {
   const [currProjectId, setCurrProjectId] = useState<number>();
   const [plantsByLayerId, setPlantsByLayerId] = useState<PlantsByLayerId>();
   const [plantErrorByLayerId, setPlantErrorByLayerId] = useState<PlantErrorByLayerId>();
+  const [speciesById, setSpeciesById] = useState<SpeciesById>();
   const [plantSummariesByLayerId, setPlantSummariesByLayerId] = useState<PlantSummariesByLayerId>();
   const [plantSummaryErrorByLayerId, setPlantSummaryErrorByLayerId] = useState<PlantErrorByLayerId>();
 
@@ -95,22 +96,13 @@ function AppContent() {
   }, []);
 
   useEffect(() => {
-    const populatePlantList = async () => {
-      const promises = organization.layers.map((layer) => (getPlants(layer.id)));
-      const plantsResponseList : GetPlantsResponse[] = await Promise.all(promises);
-
-      const currPlantsByLayerId: PlantsByLayerId = new Map();
-      const currPlantErrorByLayerId: PlantErrorByLayerId = new Map();
-      plantsResponseList.forEach((plantResponse) => {
-        if (plantResponse.error) {
-          currPlantErrorByLayerId.set(plantResponse.layerId, plantResponse.error);
-        } else {
-          currPlantsByLayerId.set(plantResponse.layerId, plantResponse.plants);
-        }
-      });
-
-      setPlantsByLayerId(currPlantsByLayerId);
-      setPlantErrorByLayerId(currPlantErrorByLayerId);
+    const populatePlantsAndSpecies = async () => {
+      const response = await getPlantsAndSpecies(organization.layers.map((layer) => layer.id));
+      setPlantsByLayerId(response.plantsByLayerId);
+      setPlantErrorByLayerId(response.plantErrorByLayerId);
+      if (response.speciesRequestSucceeded) {
+        setSpeciesById(response.speciesById);
+      }
     };
 
     const populatePlantSummaries = async() => {
@@ -120,7 +112,7 @@ function AppContent() {
     };
 
     if (organization.layers.length > 0) {
-      populatePlantList();
+      populatePlantsAndSpecies();
       populatePlantSummaries();
     }
   }, [organization]);
