@@ -4,7 +4,7 @@ import AddIcon from '@material-ui/icons/Add';
 import CreateIcon from '@material-ui/icons/Create';
 import FullscreenIcon from '@material-ui/icons/Fullscreen';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import React from 'react';
+import React, { useEffect, useState, memo } from 'react';
 import ReactMapGL, {
   MapContext,
   MapEvent,
@@ -12,18 +12,16 @@ import ReactMapGL, {
   Popup,
   Source,
 } from 'react-map-gl';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { Feature } from 'src/api/types/feature';
+import { useSetRecoilState } from 'recoil';
 import snackbarAtom from 'src/state/atoms/snackbar';
-import { plantsByFeatureIdSelector } from 'src/state/selectors/plants/plants';
-import { plantsFeaturesWithGeolocationSelector } from 'src/state/selectors/plants/plantsFeatures';
-import speciesForChartSelector from 'src/state/selectors/plants/speciesForChart';
 import strings from 'src/strings';
-import { getCenter, getCoordinates } from 'src/utils/maps';
 import { cellDateFormatter } from '../../common/table/TableCellRenderer';
 import MapLayers from './MapLayers';
-import NewSpeciesModal from '../EditPlantModal';
-import PlantPhoto from '../DisplayPhoto';
+import EditPlantModal from '../EditPlantModal';
+import DisplayPhoto from '../DisplayPhoto';
+import { Plant } from 'src/types/Plant';
+import { SpeciesById } from 'src/types/Species';
+import { getPlantPhoto } from 'src/api/plants2/photo';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -54,19 +52,6 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-export interface SpeciesMap {
-  geometry: {
-    coordinates: number[];
-  };
-  properties: {
-    SPECIES_ID: number;
-    NAME: string;
-    DATE: string;
-    IMG: string;
-    MARKER?: string;
-  };
-}
-
 interface ViewportProps {
   zoom: number;
   width: string;
@@ -74,8 +59,8 @@ interface ViewportProps {
 }
 
 interface MapboxFeaturesProps {
-  /** A JSON string for the Terraware Feature (Mapbox internally converts all properties into strings) */
-  feature: string;
+  /** A JSON string for a Plant (Mapbox internally converts all properties into strings) */
+  plant: string;
   color: string;
 }
 
@@ -86,102 +71,91 @@ const DEFAULT_VIEWPORT: ViewportProps = {
   height: '100%',
 };
 
-interface Props {
+export type PlantMapProps = {
   onFullscreen: () => void;
   isFullscreen: boolean;
-}
+  plants: Plant[];
+  speciesById: SpeciesById;
+  colorsBySpeciesId: Record<number, string>;
+  reloadData: () => void;
+};
 
-function PlantMap({ onFullscreen, isFullscreen }: Props): JSX.Element {
+function PlantMap(props: PlantMapProps): JSX.Element {
   const classes = useStyles();
-  const [selectedFeature, setSelectedFeature] = React.useState<Feature>();
-  const [editPlantModalOpen, setEditPlantModalOpen] = React.useState(false);
-  const [viewport, setViewport] = React.useState(DEFAULT_VIEWPORT);
-  const [selectedCoordinates, setSelectedCoordinates] =
-    React.useState<[number, number]>();
 
-  const features = useRecoilValue(plantsFeaturesWithGeolocationSelector);
-  const speciesForChart = useRecoilValue(speciesForChartSelector);
-  const plantsByFeatureId = useRecoilValue(plantsByFeatureIdSelector);
+  const {onFullscreen, isFullscreen, plants, speciesById, colorsBySpeciesId, reloadData} = props;
+  const [selectedPlant, setSelectedPlant] = useState<Plant>();
+  const [selectedPlantPhotoUrl, setSelectedPlantPhotoUrl] = useState<string>();
+  const [plantModalOpen, setPlantModalOpen] = React.useState(false);
+  const [viewport, setViewport] = useState(DEFAULT_VIEWPORT);
   const setSnackbar = useSetRecoilState(snackbarAtom);
 
-  const center = getCenter(features);
+  const center = getCenterCoordinates(plants);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setViewport({ ...DEFAULT_VIEWPORT, height: '60vh' });
   }, [isFullscreen]);
 
-  const geojson: GeoJSON.FeatureCollection<GeoJSON.Geometry> = React.useMemo(
-    () =>
-      (plantsByFeatureId && features ? features : []).reduce(
-        (acum, feature) => {
-          const coordinates = getCoordinates(feature);
-          const plant = plantsByFeatureId![feature.id!];
-          if (plant) {
-            const color = (
-              speciesForChart[plant.speciesId ?? 0] ?? { color: 'black' }
-            ).color;
-            const properties: MapboxFeaturesProps = {
-              feature: JSON.stringify(feature),
-              color,
-            };
+  useEffect(() => {
+    setSelectedPlant((currentlySelected) => {
+      return plants.find((plant) => currentlySelected?.featureId === plant.featureId) ?? undefined;
+    });
+  }, [plants]);
 
-            acum.features.push({
-              type: 'Feature',
-              properties,
-              geometry: {
-                type: 'Point',
-                coordinates: [coordinates.longitude, coordinates.latitude],
-              },
-            });
-          }
+  useEffect(() => {
+    const populateSelectedPlantPhoto = async() => {
+      if (selectedPlant) {
+        const response = await getPlantPhoto(selectedPlant.featureId!);
+        setSelectedPlantPhotoUrl(response.photo.imgSrc ?? undefined);
+      } else {
+        setSelectedPlantPhotoUrl(undefined);
+      }
+    };
 
-          return acum;
+    populateSelectedPlantPhoto();
+  }, [selectedPlant]);
+
+  const geojson: GeoJSON.FeatureCollection<GeoJSON.Geometry> = React.useMemo(() => {
+    const plantsWithCoordinates: Plant[] = plants.filter((plant) => plant.coordinates !== undefined);
+    const features: GeoJSON.Feature[] = plantsWithCoordinates.map((plant) => {
+      const properties: MapboxFeaturesProps = {
+        plant: JSON.stringify(plant),
+        color: plant.speciesId ? colorsBySpeciesId[plant.speciesId] : 'black',
+      };
+
+      return {
+        type: 'Feature',
+        geometry: {
+          type: 'Point',
+          // We just filtered out all plants without coordinates.
+          coordinates: [plant.coordinates!.longitude, plant.coordinates!.latitude],
         },
-        {
-          type: 'FeatureCollection',
-          features: [],
-        } as GeoJSON.FeatureCollection<GeoJSON.Geometry>
-      ),
-    [features, plantsByFeatureId, speciesForChart]
-  );
+        id: plant.featureId,
+        properties,
+      };
+    });
 
-  const selectedPlant =
-    selectedFeature && plantsByFeatureId
-      ? plantsByFeatureId[selectedFeature.id!]
-      : undefined;
+    return {
+      type: 'FeatureCollection',
+      features,
+    };
+  }, [plants, colorsBySpeciesId]);
 
-  const selectedPlantForTable =
-    selectedPlant && selectedFeature
-      ? {
-          date: selectedPlant.datePlanted,
-          species: speciesForChart[selectedPlant.speciesId!]
-            ? speciesForChart[selectedPlant.speciesId!].speciesName.name
-            : undefined,
-          geolocation:
-            selectedFeature.geom &&
-            Array.isArray(selectedFeature?.geom.coordinates)
-              ? `${selectedFeature.geom.coordinates[1].toFixed(
-                  6
-                )}, ${selectedFeature.geom.coordinates[0].toFixed(6)}`
-              : undefined,
-          notes: selectedFeature.notes,
-          featureId: selectedFeature.id,
-          speciesId: selectedPlant.speciesId,
-        }
-      : undefined;
-
-  const onCloseEditPlantModal = (snackbarMessage?: string) => {
-    setEditPlantModalOpen(false);
-    if (snackbarMessage) {
+  const onPlantModalSave = (deleted: boolean) => {
+    reloadData();
+    setPlantModalOpen(false);
+    if (deleted) {
+      console.error('BUG!! Plant deletion should not be enabled for the plant dashboard.');
+    } else {
       setSnackbar({
         type: 'success',
-        msg: snackbarMessage,
+        msg: strings.SNACKBAR_MSG_CHANGES_SAVED,
       });
     }
   };
 
-  const onNewSpecies = () => {
-    setEditPlantModalOpen(true);
+  const onUpdatePlant = () => {
+    setPlantModalOpen(true);
   };
 
   const onViewportChange = (newViewport: any) => {
@@ -198,14 +172,11 @@ function PlantMap({ onFullscreen, isFullscreen }: Props): JSX.Element {
       const layerId = eventFeature.layer.id;
 
       if (layerId === 'unclustered-point') {
-        const lngLat = event.lngLat;
-
         if (eventFeature.properties) {
           const properties: MapboxFeaturesProps = eventFeature.properties;
-          const feature = JSON.parse(properties.feature);
+          const plant: Plant = JSON.parse(properties.plant);
 
-          setSelectedCoordinates(lngLat);
-          setSelectedFeature(feature);
+          setSelectedPlant(plant);
         }
       }
     }
@@ -213,11 +184,16 @@ function PlantMap({ onFullscreen, isFullscreen }: Props): JSX.Element {
 
   return (
     <>
-      <NewSpeciesModal
-        open={editPlantModalOpen}
-        onClose={onCloseEditPlantModal}
-        value={selectedPlantForTable}
-      />
+      {selectedPlant && plantModalOpen &&
+      <EditPlantModal
+            onSave={onPlantModalSave}
+            onCancel={() => setPlantModalOpen(false)}
+            canDelete={false}
+            speciesById={speciesById}
+            plant={selectedPlant}
+            photoUrl={selectedPlantPhotoUrl}
+        />
+      }
       <ReactMapGL
         latitude={center.latitude}
         longitude={center.longitude}
@@ -249,14 +225,14 @@ function PlantMap({ onFullscreen, isFullscreen }: Props): JSX.Element {
             <FullscreenIcon />
           </IconButton>
         </div>
-        {selectedFeature && selectedPlant && selectedCoordinates && (
+        {selectedPlant && (
           <Popup
             onClose={() => {
-              setSelectedFeature(undefined);
-              setSelectedCoordinates(undefined);
+              setSelectedPlant(undefined);
             }}
-            latitude={selectedCoordinates[1]}
-            longitude={selectedCoordinates[0]}
+            /* Coordinates must be defined otherwise this plant wouldn't be on the map. */
+            latitude={selectedPlant.coordinates!.latitude}
+            longitude={selectedPlant.coordinates!.longitude}
             captureClick={false}
             closeOnClick={false}
             anchor='top'
@@ -268,7 +244,7 @@ function PlantMap({ onFullscreen, isFullscreen }: Props): JSX.Element {
                 id='feature-species-name'
               >
                 {selectedPlant.speciesId
-                  ? speciesForChart[selectedPlant.speciesId].speciesName.name
+                  ? speciesById.get(selectedPlant.speciesId)?. name ?? strings.OTHER
                   : strings.OTHER}
               </Typography>
               <Typography
@@ -276,7 +252,7 @@ function PlantMap({ onFullscreen, isFullscreen }: Props): JSX.Element {
                 variant='body2'
                 className={classes.spacing}
               >
-                {strings.AS_OF} {cellDateFormatter(selectedFeature.enteredTime)}
+                {strings.AS_OF} {cellDateFormatter(selectedPlant.enteredTime)}
               </Typography>
               <Typography
                 component='p'
@@ -284,10 +260,10 @@ function PlantMap({ onFullscreen, isFullscreen }: Props): JSX.Element {
                 className={classes.spacing}
                 id='feature-coordinates'
               >
-                {selectedCoordinates ? selectedCoordinates[1].toFixed(6) : 0},
-                {selectedCoordinates ? selectedCoordinates[0].toFixed(6) : 0}
+                {selectedPlant.coordinates?.latitude.toFixed(6) ?? 0},
+                {selectedPlant.coordinates?.longitude.toFixed(6) ?? 0}
               </Typography>
-              <PlantPhoto featureId={selectedFeature?.id} />
+              <DisplayPhoto photoUrl={selectedPlantPhotoUrl} />
               <Chip
                 id='new-species'
                 size='medium'
@@ -296,7 +272,7 @@ function PlantMap({ onFullscreen, isFullscreen }: Props): JSX.Element {
                     ? strings.EDIT_SPECIES
                     : strings.ADD_SPECIES
                 }
-                onClick={onNewSpecies}
+                onClick={onUpdatePlant}
                 className={classes.newSpecies}
                 icon={selectedPlant.speciesId ? <CreateIcon /> : <AddIcon />}
               />
@@ -308,7 +284,7 @@ function PlantMap({ onFullscreen, isFullscreen }: Props): JSX.Element {
   );
 }
 
-export default React.memo(PlantMap);
+export default memo(PlantMap);
 
 interface CenterMapProps {
   center: { latitude: number; longitude: number };
@@ -339,4 +315,41 @@ function CenterMap({ center, setViewport }: CenterMapProps) {
   }, [center, lat, long, map, setViewport]);
 
   return null;
+}
+
+function getCenterCoordinates(plants: Plant[]): { latitude: number; longitude: number } {
+  if (plants.length === 0) {
+    return { latitude: 0, longitude: 0 };
+  }
+
+  let maxLat: number = plants[0].coordinates?.latitude ?? 0;
+  let minLat = maxLat;
+  let maxLong: number = plants[0].coordinates?.longitude ?? 0;
+  let minLong = maxLong;
+
+  const plantsCopy = [...plants];
+  plantsCopy.shift();
+
+  plantsCopy.forEach((plant) => {
+    if (plant.coordinates) {
+      const coordinates = plant.coordinates;
+      if (coordinates.latitude > maxLat) {
+        maxLat = coordinates.latitude;
+      }
+      if (coordinates.latitude < minLat) {
+        minLat = coordinates.latitude;
+      }
+      if (coordinates.longitude > maxLong) {
+        maxLong = coordinates.longitude;
+      }
+      if (coordinates.longitude < minLong) {
+        minLong = coordinates.longitude;
+      }
+    }
+  });
+
+  return {
+    latitude: (maxLat + minLat) / 2,
+    longitude: (maxLong + minLong) / 2,
+  };
 }

@@ -20,7 +20,7 @@ test( `getPlantPhoto() creates URL from image data when the API calls succeeded`
     // so we must check for the more specific url first.
     if (url.includes(`features/${FEATURE_ID}/photos/121`)) {
       return Promise.resolve({data: {fileContent}});
-    } else if (url.includes(`features/${FEATURE_ID}/photos/121`)) {
+    } else if (url.includes(`features/${FEATURE_ID}/photos/131`)) {
       console.error('Unexpected URL. No need to fetch more than one photo');
       throw Error('Unexpected URL. No need to fetch more than one photo');
     } else if (url.includes(`features/${FEATURE_ID}/photos`)) {

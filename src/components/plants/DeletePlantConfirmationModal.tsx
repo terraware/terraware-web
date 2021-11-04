@@ -4,13 +4,9 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import { useResetRecoilState } from 'recoil';
-import { deleteFeature } from 'src/api/plants/features';
-import { plantsFeaturesSelector } from 'src/state/selectors/plants/plantsFeatures';
+import Button from 'src/components/common/button/Button';
+import DialogCloseButton from 'src/components/common/DialogCloseButton';
 import strings from 'src/strings';
-import { PlantForTable } from '.';
-import Button from '../../common/button/Button';
-import DialogCloseButton from '../../common/DialogCloseButton';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -31,36 +27,24 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export interface Props {
-  open: boolean;
-  onClose: (deleted?: boolean) => void;
-  plant: PlantForTable;
-}
+type DeletePlantConfirmationModalProps = {
+  onCancel: () => void;
+  confirmDelete: () => void;
+};
 
-export default function DeletePlantConfirmationModal(
-  props: Props
-): JSX.Element {
+export default function DeletePlantConfirmationModal(props: DeletePlantConfirmationModalProps): JSX.Element {
   const classes = useStyles();
-  const { onClose, open, plant } = props;
-  const resetFeatures = useResetRecoilState(plantsFeaturesSelector);
+  const { onCancel, confirmDelete } = props;
 
   const handleCancel = () => {
-    onClose();
-  };
-
-  const handleOk = async () => {
-    if (plant.featureId) {
-      await deleteFeature(plant.featureId);
-      resetFeatures();
-    }
-    onClose(true);
+    onCancel();
   };
 
   return (
     <Dialog
       onClose={handleCancel}
       disableEscapeKeyDown
-      open={open}
+      open={true}
       maxWidth='sm'
       classes={{ paper: classes.paper }}
     >
@@ -86,7 +70,7 @@ export default function DeletePlantConfirmationModal(
               className={classes.spacing}
             />
             <Button
-              onClick={handleOk}
+              onClick={confirmDelete}
               id='delete'
               label={strings.DELETE}
               type='destructive'

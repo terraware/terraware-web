@@ -61,4 +61,4 @@ export async function getPlantPhoto(featureId: number): Promise<GetPlantPhotoRes
   }
 
   return response;
-};
+}

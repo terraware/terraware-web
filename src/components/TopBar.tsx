@@ -1,16 +1,12 @@
-import { AppBar, Grid, IconButton, Link, Toolbar } from '@material-ui/core';
+import { AppBar, IconButton, Link, Toolbar } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import HelpIcon from '@material-ui/icons/Help';
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import strings from 'src/strings';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
-import ErrorBoundary from '../ErrorBoundary';
-import Dropdown from './common/Dropdown';
 import NotificationsDropdown from './NotificationsDropdown';
 import SearchBar from './SearchBar';
 import UserMenu from './UserMenu';
-import { Project } from '../types/Organization';
 
 const useStyles = makeStyles((theme) =>
   createStyles({

@@ -4,13 +4,12 @@ import {
   Coordinate,
   Plant,
   PlantErrorByLayerId,
-  PlantRequestError, PlantsByLayerId,
+  PlantRequestError, PlantsByLayerId, PlantSearchOptions,
   PlantSummariesByLayerId,
   PlantSummary,
 } from 'src/types/Plant';
 import addQueryParams from 'src/api/addQueryParams';
 import {SpeciesById} from 'src/types/Species';
-import {getAllSpecies} from 'src/api/species/species';
 
 /*
  * All functions in this module ALWAYS return a promise that resolves. Any errors will be caught and
@@ -25,21 +24,17 @@ type ListPlantsResponse = paths[typeof LIST_PLANTS_ENDPOINT]['get']['responses']
 type ListPlantsResponseElement = ListPlantsResponse['list'][0];
 type Geometry = ListPlantsResponseElement['geom'];
 
-/*
- * getPlants() will not include the species name on the Plant objects unless the caller provides speciesById.
- */
 export type GetPlantsResponse = {
   layerId: number;
-  plantsWithoutSpeciesName: Plant[];  // Will be empty if an error occurred.
+  plants: Plant[];  // Will be empty if an error occurred.
   error: PlantRequestError | null;
 };
 
 export async function getPlants(
   layerId: number,
-  speciesById?: SpeciesById,
   filters?: ListPlantsQuery, // The client code knows this type as PlantSearchOptions.
 ): Promise<GetPlantsResponse> {
-  const response: GetPlantsResponse = {layerId, plantsWithoutSpeciesName: [], error: null};
+  const response: GetPlantsResponse = {layerId, plants: [], error: null};
   let endpoint = `${BASE_URL}${LIST_PLANTS_ENDPOINT}`.replace('{layerId}', `${layerId}`);
   if (filters) {
     endpoint = addQueryParams(endpoint, filters);
@@ -48,20 +43,11 @@ export async function getPlants(
   try {
     const apiList : ListPlantsResponseElement[] = (await axios.get(endpoint)).data.list;
 
-    response.plantsWithoutSpeciesName = apiList.map((plant) => {
+    response.plants = apiList.map((plant) => {
       const coords: Coordinate | undefined = plant.geom?.coordinates
         ? { longitude: plant.geom.coordinates[0],
             latitude: plant.geom.coordinates[1] }
         : undefined;
-
-      let speciesName;
-      if (plant.speciesId && speciesById) {
-        if (speciesById.has(plant.speciesId)) {
-          speciesName = speciesById.get(plant.speciesId)?.name;
-        } else {
-          console.error(`Cannot find species name for species ID ${plant.speciesId}, on feature ${plant.featureId}`);
-        }
-      }
 
       return {
         featureId: plant.featureId,
@@ -70,7 +56,6 @@ export async function getPlants(
         notes: plant.notes,
         enteredTime: plant.enteredTime,
         speciesId: plant.speciesId,
-        speciesName,
       };
     });
   } catch(error) {
@@ -85,23 +70,19 @@ export async function getPlants(
   return response;
 }
 
-/*
- * You most likely don't want to use this function directly. Prefer to use getPlantsAndSpecies(), which
- * fetches the species map so that this function can return Plant objects that include a species name.
- */
-export type GetAllPlantsResponse = {
+export type GetPlantsForMultipleLayersResponse = {
   plantsByLayerId: PlantsByLayerId;
   plantErrorByLayerId: PlantErrorByLayerId;
 };
 
-async function getPlantsForMultipleLayers(
+export async function getPlantsForMultipleLayers(
   layerIds: number[],
-  speciesById?: SpeciesById,
-): Promise<GetAllPlantsResponse> {
-  const promises = layerIds.map((id) => (getPlants(id, speciesById)));
+  filters?: PlantSearchOptions,
+): Promise<GetPlantsForMultipleLayersResponse> {
+  const promises = layerIds.map((id) => (getPlants(id, filters)));
   const plantsResponseList : GetPlantsResponse[] = await Promise.all(promises);
 
-  const response: GetAllPlantsResponse = {
+  const response: GetPlantsForMultipleLayersResponse = {
     plantsByLayerId: new Map(),
     plantErrorByLayerId: new Map(),
   };
@@ -110,47 +91,11 @@ async function getPlantsForMultipleLayers(
     if (plantResponse.error) {
       response.plantErrorByLayerId.set(plantResponse.layerId, plantResponse.error);
     } else {
-      response.plantsByLayerId.set(plantResponse.layerId, plantResponse.plantsWithoutSpeciesName);
+      response.plantsByLayerId.set(plantResponse.layerId, plantResponse.plants);
     }
   });
 
   return response;
-}
-
-/*
- * If we failed to fetch species names,
- *    speciesRequestSucceeded will be false
- *    the Plant objects in plantsByLayerId will only include species IDs, not species names
- * If we failed to fetch plants for any of the requested layer IDs,
- *    plantsByLayerId will not include that layer ID
- *    plantErrorByLayerId will include an error message for that layer ID
- */
-export type GetPlantsAndSpeciesResponse = {
-  plantsByLayerId: PlantsByLayerId;
-  plantErrorByLayerId: PlantErrorByLayerId;
-  speciesById: SpeciesById;
-  speciesRequestSucceeded: boolean;
-};
-
-export async function getPlantsAndSpecies (
-  layerIds: number[],
-): Promise<GetPlantsAndSpeciesResponse> {
-
-  // Fetch this synchronously so that we can pass the species list to getPlantsForMultipleLayers().
-  // The alternative would be to add species names to the Plant objects returned from getPlantsForMultipleLayers().
-  // However, that seems overly complicated and could take up a lot of memory because we'd be duplicating
-  // a (possibly) large map of arrays.
-  const {speciesById, requestSucceeded} = await getAllSpecies();
-  const {plantsByLayerId, plantErrorByLayerId} = await getPlantsForMultipleLayers(
-    layerIds, requestSucceeded ? speciesById : undefined
-  );
-
-  return {
-    plantsByLayerId,
-    plantErrorByLayerId,
-    speciesById,
-    speciesRequestSucceeded: requestSucceeded,
-  };
 }
 
 const PLANT_SUMMARY_ENDPOINT = '/api/v1/gis/plants/list/summary/{layerId}';
@@ -160,7 +105,7 @@ type PlantSummaryResponse = paths[typeof PLANT_SUMMARY_ENDPOINT]['get']['respons
 export type GetPlantSummaryResponse = {
   layerId: number;
   maxEnteredTime: Date;
-  summary: PlantSummary | null;  // Will be null if an error occurred.
+  summary: PlantSummary[] | null;  // Will be null if an error occurred.
   error: PlantRequestError | null;
 };
 
@@ -176,10 +121,7 @@ export async function getPlantSummary (
   const response: GetPlantSummaryResponse = {
     layerId,
     maxEnteredTime,
-    summary: {
-      numSpecies: 0,
-      numPlants: 0,
-    },
+    summary: [],
     error: null,
   };
 
@@ -188,9 +130,11 @@ export async function getPlantSummary (
     for (const speciesId in apiResponse.summary) {
       // https://palantir.github.io/tslint/rules/forin/
       if (apiResponse.summary.hasOwnProperty(speciesId)) {
-        // We initialized response.summary to be not null
-        response.summary!!.numSpecies += 1;
-        response.summary!!.numPlants += apiResponse.summary[speciesId];
+        // We initialized response.summary to be an empty list
+        response.summary!!.push({
+          speciesId: Number(speciesId),
+          numPlants: apiResponse.summary[speciesId],
+        });
       }
     }
   } catch (error) {
@@ -213,12 +157,12 @@ export async function getPlantSummary (
  * The failure to fetch a PlantSummaries object for one layer ID will not affect the return data
  * for the other requested layer IDs.
  */
-export type GetPlantSummariesResponse = {
+export type GetPlantSummariesByLayer = {
   plantSummariesByLayerId: PlantSummariesByLayerId;
   plantErrorByLayerId: PlantErrorByLayerId;
 };
 
-export async function getPlantSummaries(layerIds: number[]): Promise<GetPlantSummariesResponse> {
+export async function getPlantSummariesByLayer(layerIds: number[]): Promise<GetPlantSummariesByLayer> {
   const today = new Date();
   const oneWeekAgo = new Date();
   oneWeekAgo.setDate(today.getDate() - 7);
@@ -336,6 +280,35 @@ export async function putPlant (
     }
     // Don't return partially updated data.
     response.plant = plant;
+  }
+
+  return response;
+}
+
+/*
+ * DeletePlantResponse.featureId WILL NEVER BE EMPTY! The caller must examine DeletePlantResponse.error to determine
+ * if the API call succeeded.
+ */
+export type DeletePlantResponse = {
+  featureId: number;
+  error: PlantRequestError | null;
+};
+
+export async function deletePlant(featureId: number): Promise<DeletePlantResponse> {
+  const response: DeletePlantResponse = {
+    featureId,
+    error: null,
+  };
+
+  try {
+    const endpoint = `${BASE_URL}${FEATURE_ENDPOINT}`.replace('{featureId}', `${featureId}`);
+    await axios.delete(endpoint);
+  } catch(error) {
+    if (axios.isAxiosError(error) && error.response?.status === 404) {
+      response.error = PlantRequestError.FeatureIdNotFound;
+    } else {
+      response.error = PlantRequestError.RequestFailed;
+    }
   }
 
   return response;

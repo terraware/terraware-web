@@ -12,24 +12,17 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import React from 'react';
-import { useRecoilValue, useResetRecoilState } from 'recoil';
-import { putPlant } from 'src/api/plants/plants';
-import { postSpecies } from 'src/api/seeds/species';
-import { Species } from 'src/api/types/species';
-import { plantsByFeatureIdSelector } from 'src/state/selectors/plants/plants';
-import { plantsFeaturesSelector } from 'src/state/selectors/plants/plantsFeatures';
-import { plantsFilteredSelector } from 'src/state/selectors/plants/plantsFiltered';
-import speciesForChartSelector from 'src/state/selectors/plants/speciesForChart';
-import speciesSelector from 'src/state/selectors/species';
-import speciesByIdSelector from 'src/state/selectors/speciesById';
+import React, { useState } from 'react';
+import { deletePlant, putPlant } from 'src/api/plants2/plants';
+import { createSpecies } from 'src/api/species/species';
+import Button from 'src/components/common/button/Button';
+import DialogCloseButton from 'src/components/common/DialogCloseButton';
+import TextField from 'src/components/common/TextField';
 import strings from 'src/strings';
-import useForm from 'src/utils/useForm';
-import Button from '../common/button/Button';
-import DialogCloseButton from '../common/DialogCloseButton';
-import TextField from '../common/TextField';
-import { PlantForTable } from './PlantsList';
-import PlantPhoto from './DisplayPhoto';
+import { Plant } from 'src/types/Plant';
+import { Species, SpeciesById } from 'src/types/Species';
+import DisplayPhoto from './DisplayPhoto';
+import DeletePlantConfirmationModal from './DeletePlantConfirmationModal';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -66,233 +59,204 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export interface Props {
-  open: boolean;
-  onClose: (snackbarMessage?: string) => void;
-  value?: PlantForTable;
-  onDelete?: () => void;
-}
-
-const initPlant = (plant?: PlantForTable): PlantForTable => {
-  return plant ? { ...plant, speciesId: plant.speciesId ?? 0 } : {};
+export type EditPlantModalProps = {
+  onSave: (deleted: boolean) => void;
+  onCancel: () => void;
+  canDelete: boolean;
+  speciesById: SpeciesById;
+  plant: Plant;
+  photoUrl?: string;
 };
 
-export default function NewSpeciesModalWrapper(props: Props): JSX.Element {
-  return (
-    <React.Suspense fallback={strings.LOADING}>
-      <EditPlantModal {...props} />
-    </React.Suspense>
-  );
-}
-
-function EditPlantModal(props: Props): JSX.Element {
+export default function EditPlantModal(props: EditPlantModalProps): JSX.Element {
   const classes = useStyles();
-  const { onClose, open, onDelete } = props;
-  const [record, setRecord] = useForm<PlantForTable>(initPlant(props.value));
+  const {onSave, onCancel, canDelete, speciesById, plant, photoUrl} = props;
+  const [deleteConfirmationModelOpen, setDeleteConfirmationModelOpen] = useState<boolean>(false);
+  // For creating a new species
+  const [newSpeciesName, setNewSpeciesName] = useState<string>('');
+  // For selecting an existing species
+  const [selectedSpecies, setSelectedSpecies] = useState<Species>({
+    id: plant.speciesId ?? -1,
+    name: plant.speciesId
+      ? speciesById.get(plant.speciesId)?.name ?? ''
+      : ''
+  });
 
-  const plantsByFeature = useRecoilValue(plantsByFeatureIdSelector);
-  const resetplantsFeatures = useResetRecoilState(plantsFeaturesSelector);
-  const resetplantsFiltered = useResetRecoilState(plantsFilteredSelector);
-  const resetSpeciesForChart = useResetRecoilState(speciesForChartSelector);
-  const resetSpecies = useResetRecoilState(speciesSelector);
-
-  React.useEffect(() => {
-    if (props.open) {
-      setRecord(initPlant(props.value));
-    }
-  }, [props.open, props.value, setRecord]);
-
-  const handleCancel = () => {
-    setRecord(initPlant(props.value));
-    onClose();
+  const handleTypingNewSpecies = (id: string, value: unknown) => {
+    // @ts-ignore
+    setNewSpeciesName(value.toString());
   };
 
-  const handleDelete = () => {
-    if (onDelete) {
-      onDelete();
-      onClose();
-    }
+  const handleSelectExistingSpecies = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const id = parseInt(event.target.value, 10);
+    // TODO what if the species name isn't there?
+    setSelectedSpecies({id, name: speciesById.get(id)?.name ?? ''});
   };
 
-  const handleOk = async () => {
-    if (plantsByFeature && record.featureId) {
-      const previousPlant = plantsByFeature[record.featureId];
-      if (record.speciesId !== undefined) {
-        const newPlant = {
-          ...previousPlant,
-          speciesId: record.speciesId !== 0 ? record.speciesId : undefined,
-        };
-        await putPlant(record.featureId, newPlant);
-        onClose(strings.SNACKBAR_MSG_CHANGES_SAVED);
+  const inputtedValidNewSpecies = (): boolean => newSpeciesName !== null && newSpeciesName.length > 2;
+  const selectedDifferentExistingSpecies = (): boolean => {
+    return (plant.speciesId !== null && plant.speciesId !== selectedSpecies.id) ||
+           (plant.speciesId === null && selectedSpecies.id !== -1);
+  };
 
-        resetplantsFeatures();
-        resetSpeciesForChart();
-        resetplantsFiltered();
-      } else if (record.species) {
-        const newSpeciesData: Species = { name: record.species };
-        const newSpecies = await postSpecies(newSpeciesData);
-        const newPlant = { ...previousPlant, speciesId: newSpecies.id };
+  // Check if the user has inputted anything
+  const canSave = (): boolean => {
+    return inputtedValidNewSpecies() || selectedDifferentExistingSpecies();
+  };
 
-        await putPlant(record.featureId, newPlant);
-        onClose(strings.SNACKBAR_MSG_CHANGES_SAVED);
-
-        resetSpecies();
-        resetplantsFeatures();
-        resetSpeciesForChart();
-        resetplantsFiltered();
+  const handleSave = async () => {
+    let speciesId: number | undefined;
+    if (inputtedValidNewSpecies()) {
+      // create new species
+      const response = await(createSpecies(newSpeciesName));
+      // TODO handle error if cannot save species
+      if (response.species) {
+        speciesId = response.species.id;
+      }
+    } else if (selectedDifferentExistingSpecies()) {
+      if (selectedSpecies.id >= 0) {
+        // update species id to an existing species
+        speciesId = selectedSpecies.id;
+      } else {
+        // update species to "Other", aka remove species from the plant.
+        speciesId = undefined;
       }
     } else {
-      onClose('');
+      // TODO what happens if the user clicked the save button but there's nothing to save?
+      // Developer error. Should close and console.error()
+      onCancel();
     }
+
+    await putPlant({...plant, speciesId});
+    // TODO handle cannot save plant error
+    onSave(false);
   };
 
-  return (
-    <Dialog
-      onClose={handleCancel}
-      disableEscapeKeyDown
-      open={open}
-      maxWidth='md'
-      classes={{ paper: classes.paper }}
-    >
-      <DialogTitle>
-        <Typography variant='h6'>{strings.EDIT_SPECIES}</Typography>
-        <DialogCloseButton onClick={handleCancel} />
-      </DialogTitle>
-      <DialogContent dividers>
-        <NewSpeciesModalContent record={record} setRecord={setRecord} />
-      </DialogContent>
-      <DialogActions>
-        <Box width={'100%'} className={classes.actions}>
-          <Box>
-            {props.value && props.onDelete && (
-              <Button
-                onClick={handleDelete}
-                id='delete-species'
-                label={strings.DELETE}
-                type='destructive'
-                priority='secondary'
-              />
-            )}
-          </Box>
-          <Box>
-            <Button
-              onClick={handleCancel}
-              id='cancel'
-              label={strings.CANCEL}
-              priority='secondary'
-              type='passive'
-              className={classes.spacing}
-            />
-            <Button onClick={handleOk} id='saveSpecies' label={strings.SAVE} />
-          </Box>
-        </Box>
-      </DialogActions>
-    </Dialog>
-  );
-}
-
-interface ContentProps {
-  record: PlantForTable;
-  setRecord: (record: PlantForTable) => void;
-}
-
-function NewSpeciesModalContent(props: ContentProps): JSX.Element {
-  const classes = useStyles();
-
-  const species = useRecoilValue(speciesSelector);
-  const speciesById = useRecoilValue(speciesByIdSelector);
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newSpeciesId = parseInt(event.target.value, 10);
-    const newRecord = {
-      ...props.record,
-      speciesId: newSpeciesId,
-      species: speciesById[newSpeciesId]
-        ? speciesById[newSpeciesId].name
-        : undefined,
-    };
-
-    props.setRecord(newRecord);
-  };
-
-  const onChangeTextField = (id: string, value: unknown) => {
-    const newRecord = {
-      ...props.record,
-      [id]: value,
-      speciesId: undefined,
-    };
-
-    props.setRecord(newRecord);
+  const handleDeletePlant = async () => {
+    const response = await deletePlant(plant.featureId!);
+    // TODO handle cannot delete plant error
+    if (response.error === null) {
+      onSave(true);
+      setDeleteConfirmationModelOpen(false);
+    }
   };
 
   return (
     <>
-      <Grid container spacing={4}>
-        <Grid item xs={6}>
-          <Grid item xs={12}>
-            <Typography variant='body1'>{strings.PHOTO}</Typography>
+      {deleteConfirmationModelOpen &&
+        <DeletePlantConfirmationModal
+          onCancel={() => setDeleteConfirmationModelOpen(false)}
+          confirmDelete={handleDeletePlant} />
+      }
+      <Dialog
+        onClose={onCancel}
+        disableEscapeKeyDown
+        open={!deleteConfirmationModelOpen}
+        maxWidth='md'
+        classes={{ paper: classes.paper }}
+      >
+        <DialogTitle>
+          <Typography variant='h6'>{strings.EDIT_SPECIES}</Typography>
+          <DialogCloseButton onClick={onCancel} />
+        </DialogTitle>
+        <DialogContent dividers>
+          <Grid container spacing={4}>
+            <Grid item xs={6}>
+              <Grid item xs={12}>
+                <Typography variant='body1'>{strings.PHOTO}</Typography>
+              </Grid>
+              <Grid item xs={12}>
+                <DisplayPhoto photoUrl={photoUrl}/>
+              </Grid>
+            </Grid>
+            <Grid item xs={6}>
+              <Grid item xs={12}>
+                <Typography variant='body1'>{strings.NOTES}</Typography>
+              </Grid>
+              <Grid item xs={6}>
+                <Typography variant='body2'>{plant.notes}</Typography>
+              </Grid>
+            </Grid>
+            <Grid item xs={12}>
+              <Typography variant='body1'>
+                {strings.EXISTING_SPECIES_MSG}
+              </Typography>
+              <FormControl component='fieldset'
+                           className={classes.container}
+                           disabled={inputtedValidNewSpecies()}
+              >
+                <RadioGroup
+                  aria-label='species'
+                  name='species'
+                  value={selectedSpecies.id}
+                  onChange={handleSelectExistingSpecies}
+                >
+                  {Array.from(speciesById?.values()).map((sp) => (
+                    <FormControlLabel
+                      id={sp.name}
+                      key={sp.id}
+                      value={sp.id}
+                      control={<Radio />}
+                      label={sp.name}
+                    />
+                  ))}
+                  <FormControlLabel
+                    id='Other'
+                    key={-1}
+                    value={-1}
+                    control={<Radio />}
+                    label={strings.OTHER}
+                  />
+                </RadioGroup>
+              </FormControl>
+            </Grid>
           </Grid>
-          <Grid item xs={12}>
-            <PlantPhoto featureId={props.record.featureId} />
+          <Grid container spacing={4}>
+            <Grid item xs={12}>
+              <Typography component='p' variant='subtitle2'>
+                {strings.OR}
+              </Typography>
+            </Grid>
           </Grid>
-        </Grid>
-        <Grid item xs={6}>
-          <Grid item xs={12}>
-            <Typography variant='body1'>{strings.NOTES}</Typography>
-          </Grid>
-          <Grid item xs={6}>
-            <Typography variant='body2'>{props.record.notes}</Typography>
-          </Grid>
-        </Grid>
-        <Grid item xs={12}>
-          <Typography variant='body1'>
-            {strings.EXISTING_SPECIES_MSG}
-          </Typography>
-          <FormControl component='fieldset' className={classes.container}>
-            <RadioGroup
-              aria-label='species'
-              name='species'
-              value={props.record.speciesId}
-              onChange={handleChange}
-            >
-              {species?.map((sp) => (
-                <FormControlLabel
-                  id={sp.name}
-                  key={sp.id}
-                  value={sp.id}
-                  control={<Radio />}
-                  label={sp.name}
-                />
-              ))}
-              <FormControlLabel
-                id='Other'
-                key={-1}
-                value={0}
-                control={<Radio />}
-                label={strings.OTHER}
+          <Grid container spacing={4}>
+            <Grid item xs={12} id='new-species-section'>
+              <TextField
+                id='new-species-name'
+                value={newSpeciesName}
+                onChange={handleTypingNewSpecies}
+                label={strings.CREATE_NEW_SPECIES}
+                aria-label='Species Name'
               />
-            </RadioGroup>
-          </FormControl>
-        </Grid>
-      </Grid>
-      <Grid container spacing={4}>
-        <Grid item xs={12}>
-          <Typography component='p' variant='subtitle2'>
-            {strings.OR}
-          </Typography>
-        </Grid>
-      </Grid>
-      <Grid container spacing={4}>
-        <Grid item xs={12} id='new-species-section'>
-          <TextField
-            id='species'
-            value={props.record.speciesId ? '' : props.record.species}
-            onChange={onChangeTextField}
-            label={strings.CREATE_NEW_SPECIES}
-            aria-label='Species Name'
-          />
-        </Grid>
-      </Grid>
+            </Grid>
+          </Grid>
+        </DialogContent>
+        <DialogActions>
+          <Box width={'100%'} className={classes.actions}>
+            <Box>
+              {plant && canDelete && (
+                <Button
+                  onClick={() => setDeleteConfirmationModelOpen(true)}
+                  id='delete-species'
+                  label={strings.DELETE}
+                  type='destructive'
+                  priority='secondary'
+                />
+              )}
+            </Box>
+            <Box>
+              <Button
+                onClick={onCancel}
+                id='cancel'
+                label={strings.CANCEL}
+                priority='secondary'
+                type='passive'
+                className={classes.spacing}
+              />
+              <Button onClick={handleSave} id='saveSpecies' label={strings.SAVE} disabled={!canSave()}/>
+            </Box>
+          </Box>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }

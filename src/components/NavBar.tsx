@@ -1,8 +1,4 @@
 import { useHistory, useRouteMatch } from 'react-router-dom';
-import { useResetRecoilState } from 'recoil';
-import { plantsSelector } from 'src/state/selectors/plants/plants';
-import { plantsFeaturesSelector } from 'src/state/selectors/plants/plantsFeatures';
-import { plantsFilteredSelector } from 'src/state/selectors/plants/plantsFiltered';
 import strings from 'src/strings';
 import Navbar from './common/Navbar/Navbar';
 import NavItem from './common/Navbar/NavItem';
@@ -18,27 +14,9 @@ export default function NavBar(): JSX.Element | null {
   const isPlantsListRoute = useRouteMatch('/plants-list');
   const isAccessionsRoute = useRouteMatch('/accessions/');
   const isAccessionSummaryRoute = useRouteMatch('/seeds-summary');
-  const resetplants = useResetRecoilState(plantsSelector);
-  const resetplantsFiltered = useResetRecoilState(
-    plantsFilteredSelector
-  );
-  const resetplantsFeatures = useResetRecoilState(
-    plantsFeaturesSelector
-  );
 
   const navigate = (url: string) => {
     history.push(url);
-  };
-
-  const navigateToDashboard = () => {
-    resetplants();
-    navigate('/plants-dashboard');
-  };
-
-  const navigateToAllPlants = () => {
-    resetplantsFeatures();
-    resetplantsFiltered();
-    navigate('/plants-list');
   };
 
   return (
@@ -75,21 +53,21 @@ export default function NavBar(): JSX.Element | null {
       <NavItem
         label={strings.PLANTS}
         icon='restorationSite'
-        onClick={() => !isPlantsDashboardRoute && navigateToDashboard()}
+        onClick={() => !isPlantsDashboardRoute && navigate('/plants-dashboard')}
         id='plants'
       >
         <SubNavbar>
           <NavItem
             label={strings.DASHBOARD}
             selected={isPlantsDashboardRoute ? true : false}
-            onClick={() => !isPlantsDashboardRoute && navigateToDashboard()}
+            onClick={() => !isPlantsDashboardRoute &&  navigate('/plants-dashboard')}
             id='dashboard'
           />
 
           <NavItem
             label={strings.PLANTS_LIST}
             selected={isPlantsListRoute ? true : false}
-            onClick={() => navigateToAllPlants()}
+            onClick={() => navigate('/plants-list')}
             id='plants-list'
           />
 

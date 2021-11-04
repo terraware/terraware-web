@@ -65,16 +65,17 @@ jobs:
           KEYCLOAK_REALM: dummy
           KEYCLOAK_RESOURCE: dummy
 
-      - name: Run end-to-end cypress tests
-        # Skip tests on main and releases because of Cypress hanging bug
-        if: github.ref != 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/')
-        run: yarn e2e
-        # If Cypress hangs, don't let the job sit there for the default 6-hour timeout.
-        timeout-minutes: 60
-        env:
-          REACT_APP_TERRAWARE_API: 'http://localhost:8080'
-          REACT_APP_SNACKBAR_TIMEOUT: 1000
-          REACT_APP_MAPBOX_TOKEN: ${{ secrets.REACT_APP_MAPBOX_TOKEN }}
+#       Disable end to end tests until we can refactor a few key tests. Most will be removed.
+#      - name: Run end-to-end cypress tests
+#        # Skip tests on main and releases because of Cypress hanging bug
+#        if: github.ref != 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/')
+#        run: yarn e2e
+#        # If Cypress hangs, don't let the job sit there for the default 6-hour timeout.
+#        timeout-minutes: 60
+#        env:
+#          REACT_APP_TERRAWARE_API: 'http://localhost:8080'
+#          REACT_APP_SNACKBAR_TIMEOUT: 1000
+#          REACT_APP_MAPBOX_TOKEN: ${{ secrets.REACT_APP_MAPBOX_TOKEN }}
 
       - name: build
         run: yarn build

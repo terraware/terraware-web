@@ -1,13 +1,13 @@
 /* eslint-disable import/no-webpack-loader-syntax */
 import {createStyles, CssBaseline, makeStyles, ThemeProvider,} from '@material-ui/core';
 import mapboxgl from 'mapbox-gl';
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {BrowserRouter as Router, Redirect, Route, Switch,} from 'react-router-dom';
 import {RecoilRoot} from 'recoil';
 import TopBar from './components/TopBar';
 import NavBar from './components/NavBar';
-import PlantsList from './components/plants/PlantsList';
-import PlantsDashboard from './components/plants/PlantsDashboard';
+import PlantList from './components/plants/PlantsList';
+import PlantDashboard from './components/plants/PlantsDashboard';
 import Species from './components/plants/Species';
 import Accession from './components/seeds/accession';
 import Database from './components/seeds/database';
@@ -19,14 +19,8 @@ import ErrorBoundary from './ErrorBoundary';
 import strings from './strings';
 import theme from './theme';
 import useTimer from './utils/useTimer';
-import getOrganization, {GetOrganizationResponse, OrgRequestError} from 'src/api/organization/organization';
-import {Organization} from 'src/types/Organization';
-import {PlantErrorByLayerId, PlantsByLayerId, PlantSummariesByLayerId} from 'src/types/Plant';
-import {SpeciesById} from 'src/types/Species';
-import {
-  getPlantsAndSpecies,
-  getPlantSummaries,
-} from 'src/api/plants2/plants';
+import getOrganization, { GetOrganizationResponse, OrgRequestError } from 'src/api/organization/organization';
+import { Organization } from 'src/types/Organization';
 import PageHeader from './components/seeds/PageHeader';
 
 // @ts-ignore
@@ -62,7 +56,7 @@ const emptyOrg: Organization = {
   projects: [],
   sites: [],
   facilities: [],
-  layers: [],
+  plantLayers: [],
 };
 
 function AppContent() {
@@ -71,11 +65,6 @@ function AppContent() {
 
   const [organization, setOrganization] = useState<Organization>(emptyOrg);
   const [organizationErrors, setOrganizationErrors] = useState<OrgRequestError[]>([]);
-  const [plantsByLayerId, setPlantsByLayerId] = useState<PlantsByLayerId>();
-  const [plantErrorByLayerId, setPlantErrorByLayerId] = useState<PlantErrorByLayerId>();
-  const [speciesById, setSpeciesById] = useState<SpeciesById>();
-  const [plantSummariesByLayerId, setPlantSummariesByLayerId] = useState<PlantSummariesByLayerId>();
-  const [plantSummaryErrorByLayerId, setPlantSummaryErrorByLayerId] = useState<PlantErrorByLayerId>();
 
   useEffect(() => {
     const populateOrganizationData = async () => {
@@ -89,27 +78,6 @@ function AppContent() {
     populateOrganizationData();
   }, []);
 
-  useEffect(() => {
-    const populatePlantsAndSpecies = async () => {
-      const response = await getPlantsAndSpecies(organization.layers.map((layer) => layer.id));
-      setPlantsByLayerId(response.plantsByLayerId);
-      setPlantErrorByLayerId(response.plantErrorByLayerId);
-      if (response.speciesRequestSucceeded) {
-        setSpeciesById(response.speciesById);
-      }
-    };
-
-    const populatePlantSummaries = async() => {
-      const response = await getPlantSummaries(organization.layers.map((layer) => (layer.id)));
-      setPlantSummariesByLayerId(response.plantSummariesByLayerId);
-      setPlantSummaryErrorByLayerId(response.plantErrorByLayerId);
-    };
-
-    if (organization.layers.length > 0) {
-      populatePlantsAndSpecies();
-      populatePlantSummaries();
-    }
-  }, [organization]);
 
   // Temporary error UI. Will be made prettier once we have input from the Design Team.
   if (organizationErrors.includes(OrgRequestError.ErrorFetchingProjectsOrSites)) {
@@ -149,10 +117,10 @@ function AppContent() {
                 <Accession />
               </Route>
               <Route exact path='/plants-dashboard'>
-                <PlantsDashboard />
+                <PlantDashboard organization={organization}/>
               </Route>
               <Route exact path='/plants-list'>
-                <PlantsList />
+                <PlantList organization={organization}/>
               </Route>
               <Route exact path='/species'>
                 <Species />

@@ -98,7 +98,7 @@ async function getOrganization(): Promise<GetOrganizationResponse> {
       projects: [],
       sites: [],
       facilities: [],
-      layers: [],
+      plantLayers: [],
     },
     errors: [],
   };
@@ -116,6 +116,7 @@ async function getOrganization(): Promise<GetOrganizationResponse> {
     }
     OrgResponse.organization.sites = sites;
   } catch (error) {
+    // eslint-disable-line no-console
     console.error(error);
     OrgResponse.errors.push(OrgRequestError.ErrorFetchingProjectsOrSites);
     return OrgResponse;
@@ -127,12 +128,14 @@ async function getOrganization(): Promise<GetOrganizationResponse> {
   if (facilitiesResponse.status === 'fulfilled') {
     OrgResponse.organization.facilities = facilitiesResponse.value;
   } else {
+    // eslint-disable-line no-console
     console.error(facilitiesResponse.reason);
     OrgResponse.errors.push(OrgRequestError.ErrorFetchingFacilities);
   }
   if (layersResponse.status === 'fulfilled') {
-    OrgResponse.organization.layers = layersResponse.value;
+    OrgResponse.organization.plantLayers = layersResponse.value;
   } else {
+    // eslint-disable-line no-console
     console.error(layersResponse.reason);
     OrgResponse.errors.push(OrgRequestError.ErrorFetchingLayers);
   }

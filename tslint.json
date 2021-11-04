@@ -12,7 +12,7 @@
         "options": ["ban-keywords", "check-format", "allow-leading-underscore", "allow-pascal-case"]
       },
       "curly": true,
-      "no-console": [true, "log"],
+      "no-console": false,
       "no-constant-condition": true,
       "no-empty": [true],
       "no-async-without-await": true,

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import {
   getPlants,
-  getPlantSummaries,
+  getPlantSummariesByLayer,
   getPlantSummary,
   putPlant
 } from 'src/api/plants2/plants';
@@ -90,7 +90,7 @@ test('getPlants() correctly parses geom data into the client side Coordinate typ
 
   const response = await getPlants(LAYER_ID);
   expect(response.layerId).toEqual(LAYER_ID);
-  expect(response.plantsWithoutSpeciesName.map((plant) => { return plant.coordinates; })).toEqual(coordinates);
+  expect(response.plants.map((plant) => { return plant.coordinates; })).toEqual(coordinates);
   expect(response.error).toEqual(null);
 });
 
@@ -104,7 +104,7 @@ test('getPlants() returns correct error when server throws 404', async () => {
 
   const response = await getPlants(LAYER_ID);
   expect(response.layerId).toEqual(LAYER_ID);
-  expect(response.plantsWithoutSpeciesName).toEqual([]);
+  expect(response.plants).toEqual([]);
   expect(response.error).toEqual(PlantRequestError.LayerIdNotFound);
 });
 
@@ -117,7 +117,7 @@ test('getPlants() returns correct error for all non 404 errors', async() => {
   for (let i = 0; i < numTimesAxiosWasMocked; i++) {
     const response = await getPlants(LAYER_ID);
     expect(response.layerId).toEqual(LAYER_ID);
-    expect(response.plantsWithoutSpeciesName).toEqual([]);
+    expect(response.plants).toEqual([]);
     expect(response.error).toEqual(PlantRequestError.RequestFailed);
   }
 });
@@ -153,25 +153,44 @@ test('getPlantSummaries() returns this + last week summaries for all layers when
   jest.setSystemTime(TODAY);
   const expected: PlantSummariesByLayerId = new Map([
     [12, {
-      lastWeek: {
-        numSpecies: 2,
-        numPlants: 10,
-      },
-      thisWeek: {
-        numSpecies: 4,
-        numPlants: 20,
-      }
+      lastWeek: [
+        {
+          speciesId: 1,
+          numPlants: 8,
+        },
+        {
+          speciesId: 2,
+          numPlants: 2,
+        }
+      ],
+      thisWeek: [
+        {
+          speciesId: 1,
+          numPlants: 8,
+        },
+        {
+          speciesId: 2,
+          numPlants: 2,
+        },
+        {
+          speciesId: 3,
+          numPlants: 5,
+        },
+        {
+          speciesId: 4,
+          numPlants: 5,
+        }
+      ]
     }],
     [13, {
-      lastWeek: {
-        numSpecies: 0,
-        numPlants: 0,
-      },
-      thisWeek: {
-        numSpecies: 1,
-        numPlants: 24,
-      }
-    }]
+      lastWeek: [],
+      thisWeek: [
+        {
+          speciesId: 1,
+          numPlants: 24,
+        }
+      ],
+    }],
   ]);
 
   let summary: {[key: string]: number};  // speciesId to count JSON
@@ -211,7 +230,7 @@ test('getPlantSummaries() returns this + last week summaries for all layers when
     });
   });
 
-  await expect(getPlantSummaries([12, 13])).resolves.toEqual({
+  await expect(getPlantSummariesByLayer([12, 13])).resolves.toEqual({
     plantSummariesByLayerId: expected,
     plantErrorByLayerId: new Map(),
   });
@@ -254,7 +273,7 @@ test('getPlantSummaries() never returns incomplete summary data (always returns 
   const failures = ['current', 'last', 'both'];
   for (const failure of failures) {
     mockListSummaryRejection(LAYER_ID, failure);
-    await expect(getPlantSummaries([LAYER_ID])).resolves.toEqual({
+    await expect(getPlantSummariesByLayer([LAYER_ID])).resolves.toEqual({
       plantSummariesByLayerId: new Map(),
       plantErrorByLayerId: new Map([[LAYER_ID, PlantRequestError.LayerIdNotFound]]),
     });
@@ -265,16 +284,16 @@ test('getPlantSummaries() returns plant summary data for some layers, even if ot
   const layerIds = [60, 70];
   const expectedPlantSummaries: PlantSummariesByLayerId = new Map([
     [70, {
-      thisWeek: {
-        numSpecies: 1,
+      thisWeek: [{
+        speciesId: 1,
         numPlants: 10,
-      },
-      lastWeek: {
-        numSpecies: 1,
+      }],
+      lastWeek: [{
+        speciesId: 1,
         numPlants: 10
-      }
-    }],
-  ]);
+      }]
+    },
+  ]]);
   const expectedPlantSummaryErrors: PlantErrorByLayerId = new Map([
     [60, PlantRequestError.LayerIdNotFound],
   ]);
@@ -297,14 +316,14 @@ test('getPlantSummaries() returns plant summary data for some layers, even if ot
     throw Error('Axios mock called with an unexpected url');
   });
 
-  await expect(getPlantSummaries(layerIds)).resolves.toEqual({
+  await expect(getPlantSummariesByLayer(layerIds)).resolves.toEqual({
     plantSummariesByLayerId: expectedPlantSummaries,
     plantErrorByLayerId: expectedPlantSummaryErrors,
   });
 });
 
 test('getPlantSummaries() returns empty summary maps when passed an empty list of layer ids', async() => {
-  const result = await getPlantSummaries([]);
+  const result = await getPlantSummariesByLayer([]);
   expect(result).toEqual({
       plantSummariesByLayerId: new Map(),
       plantErrorByLayerId: new Map()

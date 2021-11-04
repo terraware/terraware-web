@@ -22,5 +22,5 @@ export type Organization = {
   projects: Project[],
   sites: Site[],
   facilities: SeedBank[],
-  layers: PlantLayer[],
+  plantLayers: PlantLayer[],
 };

@@ -1,3 +1,4 @@
+/* tslint:disable:no-console */
 import getOrganization, {OrgRequestError, exportedForTesting} from "./organization";
 import axios from "axios";
 
@@ -88,7 +89,7 @@ test('getOrganization() returns all data when no errors thrown', async () => {
       projects: PROJECTS,
       sites: SITES,
       facilities: FACILITIES,
-      layers: LAYERS,
+      plantLayers: LAYERS,
     },
     errors: [],
   });
@@ -224,7 +225,7 @@ async function testFacilitiesAndOrLayersFailure(failure) {
     projects: PROJECTS,
     sites: SITES,
     facilities: shouldFacilitiesFail() ? [] : FACILITIES,
-    layers: shouldLayersFail() ? [] : LAYERS,
+    plantLayers: shouldLayersFail() ? [] : LAYERS,
   });
 }
 

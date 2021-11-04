@@ -10,7 +10,6 @@ export type Plant = {
   notes?: string;
   enteredTime?: string;
   speciesId?: number;
-  speciesName?: string;
 };
 
 export type PlantSearchOptions = {
@@ -23,13 +22,13 @@ export type PlantSearchOptions = {
 export type PlantsByLayerId = Map<number, Plant[]>;
 
 export type PlantSummary = {
-  'numSpecies': number;
+  'speciesId': number;
   'numPlants': number;
 };
 
 export type PlantSummaries = {
-  lastWeek: PlantSummary | null;
-  thisWeek: PlantSummary | null;
+  lastWeek: PlantSummary[] | null;
+  thisWeek: PlantSummary[] | null;
 };
 
 export type PlantSummariesByLayerId = Map<number, PlantSummaries>;

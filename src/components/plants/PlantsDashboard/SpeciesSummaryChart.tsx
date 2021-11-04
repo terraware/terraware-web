@@ -1,28 +1,41 @@
 import Chart from 'chart.js/auto';
 import React from 'react';
-import { useRecoilValue } from 'recoil';
-import speciesForChartSelector from 'src/state/selectors/plants/speciesForChart';
 import strings from 'src/strings';
+import { PlantSummaries, PlantSummariesByLayerId, PlantSummary } from 'src/types/Plant';
+import { SpeciesById } from 'src/types/Species';
 
-interface Props {
+type SpeciesSummaryChartProps = {
+  plantSummariesByLayerId: PlantSummariesByLayerId;
+  speciesById: SpeciesById;
+  colorsBySpeciesId: Record<number, string>;
   isFullscreen: boolean;
-}
+};
 
-export default function SpeciesChart({ isFullscreen }: Props): JSX.Element {
+export default function SpeciesSummaryChart(props: SpeciesSummaryChartProps): JSX.Element {
+  const {plantSummariesByLayerId, speciesById, colorsBySpeciesId, isFullscreen} = props;
   const chartRef = React.useRef<HTMLCanvasElement>(null);
-  const speciesForChart = useRecoilValue(speciesForChartSelector);
   const currentChartRef = React.useRef();
 
   React.useEffect(() => {
-    const speciesForChartArray = Object.values(speciesForChart);
+    // TODO: remove this logic once we have the updated plant summary APIs
+    const plantSummaries: PlantSummaries[] = Array.from(plantSummariesByLayerId.values());
+    const thisWeekOrNull: (PlantSummary | null)[] = plantSummaries.map((summary) => summary.thisWeek).flat();
+    const thisWeek = thisWeekOrNull.filter((s) => s !== null) as PlantSummary[];
+    const countBySpeciesId = new Map();
+
+    thisWeek.forEach((summary) => {
+      const current = countBySpeciesId.get(speciesById);
+      countBySpeciesId.set(summary.speciesId, current ? current + summary.numPlants : summary.numPlants);
+    });
+
     const names: string[] = [];
     const numberOfTrees: number[] = [];
     const colors: string[] = [];
 
-    speciesForChartArray.forEach((species) => {
-      names.push(species.speciesName.name);
-      numberOfTrees.push(species.numberOfTrees);
-      colors.push(species.color);
+    countBySpeciesId.forEach((numPlants, speciesId) => {
+      names.push(speciesById.get(speciesId)?.name ?? strings.OTHER);
+      numberOfTrees.push(numPlants);
+      colors.push(colorsBySpeciesId[speciesId]);
     });
 
     const ctx = chartRef?.current?.getContext('2d');
@@ -88,7 +101,7 @@ export default function SpeciesChart({ isFullscreen }: Props): JSX.Element {
         },
       });
     }
-  }, [isFullscreen, speciesForChart]);
+  }, [plantSummariesByLayerId, speciesById, colorsBySpeciesId, isFullscreen]);
 
   return <canvas id='speciesChart' ref={chartRef} width='400' height='400' />;
 }
