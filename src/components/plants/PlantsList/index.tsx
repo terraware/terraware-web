@@ -32,7 +32,7 @@ import Dropdown from '../../common/Dropdown';
 import Table from '../../common/table';
 import { TableRowType } from '../../common/table/TableCellRenderer';
 import { TableColumnType } from '../../common/table/types';
-import NewSpeciesModal from '../Dashboard/NewSpeciesModal';
+import NewSpeciesModal from '../EditPlantModal';
 import DeletePlantConfirmationModal from './DeletePlantConfirmationModal';
 import AllPlantsCellRenderer from './TableCellRenderer';
 

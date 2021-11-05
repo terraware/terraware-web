@@ -5,7 +5,7 @@ import CellRenderer, {
   TableRowType,
 } from '../../common/table/TableCellRenderer';
 import { RendererProps } from '../../common/table/types';
-import PlantPhoto from '../Dashboard/PlantPhoto';
+import PlantPhoto from '../DisplayPhoto';
 
 export default function AllPlantsCellRenderer(
   props: RendererProps<TableRowType>

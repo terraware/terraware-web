@@ -25,11 +25,11 @@ import speciesSelector from 'src/state/selectors/species';
 import speciesByIdSelector from 'src/state/selectors/speciesById';
 import strings from 'src/strings';
 import useForm from 'src/utils/useForm';
-import Button from '../../common/button/Button';
-import DialogCloseButton from '../../common/DialogCloseButton';
-import TextField from '../../common/TextField';
-import { PlantForTable } from '../AllPlants';
-import PlantPhoto from './PlantPhoto';
+import Button from '../common/button/Button';
+import DialogCloseButton from '../common/DialogCloseButton';
+import TextField from '../common/TextField';
+import { PlantForTable } from './PlantsList';
+import PlantPhoto from './DisplayPhoto';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -80,12 +80,12 @@ const initPlant = (plant?: PlantForTable): PlantForTable => {
 export default function NewSpeciesModalWrapper(props: Props): JSX.Element {
   return (
     <React.Suspense fallback={strings.LOADING}>
-      <NewSpeciesModal {...props} />
+      <EditPlantModal {...props} />
     </React.Suspense>
   );
 }
 
-function NewSpeciesModal(props: Props): JSX.Element {
+function EditPlantModal(props: Props): JSX.Element {
   const classes = useStyles();
   const { onClose, open, onDelete } = props;
   const [record, setRecord] = useForm<PlantForTable>(initPlant(props.value));

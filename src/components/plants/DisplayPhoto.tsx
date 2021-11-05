@@ -14,13 +14,13 @@ export default function PlantWrapper(props: Props): JSX.Element {
   return (
     <ErrorBoundary>
       <React.Suspense fallback={strings.LOADING}>
-        <PlantPhoto {...props} />
+        <DisplayPhoto {...props} />
       </React.Suspense>
     </ErrorBoundary>
   );
 }
 
-function PlantPhoto({ featureId, style }: Props): JSX.Element {
+function DisplayPhoto({ featureId, style }: Props): JSX.Element {
   const photoFeature = useRecoilValue(
     uniquePhotoForFeatureSelectorFamily(featureId)
   );

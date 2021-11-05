@@ -22,8 +22,8 @@ import strings from 'src/strings';
 import { getCenter, getCoordinates } from 'src/utils/maps';
 import { cellDateFormatter } from '../../common/table/TableCellRenderer';
 import MapLayers from './MapLayers';
-import NewSpeciesModal from './NewSpeciesModal';
-import PlantPhoto from './PlantPhoto';
+import NewSpeciesModal from '../EditPlantModal';
+import PlantPhoto from '../DisplayPhoto';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -91,7 +91,7 @@ interface Props {
   isFullscreen: boolean;
 }
 
-function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
+function PlantMap({ onFullscreen, isFullscreen }: Props): JSX.Element {
   const classes = useStyles();
   const [selectedFeature, setSelectedFeature] = React.useState<Feature>();
   const [editPlantModalOpen, setEditPlantModalOpen] = React.useState(false);
@@ -308,7 +308,7 @@ function Map({ onFullscreen, isFullscreen }: Props): JSX.Element {
   );
 }
 
-export default React.memo(Map);
+export default React.memo(PlantMap);
 
 interface CenterMapProps {
   center: { latitude: number; longitude: number };

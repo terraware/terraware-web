@@ -1,7 +1,7 @@
 import React from 'react';
 import CellRenderer from '../../common/table/TableCellRenderer';
 import { RendererProps } from '../../common/table/types';
-import { SpeciesMap } from './Map';
+import { SpeciesMap } from './PlantMap';
 
 export default function GeolocationCellRenderer(
   props: RendererProps<SpeciesMap>

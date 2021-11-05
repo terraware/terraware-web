@@ -9,7 +9,7 @@ import { PlantSummary } from 'src/api/types/plant';
 import ErrorBoundary from 'src/ErrorBoundary';
 import plantsSummarySelector from 'src/state/selectors/plants/plantsSummary';
 import strings from 'src/strings';
-import Map from './Map';
+import Map from './PlantMap';
 import SpeciesChart from './SpeciesChart';
 import SummaryCell from './SummaryCell';
 

@@ -48,7 +48,7 @@ function initSpecies(species?: Species): Species {
     }
   );
 }
-export default function EditSpeciesModal(props: Props): JSX.Element {
+export default function SimpleSpeciesModal(props: Props): JSX.Element {
   const classes = useStyles();
   const { onClose, open } = props;
   const [record, setRecord, onChange] = useForm<Species>(
