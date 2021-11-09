@@ -1,7 +1,7 @@
 describe('Summary page', () => {
   beforeEach(() => {
     cy.intercept('GET', '/api/v1/seedbank/notification').as('notification');
-    cy.intercept('GET', '/api/v1/seedbank/summary').as('summary');
+    cy.intercept('GET', '/api/v1/seedbank/summary/*').as('summary');
     cy.visit('/summary');
     cy.wait('@notification');
     cy.wait('@summary');
@@ -43,10 +43,7 @@ describe('Summary page', () => {
     });
 
     it('navigates to database page filtered by processed state when clicking on Most recent update', () => {
-      cy.get('#update-Processed')
-        .click()
-        .url()
-        .should('contain', '/accessions');
+      cy.get('#update-Processed').click().url().should('contain', '/accessions');
       cy.get('#subtitle').should('contain', '0 total');
       cy.get('#filter-state').click();
       cy.get('#filter-list-state').should('be.visible');
@@ -59,7 +56,7 @@ describe('Summary page', () => {
 describe.skip('Summary page - Spinners', () => {
   it('display loading spinner', () => {
     cy.intercept('GET', '/api/v1/seedbank/notification').as('notification');
-    cy.intercept('GET', '/api/v1/seedbank/summary').as('summary');
+    cy.intercept('GET', '/api/v1/seedbank/summary/*').as('summary');
 
     cy.visit('/');
 

@@ -4,7 +4,7 @@ describe('Accessions', () => {
       cy.visit('/summary');
     });
     it('has the right summary results', () => {
-      cy.intercept('GET', '/api/v1/seedbank/summary').as('summary');
+      cy.intercept('GET', '/api/v1/seedbank/summary/*').as('summary');
       cy.visit('/summary');
       cy.wait('@summary');
 
@@ -31,16 +31,10 @@ describe('Accessions', () => {
     });
 
     it('should navigate in and out of the new accession page', () => {
-      cy.get('#newAccession')
-        .click()
-        .url()
-        .should('contain', '/accessions/new');
+      cy.get('#newAccession').click().url().should('contain', '/accessions/new');
       cy.get('#closenewAccession').click().url().should('contain', '/');
 
-      cy.get('#newAccession')
-        .click()
-        .url()
-        .should('contain', '/accessions/new');
+      cy.get('#newAccession').click().url().should('contain', '/accessions/new');
       cy.get('#cancelButton').click().url().should('contain', '/');
     });
   });
@@ -48,10 +42,7 @@ describe('Accessions', () => {
   context('Accessions', () => {
     it('should create the accession', () => {
       cy.visit('/accessions');
-      cy.get('#newAccession')
-        .click()
-        .url()
-        .should('contain', '/accessions/new');
+      cy.get('#newAccession').click().url().should('contain', '/accessions/new');
 
       cy.get('#species').type('Kousa Dogwoord');
       cy.get('#family').type('Cornaceae');
@@ -83,7 +74,7 @@ describe('Accessions', () => {
       cy.get('#header-status').contains('Active');
       cy.get('#header-species').contains('Kousa Dogwoord');
       cy.get('#header-date').contains('02/03/2021');
-      cy.get('#header-state').contains('Pending');
+      cy.get('#header-state').contains('Awaiting Check-In');
 
       cy.get('#species').should('have.value', 'Kousa Dogwoord');
       cy.get('#family').should('have.value', 'Cornaceae');
@@ -101,6 +92,16 @@ describe('Accessions', () => {
       cy.get('#siteLocation').should('have.value', 'Sunset Overdrive');
       cy.get('#landowner').should('have.value', 'Yacin');
       cy.get('#environmentalNotes').should('have.value', 'Cold day');
+    });
+
+    it('should check in the accession', () => {
+      cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
+      cy.intercept('POST', '/api/v1/seedbank/accession/*/checkIn').as('checkInAccession');
+      cy.get('#checkIn').click();
+      cy.wait('@checkInAccession');
+      cy.wait('@getAccession');
+      cy.get('#checkIn').should('contain', 'Checked In!');
+      cy.get('#header-state').contains('Pending');
     });
 
     it('should update the accession', () => {
@@ -184,20 +185,12 @@ describe('Accessions', () => {
 
       cy.get('#photo-0').contains('accession1.jpg');
       cy.get('#photo-0')
-        .should(
-          'have.attr',
-          'href',
-          'http://localhost:8080/api/v1/seedbank/accession/1002/photo/accession1.jpg'
-        )
+        .should('have.attr', 'href', 'http://localhost:8080/api/v1/seedbank/accession/1002/photo/accession1.jpg')
         .should('have.attr', 'target', '_blank');
 
       cy.get('#photo-1').contains('accession2.jpg');
       cy.get('#photo-1')
-        .should(
-          'have.attr',
-          'href',
-          'http://localhost:8080/api/v1/seedbank/accession/1002/photo/accession2.jpg'
-        )
+        .should('have.attr', 'href', 'http://localhost:8080/api/v1/seedbank/accession/1002/photo/accession2.jpg')
         .should('have.attr', 'target', '_blank');
 
       // cy.request({
@@ -222,7 +215,7 @@ describe('Accessions', () => {
 
   context('Summary End Results', () => {
     it('has the right summary results', () => {
-      cy.intercept('GET', '/api/v1/seedbank/summary').as('summary');
+      cy.intercept('GET', '/api/v1/seedbank/summary/*').as('summary');
       cy.visit('/summary');
       cy.wait('@summary');
 

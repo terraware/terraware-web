@@ -32,9 +32,7 @@ describe('Withdrawal', () => {
       cy.get('#save-withdrawn-button').contains('Withdraw seeds');
       cy.get('#modal-seeds-available').contains('300');
 
-      cy.get('#date-tip').contains(
-        'Schedule a date by selecting a future date.'
-      );
+      cy.get('#date-tip').contains('Schedule a date by selecting a future date.');
 
       cy.get('#units').contains('seed count');
       cy.get('#units').click();
@@ -66,9 +64,7 @@ describe('Withdrawal', () => {
       cy.get('#row1-destination').contains('Panama');
       cy.get('#row1-purpose').contains('Outreach or Education');
       cy.get('#row1-staffResponsible').contains('Carlos');
-      cy.get('#row1-notes > .MuiTypography-root > .MuiSvgIcon-root').should(
-        'exist'
-      );
+      cy.get('#row1-notes > .MuiTypography-root > .MuiSvgIcon-root').should('exist');
     });
 
     it('should edit a withdrawal ', () => {
@@ -101,9 +97,7 @@ describe('Withdrawal', () => {
       cy.get('#row1-destination').contains('USA');
       cy.get('#row1-purpose').contains('Research');
       cy.get('#row1-staffResponsible').contains('Leann');
-      cy.get('#row1-notes > .MuiTypography-root > .MuiSvgIcon-root').should(
-        'not.exist'
-      );
+      cy.get('#row1-notes > .MuiTypography-root > .MuiSvgIcon-root').should('not.exist');
     });
 
     it('should delete the withdrawal ', () => {
@@ -143,11 +137,7 @@ describe('Withdrawal', () => {
 
       cy.get('#seeds-withdrawn').contains('50');
       cy.get('#seeds-available').contains('250');
-      cy.get('#seeds-available').should(
-        'have.css',
-        'background-color',
-        'rgb(73, 80, 87)'
-      );
+      cy.get('#seeds-available').should('have.css', 'background-color', 'rgb(73, 80, 87)');
 
       cy.get('#new-withdrawal-button').click();
       cy.get('#modal-seeds-available').contains('250');
@@ -168,11 +158,7 @@ describe('Withdrawal', () => {
 
       cy.get('#seeds-withdrawn').contains('150');
       cy.get('#seeds-available').contains('100');
-      cy.get('#seeds-available').should(
-        'have.css',
-        'background-color',
-        'rgb(73, 80, 87)'
-      );
+      cy.get('#seeds-available').should('have.css', 'background-color', 'rgb(73, 80, 87)');
 
       cy.get('#new-withdrawal-button').click();
       cy.get('#modal-seeds-available').contains('100');
@@ -193,17 +179,9 @@ describe('Withdrawal', () => {
 
       cy.get('#seeds-withdrawn').contains('250');
       cy.get('#seeds-available').contains('0');
-      cy.get('#seeds-available').should(
-        'have.css',
-        'background-color',
-        'rgb(205, 91, 56)'
-      );
+      cy.get('#seeds-available').should('have.css', 'background-color', 'rgb(205, 91, 56)');
 
-      cy.get('#new-withdrawal-button').should(
-        'have.css',
-        'background-color',
-        'rgb(173, 181, 189)'
-      );
+      cy.get('#new-withdrawal-button').should('have.css', 'background-color', 'rgb(173, 181, 189)');
       cy.get('#new-withdrawal-button').click();
       cy.get('#modal-seeds-available').should('not.exist');
     });
@@ -269,9 +247,7 @@ describe('Withdrawal', () => {
       cy.get('#row1-destination').contains('Panama');
       cy.get('#row1-purpose').contains('Outreach or Education');
       cy.get('#row1-staffResponsible').contains('Carlos');
-      cy.get('#row1-notes > .MuiTypography-root > .MuiSvgIcon-root').should(
-        'exist'
-      );
+      cy.get('#row1-notes > .MuiTypography-root > .MuiSvgIcon-root').should('exist');
     });
 
     it('should edit a withdrawal ', () => {
@@ -304,9 +280,7 @@ describe('Withdrawal', () => {
       cy.get('#row1-destination').contains('USA');
       cy.get('#row1-purpose').contains('Research');
       cy.get('#row1-staffResponsible').contains('Leann');
-      cy.get('#row1-notes > .MuiTypography-root > .MuiSvgIcon-root').should(
-        'not.exist'
-      );
+      cy.get('#row1-notes > .MuiTypography-root > .MuiSvgIcon-root').should('not.exist');
     });
 
     it('should do the right math when adding withdrawals', () => {
@@ -328,11 +302,7 @@ describe('Withdrawal', () => {
 
       cy.get('#seeds-withdrawn').contains('93');
       cy.get('#seeds-available').contains('6');
-      cy.get('#seeds-available').should(
-        'have.css',
-        'background-color',
-        'rgb(73, 80, 87)'
-      );
+      cy.get('#seeds-available').should('have.css', 'background-color', 'rgb(73, 80, 87)');
 
       cy.get('#new-withdrawal-button').click();
       cy.get('#modal-seeds-available').contains('6');
@@ -352,11 +322,7 @@ describe('Withdrawal', () => {
 
       cy.get('#seeds-withdrawn').contains('94');
       cy.get('#seeds-available').contains('5');
-      cy.get('#seeds-available').should(
-        'have.css',
-        'background-color',
-        'rgb(73, 80, 87)'
-      );
+      cy.get('#seeds-available').should('have.css', 'background-color', 'rgb(73, 80, 87)');
 
       cy.get('#new-withdrawal-button').click();
       cy.get('#modal-seeds-available').contains('5');
@@ -397,17 +363,9 @@ describe('Withdrawal', () => {
 
       cy.get('#seeds-withdrawn').contains('99');
       cy.get('#seeds-available').contains('0');
-      cy.get('#seeds-available').should(
-        'have.css',
-        'background-color',
-        'rgb(205, 91, 56)'
-      );
+      cy.get('#seeds-available').should('have.css', 'background-color', 'rgb(205, 91, 56)');
 
-      cy.get('#new-withdrawal-button').should(
-        'have.css',
-        'background-color',
-        'rgb(173, 181, 189)'
-      );
+      cy.get('#new-withdrawal-button').should('have.css', 'background-color', 'rgb(173, 181, 189)');
       cy.get('#new-withdrawal-button').click();
       cy.get('#modal-seeds-available').should('not.exist');
     });
@@ -462,7 +420,7 @@ describe('Withdrawal', () => {
 
   context('Summary End Results', () => {
     it('has the right summary results', () => {
-      cy.intercept('GET', '/api/v1/seedbank/summary').as('summary');
+      cy.intercept('GET', '/api/v1/seedbank/summary/*').as('summary');
       cy.visit('/summary');
       cy.wait('@summary');
 

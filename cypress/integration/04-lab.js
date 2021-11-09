@@ -49,9 +49,7 @@ describe('Lab', () => {
     cy.get('#row1-treatment').should('contain', 'Scarify');
     cy.get('#row1-seedsSown').should('contain', '100');
     cy.get('#row1-staffResponsible').should('contain', 'Constanza');
-    cy.get('#row1-notes > .MuiTypography-root > .MuiSvgIcon-root').should(
-      'exist'
-    );
+    cy.get('#row1-notes > .MuiTypography-root > .MuiSvgIcon-root').should('exist');
   });
 
   it('should modify test', () => {
@@ -70,9 +68,7 @@ describe('Lab', () => {
     cy.get('#row1-treatment').should('contain', 'Scarify');
     cy.get('#row1-seedsSown').should('contain', '100');
     cy.get('#row1-staffResponsible').should('contain', 'Constanza');
-    cy.get('#row1-notes > .MuiTypography-root > .MuiSvgIcon-root').should(
-      'not.exist'
-    );
+    cy.get('#row1-notes > .MuiTypography-root > .MuiSvgIcon-root').should('not.exist');
   });
 
   it('should create another test', () => {
@@ -174,18 +170,13 @@ describe('Lab', () => {
     cy.get('#row2-treatment').should('contain', 'Scarify');
     cy.get('#row2-seedsSown').should('contain', '100');
     cy.get('#row2-staffResponsible').should('contain', 'Constanza');
-    cy.get('#row2-notes > .MuiTypography-root > .MuiSvgIcon-root').should(
-      'not.exist'
-    );
+    cy.get('#row2-notes > .MuiTypography-root > .MuiSvgIcon-root').should('not.exist');
 
     cy.get('#mostRecentViabiliy').contains('10%');
     cy.get('#lab-table').scrollTo('left');
     cy.get('#totalSeedsGerminated').contains('10 (10.0%)');
 
-    cy.get('#row2-details #row1-seedsGerminated').should(
-      'contain',
-      '10 seeds germinated'
-    );
+    cy.get('#row2-details #row1-seedsGerminated').should('contain', '10 seeds germinated');
     cy.get('#row2-details #row1-recordingDate').should('contain', '02/09/2021');
     cy.get('#myChart').should('exist');
   });
@@ -210,17 +201,13 @@ describe('Lab', () => {
     cy.get('#row2-treatment').should('contain', 'Scarify');
     cy.get('#row2-seedsSown').should('contain', '100');
     cy.get('#row2-staffResponsible').should('contain', 'Constanza');
-    cy.get('#row2-notes > .MuiTypography-root > .MuiSvgIcon-root').should(
-      'not.exist'
-    );
+    cy.get('#row2-notes > .MuiTypography-root > .MuiSvgIcon-root').should('not.exist');
 
     cy.get('#mostRecentViabiliy').contains('25%');
     cy.get('#row2-expand').click();
     cy.get('#totalSeedsGerminated').contains('25 (25.0%)');
 
-    cy.get('#row2-details #row2-seedsGerminated').contains(
-      '15 seeds germinated'
-    );
+    cy.get('#row2-details #row2-seedsGerminated').contains('15 seeds germinated');
     cy.get('#row2-details #row2-recordingDate').contains('05/09/2021');
     cy.get('#myChart').should('exist');
   });
@@ -242,16 +229,12 @@ describe('Lab', () => {
     cy.get('#row2-treatment').should('contain', 'Scarify');
     cy.get('#row2-seedsSown').should('contain', '100');
     cy.get('#row2-staffResponsible').should('contain', 'Constanza');
-    cy.get('#row2-notes > .MuiTypography-root > .MuiSvgIcon-root').should(
-      'not.exist'
-    );
+    cy.get('#row2-notes > .MuiTypography-root > .MuiSvgIcon-root').should('not.exist');
 
     cy.get('#mostRecentViabiliy').contains('35%');
     cy.get('#row2-expand').click();
 
-    cy.get('#row2-details #row2-seedsGerminated').contains(
-      '25 seeds germinated'
-    );
+    cy.get('#row2-details #row2-seedsGerminated').contains('25 seeds germinated');
     cy.get('#row2-details #row2-recordingDate').contains('05/09/2021');
     cy.get('#myChart').should('exist');
   });
@@ -271,9 +254,7 @@ describe('Lab', () => {
     cy.get('#row2-treatment').should('contain', 'Scarify');
     cy.get('#row2-seedsSown').should('contain', '100');
     cy.get('#row2-staffResponsible').should('contain', 'Constanza');
-    cy.get('#row2-notes > .MuiTypography-root > .MuiSvgIcon-root').should(
-      'not.exist'
-    );
+    cy.get('#row2-notes > .MuiTypography-root > .MuiSvgIcon-root').should('not.exist');
 
     cy.get('#mostRecentViabiliy').contains('10%');
 
@@ -325,7 +306,7 @@ describe('Lab', () => {
 
   context('Summary End Results', () => {
     it('has the right summary results', () => {
-      cy.intercept('GET', '/api/v1/seedbank/summary').as('summary');
+      cy.intercept('GET', '/api/v1/seedbank/summary/*').as('summary');
       cy.visit('/summary');
       cy.wait('@summary');
 

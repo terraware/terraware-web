@@ -179,8 +179,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({ updating, ph
     if (isCheckingIn) {
       setIsCheckingIn(false);
       setIsCheckedIn(true);
-      const timer = setTimeout(() => setIsCheckedIn(false), 1000);
-      clearTimeout(timer);
+      setTimeout(() => setIsCheckedIn(false), 1000);
     }
     if (isSaving) {
       setIsSaving(false);
