@@ -1,6 +1,6 @@
 describe('Summary page', () => {
   beforeEach(() => {
-    cy.intercept('GET', '/api/v1/seedbank/notification').as('notification');
+    cy.intercept('GET', '/api/v1/seedbank/notification?*').as('notification');
     cy.intercept('GET', '/api/v1/seedbank/summary/*').as('summary');
     cy.visit('/summary');
     cy.wait('@notification');

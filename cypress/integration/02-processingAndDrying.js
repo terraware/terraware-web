@@ -22,12 +22,21 @@ describe('Processing and Drying', () => {
     cy.get('#quantity').type(300);
   });
 
-  it('should add processing and drying information', () => {
+  it('should add check nursery', () => {
     cy.get('#check-Nursery').click();
+  });
+
+  it('should add dates', () => {
     cy.get('#dryingStartDate').type('01/01/2021');
     cy.get('#dryingEndDate').type('01/01/2021');
     cy.get('#dryingMoveDate').type('01/01/2021');
+  });
+
+  it('should add note', () => {
     cy.get('#processingNotes').type('A processing note');
+  });
+
+  it('should add responsible', () => {
     cy.get('#processingStaffResponsible').type('Constanza');
   });
 

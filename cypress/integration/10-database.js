@@ -81,17 +81,11 @@ describe('Database', () => {
         cy.get('#table-header-endangered').contains('ENDANGERED');
         cy.get('#table-header-rare').contains('RARE');
         cy.get('#table-header-treesCollectedFrom').contains('NUMBER OF TREES');
-        cy.get('#table-header-estimatedSeedsIncoming').contains(
-          'ESTIMATED SEEDS INCOMING'
-        );
+        cy.get('#table-header-estimatedSeedsIncoming').contains('ESTIMATED SEEDS INCOMING');
         cy.get('#table-header-landowner').contains('LANDOWNER');
         cy.get('#table-header-storageCondition').contains('STORAGE CONDITION');
-        cy.get('#table-header-latestGerminationTestDate').contains(
-          'MOST RECENT GERMINATION TEST DATE'
-        );
-        cy.get('#table-header-latestViabilityPercent').contains(
-          'MOST RECENT % VIABILITY'
-        );
+        cy.get('#table-header-latestGerminationTestDate').contains('MOST RECENT GERMINATION TEST DATE');
+        cy.get('#table-header-latestViabilityPercent').contains('MOST RECENT % VIABILITY');
       });
 
       it('Default', () => {
@@ -136,23 +130,13 @@ describe('Database', () => {
         cy.get('#table-header-species').contains('SPECIES');
         cy.get('#table-header-receivedDate').contains('RECEIVED DATE');
         cy.get('#table-header-collectedDate').contains('COLLECTED DATE');
-        cy.get('#table-header-estimatedSeedsIncoming').should(
-          'contain',
-          'ESTIMATED SEEDS INCOMING'
-        );
-        cy.get('#table-header-storageStartDate').should(
-          'contain',
-          'STORING START DATE'
-        );
+        cy.get('#table-header-estimatedSeedsIncoming').should('contain', 'ESTIMATED SEEDS INCOMING');
+        cy.get('#table-header-storageStartDate').should('contain', 'STORING START DATE');
         cy.get('#table-header-storageCondition').contains('STORAGE CONDITION');
         cy.get('#table-header-storageLocation').contains('STORAGE LOCATION');
-        cy.get('#table-header-storagePackets').contains(
-          'NUMBER OF STORAGE PACKETS'
-        );
+        cy.get('#table-header-storagePackets').contains('NUMBER OF STORAGE PACKETS');
         cy.get('#table-header-storageNotes').contains('NOTES');
-        cy.get('#table-header-latestViabilityPercent').contains(
-          'MOST RECENT % VIABILITY'
-        );
+        cy.get('#table-header-latestViabilityPercent').contains('MOST RECENT % VIABILITY');
       });
 
       it('Viability Summary', () => {
@@ -173,38 +157,18 @@ describe('Database', () => {
         cy.get('#table-header-state').contains('STAGE');
         cy.get('#table-header-species').contains('SPECIES');
         cy.get('#table-header-collectedDate').contains('COLLECTED DATE');
-        cy.get('#table-header-germinationTestType').contains(
-          'GERMINATION TEST TYPE'
-        );
+        cy.get('#table-header-germinationTestType').contains('GERMINATION TEST TYPE');
         cy.get('#table-header-germinationSeedType').contains('SEED TYPE');
-        cy.get('#table-header-germinationTreatment').contains(
-          'GERMINATION TREATMENT'
-        );
-        cy.get('#table-header-cutTestSeedsFilled').contains(
-          'NUMBER OF SEEDS FILLED'
-        );
+        cy.get('#table-header-germinationTreatment').contains('GERMINATION TREATMENT');
+        cy.get('#table-header-cutTestSeedsFilled').contains('NUMBER OF SEEDS FILLED');
         cy.get('#table-header-germinationTestNotes').contains('NOTES');
-        cy.get('#table-header-germinationSeedsSown').contains(
-          'NUMBER OF SEEDS SOWN'
-        );
-        cy.get('#table-header-germinationSeedsGerminated').contains(
-          'TOTAL OF SEEDS GERMINATED'
-        );
-        cy.get('#table-header-cutTestSeedsEmpty').contains(
-          'NUMBER OF SEEDS EMPTY'
-        );
-        cy.get('#table-header-germinationSubstrate').contains(
-          'GERMINATION SUBSTRATE'
-        );
-        cy.get('#table-header-germinationPercentGerminated').contains(
-          '% VIABILITY'
-        );
-        cy.get('#table-header-cutTestSeedsCompromised').contains(
-          'NUMBER OF SEEDS COMPROMISED'
-        );
-        cy.get('#table-header-latestViabilityPercent').contains(
-          'MOST RECENT % VIABILITY'
-        );
+        cy.get('#table-header-germinationSeedsSown').contains('NUMBER OF SEEDS SOWN');
+        cy.get('#table-header-germinationSeedsGerminated').contains('TOTAL OF SEEDS GERMINATED');
+        cy.get('#table-header-cutTestSeedsEmpty').contains('NUMBER OF SEEDS EMPTY');
+        cy.get('#table-header-germinationSubstrate').contains('GERMINATION SUBSTRATE');
+        cy.get('#table-header-germinationPercentGerminated').contains('% VIABILITY');
+        cy.get('#table-header-cutTestSeedsCompromised').contains('NUMBER OF SEEDS COMPROMISED');
+        cy.get('#table-header-latestViabilityPercent').contains('MOST RECENT % VIABILITY');
       });
 
       it('Germination Testing To Do', () => {
@@ -227,16 +191,10 @@ describe('Database', () => {
         cy.get('#table-header-collectedDate').contains('COLLECTED DATE');
         cy.get('#table-header-storageCondition').contains('STORAGE CONDITION');
         cy.get('#table-header-storageLocation').contains('STORAGE LOCATION');
-        cy.get('#table-header-storagePackets').contains(
-          'NUMBER OF STORAGE PACKETS'
-        );
+        cy.get('#table-header-storagePackets').contains('NUMBER OF STORAGE PACKETS');
         cy.get('#table-header-storageNotes').contains('NOTES');
-        cy.get('#table-header-germinationTestType').contains(
-          'GERMINATION TEST TYPE'
-        );
-        cy.get('#table-header-germinationStartDate').contains(
-          'GERMINATION START DATE'
-        );
+        cy.get('#table-header-germinationTestType').contains('GERMINATION TEST TYPE');
+        cy.get('#table-header-germinationStartDate').contains('GERMINATION START DATE');
       });
 
       it('Custom columns', () => {
@@ -259,18 +217,12 @@ describe('Database', () => {
         cy.get('#table-header > :nth-child(3)').contains('ACTIVE/INACTIVE');
         cy.get('#table-header > :nth-child(4)').contains('STAGE');
         cy.get('#table-header > :nth-child(5)').contains('COLLECTED DATE');
-        cy.get('#table-header > :nth-child(6)').contains(
-          'NUMBER OF STORAGE PACKETS'
-        );
+        cy.get('#table-header > :nth-child(6)').contains('NUMBER OF STORAGE PACKETS');
         cy.get('#table-header > :nth-child(7)').contains('STORAGE CONDITION');
         cy.get('#table-header > :nth-child(8)').contains('STORAGE LOCATION');
         cy.get('#table-header > :nth-child(9)').contains('NOTES');
-        cy.get('#table-header > :nth-child(10)').contains(
-          'GERMINATION TEST TYPE'
-        );
-        cy.get('#table-header > :nth-child(11)').contains(
-          'GERMINATION START DATE'
-        );
+        cy.get('#table-header > :nth-child(10)').contains('GERMINATION TEST TYPE');
+        cy.get('#table-header > :nth-child(11)').contains('GERMINATION START DATE');
         cy.get('#table-header > :nth-child(12)').contains('COLLECTOR');
         cy.get('#table-header > :nth-child(13)').contains('RARE');
       });
@@ -593,11 +545,8 @@ describe('Database', () => {
       // checking state list
       cy.get('#filter-state').click();
       cy.get('#filter-list-state').should('be.visible');
-      cy.get('#filter-list-state').children().should('have.length', 8);
-      cy.get('#filter-list-state .Mui-disabled .MuiCheckbox-root').should(
-        'have.length',
-        2
-      );
+      cy.get('#filter-list-state').children().should('have.length', 9);
+      cy.get('#filter-list-state .Mui-disabled .MuiCheckbox-root').should('have.length', 2);
       cy.get('#filter-list-state').type('{esc}');
       cy.get('#filter-list-state').should('not.exist');
 
@@ -614,10 +563,7 @@ describe('Database', () => {
       // re-checking state list
       cy.get('#filter-state').click();
       cy.get('#filter-list-state').should('be.visible');
-      cy.get('#filter-list-state .Mui-disabled .MuiCheckbox-root').should(
-        'have.length',
-        3
-      );
+      cy.get('#filter-list-state .Mui-disabled .MuiCheckbox-root').should('have.length', 3);
       cy.get('#filter-list-state').type('{esc}');
       cy.get('#filter-list-state').should('not.exist');
 
@@ -637,10 +583,7 @@ describe('Database', () => {
       // re-checking state list
       cy.get('#filter-state').click();
       cy.get('#filter-list-state').should('be.visible');
-      cy.get('#filter-list-state .Mui-disabled .MuiCheckbox-root').should(
-        'have.length',
-        7
-      );
+      cy.get('#filter-list-state .Mui-disabled .MuiCheckbox-root').should('have.length', 8);
       cy.get('#filter-list-state').type('{esc}');
       cy.get('#filter-list-state').should('not.exist');
     });
@@ -677,7 +620,7 @@ describe('Database', () => {
       cy.wait('@search');
 
       cy.get('#row1-active').contains('Active');
-      cy.get('#row1-state').contains('Dried');
+      cy.get('#row1-state').contains('Awaiting Check-In');
     });
 
     it('Should be able to sort by state, descending', () => {
@@ -686,11 +629,7 @@ describe('Database', () => {
       cy.wait('@search');
 
       cy.get('#row1-active').contains('Inactive');
-      cy.get('#row1').should(
-        'have.css',
-        'background-color',
-        'rgb(248, 249, 250)'
-      );
+      cy.get('#row1').should('have.css', 'background-color', 'rgb(248, 249, 250)');
       cy.get('#row1-state').contains('Withdrawn');
       cy.get('#row5-species').contains('Dogwood');
     });
@@ -758,7 +697,7 @@ describe('Database', () => {
     it('should handle the Pending navigation', () => {
       cy.visit('/accessions');
 
-      cy.get('#row3-state').contains('Pending');
+      cy.get('#row10-state').contains('Pending');
       cy.get('#row3')
         .click()
         .url()
