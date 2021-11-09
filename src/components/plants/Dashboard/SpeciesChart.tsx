@@ -33,6 +33,7 @@ export default function SpeciesChart({ isFullscreen }: Props): JSX.Element {
     }
     if (ctx) {
       ctx.canvas.height = isFullscreen ? 70 : 200;
+      // @ts-ignore
       currentChartRef.current = new Chart(ctx, {
         type: 'bar',
         data: {

@@ -3,9 +3,6 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 import HelpIcon from '@material-ui/icons/Help';
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import projectIdSelector from 'src/state/selectors/plants/projectId';
-import projectsSelector from 'src/state/selectors/plants/projects';
 import strings from 'src/strings';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import ErrorBoundary from '../ErrorBoundary';
@@ -13,6 +10,7 @@ import Dropdown from './common/Dropdown';
 import NotificationsDropdown from './NotificationsDropdown';
 import SearchBar from './SearchBar';
 import UserMenu from './UserMenu';
+import { Project } from '../types/Organization';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -50,7 +48,14 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-export default function NavBar(): JSX.Element | null {
+type TopBarProps = {
+  projects: Project[],
+  currProjectId?: number,
+  setCurrProjectId: CallableFunction,
+};
+
+export default function TopBar(props: TopBarProps): JSX.Element | null {
+  const {projects, currProjectId, setCurrProjectId} = props;
   const classes = useStyles();
   const location = useStateLocation();
 
@@ -61,7 +66,16 @@ export default function NavBar(): JSX.Element | null {
           <Grid item>
             <ErrorBoundary>
               <React.Suspense fallback={strings.LOADING}>
-                <ProjectsDropdown />
+                <Dropdown
+                  label={strings.PROJECTS}
+                  id='projects'
+                  values={projects.map((project) => ({
+                    value: project.id?.toString() ?? '',
+                    label: project.name,
+                  }))}
+                  onChange={(id, value) => setCurrProjectId(parseInt(value, 10))}
+                  selected={currProjectId?.toString() ?? ''}
+                />
               </React.Suspense>
             </ErrorBoundary>
           </Grid>
@@ -87,31 +101,5 @@ export default function NavBar(): JSX.Element | null {
         </Grid>
       </Toolbar>
     </AppBar>
-  );
-}
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function ProjectsDropdown(): JSX.Element {
-  const projects = useRecoilValue(projectsSelector);
-  const [projectId, setProjectId] = useRecoilState(projectIdSelector);
-
-  React.useEffect(() => {
-    if (projects && !projectId) {
-      const firstProject = projects[0];
-      setProjectId(firstProject.id);
-    }
-  }, [projects, projectId, setProjectId]);
-
-  return (
-    <Dropdown
-      label={strings.PROJECTS}
-      id='projects'
-      values={projects?.map((value) => ({
-        value: value.id?.toString() ?? '',
-        label: value.name,
-      }))}
-      onChange={(id, value) => setProjectId(parseInt(value, 10))}
-      selected={projectId?.toString() ?? ''}
-    />
   );
 }

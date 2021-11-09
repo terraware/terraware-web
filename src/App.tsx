@@ -1,20 +1,10 @@
 /* eslint-disable import/no-webpack-loader-syntax */
-import {
-  createStyles,
-  CssBaseline,
-  makeStyles,
-  ThemeProvider,
-} from '@material-ui/core';
+import {createStyles, CssBaseline, makeStyles, ThemeProvider,} from '@material-ui/core';
 import mapboxgl from 'mapbox-gl';
-import React from 'react';
-import {
-  BrowserRouter as Router,
-  Redirect,
-  Route,
-  Switch,
-} from 'react-router-dom';
-import { RecoilRoot } from 'recoil';
-import AppBar from './components/AppBar';
+import React, {useEffect, useState} from 'react';
+import {BrowserRouter as Router, Redirect, Route, Switch,} from 'react-router-dom';
+import {RecoilRoot} from 'recoil';
+import TopBar from './components/TopBar';
 import NavBar from './components/NavBar';
 import AllPlants from './components/plants/AllPlants';
 import Dashboard from './components/plants/Dashboard';
@@ -29,6 +19,8 @@ import ErrorBoundary from './ErrorBoundary';
 import strings from './strings';
 import theme from './theme';
 import useTimer from './utils/useTimer';
+import getOrganization, {GetOrganizationResponse, OrgRequestError} from './api/organization/organization';
+import {Organization} from './types/Organization';
 
 // @ts-ignore
 mapboxgl.workerClass =
@@ -59,9 +51,46 @@ const useStyles = makeStyles(() =>
   })
 );
 
+const emptyOrg: Organization = {
+  projects: [],
+  sites: [],
+  facilities: [],
+  layers: [],
+};
+
 function AppContent() {
   const classes = useStyles();
   useTimer();
+
+  const [organization, setOrganization] = useState<Organization>(emptyOrg);
+  const [organizationErrors, setOrganizationErrors] = useState<OrgRequestError[]>([]);
+  // Temporary state used to populate the Projects dropdown. Unclear if this state will live here
+  // after the refactor is finished.
+  const [currProjectId, setCurrProjectId] = useState<number>();
+
+  useEffect(() => {
+    const populateOrganizationData = async () => {
+      const response: GetOrganizationResponse = await getOrganization();
+      if (response.errors.length > 0) {
+        setOrganizationErrors(response.errors);
+      }
+      setOrganization(response.organization);
+      // Temporary way to choose default project for Projects dropdown.
+      if (response.organization.projects.length > 0) {
+        setCurrProjectId(response.organization.projects[0].id);
+      }
+    };
+
+    populateOrganizationData();
+  }, []);
+
+  // Temporary error UI. Will be made prettier once we have input from the Design Team.
+  if (organizationErrors.includes(OrgRequestError.ErrorFetchingProjectsOrSites)) {
+    return <h1>Whoops! Looks like an unrecoverable internal error when fetching projects and/or sites</h1>;
+  } else if (organizationErrors.includes(OrgRequestError.NoProjects) ||
+             organizationErrors.includes(OrgRequestError.NoSites)) {
+    return <h1>You don't have access to any projects and/or sites!</h1>;
+  }
 
   return (
     <>
@@ -72,7 +101,8 @@ function AppContent() {
           <NavBar />
         </div>
         <div className={classes.content}>
-          <AppBar />
+          {/* Also temporary since projects dropdown will probably not continue to live in the top nav bar. */}
+          <TopBar projects={organization.projects} currProjectId={currProjectId} setCurrProjectId={setCurrProjectId}/>
           <ErrorBoundary>
             <Switch>
               <Route exact path='/'>
@@ -80,11 +110,10 @@ function AppContent() {
               </Route>
               <Route exact path='/dashboard' component={Dashboard} />
               <Route exact path='/plants' component={AllPlants} />
-              <Route exact path='/species' component={Species} />
+              <Route path='/species' component={Species} />
               <Route path='/accessions/new' component={NewAccession} />
               <Route path='/accessions/:accessionId' component={Accession} />
               <Route path='/accessions' component={Database} />
-              <Route path='/species' component={Species} />
               <Route path='/help' component={Help} />
               <Route exact path='/summary' component={Summary} />
             </Switch>
