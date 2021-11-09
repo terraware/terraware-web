@@ -17,8 +17,8 @@
 // ***********************************************************
 
 // Import commands.js using ES2015 syntax:
-import './commands';
 import '@cypress/code-coverage/support';
+import './commands';
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
@@ -34,16 +34,16 @@ declare global {
   // eslint-disable-next-line
   namespace Cypress {
     interface Chainable {
-      interrupt: () => void
+      interrupt: () => void;
     }
   }
 }
 
 function abortEarly() {
   if (this.currentTest.state === 'failed') {
-    return cy.task('shouldSkip', true)
+    return cy.task('shouldSkip', true);
   }
-  cy.task('shouldSkip').then(value => {
-    if (value) return cy.interrupt()
-  })
+  cy.task('shouldSkip').then((value) => {
+    if (value) return cy.interrupt();
+  });
 }
