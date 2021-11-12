@@ -10,7 +10,7 @@ import PlantMap from './PlantMap';
 import SpeciesSummaryChart from './SpeciesSummaryChart';
 import SummaryCell from './SummaryCell';
 import {Organization} from 'src/types/Organization';
-import {getPlantsForMultipleLayers, getPlantSummariesByLayer} from 'src/api/plants2/plants';
+import {getPlantsForMultipleLayers, getPlantSummariesByLayer} from 'src/api/plants/plants';
 import {getAllSpecies} from 'src/api/species/species';
 import {Plant, PlantErrorByLayerId, PlantSummariesByLayerId} from 'src/types/Plant';
 import {SpeciesById} from 'src/types/Species';

@@ -6,8 +6,8 @@ import {BrowserRouter as Router, Redirect, Route, Switch,} from 'react-router-do
 import {RecoilRoot} from 'recoil';
 import TopBar from './components/TopBar';
 import NavBar from './components/NavBar';
-import PlantList from './components/plants/PlantsList';
-import PlantDashboard from './components/plants/PlantsDashboard';
+import PlantList from './components/plants/PlantList';
+import PlantDashboard from './components/plants/PlantDashboard';
 import Species from './components/plants/Species';
 import Accession from './components/seeds/accession';
 import Database from './components/seeds/database';

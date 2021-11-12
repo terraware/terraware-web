@@ -4,7 +4,7 @@ import {
   getPlantSummariesByLayer,
   getPlantSummary,
   putPlant
-} from 'src/api/plants2/plants';
+} from 'src/api/plants/plants';
 import {
   Coordinate,
   Plant,

@@ -13,7 +13,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React, { useState } from 'react';
-import { deletePlant, putPlant } from 'src/api/plants2/plants';
+import { deletePlant, putPlant } from 'src/api/plants/plants';
 import { createSpecies } from 'src/api/species/species';
 import Button from 'src/components/common/button/Button';
 import DialogCloseButton from 'src/components/common/DialogCloseButton';

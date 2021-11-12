@@ -16,8 +16,8 @@ import EditPlantModal from '../EditPlantModal';
 import PlantFilterBar from './PlantFilterBar';
 import PlantListContent from './PlantListContent';
 import { getAllSpecies } from 'src/api/species/species';
-import { getPlantsForMultipleLayers } from 'src/api/plants2/plants';
-import { getPlantPhoto } from 'src/api/plants2/photo';
+import { getPlantsForMultipleLayers } from 'src/api/plants/plants';
+import { getPlantPhoto } from 'src/api/plants/photo';
 import { Plant, PlantSearchOptions } from 'src/types/Plant';
 import { SpeciesById } from 'src/types/Species';
 import { Organization } from 'src/types/Organization';
@@ -52,7 +52,7 @@ export default function PlantList(props: PlantListProps): JSX.Element {
   const organization = props.organization;
   const [speciesById, setSpeciesById] = useState<SpeciesById>(new Map());
   const [plants, setPlants] = useState<Plant[]>([]);
-  const [filters2, setFilters2] = useState<PlantSearchOptions>();
+  const [filters, setFilters] = useState<PlantSearchOptions>();
   const [selectedPlant, setSelectedPlant] = useState<Plant>();
   const [selectedPlantPhoto, setSelectedPlantPhoto] = useState<string>();
   const [showFilters, setShowFilters] = useState(false);
@@ -69,7 +69,7 @@ export default function PlantList(props: PlantListProps): JSX.Element {
 
     const populatePlants = async () => {
       const layerIds = organization.plantLayers.map((layer) => layer.id);
-      const plantsResponse = await getPlantsForMultipleLayers(layerIds, filters2);
+      const plantsResponse = await getPlantsForMultipleLayers(layerIds, filters);
       // TODO display errors to client
       if (plantsResponse.plantErrorByLayerId.size === 0) {
         setPlants(Array.from(plantsResponse.plantsByLayerId.values()).flat());
@@ -79,7 +79,7 @@ export default function PlantList(props: PlantListProps): JSX.Element {
     populateSpecies();
     populatePlants();
 
-  }, [organization, filters2]);
+  }, [organization, filters]);
 
   useEffect(() => {
     fetchPlantsAndSpecies();
@@ -158,8 +158,8 @@ export default function PlantList(props: PlantListProps): JSX.Element {
           </Grid>
           {showFilters &&
             <PlantFilterBar speciesNames={getSpeciesNames()}
-                            onApplyFilters={setFilters2}
-                            onClearFilters={() => setFilters2(undefined)}/>
+                            onApplyFilters={setFilters}
+                            onClearFilters={() => setFilters(undefined)}/>
           }
           <Grid item xs={1} />
           <Grid item xs={10}>

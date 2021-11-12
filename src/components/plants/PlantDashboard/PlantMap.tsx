@@ -21,7 +21,7 @@ import EditPlantModal from '../EditPlantModal';
 import DisplayPhoto from '../DisplayPhoto';
 import { Plant } from 'src/types/Plant';
 import { SpeciesById } from 'src/types/Species';
-import { getPlantPhoto } from 'src/api/plants2/photo';
+import { getPlantPhoto } from 'src/api/plants/photo';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
