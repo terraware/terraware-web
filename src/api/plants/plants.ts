@@ -9,7 +9,6 @@ import {
   PlantSummary,
 } from 'src/types/Plant';
 import addQueryParams from 'src/api/addQueryParams';
-import {SpeciesById} from 'src/types/Species';
 
 /*
  * All functions in this module ALWAYS return a promise that resolves. Any errors will be caught and

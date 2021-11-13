@@ -244,7 +244,7 @@ function PlantMap(props: PlantMapProps): JSX.Element {
                 id='feature-species-name'
               >
                 {selectedPlant.speciesId
-                  ? speciesById.get(selectedPlant.speciesId)?. name ?? strings.OTHER
+                  ? speciesById.get(selectedPlant.speciesId)?.name ?? strings.OTHER
                   : strings.OTHER}
               </Typography>
               <Typography
