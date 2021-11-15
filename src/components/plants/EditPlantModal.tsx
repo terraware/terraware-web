@@ -83,8 +83,7 @@ export default function EditPlantModal(props: EditPlantModalProps): JSX.Element 
   });
 
   const handleTypingNewSpecies = (id: string, value: unknown) => {
-    // @ts-ignore
-    setNewSpeciesName(value.toString());
+    setNewSpeciesName(value as string);
   };
 
   const handleSelectExistingSpecies = (event: React.ChangeEvent<HTMLInputElement>) => {
