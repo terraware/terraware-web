@@ -35,7 +35,7 @@ Cookies.defaults = {
   secure: true,
 };
 
-export default function Summary(): JSX.Element {
+export default function SeedSummary(): JSX.Element {
   const classes = useStyles();
 
   const summaryResponse = useRecoilValueLoadable(summarySelector);

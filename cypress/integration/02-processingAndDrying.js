@@ -90,7 +90,7 @@ describe('Processing and Drying', () => {
   context('Summary End Results', () => {
     it('has the right summary results', () => {
       cy.intercept('GET', '/api/v1/seedbank/summary').as('summary');
-      cy.visit('/summary');
+      cy.visit('/seeds-summary');
       cy.wait('@summary');
 
       cy.get('#sessions-current').contains('5');

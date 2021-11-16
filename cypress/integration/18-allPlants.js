@@ -4,7 +4,8 @@
 describe('All plants', () => {
   beforeEach(() => {
     cy.visit('/');
-    cy.get('#plants').click().url().should('contain', '/plants');
+    cy.get('#plants').click().url().should('contain', '/plants-dashboard');
+    cy.get('#plants-list').click().url().should('contain', '/plants-list');
   });
 
   it('should render the data on the table', () => {
@@ -50,7 +51,7 @@ describe('All plants', () => {
 
   it('should edit species of a plant, creating a new species', () => {
     cy.get('#row1').click();
-    cy.get('#new-species-section #species').click().type('Acacia');
+    cy.get('#new-species-section').click().type('Acacia');
     cy.get('#saveSpecies').click();
 
     cy.get('#row1-species').should('contain', 'Acacia');

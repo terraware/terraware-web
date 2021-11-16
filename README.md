@@ -65,16 +65,28 @@ yarn lint
 
 ## Run End to End tests
 
-To run the test, execute the following command:
+Execute this command before each run of the end-to-end tests. This script does two things. #1 it downloads and start a Docker image for the terraware backend server and #2 it resets the state of the `terraware` database.
 
 ```shell
-yarn start:dev
-yarn cy
+yarn server:reset
 ```
-
-To run the tests and generate the report:
+Tip: if you want to save the contents of a `terraware` database that you're using for manual testing, you can dump the contents of that database and reload them later. You can also rename the existing database using the following commands.
 
 ```shell
+# connect to another local psql database that isn't terraware
+psql postgres
+# rename the existing terraware database to save it's contents
+ALTER DATABASE terraware RENAME TO terrawareTEMP;
+````
+
+To run the end-to-end tests:
+
+```shell
+# start the frontend server
+yarn start:dev
+# run the tests in interactive mode
+yarn cy
+# OR run the tests on the command line and generate a report
 yarn cy:run
 yarn e2e:report
 ```

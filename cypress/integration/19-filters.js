@@ -4,7 +4,8 @@
 describe('Filter plants', () => {
   beforeEach(() => {
     cy.visit('/');
-    cy.get('#plants').click().url().should('contain', '/plants');
+    cy.get('#plants').click().url().should('contain', '/plants-dashboard');
+    cy.get('#plants-list').click().url().should('contain', '/plants-list');
   });
 
   it('should filter by min_entered_time', () => {
@@ -57,24 +58,6 @@ describe('Filter plants', () => {
     cy.get('#all-plants-table .MuiTableBody-root .MuiTableRow-root').should(
       'have.length',
       2
-    );
-  });
-
-  it('should filter by notes and keep filter when navigating', () => {
-    cy.get('#show-filters').click();
-    cy.get('#notes').type('testing');
-    cy.get('#apply-filters').click();
-    cy.get('#all-plants-table .MuiTableBody-root .MuiTableRow-root').should(
-      'have.length',
-      1
-    );
-
-    cy.get('#speciesNb').click().url().should('contain', '/species');
-    cy.get('#plants').click().url().should('contain', '/plants');
-    cy.get('#notes').should('exist');
-    cy.get('#all-plants-table .MuiTableBody-root .MuiTableRow-root').should(
-      'have.length',
-      1
     );
   });
 });

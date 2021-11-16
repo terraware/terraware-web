@@ -11,7 +11,7 @@ import strings from 'src/strings';
 import Button from '../../common/button/Button';
 import Table from '../../common/table';
 import { TableColumnType } from '../../common/table/types';
-import EditSpeciesModal from './EditSpeciesModal';
+import SimpleSpeciesModal from './SimpleSpeciesModal';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -76,7 +76,7 @@ export default function Species(): JSX.Element {
 
   return (
     <main>
-      <EditSpeciesModal
+      <SimpleSpeciesModal
         open={editSpeciesModalOpen}
         onClose={onCloseEditSpeciesModal}
         value={selectedSpecies}

@@ -1,8 +1,4 @@
 import { useHistory, useRouteMatch } from 'react-router-dom';
-import { useResetRecoilState } from 'recoil';
-import { plantsSelector } from 'src/state/selectors/plants/plants';
-import { plantsFeaturesSelector } from 'src/state/selectors/plants/plantsFeatures';
-import { plantsFilteredSelector } from 'src/state/selectors/plants/plantsFiltered';
 import strings from 'src/strings';
 import Navbar from './common/Navbar/Navbar';
 import NavItem from './common/Navbar/NavItem';
@@ -12,32 +8,15 @@ import SubNavbar from './common/Navbar/SubNavbar';
 export default function NavBar(): JSX.Element | null {
   const history = useHistory();
 
-  const isDashboardRoute = useRouteMatch('/dashboard/');
-  const isSpeciesRoute = useRouteMatch('/species/');
-  const isPlantsRoute = useRouteMatch('/plants/');
+  const isHomeRoute = useRouteMatch('/home');
+  const isAccessionSummaryRoute = useRouteMatch('/seeds-summary');
   const isAccessionsRoute = useRouteMatch('/accessions/');
-  const isSummaryRoute = useRouteMatch('/summary/');
-  const resetplants = useResetRecoilState(plantsSelector);
-  const resetplantsFiltered = useResetRecoilState(
-    plantsFilteredSelector
-  );
-  const resetplantsFeatures = useResetRecoilState(
-    plantsFeaturesSelector
-  );
+  const isPlantDashboardRoute = useRouteMatch('/plants-dashboard');
+  const isPlantListRoute = useRouteMatch('/plants-list');
+  const isSpeciesRoute = useRouteMatch('/species');
 
   const navigate = (url: string) => {
     history.push(url);
-  };
-
-  const navigateToDashboard = () => {
-    resetplants();
-    navigate('/dashboard');
-  };
-
-  const navigateToAllPlants = () => {
-    resetplantsFeatures();
-    resetplantsFiltered();
-    navigate('/plants');
   };
 
   return (
@@ -45,8 +24,8 @@ export default function NavBar(): JSX.Element | null {
       <NavItem
         label='Home'
         icon='home'
-        selected={isDashboardRoute ? true : false}
-        onClick={() => navigateToDashboard()}
+        selected={isHomeRoute ? true : false}
+        onClick={() => navigate('/home')}
         id='dashboard'
       />
       <NavSection title={strings.FLORA} />
@@ -54,13 +33,13 @@ export default function NavBar(): JSX.Element | null {
         label='Seeds'
         icon='seeds'
         id='seeds'
-        onClick={() => navigate('/summary')}
+        onClick={() => !isAccessionSummaryRoute && navigate('/seeds-summary')}
       >
         <SubNavbar>
           <NavItem
             label='Summary'
-            selected={isSummaryRoute ? true : false}
-            onClick={() => navigate('/summary')}
+            selected={isAccessionSummaryRoute ? true : false}
+            onClick={() => !isAccessionSummaryRoute && navigate('/seeds-summary')}
             id='summary'
           />
           <NavItem
@@ -72,12 +51,30 @@ export default function NavBar(): JSX.Element | null {
         </SubNavbar>
       </NavItem>
       <NavItem
-        label={strings.ALL_PLANTS}
+        label={strings.PLANTS}
         icon='restorationSite'
-        selected={isPlantsRoute ? true : false}
-        onClick={() => navigateToAllPlants()}
+        onClick={() => !isPlantDashboardRoute && navigate('/plants-dashboard')}
         id='plants'
-      />
+      >
+        <SubNavbar>
+          <NavItem
+            label={strings.DASHBOARD}
+            selected={isPlantDashboardRoute ? true : false}
+            onClick={() => !isPlantDashboardRoute &&  navigate('/plants-dashboard')}
+            id='dashboard'
+          />
+
+          <NavItem
+            label={strings.PLANTS_LIST}
+            selected={isPlantListRoute ? true : false}
+            onClick={() => navigate('/plants-list')}
+            id='plants-list'
+          />
+
+        </SubNavbar>
+      </NavItem>
+
+
       <NavItem
         label={strings.SPECIES}
         icon='species'

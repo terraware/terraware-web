@@ -1,0 +1,179 @@
+import { Table, TableBody, TableContainer, TableRow } from '@material-ui/core';
+import Container from '@material-ui/core/Container';
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
+import { createStyles, makeStyles } from '@material-ui/core/styles';
+import React, {useCallback, useEffect, useState} from 'react';
+import ErrorBoundary from 'src/ErrorBoundary';
+import strings from 'src/strings';
+import PlantMap from './PlantMap';
+import SpeciesSummaryChart from './SpeciesSummaryChart';
+import SummaryCell from './SummaryCell';
+import {Organization} from 'src/types/Organization';
+import {getPlantsForMultipleLayers, getPlantSummariesByLayer} from 'src/api/plants/plants';
+import {getAllSpecies} from 'src/api/species/species';
+import {Plant, PlantSummariesByLayerId} from 'src/types/Plant';
+import {SpeciesById} from 'src/types/Species';
+import getColorsBySpeciesId from 'src/api/species/getColorsBySpeciesId';
+
+const useStyles = makeStyles((theme) =>
+  createStyles({
+    mainContainer: {
+      paddingTop: theme.spacing(4),
+      paddingBottom: theme.spacing(4),
+    },
+    map: {
+      width: '100%',
+      height: '400px',
+    },
+    mapContainer: {
+      paddingTop: theme.spacing(5),
+    },
+  })
+);
+
+export type PlantDashboardProps = {
+  organization: Organization;
+};
+
+export default function PlantDashboard(props: PlantDashboardProps): JSX.Element {
+  const classes = useStyles();
+  const {organization} = props;
+  const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
+  const [plants, setPlants] = useState<Plant[]>([]);
+  const [speciesById, setSpeciesById] = useState<SpeciesById>(new Map());
+  const [colorsBySpeciesId, setColorsBySpeciesId] = useState<Record<number, string>>({});
+  const [plantSummariesByLayerId, setPlantSummariesByLayerId] = useState<PlantSummariesByLayerId>(new Map());
+
+  const onFullscreenHandler = () => {
+    setIsFullscreen(!isFullscreen);
+  };
+
+  const reloadData = useCallback(() => {
+    const populateSpecies = async () => {
+      const speciesResponse = await getAllSpecies();
+      if (speciesResponse.requestSucceeded) {
+        setSpeciesById(speciesResponse.speciesById);
+        const speciesIds: number[] = Array.from(speciesResponse.speciesById.keys());
+        setColorsBySpeciesId(getColorsBySpeciesId(speciesIds));
+      }
+    };
+
+    const populatePlants = async () => {
+      const layerIds = organization.plantLayers.map((layer) => layer.id);
+      const plantsResponse = await getPlantsForMultipleLayers(layerIds);
+      if (plantsResponse.plantErrorByLayerId.size === 0) {
+        setPlants(Array.from(plantsResponse.plantsByLayerId.values()).flat());
+      }
+      // TODO handle error fetching plant data
+    };
+
+    const populatePlantSummaries = async() => {
+      const summaryResponse = await getPlantSummariesByLayer(organization.plantLayers.map((layer) => (layer.id)));
+      // TODO handle error fetching plant summary data
+      if (summaryResponse.plantErrorByLayerId.size === 0) {
+        setPlantSummariesByLayerId(summaryResponse.plantSummariesByLayerId);
+      }
+    };
+
+    populateSpecies();
+    populatePlants();
+    populatePlantSummaries();
+  }, [organization]);
+
+  useEffect(() => {
+    reloadData();
+  }, [reloadData]);
+
+  return (
+    <main>
+      <Container maxWidth={false} className={classes.mainContainer}>
+        <Grid container spacing={3}>
+          <Grid item xs={isFullscreen ? 12 : 6}>
+            <React.Suspense fallback={strings.LOADING}>
+              <PlantMap
+                onFullscreen={onFullscreenHandler}
+                isFullscreen={isFullscreen}
+                plants={plants}
+                speciesById={speciesById}
+                colorsBySpeciesId={colorsBySpeciesId}
+                reloadData={reloadData}
+              />
+            </React.Suspense>
+          </Grid>
+          <Grid item xs={isFullscreen ? 12 : 6}>
+            <Grid container>
+              <Grid item xs={12}>
+                <TableContainer component={Paper}>
+                  <Table aria-label='simple table'>
+                    <TableBody>
+                      <ErrorBoundary>
+                        <React.Suspense fallback={strings.LOADING}>
+                          <SummaryCount summary={plantSummariesByLayerId}/>
+                        </React.Suspense>
+                      </ErrorBoundary>
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </Grid>
+              <Grid item xs={12}>
+                <Paper className={classes.mapContainer}>
+                  <ErrorBoundary>
+                    <React.Suspense fallback={strings.LOADING}>
+                      <SpeciesSummaryChart plantSummariesByLayerId={plantSummariesByLayerId}
+                                           speciesById={speciesById}
+                                           colorsBySpeciesId={colorsBySpeciesId}
+                                           isFullscreen={isFullscreen} />
+                    </React.Suspense>
+                  </ErrorBoundary>
+                </Paper>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
+      </Container>
+    </main>
+  );
+}
+
+type SummaryCountProps = {
+  summary: PlantSummariesByLayerId;
+};
+
+function SummaryCount(props: SummaryCountProps): JSX.Element {
+  let lastWeekSpeciesCount = 0;
+  let lastWeekPlantsCount = 0;
+  let thisWeekSpeciesCount = 0;
+  let thisWeekPlantsCount = 0;
+
+  props.summary.forEach((plantSummaries) => {
+    plantSummaries.lastWeek?.forEach((plantSummary) => {
+      if (plantSummary.speciesId !== -1) {
+        lastWeekSpeciesCount += 1;
+      }
+      lastWeekPlantsCount += plantSummary.numPlants;
+    });
+    plantSummaries.thisWeek?.forEach((plantSummary) => {
+      if (plantSummary.speciesId !== -1) {
+        thisWeekSpeciesCount += 1;
+      }
+      thisWeekPlantsCount += plantSummary.numPlants;
+    });
+  });
+
+  return (
+    <TableRow>
+      <SummaryCell
+        title={strings.PLANTS}
+        current={thisWeekPlantsCount}
+        lastWeek={lastWeekPlantsCount}
+      />
+      <SummaryCell
+        title={strings.SPECIES}
+        current={thisWeekSpeciesCount}
+        lastWeek={lastWeekSpeciesCount}
+      />
+    </TableRow>
+  );
+}
+
