@@ -4,221 +4,216 @@
  */
 
 export interface paths {
-  '/api/v1/devices': {
-    post: operations['createDevice'];
+  "/api/v1/devices": {
+    post: operations["createDevice"];
   };
-  '/api/v1/devices/{id}': {
-    get: operations['getDevice'];
-    put: operations['updateDevice'];
+  "/api/v1/devices/{id}": {
+    get: operations["getDevice"];
+    put: operations["updateDevice"];
   };
-  '/api/v1/facility': {
+  "/api/v1/facility": {
     /** List all the facilities the current user can access. */
-    get: operations['listAllFacilities'];
+    get: operations["listAllFacilities"];
   };
-  '/api/v1/facility/{facilityId}': {
-    get: operations['getFacility'];
+  "/api/v1/facility/{facilityId}": {
+    get: operations["getFacility"];
   };
-  '/api/v1/facility/{facilityId}/alert/send': {
-    post: operations['sendFacilityAlert'];
+  "/api/v1/facility/{facilityId}/devices": {
+    get: operations["listFacilityDevices"];
   };
-  '/api/v1/facility/{facilityId}/automations': {
-    get: operations['listAutomations'];
-    post: operations['createAutomation'];
+  "/api/v1/gis/features": {
+    post: operations["create_4"];
   };
-  '/api/v1/facility/{facilityId}/automations/{automationId}': {
-    get: operations['getAutomation'];
-    put: operations['updateAutomation'];
-    delete: operations['deleteAutomation'];
+  "/api/v1/gis/features/list/{layerId}": {
+    get: operations["list_1"];
   };
-  '/api/v1/facility/{facilityId}/devices': {
-    get: operations['listFacilityDevices'];
+  "/api/v1/gis/features/{featureId}": {
+    get: operations["read_2"];
+    put: operations["update_4"];
+    delete: operations["delete_1"];
   };
-  '/api/v1/gis/features': {
-    post: operations['create_4'];
+  "/api/v1/gis/features/{featureId}/photos": {
+    get: operations["listFeaturePhotos"];
+    post: operations["createFeaturePhoto"];
   };
-  '/api/v1/gis/features/list/{layerId}': {
-    get: operations['list_1'];
-  };
-  '/api/v1/gis/features/{featureId}': {
-    get: operations['read_2'];
-    put: operations['update_4'];
-    delete: operations['delete_1'];
-  };
-  '/api/v1/gis/features/{featureId}/photos': {
-    get: operations['listFeaturePhotos'];
-    post: operations['createFeaturePhoto'];
-  };
-  '/api/v1/gis/features/{featureId}/photos/{photoId}': {
+  "/api/v1/gis/features/{featureId}/photos/{photoId}": {
     /** Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio. */
-    get: operations['downloadFeaturePhoto'];
-    delete: operations['deleteFeaturePhoto'];
+    get: operations["downloadFeaturePhoto"];
+    delete: operations["deleteFeaturePhoto"];
   };
-  '/api/v1/gis/features/{featureId}/photos/{photoId}/metadata': {
-    get: operations['getFeaturePhotoMetadata'];
+  "/api/v1/gis/features/{featureId}/photos/{photoId}/metadata": {
+    get: operations["getFeaturePhotoMetadata"];
   };
-  '/api/v1/gis/layers': {
-    post: operations['create_3'];
+  "/api/v1/gis/layers": {
+    post: operations["create_3"];
   };
-  '/api/v1/gis/layers/list/{siteId}': {
-    get: operations['list'];
+  "/api/v1/gis/layers/list/{siteId}": {
+    get: operations["list"];
   };
-  '/api/v1/gis/layers/{layerId}': {
-    get: operations['read_1'];
-    put: operations['update_3'];
-    delete: operations['delete'];
+  "/api/v1/gis/layers/{layerId}": {
+    get: operations["read_1"];
+    put: operations["update_3"];
+    delete: operations["delete"];
   };
-  '/api/v1/gis/plant_observations': {
-    post: operations['create_2'];
+  "/api/v1/gis/plant_observations": {
+    post: operations["create_2"];
   };
-  '/api/v1/gis/plant_observations/list/{featureId}': {
-    get: operations['getList'];
+  "/api/v1/gis/plant_observations/list/{featureId}": {
+    get: operations["getList"];
   };
-  '/api/v1/gis/plant_observations/{plantObservationId}': {
-    get: operations['get_1'];
-    put: operations['update_2'];
+  "/api/v1/gis/plant_observations/{plantObservationId}": {
+    get: operations["get_1"];
+    put: operations["update_2"];
   };
-  '/api/v1/gis/plants': {
-    post: operations['create_1'];
+  "/api/v1/gis/plants": {
+    post: operations["create_1"];
   };
-  '/api/v1/gis/plants/list/summary/{layerId}': {
-    get: operations['getPlantSummary'];
+  "/api/v1/gis/plants/list/summary/{layerId}": {
+    get: operations["getPlantSummary"];
   };
-  '/api/v1/gis/plants/list/{layerId}': {
-    get: operations['getPlantsList'];
+  "/api/v1/gis/plants/list/{layerId}": {
+    get: operations["getPlantsList"];
   };
-  '/api/v1/gis/plants/{featureId}': {
-    get: operations['get'];
-    put: operations['update_1'];
+  "/api/v1/gis/plants/{featureId}": {
+    get: operations["get"];
+    put: operations["update_1"];
   };
-  '/api/v1/login': {
+  "/api/v1/login": {
     /** For interactive web applications, this can be used to redirect the user to a login page to allow the application to make other API requests. The login process will set a cookie that will authenticate to the API, and will then redirect back to the application. One approach is to use this in error response handlers: if an API request returns HTTP 401 Unauthorized, set location.href to this endpoint and set "redirect" to the URL of the page the user was on so they'll return there after logging in. */
-    get: operations['login'];
+    get: operations["login"];
   };
-  '/api/v1/organization': {
+  "/api/v1/organization": {
     /** List all organizations the user can access. */
-    get: operations['listAll_1'];
+    get: operations["listAll_1"];
   };
-  '/api/v1/organizations/{organizationId}/projects': {
+  "/api/v1/organizations/{organizationId}/projects": {
     /** Only projects that are accessible by the current user are included. */
-    get: operations['listOrganizationProjects'];
+    get: operations["listOrganizationProjects"];
   };
-  '/api/v1/projects': {
-    get: operations['listAllProjects'];
-    post: operations['createProject'];
+  "/api/v1/projects": {
+    get: operations["listAllProjects"];
+    post: operations["createProject"];
   };
-  '/api/v1/projects/{id}': {
-    get: operations['getProject'];
-    put: operations['updateProject'];
+  "/api/v1/projects/{id}": {
+    get: operations["getProject"];
+    put: operations["updateProject"];
   };
-  '/api/v1/projects/{projectId}/sites': {
-    get: operations['listProjectSites'];
+  "/api/v1/projects/{projectId}/sites": {
+    get: operations["listProjectSites"];
   };
-  '/api/v1/seedbank/accession': {
-    post: operations['create'];
+  "/api/v1/seedbank/accession": {
+    post: operations["create"];
   };
-  '/api/v1/seedbank/accession/{id}': {
-    get: operations['read'];
-    put: operations['update'];
+  "/api/v1/seedbank/accession/{id}": {
+    get: operations["read"];
+    put: operations["update"];
   };
-  '/api/v1/seedbank/accession/{id}/checkIn': {
-    post: operations['checkIn'];
+  "/api/v1/seedbank/accession/{id}/checkIn": {
+    post: operations["checkIn"];
   };
-  '/api/v1/seedbank/accession/{id}/photo': {
-    get: operations['listPhotos'];
+  "/api/v1/seedbank/accession/{id}/photo": {
+    get: operations["listPhotos"];
   };
-  '/api/v1/seedbank/accession/{id}/photo/{photoFilename}': {
+  "/api/v1/seedbank/accession/{id}/photo/{photoFilename}": {
     /** Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio. */
-    get: operations['getPhoto'];
-    post: operations['uploadPhoto'];
+    get: operations["getPhoto"];
+    post: operations["uploadPhoto"];
   };
-  '/api/v1/seedbank/clock': {
+  "/api/v1/seedbank/clock": {
     /** In test environments, the clock can be advanced artificially, which will cause it to differ from the real-world date and time. */
-    get: operations['getCurrentTime'];
+    get: operations["getCurrentTime"];
   };
-  '/api/v1/seedbank/clock/advance': {
+  "/api/v1/seedbank/clock/advance": {
     /** Advancing the clock causes any scheduled processes to run. Subsequent GET requests to read the current time will take the advancement into account. Only supported in test and development environments. */
-    post: operations['advanceClock'];
+    post: operations["advanceClock"];
   };
-  '/api/v1/seedbank/log/{tag}': {
-    post: operations['recordLogMessage'];
+  "/api/v1/seedbank/log/{tag}": {
+    post: operations["recordLogMessage"];
   };
-  '/api/v1/seedbank/notification': {
-    get: operations['listAll'];
+  "/api/v1/seedbank/notification": {
+    get: operations["listAll"];
   };
-  '/api/v1/seedbank/notification/all/markRead': {
-    post: operations['markAllRead'];
+  "/api/v1/seedbank/notification/all/markRead": {
+    post: operations["markAllRead"];
   };
-  '/api/v1/seedbank/notification/all/markUnread': {
+  "/api/v1/seedbank/notification/all/markUnread": {
     /** For development and testing of notifications. Not available in production. */
-    post: operations['markAllUnread'];
+    post: operations["markAllUnread"];
   };
-  '/api/v1/seedbank/notification/{id}/markRead': {
-    post: operations['markRead'];
+  "/api/v1/seedbank/notification/{id}/markRead": {
+    post: operations["markRead"];
   };
-  '/api/v1/seedbank/search': {
-    post: operations['search'];
+  "/api/v1/seedbank/search": {
+    post: operations["search"];
   };
-  '/api/v1/seedbank/search/export': {
-    post: operations['export'];
+  "/api/v1/seedbank/search/export": {
+    post: operations["export"];
   };
-  '/api/v1/seedbank/summary/{facilityId}': {
-    get: operations['getSummary'];
+  "/api/v1/seedbank/summary/{facilityId}": {
+    get: operations["getSummary"];
   };
-  '/api/v1/seedbank/values': {
-    post: operations['listFieldValues'];
-  };
-  '/api/v1/seedbank/values/all': {
-    post: operations['listAllFieldValues'];
-  };
-  '/api/v1/seedbank/values/species': {
-    /** Use /api/v1/species instead. */
-    get: operations['listSpecies'];
-    /** Use /api/v1/species instead. */
-    post: operations['createSpecies'];
-  };
-  '/api/v1/seedbank/values/species/{id}': {
-    /** Use /api/v1/species instead. */
-    post: operations['updateSpecies'];
-  };
-  '/api/v1/seedbank/values/storageLocation/{facilityId}': {
-    get: operations['getStorageLocations'];
-  };
-  '/api/v1/sites': {
-    get: operations['listAllSites'];
-  };
-  '/api/v1/sites/{siteId}': {
-    get: operations['getSite'];
-  };
-  '/api/v1/species': {
-    get: operations['speciesList'];
-    post: operations['speciesCreate'];
-  };
-  '/api/v1/species/names': {
-    get: operations['speciesNamesListAll'];
-    post: operations['speciesNameCreate'];
-  };
-  '/api/v1/species/names/{speciesNameId}': {
-    /** Gets information about a single species name. */
-    get: operations['speciesNameGet'];
-    /** Updates one of the names of a species. */
-    put: operations['speciesNameUpdate'];
-    /** Deletes one of the secondary names of a species. */
-    delete: operations['speciesNameDelete'];
-  };
-  '/api/v1/species/{speciesId}': {
-    get: operations['speciesRead'];
-    put: operations['speciesUpdate'];
-    delete: operations['speciesDelete'];
-  };
-  '/api/v1/species/{speciesId}/names': {
-    get: operations['speciesNamesList'];
-  };
-  '/api/v1/timeseries/create': {
+  "/api/v1/seedbank/timeseries/create": {
     /** If there are existing timeseries with the same names, the old definitions will be overwritten. */
-    post: operations['createMultipleTimeseries'];
+    post: operations["createMultipleTimeseries"];
   };
-  '/api/v1/timeseries/values': {
-    post: operations['recordTimeseriesValues'];
+  "/api/v1/seedbank/timeseries/values": {
+    post: operations["recordTimeseriesValues_1"];
+  };
+  "/api/v1/seedbank/values": {
+    post: operations["listFieldValues"];
+  };
+  "/api/v1/seedbank/values/all": {
+    post: operations["listAllFieldValues"];
+  };
+  "/api/v1/seedbank/values/species": {
+    /** Use /api/v1/species instead. */
+    get: operations["listSpecies"];
+    /** Use /api/v1/species instead. */
+    post: operations["createSpecies"];
+  };
+  "/api/v1/seedbank/values/species/{id}": {
+    /** Use /api/v1/species instead. */
+    post: operations["updateSpecies"];
+  };
+  "/api/v1/seedbank/values/storageLocation/{facilityId}": {
+    get: operations["getStorageLocations"];
+  };
+  "/api/v1/sites": {
+    get: operations["listAllSites"];
+  };
+  "/api/v1/sites/{siteId}": {
+    get: operations["getSite"];
+  };
+  "/api/v1/species": {
+    get: operations["speciesList"];
+    post: operations["speciesCreate"];
+  };
+  "/api/v1/species/names": {
+    get: operations["speciesNamesListAll"];
+    post: operations["speciesNameCreate"];
+  };
+  "/api/v1/species/names/{speciesNameId}": {
+    /** Gets information about a single species name. */
+    get: operations["speciesNameGet"];
+    /** Updates one of the names of a species. */
+    put: operations["speciesNameUpdate"];
+    /** Deletes one of the secondary names of a species. */
+    delete: operations["speciesNameDelete"];
+  };
+  "/api/v1/species/{speciesId}": {
+    get: operations["speciesRead"];
+    put: operations["speciesUpdate"];
+    delete: operations["speciesDelete"];
+  };
+  "/api/v1/species/{speciesId}/names": {
+    get: operations["speciesNamesList"];
+  };
+  "/api/v1/timeseries/create": {
+    /** If there are existing timeseries with the same names, the old definitions will be overwritten. */
+    post: operations["createMultipleTimeseries_1"];
+  };
+  "/api/v1/timeseries/values": {
+    post: operations["recordTimeseriesValues"];
   };
 }
 
@@ -228,31 +223,31 @@ export interface components {
       /** Server-generated human-readable identifier for the accession. This is unique within a single seed bank, but different seed banks may have accessions with the same number. */
       accessionNumber: string;
       /** Server-calculated active indicator. This is based on the accession's state. */
-      active: 'Inactive' | 'Active';
+      active: "Inactive" | "Active";
       bagNumbers?: string[];
       checkedInTime?: string;
       collectedDate?: string;
-      deviceInfo?: components['schemas']['DeviceInfoPayload'];
+      deviceInfo?: components["schemas"]["DeviceInfoPayload"];
       cutTestSeedsCompromised?: number;
       cutTestSeedsEmpty?: number;
       cutTestSeedsFilled?: number;
       dryingEndDate?: string;
       dryingMoveDate?: string;
       dryingStartDate?: string;
-      endangered?: 'No' | 'Yes' | 'Unsure';
+      endangered?: "No" | "Yes" | "Unsure";
       environmentalNotes?: string;
       estimatedSeedCount?: number;
       facilityId: number;
       family?: string;
       fieldNotes?: string;
       founderId?: string;
-      geolocations?: components['schemas']['Geolocation'][];
-      germinationTests?: components['schemas']['GerminationTestPayload'][];
-      germinationTestTypes?: ('Lab' | 'Nursery')[];
+      geolocations?: components["schemas"]["Geolocation"][];
+      germinationTests?: components["schemas"]["GerminationTestPayload"][];
+      germinationTestTypes?: ("Lab" | "Nursery")[];
       /** Server-generated unique identifier for the accession. This is unique across all seed banks, but is not suitable for display to end users. */
       id: number;
       /** Initial size of accession. The units of this value must match the measurement type in "processingMethod". */
-      initialQuantity?: components['schemas']['SeedQuantityPayload'];
+      initialQuantity?: components["schemas"]["SeedQuantityPayload"];
       landowner?: string;
       latestGerminationTestDate?: string;
       latestViabilityPercent?: number;
@@ -260,25 +255,34 @@ export interface components {
       nurseryStartDate?: string;
       photoFilenames?: string[];
       primaryCollector?: string;
-      processingMethod?: 'Count' | 'Weight';
+      processingMethod?: "Count" | "Weight";
       processingNotes?: string;
       processingStaffResponsible?: string;
       processingStartDate?: string;
-      rare?: 'No' | 'Yes' | 'Unsure';
+      rare?: "No" | "Yes" | "Unsure";
       receivedDate?: string;
       /** Number or weight of seeds remaining for withdrawal and testing. Calculated by the server when the accession's total size is known. */
-      remainingQuantity?: components['schemas']['SeedQuantityPayload'];
+      remainingQuantity?: components["schemas"]["SeedQuantityPayload"];
       secondaryCollectors?: string[];
       siteLocation?: string;
       /** Which application this accession originally came from. This is currently based on the presence of the deviceInfo field. */
-      source?: 'Web' | 'SeedCollectorApp';
-      sourcePlantOrigin?: 'Wild' | 'Outplant';
+      source?: "Web" | "SeedCollectorApp";
+      sourcePlantOrigin?: "Wild" | "Outplant";
       species?: string;
       /** Server-generated unique ID of the species. */
       speciesId?: number;
       /** Server-calculated accession state. Can change due to modifications to accession data or based on passage of time. */
-      state: 'Awaiting Check-In' | 'Pending' | 'Processing' | 'Processed' | 'Drying' | 'Dried' | 'In Storage' | 'Withdrawn' | 'Nursery';
-      storageCondition?: 'Refrigerator' | 'Freezer';
+      state:
+        | "Awaiting Check-In"
+        | "Pending"
+        | "Processing"
+        | "Processed"
+        | "Drying"
+        | "Dried"
+        | "In Storage"
+        | "Withdrawn"
+        | "Nursery";
+      storageCondition?: "Refrigerator" | "Freezer";
       storageLocation?: string;
       storagePackets?: number;
       storageNotes?: string;
@@ -286,20 +290,20 @@ export interface components {
       storageStartDate?: string;
       subsetCount?: number;
       /** Weight of subset of seeds. Units must be a weight measurement, not "Seeds". */
-      subsetWeight?: components['schemas']['SeedQuantityPayload'];
-      targetStorageCondition?: 'Refrigerator' | 'Freezer';
+      subsetWeight?: components["schemas"]["SeedQuantityPayload"];
+      targetStorageCondition?: "Refrigerator" | "Freezer";
       /** Total quantity of all past withdrawals, including germination tests. */
-      totalPastWithdrawalQuantity?: components['schemas']['SeedQuantityPayload'];
+      totalPastWithdrawalQuantity?: components["schemas"]["SeedQuantityPayload"];
       /** Total quantity of scheduled withdrawals, not counting germination tests. */
-      totalScheduledNonTestQuantity?: components['schemas']['SeedQuantityPayload'];
+      totalScheduledNonTestQuantity?: components["schemas"]["SeedQuantityPayload"];
       /** Total quantity of scheduled withdrawals for germination tests. */
-      totalScheduledTestQuantity?: components['schemas']['SeedQuantityPayload'];
+      totalScheduledTestQuantity?: components["schemas"]["SeedQuantityPayload"];
       /** Total quantity of scheduled withdrawals, including germination tests. */
-      totalScheduledWithdrawalQuantity?: components['schemas']['SeedQuantityPayload'];
+      totalScheduledWithdrawalQuantity?: components["schemas"]["SeedQuantityPayload"];
       totalViabilityPercent?: number;
       /** Total quantity of all past and scheduled withdrawals, including germination tests. */
-      totalWithdrawalQuantity?: components['schemas']['SeedQuantityPayload'];
-      withdrawals?: components['schemas']['WithdrawalPayload'][];
+      totalWithdrawalQuantity?: components["schemas"]["SeedQuantityPayload"];
+      withdrawals?: components["schemas"]["WithdrawalPayload"][];
     };
     AdvanceClockRequestPayload: {
       days: number;
@@ -311,25 +315,15 @@ export interface components {
       partial: boolean;
     };
     /** Search criterion that matches results that meet all of a set of other search criteria. That is, if the list of children is x, y, and z, this will require x AND y AND z. */
-    AndNodePayload: components['schemas']['SearchNodePayload'] & {
-      children?: components['schemas']['SearchNodePayload'][];
+    AndNodePayload: components["schemas"]["SearchNodePayload"] & {
+      children?: components["schemas"]["SearchNodePayload"][];
     } & {
       children: unknown;
     };
-    AutomationPayload: {
-      id: number;
-      facilityId: number;
-      /** Short human-readable name of this automation. */
-      name: string;
-      /** Human-readable description of this automation. */
-      description?: string;
-      /** Client-defined configuration data for this automation. */
-      configuration?: { [key: string]: unknown };
-    };
     /** Coordinate reference system used for X and Y coordinates in this geometry. By default, coordinates are in WGS 84, with longitude and latitude in degrees. In that case, this element is not present. Otherwise, it specifies which coordinate system to use. */
     CRS: {
-      type: 'name';
-      properties: components['schemas']['CRSProperties'];
+      type: "name";
+      properties: components["schemas"]["CRSProperties"];
     };
     CRSProperties: {
       /** Name of the coordinate reference system. This must be in the form EPSG:nnnn where nnnn is the numeric identifier of a coordinate system in the EPSG dataset. The default is Longitude/Latitude EPSG:4326, which is the coordinate system +for GeoJSON. */
@@ -338,32 +332,28 @@ export interface components {
     CreateAccessionRequestPayload: {
       bagNumbers?: string[];
       collectedDate?: string;
-      deviceInfo?: components['schemas']['DeviceInfoPayload'];
-      endangered?: 'No' | 'Yes' | 'Unsure';
+      deviceInfo?: components["schemas"]["DeviceInfoPayload"];
+      endangered?: "No" | "Yes" | "Unsure";
       environmentalNotes?: string;
       facilityId?: number;
       family?: string;
       fieldNotes?: string;
       founderId?: string;
-      geolocations?: components['schemas']['Geolocation'][];
-      germinationTestTypes?: ('Lab' | 'Nursery')[];
+      geolocations?: components["schemas"]["Geolocation"][];
+      germinationTestTypes?: ("Lab" | "Nursery")[];
       landowner?: string;
       numberOfTrees?: number;
       primaryCollector?: string;
-      rare?: 'No' | 'Yes' | 'Unsure';
+      rare?: "No" | "Yes" | "Unsure";
       receivedDate?: string;
       secondaryCollectors?: string[];
       siteLocation?: string;
-      sourcePlantOrigin?: 'Wild' | 'Outplant';
+      sourcePlantOrigin?: "Wild" | "Outplant";
       species?: string;
     };
     CreateAccessionResponsePayload: {
-      accession: components['schemas']['AccessionPayload'];
-      status: components['schemas']['SuccessOrError'];
-    };
-    CreateAutomationResponsePayload: {
-      id: number;
-      status: components['schemas']['SuccessOrError'];
+      accession: components["schemas"]["AccessionPayload"];
+      status: components["schemas"]["SuccessOrError"];
     };
     CreateDeviceRequestPayload: {
       /** Identifier of facility where this device is located. */
@@ -393,7 +383,7 @@ export interface components {
       capturedTime: string;
       /** Compass heading of phone/camera when photo was taken. */
       heading?: number;
-      location?: components['schemas']['Point'];
+      location?: components["schemas"]["Point"];
       /** Orientation of phone/camera when photo was taken. */
       orientation?: number;
       /** GPS horizontal accuracy in meters. */
@@ -403,11 +393,11 @@ export interface components {
     };
     CreateFeaturePhotoResponsePayload: {
       photoId: number;
-      status: components['schemas']['SuccessOrError'];
+      status: components["schemas"]["SuccessOrError"];
     };
     CreateFeatureRequestPayload: {
       layerId: number;
-      geom?: components['schemas']['Geometry'];
+      geom?: components["schemas"]["Geometry"];
       gpsHorizAccuracy?: number;
       gpsVertAccuracy?: number;
       attrib?: string;
@@ -415,36 +405,36 @@ export interface components {
       enteredTime?: string;
     };
     CreateFeatureResponsePayload: {
-      feature: components['schemas']['FeatureResponse'];
-      status: components['schemas']['SuccessOrError'];
+      feature: components["schemas"]["FeatureResponse"];
+      status: components["schemas"]["SuccessOrError"];
     };
     CreateLayerRequestPayload: {
       siteId: number;
       layerType:
-        | 'Aerial Photos'
-        | 'Surface Color Map'
-        | 'Terrain Color Map'
-        | 'Boundaries'
-        | 'Plants Planted'
-        | 'Plants Existing'
-        | 'Irrigation'
-        | 'Infrastructure'
-        | 'Partner Input'
-        | 'Restoration Zones'
-        | 'Site Prep'
-        | 'Map notes';
+        | "Aerial Photos"
+        | "Surface Color Map"
+        | "Terrain Color Map"
+        | "Boundaries"
+        | "Plants Planted"
+        | "Plants Existing"
+        | "Irrigation"
+        | "Infrastructure"
+        | "Partner Input"
+        | "Restoration Zones"
+        | "Site Prep"
+        | "Map notes";
       tileSetName?: string;
       proposed: boolean;
       hidden: boolean;
     };
     CreateLayerResponsePayload: {
-      layer: components['schemas']['LayerResponse'];
-      status: components['schemas']['SuccessOrError'];
+      layer: components["schemas"]["LayerResponse"];
+      status: components["schemas"]["SuccessOrError"];
     };
     CreateObservationRequestPayload: {
       featureId: number;
       timestamp: string;
-      healthState?: 'Good' | 'Moderate' | 'Poor' | 'Dead';
+      healthState?: "Good" | "Moderate" | "Poor" | "Dead";
       flowers?: boolean;
       seeds?: boolean;
       pests?: string;
@@ -454,8 +444,8 @@ export interface components {
       diameterAtBreastHeight?: number;
     };
     CreateObservationResponsePayload: {
-      resp: components['schemas']['ObservationResponse'];
-      status: components['schemas']['SuccessOrError'];
+      resp: components["schemas"]["ObservationResponse"];
+      status: components["schemas"]["SuccessOrError"];
     };
     CreatePlantRequestPayload: {
       featureId: number;
@@ -465,8 +455,8 @@ export interface components {
       datePlanted?: string;
     };
     CreatePlantResponsePayload: {
-      plant: components['schemas']['PlantResponse'];
-      status: components['schemas']['SuccessOrError'];
+      plant: components["schemas"]["PlantResponse"];
+      status: components["schemas"]["SuccessOrError"];
     };
     CreateProjectRequestPayload: {
       name: string;
@@ -476,34 +466,34 @@ export interface components {
       name: string;
     };
     CreateSpeciesResponsePayload: {
-      details: components['schemas']['SpeciesDetails'];
-      status: components['schemas']['SuccessOrError'];
+      details: components["schemas"]["SpeciesDetails"];
+      status: components["schemas"]["SuccessOrError"];
     };
     CreateTimeseriesEntry: {
       /** ID of device that produces this timeseries. */
       deviceId: number;
       /** Name of this timeseries. Duplicate timeseries names for the same device aren't allowed, but different devices can have timeseries with the same name. */
       timeseriesName: string;
-      type: 'Numeric' | 'Text';
+      type: "Numeric" | "Text";
       /** Number of significant fractional digits (after the decimal point), if this is a timeseries with non-integer numeric values. */
       decimalPlaces?: number;
       /** Units of measure for values in this timeseries. */
       units?: string;
     };
     CreateTimeseriesRequestPayload: {
-      timeseries: components['schemas']['CreateTimeseriesEntry'][];
+      timeseries: components["schemas"]["CreateTimeseriesEntry"][];
     };
     DeleteFeatureResponsePayload: {
       id: number;
-      status: components['schemas']['SuccessOrError'];
+      status: components["schemas"]["SuccessOrError"];
     };
     DeleteLayerResponse: {
       id: number;
       siteId: number;
     };
     DeleteLayerResponsePayload: {
-      layer: components['schemas']['DeleteLayerResponse'];
-      status: components['schemas']['SuccessOrError'];
+      layer: components["schemas"]["DeleteLayerResponse"];
+      status: components["schemas"]["SuccessOrError"];
     };
     DeviceConfig: {
       /** Unique identifier of this device. */
@@ -555,20 +545,20 @@ export interface components {
     };
     ExportRequestPayload: {
       facilityId: number;
-      fields: components['schemas']['SearchField'][];
-      sortOrder?: components['schemas']['SearchSortOrderElement'][];
-      filters?: components['schemas']['SearchFilter'][];
+      fields: components["schemas"]["SearchField"][];
+      sortOrder?: components["schemas"]["SearchSortOrderElement"][];
+      filters?: components["schemas"]["SearchFilter"][];
       search?:
-        | components['schemas']['AndNodePayload']
-        | components['schemas']['FieldNodePayload']
-        | components['schemas']['NotNodePayload']
-        | components['schemas']['OrNodePayload'];
+        | components["schemas"]["AndNodePayload"]
+        | components["schemas"]["FieldNodePayload"]
+        | components["schemas"]["NotNodePayload"]
+        | components["schemas"]["OrNodePayload"];
     };
     FacilityPayload: {
       id: number;
       siteId: number;
       name: string;
-      type: 'Seed Bank' | 'Desalination' | 'Reverse Osmosis';
+      type: "Seed Bank" | "Desalination" | "Reverse Osmosis";
       /** The name of the role the current user has at the facility. */
       role: string;
     };
@@ -584,7 +574,7 @@ export interface components {
       /** Compass heading of phone/camera when photo was taken. */
       heading?: number;
       id: number;
-      location?: components['schemas']['Point'];
+      location?: components["schemas"]["Point"];
       /** Orientation of phone/camera when photo was taken. */
       orientation?: number;
       size: number;
@@ -593,18 +583,18 @@ export interface components {
     FeatureResponse: {
       id: number;
       layerId: number;
-      geom?: components['schemas']['Geometry'];
+      geom?: components["schemas"]["Geometry"];
       gpsHorizAccuracy?: number;
       gpsVertAccuracy?: number;
       attrib?: string;
       notes?: string;
       enteredTime?: string;
     };
-    FieldNodePayload: components['schemas']['SearchNodePayload'] & {
-      field?: components['schemas']['SearchField'];
+    FieldNodePayload: components["schemas"]["SearchNodePayload"] & {
+      field?: components["schemas"]["SearchField"];
       /** List of values to match. For exact and fuzzy searches, a list of at least one value to search for; the list may include null to match accessions where the field does not have a value. For range searches, the list must contain exactly two values, the minimum and maximum; one of the values may be null to search for all values above a minimum or below a maximum. */
       values?: (string | null)[];
-      type?: 'Exact' | 'Fuzzy' | 'Range';
+      type?: "Exact" | "Fuzzy" | "Range";
     } & {
       field: unknown;
       type: unknown;
@@ -623,12 +613,19 @@ export interface components {
     };
     /** GEOMETRY-FIX-TYPE-ON-CLIENT-SIDE */
     Geometry: {
-      type: 'Point' | 'LineString' | 'Polygon' | 'MultiPoint' | 'MultiLineString' | 'MultiPolygon' | 'GeometryCollection';
+      type:
+        | "Point"
+        | "LineString"
+        | "Polygon"
+        | "MultiPoint"
+        | "MultiLineString"
+        | "MultiPolygon"
+        | "GeometryCollection";
       coordinates: number[];
-      crs?: components['schemas']['CRS'];
+      crs?: components["schemas"]["CRS"];
     };
-    GeometryCollection: components['schemas']['Geometry'] & {
-      geometries?: components['schemas']['Geometry'][];
+    GeometryCollection: components["schemas"]["Geometry"] & {
+      geometries?: components["schemas"]["Geometry"][];
     } & {
       geometries: unknown;
     };
@@ -640,153 +637,149 @@ export interface components {
       /** Server-assigned unique ID of this germination test. Null when creating a new test. */
       id?: string;
       /** Which type of test is described. At most one of each test type is allowed. */
-      testType: 'Lab' | 'Nursery';
+      testType: "Lab" | "Nursery";
       startDate?: string;
       endDate?: string;
-      seedType?: 'Fresh' | 'Stored';
-      substrate?: 'Nursery Media' | 'Agar Petri Dish' | 'Paper Petri Dish' | 'Other';
-      treatment?: 'Soak' | 'Scarify' | 'GA3' | 'Stratification' | 'Other';
+      seedType?: "Fresh" | "Stored";
+      substrate?:
+        | "Nursery Media"
+        | "Agar Petri Dish"
+        | "Paper Petri Dish"
+        | "Other";
+      treatment?: "Soak" | "Scarify" | "GA3" | "Stratification" | "Other";
       notes?: string;
       /** Quantity of seeds remaining. For weight-based accessions, this is user input and is required. For count-based accessions, it is calculated by the server and ignored on input. */
-      remainingQuantity?: components['schemas']['SeedQuantityPayload'];
+      remainingQuantity?: components["schemas"]["SeedQuantityPayload"];
       staffResponsible?: string;
       seedsSown?: number;
       totalPercentGerminated?: number;
       totalSeedsGerminated?: number;
-      germinations?: components['schemas']['GerminationPayload'][];
+      germinations?: components["schemas"]["GerminationPayload"][];
     };
     GetAccessionResponsePayload: {
-      accession: components['schemas']['AccessionPayload'];
-      status: components['schemas']['SuccessOrError'];
-    };
-    GetAutomationResponsePayload: {
-      automation: components['schemas']['AutomationPayload'];
-      status: components['schemas']['SuccessOrError'];
+      accession: components["schemas"]["AccessionPayload"];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetCurrentTimeResponsePayload: {
       currentTime: string;
-      status: components['schemas']['SuccessOrError'];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetDeviceResponsePayload: {
-      device: components['schemas']['DeviceConfig'];
-      status: components['schemas']['SuccessOrError'];
+      device: components["schemas"]["DeviceConfig"];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetFacilityResponse: {
-      facility: components['schemas']['FacilityPayload'];
-      status: components['schemas']['SuccessOrError'];
+      facility: components["schemas"]["FacilityPayload"];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetFeaturePhotoMetadataResponsePayload: {
-      photo: components['schemas']['FeaturePhoto'];
-      status: components['schemas']['SuccessOrError'];
+      photo: components["schemas"]["FeaturePhoto"];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetFeatureResponsePayload: {
-      feature: components['schemas']['FeatureResponse'];
-      status: components['schemas']['SuccessOrError'];
+      feature: components["schemas"]["FeatureResponse"];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetLayerResponsePayload: {
-      layer: components['schemas']['LayerResponse'];
-      status: components['schemas']['SuccessOrError'];
+      layer: components["schemas"]["LayerResponse"];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetObservationResponsePayload: {
-      resp: components['schemas']['ObservationResponse'];
-      status: components['schemas']['SuccessOrError'];
+      resp: components["schemas"]["ObservationResponse"];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetPlantResponsePayload: {
-      plant: components['schemas']['PlantResponse'];
-      status: components['schemas']['SuccessOrError'];
+      plant: components["schemas"]["PlantResponse"];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetProjectResponsePayload: {
-      project: components['schemas']['ProjectPayload'];
-      status: components['schemas']['SuccessOrError'];
+      project: components["schemas"]["ProjectPayload"];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetSiteResponsePayload: {
-      site: components['schemas']['SiteElement'];
-      status: components['schemas']['SuccessOrError'];
+      site: components["schemas"]["SiteElement"];
+      status: components["schemas"]["SuccessOrError"];
     };
     LayerResponse: {
       id: number;
       siteId: number;
       layerType:
-        | 'Aerial Photos'
-        | 'Surface Color Map'
-        | 'Terrain Color Map'
-        | 'Boundaries'
-        | 'Plants Planted'
-        | 'Plants Existing'
-        | 'Irrigation'
-        | 'Infrastructure'
-        | 'Partner Input'
-        | 'Restoration Zones'
-        | 'Site Prep'
-        | 'Map notes';
+        | "Aerial Photos"
+        | "Surface Color Map"
+        | "Terrain Color Map"
+        | "Boundaries"
+        | "Plants Planted"
+        | "Plants Existing"
+        | "Irrigation"
+        | "Infrastructure"
+        | "Partner Input"
+        | "Restoration Zones"
+        | "Site Prep"
+        | "Map notes";
       tileSetName?: string;
       proposed: boolean;
       hidden: boolean;
     };
-    LineString: components['schemas']['Geometry'] & {
+    LineString: components["schemas"]["Geometry"] & {
       coordinates?: number[][];
     } & {
       coordinates: unknown;
     };
     ListAllFieldValuesRequestPayload: {
       facilityId: number;
-      fields: components['schemas']['SearchField'][];
+      fields: components["schemas"]["SearchField"][];
     };
     ListAllFieldValuesResponsePayload: {
       results: {
-        [key: string]: components['schemas']['AllFieldValuesPayload'];
+        [key: string]: components["schemas"]["AllFieldValuesPayload"];
       };
-      status: components['schemas']['SuccessOrError'];
-    };
-    ListAutomationsResponsePayload: {
-      automations: components['schemas']['AutomationPayload'][];
-      status: components['schemas']['SuccessOrError'];
+      status: components["schemas"]["SuccessOrError"];
     };
     ListDeviceConfigsResponse: {
-      devices: components['schemas']['DeviceConfig'][];
-      status: components['schemas']['SuccessOrError'];
+      devices: components["schemas"]["DeviceConfig"][];
+      status: components["schemas"]["SuccessOrError"];
     };
     ListFacilitiesResponse: {
-      facilities: components['schemas']['FacilityPayload'][];
-      status: components['schemas']['SuccessOrError'];
+      facilities: components["schemas"]["FacilityPayload"][];
+      status: components["schemas"]["SuccessOrError"];
     };
     ListFeaturePhotosResponsePayload: {
-      photos: components['schemas']['FeaturePhoto'][];
-      status: components['schemas']['SuccessOrError'];
+      photos: components["schemas"]["FeaturePhoto"][];
+      status: components["schemas"]["SuccessOrError"];
     };
     ListFeaturesResponsePayload: {
-      features: components['schemas']['FeatureResponse'][];
+      features: components["schemas"]["FeatureResponse"][];
       totalCount: number;
-      status: components['schemas']['SuccessOrError'];
+      status: components["schemas"]["SuccessOrError"];
     };
     ListFieldValuesRequestPayload: {
       facilityId: number;
-      fields: components['schemas']['SearchField'][];
-      filters?: components['schemas']['SearchFilter'][];
+      fields: components["schemas"]["SearchField"][];
+      filters?: components["schemas"]["SearchFilter"][];
       search?:
-        | components['schemas']['AndNodePayload']
-        | components['schemas']['FieldNodePayload']
-        | components['schemas']['NotNodePayload']
-        | components['schemas']['OrNodePayload'];
+        | components["schemas"]["AndNodePayload"]
+        | components["schemas"]["FieldNodePayload"]
+        | components["schemas"]["NotNodePayload"]
+        | components["schemas"]["OrNodePayload"];
     };
     ListFieldValuesResponsePayload: {
-      results: { [key: string]: components['schemas']['FieldValuesPayload'] };
-      status: components['schemas']['SuccessOrError'];
+      results: { [key: string]: components["schemas"]["FieldValuesPayload"] };
+      status: components["schemas"]["SuccessOrError"];
     };
     ListLayersResponsePayload: {
-      layers: components['schemas']['LayerResponse'][];
-      status: components['schemas']['SuccessOrError'];
+      layers: components["schemas"]["LayerResponse"][];
+      status: components["schemas"]["SuccessOrError"];
     };
     ListObservationsResponsePayload: {
-      list: components['schemas']['ObservationResponse'][];
-      status: components['schemas']['SuccessOrError'];
+      list: components["schemas"]["ObservationResponse"][];
+      status: components["schemas"]["SuccessOrError"];
     };
     ListOrganizationsElement: {
       id: number;
       name: string;
     };
     ListOrganizationsResponse: {
-      organizations: components['schemas']['ListOrganizationsElement'][];
+      organizations: components["schemas"]["ListOrganizationsElement"][];
     };
     ListPhotosResponseElement: {
       filename: string;
@@ -796,13 +789,13 @@ export interface components {
       latitude?: number;
       /** Use location field instead. */
       longitude?: number;
-      location?: components['schemas']['Point'];
+      location?: components["schemas"]["Point"];
       /** GPS accuracy in meters. */
       gpsAccuracy?: number;
     };
     ListPhotosResponsePayload: {
-      photos: components['schemas']['ListPhotosResponseElement'][];
-      status: components['schemas']['SuccessOrError'];
+      photos: components["schemas"]["ListPhotosResponseElement"][];
+      status: components["schemas"]["SuccessOrError"];
     };
     ListPlantsResponseElement: {
       featureId: number;
@@ -816,59 +809,54 @@ export interface components {
       attrib?: string;
       notes?: string;
       enteredTime?: string;
-      geom?: components['schemas']['Geometry'];
+      geom?: components["schemas"]["Geometry"];
     };
     ListPlantsResponsePayload: {
-      list: components['schemas']['ListPlantsResponseElement'][];
-      status: components['schemas']['SuccessOrError'];
+      list: components["schemas"]["ListPlantsResponseElement"][];
+      status: components["schemas"]["SuccessOrError"];
     };
     ListProjectsResponsePayload: {
-      projects: components['schemas']['ProjectPayload'][];
-      status: components['schemas']['SuccessOrError'];
+      projects: components["schemas"]["ProjectPayload"][];
+      status: components["schemas"]["SuccessOrError"];
     };
     ListSitesResponsePayload: {
-      sites: components['schemas']['SiteElement'][];
-      status: components['schemas']['SuccessOrError'];
+      sites: components["schemas"]["SiteElement"][];
+      status: components["schemas"]["SuccessOrError"];
     };
     ListSpeciesResponsePayload: {
-      values: components['schemas']['SpeciesDetails'][];
-      status: components['schemas']['SuccessOrError'];
+      values: components["schemas"]["SpeciesDetails"][];
+      status: components["schemas"]["SuccessOrError"];
     };
-    ModifyAutomationRequestPayload: {
-      name: string;
-      description?: string;
-      configuration?: { [key: string]: unknown };
-    };
-    MultiLineString: components['schemas']['Geometry'] & {
+    MultiLineString: components["schemas"]["Geometry"] & {
       coordinates?: number[][][];
     } & {
       coordinates: unknown;
     };
-    MultiPoint: components['schemas']['Geometry'] & {
+    MultiPoint: components["schemas"]["Geometry"] & {
       coordinates?: number[][];
     } & {
       coordinates: unknown;
     };
-    MultiPolygon: components['schemas']['Geometry'] & {
+    MultiPolygon: components["schemas"]["Geometry"] & {
       coordinates?: number[][][][];
     } & {
       coordinates: unknown;
     };
     /** Search criterion that matches results that do not match a set of search criteria. */
-    NotNodePayload: components['schemas']['SearchNodePayload'] & {
-      child?: components['schemas']['SearchNodePayload'];
+    NotNodePayload: components["schemas"]["SearchNodePayload"] & {
+      child?: components["schemas"]["SearchNodePayload"];
     } & {
       child: unknown;
     };
     NotificationListResponse: {
-      notifications: components['schemas']['NotificationPayload'][];
-      status: components['schemas']['SuccessOrError'];
+      notifications: components["schemas"]["NotificationPayload"][];
+      status: components["schemas"]["SuccessOrError"];
     };
     NotificationPayload: {
       /** Unique identifier for this notification. Clients should treat it as opaque. */
       id: string;
       timestamp: string;
-      type: 'Alert' | 'State' | 'Date';
+      type: "Alert" | "State" | "Date";
       /** If true, this notification has been marked as read. */
       read: boolean;
       /** Plain-text body of notification. */
@@ -876,13 +864,22 @@ export interface components {
       /** For accession notifications, which accession caused the notification. */
       accessionId?: number;
       /** For state notifications, which state is being summarized. */
-      state?: 'Awaiting Check-In' | 'Pending' | 'Processing' | 'Processed' | 'Drying' | 'Dried' | 'In Storage' | 'Withdrawn' | 'Nursery';
+      state?:
+        | "Awaiting Check-In"
+        | "Pending"
+        | "Processing"
+        | "Processed"
+        | "Drying"
+        | "Dried"
+        | "In Storage"
+        | "Withdrawn"
+        | "Nursery";
     };
     ObservationResponse: {
       id: number;
       featureId: number;
       timestamp: string;
-      healthState?: 'Good' | 'Moderate' | 'Poor' | 'Dead';
+      healthState?: "Good" | "Moderate" | "Poor" | "Dead";
       flowers?: boolean;
       seeds?: boolean;
       pests?: string;
@@ -892,7 +889,7 @@ export interface components {
       diameterAtBreastHeight?: number;
     };
     /** Search criterion that matches results that meet any of a set of other search criteria. That is, if the list of children is x, y, and z, this will require x OR y OR z. */
-    OrNodePayload: components['schemas']['SearchNodePayload'];
+    OrNodePayload: components["schemas"]["SearchNodePayload"];
     PlantResponse: {
       featureId: number;
       label?: string;
@@ -902,15 +899,15 @@ export interface components {
     };
     PlantSummaryResponsePayload: {
       summary: { [key: string]: number };
-      status: components['schemas']['SuccessOrError'];
+      status: components["schemas"]["SuccessOrError"];
     };
-    Point: components['schemas']['Geometry'] & {
+    Point: components["schemas"]["Geometry"] & {
       /** A single position. In the terraware-server API, positions must always include 3 dimensions. The X and Y dimensions use the coordinate system specified by the crs field, and the Z dimension is in meters. */
       coordinates?: number[];
     } & {
       coordinates: unknown;
     };
-    Polygon: components['schemas']['Geometry'] & {
+    Polygon: components["schemas"]["Geometry"] & {
       coordinates?: number[][][];
     } & {
       coordinates: unknown;
@@ -921,122 +918,100 @@ export interface components {
       organizationId: number;
     };
     RecordTimeseriesValuesRequestPayload: {
-      timeseries: components['schemas']['TimeseriesValuesPayload'][];
+      timeseries: components["schemas"]["TimeseriesValuesPayload"][];
     };
     /** Results of a request to record timeseries values. */
     RecordTimeseriesValuesResponsePayload: {
       /** List of values that the server failed to record. Will not be included if all the values were recorded successfully. */
-      failures?: components['schemas']['TimeseriesValuesErrorPayload'][];
-      status: components['schemas']['SuccessOrError'];
-      error?: components['schemas']['ErrorDetails'];
+      failures?: components["schemas"]["TimeseriesValuesErrorPayload"][];
+      status: components["schemas"]["SuccessOrError"];
+      error?: components["schemas"]["ErrorDetails"];
     };
     SearchField:
-      | 'accessionNumber'
-      | 'active'
-      | 'bagNumber'
-      | 'bags.number'
-      | 'checkedInTime'
-      | 'collectedDate'
-      | 'collectionNotes'
-      | 'cutTestSeedsCompromised'
-      | 'cutTestSeedsEmpty'
-      | 'cutTestSeedsFilled'
-      | 'dryingEndDate'
-      | 'dryingMoveDate'
-      | 'dryingStartDate'
-      | 'endangered'
-      | 'estimatedSeedsIncoming'
-      | 'family'
-      | 'geolocation'
-      | 'germinationEndDate'
-      | 'germinationPercentGerminated'
-      | 'germinationSeedType'
-      | 'germinationSeedsGerminated'
-      | 'germinationSeedsSown'
-      | 'germinationStartDate'
-      | 'germinationSubstrate'
-      | 'germinationTestNotes'
-      | 'germinationTestType'
-      | 'germinationTests.endDate'
-      | 'germinationTests.germinations.recordingDate'
-      | 'germinationTests.germinations.seedsGerminated'
-      | 'germinationTests.notes'
-      | 'germinationTests.percentGerminated'
-      | 'germinationTests.seedType'
-      | 'germinationTests.seedsSown'
-      | 'germinationTests.startDate'
-      | 'germinationTests.substrate'
-      | 'germinationTests.treatment'
-      | 'germinationTests.type'
-      | 'germinationTreatment'
-      | 'id'
-      | 'landowner'
-      | 'latestGerminationTestDate'
-      | 'latestViabilityPercent'
-      | 'nurseryStartDate'
-      | 'primaryCollector'
-      | 'processingMethod'
-      | 'processingNotes'
-      | 'processingStartDate'
-      | 'rare'
-      | 'receivedDate'
-      | 'remainingGrams'
-      | 'remainingQuantity'
-      | 'remainingUnits'
-      | 'siteLocation'
-      | 'sourcePlantOrigin'
-      | 'species'
-      | 'state'
-      | 'storageCondition'
-      | 'storageLocation'
-      | 'storageNotes'
-      | 'storagePackets'
-      | 'storageStartDate'
-      | 'targetStorageCondition'
-      | 'totalGrams'
-      | 'totalQuantity'
-      | 'totalUnits'
-      | 'totalViabilityPercent'
-      | 'treesCollectedFrom'
-      | 'viabilityTestType'
-      | 'withdrawalDate'
-      | 'withdrawalDestination'
-      | 'withdrawalGrams'
-      | 'withdrawalNotes'
-      | 'withdrawalPurpose'
-      | 'withdrawalQuantity'
-      | 'withdrawalRemainingGrams'
-      | 'withdrawalRemainingQuantity'
-      | 'withdrawalRemainingUnits'
-      | 'withdrawalUnits'
-      | 'withdrawals.date'
-      | 'withdrawals.destination'
-      | 'withdrawals.grams'
-      | 'withdrawals.notes'
-      | 'withdrawals.purpose'
-      | 'withdrawals.quantity'
-      | 'withdrawals.remainingGrams'
-      | 'withdrawals.remainingQuantity'
-      | 'withdrawals.remainingUnits'
-      | 'withdrawals.units';
+      | "accessionNumber"
+      | "active"
+      | "bagNumber"
+      | "checkedInTime"
+      | "collectedDate"
+      | "collectionNotes"
+      | "cutTestSeedsCompromised"
+      | "cutTestSeedsEmpty"
+      | "cutTestSeedsFilled"
+      | "dryingEndDate"
+      | "dryingMoveDate"
+      | "dryingStartDate"
+      | "endangered"
+      | "estimatedSeedsIncoming"
+      | "family"
+      | "geolocation"
+      | "germinationEndDate"
+      | "germinationPercentGerminated"
+      | "germinationSeedType"
+      | "germinationSeedsGerminated"
+      | "germinationSeedsSown"
+      | "germinationStartDate"
+      | "germinationSubstrate"
+      | "germinationTestNotes"
+      | "germinationTestType"
+      | "germinationTreatment"
+      | "id"
+      | "landowner"
+      | "latestGerminationTestDate"
+      | "latestViabilityPercent"
+      | "nurseryStartDate"
+      | "primaryCollector"
+      | "processingMethod"
+      | "processingNotes"
+      | "processingStartDate"
+      | "rare"
+      | "receivedDate"
+      | "remainingGrams"
+      | "remainingQuantity"
+      | "remainingUnits"
+      | "siteLocation"
+      | "sourcePlantOrigin"
+      | "species"
+      | "state"
+      | "storageCondition"
+      | "storageLocation"
+      | "storageNotes"
+      | "storagePackets"
+      | "storageStartDate"
+      | "targetStorageCondition"
+      | "totalGrams"
+      | "totalQuantity"
+      | "totalUnits"
+      | "totalViabilityPercent"
+      | "treesCollectedFrom"
+      | "viabilityTestType"
+      | "withdrawalDate"
+      | "withdrawalDestination"
+      | "withdrawalGrams"
+      | "withdrawalNotes"
+      | "withdrawalPurpose"
+      | "withdrawalQuantity"
+      | "withdrawalRemainingGrams"
+      | "withdrawalRemainingQuantity"
+      | "withdrawalRemainingUnits"
+      | "withdrawalUnits";
     SearchFilter: {
-      field: components['schemas']['SearchField'];
+      field: components["schemas"]["SearchField"];
       /** List of values to match. For exact and fuzzy searches, a list of at least one value to search for; the list may include null to match accessions where the field does not have a value. For range searches, the list must contain exactly two values, the minimum and maximum; one of the values may be null to search for all values above a minimum or below a maximum. */
       values: (string | null)[];
-      type: 'Exact' | 'Fuzzy' | 'Range';
+      type: "Exact" | "Fuzzy" | "Range";
     };
     /** A search criterion. The search will return results that match this criterion. The criterion can be composed of other search criteria to form arbitrary Boolean search expressions. TYPESCRIPT-OVERRIDE-TYPE-WITH-ANY */
     SearchNodePayload: any;
     SearchRequestPayload: {
       facilityId: number;
-      fields: components['schemas']['SearchField'][];
-      sortOrder?: components['schemas']['SearchSortOrderElement'][];
-      filters?: components['schemas']['SearchFilter'][];
+      fields: components["schemas"]["SearchField"][];
+      sortOrder?: components["schemas"]["SearchSortOrderElement"][];
+      filters?: components["schemas"]["SearchFilter"][];
       search?:
-        | components['schemas']['AndNodePayload']
-        | components['schemas']['FieldNodePayload']
-        | components['schemas']['NotNodePayload']
-        | components['schemas']['OrNodePayload'];
+        | components["schemas"]["AndNodePayload"]
+        | components["schemas"]["FieldNodePayload"]
+        | components["schemas"]["NotNodePayload"]
+        | components["schemas"]["OrNodePayload"];
       cursor?: string;
       count: number;
     };
@@ -1045,9 +1020,6 @@ export interface components {
         accessionNumber?: string;
         active?: string;
         bagNumber?: string;
-        bags?: {
-          number?: string;
-        }[];
         checkedInTime?: string;
         collectedDate?: string;
         collectionNotes?: string;
@@ -1070,21 +1042,6 @@ export interface components {
         germinationSubstrate?: string;
         germinationTestNotes?: string;
         germinationTestType?: string;
-        germinationTests?: {
-          endDate?: string;
-          germinations?: {
-            recordingDate?: string;
-            seedsGerminated?: string;
-          }[];
-          notes?: string;
-          percentGerminated?: string;
-          seedType?: string;
-          seedsSown?: string;
-          startDate?: string;
-          substrate?: string;
-          treatment?: string;
-          type?: string;
-        }[];
         germinationTreatment?: string;
         id?: string;
         landowner?: string;
@@ -1121,81 +1078,70 @@ export interface components {
         withdrawalGrams?: string;
         withdrawalNotes?: string;
         withdrawalPurpose?: string;
-        withdrawalQuantity?: string;
         withdrawalRemainingGrams?: string;
         withdrawalRemainingQuantity?: string;
         withdrawalRemainingUnits?: string;
+        withdrawalQuantity?: string;
         withdrawalUnits?: string;
-        withdrawals?: {
-          date?: string;
-          destination?: string;
-          grams?: string;
-          notes?: string;
-          purpose?: string;
-          quantity?: string;
-          remainingGrams?: string;
-          remainingQuantity?: string;
-          remainingUnits?: string;
-          units?: string;
-        }[];
       }[];
       cursor?: string;
     };
     SearchSortOrderElement: {
-      field: components['schemas']['SearchField'];
-      direction?: 'Ascending' | 'Descending';
+      field: components["schemas"]["SearchField"];
+      direction?: "Ascending" | "Descending";
     };
     /** Represents a quantity of seeds, measured either in individual seeds or by weight. */
     SeedQuantityPayload: {
       /** Number of units of seeds. If "units" is "Seeds", this is the number of seeds and must be an integer. Otherwise it is a measurement in the weight units specified in the "units" field, and may have a fractional part. */
       quantity: number;
-      units: 'Seeds' | 'Grams' | 'Milligrams' | 'Kilograms' | 'Ounces' | 'Pounds';
+      units:
+        | "Seeds"
+        | "Grams"
+        | "Milligrams"
+        | "Kilograms"
+        | "Ounces"
+        | "Pounds";
       /** If this quantity is a weight measurement, the weight in grams. This is not set if the "units" field is "Seeds". This is always calculated on the server side and is ignored on input. */
       grams?: number;
     };
-    SendFacilityAlertRequestPayload: {
-      subject: string;
-      /** Alert body in plain text. HTML alerts are not supported yet. */
-      body: string;
-    };
     SimpleErrorResponsePayload: {
-      error: components['schemas']['ErrorDetails'];
-      status: components['schemas']['SuccessOrError'];
+      error: components["schemas"]["ErrorDetails"];
+      status: components["schemas"]["SuccessOrError"];
     };
     SimpleSuccessResponsePayload: {
-      status: components['schemas']['SuccessOrError'];
+      status: components["schemas"]["SuccessOrError"];
     };
     SiteElement: {
       id: number;
       name: string;
       projectId: number;
-      location: components['schemas']['Point'];
+      location: components["schemas"]["Point"];
       locale?: string;
       timezone?: string;
     };
     SpeciesCreateResponsePayload: {
       id: number;
-      status: components['schemas']['SuccessOrError'];
+      status: components["schemas"]["SuccessOrError"];
     };
     SpeciesDetails: {
       id: number;
       name: string;
     };
     SpeciesGetResponsePayload: {
-      species: components['schemas']['SpeciesResponseElement'];
-      status: components['schemas']['SuccessOrError'];
+      species: components["schemas"]["SpeciesResponseElement"];
+      status: components["schemas"]["SuccessOrError"];
     };
     SpeciesListResponsePayload: {
-      species: components['schemas']['SpeciesResponseElement'][];
-      status: components['schemas']['SuccessOrError'];
+      species: components["schemas"]["SpeciesResponseElement"][];
+      status: components["schemas"]["SuccessOrError"];
     };
     SpeciesNameCreateResponsePayload: {
       id: number;
-      status: components['schemas']['SuccessOrError'];
+      status: components["schemas"]["SuccessOrError"];
     };
     SpeciesNameGetResponsePayload: {
-      speciesName: components['schemas']['SpeciesNamesResponseElement'];
-      status: components['schemas']['SuccessOrError'];
+      speciesName: components["schemas"]["SpeciesNamesResponseElement"];
+      status: components["schemas"]["SuccessOrError"];
     };
     SpeciesNameRequestPayload: {
       /** True if name is a scientific name for the species. */
@@ -1205,8 +1151,8 @@ export interface components {
       speciesId: number;
     };
     SpeciesNamesListResponsePayload: {
-      speciesNames: components['schemas']['SpeciesNamesResponseElement'][];
-      status: components['schemas']['SuccessOrError'];
+      speciesNames: components["schemas"]["SpeciesNamesResponseElement"][];
+      status: components["schemas"]["SuccessOrError"];
     };
     SpeciesNamesResponseElement: {
       id: number;
@@ -1221,8 +1167,8 @@ export interface components {
       /** True if name is the scientific name for the species. */
       isScientific?: boolean;
       name: string;
-      plantForm?: 'Tree' | 'Shrub' | 'Vine' | 'Liana' | 'Herbaceous';
-      rare?: 'No' | 'Yes' | 'Unsure';
+      plantForm?: "Tree" | "Shrub" | "Vine" | "Liana" | "Herbaceous";
+      rare?: "No" | "Yes" | "Unsure";
       /** Taxonomic serial number from ITIS database. */
       tsn?: string;
     };
@@ -1233,26 +1179,26 @@ export interface components {
       /** True if name is the scientific name for the species. */
       isScientific: boolean;
       name: string;
-      plantForm?: 'Tree' | 'Shrub' | 'Vine' | 'Liana' | 'Herbaceous';
-      rare?: 'No' | 'Yes' | 'Unsure';
+      plantForm?: "Tree" | "Shrub" | "Vine" | "Liana" | "Herbaceous";
+      rare?: "No" | "Yes" | "Unsure";
       /** Taxonomic serial number from ITIS database. */
       tsn?: string;
     };
     StorageLocationDetails: {
       storageLocation: string;
-      storageCondition: 'Refrigerator' | 'Freezer';
+      storageCondition: "Refrigerator" | "Freezer";
     };
     StorageLocationsResponsePayload: {
-      locations: components['schemas']['StorageLocationDetails'][];
-      status: components['schemas']['SuccessOrError'];
+      locations: components["schemas"]["StorageLocationDetails"][];
+      status: components["schemas"]["SuccessOrError"];
     };
     /** Indicates of success or failure of the requested operation. */
-    SuccessOrError: 'ok' | 'error';
+    SuccessOrError: "ok" | "error";
     /** Summary of important statistics about the seed bank for the Summary page. */
     SummaryResponse: {
-      activeAccessions: components['schemas']['SummaryStatistic'];
-      species: components['schemas']['SummaryStatistic'];
-      families: components['schemas']['SummaryStatistic'];
+      activeAccessions: components["schemas"]["SummaryStatistic"];
+      species: components["schemas"]["SummaryStatistic"];
+      families: components["schemas"]["SummaryStatistic"];
       /** Number of accessions in Pending state overdue for processing */
       overduePendingAccessions: number;
       /** Number of accessions in Processed state overdue for drying */
@@ -1279,7 +1225,7 @@ export interface components {
       /** Name of timeseries as specified in the failing request. */
       timeseriesName: string;
       /** Values that the server was not able to successfully record. */
-      values: components['schemas']['TimeseriesValuePayload'][];
+      values: components["schemas"]["TimeseriesValuePayload"][];
       /** Human-readable details about the failure. */
       message: string;
     };
@@ -1288,7 +1234,7 @@ export interface components {
       deviceId: number;
       /** Name of timeseries. This must be the name of a timeseries that has already been created for the device. */
       timeseriesName: string;
-      values: components['schemas']['TimeseriesValuePayload'][];
+      values: components["schemas"]["TimeseriesValuePayload"][];
     };
     UpdateAccessionRequestPayload: {
       bagNumbers?: string[];
@@ -1299,29 +1245,29 @@ export interface components {
       dryingEndDate?: string;
       dryingMoveDate?: string;
       dryingStartDate?: string;
-      endangered?: 'No' | 'Yes' | 'Unsure';
+      endangered?: "No" | "Yes" | "Unsure";
       environmentalNotes?: string;
       family?: string;
       fieldNotes?: string;
       founderId?: string;
-      geolocations?: components['schemas']['Geolocation'][];
-      germinationTestTypes?: ('Lab' | 'Nursery')[];
-      germinationTests?: components['schemas']['GerminationTestPayload'][];
+      geolocations?: components["schemas"]["Geolocation"][];
+      germinationTestTypes?: ("Lab" | "Nursery")[];
+      germinationTests?: components["schemas"]["GerminationTestPayload"][];
       /** Initial size of accession. The units of this value must match the measurement type in "processingMethod". */
-      initialQuantity?: components['schemas']['SeedQuantityPayload'];
+      initialQuantity?: components["schemas"]["SeedQuantityPayload"];
       landowner?: string;
       numberOfTrees?: number;
       nurseryStartDate?: string;
       primaryCollector?: string;
-      processingMethod?: 'Count' | 'Weight';
+      processingMethod?: "Count" | "Weight";
       processingNotes?: string;
       processingStaffResponsible?: string;
       processingStartDate?: string;
-      rare?: 'No' | 'Yes' | 'Unsure';
+      rare?: "No" | "Yes" | "Unsure";
       receivedDate?: string;
       secondaryCollectors?: string[];
       siteLocation?: string;
-      sourcePlantOrigin?: 'Wild' | 'Outplant';
+      sourcePlantOrigin?: "Wild" | "Outplant";
       species?: string;
       storageLocation?: string;
       storageNotes?: string;
@@ -1330,13 +1276,13 @@ export interface components {
       storageStartDate?: string;
       subsetCount?: number;
       /** Weight of subset of seeds. Units must be a weight measurement, not "Seeds". */
-      subsetWeight?: components['schemas']['SeedQuantityPayload'];
-      targetStorageCondition?: 'Refrigerator' | 'Freezer';
-      withdrawals?: components['schemas']['WithdrawalPayload'][];
+      subsetWeight?: components["schemas"]["SeedQuantityPayload"];
+      targetStorageCondition?: "Refrigerator" | "Freezer";
+      withdrawals?: components["schemas"]["WithdrawalPayload"][];
     };
     UpdateAccessionResponsePayload: {
-      accession: components['schemas']['AccessionPayload'];
-      status: components['schemas']['SuccessOrError'];
+      accession: components["schemas"]["AccessionPayload"];
+      status: components["schemas"]["SuccessOrError"];
     };
     UpdateDeviceRequestPayload: {
       /** Name of this device. */
@@ -1362,7 +1308,7 @@ export interface components {
     };
     UpdateFeatureRequestPayload: {
       layerId: number;
-      geom?: components['schemas']['Geometry'];
+      geom?: components["schemas"]["Geometry"];
       gpsHorizAccuracy?: number;
       gpsVertAccuracy?: number;
       attrib?: string;
@@ -1370,35 +1316,35 @@ export interface components {
       enteredTime?: string;
     };
     UpdateFeatureResponsePayload: {
-      feature: components['schemas']['FeatureResponse'];
-      status: components['schemas']['SuccessOrError'];
+      feature: components["schemas"]["FeatureResponse"];
+      status: components["schemas"]["SuccessOrError"];
     };
     UpdateLayerRequestPayload: {
       siteId: number;
       layerType:
-        | 'Aerial Photos'
-        | 'Surface Color Map'
-        | 'Terrain Color Map'
-        | 'Boundaries'
-        | 'Plants Planted'
-        | 'Plants Existing'
-        | 'Irrigation'
-        | 'Infrastructure'
-        | 'Partner Input'
-        | 'Restoration Zones'
-        | 'Site Prep'
-        | 'Map notes';
+        | "Aerial Photos"
+        | "Surface Color Map"
+        | "Terrain Color Map"
+        | "Boundaries"
+        | "Plants Planted"
+        | "Plants Existing"
+        | "Irrigation"
+        | "Infrastructure"
+        | "Partner Input"
+        | "Restoration Zones"
+        | "Site Prep"
+        | "Map notes";
       tileSetName?: string;
       proposed: boolean;
       hidden: boolean;
     };
     UpdateLayerResponsePayload: {
-      layer: components['schemas']['LayerResponse'];
-      status: components['schemas']['SuccessOrError'];
+      layer: components["schemas"]["LayerResponse"];
+      status: components["schemas"]["SuccessOrError"];
     };
     UpdateObservationRequestPayload: {
       timestamp: string;
-      healthState?: 'Good' | 'Moderate' | 'Poor' | 'Dead';
+      healthState?: "Good" | "Moderate" | "Poor" | "Dead";
       flowers?: boolean;
       seeds?: boolean;
       pests?: string;
@@ -1408,8 +1354,8 @@ export interface components {
       diameterAtBreastHeight?: number;
     };
     UpdateObservationResponsePayload: {
-      resp: components['schemas']['ObservationResponse'];
-      status: components['schemas']['SuccessOrError'];
+      resp: components["schemas"]["ObservationResponse"];
+      status: components["schemas"]["SuccessOrError"];
     };
     UpdatePlantRequestPayload: {
       label?: string;
@@ -1418,8 +1364,8 @@ export interface components {
       datePlanted?: string;
     };
     UpdatePlantResponsePayload: {
-      plant: components['schemas']['PlantResponse'];
-      status: components['schemas']['SuccessOrError'];
+      plant: components["schemas"]["PlantResponse"];
+      status: components["schemas"]["SuccessOrError"];
     };
     UpdateProjectRequestPayload: {
       name: string;
@@ -1430,7 +1376,7 @@ export interface components {
       latitude?: number;
       /** Use location field instead. */
       longitude?: number;
-      location?: components['schemas']['Point'];
+      location?: components["schemas"]["Point"];
       /** GPS accuracy in meters. */
       gpsAccuracy?: number;
     };
@@ -1438,20 +1384,27 @@ export interface components {
       /** Server-assigned unique ID of this withdrawal, its ID. Omit when creating a new withdrawal. */
       id?: number;
       date: string;
-      purpose: 'Propagation' | 'Outreach or Education' | 'Research' | 'Broadcast' | 'Share with Another Site' | 'Other' | 'Germination Testing';
+      purpose:
+        | "Propagation"
+        | "Outreach or Education"
+        | "Research"
+        | "Broadcast"
+        | "Share with Another Site"
+        | "Other"
+        | "Germination Testing";
       destination?: string;
       notes?: string;
       /** Quantity of seeds remaining. For weight-based accessions, this is user input and is required. For count-based accessions, it is calculated by the server and ignored on input. */
-      remainingQuantity?: components['schemas']['SeedQuantityPayload'];
+      remainingQuantity?: components["schemas"]["SeedQuantityPayload"];
       staffResponsible?: string;
       /** If this withdrawal is of type "Germination Testing", the ID of the test it is associated with. This is always set by the server and cannot be modified. */
       germinationTestId?: number;
       /** For weight-based accessions, the difference between the weight remaining before this withdrawal and the weight remaining after it. This is a server-calculated value and is ignored on input. */
-      weightDifference?: components['schemas']['SeedQuantityPayload'];
+      weightDifference?: components["schemas"]["SeedQuantityPayload"];
       /** Quantity of seeds withdrawn. For germination testing withdrawals, this is always the same as the test's "seedsSown" value, if that value is present. Otherwise, it is a user-supplied value. For count-based accessions, the units must always be "Seeds". For weight-based accessions, the units may either be a weight measurement or "Seeds". */
-      withdrawnQuantity?: components['schemas']['SeedQuantityPayload'];
+      withdrawnQuantity?: components["schemas"]["SeedQuantityPayload"];
       /** The best estimate of the number of seeds withdrawn. This is the same as "withdrawnQuantity" if that is present, or else the same as "weightDifference" if this is a weight-based accession. If this is a count-based accession and "withdrawnQuantity" does not have a value, this field will not be present. This is a server-calculated value and is ignored on input. */
-      estimatedQuantity?: components['schemas']['SeedQuantityPayload'];
+      estimatedQuantity?: components["schemas"]["SeedQuantityPayload"];
     };
   };
 }
@@ -1462,13 +1415,13 @@ export interface operations {
       /** The requested operation succeeded. */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['CreateDeviceRequestPayload'];
+        "application/json": components["schemas"]["CreateDeviceRequestPayload"];
       };
     };
   };
@@ -1482,13 +1435,13 @@ export interface operations {
       /** Device configuration retrieved. */
       200: {
         content: {
-          'application/json': components['schemas']['GetDeviceResponsePayload'];
+          "application/json": components["schemas"]["GetDeviceResponsePayload"];
         };
       };
       /** The requested resource was not found. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -1503,19 +1456,19 @@ export interface operations {
       /** Device configuration updated. */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
       /** The requested resource was not found. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['UpdateDeviceRequestPayload'];
+        "application/json": components["schemas"]["UpdateDeviceRequestPayload"];
       };
     };
   };
@@ -1525,7 +1478,7 @@ export interface operations {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['ListFacilitiesResponse'];
+          "application/json": components["schemas"]["ListFacilitiesResponse"];
         };
       };
     };
@@ -1540,145 +1493,7 @@ export interface operations {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['GetFacilityResponse'];
-        };
-      };
-    };
-  };
-  sendFacilityAlert: {
-    parameters: {
-      path: {
-        facilityId: number;
-      };
-    };
-    responses: {
-      /** The requested operation succeeded. */
-      200: {
-        content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['SendFacilityAlertRequestPayload'];
-      };
-    };
-  };
-  listAutomations: {
-    parameters: {
-      path: {
-        facilityId: number;
-      };
-    };
-    responses: {
-      /** Success */
-      200: {
-        content: {
-          'application/json': components['schemas']['ListAutomationsResponsePayload'];
-        };
-      };
-      /** The facility does not exist or is not accessible. */
-      404: {
-        content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
-        };
-      };
-    };
-  };
-  createAutomation: {
-    parameters: {
-      path: {
-        facilityId: number;
-      };
-    };
-    responses: {
-      /** Success */
-      200: {
-        content: {
-          'application/json': components['schemas']['CreateAutomationResponsePayload'];
-        };
-      };
-      /** The facility does not exist or is not accessible. */
-      404: {
-        content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['ModifyAutomationRequestPayload'];
-      };
-    };
-  };
-  getAutomation: {
-    parameters: {
-      path: {
-        facilityId: number;
-        automationId: number;
-      };
-    };
-    responses: {
-      /** Success */
-      200: {
-        content: {
-          'application/json': components['schemas']['GetAutomationResponsePayload'];
-        };
-      };
-      /** The requested resource was not found. */
-      404: {
-        content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
-        };
-      };
-    };
-  };
-  updateAutomation: {
-    parameters: {
-      path: {
-        facilityId: number;
-        automationId: number;
-      };
-    };
-    responses: {
-      /** The requested operation succeeded. */
-      200: {
-        content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
-        };
-      };
-      /** The requested resource was not found. */
-      404: {
-        content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['ModifyAutomationRequestPayload'];
-      };
-    };
-  };
-  deleteAutomation: {
-    parameters: {
-      path: {
-        facilityId: number;
-        automationId: number;
-      };
-    };
-    responses: {
-      /** The requested operation succeeded. */
-      200: {
-        content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
-        };
-      };
-      /** The requested resource was not found. */
-      404: {
-        content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["GetFacilityResponse"];
         };
       };
     };
@@ -1693,13 +1508,13 @@ export interface operations {
       /** Successfully listed the facility's devices. */
       200: {
         content: {
-          'application/json': components['schemas']['ListDeviceConfigsResponse'];
+          "application/json": components["schemas"]["ListDeviceConfigsResponse"];
         };
       };
       /** The facility does not exist or is not accessible by the current user. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -1709,13 +1524,13 @@ export interface operations {
       /** The feature was created successfully. Response includes fields populated by the server, including the feature id. */
       200: {
         content: {
-          'application/json': components['schemas']['CreateFeatureResponsePayload'];
+          "application/json": components["schemas"]["CreateFeatureResponsePayload"];
         };
       };
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['CreateFeatureRequestPayload'];
+        "application/json": components["schemas"]["CreateFeatureRequestPayload"];
       };
     };
   };
@@ -1733,7 +1548,7 @@ export interface operations {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['ListFeaturesResponsePayload'];
+          "application/json": components["schemas"]["ListFeaturesResponsePayload"];
         };
       };
     };
@@ -1748,13 +1563,13 @@ export interface operations {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['GetFeatureResponsePayload'];
+          "application/json": components["schemas"]["GetFeatureResponsePayload"];
         };
       };
       /** The specified feature doesn't exist. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -1769,19 +1584,19 @@ export interface operations {
       /** The feature was updated successfully. */
       200: {
         content: {
-          'application/json': components['schemas']['UpdateFeatureResponsePayload'];
+          "application/json": components["schemas"]["UpdateFeatureResponsePayload"];
         };
       };
       /** The specified feature doesn't exist. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['UpdateFeatureRequestPayload'];
+        "application/json": components["schemas"]["UpdateFeatureRequestPayload"];
       };
     };
   };
@@ -1795,13 +1610,13 @@ export interface operations {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['DeleteFeatureResponsePayload'];
+          "application/json": components["schemas"]["DeleteFeatureResponsePayload"];
         };
       };
       /** The specified feature doesn't exist. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -1816,7 +1631,7 @@ export interface operations {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['ListFeaturePhotosResponsePayload'];
+          "application/json": components["schemas"]["ListFeaturePhotosResponsePayload"];
         };
       };
     };
@@ -1831,14 +1646,14 @@ export interface operations {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['CreateFeaturePhotoResponsePayload'];
+          "application/json": components["schemas"]["CreateFeaturePhotoResponsePayload"];
         };
       };
     };
     requestBody: {
       content: {
-        'multipart/form-data': {
-          metadata: components['schemas']['CreateFeaturePhotoRequestPayload'];
+        "multipart/form-data": {
+          metadata: components["schemas"]["CreateFeaturePhotoRequestPayload"];
           file: string;
         };
       };
@@ -1860,13 +1675,13 @@ export interface operations {
       /** The photo was successfully retrieved. */
       200: {
         content: {
-          'image/jpeg': string;
+          "image/jpeg": string;
         };
       };
       /** The accession does not exist, or does not have a photo with the requested filename. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -1882,13 +1697,13 @@ export interface operations {
       /** Photo deleted. */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
       /** The requested resource was not found. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -1904,13 +1719,13 @@ export interface operations {
       /** Photo metadata retrieved. */
       200: {
         content: {
-          'application/json': components['schemas']['GetFeaturePhotoMetadataResponsePayload'];
+          "application/json": components["schemas"]["GetFeaturePhotoMetadataResponsePayload"];
         };
       };
       /** The requested resource was not found. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -1920,13 +1735,13 @@ export interface operations {
       /** The layer was created successfully. Response includes fields populated by the server, including the layer id. */
       200: {
         content: {
-          'application/json': components['schemas']['CreateLayerResponsePayload'];
+          "application/json": components["schemas"]["CreateLayerResponsePayload"];
         };
       };
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['CreateLayerRequestPayload'];
+        "application/json": components["schemas"]["CreateLayerRequestPayload"];
       };
     };
   };
@@ -1940,7 +1755,7 @@ export interface operations {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['ListLayersResponsePayload'];
+          "application/json": components["schemas"]["ListLayersResponsePayload"];
         };
       };
     };
@@ -1955,13 +1770,13 @@ export interface operations {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['GetLayerResponsePayload'];
+          "application/json": components["schemas"]["GetLayerResponsePayload"];
         };
       };
       /** The specified layer doesn't exist. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -1976,19 +1791,19 @@ export interface operations {
       /** The layer was updated successfully. */
       200: {
         content: {
-          'application/json': components['schemas']['UpdateLayerResponsePayload'];
+          "application/json": components["schemas"]["UpdateLayerResponsePayload"];
         };
       };
       /** The specified layer doesn't exist. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['UpdateLayerRequestPayload'];
+        "application/json": components["schemas"]["UpdateLayerRequestPayload"];
       };
     };
   };
@@ -2002,13 +1817,13 @@ export interface operations {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['DeleteLayerResponsePayload'];
+          "application/json": components["schemas"]["DeleteLayerResponsePayload"];
         };
       };
       /** The specified layer doesn't exist. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -2018,13 +1833,13 @@ export interface operations {
       /** The plant observation was created successfully. */
       200: {
         content: {
-          'application/json': components['schemas']['CreateObservationResponsePayload'];
+          "application/json": components["schemas"]["CreateObservationResponsePayload"];
         };
       };
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['CreateObservationRequestPayload'];
+        "application/json": components["schemas"]["CreateObservationRequestPayload"];
       };
     };
   };
@@ -2038,7 +1853,7 @@ export interface operations {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['ListObservationsResponsePayload'];
+          "application/json": components["schemas"]["ListObservationsResponsePayload"];
         };
       };
     };
@@ -2053,13 +1868,13 @@ export interface operations {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['GetObservationResponsePayload'];
+          "application/json": components["schemas"]["GetObservationResponsePayload"];
         };
       };
       /** The specified plant observation doesn't exist. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -2074,19 +1889,19 @@ export interface operations {
       /** The plant observation was updated successfully. */
       200: {
         content: {
-          'application/json': components['schemas']['UpdateObservationResponsePayload'];
+          "application/json": components["schemas"]["UpdateObservationResponsePayload"];
         };
       };
       /** The specified plant observation doesn't exist. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['UpdateObservationRequestPayload'];
+        "application/json": components["schemas"]["UpdateObservationRequestPayload"];
       };
     };
   };
@@ -2095,13 +1910,13 @@ export interface operations {
       /** The plant was created successfully. */
       200: {
         content: {
-          'application/json': components['schemas']['CreatePlantResponsePayload'];
+          "application/json": components["schemas"]["CreatePlantResponsePayload"];
         };
       };
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['CreatePlantRequestPayload'];
+        "application/json": components["schemas"]["CreatePlantRequestPayload"];
       };
     };
   };
@@ -2119,7 +1934,7 @@ export interface operations {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['PlantSummaryResponsePayload'];
+          "application/json": components["schemas"]["PlantSummaryResponsePayload"];
         };
       };
     };
@@ -2140,7 +1955,7 @@ export interface operations {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['ListPlantsResponsePayload'];
+          "application/json": components["schemas"]["ListPlantsResponsePayload"];
         };
       };
     };
@@ -2155,13 +1970,13 @@ export interface operations {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['GetPlantResponsePayload'];
+          "application/json": components["schemas"]["GetPlantResponsePayload"];
         };
       };
       /** The specified plant doesn't exist. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -2176,19 +1991,19 @@ export interface operations {
       /** The plant was updated successfully. */
       200: {
         content: {
-          'application/json': components['schemas']['UpdatePlantResponsePayload'];
+          "application/json": components["schemas"]["UpdatePlantResponsePayload"];
         };
       };
       /** The specified plant doesn't exist. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['UpdatePlantRequestPayload'];
+        "application/json": components["schemas"]["UpdatePlantRequestPayload"];
       };
     };
   };
@@ -2210,7 +2025,7 @@ export interface operations {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['ListOrganizationsResponse'];
+          "application/json": components["schemas"]["ListOrganizationsResponse"];
         };
       };
     };
@@ -2226,13 +2041,13 @@ export interface operations {
       /** Projects retrieved. */
       200: {
         content: {
-          'application/json': components['schemas']['ListProjectsResponsePayload'];
+          "application/json": components["schemas"]["ListProjectsResponsePayload"];
         };
       };
       /** The user is not a member of the organization, or the organization does not exist. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -2242,7 +2057,7 @@ export interface operations {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['ListProjectsResponsePayload'];
+          "application/json": components["schemas"]["ListProjectsResponsePayload"];
         };
       };
     };
@@ -2252,13 +2067,13 @@ export interface operations {
       /** Project created. */
       200: {
         content: {
-          'application/json': components['schemas']['GetProjectResponsePayload'];
+          "application/json": components["schemas"]["GetProjectResponsePayload"];
         };
       };
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['CreateProjectRequestPayload'];
+        "application/json": components["schemas"]["CreateProjectRequestPayload"];
       };
     };
   };
@@ -2272,13 +2087,13 @@ export interface operations {
       /** Project retrieved. */
       200: {
         content: {
-          'application/json': components['schemas']['GetProjectResponsePayload'];
+          "application/json": components["schemas"]["GetProjectResponsePayload"];
         };
       };
       /** The requested resource was not found. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -2293,13 +2108,13 @@ export interface operations {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['UpdateProjectRequestPayload'];
+        "application/json": components["schemas"]["UpdateProjectRequestPayload"];
       };
     };
   };
@@ -2316,13 +2131,13 @@ export interface operations {
       /** Retrieved list of sites. */
       200: {
         content: {
-          'application/json': components['schemas']['ListSitesResponsePayload'];
+          "application/json": components["schemas"]["ListSitesResponsePayload"];
         };
       };
       /** The project does not exist or is not accessible. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -2332,13 +2147,13 @@ export interface operations {
       /** The accession was created successfully. Response includes fields populated by the server, including the accession number and ID. */
       200: {
         content: {
-          'application/json': components['schemas']['CreateAccessionResponsePayload'];
+          "application/json": components["schemas"]["CreateAccessionResponsePayload"];
         };
       };
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['CreateAccessionRequestPayload'];
+        "application/json": components["schemas"]["CreateAccessionRequestPayload"];
       };
     };
   };
@@ -2352,13 +2167,13 @@ export interface operations {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['GetAccessionResponsePayload'];
+          "application/json": components["schemas"]["GetAccessionResponsePayload"];
         };
       };
       /** The requested resource was not found. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -2376,19 +2191,19 @@ export interface operations {
       /** The accession was updated successfully. Response includes fields populated or modified by the server as a result of the update. */
       200: {
         content: {
-          'application/json': components['schemas']['UpdateAccessionResponsePayload'];
+          "application/json": components["schemas"]["UpdateAccessionResponsePayload"];
         };
       };
       /** The specified accession doesn't exist. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['UpdateAccessionRequestPayload'];
+        "application/json": components["schemas"]["UpdateAccessionRequestPayload"];
       };
     };
   };
@@ -2402,13 +2217,13 @@ export interface operations {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['UpdateAccessionResponsePayload'];
+          "application/json": components["schemas"]["UpdateAccessionResponsePayload"];
         };
       };
       /** The requested resource was not found. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -2423,13 +2238,13 @@ export interface operations {
       /** The accession's photos are listed in the response. */
       200: {
         content: {
-          'application/json': components['schemas']['ListPhotosResponsePayload'];
+          "application/json": components["schemas"]["ListPhotosResponsePayload"];
         };
       };
       /** The accession does not exist. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -2450,13 +2265,13 @@ export interface operations {
       /** The photo was successfully retrieved. */
       200: {
         content: {
-          'image/jpeg': string;
+          "image/jpeg": string;
         };
       };
       /** The accession does not exist, or does not have a photo with the requested filename. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -2472,27 +2287,27 @@ export interface operations {
       /** The requested operation succeeded. */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
       /** The specified accession does not exist. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
       /** The requested photo already exists on the accession. */
       409: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
     requestBody: {
       content: {
-        'multipart/form-data': {
+        "multipart/form-data": {
           file: string;
-          metadata: components['schemas']['UploadPhotoMetadataPayload'];
+          metadata: components["schemas"]["UploadPhotoMetadataPayload"];
         };
       };
     };
@@ -2503,7 +2318,7 @@ export interface operations {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['GetCurrentTimeResponsePayload'];
+          "application/json": components["schemas"]["GetCurrentTimeResponsePayload"];
         };
       };
     };
@@ -2514,13 +2329,13 @@ export interface operations {
       /** The clock has been advanced. The response includes the newly-adjusted time. */
       200: {
         content: {
-          'application/json': components['schemas']['GetCurrentTimeResponsePayload'];
+          "application/json": components["schemas"]["GetCurrentTimeResponsePayload"];
         };
       };
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['AdvanceClockRequestPayload'];
+        "application/json": components["schemas"]["AdvanceClockRequestPayload"];
       };
     };
   };
@@ -2536,7 +2351,7 @@ export interface operations {
     };
     requestBody: {
       content: {
-        'application/json': { [key: string]: { [key: string]: unknown } };
+        "application/json": { [key: string]: { [key: string]: unknown } };
       };
     };
   };
@@ -2554,7 +2369,7 @@ export interface operations {
       /** Notifications in reverse time order (newest first). */
       200: {
         content: {
-          'application/json': components['schemas']['NotificationListResponse'];
+          "application/json": components["schemas"]["NotificationListResponse"];
         };
       };
     };
@@ -2564,7 +2379,7 @@ export interface operations {
       /** All notifications have been marked as read. */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };
@@ -2575,7 +2390,7 @@ export interface operations {
       /** All notifications have been marked as unread. */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };
@@ -2591,13 +2406,13 @@ export interface operations {
       /** Notification has been marked as read. */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
       /** The requested notification ID was not valid. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -2607,13 +2422,13 @@ export interface operations {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['SearchResponsePayload'];
+          "application/json": components["schemas"]["SearchResponsePayload"];
         };
       };
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['SearchRequestPayload'];
+        "application/json": components["schemas"]["SearchRequestPayload"];
       };
     };
   };
@@ -2622,13 +2437,13 @@ export interface operations {
       /** Export succeeded. */
       200: {
         content: {
-          'text/csv': string;
+          "text/csv": string;
         };
       };
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['ExportRequestPayload'];
+        "application/json": components["schemas"]["ExportRequestPayload"];
       };
     };
   };
@@ -2642,8 +2457,39 @@ export interface operations {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['SummaryResponse'];
+          "application/json": components["schemas"]["SummaryResponse"];
         };
+      };
+    };
+  };
+  /** If there are existing timeseries with the same names, the old definitions will be overwritten. */
+  createMultipleTimeseries: {
+    responses: {
+      /** The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateTimeseriesRequestPayload"];
+      };
+    };
+  };
+  recordTimeseriesValues_1: {
+    responses: {
+      /** Successfully processed the request. Note that this status will be returned even if the server was unable to record some of the values. In that case, the failed values will be returned in the response payload. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["RecordTimeseriesValuesResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["RecordTimeseriesValuesRequestPayload"];
       };
     };
   };
@@ -2652,13 +2498,13 @@ export interface operations {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['ListFieldValuesResponsePayload'];
+          "application/json": components["schemas"]["ListFieldValuesResponsePayload"];
         };
       };
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['ListFieldValuesRequestPayload'];
+        "application/json": components["schemas"]["ListFieldValuesRequestPayload"];
       };
     };
   };
@@ -2667,13 +2513,13 @@ export interface operations {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['ListAllFieldValuesResponsePayload'];
+          "application/json": components["schemas"]["ListAllFieldValuesResponsePayload"];
         };
       };
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['ListAllFieldValuesRequestPayload'];
+        "application/json": components["schemas"]["ListAllFieldValuesRequestPayload"];
       };
     };
   };
@@ -2683,7 +2529,7 @@ export interface operations {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['ListSpeciesResponsePayload'];
+          "application/json": components["schemas"]["ListSpeciesResponsePayload"];
         };
       };
     };
@@ -2694,19 +2540,19 @@ export interface operations {
       /** Species created. */
       200: {
         content: {
-          'application/json': components['schemas']['CreateSpeciesResponsePayload'];
+          "application/json": components["schemas"]["CreateSpeciesResponsePayload"];
         };
       };
       /** A species with the requested name already exists. */
       409: {
         content: {
-          'application/json': components['schemas']['CreateSpeciesResponsePayload'];
+          "application/json": components["schemas"]["CreateSpeciesResponsePayload"];
         };
       };
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['CreateSpeciesRequestPayload'];
+        "application/json": components["schemas"]["CreateSpeciesRequestPayload"];
       };
     };
   };
@@ -2721,19 +2567,19 @@ export interface operations {
       /** The requested operation succeeded. */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
       /** The requested resource was not found. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['CreateSpeciesRequestPayload'];
+        "application/json": components["schemas"]["CreateSpeciesRequestPayload"];
       };
     };
   };
@@ -2747,7 +2593,7 @@ export interface operations {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['StorageLocationsResponsePayload'];
+          "application/json": components["schemas"]["StorageLocationsResponsePayload"];
         };
       };
     };
@@ -2762,7 +2608,7 @@ export interface operations {
       /** Retrieved list of sites. */
       200: {
         content: {
-          'application/json': components['schemas']['ListSitesResponsePayload'];
+          "application/json": components["schemas"]["ListSitesResponsePayload"];
         };
       };
     };
@@ -2780,13 +2626,13 @@ export interface operations {
       /** Site retrieved. */
       200: {
         content: {
-          'application/json': components['schemas']['GetSiteResponsePayload'];
+          "application/json": components["schemas"]["GetSiteResponsePayload"];
         };
       };
       /** The requested resource was not found. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -2796,7 +2642,7 @@ export interface operations {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['SpeciesListResponsePayload'];
+          "application/json": components["schemas"]["SpeciesListResponsePayload"];
         };
       };
     };
@@ -2806,19 +2652,19 @@ export interface operations {
       /** Species created. */
       200: {
         content: {
-          'application/json': components['schemas']['SpeciesCreateResponsePayload'];
+          "application/json": components["schemas"]["SpeciesCreateResponsePayload"];
         };
       };
       /** A species with the requested name already exists. */
       409: {
         content: {
-          'application/json': components['schemas']['SpeciesCreateResponsePayload'];
+          "application/json": components["schemas"]["SpeciesCreateResponsePayload"];
         };
       };
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['SpeciesRequestPayload'];
+        "application/json": components["schemas"]["SpeciesRequestPayload"];
       };
     };
   };
@@ -2827,7 +2673,7 @@ export interface operations {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['SpeciesNamesListResponsePayload'];
+          "application/json": components["schemas"]["SpeciesNamesListResponsePayload"];
         };
       };
     };
@@ -2837,25 +2683,25 @@ export interface operations {
       /** Species name added. */
       200: {
         content: {
-          'application/json': components['schemas']['SpeciesNameCreateResponsePayload'];
+          "application/json": components["schemas"]["SpeciesNameCreateResponsePayload"];
         };
       };
       /** The species does not exist. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
       /** The species already has the requested name. */
       409: {
         content: {
-          'application/json': components['schemas']['SpeciesNameCreateResponsePayload'];
+          "application/json": components["schemas"]["SpeciesNameCreateResponsePayload"];
         };
       };
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['SpeciesNameRequestPayload'];
+        "application/json": components["schemas"]["SpeciesNameRequestPayload"];
       };
     };
   };
@@ -2870,13 +2716,13 @@ export interface operations {
       /** Species name retrieved. */
       200: {
         content: {
-          'application/json': components['schemas']['SpeciesNameGetResponsePayload'];
+          "application/json": components["schemas"]["SpeciesNameGetResponsePayload"];
         };
       };
       /** The requested resource was not found. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -2892,13 +2738,13 @@ export interface operations {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['SpeciesNameRequestPayload'];
+        "application/json": components["schemas"]["SpeciesNameRequestPayload"];
       };
     };
   };
@@ -2913,19 +2759,19 @@ export interface operations {
       /** Species name deleted. */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
       /** The requested resource was not found. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
       /** Cannot delete the primary name of a species. */
       409: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };
@@ -2940,13 +2786,13 @@ export interface operations {
       /** Species retrieved. */
       200: {
         content: {
-          'application/json': components['schemas']['SpeciesGetResponsePayload'];
+          "application/json": components["schemas"]["SpeciesGetResponsePayload"];
         };
       };
       /** The requested resource was not found. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -2961,19 +2807,19 @@ export interface operations {
       /** Species updated or merged with an existing species. */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
       /** The requested resource was not found. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['SpeciesRequestPayload'];
+        "application/json": components["schemas"]["SpeciesRequestPayload"];
       };
     };
   };
@@ -2987,19 +2833,19 @@ export interface operations {
       /** Species deleted. */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
       /** The requested resource was not found. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
       /** Cannot delete the species because it is currently in use. */
       409: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };
@@ -3014,30 +2860,30 @@ export interface operations {
       /** Species names retrieved. */
       200: {
         content: {
-          'application/json': components['schemas']['SpeciesNamesListResponsePayload'];
+          "application/json": components["schemas"]["SpeciesNamesListResponsePayload"];
         };
       };
       /** The species does not exist. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
   };
   /** If there are existing timeseries with the same names, the old definitions will be overwritten. */
-  createMultipleTimeseries: {
+  createMultipleTimeseries_1: {
     responses: {
       /** The requested operation succeeded. */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['CreateTimeseriesRequestPayload'];
+        "application/json": components["schemas"]["CreateTimeseriesRequestPayload"];
       };
     };
   };
@@ -3046,13 +2892,13 @@ export interface operations {
       /** Successfully processed the request. Note that this status will be returned even if the server was unable to record some of the values. In that case, the failed values will be returned in the response payload. */
       200: {
         content: {
-          'application/json': components['schemas']['RecordTimeseriesValuesResponsePayload'];
+          "application/json": components["schemas"]["RecordTimeseriesValuesResponsePayload"];
         };
       };
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['RecordTimeseriesValuesRequestPayload'];
+        "application/json": components["schemas"]["RecordTimeseriesValuesRequestPayload"];
       };
     };
   };

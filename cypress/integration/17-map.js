@@ -3,7 +3,7 @@
 
 describe('Map', () => {
   beforeEach(() => {
-    cy.visit('/dashboard');
+    cy.visit('/plants-dashboard');
   });
 
   it('should make the map bigger', () => {

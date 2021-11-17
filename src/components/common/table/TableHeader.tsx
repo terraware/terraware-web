@@ -87,7 +87,7 @@ export default function EnhancedTableHead(props: Props): JSX.Element {
                 id={`table-header-${headCell.id}`}
                 key={headCell.id}
                 align='left'
-                padding={headCell.disablePadding ? 'none' : 'default'}
+                padding={headCell.disablePadding ? 'none' : 'normal'}
                 sortDirection={orderBy === headCell.id ? order : false}
                 className={classes.headcell}
               >

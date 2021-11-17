@@ -1,7 +1,7 @@
 describe('Help', () => {
   describe('Homepage', () => {
     beforeEach(() => {
-      cy.visit('/summary');
+      cy.visit('/home');
     });
 
     it('navbar should have all elements', () => {

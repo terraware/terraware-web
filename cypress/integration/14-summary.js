@@ -3,7 +3,7 @@
 
 describe('Summary', () => {
   beforeEach(() => {
-    cy.visit('/dashboard');
+    cy.visit('/plants-dashboard');
   });
   it('has the right summary results in the first project', () => {
     cy.get('#summary-Plants').contains('4 Plants');

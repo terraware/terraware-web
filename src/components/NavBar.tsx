@@ -1,8 +1,5 @@
 import { useHistory, useRouteMatch } from 'react-router-dom';
 import { useResetRecoilState } from 'recoil';
-import { plantsSelector } from 'src/state/selectors/plants/plants';
-import { plantsFeaturesSelector } from 'src/state/selectors/plants/plantsFeatures';
-import { plantsFilteredSelector } from 'src/state/selectors/plants/plantsFiltered';
 import { pendingAccessionsSelector } from 'src/state/selectors/seeds/pendingCheckIn';
 import strings from 'src/strings';
 import Navbar from './common/Navbar/Navbar';
@@ -13,30 +10,17 @@ import SubNavbar from './common/Navbar/SubNavbar';
 export default function NavBar(): JSX.Element | null {
   const history = useHistory();
 
-  const isDashboardRoute = useRouteMatch('/dashboard/');
-  const isSpeciesRoute = useRouteMatch('/species/');
-  const isPlantsRoute = useRouteMatch('/plants/');
+  const isHomeRoute = useRouteMatch('/home');
+  const isAccessionSummaryRoute = useRouteMatch('/seeds-summary');
   const isAccessionsRoute = useRouteMatch('/accessions/');
   const isCheckinRoute = useRouteMatch('/checkin/');
-  const isSummaryRoute = useRouteMatch('/summary/');
-  const resetplants = useResetRecoilState(plantsSelector);
-  const resetplantsFiltered = useResetRecoilState(plantsFilteredSelector);
-  const resetplantsFeatures = useResetRecoilState(plantsFeaturesSelector);
   const resetPendingCheckInAccessions = useResetRecoilState(pendingAccessionsSelector);
+  const isPlantDashboardRoute = useRouteMatch('/plants-dashboard');
+  const isPlantListRoute = useRouteMatch('/plants-list');
+  const isSpeciesRoute = useRouteMatch('/species');
 
   const navigate = (url: string) => {
     history.push(url);
-  };
-
-  const navigateToDashboard = () => {
-    resetplants();
-    navigate('/dashboard');
-  };
-
-  const navigateToAllPlants = () => {
-    resetplantsFeatures();
-    resetplantsFiltered();
-    navigate('/plants');
   };
 
   const navigateToAccessions = () => {
@@ -46,15 +30,33 @@ export default function NavBar(): JSX.Element | null {
 
   return (
     <Navbar>
-      <NavItem label='Home' icon='home' selected={isDashboardRoute ? true : false} onClick={() => navigateToDashboard()} id='dashboard' />
+      <NavItem label='Home' icon='home' selected={isHomeRoute ? true : false} onClick={() => navigate('/home')} id='dashboard' />
       <NavSection title={strings.FLORA} />
-      <NavItem label='Seeds' icon='seeds' id='seeds' onClick={() => navigate('/summary')}>
+      <NavItem label='Seeds' icon='seeds' id='seeds' onClick={() => !isAccessionSummaryRoute && navigate('/seeds-summary')}>
         <SubNavbar>
-          <NavItem label='Summary' selected={isSummaryRoute ? true : false} onClick={() => navigate('/summary')} id='summary' />
+          <NavItem
+            label='Summary'
+            selected={isAccessionSummaryRoute ? true : false}
+            onClick={() => !isAccessionSummaryRoute && navigate('/seeds-summary')}
+            id='summary'
+          />
+
           <NavItem label='Accessions' selected={isAccessionsRoute || isCheckinRoute ? true : false} onClick={() => navigateToAccessions()} id='accessions' />
         </SubNavbar>
       </NavItem>
-      <NavItem label={strings.ALL_PLANTS} icon='restorationSite' selected={isPlantsRoute ? true : false} onClick={() => navigateToAllPlants()} id='plants' />
+      <NavItem label={strings.PLANTS} icon='restorationSite' onClick={() => !isPlantDashboardRoute && navigate('/plants-dashboard')} id='plants'>
+        <SubNavbar>
+          <NavItem
+            label={strings.DASHBOARD}
+            selected={isPlantDashboardRoute ? true : false}
+            onClick={() => !isPlantDashboardRoute && navigate('/plants-dashboard')}
+            id='dashboard'
+          />
+
+          <NavItem label={strings.PLANTS_LIST} selected={isPlantListRoute ? true : false} onClick={() => navigate('/plants-list')} id='plants-list' />
+        </SubNavbar>
+      </NavItem>
+
       <NavItem label={strings.SPECIES} icon='species' selected={isSpeciesRoute ? true : false} onClick={() => navigate('/species')} id='speciesNb' />
     </Navbar>
   );

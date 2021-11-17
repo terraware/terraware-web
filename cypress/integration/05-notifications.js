@@ -1,7 +1,7 @@
 describe('Notifications', () => {
   beforeEach(() => {
     cy.intercept('GET', '/api/v1/seedbank/notification?*').as('notification');
-    cy.visit('/summary');
+    cy.visit('/seeds-summary');
     cy.wait('@notification');
   });
 

@@ -39,7 +39,7 @@ export default function LabChart<T>({
     const ctx = chartRef?.current?.getContext('2d');
     if (ctx) {
       const data = barData;
-      // tslint:disable-next-line: no-unused-expression
+      // tslint:disable-next-line:no-unused-expression
       new Chart(ctx, {
         // The type of chart we want to create
         type: 'line',
@@ -66,6 +66,7 @@ export default function LabChart<T>({
             display: false,
           },
           scales: {
+            // @ts-ignore
             xAxes: [
               {
                 gridLines: {
@@ -73,6 +74,7 @@ export default function LabChart<T>({
                 },
               },
             ],
+            // @ts-ignore
             yAxes: [
               {
                 display: true,
