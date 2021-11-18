@@ -422,6 +422,7 @@ export interface components {
       attrib?: string;
       notes?: string;
       enteredTime?: string;
+      plant?: components["schemas"]["PlantDetailsPayload"];
     };
     CreateFeatureResponsePayload: {
       feature: components["schemas"]["FeatureResponse"];
@@ -608,6 +609,7 @@ export interface components {
       attrib?: string;
       notes?: string;
       enteredTime?: string;
+      plant?: components["schemas"]["PlantDetailsPayload"];
     };
     FieldNodePayload: components["schemas"]["SearchNodePayload"] & {
       field?: components["schemas"]["SearchField"];
@@ -922,6 +924,13 @@ export interface components {
     };
     /** Search criterion that matches results that meet any of a set of other search criteria. That is, if the list of children is x, y, and z, this will require x OR y OR z. */
     OrNodePayload: components["schemas"]["SearchNodePayload"];
+    /** Additional details for features that represent plants. */
+    PlantDetailsPayload: {
+      datePlanted?: string;
+      label?: string;
+      naturalRegen?: boolean;
+      speciesId?: number;
+    };
     PlantResponse: {
       featureId: number;
       label?: string;
@@ -1396,13 +1405,13 @@ export interface components {
       parentId?: number;
     };
     UpdateFeatureRequestPayload: {
-      layerId: number;
       geom?: components["schemas"]["Geometry"];
       gpsHorizAccuracy?: number;
       gpsVertAccuracy?: number;
       attrib?: string;
       notes?: string;
       enteredTime?: string;
+      plant?: components["schemas"]["PlantDetailsPayload"];
     };
     UpdateFeatureResponsePayload: {
       feature: components["schemas"]["FeatureResponse"];
@@ -1764,6 +1773,10 @@ export interface operations {
   list_1: {
     parameters: {
       query: {
+        minEnteredTime?: string;
+        maxEnteredTime?: string;
+        notes?: string;
+        speciesId?: number;
         skip?: number;
         limit?: number;
       };
