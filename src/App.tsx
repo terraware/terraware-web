@@ -22,6 +22,7 @@ import useTimer from './utils/useTimer';
 import getOrganization, { GetOrganizationResponse, OrgRequestError } from 'src/api/organization/organization';
 import { Organization } from 'src/types/Organization';
 import PageHeader from './components/seeds/PageHeader';
+import { PlantSearchOptions } from './types/Plant';
 
 // @ts-ignore
 mapboxgl.workerClass =
@@ -65,6 +66,7 @@ function AppContent() {
 
   const [organization, setOrganization] = useState<Organization>(emptyOrg);
   const [organizationErrors, setOrganizationErrors] = useState<OrgRequestError[]>([]);
+  const [plantListFilters, setPlantListFilters] = useState<PlantSearchOptions>();
 
   useEffect(() => {
     const populateOrganizationData = async () => {
@@ -120,7 +122,7 @@ function AppContent() {
                 <PlantDashboard organization={organization}/>
               </Route>
               <Route exact path='/plants-list'>
-                <PlantList organization={organization}/>
+                <PlantList organization={organization} filters={plantListFilters} setFilters={setPlantListFilters}/>
               </Route>
               <Route exact path='/species'>
                 <Species />
