@@ -14,11 +14,7 @@ interface Props {
   storageCondition?: string;
 }
 
-export default function LocationDropdown({
-  onChange,
-  storageLocation,
-  storageCondition,
-}: Props): JSX.Element {
+export default function LocationDropdown({ onChange, storageLocation, storageCondition }: Props): JSX.Element {
   const locations = useRecoilValue(locationsSelector);
   const resetLocations = useResetRecoilState(locationsSelector);
 
@@ -41,9 +37,7 @@ export default function LocationDropdown({
     };
   });
 
-  const getConditionValue = (
-    locationSelected: string
-  ): ConditionType | undefined => {
+  const getConditionValue = (locationSelected: string): ConditionType | undefined => {
     const location = locations?.find((_location: StorageLocation) => {
       return _location.storageLocation === locationSelected;
     });

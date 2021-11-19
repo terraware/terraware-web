@@ -4,8 +4,8 @@ import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
 import AllPlantsCellRenderer from './TableCellRenderer';
 import strings from 'src/strings';
-import {Plant} from 'src/types/Plant';
-import {SpeciesById} from 'src/types/Species';
+import { Plant } from 'src/types/Plant';
+import { SpeciesById } from 'src/types/Species';
 
 type PlantForTable = {
   featureId: number;
@@ -29,7 +29,7 @@ type PlantListContentProps = {
 };
 
 export default function PlantListContent(props: PlantListContentProps): JSX.Element {
-  const {plants, speciesById, selectPlant} = props;
+  const { plants, speciesById, selectPlant } = props;
   const [maxItemsPerPage, setMaxItemsPerPage] = useState(100);
   const [itemsToSkip, setItemsToSkip] = useState(0);
 
@@ -41,9 +41,7 @@ export default function PlantListContent(props: PlantListContentProps): JSX.Elem
         return {
           featureId: plant.featureId!,
           date: plant.enteredTime,
-          species: plant.speciesId
-            ? speciesById.get(plant.speciesId)?.name
-            : undefined,
+          species: plant.speciesId ? speciesById.get(plant.speciesId)?.name : undefined,
           geolocation: plant.coordinates
             ? `${plant.coordinates.latitude.toFixed(6)}, ${plant.coordinates.longitude.toFixed(6)}`
             : undefined,
@@ -56,7 +54,7 @@ export default function PlantListContent(props: PlantListContentProps): JSX.Elem
   }, [plants, speciesById]);
 
   const handleChangePage = (event: unknown, newPage: number) => {
-    if (newPage > (itemsToSkip/maxItemsPerPage)) {
+    if (newPage > itemsToSkip / maxItemsPerPage) {
       setItemsToSkip(itemsToSkip + maxItemsPerPage);
     } else {
       setItemsToSkip(itemsToSkip - maxItemsPerPage);
@@ -83,7 +81,7 @@ export default function PlantListContent(props: PlantListContentProps): JSX.Elem
         <TablePagination
           component='div'
           count={plants.length}
-          page={itemsToSkip/maxItemsPerPage}
+          page={itemsToSkip / maxItemsPerPage}
           onChangePage={handleChangePage}
           rowsPerPage={maxItemsPerPage}
           rowsPerPageOptions={[10, 25, 50, 100]}

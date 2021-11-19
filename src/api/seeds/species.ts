@@ -30,7 +30,10 @@ export const postSpecies = async (species: Species): Promise<Species> => {
 };
 
 export const updateSpecies = async (species: Species): Promise<SpeciesPutResponse> => {
-  const endpoint = `${process.env.REACT_APP_TERRAWARE_API}${speciesPutEndpoint}`.replace('{speciesId}', `${species.id}`);
+  const endpoint = `${process.env.REACT_APP_TERRAWARE_API}${speciesPutEndpoint}`.replace(
+    '{speciesId}',
+    `${species.id}`
+  );
   const updateSpeciesRequest: SpeciesPutRequestBody = { name: species.name };
   const response: SpeciesPutResponse = (await axios.put(endpoint, updateSpeciesRequest)).data;
 

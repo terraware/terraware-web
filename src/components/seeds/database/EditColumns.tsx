@@ -187,12 +187,7 @@ const sections: Section[] = [
         COLUMNS_INDEXED.primaryCollector,
         COLUMNS_INDEXED.siteLocation,
       ],
-      [
-        COLUMNS_INDEXED.endangered,
-        COLUMNS_INDEXED.rare,
-        COLUMNS_INDEXED.sourcePlantOrigin,
-        COLUMNS_INDEXED.family,
-      ],
+      [COLUMNS_INDEXED.endangered, COLUMNS_INDEXED.rare, COLUMNS_INDEXED.sourcePlantOrigin, COLUMNS_INDEXED.family],
       [
         COLUMNS_INDEXED.treesCollectedFrom,
         COLUMNS_INDEXED.bagNumber,
@@ -204,16 +199,8 @@ const sections: Section[] = [
   {
     name: 'Processing and Drying',
     options: [
-      [
-        COLUMNS_INDEXED.totalQuantity,
-        COLUMNS_INDEXED.viabilityTestType,
-        COLUMNS_INDEXED.dryingStartDate,
-      ],
-      [
-        COLUMNS_INDEXED.dryingEndDate,
-        COLUMNS_INDEXED.targetStorageCondition,
-        COLUMNS_INDEXED.processingNotes,
-      ],
+      [COLUMNS_INDEXED.totalQuantity, COLUMNS_INDEXED.viabilityTestType, COLUMNS_INDEXED.dryingStartDate],
+      [COLUMNS_INDEXED.dryingEndDate, COLUMNS_INDEXED.targetStorageCondition, COLUMNS_INDEXED.processingNotes],
     ],
   },
   {
@@ -228,10 +215,7 @@ const sections: Section[] = [
     name: 'Withdrawal',
     options: [
       [COLUMNS_INDEXED.withdrawalDate, COLUMNS_INDEXED.withdrawalQuantity],
-      [
-        COLUMNS_INDEXED.withdrawalDestination,
-        COLUMNS_INDEXED.remainingQuantity,
-      ],
+      [COLUMNS_INDEXED.withdrawalDestination, COLUMNS_INDEXED.remainingQuantity],
       [COLUMNS_INDEXED.withdrawalPurpose, COLUMNS_INDEXED.withdrawalNotes],
     ],
   },

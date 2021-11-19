@@ -49,11 +49,7 @@ export default function SnackbarMessage(): JSX.Element {
       <div className={classes[snackbar.type]}>
         {snackbar.type === 'success' && <CheckIcon />}
         {snackbar.type === 'delete' && <DeleteOutline />}
-        <Typography
-          component='p'
-          variant='body1'
-          className={classes.snackbarText}
-        >
+        <Typography component='p' variant='body1' className={classes.snackbarText}>
           {snackbar.msg}
         </Typography>
       </div>

@@ -1,12 +1,7 @@
 import { Link, Paper, Typography } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React from 'react';
-import {
-  Link as RouterLink,
-  useHistory,
-  useParams,
-  useRouteMatch,
-} from 'react-router-dom';
+import { Link as RouterLink, useHistory, useParams, useRouteMatch } from 'react-router-dom';
 import { Accession } from 'src/api/types/accessions';
 import strings from 'src/strings';
 import useStateLocation from 'src/utils/useStateLocation';
@@ -32,19 +27,15 @@ interface Props {
   accession: Accession;
 }
 
-export default function GerminationMenu({
-  accession,
-}: Props): JSX.Element | null {
+export default function GerminationMenu({ accession }: Props): JSX.Element | null {
   const classes = useStyles();
   const { accessionId } = useParams<{ accessionId: string }>();
 
-  const hasNurseryGerminationTest =
-    accession.germinationTestTypes?.includes('Nursery');
+  const hasNurseryGerminationTest = accession.germinationTestTypes?.includes('Nursery');
 
   const hasLabGerminationTest = accession.germinationTestTypes?.includes('Lab');
 
-  const TypographyClass = (route: string) =>
-    useRouteMatch(route) ? classes.bold : classes.link;
+  const TypographyClass = (route: string) => (useRouteMatch(route) ? classes.bold : classes.link);
   const location = useStateLocation();
   const history = useHistory();
 
@@ -73,11 +64,7 @@ export default function GerminationMenu({
             },
           }}
         >
-          <Typography
-            component='p'
-            variant='body1'
-            className={TypographyClass('/accessions/:accessionId/nursery')}
-          >
+          <Typography component='p' variant='body1' className={TypographyClass('/accessions/:accessionId/nursery')}>
             {strings.NURSERY}
           </Typography>
         </Link>
@@ -91,11 +78,7 @@ export default function GerminationMenu({
             state: { from: location.state?.from ?? '' },
           }}
         >
-          <Typography
-            component='p'
-            variant='body1'
-            className={TypographyClass('/accessions/:accessionId/lab')}
-          >
+          <Typography component='p' variant='body1' className={TypographyClass('/accessions/:accessionId/lab')}>
             {strings.LAB}
           </Typography>
         </Link>

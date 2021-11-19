@@ -58,7 +58,8 @@ export default function TopBar(): JSX.Element | null {
             component={RouterLink}
             to={getLocation('/help', location)}
             target='_blank'
-            rel='noopener noreferrer'>
+            rel='noopener noreferrer'
+          >
             <IconButton id='help-button' onClick={() => true}>
               <HelpIcon />
             </IconButton>

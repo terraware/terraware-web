@@ -71,11 +71,7 @@ export default function Help(): JSX.Element {
     setExpanded(isExpanded ? id : false);
   };
 
-  const goTo = (
-    id: string,
-    item = 0,
-    block: 'start' | 'center' | 'end' | 'nearest' = 'start'
-  ) => {
+  const goTo = (id: string, item = 0, block: 'start' | 'center' | 'end' | 'nearest' = 'start') => {
     handleChange(id + item, true);
     setTimeout(() => {
       const element = document.getElementById(id);
@@ -112,19 +108,12 @@ export default function Help(): JSX.Element {
           <Grid item xs={6}>
             <Box className={classes.quicktour} display='flex'>
               <Box display='flex' flexDirection='column'>
-                <Typography variant='h6'>
-                  {strings.HELP_HEADER_QUICK_TOUR}
-                </Typography>
+                <Typography variant='h6'>{strings.HELP_HEADER_QUICK_TOUR}</Typography>
                 <Typography variant='body2' className={classes.detail}>
                   {strings.HELP_HEADER_QUICK_TOUR_TEXT}
                 </Typography>
               </Box>
-              <Box
-                display='flex'
-                justifyContent='center'
-                flex={1}
-                alignItems='center'
-              >
+              <Box display='flex' justifyContent='center' flex={1} alignItems='center'>
                 <Link
                   component={RouterLink}
                   to='/'
@@ -145,12 +134,7 @@ export default function Help(): JSX.Element {
             </Box>
             <Box mt={4}>{content.header}</Box>
             {content.accordions.map((accordion) => (
-              <Box
-                key={accordion.id}
-                id={accordion.id}
-                display='flex'
-                flexDirection='column'
-              >
+              <Box key={accordion.id} id={accordion.id} display='flex' flexDirection='column'>
                 <Typography variant='h4' className={classes.subtitle}>
                   {accordion.title}
                 </Typography>

@@ -32,12 +32,7 @@ interface Props {
   rightComponent?: React.ReactNode;
 }
 
-export default function PageHeader({
-  title,
-  subtitle,
-  children,
-  rightComponent,
-}: Props): JSX.Element {
+export default function PageHeader({ title, subtitle, children, rightComponent }: Props): JSX.Element {
   const classes = useStyles();
 
   return (
@@ -45,12 +40,7 @@ export default function PageHeader({
       <Grid container spacing={3} className={classes.container}>
         <Grid item xs={1} />
         <Grid item xs={10}>
-          <Box
-            display='flex'
-            justifyContent='space-between'
-            alignItems='center'
-            className={classes.titleSpacing}
-          >
+          <Box display='flex' justifyContent='space-between' alignItems='center' className={classes.titleSpacing}>
             <Typography id='title' variant='h4' className={classes.title}>
               {title}
             </Typography>

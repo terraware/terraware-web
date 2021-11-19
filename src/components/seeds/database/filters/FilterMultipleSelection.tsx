@@ -27,9 +27,7 @@ interface Props {
 export default function MultipleSelection(props: Props): JSX.Element {
   const classes = useStyles();
   const filter = React.useRef<FieldNodePayload>();
-  const [selections, setSelections] = React.useState<(string | null)[]>(
-    props.values
-  );
+  const [selections, setSelections] = React.useState<(string | null)[]>(props.values);
 
   React.useEffect(() => {
     setSelections(props.values);
@@ -72,9 +70,7 @@ export default function MultipleSelection(props: Props): JSX.Element {
     }
     options.splice(indexNull, 1);
   }
-  options.sort((a, b) =>
-    a.value && b.value ? a.value.localeCompare(b.value) : 0
-  );
+  options.sort((a, b) => (a.value && b.value ? a.value.localeCompare(b.value) : 0));
 
   return (
     <div id={`filter-list-${props.field}`} className={classes.box}>

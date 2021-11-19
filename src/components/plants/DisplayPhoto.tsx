@@ -7,16 +7,8 @@ interface DisplayPhotoProps {
 }
 
 export default function DisplayPhoto(props: DisplayPhotoProps): JSX.Element {
-  const {photoUrl, style} = props;
+  const { photoUrl, style } = props;
   return (
-    <>
-      {photoUrl && (
-        <img
-          alt='Plant'
-          src={photoUrl}
-          style={{ maxHeight: '100px', display: 'block', ...style }}
-        />
-      )}
-    </>
+    <>{photoUrl && <img alt='Plant' src={photoUrl} style={{ maxHeight: '100px', display: 'block', ...style }} />}</>
   );
 }

@@ -1,9 +1,9 @@
 /* eslint-disable import/no-webpack-loader-syntax */
-import {createStyles, CssBaseline, makeStyles, ThemeProvider,} from '@material-ui/core';
+import { createStyles, CssBaseline, makeStyles, ThemeProvider } from '@material-ui/core';
 import mapboxgl from 'mapbox-gl';
 import React, { useEffect, useState } from 'react';
-import {BrowserRouter as Router, Redirect, Route, Switch,} from 'react-router-dom';
-import {RecoilRoot} from 'recoil';
+import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
+import { RecoilRoot } from 'recoil';
 import TopBar from './components/TopBar';
 import NavBar from './components/NavBar';
 import PlantList from './components/plants/PlantList';
@@ -78,12 +78,13 @@ function AppContent() {
     populateOrganizationData();
   }, []);
 
-
   // Temporary error UI. Will be made prettier once we have input from the Design Team.
   if (organizationErrors.includes(OrgRequestError.ErrorFetchingProjectsOrSites)) {
     return <h1>Whoops! Looks like an unrecoverable internal error when fetching projects and/or sites</h1>;
-  } else if (organizationErrors.includes(OrgRequestError.NoProjects) ||
-             organizationErrors.includes(OrgRequestError.NoSites)) {
+  } else if (
+    organizationErrors.includes(OrgRequestError.NoProjects) ||
+    organizationErrors.includes(OrgRequestError.NoSites)
+  ) {
     return <h1>You don't have access to any projects and/or sites!</h1>;
   }
 
@@ -96,13 +97,15 @@ function AppContent() {
           <NavBar />
         </div>
         <div className={classes.content}>
-          <TopBar/>
+          <TopBar />
           <ErrorBoundary>
             <Switch>
               {/* Routes, in order of their appearance down the side nav bar and then across the top nav bar. */}
               <Route exact path='/home'>
                 {/* Temporary homepage. Needs to be updated with input from the Design Team. */}
-                <main><PageHeader title='Welcome to Terraware!' subtitle=''/></main>
+                <main>
+                  <PageHeader title='Welcome to Terraware!' subtitle='' />
+                </main>
               </Route>
               <Route exact path='/seeds-summary'>
                 <SeedSummary />
@@ -117,10 +120,10 @@ function AppContent() {
                 <Accession />
               </Route>
               <Route exact path='/plants-dashboard'>
-                <PlantDashboard organization={organization}/>
+                <PlantDashboard organization={organization} />
               </Route>
               <Route exact path='/plants-list'>
-                <PlantList organization={organization}/>
+                <PlantList organization={organization} />
               </Route>
               <Route exact path='/species'>
                 <Species />
@@ -130,13 +133,27 @@ function AppContent() {
               </Route>
 
               {/* Redirects. Invalid paths will redirect to the closest valid path. */}
-              <Route path='/plants-dashboard/'><Redirect to='/plants-dashboard'/></Route>
-              <Route path='/plants-list/'><Redirect to='/plants-list'/></Route>
-              <Route path='/seeds-summary/'><Redirect to='/seeds-summary'/></Route>
-              <Route path='/accessions/new/'><Redirect to='/accessions/new'/></Route>
-              <Route path='/species/'><Redirect to='/species'/></Route>
-              <Route path='/help/'><Redirect to='/help'/></Route>
-              <Route path='/'><Redirect to='/home' /></Route>
+              <Route path='/plants-dashboard/'>
+                <Redirect to='/plants-dashboard' />
+              </Route>
+              <Route path='/plants-list/'>
+                <Redirect to='/plants-list' />
+              </Route>
+              <Route path='/seeds-summary/'>
+                <Redirect to='/seeds-summary' />
+              </Route>
+              <Route path='/accessions/new/'>
+                <Redirect to='/accessions/new' />
+              </Route>
+              <Route path='/species/'>
+                <Redirect to='/species' />
+              </Route>
+              <Route path='/help/'>
+                <Redirect to='/help' />
+              </Route>
+              <Route path='/'>
+                <Redirect to='/home' />
+              </Route>
             </Switch>
           </ErrorBoundary>
         </div>

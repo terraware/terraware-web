@@ -37,29 +37,18 @@ export default function EditSpeciesModal(props: Props): JSX.Element {
   const { onClose, open, onOk } = props;
 
   return (
-    <Dialog
-      onClose={onClose}
-      disableEscapeKeyDown
-      open={open}
-      maxWidth='sm'
-      id='speciesModal'
-    >
+    <Dialog onClose={onClose} disableEscapeKeyDown open={open} maxWidth='sm' id='speciesModal'>
       <DialogTitle>
         <Typography component='p' variant='h6' className={classes.bold}>
           {strings.EDIT_SPECIES}
         </Typography>
-        <Typography component='p'>
-          {strings.EDIT_SPECIES_MODAL_QUESTION}
-        </Typography>
+        <Typography component='p'>{strings.EDIT_SPECIES_MODAL_QUESTION}</Typography>
         <DialogCloseButton onClick={onClose} />
       </DialogTitle>
       <DialogActions>
         <Box width={'100%'} className={classes.actions}>
           <Box>
-            <CancelButton
-              onClick={onClose}
-              label={strings.EDIT_SPECIES_MODAL_ANSWER_NO}
-            />
+            <CancelButton onClick={onClose} label={strings.EDIT_SPECIES_MODAL_ANSWER_NO} />
             <Chip
               id='applyAll'
               className={classes.submit}

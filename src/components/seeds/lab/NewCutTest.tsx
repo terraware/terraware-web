@@ -55,12 +55,7 @@ export default function NewCutTest(props: Props): JSX.Element {
   };
 
   return (
-    <Dialog
-      onClose={handleCancel}
-      disableEscapeKeyDown
-      open={open}
-      maxWidth='sm'
-    >
+    <Dialog onClose={handleCancel} disableEscapeKeyDown open={open} maxWidth='sm'>
       <DialogTitle>
         <Typography variant='h6'>Cut test</Typography>
         <DialogCloseButton onClick={handleCancel} />

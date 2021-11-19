@@ -1,12 +1,5 @@
 import MomentUtils from '@date-io/moment';
-import {
-  CircularProgress,
-  Container,
-  Grid,
-  Link,
-  Paper,
-  Typography
-} from '@material-ui/core';
+import { CircularProgress, Container, Grid, Link, Paper, Typography } from '@material-ui/core';
 import Fab from '@material-ui/core/Fab';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
@@ -91,14 +84,7 @@ export default function NewAccessionWrapper(): JSX.Element {
   };
 
   if (accessionId) {
-    return (
-      <Redirect
-        to={getLocation(
-          `/accessions/${accessionId}/seed-collection`,
-          location
-        )}
-      />
-    );
+    return <Redirect to={getLocation(`/accessions/${accessionId}/seed-collection`, location)} />;
   }
 
   return (
@@ -272,11 +258,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
 
     const combinedErrors = [...previousErrors, ...newErrors].filter(
       (error, index, self) =>
-        index ===
-        self.findIndex(
-          (otherError) =>
-            otherError.id === error.id && otherError.msg === error.msg
-        )
+        index === self.findIndex((otherError) => otherError.id === error.id && otherError.msg === error.msg)
     );
     setErrors(combinedErrors);
   };
@@ -313,9 +295,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
           <Typography variant='h6' className={classes.bold}>
             {strings.SEED_COLLECTION}
           </Typography>
-          <Typography component='p'>
-            {strings.SEED_COLLECTION_DESCRIPTION}
-          </Typography>
+          <Typography component='p'>{strings.SEED_COLLECTION_DESCRIPTION}</Typography>
           <Divisor />
           <Grid container spacing={4}>
             <Suspense
@@ -330,12 +310,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
               </Grid>
             </Suspense>
             <Grid item xs={4}>
-              <TextField
-                id='family'
-                value={record.family}
-                onChange={onChange}
-                label={strings.FAMILY}
-              />
+              <TextField id='family' value={record.family} onChange={onChange} label={strings.FAMILY} />
             </Grid>
             <Grid item xs={4} />
             <Grid item xs={4}>
@@ -351,12 +326,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
               />
             </Grid>
             <Grid item xs={4}>
-              <TextField
-                id='founderId'
-                value={record.founderId}
-                onChange={onChange}
-                label={strings.FOUNDER_ID}
-              />
+              <TextField id='founderId' value={record.founderId} onChange={onChange} label={strings.FOUNDER_ID} />
             </Grid>
             <Grid item xs={4} />
             <Grid item xs={4}>
@@ -434,10 +404,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
               }
             >
               <Grid item xs={4}>
-                <MainCollector
-                  onChange={onChange}
-                  mainCollector={record.primaryCollector}
-                />
+                <MainCollector onChange={onChange} mainCollector={record.primaryCollector} />
               </Grid>
             </Suspense>
             <Grid item xs={4}>
@@ -451,20 +418,10 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
           <Divisor />
           <Grid container spacing={4}>
             <Grid item xs={4}>
-              <TextField
-                id='siteLocation'
-                value={record.siteLocation}
-                onChange={onChange}
-                label={strings.SITE}
-              />
+              <TextField id='siteLocation' value={record.siteLocation} onChange={onChange} label={strings.SITE} />
             </Grid>
             <Grid item xs={4}>
-              <TextField
-                id='landowner'
-                value={record.landowner}
-                onChange={onChange}
-                label={strings.LANDOWNER}
-              />
+              <TextField id='landowner' value={record.landowner} onChange={onChange} label={strings.LANDOWNER} />
             </Grid>
             <Grid item xs={4} />
             <Grid item xs={12}>
@@ -482,31 +439,17 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
           {updating && (
             <Grid container spacing={4}>
               <Grid item xs={3}>
-                <Typography
-                  component='p'
-                  variant='body2'
-                  className={classes.listItem}
-                >
+                <Typography component='p' variant='body2' className={classes.listItem}>
                   {strings.BAG_IDS}
                 </Typography>
                 {record.bagNumbers?.map((bag, index) => (
-                  <Typography
-                    id={`bag${index}`}
-                    key={index}
-                    component='p'
-                    variant='body1'
-                    className={classes.listItem}
-                  >
+                  <Typography id={`bag${index}`} key={index} component='p' variant='body1' className={classes.listItem}>
                     {bag}
                   </Typography>
                 ))}
               </Grid>
               <Grid item xs={5}>
-                <Typography
-                  component='p'
-                  variant='body2'
-                  className={classes.listItem}
-                >
+                <Typography component='p' variant='body2' className={classes.listItem}>
                   {strings.PHOTOS}
                 </Typography>
                 {photoFilenames?.map((photo, index) => (
@@ -514,27 +457,16 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
                     id={`photo-${index}`}
                     key={index}
                     target='_blank'
-                    href={getPhotoEndpoint(
-                      (record as unknown as Accession).id,
-                      photo
-                    )}
+                    href={getPhotoEndpoint((record as unknown as Accession).id, photo)}
                   >
-                    <Typography
-                      component='p'
-                      variant='body1'
-                      className={classes.photoLink}
-                    >
+                    <Typography component='p' variant='body1' className={classes.photoLink}>
                       {photo}
                     </Typography>
                   </Link>
                 ))}
               </Grid>
               <Grid item xs={4}>
-                <Typography
-                  component='p'
-                  variant='body2'
-                  className={classes.listItem}
-                >
+                <Typography component='p' variant='body2' className={classes.listItem}>
                   {strings.GEOLOCATIONS}
                 </Typography>
                 {record.geolocations?.map((geolocation, index) => (

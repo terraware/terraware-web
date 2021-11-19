@@ -36,9 +36,7 @@ export default function DateRange(props: Props): JSX.Element {
 
   const onChangeDate = (id: string, value?: string) => {
     const formatedValue = value ? value.substr(0, 10) : null;
-    const newValues = props.values.length
-      ? [...props.values]
-      : [startDate, endDate];
+    const newValues = props.values.length ? [...props.values] : [startDate, endDate];
     if (id === 'startDate' && value) {
       setStartDate(formatedValue);
       newValues[0] = formatedValue;

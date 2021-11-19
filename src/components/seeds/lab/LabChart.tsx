@@ -2,12 +2,7 @@ import { createStyles, makeStyles, useTheme } from '@material-ui/core';
 import Chart from 'chart.js/auto';
 import React from 'react';
 import { Germination } from 'src/api/types/tests';
-import {
-  descendingComparator,
-  getComparator,
-  Order,
-  stableSort,
-} from '../../common/table/sort';
+import { descendingComparator, getComparator, Order, stableSort } from '../../common/table/sort';
 import { EnhancedTableDetailsRow } from '../../common/table/types';
 
 const useStyles = makeStyles(() =>
@@ -24,11 +19,7 @@ export interface Props {
   defaultSort: string;
 }
 
-export default function LabChart<T>({
-  row,
-  rowName,
-  defaultSort,
-}: Props): JSX.Element {
+export default function LabChart<T>({ row, rowName, defaultSort }: Props): JSX.Element {
   const classes = useStyles();
   const [order] = React.useState<Order>('asc');
   const [orderBy] = React.useState(defaultSort);

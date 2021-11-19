@@ -51,14 +51,10 @@ interface Props {
   onSubmit: (record: Accession) => void;
 }
 
-export default function WithdrawalView({
-  accession,
-  onSubmit,
-}: Props): JSX.Element {
+export default function WithdrawalView({ accession, onSubmit }: Props): JSX.Element {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
-  const [selectedRecord, setSelectedRecord] =
-    React.useState<AccessionWithdrawal>();
+  const [selectedRecord, setSelectedRecord] = React.useState<AccessionWithdrawal>();
   const [openInfoModal, setOpenInfoModal] = React.useState(false);
 
   React.useEffect(() => {
@@ -69,28 +65,14 @@ export default function WithdrawalView({
     ? `${accession.initialQuantity?.quantity} ${accession.initialQuantity?.units}`
     : 0;
   const seedsWithdrawn = `${
-    accession.totalPastWithdrawalQuantity
-      ? accession.totalPastWithdrawalQuantity?.quantity.toFixed(1)
-      : ''
-  } ${
-    accession.totalPastWithdrawalQuantity
-      ? accession.totalPastWithdrawalQuantity?.units
-      : ''
-  }\r
-   ${
-     accession.totalScheduledWithdrawalQuantity
-       ? accession.totalScheduledWithdrawalQuantity?.quantity
-       : ''
-   } ${
-    accession.totalScheduledWithdrawalQuantity
-      ? accession.totalScheduledWithdrawalQuantity?.units
-      : ''
+    accession.totalPastWithdrawalQuantity ? accession.totalPastWithdrawalQuantity?.quantity.toFixed(1) : ''
+  } ${accession.totalPastWithdrawalQuantity ? accession.totalPastWithdrawalQuantity?.units : ''}\r
+   ${accession.totalScheduledWithdrawalQuantity ? accession.totalScheduledWithdrawalQuantity?.quantity : ''} ${
+    accession.totalScheduledWithdrawalQuantity ? accession.totalScheduledWithdrawalQuantity?.units : ''
   } ${accession.totalScheduledWithdrawalQuantity ? strings.SCHEDULED : ''}`;
   const seedsAvailable = accession.remainingQuantity?.quantity || 0;
 
-  const allowWithdrawalInGrams = Boolean(
-    accession.processingMethod === 'Weight'
-  );
+  const allowWithdrawalInGrams = Boolean(accession.processingMethod === 'Weight');
 
   const onEdit = (row: AccessionWithdrawal) => {
     setSelectedRecord(row);
@@ -104,14 +86,10 @@ export default function WithdrawalView({
 
   const onCloseModal = (value?: AccessionWithdrawal) => {
     if (value) {
-      const newWithdrawals = !accession.withdrawals
-        ? []
-        : [...accession.withdrawals];
+      const newWithdrawals = !accession.withdrawals ? [] : [...accession.withdrawals];
 
       if (selectedRecord) {
-        const index = newWithdrawals.findIndex(
-          (withdrawal) => withdrawal.id === selectedRecord.id
-        );
+        const index = newWithdrawals.findIndex((withdrawal) => withdrawal.id === selectedRecord.id);
         newWithdrawals.splice(index, 1, value);
       } else {
         newWithdrawals.push(value);
@@ -140,9 +118,7 @@ export default function WithdrawalView({
   };
 
   const onDelete = (value: AccessionWithdrawal) => {
-    const newWithdrawals =
-      accession?.withdrawals?.filter((withdrawal) => withdrawal !== value) ??
-      [];
+    const newWithdrawals = accession?.withdrawals?.filter((withdrawal) => withdrawal !== value) ?? [];
     accession.withdrawals = newWithdrawals;
     onSubmit(accession);
 
@@ -150,12 +126,8 @@ export default function WithdrawalView({
   };
 
   const hasBothWithdrawals =
-    accession.withdrawals?.some(
-      (withdrawal) => withdrawal.withdrawnQuantity?.units !== 'Seeds'
-    ) &&
-    accession.withdrawals?.some(
-      (withdrawal) => withdrawal.withdrawnQuantity?.units === 'Seeds'
-    );
+    accession.withdrawals?.some((withdrawal) => withdrawal.withdrawnQuantity?.units !== 'Seeds') &&
+    accession.withdrawals?.some((withdrawal) => withdrawal.withdrawnQuantity?.units === 'Seeds');
 
   return (
     <main>
@@ -173,9 +145,7 @@ export default function WithdrawalView({
           <Typography variant='h6' className={classes.bold}>
             {strings.WITHDRAWAL}
           </Typography>
-          <Typography component='p'>
-            {strings.WITHDRAWAL_DESCRIPTION}
-          </Typography>
+          <Typography component='p'>{strings.WITHDRAWAL_DESCRIPTION}</Typography>
           <Divisor />
 
           {seedsAvailable === 0 && (
@@ -187,12 +157,7 @@ export default function WithdrawalView({
 
           <Grid container spacing={4}>
             <Grid item xs={4}>
-              <SummaryBox
-                id='total-seeds'
-                title={strings.INITIAL_SEEDS}
-                value={seedsTotal}
-                variant='default'
-              />
+              <SummaryBox id='total-seeds' title={strings.INITIAL_SEEDS} value={seedsTotal} variant='default' />
             </Grid>
             <Grid item xs={4}>
               <SummaryBox
@@ -235,9 +200,7 @@ export default function WithdrawalView({
             <Grid item className={classes.right}>
               <Chip
                 id='new-withdrawal-button'
-                className={
-                  seedsAvailable > 0 ? classes.greenChip : classes.grayChip
-                }
+                className={seedsAvailable > 0 ? classes.greenChip : classes.grayChip}
                 label={strings.NEW_WITHDRAWAL}
                 clickable={seedsAvailable > 0}
                 deleteIcon={<AddIcon classes={newWithdrawalChipStyles()} />}
@@ -263,11 +226,7 @@ const COLUMNS: TableColumnType[] = [
   { key: 'notes', name: strings.NOTES, type: 'notes' },
 ];
 
-function sortComparator(
-  a: AccessionWithdrawal,
-  b: AccessionWithdrawal,
-  orderBy: any
-): 1 | -1 | 0 {
+function sortComparator(a: AccessionWithdrawal, b: AccessionWithdrawal, orderBy: any): 1 | -1 | 0 {
   if (orderBy === 'quantity') {
     const aValue =
       a.withdrawnQuantity?.units === 'Seeds'

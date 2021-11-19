@@ -36,11 +36,7 @@ export default function UserMenu(): JSX.Element {
 
   return (
     <div>
-      <IconButton
-        onClick={handleClick}
-        size='small'
-        className={classes.iconContainer}
-      >
+      <IconButton onClick={handleClick} size='small' className={classes.iconContainer}>
         <AvatarIcon className={classes.icon} />
         <KeyboardArrowDownIcon />
       </IconButton>

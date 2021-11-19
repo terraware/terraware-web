@@ -334,15 +334,7 @@ export interface Preset {
 
 export const defaultPreset: Preset = {
   name: 'Default',
-  fields: [
-    'accessionNumber',
-    'species',
-    'siteLocation',
-    'state',
-    'collectedDate',
-    'receivedDate',
-    'primaryCollector',
-  ],
+  fields: ['accessionNumber', 'species', 'siteLocation', 'state', 'collectedDate', 'receivedDate', 'primaryCollector'],
 };
 
 const generalInventoryPreset: Preset = {

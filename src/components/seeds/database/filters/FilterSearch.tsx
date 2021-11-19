@@ -1,9 +1,4 @@
-import {
-  createStyles,
-  InputAdornment,
-  makeStyles,
-  TextField,
-} from '@material-ui/core';
+import { createStyles, InputAdornment, makeStyles, TextField } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import React from 'react';
 import { FieldNodePayload, SearchField } from 'src/api/types/search';

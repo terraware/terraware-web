@@ -63,10 +63,7 @@ export default function EnhancedTable<T>({
   const [order, setOrder] = React.useState<Order>(_order);
   const [orderBy, setOrderBy] = React.useState(_orderBy);
 
-  const handleRequestSort = (
-    event: React.MouseEvent<unknown>,
-    property: string
-  ) => {
+  const handleRequestSort = (event: React.MouseEvent<unknown>, property: string) => {
     const isAsc = orderBy === property && order === 'asc';
     const newOrder = isAsc ? 'desc' : 'asc';
     setOrder(newOrder);
@@ -96,65 +93,45 @@ export default function EnhancedTable<T>({
           onReorderEnd={onReorderEnd}
         />
         <TableBody>
-          {stableSort(rows, getComparator(order, orderBy, sortComparator)).map(
-            (row, index) => {
-              const onClick = onSelect ? () => onSelect(row as T) : undefined;
+          {stableSort(rows, getComparator(order, orderBy, sortComparator)).map((row, index) => {
+            const onClick = onSelect ? () => onSelect(row as T) : undefined;
 
-              return (
-                <React.Fragment key={index}>
-                  <TableRow
-                    id={`row${index + 1}`}
-                    classes={{ hover: classes.hover }}
-                    hover={
-                      Boolean(onSelect) &&
-                      (isClickable ? isClickable(row as T) : true) &&
-                      !hasEditColumn
+            return (
+              <React.Fragment key={index}>
+                <TableRow
+                  id={`row${index + 1}`}
+                  classes={{ hover: classes.hover }}
+                  hover={Boolean(onSelect) && (isClickable ? isClickable(row as T) : true) && !hasEditColumn}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (onClick && !hasEditColumn && (isClickable ? isClickable(row as T) : true)) {
+                      onClick();
                     }
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      if (
-                        onClick &&
-                        !hasEditColumn &&
-                        (isClickable ? isClickable(row as T) : true)
-                      ) {
-                        onClick();
-                      }
-                    }}
-                    className={
-                      isInactive && isInactive(row as T)
-                        ? classes.inactiveRow
-                        : undefined
-                    }
-                  >
-                    {columns.map((c) => (
-                      <Renderer
-                        index={index + 1}
-                        key={c.key}
-                        row={row as T}
-                        column={c}
-                        value={row[c.key]}
-                        onRowClick={onClick}
-                      />
-                    ))}
-                  </TableRow>
-                  {DetailsRenderer && (
-                    <DetailsRenderer index={index} row={row} />
-                  )}
-                </React.Fragment>
-              );
-            }
-          )}
+                  }}
+                  className={isInactive && isInactive(row as T) ? classes.inactiveRow : undefined}
+                >
+                  {columns.map((c) => (
+                    <Renderer
+                      index={index + 1}
+                      key={c.key}
+                      row={row as T}
+                      column={c}
+                      value={row[c.key]}
+                      onRowClick={onClick}
+                    />
+                  ))}
+                </TableRow>
+                {DetailsRenderer && <DetailsRenderer index={index} row={row} />}
+              </React.Fragment>
+            );
+          })}
         </TableBody>
       </Table>
     </TableContainer>
   );
 }
 
-export function tableSort<T>(
-  ignore: boolean,
-  array: T[],
-  comparator: (a: T, b: T) => number
-): T[] {
+export function tableSort<T>(ignore: boolean, array: T[], comparator: (a: T, b: T) => number): T[] {
   if (ignore) {
     return array;
   }

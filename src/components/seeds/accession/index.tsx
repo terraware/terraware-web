@@ -55,18 +55,14 @@ function Content(): JSX.Element {
   const history = useHistory();
 
   const accession = useRecoilValue(getAccessionSelector(parseInt(accessionId, 10)));
-  const resetAccession = useResetRecoilState(
-    getAccessionSelector(parseInt(accessionId, 10))
-  );
+  const resetAccession = useResetRecoilState(getAccessionSelector(parseInt(accessionId, 10)));
 
   React.useEffect(() => {
     if (accession && accession.id) {
       if (history.location.pathname.endsWith(accession.id.toString())) {
         const state = accession.state;
         const newLocation = {
-          pathname: `/accessions/${
-            accession.id
-          }/${pathDestinationForState(state)}`,
+          pathname: `/accessions/${accession.id}/${pathDestinationForState(state)}`,
           state: history.location.state,
         };
         history.replace(newLocation);
@@ -82,9 +78,7 @@ function Content(): JSX.Element {
 
   const clonedAccession = {
     ...accession,
-    secondaryCollectors: accession.secondaryCollectors && [
-      ...accession.secondaryCollectors,
-    ],
+    secondaryCollectors: accession.secondaryCollectors && [...accession.secondaryCollectors],
   };
 
   const onSubmit = async (record: Accession) => {
@@ -119,14 +113,8 @@ function Content(): JSX.Element {
                   onSubmit={onSubmit}
                 />
               </Route>
-              <Route
-                exact
-                path='/accessions/:accessionId/processing-drying'
-              >
-                <ProcessingAndDrying
-                  accession={clonedAccession}
-                  onSubmit={onSubmit}
-                />
+              <Route exact path='/accessions/:accessionId/processing-drying'>
+                <ProcessingAndDrying accession={clonedAccession} onSubmit={onSubmit} />
               </Route>
               <Route exact path='/accessions/:accessionId/storage'>
                 <Storage accession={clonedAccession} onSubmit={onSubmit} />

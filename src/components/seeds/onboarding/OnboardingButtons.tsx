@@ -40,22 +40,13 @@ interface Props {
   close: () => void;
 }
 
-export default function OnboardingButtons({
-  current,
-  content,
-  totalSteps,
-  gotoStep,
-  close,
-}: Props): JSX.Element {
+export default function OnboardingButtons({ current, content, totalSteps, gotoStep, close }: Props): JSX.Element {
   const classes = useStyles();
 
   return (
     <div className={classes.onboarding}>
       {content}
-      <Controls
-        data-tour-elem='controls'
-        className={classes.onboardingControls}
-      >
+      <Controls data-tour-elem='controls' className={classes.onboardingControls}>
         {current === totalSteps - 1 && (
           <Chip
             id='nextStep'

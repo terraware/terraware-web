@@ -1,69 +1,59 @@
-[![Deployment](https://github.com/terraware/tree-location-web/actions/workflows/workflow.yml/badge.svg)](https://github.com/terraware/tree-location-web/actions/workflows/workflow.yml)
-
 # Plant Locator App
 
-## Running the app in development mode
-
-### Step 1: Configure the `.env` file
-
-```
-KEYCLOAK_RESOURCE=(Keycloak client ID)
-KEYCLOAK_CREDENTIALS_SECRET=(Keycloak client secret)
-KEYCLOAK_REALM=(Keycloak realm)
-KEYCLOAK_AUTH_SERVER_URL=(Keycloak server URL)
-REACT_APP_TERRAWARE_API=http://localhost:8080
-```
-
-### Step 2: Login to Docker hub
-
-To be able to access the Docker registry, you must first login:
+## How to Run the App in Development Mode
+1. Configure the `.env` file using the sample file `.env.sample`
+   
+2. Login to Docker hub
 
 ```shell
 docker login
 ```
 
-Just type your username and password and you will be set.
+3. Install dependencies
 
-### Step 3: Install dependencies
-
-```
+```shell
 yarn
 ```
 
-### Step 4: Running the app
-
-Execute the following commands:
+4. Start the app
 
 ```shell
-yarn docker:start
-yarn start
+yarn docker:start  # Run the server code
+yarn start         # Run the front-end code
 ```
 
-### Step 5: Logging into the app
-
-API endpoints will return HTTP 401 if you're not logged in. If you want to manually log in, you can use the API endpoint that redirects you to a login page. It takes a parameter to tell it where to send you after you've logged in:
-
-```
+5. Login. If you configured your environment variables correctly then you'll be taken to a keycloak login page. You may also try to login using through this API endpoint.
+``` shell
 http://localhost:8080/api/v1/login?redirect=http://localhost:3000/
 ```
 
-### Step 6: Stopping the app
-
-Execute the following commands:
+6. Stop the app
 
 ```shell
 yarn docker:stop
+# Stop the process running the frontend
 ```
 
-## Run Linter
+## How to Contribute
 
-Execute the following commands:
+Before putting up a pull request, make sure to run the following commands. The CI will check that these steps are completed.
 
 ```shell
-yarn lint
+yarn generate-types  # generate types for any server side API changes
+yarn format          # run code formatter
+yarn lint            # run linter to check for code quality issues
+yarn ts              # run the typescript types checker
+yarn test            # run the Jest (unit and integration) tests
+# run the end to end tests, see the section below for more details
 ```
 
-## Run End to End tests
+Tip: you can run everything except the end-to-end tests using:
+```shell
+yarn generate-types && yarn format && yarn lint && yarn ts && yarn test
+```
+
+
+## How to Run the End-to-End Tests
 
 Execute this command before each run of the end-to-end tests. This script does two things. #1 it downloads and start a Docker image for the terraware backend server and #2 it resets the state of the `terraware` database.
 
@@ -82,25 +72,14 @@ ALTER DATABASE terraware RENAME TO terrawareTEMP;
 To run the end-to-end tests:
 
 ```shell
-# start the frontend server
-yarn start:dev
-# run the tests in interactive mode
-yarn cy
-# OR run the tests on the command line and generate a report
-yarn cy:run
-yarn e2e:report
+yarn server:reset  # start server and reset database state
+yarn start:dev     # start the frontend
+yarn cy            # run the tests in interactive mode
+# OR
+yarn cy:run && yarn e2e:report  # run the tests on the command line and generate a report
+yarn docker:stop   # don't forget to stop the server when you're done
 ```
 
-### Generating endpoint types
-
-Execute the following command:
-
-```shell
-yarn generate-types
-```
-
-This will create the file `src/api/types/generated-schema.ts`
-
-### TreeLocator API
-
-The Swagger documentation can be accesed [here](http://localhost:8080/docs)
+## Useful links
+- The API Swagger documentation [link](http://localhost:8080/docs)
+- Github deployment information [link](https://github.com/terraware/tree-location-web/actions/workflows/workflow.yml)

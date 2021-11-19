@@ -9,17 +9,12 @@ interface Props {
   onChange: (id: string, value: unknown, isNew: boolean) => void;
 }
 
-export default function SpeciesDropdown({
-  species,
-  onChange,
-}: Props): JSX.Element {
+export default function SpeciesDropdown({ species, onChange }: Props): JSX.Element {
   const speciesList = useRecoilValue(speciesSelector);
   const resetSpecies = useResetRecoilState(speciesSelector);
 
   const onChangeHandler = (id: string, selectedSpecies: string) => {
-    const found = speciesList.findIndex(
-      (item) => item.name === selectedSpecies
-    );
+    const found = speciesList.findIndex((item) => item.name === selectedSpecies);
     if (found === -1) {
       onChange(id, selectedSpecies, true);
     } else {

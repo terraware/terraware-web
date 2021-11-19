@@ -50,13 +50,7 @@ export default function FooterButtons({
     <>
       {!updating && (
         <Link component={RouterLink} to='/'>
-          <Chip
-            id='cancelButton'
-            className={classes.cancel}
-            label={strings.CANCEL}
-            clickable
-            variant='outlined'
-          />
+          <Chip id='cancelButton' className={classes.cancel} label={strings.CANCEL} clickable variant='outlined' />
         </Link>
       )}
       {(isEditing || isSaving || isSaved) && updating && (
@@ -76,13 +70,7 @@ export default function FooterButtons({
             root: classes.submit,
             disabled: classes.disabled,
           }}
-          label={
-            updating
-              ? isSaving
-                ? strings.SAVING
-                : strings.SAVE_CHANGES
-              : strings.CREATE_ACCESSION
-          }
+          label={updating ? (isSaving ? strings.SAVING : strings.SAVE_CHANGES) : strings.CREATE_ACCESSION}
           clickable
           color='primary'
           onClick={() => onSubmitHandler()}

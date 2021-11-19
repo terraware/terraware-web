@@ -63,13 +63,7 @@ export default function OnboardingModal(props: Props): JSX.Element {
   const { onClose, open, onOk } = props;
 
   return (
-    <Dialog
-      onClose={onClose}
-      disableEscapeKeyDown
-      open={open}
-      maxWidth='lg'
-      id='onboardingModal'
-    >
+    <Dialog onClose={onClose} disableEscapeKeyDown open={open} maxWidth='lg' id='onboardingModal'>
       <DialogTitle className={classes.modalTitle}>
         <Typography component='p' variant='h5' className={classes.bold}>
           {strings.TOUR_TITLE}
@@ -87,22 +81,11 @@ export default function OnboardingModal(props: Props): JSX.Element {
             color='primary'
             onClick={onOk}
           />
-          <Chip
-            id='declineTour'
-            className={classes.cancel}
-            label={strings.DECLINE_TOUR}
-            clickable
-            onClick={onClose}
-          />
+          <Chip id='declineTour' className={classes.cancel} label={strings.DECLINE_TOUR} clickable onClick={onClose} />
         </Box>
       </DialogActions>
       <div className={classes.imageContainer}>
-        <img
-          src='/assets/summaryImage.png'
-          width='100%'
-          className={classes.modalImage}
-          alt='summary'
-        />
+        <img src='/assets/summaryImage.png' width='100%' className={classes.modalImage} alt='summary' />
       </div>
     </Dialog>
   );

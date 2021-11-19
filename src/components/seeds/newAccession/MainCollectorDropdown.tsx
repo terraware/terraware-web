@@ -9,10 +9,7 @@ interface Props {
   mainCollector?: string;
 }
 
-export default function MainCollectorDropdown({
-  mainCollector,
-  onChange,
-}: Props): JSX.Element {
+export default function MainCollectorDropdown({ mainCollector, onChange }: Props): JSX.Element {
   const collectors = useRecoilValue(collectorsSelector);
   const resetCollectors = useResetRecoilState(collectorsSelector);
 

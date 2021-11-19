@@ -60,7 +60,7 @@ export default function NavBar(): JSX.Element | null {
           <NavItem
             label={strings.DASHBOARD}
             selected={isPlantDashboardRoute ? true : false}
-            onClick={() => !isPlantDashboardRoute &&  navigate('/plants-dashboard')}
+            onClick={() => !isPlantDashboardRoute && navigate('/plants-dashboard')}
             id='dashboard'
           />
 
@@ -70,10 +70,8 @@ export default function NavBar(): JSX.Element | null {
             onClick={() => navigate('/plants-list')}
             id='plants-list'
           />
-
         </SubNavbar>
       </NavItem>
-
 
       <NavItem
         label={strings.SPECIES}

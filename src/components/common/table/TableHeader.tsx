@@ -5,11 +5,7 @@ import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import DragIndicatorIcon from '@material-ui/icons/DragIndicator';
 import React from 'react';
-import {
-  SortableContainer,
-  SortableElement,
-  SortableHandle,
-} from 'react-sortable-hoc';
+import { SortableContainer, SortableElement, SortableHandle } from 'react-sortable-hoc';
 import { Order } from './sort';
 import { TableColumnType } from './types';
 
@@ -56,26 +52,17 @@ function columnsToHeadCells(columns: TableColumnType[]): HeadCell[] {
 export default function EnhancedTableHead(props: Props): JSX.Element {
   const classes = useStyles();
   const { order, orderBy, onRequestSort } = props;
-  const createSortHandler = (property: string) => (
-    event: React.MouseEvent<unknown>
-  ) => {
+  const createSortHandler = (property: string) => (event: React.MouseEvent<unknown>) => {
     onRequestSort(event, property);
   };
 
-  const [headCells, setHeadCells] = React.useState<HeadCell[]>(
-    columnsToHeadCells(props.columns)
-  );
+  const [headCells, setHeadCells] = React.useState<HeadCell[]>(columnsToHeadCells(props.columns));
   React.useEffect(() => {
     setHeadCells(columnsToHeadCells(props.columns));
   }, [props.columns]);
 
   return (
-    <SortableHead
-      lockAxis='x'
-      axis='x'
-      onSortEnd={props.onReorderEnd}
-      useDragHandle
-    >
+    <SortableHead lockAxis='x' axis='x' onSortEnd={props.onReorderEnd} useDragHandle>
       <TableRow id='table-header'>
         {headCells.map((headCell, i) => (
           <SortableCell
@@ -110,18 +97,12 @@ export default function EnhancedTableHead(props: Props): JSX.Element {
   );
 }
 
-const DragHandle = SortableHandle(() => (
-  <DragIndicatorIcon fontSize='small' classes={dragIconStyles()} />
-));
+const DragHandle = SortableHandle(() => <DragIndicatorIcon fontSize='small' classes={dragIconStyles()} />);
 
-const SortableHead = SortableContainer(
-  ({ children }: { children: React.ReactNode }) => {
-    return <TableHead>{children}</TableHead>;
-  }
-);
+const SortableHead = SortableContainer(({ children }: { children: React.ReactNode }) => {
+  return <TableHead>{children}</TableHead>;
+});
 
-const SortableCell = SortableElement(
-  ({ value }: { value: React.ReactNode }) => {
-    return <>{value}</>;
-  }
-);
+const SortableCell = SortableElement(({ value }: { value: React.ReactNode }) => {
+  return <>{value}</>;
+});

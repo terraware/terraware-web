@@ -1,12 +1,4 @@
-import {
-  Box,
-  Chip,
-  Collapse,
-  createStyles,
-  Grid,
-  makeStyles,
-  TableCell,
-} from '@material-ui/core';
+import { Box, Chip, Collapse, createStyles, Grid, makeStyles, TableCell } from '@material-ui/core';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
@@ -16,12 +8,7 @@ import { GerminationTest } from 'src/api/types/tests';
 import strings from 'src/strings';
 import Divisor from '../../common/Divisor';
 import SummaryBox from '../../common/SummaryBox';
-import {
-  descendingComparator,
-  getComparator,
-  Order,
-  stableSort,
-} from '../../common/table/sort';
+import { descendingComparator, getComparator, Order, stableSort } from '../../common/table/sort';
 import { DetailsProps } from '../../common/table/types';
 import LabChart from './LabChart';
 
@@ -80,8 +67,7 @@ export default function EnhancedTableDetails<T>({
   const [open, setOpen] = React.useState([false]);
 
   const [totalSeedsGerminated, setTotalSeedsGerminated] = React.useState(0);
-  const [percentageTotalSeedsGerminated, setPercentageTotalSeedsGerminated] =
-    React.useState('');
+  const [percentageTotalSeedsGerminated, setPercentageTotalSeedsGerminated] = React.useState('');
 
   const calculateTotalSeedsGerminated = () => {
     let total = 0;
@@ -95,9 +81,7 @@ export default function EnhancedTableDetails<T>({
 
     setTotalSeedsGerminated(total);
     if (selectedTest.seedsSown) {
-      setPercentageTotalSeedsGerminated(
-        ((total / selectedTest.seedsSown) * 100).toFixed(1)
-      );
+      setPercentageTotalSeedsGerminated(((total / selectedTest.seedsSown) * 100).toFixed(1));
     }
   };
 
@@ -106,9 +90,7 @@ export default function EnhancedTableDetails<T>({
   });
 
   React.useEffect(() => {
-    const previousOpen = localStorage.getItem(
-      `${accessionId}-lab-opened-entries`
-    );
+    const previousOpen = localStorage.getItem(`${accessionId}-lab-opened-entries`);
     if (previousOpen) {
       setOpen(JSON.parse(previousOpen));
     }
@@ -128,10 +110,7 @@ export default function EnhancedTableDetails<T>({
               const prevOpens = [...open];
               prevOpens[index] = prevOpens[index] ? !prevOpens[index] : true;
               setOpen(prevOpens);
-              localStorage.setItem(
-                `${accessionId}-lab-opened-entries`,
-                JSON.stringify(prevOpens)
-              );
+              localStorage.setItem(`${accessionId}-lab-opened-entries`, JSON.stringify(prevOpens));
             }}
           >
             {expandText}
@@ -147,10 +126,7 @@ export default function EnhancedTableDetails<T>({
               const prevOpens = [...open];
               prevOpens[index] = prevOpens[index] ? !prevOpens[index] : true;
               setOpen(prevOpens);
-              localStorage.setItem(
-                `${accessionId}-lab-opened-entries`,
-                JSON.stringify(prevOpens)
-              );
+              localStorage.setItem(`${accessionId}-lab-opened-entries`, JSON.stringify(prevOpens));
             }}
           >
             <CloseIcon />
@@ -172,59 +148,46 @@ export default function EnhancedTableDetails<T>({
                     />
                   </Grid>
                   <Grid item xs={8}>
-                    {row[rowName] && (
-                      <LabChart
-                        row={row}
-                        rowName={rowName}
-                        defaultSort={defaultSort}
-                      />
-                    )}
+                    {row[rowName] && <LabChart row={row} rowName={rowName} defaultSort={defaultSort} />}
                   </Grid>
                   <Grid item xs={12}>
                     <Divisor />
                   </Grid>
                   <Grid item xs={12}>
-                    <Table
-                      size='small'
-                      aria-label='purchases'
-                      id={`row${index + 1}-details`}
-                    >
+                    <Table size='small' aria-label='purchases' id={`row${index + 1}-details`}>
                       <TableBody>
                         {row[rowName] &&
-                          stableSort(
-                            row[rowName] as T[],
-                            getComparator(order, orderBy, descendingComparator)
-                          ).map((subRow, subRowIndex) => {
-                            const newOnClick = onSelect
-                              ? () => onSelect(subRow, row)
-                              : undefined;
+                          stableSort(row[rowName] as T[], getComparator(order, orderBy, descendingComparator)).map(
+                            (subRow, subRowIndex) => {
+                              const newOnClick = onSelect ? () => onSelect(subRow, row) : undefined;
 
-                            return (
-                              <TableRow
-                                id={`row${subRowIndex + 1}`}
-                                key={subRowIndex}
-                                classes={{ hover: classes.hover }}
-                                hover={Boolean(onSelect) && !hasEditColumn}
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  if (newOnClick && !hasEditColumn) {
-                                    newOnClick();
-                                  }
-                                }}
-                              >
-                                {columns.map((column) => (
-                                  <Renderer
-                                    index={subRowIndex + 1}
-                                    key={column.key}
-                                    row={subRow as T}
-                                    column={column}
-                                    value={subRow[column.key]}
-                                    onRowClick={newOnClick}
-                                  />
-                                ))}
-                              </TableRow>
-                            );
-                          })}
+                              return (
+                                <TableRow
+                                  id={`row${subRowIndex + 1}`}
+                                  key={subRowIndex}
+                                  classes={{ hover: classes.hover }}
+                                  hover={Boolean(onSelect) && !hasEditColumn}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    if (newOnClick && !hasEditColumn) {
+                                      newOnClick();
+                                    }
+                                  }}
+                                >
+                                  {columns.map((column) => (
+                                    <Renderer
+                                      index={subRowIndex + 1}
+                                      key={column.key}
+                                      row={subRow as T}
+                                      column={column}
+                                      value={subRow[column.key]}
+                                      onRowClick={newOnClick}
+                                    />
+                                  ))}
+                                </TableRow>
+                              );
+                            }
+                          )}
                       </TableBody>
                     </Table>
                   </Grid>
