@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-export const EMPTY_FILTERS: PlantSearchOptions = {
+const EMPTY_FILTERS: PlantSearchOptions = {
   speciesName: undefined,
   minEnteredTime: undefined,
   maxEnteredTime: undefined,
