@@ -117,15 +117,13 @@ const strings = new LocalizedStrings({
     REPORT_NAME: 'Report Name',
     DOWNLOAD: 'Download',
     ADD_COLUMNS: 'Add columns',
-    ADD_COLUMNS_DESCRIPTION:
-      'Select columns you want to add. Deselect columns you want to remove.',
+    ADD_COLUMNS_DESCRIPTION: 'Select columns you want to add. Deselect columns you want to remove.',
     CLEAR: 'Clear',
     NEW_ENTRY: 'New Entry',
     SEE_ENTRIES: 'See Entries',
     TOTAL_SEEDS_GERMINATED: 'Total Seeds Germinated',
     TOTAL_ESTIMATED_VIABILITY: 'Total Estimated Viability',
-    LAB_DESCRIPTION:
-      'All the details about lab germination tests conducted on the seeds.',
+    LAB_DESCRIPTION: 'All the details about lab germination tests conducted on the seeds.',
     NEW_TEST: 'New Test',
     CUT_TEST: 'Cut Test',
     FILLED_SEEDS: 'Filled Seeds',
@@ -160,8 +158,7 @@ const strings = new LocalizedStrings({
     RECEIVED_ON: 'Received On',
     NO_FUTURE_DATES: 'No future dates allowed',
     NO_NEGATIVE_NUMBERS: 'No negative numbers allowed',
-    SEED_COLLECTION_DESCRIPTION:
-      'All the details about the species, date collected, collectors and the site location.',
+    SEED_COLLECTION_DESCRIPTION: 'All the details about the species, date collected, collectors and the site location.',
     FAMILY: 'Family',
     FOUNDER_ID: 'Founder ID',
     FIELD_NOTES: 'Field Notes',
@@ -169,11 +166,9 @@ const strings = new LocalizedStrings({
     PRIMARY_COLLECTOR: 'Primary Collector',
     SITE: 'Site',
     ENVIRONMENTAL_NOTES: 'Environmental Notes',
-    ENVIRONMENTAL_NOTES_PLACEHOLDER:
-      'Important notes about landscape, climate, and environmental conditions',
+    ENVIRONMENTAL_NOTES_PLACEHOLDER: 'Important notes about landscape, climate, and environmental conditions',
     NEW_ACCESSION: 'New Accession',
-    NEW_ACCESSION_DESCRIPTION:
-      'An accession number will be generated once you create the accession.',
+    NEW_ACCESSION_DESCRIPTION: 'An accession number will be generated once you create the accession.',
     NEW_ACCESSION_INFO:
       'Information like Seed Bags, Photos and Geolocations can only be added via the Seed Collector Android app. All the other information about processing, drying, storage and withdrawals can be added after first creating the accession.',
     SEED_BAGS: 'Seed Bags',
@@ -183,10 +178,8 @@ const strings = new LocalizedStrings({
     UNSURE: 'Unsure',
     ACCESSION_SAVED: 'Accession saved',
     ADD_NEW: 'Add New',
-    NURSERY_DESCRIPTION:
-      'All the details about nursery germination tests conducted on the seeds.',
-    PROCESSING_AND_DRYING_DESCRIPTION:
-      'All the details about processing and drying the seeds.',
+    NURSERY_DESCRIPTION: 'All the details about nursery germination tests conducted on the seeds.',
+    PROCESSING_AND_DRYING_DESCRIPTION: 'All the details about processing and drying the seeds.',
     QUANTIFY: 'Quantify',
     SEED_WEIGHT: 'Seed Weight',
     SEED_COUNT: 'Seed Count',
@@ -222,10 +215,8 @@ const strings = new LocalizedStrings({
       'There are {0} seed collection bags have been waiting since drop off for at least 1 week and are ready to be processed.',
     PROCESSED_UPDATES:
       '{0} accessions have finished processing for at least 2 weeks and are ready to be tested for %RH (or dried).',
-    DRIED_UPDATES:
-      '{0} accessions have past its drying end date and are ready to be stored.',
-    WITHDRAWN_UPDATES:
-      '{0} accessions have been completely withdrawn this week and are now inactive.',
+    DRIED_UPDATES: '{0} accessions have past its drying end date and are ready to be stored.',
+    WITHDRAWN_UPDATES: '{0} accessions have been completely withdrawn this week and are now inactive.',
     WITHDRAWAL_DESCRIPTION: 'All the details about withdrawal of the seeds.',
     ALL_SEEDS_WITHDRAWN_MSG:
       "As all seeds have been withdrawn, new withdrawals are disabled, the accession's stage has been set to Withdrawn, and the accession itself marked as Inactive",
@@ -249,8 +240,7 @@ const strings = new LocalizedStrings({
     SHARE_WITH_ANOTHER_SITE: 'Share with another Site',
     SCHEDULED_FOR: 'Scheduled for',
     ALERTS: 'Alerts',
-    EDIT_SPECIES_MODAL_QUESTION:
-      'Would you like to apply this edit to all accessions with this species?',
+    EDIT_SPECIES_MODAL_QUESTION: 'Would you like to apply this edit to all accessions with this species?',
     EDIT_SPECIES_MODAL_ANSWER_NO: 'No, Only Apply Here',
     EDIT_SPECIES_MODAL_ANSWER_YES: 'Yes, Apply To All',
     ACTIVE_INACTIVE: 'Active/Inactive',
@@ -261,8 +251,7 @@ const strings = new LocalizedStrings({
     WITHDRAWN_BY: 'Withdrawn By',
     GERMINATION_TESTED_BY: 'Germination Tested By',
     TOUR_TITLE: 'Hey! Want a tour?',
-    TOUR_DESCRIPTION:
-      'There are many things you can do in Seed Bank App. Take the tour to find out what.',
+    TOUR_DESCRIPTION: 'There are many things you can do in Seed Bank App. Take the tour to find out what.',
     ACCEPT_TOUR: 'Hell Yeah!',
     DECLINE_TOUR: 'Maybe Later',
     ONBOARDING_TITLE_STEP_1: 'Meet the Summary Page',
@@ -278,8 +267,7 @@ const strings = new LocalizedStrings({
     ONBOARDING_DESCRIPTION_STEP_4:
       'Get all the latest reminders about your accessions. Never miss out on any important information.',
     ONBOARDING_TITLE_STEP_5: 'Manually Add Accessions If Needed',
-    ONBOARDING_DESCRIPTION_STEP_5:
-      'Received a new bag of seeds? Click this button to add it to the database.',
+    ONBOARDING_DESCRIPTION_STEP_5: 'Received a new bag of seeds? Click this button to add it to the database.',
     ONBOARDING_NEXT_STEP: 'Got It!',
     SKIP_ONBOARDING: 'Skip Tour',
     ONBOARDING_LAST_STEP: 'All Done!',

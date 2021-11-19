@@ -1,11 +1,4 @@
-import {
-  Box,
-  createStyles,
-  Link,
-  makeStyles,
-  TableCell,
-  Typography
-} from '@material-ui/core';
+import { Box, createStyles, Link, makeStyles, TableCell, Typography } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import NotesIcon from '@material-ui/icons/Notes';
 import React from 'react';
@@ -14,9 +7,7 @@ import { RendererProps } from './types';
 
 export type TableRowType = Record<string, any>;
 
-export default function CellRenderer(
-  props: RendererProps<TableRowType>
-): JSX.Element {
+export default function CellRenderer(props: RendererProps<TableRowType>): JSX.Element {
   const { column, value, onRowClick, index } = props;
   const id = `row${index}-${column.key}`;
   if (column.type === 'date' && typeof value === 'string' && value) {
@@ -43,13 +34,7 @@ export const cellDateFormatter = (value?: string): string | undefined => {
   }
 };
 
-export function CellDateRenderer({
-  id,
-  value,
-}: {
-  id: string;
-  value: string;
-}): JSX.Element {
+export function CellDateRenderer({ id, value }: { id: string; value: string }): JSX.Element {
   return (
     <TableCell id={id} align='left'>
       <Typography component='p' variant='body1'>
@@ -59,13 +44,7 @@ export function CellDateRenderer({
   );
 }
 
-export function CellTextRenderer({
-  id,
-  value,
-}: {
-  id: string;
-  value?: string | number | any[];
-}): JSX.Element {
+export function CellTextRenderer({ id, value }: { id: string; value?: string | number | any[] }): JSX.Element {
   return (
     <TableCell id={id} align='left'>
       <Typography component='p' variant='body1'>
@@ -75,13 +54,7 @@ export function CellTextRenderer({
   );
 }
 
-export function CellBooleanRenderer({
-  id,
-  value,
-}: {
-  id: string;
-  value?: string | number | any[];
-}): JSX.Element {
+export function CellBooleanRenderer({ id, value }: { id: string; value?: string | number | any[] }): JSX.Element {
   return (
     <TableCell id={id} align='left'>
       <Typography component='p' variant='body1'>
@@ -91,13 +64,7 @@ export function CellBooleanRenderer({
   );
 }
 
-export function CellNotesRenderer({
-  id,
-  value,
-}: {
-  id: string;
-  value?: string;
-}): JSX.Element {
+export function CellNotesRenderer({ id, value }: { id: string; value?: string }): JSX.Element {
   return (
     <TableCell id={id} align='left'>
       <Typography id={id} component='p' variant='body1'>
@@ -115,13 +82,7 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-export function CellEditRenderer({
-  id,
-  onRowClick,
-}: {
-  id: string;
-  onRowClick?: () => void;
-}): JSX.Element {
+export function CellEditRenderer({ id, onRowClick }: { id: string; onRowClick?: () => void }): JSX.Element {
   const classes = useStyles();
 
   return (

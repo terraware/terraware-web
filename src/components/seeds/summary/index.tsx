@@ -39,8 +39,7 @@ export default function SeedSummary(): JSX.Element {
   const classes = useStyles();
 
   const summaryResponse = useRecoilValueLoadable(summarySelector);
-  const contents =
-    summaryResponse.state === 'hasValue' ? summaryResponse.contents : undefined;
+  const contents = summaryResponse.state === 'hasValue' ? summaryResponse.contents : undefined;
   const isLoading = summaryResponse.state === 'loading';
   const hasError = summaryResponse.state === 'hasError';
 
@@ -92,11 +91,7 @@ export default function SeedSummary(): JSX.Element {
               </Grid>
               <Grid item xs={8}>
                 <Paper className={`${classes.paper} ${classes.fixedHeight}`}>
-                  <Updates
-                    summaryResponse={contents}
-                    loading={isLoading}
-                    error={hasError}
-                  />
+                  <Updates summaryResponse={contents} loading={isLoading} error={hasError} />
                 </Paper>
               </Grid>
             </Grid>

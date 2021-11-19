@@ -63,32 +63,22 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
   const [selectedTest, setSelectedTest] = React.useState<GerminationTest>();
   const allowTestInGrams = Boolean(accession.processingMethod === 'Weight');
   const seedsAvailable = accession.remainingQuantity?.quantity ?? 0;
-  const [selectedTestEntry, setSelectedTestEntry] =
-    React.useState<Germination>();
+  const [selectedTestEntry, setSelectedTestEntry] = React.useState<Germination>();
   const date = useRecoilValue(timeSelector);
 
   const getTotalScheduled = (): number => {
-    const totalS = accession.germinationTests?.reduce(
-      (acum, germinationTest) => {
-        if (
-          germinationTest.testType === 'Lab' &&
-          moment(germinationTest.startDate).isAfter(date)
-        ) {
-          acum += germinationTest.seedsSown || 0;
-        }
+    const totalS = accession.germinationTests?.reduce((acum, germinationTest) => {
+      if (germinationTest.testType === 'Lab' && moment(germinationTest.startDate).isAfter(date)) {
+        acum += germinationTest.seedsSown || 0;
+      }
 
-        return acum;
-      },
-      0
-    );
+      return acum;
+    }, 0);
 
     return totalS || 0;
   };
 
-  const labRows =
-    accession.germinationTests?.filter(
-      (germinationTest) => germinationTest.testType === 'Lab'
-    ) || [];
+  const labRows = accession.germinationTests?.filter((germinationTest) => germinationTest.testType === 'Lab') || [];
 
   const onEditTest = (row: TableRowType) => {
     setSelectedTest(row as GerminationTest);
@@ -125,9 +115,7 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
 
   const onCloseTestModal = (value?: GerminationTest | undefined) => {
     if (value) {
-      const newGerminationTests = !accession.germinationTests
-        ? []
-        : [...accession.germinationTests];
+      const newGerminationTests = !accession.germinationTests ? [] : [...accession.germinationTests];
 
       if (selectedTest) {
         const germinationTestIndex = newGerminationTests.findIndex(
@@ -145,14 +133,10 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
 
   const onCloseTestEntryModal = (value?: Germination | undefined) => {
     if (selectedTest && value) {
-      const newGerminations = !selectedTest?.germinations
-        ? []
-        : [...selectedTest.germinations];
+      const newGerminations = !selectedTest?.germinations ? [] : [...selectedTest.germinations];
 
       if (selectedTestEntry) {
-        const germinationIndex = newGerminations.findIndex(
-          (germination) => germination === selectedTestEntry
-        );
+        const germinationIndex = newGerminations.findIndex((germination) => germination === selectedTestEntry);
         newGerminations.splice(germinationIndex, 1, value);
       } else {
         newGerminations.push(value);
@@ -169,10 +153,7 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
   };
 
   const onDeleteTest = (value: GerminationTest) => {
-    const newGerminationsTests =
-      accession?.germinationTests?.filter(
-        (germination) => germination !== value
-      ) ?? [];
+    const newGerminationsTests = accession?.germinationTests?.filter((germination) => germination !== value) ?? [];
     accession.germinationTests = newGerminationsTests;
     onSubmit(accession);
     setTestOpen(false);
@@ -180,10 +161,7 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
 
   const onDeleteTestEntry = (value: Germination) => {
     if (selectedTest && selectedTest.germinations) {
-      const newGerminations =
-        selectedTest.germinations.filter(
-          (germination) => germination !== value
-        ) ?? [];
+      const newGerminations = selectedTest.germinations.filter((germination) => germination !== value) ?? [];
 
       const newGerminationTest = {
         ...selectedTest,
@@ -227,11 +205,7 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
           onDelete={onDeleteTestEntry}
           value={selectedTestEntry}
         />
-        <NewCutTest
-          open={cutTestOpen}
-          onClose={onCloseCutTestModal}
-          accession={accession}
-        />
+        <NewCutTest open={cutTestOpen} onClose={onCloseCutTestModal} accession={accession} />
         <Paper className={classes.paper}>
           <Typography variant='h6' className={classes.bold}>
             {strings.LAB}
@@ -244,9 +218,7 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
                 <SummaryBox
                   id='scheduledForTesting'
                   title={strings.SCHEDULED_FOR_TESTING}
-                  value={strings
-                    .formatString(strings.SCHEDULED_SEEDS, total)
-                    .toString()}
+                  value={strings.formatString(strings.SCHEDULED_SEEDS, total).toString()}
                   variant='default'
                 />
               </Grid>

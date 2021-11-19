@@ -93,11 +93,7 @@ export default function Storage({ accession, onSubmit }: Props): JSX.Element {
 
     const combinedErrors = [...previousErrors, ...newErrors].filter(
       (error, index, self) =>
-        index ===
-        self.findIndex(
-          (otherError) =>
-            otherError.id === error.id && otherError.msg === error.msg
-        )
+        index === self.findIndex((otherError) => otherError.id === error.id && otherError.msg === error.msg)
     );
     setErrors(combinedErrors);
   };
@@ -111,11 +107,7 @@ export default function Storage({ accession, onSubmit }: Props): JSX.Element {
         <Typography component='p'>{strings.STORAGE_DESCRIPTION}</Typography>
         <Divisor />
         <Grid container spacing={4}>
-          <StorageStartDate
-            onChange={onChange}
-            refreshErrors={refreshErrors}
-            storageDate={record.storageStartDate}
-          />
+          <StorageStartDate onChange={onChange} refreshErrors={refreshErrors} storageDate={record.storageStartDate} />
           <Grid item xs={4} />
           <Grid item xs={4} />
           <Grid item xs={4}>
@@ -143,12 +135,7 @@ export default function Storage({ accession, onSubmit }: Props): JSX.Element {
             />
           </Suspense>
           <Grid item xs={12}>
-            <TextArea
-              id='storageNotes'
-              value={record.storageNotes || ''}
-              onChange={onChange}
-              label={strings.NOTES}
-            />
+            <TextArea id='storageNotes' value={record.storageNotes || ''} onChange={onChange} label={strings.NOTES} />
           </Grid>
           <Grid item xs={4}>
             <TextField

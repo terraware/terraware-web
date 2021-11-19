@@ -1,7 +1,7 @@
-import {AxiosResponse} from 'axios';
+import { AxiosResponse } from 'axios';
 import axios from 'src/api/index';
-import {SeedBank, Organization, PlantLayer, Project, Site} from 'src/types/Organization';
-import {paths} from 'src/api/types/generated-schema';
+import { SeedBank, Organization, PlantLayer, Project, Site } from 'src/types/Organization';
+import { paths } from 'src/api/types/generated-schema';
 
 const BASE_URL = `${process.env.REACT_APP_TERRAWARE_API}`;
 
@@ -11,8 +11,8 @@ type ListProjectsResponse = paths[typeof PROJECTS]['get']['responses'][200]['con
 async function getProjects(): Promise<Project[]> {
   const response: ListProjectsResponse = (await axios.get(`${BASE_URL}${PROJECTS}`)).data;
   return response.projects.map((project) => ({
-      id: project.id,
-      name: project.name
+    id: project.id,
+    name: project.name,
   }));
 }
 
@@ -22,8 +22,8 @@ type ListSitesResponse = paths[typeof SITES]['get']['responses'][200]['content']
 async function getSites(): Promise<Site[]> {
   const sitesResponse: ListSitesResponse = (await axios.get(`${BASE_URL}${SITES}`)).data;
   return sitesResponse.sites.map((site) => ({
-      id: site.id,
-      projectId: site.projectId
+    id: site.id,
+    projectId: site.projectId,
   }));
 }
 
@@ -34,7 +34,7 @@ type LayerResponse = ListLayersResponse['layers'][0];
 async function getPlantLayers(sites: Site[]): Promise<PlantLayer[]> {
   // We may want to add functionality to allow fetching of some layers to fail
   // while still returning those that were fetched successfully
-  const axiosResponse : AxiosResponse<ListLayersResponse>[] = await Promise.all(
+  const axiosResponse: AxiosResponse<ListLayersResponse>[] = await Promise.all(
     sites.map((site) => axios.get(`${BASE_URL}${LAYERS}`.replace('{siteId}', `${site.id}`)))
   );
 
@@ -79,8 +79,8 @@ export enum OrgRequestError {
 }
 
 export type GetOrganizationResponse = {
-  organization: Organization,
-  errors: OrgRequestError[],
+  organization: Organization;
+  errors: OrgRequestError[];
 };
 
 /*
@@ -93,7 +93,7 @@ export type GetOrganizationResponse = {
  *    a non-empty errors list indicating what went wrong
  */
 async function getOrganization(): Promise<GetOrganizationResponse> {
-  const OrgResponse : GetOrganizationResponse = {
+  const OrgResponse: GetOrganizationResponse = {
     organization: {
       projects: [],
       sites: [],
@@ -122,9 +122,10 @@ async function getOrganization(): Promise<GetOrganizationResponse> {
     return OrgResponse;
   }
 
-  const [facilitiesResponse, layersResponse] = await Promise.allSettled(
-    [getSeedBankFacilities(), getPlantLayers(OrgResponse.organization.sites)]
-  );
+  const [facilitiesResponse, layersResponse] = await Promise.allSettled([
+    getSeedBankFacilities(),
+    getPlantLayers(OrgResponse.organization.sites),
+  ]);
   if (facilitiesResponse.status === 'fulfilled') {
     OrgResponse.organization.facilities = facilitiesResponse.value;
   } else {

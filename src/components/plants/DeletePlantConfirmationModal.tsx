@@ -41,21 +41,13 @@ export default function DeletePlantConfirmationModal(props: DeletePlantConfirmat
   };
 
   return (
-    <Dialog
-      onClose={handleCancel}
-      disableEscapeKeyDown
-      open={true}
-      maxWidth='sm'
-      classes={{ paper: classes.paper }}
-    >
+    <Dialog onClose={handleCancel} disableEscapeKeyDown open={true} maxWidth='sm' classes={{ paper: classes.paper }}>
       <DialogTitle>
         <Typography variant='h6'>{strings.DELETE_PLANT}</Typography>
         <DialogCloseButton onClick={handleCancel} />
       </DialogTitle>
       <DialogContent>
-        <Typography variant='body2'>
-          {strings.DELETE_PLANT_CONFIRMATION_MODAL_MAIN_TEXT}
-        </Typography>
+        <Typography variant='body2'>{strings.DELETE_PLANT_CONFIRMATION_MODAL_MAIN_TEXT}</Typography>
       </DialogContent>
       <DialogActions>
         <Box width={'100%'} className={classes.actions}>
@@ -69,12 +61,7 @@ export default function DeletePlantConfirmationModal(props: DeletePlantConfirmat
               type='passive'
               className={classes.spacing}
             />
-            <Button
-              onClick={confirmDelete}
-              id='delete'
-              label={strings.DELETE}
-              type='destructive'
-            />
+            <Button onClick={confirmDelete} id='delete' label={strings.DELETE} type='destructive' />
           </Box>
         </Box>
       </DialogActions>

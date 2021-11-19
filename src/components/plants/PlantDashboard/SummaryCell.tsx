@@ -34,49 +34,23 @@ interface SummaryProps {
   lastWeek: number;
 }
 
-export default function SummaryCell({
-  title,
-  current,
-  lastWeek,
-}: SummaryProps): JSX.Element {
+export default function SummaryCell({ title, current, lastWeek }: SummaryProps): JSX.Element {
   const classes = useStyles();
 
   return (
     <TableCell className={classes.border}>
       <div className={classes.cell}>
         <div>
-          <Typography
-            component='h2'
-            variant='h6'
-            gutterBottom
-            id={`summary-${title}`}
-          >
+          <Typography component='h2' variant='h6' gutterBottom id={`summary-${title}`}>
             {current} {title}
           </Typography>
           <div className={classes.details}>
             {lastWeek !== 0 && (
               <>
-                {current - lastWeek < 0 && (
-                  <ArrowDownwardIcon
-                    id={`${title}-arrow-decrease`}
-                    color='error'
-                  />
-                )}
-                {current - lastWeek > 0 && (
-                  <ArrowUpwardIcon
-                    id={`${title}-arrow-increase`}
-                    color='primary'
-                  />
-                )}
-                <Typography
-                  color='textSecondary'
-                  className={classes.depositContext}
-                  id={`summary-${title}-value`}
-                >
-                  {strings.formatString(
-                    strings.GROWTH_SINCE_LAST_WEEK,
-                    calculateGrowth(current, lastWeek)
-                  )}
+                {current - lastWeek < 0 && <ArrowDownwardIcon id={`${title}-arrow-decrease`} color='error' />}
+                {current - lastWeek > 0 && <ArrowUpwardIcon id={`${title}-arrow-increase`} color='primary' />}
+                <Typography color='textSecondary' className={classes.depositContext} id={`summary-${title}-value`}>
+                  {strings.formatString(strings.GROWTH_SINCE_LAST_WEEK, calculateGrowth(current, lastWeek))}
                 </Typography>
               </>
             )}

@@ -22,11 +22,7 @@ export default function DialogCloseButton({ onClick }: Props): JSX.Element {
   const classes = useStyles();
 
   return (
-    <IconButton
-      aria-label='close'
-      className={classes.closeButton}
-      onClick={onClick}
-    >
+    <IconButton aria-label='close' className={classes.closeButton} onClick={onClick}>
       <CloseIcon />
     </IconButton>
   );

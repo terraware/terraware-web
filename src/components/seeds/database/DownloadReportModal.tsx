@@ -71,19 +71,12 @@ export default function DownloadReportModal(props: Props): JSX.Element {
   };
 
   return (
-    <Dialog
-      onClose={handleCancel}
-      disableEscapeKeyDown
-      open={open}
-      maxWidth='sm'
-    >
+    <Dialog onClose={handleCancel} disableEscapeKeyDown open={open} maxWidth='sm'>
       <DialogTitle>
         <Typography component='p' variant='h6' className={classes.bold}>
           {strings.REPORT}
         </Typography>
-        <Typography component='p'>
-          {strings.DOWNLOAD_REPORT_DESCRIPTION}
-        </Typography>
+        <Typography component='p'>{strings.DOWNLOAD_REPORT_DESCRIPTION}</Typography>
         <DialogCloseButton onClick={handleCancel} />
       </DialogTitle>
       <DialogContent dividers>

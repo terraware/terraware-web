@@ -76,11 +76,7 @@ export default function Species(): JSX.Element {
 
   return (
     <main>
-      <SimpleSpeciesModal
-        open={editSpeciesModalOpen}
-        onClose={onCloseEditSpeciesModal}
-        value={selectedSpecies}
-      />
+      <SimpleSpeciesModal open={editSpeciesModalOpen} onClose={onCloseEditSpeciesModal} value={selectedSpecies} />
       <Container maxWidth={false} className={classes.mainContainer}>
         <Grid container spacing={3}>
           <Grid item xs={1} />
@@ -89,12 +85,7 @@ export default function Species(): JSX.Element {
           </Grid>
           <Grid item xs={6} />
           <Grid item xs={2} className={classes.centered}>
-            <Button
-              id='new-species'
-              label={strings.NEW_SPECIES}
-              onClick={onNewSpecies}
-              icon='plus'
-            />
+            <Button id='new-species' label={strings.NEW_SPECIES} onClick={onNewSpecies} icon='plus' />
           </Grid>
           <Grid item xs={1} />
           <Grid item xs={1} />
@@ -121,21 +112,11 @@ interface SpeciesContentProps {
 function SpeciesContent({ onSelect }: SpeciesContentProps): JSX.Element {
   const species = useRecoilValue(speciesSelector);
 
-  const columns: TableColumnType[] = [
-    { key: 'name', name: 'Name', type: 'string' },
-  ];
+  const columns: TableColumnType[] = [{ key: 'name', name: 'Name', type: 'string' }];
 
   return (
     <Grid item xs={12}>
-      {species && (
-        <Table
-          id='species-table'
-          columns={columns}
-          rows={species}
-          orderBy='name'
-          onSelect={onSelect}
-        />
-      )}
+      {species && <Table id='species-table' columns={columns} rows={species} orderBy='name' onSelect={onSelect} />}
     </Grid>
   );
 }

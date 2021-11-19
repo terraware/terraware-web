@@ -1,12 +1,5 @@
 import MomentUtils from '@date-io/moment';
-import {
-  Box,
-  Chip,
-  Grid,
-  InputAdornment,
-  Link,
-  Typography,
-} from '@material-ui/core';
+import { Box, Chip, Grid, InputAdornment, Link, Typography } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -52,9 +45,7 @@ export interface Props {
 export default function NewGermination(props: Props): JSX.Element {
   const classes = useStyles();
   const { onClose, open, onDelete } = props;
-  const [record, setRecord, onChange] = useForm<Germination>(
-    initEntry(props.value)
-  );
+  const [record, setRecord, onChange] = useForm<Germination>(initEntry(props.value));
 
   function initEntry(entry?: Germination): Germination {
     return (
@@ -81,12 +72,7 @@ export default function NewGermination(props: Props): JSX.Element {
   };
 
   return (
-    <Dialog
-      onClose={handleCancel}
-      disableEscapeKeyDown
-      open={open}
-      maxWidth='sm'
-    >
+    <Dialog onClose={handleCancel} disableEscapeKeyDown open={open} maxWidth='sm'>
       <DialogTitle>
         <Typography variant='h6'>{strings.NEW_ENTRY}</Typography>
         <DialogCloseButton onClick={handleCancel} />

@@ -1,17 +1,6 @@
 import axios from 'axios';
-import {
-  getPlants,
-  getPlantSummariesByLayer,
-  getPlantSummary,
-  putPlant
-} from 'src/api/plants/plants';
-import {
-  Coordinate,
-  Plant,
-  PlantErrorByLayerId,
-  PlantRequestError,
-  PlantSummariesByLayerId,
-} from 'src/types/Plant';
+import { getPlants, getPlantSummariesByLayer, getPlantSummary, putPlant } from 'src/api/plants/plants';
+import { Coordinate, Plant, PlantErrorByLayerId, PlantRequestError, PlantSummariesByLayerId } from 'src/types/Plant';
 
 jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
@@ -36,7 +25,9 @@ const PLANT: Plant = {
 
 function suppressConsoleErrorOutput() {
   // Suppress console.error() calls so that the expected errors don't look like test failures.
-  jest.spyOn(console, 'error').mockImplementation(() => {/* tslint:disable:no-empty */});
+  jest.spyOn(console, 'error').mockImplementation(() => {
+    /* tslint:disable:no-empty */
+  });
 }
 
 function mockIsAxiosError() {
@@ -47,16 +38,16 @@ function mockIsAxiosError() {
 // Returns the number of axios.get failure variations that were mocked.
 function mockAxiosGETFailures(): number {
   mockedAxios.get.mockImplementationOnce(() => {
-    return Promise.reject({ response: { status: 400} });
+    return Promise.reject({ response: { status: 400 } });
   });
-  mockedAxios.get.mockImplementationOnce( () => {
-    return Promise.reject({ response: { status: 500} });
+  mockedAxios.get.mockImplementationOnce(() => {
+    return Promise.reject({ response: { status: 500 } });
   });
-  mockedAxios.get.mockImplementationOnce( () => {
-    return Promise.reject({ request: { message: 'The server did not respond' }});
+  mockedAxios.get.mockImplementationOnce(() => {
+    return Promise.reject({ request: { message: 'The server did not respond' } });
   });
-  mockedAxios.get.mockImplementationOnce( () => {
-    return Promise.reject({ message: 'Could not set up request. Malformed url.'});
+  mockedAxios.get.mockImplementationOnce(() => {
+    return Promise.reject({ message: 'Could not set up request. Malformed url.' });
   });
 
   return 4;
@@ -64,33 +55,37 @@ function mockAxiosGETFailures(): number {
 
 test('getPlants() correctly parses geom data into the client side Coordinate type', async () => {
   const coordinates: Coordinate[] = [
-    {latitude: -45, longitude: 60},
-    {latitude: 40.7812, longitude: 73.9665}
+    { latitude: -45, longitude: 60 },
+    { latitude: 40.7812, longitude: 73.9665 },
   ];
   mockedAxios.get.mockResolvedValue({
     data: {
-        list: [
-          {
-            featureId: 10,
-            layerId: LAYER_ID,
-            geom: {
-              coordinates: [coordinates[0].longitude, coordinates[0].latitude, 42]
-            }
+      list: [
+        {
+          featureId: 10,
+          layerId: LAYER_ID,
+          geom: {
+            coordinates: [coordinates[0].longitude, coordinates[0].latitude, 42],
           },
-          {
-            featureId: 20,
-            layerId: LAYER_ID,
-            geom: {
-              coordinates: [coordinates[1].longitude, coordinates[1].latitude, 11]
-            }
-          }
-        ]
-        }
+        },
+        {
+          featureId: 20,
+          layerId: LAYER_ID,
+          geom: {
+            coordinates: [coordinates[1].longitude, coordinates[1].latitude, 11],
+          },
+        },
+      ],
+    },
   });
 
   const response = await getPlants(LAYER_ID);
   expect(response.layerId).toEqual(LAYER_ID);
-  expect(response.plants.map((plant) => { return plant.coordinates; })).toEqual(coordinates);
+  expect(
+    response.plants.map((plant) => {
+      return plant.coordinates;
+    })
+  ).toEqual(coordinates);
   expect(response.error).toEqual(null);
 });
 
@@ -98,7 +93,7 @@ test('getPlants() returns correct error when server throws 404', async () => {
   suppressConsoleErrorOutput();
 
   mockedAxios.get.mockImplementation(() => {
-    return Promise.reject({ response: { status: 404} });
+    return Promise.reject({ response: { status: 404 } });
   });
   mockIsAxiosError();
 
@@ -108,7 +103,7 @@ test('getPlants() returns correct error when server throws 404', async () => {
   expect(response.error).toEqual(PlantRequestError.LayerIdNotFound);
 });
 
-test('getPlants() returns correct error for all non 404 errors', async() => {
+test('getPlants() returns correct error for all non 404 errors', async () => {
   suppressConsoleErrorOutput();
 
   const numTimesAxiosWasMocked = mockAxiosGETFailures();
@@ -125,7 +120,7 @@ test('getPlants() returns correct error for all non 404 errors', async() => {
 test('getPlantSummary() returns correct error when server throws 404', async () => {
   suppressConsoleErrorOutput();
   mockedAxios.get.mockImplementation(() => {
-    return Promise.reject({ response: { status: 404} });
+    return Promise.reject({ response: { status: 404 } });
   });
   mockIsAxiosError();
 
@@ -135,7 +130,7 @@ test('getPlantSummary() returns correct error when server throws 404', async () 
   expect(response.error).toEqual(PlantRequestError.LayerIdNotFound);
 });
 
-test('getPlantSummary() returns correct error for all non 404 errors', async() => {
+test('getPlantSummary() returns correct error for all non 404 errors', async () => {
   suppressConsoleErrorOutput();
   const numTimesAxiosWasMocked = mockAxiosGETFailures();
   mockIsAxiosError();
@@ -148,52 +143,58 @@ test('getPlantSummary() returns correct error for all non 404 errors', async() =
   }
 });
 
-test('getPlantSummaries() returns this + last week summaries for all layers when no errors occurred', async() => {
+test('getPlantSummaries() returns this + last week summaries for all layers when no errors occurred', async () => {
   jest.useFakeTimers('modern');
   jest.setSystemTime(TODAY);
   const expected: PlantSummariesByLayerId = new Map([
-    [12, {
-      lastWeek: [
-        {
-          speciesId: 1,
-          numPlants: 8,
-        },
-        {
-          speciesId: 2,
-          numPlants: 2,
-        }
-      ],
-      thisWeek: [
-        {
-          speciesId: 1,
-          numPlants: 8,
-        },
-        {
-          speciesId: 2,
-          numPlants: 2,
-        },
-        {
-          speciesId: 3,
-          numPlants: 5,
-        },
-        {
-          speciesId: 4,
-          numPlants: 5,
-        }
-      ]
-    }],
-    [13, {
-      lastWeek: [],
-      thisWeek: [
-        {
-          speciesId: 1,
-          numPlants: 24,
-        }
-      ],
-    }],
+    [
+      12,
+      {
+        lastWeek: [
+          {
+            speciesId: 1,
+            numPlants: 8,
+          },
+          {
+            speciesId: 2,
+            numPlants: 2,
+          },
+        ],
+        thisWeek: [
+          {
+            speciesId: 1,
+            numPlants: 8,
+          },
+          {
+            speciesId: 2,
+            numPlants: 2,
+          },
+          {
+            speciesId: 3,
+            numPlants: 5,
+          },
+          {
+            speciesId: 4,
+            numPlants: 5,
+          },
+        ],
+      },
+    ],
+    [
+      13,
+      {
+        lastWeek: [],
+        thisWeek: [
+          {
+            speciesId: 1,
+            numPlants: 24,
+          },
+        ],
+      },
+    ],
   ]);
 
-  let summary: {[key: string]: number};  // speciesId to count JSON
+  let summary: { [key: string]: number }; // speciesId to count JSON
   mockedAxios.get.mockImplementation((url: string) => {
     if (url.includes('/list/summary/12')) {
       if (url.includes(ONE_WEEK_AGO.getDate().toString())) {
@@ -206,14 +207,14 @@ test('getPlantSummaries() returns this + last week summaries for all layers when
           '1': 8,
           '2': 2,
           '3': 5,
-          '4': 5
+          '4': 5,
         };
       }
     } else if (url.includes('/list/summary/13')) {
       if (url.includes(ONE_WEEK_AGO.getDate().toString())) {
         summary = {};
       } else if (url.includes(TODAY.getDate().toString())) {
-        summary = {'1': 24};
+        summary = { '1': 24 };
       }
     }
 
@@ -226,7 +227,7 @@ test('getPlantSummaries() returns this + last week summaries for all layers when
       data: {
         summary,
         status: 'ok',
-      }
+      },
     });
   });
 
@@ -236,18 +237,17 @@ test('getPlantSummaries() returns this + last week summaries for all layers when
   });
 });
 
-
 function mockListSummaryRejection(currLayerId: number, weekToReject: string) {
   expect(weekToReject === 'current' || weekToReject === 'last' || weekToReject === 'both').toEqual(true);
   jest.useFakeTimers('modern');
   jest.setSystemTime(TODAY);
   mockIsAxiosError();
-  const rejectedResponse = {response: {status: 404}};
+  const rejectedResponse = { response: { status: 404 } };
   const resolvedResponse = {
     data: {
-      summary: {'1': 10},
+      summary: { '1': 10 },
       status: 'ok',
-    }
+    },
   };
 
   mockedAxios.get.mockImplementation((url: string) => {
@@ -268,7 +268,7 @@ function mockListSummaryRejection(currLayerId: number, weekToReject: string) {
   });
 }
 
-test('getPlantSummaries() never returns incomplete summary data (always returns both this AND last week summary)', async() => {
+test('getPlantSummaries() never returns incomplete summary data (always returns both this AND last week summary)', async () => {
   // Mock axios response for current week only failed, last week only failed, and both weeks failed
   const failures = ['current', 'last', 'both'];
   for (const failure of failures) {
@@ -280,27 +280,32 @@ test('getPlantSummaries() never returns incomplete summary data (always returns 
   }
 });
 
-test('getPlantSummaries() returns plant summary data for some layers, even if others failed', async() => {
+test('getPlantSummaries() returns plant summary data for some layers, even if others failed', async () => {
   const layerIds = [60, 70];
   const expectedPlantSummaries: PlantSummariesByLayerId = new Map([
-    [70, {
-      thisWeek: [{
-        speciesId: 1,
-        numPlants: 10,
-      }],
-      lastWeek: [{
-        speciesId: 1,
-        numPlants: 10
-      }]
-    },
-  ]]);
-  const expectedPlantSummaryErrors: PlantErrorByLayerId = new Map([
-    [60, PlantRequestError.LayerIdNotFound],
+    [
+      70,
+      {
+        thisWeek: [
+          {
+            speciesId: 1,
+            numPlants: 10,
+          },
+        ],
+        lastWeek: [
+          {
+            speciesId: 1,
+            numPlants: 10,
+          },
+        ],
+      },
+    ],
   ]);
+  const expectedPlantSummaryErrors: PlantErrorByLayerId = new Map([[60, PlantRequestError.LayerIdNotFound]]);
   mockIsAxiosError();
   mockedAxios.get.mockImplementation((url: string) => {
     if (url.includes('list/summary/60')) {
-      return Promise.reject({response: {status: 404}});
+      return Promise.reject({ response: { status: 404 } });
     } else if (url.includes('list/summary/70')) {
       return Promise.resolve({
         data: {
@@ -308,7 +313,7 @@ test('getPlantSummaries() returns plant summary data for some layers, even if ot
             '1': 10,
           },
           status: 'ok',
-        }
+        },
       });
     }
 
@@ -322,19 +327,25 @@ test('getPlantSummaries() returns plant summary data for some layers, even if ot
   });
 });
 
-test('getPlantSummaries() returns empty summary maps when passed an empty list of layer ids', async() => {
+test('getPlantSummaries() returns empty summary maps when passed an empty list of layer ids', async () => {
   const result = await getPlantSummariesByLayer([]);
   expect(result).toEqual({
-      plantSummariesByLayerId: new Map(),
-      plantErrorByLayerId: new Map()
+    plantSummariesByLayerId: new Map(),
+    plantErrorByLayerId: new Map(),
   });
 });
 
-function mockPutFeaturesAndPlantsEndpoint(featureId: number, failedEndpoint?: string, httpFailureStatusCode: number = 404) {
-  expect(failedEndpoint === undefined ||
-                failedEndpoint === 'plants' ||
-                failedEndpoint === 'features' ||
-                failedEndpoint === 'both').toEqual(true);
+function mockPutFeaturesAndPlantsEndpoint(
+  featureId: number,
+  failedEndpoint?: string,
+  httpFailureStatusCode: number = 404
+) {
+  expect(
+    failedEndpoint === undefined ||
+      failedEndpoint === 'plants' ||
+      failedEndpoint === 'features' ||
+      failedEndpoint === 'both'
+  ).toEqual(true);
 
   if (failedEndpoint) {
     mockIsAxiosError();
@@ -343,30 +354,30 @@ function mockPutFeaturesAndPlantsEndpoint(featureId: number, failedEndpoint?: st
   mockedAxios.put.mockImplementation((url: string, requestData: any) => {
     if (url.includes(`features/${featureId}`)) {
       return failedEndpoint === 'features' || failedEndpoint === 'both'
-        ? Promise.reject({response: {status: httpFailureStatusCode}})
-        : Promise.resolve({data:
-          {
-            feature: {...requestData, id: featureId},
-            status: 'ok',
-          }
-      });
+        ? Promise.reject({ response: { status: httpFailureStatusCode } })
+        : Promise.resolve({
+            data: {
+              feature: { ...requestData, id: featureId },
+              status: 'ok',
+            },
+          });
     } else if (url.includes(`plants/${featureId}`)) {
       return failedEndpoint === 'plants' || failedEndpoint === 'both'
-        ? Promise.reject({response: {status: httpFailureStatusCode}})
-        : Promise.resolve({data:
-          {
-            plant: {...requestData, featureId},
-            status: 'ok',
-          }
-      });
+        ? Promise.reject({ response: { status: httpFailureStatusCode } })
+        : Promise.resolve({
+            data: {
+              plant: { ...requestData, featureId },
+              status: 'ok',
+            },
+          });
     }
-    
+
     console.error('Axios mock called with an unexpected url');
     throw Error('Axios mock called with an unexpected url');
   });
 }
 
-test('putPlant() returns plant (and no errors) when we successfully updated plant and feature objects', async() => {
+test('putPlant() returns plant (and no errors) when we successfully updated plant and feature objects', async () => {
   mockPutFeaturesAndPlantsEndpoint(FEATURE_ID);
   await expect(putPlant(PLANT)).resolves.toEqual({
     plant: PLANT,
@@ -374,14 +385,14 @@ test('putPlant() returns plant (and no errors) when we successfully updated plan
   });
 });
 
-test('putPlant() returns attempted update and error when any API write request fails', async() => {
+test('putPlant() returns attempted update and error when any API write request fails', async () => {
   const failures = ['features', 'plants', 'both'];
   for (const failure of failures) {
     for (const status of [404, 500]) {
       mockPutFeaturesAndPlantsEndpoint(FEATURE_ID, 'features', status);
       await expect(putPlant(PLANT)).resolves.toEqual({
         plant: PLANT,
-        error: status === 404 ? PlantRequestError.FeatureIdNotFound : PlantRequestError.RequestFailed
+        error: status === 404 ? PlantRequestError.FeatureIdNotFound : PlantRequestError.RequestFailed,
       });
     }
   }

@@ -31,15 +31,9 @@ interface Props {
   error: boolean;
 }
 
-export default function Updates({
-  summaryResponse,
-  error,
-  loading,
-}: Props): JSX.Element {
+export default function Updates({ summaryResponse, error, loading }: Props): JSX.Element {
   const classes = useStyles();
-  const updates = summaryResponse
-    ? generateUpdates(summaryResponse)
-    : undefined;
+  const updates = summaryResponse ? generateUpdates(summaryResponse) : undefined;
 
   const setFilters = useSetRecoilState(searchFilterAtom);
 
@@ -87,10 +81,7 @@ export default function Updates({
           state: filter,
           withdrawalDate: {
             field: 'withdrawalDate',
-            values: [
-              date.toISOString().substr(0, 10),
-              new Date().toISOString().substr(0, 10),
-            ],
+            values: [date.toISOString().substr(0, 10), new Date().toISOString().substr(0, 10)],
             type: 'Range',
             operation: 'field',
           },
@@ -129,12 +120,7 @@ export default function Updates({
           updates.map(({ state, description }) => (
             <TableRow id={`update-row-${state}`} key={state}>
               <TableCell className={classes.alertCell}>
-                <Link
-                  onClick={() => onClick(state)}
-                  id={`update-${state}`}
-                  to='/accessions'
-                  className={classes.state}
-                >
+                <Link onClick={() => onClick(state)} id={`update-${state}`} to='/accessions' className={classes.state}>
                   {state}
                 </Link>
               </TableCell>
@@ -155,10 +141,7 @@ function generateUpdates(summaryResponse: SummaryGetResponse): Update[] {
   const updates: Update[] = [
     {
       state: 'Pending',
-      description: strings.formatString(
-        strings.PENDING_UPDATES,
-        summaryResponse.overduePendingAccessions.toString()
-      ),
+      description: strings.formatString(strings.PENDING_UPDATES, summaryResponse.overduePendingAccessions.toString()),
     },
     {
       state: 'Processed',
@@ -169,10 +152,7 @@ function generateUpdates(summaryResponse: SummaryGetResponse): Update[] {
     },
     {
       state: 'Dried',
-      description: strings.formatString(
-        strings.DRIED_UPDATES,
-        summaryResponse.overdueDriedAccessions.toString()
-      ),
+      description: strings.formatString(strings.DRIED_UPDATES, summaryResponse.overdueDriedAccessions.toString()),
     },
     {
       state: 'Withdrawn',

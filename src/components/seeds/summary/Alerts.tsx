@@ -1,9 +1,4 @@
-import {
-  CircularProgress,
-  createStyles,
-  Fab,
-  makeStyles,
-} from '@material-ui/core';
+import { CircularProgress, createStyles, Fab, makeStyles } from '@material-ui/core';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -38,17 +33,12 @@ const useStyles = makeStyles((theme) =>
 
 export default function Alerts(): JSX.Element {
   const notificationLoadable = useRecoilValueLoadable(notifications);
-  const contents =
-    notificationLoadable.state === 'hasValue'
-      ? notificationLoadable.contents
-      : undefined;
+  const contents = notificationLoadable.state === 'hasValue' ? notificationLoadable.contents : undefined;
   const isLoading = notificationLoadable.state === 'loading';
   const hasError = notificationLoadable.state === 'hasError';
   const classes = useStyles();
 
-  const alerts = contents?.filter(
-    (notification) => notification.type === 'Alert'
-  );
+  const alerts = contents?.filter((notification) => notification.type === 'Alert');
 
   return (
     <Table size='small'>
@@ -76,12 +66,7 @@ export default function Alerts(): JSX.Element {
           alerts?.map(({ id, text }) => (
             <TableRow key={id}>
               <TableCell className={classes.alertCell}>
-                <Fab
-                  aria-label='add'
-                  className={classes.fab}
-                  variant='round'
-                  disableRipple={true}
-                >
+                <Fab aria-label='add' className={classes.fab} variant='round' disableRipple={true}>
                   <WarningIcon htmlColor='#fff' fontSize='small' />
                 </Fab>
               </TableCell>

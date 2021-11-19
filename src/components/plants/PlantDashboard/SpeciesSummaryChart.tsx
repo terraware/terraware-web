@@ -12,7 +12,7 @@ type SpeciesSummaryChartProps = {
 };
 
 export default function SpeciesSummaryChart(props: SpeciesSummaryChartProps): JSX.Element {
-  const {plantSummariesByLayerId, speciesById, colorsBySpeciesId, isFullscreen} = props;
+  const { plantSummariesByLayerId, speciesById, colorsBySpeciesId, isFullscreen } = props;
   const chartRef = React.useRef<HTMLCanvasElement>(null);
   const currentChartRef = React.useRef();
 

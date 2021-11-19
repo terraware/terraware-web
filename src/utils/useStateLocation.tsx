@@ -14,11 +14,7 @@ export default function useStateLocation(): StateLocation {
   return location;
 }
 
-export function getLocation(
-  pathname: string,
-  location: StateLocation,
-  search?: string
-): LocationDescriptor<State> {
+export function getLocation(pathname: string, location: StateLocation, search?: string): LocationDescriptor<State> {
   if (location.state?.from) {
     return {
       pathname,

@@ -1,12 +1,5 @@
 import MomentUtils from '@date-io/moment';
-import {
-  Box,
-  Chip,
-  Grid,
-  InputAdornment,
-  Link,
-  Typography,
-} from '@material-ui/core';
+import { Box, Chip, Grid, InputAdornment, Link, Typography } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -73,32 +66,20 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
   const [withdrawRemaining, setWithdrawRemaining] = React.useState(false);
   const [remainingSeeds, setRemainingSeeds] = React.useState(0);
   const [errors, setErrors] = React.useState<FieldError[]>([]);
-  const [withdrawalType, setWithdrawalType] = React.useState(
-    props.allowWithdrawalInGrams ? 'weight' : 'count'
-  );
+  const [withdrawalType, setWithdrawalType] = React.useState(props.allowWithdrawalInGrams ? 'weight' : 'count');
 
-  const [record, setRecord, onChange] = useForm<AccessionWithdrawal>(
-    initWithdrawal(props.value)
-  );
+  const [record, setRecord, onChange] = useForm<AccessionWithdrawal>(initWithdrawal(props.value));
   React.useEffect(() => {
     setRecord(initWithdrawal(props.value));
     setWithdrawalType(props.allowWithdrawalInGrams ? 'weight' : 'count');
     setErrors([]);
     if (!props.allowWithdrawalInGrams) {
-      setRemainingSeeds(
-        props.value?.remainingQuantity?.quantity || props.seedsAvailable
-      );
+      setRemainingSeeds(props.value?.remainingQuantity?.quantity || props.seedsAvailable);
     } else {
       setRemainingSeeds(props.value?.remainingQuantity?.quantity || 0);
     }
     setWithdrawRemaining(false);
-  }, [
-    props.allowWithdrawalInGrams,
-    props.open,
-    props.seedsAvailable,
-    props.value,
-    setRecord,
-  ]);
+  }, [props.allowWithdrawalInGrams, props.open, props.seedsAvailable, props.value, setRecord]);
 
   const handleCancel = () => {
     setRecord(initWithdrawal(props.value));
@@ -124,11 +105,7 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
         [id]: _value,
       };
 
-      setRemainingSeeds(
-        props.seedsAvailable +
-          (props.value?.withdrawnQuantity?.quantity ?? 0) -
-          (value ?? 0)
-      );
+      setRemainingSeeds(props.seedsAvailable + (props.value?.withdrawnQuantity?.quantity ?? 0) - (value ?? 0));
     }
     const newRecord = {
       ...record,
@@ -143,12 +120,7 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
       setWithdrawRemaining(false);
     } else {
       setWithdrawRemaining(true);
-      onQuantityChange(
-        'quantity',
-        '' +
-          (props.seedsAvailable +
-            (props.value?.withdrawnQuantity?.quantity ?? 0))
-      );
+      onQuantityChange('quantity', '' + (props.seedsAvailable + (props.value?.withdrawnQuantity?.quantity ?? 0)));
     }
   };
 
@@ -171,10 +143,7 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
 
   const schedule = new Date(record.date) > new Date();
   const dateSubtext = schedule
-    ? strings.formatString(
-        strings.SCHEDULING_FOR,
-        moment(record.date).format('MMMM Do, YYYY')
-      )
+    ? strings.formatString(strings.SCHEDULING_FOR, moment(record.date).format('MMMM Do, YYYY'))
     : strings.SCHEDULE_DATE_INFO;
   const submitText = props.value
     ? strings.SAVE_CHANGES
@@ -232,13 +201,7 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
   };
 
   return (
-    <Dialog
-      onClose={handleCancel}
-      disableEscapeKeyDown
-      open={open}
-      maxWidth='sm'
-      classes={{ paper: classes.paper }}
-    >
+    <Dialog onClose={handleCancel} disableEscapeKeyDown open={open} maxWidth='sm' classes={{ paper: classes.paper }}>
       <DialogTitle>
         <Typography variant='h6'>New withdrawal</Typography>
         <DialogCloseButton onClick={handleCancel} />
@@ -251,9 +214,7 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
                 id='modal-seeds-available'
                 title={strings.SEEDS_REMAINING}
                 value={`${props.seedsAvailable} ${
-                  props.allowWithdrawalInGrams
-                    ? WEIGHT_UNITS[0].value
-                    : countUnits[0].value
+                  props.allowWithdrawalInGrams ? WEIGHT_UNITS[0].value : countUnits[0].value
                 }`}
                 variant={props.seedsAvailable === 0 ? 'zero' : 'default'}
               />
@@ -289,8 +250,7 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
                       label=''
                       selected={
                         props.allowWithdrawalInGrams
-                          ? record.withdrawnQuantity?.units ||
-                            WEIGHT_UNITS[0].value
+                          ? record.withdrawnQuantity?.units || WEIGHT_UNITS[0].value
                           : countUnits[0].value
                       }
                       values={withdrawalOptions(true)}
@@ -335,30 +295,20 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
                       <Dropdown
                         id='units'
                         label=''
-                        selected={
-                          record.remainingQuantity?.units ||
-                          WEIGHT_UNITS[0].value
-                        }
+                        selected={record.remainingQuantity?.units || WEIGHT_UNITS[0].value}
                         values={withdrawalOptions(false)}
                         onChange={onChangeRemainingQuantity}
                       />
                     </InputAdornment>
                   }
                   required={true}
-                  helperText={
-                    getErrorText('remainingSeeds') || strings.REQUIRED_FIELD
-                  }
+                  helperText={getErrorText('remainingSeeds') || strings.REQUIRED_FIELD}
                   error={getErrorText('remainingSeeds') ? true : false}
                 />
               )}
             </Grid>
             <Grid item xs={6}>
-              <TextField
-                id='destination'
-                value={record.destination}
-                onChange={onChange}
-                label={strings.DESTINATION}
-              />
+              <TextField id='destination' value={record.destination} onChange={onChange} label={strings.DESTINATION} />
             </Grid>
             <Grid item xs={6}>
               <Dropdown
@@ -386,12 +336,7 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
           <Divisor />
           <Grid container spacing={4}>
             <Grid item xs={12}>
-              <TextArea
-                id='notes'
-                value={record.notes}
-                onChange={onChange}
-                label={strings.NOTES}
-              />
+              <TextArea id='notes' value={record.notes} onChange={onChange} label={strings.NOTES} />
             </Grid>
             <Grid item xs={6}>
               <TextField

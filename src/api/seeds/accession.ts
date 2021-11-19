@@ -30,5 +30,7 @@ export const putAccession = async (accessionId: number, accession: AccessionPutR
 };
 
 export const getPhotoEndpoint = (accessionId: number, photoFilename: string): string => {
-  return `${process.env.REACT_APP_TERRAWARE_API}${photoEndpoint}`.replace('{id}', `${accessionId}`).replace('{photoFilename}', `${photoFilename}`);
+  return `${process.env.REACT_APP_TERRAWARE_API}${photoEndpoint}`
+    .replace('{id}', `${accessionId}`)
+    .replace('{photoFilename}', `${photoFilename}`);
 };

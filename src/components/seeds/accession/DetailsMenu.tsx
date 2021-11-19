@@ -1,12 +1,7 @@
 import { Box, Divider, Link, Paper, Typography } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React from 'react';
-import {
-  Link as RouterLink,
-  useHistory,
-  useParams,
-  useRouteMatch,
-} from 'react-router-dom';
+import { Link as RouterLink, useHistory, useParams, useRouteMatch } from 'react-router-dom';
 import strings from 'src/strings';
 import useStateLocation from 'src/utils/useStateLocation';
 
@@ -81,11 +76,7 @@ export default function DetailsMenu({ state }: Props): JSX.Element | null {
       {paths.map(({ title, active, route, disabled }) =>
         disabled ? (
           <span>
-            <Typography
-              component='p'
-              variant='body1'
-              className={classes.disabled}
-            >
+            <Typography component='p' variant='body1' className={classes.disabled}>
               {title}
             </Typography>
           </span>
@@ -101,11 +92,7 @@ export default function DetailsMenu({ state }: Props): JSX.Element | null {
               },
             }}
           >
-            <Typography
-              component='p'
-              variant='body1'
-              className={active ? classes.bold : classes.link}
-            >
+            <Typography component='p' variant='body1' className={active ? classes.bold : classes.link}>
               {title}
             </Typography>
           </Link>

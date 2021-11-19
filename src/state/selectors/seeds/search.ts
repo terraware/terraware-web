@@ -1,20 +1,8 @@
 import { atom, selector } from 'recoil';
 import { search } from 'src/api/seeds/search';
-import {
-  AndNodePayload,
-  SearchRequestPayload,
-  SearchResponsePayload,
-} from 'src/api/types/search';
-import {
-  COLUMNS_INDEXED,
-  DatabaseColumn,
-} from 'src/components/seeds/database/columns';
-import {
-  columnsAtom,
-  searchFilterAtom,
-  searchSelectedColumnsAtom,
-  searchSortAtom,
-} from '../../atoms/seeds/search';
+import { AndNodePayload, SearchRequestPayload, SearchResponsePayload } from 'src/api/types/search';
+import { COLUMNS_INDEXED, DatabaseColumn } from 'src/components/seeds/database/columns';
+import { columnsAtom, searchFilterAtom, searchSelectedColumnsAtom, searchSortAtom } from '../../atoms/seeds/search';
 import { facilityIdSelector } from './facility';
 
 const searchAtom = atom({
@@ -76,9 +64,7 @@ export const searchParamsSelector = selector({
 
     return {
       facilityId,
-      fields: tableColumns.includes('active')
-        ? tableColumns
-        : [...tableColumns, 'active'],
+      fields: tableColumns.includes('active') ? tableColumns : [...tableColumns, 'active'],
       sortOrder: [{ field: sort.field, direction: sort.direction }],
       search: internalSearch,
       count: 1000,
