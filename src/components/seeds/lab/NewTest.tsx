@@ -1,12 +1,5 @@
 import MomentUtils from '@date-io/moment';
-import {
-  Box,
-  Chip,
-  Grid,
-  InputAdornment,
-  Link,
-  Typography,
-} from '@material-ui/core';
+import { Box, Chip, Grid, InputAdornment, Link, Typography } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -66,37 +59,25 @@ function initTest(test?: GerminationTest): GerminationTest {
 export default function NewTestDialog(props: Props): JSX.Element {
   const classes = useStyles();
   const { onClose, open, onDelete } = props;
-  const [record, setRecord, onChange] = useForm<GerminationTest>(
-    initTest(props.value)
-  );
+  const [record, setRecord, onChange] = useForm<GerminationTest>(initTest(props.value));
   const [seedsRemaining, setSeedsRemaining] = React.useState(0);
   const [unit, setUnit] = React.useState('');
   const [errors, setErrors] = React.useState<FieldError[]>([]);
 
-  const typeOptions = props.allowTestInGrams
-    ? WEIGHT_UNITS
-    : [{ label: strings.S_SEED_COUNT, value: 'Seeds' }];
+  const typeOptions = props.allowTestInGrams ? WEIGHT_UNITS : [{ label: strings.S_SEED_COUNT, value: 'Seeds' }];
 
   React.useEffect(() => {
     setErrors([]);
     setUnit(props.allowTestInGrams ? 'weight' : 'count');
     if (!props.allowTestInGrams) {
-      setSeedsRemaining(
-        props.value?.remainingQuantity?.quantity || props.seedsAvailable
-      );
+      setSeedsRemaining(props.value?.remainingQuantity?.quantity || props.seedsAvailable);
     } else {
       setSeedsRemaining(props.value?.remainingQuantity?.quantity || 0);
     }
     if (props.open) {
       setRecord(initTest(props.value));
     }
-  }, [
-    props.allowTestInGrams,
-    props.open,
-    props.seedsAvailable,
-    props.value,
-    setRecord,
-  ]);
+  }, [props.allowTestInGrams, props.open, props.seedsAvailable, props.value, setRecord]);
 
   const handleCancel = () => {
     setRecord(initTest(props.value));
@@ -170,12 +151,7 @@ export default function NewTestDialog(props: Props): JSX.Element {
   };
 
   return (
-    <Dialog
-      onClose={handleCancel}
-      disableEscapeKeyDown
-      open={open}
-      maxWidth='sm'
-    >
+    <Dialog onClose={handleCancel} disableEscapeKeyDown open={open} maxWidth='sm'>
       <DialogTitle>
         <Typography variant='h6'>{strings.NEW_TEST}</Typography>
         <DialogCloseButton onClick={handleCancel} />
@@ -301,19 +277,14 @@ export default function NewTestDialog(props: Props): JSX.Element {
                       <Dropdown
                         id='units'
                         label=''
-                        selected={
-                          record.remainingQuantity?.units ||
-                          WEIGHT_UNITS[0].value
-                        }
+                        selected={record.remainingQuantity?.units || WEIGHT_UNITS[0].value}
                         values={typeOptions}
                         onChange={onRemainingChange}
                       />
                     </InputAdornment>
                   }
                   required={true}
-                  helperText={
-                    getErrorText('seedsRemaining') || strings.REQUIRED_FIELD
-                  }
+                  helperText={getErrorText('seedsRemaining') || strings.REQUIRED_FIELD}
                   error={getErrorText('seedsRemaining') ? true : false}
                 />
               </Grid>
@@ -322,12 +293,7 @@ export default function NewTestDialog(props: Props): JSX.Element {
           <Divisor />
           <Grid container spacing={4}>
             <Grid item xs={12}>
-              <TextArea
-                id='notes'
-                value={record?.notes}
-                onChange={onChange}
-                label={strings.NOTES}
-              />
+              <TextArea id='notes' value={record?.notes} onChange={onChange} label={strings.NOTES} />
             </Grid>
             <Grid item xs={6}>
               <TextField

@@ -17,10 +17,7 @@
     font-family: $tw-fnt-btn-label-small-font-family;
     line-height: $tw-fnt-btn-label-small-line-height;
     min-width: $tw-sz-btn-small-min-width;
-    padding: calc(
-        (#{$tw-sz-btn-small-height} - #{$tw-fnt-btn-label-small-line-height}) /
-          2
-      )
+    padding: calc((#{$tw-sz-btn-small-height} - #{$tw-fnt-btn-label-small-line-height}) / 2)
       calc(#{$tw-sz-btn-small-height}/ 2);
     border-radius: calc(#{$tw-sz-btn-small-height} / 2);
 
@@ -33,30 +30,18 @@
         bottom: calc(#{-$tw-sz-btn-stroke} * 2);
         left: calc(#{-$tw-sz-btn-stroke} * 2);
         right: calc(#{-$tw-sz-btn-stroke} * 2);
-        border-radius: calc(
-          #{$tw-sz-btn-small-height + $tw-sz-btn-stroke * 4} / 2
-        );
+        border-radius: calc(#{$tw-sz-btn-small-height + $tw-sz-btn-stroke * 4} / 2);
         border: $tw-sz-btn-stroke solid $tw-clr-btn-stroke-focus;
       }
     }
 
     &.button-with-icon {
       padding-left: calc(
-        (#{$tw-sz-btn-small-height} / 2) -
-          (
-            (
-              (
-                  #{$tw-sz-btn-small-height} - #{$tw-fnt-btn-label-small-line-height}
-                ) / 2
-            )
-          )
+        (#{$tw-sz-btn-small-height} / 2) - (((#{$tw-sz-btn-small-height} - #{$tw-fnt-btn-label-small-line-height}) / 2))
       );
 
       .tw-icon--small {
-        margin-right: calc(
-          (#{$tw-sz-btn-small-height} - #{$tw-fnt-btn-label-small-line-height}) /
-            2
-        );
+        margin-right: calc((#{$tw-sz-btn-small-height} - #{$tw-fnt-btn-label-small-line-height}) / 2);
       }
     }
   }
@@ -68,10 +53,7 @@
     font-family: $tw-fnt-btn-label-medium-font-family;
     line-height: $tw-fnt-btn-label-medium-line-height;
     min-width: $tw-sz-btn-medium-min-width;
-    padding: calc(
-        (#{$tw-sz-btn-medium-height} - #{$tw-fnt-btn-label-medium-line-height}) /
-          2
-      )
+    padding: calc((#{$tw-sz-btn-medium-height} - #{$tw-fnt-btn-label-medium-line-height}) / 2)
       calc(#{$tw-sz-btn-medium-height}/ 2);
     border-radius: calc(#{$tw-sz-btn-medium-height} / 2);
 
@@ -84,29 +66,17 @@
         bottom: calc(#{-$tw-sz-btn-stroke} * 2);
         left: calc(#{-$tw-sz-btn-stroke} * 2);
         right: calc(#{-$tw-sz-btn-stroke} * 2);
-        border-radius: calc(
-          #{$tw-sz-btn-medium-height + $tw-sz-btn-stroke * 4} / 2
-        );
+        border-radius: calc(#{$tw-sz-btn-medium-height + $tw-sz-btn-stroke * 4} / 2);
         border: $tw-sz-btn-stroke solid $tw-clr-btn-stroke-focus;
       }
     }
     &.button-with-icon {
       padding-left: calc(
         (#{$tw-sz-btn-medium-height} / 2) -
-          (
-            (
-              (
-                  #{$tw-sz-btn-medium-height} - #{$tw-fnt-btn-label-medium-line-height}
-                ) / 2
-            )
-          )
+          (((#{$tw-sz-btn-medium-height} - #{$tw-fnt-btn-label-medium-line-height}) / 2))
       );
       .tw-icon--medium {
-        margin-right: calc(
-          (
-              #{$tw-sz-btn-medium-height} - #{$tw-fnt-btn-label-medium-line-height}
-            ) / 2
-        );
+        margin-right: calc((#{$tw-sz-btn-medium-height} - #{$tw-fnt-btn-label-medium-line-height}) / 2);
       }
     }
   }
@@ -118,10 +88,7 @@
     font-family: $tw-fnt-btn-label-large-font-family;
     line-height: $tw-fnt-btn-label-large-line-height;
     min-width: $tw-sz-btn-large-min-width;
-    padding: calc(
-        (#{$tw-sz-btn-large-height} - #{$tw-fnt-btn-label-large-line-height}) /
-          2
-      )
+    padding: calc((#{$tw-sz-btn-large-height} - #{$tw-fnt-btn-label-large-line-height}) / 2)
       calc(#{$tw-sz-btn-large-height}/ 2);
     border-radius: calc(#{$tw-sz-btn-large-height} / 2);
 
@@ -134,28 +101,16 @@
         bottom: calc(#{-$tw-sz-btn-stroke} * 2);
         left: calc(#{-$tw-sz-btn-stroke} * 2);
         right: calc(#{-$tw-sz-btn-stroke} * 2);
-        border-radius: calc(
-          #{$tw-sz-btn-large-height + $tw-sz-btn-stroke * 4} / 2
-        );
+        border-radius: calc(#{$tw-sz-btn-large-height + $tw-sz-btn-stroke * 4} / 2);
         border: $tw-sz-btn-stroke solid $tw-clr-btn-stroke-focus;
       }
     }
     &.button-with-icon {
       padding-left: calc(
-        (#{$tw-sz-btn-large-height} / 2) -
-          (
-            (
-              (
-                  #{$tw-sz-btn-large-height} - #{$tw-fnt-btn-label-large-line-height}
-                ) / 2
-            )
-          )
+        (#{$tw-sz-btn-large-height} / 2) - (((#{$tw-sz-btn-large-height} - #{$tw-fnt-btn-label-large-line-height}) / 2))
       );
       .tw-icon--large {
-        margin-right: calc(
-          (#{$tw-sz-btn-large-height} - #{$tw-fnt-btn-label-large-line-height}) /
-            2
-        );
+        margin-right: calc((#{$tw-sz-btn-large-height} - #{$tw-fnt-btn-label-large-line-height}) / 2);
       }
     }
   }
@@ -167,11 +122,7 @@
     font-family: $tw-fnt-btn-label-x-large-font-family;
     line-height: $tw-fnt-btn-label-x-large-line-height;
     min-width: $tw-sz-btn-x-large-min-width;
-    padding: calc(
-        (
-            #{$tw-sz-btn-x-large-height} - #{$tw-fnt-btn-label-x-large-line-height}
-          ) / 2
-      )
+    padding: calc((#{$tw-sz-btn-x-large-height} - #{$tw-fnt-btn-label-x-large-line-height}) / 2)
       calc(#{$tw-sz-btn-x-large-height}/ 2);
     border-radius: calc(#{$tw-sz-btn-x-large-height} / 2);
 
@@ -184,29 +135,17 @@
         bottom: calc(#{-$tw-sz-btn-stroke} * 2);
         left: calc(#{-$tw-sz-btn-stroke} * 2);
         right: calc(#{-$tw-sz-btn-stroke} * 2);
-        border-radius: calc(
-          #{$tw-sz-btn-x-large-height + $tw-sz-btn-stroke * 4} / 2
-        );
+        border-radius: calc(#{$tw-sz-btn-x-large-height + $tw-sz-btn-stroke * 4} / 2);
         border: $tw-sz-btn-stroke solid $tw-clr-btn-stroke-focus;
       }
     }
     &.button-with-icon {
       padding-left: calc(
         (#{$tw-sz-btn-x-large-height} / 2) -
-          (
-            (
-              (
-                  #{$tw-sz-btn-x-large-height} - #{$tw-fnt-btn-label-x-large-line-height}
-                ) / 2
-            )
-          )
+          (((#{$tw-sz-btn-x-large-height} - #{$tw-fnt-btn-label-x-large-line-height}) / 2))
       );
       .tw-icon--xlarge {
-        margin-right: calc(
-          (
-              #{$tw-sz-btn-x-large-height} - #{$tw-fnt-btn-label-x-large-line-height}
-            ) / 2
-        );
+        margin-right: calc((#{$tw-sz-btn-x-large-height} - #{$tw-fnt-btn-label-x-large-line-height}) / 2);
       }
     }
   }
@@ -264,56 +203,39 @@
 
   &--small {
     padding: calc(
-        (
-            #{$tw-sz-btn-small-height} - (2 * #{$tw-sz-btn-stroke}) - #{$tw-fnt-btn-label-small-line-height}
-          ) / 2
+        (#{$tw-sz-btn-small-height} - (2 * #{$tw-sz-btn-stroke}) - #{$tw-fnt-btn-label-small-line-height}) / 2
       )
       calc((#{$tw-sz-btn-small-height} - 2 * #{$tw-sz-btn-stroke}) / 2);
-    border-radius: calc(
-      (#{$tw-sz-btn-small-height} - 2 * #{$tw-sz-btn-stroke}) / 2
-    );
+    border-radius: calc((#{$tw-sz-btn-small-height} - 2 * #{$tw-sz-btn-stroke}) / 2);
   }
 
   &--medium {
     padding: calc(
-        (
-            #{$tw-sz-btn-medium-height} - (2 * #{$tw-sz-btn-stroke}) - #{$tw-fnt-btn-label-medium-line-height}
-          ) / 2
+        (#{$tw-sz-btn-medium-height} - (2 * #{$tw-sz-btn-stroke}) - #{$tw-fnt-btn-label-medium-line-height}) / 2
       )
       calc((#{$tw-sz-btn-medium-height} - 2 * #{$tw-sz-btn-stroke}) / 2);
-    border-radius: calc(
-      (#{$tw-sz-btn-medium-height} - 2 * #{$tw-sz-btn-stroke}) / 2
-    );
+    border-radius: calc((#{$tw-sz-btn-medium-height} - 2 * #{$tw-sz-btn-stroke}) / 2);
   }
 
   &--large {
     padding: calc(
-        (
-            #{$tw-sz-btn-large-height} - (2 * #{$tw-sz-btn-stroke}) - #{$tw-fnt-btn-label-large-line-height}
-          ) / 2
+        (#{$tw-sz-btn-large-height} - (2 * #{$tw-sz-btn-stroke}) - #{$tw-fnt-btn-label-large-line-height}) / 2
       )
       calc((#{$tw-sz-btn-large-height} - 2 * #{$tw-sz-btn-stroke}) / 2);
-    border-radius: calc(
-      (#{$tw-sz-btn-large-height} - 2 * #{$tw-sz-btn-stroke}) / 2
-    );
+    border-radius: calc((#{$tw-sz-btn-large-height} - 2 * #{$tw-sz-btn-stroke}) / 2);
   }
 
   &--xlarge {
     padding: calc(
-        (
-            #{$tw-sz-btn-x-large-height} - (2 * #{$tw-sz-btn-stroke}) - #{$tw-fnt-btn-label-x-large-line-height}
-          ) / 2
+        (#{$tw-sz-btn-x-large-height} - (2 * #{$tw-sz-btn-stroke}) - #{$tw-fnt-btn-label-x-large-line-height}) / 2
       )
       calc((#{$tw-sz-btn-x-large-height} - 2 * #{$tw-sz-btn-stroke}) / 2);
-    border-radius: calc(
-      (#{$tw-sz-btn-x-large-height} - 2 * #{$tw-sz-btn-stroke}) / 2
-    );
+    border-radius: calc((#{$tw-sz-btn-x-large-height} - 2 * #{$tw-sz-btn-stroke}) / 2);
   }
 
   &:disabled {
     background-color: rgba($tw-clr-btn-productive-secondary-fill, 0.4);
-    border: $tw-sz-btn-stroke solid
-      rgba($tw-clr-btn-productive-secondary-stroke, 0.4);
+    border: $tw-sz-btn-stroke solid rgba($tw-clr-btn-productive-secondary-stroke, 0.4);
     color: rgba($tw-clr-btn-productive-secondary-label, 0.4);
     svg {
       fill: rgba($tw-clr-btn-productive-secondary-label, 0.4);
@@ -370,8 +292,7 @@
 
   &:disabled {
     background-color: rgba($tw-clr-btn-passive-secondary-fill, 0.4);
-    border: $tw-sz-btn-stroke solid
-      rgba($tw-clr-btn-passive-secondary-stroke, 0.4);
+    border: $tw-sz-btn-stroke solid rgba($tw-clr-btn-passive-secondary-stroke, 0.4);
     color: rgba($tw-clr-btn-passive-secondary-label, 0.4);
     svg {
       fill: rgba($tw-clr-btn-passive-secondary-label, 0.4);
@@ -380,50 +301,34 @@
 
   &--small {
     padding: calc(
-        (
-            #{$tw-sz-btn-small-height} - (2 * #{$tw-sz-btn-stroke}) - #{$tw-fnt-btn-label-small-line-height}
-          ) / 2
+        (#{$tw-sz-btn-small-height} - (2 * #{$tw-sz-btn-stroke}) - #{$tw-fnt-btn-label-small-line-height}) / 2
       )
       calc((#{$tw-sz-btn-small-height} - 2 * #{$tw-sz-btn-stroke}) / 2);
-    border-radius: calc(
-      (#{$tw-sz-btn-small-height} - 2 * #{$tw-sz-btn-stroke}) / 2
-    );
+    border-radius: calc((#{$tw-sz-btn-small-height} - 2 * #{$tw-sz-btn-stroke}) / 2);
   }
 
   &--medium {
     padding: calc(
-        (
-            #{$tw-sz-btn-medium-height} - (2 * #{$tw-sz-btn-stroke}) - #{$tw-fnt-btn-label-medium-line-height}
-          ) / 2
+        (#{$tw-sz-btn-medium-height} - (2 * #{$tw-sz-btn-stroke}) - #{$tw-fnt-btn-label-medium-line-height}) / 2
       )
       calc((#{$tw-sz-btn-medium-height} - 2 * #{$tw-sz-btn-stroke}) / 2);
-    border-radius: calc(
-      (#{$tw-sz-btn-medium-height} - 2 * #{$tw-sz-btn-stroke}) / 2
-    );
+    border-radius: calc((#{$tw-sz-btn-medium-height} - 2 * #{$tw-sz-btn-stroke}) / 2);
   }
 
   &--large {
     padding: calc(
-        (
-            #{$tw-sz-btn-large-height} - (2 * #{$tw-sz-btn-stroke}) - #{$tw-fnt-btn-label-large-line-height}
-          ) / 2
+        (#{$tw-sz-btn-large-height} - (2 * #{$tw-sz-btn-stroke}) - #{$tw-fnt-btn-label-large-line-height}) / 2
       )
       calc((#{$tw-sz-btn-large-height} - 2 * #{$tw-sz-btn-stroke}) / 2);
-    border-radius: calc(
-      (#{$tw-sz-btn-large-height} - 2 * #{$tw-sz-btn-stroke}) / 2
-    );
+    border-radius: calc((#{$tw-sz-btn-large-height} - 2 * #{$tw-sz-btn-stroke}) / 2);
   }
 
   &--xlarge {
     padding: calc(
-        (
-            #{$tw-sz-btn-x-large-height} - (2 * #{$tw-sz-btn-stroke}) - #{$tw-fnt-btn-label-x-large-line-height}
-          ) / 2
+        (#{$tw-sz-btn-x-large-height} - (2 * #{$tw-sz-btn-stroke}) - #{$tw-fnt-btn-label-x-large-line-height}) / 2
       )
       calc((#{$tw-sz-btn-x-large-height} - 2 * #{$tw-sz-btn-stroke}) / 2);
-    border-radius: calc(
-      (#{$tw-sz-btn-x-large-height} - 2 * #{$tw-sz-btn-stroke}) / 2
-    );
+    border-radius: calc((#{$tw-sz-btn-x-large-height} - 2 * #{$tw-sz-btn-stroke}) / 2);
   }
 }
 
@@ -467,8 +372,7 @@
 
   &:disabled {
     background-color: rgba($tw-clr-btn-destructive-secondary-fill, 0.4);
-    border: $tw-sz-btn-stroke solid
-      rgba($tw-clr-btn-destructive-secondary-stroke, 0.4);
+    border: $tw-sz-btn-stroke solid rgba($tw-clr-btn-destructive-secondary-stroke, 0.4);
     color: rgba($tw-clr-btn-destructive-secondary-label, 0.4);
     svg {
       fill: rgba($tw-clr-btn-destructive-secondary-label, 0.4);
@@ -486,49 +390,33 @@
 
   &--small {
     padding: calc(
-        (
-            #{$tw-sz-btn-small-height} - (2 * #{$tw-sz-btn-stroke}) - #{$tw-fnt-btn-label-small-line-height}
-          ) / 2
+        (#{$tw-sz-btn-small-height} - (2 * #{$tw-sz-btn-stroke}) - #{$tw-fnt-btn-label-small-line-height}) / 2
       )
       calc((#{$tw-sz-btn-small-height} - 2 * #{$tw-sz-btn-stroke}) / 2);
-    border-radius: calc(
-      (#{$tw-sz-btn-small-height} - 2 * #{$tw-sz-btn-stroke}) / 2
-    );
+    border-radius: calc((#{$tw-sz-btn-small-height} - 2 * #{$tw-sz-btn-stroke}) / 2);
   }
 
   &--medium {
     padding: calc(
-        (
-            #{$tw-sz-btn-medium-height} - (2 * #{$tw-sz-btn-stroke}) - #{$tw-fnt-btn-label-medium-line-height}
-          ) / 2
+        (#{$tw-sz-btn-medium-height} - (2 * #{$tw-sz-btn-stroke}) - #{$tw-fnt-btn-label-medium-line-height}) / 2
       )
       calc((#{$tw-sz-btn-medium-height} - 2 * #{$tw-sz-btn-stroke}) / 2);
-    border-radius: calc(
-      (#{$tw-sz-btn-medium-height} - 2 * #{$tw-sz-btn-stroke}) / 2
-    );
+    border-radius: calc((#{$tw-sz-btn-medium-height} - 2 * #{$tw-sz-btn-stroke}) / 2);
   }
 
   &--large {
     padding: calc(
-        (
-            #{$tw-sz-btn-large-height} - (2 * #{$tw-sz-btn-stroke}) - #{$tw-fnt-btn-label-large-line-height}
-          ) / 2
+        (#{$tw-sz-btn-large-height} - (2 * #{$tw-sz-btn-stroke}) - #{$tw-fnt-btn-label-large-line-height}) / 2
       )
       calc((#{$tw-sz-btn-large-height} - 2 * #{$tw-sz-btn-stroke}) / 2);
-    border-radius: calc(
-      (#{$tw-sz-btn-large-height} - 2 * #{$tw-sz-btn-stroke}) / 2
-    );
+    border-radius: calc((#{$tw-sz-btn-large-height} - 2 * #{$tw-sz-btn-stroke}) / 2);
   }
 
   &--xlarge {
     padding: calc(
-        (
-            #{$tw-sz-btn-x-large-height} - (2 * #{$tw-sz-btn-stroke}) - #{$tw-fnt-btn-label-x-large-line-height}
-          ) / 2
+        (#{$tw-sz-btn-x-large-height} - (2 * #{$tw-sz-btn-stroke}) - #{$tw-fnt-btn-label-x-large-line-height}) / 2
       )
       calc((#{$tw-sz-btn-x-large-height} - 2 * #{$tw-sz-btn-stroke}) / 2);
-    border-radius: calc(
-      (#{$tw-sz-btn-x-large-height} - 2 * #{$tw-sz-btn-stroke}) / 2
-    );
+    border-radius: calc((#{$tw-sz-btn-x-large-height} - 2 * #{$tw-sz-btn-stroke}) / 2);
   }
 }

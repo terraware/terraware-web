@@ -1,4 +1,6 @@
 import { useHistory, useRouteMatch } from 'react-router-dom';
+import { useResetRecoilState } from 'recoil';
+import { pendingAccessionsSelector } from 'src/state/selectors/seeds/pendingCheckIn';
 import strings from 'src/strings';
 import Navbar from './common/Navbar/Navbar';
 import NavItem from './common/Navbar/NavItem';
@@ -11,12 +13,19 @@ export default function NavBar(): JSX.Element | null {
   const isHomeRoute = useRouteMatch('/home');
   const isAccessionSummaryRoute = useRouteMatch('/seeds-summary');
   const isAccessionsRoute = useRouteMatch('/accessions/');
+  const isCheckinRoute = useRouteMatch('/checkin/');
+  const resetPendingCheckInAccessions = useResetRecoilState(pendingAccessionsSelector);
   const isPlantDashboardRoute = useRouteMatch('/plants-dashboard');
   const isPlantListRoute = useRouteMatch('/plants-list');
   const isSpeciesRoute = useRouteMatch('/species');
 
   const navigate = (url: string) => {
     history.push(url);
+  };
+
+  const navigateToAccessions = () => {
+    resetPendingCheckInAccessions();
+    navigate('/accessions');
   };
 
   return (
@@ -42,10 +51,11 @@ export default function NavBar(): JSX.Element | null {
             onClick={() => !isAccessionSummaryRoute && navigate('/seeds-summary')}
             id='summary'
           />
+
           <NavItem
             label='Accessions'
-            selected={isAccessionsRoute ? true : false}
-            onClick={() => navigate('/accessions')}
+            selected={isAccessionsRoute || isCheckinRoute ? true : false}
+            onClick={() => navigateToAccessions()}
             id='accessions'
           />
         </SubNavbar>
@@ -60,7 +70,7 @@ export default function NavBar(): JSX.Element | null {
           <NavItem
             label={strings.DASHBOARD}
             selected={isPlantDashboardRoute ? true : false}
-            onClick={() => !isPlantDashboardRoute &&  navigate('/plants-dashboard')}
+            onClick={() => !isPlantDashboardRoute && navigate('/plants-dashboard')}
             id='dashboard'
           />
 
@@ -70,10 +80,8 @@ export default function NavBar(): JSX.Element | null {
             onClick={() => navigate('/plants-list')}
             id='plants-list'
           />
-
         </SubNavbar>
       </NavItem>
-
 
       <NavItem
         label={strings.SPECIES}

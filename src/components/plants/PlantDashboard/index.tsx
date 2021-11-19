@@ -3,17 +3,17 @@ import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
-import React, {useCallback, useEffect, useState} from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import ErrorBoundary from 'src/ErrorBoundary';
 import strings from 'src/strings';
 import PlantMap from './PlantMap';
 import SpeciesSummaryChart from './SpeciesSummaryChart';
 import SummaryCell from './SummaryCell';
-import {Organization} from 'src/types/Organization';
-import {getPlantsForMultipleLayers, getPlantSummariesByLayer} from 'src/api/plants/plants';
-import {getAllSpecies} from 'src/api/species/species';
-import {Plant, PlantSummariesByLayerId} from 'src/types/Plant';
-import {SpeciesById} from 'src/types/Species';
+import { Organization } from 'src/types/Organization';
+import { getPlantsForMultipleLayers, getPlantSummariesByLayer } from 'src/api/plants/plants';
+import { getAllSpecies } from 'src/api/species/species';
+import { Plant, PlantSummariesByLayerId } from 'src/types/Plant';
+import { SpeciesById } from 'src/types/Species';
 import getColorsBySpeciesId from 'src/api/species/getColorsBySpeciesId';
 
 const useStyles = makeStyles((theme) =>
@@ -38,7 +38,7 @@ export type PlantDashboardProps = {
 
 export default function PlantDashboard(props: PlantDashboardProps): JSX.Element {
   const classes = useStyles();
-  const {organization} = props;
+  const { organization } = props;
   const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
   const [plants, setPlants] = useState<Plant[]>([]);
   const [speciesById, setSpeciesById] = useState<SpeciesById>(new Map());
@@ -68,8 +68,8 @@ export default function PlantDashboard(props: PlantDashboardProps): JSX.Element 
       // TODO handle error fetching plant data
     };
 
-    const populatePlantSummaries = async() => {
-      const summaryResponse = await getPlantSummariesByLayer(organization.plantLayers.map((layer) => (layer.id)));
+    const populatePlantSummaries = async () => {
+      const summaryResponse = await getPlantSummariesByLayer(organization.plantLayers.map((layer) => layer.id));
       // TODO handle error fetching plant summary data
       if (summaryResponse.plantErrorByLayerId.size === 0) {
         setPlantSummariesByLayerId(summaryResponse.plantSummariesByLayerId);
@@ -109,7 +109,7 @@ export default function PlantDashboard(props: PlantDashboardProps): JSX.Element 
                     <TableBody>
                       <ErrorBoundary>
                         <React.Suspense fallback={strings.LOADING}>
-                          <SummaryCount summary={plantSummariesByLayerId}/>
+                          <SummaryCount summary={plantSummariesByLayerId} />
                         </React.Suspense>
                       </ErrorBoundary>
                     </TableBody>
@@ -120,10 +120,12 @@ export default function PlantDashboard(props: PlantDashboardProps): JSX.Element 
                 <Paper className={classes.mapContainer}>
                   <ErrorBoundary>
                     <React.Suspense fallback={strings.LOADING}>
-                      <SpeciesSummaryChart plantSummariesByLayerId={plantSummariesByLayerId}
-                                           speciesById={speciesById}
-                                           colorsBySpeciesId={colorsBySpeciesId}
-                                           isFullscreen={isFullscreen} />
+                      <SpeciesSummaryChart
+                        plantSummariesByLayerId={plantSummariesByLayerId}
+                        speciesById={speciesById}
+                        colorsBySpeciesId={colorsBySpeciesId}
+                        isFullscreen={isFullscreen}
+                      />
                     </React.Suspense>
                   </ErrorBoundary>
                 </Paper>
@@ -163,17 +165,8 @@ function SummaryCount(props: SummaryCountProps): JSX.Element {
 
   return (
     <TableRow>
-      <SummaryCell
-        title={strings.PLANTS}
-        current={thisWeekPlantsCount}
-        lastWeek={lastWeekPlantsCount}
-      />
-      <SummaryCell
-        title={strings.SPECIES}
-        current={thisWeekSpeciesCount}
-        lastWeek={lastWeekSpeciesCount}
-      />
+      <SummaryCell title={strings.PLANTS} current={thisWeekPlantsCount} lastWeek={lastWeekPlantsCount} />
+      <SummaryCell title={strings.SPECIES} current={thisWeekSpeciesCount} lastWeek={lastWeekSpeciesCount} />
     </TableRow>
   );
 }
-

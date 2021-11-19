@@ -51,9 +51,7 @@ function initSpecies(species?: Species): Species {
 export default function SimpleSpeciesModal(props: Props): JSX.Element {
   const classes = useStyles();
   const { onClose, open } = props;
-  const [record, setRecord, onChange] = useForm<Species>(
-    initSpecies(props.value)
-  );
+  const [record, setRecord, onChange] = useForm<Species>(initSpecies(props.value));
   const resetSpecies = useResetRecoilState(speciesSelector);
 
   React.useEffect(() => {
@@ -84,17 +82,9 @@ export default function SimpleSpeciesModal(props: Props): JSX.Element {
   };
 
   return (
-    <Dialog
-      onClose={handleCancel}
-      disableEscapeKeyDown
-      open={open}
-      maxWidth='md'
-      classes={{ paper: classes.paper }}
-    >
+    <Dialog onClose={handleCancel} disableEscapeKeyDown open={open} maxWidth='md' classes={{ paper: classes.paper }}>
       <DialogTitle>
-        <Typography variant='h6'>
-          {props.value ? strings.EDIT_SPECIES : strings.ADD_SPECIES}
-        </Typography>
+        <Typography variant='h6'>{props.value ? strings.EDIT_SPECIES : strings.ADD_SPECIES}</Typography>
         <DialogCloseButton onClick={handleCancel} />
       </DialogTitle>
       <DialogContent dividers>
@@ -122,11 +112,7 @@ export default function SimpleSpeciesModal(props: Props): JSX.Element {
               type='passive'
               className={classes.spacing}
             />
-            <Button
-              onClick={handleOk}
-              id='save-species'
-              label={props.value ? strings.SAVE : strings.ADD}
-            />
+            <Button onClick={handleOk} id='save-species' label={props.value ? strings.SAVE : strings.ADD} />
           </Box>
         </Box>
       </DialogActions>

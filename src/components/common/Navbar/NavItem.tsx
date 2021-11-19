@@ -57,12 +57,7 @@ export default function NavItem(props: NavItemProps): JSX.Element {
       <button className='nav-item-content' onClick={onClickHandler} id={id}>
         {icon && <Icon name={icon} className='nav-item--icon' />}
         <span className='nav-item--label'>{label}</span>
-        {children && (
-          <Icon
-            name={open ? 'chevronUp' : 'chevronDown'}
-            className='nav-item--arrow'
-          />
-        )}
+        {children && <Icon name={open ? 'chevronUp' : 'chevronDown'} className='nav-item--arrow' />}
       </button>
       {children && open && children}
     </div>

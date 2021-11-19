@@ -50,14 +50,7 @@ export interface Props {
   onIconClick?: () => void;
 }
 
-export default function SummaryBox({
-  title,
-  value,
-  variant = 'default',
-  id,
-  icon,
-  onIconClick,
-}: Props): JSX.Element {
+export default function SummaryBox({ title, value, variant = 'default', id, icon, onIconClick }: Props): JSX.Element {
   const classes = useStyles();
 
   const style =

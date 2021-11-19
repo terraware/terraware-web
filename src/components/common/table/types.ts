@@ -24,10 +24,7 @@ export interface DetailsProps<T> {
   defaultSort: string;
   columns: TableColumnType[];
   onClick: (parentValue: EnhancedTableDetailsRow) => void;
-  onSelect: (
-    value: EnhancedTableDetailsRow,
-    parentValue: EnhancedTableDetailsRow
-  ) => void;
+  onSelect: (value: EnhancedTableDetailsRow, parentValue: EnhancedTableDetailsRow) => void;
   Renderer: (props: RendererProps<T>) => JSX.Element;
   row: EnhancedTableDetailsRow;
 }

@@ -19,7 +19,7 @@ describe('Searchbar', () => {
 
   context('Summary End Results', () => {
     it('has the right summary results', () => {
-      cy.intercept('GET', '/api/v1/seedbank/summary').as('summary');
+      cy.intercept('GET', '/api/v1/seedbank/summary/*').as('summary');
       cy.visit('/seeds-summary');
       cy.wait('@summary');
 

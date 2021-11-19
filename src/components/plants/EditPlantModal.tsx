@@ -1,12 +1,4 @@
-import {
-  Box,
-  FormControl,
-  FormControlLabel,
-  Grid,
-  Radio,
-  RadioGroup,
-  Typography,
-} from '@material-ui/core';
+import { Box, FormControl, FormControlLabel, Grid, Radio, RadioGroup, Typography } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -70,16 +62,14 @@ export type EditPlantModalProps = {
 
 export default function EditPlantModal(props: EditPlantModalProps): JSX.Element {
   const classes = useStyles();
-  const {onSave, onCancel, canDelete, speciesById, plant, photoUrl} = props;
+  const { onSave, onCancel, canDelete, speciesById, plant, photoUrl } = props;
   const [deleteConfirmationModelOpen, setDeleteConfirmationModelOpen] = useState<boolean>(false);
   // For creating a new species
   const [newSpeciesName, setNewSpeciesName] = useState<string>('');
   // For selecting an existing species
   const [selectedSpecies, setSelectedSpecies] = useState<Species>({
     id: plant.speciesId ?? -1,
-    name: plant.speciesId
-      ? speciesById.get(plant.speciesId)?.name ?? ''
-      : ''
+    name: plant.speciesId ? speciesById.get(plant.speciesId)?.name ?? '' : '',
   });
 
   const handleTypingNewSpecies = (id: string, value: unknown) => {
@@ -89,13 +79,15 @@ export default function EditPlantModal(props: EditPlantModalProps): JSX.Element 
   const handleSelectExistingSpecies = (event: React.ChangeEvent<HTMLInputElement>) => {
     const id = parseInt(event.target.value, 10);
     // TODO what if the species name isn't there?
-    setSelectedSpecies({id, name: speciesById.get(id)?.name ?? ''});
+    setSelectedSpecies({ id, name: speciesById.get(id)?.name ?? '' });
   };
 
   const inputtedValidNewSpecies = (): boolean => newSpeciesName !== null && newSpeciesName.length > 2;
   const selectedDifferentExistingSpecies = (): boolean => {
-    return (plant.speciesId !== null && plant.speciesId !== selectedSpecies.id) ||
-           (plant.speciesId === null && selectedSpecies.id !== -1);
+    return (
+      (plant.speciesId !== null && plant.speciesId !== selectedSpecies.id) ||
+      (plant.speciesId === null && selectedSpecies.id !== -1)
+    );
   };
 
   // Check if the user has inputted anything
@@ -107,7 +99,7 @@ export default function EditPlantModal(props: EditPlantModalProps): JSX.Element 
     let speciesId: number | undefined;
     if (inputtedValidNewSpecies()) {
       // create new species
-      const response = await(createSpecies(newSpeciesName));
+      const response = await createSpecies(newSpeciesName);
       // TODO handle error if cannot save species
       if (response.species) {
         speciesId = response.species.id;
@@ -126,7 +118,7 @@ export default function EditPlantModal(props: EditPlantModalProps): JSX.Element 
       onCancel();
     }
 
-    await putPlant({...plant, speciesId});
+    await putPlant({ ...plant, speciesId });
     // TODO handle cannot save plant error
     onSave(false);
   };
@@ -142,11 +134,12 @@ export default function EditPlantModal(props: EditPlantModalProps): JSX.Element 
 
   return (
     <>
-      {deleteConfirmationModelOpen &&
+      {deleteConfirmationModelOpen && (
         <DeletePlantConfirmationModal
           onCancel={() => setDeleteConfirmationModelOpen(false)}
-          confirmDelete={handleDeletePlant} />
-      }
+          confirmDelete={handleDeletePlant}
+        />
+      )}
       <Dialog
         onClose={onCancel}
         disableEscapeKeyDown
@@ -165,7 +158,7 @@ export default function EditPlantModal(props: EditPlantModalProps): JSX.Element 
                 <Typography variant='body1'>{strings.PHOTO}</Typography>
               </Grid>
               <Grid item xs={12}>
-                <DisplayPhoto photoUrl={photoUrl}/>
+                <DisplayPhoto photoUrl={photoUrl} />
               </Grid>
             </Grid>
             <Grid item xs={6}>
@@ -177,13 +170,8 @@ export default function EditPlantModal(props: EditPlantModalProps): JSX.Element 
               </Grid>
             </Grid>
             <Grid item xs={12}>
-              <Typography variant='body1'>
-                {strings.EXISTING_SPECIES_MSG}
-              </Typography>
-              <FormControl component='fieldset'
-                           className={classes.container}
-                           disabled={inputtedValidNewSpecies()}
-              >
+              <Typography variant='body1'>{strings.EXISTING_SPECIES_MSG}</Typography>
+              <FormControl component='fieldset' className={classes.container} disabled={inputtedValidNewSpecies()}>
                 <RadioGroup
                   aria-label='species'
                   name='species'
@@ -191,21 +179,9 @@ export default function EditPlantModal(props: EditPlantModalProps): JSX.Element 
                   onChange={handleSelectExistingSpecies}
                 >
                   {Array.from(speciesById?.values()).map((sp) => (
-                    <FormControlLabel
-                      id={sp.name}
-                      key={sp.id}
-                      value={sp.id}
-                      control={<Radio />}
-                      label={sp.name}
-                    />
+                    <FormControlLabel id={sp.name} key={sp.id} value={sp.id} control={<Radio />} label={sp.name} />
                   ))}
-                  <FormControlLabel
-                    id='Other'
-                    key={-1}
-                    value={-1}
-                    control={<Radio />}
-                    label={strings.OTHER}
-                  />
+                  <FormControlLabel id='Other' key={-1} value={-1} control={<Radio />} label={strings.OTHER} />
                 </RadioGroup>
               </FormControl>
             </Grid>
@@ -251,7 +227,7 @@ export default function EditPlantModal(props: EditPlantModalProps): JSX.Element 
                 type='passive'
                 className={classes.spacing}
               />
-              <Button onClick={handleSave} id='saveSpecies' label={strings.SAVE} disabled={!canSave()}/>
+              <Button onClick={handleSave} id='saveSpecies' label={strings.SAVE} disabled={!canSave()} />
             </Box>
           </Box>
         </DialogActions>

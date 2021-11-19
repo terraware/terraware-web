@@ -1,12 +1,5 @@
 import MomentUtils from '@date-io/moment';
-import {
-  CircularProgress,
-  Container,
-  Grid,
-  Link,
-  Paper,
-  Typography
-} from '@material-ui/core';
+import { CircularProgress, Container, Grid, Link, Paper, Typography } from '@material-ui/core';
 import Fab from '@material-ui/core/Fab';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
@@ -15,7 +8,7 @@ import moment from 'moment';
 import React, { Suspense } from 'react';
 import { Redirect, useHistory } from 'react-router-dom';
 import { useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil';
-import { getPhotoEndpoint, postAccession } from 'src/api/seeds/accession';
+import { checkIn, getPhotoEndpoint, postAccession } from 'src/api/seeds/accession';
 import { updateSpecies } from 'src/api/seeds/species';
 import { Accession, AccessionPostRequestBody } from 'src/api/types/accessions';
 import snackbarAtom from 'src/state/atoms/snackbar';
@@ -32,6 +25,7 @@ import TextField from '../../common/TextField';
 import FooterButtons from '../accession/FooterButtons';
 import PageHeader from '../PageHeader';
 import { AccessionDates } from './AccessionDates';
+import CheckInButtons from './CheckInButtons';
 import EditSpeciesModal from './EditSpeciesModal';
 import MainCollector from './MainCollectorDropdown';
 import NurseryButtons from './NurseryButtons';
@@ -90,15 +84,21 @@ export default function NewAccessionWrapper(): JSX.Element {
     }
   };
 
+  const onCheckIn = async (id: number) => {
+    try {
+      await checkIn(id);
+      resetSearch();
+      setSnackbar({ type: 'success', msg: strings.ACCESSION_SAVED });
+    } catch (ex) {
+      setSnackbar({
+        type: 'delete',
+        msg: strings.SAVE_ACCESSION_ERROR,
+      });
+    }
+  };
+
   if (accessionId) {
-    return (
-      <Redirect
-        to={getLocation(
-          `/accessions/${accessionId}/seed-collection`,
-          location
-        )}
-      />
-    );
+    return <Redirect to={getLocation(`/accessions/${accessionId}/seed-collection`, location)} />;
   }
 
   return (
@@ -130,6 +130,7 @@ export default function NewAccessionWrapper(): JSX.Element {
                 receivedDate: moment().format('YYYY-MM-DD'),
               }}
               onSubmit={onSubmit}
+              onCheckIn={onCheckIn}
             />
           </Grid>
           <Grid item xs={1} />
@@ -144,6 +145,7 @@ interface Props<T extends AccessionPostRequestBody> {
   photoFilenames?: string[];
   accession: T;
   onSubmit: (record: T) => void;
+  onCheckIn: (id: number) => void;
 }
 
 export type FieldError = {
@@ -155,6 +157,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
   photoFilenames,
   accession,
   onSubmit,
+  onCheckIn,
 }: Props<T>): JSX.Element {
   const classes = useStyles();
 
@@ -168,9 +171,22 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
   const [isSendingToNursery, setIsSendingToNursery] = React.useState(false);
   const [isSentToNursery, setIsSentToNursery] = React.useState(false);
   const [canSendToNursery, setCanSendToNursery] = React.useState(false);
+  const [isPendingCheckIn, setIsPendingCheckIn] = React.useState(false);
+  const [isCheckingIn, setIsCheckingIn] = React.useState(false);
+  const [isCheckedIn, setIsCheckedIn] = React.useState(false);
 
   React.useEffect(() => {
     setRecord(accession);
+    if ((accession as unknown as Accession).state === 'Awaiting Check-In') {
+      setIsPendingCheckIn(true);
+    } else {
+      setIsPendingCheckIn(false);
+    }
+    if (isCheckingIn) {
+      setIsCheckingIn(false);
+      setIsCheckedIn(true);
+      setTimeout(() => setIsCheckedIn(false), 1000);
+    }
     if (isSaving) {
       setIsSaving(false);
       setIsSaved(true);
@@ -227,6 +243,11 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
     setTimeout(() => onSubmit(newRecord), 1000);
   };
 
+  const onCheckInHandler = () => {
+    setIsCheckingIn(true);
+    setTimeout(() => onCheckIn((accession as unknown as Accession).id), 1000);
+  };
+
   const onUndoSendToNursery = () => {
     const newRecord = {
       ...record,
@@ -272,11 +293,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
 
     const combinedErrors = [...previousErrors, ...newErrors].filter(
       (error, index, self) =>
-        index ===
-        self.findIndex(
-          (otherError) =>
-            otherError.id === error.id && otherError.msg === error.msg
-        )
+        index === self.findIndex((otherError) => otherError.id === error.id && otherError.msg === error.msg)
     );
     setErrors(combinedErrors);
   };
@@ -299,6 +316,8 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
     onChange(id, value);
   };
 
+  const showCheckIn = isPendingCheckIn || isCheckedIn;
+
   return (
     <>
       {updating && (
@@ -313,9 +332,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
           <Typography variant='h6' className={classes.bold}>
             {strings.SEED_COLLECTION}
           </Typography>
-          <Typography component='p'>
-            {strings.SEED_COLLECTION_DESCRIPTION}
-          </Typography>
+          <Typography component='p'>{strings.SEED_COLLECTION_DESCRIPTION}</Typography>
           <Divisor />
           <Grid container spacing={4}>
             <Suspense
@@ -330,12 +347,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
               </Grid>
             </Suspense>
             <Grid item xs={4}>
-              <TextField
-                id='family'
-                value={record.family}
-                onChange={onChange}
-                label={strings.FAMILY}
-              />
+              <TextField id='family' value={record.family} onChange={onChange} label={strings.FAMILY} />
             </Grid>
             <Grid item xs={4} />
             <Grid item xs={4}>
@@ -351,12 +363,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
               />
             </Grid>
             <Grid item xs={4}>
-              <TextField
-                id='founderId'
-                value={record.founderId}
-                onChange={onChange}
-                label={strings.FOUNDER_ID}
-              />
+              <TextField id='founderId' value={record.founderId} onChange={onChange} label={strings.FOUNDER_ID} />
             </Grid>
             <Grid item xs={4} />
             <Grid item xs={4}>
@@ -434,10 +441,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
               }
             >
               <Grid item xs={4}>
-                <MainCollector
-                  onChange={onChange}
-                  mainCollector={record.primaryCollector}
-                />
+                <MainCollector onChange={onChange} mainCollector={record.primaryCollector} />
               </Grid>
             </Suspense>
             <Grid item xs={4}>
@@ -451,20 +455,10 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
           <Divisor />
           <Grid container spacing={4}>
             <Grid item xs={4}>
-              <TextField
-                id='siteLocation'
-                value={record.siteLocation}
-                onChange={onChange}
-                label={strings.SITE}
-              />
+              <TextField id='siteLocation' value={record.siteLocation} onChange={onChange} label={strings.SITE} />
             </Grid>
             <Grid item xs={4}>
-              <TextField
-                id='landowner'
-                value={record.landowner}
-                onChange={onChange}
-                label={strings.LANDOWNER}
-              />
+              <TextField id='landowner' value={record.landowner} onChange={onChange} label={strings.LANDOWNER} />
             </Grid>
             <Grid item xs={4} />
             <Grid item xs={12}>
@@ -482,31 +476,17 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
           {updating && (
             <Grid container spacing={4}>
               <Grid item xs={3}>
-                <Typography
-                  component='p'
-                  variant='body2'
-                  className={classes.listItem}
-                >
+                <Typography component='p' variant='body2' className={classes.listItem}>
                   {strings.BAG_IDS}
                 </Typography>
                 {record.bagNumbers?.map((bag, index) => (
-                  <Typography
-                    id={`bag${index}`}
-                    key={index}
-                    component='p'
-                    variant='body1'
-                    className={classes.listItem}
-                  >
+                  <Typography id={`bag${index}`} key={index} component='p' variant='body1' className={classes.listItem}>
                     {bag}
                   </Typography>
                 ))}
               </Grid>
               <Grid item xs={5}>
-                <Typography
-                  component='p'
-                  variant='body2'
-                  className={classes.listItem}
-                >
+                <Typography component='p' variant='body2' className={classes.listItem}>
                   {strings.PHOTOS}
                 </Typography>
                 {photoFilenames?.map((photo, index) => (
@@ -514,27 +494,16 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
                     id={`photo-${index}`}
                     key={index}
                     target='_blank'
-                    href={getPhotoEndpoint(
-                      (record as unknown as Accession).id,
-                      photo
-                    )}
+                    href={getPhotoEndpoint((record as unknown as Accession).id, photo)}
                   >
-                    <Typography
-                      component='p'
-                      variant='body1'
-                      className={classes.photoLink}
-                    >
+                    <Typography component='p' variant='body1' className={classes.photoLink}>
                       {photo}
                     </Typography>
                   </Link>
                 ))}
               </Grid>
               <Grid item xs={4}>
-                <Typography
-                  component='p'
-                  variant='body2'
-                  className={classes.listItem}
-                >
+                <Typography component='p' variant='body2' className={classes.listItem}>
                   {strings.GEOLOCATIONS}
                 </Typography>
                 {record.geolocations?.map((geolocation, index) => (
@@ -553,7 +522,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
           )}
           <Divisor />
           <Grid container spacing={4}>
-            {updating && (
+            {!showCheckIn && updating && (
               <Grid item>
                 <NurseryButtons
                   isSendingToNursery={isSendingToNursery}
@@ -565,17 +534,26 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
               </Grid>
             )}
             <Grid item className={classes.right}>
-              <FooterButtons
-                errors={errors.length > 0}
-                updating={updating}
-                isEditing={isEditing}
-                isSaving={isSaving}
-                isSaved={isSaved}
-                nextStepTo='processing-drying'
-                nextStep={strings.NEXT_PROCESSING_AND_DRYING}
-                onSubmitHandler={beforeSubmit}
-                handleCancel={handleCancel}
-              />
+              {showCheckIn ? (
+                <CheckInButtons
+                  isCheckedIn={isCheckedIn}
+                  isCheckingIn={isCheckingIn}
+                  pendingCheckIn={isPendingCheckIn}
+                  onSubmitHandler={onCheckInHandler}
+                />
+              ) : (
+                <FooterButtons
+                  errors={errors.length > 0}
+                  updating={updating}
+                  isEditing={isEditing}
+                  isSaving={isSaving}
+                  isSaved={isSaved}
+                  nextStepTo='processing-drying'
+                  nextStep={strings.NEXT_PROCESSING_AND_DRYING}
+                  onSubmitHandler={beforeSubmit}
+                  handleCancel={handleCancel}
+                />
+              )}
             </Grid>
           </Grid>
         </Paper>

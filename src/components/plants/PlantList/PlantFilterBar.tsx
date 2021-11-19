@@ -1,6 +1,6 @@
-import {MuiPickersUtilsProvider} from '@material-ui/pickers';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import MomentUtils from '@date-io/moment';
-import {createStyles, Grid, InputAdornment, makeStyles} from '@material-ui/core';
+import { createStyles, Grid, InputAdornment, makeStyles } from '@material-ui/core';
 import DatePicker from 'src/components/common/DatePicker';
 import strings from 'src/strings';
 import Dropdown from 'src/components/common/Dropdown';
@@ -32,7 +32,7 @@ type PlantFilterBarProps = {
   onClearFilters: () => void;
 };
 
-export default function PlantFilterBar(props: PlantFilterBarProps) : JSX.Element {
+export default function PlantFilterBar(props: PlantFilterBarProps): JSX.Element {
   const classes = useStyles();
   const {speciesNames, filters, onApplyFilters, onClearFilters} = props;
   const [unsavedFilters, setUnsavedFilters] = useState<PlantSearchOptions>(

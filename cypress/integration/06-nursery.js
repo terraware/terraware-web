@@ -58,9 +58,7 @@ describe('Nursery', () => {
     cy.get('#row1-seedsSown').should('contain', '100');
     cy.get('#row1-seedsGerminated').should('contain', '50');
     cy.get('#row1-recordingDate').should('contain', '02/09/2021');
-    cy.get('#row1-notes > .MuiTypography-root > .MuiSvgIcon-root').should(
-      'exist'
-    );
+    cy.get('#row1-notes > .MuiTypography-root > .MuiSvgIcon-root').should('exist');
   });
 
   it('should modify test', () => {
@@ -85,9 +83,7 @@ describe('Nursery', () => {
     cy.get('#row1-seedsSown').should('contain', '100');
     cy.get('#row1-seedsGerminated').should('contain', '70');
     cy.get('#row1-recordingDate').should('contain', '02/10/2021');
-    cy.get('#row1-notes > .MuiTypography-root > .MuiSvgIcon-root').should(
-      'not.exist'
-    );
+    cy.get('#row1-notes > .MuiTypography-root > .MuiSvgIcon-root').should('not.exist');
   });
 
   it('should create another test', () => {
@@ -202,7 +198,7 @@ describe('Nursery', () => {
 
   context('Summary End Results', () => {
     it('has the right summary results', () => {
-      cy.intercept('GET', '/api/v1/seedbank/summary').as('summary');
+      cy.intercept('GET', '/api/v1/seedbank/summary/*').as('summary');
       cy.visit('/seeds-summary');
       cy.wait('@summary');
 

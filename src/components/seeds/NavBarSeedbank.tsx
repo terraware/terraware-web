@@ -89,10 +89,7 @@ export default function NavBar(): JSX.Element | null {
               </IconButton>
             </Link>
             <NotificationsDropdown />
-            <Link
-              component={RouterLink}
-              to={getLocation('/accessions/new', location)}
-            >
+            <Link component={RouterLink} to={getLocation('/accessions/new', location)}>
               <Chip
                 id='newAccession'
                 className={classes.addAccession}

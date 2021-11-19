@@ -72,14 +72,10 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
 
   const onCloseModal = (value?: GerminationTest | undefined) => {
     if (value) {
-      const newGerminationTests = !accession.germinationTests
-        ? []
-        : [...accession.germinationTests];
+      const newGerminationTests = !accession.germinationTests ? [] : [...accession.germinationTests];
 
       if (selectedRecord) {
-        const index = newGerminationTests.findIndex(
-          (test) => test.id === selectedRecord.id
-        );
+        const index = newGerminationTests.findIndex((test) => test.id === selectedRecord.id);
         newGerminationTests.splice(index, 1, value);
       } else {
         newGerminationTests.push(value);
@@ -92,10 +88,7 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
   };
 
   const onDelete = (value: GerminationTest) => {
-    const newGerminationsTests =
-      accession?.germinationTests?.filter(
-        (germination) => germination !== value
-      ) ?? [];
+    const newGerminationsTests = accession?.germinationTests?.filter((germination) => germination !== value) ?? [];
     accession.germinationTests = newGerminationsTests;
     onSubmit(accession);
     setOpen(false);
@@ -110,19 +103,13 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
   };
 
   const getTotalScheduled = (): number => {
-    const totali = accession.germinationTests?.reduce(
-      (acum, germinationTest) => {
-        if (
-          germinationTest.testType === 'Nursery' &&
-          moment(germinationTest.startDate).isAfter(date)
-        ) {
-          acum += germinationTest.seedsSown || 0;
-        }
+    const totali = accession.germinationTests?.reduce((acum, germinationTest) => {
+      if (germinationTest.testType === 'Nursery' && moment(germinationTest.startDate).isAfter(date)) {
+        acum += germinationTest.seedsSown || 0;
+      }
 
-        return acum;
-      },
-      0
-    );
+      return acum;
+    }, 0);
 
     return totali || 0;
   };
@@ -152,9 +139,7 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
                 <SummaryBox
                   id='scheduledForTesting'
                   title={strings.SCHEDULED_FOR_TESTING}
-                  value={strings
-                    .formatString(strings.SCHEDULED_SEEDS, total)
-                    .toString()}
+                  value={strings.formatString(strings.SCHEDULED_SEEDS, total).toString()}
                   variant='default'
                 />
               </Grid>
@@ -200,18 +185,10 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
   );
 }
 
-function sortComparator(
-  a: GerminationTest,
-  b: GerminationTest,
-  orderBy: any
-): 1 | -1 | 0 {
+function sortComparator(a: GerminationTest, b: GerminationTest, orderBy: any): 1 | -1 | 0 {
   if (orderBy === 'recordingDate' || orderBy === 'seedsGerminated') {
-    const aValue = a.germinations
-      ? a.germinations[0][orderBy as keyof Germination]
-      : 0;
-    const bValue = b.germinations
-      ? b.germinations[0][orderBy as keyof Germination]
-      : 0;
+    const aValue = a.germinations ? a.germinations[0][orderBy as keyof Germination] : 0;
+    const bValue = b.germinations ? b.germinations[0][orderBy as keyof Germination] : 0;
 
     if (bValue < aValue) {
       return -1;

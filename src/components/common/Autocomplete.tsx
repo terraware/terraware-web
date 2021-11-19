@@ -15,13 +15,7 @@ export type DropdownItem = {
   value: string;
 };
 
-export default function Autocomplete({
-  id,
-  label,
-  values,
-  onChange,
-  selected,
-}: Props): JSX.Element {
+export default function Autocomplete({ id, label, values, onChange, selected }: Props): JSX.Element {
   const onChangeHandler = (event: ChangeEvent<any>, value: string | null) => {
     if (event) {
       if (value) {
@@ -42,9 +36,7 @@ export default function Autocomplete({
       inputValue={selected}
       freeSolo={true}
       forcePopupIcon={true}
-      renderInput={(params) => (
-        <TextField {...params} label={label} variant='outlined' size='small' />
-      )}
+      renderInput={(params) => <TextField {...params} label={label} variant='outlined' size='small' />}
     />
   );
 }

@@ -1,20 +1,8 @@
-import {
-  Chip,
-  Container,
-  Divider,
-  Link,
-  Popover,
-  Typography,
-} from '@material-ui/core';
+import { Chip, Container, Divider, Link, Popover, Typography } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import ArrowDropDown from '@material-ui/icons/ArrowDropDown';
 import React from 'react';
-import {
-  FieldNodePayload,
-  FieldValuesPayload,
-  OrNodePayload,
-  SearchNodePayload
-} from 'src/api/types/search';
+import { FieldNodePayload, FieldValuesPayload, OrNodePayload, SearchNodePayload } from 'src/api/types/search';
 import strings from 'src/strings';
 import preventDefaultEvent from 'src/utils/preventDefaultEvent';
 import { DatabaseColumn, Option } from './columns';
@@ -90,10 +78,7 @@ export default function Filters(props: Props): JSX.Element {
     props.onChange(updatedFilters);
   };
 
-  const handleClick = (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
-    col: DatabaseColumn
-  ) => {
+  const handleClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>, col: DatabaseColumn) => {
     setPopover({ anchor: event.currentTarget, col });
   };
 
@@ -106,8 +91,7 @@ export default function Filters(props: Props): JSX.Element {
     let totalFilteredValues = filter?.values?.length ?? 0;
     const isBoolean = col.type === 'boolean';
     if (filter && totalFilteredValues && isBoolean) {
-      const indexNull =
-        filter.values?.findIndex((value: any) => value === null) ?? -1;
+      const indexNull = filter.values?.findIndex((value: any) => value === null) ?? -1;
       if (indexNull > -1) {
         totalFilteredValues = totalFilteredValues - 1;
       }
@@ -116,9 +100,7 @@ export default function Filters(props: Props): JSX.Element {
       totalFilteredValues = filter.children.length;
     }
 
-    return totalFilteredValues
-      ? `${col.name} (${totalFilteredValues})`
-      : col.name;
+    return totalFilteredValues ? `${col.name} (${totalFilteredValues})` : col.name;
   };
 
   return (
@@ -202,18 +184,12 @@ export function getUpdatedFilters(
   return updatedFilters;
 }
 
-function getOptions(
-  col: DatabaseColumn,
-  availableValues: FieldValuesPayload,
-  allValues: FieldValuesPayload
-): Option[] {
+function getOptions(col: DatabaseColumn, availableValues: FieldValuesPayload, allValues: FieldValuesPayload): Option[] {
   const map1 = allValues[col.key].values.map((v) => {
     return {
       label: v,
       value: v,
-      disabled:
-        availableValues[col.key].values.findIndex((value) => v === value) ===
-        -1,
+      disabled: availableValues[col.key].values.findIndex((value) => v === value) === -1,
     };
   });
 
@@ -320,11 +296,7 @@ export function SimplePopover({
         />
       )}
       {popover?.col.filter?.type === 'search' && (
-        <Search
-          field={popover?.col.key}
-          onChange={onFilterChange}
-          values={filters[popover?.col.key]?.values ?? []}
-        />
+        <Search field={popover?.col.key} onChange={onFilterChange} values={filters[popover?.col.key]?.values ?? []} />
       )}
       {popover?.col.filter?.type === 'date_range' && (
         <DateRange

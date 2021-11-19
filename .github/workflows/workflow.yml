@@ -48,6 +48,9 @@ jobs:
       #- name: generate schemas
       #  run: yarn generate-types
 
+      - name: Check that code is formatted
+        run: yarn prettier --check src
+
       - name: Run linter
         run: yarn lint
 

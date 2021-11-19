@@ -5,7 +5,7 @@ export type Coordinate = {
 
 export type Plant = {
   featureId?: number;
-  layerId: number;
+  layerId?: number;
   coordinates?: Coordinate;
   notes?: string;
   enteredTime?: string;
@@ -22,8 +22,8 @@ export type PlantSearchOptions = {
 export type PlantsByLayerId = Map<number, Plant[]>;
 
 export type PlantSummary = {
-  'speciesId': number;
-  'numPlants': number;
+  speciesId: number;
+  numPlants: number;
 };
 
 export type PlantSummaries = {

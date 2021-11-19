@@ -16,11 +16,7 @@ type FieldError = {
   id: string;
   msg: string;
 };
-export function StorageStartDate({
-  onChange,
-  refreshErrors,
-  storageDate,
-}: Props): JSX.Element {
+export function StorageStartDate({ onChange, refreshErrors, storageDate }: Props): JSX.Element {
   const [dateErrors, setDateErrors] = React.useState<FieldError[]>([]);
   const date = useRecoilValue(timeSelector);
   const resetDate = useResetRecoilState(timeSelector);

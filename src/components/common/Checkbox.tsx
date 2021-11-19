@@ -11,10 +11,7 @@ export interface Props {
 }
 
 export default function Checkbox(props: Props): JSX.Element {
-  const onChange = (
-    event: React.ChangeEvent<Record<string, never>>,
-    checked: boolean
-  ) => {
+  const onChange = (event: React.ChangeEvent<Record<string, never>>, checked: boolean) => {
     props.onChange(props.id, checked);
   };
 
@@ -24,13 +21,7 @@ export default function Checkbox(props: Props): JSX.Element {
       onChange={onChange}
       label={props.label}
       disabled={props.disabled}
-      control={
-        <MUICheckbox
-          id={'check-' + props.id}
-          color='primary'
-          checked={props.value ?? false}
-        />
-      }
+      control={<MUICheckbox id={'check-' + props.id} color='primary' checked={props.value ?? false} />}
     />
   );
 }

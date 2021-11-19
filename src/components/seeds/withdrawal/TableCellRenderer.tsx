@@ -3,25 +3,17 @@ import moment from 'moment';
 import React from 'react';
 import { AccessionWithdrawal } from 'src/api/types/accessions';
 import strings from 'src/strings';
-import CellRenderer, {
-  CellDateRenderer,
-} from '../../common/table/TableCellRenderer';
+import CellRenderer, { CellDateRenderer } from '../../common/table/TableCellRenderer';
 import { RendererProps } from '../../common/table/types';
 
-export default function WithdrawalCellRenderer(
-  props: RendererProps<AccessionWithdrawal>
-): JSX.Element {
+export default function WithdrawalCellRenderer(props: RendererProps<AccessionWithdrawal>): JSX.Element {
   const { column, value, row, index } = props;
   if (column.key === 'quantity') {
     return (
       <CellRenderer
         index={index}
         column={column}
-        value={
-          row.withdrawnQuantity
-            ? `${row.withdrawnQuantity?.quantity} ${row.withdrawnQuantity?.units}`
-            : 0
-        }
+        value={row.withdrawnQuantity ? `${row.withdrawnQuantity?.quantity} ${row.withdrawnQuantity?.units}` : 0}
         row={row}
       />
     );

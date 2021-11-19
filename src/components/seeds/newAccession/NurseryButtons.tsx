@@ -56,9 +56,7 @@ export default function NurseryButtons({
       {(isSendingToNursery || isSentToNursery) && (
         <>
           {isSentToNursery && <DoneIcon fontSize='inherit' />}
-          {isSendingToNursery && (
-            <img src='/assets/loading.gif' height={16} alt='loading' />
-          )}
+          {isSendingToNursery && <img src='/assets/loading.gif' height={16} alt='loading' />}
           <Link
             className={classes.submit}
             id='sendToNursery'

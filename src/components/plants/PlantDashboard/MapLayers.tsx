@@ -17,15 +17,19 @@ export default function MapLayers(): JSX.Element {
             'step',
             ['get', 'point_count'],
             '#51bbd6', // point_count<100
-            100, '#f1f075', // point_count>100
-            750, '#f28cb1', // point_count>750
+            100,
+            '#f1f075', // point_count>100
+            750,
+            '#f28cb1', // point_count>750
           ],
           'circle-radius': [
             'step',
             ['get', 'point_count'],
             20, // point_count<100
-            100, 30, // point_count>100
-            750, 40, // point_count>750
+            100,
+            30, // point_count>100
+            750,
+            40, // point_count>750
           ],
         }}
       />
@@ -52,9 +56,12 @@ export default function MapLayers(): JSX.Element {
             'interpolate',
             ['linear'],
             ['zoom'],
-            10, 2, // zoom<=10
-            14, 4, // zoom<=14
-            15, 6, // zoom>5
+            10,
+            2, // zoom<=10
+            14,
+            4, // zoom<=14
+            15,
+            6, // zoom>5
           ],
           'circle-stroke-width': 1,
           'circle-stroke-color': '#fff',

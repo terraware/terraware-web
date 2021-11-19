@@ -28,13 +28,7 @@ interface Props {
   error: boolean;
 }
 
-export default function SummaryPaper({
-  id,
-  title,
-  statistics,
-  loading,
-  error,
-}: Props): JSX.Element {
+export default function SummaryPaper({ id, title, statistics, loading, error }: Props): JSX.Element {
   const classes = useStyles();
 
   return (
@@ -57,15 +51,8 @@ export default function SummaryPaper({
                 <ArrowUpwardIcon id={`${id}-arrow-increase`} color='primary' />
               ))}
             {statistics.lastWeek !== 0 && (
-              <Typography
-                id={`${id}-change`}
-                color='textSecondary'
-                className={classes.depositContext}
-              >
-                {strings.formatString(
-                  strings.GROWTH_SINCE_LAST_WEEK,
-                  calculateGrowth(statistics)
-                )}
+              <Typography id={`${id}-change`} color='textSecondary' className={classes.depositContext}>
+                {strings.formatString(strings.GROWTH_SINCE_LAST_WEEK, calculateGrowth(statistics))}
               </Typography>
             )}
           </div>
@@ -77,9 +64,6 @@ export default function SummaryPaper({
 
 function calculateGrowth(summaryStatistics: SummaryStatistic): number {
   return Math.round(
-    Math.abs(
-      ((summaryStatistics.current - summaryStatistics.lastWeek) * 100) /
-        summaryStatistics.lastWeek
-    )
+    Math.abs(((summaryStatistics.current - summaryStatistics.lastWeek) * 100) / summaryStatistics.lastWeek)
   );
 }

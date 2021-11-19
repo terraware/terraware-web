@@ -30,14 +30,10 @@ export default function SingleSelection(props: Props): JSX.Element {
   const classes = useStyles();
 
   const options = [...props.options];
-  const indexEnabledNull = options.findIndex(
-    (o) => o.value === null && o.disabled === false
-  );
+  const indexEnabledNull = options.findIndex((o) => o.value === null && o.disabled === false);
   if (indexEnabledNull >= 0) {
     if (props.isBoolean) {
-      const falseOption = options.find(
-        (o) => o.value === 'false' && o.disabled
-      );
+      const falseOption = options.find((o) => o.value === 'false' && o.disabled);
       if (falseOption) {
         falseOption.disabled = false;
       }
@@ -48,16 +44,12 @@ export default function SingleSelection(props: Props): JSX.Element {
     }
     options.splice(indexEnabledNull, 1);
   } else {
-    const indexDisabledNull = options.findIndex(
-      (o) => o.value === null && o.disabled
-    );
+    const indexDisabledNull = options.findIndex((o) => o.value === null && o.disabled);
     if (indexDisabledNull >= 0) {
       options.splice(indexDisabledNull, 1);
     }
   }
-  options.sort((a, b) =>
-    a.value && b.value ? a.value.localeCompare(b.value) : 0
-  );
+  options.sort((a, b) => (a.value && b.value ? a.value.localeCompare(b.value) : 0));
 
   const handleChange = (value: string | null) => {
     let updatesValues = [value];

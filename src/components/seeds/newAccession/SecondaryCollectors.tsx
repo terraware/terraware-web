@@ -11,11 +11,7 @@ interface Props {
   onChange: (id: string, value: string[]) => void;
 }
 
-export default function SecondaryCollectors({
-  id,
-  secondaryCollectors = [''],
-  onChange,
-}: Props): JSX.Element {
+export default function SecondaryCollectors({ id, secondaryCollectors = [''], onChange }: Props): JSX.Element {
   const onAddCollector = () => {
     const updatedSecondaryCollectors = [...secondaryCollectors];
     updatedSecondaryCollectors.push('');

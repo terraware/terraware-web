@@ -44,10 +44,7 @@ interface Props {
   onSubmit: (record: Accession) => void;
 }
 
-export default function ProcessingAndDrying({
-  accession,
-  onSubmit,
-}: Props): JSX.Element {
+export default function ProcessingAndDrying({ accession, onSubmit }: Props): JSX.Element {
   const classes = useStyles();
 
   const [record, setRecord, onChange] = useForm(accession);
@@ -76,10 +73,7 @@ export default function ProcessingAndDrying({
   }, []);
 
   const onSubmitHandler = () => {
-    if (
-      record.processingMethod === 'Weight' &&
-      !record.initialQuantity?.quantity
-    ) {
+    if (record.processingMethod === 'Weight' && !record.initialQuantity?.quantity) {
       onTotalWeightGramsChange('quantity', '0');
     } else {
       setIsEditing(false);
@@ -92,9 +86,7 @@ export default function ProcessingAndDrying({
     setIsEditing(false);
     setRecord(accession);
   };
-  const [estimatedSeedCount, setEstimatedSeedCount] = React.useState(
-    calculteEstimatedSeedCount(record)
-  );
+  const [estimatedSeedCount, setEstimatedSeedCount] = React.useState(calculteEstimatedSeedCount(record));
 
   const OnProcessingMethodChange = (id: string, value: unknown) => {
     if (value === 'Count') {
@@ -139,10 +131,7 @@ export default function ProcessingAndDrying({
 
     if (id === 'subsetWeight') {
       const newSubsetWeight = {
-        units:
-          record.subsetWeight?.units ||
-          record.initialQuantity?.units ||
-          weightValues[0].value,
+        units: record.subsetWeight?.units || record.initialQuantity?.units || weightValues[0].value,
         quantity: value as number,
       };
       newRecord = {
@@ -158,9 +147,7 @@ export default function ProcessingAndDrying({
   type GerminationTestType = 'Lab' | 'Nursery';
 
   const onChangeGerminationTestType = (id: string, value: unknown) => {
-    let germinationTestTypes = record.germinationTestTypes
-      ? [...record.germinationTestTypes]
-      : undefined;
+    let germinationTestTypes = record.germinationTestTypes ? [...record.germinationTestTypes] : undefined;
     if (germinationTestTypes) {
       const index = germinationTestTypes.indexOf(id as GerminationTestType, 0);
       if (index !== -1 && value === false) {
@@ -228,9 +215,7 @@ export default function ProcessingAndDrying({
         <Typography component='p' variant='h6' className={classes.bold}>
           {strings.PROCESSING_AND_DRYING}
         </Typography>
-        <Typography component='p'>
-          {strings.PROCESSING_AND_DRYING_DESCRIPTION}
-        </Typography>
+        <Typography component='p'>{strings.PROCESSING_AND_DRYING_DESCRIPTION}</Typography>
         <Divisor />
         <Grid container spacing={4}>
           <Grid item xs={4}>
@@ -251,16 +236,13 @@ export default function ProcessingAndDrying({
               <Dropdown
                 id='units'
                 label={strings.UNITS}
-                selected={
-                  record.initialQuantity?.units || weightValues[0].value
-                }
+                selected={record.initialQuantity?.units || weightValues[0].value}
                 values={weightValues}
                 onChange={onTotalWeightGramsChange}
               />
             </Grid>
           )}
-          {(record.processingMethod === 'Count' ||
-            !record.processingMethod) && (
+          {(record.processingMethod === 'Count' || !record.processingMethod) && (
             <Grid item xs={4} className={classes.alignMiddle}>
               <TextField
                 id='quantity'
@@ -274,14 +256,7 @@ export default function ProcessingAndDrying({
           {record.processingMethod === 'Weight' && (
             <>
               <Grid item xs={4} />
-              <Grid
-                item
-                xs={4}
-                justify='center'
-                alignItems='center'
-                wrap='nowrap'
-                direction='column'
-              >
+              <Grid item xs={4} justify='center' alignItems='center' wrap='nowrap' direction='column'>
                 <Grid item>
                   <TextField
                     id='quantity'
@@ -290,9 +265,7 @@ export default function ProcessingAndDrying({
                     label={strings.TOTAL_WEIGHT_OF_SEEDS}
                     type='number'
                     required={true}
-                    helperText={
-                      getErrorText('quantity') || strings.REQUIRED_FIELD
-                    }
+                    helperText={getErrorText('quantity') || strings.REQUIRED_FIELD}
                     error={getErrorText('quantity') ? true : false}
                   />
                 </Grid>
@@ -400,11 +373,7 @@ export default function ProcessingAndDrying({
               label={strings.SCHEDULE_DATE_TO_MOVE}
               aria-label='Drying move date'
             />
-            <Typography
-              component='p'
-              variant='caption'
-              className={classes.caption}
-            >
+            <Typography component='p' variant='caption' className={classes.caption}>
               {strings.IF_APPLIES}
             </Typography>
           </Grid>
@@ -454,9 +423,7 @@ export default function ProcessingAndDrying({
   );
 }
 
-const calculteEstimatedSeedCount = (
-  latestRecord: Accession
-): number | undefined => {
+const calculteEstimatedSeedCount = (latestRecord: Accession): number | undefined => {
   const subsetCount = latestRecord.subsetCount;
   const totalWeightGrams = latestRecord.initialQuantity?.quantity;
   const subsetWeightGrams = latestRecord.subsetWeight?.quantity;

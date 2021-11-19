@@ -1,6 +1,6 @@
 import axios from 'src/api/index';
-import {paths} from 'src/api/types/generated-schema';
-import {Species, SpeciesById} from 'src/types/Species';
+import { paths } from 'src/api/types/generated-schema';
+import { Species, SpeciesById } from 'src/types/Species';
 
 /*
  * All functions in this module ALWAYS returns a promise that resolves. All errors will be caught and
@@ -14,8 +14,8 @@ type SpeciesList = paths[typeof SPECIES_ENDPOINT]['get']['responses'][200]['cont
 type SpeciesListItem = SpeciesList[0];
 
 export type GetSpeciesListResponse = {
-  speciesById: SpeciesById,
-  requestSucceeded: boolean,
+  speciesById: SpeciesById;
+  requestSucceeded: boolean;
 };
 
 export async function getAllSpecies(): Promise<GetSpeciesListResponse> {
@@ -28,9 +28,9 @@ export async function getAllSpecies(): Promise<GetSpeciesListResponse> {
     const endpoint = `${BASE_URL}${SPECIES_ENDPOINT}`;
     const speciesList: SpeciesList = (await axios.get(endpoint)).data.species;
     speciesList.forEach((species: SpeciesListItem) => {
-      response.speciesById.set(species.id, {id: species.id, name: species.name});
+      response.speciesById.set(species.id, { id: species.id, name: species.name });
     });
-  } catch(error) {
+  } catch (error) {
     console.error(error);
     // Don't return a partially filled map;
     response.speciesById = new Map();
@@ -59,7 +59,7 @@ export async function createSpecies(name: string): Promise<CreateSpeciesResponse
     const createSpeciesRequest: PostSpeciesRequest = { name };
     const serverResponse: PostSpeciesResponse = (await axios.post(endpoint, createSpeciesRequest)).data;
     response.species = { id: serverResponse.id, name };
-  } catch(error) {
+  } catch (error) {
     console.error(error);
     response.species = null;
     response.requestSucceeded = false;
@@ -87,7 +87,7 @@ export async function updateSpecies(species: Species): Promise<UpdateSpeciesResp
     const endpoint = `${BASE_URL}${PUT_SPECIES_ENDPOINT}`.replace('{speciesId}', `${species.id}`);
     const updateSpeciesRequest: PutSpeciesRequest = { name: species.name };
     await axios.put(endpoint, updateSpeciesRequest);
-  } catch(error) {
+  } catch (error) {
     console.error(error);
     response.requestSucceeded = false;
   }
