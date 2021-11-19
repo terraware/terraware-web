@@ -22,12 +22,21 @@ describe('Processing and Drying', () => {
     cy.get('#quantity').type(300);
   });
 
-  it('should add processing and drying information', () => {
+  it('should add check nursery', () => {
     cy.get('#check-Nursery').click();
+  });
+
+  it('should add dates', () => {
     cy.get('#dryingStartDate').type('01/01/2021');
     cy.get('#dryingEndDate').type('01/01/2021');
     cy.get('#dryingMoveDate').type('01/01/2021');
+  });
+
+  it('should add note', () => {
     cy.get('#processingNotes').type('A processing note');
+  });
+
+  it('should add responsible', () => {
     cy.get('#processingStaffResponsible').type('Constanza');
   });
 
@@ -89,7 +98,7 @@ describe('Processing and Drying', () => {
 
   context('Summary End Results', () => {
     it('has the right summary results', () => {
-      cy.intercept('GET', '/api/v1/seedbank/summary').as('summary');
+      cy.intercept('GET', '/api/v1/seedbank/summary/*').as('summary');
       cy.visit('/seeds-summary');
       cy.wait('@summary');
 

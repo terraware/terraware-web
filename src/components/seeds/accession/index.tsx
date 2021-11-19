@@ -3,13 +3,14 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 import { Route, Switch, useHistory, useParams } from 'react-router-dom';
 import { useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil';
-import { putAccession } from 'src/api/seeds/accession';
+import { checkIn, putAccession } from 'src/api/seeds/accession';
 import { Accession, AccessionState } from 'src/api/types/accessions';
 import ErrorBoundary from 'src/ErrorBoundary';
 import snackbarAtom from 'src/state/atoms/snackbar';
 import getAccessionSelector from 'src/state/selectors/seeds/accession';
 import searchSelector from 'src/state/selectors/seeds/search';
 import strings from 'src/strings';
+import { pendingAccessionsSelector } from '../../../state/selectors/seeds/pendingCheckIn';
 import Lab from '../lab';
 import { AccessionForm } from '../newAccession';
 import Nursery from '../nursery';
@@ -52,6 +53,7 @@ function Content(): JSX.Element {
   const { accessionId } = useParams<{ accessionId: string }>();
   const setSnackbar = useSetRecoilState(snackbarAtom);
   const resetSearch = useResetRecoilState(searchSelector);
+  const resetPendingCheckInAccessions = useResetRecoilState(pendingAccessionsSelector);
   const history = useHistory();
 
   const accession = useRecoilValue(getAccessionSelector(parseInt(accessionId, 10)));
@@ -94,6 +96,20 @@ function Content(): JSX.Element {
     }
   };
 
+  const onCheckIn = async (id: number) => {
+    try {
+      await checkIn(id);
+      resetSearch();
+      resetAccession();
+      resetPendingCheckInAccessions();
+    } catch (ex) {
+      setSnackbar({
+        type: 'delete',
+        msg: strings.SAVE_ACCESSION_ERROR,
+      });
+    }
+  };
+
   return (
     <main>
       <AccessionPageHeader accession={clonedAccession} />
@@ -111,6 +127,7 @@ function Content(): JSX.Element {
                   photoFilenames={clonedAccession.photoFilenames}
                   accession={clonedAccession}
                   onSubmit={onSubmit}
+                  onCheckIn={onCheckIn}
                 />
               </Route>
               <Route exact path='/accessions/:accessionId/processing-drying'>
@@ -140,6 +157,7 @@ function Content(): JSX.Element {
 function pathDestinationForState(state: AccessionState): string {
   switch (state) {
     case 'Pending':
+    case 'Awaiting Check-In':
       return 'seed-collection';
     case 'Processing':
     case 'Processed':

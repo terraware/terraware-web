@@ -13,7 +13,7 @@ const LAYER_ID = 100;
 const FEATURE_ID = 10;
 const PLANT: Plant = {
   featureId: FEATURE_ID,
-  layerId: LAYER_ID,
+  layerId: undefined,
   coordinates: {
     latitude: 45,
     longitude: 30,

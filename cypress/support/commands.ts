@@ -32,3 +32,7 @@ Cypress.on('uncaught:exception', (err) => {
     return false;
   }
 });
+
+Cypress.Commands.add('interrupt', () => {
+  eval("window.top.document.body.querySelector('header button.stop').click()");
+});

@@ -6,7 +6,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import React from 'react';
 import { Link as RouterLink, useHistory } from 'react-router-dom';
-import { useRecoilState, useRecoilValueLoadable, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useRecoilValueLoadable, useSetRecoilState } from 'recoil';
 import { SearchField, SearchNodePayload, SearchResponseResults } from 'src/api/types/search';
 import { columnsAtom, searchFilterAtom, searchSelectedColumnsAtom, searchSortAtom } from 'src/state/atoms/seeds/search';
 import searchSelector, { columnsSelector } from 'src/state/selectors/seeds/search';
@@ -14,6 +14,8 @@ import searchAllValuesSelector from 'src/state/selectors/seeds/searchAllValues';
 import searchValuesSelector from 'src/state/selectors/seeds/searchValues';
 import strings from 'src/strings';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
+import Button from '../../../components/common/button/Button';
+import { pendingAccessionsSelector } from '../../../state/selectors/seeds/pendingCheckIn';
 import Table from '../../common/table';
 import { Order } from '../../common/table/sort';
 import PageHeader from '../PageHeader';
@@ -41,6 +43,19 @@ const useStyles = makeStyles((theme: Theme) =>
       marginLeft: theme.spacing(2),
       color: theme.palette.common.white,
     },
+    checkinMessage: {
+      marginBottom: theme.spacing(6),
+    },
+    checkInContent: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginLeft: theme.spacing(3),
+    },
+    checkInButton: {
+      marginTop: theme.spacing(2),
+      marginRight: theme.spacing(3),
+    },
   })
 );
 
@@ -60,6 +75,7 @@ export default function Database(): JSX.Element {
   const setSearchSelectedColumns = useSetRecoilState(searchSelectedColumnsAtom);
   const [columns, setColumns] = useRecoilState(columnsAtom);
 
+  const pendingAccessions = useRecoilValue(pendingAccessionsSelector);
   const tableColumnsLodable = useRecoilValueLoadable(columnsSelector);
   const tableColumns = tableColumnsLodable.state === 'hasValue' ? tableColumnsLodable.contents : undefined;
   const resultsLodable = useRecoilValueLoadable(searchSelector);
@@ -151,6 +167,10 @@ export default function Database(): JSX.Element {
     }
   };
 
+  const handleViewCollections = () => {
+    history.push('/checkin');
+  };
+
   const location = useStateLocation();
 
   return (
@@ -213,6 +233,32 @@ export default function Database(): JSX.Element {
             strings.GENERIC_ERROR}
         </PageHeader>
         <Container maxWidth={false} className={classes.mainContainer}>
+          {pendingAccessions.results.length > 0 && (
+            <Grid container spacing={3} className={classes.checkinMessage}>
+              <Grid item xs={1} />
+              <Grid item xs={10}>
+                <Paper>
+                  <Grid container spacing={4}>
+                    <Grid item xs={12} className={classes.checkInContent}>
+                      <div>
+                        <span> {strings.CHECKIN_BAGS}</span>
+                        <p>{strings.formatString(strings.CHECK_IN_MESSAGE, pendingAccessions.results.length)}</p>
+                      </div>
+                      <Button
+                        className={classes.checkInButton}
+                        onClick={handleViewCollections}
+                        id='viewCollections'
+                        label={strings.VIEW_COLLECTIONS}
+                        priority='secondary'
+                        type='passive'
+                      />
+                    </Grid>
+                  </Grid>
+                </Paper>
+              </Grid>
+              <Grid item xs={1} />
+            </Grid>
+          )}
           <Grid container spacing={3}>
             <Grid item xs={1} />
             <Grid item xs={10}>

@@ -4,24 +4,25 @@ import mapboxgl from 'mapbox-gl';
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
-import TopBar from './components/TopBar';
+import getOrganization, { GetOrganizationResponse, OrgRequestError } from 'src/api/organization/organization';
+import { Organization } from 'src/types/Organization';
 import NavBar from './components/NavBar';
-import PlantList from './components/plants/PlantList';
 import PlantDashboard from './components/plants/PlantDashboard';
+import PlantList from './components/plants/PlantList';
 import Species from './components/plants/Species';
 import Accession from './components/seeds/accession';
+import Checkin from './components/seeds/checkin';
 import Database from './components/seeds/database';
 import Help from './components/seeds/help';
 import NewAccession from './components/seeds/newAccession';
+import PageHeader from './components/seeds/PageHeader';
 import SeedSummary from './components/seeds/summary';
 import Snackbar from './components/Snackbar';
+import TopBar from './components/TopBar';
 import ErrorBoundary from './ErrorBoundary';
 import strings from './strings';
 import theme from './theme';
 import useTimer from './utils/useTimer';
-import getOrganization, { GetOrganizationResponse, OrgRequestError } from 'src/api/organization/organization';
-import { Organization } from 'src/types/Organization';
-import PageHeader from './components/seeds/PageHeader';
 
 // @ts-ignore
 mapboxgl.workerClass =
@@ -109,6 +110,10 @@ function AppContent() {
               </Route>
               <Route exact path='/seeds-summary'>
                 <SeedSummary />
+              </Route>
+
+              <Route exact path='/checkin'>
+                <Checkin />
               </Route>
               <Route exact path='/accessions/new'>
                 <NewAccession />

@@ -8,7 +8,7 @@ import moment from 'moment';
 import React, { Suspense } from 'react';
 import { Redirect, useHistory } from 'react-router-dom';
 import { useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil';
-import { getPhotoEndpoint, postAccession } from 'src/api/seeds/accession';
+import { checkIn, getPhotoEndpoint, postAccession } from 'src/api/seeds/accession';
 import { updateSpecies } from 'src/api/seeds/species';
 import { Accession, AccessionPostRequestBody } from 'src/api/types/accessions';
 import snackbarAtom from 'src/state/atoms/snackbar';
@@ -25,6 +25,7 @@ import TextField from '../../common/TextField';
 import FooterButtons from '../accession/FooterButtons';
 import PageHeader from '../PageHeader';
 import { AccessionDates } from './AccessionDates';
+import CheckInButtons from './CheckInButtons';
 import EditSpeciesModal from './EditSpeciesModal';
 import MainCollector from './MainCollectorDropdown';
 import NurseryButtons from './NurseryButtons';
@@ -83,6 +84,19 @@ export default function NewAccessionWrapper(): JSX.Element {
     }
   };
 
+  const onCheckIn = async (id: number) => {
+    try {
+      await checkIn(id);
+      resetSearch();
+      setSnackbar({ type: 'success', msg: strings.ACCESSION_SAVED });
+    } catch (ex) {
+      setSnackbar({
+        type: 'delete',
+        msg: strings.SAVE_ACCESSION_ERROR,
+      });
+    }
+  };
+
   if (accessionId) {
     return <Redirect to={getLocation(`/accessions/${accessionId}/seed-collection`, location)} />;
   }
@@ -116,6 +130,7 @@ export default function NewAccessionWrapper(): JSX.Element {
                 receivedDate: moment().format('YYYY-MM-DD'),
               }}
               onSubmit={onSubmit}
+              onCheckIn={onCheckIn}
             />
           </Grid>
           <Grid item xs={1} />
@@ -130,6 +145,7 @@ interface Props<T extends AccessionPostRequestBody> {
   photoFilenames?: string[];
   accession: T;
   onSubmit: (record: T) => void;
+  onCheckIn: (id: number) => void;
 }
 
 export type FieldError = {
@@ -141,6 +157,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
   photoFilenames,
   accession,
   onSubmit,
+  onCheckIn,
 }: Props<T>): JSX.Element {
   const classes = useStyles();
 
@@ -154,9 +171,22 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
   const [isSendingToNursery, setIsSendingToNursery] = React.useState(false);
   const [isSentToNursery, setIsSentToNursery] = React.useState(false);
   const [canSendToNursery, setCanSendToNursery] = React.useState(false);
+  const [isPendingCheckIn, setIsPendingCheckIn] = React.useState(false);
+  const [isCheckingIn, setIsCheckingIn] = React.useState(false);
+  const [isCheckedIn, setIsCheckedIn] = React.useState(false);
 
   React.useEffect(() => {
     setRecord(accession);
+    if ((accession as unknown as Accession).state === 'Awaiting Check-In') {
+      setIsPendingCheckIn(true);
+    } else {
+      setIsPendingCheckIn(false);
+    }
+    if (isCheckingIn) {
+      setIsCheckingIn(false);
+      setIsCheckedIn(true);
+      setTimeout(() => setIsCheckedIn(false), 1000);
+    }
     if (isSaving) {
       setIsSaving(false);
       setIsSaved(true);
@@ -211,6 +241,11 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
     };
     setIsSendingToNursery(true);
     setTimeout(() => onSubmit(newRecord), 1000);
+  };
+
+  const onCheckInHandler = () => {
+    setIsCheckingIn(true);
+    setTimeout(() => onCheckIn((accession as unknown as Accession).id), 1000);
   };
 
   const onUndoSendToNursery = () => {
@@ -280,6 +315,8 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
     setNewSpeciesSelected(isNew);
     onChange(id, value);
   };
+
+  const showCheckIn = isPendingCheckIn || isCheckedIn;
 
   return (
     <>
@@ -485,7 +522,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
           )}
           <Divisor />
           <Grid container spacing={4}>
-            {updating && (
+            {!showCheckIn && updating && (
               <Grid item>
                 <NurseryButtons
                   isSendingToNursery={isSendingToNursery}
@@ -497,17 +534,26 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
               </Grid>
             )}
             <Grid item className={classes.right}>
-              <FooterButtons
-                errors={errors.length > 0}
-                updating={updating}
-                isEditing={isEditing}
-                isSaving={isSaving}
-                isSaved={isSaved}
-                nextStepTo='processing-drying'
-                nextStep={strings.NEXT_PROCESSING_AND_DRYING}
-                onSubmitHandler={beforeSubmit}
-                handleCancel={handleCancel}
-              />
+              {showCheckIn ? (
+                <CheckInButtons
+                  isCheckedIn={isCheckedIn}
+                  isCheckingIn={isCheckingIn}
+                  pendingCheckIn={isPendingCheckIn}
+                  onSubmitHandler={onCheckInHandler}
+                />
+              ) : (
+                <FooterButtons
+                  errors={errors.length > 0}
+                  updating={updating}
+                  isEditing={isEditing}
+                  isSaving={isSaving}
+                  isSaved={isSaved}
+                  nextStepTo='processing-drying'
+                  nextStep={strings.NEXT_PROCESSING_AND_DRYING}
+                  onSubmitHandler={beforeSubmit}
+                  handleCancel={handleCancel}
+                />
+              )}
             </Grid>
           </Grid>
         </Paper>
