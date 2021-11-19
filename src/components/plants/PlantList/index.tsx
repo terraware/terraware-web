@@ -43,7 +43,7 @@ type PlantListProps = {
 
 export default function PlantList(props: PlantListProps): JSX.Element {
   const classes = useStyles();
-  const {organization, filters, setFilters} = props;
+  const { organization, filters, setFilters } = props;
   const [speciesById, setSpeciesById] = useState<SpeciesById>(new Map());
   const [plants, setPlants] = useState<Plant[]>([]);
   const [selectedPlant, setSelectedPlant] = useState<Plant>();
@@ -149,12 +149,14 @@ export default function PlantList(props: PlantListProps): JSX.Element {
               <Typography variant='h6'>{strings.FILTERS}</Typography>
             </IconButton>
           </Grid>
-          {showFilters &&
-            <PlantFilterBar speciesNames={getSpeciesNames()}
-                            filters={filters}
-                            onApplyFilters={setFilters}
-                            onClearFilters={() => setFilters(undefined)}/>
-          }
+          {showFilters && (
+            <PlantFilterBar
+              speciesNames={getSpeciesNames()}
+              filters={filters}
+              onApplyFilters={setFilters}
+              onClearFilters={() => setFilters(undefined)}
+            />
+          )}
           <Grid item xs={1} />
           <Grid item xs={10}>
             <Paper className={classes.mainContent}>

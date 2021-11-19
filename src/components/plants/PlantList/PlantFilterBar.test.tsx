@@ -3,7 +3,7 @@ import { MockProxy, mock } from 'jest-mock-extended';
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import strings from 'src/strings';
-import {PlantSearchOptions} from 'src/types/Plant';
+import { PlantSearchOptions } from 'src/types/Plant';
 import PlantFilterBar from './PlantFilterBar';
 
 const speciesNames = ['Common Mango', 'Hayden Mango', 'Ice Cream Mango'];
@@ -15,13 +15,12 @@ beforeEach(() => {
   (onClearFilters as jest.Mock).mockReset();
 });
 
-
 function getSpeciesInput(): HTMLInputElement {
   return screen.getByLabelText(strings.SPECIES) as HTMLInputElement;
 }
 
 function getNotesInput(): HTMLInputElement {
-  return screen.getByRole('searchbox', {name: strings.NOTES}) as HTMLInputElement;
+  return screen.getByRole('searchbox', { name: strings.NOTES }) as HTMLInputElement;
 }
 
 test('Renders without existing filters', () => {
@@ -31,12 +30,12 @@ test('Renders without existing filters', () => {
       filters={undefined}
       onApplyFilters={onApplyFilters}
       onClearFilters={onClearFilters}
-    />,
+    />
   );
 
   // Species options should be correct.
   userEvent.click(getSpeciesInput());
-  const speciesList = screen.getByRole('listbox', {name: strings.SPECIES});
+  const speciesList = screen.getByRole('listbox', { name: strings.SPECIES });
   speciesNames.forEach((name) => {
     within(speciesList).getByText(name);
   });
@@ -56,7 +55,7 @@ test(`Renders with existing filters`, () => {
       filters={filters}
       onApplyFilters={onApplyFilters}
       onClearFilters={onClearFilters}
-    />,
+    />
   );
 
   expect(getSpeciesInput()).toHaveTextContent(filters.speciesName!);

@@ -34,10 +34,8 @@ type PlantFilterBarProps = {
 
 export default function PlantFilterBar(props: PlantFilterBarProps): JSX.Element {
   const classes = useStyles();
-  const {speciesNames, filters, onApplyFilters, onClearFilters} = props;
-  const [unsavedFilters, setUnsavedFilters] = useState<PlantSearchOptions>(
-    filters ? filters : EMPTY_FILTERS
-  );
+  const { speciesNames, filters, onApplyFilters, onClearFilters } = props;
+  const [unsavedFilters, setUnsavedFilters] = useState<PlantSearchOptions>(filters ? filters : EMPTY_FILTERS);
 
   const onChange = (id: string, value?: string) => {
     const newFiltersObj = { ...unsavedFilters, [id]: value };
@@ -76,7 +74,7 @@ export default function PlantFilterBar(props: PlantFilterBarProps): JSX.Element 
           label={strings.SPECIES}
           onChange={onChange}
           selected={unsavedFilters.speciesName ?? ''}
-          values={speciesNames.map((name) => ({label: name, value: name}))}
+          values={speciesNames.map((name) => ({ label: name, value: name }))}
         />
       </Grid>
       <Grid item xs={2}>
