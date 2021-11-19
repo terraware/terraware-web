@@ -244,7 +244,6 @@ export async function putPlant (
       ? { type : 'Point', coordinates: [plant.coordinates.longitude, plant.coordinates.latitude]}
       : undefined;
     const featureRequest: UpdateFeatureRequest = {
-      layerId: plant.layerId,
       geom,
       notes: plant.notes,
       enteredTime: plant.enteredTime,
@@ -265,7 +264,7 @@ export async function putPlant (
 
     response.plant = {
       featureId: featureResponse.id,
-      layerId: featureResponse.layerId,
+      layerId: plant.layerId,
       coordinates: coordinateResponse,
       notes: featureResponse.notes,
       enteredTime: featureResponse.enteredTime,
