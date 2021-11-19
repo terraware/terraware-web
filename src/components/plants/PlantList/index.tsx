@@ -1,12 +1,4 @@
-import {
-  Container,
-  createStyles,
-  Grid,
-  IconButton,
-  makeStyles,
-  Paper,
-  Typography,
-} from '@material-ui/core';
+import { Container, createStyles, Grid, IconButton, makeStyles, Paper, Typography } from '@material-ui/core';
 import TuneIcon from '@material-ui/icons/Tune';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSetRecoilState } from 'recoil';
@@ -78,7 +70,6 @@ export default function PlantList(props: PlantListProps): JSX.Element {
 
     populateSpecies();
     populatePlants();
-
   }, [organization, filters]);
 
   useEffect(() => {
@@ -86,7 +77,7 @@ export default function PlantList(props: PlantListProps): JSX.Element {
   }, [fetchPlantsAndSpecies]);
 
   useEffect(() => {
-    const populateSelectedPlantPhoto = async() => {
+    const populateSelectedPlantPhoto = async () => {
       if (selectedPlant) {
         const response = await getPlantPhoto(selectedPlant.featureId!);
         setSelectedPlantPhoto(response.photo.imgSrc ?? undefined);
@@ -128,15 +119,16 @@ export default function PlantList(props: PlantListProps): JSX.Element {
 
   return (
     <main>
-      {selectedPlant &&
+      {selectedPlant && (
         <EditPlantModal
           onSave={onPlantEditSaved}
           onCancel={() => setSelectedPlant(undefined)}
           canDelete={true}
           speciesById={speciesById}
           plant={selectedPlant}
-          photoUrl={selectedPlantPhoto}/>
-      }
+          photoUrl={selectedPlantPhoto}
+        />
+      )}
       <Container maxWidth={false} className={classes.mainContainer}>
         <Grid container spacing={3}>
           <Grid item xs={1} />
@@ -156,18 +148,18 @@ export default function PlantList(props: PlantListProps): JSX.Element {
               <Typography variant='h6'>{strings.FILTERS}</Typography>
             </IconButton>
           </Grid>
-          {showFilters &&
-            <PlantFilterBar speciesNames={getSpeciesNames()}
-                            onApplyFilters={setFilters}
-                            onClearFilters={() => setFilters(undefined)}/>
-          }
+          {showFilters && (
+            <PlantFilterBar
+              speciesNames={getSpeciesNames()}
+              onApplyFilters={setFilters}
+              onClearFilters={() => setFilters(undefined)}
+            />
+          )}
           <Grid item xs={1} />
           <Grid item xs={10}>
             <Paper className={classes.mainContent}>
               <React.Suspense fallback={strings.LOADING}>
-                <PlantListContent plants={plants}
-                                  speciesById={speciesById}
-                                  selectPlant={selectPlant}/>
+                <PlantListContent plants={plants} speciesById={speciesById} selectPlant={selectPlant} />
               </React.Suspense>
             </Paper>
           </Grid>
@@ -177,4 +169,3 @@ export default function PlantList(props: PlantListProps): JSX.Element {
     </main>
   );
 }
-

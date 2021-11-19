@@ -5,13 +5,7 @@ import CreateIcon from '@material-ui/icons/Create';
 import FullscreenIcon from '@material-ui/icons/Fullscreen';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import React, { useEffect, useState, memo } from 'react';
-import ReactMapGL, {
-  MapContext,
-  MapEvent,
-  NavigationControl,
-  Popup,
-  Source,
-} from 'react-map-gl';
+import ReactMapGL, { MapContext, MapEvent, NavigationControl, Popup, Source } from 'react-map-gl';
 import { useSetRecoilState } from 'recoil';
 import snackbarAtom from 'src/state/atoms/snackbar';
 import strings from 'src/strings';
@@ -83,7 +77,7 @@ export type PlantMapProps = {
 function PlantMap(props: PlantMapProps): JSX.Element {
   const classes = useStyles();
 
-  const {onFullscreen, isFullscreen, plants, speciesById, colorsBySpeciesId, reloadData} = props;
+  const { onFullscreen, isFullscreen, plants, speciesById, colorsBySpeciesId, reloadData } = props;
   const [selectedPlant, setSelectedPlant] = useState<Plant>();
   const [selectedPlantPhotoUrl, setSelectedPlantPhotoUrl] = useState<string>();
   const [plantModalOpen, setPlantModalOpen] = React.useState(false);
@@ -103,7 +97,7 @@ function PlantMap(props: PlantMapProps): JSX.Element {
   }, [plants]);
 
   useEffect(() => {
-    const populateSelectedPlantPhoto = async() => {
+    const populateSelectedPlantPhoto = async () => {
       if (selectedPlant) {
         const response = await getPlantPhoto(selectedPlant.featureId!);
         setSelectedPlantPhotoUrl(response.photo.imgSrc ?? undefined);
@@ -184,16 +178,16 @@ function PlantMap(props: PlantMapProps): JSX.Element {
 
   return (
     <>
-      {selectedPlant && plantModalOpen &&
-      <EditPlantModal
-            onSave={onPlantModalSave}
-            onCancel={() => setPlantModalOpen(false)}
-            canDelete={false}
-            speciesById={speciesById}
-            plant={selectedPlant}
-            photoUrl={selectedPlantPhotoUrl}
+      {selectedPlant && plantModalOpen && (
+        <EditPlantModal
+          onSave={onPlantModalSave}
+          onCancel={() => setPlantModalOpen(false)}
+          canDelete={false}
+          speciesById={speciesById}
+          plant={selectedPlant}
+          photoUrl={selectedPlantPhotoUrl}
         />
-      }
+      )}
       <ReactMapGL
         latitude={center.latitude}
         longitude={center.longitude}
@@ -205,23 +199,13 @@ function PlantMap(props: PlantMapProps): JSX.Element {
         onClick={onClick}
       >
         {/* https://docs.mapbox.com/mapbox-gl-js/style-spec/sources/#geojson-clusterRadius */}
-        <Source
-          id='plants'
-          type='geojson'
-          data={geojson}
-          cluster={true}
-          clusterMaxZoom={8}
-        >
+        <Source id='plants' type='geojson' data={geojson} cluster={true} clusterMaxZoom={8}>
           <MapLayers />
         </Source>
         <NavigationControl showCompass={false} style={navControlStyle} />
         <CenterMap center={center} setViewport={setViewport} />
         <div style={{ position: 'absolute', right: 0, bottom: 80 }}>
-          <IconButton
-            id='full-screen'
-            onClick={onFullscreen}
-            className={classes.fullscreen}
-          >
+          <IconButton id='full-screen' onClick={onFullscreen} className={classes.fullscreen}>
             <FullscreenIcon />
           </IconButton>
         </div>
@@ -238,28 +222,15 @@ function PlantMap(props: PlantMapProps): JSX.Element {
             anchor='top'
           >
             <div>
-              <Typography
-                component='p'
-                variant='subtitle2'
-                id='feature-species-name'
-              >
+              <Typography component='p' variant='subtitle2' id='feature-species-name'>
                 {selectedPlant.speciesId
                   ? speciesById.get(selectedPlant.speciesId)?.name ?? strings.OTHER
                   : strings.OTHER}
               </Typography>
-              <Typography
-                component='p'
-                variant='body2'
-                className={classes.spacing}
-              >
+              <Typography component='p' variant='body2' className={classes.spacing}>
                 {strings.AS_OF} {cellDateFormatter(selectedPlant.enteredTime)}
               </Typography>
-              <Typography
-                component='p'
-                variant='body2'
-                className={classes.spacing}
-                id='feature-coordinates'
-              >
+              <Typography component='p' variant='body2' className={classes.spacing} id='feature-coordinates'>
                 {selectedPlant.coordinates?.latitude.toFixed(6) ?? 0},
                 {selectedPlant.coordinates?.longitude.toFixed(6) ?? 0}
               </Typography>
@@ -267,11 +238,7 @@ function PlantMap(props: PlantMapProps): JSX.Element {
               <Chip
                 id='new-species'
                 size='medium'
-                label={
-                  selectedPlant.speciesId
-                    ? strings.EDIT_SPECIES
-                    : strings.ADD_SPECIES
-                }
+                label={selectedPlant.speciesId ? strings.EDIT_SPECIES : strings.ADD_SPECIES}
                 onClick={onUpdatePlant}
                 className={classes.newSpecies}
                 icon={selectedPlant.speciesId ? <CreateIcon /> : <AddIcon />}

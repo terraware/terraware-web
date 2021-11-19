@@ -1,13 +1,5 @@
 import MomentUtils from '@date-io/moment';
-import {
-  Box,
-  Chip,
-  DialogTitle,
-  Grid,
-  InputAdornment,
-  Link,
-  Typography,
-} from '@material-ui/core';
+import { Box, Chip, DialogTitle, Grid, InputAdornment, Link, Typography } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -66,26 +58,15 @@ export default function NewTestDialog(props: Props): JSX.Element {
   const classes = useStyles();
   const { onClose, open, onDelete } = props;
 
-  const [record, setRecord, onChange] = useForm<GerminationTest>(
-    initTest(props.value)
-  );
+  const [record, setRecord, onChange] = useForm<GerminationTest>(initTest(props.value));
   const [seedsRemaining, setSeedsRemaining] = React.useState(0);
   const [viability, setSeedsViability] = React.useState('');
   const [unit, setUnit] = React.useState('');
 
   React.useEffect(() => {
     setRecord(initTest(props.value));
-    if (
-      record.germinations &&
-      record.germinations[0].seedsGerminated &&
-      record.seedsSown
-    ) {
-      setSeedsViability(
-        (
-          (record.germinations[0].seedsGerminated / record.seedsSown) *
-          100
-        ).toFixed(1)
-      );
+    if (record.germinations && record.germinations[0].seedsGerminated && record.seedsSown) {
+      setSeedsViability(((record.germinations[0].seedsGerminated / record.seedsSown) * 100).toFixed(1));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.open]);
@@ -103,29 +84,19 @@ export default function NewTestDialog(props: Props): JSX.Element {
   const [seedsGerminated, setSeedsGerminated] = React.useState<number>();
   const [errors, setErrors] = React.useState<FieldError[]>([]);
 
-  const typeOptions = props.allowTestInGrams
-    ? WEIGHT_UNITS
-    : [{ label: strings.S_SEED_COUNT, value: 'Seeds' }];
+  const typeOptions = props.allowTestInGrams ? WEIGHT_UNITS : [{ label: strings.S_SEED_COUNT, value: 'Seeds' }];
 
   React.useEffect(() => {
     setErrors([]);
     setUnit(props.allowTestInGrams ? 'weight' : 'count');
     if (!props.allowTestInGrams) {
-      setSeedsRemaining(
-        props.value?.remainingQuantity?.quantity || props.seedsAvailable
-      );
+      setSeedsRemaining(props.value?.remainingQuantity?.quantity || props.seedsAvailable);
     } else {
       setSeedsRemaining(props.value?.remainingQuantity?.quantity || 0);
     }
-    setRecordingDate(
-      props.value && props.value.germinations
-        ? props.value.germinations[0].recordingDate
-        : undefined
-    );
+    setRecordingDate(props.value && props.value.germinations ? props.value.germinations[0].recordingDate : undefined);
     setSeedsGerminated(
-      props.value && props.value.germinations
-        ? props.value.germinations[0].seedsGerminated
-        : undefined
+      props.value && props.value.germinations ? props.value.germinations[0].seedsGerminated : undefined
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.open]);
@@ -157,9 +128,7 @@ export default function NewTestDialog(props: Props): JSX.Element {
       newSeedsGerminated = value as number;
       setSeedsGerminated(newSeedsGerminated);
       if (record.seedsSown && record.seedsSown > 0) {
-        setSeedsViability(
-          ((newSeedsGerminated / record.seedsSown) * 100).toFixed(1)
-        );
+        setSeedsViability(((newSeedsGerminated / record.seedsSown) * 100).toFixed(1));
       } else {
         setSeedsViability('');
       }
@@ -228,12 +197,7 @@ export default function NewTestDialog(props: Props): JSX.Element {
   };
 
   return (
-    <Dialog
-      onClose={handleCancel}
-      disableEscapeKeyDown
-      open={open}
-      maxWidth='sm'
-    >
+    <Dialog onClose={handleCancel} disableEscapeKeyDown open={open} maxWidth='sm'>
       <DialogTitle>
         <Typography variant='h6'>{strings.NEW_TEST}</Typography>
         <DialogCloseButton onClick={handleCancel} />
@@ -356,19 +320,14 @@ export default function NewTestDialog(props: Props): JSX.Element {
                       <Dropdown
                         id='units'
                         label=''
-                        selected={
-                          record.remainingQuantity?.units ||
-                          WEIGHT_UNITS[0].value
-                        }
+                        selected={record.remainingQuantity?.units || WEIGHT_UNITS[0].value}
                         values={typeOptions}
                         onChange={onRemainingChange}
                       />
                     </InputAdornment>
                   }
                   required={true}
-                  helperText={
-                    getErrorText('seedsRemaining') || strings.REQUIRED_FIELD
-                  }
+                  helperText={getErrorText('seedsRemaining') || strings.REQUIRED_FIELD}
                   error={getErrorText('seedsRemaining') ? true : false}
                 />
               </Grid>
@@ -413,12 +372,7 @@ export default function NewTestDialog(props: Props): JSX.Element {
           <Divisor />
           <Grid container spacing={4}>
             <Grid item xs={12}>
-              <TextArea
-                id='notes'
-                value={record?.notes}
-                onChange={onChange}
-                label={strings.NOTES}
-              />
+              <TextArea id='notes' value={record?.notes} onChange={onChange} label={strings.NOTES} />
             </Grid>
             <Grid item xs={6}>
               <TextField

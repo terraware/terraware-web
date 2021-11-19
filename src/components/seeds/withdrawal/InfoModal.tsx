@@ -50,9 +50,7 @@ export default function InfoModal(props: Props): JSX.Element {
       <DialogContent dividers>
         <Grid container spacing={4}>
           <Grid item xs={12}>
-            <Typography component='p'>
-              {strings.BOTH_WITHDRAWS_DESCRIPTION}
-            </Typography>
+            <Typography component='p'>{strings.BOTH_WITHDRAWS_DESCRIPTION}</Typography>
           </Grid>
         </Grid>
       </DialogContent>

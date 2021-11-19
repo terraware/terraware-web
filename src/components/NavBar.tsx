@@ -30,9 +30,20 @@ export default function NavBar(): JSX.Element | null {
 
   return (
     <Navbar>
-      <NavItem label='Home' icon='home' selected={isHomeRoute ? true : false} onClick={() => navigate('/home')} id='dashboard' />
+      <NavItem
+        label='Home'
+        icon='home'
+        selected={isHomeRoute ? true : false}
+        onClick={() => navigate('/home')}
+        id='dashboard'
+      />
       <NavSection title={strings.FLORA} />
-      <NavItem label='Seeds' icon='seeds' id='seeds' onClick={() => !isAccessionSummaryRoute && navigate('/seeds-summary')}>
+      <NavItem
+        label='Seeds'
+        icon='seeds'
+        id='seeds'
+        onClick={() => !isAccessionSummaryRoute && navigate('/seeds-summary')}
+      >
         <SubNavbar>
           <NavItem
             label='Summary'
@@ -41,10 +52,20 @@ export default function NavBar(): JSX.Element | null {
             id='summary'
           />
 
-          <NavItem label='Accessions' selected={isAccessionsRoute || isCheckinRoute ? true : false} onClick={() => navigateToAccessions()} id='accessions' />
+          <NavItem
+            label='Accessions'
+            selected={isAccessionsRoute || isCheckinRoute ? true : false}
+            onClick={() => navigateToAccessions()}
+            id='accessions'
+          />
         </SubNavbar>
       </NavItem>
-      <NavItem label={strings.PLANTS} icon='restorationSite' onClick={() => !isPlantDashboardRoute && navigate('/plants-dashboard')} id='plants'>
+      <NavItem
+        label={strings.PLANTS}
+        icon='restorationSite'
+        onClick={() => !isPlantDashboardRoute && navigate('/plants-dashboard')}
+        id='plants'
+      >
         <SubNavbar>
           <NavItem
             label={strings.DASHBOARD}
@@ -53,11 +74,22 @@ export default function NavBar(): JSX.Element | null {
             id='dashboard'
           />
 
-          <NavItem label={strings.PLANTS_LIST} selected={isPlantListRoute ? true : false} onClick={() => navigate('/plants-list')} id='plants-list' />
+          <NavItem
+            label={strings.PLANTS_LIST}
+            selected={isPlantListRoute ? true : false}
+            onClick={() => navigate('/plants-list')}
+            id='plants-list'
+          />
         </SubNavbar>
       </NavItem>
 
-      <NavItem label={strings.SPECIES} icon='species' selected={isSpeciesRoute ? true : false} onClick={() => navigate('/species')} id='speciesNb' />
+      <NavItem
+        label={strings.SPECIES}
+        icon='species'
+        selected={isSpeciesRoute ? true : false}
+        onClick={() => navigate('/species')}
+        id='speciesNb'
+      />
     </Navbar>
   );
 }

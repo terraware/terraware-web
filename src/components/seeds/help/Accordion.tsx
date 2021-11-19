@@ -65,29 +65,16 @@ interface Props {
   children: React.ReactNode;
 }
 
-export default function HelpAccordion({
-  id,
-  expanded,
-  onChange,
-  title,
-  children,
-}: Props): JSX.Element {
+export default function HelpAccordion({ id, expanded, onChange, title, children }: Props): JSX.Element {
   const classes = useStyles();
 
-  const handleChange = (
-    event: React.ChangeEvent<Record<string, unknown>>,
-    isExpanded: boolean
-  ) => {
+  const handleChange = (event: React.ChangeEvent<Record<string, unknown>>, isExpanded: boolean) => {
     onChange(id, isExpanded);
   };
 
   return (
     <Accordion id={id} expanded={expanded === id} onChange={handleChange}>
-      <AccordionSummary
-        expandIcon={<AddIcon />}
-        aria-controls={`${id}bh-content`}
-        id={`${id}bh-header'`}
-      >
+      <AccordionSummary expandIcon={<AddIcon />} aria-controls={`${id}bh-content`} id={`${id}bh-header'`}>
         <Typography variant='h5' className={classes.header}>
           {title}
         </Typography>

@@ -9,8 +9,10 @@ export type ValuesPostRequestBody = paths[typeof valuesEndpoint]['post']['reques
 export type ValuesPostResponse = paths[typeof valuesEndpoint]['post']['responses'][200]['content']['application/json'];
 
 export const valuesAllEndpoint = '/api/v1/seedbank/values/all';
-export type ValuesAllPostRequestBody = paths[typeof valuesAllEndpoint]['post']['requestBody']['content']['application/json'];
-export type ValuesAllPostResponse = paths[typeof valuesAllEndpoint]['post']['responses'][200]['content']['application/json'];
+export type ValuesAllPostRequestBody =
+  paths[typeof valuesAllEndpoint]['post']['requestBody']['content']['application/json'];
+export type ValuesAllPostResponse =
+  paths[typeof valuesAllEndpoint]['post']['responses'][200]['content']['application/json'];
 
 export type SearchField = components['schemas']['SearchField'];
 export type SearchRequestPayload = components['schemas']['SearchRequestPayload'];

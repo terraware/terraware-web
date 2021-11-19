@@ -16,15 +16,8 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import {
-  useRecoilValueLoadable,
-  useResetRecoilState,
-  useSetRecoilState,
-} from 'recoil';
-import {
-  postAllNotificationsAsRead,
-  postNotificationAsRead
-} from 'src/api/seeds/notification';
+import { useRecoilValueLoadable, useResetRecoilState, useSetRecoilState } from 'recoil';
+import { postAllNotificationsAsRead, postNotificationAsRead } from 'src/api/seeds/notification';
 import { AccessionState } from 'src/api/types/accessions';
 import { FieldNodePayload } from 'src/api/types/search';
 import { searchFilterAtom } from 'src/state/atoms/seeds/search';
@@ -107,19 +100,14 @@ export default function NotificationsDropdown(): JSX.Element {
   };
 
   const getUnreadNotifications = () => {
-    const unreadNotifications = contents
-      ? contents.filter((notification) => !notification.read)
-      : [];
+    const unreadNotifications = contents ? contents.filter((notification) => !notification.read) : [];
 
     return unreadNotifications.length;
   };
 
   const location = useStateLocation();
   const databaseLocation = getLocation('/accessions', location);
-  const getDestination = (
-    type: 'Alert' | 'State' | 'Date',
-    accessionId?: number
-  ) => {
+  const getDestination = (type: 'Alert' | 'State' | 'Date', accessionId?: number) => {
     return type === 'Date'
       ? getLocation(`/accessions/${accessionId}`, location)
       : type === 'State'
@@ -169,36 +157,24 @@ export default function NotificationsDropdown(): JSX.Element {
             <Divider />
           </ListSubheader>
           {notificationLoadable.state === 'hasError' && strings.GENERIC_ERROR}
-          {notificationLoadable.state === 'loading' && (
-            <CircularProgress id='spinner-notifications' />
-          )}
+          {notificationLoadable.state === 'loading' && <CircularProgress id='spinner-notifications' />}
           {contents &&
-            contents.map(
-              (
-                { id, state, type, accessionId, read, text, timestamp },
-                index
-              ) => (
-                <ListItem
-                  id={`notification${index + 1}`}
-                  key={id}
-                  button
-                  className={
-                    read ? `${classes.readNotification}` : classes.noHover
-                  }
-                  onClick={() => onNotificationClick(id, state)}
-                  component={Link}
-                  to={getDestination(type, accessionId)}
-                >
-                  <ListItemIcon>
-                    <NotificationIcon type={type} />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={text}
-                    secondary={createSecondaryText(timestamp)}
-                  />
-                </ListItem>
-              )
-            )}
+            contents.map(({ id, state, type, accessionId, read, text, timestamp }, index) => (
+              <ListItem
+                id={`notification${index + 1}`}
+                key={id}
+                button
+                className={read ? `${classes.readNotification}` : classes.noHover}
+                onClick={() => onNotificationClick(id, state)}
+                component={Link}
+                to={getDestination(type, accessionId)}
+              >
+                <ListItemIcon>
+                  <NotificationIcon type={type} />
+                </ListItemIcon>
+                <ListItemText primary={text} secondary={createSecondaryText(timestamp)} />
+              </ListItem>
+            ))}
         </List>
       </Popover>
     </div>

@@ -5,7 +5,6 @@ const generateRandomColor = () => {
 };
 
 export default function getColorsBySpeciesId(speciesIds: number[]): Record<number, string> {
-
   let colorsBySpecies: Record<number, string> = {};
   const colorsJSON = localStorage.getItem(LOCAL_STORAGE_KEY);
   if (colorsJSON) {

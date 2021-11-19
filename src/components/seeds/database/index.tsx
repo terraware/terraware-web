@@ -81,7 +81,8 @@ export default function Database(): JSX.Element {
   const resultsLodable = useRecoilValueLoadable(searchSelector);
   const results = resultsLodable.state === 'hasValue' ? resultsLodable.contents.results : undefined;
   const availableValuesLodable = useRecoilValueLoadable(searchValuesSelector);
-  const availableValues = availableValuesLodable.state === 'hasValue' ? availableValuesLodable.contents.results : undefined;
+  const availableValues =
+    availableValuesLodable.state === 'hasValue' ? availableValuesLodable.contents.results : undefined;
   const allValuesLodable = useRecoilValueLoadable(searchAllValuesSelector);
   const allValues = allValuesLodable.state === 'hasValue' ? allValuesLodable.contents.results : undefined;
 
@@ -182,7 +183,14 @@ export default function Database(): JSX.Element {
           subtitle={getSubtitle()}
           rightComponent={
             <div>
-              <Chip id='edit-columns' variant='outlined' size='medium' label='Add Columns' onClick={onOpenEditColumnsModal} icon={<EditIcon />} />
+              <Chip
+                id='edit-columns'
+                variant='outlined'
+                size='medium'
+                label='Add Columns'
+                onClick={onOpenEditColumnsModal}
+                icon={<EditIcon />}
+              />
               <Chip
                 id='download-report'
                 variant='outlined'
@@ -208,12 +216,20 @@ export default function Database(): JSX.Element {
           }
         >
           {availableValues && allValues && tableColumns && (
-            <Filters filters={filters} availableValues={availableValues} allValues={allValues} columns={tableColumns} onChange={onFilterChange} />
+            <Filters
+              filters={filters}
+              availableValues={availableValues}
+              allValues={allValues}
+              columns={tableColumns}
+              onChange={onFilterChange}
+            />
           )}
-          {(allValuesLodable.state === 'loading' || availableValuesLodable.state === 'loading' || tableColumnsLodable.state === 'loading') && (
-            <CircularProgress />
-          )}
-          {(allValuesLodable.state === 'hasError' || availableValuesLodable.state === 'hasError' || tableColumnsLodable.state === 'hasError') &&
+          {(allValuesLodable.state === 'loading' ||
+            availableValuesLodable.state === 'loading' ||
+            tableColumnsLodable.state === 'loading') && <CircularProgress />}
+          {(allValuesLodable.state === 'hasError' ||
+            availableValuesLodable.state === 'hasError' ||
+            tableColumnsLodable.state === 'hasError') &&
             strings.GENERIC_ERROR}
         </PageHeader>
         <Container maxWidth={false} className={classes.mainContainer}>
@@ -262,8 +278,11 @@ export default function Database(): JSX.Element {
                         onReorderEnd={onReorderEnd}
                       />
                     )}
-                    {(resultsLodable.state === 'loading' || tableColumnsLodable.state === 'loading') && <CircularProgress />}
-                    {(resultsLodable.state === 'hasError' || tableColumnsLodable.state === 'hasError') && strings.GENERIC_ERROR}
+                    {(resultsLodable.state === 'loading' || tableColumnsLodable.state === 'loading') && (
+                      <CircularProgress />
+                    )}
+                    {(resultsLodable.state === 'hasError' || tableColumnsLodable.state === 'hasError') &&
+                      strings.GENERIC_ERROR}
                   </Grid>
                 </Grid>
               </Paper>

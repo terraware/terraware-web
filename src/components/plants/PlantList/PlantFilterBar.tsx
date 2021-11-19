@@ -1,6 +1,6 @@
-import {MuiPickersUtilsProvider} from '@material-ui/pickers';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import MomentUtils from '@date-io/moment';
-import {createStyles, Grid, InputAdornment, makeStyles} from '@material-ui/core';
+import { createStyles, Grid, InputAdornment, makeStyles } from '@material-ui/core';
 import DatePicker from 'src/components/common/DatePicker';
 import strings from 'src/strings';
 import Dropdown from 'src/components/common/Dropdown';
@@ -31,9 +31,9 @@ type PlantFilterBarProps = {
   onClearFilters: () => void;
 };
 
-export default function PlantFilterBar(props: PlantFilterBarProps) : JSX.Element {
+export default function PlantFilterBar(props: PlantFilterBarProps): JSX.Element {
   const classes = useStyles();
-  const {speciesNames, onApplyFilters, onClearFilters} = props;
+  const { speciesNames, onApplyFilters, onClearFilters } = props;
   const [filters, setFilters] = useState<PlantSearchOptions>(EMPTY_FILTERS);
 
   const onChange = (id: string, value?: string) => {
@@ -73,7 +73,7 @@ export default function PlantFilterBar(props: PlantFilterBarProps) : JSX.Element
           label={strings.SPECIES}
           onChange={onChange}
           selected={filters.speciesName ?? ''}
-          values={speciesNames.map((name) => ({label: name, value: name}))}
+          values={speciesNames.map((name) => ({ label: name, value: name }))}
         />
       </Grid>
       <Grid item xs={2}>

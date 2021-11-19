@@ -85,17 +85,9 @@ export default function AccessionPageHeader({ accession }: Props): JSX.Element {
             </Fab>
           </Box>
           <Box display='flex' flexDirection='column'>
-            <Box
-              display='flex'
-              alignItems='center'
-              className={classes.titleBox}
-            >
+            <Box display='flex' alignItems='center' className={classes.titleBox}>
               <EcoIcon color='primary' className={classes.ecoIcon} />
-              <Typography
-                variant='h4'
-                className={classes.title}
-                id='header-accessionNumber'
-              >
+              <Typography variant='h4' className={classes.title} id='header-accessionNumber'>
                 {accession.accessionNumber}
               </Typography>
             </Box>
@@ -111,15 +103,12 @@ export default function AccessionPageHeader({ accession }: Props): JSX.Element {
                 {accession.receivedDate && <DetailDivisor />}
                 {accession.receivedDate && (
                   <span id='header-date'>
-                    {new Date(accession.receivedDate).toLocaleDateString(
-                      'en-US',
-                      {
-                        day: '2-digit',
-                        month: '2-digit',
-                        year: 'numeric',
-                        timeZone: 'UTC',
-                      }
-                    )}
+                    {new Date(accession.receivedDate).toLocaleDateString('en-US', {
+                      day: '2-digit',
+                      month: '2-digit',
+                      year: 'numeric',
+                      timeZone: 'UTC',
+                    })}
                   </span>
                 )}
                 <DetailDivisor />
@@ -137,7 +126,5 @@ export default function AccessionPageHeader({ accession }: Props): JSX.Element {
 function DetailDivisor() {
   const classes = useStyles();
 
-  return (
-    <FiberManualRecord color='disabled' className={classes.detailDivisor} />
-  );
+  return <FiberManualRecord color='disabled' className={classes.detailDivisor} />;
 }

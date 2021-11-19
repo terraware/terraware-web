@@ -1,6 +1,6 @@
 export type Project = {
-  id: number,
-  name: string,
+  id: number;
+  name: string;
 };
 
 export type Site = {
@@ -19,8 +19,8 @@ export type PlantLayer = {
 };
 
 export type Organization = {
-  projects: Project[],
-  sites: Site[],
-  facilities: SeedBank[],
-  plantLayers: PlantLayer[],
+  projects: Project[];
+  sites: Site[];
+  facilities: SeedBank[];
+  plantLayers: PlantLayer[];
 };

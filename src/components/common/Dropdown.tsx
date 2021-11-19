@@ -1,11 +1,4 @@
-import {
-  createStyles,
-  FormControl,
-  InputLabel,
-  makeStyles,
-  MenuItem,
-  Select,
-} from '@material-ui/core';
+import { createStyles, FormControl, InputLabel, makeStyles, MenuItem, Select } from '@material-ui/core';
 import React from 'react';
 
 export interface Props {
@@ -29,14 +22,7 @@ export type DropdownItem = {
   value: string;
 };
 
-export default function Dropdown({
-  id,
-  label,
-  values,
-  onChange,
-  selected,
-  disabled,
-}: Props): JSX.Element {
+export default function Dropdown({ id, label, values, onChange, selected, disabled }: Props): JSX.Element {
   const onChangeH = (
     event: React.ChangeEvent<{
       name?: string | undefined;
@@ -49,20 +35,9 @@ export default function Dropdown({
   const classes = useStyles();
 
   return (
-    <FormControl
-      variant='outlined'
-      className={classes.formControl}
-      size='small'
-      disabled={disabled}
-    >
+    <FormControl variant='outlined' className={classes.formControl} size='small' disabled={disabled}>
       <InputLabel id={`${id}-outlined-label`}>{label}</InputLabel>
-      <Select
-        labelId={`${id}-outlined-label`}
-        id={id}
-        label={label}
-        onChange={onChangeH}
-        value={selected}
-      >
+      <Select labelId={`${id}-outlined-label`} id={id} label={label} onChange={onChangeH} value={selected}>
         {values?.map(({ label: inLabel, value }) => (
           <MenuItem id={value} key={value} value={value}>
             {inLabel}

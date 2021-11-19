@@ -3,9 +3,7 @@ import React from 'react';
 import { Props } from './TextField';
 
 export default function TextArea(props: Props): JSX.Element {
-  const onChange = (
-    event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-  ) => {
+  const onChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     props.onChange(props.id, event.target.value);
   };
 

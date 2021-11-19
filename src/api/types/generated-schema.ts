@@ -95,8 +95,11 @@ export interface paths {
     get: operations["login"];
   };
   "/api/v1/organization": {
-    /** List all organizations the user can access. */
-    get: operations["listAll_1"];
+    /** Lists all organizations the user can access. */
+    get: operations["listOrganizations"];
+  };
+  "/api/v1/organization/{organizationId}": {
+    get: operations["getOrganization"];
   };
   "/api/v1/organizations/{organizationId}/projects": {
     /** Only projects that are accessible by the current user are included. */
@@ -579,8 +582,6 @@ export interface components {
       siteId: number;
       name: string;
       type: "Seed Bank" | "Desalination" | "Reverse Osmosis";
-      /** The name of the role the current user has at the facility. */
-      role: string;
     };
     FeaturePhoto: {
       capturedTime: string;
@@ -713,6 +714,10 @@ export interface components {
       resp: components["schemas"]["ObservationResponse"];
       status: components["schemas"]["SuccessOrError"];
     };
+    GetOrganizationResponsePayload: {
+      organization: components["schemas"]["ListOrganizationsElement"];
+      status: components["schemas"]["SuccessOrError"];
+    };
     GetPlantResponsePayload: {
       plant: components["schemas"]["PlantResponse"];
       status: components["schemas"]["SuccessOrError"];
@@ -806,9 +811,12 @@ export interface components {
     ListOrganizationsElement: {
       id: number;
       name: string;
+      /** This organization's projects. Omitted if depth is "Organization". */
+      projects?: components["schemas"]["ProjectPayload"][];
     };
     ListOrganizationsResponse: {
       organizations: components["schemas"]["ListOrganizationsElement"][];
+      status: components["schemas"]["SuccessOrError"];
     };
     ListPhotosResponseElement: {
       filename: string;
@@ -957,6 +965,7 @@ export interface components {
       id: number;
       name: string;
       organizationId: number;
+      sites?: components["schemas"]["SiteElement"][];
     };
     RecordTimeseriesValuesRequestPayload: {
       timeseries: components["schemas"]["TimeseriesValuesPayload"][];
@@ -1216,6 +1225,7 @@ export interface components {
       location: components["schemas"]["Point"];
       locale?: string;
       timezone?: string;
+      facilities?: components["schemas"]["FacilityPayload"][];
     };
     SpeciesCreateResponsePayload: {
       id: number;
@@ -2259,13 +2269,36 @@ export interface operations {
       302: never;
     };
   };
-  /** List all organizations the user can access. */
-  listAll_1: {
+  /** Lists all organizations the user can access. */
+  listOrganizations: {
+    parameters: {
+      query: {
+        depth?: "Organization" | "Project" | "Site" | "Facility";
+      };
+    };
     responses: {
       /** OK */
       200: {
         content: {
           "application/json": components["schemas"]["ListOrganizationsResponse"];
+        };
+      };
+    };
+  };
+  getOrganization: {
+    parameters: {
+      path: {
+        organizationId: number;
+      };
+      query: {
+        depth?: "Organization" | "Project" | "Site" | "Facility";
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetOrganizationResponsePayload"];
         };
       };
     };

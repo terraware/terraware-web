@@ -34,9 +34,7 @@ export default function NumberRange(props: Props): JSX.Element {
   }, [props.values]);
 
   const onChange = (id: string, value?: unknown) => {
-    const newValues = props.values.length
-      ? [...props.values]
-      : [minValue, maxValue];
+    const newValues = props.values.length ? [...props.values] : [minValue, maxValue];
 
     if (id === 'minValue') {
       setMinValue(value as string);
@@ -69,25 +67,13 @@ export default function NumberRange(props: Props): JSX.Element {
     <div className={classes.box}>
       <Grid container spacing={4}>
         <Grid item xs={5}>
-          <TextField
-            id='minValue'
-            value={minValue}
-            onChange={onChange}
-            label='Min'
-            onKeyPress={(e) => onEnter(e)}
-          />
+          <TextField id='minValue' value={minValue} onChange={onChange} label='Min' onKeyPress={(e) => onEnter(e)} />
         </Grid>
         <Grid item xs={1} className={classes.flexContainer}>
           <ArrowForwardIcon />
         </Grid>
         <Grid item xs={5}>
-          <TextField
-            id='maxValue'
-            value={maxValue}
-            onChange={onChange}
-            label='Max'
-            onKeyPress={(e) => onEnter(e)}
-          />
+          <TextField id='maxValue' value={maxValue} onChange={onChange} label='Max' onKeyPress={(e) => onEnter(e)} />
         </Grid>
       </Grid>
     </div>

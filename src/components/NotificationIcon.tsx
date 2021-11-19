@@ -38,36 +38,21 @@ export default function NotificationIcon({ type }: Props): JSX.Element {
   const classes = useStyles();
   if (type === ('Alert' as NotificationType)) {
     return (
-      <Fab
-        color='secondary'
-        aria-label='add'
-        className={classes.fab}
-        variant='round'
-      >
+      <Fab color='secondary' aria-label='add' className={classes.fab} variant='round'>
         <WarningIcon htmlColor='#fff' fontSize='small' />
       </Fab>
     );
   }
   if (type === ('Date' as NotificationType)) {
     return (
-      <Fab
-        color='secondary'
-        aria-label='add'
-        className={`${classes.fab} ${classes.dateNotification}`}
-        variant='round'
-      >
+      <Fab color='secondary' aria-label='add' className={`${classes.fab} ${classes.dateNotification}`} variant='round'>
         <CalendarTodayIcon htmlColor='#fff' fontSize='small' />
       </Fab>
     );
   }
 
   return (
-    <Fab
-      color='secondary'
-      aria-label='add'
-      className={`${classes.fab} ${classes.stateNotification}`}
-      variant='round'
-    >
+    <Fab color='secondary' aria-label='add' className={`${classes.fab} ${classes.stateNotification}`} variant='round'>
       <WifiTetheringIcon htmlColor='#fff' fontSize='small' />
     </Fab>
   );

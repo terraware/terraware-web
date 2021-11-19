@@ -59,13 +59,7 @@ export default function EditSpeciesModal(props: Props): JSX.Element {
   };
 
   return (
-    <Dialog
-      onClose={handleCancel}
-      disableEscapeKeyDown
-      open={open}
-      maxWidth='md'
-      classes={{ paper: classes.paper }}
-    >
+    <Dialog onClose={handleCancel} disableEscapeKeyDown open={open} maxWidth='md' classes={{ paper: classes.paper }}>
       <DialogTitle>
         <Typography variant='h6'>Edit Species</Typography>
         <DialogCloseButton onClick={handleCancel} />

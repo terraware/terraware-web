@@ -253,9 +253,13 @@ function mockListSummaryRejection(currLayerId: number, weekToReject: string) {
   mockedAxios.get.mockImplementation((url: string) => {
     if (url.includes(`list/summary/${currLayerId}`)) {
       if (url.includes(ONE_WEEK_AGO.getDate().toString())) {
-        return weekToReject === 'last' || weekToReject === 'both' ? Promise.reject(rejectedResponse) : Promise.resolve(resolvedResponse);
+        return weekToReject === 'last' || weekToReject === 'both'
+          ? Promise.reject(rejectedResponse)
+          : Promise.resolve(resolvedResponse);
       } else if (url.includes(TODAY.getDate().toString())) {
-        return weekToReject === 'current' || weekToReject === 'both' ? Promise.reject(rejectedResponse) : Promise.resolve(resolvedResponse);
+        return weekToReject === 'current' || weekToReject === 'both'
+          ? Promise.reject(rejectedResponse)
+          : Promise.resolve(resolvedResponse);
       }
     }
 
@@ -331,8 +335,17 @@ test('getPlantSummaries() returns empty summary maps when passed an empty list o
   });
 });
 
-function mockPutFeaturesAndPlantsEndpoint(featureId: number, failedEndpoint?: string, httpFailureStatusCode: number = 404) {
-  expect(failedEndpoint === undefined || failedEndpoint === 'plants' || failedEndpoint === 'features' || failedEndpoint === 'both').toEqual(true);
+function mockPutFeaturesAndPlantsEndpoint(
+  featureId: number,
+  failedEndpoint?: string,
+  httpFailureStatusCode: number = 404
+) {
+  expect(
+    failedEndpoint === undefined ||
+      failedEndpoint === 'plants' ||
+      failedEndpoint === 'features' ||
+      failedEndpoint === 'both'
+  ).toEqual(true);
 
   if (failedEndpoint) {
     mockIsAxiosError();

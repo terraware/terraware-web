@@ -16,11 +16,7 @@ interface Props {
   stepNumber: number;
 }
 
-export default function Step({
-  title,
-  description,
-  stepNumber,
-}: Props): JSX.Element {
+export default function Step({ title, description, stepNumber }: Props): JSX.Element {
   const classes = useStyles();
 
   return (

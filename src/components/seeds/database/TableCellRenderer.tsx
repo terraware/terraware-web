@@ -1,9 +1,4 @@
-import {
-  createStyles,
-  makeStyles,
-  TableCell,
-  Typography,
-} from '@material-ui/core';
+import { createStyles, makeStyles, TableCell, Typography } from '@material-ui/core';
 import FiberManualRecord from '@material-ui/icons/FiberManualRecord';
 import React from 'react';
 import { SearchResponseResults } from 'src/api/types/search';
@@ -27,9 +22,7 @@ const statusStyles = makeStyles((theme) =>
   })
 );
 
-export default function SearchCellRenderer(
-  props: RendererProps<SearchResponseResults>
-): JSX.Element {
+export default function SearchCellRenderer(props: RendererProps<SearchResponseResults>): JSX.Element {
   const { column, value, index, row } = props;
 
   const id = `row${index}-${column.key}`;
@@ -40,13 +33,8 @@ export default function SearchCellRenderer(
     return (
       <TableCell id={id} align='left'>
         <div className={classes.flex}>
-          <FiberManualRecord
-            color={active ? 'primary' : 'disabled'}
-            className={classes.statusIndicator}
-          />
-          <Typography classes={{ root: active ? undefined : classes.inactive }}>
-            {value}
-          </Typography>
+          <FiberManualRecord color={active ? 'primary' : 'disabled'} className={classes.statusIndicator} />
+          <Typography classes={{ root: active ? undefined : classes.inactive }}>{value}</Typography>
         </div>
       </TableCell>
     );
@@ -55,40 +43,19 @@ export default function SearchCellRenderer(
   if (column.key === 'remainingQuantity' && value) {
     const units = row.remainingUnits;
 
-    return (
-      <CellRenderer
-        index={index}
-        column={column}
-        value={`${value} ${units}`}
-        row={row}
-      />
-    );
+    return <CellRenderer index={index} column={column} value={`${value} ${units}`} row={row} />;
   }
 
   if (column.key === 'totalQuantity' && value) {
     const units = row.totalUnits;
 
-    return (
-      <CellRenderer
-        index={index}
-        column={column}
-        value={`${value} ${units}`}
-        row={row}
-      />
-    );
+    return <CellRenderer index={index} column={column} value={`${value} ${units}`} row={row} />;
   }
 
   if (column.key === 'withdrawalQuantity' && value) {
     const units = row.withdrawalUnits;
 
-    return (
-      <CellRenderer
-        index={index}
-        column={column}
-        value={`${value} ${units}`}
-        row={row}
-      />
-    );
+    return <CellRenderer index={index} column={column} value={`${value} ${units}`} row={row} />;
   }
 
   return <CellRenderer {...props} />;

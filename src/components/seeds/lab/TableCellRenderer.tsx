@@ -2,15 +2,10 @@ import { TableCell, Typography } from '@material-ui/core';
 import moment from 'moment';
 import React from 'react';
 import strings from 'src/strings';
-import CellRenderer, {
-  CellDateRenderer,
-  TableRowType,
-} from '../../common/table/TableCellRenderer';
+import CellRenderer, { CellDateRenderer, TableRowType } from '../../common/table/TableCellRenderer';
 import { RendererProps } from '../../common/table/types';
 
-export default function LabCellRenderer(
-  props: RendererProps<TableRowType>
-): JSX.Element {
+export default function LabCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
   const { column, row, value, index } = props;
   if (column.key === 'seedsGerminated') {
     return (
@@ -51,14 +46,7 @@ export default function LabCellRenderer(
     );
   }
   if (column.key === 'seedsSown') {
-    return (
-      <CellRenderer
-        index={index}
-        column={column}
-        value={`${value} Seeds`}
-        row={row}
-      />
-    );
+    return <CellRenderer index={index} column={column} value={`${value} Seeds`} row={row} />;
   }
 
   return <CellRenderer {...props} />;

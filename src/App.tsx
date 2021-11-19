@@ -82,7 +82,10 @@ function AppContent() {
   // Temporary error UI. Will be made prettier once we have input from the Design Team.
   if (organizationErrors.includes(OrgRequestError.ErrorFetchingProjectsOrSites)) {
     return <h1>Whoops! Looks like an unrecoverable internal error when fetching projects and/or sites</h1>;
-  } else if (organizationErrors.includes(OrgRequestError.NoProjects) || organizationErrors.includes(OrgRequestError.NoSites)) {
+  } else if (
+    organizationErrors.includes(OrgRequestError.NoProjects) ||
+    organizationErrors.includes(OrgRequestError.NoSites)
+  ) {
     return <h1>You don't have access to any projects and/or sites!</h1>;
   }
 

@@ -1,23 +1,23 @@
 /* tslint:disable:no-console */
-import getOrganization, {OrgRequestError, exportedForTesting} from "./organization";
-import axios from "axios";
+import getOrganization, { OrgRequestError, exportedForTesting } from './organization';
+import axios from 'axios';
 
-const getLayers = exportedForTesting.getLayers
+const getLayers = exportedForTesting.getLayers;
 
 jest.mock('axios');
 
-const PROJECTS =  [
+const PROJECTS = [
   {
     id: 1,
-    name: "Hawaii Project",
+    name: 'Hawaii Project',
   },
   {
     id: 2,
-    name: "Oahu Project",
-  }
-]
-const SUCCESSFUL_GET_PROJECTS_RESPONSE = { data: { projects: PROJECTS, status: 'ok'}};
-const EMPTY_GET_PROJECTS_RESPONSE = { data: { projects: [], status: 'ok'}};
+    name: 'Oahu Project',
+  },
+];
+const SUCCESSFUL_GET_PROJECTS_RESPONSE = { data: { projects: PROJECTS, status: 'ok' } };
+const EMPTY_GET_PROJECTS_RESPONSE = { data: { projects: [], status: 'ok' } };
 
 const SITES = [
   {
@@ -29,38 +29,42 @@ const SITES = [
     projectId: 2,
   },
 ];
-const SUCCESSFUL_GET_SITES_RESPONSE = { data: { sites: SITES, status: 'ok'}};
-const EMPTY_GET_SITES_RESPONSE = { data: { sites: [], status: 'ok'}};
+const SUCCESSFUL_GET_SITES_RESPONSE = { data: { sites: SITES, status: 'ok' } };
+const EMPTY_GET_SITES_RESPONSE = { data: { sites: [], status: 'ok' } };
 
 const FACILITIES = [
   {
     id: 100,
     siteId: 20,
-  }
-]
+  },
+];
 // Server response includes facility type, which is used by getSeedBankFacilities() to select only Seed Bank facilities.
-const FACILITIES_FROM_SERVER = FACILITIES.map(facility => {
-  return {...facility, type: 'Seed Bank'}
+const FACILITIES_FROM_SERVER = FACILITIES.map((facility) => {
+  return { ...facility, type: 'Seed Bank' };
 });
-const SUCCESSFUL_GET_FACILITIES_RESPONSE = { data: { facilities: FACILITIES_FROM_SERVER, status: 'ok'}};
+const SUCCESSFUL_GET_FACILITIES_RESPONSE = { data: { facilities: FACILITIES_FROM_SERVER, status: 'ok' } };
 
 const LAYERS = [
   {
     id: 100,
     siteId: 20,
   },
-]
+];
 // Server response includes layer type, which is used by getPlantLayers() to select only Plants Planted layers.
-const LAYERS_FROM_SERVER = LAYERS.map(layer => {
-  return {...layer, layerType: 'Plants Planted'}
+const LAYERS_FROM_SERVER = LAYERS.map((layer) => {
+  return { ...layer, layerType: 'Plants Planted' };
 });
-const SUCCESSFUL_GET_LAYERS_RESPONSE = { data: { layers: LAYERS_FROM_SERVER, status: 'ok'}};
-const EMPTY_GET_LAYERS_RESPONSE = { data: { layers: [], status: 'ok'}};
+const SUCCESSFUL_GET_LAYERS_RESPONSE = { data: { layers: LAYERS_FROM_SERVER, status: 'ok' } };
+const EMPTY_GET_LAYERS_RESPONSE = { data: { layers: [], status: 'ok' } };
 
-const FAILURE_RESPONSE = {request : { status: 500 }};
+const FAILURE_RESPONSE = { request: { status: 500 } };
 
 function assertOrganizationIsEmpty(organization) {
-  expect(Object.keys(organization).map(key => organization[key]).flat()).toEqual([]);
+  expect(
+    Object.keys(organization)
+      .map((key) => organization[key])
+      .flat()
+  ).toEqual([]);
 }
 
 test('getOrganization() returns all data when no errors thrown', async () => {
@@ -108,8 +112,10 @@ async function testProjectsOrSitesEmpty(emptyResponse) {
 
   axios.get.mockImplementation((url) => {
     if (url.includes('projects')) {
-      return Promise.resolve(emptyResponse === 'projects' ? EMPTY_GET_PROJECTS_RESPONSE : SUCCESSFUL_GET_PROJECTS_RESPONSE);
-    } else if(url.includes('sites')) {
+      return Promise.resolve(
+        emptyResponse === 'projects' ? EMPTY_GET_PROJECTS_RESPONSE : SUCCESSFUL_GET_PROJECTS_RESPONSE
+      );
+    } else if (url.includes('sites')) {
       return Promise.resolve(emptyResponse === 'sites' ? EMPTY_GET_SITES_RESPONSE : SUCCESSFUL_GET_SITES_RESPONSE);
     }
 
@@ -118,9 +124,9 @@ async function testProjectsOrSitesEmpty(emptyResponse) {
   });
 
   const response = await getOrganization();
-  expect(response.errors).toEqual(
-      [emptyResponse === 'projects' ? OrgRequestError.NoProjects : OrgRequestError.NoSites]
-  );
+  expect(response.errors).toEqual([
+    emptyResponse === 'projects' ? OrgRequestError.NoProjects : OrgRequestError.NoSites,
+  ]);
   if (emptyResponse === 'projects') {
     assertOrganizationIsEmpty(response.organization);
   } else {
@@ -141,17 +147,17 @@ async function testProjectsOrSitesFailure(failure) {
   expect(failure === 'projects' || failure === 'sites').toBe(true);
 
   // suppress console.error() calls so that the expected errors don't look like test failures
-  jest.spyOn(console, 'error').mockImplementation(() => {/* tslint:disable:no-empty */});
+  jest.spyOn(console, 'error').mockImplementation(() => {
+    /* tslint:disable:no-empty */
+  });
 
   axios.get.mockImplementation((url) => {
     if (url.includes('projects')) {
       return failure === 'projects'
-          ? Promise.reject(FAILURE_RESPONSE)
-          : Promise.resolve(SUCCESSFUL_GET_PROJECTS_RESPONSE);
-    } else if(url.includes('sites')) {
-      return failure === 'sites'
-          ? Promise.reject(FAILURE_RESPONSE)
-          : Promise.resolve(SUCCESSFUL_GET_SITES_RESPONSE);
+        ? Promise.reject(FAILURE_RESPONSE)
+        : Promise.resolve(SUCCESSFUL_GET_PROJECTS_RESPONSE);
+    } else if (url.includes('sites')) {
+      return failure === 'sites' ? Promise.reject(FAILURE_RESPONSE) : Promise.resolve(SUCCESSFUL_GET_SITES_RESPONSE);
     }
 
     console.error('Axios mock called with an unexpected url');
@@ -180,10 +186,10 @@ async function testFacilitiesAndOrLayersFailure(failure) {
 
   const shouldFacilitiesFail = () => {
     return failure === 'facilities' || failure === 'both';
-  }
+  };
   const shouldLayersFail = () => {
     return failure === 'layers' || failure === 'both';
-  }
+  };
 
   axios.get.mockImplementation((url) => {
     if (url.includes('projects')) {
@@ -194,17 +200,13 @@ async function testFacilitiesAndOrLayersFailure(failure) {
     }
     if (url.includes('facility')) {
       return shouldFacilitiesFail()
-          ? Promise.reject(FAILURE_RESPONSE)
-          : Promise.resolve(SUCCESSFUL_GET_FACILITIES_RESPONSE);
+        ? Promise.reject(FAILURE_RESPONSE)
+        : Promise.resolve(SUCCESSFUL_GET_FACILITIES_RESPONSE);
     }
     if (url.includes('gis/layers/list/20')) {
-      return shouldLayersFail()
-          ? Promise.reject(FAILURE_RESPONSE)
-          : Promise.resolve(SUCCESSFUL_GET_LAYERS_RESPONSE);
+      return shouldLayersFail() ? Promise.reject(FAILURE_RESPONSE) : Promise.resolve(SUCCESSFUL_GET_LAYERS_RESPONSE);
     } else if (url.includes('gis/layers/list/10')) {
-      return shouldLayersFail()
-          ? Promise.reject(FAILURE_RESPONSE)
-          : Promise.resolve(EMPTY_GET_LAYERS_RESPONSE);
+      return shouldLayersFail() ? Promise.reject(FAILURE_RESPONSE) : Promise.resolve(EMPTY_GET_LAYERS_RESPONSE);
     }
 
     console.error('Axios mock called with an unexpected url');

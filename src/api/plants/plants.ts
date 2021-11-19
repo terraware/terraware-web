@@ -75,7 +75,10 @@ export type GetPlantsForMultipleLayersResponse = {
   plantErrorByLayerId: PlantErrorByLayerId;
 };
 
-export async function getPlantsForMultipleLayers(layerIds: number[], filters?: PlantSearchOptions): Promise<GetPlantsForMultipleLayersResponse> {
+export async function getPlantsForMultipleLayers(
+  layerIds: number[],
+  filters?: PlantSearchOptions
+): Promise<GetPlantsForMultipleLayersResponse> {
   const promises = layerIds.map((id) => getPlants(id, filters));
   const plantsResponseList: GetPlantsResponse[] = await Promise.all(promises);
 
@@ -97,7 +100,8 @@ export async function getPlantsForMultipleLayers(layerIds: number[], filters?: P
 
 const PLANT_SUMMARY_ENDPOINT = '/api/v1/gis/plants/list/summary/{layerId}';
 type PlantSummaryQuery = paths[typeof PLANT_SUMMARY_ENDPOINT]['get']['parameters']['query'];
-type PlantSummaryResponse = paths[typeof PLANT_SUMMARY_ENDPOINT]['get']['responses'][200]['content']['application/json'];
+type PlantSummaryResponse =
+  paths[typeof PLANT_SUMMARY_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 
 export type GetPlantSummaryResponse = {
   layerId: number;
@@ -258,7 +262,7 @@ export async function putPlant(plant: Plant): Promise<PutPlantResponse> {
 
     response.plant = {
       featureId: featureResponse.id,
-      layerId: featureResponse.layerId,
+      layerId: plant.layerId,
       coordinates: coordinateResponse,
       notes: featureResponse.notes,
       enteredTime: featureResponse.enteredTime,
