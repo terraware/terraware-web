@@ -49,7 +49,7 @@ jobs:
       #  run: yarn generate-types
 
       - name: Check that code is formatted
-        run: yarn prettier --check src
+        run: yarn prettier --check .
 
       - name: Run linter
         run: yarn lint
