@@ -1,5 +1,15 @@
 import MomentUtils from '@date-io/moment';
-import { Container, Grid, Paper, Table, TableBody, TableCell as MuiTableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
+import {
+  Container,
+  Grid,
+  Paper,
+  Table,
+  TableBody,
+  TableCell as MuiTableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from '@material-ui/core';
 import { createStyles, makeStyles, Theme, withStyles } from '@material-ui/core/styles';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import React from 'react';
@@ -99,7 +109,11 @@ export default function Checkin(): JSX.Element {
                 <div>
                   {pendingAccessionsById.map((result) => {
                     return (
-                      <TableContainer component={Paper} key={result.accessionNumber} style={{ padding: '24px', marginBottom: '32px' }}>
+                      <TableContainer
+                        component={Paper}
+                        key={result.accessionNumber}
+                        style={{ padding: '24px', marginBottom: '32px' }}
+                      >
                         <Table aria-label='simple table'>
                           <TableHead>
                             <TableRow>

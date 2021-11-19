@@ -8,7 +8,7 @@ import {
   AccessionPutRequestBody,
   checkInEndpoint,
   photoEndpoint,
-  postAccessionEndpoint
+  postAccessionEndpoint,
 } from '../types/accessions';
 
 export const getAccession = async (accessionId: number): Promise<Accession> => {
@@ -37,7 +37,6 @@ export const getPhotoEndpoint = (accessionId: number, photoFilename: string): st
 };
 
 export const checkIn = async (id: number): Promise<Accession> => {
-
   const endpoint = `${process.env.REACT_APP_TERRAWARE_API}${checkInEndpoint}`.replace('{id}', `${id}`);
 
   return (await axios.post(endpoint)).data;
