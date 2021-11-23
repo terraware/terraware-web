@@ -23,7 +23,7 @@ import TopBar from './components/TopBar';
 import ErrorBoundary from './ErrorBoundary';
 import strings from './strings';
 import theme from './theme';
-import useTimer from './utils/useTimer';
+import { Notifications } from 'src/types/Notifications';
 
 // @ts-ignore
 mapboxgl.workerClass =
@@ -63,11 +63,11 @@ const emptyOrg: Organization = {
 
 function AppContent() {
   const classes = useStyles();
-  useTimer();
-
   const [organization, setOrganization] = useState<Organization>(emptyOrg);
   const [organizationErrors, setOrganizationErrors] = useState<OrgRequestError[]>([]);
   const [plantListFilters, setPlantListFilters] = useState<PlantSearchOptions>();
+  const [currFacilityId, setCurrFacilityId] = useState<number>(0);
+  const [notifications, setNotifications] = useState<Notifications>();
 
   useEffect(() => {
     const populateOrganizationData = async () => {
@@ -76,6 +76,9 @@ function AppContent() {
         setOrganizationErrors(response.errors);
       }
       setOrganization(response.organization);
+      if (response.organization.facilities.length > 0) {
+        setCurrFacilityId(response.organization.facilities[0].id);
+      }
     };
 
     populateOrganizationData();
@@ -100,7 +103,7 @@ function AppContent() {
           <NavBar />
         </div>
         <div className={classes.content}>
-          <TopBar />
+          <TopBar notifications={notifications} setNotifications={setNotifications} currFacilityId={currFacilityId} />
           <ErrorBoundary>
             <Switch>
               {/* Routes, in order of their appearance down the side nav bar and then across the top nav bar. */}
@@ -111,16 +114,16 @@ function AppContent() {
                 </main>
               </Route>
               <Route exact path='/seeds-summary'>
-                <SeedSummary />
+                <SeedSummary facilityId={currFacilityId} notifications={notifications} />
               </Route>
               <Route exact path='/checkin'>
                 <Checkin />
               </Route>
               <Route exact path='/accessions/new'>
-                <NewAccession />
+                <NewAccession facilityId={currFacilityId} />
               </Route>
               <Route exact path='/accessions'>
-                <Database />
+                <Database facilityId={currFacilityId} />
               </Route>
               <Route path='/accessions/:accessionId'>
                 <Accession />

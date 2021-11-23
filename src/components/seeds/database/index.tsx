@@ -65,7 +65,12 @@ const newAccessionChipStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Database(): JSX.Element {
+type DatabaseProps = {
+  facilityId: number;
+};
+
+export default function Database(props: DatabaseProps): JSX.Element {
+  const { facilityId } = props;
   const classes = useStyles();
   const history = useHistory();
   const [editColumnsModalOpen, setEditColumnsModalOpen] = React.useState(false);
@@ -177,7 +182,7 @@ export default function Database(): JSX.Element {
     <MuiPickersUtilsProvider utils={MomentUtils}>
       <main>
         <EditColumns open={editColumnsModalOpen} value={columns} onClose={onCloseEditColumnsModal} />
-        <DownloadReportModal open={reportModalOpen} onClose={onCloseDownloadReportModal} />
+        <DownloadReportModal facilityId={facilityId} open={reportModalOpen} onClose={onCloseDownloadReportModal} />
         <PageHeader
           title='Database'
           subtitle={getSubtitle()}

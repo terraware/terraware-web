@@ -31,3 +31,12 @@ export const searchAllValues = async (params: ValuesAllPostRequestBody): Promise
 
   return response;
 };
+
+export const findPrimaryCollectors = async (facilityId: number): Promise<string[]> => {
+  const params: ValuesAllPostRequestBody = {
+    facilityId,
+    fields: ['primaryCollector'],
+  };
+
+  return (await searchAllValues(params)).results.primaryCollector.values;
+};

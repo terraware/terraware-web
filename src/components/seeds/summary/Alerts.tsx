@@ -6,9 +6,8 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import WarningIcon from '@material-ui/icons/Warning';
 import React from 'react';
-import { useRecoilValueLoadable } from 'recoil';
-import notifications from 'src/state/selectors/notifications';
 import strings from 'src/strings';
+import {Notifications, NotificationTypes} from 'src/types/Notifications';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -31,14 +30,15 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-export default function Alerts(): JSX.Element {
-  const notificationLoadable = useRecoilValueLoadable(notifications);
-  const contents = notificationLoadable.state === 'hasValue' ? notificationLoadable.contents : undefined;
-  const isLoading = notificationLoadable.state === 'loading';
-  const hasError = notificationLoadable.state === 'hasError';
+type AlertsProps = {
+  notifications?: Notifications;
+};
+
+export default function Alerts(props: AlertsProps): JSX.Element {
+  const { notifications } = props;
   const classes = useStyles();
 
-  const alerts = contents?.filter((notification) => notification.type === 'Alert');
+  const alerts = notifications?.items.filter((notification) => notification.type === NotificationTypes.Alert);
 
   return (
     <Table size='small'>
@@ -50,20 +50,20 @@ export default function Alerts(): JSX.Element {
         </TableRow>
       </TableHead>
       <TableBody id='alerts-table'>
-        {hasError && (
-          <TableRow>
-            <TableCell>{strings.GENERIC_ERROR}</TableCell>
-          </TableRow>
-        )}
-        {isLoading && (
+        {notifications === undefined && (
           <TableRow>
             <TableCell>
               <CircularProgress id='spinner-alerts' />
             </TableCell>
           </TableRow>
         )}
-        {contents &&
-          alerts?.map(({ id, text }) => (
+        {notifications?.errorOccurred && (
+          <TableRow>
+            <TableCell>{strings.GENERIC_ERROR}</TableCell>
+          </TableRow>
+        )}
+        {alerts &&
+          alerts.map(({ id, text }) => (
             <TableRow key={id}>
               <TableCell className={classes.alertCell}>
                 <Fab aria-label='add' className={classes.fab} variant='round' disableRipple={true}>

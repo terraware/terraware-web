@@ -1,13 +1,13 @@
 import { Container, Grid } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Route, Switch, useHistory, useParams } from 'react-router-dom';
-import { useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil';
+import { useResetRecoilState, useSetRecoilState } from 'recoil';
 import { checkIn, putAccession } from 'src/api/seeds/accession';
+import { getAccession } from 'src/api/seeds/accession';
 import { Accession, AccessionState } from 'src/api/types/accessions';
 import ErrorBoundary from 'src/ErrorBoundary';
 import snackbarAtom from 'src/state/atoms/snackbar';
-import getAccessionSelector from 'src/state/selectors/seeds/accession';
 import searchSelector from 'src/state/selectors/seeds/search';
 import strings from 'src/strings';
 import { pendingAccessionsSelector } from '../../../state/selectors/seeds/pendingCheckIn';
@@ -32,11 +32,13 @@ const useStyles = makeStyles((theme) =>
 
 export default function AccessionPage(): JSX.Element {
   const setSnackbar = useSetRecoilState(snackbarAtom);
+  const history = useHistory();
   const errorHandler = () => {
     setSnackbar({
       type: 'delete',
       msg: strings.GET_ACCESSION_ERROR,
     });
+    history.push('/accessions');
   };
 
   return (
@@ -51,15 +53,30 @@ export default function AccessionPage(): JSX.Element {
 function Content(): JSX.Element {
   const classes = useStyles();
   const { accessionId } = useParams<{ accessionId: string }>();
+  const [accession, setAccession] = useState<Accession>();
   const setSnackbar = useSetRecoilState(snackbarAtom);
   const resetSearch = useResetRecoilState(searchSelector);
   const resetPendingCheckInAccessions = useResetRecoilState(pendingAccessionsSelector);
   const history = useHistory();
 
-  const accession = useRecoilValue(getAccessionSelector(parseInt(accessionId, 10)));
-  const resetAccession = useResetRecoilState(getAccessionSelector(parseInt(accessionId, 10)));
+  const reloadAccession = useCallback(() => {
+    const populateAccession = async () => {
+      const response = await getAccession(parseInt(accessionId, 10));
+      setAccession(response);
+    };
 
-  React.useEffect(() => {
+    if (accessionId) {
+      populateAccession();
+    } else {
+      setAccession(undefined);
+    }
+  }, [accessionId]);
+
+  useEffect(() => {
+    reloadAccession();
+  }, [reloadAccession]);
+
+  useEffect(() => {
     if (accession && accession.id) {
       if (history.location.pathname.endsWith(accession.id.toString())) {
         const state = accession.state;
@@ -72,22 +89,11 @@ function Content(): JSX.Element {
     }
   }, [accession, history, history.location]);
 
-  React.useEffect(() => {
-    return () => {
-      resetAccession();
-    };
-  }, [resetAccession]);
-
-  const clonedAccession = {
-    ...accession,
-    secondaryCollectors: accession.secondaryCollectors && [...accession.secondaryCollectors],
-  };
-
   const onSubmit = async (record: Accession) => {
     try {
       await putAccession(record.id, record);
       resetSearch();
-      resetAccession();
+      reloadAccession();
     } catch (ex) {
       setSnackbar({
         type: 'delete',
@@ -100,7 +106,7 @@ function Content(): JSX.Element {
     try {
       await checkIn(id);
       resetSearch();
-      resetAccession();
+      reloadAccession();
       resetPendingCheckInAccessions();
     } catch (ex) {
       setSnackbar({
@@ -110,40 +116,49 @@ function Content(): JSX.Element {
     }
   };
 
+  if (accession === undefined) {
+    setSnackbar({
+      type: 'delete',
+      msg: strings.GET_ACCESSION_ERROR,
+    });
+    history.push('/accessions');
+    return <></>;
+  }
+
   return (
     <main>
-      <AccessionPageHeader accession={clonedAccession} />
+      <AccessionPageHeader accession={accession} />
       <Container maxWidth='lg' className={classes.mainContainer}>
         <Grid container spacing={3}>
           <Grid item xs={3}>
-            <DetailsMenu state={clonedAccession.state} />
-            <GerminationMenu accession={clonedAccession} />
+            <DetailsMenu state={accession.state} />
+            <GerminationMenu accession={accession} />
           </Grid>
           <Grid item xs={9}>
             <Switch>
               <Route exact path='/accessions/:accessionId/seed-collection'>
                 <AccessionForm
                   updating={true}
-                  photoFilenames={clonedAccession.photoFilenames}
-                  accession={clonedAccession}
+                  photoFilenames={accession.photoFilenames}
+                  accession={accession}
                   onSubmit={onSubmit}
                   onCheckIn={onCheckIn}
                 />
               </Route>
               <Route exact path='/accessions/:accessionId/processing-drying'>
-                <ProcessingAndDrying accession={clonedAccession} onSubmit={onSubmit} />
+                <ProcessingAndDrying accession={accession} onSubmit={onSubmit} />
               </Route>
               <Route exact path='/accessions/:accessionId/storage'>
-                <Storage accession={clonedAccession} onSubmit={onSubmit} />
+                <Storage accession={accession} onSubmit={onSubmit} />
               </Route>
               <Route exact path='/accessions/:accessionId/nursery'>
-                <Nursery accession={clonedAccession} onSubmit={onSubmit} />
+                <Nursery accession={accession} onSubmit={onSubmit} />
               </Route>
               <Route exact path='/accessions/:accessionId/lab'>
-                <Lab accession={clonedAccession} onSubmit={onSubmit} />
+                <Lab accession={accession} onSubmit={onSubmit} />
               </Route>
               <Route exact path='/accessions/:accessionId/withdrawal'>
-                <Withdrawal accession={clonedAccession} onSubmit={onSubmit} />
+                <Withdrawal accession={accession} onSubmit={onSubmit} />
               </Route>
             </Switch>
           </Grid>

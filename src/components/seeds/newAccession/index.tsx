@@ -5,14 +5,13 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import moment from 'moment';
-import React, { Suspense } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import { Redirect, useHistory } from 'react-router-dom';
-import { useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil';
+import { useResetRecoilState, useSetRecoilState } from 'recoil';
 import { checkIn, getPhotoEndpoint, postAccession } from 'src/api/seeds/accession';
 import { updateSpecies } from 'src/api/seeds/species';
 import { Accession, AccessionPostRequestBody } from 'src/api/types/accessions';
 import snackbarAtom from 'src/state/atoms/snackbar';
-import { facilityIdSelector } from 'src/state/selectors/seeds/facility';
 import searchSelector from 'src/state/selectors/seeds/search';
 import strings from 'src/strings';
 import useForm from 'src/utils/useForm';
@@ -61,14 +60,18 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-export default function NewAccessionWrapper(): JSX.Element {
-  const [accessionId, setAccessionId] = React.useState<number>();
+type NewAccessionProps = {
+  facilityId: number;
+};
+
+export default function NewAccessionWrapper(props: NewAccessionProps): JSX.Element {
+  const { facilityId } = props;
+  const [accessionId, setAccessionId] = useState<number>();
   const setSnackbar = useSetRecoilState(snackbarAtom);
   const resetSearch = useResetRecoilState(searchSelector);
   const classes = useStyles();
   const history = useHistory();
   const location = useStateLocation();
-  const facilityId = useRecoilValue(facilityIdSelector);
 
   const onSubmit = async (record: AccessionPostRequestBody) => {
     try {
@@ -162,20 +165,20 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
   const classes = useStyles();
 
   const [record, setRecord, onChange] = useForm(accession);
-  const [errors, setErrors] = React.useState<FieldError[]>([]);
-  const [isEditing, setIsEditing] = React.useState(false);
-  const [isSaving, setIsSaving] = React.useState(false);
-  const [isSaved, setIsSaved] = React.useState(false);
-  const [editSpeciesModalOpen, setEditSpeciesModalOpen] = React.useState(false);
-  const [newSpeciesSelected, setNewSpeciesSelected] = React.useState(false);
-  const [isSendingToNursery, setIsSendingToNursery] = React.useState(false);
-  const [isSentToNursery, setIsSentToNursery] = React.useState(false);
-  const [canSendToNursery, setCanSendToNursery] = React.useState(false);
-  const [isPendingCheckIn, setIsPendingCheckIn] = React.useState(false);
-  const [isCheckingIn, setIsCheckingIn] = React.useState(false);
-  const [isCheckedIn, setIsCheckedIn] = React.useState(false);
+  const [errors, setErrors] = useState<FieldError[]>([]);
+  const [isEditing, setIsEditing] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
+  const [editSpeciesModalOpen, setEditSpeciesModalOpen] = useState(false);
+  const [newSpeciesSelected, setNewSpeciesSelected] = useState(false);
+  const [isSendingToNursery, setIsSendingToNursery] = useState(false);
+  const [isSentToNursery, setIsSentToNursery] = useState(false);
+  const [canSendToNursery, setCanSendToNursery] = useState(false);
+  const [isPendingCheckIn, setIsPendingCheckIn] = useState(false);
+  const [isCheckingIn, setIsCheckingIn] = useState(false);
+  const [isCheckedIn, setIsCheckedIn] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setRecord(accession);
     if ((accession as unknown as Accession).state === 'Awaiting Check-In') {
       setIsPendingCheckIn(true);
@@ -205,13 +208,13 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accession]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (accession !== record) {
       setIsEditing(true);
     }
   }, [accession, record]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     window.scrollTo({ top: 0 });
   }, []);
 
@@ -441,7 +444,11 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
               }
             >
               <Grid item xs={4}>
-                <MainCollector onChange={onChange} mainCollector={record.primaryCollector} />
+                <MainCollector
+                  facilityId={accession.facilityId!}
+                  onChange={onChange}
+                  mainCollector={record.primaryCollector}
+                />
               </Grid>
             </Suspense>
             <Grid item xs={4}>

@@ -1,9 +1,33 @@
 import axios from '..';
-import { summaryEndpoint, SummaryGetResponse } from '../types/summary';
+import { paths } from 'src/api/types/generated-schema';
 
-export const getSummary = async (facilityId: number): Promise<SummaryGetResponse> => {
-  const endpoint = `${process.env.REACT_APP_TERRAWARE_API}${summaryEndpoint}`.replace('{facilityId}', `${facilityId}`);
-  const response: SummaryGetResponse = (await axios.get(endpoint)).data;
+const SUMMARY_ENDPOINT = '/api/v1/seedbank/summary/{facilityId}';
+export type SeedbankSummary = paths[typeof SUMMARY_ENDPOINT]['get']['responses'][200]['content']['application/json'];
+export type SummaryStatistic =
+  | SeedbankSummary['activeAccessions']
+  | SeedbankSummary['species']
+  | SeedbankSummary['families'];
+
+export type GetSummaryResponse = {
+  value?: SeedbankSummary;
+  errorOccurred: boolean;
+};
+
+export const getSummary = async (facilityId: number): Promise<GetSummaryResponse> => {
+  const response: GetSummaryResponse = {
+    value: undefined,
+    errorOccurred: false,
+  };
+
+  try {
+    const endpoint = `${process.env.REACT_APP_TERRAWARE_API}${SUMMARY_ENDPOINT}`.replace(
+      '{facilityId}',
+      `${facilityId}`
+    );
+    response.value = (await axios.get(endpoint)).data;
+  } catch {
+    response.errorOccurred = true;
+  }
 
   return response;
 };

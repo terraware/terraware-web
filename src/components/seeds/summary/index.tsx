@@ -3,14 +3,15 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import Cookies from 'cookies-js';
-import React from 'react';
-import { useRecoilValueLoadable } from 'recoil';
-import summarySelector from 'src/state/selectors/seeds/summary';
+import React, { useEffect, useState } from 'react';
 import strings from 'src/strings';
 import PageHeader from '../PageHeader';
 import Alerts from './Alerts';
 import SummaryPaper from './SummaryPaper';
 import Updates from './Updates';
+import { Notifications } from '../../../types/Notifications';
+import { getSummary, GetSummaryResponse } from 'src/api/seeds/summary';
+import { API_PULL_INTERVAL } from '../../../constants';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -35,13 +36,37 @@ Cookies.defaults = {
   secure: true,
 };
 
-export default function SeedSummary(): JSX.Element {
-  const classes = useStyles();
+type SeedSummaryProps = {
+  facilityId: number;
+  notifications?: Notifications;
+};
 
-  const summaryResponse = useRecoilValueLoadable(summarySelector);
-  const contents = summaryResponse.state === 'hasValue' ? summaryResponse.contents : undefined;
-  const isLoading = summaryResponse.state === 'loading';
-  const hasError = summaryResponse.state === 'hasError';
+export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
+  const classes = useStyles();
+  const { facilityId, notifications } = props;
+  const [summary, setSummary] = useState<GetSummaryResponse>();
+  const errorOccurred = summary ? summary.errorOccurred : false;
+
+  useEffect(() => {
+    const populateSummary = async () => {
+      setSummary(await getSummary(facilityId));
+    };
+    let interval: ReturnType<typeof setInterval>;
+    if (facilityId) {
+      populateSummary();
+      if (!process.env.REACT_APP_DISABLE_RECURRENT_REQUESTS) {
+        interval = setInterval(() => {
+          populateSummary();
+        }, API_PULL_INTERVAL);
+      }
+    }
+
+    return () => {
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
+  }, [facilityId]);
 
   return (
     <main>
@@ -56,9 +81,9 @@ export default function SeedSummary(): JSX.Element {
                   <SummaryPaper
                     id='sessions'
                     title={strings.ACTIVE_ACCESSIONS}
-                    statistics={contents?.activeAccessions}
-                    loading={isLoading}
-                    error={hasError}
+                    statistics={summary?.value?.activeAccessions}
+                    loading={summary === undefined}
+                    error={errorOccurred}
                   />
                 </Paper>
               </Grid>
@@ -67,9 +92,9 @@ export default function SeedSummary(): JSX.Element {
                   <SummaryPaper
                     id='species'
                     title={strings.SPECIES}
-                    statistics={contents?.species}
-                    loading={isLoading}
-                    error={hasError}
+                    statistics={summary?.value?.species}
+                    loading={summary === undefined}
+                    error={errorOccurred}
                   />
                 </Paper>
               </Grid>
@@ -78,20 +103,20 @@ export default function SeedSummary(): JSX.Element {
                   <SummaryPaper
                     id='families'
                     title={strings.FAMILY}
-                    statistics={contents?.families}
-                    loading={isLoading}
-                    error={hasError}
+                    statistics={summary?.value?.families}
+                    loading={summary === undefined}
+                    error={errorOccurred}
                   />
                 </Paper>
               </Grid>
               <Grid item xs={4}>
                 <Paper className={`${classes.paper} ${classes.fixedHeight}`}>
-                  <Alerts />
+                  <Alerts notifications={notifications} />
                 </Paper>
               </Grid>
               <Grid item xs={8}>
                 <Paper className={`${classes.paper} ${classes.fixedHeight}`}>
-                  <Updates summaryResponse={contents} loading={isLoading} error={hasError} />
+                  <Updates summaryResponse={summary?.value} loading={summary === undefined} error={errorOccurred} />
                 </Paper>
               </Grid>
             </Grid>

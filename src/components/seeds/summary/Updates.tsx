@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import { AccessionState } from 'src/api/types/accessions';
 import { FieldNodePayload } from 'src/api/types/search';
-import { SummaryGetResponse } from 'src/api/types/summary';
+import { SeedbankSummary } from 'src/api/seeds/summary';
 import { searchFilterAtom } from 'src/state/atoms/seeds/search';
 import strings from 'src/strings';
 
@@ -26,7 +26,7 @@ const useStyles = makeStyles(() =>
 );
 
 interface Props {
-  summaryResponse?: SummaryGetResponse;
+  summaryResponse?: SeedbankSummary;
   loading: boolean;
   error: boolean;
 }
@@ -137,7 +137,7 @@ interface Update {
   description: string | string[];
 }
 
-function generateUpdates(summaryResponse: SummaryGetResponse): Update[] {
+function generateUpdates(summaryResponse: SeedbankSummary): Update[] {
   const updates: Update[] = [
     {
       state: 'Pending',

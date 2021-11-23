@@ -4,8 +4,8 @@ import Typography from '@material-ui/core/Typography';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import React from 'react';
-import { SummaryStatistic } from 'src/api/types/summary';
 import strings from 'src/strings';
+import { SummaryStatistic } from '../../../api/seeds/summary';
 
 const useStyles = makeStyles((theme) =>
   createStyles({

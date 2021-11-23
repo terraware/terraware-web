@@ -1,30 +1,31 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Grid } from '@material-ui/core';
-import React from 'react';
-import { useRecoilValue, useResetRecoilState } from 'recoil';
+import React, { useEffect, useState } from 'react';
+import { getLocations } from 'src/api/seeds/locations';
 import { ConditionType, StorageLocation } from 'src/api/types/locations';
-import locationsSelector from 'src/state/selectors/seeds/locations';
+import Dropdown from 'src/components/common/Dropdown';
+import TextField from 'src/components/common/TextField';
 import strings from 'src/strings';
-import Dropdown from '../../common/Dropdown';
-import TextField from '../../common/TextField';
 
-interface Props {
+interface LocationDropdownProps {
+  facilityId: number;
   onChange: (id: string, value: unknown) => void;
   storageLocation?: string;
   storageCondition?: string;
 }
 
-export default function LocationDropdown({ onChange, storageLocation, storageCondition }: Props): JSX.Element {
-  const locations = useRecoilValue(locationsSelector);
-  const resetLocations = useResetRecoilState(locationsSelector);
+export default function LocationDropdown(props: LocationDropdownProps): JSX.Element {
+  const { facilityId, onChange, storageLocation, storageCondition } = props;
+  const [locations, setLocations] = useState<StorageLocation[]>([]);
 
-  React.useEffect(() => {
-    return () => {
-      resetLocations();
+  useEffect(() => {
+    const populateLocations = async () => {
+      setLocations(await getLocations(facilityId));
     };
-  }, []);
+    populateLocations()
+  }, [facilityId]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (storageLocation) {
       onChange('storageCondition', getConditionValue(storageLocation) || '');
     }
