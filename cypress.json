@@ -1,6 +1,6 @@
-{ 
-    "baseUrl": "http://localhost:3000",
-    "screenshotOnRunFailure": false,
-    "video": false,
-    "watchForFileChanges": false
+{
+  "baseUrl": "http://localhost:3000",
+  "screenshotOnRunFailure": false,
+  "video": false,
+  "watchForFileChanges": false
 }

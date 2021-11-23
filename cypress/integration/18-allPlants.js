@@ -9,10 +9,7 @@ describe('All plants', () => {
   });
 
   it('should render the data on the table', () => {
-    cy.get('#all-plants-table .MuiTableBody-root .MuiTableRow-root').should(
-      'have.length',
-      4
-    );
+    cy.get('#all-plants-table .MuiTableBody-root .MuiTableRow-root').should('have.length', 4);
 
     var d = new Date();
     d.setDate(d.getDate() - 7);

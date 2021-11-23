@@ -9,9 +9,7 @@ describe('Help', () => {
     });
 
     it('navigate to help page', () => {
-      cy.get('#help-button-link')
-        .should('have.attr', 'href', '/help')
-        .should('have.attr', 'target', '_blank');
+      cy.get('#help-button-link').should('have.attr', 'href', '/help').should('have.attr', 'target', '_blank');
       cy.request(Cypress.config().baseUrl + '/help')
         .its('status')
         .should('eq', 200);
@@ -32,9 +30,7 @@ describe('Help', () => {
     it.skip('clear onboarding cookie and navigate to home page', () => {
       cy.setCookie('onboarding', 'true');
       cy.getCookie('onboarding').should('have.property', 'value', 'true');
-      cy.get('#letsDoIt-button-link')
-        .should('have.attr', 'href', '/')
-        .should('have.attr', 'target', '_blank');
+      cy.get('#letsDoIt-button-link').should('have.attr', 'href', '/').should('have.attr', 'target', '_blank');
 
       cy.get('#letsDoIt-button-link').click();
 
