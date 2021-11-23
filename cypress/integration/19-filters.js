@@ -20,10 +20,7 @@ describe('Filter plants', () => {
     cy.get('#show-filters').click();
     cy.get('#minEnteredTime').type(dateStr);
     cy.get('#apply-filters').click();
-    cy.get('#all-plants-table .MuiTableBody-root .MuiTableRow-root').should(
-      'have.length',
-      1
-    );
+    cy.get('#all-plants-table .MuiTableBody-root .MuiTableRow-root').should('have.length', 1);
   });
 
   it('should filter by max_entered_time and reset filters after', () => {
@@ -38,16 +35,10 @@ describe('Filter plants', () => {
     cy.get('#show-filters').click();
     cy.get('#maxEnteredTime').type(dateStr);
     cy.get('#apply-filters').click();
-    cy.get('#all-plants-table .MuiTableBody-root .MuiTableRow-root').should(
-      'have.length',
-      2
-    );
+    cy.get('#all-plants-table .MuiTableBody-root .MuiTableRow-root').should('have.length', 2);
 
     cy.get('#clear-filters').click();
-    cy.get('#all-plants-table .MuiTableBody-root .MuiTableRow-root').should(
-      'have.length',
-      3
-    );
+    cy.get('#all-plants-table .MuiTableBody-root .MuiTableRow-root').should('have.length', 3);
   });
 
   it('should filter by species', () => {
@@ -55,9 +46,6 @@ describe('Filter plants', () => {
     cy.get('#speciesName').click();
     cy.get('#Banana').click();
     cy.get('#apply-filters').click();
-    cy.get('#all-plants-table .MuiTableBody-root .MuiTableRow-root').should(
-      'have.length',
-      2
-    );
+    cy.get('#all-plants-table .MuiTableBody-root .MuiTableRow-root').should('have.length', 2);
   });
 });
