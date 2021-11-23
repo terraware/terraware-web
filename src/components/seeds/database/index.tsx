@@ -8,6 +8,7 @@ import React from 'react';
 import { Link as RouterLink, useHistory } from 'react-router-dom';
 import { useRecoilState, useRecoilValueLoadable, useSetRecoilState } from 'recoil';
 import { SearchField, SearchNodePayload, SearchResponseResults } from 'src/api/types/search';
+import Title from 'src/components/common/Title';
 import { columnsAtom, searchFilterAtom, searchSelectedColumnsAtom, searchSortAtom } from 'src/state/atoms/seeds/search';
 import searchSelector, { columnsSelector } from 'src/state/selectors/seeds/search';
 import searchAllValuesSelector from 'src/state/selectors/seeds/searchAllValues';
@@ -159,8 +160,10 @@ export default function Database(): JSX.Element {
         <EditColumns open={editColumnsModalOpen} value={columns} onClose={onCloseEditColumnsModal} />
         <DownloadReportModal open={reportModalOpen} onClose={onCloseDownloadReportModal} />
         <PageHeader
-          title='Database'
+          title=''
           subtitle={getSubtitle()}
+          page={strings.ACCESSIONS}
+          parentPage={strings.SEEDS}
           rightComponent={
             <div>
               <Chip

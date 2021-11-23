@@ -13,6 +13,7 @@ import { getPlantPhoto } from 'src/api/plants/photo';
 import { Plant, PlantSearchOptions } from 'src/types/Plant';
 import { SpeciesById } from 'src/types/Species';
 import { Organization } from 'src/types/Organization';
+import Title from 'src/components/common/Title';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -131,11 +132,9 @@ export default function PlantList(props: PlantListProps): JSX.Element {
       )}
       <Container maxWidth={false} className={classes.mainContainer}>
         <Grid container spacing={3}>
-          <Grid item xs={1} />
-          <Grid item xs={10}>
-            <h1>{strings.PLANTS}</h1>
+          <Grid item xs={12}>
+            <Title page={strings.PLANTS} parentPage={strings.PLANTS} />
           </Grid>
-          <Grid item xs={1} />
           <Grid item xs={1} />
           <Grid item xs={11}>
             <IconButton

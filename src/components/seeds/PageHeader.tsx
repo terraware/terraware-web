@@ -2,6 +2,7 @@ import { Box, Container, Grid } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import React from 'react';
+import Title from '../common/Title';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -30,14 +31,28 @@ interface Props {
   subtitle: string | React.ReactNode;
   children?: React.ReactNode;
   rightComponent?: React.ReactNode;
+  page?: string;
+  parentPage?: string;
 }
 
-export default function PageHeader({ title, subtitle, children, rightComponent }: Props): JSX.Element {
+export default function PageHeader({
+  title,
+  subtitle,
+  children,
+  rightComponent,
+  page,
+  parentPage,
+}: Props): JSX.Element {
   const classes = useStyles();
 
   return (
     <Container maxWidth={false} className={classes.mainContainer}>
       <Grid container spacing={3} className={classes.container}>
+        {page && parentPage && (
+          <Grid item xs={12}>
+            <Title page={page} parentPage={parentPage} />
+          </Grid>
+        )}
         <Grid item xs={1} />
         <Grid item xs={10}>
           <Box display='flex' justifyContent='space-between' alignItems='center' className={classes.titleSpacing}>
