@@ -53,17 +53,11 @@ describe('Filter plants', () => {
     cy.get('#show-filters').click();
     cy.get('#notes').type('testing');
     cy.get('#apply-filters').click();
-    cy.get('#all-plants-table .MuiTableBody-root .MuiTableRow-root').should(
-        'have.length',
-        1
-    );
+    cy.get('#all-plants-table .MuiTableBody-root .MuiTableRow-root').should('have.length', 1);
 
     cy.get('#plants').click().url().should('contain', '/plants-dashboard');
     cy.get('#plants-list').click().url().should('contain', '/plants-list');
     cy.get('#notes').should('exist');
-    cy.get('#all-plants-table .MuiTableBody-root .MuiTableRow-root').should(
-        'have.length',
-        1
-    );
+    cy.get('#all-plants-table .MuiTableBody-root .MuiTableRow-root').should('have.length', 1);
   });
 });
