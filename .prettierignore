@@ -1,2 +1,29 @@
+# Dependencies
+node_modules
+typings
+reactour.d.ts
+
+# Tools
+.nyc_output
+coverage
+nginx
+
+# Editor settings
+.idea
+.vscode
+
+# Generated Code
+build
+style-dictionary-dist
+
+# Data
+dump
+photo_data
+
+# Generated Types
 src/api/types/generated-schema.ts
 
+# Misc
+.DS_Store
+.env*
+yarn.lock

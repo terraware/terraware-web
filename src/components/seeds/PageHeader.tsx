@@ -1,8 +1,11 @@
-import { Box, Container, Grid } from '@material-ui/core';
+import { Box, Container, Fab, Grid } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import React from 'react';
 import Title from '../common/Title';
+import { useHistory } from 'react-router-dom';
+import useStateLocation, { getLocation } from '../../utils/useStateLocation';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -23,6 +26,19 @@ const useStyles = makeStyles((theme) =>
     subtitle: {
       fontWeight: theme.typography.fontWeightLight,
     },
+    flex: {
+      display: 'flex',
+    },
+    back: {
+      marginTop: theme.spacing(4),
+    },
+    backIcon: {
+      marginRight: theme.spacing(4),
+      backgroundColor: theme.palette.common.white,
+    },
+    mainContent: {
+      width: '100%',
+    },
   })
 );
 
@@ -33,6 +49,8 @@ interface Props {
   rightComponent?: React.ReactNode;
   page?: string;
   parentPage?: string;
+  back?: boolean;
+  backUrl?: string;
 }
 
 export default function PageHeader({
@@ -40,10 +58,14 @@ export default function PageHeader({
   subtitle,
   children,
   rightComponent,
+  back,
+  backUrl,
   page,
   parentPage,
 }: Props): JSX.Element {
   const classes = useStyles();
+  const history = useHistory();
+  const location = useStateLocation();
 
   return (
     <Container maxWidth={false} className={classes.mainContainer}>
@@ -54,17 +76,38 @@ export default function PageHeader({
           </Grid>
         )}
         <Grid item xs={1} />
-        <Grid item xs={10}>
-          <Box display='flex' justifyContent='space-between' alignItems='center' className={classes.titleSpacing}>
-            <Typography id='title' variant='h4' className={classes.title}>
-              {title}
+        <Grid item xs={10} className={classes.flex}>
+          {back && (
+            <div className={classes.back}>
+              <Fab
+                id='close'
+                size='small'
+                aria-label='close'
+                className={classes.backIcon}
+                onClick={() => {
+                  if (backUrl) {
+                    history.push(getLocation(backUrl, location));
+                  } else {
+                    history.go(-1);
+                  }
+                }}
+              >
+                <ArrowBackIcon />
+              </Fab>
+            </div>
+          )}
+          <div className={classes.mainContent}>
+            <Box display='flex' justifyContent='space-between' alignItems='center' className={classes.titleSpacing}>
+              <Typography id='title' variant='h4' className={classes.title}>
+                {title}
+              </Typography>
+              {rightComponent}
+            </Box>
+            <Typography id='subtitle' variant='h6' className={classes.subtitle}>
+              {subtitle}
             </Typography>
-            {rightComponent}
-          </Box>
-          <Typography id='subtitle' variant='h6' className={classes.subtitle}>
-            {subtitle}
-          </Typography>
-          {children}
+            {children}
+          </div>
         </Grid>
         <Grid item xs={1} />
       </Grid>

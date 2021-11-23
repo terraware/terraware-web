@@ -306,6 +306,16 @@ const strings = new LocalizedStrings({
     LB_POUNDS: 'lb (pounds)',
     OZ_OUNCES: 'oz (ounces)',
     GOT_IT: 'Got It!',
+    VIEW_COLLECTIONS: 'View collections',
+    BAGS_TOTAL: 'Bags Total',
+    CHECKIN_BAGS: 'Check In Bags',
+    VIEW_ACCESSION: 'View accession',
+    CHECKING_IN: 'Checking In...',
+    CHECK_IN: 'Check In',
+    CHECKED_IN: 'Checked In!',
+    CHECK_IN_BAGS: 'Check In Bags',
+    CHECK_IN_MESSAGE:
+      '{0} new seed collection bags should have been dropped off at the seed bank. Please verify their arrival and check them in.',
   },
 });
 

@@ -5,7 +5,7 @@ export type Coordinate = {
 
 export type Plant = {
   featureId?: number;
-  layerId: number;
+  layerId?: number;
   coordinates?: Coordinate;
   notes?: string;
   enteredTime?: string;

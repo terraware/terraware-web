@@ -1,3 +1,4 @@
+import addQueryParams from 'src/api/addQueryParams';
 import axios from 'src/api/index';
 import { paths } from 'src/api/types/generated-schema';
 import {
@@ -10,7 +11,6 @@ import {
   PlantSummariesByLayerId,
   PlantSummary,
 } from 'src/types/Plant';
-import addQueryParams from 'src/api/addQueryParams';
 
 /*
  * All functions in this module ALWAYS return a promise that resolves. Any errors will be caught and

@@ -1,8 +1,8 @@
 # Plant Locator App
 
 ## How to Run the App in Development Mode
+
 1. Configure the `.env` file using the sample file `.env.sample`
-   
 2. Login to Docker hub
 
 ```shell
@@ -23,7 +23,8 @@ yarn start         # Run the front-end code
 ```
 
 5. Login. If you configured your environment variables correctly then you'll be taken to a keycloak login page. You may also try to login using through this API endpoint.
-``` shell
+
+```shell
 http://localhost:8080/api/v1/login?redirect=http://localhost:3000/
 ```
 
@@ -48,10 +49,10 @@ yarn test            # run the Jest (unit and integration) tests
 ```
 
 Tip: you can run everything except the end-to-end tests using:
+
 ```shell
 yarn generate-types && yarn format && yarn lint && yarn ts && yarn test
 ```
-
 
 ## How to Run the End-to-End Tests
 
@@ -60,6 +61,7 @@ Execute this command before each run of the end-to-end tests. This script does t
 ```shell
 yarn server:reset
 ```
+
 Tip: if you want to save the contents of a `terraware` database that you're using for manual testing, you can dump the contents of that database and reload them later. You can also rename the existing database using the following commands.
 
 ```shell
@@ -67,7 +69,7 @@ Tip: if you want to save the contents of a `terraware` database that you're usin
 psql postgres
 # rename the existing terraware database to save it's contents
 ALTER DATABASE terraware RENAME TO terrawareTEMP;
-````
+```
 
 To run the end-to-end tests:
 
@@ -81,5 +83,6 @@ yarn docker:stop   # don't forget to stop the server when you're done
 ```
 
 ## Useful links
+
 - The API Swagger documentation [link](http://localhost:8080/docs)
 - Github deployment information [link](https://github.com/terraware/tree-location-web/actions/workflows/workflow.yml)
