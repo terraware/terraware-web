@@ -8,7 +8,6 @@ import React from 'react';
 import { Link as RouterLink, useHistory } from 'react-router-dom';
 import { useRecoilState, useRecoilValue, useRecoilValueLoadable, useSetRecoilState } from 'recoil';
 import { SearchField, SearchNodePayload, SearchResponseResults } from 'src/api/types/search';
-import Title from 'src/components/common/Title';
 import { columnsAtom, searchFilterAtom, searchSelectedColumnsAtom, searchSortAtom } from 'src/state/atoms/seeds/search';
 import searchSelector, { columnsSelector } from 'src/state/selectors/seeds/search';
 import searchAllValuesSelector from 'src/state/selectors/seeds/searchAllValues';
