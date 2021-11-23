@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-d
 import { RecoilRoot } from 'recoil';
 import getOrganization, { GetOrganizationResponse, OrgRequestError } from 'src/api/organization/organization';
 import { Organization } from 'src/types/Organization';
+import { PlantSearchOptions } from 'src/types/Plant';
 import NavBar from './components/NavBar';
 import PlantDashboard from './components/plants/PlantDashboard';
 import PlantList from './components/plants/PlantList';
@@ -66,6 +67,7 @@ function AppContent() {
 
   const [organization, setOrganization] = useState<Organization>(emptyOrg);
   const [organizationErrors, setOrganizationErrors] = useState<OrgRequestError[]>([]);
+  const [plantListFilters, setPlantListFilters] = useState<PlantSearchOptions>();
 
   useEffect(() => {
     const populateOrganizationData = async () => {
@@ -111,7 +113,6 @@ function AppContent() {
               <Route exact path='/seeds-summary'>
                 <SeedSummary />
               </Route>
-
               <Route exact path='/checkin'>
                 <Checkin />
               </Route>
@@ -128,7 +129,7 @@ function AppContent() {
                 <PlantDashboard organization={organization} />
               </Route>
               <Route exact path='/plants-list'>
-                <PlantList organization={organization} />
+                <PlantList organization={organization} filters={plantListFilters} setFilters={setPlantListFilters} />
               </Route>
               <Route exact path='/species'>
                 <Species />
