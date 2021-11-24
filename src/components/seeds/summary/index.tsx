@@ -45,7 +45,12 @@ export default function SeedSummary(): JSX.Element {
 
   return (
     <main>
-      <PageHeader title={strings.SUMMARY} subtitle={strings.WELCOME_MSG} />
+      <PageHeader
+        title={strings.SUMMARY}
+        subtitle={strings.WELCOME_MSG}
+        page={strings.DASHBOARD}
+        parentPage={strings.SEEDS}
+      />
       <Container maxWidth={false} className={classes.mainContainer}>
         <Grid container spacing={3}>
           <Grid item xs={1} />

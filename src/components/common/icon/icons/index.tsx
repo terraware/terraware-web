@@ -3,6 +3,7 @@ import { ReactComponent as CaretDown } from './caret-down.svg';
 import { ReactComponent as CaretUp } from './caret-up.svg';
 import { ReactComponent as ChevronDown } from './chevron-down.svg';
 import { ReactComponent as ChevronUp } from './chevron-up.svg';
+import { ReactComponent as Error } from './error.svg';
 import { ReactComponent as Folder } from './folder.svg';
 import { ReactComponent as Home } from './home.svg';
 import { ReactComponent as Key } from './key.svg';
@@ -13,12 +14,14 @@ import { ReactComponent as Seeds } from './seeds.svg';
 import { ReactComponent as Site } from './site.svg';
 import { ReactComponent as Species } from './species.svg';
 import { ReactComponent as Spinner } from './spinner.svg';
+import { ReactComponent as Warning } from './warning.svg';
 
 export type IconName =
   | 'caretDown'
   | 'caretUp'
   | 'chevronUp'
   | 'chevronDown'
+  | 'error'
   | 'folder'
   | 'home'
   | 'key'
@@ -28,7 +31,8 @@ export type IconName =
   | 'seeds'
   | 'site'
   | 'species'
-  | 'spinner';
+  | 'spinner'
+  | 'warning';
 
 type SVGComponent = React.FunctionComponent<
   React.SVGProps<SVGSVGElement> & {
@@ -50,6 +54,8 @@ const icons: Record<IconName, SVGComponent> = {
   site: Site,
   species: Species,
   spinner: Spinner,
+  error: Error,
+  warning: Warning,
 };
 
 export default icons;

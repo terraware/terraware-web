@@ -3,6 +3,7 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import React from 'react';
+import Title from '../common/Title';
 import { useHistory } from 'react-router-dom';
 import useStateLocation, { getLocation } from '../../utils/useStateLocation';
 
@@ -46,11 +47,22 @@ interface Props {
   subtitle: string | React.ReactNode;
   children?: React.ReactNode;
   rightComponent?: React.ReactNode;
+  page?: string;
+  parentPage?: string;
   back?: boolean;
   backUrl?: string;
 }
 
-export default function PageHeader({ title, subtitle, children, rightComponent, back, backUrl }: Props): JSX.Element {
+export default function PageHeader({
+  title,
+  subtitle,
+  children,
+  rightComponent,
+  back,
+  backUrl,
+  page,
+  parentPage,
+}: Props): JSX.Element {
   const classes = useStyles();
   const history = useHistory();
   const location = useStateLocation();
@@ -58,6 +70,11 @@ export default function PageHeader({ title, subtitle, children, rightComponent, 
   return (
     <Container maxWidth={false} className={classes.mainContainer}>
       <Grid container spacing={3} className={classes.container}>
+        {page && parentPage && (
+          <Grid item xs={12}>
+            <Title page={page} parentPage={parentPage} />
+          </Grid>
+        )}
         <Grid item xs={1} />
         <Grid item xs={10} className={classes.flex}>
           {back && (

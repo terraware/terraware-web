@@ -15,6 +15,7 @@ import { getAllSpecies } from 'src/api/species/species';
 import { Plant, PlantSummariesByLayerId } from 'src/types/Plant';
 import { SpeciesById } from 'src/types/Species';
 import getColorsBySpeciesId from 'src/api/species/getColorsBySpeciesId';
+import Title from 'src/components/common/Title';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -89,6 +90,9 @@ export default function PlantDashboard(props: PlantDashboardProps): JSX.Element 
     <main>
       <Container maxWidth={false} className={classes.mainContainer}>
         <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <Title page={strings.DASHBOARD} parentPage={strings.PLANTS} />
+          </Grid>
           <Grid item xs={isFullscreen ? 12 : 6}>
             <React.Suspense fallback={strings.LOADING}>
               <PlantMap
