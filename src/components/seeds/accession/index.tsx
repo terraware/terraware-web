@@ -1,4 +1,4 @@
-import { Container, Grid } from '@material-ui/core';
+import {CircularProgress, Container, Grid} from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Route, Switch, useHistory, useParams } from 'react-router-dom';
@@ -32,13 +32,13 @@ const useStyles = makeStyles((theme) =>
 
 export default function AccessionPage(): JSX.Element {
   const setSnackbar = useSetRecoilState(snackbarAtom);
-  const history = useHistory();
+  // const history = useHistory();
   const errorHandler = () => {
     setSnackbar({
       type: 'delete',
       msg: strings.GET_ACCESSION_ERROR,
     });
-    history.push('/accessions');
+    // history.push('/accessions');
   };
 
   return (
@@ -65,7 +65,7 @@ function Content(): JSX.Element {
       setAccession(response);
     };
 
-    if (accessionId) {
+    if (accessionId !== undefined) {
       populateAccession();
     } else {
       setAccession(undefined);
@@ -88,6 +88,11 @@ function Content(): JSX.Element {
       }
     }
   }, [accession, history, history.location]);
+
+  const clonedAccession = accession ? {
+    ...accession,
+    secondaryCollectors: accession.secondaryCollectors && [...accession.secondaryCollectors],
+  } : undefined;
 
   const onSubmit = async (record: Accession) => {
     try {
@@ -116,49 +121,44 @@ function Content(): JSX.Element {
     }
   };
 
-  if (accession === undefined) {
-    setSnackbar({
-      type: 'delete',
-      msg: strings.GET_ACCESSION_ERROR,
-    });
-    history.push('/accessions');
-    return <></>;
+  if (clonedAccession === undefined) {
+    return <CircularProgress id='spinner-alerts' />;
   }
 
   return (
     <main>
-      <AccessionPageHeader accession={accession} />
+      <AccessionPageHeader accession={clonedAccession} />
       <Container maxWidth='lg' className={classes.mainContainer}>
         <Grid container spacing={3}>
           <Grid item xs={3}>
-            <DetailsMenu state={accession.state} />
-            <GerminationMenu accession={accession} />
+            <DetailsMenu state={clonedAccession.state} />
+            <GerminationMenu accession={clonedAccession} />
           </Grid>
           <Grid item xs={9}>
             <Switch>
               <Route exact path='/accessions/:accessionId/seed-collection'>
                 <AccessionForm
                   updating={true}
-                  photoFilenames={accession.photoFilenames}
-                  accession={accession}
+                  photoFilenames={clonedAccession.photoFilenames}
+                  accession={clonedAccession}
                   onSubmit={onSubmit}
                   onCheckIn={onCheckIn}
                 />
               </Route>
               <Route exact path='/accessions/:accessionId/processing-drying'>
-                <ProcessingAndDrying accession={accession} onSubmit={onSubmit} />
+                <ProcessingAndDrying accession={clonedAccession} onSubmit={onSubmit} />
               </Route>
               <Route exact path='/accessions/:accessionId/storage'>
-                <Storage accession={accession} onSubmit={onSubmit} />
+                <Storage accession={clonedAccession} onSubmit={onSubmit} />
               </Route>
               <Route exact path='/accessions/:accessionId/nursery'>
-                <Nursery accession={accession} onSubmit={onSubmit} />
+                <Nursery accession={clonedAccession} onSubmit={onSubmit} />
               </Route>
               <Route exact path='/accessions/:accessionId/lab'>
-                <Lab accession={accession} onSubmit={onSubmit} />
+                <Lab accession={clonedAccession} onSubmit={onSubmit} />
               </Route>
               <Route exact path='/accessions/:accessionId/withdrawal'>
-                <Withdrawal accession={accession} onSubmit={onSubmit} />
+                <Withdrawal accession={clonedAccession} onSubmit={onSubmit} />
               </Route>
             </Switch>
           </Grid>
