@@ -32,11 +32,11 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-export interface Props {
+interface TitleProps {
   page: string;
   parentPage: string;
 }
-export default function Title({ page, parentPage }: Props): JSX.Element {
+export default function Title({ page, parentPage }: TitleProps): JSX.Element {
   const classes = useStyles();
   return (
     <div className={classes.titleContainer}>

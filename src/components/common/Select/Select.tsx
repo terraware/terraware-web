@@ -1,9 +1,9 @@
 import classNames from 'classnames';
-import React, { ChangeEventHandler } from 'react';
+import React, { ChangeEventHandler, useState } from 'react';
 import Icon from '../icon/Icon';
 import './styles.scss';
 
-export interface Props {
+interface SelectProps {
   onChange?: ChangeEventHandler<HTMLInputElement> | undefined;
   label?: string;
   disabled?: boolean;
@@ -18,7 +18,7 @@ export interface Props {
   options?: string[];
 }
 
-export default function Select(props: Props): JSX.Element {
+export default function Select(props: SelectProps): JSX.Element {
   const {
     selectedValue,
     onChange,
@@ -47,8 +47,8 @@ export default function Select(props: Props): JSX.Element {
     'select-value--disabled': disabled,
   });
 
-  const [openedOptions, setOpenedOptions] = React.useState(false);
-  const [value, setValue] = React.useState(selectedValue);
+  const [openedOptions, setOpenedOptions] = useState(false);
+  const [value, setValue] = useState(selectedValue);
 
   const toggleOptions = () => {
     setOpenedOptions(!openedOptions);
