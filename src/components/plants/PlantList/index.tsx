@@ -38,17 +38,18 @@ const useStyles = makeStyles((theme) =>
 
 type PlantListProps = {
   organization: Organization;
+  filters?: PlantSearchOptions;
+  setFilters: (filters?: PlantSearchOptions) => void;
 };
 
 export default function PlantList(props: PlantListProps): JSX.Element {
   const classes = useStyles();
-  const organization = props.organization;
+  const { organization, filters, setFilters } = props;
   const [speciesById, setSpeciesById] = useState<SpeciesById>(new Map());
   const [plants, setPlants] = useState<Plant[]>([]);
-  const [filters, setFilters] = useState<PlantSearchOptions>();
   const [selectedPlant, setSelectedPlant] = useState<Plant>();
   const [selectedPlantPhoto, setSelectedPlantPhoto] = useState<string>();
-  const [showFilters, setShowFilters] = useState(false);
+  const [showFilters, setShowFilters] = useState(filters ? true : false);
   const setSnackbar = useSetRecoilState(snackbarAtom);
 
   const fetchPlantsAndSpecies = useCallback(() => {
@@ -150,6 +151,7 @@ export default function PlantList(props: PlantListProps): JSX.Element {
           {showFilters && (
             <PlantFilterBar
               speciesNames={getSpeciesNames()}
+              filters={filters}
               onApplyFilters={setFilters}
               onClearFilters={() => setFilters(undefined)}
             />

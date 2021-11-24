@@ -27,22 +27,23 @@ const EMPTY_FILTERS: PlantSearchOptions = {
 
 type PlantFilterBarProps = {
   speciesNames: string[];
+  filters?: PlantSearchOptions;
   onApplyFilters: (filters: PlantSearchOptions) => void;
   onClearFilters: () => void;
 };
 
 export default function PlantFilterBar(props: PlantFilterBarProps): JSX.Element {
   const classes = useStyles();
-  const { speciesNames, onApplyFilters, onClearFilters } = props;
-  const [filters, setFilters] = useState<PlantSearchOptions>(EMPTY_FILTERS);
+  const { speciesNames, filters, onApplyFilters, onClearFilters } = props;
+  const [unsavedFilters, setUnsavedFilters] = useState<PlantSearchOptions>(filters ? filters : EMPTY_FILTERS);
 
   const onChange = (id: string, value?: string) => {
-    const newFiltersObj = { ...filters, [id]: value };
-    setFilters(newFiltersObj);
+    const newFiltersObj = { ...unsavedFilters, [id]: value };
+    setUnsavedFilters(newFiltersObj);
   };
 
   const onClear = () => {
-    setFilters(EMPTY_FILTERS);
+    setUnsavedFilters(EMPTY_FILTERS);
     onClearFilters();
   };
 
@@ -55,7 +56,7 @@ export default function PlantFilterBar(props: PlantFilterBarProps): JSX.Element 
           id='minEnteredTime'
           aria-label='min_entered_time'
           onChange={onChange}
-          value={filters.minEnteredTime}
+          value={unsavedFilters.minEnteredTime}
         />
       </Grid>
       <Grid item xs={2}>
@@ -64,7 +65,7 @@ export default function PlantFilterBar(props: PlantFilterBarProps): JSX.Element 
           label={strings.TO}
           aria-label='max_entered_time'
           onChange={onChange}
-          value={filters?.maxEnteredTime}
+          value={unsavedFilters?.maxEnteredTime}
         />
       </Grid>
       <Grid item xs={2}>
@@ -72,13 +73,15 @@ export default function PlantFilterBar(props: PlantFilterBarProps): JSX.Element 
           id='speciesName'
           label={strings.SPECIES}
           onChange={onChange}
-          selected={filters.speciesName ?? ''}
+          selected={unsavedFilters.speciesName ?? ''}
           values={speciesNames.map((name) => ({ label: name, value: name }))}
         />
       </Grid>
       <Grid item xs={2}>
         <TextField
           id='notes'
+          role='searchbox'
+          aria-label={strings.NOTES}
           placeholder={strings.NOTES}
           variant='outlined'
           InputProps={{
@@ -88,7 +91,7 @@ export default function PlantFilterBar(props: PlantFilterBarProps): JSX.Element 
               </InputAdornment>
             ),
           }}
-          value={filters.notes ?? ''}
+          value={unsavedFilters.notes ?? ''}
           size='small'
           onChange={(event) => {
             onChange('notes', event.target.value);
@@ -99,7 +102,7 @@ export default function PlantFilterBar(props: PlantFilterBarProps): JSX.Element 
         <Button
           id='apply-filters'
           label={strings.APPLY_FILTERS}
-          onClick={() => onApplyFilters(filters)}
+          onClick={() => onApplyFilters(unsavedFilters)}
           type='passive'
           priority='secondary'
         />
