@@ -1,7 +1,7 @@
 import addQueryParams from 'src/api/addQueryParams';
 import { paths } from 'src/api/types/generated-schema';
 import axios from '..';
-import {Notifications, NotificationTypes} from '../../types/Notifications';
+import { Notifications, NotificationTypes } from '../../types/Notifications';
 
 const NOTIFICATIONS_ENDPOINT = '/api/v1/seedbank/notification';
 type ListNotificationsQuery = paths[typeof NOTIFICATIONS_ENDPOINT]['get']['parameters']['query'];

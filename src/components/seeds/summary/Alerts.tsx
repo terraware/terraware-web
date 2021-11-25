@@ -7,7 +7,7 @@ import TableRow from '@material-ui/core/TableRow';
 import WarningIcon from '@material-ui/icons/Warning';
 import React from 'react';
 import strings from 'src/strings';
-import {Notifications, NotificationTypes} from 'src/types/Notifications';
+import { Notifications, NotificationTypes } from 'src/types/Notifications';
 
 const useStyles = makeStyles((theme) =>
   createStyles({

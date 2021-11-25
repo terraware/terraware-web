@@ -22,7 +22,7 @@ export default function LocationDropdown(props: LocationDropdownProps): JSX.Elem
     const populateLocations = async () => {
       setLocations(await getLocations(facilityId));
     };
-    populateLocations()
+    populateLocations();
   }, [facilityId]);
 
   useEffect(() => {

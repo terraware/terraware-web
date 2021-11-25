@@ -1,4 +1,4 @@
-import {CircularProgress, Container, Grid} from '@material-ui/core';
+import { CircularProgress, Container, Grid } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Route, Switch, useHistory, useParams } from 'react-router-dom';
@@ -89,10 +89,12 @@ function Content(): JSX.Element {
     }
   }, [accession, history, history.location]);
 
-  const clonedAccession = accession ? {
-    ...accession,
-    secondaryCollectors: accession.secondaryCollectors && [...accession.secondaryCollectors],
-  } : undefined;
+  const clonedAccession = accession
+    ? {
+        ...accession,
+        secondaryCollectors: accession.secondaryCollectors && [...accession.secondaryCollectors],
+      }
+    : undefined;
 
   const onSubmit = async (record: Accession) => {
     try {
