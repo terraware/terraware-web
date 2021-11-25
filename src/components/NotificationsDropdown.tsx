@@ -131,10 +131,7 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
   };
 
   const getUnreadNotifications = () => {
-    const unreadNotifications =
-      notifications
-      ? notifications.items.filter((notification) => !notification.read)
-      : [];
+    const unreadNotifications = notifications ? notifications.items.filter((notification) => !notification.read) : [];
 
     return unreadNotifications.length;
   };
