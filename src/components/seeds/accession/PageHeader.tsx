@@ -56,11 +56,6 @@ export default function AccessionPageHeader({ accession }: Props): JSX.Element {
   const classes = useStyles();
   const history = useHistory();
   const location = useStateLocation();
-  const [counter, setCounter] = React.useState(0);
-
-  React.useEffect(() => {
-    setCounter(counter - 1);
-  }, [counter, location]);
 
   return (
     <Grid container spacing={3} className={classes.container}>
@@ -77,7 +72,7 @@ export default function AccessionPageHeader({ accession }: Props): JSX.Element {
                 if (location.state?.from) {
                   history.push(getLocation(location.state.from, location));
                 } else {
-                  history.go(counter);
+                  history.go(-1);
                 }
               }}
             >

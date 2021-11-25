@@ -104,6 +104,10 @@ export default function NewAccessionWrapper(props: NewAccessionProps): JSX.Eleme
     return <Redirect to={getLocation(`/accessions/${accessionId}/seed-collection`, location)} />;
   }
 
+  if (facilityId === undefined || facilityId === 0) {
+    return <CircularProgress id={`new-accession-facilityid-spinner`} />;
+  }
+
   return (
     <main>
       <PageHeader
