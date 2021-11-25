@@ -1,7 +1,12 @@
 import addQueryParams from 'src/api/addQueryParams';
 import { paths } from 'src/api/types/generated-schema';
 import axios from '..';
-import { Notifications, NotificationTypes } from '../../types/Notifications';
+import { Notifications, NotificationTypes } from 'src/types/Notifications';
+
+/*
+ * All functions in this module ALWAYS return a promise that resolves. The caller must examine
+ * the return value to check that the request was successful.
+ */
 
 const NOTIFICATIONS_ENDPOINT = '/api/v1/seedbank/notification';
 type ListNotificationsQuery = paths[typeof NOTIFICATIONS_ENDPOINT]['get']['parameters']['query'];
@@ -29,6 +34,7 @@ export const getNotifications = async (facilityId: number): Promise<Notification
       });
     });
   } catch {
+    // Do not return a partially filled list of notifications.
     response.items = [];
     response.errorOccurred = true;
   }

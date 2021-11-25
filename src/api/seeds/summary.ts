@@ -8,6 +8,10 @@ export type SummaryStatistic =
   | SeedbankSummary['species']
   | SeedbankSummary['families'];
 
+/*
+ * getSummary() always returns a promise that resolves. The caller must examine the response to check if
+ * any errors occurred.
+ */
 export type GetSummaryResponse = {
   value?: SeedbankSummary;
   errorOccurred: boolean;

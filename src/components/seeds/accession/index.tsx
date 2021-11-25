@@ -3,14 +3,13 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Route, Switch, useHistory, useParams } from 'react-router-dom';
 import { useResetRecoilState, useSetRecoilState } from 'recoil';
-import { checkIn, putAccession } from 'src/api/seeds/accession';
-import { getAccession } from 'src/api/seeds/accession';
+import { checkIn, getAccession, putAccession } from 'src/api/seeds/accession';
 import { Accession, AccessionState } from 'src/api/types/accessions';
 import ErrorBoundary from 'src/ErrorBoundary';
 import snackbarAtom from 'src/state/atoms/snackbar';
 import searchSelector from 'src/state/selectors/seeds/search';
 import strings from 'src/strings';
-import { pendingAccessionsSelector } from '../../../state/selectors/seeds/pendingCheckIn';
+import { pendingAccessionsSelector } from 'src/state/selectors/seeds/pendingCheckIn';
 import Lab from '../lab';
 import { AccessionForm } from '../newAccession';
 import Nursery from '../nursery';
@@ -31,14 +30,14 @@ const useStyles = makeStyles((theme) =>
 );
 
 export default function AccessionPage(): JSX.Element {
+  // TODO: consider navigating to the main accessions page if we cannot
+  // fetch the current accession.
   const setSnackbar = useSetRecoilState(snackbarAtom);
-  // const history = useHistory();
   const errorHandler = () => {
     setSnackbar({
       type: 'delete',
       msg: strings.GET_ACCESSION_ERROR,
     });
-    // history.push('/accessions');
   };
 
   return (

@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
 import getOrganization, { GetOrganizationResponse, OrgRequestError } from 'src/api/organization/organization';
+import { Notifications } from 'src/types/Notifications';
 import { Organization } from 'src/types/Organization';
 import { PlantSearchOptions } from 'src/types/Plant';
 import NavBar from './components/NavBar';
@@ -23,7 +24,6 @@ import TopBar from './components/TopBar';
 import ErrorBoundary from './ErrorBoundary';
 import strings from './strings';
 import theme from './theme';
-import { Notifications } from 'src/types/Notifications';
 
 // @ts-ignore
 mapboxgl.workerClass =

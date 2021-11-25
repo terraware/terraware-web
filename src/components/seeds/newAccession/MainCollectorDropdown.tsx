@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import { findPrimaryCollectors } from 'src/api/seeds/search';
 import strings from 'src/strings';
-import Autocomplete from '../../common/Autocomplete';
-import { findPrimaryCollectors } from '../../../api/seeds/search';
+import Autocomplete from 'src/components/common/Autocomplete';
 
 interface MainCollectorDropdownProps {
   facilityId: number;

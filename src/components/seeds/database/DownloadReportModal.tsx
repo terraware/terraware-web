@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export interface DownloadReportModalProps {
+interface DownloadReportModalProps {
   facilityId: number;
   open: boolean;
   onClose: () => void;

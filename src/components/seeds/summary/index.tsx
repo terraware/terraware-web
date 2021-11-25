@@ -4,14 +4,14 @@ import Paper from '@material-ui/core/Paper';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import Cookies from 'cookies-js';
 import React, { useEffect, useState } from 'react';
+import { getSummary, GetSummaryResponse } from 'src/api/seeds/summary';
+import { API_PULL_INTERVAL } from 'src/constants';
 import strings from 'src/strings';
+import { Notifications } from 'src/types/Notifications';
 import PageHeader from '../PageHeader';
 import Alerts from './Alerts';
 import SummaryPaper from './SummaryPaper';
 import Updates from './Updates';
-import { Notifications } from '../../../types/Notifications';
-import { getSummary, GetSummaryResponse } from 'src/api/seeds/summary';
-import { API_PULL_INTERVAL } from '../../../constants';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -44,6 +44,7 @@ type SeedSummaryProps = {
 export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
   const classes = useStyles();
   const { facilityId, notifications } = props;
+  const [populateSummaryInterval, setPopulateSummaryInterval] = useState<ReturnType<typeof setInterval>>();
   const [summary, setSummary] = useState<GetSummaryResponse>();
   const errorOccurred = summary ? summary.errorOccurred : false;
 
@@ -51,19 +52,23 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
     const populateSummary = async () => {
       setSummary(await getSummary(facilityId));
     };
-    let interval: ReturnType<typeof setInterval>;
     if (facilityId) {
       populateSummary();
+      // Clear an existing interval when the facilityId changes
+      if (populateSummaryInterval) {
+        clearInterval(populateSummaryInterval);
+      }
       if (!process.env.REACT_APP_DISABLE_RECURRENT_REQUESTS) {
-        interval = setInterval(() => {
+        const tempInterval = setInterval(() => {
           populateSummary();
         }, API_PULL_INTERVAL);
+        setPopulateSummaryInterval(tempInterval);
       }
     }
 
     return () => {
-      if (interval) {
-        clearInterval(interval);
+      if (populateSummaryInterval) {
+        clearInterval(populateSummaryInterval);
       }
     };
   }, [facilityId]);

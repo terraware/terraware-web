@@ -14,19 +14,19 @@ import Badge from '@material-ui/core/Badge';
 import IconButton from '@material-ui/core/IconButton';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import NotificationsIcon from '@material-ui/icons/Notifications';
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import { getNotifications, MarkAllNotificationsRead, MarkNotificationRead } from 'src/api/seeds/notification';
 import { AccessionState } from 'src/api/types/accessions';
 import { FieldNodePayload } from 'src/api/types/search';
+import { API_PULL_INTERVAL } from 'src/constants';
 import { searchFilterAtom } from 'src/state/atoms/seeds/search';
 import strings from 'src/strings';
+import { Notifications, NotificationTypes } from 'src/types/Notifications';
 import preventDefaultEvent from 'src/utils/preventDefaultEvent';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import NotificationIcon from './NotificationIcon';
-import { API_PULL_INTERVAL } from '../constants';
-import { Notifications, NotificationTypes } from 'src/types/Notifications';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -72,7 +72,8 @@ type NotificationsDropdownProps = {
 export default function NotificationsDropdown(props: NotificationsDropdownProps): JSX.Element {
   const classes = useStyles();
   const { notifications, setNotifications, currFacilityId } = props;
-  const [anchorEl, setAnchorEl] = React.useState<Element | null>(null);
+  const [notificationsInterval, setNotificationsInterval] = useState<ReturnType<typeof setInterval>>();
+  const [anchorEl, setAnchorEl] = useState<Element | null>(null);
   const setFilters = useSetRecoilState(searchFilterAtom);
 
   const populateNotifications = useCallback(async () => {
@@ -80,13 +81,16 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
   }, [setNotifications, currFacilityId]);
 
   useEffect(() => {
-    let notificationsInterval: ReturnType<typeof setInterval>;
     populateNotifications();
 
     if (currFacilityId > 0) {
       populateNotifications();
+      // Clear an existing interval when the current facility ID changes
+      if (notificationsInterval) {
+        clearInterval(notificationsInterval);
+      }
       if (!process.env.REACT_APP_DISABLE_RECURRENT_REQUESTS) {
-        notificationsInterval = setInterval(populateNotifications, API_PULL_INTERVAL);
+        setNotificationsInterval(setInterval(populateNotifications, API_PULL_INTERVAL));
       }
     }
 
@@ -127,7 +131,10 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
   };
 
   const getUnreadNotifications = () => {
-    const unreadNotifications = notifications ? notifications.items.filter((notification) => !notification.read) : [];
+    const unreadNotifications =
+      notifications
+      ? notifications.items.filter((notification) => !notification.read)
+      : [];
 
     return unreadNotifications.length;
   };
@@ -135,11 +142,13 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
   const location = useStateLocation();
   const databaseLocation = getLocation('/accessions', location);
   const getDestination = (type: NotificationTypes, accessionId?: number) => {
-    return type === NotificationTypes.Date
-      ? getLocation(`/accessions/${accessionId}`, location)
-      : type === NotificationTypes.State
-      ? databaseLocation
-      : '';
+    if (type === NotificationTypes.Date) {
+      return getLocation(`/accessions/${accessionId}`, location);
+    } else if (type === NotificationTypes.State) {
+      return databaseLocation;
+    } else {
+      return '';
+    }
   };
 
   return (
