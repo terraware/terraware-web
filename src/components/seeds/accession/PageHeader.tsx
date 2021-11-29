@@ -70,8 +70,11 @@ export default function AccessionPageHeader({ accession }: Props): JSX.Element {
               className={classes.backIcon}
               onClick={() => {
                 if (location.state?.from) {
+                  console.log(location);
+                  console.log('using history.push');
                   history.push(getLocation(location.state.from, location));
                 } else {
+                  console.log('using history.go');
                   history.go(-1);
                 }
               }}

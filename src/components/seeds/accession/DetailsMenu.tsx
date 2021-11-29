@@ -75,7 +75,7 @@ export default function DetailsMenu({ state }: Props): JSX.Element | null {
       <Box mt={1} />
       {paths.map(({ title, active, route, disabled }) =>
         disabled ? (
-          <span>
+          <span key={title}>
             <Typography component='p' variant='body1' className={classes.disabled}>
               {title}
             </Typography>
