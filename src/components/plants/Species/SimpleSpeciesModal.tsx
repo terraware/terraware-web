@@ -64,6 +64,7 @@ export default function SimpleSpeciesModal(props: Props): JSX.Element {
   }, [props.open, props.value, setRecord]);
 
   const handleCancel = () => {
+    setNameError('');
     setRecord(initSpecies(props.value));
     onClose();
   };
