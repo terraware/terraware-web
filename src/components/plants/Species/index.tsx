@@ -74,9 +74,21 @@ export default function Species(): JSX.Element {
     setEditSpeciesModalOpen(true);
   };
 
+  const setErrorSnackbar = (snackbarMessage: string) => {
+    setSnackbar({
+      type: 'delete',
+      msg: snackbarMessage,
+    });
+  };
+
   return (
     <main>
-      <SimpleSpeciesModal open={editSpeciesModalOpen} onClose={onCloseEditSpeciesModal} value={selectedSpecies} />
+      <SimpleSpeciesModal
+        open={editSpeciesModalOpen}
+        onClose={onCloseEditSpeciesModal}
+        value={selectedSpecies}
+        onError={setErrorSnackbar}
+      />
       <Container maxWidth={false} className={classes.mainContainer}>
         <Grid container spacing={3}>
           <Grid item xs={1} />
