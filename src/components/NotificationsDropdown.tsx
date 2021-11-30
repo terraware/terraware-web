@@ -72,35 +72,45 @@ type NotificationsDropdownProps = {
 export default function NotificationsDropdown(props: NotificationsDropdownProps): JSX.Element {
   const classes = useStyles();
   const { notifications, setNotifications, currFacilityId } = props;
+  // notificationsInterval value is being used when it is set.
+  // This was a known issue in the past https://github.com/yannickcr/eslint-plugin-react/issues/1964
   const [notificationsInterval, setNotificationsInterval] = useState<ReturnType<typeof setInterval>>();
   const [anchorEl, setAnchorEl] = useState<Element | null>(null);
   const setFilters = useSetRecoilState(searchFilterAtom);
 
   const populateNotifications = useCallback(async () => {
-    setNotifications(await getNotifications(currFacilityId));
+    if (currFacilityId) {
+      setNotifications(await getNotifications(currFacilityId));
+    } else {
+      setNotifications(undefined);
+    }
   }, [setNotifications, currFacilityId]);
 
   useEffect(() => {
+    // Update notifications now.
     populateNotifications();
 
-    if (currFacilityId > 0) {
-      populateNotifications();
-      // Clear an existing interval when the current facility ID changes
-      if (notificationsInterval) {
-        clearInterval(notificationsInterval);
-      }
-      if (!process.env.REACT_APP_DISABLE_RECURRENT_REQUESTS) {
-        setNotificationsInterval(setInterval(populateNotifications, API_PULL_INTERVAL));
-      }
+    // Create interval to fetch future notifications.
+    if (!process.env.REACT_APP_DISABLE_RECURRENT_REQUESTS) {
+      setNotificationsInterval((currInterval) => {
+        if (currInterval) {
+          clearInterval(currInterval);
+        }
+        return currFacilityId ? setInterval(populateNotifications, API_PULL_INTERVAL) : undefined;
+      });
     }
 
+    // Clean up existing interval.
     return () => {
-      if (notificationsInterval) {
-        clearInterval(notificationsInterval);
-      }
+      setNotificationsInterval((currInterval) => {
+        if (currInterval) {
+          clearInterval(currInterval);
+        }
+        return undefined;
+      });
     };
     // TODO update this to handle notifications from more than one facility
-  }, [currFacilityId, populateNotifications]);
+  }, [populateNotifications, currFacilityId]);
 
   const onIconClick = (event: React.MouseEvent<any>) => {
     setAnchorEl(event.currentTarget);

@@ -44,6 +44,8 @@ type SeedSummaryProps = {
 export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
   const classes = useStyles();
   const { facilityId, notifications } = props;
+  // populateSummaryInterval value is being used when it is set.
+  // This was a known issue in the past https://github.com/yannickcr/eslint-plugin-react/issues/1964
   const [populateSummaryInterval, setPopulateSummaryInterval] = useState<ReturnType<typeof setInterval>>();
   const [summary, setSummary] = useState<GetSummaryResponse>();
   const errorOccurred = summary ? summary.errorOccurred : false;
@@ -52,24 +54,33 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
     const populateSummary = async () => {
       setSummary(await getSummary(facilityId));
     };
+
+    // Update summary information
     if (facilityId) {
       populateSummary();
-      // Clear an existing interval when the facilityId changes
-      if (populateSummaryInterval) {
-        clearInterval(populateSummaryInterval);
-      }
-      if (!process.env.REACT_APP_DISABLE_RECURRENT_REQUESTS) {
-        const tempInterval = setInterval(() => {
-          populateSummary();
-        }, API_PULL_INTERVAL);
-        setPopulateSummaryInterval(tempInterval);
-      }
+    } else {
+      setSummary(undefined);
     }
 
+    // Update interval that keeps summary up to date
+    if (!process.env.REACT_APP_DISABLE_RECURRENT_REQUESTS) {
+      setPopulateSummaryInterval((currInterval) => {
+        if (currInterval) {
+          // Clear an existing interval when the facilityId changes
+          clearInterval(currInterval);
+        }
+        return facilityId ? setInterval(populateSummary, API_PULL_INTERVAL) : undefined;
+      });
+    }
+
+    // Clear interval on exit
     return () => {
-      if (populateSummaryInterval) {
-        clearInterval(populateSummaryInterval);
-      }
+      setPopulateSummaryInterval((currInterval) => {
+        if (currInterval) {
+          clearInterval(currInterval);
+        }
+        return undefined;
+      });
     };
   }, [facilityId]);
 
