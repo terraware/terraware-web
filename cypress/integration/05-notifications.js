@@ -24,8 +24,6 @@ describe('Notifications', () => {
     cy.wait('@markRead');
     cy.wait('@search');
     cy.wait('@notification');
-    // cy.get('#simple-popover > .MuiPaper-root').should('be.visible');
-    // cy.get('#root').type('{esc}');
 
     cy.get('#subtitle').should('contain', '1 total');
 
