@@ -7,6 +7,7 @@ import FiberManualRecord from '@material-ui/icons/FiberManualRecord';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { Accession } from 'src/api/types/accessions';
+import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -54,6 +55,7 @@ interface Props {
 export default function AccessionPageHeader({ accession }: Props): JSX.Element {
   const classes = useStyles();
   const history = useHistory();
+  const location = useStateLocation();
 
   return (
     <Grid container spacing={3} className={classes.container}>
@@ -67,7 +69,12 @@ export default function AccessionPageHeader({ accession }: Props): JSX.Element {
               aria-label='close'
               className={classes.backIcon}
               onClick={() => {
-                history.push('/accessions');
+                if (location.state?.from) {
+                  history.push(getLocation(location.state.from, location));
+                } else {
+                  // TODO: this path is almost certainly never used. Remove it.
+                  history.push('/accesssions');
+                }
               }}
             >
               <ArrowBackIcon />
