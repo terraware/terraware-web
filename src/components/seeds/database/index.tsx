@@ -184,8 +184,10 @@ export default function Database(props: DatabaseProps): JSX.Element {
         <EditColumns open={editColumnsModalOpen} value={columns} onClose={onCloseEditColumnsModal} />
         <DownloadReportModal facilityId={facilityId} open={reportModalOpen} onClose={onCloseDownloadReportModal} />
         <PageHeader
-          title='Database'
+          title=''
           subtitle={getSubtitle()}
+          page={strings.ACCESSIONS}
+          parentPage={strings.SEEDS}
           rightComponent={
             <div>
               <Chip
