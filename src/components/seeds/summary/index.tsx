@@ -46,6 +46,7 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
   const { facilityId, notifications } = props;
   // populateSummaryInterval value is being used when it is set.
   // This was a known issue in the past https://github.com/yannickcr/eslint-plugin-react/issues/1964
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [populateSummaryInterval, setPopulateSummaryInterval] = useState<ReturnType<typeof setInterval>>();
   const [summary, setSummary] = useState<GetSummaryResponse>();
   const errorOccurred = summary ? summary.errorOccurred : false;

@@ -74,6 +74,7 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
   const { notifications, setNotifications, currFacilityId } = props;
   // notificationsInterval value is being used when it is set.
   // This was a known issue in the past https://github.com/yannickcr/eslint-plugin-react/issues/1964
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [notificationsInterval, setNotificationsInterval] = useState<ReturnType<typeof setInterval>>();
   const [anchorEl, setAnchorEl] = useState<Element | null>(null);
   const setFilters = useSetRecoilState(searchFilterAtom);
