@@ -55,7 +55,7 @@ export default function SimpleSpeciesModal(props: Props): JSX.Element {
   const { onClose, open } = props;
   const [record, setRecord, onChange] = useForm<Species>(initSpecies(props.value));
   const resetSpecies = useResetRecoilState(speciesSelector);
-  const [nameError, setNameError] = useState('');
+  const [nameFormatError, setNameFormatError] = useState('');
 
   React.useEffect(() => {
     if (props.open) {
@@ -64,7 +64,7 @@ export default function SimpleSpeciesModal(props: Props): JSX.Element {
   }, [props.open, props.value, setRecord]);
 
   const handleCancel = () => {
-    setNameError('');
+    setNameFormatError('');
     setRecord(initSpecies(props.value));
     onClose();
   };
@@ -72,7 +72,7 @@ export default function SimpleSpeciesModal(props: Props): JSX.Element {
   const handleOk = async () => {
     let snackbarMessage = '';
     if (record.name.trim()) {
-      setNameError('');
+      setNameFormatError('');
       if (record.id === 0) {
         const newSpeciesData: Species = { name: record.name };
         const newSpecies = await postSpecies(newSpeciesData);
@@ -81,8 +81,8 @@ export default function SimpleSpeciesModal(props: Props): JSX.Element {
           resetSpecies();
           onClose(snackbarMessage);
         } else if (newSpecies.error) {
-          if (newSpecies.error === SpeciesRequestError.ExistentSpecies) {
-            snackbarMessage = strings.EXISTENT_SPECIES;
+          if (newSpecies.error === SpeciesRequestError.PreexistingSpecies) {
+            snackbarMessage = strings.PREEXISTING_SPECIES;
           } else {
             snackbarMessage = strings.GENERIC_ERROR;
           }
@@ -100,7 +100,7 @@ export default function SimpleSpeciesModal(props: Props): JSX.Element {
         }
       }
     } else {
-      setNameError(strings.REQUIRED_FIELD);
+      setNameFormatError(strings.REQUIRED_FIELD);
     }
   };
 
@@ -119,8 +119,8 @@ export default function SimpleSpeciesModal(props: Props): JSX.Element {
               onChange={onChange}
               label={strings.SPECIES_NAME}
               aria-label={strings.SPECIES_NAME}
-              error={!!nameError}
-              helperText={!!nameError && !record.name ? nameError : ''}
+              error={!!nameFormatError}
+              helperText={!!nameFormatError && !record.name ? nameFormatError : ''}
             />
           </Grid>
         </Grid>

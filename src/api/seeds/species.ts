@@ -12,11 +12,6 @@ import {
   SpeciesPutResponse,
 } from '../types/species';
 
-export type PostSpeciesResponse = {
-  species?: Species;
-  error?: string;
-};
-
 export const getSpeciesList = async (): Promise<Species[]> => {
   const endpoint = `${process.env.REACT_APP_TERRAWARE_API}${speciesEndpoint}`;
   const response: SpeciesListResponse = (await axios.get(endpoint)).data;
@@ -25,6 +20,11 @@ export const getSpeciesList = async (): Promise<Species[]> => {
     id: species.id,
     name: species.name,
   }));
+};
+
+export type PostSpeciesResponse = {
+  species?: Species;
+  error?: string | null;
 };
 
 export const postSpecies = async (species: Species): Promise<PostSpeciesResponse> => {
@@ -41,7 +41,7 @@ export const postSpecies = async (species: Species): Promise<PostSpeciesResponse
     };
   } catch (error) {
     if (axios.isAxiosError(error) && error.response?.status === 409) {
-      response.error = SpeciesRequestError.ExistentSpecies;
+      response.error = SpeciesRequestError.PreexistingSpecies;
     } else {
       response.error = SpeciesRequestError.RequestFailed;
     }
