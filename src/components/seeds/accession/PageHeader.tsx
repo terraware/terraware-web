@@ -73,7 +73,7 @@ export default function AccessionPageHeader({ accession }: Props): JSX.Element {
                   history.push(getLocation(location.state.from, location));
                 } else {
                   // TODO: this path is almost certainly never used. Remove it.
-                  history.push('/accesssions');
+                  history.push('/accessions');
                 }
               }}
             >
