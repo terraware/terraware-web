@@ -14,15 +14,16 @@ import Badge from '@material-ui/core/Badge';
 import IconButton from '@material-ui/core/IconButton';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import NotificationsIcon from '@material-ui/icons/Notifications';
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useRecoilValueLoadable, useResetRecoilState, useSetRecoilState } from 'recoil';
-import { postAllNotificationsAsRead, postNotificationAsRead } from 'src/api/seeds/notification';
+import { useSetRecoilState } from 'recoil';
+import { getNotifications, MarkAllNotificationsRead, MarkNotificationRead } from 'src/api/seeds/notification';
 import { AccessionState } from 'src/api/types/accessions';
 import { FieldNodePayload } from 'src/api/types/search';
+import { API_PULL_INTERVAL } from 'src/constants';
 import { searchFilterAtom } from 'src/state/atoms/seeds/search';
-import notificationsSelector from 'src/state/selectors/notifications';
 import strings from 'src/strings';
+import { Notifications, NotificationTypes } from 'src/types/Notifications';
 import preventDefaultEvent from 'src/utils/preventDefaultEvent';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import NotificationIcon from './NotificationIcon';
@@ -62,14 +63,53 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-export default function NotificationsDropdown(): JSX.Element {
+type NotificationsDropdownProps = {
+  notifications?: Notifications;
+  setNotifications: (notifications?: Notifications) => void;
+  currFacilityId: number;
+};
+
+export default function NotificationsDropdown(props: NotificationsDropdownProps): JSX.Element {
   const classes = useStyles();
-  const [anchorEl, setAnchorEl] = React.useState<Element | null>(null);
-  const notificationLoadable = useRecoilValueLoadable(notificationsSelector);
-  const resetNotifications = useResetRecoilState(notificationsSelector);
+  const { notifications, setNotifications, currFacilityId } = props;
+  // notificationsInterval value is only being used when it is set.
+  const [, setNotificationsInterval] = useState<ReturnType<typeof setInterval>>();
+  const [anchorEl, setAnchorEl] = useState<Element | null>(null);
   const setFilters = useSetRecoilState(searchFilterAtom);
 
-  const contents = notificationLoadable.valueMaybe();
+  const populateNotifications = useCallback(async () => {
+    if (currFacilityId) {
+      setNotifications(await getNotifications(currFacilityId));
+    } else {
+      setNotifications(undefined);
+    }
+  }, [setNotifications, currFacilityId]);
+
+  useEffect(() => {
+    // Update notifications now.
+    populateNotifications();
+
+    // Create interval to fetch future notifications.
+    if (!process.env.REACT_APP_DISABLE_RECURRENT_REQUESTS) {
+      setNotificationsInterval((currInterval) => {
+        if (currInterval) {
+          clearInterval(currInterval);
+        }
+        return currFacilityId ? setInterval(populateNotifications, API_PULL_INTERVAL) : undefined;
+      });
+    }
+
+    // Clean up existing interval.
+    return () => {
+      setNotificationsInterval((currInterval) => {
+        if (currInterval) {
+          clearInterval(currInterval);
+        }
+        return undefined;
+      });
+    };
+    // TODO update this to handle notifications from more than one facility
+  }, [populateNotifications, currFacilityId]);
 
   const onIconClick = (event: React.MouseEvent<any>) => {
     setAnchorEl(event.currentTarget);
@@ -90,29 +130,31 @@ export default function NotificationsDropdown(): JSX.Element {
       setFilters({ state: filter });
     }
 
-    await postNotificationAsRead(id);
-    resetNotifications();
+    await MarkNotificationRead(id);
+    await populateNotifications();
   };
 
   const markAllAsRead = async () => {
-    await postAllNotificationsAsRead();
-    resetNotifications();
+    await MarkAllNotificationsRead();
+    await populateNotifications();
   };
 
   const getUnreadNotifications = () => {
-    const unreadNotifications = contents ? contents.filter((notification) => !notification.read) : [];
+    const unreadNotifications = notifications ? notifications.items.filter((notification) => !notification.read) : [];
 
     return unreadNotifications.length;
   };
 
   const location = useStateLocation();
   const databaseLocation = getLocation('/accessions', location);
-  const getDestination = (type: 'Alert' | 'State' | 'Date', accessionId?: number) => {
-    return type === 'Date'
-      ? getLocation(`/accessions/${accessionId}`, location)
-      : type === 'State'
-      ? databaseLocation
-      : '';
+  const getDestination = (type: NotificationTypes, accessionId?: number) => {
+    if (type === NotificationTypes.Date) {
+      return getLocation(`/accessions/${accessionId}`, location);
+    } else if (type === NotificationTypes.State) {
+      return databaseLocation;
+    } else {
+      return '';
+    }
   };
 
   return (
@@ -120,7 +162,7 @@ export default function NotificationsDropdown(): JSX.Element {
       <IconButton id='notifications-button' onClick={onIconClick}>
         <Badge
           id='notifications-badge'
-          badgeContent={contents ? getUnreadNotifications() : undefined}
+          badgeContent={notifications ? getUnreadNotifications() : undefined}
           color='secondary'
         >
           <NotificationsIcon />
@@ -156,10 +198,10 @@ export default function NotificationsDropdown(): JSX.Element {
             </div>
             <Divider />
           </ListSubheader>
-          {notificationLoadable.state === 'hasError' && strings.GENERIC_ERROR}
-          {notificationLoadable.state === 'loading' && <CircularProgress id='spinner-notifications' />}
-          {contents &&
-            contents.map(({ id, state, type, accessionId, read, text, timestamp }, index) => (
+          {notifications === undefined && <CircularProgress id='spinner-notifications' />}
+          {notifications?.errorOccurred && strings.GENERIC_ERROR}
+          {notifications &&
+            notifications.items.map(({ id, state, type, accessionId, read, text, timestamp }, index) => (
               <ListItem
                 id={`notification${index + 1}`}
                 key={id}

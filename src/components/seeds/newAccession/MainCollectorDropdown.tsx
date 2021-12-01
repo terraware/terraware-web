@@ -1,23 +1,24 @@
-import React from 'react';
-import { useRecoilValue, useResetRecoilState } from 'recoil';
-import collectorsSelector from 'src/state/selectors/seeds/collectors';
+import React, { useEffect, useState } from 'react';
+import { findPrimaryCollectors } from 'src/api/seeds/search';
 import strings from 'src/strings';
-import Autocomplete from '../../common/Autocomplete';
+import Autocomplete from 'src/components/common/Autocomplete';
 
-interface Props {
+interface MainCollectorDropdownProps {
+  facilityId: number;
   onChange: (id: string, value: unknown) => void;
   mainCollector?: string;
 }
 
-export default function MainCollectorDropdown({ mainCollector, onChange }: Props): JSX.Element {
-  const collectors = useRecoilValue(collectorsSelector);
-  const resetCollectors = useResetRecoilState(collectorsSelector);
+export default function MainCollectorDropdown(props: MainCollectorDropdownProps): JSX.Element {
+  const { facilityId, onChange, mainCollector } = props;
+  const [collectors, setCollectors] = useState<string[]>([]);
 
-  React.useEffect(() => {
-    return () => {
-      resetCollectors();
+  useEffect(() => {
+    const populateCollectors = async () => {
+      setCollectors(await findPrimaryCollectors(facilityId));
     };
-  }, [resetCollectors]);
+    populateCollectors();
+  }, [facilityId]);
 
   return (
     <Autocomplete

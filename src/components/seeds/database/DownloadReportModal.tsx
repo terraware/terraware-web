@@ -7,7 +7,6 @@ import React from 'react';
 import { useRecoilValue } from 'recoil';
 import { downloadReport } from 'src/api/seeds/report';
 import { SearchExportPostRequestBody } from 'src/api/types/report';
-import { facilityIdSelector } from 'src/state/selectors/seeds/facility';
 import { searchParamsSelector } from 'src/state/selectors/seeds/search';
 import strings from 'src/strings';
 import CancelButton from '../../common/CancelButton';
@@ -33,18 +32,18 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export interface Props {
+interface DownloadReportModalProps {
+  facilityId: number;
   open: boolean;
   onClose: () => void;
 }
 
-export default function DownloadReportModal(props: Props): JSX.Element {
+export default function DownloadReportModal(props: DownloadReportModalProps): JSX.Element {
   const classes = useStyles();
-  const { onClose, open } = props;
+  const { facilityId, open, onClose } = props;
   const [name, setName] = React.useState('');
 
   const searchParams = useRecoilValue(searchParamsSelector);
-  const facilityId = useRecoilValue(facilityIdSelector);
 
   const handleCancel = () => {
     setName('');

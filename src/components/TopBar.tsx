@@ -3,6 +3,7 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 import HelpIcon from '@material-ui/icons/Help';
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
+import { Notifications } from 'src/types/Notifications';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import NotificationsDropdown from './NotificationsDropdown';
 import SearchBar from './SearchBar';
@@ -44,8 +45,15 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-export default function TopBar(): JSX.Element | null {
+type TopBarProps = {
+  notifications?: Notifications;
+  setNotifications: (notifications?: Notifications) => void;
+  currFacilityId: number;
+};
+
+export default function TopBar(props: TopBarProps): JSX.Element | null {
   const classes = useStyles();
+  const { notifications, setNotifications, currFacilityId } = props;
   const location = useStateLocation();
 
   return (
@@ -64,7 +72,11 @@ export default function TopBar(): JSX.Element | null {
               <HelpIcon />
             </IconButton>
           </Link>
-          <NotificationsDropdown />
+          <NotificationsDropdown
+            notifications={notifications}
+            setNotifications={setNotifications}
+            currFacilityId={currFacilityId}
+          />
           <div className={classes.separator} />
           <UserMenu />
         </div>

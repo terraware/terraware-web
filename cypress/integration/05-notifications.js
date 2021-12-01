@@ -20,11 +20,10 @@ describe('Notifications', () => {
     cy.intercept('POST', '/api/v1/seedbank/values').as('search');
     cy.intercept('GET', '/api/v1/seedbank/notification').as('notification');
     cy.get('#notification4').click().url().should('contain', '/accessions');
+    cy.get('#notification4').type('{esc}');
     cy.wait('@markRead');
     cy.wait('@search');
     cy.wait('@notification');
-    cy.get('#simple-popover > .MuiPaper-root').should('be.visible');
-    cy.get('#simple-popover > .MuiPaper-root').type('{esc}');
 
     cy.get('#subtitle').should('contain', '1 total');
 
@@ -38,10 +37,10 @@ describe('Notifications', () => {
     cy.intercept('POST', '/api/v1/seedbank/values').as('search2');
     cy.intercept('GET', '/api/v1/seedbank/notification?*').as('notification2');
     cy.get('#notification3').click().url().should('contain', '/accessions');
+    cy.get('#notification3').click().type('{esc}');
     cy.wait('@markRead2');
     cy.wait('@search2');
     cy.wait('@notification2');
-    cy.get('#simple-popover > .MuiPaper-root').type('{esc}');
 
     cy.get('#subtitle').should('contain', '1 total');
 
