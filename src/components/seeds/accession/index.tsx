@@ -88,13 +88,6 @@ function Content(): JSX.Element {
     }
   }, [accession, history, history.location]);
 
-  const clonedAccession = accession
-    ? {
-        ...accession,
-        secondaryCollectors: accession.secondaryCollectors && [...accession.secondaryCollectors],
-      }
-    : undefined;
-
   const onSubmit = async (record: Accession) => {
     try {
       await putAccession(record.id, record);
@@ -122,44 +115,44 @@ function Content(): JSX.Element {
     }
   };
 
-  if (clonedAccession === undefined) {
+  if (accession === undefined) {
     return <CircularProgress id='spinner-alerts' />;
   }
 
   return (
     <main>
-      <AccessionPageHeader accession={clonedAccession} />
+      <AccessionPageHeader accession={accession} />
       <Container maxWidth='lg' className={classes.mainContainer}>
         <Grid container spacing={3}>
           <Grid item xs={3}>
-            <DetailsMenu state={clonedAccession.state} />
-            <GerminationMenu accession={clonedAccession} />
+            <DetailsMenu state={accession.state} />
+            <GerminationMenu accession={accession} />
           </Grid>
           <Grid item xs={9}>
             <Switch>
               <Route exact path='/accessions/:accessionId/seed-collection'>
                 <AccessionForm
                   updating={true}
-                  photoFilenames={clonedAccession.photoFilenames}
-                  accession={clonedAccession}
+                  photoFilenames={accession.photoFilenames}
+                  accession={accession}
                   onSubmit={onSubmit}
                   onCheckIn={onCheckIn}
                 />
               </Route>
               <Route exact path='/accessions/:accessionId/processing-drying'>
-                <ProcessingAndDrying accession={clonedAccession} onSubmit={onSubmit} />
+                <ProcessingAndDrying accession={accession} onSubmit={onSubmit} />
               </Route>
               <Route exact path='/accessions/:accessionId/storage'>
-                <Storage accession={clonedAccession} onSubmit={onSubmit} />
+                <Storage accession={accession} onSubmit={onSubmit} />
               </Route>
               <Route exact path='/accessions/:accessionId/nursery'>
-                <Nursery accession={clonedAccession} onSubmit={onSubmit} />
+                <Nursery accession={accession} onSubmit={onSubmit} />
               </Route>
               <Route exact path='/accessions/:accessionId/lab'>
-                <Lab accession={clonedAccession} onSubmit={onSubmit} />
+                <Lab accession={accession} onSubmit={onSubmit} />
               </Route>
               <Route exact path='/accessions/:accessionId/withdrawal'>
-                <Withdrawal accession={clonedAccession} onSubmit={onSubmit} />
+                <Withdrawal accession={accession} onSubmit={onSubmit} />
               </Route>
             </Switch>
           </Grid>
