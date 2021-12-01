@@ -15,6 +15,7 @@ nginx
 # Generated Code
 build
 style-dictionary-dist
+tsconfig.json
 
 # Data
 dump
