@@ -6,6 +6,7 @@ const strings = new LocalizedStrings({
     SAVE: 'Save',
     SAVE_CHANGES: 'Save Changes',
     GENERIC_ERROR: 'An error ocurred',
+    PREEXISTING_SPECIES: 'This species already exists',
     DELETE: 'Delete',
     SPECIES_NAME: 'Species Name',
     DASHBOARD: 'Dashboard',
