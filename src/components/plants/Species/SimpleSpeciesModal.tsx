@@ -4,12 +4,13 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import React from 'react';
+import React, { useState } from 'react';
 import { useResetRecoilState } from 'recoil';
 import { postSpecies, updateSpecies } from 'src/api/seeds/species';
 import { Species } from 'src/api/types/species';
 import speciesSelector from 'src/state/selectors/species';
 import strings from 'src/strings';
+import { SpeciesRequestError } from 'src/types/Species';
 import useForm from 'src/utils/useForm';
 import Button from '../../common/button/Button';
 import DialogCloseButton from '../../common/DialogCloseButton';
@@ -38,6 +39,7 @@ export interface Props {
   open: boolean;
   onClose: (snackbarMessage?: string) => void;
   value?: Species;
+  onError: (snackbarMessage: string) => void;
 }
 
 function initSpecies(species?: Species): Species {
@@ -53,6 +55,7 @@ export default function SimpleSpeciesModal(props: Props): JSX.Element {
   const { onClose, open } = props;
   const [record, setRecord, onChange] = useForm<Species>(initSpecies(props.value));
   const resetSpecies = useResetRecoilState(speciesSelector);
+  const [nameFormatError, setNameFormatError] = useState('');
 
   React.useEffect(() => {
     if (props.open) {
@@ -61,24 +64,44 @@ export default function SimpleSpeciesModal(props: Props): JSX.Element {
   }, [props.open, props.value, setRecord]);
 
   const handleCancel = () => {
+    setNameFormatError('');
     setRecord(initSpecies(props.value));
     onClose();
   };
 
   const handleOk = async () => {
     let snackbarMessage = '';
-    if (record.id === 0) {
-      const newSpeciesData: Species = { name: record.name };
-      const newSpecies = await postSpecies(newSpeciesData);
-      if (newSpecies.id) {
-        snackbarMessage = strings.SNACKBAR_MSG_NEW_SPECIES_ADDED;
+    if (record.name.trim()) {
+      setNameFormatError('');
+      if (record.id === 0) {
+        const newSpeciesData: Species = { name: record.name };
+        const newSpecies = await postSpecies(newSpeciesData);
+        if (newSpecies.species?.id) {
+          snackbarMessage = strings.SNACKBAR_MSG_NEW_SPECIES_ADDED;
+          resetSpecies();
+          onClose(snackbarMessage);
+        } else if (newSpecies.error) {
+          if (newSpecies.error === SpeciesRequestError.PreexistingSpecies) {
+            snackbarMessage = strings.PREEXISTING_SPECIES;
+          } else {
+            snackbarMessage = strings.GENERIC_ERROR;
+          }
+          props.onError(snackbarMessage);
+        }
+      } else {
+        try {
+          await updateSpecies(record);
+          snackbarMessage = strings.SNACKBAR_MSG_CHANGES_SAVED;
+          resetSpecies();
+          onClose(snackbarMessage);
+        } catch {
+          snackbarMessage = strings.GENERIC_ERROR;
+          props.onError(snackbarMessage);
+        }
       }
     } else {
-      await updateSpecies(record);
-      snackbarMessage = strings.SNACKBAR_MSG_CHANGES_SAVED;
+      setNameFormatError(strings.REQUIRED_FIELD);
     }
-    resetSpecies();
-    onClose(snackbarMessage);
   };
 
   return (
@@ -96,6 +119,8 @@ export default function SimpleSpeciesModal(props: Props): JSX.Element {
               onChange={onChange}
               label={strings.SPECIES_NAME}
               aria-label={strings.SPECIES_NAME}
+              error={!!nameFormatError}
+              helperText={!!nameFormatError && !record.name ? nameFormatError : ''}
             />
           </Grid>
         </Grid>

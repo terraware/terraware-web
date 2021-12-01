@@ -1,3 +1,4 @@
+import { SpeciesRequestError } from 'src/types/Species';
 import axios from '..';
 import {
   Species,
@@ -21,12 +22,32 @@ export const getSpeciesList = async (): Promise<Species[]> => {
   }));
 };
 
-export const postSpecies = async (species: Species): Promise<Species> => {
+export type PostSpeciesResponse = {
+  species?: Species;
+  error?: string | null;
+};
+
+export const postSpecies = async (species: Species): Promise<PostSpeciesResponse> => {
   const endpoint = `${process.env.REACT_APP_TERRAWARE_API}${speciesEndpoint}`;
   const createSpeciesRequest: SpeciesPostRequestBody = { name: species.name };
-  const response: SpeciesPostResponse = (await axios.post(endpoint, createSpeciesRequest)).data;
 
-  return { id: response.id, name: species.name };
+  const response: PostSpeciesResponse = {};
+
+  try {
+    const apiResponse: SpeciesPostResponse = (await axios.post(endpoint, createSpeciesRequest)).data;
+    response.species = {
+      id: apiResponse.id,
+      name: species.name,
+    };
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response?.status === 409) {
+      response.error = SpeciesRequestError.PreexistingSpecies;
+    } else {
+      response.error = SpeciesRequestError.RequestFailed;
+    }
+  }
+
+  return response;
 };
 
 export const updateSpecies = async (species: Species): Promise<SpeciesPutResponse> => {
