@@ -14,7 +14,6 @@ import { createStyles, makeStyles, Theme, withStyles } from '@material-ui/core/s
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
-import { useRecoilValue } from 'recoil';
 import { SearchResponsePayload, SearchResponseResults } from 'src/api/types/search';
 import Button from 'src/components/common/button/Button';
 import strings from 'src/strings';

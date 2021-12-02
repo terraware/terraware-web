@@ -6,7 +6,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import React, { useEffect, useState } from 'react';
 import { Link as RouterLink, useHistory } from 'react-router-dom';
-import { useRecoilState, useRecoilValue, useRecoilValueLoadable, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValueLoadable, useSetRecoilState } from 'recoil';
 import { SearchField, SearchNodePayload, SearchResponsePayload, SearchResponseResults } from 'src/api/types/search';
 import { columnsAtom, searchFilterAtom, searchSelectedColumnsAtom, searchSortAtom } from 'src/state/atoms/seeds/search';
 import searchSelector, { columnsSelector } from 'src/state/selectors/seeds/search';

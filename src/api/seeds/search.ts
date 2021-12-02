@@ -5,7 +5,6 @@ import {
   SearchPostResponse,
   SearchRequestPayload,
   SearchResponsePayload,
-  SearchResponseResults,
   valuesAllEndpoint,
   ValuesAllPostRequestBody,
   ValuesAllPostResponse,
