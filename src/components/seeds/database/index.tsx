@@ -4,10 +4,10 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link as RouterLink, useHistory } from 'react-router-dom';
 import { useRecoilState, useRecoilValue, useRecoilValueLoadable, useSetRecoilState } from 'recoil';
-import { SearchField, SearchNodePayload, SearchResponseResults } from 'src/api/types/search';
+import { SearchField, SearchNodePayload, SearchResponsePayload, SearchResponseResults } from 'src/api/types/search';
 import { columnsAtom, searchFilterAtom, searchSelectedColumnsAtom, searchSortAtom } from 'src/state/atoms/seeds/search';
 import searchSelector, { columnsSelector } from 'src/state/selectors/seeds/search';
 import searchAllValuesSelector from 'src/state/selectors/seeds/searchAllValues';
@@ -15,7 +15,6 @@ import searchValuesSelector from 'src/state/selectors/seeds/searchValues';
 import strings from 'src/strings';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import Button from '../../../components/common/button/Button';
-import { pendingAccessionsSelector } from '../../../state/selectors/seeds/pendingCheckIn';
 import Table from '../../common/table';
 import { Order } from '../../common/table/sort';
 import PageHeader from '../PageHeader';
@@ -24,6 +23,7 @@ import DownloadReportModal from './DownloadReportModal';
 import EditColumns from './EditColumns';
 import Filters from './Filters';
 import SearchCellRenderer from './TableCellRenderer';
+import { getPendingAccessions } from '../../../api/seeds/search';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -73,14 +73,14 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const { facilityId } = props;
   const classes = useStyles();
   const history = useHistory();
-  const [editColumnsModalOpen, setEditColumnsModalOpen] = React.useState(false);
-  const [reportModalOpen, setReportModalOpen] = React.useState(false);
+  const [editColumnsModalOpen, setEditColumnsModalOpen] = useState(false);
+  const [reportModalOpen, setReportModalOpen] = useState(false);
+  const [pendingAccessions, setPendingAccessions] = useState<SearchResponsePayload>();
   const [filters, setFilters] = useRecoilState(searchFilterAtom);
   const [sort, setSort] = useRecoilState(searchSortAtom);
   const setSearchSelectedColumns = useSetRecoilState(searchSelectedColumnsAtom);
   const [columns, setColumns] = useRecoilState(columnsAtom);
 
-  const pendingAccessions = useRecoilValue(pendingAccessionsSelector);
   const tableColumnsLodable = useRecoilValueLoadable(columnsSelector);
   const tableColumns = tableColumnsLodable.state === 'hasValue' ? tableColumnsLodable.contents : undefined;
   const resultsLodable = useRecoilValueLoadable(searchSelector);
@@ -90,6 +90,13 @@ export default function Database(props: DatabaseProps): JSX.Element {
     availableValuesLodable.state === 'hasValue' ? availableValuesLodable.contents.results : undefined;
   const allValuesLodable = useRecoilValueLoadable(searchAllValuesSelector);
   const allValues = allValuesLodable.state === 'hasValue' ? allValuesLodable.contents.results : undefined;
+
+  useEffect(() => {
+    const populatePendingAccessions = async () => {
+      setPendingAccessions(await getPendingAccessions(facilityId));
+    };
+    populatePendingAccessions();
+  }, [facilityId]);
 
   const onSelect = (row: SearchResponseResults) => {
     if (row.id) {
@@ -240,7 +247,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
             strings.GENERIC_ERROR}
         </PageHeader>
         <Container maxWidth={false} className={classes.mainContainer}>
-          {pendingAccessions.results.length > 0 && (
+          {pendingAccessions && pendingAccessions.results.length > 0 && (
             <Grid container spacing={3} className={classes.checkinMessage}>
               <Grid item xs={1} />
               <Grid item xs={10}>

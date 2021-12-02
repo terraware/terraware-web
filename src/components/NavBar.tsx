@@ -1,6 +1,4 @@
 import { useHistory, useRouteMatch } from 'react-router-dom';
-import { useResetRecoilState } from 'recoil';
-import { pendingAccessionsSelector } from 'src/state/selectors/seeds/pendingCheckIn';
 import strings from 'src/strings';
 import Navbar from './common/Navbar/Navbar';
 import NavItem from './common/Navbar/NavItem';
@@ -14,18 +12,12 @@ export default function NavBar(): JSX.Element | null {
   const isAccessionSummaryRoute = useRouteMatch('/seeds-summary');
   const isAccessionsRoute = useRouteMatch('/accessions/');
   const isCheckinRoute = useRouteMatch('/checkin/');
-  const resetPendingCheckInAccessions = useResetRecoilState(pendingAccessionsSelector);
   const isPlantDashboardRoute = useRouteMatch('/plants-dashboard');
   const isPlantListRoute = useRouteMatch('/plants-list');
   const isSpeciesRoute = useRouteMatch('/species');
 
   const navigate = (url: string) => {
     history.push(url);
-  };
-
-  const navigateToAccessions = () => {
-    resetPendingCheckInAccessions();
-    navigate('/accessions');
   };
 
   return (
@@ -55,7 +47,7 @@ export default function NavBar(): JSX.Element | null {
           <NavItem
             label='Accessions'
             selected={isAccessionsRoute || isCheckinRoute ? true : false}
-            onClick={() => navigateToAccessions()}
+            onClick={() => navigate('/accessions')}
             id='accessions'
           />
         </SubNavbar>

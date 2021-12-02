@@ -12,15 +12,15 @@ import {
 } from '@material-ui/core';
 import { createStyles, makeStyles, Theme, withStyles } from '@material-ui/core/styles';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import { useRecoilValue } from 'recoil';
-import { SearchResponseResults } from 'src/api/types/search';
-import Button from '../../../components/common/button/Button';
-import { pendingAccessionsSelector } from '../../../state/selectors/seeds/pendingCheckIn';
-import strings from '../../../strings';
-import useStateLocation from '../../../utils/useStateLocation';
+import { SearchResponsePayload, SearchResponseResults } from 'src/api/types/search';
+import Button from 'src/components/common/button/Button';
+import strings from 'src/strings';
+import useStateLocation from 'src/utils/useStateLocation';
 import PageHeader from '../PageHeader';
+import { getPendingAccessions } from '../../../api/seeds/search';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -58,15 +58,27 @@ const TableCell = withStyles({
   },
 })(MuiTableCell);
 
-export default function Checkin(): JSX.Element {
+export type CheckInProps = {
+  facilityId: number;
+};
+
+export default function CheckIn(props: CheckInProps): JSX.Element {
   const classes = useStyles();
+  const { facilityId } = props;
   const history = useHistory();
   const location = useStateLocation();
-  const pendingAccessions = useRecoilValue(pendingAccessionsSelector);
+  const [pendingAccessions, setPendingAccessions] = useState<SearchResponsePayload>();
+
+  useEffect(() => {
+    const populatePendingAccessions = async () => {
+      setPendingAccessions(await getPendingAccessions(facilityId));
+    };
+    populatePendingAccessions();
+  }, [facilityId]);
 
   const transformPendingAccessions = () => {
     const accessionsById: Record<number, SearchResponseResults> = {};
-    pendingAccessions.results?.forEach((accession) => {
+    pendingAccessions?.results?.forEach((accession) => {
       if (accessionsById[Number(accession.id)]) {
         accessionsById[Number(accession.id)] = {
           ...accessionsById[Number(accession.id)],
@@ -81,7 +93,7 @@ export default function Checkin(): JSX.Element {
   };
 
   const getSubtitle = () => {
-    if (pendingAccessions.results) {
+    if (pendingAccessions?.results) {
       return `${pendingAccessions.results.length} ${strings.BAGS_TOTAL}`;
     }
   };
