@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { findPrimaryCollectors } from 'src/api/seeds/search';
+import { getPrimaryCollectors } from 'src/api/seeds/search';
 import strings from 'src/strings';
 import Autocomplete from 'src/components/common/Autocomplete';
 
@@ -15,7 +15,7 @@ export default function MainCollectorDropdown(props: MainCollectorDropdownProps)
 
   useEffect(() => {
     const populateCollectors = async () => {
-      setCollectors(await findPrimaryCollectors(facilityId));
+      setCollectors(await getPrimaryCollectors(facilityId));
     };
     populateCollectors();
   }, [facilityId]);
