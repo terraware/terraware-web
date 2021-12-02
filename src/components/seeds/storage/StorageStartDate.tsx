@@ -1,10 +1,9 @@
 import { Grid } from '@material-ui/core';
 import moment from 'moment';
-import React from 'react';
-import { useRecoilValue, useResetRecoilState } from 'recoil';
-import timeSelector from 'src/state/selectors/time';
+import React, { useEffect, useState } from 'react';
+import { getDate } from 'src/api/clock';
+import DatePicker from 'src/components/common/DatePicker';
 import strings from 'src/strings';
-import DatePicker from '../../common/DatePicker';
 
 interface Props {
   onChange: (id: string, value: string) => void;
@@ -17,15 +16,16 @@ type FieldError = {
   msg: string;
 };
 export function StorageStartDate({ onChange, refreshErrors, storageDate }: Props): JSX.Element {
-  const [dateErrors, setDateErrors] = React.useState<FieldError[]>([]);
-  const date = useRecoilValue(timeSelector);
-  const resetDate = useResetRecoilState(timeSelector);
+  const [dateErrors, setDateErrors] = useState<FieldError[]>([]);
+  const [date, setDate] = useState<number>();
 
-  React.useEffect(() => {
-    return () => {
-      resetDate();
+  useEffect(() => {
+    const populateDate = async () => {
+      const response = await getDate();
+      setDate(response.serverTime ? response.serverTime : response.localTime);
     };
-  }, [resetDate]);
+    populateDate();
+  }, []);
 
   const onChangeDate = (id: string, value: unknown) => {
     const newErrors = [...dateErrors];

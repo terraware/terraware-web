@@ -4,16 +4,15 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import moment from 'moment';
-import React from 'react';
-import { useRecoilValue } from 'recoil';
+import React, { useEffect, useState } from 'react';
+import { getDate } from 'src/api/clock';
 import { Accession } from 'src/api/types/accessions';
 import { Germination, GerminationTest } from 'src/api/types/tests';
-import timeSelector from 'src/state/selectors/time';
+import Divisor from 'src/components/common/Divisor';
+import SummaryBox from 'src/components/common/SummaryBox';
+import Table from 'src/components/common/table';
+import { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import strings from 'src/strings';
-import Divisor from '../../common/Divisor';
-import SummaryBox from '../../common/SummaryBox';
-import Table from '../../common/table';
-import { TableRowType } from '../../common/table/TableCellRenderer';
 import CutTestCellRenderer from './CutTestCellRenderer';
 import EnhancedTableDetails from './EnhacedTableDetails';
 import NewCutTest from './NewCutTest';
@@ -52,19 +51,26 @@ interface Props {
 
 export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
   const classes = useStyles();
+  const [testOpen, setTestOpen] = useState(false);
+  const [testEntryOpen, setTestEntryOpen] = useState(false);
+  const [cutTestOpen, setCutTestOpen] = useState(false);
+  const [selectedTest, setSelectedTest] = useState<GerminationTest>();
+  const allowTestInGrams = Boolean(accession.processingMethod === 'Weight');
+  const seedsAvailable = accession.remainingQuantity?.quantity ?? 0;
+  const [selectedTestEntry, setSelectedTestEntry] = useState<Germination>();
+  const [date, setDate] = useState<number>();
 
-  React.useEffect(() => {
+  useEffect(() => {
     window.scrollTo({ top: 0 });
   }, []);
 
-  const [testOpen, setTestOpen] = React.useState(false);
-  const [testEntryOpen, setTestEntryOpen] = React.useState(false);
-  const [cutTestOpen, setCutTestOpen] = React.useState(false);
-  const [selectedTest, setSelectedTest] = React.useState<GerminationTest>();
-  const allowTestInGrams = Boolean(accession.processingMethod === 'Weight');
-  const seedsAvailable = accession.remainingQuantity?.quantity ?? 0;
-  const [selectedTestEntry, setSelectedTestEntry] = React.useState<Germination>();
-  const date = useRecoilValue(timeSelector);
+  useEffect(() => {
+    const populateDate = async () => {
+      const response = await getDate();
+      setDate(response.serverTime ? response.serverTime : response.localTime);
+    };
+    populateDate();
+  }, []);
 
   const getTotalScheduled = (): number => {
     const totalS = accession.germinationTests?.reduce((acum, germinationTest) => {

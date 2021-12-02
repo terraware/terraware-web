@@ -1,4 +1,4 @@
-import addQueryParams from 'src/api/addQueryParams';
+import addQueryParams from 'src/api/helpers/addQueryParams';
 
 const endpoint = 'api/v1/test';
 

@@ -4,17 +4,16 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import moment from 'moment';
-import React from 'react';
-import { useRecoilValue } from 'recoil';
+import React, { useEffect, useState } from 'react';
+import { getDate } from 'src/api/clock';
 import { Accession } from 'src/api/types/accessions';
 import { Germination, GerminationTest } from 'src/api/types/tests';
-import timeSelector from 'src/state/selectors/time';
+import Divisor from 'src/components/common/Divisor';
+import SummaryBox from 'src/components/common/SummaryBox';
+import Table from 'src/components/common/table';
+import { descendingComparator } from 'src/components/common/table/sort';
+import { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import strings from 'src/strings';
-import Divisor from '../../common/Divisor';
-import SummaryBox from '../../common/SummaryBox';
-import Table from '../../common/table';
-import { descendingComparator } from '../../common/table/sort';
-import { TableRowType } from '../../common/table/TableCellRenderer';
 import NewTest from './NewTest';
 import NurseryCellRenderer from './TableCellRenderer';
 import { COLUMNS } from './types';
@@ -49,16 +48,23 @@ interface Props {
 
 export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
   const classes = useStyles();
-  const date = useRecoilValue(timeSelector);
+  const [date, setDate] = useState<number>();
+  const [open, setOpen] = useState(false);
+  const [selectedRecord, setSelectedRecord] = useState<GerminationTest>();
+  const allowTestInGrams = Boolean(accession.processingMethod === 'Weight');
+  const seedsAvailable = accession.remainingQuantity?.quantity ?? 0;
 
-  React.useEffect(() => {
+  useEffect(() => {
     window.scrollTo({ top: 0 });
   }, []);
 
-  const [open, setOpen] = React.useState(false);
-  const [selectedRecord, setSelectedRecord] = React.useState<GerminationTest>();
-  const allowTestInGrams = Boolean(accession.processingMethod === 'Weight');
-  const seedsAvailable = accession.remainingQuantity?.quantity ?? 0;
+  useEffect(() => {
+    const populateDate = async () => {
+      const response = await getDate();
+      setDate(response.serverTime ? response.serverTime : response.localTime);
+    };
+    populateDate();
+  }, []);
 
   const onEdit = (row: TableRowType) => {
     setSelectedRecord(row as GerminationTest);
