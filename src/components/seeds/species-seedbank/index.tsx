@@ -1,11 +1,9 @@
 import { Chip, Container, Grid, Paper } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
-import React from 'react';
-import { useRecoilValueLoadable, useResetRecoilState } from 'recoil';
-import { postSpecies, updateSpecies } from 'src/api/seeds/species';
-import { Species as SpeciesType } from 'src/api/types/species';
-import speciesSelector from 'src/state/selectors/species';
+import React, { useCallback, useEffect, useState } from 'react';
+import { createSpecies, getAllSpecies, updateSpecies } from 'src/api/species/species';
+import { Species } from 'src/types/Species';
 import Table from '../../common/table';
 import { TableColumnType } from '../../common/table/types';
 import PageHeader from '../PageHeader';
@@ -31,22 +29,32 @@ const chipStyles = makeStyles((theme) => ({
   },
 }));
 
+const columns: TableColumnType[] = [{ key: 'name', name: 'Species', type: 'string' }];
+
 export default function Species(): JSX.Element {
   const classes = useStyles();
-  const [isNewSpeciesModalOpen, setIsNewSpeciesModalOpen] = React.useState(false);
-  const [isEditSpeciesModalOpen, setIsEditSpeciesModalOpen] = React.useState(false);
-  const [selectedSpecies, setSelectedSpecies] = React.useState<SpeciesType>({
+  const [isNewSpeciesModalOpen, setIsNewSpeciesModalOpen] = useState(false);
+  const [isEditSpeciesModalOpen, setIsEditSpeciesModalOpen] = useState(false);
+  const [selectedSpecies, setSelectedSpecies] = useState<Species>({
     name: '',
     id: 0,
   });
-  const resetSpecies = useResetRecoilState(speciesSelector);
-  const resultsLoadable = useRecoilValueLoadable(speciesSelector);
-  const results = resultsLoadable.state === 'hasValue' ? resultsLoadable.contents : undefined;
+  const [speciesList, setSpeciesList] = useState<Species[]>([]);
 
-  const columns: TableColumnType[] = [{ key: 'name', name: 'Species', type: 'string' }];
+  const populateSpecies = useCallback(async () => {
+    const response = await getAllSpecies();
+    // TODO: what if we cannot fetch the species list?
+    if (response.requestSucceeded) {
+      setSpeciesList(Array.from(response.speciesById.values()));
+    }
+  }, []);
 
-  const onSelect = (species: SpeciesType) => {
-    setSelectedSpecies(species);
+  useEffect(() => {
+    populateSpecies();
+  }, [populateSpecies]);
+
+  const onSelect = (selected: Species) => {
+    setSelectedSpecies(selected);
     setIsEditSpeciesModalOpen(true);
   };
 
@@ -54,25 +62,25 @@ export default function Species(): JSX.Element {
     setIsNewSpeciesModalOpen(true);
   };
 
-  const onCloseEditSpeciesModal = async (species?: SpeciesType) => {
+  const onCloseEditSpeciesModal = async (species?: Species) => {
     if (species) {
       await updateSpecies(species);
-      resetSpecies();
+      populateSpecies();
     }
     setIsEditSpeciesModalOpen(false);
   };
 
-  const onCloseNewSpeciesModal = async (newSpecies?: SpeciesType) => {
-    if (newSpecies) {
-      await postSpecies(newSpecies);
-      resetSpecies();
+  const onCloseNewSpeciesModal = async (name?: string) => {
+    if (name) {
+      await createSpecies(name);
+      populateSpecies();
     }
     setIsNewSpeciesModalOpen(false);
   };
 
   const getTotalSpeciesCount = () => {
-    if (results) {
-      return `${results.length} total`;
+    if (speciesList) {
+      return `${speciesList.length} total`;
     }
   };
 
@@ -104,7 +112,7 @@ export default function Species(): JSX.Element {
             <Paper>
               <Grid container spacing={4}>
                 <Grid item xs={12}>
-                  {results && <Table columns={columns} rows={results} orderBy='name' onSelect={onSelect} />}
+                  {speciesList && <Table columns={columns} rows={speciesList} orderBy='name' onSelect={onSelect} />}
                 </Grid>
               </Grid>
             </Paper>

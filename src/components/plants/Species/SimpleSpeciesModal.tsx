@@ -4,13 +4,10 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import React, { useState } from 'react';
-import { useResetRecoilState } from 'recoil';
-import { postSpecies, updateSpecies } from 'src/api/seeds/species';
-import { Species } from 'src/api/types/species';
-import speciesSelector from 'src/state/selectors/species';
+import React, { useEffect, useState } from 'react';
+import { createSpecies, updateSpecies } from 'src/api/species/species';
 import strings from 'src/strings';
-import { SpeciesRequestError } from 'src/types/Species';
+import { Species, SpeciesRequestError } from 'src/types/Species';
 import useForm from 'src/utils/useForm';
 import Button from '../../common/button/Button';
 import DialogCloseButton from '../../common/DialogCloseButton';
@@ -35,12 +32,12 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export interface Props {
+export type SimpleSpeciesModalProps = {
   open: boolean;
-  onClose: (snackbarMessage?: string) => void;
-  value?: Species;
+  onClose: (saved: boolean, snackbarMessage?: string) => void;
+  initialSpecies?: Species;
   onError: (snackbarMessage: string) => void;
-}
+};
 
 function initSpecies(species?: Species): Species {
   return (
@@ -50,23 +47,22 @@ function initSpecies(species?: Species): Species {
     }
   );
 }
-export default function SimpleSpeciesModal(props: Props): JSX.Element {
+export default function SimpleSpeciesModal(props: SimpleSpeciesModalProps): JSX.Element {
   const classes = useStyles();
-  const { onClose, open } = props;
-  const [record, setRecord, onChange] = useForm<Species>(initSpecies(props.value));
-  const resetSpecies = useResetRecoilState(speciesSelector);
+  const { open, onClose, initialSpecies, onError } = props;
+  const [record, setRecord, onChange] = useForm<Species>(initSpecies(initialSpecies));
   const [nameFormatError, setNameFormatError] = useState('');
 
-  React.useEffect(() => {
-    if (props.open) {
-      setRecord(initSpecies(props.value));
+  useEffect(() => {
+    if (open) {
+      setRecord(initSpecies(initialSpecies));
     }
-  }, [props.open, props.value, setRecord]);
+  }, [open, initialSpecies, setRecord]);
 
   const handleCancel = () => {
     setNameFormatError('');
-    setRecord(initSpecies(props.value));
-    onClose();
+    setRecord(initSpecies(initialSpecies));
+    onClose(false);
   };
 
   const handleOk = async () => {
@@ -74,29 +70,26 @@ export default function SimpleSpeciesModal(props: Props): JSX.Element {
     if (record.name.trim()) {
       setNameFormatError('');
       if (record.id === 0) {
-        const newSpeciesData: Species = { name: record.name };
-        const newSpecies = await postSpecies(newSpeciesData);
+        const newSpecies = await createSpecies(record.name);
         if (newSpecies.species?.id) {
           snackbarMessage = strings.SNACKBAR_MSG_NEW_SPECIES_ADDED;
-          resetSpecies();
-          onClose(snackbarMessage);
+          onClose(true, snackbarMessage);
         } else if (newSpecies.error) {
           if (newSpecies.error === SpeciesRequestError.PreexistingSpecies) {
             snackbarMessage = strings.PREEXISTING_SPECIES;
           } else {
             snackbarMessage = strings.GENERIC_ERROR;
           }
-          props.onError(snackbarMessage);
+          onError(snackbarMessage);
         }
       } else {
         try {
           await updateSpecies(record);
           snackbarMessage = strings.SNACKBAR_MSG_CHANGES_SAVED;
-          resetSpecies();
-          onClose(snackbarMessage);
+          onClose(true, snackbarMessage);
         } catch {
           snackbarMessage = strings.GENERIC_ERROR;
-          props.onError(snackbarMessage);
+          onError(snackbarMessage);
         }
       }
     } else {
@@ -107,7 +100,7 @@ export default function SimpleSpeciesModal(props: Props): JSX.Element {
   return (
     <Dialog onClose={handleCancel} disableEscapeKeyDown open={open} maxWidth='md' classes={{ paper: classes.paper }}>
       <DialogTitle>
-        <Typography variant='h6'>{props.value ? strings.EDIT_SPECIES : strings.ADD_SPECIES}</Typography>
+        <Typography variant='h6'>{initialSpecies ? strings.EDIT_SPECIES : strings.ADD_SPECIES}</Typography>
         <DialogCloseButton onClick={handleCancel} />
       </DialogTitle>
       <DialogContent dividers>
@@ -137,7 +130,7 @@ export default function SimpleSpeciesModal(props: Props): JSX.Element {
               type='passive'
               className={classes.spacing}
             />
-            <Button onClick={handleOk} id='save-species' label={props.value ? strings.SAVE : strings.ADD} />
+            <Button onClick={handleOk} id='save-species' label={initialSpecies ? strings.SAVE : strings.ADD} />
           </Box>
         </Box>
       </DialogActions>

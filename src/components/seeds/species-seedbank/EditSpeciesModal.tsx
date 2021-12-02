@@ -5,12 +5,12 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React from 'react';
-import { Species } from 'src/api/types/species';
+import CancelButton from 'src/components/common/CancelButton';
+import DialogCloseButton from 'src/components/common/DialogCloseButton';
+import TextField from 'src/components/common/TextField';
 import strings from 'src/strings';
+import { Species } from 'src/types/Species';
 import useForm from 'src/utils/useForm';
-import CancelButton from '../../common/CancelButton';
-import DialogCloseButton from '../../common/DialogCloseButton';
-import TextField from '../../common/TextField';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

@@ -4,13 +4,11 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import React from 'react';
-import { Species } from 'src/api/types/species';
+import React, { useEffect, useState } from 'react';
+import CancelButton from 'src/components/common/CancelButton';
+import DialogCloseButton from 'src/components/common/DialogCloseButton';
+import TextField from 'src/components/common/TextField';
 import strings from 'src/strings';
-import useForm from 'src/utils/useForm';
-import CancelButton from '../../common/CancelButton';
-import DialogCloseButton from '../../common/DialogCloseButton';
-import TextField from '../../common/TextField';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -34,34 +32,27 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export interface Props {
   open: boolean;
-  onClose: (species?: Species) => void;
-}
-
-// Every time we open the modal, we want to start with a brand new instance
-function getEmptySpecies(): Species {
-  return {
-    name: '',
-  };
+  onClose: (name?: string) => void;
 }
 
 export default function NewSpeciesModal(props: Props): JSX.Element {
   const classes = useStyles();
   const { onClose, open } = props;
-  const [record, setRecord, onChange] = useForm<Species>(getEmptySpecies());
+  const [name, setName] = useState<string>('');
 
-  React.useEffect(() => {
-    if (props.open) {
-      setRecord(getEmptySpecies());
+  useEffect(() => {
+    if (open) {
+      setName('');
     }
-  }, [props.open]);
+  }, [open]);
 
   const handleCancel = () => {
-    setRecord(getEmptySpecies());
+    setName('');
     onClose();
   };
 
   const handleOk = () => {
-    onClose(record);
+    onClose(name);
   };
 
   return (
@@ -75,8 +66,8 @@ export default function NewSpeciesModal(props: Props): JSX.Element {
           <Grid item xs={12}>
             <TextField
               id='name'
-              value={record.name}
-              onChange={onChange}
+              value={name}
+              onChange={setName}
               label={strings.SPECIES_NAME}
               aria-label='Species Name'
             />
