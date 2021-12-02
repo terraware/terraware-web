@@ -5,12 +5,12 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { getAllSpecies } from 'src/api/species/species';
+import Button from 'src/components/common/button/Button';
+import Table from 'src/components/common/table';
+import { TableColumnType } from 'src/components/common/table/types';
 import snackbarAtom from 'src/state/atoms/snackbar';
 import strings from 'src/strings';
 import { Species } from 'src/types/Species';
-import Button from '../../common/button/Button';
-import Table from '../../common/table';
-import { TableColumnType } from '../../common/table/types';
 import SimpleSpeciesModal from './SimpleSpeciesModal';
 
 const useStyles = makeStyles((theme) =>
@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme) =>
 
 const columns: TableColumnType[] = [{ key: 'name', name: 'Name', type: 'string' }];
 
-export default function Species(): JSX.Element {
+export default function SpeciesList(): JSX.Element {
   const classes = useStyles();
   const [species, setSpecies] = useState<Species[]>();
   const [selectedSpecies, setSelectedSpecies] = useState<Species>();
