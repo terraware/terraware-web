@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { createSpecies, getAllSpecies, updateSpecies } from './species';
+import { SpeciesRequestError } from '../../types/Species';
 
 jest.mock('axios');
 
@@ -20,7 +21,10 @@ test('createSpecies() handles axios errors', async () => {
   axios.post.mockRejectedValue({ response: { status: 500 } });
   suppressConsoleErrorOutput();
   const speciesName = 'Koa';
-  await expect(createSpecies(speciesName)).resolves.toEqual({ species: null, requestSucceeded: false });
+  await expect(createSpecies(speciesName)).resolves.toEqual({
+    species: null,
+    error: SpeciesRequestError.RequestFailed,
+  });
 });
 
 test('updateSpecies() handles axios errors', async () => {

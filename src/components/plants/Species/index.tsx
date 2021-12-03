@@ -2,15 +2,15 @@ import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
-import React from 'react';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { Species as SpeciesType } from 'src/api/types/species';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useSetRecoilState } from 'recoil';
+import { getAllSpecies } from 'src/api/species/species';
+import Button from 'src/components/common/button/Button';
+import Table from 'src/components/common/table';
+import { TableColumnType } from 'src/components/common/table/types';
 import snackbarAtom from 'src/state/atoms/snackbar';
-import speciesSelector from 'src/state/selectors/species';
 import strings from 'src/strings';
-import Button from '../../common/button/Button';
-import Table from '../../common/table';
-import { TableColumnType } from '../../common/table/types';
+import { Species } from 'src/types/Species';
 import SimpleSpeciesModal from './SimpleSpeciesModal';
 
 const useStyles = makeStyles((theme) =>
@@ -47,16 +47,31 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-export default function Species(): JSX.Element {
+const columns: TableColumnType[] = [{ key: 'name', name: 'Name', type: 'string' }];
+
+export default function SpeciesList(): JSX.Element {
+  const classes = useStyles();
+  const [species, setSpecies] = useState<Species[]>();
+  const [selectedSpecies, setSelectedSpecies] = useState<Species>();
+  const [editSpeciesModalOpen, setEditSpeciesModalOpen] = useState(false);
   const setSnackbar = useSetRecoilState(snackbarAtom);
 
-  const classes = useStyles();
+  const populateSpecies = useCallback(async () => {
+    const response = await getAllSpecies();
+    // TODO: what if we cannot fetch the species list?
+    if (response.requestSucceeded) {
+      setSpecies(Array.from(response.speciesById.values()));
+    }
+  }, []);
 
-  const [editSpeciesModalOpen, setEditSpeciesModalOpen] = React.useState(false);
+  useEffect(() => {
+    populateSpecies();
+  }, [populateSpecies]);
 
-  const [selectedSpecies, setSelectedSpecies] = React.useState<SpeciesType>();
-
-  const onCloseEditSpeciesModal = (snackbarMessage?: string) => {
+  const onCloseEditSpeciesModal = (saved: boolean, snackbarMessage?: string) => {
+    if (saved) {
+      populateSpecies();
+    }
     setEditSpeciesModalOpen(false);
     if (snackbarMessage) {
       setSnackbar({
@@ -65,8 +80,8 @@ export default function Species(): JSX.Element {
       });
     }
   };
-  const onSelect = (species: SpeciesType) => {
-    setSelectedSpecies(species);
+  const onSelect = (selected: Species) => {
+    setSelectedSpecies(selected);
     setEditSpeciesModalOpen(true);
   };
   const onNewSpecies = () => {
@@ -86,7 +101,7 @@ export default function Species(): JSX.Element {
       <SimpleSpeciesModal
         open={editSpeciesModalOpen}
         onClose={onCloseEditSpeciesModal}
-        value={selectedSpecies}
+        initialSpecies={selectedSpecies}
         onError={setErrorSnackbar}
       />
       <Container maxWidth={false} className={classes.mainContainer}>
@@ -104,9 +119,11 @@ export default function Species(): JSX.Element {
           <Grid item xs={10}>
             <Paper className={classes.mainContent}>
               <Grid container spacing={4}>
-                <React.Suspense fallback={strings.LOADING}>
-                  <SpeciesContent onSelect={onSelect} />
-                </React.Suspense>
+                <Grid item xs={12}>
+                  {species && (
+                    <Table id='species-table' columns={columns} rows={species} orderBy='name' onSelect={onSelect} />
+                  )}
+                </Grid>
               </Grid>
             </Paper>
           </Grid>
@@ -114,21 +131,5 @@ export default function Species(): JSX.Element {
         </Grid>
       </Container>
     </main>
-  );
-}
-
-interface SpeciesContentProps {
-  onSelect: (species: SpeciesType) => void;
-}
-
-function SpeciesContent({ onSelect }: SpeciesContentProps): JSX.Element {
-  const species = useRecoilValue(speciesSelector);
-
-  const columns: TableColumnType[] = [{ key: 'name', name: 'Name', type: 'string' }];
-
-  return (
-    <Grid item xs={12}>
-      {species && <Table id='species-table' columns={columns} rows={species} orderBy='name' onSelect={onSelect} />}
-    </Grid>
   );
 }
