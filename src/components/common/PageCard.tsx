@@ -12,6 +12,8 @@ const useStyles = makeStyles((theme) =>
       borderRadius: '8px',
       height: '100%',
       padding: '24px',
+      display: 'flex',
+      flexDirection: 'column',
     },
     title: {
       display: 'flex',
@@ -28,6 +30,7 @@ const useStyles = makeStyles((theme) =>
     description: {
       fontSize: '16px',
       lineHeight: '24px',
+      height: '100%',
     },
     link: {
       marginTop: '28px',
