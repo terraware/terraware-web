@@ -4,10 +4,15 @@ import mapboxgl from 'mapbox-gl';
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
-import getOrganization, { GetOrganizationResponse, OrgRequestError } from 'src/api/organization/organization';
+import getOrganization, {
+  GetOrganizationResponse,
+  getOrganizations,
+  OrgRequestError,
+} from 'src/api/organization/organization';
 import { Notifications } from 'src/types/Notifications';
-import { Organization } from 'src/types/Organization';
+import { Organization, ServerOrganization } from 'src/types/Organization';
 import { PlantSearchOptions } from 'src/types/Plant';
+import Home from './components/Home';
 import NavBar from './components/NavBar';
 import PlantDashboard from './components/plants/PlantDashboard';
 import PlantList from './components/plants/PlantList';
@@ -17,7 +22,6 @@ import Checkin from './components/seeds/checkin';
 import Database from './components/seeds/database';
 import Help from './components/seeds/help';
 import NewAccession from './components/seeds/newAccession';
-import PageHeader from './components/seeds/PageHeader';
 import SeedSummary from './components/seeds/summary';
 import Snackbar from './components/Snackbar';
 import TopBar from './components/TopBar';
@@ -64,12 +68,21 @@ const emptyOrg: Organization = {
 function AppContent() {
   const classes = useStyles();
   const [organization, setOrganization] = useState<Organization>(emptyOrg);
+  const [selectedOrganization, setSelectedOrganization] = useState<ServerOrganization>();
   const [organizationErrors, setOrganizationErrors] = useState<OrgRequestError[]>([]);
   const [plantListFilters, setPlantListFilters] = useState<PlantSearchOptions>();
   const [currFacilityId, setCurrFacilityId] = useState<number>(0);
   const [notifications, setNotifications] = useState<Notifications>();
 
   useEffect(() => {
+    const populateOrganizations = async () => {
+      console.log('entra a populate organizations');
+      const fetchedOrganizations = await getOrganizations();
+      console.log(fetchedOrganizations);
+      if (fetchedOrganizations) {
+        setSelectedOrganization(fetchedOrganizations[0]);
+      }
+    };
     const populateOrganizationData = async () => {
       const response: GetOrganizationResponse = await getOrganization();
       if (response.errors.length > 0) {
@@ -81,6 +94,7 @@ function AppContent() {
       }
     };
 
+    populateOrganizations();
     populateOrganizationData();
   }, []);
 
@@ -108,10 +122,7 @@ function AppContent() {
             <Switch>
               {/* Routes, in order of their appearance down the side nav bar and then across the top nav bar. */}
               <Route exact path='/home'>
-                {/* Temporary homepage. Needs to be updated with input from the Design Team. */}
-                <main>
-                  <PageHeader title='Welcome to Terraware!' subtitle='' />
-                </main>
+                <Home organization={selectedOrganization} />
               </Route>
               <Route exact path='/seeds-summary'>
                 <SeedSummary facilityId={currFacilityId} notifications={notifications} />

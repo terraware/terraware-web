@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios';
 import axios from 'src/api/index';
-import { SeedBank, Organization, PlantLayer, Project, Site } from 'src/types/Organization';
+import { SeedBank, Organization, PlantLayer, Project, Site, ServerOrganization } from 'src/types/Organization';
 import { paths } from 'src/api/types/generated-schema';
 
 const BASE_URL = `${process.env.REACT_APP_TERRAWARE_API}`;
@@ -82,6 +82,18 @@ export type GetOrganizationResponse = {
   organization: Organization;
   errors: OrgRequestError[];
 };
+
+const ORGANIZATIONS = '/api/v1/organizations';
+type ListOrganizationsResponsePayload =
+  paths[typeof ORGANIZATIONS]['get']['responses'][200]['content']['application/json'];
+export async function getOrganizations(): Promise<ServerOrganization[]> {
+  const organizationsResponse: ListOrganizationsResponsePayload = (await axios.get(`${BASE_URL}${ORGANIZATIONS}`)).data;
+  return organizationsResponse.organizations.map((organization) => ({
+    id: organization.id,
+    name: organization.name,
+    role: organization.role,
+  }));
+}
 
 /*
  * getOrganization() always returns a promise that resolves.
