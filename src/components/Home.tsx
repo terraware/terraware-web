@@ -30,9 +30,9 @@ export default function Home({ organization }: HomeProps): JSX.Element {
     <main>
       <PageHeader title='Good morning!' subtitle='' />
       <Container maxWidth={false} className={classes.mainContainer}>
-        {(role === 'Manager' || role === 'Admin') && (
+        {(role === 'Manager' || role === 'Owner' || role === 'Admin') && (
           <Grid container spacing={3} className={classes.mainGrid}>
-            <Grid item xs={role === 'Admin' ? 4 : 6}>
+            <Grid item xs={role === 'Manager' ? 6 : 4}>
               <PageCard
                 name={strings.PROJECTS}
                 icon='folder'
@@ -40,10 +40,10 @@ export default function Home({ organization }: HomeProps): JSX.Element {
                 link='/projects'
               />
             </Grid>
-            <Grid item xs={role === 'Admin' ? 4 : 6}>
+            <Grid item xs={role === 'Manager' ? 6 : 4}>
               <PageCard name={strings.SITES} icon='site' description={strings.SITES_CARD_DESCRIPTION} link='/sites' />
             </Grid>
-            {role === 'Admin' && (
+            {(role === 'Admin' || role === 'Owner') && (
               <Grid item xs={4}>
                 <PageCard
                   name={strings.PEOPLE}
