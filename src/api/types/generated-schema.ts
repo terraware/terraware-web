@@ -230,6 +230,10 @@ export interface paths {
   "/api/v1/timeseries/values": {
     post: operations["recordTimeseriesValues"];
   };
+  "/api/v1/users/me": {
+    get: operations["getMyself"];
+    put: operations["updateMyself"];
+  };
 }
 
 export interface components {
@@ -737,6 +741,10 @@ export interface components {
       site: components["schemas"]["SiteElement"];
       status: components["schemas"]["SuccessOrError"];
     };
+    GetUserResponsePayload: {
+      user: components["schemas"]["UserProfilePayload"];
+      status: components["schemas"]["SuccessOrError"];
+    };
     LayerResponse: {
       id: number;
       siteId: number;
@@ -1004,6 +1012,7 @@ export interface components {
       | "estimatedSeedsIncoming"
       | "family"
       | "geolocation"
+      | "geolocations.coordinates"
       | "germinationEndDate"
       | "germinationPercentGerminated"
       | "germinationSeedType"
@@ -1055,6 +1064,7 @@ export interface components {
       | "totalViabilityPercent"
       | "treesCollectedFrom"
       | "viabilityTestType"
+      | "viabilityTestTypes.type"
       | "withdrawalDate"
       | "withdrawalDestination"
       | "withdrawalGrams"
@@ -1117,6 +1127,9 @@ export interface components {
         estimatedSeedsIncoming?: string;
         family?: string;
         geolocation?: string;
+        geolocations?: {
+          coordinates?: string;
+        }[];
         germinationEndDate?: string;
         germinationPercentGerminated?: string;
         germinationSeedType?: string;
@@ -1172,6 +1185,9 @@ export interface components {
         totalViabilityPercent?: string;
         treesCollectedFrom?: string;
         viabilityTestType?: string;
+        viabilityTestTypes?: {
+          type?: string;
+        }[];
         withdrawalDate?: string;
         withdrawalDestination?: string;
         withdrawalGrams?: string;
@@ -1487,6 +1503,10 @@ export interface components {
     UpdateProjectRequestPayload: {
       name: string;
     };
+    UpdateUserRequestPayload: {
+      firstName: string;
+      lastName: string;
+    };
     UploadPhotoMetadataPayload: {
       capturedTime: string;
       /** @deprecated Use location field instead. */
@@ -1496,6 +1516,11 @@ export interface components {
       location?: components["schemas"]["Point"];
       /** GPS accuracy in meters. */
       gpsAccuracy?: number;
+    };
+    UserProfilePayload: {
+      email: string;
+      firstName?: string;
+      lastName?: string;
     };
     WithdrawalPayload: {
       /** Server-assigned unique ID of this withdrawal, its ID. Omit when creating a new withdrawal. */
@@ -3184,6 +3209,31 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["RecordTimeseriesValuesRequestPayload"];
+      };
+    };
+  };
+  getMyself: {
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetUserResponsePayload"];
+        };
+      };
+    };
+  };
+  updateMyself: {
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateUserRequestPayload"];
       };
     };
   };

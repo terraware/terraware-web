@@ -1,5 +1,7 @@
 import { Container, Grid } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import { useEffect, useState } from 'react';
+import { getUser, User } from 'src/api/user/user';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
 import PageCard from './common/PageCard';
@@ -26,9 +28,18 @@ export type HomeProps = {
 export default function Home({ organization }: HomeProps): JSX.Element {
   const classes = useStyles();
   const role = organization?.role;
+  const [user, setUser] = useState<User>();
+
+  useEffect(() => {
+    const populateUser = async () => {
+      const fetchedUser = await getUser();
+      setUser(fetchedUser);
+    };
+    populateUser();
+  }, []);
   return (
     <main>
-      <PageHeader title='Good morning!' subtitle='' />
+      <PageHeader title={user?.firstName ? `Good morning, ${user?.firstName}!` : 'Good morning!'} subtitle='' />
       <Container maxWidth={false} className={classes.mainContainer}>
         {(role === 'Manager' || role === 'Owner' || role === 'Admin') && (
           <Grid container spacing={3} className={classes.mainGrid}>
