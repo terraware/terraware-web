@@ -1,6 +1,6 @@
-import addQueryParams from 'src/api/addQueryParams';
+import addQueryParams from 'src/api/helpers/addQueryParams';
 import { paths } from 'src/api/types/generated-schema';
-import axios from '..';
+import axios from './index';
 import { Notifications, NotificationTypes } from 'src/types/Notifications';
 
 /*

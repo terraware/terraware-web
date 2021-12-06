@@ -9,7 +9,7 @@ import React, { Suspense, useEffect, useState } from 'react';
 import { Redirect, useHistory } from 'react-router-dom';
 import { useResetRecoilState, useSetRecoilState } from 'recoil';
 import { checkIn, getPhotoEndpoint, postAccession } from 'src/api/seeds/accession';
-import { updateSpecies } from 'src/api/seeds/species';
+import { updateSpecies } from 'src/api/species/species';
 import { Accession, AccessionPostRequestBody } from 'src/api/types/accessions';
 import snackbarAtom from 'src/state/atoms/snackbar';
 import searchSelector from 'src/state/selectors/seeds/search';
@@ -350,7 +350,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
               }
             >
               <Grid item xs={4}>
-                <Species species={record.species} onChange={onSpeciesChanged} />
+                <Species selectedSpecies={record.species} onChange={onSpeciesChanged} />
               </Grid>
             </Suspense>
             <Grid item xs={4}>

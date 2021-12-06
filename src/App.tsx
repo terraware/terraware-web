@@ -16,7 +16,7 @@ import Home from './components/Home';
 import NavBar from './components/NavBar';
 import PlantDashboard from './components/plants/PlantDashboard';
 import PlantList from './components/plants/PlantList';
-import Species from './components/plants/Species';
+import SpeciesList from './components/plants/Species';
 import Accession from './components/seeds/accession';
 import Checkin from './components/seeds/checkin';
 import Database from './components/seeds/database';
@@ -146,7 +146,7 @@ function AppContent() {
                 <PlantList organization={organization} filters={plantListFilters} setFilters={setPlantListFilters} />
               </Route>
               <Route exact path='/species'>
-                <Species />
+                <SpeciesList />
               </Route>
               <Route path='/help' component={Help}>
                 <Help />

@@ -1,37 +1,42 @@
-import React from 'react';
-import { useRecoilValue, useResetRecoilState } from 'recoil';
-import speciesSelector from 'src/state/selectors/species';
+import React, { useEffect, useState } from 'react';
+import { getAllSpecies } from 'src/api/species/species';
 import strings from 'src/strings';
+import { Species } from 'src/types/Species';
 import Autocomplete from '../../common/Autocomplete';
 
-interface Props {
-  species?: string;
+interface SpeciesDropdownProps {
+  selectedSpecies?: string;
   onChange: (id: string, value: unknown, isNew: boolean) => void;
 }
 
-export default function SpeciesDropdown({ species, onChange }: Props): JSX.Element {
-  const speciesList = useRecoilValue(speciesSelector);
-  const resetSpecies = useResetRecoilState(speciesSelector);
+export default function SpeciesDropdown(props: SpeciesDropdownProps): JSX.Element {
+  const { selectedSpecies, onChange } = props;
+  const [speciesList, setSpeciesList] = useState<Species[]>([]);
 
-  const onChangeHandler = (id: string, selectedSpecies: string) => {
-    const found = speciesList.findIndex((item) => item.name === selectedSpecies);
+  useEffect(() => {
+    const populateSpecies = async () => {
+      const response = await getAllSpecies();
+      // TODO: what if we cannot fetch the species list?
+      if (response.requestSucceeded) {
+        setSpeciesList(Array.from(response.speciesById.values()));
+      }
+    };
+    populateSpecies();
+  }, []);
+
+  const onChangeHandler = (id: string, selectedName: string) => {
+    const found = speciesList.findIndex((item) => item.name === selectedName);
     if (found === -1) {
-      onChange(id, selectedSpecies, true);
+      onChange(id, selectedName, true);
     } else {
-      onChange(id, selectedSpecies, false);
+      onChange(id, selectedName, false);
     }
   };
-
-  React.useEffect(() => {
-    return () => {
-      resetSpecies();
-    };
-  }, [resetSpecies]);
 
   return (
     <Autocomplete
       id='species'
-      selected={species}
+      selected={selectedSpecies}
       onChange={onChangeHandler}
       label={strings.SPECIES}
       values={speciesList.map((item) => item.name)}

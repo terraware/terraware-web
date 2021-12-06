@@ -1,4 +1,4 @@
-import addQueryParams from 'src/api/addQueryParams';
+import addQueryParams from 'src/api/helpers/addQueryParams';
 import axios from 'src/api/index';
 import { paths } from 'src/api/types/generated-schema';
 import {

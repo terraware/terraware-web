@@ -17,7 +17,7 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
-import { getNotifications, MarkAllNotificationsRead, MarkNotificationRead } from 'src/api/seeds/notification';
+import { getNotifications, MarkAllNotificationsRead, MarkNotificationRead } from 'src/api/notification';
 import { AccessionState } from 'src/api/types/accessions';
 import { FieldNodePayload } from 'src/api/types/search';
 import { API_PULL_INTERVAL } from 'src/constants';
