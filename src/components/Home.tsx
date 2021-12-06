@@ -39,7 +39,12 @@ export default function Home({ organization }: HomeProps): JSX.Element {
   }, []);
   return (
     <main>
-      <PageHeader title={user?.firstName ? `Good morning, ${user?.firstName}!` : 'Good morning!'} subtitle='' />
+      <PageHeader
+        title={
+          user?.firstName ? strings.formatString(strings.GOOD_MORNING_PERSON, user.firstName) : strings.GOOD_MORNING
+        }
+        subtitle=''
+      />
       <Container maxWidth={false} className={classes.mainContainer}>
         {(role === 'Manager' || role === 'Owner' || role === 'Admin') && (
           <Grid container spacing={3} className={classes.mainGrid}>
@@ -68,14 +73,19 @@ export default function Home({ organization }: HomeProps): JSX.Element {
         )}
         <Grid container spacing={3} className={classes.mainGrid}>
           <Grid item xs={4}>
-            <PageCard name={strings.SEEDS} icon='seeds' description={strings.SEEDS_CARD_DESCRIPTION} link='/seeds' />
+            <PageCard
+              name={strings.SEEDS}
+              icon='seeds'
+              description={strings.SEEDS_CARD_DESCRIPTION}
+              link='/seeds-summary'
+            />
           </Grid>
           <Grid item xs={4}>
             <PageCard
               name={strings.PLANTS}
               icon='restorationSite'
               description={strings.PLANTS_CARD_DESCRIPTION}
-              link='/plants'
+              link='/plants-dashboard'
             />
           </Grid>
           <Grid item xs={4}>

@@ -328,6 +328,8 @@ const strings = new LocalizedStrings({
       'Manage Projects to organize all your Earth saving activities and data. A reforestation Project, for example, will have Sites, which in turn will have Facilities, along with team members who will be involved with the Project.',
     SITES_CARD_DESCRIPTION: 'View Sites under your Project. A Project may have one or more Sites.',
     PEOPLE_CARD_DESCRIPTION: 'We can’t do it alone! Add people to your Organization and assign them roles.',
+    GOOD_MORNING: 'Good morning!',
+    GOOD_MORNING_PERSON: 'Good morning, {0}!',
   },
 });
 
