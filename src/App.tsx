@@ -18,7 +18,7 @@ import PlantDashboard from './components/plants/PlantDashboard';
 import PlantList from './components/plants/PlantList';
 import SpeciesList from './components/plants/Species';
 import Accession from './components/seeds/accession';
-import Checkin from './components/seeds/checkin';
+import CheckIn from './components/seeds/checkin';
 import Database from './components/seeds/database';
 import Help from './components/seeds/help';
 import NewAccession from './components/seeds/newAccession';
@@ -126,7 +126,7 @@ function AppContent() {
                 <SeedSummary facilityId={currFacilityId} notifications={notifications} />
               </Route>
               <Route exact path='/checkin'>
-                <Checkin />
+                <CheckIn facilityId={currFacilityId} />
               </Route>
               <Route exact path='/accessions/new'>
                 <NewAccession facilityId={currFacilityId} />

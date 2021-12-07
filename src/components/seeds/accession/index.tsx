@@ -9,7 +9,6 @@ import ErrorBoundary from 'src/ErrorBoundary';
 import snackbarAtom from 'src/state/atoms/snackbar';
 import searchSelector from 'src/state/selectors/seeds/search';
 import strings from 'src/strings';
-import { pendingAccessionsSelector } from 'src/state/selectors/seeds/pendingCheckIn';
 import Lab from '../lab';
 import { AccessionForm } from '../newAccession';
 import Nursery from '../nursery';
@@ -55,7 +54,6 @@ function Content(): JSX.Element {
   const [accession, setAccession] = useState<Accession>();
   const setSnackbar = useSetRecoilState(snackbarAtom);
   const resetSearch = useResetRecoilState(searchSelector);
-  const resetPendingCheckInAccessions = useResetRecoilState(pendingAccessionsSelector);
   const history = useHistory();
 
   const reloadAccession = useCallback(() => {
@@ -106,7 +104,6 @@ function Content(): JSX.Element {
       await checkIn(id);
       resetSearch();
       reloadAccession();
-      resetPendingCheckInAccessions();
     } catch (ex) {
       setSnackbar({
         type: 'delete',
