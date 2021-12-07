@@ -5,7 +5,6 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React from 'react';
-import { SearchField } from 'src/api/types/search';
 import strings from 'src/strings';
 import CancelButton from '../../common/CancelButton';
 import Checkbox from '../../common/Checkbox';
@@ -13,6 +12,7 @@ import DialogCloseButton from '../../common/DialogCloseButton';
 import Divisor from '../../common/Divisor';
 import RadioButton from '../../common/RadioButton';
 import { COLUMNS_INDEXED, Preset, searchPresets } from './columns';
+import {SearchField} from '../../../api/seeds/search';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

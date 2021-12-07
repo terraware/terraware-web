@@ -1,6 +1,6 @@
-import { SearchField } from 'src/api/types/search';
 import strings from 'src/strings';
 import { TableColumnType } from '../../common/table/types';
+import {SearchField} from '../../../api/seeds/search';
 
 export interface Option {
   label: string | null;
@@ -15,6 +15,7 @@ type DatabaseColumnFilterType =
   | 'date_range'
   | 'number_range'
   | 'count_weight';
+
 export interface DatabaseColumn extends Omit<TableColumnType, 'key'> {
   key: SearchField;
   additionalKeys?: SearchField[];

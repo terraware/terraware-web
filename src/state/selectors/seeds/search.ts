@@ -1,8 +1,6 @@
 import { atom, selector } from 'recoil';
-import { search } from 'src/api/seeds/search';
-import { AndNodePayload, SearchRequestPayload, SearchResponsePayload } from 'src/api/types/search';
-import { COLUMNS_INDEXED, DatabaseColumn } from 'src/components/seeds/database/columns';
-import { columnsAtom, searchFilterAtom, searchSelectedColumnsAtom, searchSortAtom } from '../../atoms/seeds/search';
+import {AndNodePayload, search, SearchRequestPayload, SearchResponsePayload} from 'src/api/seeds/search';
+import { searchFilterAtom, searchSelectedColumnsAtom, searchSortAtom } from '../../atoms/seeds/search';
 import { facilityIdSelector } from './facility';
 
 const searchAtom = atom({
@@ -29,22 +27,6 @@ const searchFilterSelector = selector({
     const indexedFilters = get(searchFilterAtom);
 
     return Object.values(indexedFilters);
-  },
-});
-
-export const columnsSelector = selector({
-  key: 'columnsSelector',
-  get: ({ get }) => {
-    const columns = get(columnsAtom);
-
-    const tableColumns = columns.reduce((acum, value) => {
-      const column = COLUMNS_INDEXED[value];
-      acum.push(column);
-
-      return acum;
-    }, [] as DatabaseColumn[]);
-
-    return tableColumns;
   },
 });
 

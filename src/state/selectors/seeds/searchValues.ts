@@ -1,6 +1,5 @@
 import { selector } from 'recoil';
-import { searchValues } from 'src/api/seeds/search';
-import { ValuesPostRequestBody } from 'src/api/types/search';
+import {searchFieldValues, ValuesPostRequestBody} from 'src/api/seeds/search';
 import { COLUMNS_INDEXED } from 'src/components/seeds/database/columns';
 import { searchSelectedColumnsAtom } from '../../atoms/seeds/search';
 import { facilityIdSelector } from './facility';
@@ -26,6 +25,6 @@ export default selector({
       search,
     };
 
-    return await searchValues(params);
+    return await searchFieldValues(params);
   },
 });

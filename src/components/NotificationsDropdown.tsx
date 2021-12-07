@@ -19,7 +19,6 @@ import { Link } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import { getNotifications, MarkAllNotificationsRead, MarkNotificationRead } from 'src/api/notification';
 import { AccessionState } from 'src/api/types/accessions';
-import { FieldNodePayload } from 'src/api/types/search';
 import { API_PULL_INTERVAL } from 'src/constants';
 import { searchFilterAtom } from 'src/state/atoms/seeds/search';
 import strings from 'src/strings';
@@ -27,6 +26,7 @@ import { Notifications, NotificationTypes } from 'src/types/Notifications';
 import preventDefaultEvent from 'src/utils/preventDefaultEvent';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import NotificationIcon from './NotificationIcon';
+import {FieldNodePayload} from '../api/seeds/search';
 
 const useStyles = makeStyles((theme) =>
   createStyles({

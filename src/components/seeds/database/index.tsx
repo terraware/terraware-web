@@ -4,13 +4,11 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Link as RouterLink, useHistory } from 'react-router-dom';
-import { useRecoilState, useRecoilValueLoadable, useSetRecoilState } from 'recoil';
-import { SearchField, SearchNodePayload, SearchResponsePayload, SearchResponseResults } from 'src/api/types/search';
-import { columnsAtom, searchFilterAtom, searchSelectedColumnsAtom, searchSortAtom } from 'src/state/atoms/seeds/search';
-import searchSelector, { columnsSelector } from 'src/state/selectors/seeds/search';
-import searchAllValuesSelector from 'src/state/selectors/seeds/searchAllValues';
+import { useRecoilState, useSetRecoilState, useRecoilValueLoadable } from 'recoil';
+import { searchFilterAtom, searchSortAtom, searchSelectedColumnsAtom } from 'src/state/atoms/seeds/search';
+import searchSelector from 'src/state/selectors/seeds/search';
 import searchValuesSelector from 'src/state/selectors/seeds/searchValues';
 import strings from 'src/strings';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
@@ -18,12 +16,20 @@ import Button from '../../../components/common/button/Button';
 import Table from '../../common/table';
 import { Order } from '../../common/table/sort';
 import PageHeader from '../PageHeader';
-import { COLUMNS_INDEXED } from './columns';
+import {COLUMNS_INDEXED} from './columns';
 import DownloadReportModal from './DownloadReportModal';
 import EditColumns from './EditColumns';
 import Filters from './Filters';
 import SearchCellRenderer from './TableCellRenderer';
-import { getPendingAccessions } from '../../../api/seeds/search';
+import {
+  AllFieldValuesPayload,
+  findSingleAndMultiChoiceFields,
+  getAllFieldOptions,
+  getPendingAccessions, SearchField,
+  SearchNodePayload,
+  SearchResponsePayload,
+  SearchResponseResults
+} from '../../../api/seeds/search';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -67,29 +73,37 @@ const newAccessionChipStyles = makeStyles((theme) => ({
 
 type DatabaseProps = {
   facilityId: number;
+  searchColumns: SearchField[];
+  setSearchColumns: (fields: SearchField[]) => void;
+  displayColumnNames: SearchField[];
+  setDisplayColumnNames: (fields: SearchField[]) => void;
 };
 
 export default function Database(props: DatabaseProps): JSX.Element {
-  const { facilityId } = props;
+  const { facilityId, searchColumns, setSearchColumns, displayColumnNames, setDisplayColumnNames } = props;
   const classes = useStyles();
   const history = useHistory();
   const [editColumnsModalOpen, setEditColumnsModalOpen] = useState(false);
   const [reportModalOpen, setReportModalOpen] = useState(false);
   const [pendingAccessions, setPendingAccessions] = useState<SearchResponsePayload>();
+  /*
+   * fieldOptions is a list of records
+   * keys: all single and multi select search fields.
+   * values: all the existing values that the field has in the database, for all accessions.
+   */
+  const [fieldOptions, setFieldOptions] = useState<AllFieldValuesPayload | null>();
   const [filters, setFilters] = useRecoilState(searchFilterAtom);
   const [sort, setSort] = useRecoilState(searchSortAtom);
   const setSearchSelectedColumns = useSetRecoilState(searchSelectedColumnsAtom);
-  const [columns, setColumns] = useRecoilState(columnsAtom);
 
-  const tableColumnsLodable = useRecoilValueLoadable(columnsSelector);
-  const tableColumns = tableColumnsLodable.state === 'hasValue' ? tableColumnsLodable.contents : undefined;
+  const displayColumnDetails = displayColumnNames.map((name) => {
+    return COLUMNS_INDEXED[name];
+  });
   const resultsLodable = useRecoilValueLoadable(searchSelector);
   const results = resultsLodable.state === 'hasValue' ? resultsLodable.contents.results : undefined;
   const availableValuesLodable = useRecoilValueLoadable(searchValuesSelector);
   const availableValues =
     availableValuesLodable.state === 'hasValue' ? availableValuesLodable.contents.results : undefined;
-  const allValuesLodable = useRecoilValueLoadable(searchAllValuesSelector);
-  const allValues = allValuesLodable.state === 'hasValue' ? allValuesLodable.contents.results : undefined;
 
   useEffect(() => {
     const populatePendingAccessions = async () => {
@@ -97,6 +111,14 @@ export default function Database(props: DatabaseProps): JSX.Element {
     };
     populatePendingAccessions();
   }, [facilityId]);
+
+  useEffect(() => {
+    const populateSearchColumns = async () => {
+      const singleAndMultiChoiceFields = findSingleAndMultiChoiceFields(searchColumns);
+      setFieldOptions((await getAllFieldOptions(singleAndMultiChoiceFields, facilityId)).fieldValuesByFieldName);
+    };
+    populateSearchColumns();
+  }, [facilityId, searchColumns]);
 
   const onSelect = (row: SearchResponseResults) => {
     if (row.id) {
@@ -141,7 +163,8 @@ export default function Database(props: DatabaseProps): JSX.Element {
       }, [] as SearchField[]);
 
       setSearchSelectedColumns(searchSelectedColumns);
-      setColumns(columnsintern);
+      setSearchColumns(searchSelectedColumns);
+      setDisplayColumnNames(columnsintern);
       setFilters(filters);
     }
     setEditColumnsModalOpen(false);
@@ -154,17 +177,17 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const isInactive = (row: SearchResponseResults) => {
     return row.active === 'Inactive';
   };
-  const onReorderEnd = React.useCallback(
+  const onReorderEnd = useCallback(
     ({ oldIndex, newIndex }) => {
       if (newIndex !== 0 && oldIndex !== 0) {
-        const newOrder = [...columns];
+        const newOrder = [...displayColumnNames];
         const moved = newOrder.splice(oldIndex, 1);
         newOrder.splice(newIndex, 0, moved[0]);
-        setColumns(newOrder);
+        setDisplayColumnNames(newOrder);
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [columns]
+    [displayColumnNames, setDisplayColumnNames]
   );
 
   const getSubtitle = () => {
@@ -188,7 +211,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
   return (
     <MuiPickersUtilsProvider utils={MomentUtils}>
       <main>
-        <EditColumns open={editColumnsModalOpen} value={columns} onClose={onCloseEditColumnsModal} />
+        <EditColumns open={editColumnsModalOpen} value={displayColumnNames} onClose={onCloseEditColumnsModal} />
         <DownloadReportModal facilityId={facilityId} open={reportModalOpen} onClose={onCloseDownloadReportModal} />
         <PageHeader
           title=''
@@ -229,21 +252,19 @@ export default function Database(props: DatabaseProps): JSX.Element {
             </div>
           }
         >
-          {availableValues && allValues && tableColumns && (
+          {availableValues && fieldOptions && (
             <Filters
               filters={filters}
               availableValues={availableValues}
-              allValues={allValues}
-              columns={tableColumns}
+              allValues={fieldOptions}
+              columns={displayColumnDetails}
               onChange={onFilterChange}
             />
           )}
-          {(allValuesLodable.state === 'loading' ||
-            availableValuesLodable.state === 'loading' ||
-            tableColumnsLodable.state === 'loading') && <CircularProgress />}
-          {(allValuesLodable.state === 'hasError' ||
-            availableValuesLodable.state === 'hasError' ||
-            tableColumnsLodable.state === 'hasError') &&
+          {(fieldOptions === undefined ||
+            availableValuesLodable.state === 'loading') && <CircularProgress />}
+          {(fieldOptions === null ||
+            availableValuesLodable.state === 'hasError') &&
             strings.GENERIC_ERROR}
         </PageHeader>
         <Container maxWidth={false} className={classes.mainContainer}>
@@ -279,9 +300,9 @@ export default function Database(props: DatabaseProps): JSX.Element {
               <Paper>
                 <Grid container spacing={4}>
                   <Grid item xs={12}>
-                    {results && tableColumns && (
+                    {results && (
                       <Table
-                        columns={tableColumns}
+                        columns={displayColumnDetails}
                         rows={results}
                         orderBy={sort.field}
                         order={sort.direction === 'Ascending' ? 'asc' : 'desc'}
@@ -292,10 +313,10 @@ export default function Database(props: DatabaseProps): JSX.Element {
                         onReorderEnd={onReorderEnd}
                       />
                     )}
-                    {(resultsLodable.state === 'loading' || tableColumnsLodable.state === 'loading') && (
+                    {resultsLodable.state === 'loading' && (
                       <CircularProgress />
                     )}
-                    {(resultsLodable.state === 'hasError' || tableColumnsLodable.state === 'hasError') &&
+                    {resultsLodable.state === 'hasError' &&
                       strings.GENERIC_ERROR}
                   </Grid>
                 </Grid>

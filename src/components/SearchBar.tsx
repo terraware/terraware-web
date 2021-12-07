@@ -2,10 +2,9 @@ import { InputAdornment, TextField } from '@material-ui/core';
 import { createStyles, alpha, makeStyles } from '@material-ui/core/styles';
 import SearchIcon from '@material-ui/icons/Search';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useRecoilValueLoadable, useResetRecoilState } from 'recoil';
-import searchSelector from 'src/state/selectors/seeds/searchByAccessionNumber';
+import {getAccessionsByNumber, SearchResponseResults} from 'src/api/seeds/search';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
 const useStyles = makeStyles((theme) =>
@@ -20,35 +19,50 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-export default function NavBar(): JSX.Element {
+export type NavBarProps = {
+  facilityId: number;
+};
+
+export default function NavBar(props: NavBarProps): JSX.Element {
   const classes = useStyles();
-  const [input, setInput] = React.useState('');
-
-  const loadableResults = useRecoilValueLoadable(searchSelector(input));
-  const resetResults = useResetRecoilState(searchSelector(input));
+  const {facilityId} = props;
+  const [searchInput, setSearchInput] = useState('');
+  const [searchResults, setSearchResults] = useState<SearchResponseResults[]>([]);
   const history = useHistory();
-
-  const results = loadableResults.state === 'hasValue' ? loadableResults.contents.results : [];
-
   const location = useStateLocation();
+
+  useEffect(() => {
+    const populateSearchResults = async() => {
+      if (Number(searchInput)) {
+        const apiResponse = await getAccessionsByNumber(parseInt(searchInput, 10), facilityId);
+        if (apiResponse.accessions) {
+          setSearchResults(apiResponse.accessions);
+          return;
+        }
+      }
+      setSearchResults([]);
+    };
+
+    populateSearchResults();
+  }, [facilityId, searchInput]);
 
   return (
     <div className={classes.search}>
       <Autocomplete
         id='search-bar'
         freeSolo
-        options={results.map((accession) => accession.accessionNumber)}
-        inputValue={input}
+        options={searchResults.map((accession) => accession.accessionNumber)}
+        inputValue={searchInput}
         onInputChange={(event, value) => {
-          setInput(value);
+          setSearchInput(value);
         }}
         value=''
         onChange={(event, value) => {
-          const accession = results.find((result) => result.accessionNumber === value);
+          const accession = searchResults.find((result) => result.accessionNumber === value);
           if (accession) {
             history.push(getLocation(`/accessions/${accession.id}`, location));
-            resetResults();
-            setInput('');
+            setSearchResults([]);
+            setSearchInput('');
           }
         }}
         renderInput={(params) => (

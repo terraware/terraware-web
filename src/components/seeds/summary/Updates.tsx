@@ -9,9 +9,9 @@ import { Link } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import { SeedbankSummary } from 'src/api/seeds/summary';
 import { AccessionState } from 'src/api/types/accessions';
-import { FieldNodePayload } from 'src/api/types/search';
 import { searchFilterAtom } from 'src/state/atoms/seeds/search';
 import strings from 'src/strings';
+import {FieldNodePayload} from '../../../api/seeds/search';
 
 const useStyles = makeStyles(() =>
   createStyles({

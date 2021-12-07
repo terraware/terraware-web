@@ -14,12 +14,11 @@ import { createStyles, makeStyles, Theme, withStyles } from '@material-ui/core/s
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
-import { SearchResponsePayload, SearchResponseResults } from 'src/api/types/search';
 import Button from 'src/components/common/button/Button';
 import strings from 'src/strings';
 import useStateLocation from 'src/utils/useStateLocation';
 import PageHeader from '../PageHeader';
-import { getPendingAccessions } from '../../../api/seeds/search';
+import {getPendingAccessions, SearchResponsePayload, SearchResponseResults} from '../../../api/seeds/search';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

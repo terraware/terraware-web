@@ -60,7 +60,7 @@ export default function TopBar(props: TopBarProps): JSX.Element | null {
     <AppBar position='static' className={classes.appBar}>
       <Toolbar className={classes.right}>
         <div className={classes.flex}>
-          <SearchBar />
+          <SearchBar facilityId={currFacilityId} />
           <Link
             id='help-button-link'
             component={RouterLink}

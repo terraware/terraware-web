@@ -5,8 +5,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-import { downloadReport } from 'src/api/seeds/report';
-import { SearchExportPostRequestBody } from 'src/api/types/report';
+import {downloadReport, ExportRequestPayload} from 'src/api/seeds/report';
 import { searchParamsSelector } from 'src/state/selectors/seeds/search';
 import strings from 'src/strings';
 import CancelButton from '../../common/CancelButton';
@@ -51,7 +50,7 @@ export default function DownloadReportModal(props: DownloadReportModalProps): JS
   };
 
   const handleOk = async () => {
-    const reportParams: SearchExportPostRequestBody = {
+    const reportParams: ExportRequestPayload = {
       facilityId,
       fields: searchParams.fields,
       sortOrder: searchParams.sortOrder,

@@ -3,8 +3,15 @@ import { createStyles, CssBaseline, makeStyles, ThemeProvider } from '@material-
 import mapboxgl from 'mapbox-gl';
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
-import { RecoilRoot } from 'recoil';
+import {RecoilRoot} from 'recoil';
 import getOrganization, { GetOrganizationResponse, OrgRequestError } from 'src/api/organization/organization';
+import {
+  DEFAULT_SEED_SEARCH_FILTERS,
+  DEFAULT_SEED_SEARCH_SORT_ORDER,
+  SearchField,
+  SeedSearchSortOrder,
+  SeedSearchFilters,
+} from 'src/api/seeds/search';
 import { Notifications } from 'src/types/Notifications';
 import { Organization } from 'src/types/Organization';
 import { PlantSearchOptions } from 'src/types/Plant';
@@ -24,6 +31,7 @@ import TopBar from './components/TopBar';
 import ErrorBoundary from './ErrorBoundary';
 import strings from './strings';
 import theme from './theme';
+import {defaultPreset as DefaultColumns} from './components/seeds/database/columns';
 
 // @ts-ignore
 mapboxgl.workerClass =
@@ -65,9 +73,26 @@ function AppContent() {
   const classes = useStyles();
   const [organization, setOrganization] = useState<Organization>(emptyOrg);
   const [organizationErrors, setOrganizationErrors] = useState<OrgRequestError[]>([]);
-  const [plantListFilters, setPlantListFilters] = useState<PlantSearchOptions>();
   const [currFacilityId, setCurrFacilityId] = useState<number>(0);
   const [notifications, setNotifications] = useState<Notifications>();
+  const [plantListFilters, setPlantListFilters] = useState<PlantSearchOptions>();
+
+  // seedSearchFilters describes which filters to apply when searching accession data.
+  const [seedSearchFilters, setSeedSearchFilters] = useState<SeedSearchFilters>(DEFAULT_SEED_SEARCH_FILTERS);
+
+  // seedSearchSort describes which sort criterion to apply when searching accession data.
+  const [seedSearchSort, setSeedSearchSort] = useState<SeedSearchSortOrder>(DEFAULT_SEED_SEARCH_SORT_ORDER);
+
+  // seedSearchColumns describes which accession columns to request when searching accession data.
+  const [seedSearchColumns, setSeedSearchColumns] = useState<SearchField[]>(DefaultColumns.fields);
+
+  /* accessionsDisplayColumns describes which columns are displayed in the accessions list, and in which order.
+   * Differs from seedSearchSelectedColumns because the order matters. Also, sometimes the two lists won't have
+   * exactly the same columns. E.g. if the user adds the Withdrawal -> "Seeds Withdrawn" column,
+   * then seedSearchSelectedColumns will contain withdrawalQuantity and withdrawalUnits but this list will only
+   * contain withdrawalQuantity.
+   */
+  const [accessionsDisplayColumns, setAccessionsDisplayColumns] = useState<SearchField[]>(DefaultColumns.fields);
 
   useEffect(() => {
     const populateOrganizationData = async () => {
@@ -123,7 +148,11 @@ function AppContent() {
                 <NewAccession facilityId={currFacilityId} />
               </Route>
               <Route exact path='/accessions'>
-                <Database facilityId={currFacilityId} />
+                <Database facilityId={currFacilityId}
+                          searchColumns={seedSearchColumns}
+                          setSearchColumns={setSeedSearchColumns}
+                          displayColumnNames={accessionsDisplayColumns}
+                          setDisplayColumnNames={setAccessionsDisplayColumns} />
               </Route>
               <Route path='/accessions/:accessionId'>
                 <Accession />

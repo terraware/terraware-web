@@ -1,6 +1,6 @@
 import { atom } from 'recoil';
-import { SearchNodePayload, SearchSortOrderElement } from 'src/api/types/search';
 import { defaultPreset } from 'src/components/seeds/database/columns';
+import {SearchNodePayload, SeedSearchSortOrder} from '../../../api/seeds/search';
 
 export const searchFilterAtom = atom({
   key: 'searchFilterAtom',
@@ -12,15 +12,10 @@ export const searchSortAtom = atom({
   default: {
     field: 'receivedDate',
     direction: 'Descending',
-  } as SearchSortOrderElement,
+  } as SeedSearchSortOrder,
 });
 
 export const searchSelectedColumnsAtom = atom({
   key: 'searchSelectedColumnsAtom',
-  default: defaultPreset.fields,
-});
-
-export const columnsAtom = atom({
-  key: 'columnsAtom',
   default: defaultPreset.fields,
 });

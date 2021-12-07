@@ -1,8 +1,8 @@
 import { createStyles, Grid, makeStyles } from '@material-ui/core';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import React from 'react';
-import { FieldNodePayload, SearchField } from 'src/api/types/search';
 import TextField from '../../../common/TextField';
+import {FieldNodePayload, SearchField} from '../../../../api/seeds/search';
 
 const useStyles = makeStyles((theme) =>
   createStyles({

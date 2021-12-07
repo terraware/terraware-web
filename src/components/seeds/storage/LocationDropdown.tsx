@@ -1,8 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Grid } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
-import { getLocations } from 'src/api/seeds/locations';
-import { ConditionType, StorageLocation } from 'src/api/types/locations';
+import {ConditionType, getLocations, StorageLocation} from 'src/api/seeds/locations';
 import Dropdown from 'src/components/common/Dropdown';
 import TextField from 'src/components/common/TextField';
 import strings from 'src/strings';
