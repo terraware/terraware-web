@@ -76,9 +76,9 @@ function AppContent() {
 
   useEffect(() => {
     const populateOrganizations = async () => {
-      const fetchedOrganizations = await getOrganizations();
-      if (fetchedOrganizations) {
-        setSelectedOrganization(fetchedOrganizations[0]);
+      const response = await getOrganizations();
+      if (response.requestSucceeded) {
+        setSelectedOrganization(response.organizations[0]);
       }
     };
     const populateOrganizationData = async () => {

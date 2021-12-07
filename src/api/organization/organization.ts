@@ -83,18 +83,6 @@ export type GetOrganizationResponse = {
   errors: OrgRequestError[];
 };
 
-const ORGANIZATIONS = '/api/v1/organizations';
-type ListOrganizationsResponsePayload =
-  paths[typeof ORGANIZATIONS]['get']['responses'][200]['content']['application/json'];
-export async function getOrganizations(): Promise<ServerOrganization[]> {
-  const organizationsResponse: ListOrganizationsResponsePayload = (await axios.get(`${BASE_URL}${ORGANIZATIONS}`)).data;
-  return organizationsResponse.organizations.map((organization) => ({
-    id: organization.id,
-    name: organization.name,
-    role: organization.role,
-  }));
-}
-
 /*
  * getOrganization() always returns a promise that resolves.
  * If we successfully fetched all organization data, the result will contain
@@ -161,3 +149,30 @@ export const exportedForTesting = {
 };
 
 export default getOrganization;
+
+const ORGANIZATIONS = '/api/v1/organizations';
+type ListOrganizationsResponsePayload =
+  paths[typeof ORGANIZATIONS]['get']['responses'][200]['content']['application/json'];
+
+type OrganizationsResponse = {
+  organizations: ServerOrganization[];
+  requestSucceeded: boolean;
+};
+export async function getOrganizations(): Promise<OrganizationsResponse> {
+  const response: OrganizationsResponse = {
+    organizations: [],
+    requestSucceeded: true,
+  };
+  try {
+    const organizationsResponse: ListOrganizationsResponsePayload = (await axios.get(`${BASE_URL}${ORGANIZATIONS}`))
+      .data;
+    response.organizations = organizationsResponse.organizations.map((organization) => ({
+      id: organization.id,
+      name: organization.name,
+      role: organization.role,
+    }));
+  } catch {
+    response.requestSucceeded = false;
+  }
+  return response;
+}

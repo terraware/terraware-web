@@ -1,9 +1,10 @@
 import { Container, Grid } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { useEffect, useState } from 'react';
-import { getUser, User } from 'src/api/user/user';
+import { getUser } from 'src/api/user/user';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
+import { User } from 'src/types/User';
 import PageCard from './common/PageCard';
 import PageHeader from './seeds/PageHeader';
 
@@ -32,8 +33,10 @@ export default function Home({ organization }: HomeProps): JSX.Element {
 
   useEffect(() => {
     const populateUser = async () => {
-      const fetchedUser = await getUser();
-      setUser(fetchedUser);
+      const response = await getUser();
+      if (response.requestSucceeded) {
+        setUser(response.user);
+      }
     };
     populateUser();
   }, []);
