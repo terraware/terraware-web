@@ -1,37 +1,15 @@
 import { AxiosResponse } from 'axios';
 import axios from 'src/api/index';
-import { SeedBank, Organization, PlantLayer, Project, Site, ServerOrganization } from 'src/types/Organization';
+import { Organization, PlantLayer, Site, ServerOrganization } from 'src/types/Organization';
 import { paths } from 'src/api/types/generated-schema';
 
 const BASE_URL = `${process.env.REACT_APP_TERRAWARE_API}`;
-
-const PROJECTS = '/api/v1/projects';
-type ListProjectsResponse = paths[typeof PROJECTS]['get']['responses'][200]['content']['application/json'];
-
-async function getProjects(): Promise<Project[]> {
-  const response: ListProjectsResponse = (await axios.get(`${BASE_URL}${PROJECTS}`)).data;
-  return response.projects.map((project) => ({
-    id: project.id,
-    name: project.name,
-  }));
-}
-
-const SITES = '/api/v1/sites';
-type ListSitesResponse = paths[typeof SITES]['get']['responses'][200]['content']['application/json'];
-
-async function getSites(): Promise<Site[]> {
-  const sitesResponse: ListSitesResponse = (await axios.get(`${BASE_URL}${SITES}`)).data;
-  return sitesResponse.sites.map((site) => ({
-    id: site.id,
-    projectId: site.projectId,
-  }));
-}
 
 const LAYERS = '/api/v1/gis/layers/list/{siteId}';
 type ListLayersResponse = paths[typeof LAYERS]['get']['responses'][200]['content']['application/json'];
 type LayerResponse = ListLayersResponse['layers'][0];
 
-async function getPlantLayers(sites: Site[]): Promise<PlantLayer[]> {
+export async function getPlantLayers(sites: Site[]): Promise<PlantLayer[]> {
   // We may want to add functionality to allow fetching of some layers to fail
   // while still returning those that were fetched successfully
   const axiosResponse: AxiosResponse<ListLayersResponse>[] = await Promise.all(
@@ -53,23 +31,6 @@ async function getPlantLayers(sites: Site[]): Promise<PlantLayer[]> {
   return layers;
 }
 
-const FACILITIES = '/api/v1/facility';
-type ListFacilitiesResponse = paths[typeof FACILITIES]['get']['responses'][200]['content']['application/json'];
-
-async function getSeedBankFacilities(): Promise<SeedBank[]> {
-  const facilitiesResponse: ListFacilitiesResponse = (await axios.get(`${BASE_URL}${FACILITIES}`)).data;
-  const seedBanks: SeedBank[] = [];
-  facilitiesResponse.facilities.forEach((facility) => {
-    if (facility.type === 'Seed Bank') {
-      seedBanks.push({
-        id: facility.id,
-        siteId: facility.siteId,
-      });
-    }
-  });
-  return seedBanks;
-}
-
 export enum OrgRequestError {
   NoProjects = 'API_RETURNED_EMPTY_PROJECT_LIST',
   NoSites = 'API_RETURNED_EMPTY_SITE_LIST',
@@ -83,72 +44,9 @@ export type GetOrganizationResponse = {
   errors: OrgRequestError[];
 };
 
-/*
- * getOrganization() always returns a promise that resolves.
- * If we successfully fetched all organization data, the result will contain
- *    all of the user's projects, sites, seed bank facilities, and plants planted layers
- *    an empty errors list
- * If we were unable to fetch all organization data, the result will contain
- *    any data that we were able to fetch
- *    a non-empty errors list indicating what went wrong
- */
-async function getOrganization(): Promise<GetOrganizationResponse> {
-  const OrgResponse: GetOrganizationResponse = {
-    organization: {
-      projects: [],
-      sites: [],
-      facilities: [],
-      plantLayers: [],
-    },
-    errors: [],
-  };
-
-  try {
-    const [projects, sites] = await Promise.all([getProjects(), getSites()]);
-    if (projects.length === 0) {
-      OrgResponse.errors.push(OrgRequestError.NoProjects);
-      return OrgResponse;
-    }
-    OrgResponse.organization.projects = projects;
-    if (sites.length === 0) {
-      OrgResponse.errors.push(OrgRequestError.NoSites);
-      return OrgResponse;
-    }
-    OrgResponse.organization.sites = sites;
-  } catch (error) {
-    // eslint-disable-line no-console
-    console.error(error);
-    OrgResponse.errors.push(OrgRequestError.ErrorFetchingProjectsOrSites);
-    return OrgResponse;
-  }
-
-  const [facilitiesResponse, layersResponse] = await Promise.allSettled([
-    getSeedBankFacilities(),
-    getPlantLayers(OrgResponse.organization.sites),
-  ]);
-  if (facilitiesResponse.status === 'fulfilled') {
-    OrgResponse.organization.facilities = facilitiesResponse.value;
-  } else {
-    // eslint-disable-line no-console
-    console.error(facilitiesResponse.reason);
-    OrgResponse.errors.push(OrgRequestError.ErrorFetchingFacilities);
-  }
-  if (layersResponse.status === 'fulfilled') {
-    OrgResponse.organization.plantLayers = layersResponse.value;
-  } else {
-    // eslint-disable-line no-console
-    console.error(layersResponse.reason);
-    OrgResponse.errors.push(OrgRequestError.ErrorFetchingLayers);
-  }
-
-  return OrgResponse;
-}
-
 export const exportedForTesting = {
   getLayers: getPlantLayers,
 };
-
-export default getOrganization;
 
 const ORGANIZATIONS = '/api/v1/organizations';
 type ListOrganizationsResponsePayload =
@@ -164,12 +62,14 @@ export async function getOrganizations(): Promise<OrganizationsResponse> {
     requestSucceeded: true,
   };
   try {
-    const organizationsResponse: ListOrganizationsResponsePayload = (await axios.get(`${BASE_URL}${ORGANIZATIONS}`))
-      .data;
+    const organizationsResponse: ListOrganizationsResponsePayload = (
+      await axios.get(`${BASE_URL}${ORGANIZATIONS}?depth=Facility`)
+    ).data;
     response.organizations = organizationsResponse.organizations.map((organization) => ({
       id: organization.id,
       name: organization.name,
       role: organization.role,
+      projects: organization.projects,
     }));
   } catch {
     response.requestSucceeded = false;

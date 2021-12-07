@@ -24,6 +24,7 @@ import EditColumns from './EditColumns';
 import Filters from './Filters';
 import SearchCellRenderer from './TableCellRenderer';
 import { getPendingAccessions } from '../../../api/seeds/search';
+import { ServerOrganization } from 'src/types/Organization';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -66,11 +67,11 @@ const newAccessionChipStyles = makeStyles((theme) => ({
 }));
 
 type DatabaseProps = {
-  facilityId: number;
+  organization?: ServerOrganization;
 };
 
 export default function Database(props: DatabaseProps): JSX.Element {
-  const { facilityId } = props;
+  const { organization } = props;
   const classes = useStyles();
   const history = useHistory();
   const [editColumnsModalOpen, setEditColumnsModalOpen] = useState(false);
@@ -90,10 +91,13 @@ export default function Database(props: DatabaseProps): JSX.Element {
     availableValuesLodable.state === 'hasValue' ? availableValuesLodable.contents.results : undefined;
   const allValuesLodable = useRecoilValueLoadable(searchAllValuesSelector);
   const allValues = allValuesLodable.state === 'hasValue' ? allValuesLodable.contents.results : undefined;
+  const [facilityId, setFacilityId] = React.useState<number>();
 
   useEffect(() => {
     const populatePendingAccessions = async () => {
-      setPendingAccessions(await getPendingAccessions(facilityId));
+      if (facilityId) {
+        setPendingAccessions(await getPendingAccessions(facilityId));
+      }
     };
     populatePendingAccessions();
   }, [facilityId]);
@@ -189,12 +193,16 @@ export default function Database(props: DatabaseProps): JSX.Element {
     <MuiPickersUtilsProvider utils={MomentUtils}>
       <main>
         <EditColumns open={editColumnsModalOpen} value={columns} onClose={onCloseEditColumnsModal} />
-        <DownloadReportModal facilityId={facilityId} open={reportModalOpen} onClose={onCloseDownloadReportModal} />
+        {facilityId && (
+          <DownloadReportModal facilityId={facilityId} open={reportModalOpen} onClose={onCloseDownloadReportModal} />
+        )}
         <PageHeader
           title=''
           subtitle={getSubtitle()}
           page={strings.ACCESSIONS}
           parentPage={strings.SEEDS}
+          organization={organization}
+          onChangeFacility={(facility) => setFacilityId(facility?.id)}
           rightComponent={
             <div>
               <Chip

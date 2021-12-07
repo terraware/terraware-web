@@ -14,6 +14,7 @@ import { Accession, AccessionPostRequestBody } from 'src/api/types/accessions';
 import snackbarAtom from 'src/state/atoms/snackbar';
 import searchSelector from 'src/state/selectors/seeds/search';
 import strings from 'src/strings';
+import { ServerOrganization } from 'src/types/Organization';
 import useForm from 'src/utils/useForm';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import Divisor from '../../common/Divisor';
@@ -61,12 +62,13 @@ const useStyles = makeStyles((theme) =>
 );
 
 type NewAccessionProps = {
-  facilityId: number;
+  organization?: ServerOrganization;
 };
 
 export default function NewAccessionWrapper(props: NewAccessionProps): JSX.Element {
-  const { facilityId } = props;
+  const { organization } = props;
   const [accessionId, setAccessionId] = useState<number>();
+  const [facilityId, setFacilityId] = React.useState<number>();
   const setSnackbar = useSetRecoilState(snackbarAtom);
   const resetSearch = useResetRecoilState(searchSelector);
   const classes = useStyles();
@@ -113,6 +115,8 @@ export default function NewAccessionWrapper(props: NewAccessionProps): JSX.Eleme
       <PageHeader
         title={strings.NEW_ACCESSION}
         subtitle={strings.NEW_ACCESSION_DESCRIPTION}
+        organization={organization}
+        onChangeFacility={(facility) => setFacilityId(facility?.id)}
         rightComponent={
           <Fab
             id='closenewAccession'

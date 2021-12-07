@@ -6,5 +6,6 @@ export type FacilitiesListResponse =
 
 export interface Facility {
   id: number;
+  name: string;
   type: FacilitiesListResponse['facilities'][0]['type'];
 }

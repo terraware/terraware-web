@@ -20,6 +20,7 @@ import strings from 'src/strings';
 import useStateLocation from 'src/utils/useStateLocation';
 import PageHeader from '../PageHeader';
 import { getPendingAccessions } from '../../../api/seeds/search';
+import { ServerOrganization } from 'src/types/Organization';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -58,19 +59,22 @@ const TableCell = withStyles({
 })(MuiTableCell);
 
 export type CheckInProps = {
-  facilityId: number;
+  organization?: ServerOrganization;
 };
 
 export default function CheckIn(props: CheckInProps): JSX.Element {
   const classes = useStyles();
-  const { facilityId } = props;
+  const { organization } = props;
   const history = useHistory();
   const location = useStateLocation();
   const [pendingAccessions, setPendingAccessions] = useState<SearchResponsePayload>();
+  const [facilityId, setFacilityId] = React.useState<number>();
 
   useEffect(() => {
     const populatePendingAccessions = async () => {
-      setPendingAccessions(await getPendingAccessions(facilityId));
+      if (facilityId) {
+        setPendingAccessions(await getPendingAccessions(facilityId));
+      }
     };
     populatePendingAccessions();
   }, [facilityId]);
@@ -111,7 +115,14 @@ export default function CheckIn(props: CheckInProps): JSX.Element {
   return (
     <MuiPickersUtilsProvider utils={MomentUtils}>
       <main>
-        <PageHeader title={strings.CHECKIN_BAGS} subtitle={getSubtitle()} back={true} backUrl={'/accessions'} />
+        <PageHeader
+          title={strings.CHECKIN_BAGS}
+          subtitle={getSubtitle()}
+          back={true}
+          backUrl={'/accessions'}
+          organization={organization}
+          onChangeFacility={(facility) => setFacilityId(facility?.id)}
+        />
         <Container maxWidth={false} className={classes.mainContainer}>
           <Grid container spacing={3}>
             <Grid item xs={1} />

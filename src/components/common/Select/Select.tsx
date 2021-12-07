@@ -1,10 +1,10 @@
 import classNames from 'classnames';
-import React, { ChangeEventHandler, useState } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import Icon from '../icon/Icon';
 import './styles.scss';
 
 interface SelectProps {
-  onChange?: ChangeEventHandler<HTMLInputElement> | undefined;
+  onChange?: (newValue: string) => void;
   label?: string;
   disabled?: boolean;
   id?: string;
@@ -56,8 +56,22 @@ export default function Select(props: SelectProps): JSX.Element {
 
   const onOptionSelected = (option: string) => {
     setValue(option);
+    if (onChange) {
+      onChange(option);
+    }
     setOpenedOptions(false);
   };
+
+  const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    setValue(e.target.value);
+    if (onChange) {
+      onChange(e.target.value);
+    }
+  };
+
+  useEffect(() => {
+    setValue(selectedValue);
+  }, [selectedValue]);
 
   return (
     <div className={`select ${className}`}>
@@ -68,7 +82,7 @@ export default function Select(props: SelectProps): JSX.Element {
       )}
       <div className='textfield-container'>
         <div id={id} className={selectClass} onClick={toggleOptions}>
-          <input value={value} disabled={true} placeholder={placeholder} onChange={onChange} />
+          <input value={value} disabled={true} placeholder={placeholder} onChange={onChangeHandler} />
           <Icon name={'caretDown'} className='textfield-value--icon-right' />
         </div>
         {options && openedOptions && (

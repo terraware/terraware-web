@@ -6,6 +6,8 @@ import React from 'react';
 import Title from '../common/Title';
 import { useHistory } from 'react-router-dom';
 import useStateLocation, { getLocation } from '../../utils/useStateLocation';
+import { Project, ServerOrganization, Site } from 'src/types/Organization';
+import { Facility } from 'src/api/types/facilities';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -51,6 +53,11 @@ interface Props {
   parentPage?: string;
   back?: boolean;
   backUrl?: string;
+  organization?: ServerOrganization;
+  onChangeFacility?: (facility?: Facility) => void;
+  allowAll?: boolean;
+  setSelectedProject?: (project: Project | undefined) => void;
+  setSelectedSite?: (site: Site | undefined) => void;
 }
 
 export default function PageHeader({
@@ -62,6 +69,11 @@ export default function PageHeader({
   backUrl,
   page,
   parentPage,
+  organization,
+  onChangeFacility,
+  allowAll,
+  setSelectedProject,
+  setSelectedSite,
 }: Props): JSX.Element {
   const classes = useStyles();
   const history = useHistory();
@@ -72,7 +84,15 @@ export default function PageHeader({
       <Grid container spacing={3} className={classes.container}>
         {page && parentPage && (
           <Grid item xs={12}>
-            <Title page={page} parentPage={parentPage} />
+            <Title
+              page={page}
+              parentPage={parentPage}
+              organization={organization}
+              onChangeFacility={onChangeFacility}
+              allowAll={allowAll}
+              setSelectedProjectToParent={setSelectedProject}
+              setSelectedSiteToParent={setSelectedSite}
+            />
           </Grid>
         )}
         <Grid item xs={1} />

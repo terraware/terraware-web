@@ -4,13 +4,9 @@ import mapboxgl from 'mapbox-gl';
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
-import getOrganization, {
-  GetOrganizationResponse,
-  getOrganizations,
-  OrgRequestError,
-} from 'src/api/organization/organization';
+import { getOrganizations } from 'src/api/organization/organization';
 import { Notifications } from 'src/types/Notifications';
-import { Organization, ServerOrganization } from 'src/types/Organization';
+import { ServerOrganization } from 'src/types/Organization';
 import { PlantSearchOptions } from 'src/types/Plant';
 import Home from './components/Home';
 import NavBar from './components/NavBar';
@@ -58,20 +54,10 @@ const useStyles = makeStyles(() =>
   })
 );
 
-const emptyOrg: Organization = {
-  projects: [],
-  sites: [],
-  facilities: [],
-  plantLayers: [],
-};
-
 function AppContent() {
   const classes = useStyles();
-  const [organization, setOrganization] = useState<Organization>(emptyOrg);
   const [selectedOrganization, setSelectedOrganization] = useState<ServerOrganization>();
-  const [organizationErrors, setOrganizationErrors] = useState<OrgRequestError[]>([]);
   const [plantListFilters, setPlantListFilters] = useState<PlantSearchOptions>();
-  const [currFacilityId, setCurrFacilityId] = useState<number>(0);
   const [notifications, setNotifications] = useState<Notifications>();
 
   useEffect(() => {
@@ -81,30 +67,18 @@ function AppContent() {
         setSelectedOrganization(response.organizations[0]);
       }
     };
-    const populateOrganizationData = async () => {
-      const response: GetOrganizationResponse = await getOrganization();
-      if (response.errors.length > 0) {
-        setOrganizationErrors(response.errors);
-      }
-      setOrganization(response.organization);
-      if (response.organization.facilities.length > 0) {
-        setCurrFacilityId(response.organization.facilities[0].id);
-      }
-    };
-
     populateOrganizations();
-    populateOrganizationData();
   }, []);
 
   // Temporary error UI. Will be made prettier once we have input from the Design Team.
-  if (organizationErrors.includes(OrgRequestError.ErrorFetchingProjectsOrSites)) {
-    return <h1>Whoops! Looks like an unrecoverable internal error when fetching projects and/or sites</h1>;
-  } else if (
-    organizationErrors.includes(OrgRequestError.NoProjects) ||
-    organizationErrors.includes(OrgRequestError.NoSites)
-  ) {
-    return <h1>You don't have access to any projects and/or sites!</h1>;
-  }
+  // if (organizationErrors.includes(OrgRequestError.ErrorFetchingProjectsOrSites)) {
+  //   return <h1>Whoops! Looks like an unrecoverable internal error when fetching projects and/or sites</h1>;
+  // } else if (
+  //   organizationErrors.includes(OrgRequestError.NoProjects) ||
+  //   organizationErrors.includes(OrgRequestError.NoSites)
+  // ) {
+  //   return <h1>You don't have access to any projects and/or sites!</h1>;
+  // }
 
   return (
     <>
@@ -115,7 +89,11 @@ function AppContent() {
           <NavBar />
         </div>
         <div className={classes.content}>
-          <TopBar notifications={notifications} setNotifications={setNotifications} currFacilityId={currFacilityId} />
+          <TopBar
+            notifications={notifications}
+            setNotifications={setNotifications}
+            organization={selectedOrganization}
+          />
           <ErrorBoundary>
             <Switch>
               {/* Routes, in order of their appearance down the side nav bar and then across the top nav bar. */}
@@ -123,25 +101,29 @@ function AppContent() {
                 <Home organization={selectedOrganization} />
               </Route>
               <Route exact path='/seeds-summary'>
-                <SeedSummary facilityId={currFacilityId} notifications={notifications} />
+                <SeedSummary organization={selectedOrganization} notifications={notifications} />
               </Route>
               <Route exact path='/checkin'>
-                <CheckIn facilityId={currFacilityId} />
+                <CheckIn organization={selectedOrganization} />
               </Route>
               <Route exact path='/accessions/new'>
-                <NewAccession facilityId={currFacilityId} />
+                <NewAccession organization={selectedOrganization} />
               </Route>
               <Route exact path='/accessions'>
-                <Database facilityId={currFacilityId} />
+                <Database organization={selectedOrganization} />
               </Route>
               <Route path='/accessions/:accessionId'>
                 <Accession />
               </Route>
               <Route exact path='/plants-dashboard'>
-                <PlantDashboard organization={organization} />
+                <PlantDashboard organization={selectedOrganization} />
               </Route>
               <Route exact path='/plants-list'>
-                <PlantList organization={organization} filters={plantListFilters} setFilters={setPlantListFilters} />
+                <PlantList
+                  organization={selectedOrganization}
+                  filters={plantListFilters}
+                  setFilters={setPlantListFilters}
+                />
               </Route>
               <Route exact path='/species'>
                 <SpeciesList />
