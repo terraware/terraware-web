@@ -3,14 +3,14 @@ import { createStyles, CssBaseline, makeStyles, ThemeProvider } from '@material-
 import mapboxgl from 'mapbox-gl';
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
-import {RecoilRoot} from 'recoil';
+import { RecoilRoot } from 'recoil';
 import getOrganization, { GetOrganizationResponse, OrgRequestError } from 'src/api/organization/organization';
 import {
   DEFAULT_SEED_SEARCH_FILTERS,
   DEFAULT_SEED_SEARCH_SORT_ORDER,
   SearchField,
   SeedSearchSortOrder,
-  SeedSearchFilters,
+  SeedSearchCriteria,
 } from 'src/api/seeds/search';
 import { Notifications } from 'src/types/Notifications';
 import { Organization } from 'src/types/Organization';
@@ -31,7 +31,7 @@ import TopBar from './components/TopBar';
 import ErrorBoundary from './ErrorBoundary';
 import strings from './strings';
 import theme from './theme';
-import {defaultPreset as DefaultColumns} from './components/seeds/database/columns';
+import { defaultPreset as DefaultColumns } from './components/seeds/database/columns';
 
 // @ts-ignore
 mapboxgl.workerClass =
@@ -77,8 +77,8 @@ function AppContent() {
   const [notifications, setNotifications] = useState<Notifications>();
   const [plantListFilters, setPlantListFilters] = useState<PlantSearchOptions>();
 
-  // seedSearchFilters describes which filters to apply when searching accession data.
-  const [seedSearchFilters, setSeedSearchFilters] = useState<SeedSearchFilters>(DEFAULT_SEED_SEARCH_FILTERS);
+  // seedSearchCriteria describes which filters to apply when searching accession data.
+  const [seedSearchCriteria, setSeedSearchCriteria] = useState<SeedSearchCriteria>(DEFAULT_SEED_SEARCH_FILTERS);
 
   // seedSearchSort describes which sort criterion to apply when searching accession data.
   const [seedSearchSort, setSeedSearchSort] = useState<SeedSearchSortOrder>(DEFAULT_SEED_SEARCH_SORT_ORDER);
@@ -128,7 +128,12 @@ function AppContent() {
           <NavBar />
         </div>
         <div className={classes.content}>
-          <TopBar notifications={notifications} setNotifications={setNotifications} currFacilityId={currFacilityId} />
+          <TopBar
+            notifications={notifications}
+            setNotifications={setNotifications}
+            setSeedSearchCriteria={setSeedSearchCriteria}
+            currFacilityId={currFacilityId}
+          />
           <ErrorBoundary>
             <Switch>
               {/* Routes, in order of their appearance down the side nav bar and then across the top nav bar. */}
@@ -139,7 +144,11 @@ function AppContent() {
                 </main>
               </Route>
               <Route exact path='/seeds-summary'>
-                <SeedSummary facilityId={currFacilityId} notifications={notifications} />
+                <SeedSummary
+                  facilityId={currFacilityId}
+                  setSeedSearchCriteria={setSeedSearchCriteria}
+                  notifications={notifications}
+                />
               </Route>
               <Route exact path='/checkin'>
                 <CheckIn facilityId={currFacilityId} />
@@ -148,11 +157,17 @@ function AppContent() {
                 <NewAccession facilityId={currFacilityId} />
               </Route>
               <Route exact path='/accessions'>
-                <Database facilityId={currFacilityId}
-                          searchColumns={seedSearchColumns}
-                          setSearchColumns={setSeedSearchColumns}
-                          displayColumnNames={accessionsDisplayColumns}
-                          setDisplayColumnNames={setAccessionsDisplayColumns} />
+                <Database
+                  facilityId={currFacilityId}
+                  searchCriteria={seedSearchCriteria}
+                  setSearchCriteria={setSeedSearchCriteria}
+                  searchSortOrder={seedSearchSort}
+                  setSearchSortOrder={setSeedSearchSort}
+                  searchColumns={seedSearchColumns}
+                  setSearchColumns={setSeedSearchColumns}
+                  displayColumnNames={accessionsDisplayColumns}
+                  setDisplayColumnNames={setAccessionsDisplayColumns}
+                />
               </Route>
               <Route path='/accessions/:accessionId'>
                 <Accession />

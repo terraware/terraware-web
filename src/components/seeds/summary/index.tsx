@@ -12,6 +12,7 @@ import PageHeader from '../PageHeader';
 import Alerts from './Alerts';
 import SummaryPaper from './SummaryPaper';
 import Updates from './Updates';
+import { SeedSearchCriteria } from '../../../api/seeds/search';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -38,12 +39,13 @@ Cookies.defaults = {
 
 type SeedSummaryProps = {
   facilityId: number;
+  setSeedSearchCriteria: (criteria: SeedSearchCriteria) => void;
   notifications?: Notifications;
 };
 
 export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
   const classes = useStyles();
-  const { facilityId, notifications } = props;
+  const { facilityId, setSeedSearchCriteria, notifications } = props;
   // populateSummaryInterval value is only being used when it is set.
   const [, setPopulateSummaryInterval] = useState<ReturnType<typeof setInterval>>();
   const [summary, setSummary] = useState<GetSummaryResponse>();
@@ -136,7 +138,12 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
               </Grid>
               <Grid item xs={8}>
                 <Paper className={`${classes.paper} ${classes.fixedHeight}`}>
-                  <Updates summaryResponse={summary?.value} loading={summary === undefined} error={errorOccurred} />
+                  <Updates
+                    setSeedSearchCriteria={setSeedSearchCriteria}
+                    summaryResponse={summary?.value}
+                    loading={summary === undefined}
+                    error={errorOccurred}
+                  />
                 </Paper>
               </Grid>
             </Grid>

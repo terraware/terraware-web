@@ -3,7 +3,7 @@ import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import React from 'react';
 import strings from 'src/strings';
 import DatePicker from '../../../common/DatePicker';
-import {FieldNodePayload, SearchField} from '../../../../api/seeds/search';
+import { FieldNodePayload, SearchField } from '../../../../api/seeds/search';
 
 const useStyles = makeStyles((theme) =>
   createStyles({

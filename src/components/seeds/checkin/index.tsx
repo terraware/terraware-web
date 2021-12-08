@@ -18,7 +18,7 @@ import Button from 'src/components/common/button/Button';
 import strings from 'src/strings';
 import useStateLocation from 'src/utils/useStateLocation';
 import PageHeader from '../PageHeader';
-import {getPendingAccessions, SearchResponsePayload, SearchResponseResults} from '../../../api/seeds/search';
+import { getPendingAccessions, SearchResponsePayload, SearchResponseResults } from '../../../api/seeds/search';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

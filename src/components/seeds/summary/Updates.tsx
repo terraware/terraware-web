@@ -6,12 +6,10 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useSetRecoilState } from 'recoil';
+import { FieldNodePayload, SeedSearchCriteria } from 'src/api/seeds/search';
 import { SeedbankSummary } from 'src/api/seeds/summary';
 import { AccessionState } from 'src/api/types/accessions';
-import { searchFilterAtom } from 'src/state/atoms/seeds/search';
 import strings from 'src/strings';
-import {FieldNodePayload} from '../../../api/seeds/search';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -25,17 +23,17 @@ const useStyles = makeStyles(() =>
   })
 );
 
-interface Props {
+interface UpdatesProps {
   summaryResponse?: SeedbankSummary;
+  setSeedSearchCriteria: (criteria: SeedSearchCriteria) => void;
   loading: boolean;
   error: boolean;
 }
 
-export default function Updates({ summaryResponse, error, loading }: Props): JSX.Element {
+export default function Updates(props: UpdatesProps): JSX.Element {
+  const { summaryResponse, setSeedSearchCriteria, error, loading } = props;
   const classes = useStyles();
   const updates = summaryResponse ? generateUpdates(summaryResponse) : undefined;
-
-  const setFilters = useSetRecoilState(searchFilterAtom);
 
   const onClick = (state: AccessionState) => {
     const filter: FieldNodePayload = {
@@ -49,7 +47,7 @@ export default function Updates({ summaryResponse, error, loading }: Props): JSX
       case 'Pending': {
         const date = new Date();
         date.setDate(date.getDate() - 7);
-        setFilters({
+        setSeedSearchCriteria({
           state: filter,
           receivedDate: {
             field: 'receivedDate',
@@ -63,7 +61,7 @@ export default function Updates({ summaryResponse, error, loading }: Props): JSX
       case 'Processed': {
         const date = new Date();
         date.setDate(date.getDate() - 14);
-        setFilters({
+        setSeedSearchCriteria({
           state: filter,
           processingStartDate: {
             field: 'processingStartDate',
@@ -77,7 +75,7 @@ export default function Updates({ summaryResponse, error, loading }: Props): JSX
       case 'Withdrawn': {
         const date = new Date();
         date.setDate(date.getDate() - 7);
-        setFilters({
+        setSeedSearchCriteria({
           state: filter,
           withdrawalDate: {
             field: 'withdrawalDate',
@@ -89,7 +87,7 @@ export default function Updates({ summaryResponse, error, loading }: Props): JSX
         break;
       }
       default:
-        setFilters({ state: filter });
+        setSeedSearchCriteria({ state: filter });
         break;
     }
   };

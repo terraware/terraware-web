@@ -12,7 +12,7 @@ import {
   FieldNodePayload,
   OrNodePayload,
   SearchField,
-  SearchNodePayload
+  SearchNodePayload,
 } from '../../../../api/seeds/search';
 
 const useStyles = makeStyles((theme) =>

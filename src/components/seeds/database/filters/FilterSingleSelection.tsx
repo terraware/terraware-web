@@ -3,7 +3,7 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 import strings from 'src/strings';
 import { Option } from '../columns';
-import {FieldNodePayload, SearchField} from '../../../../api/seeds/search';
+import { FieldNodePayload, SearchField } from '../../../../api/seeds/search';
 
 const useStyles = makeStyles((theme) =>
   createStyles({

@@ -2,7 +2,7 @@ import { createStyles, InputAdornment, makeStyles, TextField } from '@material-u
 import SearchIcon from '@material-ui/icons/Search';
 import React from 'react';
 import strings from 'src/strings';
-import {FieldNodePayload, SearchField} from '../../../../api/seeds/search';
+import { FieldNodePayload, SearchField } from '../../../../api/seeds/search';
 
 const useStyles = makeStyles((theme) =>
   createStyles({

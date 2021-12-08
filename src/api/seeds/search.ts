@@ -1,8 +1,8 @@
 import axios from '..';
-import {components, paths} from 'src/api/types/generated-schema';
-import {COLUMNS_INDEXED, DatabaseColumn} from '../../components/seeds/database/columns';
+import { components, paths } from 'src/api/types/generated-schema';
+import { COLUMNS_INDEXED, DatabaseColumn } from 'src/components/seeds/database/columns';
 
-export type SeedSearchFilters = Record<string, SearchNodePayload>;
+export type SeedSearchCriteria = Record<string, SearchNodePayload>;
 export const DEFAULT_SEED_SEARCH_FILTERS = {};
 export type SeedSearchSortOrder = components['schemas']['SearchSortOrderElement'];
 export const DEFAULT_SEED_SEARCH_SORT_ORDER = {
@@ -13,13 +13,12 @@ export const DEFAULT_SEED_SEARCH_SORT_ORDER = {
 export type SearchField = components['schemas']['SearchField'];
 export type SearchFilter = components['schemas']['SearchFilter'];
 
-export type AndNodePayload = components['schemas']['AndNodePayload'] & { operation: 'and'; };
-export type FieldNodePayload = components['schemas']['FieldNodePayload'] & { operation: 'field'; };
-export type NotNodePayload = components['schemas']['NotNodePayload'] & { operation: 'not'; };
-export type OrNodePayload = components['schemas']['OrNodePayload'] & { operation: 'or'; };
+export type AndNodePayload = components['schemas']['AndNodePayload'] & { operation: 'and' };
+export type FieldNodePayload = components['schemas']['FieldNodePayload'] & { operation: 'field' };
+export type NotNodePayload = components['schemas']['NotNodePayload'] & { operation: 'not' };
+export type OrNodePayload = components['schemas']['OrNodePayload'] & { operation: 'or' };
 export type SearchNodePayload = AndNodePayload | FieldNodePayload | NotNodePayload | OrNodePayload;
-export type FieldValuesPayload = { [key: string]: components['schemas']['FieldValuesPayload']; };
-
+export type FieldValuesPayload = { [key: string]: components['schemas']['FieldValuesPayload'] };
 
 /**********************
  * SEARCH HELPERS
@@ -27,7 +26,8 @@ export type FieldValuesPayload = { [key: string]: components['schemas']['FieldVa
 
 const SEARCH_ENDPOINT = '/api/v1/seedbank/search';
 export type SearchRequestPayload = paths[typeof SEARCH_ENDPOINT]['post']['requestBody']['content']['application/json'];
-export type SearchResponsePayload = paths[typeof SEARCH_ENDPOINT]['post']['responses'][200]['content']['application/json'];
+export type SearchResponsePayload =
+  paths[typeof SEARCH_ENDPOINT]['post']['responses'][200]['content']['application/json'];
 export type SearchResponseResults = SearchResponsePayload['results'][0];
 
 export async function search(params: SearchRequestPayload): Promise<SearchResponsePayload> {
@@ -37,26 +37,16 @@ export async function search(params: SearchRequestPayload): Promise<SearchRespon
   return response;
 }
 
-const FIELD_VALUES_ENDPOINT = '/api/v1/seedbank/values';
-export type ValuesPostRequestBody = paths[typeof FIELD_VALUES_ENDPOINT]['post']['requestBody']['content']['application/json'];
-export type ValuesPostResponse = paths[typeof FIELD_VALUES_ENDPOINT]['post']['responses'][200]['content']['application/json'];
-
-export async function searchFieldValues(params: ValuesPostRequestBody): Promise<ValuesPostResponse> {
-  const endpoint = `${process.env.REACT_APP_TERRAWARE_API}${FIELD_VALUES_ENDPOINT}`;
-  const response: ValuesPostResponse = (await axios.post(endpoint, params)).data;
-
-  return response;
-}
-
 const ALL_FIELD_VALUES_ENDPOINT = '/api/v1/seedbank/values/all';
-// TODO Remove this export
-export type ListAllFieldValuesRequestPayload =
+type ListAllFieldValuesRequestPayload =
   paths[typeof ALL_FIELD_VALUES_ENDPOINT]['post']['requestBody']['content']['application/json'];
 type ListAllFieldValuesResponsePayload =
   paths[typeof ALL_FIELD_VALUES_ENDPOINT]['post']['responses'][200]['content']['application/json'];
-export type AllFieldValuesPayload = ListAllFieldValuesResponsePayload['results'];
+export type AllFieldValuesMap = ListAllFieldValuesResponsePayload['results'];
 
-export async function listAllFieldValues(params: ListAllFieldValuesRequestPayload): Promise<ListAllFieldValuesResponsePayload> {
+export async function listAllFieldValues(
+  params: ListAllFieldValuesRequestPayload
+): Promise<ListAllFieldValuesResponsePayload> {
   const endpoint = `${process.env.REACT_APP_TERRAWARE_API}${ALL_FIELD_VALUES_ENDPOINT}`;
   const response: ListAllFieldValuesResponsePayload = (await axios.post(endpoint, params)).data;
 
@@ -81,10 +71,13 @@ export async function getPrimaryCollectors(facilityId: number): Promise<string[]
  *******************/
 
 export type GetAccessionByNumberResponse = {
-  accessions: SearchResponseResults[] | null;  // empty list if none found, null if error occurred
+  accessions: SearchResponseResults[] | null; // empty list if none found, null if error occurred
 };
 
-export async function getAccessionsByNumber(accessionNumber: number, facilityId: number): Promise<GetAccessionByNumberResponse> {
+export async function getAccessionsByNumber(
+  accessionNumber: number,
+  facilityId: number
+): Promise<GetAccessionByNumberResponse> {
   const response: GetAccessionByNumberResponse = {
     accessions: null,
   };
@@ -134,7 +127,12 @@ export async function getPendingAccessions(facilityId: number): Promise<SearchRe
  * COLUMN SEARCH
  ****************/
 
-export function findSingleAndMultiChoiceFields(fields: SearchField[]): SearchField[] {
+/* filterSelectFields()
+ * input: a list of search field names
+ * output: a list of search field names that are associated with fields that have either
+ * single or multi select values (as opposed to date range values, for example).
+ */
+export function filterSelectFields(fields: SearchField[]): SearchField[] {
   return fields.reduce((acum: SearchField[], value) => {
     const dbColumn: DatabaseColumn = COLUMNS_INDEXED[value];
     if (['multiple_selection', 'single_selection'].includes(dbColumn.filter?.type ?? '')) {
@@ -142,20 +140,26 @@ export function findSingleAndMultiChoiceFields(fields: SearchField[]): SearchFie
     }
 
     return acum;
-  }, [] as any[]);
+  }, [] as SearchField[]);
 }
 
-export type GetAllFieldOptionsResponse = {
-  fieldValuesByFieldName: AllFieldValuesPayload | null;  // null if the request failed
+/* getAllFieldValues() returns all the possible values associated with the requested accession fields.
+ * This function does not filter based on which values are currently being used by existing accessions.
+ * For example, if you pass in the field name 'stage', this function would return all accession stage
+ * options: [dried, drying, in storage, nursery, pending, processed, processing, withdrawn] even if
+ * only some stages: [pending, processed] are being used by existing accessions.
+ */
+export type GetAllFieldValuesResponse = {
+  fieldValuesByFieldName: AllFieldValuesMap | null; // null if the request failed
 };
 
-export async function getAllFieldOptions(fields: SearchField[], facilityId: number): Promise<GetAllFieldOptionsResponse>{
-  const response: GetAllFieldOptionsResponse = { fieldValuesByFieldName: null };
+export async function getAllFieldValues(fields: SearchField[], facilityId: number): Promise<GetAllFieldValuesResponse> {
+  const response: GetAllFieldValuesResponse = { fieldValuesByFieldName: null };
 
   try {
     const params: ListAllFieldValuesRequestPayload = {
       facilityId,
-      fields
+      fields,
     };
     response.fieldValuesByFieldName = (await listAllFieldValues(params)).results;
   } catch {
@@ -163,4 +167,35 @@ export async function getAllFieldOptions(fields: SearchField[], facilityId: numb
   }
 
   return response;
+}
+
+const FIELD_VALUES_ENDPOINT = '/api/v1/seedbank/values';
+type ValuesPostRequestBody = paths[typeof FIELD_VALUES_ENDPOINT]['post']['requestBody']['content']['application/json'];
+type ValuesPostResponse = paths[typeof FIELD_VALUES_ENDPOINT]['post']['responses'][200]['content']['application/json'];
+export type FieldValuesMap = ValuesPostResponse['results'];
+
+/* searchFieldValues() returns all values for the specified fields, given that those values are associated with
+ * an accession that match the given search criteria. At minimum, if no search criteria is specified, the accessions
+ * will all be associated with the given facilityId.
+ */
+export async function searchFieldValues(
+  fields: SearchField[],
+  searchCriteria: any,
+  facilityId: number
+): Promise<FieldValuesMap | null> {
+  try {
+    const internalSearch: AndNodePayload | undefined =
+      searchCriteria === {}
+        ? undefined
+        : {
+          operation: 'and',
+          children: Object.values(searchCriteria),
+        };
+    const params: ValuesPostRequestBody = { facilityId, fields, search: internalSearch };
+    const endpoint = `${process.env.REACT_APP_TERRAWARE_API}${FIELD_VALUES_ENDPOINT}`;
+    const apiResponse: ValuesPostResponse = (await axios.post(endpoint, params)).data;
+    return apiResponse.results;
+  } catch {
+    return null;
+  }
 }

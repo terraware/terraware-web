@@ -11,7 +11,7 @@ import MultipleSelection from './filters/FilterMultipleSelection';
 import FilterNumberRange from './filters/FilterNumberRange';
 import Search from './filters/FilterSearch';
 import SingleSelection from './filters/FilterSingleSelection';
-import {FieldNodePayload, FieldValuesPayload, OrNodePayload, SearchNodePayload} from '../../../api/seeds/search';
+import { FieldNodePayload, FieldValuesPayload, OrNodePayload, SearchNodePayload } from '../../../api/seeds/search';
 
 const useStyles = makeStyles((theme) =>
   createStyles({

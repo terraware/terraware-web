@@ -6,30 +6,32 @@ import EditIcon from '@material-ui/icons/Edit';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Link as RouterLink, useHistory } from 'react-router-dom';
-import { useRecoilState, useSetRecoilState, useRecoilValueLoadable } from 'recoil';
-import { searchFilterAtom, searchSortAtom, searchSelectedColumnsAtom } from 'src/state/atoms/seeds/search';
-import searchSelector from 'src/state/selectors/seeds/search';
-import searchValuesSelector from 'src/state/selectors/seeds/searchValues';
+import {selector, useRecoilValueLoadable} from 'recoil';
+import {
+  AllFieldValuesMap, AndNodePayload,
+  FieldValuesMap,
+  filterSelectFields,
+  getAllFieldValues,
+  getPendingAccessions, search,
+  SearchField,
+  searchFieldValues,
+  SearchNodePayload, SearchRequestPayload,
+  SearchResponsePayload,
+  SearchResponseResults,
+  SeedSearchCriteria,
+  SeedSearchSortOrder,
+} from 'src/api/seeds/search';
 import strings from 'src/strings';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
-import Button from '../../../components/common/button/Button';
-import Table from '../../common/table';
-import { Order } from '../../common/table/sort';
+import Button from 'src/components/common/button/Button';
+import Table from 'src/components/common/table';
+import { Order } from 'src/components/common/table/sort';
 import PageHeader from '../PageHeader';
-import {COLUMNS_INDEXED} from './columns';
+import { COLUMNS_INDEXED } from './columns';
 import DownloadReportModal from './DownloadReportModal';
 import EditColumns from './EditColumns';
 import Filters from './Filters';
 import SearchCellRenderer from './TableCellRenderer';
-import {
-  AllFieldValuesPayload,
-  findSingleAndMultiChoiceFields,
-  getAllFieldOptions,
-  getPendingAccessions, SearchField,
-  SearchNodePayload,
-  SearchResponsePayload,
-  SearchResponseResults
-} from '../../../api/seeds/search';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -73,6 +75,10 @@ const newAccessionChipStyles = makeStyles((theme) => ({
 
 type DatabaseProps = {
   facilityId: number;
+  searchCriteria: SeedSearchCriteria;
+  setSearchCriteria: (criteria: SeedSearchCriteria) => void;
+  searchSortOrder: SeedSearchSortOrder;
+  setSearchSortOrder: (order: SeedSearchSortOrder) => void;
   searchColumns: SearchField[];
   setSearchColumns: (fields: SearchField[]) => void;
   displayColumnNames: SearchField[];
@@ -80,9 +86,22 @@ type DatabaseProps = {
 };
 
 export default function Database(props: DatabaseProps): JSX.Element {
-  const { facilityId, searchColumns, setSearchColumns, displayColumnNames, setDisplayColumnNames } = props;
   const classes = useStyles();
   const history = useHistory();
+  const {
+    facilityId,
+    searchCriteria,
+    setSearchCriteria,
+    searchSortOrder,
+    setSearchSortOrder,
+    searchColumns,
+    setSearchColumns,
+    displayColumnNames,
+    setDisplayColumnNames,
+  } = props;
+  const displayColumnDetails = displayColumnNames.map((name) => {
+    return COLUMNS_INDEXED[name];
+  });
   const [editColumnsModalOpen, setEditColumnsModalOpen] = useState(false);
   const [reportModalOpen, setReportModalOpen] = useState(false);
   const [pendingAccessions, setPendingAccessions] = useState<SearchResponsePayload>();
@@ -91,19 +110,15 @@ export default function Database(props: DatabaseProps): JSX.Element {
    * keys: all single and multi select search fields.
    * values: all the existing values that the field has in the database, for all accessions.
    */
-  const [fieldOptions, setFieldOptions] = useState<AllFieldValuesPayload | null>();
-  const [filters, setFilters] = useRecoilState(searchFilterAtom);
-  const [sort, setSort] = useRecoilState(searchSortAtom);
-  const setSearchSelectedColumns = useSetRecoilState(searchSelectedColumnsAtom);
-
-  const displayColumnDetails = displayColumnNames.map((name) => {
-    return COLUMNS_INDEXED[name];
-  });
-  const resultsLodable = useRecoilValueLoadable(searchSelector);
-  const results = resultsLodable.state === 'hasValue' ? resultsLodable.contents.results : undefined;
-  const availableValuesLodable = useRecoilValueLoadable(searchValuesSelector);
-  const availableValues =
-    availableValuesLodable.state === 'hasValue' ? availableValuesLodable.contents.results : undefined;
+  const [fieldOptions, setFieldOptions] = useState<AllFieldValuesMap | null>();
+  /*
+   * availableFieldOptions is a list of records
+   * keys: all single and multi select search fields.
+   * values: all the values that are associated with an accession in the current facility AND that aren't being
+   * filtered out by the given search criteria.
+   */
+  const [availableFieldOptions, setAvailableFieldOptions] = useState<FieldValuesMap | null>();
+  const [searchResults, setSearchResults] = useState<SearchResponseResults[] | null>();
 
   useEffect(() => {
     const populatePendingAccessions = async () => {
@@ -113,12 +128,47 @@ export default function Database(props: DatabaseProps): JSX.Element {
   }, [facilityId]);
 
   useEffect(() => {
-    const populateSearchColumns = async () => {
-      const singleAndMultiChoiceFields = findSingleAndMultiChoiceFields(searchColumns);
-      setFieldOptions((await getAllFieldOptions(singleAndMultiChoiceFields, facilityId)).fieldValuesByFieldName);
+    const populateFieldOptions = async () => {
+      const singleAndMultiChoiceFields = filterSelectFields(searchColumns);
+      setFieldOptions((await getAllFieldValues(singleAndMultiChoiceFields, facilityId)).fieldValuesByFieldName);
     };
-    populateSearchColumns();
+    populateFieldOptions();
   }, [facilityId, searchColumns]);
+
+  useEffect(() => {
+    const populateAvailableFieldOptions = async () => {
+      const singleAndMultiChoiceFields = filterSelectFields(searchColumns);
+      setAvailableFieldOptions(await searchFieldValues(singleAndMultiChoiceFields, searchCriteria, facilityId));
+    };
+    populateAvailableFieldOptions();
+  }, [facilityId, searchColumns, searchCriteria]);
+
+  useEffect(() => {
+    const populateSearchResults = async () => {
+      console.log('searchCriteria, ', searchCriteria);
+
+      const internalSearch: AndNodePayload | undefined =
+        searchCriteria === {}
+      ? undefined
+      : {
+        operation: 'and',
+        children: Object.values(searchCriteria),
+      };
+
+      const apiResponse = await search({
+        facilityId,
+        fields: searchColumns.includes('active') ? searchColumns : [...searchColumns, 'active'],
+        sortOrder: [searchSortOrder],
+        search: internalSearch,
+        count: 1000,
+      } as SearchRequestPayload);
+
+      setSearchResults(apiResponse.results);
+    };
+
+    populateSearchResults();
+
+  }, [facilityId, searchCriteria, searchSortOrder, searchColumns]);
 
   const onSelect = (row: SearchResponseResults) => {
     if (row.id) {
@@ -132,14 +182,14 @@ export default function Database(props: DatabaseProps): JSX.Element {
   };
 
   const onSortChange = (order: Order, orderBy: string) => {
-    setSort({
+    setSearchSortOrder({
       field: orderBy as SearchField,
       direction: order === 'asc' ? 'Ascending' : 'Descending',
     });
   };
 
   const onFilterChange = (newFilters: Record<string, SearchNodePayload>) => {
-    setFilters(newFilters);
+    setSearchCriteria(newFilters);
   };
 
   const onOpenEditColumnsModal = () => {
@@ -162,10 +212,8 @@ export default function Database(props: DatabaseProps): JSX.Element {
         return acum;
       }, [] as SearchField[]);
 
-      setSearchSelectedColumns(searchSelectedColumns);
       setSearchColumns(searchSelectedColumns);
       setDisplayColumnNames(columnsintern);
-      setFilters(filters);
     }
     setEditColumnsModalOpen(false);
   };
@@ -191,13 +239,13 @@ export default function Database(props: DatabaseProps): JSX.Element {
   );
 
   const getSubtitle = () => {
-    if (results) {
-      return `${results.length} total`;
+    if (searchResults) {
+      return `${searchResults.length} total`;
     }
-    if (resultsLodable.state === 'loading') {
+    if (searchResults === undefined) {
       return <CircularProgress />;
     }
-    if (resultsLodable.state === 'hasError') {
+    if (searchResults === null) {
       return strings.GENERIC_ERROR;
     }
   };
@@ -212,7 +260,14 @@ export default function Database(props: DatabaseProps): JSX.Element {
     <MuiPickersUtilsProvider utils={MomentUtils}>
       <main>
         <EditColumns open={editColumnsModalOpen} value={displayColumnNames} onClose={onCloseEditColumnsModal} />
-        <DownloadReportModal facilityId={facilityId} open={reportModalOpen} onClose={onCloseDownloadReportModal} />
+        <DownloadReportModal
+          searchCriteria={searchCriteria}
+          searchSortOrder={searchSortOrder}
+          searchColumns={searchColumns}
+          facilityId={facilityId}
+          open={reportModalOpen}
+          onClose={onCloseDownloadReportModal}
+        />
         <PageHeader
           title=''
           subtitle={getSubtitle()}
@@ -252,20 +307,17 @@ export default function Database(props: DatabaseProps): JSX.Element {
             </div>
           }
         >
-          {availableValues && fieldOptions && (
+          {availableFieldOptions && fieldOptions && (
             <Filters
-              filters={filters}
-              availableValues={availableValues}
+              filters={searchCriteria}
+              availableValues={availableFieldOptions}
               allValues={fieldOptions}
               columns={displayColumnDetails}
               onChange={onFilterChange}
             />
           )}
-          {(fieldOptions === undefined ||
-            availableValuesLodable.state === 'loading') && <CircularProgress />}
-          {(fieldOptions === null ||
-            availableValuesLodable.state === 'hasError') &&
-            strings.GENERIC_ERROR}
+          {(fieldOptions === undefined || availableFieldOptions === undefined) && <CircularProgress />}
+          {(fieldOptions === null || availableFieldOptions === null) && strings.GENERIC_ERROR}
         </PageHeader>
         <Container maxWidth={false} className={classes.mainContainer}>
           {pendingAccessions && pendingAccessions.results.length > 0 && (
@@ -300,12 +352,12 @@ export default function Database(props: DatabaseProps): JSX.Element {
               <Paper>
                 <Grid container spacing={4}>
                   <Grid item xs={12}>
-                    {results && (
+                    {searchResults && (
                       <Table
                         columns={displayColumnDetails}
-                        rows={results}
-                        orderBy={sort.field}
-                        order={sort.direction === 'Ascending' ? 'asc' : 'desc'}
+                        rows={searchResults}
+                        orderBy={searchSortOrder.field}
+                        order={searchSortOrder.direction === 'Ascending' ? 'asc' : 'desc'}
                         Renderer={SearchCellRenderer}
                         onSelect={onSelect}
                         sortHandler={onSortChange}
@@ -313,11 +365,8 @@ export default function Database(props: DatabaseProps): JSX.Element {
                         onReorderEnd={onReorderEnd}
                       />
                     )}
-                    {resultsLodable.state === 'loading' && (
-                      <CircularProgress />
-                    )}
-                    {resultsLodable.state === 'hasError' &&
-                      strings.GENERIC_ERROR}
+                    {searchResults === undefined && <CircularProgress />}
+                    {searchResults === null && strings.GENERIC_ERROR}
                   </Grid>
                 </Grid>
               </Paper>

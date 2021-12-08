@@ -3,7 +3,7 @@ import FiberManualRecord from '@material-ui/icons/FiberManualRecord';
 import React from 'react';
 import CellRenderer from '../../common/table/TableCellRenderer';
 import { RendererProps } from '../../common/table/types';
-import {SearchResponseResults} from '../../../api/seeds/search';
+import { SearchResponseResults } from '../../../api/seeds/search';
 
 const statusStyles = makeStyles((theme) =>
   createStyles({

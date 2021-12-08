@@ -1,24 +1,46 @@
 import { atom, selector } from 'recoil';
-import {AndNodePayload, search, SearchRequestPayload, SearchResponsePayload} from 'src/api/seeds/search';
-import { searchFilterAtom, searchSelectedColumnsAtom, searchSortAtom } from '../../atoms/seeds/search';
-import { facilityIdSelector } from './facility';
+import { getAllFacilities } from 'src/api/seeds/facilities';
+import {
+  AndNodePayload,
+  search,
+  SearchNodePayload,
+  SearchRequestPayload,
+  SearchResponsePayload,
+  SeedSearchSortOrder,
+} from 'src/api/seeds/search';
+import { defaultPreset } from 'src/components/seeds/database/columns';
+
+const facilityIdSelector = selector<number>({
+  key: 'facilityId',
+  get: async ({ get }) => {
+    const facilities = await getAllFacilities();
+    const seedBank = facilities.find((facility) => facility.type === 'Seed Bank');
+
+    return seedBank?.id || 0;
+  },
+});
+
+const searchFilterAtom = atom({
+  key: 'searchFilterAtom',
+  default: {} as Record<string, SearchNodePayload>,
+});
+
+const searchSortAtom = atom({
+  key: 'searchSortAtom',
+  default: {
+    field: 'receivedDate',
+    direction: 'Descending',
+  } as SeedSearchSortOrder,
+});
+
+const searchSelectedColumnsAtom = atom({
+  key: 'searchSelectedColumnsAtom',
+  default: defaultPreset.fields,
+});
 
 const searchAtom = atom({
   key: 'searchTrigger',
   default: 0,
-});
-
-export default selector<SearchResponsePayload>({
-  key: 'searchSelector',
-  get: async ({ get }) => {
-    get(searchAtom);
-    const searchParams = get(searchParamsSelector);
-
-    return await search(searchParams);
-  },
-  set: ({ set }) => {
-    set(searchAtom, (v) => v + 1);
-  },
 });
 
 const searchFilterSelector = selector({
@@ -30,7 +52,7 @@ const searchFilterSelector = selector({
   },
 });
 
-export const searchParamsSelector = selector({
+const searchParamsSelector = selector({
   key: 'searchParamsSelector',
   get: ({ get }) => {
     const tableColumns = get(searchSelectedColumnsAtom);
@@ -51,5 +73,18 @@ export const searchParamsSelector = selector({
       search: internalSearch,
       count: 1000,
     } as SearchRequestPayload;
+  },
+});
+
+export default selector<SearchResponsePayload>({
+  key: 'searchSelector',
+  get: async ({ get }) => {
+    get(searchAtom);
+    const searchParams = get(searchParamsSelector);
+
+    return await search(searchParams);
+  },
+  set: ({ set }) => {
+    set(searchAtom, (v) => v + 1);
   },
 });

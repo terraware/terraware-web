@@ -4,7 +4,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import {getAccessionsByNumber, SearchResponseResults} from 'src/api/seeds/search';
+import { getAccessionsByNumber, SearchResponseResults } from 'src/api/seeds/search';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
 const useStyles = makeStyles((theme) =>
@@ -25,14 +25,14 @@ export type NavBarProps = {
 
 export default function NavBar(props: NavBarProps): JSX.Element {
   const classes = useStyles();
-  const {facilityId} = props;
+  const { facilityId } = props;
   const [searchInput, setSearchInput] = useState('');
   const [searchResults, setSearchResults] = useState<SearchResponseResults[]>([]);
   const history = useHistory();
   const location = useStateLocation();
 
   useEffect(() => {
-    const populateSearchResults = async() => {
+    const populateSearchResults = async () => {
       if (Number(searchInput)) {
         const apiResponse = await getAccessionsByNumber(parseInt(searchInput, 10), facilityId);
         if (apiResponse.accessions) {

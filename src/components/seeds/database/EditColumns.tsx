@@ -12,7 +12,7 @@ import DialogCloseButton from '../../common/DialogCloseButton';
 import Divisor from '../../common/Divisor';
 import RadioButton from '../../common/RadioButton';
 import { COLUMNS_INDEXED, Preset, searchPresets } from './columns';
-import {SearchField} from '../../../api/seeds/search';
+import { SearchField } from '../../../api/seeds/search';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

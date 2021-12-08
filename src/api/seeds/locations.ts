@@ -1,5 +1,5 @@
 import axios from '..';
-import {paths} from 'src/api/types/generated-schema';
+import { paths } from 'src/api/types/generated-schema';
 
 const STORAGE_LOCATIONS_ENDPOINT = '/api/v1/seedbank/values/storageLocation/{facilityId}';
 type StorageLocationsResponsePayload =

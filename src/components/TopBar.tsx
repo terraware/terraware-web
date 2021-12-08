@@ -8,6 +8,7 @@ import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import NotificationsDropdown from './NotificationsDropdown';
 import SearchBar from './SearchBar';
 import UserMenu from './UserMenu';
+import { SeedSearchCriteria } from '../api/seeds/search';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -48,12 +49,13 @@ const useStyles = makeStyles((theme) =>
 type TopBarProps = {
   notifications?: Notifications;
   setNotifications: (notifications?: Notifications) => void;
+  setSeedSearchCriteria: (criteria: SeedSearchCriteria) => void;
   currFacilityId: number;
 };
 
 export default function TopBar(props: TopBarProps): JSX.Element | null {
   const classes = useStyles();
-  const { notifications, setNotifications, currFacilityId } = props;
+  const { notifications, setNotifications, setSeedSearchCriteria, currFacilityId } = props;
   const location = useStateLocation();
 
   return (
@@ -75,6 +77,7 @@ export default function TopBar(props: TopBarProps): JSX.Element | null {
           <NotificationsDropdown
             notifications={notifications}
             setNotifications={setNotifications}
+            setSeedSearchCriteria={setSeedSearchCriteria}
             currFacilityId={currFacilityId}
           />
           <div className={classes.separator} />
