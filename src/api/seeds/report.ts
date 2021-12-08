@@ -1,6 +1,6 @@
 import axios from '..';
 import { paths } from 'src/api/types/generated-schema';
-import { AndNodePayload, SearchField, SeedSearchCriteria, SeedSearchSortOrder } from './search';
+import { convertToSearchNodePayload, SearchField, SeedSearchCriteria, SeedSearchSortOrder } from './search';
 
 const REPORT_ENDPOINT = '/api/v1/seedbank/search/export';
 export type ExportRequestPayload = paths[typeof REPORT_ENDPOINT]['post']['requestBody']['content']['application/json'];
@@ -13,15 +13,11 @@ export async function downloadReport(
   facilityId: number
 ): Promise<string | null> {
   try {
-    const internalSearch: AndNodePayload = {
-      operation: 'and',
-      children: Object.values(searchCriteria),
-    };
     const params: ExportRequestPayload = {
       facilityId,
       fields: searchColumns.includes('active') ? searchColumns : [...searchColumns, 'active'],
       sortOrder: [searchSortOrder],
-      search: internalSearch,
+      search: convertToSearchNodePayload(searchCriteria),
     };
 
     const endpoint = `${process.env.REACT_APP_TERRAWARE_API}${REPORT_ENDPOINT}`;

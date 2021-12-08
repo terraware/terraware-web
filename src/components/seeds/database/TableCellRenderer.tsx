@@ -3,7 +3,7 @@ import FiberManualRecord from '@material-ui/icons/FiberManualRecord';
 import React from 'react';
 import CellRenderer from '../../common/table/TableCellRenderer';
 import { RendererProps } from '../../common/table/types';
-import { SearchResponseResults } from '../../../api/seeds/search';
+import { SearchResponseElement } from '../../../api/seeds/search';
 
 const statusStyles = makeStyles((theme) =>
   createStyles({
@@ -22,7 +22,7 @@ const statusStyles = makeStyles((theme) =>
   })
 );
 
-export default function SearchCellRenderer(props: RendererProps<SearchResponseResults>): JSX.Element {
+export default function SearchCellRenderer(props: RendererProps<SearchResponseElement>): JSX.Element {
   const { column, value, index, row } = props;
 
   const id = `row${index}-${column.key}`;
