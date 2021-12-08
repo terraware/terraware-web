@@ -19,7 +19,7 @@ export const getNotifications = async (facilityId: number): Promise<Notification
 
   try {
     const queryParams: ListNotificationsQuery = { facilityId };
-    let endpoint = `${process.env.REACT_APP_TERRAWARE_API}${NOTIFICATIONS_ENDPOINT}`;
+    let endpoint = NOTIFICATIONS_ENDPOINT;
     endpoint = addQueryParams(endpoint, queryParams);
     const notifications: ListNotificationsResponseElement[] = (await axios.get(endpoint)).data.notifications;
     notifications.forEach((notification: ListNotificationsResponseElement) => {
@@ -53,7 +53,7 @@ export const MarkNotificationRead = async (id: string): Promise<MarkNotification
   const response: MarkNotificationReadResponse = { id, errorOccurred: false };
 
   try {
-    const endpoint = `${process.env.REACT_APP_TERRAWARE_API}${MARK_READ_ENDPOINT}`.replace('{id}', id);
+    const endpoint = MARK_READ_ENDPOINT.replace('{id}', id);
     await axios.post(endpoint);
   } catch (error) {
     response.errorOccurred = true;
@@ -72,8 +72,7 @@ export const MarkAllNotificationsRead = async (): Promise<MarkAllNotificationsRe
   const response: MarkAllNotificationsReadResponse = { errorOccurred: false };
 
   try {
-    const endpoint = `${process.env.REACT_APP_TERRAWARE_API}${MARK_ALL_READ_ENDPOINT}`;
-    await axios.post(endpoint);
+    await axios.post(MARK_ALL_READ_ENDPOINT);
   } catch (error) {
     response.errorOccurred = true;
   }

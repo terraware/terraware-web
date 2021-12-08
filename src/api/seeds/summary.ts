@@ -24,10 +24,7 @@ export const getSummary = async (facilityId: number): Promise<GetSummaryResponse
   };
 
   try {
-    const endpoint = `${process.env.REACT_APP_TERRAWARE_API}${SUMMARY_ENDPOINT}`.replace(
-      '{facilityId}',
-      `${facilityId}`
-    );
+    const endpoint = SUMMARY_ENDPOINT.replace('{facilityId}', `${facilityId}`);
     response.value = (await axios.get(endpoint)).data;
   } catch {
     response.errorOccurred = true;

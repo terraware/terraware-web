@@ -29,7 +29,7 @@ axios.interceptors.response.use(
   (error) => {
     if (error.response && error.response.status === 401) {
       const redirect = encodeURIComponent(location.href);
-      location.href = `${process.env.REACT_APP_TERRAWARE_API}/api/v1/login?redirect=${redirect}`;
+      location.href = `/api/v1/login?redirect=${redirect}`;
 
       return null;
     } else {

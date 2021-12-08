@@ -14,22 +14,19 @@ import {
 } from '../types/search';
 
 export async function search(params: SearchPostRequestBody): Promise<SearchPostResponse> {
-  const endpoint = `${process.env.REACT_APP_TERRAWARE_API}${searchEndpoint}`;
-  const response: SearchPostResponse = (await axios.post(endpoint, params)).data;
+  const response: SearchPostResponse = (await axios.post(searchEndpoint, params)).data;
 
   return response;
 }
 
 export async function searchValues(params: ValuesPostRequestBody): Promise<ValuesPostResponse> {
-  const endpoint = `${process.env.REACT_APP_TERRAWARE_API}${valuesEndpoint}`;
-  const response: ValuesPostResponse = (await axios.post(endpoint, params)).data;
+  const response: ValuesPostResponse = (await axios.post(valuesEndpoint, params)).data;
 
   return response;
 }
 
 export async function searchAllValues(params: ValuesAllPostRequestBody): Promise<ValuesAllPostResponse> {
-  const endpoint = `${process.env.REACT_APP_TERRAWARE_API}${valuesAllEndpoint}`;
-  const response: ValuesAllPostResponse = (await axios.post(endpoint, params)).data;
+  const response: ValuesAllPostResponse = (await axios.post(valuesAllEndpoint, params)).data;
 
   return response;
 }
