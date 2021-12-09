@@ -1,9 +1,9 @@
 import { createStyles, makeStyles, TableCell, Typography } from '@material-ui/core';
 import FiberManualRecord from '@material-ui/icons/FiberManualRecord';
 import React from 'react';
-import CellRenderer from '../../common/table/TableCellRenderer';
-import { RendererProps } from '../../common/table/types';
-import { SearchResponseElement } from '../../../api/seeds/search';
+import { SearchResponseElement } from 'src/api/seeds/search';
+import CellRenderer from 'src/components/common/table/TableCellRenderer';
+import { RendererProps } from 'src/components/common/table/types';
 
 const statusStyles = makeStyles((theme) =>
   createStyles({

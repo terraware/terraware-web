@@ -2,9 +2,9 @@ import axios from '..';
 import { paths } from 'src/api/types/generated-schema';
 import { convertToSearchNodePayload, SearchField, SeedSearchCriteria, SeedSearchSortOrder } from './search';
 
-const REPORT_ENDPOINT = '/api/v1/seedbank/search/export';
-export type ExportRequestPayload = paths[typeof REPORT_ENDPOINT]['post']['requestBody']['content']['application/json'];
-type ExportResponse = paths[typeof REPORT_ENDPOINT]['post']['responses'][200]['content']['text/csv'];
+const EXPORT_ENDPOINT = '/api/v1/seedbank/search/export';
+export type ExportRequestPayload = paths[typeof EXPORT_ENDPOINT]['post']['requestBody']['content']['application/json'];
+type ExportResponse = paths[typeof EXPORT_ENDPOINT]['post']['responses'][200]['content']['text/csv'];
 
 export async function downloadReport(
   searchCriteria: SeedSearchCriteria,
@@ -20,7 +20,7 @@ export async function downloadReport(
       search: convertToSearchNodePayload(searchCriteria),
     };
 
-    const endpoint = `${process.env.REACT_APP_TERRAWARE_API}${REPORT_ENDPOINT}`;
+    const endpoint = `${process.env.REACT_APP_TERRAWARE_API}${EXPORT_ENDPOINT}`;
     const response: ExportResponse = (await axios.post(endpoint, params)).data;
     return response;
   } catch {

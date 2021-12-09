@@ -2,6 +2,7 @@ import { Chip, Container, Divider, Link, Popover, Typography } from '@material-u
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import ArrowDropDown from '@material-ui/icons/ArrowDropDown';
 import React from 'react';
+import { FieldNodePayload, FieldValuesPayload, OrNodePayload, SearchNodePayload } from 'src/api/seeds/search';
 import strings from 'src/strings';
 import preventDefaultEvent from 'src/utils/preventDefaultEvent';
 import { DatabaseColumn, Option } from './columns';
@@ -11,7 +12,6 @@ import MultipleSelection from './filters/FilterMultipleSelection';
 import FilterNumberRange from './filters/FilterNumberRange';
 import Search from './filters/FilterSearch';
 import SingleSelection from './filters/FilterSingleSelection';
-import { FieldNodePayload, FieldValuesPayload, OrNodePayload, SearchNodePayload } from '../../../api/seeds/search';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -185,10 +185,6 @@ export function getUpdatedFilters(
 }
 
 function getOptions(col: DatabaseColumn, availableValues: FieldValuesPayload, allValues: FieldValuesPayload): Option[] {
-  console.log('allValues:', allValues);
-  console.log('col.key', col.key);
-  console.log('allValues[col.key]', allValues[col.key]);
-  console.log('availableValues', availableValues);
   const map1 = allValues[col.key].values.map((v) => {
     return {
       label: v,

@@ -3,12 +3,12 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 import HelpIcon from '@material-ui/icons/Help';
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
+import { SeedSearchCriteria } from 'src/api/seeds/search';
 import { Notifications } from 'src/types/Notifications';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import NotificationsDropdown from './NotificationsDropdown';
 import SearchBar from './SearchBar';
 import UserMenu from './UserMenu';
-import { SeedSearchCriteria } from '../api/seeds/search';
 
 const useStyles = makeStyles((theme) =>
   createStyles({

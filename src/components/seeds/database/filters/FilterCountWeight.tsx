@@ -1,19 +1,13 @@
 import { createStyles, Grid, makeStyles } from '@material-ui/core';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import React from 'react';
+import { AndNodePayload, FieldNodePayload, OrNodePayload, SearchField, SearchNodePayload } from 'src/api/seeds/search';
+import Checkbox from 'src/components/common/Checkbox';
+import Divisor from 'src/components/common/Divisor';
+import Dropdown from 'src/components/common/Dropdown';
+import TextField from 'src/components/common/TextField';
 import strings from 'src/strings';
-import Checkbox from '../../../common/Checkbox';
-import Divisor from '../../../common/Divisor';
-import Dropdown from '../../../common/Dropdown';
-import TextField from '../../../common/TextField';
 import { WEIGHT_UNITS } from '../../nursery/NewTest';
-import {
-  AndNodePayload,
-  FieldNodePayload,
-  OrNodePayload,
-  SearchField,
-  SearchNodePayload,
-} from '../../../../api/seeds/search';
 
 const useStyles = makeStyles((theme) =>
   createStyles({

@@ -16,6 +16,7 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { FieldNodePayload, SeedSearchCriteria } from 'src/api/seeds/search';
 import { getNotifications, MarkAllNotificationsRead, MarkNotificationRead } from 'src/api/notification';
 import { AccessionState } from 'src/api/types/accessions';
 import { API_PULL_INTERVAL } from 'src/constants';
@@ -24,7 +25,6 @@ import { Notifications, NotificationTypes } from 'src/types/Notifications';
 import preventDefaultEvent from 'src/utils/preventDefaultEvent';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import NotificationIcon from './NotificationIcon';
-import { FieldNodePayload, SeedSearchCriteria } from '../api/seeds/search';
 
 const useStyles = makeStyles((theme) =>
   createStyles({

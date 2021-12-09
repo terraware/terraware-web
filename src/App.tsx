@@ -77,7 +77,7 @@ function AppContent() {
   const [notifications, setNotifications] = useState<Notifications>();
   const [plantListFilters, setPlantListFilters] = useState<PlantSearchOptions>();
 
-  // seedSearchCriteria describes which filters to apply when searching accession data.
+  // seedSearchCriteria describes which criteria to apply when searching accession data.
   const [seedSearchCriteria, setSeedSearchCriteria] = useState<SeedSearchCriteria>(DEFAULT_SEED_SEARCH_FILTERS);
 
   // seedSearchSort describes which sort criterion to apply when searching accession data.
@@ -86,7 +86,8 @@ function AppContent() {
   // seedSearchColumns describes which accession columns to request when searching accession data.
   const [seedSearchColumns, setSeedSearchColumns] = useState<SearchField[]>(DefaultColumns.fields);
 
-  /* accessionsDisplayColumns describes which columns are displayed in the accessions list, and in which order.
+  /*
+   * accessionsDisplayColumns describes which columns are displayed in the accessions list, and in which order.
    * Differs from seedSearchSelectedColumns because the order matters. Also, sometimes the two lists won't have
    * exactly the same columns. E.g. if the user adds the Withdrawal -> "Seeds Withdrawn" column,
    * then seedSearchSelectedColumns will contain withdrawalQuantity and withdrawalUnits but this list will only

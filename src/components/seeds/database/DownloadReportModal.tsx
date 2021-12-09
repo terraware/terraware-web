@@ -4,12 +4,12 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React from 'react';
+import { SearchField, SeedSearchCriteria, SeedSearchSortOrder } from 'src/api/seeds/search';
 import { downloadReport } from 'src/api/seeds/report';
+import CancelButton from 'src/components/common/CancelButton';
+import DialogCloseButton from 'src/components/common/DialogCloseButton';
+import TextField from 'src/components/common/TextField';
 import strings from 'src/strings';
-import CancelButton from '../../common/CancelButton';
-import DialogCloseButton from '../../common/DialogCloseButton';
-import TextField from '../../common/TextField';
-import { SearchField, SeedSearchCriteria, SeedSearchSortOrder } from '../../../api/seeds/search';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

@@ -4,6 +4,7 @@ import Paper from '@material-ui/core/Paper';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import Cookies from 'cookies-js';
 import React, { useEffect, useState } from 'react';
+import { SeedSearchCriteria } from 'src/api/seeds/search';
 import { getSummary, GetSummaryResponse } from 'src/api/seeds/summary';
 import { API_PULL_INTERVAL } from 'src/constants';
 import strings from 'src/strings';
@@ -12,7 +13,6 @@ import PageHeader from '../PageHeader';
 import Alerts from './Alerts';
 import SummaryPaper from './SummaryPaper';
 import Updates from './Updates';
-import { SeedSearchCriteria } from '../../../api/seeds/search';
 
 const useStyles = makeStyles((theme) =>
   createStyles({

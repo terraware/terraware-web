@@ -19,7 +19,11 @@ export default function LocationDropdown(props: LocationDropdownProps): JSX.Elem
 
   useEffect(() => {
     const populateLocations = async () => {
-      setLocations(await getLocations(facilityId));
+      const apiResponse = await getLocations(facilityId);
+      // TODO what if the request fails?
+      if (apiResponse !== null) {
+        setLocations(apiResponse);
+      }
     };
     populateLocations();
   }, [facilityId]);

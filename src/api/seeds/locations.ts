@@ -7,12 +7,19 @@ type StorageLocationsResponsePayload =
 export type StorageLocation = StorageLocationsResponsePayload['locations'][0];
 export type ConditionType = StorageLocation['storageCondition'];
 
-export const getLocations = async (facilityId: number): Promise<StorageLocation[]> => {
-  const endpoint = `${process.env.REACT_APP_TERRAWARE_API}${STORAGE_LOCATIONS_ENDPOINT}`.replace(
-    '{facilityId}',
-    `${facilityId}`
-  );
-  const response: StorageLocationsResponsePayload = (await axios.get(endpoint)).data;
-
-  return response.locations;
-};
+/*
+ * getLocations() returns all the storage locations associated with a given facility or null if the
+ * API call failed.
+ */
+export async function getLocations(facilityId: number): Promise<StorageLocation[] | null> {
+  try {
+    const endpoint = `${process.env.REACT_APP_TERRAWARE_API}${STORAGE_LOCATIONS_ENDPOINT}`.replace(
+      '{facilityId}',
+      `${facilityId}`
+    );
+    const response: StorageLocationsResponsePayload = (await axios.get(endpoint)).data;
+    return response.locations;
+  } catch {
+    return null;
+  }
+}

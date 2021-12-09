@@ -1,6 +1,6 @@
 import strings from 'src/strings';
-import { TableColumnType } from '../../common/table/types';
-import { SearchField } from '../../../api/seeds/search';
+import { SearchField } from 'src/api/seeds/search';
+import { TableColumnType } from 'src/components/common/table/types';
 
 export interface Option {
   label: string | null;

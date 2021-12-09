@@ -115,7 +115,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
    * availableFieldOptions is a list of records
    * keys: all single and multi select search fields.
    * values: all the values that are associated with an accession in the current facility AND that aren't being
-   * filtered out by the given search criteria.
+   * filtered out by searchCriteria.
    */
   const [availableFieldOptions, setAvailableFieldOptions] = useState<FieldValuesMap | null>();
   const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>();
@@ -223,7 +223,6 @@ export default function Database(props: DatabaseProps): JSX.Element {
         setDisplayColumnNames(newOrder);
       }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [displayColumnNames, setDisplayColumnNames]
   );
 

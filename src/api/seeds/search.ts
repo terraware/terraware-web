@@ -18,8 +18,8 @@ export type FieldValuesPayload = { [key: string]: components['schemas']['FieldVa
 /*
  * convertToSearchNodePayload()
  * input: search criteria in the type of SeedSearchCriteria, which is used by the application
- * output: search criteria in the type of SearchNodePayload, which is required by API modules. Or undefined
- *         if the input represented no search criteria.
+ * output: search criteria in the type of SearchNodePayload, which is required by API modules.
+ *         undefined if the input represented no search criteria.
  */
 export function convertToSearchNodePayload(criteria: SeedSearchCriteria): SearchNodePayload | undefined {
   if (criteria === {}) {
@@ -51,6 +51,11 @@ export async function search(params: SearchRequestPayload): Promise<SearchRespon
   }
 }
 
+/*
+ * getAccessionsByNumber() does a fuzzy search for accessions based on the accession number.
+ * e.g. if you have accession 1234 and 1253 then passing accessionNumber = 12 will return both
+ * accessions 1234 and 1253.
+ */
 export async function getAccessionsByNumber(
   accessionNumber: number,
   facilityId: number
@@ -130,9 +135,7 @@ async function listAllFieldValues(
   params: ListAllFieldValuesRequestPayload
 ): Promise<ListAllFieldValuesResponsePayload> {
   const endpoint = `${process.env.REACT_APP_TERRAWARE_API}${ALL_FIELD_VALUES_ENDPOINT}`;
-  const response: ListAllFieldValuesResponsePayload = (await axios.post(endpoint, params)).data;
-
-  return response;
+  return (await axios.post(endpoint, params)).data as ListAllFieldValuesResponsePayload;
 }
 
 /*
@@ -140,10 +143,11 @@ async function listAllFieldValues(
  * This function does not filter based on which values are currently being used by existing accessions.
  * Returns null if the API request failed.
  *
- * For example, if you pass in the field name 'stage', this function would return all accession stage
- * options: [dried, drying, in storage, nursery, pending, processed, processing, withdrawn] even if
- * only some stages: [pending, processed] are being used by existing accessions.
- *
+ * For example, if one of the requested field names was 'stage', this function's return value would
+ * include all accession stage options: [dried, drying, in storage, nursery, pending, processed,
+ * processing, withdrawn] even if only some stages such as [pending, processed] were being used by
+ * existing accessions in the given facility. This example simplifies the input and return type details;
+ * see the type definitions for more precise information.
  */
 export async function getAllFieldValues(fields: SearchField[], facilityId: number): Promise<AllFieldValuesMap | null> {
   try {
@@ -163,9 +167,9 @@ type ValuesPostResponse = paths[typeof FIELD_VALUES_ENDPOINT]['post']['responses
 export type FieldValuesMap = ValuesPostResponse['results'];
 
 /*
- * searchFieldValues() returns all values for the specified fields, given that those values are associated with
- * an accession that match the given search criteria. At minimum, if no search criteria is specified, the accessions
- * will all be associated with the given facilityId.
+ * searchFieldValues() returns values for the specified fields, given that those values are associated
+ * with an accession that match the given search criteria. If no search criteria is specified, the default
+ * "search" will be "all accession associated with the given facilityId".
  * Returns null if the API request failed.
  */
 export async function searchFieldValues(
@@ -175,7 +179,11 @@ export async function searchFieldValues(
 ): Promise<FieldValuesMap | null> {
   try {
     const formattedSearch = convertToSearchNodePayload(searchCriteria);
-    const params: ValuesPostRequestBody = { facilityId, fields, search: formattedSearch };
+    const params: ValuesPostRequestBody = {
+      facilityId,
+      fields,
+      search: formattedSearch,
+    };
     const endpoint = `${process.env.REACT_APP_TERRAWARE_API}${FIELD_VALUES_ENDPOINT}`;
     const apiResponse: ValuesPostResponse = (await axios.post(endpoint, params)).data;
     return apiResponse.results;
