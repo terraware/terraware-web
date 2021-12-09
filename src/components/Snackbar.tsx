@@ -3,7 +3,7 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { DeleteOutline } from '@material-ui/icons';
 import CheckIcon from '@material-ui/icons/Check';
 import { useRecoilState } from 'recoil';
-import snackbarAtom from 'src/state/atoms/snackbar';
+import snackbarAtom from 'src/state/snackbar';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

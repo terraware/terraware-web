@@ -2,7 +2,7 @@ import { Chip, Container, Divider, Link, Popover, Typography } from '@material-u
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import ArrowDropDown from '@material-ui/icons/ArrowDropDown';
 import React from 'react';
-import { FieldNodePayload, FieldValuesPayload, OrNodePayload, SearchNodePayload } from 'src/api/types/search';
+import { FieldNodePayload, FieldValuesPayload, OrNodePayload, SearchNodePayload } from 'src/api/seeds/search';
 import strings from 'src/strings';
 import preventDefaultEvent from 'src/utils/preventDefaultEvent';
 import { DatabaseColumn, Option } from './columns';

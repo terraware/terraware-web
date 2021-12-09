@@ -16,12 +16,10 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useSetRecoilState } from 'recoil';
+import { FieldNodePayload, SeedSearchCriteria } from 'src/api/seeds/search';
 import { getNotifications, MarkAllNotificationsRead, MarkNotificationRead } from 'src/api/notification';
 import { AccessionState } from 'src/api/types/accessions';
-import { FieldNodePayload } from 'src/api/types/search';
 import { API_PULL_INTERVAL } from 'src/constants';
-import { searchFilterAtom } from 'src/state/atoms/seeds/search';
 import strings from 'src/strings';
 import { Notifications, NotificationTypes } from 'src/types/Notifications';
 import preventDefaultEvent from 'src/utils/preventDefaultEvent';
@@ -66,16 +64,16 @@ const useStyles = makeStyles((theme) =>
 type NotificationsDropdownProps = {
   notifications?: Notifications;
   setNotifications: (notifications?: Notifications) => void;
+  setSeedSearchCriteria: (criteria: SeedSearchCriteria) => void;
   currFacilityId: number;
 };
 
 export default function NotificationsDropdown(props: NotificationsDropdownProps): JSX.Element {
   const classes = useStyles();
-  const { notifications, setNotifications, currFacilityId } = props;
+  const { notifications, setNotifications, setSeedSearchCriteria, currFacilityId } = props;
   // notificationsInterval value is only being used when it is set.
   const [, setNotificationsInterval] = useState<ReturnType<typeof setInterval>>();
   const [anchorEl, setAnchorEl] = useState<Element | null>(null);
-  const setFilters = useSetRecoilState(searchFilterAtom);
 
   const populateNotifications = useCallback(async () => {
     if (currFacilityId) {
@@ -127,7 +125,7 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
         type: 'Exact',
         operation: 'field',
       };
-      setFilters({ state: filter });
+      setSeedSearchCriteria({ state: filter });
     }
 
     await MarkNotificationRead(id);
