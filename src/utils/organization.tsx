@@ -1,4 +1,3 @@
-import React from 'react';
 import { Facility } from 'src/api/types/facilities';
 import { Project, ServerOrganization, Site } from 'src/types/Organization';
 

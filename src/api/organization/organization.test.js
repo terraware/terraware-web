@@ -1,10 +1,45 @@
 /* tslint:disable:no-console */
-import getOrganization, { OrgRequestError, exportedForTesting } from './organization';
+import { OrgRequestError, exportedForTesting, getOrganizations } from './organization';
 import axios from 'axios';
 
 const getLayers = exportedForTesting.getLayers;
 
 jest.mock('axios');
+
+const ORGANIZATIONS = [
+  {
+    id: 1,
+    name: 'Terraformation (staging)',
+    role: 'Owner',
+    projects: [
+      {
+        id: 0,
+        name: 'Example Project',
+        sites: [
+          {
+            id: 10,
+            name: 'Example Site',
+            projectId: 10,
+            facilities: [
+              {
+                id: 100,
+                name: 'ohana',
+                type: 'Seed Bank',
+              },
+              {
+                id: 101,
+                name: 'garage',
+                type: 'Seed Bank',
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+];
+
+const SUCCESSFUL_GET_ORGANIZATIONS_RESPONSE = { data: { organizations: ORGANIZATIONS, status: 'ok' } };
 
 const PROJECTS = [
   {
@@ -67,44 +102,16 @@ function assertOrganizationIsEmpty(organization) {
   ).toEqual([]);
 }
 
-test('getOrganization() returns all data when no errors thrown', async () => {
+test('getOrganizations() returns all data when no errors thrown', async () => {
   axios.get.mockImplementation((url) => {
-    if (url.includes('projects')) {
-      return Promise.resolve(SUCCESSFUL_GET_PROJECTS_RESPONSE);
+    if (url.includes('organizations')) {
+      return Promise.resolve(SUCCESSFUL_GET_ORGANIZATIONS_RESPONSE);
     }
-    if (url.includes('sites')) {
-      return Promise.resolve(SUCCESSFUL_GET_SITES_RESPONSE);
-    }
-    if (url.includes('facility')) {
-      return Promise.resolve(SUCCESSFUL_GET_FACILITIES_RESPONSE);
-    }
-    if (url.includes('gis/layers/list/20')) {
-      return Promise.resolve(SUCCESSFUL_GET_LAYERS_RESPONSE);
-    } else if (url.includes('gis/layers/list/10')) {
-      return Promise.resolve(EMPTY_GET_LAYERS_RESPONSE);
-    }
-
-    console.error('Axios mock called with an unexpected url');
-    throw Error('Axios mock called with an unexpected url');
   });
-
-  await expect(getOrganization()).resolves.toEqual({
-    organization: {
-      projects: PROJECTS,
-      sites: SITES,
-      facilities: FACILITIES,
-      plantLayers: LAYERS,
-    },
-    errors: [],
+  await expect(getOrganizations()).resolves.toEqual({
+    organizations: ORGANIZATIONS,
+    requestSucceeded: true,
   });
-});
-
-test('getOrganization() returns error (and no org data) when project list is empty', async () => {
-  await testProjectsOrSitesEmpty('projects');
-});
-
-test('getOrganization() returns project list and correct error when site list is empty', async () => {
-  await testProjectsOrSitesEmpty('sites');
 });
 
 async function testProjectsOrSitesEmpty(emptyResponse) {
@@ -134,48 +141,6 @@ async function testProjectsOrSitesEmpty(emptyResponse) {
     expect(response.organization.sites).toEqual([]);
   }
 }
-
-test('getOrganization() returns error (and no org data) on failure to fetch projects', async () => {
-  await testProjectsOrSitesFailure('projects');
-});
-
-test('getOrganization() returns error (and no org data) on failure to fetch sites', async () => {
-  await testProjectsOrSitesFailure('sites');
-});
-
-async function testProjectsOrSitesFailure(failure) {
-  expect(failure === 'projects' || failure === 'sites').toBe(true);
-
-  // suppress console.error() calls so that the expected errors don't look like test failures
-  jest.spyOn(console, 'error').mockImplementation(() => {
-    /* tslint:disable:no-empty */
-  });
-
-  axios.get.mockImplementation((url) => {
-    if (url.includes('projects')) {
-      return failure === 'projects'
-        ? Promise.reject(FAILURE_RESPONSE)
-        : Promise.resolve(SUCCESSFUL_GET_PROJECTS_RESPONSE);
-    } else if (url.includes('sites')) {
-      return failure === 'sites' ? Promise.reject(FAILURE_RESPONSE) : Promise.resolve(SUCCESSFUL_GET_SITES_RESPONSE);
-    }
-
-    console.error('Axios mock called with an unexpected url');
-    throw Error('Axios mock called with an unexpected url');
-  });
-
-  const response = await getOrganization();
-  expect(response.errors).toEqual([OrgRequestError.ErrorFetchingProjectsOrSites]);
-  assertOrganizationIsEmpty(response.organization);
-}
-
-test('getOrganization() returns partial data and correct error on failure to fetch facilities', () => {
-  testFacilitiesAndOrLayersFailure('facilities');
-});
-
-test('getOrganization() returns partial data and correct error on failure to fetch layers', () => {
-  testFacilitiesAndOrLayersFailure('layers');
-});
 
 test('getOrganization() returns partial data and correct errors on failure to fetch layers and facilities', () => {
   testFacilitiesAndOrLayersFailure('both');
