@@ -143,7 +143,7 @@ export default function CheckIn(props: CheckInProps): JSX.Element {
                               <TableCell component='th' scope='row'>
                                 {result.accessionNumber}
                               </TableCell>
-                              <TableCell>{result.species}</TableCell>
+                              <TableCell>{result.speciesName}</TableCell>
                               <TableCell>{result.siteLocation}</TableCell>
                               <TableCell>{result.collectedDate}</TableCell>
                               <TableCell>{result.receivedDate}</TableCell>

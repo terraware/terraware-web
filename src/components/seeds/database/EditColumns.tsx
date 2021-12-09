@@ -181,13 +181,13 @@ const sections: Section[] = [
     name: 'Seed Collection',
     options: [
       [
-        COLUMNS_INDEXED.species,
+        COLUMNS_INDEXED.speciesName,
         COLUMNS_INDEXED.receivedDate,
         COLUMNS_INDEXED.collectedDate,
-        COLUMNS_INDEXED.primaryCollector,
+        COLUMNS_INDEXED.primaryCollectorName,
         COLUMNS_INDEXED.siteLocation,
       ],
-      [COLUMNS_INDEXED.endangered, COLUMNS_INDEXED.rare, COLUMNS_INDEXED.sourcePlantOrigin, COLUMNS_INDEXED.family],
+      [COLUMNS_INDEXED.endangered, COLUMNS_INDEXED.rare, COLUMNS_INDEXED.sourcePlantOrigin, COLUMNS_INDEXED.familyName],
       [
         COLUMNS_INDEXED.treesCollectedFrom,
         COLUMNS_INDEXED.bagNumber,
@@ -207,7 +207,7 @@ const sections: Section[] = [
     name: 'Storing',
     options: [
       [COLUMNS_INDEXED.storageStartDate, COLUMNS_INDEXED.storageCondition],
-      [COLUMNS_INDEXED.storagePackets, COLUMNS_INDEXED.storageLocation],
+      [COLUMNS_INDEXED.storagePackets, COLUMNS_INDEXED.storageLocationName],
       [COLUMNS_INDEXED.storageNotes],
     ],
   },

@@ -37,16 +37,16 @@ export async function searchAllValues(params: ValuesAllPostRequestBody): Promise
 export async function getPrimaryCollectors(facilityId: number): Promise<string[]> {
   const params: ValuesAllPostRequestBody = {
     facilityId,
-    fields: ['primaryCollector'],
+    fields: ['primaryCollectorName'],
   };
 
-  return (await searchAllValues(params)).results.primaryCollector.values;
+  return (await searchAllValues(params)).results.primaryCollectorName.values;
 }
 
 export async function getPendingAccessions(facilityId: number): Promise<SearchResponsePayload> {
   const searchParams: SearchRequestPayload = {
     facilityId,
-    fields: ['accessionNumber', 'bagNumber', 'species', 'siteLocation', 'collectedDate', 'receivedDate'],
+    fields: ['accessionNumber', 'bagNumber', 'speciesName', 'siteLocation', 'collectedDate', 'receivedDate'],
     sortOrder: [{ field: 'accessionNumber', direction: 'Ascending' }],
     filters: [
       {
