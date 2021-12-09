@@ -32,3 +32,47 @@ export const getAllFacilities = (organization: ServerOrganization): Facility[] =
   });
   return facilities;
 };
+
+export const parseProject = (project: Project) => {
+  const parsedProject: Project = {
+    id: project.id,
+    name: project.name,
+    sites: project.sites?.map((site) => parseSite(site)),
+  };
+  return parsedProject;
+};
+
+export const parseSite = (site: Site) => {
+  const parsedSite: Site = {
+    id: site.id,
+    name: site.name,
+    projectId: site.projectId,
+    facilities: site.facilities?.map((facility) => parseFacility(facility)),
+  };
+  return parsedSite;
+};
+
+export const parseFacility = (facility: Facility) => {
+  const parsedFacility: Facility = {
+    id: facility.id,
+    name: facility.name,
+    type: facility.type,
+  };
+  return parsedFacility;
+};
+
+export const getSelectedSites = (
+  selectedSite: Site | undefined,
+  selectedProject: Project | undefined,
+  organization: ServerOrganization
+): Site[] => {
+  let sites: Site[] = [];
+  if (selectedSite) {
+    sites.push(selectedSite);
+  } else if (selectedProject) {
+    sites = getAllSitesForProject(selectedProject);
+  } else {
+    sites = getAllSites(organization);
+  }
+  return sites;
+};

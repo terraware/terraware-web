@@ -2,6 +2,7 @@ import { AxiosResponse } from 'axios';
 import axios from 'src/api/index';
 import { Organization, PlantLayer, Site, ServerOrganization } from 'src/types/Organization';
 import { paths } from 'src/api/types/generated-schema';
+import { parseProject } from 'src/utils/organization';
 
 const BASE_URL = `${process.env.REACT_APP_TERRAWARE_API}`;
 
@@ -69,7 +70,7 @@ export async function getOrganizations(): Promise<OrganizationsResponse> {
       id: organization.id,
       name: organization.name,
       role: organization.role,
-      projects: organization.projects,
+      projects: organization.projects?.map((project) => parseProject(project)),
     }));
   } catch {
     response.requestSucceeded = false;

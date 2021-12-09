@@ -17,7 +17,7 @@ import { SpeciesById } from 'src/types/Species';
 import getColorsBySpeciesId from 'src/api/species/getColorsBySpeciesId';
 import Title from 'src/components/common/Title';
 import { getPlantLayers } from 'src/api/organization/organization';
-import { getAllSites, getAllSitesForProject } from 'src/utils/organization';
+import { getSelectedSites } from 'src/utils/organization';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -66,14 +66,7 @@ export default function PlantDashboard(props: PlantDashboardProps): JSX.Element 
 
     const populatePlants = async () => {
       if (organization) {
-        let sites = [];
-        if (selectedSite) {
-          sites.push(selectedSite);
-        } else if (selectedProject) {
-          sites = getAllSitesForProject(selectedProject);
-        } else {
-          sites = getAllSites(organization);
-        }
+        const sites = getSelectedSites(selectedSite, selectedProject, organization);
         const layers = await getPlantLayers(sites);
         const layerIds = layers.map((layer) => layer.id);
         const plantsResponse = await getPlantsForMultipleLayers(layerIds);
@@ -86,14 +79,7 @@ export default function PlantDashboard(props: PlantDashboardProps): JSX.Element 
 
     const populatePlantSummaries = async () => {
       if (organization) {
-        let sites = [];
-        if (selectedSite) {
-          sites.push(selectedSite);
-        } else if (selectedProject) {
-          sites = getAllSitesForProject(selectedProject);
-        } else {
-          sites = getAllSites(organization);
-        }
+        const sites = getSelectedSites(selectedSite, selectedProject, organization);
         const layers = await getPlantLayers(sites);
         const layerIds = layers.map((layer) => layer.id);
         const summaryResponse = await getPlantSummariesByLayer(layerIds);
