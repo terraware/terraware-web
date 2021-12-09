@@ -35,7 +35,7 @@ export default function Home({ organization }: HomeProps): JSX.Element {
     const populateUser = async () => {
       const response = await getUser();
       if (response.requestSucceeded) {
-        setUser(response.user);
+        setUser(response.user ?? undefined);
       }
     };
     populateUser();

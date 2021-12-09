@@ -58,7 +58,7 @@ export default function Title({
 
   useEffect(() => {
     if (organization && organization.projects) {
-      //if page doesn't allow the 'all' options on dropdowns, then select on dropdowns the first project, first site and first facility
+      // if page doesn't allow the 'all' options on dropdowns, then select on dropdowns the first project, first site and first facility
       if (!allowAll) {
         setSelectedProject(organization.projects[0]);
         if (organization.projects[0].sites) {
