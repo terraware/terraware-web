@@ -93,7 +93,7 @@ export default function PlantDashboard(props: PlantDashboardProps): JSX.Element 
     populateSpecies();
     populatePlants();
     populatePlantSummaries();
-  }, [organization]);
+  }, [organization, selectedProject, selectedSite]);
 
   useEffect(() => {
     reloadData();

@@ -69,7 +69,7 @@ export default function Title({
         }
       }
     }
-  }, [organization]);
+  }, [organization, allowAll, onChangeFacility]);
 
   const addAllOption = (originalOptions?: string[]) => {
     let newOptions: string[] = [];

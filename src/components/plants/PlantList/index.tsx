@@ -80,7 +80,7 @@ export default function PlantList(props: PlantListProps): JSX.Element {
 
     populateSpecies();
     populatePlants();
-  }, [organization, filters]);
+  }, [organization, filters, selectedProject, selectedSite]);
 
   useEffect(() => {
     fetchPlantsAndSpecies();
