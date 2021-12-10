@@ -206,7 +206,7 @@ export async function getPrimaryCollectors(facilityId: number): Promise<string[]
       fields: ['primaryCollectorName'],
     };
 
-    return (await listAllFieldValues(params)).results.primaryCollector.values;
+    return (await listAllFieldValues(params)).results.primaryCollectorName.values;
   } catch {
     return null;
   }
