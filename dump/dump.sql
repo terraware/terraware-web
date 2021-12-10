@@ -73,7 +73,7 @@ ON CONFLICT (id) DO UPDATE SET name = excluded.name,
                                is_scientific = excluded.is_scientific;
 
 INSERT INTO families (id, name, is_scientific, created_time, modified_time)
-VALUES (20000, 'Dogwood', false, NOW(), NOW())
+VALUES (20000, 'Dogwood', false, '2021-01-03T13:08:11Z', '2021-01-03T13:08:11Z')
 ON CONFLICT (id) DO UPDATE SET name = excluded.name,
                                is_scientific = excluded.is_scientific;
 
