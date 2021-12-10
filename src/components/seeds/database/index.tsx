@@ -84,6 +84,7 @@ type DatabaseProps = {
   setSearchColumns: (fields: SearchField[]) => void;
   displayColumnNames: SearchField[];
   setDisplayColumnNames: (fields: SearchField[]) => void;
+  setFacilityIdSelected: (facilityId: number) => void;
 };
 
 export default function Database(props: DatabaseProps): JSX.Element {
@@ -99,6 +100,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
     displayColumnNames,
     setDisplayColumnNames,
     organization,
+    setFacilityIdSelected,
   } = props;
   const displayColumnDetails = displayColumnNames.map((name) => {
     return COLUMNS_INDEXED[name];
@@ -125,11 +127,12 @@ export default function Database(props: DatabaseProps): JSX.Element {
   useEffect(() => {
     const populatePendingAccessions = async () => {
       if (facilityId) {
+        setFacilityIdSelected(facilityId);
         setPendingAccessions(await getPendingAccessions(facilityId));
       }
     };
     populatePendingAccessions();
-  }, [facilityId]);
+  }, [facilityId, setFacilityIdSelected]);
 
   useEffect(() => {
     if (facilityId) {
