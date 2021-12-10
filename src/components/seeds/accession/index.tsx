@@ -2,12 +2,11 @@ import { CircularProgress, Container, Grid } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Route, Switch, useHistory, useParams } from 'react-router-dom';
-import { useResetRecoilState, useSetRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import { checkIn, getAccession, putAccession } from 'src/api/seeds/accession';
 import { Accession, AccessionState } from 'src/api/types/accessions';
 import ErrorBoundary from 'src/ErrorBoundary';
-import snackbarAtom from 'src/state/atoms/snackbar';
-import searchSelector from 'src/state/selectors/seeds/search';
+import snackbarAtom from 'src/state/snackbar';
 import strings from 'src/strings';
 import Lab from '../lab';
 import { AccessionForm } from '../newAccession';
@@ -53,7 +52,6 @@ function Content(): JSX.Element {
   const { accessionId } = useParams<{ accessionId: string }>();
   const [accession, setAccession] = useState<Accession>();
   const setSnackbar = useSetRecoilState(snackbarAtom);
-  const resetSearch = useResetRecoilState(searchSelector);
   const history = useHistory();
 
   const reloadAccession = useCallback(() => {
@@ -89,7 +87,6 @@ function Content(): JSX.Element {
   const onSubmit = async (record: Accession) => {
     try {
       await putAccession(record.id, record);
-      resetSearch();
       reloadAccession();
     } catch (ex) {
       setSnackbar({
@@ -102,7 +99,6 @@ function Content(): JSX.Element {
   const onCheckIn = async (id: number) => {
     try {
       await checkIn(id);
-      resetSearch();
       reloadAccession();
     } catch (ex) {
       setSnackbar({
