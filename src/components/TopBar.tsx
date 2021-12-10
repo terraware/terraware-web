@@ -52,18 +52,19 @@ type TopBarProps = {
   setNotifications: (notifications?: Notifications) => void;
   setSeedSearchCriteria: (criteria: SeedSearchCriteria) => void;
   organization?: ServerOrganization;
+  facilityId?: number;
 };
 
 export default function TopBar(props: TopBarProps): JSX.Element | null {
   const classes = useStyles();
-  const { notifications, setNotifications, setSeedSearchCriteria } = props;
+  const { notifications, setNotifications, setSeedSearchCriteria, facilityId } = props;
   const location = useStateLocation();
 
   return (
     <AppBar position='static' className={classes.appBar}>
       <Toolbar className={classes.right}>
         <div className={classes.flex}>
-          <SearchBar facilityId={0} />
+          <SearchBar facilityId={facilityId || 0} />
           <Link
             id='help-button-link'
             component={RouterLink}
@@ -79,7 +80,7 @@ export default function TopBar(props: TopBarProps): JSX.Element | null {
             notifications={notifications}
             setNotifications={setNotifications}
             setSeedSearchCriteria={setSeedSearchCriteria}
-            currFacilityId={0}
+            currFacilityId={facilityId || 0}
           />
           <div className={classes.separator} />
           <UserMenu />

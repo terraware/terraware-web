@@ -42,11 +42,12 @@ type SeedSummaryProps = {
   organization?: ServerOrganization;
   setSeedSearchCriteria: (criteria: SeedSearchCriteria) => void;
   notifications?: Notifications;
+  setFacilityIdSelected: (facilityId: number) => void;
 };
 
 export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
   const classes = useStyles();
-  const { setSeedSearchCriteria, notifications, organization } = props;
+  const { setSeedSearchCriteria, notifications, organization, setFacilityIdSelected } = props;
   const [facilityId, setFacilityId] = React.useState<number>();
   // populateSummaryInterval value is only being used when it is set.
   const [, setPopulateSummaryInterval] = useState<ReturnType<typeof setInterval>>();
@@ -62,6 +63,7 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
 
     // Update summary information
     if (facilityId) {
+      setFacilityIdSelected(facilityId);
       populateSummary();
     } else {
       setSummary(undefined);
@@ -87,7 +89,7 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
         return undefined;
       });
     };
-  }, [facilityId]);
+  }, [facilityId, setFacilityIdSelected]);
 
   return (
     <main>

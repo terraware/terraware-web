@@ -85,7 +85,7 @@ function AppContent() {
    * contain withdrawalQuantity.
    */
   const [accessionsDisplayColumns, setAccessionsDisplayColumns] = useState<SearchField[]>(DefaultColumns.fields);
-  const [accessionsFacilityIdSelected, setAccessionsFacilityIdSelected] = useState<number>();
+  const [facilityIdSelected, setFacilityIdSelected] = useState<number>();
 
   useEffect(() => {
     const populateOrganizations = async () => {
@@ -121,6 +121,7 @@ function AppContent() {
             setNotifications={setNotifications}
             organization={selectedOrganization}
             setSeedSearchCriteria={setSeedSearchCriteria}
+            facilityId={facilityIdSelected}
           />
           <ErrorBoundary>
             <Switch>
@@ -133,13 +134,14 @@ function AppContent() {
                   organization={selectedOrganization}
                   setSeedSearchCriteria={setSeedSearchCriteria}
                   notifications={notifications}
+                  setFacilityIdSelected={setFacilityIdSelected}
                 />
               </Route>
               <Route exact path='/checkin'>
                 <CheckIn organization={selectedOrganization} />
               </Route>
               <Route exact path='/accessions/new'>
-                <NewAccession facilityId={accessionsFacilityIdSelected} />
+                <NewAccession facilityId={facilityIdSelected} />
               </Route>
               <Route exact path='/accessions'>
                 <Database
@@ -152,7 +154,7 @@ function AppContent() {
                   setSearchColumns={setSeedSearchColumns}
                   displayColumnNames={accessionsDisplayColumns}
                   setDisplayColumnNames={setAccessionsDisplayColumns}
-                  setFacilityIdSelected={setAccessionsFacilityIdSelected}
+                  setFacilityIdSelected={setFacilityIdSelected}
                 />
               </Route>
               <Route path='/accessions/:accessionId'>
