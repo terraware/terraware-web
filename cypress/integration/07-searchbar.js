@@ -1,7 +1,8 @@
 describe('Searchbar', () => {
   context('search', () => {
     it('should redirect the user to the correct page', () => {
-      cy.visit('/accessions/new');
+      cy.visit('/accessions');
+      cy.get('#newAccession').click().url().should('contain', '/accessions/new');
       cy.get('#saveAccession').click();
       cy.get('#snackbar').contains('Accession saved');
 
