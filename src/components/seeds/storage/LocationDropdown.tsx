@@ -1,8 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Grid } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
-import { getLocations } from 'src/api/seeds/locations';
-import { ConditionType, StorageLocation } from 'src/api/types/locations';
+import { ConditionType, getLocations, StorageLocation } from 'src/api/seeds/locations';
 import Dropdown from 'src/components/common/Dropdown';
 import TextField from 'src/components/common/TextField';
 import strings from 'src/strings';
@@ -20,7 +19,11 @@ export default function LocationDropdown(props: LocationDropdownProps): JSX.Elem
 
   useEffect(() => {
     const populateLocations = async () => {
-      setLocations(await getLocations(facilityId));
+      const apiResponse = await getLocations(facilityId);
+      // TODO what if the request fails?
+      if (apiResponse !== null) {
+        setLocations(apiResponse);
+      }
     };
     populateLocations();
   }, [facilityId]);

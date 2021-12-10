@@ -3,6 +3,7 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 import HelpIcon from '@material-ui/icons/Help';
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
+import { SeedSearchCriteria } from 'src/api/seeds/search';
 import { Notifications } from 'src/types/Notifications';
 import { ServerOrganization } from 'src/types/Organization';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
@@ -49,19 +50,20 @@ const useStyles = makeStyles((theme) =>
 type TopBarProps = {
   notifications?: Notifications;
   setNotifications: (notifications?: Notifications) => void;
+  setSeedSearchCriteria: (criteria: SeedSearchCriteria) => void;
   organization?: ServerOrganization;
 };
 
 export default function TopBar(props: TopBarProps): JSX.Element | null {
   const classes = useStyles();
-  const { notifications, setNotifications } = props;
+  const { notifications, setNotifications, setSeedSearchCriteria } = props;
   const location = useStateLocation();
 
   return (
     <AppBar position='static' className={classes.appBar}>
       <Toolbar className={classes.right}>
         <div className={classes.flex}>
-          <SearchBar />
+          <SearchBar facilityId={0} />
           <Link
             id='help-button-link'
             component={RouterLink}
@@ -73,7 +75,12 @@ export default function TopBar(props: TopBarProps): JSX.Element | null {
               <HelpIcon />
             </IconButton>
           </Link>
-          <NotificationsDropdown notifications={notifications} setNotifications={setNotifications} currFacilityId={0} />
+          <NotificationsDropdown
+            notifications={notifications}
+            setNotifications={setNotifications}
+            setSeedSearchCriteria={setSeedSearchCriteria}
+            currFacilityId={0}
+          />
           <div className={classes.separator} />
           <UserMenu />
         </div>

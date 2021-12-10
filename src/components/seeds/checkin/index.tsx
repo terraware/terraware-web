@@ -14,12 +14,11 @@ import { createStyles, makeStyles, Theme, withStyles } from '@material-ui/core/s
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
-import { SearchResponsePayload, SearchResponseResults } from 'src/api/types/search';
+import { getPendingAccessions, SearchResponseElement } from 'src/api/seeds/search';
 import Button from 'src/components/common/button/Button';
 import strings from 'src/strings';
 import useStateLocation from 'src/utils/useStateLocation';
 import PageHeader from '../PageHeader';
-import { getPendingAccessions } from '../../../api/seeds/search';
 import { ServerOrganization } from 'src/types/Organization';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -68,7 +67,6 @@ export default function CheckIn(props: CheckInProps): JSX.Element {
   const history = useHistory();
   const location = useStateLocation();
   const [pendingAccessions, setPendingAccessions] = useState<SearchResponsePayload>();
-  const [facilityId, setFacilityId] = React.useState<number>();
 
   useEffect(() => {
     const populatePendingAccessions = async () => {
@@ -80,8 +78,8 @@ export default function CheckIn(props: CheckInProps): JSX.Element {
   }, [facilityId]);
 
   const transformPendingAccessions = () => {
-    const accessionsById: Record<number, SearchResponseResults> = {};
-    pendingAccessions?.results?.forEach((accession) => {
+    const accessionsById: Record<number, SearchResponseElement> = {};
+    pendingAccessions?.forEach((accession) => {
       if (accessionsById[Number(accession.id)]) {
         accessionsById[Number(accession.id)] = {
           ...accessionsById[Number(accession.id)],
@@ -96,8 +94,8 @@ export default function CheckIn(props: CheckInProps): JSX.Element {
   };
 
   const getSubtitle = () => {
-    if (pendingAccessions?.results) {
-      return `${pendingAccessions.results.length} ${strings.BAGS_TOTAL}`;
+    if (pendingAccessions) {
+      return `${pendingAccessions.length} ${strings.BAGS_TOTAL}`;
     }
   };
 

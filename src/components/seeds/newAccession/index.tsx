@@ -7,12 +7,11 @@ import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import moment from 'moment';
 import React, { Suspense, useEffect, useState } from 'react';
 import { Redirect, useHistory } from 'react-router-dom';
-import { useResetRecoilState, useSetRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import { checkIn, getPhotoEndpoint, postAccession } from 'src/api/seeds/accession';
 import { updateSpecies } from 'src/api/species/species';
 import { Accession, AccessionPostRequestBody } from 'src/api/types/accessions';
-import snackbarAtom from 'src/state/atoms/snackbar';
-import searchSelector from 'src/state/selectors/seeds/search';
+import snackbarAtom from 'src/state/snackbar';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
 import useForm from 'src/utils/useForm';
@@ -70,7 +69,6 @@ export default function NewAccessionWrapper(props: NewAccessionProps): JSX.Eleme
   const [accessionId, setAccessionId] = useState<number>();
   const [facilityId, setFacilityId] = React.useState<number>();
   const setSnackbar = useSetRecoilState(snackbarAtom);
-  const resetSearch = useResetRecoilState(searchSelector);
   const classes = useStyles();
   const history = useHistory();
   const location = useStateLocation();
@@ -78,7 +76,6 @@ export default function NewAccessionWrapper(props: NewAccessionProps): JSX.Eleme
   const onSubmit = async (record: AccessionPostRequestBody) => {
     try {
       const newAccessionId = await postAccession(record);
-      resetSearch();
       setAccessionId(newAccessionId);
       setSnackbar({ type: 'success', msg: strings.ACCESSION_SAVED });
     } catch (ex) {
@@ -92,7 +89,6 @@ export default function NewAccessionWrapper(props: NewAccessionProps): JSX.Eleme
   const onCheckIn = async (id: number) => {
     try {
       await checkIn(id);
-      resetSearch();
       setSnackbar({ type: 'success', msg: strings.ACCESSION_SAVED });
     } catch (ex) {
       setSnackbar({
