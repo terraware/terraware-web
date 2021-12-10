@@ -5,7 +5,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React from 'react';
-import { SearchField } from 'src/api/types/search';
+import { SearchField } from 'src/api/seeds/search';
 import strings from 'src/strings';
 import CancelButton from '../../common/CancelButton';
 import Checkbox from '../../common/Checkbox';

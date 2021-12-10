@@ -8,7 +8,7 @@ import { getAllSpecies } from 'src/api/species/species';
 import Button from 'src/components/common/button/Button';
 import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
-import snackbarAtom from 'src/state/atoms/snackbar';
+import snackbarAtom from 'src/state/snackbar';
 import strings from 'src/strings';
 import { Species } from 'src/types/Species';
 import SimpleSpeciesModal from './SimpleSpeciesModal';

@@ -11,7 +11,7 @@ interface MainCollectorDropdownProps {
 
 export default function MainCollectorDropdown(props: MainCollectorDropdownProps): JSX.Element {
   const { facilityId, onChange, mainCollector } = props;
-  const [collectors, setCollectors] = useState<string[]>([]);
+  const [collectors, setCollectors] = useState<string[] | null>([]);
 
   useEffect(() => {
     const populateCollectors = async () => {
@@ -19,6 +19,11 @@ export default function MainCollectorDropdown(props: MainCollectorDropdownProps)
     };
     populateCollectors();
   }, [facilityId]);
+
+  // TODO: clean up this error handling
+  if (collectors === null) {
+    return <div>strings.GENERIC_ERROR</div>;
+  }
 
   return (
     <Autocomplete

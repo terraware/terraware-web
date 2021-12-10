@@ -4,6 +4,7 @@ import Paper from '@material-ui/core/Paper';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import Cookies from 'cookies-js';
 import React, { useEffect, useState } from 'react';
+import { SeedSearchCriteria } from 'src/api/seeds/search';
 import { getSummary, GetSummaryResponse } from 'src/api/seeds/summary';
 import { API_PULL_INTERVAL } from 'src/constants';
 import strings from 'src/strings';
@@ -38,12 +39,13 @@ Cookies.defaults = {
 
 type SeedSummaryProps = {
   facilityId: number;
+  setSeedSearchCriteria: (criteria: SeedSearchCriteria) => void;
   notifications?: Notifications;
 };
 
 export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
   const classes = useStyles();
-  const { facilityId, notifications } = props;
+  const { facilityId, setSeedSearchCriteria, notifications } = props;
   // populateSummaryInterval value is only being used when it is set.
   const [, setPopulateSummaryInterval] = useState<ReturnType<typeof setInterval>>();
   const [summary, setSummary] = useState<GetSummaryResponse>();
@@ -136,7 +138,12 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
               </Grid>
               <Grid item xs={8}>
                 <Paper className={`${classes.paper} ${classes.fixedHeight}`}>
-                  <Updates summaryResponse={summary?.value} loading={summary === undefined} error={errorOccurred} />
+                  <Updates
+                    setSeedSearchCriteria={setSeedSearchCriteria}
+                    summaryResponse={summary?.value}
+                    loading={summary === undefined}
+                    error={errorOccurred}
+                  />
                 </Paper>
               </Grid>
             </Grid>

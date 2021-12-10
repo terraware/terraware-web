@@ -7,7 +7,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import React, { useEffect, useState, memo } from 'react';
 import ReactMapGL, { MapContext, MapEvent, NavigationControl, Popup, Source } from 'react-map-gl';
 import { useSetRecoilState } from 'recoil';
-import snackbarAtom from 'src/state/atoms/snackbar';
+import snackbarAtom from 'src/state/snackbar';
 import strings from 'src/strings';
 import { cellDateFormatter } from '../../common/table/TableCellRenderer';
 import MapLayers from './MapLayers';

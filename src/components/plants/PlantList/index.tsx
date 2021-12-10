@@ -2,7 +2,7 @@ import { Container, createStyles, Grid, IconButton, makeStyles, Paper, Typograph
 import TuneIcon from '@material-ui/icons/Tune';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSetRecoilState } from 'recoil';
-import snackbarAtom from 'src/state/atoms/snackbar';
+import snackbarAtom from 'src/state/snackbar';
 import strings from 'src/strings';
 import EditPlantModal from '../EditPlantModal';
 import PlantFilterBar from './PlantFilterBar';
