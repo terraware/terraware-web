@@ -4,14 +4,12 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React from 'react';
-import { useRecoilValue } from 'recoil';
+import { SearchField, SeedSearchCriteria, SeedSearchSortOrder } from 'src/api/seeds/search';
 import { downloadReport } from 'src/api/seeds/report';
-import { SearchExportPostRequestBody } from 'src/api/types/report';
-import { searchParamsSelector } from 'src/state/selectors/seeds/search';
+import CancelButton from 'src/components/common/CancelButton';
+import DialogCloseButton from 'src/components/common/DialogCloseButton';
+import TextField from 'src/components/common/TextField';
 import strings from 'src/strings';
-import CancelButton from '../../common/CancelButton';
-import DialogCloseButton from '../../common/DialogCloseButton';
-import TextField from '../../common/TextField';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -33,6 +31,9 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface DownloadReportModalProps {
+  searchCriteria: SeedSearchCriteria;
+  searchSortOrder: SeedSearchSortOrder;
+  searchColumns: SearchField[];
   facilityId: number;
   open: boolean;
   onClose: () => void;
@@ -40,10 +41,8 @@ interface DownloadReportModalProps {
 
 export default function DownloadReportModal(props: DownloadReportModalProps): JSX.Element {
   const classes = useStyles();
-  const { facilityId, open, onClose } = props;
+  const { searchCriteria, searchSortOrder, searchColumns, facilityId, open, onClose } = props;
   const [name, setName] = React.useState('');
-
-  const searchParams = useRecoilValue(searchParamsSelector);
 
   const handleCancel = () => {
     setName('');
@@ -51,21 +50,17 @@ export default function DownloadReportModal(props: DownloadReportModalProps): JS
   };
 
   const handleOk = async () => {
-    const reportParams: SearchExportPostRequestBody = {
-      facilityId,
-      fields: searchParams.fields,
-      sortOrder: searchParams.sortOrder,
-      search: searchParams.search,
-    };
+    const apiResponse = await downloadReport(searchCriteria, searchSortOrder, searchColumns, facilityId);
 
-    const reponse = await downloadReport(reportParams);
-
-    const csvContent = 'data:text/csv;charset=utf-8,' + reponse;
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement('a');
-    link.setAttribute('href', encodedUri);
-    link.setAttribute('download', `${name}.csv`);
-    link.click();
+    // TODO: show user error message if API call failed.
+    if (apiResponse !== null) {
+      const csvContent = 'data:text/csv;charset=utf-8,' + apiResponse;
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement('a');
+      link.setAttribute('href', encodedUri);
+      link.setAttribute('download', `${name}.csv`);
+      link.click();
+    }
     onClose();
   };
 

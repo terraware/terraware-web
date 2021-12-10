@@ -1,7 +1,7 @@
 import { List, ListItem, ListItemText } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React from 'react';
-import { FieldNodePayload, SearchField } from 'src/api/types/search';
+import { FieldNodePayload, SearchField } from 'src/api/seeds/search';
 import strings from 'src/strings';
 import { Option } from '../columns';
 

@@ -4,10 +4,22 @@ import mapboxgl from 'mapbox-gl';
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
-import getOrganization, { GetOrganizationResponse, OrgRequestError } from 'src/api/organization/organization';
+import getOrganization, {
+  GetOrganizationResponse,
+  getOrganizations,
+  OrgRequestError,
+} from 'src/api/organization/organization';
+import {
+  DEFAULT_SEED_SEARCH_FILTERS,
+  DEFAULT_SEED_SEARCH_SORT_ORDER,
+  SearchField,
+  SeedSearchSortOrder,
+  SeedSearchCriteria,
+} from 'src/api/seeds/search';
 import { Notifications } from 'src/types/Notifications';
-import { Organization } from 'src/types/Organization';
+import { Organization, ServerOrganization } from 'src/types/Organization';
 import { PlantSearchOptions } from 'src/types/Plant';
+import Home from './components/Home';
 import NavBar from './components/NavBar';
 import PlantDashboard from './components/plants/PlantDashboard';
 import PlantList from './components/plants/PlantList';
@@ -17,13 +29,13 @@ import CheckIn from './components/seeds/checkin';
 import Database from './components/seeds/database';
 import Help from './components/seeds/help';
 import NewAccession from './components/seeds/newAccession';
-import PageHeader from './components/seeds/PageHeader';
 import SeedSummary from './components/seeds/summary';
 import Snackbar from './components/Snackbar';
 import TopBar from './components/TopBar';
 import ErrorBoundary from './ErrorBoundary';
 import strings from './strings';
 import theme from './theme';
+import { defaultPreset as DefaultColumns } from './components/seeds/database/columns';
 
 // @ts-ignore
 mapboxgl.workerClass =
@@ -64,12 +76,37 @@ const emptyOrg: Organization = {
 function AppContent() {
   const classes = useStyles();
   const [organization, setOrganization] = useState<Organization>(emptyOrg);
+  const [selectedOrganization, setSelectedOrganization] = useState<ServerOrganization>();
   const [organizationErrors, setOrganizationErrors] = useState<OrgRequestError[]>([]);
-  const [plantListFilters, setPlantListFilters] = useState<PlantSearchOptions>();
   const [currFacilityId, setCurrFacilityId] = useState<number>(0);
   const [notifications, setNotifications] = useState<Notifications>();
+  const [plantListFilters, setPlantListFilters] = useState<PlantSearchOptions>();
+
+  // seedSearchCriteria describes which criteria to apply when searching accession data.
+  const [seedSearchCriteria, setSeedSearchCriteria] = useState<SeedSearchCriteria>(DEFAULT_SEED_SEARCH_FILTERS);
+
+  // seedSearchSort describes which sort criterion to apply when searching accession data.
+  const [seedSearchSort, setSeedSearchSort] = useState<SeedSearchSortOrder>(DEFAULT_SEED_SEARCH_SORT_ORDER);
+
+  // seedSearchColumns describes which accession columns to request when searching accession data.
+  const [seedSearchColumns, setSeedSearchColumns] = useState<SearchField[]>(DefaultColumns.fields);
+
+  /*
+   * accessionsDisplayColumns describes which columns are displayed in the accessions list, and in which order.
+   * Differs from seedSearchSelectedColumns because the order matters. Also, sometimes the two lists won't have
+   * exactly the same columns. E.g. if the user adds the Withdrawal -> "Seeds Withdrawn" column,
+   * then seedSearchSelectedColumns will contain withdrawalQuantity and withdrawalUnits but this list will only
+   * contain withdrawalQuantity.
+   */
+  const [accessionsDisplayColumns, setAccessionsDisplayColumns] = useState<SearchField[]>(DefaultColumns.fields);
 
   useEffect(() => {
+    const populateOrganizations = async () => {
+      const response = await getOrganizations();
+      if (response.requestSucceeded) {
+        setSelectedOrganization(response.organizations[0]);
+      }
+    };
     const populateOrganizationData = async () => {
       const response: GetOrganizationResponse = await getOrganization();
       if (response.errors.length > 0) {
@@ -81,6 +118,7 @@ function AppContent() {
       }
     };
 
+    populateOrganizations();
     populateOrganizationData();
   }, []);
 
@@ -103,18 +141,24 @@ function AppContent() {
           <NavBar />
         </div>
         <div className={classes.content}>
-          <TopBar notifications={notifications} setNotifications={setNotifications} currFacilityId={currFacilityId} />
+          <TopBar
+            notifications={notifications}
+            setNotifications={setNotifications}
+            setSeedSearchCriteria={setSeedSearchCriteria}
+            currFacilityId={currFacilityId}
+          />
           <ErrorBoundary>
             <Switch>
               {/* Routes, in order of their appearance down the side nav bar and then across the top nav bar. */}
               <Route exact path='/home'>
-                {/* Temporary homepage. Needs to be updated with input from the Design Team. */}
-                <main>
-                  <PageHeader title='Welcome to Terraware!' subtitle='' />
-                </main>
+                <Home organization={selectedOrganization} />
               </Route>
               <Route exact path='/seeds-summary'>
-                <SeedSummary facilityId={currFacilityId} notifications={notifications} />
+                <SeedSummary
+                  facilityId={currFacilityId}
+                  setSeedSearchCriteria={setSeedSearchCriteria}
+                  notifications={notifications}
+                />
               </Route>
               <Route exact path='/checkin'>
                 <CheckIn facilityId={currFacilityId} />
@@ -123,7 +167,17 @@ function AppContent() {
                 <NewAccession facilityId={currFacilityId} />
               </Route>
               <Route exact path='/accessions'>
-                <Database facilityId={currFacilityId} />
+                <Database
+                  facilityId={currFacilityId}
+                  searchCriteria={seedSearchCriteria}
+                  setSearchCriteria={setSeedSearchCriteria}
+                  searchSortOrder={seedSearchSort}
+                  setSearchSortOrder={setSeedSearchSort}
+                  searchColumns={seedSearchColumns}
+                  setSearchColumns={setSeedSearchColumns}
+                  displayColumnNames={accessionsDisplayColumns}
+                  setDisplayColumnNames={setAccessionsDisplayColumns}
+                />
               </Route>
               <Route path='/accessions/:accessionId'>
                 <Accession />

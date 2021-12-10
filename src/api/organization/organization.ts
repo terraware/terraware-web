@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios';
 import axios from 'src/api/index';
-import { SeedBank, Organization, PlantLayer, Project, Site } from 'src/types/Organization';
+import { SeedBank, Organization, PlantLayer, Project, Site, ServerOrganization } from 'src/types/Organization';
 import { paths } from 'src/api/types/generated-schema';
 
 const PROJECTS = '/api/v1/projects';
@@ -147,3 +147,29 @@ export const exportedForTesting = {
 };
 
 export default getOrganization;
+
+const ORGANIZATIONS = '/api/v1/organizations';
+type ListOrganizationsResponsePayload =
+  paths[typeof ORGANIZATIONS]['get']['responses'][200]['content']['application/json'];
+
+type OrganizationsResponse = {
+  organizations: ServerOrganization[];
+  requestSucceeded: boolean;
+};
+export async function getOrganizations(): Promise<OrganizationsResponse> {
+  const response: OrganizationsResponse = {
+    organizations: [],
+    requestSucceeded: true,
+  };
+  try {
+    const organizationsResponse: ListOrganizationsResponsePayload = (await axios.get(ORGANIZATIONS)).data;
+    response.organizations = organizationsResponse.organizations.map((organization) => ({
+      id: organization.id,
+      name: organization.name,
+      role: organization.role,
+    }));
+  } catch {
+    response.requestSucceeded = false;
+  }
+  return response;
+}

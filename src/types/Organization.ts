@@ -24,3 +24,9 @@ export type Organization = {
   facilities: SeedBank[];
   plantLayers: PlantLayer[];
 };
+
+export type ServerOrganization = {
+  id: number;
+  name: string;
+  role: 'Contributor' | 'Manager' | 'Admin' | 'Owner';
+};
