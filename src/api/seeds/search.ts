@@ -84,7 +84,7 @@ export async function getAccessionsByNumber(
 export async function getPendingAccessions(facilityId: number): Promise<SearchResponseElement[] | null> {
   const searchParams: SearchRequestPayload = {
     facilityId,
-    fields: ['accessionNumber', 'bagNumber', 'species', 'siteLocation', 'collectedDate', 'receivedDate'],
+    fields: ['accessionNumber', 'bagNumber', 'speciesName', 'siteLocation', 'collectedDate', 'receivedDate'],
     sortOrder: [{ field: 'accessionNumber', direction: 'Ascending' }],
     filters: [
       {
@@ -203,10 +203,10 @@ export async function getPrimaryCollectors(facilityId: number): Promise<string[]
   try {
     const params: ListAllFieldValuesRequestPayload = {
       facilityId,
-      fields: ['primaryCollector'],
+      fields: ['primaryCollectorName'],
     };
 
-    return (await listAllFieldValues(params)).results.primaryCollector.values;
+    return (await listAllFieldValues(params)).results.primaryCollectorName.values;
   } catch {
     return null;
   }
