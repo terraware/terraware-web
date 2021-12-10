@@ -55,6 +55,7 @@ export default function Title({
   const classes = useStyles();
   const [selectedProject, setSelectedProject] = React.useState<Project>();
   const [selectedSite, setSelectedSite] = React.useState<Site>();
+  const [selectedFacility, setSelectedFacility] = React.useState<Facility>();
 
   useEffect(() => {
     if (organization && organization.projects) {
@@ -64,12 +65,18 @@ export default function Title({
         if (organization.projects[0].sites) {
           setSelectedSite(organization.projects[0].sites[0]);
         }
-        if (onChangeFacility && organization.projects[0].sites && organization.projects[0].sites[0].facilities) {
+        if (
+          onChangeFacility &&
+          !selectedFacility &&
+          organization.projects[0].sites &&
+          organization.projects[0].sites[0].facilities
+        ) {
+          setSelectedFacility(organization.projects[0].sites[0].facilities[0]);
           onChangeFacility(organization.projects[0].sites[0].facilities[0]);
         }
       }
     }
-  }, [organization, allowAll, onChangeFacility]);
+  }, [organization, allowAll, onChangeFacility, selectedFacility]);
 
   const addAllOption = (originalOptions?: string[]) => {
     let newOptions: string[] = [];
@@ -122,9 +129,10 @@ export default function Title({
                 : undefined
             }
             options={addAllOption(selectedSite?.facilities?.map((facility) => facility.name))}
-            onChange={(newValue) =>
-              onChangeFacility(selectedSite?.facilities?.find((facility) => facility.name === newValue))
-            }
+            onChange={(newValue) => {
+              setSelectedFacility(selectedSite?.facilities?.find((facility) => facility.name === newValue));
+              onChangeFacility(selectedSite?.facilities?.find((facility) => facility.name === newValue));
+            }}
           />
         </>
       )}

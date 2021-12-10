@@ -66,7 +66,8 @@ export default function CheckIn(props: CheckInProps): JSX.Element {
   const { organization } = props;
   const history = useHistory();
   const location = useStateLocation();
-  const [pendingAccessions, setPendingAccessions] = useState<SearchResponsePayload>();
+  const [pendingAccessions, setPendingAccessions] = useState<SearchResponseElement[] | null>();
+  const [facilityId, setFacilityId] = React.useState<number>();
 
   useEffect(() => {
     const populatePendingAccessions = async () => {

@@ -55,7 +55,9 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
 
   useEffect(() => {
     const populateSummary = async () => {
-      setSummary(await getSummary(facilityId || 0));
+      if (facilityId) {
+        setSummary(await getSummary(facilityId));
+      }
     };
 
     // Update summary information
@@ -95,7 +97,9 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
         page={strings.DASHBOARD}
         parentPage={strings.SEEDS}
         organization={organization}
-        onChangeFacility={(facility) => setFacilityId(facility?.id)}
+        onChangeFacility={(facility) => {
+          setFacilityId(facility?.id);
+        }}
       />
       <Container maxWidth={false} className={classes.mainContainer}>
         <Grid container spacing={3}>

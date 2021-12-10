@@ -132,35 +132,41 @@ export default function Database(props: DatabaseProps): JSX.Element {
   }, [facilityId]);
 
   useEffect(() => {
-    const populateFieldOptions = async () => {
-      const singleAndMultiChoiceFields = filterSelectFields(searchColumns);
-      setFieldOptions(await getAllFieldValues(singleAndMultiChoiceFields, facilityId));
-    };
-    populateFieldOptions();
+    if (facilityId) {
+      const populateFieldOptions = async () => {
+        const singleAndMultiChoiceFields = filterSelectFields(searchColumns);
+        setFieldOptions(await getAllFieldValues(singleAndMultiChoiceFields, facilityId));
+      };
+      populateFieldOptions();
+    }
   }, [facilityId, searchColumns]);
 
   useEffect(() => {
-    const populateAvailableFieldOptions = async () => {
-      const singleAndMultiChoiceFields = filterSelectFields(searchColumns);
-      setAvailableFieldOptions(await searchFieldValues(singleAndMultiChoiceFields, searchCriteria, facilityId));
-    };
-    populateAvailableFieldOptions();
+    if (facilityId) {
+      const populateAvailableFieldOptions = async () => {
+        const singleAndMultiChoiceFields = filterSelectFields(searchColumns);
+        setAvailableFieldOptions(await searchFieldValues(singleAndMultiChoiceFields, searchCriteria, facilityId));
+      };
+      populateAvailableFieldOptions();
+    }
   }, [facilityId, searchColumns, searchCriteria]);
 
   useEffect(() => {
-    const populateSearchResults = async () => {
-      const apiResponse = await search({
-        facilityId,
-        fields: searchColumns.includes('active') ? searchColumns : [...searchColumns, 'active'],
-        sortOrder: [searchSortOrder],
-        search: convertToSearchNodePayload(searchCriteria),
-        count: 1000,
-      });
+    if (facilityId) {
+      const populateSearchResults = async () => {
+        const apiResponse = await search({
+          facilityId,
+          fields: searchColumns.includes('active') ? searchColumns : [...searchColumns, 'active'],
+          sortOrder: [searchSortOrder],
+          search: convertToSearchNodePayload(searchCriteria),
+          count: 1000,
+        });
 
-      setSearchResults(apiResponse);
-    };
+        setSearchResults(apiResponse);
+      };
 
-    populateSearchResults();
+      populateSearchResults();
+    }
   }, [facilityId, searchCriteria, searchSortOrder, searchColumns]);
 
   const onSelect = (row: SearchResponseElement) => {
@@ -252,14 +258,16 @@ export default function Database(props: DatabaseProps): JSX.Element {
     <MuiPickersUtilsProvider utils={MomentUtils}>
       <main>
         <EditColumns open={editColumnsModalOpen} value={displayColumnNames} onClose={onCloseEditColumnsModal} />
-        <DownloadReportModal
-          searchCriteria={searchCriteria}
-          searchSortOrder={searchSortOrder}
-          searchColumns={searchColumns}
-          facilityId={facilityId}
-          open={reportModalOpen}
-          onClose={onCloseDownloadReportModal}
-        />
+        {facilityId && (
+          <DownloadReportModal
+            searchCriteria={searchCriteria}
+            searchSortOrder={searchSortOrder}
+            searchColumns={searchColumns}
+            facilityId={facilityId}
+            open={reportModalOpen}
+            onClose={onCloseDownloadReportModal}
+          />
+        )}
         <PageHeader
           title=''
           subtitle={getSubtitle()}
