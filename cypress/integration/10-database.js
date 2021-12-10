@@ -5,7 +5,7 @@ describe('Database', () => {
       cy.get('#table-header').children().should('have.length', 7);
       cy.get('#table-header-accessionNumber').contains('ACCESSION');
       cy.get('#table-header-state').contains('STAGE');
-      cy.get('#table-header-species').contains('SPECIES');
+      cy.get('#table-header-speciesName').contains('SPECIES');
       cy.get('#table-header-receivedDate').contains('RECEIVED DATE');
       cy.get('#table-header-collectedDate').contains('COLLECTED DATE');
       cy.get('#table-header-siteLocation').contains('SITE LOCATION');
@@ -20,10 +20,10 @@ describe('Database', () => {
       cy.get('#table-header').children().should('have.length', 7);
       cy.get('#table-header-accessionNumber').contains('ACCESSION');
       cy.get('#table-header-state').contains('STAGE');
-      cy.get('#table-header-species').contains('SPECIES');
+      cy.get('#table-header-speciesName').contains('SPECIES');
       cy.get('#table-header-receivedDate').contains('RECEIVED DATE');
       cy.get('#table-header-collectedDate').contains('COLLECTED DATE');
-      cy.get('#table-header-primaryCollector').contains('COLLECTOR');
+      cy.get('#table-header-primaryCollectorName').contains('COLLECTOR');
       cy.get('#table-header-siteLocation').contains('SITE LOCATION');
     });
 
@@ -33,10 +33,10 @@ describe('Database', () => {
 
       cy.get('#edit-columns').click();
 
-      cy.get('#species').click();
+      cy.get('#speciesName').click();
       cy.get('#receivedDate').click();
       cy.get('#collectedDate').click();
-      cy.get('#primaryCollector').click();
+      cy.get('#primaryCollectorName').click();
       cy.get('#active').click();
       cy.get('#saveColumnsButton').click();
       cy.wait('@search');
@@ -73,10 +73,10 @@ describe('Database', () => {
         cy.get('#table-header-accessionNumber').contains('ACCESSION');
         cy.get('#table-header-active').contains('ACTIVE/INACTIVE');
         cy.get('#table-header-state').contains('STAGE');
-        cy.get('#table-header-species').contains('SPECIES');
+        cy.get('#table-header-speciesName').contains('SPECIES');
         cy.get('#table-header-receivedDate').contains('RECEIVED DATE');
         cy.get('#table-header-collectedDate').contains('COLLECTED DATE');
-        cy.get('#table-header-primaryCollector').contains('COLLECTOR');
+        cy.get('#table-header-primaryCollectorName').contains('COLLECTOR');
         cy.get('#table-header-siteLocation').contains('SITE LOCATION');
         cy.get('#table-header-endangered').contains('ENDANGERED');
         cy.get('#table-header-rare').contains('RARE');
@@ -104,10 +104,10 @@ describe('Database', () => {
         cy.get('#table-header').children().should('have.length', 7);
         cy.get('#table-header-accessionNumber').contains('ACCESSION');
         cy.get('#table-header-state').contains('STAGE');
-        cy.get('#table-header-species').contains('SPECIES');
+        cy.get('#table-header-speciesName').contains('SPECIES');
         cy.get('#table-header-receivedDate').contains('RECEIVED DATE');
         cy.get('#table-header-collectedDate').contains('COLLECTED DATE');
-        cy.get('#table-header-primaryCollector').contains('COLLECTOR');
+        cy.get('#table-header-primaryCollectorName').contains('COLLECTOR');
         cy.get('#table-header-siteLocation').contains('SITE LOCATION');
       });
 
@@ -127,13 +127,13 @@ describe('Database', () => {
         cy.get('#table-header-accessionNumber').contains('ACCESSION');
         cy.get('#table-header-active').contains('ACTIVE/INACTIVE');
         cy.get('#table-header-state').contains('STAGE');
-        cy.get('#table-header-species').contains('SPECIES');
+        cy.get('#table-header-speciesName').contains('SPECIES');
         cy.get('#table-header-receivedDate').contains('RECEIVED DATE');
         cy.get('#table-header-collectedDate').contains('COLLECTED DATE');
         cy.get('#table-header-estimatedSeedsIncoming').should('contain', 'ESTIMATED SEEDS INCOMING');
         cy.get('#table-header-storageStartDate').should('contain', 'STORING START DATE');
         cy.get('#table-header-storageCondition').contains('STORAGE CONDITION');
-        cy.get('#table-header-storageLocation').contains('STORAGE LOCATION');
+        cy.get('#table-header-storageLocationName').contains('STORAGE LOCATION');
         cy.get('#table-header-storagePackets').contains('NUMBER OF STORAGE PACKETS');
         cy.get('#table-header-storageNotes').contains('NOTES');
         cy.get('#table-header-latestViabilityPercent').contains('MOST RECENT % VIABILITY');
@@ -155,7 +155,7 @@ describe('Database', () => {
         cy.get('#table-header-accessionNumber').contains('ACCESSION');
         cy.get('#table-header-active').contains('ACTIVE/INACTIVE');
         cy.get('#table-header-state').contains('STAGE');
-        cy.get('#table-header-species').contains('SPECIES');
+        cy.get('#table-header-speciesName').contains('SPECIES');
         cy.get('#table-header-collectedDate').contains('COLLECTED DATE');
         cy.get('#table-header-germinationTestType').contains('GERMINATION TEST TYPE');
         cy.get('#table-header-germinationSeedType').contains('SEED TYPE');
@@ -187,10 +187,10 @@ describe('Database', () => {
         cy.get('#table-header-accessionNumber').contains('ACCESSION');
         cy.get('#table-header-active').contains('ACTIVE/INACTIVE');
         cy.get('#table-header-state').contains('STAGE');
-        cy.get('#table-header-species').contains('SPECIES');
+        cy.get('#table-header-speciesName').contains('SPECIES');
         cy.get('#table-header-collectedDate').contains('COLLECTED DATE');
         cy.get('#table-header-storageCondition').contains('STORAGE CONDITION');
-        cy.get('#table-header-storageLocation').contains('STORAGE LOCATION');
+        cy.get('#table-header-storageLocationName').contains('STORAGE LOCATION');
         cy.get('#table-header-storagePackets').contains('NUMBER OF STORAGE PACKETS');
         cy.get('#table-header-storageNotes').contains('NOTES');
         cy.get('#table-header-germinationTestType').contains('GERMINATION TEST TYPE');
@@ -204,7 +204,7 @@ describe('Database', () => {
         cy.get('#edit-columns').click();
 
         cy.get('#Germination\\ Testing\\ To\\ Do').click();
-        cy.get('#primaryCollector').click();
+        cy.get('#primaryCollectorName').click();
         cy.get('#rare').click();
         cy.get('#saveColumnsButton').click();
         cy.wait('@search');
@@ -308,14 +308,14 @@ describe('Database', () => {
       cy.intercept('POST', '/api/v1/seedbank/search').as('search');
       cy.intercept('POST', '/api/v1/seedbank/values').as('values');
 
-      cy.get('#filter-species').click();
-      cy.get('#species').should('be.visible');
-      cy.get('#species').type('kousa').type('{enter}');
+      cy.get('#filter-speciesName').click();
+      cy.get('#speciesName').should('be.visible');
+      cy.get('#speciesName').type('kousa').type('{enter}');
 
       cy.wait('@search');
       cy.wait('@values');
 
-      cy.get('#species').should('not.exist');
+      cy.get('#speciesName').should('not.exist');
       cy.get('#subtitle').should('contain', '3 total');
     });
 
@@ -323,14 +323,14 @@ describe('Database', () => {
       cy.intercept('POST', '/api/v1/seedbank/search').as('search');
       cy.intercept('POST', '/api/v1/seedbank/values').as('values');
 
-      cy.get('#filter-species').click();
-      cy.get('#species').should('be.visible');
+      cy.get('#filter-speciesName').click();
+      cy.get('#speciesName').should('be.visible');
       cy.get('#clear').click({ force: true });
 
       cy.wait('@search');
       cy.wait('@values');
 
-      cy.get('#species').should('not.exist');
+      cy.get('#speciesName').should('not.exist');
       cy.get('#subtitle').should('contain', '13 total');
     });
 
@@ -607,11 +607,11 @@ describe('Database', () => {
       cy.get('#editColumnsDialog').should('not.exist');
 
       cy.intercept('POST', '/api/v1/seedbank/search').as('search2');
-      cy.get('#table-header-species').click();
+      cy.get('#table-header-speciesName').click();
       cy.wait('@search2');
 
-      cy.get('#row13-species').contains('Other Dogwood');
-      cy.get('#row10-species').contains('Kousa');
+      cy.get('#row13-speciesName').contains('Other Dogwood');
+      cy.get('#row10-speciesName').contains('Kousa');
     });
 
     it('Should be able to sort by state', () => {
@@ -631,7 +631,7 @@ describe('Database', () => {
       cy.get('#row1-active').contains('Inactive');
       cy.get('#row1').should('have.css', 'background-color', 'rgb(248, 249, 250)');
       cy.get('#row1-state').contains('Withdrawn');
-      cy.get('#row5-species').contains('Dogwood');
+      cy.get('#row5-speciesName').contains('Dogwood');
     });
   });
 
@@ -657,25 +657,25 @@ describe('Database', () => {
       cy.intercept('POST', '/api/v1/seedbank/search').as('search3');
       cy.intercept('POST', '/api/v1/seedbank/values').as('values3');
 
-      cy.get('#filter-species').click();
-      cy.get('#species').should('be.visible');
-      cy.get('#species').type('dogwood').type('{enter}');
+      cy.get('#filter-speciesName').click();
+      cy.get('#speciesName').should('be.visible');
+      cy.get('#speciesName').type('dogwood').type('{enter}');
 
       cy.wait('@search3');
       cy.wait('@values3');
 
-      cy.get('#species').should('not.exist');
+      cy.get('#speciesName').should('not.exist');
       cy.get('#subtitle').should('contain', '4 total');
 
       cy.intercept('POST', '/api/v1/seedbank/search').as('search4');
-      cy.get('#table-header-species').click();
+      cy.get('#table-header-speciesName').click();
       cy.wait('@search4');
 
       cy.intercept('POST', '/api/v1/seedbank/search').as('search5');
-      cy.get('#table-header-species').click();
+      cy.get('#table-header-speciesName').click();
       cy.wait('@search5');
 
-      cy.get('#row1-species').contains('Other Dogwood');
+      cy.get('#row1-speciesName').contains('Other Dogwood');
 
       cy.get('#filter-rare').should('exist');
 
@@ -688,7 +688,7 @@ describe('Database', () => {
       cy.get('#close').click();
 
       cy.get('#subtitle').should('contain', '4 total');
-      cy.get('#row1-species').contains('Other Dogwood');
+      cy.get('#row1-speciesName').contains('Other Dogwood');
       cy.get('#filter-rare').contains('Rare');
     });
   });

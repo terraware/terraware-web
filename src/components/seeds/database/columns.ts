@@ -43,7 +43,7 @@ const COLUMNS: DatabaseColumn[] = [
     filter: { type: 'multiple_selection' },
   },
   {
-    key: 'species',
+    key: 'speciesName',
     name: strings.SPECIES,
     type: 'string',
     filter: { type: 'search' },
@@ -61,7 +61,7 @@ const COLUMNS: DatabaseColumn[] = [
     filter: { type: 'date_range' },
   },
   {
-    key: 'primaryCollector',
+    key: 'primaryCollectorName',
     name: strings.PRIMARY_COLLECTOR,
     type: 'string',
     filter: { type: 'search' },
@@ -103,7 +103,7 @@ const COLUMNS: DatabaseColumn[] = [
     filter: { type: 'number_range' },
   },
   {
-    key: 'family',
+    key: 'familyName',
     name: strings.FAMILY,
     type: 'string',
     filter: { type: 'search' },
@@ -185,7 +185,7 @@ const COLUMNS: DatabaseColumn[] = [
     filter: { type: 'single_selection' },
   },
   {
-    key: 'storageLocation',
+    key: 'storageLocationName',
     name: strings.STORAGE_LOCATION,
     type: 'string',
     filter: { type: 'multiple_selection' },
@@ -335,21 +335,29 @@ export interface Preset {
 
 export const defaultPreset: Preset = {
   name: 'Default',
-  fields: ['accessionNumber', 'species', 'siteLocation', 'state', 'collectedDate', 'receivedDate', 'primaryCollector'],
+  fields: [
+    'accessionNumber',
+    'speciesName',
+    'siteLocation',
+    'state',
+    'collectedDate',
+    'receivedDate',
+    'primaryCollectorName',
+  ],
 };
 
 const generalInventoryPreset: Preset = {
   name: 'General Inventory',
   fields: [
     'accessionNumber',
-    'species',
+    'speciesName',
     'siteLocation',
     'landowner',
     'active',
     'state',
     'collectedDate',
     'receivedDate',
-    'primaryCollector',
+    'primaryCollectorName',
     'endangered',
     'rare',
     'treesCollectedFrom',
@@ -364,7 +372,7 @@ const seedStoragePreset: Preset = {
   name: 'Seed Storage Status',
   fields: [
     'accessionNumber',
-    'species',
+    'speciesName',
     'active',
     'state',
     'collectedDate',
@@ -373,7 +381,7 @@ const seedStoragePreset: Preset = {
     'storageStartDate',
     'storagePackets',
     'storageCondition',
-    'storageLocation',
+    'storageLocationName',
     'storageNotes',
     'latestViabilityPercent',
   ],
@@ -383,7 +391,7 @@ const viabilitySummaryPreset: Preset = {
   name: 'Viability Summary',
   fields: [
     'accessionNumber',
-    'species',
+    'speciesName',
     'active',
     'state',
     'collectedDate',
@@ -406,13 +414,13 @@ const germinationTestingPreset: Preset = {
   name: 'Germination Testing To Do',
   fields: [
     'accessionNumber',
-    'species',
+    'speciesName',
     'active',
     'state',
     'collectedDate',
     'storagePackets',
     'storageCondition',
-    'storageLocation',
+    'storageLocationName',
     'storageNotes',
     'germinationTestType',
     'germinationStartDate',

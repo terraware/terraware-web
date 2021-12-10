@@ -1010,7 +1010,7 @@ export interface components {
       | "dryingStartDate"
       | "endangered"
       | "estimatedSeedsIncoming"
-      | "family"
+      | "familyName"
       | "geolocation"
       | "geolocations.coordinates"
       | "germinationEndDate"
@@ -1039,7 +1039,7 @@ export interface components {
       | "latestGerminationTestDate"
       | "latestViabilityPercent"
       | "nurseryStartDate"
-      | "primaryCollector"
+      | "primaryCollectorName"
       | "processingMethod"
       | "processingNotes"
       | "processingStartDate"
@@ -1050,10 +1050,10 @@ export interface components {
       | "remainingUnits"
       | "siteLocation"
       | "sourcePlantOrigin"
-      | "species"
+      | "speciesName"
       | "state"
       | "storageCondition"
-      | "storageLocation"
+      | "storageLocationName"
       | "storageNotes"
       | "storagePackets"
       | "storageStartDate"
@@ -1125,7 +1125,7 @@ export interface components {
         dryingStartDate?: string;
         endangered?: string;
         estimatedSeedsIncoming?: string;
-        family?: string;
+        familyName?: string;
         geolocation?: string;
         geolocations?: {
           coordinates?: string;
@@ -1160,7 +1160,7 @@ export interface components {
         latestGerminationTestDate?: string;
         latestViabilityPercent?: string;
         nurseryStartDate?: string;
-        primaryCollector?: string;
+        primaryCollectorName?: string;
         processingMethod?: string;
         processingNotes?: string;
         processingStartDate?: string;
@@ -1171,7 +1171,7 @@ export interface components {
         remainingUnits?: string;
         siteLocation?: string;
         sourcePlantOrigin?: string;
-        species?: string;
+        speciesName?: string;
         state?: string;
         storageCondition?: string;
         storageLocation?: string;
