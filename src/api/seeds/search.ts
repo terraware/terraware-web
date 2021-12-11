@@ -43,8 +43,7 @@ export type SearchResponseElement = SearchResponsePayload['results'][0];
 
 export async function search(params: SearchRequestPayload): Promise<SearchResponseElement[] | null> {
   try {
-    const endpoint = `${process.env.REACT_APP_TERRAWARE_API}${SEARCH_ENDPOINT}`;
-    const response: SearchResponsePayload = (await axios.post(endpoint, params)).data;
+    const response: SearchResponsePayload = (await axios.post(SEARCH_ENDPOINT, params)).data;
     return response.results;
   } catch {
     return null;
@@ -134,8 +133,7 @@ export type AllFieldValuesMap = ListAllFieldValuesResponsePayload['results'];
 async function listAllFieldValues(
   params: ListAllFieldValuesRequestPayload
 ): Promise<ListAllFieldValuesResponsePayload> {
-  const endpoint = `${process.env.REACT_APP_TERRAWARE_API}${ALL_FIELD_VALUES_ENDPOINT}`;
-  return (await axios.post(endpoint, params)).data as ListAllFieldValuesResponsePayload;
+  return (await axios.post(ALL_FIELD_VALUES_ENDPOINT, params)).data as ListAllFieldValuesResponsePayload;
 }
 
 /*
@@ -184,8 +182,7 @@ export async function searchFieldValues(
       fields,
       search: formattedSearch,
     };
-    const endpoint = `${process.env.REACT_APP_TERRAWARE_API}${FIELD_VALUES_ENDPOINT}`;
-    const apiResponse: ValuesPostResponse = (await axios.post(endpoint, params)).data;
+    const apiResponse: ValuesPostResponse = (await axios.post(FIELD_VALUES_ENDPOINT, params)).data;
     return apiResponse.results;
   } catch {
     return null;

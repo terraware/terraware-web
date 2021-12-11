@@ -7,8 +7,6 @@ import { Species, SpeciesById, SpeciesRequestError } from 'src/types/Species';
  * surfaced to the caller via the requestSucceeded or error field.
  */
 
-const BASE_URL = `${process.env.REACT_APP_TERRAWARE_API}`;
-
 const SPECIES_ENDPOINT = '/api/v1/species';
 type SpeciesList = paths[typeof SPECIES_ENDPOINT]['get']['responses'][200]['content']['application/json']['species'];
 type SpeciesListItem = SpeciesList[0];
@@ -25,8 +23,7 @@ export async function getAllSpecies(): Promise<GetSpeciesListResponse> {
   };
 
   try {
-    const endpoint = `${BASE_URL}${SPECIES_ENDPOINT}`;
-    const speciesList: SpeciesList = (await axios.get(endpoint)).data.species;
+    const speciesList: SpeciesList = (await axios.get(SPECIES_ENDPOINT)).data.species;
     speciesList.forEach((species: SpeciesListItem) => {
       response.speciesById.set(species.id, { id: species.id, name: species.name });
     });
@@ -55,9 +52,8 @@ export async function createSpecies(name: string): Promise<CreateSpeciesResponse
   };
 
   try {
-    const endpoint = `${BASE_URL}${SPECIES_ENDPOINT}`;
     const createSpeciesRequest: PostSpeciesRequest = { name };
-    const serverResponse: PostSpeciesResponse = (await axios.post(endpoint, createSpeciesRequest)).data;
+    const serverResponse: PostSpeciesResponse = (await axios.post(SPECIES_ENDPOINT, createSpeciesRequest)).data;
     response.species = { id: serverResponse.id, name };
   } catch (error) {
     if (axios.isAxiosError(error) && error.response?.status === 409) {
@@ -86,7 +82,7 @@ export async function updateSpecies(species: Species): Promise<UpdateSpeciesResp
   const response: UpdateSpeciesResponse = { species, requestSucceeded: true };
 
   try {
-    const endpoint = `${BASE_URL}${PUT_SPECIES_ENDPOINT}`.replace('{speciesId}', `${species.id}`);
+    const endpoint = PUT_SPECIES_ENDPOINT.replace('{speciesId}', `${species.id}`);
     const updateSpeciesRequest: PutSpeciesRequest = { name: species.name };
     await axios.put(endpoint, updateSpeciesRequest);
   } catch (error) {
@@ -101,10 +97,7 @@ type SpeciesDeleteResponse =
   paths[typeof PUT_SPECIES_ENDPOINT]['delete']['responses'][200]['content']['application/json'];
 
 export async function deleteSpecies(speciesId: number): Promise<SpeciesDeleteResponse> {
-  const endpoint = `${process.env.REACT_APP_TERRAWARE_API}${PUT_SPECIES_ENDPOINT}`.replace(
-    '{speciesId}',
-    `${speciesId}`
-  );
+  const endpoint = PUT_SPECIES_ENDPOINT.replace('{speciesId}', `${speciesId}`);
   const response: SpeciesDeleteResponse = (await axios.delete(endpoint)).data;
 
   return response;

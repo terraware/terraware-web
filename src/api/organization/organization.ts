@@ -3,13 +3,11 @@ import axios from 'src/api/index';
 import { SeedBank, Organization, PlantLayer, Project, Site, ServerOrganization } from 'src/types/Organization';
 import { paths } from 'src/api/types/generated-schema';
 
-const BASE_URL = `${process.env.REACT_APP_TERRAWARE_API}`;
-
 const PROJECTS = '/api/v1/projects';
 type ListProjectsResponse = paths[typeof PROJECTS]['get']['responses'][200]['content']['application/json'];
 
 async function getProjects(): Promise<Project[]> {
-  const response: ListProjectsResponse = (await axios.get(`${BASE_URL}${PROJECTS}`)).data;
+  const response: ListProjectsResponse = (await axios.get(PROJECTS)).data;
   return response.projects.map((project) => ({
     id: project.id,
     name: project.name,
@@ -20,7 +18,7 @@ const SITES = '/api/v1/sites';
 type ListSitesResponse = paths[typeof SITES]['get']['responses'][200]['content']['application/json'];
 
 async function getSites(): Promise<Site[]> {
-  const sitesResponse: ListSitesResponse = (await axios.get(`${BASE_URL}${SITES}`)).data;
+  const sitesResponse: ListSitesResponse = (await axios.get(SITES)).data;
   return sitesResponse.sites.map((site) => ({
     id: site.id,
     projectId: site.projectId,
@@ -35,7 +33,7 @@ async function getPlantLayers(sites: Site[]): Promise<PlantLayer[]> {
   // We may want to add functionality to allow fetching of some layers to fail
   // while still returning those that were fetched successfully
   const axiosResponse: AxiosResponse<ListLayersResponse>[] = await Promise.all(
-    sites.map((site) => axios.get(`${BASE_URL}${LAYERS}`.replace('{siteId}', `${site.id}`)))
+    sites.map((site) => axios.get(LAYERS.replace('{siteId}', `${site.id}`)))
   );
 
   const layers: PlantLayer[] = [];
@@ -57,7 +55,7 @@ const FACILITIES = '/api/v1/facility';
 type ListFacilitiesResponse = paths[typeof FACILITIES]['get']['responses'][200]['content']['application/json'];
 
 async function getSeedBankFacilities(): Promise<SeedBank[]> {
-  const facilitiesResponse: ListFacilitiesResponse = (await axios.get(`${BASE_URL}${FACILITIES}`)).data;
+  const facilitiesResponse: ListFacilitiesResponse = (await axios.get(FACILITIES)).data;
   const seedBanks: SeedBank[] = [];
   facilitiesResponse.facilities.forEach((facility) => {
     if (facility.type === 'Seed Bank') {
@@ -164,8 +162,7 @@ export async function getOrganizations(): Promise<OrganizationsResponse> {
     requestSucceeded: true,
   };
   try {
-    const organizationsResponse: ListOrganizationsResponsePayload = (await axios.get(`${BASE_URL}${ORGANIZATIONS}`))
-      .data;
+    const organizationsResponse: ListOrganizationsResponsePayload = (await axios.get(ORGANIZATIONS)).data;
     response.organizations = organizationsResponse.organizations.map((organization) => ({
       id: organization.id,
       name: organization.name,

@@ -13,10 +13,7 @@ export type ConditionType = StorageLocation['storageCondition'];
  */
 export async function getLocations(facilityId: number): Promise<StorageLocation[] | null> {
   try {
-    const endpoint = `${process.env.REACT_APP_TERRAWARE_API}${STORAGE_LOCATIONS_ENDPOINT}`.replace(
-      '{facilityId}',
-      `${facilityId}`
-    );
+    const endpoint = STORAGE_LOCATIONS_ENDPOINT.replace('{facilityId}', `${facilityId}`);
     const response: StorageLocationsResponsePayload = (await axios.get(endpoint)).data;
     return response.locations;
   } catch {
