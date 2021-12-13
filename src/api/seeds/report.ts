@@ -20,8 +20,7 @@ export async function downloadReport(
       search: convertToSearchNodePayload(searchCriteria),
     };
 
-    const endpoint = `${process.env.REACT_APP_TERRAWARE_API}${EXPORT_ENDPOINT}`;
-    const response: ExportResponse = (await axios.post(endpoint, params)).data;
+    const response: ExportResponse = (await axios.post(EXPORT_ENDPOINT, params)).data;
     return response;
   } catch {
     return null;

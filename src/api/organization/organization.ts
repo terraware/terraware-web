@@ -4,8 +4,6 @@ import { Organization, PlantLayer, Site, ServerOrganization } from 'src/types/Or
 import { paths } from 'src/api/types/generated-schema';
 import { parseProject } from 'src/utils/organization';
 
-const BASE_URL = `${process.env.REACT_APP_TERRAWARE_API}`;
-
 const LAYERS = '/api/v1/gis/layers/list/{siteId}';
 type ListLayersResponse = paths[typeof LAYERS]['get']['responses'][200]['content']['application/json'];
 type LayerResponse = ListLayersResponse['layers'][0];
@@ -14,7 +12,7 @@ export async function getPlantLayers(sites: Site[]): Promise<PlantLayer[]> {
   // We may want to add functionality to allow fetching of some layers to fail
   // while still returning those that were fetched successfully
   const axiosResponse: AxiosResponse<ListLayersResponse>[] = await Promise.all(
-    sites.map((site) => axios.get(`${BASE_URL}${LAYERS}`.replace('{siteId}', `${site.id}`)))
+    sites.map((site) => axios.get(LAYERS.replace('{siteId}', `${site.id}`)))
   );
 
   const layers: PlantLayer[] = [];
@@ -63,9 +61,8 @@ export async function getOrganizations(): Promise<OrganizationsResponse> {
     requestSucceeded: true,
   };
   try {
-    const organizationsResponse: ListOrganizationsResponsePayload = (
-      await axios.get(`${BASE_URL}${ORGANIZATIONS}?depth=Facility`)
-    ).data;
+    const organizationsResponse: ListOrganizationsResponsePayload = (await axios.get(`${ORGANIZATIONS}?depth=Facility`))
+      .data;
     response.organizations = organizationsResponse.organizations.map((organization) => ({
       id: organization.id,
       name: organization.name,

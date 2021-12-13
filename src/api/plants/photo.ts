@@ -8,8 +8,6 @@ type PhotoMetadataList = ListPhotosResponse['photos'];
 const GET_PHOTO_ENDPOINT = '/api/v1/gis/features/{featureId}/photos/{photoId}';
 type PhotoData = paths[typeof GET_PHOTO_ENDPOINT]['get']['responses'][200]['content']['image/jpeg'];
 
-const BASE_URL = `${process.env.REACT_APP_TERRAWARE_API}`;
-
 export type GetPlantPhotoResponse = {
   photo: PlantPhoto; // Will always be defined so that we can return the requested feature ID to the caller.
   error: PlantRequestError | null;
@@ -28,7 +26,7 @@ export async function getPlantPhoto(featureId: number): Promise<GetPlantPhotoRes
   };
 
   try {
-    const listPhotosEndpoint = `${BASE_URL}${LIST_PHOTOS_ENDPOINT}`.replace('{featureId}', `${featureId}`);
+    const listPhotosEndpoint = LIST_PHOTOS_ENDPOINT.replace('{featureId}', `${featureId}`);
     // Use all settled so we can handle errors here, instead of in the catch block. This allows us to
     // differentiate between errors thrown by each of the API requests.
     const [photoMetadataResponse] = await Promise.allSettled([axios.get(listPhotosEndpoint)]);
@@ -48,9 +46,10 @@ export async function getPlantPhoto(featureId: number): Promise<GetPlantPhotoRes
     // Choose first photo associated with the plant.
     const photoId = photoMetadataList[0].id;
     const photoType = photoMetadataList[0].contentType;
-    const getPhotoEndpoint = `${BASE_URL}${GET_PHOTO_ENDPOINT}`
-      .replace('{featureId}', `${featureId}`)
-      .replace('{photoId}', `${photoId}`);
+    const getPhotoEndpoint = GET_PHOTO_ENDPOINT.replace('{featureId}', `${featureId}`).replace(
+      '{photoId}',
+      `${photoId}`
+    );
     const photoData: PhotoData = (await axios.get(getPhotoEndpoint, { responseType: 'arraybuffer' })).data;
     const urlCreator = window.URL || window.webkitURL;
     response.photo = {

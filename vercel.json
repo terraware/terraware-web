@@ -1,0 +1,16 @@
+{
+  "rewrites": [
+    {
+      "source": "/sso/:path*",
+      "destination": "https://staging.terraware.io/sso/:path*"
+    },
+    {
+      "source": "/api/:path*",
+      "destination": "https://staging.terraware.io/api/:path*"
+    },
+    {
+      "source": "/api/:path*/",
+      "destination": "https://staging.terraware.io/api/:path*/"
+    }
+  ]
+}

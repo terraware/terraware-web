@@ -21,8 +21,7 @@ export async function getDate(): Promise<GetDateResponse> {
   };
 
   try {
-    const endpoint = `${process.env.REACT_APP_TERRAWARE_API}${clockEndpoint}`;
-    const apiResponse: ClockGetResponse = (await axios.get(endpoint)).data;
+    const apiResponse: ClockGetResponse = (await axios.get(clockEndpoint)).data;
     response.serverTime = Date.parse(apiResponse.currentTime);
   } catch {
     console.error('getDate() unable to fetch the server time. Callers will be forced to use the fallback local time');
