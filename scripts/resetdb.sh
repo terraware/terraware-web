@@ -9,7 +9,9 @@ while [ $attempts_remaining -gt 0 ]; do
     if docker exec -i tree-location-web_postgres_1 psql -d terraware -U postgres < dump/dump.sql; then
         break
     fi
+
     attempts_remaining=`expr $attempts_remaining - 1`
+    sleep 1
 done
 
 if [ $attempts_remaining = 0 ]; then
