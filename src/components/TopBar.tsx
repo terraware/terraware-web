@@ -5,7 +5,6 @@ import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { SeedSearchCriteria } from 'src/api/seeds/search';
 import { Notifications } from 'src/types/Notifications';
-import { ServerOrganization } from 'src/types/Organization';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import NotificationsDropdown from './NotificationsDropdown';
 import SearchBar from './SearchBar';
@@ -51,7 +50,6 @@ type TopBarProps = {
   notifications?: Notifications;
   setNotifications: (notifications?: Notifications) => void;
   setSeedSearchCriteria: (criteria: SeedSearchCriteria) => void;
-  organization?: ServerOrganization;
   facilityId?: number;
 };
 

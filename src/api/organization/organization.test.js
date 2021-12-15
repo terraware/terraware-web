@@ -1,5 +1,5 @@
 /* tslint:disable:no-console */
-import { OrgRequestError, exportedForTesting, getOrganizations } from './organization';
+import { exportedForTesting, getOrganizations } from './organization';
 import axios from 'axios';
 
 const getLayers = exportedForTesting.getLayers;
@@ -114,6 +114,18 @@ test('getOrganizations() returns all data when no errors thrown', async () => {
   });
 });
 
+test('getOrganizations() fails', async () => {
+  axios.get.mockImplementation((url) => {
+    if (url.includes('organizations')) {
+      return Promise.reject(FAILURE_RESPONSE);
+    }
+  });
+  await expect(getOrganizations()).resolves.toEqual({
+    organizations: [],
+    requestSucceeded: false,
+  });
+});
+
 test('getLayers() returns a rejected promise if fetching layers from any site fails', async () => {
   axios.get.mockImplementation((url) => {
     if (url.includes('gis/layers/list/20')) {
@@ -126,5 +138,8 @@ test('getLayers() returns a rejected promise if fetching layers from any site fa
     throw Error('Axios mock called with an unexpected url');
   });
 
-  await expect(getLayers(SITES)).rejects.toEqual(FAILURE_RESPONSE);
+  await expect(getLayers(SITES)).resolves.toEqual({
+    layers: [],
+    requestSucceeded: false,
+  });
 });

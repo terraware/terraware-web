@@ -67,7 +67,7 @@ export default function PlantDashboard(props: PlantDashboardProps): JSX.Element 
     const populatePlants = async () => {
       if (organization) {
         const sites = getSelectedSites(selectedSite, selectedProject, organization);
-        const layers = await getPlantLayers(sites);
+        const layers = (await getPlantLayers(sites)).layers;
         const layerIds = layers.map((layer) => layer.id);
         const plantsResponse = await getPlantsForMultipleLayers(layerIds);
         if (plantsResponse.plantErrorByLayerId.size === 0) {
@@ -80,7 +80,7 @@ export default function PlantDashboard(props: PlantDashboardProps): JSX.Element 
     const populatePlantSummaries = async () => {
       if (organization) {
         const sites = getSelectedSites(selectedSite, selectedProject, organization);
-        const layers = await getPlantLayers(sites);
+        const layers = (await getPlantLayers(sites)).layers;
         const layerIds = layers.map((layer) => layer.id);
         const summaryResponse = await getPlantSummariesByLayer(layerIds);
         // TODO handle error fetching plant summary data

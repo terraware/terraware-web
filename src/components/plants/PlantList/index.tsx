@@ -68,7 +68,7 @@ export default function PlantList(props: PlantListProps): JSX.Element {
     const populatePlants = async () => {
       if (organization) {
         const sites = getSelectedSites(selectedSite, selectedProject, organization);
-        const layers = await getPlantLayers(sites);
+        const layers = (await getPlantLayers(sites)).layers;
         const layerIds = layers.map((layer) => layer.id);
         const plantsResponse = await getPlantsForMultipleLayers(layerIds, filters);
         // TODO display errors to client

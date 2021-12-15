@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios';
 import axios from 'src/api/index';
-import { Organization, PlantLayer, Site, ServerOrganization } from 'src/types/Organization';
+import { PlantLayer, Site, ServerOrganization } from 'src/types/Organization';
 import { paths } from 'src/api/types/generated-schema';
 import { parseProject } from 'src/utils/organization';
 
@@ -8,40 +8,41 @@ const LAYERS = '/api/v1/gis/layers/list/{siteId}';
 type ListLayersResponse = paths[typeof LAYERS]['get']['responses'][200]['content']['application/json'];
 type LayerResponse = ListLayersResponse['layers'][0];
 
-export async function getPlantLayers(sites: Site[]): Promise<PlantLayer[]> {
+type GetPlantLayersResponse = {
+  layers: PlantLayer[];
+  requestSucceeded: boolean;
+};
+export async function getPlantLayers(sites: Site[]): Promise<GetPlantLayersResponse> {
   // We may want to add functionality to allow fetching of some layers to fail
   // while still returning those that were fetched successfully
-  const axiosResponse: AxiosResponse<ListLayersResponse>[] = await Promise.all(
-    sites.map((site) => axios.get(LAYERS.replace('{siteId}', `${site.id}`)))
-  );
+  const response: GetPlantLayersResponse = {
+    layers: [],
+    requestSucceeded: true,
+  };
+  try {
+    const axiosResponse: AxiosResponse<ListLayersResponse>[] = await Promise.all(
+      sites.map((site) => axios.get(LAYERS.replace('{siteId}', `${site.id}`)))
+    );
 
-  const layers: PlantLayer[] = [];
-  axiosResponse.forEach((response) => {
-    response.data.layers.forEach((layer: LayerResponse) => {
-      if (layer.layerType === 'Plants Planted') {
-        layers.push({
-          id: layer.id,
-          siteId: layer.siteId,
-        });
-      }
+    const layers: PlantLayer[] = [];
+    axiosResponse.forEach((serResponse) => {
+      serResponse.data.layers.forEach((layer: LayerResponse) => {
+        if (layer.layerType === 'Plants Planted') {
+          layers.push({
+            id: layer.id,
+            siteId: layer.siteId,
+          });
+        }
+      });
     });
-  });
 
-  return layers;
+    response.layers = layers;
+  } catch {
+    response.requestSucceeded = false;
+  }
+
+  return response;
 }
-
-export enum OrgRequestError {
-  NoProjects = 'API_RETURNED_EMPTY_PROJECT_LIST',
-  NoSites = 'API_RETURNED_EMPTY_SITE_LIST',
-  ErrorFetchingProjectsOrSites = 'UNRECOVERABLE_ERROR_FETCHING_PROJECTS_OR_SITES',
-  ErrorFetchingLayers = 'UNRECOVERABLE_ERROR_FETCHING_LAYERS',
-  ErrorFetchingFacilities = 'UNRECOVERABLE_ERROR_FETCHING_FACILITIES',
-}
-
-export type GetOrganizationResponse = {
-  organization: Organization;
-  errors: OrgRequestError[];
-};
 
 export const exportedForTesting = {
   getLayers: getPlantLayers,

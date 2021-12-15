@@ -86,26 +86,23 @@ function AppContent() {
    */
   const [accessionsDisplayColumns, setAccessionsDisplayColumns] = useState<SearchField[]>(DefaultColumns.fields);
   const [facilityIdSelected, setFacilityIdSelected] = useState<number>();
+  const [organizationError, setOrganizationError] = useState<boolean>(false);
 
   useEffect(() => {
     const populateOrganizations = async () => {
       const response = await getOrganizations();
       if (response.requestSucceeded) {
         setSelectedOrganization(response.organizations[0]);
+      } else {
+        setOrganizationError(true);
       }
     };
     populateOrganizations();
   }, []);
 
-  // Temporary error UI. Will be made prettier once we have input from the Design Team.
-  // if (organizationErrors.includes(OrgRequestError.ErrorFetchingProjectsOrSites)) {
-  //   return <h1>Whoops! Looks like an unrecoverable internal error when fetching projects and/or sites</h1>;
-  // } else if (
-  //   organizationErrors.includes(OrgRequestError.NoProjects) ||
-  //   organizationErrors.includes(OrgRequestError.NoSites)
-  // ) {
-  //   return <h1>You don't have access to any projects and/or sites!</h1>;
-  // }
+  if (organizationError) {
+    return <h1>Could not fetch organization data</h1>;
+  }
 
   return (
     <>
@@ -119,7 +116,6 @@ function AppContent() {
           <TopBar
             notifications={notifications}
             setNotifications={setNotifications}
-            organization={selectedOrganization}
             setSeedSearchCriteria={setSeedSearchCriteria}
             facilityId={facilityIdSelected}
           />
