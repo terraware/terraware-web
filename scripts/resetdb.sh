@@ -28,6 +28,7 @@ fi
 if docker exec -i tree-location-web_postgres_1 psql -d terraware -U postgres < dump/dump.sql; then
     yarn docker:start
     yarn wait-be
+    yarn server:prepare
 else
     echo
     echo "Failed to restore database dump."
