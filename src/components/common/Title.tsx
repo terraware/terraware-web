@@ -98,7 +98,7 @@ export default function Title({
       <label className={classes.titleLabel}>{strings.PROJECT}</label>
       <Select
         options={addAllOption(organization?.projects?.map((org) => org.name))}
-        selectedValue={allowAll ? 'All' : selectedProject?.name}
+        selectedValue={selectedProject?.name}
         onChange={(newValue) => {
           setSelectedProject(organization?.projects?.find((proj) => proj.name === newValue));
           if (setSelectedProjectToParent) {
@@ -108,7 +108,7 @@ export default function Title({
       />
       <label className={classes.titleLabel}>{strings.SITE}</label>
       <Select
-        selectedValue={allowAll ? 'All' : selectedProject?.sites ? selectedProject?.sites[0].name : undefined}
+        selectedValue={selectedSite?.name}
         options={addAllOption(selectedProject?.sites?.map((site) => site.name))}
         onChange={(newValue) => {
           setSelectedSite(selectedProject?.sites?.find((site) => site.name === newValue));
@@ -121,13 +121,7 @@ export default function Title({
         <>
           <label className={classes.titleLabel}>{strings.FACILITY}</label>
           <Select
-            selectedValue={
-              selectedProject?.sites && selectedProject?.sites[0].facilities
-                ? selectedProject?.sites[0].facilities[0].name
-                : allowAll
-                ? 'All'
-                : undefined
-            }
+            selectedValue={selectedFacility?.name}
             options={addAllOption(selectedSite?.facilities?.map((facility) => facility.name))}
             onChange={(newValue) => {
               setSelectedFacility(selectedSite?.facilities?.find((facility) => facility.name === newValue));

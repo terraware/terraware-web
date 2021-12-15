@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import Icon from '../icon/Icon';
 import './styles.scss';
 
@@ -48,14 +48,12 @@ export default function Select(props: SelectProps): JSX.Element {
   });
 
   const [openedOptions, setOpenedOptions] = useState(false);
-  const [value, setValue] = useState(selectedValue);
 
   const toggleOptions = () => {
     setOpenedOptions(!openedOptions);
   };
 
   const onOptionSelected = (option: string) => {
-    setValue(option);
     if (onChange) {
       onChange(option);
     }
@@ -63,15 +61,10 @@ export default function Select(props: SelectProps): JSX.Element {
   };
 
   const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value);
     if (onChange) {
       onChange(e.target.value);
     }
   };
-
-  useEffect(() => {
-    setValue(selectedValue);
-  }, [selectedValue]);
 
   return (
     <div className={`select ${className}`}>
@@ -82,7 +75,7 @@ export default function Select(props: SelectProps): JSX.Element {
       )}
       <div className='textfield-container'>
         <div id={id} className={selectClass} onClick={toggleOptions}>
-          <input value={value} disabled={true} placeholder={placeholder} onChange={onChangeHandler} />
+          <input value={selectedValue} disabled={true} placeholder={placeholder} onChange={onChangeHandler} />
           <Icon name={'caretDown'} className='textfield-value--icon-right' />
         </div>
         {options && openedOptions && (
@@ -92,7 +85,7 @@ export default function Select(props: SelectProps): JSX.Element {
                 <li
                   key={option}
                   onClick={() => onOptionSelected(option)}
-                  className={`${itemClass} ${option === value ? 'select-value--selected' : ''} `}
+                  className={`${itemClass} ${option === selectedValue ? 'select-value--selected' : ''} `}
                 >
                   {option}
                 </li>
