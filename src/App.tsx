@@ -85,6 +85,12 @@ function AppContent() {
    * contain withdrawalQuantity.
    */
   const [accessionsDisplayColumns, setAccessionsDisplayColumns] = useState<SearchField[]>(DefaultColumns.fields);
+
+  /*
+   * facilityIdSelected saves the value of the facilityId selected on "Accessions" and "Seeds summary" page.
+   * We can then pass its value to "New accession page", when creating a new accession and to the top bar
+   * to how notifications.
+   */
   const [facilityIdSelected, setFacilityIdSelected] = useState<number>();
   const [organizationError, setOrganizationError] = useState<boolean>(false);
 

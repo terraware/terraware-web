@@ -1,8 +1,8 @@
 import { AxiosResponse } from 'axios';
 import axios from 'src/api/index';
-import { PlantLayer, Site, ServerOrganization } from 'src/types/Organization';
+import { PlantLayer, Site, ServerOrganization, Project } from 'src/types/Organization';
 import { paths } from 'src/api/types/generated-schema';
-import { parseProject } from 'src/utils/organization';
+import { Facility } from '../types/facilities';
 
 const LAYERS = '/api/v1/gis/layers/list/{siteId}';
 type ListLayersResponse = paths[typeof LAYERS]['get']['responses'][200]['content']['application/json'];
@@ -12,6 +12,7 @@ type GetPlantLayersResponse = {
   layers: PlantLayer[];
   requestSucceeded: boolean;
 };
+
 export async function getPlantLayers(sites: Site[]): Promise<GetPlantLayersResponse> {
   // We may want to add functionality to allow fetching of some layers to fail
   // while still returning those that were fetched successfully
@@ -24,19 +25,16 @@ export async function getPlantLayers(sites: Site[]): Promise<GetPlantLayersRespo
       sites.map((site) => axios.get(LAYERS.replace('{siteId}', `${site.id}`)))
     );
 
-    const layers: PlantLayer[] = [];
     axiosResponse.forEach((serResponse) => {
       serResponse.data.layers.forEach((layer: LayerResponse) => {
         if (layer.layerType === 'Plants Planted') {
-          layers.push({
+          response.layers.push({
             id: layer.id,
             siteId: layer.siteId,
           });
         }
       });
     });
-
-    response.layers = layers;
   } catch {
     response.requestSucceeded = false;
   }
@@ -52,9 +50,45 @@ const ORGANIZATIONS = '/api/v1/organizations';
 type ListOrganizationsResponsePayload =
   paths[typeof ORGANIZATIONS]['get']['responses'][200]['content']['application/json'];
 
+type ServerOrg = ListOrganizationsResponsePayload['organizations'][0];
+
+type ServerProject = Required<ServerOrg>['projects'][0];
+
+type ServerSite = Required<ServerProject>['sites'][0];
+
+type ServerFacility = Required<ServerSite>['facilities'][0];
+
 type OrganizationsResponse = {
   organizations: ServerOrganization[];
   requestSucceeded: boolean;
+};
+
+const parseProject = (project: ServerProject): Project => {
+  const parsedProject: Project = {
+    id: project.id,
+    name: project.name,
+    sites: project.sites?.map((site) => parseSite(site)),
+  };
+  return parsedProject;
+};
+
+const parseSite = (site: ServerSite): Site => {
+  const parsedSite: Site = {
+    id: site.id,
+    name: site.name,
+    projectId: site.projectId,
+    facilities: site.facilities?.map((facility) => parseFacility(facility)),
+  };
+  return parsedSite;
+};
+
+const parseFacility = (facility: ServerFacility): Facility => {
+  const parsedFacility: Facility = {
+    id: facility.id,
+    name: facility.name,
+    type: facility.type,
+  };
+  return parsedFacility;
 };
 export async function getOrganizations(): Promise<OrganizationsResponse> {
   const response: OrganizationsResponse = {

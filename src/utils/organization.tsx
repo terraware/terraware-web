@@ -1,4 +1,3 @@
-import { Facility } from 'src/api/types/facilities';
 import { Project, ServerOrganization, Site } from 'src/types/Organization';
 
 const getAllSites = (organization: ServerOrganization): Site[] => {
@@ -13,34 +12,6 @@ const getAllSites = (organization: ServerOrganization): Site[] => {
 
 const getAllSitesForProject = (project: Project): Site[] => {
   return project.sites ? project.sites : [];
-};
-
-export const parseProject = (project: Project) => {
-  const parsedProject: Project = {
-    id: project.id,
-    name: project.name,
-    sites: project.sites?.map((site) => parseSite(site)),
-  };
-  return parsedProject;
-};
-
-export const parseSite = (site: Site) => {
-  const parsedSite: Site = {
-    id: site.id,
-    name: site.name,
-    projectId: site.projectId,
-    facilities: site.facilities?.map((facility) => parseFacility(facility)),
-  };
-  return parsedSite;
-};
-
-export const parseFacility = (facility: Facility) => {
-  const parsedFacility: Facility = {
-    id: facility.id,
-    name: facility.name,
-    type: facility.type,
-  };
-  return parsedFacility;
 };
 
 export const getSelectedSites = (

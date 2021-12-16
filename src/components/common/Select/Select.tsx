@@ -4,7 +4,7 @@ import Icon from '../icon/Icon';
 import './styles.scss';
 
 interface SelectProps {
-  onChange?: (newValue: string) => void;
+  onChange: (newValue: string) => void;
   label?: string;
   disabled?: boolean;
   id?: string;
