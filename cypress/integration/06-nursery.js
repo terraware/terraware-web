@@ -1,13 +1,15 @@
 describe('Nursery', () => {
   it('should not create Germination menu if not selecting any test', () => {
-    cy.visit('/accessions/new');
+    cy.visit('/accessions');
+    cy.get('#newAccession').click().url().should('contain', '/accessions/new');
     cy.get('#saveAccession').click();
     cy.get('#snackbar').contains('Accession saved');
 
     cy.get('#nursery').should('not.exist');
   });
   it('should create the accession with nursery test and navigate to nursery section', () => {
-    cy.visit('/accessions/new');
+    cy.visit('/accessions');
+    cy.get('#newAccession').click().url().should('contain', '/accessions/new');
     cy.get('#saveAccession').click();
     cy.get('#snackbar').contains('Accession saved');
 

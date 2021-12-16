@@ -1,10 +1,10 @@
 import classNames from 'classnames';
-import React, { ChangeEventHandler, useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import Icon from '../icon/Icon';
 import './styles.scss';
 
 interface SelectProps {
-  onChange?: ChangeEventHandler<HTMLInputElement> | undefined;
+  onChange: (newValue: string) => void;
   label?: string;
   disabled?: boolean;
   id?: string;
@@ -48,15 +48,22 @@ export default function Select(props: SelectProps): JSX.Element {
   });
 
   const [openedOptions, setOpenedOptions] = useState(false);
-  const [value, setValue] = useState(selectedValue);
 
   const toggleOptions = () => {
     setOpenedOptions(!openedOptions);
   };
 
   const onOptionSelected = (option: string) => {
-    setValue(option);
+    if (onChange) {
+      onChange(option);
+    }
     setOpenedOptions(false);
+  };
+
+  const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    if (onChange) {
+      onChange(e.target.value);
+    }
   };
 
   return (
@@ -68,7 +75,7 @@ export default function Select(props: SelectProps): JSX.Element {
       )}
       <div className='textfield-container'>
         <div id={id} className={selectClass} onClick={toggleOptions}>
-          <input value={value} disabled={true} placeholder={placeholder} onChange={onChange} />
+          <input value={selectedValue} disabled={true} placeholder={placeholder} onChange={onChangeHandler} />
           <Icon name={'caretDown'} className='textfield-value--icon-right' />
         </div>
         {options && openedOptions && (
@@ -78,7 +85,7 @@ export default function Select(props: SelectProps): JSX.Element {
                 <li
                   key={option}
                   onClick={() => onOptionSelected(option)}
-                  className={`${itemClass} ${option === value ? 'select-value--selected' : ''} `}
+                  className={`${itemClass} ${option === selectedValue ? 'select-value--selected' : ''} `}
                 >
                   {option}
                 </li>

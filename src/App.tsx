@@ -4,11 +4,7 @@ import mapboxgl from 'mapbox-gl';
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
-import getOrganization, {
-  GetOrganizationResponse,
-  getOrganizations,
-  OrgRequestError,
-} from 'src/api/organization/organization';
+import { getOrganizations } from 'src/api/organization/organization';
 import {
   DEFAULT_SEED_SEARCH_FILTERS,
   DEFAULT_SEED_SEARCH_SORT_ORDER,
@@ -17,7 +13,7 @@ import {
   SeedSearchCriteria,
 } from 'src/api/seeds/search';
 import { Notifications } from 'src/types/Notifications';
-import { Organization, ServerOrganization } from 'src/types/Organization';
+import { ServerOrganization } from 'src/types/Organization';
 import { PlantSearchOptions } from 'src/types/Plant';
 import Home from './components/Home';
 import NavBar from './components/NavBar';
@@ -66,21 +62,11 @@ const useStyles = makeStyles(() =>
   })
 );
 
-const emptyOrg: Organization = {
-  projects: [],
-  sites: [],
-  facilities: [],
-  plantLayers: [],
-};
-
 function AppContent() {
   const classes = useStyles();
-  const [organization, setOrganization] = useState<Organization>(emptyOrg);
   const [selectedOrganization, setSelectedOrganization] = useState<ServerOrganization>();
-  const [organizationErrors, setOrganizationErrors] = useState<OrgRequestError[]>([]);
-  const [currFacilityId, setCurrFacilityId] = useState<number>(0);
-  const [notifications, setNotifications] = useState<Notifications>();
   const [plantListFilters, setPlantListFilters] = useState<PlantSearchOptions>();
+  const [notifications, setNotifications] = useState<Notifications>();
 
   // seedSearchCriteria describes which criteria to apply when searching accession data.
   const [seedSearchCriteria, setSeedSearchCriteria] = useState<SeedSearchCriteria>(DEFAULT_SEED_SEARCH_FILTERS);
@@ -100,36 +86,28 @@ function AppContent() {
    */
   const [accessionsDisplayColumns, setAccessionsDisplayColumns] = useState<SearchField[]>(DefaultColumns.fields);
 
+  /*
+   * facilityIdSelected saves the value of the facilityId selected on "Accessions" and "Seeds summary" page.
+   * We can then pass its value to "New accession page", when creating a new accession and to the top bar
+   * to how notifications.
+   */
+  const [facilityIdSelected, setFacilityIdSelected] = useState<number>();
+  const [organizationError, setOrganizationError] = useState<boolean>(false);
+
   useEffect(() => {
     const populateOrganizations = async () => {
       const response = await getOrganizations();
       if (response.requestSucceeded) {
         setSelectedOrganization(response.organizations[0]);
+      } else {
+        setOrganizationError(true);
       }
     };
-    const populateOrganizationData = async () => {
-      const response: GetOrganizationResponse = await getOrganization();
-      if (response.errors.length > 0) {
-        setOrganizationErrors(response.errors);
-      }
-      setOrganization(response.organization);
-      if (response.organization.facilities.length > 0) {
-        setCurrFacilityId(response.organization.facilities[0].id);
-      }
-    };
-
     populateOrganizations();
-    populateOrganizationData();
   }, []);
 
-  // Temporary error UI. Will be made prettier once we have input from the Design Team.
-  if (organizationErrors.includes(OrgRequestError.ErrorFetchingProjectsOrSites)) {
-    return <h1>Whoops! Looks like an unrecoverable internal error when fetching projects and/or sites</h1>;
-  } else if (
-    organizationErrors.includes(OrgRequestError.NoProjects) ||
-    organizationErrors.includes(OrgRequestError.NoSites)
-  ) {
-    return <h1>You don't have access to any projects and/or sites!</h1>;
+  if (organizationError) {
+    return <h1>Could not fetch organization data</h1>;
   }
 
   return (
@@ -145,7 +123,7 @@ function AppContent() {
             notifications={notifications}
             setNotifications={setNotifications}
             setSeedSearchCriteria={setSeedSearchCriteria}
-            currFacilityId={currFacilityId}
+            facilityId={facilityIdSelected}
           />
           <ErrorBoundary>
             <Switch>
@@ -155,20 +133,21 @@ function AppContent() {
               </Route>
               <Route exact path='/seeds-summary'>
                 <SeedSummary
-                  facilityId={currFacilityId}
+                  organization={selectedOrganization}
                   setSeedSearchCriteria={setSeedSearchCriteria}
                   notifications={notifications}
+                  setFacilityIdSelected={setFacilityIdSelected}
                 />
               </Route>
               <Route exact path='/checkin'>
-                <CheckIn facilityId={currFacilityId} />
+                <CheckIn organization={selectedOrganization} />
               </Route>
               <Route exact path='/accessions/new'>
-                <NewAccession facilityId={currFacilityId} />
+                <NewAccession facilityId={facilityIdSelected} />
               </Route>
               <Route exact path='/accessions'>
                 <Database
-                  facilityId={currFacilityId}
+                  organization={selectedOrganization}
                   searchCriteria={seedSearchCriteria}
                   setSearchCriteria={setSeedSearchCriteria}
                   searchSortOrder={seedSearchSort}
@@ -177,16 +156,21 @@ function AppContent() {
                   setSearchColumns={setSeedSearchColumns}
                   displayColumnNames={accessionsDisplayColumns}
                   setDisplayColumnNames={setAccessionsDisplayColumns}
+                  setFacilityIdSelected={setFacilityIdSelected}
                 />
               </Route>
               <Route path='/accessions/:accessionId'>
                 <Accession />
               </Route>
               <Route exact path='/plants-dashboard'>
-                <PlantDashboard organization={organization} />
+                <PlantDashboard organization={selectedOrganization} />
               </Route>
               <Route exact path='/plants-list'>
-                <PlantList organization={organization} filters={plantListFilters} setFilters={setPlantListFilters} />
+                <PlantList
+                  organization={selectedOrganization}
+                  filters={plantListFilters}
+                  setFilters={setPlantListFilters}
+                />
               </Route>
               <Route exact path='/species'>
                 <SpeciesList />

@@ -1,11 +1,16 @@
+import { Facility } from 'src/api/types/facilities';
+
 export type Project = {
   id: number;
   name: string;
+  sites?: Site[];
 };
 
 export type Site = {
   id: number;
+  name: string;
   projectId: number;
+  facilities?: Facility[];
 };
 
 export type SeedBank = {
@@ -29,4 +34,5 @@ export type ServerOrganization = {
   id: number;
   name: string;
   role: 'Contributor' | 'Manager' | 'Admin' | 'Owner';
+  projects?: Project[];
 };

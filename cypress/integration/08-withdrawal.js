@@ -1,7 +1,8 @@
 describe('Withdrawal', () => {
   context('quantity by seed', () => {
     it('should create the accession', () => {
-      cy.visit('/accessions/new');
+      cy.visit('/accessions');
+      cy.get('#newAccession').click().url().should('contain', '/accessions/new');
       cy.get('#saveAccession').click();
 
       cy.get('#menu-processing-drying').click();
@@ -189,7 +190,8 @@ describe('Withdrawal', () => {
 
   context('quantity by grams', () => {
     it('should create the accession', () => {
-      cy.visit('/accessions/new');
+      cy.visit('/accessions');
+      cy.get('#newAccession').click().url().should('contain', '/accessions/new');
 
       cy.get('#saveAccession').click();
       cy.get('#snackbar').contains('Accession saved');

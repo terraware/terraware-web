@@ -9,13 +9,15 @@ import strings from 'src/strings';
 import PlantMap from './PlantMap';
 import SpeciesSummaryChart from './SpeciesSummaryChart';
 import SummaryCell from './SummaryCell';
-import { Organization } from 'src/types/Organization';
+import { Project, ServerOrganization, Site } from 'src/types/Organization';
 import { getPlantsForMultipleLayers, getPlantSummariesByLayer } from 'src/api/plants/plants';
 import { getAllSpecies } from 'src/api/species/species';
 import { Plant, PlantSummariesByLayerId } from 'src/types/Plant';
 import { SpeciesById } from 'src/types/Species';
 import getColorsBySpeciesId from 'src/api/species/getColorsBySpeciesId';
 import Title from 'src/components/common/Title';
+import { getPlantLayers } from 'src/api/organization/organization';
+import { getSelectedSites } from 'src/utils/organization';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -34,7 +36,7 @@ const useStyles = makeStyles((theme) =>
 );
 
 export type PlantDashboardProps = {
-  organization: Organization;
+  organization?: ServerOrganization;
 };
 
 export default function PlantDashboard(props: PlantDashboardProps): JSX.Element {
@@ -45,6 +47,8 @@ export default function PlantDashboard(props: PlantDashboardProps): JSX.Element 
   const [speciesById, setSpeciesById] = useState<SpeciesById>(new Map());
   const [colorsBySpeciesId, setColorsBySpeciesId] = useState<Record<number, string>>({});
   const [plantSummariesByLayerId, setPlantSummariesByLayerId] = useState<PlantSummariesByLayerId>(new Map());
+  const [selectedSite, setSelectedSite] = useState<Site>();
+  const [selectedProject, setSelectedProject] = useState<Project>();
 
   const onFullscreenHandler = () => {
     setIsFullscreen(!isFullscreen);
@@ -61,26 +65,35 @@ export default function PlantDashboard(props: PlantDashboardProps): JSX.Element 
     };
 
     const populatePlants = async () => {
-      const layerIds = organization.plantLayers.map((layer) => layer.id);
-      const plantsResponse = await getPlantsForMultipleLayers(layerIds);
-      if (plantsResponse.plantErrorByLayerId.size === 0) {
-        setPlants(Array.from(plantsResponse.plantsByLayerId.values()).flat());
+      if (organization) {
+        const sites = getSelectedSites(selectedSite, selectedProject, organization);
+        const layers = (await getPlantLayers(sites)).layers;
+        const layerIds = layers.map((layer) => layer.id);
+        const plantsResponse = await getPlantsForMultipleLayers(layerIds);
+        if (plantsResponse.plantErrorByLayerId.size === 0) {
+          setPlants(Array.from(plantsResponse.plantsByLayerId.values()).flat());
+        }
+        // TODO handle error fetching plant data
       }
-      // TODO handle error fetching plant data
     };
 
     const populatePlantSummaries = async () => {
-      const summaryResponse = await getPlantSummariesByLayer(organization.plantLayers.map((layer) => layer.id));
-      // TODO handle error fetching plant summary data
-      if (summaryResponse.plantErrorByLayerId.size === 0) {
-        setPlantSummariesByLayerId(summaryResponse.plantSummariesByLayerId);
+      if (organization) {
+        const sites = getSelectedSites(selectedSite, selectedProject, organization);
+        const layers = (await getPlantLayers(sites)).layers;
+        const layerIds = layers.map((layer) => layer.id);
+        const summaryResponse = await getPlantSummariesByLayer(layerIds);
+        // TODO handle error fetching plant summary data
+        if (summaryResponse.plantErrorByLayerId.size === 0) {
+          setPlantSummariesByLayerId(summaryResponse.plantSummariesByLayerId);
+        }
       }
     };
 
     populateSpecies();
     populatePlants();
     populatePlantSummaries();
-  }, [organization]);
+  }, [organization, selectedProject, selectedSite]);
 
   useEffect(() => {
     reloadData();
@@ -91,7 +104,14 @@ export default function PlantDashboard(props: PlantDashboardProps): JSX.Element 
       <Container maxWidth={false} className={classes.mainContainer}>
         <Grid container spacing={3}>
           <Grid item xs={12}>
-            <Title page={strings.DASHBOARD} parentPage={strings.PLANTS} />
+            <Title
+              page={strings.DASHBOARD}
+              parentPage={strings.PLANTS}
+              organization={organization}
+              allowAll={true}
+              setSelectedProjectToParent={(project) => setSelectedProject(project)}
+              setSelectedSiteToParent={(site) => setSelectedSite(site)}
+            />
           </Grid>
           <Grid item xs={isFullscreen ? 12 : 6}>
             <React.Suspense fallback={strings.LOADING}>

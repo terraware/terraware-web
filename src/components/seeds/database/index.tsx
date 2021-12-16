@@ -32,6 +32,7 @@ import DownloadReportModal from './DownloadReportModal';
 import EditColumns from './EditColumns';
 import Filters from './Filters';
 import SearchCellRenderer from './TableCellRenderer';
+import { ServerOrganization } from 'src/types/Organization';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -74,7 +75,7 @@ const newAccessionChipStyles = makeStyles((theme) => ({
 }));
 
 type DatabaseProps = {
-  facilityId: number;
+  organization?: ServerOrganization;
   searchCriteria: SeedSearchCriteria;
   setSearchCriteria: (criteria: SeedSearchCriteria) => void;
   searchSortOrder: SeedSearchSortOrder;
@@ -83,13 +84,13 @@ type DatabaseProps = {
   setSearchColumns: (fields: SearchField[]) => void;
   displayColumnNames: SearchField[];
   setDisplayColumnNames: (fields: SearchField[]) => void;
+  setFacilityIdSelected: (facilityId: number) => void;
 };
 
 export default function Database(props: DatabaseProps): JSX.Element {
   const classes = useStyles();
   const history = useHistory();
   const {
-    facilityId,
     searchCriteria,
     setSearchCriteria,
     searchSortOrder,
@@ -98,6 +99,8 @@ export default function Database(props: DatabaseProps): JSX.Element {
     setSearchColumns,
     displayColumnNames,
     setDisplayColumnNames,
+    organization,
+    setFacilityIdSelected,
   } = props;
   const displayColumnDetails = displayColumnNames.map((name) => {
     return COLUMNS_INDEXED[name];
@@ -119,44 +122,54 @@ export default function Database(props: DatabaseProps): JSX.Element {
    */
   const [availableFieldOptions, setAvailableFieldOptions] = useState<FieldValuesMap | null>();
   const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>();
+  const [facilityId, setFacilityId] = React.useState<number>();
 
   useEffect(() => {
     const populatePendingAccessions = async () => {
-      setPendingAccessions(await getPendingAccessions(facilityId));
+      if (facilityId) {
+        setFacilityIdSelected(facilityId);
+        setPendingAccessions(await getPendingAccessions(facilityId));
+      }
     };
     populatePendingAccessions();
-  }, [facilityId]);
+  }, [facilityId, setFacilityIdSelected]);
 
   useEffect(() => {
-    const populateFieldOptions = async () => {
-      const singleAndMultiChoiceFields = filterSelectFields(searchColumns);
-      setFieldOptions(await getAllFieldValues(singleAndMultiChoiceFields, facilityId));
-    };
-    populateFieldOptions();
+    if (facilityId) {
+      const populateFieldOptions = async () => {
+        const singleAndMultiChoiceFields = filterSelectFields(searchColumns);
+        setFieldOptions(await getAllFieldValues(singleAndMultiChoiceFields, facilityId));
+      };
+      populateFieldOptions();
+    }
   }, [facilityId, searchColumns]);
 
   useEffect(() => {
-    const populateAvailableFieldOptions = async () => {
-      const singleAndMultiChoiceFields = filterSelectFields(searchColumns);
-      setAvailableFieldOptions(await searchFieldValues(singleAndMultiChoiceFields, searchCriteria, facilityId));
-    };
-    populateAvailableFieldOptions();
+    if (facilityId) {
+      const populateAvailableFieldOptions = async () => {
+        const singleAndMultiChoiceFields = filterSelectFields(searchColumns);
+        setAvailableFieldOptions(await searchFieldValues(singleAndMultiChoiceFields, searchCriteria, facilityId));
+      };
+      populateAvailableFieldOptions();
+    }
   }, [facilityId, searchColumns, searchCriteria]);
 
   useEffect(() => {
-    const populateSearchResults = async () => {
-      const apiResponse = await search({
-        facilityId,
-        fields: searchColumns.includes('active') ? searchColumns : [...searchColumns, 'active'],
-        sortOrder: [searchSortOrder],
-        search: convertToSearchNodePayload(searchCriteria),
-        count: 1000,
-      });
+    if (facilityId) {
+      const populateSearchResults = async () => {
+        const apiResponse = await search({
+          facilityId,
+          fields: searchColumns.includes('active') ? searchColumns : [...searchColumns, 'active'],
+          sortOrder: [searchSortOrder],
+          search: convertToSearchNodePayload(searchCriteria),
+          count: 1000,
+        });
 
-      setSearchResults(apiResponse);
-    };
+        setSearchResults(apiResponse);
+      };
 
-    populateSearchResults();
+      populateSearchResults();
+    }
   }, [facilityId, searchCriteria, searchSortOrder, searchColumns]);
 
   const onSelect = (row: SearchResponseElement) => {
@@ -248,19 +261,23 @@ export default function Database(props: DatabaseProps): JSX.Element {
     <MuiPickersUtilsProvider utils={MomentUtils}>
       <main>
         <EditColumns open={editColumnsModalOpen} value={displayColumnNames} onClose={onCloseEditColumnsModal} />
-        <DownloadReportModal
-          searchCriteria={searchCriteria}
-          searchSortOrder={searchSortOrder}
-          searchColumns={searchColumns}
-          facilityId={facilityId}
-          open={reportModalOpen}
-          onClose={onCloseDownloadReportModal}
-        />
+        {facilityId && (
+          <DownloadReportModal
+            searchCriteria={searchCriteria}
+            searchSortOrder={searchSortOrder}
+            searchColumns={searchColumns}
+            facilityId={facilityId}
+            open={reportModalOpen}
+            onClose={onCloseDownloadReportModal}
+          />
+        )}
         <PageHeader
           title=''
           subtitle={getSubtitle()}
           page={strings.ACCESSIONS}
           parentPage={strings.SEEDS}
+          organization={organization}
+          onChangeFacility={(facility) => setFacilityId(facility?.id)}
           rightComponent={
             <div>
               <Chip

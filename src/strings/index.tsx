@@ -169,6 +169,7 @@ const strings = new LocalizedStrings({
     FIELD_NOTES_PLACEHOLDER: 'Important notes about seeds, fruits, or plants',
     PRIMARY_COLLECTOR: 'Primary Collector',
     SITE: 'Site',
+    FACILITY: 'Facility',
     ENVIRONMENTAL_NOTES: 'Environmental Notes',
     ENVIRONMENTAL_NOTES_PLACEHOLDER: 'Important notes about landscape, climate, and environmental conditions',
     NEW_ACCESSION: 'New Accession',

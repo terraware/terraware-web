@@ -60,7 +60,7 @@ const useStyles = makeStyles((theme) =>
 );
 
 type NewAccessionProps = {
-  facilityId: number;
+  facilityId?: number;
 };
 
 export default function NewAccessionWrapper(props: NewAccessionProps): JSX.Element {

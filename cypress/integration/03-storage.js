@@ -1,6 +1,7 @@
 describe('Storage', () => {
   it('should create the accession and navigate to storage section only when processing and drying is filled', () => {
-    cy.visit('/accessions/new');
+    cy.visit('/accessions');
+    cy.get('#newAccession').click().url().should('contain', '/accessions/new');
     cy.get('#saveAccession').click();
     cy.get('#snackbar').contains('Accession saved');
     cy.get('a#menu-storage').should('not.exist');

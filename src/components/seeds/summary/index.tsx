@@ -9,6 +9,7 @@ import { getSummary, GetSummaryResponse } from 'src/api/seeds/summary';
 import { API_PULL_INTERVAL } from 'src/constants';
 import strings from 'src/strings';
 import { Notifications } from 'src/types/Notifications';
+import { ServerOrganization } from 'src/types/Organization';
 import PageHeader from '../PageHeader';
 import Alerts from './Alerts';
 import SummaryPaper from './SummaryPaper';
@@ -38,14 +39,16 @@ Cookies.defaults = {
 };
 
 type SeedSummaryProps = {
-  facilityId: number;
+  organization?: ServerOrganization;
   setSeedSearchCriteria: (criteria: SeedSearchCriteria) => void;
   notifications?: Notifications;
+  setFacilityIdSelected: (facilityId: number) => void;
 };
 
 export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
   const classes = useStyles();
-  const { facilityId, setSeedSearchCriteria, notifications } = props;
+  const { setSeedSearchCriteria, notifications, organization, setFacilityIdSelected } = props;
+  const [facilityId, setFacilityId] = React.useState<number>();
   // populateSummaryInterval value is only being used when it is set.
   const [, setPopulateSummaryInterval] = useState<ReturnType<typeof setInterval>>();
   const [summary, setSummary] = useState<GetSummaryResponse>();
@@ -53,11 +56,14 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
 
   useEffect(() => {
     const populateSummary = async () => {
-      setSummary(await getSummary(facilityId));
+      if (facilityId) {
+        setSummary(await getSummary(facilityId));
+      }
     };
 
     // Update summary information
     if (facilityId) {
+      setFacilityIdSelected(facilityId);
       populateSummary();
     } else {
       setSummary(undefined);
@@ -83,7 +89,7 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
         return undefined;
       });
     };
-  }, [facilityId]);
+  }, [facilityId, setFacilityIdSelected]);
 
   return (
     <main>
@@ -92,6 +98,10 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
         subtitle={strings.WELCOME_MSG}
         page={strings.DASHBOARD}
         parentPage={strings.SEEDS}
+        organization={organization}
+        onChangeFacility={(facility) => {
+          setFacilityId(facility?.id);
+        }}
       />
       <Container maxWidth={false} className={classes.mainContainer}>
         <Grid container spacing={3}>
