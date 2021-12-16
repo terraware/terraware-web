@@ -7,7 +7,9 @@ import { ReactComponent as Error } from './error.svg';
 import { ReactComponent as Folder } from './folder.svg';
 import { ReactComponent as Home } from './home.svg';
 import { ReactComponent as Key } from './key.svg';
+import { ReactComponent as Leaf } from './leaf.svg';
 import { ReactComponent as Lock } from './lock.svg';
+import { ReactComponent as Person } from './person.svg';
 import { ReactComponent as Plus } from './plus.svg';
 import { ReactComponent as RestorationSite } from './restoration-site.svg';
 import { ReactComponent as Seeds } from './seeds.svg';
@@ -25,7 +27,9 @@ export type IconName =
   | 'folder'
   | 'home'
   | 'key'
+  | 'leaf'
   | 'lock'
+  | 'person'
   | 'plus'
   | 'restorationSite'
   | 'seeds'
@@ -47,7 +51,9 @@ const icons: Record<IconName, SVGComponent> = {
   folder: Folder,
   home: Home,
   key: Key,
+  leaf: Leaf,
   lock: Lock,
+  person: Person,
   plus: Plus,
   restorationSite: RestorationSite,
   seeds: Seeds,
