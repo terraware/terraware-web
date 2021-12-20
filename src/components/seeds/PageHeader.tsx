@@ -6,8 +6,8 @@ import React from 'react';
 import Title from '../common/Title';
 import { useHistory } from 'react-router-dom';
 import useStateLocation, { getLocation } from '../../utils/useStateLocation';
-import { Project, ServerOrganization, Site } from 'src/types/Organization';
-import { Facility } from 'src/api/types/facilities';
+import { ServerOrganization } from 'src/types/Organization';
+import { SelectedValues } from 'src/api/types/facilities';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -54,10 +54,10 @@ interface Props {
   back?: boolean;
   backUrl?: string;
   organization?: ServerOrganization;
-  onChangeFacility?: (facility?: Facility) => void;
   allowAll?: boolean;
-  setSelectedProject?: (project: Project | undefined) => void;
-  setSelectedSite?: (site: Site | undefined) => void;
+  selectedValues?: SelectedValues;
+  onChangeSelectedValues?: (selectedValues: SelectedValues) => void;
+  showFacility?: boolean;
 }
 
 export default function PageHeader({
@@ -70,10 +70,10 @@ export default function PageHeader({
   page,
   parentPage,
   organization,
-  onChangeFacility,
   allowAll,
-  setSelectedProject,
-  setSelectedSite,
+  selectedValues,
+  onChangeSelectedValues,
+  showFacility,
 }: Props): JSX.Element {
   const classes = useStyles();
   const history = useHistory();
@@ -82,16 +82,16 @@ export default function PageHeader({
   return (
     <Container maxWidth={false} className={classes.mainContainer}>
       <Grid container spacing={3} className={classes.container}>
-        {page && parentPage && (
+        {page && parentPage && !!selectedValues && !!onChangeSelectedValues && (
           <Grid item xs={12}>
             <Title
               page={page}
               parentPage={parentPage}
               organization={organization}
-              onChangeFacility={onChangeFacility}
               allowAll={allowAll}
-              setSelectedProjectToParent={setSelectedProject}
-              setSelectedSiteToParent={setSelectedSite}
+              selectedValues={selectedValues}
+              onChangeSelectedValues={onChangeSelectedValues}
+              showFacility={showFacility}
             />
           </Grid>
         )}

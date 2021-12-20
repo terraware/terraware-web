@@ -9,7 +9,7 @@ import strings from 'src/strings';
 import PlantMap from './PlantMap';
 import SpeciesSummaryChart from './SpeciesSummaryChart';
 import SummaryCell from './SummaryCell';
-import { Project, ServerOrganization, Site } from 'src/types/Organization';
+import { ServerOrganization } from 'src/types/Organization';
 import { getPlantsForMultipleLayers, getPlantSummariesByLayer } from 'src/api/plants/plants';
 import { getAllSpecies } from 'src/api/species/species';
 import { Plant, PlantSummariesByLayerId } from 'src/types/Plant';
@@ -18,6 +18,8 @@ import getColorsBySpeciesId from 'src/api/species/getColorsBySpeciesId';
 import Title from 'src/components/common/Title';
 import { getPlantLayers } from 'src/api/organization/organization';
 import { getSelectedSites } from 'src/utils/organization';
+import { useRecoilState } from 'recoil';
+import { plantDashboardSelectedValues } from 'src/state/selectedValuesPerPage';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -47,8 +49,7 @@ export default function PlantDashboard(props: PlantDashboardProps): JSX.Element 
   const [speciesById, setSpeciesById] = useState<SpeciesById>(new Map());
   const [colorsBySpeciesId, setColorsBySpeciesId] = useState<Record<number, string>>({});
   const [plantSummariesByLayerId, setPlantSummariesByLayerId] = useState<PlantSummariesByLayerId>(new Map());
-  const [selectedSite, setSelectedSite] = useState<Site>();
-  const [selectedProject, setSelectedProject] = useState<Project>();
+  const [selectedValues, setSelectedValues] = useRecoilState(plantDashboardSelectedValues);
 
   const onFullscreenHandler = () => {
     setIsFullscreen(!isFullscreen);
@@ -66,7 +67,7 @@ export default function PlantDashboard(props: PlantDashboardProps): JSX.Element 
 
     const populatePlants = async () => {
       if (organization) {
-        const sites = getSelectedSites(selectedSite, selectedProject, organization);
+        const sites = getSelectedSites(selectedValues.selectedSite, selectedValues.selectedProject, organization);
         const layers = (await getPlantLayers(sites)).layers;
         const layerIds = layers.map((layer) => layer.id);
         const plantsResponse = await getPlantsForMultipleLayers(layerIds);
@@ -79,7 +80,7 @@ export default function PlantDashboard(props: PlantDashboardProps): JSX.Element 
 
     const populatePlantSummaries = async () => {
       if (organization) {
-        const sites = getSelectedSites(selectedSite, selectedProject, organization);
+        const sites = getSelectedSites(selectedValues.selectedSite, selectedValues.selectedProject, organization);
         const layers = (await getPlantLayers(sites)).layers;
         const layerIds = layers.map((layer) => layer.id);
         const summaryResponse = await getPlantSummariesByLayer(layerIds);
@@ -93,7 +94,7 @@ export default function PlantDashboard(props: PlantDashboardProps): JSX.Element 
     populateSpecies();
     populatePlants();
     populatePlantSummaries();
-  }, [organization, selectedProject, selectedSite]);
+  }, [organization, selectedValues]);
 
   useEffect(() => {
     reloadData();
@@ -109,8 +110,8 @@ export default function PlantDashboard(props: PlantDashboardProps): JSX.Element 
               parentPage={strings.PLANTS}
               organization={organization}
               allowAll={true}
-              setSelectedProjectToParent={(project) => setSelectedProject(project)}
-              setSelectedSiteToParent={(site) => setSelectedSite(site)}
+              selectedValues={selectedValues}
+              onChangeSelectedValues={(newValues) => setSelectedValues(newValues)}
             />
           </Grid>
           <Grid item xs={isFullscreen ? 12 : 6}>

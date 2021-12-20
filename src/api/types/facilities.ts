@@ -1,3 +1,4 @@
+import { Project, Site } from 'src/types/Organization';
 import { paths } from './generated-schema';
 
 export const facilitiesEndpoint = '/api/v1/facility';
@@ -8,4 +9,10 @@ export interface Facility {
   id: number;
   name: string;
   type: FacilitiesListResponse['facilities'][0]['type'];
+}
+
+export interface SelectedValues {
+  selectedFacility?: Facility;
+  selectedSite?: Site;
+  selectedProject?: Project;
 }

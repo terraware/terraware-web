@@ -4,9 +4,11 @@ import Paper from '@material-ui/core/Paper';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import Cookies from 'cookies-js';
 import React, { useEffect, useState } from 'react';
+import { useRecoilState } from 'recoil';
 import { SeedSearchCriteria } from 'src/api/seeds/search';
 import { getSummary, GetSummaryResponse } from 'src/api/seeds/summary';
 import { API_PULL_INTERVAL } from 'src/constants';
+import { seedsSummarySelectedValues } from 'src/state/selectedValuesPerPage';
 import strings from 'src/strings';
 import { Notifications } from 'src/types/Notifications';
 import { ServerOrganization } from 'src/types/Organization';
@@ -48,22 +50,22 @@ type SeedSummaryProps = {
 export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
   const classes = useStyles();
   const { setSeedSearchCriteria, notifications, organization, setFacilityIdSelected } = props;
-  const [facilityId, setFacilityId] = React.useState<number>();
   // populateSummaryInterval value is only being used when it is set.
   const [, setPopulateSummaryInterval] = useState<ReturnType<typeof setInterval>>();
   const [summary, setSummary] = useState<GetSummaryResponse>();
   const errorOccurred = summary ? summary.errorOccurred : false;
+  const [selectedValues, setSelectedValues] = useRecoilState(seedsSummarySelectedValues);
 
   useEffect(() => {
     const populateSummary = async () => {
-      if (facilityId) {
-        setSummary(await getSummary(facilityId));
+      if (selectedValues.selectedFacility?.id) {
+        setSummary(await getSummary(selectedValues.selectedFacility?.id));
       }
     };
 
     // Update summary information
-    if (facilityId) {
-      setFacilityIdSelected(facilityId);
+    if (selectedValues.selectedFacility?.id) {
+      setFacilityIdSelected(selectedValues.selectedFacility?.id);
       populateSummary();
     } else {
       setSummary(undefined);
@@ -76,7 +78,7 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
           // Clear an existing interval when the facilityId changes
           clearInterval(currInterval);
         }
-        return facilityId ? setInterval(populateSummary, API_PULL_INTERVAL) : undefined;
+        return selectedValues.selectedFacility?.id ? setInterval(populateSummary, API_PULL_INTERVAL) : undefined;
       });
     }
 
@@ -89,7 +91,7 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
         return undefined;
       });
     };
-  }, [facilityId, setFacilityIdSelected]);
+  }, [selectedValues, setFacilityIdSelected]);
 
   return (
     <main>
@@ -99,9 +101,9 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
         page={strings.DASHBOARD}
         parentPage={strings.SEEDS}
         organization={organization}
-        onChangeFacility={(facility) => {
-          setFacilityId(facility?.id);
-        }}
+        selectedValues={selectedValues}
+        onChangeSelectedValues={(newValues) => setSelectedValues(newValues)}
+        showFacility={true}
       />
       <Container maxWidth={false} className={classes.mainContainer}>
         <Grid container spacing={3}>

@@ -1,7 +1,7 @@
 import { Container, createStyles, Grid, IconButton, makeStyles, Paper, Typography } from '@material-ui/core';
 import TuneIcon from '@material-ui/icons/Tune';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import snackbarAtom from 'src/state/snackbar';
 import strings from 'src/strings';
 import EditPlantModal from '../EditPlantModal';
@@ -12,10 +12,11 @@ import { getPlantsForMultipleLayers } from 'src/api/plants/plants';
 import { getPlantPhoto } from 'src/api/plants/photo';
 import { Plant, PlantSearchOptions } from 'src/types/Plant';
 import { SpeciesById } from 'src/types/Species';
-import { Project, ServerOrganization, Site } from 'src/types/Organization';
+import { ServerOrganization } from 'src/types/Organization';
 import Title from 'src/components/common/Title';
 import { getPlantLayers } from 'src/api/organization/organization';
 import { getSelectedSites } from 'src/utils/organization';
+import { plantListSelectedValues } from 'src/state/selectedValuesPerPage';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -52,8 +53,7 @@ export default function PlantList(props: PlantListProps): JSX.Element {
   const [selectedPlant, setSelectedPlant] = useState<Plant>();
   const [selectedPlantPhoto, setSelectedPlantPhoto] = useState<string>();
   const [showFilters, setShowFilters] = useState(filters ? true : false);
-  const [selectedSite, setSelectedSite] = useState<Site>();
-  const [selectedProject, setSelectedProject] = useState<Project>();
+  const [selectedValues, setSelectedValues] = useRecoilState(plantListSelectedValues);
   const setSnackbar = useSetRecoilState(snackbarAtom);
 
   const fetchPlantsAndSpecies = useCallback(() => {
@@ -67,7 +67,7 @@ export default function PlantList(props: PlantListProps): JSX.Element {
 
     const populatePlants = async () => {
       if (organization) {
-        const sites = getSelectedSites(selectedSite, selectedProject, organization);
+        const sites = getSelectedSites(selectedValues.selectedSite, selectedValues.selectedProject, organization);
         const layers = (await getPlantLayers(sites)).layers;
         const layerIds = layers.map((layer) => layer.id);
         const plantsResponse = await getPlantsForMultipleLayers(layerIds, filters);
@@ -80,7 +80,7 @@ export default function PlantList(props: PlantListProps): JSX.Element {
 
     populateSpecies();
     populatePlants();
-  }, [organization, filters, selectedProject, selectedSite]);
+  }, [organization, filters, selectedValues]);
 
   useEffect(() => {
     fetchPlantsAndSpecies();
@@ -147,8 +147,8 @@ export default function PlantList(props: PlantListProps): JSX.Element {
               parentPage={strings.PLANTS}
               organization={organization}
               allowAll={true}
-              setSelectedSiteToParent={(site) => setSelectedSite(site)}
-              setSelectedProjectToParent={(project) => setSelectedProject(project)}
+              onChangeSelectedValues={(newValues) => setSelectedValues(newValues)}
+              selectedValues={selectedValues}
             />
           </Grid>
           <Grid item xs={1} />
