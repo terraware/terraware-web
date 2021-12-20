@@ -317,7 +317,8 @@ describe('Lab', () => {
       cy.get('#sessions-arrow-increase').should('exist');
 
       cy.get('#species-current').contains('6');
-      cy.get('#species-details').children().should('have.length', 0);
+      cy.get('#species-change').contains('200% since last week');
+      cy.get('#species-arrow-increase').should('exist');
 
       cy.get('#families-current').contains('2');
       cy.get('#families-change').contains('100% since last week');
