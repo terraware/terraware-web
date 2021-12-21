@@ -1,5 +1,4 @@
 import strings from 'src/strings';
-import { SearchField } from 'src/api/seeds/search';
 import { TableColumnType } from 'src/components/common/table/types';
 
 export interface Option {
@@ -17,8 +16,8 @@ type DatabaseColumnFilterType =
   | 'count_weight';
 
 export interface DatabaseColumn extends Omit<TableColumnType, 'key'> {
-  key: SearchField;
-  additionalKeys?: SearchField[];
+  key: string;
+  additionalKeys?: string[];
   filter?: { type: DatabaseColumnFilterType; options?: Option[] };
   operation?: 'or' | 'and' | 'field' | 'not';
 }
@@ -326,11 +325,11 @@ export const COLUMNS_INDEXED = COLUMNS.reduce((acum, value) => {
   acum[value.key] = value;
 
   return acum;
-}, {} as Record<SearchField, DatabaseColumn>);
+}, {} as Record<string, DatabaseColumn>);
 
 export interface Preset {
   name: string;
-  fields: SearchField[];
+  fields: string[];
 }
 
 export const defaultPreset: Preset = {

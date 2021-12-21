@@ -1,7 +1,7 @@
 import { List, ListItem, ListItemText } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React from 'react';
-import { FieldNodePayload, SearchField } from 'src/api/seeds/search';
+import { FieldNodePayload } from 'src/api/seeds/search';
 import strings from 'src/strings';
 import { Option } from '../columns';
 
@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) =>
 );
 
 interface Props {
-  field: SearchField;
+  field: string;
   onChange: (filter: FieldNodePayload) => void;
   options: Option[];
   values: (string | null)[];

@@ -14,7 +14,6 @@ import {
   getAllFieldValues,
   getPendingAccessions,
   search,
-  SearchField,
   searchFieldValues,
   SearchNodePayload,
   SearchResponseElement,
@@ -82,10 +81,10 @@ type DatabaseProps = {
   setSearchCriteria: (criteria: SeedSearchCriteria) => void;
   searchSortOrder: SeedSearchSortOrder;
   setSearchSortOrder: (order: SeedSearchSortOrder) => void;
-  searchColumns: SearchField[];
-  setSearchColumns: (fields: SearchField[]) => void;
-  displayColumnNames: SearchField[];
-  setDisplayColumnNames: (fields: SearchField[]) => void;
+  searchColumns: string[];
+  setSearchColumns: (fields: string[]) => void;
+  displayColumnNames: string[];
+  setDisplayColumnNames: (fields: string[]) => void;
   setFacilityIdSelected: (facilityId: number) => void;
 };
 
@@ -126,46 +125,55 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const [availableFieldOptions, setAvailableFieldOptions] = useState<FieldValuesMap | null>();
   const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>();
 
+  // Remove this when download report receives site/project/org id
+  const [facilityIdForReport, setFacilityIdForReport] = useState<number>();
+
   useEffect(() => {
     const populatePendingAccessions = async () => {
-      if (selectedValues.selectedFacility?.id) {
-        setFacilityIdSelected(selectedValues.selectedFacility.id);
-        setPendingAccessions(await getPendingAccessions(selectedValues.selectedFacility.id));
+      if (organization && selectedValues.selectedFacility?.id) {
+        setPendingAccessions(await getPendingAccessions(selectedValues, organization.id));
       }
     };
     populatePendingAccessions();
-  }, [selectedValues, setFacilityIdSelected]);
+  }, [selectedValues, organization]);
 
   useEffect(() => {
-    if (selectedValues.selectedFacility?.id) {
-      const facilityId = selectedValues.selectedFacility.id;
-      const populateFieldOptions = async () => {
-        const singleAndMultiChoiceFields = filterSelectFields(searchColumns);
-        setFieldOptions(await getAllFieldValues(singleAndMultiChoiceFields, facilityId));
-      };
-      populateFieldOptions();
-    }
+    const populateFieldOptions = async () => {
+      const singleAndMultiChoiceFields = filterSelectFields(searchColumns);
+      setFieldOptions(await getAllFieldValues(singleAndMultiChoiceFields, 0));
+    };
+    populateFieldOptions();
   }, [selectedValues, searchColumns]);
 
   useEffect(() => {
-    if (selectedValues.selectedFacility?.id) {
-      const facilityId = selectedValues.selectedFacility.id;
-      const populateAvailableFieldOptions = async () => {
-        const singleAndMultiChoiceFields = filterSelectFields(searchColumns);
-        setAvailableFieldOptions(await searchFieldValues(singleAndMultiChoiceFields, searchCriteria, facilityId));
-      };
-      populateAvailableFieldOptions();
+    let facilityId = selectedValues?.selectedFacility?.id;
+    // If no faciliyId is selected, then select first facility of first project of first site, until endpoint receives siteId, projectId or OrgId
+    if (
+      !facilityId &&
+      organization &&
+      organization.projects &&
+      organization.projects[0].sites &&
+      organization.projects[0].sites[0].facilities
+    ) {
+      facilityId = organization.projects[0].sites[0].facilities[0].id;
+      setFacilityIdSelected(facilityId);
+      setFacilityIdForReport(facilityId);
     }
-  }, [selectedValues, searchColumns, searchCriteria]);
+    const populateAvailableFieldOptions = async () => {
+      const singleAndMultiChoiceFields = filterSelectFields(searchColumns);
+      setAvailableFieldOptions(await searchFieldValues(singleAndMultiChoiceFields, searchCriteria, facilityId || 0));
+    };
+    populateAvailableFieldOptions();
+  }, [selectedValues, searchColumns, searchCriteria, organization, setFacilityIdSelected]);
 
   useEffect(() => {
-    if (selectedValues.selectedFacility?.id) {
+    if (organization) {
       const populateSearchResults = async () => {
         const apiResponse = await search({
-          facilityId: selectedValues.selectedFacility?.id as number,
-          fields: searchColumns.includes('active') ? searchColumns : [...searchColumns, 'active'],
+          prefix: 'projects.sites.facilities.accessions',
+          fields: searchColumns.includes('active') ? [...searchColumns, 'id'] : [...searchColumns, 'active', 'id'],
           sortOrder: [searchSortOrder],
-          search: convertToSearchNodePayload(searchCriteria),
+          search: convertToSearchNodePayload(searchCriteria, selectedValues, organization.id),
           count: 1000,
         });
 
@@ -174,7 +182,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
 
       populateSearchResults();
     }
-  }, [selectedValues, searchCriteria, searchSortOrder, searchColumns]);
+  }, [selectedValues, searchCriteria, searchSortOrder, searchColumns, organization]);
 
   const onSelect = (row: SearchResponseElement) => {
     if (row.id) {
@@ -189,7 +197,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
 
   const onSortChange = (order: Order, orderBy: string) => {
     setSearchSortOrder({
-      field: orderBy as SearchField,
+      field: orderBy as string,
       direction: order === 'asc' ? 'Ascending' : 'Descending',
     });
   };
@@ -206,7 +214,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
     setReportModalOpen(true);
   };
 
-  const onCloseEditColumnsModal = (columnsintern?: SearchField[]) => {
+  const onCloseEditColumnsModal = (columnsintern?: string[]) => {
     if (columnsintern) {
       const searchSelectedColumns = columnsintern.reduce((acum, value) => {
         acum.push(value);
@@ -216,7 +224,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
         }
 
         return acum;
-      }, [] as SearchField[]);
+      }, [] as string[]);
 
       setSearchColumns(searchSelectedColumns);
       setDisplayColumnNames(columnsintern);
@@ -265,18 +273,19 @@ export default function Database(props: DatabaseProps): JSX.Element {
     <MuiPickersUtilsProvider utils={MomentUtils}>
       <main>
         <EditColumns open={editColumnsModalOpen} value={displayColumnNames} onClose={onCloseEditColumnsModal} />
-        {selectedValues.selectedFacility?.id && (
+        {facilityIdForReport && (
           <DownloadReportModal
             searchCriteria={searchCriteria}
             searchSortOrder={searchSortOrder}
             searchColumns={searchColumns}
-            facilityId={selectedValues.selectedFacility.id}
+            facilityId={facilityIdForReport}
             open={reportModalOpen}
             onClose={onCloseDownloadReportModal}
           />
         )}
         <PageHeader
           title=''
+          allowAll={true}
           subtitle={getSubtitle()}
           page={strings.ACCESSIONS}
           parentPage={strings.SEEDS}

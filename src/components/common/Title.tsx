@@ -55,22 +55,24 @@ export default function Title({
   const classes = useStyles();
 
   useEffect(() => {
-    // if no project selected, select first project and site
-    if (!selectedValues.selectedProject && organization?.projects && organization.projects[0].sites) {
-      if (organization?.projects[0].sites[0].facilities) {
-        onChangeSelectedValues({
-          selectedProject: organization?.projects[0],
-          selectedSite: organization?.projects[0].sites[0],
-          selectedFacility: organization?.projects[0].sites[0].facilities[0],
-        });
-      } else {
-        onChangeSelectedValues({
-          selectedProject: organization?.projects[0],
-          selectedSite: organization?.projects[0].sites[0],
-        });
+    // if no project selected and all option is not available, select first project and site
+    if (!allowAll) {
+      if (!selectedValues.selectedProject && organization?.projects && organization.projects[0].sites) {
+        if (organization?.projects[0].sites[0].facilities) {
+          onChangeSelectedValues({
+            selectedProject: organization?.projects[0],
+            selectedSite: organization?.projects[0].sites[0],
+            selectedFacility: organization?.projects[0].sites[0].facilities[0],
+          });
+        } else {
+          onChangeSelectedValues({
+            selectedProject: organization?.projects[0],
+            selectedSite: organization?.projects[0].sites[0],
+          });
+        }
       }
     }
-  }, [organization, selectedValues, onChangeSelectedValues]);
+  }, [organization, selectedValues, onChangeSelectedValues, allowAll]);
 
   const addAllOption = (originalOptions?: string[]) => {
     let newOptions: string[] = [];
@@ -92,22 +94,25 @@ export default function Title({
       <label className={classes.titleLabel}>{strings.PROJECT}</label>
       <Select
         options={addAllOption(organization?.projects?.map((org) => org.name))}
-        selectedValue={selectedValues?.selectedProject?.name}
+        selectedValue={selectedValues?.selectedProject?.name ?? 'All'}
         onChange={(newValue) => {
           onChangeSelectedValues({
-            ...selectedValues,
             selectedProject: organization?.projects?.find((proj) => proj.name === newValue),
+            selectedSite: undefined,
+            selectedFacility: undefined,
           });
         }}
       />
       <label className={classes.titleLabel}>{strings.SITE}</label>
       <Select
-        selectedValue={selectedValues?.selectedSite?.name}
+        disabled={!selectedValues.selectedProject}
+        selectedValue={selectedValues?.selectedSite?.name ?? 'All'}
         options={addAllOption(selectedValues?.selectedProject?.sites?.map((site) => site.name))}
         onChange={(newValue) => {
           onChangeSelectedValues({
             ...selectedValues,
             selectedSite: selectedValues.selectedProject?.sites?.find((site) => site.name === newValue),
+            selectedFacility: undefined,
           });
         }}
       />
@@ -115,7 +120,8 @@ export default function Title({
         <>
           <label className={classes.titleLabel}>{strings.FACILITY}</label>
           <Select
-            selectedValue={selectedValues?.selectedFacility?.name}
+            disabled={!selectedValues.selectedSite}
+            selectedValue={selectedValues?.selectedFacility?.name ?? 'All'}
             options={addAllOption(selectedValues.selectedSite?.facilities?.map((facility) => facility.name))}
             onChange={(newValue) => {
               onChangeSelectedValues({

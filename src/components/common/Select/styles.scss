@@ -106,6 +106,7 @@
 
     &--disabled {
       opacity: $tw-opcty-semantic-off;
+      pointer-events: none;
       &:hover {
         border: $tw-sz-frm-fld-text-input-stroke solid $tw-clr-frm-fld-text-input-stroke;
       }

@@ -5,7 +5,6 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React from 'react';
-import { SearchField } from 'src/api/seeds/search';
 import strings from 'src/strings';
 import CancelButton from '../../common/CancelButton';
 import Checkbox from '../../common/Checkbox';
@@ -34,8 +33,8 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export interface Props {
   open: boolean;
-  onClose: (columns?: SearchField[]) => void;
-  value: SearchField[];
+  onClose: (columns?: string[]) => void;
+  value: string[];
 }
 
 export default function EditColumnsDialog(props: Props): JSX.Element {
@@ -66,7 +65,7 @@ export default function EditColumnsDialog(props: Props): JSX.Element {
   const onChange = (id: string, checked: boolean) => {
     if (checked) {
       const newValue = [...value];
-      newValue.push(id as SearchField);
+      newValue.push(id as string);
       setValue(newValue);
     } else {
       setValue(value.filter((v) => v !== id));
@@ -159,7 +158,7 @@ export default function EditColumnsDialog(props: Props): JSX.Element {
 
 interface Option {
   name: string;
-  key: SearchField;
+  key: string;
   disabled?: boolean;
 }
 

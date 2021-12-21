@@ -1,7 +1,7 @@
 import { createStyles, Grid, makeStyles } from '@material-ui/core';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import React from 'react';
-import { FieldNodePayload, SearchField } from 'src/api/seeds/search';
+import { FieldNodePayload } from 'src/api/seeds/search';
 import DatePicker from 'src/components/common/DatePicker';
 import strings from 'src/strings';
 
@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) =>
 );
 
 interface Props {
-  field: SearchField;
+  field: string;
   onChange: (filter: FieldNodePayload) => void;
   values: (string | null)[];
 }

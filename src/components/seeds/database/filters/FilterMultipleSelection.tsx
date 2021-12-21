@@ -2,7 +2,7 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 import Checkbox from '../../../common/Checkbox';
 import { Option } from '../columns';
-import { FieldNodePayload, SearchField } from '../../../../api/seeds/search';
+import { FieldNodePayload } from '../../../../api/seeds/search';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) =>
 );
 
 interface Props {
-  field: SearchField;
+  field: string;
   onChange: (filter: FieldNodePayload) => void;
   options: Option[];
   values: (string | null)[];
