@@ -30,6 +30,14 @@ speciesId1=$(curl 'http://localhost:8080/api/v1/species' \
   -H 'Content-Type: application/json' \
   --data '{"name":"Banana" }' | jq -r '.id')
 
+if [ -z "$speciesId1" ]; then
+    echo
+    echo Failed to make request to server
+    echo
+    docker-compose logs terraware-server
+    exit 1
+fi
+
 speciesId2=$(curl 'http://localhost:8080/api/v1/species' \
   --cookie "${COOKIE}"  \
   -H 'accept: application/json' \
