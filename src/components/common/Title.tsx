@@ -1,5 +1,5 @@
 import { createStyles, makeStyles } from '@material-ui/core';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { SelectedValues } from 'src/api/types/facilities';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
@@ -53,6 +53,24 @@ export default function Title({
   onChangeSelectedValues,
 }: TitleProps): JSX.Element {
   const classes = useStyles();
+
+  useEffect(() => {
+    // if no project selected, select first project and site
+    if (!selectedValues.selectedProject && organization?.projects && organization.projects[0].sites) {
+      if (organization?.projects[0].sites[0].facilities) {
+        onChangeSelectedValues({
+          selectedProject: organization?.projects[0],
+          selectedSite: organization?.projects[0].sites[0],
+          selectedFacility: organization?.projects[0].sites[0].facilities[0],
+        });
+      } else {
+        onChangeSelectedValues({
+          selectedProject: organization?.projects[0],
+          selectedSite: organization?.projects[0].sites[0],
+        });
+      }
+    }
+  }, [organization, selectedValues, onChangeSelectedValues]);
 
   const addAllOption = (originalOptions?: string[]) => {
     let newOptions: string[] = [];
