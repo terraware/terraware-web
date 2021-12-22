@@ -53,6 +53,9 @@ const useStyles = makeStyles((theme: Theme) =>
       marginLeft: theme.spacing(2),
       color: theme.palette.common.white,
     },
+    addAccessionIcon: {
+      color: theme.palette.common.white,
+    },
     checkinMessage: {
       marginBottom: theme.spacing(6),
     },
@@ -69,12 +72,6 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const newAccessionChipStyles = makeStyles((theme) => ({
-  root: {
-    color: theme.palette.common.white,
-  },
-}));
-
 type DatabaseProps = {
   organization?: ServerOrganization;
   searchCriteria: SeedSearchCriteria;
@@ -85,7 +82,6 @@ type DatabaseProps = {
   setSearchColumns: (fields: string[]) => void;
   displayColumnNames: string[];
   setDisplayColumnNames: (fields: string[]) => void;
-  setFacilityIdSelected: (facilityId: number) => void;
 };
 
 export default function Database(props: DatabaseProps): JSX.Element {
@@ -101,7 +97,6 @@ export default function Database(props: DatabaseProps): JSX.Element {
     displayColumnNames,
     setDisplayColumnNames,
     organization,
-    setFacilityIdSelected,
   } = props;
   const displayColumnDetails = displayColumnNames.map((name) => {
     return COLUMNS_INDEXED[name];
@@ -156,7 +151,6 @@ export default function Database(props: DatabaseProps): JSX.Element {
       organization.projects[0].sites[0].facilities
     ) {
       facilityId = organization.projects[0].sites[0].facilities[0].id;
-      setFacilityIdSelected(facilityId);
       setFacilityIdForReport(facilityId);
     }
     const populateAvailableFieldOptions = async () => {
@@ -164,7 +158,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
       setAvailableFieldOptions(await searchFieldValues(singleAndMultiChoiceFields, searchCriteria, facilityId || 0));
     };
     populateAvailableFieldOptions();
-  }, [selectedValues, searchColumns, searchCriteria, organization, setFacilityIdSelected]);
+  }, [selectedValues, searchColumns, searchCriteria, organization]);
 
   useEffect(() => {
     if (organization) {
@@ -311,19 +305,21 @@ export default function Database(props: DatabaseProps): JSX.Element {
                 onClick={onDownloadReport}
                 className={classes.downloadReport}
               />
-              <Link component={RouterLink} to={getLocation('/accessions/new', location)}>
-                <Chip
-                  id='newAccession'
-                  className={classes.addAccession}
-                  label={strings.NEW_ACCESSION}
-                  clickable={true}
-                  deleteIcon={<AddIcon classes={newAccessionChipStyles()} />}
-                  color='primary'
-                  onDelete={() => {
-                    return true;
-                  }}
-                />
-              </Link>
+              {selectedValues.selectedFacility && (
+                <Link component={RouterLink} to={getLocation('/accessions/new', location)}>
+                  <Chip
+                    id='newAccession'
+                    className={classes.addAccession}
+                    label={strings.NEW_ACCESSION}
+                    clickable={true}
+                    deleteIcon={<AddIcon className={classes.addAccessionIcon} />}
+                    color='primary'
+                    onDelete={() => {
+                      return true;
+                    }}
+                  />
+                </Link>
+              )}
             </div>
           }
         >

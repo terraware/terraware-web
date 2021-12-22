@@ -2,6 +2,13 @@ describe('Searchbar', () => {
   context('search', () => {
     it('should redirect the user to the correct page', () => {
       cy.visit('/accessions');
+      cy.get('#projectSelect').click();
+      cy.get('.options-container').should('be.visible');
+      cy.get('.options-container .select-value').eq(1).click();
+      cy.get('#siteSelect').click();
+      cy.get('.select-value').eq(1).click();
+      cy.get('#facilitySelect').click();
+      cy.get('.select-value').eq(1).click();
       cy.get('#newAccession').click().url().should('contain', '/accessions/new');
       cy.get('#saveAccession').click();
       cy.get('#snackbar').contains('Accession saved');
