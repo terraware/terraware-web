@@ -15,6 +15,8 @@ export default function NavBar(): JSX.Element | null {
   const isPlantDashboardRoute = useRouteMatch('/plants-dashboard');
   const isPlantListRoute = useRouteMatch('/plants-list');
   const isSpeciesRoute = useRouteMatch('/species');
+  const isProjectsRoute = useRouteMatch('/projects');
+  const isSitesRoute = useRouteMatch('/sites');
 
   const navigate = (url: string) => {
     history.push(url);
@@ -81,6 +83,21 @@ export default function NavBar(): JSX.Element | null {
         selected={isSpeciesRoute ? true : false}
         onClick={() => navigate('/species')}
         id='speciesNb'
+      />
+      <NavSection />
+      <NavItem
+        label={strings.PROJECTS}
+        icon='folder'
+        selected={isProjectsRoute ? true : false}
+        onClick={() => navigate('/projects')}
+        id='projects'
+      />
+      <NavItem
+        label={strings.SITES}
+        icon='site'
+        selected={isSitesRoute ? true : false}
+        onClick={() => navigate('/sites')}
+        id='projects'
       />
     </Navbar>
   );

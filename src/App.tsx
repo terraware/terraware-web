@@ -32,6 +32,8 @@ import strings from './strings';
 import theme from './theme';
 import { defaultPreset as DefaultColumns } from './components/seeds/database/columns';
 import { seedsDatabaseSelectedValues } from './state/selectedValuesPerPage';
+import ProjectsList from './components/Projects';
+import SitesList from './components/Sites';
 
 // @ts-ignore
 mapboxgl.workerClass =
@@ -176,6 +178,12 @@ function AppContent() {
               <Route exact path='/species'>
                 <SpeciesList />
               </Route>
+              <Route exact path='/projects'>
+                <ProjectsList organization={selectedOrganization} />
+              </Route>
+              <Route exact path='/sites'>
+                <SitesList organization={selectedOrganization} />
+              </Route>
               <Route path='/help' component={Help}>
                 <Help />
               </Route>
@@ -196,6 +204,12 @@ function AppContent() {
               <Route path='/species/'>
                 <Redirect to='/species' />
               </Route>
+              <Route path='/projects/'>
+                <Redirect to='/projects' />
+              </Route>
+              <Route path='/sites/'>
+                <Redirect to='/sites' />
+              </Route>
               <Route path='/help/'>
                 <Redirect to='/help' />
               </Route>
@@ -206,7 +220,6 @@ function AppContent() {
           </ErrorBoundary>
         </div>
       </>
-      )
     </>
   );
 }

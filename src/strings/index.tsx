@@ -331,6 +331,10 @@ const strings = new LocalizedStrings({
     PEOPLE_CARD_DESCRIPTION: 'We can’t do it alone! Add people to your Organization and assign them roles.',
     GOOD_MORNING: 'Good morning!',
     GOOD_MORNING_PERSON: 'Good morning, {0}!',
+    ADD_PROJECT: 'Add Project',
+    PROJECTS_DESCRIPTION: 'Manage your Projects.',
+    ADD_SITE: 'Add Site',
+    SITES_DESCRIPTION: 'Manage your Sites.',
   },
 });
 
