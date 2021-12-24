@@ -42,19 +42,19 @@ type SitesListProps = {
 type SiteTable = Site & { projectName: string };
 export default function SitesList({ organization }: SitesListProps): JSX.Element {
   const classes = useStyles();
-  const [, setSelectedSite] = useState<Site>();
+  const [, setSelectedSite] = useState<SiteTable>();
   const [sites, setSites] = useState<SiteTable[]>();
 
-  const onSelect = (selected: Site) => {
+  const onSelect = (selected: SiteTable) => {
     setSelectedSite(selected);
   };
 
   useEffect(() => {
     const addProjectNameToSites = () => {
       if (organization) {
-        const sites = getAllSites(organization);
+        const allSites = getAllSites(organization);
         const projectsById = getProjectsById(organization);
-        const newSites = sites.map((site) => {
+        const newSites = allSites.map((site) => {
           return {
             ...site,
             projectName: projectsById.get(site.id)?.name || '',
@@ -78,7 +78,13 @@ export default function SitesList({ organization }: SitesListProps): JSX.Element
           </Grid>
           <Grid item xs={6} />
           <Grid item xs={2} className={classes.centered}>
-            <Button id='new-site' label={strings.ADD_SITE} onClick={() => {}} />
+            <Button
+              id='new-site'
+              label={strings.ADD_SITE}
+              onClick={() => {
+                return true;
+              }}
+            />
           </Grid>
           <Grid item xs={1} />
           <Grid item xs={1} />
