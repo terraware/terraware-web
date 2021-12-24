@@ -78,8 +78,8 @@ const parseSite = (site: ServerSite): Site => {
     name: site.name,
     projectId: site.projectId,
     facilities: site.facilities?.map((facility) => parseFacility(facility)),
-    latitude: site.location.coordinates[1],
-    longitude: site.location.coordinates[0],
+    latitude: site.location?.coordinates ? site.location.coordinates[1] : undefined,
+    longitude: site.location?.coordinates ? site.location.coordinates[0] : undefined,
   };
   return parsedSite;
 };
