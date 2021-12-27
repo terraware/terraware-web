@@ -120,7 +120,7 @@ function AppContent() {
       <Snackbar />
       <>
         <div>
-          <NavBar />
+          <NavBar organization={selectedOrganization} />
         </div>
         <div className={classes.content}>
           <TopBar
