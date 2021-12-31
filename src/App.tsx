@@ -34,6 +34,7 @@ import { defaultPreset as DefaultColumns } from './components/seeds/database/col
 import { seedsDatabaseSelectedValues } from './state/selectedValuesPerPage';
 import ProjectsList from './components/Projects';
 import SitesList from './components/Sites';
+import Project from './components/Project';
 
 // @ts-ignore
 mapboxgl.workerClass =
@@ -180,6 +181,9 @@ function AppContent() {
               </Route>
               <Route exact path='/projects'>
                 <ProjectsList organization={selectedOrganization} />
+              </Route>
+              <Route path='/projects/:projectId'>
+                <Project />
               </Route>
               <Route exact path='/sites'>
                 <SitesList organization={selectedOrganization} />

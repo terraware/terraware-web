@@ -1,5 +1,6 @@
 import React from 'react';
 import { ReactComponent as CaretDown } from './caret-down.svg';
+import { ReactComponent as CaretLeft } from './caret-left.svg';
 import { ReactComponent as CaretUp } from './caret-up.svg';
 import { ReactComponent as ChevronDown } from './chevron-down.svg';
 import { ReactComponent as ChevronUp } from './chevron-up.svg';
@@ -20,6 +21,7 @@ import { ReactComponent as Warning } from './warning.svg';
 
 export type IconName =
   | 'caretDown'
+  | 'caretLeft'
   | 'caretUp'
   | 'chevronUp'
   | 'chevronDown'
@@ -45,6 +47,7 @@ type SVGComponent = React.FunctionComponent<
 >;
 const icons: Record<IconName, SVGComponent> = {
   caretDown: CaretDown,
+  caretLeft: CaretLeft,
   caretUp: CaretUp,
   chevronUp: ChevronUp,
   chevronDown: ChevronDown,
