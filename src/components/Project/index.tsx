@@ -74,13 +74,13 @@ export default function ProjectView(): JSX.Element {
           <p>{strings.START_DATE_OPT}</p>
         </Grid>
         <Grid item xs={4}>
-          <p></p>
+          <p>{projectSelected?.name}</p>
         </Grid>
         <Grid item xs={4}>
-          <p></p>
+          <p />
         </Grid>
         <Grid item xs={4}>
-          <p></p>
+          <p />
         </Grid>
         <Grid item xs={4}>
           <p>{strings.STATUS_OPT}</p>
@@ -88,7 +88,6 @@ export default function ProjectView(): JSX.Element {
         <Grid item xs={4}>
           <p>{strings.PROJECT_TYPE_OPT}</p>
         </Grid>
-        <Grid item xs={4}></Grid>
         <Grid item xs={12}>
           <TfDivisor />
         </Grid>

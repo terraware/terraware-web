@@ -5,7 +5,6 @@ import { getUser } from 'src/api/user/user';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
 import { User } from 'src/types/User';
-import Icon from './common/icon/Icon';
 import PageCard from './common/PageCard';
 import TfDivisor from './common/TfDivisor';
 import PageHeader from './seeds/PageHeader';
