@@ -340,6 +340,8 @@ const strings = new LocalizedStrings({
     START_DATE_OPT: 'Start Date (optional)',
     STATUS_OPT: 'Status (opt)',
     PROJECT_TYPE_OPT: 'Project Type(s) (optional)',
+    PEOPLE_DESC: 'To add new people to this organization go to People.',
+    SITES_DESC: 'To add new sites to this project go to Sites.',
   },
 });
 

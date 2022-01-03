@@ -127,7 +127,7 @@ export async function getProject(projectId: string): Promise<ProjectResponse> {
   };
 
   try {
-    const serverResponse: GetProjectResponsePayload = (await axios.get(PROJECT.replace('{id}', `${projectId}`))).data;
+    const serverResponse: GetProjectResponsePayload = (await axios.get(PROJECT.replace('{id}', projectId))).data;
     response.project = serverResponse.project;
   } catch {
     response.requestSucceeded = false;

@@ -6,6 +6,8 @@ import strings from 'src/strings';
 import { Project } from 'src/types/Organization';
 import Icon from '../common/icon/Icon';
 import TfDivisor from '../common/TfDivisor';
+import Table from 'src/components/common/table';
+import { TableColumnType } from '../common/table/types';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -36,12 +38,19 @@ export default function ProjectView(): JSX.Element {
       const response = await getProject(projectId);
       if (response.requestSucceeded) {
         setProjectSelected(response.project);
+        console.log(response.project);
       }
     };
     populateProject();
   }, [projectId]);
 
   const classes = useStyles();
+
+  const columns: TableColumnType[] = [
+    { key: 'name', name: 'Name', type: 'string' },
+    { key: 'longitude', name: 'Longitude', type: 'string' },
+    { key: 'latitude', name: 'Latitude', type: 'string' },
+  ];
 
   return (
     <Container maxWidth={false} className={classes.mainContainer}>
@@ -84,8 +93,32 @@ export default function ProjectView(): JSX.Element {
           <TfDivisor />
         </Grid>
       </Grid>
-      <Grid item xs={12}>
-        <h2>{strings.PEOPLE}</h2>
+      <Grid container spacing={3}>
+        <Grid item xs={12}>
+          <h2>{strings.PEOPLE}</h2>
+        </Grid>
+        <Grid item xs={12}>
+          <p>{strings.PEOPLE_DESC}</p>
+        </Grid>
+        <Grid item xs={12}>
+          <TfDivisor />
+        </Grid>
+      </Grid>
+      <Grid container spacing={3}>
+        <Grid item xs={12}>
+          <h2>{strings.SITES}</h2>
+        </Grid>
+        <Grid item xs={12}>
+          <p>{strings.SITES_DESC}</p>
+        </Grid>
+        {projectSelected?.sites && (
+          <Grid item xs={12}>
+            <Table rows={projectSelected.sites} orderBy='name' columns={columns} />
+          </Grid>
+        )}
+        <Grid item xs={12}>
+          <TfDivisor />
+        </Grid>
       </Grid>
     </Container>
   );
