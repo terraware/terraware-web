@@ -111,27 +111,3 @@ export async function getOrganizations(): Promise<OrganizationsResponse> {
   }
   return response;
 }
-
-type ProjectResponse = {
-  project: Project | null;
-  requestSucceeded: boolean;
-};
-
-const PROJECT = '/api/v1/projects/{id}';
-type GetProjectResponsePayload = paths[typeof PROJECT]['get']['responses'][200]['content']['application/json'];
-
-export async function getProject(projectId: string): Promise<ProjectResponse> {
-  const response: ProjectResponse = {
-    project: null,
-    requestSucceeded: true,
-  };
-
-  try {
-    const serverResponse: GetProjectResponsePayload = (await axios.get(PROJECT.replace('{id}', projectId))).data;
-    response.project = serverResponse.project;
-  } catch {
-    response.requestSucceeded = false;
-  }
-
-  return response;
-}
