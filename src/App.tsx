@@ -183,7 +183,7 @@ function AppContent() {
                 <ProjectsList organization={selectedOrganization} />
               </Route>
               <Route path='/projects/:projectId'>
-                <Project />
+                <Project organization={selectedOrganization} />
               </Route>
               <Route exact path='/sites'>
                 <SitesList organization={selectedOrganization} />
