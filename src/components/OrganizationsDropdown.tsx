@@ -59,7 +59,7 @@ export default function OrganizationsDropdown({
         <List id='organizations-popover'>
           {organizations?.map((organization) => {
             return (
-              <ListItem button onClick={() => setSelectedOrganization(organization)}>
+              <ListItem button onClick={() => setSelectedOrganization(organization)} key={organization.id}>
                 {organization.name}
               </ListItem>
             );
