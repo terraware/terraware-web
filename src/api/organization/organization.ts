@@ -3,6 +3,7 @@ import axios from 'src/api/index';
 import { PlantLayer, Site, ServerOrganization, Project } from 'src/types/Organization';
 import { paths } from 'src/api/types/generated-schema';
 import { Facility } from '../types/facilities';
+import { OrganizationUser } from 'src/types/User';
 
 const LAYERS = '/api/v1/gis/layers/list/{siteId}';
 type ListLayersResponse = paths[typeof LAYERS]['get']['responses'][200]['content']['application/json'];
@@ -105,6 +106,37 @@ export async function getOrganizations(): Promise<OrganizationsResponse> {
       name: organization.name,
       role: organization.role,
       projects: organization.projects?.map((project) => parseProject(project)),
+    }));
+  } catch {
+    response.requestSucceeded = false;
+  }
+  return response;
+}
+
+const ORGANIZATION_USERS = '/api/v1/organizations/{organizationId}/users';
+type ListOrganizationUsersResponsePayload =
+  paths[typeof ORGANIZATION_USERS]['get']['responses'][200]['content']['application/json'];
+
+type OrganizationUsersResponse = {
+  users: OrganizationUser[];
+  requestSucceeded: boolean;
+};
+export async function getOrganizationUsers(organization: ServerOrganization): Promise<OrganizationUsersResponse> {
+  const response: OrganizationUsersResponse = {
+    users: [],
+    requestSucceeded: true,
+  };
+  try {
+    const usersResponse: ListOrganizationUsersResponsePayload = (
+      await axios.get(ORGANIZATION_USERS.replace('{organizationId}', organization.id.toString()))
+    ).data;
+    response.users = usersResponse.users.map((user) => ({
+      id: user.id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      role: user.role,
+      projectIds: user.projectIds,
     }));
   } catch {
     response.requestSucceeded = false;
