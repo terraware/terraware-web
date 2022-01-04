@@ -103,9 +103,18 @@ export interface paths {
     get: operations["getOrganization"];
     put: operations["updateOrganization"];
   };
+  "/api/v1/organizations/{organizationId}/invitations": {
+    post: operations["inviteOrganizationUser"];
+  };
   "/api/v1/organizations/{organizationId}/projects": {
     /** Only projects that are accessible by the current user are included. */
     get: operations["listOrganizationProjects"];
+  };
+  "/api/v1/organizations/{organizationId}/users": {
+    get: operations["listOrganizationUsers"];
+  };
+  "/api/v1/organizations/{organizationId}/users/{userId}": {
+    get: operations["getOrganizationUser"];
   };
   "/api/v1/projects": {
     get: operations["listAllProjects"];
@@ -710,6 +719,10 @@ export interface components {
       organization: components["schemas"]["OrganizationPayload"];
       status: components["schemas"]["SuccessOrError"];
     };
+    GetOrganizationUserResponsePayload: {
+      user: components["schemas"]["OrganizationUserPayload"];
+      status: components["schemas"]["SuccessOrError"];
+    };
     GetPlantResponsePayload: {
       plant: components["schemas"]["PlantResponse"];
       status: components["schemas"]["SuccessOrError"];
@@ -725,6 +738,11 @@ export interface components {
     GetUserResponsePayload: {
       user: components["schemas"]["UserProfilePayload"];
       status: components["schemas"]["SuccessOrError"];
+    };
+    InviteOrganizationUserRequestPayload: {
+      email: string;
+      role: "Contributor" | "Manager" | "Admin" | "Owner";
+      projectIds?: number[];
     };
     LayerResponse: {
       id: number;
@@ -802,6 +820,10 @@ export interface components {
     };
     ListObservationsResponsePayload: {
       list: components["schemas"]["ObservationResponse"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    ListOrganizationUsersResponsePayload: {
+      users: components["schemas"]["OrganizationUserPayload"][];
       status: components["schemas"]["SuccessOrError"];
     };
     ListOrganizationsResponsePayload: {
@@ -929,6 +951,17 @@ export interface components {
       /** This organization's projects. Omitted if depth is "Organization". */
       projects?: components["schemas"]["ProjectPayload"][];
       /** The current user's role in the organization. */
+      role: "Contributor" | "Manager" | "Admin" | "Owner";
+    };
+    OrganizationUserPayload: {
+      email: string;
+      id: number;
+      /** The user's first name. Not visible for users who have been invited but have not yet accepted the invitation. */
+      firstName?: string;
+      /** The user's last name. Not visible for users who have been invited but have not yet accepted the invitation. */
+      lastName?: string;
+      /** IDs of projects the user is in. Users with admin and owner roles always have access to all projects. */
+      projectIds: number[];
       role: "Contributor" | "Manager" | "Admin" | "Owner";
     };
     /** Additional details for features that represent plants. */
@@ -2180,6 +2213,26 @@ export interface operations {
       };
     };
   };
+  inviteOrganizationUser: {
+    parameters: {
+      path: {
+        organizationId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["InviteOrganizationUserRequestPayload"];
+      };
+    };
+  };
   /** Only projects that are accessible by the current user are included. */
   listOrganizationProjects: {
     parameters: {
@@ -2198,6 +2251,37 @@ export interface operations {
       404: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  listOrganizationUsers: {
+    parameters: {
+      path: {
+        organizationId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListOrganizationUsersResponsePayload"];
+        };
+      };
+    };
+  };
+  getOrganizationUser: {
+    parameters: {
+      path: {
+        organizationId: number;
+        userId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetOrganizationUserResponsePayload"];
         };
       };
     };

@@ -8,6 +8,8 @@ import TfDivisor from '../common/TfDivisor';
 import Table from 'src/components/common/table';
 import { TableColumnType } from '../common/table/types';
 import { getProjectsById } from 'src/utils/organization';
+import { OrganizationUser } from 'src/types/User';
+import { getOrganizationUsers } from 'src/api/organization/organization';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -39,11 +41,21 @@ type ProjectViewProps = {
 export default function ProjectView({ organization }: ProjectViewProps): JSX.Element {
   const { projectId } = useParams<{ projectId: string }>();
   const [projectSelected, setProjectSelected] = useState<Project | null>();
+  const [people, setPeople] = useState<OrganizationUser[]>();
 
   useEffect(() => {
+    const populatePeople = async () => {
+      if (organization) {
+        const response = await getOrganizationUsers(organization);
+        if (response.requestSucceeded) {
+          setPeople(response.users);
+        }
+      }
+    };
     if (organization) {
       const projects = getProjectsById(organization);
       setProjectSelected(projects.get(parseInt(projectId, 10)));
+      populatePeople();
     }
   }, [projectId, organization]);
 
@@ -53,6 +65,13 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
     { key: 'name', name: 'Name', type: 'string' },
     { key: 'longitude', name: 'Longitude', type: 'string' },
     { key: 'latitude', name: 'Latitude', type: 'string' },
+  ];
+
+  const peopleColumns: TableColumnType[] = [
+    { key: 'firstName', name: 'First Name', type: 'string' },
+    { key: 'lastName', name: 'Last Name', type: 'string' },
+    { key: 'email', name: 'Email', type: 'string' },
+    { key: 'role', name: 'Role', type: 'string' },
   ];
 
   return (
@@ -83,6 +102,7 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
         <Grid item xs={4}>
           <p>{strings.PROJECT_TYPE_OPT}</p>
         </Grid>
+        <Grid item xs={12} />
         <Grid item xs={12}>
           <TfDivisor />
         </Grid>
@@ -92,6 +112,16 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
           <h2>{strings.PEOPLE}</h2>
           <p>{strings.PEOPLE_DESC}</p>
         </Grid>
+        {projectSelected && people && (
+          <Grid item xs={12}>
+            <Table
+              rows={people.filter((user) => user.projectIds.includes(projectSelected.id))}
+              orderBy='name'
+              columns={peopleColumns}
+            />
+          </Grid>
+        )}
+        <Grid item xs={12} />
         <Grid item xs={12}>
           <TfDivisor />
         </Grid>
@@ -103,7 +133,7 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
         </Grid>
         {projectSelected?.sites && (
           <Grid item xs={12}>
-            <Table rows={projectSelected.sites} orderBy='name' columns={columns} />
+            <Table rows={projectSelected.sites} orderBy='firstName' columns={columns} />
           </Grid>
         )}
       </Grid>
