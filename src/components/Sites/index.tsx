@@ -30,8 +30,7 @@ const useStyles = makeStyles((theme) =>
 
 const columns: TableColumnType[] = [
   { key: 'name', name: 'Name', type: 'string' },
-  { key: 'longitude', name: 'Longitude', type: 'string' },
-  { key: 'latitude', name: 'Latitude', type: 'string' },
+  { key: 'description', name: 'Description', type: 'string' },
   { key: 'projectName', name: 'Projects', type: 'string' },
 ];
 
