@@ -8,6 +8,7 @@ import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
 import strings from 'src/strings';
 import { Project, ServerOrganization } from 'src/types/Organization';
+import ProjectsCellRenderer from './TableCellRenderer';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -27,7 +28,13 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-const columns: TableColumnType[] = [{ key: 'name', name: 'Name', type: 'string' }];
+const columns: TableColumnType[] = [
+  { key: 'name', name: 'Name', type: 'string' },
+  { key: 'description', name: 'Description', type: 'string' },
+  { key: 'startDate', name: 'Start Date', type: 'string' },
+  { key: 'status', name: 'Status', type: 'string' },
+  { key: 'types', name: 'Project Type(s)', type: 'string' },
+];
 
 type ProjectsListProps = {
   organization?: ServerOrganization;
@@ -73,6 +80,7 @@ export default function ProjectsList({ organization }: ProjectsListProps): JSX.E
                       rows={organization.projects}
                       orderBy='name'
                       onSelect={onSelect}
+                      Renderer={ProjectsCellRenderer}
                     />
                   )}
                 </Grid>

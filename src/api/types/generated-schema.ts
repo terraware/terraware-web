@@ -113,6 +113,7 @@ export interface paths {
   };
   "/api/v1/projects/{id}": {
     get: operations["getProject"];
+    /** Overwrites existing values; if a payload field is null, any existing value is removed from the project. */
     put: operations["updateProject"];
   };
   "/api/v1/projects/{projectId}/sites": {
@@ -481,8 +482,17 @@ export interface components {
       status: components["schemas"]["SuccessOrError"];
     };
     CreateProjectRequestPayload: {
+      description?: string;
       name: string;
       organizationId: number;
+      startDate?: string;
+      status?: "Propagating" | "Planting" | "Completed/Monitoring";
+      types?: (
+        | "Native Forest Restoration"
+        | "Agroforestry"
+        | "Silvopasture"
+        | "Sustainable Timber"
+      )[];
     };
     CreateTimeseriesEntry: {
       /** ID of device that produces this timeseries. */
@@ -961,10 +971,19 @@ export interface components {
       coordinates: unknown;
     };
     ProjectPayload: {
+      description?: string;
       id: number;
       name: string;
       organizationId: number;
       sites?: components["schemas"]["SiteElement"][];
+      startDate?: string;
+      status?: "Propagating" | "Planting" | "Completed/Monitoring";
+      types?: (
+        | "Native Forest Restoration"
+        | "Agroforestry"
+        | "Silvopasture"
+        | "Sustainable Timber"
+      )[];
     };
     RecordTimeseriesValuesRequestPayload: {
       timeseries: components["schemas"]["TimeseriesValuesPayload"][];
@@ -1013,7 +1032,6 @@ export interface components {
       count: number;
       /** Starting point for search results. If present, a previous search will be continued from where it left off. This should be the value of the cursor that was returned in the response to a previous search. */
       cursor?: string;
-      filters?: components["schemas"]["SearchFilter"][];
     };
     SearchResponsePayload: {
       results: { [key: string]: unknown }[];
@@ -1050,6 +1068,7 @@ export interface components {
       status: components["schemas"]["SuccessOrError"];
     };
     SiteElement: {
+      description?: string;
       id: number;
       name: string;
       projectId: number;
@@ -1309,7 +1328,16 @@ export interface components {
       status: components["schemas"]["SuccessOrError"];
     };
     UpdateProjectRequestPayload: {
+      description?: string;
       name: string;
+      startDate?: string;
+      status?: "Propagating" | "Planting" | "Completed/Monitoring";
+      types?: (
+        | "Native Forest Restoration"
+        | "Agroforestry"
+        | "Silvopasture"
+        | "Sustainable Timber"
+      )[];
     };
     UpdateUserRequestPayload: {
       firstName: string;
@@ -2248,6 +2276,7 @@ export interface operations {
       };
     };
   };
+  /** Overwrites existing values; if a payload field is null, any existing value is removed from the project. */
   updateProject: {
     parameters: {
       path: {

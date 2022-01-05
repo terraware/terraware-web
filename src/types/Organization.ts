@@ -3,12 +3,17 @@ import { Facility } from 'src/api/types/facilities';
 export type Project = {
   id: number;
   name: string;
+  description?: string;
+  startDate?: string;
+  status?: string;
+  types?: string[];
   sites?: Site[];
 };
 
 export type Site = {
   id: number;
   name: string;
+  description?: string;
   projectId: number;
   facilities?: Facility[];
   latitude?: number;
