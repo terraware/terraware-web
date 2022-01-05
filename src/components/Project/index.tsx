@@ -63,6 +63,7 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
 
   const columns: TableColumnType[] = [
     { key: 'name', name: 'Name', type: 'string' },
+    { key: 'description', name: 'Description', type: 'string' },
     { key: 'longitude', name: 'Longitude', type: 'string' },
     { key: 'latitude', name: 'Latitude', type: 'string' },
   ];
@@ -92,15 +93,19 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
         </Grid>
         <Grid item xs={4}>
           <p>{strings.DESCRIPTION}</p>
+          <p className={classes.value}>{projectSelected?.description}</p>
         </Grid>
         <Grid item xs={4}>
           <p>{strings.START_DATE_OPT}</p>
+          <p className={classes.value}>{projectSelected?.startDate}</p>
         </Grid>
         <Grid item xs={4}>
           <p>{strings.STATUS_OPT}</p>
+          <p className={classes.value}>{projectSelected?.status}</p>
         </Grid>
         <Grid item xs={4}>
           <p>{strings.PROJECT_TYPE_OPT}</p>
+          <p className={classes.value}>{projectSelected?.types?.join(', ')}</p>
         </Grid>
         <Grid item xs={12} />
         <Grid item xs={12}>
