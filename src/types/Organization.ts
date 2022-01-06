@@ -18,6 +18,7 @@ export type Site = {
   facilities?: Facility[];
   latitude?: number;
   longitude?: number;
+  projectName?: string;
 };
 
 export type SeedBank = {

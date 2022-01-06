@@ -35,6 +35,7 @@ import { seedsDatabaseSelectedValues } from './state/selectedValuesPerPage';
 import ProjectsList from './components/Projects';
 import SitesList from './components/Sites';
 import Project from './components/Project';
+import SiteView from './components/Site';
 
 // @ts-ignore
 mapboxgl.workerClass =
@@ -194,6 +195,9 @@ function AppContent() {
               </Route>
               <Route exact path='/sites'>
                 <SitesList organization={selectedOrganization} />
+              </Route>
+              <Route path='/sites/:siteId'>
+                <SiteView organization={selectedOrganization} />
               </Route>
               <Route path='/help' component={Help}>
                 <Help />

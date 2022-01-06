@@ -39,3 +39,25 @@ export const getProjectsById = (organization: ServerOrganization): ProjectsById 
   });
   return projectById;
 };
+
+export type SitesById = Map<number, Site>;
+
+export const getSitesById = (organization: ServerOrganization): SitesById => {
+  const sitesById = new Map();
+  const sites = getAllSitesWithProjectName(organization);
+  sites.forEach((site) => {
+    sitesById.set(site.id, site);
+  });
+  return sitesById;
+};
+
+export const getAllSitesWithProjectName = (organization: ServerOrganization): Site[] => {
+  const projectsById = getProjectsById(organization);
+  const newSites = getAllSites(organization).map((site) => {
+    return {
+      ...site,
+      projectName: projectsById.get(site.id)?.name || '',
+    };
+  });
+  return newSites;
+};
