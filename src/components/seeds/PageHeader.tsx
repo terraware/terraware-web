@@ -6,8 +6,7 @@ import React from 'react';
 import Title from '../common/Title';
 import { useHistory } from 'react-router-dom';
 import useStateLocation, { getLocation } from '../../utils/useStateLocation';
-import { ServerOrganization } from 'src/types/Organization';
-import { SelectedValues } from 'src/api/types/facilities';
+import { SelectedOrgInfo, ServerOrganization } from 'src/types/Organization';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -55,8 +54,8 @@ interface Props {
   backUrl?: string;
   organization?: ServerOrganization;
   allowAll?: boolean;
-  selectedValues?: SelectedValues;
-  onChangeSelectedValues?: (selectedValues: SelectedValues) => void;
+  selectedOrgInfo?: SelectedOrgInfo;
+  onChangeSelectedOrgInfo?: (selectedValues: SelectedOrgInfo) => void;
   showFacility?: boolean;
 }
 
@@ -71,8 +70,8 @@ export default function PageHeader({
   parentPage,
   organization,
   allowAll,
-  selectedValues,
-  onChangeSelectedValues,
+  selectedOrgInfo,
+  onChangeSelectedOrgInfo,
   showFacility,
 }: Props): JSX.Element {
   const classes = useStyles();
@@ -82,15 +81,15 @@ export default function PageHeader({
   return (
     <Container maxWidth={false} className={classes.mainContainer}>
       <Grid container spacing={3} className={classes.container}>
-        {page && parentPage && !!selectedValues && !!onChangeSelectedValues && (
+        {page && parentPage && !!selectedOrgInfo && !!onChangeSelectedOrgInfo && (
           <Grid item xs={12}>
             <Title
               page={page}
               parentPage={parentPage}
               organization={organization}
               allowAll={allowAll}
-              selectedValues={selectedValues}
-              onChangeSelectedValues={onChangeSelectedValues}
+              selectedOrgInfo={selectedOrgInfo}
+              onChangeSelectedOrgInfo={onChangeSelectedOrgInfo}
               showFacility={showFacility}
             />
           </Grid>
