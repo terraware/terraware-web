@@ -16,7 +16,7 @@ import { ServerOrganization } from 'src/types/Organization';
 import Title from 'src/components/common/Title';
 import { getPlantLayers } from 'src/api/organization/organization';
 import { getSelectedSites } from 'src/utils/organization';
-import { plantListSelectedValues } from 'src/state/selectedValuesPerPage';
+import { plantListSelectedOrgInfo } from 'src/state/selectedOrgInfoPerPage';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -53,7 +53,7 @@ export default function PlantList(props: PlantListProps): JSX.Element {
   const [selectedPlant, setSelectedPlant] = useState<Plant>();
   const [selectedPlantPhoto, setSelectedPlantPhoto] = useState<string>();
   const [showFilters, setShowFilters] = useState(filters ? true : false);
-  const [selectedValues, setSelectedValues] = useRecoilState(plantListSelectedValues);
+  const [selectedOrgInfo, setSelectedOrgInfo] = useRecoilState(plantListSelectedOrgInfo);
   const setSnackbar = useSetRecoilState(snackbarAtom);
 
   const fetchPlantsAndSpecies = useCallback(() => {
@@ -67,7 +67,7 @@ export default function PlantList(props: PlantListProps): JSX.Element {
 
     const populatePlants = async () => {
       if (organization) {
-        const sites = getSelectedSites(selectedValues.selectedSite, selectedValues.selectedProject, organization);
+        const sites = getSelectedSites(selectedOrgInfo.selectedSite, selectedOrgInfo.selectedProject, organization);
         const layers = (await getPlantLayers(sites)).layers;
         const layerIds = layers.map((layer) => layer.id);
         const plantsResponse = await getPlantsForMultipleLayers(layerIds, filters);
@@ -80,7 +80,7 @@ export default function PlantList(props: PlantListProps): JSX.Element {
 
     populateSpecies();
     populatePlants();
-  }, [organization, filters, selectedValues]);
+  }, [organization, filters, selectedOrgInfo]);
 
   useEffect(() => {
     fetchPlantsAndSpecies();
@@ -147,8 +147,8 @@ export default function PlantList(props: PlantListProps): JSX.Element {
               parentPage={strings.PLANTS}
               organization={organization}
               allowAll={true}
-              onChangeSelectedValues={(newValues) => setSelectedValues(newValues)}
-              selectedValues={selectedValues}
+              onChangeSelectedOrgInfo={(newValues) => setSelectedOrgInfo(newValues)}
+              selectedOrgInfo={selectedOrgInfo}
             />
           </Grid>
           <Grid item xs={1} />

@@ -31,9 +31,9 @@ import ErrorBoundary from './ErrorBoundary';
 import strings from './strings';
 import theme from './theme';
 import { defaultPreset as DefaultColumns } from './components/seeds/database/columns';
-import { seedsDatabaseSelectedValues } from './state/selectedValuesPerPage';
 import ProjectsList from './components/Projects';
 import SitesList from './components/Sites';
+import { seedsDatabaseSelectedOrgInfo } from './state/selectedOrgInfoPerPage';
 
 // @ts-ignore
 mapboxgl.workerClass =
@@ -96,7 +96,7 @@ function AppContent() {
   const [facilityIdSelected, setFacilityIdSelected] = useState<number>();
   const [organizationError, setOrganizationError] = useState<boolean>(false);
   // get the selected values on database to pass it to new accession page
-  const selectedValuesDatabase = useRecoilValue(seedsDatabaseSelectedValues);
+  const selectedOrgInfoDatabase = useRecoilValue(seedsDatabaseSelectedOrgInfo);
 
   useEffect(() => {
     const populateOrganizations = async () => {
@@ -147,7 +147,7 @@ function AppContent() {
                 <CheckIn organization={selectedOrganization} />
               </Route>
               <Route exact path='/accessions/new'>
-                <NewAccession facilityId={selectedValuesDatabase.selectedFacility?.id} />
+                <NewAccession facilityId={selectedOrgInfoDatabase.selectedFacility?.id} />
               </Route>
               <Route exact path='/accessions'>
                 <Database
