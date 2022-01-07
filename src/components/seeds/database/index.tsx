@@ -32,7 +32,7 @@ import EditColumns from './EditColumns';
 import Filters from './Filters';
 import SearchCellRenderer from './TableCellRenderer';
 import { ServerOrganization } from 'src/types/Organization';
-import { seedsDatabaseSelectedValues } from 'src/state/selectedValuesPerPage';
+import { seedsDatabaseSelectedOrgInfo } from 'src/state/selectedOrgInfoPerPage';
 import { useRecoilState } from 'recoil';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -104,7 +104,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const [editColumnsModalOpen, setEditColumnsModalOpen] = useState(false);
   const [reportModalOpen, setReportModalOpen] = useState(false);
   const [pendingAccessions, setPendingAccessions] = useState<SearchResponseElement[] | null>();
-  const [selectedValues, setSelectedValues] = useRecoilState(seedsDatabaseSelectedValues);
+  const [selectedOrgInfo, setSelectedOrgInfo] = useRecoilState(seedsDatabaseSelectedOrgInfo);
   /*
    * fieldOptions is a list of records
    * keys: all single and multi select search fields.
@@ -125,12 +125,12 @@ export default function Database(props: DatabaseProps): JSX.Element {
 
   useEffect(() => {
     const populatePendingAccessions = async () => {
-      if (organization && selectedValues.selectedFacility?.id) {
-        setPendingAccessions(await getPendingAccessions(selectedValues, organization.id));
+      if (organization && selectedOrgInfo.selectedFacility?.id) {
+        setPendingAccessions(await getPendingAccessions(selectedOrgInfo, organization.id));
       }
     };
     populatePendingAccessions();
-  }, [selectedValues, organization]);
+  }, [selectedOrgInfo, organization]);
 
   useEffect(() => {
     const populateFieldOptions = async () => {
@@ -138,10 +138,10 @@ export default function Database(props: DatabaseProps): JSX.Element {
       setFieldOptions(await getAllFieldValues(singleAndMultiChoiceFields, 0));
     };
     populateFieldOptions();
-  }, [selectedValues, searchColumns]);
+  }, [selectedOrgInfo, searchColumns]);
 
   useEffect(() => {
-    let facilityId = selectedValues?.selectedFacility?.id;
+    let facilityId = selectedOrgInfo?.selectedFacility?.id;
     // If no faciliyId is selected, then select first facility of first project of first site, until endpoint receives siteId, projectId or OrgId
     if (
       !facilityId &&
@@ -158,7 +158,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
       setAvailableFieldOptions(await searchFieldValues(singleAndMultiChoiceFields, searchCriteria, facilityId || 0));
     };
     populateAvailableFieldOptions();
-  }, [selectedValues, searchColumns, searchCriteria, organization]);
+  }, [selectedOrgInfo, searchColumns, searchCriteria, organization]);
 
   useEffect(() => {
     if (organization) {
@@ -167,7 +167,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
           prefix: 'projects.sites.facilities.accessions',
           fields: searchColumns.includes('active') ? [...searchColumns, 'id'] : [...searchColumns, 'active', 'id'],
           sortOrder: [searchSortOrder],
-          search: convertToSearchNodePayload(searchCriteria, selectedValues, organization.id),
+          search: convertToSearchNodePayload(searchCriteria, selectedOrgInfo, organization.id),
           count: 1000,
         });
 
@@ -176,7 +176,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
 
       populateSearchResults();
     }
-  }, [selectedValues, searchCriteria, searchSortOrder, searchColumns, organization]);
+  }, [selectedOrgInfo, searchCriteria, searchSortOrder, searchColumns, organization]);
 
   const onSelect = (row: SearchResponseElement) => {
     if (row.id) {
@@ -284,9 +284,9 @@ export default function Database(props: DatabaseProps): JSX.Element {
           page={strings.ACCESSIONS}
           parentPage={strings.SEEDS}
           organization={organization}
-          selectedValues={selectedValues}
+          selectedOrgInfo={selectedOrgInfo}
           showFacility={true}
-          onChangeSelectedValues={(newValues) => setSelectedValues(newValues)}
+          onChangeSelectedOrgInfo={(newValues) => setSelectedOrgInfo(newValues)}
           rightComponent={
             <div>
               <Chip
@@ -305,7 +305,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
                 onClick={onDownloadReport}
                 className={classes.downloadReport}
               />
-              {selectedValues.selectedFacility && (
+              {selectedOrgInfo.selectedFacility && (
                 <Link component={RouterLink} to={getLocation('/accessions/new', location)}>
                   <Chip
                     id='newAccession'

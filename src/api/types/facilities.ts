@@ -10,9 +10,3 @@ export interface Facility {
   name: string;
   type: FacilitiesListResponse['facilities'][0]['type'];
 }
-
-export interface SelectedValues {
-  selectedFacility?: Facility;
-  selectedSite?: Site;
-  selectedProject?: Project;
-}

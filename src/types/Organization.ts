@@ -44,3 +44,9 @@ export type ServerOrganization = {
   role: 'Contributor' | 'Manager' | 'Admin' | 'Owner';
   projects?: Project[];
 };
+
+export interface SelectedOrgInfo {
+  selectedProject?: Project;
+  selectedSite?: Site;
+  selectedFacility?: Facility;
+}
