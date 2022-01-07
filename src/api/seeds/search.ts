@@ -1,7 +1,7 @@
 import axios from '..';
 import { components, paths } from 'src/api/types/generated-schema';
 import { COLUMNS_INDEXED, DatabaseColumn } from 'src/components/seeds/database/columns';
-import { SelectedValues } from '../types/facilities';
+import { SelectedOrgInfo } from 'src/types/Organization';
 
 export type SeedSearchCriteria = Record<string, SearchNodePayload>;
 export const DEFAULT_SEED_SEARCH_FILTERS = {};
@@ -23,15 +23,15 @@ export type FieldValuesPayload = { [key: string]: components['schemas']['FieldVa
  */
 export function convertToSearchNodePayload(
   criteria: SeedSearchCriteria,
-  selectedValues?: SelectedValues,
+  selectedOrgInfo?: SelectedOrgInfo,
   organizationId?: number
 ): SearchNodePayload | undefined {
   if (criteria === {}) {
     return undefined;
   }
   let newCriteria = criteria;
-  if (selectedValues && organizationId) {
-    newCriteria = addFacilitiesToSearch(selectedValues, organizationId, criteria);
+  if (selectedOrgInfo && organizationId) {
+    newCriteria = addFacilitiesToSearch(selectedOrgInfo, organizationId, criteria);
   }
   return {
     operation: 'and',
@@ -40,25 +40,25 @@ export function convertToSearchNodePayload(
 }
 
 export function addFacilitiesToSearch(
-  selectedValues: SelectedValues,
+  selectedOrgInfo: SelectedOrgInfo,
   organizationId: number,
   previousCriterias?: SeedSearchCriteria
 ) {
   const newCriteria = previousCriterias ? Object.values(previousCriterias) : [];
-  if (selectedValues.selectedFacility) {
-    newCriteria.unshift({ field: 'facility_id', values: [selectedValues.selectedFacility.id], operation: 'field' });
+  if (selectedOrgInfo.selectedFacility) {
+    newCriteria.unshift({ field: 'facility_id', values: [selectedOrgInfo.selectedFacility.id], operation: 'field' });
   } else {
-    if (selectedValues.selectedSite) {
+    if (selectedOrgInfo.selectedSite) {
       newCriteria.unshift({
         field: 'facility_site_id',
-        values: [selectedValues.selectedSite.id],
+        values: [selectedOrgInfo.selectedSite.id],
         operation: 'field',
       });
     } else {
-      if (selectedValues.selectedProject) {
+      if (selectedOrgInfo.selectedProject) {
         newCriteria.unshift({
           field: 'facility_site_project_id',
-          values: [selectedValues.selectedProject.id],
+          values: [selectedOrgInfo.selectedProject.id],
           operation: 'field',
         });
       } else {
@@ -140,7 +140,7 @@ export async function getAccessionsByNumber(
 }
 
 export async function getPendingAccessions(
-  selectedValues: SelectedValues,
+  selectedValues: SelectedOrgInfo,
   organizationId: number
 ): Promise<SearchResponseElement[] | null> {
   const searchParams: SearchRequestPayload = {

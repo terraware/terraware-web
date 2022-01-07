@@ -1,8 +1,7 @@
 import { createStyles, makeStyles } from '@material-ui/core';
 import React, { useEffect } from 'react';
-import { SelectedValues } from 'src/api/types/facilities';
 import strings from 'src/strings';
-import { ServerOrganization } from 'src/types/Organization';
+import { SelectedOrgInfo, ServerOrganization } from 'src/types/Organization';
 import Select from './Select/Select';
 
 const useStyles = makeStyles((theme) =>
@@ -39,8 +38,8 @@ interface TitleProps {
   parentPage: string;
   organization?: ServerOrganization;
   allowAll?: boolean;
-  selectedValues: SelectedValues;
-  onChangeSelectedValues: (selectedValues: SelectedValues) => void;
+  selectedOrgInfo: SelectedOrgInfo;
+  onChangeSelectedOrgInfo: (selectedValues: SelectedOrgInfo) => void;
   showFacility?: boolean;
 }
 export default function Title({
@@ -48,31 +47,31 @@ export default function Title({
   parentPage,
   organization,
   allowAll,
-  selectedValues,
+  selectedOrgInfo,
   showFacility,
-  onChangeSelectedValues,
+  onChangeSelectedOrgInfo,
 }: TitleProps): JSX.Element {
   const classes = useStyles();
 
   useEffect(() => {
     // if no project selected and all option is not available, select first project and site
     if (!allowAll) {
-      if (!selectedValues.selectedProject && organization?.projects && organization.projects[0].sites) {
+      if (!selectedOrgInfo.selectedProject && organization?.projects && organization.projects[0].sites) {
         if (organization?.projects[0].sites[0].facilities) {
-          onChangeSelectedValues({
+          onChangeSelectedOrgInfo({
             selectedProject: organization?.projects[0],
             selectedSite: organization?.projects[0].sites[0],
             selectedFacility: organization?.projects[0].sites[0].facilities[0],
           });
         } else {
-          onChangeSelectedValues({
+          onChangeSelectedOrgInfo({
             selectedProject: organization?.projects[0],
             selectedSite: organization?.projects[0].sites[0],
           });
         }
       }
     }
-  }, [organization, selectedValues, onChangeSelectedValues, allowAll]);
+  }, [organization, selectedOrgInfo, onChangeSelectedOrgInfo, allowAll]);
 
   const addAllOption = (originalOptions?: string[]) => {
     let newOptions: string[] = [];
@@ -94,9 +93,9 @@ export default function Title({
       <label className={classes.titleLabel}>{strings.PROJECT}</label>
       <Select
         options={addAllOption(organization?.projects?.map((org) => org.name))}
-        selectedValue={selectedValues?.selectedProject?.name ?? 'All'}
+        selectedValue={selectedOrgInfo?.selectedProject?.name ?? 'All'}
         onChange={(newValue) => {
-          onChangeSelectedValues({
+          onChangeSelectedOrgInfo({
             selectedProject: organization?.projects?.find((proj) => proj.name === newValue),
             selectedSite: undefined,
             selectedFacility: undefined,
@@ -105,13 +104,13 @@ export default function Title({
       />
       <label className={classes.titleLabel}>{strings.SITE}</label>
       <Select
-        disabled={!selectedValues.selectedProject}
-        selectedValue={selectedValues?.selectedSite?.name ?? 'All'}
-        options={addAllOption(selectedValues?.selectedProject?.sites?.map((site) => site.name))}
+        disabled={!selectedOrgInfo.selectedProject}
+        selectedValue={selectedOrgInfo?.selectedSite?.name ?? 'All'}
+        options={addAllOption(selectedOrgInfo?.selectedProject?.sites?.map((site) => site.name))}
         onChange={(newValue) => {
-          onChangeSelectedValues({
-            ...selectedValues,
-            selectedSite: selectedValues.selectedProject?.sites?.find((site) => site.name === newValue),
+          onChangeSelectedOrgInfo({
+            ...selectedOrgInfo,
+            selectedSite: selectedOrgInfo.selectedProject?.sites?.find((site) => site.name === newValue),
             selectedFacility: undefined,
           });
         }}
@@ -120,13 +119,13 @@ export default function Title({
         <>
           <label className={classes.titleLabel}>{strings.FACILITY}</label>
           <Select
-            disabled={!selectedValues.selectedSite}
-            selectedValue={selectedValues?.selectedFacility?.name ?? 'All'}
-            options={addAllOption(selectedValues.selectedSite?.facilities?.map((facility) => facility.name))}
+            disabled={!selectedOrgInfo.selectedSite}
+            selectedValue={selectedOrgInfo?.selectedFacility?.name ?? 'All'}
+            options={addAllOption(selectedOrgInfo.selectedSite?.facilities?.map((facility) => facility.name))}
             onChange={(newValue) => {
-              onChangeSelectedValues({
-                ...selectedValues,
-                selectedFacility: selectedValues.selectedSite?.facilities?.find(
+              onChangeSelectedOrgInfo({
+                ...selectedOrgInfo,
+                selectedFacility: selectedOrgInfo.selectedSite?.facilities?.find(
                   (facility) => facility.name === newValue
                 ),
               });
