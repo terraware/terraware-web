@@ -8,7 +8,7 @@ import { useRecoilState } from 'recoil';
 import { SeedSearchCriteria } from 'src/api/seeds/search';
 import { getSummary, GetSummaryResponse } from 'src/api/seeds/summary';
 import { API_PULL_INTERVAL } from 'src/constants';
-import { seedsSummarySelectedValues } from 'src/state/selectedValuesPerPage';
+import { seedsSummarySelectedOrgInfo } from 'src/state/selectedOrgInfoPerPage';
 import strings from 'src/strings';
 import { Notifications } from 'src/types/Notifications';
 import { ServerOrganization } from 'src/types/Organization';
@@ -54,18 +54,18 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
   const [, setPopulateSummaryInterval] = useState<ReturnType<typeof setInterval>>();
   const [summary, setSummary] = useState<GetSummaryResponse>();
   const errorOccurred = summary ? summary.errorOccurred : false;
-  const [selectedValues, setSelectedValues] = useRecoilState(seedsSummarySelectedValues);
+  const [selectedOrgInfo, setSelectedOrgInfo] = useRecoilState(seedsSummarySelectedOrgInfo);
 
   useEffect(() => {
     const populateSummary = async () => {
-      if (selectedValues.selectedFacility?.id) {
-        setSummary(await getSummary(selectedValues.selectedFacility?.id));
+      if (selectedOrgInfo.selectedFacility?.id) {
+        setSummary(await getSummary(selectedOrgInfo.selectedFacility?.id));
       }
     };
 
     // Update summary information
-    if (selectedValues.selectedFacility?.id) {
-      setFacilityIdSelected(selectedValues.selectedFacility?.id);
+    if (selectedOrgInfo.selectedFacility?.id) {
+      setFacilityIdSelected(selectedOrgInfo.selectedFacility?.id);
       populateSummary();
     } else {
       setSummary(undefined);
@@ -78,7 +78,7 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
           // Clear an existing interval when the facilityId changes
           clearInterval(currInterval);
         }
-        return selectedValues.selectedFacility?.id ? setInterval(populateSummary, API_PULL_INTERVAL) : undefined;
+        return selectedOrgInfo.selectedFacility?.id ? setInterval(populateSummary, API_PULL_INTERVAL) : undefined;
       });
     }
 
@@ -91,7 +91,7 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
         return undefined;
       });
     };
-  }, [selectedValues, setFacilityIdSelected]);
+  }, [selectedOrgInfo, setFacilityIdSelected]);
 
   return (
     <main>
@@ -101,8 +101,8 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
         page={strings.DASHBOARD}
         parentPage={strings.SEEDS}
         organization={organization}
-        selectedValues={selectedValues}
-        onChangeSelectedValues={(newValues) => setSelectedValues(newValues)}
+        selectedOrgInfo={selectedOrgInfo}
+        onChangeSelectedOrgInfo={(newValues) => setSelectedOrgInfo(newValues)}
         showFacility={true}
       />
       <Container maxWidth={false} className={classes.mainContainer}>
