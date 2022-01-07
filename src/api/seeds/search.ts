@@ -31,7 +31,7 @@ export function convertToSearchNodePayload(
   }
   let newCriteria = criteria;
   if (selectedOrgInfo && organizationId) {
-    newCriteria = addFacilitiesToSearch(selectedOrgInfo, organizationId, criteria);
+    newCriteria = addOrgInfoToSearch(selectedOrgInfo, organizationId, criteria);
   }
   return {
     operation: 'and',
@@ -39,12 +39,12 @@ export function convertToSearchNodePayload(
   };
 }
 
-export function addFacilitiesToSearch(
+export function addOrgInfoToSearch(
   selectedOrgInfo: SelectedOrgInfo,
   organizationId: number,
-  previousCriterias?: SeedSearchCriteria
+  previousCriteria?: SeedSearchCriteria
 ) {
-  const newCriteria = previousCriterias ? Object.values(previousCriterias) : [];
+  const newCriteria = previousCriteria ? Object.values(previousCriteria) : [];
   if (selectedOrgInfo.selectedFacility) {
     newCriteria.unshift({ field: 'facility_id', values: [selectedOrgInfo.selectedFacility.id], operation: 'field' });
   } else {
@@ -95,10 +95,11 @@ export async function search(params: SearchRequestPayload): Promise<SearchRespon
 const SEARCH_ACCESSIONS_ENDPOINT = '/api/v1/seedbank/search';
 type SearchAccessionsRequestPayload =
   paths[typeof SEARCH_ACCESSIONS_ENDPOINT]['post']['requestBody']['content']['application/json'];
-export type SearchAccessionsResponsePayload =
+type SearchAccessionsResponsePayload =
   paths[typeof SEARCH_ACCESSIONS_ENDPOINT]['post']['responses'][200]['content']['application/json'];
-export type SearchAccessionsResponseElement = SearchResponsePayload['results'][0];
-export async function searchAccession(
+type SearchAccessionsResponseElement = SearchResponsePayload['results'][0];
+
+async function searchAccession(
   params: SearchAccessionsRequestPayload
 ): Promise<SearchAccessionsResponseElement[] | null> {
   try {
