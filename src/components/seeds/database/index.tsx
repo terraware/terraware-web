@@ -33,7 +33,7 @@ import EditColumns from './EditColumns';
 import Filters from './Filters';
 import SearchCellRenderer from './TableCellRenderer';
 import { ServerOrganization } from 'src/types/Organization';
-import { seedsDatabaseSelectedValues } from 'src/state/selectedValuesPerPage';
+import { seedsDatabaseSelectedOrgInfo } from 'src/state/selectedOrgInfoPerPage';
 import { useRecoilState } from 'recoil';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -110,7 +110,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const [editColumnsModalOpen, setEditColumnsModalOpen] = useState(false);
   const [reportModalOpen, setReportModalOpen] = useState(false);
   const [pendingAccessions, setPendingAccessions] = useState<SearchResponseElement[] | null>();
-  const [selectedValues, setSelectedValues] = useRecoilState(seedsDatabaseSelectedValues);
+  const [selectedOrgInfo, setSelectedOrgInfo] = useRecoilState(seedsDatabaseSelectedOrgInfo);
   /*
    * fieldOptions is a list of records
    * keys: all single and multi select search fields.
@@ -128,41 +128,41 @@ export default function Database(props: DatabaseProps): JSX.Element {
 
   useEffect(() => {
     const populatePendingAccessions = async () => {
-      if (selectedValues.selectedFacility?.id) {
-        setFacilityIdSelected(selectedValues.selectedFacility.id);
-        setPendingAccessions(await getPendingAccessions(selectedValues.selectedFacility.id));
+      if (selectedOrgInfo.selectedFacility?.id) {
+        setFacilityIdSelected(selectedOrgInfo.selectedFacility.id);
+        setPendingAccessions(await getPendingAccessions(selectedOrgInfo.selectedFacility.id));
       }
     };
     populatePendingAccessions();
-  }, [selectedValues, setFacilityIdSelected]);
+  }, [selectedOrgInfo, setFacilityIdSelected]);
 
   useEffect(() => {
-    if (selectedValues.selectedFacility?.id) {
-      const facilityId = selectedValues.selectedFacility.id;
+    if (selectedOrgInfo.selectedFacility?.id) {
+      const facilityId = selectedOrgInfo.selectedFacility.id;
       const populateFieldOptions = async () => {
         const singleAndMultiChoiceFields = filterSelectFields(searchColumns);
         setFieldOptions(await getAllFieldValues(singleAndMultiChoiceFields, facilityId));
       };
       populateFieldOptions();
     }
-  }, [selectedValues, searchColumns]);
+  }, [selectedOrgInfo, searchColumns]);
 
   useEffect(() => {
-    if (selectedValues.selectedFacility?.id) {
-      const facilityId = selectedValues.selectedFacility.id;
+    if (selectedOrgInfo.selectedFacility?.id) {
+      const facilityId = selectedOrgInfo.selectedFacility.id;
       const populateAvailableFieldOptions = async () => {
         const singleAndMultiChoiceFields = filterSelectFields(searchColumns);
         setAvailableFieldOptions(await searchFieldValues(singleAndMultiChoiceFields, searchCriteria, facilityId));
       };
       populateAvailableFieldOptions();
     }
-  }, [selectedValues, searchColumns, searchCriteria]);
+  }, [selectedOrgInfo, searchColumns, searchCriteria]);
 
   useEffect(() => {
-    if (selectedValues.selectedFacility?.id) {
+    if (selectedOrgInfo.selectedFacility?.id) {
       const populateSearchResults = async () => {
         const apiResponse = await search({
-          facilityId: selectedValues.selectedFacility?.id as number,
+          facilityId: selectedOrgInfo.selectedFacility?.id as number,
           fields: searchColumns.includes('active') ? searchColumns : [...searchColumns, 'active'],
           sortOrder: [searchSortOrder],
           search: convertToSearchNodePayload(searchCriteria),
@@ -174,7 +174,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
 
       populateSearchResults();
     }
-  }, [selectedValues, searchCriteria, searchSortOrder, searchColumns]);
+  }, [selectedOrgInfo, searchCriteria, searchSortOrder, searchColumns]);
 
   const onSelect = (row: SearchResponseElement) => {
     if (row.id) {
@@ -265,12 +265,12 @@ export default function Database(props: DatabaseProps): JSX.Element {
     <MuiPickersUtilsProvider utils={MomentUtils}>
       <main>
         <EditColumns open={editColumnsModalOpen} value={displayColumnNames} onClose={onCloseEditColumnsModal} />
-        {selectedValues.selectedFacility?.id && (
+        {selectedOrgInfo.selectedFacility?.id && (
           <DownloadReportModal
             searchCriteria={searchCriteria}
             searchSortOrder={searchSortOrder}
             searchColumns={searchColumns}
-            facilityId={selectedValues.selectedFacility.id}
+            facilityId={selectedOrgInfo.selectedFacility.id}
             open={reportModalOpen}
             onClose={onCloseDownloadReportModal}
           />
@@ -281,9 +281,9 @@ export default function Database(props: DatabaseProps): JSX.Element {
           page={strings.ACCESSIONS}
           parentPage={strings.SEEDS}
           organization={organization}
-          selectedValues={selectedValues}
+          selectedOrgInfo={selectedOrgInfo}
           showFacility={true}
-          onChangeSelectedValues={(newValues) => setSelectedValues(newValues)}
+          onChangeSelectedOrgInfo={(newValues) => setSelectedOrgInfo(newValues)}
           rightComponent={
             <div>
               <Chip

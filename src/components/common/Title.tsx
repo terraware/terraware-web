@@ -1,8 +1,7 @@
 import { createStyles, makeStyles } from '@material-ui/core';
 import React, { useEffect } from 'react';
-import { SelectedValues } from 'src/api/types/facilities';
 import strings from 'src/strings';
-import { ServerOrganization } from 'src/types/Organization';
+import { SelectedOrgInfo, ServerOrganization } from 'src/types/Organization';
 import Select from './Select/Select';
 
 const useStyles = makeStyles((theme) =>
@@ -39,8 +38,8 @@ interface TitleProps {
   parentPage: string;
   organization?: ServerOrganization;
   allowAll?: boolean;
-  selectedValues: SelectedValues;
-  onChangeSelectedValues: (selectedValues: SelectedValues) => void;
+  selectedOrgInfo: SelectedOrgInfo;
+  onChangeSelectedOrgInfo: (selectedOrgInfo: SelectedOrgInfo) => void;
   showFacility?: boolean;
 }
 export default function Title({
@@ -48,29 +47,29 @@ export default function Title({
   parentPage,
   organization,
   allowAll,
-  selectedValues,
+  selectedOrgInfo,
   showFacility,
-  onChangeSelectedValues,
+  onChangeSelectedOrgInfo,
 }: TitleProps): JSX.Element {
   const classes = useStyles();
 
   useEffect(() => {
     // if no project selected, select first project and site
-    if (!selectedValues.selectedProject && organization?.projects && organization.projects[0].sites) {
+    if (!selectedOrgInfo.selectedProject && organization?.projects && organization.projects[0].sites) {
       if (organization?.projects[0].sites[0].facilities) {
-        onChangeSelectedValues({
+        onChangeSelectedOrgInfo({
           selectedProject: organization?.projects[0],
           selectedSite: organization?.projects[0].sites[0],
           selectedFacility: organization?.projects[0].sites[0].facilities[0],
         });
       } else {
-        onChangeSelectedValues({
+        onChangeSelectedOrgInfo({
           selectedProject: organization?.projects[0],
           selectedSite: organization?.projects[0].sites[0],
         });
       }
     }
-  }, [organization, selectedValues, onChangeSelectedValues]);
+  }, [organization, selectedOrgInfo, onChangeSelectedOrgInfo]);
 
   const addAllOption = (originalOptions?: string[]) => {
     let newOptions: string[] = [];
@@ -92,22 +91,22 @@ export default function Title({
       <label className={classes.titleLabel}>{strings.PROJECT}</label>
       <Select
         options={addAllOption(organization?.projects?.map((org) => org.name))}
-        selectedValue={selectedValues?.selectedProject?.name}
+        selectedValue={selectedOrgInfo?.selectedProject?.name}
         onChange={(newValue) => {
-          onChangeSelectedValues({
-            ...selectedValues,
+          onChangeSelectedOrgInfo({
+            ...selectedOrgInfo,
             selectedProject: organization?.projects?.find((proj) => proj.name === newValue),
           });
         }}
       />
       <label className={classes.titleLabel}>{strings.SITE}</label>
       <Select
-        selectedValue={selectedValues?.selectedSite?.name}
-        options={addAllOption(selectedValues?.selectedProject?.sites?.map((site) => site.name))}
+        selectedValue={selectedOrgInfo?.selectedSite?.name}
+        options={addAllOption(selectedOrgInfo?.selectedProject?.sites?.map((site) => site.name))}
         onChange={(newValue) => {
-          onChangeSelectedValues({
-            ...selectedValues,
-            selectedSite: selectedValues.selectedProject?.sites?.find((site) => site.name === newValue),
+          onChangeSelectedOrgInfo({
+            ...selectedOrgInfo,
+            selectedSite: selectedOrgInfo.selectedProject?.sites?.find((site) => site.name === newValue),
           });
         }}
       />
@@ -115,12 +114,12 @@ export default function Title({
         <>
           <label className={classes.titleLabel}>{strings.FACILITY}</label>
           <Select
-            selectedValue={selectedValues?.selectedFacility?.name}
-            options={addAllOption(selectedValues.selectedSite?.facilities?.map((facility) => facility.name))}
+            selectedValue={selectedOrgInfo?.selectedFacility?.name}
+            options={addAllOption(selectedOrgInfo.selectedSite?.facilities?.map((facility) => facility.name))}
             onChange={(newValue) => {
-              onChangeSelectedValues({
-                ...selectedValues,
-                selectedFacility: selectedValues.selectedSite?.facilities?.find(
+              onChangeSelectedOrgInfo({
+                ...selectedOrgInfo,
+                selectedFacility: selectedOrgInfo.selectedSite?.facilities?.find(
                   (facility) => facility.name === newValue
                 ),
               });

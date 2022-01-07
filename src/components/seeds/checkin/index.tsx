@@ -21,7 +21,7 @@ import useStateLocation from 'src/utils/useStateLocation';
 import PageHeader from '../PageHeader';
 import { ServerOrganization } from 'src/types/Organization';
 import { useRecoilState } from 'recoil';
-import { checkInSelectedValues } from 'src/state/selectedValuesPerPage';
+import { checkInSelectedOrgInfo } from 'src/state/selectedOrgInfoPerPage';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -69,16 +69,16 @@ export default function CheckIn(props: CheckInProps): JSX.Element {
   const history = useHistory();
   const location = useStateLocation();
   const [pendingAccessions, setPendingAccessions] = useState<SearchResponseElement[] | null>();
-  const [selectedValues, setSelectedValues] = useRecoilState(checkInSelectedValues);
+  const [selectedOrgInfo, setSelectedOrgInfo] = useRecoilState(checkInSelectedOrgInfo);
 
   useEffect(() => {
     const populatePendingAccessions = async () => {
-      if (selectedValues.selectedFacility?.id) {
-        setPendingAccessions(await getPendingAccessions(selectedValues.selectedFacility?.id));
+      if (selectedOrgInfo.selectedFacility?.id) {
+        setPendingAccessions(await getPendingAccessions(selectedOrgInfo.selectedFacility?.id));
       }
     };
     populatePendingAccessions();
-  }, [selectedValues]);
+  }, [selectedOrgInfo]);
 
   const transformPendingAccessions = () => {
     const accessionsById: Record<number, SearchResponseElement> = {};
@@ -122,8 +122,8 @@ export default function CheckIn(props: CheckInProps): JSX.Element {
           back={true}
           backUrl={'/accessions'}
           organization={organization}
-          selectedValues={selectedValues}
-          onChangeSelectedValues={(newValues) => setSelectedValues(newValues)}
+          selectedOrgInfo={selectedOrgInfo}
+          onChangeSelectedOrgInfo={(newValues) => setSelectedOrgInfo(newValues)}
         />
         <Container maxWidth={false} className={classes.mainContainer}>
           <Grid container spacing={3}>
