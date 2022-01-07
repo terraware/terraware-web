@@ -28,7 +28,7 @@ describe('Database', () => {
     });
 
     it('should be able to select the columns', () => {
-      cy.intercept('POST', '/api/v1/seedbank/search').as('search');
+      cy.intercept('POST', '/api/v1/search').as('search');
       cy.intercept('POST', '/api/v1/seedbank/values').as('values');
 
       cy.get('#edit-columns').click();
@@ -52,13 +52,13 @@ describe('Database', () => {
 
     context('Presets', () => {
       it('General Inventory', () => {
-        cy.intercept('POST', '/api/v1/seedbank/search').as('search');
+        cy.intercept('POST', '/api/v1/search').as('search');
         cy.intercept('POST', '/api/v1/seedbank/values').as('values');
         cy.visit('/accessions');
         cy.wait('@search');
         cy.wait('@values');
 
-        cy.intercept('POST', '/api/v1/seedbank/search').as('search2');
+        cy.intercept('POST', '/api/v1/search').as('search2');
         cy.intercept('POST', '/api/v1/seedbank/values').as('values2');
 
         cy.get('#edit-columns').click();
@@ -89,7 +89,7 @@ describe('Database', () => {
       });
 
       it('Default', () => {
-        cy.intercept('POST', '/api/v1/seedbank/search').as('search');
+        cy.intercept('POST', '/api/v1/search').as('search');
         cy.intercept('POST', '/api/v1/seedbank/values').as('values');
 
         cy.get('#edit-columns').click();
@@ -112,7 +112,7 @@ describe('Database', () => {
       });
 
       it('Seed Storage Status', () => {
-        cy.intercept('POST', '/api/v1/seedbank/search').as('search');
+        cy.intercept('POST', '/api/v1/search').as('search');
         cy.intercept('POST', '/api/v1/seedbank/values').as('values');
 
         cy.get('#edit-columns').click();
@@ -140,7 +140,7 @@ describe('Database', () => {
       });
 
       it('Viability Summary', () => {
-        cy.intercept('POST', '/api/v1/seedbank/search').as('search');
+        cy.intercept('POST', '/api/v1/search').as('search');
         cy.intercept('POST', '/api/v1/seedbank/values').as('values');
 
         cy.get('#edit-columns').click();
@@ -172,7 +172,7 @@ describe('Database', () => {
       });
 
       it('Germination Testing To Do', () => {
-        cy.intercept('POST', '/api/v1/seedbank/search').as('search');
+        cy.intercept('POST', '/api/v1/search').as('search');
         cy.intercept('POST', '/api/v1/seedbank/values').as('values');
 
         cy.get('#edit-columns').click();
@@ -198,7 +198,7 @@ describe('Database', () => {
       });
 
       it('Custom columns', () => {
-        cy.intercept('POST', '/api/v1/seedbank/search').as('search');
+        cy.intercept('POST', '/api/v1/search').as('search');
         cy.intercept('POST', '/api/v1/seedbank/values').as('values');
 
         cy.get('#edit-columns').click();
@@ -231,13 +231,13 @@ describe('Database', () => {
 
   context('Filters', () => {
     it('Should filter by Active Status', () => {
-      cy.intercept('POST', '/api/v1/seedbank/search').as('search');
+      cy.intercept('POST', '/api/v1/search').as('search');
       cy.intercept('POST', '/api/v1/seedbank/values').as('values');
       cy.visit('/accessions');
       cy.wait('@search');
       cy.wait('@values');
 
-      cy.intercept('POST', '/api/v1/seedbank/search').as('search-c');
+      cy.intercept('POST', '/api/v1/search').as('search-c');
       cy.intercept('POST', '/api/v1/seedbank/values').as('values-c');
       cy.get('#edit-columns').click();
       cy.get('#active').click();
@@ -246,7 +246,7 @@ describe('Database', () => {
       cy.wait('@values-c');
       cy.get('#editColumnsDialog').should('not.exist');
 
-      cy.intercept('POST', '/api/v1/seedbank/search').as('search2');
+      cy.intercept('POST', '/api/v1/search').as('search2');
       cy.intercept('POST', '/api/v1/seedbank/values').as('values2');
 
       cy.get('#filter-active').click();
@@ -261,7 +261,7 @@ describe('Database', () => {
     });
 
     it('Should clear Status filter', () => {
-      cy.intercept('POST', '/api/v1/seedbank/search').as('search');
+      cy.intercept('POST', '/api/v1/search').as('search');
       cy.intercept('POST', '/api/v1/seedbank/values').as('values');
 
       cy.get('#filter-active').click();
@@ -276,7 +276,7 @@ describe('Database', () => {
     });
 
     it('Should filter by Processing state', () => {
-      cy.intercept('POST', '/api/v1/seedbank/search').as('search');
+      cy.intercept('POST', '/api/v1/search').as('search');
       cy.intercept('POST', '/api/v1/seedbank/values').as('values');
       cy.get('#filter-state').click();
       cy.get('#filter-list-state').should('be.visible');
@@ -290,7 +290,7 @@ describe('Database', () => {
     });
 
     it('Should clear state filter', () => {
-      cy.intercept('POST', '/api/v1/seedbank/search').as('search');
+      cy.intercept('POST', '/api/v1/search').as('search');
       cy.intercept('POST', '/api/v1/seedbank/values').as('values');
 
       cy.get('#filter-state').click();
@@ -305,7 +305,7 @@ describe('Database', () => {
     });
 
     it('Should search by species', () => {
-      cy.intercept('POST', '/api/v1/seedbank/search').as('search');
+      cy.intercept('POST', '/api/v1/search').as('search');
       cy.intercept('POST', '/api/v1/seedbank/values').as('values');
 
       cy.get('#filter-speciesName').click();
@@ -320,7 +320,7 @@ describe('Database', () => {
     });
 
     it('Should clear state filter', () => {
-      cy.intercept('POST', '/api/v1/seedbank/search').as('search');
+      cy.intercept('POST', '/api/v1/search').as('search');
       cy.intercept('POST', '/api/v1/seedbank/values').as('values');
 
       cy.get('#filter-speciesName').click();
@@ -335,7 +335,7 @@ describe('Database', () => {
     });
 
     it('Should search by Received on', () => {
-      cy.intercept('POST', '/api/v1/seedbank/search').as('search');
+      cy.intercept('POST', '/api/v1/search').as('search');
       cy.intercept('POST', '/api/v1/seedbank/values').as('values');
 
       cy.get('#filter-receivedDate').click();
@@ -351,7 +351,7 @@ describe('Database', () => {
     });
 
     it('Should clear all filters', () => {
-      cy.intercept('POST', '/api/v1/seedbank/search').as('search');
+      cy.intercept('POST', '/api/v1/search').as('search');
       cy.intercept('POST', '/api/v1/seedbank/values').as('values');
 
       cy.get('#clearAll').click({ force: true });
@@ -373,7 +373,7 @@ describe('Database', () => {
     });
 
     it('Should search by SeedsRemaining - SeedCount', () => {
-      cy.intercept('POST', '/api/v1/seedbank/search').as('search-c');
+      cy.intercept('POST', '/api/v1/search').as('search-c');
       cy.intercept('POST', '/api/v1/seedbank/values').as('values-c');
       cy.get('#edit-columns').click();
       cy.get('#remainingQuantity').click();
@@ -383,7 +383,7 @@ describe('Database', () => {
       cy.wait('@values-c');
       cy.get('#editColumnsDialog').should('not.exist');
 
-      cy.intercept('POST', '/api/v1/seedbank/search').as('search');
+      cy.intercept('POST', '/api/v1/search').as('search');
       cy.intercept('POST', '/api/v1/seedbank/values').as('values');
 
       cy.get('#filter-remainingQuantity').click();
@@ -405,7 +405,7 @@ describe('Database', () => {
     });
 
     it('Should search by SeedsRemaining - SeedCount and empty fields', () => {
-      cy.intercept('POST', '/api/v1/seedbank/search').as('search');
+      cy.intercept('POST', '/api/v1/search').as('search');
       cy.intercept('POST', '/api/v1/seedbank/values').as('values');
 
       cy.get('#filter-remainingQuantity').click();
@@ -426,7 +426,7 @@ describe('Database', () => {
     });
 
     it('Should search by SeedsRemaining - SeedWeight', () => {
-      cy.intercept('POST', '/api/v1/seedbank/search').as('search');
+      cy.intercept('POST', '/api/v1/search').as('search');
       cy.intercept('POST', '/api/v1/seedbank/values').as('values');
 
       cy.get('#filter-remainingQuantity').click();
@@ -455,7 +455,7 @@ describe('Database', () => {
     });
 
     it('Should clear all filters', () => {
-      cy.intercept('POST', '/api/v1/seedbank/search').as('search');
+      cy.intercept('POST', '/api/v1/search').as('search');
       cy.intercept('POST', '/api/v1/seedbank/values').as('values');
 
       cy.get('#clearAll').click({ force: true });
@@ -467,7 +467,7 @@ describe('Database', () => {
     });
 
     it('Should search by QuantityFfSeeds and SeedsRemaining - SeedCount', () => {
-      cy.intercept('POST', '/api/v1/seedbank/search').as('search');
+      cy.intercept('POST', '/api/v1/search').as('search');
       cy.intercept('POST', '/api/v1/seedbank/values').as('values');
 
       cy.get('#filter-remainingQuantity').click();
@@ -487,7 +487,7 @@ describe('Database', () => {
       cy.get('#row2-remainingQuantity').should('contain', '825 Seeds');
       cy.get('#filter-remainingQuantity').should('contain', '(1)');
 
-      cy.intercept('POST', '/api/v1/seedbank/search').as('search');
+      cy.intercept('POST', '/api/v1/search').as('search');
       cy.intercept('POST', '/api/v1/seedbank/values').as('values');
 
       cy.get('#filter-totalQuantity').click();
@@ -527,7 +527,7 @@ describe('Database', () => {
     });
 
     it('Should clear all filters', () => {
-      cy.intercept('POST', '/api/v1/seedbank/search').as('search');
+      cy.intercept('POST', '/api/v1/search').as('search');
       cy.intercept('POST', '/api/v1/seedbank/values').as('values');
 
       cy.get('#clearAll').click({ force: true });
@@ -539,7 +539,7 @@ describe('Database', () => {
     });
 
     it('Should combine filters', () => {
-      cy.intercept('POST', '/api/v1/seedbank/search').as('search');
+      cy.intercept('POST', '/api/v1/search').as('search');
       cy.intercept('POST', '/api/v1/seedbank/values').as('values');
 
       // checking state list
@@ -567,7 +567,7 @@ describe('Database', () => {
       cy.get('#filter-list-state').type('{esc}');
       cy.get('#filter-list-state').should('not.exist');
 
-      cy.intercept('POST', '/api/v1/seedbank/search').as('search2');
+      cy.intercept('POST', '/api/v1/search').as('search2');
       cy.intercept('POST', '/api/v1/seedbank/values').as('values2');
 
       cy.get('#filter-siteLocation').click();
@@ -591,13 +591,13 @@ describe('Database', () => {
 
   context('Sort', () => {
     it('Should be able to sort by species', () => {
-      cy.intercept('POST', '/api/v1/seedbank/search').as('search');
+      cy.intercept('POST', '/api/v1/search').as('search');
       cy.intercept('POST', '/api/v1/seedbank/values').as('values');
       cy.visit('/accessions');
       cy.wait('@search');
       cy.wait('@values');
 
-      cy.intercept('POST', '/api/v1/seedbank/search').as('search-c');
+      cy.intercept('POST', '/api/v1/search').as('search-c');
       cy.intercept('POST', '/api/v1/seedbank/values').as('values-c');
       cy.get('#edit-columns').click();
       cy.get('#active').click();
@@ -606,7 +606,7 @@ describe('Database', () => {
       cy.wait('@values-c');
       cy.get('#editColumnsDialog').should('not.exist');
 
-      cy.intercept('POST', '/api/v1/seedbank/search').as('search2');
+      cy.intercept('POST', '/api/v1/search').as('search2');
       cy.get('#table-header-speciesName').click();
       cy.wait('@search2');
 
@@ -615,7 +615,7 @@ describe('Database', () => {
     });
 
     it('Should be able to sort by state', () => {
-      cy.intercept('POST', '/api/v1/seedbank/search').as('search');
+      cy.intercept('POST', '/api/v1/search').as('search');
       cy.get('#table-header-state').click();
       cy.wait('@search');
 
@@ -624,7 +624,7 @@ describe('Database', () => {
     });
 
     it('Should be able to sort by state, descending', () => {
-      cy.intercept('POST', '/api/v1/seedbank/search').as('search');
+      cy.intercept('POST', '/api/v1/search').as('search');
       cy.get('#table-header-state').click();
       cy.wait('@search');
 
@@ -637,13 +637,13 @@ describe('Database', () => {
 
   context('State management', () => {
     it('Should remember filters, sorting and selected columns when switching pages', () => {
-      cy.intercept('POST', '/api/v1/seedbank/search').as('search');
+      cy.intercept('POST', '/api/v1/search').as('search');
       cy.intercept('POST', '/api/v1/seedbank/values').as('values');
       cy.visit('/accessions');
       cy.wait('@search');
       cy.wait('@values');
 
-      cy.intercept('POST', '/api/v1/seedbank/search').as('search2');
+      cy.intercept('POST', '/api/v1/search').as('search2');
       cy.intercept('POST', '/api/v1/seedbank/values').as('values2');
 
       cy.get('#edit-columns').click();
@@ -654,7 +654,7 @@ describe('Database', () => {
       cy.wait('@search2');
       cy.wait('@values2');
 
-      cy.intercept('POST', '/api/v1/seedbank/search').as('search3');
+      cy.intercept('POST', '/api/v1/search').as('search3');
       cy.intercept('POST', '/api/v1/seedbank/values').as('values3');
 
       cy.get('#filter-speciesName').click();
@@ -667,11 +667,11 @@ describe('Database', () => {
       cy.get('#speciesName').should('not.exist');
       cy.get('#subtitle').should('contain', '4 total');
 
-      cy.intercept('POST', '/api/v1/seedbank/search').as('search4');
+      cy.intercept('POST', '/api/v1/search').as('search4');
       cy.get('#table-header-speciesName').click();
       cy.wait('@search4');
 
-      cy.intercept('POST', '/api/v1/seedbank/search').as('search5');
+      cy.intercept('POST', '/api/v1/search').as('search5');
       cy.get('#table-header-speciesName').click();
       cy.wait('@search5');
 

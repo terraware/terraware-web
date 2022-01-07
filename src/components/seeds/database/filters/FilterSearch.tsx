@@ -2,7 +2,7 @@ import { createStyles, InputAdornment, makeStyles, TextField } from '@material-u
 import SearchIcon from '@material-ui/icons/Search';
 import React from 'react';
 import strings from 'src/strings';
-import { FieldNodePayload, SearchField } from '../../../../api/seeds/search';
+import { FieldNodePayload } from '../../../../api/seeds/search';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) =>
 );
 
 interface Props {
-  field: SearchField;
+  field: string;
   onChange: (filter: FieldNodePayload) => void;
   values: (string | null)[];
 }

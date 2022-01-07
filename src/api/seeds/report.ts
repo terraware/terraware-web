@@ -1,6 +1,6 @@
 import axios from '..';
 import { paths } from 'src/api/types/generated-schema';
-import { convertToSearchNodePayload, SearchField, SeedSearchCriteria, SeedSearchSortOrder } from './search';
+import { convertToSearchNodePayload, SeedSearchCriteria, SeedSearchSortOrder } from './search';
 
 const EXPORT_ENDPOINT = '/api/v1/seedbank/search/export';
 export type ExportRequestPayload = paths[typeof EXPORT_ENDPOINT]['post']['requestBody']['content']['application/json'];
@@ -9,7 +9,7 @@ type ExportResponse = paths[typeof EXPORT_ENDPOINT]['post']['responses'][200]['c
 export async function downloadReport(
   searchCriteria: SeedSearchCriteria,
   searchSortOrder: SeedSearchSortOrder,
-  searchColumns: SearchField[],
+  searchColumns: string[],
   facilityId: number
 ): Promise<string | null> {
   try {

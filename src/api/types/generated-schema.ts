@@ -94,19 +94,14 @@ export interface paths {
     /** For interactive web applications, this can be used to redirect the user to a login page to allow the application to make other API requests. The login process will set a cookie that will authenticate to the API, and will then redirect back to the application. One approach is to use this in error response handlers: if an API request returns HTTP 401 Unauthorized, set location.href to this endpoint and set "redirect" to the URL of the page the user was on so they'll return there after logging in. */
     get: operations["login"];
   };
-  "/api/v1/organization": {
-    /** Lists all organizations the user can access. */
-    get: operations["listOrganizations_1"];
-  };
-  "/api/v1/organization/{organizationId}": {
-    get: operations["getOrganization_1"];
-  };
   "/api/v1/organizations": {
     /** Lists all organizations the user can access. */
     get: operations["listOrganizations"];
+    post: operations["createOrganization"];
   };
   "/api/v1/organizations/{organizationId}": {
     get: operations["getOrganization"];
+    put: operations["updateOrganization"];
   };
   "/api/v1/organizations/{organizationId}/projects": {
     /** Only projects that are accessible by the current user are included. */
@@ -122,6 +117,9 @@ export interface paths {
   };
   "/api/v1/projects/{projectId}/sites": {
     get: operations["listProjectSites"];
+  };
+  "/api/v1/search": {
+    post: operations["search"];
   };
   "/api/v1/seedbank/accession": {
     post: operations["create"];
@@ -166,10 +164,10 @@ export interface paths {
     post: operations["markRead"];
   };
   "/api/v1/seedbank/search": {
-    post: operations["search"];
+    post: operations["searchAccessions"];
   };
   "/api/v1/seedbank/search/export": {
-    post: operations["export"];
+    post: operations["exportAccessions"];
   };
   "/api/v1/seedbank/summary/{facilityId}": {
     get: operations["getSummary"];
@@ -179,16 +177,6 @@ export interface paths {
   };
   "/api/v1/seedbank/values/all": {
     post: operations["listAllFieldValues"];
-  };
-  "/api/v1/seedbank/values/species": {
-    /** Use /api/v1/species instead. */
-    get: operations["listSpecies"];
-    /** Use /api/v1/species instead. */
-    post: operations["createSpecies"];
-  };
-  "/api/v1/seedbank/values/species/{id}": {
-    /** Use /api/v1/species instead. */
-    post: operations["updateSpecies"];
   };
   "/api/v1/seedbank/values/storageLocation/{facilityId}": {
     get: operations["getStorageLocations"];
@@ -496,13 +484,6 @@ export interface components {
       name: string;
       organizationId: number;
     };
-    CreateSpeciesRequestPayload: {
-      name: string;
-    };
-    CreateSpeciesResponsePayload: {
-      details: components["schemas"]["SpeciesDetails"];
-      status: components["schemas"]["SuccessOrError"];
-    };
     CreateTimeseriesEntry: {
       /** ID of device that produces this timeseries. */
       deviceId: number;
@@ -577,9 +558,9 @@ export interface components {
     ErrorDetails: {
       message: string;
     };
-    ExportRequestPayload: {
+    ExportAccessionsRequestPayload: {
       facilityId: number;
-      fields: components["schemas"]["SearchField"][];
+      fields: string[];
       sortOrder?: components["schemas"]["SearchSortOrderElement"][];
       filters?: components["schemas"]["SearchFilter"][];
       search?:
@@ -624,7 +605,7 @@ export interface components {
       plant?: components["schemas"]["PlantDetailsPayload"];
     };
     FieldNodePayload: components["schemas"]["SearchNodePayload"] & {
-      field?: components["schemas"]["SearchField"];
+      field?: string;
       /** List of values to match. For exact and fuzzy searches, a list of at least one value to search for; the list may include null to match accessions where the field does not have a value. For range searches, the list must contain exactly two values, the minimum and maximum; one of the values may be null to search for all values above a minimum or below a maximum. */
       values?: (string | null)[];
       type?: "Exact" | "Fuzzy" | "Range";
@@ -772,7 +753,7 @@ export interface components {
     };
     ListAllFieldValuesRequestPayload: {
       facilityId: number;
-      fields: components["schemas"]["SearchField"][];
+      fields: string[];
     };
     ListAllFieldValuesResponsePayload: {
       results: {
@@ -803,7 +784,7 @@ export interface components {
     };
     ListFieldValuesRequestPayload: {
       facilityId: number;
-      fields: components["schemas"]["SearchField"][];
+      fields: string[];
       filters?: components["schemas"]["SearchFilter"][];
       search?:
         | components["schemas"]["AndNodePayload"]
@@ -867,10 +848,6 @@ export interface components {
     };
     ListSitesResponsePayload: {
       sites: components["schemas"]["SiteElement"][];
-      status: components["schemas"]["SuccessOrError"];
-    };
-    ListSpeciesResponsePayload: {
-      values: components["schemas"]["SpeciesDetails"][];
       status: components["schemas"]["SuccessOrError"];
     };
     ModifyAutomationRequestPayload: {
@@ -942,6 +919,11 @@ export interface components {
     /** Search criterion that matches results that meet any of a set of other search criteria. That is, if the list of children is x, y, and z, this will require x OR y OR z. */
     OrNodePayload: components["schemas"]["SearchNodePayload"];
     OrganizationPayload: {
+      /** ISO 3166 alpha-2 code of organization's country. */
+      countryCode?: string;
+      /** ISO 3166-2 code of organization's country subdivision (state, province, region, etc.) This is the full ISO 3166-2 code including the country prefix. If this is set, countryCode will also be set. */
+      countrySubdivisionCode?: string;
+      description?: string;
       id: number;
       name: string;
       /** This organization's projects. Omitted if depth is "Organization". */
@@ -994,108 +976,9 @@ export interface components {
       status: components["schemas"]["SuccessOrError"];
       error?: components["schemas"]["ErrorDetails"];
     };
-    SearchField:
-      | "accessionNumber"
-      | "active"
-      | "bagNumber"
-      | "bags.number"
-      | "checkedInTime"
-      | "collectedDate"
-      | "collectionNotes"
-      | "cutTestSeedsCompromised"
-      | "cutTestSeedsEmpty"
-      | "cutTestSeedsFilled"
-      | "dryingEndDate"
-      | "dryingMoveDate"
-      | "dryingStartDate"
-      | "endangered"
-      | "estimatedSeedsIncoming"
-      | "familyName"
-      | "geolocation"
-      | "geolocations.coordinates"
-      | "germinationEndDate"
-      | "germinationPercentGerminated"
-      | "germinationSeedType"
-      | "germinationSeedsGerminated"
-      | "germinationSeedsSown"
-      | "germinationStartDate"
-      | "germinationSubstrate"
-      | "germinationTestNotes"
-      | "germinationTestType"
-      | "germinationTests.endDate"
-      | "germinationTests.germinations.recordingDate"
-      | "germinationTests.germinations.seedsGerminated"
-      | "germinationTests.notes"
-      | "germinationTests.percentGerminated"
-      | "germinationTests.seedType"
-      | "germinationTests.seedsSown"
-      | "germinationTests.startDate"
-      | "germinationTests.substrate"
-      | "germinationTests.treatment"
-      | "germinationTests.type"
-      | "germinationTreatment"
-      | "id"
-      | "landowner"
-      | "latestGerminationTestDate"
-      | "latestViabilityPercent"
-      | "nurseryStartDate"
-      | "primaryCollectorName"
-      | "processingMethod"
-      | "processingNotes"
-      | "processingStartDate"
-      | "rare"
-      | "receivedDate"
-      | "remainingGrams"
-      | "remainingQuantity"
-      | "remainingUnits"
-      | "siteLocation"
-      | "sourcePlantOrigin"
-      | "speciesName"
-      | "state"
-      | "storageCondition"
-      | "storageLocationName"
-      | "storageNotes"
-      | "storagePackets"
-      | "storageStartDate"
-      | "targetStorageCondition"
-      | "totalGrams"
-      | "totalQuantity"
-      | "totalUnits"
-      | "totalViabilityPercent"
-      | "treesCollectedFrom"
-      | "viabilityTestType"
-      | "viabilityTestTypes.type"
-      | "withdrawalDate"
-      | "withdrawalDestination"
-      | "withdrawalGrams"
-      | "withdrawalNotes"
-      | "withdrawalPurpose"
-      | "withdrawalQuantity"
-      | "withdrawalRemainingGrams"
-      | "withdrawalRemainingQuantity"
-      | "withdrawalRemainingUnits"
-      | "withdrawalUnits"
-      | "withdrawals.date"
-      | "withdrawals.destination"
-      | "withdrawals.grams"
-      | "withdrawals.notes"
-      | "withdrawals.purpose"
-      | "withdrawals.quantity"
-      | "withdrawals.remainingGrams"
-      | "withdrawals.remainingQuantity"
-      | "withdrawals.remainingUnits"
-      | "withdrawals.units";
-    SearchFilter: {
-      field: components["schemas"]["SearchField"];
-      /** List of values to match. For exact and fuzzy searches, a list of at least one value to search for; the list may include null to match accessions where the field does not have a value. For range searches, the list must contain exactly two values, the minimum and maximum; one of the values may be null to search for all values above a minimum or below a maximum. */
-      values: (string | null)[];
-      type: "Exact" | "Fuzzy" | "Range";
-    };
-    /** A search criterion. The search will return results that match this criterion. The criterion can be composed of other search criteria to form arbitrary Boolean search expressions. TYPESCRIPT-OVERRIDE-TYPE-WITH-ANY */
-    SearchNodePayload: any;
-    SearchRequestPayload: {
+    SearchAccessionsRequestPayload: {
       facilityId: number;
-      fields: components["schemas"]["SearchField"][];
+      fields: string[];
       sortOrder?: components["schemas"]["SearchSortOrderElement"][];
       filters?: components["schemas"]["SearchFilter"][];
       search?:
@@ -1106,115 +989,38 @@ export interface components {
       cursor?: string;
       count: number;
     };
+    SearchFilter: {
+      field: string;
+      /** List of values to match. For exact and fuzzy searches, a list of at least one value to search for; the list may include null to match accessions where the field does not have a value. For range searches, the list must contain exactly two values, the minimum and maximum; one of the values may be null to search for all values above a minimum or below a maximum. */
+      values: (string | null)[];
+      type: "Exact" | "Fuzzy" | "Range";
+    };
+    /** A search criterion. The search will return results that match this criterion. The criterion can be composed of other search criteria to form arbitrary Boolean search expressions. TYPESCRIPT-OVERRIDE-TYPE-WITH-ANY */
+    SearchNodePayload: any;
+    SearchRequestPayload: {
+      /** Prefix for field names. This determines how field names are interpreted, and also how results are structured. Each element in the "results" array in the response will be an instance of whatever entity the prefix points to. Always evaluated starting from the "organizations" level. If not present, the search will return a list of organizations. */
+      prefix?: string;
+      /** List of fields to return. Field names should be relative to the prefix. They may navigate the data hierarchy using '.' or '_' as delimiters. */
+      fields: string[];
+      /** How to sort the search results. This controls both the order of the top-level results and the order of any lists of child objects. */
+      sortOrder?: components["schemas"]["SearchSortOrderElement"][];
+      search?:
+        | components["schemas"]["AndNodePayload"]
+        | components["schemas"]["FieldNodePayload"]
+        | components["schemas"]["NotNodePayload"]
+        | components["schemas"]["OrNodePayload"];
+      /** Maximum number of top-level search results to return. The system may impose a limit on this value. A separate system-imposed limit may also be applied to lists of child objects inside the top-level results. */
+      count: number;
+      /** Starting point for search results. If present, a previous search will be continued from where it left off. This should be the value of the cursor that was returned in the response to a previous search. */
+      cursor?: string;
+      filters?: components["schemas"]["SearchFilter"][];
+    };
     SearchResponsePayload: {
-      results: {
-        accessionNumber?: string;
-        active?: string;
-        bagNumber?: string;
-        bags?: {
-          number?: string;
-        }[];
-        checkedInTime?: string;
-        collectedDate?: string;
-        collectionNotes?: string;
-        cutTestSeedsCompromised?: string;
-        cutTestSeedsEmpty?: string;
-        cutTestSeedsFilled?: string;
-        dryingEndDate?: string;
-        dryingMoveDate?: string;
-        dryingStartDate?: string;
-        endangered?: string;
-        estimatedSeedsIncoming?: string;
-        familyName?: string;
-        geolocation?: string;
-        geolocations?: {
-          coordinates?: string;
-        }[];
-        germinationEndDate?: string;
-        germinationPercentGerminated?: string;
-        germinationSeedType?: string;
-        germinationSeedsGerminated?: string;
-        germinationSeedsSown?: string;
-        germinationStartDate?: string;
-        germinationSubstrate?: string;
-        germinationTestNotes?: string;
-        germinationTestType?: string;
-        germinationTests?: {
-          endDate?: string;
-          germinations?: {
-            recordingDate?: string;
-            seedsGerminated?: string;
-          }[];
-          notes?: string;
-          percentGerminated?: string;
-          seedType?: string;
-          seedsSown?: string;
-          startDate?: string;
-          substrate?: string;
-          treatment?: string;
-          type?: string;
-        }[];
-        germinationTreatment?: string;
-        id?: string;
-        landowner?: string;
-        latestGerminationTestDate?: string;
-        latestViabilityPercent?: string;
-        nurseryStartDate?: string;
-        primaryCollectorName?: string;
-        processingMethod?: string;
-        processingNotes?: string;
-        processingStartDate?: string;
-        rare?: string;
-        receivedDate?: string;
-        remainingGrams?: string;
-        remainingQuantity?: string;
-        remainingUnits?: string;
-        siteLocation?: string;
-        sourcePlantOrigin?: string;
-        speciesName?: string;
-        state?: string;
-        storageCondition?: string;
-        storageLocation?: string;
-        storageNotes?: string;
-        storagePackets?: string;
-        storageStartDate?: string;
-        targetStorageCondition?: string;
-        totalGrams?: string;
-        totalQuantity?: string;
-        totalUnits?: string;
-        totalViabilityPercent?: string;
-        treesCollectedFrom?: string;
-        viabilityTestType?: string;
-        viabilityTestTypes?: {
-          type?: string;
-        }[];
-        withdrawalDate?: string;
-        withdrawalDestination?: string;
-        withdrawalGrams?: string;
-        withdrawalNotes?: string;
-        withdrawalPurpose?: string;
-        withdrawalQuantity?: string;
-        withdrawalRemainingGrams?: string;
-        withdrawalRemainingQuantity?: string;
-        withdrawalRemainingUnits?: string;
-        withdrawalUnits?: string;
-        withdrawals?: {
-          date?: string;
-          destination?: string;
-          grams?: string;
-          notes?: string;
-          purpose?: string;
-          quantity?: string;
-          remainingGrams?: string;
-          remainingQuantity?: string;
-          remainingUnits?: string;
-          units?: string;
-        }[];
-      }[];
+      results: { [key: string]: unknown }[];
       cursor?: string;
     };
     SearchSortOrderElement: {
-      field: components["schemas"]["SearchField"];
+      field: string;
       direction?: "Ascending" | "Descending";
     };
     /** Represents a quantity of seeds, measured either in individual seeds or by weight. */
@@ -1256,10 +1062,6 @@ export interface components {
       id: number;
       status: components["schemas"]["SuccessOrError"];
     };
-    SpeciesDetails: {
-      id: number;
-      name: string;
-    };
     SpeciesGetResponsePayload: {
       species: components["schemas"]["SpeciesResponseElement"];
       status: components["schemas"]["SuccessOrError"];
@@ -1296,7 +1098,6 @@ export interface components {
     };
     SpeciesRequestPayload: {
       conservationStatus?: string;
-      familyId?: number;
       /** True if name is the scientific name for the species. */
       isScientific?: boolean;
       name: string;
@@ -1307,7 +1108,6 @@ export interface components {
     };
     SpeciesResponseElement: {
       conservationStatus?: string;
-      familyId?: number;
       id: number;
       /** True if name is the scientific name for the species. */
       isScientific: boolean;
@@ -1489,6 +1289,14 @@ export interface components {
     UpdateObservationResponsePayload: {
       resp: components["schemas"]["ObservationResponse"];
       status: components["schemas"]["SuccessOrError"];
+    };
+    UpdateOrganizationRequestPayload: {
+      /** ISO 3166 alpha-2 code of organization's country. */
+      countryCode?: string;
+      /** ISO 3166-2 code of organization's country subdivision (state, province, region, etc.) This is the full ISO 3166-2 code including the country prefix. If this is set, countryCode must also be set. */
+      countrySubdivisionCode?: string;
+      description?: string;
+      name: string;
     };
     UpdatePlantRequestPayload: {
       label?: string;
@@ -2304,40 +2112,6 @@ export interface operations {
     };
   };
   /** Lists all organizations the user can access. */
-  listOrganizations_1: {
-    parameters: {
-      query: {
-        depth?: "Organization" | "Project" | "Site" | "Facility";
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["ListOrganizationsResponsePayload"];
-        };
-      };
-    };
-  };
-  getOrganization_1: {
-    parameters: {
-      path: {
-        organizationId: number;
-      };
-      query: {
-        depth?: "Organization" | "Project" | "Site" | "Facility";
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["GetOrganizationResponsePayload"];
-        };
-      };
-    };
-  };
-  /** Lists all organizations the user can access. */
   listOrganizations: {
     parameters: {
       query: {
@@ -2350,6 +2124,21 @@ export interface operations {
         content: {
           "application/json": components["schemas"]["ListOrganizationsResponsePayload"];
         };
+      };
+    };
+  };
+  createOrganization: {
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetOrganizationResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateOrganizationRequestPayload"];
       };
     };
   };
@@ -2368,6 +2157,26 @@ export interface operations {
         content: {
           "application/json": components["schemas"]["GetOrganizationResponsePayload"];
         };
+      };
+    };
+  };
+  updateOrganization: {
+    parameters: {
+      path: {
+        organizationId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateOrganizationRequestPayload"];
       };
     };
   };
@@ -2480,6 +2289,21 @@ export interface operations {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
+      };
+    };
+  };
+  search: {
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SearchResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SearchRequestPayload"];
       };
     };
   };
@@ -2758,7 +2582,7 @@ export interface operations {
       };
     };
   };
-  search: {
+  searchAccessions: {
     responses: {
       /** OK */
       200: {
@@ -2769,11 +2593,11 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["SearchRequestPayload"];
+        "application/json": components["schemas"]["SearchAccessionsRequestPayload"];
       };
     };
   };
-  export: {
+  exportAccessions: {
     responses: {
       /** Export succeeded. */
       200: {
@@ -2784,7 +2608,7 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["ExportRequestPayload"];
+        "application/json": components["schemas"]["ExportAccessionsRequestPayload"];
       };
     };
   };
@@ -2830,66 +2654,6 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["ListAllFieldValuesRequestPayload"];
-      };
-    };
-  };
-  /** Use /api/v1/species instead. */
-  listSpecies: {
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["ListSpeciesResponsePayload"];
-        };
-      };
-    };
-  };
-  /** Use /api/v1/species instead. */
-  createSpecies: {
-    responses: {
-      /** Species created. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["CreateSpeciesResponsePayload"];
-        };
-      };
-      /** A species with the requested name already exists. */
-      409: {
-        content: {
-          "application/json": components["schemas"]["CreateSpeciesResponsePayload"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["CreateSpeciesRequestPayload"];
-      };
-    };
-  };
-  /** Use /api/v1/species instead. */
-  updateSpecies: {
-    parameters: {
-      path: {
-        id: number;
-      };
-    };
-    responses: {
-      /** The requested operation succeeded. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-        };
-      };
-      /** The requested resource was not found. */
-      404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["CreateSpeciesRequestPayload"];
       };
     };
   };

@@ -73,12 +73,12 @@ export default function CheckIn(props: CheckInProps): JSX.Element {
 
   useEffect(() => {
     const populatePendingAccessions = async () => {
-      if (selectedOrgInfo.selectedFacility?.id) {
-        setPendingAccessions(await getPendingAccessions(selectedOrgInfo.selectedFacility?.id));
+      if (organization) {
+        setPendingAccessions(await getPendingAccessions(selectedOrgInfo, organization?.id));
       }
     };
     populatePendingAccessions();
-  }, [selectedOrgInfo]);
+  }, [selectedOrgInfo, organization]);
 
   const transformPendingAccessions = () => {
     const accessionsById: Record<number, SearchResponseElement> = {};
@@ -135,13 +135,13 @@ export default function CheckIn(props: CheckInProps): JSX.Element {
                     return (
                       <TableContainer
                         component={Paper}
-                        key={result.accessionNumber}
+                        key={result.accessionNumber as number}
                         style={{ padding: '24px', marginBottom: '32px' }}
                       >
                         <Table aria-label='simple table'>
                           <TableHead>
                             <TableRow>
-                              <TableCell className={classes.title}>{result.bagNumber}</TableCell>
+                              <TableCell className={classes.title}>{result.bagNumber as string}</TableCell>
                             </TableRow>
                             <TableRow>
                               <TableCell>{strings.ACCESSION}</TableCell>
@@ -154,15 +154,15 @@ export default function CheckIn(props: CheckInProps): JSX.Element {
                           <TableBody>
                             <TableRow>
                               <TableCell component='th' scope='row'>
-                                {result.accessionNumber}
+                                {result.accessionNumber as string}
                               </TableCell>
-                              <TableCell>{result.speciesName}</TableCell>
-                              <TableCell>{result.siteLocation}</TableCell>
-                              <TableCell>{result.collectedDate}</TableCell>
-                              <TableCell>{result.receivedDate}</TableCell>
+                              <TableCell>{result.speciesName as string}</TableCell>
+                              <TableCell>{result.siteLocation as string}</TableCell>
+                              <TableCell>{result.collectedDate as string}</TableCell>
+                              <TableCell>{result.receivedDate as string}</TableCell>
                               <TableCell>
                                 <Button
-                                  onClick={() => goToAccession(result.id!)}
+                                  onClick={() => goToAccession(result.id! as string)}
                                   id='viewCollections'
                                   label={strings.VIEW_ACCESSION}
                                   priority='secondary'

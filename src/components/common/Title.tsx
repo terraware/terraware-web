@@ -39,7 +39,7 @@ interface TitleProps {
   organization?: ServerOrganization;
   allowAll?: boolean;
   selectedOrgInfo: SelectedOrgInfo;
-  onChangeSelectedOrgInfo: (selectedOrgInfo: SelectedOrgInfo) => void;
+  onChangeSelectedOrgInfo: (selectedValues: SelectedOrgInfo) => void;
   showFacility?: boolean;
 }
 export default function Title({
@@ -54,22 +54,24 @@ export default function Title({
   const classes = useStyles();
 
   useEffect(() => {
-    // if no project selected, select first project and site
-    if (!selectedOrgInfo.selectedProject && organization?.projects && organization.projects[0].sites) {
-      if (organization?.projects[0].sites[0].facilities) {
-        onChangeSelectedOrgInfo({
-          selectedProject: organization?.projects[0],
-          selectedSite: organization?.projects[0].sites[0],
-          selectedFacility: organization?.projects[0].sites[0].facilities[0],
-        });
-      } else {
-        onChangeSelectedOrgInfo({
-          selectedProject: organization?.projects[0],
-          selectedSite: organization?.projects[0].sites[0],
-        });
+    // if no project selected and all option is not available, select first project and site
+    if (!allowAll) {
+      if (!selectedOrgInfo.selectedProject && organization?.projects && organization.projects[0].sites) {
+        if (organization?.projects[0].sites[0].facilities) {
+          onChangeSelectedOrgInfo({
+            selectedProject: organization?.projects[0],
+            selectedSite: organization?.projects[0].sites[0],
+            selectedFacility: organization?.projects[0].sites[0].facilities[0],
+          });
+        } else {
+          onChangeSelectedOrgInfo({
+            selectedProject: organization?.projects[0],
+            selectedSite: organization?.projects[0].sites[0],
+          });
+        }
       }
     }
-  }, [organization, selectedOrgInfo, onChangeSelectedOrgInfo]);
+  }, [organization, selectedOrgInfo, onChangeSelectedOrgInfo, allowAll]);
 
   const addAllOption = (originalOptions?: string[]) => {
     let newOptions: string[] = [];
@@ -91,22 +93,25 @@ export default function Title({
       <label className={classes.titleLabel}>{strings.PROJECT}</label>
       <Select
         options={addAllOption(organization?.projects?.map((org) => org.name))}
-        selectedValue={selectedOrgInfo?.selectedProject?.name}
+        selectedValue={selectedOrgInfo?.selectedProject?.name ?? 'All'}
         onChange={(newValue) => {
           onChangeSelectedOrgInfo({
-            ...selectedOrgInfo,
             selectedProject: organization?.projects?.find((proj) => proj.name === newValue),
+            selectedSite: undefined,
+            selectedFacility: undefined,
           });
         }}
       />
       <label className={classes.titleLabel}>{strings.SITE}</label>
       <Select
-        selectedValue={selectedOrgInfo?.selectedSite?.name}
+        disabled={!selectedOrgInfo.selectedProject}
+        selectedValue={selectedOrgInfo?.selectedSite?.name ?? 'All'}
         options={addAllOption(selectedOrgInfo?.selectedProject?.sites?.map((site) => site.name))}
         onChange={(newValue) => {
           onChangeSelectedOrgInfo({
             ...selectedOrgInfo,
             selectedSite: selectedOrgInfo.selectedProject?.sites?.find((site) => site.name === newValue),
+            selectedFacility: undefined,
           });
         }}
       />
@@ -114,7 +119,8 @@ export default function Title({
         <>
           <label className={classes.titleLabel}>{strings.FACILITY}</label>
           <Select
-            selectedValue={selectedOrgInfo?.selectedFacility?.name}
+            disabled={!selectedOrgInfo.selectedSite}
+            selectedValue={selectedOrgInfo?.selectedFacility?.name ?? 'All'}
             options={addAllOption(selectedOrgInfo.selectedSite?.facilities?.map((facility) => facility.name))}
             onChange={(newValue) => {
               onChangeSelectedOrgInfo({

@@ -8,7 +8,6 @@ import { getOrganizations } from 'src/api/organization/organization';
 import {
   DEFAULT_SEED_SEARCH_FILTERS,
   DEFAULT_SEED_SEARCH_SORT_ORDER,
-  SearchField,
   SeedSearchSortOrder,
   SeedSearchCriteria,
 } from 'src/api/seeds/search';
@@ -75,7 +74,7 @@ function AppContent() {
   const [seedSearchSort, setSeedSearchSort] = useState<SeedSearchSortOrder>(DEFAULT_SEED_SEARCH_SORT_ORDER);
 
   // seedSearchColumns describes which accession columns to request when searching accession data.
-  const [seedSearchColumns, setSeedSearchColumns] = useState<SearchField[]>(DefaultColumns.fields);
+  const [seedSearchColumns, setSeedSearchColumns] = useState<string[]>(DefaultColumns.fields);
 
   /*
    * accessionsDisplayColumns describes which columns are displayed in the accessions list, and in which order.
@@ -84,7 +83,7 @@ function AppContent() {
    * then seedSearchSelectedColumns will contain withdrawalQuantity and withdrawalUnits but this list will only
    * contain withdrawalQuantity.
    */
-  const [accessionsDisplayColumns, setAccessionsDisplayColumns] = useState<SearchField[]>(DefaultColumns.fields);
+  const [accessionsDisplayColumns, setAccessionsDisplayColumns] = useState<string[]>(DefaultColumns.fields);
 
   /*
    * facilityIdSelected saves the value of the facilityId selected on "Accessions" and "Seeds summary" page.

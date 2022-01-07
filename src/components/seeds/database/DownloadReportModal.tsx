@@ -4,7 +4,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React from 'react';
-import { SearchField, SeedSearchCriteria, SeedSearchSortOrder } from 'src/api/seeds/search';
+import { SeedSearchCriteria, SeedSearchSortOrder } from 'src/api/seeds/search';
 import { downloadReport } from 'src/api/seeds/report';
 import CancelButton from 'src/components/common/CancelButton';
 import DialogCloseButton from 'src/components/common/DialogCloseButton';
@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme: Theme) =>
 interface DownloadReportModalProps {
   searchCriteria: SeedSearchCriteria;
   searchSortOrder: SeedSearchSortOrder;
-  searchColumns: SearchField[];
+  searchColumns: string[];
   facilityId: number;
   open: boolean;
   onClose: () => void;

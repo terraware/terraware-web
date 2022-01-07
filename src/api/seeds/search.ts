@@ -1,13 +1,13 @@
 import axios from '..';
 import { components, paths } from 'src/api/types/generated-schema';
 import { COLUMNS_INDEXED, DatabaseColumn } from 'src/components/seeds/database/columns';
+import { SelectedOrgInfo } from 'src/types/Organization';
 
 export type SeedSearchCriteria = Record<string, SearchNodePayload>;
 export const DEFAULT_SEED_SEARCH_FILTERS = {};
 export type SeedSearchSortOrder = components['schemas']['SearchSortOrderElement'];
 export const DEFAULT_SEED_SEARCH_SORT_ORDER = { field: 'receivedDate', direction: 'Descending' } as SeedSearchSortOrder;
 
-export type SearchField = components['schemas']['SearchField'];
 export type AndNodePayload = components['schemas']['AndNodePayload'] & { operation: 'and' };
 export type FieldNodePayload = components['schemas']['FieldNodePayload'] & { operation: 'field' };
 export type NotNodePayload = components['schemas']['NotNodePayload'] & { operation: 'not' };
@@ -21,21 +21,63 @@ export type FieldValuesPayload = { [key: string]: components['schemas']['FieldVa
  * output: search criteria in the type of SearchNodePayload, which is required by API modules.
  *         undefined if the input represented no search criteria.
  */
-export function convertToSearchNodePayload(criteria: SeedSearchCriteria): SearchNodePayload | undefined {
+export function convertToSearchNodePayload(
+  criteria: SeedSearchCriteria,
+  selectedOrgInfo?: SelectedOrgInfo,
+  organizationId?: number
+): SearchNodePayload | undefined {
   if (criteria === {}) {
     return undefined;
   }
+  let newCriteria = criteria;
+  if (selectedOrgInfo && organizationId) {
+    newCriteria = addOrgInfoToSearch(selectedOrgInfo, organizationId, criteria);
+  }
   return {
     operation: 'and',
-    children: Object.values(criteria),
+    children: Object.values(newCriteria),
   };
+}
+
+export function addOrgInfoToSearch(
+  selectedOrgInfo: SelectedOrgInfo,
+  organizationId: number,
+  previousCriteria?: SeedSearchCriteria
+) {
+  const newCriteria = previousCriteria ? Object.values(previousCriteria) : [];
+  if (selectedOrgInfo.selectedFacility) {
+    newCriteria.unshift({ field: 'facility_id', values: [selectedOrgInfo.selectedFacility.id], operation: 'field' });
+  } else {
+    if (selectedOrgInfo.selectedSite) {
+      newCriteria.unshift({
+        field: 'facility_site_id',
+        values: [selectedOrgInfo.selectedSite.id],
+        operation: 'field',
+      });
+    } else {
+      if (selectedOrgInfo.selectedProject) {
+        newCriteria.unshift({
+          field: 'facility_site_project_id',
+          values: [selectedOrgInfo.selectedProject.id],
+          operation: 'field',
+        });
+      } else {
+        newCriteria.unshift({
+          field: 'facility_site_project_organization_id',
+          values: [organizationId],
+          operation: 'field',
+        });
+      }
+    }
+  }
+  return newCriteria;
 }
 
 /*******************
  * ACCESSION SEARCH
  *******************/
 
-const SEARCH_ENDPOINT = '/api/v1/seedbank/search';
+const SEARCH_ENDPOINT = '/api/v1/search';
 type SearchRequestPayload = paths[typeof SEARCH_ENDPOINT]['post']['requestBody']['content']['application/json'];
 export type SearchResponsePayload =
   paths[typeof SEARCH_ENDPOINT]['post']['responses'][200]['content']['application/json'];
@@ -44,6 +86,24 @@ export type SearchResponseElement = SearchResponsePayload['results'][0];
 export async function search(params: SearchRequestPayload): Promise<SearchResponseElement[] | null> {
   try {
     const response: SearchResponsePayload = (await axios.post(SEARCH_ENDPOINT, params)).data;
+    return response.results;
+  } catch {
+    return null;
+  }
+}
+
+const SEARCH_ACCESSIONS_ENDPOINT = '/api/v1/seedbank/search';
+type SearchAccessionsRequestPayload =
+  paths[typeof SEARCH_ACCESSIONS_ENDPOINT]['post']['requestBody']['content']['application/json'];
+type SearchAccessionsResponsePayload =
+  paths[typeof SEARCH_ACCESSIONS_ENDPOINT]['post']['responses'][200]['content']['application/json'];
+type SearchAccessionsResponseElement = SearchResponsePayload['results'][0];
+
+async function searchAccession(
+  params: SearchAccessionsRequestPayload
+): Promise<SearchAccessionsResponseElement[] | null> {
+  try {
+    const response: SearchAccessionsResponsePayload = (await axios.post(SEARCH_ACCESSIONS_ENDPOINT, params)).data;
     return response.results;
   } catch {
     return null;
@@ -60,7 +120,7 @@ export async function getAccessionsByNumber(
   facilityId: number
 ): Promise<SearchResponseElement[] | null> {
   try {
-    const searchParams: SearchRequestPayload = {
+    const searchParams: SearchAccessionsRequestPayload = {
       facilityId,
       fields: ['accessionNumber'],
       sortOrder: [{ field: 'accessionNumber', direction: 'Ascending' }],
@@ -74,24 +134,31 @@ export async function getAccessionsByNumber(
       count: 8,
     };
 
-    return await search(searchParams);
+    return await searchAccession(searchParams);
   } catch {
     return null;
   }
 }
 
-export async function getPendingAccessions(facilityId: number): Promise<SearchResponseElement[] | null> {
+export async function getPendingAccessions(
+  selectedValues: SelectedOrgInfo,
+  organizationId: number
+): Promise<SearchResponseElement[] | null> {
   const searchParams: SearchRequestPayload = {
-    facilityId,
+    prefix: 'projects.sites.facilities.accessions',
     fields: ['accessionNumber', 'bagNumber', 'speciesName', 'siteLocation', 'collectedDate', 'receivedDate'],
+    search: convertToSearchNodePayload(
+      [
+        {
+          field: 'state',
+          values: ['Awaiting Check-In'],
+          operation: 'field',
+        },
+      ],
+      selectedValues,
+      organizationId
+    ),
     sortOrder: [{ field: 'accessionNumber', direction: 'Ascending' }],
-    filters: [
-      {
-        field: 'state',
-        values: ['Awaiting Check-In'],
-        type: 'Exact',
-      },
-    ],
     count: 1000,
   };
 
@@ -108,15 +175,15 @@ export async function getPendingAccessions(facilityId: number): Promise<SearchRe
  * output: a list of search field names that are associated with fields that have either
  *         single or multi select values (as opposed to date range values, for example).
  */
-export function filterSelectFields(fields: SearchField[]): SearchField[] {
-  return fields.reduce((acum: SearchField[], value) => {
+export function filterSelectFields(fields: string[]): string[] {
+  return fields.reduce((acum: string[], value) => {
     const dbColumn: DatabaseColumn = COLUMNS_INDEXED[value];
     if (['multiple_selection', 'single_selection'].includes(dbColumn.filter?.type ?? '')) {
       acum.push(dbColumn.key);
     }
 
     return acum;
-  }, [] as SearchField[]);
+  }, [] as string[]);
 }
 
 const ALL_FIELD_VALUES_ENDPOINT = '/api/v1/seedbank/values/all';
@@ -147,7 +214,7 @@ async function listAllFieldValues(
  * existing accessions in the given facility. This example simplifies the input and return type details;
  * see the type definitions for more precise information.
  */
-export async function getAllFieldValues(fields: SearchField[], facilityId: number): Promise<AllFieldValuesMap | null> {
+export async function getAllFieldValues(fields: string[], facilityId: number): Promise<AllFieldValuesMap | null> {
   try {
     const params: ListAllFieldValuesRequestPayload = {
       facilityId,
@@ -171,7 +238,7 @@ export type FieldValuesMap = ValuesPostResponse['results'];
  * Returns null if the API request failed.
  */
 export async function searchFieldValues(
-  fields: SearchField[],
+  fields: string[],
   searchCriteria: SeedSearchCriteria,
   facilityId: number
 ): Promise<FieldValuesMap | null> {

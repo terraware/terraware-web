@@ -1,7 +1,7 @@
 import { createStyles, Grid, makeStyles } from '@material-ui/core';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import React from 'react';
-import { AndNodePayload, FieldNodePayload, OrNodePayload, SearchField, SearchNodePayload } from 'src/api/seeds/search';
+import { AndNodePayload, FieldNodePayload, OrNodePayload, SearchNodePayload } from 'src/api/seeds/search';
 import Checkbox from 'src/components/common/Checkbox';
 import Divisor from 'src/components/common/Divisor';
 import Dropdown from 'src/components/common/Dropdown';
@@ -24,14 +24,14 @@ const useStyles = makeStyles((theme) =>
 );
 
 export type WEIGHT_QUANTITY_FIELDS = 'remainingQuantity' | 'totalQuantity' | 'withdrawalQuantity';
-export const COUNT_WEIGHT_VALID_FIELDS: Record<WEIGHT_QUANTITY_FIELDS, SearchField[]> = {
+export const COUNT_WEIGHT_VALID_FIELDS: Record<WEIGHT_QUANTITY_FIELDS, string[]> = {
   remainingQuantity: ['remainingQuantity', 'remainingGrams', 'remainingUnits'],
   totalQuantity: ['totalQuantity', 'totalGrams', 'totalUnits'],
   withdrawalQuantity: ['withdrawalQuantity', 'withdrawalGrams', 'withdrawalUnits'],
 };
 
 interface Props {
-  field: SearchField;
+  field: string;
   onChange: (filter: OrNodePayload) => void;
   payloads: SearchNodePayload[];
 }
