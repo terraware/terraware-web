@@ -1,3 +1,4 @@
+import { Project, Site } from 'src/types/Organization';
 import { paths } from './generated-schema';
 
 export const facilitiesEndpoint = '/api/v1/facility';

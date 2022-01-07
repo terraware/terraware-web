@@ -1,8 +1,7 @@
 import { createStyles, makeStyles } from '@material-ui/core';
 import React, { useEffect } from 'react';
-import { Facility } from 'src/api/types/facilities';
 import strings from 'src/strings';
-import { Project, ServerOrganization, Site } from 'src/types/Organization';
+import { SelectedOrgInfo, ServerOrganization } from 'src/types/Organization';
 import Select from './Select/Select';
 
 const useStyles = makeStyles((theme) =>
@@ -38,45 +37,39 @@ interface TitleProps {
   page: string;
   parentPage: string;
   organization?: ServerOrganization;
-  onChangeFacility?: (facility?: Facility) => void;
   allowAll?: boolean;
-  setSelectedSiteToParent?: (site: Site | undefined) => void;
-  setSelectedProjectToParent?: (project: Project | undefined) => void;
+  selectedOrgInfo: SelectedOrgInfo;
+  onChangeSelectedOrgInfo: (selectedOrgInfo: SelectedOrgInfo) => void;
+  showFacility?: boolean;
 }
 export default function Title({
   page,
   parentPage,
   organization,
-  onChangeFacility,
   allowAll,
-  setSelectedProjectToParent,
-  setSelectedSiteToParent,
+  selectedOrgInfo,
+  showFacility,
+  onChangeSelectedOrgInfo,
 }: TitleProps): JSX.Element {
   const classes = useStyles();
-  const [selectedProject, setSelectedProject] = React.useState<Project>();
-  const [selectedSite, setSelectedSite] = React.useState<Site>();
-  const [selectedFacility, setSelectedFacility] = React.useState<Facility>();
 
   useEffect(() => {
-    if (organization && organization.projects) {
-      // if page doesn't allow the 'all' options on dropdowns, then select on dropdowns the first project, first site and first facility
-      if (!allowAll) {
-        setSelectedProject(organization.projects[0]);
-        if (organization.projects[0].sites) {
-          setSelectedSite(organization.projects[0].sites[0]);
-        }
-        if (
-          onChangeFacility &&
-          !selectedFacility &&
-          organization.projects[0].sites &&
-          organization.projects[0].sites[0].facilities
-        ) {
-          setSelectedFacility(organization.projects[0].sites[0].facilities[0]);
-          onChangeFacility(organization.projects[0].sites[0].facilities[0]);
-        }
+    // if no project selected, select first project and site
+    if (!selectedOrgInfo.selectedProject && organization?.projects && organization.projects[0].sites) {
+      if (organization?.projects[0].sites[0].facilities) {
+        onChangeSelectedOrgInfo({
+          selectedProject: organization?.projects[0],
+          selectedSite: organization?.projects[0].sites[0],
+          selectedFacility: organization?.projects[0].sites[0].facilities[0],
+        });
+      } else {
+        onChangeSelectedOrgInfo({
+          selectedProject: organization?.projects[0],
+          selectedSite: organization?.projects[0].sites[0],
+        });
       }
     }
-  }, [organization, allowAll, onChangeFacility, selectedFacility]);
+  }, [organization, selectedOrgInfo, onChangeSelectedOrgInfo]);
 
   const addAllOption = (originalOptions?: string[]) => {
     let newOptions: string[] = [];
@@ -98,34 +91,38 @@ export default function Title({
       <label className={classes.titleLabel}>{strings.PROJECT}</label>
       <Select
         options={addAllOption(organization?.projects?.map((org) => org.name))}
-        selectedValue={selectedProject?.name}
+        selectedValue={selectedOrgInfo?.selectedProject?.name}
         onChange={(newValue) => {
-          setSelectedProject(organization?.projects?.find((proj) => proj.name === newValue));
-          if (setSelectedProjectToParent) {
-            setSelectedProjectToParent(organization?.projects?.find((proj) => proj.name === newValue));
-          }
+          onChangeSelectedOrgInfo({
+            ...selectedOrgInfo,
+            selectedProject: organization?.projects?.find((proj) => proj.name === newValue),
+          });
         }}
       />
       <label className={classes.titleLabel}>{strings.SITE}</label>
       <Select
-        selectedValue={selectedSite?.name}
-        options={addAllOption(selectedProject?.sites?.map((site) => site.name))}
+        selectedValue={selectedOrgInfo?.selectedSite?.name}
+        options={addAllOption(selectedOrgInfo?.selectedProject?.sites?.map((site) => site.name))}
         onChange={(newValue) => {
-          setSelectedSite(selectedProject?.sites?.find((site) => site.name === newValue));
-          if (setSelectedSiteToParent) {
-            setSelectedSiteToParent(selectedProject?.sites?.find((site) => site.name === newValue));
-          }
+          onChangeSelectedOrgInfo({
+            ...selectedOrgInfo,
+            selectedSite: selectedOrgInfo.selectedProject?.sites?.find((site) => site.name === newValue),
+          });
         }}
       />
-      {onChangeFacility && (
+      {showFacility && (
         <>
           <label className={classes.titleLabel}>{strings.FACILITY}</label>
           <Select
-            selectedValue={selectedFacility?.name}
-            options={addAllOption(selectedSite?.facilities?.map((facility) => facility.name))}
+            selectedValue={selectedOrgInfo?.selectedFacility?.name}
+            options={addAllOption(selectedOrgInfo.selectedSite?.facilities?.map((facility) => facility.name))}
             onChange={(newValue) => {
-              setSelectedFacility(selectedSite?.facilities?.find((facility) => facility.name === newValue));
-              onChangeFacility(selectedSite?.facilities?.find((facility) => facility.name === newValue));
+              onChangeSelectedOrgInfo({
+                ...selectedOrgInfo,
+                selectedFacility: selectedOrgInfo.selectedSite?.facilities?.find(
+                  (facility) => facility.name === newValue
+                ),
+              });
             }}
           />
         </>
