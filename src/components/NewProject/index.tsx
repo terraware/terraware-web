@@ -1,8 +1,8 @@
 import { AppBar, Container, createStyles, Grid, makeStyles } from '@material-ui/core';
 import { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory, useParams } from 'react-router-dom';
 import strings from 'src/strings';
-import { NewProject, ServerOrganization } from 'src/types/Organization';
+import { NewProject, Project, ServerOrganization } from 'src/types/Organization';
 import TfDivisor from '../common/TfDivisor';
 import Table from 'src/components/common/table';
 import { TableColumnType } from '../common/table/types';
@@ -13,21 +13,22 @@ import Checkbox from '../common/Checkbox';
 import useForm from 'src/utils/useForm';
 import Select from '../common/Select/Select';
 import Button from '../common/button/Button';
-import { createProject } from 'src/api/project/project';
+import { createProject, updateProject } from 'src/api/project/project';
 import { useSetRecoilState } from 'recoil';
 import snackbarAtom from 'src/state/snackbar';
 import AddPeopleModal from './AddPeopleModal';
 import DatePicker from '../common/DatePicker';
 import MomentUtils from '@date-io/moment';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import { getProjectsById } from 'src/utils/organization';
+import Icon from '../common/icon/Icon';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
     mainContainer: {
       paddingTop: theme.spacing(4),
-      paddingBottom: theme.spacing(4),
+      paddingBottom: theme.spacing(7),
       background: '#ffffff',
-      height: '100vh',
     },
     backIcon: {
       fill: '#007DF2',
@@ -77,14 +78,32 @@ const useStyles = makeStyles((theme) =>
 type ProjectViewProps = {
   organization: ServerOrganization;
 };
+
 export default function ProjectView({ organization }: ProjectViewProps): JSX.Element {
   const [people, setPeople] = useState<OrganizationUser[]>();
   const [addPeopleModalOpened, setAddPeopleModalOpened] = useState(false);
   const [peopleOnProject, setPeopleOnProject] = useState<OrganizationUser[]>();
   const [nameError, setNameError] = useState('');
+  const { projectId } = useParams<{ projectId: string }>();
+  const [projectSelected, setProjectSelected] = useState<Project | null>();
 
   const [record, setRecord, onChange] = useForm<NewProject>({ name: '', organizationId: organization?.id });
   const setSnackbar = useSetRecoilState(snackbarAtom);
+
+  useEffect(() => {
+    setRecord({
+      name: projectSelected?.name,
+      description: projectSelected?.description,
+      startDate: projectSelected?.startDate,
+      status: projectSelected?.status,
+      types: projectSelected?.types,
+      organizationId: organization?.id,
+    });
+
+    if (projectSelected) {
+      setPeopleOnProject(people?.filter((person) => person.projectIds.includes(projectSelected?.id)));
+    }
+  }, [projectSelected, setRecord, organization, people]);
 
   useEffect(() => {
     const populatePeople = async () => {
@@ -96,9 +115,11 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
       }
     };
     if (organization) {
+      const projects = getProjectsById(organization);
+      setProjectSelected(projects.get(parseInt(projectId, 10)));
       populatePeople();
     }
-  }, [organization]);
+  }, [organization, projectId]);
 
   const classes = useStyles();
 
@@ -107,6 +128,13 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
     { key: 'lastName', name: 'Last Name', type: 'string' },
     { key: 'email', name: 'Email', type: 'string' },
     { key: 'role', name: 'Role', type: 'string' },
+  ];
+
+  const siteColumns: TableColumnType[] = [
+    { key: 'name', name: 'Name', type: 'string' },
+    { key: 'description', name: 'Description', type: 'string' },
+    { key: 'longitude', name: 'Longitude', type: 'string' },
+    { key: 'latitude', name: 'Latitude', type: 'string' },
   ];
 
   type ProjectType = 'Native Forest Restoration' | 'Agroforestry' | 'Silvopasture' | 'Sustainable Timber';
@@ -152,18 +180,34 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
     if (record.name === '') {
       setNameError('Required Field');
     } else {
-      const response = await createProject(record);
-      if (response.requestSucceeded) {
-        setSnackbar({
-          type: 'success',
-          msg: 'Project added',
-        });
+      if (projectSelected) {
+        const response = await updateProject({ ...record, id: projectSelected.id } as Project);
+        if (response.requestSucceeded) {
+          setSnackbar({
+            type: 'success',
+            msg: 'Changes saved',
+          });
+        } else {
+          setSnackbar({
+            type: 'delete',
+            msg: strings.GENERIC_ERROR,
+          });
+        }
       } else {
-        setSnackbar({
-          type: 'delete',
-          msg: strings.GENERIC_ERROR,
-        });
+        const response = await createProject(record);
+        if (response.requestSucceeded) {
+          setSnackbar({
+            type: 'success',
+            msg: 'Project added',
+          });
+        } else {
+          setSnackbar({
+            type: 'delete',
+            msg: strings.GENERIC_ERROR,
+          });
+        }
       }
+
       goToProjects();
     }
   };
@@ -179,9 +223,23 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
       />
       <Container maxWidth={false} className={classes.mainContainer}>
         <Grid container spacing={3}>
+          {projectSelected && (
+            <Grid item xs={12}>
+              <Link id='back' to='/projects' className={classes.back}>
+                <Icon name='caretLeft' className={classes.backIcon} />
+                {strings.PROJECTS}
+              </Link>
+            </Grid>
+          )}
           <Grid item xs={12}>
-            <h2>{strings.ADD_PROJECT}</h2>
-            <p>{strings.ADD_PROJECT_DESC}</p>
+            {projectSelected ? (
+              <h2>{projectSelected?.name}</h2>
+            ) : (
+              <>
+                <h2>{strings.ADD_PROJECT}</h2>
+                <p>{strings.ADD_PROJECT_DESC}</p>
+              </>
+            )}
           </Grid>
           <Grid item xs={4}>
             <TextField
@@ -278,7 +336,19 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
           </Grid>
           <Grid item xs={12} />
         </Grid>
-        <Grid container spacing={3} />
+        {projectSelected && (
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
+              <h2>{strings.SITES}</h2>
+              <p>{strings.SITES_DESC}</p>
+            </Grid>
+            {projectSelected?.sites && (
+              <Grid item xs={12}>
+                <Table rows={projectSelected.sites} orderBy='name' columns={siteColumns} />
+              </Grid>
+            )}
+          </Grid>
+        )}
       </Container>
       <AppBar
         position='fixed'

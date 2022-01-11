@@ -24,3 +24,22 @@ export const createProject = async (project: NewProject): Promise<PostProjectRes
 
   return response;
 };
+
+const PROJECT = '/api/v1/projects/{id}';
+
+type PutProjectResponse = {
+  requestSucceeded: boolean;
+};
+
+export const updateProject = async (project: Project): Promise<PutProjectResponse> => {
+  const response: PutProjectResponse = {
+    requestSucceeded: true,
+  };
+  try {
+    await axios.put(PROJECT.replace('{id}', project.id.toString()), project);
+  } catch {
+    response.requestSucceeded = false;
+  }
+
+  return response;
+};

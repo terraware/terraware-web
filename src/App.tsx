@@ -182,6 +182,11 @@ function AppContent() {
               <Route exact path='/projects'>
                 <ProjectsList organization={selectedOrganization} />
               </Route>
+              {selectedOrganization && (
+                <Route path='/projects/:projectId/edit' exact={true}>
+                  <NewProject organization={selectedOrganization} />
+                </Route>
+              )}
               <Route path='/projects/:projectId'>
                 <Project organization={selectedOrganization} />
               </Route>
@@ -210,9 +215,6 @@ function AppContent() {
               </Route>
               <Route path='/species/'>
                 <Redirect to='/species' />
-              </Route>
-              <Route path='/projects/new/'>
-                <Redirect to='/projects/new' />
               </Route>
               <Route path='/sites/'>
                 <Redirect to='/sites' />

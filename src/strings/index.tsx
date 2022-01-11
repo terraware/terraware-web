@@ -348,6 +348,7 @@ const strings = new LocalizedStrings({
     SILVOPASTURE: 'Silvopasture',
     SUSTAINABLE_TIMBER: 'Sustainable Timber',
     ADD_PEOPLE: 'Add People',
+    EDIT_PROJECT: 'Edit Project',
   },
 });
 
