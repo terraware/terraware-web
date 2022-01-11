@@ -17,6 +17,9 @@ import { createProject } from 'src/api/project/project';
 import { useSetRecoilState } from 'recoil';
 import snackbarAtom from 'src/state/snackbar';
 import AddPeopleModal from './AddPeopleModal';
+import DatePicker from '../common/DatePicker';
+import MomentUtils from '@date-io/moment';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -55,6 +58,18 @@ const useStyles = makeStyles((theme) =>
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
+    },
+    datePickerLabel: {
+      color: '#5C6B6C',
+      lineHeight: '20px',
+    },
+    datePicker: {
+      marginTop: '4px',
+      '& .MuiOutlinedInput-root': {
+        '& fieldset': {
+          borderColor: '#708284',
+        },
+      },
     },
   })
 );
@@ -154,7 +169,7 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
   };
 
   return (
-    <>
+    <MuiPickersUtilsProvider utils={MomentUtils}>
       <AddPeopleModal
         open={addPeopleModalOpened}
         onClose={() => setAddPeopleModalOpened(false)}
@@ -182,12 +197,16 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
             <TextField id='description' label={strings.DESCRIPTION} type='textarea' onChange={onChange} />
           </Grid>
           <Grid item xs={4}>
-            <TextField
+            <label htmlFor={record.startDate} className={classes.datePickerLabel}>
+              {strings.START_DATE_OPT}
+            </label>
+            <DatePicker
               id='startDate'
-              label={strings.START_DATE_OPT}
-              type='text'
-              iconRight='calendar'
+              value={record.startDate}
               onChange={onChange}
+              label=''
+              aria-label={strings.START_DATE_OPT}
+              className={classes.datePicker}
             />
           </Grid>
           <Grid item xs={4}>
@@ -270,6 +289,6 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
         <Button label='Cancel' onClick={goToProjects} priority='secondary' type='passive' />
         <Button label='Save' onClick={saveProject} />
       </AppBar>
-    </>
+    </MuiPickersUtilsProvider>
   );
 }
