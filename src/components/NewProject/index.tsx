@@ -66,6 +66,7 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
   const [people, setPeople] = useState<OrganizationUser[]>();
   const [addPeopleModalOpened, setAddPeopleModalOpened] = useState(false);
   const [peopleOnProject, setPeopleOnProject] = useState<OrganizationUser[]>();
+  const [nameError, setNameError] = useState('');
 
   const [record, setRecord, onChange] = useForm<NewProject>({ name: '', organizationId: organization?.id });
   const setSnackbar = useSetRecoilState(snackbarAtom);
@@ -133,19 +134,23 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
   };
 
   const saveProject = async () => {
-    const response = await createProject(record);
-    if (response.requestSucceeded) {
-      setSnackbar({
-        type: 'success',
-        msg: 'Project added',
-      });
+    if (record.name === '') {
+      setNameError('Required Field');
     } else {
-      setSnackbar({
-        type: 'delete',
-        msg: strings.GENERIC_ERROR,
-      });
+      const response = await createProject(record);
+      if (response.requestSucceeded) {
+        setSnackbar({
+          type: 'success',
+          msg: 'Project added',
+        });
+      } else {
+        setSnackbar({
+          type: 'delete',
+          msg: strings.GENERIC_ERROR,
+        });
+      }
+      goToProjects();
     }
-    goToProjects();
   };
 
   return (
@@ -164,7 +169,14 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
             <p>{strings.ADD_PROJECT_DESC}</p>
           </Grid>
           <Grid item xs={4}>
-            <TextField id='name' label={strings.NAME} type='text' onChange={onChange} value={record.name} />
+            <TextField
+              id='name'
+              label={strings.NAME}
+              type='text'
+              onChange={onChange}
+              value={record.name}
+              errorText={record.name ? '' : nameError}
+            />
           </Grid>
           <Grid item xs={4}>
             <TextField id='description' label={strings.DESCRIPTION} type='textarea' onChange={onChange} />

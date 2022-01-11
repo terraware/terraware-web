@@ -45,6 +45,7 @@ export interface Props<T> {
   isClickable?: (row: T) => boolean;
   emptyTableMessage?: string;
   showCheckbox?: boolean;
+  previousSelectedRows?: T[];
   setSelectedRows?: (selectedRows: T[]) => void;
 }
 
@@ -65,11 +66,12 @@ export default function EnhancedTable<T>({
   emptyTableMessage,
   showCheckbox,
   setSelectedRows,
+  previousSelectedRows,
 }: Props<T>): JSX.Element {
   const classes = tableStyles();
   const [order, setOrder] = React.useState<Order>(_order);
   const [orderBy, setOrderBy] = React.useState(_orderBy);
-  const [selected, setSelected] = React.useState<T[]>([]);
+  const [selected, setSelected] = React.useState<T[]>(previousSelectedRows || []);
 
   useEffect(() => {
     if (setSelectedRows) {

@@ -1,4 +1,4 @@
-import { Box, Grid, Typography } from '@material-ui/core';
+import { Grid, Typography } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -15,18 +15,14 @@ import Table from 'src/components/common/table';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    submit: {
-      marginLeft: theme.spacing(2),
-      color: theme.palette.common.white,
+    title: {
+      textAlign: 'center',
     },
     actions: {
       display: 'flex',
-      justifyContent: 'space-between',
+      justifyContent: 'center',
       alignItems: 'center',
-      paddingLeft: theme.spacing(2),
-    },
-    adornment: {
-      marginRight: theme.spacing(1),
+      padding: theme.spacing(4),
     },
   })
 );
@@ -53,17 +49,15 @@ export default function NewTestDialog(props: Props): JSX.Element {
   const [selectedRows, setSelectedRows] = useState<OrganizationUser[]>();
 
   const onSubmitHandler = () => {
-    if (peopleOnProject && selectedRows) {
-      setPeopleOnProject([...peopleOnProject, ...selectedRows]);
-    } else if (selectedRows) {
+    if (selectedRows) {
       setPeopleOnProject(selectedRows);
     }
     onClose();
   };
 
   return (
-    <Dialog onClose={() => onClose()} disableEscapeKeyDown open={open} maxWidth='sm'>
-      <DialogTitle>
+    <Dialog onClose={() => onClose()} disableEscapeKeyDown open={open} maxWidth='md'>
+      <DialogTitle className={classes.title}>
         <Typography variant='h6'>{strings.ADD_PEOPLE}</Typography>
         <DialogCloseButton onClick={onClose} />
       </DialogTitle>
@@ -74,15 +68,14 @@ export default function NewTestDialog(props: Props): JSX.Element {
             orderBy='name'
             columns={peopleColumns}
             showCheckbox={true}
+            previousSelectedRows={peopleOnProject}
             setSelectedRows={setSelectedRows}
           />
         </Grid>
       </DialogContent>
-      <DialogActions>
-        <Box className={classes.actions}>
-          <Button label={strings.CANCEL} priority='secondary' onClick={onClose} />
-          <Button label={strings.ADD_PEOPLE} onClick={onSubmitHandler} />
-        </Box>
+      <DialogActions className={classes.actions}>
+        <Button label={strings.CANCEL} priority='secondary' onClick={onClose} />
+        <Button label={strings.ADD_PEOPLE} onClick={onSubmitHandler} />
       </DialogActions>
     </Dialog>
   );
