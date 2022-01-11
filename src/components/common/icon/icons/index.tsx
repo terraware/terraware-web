@@ -1,4 +1,5 @@
 import React from 'react';
+import { ReactComponent as Calendar } from './calendar.svg';
 import { ReactComponent as CaretDown } from './caret-down.svg';
 import { ReactComponent as CaretLeft } from './caret-left.svg';
 import { ReactComponent as CaretUp } from './caret-up.svg';
@@ -20,6 +21,7 @@ import { ReactComponent as Spinner } from './spinner.svg';
 import { ReactComponent as Warning } from './warning.svg';
 
 export type IconName =
+  | 'calendar'
   | 'caretDown'
   | 'caretLeft'
   | 'caretUp'
@@ -46,6 +48,7 @@ type SVGComponent = React.FunctionComponent<
   }
 >;
 const icons: Record<IconName, SVGComponent> = {
+  calendar: Calendar,
   caretDown: CaretDown,
   caretLeft: CaretLeft,
   caretUp: CaretUp,

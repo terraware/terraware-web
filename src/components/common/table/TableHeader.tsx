@@ -1,4 +1,4 @@
-import { createStyles, makeStyles, Theme } from '@material-ui/core';
+import { Checkbox, createStyles, makeStyles, Theme } from '@material-ui/core';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
@@ -33,6 +33,9 @@ interface Props {
   orderBy?: string;
   columns: TableColumnType[];
   onReorderEnd?: ({ oldIndex, newIndex }: any) => void;
+  numSelected?: number;
+  rowCount?: number;
+  onSelectAllClick?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 interface HeadCell {
@@ -51,7 +54,7 @@ function columnsToHeadCells(columns: TableColumnType[]): HeadCell[] {
 
 export default function EnhancedTableHead(props: Props): JSX.Element {
   const classes = useStyles();
-  const { order, orderBy, onRequestSort } = props;
+  const { order, orderBy, onRequestSort, numSelected, rowCount, onSelectAllClick } = props;
   const createSortHandler = (property: string) => (event: React.MouseEvent<unknown>) => {
     onRequestSort(event, property);
   };
@@ -64,6 +67,16 @@ export default function EnhancedTableHead(props: Props): JSX.Element {
   return (
     <SortableHead lockAxis='x' axis='x' onSortEnd={props.onReorderEnd} useDragHandle>
       <TableRow id='table-header'>
+        {numSelected !== undefined && rowCount !== undefined && onSelectAllClick && (
+          <TableCell padding='checkbox'>
+            <Checkbox
+              color='primary'
+              indeterminate={numSelected > 0 && numSelected < rowCount}
+              checked={rowCount > 0 && numSelected === rowCount}
+              onChange={onSelectAllClick}
+            />
+          </TableCell>
+        )}
         {headCells.map((headCell, i) => (
           <SortableCell
             disabled={!props.onReorderEnd}

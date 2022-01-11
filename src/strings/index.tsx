@@ -342,6 +342,12 @@ const strings = new LocalizedStrings({
     PROJECT_TYPE_OPT: 'Project Type(s) (optional)',
     PEOPLE_DESC: 'To add new people to this organization go to People.',
     SITES_DESC: 'To add new sites to this project go to Sites.',
+    ADD_PROJECT_DESC: 'Enter the project’s information below and then check the people you would like to add.',
+    NATIVE_FOREST_RESTORATION: 'Native Forest Restoration',
+    AGROFORESTRY: 'Agroforestry',
+    SILVOPASTURE: 'Silvopasture',
+    SUSTAINABLE_TIMBER: 'Sustainable Timber',
+    ADD_PEOPLE: 'Add People',
   },
 });
 
