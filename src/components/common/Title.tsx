@@ -56,8 +56,13 @@ export default function Title({
   useEffect(() => {
     // if no project selected and all option is not available, select first project and site
     if (!allowAll) {
-      if (!selectedOrgInfo.selectedProject && organization?.projects && organization.projects[0].sites) {
-        if (organization?.projects[0].sites[0].facilities) {
+      if (
+        !selectedOrgInfo.selectedProject &&
+        organization?.projects &&
+        organization.projects[0].sites &&
+        organization.projects[0].sites[0]
+      ) {
+        if (organization?.projects[0].sites[0].facilities && organization?.projects[0].sites[0].facilities[0]) {
           onChangeSelectedOrgInfo({
             selectedProject: organization?.projects[0],
             selectedSite: organization?.projects[0].sites[0],

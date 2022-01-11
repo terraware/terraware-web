@@ -148,7 +148,9 @@ export default function Database(props: DatabaseProps): JSX.Element {
       organization &&
       organization.projects &&
       organization.projects[0].sites &&
-      organization.projects[0].sites[0].facilities
+      organization.projects[0].sites[0] &&
+      organization.projects[0].sites[0].facilities &&
+      organization.projects[0].sites[0].facilities[0]
     ) {
       facilityId = organization.projects[0].sites[0].facilities[0].id;
       setFacilityIdForReport(facilityId);

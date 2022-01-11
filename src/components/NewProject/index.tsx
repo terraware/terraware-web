@@ -278,7 +278,7 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
           </Grid>
           <Grid item xs={12} />
         </Grid>
-        <Grid container spacing={3}></Grid>
+        <Grid container spacing={3} />
       </Container>
       <AppBar
         position='fixed'
