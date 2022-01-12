@@ -22,6 +22,7 @@ import MomentUtils from '@date-io/moment';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { getProjectsById } from 'src/utils/organization';
 import Icon from '../common/icon/Icon';
+import RemovedPeopleModal from './RemovedPeopleModal';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -82,10 +83,13 @@ type ProjectViewProps = {
 export default function ProjectView({ organization }: ProjectViewProps): JSX.Element {
   const [people, setPeople] = useState<OrganizationUser[]>();
   const [addPeopleModalOpened, setAddPeopleModalOpened] = useState(false);
+  const [removedPeopleModalOpened, setRemovedPeopleModalOpened] = useState(false);
   const [peopleOnProject, setPeopleOnProject] = useState<OrganizationUser[]>();
   const [nameError, setNameError] = useState('');
   const { projectId } = useParams<{ projectId: string }>();
   const [projectSelected, setProjectSelected] = useState<Project | null>();
+  const [selectedRows, setSelectedRows] = useState<OrganizationUser[]>();
+  const [removedPeople, setRemovedPeople] = useState<OrganizationUser[]>();
 
   const [record, setRecord, onChange] = useForm<NewProject>({ name: '', organizationId: organization?.id });
   const setSnackbar = useSetRecoilState(snackbarAtom);
@@ -176,22 +180,58 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
     history.push(projectsLocation);
   };
 
+  const removeSelected = () => {
+    if (peopleOnProject) {
+      const peopleOnProjectCopy = [...peopleOnProject];
+      selectedRows?.forEach((removedPerson) => {
+        const index = peopleOnProjectCopy?.indexOf(removedPerson);
+        peopleOnProjectCopy.splice(index, 1);
+      });
+
+      setPeopleOnProject(peopleOnProjectCopy);
+    }
+  };
+
+  const updateProjectHandler = async () => {
+    if (projectSelected) {
+      const response = await updateProject({ ...record, id: projectSelected.id } as Project);
+      if (response.requestSucceeded) {
+        setSnackbar({
+          type: 'success',
+          msg: 'Changes saved',
+        });
+      } else {
+        setSnackbar({
+          type: 'delete',
+          msg: strings.GENERIC_ERROR,
+        });
+      }
+      goToProjects();
+    }
+  };
+
   const saveProject = async () => {
     if (record.name === '') {
       setNameError('Required Field');
     } else {
       if (projectSelected) {
-        const response = await updateProject({ ...record, id: projectSelected.id } as Project);
-        if (response.requestSucceeded) {
-          setSnackbar({
-            type: 'success',
-            msg: 'Changes saved',
-          });
+        if (!removedPeopleModalOpened) {
+          const originalPeopleOnProject = people?.filter((person) => person.projectIds.includes(projectSelected.id));
+          if (originalPeopleOnProject && peopleOnProject && originalPeopleOnProject.length > peopleOnProject?.length) {
+            const removedPeopleArray: OrganizationUser[] = [];
+            originalPeopleOnProject?.forEach((person) => {
+              const found = peopleOnProject?.filter((newPerson) => newPerson.id === person.id);
+              if (found.length === 0) {
+                removedPeopleArray.push(person);
+              }
+            });
+            setRemovedPeople(removedPeopleArray);
+            setRemovedPeopleModalOpened(true);
+          } else {
+            updateProjectHandler();
+          }
         } else {
-          setSnackbar({
-            type: 'delete',
-            msg: strings.GENERIC_ERROR,
-          });
+          updateProjectHandler();
         }
       } else {
         const response = await createProject(record);
@@ -206,14 +246,19 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
             msg: strings.GENERIC_ERROR,
           });
         }
+        goToProjects();
       }
-
-      goToProjects();
     }
   };
 
   return (
     <MuiPickersUtilsProvider utils={MomentUtils}>
+      <RemovedPeopleModal
+        open={removedPeopleModalOpened}
+        onClose={() => setRemovedPeopleModalOpened(false)}
+        onSubmit={saveProject}
+        removedPeople={removedPeople}
+      />
       <AddPeopleModal
         open={addPeopleModalOpened}
         onClose={() => setAddPeopleModalOpened(false)}
@@ -332,6 +377,12 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
               orderBy='name'
               columns={peopleColumns}
               emptyTableMessage='No People to show.'
+              showCheckbox={true}
+              setSelectedRows={setSelectedRows}
+              showTopBar={true}
+              buttonType='destructive'
+              buttonText={strings.REMOVE}
+              onButtonClick={removeSelected}
             />
           </Grid>
           <Grid item xs={12} />

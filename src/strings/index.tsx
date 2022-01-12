@@ -349,6 +349,13 @@ const strings = new LocalizedStrings({
     SUSTAINABLE_TIMBER: 'Sustainable Timber',
     ADD_PEOPLE: 'Add People',
     EDIT_PROJECT: 'Edit Project',
+    NO_PEOPLE_IN_ORG: 'No People in Organization',
+    ADD_PEOPLE_MESSAGE: 'To add people to this organization go to People.',
+    REMOVE: 'Remove',
+    REMOVED_PEOPLE_WARNING:
+      'You’ve removed people and sites from this project. Are you sure you want to save your changes?',
+    REMOVED_PEOPLE_WARNING_DESC: 'The people you’ve removed include',
+    REMOVE_AND_SAVE: 'Remove & Save',
   },
 });
 

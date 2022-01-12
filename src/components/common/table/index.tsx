@@ -5,6 +5,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableRow from '@material-ui/core/TableRow';
 import React, { useEffect } from 'react';
+import EnhancedTableToolbar from './EnhancedTableToolbar';
 import { descendingComparator, getComparator, Order, stableSort } from './sort';
 import TableCellRenderer from './TableCellRenderer';
 import TableHeader from './TableHeader';
@@ -47,6 +48,10 @@ export interface Props<T> {
   showCheckbox?: boolean;
   previousSelectedRows?: T[];
   setSelectedRows?: (selectedRows: T[]) => void;
+  showTopBar?: boolean;
+  buttonText?: string;
+  buttonType?: 'productive' | 'passive' | 'destructive' | undefined;
+  onButtonClick?: () => void;
 }
 
 export default function EnhancedTable<T>({
@@ -67,6 +72,10 @@ export default function EnhancedTable<T>({
   showCheckbox,
   setSelectedRows,
   previousSelectedRows,
+  showTopBar,
+  buttonText,
+  buttonType,
+  onButtonClick,
 }: Props<T>): JSX.Element {
   const classes = tableStyles();
   const [order, setOrder] = React.useState<Order>(_order);
@@ -120,79 +129,89 @@ export default function EnhancedTable<T>({
   };
 
   return (
-    <TableContainer className={classes.container} id={id}>
-      <Table
-        stickyHeader
-        aria-labelledby='tableTitle'
-        size='medium'
-        aria-label='enhanced table'
-        className={classes.table}
-      >
-        <TableHeader
-          order={order}
-          orderBy={orderBy}
-          onRequestSort={handleRequestSort}
-          columns={columns}
-          onReorderEnd={onReorderEnd}
-          numSelected={showCheckbox ? selected.length : undefined}
-          onSelectAllClick={showCheckbox ? handleSelectAllClick : undefined}
-          rowCount={showCheckbox ? rows?.length : undefined}
+    <>
+      {showTopBar && buttonText && buttonType && onButtonClick && (
+        <EnhancedTableToolbar
+          numSelected={selected.length}
+          buttonText={buttonText}
+          buttonType={buttonType}
+          onButtonClick={onButtonClick}
         />
-        <TableBody>
-          {rows.length < 1 && emptyTableMessage && (
-            <TableRow>
-              <TableCell colSpan={4} align='center'>
-                <p>{emptyTableMessage}</p>
-              </TableCell>
-            </TableRow>
-          )}
-          {rows &&
-            stableSort(rows, getComparator(order, orderBy, sortComparator)).map((row, index) => {
-              const onClick = onSelect ? () => onSelect(row as T) : undefined;
-              const isItemSelected = isSelected(row as T);
+      )}
+      <TableContainer className={classes.container} id={id}>
+        <Table
+          stickyHeader
+          aria-labelledby='tableTitle'
+          size='medium'
+          aria-label='enhanced table'
+          className={classes.table}
+        >
+          <TableHeader
+            order={order}
+            orderBy={orderBy}
+            onRequestSort={handleRequestSort}
+            columns={columns}
+            onReorderEnd={onReorderEnd}
+            numSelected={showCheckbox ? selected.length : undefined}
+            onSelectAllClick={showCheckbox ? handleSelectAllClick : undefined}
+            rowCount={showCheckbox ? rows?.length : undefined}
+          />
+          <TableBody>
+            {rows.length < 1 && emptyTableMessage && (
+              <TableRow>
+                <TableCell colSpan={4} align='center'>
+                  <p>{emptyTableMessage}</p>
+                </TableCell>
+              </TableRow>
+            )}
+            {rows &&
+              stableSort(rows, getComparator(order, orderBy, sortComparator)).map((row, index) => {
+                const onClick = onSelect ? () => onSelect(row as T) : undefined;
+                const isItemSelected = isSelected(row as T);
 
-              return (
-                <React.Fragment key={index}>
-                  <TableRow
-                    id={`row${index + 1}`}
-                    classes={{ hover: classes.hover }}
-                    hover={Boolean(onSelect) && (isClickable ? isClickable(row as T) : true) && !hasEditColumn}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      if (onClick && !hasEditColumn && (isClickable ? isClickable(row as T) : true)) {
-                        onClick();
-                      }
-                      if (!onClick && !hasEditColumn && (isClickable ? isClickable(row as T) : true)) {
-                        handleClick(e, row as T);
-                      }
-                    }}
-                    className={isInactive && isInactive(row as T) ? classes.inactiveRow : undefined}
-                    selected={isItemSelected}
-                    aria-checked={isItemSelected}
-                  >
-                    {showCheckbox && (
-                      <TableCell padding='checkbox'>
-                        <Checkbox color='primary' checked={isItemSelected} />
-                      </TableCell>
-                    )}
-                    {columns.map((c) => (
-                      <Renderer
-                        index={index + 1}
-                        key={c.key}
-                        row={row as T}
-                        column={c}
-                        value={row[c.key]}
-                        onRowClick={onClick}
-                      />
-                    ))}
-                  </TableRow>
-                  {DetailsRenderer && <DetailsRenderer index={index} row={row} />}
-                </React.Fragment>
-              );
-            })}
-        </TableBody>
-      </Table>
-    </TableContainer>
+                return (
+                  <React.Fragment key={index}>
+                    <TableRow
+                      id={`row${index + 1}`}
+                      classes={{ hover: classes.hover }}
+                      hover={Boolean(onSelect) && (isClickable ? isClickable(row as T) : true) && !hasEditColumn}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (onClick && !hasEditColumn && (isClickable ? isClickable(row as T) : true)) {
+                          onClick();
+                        }
+                        if (!onClick && !hasEditColumn && (isClickable ? isClickable(row as T) : true)) {
+                          handleClick(e, row as T);
+                        }
+                      }}
+                      className={isInactive && isInactive(row as T) ? classes.inactiveRow : undefined}
+                      selected={isItemSelected}
+                      aria-checked={isItemSelected}
+                    >
+                      {showCheckbox && (
+                        <TableCell padding='checkbox'>
+                          <Checkbox color='primary' checked={isItemSelected} />
+                        </TableCell>
+                      )}
+                      {columns.map((c) => (
+                        <Renderer
+                          index={index + 1}
+                          key={c.key}
+                          row={row as T}
+                          column={c}
+                          value={row[c.key]}
+                          onRowClick={onClick}
+                        />
+                      ))}
+                    </TableRow>
+                    {DetailsRenderer && <DetailsRenderer index={index} row={row} />}
+                  </React.Fragment>
+                );
+              })}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </>
   );
 }
 

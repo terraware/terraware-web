@@ -58,24 +58,36 @@ export default function NewTestDialog(props: Props): JSX.Element {
   return (
     <Dialog onClose={() => onClose()} disableEscapeKeyDown open={open} maxWidth='md'>
       <DialogTitle className={classes.title}>
-        <Typography variant='h6'>{strings.ADD_PEOPLE}</Typography>
+        <Typography variant='h6'>
+          {people && people.length > 0 ? strings.ADD_PEOPLE : strings.NO_PEOPLE_IN_ORG}
+        </Typography>
         <DialogCloseButton onClick={onClose} />
       </DialogTitle>
       <DialogContent dividers>
         <Grid container spacing={4}>
-          <Table
-            rows={people || []}
-            orderBy='name'
-            columns={peopleColumns}
-            showCheckbox={true}
-            previousSelectedRows={peopleOnProject}
-            setSelectedRows={setSelectedRows}
-          />
+          {people && people.length > 0 ? (
+            <Table
+              rows={people || []}
+              orderBy='name'
+              columns={peopleColumns}
+              showCheckbox={true}
+              previousSelectedRows={peopleOnProject}
+              setSelectedRows={setSelectedRows}
+            />
+          ) : (
+            <p>{strings.ADD_PEOPLE_MESSAGE}</p>
+          )}
         </Grid>
       </DialogContent>
       <DialogActions className={classes.actions}>
-        <Button label={strings.CANCEL} priority='secondary' onClick={onClose} />
-        <Button label={strings.ADD_PEOPLE} onClick={onSubmitHandler} />
+        {people && people.length > 0 ? (
+          <>
+            <Button label={strings.CANCEL} priority='secondary' onClick={onClose} />
+            <Button label={strings.ADD_PEOPLE} onClick={onSubmitHandler} />
+          </>
+        ) : (
+          <Button label={strings.GOT_IT} onClick={onClose} />
+        )}
       </DialogActions>
     </Dialog>
   );
