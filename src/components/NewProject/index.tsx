@@ -63,9 +63,10 @@ const useStyles = makeStyles((theme) =>
       justifyContent: 'space-between',
       alignItems: 'center',
     },
-    datePickerLabel: {
+    label: {
       color: '#5C6B6C',
       lineHeight: '20px',
+      fontFamily: '"Inter", sans-serif',
     },
     datePicker: {
       marginTop: '4px',
@@ -74,6 +75,9 @@ const useStyles = makeStyles((theme) =>
           borderColor: '#708284',
         },
       },
+    },
+    blockCheckbox: {
+      display: 'block',
     },
   })
 );
@@ -323,7 +327,7 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
             <TextField id='description' label={strings.DESCRIPTION} type='textarea' onChange={onChange} />
           </Grid>
           <Grid item xs={4}>
-            <label htmlFor={record.startDate} className={classes.datePickerLabel}>
+            <label htmlFor={record.startDate} className={classes.label}>
               {strings.START_DATE_OPT}
             </label>
             <DatePicker
@@ -345,13 +349,14 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
             />
           </Grid>
           <Grid item xs={4}>
-            <p>{strings.PROJECT_TYPE_OPT}</p>
+            <span className={classes.label}>{strings.PROJECT_TYPE_OPT}</span>
             <Checkbox
               id='Native Forest Restoration'
               name='projectType'
               label={strings.NATIVE_FOREST_RESTORATION}
               onChange={onChangeProjectType}
               value={isChecked('Native Forest Restoration')}
+              className={classes.blockCheckbox}
             />
             <Checkbox
               id='Agroforestry'
@@ -359,6 +364,7 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
               label={strings.AGROFORESTRY}
               onChange={onChangeProjectType}
               value={isChecked('Agroforestry')}
+              className={classes.blockCheckbox}
             />
             <Checkbox
               id='Silvopasture'
@@ -366,6 +372,7 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
               label={strings.SILVOPASTURE}
               onChange={onChangeProjectType}
               value={isChecked('Silvopasture')}
+              className={classes.blockCheckbox}
             />
             <Checkbox
               id='Sustainable Timber'
@@ -373,6 +380,7 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
               label={strings.SUSTAINABLE_TIMBER}
               onChange={onChangeProjectType}
               value={isChecked('Sustainable Timber')}
+              className={classes.blockCheckbox}
             />
           </Grid>
           <Grid item xs={12} />
