@@ -47,23 +47,23 @@ export default function RemovePeopleOrSitesDialog(props: Props): JSX.Element {
   return (
     <Dialog onClose={() => onClose()} disableEscapeKeyDown open={open} maxWidth='sm'>
       <DialogTitle className={classes.title}>
-        {onlyPeopleRemoved && <Typography variant='h6'>{strings.REMOVED_PEOPLE_WARNING}</Typography>}
-        {onlySitesRemoved && <Typography variant='h6'>{strings.REMOVED_SITES_WARNING}</Typography>}
-        {peopleAndSitesRemoved && <Typography variant='h6'>{strings.REMOVED_PEOPLE_AND_SITES_WARNING}</Typography>}
+        {!!onlyPeopleRemoved && <Typography variant='h6'>{strings.REMOVED_PEOPLE_WARNING}</Typography>}
+        {!!onlySitesRemoved && <Typography variant='h6'>{strings.REMOVED_SITES_WARNING}</Typography>}
+        {!!peopleAndSitesRemoved && <Typography variant='h6'>{strings.REMOVED_PEOPLE_AND_SITES_WARNING}</Typography>}
         <DialogCloseButton onClick={onClose} />
       </DialogTitle>
       <DialogContent>
-        {onlyPeopleRemoved && (
+        {!!onlyPeopleRemoved && (
           <p>
             {strings.REMOVED_PEOPLE_WARNING_DESC} {removedPeopleNames?.join(', ')}
           </p>
         )}
-        {onlySitesRemoved && (
+        {!!onlySitesRemoved && (
           <p>
             {strings.REMOVED_SITES_WARNING_DESC} {removedSitesNames?.join(', ')}
           </p>
         )}
-        {peopleAndSitesRemoved && removedPeopleNames && removedSitesNames && (
+        {!!peopleAndSitesRemoved && !!removedPeopleNames && !!removedSitesNames && (
           <p>
             {strings.formatString(
               strings.REMOVED_PEOPLE_AND_SITES_WARNING_DESC,

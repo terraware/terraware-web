@@ -11,6 +11,7 @@ import { getProjectsById } from 'src/utils/organization';
 import { OrganizationUser } from 'src/types/User';
 import { getOrganizationUsers } from 'src/api/organization/organization';
 import Button from '../common/button/Button';
+import Textfield from '../common/Textfield/Textfield';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -29,9 +30,6 @@ const useStyles = makeStyles((theme) =>
       color: '#0067C8',
       fontSize: '20px',
       alignItems: 'center',
-    },
-    value: {
-      fontSize: '16px',
     },
     titleWithButton: {
       display: 'flex',
@@ -104,24 +102,43 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
           <Button label={strings.EDIT_PROJECT} priority='secondary' onClick={goToEditProject} />
         </Grid>
         <Grid item xs={4}>
-          <p>{strings.NAME}</p>
-          <p className={classes.value}>{projectSelected?.name}</p>
+          <Textfield label={strings.NAME} display={true} value={projectSelected?.name} id='name' type='text' />
         </Grid>
         <Grid item xs={4}>
-          <p>{strings.DESCRIPTION}</p>
-          <p className={classes.value}>{projectSelected?.description}</p>
+          <Textfield
+            label={strings.DESCRIPTION}
+            display={true}
+            value={projectSelected?.description}
+            id='description'
+            type='text'
+          />
         </Grid>
         <Grid item xs={4}>
-          <p>{strings.START_DATE_OPT}</p>
-          <p className={classes.value}>{projectSelected?.startDate}</p>
+          <Textfield
+            label={strings.START_DATE_OPT}
+            display={true}
+            value={projectSelected?.startDate}
+            id='startDate'
+            type='text'
+          />
         </Grid>
         <Grid item xs={4}>
-          <p>{strings.STATUS_OPT}</p>
-          <p className={classes.value}>{projectSelected?.status}</p>
+          <Textfield
+            label={strings.STATUS_OPT}
+            display={true}
+            value={projectSelected?.status}
+            id='status'
+            type='text'
+          />
         </Grid>
         <Grid item xs={4}>
-          <p>{strings.PROJECT_TYPE_OPT}</p>
-          <p className={classes.value}>{projectSelected?.types?.join(', ')}</p>
+          <Textfield
+            label={strings.PROJECT_TYPE_OPT}
+            display={true}
+            value={projectSelected?.types?.join(', ')}
+            id='projectType'
+            type='text'
+          />
         </Grid>
         <Grid item xs={12} />
         <Grid item xs={12}>

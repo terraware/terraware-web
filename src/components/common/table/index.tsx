@@ -83,7 +83,9 @@ export default function EnhancedTable<T>({
   const [selected, setSelected] = React.useState<T[]>(previousSelectedRows || []);
 
   useEffect(() => {
-    setSelected([]);
+    if (rows.length) {
+      setSelected([]);
+    }
   }, [rows]);
 
   useEffect(() => {
