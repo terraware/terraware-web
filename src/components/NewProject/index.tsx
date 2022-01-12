@@ -22,7 +22,7 @@ import MomentUtils from '@date-io/moment';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { getProjectsById } from 'src/utils/organization';
 import Icon from '../common/icon/Icon';
-import RemovedPeopleModal from './RemovedPeopleModal';
+import RemovedPeopleOrSitesModal from './RemovedPeopleOrSitesModal';
 import MoveSiteModal from './MoveSiteModal';
 
 const useStyles = makeStyles((theme) =>
@@ -88,6 +88,7 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
   const [removedPeopleModalOpened, setRemovedPeopleModalOpened] = useState(false);
   const [moveSiteModalOpened, setMoveSiteModalOpened] = useState(false);
   const [peopleOnProject, setPeopleOnProject] = useState<OrganizationUser[]>();
+  const [sitesOfProject, setSitesOfProject] = useState<Site[]>();
   const [nameError, setNameError] = useState('');
   const { projectId } = useParams<{ projectId: string }>();
   const [projectSelected, setProjectSelected] = useState<Project | null>();
@@ -108,27 +109,31 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
       types: projectSelected?.types,
       organizationId: organization?.id,
     });
-
-    if (projectSelected) {
-      setPeopleOnProject(people?.filter((person) => person.projectIds.includes(projectSelected?.id)));
-    }
-  }, [projectSelected, setRecord, organization, people]);
+  }, [projectSelected, setRecord, organization]);
 
   useEffect(() => {
+    const projectIdNum = parseInt(projectId, 10);
     const populatePeople = async () => {
       if (organization) {
         const response = await getOrganizationUsers(organization);
         if (response.requestSucceeded) {
           setPeople(response.users);
+          if (!peopleOnProject) {
+            setPeopleOnProject(response.users.filter((person) => person.projectIds.includes(projectIdNum)));
+          }
         }
       }
     };
     if (organization) {
       const projects = getProjectsById(organization);
-      setProjectSelected(projects.get(parseInt(projectId, 10)));
+      setProjectSelected(projects.get(projectIdNum));
+      const projectSites = projects.get(projectIdNum)?.sites;
+      if (projectSites && projectSites.length > 0) {
+        setSitesOfProject(projectSites.filter((site) => !newModifiedSites?.includes(site)));
+      }
       populatePeople();
     }
-  }, [organization, projectId]);
+  }, [organization, projectId, newModifiedSites, peopleOnProject]);
 
   const classes = useStyles();
 
@@ -226,21 +231,19 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
       if (projectSelected) {
         if (!removedPeopleModalOpened) {
           const originalPeopleOnProject = people?.filter((person) => person.projectIds.includes(projectSelected.id));
-          if (originalPeopleOnProject && peopleOnProject && originalPeopleOnProject.length > peopleOnProject?.length) {
+          if (
+            (originalPeopleOnProject && peopleOnProject && originalPeopleOnProject.length > peopleOnProject?.length) ||
+            (newModifiedSites && newModifiedSites.length > 0)
+          ) {
             const removedPeopleArray: OrganizationUser[] = [];
             originalPeopleOnProject?.forEach((person) => {
               const found = peopleOnProject?.filter((newPerson) => newPerson.id === person.id);
-              if (found.length === 0) {
+              if (found?.length === 0) {
                 removedPeopleArray.push(person);
               }
             });
             setRemovedPeople(removedPeopleArray);
             setRemovedPeopleModalOpened(true);
-          }
-          if (newModifiedSites && newModifiedSites.length > 0) {
-            setRemovedPeopleModalOpened(true);
-          } else {
-            updateProjectHandler();
           }
         } else {
           updateProjectHandler();
@@ -272,11 +275,12 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
         setNewModifiedSites={setNewModifiedSites}
         orgProjects={organization.projects}
       />
-      <RemovedPeopleModal
+      <RemovedPeopleOrSitesModal
         open={removedPeopleModalOpened}
         onClose={() => setRemovedPeopleModalOpened(false)}
         onSubmit={saveProject}
         removedPeople={removedPeople}
+        removedSites={newModifiedSites}
       />
       <AddPeopleModal
         open={addPeopleModalOpened}
@@ -415,7 +419,7 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
             {projectSelected?.sites && (
               <Grid item xs={12}>
                 <Table
-                  rows={projectSelected.sites.filter((site) => !newModifiedSites?.includes(site))}
+                  rows={sitesOfProject || []}
                   orderBy='name'
                   columns={siteColumns}
                   showCheckbox={true}

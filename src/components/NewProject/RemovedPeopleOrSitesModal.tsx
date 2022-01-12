@@ -10,6 +10,7 @@ import strings from 'src/strings';
 import DialogCloseButton from '../common/DialogCloseButton';
 import Button from '../common/button/Button';
 import { OrganizationUser } from 'src/types/User';
+import { Site } from 'src/types/Organization';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -31,23 +32,46 @@ export interface Props {
   onClose: (value?: GerminationTest) => void;
   onSubmit: () => void;
   removedPeople?: OrganizationUser[];
+  removedSites?: Site[];
 }
 
-export default function RemovePeopleDialog(props: Props): JSX.Element {
+export default function RemovePeopleOrSitesDialog(props: Props): JSX.Element {
   const classes = useStyles();
-  const { onClose, open, onSubmit, removedPeople } = props;
+  const { onClose, open, onSubmit, removedPeople, removedSites } = props;
 
   const removedPeopleNames = removedPeople?.map((person) => person.firstName);
+  const removedSitesNames = removedSites?.map((site) => site.name);
+  const onlyPeopleRemoved = removedPeople?.length && !removedSites?.length;
+  const onlySitesRemoved = !removedPeople?.length && removedSites?.length;
+  const peopleAndSitesRemoved = removedPeople?.length && removedSites?.length;
   return (
     <Dialog onClose={() => onClose()} disableEscapeKeyDown open={open} maxWidth='sm'>
       <DialogTitle className={classes.title}>
-        <Typography variant='h6'>{strings.REMOVED_PEOPLE_WARNING}</Typography>
+        {onlyPeopleRemoved && <Typography variant='h6'>{strings.REMOVED_PEOPLE_WARNING}</Typography>}
+        {onlySitesRemoved && <Typography variant='h6'>{strings.REMOVED_SITES_WARNING}</Typography>}
+        {peopleAndSitesRemoved && <Typography variant='h6'>{strings.REMOVED_PEOPLE_AND_SITES_WARNING}</Typography>}
         <DialogCloseButton onClick={onClose} />
       </DialogTitle>
       <DialogContent>
-        <p>
-          {strings.REMOVED_PEOPLE_WARNING_DESC} {removedPeopleNames?.join(', ')}
-        </p>
+        {onlyPeopleRemoved && (
+          <p>
+            {strings.REMOVED_PEOPLE_WARNING_DESC} {removedPeopleNames?.join(', ')}
+          </p>
+        )}
+        {onlySitesRemoved && (
+          <p>
+            {strings.REMOVED_SITES_WARNING_DESC} {removedSitesNames?.join(', ')}
+          </p>
+        )}
+        {peopleAndSitesRemoved && removedPeopleNames && removedSitesNames && (
+          <p>
+            {strings.formatString(
+              strings.REMOVED_PEOPLE_AND_SITES_WARNING_DESC,
+              removedPeopleNames.join(', '),
+              removedSitesNames.join(', ')
+            )}
+          </p>
+        )}
       </DialogContent>
       <DialogActions className={classes.actions}>
         <Button label={strings.CANCEL} priority='secondary' type='passive' onClick={onClose} />

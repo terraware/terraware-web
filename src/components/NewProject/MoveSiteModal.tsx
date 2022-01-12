@@ -66,11 +66,11 @@ export default function MoveSiteDialog(props: Props): JSX.Element {
     onClose();
   };
 
-  const onChangeHandler = (selectedProject: string) => {
+  const onChangeHandler = (selectedProjectOpt: string) => {
     if (selectedSites) {
       const selectedSitesCopy = [...selectedSites];
       selectedSitesCopy.forEach((site) => {
-        const newProject = orgProjects?.find((project) => project.name === selectedProject);
+        const newProject = orgProjects?.find((project) => project.name === selectedProjectOpt);
         setSelectedProject(newProject);
         if (newProject) {
           site.projectId = newProject.id;
