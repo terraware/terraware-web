@@ -42,7 +42,7 @@ const peopleColumns: TableColumnType[] = [
   { key: 'role', name: 'Role', type: 'string' },
 ];
 
-export default function NewTestDialog(props: Props): JSX.Element {
+export default function AddPeopleDialog(props: Props): JSX.Element {
   const classes = useStyles();
   const { onClose, open, people, setPeopleOnProject, peopleOnProject } = props;
 

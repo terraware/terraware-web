@@ -33,7 +33,7 @@ export interface Props {
   removedPeople?: OrganizationUser[];
 }
 
-export default function NewTestDialog(props: Props): JSX.Element {
+export default function RemovePeopleDialog(props: Props): JSX.Element {
   const classes = useStyles();
   const { onClose, open, onSubmit, removedPeople } = props;
 

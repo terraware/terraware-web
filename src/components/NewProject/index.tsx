@@ -2,7 +2,7 @@ import { AppBar, Container, createStyles, Grid, makeStyles } from '@material-ui/
 import { useEffect, useState } from 'react';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import strings from 'src/strings';
-import { NewProject, Project, ServerOrganization } from 'src/types/Organization';
+import { NewProject, Project, ServerOrganization, Site } from 'src/types/Organization';
 import TfDivisor from '../common/TfDivisor';
 import Table from 'src/components/common/table';
 import { TableColumnType } from '../common/table/types';
@@ -23,12 +23,14 @@ import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { getProjectsById } from 'src/utils/organization';
 import Icon from '../common/icon/Icon';
 import RemovedPeopleModal from './RemovedPeopleModal';
+import MoveSiteModal from './MoveSiteModal';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
     mainContainer: {
       paddingTop: theme.spacing(4),
       paddingBottom: theme.spacing(7),
+      marginBottom: theme.spacing(6),
       background: '#ffffff',
     },
     backIcon: {
@@ -84,12 +86,15 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
   const [people, setPeople] = useState<OrganizationUser[]>();
   const [addPeopleModalOpened, setAddPeopleModalOpened] = useState(false);
   const [removedPeopleModalOpened, setRemovedPeopleModalOpened] = useState(false);
+  const [moveSiteModalOpened, setMoveSiteModalOpened] = useState(false);
   const [peopleOnProject, setPeopleOnProject] = useState<OrganizationUser[]>();
   const [nameError, setNameError] = useState('');
   const { projectId } = useParams<{ projectId: string }>();
   const [projectSelected, setProjectSelected] = useState<Project | null>();
-  const [selectedRows, setSelectedRows] = useState<OrganizationUser[]>();
+  const [selectedPeopleRows, setSelectedPeopleRows] = useState<OrganizationUser[]>();
+  const [selectedSitesRows, setSelectedSitesRows] = useState<Site[]>();
   const [removedPeople, setRemovedPeople] = useState<OrganizationUser[]>();
+  const [newModifiedSites, setNewModifiedSites] = useState<Site[]>();
 
   const [record, setRecord, onChange] = useForm<NewProject>({ name: '', organizationId: organization?.id });
   const setSnackbar = useSetRecoilState(snackbarAtom);
@@ -180,16 +185,20 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
     history.push(projectsLocation);
   };
 
-  const removeSelected = () => {
+  const removeSelectedPeople = () => {
     if (peopleOnProject) {
       const peopleOnProjectCopy = [...peopleOnProject];
-      selectedRows?.forEach((removedPerson) => {
+      selectedPeopleRows?.forEach((removedPerson) => {
         const index = peopleOnProjectCopy?.indexOf(removedPerson);
         peopleOnProjectCopy.splice(index, 1);
       });
 
       setPeopleOnProject(peopleOnProjectCopy);
     }
+  };
+
+  const moveSelectedSites = () => {
+    setMoveSiteModalOpened(true);
   };
 
   const updateProjectHandler = async () => {
@@ -227,6 +236,9 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
             });
             setRemovedPeople(removedPeopleArray);
             setRemovedPeopleModalOpened(true);
+          }
+          if (newModifiedSites && newModifiedSites.length > 0) {
+            setRemovedPeopleModalOpened(true);
           } else {
             updateProjectHandler();
           }
@@ -253,6 +265,13 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
 
   return (
     <MuiPickersUtilsProvider utils={MomentUtils}>
+      <MoveSiteModal
+        open={moveSiteModalOpened}
+        onClose={() => setMoveSiteModalOpened(false)}
+        selectedSites={selectedSitesRows}
+        setNewModifiedSites={setNewModifiedSites}
+        orgProjects={organization.projects}
+      />
       <RemovedPeopleModal
         open={removedPeopleModalOpened}
         onClose={() => setRemovedPeopleModalOpened(false)}
@@ -378,11 +397,11 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
               columns={peopleColumns}
               emptyTableMessage='No People to show.'
               showCheckbox={true}
-              setSelectedRows={setSelectedRows}
+              setSelectedRows={setSelectedPeopleRows}
               showTopBar={true}
               buttonType='destructive'
               buttonText={strings.REMOVE}
-              onButtonClick={removeSelected}
+              onButtonClick={removeSelectedPeople}
             />
           </Grid>
           <Grid item xs={12} />
@@ -395,7 +414,17 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
             </Grid>
             {projectSelected?.sites && (
               <Grid item xs={12}>
-                <Table rows={projectSelected.sites} orderBy='name' columns={siteColumns} />
+                <Table
+                  rows={projectSelected.sites.filter((site) => !newModifiedSites?.includes(site))}
+                  orderBy='name'
+                  columns={siteColumns}
+                  showCheckbox={true}
+                  showTopBar={true}
+                  setSelectedRows={setSelectedSitesRows}
+                  buttonType='passive'
+                  buttonText={strings.MOVE}
+                  onButtonClick={moveSelectedSites}
+                />
               </Grid>
             )}
           </Grid>

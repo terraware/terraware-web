@@ -356,6 +356,8 @@ const strings = new LocalizedStrings({
       'You’ve removed people and sites from this project. Are you sure you want to save your changes?',
     REMOVED_PEOPLE_WARNING_DESC: 'The people you’ve removed include',
     REMOVE_AND_SAVE: 'Remove & Save',
+    MOVE: 'Move',
+    REASSIGN_SITE_TITLE: 'Please reassign this site to another project in order to remove it from this project.',
   },
 });
 
