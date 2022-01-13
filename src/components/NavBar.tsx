@@ -1,11 +1,24 @@
+import { useEffect, useState } from 'react';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 import strings from 'src/strings';
+import { AllOrganizationRoles, ServerOrganization } from 'src/types/Organization';
 import Navbar from './common/Navbar/Navbar';
 import NavItem from './common/Navbar/NavItem';
 import NavSection from './common/Navbar/NavSection';
 import SubNavbar from './common/Navbar/SubNavbar';
 
-export default function NavBar(): JSX.Element | null {
+type NavBarProps = {
+  organization?: ServerOrganization;
+};
+export default function NavBar({ organization }: NavBarProps): JSX.Element | null {
+  const [role, setRole] = useState<AllOrganizationRoles>();
+  const highRoles = ['Manager', 'Admin', 'Owner'];
+
+  useEffect(() => {
+    if (organization) {
+      setRole(organization.role);
+    }
+  }, [organization]);
   const history = useHistory();
 
   const isHomeRoute = useRouteMatch('/home');
@@ -15,6 +28,8 @@ export default function NavBar(): JSX.Element | null {
   const isPlantDashboardRoute = useRouteMatch('/plants-dashboard');
   const isPlantListRoute = useRouteMatch('/plants-list');
   const isSpeciesRoute = useRouteMatch('/species');
+  const isProjectsRoute = useRouteMatch('/projects');
+  const isSitesRoute = useRouteMatch('/sites');
 
   const navigate = (url: string) => {
     history.push(url);
@@ -82,6 +97,25 @@ export default function NavBar(): JSX.Element | null {
         onClick={() => navigate('/species')}
         id='speciesNb'
       />
+      <NavSection />
+      {role && highRoles.includes(role) && (
+        <>
+          <NavItem
+            label={strings.PROJECTS}
+            icon='folder'
+            selected={isProjectsRoute ? true : false}
+            onClick={() => navigate('/projects')}
+            id='projects'
+          />
+          <NavItem
+            label={strings.SITES}
+            icon='site'
+            selected={isSitesRoute ? true : false}
+            onClick={() => navigate('/sites')}
+            id='projects'
+          />
+        </>
+      )}
     </Navbar>
   );
 }

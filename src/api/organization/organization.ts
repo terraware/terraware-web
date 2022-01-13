@@ -67,6 +67,10 @@ const parseProject = (project: ServerProject): Project => {
   const parsedProject: Project = {
     id: project.id,
     name: project.name,
+    description: project.description,
+    startDate: project.startDate,
+    status: project.status,
+    types: project.types,
     sites: project.sites?.map((site) => parseSite(site)),
   };
   return parsedProject;
@@ -76,8 +80,11 @@ const parseSite = (site: ServerSite): Site => {
   const parsedSite: Site = {
     id: site.id,
     name: site.name,
+    description: site.description,
     projectId: site.projectId,
     facilities: site.facilities?.map((facility) => parseFacility(facility)),
+    latitude: site.location?.coordinates ? site.location.coordinates[1] : undefined,
+    longitude: site.location?.coordinates ? site.location.coordinates[0] : undefined,
   };
   return parsedSite;
 };

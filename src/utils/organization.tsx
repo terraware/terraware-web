@@ -1,6 +1,6 @@
 import { Project, ServerOrganization, Site } from 'src/types/Organization';
 
-const getAllSites = (organization: ServerOrganization): Site[] => {
+export const getAllSites = (organization: ServerOrganization): Site[] => {
   const sites: Site[] = [];
   organization.projects?.forEach((project) => {
     project.sites?.forEach((site) => {
@@ -28,4 +28,14 @@ export const getSelectedSites = (
     sites = getAllSites(organization);
   }
   return sites;
+};
+
+export type ProjectsById = Map<number, Project>;
+
+export const getProjectsById = (organization: ServerOrganization): ProjectsById => {
+  const projectById = new Map();
+  organization.projects?.forEach((project) => {
+    projectById.set(project.id, project);
+  });
+  return projectById;
 };
