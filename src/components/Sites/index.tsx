@@ -3,12 +3,13 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import Button from 'src/components/common/button/Button';
 import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
 import strings from 'src/strings';
 import { ServerOrganization, Site } from 'src/types/Organization';
-import { getAllSites, getProjectsById } from 'src/utils/organization';
+import { getAllSitesWithProjectName } from 'src/utils/organization';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -38,28 +39,25 @@ type SitesListProps = {
   organization?: ServerOrganization;
 };
 
-type SiteTable = Site & { projectName: string };
 export default function SitesList({ organization }: SitesListProps): JSX.Element {
   const classes = useStyles();
-  const [, setSelectedSite] = useState<SiteTable>();
-  const [sites, setSites] = useState<SiteTable[]>();
+  const history = useHistory();
+  const [sites, setSites] = useState<Site[]>();
 
-  const onSelect = (selected: SiteTable) => {
-    setSelectedSite(selected);
+  const onSelect = (selected: Site) => {
+    if (selected.id) {
+      const viewSiteLocation = {
+        pathname: `/sites/${selected.id}`,
+      };
+      history.push(viewSiteLocation);
+    }
   };
 
   useEffect(() => {
     const addProjectNameToSites = () => {
       if (organization) {
-        const allSites = getAllSites(organization);
-        const projectsById = getProjectsById(organization);
-        const newSites = allSites.map((site) => {
-          return {
-            ...site,
-            projectName: projectsById.get(site.projectId)?.name || '',
-          };
-        });
-        setSites(newSites);
+        const allSites = getAllSitesWithProjectName(organization);
+        setSites(allSites);
       }
     };
 
