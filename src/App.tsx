@@ -3,7 +3,7 @@ import { createStyles, CssBaseline, makeStyles, ThemeProvider } from '@material-
 import mapboxgl from 'mapbox-gl';
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
-import { RecoilRoot } from 'recoil';
+import { RecoilRoot, useRecoilValue } from 'recoil';
 import { getOrganizations } from 'src/api/organization/organization';
 import {
   DEFAULT_SEED_SEARCH_FILTERS,
@@ -31,6 +31,7 @@ import ErrorBoundary from './ErrorBoundary';
 import strings from './strings';
 import theme from './theme';
 import { defaultPreset as DefaultColumns } from './components/seeds/database/columns';
+import { seedsDatabaseSelectedOrgInfo } from './state/selectedOrgInfoPerPage';
 
 // @ts-ignore
 mapboxgl.workerClass =
@@ -92,6 +93,8 @@ function AppContent() {
    */
   const [facilityIdSelected, setFacilityIdSelected] = useState<number>();
   const [organizationError, setOrganizationError] = useState<boolean>(false);
+  // get the selected values on database to pass it to new accession page
+  const selectedOrgInfoDatabase = useRecoilValue(seedsDatabaseSelectedOrgInfo);
 
   useEffect(() => {
     const populateOrganizations = async () => {
@@ -142,7 +145,7 @@ function AppContent() {
                 <CheckIn organization={selectedOrganization} />
               </Route>
               <Route exact path='/accessions/new'>
-                <NewAccession facilityId={facilityIdSelected} />
+                <NewAccession facilityId={selectedOrgInfoDatabase.selectedFacility?.id} />
               </Route>
               <Route exact path='/accessions'>
                 <Database
@@ -155,7 +158,6 @@ function AppContent() {
                   setSearchColumns={setSeedSearchColumns}
                   displayColumnNames={accessionsDisplayColumns}
                   setDisplayColumnNames={setAccessionsDisplayColumns}
-                  setFacilityIdSelected={setFacilityIdSelected}
                 />
               </Route>
               <Route path='/accessions/:accessionId'>

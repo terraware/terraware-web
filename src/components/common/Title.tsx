@@ -92,6 +92,7 @@ export default function Title({
       <div className={classes.separator} />
       <label className={classes.titleLabel}>{strings.PROJECT}</label>
       <Select
+        id='projectSelect'
         options={addAllOption(organization?.projects?.map((org) => org.name))}
         selectedValue={selectedOrgInfo?.selectedProject?.name ?? 'All'}
         onChange={(newValue) => {
@@ -104,6 +105,7 @@ export default function Title({
       />
       <label className={classes.titleLabel}>{strings.SITE}</label>
       <Select
+        id='siteSelect'
         disabled={!selectedOrgInfo.selectedProject}
         selectedValue={selectedOrgInfo?.selectedSite?.name ?? 'All'}
         options={addAllOption(selectedOrgInfo?.selectedProject?.sites?.map((site) => site.name))}
@@ -119,6 +121,7 @@ export default function Title({
         <>
           <label className={classes.titleLabel}>{strings.FACILITY}</label>
           <Select
+            id='facilitySelect'
             disabled={!selectedOrgInfo.selectedSite}
             selectedValue={selectedOrgInfo?.selectedFacility?.name ?? 'All'}
             options={addAllOption(selectedOrgInfo.selectedSite?.facilities?.map((facility) => facility.name))}
