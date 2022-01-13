@@ -5,8 +5,8 @@ import { getUser } from 'src/api/user/user';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
 import { User } from 'src/types/User';
-import Icon from './common/icon/Icon';
 import PageCard from './common/PageCard';
+import TfDivisor from './common/TfDivisor';
 import PageHeader from './seeds/PageHeader';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -19,20 +19,6 @@ const useStyles = makeStyles((theme: Theme) =>
     mainGrid: {
       display: 'flex',
       width: '100%',
-    },
-    divisor: {
-      background:
-        'linear-gradient(to right, rgba(202, 210, 211, 0) 0%, #CAD2D3 25%, #CAD2D3 75%, rgba(202, 210, 211, 0) 100%)',
-      width: '100%',
-      height: '1px',
-      position: 'relative',
-    },
-    divisorIcon: {
-      position: 'absolute',
-      fill: '#308F5F',
-      right: 'calc(50% - 10px)',
-      bottom: '-10px',
-      background: '#ffffff',
     },
   })
 );
@@ -90,9 +76,7 @@ export default function Home({ organization }: HomeProps): JSX.Element {
               )}
 
               <Grid item xs={12}>
-                <div className={classes.divisor}>
-                  <Icon name='leaf' className={classes.divisorIcon} />
-                </div>
+                <TfDivisor />
               </Grid>
             </>
           )}

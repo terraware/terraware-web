@@ -33,6 +33,7 @@ import theme from './theme';
 import { defaultPreset as DefaultColumns } from './components/seeds/database/columns';
 import ProjectsList from './components/Projects';
 import SitesList from './components/Sites';
+import Project from './components/Project';
 import { seedsDatabaseSelectedOrgInfo } from './state/selectedOrgInfoPerPage';
 
 // @ts-ignore
@@ -180,6 +181,9 @@ function AppContent() {
               </Route>
               <Route exact path='/projects'>
                 <ProjectsList organization={selectedOrganization} />
+              </Route>
+              <Route path='/projects/:projectId'>
+                <Project organization={selectedOrganization} />
               </Route>
               <Route exact path='/sites'>
                 <SitesList organization={selectedOrganization} />

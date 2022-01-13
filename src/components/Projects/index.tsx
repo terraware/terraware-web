@@ -2,7 +2,8 @@ import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
-import React, { useState } from 'react';
+import React from 'react';
+import { useHistory } from 'react-router-dom';
 import Button from 'src/components/common/button/Button';
 import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
@@ -42,7 +43,16 @@ type ProjectsListProps = {
 
 export default function ProjectsList({ organization }: ProjectsListProps): JSX.Element {
   const classes = useStyles();
-  const [, setSelectedProject] = useState<Project>();
+  const history = useHistory();
+
+  const onSelect = (selected: Project) => {
+    if (selected.id) {
+      const viewProjectLocation = {
+        pathname: `/projects/${selected.id}`,
+      };
+      history.push(viewProjectLocation);
+    }
+  };
 
   return (
     <main>
@@ -75,7 +85,7 @@ export default function ProjectsList({ organization }: ProjectsListProps): JSX.E
                       columns={columns}
                       rows={organization.projects}
                       orderBy='name'
-                      onSelect={setSelectedProject}
+                      onSelect={onSelect}
                       Renderer={ProjectsCellRenderer}
                     />
                   )}

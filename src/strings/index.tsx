@@ -335,6 +335,13 @@ const strings = new LocalizedStrings({
     PROJECTS_DESCRIPTION: 'Manage your Projects.',
     ADD_SITE: 'Add Site',
     SITES_DESCRIPTION: 'Manage your Sites.',
+    NAME: 'Name',
+    DESCRIPTION: 'Description',
+    START_DATE_OPT: 'Start Date (optional)',
+    STATUS_OPT: 'Status (opt)',
+    PROJECT_TYPE_OPT: 'Project Type(s) (optional)',
+    PEOPLE_DESC: 'To add new people to this organization go to People.',
+    SITES_DESC: 'To add new sites to this project go to Sites.',
   },
 });
 
