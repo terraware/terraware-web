@@ -31,6 +31,8 @@ import ErrorBoundary from './ErrorBoundary';
 import strings from './strings';
 import theme from './theme';
 import { defaultPreset as DefaultColumns } from './components/seeds/database/columns';
+import ProjectsList from './components/Projects';
+import SitesList from './components/Sites';
 import { seedsDatabaseSelectedOrgInfo } from './state/selectedOrgInfoPerPage';
 
 // @ts-ignore
