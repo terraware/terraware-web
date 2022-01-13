@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 import strings from 'src/strings';
-import { ServerOrganization } from 'src/types/Organization';
+import { AllOrganizationRoles, ServerOrganization } from 'src/types/Organization';
 import Navbar from './common/Navbar/Navbar';
 import NavItem from './common/Navbar/NavItem';
 import NavSection from './common/Navbar/NavSection';
@@ -11,7 +11,7 @@ type NavBarProps = {
   organization?: ServerOrganization;
 };
 export default function NavBar({ organization }: NavBarProps): JSX.Element | null {
-  const [role, setRole] = useState<'Contributor' | 'Manager' | 'Admin' | 'Owner'>();
+  const [role, setRole] = useState<AllOrganizationRoles>();
   const highRoles = ['Manager', 'Admin', 'Owner'];
 
   useEffect(() => {

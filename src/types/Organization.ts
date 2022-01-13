@@ -40,9 +40,13 @@ export type Organization = {
 export type ServerOrganization = {
   id: number;
   name: string;
-  role: 'Contributor' | 'Manager' | 'Admin' | 'Owner';
+  role: AllOrganizationRoles;
   projects?: Project[];
 };
+
+export type HighOrganizationRoles = 'Manager' | 'Admin' | 'Owner';
+
+export type AllOrganizationRoles = HighOrganizationRoles | 'Contributor';
 
 export interface SelectedOrgInfo {
   selectedProject?: Project;
