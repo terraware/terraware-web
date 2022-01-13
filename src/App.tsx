@@ -98,18 +98,22 @@ function AppContent() {
   const [organizationError, setOrganizationError] = useState<boolean>(false);
   // get the selected values on database to pass it to new accession page
   const selectedOrgInfoDatabase = useRecoilValue(seedsDatabaseSelectedOrgInfo);
+  const [organizations, setOrganizations] = useState<ServerOrganization[]>();
 
   useEffect(() => {
     const populateOrganizations = async () => {
       const response = await getOrganizations();
       if (response.requestSucceeded) {
-        setSelectedOrganization(response.organizations[0]);
+        setOrganizations(response.organizations);
+        if (!selectedOrganization) {
+          setSelectedOrganization(response.organizations[0]);
+        }
       } else {
         setOrganizationError(true);
       }
     };
     populateOrganizations();
-  }, []);
+  }, [selectedOrganization]);
 
   if (organizationError) {
     return <h1>Could not fetch organization data</h1>;
@@ -129,6 +133,9 @@ function AppContent() {
             setNotifications={setNotifications}
             setSeedSearchCriteria={setSeedSearchCriteria}
             facilityId={facilityIdSelected}
+            organizations={organizations}
+            selectedOrganization={selectedOrganization}
+            setSelectedOrganization={setSelectedOrganization}
           />
           <ErrorBoundary>
             <Switch>

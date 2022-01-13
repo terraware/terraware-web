@@ -5,8 +5,10 @@ import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { SeedSearchCriteria } from 'src/api/seeds/search';
 import { Notifications } from 'src/types/Notifications';
+import { ServerOrganization } from 'src/types/Organization';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import NotificationsDropdown from './NotificationsDropdown';
+import OrganizationsDropdown from './OrganizationsDropdown';
 import SearchBar from './SearchBar';
 import UserMenu from './UserMenu';
 
@@ -51,11 +53,22 @@ type TopBarProps = {
   setNotifications: (notifications?: Notifications) => void;
   setSeedSearchCriteria: (criteria: SeedSearchCriteria) => void;
   facilityId?: number;
+  organizations?: ServerOrganization[];
+  selectedOrganization?: ServerOrganization;
+  setSelectedOrganization: (selectedOrganization: ServerOrganization) => void;
 };
 
 export default function TopBar(props: TopBarProps): JSX.Element | null {
   const classes = useStyles();
-  const { notifications, setNotifications, setSeedSearchCriteria, facilityId } = props;
+  const {
+    notifications,
+    setNotifications,
+    setSeedSearchCriteria,
+    facilityId,
+    selectedOrganization,
+    setSelectedOrganization,
+    organizations,
+  } = props;
   const location = useStateLocation();
 
   return (
@@ -79,6 +92,12 @@ export default function TopBar(props: TopBarProps): JSX.Element | null {
             setNotifications={setNotifications}
             setSeedSearchCriteria={setSeedSearchCriteria}
             currFacilityId={facilityId || 0}
+          />
+          <div className={classes.separator} />
+          <OrganizationsDropdown
+            organizations={organizations}
+            selectedOrganization={selectedOrganization}
+            setSelectedOrganization={setSelectedOrganization}
           />
           <div className={classes.separator} />
           <UserMenu />
