@@ -21,11 +21,11 @@ if [ $attempts_remaining = 0 ]; then
     echo "No response from PostgreSQL."
     echo
 
-    docker logs tree-location-web_postgres_1
+    docker logs terraware-web_postgres_1
     exit 1
 fi
 
-if docker exec -i tree-location-web_postgres_1 psql -d terraware -U postgres < dump/dump.sql; then
+if docker exec -i terraware-web_postgres_1 psql -d terraware -U postgres < dump/dump.sql; then
     yarn docker:start
     yarn wait-be
     yarn server:prepare
