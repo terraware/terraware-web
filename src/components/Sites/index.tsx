@@ -44,10 +44,6 @@ export default function SitesList({ organization }: SitesListProps): JSX.Element
   const [, setSelectedSite] = useState<SiteTable>();
   const [sites, setSites] = useState<SiteTable[]>();
 
-  const onSelect = (selected: SiteTable) => {
-    setSelectedSite(selected);
-  };
-
   useEffect(() => {
     const addProjectNameToSites = () => {
       if (organization) {
@@ -56,7 +52,7 @@ export default function SitesList({ organization }: SitesListProps): JSX.Element
         const newSites = allSites.map((site) => {
           return {
             ...site,
-            projectName: projectsById.get(site.id)?.name || '',
+            projectName: projectsById.get(site.projectId)?.name || '',
           };
         });
         setSites(newSites);
@@ -92,7 +88,7 @@ export default function SitesList({ organization }: SitesListProps): JSX.Element
               <Grid container spacing={4}>
                 <Grid item xs={12}>
                   {sites && (
-                    <Table id='sites-table' columns={columns} rows={sites} orderBy='name' onSelect={onSelect} />
+                    <Table id='sites-table' columns={columns} rows={sites} orderBy='name' onSelect={setSelectedSite} />
                   )}
                 </Grid>
               </Grid>

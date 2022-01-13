@@ -44,10 +44,6 @@ export default function ProjectsList({ organization }: ProjectsListProps): JSX.E
   const classes = useStyles();
   const [, setSelectedProject] = useState<Project>();
 
-  const onSelect = (selected: Project) => {
-    setSelectedProject(selected);
-  };
-
   return (
     <main>
       <Container maxWidth={false} className={classes.mainContainer}>
@@ -79,7 +75,7 @@ export default function ProjectsList({ organization }: ProjectsListProps): JSX.E
                       columns={columns}
                       rows={organization.projects}
                       orderBy='name'
-                      onSelect={onSelect}
+                      onSelect={setSelectedProject}
                       Renderer={ProjectsCellRenderer}
                     />
                   )}
