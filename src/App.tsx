@@ -98,7 +98,7 @@ function AppContent() {
   const [organizationError, setOrganizationError] = useState<boolean>(false);
   // get the selected values on database to pass it to new accession page
   const selectedOrgInfoDatabase = useRecoilValue(seedsDatabaseSelectedOrgInfo);
-  const [organizations, setOrganizations] = React.useState<ServerOrganization[]>();
+  const [organizations, setOrganizations] = useState<ServerOrganization[]>();
 
   useEffect(() => {
     const populateOrganizations = async () => {
