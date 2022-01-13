@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-type OrganizationsSelectorProps = {
+type OrganizationsDropdownProps = {
   organizations?: ServerOrganization[];
   selectedOrganization?: ServerOrganization;
   setSelectedOrganization: (selectedOrganization: ServerOrganization) => void;
@@ -25,7 +25,7 @@ export default function OrganizationsDropdown({
   organizations,
   selectedOrganization,
   setSelectedOrganization,
-}: OrganizationsSelectorProps): JSX.Element {
+}: OrganizationsDropdownProps): JSX.Element {
   const classes = useStyles();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);

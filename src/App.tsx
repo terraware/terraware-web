@@ -1,7 +1,7 @@
 /* eslint-disable import/no-webpack-loader-syntax */
 import { createStyles, CssBaseline, makeStyles, ThemeProvider } from '@material-ui/core';
 import mapboxgl from 'mapbox-gl';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
 import { RecoilRoot, useRecoilValue } from 'recoil';
 import {
@@ -36,6 +36,7 @@ import Project from './components/Project';
 import SiteView from './components/Site';
 import { seedsDatabaseSelectedOrgInfo } from './state/selectedOrgInfoPerPage';
 import NewProject from './components/NewProject';
+import { getOrganizations } from './api/organization/organization';
 
 // @ts-ignore
 mapboxgl.workerClass =
@@ -99,7 +100,22 @@ function AppContent() {
   const [organizationError, setOrganizationError] = useState<boolean>(false);
   // get the selected values on database to pass it to new accession page
   const selectedOrgInfoDatabase = useRecoilValue(seedsDatabaseSelectedOrgInfo);
-  const [organizations, setOrganizations] = React.useState<ServerOrganization[]>();
+  const [organizations, setOrganizations] = useState<ServerOrganization[]>();
+
+  useEffect(() => {
+    const populateOrganizations = async () => {
+      const response = await getOrganizations();
+      if (response.requestSucceeded) {
+        setOrganizations(response.organizations);
+        if (!selectedOrganization) {
+          setSelectedOrganization(response.organizations[0]);
+        }
+      } else {
+        setOrganizationError(true);
+      }
+    };
+    populateOrganizations();
+  }, [selectedOrganization]);
 
   if (organizationError) {
     return <h1>Could not fetch organization data</h1>;

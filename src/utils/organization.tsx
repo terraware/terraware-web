@@ -56,7 +56,7 @@ export const getAllSitesWithProjectName = (organization: ServerOrganization): Si
   const newSites = getAllSites(organization).map((site) => {
     return {
       ...site,
-      projectName: projectsById.get(site.id)?.name || '',
+      projectName: projectsById.get(site.projectId)?.name || '',
     };
   });
   return newSites;

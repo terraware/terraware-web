@@ -126,9 +126,9 @@ export default function TopBar(props: TopBarProps): JSX.Element | null {
           />
           <div className={classes.separator} />
           <OrganizationsDropdown
-            organizations={props.organizations}
-            selectedOrganization={props.selectedOrganization}
-            setSelectedOrganization={props.setSelectedOrganization}
+            organizations={organizations}
+            selectedOrganization={selectedOrganization}
+            setSelectedOrganization={setSelectedOrganization}
           />
           <div className={classes.separator} />
           <UserMenu />
