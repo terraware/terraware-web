@@ -1,3 +1,5 @@
+import { AllOrganizationRoles } from './Organization';
+
 export type User = {
   firstName?: string;
   lastName?: string;
@@ -7,8 +9,8 @@ export type User = {
 export type OrganizationUser = {
   firstName?: string;
   lastName?: string;
-  email?: string;
+  email: string;
   id: number;
-  role: 'Contributor' | 'Manager' | 'Admin' | 'Owner';
+  role: AllOrganizationRoles;
   projectIds: number[];
 };

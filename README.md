@@ -85,4 +85,4 @@ yarn docker:stop   # don't forget to stop the server when you're done
 ## Useful links
 
 - The API Swagger documentation [link](http://localhost:8080/docs)
-- Github deployment information [link](https://github.com/terraware/tree-location-web/actions/workflows/workflow.yml)
+- Github deployment information [link](https://github.com/terraware/terraware-web/actions/workflows/workflow.yml)
