@@ -363,6 +363,7 @@ const strings = new LocalizedStrings({
     REMOVE_AND_SAVE: 'Remove & Save',
     MOVE: 'Move',
     REASSIGN_SITE_TITLE: 'Please reassign this site to another project in order to remove it from this project.',
+    ADD_SITE_DESC: 'Enter the site’s information below.',
   },
 });
 

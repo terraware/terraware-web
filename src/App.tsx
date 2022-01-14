@@ -36,6 +36,7 @@ import Project from './components/Project';
 import SiteView from './components/Site';
 import { seedsDatabaseSelectedOrgInfo } from './state/selectedOrgInfoPerPage';
 import NewProject from './components/NewProject';
+import NewSite from './components/NewSite';
 
 // @ts-ignore
 mapboxgl.workerClass =
@@ -190,6 +191,11 @@ function AppContent() {
               <Route path='/projects/:projectId'>
                 <Project organization={selectedOrganization} />
               </Route>
+              {selectedOrganization && (
+                <Route path='/sites/new'>
+                  <NewSite organization={selectedOrganization} />
+                </Route>
+              )}
               <Route exact path='/sites'>
                 <SitesList organization={selectedOrganization} />
               </Route>

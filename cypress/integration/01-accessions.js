@@ -31,7 +31,6 @@ describe('Accessions', () => {
     beforeEach(() => {
       cy.intercept('POST', '/api/v1/search').as('search');
       cy.visit('/accessions');
-      cy.wait('@search');
       cy.get('#projectSelect').click();
       cy.get('.options-container').should('be.visible');
       cy.get('.options-container .select-value').eq(1).click();

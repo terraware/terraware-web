@@ -19,6 +19,12 @@ export type NewProject = {
   organizationId: number;
 };
 
+export type NewSite = {
+  name: string;
+  description?: string;
+  projectId?: number;
+};
+
 export type Site = {
   id: number;
   name: string;
