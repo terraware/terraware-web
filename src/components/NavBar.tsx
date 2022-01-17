@@ -30,6 +30,7 @@ export default function NavBar({ organization }: NavBarProps): JSX.Element | nul
   const isSpeciesRoute = useRouteMatch('/species');
   const isProjectsRoute = useRouteMatch('/projects');
   const isSitesRoute = useRouteMatch('/sites');
+  const isPeopleRoute = useRouteMatch('/people');
 
   const navigate = (url: string) => {
     history.push(url);
@@ -112,10 +113,21 @@ export default function NavBar({ organization }: NavBarProps): JSX.Element | nul
             icon='site'
             selected={isSitesRoute ? true : false}
             onClick={() => navigate('/sites')}
-            id='projects'
+            id='sites'
           />
         </>
       )}
+      <NavSection />
+      <NavItem label={strings.ADMIN} icon='key' onClick={() => !isPeopleRoute && navigate('/people')} id='admin'>
+        <SubNavbar>
+          <NavItem
+            label={strings.PEOPLE}
+            selected={isPeopleRoute ? true : false}
+            onClick={() => !isPeopleRoute && navigate('/people')}
+            id='people'
+          />
+        </SubNavbar>
+      </NavItem>
     </Navbar>
   );
 }

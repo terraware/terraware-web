@@ -342,6 +342,9 @@ const strings = new LocalizedStrings({
     PROJECT_TYPE_OPT: 'Project Type(s) (optional)',
     PEOPLE_DESC: 'To add new people to this organization go to People.',
     SITES_DESC: 'To add new sites to this project go to Sites.',
+    ADMIN: 'Admin',
+    ADD_PERSON: 'Add Person',
+    PEOPLE_DESCRIPTION: 'Manage the people in Terraware.',
   },
 });
 
