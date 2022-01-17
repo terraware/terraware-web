@@ -220,7 +220,9 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
     if (projectSelected) {
       const response = await updateProject({ ...record, id: projectSelected.id } as Project);
       peopleOnProject?.forEach(async (person) => {
-        await addProjectUser(projectSelected.id, person.id);
+        if (!person.projectIds.includes(projectSelected.id)) {
+          await addProjectUser(projectSelected.id, person.id);
+        }
       });
       removedPeople?.forEach(async (person) => {
         await deleteProjectUser(projectSelected.id, person.id);
