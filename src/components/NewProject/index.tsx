@@ -13,7 +13,7 @@ import Checkbox from '../common/Checkbox';
 import useForm from 'src/utils/useForm';
 import Select from '../common/Select/Select';
 import Button from '../common/button/Button';
-import { createProject, updateProject } from 'src/api/project/project';
+import { addProjectUser, createProject, deleteProjectUser, updateProject } from 'src/api/project/project';
 import { useSetRecoilState } from 'recoil';
 import snackbarAtom from 'src/state/snackbar';
 import AddPeopleModal from './AddPeopleModal';
@@ -92,6 +92,7 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
   const [removedPeopleModalOpened, setRemovedPeopleModalOpened] = useState(false);
   const [moveSiteModalOpened, setMoveSiteModalOpened] = useState(false);
   const [peopleOnProject, setPeopleOnProject] = useState<OrganizationUser[]>();
+  const [peopleNotOnProject, setPeopleNotOnProject] = useState<OrganizationUser[]>();
   const [sitesOfProject, setSitesOfProject] = useState<Site[]>();
   const [nameError, setNameError] = useState('');
   const { projectId } = useParams<{ projectId: string }>();
@@ -114,6 +115,11 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
       organizationId: organization?.id,
     });
   }, [projectSelected, setRecord, organization]);
+
+  useEffect(() => {
+    const allPeopleOnProjectIds = peopleOnProject?.map((person) => person.id);
+    setPeopleNotOnProject(people?.filter((person) => !allPeopleOnProjectIds?.includes(person.id)));
+  }, [peopleOnProject, people]);
 
   useEffect(() => {
     const projectIdNum = parseInt(projectId, 10);
@@ -213,6 +219,12 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
   const updateProjectHandler = async () => {
     if (projectSelected) {
       const response = await updateProject({ ...record, id: projectSelected.id } as Project);
+      peopleOnProject?.forEach(async (person) => {
+        await addProjectUser(projectSelected.id, person.id);
+      });
+      removedPeople?.forEach(async (person) => {
+        await deleteProjectUser(projectSelected.id, person.id);
+      });
       if (response.requestSucceeded) {
         setSnackbar({
           type: 'success',
@@ -235,10 +247,7 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
       if (projectSelected) {
         if (!removedPeopleModalOpened) {
           const originalPeopleOnProject = people?.filter((person) => person.projectIds.includes(projectSelected.id));
-          if (
-            (originalPeopleOnProject && peopleOnProject && originalPeopleOnProject.length > peopleOnProject?.length) ||
-            (newModifiedSites && newModifiedSites.length > 0)
-          ) {
+          if (originalPeopleOnProject && peopleOnProject) {
             const removedPeopleArray: OrganizationUser[] = [];
             originalPeopleOnProject?.forEach((person) => {
               const found = peopleOnProject?.filter((newPerson) => newPerson.id === person.id);
@@ -246,8 +255,12 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
                 removedPeopleArray.push(person);
               }
             });
-            setRemovedPeople(removedPeopleArray);
-            setRemovedPeopleModalOpened(true);
+            if (removedPeopleArray.length > 0 || (newModifiedSites && newModifiedSites.length > 0)) {
+              setRemovedPeople(removedPeopleArray);
+              setRemovedPeopleModalOpened(true);
+            } else {
+              updateProjectHandler();
+            }
           }
         } else {
           updateProjectHandler();
@@ -255,6 +268,11 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
       } else {
         const response = await createProject(record);
         if (response.requestSucceeded) {
+          peopleOnProject?.forEach(async (person) => {
+            if (response.project !== null) {
+              await addProjectUser(response.project.id, person.id);
+            }
+          });
           setSnackbar({
             type: 'success',
             msg: 'Project added',
@@ -289,7 +307,7 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
       <AddPeopleModal
         open={addPeopleModalOpened}
         onClose={() => setAddPeopleModalOpened(false)}
-        people={people}
+        people={peopleNotOnProject}
         peopleOnProject={peopleOnProject}
         setPeopleOnProject={setPeopleOnProject}
       />

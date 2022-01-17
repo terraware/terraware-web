@@ -50,7 +50,11 @@ export default function AddPeopleDialog(props: Props): JSX.Element {
 
   const onSubmitHandler = () => {
     if (selectedRows) {
-      setPeopleOnProject(selectedRows);
+      if (peopleOnProject) {
+        setPeopleOnProject([...peopleOnProject, ...selectedRows]);
+      } else {
+        setPeopleOnProject(selectedRows);
+      }
     }
     onClose();
   };
@@ -71,7 +75,6 @@ export default function AddPeopleDialog(props: Props): JSX.Element {
               orderBy='name'
               columns={peopleColumns}
               showCheckbox={true}
-              previousSelectedRows={peopleOnProject}
               setSelectedRows={setSelectedRows}
             />
           ) : (

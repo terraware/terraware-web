@@ -27,16 +27,59 @@ export const createProject = async (project: NewProject): Promise<PostProjectRes
 
 const PROJECT = '/api/v1/projects/{id}';
 
-type PutProjectResponse = {
+type SimpleResponse = {
   requestSucceeded: boolean;
 };
 
-export const updateProject = async (project: Project): Promise<PutProjectResponse> => {
-  const response: PutProjectResponse = {
+export const updateProject = async (project: Project): Promise<SimpleResponse> => {
+  const response: SimpleResponse = {
     requestSucceeded: true,
   };
   try {
     await axios.put(PROJECT.replace('{id}', project.id.toString()), project);
+  } catch {
+    response.requestSucceeded = false;
+  }
+
+  return response;
+};
+
+const USER_IN_PROJECT = '/api/v1/projects/{projectId}/users/{userId}';
+type SimpleSuccessResponsePayload =
+  paths[typeof USER_IN_PROJECT]['post']['responses'][200]['content']['application/json'];
+
+export const addProjectUser = async (projectId: number, userId: number): Promise<SimpleResponse> => {
+  const response: SimpleResponse = {
+    requestSucceeded: true,
+  };
+  try {
+    const serverResponse: SimpleSuccessResponsePayload = (
+      await axios.post(
+        USER_IN_PROJECT.replace('{projectId}', projectId.toString()).replace('{userId}', userId.toString())
+      )
+    ).data;
+    if (serverResponse.status === 'error') {
+      response.requestSucceeded = false;
+    }
+  } catch {
+    response.requestSucceeded = false;
+  }
+  return response;
+};
+
+export const deleteProjectUser = async (projectId: number, userId: number): Promise<SimpleResponse> => {
+  const response: SimpleResponse = {
+    requestSucceeded: true,
+  };
+  try {
+    const serverResponse: SimpleSuccessResponsePayload = (
+      await axios.delete(
+        USER_IN_PROJECT.replace('{projectId}', projectId.toString()).replace('{userId}', userId.toString())
+      )
+    ).data;
+    if (serverResponse.status === 'error') {
+      response.requestSucceeded = false;
+    }
   } catch {
     response.requestSucceeded = false;
   }
