@@ -1,6 +1,6 @@
 
 // Do not edit directly
-// Generated on Wed, 20 Oct 2021 16:15:45 GMT
+// Generated on Wed, 01 Dec 2021 12:31:15 GMT
 
 $tw-clr-icon-fill-critical: #FE0003;
 $tw-clr-icon-fill-passive: #708284;
@@ -239,10 +239,12 @@ $tw-fnt-base-line-height-headline-03: 44px;
 $tw-fnt-base-line-height-headline-04: 36px;
 $tw-fnt-base-line-height-headline-05: 32px;
 $tw-fnt-base-line-height-headline-06: 28px;
-$tw-clr-frm-fld-error-text: #FE0003;
-$tw-clr-frm-fld-help-text: #708284;
-$tw-clr-frm-fld-label: #708284;
+$tw-clr-frm-fld-error-text: #D40002;
+$tw-clr-frm-fld-help-text: #5C6B6C;
+$tw-clr-frm-fld-label: #5C6B6C;
 $tw-clr-frm-fld-placeholder: #A9B7B8;
+$tw-clr-frm-fld-radio-button-checkbox-fill-checked: #0067C8;
+$tw-clr-frm-fld-radio-button-checkbox-selection-label: #3A4445;
 $tw-clr-frm-fld-select-menu-fill: #FFFFFF;
 $tw-clr-frm-fld-select-menu-item-fill-active: #0067C833;
 $tw-clr-frm-fld-select-menu-item-fill-hover: #0067C81A;
@@ -258,11 +260,11 @@ $tw-clr-frm-fld-text-input-stroke-error: #FE0003;
 $tw-clr-frm-fld-text-input-stroke-hover: #0067C8;
 $tw-clr-frm-fld-text-input-stroke-warning: #BD6931;
 $tw-clr-frm-fld-value: #3A4445;
-$tw-clr-frm-fld-warning-text: #BD6931;
+$tw-clr-frm-fld-warning-text: #9A572B;
 $tw-rds-frm-fld-text-input: 4px;
 $tw-sz-frm-fld-text-input-stroke: 1px;
 $tw-sz-frm-fld-text-input-stroke-active: 2px;
-$tw-sz-frm-fld-textarea-input-height: [object Object];
+$tw-sz-frm-fld-textarea-input-height: 24px * 2.5;
 $tw-fnt-frm-fld-error-text-font-family: 'Inter', sans-serif;
 $tw-fnt-frm-fld-error-text-font-size: 14px;
 $tw-fnt-frm-fld-error-text-font-weight: 500;
@@ -275,6 +277,10 @@ $tw-fnt-frm-fld-label-font-family: 'Inter', sans-serif;
 $tw-fnt-frm-fld-label-font-size: 14px;
 $tw-fnt-frm-fld-label-font-weight: 400;
 $tw-fnt-frm-fld-label-line-height: 20px;
+$tw-fnt-frm-fld-radio-button-checkbox-selection-label-font-family: 'Inter', sans-serif;
+$tw-fnt-frm-fld-radio-button-checkbox-selection-label-font-size: 16px;
+$tw-fnt-frm-fld-radio-button-checkbox-selection-label-font-weight: 500;
+$tw-fnt-frm-fld-radio-button-checkbox-selection-label-line-height: 24px;
 $tw-fnt-frm-fld-select-value-font-family: 'Inter', sans-serif;
 $tw-fnt-frm-fld-select-value-font-size: 16px;
 $tw-fnt-frm-fld-select-value-font-weight: 500;

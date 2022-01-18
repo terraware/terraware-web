@@ -1,10 +1,9 @@
 /* eslint-disable import/no-webpack-loader-syntax */
 import { createStyles, CssBaseline, makeStyles, ThemeProvider } from '@material-ui/core';
 import mapboxgl from 'mapbox-gl';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
 import { RecoilRoot, useRecoilValue } from 'recoil';
-import { getOrganizations } from 'src/api/organization/organization';
 import {
   DEFAULT_SEED_SEARCH_FILTERS,
   DEFAULT_SEED_SEARCH_SORT_ORDER,
@@ -37,6 +36,8 @@ import Project from './components/Project';
 import SiteView from './components/Site';
 import { seedsDatabaseSelectedOrgInfo } from './state/selectedOrgInfoPerPage';
 import People from './components/People';
+import NewProject from './components/NewProject';
+import NewSite from './components/NewSite';
 
 // @ts-ignore
 mapboxgl.workerClass =
@@ -100,22 +101,7 @@ function AppContent() {
   const [organizationError, setOrganizationError] = useState<boolean>(false);
   // get the selected values on database to pass it to new accession page
   const selectedOrgInfoDatabase = useRecoilValue(seedsDatabaseSelectedOrgInfo);
-  const [organizations, setOrganizations] = useState<ServerOrganization[]>();
-
-  useEffect(() => {
-    const populateOrganizations = async () => {
-      const response = await getOrganizations();
-      if (response.requestSucceeded) {
-        setOrganizations(response.organizations);
-        if (!selectedOrganization) {
-          setSelectedOrganization(response.organizations[0]);
-        }
-      } else {
-        setOrganizationError(true);
-      }
-    };
-    populateOrganizations();
-  }, [selectedOrganization]);
+  const [organizations, setOrganizations] = React.useState<ServerOrganization[]>();
 
   if (organizationError) {
     return <h1>Could not fetch organization data</h1>;
@@ -136,8 +122,10 @@ function AppContent() {
             setSeedSearchCriteria={setSeedSearchCriteria}
             facilityId={facilityIdSelected}
             organizations={organizations}
-            selectedOrganization={selectedOrganization}
+            setOrganizations={setOrganizations}
             setSelectedOrganization={setSelectedOrganization}
+            selectedOrganization={selectedOrganization}
+            setOrganizationError={setOrganizationError}
           />
           <ErrorBoundary>
             <Switch>
@@ -188,15 +176,35 @@ function AppContent() {
               <Route exact path='/species'>
                 <SpeciesList />
               </Route>
+              {selectedOrganization && (
+                <Route path='/projects/new'>
+                  <NewProject organization={selectedOrganization} />
+                </Route>
+              )}
               <Route exact path='/projects'>
                 <ProjectsList organization={selectedOrganization} />
               </Route>
+              {selectedOrganization && (
+                <Route path='/projects/:projectId/edit' exact={true}>
+                  <NewProject organization={selectedOrganization} />
+                </Route>
+              )}
               <Route path='/projects/:projectId'>
                 <Project organization={selectedOrganization} />
               </Route>
+              {selectedOrganization && (
+                <Route path='/sites/new'>
+                  <NewSite organization={selectedOrganization} />
+                </Route>
+              )}
               <Route exact path='/sites'>
                 <SitesList organization={selectedOrganization} />
               </Route>
+              {selectedOrganization && (
+                <Route path='/sites/:siteId/edit' exact={true}>
+                  <NewSite organization={selectedOrganization} />
+                </Route>
+              )}
               <Route path='/sites/:siteId'>
                 <SiteView organization={selectedOrganization} />
               </Route>

@@ -1,11 +1,13 @@
 import { Container, createStyles, Grid, makeStyles } from '@material-ui/core';
 import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useHistory, useParams } from 'react-router-dom';
 import strings from 'src/strings';
 import { ServerOrganization, Site } from 'src/types/Organization';
 import Icon from '../common/icon/Icon';
 import TfDivisor from '../common/TfDivisor';
 import { getSitesById } from 'src/utils/organization';
+import TextField from '../common/Textfield/Textfield';
+import Button from '../common/button/Button';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -25,18 +27,22 @@ const useStyles = makeStyles((theme) =>
       fontSize: '20px',
       alignItems: 'center',
     },
-    value: {
-      fontSize: '16px',
+    titleWithButton: {
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
     },
   })
 );
 
-type SiteDetailsProps = {
+type SiteViewProps = {
   organization?: ServerOrganization;
 };
-export default function SiteDetails({ organization }: SiteDetailsProps): JSX.Element {
+export default function SiteView({ organization }: SiteViewProps): JSX.Element {
   const { siteId } = useParams<{ siteId: string }>();
   const [site, setSite] = useState<Site>();
+  const history = useHistory();
 
   useEffect(() => {
     if (organization) {
@@ -45,6 +51,13 @@ export default function SiteDetails({ organization }: SiteDetailsProps): JSX.Ele
   }, [siteId, organization]);
 
   const classes = useStyles();
+
+  const goToEditSite = () => {
+    const editSiteLocation = {
+      pathname: `/sites/${siteId}/edit`,
+    };
+    history.push(editSiteLocation);
+  };
 
   return (
     <Container maxWidth={false} className={classes.mainContainer}>
@@ -55,20 +68,24 @@ export default function SiteDetails({ organization }: SiteDetailsProps): JSX.Ele
             {strings.SITES}
           </Link>
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={12} className={classes.titleWithButton}>
           <h2>{site?.name}</h2>
+          <Button label={strings.EDIT_SITE} priority='secondary' onClick={goToEditSite} />
         </Grid>
         <Grid item xs={4}>
-          <p>{strings.NAME}</p>
-          <p className={classes.value}>{site?.name}</p>
+          <TextField label={strings.NAME} id='name' type='text' value={site?.name} display={true} />
         </Grid>
         <Grid item xs={4}>
-          <p>{strings.DESCRIPTION}</p>
-          <p className={classes.value}>{site?.description}</p>
+          <TextField
+            label={strings.DESCRIPTION}
+            id='description'
+            type='text'
+            value={site?.description}
+            display={true}
+          />
         </Grid>
         <Grid item xs={4}>
-          <p>{strings.PROJECT}</p>
-          <p className={classes.value}>{site?.projectName}</p>
+          <TextField label={strings.PROJECT} id='projectName' type='text' value={site?.projectName} display={true} />
         </Grid>
         <Grid item xs={12} />
         <Grid item xs={12}>

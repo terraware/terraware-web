@@ -10,6 +10,21 @@ export type Project = {
   sites?: Site[];
 };
 
+export type NewProject = {
+  name?: string;
+  description?: string;
+  startDate?: string;
+  status?: string;
+  types?: string[];
+  organizationId: number;
+};
+
+export type NewSite = {
+  name: string;
+  description?: string;
+  projectId?: number;
+};
+
 export type Site = {
   id: number;
   name: string;

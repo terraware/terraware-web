@@ -24,6 +24,7 @@ export interface Props {
   error?: boolean;
   helperText?: string;
   disabled?: boolean;
+  className?: string;
 }
 
 export default function DatePicker(props: Props): JSX.Element {
@@ -57,7 +58,7 @@ export default function DatePicker(props: Props): JSX.Element {
       margin='normal'
       size='small'
       fullWidth={true}
-      className={classes.root}
+      className={props.className || classes.root}
       onKeyPress={props.onKeyPress}
       maxDate={props.maxDate ?? undefined}
       error={props.error}

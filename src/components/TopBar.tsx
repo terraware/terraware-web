@@ -1,8 +1,9 @@
 import { AppBar, IconButton, Link, Toolbar } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import HelpIcon from '@material-ui/icons/Help';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
+import { getOrganizations } from 'src/api/organization/organization';
 import { SeedSearchCriteria } from 'src/api/seeds/search';
 import { Notifications } from 'src/types/Notifications';
 import { ServerOrganization } from 'src/types/Organization';
@@ -53,9 +54,11 @@ type TopBarProps = {
   setNotifications: (notifications?: Notifications) => void;
   setSeedSearchCriteria: (criteria: SeedSearchCriteria) => void;
   facilityId?: number;
+  setOrganizations: (organizations: ServerOrganization[]) => void;
   organizations?: ServerOrganization[];
-  selectedOrganization?: ServerOrganization;
   setSelectedOrganization: (selectedOrganization: ServerOrganization) => void;
+  selectedOrganization?: ServerOrganization;
+  setOrganizationError: (error: boolean) => void;
 };
 
 export default function TopBar(props: TopBarProps): JSX.Element | null {
@@ -65,11 +68,39 @@ export default function TopBar(props: TopBarProps): JSX.Element | null {
     setNotifications,
     setSeedSearchCriteria,
     facilityId,
-    selectedOrganization,
+    setOrganizations,
     setSelectedOrganization,
+    selectedOrganization,
+    setOrganizationError,
     organizations,
   } = props;
   const location = useStateLocation();
+
+  useEffect(() => {
+    const populateOrganizations = async () => {
+      const response = await getOrganizations();
+      if (response.requestSucceeded) {
+        setOrganizations(response.organizations);
+      } else {
+        setOrganizationError(true);
+      }
+    };
+    populateOrganizations();
+  }, [location, setOrganizationError, setOrganizations]);
+
+  useEffect(() => {
+    if (organizations) {
+      if (!selectedOrganization) {
+        setSelectedOrganization(organizations[0]);
+      } else {
+        // update selectedOrganization
+        const previousSelectedOrganization = organizations?.find((org) => org.id === selectedOrganization.id);
+        if (previousSelectedOrganization) {
+          setSelectedOrganization(previousSelectedOrganization);
+        }
+      }
+    }
+  }, [organizations, selectedOrganization, setSelectedOrganization]);
 
   return (
     <AppBar position='static' className={classes.appBar}>
