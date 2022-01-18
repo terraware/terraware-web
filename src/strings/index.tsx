@@ -345,6 +345,8 @@ const strings = new LocalizedStrings({
     ADMIN: 'Admin',
     ADD_PERSON: 'Add Person',
     PEOPLE_DESCRIPTION: 'Manage the people in Terraware.',
+    CREATE_NEW_ORGANIZATION: 'Create New Organization',
+    ADD_NEW_ORGANIZATION: 'Add New Organization',
   },
 });
 

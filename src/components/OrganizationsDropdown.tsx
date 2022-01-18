@@ -3,6 +3,7 @@ import IconButton from '@material-ui/core/IconButton';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import React from 'react';
+import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
 
 const useStyles = makeStyles((theme) =>
@@ -36,6 +37,8 @@ export default function OrganizationsDropdown({
     setAnchorEl(null);
   };
 
+  const createNewOrganization = () => {};
+
   return (
     <div>
       <IconButton onClick={handleClick} size='small' className={classes.iconContainer}>
@@ -64,6 +67,10 @@ export default function OrganizationsDropdown({
               </ListItem>
             );
           })}
+          <span>---</span>
+          <ListItem button onClick={createNewOrganization}>
+            {strings.CREATE_NEW_ORGANIZATION}
+          </ListItem>
         </List>
       </Popover>
     </div>
