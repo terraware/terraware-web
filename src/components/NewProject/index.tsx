@@ -2,7 +2,7 @@ import { AppBar, Container, createStyles, Grid, makeStyles } from '@material-ui/
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import strings from 'src/strings';
-import { NewProject, ServerOrganization } from 'src/types/Organization';
+import { Project, ProjectTypes, ServerOrganization } from 'src/types/Organization';
 import TfDivisor from '../common/TfDivisor';
 import Table from 'src/components/common/table';
 import { TableColumnType } from '../common/table/types';
@@ -74,6 +74,13 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
+const peopleColumns: TableColumnType[] = [
+  { key: 'firstName', name: 'First Name', type: 'string' },
+  { key: 'lastName', name: 'Last Name', type: 'string' },
+  { key: 'email', name: 'Email', type: 'string' },
+  { key: 'role', name: 'Role', type: 'string' },
+];
+
 type ProjectViewProps = {
   organization: ServerOrganization;
 };
@@ -82,8 +89,9 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
   const [addPeopleModalOpened, setAddPeopleModalOpened] = useState(false);
   const [peopleOnProject, setPeopleOnProject] = useState<OrganizationUser[]>();
   const [nameError, setNameError] = useState('');
+  const history = useHistory();
 
-  const [record, setRecord, onChange] = useForm<NewProject>({ name: '', organizationId: organization?.id });
+  const [newProject, setNewProject, onChange] = useForm<Project>({ id: -1, name: '' });
   const setSnackbar = useSetRecoilState(snackbarAtom);
 
   useEffect(() => {
@@ -102,44 +110,32 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
 
   const classes = useStyles();
 
-  const peopleColumns: TableColumnType[] = [
-    { key: 'firstName', name: 'First Name', type: 'string' },
-    { key: 'lastName', name: 'Last Name', type: 'string' },
-    { key: 'email', name: 'Email', type: 'string' },
-    { key: 'role', name: 'Role', type: 'string' },
-  ];
-
-  type ProjectType = 'Native Forest Restoration' | 'Agroforestry' | 'Silvopasture' | 'Sustainable Timber';
-
-  const onChangeProjectType = (id: string, value: unknown) => {
-    let projectTypes = record.types ? [...record.types] : undefined;
+  const onChangeProjectType = (id: string, isChecked: boolean) => {
+    let projectTypes = newProject.types ? [...newProject.types] : undefined;
     if (projectTypes) {
-      const index = projectTypes.indexOf(id as ProjectType, 0);
-      if (index !== -1 && value === false) {
+      const index = projectTypes.indexOf(id as ProjectTypes, 0);
+      if (index !== -1 && isChecked === false) {
         projectTypes.splice(index, 1);
-      }
-
-      if (index === -1 && value === true) {
-        projectTypes.push(id as ProjectType);
+      } else if (index === -1 && isChecked === true) {
+        projectTypes.push(id as ProjectTypes);
       }
     } else {
-      if (value === true) {
-        projectTypes = [id as ProjectType];
+      if (isChecked === true) {
+        projectTypes = [id as ProjectTypes];
       }
     }
-    setRecord({ ...record, types: projectTypes });
+    setNewProject({ ...newProject, types: projectTypes });
   };
 
   const onChangeStatus = (newStatus: string) => {
     onChange('status', newStatus);
   };
 
-  const isChecked = (id: ProjectType) => {
-    const projectTypes = record.types;
+  const isChecked = (id: ProjectTypes) => {
+    const projectTypes = newProject.types;
 
     return projectTypes?.includes(id);
   };
-  const history = useHistory();
 
   const goToProjects = () => {
     const projectsLocation = {
@@ -149,10 +145,10 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
   };
 
   const saveProject = async () => {
-    if (record.name === '') {
+    if (newProject.name === '') {
       setNameError('Required Field');
     } else {
-      const response = await createProject(record);
+      const response = await createProject(newProject, organization.id);
       if (response.requestSucceeded) {
         setSnackbar({
           type: 'success',
@@ -189,20 +185,20 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
               label={strings.NAME}
               type='text'
               onChange={onChange}
-              value={record.name}
-              errorText={record.name ? '' : nameError}
+              value={newProject.name}
+              errorText={newProject.name ? '' : nameError}
             />
           </Grid>
           <Grid item xs={4}>
             <TextField id='description' label={strings.DESCRIPTION} type='textarea' onChange={onChange} />
           </Grid>
           <Grid item xs={4}>
-            <label htmlFor={record.startDate} className={classes.datePickerLabel}>
+            <label htmlFor={newProject.startDate} className={classes.datePickerLabel}>
               {strings.START_DATE_OPT}
             </label>
             <DatePicker
               id='startDate'
-              value={record.startDate}
+              value={newProject.startDate}
               onChange={onChange}
               label=''
               aria-label={strings.START_DATE_OPT}
@@ -215,7 +211,7 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
               label={strings.STATUS_OPT}
               onChange={onChangeStatus}
               options={['Propagating', 'Planting', 'Completed/Monitoring']}
-              selectedValue={record.status}
+              selectedValue={newProject.status}
             />
           </Grid>
           <Grid item xs={4}>
