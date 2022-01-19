@@ -370,6 +370,8 @@ const strings = new LocalizedStrings({
     REASSIGN_SITE_TITLE: 'Please reassign this site to another project in order to remove it from this project.',
     ADD_SITE_DESC: 'Enter the site’s information below.',
     EDIT_SITE: 'Edit Site',
+    ORGANIZATION_NAME: 'Organization Name',
+    COUNTRY: 'Country',
   },
 });
 

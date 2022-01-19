@@ -148,3 +148,44 @@ export async function getOrganizationUsers(organization: ServerOrganization): Pr
   }
   return response;
 }
+
+type GetOrganizationResponsePayload =
+  paths[typeof ORGANIZATIONS]['post']['responses'][200]['content']['application/json'];
+type UpdateOrganizationRequestPayload =
+  paths[typeof ORGANIZATIONS]['post']['requestBody']['content']['application/json'];
+type CreateOrganizationResponse = {
+  organization: ServerOrganization | null;
+  requestSucceeded: boolean;
+};
+export async function createOrganization(organization: ServerOrganization) {
+  const response: CreateOrganizationResponse = {
+    organization: null,
+    requestSucceeded: true,
+  };
+  try {
+    const newOrganization: UpdateOrganizationRequestPayload = {
+      name: organization.name,
+      description: organization.description,
+      countryCode: organization.countryCode,
+      countrySubdivisionCode: organization.countrySubdivisionCode,
+    };
+    const serverResponse: GetOrganizationResponsePayload = (await axios.post(ORGANIZATIONS, newOrganization)).data;
+
+    if (serverResponse.status === 'ok') {
+      response.organization = {
+        id: serverResponse.organization.id,
+        name: serverResponse.organization.name,
+        role: serverResponse.organization.role,
+        description: serverResponse.organization.description,
+        projects: serverResponse.organization.projects,
+        countryCode: serverResponse.organization.countryCode,
+        countrySubdivisionCode: serverResponse.organization.countrySubdivisionCode,
+      };
+    } else {
+      response.requestSucceeded = false;
+    }
+  } catch {
+    response.requestSucceeded = false;
+  }
+  return response;
+}
