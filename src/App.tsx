@@ -1,7 +1,7 @@
 /* eslint-disable import/no-webpack-loader-syntax */
 import { createStyles, CssBaseline, makeStyles, ThemeProvider } from '@material-ui/core';
 import mapboxgl from 'mapbox-gl';
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
 import { RecoilRoot, useRecoilValue } from 'recoil';
 import {
@@ -36,6 +36,7 @@ import Project from './components/Project';
 import SiteView from './components/Site';
 import { seedsDatabaseSelectedOrgInfo } from './state/selectedOrgInfoPerPage';
 import NewProject from './components/NewProject';
+import { getOrganizations } from './api/organization/organization';
 
 // @ts-ignore
 mapboxgl.workerClass =
@@ -101,6 +102,36 @@ function AppContent() {
   const selectedOrgInfoDatabase = useRecoilValue(seedsDatabaseSelectedOrgInfo);
   const [organizations, setOrganizations] = useState<ServerOrganization[]>();
 
+  const reloadData = useCallback(() => {
+    const populateOrganizations = async () => {
+      const response = await getOrganizations();
+      if (response.requestSucceeded) {
+        setOrganizations(response.organizations);
+      } else {
+        setOrganizationError(true);
+      }
+    };
+    populateOrganizations();
+  }, []);
+
+  useEffect(() => {
+    if (organizations) {
+      if (!selectedOrganization) {
+        setSelectedOrganization(organizations[0]);
+      } else {
+        // update selectedOrganization
+        const previousSelectedOrganization = organizations?.find((org) => org.id === selectedOrganization.id);
+        if (previousSelectedOrganization) {
+          setSelectedOrganization(previousSelectedOrganization);
+        }
+      }
+    }
+  }, [organizations, selectedOrganization]);
+
+  useEffect(() => {
+    reloadData();
+  }, [reloadData]);
+
   if (organizationError) {
     return <h1>Could not fetch organization data</h1>;
   }
@@ -120,10 +151,8 @@ function AppContent() {
             setSeedSearchCriteria={setSeedSearchCriteria}
             facilityId={facilityIdSelected}
             organizations={organizations}
-            setOrganizations={setOrganizations}
-            setSelectedOrganization={setSelectedOrganization}
             selectedOrganization={selectedOrganization}
-            setOrganizationError={setOrganizationError}
+            setSelectedOrganization={setSelectedOrganization}
           />
           <ErrorBoundary>
             <Switch>
@@ -176,7 +205,7 @@ function AppContent() {
               </Route>
               {selectedOrganization && (
                 <Route path='/projects/new'>
-                  <NewProject organization={selectedOrganization} />
+                  <NewProject organization={selectedOrganization} reloadData={reloadData} />
                 </Route>
               )}
               <Route exact path='/projects'>

@@ -83,8 +83,9 @@ const peopleColumns: TableColumnType[] = [
 
 type ProjectViewProps = {
   organization: ServerOrganization;
+  reloadData: () => void;
 };
-export default function ProjectView({ organization }: ProjectViewProps): JSX.Element {
+export default function ProjectView({ organization, reloadData }: ProjectViewProps): JSX.Element {
   const [people, setPeople] = useState<OrganizationUser[]>();
   const [addPeopleModalOpened, setAddPeopleModalOpened] = useState(false);
   const [peopleOnProject, setPeopleOnProject] = useState<OrganizationUser[]>();
@@ -131,7 +132,7 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
     onChange('status', newStatus);
   };
 
-  const isChecked = (id: ProjectTypes) => {
+  const isCheckboxChecked = (id: ProjectTypes) => {
     const projectTypes = newProject.types;
 
     return projectTypes?.includes(id);
@@ -150,6 +151,7 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
     } else {
       const response = await createProject(newProject, organization.id);
       if (response.requestSucceeded) {
+        reloadData();
         setSnackbar({
           type: 'success',
           msg: 'Project added',
@@ -221,28 +223,28 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
               name='projectType'
               label={strings.NATIVE_FOREST_RESTORATION}
               onChange={onChangeProjectType}
-              value={isChecked('Native Forest Restoration')}
+              value={isCheckboxChecked('Native Forest Restoration')}
             />
             <Checkbox
               id='Agroforestry'
               name='projectType'
               label={strings.AGROFORESTRY}
               onChange={onChangeProjectType}
-              value={isChecked('Agroforestry')}
+              value={isCheckboxChecked('Agroforestry')}
             />
             <Checkbox
               id='Silvopasture'
               name='projectType'
               label={strings.SILVOPASTURE}
               onChange={onChangeProjectType}
-              value={isChecked('Silvopasture')}
+              value={isCheckboxChecked('Silvopasture')}
             />
             <Checkbox
               id='Sustainable Timber'
               name='projectType'
               label={strings.SUSTAINABLE_TIMBER}
               onChange={onChangeProjectType}
-              value={isChecked('Sustainable Timber')}
+              value={isCheckboxChecked('Sustainable Timber')}
             />
           </Grid>
           <Grid item xs={12} />

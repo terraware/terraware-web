@@ -12,14 +12,14 @@ type PostProjectResponse = {
   requestSucceeded: boolean;
 };
 
-export const createProject = async (project: Project, organizationId: number): Promise<PostProjectResponse> => {
+export async function createProject(project: Project, organizationId: number): Promise<PostProjectResponse> {
   const response: PostProjectResponse = {
     project: null,
     requestSucceeded: true,
   };
 
   const createProjectRequestPayload: CreateProjectRequestPayload = {
-    organizationId: organizationId,
+    organizationId,
     name: project.name,
     description: project.description,
     startDate: project.startDate,
@@ -41,4 +41,4 @@ export const createProject = async (project: Project, organizationId: number): P
   }
 
   return response;
-};
+}
