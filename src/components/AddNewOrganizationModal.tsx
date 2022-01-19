@@ -4,7 +4,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { createOrganization } from 'src/api/organization/organization';
 import Button from 'src/components/common/button/Button';
@@ -15,9 +15,18 @@ import useForm from 'src/utils/useForm';
 import Select from './common/Select/Select';
 import TextField from './common/Textfield/Textfield';
 import snackbarAtom from 'src/state/snackbar';
+import { searchCountries } from 'src/api/country/country';
+import { Country, Subdivision } from 'src/types/Country';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
+    mainModal: {
+      '& .MuiDialog-scrollPaper': {
+        '& .MuiDialog-paper': {
+          overflow: 'visible',
+        },
+      },
+    },
     submit: {
       marginLeft: theme.spacing(2),
       color: theme.palette.common.white,
@@ -48,6 +57,10 @@ const useStyles = makeStyles((theme: Theme) =>
     spacing: {
       marginRight: theme.spacing(2),
     },
+    content: {
+      margin: '0 auto',
+      overflow: 'visible',
+    },
   })
 );
 
@@ -60,14 +73,41 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
   const classes = useStyles();
   const { onCancel, open } = props;
   const setSnackbar = useSetRecoilState(snackbarAtom);
-  const [newOrganization, setNewOrganization, onChange] = useForm<ServerOrganization>({
+  const [countries, setCountries] = useState<Country[]>();
+  const [selectedCountry, setSelectedCountry] = useState<Country>();
+  const [selectedSubdivision, setSelectedSubdivision] = useState<Subdivision>();
+  const [newOrganization, , onChange] = useForm<ServerOrganization>({
     id: -1,
     name: '',
     role: 'Admin',
   });
 
-  const onChangeCountry = () => {
-    onChange('countryCode', '111');
+  useEffect(() => {
+    const populateCountries = async () => {
+      const response = await searchCountries();
+      if (response) {
+        setCountries(response);
+      }
+    };
+    populateCountries();
+  }, []);
+
+  const onChangeCountry = (newValue: string) => {
+    const found = countries?.find((country) => country.name === newValue);
+    if (found) {
+      setSelectedCountry(found);
+      setSelectedSubdivision(undefined);
+      onChange('countryCode', found.code);
+      onChange('countrySubdivisionCode', undefined);
+    }
+  };
+
+  const onChangeSubdivision = (newValue: string) => {
+    const found = selectedCountry?.subdivisions.find((subdivision) => subdivision.name === newValue);
+    if (found) {
+      setSelectedSubdivision(found);
+      onChange('countrySubdivisionCode', found.code);
+    }
   };
 
   const saveOrganization = async () => {
@@ -87,12 +127,12 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
   };
 
   return (
-    <Dialog onClose={onCancel} disableEscapeKeyDown maxWidth='md' classes={{ paper: classes.paper }} open={open}>
+    <Dialog onClose={onCancel} disableEscapeKeyDown maxWidth='md' className={classes.mainModal} open={open}>
       <DialogTitle>
         <Typography variant='h6'>{strings.ADD_NEW_ORGANIZATION}</Typography>
         <DialogCloseButton onClick={onCancel} />
       </DialogTitle>
-      <DialogContent dividers>
+      <DialogContent dividers className={classes.content}>
         <Grid item xs={12}>
           <TextField label={strings.ORGANIZATION_NAME} type='text' id='name' onChange={onChange} />
         </Grid>
@@ -100,8 +140,25 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
           <TextField label={strings.DESCRIPTION} type='text' id='description' onChange={onChange} />
         </Grid>
         <Grid item xs={12}>
-          <Select label={strings.COUNTRY} id='county' onChange={onChangeCountry} />
+          <Select
+            label={strings.COUNTRY_OPTIONAL}
+            id='county'
+            onChange={onChangeCountry}
+            options={countries?.map((country) => country.name)}
+            selectedValue={selectedCountry?.name}
+          />
         </Grid>
+        {selectedCountry?.subdivisions && (
+          <Grid item xs={12}>
+            <Select
+              label={strings.STATE_OPTIONAL}
+              id='county'
+              onChange={onChangeSubdivision}
+              options={selectedCountry.subdivisions.map((subdivision) => subdivision.name)}
+              selectedValue={selectedSubdivision?.name}
+            />
+          </Grid>
+        )}
       </DialogContent>
       <DialogActions>
         <Box width={'100%'} className={classes.actions}>

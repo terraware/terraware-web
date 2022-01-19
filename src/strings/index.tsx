@@ -371,7 +371,8 @@ const strings = new LocalizedStrings({
     ADD_SITE_DESC: 'Enter the site’s information below.',
     EDIT_SITE: 'Edit Site',
     ORGANIZATION_NAME: 'Organization Name',
-    COUNTRY: 'Country',
+    COUNTRY_OPTIONAL: 'Country (optional)',
+    STATE_OPTIONAL: 'State (optional)',
   },
 });
 

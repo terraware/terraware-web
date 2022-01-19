@@ -221,6 +221,8 @@
     margin: 0;
     margin-top: $tw-spc-base-xx-small;
     border-radius: $tw-rds-frm-fld-text-input;
+    height: 200px;
+    overflow: scroll;
 
     .select-value {
       font-family: $tw-fnt-frm-fld-select-value-font-family;
