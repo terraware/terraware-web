@@ -85,7 +85,9 @@ export default function EnhancedTable<T>({
 
   const hasEditColumn = columns.filter((c) => c.type === 'edit').length > 0;
 
-  const isSelected = (row: T) => selectedRows?.indexOf(row) !== -1;
+  const isSelected = (row: T) => {
+    return selectedRows && selectedRows.indexOf(row) !== -1;
+  };
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (setSelectedRows) {
