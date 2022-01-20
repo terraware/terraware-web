@@ -108,7 +108,6 @@ export default function ProjectView({ organization, reloadOrganizationData }: Pr
   const [removedPeopleModalOpened, setRemovedPeopleModalOpened] = useState(false);
   const [moveSiteModalOpened, setMoveSiteModalOpened] = useState(false);
   const [peopleOnProject, setPeopleOnProject] = useState<OrganizationUser[]>();
-  const [peopleNotOnProject, setPeopleNotOnProject] = useState<OrganizationUser[]>();
   const [sitesOfProject, setSitesOfProject] = useState<Site[]>();
   const [nameError, setNameError] = useState('');
   const { projectId } = useParams<{ projectId: string }>();
@@ -132,11 +131,6 @@ export default function ProjectView({ organization, reloadOrganizationData }: Pr
       types: projectSelected?.types,
     });
   }, [projectSelected, setNewProject, organization]);
-
-  useEffect(() => {
-    const allPeopleOnProjectIds = peopleOnProject?.map((person) => person.id);
-    setPeopleNotOnProject(people?.filter((person) => !allPeopleOnProjectIds?.includes(person.id)));
-  }, [peopleOnProject, people]);
 
   useEffect(() => {
     const projectIdNum = parseInt(projectId, 10);
@@ -216,7 +210,7 @@ export default function ProjectView({ organization, reloadOrganizationData }: Pr
     setMoveSiteModalOpened(true);
   };
 
-  const updateProjectHandler = async () => {
+  const saveExistingProject = async () => {
     if (projectSelected) {
       const response = await updateProject({ ...newProject, id: projectSelected.id } as Project);
       let allNewPeopleResponsesOk = true;
@@ -250,6 +244,39 @@ export default function ProjectView({ organization, reloadOrganizationData }: Pr
     }
   };
 
+  const saveNewProject = async () => {
+    const response = await createProject(newProject, organization.id);
+    if (response.requestSucceeded) {
+      let allPeopleAdded = true;
+      peopleOnProject?.forEach(async (person) => {
+        if (response.project !== null) {
+          const userResponse = await updateProjectUser(response.project.id, person.id, axios.post);
+          if (!userResponse.requestSucceeded) {
+            allPeopleAdded = false;
+          }
+        }
+      });
+      if (allPeopleAdded) {
+        setSnackbar({
+          type: 'success',
+          msg: 'Project added',
+        });
+      } else {
+        setSnackbar({
+          type: 'delete',
+          msg: strings.GENERIC_ERROR,
+        });
+      }
+      reloadOrganizationData();
+    } else {
+      setSnackbar({
+        type: 'delete',
+        msg: strings.GENERIC_ERROR,
+      });
+    }
+    goToProjects();
+  };
+
   const saveProject = async () => {
     if (newProject.name === '') {
       setNameError('Required Field');
@@ -269,45 +296,21 @@ export default function ProjectView({ organization, reloadOrganizationData }: Pr
               setRemovedPeople(removedPeopleArray);
               setRemovedPeopleModalOpened(true);
             } else {
-              updateProjectHandler();
+              saveExistingProject();
             }
           }
         } else {
-          updateProjectHandler();
+          saveExistingProject();
         }
       } else {
-        const response = await createProject(newProject, organization.id);
-        if (response.requestSucceeded) {
-          let allPeopleAdded = true;
-          peopleOnProject?.forEach(async (person) => {
-            if (response.project !== null) {
-              const userResponse = await updateProjectUser(response.project.id, person.id, axios.post);
-              if (!userResponse.requestSucceeded) {
-                allPeopleAdded = false;
-              }
-            }
-          });
-          if (allPeopleAdded) {
-            setSnackbar({
-              type: 'success',
-              msg: 'Project added',
-            });
-          } else {
-            setSnackbar({
-              type: 'delete',
-              msg: strings.GENERIC_ERROR,
-            });
-          }
-          reloadOrganizationData();
-        } else {
-          setSnackbar({
-            type: 'delete',
-            msg: strings.GENERIC_ERROR,
-          });
-        }
-        goToProjects();
+        saveNewProject();
       }
     }
+  };
+
+  const getPeopleNotOnProject = () => {
+    const allPeopleOnProjectIds = peopleOnProject?.map((person) => person.id);
+    return people?.filter((person) => !allPeopleOnProjectIds?.includes(person.id));
   };
 
   return (
@@ -329,7 +332,7 @@ export default function ProjectView({ organization, reloadOrganizationData }: Pr
       <AddPeopleModal
         open={addPeopleModalOpened}
         onClose={() => setAddPeopleModalOpened(false)}
-        people={peopleNotOnProject}
+        people={getPeopleNotOnProject()}
         peopleOnProject={peopleOnProject}
         setPeopleOnProject={setPeopleOnProject}
       />
