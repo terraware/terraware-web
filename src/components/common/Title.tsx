@@ -2,6 +2,7 @@ import { createStyles, makeStyles } from '@material-ui/core';
 import React, { useEffect } from 'react';
 import strings from 'src/strings';
 import { SelectedOrgInfo, ServerOrganization } from 'src/types/Organization';
+import { getFirstFacility, getFirstProject, getFirstSite } from 'src/utils/organization';
 import Select from './Select/Select';
 
 const useStyles = makeStyles((theme) =>
@@ -56,17 +57,17 @@ export default function Title({
   useEffect(() => {
     // if no project selected and all option is not available, select first project and site
     if (!allowAll) {
-      if (!selectedOrgInfo.selectedProject && organization?.projects && organization.projects[0].sites) {
-        if (organization?.projects[0].sites[0].facilities) {
+      if (!selectedOrgInfo.selectedProject && getFirstSite(organization)) {
+        if (getFirstFacility(organization)) {
           onChangeSelectedOrgInfo({
-            selectedProject: organization?.projects[0],
-            selectedSite: organization?.projects[0].sites[0],
-            selectedFacility: organization?.projects[0].sites[0].facilities[0],
+            selectedProject: getFirstProject(organization) ?? undefined,
+            selectedSite: getFirstSite(organization) ?? undefined,
+            selectedFacility: getFirstFacility(organization) ?? undefined,
           });
         } else {
           onChangeSelectedOrgInfo({
-            selectedProject: organization?.projects[0],
-            selectedSite: organization?.projects[0].sites[0],
+            selectedProject: getFirstProject(organization) ?? undefined,
+            selectedSite: getFirstSite(organization) ?? undefined,
           });
         }
       }

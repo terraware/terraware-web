@@ -5,13 +5,9 @@
   src: local('Inter'), url(../../../fonts/Inter.ttf) format('truetype');
 }
 
-.select {
+.textfield {
   display: flex;
   flex-flow: row wrap;
-
-  .textfield-container {
-    position: relative;
-  }
   .textfield-label {
     font-family: $tw-fnt-frm-fld-label-font-family;
     font-size: $tw-fnt-frm-fld-label-font-size;
@@ -62,6 +58,8 @@
     padding: $tw-spc-base-x-small;
     border-radius: $tw-rds-frm-fld-text-input;
     border-width: $tw-sz-frm-fld-text-input-stroke;
+    width: 100%;
+    max-width: 100%;
     display: flex;
 
     &:hover {
@@ -106,7 +104,6 @@
 
     &--disabled {
       opacity: $tw-opcty-semantic-off;
-      pointer-events: none;
       &:hover {
         border: $tw-sz-frm-fld-text-input-stroke solid $tw-clr-frm-fld-text-input-stroke;
       }
@@ -207,47 +204,5 @@
     display: flex;
     width: 100%;
     margin-top: $tw-spc-base-xx-small;
-  }
-
-  .options-container {
-    z-index: 3;
-    width: 100%;
-    position: absolute;
-    top: 42px;
-    list-style-type: none;
-    padding: $tw-spc-base-x-small 0;
-    background: $tw-clr-frm-fld-select-menu-fill;
-    border: 1px solid $tw-clr-frm-fld-select-menu-stroke;
-    margin: 0;
-    margin-top: $tw-spc-base-xx-small;
-    border-radius: $tw-rds-frm-fld-text-input;
-
-    .select-value {
-      font-family: $tw-fnt-frm-fld-select-value-font-family;
-      font-size: $tw-fnt-frm-fld-select-value-font-size;
-      font-weight: $tw-fnt-frm-fld-select-value-font-weight;
-      line-height: $tw-fnt-frm-fld-select-value-line-height;
-      padding: $tw-spc-base-x-small $tw-spc-base-small;
-      cursor: pointer;
-
-      &:hover {
-        background-color: $tw-clr-frm-fld-select-menu-item-fill-hover;
-        color: $tw-clr-frm-fld-value;
-      }
-
-      &:active {
-        background-color: $tw-clr-frm-fld-select-menu-item-fill-active;
-        color: $tw-clr-frm-fld-value;
-      }
-
-      &--selected {
-        background-color: $tw-clr-frm-fld-select-menu-item-fill-selected;
-        color: $tw-clr-frm-fld-select-value-selected;
-      }
-
-      &--disabled {
-        opacity: $tw-opcty-semantic-off;
-      }
-    }
   }
 }

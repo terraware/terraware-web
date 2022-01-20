@@ -5,10 +5,14 @@ export type Project = {
   name: string;
   description?: string;
   startDate?: string;
-  status?: string;
-  types?: string[];
+  status?: ProjectStatus;
+  types?: ProjectTypes[];
   sites?: Site[];
 };
+
+export type ProjectStatus = 'Propagating' | 'Planting' | 'Completed/Monitoring' | undefined;
+
+export type ProjectTypes = 'Native Forest Restoration' | 'Agroforestry' | 'Silvopasture' | 'Sustainable Timber';
 
 export type Site = {
   id: number;

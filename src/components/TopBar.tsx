@@ -54,8 +54,8 @@ type TopBarProps = {
   setSeedSearchCriteria: (criteria: SeedSearchCriteria) => void;
   facilityId?: number;
   organizations?: ServerOrganization[];
-  selectedOrganization?: ServerOrganization;
   setSelectedOrganization: (selectedOrganization: ServerOrganization) => void;
+  selectedOrganization?: ServerOrganization;
 };
 
 export default function TopBar(props: TopBarProps): JSX.Element | null {
@@ -65,8 +65,8 @@ export default function TopBar(props: TopBarProps): JSX.Element | null {
     setNotifications,
     setSeedSearchCriteria,
     facilityId,
-    selectedOrganization,
     setSelectedOrganization,
+    selectedOrganization,
     organizations,
   } = props;
   const location = useStateLocation();
