@@ -4,7 +4,7 @@ import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableRow from '@material-ui/core/TableRow';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { descendingComparator, getComparator, Order, stableSort } from './sort';
 import TableCellRenderer from './TableCellRenderer';
 import TableHeader from './TableHeader';
@@ -45,7 +45,7 @@ export interface Props<T> {
   isClickable?: (row: T) => boolean;
   emptyTableMessage?: string;
   showCheckbox?: boolean;
-  previousSelectedRows?: T[];
+  selectedRows?: T[];
   setSelectedRows?: (selectedRows: T[]) => void;
 }
 
@@ -65,19 +65,12 @@ export default function EnhancedTable<T>({
   isClickable,
   emptyTableMessage,
   showCheckbox,
+  selectedRows,
   setSelectedRows,
-  previousSelectedRows,
 }: Props<T>): JSX.Element {
   const classes = tableStyles();
   const [order, setOrder] = React.useState<Order>(_order);
   const [orderBy, setOrderBy] = React.useState(_orderBy);
-  const [selected, setSelected] = React.useState<T[]>(previousSelectedRows || []);
-
-  useEffect(() => {
-    if (setSelectedRows) {
-      setSelectedRows(selected);
-    }
-  }, [selected, setSelectedRows]);
 
   const handleRequestSort = (event: React.MouseEvent<unknown>, property: string) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -92,31 +85,35 @@ export default function EnhancedTable<T>({
 
   const hasEditColumn = columns.filter((c) => c.type === 'edit').length > 0;
 
-  const isSelected = (row: T) => selected.indexOf(row) !== -1;
+  const isSelected = (row: T) => selectedRows?.indexOf(row) !== -1;
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.checked) {
-      setSelected(rows);
-      return;
+    if (setSelectedRows) {
+      if (event.target.checked) {
+        setSelectedRows(rows);
+        return;
+      }
+      setSelectedRows([]);
     }
-    setSelected([]);
   };
 
   const handleClick = (event: React.MouseEvent<unknown>, row: T) => {
-    const selectedIndex = selected.indexOf(row);
-    let newSelected: T[] = [];
+    if (setSelectedRows && selectedRows) {
+      const selectedIndex = selectedRows.indexOf(row);
+      let newSelected: T[] = [];
 
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, row);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1));
+      if (selectedIndex === -1) {
+        newSelected = newSelected.concat(selectedRows, row);
+      } else if (selectedIndex === 0) {
+        newSelected = newSelected.concat(selectedRows.slice(1));
+      } else if (selectedIndex === selectedRows.length - 1) {
+        newSelected = newSelected.concat(selectedRows.slice(0, -1));
+      } else if (selectedIndex > 0) {
+        newSelected = newSelected.concat(selectedRows.slice(0, selectedIndex), selectedRows.slice(selectedIndex + 1));
+      }
+
+      setSelectedRows(newSelected);
     }
-
-    setSelected(newSelected);
   };
 
   return (
@@ -134,7 +131,7 @@ export default function EnhancedTable<T>({
           onRequestSort={handleRequestSort}
           columns={columns}
           onReorderEnd={onReorderEnd}
-          numSelected={showCheckbox ? selected.length : undefined}
+          numSelected={showCheckbox ? selectedRows?.length : undefined}
           onSelectAllClick={showCheckbox ? handleSelectAllClick : undefined}
           rowCount={showCheckbox ? rows?.length : undefined}
         />

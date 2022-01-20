@@ -45,7 +45,7 @@ export default function AddPeopleDialog(props: AddPeopleDialogProps): JSX.Elemen
   const classes = useStyles();
   const { onClose, open, people, setPeopleOnProject, peopleOnProject } = props;
 
-  const [selectedRows, setSelectedRows] = useState<OrganizationUser[]>();
+  const [selectedRows, setSelectedRows] = useState<OrganizationUser[]>(peopleOnProject ?? []);
 
   const onSubmitHandler = () => {
     if (selectedRows) {
@@ -67,7 +67,7 @@ export default function AddPeopleDialog(props: AddPeopleDialogProps): JSX.Elemen
             orderBy='name'
             columns={peopleColumns}
             showCheckbox={true}
-            previousSelectedRows={peopleOnProject}
+            selectedRows={selectedRows}
             setSelectedRows={setSelectedRows}
           />
         </Grid>

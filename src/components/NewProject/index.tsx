@@ -83,9 +83,9 @@ const peopleColumns: TableColumnType[] = [
 
 type ProjectViewProps = {
   organization: ServerOrganization;
-  reloadData: () => void;
+  reloadOrganizationData: () => void;
 };
-export default function ProjectView({ organization, reloadData }: ProjectViewProps): JSX.Element {
+export default function ProjectView({ organization, reloadOrganizationData }: ProjectViewProps): JSX.Element {
   const [people, setPeople] = useState<OrganizationUser[]>();
   const [addPeopleModalOpened, setAddPeopleModalOpened] = useState(false);
   const [peopleOnProject, setPeopleOnProject] = useState<OrganizationUser[]>();
@@ -151,7 +151,7 @@ export default function ProjectView({ organization, reloadData }: ProjectViewPro
     } else {
       const response = await createProject(newProject, organization.id);
       if (response.requestSucceeded) {
-        reloadData();
+        reloadOrganizationData();
         setSnackbar({
           type: 'success',
           msg: 'Project added',

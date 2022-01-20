@@ -1,3 +1,4 @@
+import { Facility } from 'src/api/types/facilities';
 import { Project, ServerOrganization, Site } from 'src/types/Organization';
 
 export const getAllSites = (organization: ServerOrganization): Site[] => {
@@ -60,4 +61,31 @@ export const getAllSitesWithProjectName = (organization: ServerOrganization): Si
     };
   });
   return newSites;
+};
+
+export const getFirstProject = (organization: ServerOrganization | undefined): Project | null => {
+  if (organization?.projects && organization.projects[0]) {
+    return organization.projects[0];
+  }
+  return null;
+};
+
+export const getFirstSite = (organization: ServerOrganization | undefined): Site | null => {
+  if (organization?.projects && organization.projects[0].sites && organization.projects[0].sites[0]) {
+    return organization.projects[0].sites[0];
+  }
+  return null;
+};
+
+export const getFirstFacility = (organization: ServerOrganization | undefined): Facility | null => {
+  if (
+    organization?.projects &&
+    organization.projects[0].sites &&
+    organization.projects[0].sites[0] &&
+    organization.projects[0].sites[0].facilities &&
+    organization.projects[0].sites[0].facilities[0]
+  ) {
+    return organization.projects[0].sites[0].facilities[0];
+  }
+  return null;
 };

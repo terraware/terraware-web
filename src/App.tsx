@@ -115,6 +115,10 @@ function AppContent() {
   }, []);
 
   useEffect(() => {
+    reloadData();
+  }, [reloadData]);
+
+  useEffect(() => {
     if (organizations) {
       if (!selectedOrganization) {
         setSelectedOrganization(organizations[0]);
@@ -127,10 +131,6 @@ function AppContent() {
       }
     }
   }, [organizations, selectedOrganization]);
-
-  useEffect(() => {
-    reloadData();
-  }, [reloadData]);
 
   if (organizationError) {
     return <h1>Could not fetch organization data</h1>;
@@ -205,7 +205,7 @@ function AppContent() {
               </Route>
               {selectedOrganization && (
                 <Route path='/projects/new'>
-                  <NewProject organization={selectedOrganization} reloadData={reloadData} />
+                  <NewProject organization={selectedOrganization} reloadOrganizationData={reloadData} />
                 </Route>
               )}
               <Route exact path='/projects'>
