@@ -31,7 +31,7 @@ export interface AddPeopleDialogProps {
   onClose: () => void;
   peopleOnProject?: OrganizationUser[];
   people?: OrganizationUser[];
-  setPeopleOnProject: (people: OrganizationUser[]) => void;
+  setPeopleOnProject: React.Dispatch<React.SetStateAction<OrganizationUser[] | undefined>>;
 }
 
 const peopleColumns: TableColumnType[] = [
@@ -49,11 +49,13 @@ export default function AddPeopleDialog(props: AddPeopleDialogProps): JSX.Elemen
 
   const onSubmitHandler = () => {
     if (selectedRows) {
-      if (peopleOnProject) {
-        setPeopleOnProject([...peopleOnProject, ...selectedRows]);
-      } else {
-        setPeopleOnProject(selectedRows);
-      }
+      setPeopleOnProject((current: OrganizationUser[] | undefined) => {
+        if (current) {
+          return [...current, ...selectedRows];
+        } else {
+          return selectedRows;
+        }
+      });
     }
     onClose();
   };
@@ -70,7 +72,7 @@ export default function AddPeopleDialog(props: AddPeopleDialogProps): JSX.Elemen
         <Grid container spacing={4}>
           {people && people.length > 0 ? (
             <Table
-              rows={people || []}
+              rows={people}
               orderBy='name'
               columns={peopleColumns}
               showCheckbox={true}

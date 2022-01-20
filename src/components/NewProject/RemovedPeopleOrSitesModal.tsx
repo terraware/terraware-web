@@ -5,7 +5,6 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React from 'react';
-import { GerminationTest } from 'src/api/types/tests';
 import strings from 'src/strings';
 import DialogCloseButton from '../common/DialogCloseButton';
 import Button from '../common/button/Button';
@@ -27,15 +26,15 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export interface Props {
+export interface RemovePeopleOrSitesDialogProps {
   open: boolean;
-  onClose: (value?: GerminationTest) => void;
+  onClose: () => void;
   onSubmit: () => void;
   removedPeople?: OrganizationUser[];
   removedSites?: Site[];
 }
 
-export default function RemovePeopleOrSitesDialog(props: Props): JSX.Element {
+export default function RemovePeopleOrSitesDialog(props: RemovePeopleOrSitesDialogProps): JSX.Element {
   const classes = useStyles();
   const { onClose, open, onSubmit, removedPeople, removedSites } = props;
 

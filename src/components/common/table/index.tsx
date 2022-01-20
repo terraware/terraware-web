@@ -109,8 +109,9 @@ export default function EnhancedTable<T>({
       if (event.target.checked) {
         setSelectedRows(rows);
         return;
+      } else {
+        setSelectedRows([]);
       }
-      setSelectedRows([]);
     }
   };
 

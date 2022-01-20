@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import { Project } from 'src/types/Organization';
 import { paths } from '../types/generated-schema';
 
@@ -48,7 +48,7 @@ type SimpleResponse = {
   requestSucceeded: boolean;
 };
 
-export const updateProject = async (project: Project): Promise<SimpleResponse> => {
+export async function updateProject(project: Project): Promise<SimpleResponse> {
   const response: SimpleResponse = {
     requestSucceeded: true,
   };
@@ -59,22 +59,23 @@ export const updateProject = async (project: Project): Promise<SimpleResponse> =
   }
 
   return response;
-};
+}
 
 const USER_IN_PROJECT = '/api/v1/projects/{projectId}/users/{userId}';
 type SimpleSuccessResponsePayload =
   paths[typeof USER_IN_PROJECT]['post']['responses'][200]['content']['application/json'];
 
-export const addProjectUser = async (projectId: number, userId: number): Promise<SimpleResponse> => {
+export async function updateProjectUser(
+  projectId: number,
+  userId: number,
+  operation: (url: string, data?: any) => Promise<AxiosResponse<any>>
+): Promise<SimpleResponse> {
   const response: SimpleResponse = {
     requestSucceeded: true,
   };
+  const url = USER_IN_PROJECT.replace('{projectId}', projectId.toString()).replace('{userId}', userId.toString());
   try {
-    const serverResponse: SimpleSuccessResponsePayload = (
-      await axios.post(
-        USER_IN_PROJECT.replace('{projectId}', projectId.toString()).replace('{userId}', userId.toString())
-      )
-    ).data;
+    const serverResponse: SimpleSuccessResponsePayload = (await operation(url)).data;
     if (serverResponse.status === 'error') {
       response.requestSucceeded = false;
     }
@@ -82,24 +83,24 @@ export const addProjectUser = async (projectId: number, userId: number): Promise
     response.requestSucceeded = false;
   }
   return response;
-};
+}
 
-export const deleteProjectUser = async (projectId: number, userId: number): Promise<SimpleResponse> => {
-  const response: SimpleResponse = {
-    requestSucceeded: true,
-  };
-  try {
-    const serverResponse: SimpleSuccessResponsePayload = (
-      await axios.delete(
-        USER_IN_PROJECT.replace('{projectId}', projectId.toString()).replace('{userId}', userId.toString())
-      )
-    ).data;
-    if (serverResponse.status === 'error') {
-      response.requestSucceeded = false;
-    }
-  } catch {
-    response.requestSucceeded = false;
-  }
+// export const deleteProjectUser = async (projectId: number, userId: number): Promise<SimpleResponse> => {
+//   const response: SimpleResponse = {
+//     requestSucceeded: true,
+//   };
+//   try {
+//     const serverResponse: SimpleSuccessResponsePayload = (
+//       await axios.delete(
+//         USER_IN_PROJECT.replace('{projectId}', projectId.toString()).replace('{userId}', userId.toString())
+//       )
+//     ).data;
+//     if (serverResponse.status === 'error') {
+//       response.requestSucceeded = false;
+//     }
+//   } catch {
+//     response.requestSucceeded = false;
+//   }
 
-  return response;
-};
+//   return response;
+// };

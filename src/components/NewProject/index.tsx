@@ -13,7 +13,7 @@ import Checkbox from '../common/Checkbox';
 import useForm from 'src/utils/useForm';
 import Select from '../common/Select/Select';
 import Button from '../common/button/Button';
-import { addProjectUser, createProject, deleteProjectUser, updateProject } from 'src/api/project/project';
+import { updateProjectUser, createProject, updateProject } from 'src/api/project/project';
 import { useSetRecoilState } from 'recoil';
 import snackbarAtom from 'src/state/snackbar';
 import AddPeopleModal from './AddPeopleModal';
@@ -24,6 +24,7 @@ import { getProjectsById } from 'src/utils/organization';
 import Icon from '../common/icon/Icon';
 import RemovedPeopleOrSitesModal from './RemovedPeopleOrSitesModal';
 import MoveSiteModal from './MoveSiteModal';
+import axios from 'axios';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -87,6 +88,20 @@ type ProjectViewProps = {
   reloadOrganizationData: () => void;
 };
 
+const peopleColumns: TableColumnType[] = [
+  { key: 'firstName', name: 'First Name', type: 'string' },
+  { key: 'lastName', name: 'Last Name', type: 'string' },
+  { key: 'email', name: 'Email', type: 'string' },
+  { key: 'role', name: 'Role', type: 'string' },
+];
+
+const siteColumns: TableColumnType[] = [
+  { key: 'name', name: 'Name', type: 'string' },
+  { key: 'description', name: 'Description', type: 'string' },
+  { key: 'longitude', name: 'Longitude', type: 'string' },
+  { key: 'latitude', name: 'Latitude', type: 'string' },
+];
+
 export default function ProjectView({ organization, reloadOrganizationData }: ProjectViewProps): JSX.Element {
   const [people, setPeople] = useState<OrganizationUser[]>();
   const [addPeopleModalOpened, setAddPeopleModalOpened] = useState(false);
@@ -98,10 +113,10 @@ export default function ProjectView({ organization, reloadOrganizationData }: Pr
   const [nameError, setNameError] = useState('');
   const { projectId } = useParams<{ projectId: string }>();
   const [projectSelected, setProjectSelected] = useState<Project | null>();
-  const [selectedPeopleRows, setSelectedPeopleRows] = useState<OrganizationUser[]>();
+  const [selectedPeopleRows, setSelectedPeopleRows] = useState<OrganizationUser[]>([]);
   const [selectedSitesRows, setSelectedSitesRows] = useState<Site[]>();
   const [removedPeople, setRemovedPeople] = useState<OrganizationUser[]>();
-  const [newModifiedSites, setNewModifiedSites] = useState<Site[]>();
+  const [modifiedSites, setModifiedSites] = useState<Site[]>();
 
   const [newProject, setNewProject, onChange] = useForm<Project>({ id: -1, name: '' });
   const setSnackbar = useSetRecoilState(snackbarAtom);
@@ -141,44 +156,28 @@ export default function ProjectView({ organization, reloadOrganizationData }: Pr
       setProjectSelected(projects.get(projectIdNum));
       const projectSites = projects.get(projectIdNum)?.sites;
       if (projectSites && projectSites.length > 0) {
-        setSitesOfProject(projectSites.filter((site) => !newModifiedSites?.includes(site)));
+        setSitesOfProject(projectSites.filter((site) => !modifiedSites?.includes(site)));
       }
       populatePeople();
     }
-  }, [organization, projectId, newModifiedSites, peopleOnProject]);
+  }, [organization, projectId, modifiedSites, peopleOnProject]);
 
   const classes = useStyles();
-
-  const peopleColumns: TableColumnType[] = [
-    { key: 'firstName', name: 'First Name', type: 'string' },
-    { key: 'lastName', name: 'Last Name', type: 'string' },
-    { key: 'email', name: 'Email', type: 'string' },
-    { key: 'role', name: 'Role', type: 'string' },
-  ];
-
-  const siteColumns: TableColumnType[] = [
-    { key: 'name', name: 'Name', type: 'string' },
-    { key: 'description', name: 'Description', type: 'string' },
-    { key: 'longitude', name: 'Longitude', type: 'string' },
-    { key: 'latitude', name: 'Latitude', type: 'string' },
-  ];
-
-  type ProjectType = 'Native Forest Restoration' | 'Agroforestry' | 'Silvopasture' | 'Sustainable Timber';
 
   const onChangeProjectType = (id: string, value: unknown) => {
     let projectTypes = newProject.types ? [...newProject.types] : undefined;
     if (projectTypes) {
-      const index = projectTypes.indexOf(id as ProjectType, 0);
+      const index = projectTypes.indexOf(id as ProjectTypes, 0);
       if (index !== -1 && value === false) {
         projectTypes.splice(index, 1);
       }
 
       if (index === -1 && value === true) {
-        projectTypes.push(id as ProjectType);
+        projectTypes.push(id as ProjectTypes);
       }
     } else {
       if (value === true) {
-        projectTypes = [id as ProjectType];
+        projectTypes = [id as ProjectTypes];
       }
     }
     setNewProject({ ...newProject, types: projectTypes });
@@ -220,15 +219,23 @@ export default function ProjectView({ organization, reloadOrganizationData }: Pr
   const updateProjectHandler = async () => {
     if (projectSelected) {
       const response = await updateProject({ ...newProject, id: projectSelected.id } as Project);
+      let allNewPeopleResponsesOk = true;
+      let allRemovedPeopleResponsesOk = true;
       peopleOnProject?.forEach(async (person) => {
         if (!person.projectIds.includes(projectSelected.id)) {
-          await addProjectUser(projectSelected.id, person.id);
+          const response = await updateProjectUser(projectSelected.id, person.id, axios.post);
+          if (!response.requestSucceeded) {
+            allNewPeopleResponsesOk = false;
+          }
         }
       });
       removedPeople?.forEach(async (person) => {
-        await deleteProjectUser(projectSelected.id, person.id);
+        const response = await updateProjectUser(projectSelected.id, person.id, axios.delete);
+        if (!response.requestSucceeded) {
+          allRemovedPeopleResponsesOk = false;
+        }
       });
-      if (response.requestSucceeded) {
+      if (response.requestSucceeded && allNewPeopleResponsesOk && allRemovedPeopleResponsesOk) {
         setSnackbar({
           type: 'success',
           msg: 'Changes saved',
@@ -258,7 +265,7 @@ export default function ProjectView({ organization, reloadOrganizationData }: Pr
                 removedPeopleArray.push(person);
               }
             });
-            if (removedPeopleArray.length > 0 || (newModifiedSites && newModifiedSites.length > 0)) {
+            if (removedPeopleArray.length > 0 || (modifiedSites && modifiedSites.length > 0)) {
               setRemovedPeople(removedPeopleArray);
               setRemovedPeopleModalOpened(true);
             } else {
@@ -271,15 +278,26 @@ export default function ProjectView({ organization, reloadOrganizationData }: Pr
       } else {
         const response = await createProject(newProject, organization.id);
         if (response.requestSucceeded) {
+          let allPeopleAdded = true;
           peopleOnProject?.forEach(async (person) => {
             if (response.project !== null) {
-              await addProjectUser(response.project.id, person.id);
+              const userResponse = await updateProjectUser(response.project.id, person.id, axios.post);
+              if (!userResponse.requestSucceeded) {
+                allPeopleAdded = false;
+              }
             }
           });
-          setSnackbar({
-            type: 'success',
-            msg: 'Project added',
-          });
+          if (allPeopleAdded) {
+            setSnackbar({
+              type: 'success',
+              msg: 'Project added',
+            });
+          } else {
+            setSnackbar({
+              type: 'delete',
+              msg: strings.GENERIC_ERROR,
+            });
+          }
           reloadOrganizationData();
         } else {
           setSnackbar({
@@ -298,7 +316,7 @@ export default function ProjectView({ organization, reloadOrganizationData }: Pr
         open={moveSiteModalOpened}
         onClose={() => setMoveSiteModalOpened(false)}
         selectedSites={selectedSitesRows}
-        setNewModifiedSites={setNewModifiedSites}
+        setNewModifiedSites={setModifiedSites}
         orgProjects={organization.projects}
       />
       <RemovedPeopleOrSitesModal
@@ -306,7 +324,7 @@ export default function ProjectView({ organization, reloadOrganizationData }: Pr
         onClose={() => setRemovedPeopleModalOpened(false)}
         onSubmit={saveProject}
         removedPeople={removedPeople}
-        removedSites={newModifiedSites}
+        removedSites={modifiedSites}
       />
       <AddPeopleModal
         open={addPeopleModalOpened}
