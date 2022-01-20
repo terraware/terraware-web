@@ -72,7 +72,9 @@ export default function ProjectsList({ organization }: ProjectsListProps): JSX.E
           </Grid>
           <Grid item xs={6} />
           <Grid item xs={2} className={classes.centered}>
-            <Button id='new-project' label={strings.ADD_PROJECT} onClick={goToNewProject} />
+            {organization && ['Admin', 'Owner'].includes(organization?.role) && (
+              <Button id='new-project' label={strings.ADD_PROJECT} onClick={goToNewProject} />
+            )}
           </Grid>
           <Grid item xs={1} />
           <Grid item xs={1} />

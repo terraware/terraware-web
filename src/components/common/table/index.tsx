@@ -46,12 +46,12 @@ export interface Props<T> {
   isClickable?: (row: T) => boolean;
   emptyTableMessage?: string;
   showCheckbox?: boolean;
-  previousSelectedRows?: T[];
-  setSelectedRows?: (selectedRows: T[]) => void;
   showTopBar?: boolean;
   buttonText?: string;
   buttonType?: 'productive' | 'passive' | 'destructive' | undefined;
   onButtonClick?: () => void;
+  selectedRows?: T[];
+  setSelectedRows?: (selectedRows: T[]) => void;
 }
 
 export default function EnhancedTable<T>({
@@ -70,12 +70,12 @@ export default function EnhancedTable<T>({
   isClickable,
   emptyTableMessage,
   showCheckbox,
-  setSelectedRows,
-  previousSelectedRows,
   showTopBar,
   buttonText,
   buttonType,
   onButtonClick,
+  selectedRows,
+  setSelectedRows,
 }: Props<T>): JSX.Element {
   const classes = tableStyles();
   const [order, setOrder] = React.useState<Order>(_order);
@@ -107,117 +107,113 @@ export default function EnhancedTable<T>({
 
   const hasEditColumn = columns.filter((c) => c.type === 'edit').length > 0;
 
-  const isSelected = (row: T) => selected.indexOf(row) !== -1;
+  const isSelected = (row: T) => {
+    return selectedRows && selectedRows.indexOf(row) !== -1;
+  };
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.checked) {
-      setSelected(rows);
-      return;
+    if (setSelectedRows) {
+      if (event.target.checked) {
+        setSelectedRows(rows);
+        return;
+      }
+      setSelectedRows([]);
     }
-    setSelected([]);
   };
 
   const handleClick = (event: React.MouseEvent<unknown>, row: T) => {
-    const selectedIndex = selected.indexOf(row);
-    let newSelected: T[] = [];
+    if (setSelectedRows && selectedRows) {
+      const selectedIndex = selectedRows.indexOf(row);
+      let newSelected: T[] = [];
 
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, row);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1));
+      if (selectedIndex === -1) {
+        newSelected = newSelected.concat(selectedRows, row);
+      } else if (selectedIndex === 0) {
+        newSelected = newSelected.concat(selectedRows.slice(1));
+      } else if (selectedIndex === selectedRows.length - 1) {
+        newSelected = newSelected.concat(selectedRows.slice(0, -1));
+      } else if (selectedIndex > 0) {
+        newSelected = newSelected.concat(selectedRows.slice(0, selectedIndex), selectedRows.slice(selectedIndex + 1));
+      }
+
+      setSelectedRows(newSelected);
     }
-
-    setSelected(newSelected);
   };
 
   return (
-    <>
-      {showTopBar && buttonText && buttonType && onButtonClick && (
-        <EnhancedTableToolbar
-          numSelected={selected.length}
-          buttonText={buttonText}
-          buttonType={buttonType}
-          onButtonClick={onButtonClick}
+    <TableContainer className={classes.container} id={id}>
+      <Table
+        stickyHeader
+        aria-labelledby='tableTitle'
+        size='medium'
+        aria-label='enhanced table'
+        className={classes.table}
+      >
+        <TableHeader
+          order={order}
+          orderBy={orderBy}
+          onRequestSort={handleRequestSort}
+          columns={columns}
+          onReorderEnd={onReorderEnd}
+          numSelected={showCheckbox ? selectedRows?.length : undefined}
+          onSelectAllClick={showCheckbox ? handleSelectAllClick : undefined}
+          rowCount={showCheckbox ? rows?.length : undefined}
         />
-      )}
-      <TableContainer className={classes.container} id={id}>
-        <Table
-          stickyHeader
-          aria-labelledby='tableTitle'
-          size='medium'
-          aria-label='enhanced table'
-          className={classes.table}
-        >
-          <TableHeader
-            order={order}
-            orderBy={orderBy}
-            onRequestSort={handleRequestSort}
-            columns={columns}
-            onReorderEnd={onReorderEnd}
-            numSelected={showCheckbox ? selected.length : undefined}
-            onSelectAllClick={showCheckbox ? handleSelectAllClick : undefined}
-            rowCount={showCheckbox ? rows?.length : undefined}
-          />
-          <TableBody>
-            {rows.length < 1 && emptyTableMessage && (
-              <TableRow>
-                <TableCell colSpan={4} align='center'>
-                  <p>{emptyTableMessage}</p>
-                </TableCell>
-              </TableRow>
-            )}
-            {rows &&
-              stableSort(rows, getComparator(order, orderBy, sortComparator)).map((row, index) => {
-                const onClick = onSelect ? () => onSelect(row as T) : undefined;
-                const isItemSelected = isSelected(row as T);
+        <TableBody>
+          {rows.length < 1 && emptyTableMessage && (
+            <TableRow>
+              <TableCell colSpan={4} align='center'>
+                <p>{emptyTableMessage}</p>
+              </TableCell>
+            </TableRow>
+          )}
+          {rows &&
+            stableSort(rows, getComparator(order, orderBy, sortComparator)).map((row, index) => {
+              const onClick = onSelect ? () => onSelect(row as T) : undefined;
+              const isItemSelected = isSelected(row as T);
 
-                return (
-                  <React.Fragment key={index}>
-                    <TableRow
-                      id={`row${index + 1}`}
-                      classes={{ hover: classes.hover }}
-                      hover={Boolean(onSelect) && (isClickable ? isClickable(row as T) : true) && !hasEditColumn}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        if (onClick && !hasEditColumn && (isClickable ? isClickable(row as T) : true)) {
-                          onClick();
-                        }
-                        if (!onClick && !hasEditColumn && (isClickable ? isClickable(row as T) : true)) {
-                          handleClick(e, row as T);
-                        }
-                      }}
-                      className={isInactive && isInactive(row as T) ? classes.inactiveRow : undefined}
-                      selected={isItemSelected}
-                      aria-checked={isItemSelected}
-                    >
-                      {showCheckbox && (
-                        <TableCell padding='checkbox'>
-                          <Checkbox color='primary' checked={isItemSelected} />
-                        </TableCell>
-                      )}
-                      {columns.map((c) => (
-                        <Renderer
-                          index={index + 1}
-                          key={c.key}
-                          row={row as T}
-                          column={c}
-                          value={row[c.key]}
-                          onRowClick={onClick}
-                        />
-                      ))}
-                    </TableRow>
-                    {DetailsRenderer && <DetailsRenderer index={index} row={row} />}
-                  </React.Fragment>
-                );
-              })}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </>
+              return (
+                <React.Fragment key={index}>
+                  <TableRow
+                    id={`row${index + 1}`}
+                    classes={{ hover: classes.hover }}
+                    hover={Boolean(onSelect) && (isClickable ? isClickable(row as T) : true) && !hasEditColumn}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (onClick && !hasEditColumn && (isClickable ? isClickable(row as T) : true)) {
+                        onClick();
+                      }
+                      if (!onClick && !hasEditColumn && (isClickable ? isClickable(row as T) : true)) {
+                        handleClick(e, row as T);
+                      }
+                    }}
+                    className={isInactive && isInactive(row as T) ? classes.inactiveRow : undefined}
+                    selected={isItemSelected}
+                    aria-checked={isItemSelected}
+                  >
+                    {showCheckbox && (
+                      <TableCell padding='checkbox'>
+                        <Checkbox color='primary' checked={isItemSelected} />
+                      </TableCell>
+                    )}
+                    {columns.map((c) => (
+                      <Renderer
+                        index={index + 1}
+                        key={c.key}
+                        row={row as T}
+                        column={c}
+                        value={row[c.key]}
+                        onRowClick={onClick}
+                      />
+                    ))}
+                  </TableRow>
+                  {DetailsRenderer && <DetailsRenderer index={index} row={row} />}
+                </React.Fragment>
+              );
+            })}
+        </TableBody>
+      </Table>
+    </TableContainer>
   );
 }
 

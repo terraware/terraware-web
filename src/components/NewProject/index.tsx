@@ -2,7 +2,7 @@ import { AppBar, Container, createStyles, Grid, makeStyles } from '@material-ui/
 import { useEffect, useState } from 'react';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import strings from 'src/strings';
-import { NewProject, Project, ServerOrganization, Site } from 'src/types/Organization';
+import { Project, ProjectTypes, ServerOrganization, Site } from 'src/types/Organization';
 import TfDivisor from '../common/TfDivisor';
 import Table from 'src/components/common/table';
 import { TableColumnType } from '../common/table/types';
@@ -84,9 +84,10 @@ const useStyles = makeStyles((theme) =>
 
 type ProjectViewProps = {
   organization: ServerOrganization;
+  reloadOrganizationData: () => void;
 };
 
-export default function ProjectView({ organization }: ProjectViewProps): JSX.Element {
+export default function ProjectView({ organization, reloadOrganizationData }: ProjectViewProps): JSX.Element {
   const [people, setPeople] = useState<OrganizationUser[]>();
   const [addPeopleModalOpened, setAddPeopleModalOpened] = useState(false);
   const [removedPeopleModalOpened, setRemovedPeopleModalOpened] = useState(false);
@@ -102,11 +103,12 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
   const [removedPeople, setRemovedPeople] = useState<OrganizationUser[]>();
   const [newModifiedSites, setNewModifiedSites] = useState<Site[]>();
 
-  const [record, setRecord, onChange] = useForm<NewProject>({ name: '', organizationId: organization?.id });
+  const [newProject, setNewProject, onChange] = useForm<Project>({ id: -1, name: '' });
   const setSnackbar = useSetRecoilState(snackbarAtom);
+  const history = useHistory();
 
   useEffect(() => {
-    setRecord({
+    setNewProject({
       name: projectSelected?.name,
       description: projectSelected?.description,
       startDate: projectSelected?.startDate,
@@ -114,7 +116,7 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
       types: projectSelected?.types,
       organizationId: organization?.id,
     });
-  }, [projectSelected, setRecord, organization]);
+  }, [projectSelected, setNewProject, organization]);
 
   useEffect(() => {
     const allPeopleOnProjectIds = peopleOnProject?.map((person) => person.id);
@@ -164,7 +166,7 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
   type ProjectType = 'Native Forest Restoration' | 'Agroforestry' | 'Silvopasture' | 'Sustainable Timber';
 
   const onChangeProjectType = (id: string, value: unknown) => {
-    let projectTypes = record.types ? [...record.types] : undefined;
+    let projectTypes = newProject.types ? [...newProject.types] : undefined;
     if (projectTypes) {
       const index = projectTypes.indexOf(id as ProjectType, 0);
       if (index !== -1 && value === false) {
@@ -179,19 +181,18 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
         projectTypes = [id as ProjectType];
       }
     }
-    setRecord({ ...record, types: projectTypes });
+    setNewProject({ ...newProject, types: projectTypes });
   };
 
   const onChangeStatus = (newStatus: string) => {
     onChange('status', newStatus);
   };
 
-  const isChecked = (id: ProjectType) => {
-    const projectTypes = record.types;
+  const isCheckboxChecked = (id: ProjectTypes) => {
+    const projectTypes = newProject.types;
 
     return projectTypes?.includes(id);
   };
-  const history = useHistory();
 
   const goToProjects = () => {
     const projectsLocation = {
@@ -218,7 +219,7 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
 
   const updateProjectHandler = async () => {
     if (projectSelected) {
-      const response = await updateProject({ ...record, id: projectSelected.id } as Project);
+      const response = await updateProject({ ...newProject, id: projectSelected.id } as Project);
       peopleOnProject?.forEach(async (person) => {
         if (!person.projectIds.includes(projectSelected.id)) {
           await addProjectUser(projectSelected.id, person.id);
@@ -243,7 +244,7 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
   };
 
   const saveProject = async () => {
-    if (record.name === '') {
+    if (newProject.name === '') {
       setNameError('Required Field');
     } else {
       if (projectSelected) {
@@ -268,7 +269,7 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
           updateProjectHandler();
         }
       } else {
-        const response = await createProject(record);
+        const response = await createProject(newProject, organization.id);
         if (response.requestSucceeded) {
           peopleOnProject?.forEach(async (person) => {
             if (response.project !== null) {
@@ -279,6 +280,7 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
             type: 'success',
             msg: 'Project added',
           });
+          reloadOrganizationData();
         } else {
           setSnackbar({
             type: 'delete',
@@ -339,20 +341,20 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
               label={strings.NAME}
               type='text'
               onChange={onChange}
-              value={record.name}
-              errorText={record.name ? '' : nameError}
+              value={newProject.name}
+              errorText={newProject.name ? '' : nameError}
             />
           </Grid>
           <Grid item xs={4}>
             <TextField id='description' label={strings.DESCRIPTION} type='textarea' onChange={onChange} />
           </Grid>
           <Grid item xs={4}>
-            <label htmlFor={record.startDate} className={classes.label}>
+            <label htmlFor={newProject.startDate} className={classes.label}>
               {strings.START_DATE_OPT}
             </label>
             <DatePicker
               id='startDate'
-              value={record.startDate}
+              value={newProject.startDate}
               onChange={onChange}
               label=''
               aria-label={strings.START_DATE_OPT}
@@ -365,7 +367,7 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
               label={strings.STATUS_OPT}
               onChange={onChangeStatus}
               options={['Propagating', 'Planting', 'Completed/Monitoring']}
-              selectedValue={record.status}
+              selectedValue={newProject.status}
             />
           </Grid>
           <Grid item xs={4}>
@@ -375,7 +377,7 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
               name='projectType'
               label={strings.NATIVE_FOREST_RESTORATION}
               onChange={onChangeProjectType}
-              value={isChecked('Native Forest Restoration')}
+              value={isCheckboxChecked('Native Forest Restoration')}
               className={classes.blockCheckbox}
             />
             <Checkbox
@@ -383,7 +385,7 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
               name='projectType'
               label={strings.AGROFORESTRY}
               onChange={onChangeProjectType}
-              value={isChecked('Agroforestry')}
+              value={isCheckboxChecked('Agroforestry')}
               className={classes.blockCheckbox}
             />
             <Checkbox
@@ -391,7 +393,7 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
               name='projectType'
               label={strings.SILVOPASTURE}
               onChange={onChangeProjectType}
-              value={isChecked('Silvopasture')}
+              value={isCheckboxChecked('Silvopasture')}
               className={classes.blockCheckbox}
             />
             <Checkbox
@@ -399,7 +401,7 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
               name='projectType'
               label={strings.SUSTAINABLE_TIMBER}
               onChange={onChangeProjectType}
-              value={isChecked('Sustainable Timber')}
+              value={isCheckboxChecked('Sustainable Timber')}
               className={classes.blockCheckbox}
             />
           </Grid>

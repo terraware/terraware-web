@@ -5,7 +5,6 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React, { useState } from 'react';
-import { GerminationTest } from 'src/api/types/tests';
 import strings from 'src/strings';
 import DialogCloseButton from '../common/DialogCloseButton';
 import Button from '../common/button/Button';
@@ -27,9 +26,9 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export interface Props {
+export interface AddPeopleDialogProps {
   open: boolean;
-  onClose: (value?: GerminationTest) => void;
+  onClose: () => void;
   peopleOnProject?: OrganizationUser[];
   people?: OrganizationUser[];
   setPeopleOnProject: (people: OrganizationUser[]) => void;
@@ -42,11 +41,11 @@ const peopleColumns: TableColumnType[] = [
   { key: 'role', name: 'Role', type: 'string' },
 ];
 
-export default function AddPeopleDialog(props: Props): JSX.Element {
+export default function AddPeopleDialog(props: AddPeopleDialogProps): JSX.Element {
   const classes = useStyles();
   const { onClose, open, people, setPeopleOnProject, peopleOnProject } = props;
 
-  const [selectedRows, setSelectedRows] = useState<OrganizationUser[]>();
+  const [selectedRows, setSelectedRows] = useState<OrganizationUser[]>(peopleOnProject ?? []);
 
   const onSubmitHandler = () => {
     if (selectedRows) {
@@ -75,6 +74,7 @@ export default function AddPeopleDialog(props: Props): JSX.Element {
               orderBy='name'
               columns={peopleColumns}
               showCheckbox={true}
+              selectedRows={selectedRows}
               setSelectedRows={setSelectedRows}
             />
           ) : (
