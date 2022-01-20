@@ -213,7 +213,7 @@ function AppContent() {
               </Route>
               {selectedOrganization && (
                 <Route path='/projects/:projectId/edit' exact={true}>
-                  <NewProject organization={selectedOrganization} />
+                  <NewProject organization={selectedOrganization} reloadOrganizationData={reloadData} />
                 </Route>
               )}
               <Route path='/projects/:projectId'>

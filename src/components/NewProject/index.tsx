@@ -109,12 +109,12 @@ export default function ProjectView({ organization, reloadOrganizationData }: Pr
 
   useEffect(() => {
     setNewProject({
-      name: projectSelected?.name,
+      id: projectSelected?.id || -1,
+      name: projectSelected?.name || '',
       description: projectSelected?.description,
       startDate: projectSelected?.startDate,
       status: projectSelected?.status,
       types: projectSelected?.types,
-      organizationId: organization?.id,
     });
   }, [projectSelected, setNewProject, organization]);
 
@@ -431,6 +431,7 @@ export default function ProjectView({ organization, reloadOrganizationData }: Pr
               columns={peopleColumns}
               emptyTableMessage='No People to show.'
               showCheckbox={true}
+              selectedRows={selectedPeopleRows}
               setSelectedRows={setSelectedPeopleRows}
               showTopBar={true}
               buttonType='destructive'
@@ -454,6 +455,7 @@ export default function ProjectView({ organization, reloadOrganizationData }: Pr
                   columns={siteColumns}
                   showCheckbox={true}
                   showTopBar={true}
+                  selectedRows={selectedSitesRows}
                   setSelectedRows={setSelectedSitesRows}
                   buttonType='passive'
                   buttonText={strings.MOVE}
