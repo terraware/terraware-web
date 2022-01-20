@@ -217,15 +217,15 @@ export default function ProjectView({ organization, reloadOrganizationData }: Pr
       let allRemovedPeopleResponsesOk = true;
       peopleOnProject?.forEach(async (person) => {
         if (!person.projectIds.includes(projectSelected.id)) {
-          const response = await updateProjectUser(projectSelected.id, person.id, axios.post);
-          if (!response.requestSucceeded) {
+          const updateResponse = await updateProjectUser(projectSelected.id, person.id, axios.post);
+          if (!updateResponse.requestSucceeded) {
             allNewPeopleResponsesOk = false;
           }
         }
       });
       removedPeople?.forEach(async (person) => {
-        const response = await updateProjectUser(projectSelected.id, person.id, axios.delete);
-        if (!response.requestSucceeded) {
+        const deleteResponse = await updateProjectUser(projectSelected.id, person.id, axios.delete);
+        if (!deleteResponse.requestSucceeded) {
           allRemovedPeopleResponsesOk = false;
         }
       });
@@ -277,7 +277,7 @@ export default function ProjectView({ organization, reloadOrganizationData }: Pr
     goToProjects();
   };
 
-  const saveProject = async () => {
+  const saveProject = () => {
     if (newProject.name === '') {
       setNameError('Required Field');
     } else {
