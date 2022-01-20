@@ -84,23 +84,3 @@ export async function updateProjectUser(
   }
   return response;
 }
-
-// export const deleteProjectUser = async (projectId: number, userId: number): Promise<SimpleResponse> => {
-//   const response: SimpleResponse = {
-//     requestSucceeded: true,
-//   };
-//   try {
-//     const serverResponse: SimpleSuccessResponsePayload = (
-//       await axios.delete(
-//         USER_IN_PROJECT.replace('{projectId}', projectId.toString()).replace('{userId}', userId.toString())
-//       )
-//     ).data;
-//     if (serverResponse.status === 'error') {
-//       response.requestSucceeded = false;
-//     }
-//   } catch {
-//     response.requestSucceeded = false;
-//   }
-
-//   return response;
-// };

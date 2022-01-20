@@ -149,8 +149,9 @@ export default function ProjectView({ organization, reloadOrganizationData }: Pr
       const projects = getProjectsById(organization);
       setProjectSelected(projects.get(projectIdNum));
       const projectSites = projects.get(projectIdNum)?.sites;
+      const modifiedSitesIds = modifiedSites?.map((modifiedSite) => modifiedSite.id);
       if (projectSites && projectSites.length > 0) {
-        setSitesOfProject(projectSites.filter((site) => !modifiedSites?.includes(site)));
+        setSitesOfProject(projectSites.filter((site) => !modifiedSitesIds?.includes(site.id)));
       }
       populatePeople();
     }
@@ -230,6 +231,7 @@ export default function ProjectView({ organization, reloadOrganizationData }: Pr
         }
       });
       if (response.requestSucceeded && allNewPeopleResponsesOk && allRemovedPeopleResponsesOk) {
+        reloadOrganizationData();
         setSnackbar({
           type: 'success',
           msg: 'Changes saved',
