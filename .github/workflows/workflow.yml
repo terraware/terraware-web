@@ -5,7 +5,9 @@ name: Deployment
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
+      - qa
     tags:
       # Semver (these are glob-like patterns, not regexes; the "." has no special meaning)
       - v[0-9].[0-9]+.[0-9]+

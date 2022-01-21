@@ -38,17 +38,18 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-type ProjectViewProps = {
+type SiteViewProps = {
   organization: ServerOrganization;
 };
 
-export default function ProjectView({ organization }: ProjectViewProps): JSX.Element {
+export default function SiteView({ organization }: SiteViewProps): JSX.Element {
   const [nameError, setNameError] = useState('');
 
   const [record, setRecord, onChange] = useForm<NewSite>({ name: '' });
   const setSnackbar = useSetRecoilState(snackbarAtom);
   const { siteId } = useParams<{ siteId: string }>();
   const [selectedSite, setSelectedSite] = useState<Site | null>();
+  const history = useHistory();
 
   const classes = useStyles();
 
@@ -71,7 +72,6 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
       onChange('projectId', newSelectedProject.id);
     }
   };
-  const history = useHistory();
 
   const goToSites = () => {
     const sitesLocation = {
@@ -85,6 +85,7 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
       setNameError('Required Field');
     } else {
       if (selectedSite) {
+        // We can uncomment this once the backend functionality is in place
         // const response = await updateSite({ ...record, id: selectedSite.id } as Site);
         // if (response.requestSucceeded) {
         setSnackbar({

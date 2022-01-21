@@ -5,25 +5,14 @@ export type Project = {
   name: string;
   description?: string;
   startDate?: string;
-  status?: string;
-  types?: string[];
+  status?: ProjectStatus;
+  types?: ProjectTypes[];
   sites?: Site[];
 };
 
-export type NewProject = {
-  name?: string;
-  description?: string;
-  startDate?: string;
-  status?: string;
-  types?: string[];
-  organizationId: number;
-};
+export type ProjectStatus = 'Propagating' | 'Planting' | 'Completed/Monitoring' | undefined;
 
-export type NewSite = {
-  name: string;
-  description?: string;
-  projectId?: number;
-};
+export type ProjectTypes = 'Native Forest Restoration' | 'Agroforestry' | 'Silvopasture' | 'Sustainable Timber';
 
 export type Site = {
   id: number;
@@ -56,9 +45,13 @@ export type Organization = {
 export type ServerOrganization = {
   id: number;
   name: string;
-  role: 'Contributor' | 'Manager' | 'Admin' | 'Owner';
+  role: AllOrganizationRoles;
   projects?: Project[];
 };
+
+export type HighOrganizationRoles = 'Manager' | 'Admin' | 'Owner';
+
+export type AllOrganizationRoles = HighOrganizationRoles | 'Contributor';
 
 export interface SelectedOrgInfo {
   selectedProject?: Project;

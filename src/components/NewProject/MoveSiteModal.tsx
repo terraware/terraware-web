@@ -5,7 +5,6 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React, { useEffect, useState } from 'react';
-import { GerminationTest } from 'src/api/types/tests';
 import strings from 'src/strings';
 import DialogCloseButton from '../common/DialogCloseButton';
 import Button from '../common/button/Button';
@@ -38,19 +37,19 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export interface Props {
+export interface MoveSiteDialogProps {
   open: boolean;
-  onClose: (value?: GerminationTest) => void;
+  onClose: () => void;
   selectedSites?: Site[];
   orgProjects?: Project[];
-  setNewModifiedSites: (modifiedSites: Site[]) => void;
+  saveSites: (modifiedSites: Site[]) => void;
 }
 
-export default function MoveSiteDialog(props: Props): JSX.Element {
+export default function MoveSiteDialog(props: MoveSiteDialogProps): JSX.Element {
   const classes = useStyles();
-  const [newSites, setNewSites] = useState<Site[]>();
+  const [modifiedSites, setModifiedSites] = useState<Site[]>();
   const [selectedProject, setSelectedProject] = useState<Project>();
-  const { onClose, open, orgProjects, selectedSites, setNewModifiedSites } = props;
+  const { onClose, open, orgProjects, selectedSites, saveSites } = props;
 
   useEffect(() => {
     if (selectedSites && selectedSites.length > 0) {
@@ -60,23 +59,23 @@ export default function MoveSiteDialog(props: Props): JSX.Element {
   }, [selectedSites, orgProjects]);
 
   const onSubmit = () => {
-    if (newSites) {
-      setNewModifiedSites(newSites);
+    if (modifiedSites) {
+      saveSites(modifiedSites);
     }
     onClose();
   };
 
   const onChangeHandler = (selectedProjectOpt: string) => {
     if (selectedSites) {
-      const selectedSitesCopy = [...selectedSites];
-      selectedSitesCopy.forEach((site) => {
-        const newProject = orgProjects?.find((project) => project.name === selectedProjectOpt);
+      const newProject = orgProjects?.find((project) => project.name === selectedProjectOpt);
+      if (newProject) {
         setSelectedProject(newProject);
-        if (newProject) {
-          site.projectId = newProject.id;
-        }
-      });
-      setNewSites(selectedSitesCopy);
+        setModifiedSites(
+          selectedSites.map((site) => {
+            return { ...site, projectId: newProject.id };
+          })
+        );
+      }
     }
   };
   return (
