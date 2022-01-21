@@ -8,6 +8,7 @@ export interface Props {
   value?: boolean | null;
   onChange: (id: string, value: boolean) => void;
   disabled?: boolean;
+  className?: string;
 }
 
 export default function Checkbox(props: Props): JSX.Element {
@@ -22,6 +23,7 @@ export default function Checkbox(props: Props): JSX.Element {
       label={props.label}
       disabled={props.disabled}
       control={<MUICheckbox id={'check-' + props.id} color='primary' checked={props.value ?? false} />}
+      className={props.className}
     />
   );
 }

@@ -1,6 +1,6 @@
 import { Container, createStyles, Grid, makeStyles } from '@material-ui/core';
 import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useHistory, useParams } from 'react-router-dom';
 import strings from 'src/strings';
 import { Project, ServerOrganization } from 'src/types/Organization';
 import Icon from '../common/icon/Icon';
@@ -10,6 +10,8 @@ import { TableColumnType } from '../common/table/types';
 import { getProjectsById } from 'src/utils/organization';
 import { OrganizationUser } from 'src/types/User';
 import { getOrganizationUsers } from 'src/api/organization/organization';
+import Button from '../common/button/Button';
+import Textfield from '../common/Textfield/Textfield';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -29,8 +31,11 @@ const useStyles = makeStyles((theme) =>
       fontSize: '20px',
       alignItems: 'center',
     },
-    value: {
-      fontSize: '16px',
+    titleWithButton: {
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
     },
   })
 );
@@ -42,6 +47,7 @@ export default function ProjectDetails({ organization }: ProjectDetailsProps): J
   const { projectId } = useParams<{ projectId: string }>();
   const [projectSelected, setProjectSelected] = useState<Project | null>();
   const [people, setPeople] = useState<OrganizationUser[]>();
+  const history = useHistory();
 
   useEffect(() => {
     const populatePeople = async () => {
@@ -75,6 +81,13 @@ export default function ProjectDetails({ organization }: ProjectDetailsProps): J
     { key: 'role', name: 'Role', type: 'string' },
   ];
 
+  const goToEditProject = () => {
+    const newProjectLocation = {
+      pathname: `/projects/${projectId}/edit`,
+    };
+    history.push(newProjectLocation);
+  };
+
   return (
     <Container maxWidth={false} className={classes.mainContainer}>
       <Grid container spacing={3}>
@@ -84,28 +97,48 @@ export default function ProjectDetails({ organization }: ProjectDetailsProps): J
             {strings.PROJECTS}
           </Link>
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={12} className={classes.titleWithButton}>
           <h2>{projectSelected?.name}</h2>
+          <Button label={strings.EDIT_PROJECT} priority='secondary' onClick={goToEditProject} />
         </Grid>
         <Grid item xs={4}>
-          <p>{strings.NAME}</p>
-          <p className={classes.value}>{projectSelected?.name}</p>
+          <Textfield label={strings.NAME} display={true} value={projectSelected?.name} id='name' type='text' />
         </Grid>
         <Grid item xs={4}>
-          <p>{strings.DESCRIPTION}</p>
-          <p className={classes.value}>{projectSelected?.description}</p>
+          <Textfield
+            label={strings.DESCRIPTION}
+            display={true}
+            value={projectSelected?.description}
+            id='description'
+            type='text'
+          />
         </Grid>
         <Grid item xs={4}>
-          <p>{strings.START_DATE_OPT}</p>
-          <p className={classes.value}>{projectSelected?.startDate}</p>
+          <Textfield
+            label={strings.START_DATE_OPT}
+            display={true}
+            value={projectSelected?.startDate}
+            id='startDate'
+            type='text'
+          />
         </Grid>
         <Grid item xs={4}>
-          <p>{strings.STATUS_OPT}</p>
-          <p className={classes.value}>{projectSelected?.status}</p>
+          <Textfield
+            label={strings.STATUS_OPT}
+            display={true}
+            value={projectSelected?.status}
+            id='status'
+            type='text'
+          />
         </Grid>
         <Grid item xs={4}>
-          <p>{strings.PROJECT_TYPE_OPT}</p>
-          <p className={classes.value}>{projectSelected?.types?.join(', ')}</p>
+          <Textfield
+            label={strings.PROJECT_TYPE_OPT}
+            display={true}
+            value={projectSelected?.types?.join(', ')}
+            id='projectType'
+            type='text'
+          />
         </Grid>
         <Grid item xs={12} />
         <Grid item xs={12}>

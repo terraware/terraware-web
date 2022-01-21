@@ -1,10 +1,9 @@
 /* eslint-disable import/no-webpack-loader-syntax */
 import { createStyles, CssBaseline, makeStyles, ThemeProvider } from '@material-ui/core';
 import mapboxgl from 'mapbox-gl';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
 import { RecoilRoot, useRecoilValue } from 'recoil';
-import { getOrganizations } from 'src/api/organization/organization';
 import {
   DEFAULT_SEED_SEARCH_FILTERS,
   DEFAULT_SEED_SEARCH_SORT_ORDER,
@@ -37,6 +36,9 @@ import Project from './components/Project';
 import SiteView from './components/Site';
 import { seedsDatabaseSelectedOrgInfo } from './state/selectedOrgInfoPerPage';
 import People from './components/People';
+import NewProject from './components/NewProject';
+import NewSite from './components/NewSite';
+import { getOrganizations } from './api/organization/organization';
 
 // @ts-ignore
 mapboxgl.workerClass =
@@ -102,20 +104,35 @@ function AppContent() {
   const selectedOrgInfoDatabase = useRecoilValue(seedsDatabaseSelectedOrgInfo);
   const [organizations, setOrganizations] = useState<ServerOrganization[]>();
 
-  useEffect(() => {
+  const reloadData = useCallback(() => {
     const populateOrganizations = async () => {
       const response = await getOrganizations();
       if (response.requestSucceeded) {
         setOrganizations(response.organizations);
-        if (!selectedOrganization) {
-          setSelectedOrganization(response.organizations[0]);
-        }
       } else {
         setOrganizationError(true);
       }
     };
     populateOrganizations();
-  }, [selectedOrganization]);
+  }, []);
+
+  useEffect(() => {
+    reloadData();
+  }, [reloadData]);
+
+  useEffect(() => {
+    if (organizations) {
+      if (!selectedOrganization) {
+        setSelectedOrganization(organizations[0]);
+      } else {
+        // update selectedOrganization
+        const previousSelectedOrganization = organizations?.find((org) => org.id === selectedOrganization.id);
+        if (previousSelectedOrganization) {
+          setSelectedOrganization(previousSelectedOrganization);
+        }
+      }
+    }
+  }, [organizations, selectedOrganization]);
 
   if (organizationError) {
     return <h1>Could not fetch organization data</h1>;
@@ -188,12 +205,27 @@ function AppContent() {
               <Route exact path='/species'>
                 <SpeciesList />
               </Route>
+              {selectedOrganization && (
+                <Route path='/projects/new'>
+                  <NewProject organization={selectedOrganization} reloadOrganizationData={reloadData} />
+                </Route>
+              )}
               <Route exact path='/projects'>
                 <ProjectsList organization={selectedOrganization} />
               </Route>
+              {selectedOrganization && (
+                <Route path='/projects/:projectId/edit' exact={true}>
+                  <NewProject organization={selectedOrganization} reloadOrganizationData={reloadData} />
+                </Route>
+              )}
               <Route path='/projects/:projectId'>
                 <Project organization={selectedOrganization} />
               </Route>
+              {selectedOrganization && (
+                <Route path='/sites/new'>
+                  <NewSite organization={selectedOrganization} />
+                </Route>
+              )}
               <Route exact path='/sites'>
                 <SitesList organization={selectedOrganization} />
               </Route>
@@ -222,6 +254,9 @@ function AppContent() {
               </Route>
               <Route path='/species/'>
                 <Redirect to='/species' />
+              </Route>
+              <Route path='/projects/new/'>
+                <Redirect to='/projects/new' />
               </Route>
               <Route path='/projects/'>
                 <Redirect to='/projects' />

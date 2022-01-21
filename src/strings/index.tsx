@@ -345,6 +345,28 @@ const strings = new LocalizedStrings({
     ADMIN: 'Admin',
     ADD_PERSON: 'Add Person',
     PEOPLE_DESCRIPTION: 'Manage the people in Terraware.',
+    ADD_PROJECT_DESC: 'Enter the project’s information below and then select the people you would like to add.',
+    NATIVE_FOREST_RESTORATION: 'Native Forest Restoration',
+    AGROFORESTRY: 'Agroforestry',
+    SILVOPASTURE: 'Silvopasture',
+    SUSTAINABLE_TIMBER: 'Sustainable Timber',
+    ADD_PEOPLE: 'Add People',
+    EDIT_PROJECT: 'Edit Project',
+    NO_PEOPLE_IN_ORG: 'No People in Organization',
+    ADD_PEOPLE_MESSAGE: 'To add people to this organization go to People.',
+    REMOVE: 'Remove',
+    REMOVED_PEOPLE_WARNING: 'You’ve removed people from this project. Are you sure you want to save your changes?',
+    REMOVED_SITES_WARNING: 'You’ve removed sites from this project. Are you sure you want to save your changes?',
+    REMOVED_PEOPLE_AND_SITES_WARNING:
+      'You’ve removed people and sites from this project. Are you sure you want to save your changes?',
+    REMOVED_PEOPLE_WARNING_DESC: 'The people you’ve removed include',
+    REMOVED_SITES_WARNING_DESC: 'The sites you’ve removed include',
+    REMOVED_PEOPLE_AND_SITES_WARNING_DESC:
+      'The people you’ve removed include {0} and the sites you’ve removed include {1}',
+    REMOVE_AND_SAVE: 'Remove & Save',
+    MOVE: 'Move',
+    REASSIGN_SITE_TITLE: 'Please reassign this site to another project in order to remove it from this project.',
+    ADD_SITE_DESC: 'Enter the site’s information below.',
   },
 });
 
