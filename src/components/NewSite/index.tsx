@@ -1,14 +1,15 @@
 import { Container, createStyles, Grid, makeStyles } from '@material-ui/core';
-import { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
 import strings from 'src/strings';
-import { Site, ServerOrganization } from 'src/types/Organization';
+import { ServerOrganization, Site } from 'src/types/Organization';
 import TextField from '../common/Textfield/Textfield';
 import useForm from 'src/utils/useForm';
 import Select from '../common/Select/Select';
 import { useSetRecoilState } from 'recoil';
 import snackbarAtom from 'src/state/snackbar';
 import FormBottomBar from '../common/FormBottomBar';
+import { getAllSitesWithProjectName } from 'src/utils/organization';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -43,11 +44,28 @@ type SiteViewProps = {
 
 export default function SiteView({ organization }: SiteViewProps): JSX.Element {
   const [nameError, setNameError] = useState('');
-  const [record, , onChange] = useForm<Site>({ name: '', id: -1, projectId: -1 });
-  const history = useHistory();
+
+  const [record, setRecord, onChange] = useForm<Site>({ name: '', id: -1, projectId: -1 });
   const setSnackbar = useSetRecoilState(snackbarAtom);
+  const { siteId } = useParams<{ siteId: string }>();
+  const [selectedSite, setSelectedSite] = useState<Site | null>();
+  const history = useHistory();
 
   const classes = useStyles();
+
+  useEffect(() => {
+    const sites = getAllSitesWithProjectName(organization);
+    setSelectedSite(sites.find((site) => site.id === parseInt(siteId, 10)));
+  }, [siteId, organization]);
+
+  useEffect(() => {
+    setRecord({
+      name: selectedSite?.name || '',
+      description: selectedSite?.description,
+      projectId: selectedSite?.projectId || -1,
+      id: -1,
+    });
+  }, [selectedSite, setRecord]);
 
   const onChangeProject = (newProject: string) => {
     const newSelectedProject = organization?.projects?.find((project) => project.name === newProject);
@@ -67,20 +85,34 @@ export default function SiteView({ organization }: SiteViewProps): JSX.Element {
     if (record.name === '') {
       setNameError('Required Field');
     } else {
-      // We can uncomment this once the backend functionality is in place
-      // const response = await createSite(record);
-      // if (response.requestSucceeded) {
-      setSnackbar({
-        type: 'success',
-        msg: 'Project added',
-      });
-      // We can uncomment this once the backend functionality is in place
-      // } else {
-      //   setSnackbar({
-      //     type: 'delete',
-      //     msg: strings.GENERIC_ERROR,
-      //   });
-      // }
+      if (selectedSite) {
+        // We can uncomment this once the backend functionality is in place
+        // const response = await updateSite({ ...record, id: selectedSite.id } as Site);
+        // if (response.requestSucceeded) {
+        setSnackbar({
+          type: 'success',
+          msg: 'Changes saved',
+        });
+        // } else {
+        //   setSnackbar({
+        //     type: 'delete',
+        //     msg: strings.GENERIC_ERROR,
+        //   });
+        // }
+      } else {
+        // const response = await createSite(record);
+        // if (response.requestSucceeded) {
+        setSnackbar({
+          type: 'success',
+          msg: 'Project added',
+        });
+        // } else {
+        //   setSnackbar({
+        //     type: 'delete',
+        //     msg: strings.GENERIC_ERROR,
+        //   });
+        // }
+      }
       goToSites();
     }
   };
@@ -95,10 +127,14 @@ export default function SiteView({ organization }: SiteViewProps): JSX.Element {
       <Container maxWidth={false} className={classes.mainContainer}>
         <Grid container spacing={3}>
           <Grid item xs={12}>
-            <>
-              <h2>{strings.ADD_SITE}</h2>
-              <p>{strings.ADD_SITE_DESC}</p>
-            </>
+            {selectedSite ? (
+              <h2>{selectedSite?.name}</h2>
+            ) : (
+              <>
+                <h2>{strings.ADD_SITE}</h2>
+                <p>{strings.ADD_SITE_DESC}</p>
+              </>
+            )}
           </Grid>
           <Grid item xs={4}>
             <TextField

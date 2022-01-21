@@ -228,6 +228,11 @@ function AppContent() {
               <Route exact path='/sites'>
                 <SitesList organization={selectedOrganization} />
               </Route>
+              {selectedOrganization && (
+                <Route path='/sites/:siteId/edit' exact={true}>
+                  <NewSite organization={selectedOrganization} />
+                </Route>
+              )}
               <Route path='/sites/:siteId'>
                 <SiteView organization={selectedOrganization} />
               </Route>
