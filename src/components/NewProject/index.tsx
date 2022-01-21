@@ -159,19 +159,19 @@ export default function ProjectView({ organization, reloadOrganizationData }: Pr
 
   const classes = useStyles();
 
-  const onChangeProjectType = (id: string, value: unknown) => {
+  const onChangeProjectType = (id: string, isChecked: unknown) => {
     let projectTypes = newProject.types ? [...newProject.types] : undefined;
     if (projectTypes) {
       const index = projectTypes.indexOf(id as ProjectTypes, 0);
-      if (index !== -1 && value === false) {
+      if (index !== -1 && isChecked === false) {
         projectTypes.splice(index, 1);
       }
 
-      if (index === -1 && value === true) {
+      if (index === -1 && isChecked === true) {
         projectTypes.push(id as ProjectTypes);
       }
     } else {
-      if (value === true) {
+      if (isChecked === true) {
         projectTypes = [id as ProjectTypes];
       }
     }
@@ -197,13 +197,9 @@ export default function ProjectView({ organization, reloadOrganizationData }: Pr
 
   const removeSelectedPeople = () => {
     if (peopleOnProject) {
-      const peopleOnProjectCopy = [...peopleOnProject];
-      selectedPeopleRows?.forEach((removedPerson) => {
-        const index = peopleOnProjectCopy?.indexOf(removedPerson);
-        peopleOnProjectCopy.splice(index, 1);
+      setPeopleOnProject((currentPeopleOnProject) => {
+        return currentPeopleOnProject?.filter((person) => !selectedPeopleRows?.includes(person));
       });
-
-      setPeopleOnProject(peopleOnProjectCopy);
     }
   };
 
@@ -282,30 +278,29 @@ export default function ProjectView({ organization, reloadOrganizationData }: Pr
   const saveProject = () => {
     if (newProject.name === '') {
       setNameError('Required Field');
-    } else {
-      if (projectSelected) {
-        if (!removedPeopleModalOpened) {
-          const originalPeopleOnProject = people?.filter((person) => person.projectIds.includes(projectSelected.id));
-          if (originalPeopleOnProject && peopleOnProject) {
-            const removedPeopleArray: OrganizationUser[] = [];
-            originalPeopleOnProject?.forEach((person) => {
-              const found = peopleOnProject?.filter((newPerson) => newPerson.id === person.id);
-              if (found?.length === 0) {
-                removedPeopleArray.push(person);
-              }
-            });
-            if (removedPeopleArray.length > 0 || (modifiedSites && modifiedSites.length > 0)) {
-              setRemovedPeople(removedPeopleArray);
-              setRemovedPeopleModalOpened(true);
-            } else {
-              saveExistingProject();
-            }
-          }
-        } else {
-          saveExistingProject();
-        }
+      return;
+    }
+
+    if (!projectSelected) {
+      saveNewProject();
+      return;
+    }
+
+    if (removedPeopleModalOpened) {
+      saveExistingProject();
+      return;
+    }
+
+    const originalPeopleOnProject = people?.filter((person) => person.projectIds.includes(projectSelected.id));
+    if (originalPeopleOnProject && peopleOnProject) {
+      const removedPeopleArray = originalPeopleOnProject.filter(
+        (original) => !peopleOnProject?.find((current) => current.id === original.id)
+      );
+      if (removedPeopleArray.length > 0 || (modifiedSites && modifiedSites.length > 0)) {
+        setRemovedPeople(removedPeopleArray);
+        setRemovedPeopleModalOpened(true);
       } else {
-        saveNewProject();
+        saveExistingProject();
       }
     }
   };
@@ -321,7 +316,7 @@ export default function ProjectView({ organization, reloadOrganizationData }: Pr
         open={moveSiteModalOpened}
         onClose={() => setMoveSiteModalOpened(false)}
         selectedSites={selectedSitesRows}
-        setNewModifiedSites={setModifiedSites}
+        saveSites={setModifiedSites}
         orgProjects={organization.projects}
       />
       <RemovedPeopleOrSitesModal

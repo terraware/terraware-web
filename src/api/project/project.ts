@@ -48,12 +48,21 @@ type SimpleResponse = {
   requestSucceeded: boolean;
 };
 
+type UpdateProjectRequestPayload = paths[typeof PROJECT]['put']['requestBody']['content']['application/json'];
+
 export async function updateProject(project: Project): Promise<SimpleResponse> {
   const response: SimpleResponse = {
     requestSucceeded: true,
   };
+  const updateProjectRequestPayload: UpdateProjectRequestPayload = {
+    name: project.name,
+    description: project.description,
+    startDate: project.startDate,
+    status: project.status,
+    types: project.types,
+  };
   try {
-    await axios.put(PROJECT.replace('{id}', project.id.toString()), project);
+    await axios.put(PROJECT.replace('{id}', project.id.toString()), updateProjectRequestPayload);
   } catch {
     response.requestSucceeded = false;
   }

@@ -42,14 +42,14 @@ export interface MoveSiteDialogProps {
   onClose: () => void;
   selectedSites?: Site[];
   orgProjects?: Project[];
-  setNewModifiedSites: (modifiedSites: Site[]) => void;
+  saveSites: (modifiedSites: Site[]) => void;
 }
 
 export default function MoveSiteDialog(props: MoveSiteDialogProps): JSX.Element {
   const classes = useStyles();
-  const [newSites, setNewSites] = useState<Site[]>();
+  const [modifiedSites, setModifiedSites] = useState<Site[]>();
   const [selectedProject, setSelectedProject] = useState<Project>();
-  const { onClose, open, orgProjects, selectedSites, setNewModifiedSites } = props;
+  const { onClose, open, orgProjects, selectedSites, saveSites } = props;
 
   useEffect(() => {
     if (selectedSites && selectedSites.length > 0) {
@@ -59,8 +59,8 @@ export default function MoveSiteDialog(props: MoveSiteDialogProps): JSX.Element 
   }, [selectedSites, orgProjects]);
 
   const onSubmit = () => {
-    if (newSites) {
-      setNewModifiedSites(newSites);
+    if (modifiedSites) {
+      saveSites(modifiedSites);
     }
     onClose();
   };
@@ -70,7 +70,7 @@ export default function MoveSiteDialog(props: MoveSiteDialogProps): JSX.Element 
       const newProject = orgProjects?.find((project) => project.name === selectedProjectOpt);
       if (newProject) {
         setSelectedProject(newProject);
-        setNewSites(
+        setModifiedSites(
           selectedSites.map((site) => {
             return { ...site, projectId: newProject.id };
           })

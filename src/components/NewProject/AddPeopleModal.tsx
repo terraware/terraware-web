@@ -61,7 +61,7 @@ export default function AddPeopleDialog(props: AddPeopleDialogProps): JSX.Elemen
   };
 
   return (
-    <Dialog onClose={() => onClose()} disableEscapeKeyDown open={open} maxWidth='md'>
+    <Dialog onClose={onClose} disableEscapeKeyDown open={open} maxWidth='md'>
       <DialogTitle className={classes.title}>
         <Typography variant='h6'>
           {people && people.length > 0 ? strings.ADD_PEOPLE : strings.NO_PEOPLE_IN_ORG}
