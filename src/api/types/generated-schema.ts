@@ -107,15 +107,13 @@ export interface paths {
     get: operations["getOrganization"];
     put: operations["updateOrganization"];
   };
-  "/api/v1/organizations/{organizationId}/invitations": {
-    post: operations["inviteOrganizationUser"];
-  };
   "/api/v1/organizations/{organizationId}/projects": {
     /** Only projects that are accessible by the current user are included. */
     get: operations["listOrganizationProjects"];
   };
   "/api/v1/organizations/{organizationId}/users": {
     get: operations["listOrganizationUsers"];
+    post: operations["addOrganizationUser"];
   };
   "/api/v1/organizations/{organizationId}/users/{userId}": {
     get: operations["getOrganizationUser"];
@@ -334,6 +332,11 @@ export interface components {
       /** Total quantity of all past and scheduled withdrawals, including germination tests. */
       totalWithdrawalQuantity?: components["schemas"]["SeedQuantityPayload"];
       withdrawals?: components["schemas"]["WithdrawalPayload"][];
+    };
+    AddOrganizationUserRequestPayload: {
+      email: string;
+      role: "Contributor" | "Manager" | "Admin" | "Owner";
+      projectIds?: number[];
     };
     AdvanceClockRequestPayload: {
       days: number;
@@ -785,11 +788,6 @@ export interface components {
       user: components["schemas"]["UserProfilePayload"];
       status: components["schemas"]["SuccessOrError"];
     };
-    InviteOrganizationUserRequestPayload: {
-      email: string;
-      role: "Contributor" | "Manager" | "Admin" | "Owner";
-      projectIds?: number[];
-    };
     LayerResponse: {
       id: number;
       siteId: number;
@@ -1008,11 +1006,13 @@ export interface components {
       role: "Contributor" | "Manager" | "Admin" | "Owner";
     };
     OrganizationUserPayload: {
+      /** Date and time the user was added to the organization. */
+      addedTime: string;
       email: string;
       id: number;
-      /** The user's first name. Not visible for users who have been invited but have not yet accepted the invitation. */
+      /** The user's first name. Not present if the user has been added to the organization but has not signed up for an account yet. */
       firstName?: string;
-      /** The user's last name. Not visible for users who have been invited but have not yet accepted the invitation. */
+      /** The user's last name. Not present if the user has been added to the organization but has not signed up for an account yet. */
       lastName?: string;
       /** IDs of projects the user is in. Users with admin and owner roles always have access to all projects. */
       projectIds: number[];
@@ -2293,26 +2293,6 @@ export interface operations {
       };
     };
   };
-  inviteOrganizationUser: {
-    parameters: {
-      path: {
-        organizationId: number;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["InviteOrganizationUserRequestPayload"];
-      };
-    };
-  };
   /** Only projects that are accessible by the current user are included. */
   listOrganizationProjects: {
     parameters: {
@@ -2347,6 +2327,26 @@ export interface operations {
         content: {
           "application/json": components["schemas"]["ListOrganizationUsersResponsePayload"];
         };
+      };
+    };
+  };
+  addOrganizationUser: {
+    parameters: {
+      path: {
+        organizationId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["AddOrganizationUserRequestPayload"];
       };
     };
   };

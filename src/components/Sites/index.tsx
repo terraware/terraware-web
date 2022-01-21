@@ -64,6 +64,13 @@ export default function SitesList({ organization }: SitesListProps): JSX.Element
     addProjectNameToSites();
   }, [organization]);
 
+  const goToNewSite = () => {
+    const newSiteLocation = {
+      pathname: `/sites/new`,
+    };
+    history.push(newSiteLocation);
+  };
+
   return (
     <main>
       <Container maxWidth={false} className={classes.mainContainer}>
@@ -75,13 +82,7 @@ export default function SitesList({ organization }: SitesListProps): JSX.Element
           </Grid>
           <Grid item xs={6} />
           <Grid item xs={2} className={classes.centered}>
-            <Button
-              id='new-site'
-              label={strings.ADD_SITE}
-              onClick={() => {
-                return true;
-              }}
-            />
+            <Button id='new-site' label={strings.ADD_SITE} onClick={goToNewSite} />
           </Grid>
           <Grid item xs={1} />
           <Grid item xs={1} />
