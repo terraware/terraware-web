@@ -373,6 +373,12 @@ const strings = new LocalizedStrings({
     ORGANIZATION_NAME: 'Organization Name',
     COUNTRY_OPTIONAL: 'Country (optional)',
     STATE_OPTIONAL: 'State (optional)',
+    EDIT_ORGANIZATION: 'Edit Organization',
+    ORGANIZATION: 'Organization',
+    ORGANIZATION_DESC: 'Manage your organization.',
+    DATE_ADDED: 'Date Added',
+    NUMBER_OF_PROJECTS: 'Number of Projects',
+    NUMBER_OF_PEOPLE: 'Number of People',
   },
 });
 

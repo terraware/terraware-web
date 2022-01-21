@@ -31,6 +31,7 @@ export default function NavBar({ organization }: NavBarProps): JSX.Element | nul
   const isProjectsRoute = useRouteMatch('/projects');
   const isSitesRoute = useRouteMatch('/sites');
   const isPeopleRoute = useRouteMatch('/people');
+  const isOrganizationRoute = useRouteMatch('/organization');
 
   const navigate = (url: string) => {
     history.push(url);
@@ -118,16 +119,29 @@ export default function NavBar({ organization }: NavBarProps): JSX.Element | nul
         </>
       )}
       <NavSection />
-      <NavItem label={strings.ADMIN} icon='key' onClick={() => !isPeopleRoute && navigate('/people')} id='admin'>
-        <SubNavbar>
-          <NavItem
-            label={strings.PEOPLE}
-            selected={isPeopleRoute ? true : false}
-            onClick={() => !isPeopleRoute && navigate('/people')}
-            id='people'
-          />
-        </SubNavbar>
-      </NavItem>
+      {role && ['Admin', 'Owner'].includes(role) && (
+        <NavItem
+          label={strings.ADMIN}
+          icon='key'
+          onClick={() => !isOrganizationRoute && navigate('/organization')}
+          id='admin'
+        >
+          <SubNavbar>
+            <NavItem
+              label={strings.ORGANIZATION}
+              selected={isOrganizationRoute ? true : false}
+              onClick={() => !isOrganizationRoute && navigate('/organization')}
+              id='organization'
+            />
+            <NavItem
+              label={strings.PEOPLE}
+              selected={isPeopleRoute ? true : false}
+              onClick={() => navigate('/people')}
+              id='people'
+            />
+          </SubNavbar>
+        </NavItem>
+      )}
     </Navbar>
   );
 }

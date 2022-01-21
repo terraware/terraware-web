@@ -76,7 +76,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
   const [countries, setCountries] = useState<Country[]>();
   const [selectedCountry, setSelectedCountry] = useState<Country>();
   const [selectedSubdivision, setSelectedSubdivision] = useState<Subdivision>();
-  const [newOrganization, , onChange] = useForm<ServerOrganization>({
+  const [newOrganization, setNewOrganization, onChange] = useForm<ServerOrganization>({
     id: -1,
     name: '',
     role: 'Admin',
@@ -97,8 +97,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
     if (found) {
       setSelectedCountry(found);
       setSelectedSubdivision(undefined);
-      onChange('countryCode', found.code);
-      onChange('countrySubdivisionCode', undefined);
+      setNewOrganization({ ...newOrganization, countryCode: found.code.toString(), countrySubdivisionCode: undefined });
     }
   };
 
@@ -142,7 +141,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
         <Grid item xs={12}>
           <Select
             label={strings.COUNTRY_OPTIONAL}
-            id='county'
+            id='countyCode'
             onChange={onChangeCountry}
             options={countries?.map((country) => country.name)}
             selectedValue={selectedCountry?.name}
@@ -152,7 +151,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
           <Grid item xs={12}>
             <Select
               label={strings.STATE_OPTIONAL}
-              id='county'
+              id='countySubdivisionCode'
               onChange={onChangeSubdivision}
               options={selectedCountry.subdivisions.map((subdivision) => subdivision.name)}
               selectedValue={selectedSubdivision?.name}

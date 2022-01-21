@@ -38,6 +38,8 @@ import { seedsDatabaseSelectedOrgInfo } from './state/selectedOrgInfoPerPage';
 import People from './components/People';
 import NewProject from './components/NewProject';
 import NewSite from './components/NewSite';
+import Organization from './components/Organization';
+import EditOrganization from './components/EditOrganization';
 
 // @ts-ignore
 mapboxgl.workerClass =
@@ -213,6 +215,14 @@ function AppContent() {
               </Route>
               <Route path='/people'>
                 <People organization={selectedOrganization} />
+              </Route>
+              {selectedOrganization && (
+                <Route path='/organization/edit' exact={true}>
+                  <EditOrganization organization={selectedOrganization} />
+                </Route>
+              )}
+              <Route path='/organization'>
+                <Organization organization={selectedOrganization} />
               </Route>
 
               {/* Redirects. Invalid paths will redirect to the closest valid path. */}

@@ -111,6 +111,9 @@ export async function getOrganizations(): Promise<OrganizationsResponse> {
       name: organization.name,
       role: organization.role,
       projects: organization.projects?.map((project) => parseProject(project)),
+      description: organization.description,
+      countryCode: organization.countryCode,
+      countrySubdivisionCode: organization.countrySubdivisionCode,
     }));
   } catch {
     response.requestSucceeded = false;
@@ -182,6 +185,38 @@ export async function createOrganization(organization: ServerOrganization) {
         countrySubdivisionCode: serverResponse.organization.countrySubdivisionCode,
       };
     } else {
+      response.requestSucceeded = false;
+    }
+  } catch {
+    response.requestSucceeded = false;
+  }
+  return response;
+}
+
+const UPDATE_ORGANIZATION = '/api/v1/organizations/{organizationId}';
+
+type UpdateOrganizationResponse = {
+  requestSucceeded: boolean;
+};
+type SimpleSuccessResponsePayload =
+  paths[typeof UPDATE_ORGANIZATION]['put']['responses'][200]['content']['application/json'];
+
+export async function updateOrganization(organization: ServerOrganization) {
+  const response: UpdateOrganizationResponse = {
+    requestSucceeded: true,
+  };
+  try {
+    const updatedOrganization: UpdateOrganizationRequestPayload = {
+      name: organization.name,
+      description: organization.description,
+      countryCode: organization.countryCode,
+      countrySubdivisionCode: organization.countrySubdivisionCode,
+    };
+    const serverResponse: SimpleSuccessResponsePayload = (
+      await axios.put(UPDATE_ORGANIZATION.replace('{organizationId}', organization.id.toString()), updatedOrganization)
+    ).data;
+
+    if (serverResponse.status === 'error') {
       response.requestSucceeded = false;
     }
   } catch {
