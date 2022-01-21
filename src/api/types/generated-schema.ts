@@ -86,6 +86,10 @@ export interface paths {
   "/api/v1/gis/plants/list/{layerId}": {
     get: operations["getPlantsList"];
   };
+  "/api/v1/gis/plants/summary": {
+    /** Optionally also gets the plants and species counts as of a previous time, which clients can use to compute the amount of change over time. */
+    get: operations["getPlantsAndSpeciesSummary"];
+  };
   "/api/v1/gis/plants/{featureId}": {
     get: operations["get"];
     put: operations["update_1"];
@@ -103,18 +107,20 @@ export interface paths {
     get: operations["getOrganization"];
     put: operations["updateOrganization"];
   };
-  "/api/v1/organizations/{organizationId}/invitations": {
-    post: operations["inviteOrganizationUser"];
-  };
   "/api/v1/organizations/{organizationId}/projects": {
     /** Only projects that are accessible by the current user are included. */
     get: operations["listOrganizationProjects"];
   };
   "/api/v1/organizations/{organizationId}/users": {
     get: operations["listOrganizationUsers"];
+    post: operations["addOrganizationUser"];
   };
   "/api/v1/organizations/{organizationId}/users/{userId}": {
     get: operations["getOrganizationUser"];
+    /** Only includes organization-level information that can be modified by organization administrators. Use /api/v1/projects/{projectId}/users/{userId} to change the user's projects. */
+    put: operations["updateOrganizationUser"];
+    /** Does not remove any data created by the user. */
+    delete: operations["deleteOrganizationUser"];
   };
   "/api/v1/projects": {
     get: operations["listAllProjects"];
@@ -128,8 +134,13 @@ export interface paths {
   "/api/v1/projects/{projectId}/sites": {
     get: operations["listProjectSites"];
   };
+  "/api/v1/projects/{projectId}/users/{userId}": {
+    /** The user must already be a member of, or already be invited to, the organization. */
+    post: operations["addProjectUser"];
+    delete: operations["deleteProjectUser"];
+  };
   "/api/v1/search": {
-    post: operations["search"];
+    post: operations["search_1"];
   };
   "/api/v1/seedbank/accession": {
     post: operations["create"];
@@ -198,28 +209,28 @@ export interface paths {
     get: operations["getSite"];
   };
   "/api/v1/species": {
-    get: operations["speciesList"];
-    post: operations["speciesCreate"];
+    get: operations["listSpecies"];
+    post: operations["createSpecies"];
   };
   "/api/v1/species/names": {
-    get: operations["speciesNamesListAll"];
-    post: operations["speciesNameCreate"];
+    get: operations["listAllSpeciesNames"];
+    post: operations["createSpeciesName"];
   };
   "/api/v1/species/names/{speciesNameId}": {
     /** Gets information about a single species name. */
-    get: operations["speciesNameGet"];
+    get: operations["getSpeciesName"];
     /** Updates one of the names of a species. */
-    put: operations["speciesNameUpdate"];
+    put: operations["updateSpeciesName"];
     /** Deletes one of the secondary names of a species. */
-    delete: operations["speciesNameDelete"];
+    delete: operations["deleteSpeciesName"];
   };
   "/api/v1/species/{speciesId}": {
-    get: operations["speciesRead"];
-    put: operations["speciesUpdate"];
-    delete: operations["speciesDelete"];
+    get: operations["getSpecies"];
+    put: operations["updateSpecies"];
+    delete: operations["deleteSpecies"];
   };
   "/api/v1/species/{speciesId}/names": {
-    get: operations["speciesNamesList"];
+    get: operations["listSpeciesNames"];
   };
   "/api/v1/timeseries/create": {
     /** If there are existing timeseries with the same names, the old definitions will be overwritten. */
@@ -321,6 +332,11 @@ export interface components {
       /** Total quantity of all past and scheduled withdrawals, including germination tests. */
       totalWithdrawalQuantity?: components["schemas"]["SeedQuantityPayload"];
       withdrawals?: components["schemas"]["WithdrawalPayload"][];
+    };
+    AddOrganizationUserRequestPayload: {
+      email: string;
+      role: "Contributor" | "Manager" | "Admin" | "Owner";
+      projectIds?: number[];
     };
     AdvanceClockRequestPayload: {
       days: number;
@@ -503,6 +519,14 @@ export interface components {
         | "Sustainable Timber"
       )[];
     };
+    CreateSpeciesNameResponsePayload: {
+      id: number;
+      status: components["schemas"]["SuccessOrError"];
+    };
+    CreateSpeciesResponsePayload: {
+      id: number;
+      status: components["schemas"]["SuccessOrError"];
+    };
     CreateTimeseriesEntry: {
       /** ID of device that produces this timeseries. */
       deviceId: number;
@@ -516,6 +540,13 @@ export interface components {
     };
     CreateTimeseriesRequestPayload: {
       timeseries: components["schemas"]["CreateTimeseriesEntry"][];
+    };
+    /** Represents the current, and optionally a previous, count of a quantity such as the number of plants or species. */
+    CurrentAndPreviousCounts: {
+      /** The current value of the quantity in question. */
+      current: number;
+      /** The value of the quantity in question as of a previous point in time. Will not be present if no previousTime value was specified in the request. */
+      previous?: number;
     };
     DeleteFeatureResponsePayload: {
       id: number;
@@ -745,14 +776,17 @@ export interface components {
       site: components["schemas"]["SiteElement"];
       status: components["schemas"]["SuccessOrError"];
     };
+    GetSpeciesNameResponsePayload: {
+      speciesName: components["schemas"]["SpeciesNamesResponseElement"];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    GetSpeciesResponsePayload: {
+      species: components["schemas"]["SpeciesResponseElement"];
+      status: components["schemas"]["SuccessOrError"];
+    };
     GetUserResponsePayload: {
       user: components["schemas"]["UserProfilePayload"];
       status: components["schemas"]["SuccessOrError"];
-    };
-    InviteOrganizationUserRequestPayload: {
-      email: string;
-      role: "Contributor" | "Manager" | "Admin" | "Owner";
-      projectIds?: number[];
     };
     LayerResponse: {
       id: number;
@@ -882,6 +916,14 @@ export interface components {
       sites: components["schemas"]["SiteElement"][];
       status: components["schemas"]["SuccessOrError"];
     };
+    ListSpeciesNamesResponsePayload: {
+      speciesNames: components["schemas"]["SpeciesNamesResponseElement"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    ListSpeciesResponsePayload: {
+      species: components["schemas"]["SpeciesResponseElement"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
     ModifyAutomationRequestPayload: {
       name: string;
       description?: string;
@@ -964,11 +1006,13 @@ export interface components {
       role: "Contributor" | "Manager" | "Admin" | "Owner";
     };
     OrganizationUserPayload: {
+      /** Date and time the user was added to the organization. */
+      addedTime: string;
       email: string;
       id: number;
-      /** The user's first name. Not visible for users who have been invited but have not yet accepted the invitation. */
+      /** The user's first name. Not present if the user has been added to the organization but has not signed up for an account yet. */
       firstName?: string;
-      /** The user's last name. Not visible for users who have been invited but have not yet accepted the invitation. */
+      /** The user's last name. Not present if the user has been added to the organization but has not signed up for an account yet. */
       lastName?: string;
       /** IDs of projects the user is in. Users with admin and owner roles always have access to all projects. */
       projectIds: number[];
@@ -990,6 +1034,12 @@ export interface components {
     };
     PlantSummaryResponsePayload: {
       summary: { [key: string]: number };
+      status: components["schemas"]["SuccessOrError"];
+    };
+    PlantsAndSpeciesSummaryResponsePayload: {
+      previousTime?: string;
+      plants: components["schemas"]["CurrentAndPreviousCounts"];
+      species: components["schemas"]["CurrentAndPreviousCounts"];
       status: components["schemas"]["SuccessOrError"];
     };
     Point: components["schemas"]["Geometry"] & {
@@ -1061,7 +1111,7 @@ export interface components {
         | components["schemas"]["FieldNodePayload"]
         | components["schemas"]["NotNodePayload"]
         | components["schemas"]["OrNodePayload"];
-      /** Maximum number of top-level search results to return. The system may impose a limit on this value. A separate system-imposed limit may also be applied to lists of child objects inside the top-level results. */
+      /** Maximum number of top-level search results to return. The system may impose a limit on this value. A separate system-imposed limit may also be applied to lists of child objects inside the top-level results. Use a value of 0 to return the maximum number of allowed results. */
       count: number;
       /** Starting point for search results. If present, a previous search will be continued from where it left off. This should be the value of the cursor that was returned in the response to a previous search. */
       cursor?: string;
@@ -1110,36 +1160,14 @@ export interface components {
       timezone?: string;
       facilities?: components["schemas"]["FacilityPayload"][];
     };
-    SpeciesCreateResponsePayload: {
-      id: number;
-      status: components["schemas"]["SuccessOrError"];
-    };
-    SpeciesGetResponsePayload: {
-      species: components["schemas"]["SpeciesResponseElement"];
-      status: components["schemas"]["SuccessOrError"];
-    };
-    SpeciesListResponsePayload: {
-      species: components["schemas"]["SpeciesResponseElement"][];
-      status: components["schemas"]["SuccessOrError"];
-    };
-    SpeciesNameCreateResponsePayload: {
-      id: number;
-      status: components["schemas"]["SuccessOrError"];
-    };
-    SpeciesNameGetResponsePayload: {
-      speciesName: components["schemas"]["SpeciesNamesResponseElement"];
-      status: components["schemas"]["SuccessOrError"];
-    };
     SpeciesNameRequestPayload: {
       /** True if name is a scientific name for the species. */
       isScientific?: boolean;
       locale?: string;
       name: string;
+      /** Which organization's species list to update. (Currently ignored.) */
+      organizationId?: number;
       speciesId: number;
-    };
-    SpeciesNamesListResponsePayload: {
-      speciesNames: components["schemas"]["SpeciesNamesResponseElement"][];
-      status: components["schemas"]["SuccessOrError"];
     };
     SpeciesNamesResponseElement: {
       id: number;
@@ -1153,6 +1181,8 @@ export interface components {
       /** True if name is the scientific name for the species. */
       isScientific?: boolean;
       name: string;
+      /** Which organization's species list to update. (Currently ignored.) */
+      organizationId?: number;
       plantForm?: "Tree" | "Shrub" | "Vine" | "Liana" | "Herbaceous";
       rare?: "No" | "Yes" | "Unsure";
       /** Taxonomic serial number from ITIS database. */
@@ -1349,6 +1379,9 @@ export interface components {
       countrySubdivisionCode?: string;
       description?: string;
       name: string;
+    };
+    UpdateOrganizationUserRequestPayload: {
+      role: "Contributor" | "Manager" | "Admin" | "Owner";
     };
     UpdatePlantRequestPayload: {
       label?: string;
@@ -2113,6 +2146,25 @@ export interface operations {
       };
     };
   };
+  /** Optionally also gets the plants and species counts as of a previous time, which clients can use to compute the amount of change over time. */
+  getPlantsAndSpeciesSummary: {
+    parameters: {
+      query: {
+        organizationId?: number;
+        projectId?: number;
+        siteId?: number;
+        previousTime?: string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["PlantsAndSpeciesSummaryResponsePayload"];
+        };
+      };
+    };
+  };
   get: {
     parameters: {
       path: {
@@ -2241,26 +2293,6 @@ export interface operations {
       };
     };
   };
-  inviteOrganizationUser: {
-    parameters: {
-      path: {
-        organizationId: number;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["InviteOrganizationUserRequestPayload"];
-      };
-    };
-  };
   /** Only projects that are accessible by the current user are included. */
   listOrganizationProjects: {
     parameters: {
@@ -2298,6 +2330,26 @@ export interface operations {
       };
     };
   };
+  addOrganizationUser: {
+    parameters: {
+      path: {
+        organizationId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["AddOrganizationUserRequestPayload"];
+      };
+    };
+  };
   getOrganizationUser: {
     parameters: {
       path: {
@@ -2310,6 +2362,57 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["GetOrganizationUserResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Only includes organization-level information that can be modified by organization administrators. Use /api/v1/projects/{projectId}/users/{userId} to change the user's projects. */
+  updateOrganizationUser: {
+    parameters: {
+      path: {
+        organizationId: number;
+        userId: number;
+      };
+    };
+    responses: {
+      /** The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** The user is not a member of the organization. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateOrganizationUserRequestPayload"];
+      };
+    };
+  };
+  /** Does not remove any data created by the user. */
+  deleteOrganizationUser: {
+    parameters: {
+      path: {
+        organizationId: number;
+        userId: number;
+      };
+    };
+    responses: {
+      /** The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** The user is not a member of the organization. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -2405,12 +2508,64 @@ export interface operations {
       };
     };
   };
-  search: {
+  /** The user must already be a member of, or already be invited to, the organization. */
+  addProjectUser: {
+    parameters: {
+      path: {
+        projectId: number;
+        userId: number;
+      };
+    };
+    responses: {
+      /** The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** The user does not exist or is not a member of the organization. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+      /** The user is already a member of the project. */
+      409: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  deleteProjectUser: {
+    parameters: {
+      path: {
+        projectId: number;
+        userId: number;
+      };
+    };
+    responses: {
+      /** The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** The user does not exist or is not a member of the project. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  search_1: {
     responses: {
       /** OK */
       200: {
         content: {
           "application/json": components["schemas"]["SearchResponsePayload"];
+          "text/csv": string;
         };
       };
     };
@@ -2824,28 +2979,33 @@ export interface operations {
       };
     };
   };
-  speciesList: {
+  listSpecies: {
+    parameters: {
+      query: {
+        organizationId?: number;
+      };
+    };
     responses: {
       /** OK */
       200: {
         content: {
-          "application/json": components["schemas"]["SpeciesListResponsePayload"];
+          "application/json": components["schemas"]["ListSpeciesResponsePayload"];
         };
       };
     };
   };
-  speciesCreate: {
+  createSpecies: {
     responses: {
       /** Species created. */
       200: {
         content: {
-          "application/json": components["schemas"]["SpeciesCreateResponsePayload"];
+          "application/json": components["schemas"]["CreateSpeciesResponsePayload"];
         };
       };
       /** A species with the requested name already exists. */
       409: {
         content: {
-          "application/json": components["schemas"]["SpeciesCreateResponsePayload"];
+          "application/json": components["schemas"]["CreateSpeciesResponsePayload"];
         };
       };
     };
@@ -2855,22 +3015,27 @@ export interface operations {
       };
     };
   };
-  speciesNamesListAll: {
+  listAllSpeciesNames: {
+    parameters: {
+      query: {
+        organizationId?: number;
+      };
+    };
     responses: {
       /** OK */
       200: {
         content: {
-          "application/json": components["schemas"]["SpeciesNamesListResponsePayload"];
+          "application/json": components["schemas"]["ListSpeciesNamesResponsePayload"];
         };
       };
     };
   };
-  speciesNameCreate: {
+  createSpeciesName: {
     responses: {
       /** Species name added. */
       200: {
         content: {
-          "application/json": components["schemas"]["SpeciesNameCreateResponsePayload"];
+          "application/json": components["schemas"]["CreateSpeciesNameResponsePayload"];
         };
       };
       /** The species does not exist. */
@@ -2882,7 +3047,7 @@ export interface operations {
       /** The species already has the requested name. */
       409: {
         content: {
-          "application/json": components["schemas"]["SpeciesNameCreateResponsePayload"];
+          "application/json": components["schemas"]["CreateSpeciesNameResponsePayload"];
         };
       };
     };
@@ -2893,7 +3058,7 @@ export interface operations {
     };
   };
   /** Gets information about a single species name. */
-  speciesNameGet: {
+  getSpeciesName: {
     parameters: {
       path: {
         speciesNameId: number;
@@ -2903,7 +3068,7 @@ export interface operations {
       /** Species name retrieved. */
       200: {
         content: {
-          "application/json": components["schemas"]["SpeciesNameGetResponsePayload"];
+          "application/json": components["schemas"]["GetSpeciesNameResponsePayload"];
         };
       };
       /** The requested resource was not found. */
@@ -2915,7 +3080,7 @@ export interface operations {
     };
   };
   /** Updates one of the names of a species. */
-  speciesNameUpdate: {
+  updateSpeciesName: {
     parameters: {
       path: {
         speciesNameId: number;
@@ -2936,7 +3101,7 @@ export interface operations {
     };
   };
   /** Deletes one of the secondary names of a species. */
-  speciesNameDelete: {
+  deleteSpeciesName: {
     parameters: {
       path: {
         speciesNameId: number;
@@ -2963,17 +3128,20 @@ export interface operations {
       };
     };
   };
-  speciesRead: {
+  getSpecies: {
     parameters: {
       path: {
         speciesId: number;
+      };
+      query: {
+        organizationId?: number;
       };
     };
     responses: {
       /** Species retrieved. */
       200: {
         content: {
-          "application/json": components["schemas"]["SpeciesGetResponsePayload"];
+          "application/json": components["schemas"]["GetSpeciesResponsePayload"];
         };
       };
       /** The requested resource was not found. */
@@ -2984,7 +3152,7 @@ export interface operations {
       };
     };
   };
-  speciesUpdate: {
+  updateSpecies: {
     parameters: {
       path: {
         speciesId: number;
@@ -3010,10 +3178,13 @@ export interface operations {
       };
     };
   };
-  speciesDelete: {
+  deleteSpecies: {
     parameters: {
       path: {
         speciesId: number;
+      };
+      query: {
+        organizationId?: number;
       };
     };
     responses: {
@@ -3037,17 +3208,20 @@ export interface operations {
       };
     };
   };
-  speciesNamesList: {
+  listSpeciesNames: {
     parameters: {
       path: {
         speciesId: number;
+      };
+      query: {
+        organizationId?: number;
       };
     };
     responses: {
       /** Species names retrieved. */
       200: {
         content: {
-          "application/json": components["schemas"]["SpeciesNamesListResponsePayload"];
+          "application/json": components["schemas"]["ListSpeciesNamesResponsePayload"];
         };
       };
       /** The species does not exist. */

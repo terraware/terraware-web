@@ -37,6 +37,7 @@ const columns: TableColumnType[] = [
   { key: 'email', name: 'Email', type: 'string' },
   { key: 'role', name: 'Role', type: 'string' },
   { key: 'projectNames', name: 'Projects', type: 'string' },
+  { key: 'addedTime', name: 'Date Added', type: 'date' },
 ];
 
 type PeopleListProps = {
@@ -88,6 +89,7 @@ export default function PeopleList({ organization }: PeopleListProps): JSX.Eleme
             role: user.role,
             projectIds: user.projectIds,
             projectNames: projectNamesOfPerson,
+            addedTime: user.addedTime,
           };
         });
         return peopleWithProjectName;
