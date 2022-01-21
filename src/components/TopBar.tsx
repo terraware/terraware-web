@@ -54,11 +54,9 @@ type TopBarProps = {
   setNotifications: (notifications?: Notifications) => void;
   setSeedSearchCriteria: (criteria: SeedSearchCriteria) => void;
   facilityId?: number;
-  setOrganizations: (organizations: ServerOrganization[]) => void;
   organizations?: ServerOrganization[];
   setSelectedOrganization: (selectedOrganization: ServerOrganization) => void;
   selectedOrganization?: ServerOrganization;
-  setOrganizationError: (error: boolean) => void;
 };
 
 export default function TopBar(props: TopBarProps): JSX.Element | null {
@@ -68,10 +66,8 @@ export default function TopBar(props: TopBarProps): JSX.Element | null {
     setNotifications,
     setSeedSearchCriteria,
     facilityId,
-    setOrganizations,
     setSelectedOrganization,
     selectedOrganization,
-    setOrganizationError,
     organizations,
   } = props;
   const location = useStateLocation();
@@ -126,9 +122,9 @@ export default function TopBar(props: TopBarProps): JSX.Element | null {
           />
           <div className={classes.separator} />
           <OrganizationsDropdown
-            organizations={props.organizations}
-            selectedOrganization={props.selectedOrganization}
-            setSelectedOrganization={props.setSelectedOrganization}
+            organizations={organizations}
+            selectedOrganization={selectedOrganization}
+            setSelectedOrganization={setSelectedOrganization}
           />
           <div className={classes.separator} />
           <UserMenu />

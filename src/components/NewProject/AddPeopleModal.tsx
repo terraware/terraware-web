@@ -5,7 +5,6 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React, { useState } from 'react';
-import { GerminationTest } from 'src/api/types/tests';
 import strings from 'src/strings';
 import DialogCloseButton from '../common/DialogCloseButton';
 import Button from '../common/button/Button';
@@ -27,12 +26,12 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export interface Props {
+export interface AddPeopleDialogProps {
   open: boolean;
-  onClose: (value?: GerminationTest) => void;
+  onClose: () => void;
   peopleOnProject?: OrganizationUser[];
   people?: OrganizationUser[];
-  setPeopleOnProject: (people: OrganizationUser[]) => void;
+  setPeopleOnProject: React.Dispatch<React.SetStateAction<OrganizationUser[] | undefined>>;
 }
 
 const peopleColumns: TableColumnType[] = [
@@ -42,21 +41,27 @@ const peopleColumns: TableColumnType[] = [
   { key: 'role', name: 'Role', type: 'string' },
 ];
 
-export default function AddPeopleDialog(props: Props): JSX.Element {
+export default function AddPeopleDialog(props: AddPeopleDialogProps): JSX.Element {
   const classes = useStyles();
   const { onClose, open, people, setPeopleOnProject, peopleOnProject } = props;
 
-  const [selectedRows, setSelectedRows] = useState<OrganizationUser[]>();
+  const [selectedRows, setSelectedRows] = useState<OrganizationUser[]>(peopleOnProject ?? []);
 
   const onSubmitHandler = () => {
     if (selectedRows) {
-      setPeopleOnProject(selectedRows);
+      setPeopleOnProject((current: OrganizationUser[] | undefined) => {
+        if (current) {
+          return [...current, ...selectedRows];
+        } else {
+          return selectedRows;
+        }
+      });
     }
     onClose();
   };
 
   return (
-    <Dialog onClose={() => onClose()} disableEscapeKeyDown open={open} maxWidth='md'>
+    <Dialog onClose={onClose} disableEscapeKeyDown open={open} maxWidth='md'>
       <DialogTitle className={classes.title}>
         <Typography variant='h6'>
           {people && people.length > 0 ? strings.ADD_PEOPLE : strings.NO_PEOPLE_IN_ORG}
@@ -67,11 +72,11 @@ export default function AddPeopleDialog(props: Props): JSX.Element {
         <Grid container spacing={4}>
           {people && people.length > 0 ? (
             <Table
-              rows={people || []}
+              rows={people}
               orderBy='name'
               columns={peopleColumns}
               showCheckbox={true}
-              previousSelectedRows={peopleOnProject}
+              selectedRows={selectedRows}
               setSelectedRows={setSelectedRows}
             />
           ) : (
