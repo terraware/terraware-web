@@ -31,7 +31,7 @@ export interface AddPeopleDialogProps {
   onClose: () => void;
   peopleOnProject?: OrganizationUser[];
   people?: OrganizationUser[];
-  setPeopleOnProject: (people: OrganizationUser[]) => void;
+  setPeopleOnProject: React.Dispatch<React.SetStateAction<OrganizationUser[] | undefined>>;
 }
 
 const peopleColumns: TableColumnType[] = [
@@ -49,7 +49,13 @@ export default function AddPeopleDialog(props: AddPeopleDialogProps): JSX.Elemen
 
   const onSubmitHandler = () => {
     if (selectedRows) {
-      setPeopleOnProject(selectedRows);
+      setPeopleOnProject((current: OrganizationUser[] | undefined) => {
+        if (current) {
+          return [...current, ...selectedRows];
+        } else {
+          return selectedRows;
+        }
+      });
     }
     onClose();
   };
@@ -57,24 +63,36 @@ export default function AddPeopleDialog(props: AddPeopleDialogProps): JSX.Elemen
   return (
     <Dialog onClose={onClose} disableEscapeKeyDown open={open} maxWidth='md'>
       <DialogTitle className={classes.title}>
-        <Typography variant='h6'>{strings.ADD_PEOPLE}</Typography>
+        <Typography variant='h6'>
+          {people && people.length > 0 ? strings.ADD_PEOPLE : strings.NO_PEOPLE_IN_ORG}
+        </Typography>
         <DialogCloseButton onClick={onClose} />
       </DialogTitle>
       <DialogContent dividers>
         <Grid container spacing={4}>
-          <Table
-            rows={people || []}
-            orderBy='name'
-            columns={peopleColumns}
-            showCheckbox={true}
-            selectedRows={selectedRows}
-            setSelectedRows={setSelectedRows}
-          />
+          {people && people.length > 0 ? (
+            <Table
+              rows={people}
+              orderBy='name'
+              columns={peopleColumns}
+              showCheckbox={true}
+              selectedRows={selectedRows}
+              setSelectedRows={setSelectedRows}
+            />
+          ) : (
+            <p>{strings.ADD_PEOPLE_MESSAGE}</p>
+          )}
         </Grid>
       </DialogContent>
       <DialogActions className={classes.actions}>
-        <Button label={strings.CANCEL} priority='secondary' onClick={onClose} />
-        <Button label={strings.ADD_PEOPLE} onClick={onSubmitHandler} />
+        {people && people.length > 0 ? (
+          <>
+            <Button label={strings.CANCEL} priority='secondary' onClick={onClose} />
+            <Button label={strings.ADD_PEOPLE} onClick={onSubmitHandler} />
+          </>
+        ) : (
+          <Button label={strings.GOT_IT} onClick={onClose} />
+        )}
       </DialogActions>
     </Dialog>
   );

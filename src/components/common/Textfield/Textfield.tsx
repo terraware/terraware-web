@@ -9,7 +9,7 @@ type TextfieldType = 'text' | 'textarea';
 type Handler = (id: string, value: unknown) => void;
 
 export interface Props {
-  onChange: Handler;
+  onChange?: Handler;
   label: string;
   disabled?: boolean;
   iconLeft?: IconName;
@@ -54,7 +54,9 @@ export default function TextField(props: Props): JSX.Element {
   });
 
   const textfieldOnChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-    onChange(id, event.target.value);
+    if (onChange) {
+      onChange(id, event.target.value);
+    }
   };
 
   return (
