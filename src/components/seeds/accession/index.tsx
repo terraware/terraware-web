@@ -8,6 +8,7 @@ import { Accession, AccessionState } from 'src/api/types/accessions';
 import ErrorBoundary from 'src/ErrorBoundary';
 import snackbarAtom from 'src/state/snackbar';
 import strings from 'src/strings';
+import { ServerOrganization } from 'src/types/Organization';
 import Lab from '../lab';
 import { AccessionForm } from '../newAccession';
 import Nursery from '../nursery';
@@ -27,7 +28,11 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-export default function AccessionPage(): JSX.Element {
+interface AccessionPageProps {
+  organization?: ServerOrganization;
+}
+
+export default function AccessionPage({ organization }: AccessionPageProps): JSX.Element {
   // TODO: consider navigating to the main accessions page if we cannot
   // fetch the current accession.
   const setSnackbar = useSetRecoilState(snackbarAtom);
@@ -41,13 +46,13 @@ export default function AccessionPage(): JSX.Element {
   return (
     <ErrorBoundary handler={errorHandler}>
       <React.Suspense fallback={<div />}>
-        <Content />
+        <Content organization={organization} />
       </React.Suspense>
     </ErrorBoundary>
   );
 }
 
-function Content(): JSX.Element {
+function Content({ organization }: AccessionPageProps): JSX.Element {
   const classes = useStyles();
   const { accessionId } = useParams<{ accessionId: string }>();
   const [accession, setAccession] = useState<Accession>();
@@ -128,6 +133,7 @@ function Content(): JSX.Element {
                   updating={true}
                   photoFilenames={accession.photoFilenames}
                   accession={accession}
+                  organization={organization}
                   onSubmit={onSubmit}
                   onCheckIn={onCheckIn}
                 />

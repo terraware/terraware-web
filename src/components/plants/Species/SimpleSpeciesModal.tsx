@@ -7,6 +7,7 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React, { useEffect, useState } from 'react';
 import { createSpecies, updateSpecies } from 'src/api/species/species';
 import strings from 'src/strings';
+import { ServerOrganization } from 'src/types/Organization';
 import { Species, SpeciesRequestError } from 'src/types/Species';
 import useForm from 'src/utils/useForm';
 import Button from '../../common/button/Button';
@@ -36,6 +37,7 @@ export type SimpleSpeciesModalProps = {
   open: boolean;
   onClose: (saved: boolean, snackbarMessage?: string) => void;
   initialSpecies?: Species;
+  organization: ServerOrganization;
   onError: (snackbarMessage: string) => void;
 };
 
@@ -49,7 +51,7 @@ function initSpecies(species?: Species): Species {
 }
 export default function SimpleSpeciesModal(props: SimpleSpeciesModalProps): JSX.Element {
   const classes = useStyles();
-  const { open, onClose, initialSpecies, onError } = props;
+  const { open, onClose, initialSpecies, organization, onError } = props;
   const [record, setRecord, onChange] = useForm<Species>(initSpecies(initialSpecies));
   const [nameFormatError, setNameFormatError] = useState('');
 
@@ -70,7 +72,7 @@ export default function SimpleSpeciesModal(props: SimpleSpeciesModalProps): JSX.
     if (record.name.trim()) {
       setNameFormatError('');
       if (record.id === 0) {
-        const newSpecies = await createSpecies(record.name);
+        const newSpecies = await createSpecies(record.name, organization.id);
         if (newSpecies.species?.id) {
           snackbarMessage = strings.SNACKBAR_MSG_NEW_SPECIES_ADDED;
           onClose(true, snackbarMessage);
@@ -84,7 +86,7 @@ export default function SimpleSpeciesModal(props: SimpleSpeciesModalProps): JSX.
         }
       } else {
         try {
-          await updateSpecies(record);
+          await updateSpecies(record, organization.id);
           snackbarMessage = strings.SNACKBAR_MSG_CHANGES_SAVED;
           onClose(true, snackbarMessage);
         } catch {
