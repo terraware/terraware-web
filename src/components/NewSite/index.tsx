@@ -2,7 +2,7 @@ import { Container, createStyles, Grid, makeStyles } from '@material-ui/core';
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import strings from 'src/strings';
-import { NewSite, ServerOrganization } from 'src/types/Organization';
+import { Site, ServerOrganization } from 'src/types/Organization';
 import TextField from '../common/Textfield/Textfield';
 import useForm from 'src/utils/useForm';
 import Select from '../common/Select/Select';
@@ -37,14 +37,14 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-type ProjectViewProps = {
+type SiteViewProps = {
   organization: ServerOrganization;
 };
 
-export default function ProjectView({ organization }: ProjectViewProps): JSX.Element {
+export default function SiteView({ organization }: SiteViewProps): JSX.Element {
   const [nameError, setNameError] = useState('');
-
-  const [record, , onChange] = useForm<NewSite>({ name: '' });
+  const [record, , onChange] = useForm<Site>({ name: '', id: -1, projectId: -1 });
+  const history = useHistory();
   const setSnackbar = useSetRecoilState(snackbarAtom);
 
   const classes = useStyles();
@@ -55,7 +55,6 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
       onChange('projectId', newSelectedProject.id);
     }
   };
-  const history = useHistory();
 
   const goToSites = () => {
     const sitesLocation = {
@@ -68,12 +67,14 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
     if (record.name === '') {
       setNameError('Required Field');
     } else {
+      // We can uncomment this once the backend functionality is in place
       // const response = await createSite(record);
       // if (response.requestSucceeded) {
       setSnackbar({
         type: 'success',
         msg: 'Project added',
       });
+      // We can uncomment this once the backend functionality is in place
       // } else {
       //   setSnackbar({
       //     type: 'delete',

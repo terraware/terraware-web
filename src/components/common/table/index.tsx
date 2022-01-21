@@ -80,19 +80,6 @@ export default function EnhancedTable<T>({
   const classes = tableStyles();
   const [order, setOrder] = React.useState<Order>(_order);
   const [orderBy, setOrderBy] = React.useState(_orderBy);
-  const [selected, setSelected] = React.useState<T[]>(previousSelectedRows || []);
-
-  useEffect(() => {
-    if (rows.length) {
-      setSelected([]);
-    }
-  }, [rows]);
-
-  useEffect(() => {
-    if (setSelectedRows) {
-      setSelectedRows(selected);
-    }
-  }, [selected, setSelectedRows]);
 
   useEffect(() => {
     if (rows.length && setSelectedRows) {
