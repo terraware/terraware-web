@@ -347,7 +347,7 @@ const strings = new LocalizedStrings({
     PEOPLE_DESCRIPTION: 'Manage the people in Terraware.',
     CREATE_NEW_ORGANIZATION: 'Create New Organization',
     ADD_NEW_ORGANIZATION: 'Add New Organization',
-    ADD_PROJECT_DESC: 'Enter the project’s information below and then check the people you would like to add.',
+    ADD_PROJECT_DESC: 'Enter the project’s information below and then select the people you would like to add.',
     NATIVE_FOREST_RESTORATION: 'Native Forest Restoration',
     AGROFORESTRY: 'Agroforestry',
     SILVOPASTURE: 'Silvopasture',

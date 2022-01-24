@@ -1,8 +1,8 @@
-import { Container, createStyles, Grid, makeStyles } from '@material-ui/core';
+import { AppBar, Container, createStyles, Grid, makeStyles } from '@material-ui/core';
 import { useEffect, useState } from 'react';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import strings from 'src/strings';
-import { NewProject, Project, ServerOrganization, Site } from 'src/types/Organization';
+import { Project, ProjectTypes, ServerOrganization, Site } from 'src/types/Organization';
 import TfDivisor from '../common/TfDivisor';
 import Table from 'src/components/common/table';
 import { TableColumnType } from '../common/table/types';
@@ -13,7 +13,7 @@ import Checkbox from '../common/Checkbox';
 import useForm from 'src/utils/useForm';
 import Select from '../common/Select/Select';
 import Button from '../common/button/Button';
-import { createProject, updateProject } from 'src/api/project/project';
+import { updateProjectUser, createProject, updateProject } from 'src/api/project/project';
 import { useSetRecoilState } from 'recoil';
 import snackbarAtom from 'src/state/snackbar';
 import AddPeopleModal from './AddPeopleModal';
@@ -24,7 +24,7 @@ import { getProjectsById } from 'src/utils/organization';
 import Icon from '../common/icon/Icon';
 import RemovedPeopleOrSitesModal from './RemovedPeopleOrSitesModal';
 import MoveSiteModal from './MoveSiteModal';
-import FormBottomBar from '../common/FormBottomBar';
+import axios from 'axios';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -47,6 +47,16 @@ const useStyles = makeStyles((theme) =>
     },
     value: {
       fontSize: '16px',
+    },
+    bottomBar: {
+      filter: 'drop-shadow(0px 0px 8px rgba(0, 0, 0, 0.2))',
+      background: '#ffffff',
+      boxShadow: 'none',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      display: 'flex',
+      padding: '16px 24px',
+      width: 'calc(100% - 200px)',
     },
     titleWithButton: {
       display: 'flex',
@@ -75,9 +85,24 @@ const useStyles = makeStyles((theme) =>
 
 type ProjectViewProps = {
   organization: ServerOrganization;
+  reloadOrganizationData: () => void;
 };
 
-export default function ProjectView({ organization }: ProjectViewProps): JSX.Element {
+const peopleColumns: TableColumnType[] = [
+  { key: 'firstName', name: 'First Name', type: 'string' },
+  { key: 'lastName', name: 'Last Name', type: 'string' },
+  { key: 'email', name: 'Email', type: 'string' },
+  { key: 'role', name: 'Role', type: 'string' },
+];
+
+const siteColumns: TableColumnType[] = [
+  { key: 'name', name: 'Name', type: 'string' },
+  { key: 'description', name: 'Description', type: 'string' },
+  { key: 'longitude', name: 'Longitude', type: 'string' },
+  { key: 'latitude', name: 'Latitude', type: 'string' },
+];
+
+export default function ProjectView({ organization, reloadOrganizationData }: ProjectViewProps): JSX.Element {
   const [people, setPeople] = useState<OrganizationUser[]>();
   const [addPeopleModalOpened, setAddPeopleModalOpened] = useState(false);
   const [removedPeopleModalOpened, setRemovedPeopleModalOpened] = useState(false);
@@ -87,24 +112,25 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
   const [nameError, setNameError] = useState('');
   const { projectId } = useParams<{ projectId: string }>();
   const [projectSelected, setProjectSelected] = useState<Project | null>();
-  const [selectedPeopleRows, setSelectedPeopleRows] = useState<OrganizationUser[]>();
+  const [selectedPeopleRows, setSelectedPeopleRows] = useState<OrganizationUser[]>([]);
   const [selectedSitesRows, setSelectedSitesRows] = useState<Site[]>();
   const [removedPeople, setRemovedPeople] = useState<OrganizationUser[]>();
-  const [newModifiedSites, setNewModifiedSites] = useState<Site[]>();
+  const [modifiedSites, setModifiedSites] = useState<Site[]>();
 
-  const [record, setRecord, onChange] = useForm<NewProject>({ name: '', organizationId: organization?.id });
+  const [newProject, setNewProject, onChange] = useForm<Project>({ id: -1, name: '' });
   const setSnackbar = useSetRecoilState(snackbarAtom);
+  const history = useHistory();
 
   useEffect(() => {
-    setRecord({
-      name: projectSelected?.name,
+    setNewProject({
+      id: projectSelected?.id || -1,
+      name: projectSelected?.name || '',
       description: projectSelected?.description,
       startDate: projectSelected?.startDate,
       status: projectSelected?.status,
       types: projectSelected?.types,
-      organizationId: organization?.id,
     });
-  }, [projectSelected, setRecord, organization]);
+  }, [projectSelected, setNewProject, organization]);
 
   useEffect(() => {
     const projectIdNum = parseInt(projectId, 10);
@@ -123,60 +149,44 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
       const projects = getProjectsById(organization);
       setProjectSelected(projects.get(projectIdNum));
       const projectSites = projects.get(projectIdNum)?.sites;
+      const modifiedSitesIds = modifiedSites?.map((modifiedSite) => modifiedSite.id);
       if (projectSites && projectSites.length > 0) {
-        setSitesOfProject(projectSites.filter((site) => !newModifiedSites?.includes(site)));
+        setSitesOfProject(projectSites.filter((site) => !modifiedSitesIds?.includes(site.id)));
       }
       populatePeople();
     }
-  }, [organization, projectId, newModifiedSites, peopleOnProject]);
+  }, [organization, projectId, modifiedSites, peopleOnProject]);
 
   const classes = useStyles();
 
-  const peopleColumns: TableColumnType[] = [
-    { key: 'firstName', name: 'First Name', type: 'string' },
-    { key: 'lastName', name: 'Last Name', type: 'string' },
-    { key: 'email', name: 'Email', type: 'string' },
-    { key: 'role', name: 'Role', type: 'string' },
-  ];
-
-  const siteColumns: TableColumnType[] = [
-    { key: 'name', name: 'Name', type: 'string' },
-    { key: 'description', name: 'Description', type: 'string' },
-    { key: 'longitude', name: 'Longitude', type: 'string' },
-    { key: 'latitude', name: 'Latitude', type: 'string' },
-  ];
-
-  type ProjectType = 'Native Forest Restoration' | 'Agroforestry' | 'Silvopasture' | 'Sustainable Timber';
-
-  const onChangeProjectType = (id: string, value: unknown) => {
-    let projectTypes = record.types ? [...record.types] : undefined;
+  const onChangeProjectType = (id: string, isChecked: unknown) => {
+    let projectTypes = newProject.types ? [...newProject.types] : undefined;
     if (projectTypes) {
-      const index = projectTypes.indexOf(id as ProjectType, 0);
-      if (index !== -1 && value === false) {
+      const index = projectTypes.indexOf(id as ProjectTypes, 0);
+      if (index !== -1 && isChecked === false) {
         projectTypes.splice(index, 1);
       }
 
-      if (index === -1 && value === true) {
-        projectTypes.push(id as ProjectType);
+      if (index === -1 && isChecked === true) {
+        projectTypes.push(id as ProjectTypes);
       }
     } else {
-      if (value === true) {
-        projectTypes = [id as ProjectType];
+      if (isChecked === true) {
+        projectTypes = [id as ProjectTypes];
       }
     }
-    setRecord({ ...record, types: projectTypes });
+    setNewProject({ ...newProject, types: projectTypes });
   };
 
   const onChangeStatus = (newStatus: string) => {
     onChange('status', newStatus);
   };
 
-  const isChecked = (id: ProjectType) => {
-    const projectTypes = record.types;
+  const isCheckboxChecked = (id: ProjectTypes) => {
+    const projectTypes = newProject.types;
 
     return projectTypes?.includes(id);
   };
-  const history = useHistory();
 
   const goToProjects = () => {
     const projectsLocation = {
@@ -187,13 +197,9 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
 
   const removeSelectedPeople = () => {
     if (peopleOnProject) {
-      const peopleOnProjectCopy = [...peopleOnProject];
-      selectedPeopleRows?.forEach((removedPerson) => {
-        const index = peopleOnProjectCopy?.indexOf(removedPerson);
-        peopleOnProjectCopy.splice(index, 1);
+      setPeopleOnProject((currentPeopleOnProject) => {
+        return currentPeopleOnProject?.filter((person) => !selectedPeopleRows?.includes(person));
       });
-
-      setPeopleOnProject(peopleOnProjectCopy);
     }
   };
 
@@ -201,10 +207,27 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
     setMoveSiteModalOpened(true);
   };
 
-  const updateProjectHandler = async () => {
+  const saveExistingProject = async () => {
     if (projectSelected) {
-      const response = await updateProject({ ...record, id: projectSelected.id } as Project);
-      if (response.requestSucceeded) {
+      const response = await updateProject({ ...newProject, id: projectSelected.id } as Project);
+      let allNewPeopleResponsesOk = true;
+      let allRemovedPeopleResponsesOk = true;
+      peopleOnProject?.forEach(async (person) => {
+        if (!person.projectIds.includes(projectSelected.id)) {
+          const updateResponse = await updateProjectUser(projectSelected.id, person.id, axios.post);
+          if (!updateResponse.requestSucceeded) {
+            allNewPeopleResponsesOk = false;
+          }
+        }
+      });
+      removedPeople?.forEach(async (person) => {
+        const deleteResponse = await updateProjectUser(projectSelected.id, person.id, axios.delete);
+        if (!deleteResponse.requestSucceeded) {
+          allRemovedPeopleResponsesOk = false;
+        }
+      });
+      if (response.requestSucceeded && allNewPeopleResponsesOk && allRemovedPeopleResponsesOk) {
+        reloadOrganizationData();
         setSnackbar({
           type: 'success',
           msg: 'Changes saved',
@@ -219,46 +242,72 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
     }
   };
 
-  const saveProject = async () => {
-    if (record.name === '') {
-      setNameError('Required Field');
-    } else {
-      if (projectSelected) {
-        if (!removedPeopleModalOpened) {
-          const originalPeopleOnProject = people?.filter((person) => person.projectIds.includes(projectSelected.id));
-          if (
-            (originalPeopleOnProject && peopleOnProject && originalPeopleOnProject.length > peopleOnProject?.length) ||
-            (newModifiedSites && newModifiedSites.length > 0)
-          ) {
-            const removedPeopleArray: OrganizationUser[] = [];
-            originalPeopleOnProject?.forEach((person) => {
-              const found = peopleOnProject?.filter((newPerson) => newPerson.id === person.id);
-              if (found?.length === 0) {
-                removedPeopleArray.push(person);
-              }
-            });
-            setRemovedPeople(removedPeopleArray);
-            setRemovedPeopleModalOpened(true);
+  const saveNewProject = async () => {
+    const response = await createProject(newProject, organization.id);
+    if (response.requestSucceeded) {
+      let allPeopleAdded = true;
+      peopleOnProject?.forEach(async (person) => {
+        if (response.project !== null) {
+          const userResponse = await updateProjectUser(response.project.id, person.id, axios.post);
+          if (!userResponse.requestSucceeded) {
+            allPeopleAdded = false;
           }
-        } else {
-          updateProjectHandler();
         }
+      });
+      if (allPeopleAdded) {
+        setSnackbar({
+          type: 'success',
+          msg: 'Project added',
+        });
       } else {
-        const response = await createProject(record);
-        if (response.requestSucceeded) {
-          setSnackbar({
-            type: 'success',
-            msg: 'Project added',
-          });
-        } else {
-          setSnackbar({
-            type: 'delete',
-            msg: strings.GENERIC_ERROR,
-          });
-        }
-        goToProjects();
+        setSnackbar({
+          type: 'delete',
+          msg: strings.GENERIC_ERROR,
+        });
+      }
+      reloadOrganizationData();
+    } else {
+      setSnackbar({
+        type: 'delete',
+        msg: strings.GENERIC_ERROR,
+      });
+    }
+    goToProjects();
+  };
+
+  const saveProject = () => {
+    if (newProject.name === '') {
+      setNameError('Required Field');
+      return;
+    }
+
+    if (!projectSelected) {
+      saveNewProject();
+      return;
+    }
+
+    if (removedPeopleModalOpened) {
+      saveExistingProject();
+      return;
+    }
+
+    const originalPeopleOnProject = people?.filter((person) => person.projectIds.includes(projectSelected.id));
+    if (originalPeopleOnProject && peopleOnProject) {
+      const removedPeopleArray = originalPeopleOnProject.filter(
+        (original) => !peopleOnProject?.find((current) => current.id === original.id)
+      );
+      if (removedPeopleArray.length > 0 || (modifiedSites && modifiedSites.length > 0)) {
+        setRemovedPeople(removedPeopleArray);
+        setRemovedPeopleModalOpened(true);
+      } else {
+        saveExistingProject();
       }
     }
+  };
+
+  const getPeopleNotOnProject = () => {
+    const allPeopleOnProjectIds = peopleOnProject?.map((person) => person.id);
+    return people?.filter((person) => !allPeopleOnProjectIds?.includes(person.id));
   };
 
   return (
@@ -267,7 +316,7 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
         open={moveSiteModalOpened}
         onClose={() => setMoveSiteModalOpened(false)}
         selectedSites={selectedSitesRows}
-        setNewModifiedSites={setNewModifiedSites}
+        saveSites={setModifiedSites}
         orgProjects={organization.projects}
       />
       <RemovedPeopleOrSitesModal
@@ -275,12 +324,12 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
         onClose={() => setRemovedPeopleModalOpened(false)}
         onSubmit={saveProject}
         removedPeople={removedPeople}
-        removedSites={newModifiedSites}
+        removedSites={modifiedSites}
       />
       <AddPeopleModal
         open={addPeopleModalOpened}
         onClose={() => setAddPeopleModalOpened(false)}
-        people={people}
+        people={getPeopleNotOnProject()}
         peopleOnProject={peopleOnProject}
         setPeopleOnProject={setPeopleOnProject}
       />
@@ -310,20 +359,20 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
               label={strings.NAME}
               type='text'
               onChange={onChange}
-              value={record.name}
-              errorText={record.name ? '' : nameError}
+              value={newProject.name}
+              errorText={newProject.name ? '' : nameError}
             />
           </Grid>
           <Grid item xs={4}>
             <TextField id='description' label={strings.DESCRIPTION} type='textarea' onChange={onChange} />
           </Grid>
           <Grid item xs={4}>
-            <label htmlFor={record.startDate} className={classes.label}>
+            <label htmlFor={newProject.startDate} className={classes.label}>
               {strings.START_DATE_OPT}
             </label>
             <DatePicker
               id='startDate'
-              value={record.startDate}
+              value={newProject.startDate}
               onChange={onChange}
               label=''
               aria-label={strings.START_DATE_OPT}
@@ -336,7 +385,7 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
               label={strings.STATUS_OPT}
               onChange={onChangeStatus}
               options={['Propagating', 'Planting', 'Completed/Monitoring']}
-              selectedValue={record.status}
+              selectedValue={newProject.status}
             />
           </Grid>
           <Grid item xs={4}>
@@ -346,7 +395,7 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
               name='projectType'
               label={strings.NATIVE_FOREST_RESTORATION}
               onChange={onChangeProjectType}
-              value={isChecked('Native Forest Restoration')}
+              value={isCheckboxChecked('Native Forest Restoration')}
               className={classes.blockCheckbox}
             />
             <Checkbox
@@ -354,7 +403,7 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
               name='projectType'
               label={strings.AGROFORESTRY}
               onChange={onChangeProjectType}
-              value={isChecked('Agroforestry')}
+              value={isCheckboxChecked('Agroforestry')}
               className={classes.blockCheckbox}
             />
             <Checkbox
@@ -362,7 +411,7 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
               name='projectType'
               label={strings.SILVOPASTURE}
               onChange={onChangeProjectType}
-              value={isChecked('Silvopasture')}
+              value={isCheckboxChecked('Silvopasture')}
               className={classes.blockCheckbox}
             />
             <Checkbox
@@ -370,7 +419,7 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
               name='projectType'
               label={strings.SUSTAINABLE_TIMBER}
               onChange={onChangeProjectType}
-              value={isChecked('Sustainable Timber')}
+              value={isCheckboxChecked('Sustainable Timber')}
               className={classes.blockCheckbox}
             />
           </Grid>
@@ -400,6 +449,7 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
               columns={peopleColumns}
               emptyTableMessage='No People to show.'
               showCheckbox={true}
+              selectedRows={selectedPeopleRows}
               setSelectedRows={setSelectedPeopleRows}
               showTopBar={true}
               buttonType='destructive'
@@ -423,6 +473,7 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
                   columns={siteColumns}
                   showCheckbox={true}
                   showTopBar={true}
+                  selectedRows={selectedSitesRows}
                   setSelectedRows={setSelectedSitesRows}
                   buttonType='passive'
                   buttonText={strings.MOVE}
@@ -433,7 +484,15 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
           </Grid>
         )}
       </Container>
-      <FormBottomBar onCancel={goToProjects} onSave={saveProject} />
+      <AppBar
+        position='fixed'
+        color='primary'
+        style={{ top: 'auto', bottom: 0, right: 'auto' }}
+        className={classes.bottomBar}
+      >
+        <Button label='Cancel' onClick={goToProjects} priority='secondary' type='passive' />
+        <Button label='Save' onClick={saveProject} />
+      </AppBar>
     </MuiPickersUtilsProvider>
   );
 }

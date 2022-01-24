@@ -58,7 +58,6 @@ type TopBarProps = {
   organizations?: ServerOrganization[];
   setSelectedOrganization: (selectedOrganization: ServerOrganization) => void;
   selectedOrganization?: ServerOrganization;
-  setOrganizationError: (error: boolean) => void;
 };
 
 export default function TopBar(props: TopBarProps): JSX.Element | null {
@@ -68,10 +67,8 @@ export default function TopBar(props: TopBarProps): JSX.Element | null {
     setNotifications,
     setSeedSearchCriteria,
     facilityId,
-    setOrganizations,
     setSelectedOrganization,
     selectedOrganization,
-    setOrganizationError,
     organizations,
   } = props;
   const location = useStateLocation();
