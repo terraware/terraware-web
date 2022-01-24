@@ -2,7 +2,7 @@ import { Container, createStyles, Grid, makeStyles } from '@material-ui/core';
 import { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import strings from 'src/strings';
-import { NewSite, ServerOrganization, Site } from 'src/types/Organization';
+import { ServerOrganization, Site } from 'src/types/Organization';
 import TextField from '../common/Textfield/Textfield';
 import useForm from 'src/utils/useForm';
 import Select from '../common/Select/Select';
@@ -38,17 +38,18 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-type ProjectViewProps = {
+type SiteViewProps = {
   organization: ServerOrganization;
 };
 
-export default function ProjectView({ organization }: ProjectViewProps): JSX.Element {
+export default function SiteView({ organization }: SiteViewProps): JSX.Element {
   const [nameError, setNameError] = useState('');
 
-  const [record, setRecord, onChange] = useForm<NewSite>({ name: '' });
+  const [record, setRecord, onChange] = useForm<Site>({ name: '', id: -1, projectId: -1 });
   const setSnackbar = useSetRecoilState(snackbarAtom);
   const { siteId } = useParams<{ siteId: string }>();
   const [selectedSite, setSelectedSite] = useState<Site | null>();
+  const history = useHistory();
 
   const classes = useStyles();
 
@@ -61,7 +62,8 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
     setRecord({
       name: selectedSite?.name || '',
       description: selectedSite?.description,
-      projectId: selectedSite?.projectId,
+      projectId: selectedSite?.projectId || -1,
+      id: -1,
     });
   }, [selectedSite, setRecord]);
 
@@ -71,7 +73,6 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
       onChange('projectId', newSelectedProject.id);
     }
   };
-  const history = useHistory();
 
   const goToSites = () => {
     const sitesLocation = {
@@ -85,6 +86,7 @@ export default function ProjectView({ organization }: ProjectViewProps): JSX.Ele
       setNameError('Required Field');
     } else {
       if (selectedSite) {
+        // We can uncomment this once the backend functionality is in place
         // const response = await updateSite({ ...record, id: selectedSite.id } as Site);
         // if (response.requestSucceeded) {
         setSnackbar({

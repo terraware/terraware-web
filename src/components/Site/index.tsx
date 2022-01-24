@@ -36,10 +36,10 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-type SiteViewProps = {
+type SiteDetailsProps = {
   organization?: ServerOrganization;
 };
-export default function SiteView({ organization }: SiteViewProps): JSX.Element {
+export default function SiteDetails({ organization }: SiteDetailsProps): JSX.Element {
   const { siteId } = useParams<{ siteId: string }>();
   const [site, setSite] = useState<Site>();
   const history = useHistory();

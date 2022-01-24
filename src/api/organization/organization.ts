@@ -145,6 +145,7 @@ export async function getOrganizationUsers(organization: ServerOrganization): Pr
       email: user.email,
       role: user.role,
       projectIds: user.projectIds,
+      addedTime: user.addedTime,
     }));
   } catch {
     response.requestSucceeded = false;

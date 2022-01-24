@@ -13,4 +13,5 @@ export type OrganizationUser = {
   id: number;
   role: AllOrganizationRoles;
   projectIds: number[];
+  addedTime?: string;
 };
