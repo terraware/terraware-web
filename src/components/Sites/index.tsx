@@ -82,7 +82,9 @@ export default function SitesList({ organization }: SitesListProps): JSX.Element
           </Grid>
           <Grid item xs={6} />
           <Grid item xs={2} className={classes.centered}>
-            <Button id='new-site' label={strings.ADD_SITE} onClick={goToNewSite} />
+            {organization && ['Admin', 'Owner'].includes(organization?.role) && (
+              <Button id='new-site' label={strings.ADD_SITE} onClick={goToNewSite} />
+            )}
           </Grid>
           <Grid item xs={1} />
           <Grid item xs={1} />
