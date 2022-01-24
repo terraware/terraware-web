@@ -157,6 +157,7 @@ function AppContent() {
             organizations={organizations}
             selectedOrganization={selectedOrganization}
             setSelectedOrganization={setSelectedOrganization}
+            reloadOrganizationData={reloadData}
           />
           <ErrorBoundary>
             <Switch>
@@ -247,7 +248,7 @@ function AppContent() {
               </Route>
               {selectedOrganization && (
                 <Route path='/organization/edit' exact={true}>
-                  <EditOrganization organization={selectedOrganization} />
+                  <EditOrganization organization={selectedOrganization} reloadOrganizationData={reloadData} />
                 </Route>
               )}
               <Route path='/organization'>

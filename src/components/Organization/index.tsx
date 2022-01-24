@@ -72,6 +72,17 @@ export default function OrganizationView({ organization }: OrganizationViewProps
     }
   };
 
+  const getDateAdded = () => {
+    if (organization?.createdTime) {
+      return new Date(organization.createdTime).toLocaleDateString('en-US', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        timeZone: 'UTC',
+      });
+    }
+  };
+
   return (
     <Container maxWidth={false} className={classes.mainContainer}>
       <Grid container spacing={3}>
@@ -96,7 +107,7 @@ export default function OrganizationView({ organization }: OrganizationViewProps
           />
         </Grid>
         <Grid item xs={4}>
-          <TextField label={strings.DATE_ADDED} id='dateAdded' type='text' value='' display={true} />
+          <TextField label={strings.DATE_ADDED} id='dateAdded' type='text' value={getDateAdded()} display={true} />
         </Grid>
         <Grid item xs={4}>
           <TextField

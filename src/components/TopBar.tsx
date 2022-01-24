@@ -56,6 +56,7 @@ type TopBarProps = {
   organizations?: ServerOrganization[];
   setSelectedOrganization: (selectedOrganization: ServerOrganization) => void;
   selectedOrganization?: ServerOrganization;
+  reloadOrganizationData: () => void;
 };
 
 export default function TopBar(props: TopBarProps): JSX.Element | null {
@@ -68,6 +69,7 @@ export default function TopBar(props: TopBarProps): JSX.Element | null {
     setSelectedOrganization,
     selectedOrganization,
     organizations,
+    reloadOrganizationData,
   } = props;
   const location = useStateLocation();
 
@@ -98,6 +100,7 @@ export default function TopBar(props: TopBarProps): JSX.Element | null {
             organizations={organizations}
             selectedOrganization={selectedOrganization}
             setSelectedOrganization={setSelectedOrganization}
+            reloadOrganizationData={reloadOrganizationData}
           />
           <div className={classes.separator} />
           <UserMenu />

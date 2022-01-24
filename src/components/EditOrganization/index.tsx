@@ -26,9 +26,10 @@ const useStyles = makeStyles((theme) =>
 
 type OrganizationViewProps = {
   organization: ServerOrganization;
+  reloadOrganizationData: () => void;
 };
 
-export default function OrganizationView({ organization }: OrganizationViewProps): JSX.Element {
+export default function OrganizationView({ organization, reloadOrganizationData }: OrganizationViewProps): JSX.Element {
   const [nameError, setNameError] = useState('');
 
   const [record, setRecord, onChange] = useForm<ServerOrganization>(organization);
@@ -63,11 +64,11 @@ export default function OrganizationView({ organization }: OrganizationViewProps
     }
   };
 
-  const goToHome = () => {
-    const home = {
-      pathname: `/home`,
+  const goToOrganization = () => {
+    const organizationLocation = {
+      pathname: `/organization`,
     };
-    history.push(home);
+    history.push(organizationLocation);
   };
 
   const getSelectedCountry = () => {
@@ -106,7 +107,8 @@ export default function OrganizationView({ organization }: OrganizationViewProps
           msg: strings.GENERIC_ERROR,
         });
       }
-      goToHome();
+      reloadOrganizationData();
+      goToOrganization();
     }
   };
 
@@ -160,7 +162,7 @@ export default function OrganizationView({ organization }: OrganizationViewProps
           )}
         </Grid>
       </Container>
-      <FormBottomBar onCancel={goToHome} onSave={saveOrganization} />
+      <FormBottomBar onCancel={goToOrganization} onSave={saveOrganization} />
     </>
   );
 }

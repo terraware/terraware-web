@@ -67,11 +67,12 @@ const useStyles = makeStyles((theme: Theme) =>
 export type AddNewOrganizationModalProps = {
   open: boolean;
   onCancel: () => void;
+  reloadOrganizationData: () => void;
 };
 
 export default function AddNewOrganizationModal(props: AddNewOrganizationModalProps): JSX.Element {
   const classes = useStyles();
-  const { onCancel, open } = props;
+  const { onCancel, open, reloadOrganizationData } = props;
   const setSnackbar = useSetRecoilState(snackbarAtom);
   const [countries, setCountries] = useState<Country[]>();
   const [selectedCountry, setSelectedCountry] = useState<Country>();
@@ -122,6 +123,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
         msg: strings.GENERIC_ERROR,
       });
     }
+    reloadOrganizationData();
     onCancel();
   };
 

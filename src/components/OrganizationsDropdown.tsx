@@ -21,12 +21,14 @@ type OrganizationsDropdownProps = {
   organizations?: ServerOrganization[];
   selectedOrganization?: ServerOrganization;
   setSelectedOrganization: (selectedOrganization: ServerOrganization) => void;
+  reloadOrganizationData: () => void;
 };
 
 export default function OrganizationsDropdown({
   organizations,
   selectedOrganization,
   setSelectedOrganization,
+  reloadOrganizationData,
 }: OrganizationsDropdownProps): JSX.Element {
   const classes = useStyles();
 
@@ -44,6 +46,7 @@ export default function OrganizationsDropdown({
       <AddNewOrganizationModal
         open={newOrganizationModalOpened}
         onCancel={() => setNewOrganizationModalOpened(false)}
+        reloadOrganizationData={reloadOrganizationData}
       />
       <IconButton onClick={handleClick} size='small' className={classes.iconContainer}>
         <p>{selectedOrganization?.name}</p>

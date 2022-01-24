@@ -114,6 +114,7 @@ export async function getOrganizations(): Promise<OrganizationsResponse> {
       description: organization.description,
       countryCode: organization.countryCode,
       countrySubdivisionCode: organization.countrySubdivisionCode,
+      createdTime: organization.createdTime,
     }));
   } catch {
     response.requestSucceeded = false;

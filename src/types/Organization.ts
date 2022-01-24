@@ -50,6 +50,7 @@ export type ServerOrganization = {
   countryCode?: string;
   countrySubdivisionCode?: string;
   description?: string;
+  createdTime?: string;
 };
 
 export type HighOrganizationRoles = 'Manager' | 'Admin' | 'Owner';
