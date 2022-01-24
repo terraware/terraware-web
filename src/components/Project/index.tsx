@@ -40,10 +40,10 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-type ProjectViewProps = {
+type ProjectDetailsProps = {
   organization?: ServerOrganization;
 };
-export default function ProjectView({ organization }: ProjectViewProps): JSX.Element {
+export default function ProjectDetails({ organization }: ProjectDetailsProps): JSX.Element {
   const { projectId } = useParams<{ projectId: string }>();
   const [projectSelected, setProjectSelected] = useState<Project | null>();
   const [people, setPeople] = useState<OrganizationUser[]>();

@@ -153,10 +153,8 @@ function AppContent() {
             setSeedSearchCriteria={setSeedSearchCriteria}
             facilityId={facilityIdSelected}
             organizations={organizations}
-            setOrganizations={setOrganizations}
-            setSelectedOrganization={setSelectedOrganization}
             selectedOrganization={selectedOrganization}
-            setOrganizationError={setOrganizationError}
+            setSelectedOrganization={setSelectedOrganization}
           />
           <ErrorBoundary>
             <Switch>
