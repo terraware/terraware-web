@@ -8,7 +8,7 @@ import Button from 'src/components/common/button/Button';
 import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
 import strings from 'src/strings';
-import { AllOrganizationRoles, ServerOrganization } from 'src/types/Organization';
+import { ServerOrganization } from 'src/types/Organization';
 import { OrganizationUser } from 'src/types/User';
 import { getProjectsById } from 'src/utils/organization';
 import TableCellRenderer from './TableCellRenderer';
@@ -40,6 +40,10 @@ const columns: TableColumnType[] = [
   { key: 'addedTime', name: 'Date Added', type: 'date' },
 ];
 
+type OrganizationUserWithProjectName = OrganizationUser & {
+  projectNames: string[];
+};
+
 type PeopleListProps = {
   organization?: ServerOrganization;
 };
@@ -47,16 +51,6 @@ type PeopleListProps = {
 export default function PeopleList({ organization }: PeopleListProps): JSX.Element {
   const classes = useStyles();
   const [people, setPeople] = useState<OrganizationUserWithProjectName[]>();
-
-  type OrganizationUserWithProjectName = {
-    firstName?: string;
-    lastName?: string;
-    email: string;
-    id: number;
-    role: AllOrganizationRoles;
-    projectIds: number[];
-    projectNames: string[];
-  };
 
   const onSelect = (selected: OrganizationUser) => {
     return true;
@@ -67,16 +61,16 @@ export default function PeopleList({ organization }: PeopleListProps): JSX.Eleme
       if (organization) {
         const response = await getOrganizationUsers(organization);
         if (response.requestSucceeded) {
-          const peopleWithProjectName = addProjectsNamesToPepole(response.users);
+          const peopleWithProjectName = addProjectsNamesToPeople(response.users);
           setPeople(peopleWithProjectName);
         }
       }
     };
 
-    const addProjectsNamesToPepole = (users: OrganizationUser[]): OrganizationUserWithProjectName[] => {
+    const addProjectsNamesToPeople = (users: OrganizationUser[]): OrganizationUserWithProjectName[] => {
       if (organization) {
         const allProjects = getProjectsById(organization);
-        const peopleWithProjectName = users.map((user) => {
+        return users.map((user) => {
           const projectNamesOfPerson: string[] = [];
           user.projectIds.forEach((projectId) => {
             projectNamesOfPerson.push(allProjects.get(projectId)?.name || '');
@@ -92,7 +86,6 @@ export default function PeopleList({ organization }: PeopleListProps): JSX.Eleme
             addedTime: user.addedTime,
           };
         });
-        return peopleWithProjectName;
       }
       return [];
     };
