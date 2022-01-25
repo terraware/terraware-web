@@ -100,7 +100,6 @@ export default function SiteView({ organization }: SiteViewProps): JSX.Element {
           });
         }
       } else {
-        console.log('por create');
         const response = await createSite(record);
         if (response.requestSucceeded) {
           setSnackbar({
@@ -121,6 +120,19 @@ export default function SiteView({ organization }: SiteViewProps): JSX.Element {
   const findProjectById = (projectId: number) => {
     const foundProject = organization?.projects?.find((project) => project.id === projectId);
     return foundProject?.name;
+  };
+
+  const selectedProject = () => {
+    if (record.projectId !== -1) {
+      const project = findProjectById(record.projectId);
+      if (project) {
+        return project;
+      }
+    }
+    if (organization.projects && organization.projects.length) {
+      return organization.projects[0].name;
+    }
+    return '';
   };
 
   return (
@@ -156,13 +168,7 @@ export default function SiteView({ organization }: SiteViewProps): JSX.Element {
               label={strings.PROJECT}
               onChange={onChangeProject}
               options={organization.projects?.map((project) => project.name)}
-              selectedValue={
-                record.projectId !== -1
-                  ? findProjectById(record.projectId)
-                  : organization.projects
-                  ? organization.projects[0].name
-                  : ''
-              }
+              selectedValue={selectedProject()}
             />
           </Grid>
         </Grid>
