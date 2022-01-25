@@ -13,6 +13,9 @@ import Select from '../common/Select/Select';
 import Button from '../common/button/Button';
 import AddToProjectModal from './AddToProjectModal';
 import TableCellRenderer from './TableCellRenderer';
+import { addOrganizationUser } from 'src/api/user/user';
+import snackbarAtom from 'src/state/snackbar';
+import { useSetRecoilState } from 'recoil';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -106,13 +109,18 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
   const [projectsOfPerson, setProjectsOfPerson] = useState<Project[]>();
   const [projectsOfPersonConverted, setProjectsOfPersonConverted] = useState<ProjectOfPerson[]>();
   const [selectedProjectsRows, setSelectedProjectsRows] = useState<ProjectOfPerson[]>([]);
+  const setSnackbar = useSetRecoilState(snackbarAtom);
 
   const [newPerson, , onChange] = useForm<OrganizationUser>({
     id: -1,
     email: '',
     role: 'Contributor',
-    projectIds: [-1],
+    projectIds: [],
   });
+
+  useEffect(() => {
+    setProjectsOfPersonConverted(getProjectsOfPerson(projectsOfPerson, newPerson.role));
+  }, [projectsOfPerson, newPerson.role]);
 
   const onChangeRole = (newRole: string) => {
     onChange('role', newRole);
@@ -136,12 +144,32 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
     }
   };
 
-  const savePerson = () => {
+  const savePerson = async () => {
     if (newPerson.email === '') {
       setEmailError('Required Field');
       return;
     }
-    return true;
+    const projectIds = projectsOfPerson?.map((project) => project.id) || [];
+    const response = await addOrganizationUser({ ...newPerson, projectIds: projectIds }, organization.id);
+    if (response.requestSucceeded) {
+      setSnackbar({
+        type: 'success',
+        msg: 'Person added',
+      });
+      reloadOrganizationData();
+      goToPeople();
+    } else {
+      if (response.existingUser) {
+        setEmailError('This email already exists.');
+        return;
+      } else {
+        setSnackbar({
+          type: 'delete',
+          msg: strings.GENERIC_ERROR,
+        });
+      }
+      goToPeople();
+    }
   };
 
   const getProjectsNotOfPerson = () => {
@@ -151,10 +179,6 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
     }
     return organization?.projects;
   };
-
-  useEffect(() => {
-    setProjectsOfPersonConverted(getProjectsOfPerson(projectsOfPerson, newPerson.role));
-  }, [projectsOfPerson, newPerson.role]);
 
   return (
     <>
@@ -177,7 +201,7 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
               type='text'
               onChange={onChange}
               value={newPerson.email}
-              errorText={newPerson.email ? '' : emailError}
+              errorText={emailError}
             />
           </Grid>
           <Grid item xs={4}>
