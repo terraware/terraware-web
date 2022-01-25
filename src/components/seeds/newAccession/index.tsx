@@ -13,6 +13,7 @@ import { updateSpecies } from 'src/api/species/species';
 import { Accession, AccessionPostRequestBody } from 'src/api/types/accessions';
 import snackbarAtom from 'src/state/snackbar';
 import strings from 'src/strings';
+import { ServerOrganization } from 'src/types/Organization';
 import useForm from 'src/utils/useForm';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import Divisor from '../../common/Divisor';
@@ -61,10 +62,11 @@ const useStyles = makeStyles((theme) =>
 
 type NewAccessionProps = {
   facilityId?: number;
+  organization: ServerOrganization;
 };
 
 export default function NewAccessionWrapper(props: NewAccessionProps): JSX.Element {
-  const { facilityId } = props;
+  const { facilityId, organization } = props;
   const [accessionId, setAccessionId] = useState<number>();
   const setSnackbar = useSetRecoilState(snackbarAtom);
   const classes = useStyles();
@@ -132,6 +134,7 @@ export default function NewAccessionWrapper(props: NewAccessionProps): JSX.Eleme
                 facilityId,
                 receivedDate: moment().format('YYYY-MM-DD'),
               }}
+              organization={organization}
               onSubmit={onSubmit}
               onCheckIn={onCheckIn}
             />
@@ -147,6 +150,7 @@ interface Props<T extends AccessionPostRequestBody> {
   updating?: boolean;
   photoFilenames?: string[];
   accession: T;
+  organization?: ServerOrganization;
   onSubmit: (record: T) => void;
   onCheckIn: (id: number) => void;
 }
@@ -159,6 +163,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
   updating,
   photoFilenames,
   accession,
+  organization,
   onSubmit,
   onCheckIn,
 }: Props<T>): JSX.Element {
@@ -308,8 +313,8 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
 
   const closeModalAndUpdateSpecies = () => {
     const speciesId = (record as unknown as Accession).speciesId;
-    if (speciesId && record.species) {
-      updateSpecies({ id: speciesId, name: record.species });
+    if (speciesId && record.species && organization) {
+      updateSpecies({ id: speciesId, name: record.species }, organization.id);
     }
     onCloseEditSpeciesModal();
   };
@@ -346,7 +351,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
               }
             >
               <Grid item xs={4}>
-                <Species selectedSpecies={record.species} onChange={onSpeciesChanged} />
+                <Species selectedSpecies={record.species} organization={organization} onChange={onSpeciesChanged} />
               </Grid>
             </Suspense>
             <Grid item xs={4}>

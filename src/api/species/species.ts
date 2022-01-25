@@ -16,14 +16,15 @@ export type GetSpeciesListResponse = {
   requestSucceeded: boolean;
 };
 
-export async function getAllSpecies(): Promise<GetSpeciesListResponse> {
+export async function getAllSpecies(organizationId: number): Promise<GetSpeciesListResponse> {
   const response: GetSpeciesListResponse = {
     speciesById: new Map(),
     requestSucceeded: true,
   };
 
   try {
-    const speciesList: SpeciesList = (await axios.get(SPECIES_ENDPOINT)).data.species;
+    const endpoint = `${SPECIES_ENDPOINT}?organizationId=${organizationId}`;
+    const speciesList: SpeciesList = (await axios.get(endpoint)).data.species;
     speciesList.forEach((species: SpeciesListItem) => {
       response.speciesById.set(species.id, { id: species.id, name: species.name });
     });
@@ -45,14 +46,14 @@ export type CreateSpeciesResponse = {
   error: string | null;
 };
 
-export async function createSpecies(name: string): Promise<CreateSpeciesResponse> {
+export async function createSpecies(name: string, organizationId: number): Promise<CreateSpeciesResponse> {
   const response: CreateSpeciesResponse = {
     species: null,
     error: null,
   };
 
   try {
-    const createSpeciesRequest: PostSpeciesRequest = { name };
+    const createSpeciesRequest: PostSpeciesRequest = { name, organizationId };
     const serverResponse: PostSpeciesResponse = (await axios.post(SPECIES_ENDPOINT, createSpeciesRequest)).data;
     response.species = { id: serverResponse.id, name };
   } catch (error) {
@@ -78,12 +79,12 @@ export type UpdateSpeciesResponse = {
   requestSucceeded: boolean;
 };
 
-export async function updateSpecies(species: Species): Promise<UpdateSpeciesResponse> {
+export async function updateSpecies(species: Species, organizationId: number): Promise<UpdateSpeciesResponse> {
   const response: UpdateSpeciesResponse = { species, requestSucceeded: true };
 
   try {
     const endpoint = PUT_SPECIES_ENDPOINT.replace('{speciesId}', `${species.id}`);
-    const updateSpeciesRequest: PutSpeciesRequest = { name: species.name };
+    const updateSpeciesRequest: PutSpeciesRequest = { name: species.name, organizationId };
     await axios.put(endpoint, updateSpeciesRequest);
   } catch (error) {
     console.error(error);
@@ -96,8 +97,8 @@ export async function updateSpecies(species: Species): Promise<UpdateSpeciesResp
 type SpeciesDeleteResponse =
   paths[typeof PUT_SPECIES_ENDPOINT]['delete']['responses'][200]['content']['application/json'];
 
-export async function deleteSpecies(speciesId: number): Promise<SpeciesDeleteResponse> {
-  const endpoint = PUT_SPECIES_ENDPOINT.replace('{speciesId}', `${speciesId}`);
+export async function deleteSpecies(speciesId: number, organizationId: number): Promise<SpeciesDeleteResponse> {
+  const endpoint = PUT_SPECIES_ENDPOINT.replace('{speciesId}', `${speciesId}`) + `?organizationId=${organizationId}`;
   const response: SpeciesDeleteResponse = (await axios.delete(endpoint)).data;
 
   return response;

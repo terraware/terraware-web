@@ -58,10 +58,12 @@ export default function PlantList(props: PlantListProps): JSX.Element {
 
   const fetchPlantsAndSpecies = useCallback(() => {
     const populateSpecies = async () => {
-      const speciesResponse = await getAllSpecies();
-      // TODO display errors to client
-      if (speciesResponse.requestSucceeded) {
-        setSpeciesById(speciesResponse.speciesById);
+      if (organization) {
+        const speciesResponse = await getAllSpecies(organization.id);
+        // TODO display errors to client
+        if (speciesResponse.requestSucceeded) {
+          setSpeciesById(speciesResponse.speciesById);
+        }
       }
     };
 
@@ -129,7 +131,7 @@ export default function PlantList(props: PlantListProps): JSX.Element {
 
   return (
     <main>
-      {selectedPlant && (
+      {selectedPlant && organization && (
         <EditPlantModal
           onSave={onPlantEditSaved}
           onCancel={() => setSelectedPlant(undefined)}
@@ -137,6 +139,7 @@ export default function PlantList(props: PlantListProps): JSX.Element {
           speciesById={speciesById}
           plant={selectedPlant}
           photoUrl={selectedPlantPhoto}
+          organization={organization}
         />
       )}
       <Container maxWidth={false} className={classes.mainContainer}>
