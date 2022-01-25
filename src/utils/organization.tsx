@@ -1,6 +1,5 @@
 import { Facility } from 'src/api/types/facilities';
 import { Project, ServerOrganization, Site } from 'src/types/Organization';
-import { OrganizationUser } from 'src/types/User';
 
 export const getAllSites = (organization: ServerOrganization): Site[] => {
   const sites: Site[] = [];

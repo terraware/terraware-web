@@ -378,6 +378,10 @@ const strings = new LocalizedStrings({
     ADMIN_INFO:
       'An admin can do the above as well as edit the organization profile, manage users in the organization, manager projects, and manage sites.',
     ADD_TO_PROJECT_DESC: 'To add new projects to this organization go to Projects.',
+    ROLE: 'Role',
+    ADD_TO_PROJECT: 'Add to Project',
+    NO_PROJECTS_IN_ORG: 'No Projects in Organization',
+    ADD_PROJECTS_MESSAGE: 'To add projects to this organization go to Projects.',
   },
 });
 

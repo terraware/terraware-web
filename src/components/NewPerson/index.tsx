@@ -1,23 +1,18 @@
 import { AppBar, Container, createStyles, Grid, makeStyles } from '@material-ui/core';
 import { useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import strings from 'src/strings';
-import { Project, ProjectTypes, ServerOrganization, Site } from 'src/types/Organization';
+import { Project, ServerOrganization } from 'src/types/Organization';
 import TfDivisor from '../common/TfDivisor';
 import Table from 'src/components/common/table';
 import { TableColumnType } from '../common/table/types';
 import { OrganizationUser } from 'src/types/User';
-import { getOrganizationUsers } from 'src/api/organization/organization';
 import TextField from '../common/Textfield/Textfield';
 import useForm from 'src/utils/useForm';
 import Select from '../common/Select/Select';
 import Button from '../common/button/Button';
-import { updateProjectUser, createProject, updateProject } from 'src/api/project/project';
-import { useSetRecoilState } from 'recoil';
-import snackbarAtom from 'src/state/snackbar';
-import { getProjectsById } from 'src/utils/organization';
-import axios from 'axios';
 import AddToProjectModal from './AddToProjectModal';
+import TableCellRenderer from './TableCellRenderer';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -84,43 +79,40 @@ type PersonViewProps = {
 const projectColumns: TableColumnType[] = [
   { key: 'name', name: 'Name', type: 'string' },
   { key: 'description', name: 'Description', type: 'string' },
-  { key: 'site', name: 'Sites', type: 'string' },
+  { key: 'sites', name: 'Sites', type: 'string' },
   { key: 'people', name: 'People', type: 'string' },
   { key: 'role', name: 'Role', type: 'string' },
 ];
 
+export type ProjectOfPerson = Project & {
+  role: string;
+};
+
+const getProjectsOfPerson = (projectsOfPerson: Project[] | undefined, role: string): ProjectOfPerson[] => {
+  if (projectsOfPerson) {
+    return projectsOfPerson.map((project) => {
+      return { ...project, role: role } as ProjectOfPerson;
+    });
+  } else {
+    return [];
+  }
+};
+
 export default function PersonView({ organization, reloadOrganizationData }: PersonViewProps): JSX.Element {
-  const [people, setPeople] = useState<OrganizationUser[]>();
+  const classes = useStyles();
+  const history = useHistory();
   const [addToProjectModalOpened, setAddToProjectModalOpened] = useState(false);
-  const [removedPeopleModalOpened, setRemovedPeopleModalOpened] = useState(false);
-  const [peopleOnProject, setPeopleOnProject] = useState<OrganizationUser[]>();
   const [emailError, setEmailError] = useState('');
-  const { projectId } = useParams<{ projectId: string }>();
-  const [projectSelected, setProjectSelected] = useState<Project | null>();
-  const [selectedPeopleRows, setSelectedPeopleRows] = useState<OrganizationUser[]>([]);
-  const [removedPeople, setRemovedPeople] = useState<OrganizationUser[]>();
-  const [modifiedSites, setModifiedSites] = useState<Site[]>();
+  const [projectsOfPerson, setProjectsOfPerson] = useState<Project[]>();
+  const [projectsOfPersonConverted, setProjectsOfPersonConverted] = useState<ProjectOfPerson[]>();
+  const [selectedProjectsRows, setSelectedProjectsRows] = useState<ProjectOfPerson[]>([]);
 
-  useEffect(() => {
-    const populatePeople = async () => {
-      if (organization) {
-        const response = await getOrganizationUsers(organization);
-        if (response.requestSucceeded) {
-          setPeople(response.users);
-        }
-      }
-      populatePeople();
-    };
-  }, []);
-
-  const [newPerson, setNewPerson, onChange] = useForm<OrganizationUser>({
+  const [newPerson, , onChange] = useForm<OrganizationUser>({
     id: -1,
     email: '',
     role: 'Contributor',
     projectIds: [-1],
   });
-  const setSnackbar = useSetRecoilState(snackbarAtom);
-  const history = useHistory();
 
   const onChangeRole = (newRole: string) => {
     onChange('role', newRole);
@@ -133,13 +125,44 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
     history.push(peopleLocation);
   };
 
+  const removeSelectedProjectsOfPerson = () => {
+    if (projectsOfPerson) {
+      setProjectsOfPerson((currentProjectsOfPerson) => {
+        return currentProjectsOfPerson?.filter((project) => {
+          const found = selectedProjectsRows?.find((selectedProject) => selectedProject.id === project.id);
+          return !found;
+        });
+      });
+    }
+  };
+
+  const savePerson = () => {
+    if (newPerson.email === '') {
+      setEmailError('Required Field');
+      return;
+    }
+    return true;
+  };
+
+  const getProjectsNotOfPerson = () => {
+    if (projectsOfPerson) {
+      const projectsOfPersonIds = projectsOfPerson.map((project) => project.id);
+      return organization?.projects?.filter((project) => !projectsOfPersonIds.includes(project.id));
+    }
+    return organization?.projects;
+  };
+
+  useEffect(() => {
+    setProjectsOfPersonConverted(getProjectsOfPerson(projectsOfPerson, newPerson.role));
+  }, [projectsOfPerson, newPerson.role]);
+
   return (
     <>
       <AddToProjectModal
         open={addToProjectModalOpened}
         onClose={() => setAddToProjectModalOpened(false)}
-        projects={organization.projects}
-        people={people}
+        projects={getProjectsNotOfPerson()}
+        setProjectsOfPerson={setProjectsOfPerson}
       />
       <Container maxWidth={false} className={classes.mainContainer}>
         <Grid container spacing={3}>
@@ -149,7 +172,7 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
           </Grid>
           <Grid item xs={4}>
             <TextField
-              id='Email'
+              id='email'
               label={strings.EMAIL}
               type='text'
               onChange={onChange}
@@ -158,10 +181,24 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
             />
           </Grid>
           <Grid item xs={4}>
-            <TextField id='firstName' label={strings.FIRST_NAME} type='text' onChange={onChange} disabled={true} />
+            <TextField
+              id='firstName'
+              label={strings.FIRST_NAME}
+              type='text'
+              onChange={onChange}
+              disabled={true}
+              value='--'
+            />
           </Grid>
           <Grid item xs={4}>
-            <TextField id='lastName' label={strings.LAST_NAME} type='text' onChange={onChange} disabled={true} />
+            <TextField
+              id='lastName'
+              label={strings.LAST_NAME}
+              type='text'
+              onChange={onChange}
+              disabled={true}
+              value='--'
+            />
           </Grid>
           <Grid item xs={12}>
             <p>{strings.ROLES_INFO}</p>
@@ -201,17 +238,18 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
           </Grid>
           <Grid item xs={12}>
             <Table
-              rows={peopleOnProject || []}
+              rows={projectsOfPersonConverted || []}
               orderBy='name'
-              columns={peopleColumns}
-              emptyTableMessage='No People to show.'
+              columns={projectColumns}
+              emptyTableMessage='No Projects to show.'
               showCheckbox={true}
-              selectedRows={selectedPeopleRows}
-              setSelectedRows={setSelectedPeopleRows}
+              selectedRows={selectedProjectsRows}
+              setSelectedRows={setSelectedProjectsRows}
               showTopBar={true}
               buttonType='destructive'
               buttonText={strings.REMOVE}
-              onButtonClick={removeSelectedPeople}
+              onButtonClick={removeSelectedProjectsOfPerson}
+              Renderer={TableCellRenderer}
             />
           </Grid>
           <Grid item xs={12} />
@@ -224,7 +262,7 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
         className={classes.bottomBar}
       >
         <Button label='Cancel' onClick={goToPeople} priority='secondary' type='passive' />
-        <Button label='Save' onClick={saveProject} />
+        <Button label='Save' onClick={savePerson} />
       </AppBar>
     </>
   );

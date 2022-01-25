@@ -100,7 +100,6 @@ export default function SiteView({ organization }: SiteViewProps): JSX.Element {
           });
         }
       } else {
-        console.log('por create');
         const response = await createSite(record);
         if (response.requestSucceeded) {
           setSnackbar({

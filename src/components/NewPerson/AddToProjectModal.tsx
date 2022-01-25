@@ -8,9 +8,10 @@ import React, { useState } from 'react';
 import strings from 'src/strings';
 import DialogCloseButton from '../common/DialogCloseButton';
 import Button from '../common/button/Button';
-import { OrganizationUser } from 'src/types/User';
 import { TableColumnType } from '../common/table/types';
 import Table from 'src/components/common/table';
+import { Project } from 'src/types/Organization';
+import TableCellRenderer from './TableCellRenderer';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -29,26 +30,25 @@ const useStyles = makeStyles((theme: Theme) =>
 export interface AddPeopleDialogProps {
   open: boolean;
   onClose: () => void;
-  people?: OrganizationUser[];
+  projects?: Project[];
   setProjectsOfPerson: React.Dispatch<React.SetStateAction<Project[] | undefined>>;
 }
 
-const peopleColumns: TableColumnType[] = [
-  { key: 'firstName', name: 'First Name', type: 'string' },
-  { key: 'lastName', name: 'Last Name', type: 'string' },
-  { key: 'email', name: 'Email', type: 'string' },
-  { key: 'role', name: 'Role', type: 'string' },
+const projectColumns: TableColumnType[] = [
+  { key: 'name', name: 'Name', type: 'string' },
+  { key: 'decription', name: 'Description', type: 'string' },
+  { key: 'sites', name: 'Sites', type: 'string' },
 ];
 
 export default function AddPeopleDialog(props: AddPeopleDialogProps): JSX.Element {
   const classes = useStyles();
-  const { onClose, open, people, setPeopleOnProject, peopleOnProject } = props;
+  const { onClose, open, projects, setProjectsOfPerson } = props;
 
-  const [selectedRows, setSelectedRows] = useState<OrganizationUser[]>(peopleOnProject ?? []);
+  const [selectedRows, setSelectedRows] = useState<Project[]>([]);
 
   const onSubmitHandler = () => {
     if (selectedRows) {
-      setPeopleOnProject((current: OrganizationUser[] | undefined) => {
+      setProjectsOfPerson((current: Project[] | undefined) => {
         if (current) {
           return [...current, ...selectedRows];
         } else {
@@ -63,31 +63,32 @@ export default function AddPeopleDialog(props: AddPeopleDialogProps): JSX.Elemen
     <Dialog onClose={onClose} disableEscapeKeyDown open={open} maxWidth='md'>
       <DialogTitle className={classes.title}>
         <Typography variant='h6'>
-          {people && people.length > 0 ? strings.ADD_PEOPLE : strings.NO_PEOPLE_IN_ORG}
+          {projects && projects.length > 0 ? strings.ADD_TO_PROJECT : strings.NO_PROJECTS_IN_ORG}
         </Typography>
         <DialogCloseButton onClick={onClose} />
       </DialogTitle>
       <DialogContent dividers>
         <Grid container spacing={4}>
-          {people && people.length > 0 ? (
+          {projects && projects.length > 0 ? (
             <Table
-              rows={people}
+              rows={projects}
               orderBy='name'
-              columns={peopleColumns}
+              columns={projectColumns}
               showCheckbox={true}
               selectedRows={selectedRows}
               setSelectedRows={setSelectedRows}
+              Renderer={TableCellRenderer}
             />
           ) : (
-            <p>{strings.ADD_PEOPLE_MESSAGE}</p>
+            <p>{strings.ADD_PROJECTS_MESSAGE}</p>
           )}
         </Grid>
       </DialogContent>
       <DialogActions className={classes.actions}>
-        {people && people.length > 0 ? (
+        {projects && projects.length > 0 ? (
           <>
             <Button label={strings.CANCEL} priority='secondary' onClick={onClose} />
-            <Button label={strings.ADD_PEOPLE} onClick={onSubmitHandler} />
+            <Button label={strings.ADD_TO_PROJECT} onClick={onSubmitHandler} />
           </>
         ) : (
           <Button label={strings.GOT_IT} onClick={onClose} />
