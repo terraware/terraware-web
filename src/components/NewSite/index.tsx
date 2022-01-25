@@ -122,6 +122,19 @@ export default function SiteView({ organization }: SiteViewProps): JSX.Element {
     return foundProject?.name;
   };
 
+  const selectedProject = () => {
+    if (record.projectId !== -1) {
+      const project = findProjectById(record.projectId);
+      if (project) {
+        return project;
+      }
+    }
+    if (organization.projects && organization.projects.length) {
+      return organization.projects[0].name;
+    }
+    return '';
+  };
+
   return (
     <>
       <Container maxWidth={false} className={classes.mainContainer}>
@@ -155,13 +168,7 @@ export default function SiteView({ organization }: SiteViewProps): JSX.Element {
               label={strings.PROJECT}
               onChange={onChangeProject}
               options={organization.projects?.map((project) => project.name)}
-              selectedValue={
-                record.projectId !== -1
-                  ? findProjectById(record.projectId)
-                  : organization.projects
-                  ? organization.projects[0].name
-                  : ''
-              }
+              selectedValue={selectedProject()}
             />
           </Grid>
         </Grid>

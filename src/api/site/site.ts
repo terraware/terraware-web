@@ -7,13 +7,13 @@ type CreateSiteResponsePayload = paths[typeof SITES]['post']['responses'][200]['
 
 type CreateSiteRequestPayload = paths[typeof SITES]['post']['requestBody']['content']['application/json'];
 
-type PostSiteResponse = {
+type CreateSiteResponse = {
   siteId: number | null;
   requestSucceeded: boolean;
 };
 
-export async function createSite(site: Site): Promise<PostSiteResponse> {
-  const response: PostSiteResponse = {
+export async function createSite(site: Site): Promise<CreateSiteResponse> {
+  const response: CreateSiteResponse = {
     siteId: null,
     requestSucceeded: true,
   };

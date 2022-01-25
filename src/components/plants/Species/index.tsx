@@ -10,8 +10,13 @@ import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
 import snackbarAtom from 'src/state/snackbar';
 import strings from 'src/strings';
+import { ServerOrganization } from 'src/types/Organization';
 import { Species } from 'src/types/Species';
 import SimpleSpeciesModal from './SimpleSpeciesModal';
+
+type SpeciesListProps = {
+  organization: ServerOrganization;
+};
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -49,7 +54,7 @@ const useStyles = makeStyles((theme) =>
 
 const columns: TableColumnType[] = [{ key: 'name', name: 'Name', type: 'string' }];
 
-export default function SpeciesList(): JSX.Element {
+export default function SpeciesList({ organization }: SpeciesListProps): JSX.Element {
   const classes = useStyles();
   const [species, setSpecies] = useState<Species[]>();
   const [selectedSpecies, setSelectedSpecies] = useState<Species>();
@@ -57,12 +62,12 @@ export default function SpeciesList(): JSX.Element {
   const setSnackbar = useSetRecoilState(snackbarAtom);
 
   const populateSpecies = useCallback(async () => {
-    const response = await getAllSpecies();
+    const response = await getAllSpecies(organization.id);
     // TODO: what if we cannot fetch the species list?
     if (response.requestSucceeded) {
       setSpecies(Array.from(response.speciesById.values()));
     }
-  }, []);
+  }, [organization]);
 
   useEffect(() => {
     populateSpecies();
@@ -102,6 +107,7 @@ export default function SpeciesList(): JSX.Element {
         open={editSpeciesModalOpen}
         onClose={onCloseEditSpeciesModal}
         initialSpecies={selectedSpecies}
+        organization={organization}
         onError={setErrorSnackbar}
       />
       <Container maxWidth={false} className={classes.mainContainer}>

@@ -13,6 +13,7 @@ import { cellDateFormatter } from '../../common/table/TableCellRenderer';
 import MapLayers from './MapLayers';
 import EditPlantModal from '../EditPlantModal';
 import DisplayPhoto from '../DisplayPhoto';
+import { ServerOrganization } from 'src/types/Organization';
 import { Plant } from 'src/types/Plant';
 import { SpeciesById } from 'src/types/Species';
 import { getPlantPhoto } from 'src/api/plants/photo';
@@ -69,6 +70,7 @@ export type PlantMapProps = {
   onFullscreen: () => void;
   isFullscreen: boolean;
   plants: Plant[];
+  organization?: ServerOrganization;
   speciesById: SpeciesById;
   colorsBySpeciesId: Record<number, string>;
   reloadData: () => void;
@@ -77,7 +79,7 @@ export type PlantMapProps = {
 function PlantMap(props: PlantMapProps): JSX.Element {
   const classes = useStyles();
 
-  const { onFullscreen, isFullscreen, plants, speciesById, colorsBySpeciesId, reloadData } = props;
+  const { onFullscreen, isFullscreen, plants, organization, speciesById, colorsBySpeciesId, reloadData } = props;
   const [selectedPlant, setSelectedPlant] = useState<Plant>();
   const [selectedPlantPhotoUrl, setSelectedPlantPhotoUrl] = useState<string>();
   const [plantModalOpen, setPlantModalOpen] = React.useState(false);
@@ -178,7 +180,7 @@ function PlantMap(props: PlantMapProps): JSX.Element {
 
   return (
     <>
-      {selectedPlant && plantModalOpen && (
+      {selectedPlant && plantModalOpen && organization && (
         <EditPlantModal
           onSave={onPlantModalSave}
           onCancel={() => setPlantModalOpen(false)}
@@ -186,6 +188,7 @@ function PlantMap(props: PlantMapProps): JSX.Element {
           speciesById={speciesById}
           plant={selectedPlant}
           photoUrl={selectedPlantPhotoUrl}
+          organization={organization}
         />
       )}
       <ReactMapGL
