@@ -16,7 +16,8 @@ import Select from './common/Select/Select';
 import TextField from './common/Textfield/Textfield';
 import snackbarAtom from 'src/state/snackbar';
 import { searchCountries } from 'src/api/country/country';
-import { Country, Subdivision } from 'src/types/Country';
+import { Country } from 'src/types/Country';
+import { getCountryByCode, getSubdivisionByCode } from 'src/utils/country';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -75,12 +76,10 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
   const { onCancel, open, reloadOrganizationData } = props;
   const setSnackbar = useSetRecoilState(snackbarAtom);
   const [countries, setCountries] = useState<Country[]>();
-  const [selectedCountry, setSelectedCountry] = useState<Country>();
-  const [selectedSubdivision, setSelectedSubdivision] = useState<Subdivision>();
   const [newOrganization, setNewOrganization, onChange] = useForm<ServerOrganization>({
     id: -1,
     name: '',
-    role: 'Admin',
+    role: 'Owner',
   });
 
   useEffect(() => {
@@ -96,17 +95,17 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
   const onChangeCountry = (newValue: string) => {
     const found = countries?.find((country) => country.name === newValue);
     if (found) {
-      setSelectedCountry(found);
-      setSelectedSubdivision(undefined);
       setNewOrganization({ ...newOrganization, countryCode: found.code.toString(), countrySubdivisionCode: undefined });
     }
   };
 
   const onChangeSubdivision = (newValue: string) => {
-    const found = selectedCountry?.subdivisions.find((subdivision) => subdivision.name === newValue);
-    if (found) {
-      setSelectedSubdivision(found);
-      onChange('countrySubdivisionCode', found.code);
+    if (countries && newOrganization.countryCode) {
+      const selectedCountry = getCountryByCode(countries, newOrganization.countryCode);
+      const found = selectedCountry?.subdivisions.find((subdivision) => subdivision.name === newValue);
+      if (found) {
+        onChange('countrySubdivisionCode', found.code);
+      }
     }
   };
 
@@ -115,7 +114,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
     if (response.requestSucceeded) {
       setSnackbar({
         type: 'success',
-        msg: `You have created ${response.organization?.name}. You can access the organizations you’re in by clicking the arrow in the top right corner next to your profile.`,
+        msg: strings.formatString(strings.ORGANIZATION_CREATED_MSG, response.organization?.name || ''),
       });
     } else {
       setSnackbar({
@@ -125,6 +124,28 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
     }
     reloadOrganizationData();
     onCancel();
+  };
+
+  const getSelectedCountry = () => {
+    if (countries && newOrganization.countryCode) {
+      const selectedCountry = getCountryByCode(countries, newOrganization.countryCode);
+      if (selectedCountry) {
+        return selectedCountry;
+      }
+    }
+  };
+
+  const getSelectedSubdivision = () => {
+    if (countries && newOrganization.countryCode && newOrganization.countrySubdivisionCode) {
+      const selectedSubdivision = getSubdivisionByCode(
+        countries,
+        newOrganization.countryCode,
+        newOrganization.countrySubdivisionCode
+      );
+      if (selectedSubdivision) {
+        return selectedSubdivision;
+      }
+    }
   };
 
   return (
@@ -146,17 +167,17 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
             id='countyCode'
             onChange={onChangeCountry}
             options={countries?.map((country) => country.name)}
-            selectedValue={selectedCountry?.name}
+            selectedValue={getSelectedCountry()?.name}
           />
         </Grid>
-        {selectedCountry?.subdivisions && (
+        {getSelectedCountry()?.subdivisions && (
           <Grid item xs={12}>
             <Select
               label={strings.STATE_OPTIONAL}
               id='countySubdivisionCode'
               onChange={onChangeSubdivision}
-              options={selectedCountry.subdivisions.map((subdivision) => subdivision.name)}
-              selectedValue={selectedSubdivision?.name}
+              options={getSelectedCountry()?.subdivisions.map((subdivision) => subdivision.name)}
+              selectedValue={getSelectedSubdivision()?.name}
             />
           </Grid>
         )}

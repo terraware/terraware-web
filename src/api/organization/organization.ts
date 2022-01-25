@@ -154,10 +154,11 @@ export async function getOrganizationUsers(organization: ServerOrganization): Pr
   return response;
 }
 
-type GetOrganizationResponsePayload =
+type UpdateOrganizationResponsePayload =
   paths[typeof ORGANIZATIONS]['post']['responses'][200]['content']['application/json'];
 type UpdateOrganizationRequestPayload =
   paths[typeof ORGANIZATIONS]['post']['requestBody']['content']['application/json'];
+
 type CreateOrganizationResponse = {
   organization: ServerOrganization | null;
   requestSucceeded: boolean;
@@ -174,7 +175,7 @@ export async function createOrganization(organization: ServerOrganization) {
       countryCode: organization.countryCode,
       countrySubdivisionCode: organization.countrySubdivisionCode,
     };
-    const serverResponse: GetOrganizationResponsePayload = (await axios.post(ORGANIZATIONS, newOrganization)).data;
+    const serverResponse: UpdateOrganizationResponsePayload = (await axios.post(ORGANIZATIONS, newOrganization)).data;
 
     if (serverResponse.status === 'ok') {
       response.organization = {

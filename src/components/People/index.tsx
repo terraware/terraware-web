@@ -71,9 +71,12 @@ export default function PeopleList({ organization }: PeopleListProps): JSX.Eleme
       if (organization) {
         const allProjects = getProjectsById(organization);
         return users.map((user) => {
-          const projectNamesOfPerson: string[] = [];
-          user.projectIds.forEach((projectId) => {
-            projectNamesOfPerson.push(allProjects.get(projectId)?.name || '');
+          const projectNamesOfPerson: string[] = user.projectIds.map((projectId) => {
+            const projectName = allProjects.get(projectId)?.name;
+            if (!projectName) {
+              console.error(`Could not find project name associated with user id ${user.id},  project id ${projectId}`);
+            }
+            return projectName ? projectName : '';
           });
           return {
             firstName: user.firstName,

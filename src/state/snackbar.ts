@@ -1,7 +1,7 @@
 import { atom } from 'recoil';
 
 export interface Snackbar {
-  msg: string;
+  msg: string | string[];
   type: 'delete' | 'success';
 }
 
