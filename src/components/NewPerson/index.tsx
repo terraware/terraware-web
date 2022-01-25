@@ -94,7 +94,7 @@ export type ProjectOfPerson = Project & {
 const getProjectsOfPerson = (projectsOfPerson: Project[] | undefined, role: string): ProjectOfPerson[] => {
   if (projectsOfPerson) {
     return projectsOfPerson.map((project) => {
-      return { ...project, role: role } as ProjectOfPerson;
+      return { ...project, role } as ProjectOfPerson;
     });
   } else {
     return [];
@@ -150,7 +150,7 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
       return;
     }
     const projectIds = projectsOfPerson?.map((project) => project.id) || [];
-    const response = await addOrganizationUser({ ...newPerson, projectIds: projectIds }, organization.id);
+    const response = await addOrganizationUser({ ...newPerson, projectIds }, organization.id);
     if (response.requestSucceeded) {
       setSnackbar({
         type: 'success',
