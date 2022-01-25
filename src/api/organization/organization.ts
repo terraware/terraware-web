@@ -204,7 +204,7 @@ type UpdateOrganizationResponse = {
 type SimpleSuccessResponsePayload =
   paths[typeof UPDATE_ORGANIZATION]['put']['responses'][200]['content']['application/json'];
 
-export async function updateOrganization(organization: ServerOrganization) {
+export async function updateOrganization(organization: ServerOrganization): Promise<UpdateOrganizationResponse> {
   const response: UpdateOrganizationResponse = {
     requestSucceeded: true,
   };

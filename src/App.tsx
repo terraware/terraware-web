@@ -277,6 +277,9 @@ function AppContent() {
               <Route path='/projects/'>
                 <Redirect to='/projects' />
               </Route>
+              <Route path='/organization/'>
+                <Redirect to='/organization' />
+              </Route>
               <Route path='/sites/'>
                 <Redirect to='/sites' />
               </Route>

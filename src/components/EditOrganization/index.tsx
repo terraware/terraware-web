@@ -12,6 +12,7 @@ import FormBottomBar from '../common/FormBottomBar';
 import { Country, Subdivision } from 'src/types/Country';
 import { searchCountries } from 'src/api/country/country';
 import { updateOrganization } from 'src/api/organization/organization';
+import { getCountryByCode, getSubdivisionByCode } from 'src/utils/country';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -30,14 +31,12 @@ type OrganizationViewProps = {
 };
 
 export default function OrganizationView({ organization, reloadOrganizationData }: OrganizationViewProps): JSX.Element {
-  const [nameError, setNameError] = useState('');
-
-  const [record, setRecord, onChange] = useForm<ServerOrganization>(organization);
-  const setSnackbar = useSetRecoilState(snackbarAtom);
-  const [countries, setCountries] = useState<Country[]>();
-  const [selectedCountry, setSelectedCountry] = useState<Country>();
-  const history = useHistory();
   const classes = useStyles();
+  const [organizationRecord, setOrganizationRecord, onChange] = useForm<ServerOrganization>(organization);
+  const setSnackbar = useSetRecoilState(snackbarAtom);
+  const [nameError, setNameError] = useState('');
+  const [countries, setCountries] = useState<Country[]>();
+  const history = useHistory();
 
   useEffect(() => {
     const populateCountries = async () => {
@@ -52,15 +51,43 @@ export default function OrganizationView({ organization, reloadOrganizationData 
   const onChangeCountry = (newValue: string) => {
     const found = countries?.find((country) => country.name === newValue);
     if (found) {
-      setRecord({ ...record, countryCode: found.code.toString(), countrySubdivisionCode: undefined });
-      setSelectedCountry(found);
+      setOrganizationRecord({
+        ...organizationRecord,
+        countryCode: found.code.toString(),
+        countrySubdivisionCode: undefined,
+      });
     }
   };
 
   const onChangeSubdivision = (newValue: string) => {
-    const found = selectedCountry?.subdivisions.find((subdivision: Subdivision) => subdivision.name === newValue);
-    if (found) {
-      onChange('countrySubdivisionCode', found.code);
+    if (countries && organizationRecord.countryCode) {
+      const selectedCountry = getCountryByCode(countries, organizationRecord.countryCode);
+      const found = selectedCountry?.subdivisions.find((subdivision: Subdivision) => subdivision.name === newValue);
+      if (found) {
+        onChange('countrySubdivisionCode', found.code);
+      }
+    }
+  };
+
+  const getSelectedCountry = () => {
+    if (countries && organizationRecord.countryCode) {
+      const selectedCountry = getCountryByCode(countries, organizationRecord.countryCode);
+      if (selectedCountry) {
+        return selectedCountry;
+      }
+    }
+  };
+
+  const getSelectedSubdivision = () => {
+    if (countries && organizationRecord.countryCode && organizationRecord.countrySubdivisionCode) {
+      const selectedSubdivision = getSubdivisionByCode(
+        countries,
+        organizationRecord.countryCode,
+        organizationRecord.countrySubdivisionCode
+      );
+      if (selectedSubdivision) {
+        return selectedSubdivision;
+      }
     }
   };
 
@@ -71,31 +98,11 @@ export default function OrganizationView({ organization, reloadOrganizationData 
     history.push(organizationLocation);
   };
 
-  const getSelectedCountry = () => {
-    if (countries) {
-      const found = countries.find((country) => country.code.toString() === record.countryCode);
-      if (found) {
-        return found.name;
-      }
-    }
-  };
-
-  const getSelectedState = () => {
-    if (countries && selectedCountry) {
-      const found = selectedCountry.subdivisions.find(
-        (subdivision) => subdivision.code.toString() === record.countrySubdivisionCode
-      );
-      if (found) {
-        return found.name;
-      }
-    }
-  };
-
   const saveOrganization = async () => {
-    if (record.name === '') {
+    if (organizationRecord.name === '') {
       setNameError('Required Field');
     } else {
-      const response = await updateOrganization(record);
+      const response = await updateOrganization(organizationRecord);
       if (response.requestSucceeded) {
         setSnackbar({
           type: 'success',
@@ -126,8 +133,8 @@ export default function OrganizationView({ organization, reloadOrganizationData 
               label={strings.NAME}
               type='text'
               onChange={onChange}
-              value={record.name}
-              errorText={record.name ? '' : nameError}
+              value={organizationRecord.name}
+              errorText={organizationRecord.name ? '' : nameError}
             />
           </Grid>
           <Grid item xs={4}>
@@ -136,7 +143,7 @@ export default function OrganizationView({ organization, reloadOrganizationData 
               label={strings.DESCRIPTION}
               type='textarea'
               onChange={onChange}
-              value={record.description}
+              value={organizationRecord.description}
             />
           </Grid>
           <Grid item xs={4} />
@@ -146,17 +153,17 @@ export default function OrganizationView({ organization, reloadOrganizationData 
               id='countyCode'
               onChange={onChangeCountry}
               options={countries?.map((country) => country.name)}
-              selectedValue={getSelectedCountry()}
+              selectedValue={getSelectedCountry()?.name}
             />
           </Grid>
-          {selectedCountry?.subdivisions && (
+          {getSelectedCountry()?.subdivisions && (
             <Grid item xs={4}>
               <Select
                 label={strings.STATE_OPTIONAL}
                 id='countySubdivisionCode'
                 onChange={onChangeSubdivision}
-                options={selectedCountry.subdivisions.map((subdivision: Subdivision) => subdivision.name)}
-                selectedValue={getSelectedState()}
+                options={getSelectedCountry()?.subdivisions.map((subdivision) => subdivision.name)}
+                selectedValue={getSelectedSubdivision()?.name}
               />
             </Grid>
           )}

@@ -116,13 +116,13 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
         type: 'success',
         msg: strings.formatString(strings.ORGANIZATION_CREATED_MSG, response.organization?.name || ''),
       });
+      reloadOrganizationData();
     } else {
       setSnackbar({
         type: 'delete',
         msg: strings.GENERIC_ERROR,
       });
     }
-    reloadOrganizationData();
     onCancel();
   };
 

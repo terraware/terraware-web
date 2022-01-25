@@ -10,6 +10,7 @@ import { Country } from 'src/types/Country';
 import { searchCountries } from 'src/api/country/country';
 import { getOrganizationUsers } from 'src/api/organization/organization';
 import { OrganizationUser } from 'src/types/User';
+import { getCountryByCode, getSubdivisionByCode } from 'src/utils/country';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -31,6 +32,7 @@ type OrganizationViewProps = {
   organization?: ServerOrganization;
 };
 export default function OrganizationView({ organization }: OrganizationViewProps): JSX.Element {
+  const classes = useStyles();
   const history = useHistory();
   const [countries, setCountries] = useState<Country[]>();
   const [people, setPeople] = useState<OrganizationUser[]>();
@@ -54,8 +56,6 @@ export default function OrganizationView({ organization }: OrganizationViewProps
     populatePeople();
   }, [organization]);
 
-  const classes = useStyles();
-
   const goToEditOrganization = () => {
     const editOrganizationLocation = {
       pathname: `/organization/edit`,
@@ -64,11 +64,8 @@ export default function OrganizationView({ organization }: OrganizationViewProps
   };
 
   const organizationState = () => {
-    if (organization?.countrySubdivisionCode) {
-      return countries
-        ?.find((country) => country.code.toString() === organization?.countryCode)
-        ?.subdivisions.find((subdivision) => subdivision.code.toString() === organization?.countrySubdivisionCode)
-        ?.name;
+    if (countries && organization?.countryCode && organization?.countrySubdivisionCode) {
+      return getSubdivisionByCode(countries, organization.countryCode, organization.countrySubdivisionCode)?.name;
     }
   };
 
@@ -114,7 +111,9 @@ export default function OrganizationView({ organization }: OrganizationViewProps
             label={strings.COUNTRY_OPTIONAL}
             id='country'
             type='text'
-            value={countries?.find((country) => country.code.toString() === organization?.countryCode)?.name}
+            value={
+              countries && organization?.countryCode ? getCountryByCode(countries, organization.countryCode)?.name : ''
+            }
             display={true}
           />
         </Grid>
