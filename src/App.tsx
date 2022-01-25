@@ -39,6 +39,7 @@ import People from './components/People';
 import NewProject from './components/NewProject';
 import NewSite from './components/NewSite';
 import { getOrganizations } from './api/organization/organization';
+import NewPerson from './components/NewPerson';
 
 // @ts-ignore
 mapboxgl.workerClass =
@@ -240,6 +241,11 @@ function AppContent() {
               <Route path='/help' component={Help}>
                 <Help />
               </Route>
+              {selectedOrganization && (
+                <Route path='/people/new'>
+                  <NewPerson organization={selectedOrganization} reloadOrganizationData={reloadData} />
+                </Route>
+              )}
               <Route path='/people'>
                 <People organization={selectedOrganization} />
               </Route>

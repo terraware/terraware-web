@@ -368,6 +368,16 @@ const strings = new LocalizedStrings({
     REASSIGN_SITE_TITLE: 'Please reassign this site to another project in order to remove it from this project.',
     ADD_SITE_DESC: 'Enter the site’s information below.',
     EDIT_SITE: 'Edit Site',
+    ADD_PERSON_DESC: 'Enter the person’s information below and then check the Projects you would like to add them to. ',
+    EMAIL: 'Email',
+    FIRST_NAME: 'First Name',
+    LAST_NAME: 'Last Name',
+    ROLES_INFO: 'Select a role for this person.',
+    CONTRIBUTOR_INFO: 'A contributor can only input and edit data entries for seeds and plants.',
+    MANAGER_INFO: 'A manager can do the above as well as invite users to projects, edit sites, and manage species.',
+    ADMIN_INFO:
+      'An admin can do the above as well as edit the organization profile, manage users in the organization, manager projects, and manage sites.',
+    ADD_TO_PROJECT_DESC: 'To add new projects to this organization go to Projects.',
   },
 });
 
