@@ -373,6 +373,8 @@ const strings = new LocalizedStrings({
     ORGANIZATION_NAME: 'Organization Name',
     COUNTRY_OPTIONAL: 'Country (optional)',
     STATE_OPTIONAL: 'State (optional)',
+    ORGANIZATION_CREATED_MSG:
+      'You have created {0}. You can access the organizations you’re in by clicking the arrow in the top right corner next to your profile.',
   },
 });
 

@@ -4,12 +4,9 @@ import { paths } from '../types/generated-schema';
 
 const SEARCH_ENDPOINT = '/api/v1/search';
 type SearchRequestPayload = paths[typeof SEARCH_ENDPOINT]['post']['requestBody']['content']['application/json'];
-export type SearchResponsePayload =
-  paths[typeof SEARCH_ENDPOINT]['post']['responses'][200]['content']['application/json'];
-export type SearchResponseElement = SearchResponsePayload['results'][0];
+type SearchResponsePayload = paths[typeof SEARCH_ENDPOINT]['post']['responses'][200]['content']['application/json'];
 
-export const searchCountries = async (): Promise<Country[] | null> => {
-  const countries: Country[] = [];
+export async function searchCountries(): Promise<Country[] | null> {
   const params: SearchRequestPayload = {
     prefix: 'country',
     fields: ['code', 'name', 'subdivisions.code', 'subdivisions.name'],
@@ -17,15 +14,14 @@ export const searchCountries = async (): Promise<Country[] | null> => {
   };
   try {
     const response: SearchResponsePayload = (await axios.post(SEARCH_ENDPOINT, params)).data;
-    response.results.forEach((result) => {
-      countries.push({
+    return response.results.map((result) => {
+      return {
         code: result.code,
         name: result.name,
         subdivisions: result.subdivisions,
-      } as Country);
+      } as Country;
     });
-    return countries;
   } catch {
     return null;
   }
-};
+}
