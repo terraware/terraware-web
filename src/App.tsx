@@ -35,6 +35,7 @@ import SitesList from './components/Sites';
 import Project from './components/Project';
 import SiteView from './components/Site';
 import { seedsDatabaseSelectedOrgInfo } from './state/selectedOrgInfoPerPage';
+import People from './components/People';
 import NewProject from './components/NewProject';
 import NewSite from './components/NewSite';
 import { getOrganizations } from './api/organization/organization';
@@ -238,6 +239,9 @@ function AppContent() {
               </Route>
               <Route path='/help' component={Help}>
                 <Help />
+              </Route>
+              <Route path='/people'>
+                <People organization={selectedOrganization} />
               </Route>
 
               {/* Redirects. Invalid paths will redirect to the closest valid path. */}
