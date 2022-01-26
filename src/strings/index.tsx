@@ -345,6 +345,8 @@ const strings = new LocalizedStrings({
     ADMIN: 'Admin',
     ADD_PERSON: 'Add Person',
     PEOPLE_DESCRIPTION: 'Manage the people in Terraware.',
+    CREATE_NEW_ORGANIZATION: 'Create New Organization',
+    ADD_NEW_ORGANIZATION: 'Add New Organization',
     ADD_PROJECT_DESC: 'Enter the project’s information below and then select the people you would like to add.',
     NATIVE_FOREST_RESTORATION: 'Native Forest Restoration',
     AGROFORESTRY: 'Agroforestry',
@@ -368,6 +370,11 @@ const strings = new LocalizedStrings({
     REASSIGN_SITE_TITLE: 'Please reassign this site to another project in order to remove it from this project.',
     ADD_SITE_DESC: 'Enter the site’s information below.',
     EDIT_SITE: 'Edit Site',
+    ORGANIZATION_NAME: 'Organization Name',
+    COUNTRY_OPTIONAL: 'Country (optional)',
+    STATE_OPTIONAL: 'State (optional)',
+    ORGANIZATION_CREATED_MSG:
+      'You have created {0}. You can access the organizations you’re in by clicking the arrow in the top right corner next to your profile.',
   },
 });
 
