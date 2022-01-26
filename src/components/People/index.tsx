@@ -55,7 +55,12 @@ export default function PeopleList({ organization }: PeopleListProps): JSX.Eleme
   const [people, setPeople] = useState<OrganizationUserWithProjectName[]>();
 
   const onSelect = (selected: OrganizationUser) => {
-    return true;
+    if (selected.id) {
+      const personLocation = {
+        pathname: `/people/${selected.id}`,
+      };
+      history.push(personLocation);
+    }
   };
 
   useEffect(() => {

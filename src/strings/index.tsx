@@ -382,6 +382,11 @@ const strings = new LocalizedStrings({
     ADD_TO_PROJECT: 'Add to Project',
     NO_PROJECTS_IN_ORG: 'No Projects in Organization',
     ADD_PROJECTS_MESSAGE: 'To add projects to this organization go to Projects.',
+    INVITED_PERSON:
+      'It looks like you have already added or invited this person. Please enter a unique email address or go to the existing person’s profile.',
+    GO_TO_PROFILE: 'Go to Profile',
+    DATE_ADDED: 'Date Added',
+    PROJECTS_DESC: 'To add new projects to this organization go to Projects.',
   },
 });
 

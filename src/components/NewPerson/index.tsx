@@ -16,6 +16,8 @@ import TableCellRenderer from './TableCellRenderer';
 import { addOrganizationUser } from 'src/api/user/user';
 import snackbarAtom from 'src/state/snackbar';
 import { useSetRecoilState } from 'recoil';
+import ErrorBox from '../common/ErrorBox/ErrorBox';
+import { getOrganizationUsers } from 'src/api/organization/organization';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -110,6 +112,9 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
   const [projectsOfPersonConverted, setProjectsOfPersonConverted] = useState<ProjectOfPerson[]>();
   const [selectedProjectsRows, setSelectedProjectsRows] = useState<ProjectOfPerson[]>([]);
   const setSnackbar = useSetRecoilState(snackbarAtom);
+  const [showBoxError, setShowBoxError] = useState(false);
+  const [repeatedEmail, setRepeatedEmail] = useState('');
+  const [people, setPeople] = useState<OrganizationUser[]>();
 
   const [newPerson, , onChange] = useForm<OrganizationUser>({
     id: -1,
@@ -121,6 +126,20 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
   useEffect(() => {
     setProjectsOfPersonConverted(getProjectsOfPerson(projectsOfPerson, newPerson.role));
   }, [projectsOfPerson, newPerson.role]);
+
+  useEffect(() => {
+    const populatePeople = async () => {
+      if (organization) {
+        const response = await getOrganizationUsers(organization);
+        if (response.requestSucceeded) {
+          setPeople(response.users);
+        }
+      }
+    };
+    if (organization) {
+      populatePeople();
+    }
+  }, [organization]);
 
   const onChangeRole = (newRole: string) => {
     onChange('role', newRole);
@@ -145,6 +164,7 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
   };
 
   const savePerson = async () => {
+    setShowBoxError(false);
     if (newPerson.email === '') {
       setEmailError('Required Field');
       return;
@@ -160,7 +180,9 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
       goToPeople();
     } else {
       if (response.existingUser) {
+        setRepeatedEmail(newPerson.email);
         setEmailError('This email already exists.');
+        setShowBoxError(true);
         return;
       } else {
         setSnackbar({
@@ -180,6 +202,18 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
     return organization?.projects;
   };
 
+  const goToProfile = () => {
+    if (people && repeatedEmail) {
+      const profile = people.find((person) => person.email === repeatedEmail);
+      if (profile) {
+        const profileLocation = {
+          pathname: `/people/${profile.id}`,
+        };
+        history.push(profileLocation);
+      }
+    }
+  };
+
   return (
     <>
       <AddToProjectModal
@@ -192,6 +226,9 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
         <Grid container spacing={3}>
           <Grid item xs={12}>
             <h2>{strings.ADD_PERSON}</h2>
+            {showBoxError && (
+              <ErrorBox text={strings.INVITED_PERSON} buttonText={strings.GO_TO_PROFILE} onClick={goToProfile} />
+            )}
             <p>{strings.ADD_PERSON_DESC}</p>
           </Grid>
           <Grid item xs={4}>

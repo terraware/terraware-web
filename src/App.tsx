@@ -40,6 +40,7 @@ import NewProject from './components/NewProject';
 import NewSite from './components/NewSite';
 import { getOrganizations } from './api/organization/organization';
 import NewPerson from './components/NewPerson';
+import PersonDetails from './components/Person';
 
 // @ts-ignore
 mapboxgl.workerClass =
@@ -253,8 +254,11 @@ function AppContent() {
                   <NewPerson organization={selectedOrganization} reloadOrganizationData={reloadData} />
                 </Route>
               )}
-              <Route path='/people'>
+              <Route exact path='/people'>
                 <People organization={selectedOrganization} />
+              </Route>
+              <Route path='/people/:personId'>
+                <PersonDetails organization={selectedOrganization} />
               </Route>
 
               {/* Redirects. Invalid paths will redirect to the closest valid path. */}
