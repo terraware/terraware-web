@@ -11,6 +11,7 @@ import Button from 'src/components/common/button/Button';
 import DialogCloseButton from 'src/components/common/DialogCloseButton';
 import TextField from 'src/components/common/TextField';
 import strings from 'src/strings';
+import { ServerOrganization } from 'src/types/Organization';
 import { Plant } from 'src/types/Plant';
 import { Species, SpeciesById } from 'src/types/Species';
 import DisplayPhoto from './DisplayPhoto';
@@ -58,11 +59,12 @@ export type EditPlantModalProps = {
   speciesById: SpeciesById;
   plant: Plant;
   photoUrl?: string;
+  organization: ServerOrganization;
 };
 
 export default function EditPlantModal(props: EditPlantModalProps): JSX.Element {
   const classes = useStyles();
-  const { onSave, onCancel, canDelete, speciesById, plant, photoUrl } = props;
+  const { onSave, onCancel, canDelete, speciesById, plant, photoUrl, organization } = props;
   const [deleteConfirmationModelOpen, setDeleteConfirmationModelOpen] = useState<boolean>(false);
   // For creating a new species
   const [newSpeciesName, setNewSpeciesName] = useState<string>('');
@@ -99,7 +101,7 @@ export default function EditPlantModal(props: EditPlantModalProps): JSX.Element 
     let speciesId: number | undefined;
     if (inputtedValidNewSpecies()) {
       // create new species
-      const response = await createSpecies(newSpeciesName);
+      const response = await createSpecies(newSpeciesName, organization.id);
       // TODO handle error if cannot save species
       if (response.species) {
         speciesId = response.species.id;

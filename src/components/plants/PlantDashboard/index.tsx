@@ -57,11 +57,13 @@ export default function PlantDashboard(props: PlantDashboardProps): JSX.Element 
 
   const reloadData = useCallback(() => {
     const populateSpecies = async () => {
-      const speciesResponse = await getAllSpecies();
-      if (speciesResponse.requestSucceeded) {
-        setSpeciesById(speciesResponse.speciesById);
-        const speciesIds: number[] = Array.from(speciesResponse.speciesById.keys());
-        setColorsBySpeciesId(getColorsBySpeciesId(speciesIds));
+      if (organization) {
+        const speciesResponse = await getAllSpecies(organization.id);
+        if (speciesResponse.requestSucceeded) {
+          setSpeciesById(speciesResponse.speciesById);
+          const speciesIds: number[] = Array.from(speciesResponse.speciesById.keys());
+          setColorsBySpeciesId(getColorsBySpeciesId(speciesIds));
+        }
       }
     };
 

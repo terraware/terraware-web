@@ -176,9 +176,14 @@ function AppContent() {
               <Route exact path='/checkin'>
                 <CheckIn organization={selectedOrganization} />
               </Route>
-              <Route exact path='/accessions/new'>
-                <NewAccession facilityId={selectedOrgInfoDatabase.selectedFacility?.id} />
-              </Route>
+              {selectedOrganization && (
+                <Route exact path='/accessions/new'>
+                  <NewAccession
+                    facilityId={selectedOrgInfoDatabase.selectedFacility?.id}
+                    organization={selectedOrganization}
+                  />
+                </Route>
+              )}
               <Route exact path='/accessions'>
                 <Database
                   organization={selectedOrganization}
@@ -193,7 +198,7 @@ function AppContent() {
                 />
               </Route>
               <Route path='/accessions/:accessionId'>
-                <Accession />
+                <Accession organization={selectedOrganization} />
               </Route>
               <Route exact path='/plants-dashboard'>
                 <PlantDashboard organization={selectedOrganization} />
@@ -205,9 +210,11 @@ function AppContent() {
                   setFilters={setPlantListFilters}
                 />
               </Route>
-              <Route exact path='/species'>
-                <SpeciesList />
-              </Route>
+              {selectedOrganization && (
+                <Route exact path='/species'>
+                  <SpeciesList organization={selectedOrganization} />
+                </Route>
+              )}
               {selectedOrganization && (
                 <Route path='/projects/new'>
                   <NewProject organization={selectedOrganization} reloadOrganizationData={reloadData} />

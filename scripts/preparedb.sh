@@ -28,7 +28,7 @@ speciesId1=$(curl 'http://localhost:8080/api/v1/species' \
   --cookie "${COOKIE}"  \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
-  --data '{"name":"Banana" }' | jq -r '.id')
+  --data '{"name":"Banana","organizationId":1}' | jq -r '.id')
 
 if [ -z "$speciesId1" ]; then
     echo
@@ -42,7 +42,7 @@ speciesId2=$(curl 'http://localhost:8080/api/v1/species' \
   --cookie "${COOKIE}"  \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
-  --data '{"name":"Coconut"}' | jq -r '.id')
+  --data '{"name":"Coconut","organizationId":1}' | jq -r '.id')
 
 layerId=$(curl 'http://localhost:8080/api/v1/gis/layers' \
   --cookie "${COOKIE}"  \
