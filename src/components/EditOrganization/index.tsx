@@ -108,13 +108,13 @@ export default function OrganizationView({ organization, reloadOrganizationData 
           type: 'success',
           msg: 'Changes saved',
         });
+        reloadOrganizationData();
       } else {
         setSnackbar({
           type: 'delete',
           msg: strings.GENERIC_ERROR,
         });
       }
-      reloadOrganizationData();
       goToOrganization();
     }
   };
