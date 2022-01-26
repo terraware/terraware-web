@@ -68,11 +68,12 @@ const useStyles = makeStyles((theme: Theme) =>
 export type AddNewOrganizationModalProps = {
   open: boolean;
   onCancel: () => void;
+  reloadOrganizationData: () => void;
 };
 
 export default function AddNewOrganizationModal(props: AddNewOrganizationModalProps): JSX.Element {
   const classes = useStyles();
-  const { onCancel, open } = props;
+  const { onCancel, open, reloadOrganizationData } = props;
   const setSnackbar = useSetRecoilState(snackbarAtom);
   const [countries, setCountries] = useState<Country[]>();
   const [newOrganization, setNewOrganization, onChange] = useForm<ServerOrganization>({
@@ -115,6 +116,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
         type: 'success',
         msg: strings.formatString(strings.ORGANIZATION_CREATED_MSG, response.organization?.name || ''),
       });
+      reloadOrganizationData();
     } else {
       setSnackbar({
         type: 'delete',
@@ -162,7 +164,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
         <Grid item xs={12}>
           <Select
             label={strings.COUNTRY_OPTIONAL}
-            id='county'
+            id='countyCode'
             onChange={onChangeCountry}
             options={countries?.map((country) => country.name)}
             selectedValue={getSelectedCountry()?.name}
@@ -172,7 +174,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
           <Grid item xs={12}>
             <Select
               label={strings.STATE_OPTIONAL}
-              id='county'
+              id='countySubdivisionCode'
               onChange={onChangeSubdivision}
               options={getSelectedCountry()?.subdivisions.map((subdivision) => subdivision.name)}
               selectedValue={getSelectedSubdivision()?.name}

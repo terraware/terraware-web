@@ -204,9 +204,11 @@ export interface paths {
   };
   "/api/v1/sites": {
     get: operations["listAllSites"];
+    post: operations["createSite"];
   };
   "/api/v1/sites/{siteId}": {
     get: operations["getSite"];
+    put: operations["updateSite"];
   };
   "/api/v1/species": {
     get: operations["listSpecies"];
@@ -519,6 +521,18 @@ export interface components {
         | "Sustainable Timber"
       )[];
     };
+    CreateSiteRequestPayload: {
+      description?: string;
+      location: components["schemas"]["Point"];
+      locale?: string;
+      name: string;
+      projectId: number;
+      timezone?: string;
+    };
+    CreateSiteResponsePayload: {
+      id: number;
+      status: components["schemas"]["SuccessOrError"];
+    };
     CreateSpeciesNameResponsePayload: {
       id: number;
       status: components["schemas"]["SuccessOrError"];
@@ -620,6 +634,7 @@ export interface components {
         | components["schemas"]["OrNodePayload"];
     };
     FacilityPayload: {
+      createdTime: string;
       id: number;
       siteId: number;
       name: string;
@@ -997,6 +1012,7 @@ export interface components {
       countryCode?: string;
       /** ISO 3166-2 code of organization's country subdivision (state, province, region, etc.) This is the full ISO 3166-2 code including the country prefix. If this is set, countryCode will also be set. */
       countrySubdivisionCode?: string;
+      createdTime: string;
       description?: string;
       id: number;
       name: string;
@@ -1054,6 +1070,7 @@ export interface components {
       coordinates: unknown;
     };
     ProjectPayload: {
+      createdTime: string;
       description?: string;
       id: number;
       name: string;
@@ -1151,6 +1168,7 @@ export interface components {
       status: components["schemas"]["SuccessOrError"];
     };
     SiteElement: {
+      createdTime: string;
       description?: string;
       id: number;
       name: string;
@@ -1404,6 +1422,13 @@ export interface components {
         | "Silvopasture"
         | "Sustainable Timber"
       )[];
+    };
+    UpdateSiteRequestPayload: {
+      description?: string;
+      location: components["schemas"]["Point"];
+      locale?: string;
+      name: string;
+      timezone?: string;
     };
     UpdateUserRequestPayload: {
       firstName: string;
@@ -2955,6 +2980,21 @@ export interface operations {
       };
     };
   };
+  createSite: {
+    responses: {
+      /** Site created. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CreateSiteResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateSiteRequestPayload"];
+      };
+    };
+  };
   getSite: {
     parameters: {
       path: {
@@ -2976,6 +3016,26 @@ export interface operations {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
+      };
+    };
+  };
+  updateSite: {
+    parameters: {
+      path: {
+        siteId: number;
+      };
+    };
+    responses: {
+      /** The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateSiteRequestPayload"];
       };
     };
   };
