@@ -62,8 +62,8 @@ export default function PersonDetails({ organization }: PersonDetailsProps): JSX
     const populatePeople = async () => {
       const response = await getOrganizationUsers(organization!);
       if (response.requestSucceeded) {
-        const user = response.users.find((user) => user.id.toString() === personId);
-        setPerson(user);
+        const selectedUser = response.users.find((user) => user.id.toString() === personId);
+        setPerson(selectedUser);
       }
     };
     if (organization) {
