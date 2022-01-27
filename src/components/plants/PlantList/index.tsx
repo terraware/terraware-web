@@ -170,7 +170,7 @@ export default function PlantList(props: PlantListProps): JSX.Element {
             />
           </Grid>
           <Grid item xs={12}>
-            {!plants.length && (
+            {!!organization?.projects?.length && !plants.length && (
               <EmptyMessage
                 title={strings.COLLECT_IN_FIELD_PLANT_DATA}
                 text={strings.TERRAWARE_MOBILE_APP_INFO_MSG}
@@ -179,7 +179,7 @@ export default function PlantList(props: PlantListProps): JSX.Element {
               />
             )}
           </Grid>
-          {organization?.projects?.length ? (
+          {!!organization?.projects?.length ? (
             <>
               <Grid item xs={1} />
               <Grid item xs={11}>

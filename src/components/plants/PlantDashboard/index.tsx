@@ -132,7 +132,7 @@ export default function PlantDashboard(props: PlantDashboardProps): JSX.Element 
             />
           </Grid>
           <Grid item xs={12}>
-            {!plantSummariesByLayerId.size && (
+            {!!organization?.projects?.length && !plantSummariesByLayerId.size && (
               <EmptyMessage
                 title={strings.COLLECT_IN_FIELD_PLANT_DATA}
                 text={strings.TERRAWARE_MOBILE_APP_INFO_MSG}
@@ -141,7 +141,7 @@ export default function PlantDashboard(props: PlantDashboardProps): JSX.Element 
               />
             )}
           </Grid>
-          {organization?.projects?.length && (
+          {!!organization?.projects?.length && (
             <Grid item xs={isFullscreen ? 12 : 6}>
               <React.Suspense fallback={strings.LOADING}>
                 <PlantMap
@@ -155,7 +155,7 @@ export default function PlantDashboard(props: PlantDashboardProps): JSX.Element 
               </React.Suspense>
             </Grid>
           )}
-          {organization?.projects?.length ? (
+          {!!organization?.projects?.length ? (
             <Grid item xs={isFullscreen ? 12 : 6}>
               <Grid container>
                 <Grid item xs={12}>
