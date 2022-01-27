@@ -20,7 +20,7 @@ import { getPlantLayers } from 'src/api/organization/organization';
 import { getSelectedSites } from 'src/utils/organization';
 import { useRecoilState } from 'recoil';
 import { plantDashboardSelectedOrgInfo } from 'src/state/selectedOrgInfoPerPage';
-import EmptyMessage from './EmptyMessage';
+import EmptyMessage from '../../common/EmptyMessage';
 import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) =>
@@ -35,6 +35,11 @@ const useStyles = makeStyles((theme) =>
     },
     mapContainer: {
       paddingTop: theme.spacing(5),
+    },
+    message: {
+      margin: '0 auto',
+      width: '50%',
+      marginTop: '10%',
     },
   })
 );
@@ -174,6 +179,7 @@ export default function PlantDashboard(props: PlantDashboardProps): JSX.Element 
             </Grid>
           ) : (
             <EmptyMessage
+              className={classes.message}
               title={strings.PLANTS_EMPTY_MSG_TITLE}
               text={strings.PLANTS_EMPTY_MSG_BODY}
               buttonText={strings.GO_TO_PROJECTS}

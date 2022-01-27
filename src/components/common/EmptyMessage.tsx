@@ -10,6 +10,13 @@ const useStyles = makeStyles((theme) =>
       borderRadius: '8px',
       textAlign: 'center',
     },
+    text: {
+      paddingBottom: '24px',
+      fontSize: '16px',
+    },
+    title: {
+      fontSize: '20px',
+    },
   })
 );
 
@@ -18,16 +25,17 @@ type EmptyMessageProps = {
   text?: string;
   buttonText?: string;
   onClick?: () => void;
+  className: string;
 };
 
 export default function EmptyMessage(props: EmptyMessageProps): JSX.Element {
-  const { title, text, buttonText, onClick } = props;
+  const { title, text, buttonText, onClick, className } = props;
   const classes = useStyles();
 
   return (
-    <div className={classes.mainContainer}>
-      <h3>{title}</h3>
-      <p>{text}</p>
+    <div className={`${classes.mainContainer} ${className ?? ''}`}>
+      <h3 className={classes.title}>{title}</h3>
+      <p className={classes.text}>{text}</p>
       {onClick && buttonText && <Button label={buttonText} onClick={onClick} />}
     </div>
   );
