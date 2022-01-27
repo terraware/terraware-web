@@ -1,0 +1,39 @@
+@import './style-dictionary-dist/textfield_variables.scss';
+
+@font-face {
+  font-family: 'Inter';
+  src: local('Inter'), url(../../../fonts/Inter.ttf) format('truetype');
+}
+
+.error-box {
+  display: flex;
+  width: 60%;
+  margin-top: $tw-spc-base-xx-small;
+  background: $tw-clr-base-red-050;
+  padding: 16px;
+  margin: 0 auto;
+  border: 1px solid $tw-clr-icon-fill-critical;
+  border-radius: 8px;
+}
+
+.error-text {
+  font-family: $tw-fnt-frm-fld-error-text-font-family;
+  font-size: $tw-fnt-base-font-size-body-02;
+  font-weight: $tw-fnt-frm-fld-error-text-font-weight;
+  line-height: $tw-fnt-frm-fld-error-text-line-height;
+  color: $tw-clr-text-fill;
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  margin-top: 0;
+}
+
+.button-container {
+  width: 100%;
+  text-align: right;
+}
+
+.error-icon {
+  fill: $tw-clr-frm-fld-error-text;
+  margin-right: $tw-spc-base-x-small;
+}
