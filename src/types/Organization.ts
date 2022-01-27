@@ -47,6 +47,10 @@ export type ServerOrganization = {
   name: string;
   role: AllOrganizationRoles;
   projects?: Project[];
+  countryCode?: string;
+  countrySubdivisionCode?: string;
+  description?: string;
+  createdTime?: string;
 };
 
 export type HighOrganizationRoles = 'Manager' | 'Admin' | 'Owner';

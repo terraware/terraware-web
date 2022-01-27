@@ -38,6 +38,8 @@ import { seedsDatabaseSelectedOrgInfo } from './state/selectedOrgInfoPerPage';
 import People from './components/People';
 import NewProject from './components/NewProject';
 import NewSite from './components/NewSite';
+import Organization from './components/Organization';
+import EditOrganization from './components/EditOrganization';
 import { getOrganizations } from './api/organization/organization';
 import NewPerson from './components/Person/NewPerson';
 import PersonDetails from './components/Person';
@@ -157,6 +159,7 @@ function AppContent() {
             organizations={organizations}
             selectedOrganization={selectedOrganization}
             setSelectedOrganization={setSelectedOrganization}
+            reloadOrganizationData={reloadData}
           />
           <ErrorBoundary>
             <Switch>
@@ -259,6 +262,13 @@ function AppContent() {
               </Route>
               <Route path='/people/:personId'>
                 <PersonDetails organization={selectedOrganization} />
+              {selectedOrganization && (
+                <Route path='/organization/edit' exact={true}>
+                  <EditOrganization organization={selectedOrganization} reloadOrganizationData={reloadData} />
+                </Route>
+              )}
+              <Route path='/organization'>
+                <Organization organization={selectedOrganization} />
               </Route>
 
               {/* Redirects. Invalid paths will redirect to the closest valid path. */}
@@ -282,6 +292,9 @@ function AppContent() {
               </Route>
               <Route path='/projects/'>
                 <Redirect to='/projects' />
+              </Route>
+              <Route path='/organization/'>
+                <Redirect to='/organization' />
               </Route>
               <Route path='/sites/'>
                 <Redirect to='/sites' />
