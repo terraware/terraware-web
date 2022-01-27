@@ -262,6 +262,7 @@ function AppContent() {
               </Route>
               <Route path='/people/:personId'>
                 <PersonDetails organization={selectedOrganization} />
+              </Route>
               {selectedOrganization && (
                 <Route path='/organization/edit' exact={true}>
                   <EditOrganization organization={selectedOrganization} reloadOrganizationData={reloadData} />
