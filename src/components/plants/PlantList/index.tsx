@@ -169,6 +169,16 @@ export default function PlantList(props: PlantListProps): JSX.Element {
               selectedOrgInfo={selectedOrgInfo}
             />
           </Grid>
+          <Grid item xs={12}>
+            {!plants.length && (
+              <EmptyMessage
+                title={strings.COLLECT_IN_FIELD_PLANT_DATA}
+                text={strings.TERRAWARE_MOBILE_APP_INFO_MSG}
+                buttonText={strings.REQUEST_MOBILE_APP}
+                onClick={goToProjects}
+              />
+            )}
+          </Grid>
           {organization?.projects?.length ? (
             <>
               <Grid item xs={1} />

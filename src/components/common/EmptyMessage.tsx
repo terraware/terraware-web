@@ -25,7 +25,7 @@ type EmptyMessageProps = {
   text?: string;
   buttonText?: string;
   onClick?: () => void;
-  className: string;
+  className?: string;
 };
 
 export default function EmptyMessage(props: EmptyMessageProps): JSX.Element {

@@ -385,6 +385,10 @@ const strings = new LocalizedStrings({
     PLANTS_EMPTY_MSG_BODY:
       'Start by creating a project now. You’ll be able to add a site in the next step. Once both of these are set up, please request our new mobile app to begin collecting data.',
     GO_TO_PROJECTS: 'Go to Projects',
+    COLLECT_IN_FIELD_PLANT_DATA: 'Collect In-field Plant Data',
+    TERRAWARE_MOBILE_APP_INFO_MSG:
+      'Our Terraware mobile app is used to collect in-field plant data and is still in beta testing. To be the first to try it out, send us a request.',
+    REQUEST_MOBILE_APP: 'Request Mobile App',
   },
 });
 
