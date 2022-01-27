@@ -12,12 +12,12 @@ import useForm from 'src/utils/useForm';
 import Select from '../common/Select/Select';
 import Button from '../common/button/Button';
 import AddToProjectModal from './AddToProjectModal';
-import TableCellRenderer from './TableCellRenderer';
 import { addOrganizationUser } from 'src/api/user/user';
 import snackbarAtom from 'src/state/snackbar';
 import { useSetRecoilState } from 'recoil';
 import ErrorBox from '../common/ErrorBox/ErrorBox';
 import { getOrganizationUsers } from 'src/api/organization/organization';
+import TableCellRenderer from './TableCellRenderer';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -82,11 +82,11 @@ type PersonViewProps = {
 };
 
 const projectColumns: TableColumnType[] = [
-  { key: 'name', name: 'Name', type: 'string' },
-  { key: 'description', name: 'Description', type: 'string' },
-  { key: 'sites', name: 'Sites', type: 'string' },
-  { key: 'people', name: 'People', type: 'string' },
-  { key: 'role', name: 'Role', type: 'string' },
+  { key: 'name', name: strings.NAME, type: 'string' },
+  { key: 'description', name: strings.DESCRIPTION, type: 'string' },
+  { key: 'sites', name: strings.SITES, type: 'string' },
+  { key: 'people', name: strings.PEOPLE, type: 'string' },
+  { key: 'role', name: strings.ROLE, type: 'string' },
 ];
 
 export type ProjectOfPerson = Project & {
@@ -98,9 +98,8 @@ const getProjectsOfPerson = (projectsOfPerson: Project[] | undefined, role: stri
     return projectsOfPerson.map((project) => {
       return { ...project, role } as ProjectOfPerson;
     });
-  } else {
-    return [];
   }
+  return [];
 };
 
 export default function PersonView({ organization, reloadOrganizationData }: PersonViewProps): JSX.Element {
@@ -112,7 +111,6 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
   const [projectsOfPersonConverted, setProjectsOfPersonConverted] = useState<ProjectOfPerson[]>();
   const [selectedProjectsRows, setSelectedProjectsRows] = useState<ProjectOfPerson[]>([]);
   const setSnackbar = useSetRecoilState(snackbarAtom);
-  const [showBoxError, setShowBoxError] = useState(false);
   const [repeatedEmail, setRepeatedEmail] = useState('');
   const [people, setPeople] = useState<OrganizationUser[]>();
 
@@ -164,7 +162,6 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
   };
 
   const savePerson = async () => {
-    setShowBoxError(false);
     if (newPerson.email === '') {
       setEmailError('Required Field');
       return;
@@ -179,10 +176,9 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
       reloadOrganizationData();
       goToPeople();
     } else {
-      if (response.existingUser) {
+      if (response.isExistingUser) {
         setRepeatedEmail(newPerson.email);
         setEmailError('This email already exists.');
-        setShowBoxError(true);
         return;
       } else {
         setSnackbar({
@@ -226,8 +222,12 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
         <Grid container spacing={3}>
           <Grid item xs={12}>
             <h2>{strings.ADD_PERSON}</h2>
-            {showBoxError && (
-              <ErrorBox text={strings.INVITED_PERSON} buttonText={strings.GO_TO_PROFILE} onClick={goToProfile} />
+            {repeatedEmail && (
+              <ErrorBox
+                text={strings.ALREADY_INVITED_PERSON_ERROR}
+                buttonText={strings.GO_TO_PROFILE}
+                onClick={goToProfile}
+              />
             )}
             <p>{strings.ADD_PERSON_DESC}</p>
           </Grid>

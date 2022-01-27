@@ -41,13 +41,13 @@ type AddOrganizationUserRequestPayload =
 
 export type CreateUserResponse = {
   requestSucceeded: boolean;
-  existingUser: boolean;
+  isExistingUser: boolean;
 };
 export async function addOrganizationUser(user: OrganizationUser, organizationId: number): Promise<CreateUserResponse> {
   const url = CREATE_USER_ENDPOINT.replace('{organizationId}', organizationId.toString());
   const response: CreateUserResponse = {
     requestSucceeded: true,
-    existingUser: false,
+    isExistingUser: false,
   };
   const addOrganizationUserRequestPayload: AddOrganizationUserRequestPayload = {
     email: user.email,
@@ -62,7 +62,7 @@ export async function addOrganizationUser(user: OrganizationUser, organizationId
     }
   } catch (error) {
     if ((error as AxiosError).response?.status === 409) {
-      response.existingUser = true;
+      response.isExistingUser = true;
     }
     response.requestSucceeded = false;
   }

@@ -33,12 +33,12 @@ const useStyles = makeStyles((theme) =>
 );
 
 const columns: TableColumnType[] = [
-  { key: 'firstName', name: 'First Name', type: 'string' },
-  { key: 'lastName', name: 'Last Name', type: 'string' },
-  { key: 'email', name: 'Email', type: 'string' },
-  { key: 'role', name: 'Role', type: 'string' },
-  { key: 'projectNames', name: 'Projects', type: 'string' },
-  { key: 'addedTime', name: 'Date Added', type: 'date' },
+  { key: 'firstName', name: strings.FIRST_NAME, type: 'string' },
+  { key: 'lastName', name: strings.LAST_NAME, type: 'string' },
+  { key: 'email', name: strings.EMAIL, type: 'string' },
+  { key: 'role', name: strings.ROLE, type: 'string' },
+  { key: 'projectNames', name: strings.PROJECTS, type: 'string' },
+  { key: 'addedTime', name: strings.DATE_ADDED, type: 'date' },
 ];
 
 type OrganizationUserWithProjectName = OrganizationUser & {

@@ -39,7 +39,7 @@ import People from './components/People';
 import NewProject from './components/NewProject';
 import NewSite from './components/NewSite';
 import { getOrganizations } from './api/organization/organization';
-import NewPerson from './components/NewPerson';
+import NewPerson from './components/Person/NewPerson';
 import PersonDetails from './components/Person';
 
 // @ts-ignore

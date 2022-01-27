@@ -8,7 +8,7 @@ import TfDivisor from '../common/TfDivisor';
 import TextField from '../common/Textfield/Textfield';
 import { OrganizationUser } from 'src/types/User';
 import { getOrganizationUsers } from 'src/api/organization/organization';
-import { ProjectOfPerson } from '../NewPerson';
+import { ProjectOfPerson } from './NewPerson';
 import Table from 'src/components/common/table';
 import { TableColumnType } from '../common/table/types';
 import TableCellRenderer from './TableCellRenderer';
@@ -45,11 +45,11 @@ type PersonDetailsProps = {
 };
 
 const projectColumns: TableColumnType[] = [
-  { key: 'name', name: 'Name', type: 'string' },
-  { key: 'description', name: 'Description', type: 'string' },
-  { key: 'sites', name: 'Sites', type: 'string' },
-  { key: 'people', name: 'People', type: 'string' },
-  { key: 'role', name: 'Role', type: 'string' },
+  { key: 'name', name: strings.NAME, type: 'string' },
+  { key: 'description', name: strings.DESCRIPTION, type: 'string' },
+  { key: 'sites', name: strings.SITES, type: 'string' },
+  { key: 'people', name: strings.PEOPLE, type: 'string' },
+  { key: 'role', name: strings.ROLE, type: 'string' },
 ];
 
 export default function PersonDetails({ organization }: PersonDetailsProps): JSX.Element {
@@ -59,7 +59,7 @@ export default function PersonDetails({ organization }: PersonDetailsProps): JSX
   const [projectsOfPerson, setProjectsOfPerson] = useState<ProjectOfPerson[]>();
 
   useEffect(() => {
-    const populatePeople = async () => {
+    const populatePersonData = async () => {
       const response = await getOrganizationUsers(organization!);
       if (response.requestSucceeded) {
         const selectedUser = response.users.find((user) => user.id.toString() === personId);
@@ -67,7 +67,7 @@ export default function PersonDetails({ organization }: PersonDetailsProps): JSX
       }
     };
     if (organization) {
-      populatePeople();
+      populatePersonData();
     }
   }, [personId, organization]);
 
