@@ -41,9 +41,10 @@ const useStyles = makeStyles((theme) =>
 
 type SiteViewProps = {
   organization: ServerOrganization;
+  reloadOrganizationData: () => void;
 };
 
-export default function SiteView({ organization }: SiteViewProps): JSX.Element {
+export default function SiteView({ organization, reloadOrganizationData }: SiteViewProps): JSX.Element {
   const [nameError, setNameError] = useState('');
 
   const [record, setRecord, onChange] = useForm<Site>({ name: '', id: -1, projectId: -1 });
@@ -89,6 +90,7 @@ export default function SiteView({ organization }: SiteViewProps): JSX.Element {
       if (selectedSite) {
         const response = await updateSite({ ...record, id: selectedSite.id } as Site);
         if (response.requestSucceeded) {
+          reloadOrganizationData();
           setSnackbar({
             type: 'success',
             msg: 'Changes saved',
@@ -102,6 +104,7 @@ export default function SiteView({ organization }: SiteViewProps): JSX.Element {
       } else {
         const response = await createSite(record);
         if (response.requestSucceeded) {
+          reloadOrganizationData();
           setSnackbar({
             type: 'success',
             msg: 'Site added',
@@ -130,6 +133,7 @@ export default function SiteView({ organization }: SiteViewProps): JSX.Element {
       }
     }
     if (organization.projects && organization.projects.length) {
+      onChange('projectId', organization.projects[0].id);
       return organization.projects[0].name;
     }
     return '';

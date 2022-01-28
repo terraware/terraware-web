@@ -235,7 +235,7 @@ function AppContent() {
               </Route>
               {selectedOrganization && (
                 <Route path='/sites/new'>
-                  <NewSite organization={selectedOrganization} />
+                  <NewSite organization={selectedOrganization} reloadOrganizationData={reloadData} />
                 </Route>
               )}
               <Route exact path='/sites'>
@@ -243,7 +243,7 @@ function AppContent() {
               </Route>
               {selectedOrganization && (
                 <Route path='/sites/:siteId/edit' exact={true}>
-                  <NewSite organization={selectedOrganization} />
+                  <NewSite organization={selectedOrganization} reloadOrganizationData={reloadData} />
                 </Route>
               )}
               <Route path='/sites/:siteId'>

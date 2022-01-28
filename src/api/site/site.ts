@@ -21,7 +21,6 @@ export async function createSite(site: Site): Promise<CreateSiteResponse> {
     name: site.name,
     description: site.description,
     projectId: site.projectId,
-    location: { type: 'Point', coordinates: [1234, 1234] },
   };
   try {
     const serverResponse: CreateSiteResponsePayload = (await axios.post(SITES, createSiteRequestPayload)).data;
@@ -52,7 +51,6 @@ export async function updateSite(site: Site): Promise<SimpleResponse> {
   const updateSiteRequestPayload: UpdateSiteRequestPayload = {
     name: site.name,
     description: site.description,
-    location: { type: 'Point', coordinates: [site.longitude ?? 1234, site.latitude ?? 1234] },
   };
   try {
     await axios.put(SITE.replace('{siteId}', site.id.toString()), updateSiteRequestPayload);
