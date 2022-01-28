@@ -25,6 +25,7 @@ import Icon from '../common/icon/Icon';
 import RemovedPeopleOrSitesModal from './RemovedPeopleOrSitesModal';
 import MoveSiteModal from './MoveSiteModal';
 import axios from 'axios';
+import { updateSite } from 'src/api/site/site';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -117,7 +118,7 @@ export default function ProjectView({ organization, reloadOrganizationData }: Pr
   const [removedPeople, setRemovedPeople] = useState<OrganizationUser[]>();
   const [modifiedSites, setModifiedSites] = useState<Site[]>();
 
-  const [newProject, setNewProject, onChange] = useForm<Project>({ id: -1, name: '' });
+  const [newProject, setNewProject, onChange] = useForm<Project>({ id: -1, name: '', organizationId: -1 });
   const setSnackbar = useSetRecoilState(snackbarAtom);
   const history = useHistory();
 
@@ -129,6 +130,7 @@ export default function ProjectView({ organization, reloadOrganizationData }: Pr
       startDate: projectSelected?.startDate,
       status: projectSelected?.status,
       types: projectSelected?.types,
+      organizationId: organization.id,
     });
   }, [projectSelected, setNewProject, organization]);
 
@@ -210,6 +212,15 @@ export default function ProjectView({ organization, reloadOrganizationData }: Pr
   const saveExistingProject = async () => {
     if (projectSelected) {
       const response = await updateProject({ ...newProject, id: projectSelected.id } as Project);
+      let allSitesOk = true;
+      if (modifiedSites) {
+        modifiedSites.forEach(async (site) => {
+          const siteResponse = await updateSite(site);
+          if (!siteResponse.requestSucceeded) {
+            allSitesOk = false;
+          }
+        });
+      }
       let allNewPeopleResponsesOk = true;
       let allRemovedPeopleResponsesOk = true;
       peopleOnProject?.forEach(async (person) => {
@@ -226,7 +237,7 @@ export default function ProjectView({ organization, reloadOrganizationData }: Pr
           allRemovedPeopleResponsesOk = false;
         }
       });
-      if (response.requestSucceeded && allNewPeopleResponsesOk && allRemovedPeopleResponsesOk) {
+      if (response.requestSucceeded && allNewPeopleResponsesOk && allRemovedPeopleResponsesOk && allSitesOk) {
         reloadOrganizationData();
         setSnackbar({
           type: 'success',

@@ -34,6 +34,7 @@ export async function createProject(project: Project, organizationId: number): P
       startDate: serverResponse.project.startDate,
       status: serverResponse.project.status,
       types: serverResponse.project.types,
+      organizationId: serverResponse.project.organizationId,
     };
   } catch {
     response.requestSucceeded = false;
@@ -87,6 +88,41 @@ export async function updateProjectUser(
     const serverResponse: SimpleSuccessResponsePayload = (await operation(url)).data;
     if (serverResponse.status === 'error') {
       response.requestSucceeded = false;
+    }
+  } catch {
+    response.requestSucceeded = false;
+  }
+  return response;
+}
+
+type ListAllProjectsResponse = {
+  requestSucceeded: boolean;
+  projects: Project[] | null;
+};
+type ListProjectsResponsePayload = paths[typeof PROJECTS]['get']['responses'][200]['content']['application/json'];
+export async function listAllProjects(): Promise<ListAllProjectsResponse> {
+  const response: ListAllProjectsResponse = {
+    requestSucceeded: true,
+    projects: null,
+  };
+  try {
+    const serverResponse: ListProjectsResponsePayload = (await axios.get(`${PROJECTS}?totalUsers=true`)).data;
+    if (serverResponse.status === 'error') {
+      response.requestSucceeded = false;
+    } else {
+      response.projects = serverResponse.projects.map((project) => {
+        return {
+          id: project.id,
+          name: project.name,
+          description: project.description,
+          startDate: project.startDate,
+          status: project.status,
+          types: project.types,
+          sites: project.sites,
+          totalUsers: project.totalUsers,
+          organizationId: project.organizationId,
+        };
+      });
     }
   } catch {
     response.requestSucceeded = false;
