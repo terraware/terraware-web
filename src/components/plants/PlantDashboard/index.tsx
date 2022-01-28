@@ -187,13 +187,19 @@ export default function PlantDashboard(props: PlantDashboardProps): JSX.Element 
                 </Grid>
               </Grid>
             </Grid>
-          ) : (
+          ) : ['Admin', 'Manager', 'Owner'].includes(organization?.role || '') ? (
             <EmptyMessage
               className={classes.message}
               title={strings.PLANTS_EMPTY_MSG_TITLE}
               text={strings.PLANTS_EMPTY_MSG_BODY}
               buttonText={strings.GO_TO_PROJECTS}
               onClick={goToProjects}
+            />
+          ) : (
+            <EmptyMessage
+              className={classes.message}
+              title={strings.CHECK_BACK_LATER}
+              text={strings.EMPTY_MESSAGE_CONTRIBUTOR}
             />
           )}
         </Grid>

@@ -389,6 +389,9 @@ const strings = new LocalizedStrings({
     TERRAWARE_MOBILE_APP_INFO_MSG:
       'Our Terraware mobile app is used to collect in-field plant data and is still in beta testing. To be the first to try it out, send us a request.',
     REQUEST_MOBILE_APP: 'Request Mobile App',
+    CHECK_BACK_LATER: 'Please check back later.',
+    EMPTY_MESSAGE_CONTRIBUTOR:
+      'Once your administrator has created a project and site, you’ll be able to access your data.',
   },
 });
 
