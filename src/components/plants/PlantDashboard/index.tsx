@@ -141,52 +141,52 @@ export default function PlantDashboard(props: PlantDashboardProps): JSX.Element 
               />
             )}
           </Grid>
-          {organization?.projects?.length && (
-            <Grid item xs={isFullscreen ? 12 : 6}>
-              <React.Suspense fallback={strings.LOADING}>
-                <PlantMap
-                  onFullscreen={onFullscreenHandler}
-                  isFullscreen={isFullscreen}
-                  plants={plants}
-                  speciesById={speciesById}
-                  colorsBySpeciesId={colorsBySpeciesId}
-                  reloadData={reloadData}
-                />
-              </React.Suspense>
-            </Grid>
-          )}
           {organization?.projects?.length ? (
-            <Grid item xs={isFullscreen ? 12 : 6}>
-              <Grid container>
-                <Grid item xs={12}>
-                  <TableContainer component={Paper}>
-                    <Table aria-label='simple table'>
-                      <TableBody>
-                        <ErrorBoundary>
-                          <React.Suspense fallback={strings.LOADING}>
-                            <SummaryCount summary={plantSummariesByLayerId} />
-                          </React.Suspense>
-                        </ErrorBoundary>
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
-                </Grid>
-                <Grid item xs={12}>
-                  <Paper className={classes.mapContainer}>
-                    <ErrorBoundary>
-                      <React.Suspense fallback={strings.LOADING}>
-                        <SpeciesSummaryChart
-                          plantSummariesByLayerId={plantSummariesByLayerId}
-                          speciesById={speciesById}
-                          colorsBySpeciesId={colorsBySpeciesId}
-                          isFullscreen={isFullscreen}
-                        />
-                      </React.Suspense>
-                    </ErrorBoundary>
-                  </Paper>
+            <>
+              <Grid item xs={isFullscreen ? 12 : 6}>
+                <React.Suspense fallback={strings.LOADING}>
+                  <PlantMap
+                    onFullscreen={onFullscreenHandler}
+                    isFullscreen={isFullscreen}
+                    plants={plants}
+                    speciesById={speciesById}
+                    colorsBySpeciesId={colorsBySpeciesId}
+                    reloadData={reloadData}
+                  />
+                </React.Suspense>
+              </Grid>
+              <Grid item xs={isFullscreen ? 12 : 6}>
+                <Grid container>
+                  <Grid item xs={12}>
+                    <TableContainer component={Paper}>
+                      <Table aria-label='simple table'>
+                        <TableBody>
+                          <ErrorBoundary>
+                            <React.Suspense fallback={strings.LOADING}>
+                              <SummaryCount summary={plantSummariesByLayerId} />
+                            </React.Suspense>
+                          </ErrorBoundary>
+                        </TableBody>
+                      </Table>
+                    </TableContainer>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Paper className={classes.mapContainer}>
+                      <ErrorBoundary>
+                        <React.Suspense fallback={strings.LOADING}>
+                          <SpeciesSummaryChart
+                            plantSummariesByLayerId={plantSummariesByLayerId}
+                            speciesById={speciesById}
+                            colorsBySpeciesId={colorsBySpeciesId}
+                            isFullscreen={isFullscreen}
+                          />
+                        </React.Suspense>
+                      </ErrorBoundary>
+                    </Paper>
+                  </Grid>
                 </Grid>
               </Grid>
-            </Grid>
+            </>
           ) : (
             <EmptyMessage
               className={classes.message}
