@@ -48,7 +48,7 @@ const projectColumns: TableColumnType[] = [
   { key: 'name', name: strings.NAME, type: 'string' },
   { key: 'description', name: strings.DESCRIPTION, type: 'string' },
   { key: 'sites', name: strings.SITES, type: 'string' },
-  { key: 'people', name: strings.PEOPLE, type: 'string' },
+  { key: 'totalUsers', name: strings.PEOPLE, type: 'string' },
   { key: 'role', name: strings.ROLE, type: 'string' },
 ];
 

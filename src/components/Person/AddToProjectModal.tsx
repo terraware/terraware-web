@@ -38,6 +38,7 @@ const projectColumns: TableColumnType[] = [
   { key: 'name', name: 'Name', type: 'string' },
   { key: 'decription', name: 'Description', type: 'string' },
   { key: 'sites', name: 'Sites', type: 'string' },
+  { key: 'totalUsers', name: 'People', type: 'string' },
 ];
 
 export default function AddPeopleDialog(props: AddPeopleDialogProps): JSX.Element {

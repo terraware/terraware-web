@@ -18,6 +18,7 @@ import { useSetRecoilState } from 'recoil';
 import ErrorBox from '../common/ErrorBox/ErrorBox';
 import { getOrganizationUsers } from 'src/api/organization/organization';
 import TableCellRenderer from './TableCellRenderer';
+import { listAllProjects } from 'src/api/project/project';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -85,7 +86,7 @@ const projectColumns: TableColumnType[] = [
   { key: 'name', name: strings.NAME, type: 'string' },
   { key: 'description', name: strings.DESCRIPTION, type: 'string' },
   { key: 'sites', name: strings.SITES, type: 'string' },
-  { key: 'people', name: strings.PEOPLE, type: 'string' },
+  { key: 'totalUsers', name: strings.PEOPLE, type: 'string' },
   { key: 'role', name: strings.ROLE, type: 'string' },
 ];
 
@@ -113,6 +114,7 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
   const setSnackbar = useSetRecoilState(snackbarAtom);
   const [repeatedEmail, setRepeatedEmail] = useState('');
   const [people, setPeople] = useState<OrganizationUser[]>();
+  const [allProjects, setAllProjects] = useState<Project[]>();
 
   const [newPerson, , onChange] = useForm<OrganizationUser>({
     id: -1,
@@ -126,6 +128,16 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
   }, [projectsOfPerson, newPerson.role]);
 
   useEffect(() => {
+    const populateAllProjects = async () => {
+      const response = await listAllProjects();
+      if (response.requestSucceeded && organization) {
+        const allProjects = response.projects?.filter((project) => project.organizationId === organization.id);
+        const projectsWithTotalUsers = organization.projects?.map((orgProj) => {
+          return { ...orgProj, totalUsers: allProjects?.find((pro) => pro.id === orgProj.id)?.totalUsers };
+        });
+        setAllProjects(projectsWithTotalUsers);
+      }
+    };
     const populatePeople = async () => {
       if (organization) {
         const response = await getOrganizationUsers(organization);
@@ -136,6 +148,7 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
     };
     if (organization) {
       populatePeople();
+      populateAllProjects();
     }
   }, [organization]);
 
@@ -193,9 +206,9 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
   const getProjectsNotOfPerson = () => {
     if (projectsOfPerson) {
       const projectsOfPersonIds = projectsOfPerson.map((project) => project.id);
-      return organization?.projects?.filter((project) => !projectsOfPersonIds.includes(project.id));
+      return allProjects?.filter((project) => !projectsOfPersonIds.includes(project.id));
     }
-    return organization?.projects;
+    return allProjects;
   };
 
   const goToProfile = () => {

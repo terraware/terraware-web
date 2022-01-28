@@ -8,6 +8,8 @@ export type Project = {
   status?: ProjectStatus;
   types?: ProjectTypes[];
   sites?: Site[];
+  totalUsers?: number;
+  organizationId: number;
 };
 
 export type ProjectStatus = 'Propagating' | 'Planting' | 'Completed/Monitoring' | undefined;

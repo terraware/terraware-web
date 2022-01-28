@@ -118,7 +118,7 @@ export default function ProjectView({ organization, reloadOrganizationData }: Pr
   const [removedPeople, setRemovedPeople] = useState<OrganizationUser[]>();
   const [modifiedSites, setModifiedSites] = useState<Site[]>();
 
-  const [newProject, setNewProject, onChange] = useForm<Project>({ id: -1, name: '' });
+  const [newProject, setNewProject, onChange] = useForm<Project>({ id: -1, name: '', organizationId: -1 });
   const setSnackbar = useSetRecoilState(snackbarAtom);
   const history = useHistory();
 
@@ -130,6 +130,7 @@ export default function ProjectView({ organization, reloadOrganizationData }: Pr
       startDate: projectSelected?.startDate,
       status: projectSelected?.status,
       types: projectSelected?.types,
+      organizationId: organization.id,
     });
   }, [projectSelected, setNewProject, organization]);
 
