@@ -131,9 +131,9 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
     const populateAllProjects = async () => {
       const response = await listAllProjects();
       if (response.requestSucceeded && organization) {
-        const allProjects = response.projects?.filter((project) => project.organizationId === organization.id);
+        const allProjectsServer = response.projects?.filter((project) => project.organizationId === organization.id);
         const projectsWithTotalUsers = organization.projects?.map((orgProj) => {
-          return { ...orgProj, totalUsers: allProjects?.find((pro) => pro.id === orgProj.id)?.totalUsers };
+          return { ...orgProj, totalUsers: allProjectsServer?.find((pro) => pro.id === orgProj.id)?.totalUsers };
         });
         setAllProjects(projectsWithTotalUsers);
       }

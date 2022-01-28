@@ -2,7 +2,7 @@ import { Container, createStyles, Grid, makeStyles } from '@material-ui/core';
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import strings from 'src/strings';
-import { ServerOrganization } from 'src/types/Organization';
+import { Project, ServerOrganization } from 'src/types/Organization';
 import Icon from '../common/icon/Icon';
 import TfDivisor from '../common/TfDivisor';
 import TextField from '../common/Textfield/Textfield';
@@ -12,6 +12,7 @@ import { ProjectOfPerson } from './NewPerson';
 import Table from 'src/components/common/table';
 import { TableColumnType } from '../common/table/types';
 import TableCellRenderer from './TableCellRenderer';
+import { listAllProjects } from 'src/api/project/project';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -57,6 +58,7 @@ export default function PersonDetails({ organization }: PersonDetailsProps): JSX
   const { personId } = useParams<{ personId: string }>();
   const [person, setPerson] = useState<OrganizationUser>();
   const [projectsOfPerson, setProjectsOfPerson] = useState<ProjectOfPerson[]>();
+  const [allProjects, setAllProjects] = useState<Project[]>();
 
   useEffect(() => {
     const populatePersonData = async () => {
@@ -66,18 +68,29 @@ export default function PersonDetails({ organization }: PersonDetailsProps): JSX
         setPerson(selectedUser);
       }
     };
+    const populateAllProjects = async () => {
+      const response = await listAllProjects();
+      if (response.requestSucceeded && organization) {
+        const allProjectsServer = response.projects?.filter((project) => project.organizationId === organization.id);
+        const projectsWithTotalUsers = organization.projects?.map((orgProj) => {
+          return { ...orgProj, totalUsers: allProjectsServer?.find((pro) => pro.id === orgProj.id)?.totalUsers };
+        });
+        setAllProjects(projectsWithTotalUsers);
+      }
+    };
     if (organization) {
       populatePersonData();
+      populateAllProjects();
     }
   }, [personId, organization]);
 
   useEffect(() => {
     const projects = person?.projectIds.map((projectId) => {
-      const found = organization?.projects?.find((project) => project.id === projectId);
+      const found = allProjects?.find((project) => project.id === projectId);
       return { ...found, role: person.role } as ProjectOfPerson;
     });
     setProjectsOfPerson(projects);
-  }, [person, organization?.projects]);
+  }, [person, organization?.projects, allProjects]);
 
   const getDateAdded = () => {
     if (person?.addedTime) {
