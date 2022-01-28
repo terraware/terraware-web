@@ -17,6 +17,8 @@ import Title from 'src/components/common/Title';
 import { getPlantLayers } from 'src/api/organization/organization';
 import { getSelectedSites } from 'src/utils/organization';
 import { plantListSelectedOrgInfo } from 'src/state/selectedOrgInfoPerPage';
+import EmptyMessage from '../../common/EmptyMessage';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -36,6 +38,11 @@ const useStyles = makeStyles((theme) =>
     buttonSpacing: {
       marginLeft: theme.spacing(1),
     },
+    message: {
+      margin: '0 auto',
+      width: '50%',
+      marginTop: '10%',
+    },
   })
 );
 
@@ -47,6 +54,7 @@ type PlantListProps = {
 
 export default function PlantList(props: PlantListProps): JSX.Element {
   const classes = useStyles();
+  const history = useHistory();
   const { organization, filters, setFilters } = props;
   const [speciesById, setSpeciesById] = useState<SpeciesById>(new Map());
   const [plants, setPlants] = useState<Plant[]>([]);
@@ -129,6 +137,13 @@ export default function PlantList(props: PlantListProps): JSX.Element {
     fetchPlantsAndSpecies();
   };
 
+  const goToProjects = () => {
+    const projectsLocation = {
+      pathname: `/projects`,
+    };
+    history.push(projectsLocation);
+  };
+
   return (
     <main>
       {selectedPlant && organization && (
@@ -154,35 +169,57 @@ export default function PlantList(props: PlantListProps): JSX.Element {
               selectedOrgInfo={selectedOrgInfo}
             />
           </Grid>
-          <Grid item xs={1} />
-          <Grid item xs={11}>
-            <IconButton
-              id='show-filters'
-              aria-label='filter'
-              onClick={() => setShowFilters(!showFilters)}
-              className={classes.filtersButton}
-            >
-              <TuneIcon className={classes.filtersIcon} />
-              <Typography variant='h6'>{strings.FILTERS}</Typography>
-            </IconButton>
+          <Grid item xs={12}>
+            {!plants.length && (
+              <EmptyMessage
+                title={strings.COLLECT_IN_FIELD_PLANT_DATA}
+                text={strings.TERRAWARE_MOBILE_APP_INFO_MSG}
+                buttonText={strings.REQUEST_MOBILE_APP}
+                onClick={goToProjects}
+              />
+            )}
           </Grid>
-          {showFilters && (
-            <PlantFilterBar
-              speciesNames={getSpeciesNames()}
-              filters={filters}
-              onApplyFilters={setFilters}
-              onClearFilters={() => setFilters(undefined)}
+          {organization?.projects?.length ? (
+            <>
+              <Grid item xs={1} />
+              <Grid item xs={11}>
+                <IconButton
+                  id='show-filters'
+                  aria-label='filter'
+                  onClick={() => setShowFilters(!showFilters)}
+                  className={classes.filtersButton}
+                >
+                  <TuneIcon className={classes.filtersIcon} />
+                  <Typography variant='h6'>{strings.FILTERS}</Typography>
+                </IconButton>
+              </Grid>
+              {showFilters && (
+                <PlantFilterBar
+                  speciesNames={getSpeciesNames()}
+                  filters={filters}
+                  onApplyFilters={setFilters}
+                  onClearFilters={() => setFilters(undefined)}
+                />
+              )}
+              <Grid item xs={1} />
+              <Grid item xs={10}>
+                <Paper className={classes.mainContent}>
+                  <React.Suspense fallback={strings.LOADING}>
+                    <PlantListContent plants={plants} speciesById={speciesById} selectPlant={selectPlant} />
+                  </React.Suspense>
+                </Paper>
+              </Grid>
+              <Grid item xs={1} />
+            </>
+          ) : (
+            <EmptyMessage
+              className={classes.message}
+              title={strings.PLANTS_EMPTY_MSG_TITLE}
+              text={strings.PLANTS_EMPTY_MSG_BODY}
+              buttonText={strings.GO_TO_PROJECTS}
+              onClick={goToProjects}
             />
           )}
-          <Grid item xs={1} />
-          <Grid item xs={10}>
-            <Paper className={classes.mainContent}>
-              <React.Suspense fallback={strings.LOADING}>
-                <PlantListContent plants={plants} speciesById={speciesById} selectPlant={selectPlant} />
-              </React.Suspense>
-            </Paper>
-          </Grid>
-          <Grid item xs={1} />
         </Grid>
       </Container>
     </main>
