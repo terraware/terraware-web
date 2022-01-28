@@ -497,6 +497,16 @@ export interface components {
       resp: components["schemas"]["ObservationResponse"];
       status: components["schemas"]["SuccessOrError"];
     };
+    CreateOrganizationRequestPayload: {
+      /** ISO 3166 alpha-2 code of organization's country. */
+      countryCode?: string;
+      /** ISO 3166-2 code of organization's country subdivision (state, province, region, etc.) This is the full ISO 3166-2 code including the country prefix. If this is set, countryCode must also be set. */
+      countrySubdivisionCode?: string;
+      /** If true or not specified, create a project, site, and seed bank facility automatically. */
+      createSeedBank?: boolean;
+      description?: string;
+      name: string;
+    };
     CreatePlantRequestPayload: {
       featureId: number;
       label?: string;
@@ -523,7 +533,7 @@ export interface components {
     };
     CreateSiteRequestPayload: {
       description?: string;
-      location: components["schemas"]["Point"];
+      location?: components["schemas"]["Point"];
       locale?: string;
       name: string;
       projectId: number;
@@ -1072,12 +1082,18 @@ export interface components {
     ProjectPayload: {
       createdTime: string;
       description?: string;
+      /** If true, the project and its associated sites and facilities should not be displayed to end users. */
+      hidden: boolean;
       id: number;
       name: string;
       organizationId: number;
+      /** If false, the project is accessible by the entire organization and users may not be added. If true, the project is only accessible by users who are specifically added to it (as well as to admins and owners). */
+      organizationWide: boolean;
       sites?: components["schemas"]["SiteElement"][];
       startDate?: string;
       status?: "Propagating" | "Planting" | "Completed/Monitoring";
+      /** Total number of users with access to the project. This includes administrators, who have access to all the organization's projects. Only included if the client specifically requested it. */
+      totalUsers?: number;
       types?: (
         | "Native Forest Restoration"
         | "Agroforestry"
@@ -1173,7 +1189,7 @@ export interface components {
       id: number;
       name: string;
       projectId: number;
-      location: components["schemas"]["Point"];
+      location?: components["schemas"]["Point"];
       locale?: string;
       timezone?: string;
       facilities?: components["schemas"]["FacilityPayload"][];
@@ -1425,9 +1441,11 @@ export interface components {
     };
     UpdateSiteRequestPayload: {
       description?: string;
-      location: components["schemas"]["Point"];
+      location?: components["schemas"]["Point"];
       locale?: string;
       name: string;
+      /** If present, move the site to this project. Project must be owned by the same organization as the site's current project. User must have permission to add sites to the new project and remove them from the existing one. */
+      projectId?: number;
       timezone?: string;
     };
     UpdateUserRequestPayload: {
@@ -2276,7 +2294,7 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["UpdateOrganizationRequestPayload"];
+        "application/json": components["schemas"]["CreateOrganizationRequestPayload"];
       };
     };
   };
@@ -2323,6 +2341,9 @@ export interface operations {
     parameters: {
       path: {
         organizationId: number;
+      };
+      query: {
+        totalUsers?: boolean;
       };
     };
     responses: {
@@ -2443,6 +2464,11 @@ export interface operations {
     };
   };
   listAllProjects: {
+    parameters: {
+      query: {
+        totalUsers?: boolean;
+      };
+    };
     responses: {
       /** OK */
       200: {
@@ -2471,6 +2497,9 @@ export interface operations {
     parameters: {
       path: {
         id: number;
+      };
+      query: {
+        totalUsers?: boolean;
       };
     };
     responses: {
@@ -2554,7 +2583,7 @@ export interface operations {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
-      /** The user is already a member of the project. */
+      /** The user is already a member of the project, or the project is organization-wide. */
       409: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
