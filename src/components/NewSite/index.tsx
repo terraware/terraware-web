@@ -10,6 +10,7 @@ import { useSetRecoilState } from 'recoil';
 import snackbarAtom from 'src/state/snackbar';
 import FormBottomBar from '../common/FormBottomBar';
 import { getAllSitesWithProjectName } from 'src/utils/organization';
+import { createSite, updateSite } from 'src/api/site/site';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -40,9 +41,10 @@ const useStyles = makeStyles((theme) =>
 
 type SiteViewProps = {
   organization: ServerOrganization;
+  reloadOrganizationData: () => void;
 };
 
-export default function SiteView({ organization }: SiteViewProps): JSX.Element {
+export default function SiteView({ organization, reloadOrganizationData }: SiteViewProps): JSX.Element {
   const [nameError, setNameError] = useState('');
 
   const [record, setRecord, onChange] = useForm<Site>({ name: '', id: -1, projectId: -1 });
@@ -81,37 +83,38 @@ export default function SiteView({ organization }: SiteViewProps): JSX.Element {
     history.push(sitesLocation);
   };
 
-  const saveSite = () => {
+  const saveSite = async () => {
     if (record.name === '') {
       setNameError('Required Field');
     } else {
       if (selectedSite) {
-        // We can uncomment this once the backend functionality is in place
-        // const response = await updateSite({ ...record, id: selectedSite.id } as Site);
-        // if (response.requestSucceeded) {
-        setSnackbar({
-          type: 'success',
-          msg: 'Changes saved',
-        });
-        // } else {
-        //   setSnackbar({
-        //     type: 'delete',
-        //     msg: strings.GENERIC_ERROR,
-        //   });
-        // }
+        const response = await updateSite({ ...record, id: selectedSite.id } as Site);
+        if (response.requestSucceeded) {
+          reloadOrganizationData();
+          setSnackbar({
+            type: 'success',
+            msg: 'Changes saved',
+          });
+        } else {
+          setSnackbar({
+            type: 'delete',
+            msg: strings.GENERIC_ERROR,
+          });
+        }
       } else {
-        // const response = await createSite(record);
-        // if (response.requestSucceeded) {
-        setSnackbar({
-          type: 'success',
-          msg: 'Project added',
-        });
-        // } else {
-        //   setSnackbar({
-        //     type: 'delete',
-        //     msg: strings.GENERIC_ERROR,
-        //   });
-        // }
+        const response = await createSite(record);
+        if (response.requestSucceeded) {
+          reloadOrganizationData();
+          setSnackbar({
+            type: 'success',
+            msg: 'Site added',
+          });
+        } else {
+          setSnackbar({
+            type: 'delete',
+            msg: strings.GENERIC_ERROR,
+          });
+        }
       }
       goToSites();
     }
@@ -120,6 +123,20 @@ export default function SiteView({ organization }: SiteViewProps): JSX.Element {
   const findProjectById = (projectId: number) => {
     const foundProject = organization?.projects?.find((project) => project.id === projectId);
     return foundProject?.name;
+  };
+
+  const selectedProject = () => {
+    if (record.projectId !== -1) {
+      const project = findProjectById(record.projectId);
+      if (project) {
+        return project;
+      }
+    }
+    if (organization.projects && organization.projects.length) {
+      onChange('projectId', organization.projects[0].id);
+      return organization.projects[0].name;
+    }
+    return '';
   };
 
   return (
@@ -155,7 +172,7 @@ export default function SiteView({ organization }: SiteViewProps): JSX.Element {
               label={strings.PROJECT}
               onChange={onChangeProject}
               options={organization.projects?.map((project) => project.name)}
-              selectedValue={record.projectId ? findProjectById(record.projectId) : ''}
+              selectedValue={selectedProject()}
             />
           </Grid>
         </Grid>

@@ -3,6 +3,7 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { getOrganizationUsers } from 'src/api/organization/organization';
 import Button from 'src/components/common/button/Button';
 import Table from 'src/components/common/table';
@@ -32,12 +33,12 @@ const useStyles = makeStyles((theme) =>
 );
 
 const columns: TableColumnType[] = [
-  { key: 'firstName', name: 'Frist Name', type: 'string' },
-  { key: 'firstName', name: 'Frist Name', type: 'string' },
-  { key: 'email', name: 'Email', type: 'string' },
-  { key: 'role', name: 'Role', type: 'string' },
-  { key: 'projectNames', name: 'Projects', type: 'string' },
-  { key: 'addedTime', name: 'Date Added', type: 'date' },
+  { key: 'firstName', name: strings.FIRST_NAME, type: 'string' },
+  { key: 'lastName', name: strings.LAST_NAME, type: 'string' },
+  { key: 'email', name: strings.EMAIL, type: 'string' },
+  { key: 'role', name: strings.ROLE, type: 'string' },
+  { key: 'projectNames', name: strings.PROJECTS, type: 'string' },
+  { key: 'addedTime', name: strings.DATE_ADDED, type: 'date' },
 ];
 
 type OrganizationUserWithProjectName = OrganizationUser & {
@@ -50,10 +51,16 @@ type PeopleListProps = {
 
 export default function PeopleList({ organization }: PeopleListProps): JSX.Element {
   const classes = useStyles();
+  const history = useHistory();
   const [people, setPeople] = useState<OrganizationUserWithProjectName[]>();
 
   const onSelect = (selected: OrganizationUser) => {
-    return true;
+    if (selected.id) {
+      const personLocation = {
+        pathname: `/people/${selected.id}`,
+      };
+      history.push(personLocation);
+    }
   };
 
   useEffect(() => {
@@ -98,6 +105,13 @@ export default function PeopleList({ organization }: PeopleListProps): JSX.Eleme
     }
   }, [organization]);
 
+  const goToNewPerson = () => {
+    const newPersonLocation = {
+      pathname: `/people/new`,
+    };
+    history.push(newPersonLocation);
+  };
+
   return (
     <main>
       <Container maxWidth={false} className={classes.mainContainer}>
@@ -109,13 +123,7 @@ export default function PeopleList({ organization }: PeopleListProps): JSX.Eleme
           </Grid>
           <Grid item xs={6} />
           <Grid item xs={2} className={classes.centered}>
-            <Button
-              id='new-person'
-              label={strings.ADD_PERSON}
-              onClick={() => {
-                return true;
-              }}
-            />
+            <Button id='new-person' label={strings.ADD_PERSON} onClick={goToNewPerson} />
           </Grid>
           <Grid item xs={1} />
           <Grid item xs={1} />

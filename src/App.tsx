@@ -41,6 +41,8 @@ import NewSite from './components/NewSite';
 import Organization from './components/Organization';
 import EditOrganization from './components/EditOrganization';
 import { getOrganizations } from './api/organization/organization';
+import NewPerson from './components/Person/NewPerson';
+import PersonDetails from './components/Person';
 
 // @ts-ignore
 mapboxgl.workerClass =
@@ -233,7 +235,7 @@ function AppContent() {
               </Route>
               {selectedOrganization && (
                 <Route path='/sites/new'>
-                  <NewSite organization={selectedOrganization} />
+                  <NewSite organization={selectedOrganization} reloadOrganizationData={reloadData} />
                 </Route>
               )}
               <Route exact path='/sites'>
@@ -241,7 +243,7 @@ function AppContent() {
               </Route>
               {selectedOrganization && (
                 <Route path='/sites/:siteId/edit' exact={true}>
-                  <NewSite organization={selectedOrganization} />
+                  <NewSite organization={selectedOrganization} reloadOrganizationData={reloadData} />
                 </Route>
               )}
               <Route path='/sites/:siteId'>
@@ -250,8 +252,16 @@ function AppContent() {
               <Route path='/help' component={Help}>
                 <Help />
               </Route>
-              <Route path='/people'>
+              {selectedOrganization && (
+                <Route path='/people/new'>
+                  <NewPerson organization={selectedOrganization} reloadOrganizationData={reloadData} />
+                </Route>
+              )}
+              <Route exact path='/people'>
                 <People organization={selectedOrganization} />
+              </Route>
+              <Route path='/people/:personId'>
+                <PersonDetails organization={selectedOrganization} />
               </Route>
               {selectedOrganization && (
                 <Route path='/organization/edit' exact={true}>

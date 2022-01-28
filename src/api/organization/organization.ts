@@ -73,6 +73,8 @@ const parseProject = (project: ServerProject): Project => {
     status: project.status,
     types: project.types,
     sites: project.sites?.map((site) => parseSite(site)),
+    organizationId: project.organizationId,
+    totalUsers: project.totalUsers,
   };
   return parsedProject;
 };
