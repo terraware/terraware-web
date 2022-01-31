@@ -117,6 +117,10 @@ export default function PlantDashboard(props: PlantDashboardProps): JSX.Element 
     history.push(projectsLocation);
   };
 
+  const getOrganizationProjects = () => {
+    return organization?.projects?.filter((proj) => proj.name !== 'Seed Bank') || [];
+  };
+
   return (
     <main>
       <Container maxWidth={false} className={classes.mainContainer}>
@@ -125,14 +129,14 @@ export default function PlantDashboard(props: PlantDashboardProps): JSX.Element 
             <Title
               page={strings.DASHBOARD}
               parentPage={strings.PLANTS}
-              organization={organization}
+              organization={!!getOrganizationProjects().length ? organization : undefined}
               allowAll={true}
               selectedOrgInfo={selectedOrgInfo}
               onChangeSelectedOrgInfo={(newValues) => setSelectedOrgInfo(newValues)}
             />
           </Grid>
           <Grid item xs={12}>
-            {!!organization?.projects?.length && !plantSummariesByLayerId.size && (
+            {!!getOrganizationProjects().length && !plantSummariesByLayerId.size && (
               <EmptyMessage
                 title={strings.COLLECT_IN_FIELD_PLANT_DATA}
                 text={strings.TERRAWARE_MOBILE_APP_INFO_MSG}

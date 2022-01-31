@@ -144,6 +144,10 @@ export default function PlantList(props: PlantListProps): JSX.Element {
     history.push(projectsLocation);
   };
 
+  const getOrganizationProjects = () => {
+    return organization?.projects?.filter((proj) => proj.name !== 'Seed Bank') || [];
+  };
+
   return (
     <main>
       {selectedPlant && organization && (
@@ -163,14 +167,14 @@ export default function PlantList(props: PlantListProps): JSX.Element {
             <Title
               page={strings.PLANTS}
               parentPage={strings.PLANTS}
-              organization={organization}
+              organization={!!getOrganizationProjects().length ? organization : undefined}
               allowAll={true}
               onChangeSelectedOrgInfo={(newValues) => setSelectedOrgInfo(newValues)}
               selectedOrgInfo={selectedOrgInfo}
             />
           </Grid>
           <Grid item xs={12}>
-            {!!organization?.projects?.length && !plants.length && (
+            {!!getOrganizationProjects().length && !plants.length && (
               <EmptyMessage
                 title={strings.COLLECT_IN_FIELD_PLANT_DATA}
                 text={strings.TERRAWARE_MOBILE_APP_INFO_MSG}
@@ -179,7 +183,7 @@ export default function PlantList(props: PlantListProps): JSX.Element {
               />
             )}
           </Grid>
-          {!!organization?.projects?.length ? (
+          {!!getOrganizationProjects().length ? (
             <>
               <Grid item xs={1} />
               <Grid item xs={11}>

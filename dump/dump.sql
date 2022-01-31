@@ -2221,6 +2221,7 @@ COPY public.devices (id, facility_id, name, device_type, make, model, protocol, 
 COPY public.facilities (id, site_id, type_id, name, latitude, longitude, enabled) FROM stdin;
 100	10	1	Seed Bank	\N	\N	t
 101	10	1	garage	\N	\N	t
+102	10	1	Test facility	\N	\N	t
 \.
 
 
@@ -2585,6 +2586,7 @@ COPY public.project_users (user_id, project_id, created_time, modified_time) FRO
 
 COPY public.projects (id, organization_id, name, description, location, type_id, status_id, start_date, end_date, created_time, modified_time, disabled_time, pm_user_id) FROM stdin;
 10	1	Seed Bank	\N	\N	\N	\N	\N	\N	2021-12-15 09:59:59.073925-08	2021-12-15 09:59:59.073925-08	\N	\N
+11	1	Test Project	\N	\N	\N	\N	\N	\N	2021-12-15 09:59:59.073925-08	2021-12-15 09:59:59.073925-08	\N	\N
 \.
 
 
@@ -2631,6 +2633,7 @@ COPY public.seed_quantity_units (id, name) FROM stdin;
 
 COPY public.sites (id, name, locale, timezone, enabled, project_id, location, created_time, modified_time) FROM stdin;
 10	Seed Bank	en-US	US/Pacific	t	10	01010000A0110F00002C2CB81FF074374025581CCEFCB058C00000000000000000	2021-12-15 09:59:59.075471-08	2021-12-15 09:59:59.075471-08
+11	Test Site	en-US	US/Pacific	t	11	01010000A0110F00002C2CB81FF074374025581CCEFCB058C00000000000000000	2021-12-15 09:59:59.075471-08	2021-12-15 09:59:59.075471-08
 \.
 
 

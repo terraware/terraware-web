@@ -48,7 +48,7 @@ layerId=$(curl 'http://localhost:8080/api/v1/gis/layers' \
   --cookie "${COOKIE}"  \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
-  --data '{"siteId":10, "layerType": "Plants Planted", "tileSetName": "Some tile set name", "proposed": "false", "hidden": "false"}' | jq -r '.layer.id')
+  --data '{"siteId":11, "layerType": "Plants Planted", "tileSetName": "Some tile set name", "proposed": "false", "hidden": "false"}' | jq -r '.layer.id')
 
 echo "---- E2E: adding features/plants/photos records ----"
 featureId=$(curl 'http://localhost:8080/api/v1/gis/features' \
