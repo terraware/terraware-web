@@ -62,7 +62,7 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
   const [, setPopulateSummaryInterval] = useState<ReturnType<typeof setInterval>>();
   const [summary, setSummary] = useState<GetSummaryResponse>();
   const errorOccurred = summary ? summary.errorOccurred : false;
-  const [selectedOrgInfo, setSelectedOrgInfo] = useRecoilState(seedsSummarySelectedOrgInfo);
+  const [, setSelectedOrgInfo] = useRecoilState(seedsSummarySelectedOrgInfo);
 
   useEffect(() => {
     if (organization) {
@@ -70,35 +70,35 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
       const seedbankSite = seedbankProject?.sites?.find((site) => site.name === 'Seed Bank');
       const seedbankFacility = seedbankSite?.facilities?.find((facility) => facility.name === 'Seed Bank');
 
+      const populateSummary = async () => {
+        if (seedbankFacility) {
+          setSummary(await getSummary(seedbankFacility.id));
+        }
+      };
+
+      // Update summary information
+      if (seedbankFacility) {
+        setFacilityIdSelected(seedbankFacility.id);
+        populateSummary();
+      } else {
+        setSummary(undefined);
+      }
+
+      // Update interval that keeps summary up to date
+      if (!process.env.REACT_APP_DISABLE_RECURRENT_REQUESTS) {
+        setPopulateSummaryInterval((currInterval) => {
+          if (currInterval) {
+            // Clear an existing interval when the facilityId changes
+            clearInterval(currInterval);
+          }
+          return seedbankFacility?.id ? setInterval(populateSummary, API_PULL_INTERVAL) : undefined;
+        });
+      }
+
       setSelectedOrgInfo({
         selectedFacility: seedbankFacility,
         selectedProject: seedbankProject,
         selectedSite: seedbankSite,
-      });
-    }
-
-    const populateSummary = async () => {
-      if (selectedOrgInfo.selectedFacility?.id) {
-        setSummary(await getSummary(selectedOrgInfo.selectedFacility?.id));
-      }
-    };
-
-    // Update summary information
-    if (selectedOrgInfo.selectedFacility?.id) {
-      setFacilityIdSelected(selectedOrgInfo.selectedFacility?.id);
-      populateSummary();
-    } else {
-      setSummary(undefined);
-    }
-
-    // Update interval that keeps summary up to date
-    if (!process.env.REACT_APP_DISABLE_RECURRENT_REQUESTS) {
-      setPopulateSummaryInterval((currInterval) => {
-        if (currInterval) {
-          // Clear an existing interval when the facilityId changes
-          clearInterval(currInterval);
-        }
-        return selectedOrgInfo.selectedFacility?.id ? setInterval(populateSummary, API_PULL_INTERVAL) : undefined;
       });
     }
 
@@ -111,7 +111,7 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
         return undefined;
       });
     };
-  }, [selectedOrgInfo, setFacilityIdSelected, organization, setSelectedOrgInfo]);
+  }, [setFacilityIdSelected, organization, setSelectedOrgInfo]);
 
   const goToProjects = () => {
     const projectsLocation = {
@@ -131,7 +131,7 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
       <Container maxWidth={false} className={classes.mainContainer}>
         <Grid container spacing={3}>
           <Grid item xs={12}>
-            {!!organization?.projects?.length && !!summary?.value?.activeAccessions && (
+            {!!organization?.projects?.length && !summary?.value?.activeAccessions && (
               <EmptyMessage
                 title={strings.COLLECT_IN_FIELD_PLANT_DATA}
                 text={strings.TERRAWARE_MOBILE_APP_INFO_MSG}
