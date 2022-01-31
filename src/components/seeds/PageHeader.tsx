@@ -10,10 +10,6 @@ import { SelectedOrgInfo, ServerOrganization } from 'src/types/Organization';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
-    mainContainer: {
-      backgroundColor: theme.palette.common.white,
-      border: '0.5px solid rgba(33, 37, 41, 0.06)',
-    },
     container: {
       minHeight: '156px',
       maxWidth: '100%',
@@ -79,7 +75,7 @@ export default function PageHeader({
   const location = useStateLocation();
 
   return (
-    <Container maxWidth={false} className={classes.mainContainer}>
+    <Container maxWidth={false}>
       <Grid container spacing={3} className={classes.container}>
         {page && parentPage && !!selectedOrgInfo && !!onChangeSelectedOrgInfo && (
           <Grid item xs={12}>
