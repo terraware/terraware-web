@@ -171,12 +171,23 @@ export default function Database(props: DatabaseProps): JSX.Element {
 
   useEffect(() => {
     if (organization) {
+      const seedbankProject = organization?.projects?.find((project) => project.name === 'Seed Bank');
+      const seedbankSite = seedbankProject?.sites?.find((site) => site.name === 'Seed Bank');
+      const seedbankFacility = seedbankSite?.facilities?.find((facility) => facility.name === 'Seed Bank');
+
+      const selected = {
+        selectedFacility: seedbankFacility,
+        selectedProject: seedbankProject,
+        selectedSite: seedbankSite,
+      };
+      setSelectedOrgInfo(selected);
+
       const populateSearchResults = async () => {
         const apiResponse = await search({
           prefix: 'projects.sites.facilities.accessions',
           fields: searchColumns.includes('active') ? [...searchColumns, 'id'] : [...searchColumns, 'active', 'id'],
           sortOrder: [searchSortOrder],
-          search: convertToSearchNodePayload(searchCriteria, selectedOrgInfo, organization.id),
+          search: convertToSearchNodePayload(searchCriteria, selected, organization.id),
           count: 1000,
         });
 
@@ -185,7 +196,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
 
       populateSearchResults();
     }
-  }, [selectedOrgInfo, searchCriteria, searchSortOrder, searchColumns, organization]);
+  }, [setSelectedOrgInfo, searchCriteria, searchSortOrder, searchColumns, organization]);
 
   const onSelect = (row: SearchResponseElement) => {
     if (row.id) {
@@ -299,10 +310,6 @@ export default function Database(props: DatabaseProps): JSX.Element {
           subtitle={getSubtitle()}
           page={strings.ACCESSIONS}
           parentPage={strings.SEEDS}
-          organization={organization}
-          selectedOrgInfo={selectedOrgInfo}
-          showFacility={true}
-          onChangeSelectedOrgInfo={(newValues) => setSelectedOrgInfo(newValues)}
           rightComponent={
             <div>
               <Chip

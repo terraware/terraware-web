@@ -65,6 +65,18 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
   const [selectedOrgInfo, setSelectedOrgInfo] = useRecoilState(seedsSummarySelectedOrgInfo);
 
   useEffect(() => {
+    if (organization) {
+      const seedbankProject = organization?.projects?.find((project) => project.name === 'Seed Bank');
+      const seedbankSite = seedbankProject?.sites?.find((site) => site.name === 'Seed Bank');
+      const seedbankFacility = seedbankSite?.facilities?.find((facility) => facility.name === 'Seed Bank');
+
+      setSelectedOrgInfo({
+        selectedFacility: seedbankFacility,
+        selectedProject: seedbankProject,
+        selectedSite: seedbankSite,
+      });
+    }
+
     const populateSummary = async () => {
       if (selectedOrgInfo.selectedFacility?.id) {
         setSummary(await getSummary(selectedOrgInfo.selectedFacility?.id));
@@ -99,7 +111,7 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
         return undefined;
       });
     };
-  }, [selectedOrgInfo, setFacilityIdSelected]);
+  }, [selectedOrgInfo, setFacilityIdSelected, organization, setSelectedOrgInfo]);
 
   const goToProjects = () => {
     const projectsLocation = {
@@ -115,15 +127,11 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
         subtitle={strings.WELCOME_MSG}
         page={strings.DASHBOARD}
         parentPage={strings.SEEDS}
-        organization={organization}
-        selectedOrgInfo={selectedOrgInfo}
-        onChangeSelectedOrgInfo={(newValues) => setSelectedOrgInfo(newValues)}
-        showFacility={true}
       />
       <Container maxWidth={false} className={classes.mainContainer}>
         <Grid container spacing={3}>
           <Grid item xs={12}>
-            {!!organization?.projects?.length && !summary && (
+            {!!organization?.projects?.length && !!summary?.value?.activeAccessions && (
               <EmptyMessage
                 title={strings.COLLECT_IN_FIELD_PLANT_DATA}
                 text={strings.TERRAWARE_MOBILE_APP_INFO_MSG}
