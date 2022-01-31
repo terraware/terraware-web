@@ -145,7 +145,7 @@ export default function PlantDashboard(props: PlantDashboardProps): JSX.Element 
               />
             )}
           </Grid>
-          {!!organization?.projects?.length ? (
+          {!!getOrganizationProjects().length ? (
             <>
               <Grid item xs={isFullscreen ? 12 : 6}>
                 <React.Suspense fallback={strings.LOADING}>
