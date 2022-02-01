@@ -24,7 +24,7 @@ import { SpeciesById } from 'src/types/Species';
 import { ServerOrganization } from 'src/types/Organization';
 import Title from 'src/components/common/Title';
 import { getPlantLayers } from 'src/api/organization/organization';
-import { getSelectedSites } from 'src/utils/organization';
+import { getOrganizationProjects, getSelectedSites } from 'src/utils/organization';
 import { plantListSelectedOrgInfo } from 'src/state/selectedOrgInfoPerPage';
 import EmptyMessage from '../../common/EmptyMessage';
 import { useHistory } from 'react-router-dom';
@@ -153,10 +153,6 @@ export default function PlantList(props: PlantListProps): JSX.Element {
     history.push(projectsLocation);
   };
 
-  const getOrganizationProjects = () => {
-    return organization?.projects?.filter((proj) => proj.name !== 'Seed Bank') || [];
-  };
-
   return (
     <main>
       {selectedPlant && organization && (
@@ -177,14 +173,14 @@ export default function PlantList(props: PlantListProps): JSX.Element {
               <Title
                 page={strings.PLANTS}
                 parentPage={strings.PLANTS}
-                organization={!!getOrganizationProjects().length ? organization : undefined}
+                organization={!!getOrganizationProjects(organization).length ? organization : undefined}
                 allowAll={true}
                 onChangeSelectedOrgInfo={(newValues) => setSelectedOrgInfo(newValues)}
                 selectedOrgInfo={selectedOrgInfo}
               />
             </Grid>
             <Grid item xs={12}>
-              {!!getOrganizationProjects().length && !plants.length && (
+              {!!getOrganizationProjects(organization).length && !plants.length && (
                 <EmptyMessage
                   title={strings.COLLECT_IN_FIELD_PLANT_DATA}
                   text={strings.TERRAWARE_MOBILE_APP_INFO_MSG}
@@ -193,7 +189,7 @@ export default function PlantList(props: PlantListProps): JSX.Element {
                 />
               )}
             </Grid>
-            {!!getOrganizationProjects().length ? (
+            {!!getOrganizationProjects(organization).length ? (
               <>
                 <Grid item xs={1} />
                 <Grid item xs={11}>
