@@ -1,3 +1,4 @@
+import { CircularProgress } from '@material-ui/core';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
@@ -128,90 +129,94 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
         page={strings.DASHBOARD}
         parentPage={strings.SEEDS}
       />
-      <Container maxWidth={false} className={classes.mainContainer}>
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
-            {!!organization?.projects?.length && !summary?.value?.activeAccessions && (
-              <EmptyMessage
-                title={strings.COLLECT_IN_FIELD_PLANT_DATA}
-                text={strings.TERRAWARE_MOBILE_APP_INFO_MSG}
-                buttonText={strings.REQUEST_MOBILE_APP}
-                onClick={goToProjects}
-              />
-            )}
-          </Grid>
-          <Grid item xs={1} />
-          {!!organization?.projects?.length ? (
-            <Grid item xs={10}>
-              <Grid container spacing={3}>
-                <Grid item xs={4}>
-                  <Paper className={classes.paper}>
-                    <SummaryPaper
-                      id='sessions'
-                      title={strings.ACTIVE_ACCESSIONS}
-                      statistics={summary?.value?.activeAccessions}
-                      loading={summary === undefined}
-                      error={errorOccurred}
-                    />
-                  </Paper>
-                </Grid>
-                <Grid item xs={4}>
-                  <Paper className={classes.paper}>
-                    <SummaryPaper
-                      id='species'
-                      title={strings.SPECIES}
-                      statistics={summary?.value?.species}
-                      loading={summary === undefined}
-                      error={errorOccurred}
-                    />
-                  </Paper>
-                </Grid>
-                <Grid item xs={4}>
-                  <Paper className={classes.paper}>
-                    <SummaryPaper
-                      id='families'
-                      title={strings.FAMILY}
-                      statistics={summary?.value?.families}
-                      loading={summary === undefined}
-                      error={errorOccurred}
-                    />
-                  </Paper>
-                </Grid>
-                <Grid item xs={4}>
-                  <Paper className={`${classes.paper} ${classes.fixedHeight}`}>
-                    <Alerts notifications={notifications} />
-                  </Paper>
-                </Grid>
-                <Grid item xs={8}>
-                  <Paper className={`${classes.paper} ${classes.fixedHeight}`}>
-                    <Updates
-                      setSeedSearchCriteria={setSeedSearchCriteria}
-                      summaryResponse={summary?.value}
-                      loading={summary === undefined}
-                      error={errorOccurred}
-                    />
-                  </Paper>
+      {organization && summary ? (
+        <Container maxWidth={false} className={classes.mainContainer}>
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
+              {!!organization?.projects?.length && !summary?.value?.activeAccessions.current && (
+                <EmptyMessage
+                  title={strings.COLLECT_IN_FIELD_PLANT_DATA}
+                  text={strings.TERRAWARE_MOBILE_APP_INFO_MSG}
+                  buttonText={strings.REQUEST_MOBILE_APP}
+                  onClick={goToProjects}
+                />
+              )}
+            </Grid>
+            <Grid item xs={1} />
+            {!!organization?.projects?.length ? (
+              <Grid item xs={10}>
+                <Grid container spacing={3}>
+                  <Grid item xs={4}>
+                    <Paper className={classes.paper}>
+                      <SummaryPaper
+                        id='sessions'
+                        title={strings.ACTIVE_ACCESSIONS}
+                        statistics={summary?.value?.activeAccessions}
+                        loading={summary === undefined}
+                        error={errorOccurred}
+                      />
+                    </Paper>
+                  </Grid>
+                  <Grid item xs={4}>
+                    <Paper className={classes.paper}>
+                      <SummaryPaper
+                        id='species'
+                        title={strings.SPECIES}
+                        statistics={summary?.value?.species}
+                        loading={summary === undefined}
+                        error={errorOccurred}
+                      />
+                    </Paper>
+                  </Grid>
+                  <Grid item xs={4}>
+                    <Paper className={classes.paper}>
+                      <SummaryPaper
+                        id='families'
+                        title={strings.FAMILY}
+                        statistics={summary?.value?.families}
+                        loading={summary === undefined}
+                        error={errorOccurred}
+                      />
+                    </Paper>
+                  </Grid>
+                  <Grid item xs={4}>
+                    <Paper className={`${classes.paper} ${classes.fixedHeight}`}>
+                      <Alerts notifications={notifications} />
+                    </Paper>
+                  </Grid>
+                  <Grid item xs={8}>
+                    <Paper className={`${classes.paper} ${classes.fixedHeight}`}>
+                      <Updates
+                        setSeedSearchCriteria={setSeedSearchCriteria}
+                        summaryResponse={summary?.value}
+                        loading={summary === undefined}
+                        error={errorOccurred}
+                      />
+                    </Paper>
+                  </Grid>
                 </Grid>
               </Grid>
-            </Grid>
-          ) : ['Admin', 'Manager', 'Owner'].includes(organization?.role || '') ? (
-            <EmptyMessage
-              className={classes.message}
-              title={strings.PLANTS_EMPTY_MSG_TITLE}
-              text={strings.PLANTS_EMPTY_MSG_BODY}
-              buttonText={strings.GO_TO_PROJECTS}
-              onClick={goToProjects}
-            />
-          ) : (
-            <EmptyMessage
-              className={classes.message}
-              title={strings.CHECK_BACK_LATER}
-              text={strings.EMPTY_MESSAGE_CONTRIBUTOR}
-            />
-          )}
-          <Grid item xs={1} />
-        </Grid>
-      </Container>
+            ) : ['Admin', 'Manager', 'Owner'].includes(organization?.role || '') ? (
+              <EmptyMessage
+                className={classes.message}
+                title={strings.PLANTS_EMPTY_MSG_TITLE}
+                text={strings.PLANTS_EMPTY_MSG_BODY}
+                buttonText={strings.GO_TO_PROJECTS}
+                onClick={goToProjects}
+              />
+            ) : (
+              <EmptyMessage
+                className={classes.message}
+                title={strings.CHECK_BACK_LATER}
+                text={strings.EMPTY_MESSAGE_CONTRIBUTOR}
+              />
+            )}
+            <Grid item xs={1} />
+          </Grid>
+        </Container>
+      ) : (
+        <CircularProgress />
+      )}
     </main>
   );
 }

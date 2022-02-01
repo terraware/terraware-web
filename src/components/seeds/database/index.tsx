@@ -358,86 +358,92 @@ export default function Database(props: DatabaseProps): JSX.Element {
           {(fieldOptions === undefined || availableFieldOptions === undefined) && <CircularProgress />}
           {(fieldOptions === null || availableFieldOptions === null) && strings.GENERIC_ERROR}
         </PageHeader>
-        <Grid item xs={12}>
-          {!!organization?.projects?.length && !searchResults?.length && (
-            <EmptyMessage
-              title={strings.COLLECT_IN_FIELD_PLANT_DATA}
-              text={strings.TERRAWARE_MOBILE_APP_INFO_MSG}
-              buttonText={strings.REQUEST_MOBILE_APP}
-              onClick={goToProjects}
-            />
-          )}
-        </Grid>
-        {!!organization?.projects?.length ? (
-          <Container maxWidth={false} className={classes.mainContainer}>
-            {pendingAccessions && pendingAccessions.length > 0 && (
-              <Grid container spacing={3} className={classes.checkinMessage}>
-                <Grid item xs={1} />
-                <Grid item xs={10}>
-                  <Paper>
-                    <Grid container spacing={4}>
-                      <Grid item xs={12} className={classes.checkInContent}>
-                        <div>
-                          <span> {strings.CHECKIN_BAGS}</span>
-                          <p>{strings.formatString(strings.CHECK_IN_MESSAGE, pendingAccessions.length)}</p>
-                        </div>
-                        <Button
-                          className={classes.checkInButton}
-                          onClick={handleViewCollections}
-                          id='viewCollections'
-                          label={strings.VIEW_COLLECTIONS}
-                          priority='secondary'
-                          type='passive'
-                        />
-                      </Grid>
-                    </Grid>
-                  </Paper>
-                </Grid>
-                <Grid item xs={1} />
-              </Grid>
-            )}
-            <Grid container spacing={3}>
-              <Grid item xs={1} />
-              <Grid item xs={10}>
-                <Paper>
-                  <Grid container spacing={4}>
-                    <Grid item xs={12}>
-                      {searchResults && (
-                        <Table
-                          columns={displayColumnDetails}
-                          rows={searchResults}
-                          orderBy={searchSortOrder.field}
-                          order={searchSortOrder.direction === 'Ascending' ? 'asc' : 'desc'}
-                          Renderer={SearchCellRenderer}
-                          onSelect={onSelect}
-                          sortHandler={onSortChange}
-                          isInactive={isInactive}
-                          onReorderEnd={onReorderEnd}
-                        />
-                      )}
-                      {searchResults === undefined && <CircularProgress />}
-                      {searchResults === null && strings.GENERIC_ERROR}
-                    </Grid>
-                  </Grid>
-                </Paper>
-              </Grid>
-              <Grid item xs={1} />
+        {organization && searchResults ? (
+          <>
+            <Grid item xs={12}>
+              {!!organization?.projects?.length && !searchResults?.length && (
+                <EmptyMessage
+                  title={strings.COLLECT_IN_FIELD_PLANT_DATA}
+                  text={strings.TERRAWARE_MOBILE_APP_INFO_MSG}
+                  buttonText={strings.REQUEST_MOBILE_APP}
+                  onClick={goToProjects}
+                />
+              )}
             </Grid>
-          </Container>
-        ) : ['Admin', 'Manager', 'Owner'].includes(organization?.role || '') ? (
-          <EmptyMessage
-            className={classes.message}
-            title={strings.PLANTS_EMPTY_MSG_TITLE}
-            text={strings.PLANTS_EMPTY_MSG_BODY}
-            buttonText={strings.GO_TO_PROJECTS}
-            onClick={goToProjects}
-          />
+            {!!organization?.projects?.length ? (
+              <Container maxWidth={false} className={classes.mainContainer}>
+                {pendingAccessions && pendingAccessions.length > 0 && (
+                  <Grid container spacing={3} className={classes.checkinMessage}>
+                    <Grid item xs={1} />
+                    <Grid item xs={10}>
+                      <Paper>
+                        <Grid container spacing={4}>
+                          <Grid item xs={12} className={classes.checkInContent}>
+                            <div>
+                              <span> {strings.CHECKIN_BAGS}</span>
+                              <p>{strings.formatString(strings.CHECK_IN_MESSAGE, pendingAccessions.length)}</p>
+                            </div>
+                            <Button
+                              className={classes.checkInButton}
+                              onClick={handleViewCollections}
+                              id='viewCollections'
+                              label={strings.VIEW_COLLECTIONS}
+                              priority='secondary'
+                              type='passive'
+                            />
+                          </Grid>
+                        </Grid>
+                      </Paper>
+                    </Grid>
+                    <Grid item xs={1} />
+                  </Grid>
+                )}
+                <Grid container spacing={3}>
+                  <Grid item xs={1} />
+                  <Grid item xs={10}>
+                    <Paper>
+                      <Grid container spacing={4}>
+                        <Grid item xs={12}>
+                          {searchResults && (
+                            <Table
+                              columns={displayColumnDetails}
+                              rows={searchResults}
+                              orderBy={searchSortOrder.field}
+                              order={searchSortOrder.direction === 'Ascending' ? 'asc' : 'desc'}
+                              Renderer={SearchCellRenderer}
+                              onSelect={onSelect}
+                              sortHandler={onSortChange}
+                              isInactive={isInactive}
+                              onReorderEnd={onReorderEnd}
+                            />
+                          )}
+                          {searchResults === undefined && <CircularProgress />}
+                          {searchResults === null && strings.GENERIC_ERROR}
+                        </Grid>
+                      </Grid>
+                    </Paper>
+                  </Grid>
+                  <Grid item xs={1} />
+                </Grid>
+              </Container>
+            ) : ['Admin', 'Manager', 'Owner'].includes(organization?.role || '') ? (
+              <EmptyMessage
+                className={classes.message}
+                title={strings.PLANTS_EMPTY_MSG_TITLE}
+                text={strings.PLANTS_EMPTY_MSG_BODY}
+                buttonText={strings.GO_TO_PROJECTS}
+                onClick={goToProjects}
+              />
+            ) : (
+              <EmptyMessage
+                className={classes.message}
+                title={strings.CHECK_BACK_LATER}
+                text={strings.EMPTY_MESSAGE_CONTRIBUTOR}
+              />
+            )}
+          </>
         ) : (
-          <EmptyMessage
-            className={classes.message}
-            title={strings.CHECK_BACK_LATER}
-            text={strings.EMPTY_MESSAGE_CONTRIBUTOR}
-          />
+          <CircularProgress />
         )}
       </main>
     </MuiPickersUtilsProvider>
