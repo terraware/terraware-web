@@ -11,7 +11,7 @@ import { TableColumnType } from 'src/components/common/table/types';
 import snackbarAtom from 'src/state/snackbar';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
-import { Species } from 'src/types/Species';
+import { Species, SpeciesWithScientificName } from 'src/types/Species';
 import SimpleSpeciesModal from './SimpleSpeciesModal';
 
 type SpeciesListProps = {
@@ -52,12 +52,15 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-const columns: TableColumnType[] = [{ key: 'name', name: 'Name', type: 'string' }];
+const columns: TableColumnType[] = [
+  { key: 'name', name: 'Common  Name', type: 'string' },
+  { key: 'scientificName', name: 'Sicientific Name', type: 'string' },
+];
 
 export default function SpeciesList({ organization }: SpeciesListProps): JSX.Element {
   const classes = useStyles();
-  const [species, setSpecies] = useState<Species[]>();
-  const [selectedSpecies, setSelectedSpecies] = useState<Species>();
+  const [species, setSpecies] = useState<SpeciesWithScientificName[]>();
+  const [selectedSpecies, setSelectedSpecies] = useState<SpeciesWithScientificName>();
   const [editSpeciesModalOpen, setEditSpeciesModalOpen] = useState(false);
   const setSnackbar = useSetRecoilState(snackbarAtom);
 

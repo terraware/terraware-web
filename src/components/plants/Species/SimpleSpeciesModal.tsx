@@ -5,10 +5,10 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React, { useEffect, useState } from 'react';
-import { createSpecies, updateSpecies } from 'src/api/species/species';
+import { createSpecies, createSpeciesNames, updateScientificName, updateSpecies } from 'src/api/species/species';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
-import { Species, SpeciesRequestError } from 'src/types/Species';
+import { Species, SpeciesRequestError, SpeciesWithScientificName } from 'src/types/Species';
 import useForm from 'src/utils/useForm';
 import Button from '../../common/button/Button';
 import DialogCloseButton from '../../common/DialogCloseButton';
@@ -52,7 +52,7 @@ function initSpecies(species?: Species): Species {
 export default function SimpleSpeciesModal(props: SimpleSpeciesModalProps): JSX.Element {
   const classes = useStyles();
   const { open, onClose, initialSpecies, organization, onError } = props;
-  const [record, setRecord, onChange] = useForm<Species>(initSpecies(initialSpecies));
+  const [record, setRecord, onChange] = useForm<SpeciesWithScientificName>(initSpecies(initialSpecies));
   const [nameFormatError, setNameFormatError] = useState('');
 
   useEffect(() => {
@@ -72,10 +72,24 @@ export default function SimpleSpeciesModal(props: SimpleSpeciesModalProps): JSX.
     if (record.name.trim()) {
       setNameFormatError('');
       if (record.id === 0) {
+        let allOk = true;
         const newSpecies = await createSpecies(record.name, organization.id);
         if (newSpecies.species?.id) {
-          snackbarMessage = strings.SNACKBAR_MSG_NEW_SPECIES_ADDED;
-          onClose(true, snackbarMessage);
+          if (record.scientificName) {
+            const response = await createSpeciesNames(
+              record.scientificName,
+              organization.id,
+              newSpecies.species.id,
+              true
+            );
+            if (response.error) {
+              allOk = false;
+            }
+          }
+          if (allOk) {
+            snackbarMessage = strings.SNACKBAR_MSG_NEW_SPECIES_ADDED;
+            onClose(true, snackbarMessage);
+          }
         } else if (newSpecies.error) {
           if (newSpecies.error === SpeciesRequestError.PreexistingSpecies) {
             snackbarMessage = strings.PREEXISTING_SPECIES;
@@ -87,8 +101,20 @@ export default function SimpleSpeciesModal(props: SimpleSpeciesModalProps): JSX.
       } else {
         try {
           await updateSpecies(record, organization.id);
-          snackbarMessage = strings.SNACKBAR_MSG_CHANGES_SAVED;
-          onClose(true, snackbarMessage);
+          let allOk = true;
+          if (record.scientificName) {
+            const response = await updateScientificName(record.scientificName, record.id, organization.id);
+            if (!response.requestSucceeded) {
+              allOk = false;
+            }
+          }
+          if (allOk) {
+            snackbarMessage = strings.SNACKBAR_MSG_CHANGES_SAVED;
+            onClose(true, snackbarMessage);
+          } else {
+            snackbarMessage = strings.GENERIC_ERROR;
+            onError(snackbarMessage);
+          }
         } catch {
           snackbarMessage = strings.GENERIC_ERROR;
           onError(snackbarMessage);
@@ -112,10 +138,19 @@ export default function SimpleSpeciesModal(props: SimpleSpeciesModalProps): JSX.
               id='name'
               value={record.name}
               onChange={onChange}
-              label={strings.SPECIES_NAME}
-              aria-label={strings.SPECIES_NAME}
+              label={strings.COMMON_NAME}
+              aria-label={strings.COMMON_NAME}
               error={!!nameFormatError}
               helperText={!!nameFormatError && !record.name ? nameFormatError : ''}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              id='scientificName'
+              value={record.scientificName}
+              onChange={onChange}
+              label={strings.SCIENTIFIC_NAME}
+              aria-label={strings.SCIENTIFIC_NAME}
             />
           </Grid>
         </Grid>
