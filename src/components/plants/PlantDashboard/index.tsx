@@ -153,6 +153,7 @@ export default function PlantDashboard(props: PlantDashboardProps): JSX.Element 
                       speciesById={speciesById}
                       colorsBySpeciesId={colorsBySpeciesId}
                       reloadData={reloadData}
+                      organization={organization}
                     />
                   </React.Suspense>
                 </Grid>

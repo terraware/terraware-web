@@ -178,7 +178,10 @@ export async function updateScientificName(
       const updateSpeciesNamesRequest: PutSpeciesNamesRequest = { name: scientificName, speciesId, isScientific: true };
       await axios.put(endpoint, updateSpeciesNamesRequest);
     } else {
-      createSpeciesNames(scientificName, organizationId, speciesId, true);
+      const responseCreate = await createSpeciesNames(scientificName, organizationId, speciesId, true);
+      if (responseCreate.error) {
+        response.requestSucceeded = false;
+      }
     }
   } catch (error) {
     console.error(error);
