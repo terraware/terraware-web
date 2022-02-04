@@ -5,7 +5,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React, { useEffect, useState } from 'react';
-import { createSpecies, createSpeciesNames, updateScientificName, updateSpecies } from 'src/api/species/species';
+import { createSpecies, updateSpecies } from 'src/api/species/species';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
 import { Species, SpeciesRequestError, SpeciesWithScientificName } from 'src/types/Species';
@@ -72,25 +72,11 @@ export default function SimpleSpeciesModal(props: SimpleSpeciesModalProps): JSX.
     if (record.name.trim()) {
       setNameFormatError('');
       if (record.id === 0) {
-        let allOk = true;
-        const newSpecies = await createSpecies(record.name, organization.id);
-        if (newSpecies.species?.id) {
-          if (record.scientificName) {
-            const response = await createSpeciesNames(
-              record.scientificName,
-              organization.id,
-              newSpecies.species.id,
-              true
-            );
-            if (response.error) {
-              allOk = false;
-            }
-          }
-          if (allOk) {
-            snackbarMessage = strings.SNACKBAR_MSG_NEW_SPECIES_ADDED;
-            onClose(true, snackbarMessage);
-          }
-        } else if (newSpecies.error) {
+        const newSpecies = await createSpecies(record, organization.id);
+        if (!newSpecies.error) {
+          snackbarMessage = strings.SNACKBAR_MSG_NEW_SPECIES_ADDED;
+          onClose(true, snackbarMessage);
+        } else {
           if (newSpecies.error === SpeciesRequestError.PreexistingSpecies) {
             snackbarMessage = strings.PREEXISTING_SPECIES;
           } else {
@@ -99,23 +85,11 @@ export default function SimpleSpeciesModal(props: SimpleSpeciesModalProps): JSX.
           onError(snackbarMessage);
         }
       } else {
-        try {
-          await updateSpecies(record, organization.id);
-          let allOk = true;
-          if (record.scientificName) {
-            const response = await updateScientificName(record.scientificName, record.id, organization.id);
-            if (!response.requestSucceeded) {
-              allOk = false;
-            }
-          }
-          if (allOk) {
-            snackbarMessage = strings.SNACKBAR_MSG_CHANGES_SAVED;
-            onClose(true, snackbarMessage);
-          } else {
-            snackbarMessage = strings.GENERIC_ERROR;
-            onError(snackbarMessage);
-          }
-        } catch {
+        const updateResponse = await updateSpecies(record, organization.id);
+        if (updateResponse.requestSucceeded) {
+          snackbarMessage = strings.SNACKBAR_MSG_CHANGES_SAVED;
+          onClose(true, snackbarMessage);
+        } else {
           snackbarMessage = strings.GENERIC_ERROR;
           onError(snackbarMessage);
         }

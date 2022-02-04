@@ -1,6 +1,11 @@
 import axios from 'src/api/index';
 import { paths } from 'src/api/types/generated-schema';
-import { Species, SpeciesByIdWithScientificName, SpeciesNames, SpeciesRequestError } from 'src/types/Species';
+import {
+  Species,
+  SpeciesByIdWithScientificName,
+  SpeciesRequestError,
+  SpeciesWithScientificName,
+} from 'src/types/Species';
 
 /*
  * All functions in this module ALWAYS returns a promise that resolves. All errors will be caught and
@@ -27,21 +32,19 @@ export async function getAllSpecies(organizationId: number): Promise<GetSpeciesL
     const endpoint = `${SPECIES_NAME_ENDPOINT}?organizationId=${organizationId}`;
     const speciesList: SpeciesList = (await axios.get(endpoint)).data.speciesNames;
     speciesList.forEach((species: SpeciesListItem) => {
-      let commonName = '';
-      let prevScientificName = '';
       if (species.isScientific) {
-        commonName = response.speciesById.get(species.speciesId)?.name || '';
+        const commonName = response.speciesById.get(species.speciesId)?.name || '';
         response.speciesById.set(species.speciesId, {
           id: species.speciesId,
           name: commonName,
           scientificName: species.name,
         });
       } else {
-        prevScientificName = response.speciesById.get(species.speciesId)?.scientificName || '';
+        const scientificName = response.speciesById.get(species.speciesId)?.scientificName || '';
         response.speciesById.set(species.speciesId, {
           id: species.speciesId,
           name: species.name,
-          scientificName: prevScientificName,
+          scientificName,
         });
       }
     });
@@ -59,8 +62,7 @@ type PostSpeciesNameResponse =
   paths[typeof SPECIES_NAME_ENDPOINT]['post']['responses'][200]['content']['application/json'];
 
 export type CreateSpeciesNamesResponse = {
-  speciesName: SpeciesNames | null;
-  error: string | null;
+  requestSucceeded: boolean;
 };
 
 export async function createSpeciesNames(
@@ -70,21 +72,18 @@ export async function createSpeciesNames(
   isScientific: boolean
 ): Promise<CreateSpeciesNamesResponse> {
   const response: CreateSpeciesNamesResponse = {
-    speciesName: null,
-    error: null,
+    requestSucceeded: true,
   };
 
   try {
     const createSpeciesNamesRequest: PostSpeciesNameRequest = { name, organizationId, speciesId, isScientific };
     const serverResponse: PostSpeciesNameResponse = (await axios.post(SPECIES_NAME_ENDPOINT, createSpeciesNamesRequest))
       .data;
-    response.speciesName = { id: serverResponse.id };
-  } catch (error) {
-    if (axios.isAxiosError(error) && error.response?.status === 409) {
-      response.error = SpeciesRequestError.PreexistingSpecies;
-    } else {
-      response.error = SpeciesRequestError.RequestFailed;
+    if (serverResponse.status === 'error') {
+      response.requestSucceeded = false;
     }
+  } catch (error) {
+    response.requestSucceeded = false;
   }
 
   return response;
@@ -99,16 +98,29 @@ export type CreateSpeciesResponse = {
   error: string | null;
 };
 
-export async function createSpecies(name: string, organizationId: number): Promise<CreateSpeciesResponse> {
+export async function createSpecies(
+  species: SpeciesWithScientificName,
+  organizationId: number
+): Promise<CreateSpeciesResponse> {
   const response: CreateSpeciesResponse = {
     species: null,
     error: null,
   };
 
   try {
-    const createSpeciesRequest: PostSpeciesRequest = { name, organizationId };
+    const createSpeciesRequest: PostSpeciesRequest = { name: species.name, organizationId };
     const serverResponse: PostSpeciesResponse = (await axios.post(SPECIES_ENDPOINT, createSpeciesRequest)).data;
-    response.species = { id: serverResponse.id, name };
+    if (serverResponse.id && species.scientificName) {
+      const createSpeciesresponse = await createSpeciesNames(
+        species.scientificName,
+        organizationId,
+        serverResponse.id,
+        true
+      );
+      if (!createSpeciesresponse.requestSucceeded) {
+        response.error = SpeciesRequestError.RequestFailed;
+      }
+    }
   } catch (error) {
     if (axios.isAxiosError(error) && error.response?.status === 409) {
       response.error = SpeciesRequestError.PreexistingSpecies;
@@ -122,7 +134,8 @@ export async function createSpecies(name: string, organizationId: number): Promi
 
 const PUT_SPECIES_ENDPOINT = '/api/v1/species/{speciesId}';
 type PutSpeciesRequest = paths[typeof PUT_SPECIES_ENDPOINT]['put']['requestBody']['content']['application/json'];
-
+type SimpleSuccessResponsePayload =
+  paths[typeof PUT_SPECIES_ENDPOINT]['put']['responses']['200']['content']['application/json'];
 /*
  * UpdateSpeciesResponse.species will always contain the data the caller attempted to write. The caller must examine
  * the requestSucceeded field to determine if the API call succeeded.
@@ -132,13 +145,28 @@ export type UpdateSpeciesResponse = {
   requestSucceeded: boolean;
 };
 
-export async function updateSpecies(species: Species, organizationId: number): Promise<UpdateSpeciesResponse> {
+export async function updateSpecies(
+  species: SpeciesWithScientificName,
+  organizationId: number
+): Promise<UpdateSpeciesResponse> {
   const response: UpdateSpeciesResponse = { species, requestSucceeded: true };
 
   try {
     const endpoint = PUT_SPECIES_ENDPOINT.replace('{speciesId}', `${species.id}`);
     const updateSpeciesRequest: PutSpeciesRequest = { name: species.name, organizationId };
-    await axios.put(endpoint, updateSpeciesRequest);
+    const updateSpeciesNameResponse: SimpleSuccessResponsePayload = await axios.put(endpoint, updateSpeciesRequest);
+    if (updateSpeciesNameResponse.status !== 'error') {
+      if (species.scientificName) {
+        const responseUpdateScientificName = await updateScientificName(
+          species.scientificName,
+          species.id,
+          organizationId
+        );
+        if (!responseUpdateScientificName.requestSucceeded) {
+          response.requestSucceeded = false;
+        }
+      }
+    }
   } catch (error) {
     console.error(error);
     response.requestSucceeded = false;
@@ -171,15 +199,15 @@ export async function updateScientificName(
     const speciesNames: SpeciesNamesList = (
       await axios.get(SPECIES_NAMES_OF_SPECIES.replace('{speciesId}', speciesId.toString()))
     ).data.speciesNames;
-    const sicientificNames = speciesNames.filter((name) => name.isScientific);
-    const sicientificNameOfSpecies = sicientificNames[0];
-    if (sicientificNameOfSpecies) {
-      const endpoint = PUT_SPECIES_NAME_ENDPOINT.replace('{speciesNameId}', `${sicientificNameOfSpecies.id}`);
+    const scientificNames = speciesNames.filter((name) => name.isScientific);
+    const scientificNameOfSpecies = scientificNames[0];
+    if (scientificNameOfSpecies) {
+      const endpoint = PUT_SPECIES_NAME_ENDPOINT.replace('{speciesNameId}', `${scientificNameOfSpecies.id}`);
       const updateSpeciesNamesRequest: PutSpeciesNamesRequest = { name: scientificName, speciesId, isScientific: true };
       await axios.put(endpoint, updateSpeciesNamesRequest);
     } else {
       const responseCreate = await createSpeciesNames(scientificName, organizationId, speciesId, true);
-      if (responseCreate.error) {
+      if (!responseCreate.requestSucceeded) {
         response.requestSucceeded = false;
       }
     }
