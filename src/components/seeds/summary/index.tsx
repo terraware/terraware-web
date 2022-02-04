@@ -13,7 +13,7 @@ import { API_PULL_INTERVAL } from 'src/constants';
 import { seedsSummarySelectedOrgInfo } from 'src/state/selectedOrgInfoPerPage';
 import strings from 'src/strings';
 import { Notifications } from 'src/types/Notifications';
-import { ServerOrganization } from 'src/types/Organization';
+import { HighOrganizationRolesValues, ServerOrganization } from 'src/types/Organization';
 import PageHeader from '../PageHeader';
 import Alerts from './Alerts';
 import SummaryPaper from './SummaryPaper';
@@ -186,7 +186,7 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
                 </Grid>
               </Grid>
             </Grid>
-          ) : ['Admin', 'Manager', 'Owner'].includes(organization?.role || '') ? (
+          ) : HighOrganizationRolesValues.includes(organization?.role || '') ? (
             <EmptyMessage
               className={classes.message}
               title={strings.PLANTS_EMPTY_MSG_TITLE}
