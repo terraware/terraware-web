@@ -10,6 +10,7 @@ export type Project = {
   sites?: Site[];
   totalUsers?: number;
   organizationId: number;
+  hidden?: boolean;
 };
 
 export type ProjectStatus = 'Propagating' | 'Planting' | 'Completed/Monitoring' | undefined;
