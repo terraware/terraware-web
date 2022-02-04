@@ -66,7 +66,7 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
 
   useEffect(() => {
     if (organization) {
-      const seedbankProject = organization?.projects?.find((project) => project.name === 'Seed Bank');
+      const seedbankProject = organization?.projects?.length ? organization?.projects[0] : undefined;
       const seedbankSite = seedbankProject?.sites?.find((site) => site.name === 'Seed Bank');
       const seedbankFacility = seedbankSite?.facilities?.find((facility) => facility.name === 'Seed Bank');
 

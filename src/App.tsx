@@ -142,6 +142,15 @@ function AppContent() {
     return <h1>Could not fetch organization data</h1>;
   }
 
+  const filteredOrganization = () => {
+    if (selectedOrganization) {
+      return {
+        ...selectedOrganization,
+        projects: selectedOrganization?.projects?.filter((proj) => proj.hidden && proj.name === 'Seed Bank'),
+      };
+    }
+  };
+
   return (
     <>
       <CssBaseline />
@@ -169,7 +178,7 @@ function AppContent() {
               </Route>
               <Route exact path='/seeds-summary'>
                 <SeedSummary
-                  organization={selectedOrganization}
+                  organization={filteredOrganization()}
                   setSeedSearchCriteria={setSeedSearchCriteria}
                   notifications={notifications}
                   setFacilityIdSelected={setFacilityIdSelected}
@@ -188,7 +197,7 @@ function AppContent() {
               )}
               <Route exact path='/accessions'>
                 <Database
-                  organization={selectedOrganization}
+                  organization={filteredOrganization()}
                   searchCriteria={seedSearchCriteria}
                   setSearchCriteria={setSeedSearchCriteria}
                   searchSortOrder={seedSearchSort}
