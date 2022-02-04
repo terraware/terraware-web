@@ -31,9 +31,11 @@ import DownloadReportModal from './DownloadReportModal';
 import EditColumns from './EditColumns';
 import Filters from './Filters';
 import SearchCellRenderer from './TableCellRenderer';
-import { ServerOrganization } from 'src/types/Organization';
+import { HighOrganizationRolesValues, ServerOrganization } from 'src/types/Organization';
 import { seedsDatabaseSelectedOrgInfo } from 'src/state/selectedOrgInfoPerPage';
 import { useRecoilState } from 'recoil';
+import EmptyMessage from 'src/components/common/EmptyMessage';
+import { getFirstFacility } from 'src/utils/organization';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -68,6 +70,11 @@ const useStyles = makeStyles((theme: Theme) =>
     checkInButton: {
       marginTop: theme.spacing(2),
       marginRight: theme.spacing(3),
+    },
+    message: {
+      margin: '0 auto',
+      width: '50%',
+      marginTop: '10%',
     },
   })
 );
@@ -143,16 +150,8 @@ export default function Database(props: DatabaseProps): JSX.Element {
   useEffect(() => {
     let facilityId = selectedOrgInfo?.selectedFacility?.id;
     // If no faciliyId is selected, then select first facility of first project of first site, until endpoint receives siteId, projectId or OrgId
-    if (
-      !facilityId &&
-      organization &&
-      organization.projects &&
-      organization.projects[0].sites &&
-      organization.projects[0].sites[0] &&
-      organization.projects[0].sites[0].facilities &&
-      organization.projects[0].sites[0].facilities[0]
-    ) {
-      facilityId = organization.projects[0].sites[0].facilities[0].id;
+    if (getFirstFacility(organization)) {
+      facilityId = getFirstFacility(organization)?.id;
       setFacilityIdForReport(facilityId);
     }
     const populateAvailableFieldOptions = async () => {
@@ -263,6 +262,13 @@ export default function Database(props: DatabaseProps): JSX.Element {
     history.push('/checkin');
   };
 
+  const goToProjects = () => {
+    const projectsLocation = {
+      pathname: `/projects`,
+    };
+    history.push(projectsLocation);
+  };
+
   const location = useStateLocation();
 
   return (
@@ -337,61 +343,87 @@ export default function Database(props: DatabaseProps): JSX.Element {
           {(fieldOptions === undefined || availableFieldOptions === undefined) && <CircularProgress />}
           {(fieldOptions === null || availableFieldOptions === null) && strings.GENERIC_ERROR}
         </PageHeader>
-        <Container maxWidth={false} className={classes.mainContainer}>
-          {pendingAccessions && pendingAccessions.length > 0 && (
-            <Grid container spacing={3} className={classes.checkinMessage}>
+        <Grid item xs={12}>
+          {!!organization?.projects?.length && !searchResults?.length && (
+            <EmptyMessage
+              title={strings.COLLECT_IN_FIELD_PLANT_DATA}
+              text={strings.TERRAWARE_MOBILE_APP_INFO_MSG}
+              buttonText={strings.REQUEST_MOBILE_APP}
+              onClick={goToProjects}
+            />
+          )}
+        </Grid>
+        {!!organization?.projects?.length ? (
+          <Container maxWidth={false} className={classes.mainContainer}>
+            {pendingAccessions && pendingAccessions.length > 0 && (
+              <Grid container spacing={3} className={classes.checkinMessage}>
+                <Grid item xs={1} />
+                <Grid item xs={10}>
+                  <Paper>
+                    <Grid container spacing={4}>
+                      <Grid item xs={12} className={classes.checkInContent}>
+                        <div>
+                          <span> {strings.CHECKIN_BAGS}</span>
+                          <p>{strings.formatString(strings.CHECK_IN_MESSAGE, pendingAccessions.length)}</p>
+                        </div>
+                        <Button
+                          className={classes.checkInButton}
+                          onClick={handleViewCollections}
+                          id='viewCollections'
+                          label={strings.VIEW_COLLECTIONS}
+                          priority='secondary'
+                          type='passive'
+                        />
+                      </Grid>
+                    </Grid>
+                  </Paper>
+                </Grid>
+                <Grid item xs={1} />
+              </Grid>
+            )}
+            <Grid container spacing={3}>
               <Grid item xs={1} />
               <Grid item xs={10}>
                 <Paper>
                   <Grid container spacing={4}>
-                    <Grid item xs={12} className={classes.checkInContent}>
-                      <div>
-                        <span> {strings.CHECKIN_BAGS}</span>
-                        <p>{strings.formatString(strings.CHECK_IN_MESSAGE, pendingAccessions.length)}</p>
-                      </div>
-                      <Button
-                        className={classes.checkInButton}
-                        onClick={handleViewCollections}
-                        id='viewCollections'
-                        label={strings.VIEW_COLLECTIONS}
-                        priority='secondary'
-                        type='passive'
-                      />
+                    <Grid item xs={12}>
+                      {searchResults && (
+                        <Table
+                          columns={displayColumnDetails}
+                          rows={searchResults}
+                          orderBy={searchSortOrder.field}
+                          order={searchSortOrder.direction === 'Ascending' ? 'asc' : 'desc'}
+                          Renderer={SearchCellRenderer}
+                          onSelect={onSelect}
+                          sortHandler={onSortChange}
+                          isInactive={isInactive}
+                          onReorderEnd={onReorderEnd}
+                        />
+                      )}
+                      {searchResults === undefined && <CircularProgress />}
+                      {searchResults === null && strings.GENERIC_ERROR}
                     </Grid>
                   </Grid>
                 </Paper>
               </Grid>
               <Grid item xs={1} />
             </Grid>
-          )}
-          <Grid container spacing={3}>
-            <Grid item xs={1} />
-            <Grid item xs={10}>
-              <Paper>
-                <Grid container spacing={4}>
-                  <Grid item xs={12}>
-                    {searchResults && (
-                      <Table
-                        columns={displayColumnDetails}
-                        rows={searchResults}
-                        orderBy={searchSortOrder.field}
-                        order={searchSortOrder.direction === 'Ascending' ? 'asc' : 'desc'}
-                        Renderer={SearchCellRenderer}
-                        onSelect={onSelect}
-                        sortHandler={onSortChange}
-                        isInactive={isInactive}
-                        onReorderEnd={onReorderEnd}
-                      />
-                    )}
-                    {searchResults === undefined && <CircularProgress />}
-                    {searchResults === null && strings.GENERIC_ERROR}
-                  </Grid>
-                </Grid>
-              </Paper>
-            </Grid>
-            <Grid item xs={1} />
-          </Grid>
-        </Container>
+          </Container>
+        ) : HighOrganizationRolesValues.includes(organization?.role || '') ? (
+          <EmptyMessage
+            className={classes.message}
+            title={strings.PLANTS_EMPTY_MSG_TITLE}
+            text={strings.PLANTS_EMPTY_MSG_BODY}
+            buttonText={strings.GO_TO_PROJECTS}
+            onClick={goToProjects}
+          />
+        ) : (
+          <EmptyMessage
+            className={classes.message}
+            title={strings.CHECK_BACK_LATER}
+            text={strings.EMPTY_MESSAGE_CONTRIBUTOR}
+          />
+        )}
       </main>
     </MuiPickersUtilsProvider>
   );

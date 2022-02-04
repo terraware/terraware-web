@@ -71,7 +71,12 @@ export const getFirstProject = (organization: ServerOrganization | undefined): P
 };
 
 export const getFirstSite = (organization: ServerOrganization | undefined): Site | null => {
-  if (organization?.projects && organization.projects[0].sites && organization.projects[0].sites[0]) {
+  if (
+    organization?.projects &&
+    organization.projects[0] &&
+    organization.projects[0].sites &&
+    organization.projects[0].sites[0]
+  ) {
     return organization.projects[0].sites[0];
   }
   return null;
@@ -80,6 +85,7 @@ export const getFirstSite = (organization: ServerOrganization | undefined): Site
 export const getFirstFacility = (organization: ServerOrganization | undefined): Facility | null => {
   if (
     organization?.projects &&
+    organization.projects[0] &&
     organization.projects[0].sites &&
     organization.projects[0].sites[0] &&
     organization.projects[0].sites[0].facilities &&

@@ -9,7 +9,7 @@ import strings from 'src/strings';
 import PlantMap from './PlantMap';
 import SpeciesSummaryChart from './SpeciesSummaryChart';
 import SummaryCell from './SummaryCell';
-import { ServerOrganization } from 'src/types/Organization';
+import { HighOrganizationRolesValues, ServerOrganization } from 'src/types/Organization';
 import { getPlantsForMultipleLayers, getPlantSummariesByLayer } from 'src/api/plants/plants';
 import { getAllSpecies } from 'src/api/species/species';
 import { Plant, PlantSummariesByLayerId } from 'src/types/Plant';
@@ -132,7 +132,7 @@ export default function PlantDashboard(props: PlantDashboardProps): JSX.Element 
             />
           </Grid>
           <Grid item xs={12}>
-            {!plantSummariesByLayerId.size && (
+            {!!organization?.projects?.length && !plantSummariesByLayerId.size && (
               <EmptyMessage
                 title={strings.COLLECT_IN_FIELD_PLANT_DATA}
                 text={strings.TERRAWARE_MOBILE_APP_INFO_MSG}
@@ -141,7 +141,7 @@ export default function PlantDashboard(props: PlantDashboardProps): JSX.Element 
               />
             )}
           </Grid>
-          {organization?.projects?.length ? (
+          {!!organization?.projects?.length ? (
             <>
               <Grid item xs={isFullscreen ? 12 : 6}>
                 <React.Suspense fallback={strings.LOADING}>
@@ -155,6 +155,7 @@ export default function PlantDashboard(props: PlantDashboardProps): JSX.Element 
                   />
                 </React.Suspense>
               </Grid>
+
               <Grid item xs={isFullscreen ? 12 : 6}>
                 <Grid container>
                   <Grid item xs={12}>
@@ -187,13 +188,19 @@ export default function PlantDashboard(props: PlantDashboardProps): JSX.Element 
                 </Grid>
               </Grid>
             </>
-          ) : (
+          ) : HighOrganizationRolesValues.includes(organization?.role || '') ? (
             <EmptyMessage
               className={classes.message}
               title={strings.PLANTS_EMPTY_MSG_TITLE}
               text={strings.PLANTS_EMPTY_MSG_BODY}
               buttonText={strings.GO_TO_PROJECTS}
               onClick={goToProjects}
+            />
+          ) : (
+            <EmptyMessage
+              className={classes.message}
+              title={strings.CHECK_BACK_LATER}
+              text={strings.EMPTY_MESSAGE_CONTRIBUTOR}
             />
           )}
         </Grid>
