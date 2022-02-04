@@ -31,10 +31,11 @@ import DownloadReportModal from './DownloadReportModal';
 import EditColumns from './EditColumns';
 import Filters from './Filters';
 import SearchCellRenderer from './TableCellRenderer';
-import { ServerOrganization } from 'src/types/Organization';
+import { HighOrganizationRolesValues, ServerOrganization } from 'src/types/Organization';
 import { seedsDatabaseSelectedOrgInfo } from 'src/state/selectedOrgInfoPerPage';
 import { useRecoilState } from 'recoil';
 import EmptyMessage from 'src/components/common/EmptyMessage';
+import { getFirstFacility } from 'src/utils/organization';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -149,17 +150,8 @@ export default function Database(props: DatabaseProps): JSX.Element {
   useEffect(() => {
     let facilityId = selectedOrgInfo?.selectedFacility?.id;
     // If no faciliyId is selected, then select first facility of first project of first site, until endpoint receives siteId, projectId or OrgId
-    if (
-      !facilityId &&
-      organization &&
-      organization.projects &&
-      organization.projects[0] &&
-      organization.projects[0].sites &&
-      organization.projects[0].sites[0] &&
-      organization.projects[0].sites[0].facilities &&
-      organization.projects[0].sites[0].facilities[0]
-    ) {
-      facilityId = organization.projects[0].sites[0].facilities[0].id;
+    if (getFirstFacility(organization)) {
+      facilityId = getFirstFacility(organization)?.id;
       setFacilityIdForReport(facilityId);
     }
     const populateAvailableFieldOptions = async () => {
@@ -424,7 +416,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
               <Grid item xs={1} />
             </Grid>
           </Container>
-        ) : ['Admin', 'Manager', 'Owner'].includes(organization?.role || '') ? (
+        ) : HighOrganizationRolesValues.includes(organization?.role || '') ? (
           <EmptyMessage
             className={classes.message}
             title={strings.PLANTS_EMPTY_MSG_TITLE}

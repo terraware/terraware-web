@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 13.4
--- Dumped by pg_dump version 13.4
+-- Dumped from database version 14.1
+-- Dumped by pg_dump version 14.1
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -2859,14 +2859,14 @@ SELECT pg_catalog.setval('public.automations_id_seq', 1, false);
 -- Name: bag_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.bag_id_seq', 1, false);
+SELECT pg_catalog.setval('public.bag_id_seq', 1003, false);
 
 
 --
 -- Name: collection_event_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.collection_event_id_seq', 1, false);
+SELECT pg_catalog.setval('public.collection_event_id_seq', 1002, false);
 
 
 --
@@ -2894,14 +2894,14 @@ SELECT pg_catalog.setval('public.facility_alert_recipients_id_seq', 1, false);
 -- Name: family_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.family_id_seq', 1, false);
+SELECT pg_catalog.setval('public.family_id_seq', 20001, false);
 
 
 --
 -- Name: family_names_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.family_names_id_seq', 1, true);
+SELECT pg_catalog.setval('public.family_names_id_seq', 2, false);
 
 
 --
@@ -2957,21 +2957,21 @@ SELECT pg_catalog.setval('public.layers_id_seq', 1, false);
 -- Name: notification_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.notification_id_seq', 1, false);
+SELECT pg_catalog.setval('public.notification_id_seq', 100010, false);
 
 
 --
 -- Name: organizations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.organizations_id_seq', 1, false);
+SELECT pg_catalog.setval('public.organizations_id_seq', 2, false);
 
 
 --
 -- Name: photos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.photos_id_seq', 1, false);
+SELECT pg_catalog.setval('public.photos_id_seq', 1003, false);
 
 
 --
@@ -2985,35 +2985,35 @@ SELECT pg_catalog.setval('public.plant_observations_id_seq', 1, false);
 -- Name: projects_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.projects_id_seq', 1, false);
+SELECT pg_catalog.setval('public.projects_id_seq', 11, false);
 
 
 --
 -- Name: site_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.site_id_seq', 1, false);
+SELECT pg_catalog.setval('public.site_id_seq', 11, false);
 
 
 --
 -- Name: site_module_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.site_module_id_seq', 1, false);
+SELECT pg_catalog.setval('public.site_module_id_seq', 102, false);
 
 
 --
 -- Name: species_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.species_id_seq', 1, false);
+SELECT pg_catalog.setval('public.species_id_seq', 10002, false);
 
 
 --
 -- Name: species_names_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.species_names_id_seq', 2, true);
+SELECT pg_catalog.setval('public.species_names_id_seq', 3, false);
 
 
 --
@@ -3027,7 +3027,7 @@ SELECT pg_catalog.setval('public.species_options_id_seq', 1, false);
 -- Name: storage_location_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.storage_location_id_seq', 1, false);
+SELECT pg_catalog.setval('public.storage_location_id_seq', 1003, false);
 
 
 --
@@ -3048,7 +3048,7 @@ SELECT pg_catalog.setval('public.timeseries_id_seq', 1, false);
 -- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.users_id_seq', 1, false);
+SELECT pg_catalog.setval('public.users_id_seq', 2, false);
 
 
 --
