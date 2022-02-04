@@ -1,5 +1,5 @@
 /* eslint-disable import/no-webpack-loader-syntax */
-import { createStyles, CssBaseline, makeStyles, ThemeProvider } from '@material-ui/core';
+import { CircularProgress, createStyles, CssBaseline, makeStyles, ThemeProvider } from '@material-ui/core';
 import mapboxgl from 'mapbox-gl';
 import React, { useCallback, useEffect, useState } from 'react';
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
@@ -139,7 +139,7 @@ function AppContent() {
   }, [organizations, selectedOrganization]);
 
   if (organizationError) {
-    return <h1>Could not fetch organization data</h1>;
+    return <CircularProgress />;
   }
 
   return (
