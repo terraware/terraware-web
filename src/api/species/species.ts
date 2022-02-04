@@ -110,6 +110,7 @@ export async function createSpecies(
   try {
     const createSpeciesRequest: PostSpeciesRequest = { name: species.name, organizationId };
     const serverResponse: PostSpeciesResponse = (await axios.post(SPECIES_ENDPOINT, createSpeciesRequest)).data;
+    response.species = { id: serverResponse.id } as SpeciesWithScientificName;
     if (serverResponse.id && species.scientificName) {
       const createSpeciesresponse = await createSpeciesNames(
         species.scientificName,
@@ -197,12 +198,18 @@ export async function updateScientificName(
 
   try {
     const speciesNames: SpeciesNamesList = (
-      await axios.get(SPECIES_NAMES_OF_SPECIES.replace('{speciesId}', speciesId.toString()))
+      await axios.get(
+        SPECIES_NAMES_OF_SPECIES.replace('{speciesId}', speciesId.toString()).concat(
+          `?organizationId=${organizationId}`
+        )
+      )
     ).data.speciesNames;
     const scientificNames = speciesNames.filter((name) => name.isScientific);
     const scientificNameOfSpecies = scientificNames[0];
     if (scientificNameOfSpecies) {
-      const endpoint = PUT_SPECIES_NAME_ENDPOINT.replace('{speciesNameId}', `${scientificNameOfSpecies.id}`);
+      const endpoint = PUT_SPECIES_NAME_ENDPOINT.replace('{speciesNameId}', `${scientificNameOfSpecies.id}`).concat(
+        `?organizationId=${organizationId}`
+      );
       const updateSpeciesNamesRequest: PutSpeciesNamesRequest = { name: scientificName, speciesId, isScientific: true };
       await axios.put(endpoint, updateSpeciesNamesRequest);
     } else {
