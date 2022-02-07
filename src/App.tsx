@@ -3,7 +3,7 @@ import { createStyles, CssBaseline, makeStyles, ThemeProvider } from '@material-
 import mapboxgl from 'mapbox-gl';
 import React, { useCallback, useEffect, useState } from 'react';
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
-import { RecoilRoot, useRecoilValue } from 'recoil';
+import { RecoilRoot } from 'recoil';
 import {
   DEFAULT_SEED_SEARCH_FILTERS,
   DEFAULT_SEED_SEARCH_SORT_ORDER,
@@ -34,7 +34,6 @@ import ProjectsList from './components/Projects';
 import SitesList from './components/Sites';
 import Project from './components/Project';
 import SiteView from './components/Site';
-import { seedsDatabaseSelectedOrgInfo } from './state/selectedOrgInfoPerPage';
 import People from './components/People';
 import NewProject from './components/NewProject';
 import NewSite from './components/NewSite';
@@ -105,7 +104,6 @@ function AppContent() {
   const [facilityIdSelected, setFacilityIdSelected] = useState<number>();
   const [organizationError, setOrganizationError] = useState<boolean>(false);
   // get the selected values on database to pass it to new accession page
-  const selectedOrgInfoDatabase = useRecoilValue(seedsDatabaseSelectedOrgInfo);
   const [organizations, setOrganizations] = useState<ServerOrganization[]>();
 
   const reloadData = useCallback(() => {
@@ -189,10 +187,7 @@ function AppContent() {
               </Route>
               {selectedOrganization && (
                 <Route exact path='/accessions/new'>
-                  <NewAccession
-                    facilityId={selectedOrgInfoDatabase.selectedFacility?.id}
-                    organization={selectedOrganization}
-                  />
+                  <NewAccession organization={selectedOrganization} />
                 </Route>
               )}
               <Route exact path='/accessions'>
