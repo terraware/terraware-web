@@ -9,7 +9,7 @@ import strings from 'src/strings';
 import PlantMap from './PlantMap';
 import SpeciesSummaryChart from './SpeciesSummaryChart';
 import SummaryCell from './SummaryCell';
-import { ServerOrganization } from 'src/types/Organization';
+import { HighOrganizationRolesValues, ServerOrganization } from 'src/types/Organization';
 import { getPlantsForMultipleLayers, getPlantSummariesByLayer } from 'src/api/plants/plants';
 import { getAllSpecies } from 'src/api/species/species';
 import { Plant, PlantSummariesByLayerId } from 'src/types/Plant';
@@ -188,7 +188,7 @@ export default function PlantDashboard(props: PlantDashboardProps): JSX.Element 
                 </Grid>
               </Grid>
             </>
-          ) : ['Admin', 'Manager', 'Owner'].includes(organization?.role || '') ? (
+          ) : HighOrganizationRolesValues.includes(organization?.role || '') ? (
             <EmptyMessage
               className={classes.message}
               title={strings.PLANTS_EMPTY_MSG_TITLE}

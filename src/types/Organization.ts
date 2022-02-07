@@ -58,6 +58,8 @@ export type ServerOrganization = {
 
 export type HighOrganizationRoles = 'Manager' | 'Admin' | 'Owner';
 
+export const HighOrganizationRolesValues = ['Admin', 'Manager', 'Owner'];
+
 export type AllOrganizationRoles = HighOrganizationRoles | 'Contributor';
 
 export interface SelectedOrgInfo {
