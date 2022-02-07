@@ -11,14 +11,19 @@ import PageHeader from './seeds/PageHeader';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
+    mainFrame: {
+      background: '#ffffff',
+      padding: '24px 12px',
+      height: 'calc( 100% - 64px)',
+    },
     mainContainer: {
-      paddingTop: theme.spacing(8),
-      paddingBottom: theme.spacing(4),
+      padding: '20px 0 20px 0',
       background: '#ffffff',
     },
     mainGrid: {
       display: 'flex',
       width: '100%',
+      margin: 0,
     },
   })
 );
@@ -42,7 +47,7 @@ export default function Home({ organization }: HomeProps): JSX.Element {
     populateUser();
   }, []);
   return (
-    <main>
+    <main className={classes.mainFrame}>
       <PageHeader
         title={
           user?.firstName ? strings.formatString(strings.GOOD_MORNING_PERSON, user.firstName) : strings.GOOD_MORNING

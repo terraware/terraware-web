@@ -46,7 +46,6 @@ export default function NavBar({ organization }: NavBarProps): JSX.Element | nul
         onClick={() => navigate('/home')}
         id='dashboard'
       />
-      <NavSection title={strings.FLORA} />
       <NavItem
         label='Seeds'
         icon='seeds'

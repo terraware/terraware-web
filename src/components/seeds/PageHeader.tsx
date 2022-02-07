@@ -12,17 +12,15 @@ const useStyles = makeStyles((theme) =>
   createStyles({
     mainContainer: {
       backgroundColor: theme.palette.common.white,
-      border: '0.5px solid rgba(33, 37, 41, 0.06)',
+      paddingLeft: '12px',
     },
     container: {
-      minHeight: '156px',
       maxWidth: '100%',
     },
-    titleSpacing: {
-      paddingTop: theme.spacing(4),
-    },
     title: {
-      fontWeight: theme.typography.fontWeightMedium,
+      fontSize: '24px',
+      lineHeight: '32px',
+      fontWeight: '600' as React.CSSProperties['fontWeight'],
     },
     subtitle: {
       fontWeight: theme.typography.fontWeightLight,
@@ -80,7 +78,7 @@ export default function PageHeader({
 
   return (
     <Container maxWidth={false} className={classes.mainContainer}>
-      <Grid container spacing={3} className={classes.container}>
+      <Grid container spacing={0} className={classes.container}>
         {page && parentPage && !!selectedOrgInfo && !!onChangeSelectedOrgInfo && (
           <Grid item xs={12}>
             <Title
@@ -94,8 +92,7 @@ export default function PageHeader({
             />
           </Grid>
         )}
-        <Grid item xs={1} />
-        <Grid item xs={10} className={classes.flex}>
+        <Grid item xs={11} className={classes.flex}>
           {back && (
             <div className={classes.back}>
               <Fab
@@ -116,7 +113,7 @@ export default function PageHeader({
             </div>
           )}
           <div className={classes.mainContent}>
-            <Box display='flex' justifyContent='space-between' alignItems='center' className={classes.titleSpacing}>
+            <Box display='flex' justifyContent='space-between' alignItems='center'>
               <Typography id='title' variant='h4' className={classes.title}>
                 {title}
               </Typography>
