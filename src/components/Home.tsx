@@ -14,11 +14,17 @@ const useStyles = makeStyles((theme: Theme) =>
     mainContainer: {
       paddingTop: theme.spacing(8),
       paddingBottom: theme.spacing(4),
-      background: '#ffffff',
     },
     mainGrid: {
       display: 'flex',
       width: '100%',
+    },
+    main: {
+      background:
+        'url(/assets/trees-right.png) no-repeat 100% 100%/auto 248px, url(/assets/trees-left.png) no-repeat 0 100%/auto 175px, url(/assets/water.png) repeat-x 0 100%/auto 142px, url(/assets/mountain.png) no-repeat 0 100%/auto 233px, url(/assets/far-mountain.png) no-repeat 100% 100%/auto 317px, url(/assets/background.png) no-repeat 100% 0/90% 633px, linear-gradient(to bottom right, rgb(255, 255, 255) 0%, rgb(199, 226, 234) 100%) no-repeat 0 0/auto',
+      minHeight: 'calc(100vh - 64px)',
+      display: 'flex',
+      flexDirection: 'column',
     },
   })
 );
@@ -42,7 +48,7 @@ export default function Home({ organization }: HomeProps): JSX.Element {
     populateUser();
   }, []);
   return (
-    <main>
+    <main className={classes.main}>
       <PageHeader
         title={
           user?.firstName ? strings.formatString(strings.GOOD_MORNING_PERSON, user.firstName) : strings.GOOD_MORNING

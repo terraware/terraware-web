@@ -5,7 +5,9 @@ export const getAllSites = (organization: ServerOrganization): Site[] => {
   const sites: Site[] = [];
   organization.projects?.forEach((project) => {
     project.sites?.forEach((site) => {
-      sites.push(site);
+      if (site.name !== 'Seed Bank') {
+        sites.push(site);
+      }
     });
   });
   return sites;
@@ -35,7 +37,7 @@ export type ProjectsById = Map<number, Project>;
 
 export const getProjectsById = (organization: ServerOrganization): ProjectsById => {
   const projectById = new Map();
-  organization.projects?.forEach((project) => {
+  getOrganizationProjects(organization)?.forEach((project) => {
     projectById.set(project.id, project);
   });
   return projectById;
@@ -94,4 +96,8 @@ export const getFirstFacility = (organization: ServerOrganization | undefined): 
     return organization.projects[0].sites[0].facilities[0];
   }
   return null;
+};
+
+export const getOrganizationProjects = (organization: ServerOrganization | undefined) => {
+  return organization?.projects?.filter((proj) => proj.name !== 'Seed Bank') || [];
 };

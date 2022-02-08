@@ -32,13 +32,6 @@ describe('Accessions', () => {
       cy.intercept('POST', '/api/v1/search').as('search');
       cy.visit('/accessions');
       cy.wait('@search');
-      cy.get('#projectSelect').click();
-      cy.get('.options-container').should('be.visible');
-      cy.get('.options-container .select-value').eq(1).click();
-      cy.get('#siteSelect').click();
-      cy.get('.select-value').eq(1).click();
-      cy.get('#facilitySelect').click();
-      cy.get('.select-value').eq(1).click();
     });
 
     it('should navigate in and out of the new accession page', () => {
@@ -55,13 +48,6 @@ describe('Accessions', () => {
       cy.intercept('POST', '/api/v1/search').as('search');
       cy.visit('/accessions');
       cy.wait('@search');
-      cy.get('#projectSelect').click();
-      cy.get('.options-container').should('be.visible');
-      cy.get('.options-container .select-value').eq(1).click();
-      cy.get('#siteSelect').click();
-      cy.get('.select-value').eq(1).click();
-      cy.get('#facilitySelect').click();
-      cy.get('.select-value').eq(1).click();
       cy.get('#newAccession').click().url().should('contain', '/accessions/new');
 
       cy.get('#species').type('Kousa Dogwoord');

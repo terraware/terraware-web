@@ -11,6 +11,7 @@ import { searchCountries } from 'src/api/country/country';
 import { getOrganizationUsers } from 'src/api/organization/organization';
 import { OrganizationUser } from 'src/types/User';
 import { getCountryByCode, getSubdivisionByCode } from 'src/utils/country';
+import { getOrganizationProjects } from 'src/utils/organization';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -134,7 +135,7 @@ export default function OrganizationView({ organization }: OrganizationViewProps
             label={strings.NUMBER_OF_PROJECTS}
             id='numberOfProjects'
             type='text'
-            value={organization?.projects?.length.toString()}
+            value={getOrganizationProjects(organization).length.toString()}
             display={true}
           />
         </Grid>

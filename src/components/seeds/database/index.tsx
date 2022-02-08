@@ -35,7 +35,6 @@ import { HighOrganizationRolesValues, ServerOrganization } from 'src/types/Organ
 import { seedsDatabaseSelectedOrgInfo } from 'src/state/selectedOrgInfoPerPage';
 import { useRecoilState } from 'recoil';
 import EmptyMessage from 'src/components/common/EmptyMessage';
-import { getFirstFacility } from 'src/utils/organization';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -131,53 +130,55 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const [facilityIdForReport, setFacilityIdForReport] = useState<number>();
 
   useEffect(() => {
-    const populatePendingAccessions = async () => {
-      if (organization && selectedOrgInfo.selectedFacility?.id) {
-        setPendingAccessions(await getPendingAccessions(selectedOrgInfo, organization.id));
-      }
-    };
-    populatePendingAccessions();
-  }, [selectedOrgInfo, organization]);
-
-  useEffect(() => {
-    const populateFieldOptions = async () => {
-      const singleAndMultiChoiceFields = filterSelectFields(searchColumns);
-      setFieldOptions(await getAllFieldValues(singleAndMultiChoiceFields, 0));
-    };
-    populateFieldOptions();
-  }, [selectedOrgInfo, searchColumns]);
-
-  useEffect(() => {
-    let facilityId = selectedOrgInfo?.selectedFacility?.id;
-    // If no faciliyId is selected, then select first facility of first project of first site, until endpoint receives siteId, projectId or OrgId
-    if (getFirstFacility(organization)) {
-      facilityId = getFirstFacility(organization)?.id;
-      setFacilityIdForReport(facilityId);
-    }
-    const populateAvailableFieldOptions = async () => {
-      const singleAndMultiChoiceFields = filterSelectFields(searchColumns);
-      setAvailableFieldOptions(await searchFieldValues(singleAndMultiChoiceFields, searchCriteria, facilityId || 0));
-    };
-    populateAvailableFieldOptions();
-  }, [selectedOrgInfo, searchColumns, searchCriteria, organization]);
-
-  useEffect(() => {
     if (organization) {
+      const seedbankProject = organization?.projects?.length ? organization?.projects[0] : undefined;
+      const seedbankSite = seedbankProject?.sites?.find((site) => site.name === 'Seed Bank');
+      const seedbankFacility = seedbankSite?.facilities?.find((facility) => facility.name === 'Seed Bank');
+
+      const selected = {
+        selectedFacility: seedbankFacility,
+        selectedProject: seedbankProject,
+        selectedSite: seedbankSite,
+      };
+      setFacilityIdForReport(seedbankFacility?.id);
+      setSelectedOrgInfo(selected);
+
       const populateSearchResults = async () => {
         const apiResponse = await search({
           prefix: 'projects.sites.facilities.accessions',
           fields: searchColumns.includes('active') ? [...searchColumns, 'id'] : [...searchColumns, 'active', 'id'],
           sortOrder: [searchSortOrder],
-          search: convertToSearchNodePayload(searchCriteria, selectedOrgInfo, organization.id),
+          search: convertToSearchNodePayload(searchCriteria, selected, organization.id),
           count: 1000,
         });
 
         setSearchResults(apiResponse);
       };
 
+      const populateAvailableFieldOptions = async () => {
+        const singleAndMultiChoiceFields = filterSelectFields(searchColumns);
+        setAvailableFieldOptions(
+          await searchFieldValues(singleAndMultiChoiceFields, searchCriteria, seedbankFacility?.id || 0)
+        );
+      };
+
+      const populatePendingAccessions = async () => {
+        if (organization && seedbankFacility?.id) {
+          setPendingAccessions(await getPendingAccessions(selected, organization.id));
+        }
+      };
+
+      const populateFieldOptions = async () => {
+        const singleAndMultiChoiceFields = filterSelectFields(searchColumns);
+        setFieldOptions(await getAllFieldValues(singleAndMultiChoiceFields, 0));
+      };
+
       populateSearchResults();
+      populateAvailableFieldOptions();
+      populatePendingAccessions();
+      populateFieldOptions();
     }
-  }, [selectedOrgInfo, searchCriteria, searchSortOrder, searchColumns, organization]);
+  }, [setSelectedOrgInfo, searchCriteria, searchSortOrder, searchColumns, organization]);
 
   const onSelect = (row: SearchResponseElement) => {
     if (row.id) {
@@ -291,10 +292,6 @@ export default function Database(props: DatabaseProps): JSX.Element {
           subtitle={getSubtitle()}
           page={strings.ACCESSIONS}
           parentPage={strings.SEEDS}
-          organization={organization}
-          selectedOrgInfo={selectedOrgInfo}
-          showFacility={true}
-          onChangeSelectedOrgInfo={(newValues) => setSelectedOrgInfo(newValues)}
           rightComponent={
             <div>
               <Chip
@@ -343,86 +340,92 @@ export default function Database(props: DatabaseProps): JSX.Element {
           {(fieldOptions === undefined || availableFieldOptions === undefined) && <CircularProgress />}
           {(fieldOptions === null || availableFieldOptions === null) && strings.GENERIC_ERROR}
         </PageHeader>
-        <Grid item xs={12}>
-          {!!organization?.projects?.length && !searchResults?.length && (
-            <EmptyMessage
-              title={strings.COLLECT_IN_FIELD_PLANT_DATA}
-              text={strings.TERRAWARE_MOBILE_APP_INFO_MSG}
-              buttonText={strings.REQUEST_MOBILE_APP}
-              onClick={goToProjects}
-            />
-          )}
-        </Grid>
-        {!!organization?.projects?.length ? (
-          <Container maxWidth={false} className={classes.mainContainer}>
-            {pendingAccessions && pendingAccessions.length > 0 && (
-              <Grid container spacing={3} className={classes.checkinMessage}>
-                <Grid item xs={1} />
-                <Grid item xs={10}>
-                  <Paper>
-                    <Grid container spacing={4}>
-                      <Grid item xs={12} className={classes.checkInContent}>
-                        <div>
-                          <span> {strings.CHECKIN_BAGS}</span>
-                          <p>{strings.formatString(strings.CHECK_IN_MESSAGE, pendingAccessions.length)}</p>
-                        </div>
-                        <Button
-                          className={classes.checkInButton}
-                          onClick={handleViewCollections}
-                          id='viewCollections'
-                          label={strings.VIEW_COLLECTIONS}
-                          priority='secondary'
-                          type='passive'
-                        />
-                      </Grid>
-                    </Grid>
-                  </Paper>
-                </Grid>
-                <Grid item xs={1} />
-              </Grid>
-            )}
-            <Grid container spacing={3}>
-              <Grid item xs={1} />
-              <Grid item xs={10}>
-                <Paper>
-                  <Grid container spacing={4}>
-                    <Grid item xs={12}>
-                      {searchResults && (
-                        <Table
-                          columns={displayColumnDetails}
-                          rows={searchResults}
-                          orderBy={searchSortOrder.field}
-                          order={searchSortOrder.direction === 'Ascending' ? 'asc' : 'desc'}
-                          Renderer={SearchCellRenderer}
-                          onSelect={onSelect}
-                          sortHandler={onSortChange}
-                          isInactive={isInactive}
-                          onReorderEnd={onReorderEnd}
-                        />
-                      )}
-                      {searchResults === undefined && <CircularProgress />}
-                      {searchResults === null && strings.GENERIC_ERROR}
-                    </Grid>
-                  </Grid>
-                </Paper>
-              </Grid>
-              <Grid item xs={1} />
+        {organization && searchResults ? (
+          <>
+            <Grid item xs={12}>
+              {!!organization?.projects?.length && !searchResults?.length && (
+                <EmptyMessage
+                  title={strings.COLLECT_IN_FIELD_PLANT_DATA}
+                  text={strings.TERRAWARE_MOBILE_APP_INFO_MSG}
+                  buttonText={strings.REQUEST_MOBILE_APP}
+                  onClick={goToProjects}
+                />
+              )}
             </Grid>
-          </Container>
-        ) : HighOrganizationRolesValues.includes(organization?.role || '') ? (
-          <EmptyMessage
-            className={classes.message}
-            title={strings.PLANTS_EMPTY_MSG_TITLE}
-            text={strings.PLANTS_EMPTY_MSG_BODY}
-            buttonText={strings.GO_TO_PROJECTS}
-            onClick={goToProjects}
-          />
+            {!!organization?.projects?.length ? (
+              <Container maxWidth={false} className={classes.mainContainer}>
+                {pendingAccessions && pendingAccessions.length > 0 && (
+                  <Grid container spacing={3} className={classes.checkinMessage}>
+                    <Grid item xs={1} />
+                    <Grid item xs={10}>
+                      <Paper>
+                        <Grid container spacing={4}>
+                          <Grid item xs={12} className={classes.checkInContent}>
+                            <div>
+                              <span> {strings.CHECKIN_BAGS}</span>
+                              <p>{strings.formatString(strings.CHECK_IN_MESSAGE, pendingAccessions.length)}</p>
+                            </div>
+                            <Button
+                              className={classes.checkInButton}
+                              onClick={handleViewCollections}
+                              id='viewCollections'
+                              label={strings.VIEW_COLLECTIONS}
+                              priority='secondary'
+                              type='passive'
+                            />
+                          </Grid>
+                        </Grid>
+                      </Paper>
+                    </Grid>
+                    <Grid item xs={1} />
+                  </Grid>
+                )}
+                <Grid container spacing={3}>
+                  <Grid item xs={1} />
+                  <Grid item xs={10}>
+                    <Paper>
+                      <Grid container spacing={4}>
+                        <Grid item xs={12}>
+                          {searchResults && (
+                            <Table
+                              columns={displayColumnDetails}
+                              rows={searchResults}
+                              orderBy={searchSortOrder.field}
+                              order={searchSortOrder.direction === 'Ascending' ? 'asc' : 'desc'}
+                              Renderer={SearchCellRenderer}
+                              onSelect={onSelect}
+                              sortHandler={onSortChange}
+                              isInactive={isInactive}
+                              onReorderEnd={onReorderEnd}
+                            />
+                          )}
+                          {searchResults === undefined && <CircularProgress />}
+                          {searchResults === null && strings.GENERIC_ERROR}
+                        </Grid>
+                      </Grid>
+                    </Paper>
+                  </Grid>
+                  <Grid item xs={1} />
+                </Grid>
+              </Container>
+            ) : HighOrganizationRolesValues.includes(organization?.role || '') ? (
+              <EmptyMessage
+                className={classes.message}
+                title={strings.PLANTS_EMPTY_MSG_TITLE}
+                text={strings.PLANTS_EMPTY_MSG_BODY}
+                buttonText={strings.GO_TO_PROJECTS}
+                onClick={goToProjects}
+              />
+            ) : (
+              <EmptyMessage
+                className={classes.message}
+                title={strings.CHECK_BACK_LATER}
+                text={strings.EMPTY_MESSAGE_CONTRIBUTOR}
+              />
+            )}
+          </>
         ) : (
-          <EmptyMessage
-            className={classes.message}
-            title={strings.CHECK_BACK_LATER}
-            text={strings.EMPTY_MESSAGE_CONTRIBUTOR}
-          />
+          <CircularProgress />
         )}
       </main>
     </MuiPickersUtilsProvider>

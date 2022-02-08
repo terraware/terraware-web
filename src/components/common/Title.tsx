@@ -90,51 +90,55 @@ export default function Title({
       <div className={classes.title}>
         {parentPage} / <span className={classes.selectedSection}>{page}</span>
       </div>
-      <div className={classes.separator} />
-      <label className={classes.titleLabel}>{strings.PROJECT}</label>
-      <Select
-        id='projectSelect'
-        options={addAllOption(organization?.projects?.map((org) => org.name))}
-        selectedValue={selectedOrgInfo?.selectedProject?.name ?? 'All'}
-        onChange={(newValue) => {
-          onChangeSelectedOrgInfo({
-            selectedProject: organization?.projects?.find((proj) => proj.name === newValue),
-            selectedSite: undefined,
-            selectedFacility: undefined,
-          });
-        }}
-      />
-      <label className={classes.titleLabel}>{strings.SITE}</label>
-      <Select
-        id='siteSelect'
-        disabled={!selectedOrgInfo.selectedProject}
-        selectedValue={selectedOrgInfo?.selectedSite?.name ?? 'All'}
-        options={addAllOption(selectedOrgInfo?.selectedProject?.sites?.map((site) => site.name))}
-        onChange={(newValue) => {
-          onChangeSelectedOrgInfo({
-            ...selectedOrgInfo,
-            selectedSite: selectedOrgInfo.selectedProject?.sites?.find((site) => site.name === newValue),
-            selectedFacility: undefined,
-          });
-        }}
-      />
-      {showFacility && (
+      {organization && (
         <>
-          <label className={classes.titleLabel}>{strings.FACILITY}</label>
+          <div className={classes.separator} />
+          <label className={classes.titleLabel}>{strings.PROJECT}</label>
           <Select
-            id='facilitySelect'
-            disabled={!selectedOrgInfo.selectedSite}
-            selectedValue={selectedOrgInfo?.selectedFacility?.name ?? 'All'}
-            options={addAllOption(selectedOrgInfo.selectedSite?.facilities?.map((facility) => facility.name))}
+            id='projectSelect'
+            options={addAllOption(organization?.projects?.map((org) => org.name))}
+            selectedValue={selectedOrgInfo?.selectedProject?.name ?? 'All'}
             onChange={(newValue) => {
               onChangeSelectedOrgInfo({
-                ...selectedOrgInfo,
-                selectedFacility: selectedOrgInfo.selectedSite?.facilities?.find(
-                  (facility) => facility.name === newValue
-                ),
+                selectedProject: organization?.projects?.find((proj) => proj.name === newValue),
+                selectedSite: undefined,
+                selectedFacility: undefined,
               });
             }}
           />
+          <label className={classes.titleLabel}>{strings.SITE}</label>
+          <Select
+            id='siteSelect'
+            disabled={!selectedOrgInfo.selectedProject}
+            selectedValue={selectedOrgInfo?.selectedSite?.name ?? 'All'}
+            options={addAllOption(selectedOrgInfo?.selectedProject?.sites?.map((site) => site.name))}
+            onChange={(newValue) => {
+              onChangeSelectedOrgInfo({
+                ...selectedOrgInfo,
+                selectedSite: selectedOrgInfo.selectedProject?.sites?.find((site) => site.name === newValue),
+                selectedFacility: undefined,
+              });
+            }}
+          />
+          {showFacility && (
+            <>
+              <label className={classes.titleLabel}>{strings.FACILITY}</label>
+              <Select
+                id='facilitySelect'
+                disabled={!selectedOrgInfo.selectedSite}
+                selectedValue={selectedOrgInfo?.selectedFacility?.name ?? 'All'}
+                options={addAllOption(selectedOrgInfo.selectedSite?.facilities?.map((facility) => facility.name))}
+                onChange={(newValue) => {
+                  onChangeSelectedOrgInfo({
+                    ...selectedOrgInfo,
+                    selectedFacility: selectedOrgInfo.selectedSite?.facilities?.find(
+                      (facility) => facility.name === newValue
+                    ),
+                  });
+                }}
+              />
+            </>
+          )}
         </>
       )}
     </div>

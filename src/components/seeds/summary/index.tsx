@@ -1,3 +1,4 @@
+import { CircularProgress } from '@material-ui/core';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
@@ -62,31 +63,43 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
   const [, setPopulateSummaryInterval] = useState<ReturnType<typeof setInterval>>();
   const [summary, setSummary] = useState<GetSummaryResponse>();
   const errorOccurred = summary ? summary.errorOccurred : false;
-  const [selectedOrgInfo, setSelectedOrgInfo] = useRecoilState(seedsSummarySelectedOrgInfo);
+  const [, setSelectedOrgInfo] = useRecoilState(seedsSummarySelectedOrgInfo);
 
   useEffect(() => {
-    const populateSummary = async () => {
-      if (selectedOrgInfo.selectedFacility?.id) {
-        setSummary(await getSummary(selectedOrgInfo.selectedFacility?.id));
-      }
-    };
+    if (organization) {
+      const seedbankProject = organization?.projects?.length ? organization?.projects[0] : undefined;
+      const seedbankSite = seedbankProject?.sites?.find((site) => site.name === 'Seed Bank');
+      const seedbankFacility = seedbankSite?.facilities?.find((facility) => facility.name === 'Seed Bank');
 
-    // Update summary information
-    if (selectedOrgInfo.selectedFacility?.id) {
-      setFacilityIdSelected(selectedOrgInfo.selectedFacility?.id);
-      populateSummary();
-    } else {
-      setSummary(undefined);
-    }
-
-    // Update interval that keeps summary up to date
-    if (!process.env.REACT_APP_DISABLE_RECURRENT_REQUESTS) {
-      setPopulateSummaryInterval((currInterval) => {
-        if (currInterval) {
-          // Clear an existing interval when the facilityId changes
-          clearInterval(currInterval);
+      const populateSummary = async () => {
+        if (seedbankFacility) {
+          setSummary(await getSummary(seedbankFacility.id));
         }
-        return selectedOrgInfo.selectedFacility?.id ? setInterval(populateSummary, API_PULL_INTERVAL) : undefined;
+      };
+
+      // Update summary information
+      if (seedbankFacility) {
+        setFacilityIdSelected(seedbankFacility.id);
+        populateSummary();
+      } else {
+        setSummary(undefined);
+      }
+
+      // Update interval that keeps summary up to date
+      if (!process.env.REACT_APP_DISABLE_RECURRENT_REQUESTS) {
+        setPopulateSummaryInterval((currInterval) => {
+          if (currInterval) {
+            // Clear an existing interval when the facilityId changes
+            clearInterval(currInterval);
+          }
+          return seedbankFacility?.id ? setInterval(populateSummary, API_PULL_INTERVAL) : undefined;
+        });
+      }
+
+      setSelectedOrgInfo({
+        selectedFacility: seedbankFacility,
+        selectedProject: seedbankProject,
+        selectedSite: seedbankSite,
       });
     }
 
@@ -99,7 +112,7 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
         return undefined;
       });
     };
-  }, [selectedOrgInfo, setFacilityIdSelected]);
+  }, [setFacilityIdSelected, organization, setSelectedOrgInfo]);
 
   const goToProjects = () => {
     const projectsLocation = {
@@ -115,95 +128,95 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
         subtitle={strings.WELCOME_MSG}
         page={strings.DASHBOARD}
         parentPage={strings.SEEDS}
-        organization={organization}
-        selectedOrgInfo={selectedOrgInfo}
-        onChangeSelectedOrgInfo={(newValues) => setSelectedOrgInfo(newValues)}
-        showFacility={true}
       />
-      <Container maxWidth={false} className={classes.mainContainer}>
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
-            {!!organization?.projects?.length && !summary && (
-              <EmptyMessage
-                title={strings.COLLECT_IN_FIELD_PLANT_DATA}
-                text={strings.TERRAWARE_MOBILE_APP_INFO_MSG}
-                buttonText={strings.REQUEST_MOBILE_APP}
-                onClick={goToProjects}
-              />
-            )}
-          </Grid>
-          <Grid item xs={1} />
-          {!!organization?.projects?.length ? (
-            <Grid item xs={10}>
-              <Grid container spacing={3}>
-                <Grid item xs={4}>
-                  <Paper className={classes.paper}>
-                    <SummaryPaper
-                      id='sessions'
-                      title={strings.ACTIVE_ACCESSIONS}
-                      statistics={summary?.value?.activeAccessions}
-                      loading={summary === undefined}
-                      error={errorOccurred}
-                    />
-                  </Paper>
-                </Grid>
-                <Grid item xs={4}>
-                  <Paper className={classes.paper}>
-                    <SummaryPaper
-                      id='species'
-                      title={strings.SPECIES}
-                      statistics={summary?.value?.species}
-                      loading={summary === undefined}
-                      error={errorOccurred}
-                    />
-                  </Paper>
-                </Grid>
-                <Grid item xs={4}>
-                  <Paper className={classes.paper}>
-                    <SummaryPaper
-                      id='families'
-                      title={strings.FAMILY}
-                      statistics={summary?.value?.families}
-                      loading={summary === undefined}
-                      error={errorOccurred}
-                    />
-                  </Paper>
-                </Grid>
-                <Grid item xs={4}>
-                  <Paper className={`${classes.paper} ${classes.fixedHeight}`}>
-                    <Alerts notifications={notifications} />
-                  </Paper>
-                </Grid>
-                <Grid item xs={8}>
-                  <Paper className={`${classes.paper} ${classes.fixedHeight}`}>
-                    <Updates
-                      setSeedSearchCriteria={setSeedSearchCriteria}
-                      summaryResponse={summary?.value}
-                      loading={summary === undefined}
-                      error={errorOccurred}
-                    />
-                  </Paper>
+      {organization && summary ? (
+        <Container maxWidth={false} className={classes.mainContainer}>
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
+              {!!organization?.projects?.length && !summary?.value?.activeAccessions.current && (
+                <EmptyMessage
+                  title={strings.COLLECT_IN_FIELD_PLANT_DATA}
+                  text={strings.TERRAWARE_MOBILE_APP_INFO_MSG}
+                  buttonText={strings.REQUEST_MOBILE_APP}
+                  onClick={goToProjects}
+                />
+              )}
+            </Grid>
+            <Grid item xs={1} />
+            {!!organization?.projects?.length ? (
+              <Grid item xs={10}>
+                <Grid container spacing={3}>
+                  <Grid item xs={4}>
+                    <Paper className={classes.paper}>
+                      <SummaryPaper
+                        id='sessions'
+                        title={strings.ACTIVE_ACCESSIONS}
+                        statistics={summary?.value?.activeAccessions}
+                        loading={summary === undefined}
+                        error={errorOccurred}
+                      />
+                    </Paper>
+                  </Grid>
+                  <Grid item xs={4}>
+                    <Paper className={classes.paper}>
+                      <SummaryPaper
+                        id='species'
+                        title={strings.SPECIES}
+                        statistics={summary?.value?.species}
+                        loading={summary === undefined}
+                        error={errorOccurred}
+                      />
+                    </Paper>
+                  </Grid>
+                  <Grid item xs={4}>
+                    <Paper className={classes.paper}>
+                      <SummaryPaper
+                        id='families'
+                        title={strings.FAMILY}
+                        statistics={summary?.value?.families}
+                        loading={summary === undefined}
+                        error={errorOccurred}
+                      />
+                    </Paper>
+                  </Grid>
+                  <Grid item xs={4}>
+                    <Paper className={`${classes.paper} ${classes.fixedHeight}`}>
+                      <Alerts notifications={notifications} />
+                    </Paper>
+                  </Grid>
+                  <Grid item xs={8}>
+                    <Paper className={`${classes.paper} ${classes.fixedHeight}`}>
+                      <Updates
+                        setSeedSearchCriteria={setSeedSearchCriteria}
+                        summaryResponse={summary?.value}
+                        loading={summary === undefined}
+                        error={errorOccurred}
+                      />
+                    </Paper>
+                  </Grid>
                 </Grid>
               </Grid>
-            </Grid>
-          ) : HighOrganizationRolesValues.includes(organization?.role || '') ? (
-            <EmptyMessage
-              className={classes.message}
-              title={strings.PLANTS_EMPTY_MSG_TITLE}
-              text={strings.PLANTS_EMPTY_MSG_BODY}
-              buttonText={strings.GO_TO_PROJECTS}
-              onClick={goToProjects}
-            />
-          ) : (
-            <EmptyMessage
-              className={classes.message}
-              title={strings.CHECK_BACK_LATER}
-              text={strings.EMPTY_MESSAGE_CONTRIBUTOR}
-            />
-          )}
-          <Grid item xs={1} />
-        </Grid>
-      </Container>
+            ) : HighOrganizationRolesValues.includes(organization?.role || '') ? (
+              <EmptyMessage
+                className={classes.message}
+                title={strings.PLANTS_EMPTY_MSG_TITLE}
+                text={strings.PLANTS_EMPTY_MSG_BODY}
+                buttonText={strings.GO_TO_PROJECTS}
+                onClick={goToProjects}
+              />
+            ) : (
+              <EmptyMessage
+                className={classes.message}
+                title={strings.CHECK_BACK_LATER}
+                text={strings.EMPTY_MESSAGE_CONTRIBUTOR}
+              />
+            )}
+            <Grid item xs={1} />
+          </Grid>
+        </Container>
+      ) : (
+        <CircularProgress />
+      )}
     </main>
   );
 }

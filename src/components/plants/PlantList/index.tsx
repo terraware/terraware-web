@@ -1,4 +1,13 @@
-import { Container, createStyles, Grid, IconButton, makeStyles, Paper, Typography } from '@material-ui/core';
+import {
+  CircularProgress,
+  Container,
+  createStyles,
+  Grid,
+  IconButton,
+  makeStyles,
+  Paper,
+  Typography,
+} from '@material-ui/core';
 import TuneIcon from '@material-ui/icons/Tune';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
@@ -57,7 +66,7 @@ export default function PlantList(props: PlantListProps): JSX.Element {
   const history = useHistory();
   const { organization, filters, setFilters } = props;
   const [speciesById, setSpeciesById] = useState<SpeciesById>(new Map());
-  const [plants, setPlants] = useState<Plant[]>([]);
+  const [plants, setPlants] = useState<Plant[]>();
   const [selectedPlant, setSelectedPlant] = useState<Plant>();
   const [selectedPlantPhoto, setSelectedPlantPhoto] = useState<string>();
   const [showFilters, setShowFilters] = useState(filters ? true : false);
@@ -118,7 +127,7 @@ export default function PlantList(props: PlantListProps): JSX.Element {
   };
 
   const selectPlant = (id: number) => {
-    setSelectedPlant(plants.find((plant) => plant.featureId === id));
+    setSelectedPlant(plants?.find((plant) => plant.featureId === id));
   };
 
   const onPlantEditSaved = (deleted: boolean) => {
@@ -157,77 +166,81 @@ export default function PlantList(props: PlantListProps): JSX.Element {
           organization={organization}
         />
       )}
-      <Container maxWidth={false} className={classes.mainContainer}>
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <Title
-              page={strings.PLANTS}
-              parentPage={strings.PLANTS}
-              organization={organization}
-              allowAll={true}
-              onChangeSelectedOrgInfo={(newValues) => setSelectedOrgInfo(newValues)}
-              selectedOrgInfo={selectedOrgInfo}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            {!!organization?.projects?.length && !plants.length && (
+      {organization && plants ? (
+        <Container maxWidth={false} className={classes.mainContainer}>
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
+              <Title
+                page={strings.PLANTS}
+                parentPage={strings.PLANTS}
+                organization={!!organization.projects?.length ? organization : undefined}
+                allowAll={true}
+                onChangeSelectedOrgInfo={(newValues) => setSelectedOrgInfo(newValues)}
+                selectedOrgInfo={selectedOrgInfo}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              {!!organization.projects?.length && !plants.length && (
+                <EmptyMessage
+                  title={strings.COLLECT_IN_FIELD_PLANT_DATA}
+                  text={strings.TERRAWARE_MOBILE_APP_INFO_MSG}
+                  buttonText={strings.REQUEST_MOBILE_APP}
+                  onClick={goToProjects}
+                />
+              )}
+            </Grid>
+            {!!organization.projects?.length ? (
+              <>
+                <Grid item xs={1} />
+                <Grid item xs={11}>
+                  <IconButton
+                    id='show-filters'
+                    aria-label='filter'
+                    onClick={() => setShowFilters(!showFilters)}
+                    className={classes.filtersButton}
+                  >
+                    <TuneIcon className={classes.filtersIcon} />
+                    <Typography variant='h6'>{strings.FILTERS}</Typography>
+                  </IconButton>
+                </Grid>
+                {showFilters && (
+                  <PlantFilterBar
+                    speciesNames={getSpeciesNames()}
+                    filters={filters}
+                    onApplyFilters={setFilters}
+                    onClearFilters={() => setFilters(undefined)}
+                  />
+                )}
+                <Grid item xs={1} />
+                <Grid item xs={10}>
+                  <Paper className={classes.mainContent}>
+                    <React.Suspense fallback={strings.LOADING}>
+                      <PlantListContent plants={plants} speciesById={speciesById} selectPlant={selectPlant} />
+                    </React.Suspense>
+                  </Paper>
+                </Grid>
+                <Grid item xs={1} />
+              </>
+            ) : ['Admin', 'Manager', 'Owner'].includes(organization?.role || '') ? (
               <EmptyMessage
-                title={strings.COLLECT_IN_FIELD_PLANT_DATA}
-                text={strings.TERRAWARE_MOBILE_APP_INFO_MSG}
-                buttonText={strings.REQUEST_MOBILE_APP}
+                className={classes.message}
+                title={strings.PLANTS_EMPTY_MSG_TITLE}
+                text={strings.PLANTS_EMPTY_MSG_BODY}
+                buttonText={strings.GO_TO_PROJECTS}
                 onClick={goToProjects}
+              />
+            ) : (
+              <EmptyMessage
+                className={classes.message}
+                title={strings.CHECK_BACK_LATER}
+                text={strings.EMPTY_MESSAGE_CONTRIBUTOR}
               />
             )}
           </Grid>
-          {!!organization?.projects?.length ? (
-            <>
-              <Grid item xs={1} />
-              <Grid item xs={11}>
-                <IconButton
-                  id='show-filters'
-                  aria-label='filter'
-                  onClick={() => setShowFilters(!showFilters)}
-                  className={classes.filtersButton}
-                >
-                  <TuneIcon className={classes.filtersIcon} />
-                  <Typography variant='h6'>{strings.FILTERS}</Typography>
-                </IconButton>
-              </Grid>
-              {showFilters && (
-                <PlantFilterBar
-                  speciesNames={getSpeciesNames()}
-                  filters={filters}
-                  onApplyFilters={setFilters}
-                  onClearFilters={() => setFilters(undefined)}
-                />
-              )}
-              <Grid item xs={1} />
-              <Grid item xs={10}>
-                <Paper className={classes.mainContent}>
-                  <React.Suspense fallback={strings.LOADING}>
-                    <PlantListContent plants={plants} speciesById={speciesById} selectPlant={selectPlant} />
-                  </React.Suspense>
-                </Paper>
-              </Grid>
-              <Grid item xs={1} />
-            </>
-          ) : ['Admin', 'Manager', 'Owner'].includes(organization?.role || '') ? (
-            <EmptyMessage
-              className={classes.message}
-              title={strings.PLANTS_EMPTY_MSG_TITLE}
-              text={strings.PLANTS_EMPTY_MSG_BODY}
-              buttonText={strings.GO_TO_PROJECTS}
-              onClick={goToProjects}
-            />
-          ) : (
-            <EmptyMessage
-              className={classes.message}
-              title={strings.CHECK_BACK_LATER}
-              text={strings.EMPTY_MESSAGE_CONTRIBUTOR}
-            />
-          )}
-        </Grid>
-      </Container>
+        </Container>
+      ) : (
+        <CircularProgress />
+      )}
     </main>
   );
 }
