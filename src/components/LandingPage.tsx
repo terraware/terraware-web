@@ -1,13 +1,12 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import Container from '@material-ui/core/Container';
-import {createStyles, makeStyles} from '@material-ui/core/styles';
+import { createStyles, makeStyles } from '@material-ui/core/styles';
 import Button from 'src/components/common/button/Button';
 import Icon from 'src/components/common/icon/Icon';
 import moreStrings from 'src/strings/landingPage';
 import strings from 'src/strings/index';
-import {IconName} from './common/icon/icons';
+import { IconName } from './common/icon/icons';
 import AddNewOrganizationModal from './AddNewOrganizationModal';
-
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -72,17 +71,17 @@ const useStyles = makeStyles((theme) =>
 );
 
 type ListItemContent = {
-  iconName: IconName,
-  sectionName: string,
-  description: string,
+  iconName: IconName;
+  sectionName: string;
+  description: string;
 };
 
 const listItemContent: ListItemContent[] = [
   { iconName: 'organization', sectionName: strings.ORGANIZATION, description: moreStrings.DESCRIPTION_ORGANIZATION },
   { iconName: 'project', sectionName: strings.PROJECTS, description: moreStrings.DESCRIPTION_PROJECTS },
   { iconName: 'sites', sectionName: strings.SITES, description: moreStrings.DESCRIPTION_SITES },
-  { iconName: 'people', sectionName: strings.PEOPLE, description: moreStrings.DESCRIPTION_PEOPLE},
-  { iconName: 'species2', sectionName: strings.SPECIES, description: moreStrings.DESCRIPTION_SPECIES},
+  { iconName: 'people', sectionName: strings.PEOPLE, description: moreStrings.DESCRIPTION_PEOPLE },
+  { iconName: 'species2', sectionName: strings.SPECIES, description: moreStrings.DESCRIPTION_SPECIES },
 ];
 
 type LandingPageProps = {
@@ -114,9 +113,12 @@ export default function LandingPage(props: LandingPageProps): JSX.Element {
             );
           })}
         </div>
-        <Button className={classes.createOrgButton}
-                label={moreStrings.BUTTON_CREATE_ORGANIZATION}
-                onClick={() => {setIsOrgModalOpen(true)}}
+        <Button
+          className={classes.createOrgButton}
+          label={moreStrings.BUTTON_CREATE_ORGANIZATION}
+          onClick={() => {
+            setIsOrgModalOpen(true);
+          }}
         />
         <div className={classes.footNote}>{moreStrings.FOOTNOTE_WAIT_FOR_INVITATION}</div>
       </Container>

@@ -27,9 +27,7 @@ export default function TopBar(props: TopBarProps): JSX.Element {
   return (
     <AppBar position='static' className={classes.appBar}>
       <Toolbar className={classes.right}>
-        <div className={classes.flex}>
-          {props.children}
-        </div>
+        <div className={classes.flex}>{props.children}</div>
       </Toolbar>
     </AppBar>
   );

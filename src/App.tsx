@@ -142,7 +142,6 @@ function AppContent() {
     }
   }, [organizations, selectedOrganization]);
 
-
   if (orgDataStatus === 'Awaiting') {
     return <h1>Spinner goes here...</h1>;
   }
@@ -167,9 +166,9 @@ function AppContent() {
       <Switch>
         <Route exact path='/welcome'>
           <TopBar>
-            <UserMenu/>
+            <UserMenu />
           </TopBar>
-          <LandingPage reloadOrganizationData={reloadData}/>
+          <LandingPage reloadOrganizationData={reloadData} />
         </Route>
 
         <Route path='*'>

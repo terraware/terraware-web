@@ -51,32 +51,32 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
 
   return (
     <>
-      <SearchBar facilityId={facilityId || 0}/>
+      <SearchBar facilityId={facilityId || 0} />
       <Link
-          id='help-button-link'
-          component={RouterLink}
-          to={getLocation('/help', location)}
-          target='_blank'
-          rel='noopener noreferrer'
+        id='help-button-link'
+        component={RouterLink}
+        to={getLocation('/help', location)}
+        target='_blank'
+        rel='noopener noreferrer'
       >
         <IconButton id='help-button' onClick={() => true}>
-          <HelpIcon/>
+          <HelpIcon />
         </IconButton>
       </Link>
       <NotificationsDropdown
-          notifications={props.notifications}
-          setNotifications={setNotifications}
-          setSeedSearchCriteria={setSeedSearchCriteria}
-          currFacilityId={facilityId || 0}
+        notifications={props.notifications}
+        setNotifications={setNotifications}
+        setSeedSearchCriteria={setSeedSearchCriteria}
+        currFacilityId={facilityId || 0}
       />
-      <div className={classes.separator}/>
+      <div className={classes.separator} />
       <OrganizationsDropdown
-          organizations={organizations}
-          selectedOrganization={selectedOrganization}
-          setSelectedOrganization={setSelectedOrganization}
-          reloadOrganizationData={reloadOrganizationData}
+        organizations={organizations}
+        selectedOrganization={selectedOrganization}
+        setSelectedOrganization={setSelectedOrganization}
+        reloadOrganizationData={reloadOrganizationData}
       />
-      <div className={classes.separator}/>
+      <div className={classes.separator} />
       <UserMenu />
     </>
   );

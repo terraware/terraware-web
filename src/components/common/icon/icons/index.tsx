@@ -15,7 +15,7 @@ import { ReactComponent as Organization } from './organization.svg';
 import { ReactComponent as People } from './people.svg';
 import { ReactComponent as Person } from './person.svg';
 import { ReactComponent as Plus } from './plus.svg';
-import { ReactComponent as Project} from './project.svg';
+import { ReactComponent as Project } from './project.svg';
 import { ReactComponent as RestorationSite } from './restoration-site.svg';
 import { ReactComponent as Seeds } from './seeds.svg';
 import { ReactComponent as Site } from './site.svg';

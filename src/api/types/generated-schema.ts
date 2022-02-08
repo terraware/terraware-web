@@ -1200,7 +1200,7 @@ export interface components {
       locale?: string;
       name: string;
       /** Which organization's species list to update. (Currently ignored.) */
-      organizationId?: number;
+      organizationId: number;
       speciesId: number;
     };
     SpeciesNamesResponseElement: {
@@ -1216,7 +1216,7 @@ export interface components {
       isScientific?: boolean;
       name: string;
       /** Which organization's species list to update. (Currently ignored.) */
-      organizationId?: number;
+      organizationId: number;
       plantForm?: "Tree" | "Shrub" | "Vine" | "Liana" | "Herbaceous";
       rare?: "No" | "Yes" | "Unsure";
       /** Taxonomic serial number from ITIS database. */
@@ -3071,7 +3071,7 @@ export interface operations {
   listSpecies: {
     parameters: {
       query: {
-        organizationId?: number;
+        organizationId: number;
       };
     };
     responses: {
@@ -3107,7 +3107,7 @@ export interface operations {
   listAllSpeciesNames: {
     parameters: {
       query: {
-        organizationId?: number;
+        organizationId: number;
       };
     };
     responses: {
@@ -3223,7 +3223,7 @@ export interface operations {
         speciesId: number;
       };
       query: {
-        organizationId?: number;
+        organizationId: number;
       };
     };
     responses: {
@@ -3273,7 +3273,7 @@ export interface operations {
         speciesId: number;
       };
       query: {
-        organizationId?: number;
+        organizationId: number;
       };
     };
     responses: {
@@ -3303,7 +3303,7 @@ export interface operations {
         speciesId: number;
       };
       query: {
-        organizationId?: number;
+        organizationId: number;
       };
     };
     responses: {
