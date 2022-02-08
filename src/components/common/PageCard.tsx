@@ -14,6 +14,7 @@ const useStyles = makeStyles((theme) =>
       padding: '24px',
       display: 'flex',
       flexDirection: 'column',
+      background: '#ffffff',
     },
     title: {
       display: 'flex',

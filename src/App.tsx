@@ -140,6 +140,15 @@ function AppContent() {
     return <h1>Could not fetch organization data</h1>;
   }
 
+  const organizationWithoutSB = () => {
+    if (selectedOrganization) {
+      return {
+        ...selectedOrganization,
+        projects: selectedOrganization?.projects?.filter((proj) => !proj.hidden),
+      };
+    }
+  };
+
   const filteredOrganization = () => {
     if (selectedOrganization) {
       return {
@@ -207,11 +216,11 @@ function AppContent() {
                 <Accession organization={selectedOrganization} />
               </Route>
               <Route exact path='/plants-dashboard'>
-                <PlantDashboard organization={selectedOrganization} />
+                <PlantDashboard organization={organizationWithoutSB()} />
               </Route>
               <Route exact path='/plants-list'>
                 <PlantList
-                  organization={selectedOrganization}
+                  organization={organizationWithoutSB()}
                   filters={plantListFilters}
                   setFilters={setPlantListFilters}
                 />

@@ -125,7 +125,7 @@ export default function PlantDashboard(props: PlantDashboardProps): JSX.Element 
             <Title
               page={strings.DASHBOARD}
               parentPage={strings.PLANTS}
-              organization={organization}
+              organization={!!organization?.projects?.length ? organization : undefined}
               allowAll={true}
               selectedOrgInfo={selectedOrgInfo}
               onChangeSelectedOrgInfo={(newValues) => setSelectedOrgInfo(newValues)}

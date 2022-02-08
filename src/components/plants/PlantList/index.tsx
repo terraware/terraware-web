@@ -163,7 +163,7 @@ export default function PlantList(props: PlantListProps): JSX.Element {
             <Title
               page={strings.PLANTS}
               parentPage={strings.PLANTS}
-              organization={organization}
+              organization={!!organization?.projects?.length ? organization : undefined}
               allowAll={true}
               onChangeSelectedOrgInfo={(newValues) => setSelectedOrgInfo(newValues)}
               selectedOrgInfo={selectedOrgInfo}
