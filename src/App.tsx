@@ -140,7 +140,7 @@ function AppContent() {
     return <h1>Could not fetch organization data</h1>;
   }
 
-  const organizationWithNoSB = () => {
+  const organizationWithoutSB = () => {
     if (selectedOrganization) {
       return {
         ...selectedOrganization,
@@ -216,11 +216,11 @@ function AppContent() {
                 <Accession organization={selectedOrganization} />
               </Route>
               <Route exact path='/plants-dashboard'>
-                <PlantDashboard organization={organizationWithNoSB()} />
+                <PlantDashboard organization={organizationWithoutSB()} />
               </Route>
               <Route exact path='/plants-list'>
                 <PlantList
-                  organization={organizationWithNoSB()}
+                  organization={organizationWithoutSB()}
                   filters={plantListFilters}
                   setFilters={setPlantListFilters}
                 />
