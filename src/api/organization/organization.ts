@@ -75,6 +75,7 @@ const parseProject = (project: ServerProject): Project => {
     sites: project.sites?.map((site) => parseSite(site)),
     organizationId: project.organizationId,
     totalUsers: project.totalUsers,
+    hidden: project.hidden,
   };
   return parsedProject;
 };

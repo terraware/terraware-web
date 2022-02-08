@@ -2,13 +2,6 @@ describe('Withdrawal', () => {
   context('quantity by seed', () => {
     it('should create the accession', () => {
       cy.visit('/accessions');
-      cy.get('#projectSelect').click();
-      cy.get('.options-container').should('be.visible');
-      cy.get('.options-container .select-value').eq(1).click();
-      cy.get('#siteSelect').click();
-      cy.get('.select-value').eq(1).click();
-      cy.get('#facilitySelect').click();
-      cy.get('.select-value').eq(1).click();
       cy.get('#newAccession').click().url().should('contain', '/accessions/new');
       cy.get('#saveAccession').click();
 
@@ -198,13 +191,6 @@ describe('Withdrawal', () => {
   context('quantity by grams', () => {
     it('should create the accession', () => {
       cy.visit('/accessions');
-      cy.get('#projectSelect').click();
-      cy.get('.options-container').should('be.visible');
-      cy.get('.options-container .select-value').eq(1).click();
-      cy.get('#siteSelect').click();
-      cy.get('.select-value').eq(1).click();
-      cy.get('#facilitySelect').click();
-      cy.get('.select-value').eq(1).click();
       cy.get('#newAccession').click().url().should('contain', '/accessions/new');
 
       cy.get('#saveAccession').click();

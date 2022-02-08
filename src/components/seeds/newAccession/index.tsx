@@ -7,10 +7,11 @@ import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import moment from 'moment';
 import React, { Suspense, useEffect, useState } from 'react';
 import { Redirect, useHistory } from 'react-router-dom';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { checkIn, getPhotoEndpoint, postAccession } from 'src/api/seeds/accession';
 import { updateSpecies } from 'src/api/species/species';
 import { Accession, AccessionPostRequestBody } from 'src/api/types/accessions';
+import { seedsDatabaseSelectedOrgInfo } from 'src/state/selectedOrgInfoPerPage';
 import snackbarAtom from 'src/state/snackbar';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
@@ -61,17 +62,17 @@ const useStyles = makeStyles((theme) =>
 );
 
 type NewAccessionProps = {
-  facilityId?: number;
   organization: ServerOrganization;
 };
 
 export default function NewAccessionWrapper(props: NewAccessionProps): JSX.Element {
-  const { facilityId, organization } = props;
+  const { organization } = props;
   const [accessionId, setAccessionId] = useState<number>();
   const setSnackbar = useSetRecoilState(snackbarAtom);
   const classes = useStyles();
   const history = useHistory();
   const location = useStateLocation();
+  const selectedOrgInfoDatabase = useRecoilValue(seedsDatabaseSelectedOrgInfo);
 
   const onSubmit = async (record: AccessionPostRequestBody) => {
     try {
@@ -102,7 +103,7 @@ export default function NewAccessionWrapper(props: NewAccessionProps): JSX.Eleme
     return <Redirect to={getLocation(`/accessions/${accessionId}/seed-collection`, location)} />;
   }
 
-  if (facilityId === undefined || facilityId === 0) {
+  if (selectedOrgInfoDatabase.selectedFacility?.id === undefined) {
     return <CircularProgress id={`new-accession-facilityid-spinner`} />;
   }
 
@@ -131,7 +132,7 @@ export default function NewAccessionWrapper(props: NewAccessionProps): JSX.Eleme
           <Grid item xs={10}>
             <AccessionForm
               accession={{
-                facilityId,
+                facilityId: selectedOrgInfoDatabase.selectedFacility?.id,
                 receivedDate: moment().format('YYYY-MM-DD'),
               }}
               organization={organization}

@@ -35,7 +35,6 @@ import { HighOrganizationRolesValues, ServerOrganization } from 'src/types/Organ
 import { seedsDatabaseSelectedOrgInfo } from 'src/state/selectedOrgInfoPerPage';
 import { useRecoilState } from 'recoil';
 import EmptyMessage from 'src/components/common/EmptyMessage';
-import { getFirstFacility } from 'src/utils/organization';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -131,53 +130,55 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const [facilityIdForReport, setFacilityIdForReport] = useState<number>();
 
   useEffect(() => {
-    const populatePendingAccessions = async () => {
-      if (organization && selectedOrgInfo.selectedFacility?.id) {
-        setPendingAccessions(await getPendingAccessions(selectedOrgInfo, organization.id));
-      }
-    };
-    populatePendingAccessions();
-  }, [selectedOrgInfo, organization]);
-
-  useEffect(() => {
-    const populateFieldOptions = async () => {
-      const singleAndMultiChoiceFields = filterSelectFields(searchColumns);
-      setFieldOptions(await getAllFieldValues(singleAndMultiChoiceFields, 0));
-    };
-    populateFieldOptions();
-  }, [selectedOrgInfo, searchColumns]);
-
-  useEffect(() => {
-    let facilityId = selectedOrgInfo?.selectedFacility?.id;
-    // If no faciliyId is selected, then select first facility of first project of first site, until endpoint receives siteId, projectId or OrgId
-    if (getFirstFacility(organization)) {
-      facilityId = getFirstFacility(organization)?.id;
-      setFacilityIdForReport(facilityId);
-    }
-    const populateAvailableFieldOptions = async () => {
-      const singleAndMultiChoiceFields = filterSelectFields(searchColumns);
-      setAvailableFieldOptions(await searchFieldValues(singleAndMultiChoiceFields, searchCriteria, facilityId || 0));
-    };
-    populateAvailableFieldOptions();
-  }, [selectedOrgInfo, searchColumns, searchCriteria, organization]);
-
-  useEffect(() => {
     if (organization) {
+      const seedbankProject = organization?.projects?.length ? organization?.projects[0] : undefined;
+      const seedbankSite = seedbankProject?.sites?.find((site) => site.name === 'Seed Bank');
+      const seedbankFacility = seedbankSite?.facilities?.find((facility) => facility.name === 'Seed Bank');
+
+      const selected = {
+        selectedFacility: seedbankFacility,
+        selectedProject: seedbankProject,
+        selectedSite: seedbankSite,
+      };
+      setFacilityIdForReport(seedbankFacility?.id);
+      setSelectedOrgInfo(selected);
+
       const populateSearchResults = async () => {
         const apiResponse = await search({
           prefix: 'projects.sites.facilities.accessions',
           fields: searchColumns.includes('active') ? [...searchColumns, 'id'] : [...searchColumns, 'active', 'id'],
           sortOrder: [searchSortOrder],
-          search: convertToSearchNodePayload(searchCriteria, selectedOrgInfo, organization.id),
+          search: convertToSearchNodePayload(searchCriteria, selected, organization.id),
           count: 1000,
         });
 
         setSearchResults(apiResponse);
       };
 
+      const populateAvailableFieldOptions = async () => {
+        const singleAndMultiChoiceFields = filterSelectFields(searchColumns);
+        setAvailableFieldOptions(
+          await searchFieldValues(singleAndMultiChoiceFields, searchCriteria, seedbankFacility?.id || 0)
+        );
+      };
+
+      const populatePendingAccessions = async () => {
+        if (organization && seedbankFacility?.id) {
+          setPendingAccessions(await getPendingAccessions(selected, organization.id));
+        }
+      };
+
+      const populateFieldOptions = async () => {
+        const singleAndMultiChoiceFields = filterSelectFields(searchColumns);
+        setFieldOptions(await getAllFieldValues(singleAndMultiChoiceFields, 0));
+      };
+
       populateSearchResults();
+      populateAvailableFieldOptions();
+      populatePendingAccessions();
+      populateFieldOptions();
     }
-  }, [selectedOrgInfo, searchCriteria, searchSortOrder, searchColumns, organization]);
+  }, [setSelectedOrgInfo, searchCriteria, searchSortOrder, searchColumns, organization]);
 
   const onSelect = (row: SearchResponseElement) => {
     if (row.id) {
@@ -291,10 +292,6 @@ export default function Database(props: DatabaseProps): JSX.Element {
           subtitle={getSubtitle()}
           page={strings.ACCESSIONS}
           parentPage={strings.SEEDS}
-          organization={organization}
-          selectedOrgInfo={selectedOrgInfo}
-          showFacility={true}
-          onChangeSelectedOrgInfo={(newValues) => setSelectedOrgInfo(newValues)}
           rightComponent={
             <div>
               <Chip
