@@ -19,7 +19,6 @@ import ErrorBox from '../common/ErrorBox/ErrorBox';
 import { getOrganizationUsers } from 'src/api/organization/organization';
 import TableCellRenderer from './TableCellRenderer';
 import { listAllProjects } from 'src/api/project/project';
-import { getOrganizationProjects } from 'src/utils/organization';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -133,7 +132,7 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
       const response = await listAllProjects();
       if (response.requestSucceeded && organization) {
         const allProjectsServer = response.projects?.filter((project) => project.organizationId === organization.id);
-        const projectsWithTotalUsers = getOrganizationProjects(organization)?.map((orgProj) => {
+        const projectsWithTotalUsers = organization.projects?.map((orgProj) => {
           return { ...orgProj, totalUsers: allProjectsServer?.find((pro) => pro.id === orgProj.id)?.totalUsers };
         });
         setAllProjects(projectsWithTotalUsers);

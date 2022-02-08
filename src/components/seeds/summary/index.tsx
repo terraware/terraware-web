@@ -196,7 +196,7 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
                   </Grid>
                 </Grid>
               </Grid>
-            ) : ['Admin', 'Manager', 'Owner'].includes(organization?.role || '') ? (
+            ) : HighOrganizationRolesValues.includes(organization?.role || '') ? (
               <EmptyMessage
                 className={classes.message}
                 title={strings.PLANTS_EMPTY_MSG_TITLE}

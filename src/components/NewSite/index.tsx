@@ -9,7 +9,7 @@ import Select from '../common/Select/Select';
 import { useSetRecoilState } from 'recoil';
 import snackbarAtom from 'src/state/snackbar';
 import FormBottomBar from '../common/FormBottomBar';
-import { getAllSitesWithProjectName, getOrganizationProjects } from 'src/utils/organization';
+import { getAllSitesWithProjectName } from 'src/utils/organization';
 import { createSite, updateSite } from 'src/api/site/site';
 
 const useStyles = makeStyles((theme) =>
@@ -132,10 +132,9 @@ export default function SiteView({ organization, reloadOrganizationData }: SiteV
         return project;
       }
     }
-    if (getOrganizationProjects(organization) && getOrganizationProjects(organization).length) {
-      const firstProject = getOrganizationProjects(organization)[0];
-      onChange('projectId', firstProject.id);
-      return firstProject.name;
+    if (organization.projects && organization.projects.length) {
+      onChange('projectId', organization.projects[0].id);
+      return organization.projects[0].name;
     }
     return '';
   };
@@ -172,7 +171,7 @@ export default function SiteView({ organization, reloadOrganizationData }: SiteV
               id='projectId'
               label={strings.PROJECT}
               onChange={onChangeProject}
-              options={getOrganizationProjects(organization)?.map((project) => project.name)}
+              options={organization.projects?.map((project) => project.name)}
               selectedValue={selectedProject()}
             />
           </Grid>

@@ -9,7 +9,6 @@ import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
 import strings from 'src/strings';
 import { Project, ServerOrganization } from 'src/types/Organization';
-import { getOrganizationProjects } from 'src/utils/organization';
 import ProjectsCellRenderer from './TableCellRenderer';
 
 const useStyles = makeStyles((theme) =>
@@ -87,7 +86,7 @@ export default function ProjectsList({ organization }: ProjectsListProps): JSX.E
                     <Table
                       id='projects-table'
                       columns={columns}
-                      rows={getOrganizationProjects(organization)}
+                      rows={organization.projects}
                       orderBy='name'
                       onSelect={onSelect}
                       Renderer={ProjectsCellRenderer}

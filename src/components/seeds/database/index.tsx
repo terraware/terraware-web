@@ -408,7 +408,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
                   <Grid item xs={1} />
                 </Grid>
               </Container>
-            ) : ['Admin', 'Manager', 'Owner'].includes(organization?.role || '') ? (
+            ) : HighOrganizationRolesValues.includes(organization?.role || '') ? (
               <EmptyMessage
                 className={classes.message}
                 title={strings.PLANTS_EMPTY_MSG_TITLE}
