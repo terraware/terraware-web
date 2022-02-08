@@ -11,7 +11,6 @@ import { SelectedOrgInfo, ServerOrganization } from 'src/types/Organization';
 const useStyles = makeStyles((theme) =>
   createStyles({
     mainContainer: {
-      backgroundColor: theme.palette.common.white,
       paddingLeft: '12px',
     },
     container: {

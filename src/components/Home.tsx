@@ -13,7 +13,6 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     mainContainer: {
       padding: '20px 0 20px 0',
-      background: '#ffffff',
     },
     mainGrid: {
       display: 'flex',
