@@ -1,9 +1,9 @@
 /* eslint-disable import/no-webpack-loader-syntax */
-import { createStyles, CssBaseline, makeStyles, ThemeProvider } from '@material-ui/core';
+import { CircularProgress, createStyles, CssBaseline, makeStyles, ThemeProvider } from '@material-ui/core';
 import mapboxgl from 'mapbox-gl';
 import React, { useCallback, useEffect, useState } from 'react';
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
-import { RecoilRoot, useRecoilValue } from 'recoil';
+import { RecoilRoot } from 'recoil';
 import {
   DEFAULT_SEED_SEARCH_FILTERS,
   DEFAULT_SEED_SEARCH_SORT_ORDER,
@@ -34,7 +34,6 @@ import ProjectsList from './components/Projects';
 import SitesList from './components/Sites';
 import Project from './components/Project';
 import SiteView from './components/Site';
-import { seedsDatabaseSelectedOrgInfo } from './state/selectedOrgInfoPerPage';
 import People from './components/People';
 import NewProject from './components/NewProject';
 import NewSite from './components/NewSite';
@@ -106,7 +105,6 @@ function AppContent() {
   const [facilityIdSelected, setFacilityIdSelected] = useState<number>();
   const [organizationError, setOrganizationError] = useState<boolean>(false);
   // get the selected values on database to pass it to new accession page
-  const selectedOrgInfoDatabase = useRecoilValue(seedsDatabaseSelectedOrgInfo);
   const [organizations, setOrganizations] = useState<ServerOrganization[]>();
 
   const reloadData = useCallback(() => {
@@ -140,8 +138,26 @@ function AppContent() {
   }, [organizations, selectedOrganization]);
 
   if (organizationError) {
-    return <h1>Could not fetch organization data</h1>;
+    return <CircularProgress />;
   }
+
+  const organizationWithoutSB = () => {
+    if (selectedOrganization) {
+      return {
+        ...selectedOrganization,
+        projects: selectedOrganization?.projects?.filter((proj) => !proj.hidden),
+      };
+    }
+  };
+
+  const filteredOrganization = () => {
+    if (selectedOrganization) {
+      return {
+        ...selectedOrganization,
+        projects: selectedOrganization?.projects?.filter((proj) => proj.hidden && proj.name === 'Seed Bank'),
+      };
+    }
+  };
 
   return (
     <>
@@ -170,7 +186,7 @@ function AppContent() {
               </Route>
               <Route exact path='/seeds-summary'>
                 <SeedSummary
-                  organization={selectedOrganization}
+                  organization={filteredOrganization()}
                   setSeedSearchCriteria={setSeedSearchCriteria}
                   notifications={notifications}
                   setFacilityIdSelected={setFacilityIdSelected}
@@ -181,15 +197,12 @@ function AppContent() {
               </Route>
               {selectedOrganization && (
                 <Route exact path='/accessions/new'>
-                  <NewAccession
-                    facilityId={selectedOrgInfoDatabase.selectedFacility?.id}
-                    organization={selectedOrganization}
-                  />
+                  <NewAccession organization={selectedOrganization} />
                 </Route>
               )}
               <Route exact path='/accessions'>
                 <Database
-                  organization={selectedOrganization}
+                  organization={filteredOrganization()}
                   searchCriteria={seedSearchCriteria}
                   setSearchCriteria={setSeedSearchCriteria}
                   searchSortOrder={seedSearchSort}
@@ -204,11 +217,11 @@ function AppContent() {
                 <Accession organization={selectedOrganization} />
               </Route>
               <Route exact path='/plants-dashboard'>
-                <PlantDashboard organization={selectedOrganization} />
+                <PlantDashboard organization={organizationWithoutSB()} />
               </Route>
               <Route exact path='/plants-list'>
                 <PlantList
-                  organization={selectedOrganization}
+                  organization={organizationWithoutSB()}
                   filters={plantListFilters}
                   setFilters={setPlantListFilters}
                 />
@@ -224,7 +237,7 @@ function AppContent() {
                 </Route>
               )}
               <Route exact path='/projects'>
-                <ProjectsList organization={selectedOrganization} />
+                <ProjectsList organization={organizationWithoutSB()} />
               </Route>
               {selectedOrganization && (
                 <Route path='/projects/:projectId/edit' exact={true}>
@@ -236,7 +249,7 @@ function AppContent() {
               </Route>
               {selectedOrganization && (
                 <Route path='/sites/new'>
-                  <NewSite organization={selectedOrganization} reloadOrganizationData={reloadData} />
+                  <NewSite organization={organizationWithoutSB()!} reloadOrganizationData={reloadData} />
                 </Route>
               )}
               <Route exact path='/sites'>
@@ -255,14 +268,14 @@ function AppContent() {
               </Route>
               {selectedOrganization && (
                 <Route path='/people/new'>
-                  <NewPerson organization={selectedOrganization} reloadOrganizationData={reloadData} />
+                  <NewPerson organization={organizationWithoutSB()!} reloadOrganizationData={reloadData} />
                 </Route>
               )}
               <Route exact path='/people'>
                 <People organization={selectedOrganization} />
               </Route>
               <Route path='/people/:personId'>
-                <PersonDetails organization={selectedOrganization} />
+                <PersonDetails organization={organizationWithoutSB()} />
               </Route>
               {selectedOrganization && (
                 <Route path='/organization/edit' exact={true}>
@@ -270,7 +283,7 @@ function AppContent() {
                 </Route>
               )}
               <Route path='/organization'>
-                <Organization organization={selectedOrganization} />
+                <Organization organization={organizationWithoutSB()} />
               </Route>
 
               {/* Redirects. Invalid paths will redirect to the closest valid path. */}
