@@ -3,7 +3,7 @@ import Container from '@material-ui/core/Container';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import Button from 'src/components/common/button/Button';
 import Icon from 'src/components/common/icon/Icon';
-import moreStrings from 'src/strings/landingPage';
+import landingPageString from 'src/strings/landingPage';
 import strings from 'src/strings/index';
 import { IconName } from './common/icon/icons';
 import AddNewOrganizationModal from './AddNewOrganizationModal';
@@ -71,17 +71,17 @@ const useStyles = makeStyles((theme) =>
 );
 
 type ListItemContent = {
-  iconName: IconName;
-  sectionName: string;
+  icon: IconName;
+  title: string;
   description: string;
 };
 
 const listItemContent: ListItemContent[] = [
-  { iconName: 'organization', sectionName: strings.ORGANIZATION, description: moreStrings.DESCRIPTION_ORGANIZATION },
-  { iconName: 'project', sectionName: strings.PROJECTS, description: moreStrings.DESCRIPTION_PROJECTS },
-  { iconName: 'sites', sectionName: strings.SITES, description: moreStrings.DESCRIPTION_SITES },
-  { iconName: 'people', sectionName: strings.PEOPLE, description: moreStrings.DESCRIPTION_PEOPLE },
-  { iconName: 'species2', sectionName: strings.SPECIES, description: moreStrings.DESCRIPTION_SPECIES },
+  { icon: 'organization', title: strings.ORGANIZATION, description: landingPageString.DESCRIPTION_ORGANIZATION },
+  { icon: 'project', title: strings.PROJECTS, description: landingPageString.DESCRIPTION_PROJECTS },
+  { icon: 'sites', title: strings.SITES, description: landingPageString.DESCRIPTION_SITES },
+  { icon: 'people', title: strings.PEOPLE, description: landingPageString.DESCRIPTION_PEOPLE },
+  { icon: 'species2', title: strings.SPECIES, description: landingPageString.DESCRIPTION_SPECIES },
 ];
 
 type LandingPageProps = {
@@ -100,14 +100,14 @@ export default function LandingPage(props: LandingPageProps): JSX.Element {
           onCancel={() => setIsOrgModalOpen(false)}
           reloadOrganizationData={props.reloadOrganizationData}
         />
-        <h1 className={classes.title}>{moreStrings.TITLE_WELCOME}</h1>
-        <p className={classes.subtitle}>{moreStrings.SUBTITLE_GET_STARTED}</p>
+        <h1 className={classes.title}>{landingPageString.TITLE_WELCOME}</h1>
+        <p className={classes.subtitle}>{landingPageString.SUBTITLE_GET_STARTED}</p>
         <div className={classes.listContainer}>
           {listItemContent.map((item) => {
             return (
-              <div key={item.sectionName} className={classes.listItem}>
-                <Icon name={item.iconName} className={classes.listItemIcon} />
-                <p className={classes.listItemTitle}>{item.sectionName}</p>
+              <div key={item.title} className={classes.listItem}>
+                <Icon name={item.icon} className={classes.listItemIcon} />
+                <p className={classes.listItemTitle}>{item.title}</p>
                 <p className={classes.listItemDescription}>{item.description}</p>
               </div>
             );
@@ -115,12 +115,12 @@ export default function LandingPage(props: LandingPageProps): JSX.Element {
         </div>
         <Button
           className={classes.createOrgButton}
-          label={moreStrings.BUTTON_CREATE_ORGANIZATION}
+          label={landingPageString.BUTTON_CREATE_ORGANIZATION}
           onClick={() => {
             setIsOrgModalOpen(true);
           }}
         />
-        <div className={classes.footNote}>{moreStrings.FOOTNOTE_WAIT_FOR_INVITATION}</div>
+        <div className={classes.footNote}>{landingPageString.FOOTNOTE_WAIT_FOR_INVITATION}</div>
       </Container>
     </main>
   );
