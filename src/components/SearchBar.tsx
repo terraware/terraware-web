@@ -1,11 +1,11 @@
 import { InputAdornment, TextField } from '@material-ui/core';
 import { createStyles, alpha, makeStyles } from '@material-ui/core/styles';
-import SearchIcon from '@material-ui/icons/Search';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { getAccessionsByNumber, SearchResponseElement } from 'src/api/seeds/search';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
+import Icon from './common/icon/Icon';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -15,6 +15,9 @@ const useStyles = makeStyles((theme) =>
       },
       marginRight: theme.spacing(2),
       width: 225,
+    },
+    searchIcon: {
+      fill: '#708284',
     },
   })
 );
@@ -74,7 +77,7 @@ export default function NavBar(props: NavBarProps): JSX.Element {
               ...params.InputProps,
               startAdornment: (
                 <InputAdornment position='start'>
-                  <SearchIcon />
+                  <Icon name='search' className={classes.searchIcon} />
                 </InputAdornment>
               ),
             }}

@@ -13,7 +13,6 @@ import {
 import Badge from '@material-ui/core/Badge';
 import IconButton from '@material-ui/core/IconButton';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
-import NotificationsIcon from '@material-ui/icons/Notifications';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FieldNodePayload, SeedSearchCriteria } from 'src/api/seeds/search';
@@ -25,6 +24,7 @@ import { Notifications, NotificationTypes } from 'src/types/Notifications';
 import preventDefaultEvent from 'src/utils/preventDefaultEvent';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import NotificationIcon from './NotificationIcon';
+import Icon from './common/icon/Icon';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -57,6 +57,9 @@ const useStyles = makeStyles((theme) =>
       '&:hover': {
         backgroundColor: theme.palette.neutral[200],
       },
+    },
+    notificationIcon: {
+      fill: '#708284',
     },
   })
 );
@@ -163,7 +166,7 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
           badgeContent={notifications ? getUnreadNotifications() : undefined}
           color='secondary'
         >
-          <NotificationsIcon />
+          <Icon name='notification' className={classes.notificationIcon} />
         </Badge>
       </IconButton>
       <Popover
