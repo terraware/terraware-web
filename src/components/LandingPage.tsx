@@ -62,10 +62,10 @@ const useStyles = makeStyles((theme) =>
       marginBottom: theme.spacing(3),
     },
     footNote: {
+      fontSize: '12px',
       lineHeight: '16px',
       margin: '0 auto',
       maxWidth: '550px',
-      size: '12px',
     },
   })
 );
