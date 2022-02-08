@@ -58,6 +58,9 @@ declare module '@material-ui/core/styles/createPalette' {
 }
 
 export default createTheme({
+  typography: {
+    fontFamily: 'Inter',
+  },
   overrides: {
     MuiCssBaseline: {
       '@global': {
