@@ -210,7 +210,7 @@ export async function updateScientificName(
       const endpoint = PUT_SPECIES_NAME_ENDPOINT.replace('{speciesNameId}', `${scientificNameOfSpecies.id}`).concat(
         `?organizationId=${organizationId}`
       );
-      const updateSpeciesNamesRequest: PutSpeciesNamesRequest = { name: scientificName, speciesId, isScientific: true};
+      const updateSpeciesNamesRequest: PutSpeciesNamesRequest = { organizationId, name: scientificName, speciesId, isScientific: true};
       await axios.put(endpoint, updateSpeciesNamesRequest);
     } else {
       const responseCreate = await createSpeciesNames(scientificName, organizationId, speciesId, true);
