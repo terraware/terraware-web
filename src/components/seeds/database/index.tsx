@@ -31,7 +31,7 @@ import DownloadReportModal from './DownloadReportModal';
 import EditColumns from './EditColumns';
 import Filters from './Filters';
 import SearchCellRenderer from './TableCellRenderer';
-import { ServerOrganization } from 'src/types/Organization';
+import { HighOrganizationRolesValues, ServerOrganization } from 'src/types/Organization';
 import { seedsDatabaseSelectedOrgInfo } from 'src/state/selectedOrgInfoPerPage';
 import { useRecoilState } from 'recoil';
 import EmptyMessage from 'src/components/common/EmptyMessage';
@@ -130,48 +130,8 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const [facilityIdForReport, setFacilityIdForReport] = useState<number>();
 
   useEffect(() => {
-    const populatePendingAccessions = async () => {
-      if (organization && selectedOrgInfo.selectedFacility?.id) {
-        setPendingAccessions(await getPendingAccessions(selectedOrgInfo, organization.id));
-      }
-    };
-    populatePendingAccessions();
-  }, [selectedOrgInfo, organization]);
-
-  useEffect(() => {
-    const populateFieldOptions = async () => {
-      const singleAndMultiChoiceFields = filterSelectFields(searchColumns);
-      setFieldOptions(await getAllFieldValues(singleAndMultiChoiceFields, 0));
-    };
-    populateFieldOptions();
-  }, [selectedOrgInfo, searchColumns]);
-
-  useEffect(() => {
-    let facilityId = selectedOrgInfo?.selectedFacility?.id;
-    // If no faciliyId is selected, then select first facility of first project of first site, until endpoint receives siteId, projectId or OrgId
-    if (
-      !facilityId &&
-      organization &&
-      organization.projects &&
-      organization.projects[0] &&
-      organization.projects[0].sites &&
-      organization.projects[0].sites[0] &&
-      organization.projects[0].sites[0].facilities &&
-      organization.projects[0].sites[0].facilities[0]
-    ) {
-      facilityId = organization.projects[0].sites[0].facilities[0].id;
-      setFacilityIdForReport(facilityId);
-    }
-    const populateAvailableFieldOptions = async () => {
-      const singleAndMultiChoiceFields = filterSelectFields(searchColumns);
-      setAvailableFieldOptions(await searchFieldValues(singleAndMultiChoiceFields, searchCriteria, facilityId || 0));
-    };
-    populateAvailableFieldOptions();
-  }, [selectedOrgInfo, searchColumns, searchCriteria, organization]);
-
-  useEffect(() => {
     if (organization) {
-      const seedbankProject = organization?.projects?.find((project) => project.name === 'Seed Bank');
+      const seedbankProject = organization?.projects?.length ? organization?.projects[0] : undefined;
       const seedbankSite = seedbankProject?.sites?.find((site) => site.name === 'Seed Bank');
       const seedbankFacility = seedbankSite?.facilities?.find((facility) => facility.name === 'Seed Bank');
 
@@ -180,6 +140,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
         selectedProject: seedbankProject,
         selectedSite: seedbankSite,
       };
+      setFacilityIdForReport(seedbankFacility?.id);
       setSelectedOrgInfo(selected);
 
       const populateSearchResults = async () => {
@@ -194,7 +155,28 @@ export default function Database(props: DatabaseProps): JSX.Element {
         setSearchResults(apiResponse);
       };
 
+      const populateAvailableFieldOptions = async () => {
+        const singleAndMultiChoiceFields = filterSelectFields(searchColumns);
+        setAvailableFieldOptions(
+          await searchFieldValues(singleAndMultiChoiceFields, searchCriteria, seedbankFacility?.id || 0)
+        );
+      };
+
+      const populatePendingAccessions = async () => {
+        if (organization && seedbankFacility?.id) {
+          setPendingAccessions(await getPendingAccessions(selected, organization.id));
+        }
+      };
+
+      const populateFieldOptions = async () => {
+        const singleAndMultiChoiceFields = filterSelectFields(searchColumns);
+        setFieldOptions(await getAllFieldValues(singleAndMultiChoiceFields, 0));
+      };
+
       populateSearchResults();
+      populateAvailableFieldOptions();
+      populatePendingAccessions();
+      populateFieldOptions();
     }
   }, [setSelectedOrgInfo, searchCriteria, searchSortOrder, searchColumns, organization]);
 
@@ -426,7 +408,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
                   <Grid item xs={1} />
                 </Grid>
               </Container>
-            ) : ['Admin', 'Manager', 'Owner'].includes(organization?.role || '') ? (
+            ) : HighOrganizationRolesValues.includes(organization?.role || '') ? (
               <EmptyMessage
                 className={classes.message}
                 title={strings.PLANTS_EMPTY_MSG_TITLE}

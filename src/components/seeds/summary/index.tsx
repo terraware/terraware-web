@@ -14,7 +14,7 @@ import { API_PULL_INTERVAL } from 'src/constants';
 import { seedsSummarySelectedOrgInfo } from 'src/state/selectedOrgInfoPerPage';
 import strings from 'src/strings';
 import { Notifications } from 'src/types/Notifications';
-import { ServerOrganization } from 'src/types/Organization';
+import { HighOrganizationRolesValues, ServerOrganization } from 'src/types/Organization';
 import PageHeader from '../PageHeader';
 import Alerts from './Alerts';
 import SummaryPaper from './SummaryPaper';
@@ -67,7 +67,7 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
 
   useEffect(() => {
     if (organization) {
-      const seedbankProject = organization?.projects?.find((project) => project.name === 'Seed Bank');
+      const seedbankProject = organization?.projects?.length ? organization?.projects[0] : undefined;
       const seedbankSite = seedbankProject?.sites?.find((site) => site.name === 'Seed Bank');
       const seedbankFacility = seedbankSite?.facilities?.find((facility) => facility.name === 'Seed Bank');
 
@@ -196,7 +196,7 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
                   </Grid>
                 </Grid>
               </Grid>
-            ) : ['Admin', 'Manager', 'Owner'].includes(organization?.role || '') ? (
+            ) : HighOrganizationRolesValues.includes(organization?.role || '') ? (
               <EmptyMessage
                 className={classes.message}
                 title={strings.PLANTS_EMPTY_MSG_TITLE}

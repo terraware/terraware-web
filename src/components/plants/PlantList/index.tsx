@@ -173,14 +173,14 @@ export default function PlantList(props: PlantListProps): JSX.Element {
               <Title
                 page={strings.PLANTS}
                 parentPage={strings.PLANTS}
-                organization={!!getOrganizationProjects(organization).length ? organization : undefined}
+                organization={!!organization.projects?.length ? organization : undefined}
                 allowAll={true}
                 onChangeSelectedOrgInfo={(newValues) => setSelectedOrgInfo(newValues)}
                 selectedOrgInfo={selectedOrgInfo}
               />
             </Grid>
             <Grid item xs={12}>
-              {!!getOrganizationProjects(organization).length && !plants.length && (
+              {!!organization.projects?.length && !plants.length && (
                 <EmptyMessage
                   title={strings.COLLECT_IN_FIELD_PLANT_DATA}
                   text={strings.TERRAWARE_MOBILE_APP_INFO_MSG}
@@ -189,7 +189,7 @@ export default function PlantList(props: PlantListProps): JSX.Element {
                 />
               )}
             </Grid>
-            {!!getOrganizationProjects(organization).length ? (
+            {!!organization.projects?.length ? (
               <>
                 <Grid item xs={1} />
                 <Grid item xs={11}>

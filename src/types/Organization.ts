@@ -10,6 +10,7 @@ export type Project = {
   sites?: Site[];
   totalUsers?: number;
   organizationId: number;
+  hidden?: boolean;
 };
 
 export type ProjectStatus = 'Propagating' | 'Planting' | 'Completed/Monitoring' | undefined;
@@ -56,6 +57,8 @@ export type ServerOrganization = {
 };
 
 export type HighOrganizationRoles = 'Manager' | 'Admin' | 'Owner';
+
+export const HighOrganizationRolesValues = ['Admin', 'Manager', 'Owner'];
 
 export type AllOrganizationRoles = HighOrganizationRoles | 'Contributor';
 
