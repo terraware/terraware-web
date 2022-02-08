@@ -13,7 +13,7 @@ import TextField from 'src/components/common/TextField';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
 import { Plant } from 'src/types/Plant';
-import { Species, SpeciesById } from 'src/types/Species';
+import { Species, SpeciesById, SpeciesWithScientificName } from 'src/types/Species';
 import DisplayPhoto from './DisplayPhoto';
 import DeletePlantConfirmationModal from './DeletePlantConfirmationModal';
 
@@ -101,7 +101,7 @@ export default function EditPlantModal(props: EditPlantModalProps): JSX.Element 
     let speciesId: number | undefined;
     if (inputtedValidNewSpecies()) {
       // create new species
-      const response = await createSpecies(newSpeciesName, organization.id);
+      const response = await createSpecies({ name: newSpeciesName } as SpeciesWithScientificName, organization.id);
       // TODO handle error if cannot save species
       if (response.species) {
         speciesId = response.species.id;

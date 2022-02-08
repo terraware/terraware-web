@@ -3,7 +3,13 @@ export type Species = {
   name: string;
 };
 
+export type SpeciesWithScientificName = Species & {
+  scientificName?: string;
+};
+
 export type SpeciesById = Map<number, Species>;
+
+export type SpeciesByIdWithScientificName = Map<number, SpeciesWithScientificName>;
 
 export enum SpeciesRequestError {
   PreexistingSpecies = 'SERVER_RETURNED_409_PREEXISTING_SPECIES',

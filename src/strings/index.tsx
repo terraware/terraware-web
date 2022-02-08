@@ -410,6 +410,8 @@ const strings = new LocalizedStrings({
     CHECK_BACK_LATER: 'Please check back later.',
     EMPTY_MESSAGE_CONTRIBUTOR:
       'Once your administrator has created a project and site, you’ll be able to access your data.',
+    COMMON_NAME: 'Common Name',
+    SCIENTIFIC_NAME: 'Scientific Name',
   },
 });
 

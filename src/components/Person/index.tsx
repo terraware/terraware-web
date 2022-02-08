@@ -13,6 +13,7 @@ import Table from 'src/components/common/table';
 import { TableColumnType } from '../common/table/types';
 import TableCellRenderer from './TableCellRenderer';
 import { listAllProjects } from 'src/api/project/project';
+import { getOrganizationProjects } from 'src/utils/organization';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -72,7 +73,7 @@ export default function PersonDetails({ organization }: PersonDetailsProps): JSX
       const response = await listAllProjects();
       if (response.requestSucceeded && organization) {
         const allProjectsServer = response.projects?.filter((project) => project.organizationId === organization.id);
-        const projectsWithTotalUsers = organization.projects?.map((orgProj) => {
+        const projectsWithTotalUsers = getOrganizationProjects(organization)?.map((orgProj) => {
           return { ...orgProj, totalUsers: allProjectsServer?.find((pro) => pro.id === orgProj.id)?.totalUsers };
         });
         setAllProjects(projectsWithTotalUsers);

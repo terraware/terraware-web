@@ -8,7 +8,7 @@ import React, { useEffect, useState } from 'react';
 import { createSpecies, updateSpecies } from 'src/api/species/species';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
-import { Species, SpeciesRequestError } from 'src/types/Species';
+import { Species, SpeciesRequestError, SpeciesWithScientificName } from 'src/types/Species';
 import useForm from 'src/utils/useForm';
 import Button from '../../common/button/Button';
 import DialogCloseButton from '../../common/DialogCloseButton';
@@ -52,7 +52,7 @@ function initSpecies(species?: Species): Species {
 export default function SimpleSpeciesModal(props: SimpleSpeciesModalProps): JSX.Element {
   const classes = useStyles();
   const { open, onClose, initialSpecies, organization, onError } = props;
-  const [record, setRecord, onChange] = useForm<Species>(initSpecies(initialSpecies));
+  const [record, setRecord, onChange] = useForm<SpeciesWithScientificName>(initSpecies(initialSpecies));
   const [nameFormatError, setNameFormatError] = useState('');
 
   useEffect(() => {
@@ -72,11 +72,11 @@ export default function SimpleSpeciesModal(props: SimpleSpeciesModalProps): JSX.
     if (record.name.trim()) {
       setNameFormatError('');
       if (record.id === 0) {
-        const newSpecies = await createSpecies(record.name, organization.id);
-        if (newSpecies.species?.id) {
+        const newSpecies = await createSpecies(record, organization.id);
+        if (!newSpecies.error) {
           snackbarMessage = strings.SNACKBAR_MSG_NEW_SPECIES_ADDED;
           onClose(true, snackbarMessage);
-        } else if (newSpecies.error) {
+        } else {
           if (newSpecies.error === SpeciesRequestError.PreexistingSpecies) {
             snackbarMessage = strings.PREEXISTING_SPECIES;
           } else {
@@ -85,11 +85,11 @@ export default function SimpleSpeciesModal(props: SimpleSpeciesModalProps): JSX.
           onError(snackbarMessage);
         }
       } else {
-        try {
-          await updateSpecies(record, organization.id);
+        const updateResponse = await updateSpecies(record, organization.id);
+        if (updateResponse.requestSucceeded) {
           snackbarMessage = strings.SNACKBAR_MSG_CHANGES_SAVED;
           onClose(true, snackbarMessage);
-        } catch {
+        } else {
           snackbarMessage = strings.GENERIC_ERROR;
           onError(snackbarMessage);
         }
@@ -112,10 +112,19 @@ export default function SimpleSpeciesModal(props: SimpleSpeciesModalProps): JSX.
               id='name'
               value={record.name}
               onChange={onChange}
-              label={strings.SPECIES_NAME}
-              aria-label={strings.SPECIES_NAME}
+              label={strings.COMMON_NAME}
+              aria-label={strings.COMMON_NAME}
               error={!!nameFormatError}
               helperText={!!nameFormatError && !record.name ? nameFormatError : ''}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              id='scientificName'
+              value={record.scientificName}
+              onChange={onChange}
+              label={strings.SCIENTIFIC_NAME}
+              aria-label={strings.SCIENTIFIC_NAME}
             />
           </Grid>
         </Grid>
