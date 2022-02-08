@@ -3,7 +3,7 @@ import { CircularProgress, createStyles, CssBaseline, makeStyles, ThemeProvider 
 import mapboxgl from 'mapbox-gl';
 import React, { useCallback, useEffect, useState } from 'react';
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
-import { RecoilRoot, useRecoilValue } from 'recoil';
+import { RecoilRoot } from 'recoil';
 import { getOrganizations } from 'src/api/organization/organization';
 import {
   DEFAULT_SEED_SEARCH_FILTERS,
@@ -75,6 +75,13 @@ const useStyles = makeStyles(() =>
   })
 );
 
+enum APIRequestStatus {
+  'AWAITING',
+  'FAILED',
+  'FAILED_NO_AUTH',
+  'SUCCEEDED',
+}
+
 function AppContent() {
   const classes = useStyles();
   const [selectedOrganization, setSelectedOrganization] = useState<ServerOrganization>();
@@ -105,18 +112,20 @@ function AppContent() {
    * to how notifications.
    */
   const [facilityIdSelected, setFacilityIdSelected] = useState<number>();
-  const [orgDataStatus, setOrgDataStatus] = useState<'Awaiting' | 'Succeeded' | 'Failed'>('Awaiting');
+  const [orgAPIRequestStatus, setOrgAPIRequestStatus] = useState<APIRequestStatus>(APIRequestStatus.AWAITING);
   // get the selected values on database to pass it to new accession page
   const [organizations, setOrganizations] = useState<ServerOrganization[]>();
 
   const reloadData = useCallback(() => {
     const populateOrganizations = async () => {
       const response = await getOrganizations();
-      if (response.requestSucceeded) {
-        setOrgDataStatus('Succeeded');
+      if (!response.error) {
+        setOrgAPIRequestStatus(APIRequestStatus.SUCCEEDED);
         setOrganizations(response.organizations);
+      } else if (response.error === 'NotAuthenticated') {
+        setOrgAPIRequestStatus(APIRequestStatus.FAILED_NO_AUTH);
       } else {
-        setOrgDataStatus('Failed');
+        setOrgAPIRequestStatus(APIRequestStatus.FAILED);
       }
     };
     populateOrganizations();
@@ -140,11 +149,11 @@ function AppContent() {
     }
   }, [organizations, selectedOrganization]);
 
-  if (orgDataStatus === 'Awaiting') {
+  if (orgAPIRequestStatus === APIRequestStatus.AWAITING || orgAPIRequestStatus === APIRequestStatus.FAILED_NO_AUTH) {
     return <CircularProgress />;
   }
 
-  if (orgDataStatus === 'Failed') {
+  if (orgAPIRequestStatus === APIRequestStatus.FAILED) {
     return (
       <Switch>
         <Route exact path='/error'>
@@ -159,7 +168,7 @@ function AppContent() {
     );
   }
 
-  if (orgDataStatus === 'Succeeded' && organizations?.length === 0) {
+  if (orgAPIRequestStatus === APIRequestStatus.SUCCEEDED && organizations?.length === 0) {
     return (
       <Switch>
         <Route exact path='/welcome'>

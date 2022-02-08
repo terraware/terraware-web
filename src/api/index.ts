@@ -30,11 +30,8 @@ axios.interceptors.response.use(
     if (error.response && error.response.status === 401) {
       const redirect = encodeURIComponent(location.href);
       location.href = `/api/v1/login?redirect=${redirect}`;
-
-      return null;
-    } else {
-      return Promise.reject(error);
     }
+    return Promise.reject(error);
   }
 );
 
