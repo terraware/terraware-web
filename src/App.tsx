@@ -1,5 +1,5 @@
 /* eslint-disable import/no-webpack-loader-syntax */
-import { createStyles, CssBaseline, makeStyles, ThemeProvider } from '@material-ui/core';
+import { CircularProgress, createStyles, CssBaseline, makeStyles, ThemeProvider } from '@material-ui/core';
 import mapboxgl from 'mapbox-gl';
 import React, { useCallback, useEffect, useState } from 'react';
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
@@ -137,7 +137,7 @@ function AppContent() {
   }, [organizations, selectedOrganization]);
 
   if (organizationError) {
-    return <h1>Could not fetch organization data</h1>;
+    return <CircularProgress />;
   }
 
   const organizationWithoutSB = () => {
@@ -236,7 +236,7 @@ function AppContent() {
                 </Route>
               )}
               <Route exact path='/projects'>
-                <ProjectsList organization={selectedOrganization} />
+                <ProjectsList organization={organizationWithoutSB()} />
               </Route>
               {selectedOrganization && (
                 <Route path='/projects/:projectId/edit' exact={true}>
@@ -248,7 +248,7 @@ function AppContent() {
               </Route>
               {selectedOrganization && (
                 <Route path='/sites/new'>
-                  <NewSite organization={selectedOrganization} reloadOrganizationData={reloadData} />
+                  <NewSite organization={organizationWithoutSB()!} reloadOrganizationData={reloadData} />
                 </Route>
               )}
               <Route exact path='/sites'>
@@ -267,14 +267,14 @@ function AppContent() {
               </Route>
               {selectedOrganization && (
                 <Route path='/people/new'>
-                  <NewPerson organization={selectedOrganization} reloadOrganizationData={reloadData} />
+                  <NewPerson organization={organizationWithoutSB()!} reloadOrganizationData={reloadData} />
                 </Route>
               )}
               <Route exact path='/people'>
                 <People organization={selectedOrganization} />
               </Route>
               <Route path='/people/:personId'>
-                <PersonDetails organization={selectedOrganization} />
+                <PersonDetails organization={organizationWithoutSB()} />
               </Route>
               {selectedOrganization && (
                 <Route path='/organization/edit' exact={true}>
@@ -282,7 +282,7 @@ function AppContent() {
                 </Route>
               )}
               <Route path='/organization'>
-                <Organization organization={selectedOrganization} />
+                <Organization organization={organizationWithoutSB()} />
               </Route>
 
               {/* Redirects. Invalid paths will redirect to the closest valid path. */}

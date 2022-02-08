@@ -85,10 +85,13 @@ export default function PersonDetails({ organization }: PersonDetailsProps): JSX
   }, [personId, organization]);
 
   useEffect(() => {
-    const projects = person?.projectIds.map((projectId) => {
+    const projects = person?.projectIds.reduce((filtered, projectId) => {
       const found = allProjects?.find((project) => project.id === projectId);
-      return { ...found, role: person.role } as ProjectOfPerson;
-    });
+      if (found) {
+        filtered.push({ ...found, role: person.role } as ProjectOfPerson);
+      }
+      return filtered;
+    }, [] as ProjectOfPerson[]);
     setProjectsOfPerson(projects);
   }, [person, organization?.projects, allProjects]);
 

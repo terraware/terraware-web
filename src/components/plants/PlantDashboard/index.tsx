@@ -1,4 +1,4 @@
-import { Table, TableBody, TableContainer, TableRow } from '@material-ui/core';
+import { CircularProgress, Table, TableBody, TableContainer, TableRow } from '@material-ui/core';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
@@ -56,7 +56,7 @@ export default function PlantDashboard(props: PlantDashboardProps): JSX.Element 
   const [plants, setPlants] = useState<Plant[]>([]);
   const [speciesById, setSpeciesById] = useState<SpeciesById>(new Map());
   const [colorsBySpeciesId, setColorsBySpeciesId] = useState<Record<number, string>>({});
-  const [plantSummariesByLayerId, setPlantSummariesByLayerId] = useState<PlantSummariesByLayerId>(new Map());
+  const [plantSummariesByLayerId, setPlantSummariesByLayerId] = useState<PlantSummariesByLayerId>();
   const [selectedOrgInfo, setSelectedOrgInfo] = useRecoilState(plantDashboardSelectedOrgInfo);
 
   const onFullscreenHandler = () => {
@@ -119,92 +119,96 @@ export default function PlantDashboard(props: PlantDashboardProps): JSX.Element 
 
   return (
     <main>
-      <Container maxWidth={false} className={classes.mainContainer}>
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <Title
-              page={strings.DASHBOARD}
-              parentPage={strings.PLANTS}
-              organization={!!organization?.projects?.length ? organization : undefined}
-              allowAll={true}
-              selectedOrgInfo={selectedOrgInfo}
-              onChangeSelectedOrgInfo={(newValues) => setSelectedOrgInfo(newValues)}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            {!!organization?.projects?.length && !plantSummariesByLayerId.size && (
+      {organization && plantSummariesByLayerId ? (
+        <Container maxWidth={false} className={classes.mainContainer}>
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
+              <Title
+                page={strings.DASHBOARD}
+                parentPage={strings.PLANTS}
+                organization={!!organization.projects?.length ? organization : undefined}
+                allowAll={true}
+                selectedOrgInfo={selectedOrgInfo}
+                onChangeSelectedOrgInfo={(newValues) => setSelectedOrgInfo(newValues)}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              {!!organization.projects?.length && !plantSummariesByLayerId.size && (
+                <EmptyMessage
+                  title={strings.COLLECT_IN_FIELD_PLANT_DATA}
+                  text={strings.TERRAWARE_MOBILE_APP_INFO_MSG}
+                  buttonText={strings.REQUEST_MOBILE_APP}
+                  onClick={goToProjects}
+                />
+              )}
+            </Grid>
+            {!!organization.projects?.length ? (
+              <>
+                <Grid item xs={isFullscreen ? 12 : 6}>
+                  <React.Suspense fallback={strings.LOADING}>
+                    <PlantMap
+                      onFullscreen={onFullscreenHandler}
+                      isFullscreen={isFullscreen}
+                      plants={plants}
+                      speciesById={speciesById}
+                      colorsBySpeciesId={colorsBySpeciesId}
+                      reloadData={reloadData}
+                    />
+                  </React.Suspense>
+                </Grid>
+
+                <Grid item xs={isFullscreen ? 12 : 6}>
+                  <Grid container>
+                    <Grid item xs={12}>
+                      <TableContainer component={Paper}>
+                        <Table aria-label='simple table'>
+                          <TableBody>
+                            <ErrorBoundary>
+                              <React.Suspense fallback={strings.LOADING}>
+                                <SummaryCount summary={plantSummariesByLayerId} />
+                              </React.Suspense>
+                            </ErrorBoundary>
+                          </TableBody>
+                        </Table>
+                      </TableContainer>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Paper className={classes.mapContainer}>
+                        <ErrorBoundary>
+                          <React.Suspense fallback={strings.LOADING}>
+                            <SpeciesSummaryChart
+                              plantSummariesByLayerId={plantSummariesByLayerId}
+                              speciesById={speciesById}
+                              colorsBySpeciesId={colorsBySpeciesId}
+                              isFullscreen={isFullscreen}
+                            />
+                          </React.Suspense>
+                        </ErrorBoundary>
+                      </Paper>
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </>
+            ) : HighOrganizationRolesValues.includes(organization?.role || '') ? (
               <EmptyMessage
-                title={strings.COLLECT_IN_FIELD_PLANT_DATA}
-                text={strings.TERRAWARE_MOBILE_APP_INFO_MSG}
-                buttonText={strings.REQUEST_MOBILE_APP}
+                className={classes.message}
+                title={strings.PLANTS_EMPTY_MSG_TITLE}
+                text={strings.PLANTS_EMPTY_MSG_BODY}
+                buttonText={strings.GO_TO_PROJECTS}
                 onClick={goToProjects}
+              />
+            ) : (
+              <EmptyMessage
+                className={classes.message}
+                title={strings.CHECK_BACK_LATER}
+                text={strings.EMPTY_MESSAGE_CONTRIBUTOR}
               />
             )}
           </Grid>
-          {!!organization?.projects?.length ? (
-            <>
-              <Grid item xs={isFullscreen ? 12 : 6}>
-                <React.Suspense fallback={strings.LOADING}>
-                  <PlantMap
-                    onFullscreen={onFullscreenHandler}
-                    isFullscreen={isFullscreen}
-                    plants={plants}
-                    speciesById={speciesById}
-                    colorsBySpeciesId={colorsBySpeciesId}
-                    reloadData={reloadData}
-                  />
-                </React.Suspense>
-              </Grid>
-
-              <Grid item xs={isFullscreen ? 12 : 6}>
-                <Grid container>
-                  <Grid item xs={12}>
-                    <TableContainer component={Paper}>
-                      <Table aria-label='simple table'>
-                        <TableBody>
-                          <ErrorBoundary>
-                            <React.Suspense fallback={strings.LOADING}>
-                              <SummaryCount summary={plantSummariesByLayerId} />
-                            </React.Suspense>
-                          </ErrorBoundary>
-                        </TableBody>
-                      </Table>
-                    </TableContainer>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Paper className={classes.mapContainer}>
-                      <ErrorBoundary>
-                        <React.Suspense fallback={strings.LOADING}>
-                          <SpeciesSummaryChart
-                            plantSummariesByLayerId={plantSummariesByLayerId}
-                            speciesById={speciesById}
-                            colorsBySpeciesId={colorsBySpeciesId}
-                            isFullscreen={isFullscreen}
-                          />
-                        </React.Suspense>
-                      </ErrorBoundary>
-                    </Paper>
-                  </Grid>
-                </Grid>
-              </Grid>
-            </>
-          ) : HighOrganizationRolesValues.includes(organization?.role || '') ? (
-            <EmptyMessage
-              className={classes.message}
-              title={strings.PLANTS_EMPTY_MSG_TITLE}
-              text={strings.PLANTS_EMPTY_MSG_BODY}
-              buttonText={strings.GO_TO_PROJECTS}
-              onClick={goToProjects}
-            />
-          ) : (
-            <EmptyMessage
-              className={classes.message}
-              title={strings.CHECK_BACK_LATER}
-              text={strings.EMPTY_MESSAGE_CONTRIBUTOR}
-            />
-          )}
-        </Grid>
-      </Container>
+        </Container>
+      ) : (
+        <CircularProgress />
+      )}
     </main>
   );
 }
