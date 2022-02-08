@@ -17,7 +17,7 @@ import { SpeciesById } from 'src/types/Species';
 import getColorsBySpeciesId from 'src/api/species/getColorsBySpeciesId';
 import Title from 'src/components/common/Title';
 import { getPlantLayers } from 'src/api/organization/organization';
-import { getOrganizationProjects, getSelectedSites } from 'src/utils/organization';
+import { getSelectedSites } from 'src/utils/organization';
 import { useRecoilState } from 'recoil';
 import { plantDashboardSelectedOrgInfo } from 'src/state/selectedOrgInfoPerPage';
 import EmptyMessage from '../../common/EmptyMessage';

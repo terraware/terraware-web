@@ -24,7 +24,7 @@ import { SpeciesById } from 'src/types/Species';
 import { ServerOrganization } from 'src/types/Organization';
 import Title from 'src/components/common/Title';
 import { getPlantLayers } from 'src/api/organization/organization';
-import { getOrganizationProjects, getSelectedSites } from 'src/utils/organization';
+import { getSelectedSites } from 'src/utils/organization';
 import { plantListSelectedOrgInfo } from 'src/state/selectedOrgInfoPerPage';
 import EmptyMessage from '../../common/EmptyMessage';
 import { useHistory } from 'react-router-dom';

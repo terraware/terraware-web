@@ -112,13 +112,13 @@ export async function createSpecies(
     const serverResponse: PostSpeciesResponse = (await axios.post(SPECIES_ENDPOINT, createSpeciesRequest)).data;
     response.species = { id: serverResponse.id } as SpeciesWithScientificName;
     if (serverResponse.id && species.scientificName) {
-      const createSpeciesresponse = await createSpeciesNames(
+      const createSpeciesResponse = await createSpeciesNames(
         species.scientificName,
         organizationId,
         serverResponse.id,
         true
       );
-      if (!createSpeciesresponse.requestSucceeded) {
+      if (!createSpeciesResponse.requestSucceeded) {
         response.error = SpeciesRequestError.RequestFailed;
       }
     }
@@ -154,16 +154,16 @@ export async function updateSpecies(
 
   try {
     const endpoint = PUT_SPECIES_ENDPOINT.replace('{speciesId}', `${species.id}`);
-    const updateSpeciesRequest: PutSpeciesRequest = { name: species.name, organizationId };
-    const updateSpeciesNameResponse: SimpleSuccessResponsePayload = await axios.put(endpoint, updateSpeciesRequest);
+    const updateSpeciesNameRequest: PutSpeciesRequest = { name: species.name, organizationId };
+    const updateSpeciesNameResponse: SimpleSuccessResponsePayload = await axios.put(endpoint, updateSpeciesNameRequest);
     if (updateSpeciesNameResponse.status !== 'error') {
       if (species.scientificName) {
-        const responseUpdateScientificName = await updateScientificName(
+        const updateScientificNameResponse = await updateScientificName(
           species.scientificName,
           species.id,
           organizationId
         );
-        if (!responseUpdateScientificName.requestSucceeded) {
+        if (!updateScientificNameResponse.requestSucceeded) {
           response.requestSucceeded = false;
         }
       }

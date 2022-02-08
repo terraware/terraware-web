@@ -3,10 +3,6 @@ export type Species = {
   name: string;
 };
 
-export type SpeciesNames = {
-  id: number;
-};
-
 export type SpeciesWithScientificName = Species & {
   scientificName?: string;
 };
