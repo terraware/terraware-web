@@ -17,6 +17,8 @@ const useStyles = makeStyles((theme) =>
     appBar: {
       background: theme.palette.common.white,
       color: theme.palette.common.black,
+      filter: 'drop-shadow(0 0 12px rgba(0, 0, 0, 0.5))',
+      boxShadow: 'none',
     },
     icon: {
       padding: theme.spacing(1, 1),
@@ -79,7 +81,7 @@ export default function TopBar(props: TopBarProps): JSX.Element | null {
   const location = useStateLocation();
 
   return (
-    <AppBar position='static' className={classes.appBar}>
+    <AppBar position='relative' className={classes.appBar}>
       <Toolbar className={classes.right}>
         <div className={classes.flex}>
           <SearchBar facilityId={facilityId || 0} />
