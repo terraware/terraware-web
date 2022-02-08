@@ -9,7 +9,7 @@ import strings from 'src/strings';
 import PlantMap from './PlantMap';
 import SpeciesSummaryChart from './SpeciesSummaryChart';
 import SummaryCell from './SummaryCell';
-import { ServerOrganization } from 'src/types/Organization';
+import { HighOrganizationRolesValues, ServerOrganization } from 'src/types/Organization';
 import { getPlantsForMultipleLayers, getPlantSummariesByLayer } from 'src/api/plants/plants';
 import { getAllSpecies } from 'src/api/species/species';
 import { Plant, PlantSummariesByLayerId } from 'src/types/Plant';

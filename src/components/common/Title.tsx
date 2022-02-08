@@ -74,11 +74,10 @@ export default function Title({
     }
   }, [organization, selectedOrgInfo, onChangeSelectedOrgInfo, allowAll]);
 
-  const addAllOptionAndRemoveSeedbank = (originalOptions?: string[]) => {
+  const addAllOption = (originalOptions?: string[]) => {
     let newOptions: string[] = [];
     if (originalOptions) {
-      const optionsWithoutSeedbank = originalOptions.filter((opt) => opt !== 'Seed Bank');
-      newOptions = [...optionsWithoutSeedbank];
+      newOptions = [...originalOptions];
     }
     if (allowAll) {
       newOptions.unshift('All');
@@ -97,7 +96,7 @@ export default function Title({
           <label className={classes.titleLabel}>{strings.PROJECT}</label>
           <Select
             id='projectSelect'
-            options={addAllOptionAndRemoveSeedbank(organization?.projects?.map((org) => org.name))}
+            options={addAllOption(organization?.projects?.map((org) => org.name))}
             selectedValue={selectedOrgInfo?.selectedProject?.name ?? 'All'}
             onChange={(newValue) => {
               onChangeSelectedOrgInfo({
@@ -112,7 +111,7 @@ export default function Title({
             id='siteSelect'
             disabled={!selectedOrgInfo.selectedProject}
             selectedValue={selectedOrgInfo?.selectedSite?.name ?? 'All'}
-            options={addAllOptionAndRemoveSeedbank(selectedOrgInfo?.selectedProject?.sites?.map((site) => site.name))}
+            options={addAllOption(selectedOrgInfo?.selectedProject?.sites?.map((site) => site.name))}
             onChange={(newValue) => {
               onChangeSelectedOrgInfo({
                 ...selectedOrgInfo,
@@ -128,9 +127,7 @@ export default function Title({
                 id='facilitySelect'
                 disabled={!selectedOrgInfo.selectedSite}
                 selectedValue={selectedOrgInfo?.selectedFacility?.name ?? 'All'}
-                options={addAllOptionAndRemoveSeedbank(
-                  selectedOrgInfo.selectedSite?.facilities?.map((facility) => facility.name)
-                )}
+                options={addAllOption(selectedOrgInfo.selectedSite?.facilities?.map((facility) => facility.name))}
                 onChange={(newValue) => {
                   onChangeSelectedOrgInfo({
                     ...selectedOrgInfo,
