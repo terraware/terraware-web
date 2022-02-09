@@ -81,7 +81,7 @@ export default function TopBar(props: TopBarProps): JSX.Element | null {
   const location = useStateLocation();
 
   return (
-    <AppBar position='relative' className={classes.appBar}>
+    <AppBar position='fixed' className={classes.appBar}>
       <Toolbar className={classes.right}>
         <div className={classes.flex}>
           <SearchBar facilityId={facilityId || 0} />

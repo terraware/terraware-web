@@ -24,11 +24,11 @@ const useStyles = makeStyles((theme) =>
   createStyles({
     main: {
       background: '#ffffff',
-      height: 'calc( 100% - 64px)',
-      minHeight: 'calc(100vh - 64px)',
+      minHeight: '100vh',
       display: 'flex',
       flexDirection: 'column',
       padding: '24px',
+      marginTop: '64px',
     },
     mainContainer: {
       padding: '32px 0',

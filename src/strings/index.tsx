@@ -412,6 +412,7 @@ const strings = new LocalizedStrings({
       'Once your administrator has created a project and site, you’ll be able to access your data.',
     COMMON_NAME: 'Common Name',
     SCIENTIFIC_NAME: 'Scientific Name',
+    DOWNLOAD_AS_REPORT: 'Download as Report',
   },
 });
 
