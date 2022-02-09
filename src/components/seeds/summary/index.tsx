@@ -28,7 +28,6 @@ const useStyles = makeStyles((theme) =>
       display: 'flex',
       flexDirection: 'column',
       padding: '24px',
-      marginTop: '64px',
     },
     mainContainer: {
       padding: '32px 0',

@@ -21,9 +21,15 @@ import AccessionPageHeader from './PageHeader';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
+    main: {
+      background: '#ffffff',
+      minHeight: '100vh',
+      display: 'flex',
+      flexDirection: 'column',
+      padding: '24px',
+    },
     mainContainer: {
-      paddingTop: theme.spacing(4),
-      paddingBottom: theme.spacing(4),
+      padding: '32px 0',
     },
   })
 );
@@ -118,9 +124,9 @@ function Content({ organization }: AccessionPageProps): JSX.Element {
   }
 
   return (
-    <main>
+    <main className={classes.main}>
       <AccessionPageHeader accession={accession} />
-      <Container maxWidth='lg' className={classes.mainContainer}>
+      <Container maxWidth={false} className={classes.mainContainer}>
         <Grid container spacing={3}>
           <Grid item xs={3}>
             <DetailsMenu state={accession.state} />

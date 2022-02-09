@@ -19,6 +19,15 @@ const useStyles = makeStyles((theme) =>
   createStyles({
     paper: {
       padding: theme.spacing(2),
+      border: '1px solid #A9B7B8',
+      borderRadius: '8px',
+      boxShadow: 'none',
+    },
+    panelTitle: {
+      fontSize: '20px',
+      lineHeight: '28px',
+      fontWeight: 600,
+      color: '#3A4445',
     },
     right: {
       marginLeft: 'auto',
@@ -101,7 +110,7 @@ export default function Storage({ accession, onSubmit }: Props): JSX.Element {
   return (
     <MuiPickersUtilsProvider utils={MomentUtils}>
       <Paper className={classes.paper}>
-        <Typography variant='h6' className={classes.bold}>
+        <Typography variant='h6' className={classes.panelTitle}>
           {strings.STORAGE}
         </Typography>
         <Typography component='p'>{strings.STORAGE_DESCRIPTION}</Typography>

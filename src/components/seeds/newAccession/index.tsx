@@ -34,12 +34,24 @@ import Species from './SpeciesDropdown';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
+    main: {
+      background: '#ffffff',
+      minHeight: '100vh',
+      display: 'flex',
+      flexDirection: 'column',
+      padding: '24px',
+    },
     mainContainer: {
-      paddingTop: theme.spacing(4),
-      paddingBottom: theme.spacing(4),
+      padding: '32px 0',
     },
     paper: {
       padding: theme.spacing(2),
+    },
+    panelTitle: {
+      fontSize: '20px',
+      lineHeight: '28px',
+      fontWeight: 600,
+      color: '#3A4445',
     },
     closeIcon: {
       backgroundColor: theme.palette.common.white,
@@ -108,7 +120,7 @@ export default function NewAccessionWrapper(props: NewAccessionProps): JSX.Eleme
   }
 
   return (
-    <main>
+    <main className={classes.main}>
       <PageHeader
         title={strings.NEW_ACCESSION}
         subtitle={strings.NEW_ACCESSION_DESCRIPTION}
@@ -126,7 +138,7 @@ export default function NewAccessionWrapper(props: NewAccessionProps): JSX.Eleme
           </Fab>
         }
       />
-      <Container maxWidth='lg' className={classes.mainContainer}>
+      <Container maxWidth={false} className={classes.mainContainer}>
         <Grid container spacing={3}>
           <Grid item xs={1} />
           <Grid item xs={10}>
@@ -338,7 +350,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
       )}
       <MuiPickersUtilsProvider utils={MomentUtils}>
         <Paper className={classes.paper}>
-          <Typography variant='h6' className={classes.bold}>
+          <Typography variant='h6' className={classes.panelTitle}>
             {strings.SEED_COLLECTION}
           </Typography>
           <Typography component='p'>{strings.SEED_COLLECTION_DESCRIPTION}</Typography>

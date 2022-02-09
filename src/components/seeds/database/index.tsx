@@ -42,7 +42,6 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       flexDirection: 'column',
       padding: '24px',
-      marginTop: '64px',
     },
     mainContainer: {
       padding: '32px 0',

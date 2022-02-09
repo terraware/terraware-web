@@ -69,6 +69,7 @@ const useStyles = makeStyles(() =>
     content: {
       marginLeft: '200px',
       height: '100%',
+      paddingTop: '64px',
     },
   })
 );
