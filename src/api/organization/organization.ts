@@ -59,11 +59,6 @@ type ServerSite = Required<ServerProject>['sites'][0];
 
 type ServerFacility = Required<ServerSite>['facilities'][0];
 
-type OrganizationsResponse = {
-  organizations: ServerOrganization[];
-  requestSucceeded: boolean;
-};
-
 const parseProject = (project: ServerProject): Project => {
   const parsedProject: Project = {
     id: project.id,
@@ -101,11 +96,18 @@ const parseFacility = (facility: ServerFacility): Facility => {
   };
   return parsedFacility;
 };
+
+type OrganizationsResponse = {
+  organizations: ServerOrganization[];
+  error: null | 'NotAuthenticated' | 'GenericError';
+};
+
 export async function getOrganizations(): Promise<OrganizationsResponse> {
   const response: OrganizationsResponse = {
     organizations: [],
-    requestSucceeded: true,
+    error: null,
   };
+
   try {
     const organizationsResponse: ListOrganizationsResponsePayload = (await axios.get(`${ORGANIZATIONS}?depth=Facility`))
       .data;
@@ -119,9 +121,14 @@ export async function getOrganizations(): Promise<OrganizationsResponse> {
       countrySubdivisionCode: organization.countrySubdivisionCode,
       createdTime: organization.createdTime,
     }));
-  } catch {
-    response.requestSucceeded = false;
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response?.status === 401) {
+      response.error = 'NotAuthenticated';
+    } else {
+      response.error = 'GenericError';
+    }
   }
+
   return response;
 }
 

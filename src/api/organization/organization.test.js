@@ -41,19 +41,6 @@ const ORGANIZATIONS = [
 
 const SUCCESSFUL_GET_ORGANIZATIONS_RESPONSE = { data: { organizations: ORGANIZATIONS, status: 'ok' } };
 
-const PROJECTS = [
-  {
-    id: 1,
-    name: 'Hawaii Project',
-  },
-  {
-    id: 2,
-    name: 'Oahu Project',
-  },
-];
-const SUCCESSFUL_GET_PROJECTS_RESPONSE = { data: { projects: PROJECTS, status: 'ok' } };
-const EMPTY_GET_PROJECTS_RESPONSE = { data: { projects: [], status: 'ok' } };
-
 const SITES = [
   {
     id: 10,
@@ -64,20 +51,6 @@ const SITES = [
     projectId: 2,
   },
 ];
-const SUCCESSFUL_GET_SITES_RESPONSE = { data: { sites: SITES, status: 'ok' } };
-const EMPTY_GET_SITES_RESPONSE = { data: { sites: [], status: 'ok' } };
-
-const FACILITIES = [
-  {
-    id: 100,
-    siteId: 20,
-  },
-];
-// Server response includes facility type, which is used by getSeedBankFacilities() to select only Seed Bank facilities.
-const FACILITIES_FROM_SERVER = FACILITIES.map((facility) => {
-  return { ...facility, type: 'Seed Bank' };
-});
-const SUCCESSFUL_GET_FACILITIES_RESPONSE = { data: { facilities: FACILITIES_FROM_SERVER, status: 'ok' } };
 
 const LAYERS = [
   {
@@ -90,17 +63,8 @@ const LAYERS_FROM_SERVER = LAYERS.map((layer) => {
   return { ...layer, layerType: 'Plants Planted' };
 });
 const SUCCESSFUL_GET_LAYERS_RESPONSE = { data: { layers: LAYERS_FROM_SERVER, status: 'ok' } };
-const EMPTY_GET_LAYERS_RESPONSE = { data: { layers: [], status: 'ok' } };
 
 const FAILURE_RESPONSE = { request: { status: 500 } };
-
-function assertOrganizationIsEmpty(organization) {
-  expect(
-    Object.keys(organization)
-      .map((key) => organization[key])
-      .flat()
-  ).toEqual([]);
-}
 
 test('getOrganizations() returns all data when no errors thrown', async () => {
   axios.get.mockImplementation((url) => {
@@ -110,7 +74,7 @@ test('getOrganizations() returns all data when no errors thrown', async () => {
   });
   await expect(getOrganizations()).resolves.toEqual({
     organizations: ORGANIZATIONS,
-    requestSucceeded: true,
+    error: null,
   });
 });
 
@@ -122,7 +86,7 @@ test('getOrganizations() fails', async () => {
   });
   await expect(getOrganizations()).resolves.toEqual({
     organizations: [],
-    requestSucceeded: false,
+    error: 'GenericError',
   });
 });
 
