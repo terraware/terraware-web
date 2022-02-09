@@ -12,8 +12,8 @@ const useStyles = makeStyles((theme) =>
   createStyles({
     mainContainer: {
       fontWeight: 400,
-      marginTop: '15vh',
-      marginBottom: theme.spacing(3),
+      marginBottom: theme.spacing(8),
+      marginTop: `max(15vh, ${theme.spacing(8)}px)`,
       textAlign: 'center',
     },
     title: {
@@ -34,18 +34,15 @@ const useStyles = makeStyles((theme) =>
       fontSize: '14px',
       justifyContent: 'center',
       lineHeight: '20px',
-      margin: 'auto',
-      marginTop: theme.spacing(3),
-      marginBottom: theme.spacing(3),
+      margin: `${theme.spacing(6)}px auto`,
       maxWidth: '1200px',
     },
     listItem: {
       flex: '1 1 auto',
       textAlign: 'center',
-      margin: '0 12px',
     },
     listItemIcon: {
-      width: '110px',
+      width: '200px',
       height: '128px',
     },
     listItemTitle: {
@@ -58,7 +55,6 @@ const useStyles = makeStyles((theme) =>
       maxWidth: '200px',
     },
     createOrgButton: {
-      marginTop: theme.spacing(3),
       marginBottom: theme.spacing(3),
     },
     footNote: {
