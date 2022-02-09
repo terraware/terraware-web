@@ -39,8 +39,8 @@ interface TitleProps {
   parentPage: string;
   organization?: ServerOrganization;
   allowAll?: boolean;
-  selectedOrgInfo: SelectedOrgInfo;
-  onChangeSelectedOrgInfo: (selectedValues: SelectedOrgInfo) => void;
+  selectedOrgInfo?: SelectedOrgInfo;
+  onChangeSelectedOrgInfo?: (selectedValues: SelectedOrgInfo) => void;
   showFacility?: boolean;
 }
 export default function Title({
@@ -56,8 +56,8 @@ export default function Title({
 
   useEffect(() => {
     // if no project selected and all option is not available, select first project and site
-    if (!allowAll) {
-      if (!selectedOrgInfo.selectedProject && getFirstSite(organization)) {
+    if (onChangeSelectedOrgInfo && !allowAll) {
+      if (!selectedOrgInfo?.selectedProject && getFirstSite(organization)) {
         if (getFirstFacility(organization)) {
           onChangeSelectedOrgInfo({
             selectedProject: getFirstProject(organization) ?? undefined,
@@ -90,7 +90,7 @@ export default function Title({
       <div className={classes.title}>
         {parentPage} / <span className={classes.selectedSection}>{page}</span>
       </div>
-      {organization && (
+      {organization && onChangeSelectedOrgInfo && selectedOrgInfo && (
         <>
           <div className={classes.separator} />
           <label className={classes.titleLabel}>{strings.PROJECT}</label>
