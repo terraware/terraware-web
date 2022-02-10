@@ -13,9 +13,6 @@ const useStyles = makeStyles((theme) =>
     mainContainer: {
       paddingLeft: '12px',
     },
-    container: {
-      maxWidth: '100%',
-    },
     title: {
       fontSize: '24px',
       lineHeight: '32px',
@@ -80,7 +77,7 @@ export default function PageHeader({
 
   return (
     <Container maxWidth={false} className={classes.mainContainer}>
-      <Grid container spacing={0} className={classes.container}>
+      <Grid container spacing={0}>
         {page && parentPage && (
           <Grid item xs={12}>
             <Title

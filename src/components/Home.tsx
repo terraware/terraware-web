@@ -12,7 +12,7 @@ import PageHeader from './seeds/PageHeader';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     mainContainer: {
-      padding: '20px 0 20px 0',
+      padding: '20px 0',
     },
     mainGrid: {
       display: 'flex',
