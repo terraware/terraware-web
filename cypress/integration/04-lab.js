@@ -103,7 +103,7 @@ describe('Lab', () => {
     cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
     cy.get('#saveTest').click();
     cy.wait('@getAccession');
-    cy.get('.testingscroll').scrollTo(0, 0);
+    cy.get('.scrollable-content').scrollTo(0, 0);
   });
 
   it('should display the records in the right order', () => {
@@ -119,7 +119,7 @@ describe('Lab', () => {
     cy.get('#row1-startDate').contains('02/01/2021');
     cy.get('#row2-startDate').contains('02/09/2021');
     cy.get('#row3-startDate').contains('02/12/2021');
-    cy.get('.testingscroll').scrollTo(0, 0);
+    cy.get('.scrollable-content').scrollTo(0, 0);
   });
 
   it('rest', () => {
@@ -129,7 +129,7 @@ describe('Lab', () => {
     cy.get('#row1-seedType').contains('Fresh');
     cy.get('#row2-seedType').contains('Stored');
     cy.get('#row3-seedType').contains('Stored');
-    cy.get('.testingscroll').scrollTo(0, 0);
+    cy.get('.scrollable-content').scrollTo(0, 0);
 
     // by substrate
     cy.get('#mostRecentViabiliy').should('be.visible');
@@ -137,7 +137,7 @@ describe('Lab', () => {
     cy.get('#row1-substrate').contains('Agar Petri Dish');
     cy.get('#row2-substrate').contains('Nursery Media');
     cy.get('#row3-substrate').contains('Other');
-    cy.get('.testingscroll').scrollTo(0, 0);
+    cy.get('.scrollable-content').scrollTo(0, 0);
 
     // by Treatment
     cy.get('#mostRecentViabiliy').should('be.visible');
@@ -148,13 +148,13 @@ describe('Lab', () => {
 
     // by sown
     cy.get('#lab-table').scrollTo('right');
-    cy.get('.testingscroll').scrollTo('top');
+    cy.get('.scrollable-content').scrollTo('top');
     cy.get('#mostRecentViabiliy').should('be.visible');
     cy.get('#table-header-seedsSown').click({ scrollBehavior: false });
     cy.get('#row1-seedsSown').contains('50');
     cy.get('#row2-seedsSown').contains('100');
     cy.get('#row3-seedsSown').contains('200');
-    cy.get('.testingscroll').scrollTo(0, 0);
+    cy.get('.scrollable-content').scrollTo(0, 0);
   });
 
   it('should delete test', () => {

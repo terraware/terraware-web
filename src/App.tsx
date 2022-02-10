@@ -169,7 +169,7 @@ function AppContent() {
         <div>
           <NavBar organization={selectedOrganization} />
         </div>
-        <div className={`${classes.content} testingscroll`}>
+        <div className={`${classes.content} scrollable-content`}>
           <TopBar
             notifications={notifications}
             setNotifications={setNotifications}
