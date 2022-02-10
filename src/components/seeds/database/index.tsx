@@ -310,6 +310,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
           rightComponent={
             <div>
               <Button
+                id='edit-columns'
                 label={strings.ADD_COLUMNS}
                 onClick={onOpenEditColumnsModal}
                 priority='secondary'
@@ -318,6 +319,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
                 className={classes.buttonSpc}
               />
               <Button
+                id='download-report'
                 label={strings.DOWNLOAD_AS_REPORT}
                 onClick={onDownloadReport}
                 priority='secondary'
@@ -326,7 +328,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
                 className={classes.buttonSpc}
               />
               {selectedOrgInfo.selectedFacility && (
-                <Button label={strings.NEW_ACCESSION} onClick={goToNewAccession} size='medium' />
+                <Button label={strings.NEW_ACCESSION} onClick={goToNewAccession} size='medium' id='newAccession' />
               )}
             </div>
           }
