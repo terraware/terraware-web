@@ -4,6 +4,7 @@ import mapboxgl from 'mapbox-gl';
 import React, { useCallback, useEffect, useState } from 'react';
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
+import { getOrganizations } from 'src/api/organization/organization';
 import {
   DEFAULT_SEED_SEARCH_FILTERS,
   DEFAULT_SEED_SEARCH_SORT_ORDER,
@@ -13,35 +14,37 @@ import {
 import { Notifications } from 'src/types/Notifications';
 import { ServerOrganization } from 'src/types/Organization';
 import { PlantSearchOptions } from 'src/types/Plant';
-import Home from './components/Home';
-import NavBar from './components/NavBar';
-import PlantDashboard from './components/plants/PlantDashboard';
-import PlantList from './components/plants/PlantList';
-import SpeciesList from './components/plants/Species';
-import Accession from './components/seeds/accession';
-import CheckIn from './components/seeds/checkin';
-import Database from './components/seeds/database';
-import Help from './components/seeds/help';
-import NewAccession from './components/seeds/newAccession';
-import SeedSummary from './components/seeds/summary';
-import Snackbar from './components/Snackbar';
-import TopBar from './components/TopBar';
-import ErrorBoundary from './ErrorBoundary';
-import strings from './strings';
-import theme from './theme';
-import { defaultPreset as DefaultColumns } from './components/seeds/database/columns';
-import ProjectsList from './components/Projects';
-import SitesList from './components/Sites';
-import Project from './components/Project';
-import SiteView from './components/Site';
-import People from './components/People';
-import NewProject from './components/NewProject';
-import NewSite from './components/NewSite';
-import Organization from './components/Organization';
-import EditOrganization from './components/EditOrganization';
-import { getOrganizations } from './api/organization/organization';
-import NewPerson from './components/Person/NewPerson';
-import PersonDetails from './components/Person';
+import EditOrganization from 'src/components/EditOrganization';
+import Home from 'src/components/Home';
+import LandingPage from 'src/components/LandingPage';
+import NavBar from 'src/components/NavBar';
+import NewPerson from 'src/components/Person/NewPerson';
+import NewProject from 'src/components/NewProject';
+import NewSite from 'src/components/NewSite';
+import Organization from 'src/components/Organization';
+import People from 'src/components/People';
+import PersonDetails from 'src/components/Person';
+import PlantDashboard from 'src/components/plants/PlantDashboard';
+import PlantList from 'src/components/plants/PlantList';
+import SpeciesList from 'src/components/plants/Species';
+import Project from 'src/components/Project';
+import ProjectsList from 'src/components/Projects';
+import Accession from 'src/components/seeds/accession';
+import CheckIn from 'src/components/seeds/checkin';
+import Database from 'src/components/seeds/database';
+import { defaultPreset as DefaultColumns } from 'src/components/seeds/database/columns';
+import Help from 'src/components/seeds/help';
+import NewAccession from 'src/components/seeds/newAccession';
+import SeedSummary from 'src/components/seeds/summary';
+import SiteView from 'src/components/Site';
+import SitesList from 'src/components/Sites';
+import Snackbar from 'src/components/Snackbar';
+import TopBar from 'src/components/TopBar/TopBar';
+import TopBarContent from 'src/components/TopBar/TopBarContent';
+import UserMenu from 'src/components/UserMenu';
+import ErrorBoundary from 'src/ErrorBoundary';
+import strings from 'src/strings';
+import theme from 'src/theme';
 
 // @ts-ignore
 mapboxgl.workerClass =
@@ -73,6 +76,13 @@ const useStyles = makeStyles(() =>
   })
 );
 
+enum APIRequestStatus {
+  'AWAITING',
+  'FAILED',
+  'FAILED_NO_AUTH',
+  'SUCCEEDED',
+}
+
 function AppContent() {
   const classes = useStyles();
   const [selectedOrganization, setSelectedOrganization] = useState<ServerOrganization>();
@@ -103,17 +113,20 @@ function AppContent() {
    * to how notifications.
    */
   const [facilityIdSelected, setFacilityIdSelected] = useState<number>();
-  const [organizationError, setOrganizationError] = useState<boolean>(false);
+  const [orgAPIRequestStatus, setOrgAPIRequestStatus] = useState<APIRequestStatus>(APIRequestStatus.AWAITING);
   // get the selected values on database to pass it to new accession page
   const [organizations, setOrganizations] = useState<ServerOrganization[]>();
 
   const reloadData = useCallback(() => {
     const populateOrganizations = async () => {
       const response = await getOrganizations();
-      if (response.requestSucceeded) {
+      if (!response.error) {
+        setOrgAPIRequestStatus(APIRequestStatus.SUCCEEDED);
         setOrganizations(response.organizations);
+      } else if (response.error === 'NotAuthenticated') {
+        setOrgAPIRequestStatus(APIRequestStatus.FAILED_NO_AUTH);
       } else {
-        setOrganizationError(true);
+        setOrgAPIRequestStatus(APIRequestStatus.FAILED);
       }
     };
     populateOrganizations();
@@ -137,8 +150,40 @@ function AppContent() {
     }
   }, [organizations, selectedOrganization]);
 
-  if (organizationError) {
+  if (orgAPIRequestStatus === APIRequestStatus.AWAITING || orgAPIRequestStatus === APIRequestStatus.FAILED_NO_AUTH) {
     return <CircularProgress />;
+  }
+
+  if (orgAPIRequestStatus === APIRequestStatus.FAILED) {
+    return (
+      <Switch>
+        <Route exact path='/error'>
+          {/*TODO implement designs.*/}
+          <h1>Could not fetch organization data.</h1>
+        </Route>
+
+        <Route path='*'>
+          <Redirect to='/error' />
+        </Route>
+      </Switch>
+    );
+  }
+
+  if (orgAPIRequestStatus === APIRequestStatus.SUCCEEDED && organizations?.length === 0) {
+    return (
+      <Switch>
+        <Route exact path='/welcome'>
+          <TopBar>
+            <UserMenu />
+          </TopBar>
+          <LandingPage reloadOrganizationData={reloadData} />
+        </Route>
+
+        <Route path='*'>
+          <Redirect to='/welcome' />
+        </Route>
+      </Switch>
+    );
   }
 
   const organizationWithoutSB = () => {
@@ -168,16 +213,18 @@ function AppContent() {
           <NavBar organization={selectedOrganization} />
         </div>
         <div className={classes.content}>
-          <TopBar
-            notifications={notifications}
-            setNotifications={setNotifications}
-            setSeedSearchCriteria={setSeedSearchCriteria}
-            facilityId={facilityIdSelected}
-            organizations={organizations}
-            selectedOrganization={selectedOrganization}
-            setSelectedOrganization={setSelectedOrganization}
-            reloadOrganizationData={reloadData}
-          />
+          <TopBar>
+            <TopBarContent
+              notifications={notifications}
+              setNotifications={setNotifications}
+              setSeedSearchCriteria={setSeedSearchCriteria}
+              facilityId={facilityIdSelected}
+              organizations={organizations}
+              selectedOrganization={selectedOrganization}
+              setSelectedOrganization={setSelectedOrganization}
+              reloadOrganizationData={reloadData}
+            />
+          </TopBar>
           <ErrorBoundary>
             <Switch>
               {/* Routes, in order of their appearance down the side nav bar and then across the top nav bar. */}
