@@ -13,9 +13,21 @@ const useStyles = makeStyles((theme) =>
       flex: 1,
       marginLeft: theme.spacing(1),
     },
+    panelTitle: {
+      fontSize: '20px',
+      lineHeight: '28px',
+      fontWeight: 600,
+      color: '#3A4445',
+    },
     details: {
       display: 'flex',
       height: '24px',
+    },
+    iconDown: {
+      fill: '#FE0003',
+    },
+    iconUp: {
+      fill: '#308F5F',
     },
   })
 );
@@ -33,7 +45,7 @@ export default function SummaryPaper({ id, title, statistics, loading, error }: 
 
   return (
     <>
-      <Typography component='h2' variant='h6' color='primary' gutterBottom>
+      <Typography component='h2' variant='h6' color='primary' gutterBottom className={classes.panelTitle}>
         {title}
       </Typography>
       {error && strings.GENERIC_ERROR}
@@ -46,9 +58,9 @@ export default function SummaryPaper({ id, title, statistics, loading, error }: 
           <div id={`${id}-details`} className={classes.details}>
             {statistics.lastWeek !== 0 &&
               (statistics.current - statistics.lastWeek < 0 ? (
-                <ArrowDownwardIcon id={`${id}-arrow-decrease`} color='error' />
+                <ArrowDownwardIcon id={`${id}-arrow-decrease`} color='inherit' className={classes.iconDown} />
               ) : (
-                <ArrowUpwardIcon id={`${id}-arrow-increase`} color='primary' />
+                <ArrowUpwardIcon id={`${id}-arrow-increase`} color='inherit' className={classes.iconUp} />
               ))}
             {statistics.lastWeek !== 0 && (
               <Typography id={`${id}-change`} color='textSecondary' className={classes.depositContext}>

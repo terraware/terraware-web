@@ -7,10 +7,6 @@ describe('Summary page', () => {
     cy.wait('@summary');
   });
 
-  it('has the summary title', () => {
-    cy.get('#title').contains('Summary');
-  });
-
   it('display endpoint result', () => {
     cy.get('#sessions-current').contains('11');
     cy.get('#sessions-change').contains('267% since last week');

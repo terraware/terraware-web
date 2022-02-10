@@ -19,10 +19,13 @@ const useStyles = makeStyles((theme) =>
     title: {
       fontSize: '24px',
       lineHeight: '32px',
-      fontWeight: '600' as React.CSSProperties['fontWeight'],
+      fontWeight: 600,
     },
     subtitle: {
-      fontWeight: theme.typography.fontWeightLight,
+      fontWeight: 400,
+      paddingTop: '16px',
+      fontSize: '14px',
+      lineHeight: '20px',
     },
     flex: {
       display: 'flex',
@@ -41,7 +44,7 @@ const useStyles = makeStyles((theme) =>
 );
 
 interface Props {
-  title: string | string[];
+  title?: string | string[];
   subtitle: string | React.ReactNode;
   children?: React.ReactNode;
   rightComponent?: React.ReactNode;
@@ -78,7 +81,7 @@ export default function PageHeader({
   return (
     <Container maxWidth={false} className={classes.mainContainer}>
       <Grid container spacing={0} className={classes.container}>
-        {page && parentPage && !!selectedOrgInfo && !!onChangeSelectedOrgInfo && (
+        {page && parentPage && (
           <Grid item xs={12}>
             <Title
               page={page}
@@ -113,9 +116,11 @@ export default function PageHeader({
           )}
           <div className={classes.mainContent}>
             <Box display='flex' justifyContent='space-between' alignItems='center'>
-              <Typography id='title' variant='h4' className={classes.title}>
-                {title}
-              </Typography>
+              {title && (
+                <Typography id='title' variant='h4' className={classes.title}>
+                  {title}
+                </Typography>
+              )}
               {rightComponent}
             </Box>
             <Typography id='subtitle' variant='h6' className={classes.subtitle}>
