@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) =>
     container: {
       maxWidth: '100%',
     },
-    title: {
+    pageTitle: {
       fontSize: '24px',
       lineHeight: '32px',
       fontWeight: '600' as React.CSSProperties['fontWeight'],
@@ -119,7 +119,7 @@ export default function PageHeader({
           )}
           <div className={classes.mainContent}>
             <Box display='flex' justifyContent='space-between' alignItems='center'>
-              <Typography id='title' variant='h4' className={classes.title}>
+              <Typography id='title' variant='h4' className={classes.pageTitle}>
                 {title}
               </Typography>
 

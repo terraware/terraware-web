@@ -23,6 +23,15 @@ const useStyles = makeStyles((theme) =>
     },
     paper: {
       padding: theme.spacing(2),
+      border: '1px solid #A9B7B8',
+      borderRadius: '8px',
+      boxShadow: 'none',
+    },
+    panelTitle: {
+      fontSize: '20px',
+      lineHeight: '28px',
+      fontWeight: 600,
+      color: '#3A4445',
     },
     bold: {
       fontWeight: theme.typography.fontWeightBold,
@@ -142,7 +151,7 @@ export default function WithdrawalView({ accession, onSubmit }: Props): JSX.Elem
         />
         <InfoModal open={openInfoModal} onClose={onCloseInfoModal} />
         <Paper className={classes.paper}>
-          <Typography variant='h6' className={classes.bold}>
+          <Typography variant='h6' className={classes.panelTitle}>
             {strings.WITHDRAWAL}
           </Typography>
           <Typography component='p'>{strings.WITHDRAWAL_DESCRIPTION}</Typography>

@@ -69,6 +69,8 @@ const useStyles = makeStyles(() =>
     content: {
       marginLeft: '200px',
       height: '100%',
+      paddingTop: '64px',
+      overflow: 'scroll',
     },
   })
 );
@@ -167,7 +169,7 @@ function AppContent() {
         <div>
           <NavBar organization={selectedOrganization} />
         </div>
-        <div className={classes.content}>
+        <div className={`${classes.content} scrollable-content`}>
           <TopBar
             notifications={notifications}
             setNotifications={setNotifications}

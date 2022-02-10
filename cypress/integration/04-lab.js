@@ -103,42 +103,58 @@ describe('Lab', () => {
     cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
     cy.get('#saveTest').click();
     cy.wait('@getAccession');
+    cy.get('.scrollable-content').scrollTo(0, 0);
   });
 
   it('should display the records in the right order', () => {
     cy.get('#row1-startDate').contains('02/09/2021');
     cy.get('#row2-startDate').contains('02/12/2021');
     cy.get('#row3-startDate').contains('02/01/2021');
+  });
 
+  it('by start date', () => {
     // by start date
-    cy.get('#table-header-startDate').click();
+    cy.get('#mostRecentViabiliy').should('be.visible');
+    cy.get('#table-header-startDate').click({ scrollBehavior: false });
     cy.get('#row1-startDate').contains('02/01/2021');
     cy.get('#row2-startDate').contains('02/09/2021');
     cy.get('#row3-startDate').contains('02/12/2021');
+    cy.get('.scrollable-content').scrollTo(0, 0);
+  });
 
+  it('rest', () => {
     // by seed type
-    cy.get('#table-header-seedType').click();
+    cy.get('#mostRecentViabiliy').should('be.visible');
+    cy.get('#table-header-seedType').click({ scrollBehavior: false });
     cy.get('#row1-seedType').contains('Fresh');
     cy.get('#row2-seedType').contains('Stored');
     cy.get('#row3-seedType').contains('Stored');
+    cy.get('.scrollable-content').scrollTo(0, 0);
 
     // by substrate
-    cy.get('#table-header-substrate').click();
+    cy.get('#mostRecentViabiliy').should('be.visible');
+    cy.get('#table-header-substrate').click({ scrollBehavior: false });
     cy.get('#row1-substrate').contains('Agar Petri Dish');
     cy.get('#row2-substrate').contains('Nursery Media');
     cy.get('#row3-substrate').contains('Other');
+    cy.get('.scrollable-content').scrollTo(0, 0);
 
     // by Treatment
-    cy.get('#table-header-treatment').click();
+    cy.get('#mostRecentViabiliy').should('be.visible');
+    cy.get('#table-header-treatment').click({ scrollBehavior: false });
     cy.get('#row1-treatment').contains('Other');
     cy.get('#row2-treatment').contains('Scarify');
     cy.get('#row3-treatment').contains('Soak');
 
     // by sown
-    cy.get('#table-header-seedsSown').click();
+    cy.get('#lab-table').scrollTo('right');
+    cy.get('.scrollable-content').scrollTo('top');
+    cy.get('#mostRecentViabiliy').should('be.visible');
+    cy.get('#table-header-seedsSown').click({ scrollBehavior: false });
     cy.get('#row1-seedsSown').contains('50');
     cy.get('#row2-seedsSown').contains('100');
     cy.get('#row3-seedsSown').contains('200');
+    cy.get('.scrollable-content').scrollTo(0, 0);
   });
 
   it('should delete test', () => {

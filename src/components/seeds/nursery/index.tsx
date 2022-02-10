@@ -22,6 +22,15 @@ const useStyles = makeStyles((theme) =>
   createStyles({
     paper: {
       padding: theme.spacing(2),
+      border: '1px solid #A9B7B8',
+      borderRadius: '8px',
+      boxShadow: 'none',
+    },
+    panelTitle: {
+      fontSize: '20px',
+      lineHeight: '28px',
+      fontWeight: 600,
+      color: '#3A4445',
     },
     right: {
       marginLeft: 'auto',
@@ -134,7 +143,7 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
           seedsAvailable={seedsAvailable}
         />
         <Paper className={classes.paper}>
-          <Typography variant='h6' className={classes.bold}>
+          <Typography variant='h6' className={classes.panelTitle}>
             {strings.NURSERY}
           </Typography>
           <Typography component='p'>{strings.NURSERY_DESCRIPTION}</Typography>
