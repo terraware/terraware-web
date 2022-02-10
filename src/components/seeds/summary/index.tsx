@@ -22,15 +22,25 @@ import Updates from './Updates';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
+    main: {
+      background: '#ffffff',
+      height: 'calc( 100% - 64px)',
+      minHeight: 'calc(100vh - 64px)',
+      display: 'flex',
+      flexDirection: 'column',
+      padding: '24px',
+    },
     mainContainer: {
-      paddingTop: theme.spacing(4),
-      paddingBottom: theme.spacing(4),
+      padding: '32px 0',
     },
     paper: {
       padding: theme.spacing(2),
       display: 'flex',
       overflow: 'auto',
       flexDirection: 'column',
+      border: '1px solid #A9B7B8',
+      borderRadius: '8px',
+      boxShadow: 'none',
     },
     fixedHeight: {
       height: '100%',
@@ -122,29 +132,23 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
   };
 
   return (
-    <main>
-      <PageHeader
-        title={strings.SUMMARY}
-        subtitle={strings.WELCOME_MSG}
-        page={strings.DASHBOARD}
-        parentPage={strings.SEEDS}
-      />
+    <main className={classes.main}>
+      <PageHeader subtitle={strings.WELCOME_MSG} page={strings.DASHBOARD} parentPage={strings.SEEDS} />
       {organization && summary ? (
         <Container maxWidth={false} className={classes.mainContainer}>
           <Grid container spacing={3}>
-            <Grid item xs={12}>
-              {!!organization?.projects?.length && !summary?.value?.activeAccessions.current && (
+            {!!organization?.projects?.length && !summary?.value?.activeAccessions.current && (
+              <Grid item xs={12}>
                 <EmptyMessage
                   title={strings.COLLECT_IN_FIELD_PLANT_DATA}
                   text={strings.TERRAWARE_MOBILE_APP_INFO_MSG}
                   buttonText={strings.REQUEST_MOBILE_APP}
                   onClick={goToProjects}
                 />
-              )}
-            </Grid>
-            <Grid item xs={1} />
+              </Grid>
+            )}
             {!!organization?.projects?.length ? (
-              <Grid item xs={10}>
+              <Grid item xs={12}>
                 <Grid container spacing={3}>
                   <Grid item xs={4}>
                     <Paper className={classes.paper}>
@@ -211,7 +215,6 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
                 text={strings.EMPTY_MESSAGE_CONTRIBUTOR}
               />
             )}
-            <Grid item xs={1} />
           </Grid>
         </Container>
       ) : (
