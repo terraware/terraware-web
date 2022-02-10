@@ -19,10 +19,10 @@ const useStyles = makeStyles((theme) =>
     title: {
       fontSize: '24px',
       lineHeight: '32px',
-      fontWeight: '600' as React.CSSProperties['fontWeight'],
+      fontWeight: 600,
     },
     subtitle: {
-      fontWeight: '400' as React.CSSProperties['fontWeight'],
+      fontWeight: 400,
       paddingTop: '16px',
       fontSize: '14px',
       lineHeight: '20px',
