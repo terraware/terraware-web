@@ -7,9 +7,13 @@ const useStyles = makeStyles((theme) =>
     appBar: {
       background: theme.palette.common.white,
       color: theme.palette.common.black,
+      filter: 'drop-shadow(0 0 12px rgba(0, 0, 0, 0.5))',
+      boxShadow: 'none',
     },
     flex: {
       display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
     },
     right: {
       marginLeft: 'auto',

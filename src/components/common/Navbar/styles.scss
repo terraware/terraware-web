@@ -9,6 +9,7 @@
   background-color: $tw-clr-nvgtn-side-nav-item-fill;
   width: $tw-sz-nvgtn-side-nav-width;
   position: fixed;
+  z-index: 1101;
   .logo {
     background-color: $tw-clr-nvgtn-side-nav-item-fill;
     padding-bottom: $tw-spc-base-small 0;

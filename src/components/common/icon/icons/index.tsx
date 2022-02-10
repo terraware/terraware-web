@@ -7,16 +7,19 @@ import { ReactComponent as ChevronDown } from './chevron-down.svg';
 import { ReactComponent as ChevronUp } from './chevron-up.svg';
 import { ReactComponent as Error } from './error.svg';
 import { ReactComponent as Folder } from './folder.svg';
+import { ReactComponent as Help } from './help.svg';
 import { ReactComponent as Home } from './home.svg';
 import { ReactComponent as Key } from './key.svg';
 import { ReactComponent as Leaf } from './leaf.svg';
 import { ReactComponent as Lock } from './lock.svg';
+import { ReactComponent as Notification } from './notification.svg';
 import { ReactComponent as Organization } from './organization.svg';
 import { ReactComponent as People } from './people.svg';
 import { ReactComponent as Person } from './person.svg';
 import { ReactComponent as Plus } from './plus.svg';
 import { ReactComponent as Project } from './project.svg';
 import { ReactComponent as RestorationSite } from './restoration-site.svg';
+import { ReactComponent as Search } from './search.svg';
 import { ReactComponent as Seeds } from './seeds.svg';
 import { ReactComponent as Site } from './site.svg';
 import { ReactComponent as Sites } from './sites.svg';
@@ -34,16 +37,19 @@ export type IconName =
   | 'chevronDown'
   | 'error'
   | 'folder'
+  | 'help'
   | 'home'
   | 'key'
   | 'leaf'
   | 'lock'
+  | 'notification'
   | 'organization'
   | 'people'
   | 'person'
   | 'plus'
   | 'project'
   | 'restorationSite'
+  | 'search'
   | 'seeds'
   | 'site'
   | 'sites'
@@ -65,16 +71,19 @@ const icons: Record<IconName, SVGComponent> = {
   chevronUp: ChevronUp,
   chevronDown: ChevronDown,
   folder: Folder,
+  help: Help,
   home: Home,
   key: Key,
   leaf: Leaf,
   lock: Lock,
+  notification: Notification,
   organization: Organization,
   people: People,
   person: Person,
   plus: Plus,
   project: Project,
   restorationSite: RestorationSite,
+  search: Search,
   seeds: Seeds,
   site: Site,
   sites: Sites,

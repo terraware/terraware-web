@@ -1,10 +1,10 @@
 import { List, ListItem, Popover } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
-import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import React from 'react';
 import strings from '../../src/strings';
 import { ReactComponent as AvatarIcon } from './avatar-default.svg';
+import Icon from './common/icon/Icon';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -14,7 +14,10 @@ const useStyles = makeStyles((theme) =>
     },
     icon: {
       width: '32px',
-      height: '48px',
+      height: '32px',
+    },
+    chevronDown: {
+      fill: '#3A4445',
     },
   })
 );
@@ -38,7 +41,7 @@ export default function UserMenu(): JSX.Element {
     <div>
       <IconButton onClick={handleClick} size='small' className={classes.iconContainer}>
         <AvatarIcon className={classes.icon} />
-        <KeyboardArrowDownIcon />
+        <Icon name='chevronDown' className={classes.chevronDown} />
       </IconButton>
       <Popover
         id='simple-popover'

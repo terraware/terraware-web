@@ -71,6 +71,7 @@ const useStyles = makeStyles(() =>
   createStyles({
     content: {
       marginLeft: '200px',
+      height: '100%',
     },
   })
 );

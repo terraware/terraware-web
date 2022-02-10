@@ -10,18 +10,19 @@ import { SelectedOrgInfo, ServerOrganization } from 'src/types/Organization';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
-    container: {
-      minHeight: '156px',
-      maxWidth: '100%',
-    },
-    titleSpacing: {
-      paddingTop: theme.spacing(4),
+    mainContainer: {
+      paddingLeft: '12px',
     },
     title: {
-      fontWeight: theme.typography.fontWeightMedium,
+      fontSize: '24px',
+      lineHeight: '32px',
+      fontWeight: 600,
     },
     subtitle: {
-      fontWeight: theme.typography.fontWeightLight,
+      fontWeight: 400,
+      paddingTop: '16px',
+      fontSize: '14px',
+      lineHeight: '20px',
     },
     flex: {
       display: 'flex',
@@ -40,7 +41,7 @@ const useStyles = makeStyles((theme) =>
 );
 
 interface Props {
-  title: string | string[];
+  title?: string | string[];
   subtitle: string | React.ReactNode;
   children?: React.ReactNode;
   rightComponent?: React.ReactNode;
@@ -75,9 +76,9 @@ export default function PageHeader({
   const location = useStateLocation();
 
   return (
-    <Container maxWidth={false}>
-      <Grid container spacing={3} className={classes.container}>
-        {page && parentPage && !!selectedOrgInfo && !!onChangeSelectedOrgInfo && (
+    <Container maxWidth={false} className={classes.mainContainer}>
+      <Grid container spacing={0}>
+        {page && parentPage && (
           <Grid item xs={12}>
             <Title
               page={page}
@@ -90,8 +91,7 @@ export default function PageHeader({
             />
           </Grid>
         )}
-        <Grid item xs={1} />
-        <Grid item xs={10} className={classes.flex}>
+        <Grid item xs={11} className={classes.flex}>
           {back && (
             <div className={classes.back}>
               <Fab
@@ -112,10 +112,12 @@ export default function PageHeader({
             </div>
           )}
           <div className={classes.mainContent}>
-            <Box display='flex' justifyContent='space-between' alignItems='center' className={classes.titleSpacing}>
-              <Typography id='title' variant='h4' className={classes.title}>
-                {title}
-              </Typography>
+            <Box display='flex' justifyContent='space-between' alignItems='center'>
+              {title && (
+                <Typography id='title' variant='h4' className={classes.title}>
+                  {title}
+                </Typography>
+              )}
               {rightComponent}
             </Box>
             <Typography id='subtitle' variant='h6' className={classes.subtitle}>
