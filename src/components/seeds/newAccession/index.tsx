@@ -46,6 +46,9 @@ const useStyles = makeStyles((theme) =>
     },
     paper: {
       padding: theme.spacing(2),
+      border: '1px solid #A9B7B8',
+      borderRadius: '8px',
+      boxShadow: 'none',
     },
     panelTitle: {
       fontSize: '20px',
