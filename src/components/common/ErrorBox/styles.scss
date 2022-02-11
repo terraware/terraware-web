@@ -28,6 +28,18 @@
   margin-top: 0;
 }
 
+.error-title {
+  font-family: $tw-fnt-frm-fld-error-text-font-family;
+  font-size: $tw-fnt-base-font-size-body-02;
+  font-weight: $tw-fnt-base-headline-01-semi-bold-font-weight;
+  line-height: $tw-fnt-frm-fld-error-text-line-height;
+  color: $tw-clr-text-fill;
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  margin-top: 0;
+}
+
 .button-container {
   width: 100%;
   text-align: right;

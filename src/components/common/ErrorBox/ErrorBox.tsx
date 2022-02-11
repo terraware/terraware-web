@@ -7,15 +7,18 @@ export interface Props {
   text: string;
   onClick?: () => void;
   buttonText?: string;
+  title?: string;
+  className?: string;
 }
 
 export default function ErrorBox(props: Props): JSX.Element {
-  const { text, onClick, buttonText } = props;
+  const { text, onClick, buttonText, title, className } = props;
 
   return (
-    <div className='error-box'>
+    <div className={`error-box ${className}`}>
       <Icon name='error' className='error-icon' size='large' />
       <div>
+        {title && <h1 className='error-title'>{title}</h1>}
         <p className='error-text'>{text}</p>
         {buttonText && onClick && (
           <div className='button-container'>
