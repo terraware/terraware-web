@@ -7,9 +7,11 @@
 
 .navbar {
   background-color: $tw-clr-nvgtn-side-nav-item-fill;
-  width: $tw-sz-nvgtn-side-nav-width;
+  height: 100%;
   position: fixed;
   z-index: 1101;
+  width: $tw-sz-nvgtn-side-nav-width;
+
   .logo {
     background-color: $tw-clr-nvgtn-side-nav-item-fill;
     padding-bottom: $tw-spc-base-small 0;
@@ -112,6 +114,12 @@
       bottom: 0;
       width: $tw-sz-nvgtn-side-nav-item-indicator;
       background-color: $tw-clr-nvgtn-side-nav-item-indicator-fill;
+    }
+
+    &--footer {
+      bottom: 29px;
+      position: absolute;
+      width: 100%;
     }
 
     &--icon {

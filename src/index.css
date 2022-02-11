@@ -1,9 +1,10 @@
+@font-face {
+  font-family: 'Inter';
+  src: local('Inter'), url(src/fonts/Inter.ttf) format('truetype');
+}
+
 html {
   height: 100%;
-  @font-face {
-    font-family: 'Inter';
-    src: local('Inter'), url(src/fonts/Inter.ttf) format('truetype');
-  }
 }
 
 body {

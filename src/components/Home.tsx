@@ -8,6 +8,7 @@ import { User } from 'src/types/User';
 import PageCard from './common/PageCard';
 import TfDivisor from './common/TfDivisor';
 import PageHeader from './seeds/PageHeader';
+import dictionary from '../strings/dictionary';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -67,10 +68,19 @@ export default function Home({ organization }: HomeProps): JSX.Element {
                   icon='folder'
                   description={strings.PROJECTS_CARD_DESCRIPTION}
                   link='/projects'
+                  linkText={dictionary.GO_TO + ' ' + strings.PROJECTS}
+                  linkStyle={'underline'}
                 />
               </Grid>
               <Grid item xs={role === 'Manager' ? 6 : 4}>
-                <PageCard name={strings.SITES} icon='site' description={strings.SITES_CARD_DESCRIPTION} link='/sites' />
+                <PageCard
+                  name={strings.SITES}
+                  icon='site'
+                  description={strings.SITES_CARD_DESCRIPTION}
+                  link='/sites'
+                  linkText={dictionary.GO_TO + ' ' + strings.SITES}
+                  linkStyle={'underline'}
+                />
               </Grid>
               {(role === 'Admin' || role === 'Owner') && (
                 <Grid item xs={4}>
@@ -79,6 +89,8 @@ export default function Home({ organization }: HomeProps): JSX.Element {
                     icon='person'
                     description={strings.PEOPLE_CARD_DESCRIPTION}
                     link='/people'
+                    linkText={dictionary.GO_TO + ' ' + strings.PEOPLE}
+                    linkStyle={'underline'}
                   />
                 </Grid>
               )}
@@ -95,6 +107,8 @@ export default function Home({ organization }: HomeProps): JSX.Element {
                 icon='seeds'
                 description={strings.SEEDS_CARD_DESCRIPTION}
                 link='/seeds-summary'
+                linkText={dictionary.GO_TO + ' ' + strings.SEEDS}
+                linkStyle={'underline'}
               />
             </Grid>
             <Grid item xs={4}>
@@ -103,6 +117,8 @@ export default function Home({ organization }: HomeProps): JSX.Element {
                 icon='restorationSite'
                 description={strings.PLANTS_CARD_DESCRIPTION}
                 link='/plants-dashboard'
+                linkText={dictionary.GO_TO + ' ' + strings.PLANTS}
+                linkStyle={'underline'}
               />
             </Grid>
             <Grid item xs={4}>
@@ -111,6 +127,8 @@ export default function Home({ organization }: HomeProps): JSX.Element {
                 icon='species'
                 description={strings.SPECIES_CARD_DESCRIPTION}
                 link='/species'
+                linkText={dictionary.GO_TO + ' ' + strings.SPECIES}
+                linkStyle={'underline'}
               />
             </Grid>
           </>
