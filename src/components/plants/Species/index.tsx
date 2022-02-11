@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) =>
     pageTitle: {
       fontSize: '24px',
       lineHeight: '32px',
-      fontWeight: '600' as React.CSSProperties['fontWeight'],
+      fontWeight: 600,
       margin: 0,
     },
     titleContainer: {
