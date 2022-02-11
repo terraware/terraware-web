@@ -2,7 +2,7 @@ import axios from 'src/api/index';
 import { paths } from 'src/api/types/generated-schema';
 import {
   Species,
-  SpeciesByIdWithScientificName,
+  SpeciesById,
   SpeciesRequestError,
   SpeciesWithScientificName,
 } from 'src/types/Species';
@@ -18,7 +18,7 @@ type SpeciesList =
 type SpeciesListItem = SpeciesList[0];
 
 export type GetSpeciesListResponse = {
-  speciesById: SpeciesByIdWithScientificName;
+  speciesById: SpeciesById;
   requestSucceeded: boolean;
 };
 
