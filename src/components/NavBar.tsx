@@ -138,6 +138,7 @@ export default function NavBar({ organization }: NavBarProps): JSX.Element | nul
       )}
       <NavItem
         label={dictionary.CONTACT_US}
+        icon={'help'}
         selected={!!isContactUsRoute}
         onClick={() => navigate('/contactus')}
         id='contactus'
