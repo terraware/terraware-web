@@ -14,7 +14,6 @@ import LocalizedStrings from 'react-localization';
 const dictionary = new LocalizedStrings({
   en: {
     CONTACT_US: 'Contact Us',
-    GO_TO: 'Go to',
     REPORT_PROBLEM: 'Report Problem',
     REQUEST_FEATURE: 'Request Feature',
     REQUEST_MOBILE_APP: 'Request Mobile App',
