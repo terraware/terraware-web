@@ -46,6 +46,8 @@ import ErrorBoundary from 'src/ErrorBoundary';
 import strings from 'src/strings';
 import theme from 'src/theme';
 import ErrorBox from './components/common/ErrorBox/ErrorBox';
+import { User } from './types/User';
+import { getUser } from './api/user/user';
 
 // @ts-ignore
 mapboxgl.workerClass =
@@ -135,6 +137,7 @@ function AppContent() {
   const [orgAPIRequestStatus, setOrgAPIRequestStatus] = useState<APIRequestStatus>(APIRequestStatus.AWAITING);
   // get the selected values on database to pass it to new accession page
   const [organizations, setOrganizations] = useState<ServerOrganization[]>();
+  const [user, setUser] = useState<User>();
 
   const reloadData = useCallback(() => {
     const populateOrganizations = async () => {
@@ -169,6 +172,16 @@ function AppContent() {
     }
   }, [organizations, selectedOrganization]);
 
+  useEffect(() => {
+    const populateUser = async () => {
+      const response = await getUser();
+      if (response.requestSucceeded) {
+        setUser(response.user ?? undefined);
+      }
+    };
+    populateUser();
+  }, []);
+
   if (orgAPIRequestStatus === APIRequestStatus.AWAITING || orgAPIRequestStatus === APIRequestStatus.FAILED_NO_AUTH) {
     return <CircularProgress className={classes.spinner} size='193' />;
   }
@@ -197,7 +210,7 @@ function AppContent() {
       <Switch>
         <Route exact path='/welcome'>
           <TopBar>
-            <UserMenu />
+            <UserMenu userName={`${user?.firstName} ${user?.lastName}`} />
           </TopBar>
           <LandingPage reloadOrganizationData={reloadData} />
         </Route>
@@ -246,6 +259,7 @@ function AppContent() {
               selectedOrganization={selectedOrganization}
               setSelectedOrganization={setSelectedOrganization}
               reloadOrganizationData={reloadData}
+              userName={`${user?.firstName} ${user?.lastName}`}
             />
           </TopBar>
           <ErrorBoundary>
