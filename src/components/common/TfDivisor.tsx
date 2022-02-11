@@ -6,7 +6,7 @@ const useStyles = makeStyles((theme) =>
   createStyles({
     divisor: {
       background:
-        'linear-gradient(to right, rgba(202, 210, 211, 0) 0%, #CAD2D3 25%, #CAD2D3 75%, rgba(202, 210, 211, 0) 100%)',
+        'linear-gradient(90deg, rgba(202, 210, 211, 0) 0%, #CAD2D3 25%, #CAD2D3 49%, rgba(202, 210, 211, 0) 49%, rgba(202, 210, 211, 0) 51%, #CAD2D3 51%, #CAD2D3 75%, rgba(202, 210, 211, 0) 100%);',
       width: '100%',
       height: '1px',
       position: 'relative',
@@ -14,9 +14,8 @@ const useStyles = makeStyles((theme) =>
     divisorIcon: {
       position: 'absolute',
       fill: '#308F5F',
-      right: 'calc(50% - 10px)',
-      bottom: '-10px',
-      background: '#ffffff',
+      right: 'calc(50% - 8px)',
+      bottom: '-8px',
     },
   })
 );

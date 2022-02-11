@@ -11,9 +11,12 @@ import { SelectedOrgInfo, ServerOrganization } from 'src/types/Organization';
 const useStyles = makeStyles((theme) =>
   createStyles({
     mainContainer: {
-      paddingLeft: '12px',
+      paddingLeft: 0,
     },
-    title: {
+    container: {
+      maxWidth: '100%',
+    },
+    pageTitle: {
       fontSize: '24px',
       lineHeight: '32px',
       fontWeight: 600,
@@ -36,6 +39,9 @@ const useStyles = makeStyles((theme) =>
     },
     mainContent: {
       width: '100%',
+    },
+    rightComponent: {
+      paddingTop: '32px',
     },
   })
 );
@@ -77,7 +83,7 @@ export default function PageHeader({
 
   return (
     <Container maxWidth={false} className={classes.mainContainer}>
-      <Grid container spacing={0}>
+      <Grid container spacing={0} className={classes.container}>
         {page && parentPage && (
           <Grid item xs={12}>
             <Title
@@ -91,7 +97,7 @@ export default function PageHeader({
             />
           </Grid>
         )}
-        <Grid item xs={11} className={classes.flex}>
+        <Grid item xs={12} className={classes.flex}>
           {back && (
             <div className={classes.back}>
               <Fab
@@ -113,12 +119,11 @@ export default function PageHeader({
           )}
           <div className={classes.mainContent}>
             <Box display='flex' justifyContent='space-between' alignItems='center'>
-              {title && (
-                <Typography id='title' variant='h4' className={classes.title}>
-                  {title}
-                </Typography>
-              )}
-              {rightComponent}
+              <Typography id='title' variant='h4' className={classes.pageTitle}>
+                {title}
+              </Typography>
+
+              {!!rightComponent && <div className={classes.rightComponent}>{rightComponent}</div>}
             </Box>
             <Typography id='subtitle' variant='h6' className={classes.subtitle}>
               {subtitle}
@@ -126,7 +131,6 @@ export default function PageHeader({
             {children}
           </div>
         </Grid>
-        <Grid item xs={1} />
       </Grid>
     </Container>
   );

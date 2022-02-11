@@ -16,13 +16,13 @@ import SingleSelection from './filters/FilterSingleSelection';
 const useStyles = makeStyles((theme) =>
   createStyles({
     mainContainer: {
-      margin: theme.spacing(2, 0, 3, 0),
+      margin: theme.spacing(2, 0, 0, 0),
       padding: theme.spacing(0),
       display: 'flex',
     },
     pill: {
       margin: theme.spacing(0, 1.5, 0, 0),
-      height: '48px',
+      height: '32px',
       display: 'inline-block',
     },
     stateBox: {
@@ -42,14 +42,13 @@ const useStyles = makeStyles((theme) =>
       backgroundColor: theme.palette.common.white,
     },
     link: {
-      flex: 2,
-      paddingTop: theme.spacing(1),
+      paddingTop: '6px',
     },
     selectedFilter: {
       border: `2px solid ${theme.palette.neutral[600]}`,
     },
     filtersContainer: {
-      minHeight: '48px',
+      minHeight: '32px',
       flex: '8 0 600px',
     },
   })
