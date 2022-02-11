@@ -9,8 +9,8 @@ import Icon from './common/icon/Icon';
 const useStyles = makeStyles((theme) =>
   createStyles({
     iconContainer: {
-      width: '54px',
       height: '48px',
+      borderRadius: 0,
     },
     icon: {
       width: '32px',
@@ -19,10 +19,23 @@ const useStyles = makeStyles((theme) =>
     chevronDown: {
       fill: '#3A4445',
     },
+    userName: {
+      fontSize: '16px',
+      paddingLeft: '16px',
+      color: '#3A4445',
+    },
+    popover: {
+      '& .MuiPaper-rounded': {
+        minWidth: '200px',
+      },
+    },
   })
 );
 
-export default function UserMenu(): JSX.Element {
+type UserMenuProps = {
+  userName: string;
+};
+export default function UserMenu({ userName }: UserMenuProps): JSX.Element {
   const classes = useStyles();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -41,6 +54,7 @@ export default function UserMenu(): JSX.Element {
     <div>
       <IconButton onClick={handleClick} size='small' className={classes.iconContainer}>
         <AvatarIcon className={classes.icon} />
+        <span className={classes.userName}>{userName}</span>
         <Icon name='chevronDown' className={classes.chevronDown} />
       </IconButton>
       <Popover
@@ -56,6 +70,7 @@ export default function UserMenu(): JSX.Element {
           vertical: 'top',
           horizontal: 'center',
         }}
+        className={classes.popover}
       >
         <List id='notifications-popover'>
           <ListItem button onClick={onHandleLogout}>
