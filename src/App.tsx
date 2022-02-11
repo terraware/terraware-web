@@ -45,6 +45,7 @@ import UserMenu from 'src/components/UserMenu';
 import ErrorBoundary from 'src/ErrorBoundary';
 import strings from 'src/strings';
 import theme from 'src/theme';
+import ErrorBox from './components/common/ErrorBox/ErrorBox';
 
 // @ts-ignore
 mapboxgl.workerClass =
@@ -74,6 +75,22 @@ const useStyles = makeStyles(() =>
       height: '100%',
       paddingTop: '64px',
       overflow: 'scroll',
+    },
+    spinner: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      textAlign: 'center',
+      margin: 'auto',
+      minHeight: '100vh',
+      '& .MuiCircularProgress-svg': {
+        color: '#007DF2',
+        height: '193px',
+      },
+    },
+    errorBox: {
+      width: '30%',
+      marginTop: '120px',
     },
   })
 );
@@ -153,7 +170,7 @@ function AppContent() {
   }, [organizations, selectedOrganization]);
 
   if (orgAPIRequestStatus === APIRequestStatus.AWAITING || orgAPIRequestStatus === APIRequestStatus.FAILED_NO_AUTH) {
-    return <CircularProgress />;
+    return <CircularProgress className={classes.spinner} size='193' />;
   }
 
   if (orgAPIRequestStatus === APIRequestStatus.FAILED) {
@@ -161,7 +178,11 @@ function AppContent() {
       <Switch>
         <Route exact path='/error'>
           {/*TODO implement designs.*/}
-          <h1>Could not fetch organization data.</h1>
+          <ErrorBox
+            title={strings.ORGANIZATION_DATA_NOT_AVAILABLE}
+            text={strings.CONTACT_US_TO_RESOLVE_ISSUE}
+            className={classes.errorBox}
+          />
         </Route>
 
         <Route path='*'>
