@@ -50,7 +50,7 @@ import { Notifications } from 'src/types/Notifications';
 import { ServerOrganization } from 'src/types/Organization';
 import { PlantSearchOptions } from 'src/types/Plant';
 import { User } from 'src/types/User';
-import {getAllSites} from 'src/utils/organization';
+import { getAllSites } from 'src/utils/organization';
 
 // @ts-ignore
 mapboxgl.workerClass =
