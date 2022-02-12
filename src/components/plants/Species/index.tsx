@@ -45,8 +45,8 @@ const useStyles = makeStyles((theme) =>
 );
 
 const columns: TableColumnType[] = [
-  { key: 'name', name: 'Common  Name', type: 'string' },
-  { key: 'scientificName', name: 'Sicientific Name', type: 'string' },
+  { key: 'name', name: strings.COMMON_NAME, type: 'string' },
+  { key: 'scientificName', name: strings.SCIENTIFIC_NAME, type: 'string' },
 ];
 
 export default function SpeciesList({ organization }: SpeciesListProps): JSX.Element {
