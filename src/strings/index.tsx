@@ -5,7 +5,7 @@ const strings = new LocalizedStrings({
     CANCEL: 'Cancel',
     SAVE: 'Save',
     SAVE_CHANGES: 'Save Changes',
-    GENERIC_ERROR: 'An error ocurred',
+    GENERIC_ERROR: 'An error occurred',
     PREEXISTING_SPECIES: 'This species already exists',
     DELETE: 'Delete',
     SPECIES_NAME: 'Species Name',
@@ -320,17 +320,6 @@ const strings = new LocalizedStrings({
     PEOPLE: 'People',
     CHECK_IN_MESSAGE:
       '{0} new seed collection bags should have been dropped off at the seed bank. Please verify their arrival and check them in.',
-    SEEDS_CARD_DESCRIPTION:
-      'Collect seeds and then record and view your accessions. Seed accessions can be viewed and analyzed by Facilities.',
-    PLANTS_CARD_DESCRIPTION:
-      'They’ve taken root! View all your plants in one place. Plants can be viewed and analyzed by Project.',
-    SPECIES_CARD_DESCRIPTION: 'View the Species that are referenced by your Seed and Plant entries.',
-    PROJECTS_CARD_DESCRIPTION:
-      'Manage Projects to organize all your Earth saving activities and data. A reforestation Project, for example, will have Sites, which in turn will have Facilities, along with team members who will be involved with the Project.',
-    SITES_CARD_DESCRIPTION: 'View Sites under your Project. A Project may have one or more Sites.',
-    PEOPLE_CARD_DESCRIPTION: 'We can’t do it alone! Add people to your Organization and assign them roles.',
-    GOOD_MORNING: 'Good morning!',
-    GOOD_MORNING_PERSON: 'Good morning, {0}!',
     ADD_PROJECT: 'Add Project',
     PROJECTS_DESCRIPTION: 'Manage your Projects.',
     ADD_SITE: 'Add Site',

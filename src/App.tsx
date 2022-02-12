@@ -14,6 +14,7 @@ import {
 import { Notifications } from 'src/types/Notifications';
 import { ServerOrganization } from 'src/types/Organization';
 import { PlantSearchOptions } from 'src/types/Plant';
+import ContactUs from 'src/components/ContactUs';
 import EditOrganization from 'src/components/EditOrganization';
 import Home from 'src/components/Home';
 import LandingPage from 'src/components/LandingPage';
@@ -351,6 +352,14 @@ function AppContent() {
                 <Help />
               </Route>
               {selectedOrganization && (
+                <Route path='/organization/edit' exact={true}>
+                  <EditOrganization organization={selectedOrganization} reloadOrganizationData={reloadData} />
+                </Route>
+              )}
+              <Route path='/organization'>
+                <Organization organization={organizationWithoutSB()} />
+              </Route>
+              {selectedOrganization && (
                 <Route path='/people/new'>
                   <NewPerson organization={organizationWithoutSB()!} reloadOrganizationData={reloadData} />
                 </Route>
@@ -361,16 +370,14 @@ function AppContent() {
               <Route path='/people/:personId'>
                 <PersonDetails organization={organizationWithoutSB()} />
               </Route>
-              {selectedOrganization && (
-                <Route path='/organization/edit' exact={true}>
-                  <EditOrganization organization={selectedOrganization} reloadOrganizationData={reloadData} />
-                </Route>
-              )}
-              <Route path='/organization'>
-                <Organization organization={organizationWithoutSB()} />
+              <Route exact path='/contactus'>
+                <ContactUs />
               </Route>
 
               {/* Redirects. Invalid paths will redirect to the closest valid path. */}
+              <Route path='/contactus/'>
+                <Redirect to='/contactus' />
+              </Route>
               <Route path='/plants-dashboard/'>
                 <Redirect to='/plants-dashboard' />
               </Route>

@@ -2,12 +2,13 @@ import { Container, Grid } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { useEffect, useState } from 'react';
 import { getUser } from 'src/api/user/user';
+import PageCard from 'src/components/common/PageCard';
+import PageHeader from 'src/components/seeds/PageHeader';
+import TfDivisor from 'src/components/common/TfDivisor';
 import strings from 'src/strings';
+import homePageStrings from 'src/strings/homePage';
 import { ServerOrganization } from 'src/types/Organization';
 import { User } from 'src/types/User';
-import PageCard from './common/PageCard';
-import TfDivisor from './common/TfDivisor';
-import PageHeader from './seeds/PageHeader';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -53,7 +54,9 @@ export default function Home({ organization }: HomeProps): JSX.Element {
     <main className={classes.main}>
       <PageHeader
         title={
-          user?.firstName ? strings.formatString(strings.GOOD_MORNING_PERSON, user.firstName) : strings.GOOD_MORNING
+          user?.firstName
+            ? strings.formatString(homePageStrings.GOOD_MORNING_PERSON, user.firstName)
+            : homePageStrings.GOOD_MORNING
         }
         subtitle=''
       />
@@ -65,20 +68,31 @@ export default function Home({ organization }: HomeProps): JSX.Element {
                 <PageCard
                   name={strings.PROJECTS}
                   icon='folder'
-                  description={strings.PROJECTS_CARD_DESCRIPTION}
+                  description={homePageStrings.PROJECTS_CARD_DESCRIPTION}
                   link='/projects'
+                  linkText={strings.formatString(homePageStrings.GO_TO, strings.PROJECTS) as string}
+                  linkStyle={'underline'}
                 />
               </Grid>
               <Grid item xs={role === 'Manager' ? 6 : 4}>
-                <PageCard name={strings.SITES} icon='site' description={strings.SITES_CARD_DESCRIPTION} link='/sites' />
+                <PageCard
+                  name={strings.SITES}
+                  icon='site'
+                  description={homePageStrings.SITES_CARD_DESCRIPTION}
+                  link='/sites'
+                  linkText={strings.formatString(homePageStrings.GO_TO, strings.SITES) as string}
+                  linkStyle={'underline'}
+                />
               </Grid>
               {(role === 'Admin' || role === 'Owner') && (
                 <Grid item xs={4}>
                   <PageCard
                     name={strings.PEOPLE}
                     icon='person'
-                    description={strings.PEOPLE_CARD_DESCRIPTION}
+                    description={homePageStrings.PEOPLE_CARD_DESCRIPTION}
                     link='/people'
+                    linkText={strings.formatString(homePageStrings.GO_TO, strings.PEOPLE) as string}
+                    linkStyle={'underline'}
                   />
                 </Grid>
               )}
@@ -93,24 +107,30 @@ export default function Home({ organization }: HomeProps): JSX.Element {
               <PageCard
                 name={strings.SEEDS}
                 icon='seeds'
-                description={strings.SEEDS_CARD_DESCRIPTION}
+                description={homePageStrings.SEEDS_CARD_DESCRIPTION}
                 link='/seeds-summary'
+                linkText={strings.formatString(homePageStrings.GO_TO, strings.SEEDS) as string}
+                linkStyle={'underline'}
               />
             </Grid>
             <Grid item xs={4}>
               <PageCard
                 name={strings.PLANTS}
                 icon='restorationSite'
-                description={strings.PLANTS_CARD_DESCRIPTION}
+                description={homePageStrings.PLANTS_CARD_DESCRIPTION}
                 link='/plants-dashboard'
+                linkText={strings.formatString(homePageStrings.GO_TO, strings.PLANTS) as string}
+                linkStyle={'underline'}
               />
             </Grid>
             <Grid item xs={4}>
               <PageCard
                 name={strings.SPECIES}
                 icon='species'
-                description={strings.SPECIES_CARD_DESCRIPTION}
+                description={homePageStrings.SPECIES_CARD_DESCRIPTION}
                 link='/species'
+                linkText={strings.formatString(homePageStrings.GO_TO, strings.SPECIES) as string}
+                linkStyle={'underline'}
               />
             </Grid>
           </>

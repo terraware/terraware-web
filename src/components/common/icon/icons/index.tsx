@@ -1,4 +1,5 @@
 import React from 'react';
+import { ReactComponent as Bug } from './bug.svg';
 import { ReactComponent as Calendar } from './calendar.svg';
 import { ReactComponent as CaretDown } from './caret-down.svg';
 import { ReactComponent as CaretLeft } from './caret-left.svg';
@@ -23,12 +24,15 @@ import { ReactComponent as Search } from './search.svg';
 import { ReactComponent as Seeds } from './seeds.svg';
 import { ReactComponent as Site } from './site.svg';
 import { ReactComponent as Sites } from './sites.svg';
+import { ReactComponent as Sparkles } from './sparkles.svg';
 import { ReactComponent as Species } from './species.svg';
 import { ReactComponent as Species2 } from './species2.svg';
 import { ReactComponent as Spinner } from './spinner.svg';
+import { ReactComponent as Touchscreen } from './touchscreen.svg';
 import { ReactComponent as Warning } from './warning.svg';
 
 export type IconName =
+  | 'bug'
   | 'calendar'
   | 'caretDown'
   | 'caretLeft'
@@ -53,9 +57,11 @@ export type IconName =
   | 'seeds'
   | 'site'
   | 'sites'
+  | 'sparkles'
   | 'species'
   | 'species2'
   | 'spinner'
+  | 'touchscreen'
   | 'warning';
 
 type SVGComponent = React.FunctionComponent<
@@ -64,6 +70,7 @@ type SVGComponent = React.FunctionComponent<
   }
 >;
 const icons: Record<IconName, SVGComponent> = {
+  bug: Bug,
   calendar: Calendar,
   caretDown: CaretDown,
   caretLeft: CaretLeft,
@@ -87,9 +94,11 @@ const icons: Record<IconName, SVGComponent> = {
   seeds: Seeds,
   site: Site,
   sites: Sites,
+  sparkles: Sparkles,
   species: Species,
   species2: Species2,
   spinner: Spinner,
+  touchscreen: Touchscreen,
   error: Error,
   warning: Warning,
 };
