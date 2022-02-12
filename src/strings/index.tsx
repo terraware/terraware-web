@@ -401,6 +401,9 @@ const strings = new LocalizedStrings({
       'Once your administrator has created a project and site, you’ll be able to access your data.',
     COMMON_NAME: 'Common Name',
     SCIENTIFIC_NAME: 'Scientific Name',
+    DOWNLOAD_AS_REPORT: 'Download as Report',
+    ORGANIZATION_DATA_NOT_AVAILABLE: 'Organization Data Not Available',
+    CONTACT_US_TO_RESOLVE_ISSUE: 'Please contact us to resolve this issue.',
   },
 });
 

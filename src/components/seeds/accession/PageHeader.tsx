@@ -2,7 +2,6 @@ import { Box, Fab, Grid } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import EcoIcon from '@material-ui/icons/Eco';
 import FiberManualRecord from '@material-ui/icons/FiberManualRecord';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
@@ -13,22 +12,23 @@ const useStyles = makeStyles((theme) =>
   createStyles({
     container: {
       backgroundColor: theme.palette.common.white,
-      border: '0.5px solid rgba(33, 37, 41, 0.06)',
-      minHeight: '156px',
-      paddingTop: theme.spacing(4),
-      paddingBottom: theme.spacing(4),
       maxWidth: '100%',
       margin: '0',
     },
     backIcon: {
       marginRight: theme.spacing(4),
       backgroundColor: theme.palette.common.white,
+      height: '32px',
+      width: '32px',
+      minHeight: '32px',
+    },
+    pageTitle: {
+      fontSize: '24px',
+      lineHeight: '32px',
+      fontWeight: 600,
     },
     titleBox: {
-      paddingBottom: theme.spacing(1),
-    },
-    title: {
-      fontWeight: theme.typography.fontWeightMedium,
+      paddingBottom: '16px',
     },
     subtitle: {
       fontWeight: theme.typography.fontWeightLight,
@@ -41,9 +41,6 @@ const useStyles = makeStyles((theme) =>
       marginRight: theme.spacing(1),
       marginLeft: theme.spacing(1),
       fontSize: theme.typography.caption.fontSize,
-    },
-    ecoIcon: {
-      fontSize: theme.typography.h3.fontSize,
     },
   })
 );
@@ -58,9 +55,8 @@ export default function AccessionPageHeader({ accession }: Props): JSX.Element {
   const location = useStateLocation();
 
   return (
-    <Grid container spacing={3} className={classes.container}>
-      <Grid item xs={1} />
-      <Grid item xs={10}>
+    <Grid container className={classes.container}>
+      <Grid item xs={12}>
         <Box display='flex' alignItems='flex-start'>
           <Box display='flex'>
             <Fab
@@ -82,8 +78,7 @@ export default function AccessionPageHeader({ accession }: Props): JSX.Element {
           </Box>
           <Box display='flex' flexDirection='column'>
             <Box display='flex' alignItems='center' className={classes.titleBox}>
-              <EcoIcon color='primary' className={classes.ecoIcon} />
-              <Typography variant='h4' className={classes.title} id='header-accessionNumber'>
+              <Typography variant='h4' className={classes.pageTitle} id='header-accessionNumber'>
                 {accession.accessionNumber}
               </Typography>
             </Box>
@@ -114,7 +109,6 @@ export default function AccessionPageHeader({ accession }: Props): JSX.Element {
           </Box>
         </Box>
       </Grid>
-      <Grid item xs={1} />
     </Grid>
   );
 }

@@ -29,7 +29,7 @@ export default function TopBar(props: TopBarProps): JSX.Element {
   const classes = useStyles();
 
   return (
-    <AppBar position='static' className={classes.appBar}>
+    <AppBar position='fixed' className={classes.appBar}>
       <Toolbar className={classes.right}>
         <div className={classes.flex}>{props.children}</div>
       </Toolbar>

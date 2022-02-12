@@ -607,7 +607,8 @@ describe('Database', () => {
       cy.get('#editColumnsDialog').should('not.exist');
 
       cy.intercept('POST', '/api/v1/search').as('search2');
-      cy.get('#table-header-speciesName').click();
+      cy.get('.scrollable-content').scrollTo('top');
+      cy.get('#table-header-speciesName').click({ scrollBehavior: false });
       cy.wait('@search2');
 
       cy.get('#row13-speciesName').contains('Other Dogwood');
@@ -616,7 +617,8 @@ describe('Database', () => {
 
     it('Should be able to sort by state', () => {
       cy.intercept('POST', '/api/v1/search').as('search');
-      cy.get('#table-header-state').click();
+      cy.get('.scrollable-content').scrollTo('top');
+      cy.get('#table-header-state').click({ scrollBehavior: false });
       cy.wait('@search');
 
       cy.get('#row1-active').contains('Active');
@@ -625,7 +627,8 @@ describe('Database', () => {
 
     it('Should be able to sort by state, descending', () => {
       cy.intercept('POST', '/api/v1/search').as('search');
-      cy.get('#table-header-state').click();
+      cy.get('.scrollable-content').scrollTo('top');
+      cy.get('#table-header-state').click({ scrollBehavior: false });
       cy.wait('@search');
 
       cy.get('#row1-active').contains('Inactive');

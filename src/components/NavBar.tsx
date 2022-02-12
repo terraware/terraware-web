@@ -49,7 +49,7 @@ export default function NavBar({ organization }: NavBarProps): JSX.Element | nul
       >
         <SubNavbar>
           <NavItem
-            label='Summary'
+            label='Dashboard'
             selected={!!isAccessionSummaryRoute}
             onClick={() => !isAccessionSummaryRoute && navigate('/seeds-summary')}
             id='summary'

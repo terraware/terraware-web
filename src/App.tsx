@@ -46,6 +46,9 @@ import UserMenu from 'src/components/UserMenu';
 import ErrorBoundary from 'src/ErrorBoundary';
 import strings from 'src/strings';
 import theme from 'src/theme';
+import ErrorBox from './components/common/ErrorBox/ErrorBox';
+import { User } from './types/User';
+import { getUser } from './api/user/user';
 
 // @ts-ignore
 mapboxgl.workerClass =
@@ -73,6 +76,24 @@ const useStyles = makeStyles(() =>
     content: {
       marginLeft: '200px',
       height: '100%',
+      paddingTop: '64px',
+      overflow: 'scroll',
+    },
+    spinner: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      textAlign: 'center',
+      margin: 'auto',
+      minHeight: '100vh',
+      '& .MuiCircularProgress-svg': {
+        color: '#007DF2',
+        height: '193px',
+      },
+    },
+    errorBox: {
+      width: '30%',
+      marginTop: '120px',
     },
   })
 );
@@ -117,6 +138,7 @@ function AppContent() {
   const [orgAPIRequestStatus, setOrgAPIRequestStatus] = useState<APIRequestStatus>(APIRequestStatus.AWAITING);
   // get the selected values on database to pass it to new accession page
   const [organizations, setOrganizations] = useState<ServerOrganization[]>();
+  const [user, setUser] = useState<User>();
 
   const reloadData = useCallback(() => {
     const populateOrganizations = async () => {
@@ -151,8 +173,18 @@ function AppContent() {
     }
   }, [organizations, selectedOrganization]);
 
+  useEffect(() => {
+    const populateUser = async () => {
+      const response = await getUser();
+      if (response.requestSucceeded) {
+        setUser(response.user ?? undefined);
+      }
+    };
+    populateUser();
+  }, []);
+
   if (orgAPIRequestStatus === APIRequestStatus.AWAITING || orgAPIRequestStatus === APIRequestStatus.FAILED_NO_AUTH) {
-    return <CircularProgress />;
+    return <CircularProgress className={classes.spinner} size='193' />;
   }
 
   if (orgAPIRequestStatus === APIRequestStatus.FAILED) {
@@ -160,7 +192,11 @@ function AppContent() {
       <Switch>
         <Route exact path='/error'>
           {/*TODO implement designs.*/}
-          <h1>Could not fetch organization data.</h1>
+          <ErrorBox
+            title={strings.ORGANIZATION_DATA_NOT_AVAILABLE}
+            text={strings.CONTACT_US_TO_RESOLVE_ISSUE}
+            className={classes.errorBox}
+          />
         </Route>
 
         <Route path='*'>
@@ -175,7 +211,7 @@ function AppContent() {
       <Switch>
         <Route exact path='/welcome'>
           <TopBar>
-            <UserMenu />
+            <UserMenu userName={`${user?.firstName} ${user?.lastName}`} />
           </TopBar>
           <LandingPage reloadOrganizationData={reloadData} />
         </Route>
@@ -213,7 +249,7 @@ function AppContent() {
         <div>
           <NavBar organization={selectedOrganization} />
         </div>
-        <div className={classes.content}>
+        <div className={`${classes.content} scrollable-content`}>
           <TopBar>
             <TopBarContent
               notifications={notifications}
@@ -224,6 +260,7 @@ function AppContent() {
               selectedOrganization={selectedOrganization}
               setSelectedOrganization={setSelectedOrganization}
               reloadOrganizationData={reloadData}
+              userName={`${user?.firstName} ${user?.lastName}`}
             />
           </TopBar>
           <ErrorBoundary>

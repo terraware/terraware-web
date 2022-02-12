@@ -20,34 +20,26 @@ type SpeciesListProps = {
 
 const useStyles = makeStyles((theme) =>
   createStyles({
+    main: {
+      background: '#ffffff',
+      minHeight: '100vh',
+      display: 'flex',
+      flexDirection: 'column',
+      padding: '24px',
+    },
     mainContainer: {
-      paddingTop: theme.spacing(4),
-      paddingBottom: theme.spacing(4),
+      padding: '32px 0',
     },
-    paper: {
-      padding: theme.spacing(2),
+    pageTitle: {
+      fontSize: '24px',
+      lineHeight: '32px',
+      fontWeight: 600,
+      margin: 0,
+    },
+    titleContainer: {
       display: 'flex',
-      overflow: 'auto',
-      flexDirection: 'column',
-    },
-    fixedHeight: {
-      height: '100%',
-    },
-    newSpecies: {
-      backgroundColor: theme.palette.primary.main,
-      color: theme.palette.common.white,
-      '&:focus': {
-        backgroundColor: theme.palette.primary.main,
-      },
-    },
-    mainContent: {
-      paddingTop: theme.spacing(4),
-    },
-    centered: {
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'center',
-      alignItems: 'flex-end',
+      alignItems: 'center',
+      justifyContent: 'space-between',
     },
   })
 );
@@ -105,7 +97,7 @@ export default function SpeciesList({ organization }: SpeciesListProps): JSX.Ele
   };
 
   return (
-    <main>
+    <main className={classes.main}>
       <SimpleSpeciesModal
         open={editSpeciesModalOpen}
         onClose={onCloseEditSpeciesModal}
@@ -113,32 +105,21 @@ export default function SpeciesList({ organization }: SpeciesListProps): JSX.Ele
         organization={organization}
         onError={setErrorSnackbar}
       />
-      <Container maxWidth={false} className={classes.mainContainer}>
-        <Grid container spacing={3}>
-          <Grid item xs={1} />
-          <Grid item xs={2}>
-            <h1>{strings.SPECIES}</h1>
-          </Grid>
-          <Grid item xs={6} />
-          <Grid item xs={2} className={classes.centered}>
-            <Button id='new-species' label={strings.NEW_SPECIES} onClick={onNewSpecies} icon='plus' />
-          </Grid>
-          <Grid item xs={1} />
-          <Grid item xs={1} />
-          <Grid item xs={10}>
-            <Paper className={classes.mainContent}>
-              <Grid container spacing={4}>
-                <Grid item xs={12}>
-                  {species && (
-                    <Table id='species-table' columns={columns} rows={species} orderBy='name' onSelect={onSelect} />
-                  )}
-                </Grid>
-              </Grid>
+      <Grid container>
+        <Grid item xs={12} className={classes.titleContainer}>
+          <h1 className={classes.pageTitle}>{strings.SPECIES}</h1>
+          <Button id='new-species' label={strings.NEW_SPECIES} onClick={onNewSpecies} icon='plus' size='medium' />
+        </Grid>
+        <Container maxWidth={false} className={classes.mainContainer}>
+          <Grid item xs={12}>
+            <Paper>
+              {species && (
+                <Table id='species-table' columns={columns} rows={species} orderBy='name' onSelect={onSelect} />
+              )}
             </Paper>
           </Grid>
-          <Grid item xs={1} />
-        </Grid>
-      </Container>
+        </Container>
+      </Grid>
     </main>
   );
 }
