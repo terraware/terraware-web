@@ -1,11 +1,6 @@
 import axios from 'src/api/index';
 import { paths } from 'src/api/types/generated-schema';
-import {
-  Species,
-  SpeciesById,
-  SpeciesRequestError,
-  SpeciesWithScientificName,
-} from 'src/types/Species';
+import { Species, SpeciesById, SpeciesRequestError, SpeciesWithScientificName } from 'src/types/Species';
 
 /*
  * All functions in this module ALWAYS returns a promise that resolves. All errors will be caught and
