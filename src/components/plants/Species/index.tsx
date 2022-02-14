@@ -6,10 +6,13 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { getAllSpecies } from 'src/api/species/species';
 import Button from 'src/components/common/button/Button';
+import EmptyMessage from 'src/components/common/EmptyMessage';
 import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
 import snackbarAtom from 'src/state/snackbar';
+import dictionary from 'src/strings/dictionary';
 import strings from 'src/strings';
+import emptyMessageStrings from 'src/strings/emptyMessageModals';
 import { ServerOrganization } from 'src/types/Organization';
 import { Species, SpeciesWithScientificName } from 'src/types/Species';
 import SimpleSpeciesModal from './SimpleSpeciesModal';
@@ -41,6 +44,11 @@ const useStyles = makeStyles((theme) =>
       alignItems: 'center',
       justifyContent: 'space-between',
     },
+    createSpeciesMessage: {
+      margin: '0 auto',
+      width: '50%',
+      marginTop: '10%',
+    },
   })
 );
 
@@ -58,7 +66,6 @@ export default function SpeciesList({ organization }: SpeciesListProps): JSX.Ele
 
   const populateSpecies = useCallback(async () => {
     const response = await getAllSpecies(organization.id);
-    // TODO: what if we cannot fetch the species list?
     if (response.requestSucceeded) {
       setSpecies(Array.from(response.speciesById.values()));
     }
@@ -105,21 +112,31 @@ export default function SpeciesList({ organization }: SpeciesListProps): JSX.Ele
         organization={organization}
         onError={setErrorSnackbar}
       />
-      <Grid container>
-        <Grid item xs={12} className={classes.titleContainer}>
-          <h1 className={classes.pageTitle}>{strings.SPECIES}</h1>
-          <Button id='new-species' label={strings.NEW_SPECIES} onClick={onNewSpecies} icon='plus' size='medium' />
-        </Grid>
-        <Container maxWidth={false} className={classes.mainContainer}>
-          <Grid item xs={12}>
-            <Paper>
-              {species && (
-                <Table id='species-table' columns={columns} rows={species} orderBy='name' onSelect={onSelect} />
-              )}
-            </Paper>
+      {species && species.length ? (
+        <Grid container>
+          <Grid item xs={12} className={classes.titleContainer}>
+            <h1 className={classes.pageTitle}>{strings.SPECIES}</h1>
+            <Button id='new-species' label={strings.NEW_SPECIES} onClick={onNewSpecies} icon='plus' size='medium' />
           </Grid>
-        </Container>
-      </Grid>
+          <Container maxWidth={false} className={classes.mainContainer}>
+            <Grid item xs={12}>
+              <Paper>
+                {species && (
+                  <Table id='species-table' columns={columns} rows={species} orderBy='name' onSelect={onSelect} />
+                )}
+              </Paper>
+            </Grid>
+          </Container>
+        </Grid>
+      ) : (
+        <EmptyMessage
+          className={classes.createSpeciesMessage}
+          title={dictionary.ADD_A_SPECIES}
+          text={emptyMessageStrings.NO_SPECIES_DESCRIPTION}
+          buttonText={strings.ADD_SPECIES}
+          onClick={onNewSpecies}
+        />
+      )}
     </main>
   );
 }
