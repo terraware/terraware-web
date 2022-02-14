@@ -7,6 +7,7 @@ import PageHeader from 'src/components/seeds/PageHeader';
 import strings from 'src/strings';
 import dict from 'src/strings/dictionary';
 import emptyStateStrings from 'src/strings/emptyStatePages';
+import dictionary from 'src/strings/dictionary';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -59,8 +60,8 @@ const NO_SITES_CONTENT: PageContent = {
   title2: dict.CREATE_A_SITE,
   subtitle: emptyStateStrings.NO_SITES_SUBTITLE,
   listItems: [
-    { icon: 'sites', title: strings.SITES, description: emptyStateStrings.NO_SITES_DESCRIPTION_SITES },
-    { icon: 'project', title: dict.SITE_PROFILE, description: emptyStateStrings.NO_SITES_DESCRIPTION_PROJECTS },
+    { icon: 'sites', title: dictionary.SITE_PROFILE, description: emptyStateStrings.NO_SITES_DESCRIPTION_SITES },
+    { icon: 'project', title: strings.PROJECT, description: emptyStateStrings.NO_SITES_DESCRIPTION_PROJECTS },
   ],
   buttonText: strings.ADD_SITE,
   linkLocation: `/sites/new`,
