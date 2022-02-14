@@ -243,6 +243,17 @@ function AppContent() {
     return selected && getAllSites(selected).length > 0 ? true : false;
   };
 
+  const getSitesView = (): JSX.Element => {
+    if (selectedOrgHasSites()) {
+      return <SitesList organization={selectedOrganization}/>;
+    }
+    if (selectedOrgHasProjects()) {
+      return <EmptyStatePage pageName={'Sites'} />;
+    }
+
+    return <EmptyStatePage pageName={'Projects'} />;
+  };
+
   const filteredOrganization = () => {
     if (selectedOrganization) {
       return {
@@ -353,11 +364,7 @@ function AppContent() {
                 </Route>
               )}
               <Route exact path='/sites'>
-                {selectedOrgHasSites() ? (
-                  <SitesList organization={selectedOrganization} />
-                ) : (
-                  <EmptyStatePage pageName={'Sites'} />
-                )}
+                {getSitesView()}
               </Route>
               {selectedOrganization && (
                 <Route path='/sites/:siteId/edit' exact={true}>
