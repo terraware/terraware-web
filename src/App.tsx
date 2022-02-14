@@ -245,7 +245,7 @@ function AppContent() {
 
   const getSitesView = (): JSX.Element => {
     if (selectedOrgHasSites()) {
-      return <SitesList organization={selectedOrganization}/>;
+      return <SitesList organization={selectedOrganization} />;
     }
     if (selectedOrgHasProjects()) {
       return <EmptyStatePage pageName={'Sites'} />;
