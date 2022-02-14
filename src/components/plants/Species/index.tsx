@@ -12,7 +12,7 @@ import { TableColumnType } from 'src/components/common/table/types';
 import snackbarAtom from 'src/state/snackbar';
 import dictionary from 'src/strings/dictionary';
 import strings from 'src/strings';
-import emptyMessageStrings from 'src/strings/emptyMessageModals';
+import emptyMessageStrings from 'src/strings/emptyMessageModal';
 import { ServerOrganization } from 'src/types/Organization';
 import { Species, SpeciesWithScientificName } from 'src/types/Species';
 import SimpleSpeciesModal from './SimpleSpeciesModal';
@@ -132,7 +132,7 @@ export default function SpeciesList({ organization }: SpeciesListProps): JSX.Ele
         <EmptyMessage
           className={classes.createSpeciesMessage}
           title={dictionary.ADD_A_SPECIES}
-          text={emptyMessageStrings.NO_SPECIES_DESCRIPTION}
+          text={emptyMessageStrings.SPECIES_EMPTY_MSG_BODY}
           buttonText={strings.ADD_SPECIES}
           onClick={onNewSpecies}
         />
