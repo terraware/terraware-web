@@ -3,7 +3,7 @@ import Container from '@material-ui/core/Container';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import AddNewOrganizationModal from 'src/components/AddNewOrganizationModal';
 import EmptyStateContent, { ListItemContent } from 'src/components/emptyStatePages/EmptyStateContent';
-import landingPageStrings from 'src/strings/landingPage';
+import landingPageStrings from 'src/strings/noOrgLandingPage';
 import strings from 'src/strings';
 import dictionary from 'src/strings/dictionary';
 
