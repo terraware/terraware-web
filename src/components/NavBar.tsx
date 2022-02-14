@@ -78,7 +78,7 @@ export default function NavBar({ organization }: NavBarProps): JSX.Element | nul
           />
 
           <NavItem
-            label={strings.PLANTS_LIST}
+            label={strings.PLANTS}
             selected={!!isPlantListRoute}
             onClick={() => navigate('/plants-list')}
             id='plants-list'
