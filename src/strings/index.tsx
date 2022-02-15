@@ -295,12 +295,6 @@ const strings = new LocalizedStrings({
     GO_TO_DATABASE: 'Go to Database',
     AUTOCALCULATED: '(Auto-calculated)',
     EDIT_NUMBER_OF_GERMINATED_SEEDS: 'Edit Number of Germinated Seeds',
-
-    HELP_HEADER_TITLE: 'Seed Bank FAQs',
-    HELP_HEADER_QUICK_TOUR: 'Quick Tour',
-    HELP_HEADER_QUICK_TOUR_TEXT:
-      'Take a tour to find out the many things you can do on the Seed Bank App! We’ll walk you through the main pages and functionalities.',
-    HELP_HEADER_QUICK_TOUR_BUTTON: 'Let’s Do It!',
     S_SEED_COUNT: 'seed count',
     G_GRAMS: 'g (grams)',
     MG_MILLIGRAMS: 'mg (milligrams)',
