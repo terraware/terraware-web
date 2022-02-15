@@ -18,7 +18,7 @@ import { Link } from 'react-router-dom';
 import { FieldNodePayload, SeedSearchCriteria } from 'src/api/seeds/search';
 import { getNotifications, MarkAllNotificationsRead, MarkNotificationRead } from 'src/api/notification';
 import { AccessionState } from 'src/api/types/accessions';
-import { API_PULL_INTERVAL } from 'src/constants';
+import { API_PULL_INTERVAL, APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import { Notifications, NotificationTypes } from 'src/types/Notifications';
 import preventDefaultEvent from 'src/utils/preventDefaultEvent';
@@ -147,7 +147,7 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
   };
 
   const location = useStateLocation();
-  const databaseLocation = getLocation('/accessions', location);
+  const databaseLocation = getLocation(APP_PATHS.ACCESSIONS, location);
   const getDestination = (type: NotificationTypes, accessionId?: number) => {
     if (type === NotificationTypes.Date) {
       return getLocation(`/accessions/${accessionId}`, location);

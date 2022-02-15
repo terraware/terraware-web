@@ -33,6 +33,7 @@ import { HighOrganizationRolesValues, ServerOrganization } from 'src/types/Organ
 import { seedsDatabaseSelectedOrgInfo } from 'src/state/selectedOrgInfoPerPage';
 import { useRecoilState } from 'recoil';
 import EmptyMessage from 'src/components/common/EmptyMessage';
+import { APP_PATHS } from 'src/constants';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -270,7 +271,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
   };
 
   const handleViewCollections = () => {
-    history.push('/checkin');
+    history.push(APP_PATHS.CHECKIN);
   };
 
   const goToProjects = () => {
@@ -281,7 +282,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
   };
 
   const goToNewAccession = () => {
-    const newAccessionLocation = getLocation('/accessions/new', location);
+    const newAccessionLocation = getLocation(APP_PATHS.ACCESSIONS_NEW, location);
     history.push(newAccessionLocation);
   };
 

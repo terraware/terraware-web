@@ -5,6 +5,7 @@ import { getUser } from 'src/api/user/user';
 import PageCard from 'src/components/common/PageCard';
 import PageHeader from 'src/components/seeds/PageHeader';
 import TfDivisor from 'src/components/common/TfDivisor';
+import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import homePageStrings from 'src/strings/homePage';
 import { ServerOrganization } from 'src/types/Organization';
@@ -69,7 +70,7 @@ export default function Home({ organization }: HomeProps): JSX.Element {
                   name={strings.PROJECTS}
                   icon='folder'
                   description={homePageStrings.PROJECTS_CARD_DESCRIPTION}
-                  link='/projects'
+                  link={APP_PATHS.PROJECTS}
                   linkText={strings.formatString(homePageStrings.GO_TO, strings.PROJECTS) as string}
                   linkStyle={'underline'}
                 />
@@ -79,7 +80,7 @@ export default function Home({ organization }: HomeProps): JSX.Element {
                   name={strings.SITES}
                   icon='site'
                   description={homePageStrings.SITES_CARD_DESCRIPTION}
-                  link='/sites'
+                  link={APP_PATHS.SITES}
                   linkText={strings.formatString(homePageStrings.GO_TO, strings.SITES) as string}
                   linkStyle={'underline'}
                 />
@@ -90,7 +91,7 @@ export default function Home({ organization }: HomeProps): JSX.Element {
                     name={strings.PEOPLE}
                     icon='person'
                     description={homePageStrings.PEOPLE_CARD_DESCRIPTION}
-                    link='/people'
+                    link={APP_PATHS.PEOPLE}
                     linkText={strings.formatString(homePageStrings.GO_TO, strings.PEOPLE) as string}
                     linkStyle={'underline'}
                   />
@@ -108,7 +109,7 @@ export default function Home({ organization }: HomeProps): JSX.Element {
                 name={strings.SEEDS}
                 icon='seeds'
                 description={homePageStrings.SEEDS_CARD_DESCRIPTION}
-                link='/seeds-summary'
+                link={APP_PATHS.SEEDS_DASHBOARD}
                 linkText={strings.formatString(homePageStrings.GO_TO, strings.SEEDS) as string}
                 linkStyle={'underline'}
               />
@@ -118,7 +119,7 @@ export default function Home({ organization }: HomeProps): JSX.Element {
                 name={strings.PLANTS}
                 icon='restorationSite'
                 description={homePageStrings.PLANTS_CARD_DESCRIPTION}
-                link='/plants-dashboard'
+                link={APP_PATHS.PLANTS_DASHBOARD}
                 linkText={strings.formatString(homePageStrings.GO_TO, strings.PLANTS) as string}
                 linkStyle={'underline'}
               />
@@ -128,7 +129,7 @@ export default function Home({ organization }: HomeProps): JSX.Element {
                 name={strings.SPECIES}
                 icon='species'
                 description={homePageStrings.SPECIES_CARD_DESCRIPTION}
-                link='/species'
+                link={APP_PATHS.SPECIES}
                 linkText={strings.formatString(homePageStrings.GO_TO, strings.SPECIES) as string}
                 linkStyle={'underline'}
               />
