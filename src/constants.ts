@@ -25,7 +25,7 @@ export enum APP_PATHS {
   PROJECTS_EDIT = '/projects/:projectId/edit',
   PROJECTS_VIEW = '/projects/:projectId',
   PROJECTS = '/projects',
-  SEEDS_DASHBOARD = '/seeds-summary',
+  SEEDS_DASHBOARD = '/seeds-dashboard',
   SITES_NEW = '/sites/new',
   SITES_EDIT = '/sites/:siteId/edit',
   SITES_VIEW = '/sites/:siteId',
