@@ -307,6 +307,9 @@ function AppContent() {
                   <NewAccession organization={selectedOrganization} />
                 </Route>
               )}
+              <Route path={APP_PATHS.ACCESSIONS_ITEM}>
+                <Accession organization={selectedOrganization} />
+              </Route>
               <Route exact path={APP_PATHS.ACCESSIONS}>
                 <Database
                   organization={filteredOrganization()}
@@ -319,9 +322,6 @@ function AppContent() {
                   displayColumnNames={accessionsDisplayColumns}
                   setDisplayColumnNames={setAccessionsDisplayColumns}
                 />
-              </Route>
-              <Route path={APP_PATHS.ACCESSIONS_ITEM}>
-                <Accession organization={selectedOrganization} />
               </Route>
               <Route exact path={APP_PATHS.PLANTS_DASHBOARD}>
                 <PlantDashboard organization={organizationWithoutSB()} />
@@ -339,12 +339,12 @@ function AppContent() {
                 </Route>
               )}
               {selectedOrganization && (
-                <Route path={APP_PATHS.PROJECTS_NEW}>
+                <Route exact path={APP_PATHS.PROJECTS_NEW}>
                   <NewProject organization={selectedOrganization} reloadOrganizationData={reloadData} />
                 </Route>
               )}
               {selectedOrganization && (
-                <Route path={APP_PATHS.PROJECTS_EDIT} exact={true}>
+                <Route exact path={APP_PATHS.PROJECTS_EDIT}>
                   <NewProject organization={selectedOrganization} reloadOrganizationData={reloadData} />
                 </Route>
               )}
@@ -359,7 +359,7 @@ function AppContent() {
                 )}
               </Route>
               {selectedOrganization && (
-                <Route path={APP_PATHS.SITES_NEW}>
+                <Route exact path={APP_PATHS.SITES_NEW}>
                   <NewSite organization={organizationWithoutSB()!} reloadOrganizationData={reloadData} />
                 </Route>
               )}
@@ -379,11 +379,11 @@ function AppContent() {
                   <EditOrganization organization={selectedOrganization} reloadOrganizationData={reloadData} />
                 </Route>
               )}
-              <Route path={APP_PATHS.ORGANIZATION}>
+              <Route exact path={APP_PATHS.ORGANIZATION}>
                 <Organization organization={organizationWithoutSB()} />
               </Route>
               {selectedOrganization && (
-                <Route path={APP_PATHS.PEOPLE_NEW}>
+                <Route exact path={APP_PATHS.PEOPLE_NEW}>
                   <NewPerson organization={organizationWithoutSB()!} reloadOrganizationData={reloadData} />
                 </Route>
               )}
