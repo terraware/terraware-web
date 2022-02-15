@@ -11,13 +11,13 @@ import {
   SeedSearchSortOrder,
   SeedSearchCriteria,
 } from 'src/api/seeds/search';
-import { Notifications } from 'src/types/Notifications';
-import { ServerOrganization } from 'src/types/Organization';
-import { PlantSearchOptions } from 'src/types/Plant';
+import { getUser } from 'src/api/user/user';
 import ContactUs from 'src/components/ContactUs';
 import EditOrganization from 'src/components/EditOrganization';
 import Home from 'src/components/Home';
-import LandingPage from 'src/components/LandingPage';
+import NoOrgLandingPage from 'src/components/emptyStatePages/NoOrgLandingPage';
+import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
+import ErrorBox from 'src/components/common/ErrorBox/ErrorBox';
 import NavBar from 'src/components/NavBar';
 import NewPerson from 'src/components/Person/NewPerson';
 import NewProject from 'src/components/NewProject';
@@ -46,9 +46,11 @@ import UserMenu from 'src/components/UserMenu';
 import ErrorBoundary from 'src/ErrorBoundary';
 import strings from 'src/strings';
 import theme from 'src/theme';
-import ErrorBox from './components/common/ErrorBox/ErrorBox';
-import { User } from './types/User';
-import { getUser } from './api/user/user';
+import { Notifications } from 'src/types/Notifications';
+import { ServerOrganization } from 'src/types/Organization';
+import { PlantSearchOptions } from 'src/types/Plant';
+import { User } from 'src/types/User';
+import { getAllSites } from 'src/utils/organization';
 
 // @ts-ignore
 mapboxgl.workerClass =
@@ -191,7 +193,6 @@ function AppContent() {
     return (
       <Switch>
         <Route exact path='/error'>
-          {/*TODO implement designs.*/}
           <ErrorBox
             title={strings.ORGANIZATION_DATA_NOT_AVAILABLE}
             text={strings.CONTACT_US_TO_RESOLVE_ISSUE}
@@ -213,7 +214,7 @@ function AppContent() {
           <TopBar>
             <UserMenu userName={`${user?.firstName} ${user?.lastName}`} />
           </TopBar>
-          <LandingPage reloadOrganizationData={reloadData} />
+          <NoOrgLandingPage reloadOrganizationData={reloadData} />
         </Route>
 
         <Route path='*'>
@@ -230,6 +231,27 @@ function AppContent() {
         projects: selectedOrganization?.projects?.filter((proj) => !proj.hidden),
       };
     }
+  };
+
+  const selectedOrgHasProjects = (): boolean => {
+    const selected = organizationWithoutSB();
+    return selected && selected.projects && selected.projects.length > 0 ? true : false;
+  };
+
+  const selectedOrgHasSites = (): boolean => {
+    const selected = organizationWithoutSB();
+    return selected && getAllSites(selected).length > 0 ? true : false;
+  };
+
+  const getSitesView = (): JSX.Element => {
+    if (selectedOrgHasSites()) {
+      return <SitesList organization={selectedOrganization} />;
+    }
+    if (selectedOrgHasProjects()) {
+      return <EmptyStatePage pageName={'Sites'} />;
+    }
+
+    return <EmptyStatePage pageName={'Projects'} />;
   };
 
   const filteredOrganization = () => {
@@ -322,7 +344,11 @@ function AppContent() {
                 </Route>
               )}
               <Route exact path='/projects'>
-                <ProjectsList organization={organizationWithoutSB()} />
+                {selectedOrgHasProjects() ? (
+                  <ProjectsList organization={organizationWithoutSB()} />
+                ) : (
+                  <EmptyStatePage pageName={'Projects'} />
+                )}
               </Route>
               {selectedOrganization && (
                 <Route path='/projects/:projectId/edit' exact={true}>
@@ -338,7 +364,7 @@ function AppContent() {
                 </Route>
               )}
               <Route exact path='/sites'>
-                <SitesList organization={selectedOrganization} />
+                {getSitesView()}
               </Route>
               {selectedOrganization && (
                 <Route path='/sites/:siteId/edit' exact={true}>
