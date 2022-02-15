@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom';
 import { FieldNodePayload, SeedSearchCriteria } from 'src/api/seeds/search';
 import { SeedbankSummary } from 'src/api/seeds/summary';
 import { AccessionState } from 'src/api/types/accessions';
+import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 
 const useStyles = makeStyles(() =>
@@ -118,7 +119,12 @@ export default function Updates(props: UpdatesProps): JSX.Element {
           updates.map(({ state, description }) => (
             <TableRow id={`update-row-${state}`} key={state}>
               <TableCell className={classes.alertCell}>
-                <Link onClick={() => onClick(state)} id={`update-${state}`} to='/accessions' className={classes.state}>
+                <Link
+                  onClick={() => onClick(state)}
+                  id={`update-${state}`}
+                  to={APP_PATHS.ACCESSIONS}
+                  className={classes.state}
+                >
                   {state}
                 </Link>
               </TableCell>

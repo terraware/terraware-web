@@ -12,6 +12,7 @@ import { OrganizationUser } from 'src/types/User';
 import { getOrganizationUsers } from 'src/api/organization/organization';
 import Button from '../common/button/Button';
 import Textfield from '../common/Textfield/Textfield';
+import { APP_PATHS } from 'src/constants';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -92,7 +93,7 @@ export default function ProjectDetails({ organization }: ProjectDetailsProps): J
     <Container maxWidth={false} className={classes.mainContainer}>
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          <Link id='back' to='/projects' className={classes.back}>
+          <Link id='back' to={APP_PATHS.PROJECTS} className={classes.back}>
             <Icon name='caretLeft' className={classes.backIcon} />
             {strings.PROJECTS}
           </Link>

@@ -22,6 +22,7 @@ import PageHeader from '../PageHeader';
 import { ServerOrganization } from 'src/types/Organization';
 import { useRecoilState } from 'recoil';
 import { checkInSelectedOrgInfo } from 'src/state/selectedOrgInfoPerPage';
+import { APP_PATHS } from 'src/constants';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -120,7 +121,7 @@ export default function CheckIn(props: CheckInProps): JSX.Element {
           title={strings.CHECKIN_BAGS}
           subtitle={getSubtitle()}
           back={true}
-          backUrl={'/accessions'}
+          backUrl={APP_PATHS.ACCESSIONS}
           organization={organization}
           selectedOrgInfo={selectedOrgInfo}
           onChangeSelectedOrgInfo={(newValues) => setSelectedOrgInfo(newValues)}

@@ -26,6 +26,7 @@ import RemovedPeopleOrSitesModal from './RemovedPeopleOrSitesModal';
 import MoveSiteModal from './MoveSiteModal';
 import axios from 'axios';
 import { updateSite } from 'src/api/site/site';
+import { APP_PATHS } from 'src/constants';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -348,7 +349,7 @@ export default function ProjectView({ organization, reloadOrganizationData }: Pr
         <Grid container spacing={3}>
           {projectSelected && (
             <Grid item xs={12}>
-              <Link id='back' to='/projects' className={classes.back}>
+              <Link id='back' to={APP_PATHS.PROJECTS} className={classes.back}>
                 <Icon name='caretLeft' className={classes.backIcon} />
                 {strings.PROJECTS}
               </Link>

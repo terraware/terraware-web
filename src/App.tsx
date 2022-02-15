@@ -42,6 +42,7 @@ import Snackbar from 'src/components/Snackbar';
 import TopBar from 'src/components/TopBar/TopBar';
 import TopBarContent from 'src/components/TopBar/TopBarContent';
 import UserMenu from 'src/components/UserMenu';
+import { APP_PATHS } from 'src/constants';
 import ErrorBoundary from 'src/ErrorBoundary';
 import strings from 'src/strings';
 import theme from 'src/theme';
@@ -191,7 +192,7 @@ function AppContent() {
   if (orgAPIRequestStatus === APIRequestStatus.FAILED) {
     return (
       <Switch>
-        <Route exact path='/error'>
+        <Route exact path={APP_PATHS.ERROR}>
           <ErrorBox
             title={strings.ORGANIZATION_DATA_NOT_AVAILABLE}
             text={strings.CONTACT_US_TO_RESOLVE_ISSUE}
@@ -200,7 +201,7 @@ function AppContent() {
         </Route>
 
         <Route path='*'>
-          <Redirect to='/error' />
+          <Redirect to={APP_PATHS.ERROR} />
         </Route>
       </Switch>
     );
@@ -209,7 +210,7 @@ function AppContent() {
   if (orgAPIRequestStatus === APIRequestStatus.SUCCEEDED && organizations?.length === 0) {
     return (
       <Switch>
-        <Route exact path='/welcome'>
+        <Route exact path={APP_PATHS.WELCOME}>
           <TopBar>
             <UserMenu userName={`${user?.firstName} ${user?.lastName}`} />
           </TopBar>
@@ -217,7 +218,7 @@ function AppContent() {
         </Route>
 
         <Route path='*'>
-          <Redirect to='/welcome' />
+          <Redirect to={APP_PATHS.WELCOME} />
         </Route>
       </Switch>
     );
@@ -286,11 +287,11 @@ function AppContent() {
           </TopBar>
           <ErrorBoundary>
             <Switch>
-              {/* Routes, in order of their appearance down the side nav bar and then across the top nav bar. */}
-              <Route exact path='/home'>
+              {/* Routes, in order of their appearance down the side NavBar */}
+              <Route exact path={APP_PATHS.HOME}>
                 <Home organization={selectedOrganization} />
               </Route>
-              <Route exact path='/seeds-summary'>
+              <Route exact path={APP_PATHS.SEEDS_DASHBOARD}>
                 <SeedSummary
                   organization={filteredOrganization()}
                   setSeedSearchCriteria={setSeedSearchCriteria}
@@ -298,15 +299,15 @@ function AppContent() {
                   setFacilityIdSelected={setFacilityIdSelected}
                 />
               </Route>
-              <Route exact path='/checkin'>
+              <Route exact path={APP_PATHS.CHECKIN}>
                 <CheckIn organization={selectedOrganization} />
               </Route>
               {selectedOrganization && (
-                <Route exact path='/accessions/new'>
+                <Route exact path={APP_PATHS.ACCESSIONS_NEW}>
                   <NewAccession organization={selectedOrganization} />
                 </Route>
               )}
-              <Route exact path='/accessions'>
+              <Route exact path={APP_PATHS.ACCESSIONS}>
                 <Database
                   organization={filteredOrganization()}
                   searchCriteria={seedSearchCriteria}
@@ -319,13 +320,13 @@ function AppContent() {
                   setDisplayColumnNames={setAccessionsDisplayColumns}
                 />
               </Route>
-              <Route path='/accessions/:accessionId'>
+              <Route path={APP_PATHS.ACCESSIONS_ITEM}>
                 <Accession organization={selectedOrganization} />
               </Route>
-              <Route exact path='/plants-dashboard'>
+              <Route exact path={APP_PATHS.PLANTS_DASHBOARD}>
                 <PlantDashboard organization={organizationWithoutSB()} />
               </Route>
-              <Route exact path='/plants-list'>
+              <Route exact path={APP_PATHS.PLANTS_LIST}>
                 <PlantList
                   organization={organizationWithoutSB()}
                   filters={plantListFilters}
@@ -333,16 +334,24 @@ function AppContent() {
                 />
               </Route>
               {selectedOrganization && (
-                <Route exact path='/species'>
+                <Route exact path={APP_PATHS.SPECIES}>
                   <SpeciesList organization={selectedOrganization} />
                 </Route>
               )}
               {selectedOrganization && (
-                <Route path='/projects/new'>
+                <Route path={APP_PATHS.PROJECTS_NEW}>
                   <NewProject organization={selectedOrganization} reloadOrganizationData={reloadData} />
                 </Route>
               )}
-              <Route exact path='/projects'>
+              {selectedOrganization && (
+                <Route path={APP_PATHS.PROJECTS_EDIT} exact={true}>
+                  <NewProject organization={selectedOrganization} reloadOrganizationData={reloadData} />
+                </Route>
+              )}
+              <Route path={APP_PATHS.PROJECTS_VIEW}>
+                <Project organization={selectedOrganization} />
+              </Route>
+              <Route exact path={APP_PATHS.PROJECTS}>
                 {selectedOrgHasProjects() ? (
                   <ProjectsList organization={organizationWithoutSB()} />
                 ) : (
@@ -350,85 +359,82 @@ function AppContent() {
                 )}
               </Route>
               {selectedOrganization && (
-                <Route path='/projects/:projectId/edit' exact={true}>
-                  <NewProject organization={selectedOrganization} reloadOrganizationData={reloadData} />
-                </Route>
-              )}
-              <Route path='/projects/:projectId'>
-                <Project organization={selectedOrganization} />
-              </Route>
-              {selectedOrganization && (
-                <Route path='/sites/new'>
+                <Route path={APP_PATHS.SITES_NEW}>
                   <NewSite organization={organizationWithoutSB()!} reloadOrganizationData={reloadData} />
                 </Route>
               )}
-              <Route exact path='/sites'>
-                {getSitesView()}
-              </Route>
               {selectedOrganization && (
-                <Route path='/sites/:siteId/edit' exact={true}>
+                <Route exact path={APP_PATHS.SITES_EDIT}>
                   <NewSite organization={selectedOrganization} reloadOrganizationData={reloadData} />
                 </Route>
               )}
-              <Route path='/sites/:siteId'>
+              <Route path={APP_PATHS.SITES_VIEW}>
                 <SiteView organization={selectedOrganization} />
               </Route>
+              <Route exact path={APP_PATHS.SITES}>
+                {getSitesView()}
+              </Route>
               {selectedOrganization && (
-                <Route path='/organization/edit' exact={true}>
+                <Route exact path={APP_PATHS.ORGANIZATION_EDIT}>
                   <EditOrganization organization={selectedOrganization} reloadOrganizationData={reloadData} />
                 </Route>
               )}
-              <Route path='/organization'>
+              <Route path={APP_PATHS.ORGANIZATION}>
                 <Organization organization={organizationWithoutSB()} />
               </Route>
               {selectedOrganization && (
-                <Route path='/people/new'>
+                <Route path={APP_PATHS.PEOPLE_NEW}>
                   <NewPerson organization={organizationWithoutSB()!} reloadOrganizationData={reloadData} />
                 </Route>
               )}
-              <Route exact path='/people'>
-                <People organization={selectedOrganization} />
-              </Route>
-              <Route path='/people/:personId'>
+              <Route path={APP_PATHS.PEOPLE_ID}>
                 <PersonDetails organization={organizationWithoutSB()} />
               </Route>
-              <Route exact path='/contactus'>
+              <Route exact path={APP_PATHS.PEOPLE}>
+                <People organization={selectedOrganization} />
+              </Route>
+              <Route exact path={APP_PATHS.CONTACT_US}>
                 <ContactUs />
               </Route>
 
               {/* Redirects. Invalid paths will redirect to the closest valid path. */}
-              <Route path='/contactus/'>
-                <Redirect to='/contactus' />
+              {/* Only redirect 'major' paths, e.g. handle /projects/* not more granular projects paths */}
+              {/* In alphabetical order for easy reference with APP_PATHS, except for /home which must go last */}
+              <Route path={APP_PATHS.ACCESSIONS + '/'}>
+                <Redirect to={APP_PATHS.ACCESSIONS} />
               </Route>
-              <Route path='/plants-dashboard/'>
-                <Redirect to='/plants-dashboard' />
+              <Route path={APP_PATHS.CHECKIN + '/'}>
+                <Redirect to={APP_PATHS.CHECKIN} />
               </Route>
-              <Route path='/plants-list/'>
-                <Redirect to='/plants-list' />
+              <Route path={APP_PATHS.CONTACT_US + '/'}>
+                <Redirect to={APP_PATHS.CONTACT_US} />
               </Route>
-              <Route path='/seeds-summary/'>
-                <Redirect to='/seeds-summary' />
+              <Route exact path={APP_PATHS.ORGANIZATION + '/'}>
+                <Redirect to={APP_PATHS.ORGANIZATION} />
               </Route>
-              <Route path='/accessions/new/'>
-                <Redirect to='/accessions/new' />
+              <Route exact path={APP_PATHS.PEOPLE + '/'}>
+                <Redirect to={APP_PATHS.PEOPLE} />
               </Route>
-              <Route path='/species/'>
-                <Redirect to='/species' />
+              <Route path={APP_PATHS.PLANTS_DASHBOARD + '/'}>
+                <Redirect to={APP_PATHS.PLANTS_DASHBOARD} />
               </Route>
-              <Route path='/projects/new/'>
-                <Redirect to='/projects/new' />
+              <Route path={APP_PATHS.PLANTS_LIST + '/'}>
+                <Redirect to={APP_PATHS.PLANTS_LIST} />
               </Route>
-              <Route path='/projects/'>
-                <Redirect to='/projects' />
+              <Route exact path={APP_PATHS.PROJECTS + '/'}>
+                <Redirect to={APP_PATHS.PROJECTS} />
               </Route>
-              <Route path='/organization/'>
-                <Redirect to='/organization' />
+              <Route path={APP_PATHS.SEEDS_DASHBOARD + '/'}>
+                <Redirect to={APP_PATHS.SEEDS_DASHBOARD} />
               </Route>
-              <Route path='/sites/'>
-                <Redirect to='/sites' />
+              <Route exact path={APP_PATHS.SITES + '/'}>
+                <Redirect to={APP_PATHS.SITES} />
+              </Route>
+              <Route path={APP_PATHS.SPECIES + '/'}>
+                <Redirect to={APP_PATHS.SPECIES} />
               </Route>
               <Route path='/'>
-                <Redirect to='/home' />
+                <Redirect to={APP_PATHS.HOME} />
               </Route>
             </Switch>
           </ErrorBoundary>
