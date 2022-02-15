@@ -387,6 +387,7 @@ const strings = new LocalizedStrings({
     SCIENTIFIC_NAME: 'Scientific Name',
     DOWNLOAD_AS_REPORT: 'Download as Report',
     ORGANIZATION_DATA_NOT_AVAILABLE: 'Organization Data Not Available',
+    SPECIES_DATA_NOT_AVAILABLE: 'Species Data Not Available',
     CONTACT_US_TO_RESOLVE_ISSUE: 'Please contact us to resolve this issue.',
   },
 });

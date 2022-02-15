@@ -1,3 +1,4 @@
+import { CircularProgress } from '@material-ui/core';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
@@ -7,6 +8,7 @@ import { useSetRecoilState } from 'recoil';
 import { getAllSpecies } from 'src/api/species/species';
 import Button from 'src/components/common/button/Button';
 import EmptyMessage from 'src/components/common/EmptyMessage';
+import ErrorBox from 'src/components/common/ErrorBox/ErrorBox';
 import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
 import snackbarAtom from 'src/state/snackbar';
@@ -49,6 +51,15 @@ const useStyles = makeStyles((theme) =>
       width: '50%',
       marginTop: '10%',
     },
+    spinner: {
+      display: 'flex',
+      margin: 'auto',
+      minHeight: '50%',
+    },
+    errorBox: {
+      width: '400px',
+      marginTop: '120px',
+    },
   })
 );
 
@@ -60,6 +71,7 @@ const columns: TableColumnType[] = [
 export default function SpeciesList({ organization }: SpeciesListProps): JSX.Element {
   const classes = useStyles();
   const [species, setSpecies] = useState<SpeciesWithScientificName[]>();
+  const [speciesAPIRequest, setSpeciesAPIRequest] = useState<'AWAITING' | 'SUCCEEDED' | 'FAILED'>('AWAITING');
   const [selectedSpecies, setSelectedSpecies] = useState<SpeciesWithScientificName>();
   const [editSpeciesModalOpen, setEditSpeciesModalOpen] = useState(false);
   const setSnackbar = useSetRecoilState(snackbarAtom);
@@ -67,7 +79,10 @@ export default function SpeciesList({ organization }: SpeciesListProps): JSX.Ele
   const populateSpecies = useCallback(async () => {
     const response = await getAllSpecies(organization.id);
     if (response.requestSucceeded) {
+      setSpeciesAPIRequest('SUCCEEDED');
       setSpecies(Array.from(response.speciesById.values()));
+    } else {
+      setSpeciesAPIRequest('FAILED');
     }
   }, [organization]);
 
@@ -103,6 +118,20 @@ export default function SpeciesList({ organization }: SpeciesListProps): JSX.Ele
     });
   };
 
+  if (speciesAPIRequest === 'AWAITING') {
+    return <CircularProgress id='species-spinner' className={classes.spinner} />;
+  }
+
+  if (speciesAPIRequest === 'FAILED') {
+    return (
+      <ErrorBox
+        title={strings.SPECIES_DATA_NOT_AVAILABLE}
+        text={strings.CONTACT_US_TO_RESOLVE_ISSUE}
+        className={classes.errorBox}
+      />
+    );
+  }
+
   return (
     <main className={classes.main}>
       <SimpleSpeciesModal
@@ -112,13 +141,15 @@ export default function SpeciesList({ organization }: SpeciesListProps): JSX.Ele
         organization={organization}
         onError={setErrorSnackbar}
       />
-      {species && species.length ? (
-        <Grid container>
-          <Grid item xs={12} className={classes.titleContainer}>
-            <h1 className={classes.pageTitle}>{strings.SPECIES}</h1>
+      <Grid container>
+        <Grid item xs={12} className={classes.titleContainer}>
+          <h1 className={classes.pageTitle}>{strings.SPECIES}</h1>
+          {species && species.length > 0 && (
             <Button id='new-species' label={strings.NEW_SPECIES} onClick={onNewSpecies} icon='plus' size='medium' />
-          </Grid>
-          <Container maxWidth={false} className={classes.mainContainer}>
+          )}
+        </Grid>
+        <Container maxWidth={false} className={classes.mainContainer}>
+          {species && species.length ? (
             <Grid item xs={12}>
               <Paper>
                 {species && (
@@ -126,17 +157,17 @@ export default function SpeciesList({ organization }: SpeciesListProps): JSX.Ele
                 )}
               </Paper>
             </Grid>
-          </Container>
-        </Grid>
-      ) : (
-        <EmptyMessage
-          className={classes.createSpeciesMessage}
-          title={dictionary.ADD_A_SPECIES}
-          text={emptyMessageStrings.SPECIES_EMPTY_MSG_BODY}
-          buttonText={strings.ADD_SPECIES}
-          onClick={onNewSpecies}
-        />
-      )}
+          ) : (
+            <EmptyMessage
+              className={classes.createSpeciesMessage}
+              title={dictionary.ADD_A_SPECIES}
+              text={emptyMessageStrings.SPECIES_EMPTY_MSG_BODY}
+              buttonText={strings.ADD_SPECIES}
+              onClick={onNewSpecies}
+            />
+          )}
+        </Container>
+      </Grid>
     </main>
   );
 }
