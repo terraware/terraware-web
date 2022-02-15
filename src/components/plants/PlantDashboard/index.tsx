@@ -25,9 +25,15 @@ import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
+    main: {
+      background: '#ffffff',
+      minHeight: '100vh',
+      display: 'flex',
+      flexDirection: 'column',
+      padding: '24px',
+    },
     mainContainer: {
-      paddingTop: theme.spacing(4),
-      paddingBottom: theme.spacing(4),
+      padding: '32px 0',
     },
     map: {
       width: '100%',
@@ -35,11 +41,29 @@ const useStyles = makeStyles((theme) =>
     },
     mapContainer: {
       paddingTop: theme.spacing(5),
+      border: '1px solid #A9B7B8',
+      borderRadius: '8px',
+      boxShadow: 'none',
+      marginLeft: '24px',
     },
     message: {
       margin: '0 auto',
       width: '50%',
       marginTop: '10%',
+    },
+    summaryContainer: {
+      display: 'flex',
+    },
+    fsSummaryContainer: {
+      marginTop: '24px',
+    },
+    summaryItem: {
+      flex: 1,
+      padding: theme.spacing(2),
+      border: '1px solid #A9B7B8',
+      borderRadius: '8px',
+      boxShadow: 'none',
+      marginLeft: '24px',
     },
   })
 );
@@ -118,10 +142,10 @@ export default function PlantDashboard(props: PlantDashboardProps): JSX.Element 
   };
 
   return (
-    <main>
+    <main className={classes.main}>
       {organization && plantSummariesByLayerId ? (
-        <Container maxWidth={false} className={classes.mainContainer}>
-          <Grid container spacing={3}>
+        <>
+          <Grid container>
             <Grid item xs={12}>
               <Title
                 page={strings.DASHBOARD}
@@ -132,81 +156,79 @@ export default function PlantDashboard(props: PlantDashboardProps): JSX.Element 
                 onChangeSelectedOrgInfo={(newValues) => setSelectedOrgInfo(newValues)}
               />
             </Grid>
-            <Grid item xs={12}>
-              {!!organization.projects?.length && !plantSummariesByLayerId.size && (
+          </Grid>
+          <Container maxWidth={false} className={classes.mainContainer}>
+            <Grid container>
+              <Grid item xs={12}>
+                {!!organization.projects?.length && !plantSummariesByLayerId.size && (
+                  <EmptyMessage
+                    title={strings.COLLECT_IN_FIELD_PLANT_DATA}
+                    text={strings.TERRAWARE_MOBILE_APP_INFO_MSG}
+                    buttonText={strings.REQUEST_MOBILE_APP}
+                    onClick={goToProjects}
+                  />
+                )}
+              </Grid>
+              {!!organization.projects?.length ? (
+                <>
+                  <Grid item xs={isFullscreen ? 12 : 6}>
+                    <React.Suspense fallback={strings.LOADING}>
+                      <PlantMap
+                        onFullscreen={onFullscreenHandler}
+                        isFullscreen={isFullscreen}
+                        plants={plants}
+                        speciesById={speciesById}
+                        colorsBySpeciesId={colorsBySpeciesId}
+                        reloadData={reloadData}
+                        organization={organization}
+                      />
+                    </React.Suspense>
+                  </Grid>
+
+                  <Grid item xs={isFullscreen ? 12 : 6}>
+                    <Grid container spacing={3}>
+                      <Grid item xs={12}>
+                        <ErrorBoundary>
+                          <React.Suspense fallback={strings.LOADING}>
+                            <SummaryCount summary={plantSummariesByLayerId} isFullscreen={isFullscreen} />
+                          </React.Suspense>
+                        </ErrorBoundary>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Paper className={classes.mapContainer}>
+                          <ErrorBoundary>
+                            <React.Suspense fallback={strings.LOADING}>
+                              <SpeciesSummaryChart
+                                plantSummariesByLayerId={plantSummariesByLayerId}
+                                speciesById={speciesById}
+                                colorsBySpeciesId={colorsBySpeciesId}
+                                isFullscreen={isFullscreen}
+                              />
+                            </React.Suspense>
+                          </ErrorBoundary>
+                        </Paper>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                </>
+              ) : HighOrganizationRolesValues.includes(organization?.role || '') ? (
                 <EmptyMessage
-                  title={strings.COLLECT_IN_FIELD_PLANT_DATA}
-                  text={strings.TERRAWARE_MOBILE_APP_INFO_MSG}
-                  buttonText={strings.REQUEST_MOBILE_APP}
+                  className={classes.message}
+                  title={strings.PLANTS_EMPTY_MSG_TITLE}
+                  text={strings.PLANTS_EMPTY_MSG_BODY}
+                  buttonText={strings.GO_TO_PROJECTS}
                   onClick={goToProjects}
+                />
+              ) : (
+                <EmptyMessage
+                  className={classes.message}
+                  title={strings.CHECK_BACK_LATER}
+                  text={strings.EMPTY_MESSAGE_CONTRIBUTOR}
                 />
               )}
             </Grid>
-            {!!organization.projects?.length ? (
-              <>
-                <Grid item xs={isFullscreen ? 12 : 6}>
-                  <React.Suspense fallback={strings.LOADING}>
-                    <PlantMap
-                      onFullscreen={onFullscreenHandler}
-                      isFullscreen={isFullscreen}
-                      plants={plants}
-                      speciesById={speciesById}
-                      colorsBySpeciesId={colorsBySpeciesId}
-                      reloadData={reloadData}
-                      organization={organization}
-                    />
-                  </React.Suspense>
-                </Grid>
-
-                <Grid item xs={isFullscreen ? 12 : 6}>
-                  <Grid container>
-                    <Grid item xs={12}>
-                      <TableContainer component={Paper}>
-                        <Table aria-label='simple table'>
-                          <TableBody>
-                            <ErrorBoundary>
-                              <React.Suspense fallback={strings.LOADING}>
-                                <SummaryCount summary={plantSummariesByLayerId} />
-                              </React.Suspense>
-                            </ErrorBoundary>
-                          </TableBody>
-                        </Table>
-                      </TableContainer>
-                    </Grid>
-                    <Grid item xs={12}>
-                      <Paper className={classes.mapContainer}>
-                        <ErrorBoundary>
-                          <React.Suspense fallback={strings.LOADING}>
-                            <SpeciesSummaryChart
-                              plantSummariesByLayerId={plantSummariesByLayerId}
-                              speciesById={speciesById}
-                              colorsBySpeciesId={colorsBySpeciesId}
-                              isFullscreen={isFullscreen}
-                            />
-                          </React.Suspense>
-                        </ErrorBoundary>
-                      </Paper>
-                    </Grid>
-                  </Grid>
-                </Grid>
-              </>
-            ) : HighOrganizationRolesValues.includes(organization?.role || '') ? (
-              <EmptyMessage
-                className={classes.message}
-                title={strings.PLANTS_EMPTY_MSG_TITLE}
-                text={strings.PLANTS_EMPTY_MSG_BODY}
-                buttonText={strings.GO_TO_PROJECTS}
-                onClick={goToProjects}
-              />
-            ) : (
-              <EmptyMessage
-                className={classes.message}
-                title={strings.CHECK_BACK_LATER}
-                text={strings.EMPTY_MESSAGE_CONTRIBUTOR}
-              />
-            )}
-          </Grid>
-        </Container>
+          </Container>
+        </>
       ) : (
         <CircularProgress />
       )}
@@ -216,9 +238,11 @@ export default function PlantDashboard(props: PlantDashboardProps): JSX.Element 
 
 type SummaryCountProps = {
   summary: PlantSummariesByLayerId;
+  isFullscreen: boolean;
 };
 
 function SummaryCount(props: SummaryCountProps): JSX.Element {
+  const classes = useStyles();
   let lastWeekSpeciesCount = 0;
   let lastWeekPlantsCount = 0;
   let thisWeekSpeciesCount = 0;
@@ -240,9 +264,13 @@ function SummaryCount(props: SummaryCountProps): JSX.Element {
   });
 
   return (
-    <TableRow>
-      <SummaryCell title={strings.PLANTS} current={thisWeekPlantsCount} lastWeek={lastWeekPlantsCount} />
-      <SummaryCell title={strings.SPECIES} current={thisWeekSpeciesCount} lastWeek={lastWeekSpeciesCount} />
-    </TableRow>
+    <div className={`${classes.summaryContainer} ${props.isFullscreen ? classes.fsSummaryContainer : ''}`}>
+      <Paper className={classes.summaryItem}>
+        <SummaryCell title={strings.PLANTS} current={thisWeekPlantsCount} lastWeek={lastWeekPlantsCount} />
+      </Paper>
+      <Paper className={classes.summaryItem}>
+        <SummaryCell title={strings.SPECIES} current={thisWeekSpeciesCount} lastWeek={lastWeekSpeciesCount} />
+      </Paper>
+    </div>
   );
 }
