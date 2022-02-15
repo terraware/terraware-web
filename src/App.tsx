@@ -34,7 +34,6 @@ import Accession from 'src/components/seeds/accession';
 import CheckIn from 'src/components/seeds/checkin';
 import Database from 'src/components/seeds/database';
 import { defaultPreset as DefaultColumns } from 'src/components/seeds/database/columns';
-import Help from 'src/components/seeds/help';
 import NewAccession from 'src/components/seeds/newAccession';
 import SeedSummary from 'src/components/seeds/summary';
 import SiteView from 'src/components/Site';
@@ -374,9 +373,6 @@ function AppContent() {
               <Route path='/sites/:siteId'>
                 <SiteView organization={selectedOrganization} />
               </Route>
-              <Route path='/help' component={Help}>
-                <Help />
-              </Route>
               {selectedOrganization && (
                 <Route path='/organization/edit' exact={true}>
                   <EditOrganization organization={selectedOrganization} reloadOrganizationData={reloadData} />
@@ -430,9 +426,6 @@ function AppContent() {
               </Route>
               <Route path='/sites/'>
                 <Redirect to='/sites' />
-              </Route>
-              <Route path='/help/'>
-                <Redirect to='/help' />
               </Route>
               <Route path='/'>
                 <Redirect to='/home' />
