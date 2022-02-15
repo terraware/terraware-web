@@ -1,10 +1,10 @@
-import { Checkbox, TableCell } from '@material-ui/core';
+import { Checkbox, TableCell, TablePagination } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableRow from '@material-ui/core/TableRow';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import EnhancedTableToolbar from './EnhancedTableToolbar';
 import { descendingComparator, getComparator, Order, stableSort } from './sort';
 import TableCellRenderer from './TableCellRenderer';
@@ -21,9 +21,6 @@ const tableStyles = makeStyles((theme) => ({
   table: {
     padding: theme.spacing(0, 3),
     borderCollapse: 'initial',
-  },
-  container: {
-    maxHeight: 850,
   },
   inactiveRow: {
     background: theme.palette.neutral[50],
@@ -52,6 +49,7 @@ export interface Props<T> {
   onButtonClick?: () => void;
   selectedRows?: T[];
   setSelectedRows?: (selectedRows: T[]) => void;
+  showPagination?: boolean;
 }
 
 export default function EnhancedTable<T>({
@@ -76,10 +74,13 @@ export default function EnhancedTable<T>({
   onButtonClick,
   selectedRows,
   setSelectedRows,
+  showPagination = true,
 }: Props<T>): JSX.Element {
   const classes = tableStyles();
   const [order, setOrder] = React.useState<Order>(_order);
   const [orderBy, setOrderBy] = React.useState(_orderBy);
+  const [maxItemsPerPage, setMaxItemsPerPage] = useState(100);
+  const [itemsToSkip, setItemsToSkip] = useState(0);
 
   useEffect(() => {
     if (rows.length && setSelectedRows) {
@@ -134,6 +135,19 @@ export default function EnhancedTable<T>({
     }
   };
 
+  const handleChangePage = (event: unknown, newPage: number) => {
+    if (newPage > itemsToSkip / maxItemsPerPage) {
+      setItemsToSkip(itemsToSkip + maxItemsPerPage);
+    } else {
+      setItemsToSkip(itemsToSkip - maxItemsPerPage);
+    }
+  };
+
+  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setMaxItemsPerPage(parseInt(event.target.value, 10));
+    setItemsToSkip(0);
+  };
+
   return (
     <>
       {showTopBar && buttonText && buttonType && onButtonClick && (
@@ -144,7 +158,7 @@ export default function EnhancedTable<T>({
           onButtonClick={onButtonClick}
         />
       )}
-      <TableContainer className={classes.container} id={id}>
+      <TableContainer id={id}>
         <Table
           stickyHeader
           aria-labelledby='tableTitle'
@@ -171,7 +185,10 @@ export default function EnhancedTable<T>({
               </TableRow>
             )}
             {rows &&
-              stableSort(rows, getComparator(order, orderBy, sortComparator)).map((row, index) => {
+              stableSort(
+                rows.slice(itemsToSkip, itemsToSkip + maxItemsPerPage),
+                getComparator(order, orderBy, sortComparator)
+              ).map((row, index) => {
                 const onClick = onSelect ? () => onSelect(row as T) : undefined;
                 const isItemSelected = isSelected(row as T);
 
@@ -217,6 +234,18 @@ export default function EnhancedTable<T>({
           </TableBody>
         </Table>
       </TableContainer>
+      {showPagination && (
+        /* @ts-ignore */
+        <TablePagination
+          component='div'
+          count={rows.length}
+          page={itemsToSkip / maxItemsPerPage}
+          onChangePage={handleChangePage}
+          rowsPerPage={maxItemsPerPage}
+          rowsPerPageOptions={[10, 25, 50, 100]}
+          onChangeRowsPerPage={handleChangeRowsPerPage}
+        />
+      )}
     </>
   );
 }
