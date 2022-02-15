@@ -31,15 +31,22 @@ import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
+    main: {
+      background: '#ffffff',
+      minHeight: '100vh',
+      display: 'flex',
+      flexDirection: 'column',
+      padding: '24px',
+    },
     mainContainer: {
-      paddingTop: theme.spacing(4),
-      paddingBottom: theme.spacing(4),
+      padding: '32px 0',
     },
     mainContent: {
       paddingTop: theme.spacing(4),
     },
     filtersButton: {
       borderRadius: 0,
+      padding: '0 0 12px 0',
     },
     filtersIcon: {
       marginRight: theme.spacing(1),
@@ -154,7 +161,7 @@ export default function PlantList(props: PlantListProps): JSX.Element {
   };
 
   return (
-    <main>
+    <main className={classes.main}>
       {selectedPlant && organization && (
         <EditPlantModal
           onSave={onPlantEditSaved}
@@ -167,77 +174,77 @@ export default function PlantList(props: PlantListProps): JSX.Element {
         />
       )}
       {organization && plants ? (
-        <Container maxWidth={false} className={classes.mainContainer}>
-          <Grid container spacing={3}>
-            <Grid item xs={12}>
-              <Title
-                page={strings.PLANTS}
-                parentPage={strings.PLANTS}
-                organization={!!organization.projects?.length ? organization : undefined}
-                allowAll={true}
-                onChangeSelectedOrgInfo={(newValues) => setSelectedOrgInfo(newValues)}
-                selectedOrgInfo={selectedOrgInfo}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              {!!organization.projects?.length && !plants.length && (
-                <EmptyMessage
-                  title={strings.COLLECT_IN_FIELD_PLANT_DATA}
-                  text={strings.TERRAWARE_MOBILE_APP_INFO_MSG}
-                  buttonText={strings.REQUEST_MOBILE_APP}
-                  onClick={goToProjects}
-                />
-              )}
-            </Grid>
-            {!!organization.projects?.length ? (
-              <>
-                <Grid item xs={1} />
-                <Grid item xs={11}>
-                  <IconButton
-                    id='show-filters'
-                    aria-label='filter'
-                    onClick={() => setShowFilters(!showFilters)}
-                    className={classes.filtersButton}
-                  >
-                    <TuneIcon className={classes.filtersIcon} />
-                    <Typography variant='h6'>{strings.FILTERS}</Typography>
-                  </IconButton>
-                </Grid>
-                {showFilters && (
-                  <PlantFilterBar
-                    speciesNames={getSpeciesNames()}
-                    filters={filters}
-                    onApplyFilters={setFilters}
-                    onClearFilters={() => setFilters(undefined)}
-                  />
-                )}
-                <Grid item xs={1} />
-                <Grid item xs={10}>
-                  <Paper className={classes.mainContent}>
-                    <React.Suspense fallback={strings.LOADING}>
-                      <PlantListContent plants={plants} speciesById={speciesById} selectPlant={selectPlant} />
-                    </React.Suspense>
-                  </Paper>
-                </Grid>
-                <Grid item xs={1} />
-              </>
-            ) : ['Admin', 'Manager', 'Owner'].includes(organization?.role || '') ? (
+        <Grid container>
+          <Grid item xs={12}>
+            <Title
+              page={strings.PLANTS}
+              parentPage={strings.PLANTS}
+              organization={!!organization.projects?.length ? organization : undefined}
+              allowAll={true}
+              onChangeSelectedOrgInfo={(newValues) => setSelectedOrgInfo(newValues)}
+              selectedOrgInfo={selectedOrgInfo}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            {!!organization.projects?.length && !plants.length && (
               <EmptyMessage
-                className={classes.message}
-                title={strings.PLANTS_EMPTY_MSG_TITLE}
-                text={strings.PLANTS_EMPTY_MSG_BODY}
-                buttonText={strings.GO_TO_PROJECTS}
+                title={strings.COLLECT_IN_FIELD_PLANT_DATA}
+                text={strings.TERRAWARE_MOBILE_APP_INFO_MSG}
+                buttonText={strings.REQUEST_MOBILE_APP}
                 onClick={goToProjects}
-              />
-            ) : (
-              <EmptyMessage
-                className={classes.message}
-                title={strings.CHECK_BACK_LATER}
-                text={strings.EMPTY_MESSAGE_CONTRIBUTOR}
               />
             )}
           </Grid>
-        </Container>
+          <Container maxWidth={false} className={classes.mainContainer}>
+            <Grid container>
+              {!!organization.projects?.length ? (
+                <>
+                  <Grid item xs={12}>
+                    <IconButton
+                      id='show-filters'
+                      aria-label='filter'
+                      onClick={() => setShowFilters(!showFilters)}
+                      className={classes.filtersButton}
+                    >
+                      <TuneIcon className={classes.filtersIcon} />
+                      <Typography variant='h6'>{strings.FILTERS}</Typography>
+                    </IconButton>
+                  </Grid>
+                  {showFilters && (
+                    <PlantFilterBar
+                      speciesNames={getSpeciesNames()}
+                      filters={filters}
+                      onApplyFilters={setFilters}
+                      onClearFilters={() => setFilters(undefined)}
+                    />
+                  )}
+
+                  <Grid item xs={12}>
+                    <Paper className={classes.mainContent}>
+                      <React.Suspense fallback={strings.LOADING}>
+                        <PlantListContent plants={plants} speciesById={speciesById} selectPlant={selectPlant} />
+                      </React.Suspense>
+                    </Paper>
+                  </Grid>
+                </>
+              ) : ['Admin', 'Manager', 'Owner'].includes(organization?.role || '') ? (
+                <EmptyMessage
+                  className={classes.message}
+                  title={strings.PLANTS_EMPTY_MSG_TITLE}
+                  text={strings.PLANTS_EMPTY_MSG_BODY}
+                  buttonText={strings.GO_TO_PROJECTS}
+                  onClick={goToProjects}
+                />
+              ) : (
+                <EmptyMessage
+                  className={classes.message}
+                  title={strings.CHECK_BACK_LATER}
+                  text={strings.EMPTY_MESSAGE_CONTRIBUTOR}
+                />
+              )}
+            </Grid>
+          </Container>
+        </Grid>
       ) : (
         <CircularProgress />
       )}
