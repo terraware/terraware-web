@@ -416,7 +416,7 @@ function AppContent() {
                   <NewPerson organization={organizationWithoutSB()!} reloadOrganizationData={reloadData} />
                 </Route>
               )}
-              <Route path={APP_PATHS.PEOPLE_ID}>
+              <Route path={APP_PATHS.PEOPLE_VIEW}>
                 <PersonDetails organization={organizationWithoutSB()} />
               </Route>
               <Route exact path={APP_PATHS.PEOPLE}>
