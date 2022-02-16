@@ -68,7 +68,7 @@ export default function GerminationMenu({ accession }: Props): JSX.Element | nul
           id='nursery'
           component={RouterLink}
           to={{
-            pathname: `/accessions/${accessionId}/nursery`,
+            pathname: APP_PATHS.ACCESSIONS_ITEM_NURSERY.replace(':accessionId', accessionId),
             state: {
               from: location.state?.from ?? '',
             },
@@ -84,7 +84,7 @@ export default function GerminationMenu({ accession }: Props): JSX.Element | nul
           id='lab'
           component={RouterLink}
           to={{
-            pathname: `/accessions/${accessionId}/lab`,
+            pathname: APP_PATHS.ACCESSIONS_ITEM_LAB.replace(':accessionId', accessionId),
             state: { from: location.state?.from ?? '' },
           }}
         >

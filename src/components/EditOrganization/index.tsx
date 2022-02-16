@@ -1,6 +1,7 @@
 import { Container, createStyles, Grid, makeStyles } from '@material-ui/core';
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
 import TextField from '../common/Textfield/Textfield';
@@ -93,7 +94,7 @@ export default function OrganizationView({ organization, reloadOrganizationData 
 
   const goToOrganization = () => {
     const organizationLocation = {
-      pathname: `/organization`,
+      pathname: APP_PATHS.ORGANIZATION,
     };
     history.push(organizationLocation);
   };

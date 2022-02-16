@@ -1,6 +1,7 @@
 import { Container, createStyles, Grid, makeStyles } from '@material-ui/core';
 import { useEffect, useState } from 'react';
 import { Link, useHistory, useParams } from 'react-router-dom';
+import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import { Project, ServerOrganization } from 'src/types/Organization';
 import Icon from '../common/icon/Icon';
@@ -12,7 +13,6 @@ import { OrganizationUser } from 'src/types/User';
 import { getOrganizationUsers } from 'src/api/organization/organization';
 import Button from '../common/button/Button';
 import Textfield from '../common/Textfield/Textfield';
-import { APP_PATHS } from 'src/constants';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -84,7 +84,7 @@ export default function ProjectDetails({ organization }: ProjectDetailsProps): J
 
   const goToEditProject = () => {
     const newProjectLocation = {
-      pathname: `/projects/${projectId}/edit`,
+      pathname: APP_PATHS.PROJECTS_EDIT.replace(':projectId', projectId),
     };
     history.push(newProjectLocation);
   };

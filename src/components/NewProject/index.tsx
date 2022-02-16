@@ -1,6 +1,7 @@
 import { AppBar, Container, createStyles, Grid, makeStyles } from '@material-ui/core';
 import { useEffect, useState } from 'react';
 import { Link, useHistory, useParams } from 'react-router-dom';
+import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import { Project, ProjectTypes, ServerOrganization, Site } from 'src/types/Organization';
 import TfDivisor from '../common/TfDivisor';
@@ -26,7 +27,6 @@ import RemovedPeopleOrSitesModal from './RemovedPeopleOrSitesModal';
 import MoveSiteModal from './MoveSiteModal';
 import axios from 'axios';
 import { updateSite } from 'src/api/site/site';
-import { APP_PATHS } from 'src/constants';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -193,7 +193,7 @@ export default function ProjectView({ organization, reloadOrganizationData }: Pr
 
   const goToProjects = () => {
     const projectsLocation = {
-      pathname: `/projects`,
+      pathname: APP_PATHS.PROJECTS,
     };
     history.push(projectsLocation);
   };

@@ -1,6 +1,7 @@
 import { Container, createStyles, Grid, makeStyles } from '@material-ui/core';
 import { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
+import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import { ServerOrganization, Site } from 'src/types/Organization';
 import TextField from '../common/Textfield/Textfield';
@@ -78,7 +79,7 @@ export default function SiteView({ organization, reloadOrganizationData }: SiteV
 
   const goToSites = () => {
     const sitesLocation = {
-      pathname: `/sites`,
+      pathname: APP_PATHS.SITES,
     };
     history.push(sitesLocation);
   };

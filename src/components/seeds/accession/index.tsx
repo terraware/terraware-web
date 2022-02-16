@@ -89,6 +89,7 @@ function Content({ organization }: AccessionPageProps): JSX.Element {
       if (history.location.pathname.endsWith(accession.id.toString())) {
         const state = accession.state;
         const newLocation = {
+          // TODO use APP_PATHS here
           pathname: `/accessions/${accession.id}/${pathDestinationForState(state)}`,
           state: history.location.state,
         };

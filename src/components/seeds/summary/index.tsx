@@ -10,7 +10,7 @@ import { useRecoilState } from 'recoil';
 import { SeedSearchCriteria } from 'src/api/seeds/search';
 import { getSummary, GetSummaryResponse } from 'src/api/seeds/summary';
 import EmptyMessage from 'src/components/common/EmptyMessage';
-import { API_PULL_INTERVAL } from 'src/constants';
+import {API_PULL_INTERVAL, APP_PATHS} from 'src/constants';
 import { seedsSummarySelectedOrgInfo } from 'src/state/selectedOrgInfoPerPage';
 import strings from 'src/strings';
 import emptyMessageStrings from 'src/strings/emptyMessageModal';
@@ -126,7 +126,7 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
 
   const goToProjects = () => {
     const projectsLocation = {
-      pathname: `/projects`,
+      pathname: APP_PATHS.PROJECTS,
     };
     history.push(projectsLocation);
   };

@@ -96,6 +96,7 @@ export default function DetailsMenu({ state }: Props): JSX.Element | null {
             component={RouterLink}
             key={title}
             to={{
+              // TODO: use APP_PATHS here
               pathname: `/accessions/${accessionId}/${route}`,
               state: {
                 from: location.state?.from ?? '',

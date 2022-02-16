@@ -7,6 +7,7 @@ import { useHistory } from 'react-router-dom';
 import Button from 'src/components/common/button/Button';
 import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
+import {APP_PATHS} from 'src/constants';
 import strings from 'src/strings';
 import { ServerOrganization, Site } from 'src/types/Organization';
 import { getAllSitesWithProjectName } from 'src/utils/organization';
@@ -56,7 +57,7 @@ export default function SitesList({ organization }: SitesListProps): JSX.Element
   const onSelect = (selected: Site) => {
     if (selected.id) {
       const viewSiteLocation = {
-        pathname: `/sites/${selected.id}`,
+        pathname: APP_PATHS.SITES_VIEW.replace(':siteId', selected.id.toString()),
       };
       history.push(viewSiteLocation);
     }
@@ -75,7 +76,7 @@ export default function SitesList({ organization }: SitesListProps): JSX.Element
 
   const goToNewSite = () => {
     const newSiteLocation = {
-      pathname: `/sites/new`,
+      pathname: APP_PATHS.SITES_NEW,
     };
     history.push(newSiteLocation);
   };
