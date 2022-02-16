@@ -382,21 +382,12 @@ const strings = new LocalizedStrings({
     NUMBER_OF_PEOPLE: 'Number of People',
     ORGANIZATION_CREATED_MSG:
       'You have created {0}. You can access the organizations you’re in by clicking the arrow in the top right corner next to your profile.',
-    PLANTS_EMPTY_MSG_TITLE: 'Just a moment, let’s create a project and site first.',
-    PLANTS_EMPTY_MSG_BODY:
-      'Start by creating a project now. You’ll be able to add a site in the next step. Once both of these are set up, please request our new mobile app to begin collecting data.',
     GO_TO_PROJECTS: 'Go to Projects',
-    COLLECT_IN_FIELD_PLANT_DATA: 'Collect In-field Plant Data',
-    TERRAWARE_MOBILE_APP_INFO_MSG:
-      'Our Terraware mobile app is used to collect in-field plant data and is still in beta testing. To be the first to try it out, send us a request.',
-    REQUEST_MOBILE_APP: 'Request Mobile App',
-    CHECK_BACK_LATER: 'Please check back later.',
-    EMPTY_MESSAGE_CONTRIBUTOR:
-      'Once your administrator has created a project and site, you’ll be able to access your data.',
     COMMON_NAME: 'Common Name',
     SCIENTIFIC_NAME: 'Scientific Name',
     DOWNLOAD_AS_REPORT: 'Download as Report',
     ORGANIZATION_DATA_NOT_AVAILABLE: 'Organization Data Not Available',
+    SPECIES_DATA_NOT_AVAILABLE: 'Species Data Not Available',
     CONTACT_US_TO_RESOLVE_ISSUE: 'Please contact us to resolve this issue.',
   },
 });
