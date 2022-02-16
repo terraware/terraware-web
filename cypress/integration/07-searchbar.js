@@ -10,7 +10,7 @@ describe('Searchbar', () => {
         const accessionNumber = $accessionNumberElement.text();
 
         cy.url().then((url) => {
-          cy.visit('/seeds-summary');
+          cy.visit('/seeds-dashboard');
           cy.get('#search-bar').type(accessionNumber);
           cy.get('#search-bar-option-0').click().url().should('eq', url);
         });
@@ -21,7 +21,7 @@ describe('Searchbar', () => {
   context('Summary End Results', () => {
     it('has the right summary results', () => {
       cy.intercept('GET', '/api/v1/seedbank/summary/*').as('summary');
-      cy.visit('/seeds-summary');
+      cy.visit('/seeds-dashboard');
       cy.wait('@summary');
 
       cy.get('#sessions-current').contains('11');

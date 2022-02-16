@@ -5,6 +5,7 @@ import { Route, Switch, useHistory, useParams } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import { checkIn, getAccession, putAccession } from 'src/api/seeds/accession';
 import { Accession, AccessionState } from 'src/api/types/accessions';
+import { APP_PATHS } from 'src/constants';
 import ErrorBoundary from 'src/ErrorBoundary';
 import snackbarAtom from 'src/state/snackbar';
 import strings from 'src/strings';
@@ -134,7 +135,7 @@ function Content({ organization }: AccessionPageProps): JSX.Element {
           </Grid>
           <Grid item xs={9}>
             <Switch>
-              <Route exact path='/accessions/:accessionId/seed-collection'>
+              <Route exact path={APP_PATHS.ACCESSIONS_ITEM_SEED_COLLECTION}>
                 <AccessionForm
                   updating={true}
                   photoFilenames={accession.photoFilenames}
@@ -144,19 +145,19 @@ function Content({ organization }: AccessionPageProps): JSX.Element {
                   onCheckIn={onCheckIn}
                 />
               </Route>
-              <Route exact path='/accessions/:accessionId/processing-drying'>
+              <Route exact path={APP_PATHS.ACCESSIONS_ITEM_PROCESSING_DRYING}>
                 <ProcessingAndDrying accession={accession} onSubmit={onSubmit} />
               </Route>
-              <Route exact path='/accessions/:accessionId/storage'>
+              <Route exact path={APP_PATHS.ACCESSIONS_ITEM_STORAGE}>
                 <Storage accession={accession} onSubmit={onSubmit} />
               </Route>
-              <Route exact path='/accessions/:accessionId/nursery'>
+              <Route exact path={APP_PATHS.ACCESSIONS_ITEM_NURSERY}>
                 <Nursery accession={accession} onSubmit={onSubmit} />
               </Route>
-              <Route exact path='/accessions/:accessionId/lab'>
+              <Route exact path={APP_PATHS.ACCESSIONS_ITEM_LAB}>
                 <Lab accession={accession} onSubmit={onSubmit} />
               </Route>
-              <Route exact path='/accessions/:accessionId/withdrawal'>
+              <Route exact path={APP_PATHS.ACCESSIONS_ITEM_WITHDRAWAL}>
                 <Withdrawal accession={accession} onSubmit={onSubmit} />
               </Route>
             </Switch>

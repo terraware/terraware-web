@@ -1,11 +1,11 @@
 describe('Accessions', () => {
   context('Summary Start Results', () => {
     beforeEach(() => {
-      cy.visit('/seeds-summary');
+      cy.visit('/seeds-dashboard');
     });
     it('has the right summary results', () => {
       cy.intercept('GET', '/api/v1/seedbank/summary/*').as('summary');
-      cy.visit('/seeds-summary');
+      cy.visit('/seeds-dashboard');
       cy.wait('@summary');
 
       cy.get('#sessions-current').contains('3');
@@ -222,7 +222,7 @@ describe('Accessions', () => {
   context('Summary End Results', () => {
     it('has the right summary results', () => {
       cy.intercept('GET', '/api/v1/seedbank/summary/*').as('summary');
-      cy.visit('/seeds-summary');
+      cy.visit('/seeds-dashboard');
       cy.wait('@summary');
 
       cy.get('#sessions-current').contains('4');
