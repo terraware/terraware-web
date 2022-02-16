@@ -14,6 +14,7 @@ import { TableColumnType } from '../common/table/types';
 import TableCellRenderer from './TableCellRenderer';
 import { listAllProjects } from 'src/api/project/project';
 import { getOrganizationProjects } from 'src/utils/organization';
+import { APP_PATHS } from 'src/constants';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -111,7 +112,7 @@ export default function PersonDetails({ organization }: PersonDetailsProps): JSX
     <Container maxWidth={false} className={classes.mainContainer}>
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          <Link id='back' to='/people' className={classes.back}>
+          <Link id='back' to={APP_PATHS.PEOPLE} className={classes.back}>
             <Icon name='caretLeft' className={classes.backIcon} />
             {strings.PEOPLE}
           </Link>

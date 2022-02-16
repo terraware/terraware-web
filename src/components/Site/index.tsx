@@ -8,6 +8,7 @@ import TfDivisor from '../common/TfDivisor';
 import { getSitesById } from 'src/utils/organization';
 import TextField from '../common/Textfield/Textfield';
 import Button from '../common/button/Button';
+import { APP_PATHS } from 'src/constants';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -63,7 +64,7 @@ export default function SiteDetails({ organization }: SiteDetailsProps): JSX.Ele
     <Container maxWidth={false} className={classes.mainContainer}>
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          <Link id='back' to='/sites' className={classes.back}>
+          <Link id='back' to={APP_PATHS.SITES} className={classes.back}>
             <Icon name='caretLeft' className={classes.backIcon} />
             {strings.SITES}
           </Link>

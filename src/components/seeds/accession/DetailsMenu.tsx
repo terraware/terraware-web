@@ -2,6 +2,7 @@ import { Box, Divider, Link, Paper, Typography } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 import { Link as RouterLink, useHistory, useParams, useRouteMatch } from 'react-router-dom';
+import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import useStateLocation from 'src/utils/useStateLocation';
 
@@ -45,25 +46,25 @@ export default function DetailsMenu({ state }: Props): JSX.Element | null {
     {
       title: strings.SEED_COLLECTION,
       route: 'seed-collection',
-      active: useRouteMatch('/accessions/:accessionId/seed-collection'),
+      active: useRouteMatch(APP_PATHS.ACCESSIONS_ITEM_SEED_COLLECTION),
       disabled: false,
     },
     {
       title: strings.PROCESSING_AND_DRYING,
       route: 'processing-drying',
-      active: useRouteMatch('/accessions/:accessionId/processing-drying'),
+      active: useRouteMatch(APP_PATHS.ACCESSIONS_ITEM_PROCESSING_DRYING),
       disabled: state === 'Nursery',
     },
     {
       title: strings.STORAGE,
       route: 'storage',
-      active: useRouteMatch('/accessions/:accessionId/storage'),
+      active: useRouteMatch(APP_PATHS.ACCESSIONS_ITEM_STORAGE),
       disabled: state === 'Nursery' || state === 'Pending',
     },
     {
       title: strings.WITHDRAWAL,
       route: 'withdrawal',
-      active: useRouteMatch('/accessions/:accessionId/withdrawal'),
+      active: useRouteMatch(APP_PATHS.ACCESSIONS_ITEM_WITHDRAWAL),
       disabled: state === 'Nursery' || state === 'Pending',
     },
   ];
