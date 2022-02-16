@@ -398,6 +398,8 @@ const strings = new LocalizedStrings({
     DOWNLOAD_AS_REPORT: 'Download as Report',
     ORGANIZATION_DATA_NOT_AVAILABLE: 'Organization Data Not Available',
     CONTACT_US_TO_RESOLVE_ISSUE: 'Please contact us to resolve this issue.',
+    NOT_SUPPORT_MOBILE_TITLE: 'Terraware web doesn’t support mobile yet.',
+    NOT_SUPPORT_MOBILE_DESC: 'Please access terraware.io on a desktop device.',
   },
 });
 
