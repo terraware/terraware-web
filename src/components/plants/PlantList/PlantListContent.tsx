@@ -1,5 +1,5 @@
-import React, { useState, useMemo } from 'react';
-import { Grid, TablePagination } from '@material-ui/core';
+import React, { useMemo } from 'react';
+import { Grid } from '@material-ui/core';
 import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
 import AllPlantsCellRenderer from './TableCellRenderer';
@@ -30,8 +30,6 @@ type PlantListContentProps = {
 
 export default function PlantListContent(props: PlantListContentProps): JSX.Element {
   const { plants, speciesById, selectPlant } = props;
-  const [maxItemsPerPage, setMaxItemsPerPage] = useState(100);
-  const [itemsToSkip, setItemsToSkip] = useState(0);
 
   const plantsForTable = useMemo(() => {
     let plantsToReturn: PlantForTable[] = [];
@@ -53,39 +51,16 @@ export default function PlantListContent(props: PlantListContentProps): JSX.Elem
     return plantsToReturn;
   }, [plants, speciesById]);
 
-  const handleChangePage = (event: unknown, newPage: number) => {
-    if (newPage > itemsToSkip / maxItemsPerPage) {
-      setItemsToSkip(itemsToSkip + maxItemsPerPage);
-    } else {
-      setItemsToSkip(itemsToSkip - maxItemsPerPage);
-    }
-  };
-
-  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setMaxItemsPerPage(parseInt(event.target.value, 10));
-    setItemsToSkip(0);
-  };
-
   return (
     <Grid container spacing={4}>
       <Grid item xs={12}>
         <Table
           id='all-plants-table'
           columns={columns}
-          rows={plantsForTable.slice(itemsToSkip, itemsToSkip + maxItemsPerPage)}
+          rows={plantsForTable}
           orderBy='species'
           Renderer={AllPlantsCellRenderer}
           onSelect={(plant: PlantForTable) => selectPlant(plant.featureId!)}
-        />
-        {/* @ts-ignore */}
-        <TablePagination
-          component='div'
-          count={plants.length}
-          page={itemsToSkip / maxItemsPerPage}
-          onChangePage={handleChangePage}
-          rowsPerPage={maxItemsPerPage}
-          rowsPerPageOptions={[10, 25, 50, 100]}
-          onChangeRowsPerPage={handleChangeRowsPerPage}
         />
       </Grid>
     </Grid>
