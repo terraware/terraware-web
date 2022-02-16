@@ -14,9 +14,18 @@ import ProjectsCellRenderer from './TableCellRenderer';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
+    main: {
+      background: '#ffffff',
+      minHeight: '100vh',
+      display: 'flex',
+      flexDirection: 'column',
+    },
+    title: {
+      marginTop: 0,
+      fontSize: '24px',
+    },
     mainContainer: {
-      paddingTop: theme.spacing(4),
-      paddingBottom: theme.spacing(4),
+      padding: '24px',
     },
     mainContent: {
       paddingTop: theme.spacing(4),
@@ -63,23 +72,20 @@ export default function ProjectsList({ organization }: ProjectsListProps): JSX.E
   };
 
   return (
-    <main>
+    <main className={classes.main}>
       <Container maxWidth={false} className={classes.mainContainer}>
         <Grid container spacing={3}>
-          <Grid item xs={1} />
           <Grid item xs={2}>
-            <h1>{strings.PROJECTS}</h1>
+            <h1 className={classes.title}>{strings.PROJECTS}</h1>
             <p>{strings.PROJECTS_DESCRIPTION}</p>
           </Grid>
-          <Grid item xs={6} />
+          <Grid item xs={8} />
           <Grid item xs={2} className={classes.centered}>
             {organization && ['Admin', 'Owner'].includes(organization?.role) && (
-              <Button id='new-project' label={strings.ADD_PROJECT} onClick={goToNewProject} />
+              <Button id='new-project' label={strings.ADD_PROJECT} onClick={goToNewProject} size='medium' />
             )}
           </Grid>
-          <Grid item xs={1} />
-          <Grid item xs={1} />
-          <Grid item xs={10}>
+          <Grid item xs={12}>
             <Paper className={classes.mainContent}>
               <Grid container spacing={4}>
                 <Grid item xs={12}>

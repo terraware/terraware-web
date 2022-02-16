@@ -16,15 +16,21 @@ import { getOrganizationProjects } from 'src/utils/organization';
 const useStyles = makeStyles((theme) =>
   createStyles({
     mainContainer: {
-      paddingTop: theme.spacing(4),
-      paddingBottom: theme.spacing(4),
+      paddingTop: '24px',
       background: '#ffffff',
+      minHeight: '100vh',
+      display: 'flex',
+      flexDirection: 'column',
     },
     titleWithButton: {
       display: 'flex',
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
+    },
+    title: {
+      marginTop: 0,
+      fontSize: '24px',
     },
   })
 );
@@ -85,7 +91,7 @@ export default function OrganizationView({ organization }: OrganizationViewProps
     <Container maxWidth={false} className={classes.mainContainer}>
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          <h2>{strings.ORGANIZATION}</h2>
+          <h2 className={classes.title}>{strings.ORGANIZATION}</h2>
           <p>{strings.ORGANIZATION_DESC}</p>
         </Grid>
         <Grid item xs={12} className={classes.titleWithButton}>
