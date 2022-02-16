@@ -6,6 +6,7 @@ import FiberManualRecord from '@material-ui/icons/FiberManualRecord';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { Accession } from 'src/api/types/accessions';
+import { APP_PATHS } from 'src/constants';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
 const useStyles = makeStyles((theme) =>
@@ -69,7 +70,7 @@ export default function AccessionPageHeader({ accession }: Props): JSX.Element {
                   history.push(getLocation(location.state.from, location));
                 } else {
                   // TODO: this path is almost certainly never used. Remove it.
-                  history.push('/accessions');
+                  history.push(APP_PATHS.ACCESSIONS);
                 }
               }}
             >

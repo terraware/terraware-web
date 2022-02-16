@@ -3,6 +3,7 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 import { Link as RouterLink, useHistory, useParams, useRouteMatch } from 'react-router-dom';
 import { Accession } from 'src/api/types/accessions';
+import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import useStateLocation from 'src/utils/useStateLocation';
 import Divisor from '../../common/Divisor';
@@ -73,7 +74,7 @@ export default function GerminationMenu({ accession }: Props): JSX.Element | nul
             },
           }}
         >
-          <Typography component='p' variant='body1' className={TypographyClass('/accessions/:accessionId/nursery')}>
+          <Typography component='p' variant='body1' className={TypographyClass(APP_PATHS.ACCESSIONS_ITEM_NURSERY)}>
             {strings.NURSERY}
           </Typography>
         </Link>
@@ -87,7 +88,7 @@ export default function GerminationMenu({ accession }: Props): JSX.Element | nul
             state: { from: location.state?.from ?? '' },
           }}
         >
-          <Typography component='p' variant='body1' className={TypographyClass('/accessions/:accessionId/lab')}>
+          <Typography component='p' variant='body1' className={TypographyClass(APP_PATHS.ACCESSIONS_ITEM_LAB)}>
             {strings.LAB}
           </Typography>
         </Link>

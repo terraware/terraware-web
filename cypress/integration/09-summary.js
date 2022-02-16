@@ -2,7 +2,7 @@ describe('Summary page', () => {
   beforeEach(() => {
     cy.intercept('GET', '/api/v1/seedbank/notification?*').as('notification');
     cy.intercept('GET', '/api/v1/seedbank/summary/*').as('summary');
-    cy.visit('/seeds-summary');
+    cy.visit('/seeds-dashboard');
     cy.wait('@notification');
     cy.wait('@summary');
   });

@@ -2,6 +2,7 @@ import { Link } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import DoneIcon from '@material-ui/icons/Done';
 import React from 'react';
+import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import preventDefaultEvent from 'src/utils/preventDefaultEvent';
 
@@ -82,7 +83,7 @@ export default function NurseryButtons({
           >
             {strings.UNDO_SEND_TO_NURSERY}
           </Link>
-          <Link className={classes.second} id='goToDatabase' href='/accessions'>
+          <Link className={classes.second} id='goToDatabase' href={APP_PATHS.ACCESSIONS}>
             {strings.GO_TO_DATABASE}
           </Link>
         </>
