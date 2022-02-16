@@ -184,7 +184,8 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
     const response = await addOrganizationUser({ ...newPerson, projectIds }, organization.id);
     if (response.requestSucceeded) {
       setSnackbar({
-        type: 'success',
+        type: 'toast',
+        priority: 'success',
         msg: 'Person added',
       });
       reloadOrganizationData();
@@ -196,7 +197,8 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
         return;
       } else {
         setSnackbar({
-          type: 'delete',
+          type: 'toast',
+          priority: 'critical',
           msg: strings.GENERIC_ERROR,
         });
       }

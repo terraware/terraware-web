@@ -380,8 +380,9 @@ const strings = new LocalizedStrings({
     ORGANIZATION_DESC: 'Manage your organization.',
     NUMBER_OF_PROJECTS: 'Number of Projects',
     NUMBER_OF_PEOPLE: 'Number of People',
+    ORGANIZATION_CREATED_TITLE: 'You have created {0}!',
     ORGANIZATION_CREATED_MSG:
-      'You have created {0}. You can access the organizations you’re in by clicking the arrow in the top right corner next to your profile.',
+      'You can access the organizations you’re in by clicking the arrow in the top right corner next to your profile.',
     PLANTS_EMPTY_MSG_TITLE: 'Just a moment, let’s create a project and site first.',
     PLANTS_EMPTY_MSG_BODY:
       'Start by creating a project now. You’ll be able to add a site in the next step. Once both of these are set up, please request our new mobile app to begin collecting data.',

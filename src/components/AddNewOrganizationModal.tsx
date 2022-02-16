@@ -113,13 +113,16 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
     const response = await createOrganization(newOrganization);
     if (response.requestSucceeded) {
       setSnackbar({
-        type: 'success',
-        msg: strings.formatString(strings.ORGANIZATION_CREATED_MSG, response.organization?.name || ''),
+        type: 'page',
+        priority: 'success',
+        title: strings.formatString(strings.ORGANIZATION_CREATED_TITLE, response.organization?.name || ''),
+        msg: strings.ORGANIZATION_CREATED_MSG,
       });
       reloadOrganizationData();
     } else {
       setSnackbar({
-        type: 'delete',
+        type: 'page',
+        priority: 'critical',
         msg: strings.GENERIC_ERROR,
       });
     }

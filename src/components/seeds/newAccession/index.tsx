@@ -93,10 +93,11 @@ export default function NewAccessionWrapper(props: NewAccessionProps): JSX.Eleme
     try {
       const newAccessionId = await postAccession(record);
       setAccessionId(newAccessionId);
-      setSnackbar({ type: 'success', msg: strings.ACCESSION_SAVED });
+      setSnackbar({ priority: 'success', msg: strings.ACCESSION_SAVED, type: 'toast' });
     } catch (ex) {
       setSnackbar({
-        type: 'delete',
+        type: 'toast',
+        priority: 'critical',
         msg: strings.SAVE_ACCESSION_ERROR,
       });
     }
@@ -105,10 +106,11 @@ export default function NewAccessionWrapper(props: NewAccessionProps): JSX.Eleme
   const onCheckIn = async (id: number) => {
     try {
       await checkIn(id);
-      setSnackbar({ type: 'success', msg: strings.ACCESSION_SAVED });
+      setSnackbar({ priority: 'critical', msg: strings.ACCESSION_SAVED, type: 'toast' });
     } catch (ex) {
       setSnackbar({
-        type: 'delete',
+        type: 'toast',
+        priority: 'critical',
         msg: strings.SAVE_ACCESSION_ERROR,
       });
     }

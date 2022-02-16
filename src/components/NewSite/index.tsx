@@ -92,12 +92,14 @@ export default function SiteView({ organization, reloadOrganizationData }: SiteV
         if (response.requestSucceeded) {
           reloadOrganizationData();
           setSnackbar({
-            type: 'success',
+            type: 'toast',
+            priority: 'success',
             msg: 'Changes saved',
           });
         } else {
           setSnackbar({
-            type: 'delete',
+            type: 'toast',
+            priority: 'critical',
             msg: strings.GENERIC_ERROR,
           });
         }
@@ -106,12 +108,14 @@ export default function SiteView({ organization, reloadOrganizationData }: SiteV
         if (response.requestSucceeded) {
           reloadOrganizationData();
           setSnackbar({
-            type: 'success',
+            type: 'toast',
+            priority: 'success',
             msg: 'Site added',
           });
         } else {
           setSnackbar({
-            type: 'delete',
+            type: 'toast',
+            priority: 'critical',
             msg: strings.GENERIC_ERROR,
           });
         }

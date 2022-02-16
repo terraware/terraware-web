@@ -75,7 +75,8 @@ export default function SpeciesList({ organization }: SpeciesListProps): JSX.Ele
     setEditSpeciesModalOpen(false);
     if (snackbarMessage) {
       setSnackbar({
-        type: 'success',
+        type: 'toast',
+        priority: 'success',
         msg: snackbarMessage,
       });
     }
@@ -91,7 +92,8 @@ export default function SpeciesList({ organization }: SpeciesListProps): JSX.Ele
 
   const setErrorSnackbar = (snackbarMessage: string) => {
     setSnackbar({
-      type: 'delete',
+      priority: 'critical',
+      type: 'toast',
       msg: snackbarMessage,
     });
   };
