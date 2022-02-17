@@ -382,7 +382,8 @@ const strings = new LocalizedStrings({
     NUMBER_OF_PEOPLE: 'Number of People',
     ORGANIZATION_CREATED_TITLE: 'You have created {0}!',
     ORGANIZATION_CREATED_MSG:
-      'You can access the organizations you’re in by clicking the arrow in the top right corner next to your profile.',GO_TO_PROJECTS: 'Go to Projects',
+      'You can access the organizations you’re in by clicking the arrow in the top right corner next to your profile.',
+    GO_TO_PROJECTS: 'Go to Projects',
     COMMON_NAME: 'Common Name',
     SCIENTIFIC_NAME: 'Scientific Name',
     DOWNLOAD_AS_REPORT: 'Download as Report',
