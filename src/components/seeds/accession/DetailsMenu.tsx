@@ -39,7 +39,7 @@ interface Props {
 }
 
 function getAccessionPathSuffix(path: APP_PATHS) {
-  return path.replace(APP_PATHS.ACCESSIONS_ITEM + '/','');
+  return path.replace(APP_PATHS.ACCESSIONS_ITEM + '/', '');
 }
 
 export default function DetailsMenu({ state }: Props): JSX.Element | null {
