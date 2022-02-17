@@ -13,6 +13,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import snackbarAtom from 'src/state/snackbar';
 import strings from 'src/strings';
+import emptyMessageStrings from 'src/strings/emptyMessageModal';
 import EditPlantModal from '../EditPlantModal';
 import PlantFilterBar from './PlantFilterBar';
 import PlantListContent from './PlantListContent';
@@ -190,9 +191,9 @@ export default function PlantList(props: PlantListProps): JSX.Element {
           <Grid item xs={12}>
             {!!organization.projects?.length && !plants.length && (
               <EmptyMessage
-                title={strings.COLLECT_IN_FIELD_PLANT_DATA}
-                text={strings.TERRAWARE_MOBILE_APP_INFO_MSG}
-                buttonText={strings.REQUEST_MOBILE_APP}
+                title={emptyMessageStrings.COLLECT_IN_FIELD_PLANT_DATA}
+                text={emptyMessageStrings.TERRAWARE_MOBILE_APP_INFO_MSG}
+                buttonText={emptyMessageStrings.REQUEST_MOBILE_APP}
                 onClick={goToProjects}
               />
             )}
@@ -232,16 +233,16 @@ export default function PlantList(props: PlantListProps): JSX.Element {
               ) : ['Admin', 'Manager', 'Owner'].includes(organization?.role || '') ? (
                 <EmptyMessage
                   className={classes.message}
-                  title={strings.PLANTS_EMPTY_MSG_TITLE}
-                  text={strings.PLANTS_EMPTY_MSG_BODY}
+                  title={emptyMessageStrings.PLANTS_EMPTY_MSG_TITLE}
+                  text={emptyMessageStrings.PLANTS_EMPTY_MSG_BODY}
                   buttonText={strings.GO_TO_PROJECTS}
                   onClick={goToProjects}
                 />
               ) : (
                 <EmptyMessage
                   className={classes.message}
-                  title={strings.CHECK_BACK_LATER}
-                  text={strings.EMPTY_MESSAGE_CONTRIBUTOR}
+                  title={emptyMessageStrings.CHECK_BACK_LATER}
+                  text={emptyMessageStrings.EMPTY_MESSAGE_CONTRIBUTOR}
                 />
               )}
             </Grid>
