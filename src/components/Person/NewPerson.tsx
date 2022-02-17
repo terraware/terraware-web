@@ -248,14 +248,16 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
 
     if (successMessage) {
       setSnackbar({
-        type: 'success',
+        type: 'toast',
+        priority: 'success',
         msg: successMessage,
       });
       await reloadOrganizationData();
       goToViewPerson(userId.toString());
     } else {
       setSnackbar({
-        type: 'delete',
+        type: 'toast',
+        priority: 'critical',
         msg: strings.GENERIC_ERROR,
       });
       goToPeople();
