@@ -196,8 +196,8 @@ function AppContent() {
       <Switch>
         <Route exact path={APP_PATHS.MOBILE_ERROR}>
           <ErrorBox
-            title={strings.NOT_SUPPORT_MOBILE_TITLE}
-            text={strings.NOT_SUPPORT_MOBILE_DESC}
+            title={strings.NO_MOBILE_SUPPORT_TITLE}
+            text={strings.NO_MOBILE_SUPPORT_DESC}
             className={classes.mobileError}
           />
         </Route>
