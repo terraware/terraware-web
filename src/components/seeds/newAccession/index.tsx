@@ -106,7 +106,7 @@ export default function NewAccessionWrapper(props: NewAccessionProps): JSX.Eleme
   const onCheckIn = async (id: number) => {
     try {
       await checkIn(id);
-      setSnackbar({ priority: 'critical', msg: strings.ACCESSION_SAVED, type: 'toast' });
+      setSnackbar({ priority: 'success', msg: strings.ACCESSION_SAVED, type: 'toast' });
     } catch (ex) {
       setSnackbar({
         type: 'toast',
