@@ -1,6 +1,8 @@
 import axios, { AxiosError } from 'axios';
+import { updateProjectUser } from 'src/api/project/project';
+import { paths } from 'src/api/types/generated-schema';
 import { OrganizationUser, User } from 'src/types/User';
-import { paths } from '../types/generated-schema';
+import { AllOrganizationRoles } from 'src/types/Organization';
 
 const GET_USER_ENDPOINT = '/api/v1/users/me';
 
@@ -40,12 +42,14 @@ type AddOrganizationUserRequestPayload =
   paths[typeof CREATE_USER_ENDPOINT]['post']['requestBody']['content']['application/json'];
 
 export type CreateUserResponse = {
+  newUserId: number;
   requestSucceeded: boolean;
   isExistingUser: boolean;
 };
 export async function addOrganizationUser(user: OrganizationUser, organizationId: number): Promise<CreateUserResponse> {
   const url = CREATE_USER_ENDPOINT.replace('{organizationId}', organizationId.toString());
   const response: CreateUserResponse = {
+    newUserId: -1,
     requestSucceeded: true,
     isExistingUser: false,
   };
@@ -57,6 +61,7 @@ export async function addOrganizationUser(user: OrganizationUser, organizationId
   try {
     const serverResponse: SimpleSuccessResponsePayload = (await axios.post(url, addOrganizationUserRequestPayload))
       .data;
+    response.newUserId = serverResponse.id;
     if (serverResponse.status === 'error') {
       response.requestSucceeded = false;
     }
@@ -64,6 +69,57 @@ export async function addOrganizationUser(user: OrganizationUser, organizationId
     if ((error as AxiosError).response?.status === 409) {
       response.isExistingUser = true;
     }
+    response.requestSucceeded = false;
+  }
+
+  return response;
+}
+
+const UPDATE_ORG_USER_ENDPOINT = '/api/v1/organizations/{organizationId}/users/{userId}';
+
+type UPDATE_ORG_USER_RESPONSE_PAYLOAD =
+  paths[typeof UPDATE_ORG_USER_ENDPOINT]['put']['responses'][200]['content']['application/json'];
+
+type UPDATE_ORG_USER_REQUEST_PAYLOAD =
+  paths[typeof UPDATE_ORG_USER_ENDPOINT]['put']['requestBody']['content']['application/json'];
+
+export type UpdateUserResponse = {
+  requestSucceeded: boolean;
+};
+
+export async function updateOrganizationUser(
+  userId: number,
+  organizationId: number,
+  newRole: AllOrganizationRoles,
+  addedProjectIds: number[],
+  removedProjectIds: number[]
+): Promise<UpdateUserResponse> {
+  const response: UpdateUserResponse = { requestSucceeded: true };
+
+  try {
+    const url = UPDATE_ORG_USER_ENDPOINT.replace('{organizationId}', organizationId.toString()).replace(
+      '{userId}',
+      userId.toString()
+    );
+    const serverRequest: UPDATE_ORG_USER_REQUEST_PAYLOAD = { role: newRole };
+    const serverResponse: UPDATE_ORG_USER_RESPONSE_PAYLOAD = await axios.put(url, serverRequest);
+    if (serverResponse.status === 'error') {
+      response.requestSucceeded = false;
+      throw Error;
+    }
+
+    // TODO: rollback changes if one change fails.
+    const addedPromises = addedProjectIds.map((projectId) => updateProjectUser(projectId, userId, axios.post));
+    const removedPromises = removedProjectIds.map((projectId) => updateProjectUser(projectId, userId, axios.delete));
+    const projectUpdatePromises = addedPromises.concat(removedPromises);
+    const projectUpdateResponses = await Promise.all(projectUpdatePromises);
+
+    projectUpdateResponses.forEach((resp) => {
+      if (!resp.requestSucceeded) {
+        throw Error;
+      }
+    });
+  } catch (error) {
     response.requestSucceeded = false;
   }
 

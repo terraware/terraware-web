@@ -202,13 +202,9 @@ export async function updateScientificName(
     const scientificNames = speciesNames.filter((name) => name.isScientific);
     const scientificNameOfSpecies = scientificNames[0];
     if (scientificNameOfSpecies) {
-      const endpoint = PUT_SPECIES_NAME_ENDPOINT.replace('{speciesNameId}', `${scientificNameOfSpecies.id}`).concat(
-        `?organizationId=${organizationId}`
-      );
+      const endpoint = PUT_SPECIES_NAME_ENDPOINT.replace('{speciesNameId}', `${scientificNameOfSpecies.id}`);
       const updateSpeciesNamesRequest: PutSpeciesNamesRequest = {
-        organizationId,
         name: scientificName,
-        speciesId,
         isScientific: true,
       };
       await axios.put(endpoint, updateSpeciesNamesRequest);

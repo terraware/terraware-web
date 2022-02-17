@@ -411,6 +411,11 @@ function AppContent() {
                   <NewPerson organization={organizationWithoutSB()!} reloadOrganizationData={reloadData} />
                 </Route>
               )}
+              {selectedOrganization && (
+                <Route exact path={APP_PATHS.PEOPLE_EDIT}>
+                  <NewPerson organization={organizationWithoutSB()!} reloadOrganizationData={reloadData} />
+                </Route>
+              )}
               <Route path={APP_PATHS.PEOPLE_ID}>
                 <PersonDetails organization={organizationWithoutSB()} />
               </Route>
