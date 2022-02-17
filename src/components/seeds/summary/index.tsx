@@ -13,6 +13,7 @@ import EmptyMessage from 'src/components/common/EmptyMessage';
 import { API_PULL_INTERVAL } from 'src/constants';
 import { seedsSummarySelectedOrgInfo } from 'src/state/selectedOrgInfoPerPage';
 import strings from 'src/strings';
+import emptyMessageStrings from 'src/strings/emptyMessageModal';
 import { Notifications } from 'src/types/Notifications';
 import { HighOrganizationRolesValues, ServerOrganization } from 'src/types/Organization';
 import PageHeader from '../PageHeader';
@@ -139,9 +140,9 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
             {!!organization?.projects?.length && !summary?.value?.activeAccessions.current && (
               <Grid item xs={12}>
                 <EmptyMessage
-                  title={strings.COLLECT_IN_FIELD_PLANT_DATA}
-                  text={strings.TERRAWARE_MOBILE_APP_INFO_MSG}
-                  buttonText={strings.REQUEST_MOBILE_APP}
+                  title={emptyMessageStrings.COLLECT_IN_FIELD_PLANT_DATA}
+                  text={emptyMessageStrings.TERRAWARE_MOBILE_APP_INFO_MSG}
+                  buttonText={emptyMessageStrings.REQUEST_MOBILE_APP}
                   onClick={goToProjects}
                 />
               </Grid>
@@ -202,16 +203,16 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
             ) : HighOrganizationRolesValues.includes(organization?.role || '') ? (
               <EmptyMessage
                 className={classes.message}
-                title={strings.PLANTS_EMPTY_MSG_TITLE}
-                text={strings.PLANTS_EMPTY_MSG_BODY}
+                title={emptyMessageStrings.PLANTS_EMPTY_MSG_TITLE}
+                text={emptyMessageStrings.PLANTS_EMPTY_MSG_BODY}
                 buttonText={strings.GO_TO_PROJECTS}
                 onClick={goToProjects}
               />
             ) : (
               <EmptyMessage
                 className={classes.message}
-                title={strings.CHECK_BACK_LATER}
-                text={strings.EMPTY_MESSAGE_CONTRIBUTOR}
+                title={emptyMessageStrings.CHECK_BACK_LATER}
+                text={emptyMessageStrings.EMPTY_MESSAGE_CONTRIBUTOR}
               />
             )}
           </Grid>
