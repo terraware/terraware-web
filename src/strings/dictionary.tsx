@@ -18,10 +18,13 @@ const dictionary = new LocalizedStrings({
     CREATE_A_PROJECT: 'Create a Project',
     CREATE_A_SITE: 'Create a Site',
     CREATE_ORGANIZATION: 'Create Organization',
+    EDIT_PERSON: 'Edit Person',
+    PERSON_ADDED: 'Person Added',
     PROJECT_PROFILE: 'Project Profile',
     REPORT_PROBLEM: 'Report Problem',
     REQUEST_FEATURE: 'Request Feature',
     REQUEST_MOBILE_APP: 'Request Mobile App',
+    REQUIRED_FIELD: 'Required Field',
     SITE_PROFILE: 'Site Profile',
   },
 });

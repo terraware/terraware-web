@@ -229,6 +229,7 @@ export interface paths {
   "/api/v1/species/{speciesId}": {
     get: operations["getSpecies"];
     put: operations["updateSpecies"];
+    /** The species will no longer appear in the organization's list of species, but existing data (plants, seeds, etc.) that refer to the species will still refer to it. */
     delete: operations["deleteSpecies"];
   };
   "/api/v1/species/{speciesId}/names": {
@@ -507,6 +508,11 @@ export interface components {
       description?: string;
       name: string;
     };
+    CreateOrganizationUserResponsePayload: {
+      /** The ID of the newly-added user. */
+      id: number;
+      status: components["schemas"]["SuccessOrError"];
+    };
     CreatePlantRequestPayload: {
       featureId: number;
       label?: string;
@@ -542,6 +548,15 @@ export interface components {
     CreateSiteResponsePayload: {
       id: number;
       status: components["schemas"]["SuccessOrError"];
+    };
+    CreateSpeciesNameRequestPayload: {
+      /** True if name is a scientific name for the species. */
+      isScientific?: boolean;
+      locale?: string;
+      name: string;
+      /** Which organization's species list to update. */
+      organizationId: number;
+      speciesId: number;
     };
     CreateSpeciesNameResponsePayload: {
       id: number;
@@ -1194,20 +1209,12 @@ export interface components {
       timezone?: string;
       facilities?: components["schemas"]["FacilityPayload"][];
     };
-    SpeciesNameRequestPayload: {
-      /** True if name is a scientific name for the species. */
-      isScientific?: boolean;
-      locale?: string;
-      name: string;
-      /** Which organization's species list to update. (Currently ignored.) */
-      organizationId: number;
-      speciesId: number;
-    };
     SpeciesNamesResponseElement: {
       id: number;
       /** True if name is the scientific name for the species. */
       isScientific: boolean;
       name: string;
+      organizationId: number;
       speciesId: number;
     };
     SpeciesRequestPayload: {
@@ -1215,7 +1222,7 @@ export interface components {
       /** True if name is the scientific name for the species. */
       isScientific?: boolean;
       name: string;
-      /** Which organization's species list to update. (Currently ignored.) */
+      /** Which organization's species list to update. */
       organizationId: number;
       plantForm?: "Tree" | "Shrub" | "Vine" | "Liana" | "Herbaceous";
       rare?: "No" | "Yes" | "Unsure";
@@ -1447,6 +1454,12 @@ export interface components {
       /** If present, move the site to this project. Project must be owned by the same organization as the site's current project. User must have permission to add sites to the new project and remove them from the existing one. */
       projectId?: number;
       timezone?: string;
+    };
+    UpdateSpeciesNameRequestPayload: {
+      /** True if name is a scientific name for the species. */
+      isScientific?: boolean;
+      locale?: string;
+      name: string;
     };
     UpdateUserRequestPayload: {
       firstName: string;
@@ -2386,7 +2399,7 @@ export interface operations {
       /** OK */
       200: {
         content: {
-          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+          "application/json": components["schemas"]["CreateOrganizationUserResponsePayload"];
         };
       };
     };
@@ -3142,7 +3155,7 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["SpeciesNameRequestPayload"];
+        "application/json": components["schemas"]["CreateSpeciesNameRequestPayload"];
       };
     };
   };
@@ -3185,7 +3198,7 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["SpeciesNameRequestPayload"];
+        "application/json": components["schemas"]["UpdateSpeciesNameRequestPayload"];
       };
     };
   };
@@ -3267,6 +3280,7 @@ export interface operations {
       };
     };
   };
+  /** The species will no longer appear in the organization's list of species, but existing data (plants, seeds, etc.) that refer to the species will still refer to it. */
   deleteSpecies: {
     parameters: {
       path: {
