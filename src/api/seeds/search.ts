@@ -92,54 +92,6 @@ export async function search(params: SearchRequestPayload): Promise<SearchRespon
   }
 }
 
-const SEARCH_ACCESSIONS_ENDPOINT = '/api/v1/seedbank/search';
-type SearchAccessionsRequestPayload =
-  paths[typeof SEARCH_ACCESSIONS_ENDPOINT]['post']['requestBody']['content']['application/json'];
-type SearchAccessionsResponsePayload =
-  paths[typeof SEARCH_ACCESSIONS_ENDPOINT]['post']['responses'][200]['content']['application/json'];
-type SearchAccessionsResponseElement = SearchResponsePayload['results'][0];
-
-async function searchAccession(
-  params: SearchAccessionsRequestPayload
-): Promise<SearchAccessionsResponseElement[] | null> {
-  try {
-    const response: SearchAccessionsResponsePayload = (await axios.post(SEARCH_ACCESSIONS_ENDPOINT, params)).data;
-    return response.results;
-  } catch {
-    return null;
-  }
-}
-
-/*
- * getAccessionsByNumber() does a fuzzy search for accessions based on the accession number.
- * e.g. if you have accession 1234 and 1253 then passing accessionNumber = 12 will return both
- * accessions 1234 and 1253.
- */
-export async function getAccessionsByNumber(
-  accessionNumber: number,
-  facilityId: number
-): Promise<SearchResponseElement[] | null> {
-  try {
-    const searchParams: SearchAccessionsRequestPayload = {
-      facilityId,
-      fields: ['accessionNumber'],
-      sortOrder: [{ field: 'accessionNumber', direction: 'Ascending' }],
-      filters: [
-        {
-          field: 'accessionNumber',
-          values: [accessionNumber.toString()],
-          type: 'Fuzzy',
-        },
-      ],
-      count: 8,
-    };
-
-    return await searchAccession(searchParams);
-  } catch {
-    return null;
-  }
-}
-
 export async function getPendingAccessions(
   selectedValues: SelectedOrgInfo,
   organizationId: number
