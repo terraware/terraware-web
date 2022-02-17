@@ -31,6 +31,7 @@ import MainCollector from './MainCollectorDropdown';
 import NurseryButtons from './NurseryButtons';
 import SecondaryCollectors from './SecondaryCollectors';
 import Species from './SpeciesDropdown';
+import {APP_PATHS} from '../../../constants';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -117,7 +118,7 @@ export default function NewAccessionWrapper(props: NewAccessionProps): JSX.Eleme
   };
 
   if (accessionId) {
-    return <Redirect to={getLocation(`/accessions/${accessionId}/seed-collection`, location)} />;
+    return <Redirect to={getLocation(APP_PATHS.ACCESSIONS_ITEM_SEED_COLLECTION.replace(':accessionId', accessionId.toString()), location)} />;
   }
 
   if (selectedOrgInfoDatabase.selectedFacility?.id === undefined) {
