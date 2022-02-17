@@ -1,20 +1,22 @@
 import { Container, createStyles, Grid, makeStyles } from '@material-ui/core';
 import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import strings from 'src/strings';
-import { Project, ServerOrganization } from 'src/types/Organization';
-import Icon from '../common/icon/Icon';
-import TfDivisor from '../common/TfDivisor';
-import TextField from '../common/Textfield/Textfield';
-import { OrganizationUser } from 'src/types/User';
+import { Link, useHistory, useParams } from 'react-router-dom';
 import { getOrganizationUsers } from 'src/api/organization/organization';
-import { ProjectOfPerson } from './NewPerson';
-import Table from 'src/components/common/table';
-import { TableColumnType } from '../common/table/types';
-import TableCellRenderer from './TableCellRenderer';
 import { listAllProjects } from 'src/api/project/project';
-import { getOrganizationProjects } from 'src/utils/organization';
+import Button from 'src/components/common/button/Button';
+import Icon from 'src/components/common/icon/Icon';
+import Table from 'src/components/common/table';
+import { TableColumnType } from 'src/components/common/table/types';
+import TextField from 'src/components/common/Textfield/Textfield';
+import TfDivisor from 'src/components/common/TfDivisor';
 import { APP_PATHS } from 'src/constants';
+import strings from 'src/strings';
+import dictionary from 'src/strings/dictionary';
+import { Project, ServerOrganization } from 'src/types/Organization';
+import { OrganizationUser } from 'src/types/User';
+import { getOrganizationProjects } from 'src/utils/organization';
+import { ProjectWithUserRole } from './NewPerson';
+import TableCellRenderer from './TableCellRenderer';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -57,9 +59,10 @@ const projectColumns: TableColumnType[] = [
 
 export default function PersonDetails({ organization }: PersonDetailsProps): JSX.Element {
   const classes = useStyles();
+  const history = useHistory();
   const { personId } = useParams<{ personId: string }>();
   const [person, setPerson] = useState<OrganizationUser>();
-  const [projectsOfPerson, setProjectsOfPerson] = useState<ProjectOfPerson[]>();
+  const [projectsOfPerson, setProjectsOfPerson] = useState<ProjectWithUserRole[]>();
   const [allProjects, setAllProjects] = useState<Project[]>();
 
   useEffect(() => {
@@ -90,10 +93,10 @@ export default function PersonDetails({ organization }: PersonDetailsProps): JSX
     const projects = person?.projectIds.reduce((filtered, projectId) => {
       const found = allProjects?.find((project) => project.id === projectId);
       if (found) {
-        filtered.push({ ...found, role: person.role } as ProjectOfPerson);
+        filtered.push({ ...found, role: person.role } as ProjectWithUserRole);
       }
       return filtered;
-    }, [] as ProjectOfPerson[]);
+    }, [] as ProjectWithUserRole[]);
     setProjectsOfPerson(projects);
   }, [person, organization?.projects, allProjects]);
 
@@ -108,6 +111,13 @@ export default function PersonDetails({ organization }: PersonDetailsProps): JSX
     }
   };
 
+  const goToEditPerson = () => {
+    const newLocation = {
+      pathname: APP_PATHS.PEOPLE_EDIT.replace(':personId', personId),
+    };
+    history.push(newLocation);
+  };
+
   return (
     <Container maxWidth={false} className={classes.mainContainer}>
       <Grid container spacing={3}>
@@ -119,6 +129,7 @@ export default function PersonDetails({ organization }: PersonDetailsProps): JSX
         </Grid>
         <Grid item xs={12} className={classes.titleWithButton}>
           <h2>{person?.email}</h2>
+          <Button label={dictionary.EDIT_PERSON} priority='secondary' onClick={goToEditPerson} />
         </Grid>
         <Grid item xs={4}>
           <TextField label={strings.EMAIL} id='email' type='text' value={person?.email} display={true} />

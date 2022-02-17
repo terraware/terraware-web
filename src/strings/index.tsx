@@ -390,6 +390,10 @@ const strings = new LocalizedStrings({
     ORGANIZATION_DATA_NOT_AVAILABLE: 'Organization Data Not Available',
     SPECIES_DATA_NOT_AVAILABLE: 'Species Data Not Available',
     CONTACT_US_TO_RESOLVE_ISSUE: 'Please contact us to resolve this issue.',
+    EMAIL_ALREADY_EXISTS: 'This email already exists.',
+    REMOVED_PERSON_FROM_PROJECTS_WARNING:
+      'You’ve removed this person from projects. Are you sure you want to save your changes?',
+    REMOVED_PERSON_FROM_PROJECTS_WARNING_DESCRIPTION: 'The projects you’ve removed include: {0}',
     NO_MOBILE_SUPPORT_TITLE: 'Terraware web doesn’t support mobile yet.',
     NO_MOBILE_SUPPORT_DESC: 'Please access terraware.io on a desktop device.',
   },
