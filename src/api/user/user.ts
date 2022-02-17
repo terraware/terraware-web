@@ -75,13 +75,13 @@ export async function addOrganizationUser(user: OrganizationUser, organizationId
   return response;
 }
 
-const UPDATE_USER_ENDPOINT = '/api/v1/organizations/{organizationId}/users/{userId}';
+const UPDATE_ORG_USER_ENDPOINT = '/api/v1/organizations/{organizationId}/users/{userId}';
 
-type UPDATE_ORGANIZATION_USER_RESPONSE_PAYLOAD =
-  paths[typeof UPDATE_USER_ENDPOINT]['put']['responses'][200]['content']['application/json'];
+type UPDATE_ORG_USER_RESPONSE_PAYLOAD =
+  paths[typeof UPDATE_ORG_USER_ENDPOINT]['put']['responses'][200]['content']['application/json'];
 
-type UPDATE_ORGANIZATION_USER_REQUEST_PAYLOAD =
-  paths[typeof UPDATE_USER_ENDPOINT]['put']['requestBody']['content']['application/json'];
+type UPDATE_ORG_USER_REQUEST_PAYLOAD =
+  paths[typeof UPDATE_ORG_USER_ENDPOINT]['put']['requestBody']['content']['application/json'];
 
 export type UpdateUserResponse = {
   requestSucceeded: boolean;
@@ -97,24 +97,25 @@ export async function updateOrganizationUser(
   const response: UpdateUserResponse = { requestSucceeded: true };
 
   try {
-    const url = UPDATE_USER_ENDPOINT.replace('{organizationId}', organizationId.toString()).replace(
+    const url = UPDATE_ORG_USER_ENDPOINT.replace('{organizationId}', organizationId.toString()).replace(
       '{userId}',
       userId.toString()
     );
-    const serverRequest: UPDATE_ORGANIZATION_USER_REQUEST_PAYLOAD = { role: newRole };
-    const serverResponse: UPDATE_ORGANIZATION_USER_RESPONSE_PAYLOAD = await axios.put(url, serverRequest);
+    const serverRequest: UPDATE_ORG_USER_REQUEST_PAYLOAD = { role: newRole };
+    const serverResponse: UPDATE_ORG_USER_RESPONSE_PAYLOAD = await axios.put(url, serverRequest);
     if (serverResponse.status === 'error') {
       response.requestSucceeded = false;
+      throw Error;
     }
 
     // TODO: rollback changes if one change fails.
-    addedProjectIds.map(async (projectId) => {
-      if (!(await updateProjectUser(projectId, userId, axios.post)).requestSucceeded) {
-        throw Error;
-      }
-    });
-    removedProjectIds.map(async (projectId) => {
-      if (!(await updateProjectUser(projectId, userId, axios.delete)).requestSucceeded) {
+    const addedPromises = addedProjectIds.map((projectId) => updateProjectUser(projectId, userId, axios.post));
+    const removedPromises = removedProjectIds.map((projectId) => updateProjectUser(projectId, userId, axios.delete));
+    const projectUpdatePromises = addedPromises.concat(removedPromises);
+    const projectUpdateResponses = await Promise.all(projectUpdatePromises);
+
+    projectUpdateResponses.forEach((resp) => {
+      if (!resp.requestSucceeded) {
         throw Error;
       }
     });
