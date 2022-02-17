@@ -80,7 +80,7 @@ const useStyles = makeStyles(() =>
       marginLeft: '200px',
       height: '100%',
       paddingTop: '64px',
-      overflow: 'scroll',
+      overflow: 'auto',
     },
     spinner: {
       display: 'flex',
