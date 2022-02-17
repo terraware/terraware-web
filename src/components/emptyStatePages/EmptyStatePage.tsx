@@ -4,7 +4,7 @@ import Container from '@material-ui/core/Container';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import EmptyStateContent, { ListItemContent } from 'src/components/emptyStatePages/EmptyStateContent';
 import PageHeader from 'src/components/seeds/PageHeader';
-import {APP_PATHS} from 'src/constants';
+import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import dict from 'src/strings/dictionary';
 import emptyStateStrings from 'src/strings/emptyStatePages';

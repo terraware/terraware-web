@@ -7,7 +7,7 @@ import { useHistory } from 'react-router-dom';
 import Button from 'src/components/common/button/Button';
 import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
-import {APP_PATHS} from 'src/constants';
+import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import { ServerOrganization, Site } from 'src/types/Organization';
 import { getAllSitesWithProjectName } from 'src/utils/organization';

@@ -6,7 +6,7 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import ErrorBoundary from 'src/ErrorBoundary';
-import {APP_PATHS} from 'src/constants';
+import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import emptyMessageStrings from 'src/strings/emptyMessageModal';
 import PlantMap from './PlantMap';
