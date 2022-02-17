@@ -4,6 +4,7 @@ import Container from '@material-ui/core/Container';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import EmptyStateContent, { ListItemContent } from 'src/components/emptyStatePages/EmptyStateContent';
 import PageHeader from 'src/components/seeds/PageHeader';
+import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import dict from 'src/strings/dictionary';
 import emptyStateStrings from 'src/strings/emptyStatePages';
@@ -52,7 +53,7 @@ const NO_PROJECTS_CONTENT: PageContent = {
     { icon: 'sites', title: strings.SITES, description: emptyStateStrings.NO_PROJECTS_DESCRIPTION_SITES },
   ],
   buttonText: strings.ADD_PROJECT,
-  linkLocation: `/projects/new`,
+  linkLocation: APP_PATHS.PROJECTS_NEW,
 };
 
 const NO_SITES_CONTENT: PageContent = {
@@ -64,7 +65,7 @@ const NO_SITES_CONTENT: PageContent = {
     { icon: 'project', title: strings.PROJECT, description: emptyStateStrings.NO_SITES_DESCRIPTION_PROJECTS },
   ],
   buttonText: strings.ADD_SITE,
-  linkLocation: `/sites/new`,
+  linkLocation: APP_PATHS.SITES_NEW,
 };
 
 type EmptyStatePageProps = {

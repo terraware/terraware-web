@@ -4,7 +4,9 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React, { useCallback, useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import ErrorBoundary from 'src/ErrorBoundary';
+import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import emptyMessageStrings from 'src/strings/emptyMessageModal';
 import PlantMap from './PlantMap';
@@ -22,7 +24,6 @@ import { getSelectedSites } from 'src/utils/organization';
 import { useRecoilState } from 'recoil';
 import { plantDashboardSelectedOrgInfo } from 'src/state/selectedOrgInfoPerPage';
 import EmptyMessage from '../../common/EmptyMessage';
-import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -137,7 +138,7 @@ export default function PlantDashboard(props: PlantDashboardProps): JSX.Element 
 
   const goToProjects = () => {
     const projectsLocation = {
-      pathname: `/projects`,
+      pathname: APP_PATHS.PROJECTS,
     };
     history.push(projectsLocation);
   };

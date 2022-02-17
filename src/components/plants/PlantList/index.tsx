@@ -12,6 +12,7 @@ import TuneIcon from '@material-ui/icons/Tune';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import snackbarAtom from 'src/state/snackbar';
+import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import emptyMessageStrings from 'src/strings/emptyMessageModal';
 import EditPlantModal from '../EditPlantModal';
@@ -158,7 +159,7 @@ export default function PlantList(props: PlantListProps): JSX.Element {
 
   const goToProjects = () => {
     const projectsLocation = {
-      pathname: `/projects`,
+      pathname: APP_PATHS.PROJECTS,
     };
     history.push(projectsLocation);
   };

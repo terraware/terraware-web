@@ -14,15 +14,16 @@ import { createStyles, makeStyles, Theme, withStyles } from '@material-ui/core/s
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
+import { useRecoilState } from 'recoil';
 import { getPendingAccessions, SearchResponseElement } from 'src/api/seeds/search';
 import Button from 'src/components/common/button/Button';
+import { APP_PATHS } from 'src/constants';
+import { checkInSelectedOrgInfo } from 'src/state/selectedOrgInfoPerPage';
 import strings from 'src/strings';
+import { ServerOrganization } from 'src/types/Organization';
+
 import useStateLocation from 'src/utils/useStateLocation';
 import PageHeader from '../PageHeader';
-import { ServerOrganization } from 'src/types/Organization';
-import { useRecoilState } from 'recoil';
-import { checkInSelectedOrgInfo } from 'src/state/selectedOrgInfoPerPage';
-import { APP_PATHS } from 'src/constants';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -105,7 +106,7 @@ export default function CheckIn(props: CheckInProps): JSX.Element {
 
   const goToAccession = (id: string) => {
     const accessionLocation = {
-      pathname: `/accessions/${id}`,
+      pathname: APP_PATHS.ACCESSIONS_ITEM.replace(':accessionId', id),
       // eslint-disable-next-line no-restricted-globals
       state: { from: location.pathname },
     };

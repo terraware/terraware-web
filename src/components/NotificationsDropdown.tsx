@@ -149,8 +149,8 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
   const location = useStateLocation();
   const databaseLocation = getLocation(APP_PATHS.ACCESSIONS, location);
   const getDestination = (type: NotificationTypes, accessionId?: number) => {
-    if (type === NotificationTypes.Date) {
-      return getLocation(`/accessions/${accessionId}`, location);
+    if (type === NotificationTypes.Date && accessionId) {
+      return getLocation(APP_PATHS.ACCESSIONS_ITEM.replace(':accessionId', accessionId.toString()), location);
     } else if (type === NotificationTypes.State) {
       return databaseLocation;
     } else {

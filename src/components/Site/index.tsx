@@ -1,6 +1,7 @@
 import { Container, createStyles, Grid, makeStyles } from '@material-ui/core';
 import { useEffect, useState } from 'react';
 import { Link, useHistory, useParams } from 'react-router-dom';
+import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import { ServerOrganization, Site } from 'src/types/Organization';
 import Icon from '../common/icon/Icon';
@@ -8,7 +9,6 @@ import TfDivisor from '../common/TfDivisor';
 import { getSitesById } from 'src/utils/organization';
 import TextField from '../common/Textfield/Textfield';
 import Button from '../common/button/Button';
-import { APP_PATHS } from 'src/constants';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -55,7 +55,7 @@ export default function SiteDetails({ organization }: SiteDetailsProps): JSX.Ele
 
   const goToEditSite = () => {
     const editSiteLocation = {
-      pathname: `/sites/${siteId}/edit`,
+      pathname: APP_PATHS.SITES_EDIT.replace(':siteId', siteId),
     };
     history.push(editSiteLocation);
   };

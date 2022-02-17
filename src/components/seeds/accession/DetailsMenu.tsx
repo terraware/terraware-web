@@ -38,6 +38,10 @@ interface Props {
   state: string;
 }
 
+function getAccessionPathSuffix(path: APP_PATHS) {
+  return path.replace(APP_PATHS.ACCESSIONS_ITEM + '/', '');
+}
+
 export default function DetailsMenu({ state }: Props): JSX.Element | null {
   const classes = useStyles();
   const { accessionId } = useParams<{ accessionId: string }>();
@@ -45,25 +49,25 @@ export default function DetailsMenu({ state }: Props): JSX.Element | null {
   const paths = [
     {
       title: strings.SEED_COLLECTION,
-      route: 'seed-collection',
+      route: APP_PATHS.ACCESSIONS_ITEM_SEED_COLLECTION,
       active: useRouteMatch(APP_PATHS.ACCESSIONS_ITEM_SEED_COLLECTION),
       disabled: false,
     },
     {
       title: strings.PROCESSING_AND_DRYING,
-      route: 'processing-drying',
+      route: APP_PATHS.ACCESSIONS_ITEM_PROCESSING_DRYING,
       active: useRouteMatch(APP_PATHS.ACCESSIONS_ITEM_PROCESSING_DRYING),
       disabled: state === 'Nursery',
     },
     {
       title: strings.STORAGE,
-      route: 'storage',
+      route: APP_PATHS.ACCESSIONS_ITEM_STORAGE,
       active: useRouteMatch(APP_PATHS.ACCESSIONS_ITEM_STORAGE),
       disabled: state === 'Nursery' || state === 'Pending',
     },
     {
       title: strings.WITHDRAWAL,
-      route: 'withdrawal',
+      route: APP_PATHS.ACCESSIONS_ITEM_WITHDRAWAL,
       active: useRouteMatch(APP_PATHS.ACCESSIONS_ITEM_WITHDRAWAL),
       disabled: state === 'Nursery' || state === 'Pending',
     },
@@ -92,11 +96,11 @@ export default function DetailsMenu({ state }: Props): JSX.Element | null {
           </span>
         ) : (
           <Link
-            id={`menu-${route}`}
+            id={`menu-${getAccessionPathSuffix(route)}`}
             component={RouterLink}
             key={title}
             to={{
-              pathname: `/accessions/${accessionId}/${route}`,
+              pathname: route.replace(':accessionId', accessionId),
               state: {
                 from: location.state?.from ?? '',
               },

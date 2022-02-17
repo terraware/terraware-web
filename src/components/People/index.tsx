@@ -8,6 +8,7 @@ import { getOrganizationUsers } from 'src/api/organization/organization';
 import Button from 'src/components/common/button/Button';
 import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
+import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
 import { OrganizationUser } from 'src/types/User';
@@ -66,7 +67,7 @@ export default function PeopleList({ organization }: PeopleListProps): JSX.Eleme
   const onSelect = (selected: OrganizationUser) => {
     if (selected.id) {
       const personLocation = {
-        pathname: `/people/${selected.id}`,
+        pathname: APP_PATHS.PEOPLE_VIEW.replace(':personId', selected.id.toString()),
       };
       history.push(personLocation);
     }
@@ -116,7 +117,7 @@ export default function PeopleList({ organization }: PeopleListProps): JSX.Eleme
 
   const goToNewPerson = () => {
     const newPersonLocation = {
-      pathname: `/people/new`,
+      pathname: APP_PATHS.PEOPLE_NEW,
     };
     history.push(newPersonLocation);
   };

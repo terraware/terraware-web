@@ -195,7 +195,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const onSelect = (row: SearchResponseElement) => {
     if (row.id) {
       const seedCollectionLocation = {
-        pathname: `/accessions/${row.id}`,
+        pathname: APP_PATHS.ACCESSIONS_ITEM.replace(':accessionId', row.id as string),
         // eslint-disable-next-line no-restricted-globals
         state: { from: location.pathname },
       };
@@ -277,7 +277,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
 
   const goToProjects = () => {
     const projectsLocation = {
-      pathname: `/projects`,
+      pathname: APP_PATHS.PROJECTS,
     };
     history.push(projectsLocation);
   };

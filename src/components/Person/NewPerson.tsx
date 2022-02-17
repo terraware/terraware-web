@@ -184,7 +184,7 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
   };
 
   const goToViewPerson = (userId: string) => {
-    history.push({ pathname: APP_PATHS.PEOPLE_ID.replace(':personId', userId) });
+    history.push({ pathname: APP_PATHS.PEOPLE_VIEW.replace(':personId', userId) });
   };
 
   const removeSelectedProjectsOfPerson = () => {
@@ -277,7 +277,7 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
       const profile = people.find((person) => person.email === repeatedEmail);
       if (profile) {
         const profileLocation = {
-          pathname: `/people/${profile.id}`,
+          pathname: APP_PATHS.PEOPLE_VIEW.replace(':personId', profile.id.toString()),
         };
         history.push(profileLocation);
       }

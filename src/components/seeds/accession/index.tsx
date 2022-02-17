@@ -89,7 +89,7 @@ function Content({ organization }: AccessionPageProps): JSX.Element {
       if (history.location.pathname.endsWith(accession.id.toString())) {
         const state = accession.state;
         const newLocation = {
-          pathname: `/accessions/${accession.id}/${pathDestinationForState(state)}`,
+          pathname: pathDestinationForState(state).replace(':accessionId', accession.id.toString()),
           state: history.location.state,
         };
         history.replace(newLocation);
@@ -176,17 +176,17 @@ function pathDestinationForState(state: AccessionState): string {
   switch (state) {
     case 'Pending':
     case 'Awaiting Check-In':
-      return 'seed-collection';
+      return APP_PATHS.ACCESSIONS_ITEM_SEED_COLLECTION;
     case 'Processing':
     case 'Processed':
     case 'Drying':
-      return 'processing-drying';
+      return APP_PATHS.ACCESSIONS_ITEM_PROCESSING_DRYING;
     case 'Dried':
-      return 'storage';
+      return APP_PATHS.ACCESSIONS_ITEM_STORAGE;
     case 'In Storage':
     case 'Withdrawn':
-      return 'withdrawal';
+      return APP_PATHS.ACCESSIONS_ITEM_WITHDRAWAL;
     case 'Nursery':
-      return 'nursery';
+      return APP_PATHS.ACCESSIONS_ITEM_NURSERY;
   }
 }

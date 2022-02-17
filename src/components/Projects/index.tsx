@@ -7,6 +7,7 @@ import { useHistory } from 'react-router-dom';
 import Button from 'src/components/common/button/Button';
 import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
+import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import { Project, ServerOrganization } from 'src/types/Organization';
 import { getOrganizationProjects } from 'src/utils/organization';
@@ -58,7 +59,7 @@ export default function ProjectsList({ organization }: ProjectsListProps): JSX.E
   const onSelect = (selected: Project) => {
     if (selected.id) {
       const viewProjectLocation = {
-        pathname: `/projects/${selected.id}`,
+        pathname: APP_PATHS.PROJECTS_VIEW.replace(':projectId', selected.id.toString()),
       };
       history.push(viewProjectLocation);
     }
@@ -66,7 +67,7 @@ export default function ProjectsList({ organization }: ProjectsListProps): JSX.E
 
   const goToNewProject = () => {
     const newProjectLocation = {
-      pathname: `/projects/new`,
+      pathname: APP_PATHS.PROJECTS_NEW,
     };
     history.push(newProjectLocation);
   };
