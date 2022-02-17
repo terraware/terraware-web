@@ -5,7 +5,6 @@ import { Notifications } from 'src/types/Notifications';
 import { ServerOrganization } from 'src/types/Organization';
 import NotificationsDropdown from '../NotificationsDropdown';
 import OrganizationsDropdown from '../OrganizationsDropdown';
-import SearchBar from '../SearchBar';
 import UserMenu from '../UserMenu';
 
 const useStyles = makeStyles((theme) =>
@@ -48,7 +47,6 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
 
   return (
     <>
-      <SearchBar facilityId={facilityId || 0} />
       <NotificationsDropdown
         notifications={props.notifications}
         setNotifications={setNotifications}
