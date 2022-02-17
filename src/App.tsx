@@ -51,6 +51,7 @@ import { ServerOrganization } from 'src/types/Organization';
 import { PlantSearchOptions } from 'src/types/Plant';
 import { User } from 'src/types/User';
 import { getAllSites } from 'src/utils/organization';
+import { useMediaQuery } from 'react-responsive';
 
 // @ts-ignore
 mapboxgl.workerClass =
@@ -97,6 +98,9 @@ const useStyles = makeStyles(() =>
       width: '30%',
       marginTop: '120px',
     },
+    mobileError: {
+      marginTop: '120px',
+    },
   })
 );
 
@@ -141,6 +145,7 @@ function AppContent() {
   // get the selected values on database to pass it to new accession page
   const [organizations, setOrganizations] = useState<ServerOrganization[]>();
   const [user, setUser] = useState<User>();
+  const isMobile = useMediaQuery({ query: `(max-width: 760px)` });
 
   const reloadData = useCallback(() => {
     const populateOrganizations = async () => {
@@ -184,6 +189,25 @@ function AppContent() {
     };
     populateUser();
   }, []);
+
+  if (isMobile) {
+    window.stop();
+    return (
+      <Switch>
+        <Route exact path={APP_PATHS.MOBILE_ERROR}>
+          <ErrorBox
+            title={strings.NO_MOBILE_SUPPORT_TITLE}
+            text={strings.NO_MOBILE_SUPPORT_DESC}
+            className={classes.mobileError}
+          />
+        </Route>
+
+        <Route path='*'>
+          <Redirect to={APP_PATHS.MOBILE_ERROR} />
+        </Route>
+      </Switch>
+    );
+  }
 
   if (orgAPIRequestStatus === APIRequestStatus.AWAITING || orgAPIRequestStatus === APIRequestStatus.FAILED_NO_AUTH) {
     return <CircularProgress className={classes.spinner} size='193' />;
