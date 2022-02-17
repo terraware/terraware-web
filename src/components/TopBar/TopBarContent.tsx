@@ -48,7 +48,6 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
 
   return (
     <>
-      <SearchBar facilityId={facilityId || 0} />
       <NotificationsDropdown
         notifications={props.notifications}
         setNotifications={setNotifications}
