@@ -74,6 +74,7 @@ describe('Accessions', () => {
 
       cy.get('#saveAccession').click();
       cy.get('#snackbar').contains('Accession saved');
+      cy.wait(5000);
       cy.get('#snackbar').should('not.exist');
       cy.url().should('match', /accessions\/[A-Za-z0-9]+\/seed-collection/);
 
