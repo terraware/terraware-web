@@ -184,7 +184,7 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
   };
 
   const goToViewPerson = (userId: string) => {
-    history.push({ pathname: APP_PATHS.PEOPLE_ID.replace(':personId', userId) });
+    history.push({ pathname: APP_PATHS.PEOPLE_VIEW.replace(':personId', userId) });
   };
 
   const removeSelectedProjectsOfPerson = () => {
