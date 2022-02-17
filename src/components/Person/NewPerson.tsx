@@ -241,7 +241,7 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
         return;
       }
       if (response.requestSucceeded) {
-        userId = response.newUserId
+        userId = response.newUserId;
       }
       successMessage = response.requestSucceeded ? dictionary.PERSON_ADDED : null;
     }
