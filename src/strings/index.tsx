@@ -390,6 +390,8 @@ const strings = new LocalizedStrings({
     ORGANIZATION_DATA_NOT_AVAILABLE: 'Organization Data Not Available',
     SPECIES_DATA_NOT_AVAILABLE: 'Species Data Not Available',
     CONTACT_US_TO_RESOLVE_ISSUE: 'Please contact us to resolve this issue.',
+    NO_MOBILE_SUPPORT_TITLE: 'Terraware web doesn’t support mobile yet.',
+    NO_MOBILE_SUPPORT_DESC: 'Please access terraware.io on a desktop device.',
   },
 });
 

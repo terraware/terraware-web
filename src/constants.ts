@@ -13,6 +13,7 @@ export enum APP_PATHS {
   CHECKIN = '/checkin',
   CONTACT_US = '/contactus',
   ERROR = '/error',
+  MOBILE_ERROR = '/error/mobile',
   HOME = '/home',
   ORGANIZATION_EDIT = '/organization/edit',
   ORGANIZATION = '/organization',

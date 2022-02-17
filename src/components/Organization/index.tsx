@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) =>
     mainContainer: {
       paddingTop: '24px',
       background: '#ffffff',
-      minHeight: '100vh',
+      minHeight: 'calc(100vh - 64px)',
       display: 'flex',
       flexDirection: 'column',
     },

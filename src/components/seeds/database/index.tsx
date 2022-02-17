@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     main: {
       background: '#ffffff',
-      minHeight: '100vh',
+      minHeight: 'calc(100vh - 64px)',
       display: 'flex',
       flexDirection: 'column',
       padding: '24px',
