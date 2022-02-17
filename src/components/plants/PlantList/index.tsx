@@ -141,12 +141,14 @@ export default function PlantList(props: PlantListProps): JSX.Element {
   const onPlantEditSaved = (deleted: boolean) => {
     if (deleted) {
       setSnackbar({
-        type: 'delete',
+        type: 'toast',
+        priority: 'critical',
         msg: strings.SNACKBAR_MSG_PLANT_DELETED,
       });
     } else {
       setSnackbar({
-        type: 'success',
+        type: 'toast',
+        priority: 'critical',
         msg: strings.SNACKBAR_MSG_CHANGES_SAVED,
       });
     }

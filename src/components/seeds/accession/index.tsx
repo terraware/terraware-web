@@ -45,7 +45,8 @@ export default function AccessionPage({ organization }: AccessionPageProps): JSX
   const setSnackbar = useSetRecoilState(snackbarAtom);
   const errorHandler = () => {
     setSnackbar({
-      type: 'delete',
+      type: 'toast',
+      priority: 'critical',
       msg: strings.GET_ACCESSION_ERROR,
     });
   };
@@ -102,7 +103,8 @@ function Content({ organization }: AccessionPageProps): JSX.Element {
       reloadAccession();
     } catch (ex) {
       setSnackbar({
-        type: 'delete',
+        priority: 'critical',
+        type: 'toast',
         msg: strings.SAVE_ACCESSION_ERROR,
       });
     }
@@ -114,7 +116,8 @@ function Content({ organization }: AccessionPageProps): JSX.Element {
       reloadAccession();
     } catch (ex) {
       setSnackbar({
-        type: 'delete',
+        type: 'toast',
+        priority: 'critical',
         msg: strings.SAVE_ACCESSION_ERROR,
       });
     }

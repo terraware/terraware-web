@@ -380,8 +380,9 @@ const strings = new LocalizedStrings({
     ORGANIZATION_DESC: 'Manage your organization.',
     NUMBER_OF_PROJECTS: 'Number of Projects',
     NUMBER_OF_PEOPLE: 'Number of People',
+    ORGANIZATION_CREATED_TITLE: 'You have created {0}!',
     ORGANIZATION_CREATED_MSG:
-      'You have created {0}. You can access the organizations you’re in by clicking the arrow in the top right corner next to your profile.',
+      'You can access the organizations you’re in by clicking the arrow in the top right corner next to your profile.',
     GO_TO_PROJECTS: 'Go to Projects',
     COMMON_NAME: 'Common Name',
     SCIENTIFIC_NAME: 'Scientific Name',

@@ -144,7 +144,8 @@ function PlantMap(props: PlantMapProps): JSX.Element {
       console.error('BUG!! Plant deletion should not be enabled for the plant dashboard.');
     } else {
       setSnackbar({
-        type: 'success',
+        type: 'toast',
+        priority: 'success',
         msg: strings.SNACKBAR_MSG_CHANGES_SAVED,
       });
     }

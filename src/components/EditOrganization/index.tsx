@@ -105,13 +105,15 @@ export default function OrganizationView({ organization, reloadOrganizationData 
       const response = await updateOrganization(organizationRecord);
       if (response.requestSucceeded) {
         setSnackbar({
-          type: 'success',
+          type: 'toast',
+          priority: 'success',
           msg: 'Changes saved',
         });
         reloadOrganizationData();
       } else {
         setSnackbar({
-          type: 'delete',
+          type: 'toast',
+          priority: 'critical',
           msg: strings.GENERIC_ERROR,
         });
       }
