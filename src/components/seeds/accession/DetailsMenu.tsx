@@ -38,6 +38,10 @@ interface Props {
   state: string;
 }
 
+function getAccessionPathSuffix(path: APP_PATHS) {
+  return path.replace(APP_PATHS.ACCESSIONS_ITEM + '/','');
+}
+
 export default function DetailsMenu({ state }: Props): JSX.Element | null {
   const classes = useStyles();
   const { accessionId } = useParams<{ accessionId: string }>();
@@ -92,7 +96,7 @@ export default function DetailsMenu({ state }: Props): JSX.Element | null {
           </span>
         ) : (
           <Link
-            id={`menu-${route}`}
+            id={`menu-${getAccessionPathSuffix(route)}`}
             component={RouterLink}
             key={title}
             to={{
