@@ -420,6 +420,13 @@ describe('Withdrawal', () => {
     });
   });
 
+  it('should create a new accession', () => {
+    cy.visit('/accessions');
+    cy.get('#newAccession').click().url().should('contain', '/accessions/new');
+    cy.get('#saveAccession').click();
+    cy.get('#snackbar').contains('Accession saved');
+  });
+
   context('Summary End Results', () => {
     it('has the right summary results', () => {
       cy.intercept('GET', '/api/v1/seedbank/summary/*').as('summary');
