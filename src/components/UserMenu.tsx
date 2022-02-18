@@ -1,10 +1,12 @@
 import { List, ListItem, Popover } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
-import React from 'react';
+import React, { useState } from 'react';
+import { User } from 'src/types/User';
 import strings from '../../src/strings';
 import { ReactComponent as AvatarIcon } from './avatar-default.svg';
 import Icon from './common/icon/Icon';
+import MyAccountModal from './MyAccountModal';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -33,12 +35,15 @@ const useStyles = makeStyles((theme) =>
 );
 
 type UserMenuProps = {
-  userName: string;
+  user?: User;
+  reloadUser: () => void;
 };
-export default function UserMenu({ userName }: UserMenuProps): JSX.Element {
+export default function UserMenu({ user, reloadUser }: UserMenuProps): JSX.Element {
   const classes = useStyles();
 
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [myAccountModalOpened, setMyAccountModalOpened] = useState(false);
+
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -52,9 +57,19 @@ export default function UserMenu({ userName }: UserMenuProps): JSX.Element {
 
   return (
     <div>
+      {user && (
+        <MyAccountModal
+          open={myAccountModalOpened}
+          onCancel={() => setMyAccountModalOpened(false)}
+          user={user}
+          reloadUser={reloadUser}
+        />
+      )}
       <IconButton onClick={handleClick} size='small' className={classes.iconContainer}>
         <AvatarIcon className={classes.icon} />
-        <span className={classes.userName}>{userName}</span>
+        <span className={classes.userName}>
+          {user?.firstName} {user?.lastName}
+        </span>
         <Icon name='chevronDown' className={classes.chevronDown} />
       </IconButton>
       <Popover
@@ -73,6 +88,9 @@ export default function UserMenu({ userName }: UserMenuProps): JSX.Element {
         className={classes.popover}
       >
         <List id='notifications-popover'>
+          <ListItem button onClick={() => setMyAccountModalOpened(true)}>
+            {strings.MY_ACCOUNT}
+          </ListItem>
           <ListItem button onClick={onHandleLogout}>
             {strings.LOGOUT}
           </ListItem>
