@@ -60,7 +60,7 @@ export default function UserMenu({ user, reloadUser }: UserMenuProps): JSX.Eleme
       {user && (
         <MyAccountModal
           open={myAccountModalOpened}
-          onCancel={() => setMyAccountModalOpened(false)}
+          onClose={() => setMyAccountModalOpened(false)}
           user={user}
           reloadUser={reloadUser}
         />

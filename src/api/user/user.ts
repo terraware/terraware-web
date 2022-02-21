@@ -37,7 +37,7 @@ type UPDATE_USER_REQUEST_PAYLOAD = paths[typeof GET_USER_ENDPOINT]['put']['reque
 type UPDATE_USER_RESPONSE_PAYLOAD =
   paths[typeof GET_USER_ENDPOINT]['put']['responses'][200]['content']['application/json'];
 
-export async function updateUser(user: User): Promise<UpdateUserResponse> {
+export async function updateUserProfile(user: User): Promise<UpdateUserResponse> {
   const response: UpdateUserResponse = { requestSucceeded: true };
   try {
     const serverRequest: UPDATE_USER_REQUEST_PAYLOAD = {

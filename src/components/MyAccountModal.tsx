@@ -13,7 +13,7 @@ import useForm from 'src/utils/useForm';
 import TextField from './common/Textfield/Textfield';
 import snackbarAtom from 'src/state/snackbar';
 import { User } from 'src/types/User';
-import { updateUser } from 'src/api/user/user';
+import { updateUserProfile } from 'src/api/user/user';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -28,24 +28,32 @@ const useStyles = makeStyles((theme: Theme) =>
     spacing: {
       marginRight: theme.spacing(2),
     },
+    modalTitle: {
+      fontWeight: 600,
+      fontSize: '20px',
+      lineHeight: '28px',
+    },
+    spacingField: {
+      marginBottom: '16px',
+    },
   })
 );
 
 export type MyAccountModalProps = {
   open: boolean;
-  onCancel: () => void;
+  onClose: () => void;
   user: User;
   reloadUser: () => void;
 };
 
 export default function MyAccountModal(props: MyAccountModalProps): JSX.Element {
   const classes = useStyles();
-  const { onCancel, open, user, reloadUser } = props;
+  const { onClose, open, user, reloadUser } = props;
   const setSnackbar = useSetRecoilState(snackbarAtom);
   const [record, , onChange] = useForm<User>(user);
 
   const saveUser = async () => {
-    const response = await updateUser(record);
+    const response = await updateUserProfile(record);
     if (response.requestSucceeded) {
       reloadUser();
       setSnackbar({
@@ -60,17 +68,19 @@ export default function MyAccountModal(props: MyAccountModalProps): JSX.Element 
         msg: strings.GENERIC_ERROR,
       });
     }
-    onCancel();
+    onClose();
   };
 
   return (
-    <Dialog onClose={onCancel} disableEscapeKeyDown maxWidth='md' open={open}>
+    <Dialog onClose={onClose} disableEscapeKeyDown maxWidth='md' open={open}>
       <DialogTitle>
-        <Typography variant='h6'>{strings.ADD_NEW_ORGANIZATION}</Typography>
-        <DialogCloseButton onClick={onCancel} />
+        <Typography variant='h6' className={classes.modalTitle}>
+          {strings.MY_ACCOUNT}
+        </Typography>
+        <DialogCloseButton onClick={onClose} />
       </DialogTitle>
       <DialogContent dividers>
-        <Grid item xs={12}>
+        <Grid item xs={12} className={classes.spacingField}>
           <TextField
             label={strings.FIRST_NAME}
             type='text'
@@ -79,10 +89,10 @@ export default function MyAccountModal(props: MyAccountModalProps): JSX.Element 
             value={record.firstName}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={12} className={classes.spacingField}>
           <TextField label={strings.LAST_NAME} type='text' id='lastName' onChange={onChange} value={record.lastName} />
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={12} className={classes.spacingField}>
           <TextField
             label={strings.EMAIL}
             type='text'
@@ -96,7 +106,7 @@ export default function MyAccountModal(props: MyAccountModalProps): JSX.Element 
       <DialogActions>
         <Box width={'100%'} className={classes.actions}>
           <Button
-            onClick={onCancel}
+            onClick={onClose}
             id='cancel'
             label={strings.CANCEL}
             priority='secondary'
