@@ -164,6 +164,10 @@ export default function PlantList(props: PlantListProps): JSX.Element {
     history.push(projectsLocation);
   };
 
+  const goToSupport = () => {
+    window.location.href = 'https://www.terraformation.com/contact-us/terraware-support';
+  };
+
   return (
     <main className={classes.main}>
       {selectedPlant && organization && (
@@ -195,7 +199,7 @@ export default function PlantList(props: PlantListProps): JSX.Element {
                 title={emptyMessageStrings.COLLECT_IN_FIELD_PLANT_DATA}
                 text={emptyMessageStrings.TERRAWARE_MOBILE_APP_INFO_MSG}
                 buttonText={emptyMessageStrings.REQUEST_MOBILE_APP}
-                onClick={goToProjects}
+                onClick={goToSupport}
               />
             )}
           </Grid>

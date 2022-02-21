@@ -44,21 +44,21 @@ const listItemContent: ListItemContent[] = [
     title: strings.TITLE_REPORT_PROBLEM,
     description: strings.DESCRIPTION_REPORT_PROBLEM,
     buttonText: dictionary.REPORT_PROBLEM,
-    link: 'https://www.google.com',
+    link: 'https://www.terraformation.com/contact-us/terraware-support',
   },
   {
     icon: 'sparkles',
     title: strings.TITLE_REQUEST_FEATURE,
     description: strings.DESCRIPTION_REQUEST_FEATURE,
     buttonText: dictionary.REQUEST_FEATURE,
-    link: 'https://www.google.com',
+    link: 'https://www.terraformation.com/contact-us/terraware-support',
   },
   {
     icon: 'touchscreen',
     title: strings.TITLE_TEST_APP,
     description: strings.DESCRIPTION_TEST_APP,
     buttonText: dictionary.REQUEST_MOBILE_APP,
-    link: 'https://www.google.com',
+    link: 'https://www.terraformation.com/contact-us/terraware-support',
   },
 ];
 
