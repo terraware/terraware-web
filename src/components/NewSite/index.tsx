@@ -170,7 +170,13 @@ export default function SiteView({ organization, reloadOrganizationData }: SiteV
             />
           </Grid>
           <Grid item xs={4}>
-            <TextField id='description' label={strings.DESCRIPTION} type='textarea' onChange={onChange} />
+            <TextField
+              id='description'
+              label={strings.DESCRIPTION}
+              type='textarea'
+              onChange={onChange}
+              value={record.description}
+            />
           </Grid>
           <Grid item xs={4}>
             <Select
