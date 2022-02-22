@@ -381,7 +381,13 @@ export default function ProjectView({ organization, reloadOrganizationData }: Pr
             />
           </Grid>
           <Grid item xs={4}>
-            <TextField id='description' label={strings.DESCRIPTION} type='textarea' onChange={onChange} />
+            <TextField
+              id='description'
+              label={strings.DESCRIPTION}
+              type='textarea'
+              onChange={onChange}
+              value={newProject.description}
+            />
           </Grid>
           <Grid item xs={4}>
             <label htmlFor={newProject.startDate} className={classes.label}>
