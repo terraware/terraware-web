@@ -20,7 +20,7 @@ import { SpeciesById } from 'src/types/Species';
 import getColorsBySpeciesId from 'src/api/species/getColorsBySpeciesId';
 import Title from 'src/components/common/Title';
 import { getPlantLayers } from 'src/api/organization/organization';
-import { getSelectedSites } from 'src/utils/organization';
+import { getAllSites, getSelectedSites } from 'src/utils/organization';
 import { useRecoilState } from 'recoil';
 import { plantDashboardSelectedOrgInfo } from 'src/state/selectedOrgInfoPerPage';
 import EmptyMessage from '../../common/EmptyMessage';
@@ -66,6 +66,9 @@ const useStyles = makeStyles((theme) =>
       borderRadius: '8px',
       boxShadow: 'none',
       marginLeft: '24px',
+    },
+    emptyMessage: {
+      marginBottom: '35px',
     },
   })
 );
@@ -166,16 +169,19 @@ export default function PlantDashboard(props: PlantDashboardProps): JSX.Element 
           <Container maxWidth={false} className={classes.mainContainer}>
             <Grid container>
               <Grid item xs={12}>
-                {!!organization.projects?.length && !plantSummariesByLayerId.size && (
-                  <EmptyMessage
-                    title={emptyMessageStrings.COLLECT_IN_FIELD_PLANT_DATA}
-                    text={emptyMessageStrings.TERRAWARE_MOBILE_APP_INFO_MSG}
-                    buttonText={emptyMessageStrings.REQUEST_MOBILE_APP}
-                    onClick={goToSupport}
-                  />
-                )}
+                {!!organization.projects?.length &&
+                  getAllSites(organization).length > 0 &&
+                  !plantSummariesByLayerId.size && (
+                    <EmptyMessage
+                      title={emptyMessageStrings.COLLECT_IN_FIELD_PLANT_DATA}
+                      text={emptyMessageStrings.TERRAWARE_MOBILE_APP_INFO_MSG}
+                      buttonText={emptyMessageStrings.REQUEST_MOBILE_APP}
+                      onClick={goToSupport}
+                      className={classes.emptyMessage}
+                    />
+                  )}
               </Grid>
-              {!!organization.projects?.length ? (
+              {!!organization.projects?.length && getAllSites(organization).length > 0 ? (
                 <>
                   <Grid item xs={isFullscreen ? 12 : 6}>
                     <React.Suspense fallback={strings.LOADING}>

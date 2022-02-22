@@ -26,7 +26,7 @@ import { SpeciesById } from 'src/types/Species';
 import { ServerOrganization } from 'src/types/Organization';
 import Title from 'src/components/common/Title';
 import { getPlantLayers } from 'src/api/organization/organization';
-import { getSelectedSites } from 'src/utils/organization';
+import { getAllSites, getSelectedSites } from 'src/utils/organization';
 import { plantListSelectedOrgInfo } from 'src/state/selectedOrgInfoPerPage';
 import EmptyMessage from '../../common/EmptyMessage';
 import { useHistory } from 'react-router-dom';
@@ -60,6 +60,9 @@ const useStyles = makeStyles((theme) =>
       margin: '0 auto',
       width: '50%',
       marginTop: '10%',
+    },
+    emptyMessage: {
+      marginTop: '35px',
     },
   })
 );
@@ -194,18 +197,19 @@ export default function PlantList(props: PlantListProps): JSX.Element {
             />
           </Grid>
           <Grid item xs={12}>
-            {!!organization.projects?.length && !plants.length && (
+            {!!organization.projects?.length && getAllSites(organization).length > 0 && !plants.length && (
               <EmptyMessage
                 title={emptyMessageStrings.COLLECT_IN_FIELD_PLANT_DATA}
                 text={emptyMessageStrings.TERRAWARE_MOBILE_APP_INFO_MSG}
                 buttonText={emptyMessageStrings.REQUEST_MOBILE_APP}
                 onClick={goToSupport}
+                className={classes.emptyMessage}
               />
             )}
           </Grid>
           <Container maxWidth={false} className={classes.mainContainer}>
             <Grid container>
-              {!!organization.projects?.length ? (
+              {!!organization.projects?.length && getAllSites(organization).length > 0 ? (
                 <>
                   <Grid item xs={12}>
                     <IconButton
