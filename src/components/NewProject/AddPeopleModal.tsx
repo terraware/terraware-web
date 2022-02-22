@@ -16,12 +16,24 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     title: {
       textAlign: 'center',
+      paddingTop: '32px',
     },
     actions: {
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
       padding: theme.spacing(4),
+    },
+    peopleModal: {
+      '& .MuiDialog-paper': {
+        minWidth: '720px',
+        minHeight: '232px',
+      },
+    },
+    emptyMessage: {
+      marginBottom: '30px',
+      textAlign: 'center',
+      width: '100%',
     },
   })
 );
@@ -61,15 +73,15 @@ export default function AddPeopleDialog(props: AddPeopleDialogProps): JSX.Elemen
   };
 
   return (
-    <Dialog onClose={onClose} disableEscapeKeyDown open={open} maxWidth='md'>
+    <Dialog onClose={onClose} disableEscapeKeyDown open={open} maxWidth='md' className={classes.peopleModal}>
       <DialogTitle className={classes.title}>
         <Typography variant='h6'>
           {people && people.length > 0 ? strings.ADD_PEOPLE : strings.NO_PEOPLE_IN_ORG}
         </Typography>
         <DialogCloseButton onClick={onClose} />
       </DialogTitle>
-      <DialogContent dividers>
-        <Grid container spacing={4}>
+      <DialogContent dividers={people && people.length > 0}>
+        <Grid container spacing={4} alignContent='center'>
           {people && people.length > 0 ? (
             <Table
               rows={people}
@@ -80,7 +92,7 @@ export default function AddPeopleDialog(props: AddPeopleDialogProps): JSX.Elemen
               setSelectedRows={setSelectedRows}
             />
           ) : (
-            <p>{strings.ADD_PEOPLE_MESSAGE}</p>
+            <p className={classes.emptyMessage}>{strings.ADD_PEOPLE_MESSAGE}</p>
           )}
         </Grid>
       </DialogContent>
