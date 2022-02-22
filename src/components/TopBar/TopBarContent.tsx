@@ -3,6 +3,7 @@ import React from 'react';
 import { SeedSearchCriteria } from 'src/api/seeds/search';
 import { Notifications } from 'src/types/Notifications';
 import { ServerOrganization } from 'src/types/Organization';
+import { User } from 'src/types/User';
 import NotificationsDropdown from '../NotificationsDropdown';
 import OrganizationsDropdown from '../OrganizationsDropdown';
 import UserMenu from '../UserMenu';
@@ -29,7 +30,8 @@ type TopBarProps = {
   setSelectedOrganization: (selectedOrganization: ServerOrganization) => void;
   selectedOrganization?: ServerOrganization;
   reloadOrganizationData: () => void;
-  userName: string;
+  user?: User;
+  reloadUser: () => void;
 };
 
 export default function TopBarContent(props: TopBarProps): JSX.Element | null {
@@ -42,7 +44,8 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
     selectedOrganization,
     organizations,
     reloadOrganizationData,
-    userName,
+    user,
+    reloadUser,
   } = props;
 
   return (
@@ -61,7 +64,7 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
         reloadOrganizationData={reloadOrganizationData}
       />
       <div className={classes.separator} />
-      <UserMenu userName={userName} />
+      <UserMenu user={user} reloadUser={reloadUser} />
     </>
   );
 }
