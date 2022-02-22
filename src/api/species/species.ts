@@ -152,7 +152,7 @@ export async function updateSpecies(
     const updateSpeciesNameRequest: PutSpeciesRequest = { name: species.name, organizationId };
     const updateSpeciesNameResponse: SimpleSuccessResponsePayload = await axios.put(endpoint, updateSpeciesNameRequest);
     if (updateSpeciesNameResponse.status !== 'error') {
-      if (species.scientificName) {
+      if (species.scientificName !== undefined) {
         const updateScientificNameResponse = await updateScientificName(
           species.scientificName,
           species.id,
@@ -203,11 +203,15 @@ export async function updateScientificName(
     const scientificNameOfSpecies = scientificNames[0];
     if (scientificNameOfSpecies) {
       const endpoint = PUT_SPECIES_NAME_ENDPOINT.replace('{speciesNameId}', `${scientificNameOfSpecies.id}`);
-      const updateSpeciesNamesRequest: PutSpeciesNamesRequest = {
-        name: scientificName,
-        isScientific: true,
-      };
-      await axios.put(endpoint, updateSpeciesNamesRequest);
+      if (scientificName !== '') {
+        const updateSpeciesNamesRequest: PutSpeciesNamesRequest = {
+          name: scientificName,
+          isScientific: true,
+        };
+        await axios.put(endpoint, updateSpeciesNamesRequest);
+      } else {
+        await axios.delete(endpoint);
+      }
     } else {
       const responseCreate = await createSpeciesNames(scientificName, organizationId, speciesId, true);
       if (!responseCreate.requestSucceeded) {
