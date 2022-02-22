@@ -180,7 +180,7 @@ function AppContent() {
     }
   }, [organizations, selectedOrganization]);
 
-  useEffect(() => {
+  const reloadUser = useCallback(() => {
     const populateUser = async () => {
       const response = await getUser();
       if (response.requestSucceeded) {
@@ -189,6 +189,10 @@ function AppContent() {
     };
     populateUser();
   }, []);
+
+  useEffect(() => {
+    reloadUser();
+  }, [reloadUser]);
 
   if (isMobile) {
     window.stop();
@@ -236,7 +240,7 @@ function AppContent() {
       <Switch>
         <Route exact path={APP_PATHS.WELCOME}>
           <TopBar>
-            <UserMenu userName={`${user?.firstName} ${user?.lastName}`} />
+            <UserMenu user={user} reloadUser={reloadUser} />
           </TopBar>
           <NoOrgLandingPage reloadOrganizationData={reloadData} />
         </Route>
@@ -306,7 +310,8 @@ function AppContent() {
               selectedOrganization={selectedOrganization}
               setSelectedOrganization={setSelectedOrganization}
               reloadOrganizationData={reloadData}
-              userName={`${user?.firstName} ${user?.lastName}`}
+              user={user}
+              reloadUser={reloadUser}
             />
           </TopBar>
           <ErrorBoundary>
