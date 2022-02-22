@@ -321,7 +321,7 @@ const strings = new LocalizedStrings({
     NAME: 'Name',
     DESCRIPTION: 'Description',
     START_DATE_OPT: 'Start Date (optional)',
-    STATUS_OPT: 'Status (opt)',
+    STATUS_OPT: 'Status (optional)',
     PROJECT_TYPE_OPT: 'Project Type(s) (optional)',
     PEOPLE_DESC: 'To add new people to this organization go to People.',
     SITES_DESC: 'To add new sites to this project go to Sites.',
