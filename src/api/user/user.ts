@@ -33,6 +33,27 @@ export async function getUser(): Promise<GetUserResponse> {
   return response;
 }
 
+type UPDATE_USER_REQUEST_PAYLOAD = paths[typeof GET_USER_ENDPOINT]['put']['requestBody']['content']['application/json'];
+type UPDATE_USER_RESPONSE_PAYLOAD =
+  paths[typeof GET_USER_ENDPOINT]['put']['responses'][200]['content']['application/json'];
+
+export async function updateUserProfile(user: User): Promise<UpdateUserResponse> {
+  const response: UpdateUserResponse = { requestSucceeded: true };
+  try {
+    const serverRequest: UPDATE_USER_REQUEST_PAYLOAD = {
+      firstName: user.firstName || '',
+      lastName: user.lastName || '',
+    };
+    const serverResponse: UPDATE_USER_RESPONSE_PAYLOAD = (await axios.put(GET_USER_ENDPOINT, serverRequest)).data;
+    if (serverResponse.status === 'error') {
+      response.requestSucceeded = false;
+    }
+  } catch {
+    response.requestSucceeded = false;
+  }
+  return response;
+}
+
 const CREATE_USER_ENDPOINT = '/api/v1/organizations/{organizationId}/users';
 
 type SimpleSuccessResponsePayload =
