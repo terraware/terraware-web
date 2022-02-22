@@ -34,7 +34,7 @@ import { HighOrganizationRolesValues, ServerOrganization } from 'src/types/Organ
 import { seedsDatabaseSelectedOrgInfo } from 'src/state/selectedOrgInfoPerPage';
 import { useRecoilState } from 'recoil';
 import EmptyMessage from 'src/components/common/EmptyMessage';
-import { APP_PATHS } from 'src/constants';
+import { APP_PATHS, TERRAWARE_SUPPORT_LINK } from 'src/constants';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -291,7 +291,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
   };
 
   const goToSupport = () => {
-    window.location.href = 'https://www.terraformation.com/contact-us/terraware-support';
+    window.open(TERRAWARE_SUPPORT_LINK);
   };
 
   const location = useStateLocation();

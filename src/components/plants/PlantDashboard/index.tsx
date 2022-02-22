@@ -6,7 +6,7 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import ErrorBoundary from 'src/ErrorBoundary';
-import { APP_PATHS } from 'src/constants';
+import { APP_PATHS, TERRAWARE_SUPPORT_LINK } from 'src/constants';
 import strings from 'src/strings';
 import emptyMessageStrings from 'src/strings/emptyMessageModal';
 import PlantMap from './PlantMap';
@@ -144,7 +144,7 @@ export default function PlantDashboard(props: PlantDashboardProps): JSX.Element 
   };
 
   const goToSupport = () => {
-    window.location.href = 'https://www.terraformation.com/contact-us/terraware-support';
+    window.open(TERRAWARE_SUPPORT_LINK);
   };
 
   return (
