@@ -34,7 +34,7 @@ import { HighOrganizationRolesValues, ServerOrganization } from 'src/types/Organ
 import { seedsDatabaseSelectedOrgInfo } from 'src/state/selectedOrgInfoPerPage';
 import { useRecoilState } from 'recoil';
 import EmptyMessage from 'src/components/common/EmptyMessage';
-import { APP_PATHS } from 'src/constants';
+import { APP_PATHS, TERRAWARE_SUPPORT_LINK } from 'src/constants';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -86,6 +86,9 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     buttonSpc: {
       marginRight: '16px',
+    },
+    requestMobileMessage: {
+      marginBottom: '32px',
     },
   })
 );
@@ -287,6 +290,10 @@ export default function Database(props: DatabaseProps): JSX.Element {
     history.push(newAccessionLocation);
   };
 
+  const goToSupport = () => {
+    window.open(TERRAWARE_SUPPORT_LINK);
+  };
+
   const location = useStateLocation();
 
   return (
@@ -356,7 +363,8 @@ export default function Database(props: DatabaseProps): JSX.Element {
                     title={emptyMessageStrings.COLLECT_IN_FIELD_PLANT_DATA}
                     text={emptyMessageStrings.TERRAWARE_MOBILE_APP_INFO_MSG}
                     buttonText={emptyMessageStrings.REQUEST_MOBILE_APP}
-                    onClick={goToProjects}
+                    onClick={goToSupport}
+                    className={classes.requestMobileMessage}
                   />
                 </Grid>
               )}
@@ -384,30 +392,24 @@ export default function Database(props: DatabaseProps): JSX.Element {
                       </Paper>
                     </Grid>
                   )}
-                  <Grid container spacing={3}>
-                    <Grid item xs={12}>
-                      <Paper>
-                        <Grid container spacing={4}>
-                          <Grid item xs={12}>
-                            {searchResults && (
-                              <Table
-                                columns={displayColumnDetails}
-                                rows={searchResults}
-                                orderBy={searchSortOrder.field}
-                                order={searchSortOrder.direction === 'Ascending' ? 'asc' : 'desc'}
-                                Renderer={SearchCellRenderer}
-                                onSelect={onSelect}
-                                sortHandler={onSortChange}
-                                isInactive={isInactive}
-                                onReorderEnd={onReorderEnd}
-                              />
-                            )}
-                            {searchResults === undefined && <CircularProgress />}
-                            {searchResults === null && strings.GENERIC_ERROR}
-                          </Grid>
-                        </Grid>
-                      </Paper>
-                    </Grid>
+                  <Grid item xs={12}>
+                    <Paper>
+                      {searchResults && (
+                        <Table
+                          columns={displayColumnDetails}
+                          rows={searchResults}
+                          orderBy={searchSortOrder.field}
+                          order={searchSortOrder.direction === 'Ascending' ? 'asc' : 'desc'}
+                          Renderer={SearchCellRenderer}
+                          onSelect={onSelect}
+                          sortHandler={onSortChange}
+                          isInactive={isInactive}
+                          onReorderEnd={onReorderEnd}
+                        />
+                      )}
+                      {searchResults === undefined && <CircularProgress />}
+                      {searchResults === null && strings.GENERIC_ERROR}
+                    </Paper>
                   </Grid>
                 </>
               ) : HighOrganizationRolesValues.includes(organization?.role || '') ? (

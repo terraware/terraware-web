@@ -10,7 +10,7 @@ import { useRecoilState } from 'recoil';
 import { SeedSearchCriteria } from 'src/api/seeds/search';
 import { getSummary, GetSummaryResponse } from 'src/api/seeds/summary';
 import EmptyMessage from 'src/components/common/EmptyMessage';
-import { API_PULL_INTERVAL, APP_PATHS } from 'src/constants';
+import { API_PULL_INTERVAL, APP_PATHS, TERRAWARE_SUPPORT_LINK } from 'src/constants';
 import { seedsSummarySelectedOrgInfo } from 'src/state/selectedOrgInfoPerPage';
 import strings from 'src/strings';
 import emptyMessageStrings from 'src/strings/emptyMessageModal';
@@ -131,6 +131,10 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
     history.push(projectsLocation);
   };
 
+  const goToSupport = () => {
+    window.open(TERRAWARE_SUPPORT_LINK);
+  };
+
   return (
     <main className={classes.main}>
       <PageHeader subtitle={strings.WELCOME_MSG} page={strings.DASHBOARD} parentPage={strings.SEEDS} />
@@ -143,7 +147,7 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
                   title={emptyMessageStrings.COLLECT_IN_FIELD_PLANT_DATA}
                   text={emptyMessageStrings.TERRAWARE_MOBILE_APP_INFO_MSG}
                   buttonText={emptyMessageStrings.REQUEST_MOBILE_APP}
-                  onClick={goToProjects}
+                  onClick={goToSupport}
                 />
               </Grid>
             )}
