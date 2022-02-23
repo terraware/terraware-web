@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme: Theme) =>
       paddingBottom: theme.spacing(3),
     },
     paper: {
-      minWidth: '500px',
+      minWidth: '515px',
     },
     container: {
       border: `1px solid ${theme.palette.grey[400]}`,
@@ -59,7 +59,6 @@ const useStyles = makeStyles((theme: Theme) =>
       marginRight: theme.spacing(2),
     },
     content: {
-      margin: '0 auto',
       overflow: 'visible',
     },
   })
@@ -75,6 +74,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
   const classes = useStyles();
   const { onCancel, open, reloadOrganizationData } = props;
   const setSnackbar = useSetRecoilState(snackbarAtom);
+  const [nameError, setNameError] = useState('');
   const [countries, setCountries] = useState<Country[]>();
   const [newOrganization, setNewOrganization, onChange] = useForm<ServerOrganization>({
     id: -1,
@@ -91,6 +91,14 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
     };
     populateCountries();
   }, []);
+
+  useEffect(() => {
+    setNewOrganization({
+      id: -1,
+      name: '',
+      role: 'Owner',
+    });
+  }, [open, setNewOrganization]);
 
   const onChangeCountry = (newValue: string) => {
     const found = countries?.find((country) => country.name === newValue);
@@ -110,23 +118,27 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
   };
 
   const saveOrganization = async () => {
-    const response = await createOrganization(newOrganization);
-    if (response.requestSucceeded) {
-      setSnackbar({
-        type: 'page',
-        priority: 'success',
-        title: strings.formatString(strings.ORGANIZATION_CREATED_TITLE, response.organization?.name || ''),
-        msg: strings.ORGANIZATION_CREATED_MSG,
-      });
-      reloadOrganizationData();
+    if (newOrganization.name === '') {
+      setNameError(strings.REQUIRED_FIELD);
     } else {
-      setSnackbar({
-        type: 'page',
-        priority: 'critical',
-        msg: strings.GENERIC_ERROR,
-      });
+      const response = await createOrganization(newOrganization);
+      if (response.requestSucceeded) {
+        setSnackbar({
+          type: 'page',
+          priority: 'success',
+          title: strings.formatString(strings.ORGANIZATION_CREATED_TITLE, response.organization?.name || ''),
+          msg: strings.ORGANIZATION_CREATED_MSG,
+        });
+        reloadOrganizationData();
+      } else {
+        setSnackbar({
+          type: 'page',
+          priority: 'critical',
+          msg: strings.GENERIC_ERROR,
+        });
+      }
+      onCancel();
     }
-    onCancel();
   };
 
   const getSelectedCountry = () => {
@@ -151,18 +163,36 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
     }
   };
 
+  const onClose = () => {
+    setNameError('');
+    onCancel();
+  };
+
   return (
-    <Dialog onClose={onCancel} disableEscapeKeyDown maxWidth='md' className={classes.mainModal} open={open}>
+    <Dialog
+      onClose={onClose}
+      disableEscapeKeyDown
+      maxWidth='md'
+      className={classes.mainModal}
+      open={open}
+      classes={{ paper: classes.paper }}
+    >
       <DialogTitle>
         <Typography variant='h6'>{strings.ADD_NEW_ORGANIZATION}</Typography>
-        <DialogCloseButton onClick={onCancel} />
+        <DialogCloseButton onClick={onClose} />
       </DialogTitle>
       <DialogContent dividers className={classes.content}>
         <Grid item xs={12}>
-          <TextField label={strings.ORGANIZATION_NAME} type='text' id='name' onChange={onChange} />
+          <TextField
+            label={strings.ORGANIZATION_NAME}
+            type='text'
+            id='name'
+            onChange={onChange}
+            errorText={newOrganization.name ? '' : nameError}
+          />
         </Grid>
         <Grid item xs={12}>
-          <TextField label={strings.DESCRIPTION} type='text' id='description' onChange={onChange} />
+          <TextField label={strings.DESCRIPTION_OPTIONAL} type='text' id='description' onChange={onChange} />
         </Grid>
         <Grid item xs={12}>
           <Select
@@ -188,7 +218,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
       <DialogActions>
         <Box width={'100%'} className={classes.actions}>
           <Button
-            onClick={onCancel}
+            onClick={onClose}
             id='cancel'
             label={strings.CANCEL}
             priority='secondary'
