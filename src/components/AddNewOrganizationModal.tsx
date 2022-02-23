@@ -120,25 +120,25 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
   const saveOrganization = async () => {
     if (newOrganization.name === '') {
       setNameError(strings.REQUIRED_FIELD);
-    } else {
-      const response = await createOrganization(newOrganization);
-      if (response.requestSucceeded) {
-        setSnackbar({
-          type: 'page',
-          priority: 'success',
-          title: strings.formatString(strings.ORGANIZATION_CREATED_TITLE, response.organization?.name || ''),
-          msg: strings.ORGANIZATION_CREATED_MSG,
-        });
-        reloadOrganizationData();
-      } else {
-        setSnackbar({
-          type: 'page',
-          priority: 'critical',
-          msg: strings.GENERIC_ERROR,
-        });
-      }
-      onCancel();
+      return;
     }
+    const response = await createOrganization(newOrganization);
+    if (response.requestSucceeded) {
+      setSnackbar({
+        type: 'page',
+        priority: 'success',
+        title: strings.formatString(strings.ORGANIZATION_CREATED_TITLE, response.organization?.name || ''),
+        msg: strings.ORGANIZATION_CREATED_MSG,
+      });
+      reloadOrganizationData();
+    } else {
+      setSnackbar({
+        type: 'page',
+        priority: 'critical',
+        msg: strings.GENERIC_ERROR,
+      });
+    }
+    onCancel();
   };
 
   const getSelectedCountry = () => {
@@ -163,14 +163,14 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
     }
   };
 
-  const onClose = () => {
+  const onCancelWrapper = () => {
     setNameError('');
     onCancel();
   };
 
   return (
     <Dialog
-      onClose={onClose}
+      onClose={onCancelWrapper}
       disableEscapeKeyDown
       maxWidth='md'
       className={classes.mainModal}
@@ -179,7 +179,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
     >
       <DialogTitle>
         <Typography variant='h6'>{strings.ADD_NEW_ORGANIZATION}</Typography>
-        <DialogCloseButton onClick={onClose} />
+        <DialogCloseButton onClick={onCancelWrapper} />
       </DialogTitle>
       <DialogContent dividers className={classes.content}>
         <Grid item xs={12}>
@@ -218,7 +218,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
       <DialogActions>
         <Box width={'100%'} className={classes.actions}>
           <Button
-            onClick={onClose}
+            onClick={onCancelWrapper}
             id='cancel'
             label={strings.CANCEL}
             priority='secondary'
