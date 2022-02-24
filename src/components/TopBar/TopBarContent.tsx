@@ -27,7 +27,7 @@ type TopBarProps = {
   setSeedSearchCriteria: (criteria: SeedSearchCriteria) => void;
   facilityId?: number;
   organizations?: ServerOrganization[];
-  setSelectedOrganization: (selectedOrganization: ServerOrganization) => void;
+  setSelectedOrganization: React.Dispatch<React.SetStateAction<ServerOrganization | undefined>>;
   selectedOrganization?: ServerOrganization;
   reloadOrganizationData: () => void;
   user?: User;
