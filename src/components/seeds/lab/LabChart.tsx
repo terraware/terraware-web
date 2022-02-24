@@ -53,8 +53,10 @@ export default function LabChart<T>({ row, rowName, defaultSort }: Props): JSX.E
               top: 10,
             },
           },
-          legend: {
-            display: false,
+          plugins: {
+            legend: {
+              display: false,
+            },
           },
           scales: {
             // @ts-ignore
