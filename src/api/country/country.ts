@@ -10,6 +10,7 @@ export async function searchCountries(): Promise<Country[] | null> {
   const params: SearchRequestPayload = {
     prefix: 'country',
     fields: ['code', 'name', 'subdivisions.code', 'subdivisions.name'],
+    sortOrder: [{ field: 'name' }, { field: 'subdivisions.name' }],
     count: 1000,
   };
   try {

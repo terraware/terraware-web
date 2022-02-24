@@ -123,8 +123,8 @@ export default function SimpleSpeciesModal(props: SimpleSpeciesModalProps): JSX.
               id='scientificName'
               value={record.scientificName}
               onChange={onChange}
-              label={strings.SCIENTIFIC_NAME}
-              aria-label={strings.SCIENTIFIC_NAME}
+              label={strings.SCIENTIFIC_NAME_OPTIONAL}
+              aria-label={strings.SCIENTIFIC_NAME_OPTIONAL}
             />
           </Grid>
         </Grid>

@@ -1,4 +1,4 @@
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 import { updateProjectUser } from 'src/api/project/project';
 import { paths } from 'src/api/types/generated-schema';
 import { OrganizationUser, User } from 'src/types/User';
@@ -65,14 +65,15 @@ type AddOrganizationUserRequestPayload =
 export type CreateUserResponse = {
   newUserId: number;
   requestSucceeded: boolean;
-  isExistingUser: boolean;
+  errorDetails: undefined | 'PRE_EXISTING_USER' | 'INVALID_EMAIL';
 };
+
 export async function addOrganizationUser(user: OrganizationUser, organizationId: number): Promise<CreateUserResponse> {
   const url = CREATE_USER_ENDPOINT.replace('{organizationId}', organizationId.toString());
   const response: CreateUserResponse = {
     newUserId: -1,
     requestSucceeded: true,
-    isExistingUser: false,
+    errorDetails: undefined,
   };
   const addOrganizationUserRequestPayload: AddOrganizationUserRequestPayload = {
     email: user.email,
@@ -87,8 +88,15 @@ export async function addOrganizationUser(user: OrganizationUser, organizationId
       response.requestSucceeded = false;
     }
   } catch (error) {
-    if ((error as AxiosError).response?.status === 409) {
-      response.isExistingUser = true;
+    if (axios.isAxiosError(error)) {
+      if (error.response?.status === 409) {
+        response.errorDetails = 'PRE_EXISTING_USER';
+      } else if (
+        error.response?.status === 400 &&
+        error.response.data.error.message === 'Field value has incorrect format: email'
+      ) {
+        response.errorDetails = 'INVALID_EMAIL';
+      }
     }
     response.requestSucceeded = false;
   }
