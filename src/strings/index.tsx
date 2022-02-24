@@ -328,6 +328,7 @@ const strings = new LocalizedStrings({
     SITES_DESC: 'To add new sites to this project go to Sites.',
     ADMIN: 'Admin',
     ADD_PERSON: 'Add Person',
+    EDIT_PERSON: 'Edit Person',
     PEOPLE_DESCRIPTION: 'Manage the people in Terraware.',
     CREATE_NEW_ORGANIZATION: 'Create New Organization',
     ADD_NEW_ORGANIZATION: 'Add New Organization',
