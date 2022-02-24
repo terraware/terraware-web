@@ -386,6 +386,7 @@ const strings = new LocalizedStrings({
     GO_TO_PROJECTS: 'Go to Projects',
     COMMON_NAME: 'Common Name',
     SCIENTIFIC_NAME: 'Scientific Name',
+    SCIENTIFIC_NAME_OPTIONAL: 'Scientific Name (optional)',
     DOWNLOAD_AS_REPORT: 'Download as Report',
     ORGANIZATION_DATA_NOT_AVAILABLE: 'Organization Data Not Available',
     SPECIES_DATA_NOT_AVAILABLE: 'Species Data Not Available',
