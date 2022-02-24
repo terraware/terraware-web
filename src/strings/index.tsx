@@ -386,6 +386,7 @@ const strings = new LocalizedStrings({
     GO_TO_PROJECTS: 'Go to Projects',
     COMMON_NAME: 'Common Name',
     SCIENTIFIC_NAME: 'Scientific Name',
+    SCIENTIFIC_NAME_OPTIONAL: 'Scientific Name (optional)',
     DOWNLOAD_AS_REPORT: 'Download as Report',
     ORGANIZATION_DATA_NOT_AVAILABLE: 'Organization Data Not Available',
     SPECIES_DATA_NOT_AVAILABLE: 'Species Data Not Available',
@@ -397,6 +398,8 @@ const strings = new LocalizedStrings({
     NO_MOBILE_SUPPORT_TITLE: 'Terraware web doesn’t support mobile yet.',
     NO_MOBILE_SUPPORT_DESC: 'Please access terraware.io on a desktop device.',
     MY_ACCOUNT: 'My Account',
+    UNABLE_TO_ADD_PERSON: 'Unable to Add Person',
+    FIX_HIGHLIGHTED_FIELDS: 'Fix the highlighted fields below.',
   },
 });
 
