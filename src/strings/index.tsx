@@ -188,7 +188,7 @@ const strings = new LocalizedStrings({
     QUANTIFY: 'Quantify',
     SEED_WEIGHT: 'Seed Weight',
     SEED_COUNT: 'Seed Count',
-    SUBSET_WEIGHT: 'Subset’s Weight of Seeds',
+    SUBSET_WEIGHT: 'Weight of Seed Subset',
     NUMBER_OF_SEEDS_IN_SUBSET: '# of Seeds in Subset',
     TOTAL_WEIGHT_OF_SEEDS: 'Total Weight of Seeds',
     TOTAL_SEEDS_COUNT_ESTIMATION: 'Total Seeds Count Estimation',

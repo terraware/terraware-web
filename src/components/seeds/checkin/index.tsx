@@ -27,9 +27,15 @@ import PageHeader from '../PageHeader';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
+    main: {
+      background: '#ffffff',
+      minHeight: 'calc(100vh - 64px)',
+      display: 'flex',
+      flexDirection: 'column',
+      padding: '24px',
+    },
     mainContainer: {
-      paddingTop: theme.spacing(8),
-      paddingBottom: theme.spacing(4),
+      padding: '32px 0',
     },
     downloadReport: {
       background: theme.palette.common.black,
@@ -117,7 +123,7 @@ export default function CheckIn(props: CheckInProps): JSX.Element {
 
   return (
     <MuiPickersUtilsProvider utils={MomentUtils}>
-      <main>
+      <main className={classes.main}>
         <PageHeader
           title={strings.CHECKIN_BAGS}
           subtitle={getSubtitle()}
@@ -128,10 +134,9 @@ export default function CheckIn(props: CheckInProps): JSX.Element {
           onChangeSelectedOrgInfo={(newValues) => setSelectedOrgInfo(newValues)}
         />
         <Container maxWidth={false} className={classes.mainContainer}>
-          <Grid container spacing={3}>
-            <Grid item xs={1} />
+          <Grid container>
             {pendingAccessionsById && (
-              <Grid item xs={10}>
+              <Grid item xs={12}>
                 <div>
                   {pendingAccessionsById.map((result) => {
                     return (
@@ -180,7 +185,6 @@ export default function CheckIn(props: CheckInProps): JSX.Element {
                 </div>
               </Grid>
             )}
-            <Grid item xs={1} />
           </Grid>
         </Container>
       </main>
