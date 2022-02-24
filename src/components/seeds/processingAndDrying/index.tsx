@@ -74,6 +74,8 @@ export default function ProcessingAndDrying({ accession, onSubmit }: Props): JSX
   React.useEffect(() => {
     if (accession !== record) {
       setIsEditing(true);
+    } else {
+      setIsEditing(false);
     }
   }, [accession, record]);
 

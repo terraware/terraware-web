@@ -72,6 +72,8 @@ export default function Storage({ accession, onSubmit }: Props): JSX.Element {
   React.useEffect(() => {
     if (accession !== record) {
       setIsEditing(true);
+    } else {
+      setIsEditing(false);
     }
   }, [accession, record]);
 
