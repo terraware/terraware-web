@@ -320,6 +320,7 @@ const strings = new LocalizedStrings({
     SITES_DESCRIPTION: 'Manage your Sites.',
     NAME: 'Name',
     DESCRIPTION: 'Description',
+    DESCRIPTION_OPTIONAL: 'Description (optional)',
     START_DATE_OPT: 'Start Date (optional)',
     STATUS_OPT: 'Status (optional)',
     PROJECT_TYPE_OPT: 'Project Type(s) (optional)',
