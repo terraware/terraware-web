@@ -398,6 +398,8 @@ const strings = new LocalizedStrings({
     NO_MOBILE_SUPPORT_TITLE: 'Terraware web doesn’t support mobile yet.',
     NO_MOBILE_SUPPORT_DESC: 'Please access terraware.io on a desktop device.',
     MY_ACCOUNT: 'My Account',
+    UNABLE_TO_ADD_PERSON: 'Unable to Add Person',
+    FIX_HIGHLIGHTED_FIELDS: 'Fix the highlighted fields below.',
   },
 });
 

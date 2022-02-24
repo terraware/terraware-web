@@ -117,6 +117,7 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
   const [selectedProjectsRows, setSelectedProjectsRows] = useState<ProjectWithUserRole[]>([]);
   const setSnackbar = useSetRecoilState(snackbarAtom);
   const [repeatedEmail, setRepeatedEmail] = useState('');
+  const [pageError, setPageError] = useState<'REPEATED_EMAIL' | 'INVALID_EMAIL'>();
   const [people, setPeople] = useState<OrganizationUser[]>();
   const [allProjects, setAllProjects] = useState<Project[]>();
   const { personId } = useParams<{ personId: string }>();
@@ -199,8 +200,16 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
   };
 
   const saveUser = async (didConfirmProjectRemoval: boolean) => {
+    setPageError(undefined);
+
     if (newPerson.email === '') {
       setEmailError(dictionary.REQUIRED_FIELD);
+      return;
+    }
+
+    // https://stackoverflow.com/questions/41348459/regex-in-react-email-validation
+    if (!/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/.test(newPerson.email)) {
+      setEmailError(dictionary.INCORRECT_EMAIL_FORMAT);
       return;
     }
 
@@ -235,10 +244,17 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
       userId = newPerson.id;
     } else {
       const response = await addOrganizationUser({ ...newPerson, projectIds: currentProjectIds }, organization.id);
-      if (!response.requestSucceeded && response.isExistingUser) {
-        setRepeatedEmail(newPerson.email);
-        setEmailError(strings.EMAIL_ALREADY_EXISTS);
-        return;
+      if (!response.requestSucceeded) {
+        if (response.errorDetails === 'PRE_EXISTING_USER') {
+          setRepeatedEmail(newPerson.email);
+          setPageError('REPEATED_EMAIL');
+          setEmailError(strings.EMAIL_ALREADY_EXISTS);
+          return;
+        } else if (response.errorDetails === 'INVALID_EMAIL') {
+          setPageError('INVALID_EMAIL');
+          setEmailError(dictionary.INCORRECT_EMAIL_FORMAT);
+          return;
+        }
       }
       if (response.requestSucceeded) {
         userId = response.newUserId;
@@ -306,12 +322,15 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
         <Grid container spacing={3}>
           <Grid item xs={12}>
             <h2>{strings.ADD_PERSON}</h2>
-            {repeatedEmail && (
+            {pageError === 'REPEATED_EMAIL' && repeatedEmail && (
               <ErrorBox
                 text={strings.ALREADY_INVITED_PERSON_ERROR}
                 buttonText={strings.GO_TO_PROFILE}
                 onClick={goToProfile}
               />
+            )}
+            {pageError === 'INVALID_EMAIL' && (
+              <ErrorBox title={strings.UNABLE_TO_ADD_PERSON} text={strings.FIX_HIGHLIGHTED_FIELDS} />
             )}
             <p>{strings.ADD_PERSON_DESC}</p>
           </Grid>

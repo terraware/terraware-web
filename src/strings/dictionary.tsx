@@ -19,6 +19,7 @@ const dictionary = new LocalizedStrings({
     CREATE_A_SITE: 'Create a Site',
     CREATE_ORGANIZATION: 'Create Organization',
     EDIT_PERSON: 'Edit Person',
+    INCORRECT_EMAIL_FORMAT: 'Incorrect email format.',
     PERSON_ADDED: 'Person Added',
     PROJECT_PROFILE: 'Project Profile',
     REPORT_PROBLEM: 'Report Problem',
