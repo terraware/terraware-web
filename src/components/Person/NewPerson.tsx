@@ -321,11 +321,7 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
       <Container maxWidth={false} className={classes.mainContainer}>
         <Grid container spacing={3}>
           <Grid item xs={12}>
-            {personSelectedToEdit ? (
-              <h2>{`${personSelectedToEdit?.firstName} ${personSelectedToEdit?.lastName}`}</h2>
-            ) : (
-              <h2>{strings.ADD_PERSON}</h2>
-            )}
+            {personSelectedToEdit ? <h2>{strings.EDIT_PERSON}</h2> : <h2>{strings.ADD_PERSON}</h2>}
             {pageError === 'REPEATED_EMAIL' && repeatedEmail && (
               <ErrorBox
                 text={strings.ALREADY_INVITED_PERSON_ERROR}
