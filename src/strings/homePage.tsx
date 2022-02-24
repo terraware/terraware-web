@@ -2,8 +2,8 @@ import LocalizedStrings from 'react-localization';
 
 const strings = new LocalizedStrings({
   en: {
-    GOOD_MORNING: 'Good morning!',
-    GOOD_MORNING_PERSON: 'Good morning, {0}!',
+    WELCOME: 'Welcome!',
+    WELCOME_PERSON: 'Welcome {0}!',
     GO_TO: 'Go to {0}',
     PEOPLE_CARD_DESCRIPTION: 'We can’t do it alone! Add people to your Organization and assign them roles.',
     PLANTS_CARD_DESCRIPTION:
