@@ -3,7 +3,7 @@ import LocalizedStrings from 'react-localization';
 const strings = new LocalizedStrings({
   en: {
     WELCOME: 'Welcome!',
-    WELCOME_PERSON: 'Welcome {0}!',
+    WELCOME_PERSON: 'Welcome, {0}!',
     GO_TO: 'Go to {0}',
     PEOPLE_CARD_DESCRIPTION: 'We can’t do it alone! Add people to your Organization and assign them roles.',
     PLANTS_CARD_DESCRIPTION:
