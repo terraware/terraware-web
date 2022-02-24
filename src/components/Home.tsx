@@ -55,8 +55,8 @@ export default function Home({ organization }: HomeProps): JSX.Element {
       <PageHeader
         title={
           user?.firstName
-            ? strings.formatString(homePageStrings.GOOD_MORNING_PERSON, user.firstName)
-            : homePageStrings.GOOD_MORNING
+            ? strings.formatString(homePageStrings.WELCOME_PERSON, user.firstName)
+            : homePageStrings.WELCOME
         }
         subtitle=''
       />
