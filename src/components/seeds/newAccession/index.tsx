@@ -242,6 +242,8 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
   useEffect(() => {
     if (accession !== record) {
       setIsEditing(true);
+    } else {
+      setIsEditing(false);
     }
   }, [accession, record]);
 
