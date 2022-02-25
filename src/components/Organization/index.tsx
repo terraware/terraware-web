@@ -104,7 +104,7 @@ export default function OrganizationView({ organization }: OrganizationViewProps
         </Grid>
         <Grid item xs={4}>
           <TextField
-            label={strings.DESCRIPTION}
+            label={strings.DESCRIPTION_OPTIONAL}
             id='description'
             type='text'
             value={organization?.description}
