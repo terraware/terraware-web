@@ -369,7 +369,7 @@ const strings = new LocalizedStrings({
     ROLE: 'Role',
     ADD_TO_PROJECT: 'Add to Project',
     NO_PROJECTS_IN_ORG: 'No Projects in Organization',
-    NO_UNSELECTED_PROJECTS: 'You have already added all projects to this person.',
+    NO_UNSELECTED_PROJECTS: 'You have already added this person to all projects.',
     ADD_PROJECTS_MESSAGE: 'To add projects to this organization go to Projects.',
     ALREADY_INVITED_PERSON_ERROR:
       'It looks like you have already added or invited this person. Please enter a unique email address or go to the existing person’s profile.',
