@@ -338,6 +338,7 @@ const strings = new LocalizedStrings({
     SILVOPASTURE: 'Silvopasture',
     SUSTAINABLE_TIMBER: 'Sustainable Timber',
     ADD_PEOPLE: 'Add People',
+    NO_UNSELECTED_PEOPLE: 'You have already added all organization members to this project.',
     EDIT_PROJECT: 'Edit Project',
     NO_PEOPLE_IN_ORG: 'No People in Organization',
     ADD_PEOPLE_MESSAGE: 'To add people to this organization go to People.',
@@ -368,6 +369,7 @@ const strings = new LocalizedStrings({
     ROLE: 'Role',
     ADD_TO_PROJECT: 'Add to Project',
     NO_PROJECTS_IN_ORG: 'No Projects in Organization',
+    NO_UNSELECTED_PROJECTS: 'You have already added all projects to this person.',
     ADD_PROJECTS_MESSAGE: 'To add projects to this organization go to Projects.',
     ALREADY_INVITED_PERSON_ERROR:
       'It looks like you have already added or invited this person. Please enter a unique email address or go to the existing person’s profile.',

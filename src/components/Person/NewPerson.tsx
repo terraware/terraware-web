@@ -307,6 +307,7 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
         open={isAddProjectsModalOpen}
         onClose={() => setIsAddProjectsModalOpen(false)}
         projects={getProjectsNotOfPerson()}
+        projectsOfPerson={projectsOfPerson}
         setProjectsOfPerson={setProjectsOfPerson}
       />
       <RemovedProjectsWarningModal

@@ -17,6 +17,8 @@ const useStyles = makeStyles((theme: Theme) =>
     title: {
       textAlign: 'center',
       paddingTop: '32px',
+      // Needed so that the title text doesn't overlap with the 'x' button
+      paddingRight: '50px',
     },
     actions: {
       display: 'flex',
@@ -72,11 +74,21 @@ export default function AddPeopleDialog(props: AddPeopleDialogProps): JSX.Elemen
     onClose();
   };
 
+  const getModalTitle = (): string => {
+    if (people && people.length > 0) {
+      return strings.ADD_PEOPLE;
+    } else if (peopleOnProject && peopleOnProject.length > 0) {
+      return strings.NO_UNSELECTED_PEOPLE;
+    }
+
+    return strings.NO_PEOPLE_IN_ORG;
+  };
+
   return (
     <Dialog onClose={onClose} disableEscapeKeyDown open={open} maxWidth='md' className={classes.peopleModal}>
       <DialogTitle className={classes.title}>
         <Typography variant='h6'>
-          {people && people.length > 0 ? strings.ADD_PEOPLE : strings.NO_PEOPLE_IN_ORG}
+          {getModalTitle()}
         </Typography>
         <DialogCloseButton onClick={onClose} />
       </DialogTitle>
