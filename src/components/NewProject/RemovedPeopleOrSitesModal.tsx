@@ -41,7 +41,7 @@ export default function RemovePeopleOrSitesDialog(props: RemovePeopleOrSitesDial
   const classes = useStyles();
   const { onClose, open, onSubmit, removedPeople, removedSites } = props;
 
-  const removedPeopleNames = removedPeople?.map((person) => person.firstName ? person.firstName : person.email);
+  const removedPeopleNames = removedPeople?.map((person) => (person.firstName ? person.firstName : person.email));
   const removedSitesNames = removedSites?.map((site) => site.name);
   const onlyPeopleRemoved = removedPeople?.length && !removedSites?.length;
   const onlySitesRemoved = !removedPeople?.length && removedSites?.length;

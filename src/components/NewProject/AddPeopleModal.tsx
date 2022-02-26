@@ -87,9 +87,7 @@ export default function AddPeopleDialog(props: AddPeopleDialogProps): JSX.Elemen
   return (
     <Dialog onClose={onClose} disableEscapeKeyDown open={open} maxWidth='md' className={classes.peopleModal}>
       <DialogTitle className={classes.title}>
-        <Typography variant='h6'>
-          {getModalTitle()}
-        </Typography>
+        <Typography variant='h6'>{getModalTitle()}</Typography>
         <DialogCloseButton onClick={onClose} />
       </DialogTitle>
       <DialogContent dividers={people && people.length > 0}>
