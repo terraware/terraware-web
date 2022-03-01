@@ -1,6 +1,5 @@
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
@@ -135,7 +134,7 @@ export default function PeopleList({ organization }: PeopleListProps): JSX.Eleme
             <Button id='new-person' label={strings.ADD_PERSON} onClick={goToNewPerson} size='medium' />
           </Grid>
           <Grid item xs={12}>
-            <Paper className={classes.mainContent}>
+            <div className={classes.mainContent}>
               <Grid container spacing={4}>
                 <Grid item xs={12}>
                   {people && (
@@ -150,7 +149,7 @@ export default function PeopleList({ organization }: PeopleListProps): JSX.Eleme
                   )}
                 </Grid>
               </Grid>
-            </Paper>
+            </div>
           </Grid>
         </Grid>
       </Container>

@@ -50,6 +50,11 @@ const useStyles = makeStyles((theme) =>
       width: '50%',
       marginTop: '10%',
     },
+    spinnerContainer: {
+      position: 'fixed',
+      top: '50%',
+      left: 'calc(50% + 100px)',
+    },
   })
 );
 
@@ -138,8 +143,8 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
   return (
     <main className={classes.main}>
       <PageHeader subtitle={strings.WELCOME_MSG} page={strings.DASHBOARD} parentPage={strings.SEEDS} />
-      {organization && summary ? (
-        <Container maxWidth={false} className={classes.mainContainer}>
+      <Container maxWidth={false} className={classes.mainContainer}>
+        {organization && summary ? (
           <Grid container spacing={3}>
             {!!organization?.projects?.length && !summary?.value?.activeAccessions.current && (
               <Grid item xs={12}>
@@ -220,10 +225,12 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
               />
             )}
           </Grid>
-        </Container>
-      ) : (
-        <CircularProgress />
-      )}
+        ) : (
+          <div className={classes.spinnerContainer}>
+            <CircularProgress />
+          </div>
+        )}
+      </Container>
     </main>
   );
 }
