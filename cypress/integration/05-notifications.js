@@ -6,7 +6,6 @@ describe('Notifications', () => {
   });
 
   it('display endpoint result', () => {
-    cy.get('#alerts-table').children().should('have.length', 1);
     cy.get('#notifications-button').click();
     cy.get('#notifications-popover').should('be.visible');
     cy.get('#notifications-popover').children().should('have.length', 11);
