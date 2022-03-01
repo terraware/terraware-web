@@ -29,6 +29,9 @@ const useStyles = makeStyles((theme: Theme) =>
       flexDirection: 'column',
       padding: '24px 12px',
     },
+    extraPadding: {
+      paddingLeft: '12px',
+    },
   })
 );
 
@@ -59,6 +62,7 @@ export default function Home({ organization }: HomeProps): JSX.Element {
             : homePageStrings.WELCOME
         }
         subtitle=''
+        titleClassName={classes.extraPadding}
       />
       <Container maxWidth={false} className={classes.mainContainer}>
         <Grid container spacing={3} className={classes.mainGrid}>
