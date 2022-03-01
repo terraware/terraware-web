@@ -153,11 +153,9 @@ export default function SpeciesList({ organization }: SpeciesListProps): JSX.Ele
         <Container maxWidth={false} className={classes.mainContainer}>
           {species && species.length ? (
             <Grid item xs={12}>
-              <Paper>
-                {species && (
-                  <Table id='species-table' columns={columns} rows={species} orderBy='name' onSelect={onSelect} />
-                )}
-              </Paper>
+              {species && (
+                <Table id='species-table' columns={columns} rows={species} orderBy='name' onSelect={onSelect} />
+              )}
             </Grid>
           ) : (
             <EmptyMessage

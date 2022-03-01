@@ -96,7 +96,7 @@ export default function SitesList({ organization }: SitesListProps): JSX.Element
             )}
           </Grid>
           <Grid item xs={12}>
-            <Paper className={classes.mainContent}>
+            <div className={classes.mainContent}>
               <Grid container spacing={4}>
                 <Grid item xs={12}>
                   {sites && (
@@ -104,7 +104,7 @@ export default function SitesList({ organization }: SitesListProps): JSX.Element
                   )}
                 </Grid>
               </Grid>
-            </Paper>
+            </div>
           </Grid>
         </Grid>
       </Container>

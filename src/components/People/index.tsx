@@ -135,7 +135,7 @@ export default function PeopleList({ organization }: PeopleListProps): JSX.Eleme
             <Button id='new-person' label={strings.ADD_PERSON} onClick={goToNewPerson} size='medium' />
           </Grid>
           <Grid item xs={12}>
-            <Paper className={classes.mainContent}>
+            <div className={classes.mainContent}>
               <Grid container spacing={4}>
                 <Grid item xs={12}>
                   {people && (
@@ -150,7 +150,7 @@ export default function PeopleList({ organization }: PeopleListProps): JSX.Eleme
                   )}
                 </Grid>
               </Grid>
-            </Paper>
+            </div>
           </Grid>
         </Grid>
       </Container>

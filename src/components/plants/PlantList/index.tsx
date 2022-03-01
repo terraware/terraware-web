@@ -64,6 +64,11 @@ const useStyles = makeStyles((theme) =>
     emptyMessage: {
       marginTop: '35px',
     },
+    spinnerContainer: {
+      position: 'fixed',
+      top: '50%',
+      left: 'calc(50% + 100px)',
+    },
   })
 );
 
@@ -234,11 +239,11 @@ export default function PlantList(props: PlantListProps): JSX.Element {
                   )}
 
                   <Grid item xs={12}>
-                    <Paper className={classes.mainContent}>
+                    <div className={classes.mainContent}>
                       <React.Suspense fallback={strings.LOADING}>
                         <PlantListContent plants={plants} speciesById={speciesById} selectPlant={selectPlant} />
                       </React.Suspense>
-                    </Paper>
+                    </div>
                   </Grid>
                 </>
               ) : ['Admin', 'Manager', 'Owner'].includes(organization?.role || '') ? (
@@ -260,7 +265,9 @@ export default function PlantList(props: PlantListProps): JSX.Element {
           </Container>
         </Grid>
       ) : (
-        <CircularProgress />
+        <div className={classes.spinnerContainer}>
+          <CircularProgress />
+        </div>
       )}
     </main>
   );
