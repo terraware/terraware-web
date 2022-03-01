@@ -51,6 +51,7 @@
       padding: $tw-sz-base-small;
       display: flex;
       width: 100%;
+      font-weight: $tw-fnt-nvgtn-side-nav-item-label-font-weight;
 
       .nav-item--label {
         flex: 1 1 auto;
@@ -117,7 +118,7 @@
     }
 
     &--footer {
-      bottom: 29px;
+      bottom: 16px;
       position: absolute;
       width: 100%;
     }
