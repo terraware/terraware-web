@@ -1,13 +1,4 @@
-import {
-  CircularProgress,
-  Container,
-  createStyles,
-  Grid,
-  IconButton,
-  makeStyles,
-  Paper,
-  Typography,
-} from '@material-ui/core';
+import { CircularProgress, Container, createStyles, Grid, IconButton, makeStyles, Typography } from '@material-ui/core';
 import TuneIcon from '@material-ui/icons/Tune';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
