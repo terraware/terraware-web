@@ -25,6 +25,11 @@ const tableStyles = makeStyles((theme) => ({
   inactiveRow: {
     background: theme.palette.neutral[50],
   },
+  tableRow: {
+    '&.MuiTableRow-root.Mui-selected': {
+      backgroundColor: 'initial',
+    },
+  },
 }));
 
 export interface Props<T> {
@@ -213,7 +218,9 @@ export default function EnhancedTable<T>({
                           handleClick(e, row as T);
                         }
                       }}
-                      className={isInactive && isInactive(row as T) ? classes.inactiveRow : undefined}
+                      className={`${isInactive && isInactive(row as T) ? classes.inactiveRow : undefined} ${
+                        classes.tableRow
+                      }`}
                       selected={isItemSelected}
                       aria-checked={isItemSelected}
                     >

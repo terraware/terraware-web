@@ -60,6 +60,7 @@ interface Props {
   selectedOrgInfo?: SelectedOrgInfo;
   onChangeSelectedOrgInfo?: (selectedValues: SelectedOrgInfo) => void;
   showFacility?: boolean;
+  titleClassName?: string;
 }
 
 export default function PageHeader({
@@ -76,6 +77,7 @@ export default function PageHeader({
   selectedOrgInfo,
   onChangeSelectedOrgInfo,
   showFacility,
+  titleClassName,
 }: Props): JSX.Element {
   const classes = useStyles();
   const history = useHistory();
@@ -119,7 +121,7 @@ export default function PageHeader({
           )}
           <div className={classes.mainContent}>
             <Box display='flex' justifyContent='space-between' alignItems='center'>
-              <Typography id='title' variant='h4' className={classes.pageTitle}>
+              <Typography id='title' variant='h4' className={`${classes.pageTitle} ${titleClassName}`}>
                 {title}
               </Typography>
 

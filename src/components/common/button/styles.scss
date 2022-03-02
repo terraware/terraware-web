@@ -10,6 +10,10 @@
   border-style: solid;
   position: relative;
 
+  &:hover {
+    cursor: pointer;
+  }
+
   &--small {
     height: $tw-sz-btn-small-height;
     font-size: $tw-fnt-btn-label-small-font-size;

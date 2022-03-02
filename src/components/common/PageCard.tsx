@@ -33,6 +33,7 @@ const useStyles = makeStyles((theme) =>
       fontSize: '20px',
       lineHeight: '28px',
       paddingLeft: '10px',
+      fontWeight: 600,
     },
     description: {
       fontSize: '16px',

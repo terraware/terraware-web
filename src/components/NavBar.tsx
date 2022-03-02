@@ -111,9 +111,9 @@ export default function NavBar({ organization }: NavBarProps): JSX.Element | nul
             onClick={() => navigate(APP_PATHS.SITES)}
             id='sites'
           />
+          <NavSection />
         </>
       )}
-      <NavSection />
       {role && ['Admin', 'Owner'].includes(role) && (
         <NavItem
           label={strings.ADMIN}
