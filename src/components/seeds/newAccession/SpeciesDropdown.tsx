@@ -9,10 +9,11 @@ interface SpeciesDropdownProps {
   selectedSpecies?: string;
   organization?: ServerOrganization;
   onChange: (id: string, value: unknown, isNew: boolean) => void;
+  disabled?: boolean;
 }
 
 export default function SpeciesDropdown(props: SpeciesDropdownProps): JSX.Element {
-  const { selectedSpecies, organization, onChange } = props;
+  const { selectedSpecies, organization, onChange, disabled } = props;
   const [speciesList, setSpeciesList] = useState<Species[]>([]);
 
   useEffect(() => {
@@ -44,6 +45,7 @@ export default function SpeciesDropdown(props: SpeciesDropdownProps): JSX.Elemen
       onChange={onChangeHandler}
       label={strings.SPECIES}
       values={speciesList.map((item) => item.name)}
+      disabled={disabled}
     />
   );
 }

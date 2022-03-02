@@ -379,11 +379,22 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
               }
             >
               <Grid item xs={4}>
-                <Species selectedSpecies={record.species} organization={organization} onChange={onSpeciesChanged} />
+                <Species
+                  selectedSpecies={record.species}
+                  organization={organization}
+                  onChange={onSpeciesChanged}
+                  disabled={isPendingCheckIn}
+                />
               </Grid>
             </Suspense>
             <Grid item xs={4}>
-              <TextField id='family' value={record.family} onChange={onChange} label={strings.FAMILY} />
+              <TextField
+                id='family'
+                value={record.family}
+                onChange={onChange}
+                label={strings.FAMILY}
+                disabled={isPendingCheckIn}
+              />
             </Grid>
             <Grid item xs={4} />
             <Grid item xs={4}>
@@ -396,10 +407,17 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
                 min={0}
                 helperText={getErrorText('numberOfTrees')}
                 error={getErrorText('numberOfTrees') ? true : false}
+                disabled={isPendingCheckIn}
               />
             </Grid>
             <Grid item xs={4}>
-              <TextField id='founderId' value={record.founderId} onChange={onChange} label={strings.FOUNDER_ID} />
+              <TextField
+                id='founderId'
+                value={record.founderId}
+                onChange={onChange}
+                label={strings.FOUNDER_ID}
+                disabled={isPendingCheckIn}
+              />
             </Grid>
             <Grid item xs={4} />
             <Grid item xs={4}>
@@ -413,6 +431,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
                   { label: strings.UNSURE, value: 'Unsure' },
                 ]}
                 onChange={onChange}
+                disabled={isPendingCheckIn}
               />
             </Grid>
             <Grid item xs={4}>
@@ -426,6 +445,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
                   { label: strings.UNSURE, value: 'Unsure' },
                 ]}
                 onChange={onChange}
+                disabled={isPendingCheckIn}
               />
             </Grid>
             <Grid item xs={4} />
@@ -439,6 +459,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
                   { label: strings.OUTPLANT, value: 'Outplant' },
                 ]}
                 onChange={onChange}
+                disabled={isPendingCheckIn}
               />
             </Grid>
             <Grid item xs={12}>
@@ -448,6 +469,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
                 onChange={onChange}
                 label={strings.FIELD_NOTES}
                 placeholder={strings.FIELD_NOTES_PLACEHOLDER}
+                disabled={isPendingCheckIn}
               />
             </Grid>
           </Grid>
@@ -464,7 +486,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
               receivedDate={record.receivedDate}
               refreshErrors={refreshErrors}
               onChange={onChange}
-              disabled={accession.deviceInfo !== undefined}
+              disabled={accession.deviceInfo !== undefined || isPendingCheckIn}
             />
           </Suspense>
           <Divisor />
@@ -481,6 +503,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
                   facilityId={accession.facilityId!}
                   onChange={onChange}
                   mainCollector={record.primaryCollector}
+                  disabled={isPendingCheckIn}
                 />
               </Grid>
             </Suspense>
@@ -489,16 +512,29 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
                 id='secondaryCollectors'
                 secondaryCollectors={record.secondaryCollectors}
                 onChange={onChange}
+                disabled={isPendingCheckIn}
               />
             </Grid>
           </Grid>
           <Divisor />
           <Grid container spacing={4}>
             <Grid item xs={4}>
-              <TextField id='siteLocation' value={record.siteLocation} onChange={onChange} label={strings.SITE} />
+              <TextField
+                id='siteLocation'
+                value={record.siteLocation}
+                onChange={onChange}
+                label={strings.SITE}
+                disabled={isPendingCheckIn}
+              />
             </Grid>
             <Grid item xs={4}>
-              <TextField id='landowner' value={record.landowner} onChange={onChange} label={strings.LANDOWNER} />
+              <TextField
+                id='landowner'
+                value={record.landowner}
+                onChange={onChange}
+                label={strings.LANDOWNER}
+                disabled={isPendingCheckIn}
+              />
             </Grid>
             <Grid item xs={4} />
             <Grid item xs={12}>
@@ -508,6 +544,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
                 onChange={onChange}
                 label={strings.ENVIRONMENTAL_NOTES}
                 placeholder={strings.ENVIRONMENTAL_NOTES_PLACEHOLDER}
+                disabled={isPendingCheckIn}
               />
             </Grid>
           </Grid>

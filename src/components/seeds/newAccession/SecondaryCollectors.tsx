@@ -9,9 +9,15 @@ interface Props {
   id: string;
   secondaryCollectors?: string[];
   onChange: (id: string, value: string[]) => void;
+  disabled?: boolean;
 }
 
-export default function SecondaryCollectors({ id, secondaryCollectors = [''], onChange }: Props): JSX.Element {
+export default function SecondaryCollectors({
+  id,
+  secondaryCollectors = [''],
+  onChange,
+  disabled,
+}: Props): JSX.Element {
   const onAddCollector = () => {
     const updatedSecondaryCollectors = [...secondaryCollectors];
     updatedSecondaryCollectors.push('');
@@ -40,6 +46,7 @@ export default function SecondaryCollectors({ id, secondaryCollectors = [''], on
             value={collector}
             onChange={(_id, value) => onCollectorChange(value, index)}
             label={index === 0 && 'Secondary collector'}
+            disabled={disabled}
           />
           {index !== 0 && (
             <IconButton
@@ -53,16 +60,18 @@ export default function SecondaryCollectors({ id, secondaryCollectors = [''], on
           )}
         </Box>
       ))}
-      <Link
-        href='#'
-        id='addCollectorButton'
-        onClick={(event: React.SyntheticEvent) => {
-          preventDefaultEvent(event);
-          onAddCollector();
-        }}
-      >
-        {strings.ADD_NEW}
-      </Link>
+      {!disabled && (
+        <Link
+          href='#'
+          id='addCollectorButton'
+          onClick={(event: React.SyntheticEvent) => {
+            preventDefaultEvent(event);
+            onAddCollector();
+          }}
+        >
+          {strings.ADD_NEW}
+        </Link>
+      )}
     </>
   );
 }
