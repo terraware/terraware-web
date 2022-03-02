@@ -19,7 +19,6 @@ const tableStyles = makeStyles((theme) => ({
     },
   },
   table: {
-    padding: theme.spacing(0, 3),
     borderCollapse: 'initial',
   },
   inactiveRow: {
