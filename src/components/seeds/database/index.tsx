@@ -90,6 +90,11 @@ const useStyles = makeStyles((theme: Theme) =>
     requestMobileMessage: {
       marginBottom: '32px',
     },
+    spinnerContainer: {
+      position: 'fixed',
+      top: '50%',
+      left: 'calc(50% + 100px)',
+    },
   })
 );
 
@@ -266,9 +271,6 @@ export default function Database(props: DatabaseProps): JSX.Element {
     if (searchResults) {
       return `${searchResults.length} total`;
     }
-    if (searchResults === undefined) {
-      return <CircularProgress />;
-    }
     if (searchResults === null) {
       return strings.GENERIC_ERROR;
     }
@@ -351,7 +353,6 @@ export default function Database(props: DatabaseProps): JSX.Element {
               onChange={onFilterChange}
             />
           )}
-          {(fieldOptions === undefined || availableFieldOptions === undefined) && <CircularProgress />}
           {(fieldOptions === null || availableFieldOptions === null) && strings.GENERIC_ERROR}
         </PageHeader>
         <Container maxWidth={false} className={classes.mainContainer}>
@@ -393,23 +394,21 @@ export default function Database(props: DatabaseProps): JSX.Element {
                     </Grid>
                   )}
                   <Grid item xs={12}>
-                    <Paper>
-                      {searchResults && (
-                        <Table
-                          columns={displayColumnDetails}
-                          rows={searchResults}
-                          orderBy={searchSortOrder.field}
-                          order={searchSortOrder.direction === 'Ascending' ? 'asc' : 'desc'}
-                          Renderer={SearchCellRenderer}
-                          onSelect={onSelect}
-                          sortHandler={onSortChange}
-                          isInactive={isInactive}
-                          onReorderEnd={onReorderEnd}
-                        />
-                      )}
-                      {searchResults === undefined && <CircularProgress />}
-                      {searchResults === null && strings.GENERIC_ERROR}
-                    </Paper>
+                    {searchResults && (
+                      <Table
+                        columns={displayColumnDetails}
+                        rows={searchResults}
+                        orderBy={searchSortOrder.field}
+                        order={searchSortOrder.direction === 'Ascending' ? 'asc' : 'desc'}
+                        Renderer={SearchCellRenderer}
+                        onSelect={onSelect}
+                        sortHandler={onSortChange}
+                        isInactive={isInactive}
+                        onReorderEnd={onReorderEnd}
+                      />
+                    )}
+                    {searchResults === undefined && <CircularProgress />}
+                    {searchResults === null && strings.GENERIC_ERROR}
                   </Grid>
                 </>
               ) : HighOrganizationRolesValues.includes(organization?.role || '') ? (
@@ -429,7 +428,9 @@ export default function Database(props: DatabaseProps): JSX.Element {
               )}
             </Grid>
           ) : (
-            <CircularProgress />
+            <div className={classes.spinnerContainer}>
+              <CircularProgress />
+            </div>
           )}
         </Container>
       </main>

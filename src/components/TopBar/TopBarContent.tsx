@@ -14,7 +14,6 @@ const useStyles = makeStyles((theme) =>
       width: '1px',
       height: '32px',
       backgroundColor: theme.palette.gray[200],
-      marginTop: '8px',
       marginRight: '16px',
       marginLeft: '16px',
     },
