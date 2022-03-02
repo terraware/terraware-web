@@ -14,10 +14,8 @@ import { API_PULL_INTERVAL, APP_PATHS, TERRAWARE_SUPPORT_LINK } from 'src/consta
 import { seedsSummarySelectedOrgInfo } from 'src/state/selectedOrgInfoPerPage';
 import strings from 'src/strings';
 import emptyMessageStrings from 'src/strings/emptyMessageModal';
-import { Notifications } from 'src/types/Notifications';
 import { HighOrganizationRolesValues, ServerOrganization } from 'src/types/Organization';
 import PageHeader from '../PageHeader';
-import Alerts from './Alerts';
 import SummaryPaper from './SummaryPaper';
 import Updates from './Updates';
 
@@ -66,14 +64,13 @@ Cookies.defaults = {
 type SeedSummaryProps = {
   organization?: ServerOrganization;
   setSeedSearchCriteria: (criteria: SeedSearchCriteria) => void;
-  notifications?: Notifications;
   setFacilityIdSelected: (facilityId: number) => void;
 };
 
 export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
   const classes = useStyles();
   const history = useHistory();
-  const { setSeedSearchCriteria, notifications, organization, setFacilityIdSelected } = props;
+  const { setSeedSearchCriteria, organization, setFacilityIdSelected } = props;
   // populateSummaryInterval value is only being used when it is set.
   const [, setPopulateSummaryInterval] = useState<ReturnType<typeof setInterval>>();
   const [summary, setSummary] = useState<GetSummaryResponse>();
@@ -192,12 +189,7 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
                       />
                     </Paper>
                   </Grid>
-                  <Grid item xs={4}>
-                    <Paper className={`${classes.paper} ${classes.fixedHeight}`}>
-                      <Alerts notifications={notifications} />
-                    </Paper>
-                  </Grid>
-                  <Grid item xs={8}>
+                  <Grid item xs={12}>
                     <Paper className={`${classes.paper} ${classes.fixedHeight}`}>
                       <Updates
                         setSeedSearchCriteria={setSeedSearchCriteria}
