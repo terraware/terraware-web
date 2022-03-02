@@ -14,7 +14,6 @@ import { API_PULL_INTERVAL, APP_PATHS, TERRAWARE_SUPPORT_LINK } from 'src/consta
 import { seedsSummarySelectedOrgInfo } from 'src/state/selectedOrgInfoPerPage';
 import strings from 'src/strings';
 import emptyMessageStrings from 'src/strings/emptyMessageModal';
-import { Notifications } from 'src/types/Notifications';
 import { HighOrganizationRolesValues, ServerOrganization } from 'src/types/Organization';
 import PageHeader from '../PageHeader';
 import SummaryPaper from './SummaryPaper';
@@ -60,7 +59,6 @@ Cookies.defaults = {
 type SeedSummaryProps = {
   organization?: ServerOrganization;
   setSeedSearchCriteria: (criteria: SeedSearchCriteria) => void;
-  notifications?: Notifications;
   setFacilityIdSelected: (facilityId: number) => void;
 };
 

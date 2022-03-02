@@ -324,7 +324,6 @@ function AppContent() {
                 <SeedSummary
                   organization={filteredOrganization()}
                   setSeedSearchCriteria={setSeedSearchCriteria}
-                  notifications={notifications}
                   setFacilityIdSelected={setFacilityIdSelected}
                 />
               </Route>
