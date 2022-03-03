@@ -10,8 +10,9 @@ const strings = new LocalizedStrings({
     NO_PROJECTS_DESCRIPTION_SITES: 'Sites represent each of your planting locations.',
     NO_PROJECTS_DESCRIPTION_PEOPLE: 'Invite those who contribute to the organization’s success.',
     DESCRIPTION_SPECIES: 'Manage species that you collect or plant.',
-    FOOTNOTE_WAIT_FOR_INVITATION:
-      'Not interested in creating your own organization or expecting an invitation? Don’t worry. You’ll receive an email when your admin adds you to the organization.',
+    FOOTNOTE_WAIT_FOR_INVITATION_1: 'Not interested in creating your own organization or expecting an invitation?',
+    FOOTNOTE_WAIT_FOR_INVITATION_2:
+      'Don’t worry. You’ll receive an email when your admin adds you to the organization.',
   },
 });
 

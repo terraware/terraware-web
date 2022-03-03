@@ -70,6 +70,9 @@ const useStyles = makeStyles((theme) =>
       maxWidth: '550px',
       marginBottom: '24px',
     },
+    noSpacing: {
+      margin: 0,
+    },
   })
 );
 
@@ -85,7 +88,7 @@ type EmptyStateContentProps = {
   listItems: ListItemContent[];
   buttonText: string;
   onClickButton: () => void;
-  footnote?: string;
+  footnote?: string[];
   styles: EmptyStateStyleProps;
 };
 
@@ -109,7 +112,13 @@ export default function EmptyStateContent(props: EmptyStateContentProps): JSX.El
         })}
       </div>
       <Button className={classes.button} label={buttonText} onClick={onClickButton} />
-      {footnote && <div className={classes.footNote}>{footnote}</div>}
+      {footnote && (
+        <div className={classes.footNote}>
+          {footnote.map((note) => {
+            return <p className={classes.noSpacing}>{note}</p>;
+          })}
+        </div>
+      )}
     </Container>
   );
 }

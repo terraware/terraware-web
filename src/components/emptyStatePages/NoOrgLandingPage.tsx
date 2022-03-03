@@ -60,7 +60,10 @@ export default function NoOrgLandingPage(props: LandingPageProps): JSX.Element {
           listItems={LIST_ITEM_CONTENT}
           buttonText={dictionary.CREATE_ORGANIZATION}
           onClickButton={() => setIsOrgModalOpen(true)}
-          footnote={landingPageStrings.FOOTNOTE_WAIT_FOR_INVITATION}
+          footnote={[
+            landingPageStrings.FOOTNOTE_WAIT_FOR_INVITATION_1,
+            landingPageStrings.FOOTNOTE_WAIT_FOR_INVITATION_2,
+          ]}
           styles={EMPTY_STATE_CONTENT_STYLES}
         />
       </Container>
