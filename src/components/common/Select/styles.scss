@@ -71,7 +71,8 @@
     }
 
     &:active {
-      border: $tw-sz-frm-fld-text-input-stroke-active solid $tw-clr-frm-fld-text-input-stroke-hover;
+      border: $tw-sz-frm-fld-text-input-stroke solid $tw-clr-frm-fld-text-input-stroke-hover;
+      outline: $tw-sz-frm-fld-text-input-stroke solid $tw-clr-frm-fld-text-input-stroke-hover;
     }
 
     input {
@@ -140,7 +141,8 @@
       }
 
       &:active {
-        border: $tw-sz-frm-fld-text-input-stroke-active solid $tw-clr-frm-fld-text-input-stroke-error;
+        border: $tw-sz-frm-fld-text-input-stroke solid $tw-clr-frm-fld-text-input-stroke-error;
+        outline: $tw-sz-frm-fld-text-input-stroke solid $tw-clr-frm-fld-text-input-stroke-error;
       }
     }
 
@@ -153,7 +155,8 @@
       }
 
       &:active {
-        border: $tw-sz-frm-fld-text-input-stroke-active solid $tw-clr-frm-fld-text-input-stroke-warning;
+        border: $tw-sz-frm-fld-text-input-stroke solid $tw-clr-frm-fld-text-input-stroke-warning;
+        outline: $tw-sz-frm-fld-text-input-stroke solid $tw-clr-frm-fld-text-input-stroke-warning;
       }
     }
 
