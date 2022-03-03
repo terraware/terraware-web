@@ -114,8 +114,12 @@ export default function EmptyStateContent(props: EmptyStateContentProps): JSX.El
       <Button className={classes.button} label={buttonText} onClick={onClickButton} />
       {footnote && (
         <div className={classes.footNote}>
-          {footnote.map((note) => {
-            return <p className={classes.noSpacing}>{note}</p>;
+          {footnote.map((note, index) => {
+            return (
+              <p className={classes.noSpacing} key={`note-${index}`}>
+                {note}
+              </p>
+            );
           })}
         </div>
       )}
