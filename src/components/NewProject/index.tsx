@@ -115,7 +115,7 @@ export default function ProjectView({ organization, reloadOrganizationData }: Pr
   const { projectId } = useParams<{ projectId: string }>();
   const [projectSelected, setProjectSelected] = useState<Project | null>();
   const [selectedPeopleRows, setSelectedPeopleRows] = useState<OrganizationUser[]>([]);
-  const [selectedSitesRows, setSelectedSitesRows] = useState<Site[]>();
+  const [selectedSitesRows, setSelectedSitesRows] = useState<Site[]>([]);
   const [removedPeople, setRemovedPeople] = useState<OrganizationUser[]>();
   const [modifiedSites, setModifiedSites] = useState<Site[]>();
 

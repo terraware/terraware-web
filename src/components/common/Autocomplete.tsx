@@ -8,6 +8,7 @@ export interface Props {
   values: string[];
   onChange: (id: string, value: string) => void;
   selected: string | undefined;
+  disabled?: boolean;
 }
 
 export type DropdownItem = {
@@ -15,7 +16,7 @@ export type DropdownItem = {
   value: string;
 };
 
-export default function Autocomplete({ id, label, values, onChange, selected }: Props): JSX.Element {
+export default function Autocomplete({ id, label, values, onChange, selected, disabled }: Props): JSX.Element {
   const onChangeHandler = (event: ChangeEvent<any>, value: string | null) => {
     if (event) {
       if (value) {
@@ -28,6 +29,7 @@ export default function Autocomplete({ id, label, values, onChange, selected }: 
 
   return (
     <MUIAutocomplete
+      disabled={disabled}
       id={id}
       options={values}
       getOptionLabel={(option) => (option ? option : '')}
