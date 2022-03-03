@@ -56,11 +56,13 @@ export type ServerOrganization = {
   createdTime?: string;
 };
 
-export type HighOrganizationRoles = 'Manager' | 'Admin' | 'Owner';
+export type HighOrganizationRoles = 'Admin' | 'Owner';
 
-export const HighOrganizationRolesValues = ['Admin', 'Manager', 'Owner'];
+export const HighOrganizationRolesValues = ['Admin', 'Owner'];
 
-export type AllOrganizationRoles = HighOrganizationRoles | 'Contributor';
+// Manager role included here so we don't get type issues with the server response,
+// which could contain a user with a manger role.
+export type AllOrganizationRoles = HighOrganizationRoles | 'Manager' | 'Contributor';
 
 export interface SelectedOrgInfo {
   selectedProject?: Project;

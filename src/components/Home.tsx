@@ -8,7 +8,7 @@ import TfDivisor from 'src/components/common/TfDivisor';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import homePageStrings from 'src/strings/homePage';
-import { ServerOrganization } from 'src/types/Organization';
+import { HighOrganizationRolesValues, ServerOrganization } from 'src/types/Organization';
 import { User } from 'src/types/User';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -66,9 +66,9 @@ export default function Home({ organization }: HomeProps): JSX.Element {
       />
       <Container maxWidth={false} className={classes.mainContainer}>
         <Grid container spacing={3} className={classes.mainGrid}>
-          {(role === 'Manager' || role === 'Owner' || role === 'Admin') && (
+          {role && role in HighOrganizationRolesValues && (
             <>
-              <Grid item xs={role === 'Manager' ? 6 : 4}>
+              <Grid item xs={4}>
                 <PageCard
                   name={strings.PROJECTS}
                   icon='folder'
@@ -78,7 +78,7 @@ export default function Home({ organization }: HomeProps): JSX.Element {
                   linkStyle={'underline'}
                 />
               </Grid>
-              <Grid item xs={role === 'Manager' ? 6 : 4}>
+              <Grid item xs={4}>
                 <PageCard
                   name={strings.SITES}
                   icon='site'
@@ -88,18 +88,16 @@ export default function Home({ organization }: HomeProps): JSX.Element {
                   linkStyle={'underline'}
                 />
               </Grid>
-              {(role === 'Admin' || role === 'Owner') && (
-                <Grid item xs={4}>
-                  <PageCard
-                    name={strings.PEOPLE}
-                    icon='person'
-                    description={homePageStrings.PEOPLE_CARD_DESCRIPTION}
-                    link={APP_PATHS.PEOPLE}
-                    linkText={strings.formatString(homePageStrings.GO_TO, strings.PEOPLE) as string}
-                    linkStyle={'underline'}
-                  />
-                </Grid>
-              )}
+              <Grid item xs={4}>
+                <PageCard
+                  name={strings.PEOPLE}
+                  icon='person'
+                  description={homePageStrings.PEOPLE_CARD_DESCRIPTION}
+                  link={APP_PATHS.PEOPLE}
+                  linkText={strings.formatString(homePageStrings.GO_TO, strings.PEOPLE) as string}
+                  linkStyle={'underline'}
+                />
+              </Grid>
 
               <Grid item xs={12}>
                 <TfDivisor />

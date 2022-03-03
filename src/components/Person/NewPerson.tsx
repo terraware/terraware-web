@@ -370,7 +370,6 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
             <p>{strings.ROLES_INFO}</p>
             <ul>
               <li>{strings.CONTRIBUTOR_INFO}</li>
-              <li>{strings.MANAGER_INFO}</li>
               <li>{strings.ADMIN_INFO}</li>
             </ul>
           </Grid>
@@ -379,7 +378,7 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
               id='role'
               label={strings.ROLE}
               onChange={onChangeRole}
-              options={['Contributor', 'Manager', 'Admin']}
+              options={['Contributor', 'Admin']}
               selectedValue={newPerson.role}
             />
           </Grid>
