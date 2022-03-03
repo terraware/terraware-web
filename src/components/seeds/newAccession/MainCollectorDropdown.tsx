@@ -7,10 +7,11 @@ interface MainCollectorDropdownProps {
   facilityId: number;
   onChange: (id: string, value: unknown) => void;
   mainCollector?: string;
+  disabled?: boolean;
 }
 
 export default function MainCollectorDropdown(props: MainCollectorDropdownProps): JSX.Element {
-  const { facilityId, onChange, mainCollector } = props;
+  const { facilityId, onChange, mainCollector, disabled } = props;
   const [collectors, setCollectors] = useState<string[] | null>([]);
 
   useEffect(() => {
@@ -32,6 +33,7 @@ export default function MainCollectorDropdown(props: MainCollectorDropdownProps)
       onChange={onChange}
       label={strings.PRIMARY_COLLECTOR}
       values={collectors.filter((collector) => collector !== null)}
+      disabled={disabled}
     />
   );
 }

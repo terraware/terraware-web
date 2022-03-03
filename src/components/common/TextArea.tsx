@@ -20,6 +20,7 @@ export default function TextArea(props: Props): JSX.Element {
       size='small'
       fullWidth={true}
       placeholder={props.placeholder}
+      disabled={props.disabled}
     />
   );
 }

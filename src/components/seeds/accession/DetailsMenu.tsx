@@ -57,19 +57,19 @@ export default function DetailsMenu({ state }: Props): JSX.Element | null {
       title: strings.PROCESSING_AND_DRYING,
       route: APP_PATHS.ACCESSIONS_ITEM_PROCESSING_DRYING,
       active: useRouteMatch(APP_PATHS.ACCESSIONS_ITEM_PROCESSING_DRYING),
-      disabled: state === 'Nursery',
+      disabled: state === 'Nursery' || state === 'Awaiting Check-In',
     },
     {
       title: strings.STORAGE,
       route: APP_PATHS.ACCESSIONS_ITEM_STORAGE,
       active: useRouteMatch(APP_PATHS.ACCESSIONS_ITEM_STORAGE),
-      disabled: state === 'Nursery' || state === 'Pending',
+      disabled: state === 'Nursery' || state === 'Pending' || state === 'Awaiting Check-In',
     },
     {
       title: strings.WITHDRAWAL,
       route: APP_PATHS.ACCESSIONS_ITEM_WITHDRAWAL,
       active: useRouteMatch(APP_PATHS.ACCESSIONS_ITEM_WITHDRAWAL),
-      disabled: state === 'Nursery' || state === 'Pending',
+      disabled: state === 'Nursery' || state === 'Pending' || state === 'Awaiting Check-In',
     },
   ];
   const location = useStateLocation();

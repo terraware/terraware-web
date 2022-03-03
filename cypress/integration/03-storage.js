@@ -4,6 +4,7 @@ describe('Storage', () => {
     cy.get('#newAccession').click().url().should('contain', '/accessions/new');
     cy.get('#saveAccession').click();
     cy.get('#snackbar').contains('Accession saved');
+    cy.get('#checkIn').click();
     cy.get('a#menu-storage').should('not.exist');
 
     cy.get('#menu-processing-drying').click();

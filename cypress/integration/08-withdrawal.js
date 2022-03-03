@@ -4,6 +4,7 @@ describe('Withdrawal', () => {
       cy.visit('/accessions');
       cy.get('#newAccession').click().url().should('contain', '/accessions/new');
       cy.get('#saveAccession').click();
+      cy.get('#checkIn').click();
 
       cy.get('#menu-processing-drying').click();
 
@@ -195,6 +196,7 @@ describe('Withdrawal', () => {
 
       cy.get('#saveAccession').click();
       cy.get('#snackbar').contains('Accession saved');
+      cy.get('#checkIn').click();
 
       cy.get('#menu-processing-drying').click();
       cy.get('#processingMethod').click();
