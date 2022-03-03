@@ -16,6 +16,11 @@ import TableCellRenderer from './TableCellRenderer';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     title: {
+      paddingTop: '32px',
+      // Needed so that the text doesn't overlap with the 'x' button
+      paddingRight: '50px',
+    },
+    center: {
       textAlign: 'center',
     },
     actions: {
@@ -24,6 +29,9 @@ const useStyles = makeStyles((theme: Theme) =>
       alignItems: 'center',
       padding: theme.spacing(4),
     },
+    errorMessage: {
+      width: '100%',
+    },
   })
 );
 
@@ -31,6 +39,7 @@ export interface AddPeopleDialogProps {
   open: boolean;
   onClose: () => void;
   projects?: Project[];
+  projectsOfPerson: Project[] | undefined;
   setProjectsOfPerson: React.Dispatch<React.SetStateAction<Project[] | undefined>>;
 }
 
@@ -43,7 +52,7 @@ const projectColumns: TableColumnType[] = [
 
 export default function AddPeopleDialog(props: AddPeopleDialogProps): JSX.Element {
   const classes = useStyles();
-  const { onClose, open, projects, setProjectsOfPerson } = props;
+  const { onClose, open, projects, projectsOfPerson, setProjectsOfPerson } = props;
 
   const [selectedRows, setSelectedRows] = useState<Project[]>([]);
 
@@ -60,15 +69,23 @@ export default function AddPeopleDialog(props: AddPeopleDialogProps): JSX.Elemen
     onClose();
   };
 
+  const getModalTitle = (): string => {
+    if (projects && projects.length > 0) {
+      return strings.ADD_TO_PROJECT;
+    } else if (projectsOfPerson && projectsOfPerson.length > 0) {
+      return strings.NO_UNSELECTED_PROJECTS;
+    }
+
+    return strings.NO_PROJECTS_IN_ORG;
+  };
+
   return (
-    <Dialog onClose={onClose} disableEscapeKeyDown open={open} maxWidth='md'>
+    <Dialog onClose={onClose} disableEscapeKeyDown open={open} maxWidth='md' className={classes.center}>
       <DialogTitle className={classes.title}>
-        <Typography variant='h6'>
-          {projects && projects.length > 0 ? strings.ADD_TO_PROJECT : strings.NO_PROJECTS_IN_ORG}
-        </Typography>
+        <Typography variant='h6'>{getModalTitle()}</Typography>
         <DialogCloseButton onClick={onClose} />
       </DialogTitle>
-      <DialogContent dividers>
+      <DialogContent>
         <Grid container spacing={4}>
           {projects && projects.length > 0 ? (
             <Table
@@ -81,7 +98,7 @@ export default function AddPeopleDialog(props: AddPeopleDialogProps): JSX.Elemen
               Renderer={TableCellRenderer}
             />
           ) : (
-            <p>{strings.ADD_PROJECTS_MESSAGE}</p>
+            <p className={classes.errorMessage}>{strings.ADD_PROJECTS_MESSAGE}</p>
           )}
         </Grid>
       </DialogContent>

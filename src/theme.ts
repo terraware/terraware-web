@@ -73,6 +73,9 @@ export default createTheme({
           borderRadius: '4px',
           backgroundColor: '#6C757D',
         },
+        body: {
+          color: '#3a4445',
+        },
       },
     },
   },

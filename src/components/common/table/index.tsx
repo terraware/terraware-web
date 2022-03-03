@@ -19,7 +19,6 @@ const tableStyles = makeStyles((theme) => ({
     },
   },
   table: {
-    padding: theme.spacing(0, 3),
     borderCollapse: 'initial',
   },
   inactiveRow: {
@@ -53,7 +52,7 @@ export interface Props<T> {
   buttonType?: 'productive' | 'passive' | 'destructive' | undefined;
   onButtonClick?: () => void;
   selectedRows?: T[];
-  setSelectedRows?: (selectedRows: T[]) => void;
+  setSelectedRows?: React.Dispatch<React.SetStateAction<T[]>>;
   showPagination?: boolean;
 }
 
@@ -88,8 +87,14 @@ export default function EnhancedTable<T>({
   const [itemsToSkip, setItemsToSkip] = useState(0);
 
   useEffect(() => {
-    if (rows.length && setSelectedRows) {
-      setSelectedRows([]);
+    if (setSelectedRows && rows.length >= 0) {
+      setSelectedRows((currentlySelectedRows: T[]) => {
+        const emptyArray: T[] = [];
+        if (rows.length || currentlySelectedRows.length > rows.length) {
+          return emptyArray;
+        }
+        return currentlySelectedRows;
+      });
     }
   }, [rows, setSelectedRows]);
 

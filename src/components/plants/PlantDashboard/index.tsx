@@ -70,6 +70,11 @@ const useStyles = makeStyles((theme) =>
     emptyMessage: {
       marginBottom: '35px',
     },
+    spinnerContainer: {
+      position: 'fixed',
+      top: '50%',
+      left: '50%',
+    },
   })
 );
 
@@ -244,7 +249,9 @@ export default function PlantDashboard(props: PlantDashboardProps): JSX.Element 
           </Container>
         </>
       ) : (
-        <CircularProgress />
+        <div className={classes.spinnerContainer}>
+          <CircularProgress />
+        </div>
       )}
     </main>
   );

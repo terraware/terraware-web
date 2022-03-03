@@ -94,9 +94,9 @@ export default function NavBar({ organization }: NavBarProps): JSX.Element | nul
         onClick={() => navigate(APP_PATHS.SPECIES)}
         id='speciesNb'
       />
-      <NavSection />
       {role && HighOrganizationRolesValues.includes(role) && (
         <>
+          <NavSection />
           <NavItem
             label={strings.PROJECTS}
             icon='folder'
@@ -113,29 +113,31 @@ export default function NavBar({ organization }: NavBarProps): JSX.Element | nul
           />
         </>
       )}
-      <NavSection />
       {role && ['Admin', 'Owner'].includes(role) && (
-        <NavItem
-          label={strings.ADMIN}
-          icon='key'
-          onClick={() => !isOrganizationRoute && navigate(APP_PATHS.ORGANIZATION)}
-          id='admin'
-        >
-          <SubNavbar>
-            <NavItem
-              label={strings.ORGANIZATION}
-              selected={!!isOrganizationRoute}
-              onClick={() => !isOrganizationRoute && navigate(APP_PATHS.ORGANIZATION)}
-              id='organization'
-            />
-            <NavItem
-              label={strings.PEOPLE}
-              selected={!!isPeopleRoute}
-              onClick={() => navigate(APP_PATHS.PEOPLE)}
-              id='people'
-            />
-          </SubNavbar>
-        </NavItem>
+        <>
+          <NavSection />
+          <NavItem
+            label={strings.ADMIN}
+            icon='key'
+            onClick={() => !isOrganizationRoute && navigate(APP_PATHS.ORGANIZATION)}
+            id='admin'
+          >
+            <SubNavbar>
+              <NavItem
+                label={strings.ORGANIZATION}
+                selected={!!isOrganizationRoute}
+                onClick={() => !isOrganizationRoute && navigate(APP_PATHS.ORGANIZATION)}
+                id='organization'
+              />
+              <NavItem
+                label={strings.PEOPLE}
+                selected={!!isPeopleRoute}
+                onClick={() => navigate(APP_PATHS.PEOPLE)}
+                id='people'
+              />
+            </SubNavbar>
+          </NavItem>
+        </>
       )}
       <NavItem
         label={dictionary.CONTACT_US}

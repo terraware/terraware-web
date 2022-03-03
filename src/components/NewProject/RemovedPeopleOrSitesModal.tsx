@@ -23,6 +23,9 @@ const useStyles = makeStyles((theme: Theme) =>
       alignItems: 'center',
       padding: theme.spacing(4),
     },
+    content: {
+      textAlign: 'center',
+    },
   })
 );
 
@@ -38,7 +41,7 @@ export default function RemovePeopleOrSitesDialog(props: RemovePeopleOrSitesDial
   const classes = useStyles();
   const { onClose, open, onSubmit, removedPeople, removedSites } = props;
 
-  const removedPeopleNames = removedPeople?.map((person) => person.firstName);
+  const removedPeopleNames = removedPeople?.map((person) => (person.firstName ? person.firstName : person.email));
   const removedSitesNames = removedSites?.map((site) => site.name);
   const onlyPeopleRemoved = removedPeople?.length && !removedSites?.length;
   const onlySitesRemoved = !removedPeople?.length && removedSites?.length;
@@ -51,7 +54,7 @@ export default function RemovePeopleOrSitesDialog(props: RemovePeopleOrSitesDial
         {!!peopleAndSitesRemoved && <Typography variant='h6'>{strings.REMOVED_PEOPLE_AND_SITES_WARNING}</Typography>}
         <DialogCloseButton onClick={onClose} />
       </DialogTitle>
-      <DialogContent>
+      <DialogContent className={classes.content}>
         {!!onlyPeopleRemoved && (
           <p>
             {strings.REMOVED_PEOPLE_WARNING_DESC} {removedPeopleNames?.join(', ')}

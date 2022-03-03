@@ -68,6 +68,7 @@ const useStyles = makeStyles((theme) =>
       lineHeight: '16px',
       margin: '0 auto',
       maxWidth: '550px',
+      marginBottom: '24px',
     },
   })
 );

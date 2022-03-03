@@ -9,9 +9,14 @@ import dictionary from 'src/strings/dictionary';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
+    main: {
+      paddingTop: '64px',
+      minHeight: '100vh',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
     mainContainer: {
-      marginBottom: theme.spacing(8),
-      marginTop: `max(15vh, ${theme.spacing(8)}px)`,
       maxWidth: '1500px',
     },
   })
@@ -42,7 +47,7 @@ export default function NoOrgLandingPage(props: LandingPageProps): JSX.Element {
   const [isOrgModalOpen, setIsOrgModalOpen] = useState<boolean>(false);
 
   return (
-    <main>
+    <main className={classes.main}>
       <Container className={classes.mainContainer}>
         <AddNewOrganizationModal
           open={isOrgModalOpen}
