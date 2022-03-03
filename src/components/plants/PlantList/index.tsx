@@ -14,7 +14,7 @@ import { getPlantsForMultipleLayers } from 'src/api/plants/plants';
 import { getPlantPhoto } from 'src/api/plants/photo';
 import { Plant, PlantSearchOptions } from 'src/types/Plant';
 import { SpeciesById } from 'src/types/Species';
-import { ServerOrganization } from 'src/types/Organization';
+import { HighOrganizationRolesValues, ServerOrganization } from 'src/types/Organization';
 import Title from 'src/components/common/Title';
 import { getPlantLayers } from 'src/api/organization/organization';
 import { getAllSites, getSelectedSites } from 'src/utils/organization';
@@ -237,7 +237,7 @@ export default function PlantList(props: PlantListProps): JSX.Element {
                     </div>
                   </Grid>
                 </>
-              ) : ['Admin', 'Manager', 'Owner'].includes(organization?.role || '') ? (
+              ) : HighOrganizationRolesValues.includes(organization?.role || '') ? (
                 <EmptyMessage
                   className={classes.message}
                   title={emptyMessageStrings.PLANTS_EMPTY_MSG_TITLE}

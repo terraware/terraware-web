@@ -56,9 +56,9 @@ export type ServerOrganization = {
   createdTime?: string;
 };
 
-export type HighOrganizationRoles = 'Manager' | 'Admin' | 'Owner';
+export type HighOrganizationRoles = 'Admin' | 'Owner';
 
-export const HighOrganizationRolesValues = ['Admin', 'Manager', 'Owner'];
+export const HighOrganizationRolesValues = ['Admin', 'Owner'];
 
 export type AllOrganizationRoles = HighOrganizationRoles | 'Contributor';
 
