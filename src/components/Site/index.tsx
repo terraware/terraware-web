@@ -13,6 +13,7 @@ import Button from '../common/button/Button';
 const useStyles = makeStyles((theme) =>
   createStyles({
     mainContainer: {
+      height: '-webkit-fill-available',
       paddingTop: theme.spacing(4),
       paddingBottom: theme.spacing(4),
       background: '#ffffff',

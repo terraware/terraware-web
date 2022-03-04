@@ -324,7 +324,8 @@ const strings = new LocalizedStrings({
     START_DATE_OPT: 'Start Date (optional)',
     STATUS_OPT: 'Status (optional)',
     PROJECT_TYPE_OPT: 'Project Type(s) (optional)',
-    PEOPLE_DESC: 'To add new people to this organization go to People.',
+    PEOPLE_DESC:
+      'To add new people to this organization go to People. Admins and Owners automatically have access to all projects.',
     SITES_DESC: 'To add new sites to this project go to Sites.',
     ADMIN: 'Admin',
     ADD_PERSON: 'Add Person',
@@ -337,8 +338,7 @@ const strings = new LocalizedStrings({
     AGROFORESTRY: 'Agroforestry',
     SILVOPASTURE: 'Silvopasture',
     SUSTAINABLE_TIMBER: 'Sustainable Timber',
-    ADD_PEOPLE: 'Add People',
-    NO_UNSELECTED_PEOPLE: 'You have already added all organization members to this project.',
+    NO_UNSELECTED_PEOPLE: 'You have already added all Contributors to this project.',
     EDIT_PROJECT: 'Edit Project',
     NO_PEOPLE_IN_ORG: 'No People in Organization',
     ADD_PEOPLE_MESSAGE: 'To add people to this organization go to People.',
@@ -403,6 +403,7 @@ const strings = new LocalizedStrings({
     MY_ACCOUNT: 'My Account',
     UNABLE_TO_ADD_PERSON: 'Unable to Add Person',
     FIX_HIGHLIGHTED_FIELDS: 'Fix the highlighted fields below.',
+    OWNERS_ADMINS_ACCESS_ALL_PROJECTS: 'Owners and Admins automatically have access to all projects.',
   },
 });
 

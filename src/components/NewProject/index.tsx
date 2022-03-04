@@ -3,7 +3,8 @@ import { useEffect, useState } from 'react';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
-import { Project, ProjectTypes, ServerOrganization, Site } from 'src/types/Organization';
+import dictionary from 'src/strings/dictionary';
+import { HighOrganizationRolesValues, Project, ProjectTypes, ServerOrganization, Site } from 'src/types/Organization';
 import TfDivisor from '../common/TfDivisor';
 import Table from 'src/components/common/table';
 import { TableColumnType } from '../common/table/types';
@@ -322,9 +323,11 @@ export default function ProjectView({ organization, reloadOrganizationData }: Pr
     }
   };
 
-  const getPeopleNotOnProject = () => {
+  const getContributorsNotOnProject = () => {
     const allPeopleOnProjectIds = peopleOnProject?.map((person) => person.id);
-    return people?.filter((person) => !allPeopleOnProjectIds?.includes(person.id));
+    return people?.filter(
+      (person) => !allPeopleOnProjectIds?.includes(person.id) && !HighOrganizationRolesValues.includes(person.role)
+    );
   };
 
   return (
@@ -346,7 +349,7 @@ export default function ProjectView({ organization, reloadOrganizationData }: Pr
       <AddPeopleModal
         open={addPeopleModalOpened}
         onClose={() => setAddPeopleModalOpened(false)}
-        people={getPeopleNotOnProject()}
+        people={getContributorsNotOnProject()}
         peopleOnProject={peopleOnProject}
         setPeopleOnProject={setPeopleOnProject}
       />
@@ -454,9 +457,9 @@ export default function ProjectView({ organization, reloadOrganizationData }: Pr
         <Grid container spacing={3}>
           <Grid item xs={12}>
             <div className={classes.titleWithButton}>
-              <h2>{strings.PEOPLE}</h2>
+              <h2>{dictionary.CONTRIBUTORS}</h2>
               <Button
-                label={strings.ADD_PEOPLE}
+                label={dictionary.ADD_CONTRIBUTORS}
                 priority='secondary'
                 onClick={() => {
                   setAddPeopleModalOpened(true);
