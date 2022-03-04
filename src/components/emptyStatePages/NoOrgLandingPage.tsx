@@ -18,6 +18,8 @@ const useStyles = makeStyles((theme) =>
     },
     mainContainer: {
       maxWidth: '1500px',
+      margin: 'auto',
+      marginTop: `max(40px, calc(50% - 1500px/2))`,
     },
   })
 );
