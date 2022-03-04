@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, KeyboardEvent, useState } from 'react';
 import Icon from '../icon/Icon';
 import './styles.scss';
 
@@ -48,6 +48,7 @@ export default function Select(props: SelectProps): JSX.Element {
   });
 
   const [openedOptions, setOpenedOptions] = useState(false);
+  const dropdownRef = React.useRef<HTMLUListElement>(null);
 
   const toggleOptions = () => {
     setOpenedOptions(!openedOptions);
@@ -66,6 +67,19 @@ export default function Select(props: SelectProps): JSX.Element {
     }
   };
 
+  const onKeyDownHandler = (e: KeyboardEvent<HTMLInputElement>) => {
+    const pressedLetter = e.key.toUpperCase();
+    const items = dropdownRef.current?.getElementsByTagName('li');
+    if (items) {
+      for (let i = 0; i < items.length; i++) {
+        if (items[i].dataset.key === pressedLetter) {
+          items[i].scrollIntoView();
+          return;
+        }
+      }
+    }
+  };
+
   return (
     <div className={`select ${className}`}>
       {label && (
@@ -75,14 +89,22 @@ export default function Select(props: SelectProps): JSX.Element {
       )}
       <div className='textfield-container'>
         <div id={id} className={selectClass} onClick={toggleOptions}>
-          <input value={selectedValue} disabled={true} placeholder={placeholder} onChange={onChangeHandler} />
+          <input
+            value={selectedValue}
+            readOnly={true}
+            placeholder={placeholder}
+            onChange={onChangeHandler}
+            onKeyDown={onKeyDownHandler}
+          />
           <Icon name={'caretDown'} className='textfield-value--icon-right' />
         </div>
         {options && openedOptions && (
-          <ul className='options-container'>
+          <ul className='options-container' ref={dropdownRef}>
             {options.map((option) => {
               return (
                 <li
+                  data-key={option.charAt(0).toUpperCase()}
+                  tabIndex={-1}
                   key={option}
                   onClick={() => onOptionSelected(option)}
                   className={`${itemClass} ${option === selectedValue ? 'select-value--selected' : ''} `}
