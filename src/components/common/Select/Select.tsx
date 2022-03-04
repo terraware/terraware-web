@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React, { ChangeEvent, KeyboardEvent, useState } from 'react';
+import React, { ChangeEvent, KeyboardEvent, useEffect, useState } from 'react';
 import Icon from '../icon/Icon';
 import './styles.scss';
 
@@ -50,6 +50,12 @@ export default function Select(props: SelectProps): JSX.Element {
   const [openedOptions, setOpenedOptions] = useState(false);
   const dropdownRef = React.useRef<HTMLUListElement>(null);
 
+  useEffect(() => {
+    if (openedOptions) {
+      scrollToSelectedElement();
+    }
+  }, [openedOptions]);
+
   const toggleOptions = () => {
     setOpenedOptions(!openedOptions);
   };
@@ -71,9 +77,24 @@ export default function Select(props: SelectProps): JSX.Element {
     const pressedLetter = e.key.toUpperCase();
     const items = dropdownRef.current?.getElementsByTagName('li');
     if (items) {
-      for (let i = 0; i < items.length; i++) {
-        if (items[i].dataset.key === pressedLetter) {
-          items[i].scrollIntoView();
+      const arrayOfItems = Array.from(items);
+      for (const item of arrayOfItems) {
+        if (item.dataset.key === pressedLetter) {
+          item.scrollIntoView();
+          return;
+        }
+      }
+    }
+  };
+
+  const scrollToSelectedElement = () => {
+    const items = dropdownRef.current?.getElementsByTagName('li');
+    console.log(items);
+    if (items) {
+      const arrayOfItems = Array.from(items);
+      for (const item of arrayOfItems) {
+        if (item.dataset.selected === 'true') {
+          item.scrollIntoView();
           return;
         }
       }
@@ -104,7 +125,7 @@ export default function Select(props: SelectProps): JSX.Element {
               return (
                 <li
                   data-key={option.charAt(0).toUpperCase()}
-                  tabIndex={-1}
+                  data-selected={option === selectedValue}
                   key={option}
                   onClick={() => onOptionSelected(option)}
                   className={`${itemClass} ${option === selectedValue ? 'select-value--selected' : ''} `}
