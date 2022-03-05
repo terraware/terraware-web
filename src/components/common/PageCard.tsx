@@ -39,6 +39,7 @@ const useStyles = makeStyles((theme) =>
       fontSize: '16px',
       lineHeight: '24px',
       height: '100%',
+      fontWeight: 400,
     },
     underlinedLink: {
       marginTop: '28px',

@@ -58,7 +58,7 @@ const useStyles = makeStyles((theme) =>
     spinnerContainer: {
       position: 'fixed',
       top: '50%',
-      left: '50%',
+      left: 'calc(50% + 100px)',
     },
   })
 );
