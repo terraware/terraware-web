@@ -1,8 +1,8 @@
 import { AppBar, Container, createStyles, Grid, makeStyles } from '@material-ui/core';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import strings from 'src/strings';
-import { Project, ServerOrganization } from 'src/types/Organization';
+import { HighOrganizationRolesValues, Project, ServerOrganization } from 'src/types/Organization';
 import TfDivisor from '../common/TfDivisor';
 import Table from 'src/components/common/table';
 import { TableColumnType } from '../common/table/types';
@@ -23,6 +23,7 @@ import { getOrganizationProjects } from 'src/utils/organization';
 import { APP_PATHS } from 'src/constants';
 import dictionary from 'src/strings/dictionary';
 import RemovedProjectsWarningModal from './RemovedProjectsWarningModal';
+import InfoBox from '../common/InfoBox';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -379,6 +380,7 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
               label={strings.ROLE}
               onChange={onChangeRole}
               options={['Contributor', 'Admin']}
+              disabled={newPerson.role === 'Owner'}
               selectedValue={newPerson.role}
             />
           </Grid>
@@ -391,31 +393,37 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
           <Grid item xs={12}>
             <div className={classes.titleWithButton}>
               <h2>{strings.PROJECTS}</h2>
-              <Button
-                label={strings.ADD_TO_PROJECT}
-                priority='secondary'
-                onClick={() => {
-                  setIsAddProjectsModalOpen(true);
-                }}
-              />
+              {!HighOrganizationRolesValues.includes(newPerson.role) && (
+                <Button
+                  label={strings.ADD_TO_PROJECT}
+                  priority='secondary'
+                  onClick={() => {
+                    setIsAddProjectsModalOpen(true);
+                  }}
+                />
+              )}
             </div>
             <span>{strings.ADD_TO_PROJECT_DESC}</span>
           </Grid>
           <Grid item xs={12}>
-            <Table
-              rows={projectsWithUserRole || []}
-              orderBy='name'
-              columns={projectColumns}
-              emptyTableMessage='No Projects to show.'
-              showCheckbox={true}
-              selectedRows={selectedProjectsRows}
-              setSelectedRows={setSelectedProjectsRows}
-              showTopBar={true}
-              buttonType='destructive'
-              buttonText={strings.REMOVE}
-              onButtonClick={removeSelectedProjectsOfPerson}
-              Renderer={TableCellRenderer}
-            />
+            {HighOrganizationRolesValues.includes(newPerson.role) ? (
+              <InfoBox message={strings.OWNERS_ADMINS_ACCESS_ALL_PROJECTS} />
+            ) : (
+              <Table
+                rows={projectsWithUserRole || []}
+                orderBy='name'
+                columns={projectColumns}
+                emptyTableMessage='No Projects to show.'
+                showCheckbox={true}
+                selectedRows={selectedProjectsRows}
+                setSelectedRows={setSelectedProjectsRows}
+                showTopBar={true}
+                buttonType='destructive'
+                buttonText={strings.REMOVE}
+                onButtonClick={removeSelectedProjectsOfPerson}
+                Renderer={TableCellRenderer}
+              />
+            )}
           </Grid>
           <Grid item xs={12} />
         </Grid>

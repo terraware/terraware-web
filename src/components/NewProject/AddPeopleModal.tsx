@@ -6,6 +6,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React, { useState } from 'react';
 import strings from 'src/strings';
+import dictionary from 'src/strings/dictionary';
 import DialogCloseButton from '../common/DialogCloseButton';
 import Button from '../common/button/Button';
 import { OrganizationUser } from 'src/types/User';
@@ -76,7 +77,7 @@ export default function AddPeopleDialog(props: AddPeopleDialogProps): JSX.Elemen
 
   const getModalTitle = (): string => {
     if (people && people.length > 0) {
-      return strings.ADD_PEOPLE;
+      return dictionary.ADD_CONTRIBUTORS;
     } else if (peopleOnProject && peopleOnProject.length > 0) {
       return strings.NO_UNSELECTED_PEOPLE;
     }
@@ -110,7 +111,7 @@ export default function AddPeopleDialog(props: AddPeopleDialogProps): JSX.Elemen
         {people && people.length > 0 ? (
           <>
             <Button label={strings.CANCEL} priority='secondary' onClick={onClose} />
-            <Button label={strings.ADD_PEOPLE} onClick={onSubmitHandler} />
+            <Button label={dictionary.ADD_CONTRIBUTORS} onClick={onSubmitHandler} />
           </>
         ) : (
           <Button label={strings.GOT_IT} onClick={onClose} />

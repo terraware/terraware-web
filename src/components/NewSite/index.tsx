@@ -16,6 +16,7 @@ import { createSite, updateSite } from 'src/api/site/site';
 const useStyles = makeStyles((theme) =>
   createStyles({
     mainContainer: {
+      height: '-webkit-fill-available',
       paddingTop: theme.spacing(4),
       paddingBottom: theme.spacing(7),
       marginBottom: theme.spacing(6),
