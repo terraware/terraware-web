@@ -48,9 +48,14 @@ export default function SiteDetails({ organization }: SiteDetailsProps): JSX.Ele
 
   useEffect(() => {
     if (organization) {
-      setSite(getSitesById(organization).get(parseInt(siteId, 10)));
+      const selectedSite = getSitesById(organization).get(parseInt(siteId, 10));
+      if (selectedSite) {
+        setSite(selectedSite);
+      } else {
+        history.push(APP_PATHS.SITES);
+      }
     }
-  }, [siteId, organization]);
+  }, [siteId, organization, history]);
 
   const classes = useStyles();
 
