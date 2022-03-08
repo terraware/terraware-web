@@ -14,7 +14,9 @@ import LocalizedStrings from 'react-localization';
 const dictionary = new LocalizedStrings({
   en: {
     ADD_A_SPECIES: 'Add a Species',
+    ADD_CONTRIBUTORS: 'Add Contributors',
     CONTACT_US: 'Contact Us',
+    CONTRIBUTORS: 'Contributors',
     CREATE_A_PROJECT: 'Create a Project',
     CREATE_A_SITE: 'Create a Site',
     CREATE_ORGANIZATION: 'Create Organization',

@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
+import dictionary from 'src/strings/dictionary';
 import { Project, ServerOrganization } from 'src/types/Organization';
 import Icon from '../common/icon/Icon';
 import TfDivisor from '../common/TfDivisor';
@@ -148,7 +149,7 @@ export default function ProjectDetails({ organization }: ProjectDetailsProps): J
       </Grid>
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          <h2>{strings.PEOPLE}</h2>
+          <h2>{dictionary.CONTRIBUTORS}</h2>
           <p>{strings.PEOPLE_DESC}</p>
         </Grid>
         {projectSelected && people && (

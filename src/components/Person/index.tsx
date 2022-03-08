@@ -1,10 +1,11 @@
 import { Container, createStyles, Grid, makeStyles } from '@material-ui/core';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import { getOrganizationUsers } from 'src/api/organization/organization';
 import { listAllProjects } from 'src/api/project/project';
 import Button from 'src/components/common/button/Button';
 import Icon from 'src/components/common/icon/Icon';
+import InfoBox from 'src/components/common/InfoBox';
 import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
 import TextField from 'src/components/common/Textfield/Textfield';
@@ -12,7 +13,7 @@ import TfDivisor from 'src/components/common/TfDivisor';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import dictionary from 'src/strings/dictionary';
-import { Project, ServerOrganization } from 'src/types/Organization';
+import { HighOrganizationRolesValues, Project, ServerOrganization } from 'src/types/Organization';
 import { OrganizationUser } from 'src/types/User';
 import { getOrganizationProjects } from 'src/utils/organization';
 import { ProjectWithUserRole } from './NewPerson';
@@ -21,6 +22,7 @@ import TableCellRenderer from './TableCellRenderer';
 const useStyles = makeStyles((theme) =>
   createStyles({
     mainContainer: {
+      height: '100%',
       paddingTop: theme.spacing(4),
       paddingBottom: theme.spacing(4),
       background: '#ffffff',
@@ -62,7 +64,7 @@ export default function PersonDetails({ organization }: PersonDetailsProps): JSX
   const history = useHistory();
   const { personId } = useParams<{ personId: string }>();
   const [person, setPerson] = useState<OrganizationUser>();
-  const [projectsOfPerson, setProjectsOfPerson] = useState<ProjectWithUserRole[]>();
+  const [projectsOfPerson, setProjectsOfPerson] = useState<ProjectWithUserRole[]>([]);
   const [allProjects, setAllProjects] = useState<Project[]>();
 
   useEffect(() => {
@@ -97,7 +99,7 @@ export default function PersonDetails({ organization }: PersonDetailsProps): JSX
       }
       return filtered;
     }, [] as ProjectWithUserRole[]);
-    setProjectsOfPerson(projects);
+    setProjectsOfPerson(projects ?? []);
   }, [person, organization?.projects, allProjects]);
 
   const getDateAdded = () => {
@@ -157,7 +159,9 @@ export default function PersonDetails({ organization }: PersonDetailsProps): JSX
           <h2>{strings.PROJECTS}</h2>
           <p>{strings.PROJECTS_DESC}</p>
         </Grid>
-        {projectsOfPerson && (
+        {person && HighOrganizationRolesValues.includes(person.role) ? (
+          <InfoBox message={strings.OWNERS_ADMINS_ACCESS_ALL_PROJECTS} />
+        ) : (
           <Grid item xs={12}>
             <Table rows={projectsOfPerson} orderBy='name' columns={projectColumns} Renderer={TableCellRenderer} />
           </Grid>
