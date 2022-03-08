@@ -18,6 +18,7 @@ const useStyles = makeStyles((theme) =>
     },
     icon: {
       fill: '#3A4445',
+      marginLeft: '3px',
     },
   })
 );

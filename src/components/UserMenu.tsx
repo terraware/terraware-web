@@ -19,11 +19,12 @@ const useStyles = makeStyles((theme) =>
       height: '32px',
     },
     chevronDown: {
+      marginLeft: '3px',
       fill: '#3A4445',
     },
     userName: {
       fontSize: '16px',
-      paddingLeft: '16px',
+      paddingLeft: '8px',
       color: '#3A4445',
     },
     popover: {
