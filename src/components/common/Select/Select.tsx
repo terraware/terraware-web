@@ -89,7 +89,6 @@ export default function Select(props: SelectProps): JSX.Element {
 
   const scrollToSelectedElement = () => {
     const items = dropdownRef.current?.getElementsByTagName('li');
-    console.log(items);
     if (items) {
       const arrayOfItems = Array.from(items);
       for (const item of arrayOfItems) {
