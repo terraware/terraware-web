@@ -61,10 +61,15 @@ export default function ProjectDetails({ organization }: ProjectDetailsProps): J
     };
     if (organization) {
       const projects = getProjectsById(organization);
-      setProjectSelected(projects.get(parseInt(projectId, 10)));
-      populatePeople();
+      const selectedProject = projects.get(parseInt(projectId, 10));
+      if (selectedProject) {
+        setProjectSelected(selectedProject);
+        populatePeople();
+      } else {
+        history.push(APP_PATHS.PROJECTS);
+      }
     }
-  }, [projectId, organization]);
+  }, [projectId, organization, history]);
 
   const classes = useStyles();
 

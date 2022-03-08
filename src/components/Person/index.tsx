@@ -70,7 +70,11 @@ export default function PersonDetails({ organization }: PersonDetailsProps): JSX
       const response = await getOrganizationUsers(organization!);
       if (response.requestSucceeded) {
         const selectedUser = response.users.find((user) => user.id.toString() === personId);
-        setPerson(selectedUser);
+        if (selectedUser) {
+          setPerson(selectedUser);
+        } else {
+          history.push(APP_PATHS.PEOPLE);
+        }
       }
     };
     const populateAllProjects = async () => {
@@ -87,7 +91,7 @@ export default function PersonDetails({ organization }: PersonDetailsProps): JSX
       populatePersonData();
       populateAllProjects();
     }
-  }, [personId, organization]);
+  }, [personId, organization, history]);
 
   useEffect(() => {
     const projects = person?.projectIds.reduce((filtered, projectId) => {
