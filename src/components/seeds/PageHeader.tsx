@@ -12,6 +12,7 @@ const useStyles = makeStyles((theme) =>
   createStyles({
     mainContainer: {
       paddingLeft: 0,
+      paddingRight: 0,
     },
     container: {
       maxWidth: '100%',
