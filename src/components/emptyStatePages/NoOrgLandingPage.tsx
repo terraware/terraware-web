@@ -41,7 +41,7 @@ const LIST_ITEM_CONTENT: ListItemContent[] = [
 ];
 
 type LandingPageProps = {
-  reloadOrganizationData: () => void;
+  reloadOrganizationData: (selectedOrgId?: number) => void;
 };
 
 export default function NoOrgLandingPage(props: LandingPageProps): JSX.Element {

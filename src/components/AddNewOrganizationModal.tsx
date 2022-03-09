@@ -18,6 +18,8 @@ import snackbarAtom from 'src/state/snackbar';
 import { searchCountries } from 'src/api/country/country';
 import { Country } from 'src/types/Country';
 import { getCountryByCode, getSubdivisionByCode } from 'src/utils/country';
+import { APP_PATHS } from '../constants';
+import { useHistory } from 'react-router';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -67,11 +69,12 @@ const useStyles = makeStyles((theme: Theme) =>
 export type AddNewOrganizationModalProps = {
   open: boolean;
   onCancel: () => void;
-  reloadOrganizationData: () => void;
+  reloadOrganizationData: (selectedOrgId?: number) => void;
 };
 
 export default function AddNewOrganizationModal(props: AddNewOrganizationModalProps): JSX.Element {
   const classes = useStyles();
+  const history = useHistory();
   const { onCancel, open, reloadOrganizationData } = props;
   const setSnackbar = useSetRecoilState(snackbarAtom);
   const [nameError, setNameError] = useState('');
@@ -123,14 +126,15 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
       return;
     }
     const response = await createOrganization(newOrganization);
-    if (response.requestSucceeded) {
+    if (response.requestSucceeded && response.organization) {
       setSnackbar({
         type: 'page',
         priority: 'success',
-        title: strings.formatString(strings.ORGANIZATION_CREATED_TITLE, response.organization?.name || ''),
+        title: strings.formatString(strings.ORGANIZATION_CREATED_TITLE, response.organization.name),
         msg: strings.ORGANIZATION_CREATED_MSG,
       });
-      reloadOrganizationData();
+      reloadOrganizationData(response.organization.id);
+      history.push({ pathname: APP_PATHS.HOME });
     } else {
       setSnackbar({
         type: 'page',

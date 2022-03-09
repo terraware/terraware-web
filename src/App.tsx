@@ -147,12 +147,18 @@ function AppContent() {
   const [user, setUser] = useState<User>();
   const isMobile = useMediaQuery({ query: `(max-width: 760px)` });
 
-  const reloadData = useCallback(() => {
+  const reloadData = useCallback((selectedOrgId?: number) => {
     const populateOrganizations = async () => {
       const response = await getOrganizations();
       if (!response.error) {
         setOrgAPIRequestStatus(APIRequestStatus.SUCCEEDED);
         setOrganizations(response.organizations);
+        if (selectedOrgId) {
+          const orgToSelect = response.organizations.find((org) => org.id === selectedOrgId);
+          if (orgToSelect) {
+            setSelectedOrganization(orgToSelect);
+          }
+        }
       } else if (response.error === 'NotAuthenticated') {
         setOrgAPIRequestStatus(APIRequestStatus.FAILED_NO_AUTH);
       } else {
@@ -172,10 +178,10 @@ function AppContent() {
         setSelectedOrganization(organizations[0]);
       } else {
         // update selectedOrganization
-        const previousSelectedOrganization = organizations?.find((org) => org.id === selectedOrganization.id);
-        if (previousSelectedOrganization) {
-          setSelectedOrganization(previousSelectedOrganization);
-        }
+        setSelectedOrganization((previouslySelectedOrg: ServerOrganization | undefined) => {
+          const updatedOrg = organizations.find((org) => org.id === previouslySelectedOrg?.id);
+          return updatedOrg ? updatedOrg : organizations[0];
+        });
       }
     }
   }, [organizations, selectedOrganization]);

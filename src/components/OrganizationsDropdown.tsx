@@ -27,7 +27,7 @@ type OrganizationsDropdownProps = {
   organizations?: ServerOrganization[];
   selectedOrganization?: ServerOrganization;
   setSelectedOrganization: React.Dispatch<React.SetStateAction<ServerOrganization | undefined>>;
-  reloadOrganizationData: () => void;
+  reloadOrganizationData: (selectedOrgId?: number) => void;
 };
 
 export default function OrganizationsDropdown({
@@ -54,13 +54,19 @@ export default function OrganizationsDropdown({
       }
       return newlySelectedOrg;
     });
+    setAnchorEl(null);
+  };
+
+  const onCloseCreateOrganizationModal = () => {
+    setNewOrganizationModalOpened(false);
+    setAnchorEl(null);
   };
 
   return (
     <div>
       <AddNewOrganizationModal
         open={newOrganizationModalOpened}
-        onCancel={() => setNewOrganizationModalOpened(false)}
+        onCancel={onCloseCreateOrganizationModal}
         reloadOrganizationData={reloadOrganizationData}
       />
       <IconButton onClick={handleClick} size='small' className={classes.iconContainer}>
