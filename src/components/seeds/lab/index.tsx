@@ -280,6 +280,7 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
                 className={classes.greenChip}
                 label={strings.NEW_TEST}
                 clickable
+                disabled={seedsAvailable <= 0}
                 deleteIcon={<AddIcon classes={newWithdrawalChipStyles()} />}
                 color={'primary'}
                 onClick={onNewTest}
