@@ -17,7 +17,15 @@ export type DropdownItem = {
   value: string;
 };
 
-export default function Autocomplete({ id, label, values, onChange, selected, disabled, freeSolo}: Props): JSX.Element {
+export default function Autocomplete({
+  id,
+  label,
+  values,
+  onChange,
+  selected,
+  disabled,
+  freeSolo,
+}: Props): JSX.Element {
   const onChangeHandler = (event: ChangeEvent<any>, value: string | null) => {
     if (event) {
       if (value) {
