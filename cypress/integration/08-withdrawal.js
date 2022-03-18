@@ -184,7 +184,7 @@ describe('Withdrawal', () => {
       cy.get('#seeds-available').should('have.css', 'background-color', 'rgb(205, 91, 56)');
 
       cy.get('#new-withdrawal-button').should('have.css', 'background-color', 'rgb(173, 181, 189)');
-      cy.get('#new-withdrawal-button').should('be.disabled');
+      cy.get('#new-withdrawal-button').should('have.class', 'Mui-disabled');
     });
   });
 
@@ -369,7 +369,7 @@ describe('Withdrawal', () => {
       cy.get('#seeds-available').should('have.css', 'background-color', 'rgb(205, 91, 56)');
 
       cy.get('#new-withdrawal-button').should('have.css', 'background-color', 'rgb(173, 181, 189)');
-      cy.get('#new-withdrawal-button').should('be.disabled');
+      cy.get('#new-withdrawal-button').should('have.class', 'Mui-disabled');
     });
 
     it('should display the records in the right order', () => {
