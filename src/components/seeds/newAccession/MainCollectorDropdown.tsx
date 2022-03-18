@@ -34,6 +34,7 @@ export default function MainCollectorDropdown(props: MainCollectorDropdownProps)
       label={strings.PRIMARY_COLLECTOR}
       values={collectors.filter((collector) => collector !== null)}
       disabled={disabled}
+      freeSolo={true}
     />
   );
 }

@@ -256,14 +256,6 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
     setRecord(accession);
   };
 
-  const beforeSubmit = () => {
-    if (updating && accession.species !== record.species && newSpeciesSelected) {
-      setEditSpeciesModalOpen(true);
-    } else {
-      onSubmitHandler();
-    }
-  };
-
   const onSubmitHandler = () => {
     setIsEditing(false);
     setIsSaving(true);
@@ -347,8 +339,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
     onCloseEditSpeciesModal();
   };
 
-  const onSpeciesChanged = (id: string, value: unknown, isNew: boolean) => {
-    setNewSpeciesSelected(isNew);
+  const onSpeciesChanged = (id: string, value: unknown) => {
     onChange(id, value);
   };
 
@@ -627,7 +618,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
                   isSaved={isSaved}
                   nextStepTo='processing-drying'
                   nextStep={strings.NEXT_PROCESSING_AND_DRYING}
-                  onSubmitHandler={beforeSubmit}
+                  onSubmitHandler={onSubmitHandler}
                   handleCancel={handleCancel}
                 />
               )}
