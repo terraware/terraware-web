@@ -201,7 +201,6 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
   const [isSaving, setIsSaving] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
   const [editSpeciesModalOpen, setEditSpeciesModalOpen] = useState(false);
-  const [newSpeciesSelected, setNewSpeciesSelected] = useState(false);
   const [isSendingToNursery, setIsSendingToNursery] = useState(false);
   const [isSentToNursery, setIsSentToNursery] = useState(false);
   const [canSendToNursery, setCanSendToNursery] = useState(false);
