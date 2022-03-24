@@ -1,6 +1,7 @@
 import { Container, Grid } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router';
 import { getUser } from 'src/api/user/user';
 import PageCard from 'src/components/common/PageCard';
 import PageHeader from 'src/components/seeds/PageHeader';
@@ -10,6 +11,7 @@ import strings from 'src/strings';
 import homePageStrings from 'src/strings/homePage';
 import { HighOrganizationRolesValues, ServerOrganization } from 'src/types/Organization';
 import { User } from 'src/types/User';
+import useQuery from 'src/utils/useQuery';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -36,12 +38,15 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export type HomeProps = {
-  organization?: ServerOrganization;
+  organizations?: ServerOrganization[];
+  selectedOrganization?: ServerOrganization;
+  setSelectedOrganization: React.Dispatch<React.SetStateAction<ServerOrganization | undefined>>;
 };
 
-export default function Home({ organization }: HomeProps): JSX.Element {
+export default function Home({ organizations, selectedOrganization, setSelectedOrganization }: HomeProps): JSX.Element {
   const classes = useStyles();
-  const role = organization?.role;
+  const query = useQuery();
+  const history = useHistory();
   const [user, setUser] = useState<User>();
 
   useEffect(() => {
@@ -53,6 +58,18 @@ export default function Home({ organization }: HomeProps): JSX.Element {
     };
     populateUser();
   }, []);
+
+  useEffect(() => {
+    const organizationId = query.get('organizationId');
+    if (organizationId) {
+      const newlySelectedOrg = organizations?.find((org) => org.id === parseInt(organizationId, 10));
+      if (newlySelectedOrg) {
+        setSelectedOrganization(newlySelectedOrg);
+        history.push({ pathname: APP_PATHS.HOME });
+      }
+    }
+  }, [organizations, query]);
+
   return (
     <main className={classes.main}>
       <PageHeader
@@ -66,7 +83,7 @@ export default function Home({ organization }: HomeProps): JSX.Element {
       />
       <Container maxWidth={false} className={classes.mainContainer}>
         <Grid container spacing={3} className={classes.mainGrid}>
-          {role && HighOrganizationRolesValues.includes(role) && (
+          {selectedOrganization?.role && HighOrganizationRolesValues.includes(selectedOrganization.role) && (
             <>
               <Grid item xs={4}>
                 <PageCard
