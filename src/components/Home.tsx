@@ -68,7 +68,7 @@ export default function Home({ organizations, selectedOrganization, setSelectedO
         history.push({ pathname: APP_PATHS.HOME });
       }
     }
-  }, [organizations, query]);
+  }, [organizations, query, setSelectedOrganization, history]);
 
   return (
     <main className={classes.main}>
