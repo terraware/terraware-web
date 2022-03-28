@@ -66,7 +66,7 @@ export default function Home({ organization }: HomeProps): JSX.Element {
       />
       <Container maxWidth={false} className={classes.mainContainer}>
         <Grid container spacing={3} className={classes.mainGrid}>
-          {role && role in HighOrganizationRolesValues && (
+          {role && HighOrganizationRolesValues.includes(role) && (
             <>
               <Grid item xs={4}>
                 <PageCard
