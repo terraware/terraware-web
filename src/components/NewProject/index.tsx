@@ -403,6 +403,7 @@ export default function ProjectView({ organization, reloadOrganizationData }: Pr
               label=''
               aria-label={strings.START_DATE_OPT}
               className={classes.datePicker}
+              autocomplete='off'
             />
           </Grid>
           <Grid item xs={4}>
