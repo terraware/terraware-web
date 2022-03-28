@@ -145,6 +145,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
    */
   const [availableFieldOptions, setAvailableFieldOptions] = useState<FieldValuesMap | null>();
   const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>();
+  const [unfilteredResults, setUnfilteredResults] = useState<SearchResponseElement[] | null>();
 
   // Remove this when download report receives site/project/org id
   const [facilityIdForReport, setFacilityIdForReport] = useState<number>();
@@ -162,6 +163,18 @@ export default function Database(props: DatabaseProps): JSX.Element {
       };
       setFacilityIdForReport(seedbankFacility?.id);
       setSelectedOrgInfo(selected);
+
+      const populateUnfilteredResults = async () => {
+        const apiResponse = await search({
+          prefix: 'projects.sites.facilities.accessions',
+          fields: searchColumns.includes('active') ? [...searchColumns, 'id'] : [...searchColumns, 'active', 'id'],
+          sortOrder: [searchSortOrder],
+          search: convertToSearchNodePayload({}, selected, organization.id),
+          count: 1000,
+        });
+
+        setUnfilteredResults(apiResponse);
+      };
 
       const populateSearchResults = async () => {
         const apiResponse = await search({
@@ -193,6 +206,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
         setFieldOptions(await getAllFieldValues(singleAndMultiChoiceFields, 0));
       };
 
+      populateUnfilteredResults();
       populateSearchResults();
       populateAvailableFieldOptions();
       populatePendingAccessions();
@@ -356,9 +370,9 @@ export default function Database(props: DatabaseProps): JSX.Element {
           {(fieldOptions === null || availableFieldOptions === null) && strings.GENERIC_ERROR}
         </PageHeader>
         <Container maxWidth={false} className={classes.mainContainer}>
-          {organization && searchResults ? (
+          {organization && unfilteredResults ? (
             <Grid container>
-              {!!organization?.projects?.length && !searchResults?.length && (
+              {!!organization?.projects?.length && !unfilteredResults?.length && (
                 <Grid item xs={12}>
                   <EmptyMessage
                     title={emptyMessageStrings.COLLECT_IN_FIELD_PLANT_DATA}
