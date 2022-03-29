@@ -13,6 +13,8 @@ import SummaryBox from 'src/components/common/SummaryBox';
 import Table from 'src/components/common/table';
 import { descendingComparator } from 'src/components/common/table/sort';
 import { TableRowType } from 'src/components/common/table/TableCellRenderer';
+import MainPaper from 'src/components/MainPaper';
+import PanelTitle from 'src/components/PanelTitle';
 import strings from 'src/strings';
 import NewTest from './NewTest';
 import NurseryCellRenderer from './TableCellRenderer';
@@ -20,18 +22,6 @@ import { COLUMNS } from './types';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
-    paper: {
-      padding: theme.spacing(2),
-      border: '1px solid #A9B7B8',
-      borderRadius: '8px',
-      boxShadow: 'none',
-    },
-    panelTitle: {
-      fontSize: '20px',
-      lineHeight: '28px',
-      fontWeight: 600,
-      color: '#3A4445',
-    },
     right: {
       marginLeft: 'auto',
     },
@@ -142,10 +132,8 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
           allowTestInGrams={allowTestInGrams}
           seedsAvailable={seedsAvailable}
         />
-        <Paper className={classes.paper}>
-          <Typography variant='h6' className={classes.panelTitle}>
-            {strings.NURSERY}
-          </Typography>
+        <MainPaper>
+          <PanelTitle title={strings.NURSERY} />
           <Typography component='p'>{strings.NURSERY_DESCRIPTION}</Typography>
           <Divisor />
           <Grid container spacing={4}>
@@ -194,7 +182,7 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
               />
             </Grid>
           </Grid>
-        </Paper>
+        </MainPaper>
       </MuiPickersUtilsProvider>
     </main>
   );

@@ -12,6 +12,8 @@ import Divisor from 'src/components/common/Divisor';
 import SummaryBox from 'src/components/common/SummaryBox';
 import Table from 'src/components/common/table';
 import { TableRowType } from 'src/components/common/table/TableCellRenderer';
+import MainPaper from 'src/components/MainPaper';
+import PanelTitle from 'src/components/PanelTitle';
 import strings from 'src/strings';
 import CutTestCellRenderer from './CutTestCellRenderer';
 import EnhancedTableDetails from './EnhacedTableDetails';
@@ -23,18 +25,6 @@ import { CUT_TEST_COLUMNS, TEST_COLUMNS, TEST_ENTRY_COLUMNS } from './types';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
-    paper: {
-      padding: theme.spacing(2),
-      border: '1px solid #A9B7B8',
-      borderRadius: '8px',
-      boxShadow: 'none',
-    },
-    panelTitle: {
-      fontSize: '20px',
-      lineHeight: '28px',
-      fontWeight: 600,
-      color: '#3A4445',
-    },
     right: {
       marginLeft: 'auto',
     },
@@ -221,10 +211,8 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
           value={selectedTestEntry}
         />
         <NewCutTest open={cutTestOpen} onClose={onCloseCutTestModal} accession={accession} />
-        <Paper className={classes.paper}>
-          <Typography variant='h6' className={classes.panelTitle}>
-            {strings.LAB}
-          </Typography>
+        <MainPaper>
+          <PanelTitle title={strings.LAB} />
           <Typography component='p'>{strings.LAB_DESCRIPTION}</Typography>
           <Divisor />
           <Grid container spacing={4}>
@@ -305,7 +293,7 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
               />
             </Grid>
           </Grid>
-        </Paper>
+        </MainPaper>
       </MuiPickersUtilsProvider>
     </main>
   );

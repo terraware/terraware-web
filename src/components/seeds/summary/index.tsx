@@ -10,6 +10,7 @@ import { useRecoilState } from 'recoil';
 import { SeedSearchCriteria } from 'src/api/seeds/search';
 import { getSummary, GetSummaryResponse } from 'src/api/seeds/summary';
 import EmptyMessage from 'src/components/common/EmptyMessage';
+import MainPaper from 'src/components/MainPaper';
 import { API_PULL_INTERVAL, APP_PATHS, TERRAWARE_SUPPORT_LINK } from 'src/constants';
 import { seedsSummarySelectedOrgInfo } from 'src/state/selectedOrgInfoPerPage';
 import strings from 'src/strings';
@@ -32,13 +33,9 @@ const useStyles = makeStyles((theme) =>
       padding: '32px 0',
     },
     paper: {
-      padding: theme.spacing(2),
       display: 'flex',
       overflow: 'auto',
       flexDirection: 'column',
-      border: '1px solid #A9B7B8',
-      borderRadius: '8px',
-      boxShadow: 'none',
     },
     fixedHeight: {
       height: '100%',
@@ -157,7 +154,7 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
               <Grid item xs={12}>
                 <Grid container spacing={3}>
                   <Grid item xs={4}>
-                    <Paper className={classes.paper}>
+                    <MainPaper className={classes.paper}>
                       <SummaryPaper
                         id='sessions'
                         title={strings.ACTIVE_ACCESSIONS}
@@ -165,10 +162,10 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
                         loading={summary === undefined}
                         error={errorOccurred}
                       />
-                    </Paper>
+                    </MainPaper>
                   </Grid>
                   <Grid item xs={4}>
-                    <Paper className={classes.paper}>
+                    <MainPaper className={classes.paper}>
                       <SummaryPaper
                         id='species'
                         title={strings.SPECIES}
@@ -176,10 +173,10 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
                         loading={summary === undefined}
                         error={errorOccurred}
                       />
-                    </Paper>
+                    </MainPaper>
                   </Grid>
                   <Grid item xs={4}>
-                    <Paper className={classes.paper}>
+                    <MainPaper className={classes.paper}>
                       <SummaryPaper
                         id='families'
                         title={strings.FAMILY}
@@ -187,17 +184,17 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
                         loading={summary === undefined}
                         error={errorOccurred}
                       />
-                    </Paper>
+                    </MainPaper>
                   </Grid>
                   <Grid item xs={12}>
-                    <Paper className={`${classes.paper} ${classes.fixedHeight}`}>
+                    <MainPaper className={`${classes.paper} ${classes.fixedHeight}`}>
                       <Updates
                         setSeedSearchCriteria={setSeedSearchCriteria}
                         summaryResponse={summary?.value}
                         loading={summary === undefined}
                         error={errorOccurred}
                       />
-                    </Paper>
+                    </MainPaper>
                   </Grid>
                 </Grid>
               </Grid>

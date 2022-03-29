@@ -4,6 +4,8 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import React from 'react';
 import { Accession } from 'src/api/types/accessions';
+import MainPaper from 'src/components/MainPaper';
+import PanelTitle from 'src/components/PanelTitle';
 import strings from 'src/strings';
 import useForm from 'src/utils/useForm';
 import Checkbox from '../../common/Checkbox';
@@ -19,18 +21,6 @@ import { Unit } from '../nursery/NewTest';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
-    paper: {
-      padding: theme.spacing(2),
-      border: '1px solid #A9B7B8',
-      borderRadius: '8px',
-      boxShadow: 'none',
-    },
-    panelTitle: {
-      fontSize: '20px',
-      lineHeight: '28px',
-      fontWeight: 600,
-      color: '#3A4445',
-    },
     right: {
       marginLeft: 'auto',
     },
@@ -222,10 +212,8 @@ export default function ProcessingAndDrying({ accession, onSubmit }: Props): JSX
 
   return (
     <MuiPickersUtilsProvider utils={MomentUtils}>
-      <Paper className={classes.paper}>
-        <Typography component='p' variant='h6' className={classes.panelTitle}>
-          {strings.PROCESSING_AND_DRYING}
-        </Typography>
+      <MainPaper>
+        <PanelTitle title={strings.PROCESSING_AND_DRYING} />
         <Typography component='p'>{strings.PROCESSING_AND_DRYING_DESCRIPTION}</Typography>
         <Divisor />
         <Grid container spacing={4}>
@@ -429,7 +417,7 @@ export default function ProcessingAndDrying({ accession, onSubmit }: Props): JSX
             />
           </Grid>
         </Grid>
-      </Paper>
+      </MainPaper>
     </MuiPickersUtilsProvider>
   );
 }

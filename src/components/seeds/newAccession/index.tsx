@@ -32,6 +32,7 @@ import NurseryButtons from './NurseryButtons';
 import SecondaryCollectors from './SecondaryCollectors';
 import Species from './SpeciesDropdown';
 import { APP_PATHS } from '../../../constants';
+import PanelTitle from 'src/components/PanelTitle';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -44,18 +45,6 @@ const useStyles = makeStyles((theme) =>
     },
     mainContainer: {
       padding: '32px 0',
-    },
-    paper: {
-      padding: theme.spacing(2),
-      border: '1px solid #A9B7B8',
-      borderRadius: '8px',
-      boxShadow: 'none',
-    },
-    panelTitle: {
-      fontSize: '20px',
-      lineHeight: '28px',
-      fontWeight: 600,
-      color: '#3A4445',
     },
     closeIcon: {
       backgroundColor: theme.palette.common.white,
@@ -364,10 +353,8 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
         />
       )}
       <MuiPickersUtilsProvider utils={MomentUtils}>
-        <Paper className={classes.paper}>
-          <Typography variant='h6' className={classes.panelTitle}>
-            {strings.SEED_COLLECTION}
-          </Typography>
+        <Paper>
+          <PanelTitle title={strings.SEED_COLLECTION} />
           <Typography component='p'>{strings.SEED_COLLECTION_DESCRIPTION}</Typography>
           <Divisor />
           <Grid container spacing={4}>
