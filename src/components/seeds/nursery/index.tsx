@@ -1,5 +1,5 @@
 import MomentUtils from '@date-io/moment';
-import { Chip, Grid, Paper, Typography } from '@material-ui/core';
+import { Chip, Grid, Typography } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';

@@ -1,5 +1,5 @@
 import MomentUtils from '@date-io/moment';
-import { CircularProgress, Grid, Paper, Typography } from '@material-ui/core';
+import { CircularProgress, Grid, Typography } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import React, { Suspense } from 'react';
