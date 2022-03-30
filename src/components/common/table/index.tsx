@@ -189,7 +189,7 @@ export default function EnhancedTable<T>({
           <TableBody>
             {rows.length < 1 && emptyTableMessage && (
               <TableRow>
-                <TableCell colSpan={4} align='center'>
+                <TableCell colSpan={columns.length + 1} align='center'>
                   <p>{emptyTableMessage}</p>
                 </TableCell>
               </TableRow>
