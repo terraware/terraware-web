@@ -402,6 +402,7 @@ const strings = new LocalizedStrings({
     OWNERS_ADMINS_ACCESS_ALL_PROJECTS: 'Owners and Admins automatically have access to all projects.',
     DETAILS: 'Details',
     NO_NOTIFICATIONS: 'No notifications',
+    UNEXPECTED_ERROR: 'An unexpected error occurred.',
   },
 });
 
