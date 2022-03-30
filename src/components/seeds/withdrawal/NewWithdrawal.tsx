@@ -374,7 +374,7 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
               label={submitText}
               clickable
               color='primary'
-              disabled={errors.length > 0}
+              disabled={errors.length > 0 || remainingSeeds < 0}
               onClick={onSubmitHandler}
             />
           </Box>

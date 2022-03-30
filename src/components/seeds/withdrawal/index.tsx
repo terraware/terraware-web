@@ -212,6 +212,7 @@ export default function WithdrawalView({ accession, onSubmit }: Props): JSX.Elem
                 className={seedsAvailable > 0 ? classes.greenChip : classes.grayChip}
                 label={strings.NEW_WITHDRAWAL}
                 clickable={seedsAvailable > 0}
+                disabled={seedsAvailable <= 0}
                 deleteIcon={<AddIcon classes={newWithdrawalChipStyles()} />}
                 color={seedsAvailable > 0 ? 'primary' : undefined}
                 onClick={seedsAvailable > 0 ? onNewWithdrawal : undefined}
