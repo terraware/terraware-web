@@ -1,7 +1,7 @@
 import { Chip, Link } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useHistory } from 'react-router-dom';
 import strings from 'src/strings';
 
 const useStyles = makeStyles((theme) =>
@@ -45,13 +45,19 @@ export default function FooterButtons({
   errors,
 }: Props): JSX.Element {
   const classes = useStyles();
+  const history = useHistory();
 
   return (
     <>
       {!updating && (
-        <Link component={RouterLink} to='/'>
-          <Chip id='cancelButton' className={classes.cancel} label={strings.CANCEL} clickable variant='outlined' />
-        </Link>
+        <Chip
+          id='cancelButton'
+          className={classes.cancel}
+          label={strings.CANCEL}
+          clickable
+          variant='outlined'
+          onClick={() => history.goBack()}
+        />
       )}
       {(isEditing || isSaving || isSaved) && updating && (
         <Chip
