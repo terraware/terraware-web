@@ -1,9 +1,9 @@
 /* eslint-disable import/no-webpack-loader-syntax */
-import { CircularProgress, createStyles, CssBaseline, makeStyles, ThemeProvider } from '@material-ui/core';
+import { CircularProgress, createStyles, CssBaseline, makeStyles } from '@material-ui/core';
 import mapboxgl from 'mapbox-gl';
 import React, { useCallback, useEffect, useState } from 'react';
-import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
-import { RecoilRoot } from 'recoil';
+import { useHistory } from 'react-router';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import { getOrganizations } from 'src/api/organization/organization';
 import {
   DEFAULT_SEED_SEARCH_FILTERS,
@@ -17,7 +17,6 @@ import EditOrganization from 'src/components/EditOrganization';
 import Home from 'src/components/Home';
 import NoOrgLandingPage from 'src/components/emptyStatePages/NoOrgLandingPage';
 import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
-import ErrorBox from 'src/components/common/ErrorBox/ErrorBox';
 import NavBar from 'src/components/NavBar';
 import NewPerson from 'src/components/Person/NewPerson';
 import NewProject from 'src/components/NewProject';
@@ -44,8 +43,6 @@ import TopBarContent from 'src/components/TopBar/TopBarContent';
 import UserMenu from 'src/components/UserMenu';
 import { APP_PATHS } from 'src/constants';
 import ErrorBoundary from 'src/ErrorBoundary';
-import strings from 'src/strings';
-import theme from 'src/theme';
 import { Notifications } from 'src/types/Notifications';
 import { ServerOrganization } from 'src/types/Organization';
 import { PlantSearchOptions } from 'src/types/Plant';
@@ -57,22 +54,6 @@ import { useMediaQuery } from 'react-responsive';
 mapboxgl.workerClass =
   // tslint:disable-next-line: no-var-requires
   require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker').default;
-
-export default function App() {
-  return (
-    <RecoilRoot>
-      <ErrorBoundary>
-        <React.Suspense fallback={strings.LOADING}>
-          <Router>
-            <ThemeProvider theme={theme}>
-              <AppContent />
-            </ThemeProvider>
-          </Router>
-        </React.Suspense>
-      </ErrorBoundary>
-    </RecoilRoot>
-  );
-}
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -94,13 +75,6 @@ const useStyles = makeStyles(() =>
         height: '193px',
       },
     },
-    errorBox: {
-      width: '30%',
-      marginTop: '120px',
-    },
-    mobileError: {
-      marginTop: '120px',
-    },
   })
 );
 
@@ -111,7 +85,7 @@ enum APIRequestStatus {
   'SUCCEEDED',
 }
 
-function AppContent() {
+export default function App() {
   const classes = useStyles();
   const [selectedOrganization, setSelectedOrganization] = useState<ServerOrganization>();
   const [plantListFilters, setPlantListFilters] = useState<PlantSearchOptions>();
@@ -145,6 +119,7 @@ function AppContent() {
   // get the selected values on database to pass it to new accession page
   const [organizations, setOrganizations] = useState<ServerOrganization[]>();
   const [user, setUser] = useState<User>();
+  const history = useHistory();
   const isMobile = useMediaQuery({ query: `(max-width: 760px)` });
 
   const reloadData = useCallback((selectedOrgId?: number) => {
@@ -174,15 +149,10 @@ function AppContent() {
 
   useEffect(() => {
     if (organizations) {
-      if (!selectedOrganization) {
-        setSelectedOrganization(organizations[0]);
-      } else {
-        // update selectedOrganization
-        setSelectedOrganization((previouslySelectedOrg: ServerOrganization | undefined) => {
-          const updatedOrg = organizations.find((org) => org.id === previouslySelectedOrg?.id);
-          return updatedOrg ? updatedOrg : organizations[0];
-        });
-      }
+      setSelectedOrganization((previouslySelectedOrg: ServerOrganization | undefined) => {
+        const updatedOrg = organizations.find((org) => org.id === previouslySelectedOrg?.id);
+        return updatedOrg ? updatedOrg : organizations[0];
+      });
     }
   }, [organizations, selectedOrganization]);
 
@@ -200,62 +170,25 @@ function AppContent() {
     reloadUser();
   }, [reloadUser]);
 
-  if (isMobile) {
-    window.stop();
-    return (
-      <Switch>
-        <Route exact path={APP_PATHS.MOBILE_ERROR}>
-          <ErrorBox
-            title={strings.NO_MOBILE_SUPPORT_TITLE}
-            text={strings.NO_MOBILE_SUPPORT_DESC}
-            className={classes.mobileError}
-          />
-        </Route>
-
-        <Route path='*'>
-          <Redirect to={APP_PATHS.MOBILE_ERROR} />
-        </Route>
-      </Switch>
-    );
-  }
-
   if (orgAPIRequestStatus === APIRequestStatus.AWAITING || orgAPIRequestStatus === APIRequestStatus.FAILED_NO_AUTH) {
     return <CircularProgress className={classes.spinner} size='193' />;
-  }
-
-  if (orgAPIRequestStatus === APIRequestStatus.FAILED) {
+  } else if (orgAPIRequestStatus === APIRequestStatus.FAILED) {
+    history.push(APP_PATHS.ERROR_FAILED_TO_FETCH_ORG_DATA);
+    return null;
+  } else if (orgAPIRequestStatus === APIRequestStatus.SUCCEEDED && organizations?.length === 0) {
+    history.push(APP_PATHS.WELCOME);
     return (
-      <Switch>
-        <Route exact path={APP_PATHS.ERROR}>
-          <ErrorBox
-            title={strings.ORGANIZATION_DATA_NOT_AVAILABLE}
-            text={strings.CONTACT_US_TO_RESOLVE_ISSUE}
-            className={classes.errorBox}
-          />
-        </Route>
-
-        <Route path='*'>
-          <Redirect to={APP_PATHS.ERROR} />
-        </Route>
-      </Switch>
+      <>
+        <TopBar>
+          <UserMenu user={user} reloadUser={reloadUser} />
+        </TopBar>
+        <NoOrgLandingPage reloadOrganizationData={reloadData} />
+      </>
     );
-  }
-
-  if (orgAPIRequestStatus === APIRequestStatus.SUCCEEDED && organizations?.length === 0) {
-    return (
-      <Switch>
-        <Route exact path={APP_PATHS.WELCOME}>
-          <TopBar>
-            <UserMenu user={user} reloadUser={reloadUser} />
-          </TopBar>
-          <NoOrgLandingPage reloadOrganizationData={reloadData} />
-        </Route>
-
-        <Route path='*'>
-          <Redirect to={APP_PATHS.WELCOME} />
-        </Route>
-      </Switch>
-    );
+  } else if (isMobile) {
+    window.stop();
+    history.push(APP_PATHS.ERROR_MOBILE_NOT_SUPPORTED);
+    return null;
   }
 
   const organizationWithoutSB = () => {
@@ -324,7 +257,11 @@ function AppContent() {
             <Switch>
               {/* Routes, in order of their appearance down the side NavBar */}
               <Route exact path={APP_PATHS.HOME}>
-                <Home organization={selectedOrganization} />
+                <Home
+                  organizations={organizations}
+                  selectedOrganization={selectedOrganization}
+                  setSelectedOrganization={setSelectedOrganization}
+                />
               </Route>
               <Route exact path={APP_PATHS.SEEDS_DASHBOARD}>
                 <SeedSummary
