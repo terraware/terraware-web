@@ -174,15 +174,10 @@ function AppContent() {
 
   useEffect(() => {
     if (organizations) {
-      if (!selectedOrganization) {
-        setSelectedOrganization(organizations[0]);
-      } else {
-        // update selectedOrganization
-        setSelectedOrganization((previouslySelectedOrg: ServerOrganization | undefined) => {
-          const updatedOrg = organizations.find((org) => org.id === previouslySelectedOrg?.id);
-          return updatedOrg ? updatedOrg : organizations[0];
-        });
-      }
+      setSelectedOrganization((previouslySelectedOrg: ServerOrganization | undefined) => {
+        const updatedOrg = organizations.find((org) => org.id === previouslySelectedOrg?.id);
+        return updatedOrg ? updatedOrg : organizations[0];
+      });
     }
   }, [organizations, selectedOrganization]);
 
@@ -324,7 +319,11 @@ function AppContent() {
             <Switch>
               {/* Routes, in order of their appearance down the side NavBar */}
               <Route exact path={APP_PATHS.HOME}>
-                <Home organization={selectedOrganization} />
+                <Home
+                  organizations={organizations}
+                  selectedOrganization={selectedOrganization}
+                  setSelectedOrganization={setSelectedOrganization}
+                />
               </Route>
               <Route exact path={APP_PATHS.SEEDS_DASHBOARD}>
                 <SeedSummary
