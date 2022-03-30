@@ -9,7 +9,6 @@ import React, { Suspense, useEffect, useState } from 'react';
 import { Redirect, useHistory } from 'react-router-dom';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { checkIn, getPhotoEndpoint, postAccession } from 'src/api/seeds/accession';
-import { updateSpecies } from 'src/api/species/species';
 import { Accession, AccessionPostRequestBody } from 'src/api/types/accessions';
 import { seedsDatabaseSelectedOrgInfo } from 'src/state/selectedOrgInfoPerPage';
 import snackbarAtom from 'src/state/snackbar';
@@ -26,7 +25,6 @@ import FooterButtons from '../accession/FooterButtons';
 import PageHeader from '../PageHeader';
 import { AccessionDates } from './AccessionDates';
 import CheckInButtons from './CheckInButtons';
-import EditSpeciesModal from './EditSpeciesModal';
 import MainCollector from './MainCollectorDropdown';
 import NurseryButtons from './NurseryButtons';
 import SecondaryCollectors from './SecondaryCollectors';
@@ -200,8 +198,6 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
-  const [editSpeciesModalOpen, setEditSpeciesModalOpen] = useState(false);
-  const [newSpeciesSelected, setNewSpeciesSelected] = useState(false);
   const [isSendingToNursery, setIsSendingToNursery] = useState(false);
   const [isSentToNursery, setIsSentToNursery] = useState(false);
   const [canSendToNursery, setCanSendToNursery] = useState(false);
@@ -254,14 +250,6 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
   const handleCancel = () => {
     setIsEditing(false);
     setRecord(accession);
-  };
-
-  const beforeSubmit = () => {
-    if (updating && accession.species !== record.species && newSpeciesSelected) {
-      setEditSpeciesModalOpen(true);
-    } else {
-      onSubmitHandler();
-    }
   };
 
   const onSubmitHandler = () => {
@@ -334,307 +322,280 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
     setErrors(combinedErrors);
   };
 
-  const onCloseEditSpeciesModal = () => {
-    setEditSpeciesModalOpen(false);
-    onSubmitHandler();
-  };
-
-  const closeModalAndUpdateSpecies = () => {
-    const speciesId = (record as unknown as Accession).speciesId;
-    if (speciesId && record.species && organization) {
-      updateSpecies({ id: speciesId, name: record.species }, organization.id);
-    }
-    onCloseEditSpeciesModal();
-  };
-
-  const onSpeciesChanged = (id: string, value: unknown, isNew: boolean) => {
-    setNewSpeciesSelected(isNew);
-    onChange(id, value);
-  };
-
   const showCheckIn = isPendingCheckIn || isCheckedIn;
 
   return (
-    <>
-      {updating && (
-        <EditSpeciesModal
-          open={editSpeciesModalOpen}
-          onClose={onCloseEditSpeciesModal}
-          onOk={closeModalAndUpdateSpecies}
-        />
-      )}
-      <MuiPickersUtilsProvider utils={MomentUtils}>
-        <Paper className={classes.paper}>
-          <Typography variant='h6' className={classes.panelTitle}>
-            {strings.SEED_COLLECTION}
-          </Typography>
-          <Typography component='p'>{strings.SEED_COLLECTION_DESCRIPTION}</Typography>
-          <Divisor />
-          <Grid container spacing={4}>
-            <Suspense
-              fallback={
-                <Grid item xs={4}>
-                  <CircularProgress />
-                </Grid>
-              }
-            >
-              <Grid item xs={4}>
-                <Species
-                  selectedSpecies={record.species}
-                  organization={organization}
-                  onChange={onSpeciesChanged}
-                  disabled={isPendingCheckIn}
-                />
-              </Grid>
-            </Suspense>
-            <Grid item xs={4}>
-              <TextField
-                id='family'
-                value={record.family}
-                onChange={onChange}
-                label={strings.FAMILY}
-                disabled={isPendingCheckIn}
-              />
-            </Grid>
-            <Grid item xs={4} />
-            <Grid item xs={4}>
-              <TextField
-                id='numberOfTrees'
-                value={record.numberOfTrees}
-                onChange={OnNumberOfTreesChange}
-                type='number'
-                label={strings.NUMBER_OF_TREES}
-                min={0}
-                helperText={getErrorText('numberOfTrees')}
-                error={getErrorText('numberOfTrees') ? true : false}
-                disabled={isPendingCheckIn}
-              />
-            </Grid>
-            <Grid item xs={4}>
-              <TextField
-                id='founderId'
-                value={record.founderId}
-                onChange={onChange}
-                label={strings.FOUNDER_ID}
-                disabled={isPendingCheckIn}
-              />
-            </Grid>
-            <Grid item xs={4} />
-            <Grid item xs={4}>
-              <Dropdown
-                id='endangered'
-                label={strings.ENDANGERED}
-                selected={record.endangered}
-                values={[
-                  { label: strings.YES, value: 'Yes' },
-                  { label: strings.NO, value: 'No' },
-                  { label: strings.UNSURE, value: 'Unsure' },
-                ]}
-                onChange={onChange}
-                disabled={isPendingCheckIn}
-              />
-            </Grid>
-            <Grid item xs={4}>
-              <Dropdown
-                id='rare'
-                label={strings.RARE}
-                selected={record.rare}
-                values={[
-                  { label: strings.YES, value: 'Yes' },
-                  { label: strings.NO, value: 'No' },
-                  { label: strings.UNSURE, value: 'Unsure' },
-                ]}
-                onChange={onChange}
-                disabled={isPendingCheckIn}
-              />
-            </Grid>
-            <Grid item xs={4} />
-            <Grid item xs={4}>
-              <Dropdown
-                id='sourcePlantOrigin'
-                label={strings.WILD_OUTPLANT}
-                selected={record.sourcePlantOrigin}
-                values={[
-                  { label: strings.WILD, value: 'Wild' },
-                  { label: strings.OUTPLANT, value: 'Outplant' },
-                ]}
-                onChange={onChange}
-                disabled={isPendingCheckIn}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextArea
-                id='fieldNotes'
-                value={record.fieldNotes}
-                onChange={onChange}
-                label={strings.FIELD_NOTES}
-                placeholder={strings.FIELD_NOTES_PLACEHOLDER}
-                disabled={isPendingCheckIn}
-              />
-            </Grid>
-          </Grid>
-          <Divisor />
+    <MuiPickersUtilsProvider utils={MomentUtils}>
+      <Paper className={classes.paper}>
+        <Typography variant='h6' className={classes.panelTitle}>
+          {strings.SEED_COLLECTION}
+        </Typography>
+        <Typography component='p'>{strings.SEED_COLLECTION_DESCRIPTION}</Typography>
+        <Divisor />
+        <Grid container spacing={4}>
           <Suspense
             fallback={
-              <Grid item xs={12}>
+              <Grid item xs={4}>
                 <CircularProgress />
               </Grid>
             }
           >
-            <AccessionDates
-              collectedDate={record.collectedDate}
-              receivedDate={record.receivedDate}
-              refreshErrors={refreshErrors}
-              onChange={onChange}
-              disabled={accession.deviceInfo !== undefined || isPendingCheckIn}
-            />
+            <Grid item xs={4}>
+              <Species
+                selectedSpecies={record.species}
+                organization={organization}
+                onChange={onChange}
+                disabled={isPendingCheckIn}
+              />
+            </Grid>
           </Suspense>
-          <Divisor />
-          <Grid container spacing={4}>
-            <Suspense
-              fallback={
-                <Grid item xs={4}>
-                  <CircularProgress />
-                </Grid>
-              }
-            >
-              <Grid item xs={4}>
-                <MainCollector
-                  facilityId={accession.facilityId!}
-                  onChange={onChange}
-                  mainCollector={record.primaryCollector}
-                  disabled={isPendingCheckIn}
-                />
-              </Grid>
-            </Suspense>
-            <Grid item xs={4}>
-              <SecondaryCollectors
-                id='secondaryCollectors'
-                secondaryCollectors={record.secondaryCollectors}
-                onChange={onChange}
-                disabled={isPendingCheckIn}
-              />
-            </Grid>
+          <Grid item xs={4}>
+            <TextField
+              id='family'
+              value={record.family}
+              onChange={onChange}
+              label={strings.FAMILY}
+              disabled={isPendingCheckIn}
+            />
           </Grid>
-          <Divisor />
-          <Grid container spacing={4}>
-            <Grid item xs={4}>
-              <TextField
-                id='siteLocation'
-                value={record.siteLocation}
-                onChange={onChange}
-                label={strings.SITE}
-                disabled={isPendingCheckIn}
-              />
-            </Grid>
-            <Grid item xs={4}>
-              <TextField
-                id='landowner'
-                value={record.landowner}
-                onChange={onChange}
-                label={strings.LANDOWNER}
-                disabled={isPendingCheckIn}
-              />
-            </Grid>
-            <Grid item xs={4} />
+          <Grid item xs={4} />
+          <Grid item xs={4}>
+            <TextField
+              id='numberOfTrees'
+              value={record.numberOfTrees}
+              onChange={OnNumberOfTreesChange}
+              type='number'
+              label={strings.NUMBER_OF_TREES}
+              min={0}
+              helperText={getErrorText('numberOfTrees')}
+              error={getErrorText('numberOfTrees') ? true : false}
+              disabled={isPendingCheckIn}
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <TextField
+              id='founderId'
+              value={record.founderId}
+              onChange={onChange}
+              label={strings.FOUNDER_ID}
+              disabled={isPendingCheckIn}
+            />
+          </Grid>
+          <Grid item xs={4} />
+          <Grid item xs={4}>
+            <Dropdown
+              id='endangered'
+              label={strings.ENDANGERED}
+              selected={record.endangered}
+              values={[
+                { label: strings.YES, value: 'Yes' },
+                { label: strings.NO, value: 'No' },
+                { label: strings.UNSURE, value: 'Unsure' },
+              ]}
+              onChange={onChange}
+              disabled={isPendingCheckIn}
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <Dropdown
+              id='rare'
+              label={strings.RARE}
+              selected={record.rare}
+              values={[
+                { label: strings.YES, value: 'Yes' },
+                { label: strings.NO, value: 'No' },
+                { label: strings.UNSURE, value: 'Unsure' },
+              ]}
+              onChange={onChange}
+              disabled={isPendingCheckIn}
+            />
+          </Grid>
+          <Grid item xs={4} />
+          <Grid item xs={4}>
+            <Dropdown
+              id='sourcePlantOrigin'
+              label={strings.WILD_OUTPLANT}
+              selected={record.sourcePlantOrigin}
+              values={[
+                { label: strings.WILD, value: 'Wild' },
+                { label: strings.OUTPLANT, value: 'Outplant' },
+              ]}
+              onChange={onChange}
+              disabled={isPendingCheckIn}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextArea
+              id='fieldNotes'
+              value={record.fieldNotes}
+              onChange={onChange}
+              label={strings.FIELD_NOTES}
+              placeholder={strings.FIELD_NOTES_PLACEHOLDER}
+              disabled={isPendingCheckIn}
+            />
+          </Grid>
+        </Grid>
+        <Divisor />
+        <Suspense
+          fallback={
             <Grid item xs={12}>
-              <TextArea
-                id='environmentalNotes'
-                value={record.environmentalNotes}
+              <CircularProgress />
+            </Grid>
+          }
+        >
+          <AccessionDates
+            collectedDate={record.collectedDate}
+            receivedDate={record.receivedDate}
+            refreshErrors={refreshErrors}
+            onChange={onChange}
+            disabled={accession.deviceInfo !== undefined || isPendingCheckIn}
+          />
+        </Suspense>
+        <Divisor />
+        <Grid container spacing={4}>
+          <Suspense
+            fallback={
+              <Grid item xs={4}>
+                <CircularProgress />
+              </Grid>
+            }
+          >
+            <Grid item xs={4}>
+              <MainCollector
+                facilityId={accession.facilityId!}
                 onChange={onChange}
-                label={strings.ENVIRONMENTAL_NOTES}
-                placeholder={strings.ENVIRONMENTAL_NOTES_PLACEHOLDER}
+                mainCollector={record.primaryCollector}
                 disabled={isPendingCheckIn}
               />
             </Grid>
+          </Suspense>
+          <Grid item xs={4}>
+            <SecondaryCollectors
+              id='secondaryCollectors'
+              secondaryCollectors={record.secondaryCollectors}
+              onChange={onChange}
+              disabled={isPendingCheckIn}
+            />
           </Grid>
-          <Divisor />
-          {!updating && <Note>{strings.NEW_ACCESSION_INFO}</Note>}
-          {updating && (
-            <Grid container spacing={4}>
-              <Grid item xs={3}>
-                <Typography component='p' variant='body2' className={classes.listItem}>
-                  {strings.BAG_IDS}
+        </Grid>
+        <Divisor />
+        <Grid container spacing={4}>
+          <Grid item xs={4}>
+            <TextField
+              id='siteLocation'
+              value={record.siteLocation}
+              onChange={onChange}
+              label={strings.SITE}
+              disabled={isPendingCheckIn}
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <TextField
+              id='landowner'
+              value={record.landowner}
+              onChange={onChange}
+              label={strings.LANDOWNER}
+              disabled={isPendingCheckIn}
+            />
+          </Grid>
+          <Grid item xs={4} />
+          <Grid item xs={12}>
+            <TextArea
+              id='environmentalNotes'
+              value={record.environmentalNotes}
+              onChange={onChange}
+              label={strings.ENVIRONMENTAL_NOTES}
+              placeholder={strings.ENVIRONMENTAL_NOTES_PLACEHOLDER}
+              disabled={isPendingCheckIn}
+            />
+          </Grid>
+        </Grid>
+        <Divisor />
+        {!updating && <Note>{strings.NEW_ACCESSION_INFO}</Note>}
+        {updating && (
+          <Grid container spacing={4}>
+            <Grid item xs={3}>
+              <Typography component='p' variant='body2' className={classes.listItem}>
+                {strings.BAG_IDS}
+              </Typography>
+              {record.bagNumbers?.map((bag, index) => (
+                <Typography id={`bag${index}`} key={index} component='p' variant='body1' className={classes.listItem}>
+                  {bag}
                 </Typography>
-                {record.bagNumbers?.map((bag, index) => (
-                  <Typography id={`bag${index}`} key={index} component='p' variant='body1' className={classes.listItem}>
-                    {bag}
+              ))}
+            </Grid>
+            <Grid item xs={5}>
+              <Typography component='p' variant='body2' className={classes.listItem}>
+                {strings.PHOTOS}
+              </Typography>
+              {photoFilenames?.map((photo, index) => (
+                <Link
+                  id={`photo-${index}`}
+                  key={index}
+                  target='_blank'
+                  href={getPhotoEndpoint((record as unknown as Accession).id, photo)}
+                >
+                  <Typography component='p' variant='body1' className={classes.photoLink}>
+                    {photo}
                   </Typography>
-                ))}
-              </Grid>
-              <Grid item xs={5}>
-                <Typography component='p' variant='body2' className={classes.listItem}>
-                  {strings.PHOTOS}
+                </Link>
+              ))}
+            </Grid>
+            <Grid item xs={4}>
+              <Typography component='p' variant='body2' className={classes.listItem}>
+                {strings.GEOLOCATIONS}
+              </Typography>
+              {record.geolocations?.map((geolocation, index) => (
+                <Typography
+                  id={`location${index}`}
+                  key={index}
+                  component='p'
+                  variant='body1'
+                  className={classes.listItem}
+                >
+                  {`${geolocation.latitude}, ${geolocation.longitude}`}
                 </Typography>
-                {photoFilenames?.map((photo, index) => (
-                  <Link
-                    id={`photo-${index}`}
-                    key={index}
-                    target='_blank'
-                    href={getPhotoEndpoint((record as unknown as Accession).id, photo)}
-                  >
-                    <Typography component='p' variant='body1' className={classes.photoLink}>
-                      {photo}
-                    </Typography>
-                  </Link>
-                ))}
-              </Grid>
-              <Grid item xs={4}>
-                <Typography component='p' variant='body2' className={classes.listItem}>
-                  {strings.GEOLOCATIONS}
-                </Typography>
-                {record.geolocations?.map((geolocation, index) => (
-                  <Typography
-                    id={`location${index}`}
-                    key={index}
-                    component='p'
-                    variant='body1'
-                    className={classes.listItem}
-                  >
-                    {`${geolocation.latitude}, ${geolocation.longitude}`}
-                  </Typography>
-                ))}
-              </Grid>
+              ))}
+            </Grid>
+          </Grid>
+        )}
+        <Divisor />
+        <Grid container spacing={4}>
+          {!showCheckIn && updating && (
+            <Grid item>
+              <NurseryButtons
+                isSendingToNursery={isSendingToNursery}
+                isSentToNursery={isSentToNursery}
+                onSubmitHandler={onSendToNurseryHandler}
+                handleCancel={onUndoSendToNursery}
+                canSendToNursery={canSendToNursery}
+              />
             </Grid>
           )}
-          <Divisor />
-          <Grid container spacing={4}>
-            {!showCheckIn && updating && (
-              <Grid item>
-                <NurseryButtons
-                  isSendingToNursery={isSendingToNursery}
-                  isSentToNursery={isSentToNursery}
-                  onSubmitHandler={onSendToNurseryHandler}
-                  handleCancel={onUndoSendToNursery}
-                  canSendToNursery={canSendToNursery}
-                />
-              </Grid>
+          <Grid item className={classes.right}>
+            {showCheckIn ? (
+              <CheckInButtons
+                isCheckedIn={isCheckedIn}
+                isCheckingIn={isCheckingIn}
+                pendingCheckIn={isPendingCheckIn}
+                onSubmitHandler={onCheckInHandler}
+              />
+            ) : (
+              <FooterButtons
+                errors={errors.length > 0}
+                updating={updating}
+                isEditing={isEditing}
+                isSaving={isSaving}
+                isSaved={isSaved}
+                nextStepTo='processing-drying'
+                nextStep={strings.NEXT_PROCESSING_AND_DRYING}
+                onSubmitHandler={onSubmitHandler}
+                handleCancel={handleCancel}
+              />
             )}
-            <Grid item className={classes.right}>
-              {showCheckIn ? (
-                <CheckInButtons
-                  isCheckedIn={isCheckedIn}
-                  isCheckingIn={isCheckingIn}
-                  pendingCheckIn={isPendingCheckIn}
-                  onSubmitHandler={onCheckInHandler}
-                />
-              ) : (
-                <FooterButtons
-                  errors={errors.length > 0}
-                  updating={updating}
-                  isEditing={isEditing}
-                  isSaving={isSaving}
-                  isSaved={isSaved}
-                  nextStepTo='processing-drying'
-                  nextStep={strings.NEXT_PROCESSING_AND_DRYING}
-                  onSubmitHandler={beforeSubmit}
-                  handleCancel={handleCancel}
-                />
-              )}
-            </Grid>
           </Grid>
-        </Paper>
-      </MuiPickersUtilsProvider>
-    </>
+        </Grid>
+      </Paper>
+    </MuiPickersUtilsProvider>
   );
 }
