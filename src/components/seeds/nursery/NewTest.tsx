@@ -410,7 +410,7 @@ export default function NewTestDialog(props: Props): JSX.Element {
               label={props.value ? strings.SAVE_CHANGES : strings.CREATE_TEST}
               clickable
               color='primary'
-              disabled={errors.length > 0}
+              disabled={errors.length > 0 || seedsRemaining < 0}
               onClick={onSubmitHandler}
             />
           </Box>
