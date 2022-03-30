@@ -17,6 +17,7 @@ import emptyMessageStrings from 'src/strings/emptyMessageModal';
 import { ServerOrganization } from 'src/types/Organization';
 import { Species, SpeciesWithScientificName } from 'src/types/Species';
 import SimpleSpeciesModal from './SimpleSpeciesModal';
+import TfMain from 'src/components/common/TfMain';
 
 type SpeciesListProps = {
   organization: ServerOrganization;
@@ -24,13 +25,6 @@ type SpeciesListProps = {
 
 const useStyles = makeStyles((theme) =>
   createStyles({
-    main: {
-      background: '#ffffff',
-      minHeight: 'calc(100vh - 64px)',
-      display: 'flex',
-      flexDirection: 'column',
-      padding: '24px',
-    },
     mainContainer: {
       padding: '32px 0',
     },
@@ -134,7 +128,7 @@ export default function SpeciesList({ organization }: SpeciesListProps): JSX.Ele
   }
 
   return (
-    <main className={classes.main}>
+    <TfMain>
       <SimpleSpeciesModal
         open={editSpeciesModalOpen}
         onClose={onCloseEditSpeciesModal}
@@ -167,6 +161,6 @@ export default function SpeciesList({ organization }: SpeciesListProps): JSX.Ele
           )}
         </Container>
       </Grid>
-    </main>
+    </TfMain>
   );
 }

@@ -21,16 +21,10 @@ import { getAllSites, getSelectedSites } from 'src/utils/organization';
 import { plantListSelectedOrgInfo } from 'src/state/selectedOrgInfoPerPage';
 import EmptyMessage from '../../common/EmptyMessage';
 import { useHistory } from 'react-router-dom';
+import TfMain from 'src/components/common/TfMain';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
-    main: {
-      background: '#ffffff',
-      minHeight: 'calc(100vh - 64px)',
-      display: 'flex',
-      flexDirection: 'column',
-      padding: '24px',
-    },
     mainContainer: {
       padding: '32px 0',
     },
@@ -168,7 +162,7 @@ export default function PlantList(props: PlantListProps): JSX.Element {
   };
 
   return (
-    <main className={classes.main}>
+    <TfMain>
       {selectedPlant && organization && (
         <EditPlantModal
           onSave={onPlantEditSaved}
@@ -260,6 +254,6 @@ export default function PlantList(props: PlantListProps): JSX.Element {
           <CircularProgress />
         </div>
       )}
-    </main>
+    </TfMain>
   );
 }

@@ -1,4 +1,3 @@
-import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React, { useEffect, useState } from 'react';
@@ -12,22 +11,14 @@ import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
 import { OrganizationUser } from 'src/types/User';
 import { getProjectsById } from 'src/utils/organization';
+import TfMain from '../common/TfMain';
 import TableCellRenderer from './TableCellRenderer';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
-    main: {
-      background: '#ffffff',
-      minHeight: 'calc(100vh - 64px)',
-      display: 'flex',
-      flexDirection: 'column',
-    },
     title: {
       marginTop: 0,
       fontSize: '24px',
-    },
-    mainContainer: {
-      padding: '24px',
     },
     mainContent: {
       paddingTop: theme.spacing(4),
@@ -122,37 +113,35 @@ export default function PeopleList({ organization }: PeopleListProps): JSX.Eleme
   };
 
   return (
-    <main className={classes.main}>
-      <Container maxWidth={false} className={classes.mainContainer}>
-        <Grid container spacing={3}>
-          <Grid item xs={2}>
-            <h1 className={classes.title}>{strings.PEOPLE}</h1>
-            <p>{strings.PEOPLE_DESCRIPTION}</p>
-          </Grid>
-          <Grid item xs={8} />
-          <Grid item xs={2} className={classes.centered}>
-            <Button id='new-person' label={strings.ADD_PERSON} onClick={goToNewPerson} size='medium' />
-          </Grid>
-          <Grid item xs={12}>
-            <div className={classes.mainContent}>
-              <Grid container spacing={4}>
-                <Grid item xs={12}>
-                  {people && (
-                    <Table
-                      id='people-table'
-                      columns={columns}
-                      rows={people}
-                      orderBy='name'
-                      onSelect={onSelect}
-                      Renderer={TableCellRenderer}
-                    />
-                  )}
-                </Grid>
-              </Grid>
-            </div>
-          </Grid>
+    <TfMain>
+      <Grid container spacing={3}>
+        <Grid item xs={2}>
+          <h1 className={classes.title}>{strings.PEOPLE}</h1>
+          <p>{strings.PEOPLE_DESCRIPTION}</p>
         </Grid>
-      </Container>
-    </main>
+        <Grid item xs={8} />
+        <Grid item xs={2} className={classes.centered}>
+          <Button id='new-person' label={strings.ADD_PERSON} onClick={goToNewPerson} size='medium' />
+        </Grid>
+        <Grid item xs={12}>
+          <div className={classes.mainContent}>
+            <Grid container spacing={4}>
+              <Grid item xs={12}>
+                {people && (
+                  <Table
+                    id='people-table'
+                    columns={columns}
+                    rows={people}
+                    orderBy='name'
+                    onSelect={onSelect}
+                    Renderer={TableCellRenderer}
+                  />
+                )}
+              </Grid>
+            </Grid>
+          </div>
+        </Grid>
+      </Grid>
+    </TfMain>
   );
 }

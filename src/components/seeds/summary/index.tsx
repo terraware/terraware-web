@@ -10,6 +10,7 @@ import { useRecoilState } from 'recoil';
 import { SeedSearchCriteria } from 'src/api/seeds/search';
 import { getSummary, GetSummaryResponse } from 'src/api/seeds/summary';
 import EmptyMessage from 'src/components/common/EmptyMessage';
+import TfMain from 'src/components/common/TfMain';
 import { API_PULL_INTERVAL, APP_PATHS, TERRAWARE_SUPPORT_LINK } from 'src/constants';
 import { seedsSummarySelectedOrgInfo } from 'src/state/selectedOrgInfoPerPage';
 import strings from 'src/strings';
@@ -21,13 +22,6 @@ import Updates from './Updates';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
-    main: {
-      background: '#ffffff',
-      minHeight: 'calc(100vh - 64px)',
-      display: 'flex',
-      flexDirection: 'column',
-      padding: '24px',
-    },
     mainContainer: {
       padding: '32px 0',
     },
@@ -138,7 +132,7 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
   };
 
   return (
-    <main className={classes.main}>
+    <TfMain>
       <PageHeader subtitle={strings.WELCOME_MSG} page={strings.DASHBOARD} parentPage={strings.SEEDS} />
       <Container maxWidth={false} className={classes.mainContainer}>
         {organization && summary ? (
@@ -223,6 +217,6 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
           </div>
         )}
       </Container>
-    </main>
+    </TfMain>
   );
 }
