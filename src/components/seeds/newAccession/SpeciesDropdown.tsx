@@ -8,7 +8,7 @@ import Autocomplete from '../../common/Autocomplete';
 interface SpeciesDropdownProps {
   selectedSpecies?: string;
   organization?: ServerOrganization;
-  onChange: (id: string, value: unknown, isNew: boolean) => void;
+  onChange: (id: string, value: unknown) => void;
   disabled?: boolean;
 }
 
@@ -29,23 +29,15 @@ export default function SpeciesDropdown(props: SpeciesDropdownProps): JSX.Elemen
     populateSpecies();
   }, [organization]);
 
-  const onChangeHandler = (id: string, selectedName: string) => {
-    const found = speciesList.findIndex((item) => item.name === selectedName);
-    if (found === -1) {
-      onChange(id, selectedName, true);
-    } else {
-      onChange(id, selectedName, false);
-    }
-  };
-
   return (
     <Autocomplete
       id='species'
       selected={selectedSpecies}
-      onChange={onChangeHandler}
+      onChange={onChange}
       label={strings.SPECIES}
       values={speciesList.map((item) => item.name)}
       disabled={disabled}
+      freeSolo={false}
     />
   );
 }

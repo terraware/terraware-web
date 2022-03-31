@@ -404,6 +404,7 @@ const strings = new LocalizedStrings({
     UNABLE_TO_ADD_PERSON: 'Unable to Add Person',
     FIX_HIGHLIGHTED_FIELDS: 'Fix the highlighted fields below.',
     OWNERS_ADMINS_ACCESS_ALL_PROJECTS: 'Owners and Admins automatically have access to all projects.',
+    DETAILS: 'Details',
   },
 });
 

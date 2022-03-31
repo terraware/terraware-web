@@ -3,16 +3,11 @@ import Typography from '@material-ui/core/Typography';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import React from 'react';
+import PanelTitle from 'src/components/PanelTitle';
 import strings from 'src/strings';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
-    panelTitle: {
-      fontSize: '20px',
-      lineHeight: '28px',
-      fontWeight: 600,
-      color: '#3A4445',
-    },
     depositContext: {
       flex: 1,
       marginLeft: theme.spacing(1),
@@ -52,9 +47,7 @@ export default function SummaryCell({ title, current, lastWeek, className }: Sum
   return (
     <div className={classes.cell}>
       <div>
-        <Typography component='h2' variant='h6' gutterBottom id={`summary-${title}`} className={classes.panelTitle}>
-          {current} {title}
-        </Typography>
+        <PanelTitle gutterBottom={true} id={`summary-${title}`} title={`${current} ${title}`} />
         <div className={classes.details}>
           {lastWeek !== 0 && (
             <>

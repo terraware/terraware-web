@@ -1,10 +1,12 @@
 import MomentUtils from '@date-io/moment';
-import { Chip, Grid, Paper, Typography } from '@material-ui/core';
+import { Chip, Grid, Typography } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import React from 'react';
 import { Accession, AccessionWithdrawal } from 'src/api/types/accessions';
+import MainPaper from 'src/components/MainPaper';
+import PanelTitle from 'src/components/PanelTitle';
 import strings from 'src/strings';
 import Divisor from '../../common/Divisor';
 import Note from '../../common/Note';
@@ -20,18 +22,6 @@ const useStyles = makeStyles((theme) =>
   createStyles({
     mainContainer: {
       paddingBottom: theme.spacing(4),
-    },
-    paper: {
-      padding: theme.spacing(2),
-      border: '1px solid #A9B7B8',
-      borderRadius: '8px',
-      boxShadow: 'none',
-    },
-    panelTitle: {
-      fontSize: '20px',
-      lineHeight: '28px',
-      fontWeight: 600,
-      color: '#3A4445',
     },
     bold: {
       fontWeight: theme.typography.fontWeightBold,
@@ -150,10 +140,8 @@ export default function WithdrawalView({ accession, onSubmit }: Props): JSX.Elem
           allowWithdrawalInGrams={allowWithdrawalInGrams}
         />
         <InfoModal open={openInfoModal} onClose={onCloseInfoModal} />
-        <Paper className={classes.paper}>
-          <Typography variant='h6' className={classes.panelTitle}>
-            {strings.WITHDRAWAL}
-          </Typography>
+        <MainPaper>
+          <PanelTitle title={strings.WITHDRAWAL} />
           <Typography component='p'>{strings.WITHDRAWAL_DESCRIPTION}</Typography>
           <Divisor />
 
@@ -220,7 +208,7 @@ export default function WithdrawalView({ accession, onSubmit }: Props): JSX.Elem
               />
             </Grid>
           </Grid>
-        </Paper>
+        </MainPaper>
       </MuiPickersUtilsProvider>
     </main>
   );
