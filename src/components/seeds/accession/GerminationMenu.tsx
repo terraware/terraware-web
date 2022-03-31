@@ -1,8 +1,10 @@
-import { Link, Paper, Typography } from '@material-ui/core';
+import { Link, Typography } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 import { Link as RouterLink, useHistory, useParams, useRouteMatch } from 'react-router-dom';
 import { Accession } from 'src/api/types/accessions';
+import MainPaper from 'src/components/MainPaper';
+import PanelTitle from 'src/components/PanelTitle';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import useStateLocation from 'src/utils/useStateLocation';
@@ -10,19 +12,6 @@ import Divisor from '../../common/Divisor';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
-    paper: {
-      marginTop: theme.spacing(4),
-      padding: theme.spacing(2),
-      border: '1px solid #A9B7B8',
-      borderRadius: '8px',
-      boxShadow: 'none',
-    },
-    panelTitle: {
-      fontSize: '20px',
-      lineHeight: '28px',
-      fontWeight: 600,
-      color: '#3A4445',
-    },
     bold: {
       fontWeight: theme.typography.fontWeightBold,
       color: theme.palette.common.black,
@@ -58,10 +47,8 @@ export default function GerminationMenu({ accession }: Props): JSX.Element | nul
   }
 
   return (
-    <Paper className={classes.paper}>
-      <Typography variant='h6' className={classes.panelTitle}>
-        {strings.GERMINATION_TESTING}
-      </Typography>
+    <MainPaper>
+      <PanelTitle title={strings.GERMINATION_TESTING} />
       <Divisor mt={1} />
       {hasNurseryGerminationTest && (
         <Link
@@ -93,6 +80,6 @@ export default function GerminationMenu({ accession }: Props): JSX.Element | nul
           </Typography>
         </Link>
       )}
-    </Paper>
+    </MainPaper>
   );
 }

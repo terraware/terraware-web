@@ -1,25 +1,15 @@
-import { Box, Divider, Link, Paper, Typography } from '@material-ui/core';
+import { Box, Divider, Link, Typography } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 import { Link as RouterLink, useHistory, useParams, useRouteMatch } from 'react-router-dom';
+import MainPaper from 'src/components/MainPaper';
+import PanelTitle from 'src/components/PanelTitle';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import useStateLocation from 'src/utils/useStateLocation';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
-    paper: {
-      padding: theme.spacing(2),
-      border: '1px solid #A9B7B8',
-      borderRadius: '8px',
-      boxShadow: 'none',
-    },
-    panelTitle: {
-      fontSize: '20px',
-      lineHeight: '28px',
-      fontWeight: 600,
-      color: '#3A4445',
-    },
     bold: {
       fontWeight: theme.typography.fontWeightBold,
       color: theme.palette.common.black,
@@ -80,10 +70,8 @@ export default function DetailsMenu({ state }: Props): JSX.Element | null {
   }
 
   return (
-    <Paper className={classes.paper}>
-      <Typography variant='h6' className={classes.panelTitle}>
-        Details
-      </Typography>
+    <MainPaper>
+      <PanelTitle title={strings.DETAILS} />
       <Box mt={1} />
       <Divider light />
       <Box mt={1} />
@@ -112,6 +100,6 @@ export default function DetailsMenu({ state }: Props): JSX.Element | null {
           </Link>
         )
       )}
-    </Paper>
+    </MainPaper>
   );
 }

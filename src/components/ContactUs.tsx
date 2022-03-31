@@ -6,26 +6,28 @@ import PageCard from 'src/components/common/PageCard';
 import dictionary from 'src/strings/dictionary';
 import strings from 'src/strings/contactUsPage';
 import { TERRAWARE_SUPPORT_LINK } from 'src/constants';
+import TfMain from './common/TfMain';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    main: {
-      backgroundColor: '#FFFFFF',
-      display: 'flex',
-      flexDirection: 'column',
-      height: '100%',
-      padding: '12px 12px',
-    },
     title: {
       fontSize: '24px',
       fontWeight: 600,
       lineHeight: '32px',
-      margin: '12px',
+      margin: '0 0 12px 0',
     },
     mainGrid: {
       display: 'flex',
       margin: 0,
       width: '100%',
+
+      '& .MuiGrid-item:first-child': {
+        paddingLeft: 0,
+      },
+
+      '& .MuiGrid-item:last-child': {
+        paddingRight: 0,
+      },
     },
   })
 );
@@ -67,7 +69,7 @@ export default function ContactUs(): JSX.Element {
   const classes = useStyles();
 
   return (
-    <main className={classes.main}>
+    <TfMain>
       <h1 className={classes.title}>{dictionary.CONTACT_US}</h1>
       <Grid container spacing={3} className={classes.mainGrid}>
         {listItemContent.map((item) => {
@@ -86,6 +88,6 @@ export default function ContactUs(): JSX.Element {
           );
         })}
       </Grid>
-    </main>
+    </TfMain>
   );
 }

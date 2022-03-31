@@ -58,8 +58,8 @@ describe('Storage', () => {
       cy.get('#sessions-change').contains('100% since last week');
       cy.get('#sessions-arrow-increase').should('exist');
 
-      cy.get('#species-current').contains('6');
-      cy.get('#species-change').contains('200% since last week');
+      cy.get('#species-current').contains('4');
+      cy.get('#species-change').contains('100% since last week');
       cy.get('#species-arrow-increase').should('exist');
 
       cy.get('#families-current').contains('2');

@@ -1,4 +1,3 @@
-import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React from 'react';
@@ -10,16 +9,11 @@ import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import { Project, ServerOrganization } from 'src/types/Organization';
 import { getOrganizationProjects } from 'src/utils/organization';
+import TfMain from '../common/TfMain';
 import ProjectsCellRenderer from './TableCellRenderer';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
-    main: {
-      background: '#ffffff',
-      minHeight: 'calc(100vh - 64px)',
-      display: 'flex',
-      flexDirection: 'column',
-    },
     title: {
       marginTop: 0,
       fontSize: '24px',
@@ -72,40 +66,38 @@ export default function ProjectsList({ organization }: ProjectsListProps): JSX.E
   };
 
   return (
-    <main className={classes.main}>
-      <Container maxWidth={false} className={classes.mainContainer}>
-        <Grid container spacing={3}>
-          <Grid item xs={2}>
-            <h1 className={classes.title}>{strings.PROJECTS}</h1>
-            <p>{strings.PROJECTS_DESCRIPTION}</p>
-          </Grid>
-          <Grid item xs={8} />
-          <Grid item xs={2} className={classes.centered}>
-            {organization && ['Admin', 'Owner'].includes(organization?.role) && (
-              <Button id='new-project' label={strings.ADD_PROJECT} onClick={goToNewProject} size='medium' />
-            )}
-          </Grid>
-          <Grid item xs={12}>
-            <div className={classes.mainContent}>
-              <Grid container spacing={4}>
-                <Grid item xs={12}>
-                  {organization?.projects && (
-                    <Table
-                      id='projects-table'
-                      columns={columns}
-                      rows={getOrganizationProjects(organization)}
-                      orderBy='name'
-                      onSelect={onSelect}
-                      Renderer={ProjectsCellRenderer}
-                    />
-                  )}
-                </Grid>
-              </Grid>
-            </div>
-          </Grid>
-          <Grid item xs={1} />
+    <TfMain>
+      <Grid container spacing={3}>
+        <Grid item xs={2}>
+          <h1 className={classes.title}>{strings.PROJECTS}</h1>
+          <p>{strings.PROJECTS_DESCRIPTION}</p>
         </Grid>
-      </Container>
-    </main>
+        <Grid item xs={8} />
+        <Grid item xs={2} className={classes.centered}>
+          {organization && ['Admin', 'Owner'].includes(organization?.role) && (
+            <Button id='new-project' label={strings.ADD_PROJECT} onClick={goToNewProject} size='medium' />
+          )}
+        </Grid>
+        <Grid item xs={12}>
+          <div className={classes.mainContent}>
+            <Grid container spacing={4}>
+              <Grid item xs={12}>
+                {organization?.projects && (
+                  <Table
+                    id='projects-table'
+                    columns={columns}
+                    rows={getOrganizationProjects(organization)}
+                    orderBy='name'
+                    onSelect={onSelect}
+                    Renderer={ProjectsCellRenderer}
+                  />
+                )}
+              </Grid>
+            </Grid>
+          </div>
+        </Grid>
+        <Grid item xs={1} />
+      </Grid>
+    </TfMain>
   );
 }
