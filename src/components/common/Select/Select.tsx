@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React, { ChangeEvent, KeyboardEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from 'react';
 import Icon from '../icon/Icon';
 import './styles.scss';
 
@@ -48,7 +48,29 @@ export default function Select(props: SelectProps): JSX.Element {
   });
 
   const [openedOptions, setOpenedOptions] = useState(false);
-  const dropdownRef = React.useRef<HTMLUListElement>(null);
+  const inputRef = useRef<HTMLDivElement>(null);
+  const dropdownRef = useRef<HTMLUListElement>(null);
+
+  useEffect(() => {
+    window.addEventListener('click', handleClick);
+
+    return () => {
+      window.removeEventListener('click', handleClick);
+    };
+  }, []);
+
+  const handleClick = (event: any) => {
+    // Don't respond to user clicks inside the input box because those are
+    // already handled by toggleOptions()
+    if (
+      dropdownRef.current &&
+      !dropdownRef.current.contains(event.target) &&
+      inputRef.current &&
+      !inputRef.current.contains(event.target)
+    ) {
+      setOpenedOptions(false);
+    }
+  };
 
   useEffect(() => {
     if (openedOptions) {
@@ -57,7 +79,7 @@ export default function Select(props: SelectProps): JSX.Element {
   }, [openedOptions]);
 
   const toggleOptions = () => {
-    setOpenedOptions(!openedOptions);
+    setOpenedOptions((isOpen) => !isOpen);
   };
 
   const onOptionSelected = (option: string) => {
@@ -108,7 +130,7 @@ export default function Select(props: SelectProps): JSX.Element {
         </label>
       )}
       <div className='textfield-container'>
-        <div id={id} className={selectClass} onClick={toggleOptions}>
+        <div id={id} className={selectClass} onClick={toggleOptions} ref={inputRef}>
           <input
             value={selectedValue}
             readOnly={true}

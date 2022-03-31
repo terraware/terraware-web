@@ -184,8 +184,7 @@ describe('Withdrawal', () => {
       cy.get('#seeds-available').should('have.css', 'background-color', 'rgb(205, 91, 56)');
 
       cy.get('#new-withdrawal-button').should('have.css', 'background-color', 'rgb(173, 181, 189)');
-      cy.get('#new-withdrawal-button').click();
-      cy.get('#modal-seeds-available').should('not.exist');
+      cy.get('#new-withdrawal-button').should('have.class', 'Mui-disabled');
     });
   });
 
@@ -370,8 +369,7 @@ describe('Withdrawal', () => {
       cy.get('#seeds-available').should('have.css', 'background-color', 'rgb(205, 91, 56)');
 
       cy.get('#new-withdrawal-button').should('have.css', 'background-color', 'rgb(173, 181, 189)');
-      cy.get('#new-withdrawal-button').click();
-      cy.get('#modal-seeds-available').should('not.exist');
+      cy.get('#new-withdrawal-button').should('have.class', 'Mui-disabled');
     });
 
     it('should display the records in the right order', () => {
@@ -439,8 +437,8 @@ describe('Withdrawal', () => {
       cy.get('#sessions-change').contains('267% since last week');
       cy.get('#sessions-arrow-increase').should('exist');
 
-      cy.get('#species-current').contains('6');
-      cy.get('#species-change').contains('200% since last week');
+      cy.get('#species-current').contains('4');
+      cy.get('#species-change').contains('100% since last week');
       cy.get('#species-arrow-increase').should('exist');
 
       cy.get('#families-current').contains('2');
