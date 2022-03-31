@@ -35,16 +35,10 @@ import { seedsDatabaseSelectedOrgInfo } from 'src/state/selectedOrgInfoPerPage';
 import { useRecoilState } from 'recoil';
 import EmptyMessage from 'src/components/common/EmptyMessage';
 import { APP_PATHS, TERRAWARE_SUPPORT_LINK } from 'src/constants';
+import TfMain from 'src/components/common/TfMain';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    main: {
-      background: '#ffffff',
-      minHeight: 'calc(100vh - 64px)',
-      display: 'flex',
-      flexDirection: 'column',
-      padding: '24px',
-    },
     mainContainer: {
       padding: '32px 0',
     },
@@ -314,7 +308,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
 
   return (
     <MuiPickersUtilsProvider utils={MomentUtils}>
-      <main className={classes.main}>
+      <TfMain>
         <EditColumns open={editColumnsModalOpen} value={displayColumnNames} onClose={onCloseEditColumnsModal} />
         {facilityIdForReport && (
           <DownloadReportModal
@@ -447,7 +441,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
             </div>
           )}
         </Container>
-      </main>
+      </TfMain>
     </MuiPickersUtilsProvider>
   );
 }

@@ -30,18 +30,12 @@ import NurseryButtons from './NurseryButtons';
 import SecondaryCollectors from './SecondaryCollectors';
 import Species from './SpeciesDropdown';
 import { APP_PATHS } from '../../../constants';
+import TfMain from 'src/components/common/TfMain';
 import PanelTitle from 'src/components/PanelTitle';
 import MainPaper from 'src/components/MainPaper';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
-    main: {
-      background: '#ffffff',
-      minHeight: '100vh',
-      display: 'flex',
-      flexDirection: 'column',
-      padding: '24px',
-    },
     mainContainer: {
       padding: '32px 0',
     },
@@ -121,7 +115,7 @@ export default function NewAccessionWrapper(props: NewAccessionProps): JSX.Eleme
   }
 
   return (
-    <main className={classes.main}>
+    <TfMain>
       <PageHeader
         title={strings.NEW_ACCESSION}
         subtitle={strings.NEW_ACCESSION_DESCRIPTION}
@@ -156,7 +150,7 @@ export default function NewAccessionWrapper(props: NewAccessionProps): JSX.Eleme
           <Grid item xs={1} />
         </Grid>
       </Container>
-    </main>
+    </TfMain>
   );
 }
 

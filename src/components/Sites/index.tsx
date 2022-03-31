@@ -1,4 +1,3 @@
-import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React, { useEffect, useState } from 'react';
@@ -10,21 +9,13 @@ import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import { ServerOrganization, Site } from 'src/types/Organization';
 import { getAllSitesWithProjectName } from 'src/utils/organization';
+import TfMain from '../common/TfMain';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
-    main: {
-      background: '#ffffff',
-      minHeight: 'calc(100vh - 64px)',
-      display: 'flex',
-      flexDirection: 'column',
-    },
     title: {
       marginTop: 0,
       fontSize: '24px',
-    },
-    mainContainer: {
-      padding: '24px',
     },
     mainContent: {
       paddingTop: theme.spacing(4),
@@ -81,32 +72,28 @@ export default function SitesList({ organization }: SitesListProps): JSX.Element
   };
 
   return (
-    <main className={classes.main}>
-      <Container maxWidth={false} className={classes.mainContainer}>
-        <Grid container spacing={3}>
-          <Grid item xs={2}>
-            <h1 className={classes.title}>{strings.SITES}</h1>
-            <p>{strings.SITES_DESCRIPTION}</p>
-          </Grid>
-          <Grid item xs={8} />
-          <Grid item xs={2} className={classes.centered}>
-            {organization && ['Admin', 'Owner'].includes(organization?.role) && (
-              <Button id='new-site' label={strings.ADD_SITE} onClick={goToNewSite} size='medium' />
-            )}
-          </Grid>
-          <Grid item xs={12}>
-            <div className={classes.mainContent}>
-              <Grid container spacing={4}>
-                <Grid item xs={12}>
-                  {sites && (
-                    <Table id='sites-table' columns={columns} rows={sites} orderBy='name' onSelect={onSelect} />
-                  )}
-                </Grid>
-              </Grid>
-            </div>
-          </Grid>
+    <TfMain>
+      <Grid container spacing={3}>
+        <Grid item xs={2}>
+          <h1 className={classes.title}>{strings.SITES}</h1>
+          <p>{strings.SITES_DESCRIPTION}</p>
         </Grid>
-      </Container>
-    </main>
+        <Grid item xs={8} />
+        <Grid item xs={2} className={classes.centered}>
+          {organization && ['Admin', 'Owner'].includes(organization?.role) && (
+            <Button id='new-site' label={strings.ADD_SITE} onClick={goToNewSite} size='medium' />
+          )}
+        </Grid>
+        <Grid item xs={12}>
+          <div className={classes.mainContent}>
+            <Grid container spacing={4}>
+              <Grid item xs={12}>
+                {sites && <Table id='sites-table' columns={columns} rows={sites} orderBy='name' onSelect={onSelect} />}
+              </Grid>
+            </Grid>
+          </div>
+        </Grid>
+      </Grid>
+    </TfMain>
   );
 }

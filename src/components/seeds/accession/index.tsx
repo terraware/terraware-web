@@ -5,6 +5,7 @@ import { Route, Switch, useHistory, useParams } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import { checkIn, getAccession, putAccession } from 'src/api/seeds/accession';
 import { Accession, AccessionState } from 'src/api/types/accessions';
+import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import ErrorBoundary from 'src/ErrorBoundary';
 import snackbarAtom from 'src/state/snackbar';
@@ -22,13 +23,6 @@ import AccessionPageHeader from './PageHeader';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
-    main: {
-      background: '#ffffff',
-      minHeight: '100vh',
-      display: 'flex',
-      flexDirection: 'column',
-      padding: '24px',
-    },
     mainContainer: {
       padding: '32px 0',
     },
@@ -128,7 +122,7 @@ function Content({ organization }: AccessionPageProps): JSX.Element {
   }
 
   return (
-    <main className={classes.main}>
+    <TfMain>
       <AccessionPageHeader accession={accession} />
       <Container maxWidth={false} className={classes.mainContainer}>
         <Grid container spacing={3}>
@@ -167,7 +161,7 @@ function Content({ organization }: AccessionPageProps): JSX.Element {
           </Grid>
         </Grid>
       </Container>
-    </main>
+    </TfMain>
   );
 }
 
