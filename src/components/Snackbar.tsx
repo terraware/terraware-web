@@ -6,6 +6,11 @@ import Icon from './common/icon/Icon';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
+    mainSnackbar: {
+      '&.MuiSnackbar-anchorOriginTopCenter': {
+        top: '75px',
+      },
+    },
     mainContainer: {
       display: 'flex',
       backgroundColor: '#ffffff',
@@ -124,6 +129,7 @@ export default function SnackbarMessage(): JSX.Element {
       onClose={handleClose}
       autoHideDuration={5000}
       id='snackbar'
+      className={classes.mainSnackbar}
     >
       <div className={`${classes.mainContainer} ${classes[snackbar.type]} body${snackbar.priority}`}>
         <div className={`${classes.iconContainer} iconContainer`}>
