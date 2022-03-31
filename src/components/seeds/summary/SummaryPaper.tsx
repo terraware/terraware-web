@@ -5,6 +5,7 @@ import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import React from 'react';
 import { SummaryStatistic } from 'src/api/seeds/summary';
+import PanelTitle from 'src/components/PanelTitle';
 import strings from 'src/strings';
 
 const useStyles = makeStyles((theme) =>
@@ -12,12 +13,6 @@ const useStyles = makeStyles((theme) =>
     depositContext: {
       flex: 1,
       marginLeft: theme.spacing(1),
-    },
-    panelTitle: {
-      fontSize: '20px',
-      lineHeight: '28px',
-      fontWeight: 600,
-      color: '#3A4445',
     },
     details: {
       display: 'flex',
@@ -45,9 +40,7 @@ export default function SummaryPaper({ id, title, statistics, loading, error }: 
 
   return (
     <>
-      <Typography component='h2' variant='h6' color='primary' gutterBottom className={classes.panelTitle}>
-        {title}
-      </Typography>
+      <PanelTitle title={title} gutterBottom={true} />
       {error && strings.GENERIC_ERROR}
       {loading && <CircularProgress id={`spinner-summary-${id}`} />}
       {statistics && (
