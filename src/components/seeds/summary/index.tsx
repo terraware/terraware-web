@@ -1,7 +1,6 @@
 import { CircularProgress } from '@material-ui/core';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import Cookies from 'cookies-js';
 import React, { useEffect, useState } from 'react';
@@ -10,6 +9,8 @@ import { useRecoilState } from 'recoil';
 import { SeedSearchCriteria } from 'src/api/seeds/search';
 import { getSummary, GetSummaryResponse } from 'src/api/seeds/summary';
 import EmptyMessage from 'src/components/common/EmptyMessage';
+import TfMain from 'src/components/common/TfMain';
+import MainPaper from 'src/components/MainPaper';
 import { API_PULL_INTERVAL, APP_PATHS, TERRAWARE_SUPPORT_LINK } from 'src/constants';
 import { seedsSummarySelectedOrgInfo } from 'src/state/selectedOrgInfoPerPage';
 import strings from 'src/strings';
@@ -21,24 +22,13 @@ import Updates from './Updates';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
-    main: {
-      background: '#ffffff',
-      minHeight: 'calc(100vh - 64px)',
-      display: 'flex',
-      flexDirection: 'column',
-      padding: '24px',
-    },
     mainContainer: {
       padding: '32px 0',
     },
     paper: {
-      padding: theme.spacing(2),
       display: 'flex',
       overflow: 'auto',
       flexDirection: 'column',
-      border: '1px solid #A9B7B8',
-      borderRadius: '8px',
-      boxShadow: 'none',
     },
     fixedHeight: {
       height: '100%',
@@ -138,7 +128,7 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
   };
 
   return (
-    <main className={classes.main}>
+    <TfMain>
       <PageHeader subtitle={strings.WELCOME_MSG} page={strings.DASHBOARD} parentPage={strings.SEEDS} />
       <Container maxWidth={false} className={classes.mainContainer}>
         {organization && summary ? (
@@ -157,7 +147,7 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
               <Grid item xs={12}>
                 <Grid container spacing={3}>
                   <Grid item xs={4}>
-                    <Paper className={classes.paper}>
+                    <MainPaper className={classes.paper}>
                       <SummaryPaper
                         id='sessions'
                         title={strings.ACTIVE_ACCESSIONS}
@@ -165,10 +155,10 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
                         loading={summary === undefined}
                         error={errorOccurred}
                       />
-                    </Paper>
+                    </MainPaper>
                   </Grid>
                   <Grid item xs={4}>
-                    <Paper className={classes.paper}>
+                    <MainPaper className={classes.paper}>
                       <SummaryPaper
                         id='species'
                         title={strings.SPECIES}
@@ -176,10 +166,10 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
                         loading={summary === undefined}
                         error={errorOccurred}
                       />
-                    </Paper>
+                    </MainPaper>
                   </Grid>
                   <Grid item xs={4}>
-                    <Paper className={classes.paper}>
+                    <MainPaper className={classes.paper}>
                       <SummaryPaper
                         id='families'
                         title={strings.FAMILY}
@@ -187,17 +177,17 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
                         loading={summary === undefined}
                         error={errorOccurred}
                       />
-                    </Paper>
+                    </MainPaper>
                   </Grid>
                   <Grid item xs={12}>
-                    <Paper className={`${classes.paper} ${classes.fixedHeight}`}>
+                    <MainPaper className={`${classes.paper} ${classes.fixedHeight}`}>
                       <Updates
                         setSeedSearchCriteria={setSeedSearchCriteria}
                         summaryResponse={summary?.value}
                         loading={summary === undefined}
                         error={errorOccurred}
                       />
-                    </Paper>
+                    </MainPaper>
                   </Grid>
                 </Grid>
               </Grid>
@@ -223,6 +213,6 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
           </div>
         )}
       </Container>
-    </main>
+    </TfMain>
   );
 }

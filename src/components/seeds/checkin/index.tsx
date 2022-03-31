@@ -17,6 +17,7 @@ import { useHistory } from 'react-router';
 import { useRecoilState } from 'recoil';
 import { getPendingAccessions, SearchResponseElement } from 'src/api/seeds/search';
 import Button from 'src/components/common/button/Button';
+import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import { checkInSelectedOrgInfo } from 'src/state/selectedOrgInfoPerPage';
 import strings from 'src/strings';
@@ -27,13 +28,6 @@ import PageHeader from '../PageHeader';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    main: {
-      background: '#ffffff',
-      minHeight: 'calc(100vh - 64px)',
-      display: 'flex',
-      flexDirection: 'column',
-      padding: '24px',
-    },
     mainContainer: {
       padding: '32px 0',
     },
@@ -123,7 +117,7 @@ export default function CheckIn(props: CheckInProps): JSX.Element {
 
   return (
     <MuiPickersUtilsProvider utils={MomentUtils}>
-      <main className={classes.main}>
+      <TfMain>
         <PageHeader
           title={strings.CHECKIN_BAGS}
           subtitle={getSubtitle()}
@@ -187,7 +181,7 @@ export default function CheckIn(props: CheckInProps): JSX.Element {
             )}
           </Grid>
         </Container>
-      </main>
+      </TfMain>
     </MuiPickersUtilsProvider>
   );
 }

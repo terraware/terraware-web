@@ -24,16 +24,10 @@ import { getAllSites, getSelectedSites } from 'src/utils/organization';
 import { useRecoilState } from 'recoil';
 import { plantDashboardSelectedOrgInfo } from 'src/state/selectedOrgInfoPerPage';
 import EmptyMessage from '../../common/EmptyMessage';
+import TfMain from 'src/components/common/TfMain';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
-    main: {
-      background: '#ffffff',
-      minHeight: 'calc(100vh - 64px)',
-      display: 'flex',
-      flexDirection: 'column',
-      padding: '24px',
-    },
     mainContainer: {
       padding: '32px 0',
     },
@@ -156,7 +150,7 @@ export default function PlantDashboard(props: PlantDashboardProps): JSX.Element 
   };
 
   return (
-    <main className={classes.main}>
+    <TfMain>
       {organization && plantSummariesByLayerId ? (
         <>
           <Grid container>
@@ -253,7 +247,7 @@ export default function PlantDashboard(props: PlantDashboardProps): JSX.Element 
           <CircularProgress />
         </div>
       )}
-    </main>
+    </TfMain>
   );
 }
 

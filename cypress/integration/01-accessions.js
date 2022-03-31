@@ -50,7 +50,7 @@ describe('Accessions', () => {
       cy.wait('@search');
       cy.get('#newAccession').click().url().should('contain', '/accessions/new');
 
-      cy.get('#species').type('Kousa Dogwoord');
+      cy.get('#species').type('Kousa Dogwood{downArrow}{enter}');
       cy.get('#family').type('Cornaceae');
       cy.get('#numberOfTrees').type('3');
       cy.get('#founderId').type('234908098');
@@ -79,11 +79,11 @@ describe('Accessions', () => {
       cy.url().should('match', /accessions\/[A-Za-z0-9]+\/seed-collection/);
 
       cy.get('#header-status').contains('Active');
-      cy.get('#header-species').contains('Kousa Dogwoord');
+      cy.get('#header-species').contains('Kousa Dogwood');
       cy.get('#header-date').contains('02/03/2021');
       cy.get('#header-state').contains('Awaiting Check-In');
 
-      cy.get('#species').should('have.value', 'Kousa Dogwoord');
+      cy.get('#species').should('have.value', 'Kousa Dogwood');
       cy.get('#family').should('have.value', 'Cornaceae');
       cy.get('#numberOfTrees').should('have.value', '3');
       cy.get('#founderId').should('have.value', '234908098');
@@ -144,42 +144,6 @@ describe('Accessions', () => {
       cy.wait('@getAccession');
       cy.get('#sendToNursery').should('exist');
     });
-
-    it('should show autocomplete when typing and show modal when updating the species name and create a new species', () => {
-      cy.get('#species').clear().type('Kousa Dogwoord New');
-      cy.focused().should('have.attr', 'aria-controls', 'species-popup');
-
-      cy.get('#saveAccession').click();
-      cy.get('#speciesModal').should('exist');
-      cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
-      cy.get('#cancel').click();
-      cy.wait('@getAccession');
-
-      cy.get('#species').should('have.value', 'Kousa Dogwoord New');
-    });
-
-    it('should not show modal if updating the species name with an existant species', () => {
-      cy.get('#species').clear().type('Kousa Dogwoord');
-
-      cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
-      cy.get('#saveAccession').click();
-      cy.get('#speciesModal').should('not.exist');
-      cy.wait('@getAccession');
-
-      cy.get('#species').should('have.value', 'Kousa Dogwoord');
-    });
-
-    it('should show modal if updating the species name and modify the existant species', () => {
-      cy.get('#species').clear().type('Kousa Dogwoord Modified');
-
-      cy.get('#saveAccession').click();
-      cy.get('#speciesModal').should('exist');
-      cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
-      cy.get('#applyAll').click();
-      cy.wait('@getAccession');
-
-      cy.get('#species').should('have.value', 'Kousa Dogwoord Modified');
-    });
   });
 
   context('Mobile dropoff', () => {
@@ -230,8 +194,8 @@ describe('Accessions', () => {
       cy.get('#sessions-change').contains('33% since last week');
       cy.get('#sessions-arrow-increase').should('exist');
 
-      cy.get('#species-current').contains('6');
-      cy.get('#species-change').contains('200% since last week');
+      cy.get('#species-current').contains('4');
+      cy.get('#species-change').contains('100% since last week');
       cy.get('#species-arrow-increase').should('exist');
 
       cy.get('#families-current').contains('2');

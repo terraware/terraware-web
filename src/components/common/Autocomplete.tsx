@@ -9,6 +9,7 @@ export interface Props {
   onChange: (id: string, value: string) => void;
   selected: string | undefined;
   disabled?: boolean;
+  freeSolo: boolean;
 }
 
 export type DropdownItem = {
@@ -16,7 +17,15 @@ export type DropdownItem = {
   value: string;
 };
 
-export default function Autocomplete({ id, label, values, onChange, selected, disabled }: Props): JSX.Element {
+export default function Autocomplete({
+  id,
+  label,
+  values,
+  onChange,
+  selected,
+  disabled,
+  freeSolo,
+}: Props): JSX.Element {
   const onChangeHandler = (event: ChangeEvent<any>, value: string | null) => {
     if (event) {
       if (value) {
@@ -36,7 +45,7 @@ export default function Autocomplete({ id, label, values, onChange, selected, di
       onChange={onChangeHandler}
       onInputChange={onChangeHandler}
       inputValue={selected}
-      freeSolo={true}
+      freeSolo={freeSolo}
       forcePopupIcon={true}
       renderInput={(params) => <TextField {...params} label={label} variant='outlined' size='small' />}
     />
