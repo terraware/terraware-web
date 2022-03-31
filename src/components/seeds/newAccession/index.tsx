@@ -1,5 +1,5 @@
 import MomentUtils from '@date-io/moment';
-import { CircularProgress, Container, Grid, Link, Paper, Typography } from '@material-ui/core';
+import { CircularProgress, Container, Grid, Link, Typography } from '@material-ui/core';
 import Fab from '@material-ui/core/Fab';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
@@ -31,6 +31,7 @@ import SecondaryCollectors from './SecondaryCollectors';
 import Species from './SpeciesDropdown';
 import { APP_PATHS } from '../../../constants';
 import PanelTitle from 'src/components/PanelTitle';
+import MainPaper from 'src/components/MainPaper';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -315,7 +316,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
 
   return (
     <MuiPickersUtilsProvider utils={MomentUtils}>
-      <Paper>
+      <MainPaper>
         <PanelTitle title={strings.SEED_COLLECTION} />
         <Typography component='p'>{strings.SEED_COLLECTION_DESCRIPTION}</Typography>
         <Divisor />
@@ -582,7 +583,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
             )}
           </Grid>
         </Grid>
-      </Paper>
+      </MainPaper>
     </MuiPickersUtilsProvider>
   );
 }
