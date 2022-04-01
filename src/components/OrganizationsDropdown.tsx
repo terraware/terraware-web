@@ -7,7 +7,9 @@ import Icon from 'src/components/common/icon/Icon';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
+import { User } from 'src/types/User';
 import AddNewOrganizationModal from './AddNewOrganizationModal';
+import LeaveOrganizationModal from './LeaveOrganizationModal';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -28,6 +30,7 @@ type OrganizationsDropdownProps = {
   selectedOrganization?: ServerOrganization;
   setSelectedOrganization: React.Dispatch<React.SetStateAction<ServerOrganization | undefined>>;
   reloadOrganizationData: (selectedOrgId?: number) => void;
+  user?: User;
 };
 
 export default function OrganizationsDropdown({
@@ -35,11 +38,13 @@ export default function OrganizationsDropdown({
   selectedOrganization,
   setSelectedOrganization,
   reloadOrganizationData,
+  user,
 }: OrganizationsDropdownProps): JSX.Element {
   const classes = useStyles();
   const history = useHistory();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [newOrganizationModalOpened, setNewOrganizationModalOpened] = useState(false);
+  const [leaveOrganizationModalOpened, setLeaveOrganizationModalOpened] = useState(false);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -62,6 +67,11 @@ export default function OrganizationsDropdown({
     setAnchorEl(null);
   };
 
+  const onCloseLeaveOrganizationModal = () => {
+    setLeaveOrganizationModalOpened(false);
+    setAnchorEl(null);
+  };
+
   return (
     <div>
       <AddNewOrganizationModal
@@ -69,6 +79,15 @@ export default function OrganizationsDropdown({
         onCancel={onCloseCreateOrganizationModal}
         reloadOrganizationData={reloadOrganizationData}
       />
+      {selectedOrganization && user && (
+        <LeaveOrganizationModal
+          open={leaveOrganizationModalOpened}
+          onCancel={onCloseLeaveOrganizationModal}
+          reloadOrganizationData={reloadOrganizationData}
+          organization={selectedOrganization}
+          user={user}
+        />
+      )}
       <IconButton onClick={handleClick} size='small' className={classes.iconContainer}>
         <p>{selectedOrganization?.name}</p>
         <Icon name='chevronDown' className={classes.icon} />
@@ -96,6 +115,11 @@ export default function OrganizationsDropdown({
             );
           })}
           <ListItem>---</ListItem>
+          {selectedOrganization && (
+            <ListItem button onClick={() => setLeaveOrganizationModalOpened(true)}>
+              {strings.formatString(strings.LEAVE_ORGANIZATION, selectedOrganization?.name)}
+            </ListItem>
+          )}
           <ListItem button onClick={() => setNewOrganizationModalOpened(true)}>
             {strings.CREATE_NEW_ORGANIZATION}
           </ListItem>

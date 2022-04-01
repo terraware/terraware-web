@@ -61,6 +61,7 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
         selectedOrganization={selectedOrganization}
         setSelectedOrganization={setSelectedOrganization}
         reloadOrganizationData={reloadOrganizationData}
+        user={user}
       />
       <div className={classes.separator} />
       <UserMenu user={user} reloadUser={reloadUser} />

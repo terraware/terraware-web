@@ -237,3 +237,29 @@ export async function updateOrganization(organization: ServerOrganization): Prom
   }
   return response;
 }
+
+const LEAVE_ORGANIZATION = '/api/v1/organizations/{organizationId}/users/{userId}';
+
+type LeaveOrganizationResponse = {
+  requestSucceeded: boolean;
+};
+
+export async function leaveOrganization(organizationId: number, userId: number): Promise<UpdateOrganizationResponse> {
+  const response: LeaveOrganizationResponse = {
+    requestSucceeded: true,
+  };
+  try {
+    const serverResponse: SimpleSuccessResponsePayload = (
+      await axios.delete(
+        LEAVE_ORGANIZATION.replace('{organizationId}', organizationId.toString()).replace('{userId}', userId.toString())
+      )
+    ).data;
+
+    if (serverResponse.status === 'error') {
+      response.requestSucceeded = false;
+    }
+  } catch {
+    response.requestSucceeded = false;
+  }
+  return response;
+}

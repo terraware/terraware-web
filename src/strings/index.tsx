@@ -332,6 +332,12 @@ const strings = new LocalizedStrings({
     EDIT_PERSON: 'Edit Person',
     PEOPLE_DESCRIPTION: 'Manage the people in Terraware.',
     CREATE_NEW_ORGANIZATION: 'Create New Organization',
+    LEAVE_ORGANIZATION: 'Leave {0}',
+    ORGANIZATION_LEFT: 'You’ve left {0}',
+    LEAVE_ORGANIZATION_MODAL_TITLE: 'Are you sure you want leave {0}?',
+    LEAVE_ORGANIZATION_MODAL_DESC:
+      'Removing yourself from this organization means you won’t have access to this organization’s data anymore.',
+    LEAVE: 'Leave',
     ADD_NEW_ORGANIZATION: 'Add New Organization',
     ADD_PROJECT_DESC: 'Enter the project’s information below and then select the people you would like to add.',
     NATIVE_FOREST_RESTORATION: 'Native Forest Restoration',
