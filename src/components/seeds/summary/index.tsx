@@ -133,16 +133,6 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
       <Container maxWidth={false} className={classes.mainContainer}>
         {organization && summary ? (
           <Grid container spacing={3}>
-            {!!organization?.projects?.length && !summary?.value?.activeAccessions.current && (
-              <Grid item xs={12}>
-                <EmptyMessage
-                  title={emptyMessageStrings.COLLECT_IN_FIELD_PLANT_DATA}
-                  text={emptyMessageStrings.TERRAWARE_MOBILE_APP_INFO_MSG}
-                  buttonText={emptyMessageStrings.REQUEST_MOBILE_APP}
-                  onClick={goToSupport}
-                />
-              </Grid>
-            )}
             {!!organization?.projects?.length ? (
               <Grid item xs={12}>
                 <Grid container spacing={3}>

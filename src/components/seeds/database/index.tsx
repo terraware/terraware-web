@@ -366,17 +366,6 @@ export default function Database(props: DatabaseProps): JSX.Element {
         <Container maxWidth={false} className={classes.mainContainer}>
           {organization && unfilteredResults ? (
             <Grid container>
-              {!!organization?.projects?.length && !unfilteredResults?.length && (
-                <Grid item xs={12}>
-                  <EmptyMessage
-                    title={emptyMessageStrings.COLLECT_IN_FIELD_PLANT_DATA}
-                    text={emptyMessageStrings.TERRAWARE_MOBILE_APP_INFO_MSG}
-                    buttonText={emptyMessageStrings.REQUEST_MOBILE_APP}
-                    onClick={goToSupport}
-                    className={classes.requestMobileMessage}
-                  />
-                </Grid>
-              )}
               {!!organization?.projects?.length ? (
                 <>
                   {pendingAccessions && pendingAccessions.length > 0 && (
