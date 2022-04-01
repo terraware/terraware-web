@@ -11,7 +11,7 @@ import { getSummary, GetSummaryResponse } from 'src/api/seeds/summary';
 import EmptyMessage from 'src/components/common/EmptyMessage';
 import TfMain from 'src/components/common/TfMain';
 import MainPaper from 'src/components/MainPaper';
-import { API_PULL_INTERVAL, APP_PATHS, TERRAWARE_SUPPORT_LINK } from 'src/constants';
+import { API_PULL_INTERVAL, APP_PATHS } from 'src/constants';
 import { seedsSummarySelectedOrgInfo } from 'src/state/selectedOrgInfoPerPage';
 import strings from 'src/strings';
 import emptyMessageStrings from 'src/strings/emptyMessageModal';
@@ -121,10 +121,6 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
       pathname: APP_PATHS.PROJECTS,
     };
     history.push(projectsLocation);
-  };
-
-  const goToSupport = () => {
-    window.open(TERRAWARE_SUPPORT_LINK);
   };
 
   return (

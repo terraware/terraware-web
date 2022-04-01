@@ -34,7 +34,7 @@ import { HighOrganizationRolesValues, ServerOrganization } from 'src/types/Organ
 import { seedsDatabaseSelectedOrgInfo } from 'src/state/selectedOrgInfoPerPage';
 import { useRecoilState } from 'recoil';
 import EmptyMessage from 'src/components/common/EmptyMessage';
-import { APP_PATHS, TERRAWARE_SUPPORT_LINK } from 'src/constants';
+import { APP_PATHS } from 'src/constants';
 import TfMain from 'src/components/common/TfMain';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -298,10 +298,6 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const goToNewAccession = () => {
     const newAccessionLocation = getLocation(APP_PATHS.ACCESSIONS_NEW, location);
     history.push(newAccessionLocation);
-  };
-
-  const goToSupport = () => {
-    window.open(TERRAWARE_SUPPORT_LINK);
   };
 
   const location = useStateLocation();
