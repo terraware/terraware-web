@@ -11,7 +11,7 @@ import { getSummary, GetSummaryResponse } from 'src/api/seeds/summary';
 import EmptyMessage from 'src/components/common/EmptyMessage';
 import TfMain from 'src/components/common/TfMain';
 import MainPaper from 'src/components/MainPaper';
-import { API_PULL_INTERVAL, APP_PATHS, TERRAWARE_SUPPORT_LINK } from 'src/constants';
+import { API_PULL_INTERVAL, APP_PATHS } from 'src/constants';
 import { seedsSummarySelectedOrgInfo } from 'src/state/selectedOrgInfoPerPage';
 import strings from 'src/strings';
 import emptyMessageStrings from 'src/strings/emptyMessageModal';
@@ -123,26 +123,12 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
     history.push(projectsLocation);
   };
 
-  const goToSupport = () => {
-    window.open(TERRAWARE_SUPPORT_LINK);
-  };
-
   return (
     <TfMain>
       <PageHeader subtitle={strings.WELCOME_MSG} page={strings.DASHBOARD} parentPage={strings.SEEDS} />
       <Container maxWidth={false} className={classes.mainContainer}>
         {organization && summary ? (
           <Grid container spacing={3}>
-            {!!organization?.projects?.length && !summary?.value?.activeAccessions.current && (
-              <Grid item xs={12}>
-                <EmptyMessage
-                  title={emptyMessageStrings.COLLECT_IN_FIELD_PLANT_DATA}
-                  text={emptyMessageStrings.TERRAWARE_MOBILE_APP_INFO_MSG}
-                  buttonText={emptyMessageStrings.REQUEST_MOBILE_APP}
-                  onClick={goToSupport}
-                />
-              </Grid>
-            )}
             {!!organization?.projects?.length ? (
               <Grid item xs={12}>
                 <Grid container spacing={3}>
