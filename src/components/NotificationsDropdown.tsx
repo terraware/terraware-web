@@ -61,6 +61,12 @@ const useStyles = makeStyles((theme) =>
     notificationIcon: {
       fill: '#708284',
     },
+    noNotifications: {
+      color: '#3A4445',
+      paddingLeft: '8px',
+      paddingTop: '8px',
+      margin: 0,
+    },
   })
 );
 
@@ -201,7 +207,7 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
           </ListSubheader>
           {notifications === undefined && (
             <ListItem>
-              <ListItemText primary={strings.NO_NOTIFICATIONS} />
+              <ListItemText primary={strings.NO_NOTIFICATIONS} className={classes.noNotifications} />
             </ListItem>
           )}
           {notifications?.errorOccurred && strings.GENERIC_ERROR}
