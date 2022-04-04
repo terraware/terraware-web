@@ -79,7 +79,7 @@ const useStyles = makeStyles((theme: Theme) =>
       marginBottom: 0,
     },
     buttonSpc: {
-      marginRight: '16px',
+      marginRight: '8px',
 
       '&:last-child': {
         marginRight: '0',
