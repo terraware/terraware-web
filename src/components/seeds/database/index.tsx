@@ -80,6 +80,10 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     buttonSpc: {
       marginRight: '16px',
+
+      '&:last-child': {
+        marginRight: '0',
+      },
     },
     requestMobileMessage: {
       marginBottom: '32px',
