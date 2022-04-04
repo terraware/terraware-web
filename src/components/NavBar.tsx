@@ -28,8 +28,6 @@ export default function NavBar({ organization }: NavBarProps): JSX.Element | nul
   const isContactUsRoute = useRouteMatch(APP_PATHS.CONTACT_US + '/');
   const isHomeRoute = useRouteMatch(APP_PATHS.HOME + '/');
   const isPeopleRoute = useRouteMatch(APP_PATHS.PEOPLE + '/');
-  const isPlantDashboardRoute = useRouteMatch(APP_PATHS.PLANTS_DASHBOARD + '/');
-  const isPlantListRoute = useRouteMatch(APP_PATHS.PLANTS_LIST + '/');
   const isProjectsRoute = useRouteMatch(APP_PATHS.PROJECTS + '/');
   const isSitesRoute = useRouteMatch(APP_PATHS.SITES + '/');
   const isSpeciesRoute = useRouteMatch(APP_PATHS.SPECIES + '/');
@@ -61,28 +59,6 @@ export default function NavBar({ organization }: NavBarProps): JSX.Element | nul
             selected={isAccessionsRoute || isCheckinRoute ? true : false}
             onClick={() => navigate(APP_PATHS.ACCESSIONS)}
             id='accessions'
-          />
-        </SubNavbar>
-      </NavItem>
-      <NavItem
-        label={strings.PLANTS}
-        icon='restorationSite'
-        onClick={() => !isPlantDashboardRoute && navigate(APP_PATHS.PLANTS_DASHBOARD)}
-        id='plants'
-      >
-        <SubNavbar>
-          <NavItem
-            label={strings.DASHBOARD}
-            selected={!!isPlantDashboardRoute}
-            onClick={() => !isPlantDashboardRoute && navigate(APP_PATHS.PLANTS_DASHBOARD)}
-            id='dashboard'
-          />
-
-          <NavItem
-            label={strings.PLANTS}
-            selected={!!isPlantListRoute}
-            onClick={() => navigate(APP_PATHS.PLANTS_LIST)}
-            id='plants-list'
           />
         </SubNavbar>
       </NavItem>
