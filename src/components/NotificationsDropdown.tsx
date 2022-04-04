@@ -1,5 +1,4 @@
 import {
-  CircularProgress,
   Divider,
   Link as LinkMui,
   List,
@@ -46,6 +45,7 @@ const useStyles = makeStyles((theme) =>
     },
     popover: {
       width: '350px',
+      paddingTop: 0,
     },
     noHover: {
       '&:hover': {
@@ -199,7 +199,11 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
             </div>
             <Divider />
           </ListSubheader>
-          {notifications === undefined && <CircularProgress id='spinner-notifications' />}
+          {notifications === undefined && (
+            <ListItem>
+              <ListItemText primary={strings.NO_NOTIFICATIONS} />
+            </ListItem>
+          )}
           {notifications?.errorOccurred && strings.GENERIC_ERROR}
           {notifications &&
             notifications.items.map(({ id, state, type, accessionId, read, text, timestamp }, index) => (
