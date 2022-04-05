@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) =>
       height: '32px',
     },
     chevronDown: {
-      marginLeft: '3px',
+      marginLeft: '8px',
       fill: '#3A4445',
     },
     userName: {
