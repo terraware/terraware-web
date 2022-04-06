@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 /// <reference types="cypress" />
 
-describe('Summary', () => {
+describe.skip('Summary', () => {
   beforeEach(() => {
     cy.visit('/plants-dashboard');
   });
