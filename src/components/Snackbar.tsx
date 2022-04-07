@@ -134,7 +134,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface Props {
-  displayType: 'toast' | 'page',
+  displayType: 'toast' | 'page';
 }
 
 export default function SnackbarMessage({ displayType } : Props): JSX.Element | null {
