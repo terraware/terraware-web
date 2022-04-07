@@ -165,7 +165,7 @@ export default function SnackbarMessage({ displayType }: Props): JSX.Element | n
       open={Boolean(snackbar.msg && snackbar.type)}
       onClose={handleClose}
       autoHideDuration={isPage ? null : 5000}
-      id={displayType == 'page' ? 'pagesnackbar' : 'snackbar'}
+      id={displayType === 'page' ? 'pagesnackbar' : 'snackbar'}
       className={classes[`mainSnackbar_${displayType}`]}
     >
       <div className={`${classes.mainContainer} ${classes[snackbar.type]} body${snackbar.priority}`}>
