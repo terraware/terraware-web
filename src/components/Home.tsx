@@ -12,6 +12,7 @@ import homePageStrings from 'src/strings/homePage';
 import { HighOrganizationRolesValues, ServerOrganization } from 'src/types/Organization';
 import { User } from 'src/types/User';
 import useQuery from 'src/utils/useQuery';
+import Snackbar from 'src/components/Snackbar';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -81,6 +82,7 @@ export default function Home({ organizations, selectedOrganization, setSelectedO
         subtitle=''
         titleClassName={classes.extraPadding}
       />
+      <Snackbar displayType='page' />
       <Container maxWidth={false} className={classes.mainContainer}>
         <Grid container spacing={3} className={classes.mainGrid}>
           {selectedOrganization?.role && HighOrganizationRolesValues.includes(selectedOrganization.role) && (

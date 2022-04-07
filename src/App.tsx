@@ -233,7 +233,7 @@ export default function App() {
   return (
     <>
       <CssBaseline />
-      <Snackbar />
+      <Snackbar displayType='toast' />
       <>
         <div>
           <NavBar organization={selectedOrganization} />

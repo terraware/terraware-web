@@ -7,7 +7,20 @@ export interface Snackbar {
   priority: 'info' | 'critical' | 'warning' | 'success';
 }
 
-export default atom<Snackbar>({
-  key: 'snackbar',
+/**
+ * Page vs Toast snackbars can exist
+ * independent of each other and simulataneously.
+ */
+
+export const toastSnackbarAtom = atom<Snackbar>({
+  key: 'toast',
   default: { msg: '', priority: 'success', type: 'toast' },
 });
+
+export const pageSnackbarAtom = atom<Snackbar>({
+  key: 'page',
+  default: { msg: '', priority: 'success', type: 'page' },
+});
+
+// for backwards compatibility
+export default toastSnackbarAtom;
