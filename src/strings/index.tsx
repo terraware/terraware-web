@@ -324,8 +324,11 @@ const strings = new LocalizedStrings({
     START_DATE_OPT: 'Start Date (optional)',
     STATUS_OPT: 'Status (optional)',
     PROJECT_TYPE_OPT: 'Project Type(s) (optional)',
-    PEOPLE_DESC:
-      'To add new people to this organization go to People. Admins and Owners automatically have access to all projects.',
+    NO_PEOPLE_IN_PROJECT: 'No people to show. Add people by clicking on the "Add People" button above.',
+    NO_CONTRIBUTORS_IN_PROJECT:
+      'No contributors to show. Add contributors by clicking the “Add Contributors” button above.',
+    NO_PROJECTS_FOR_PERSON:
+      'No projects to show. Add this person to projects by clicking the “Add to Project” button above.',
     SITES_DESC: 'To add new sites to this project go to Sites.',
     ADMIN: 'Admin',
     ADD_PERSON: 'Add Person',
@@ -364,7 +367,6 @@ const strings = new LocalizedStrings({
     CONTRIBUTOR_INFO: 'A contributor can only input and edit data entries for seeds and plants.',
     ADMIN_INFO:
       'An admin can edit the organization profile, manage users in the organization, manage projects, and manage sites, and manage species.',
-    ADD_TO_PROJECT_DESC: 'To add new projects to this organization go to Projects.',
     ROLE: 'Role',
     ADD_TO_PROJECT: 'Add to Project',
     NO_PROJECTS_IN_ORG: 'No Projects in Organization',
