@@ -1,10 +1,7 @@
 import { Snackbar, Typography } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { useRecoilState } from 'recoil';
-import {
-  toastSnackbarAtom,
-  pageSnackbarAtom,
-} from 'src/state/snackbar';
+import { toastSnackbarAtom, pageSnackbarAtom } from 'src/state/snackbar';
 import Icon from './common/icon/Icon';
 import CloseIcon from '@material-ui/icons/Close';
 
@@ -137,7 +134,7 @@ interface Props {
   displayType: 'toast' | 'page';
 }
 
-export default function SnackbarMessage({ displayType } : Props): JSX.Element | null {
+export default function SnackbarMessage({ displayType }: Props): JSX.Element | null {
   const classes = useStyles();
 
   const [snackbar, setSnackbar] = useRecoilState(displayType === 'page' ? pageSnackbarAtom : toastSnackbarAtom);
@@ -185,12 +182,11 @@ export default function SnackbarMessage({ displayType } : Props): JSX.Element | 
             {snackbar.msg}
           </Typography>
         </div>
-        {
-          isPage &&
+        {isPage && (
           <div className={classes.closeIconContainer} onClick={clearSnackbar}>
             <CloseIcon />
           </div>
-        }
+        )}
       </div>
     </Snackbar>
   );
