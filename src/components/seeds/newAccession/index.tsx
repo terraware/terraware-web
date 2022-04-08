@@ -190,7 +190,9 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
   const [isCheckedIn, setIsCheckedIn] = useState(false);
 
   useEffect(() => {
-    setRecord(accession);
+    if (updating) {
+      setRecord(accession);
+    }
     if ((accession as unknown as Accession).state === 'Awaiting Check-In') {
       setIsPendingCheckIn(true);
     } else {
