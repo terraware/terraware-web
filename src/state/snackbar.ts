@@ -4,7 +4,7 @@ import { APP_PATHS } from 'src/constants';
 /**
  * Add more scopes in here as we have use-cases.
  */
-export type SnackbarScope = APP_PATHS.HOME | 'toast';
+export type SnackbarScope = APP_PATHS.HOME | 'app';
 
 export interface Snackbar {
   title?: string | string[] | undefined;
@@ -23,9 +23,9 @@ const createSnackbarAtom = (key: SnackbarScope, defaultValue: Snackbar) =>
   atom<Snackbar>({ key, default: defaultValue });
 
 export const snackbarAtoms = {
-  toast: createSnackbarAtom('toast', { msg: '', priority: 'success', type: 'toast' }),
+  app: createSnackbarAtom('app', { msg: '', priority: 'success', type: 'toast' }),
   [APP_PATHS.HOME]: createSnackbarAtom(APP_PATHS.HOME, { msg: '', priority: 'success', type: 'page' }),
 };
 
 // for backwards compatibility
-export default snackbarAtoms.toast;
+export default snackbarAtoms.app;

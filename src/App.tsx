@@ -233,7 +233,7 @@ export default function App() {
   return (
     <>
       <CssBaseline />
-      <Snackbar scope='toast' />
+      <Snackbar scope='app' />
       <>
         <div>
           <NavBar organization={selectedOrganization} />

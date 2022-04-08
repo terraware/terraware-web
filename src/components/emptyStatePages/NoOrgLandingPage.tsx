@@ -57,7 +57,7 @@ export default function NoOrgLandingPage(props: LandingPageProps): JSX.Element {
           onCancel={() => setIsOrgModalOpen(false)}
           reloadOrganizationData={props.reloadOrganizationData}
         />
-        <Snackbar scope='toast' />
+        <Snackbar scope='app' />
         <EmptyStateContent
           title={landingPageStrings.TITLE_WELCOME}
           subtitle={landingPageStrings.SUBTITLE_GET_STARTED}

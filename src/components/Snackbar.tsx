@@ -134,7 +134,7 @@ interface Props {
   scope: SnackbarScope;
 }
 
-export default function SnackbarMessage({ scope }: Props): JSX.Element | null {
+export default function SnackbarMessage({ scope }: Props): JSX.Element {
   const classes = useStyles();
 
   const [snackbar, setSnackbar] = useRecoilState(snackbarAtoms[scope]);
@@ -161,8 +161,8 @@ export default function SnackbarMessage({ scope }: Props): JSX.Element | null {
       open={Boolean(snackbar.msg && snackbar.type)}
       onClose={handleClose}
       autoHideDuration={cancellable ? null : 5000}
-      id={scope === 'toast' ? 'snackbar' : `snackbar_${scope}`}
-      className={classes[scope === 'toast' ? 'mainSnackbar_toast' : 'mainSnackbar_page']}
+      id={scope === 'app' ? 'snackbar' : `snackbar_${scope}`}
+      className={classes[scope === 'app' ? 'mainSnackbar_toast' : 'mainSnackbar_page']}
     >
       <div className={`${classes.mainContainer} ${classes[snackbar.type]} body${snackbar.priority}`}>
         <div className={`${classes.iconContainer} iconContainer`}>

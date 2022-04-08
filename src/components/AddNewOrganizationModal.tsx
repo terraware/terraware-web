@@ -77,7 +77,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
   const history = useHistory();
   const { onCancel, open, reloadOrganizationData } = props;
   const setSuccessSnackbar = useSetRecoilState(snackbarAtoms[APP_PATHS.HOME]);
-  const setErrorSnackbar = useSetRecoilState(snackbarAtoms.toast);
+  const setErrorSnackbar = useSetRecoilState(snackbarAtoms.app);
   const [nameError, setNameError] = useState('');
   const [countries, setCountries] = useState<Country[]>();
   const [newOrganization, setNewOrganization, onChange] = useForm<ServerOrganization>({
