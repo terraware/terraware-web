@@ -10,7 +10,6 @@ import strings from 'src/strings';
 import { ServerOrganization, Site } from 'src/types/Organization';
 import { getAllSitesWithProjectName } from 'src/utils/organization';
 import TfMain from '../common/TfMain';
-import Snackbar from 'src/components/Snackbar';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -85,7 +84,6 @@ export default function SitesList({ organization }: SitesListProps): JSX.Element
             <Button id='new-site' label={strings.ADD_SITE} onClick={goToNewSite} size='medium' />
           )}
         </Grid>
-        <Snackbar displayType='page' />
         <Grid item xs={12}>
           <div className={classes.mainContent}>
             <Grid container spacing={4}>

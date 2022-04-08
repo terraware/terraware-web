@@ -11,7 +11,6 @@ import { Project, ServerOrganization } from 'src/types/Organization';
 import { getOrganizationProjects } from 'src/utils/organization';
 import TfMain from '../common/TfMain';
 import ProjectsCellRenderer from './TableCellRenderer';
-import Snackbar from 'src/components/Snackbar';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -79,7 +78,6 @@ export default function ProjectsList({ organization }: ProjectsListProps): JSX.E
             <Button id='new-project' label={strings.ADD_PROJECT} onClick={goToNewProject} size='medium' />
           )}
         </Grid>
-        <Snackbar displayType='page' />
         <Grid item xs={12}>
           <div className={classes.mainContent}>
             <Grid container spacing={4}>

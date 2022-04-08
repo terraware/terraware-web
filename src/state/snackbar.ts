@@ -1,4 +1,10 @@
 import { atom } from 'recoil';
+import { APP_PATHS } from 'src/constants';
+
+/**
+ * Add more scopes in here as we have use-cases.
+ */
+export type SnackbarScope = APP_PATHS.HOME | 'toast';
 
 export interface Snackbar {
   title?: string | string[] | undefined;
@@ -6,6 +12,7 @@ export interface Snackbar {
   type: 'toast' | 'page';
   priority: 'info' | 'critical' | 'warning' | 'success';
   cancellable?: boolean;
+  scope?: SnackbarScope;
 }
 
 /**
@@ -13,15 +20,13 @@ export interface Snackbar {
  * independent of each other and simulataneously.
  */
 
-export const toastSnackbarAtom = atom<Snackbar>({
-  key: 'toast',
-  default: { msg: '', priority: 'success', type: 'toast' },
-});
+const createSnackbarAtom = (key: SnackbarScope, defaultValue: Snackbar) =>
+  atom<Snackbar>({ key, default: defaultValue });
 
-export const pageSnackbarAtom = atom<Snackbar>({
-  key: 'page',
-  default: { msg: '', priority: 'success', type: 'page' },
-});
+export const snackbarAtoms = {
+  toast: createSnackbarAtom('toast', { msg: '', priority: 'success', type: 'toast' }),
+  [APP_PATHS.HOME]: createSnackbarAtom(APP_PATHS.HOME, { msg: '', priority: 'success', type: 'page' }),
+};
 
 // for backwards compatibility
-export default toastSnackbarAtom;
+export default snackbarAtoms.toast;

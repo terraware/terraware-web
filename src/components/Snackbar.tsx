@@ -1,7 +1,7 @@
 import { Snackbar, Typography } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { useRecoilState } from 'recoil';
-import { toastSnackbarAtom, pageSnackbarAtom } from 'src/state/snackbar';
+import { snackbarAtoms, SnackbarScope } from 'src/state/snackbar';
 import Icon from './common/icon/Icon';
 import CloseIcon from '@material-ui/icons/Close';
 
@@ -131,13 +131,13 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface Props {
-  displayType: 'toast' | 'page';
+  scope: SnackbarScope;
 }
 
-export default function SnackbarMessage({ displayType }: Props): JSX.Element | null {
+export default function SnackbarMessage({ scope }: Props): JSX.Element | null {
   const classes = useStyles();
 
-  const [snackbar, setSnackbar] = useRecoilState(displayType === 'page' ? pageSnackbarAtom : toastSnackbarAtom);
+  const [snackbar, setSnackbar] = useRecoilState(snackbarAtoms[scope]);
 
   const cancellable = snackbar?.cancellable;
 
@@ -155,18 +155,14 @@ export default function SnackbarMessage({ displayType }: Props): JSX.Element | n
     }
   };
 
-  if (displayType && displayType !== snackbar?.type) {
-    return null;
-  }
-
   return (
     <Snackbar
       anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       open={Boolean(snackbar.msg && snackbar.type)}
       onClose={handleClose}
       autoHideDuration={cancellable ? null : 5000}
-      id={displayType === 'page' ? 'pagesnackbar' : 'snackbar'}
-      className={classes[`mainSnackbar_${displayType}`]}
+      id={scope === 'toast' ? 'snackbar' : `snackbar_${scope}`}
+      className={classes[scope === 'toast' ? 'mainSnackbar_toast' : 'mainSnackbar_page']}
     >
       <div className={`${classes.mainContainer} ${classes[snackbar.type]} body${snackbar.priority}`}>
         <div className={`${classes.iconContainer} iconContainer`}>

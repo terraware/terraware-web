@@ -14,7 +14,7 @@ import { ServerOrganization } from 'src/types/Organization';
 import useForm from 'src/utils/useForm';
 import Select from './common/Select/Select';
 import TextField from './common/Textfield/Textfield';
-import { pageSnackbarAtom } from 'src/state/snackbar';
+import { snackbarAtoms } from 'src/state/snackbar';
 import { searchCountries } from 'src/api/country/country';
 import { Country } from 'src/types/Country';
 import { getCountryByCode, getSubdivisionByCode } from 'src/utils/country';
@@ -76,7 +76,8 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
   const classes = useStyles();
   const history = useHistory();
   const { onCancel, open, reloadOrganizationData } = props;
-  const setSnackbar = useSetRecoilState(pageSnackbarAtom);
+  const setSuccessSnackbar = useSetRecoilState(snackbarAtoms[APP_PATHS.HOME]);
+  const setErrorSnackbar = useSetRecoilState(snackbarAtoms.toast);
   const [nameError, setNameError] = useState('');
   const [countries, setCountries] = useState<Country[]>();
   const [newOrganization, setNewOrganization, onChange] = useForm<ServerOrganization>({
@@ -127,7 +128,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
     }
     const response = await createOrganization(newOrganization);
     if (response.requestSucceeded && response.organization) {
-      setSnackbar({
+      setSuccessSnackbar({
         type: 'page',
         priority: 'success',
         title: strings.formatString(strings.ORGANIZATION_CREATED_TITLE, response.organization.name),
@@ -137,7 +138,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
       reloadOrganizationData(response.organization.id);
       history.push({ pathname: APP_PATHS.HOME });
     } else {
-      setSnackbar({
+      setErrorSnackbar({
         type: 'page',
         priority: 'critical',
         title: strings.ORGANIZATION_CREATE_FAILED,
