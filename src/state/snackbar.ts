@@ -12,7 +12,6 @@ export interface Snackbar {
   type: 'toast' | 'page';
   priority: 'info' | 'critical' | 'warning' | 'success';
   cancellable?: boolean;
-  scope?: SnackbarScope;
 }
 
 /**
