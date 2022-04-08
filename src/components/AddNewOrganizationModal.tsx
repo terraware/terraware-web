@@ -132,6 +132,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
         priority: 'success',
         title: strings.formatString(strings.ORGANIZATION_CREATED_TITLE, response.organization.name),
         msg: strings.ORGANIZATION_CREATED_MSG,
+        cancellable: true,
       });
       reloadOrganizationData(response.organization.id);
       history.push({ pathname: APP_PATHS.HOME });
@@ -139,7 +140,9 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
       setSnackbar({
         type: 'page',
         priority: 'critical',
+        title: strings.ORGANIZATION_CREATE_FAILED,
         msg: strings.GENERIC_ERROR,
+        cancellable: true,
       });
     }
     onCancel();

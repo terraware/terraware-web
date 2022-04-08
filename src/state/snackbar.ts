@@ -5,6 +5,7 @@ export interface Snackbar {
   msg: string | string[];
   type: 'toast' | 'page';
   priority: 'info' | 'critical' | 'warning' | 'success';
+  cancellable?: boolean;
 }
 
 /**

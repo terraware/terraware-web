@@ -139,7 +139,7 @@ export default function SnackbarMessage({ displayType }: Props): JSX.Element | n
 
   const [snackbar, setSnackbar] = useRecoilState(displayType === 'page' ? pageSnackbarAtom : toastSnackbarAtom);
 
-  const isPage = snackbar?.type === 'page';
+  const cancellable = snackbar?.cancellable;
 
   const clearSnackbar = () => {
     setSnackbar({ ...snackbar, msg: '', title: undefined });
@@ -147,8 +147,8 @@ export default function SnackbarMessage({ displayType }: Props): JSX.Element | n
 
   const handleClose = () => {
     if (snackbar) {
-      // this is needed to bypass closing of snackbar when user clicks out of a page message
-      if (snackbar?.type === 'page') {
+      // this is needed to bypass closing of snackbar when user clicks out of a cancellable message
+      if (snackbar?.cancellable) {
         return;
       }
       clearSnackbar();
@@ -164,7 +164,7 @@ export default function SnackbarMessage({ displayType }: Props): JSX.Element | n
       anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       open={Boolean(snackbar.msg && snackbar.type)}
       onClose={handleClose}
-      autoHideDuration={isPage ? null : 5000}
+      autoHideDuration={cancellable ? null : 5000}
       id={displayType === 'page' ? 'pagesnackbar' : 'snackbar'}
       className={classes[`mainSnackbar_${displayType}`]}
     >
@@ -182,7 +182,7 @@ export default function SnackbarMessage({ displayType }: Props): JSX.Element | n
             {snackbar.msg}
           </Typography>
         </div>
-        {isPage && (
+        {cancellable && (
           <div className={classes.closeIconContainer} onClick={clearSnackbar}>
             <CloseIcon />
           </div>

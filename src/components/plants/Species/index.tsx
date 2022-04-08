@@ -18,6 +18,7 @@ import { ServerOrganization } from 'src/types/Organization';
 import { Species, SpeciesWithScientificName } from 'src/types/Species';
 import SimpleSpeciesModal from './SimpleSpeciesModal';
 import TfMain from 'src/components/common/TfMain';
+import Snackbar from 'src/components/Snackbar';
 
 type SpeciesListProps = {
   organization: ServerOrganization;
@@ -143,6 +144,7 @@ export default function SpeciesList({ organization }: SpeciesListProps): JSX.Ele
             <Button id='new-species' label={strings.NEW_SPECIES} onClick={onNewSpecies} icon='plus' size='medium' />
           )}
         </Grid>
+        <Snackbar displayType='page' />
         <Container maxWidth={false} className={classes.mainContainer}>
           {species && species.length ? (
             <Grid item xs={12}>

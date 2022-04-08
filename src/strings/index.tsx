@@ -383,6 +383,7 @@ const strings = new LocalizedStrings({
     ORGANIZATION_DESC: 'Manage your organization.',
     NUMBER_OF_PROJECTS: 'Number of Projects',
     NUMBER_OF_PEOPLE: 'Number of People',
+    ORGANIZATION_CREATE_FAILED: 'Unable to create organization.',
     ORGANIZATION_CREATED_TITLE: 'You have created {0}!',
     ORGANIZATION_CREATED_MSG:
       'You can access the organizations you’re in by clicking the arrow in the top right corner next to your profile.',
