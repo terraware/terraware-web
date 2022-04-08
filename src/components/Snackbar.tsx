@@ -4,6 +4,7 @@ import { useRecoilState } from 'recoil';
 import { snackbarAtoms, SnackbarScope } from 'src/state/snackbar';
 import Icon from './common/icon/Icon';
 import CloseIcon from '@material-ui/icons/Close';
+import { useEffect } from 'react';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -154,6 +155,15 @@ export default function SnackbarMessage({ scope }: Props): JSX.Element {
       clearSnackbar();
     }
   };
+
+  useEffect(() => {
+    // clear the message after component is unloaded, if scoped to a page view
+    if (scope !== 'app' && snackbar?.msg) {
+      return () => {
+        setSnackbar({ ...snackbar, msg: '', title: undefined });
+      };
+    }
+  }, [scope, setSnackbar, snackbar]);
 
   return (
     <Snackbar
