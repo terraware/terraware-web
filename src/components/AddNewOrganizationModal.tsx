@@ -14,7 +14,7 @@ import { ServerOrganization } from 'src/types/Organization';
 import useForm from 'src/utils/useForm';
 import Select from './common/Select/Select';
 import TextField from './common/Textfield/Textfield';
-import snackbarAtom from 'src/state/snackbar';
+import { pageSnackbarAtom } from 'src/state/snackbar';
 import { searchCountries } from 'src/api/country/country';
 import { Country } from 'src/types/Country';
 import { getCountryByCode, getSubdivisionByCode } from 'src/utils/country';
@@ -76,7 +76,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
   const classes = useStyles();
   const history = useHistory();
   const { onCancel, open, reloadOrganizationData } = props;
-  const setSnackbar = useSetRecoilState(snackbarAtom);
+  const setSnackbar = useSetRecoilState(pageSnackbarAtom);
   const [nameError, setNameError] = useState('');
   const [countries, setCountries] = useState<Country[]>();
   const [newOrganization, setNewOrganization, onChange] = useForm<ServerOrganization>({

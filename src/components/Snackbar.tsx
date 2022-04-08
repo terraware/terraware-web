@@ -1,12 +1,23 @@
 import { Snackbar, Typography } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { useRecoilState } from 'recoil';
-import snackbarAtom from 'src/state/snackbar';
+import { toastSnackbarAtom, pageSnackbarAtom } from 'src/state/snackbar';
 import Icon from './common/icon/Icon';
+import CloseIcon from '@material-ui/icons/Close';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    mainSnackbar: {
+    mainSnackbar_page: {
+      '&.MuiSnackbar-anchorOriginTopCenter': {
+        top: '0px',
+      },
+      '&.MuiSnackbar-root': {
+        position: 'relative',
+        margin: '32px 0px',
+        zIndex: 0,
+      },
+    },
+    mainSnackbar_toast: {
       '&.MuiSnackbar-anchorOriginTopCenter': {
         top: '75px',
       },
@@ -54,6 +65,7 @@ const useStyles = makeStyles((theme: Theme) =>
       },
     },
     page: {
+      width: '584px',
       borderRadius: '8px',
       '&.bodyinfo': {
         border: '1px solid #708284',
@@ -108,28 +120,53 @@ const useStyles = makeStyles((theme: Theme) =>
         height: '24px',
       },
     },
+    closeIconContainer: {
+      cursor: 'pointer',
+      display: 'flex',
+      flexGrow: 1,
+      justifyContent: 'flex-end',
+      padding: '10px',
+    },
   })
 );
 
-export default function SnackbarMessage(): JSX.Element {
+interface Props {
+  displayType: 'toast' | 'page';
+}
+
+export default function SnackbarMessage({ displayType }: Props): JSX.Element | null {
   const classes = useStyles();
 
-  const [snackbar, setSnackbar] = useRecoilState(snackbarAtom);
+  const [snackbar, setSnackbar] = useRecoilState(displayType === 'page' ? pageSnackbarAtom : toastSnackbarAtom);
+
+  const isPage = snackbar?.type === 'page';
+
+  const clearSnackbar = () => {
+    setSnackbar({ ...snackbar, msg: '', title: undefined });
+  };
 
   const handleClose = () => {
     if (snackbar) {
-      setSnackbar({ ...snackbar, msg: '', title: undefined });
+      // this is needed to bypass closing of snackbar when user clicks out of a page message
+      if (snackbar?.type === 'page') {
+        return;
+      }
+      clearSnackbar();
     }
   };
+
+  if (displayType && displayType !== snackbar?.type) {
+    return null;
+  }
 
   return (
     <Snackbar
       anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       open={Boolean(snackbar.msg && snackbar.type)}
       onClose={handleClose}
-      autoHideDuration={5000}
-      id='snackbar'
-      className={classes.mainSnackbar}
+      autoHideDuration={isPage ? null : 5000}
+      id={displayType === 'page' ? 'pagesnackbar' : 'snackbar'}
+      className={classes[`mainSnackbar_${displayType}`]}
     >
       <div className={`${classes.mainContainer} ${classes[snackbar.type]} body${snackbar.priority}`}>
         <div className={`${classes.iconContainer} iconContainer`}>
@@ -145,6 +182,11 @@ export default function SnackbarMessage(): JSX.Element {
             {snackbar.msg}
           </Typography>
         </div>
+        {isPage && (
+          <div className={classes.closeIconContainer} onClick={clearSnackbar}>
+            <CloseIcon />
+          </div>
+        )}
       </div>
     </Snackbar>
   );
