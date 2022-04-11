@@ -178,6 +178,7 @@ export default function App() {
         <TopBar>
           <UserMenu user={user} reloadUser={reloadUser} />
         </TopBar>
+        <Snackbar scope='app' />
         <NoOrgLandingPage reloadOrganizationData={reloadData} />
       </>
     );

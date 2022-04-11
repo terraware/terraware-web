@@ -6,7 +6,6 @@ import EmptyStateContent, { ListItemContent } from 'src/components/emptyStatePag
 import landingPageStrings from 'src/strings/noOrgLandingPage';
 import strings from 'src/strings';
 import dictionary from 'src/strings/dictionary';
-import Snackbar from 'src/components/Snackbar';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -57,7 +56,6 @@ export default function NoOrgLandingPage(props: LandingPageProps): JSX.Element {
           onCancel={() => setIsOrgModalOpen(false)}
           reloadOrganizationData={props.reloadOrganizationData}
         />
-        <Snackbar scope='app' />
         <EmptyStateContent
           title={landingPageStrings.TITLE_WELCOME}
           subtitle={landingPageStrings.SUBTITLE_GET_STARTED}
