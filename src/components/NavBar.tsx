@@ -8,6 +8,7 @@ import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import dictionary from 'src/strings/dictionary';
 import { AllOrganizationRoles, ServerOrganization, HighOrganizationRolesValues } from 'src/types/Organization';
+import NavFooter from './common/Navbar/NavFooter';
 
 type NavBarProps = {
   organization?: ServerOrganization;
@@ -32,6 +33,7 @@ export default function NavBar({ organization }: NavBarProps): JSX.Element | nul
   const isSitesRoute = useRouteMatch(APP_PATHS.SITES + '/');
   const isSpeciesRoute = useRouteMatch(APP_PATHS.SPECIES + '/');
   const isOrganizationRoute = useRouteMatch(APP_PATHS.ORGANIZATION + '/');
+  const isMyAccountRoute = useRouteMatch(APP_PATHS.MY_ACCOUNT + '/');
 
   const navigate = (url: string) => {
     history.push(url);
@@ -115,14 +117,22 @@ export default function NavBar({ organization }: NavBarProps): JSX.Element | nul
           </NavItem>
         </>
       )}
-      <NavItem
-        label={dictionary.CONTACT_US}
-        icon={'help'}
-        selected={!!isContactUsRoute}
-        onClick={() => navigate(APP_PATHS.CONTACT_US)}
-        id='contactus'
-        isFooter={true}
-      />
+      <NavFooter>
+        <NavItem
+          label={strings.MY_ACCOUNT}
+          icon={'person'}
+          selected={!!isMyAccountRoute}
+          onClick={() => navigate(APP_PATHS.MY_ACCOUNT)}
+          id='myaccount'
+        />
+        <NavItem
+          label={dictionary.CONTACT_US}
+          icon={'help'}
+          selected={!!isContactUsRoute}
+          onClick={() => navigate(APP_PATHS.CONTACT_US)}
+          id='contactus'
+        />
+      </NavFooter>
     </Navbar>
   );
 }

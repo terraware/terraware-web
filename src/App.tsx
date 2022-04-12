@@ -46,6 +46,7 @@ import { ServerOrganization } from 'src/types/Organization';
 import { User } from 'src/types/User';
 import { getAllSites } from 'src/utils/organization';
 import { useMediaQuery } from 'react-responsive';
+import MyAccount from './components/MyAccount';
 
 // @ts-ignore
 mapboxgl.workerClass =
@@ -357,6 +358,9 @@ export default function App() {
               </Route>
               <Route exact path={APP_PATHS.CONTACT_US}>
                 <ContactUs />
+              </Route>
+              <Route path={APP_PATHS.MY_ACCOUNT}>
+                <MyAccount user={user} organizations={organizations} />
               </Route>
 
               {/* Redirects. Invalid paths will redirect to the closest valid path. */}
