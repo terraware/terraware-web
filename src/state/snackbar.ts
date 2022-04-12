@@ -11,8 +11,8 @@ export interface ToastSnackbar extends Snackbar {
 }
 
 export interface PageSnackbar extends Snackbar {
-  // snackbar will show the 'x' close button if this callback is provided and will not auto disappear
-  // potential use-case is to persist user 'has seen message' statuses, etc.
+  // Snackbar will execute this callback if provided.
+  // Potential use-case is to persist user 'has seen message' statuses, etc.
   onCloseCallback?: () => {} | undefined;
 }
 
