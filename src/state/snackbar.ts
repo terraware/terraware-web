@@ -1,17 +1,19 @@
 import { atom } from 'recoil';
-import { APP_PATHS } from 'src/constants';
-
-/**
- * Add more scopes in here as we have use-cases.
- */
-export type SnackbarScope = APP_PATHS.HOME | 'app';
 
 export interface Snackbar {
   title?: string | string[] | undefined;
   msg: string | string[];
-  type: 'toast' | 'page';
   priority: 'info' | 'critical' | 'warning' | 'success';
-  cancellable?: boolean;
+}
+
+export interface ToastSnackbar extends Snackbar {
+  type: 'toast'; // for backwards compatibility, to be removed
+}
+
+export interface PageSnackbar extends Snackbar {
+  // snackbar will show the 'x' close button if this callback is provided and will not auto disappear
+  // potential use-case is to persist user 'has seen message' statuses, etc.
+  onCloseCallback?: () => {} | undefined;
 }
 
 /**
@@ -19,13 +21,10 @@ export interface Snackbar {
  * independent of each other and simulataneously.
  */
 
-const createSnackbarAtom = (key: SnackbarScope, defaultValue: Snackbar) =>
-  atom<Snackbar>({ key, default: defaultValue });
-
 export const snackbarAtoms = {
-  app: createSnackbarAtom('app', { msg: '', priority: 'success', type: 'toast' }),
-  [APP_PATHS.HOME]: createSnackbarAtom(APP_PATHS.HOME, { msg: '', priority: 'success', type: 'page' }),
+  toast: atom<ToastSnackbar>({ key: 'toast', default: { msg: '', priority: 'success', type: 'toast' } }),
+  page: atom<PageSnackbar>({ key: 'page', default: { msg: '', priority: 'success' } }),
 };
 
 // for backwards compatibility
-export default snackbarAtoms.app;
+export default snackbarAtoms.toast;

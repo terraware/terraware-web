@@ -35,7 +35,7 @@ import NewAccession from 'src/components/seeds/newAccession';
 import SeedSummary from 'src/components/seeds/summary';
 import SiteView from 'src/components/Site';
 import SitesList from 'src/components/Sites';
-import Snackbar from 'src/components/Snackbar';
+import ToastSnackbar from 'src/components/ToastSnackbar';
 import TopBar from 'src/components/TopBar/TopBar';
 import TopBarContent from 'src/components/TopBar/TopBarContent';
 import UserMenu from 'src/components/UserMenu';
@@ -178,7 +178,7 @@ export default function App() {
         <TopBar>
           <UserMenu user={user} reloadUser={reloadUser} />
         </TopBar>
-        <Snackbar scope='app' />
+        <ToastSnackbar />
         <NoOrgLandingPage reloadOrganizationData={reloadData} />
       </>
     );
@@ -230,7 +230,7 @@ export default function App() {
   return (
     <>
       <CssBaseline />
-      <Snackbar scope='app' />
+      <ToastSnackbar />
       <>
         <div>
           <NavBar organization={selectedOrganization} />

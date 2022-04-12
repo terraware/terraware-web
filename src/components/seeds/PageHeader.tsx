@@ -7,8 +7,7 @@ import Title from '../common/Title';
 import { useHistory } from 'react-router-dom';
 import useStateLocation, { getLocation } from '../../utils/useStateLocation';
 import { SelectedOrgInfo, ServerOrganization } from 'src/types/Organization';
-import Snackbar from 'src/components/Snackbar';
-import { SnackbarScope } from 'src/state/snackbar';
+import PageSnackbar from 'src/components/PageSnackbar';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -64,7 +63,6 @@ interface Props {
   onChangeSelectedOrgInfo?: (selectedValues: SelectedOrgInfo) => void;
   showFacility?: boolean;
   titleClassName?: string;
-  snackbarScope?: SnackbarScope;
 }
 
 export default function PageHeader({
@@ -82,7 +80,6 @@ export default function PageHeader({
   onChangeSelectedOrgInfo,
   showFacility,
   titleClassName,
-  snackbarScope,
 }: Props): JSX.Element {
   const classes = useStyles();
   const history = useHistory();
@@ -135,7 +132,7 @@ export default function PageHeader({
             <Typography id='subtitle' variant='h6' className={classes.subtitle}>
               {subtitle}
             </Typography>
-            {snackbarScope && <Snackbar scope={snackbarScope} />}
+            <PageSnackbar />
             {children}
           </div>
         </Grid>

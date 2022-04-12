@@ -76,8 +76,8 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
   const classes = useStyles();
   const history = useHistory();
   const { onCancel, open, reloadOrganizationData } = props;
-  const setSuccessSnackbar = useSetRecoilState(snackbarAtoms[APP_PATHS.HOME]);
-  const setErrorSnackbar = useSetRecoilState(snackbarAtoms.app);
+  const setPageSnackbar = useSetRecoilState(snackbarAtoms.page);
+  const setToastSnackbar = useSetRecoilState(snackbarAtoms.toast);
   const [nameError, setNameError] = useState('');
   const [countries, setCountries] = useState<Country[]>();
   const [newOrganization, setNewOrganization, onChange] = useForm<ServerOrganization>({
@@ -128,22 +128,20 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
     }
     const response = await createOrganization(newOrganization);
     if (response.requestSucceeded && response.organization) {
-      setSuccessSnackbar({
-        type: 'page',
+      setPageSnackbar({
         priority: 'success',
         title: strings.formatString(strings.ORGANIZATION_CREATED_TITLE, response.organization.name),
         msg: strings.ORGANIZATION_CREATED_MSG,
-        cancellable: true,
+        onCloseCallback: undefined, // placeholder to update user preference when available
       });
       reloadOrganizationData(response.organization.id);
       history.push({ pathname: APP_PATHS.HOME });
     } else {
-      setErrorSnackbar({
-        type: 'page',
+      setToastSnackbar({
         priority: 'critical',
         title: strings.ORGANIZATION_CREATE_FAILED,
         msg: strings.GENERIC_ERROR,
-        cancellable: true,
+        type: 'toast',
       });
     }
     onCancel();

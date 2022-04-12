@@ -1,14 +1,14 @@
 import { Snackbar, Typography } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { useRecoilState } from 'recoil';
-import { snackbarAtoms, SnackbarScope } from 'src/state/snackbar';
+import { snackbarAtoms } from 'src/state/snackbar';
 import Icon from './common/icon/Icon';
 import CloseIcon from '@material-ui/icons/Close';
 import { useEffect } from 'react';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    mainSnackbar_page: {
+    mainSnackbar: {
       '&.MuiSnackbar-anchorOriginTopCenter': {
         top: '0px',
       },
@@ -18,52 +18,9 @@ const useStyles = makeStyles((theme: Theme) =>
         zIndex: 0,
       },
     },
-    mainSnackbar_toast: {
-      '&.MuiSnackbar-anchorOriginTopCenter': {
-        top: '75px',
-      },
-    },
     mainContainer: {
       display: 'flex',
       backgroundColor: '#ffffff',
-    },
-    toast: {
-      width: '480px',
-      borderRadius: '16px',
-      '&.bodyinfo': {
-        border: '1px solid #708284',
-        boxShadow: '0 2px 0 #708284',
-        '& .iconContainer': {
-          background: '#708284',
-        },
-      },
-      '&.bodycritical': {
-        border: '1px solid #FE0003',
-        boxShadow: '0 2px 0 #FE0003',
-        '& .iconContainer': {
-          background: '#FE0003',
-        },
-      },
-      '&.bodywarning': {
-        border: '1px solid #BD6931',
-        boxShadow: '0 2px 0 #BD6931',
-        '& .iconContainer': {
-          background: '#BD6931',
-        },
-      },
-      '&.bodysuccess': {
-        border: '1px solid #308F5F',
-        boxShadow: '0 2px 0 #308F5F',
-        '& .iconContainer': {
-          background: '#308F5F',
-        },
-      },
-      '& .snackbarIcon': {
-        fill: '#ffffff',
-      },
-      '& .body': {
-        padding: '16px 24px',
-      },
     },
     page: {
       width: '584px',
@@ -131,25 +88,26 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-interface Props {
-  scope: SnackbarScope;
-}
-
-export default function SnackbarMessage({ scope }: Props): JSX.Element {
+export default function PageSnackbarMessage(): JSX.Element {
   const classes = useStyles();
 
-  const [snackbar, setSnackbar] = useRecoilState(snackbarAtoms[scope]);
-
-  const cancellable = snackbar?.cancellable;
+  const [snackbar, setSnackbar] = useRecoilState(snackbarAtoms.page);
 
   const clearSnackbar = () => {
     setSnackbar({ ...snackbar, msg: '', title: undefined });
+    if (snackbar?.onCloseCallback) {
+      try {
+        snackbar?.onCloseCallback();
+      } catch (e) {
+        // swallow exception for now, expect client code to handle issues with callbacks
+      }
+    }
   };
 
   const handleClose = () => {
     if (snackbar) {
       // this is needed to bypass closing of snackbar when user clicks out of a cancellable message
-      if (snackbar?.cancellable) {
+      if (snackbar?.onCloseCallback) {
         return;
       }
       clearSnackbar();
@@ -157,24 +115,24 @@ export default function SnackbarMessage({ scope }: Props): JSX.Element {
   };
 
   useEffect(() => {
-    // clear the message after component is unloaded, if scoped to a page view
-    if (scope !== 'app' && snackbar?.msg) {
+    // clear the message after component is unloaded
+    if (snackbar?.msg) {
       return () => {
-        setSnackbar({ ...snackbar, msg: '', title: undefined });
+        setSnackbar({ ...snackbar, msg: '', title: undefined, onCloseCallback: undefined });
       };
     }
-  }, [scope, setSnackbar, snackbar]);
+  }, [setSnackbar, snackbar]);
 
   return (
     <Snackbar
       anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      open={Boolean(snackbar.msg && snackbar.type)}
+      open={Boolean(snackbar.msg)}
       onClose={handleClose}
-      autoHideDuration={cancellable ? null : 5000}
-      id={scope === 'app' ? 'snackbar' : `snackbar_${scope}`}
-      className={classes[scope === 'app' ? 'mainSnackbar_toast' : 'mainSnackbar_page']}
+      autoHideDuration={null}
+      id='snackbar_page'
+      className={classes.mainSnackbar}
     >
-      <div className={`${classes.mainContainer} ${classes[snackbar.type]} body${snackbar.priority}`}>
+      <div className={`${classes.mainContainer} ${classes.page} body${snackbar.priority}`}>
         <div className={`${classes.iconContainer} iconContainer`}>
           <Icon name={snackbar.priority} className='snackbarIcon' />
         </div>
@@ -188,11 +146,9 @@ export default function SnackbarMessage({ scope }: Props): JSX.Element {
             {snackbar.msg}
           </Typography>
         </div>
-        {cancellable && (
-          <div className={classes.closeIconContainer} onClick={clearSnackbar}>
-            <CloseIcon />
-          </div>
-        )}
+        <div className={classes.closeIconContainer} onClick={clearSnackbar}>
+          <CloseIcon />
+        </div>
       </div>
     </Snackbar>
   );

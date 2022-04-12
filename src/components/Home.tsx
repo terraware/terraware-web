@@ -80,7 +80,6 @@ export default function Home({ organizations, selectedOrganization, setSelectedO
         }
         subtitle=''
         titleClassName={classes.extraPadding}
-        snackbarScope={APP_PATHS.HOME}
       />
       <Container maxWidth={false} className={classes.mainContainer}>
         <Grid container spacing={3} className={classes.mainGrid}>
