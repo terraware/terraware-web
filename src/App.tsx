@@ -378,12 +378,6 @@ export default function App() {
               <Route exact path={APP_PATHS.PEOPLE + '/'}>
                 <Redirect to={APP_PATHS.PEOPLE} />
               </Route>
-              <Route path={APP_PATHS.PLANTS_DASHBOARD + '/'}>
-                <Redirect to={APP_PATHS.PLANTS_DASHBOARD} />
-              </Route>
-              <Route path={APP_PATHS.PLANTS_LIST + '/'}>
-                <Redirect to={APP_PATHS.PLANTS_LIST} />
-              </Route>
               <Route exact path={APP_PATHS.PROJECTS + '/'}>
                 <Redirect to={APP_PATHS.PROJECTS} />
               </Route>
