@@ -56,13 +56,6 @@ const listItemContent: ListItemContent[] = [
     buttonText: dictionary.REQUEST_FEATURE,
     link: TERRAWARE_SUPPORT_LINK,
   },
-  {
-    icon: 'touchscreen',
-    title: strings.TITLE_TEST_APP,
-    description: strings.DESCRIPTION_TEST_APP,
-    buttonText: dictionary.REQUEST_MOBILE_APP,
-    link: TERRAWARE_SUPPORT_LINK,
-  },
 ];
 
 export default function ContactUs(): JSX.Element {
