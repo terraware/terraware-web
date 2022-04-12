@@ -34,7 +34,7 @@ import { HighOrganizationRolesValues, ServerOrganization } from 'src/types/Organ
 import { seedsDatabaseSelectedOrgInfo } from 'src/state/selectedOrgInfoPerPage';
 import { useRecoilState } from 'recoil';
 import EmptyMessage from 'src/components/common/EmptyMessage';
-import { APP_PATHS, TERRAWARE_SUPPORT_LINK } from 'src/constants';
+import { APP_PATHS } from 'src/constants';
 import TfMain from 'src/components/common/TfMain';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -79,7 +79,11 @@ const useStyles = makeStyles((theme: Theme) =>
       marginBottom: 0,
     },
     buttonSpc: {
-      marginRight: '16px',
+      marginRight: '8px',
+
+      '&:last-child': {
+        marginRight: '0',
+      },
     },
     requestMobileMessage: {
       marginBottom: '32px',
@@ -300,10 +304,6 @@ export default function Database(props: DatabaseProps): JSX.Element {
     history.push(newAccessionLocation);
   };
 
-  const goToSupport = () => {
-    window.open(TERRAWARE_SUPPORT_LINK);
-  };
-
   const location = useStateLocation();
 
   return (
@@ -366,17 +366,6 @@ export default function Database(props: DatabaseProps): JSX.Element {
         <Container maxWidth={false} className={classes.mainContainer}>
           {organization && unfilteredResults ? (
             <Grid container>
-              {!!organization?.projects?.length && !unfilteredResults?.length && (
-                <Grid item xs={12}>
-                  <EmptyMessage
-                    title={emptyMessageStrings.COLLECT_IN_FIELD_PLANT_DATA}
-                    text={emptyMessageStrings.TERRAWARE_MOBILE_APP_INFO_MSG}
-                    buttonText={emptyMessageStrings.REQUEST_MOBILE_APP}
-                    onClick={goToSupport}
-                    className={classes.requestMobileMessage}
-                  />
-                </Grid>
-              )}
               {!!organization?.projects?.length ? (
                 <>
                   {pendingAccessions && pendingAccessions.length > 0 && (

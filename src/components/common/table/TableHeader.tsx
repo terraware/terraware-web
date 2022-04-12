@@ -67,7 +67,7 @@ export default function EnhancedTableHead(props: Props): JSX.Element {
   return (
     <SortableHead lockAxis='x' axis='x' onSortEnd={props.onReorderEnd} useDragHandle>
       <TableRow id='table-header'>
-        {numSelected !== undefined && rowCount !== undefined && onSelectAllClick && (
+        {numSelected !== undefined && rowCount !== undefined && rowCount > 0 && onSelectAllClick && (
           <TableCell padding='checkbox'>
             <Checkbox
               color='primary'

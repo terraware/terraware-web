@@ -134,16 +134,6 @@ export default function Home({ organizations, selectedOrganization, setSelectedO
             </Grid>
             <Grid item xs={4}>
               <PageCard
-                name={strings.PLANTS}
-                icon='restorationSite'
-                description={homePageStrings.PLANTS_CARD_DESCRIPTION}
-                link={APP_PATHS.PLANTS_DASHBOARD}
-                linkText={strings.formatString(homePageStrings.GO_TO, strings.PLANTS) as string}
-                linkStyle={'underline'}
-              />
-            </Grid>
-            <Grid item xs={4}>
-              <PageCard
                 name={strings.SPECIES}
                 icon='species'
                 description={homePageStrings.SPECIES_CARD_DESCRIPTION}

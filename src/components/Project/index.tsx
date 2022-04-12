@@ -155,14 +155,14 @@ export default function ProjectDetails({ organization }: ProjectDetailsProps): J
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <h2>{dictionary.CONTRIBUTORS}</h2>
-          <p>{strings.PEOPLE_DESC}</p>
         </Grid>
-        {projectSelected && people && (
+        {projectSelected && (
           <Grid item xs={12}>
             <Table
-              rows={people.filter((user) => user.projectIds.includes(projectSelected.id))}
+              rows={people?.filter((user) => user.projectIds.includes(projectSelected.id)) || []}
               orderBy='name'
               columns={peopleColumns}
+              emptyTableMessage={strings.NO_CONTRIBUTORS_IN_PROJECT}
             />
           </Grid>
         )}
