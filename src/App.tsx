@@ -24,9 +24,7 @@ import NewSite from 'src/components/NewSite';
 import Organization from 'src/components/Organization';
 import People from 'src/components/People';
 import PersonDetails from 'src/components/Person';
-import PlantDashboard from 'src/components/plants/PlantDashboard';
-import PlantList from 'src/components/plants/PlantList';
-import SpeciesList from 'src/components/plants/Species';
+import SpeciesList from 'src/components/Species';
 import Project from 'src/components/Project';
 import ProjectsList from 'src/components/Projects';
 import Accession from 'src/components/seeds/accession';
@@ -45,7 +43,6 @@ import { APP_PATHS } from 'src/constants';
 import ErrorBoundary from 'src/ErrorBoundary';
 import { Notifications } from 'src/types/Notifications';
 import { ServerOrganization } from 'src/types/Organization';
-import { PlantSearchOptions } from 'src/types/Plant';
 import { User } from 'src/types/User';
 import { getAllSites } from 'src/utils/organization';
 import { useMediaQuery } from 'react-responsive';
@@ -88,7 +85,6 @@ enum APIRequestStatus {
 export default function App() {
   const classes = useStyles();
   const [selectedOrganization, setSelectedOrganization] = useState<ServerOrganization>();
-  const [plantListFilters, setPlantListFilters] = useState<PlantSearchOptions>();
   const [notifications, setNotifications] = useState<Notifications>();
 
   // seedSearchCriteria describes which criteria to apply when searching accession data.
@@ -294,16 +290,6 @@ export default function App() {
                   setDisplayColumnNames={setAccessionsDisplayColumns}
                 />
               </Route>
-              <Route exact path={APP_PATHS.PLANTS_DASHBOARD}>
-                <PlantDashboard organization={organizationWithoutSB()} />
-              </Route>
-              <Route exact path={APP_PATHS.PLANTS_LIST}>
-                <PlantList
-                  organization={organizationWithoutSB()}
-                  filters={plantListFilters}
-                  setFilters={setPlantListFilters}
-                />
-              </Route>
               {selectedOrganization && (
                 <Route exact path={APP_PATHS.SPECIES}>
                   <SpeciesList organization={selectedOrganization} />
@@ -390,12 +376,6 @@ export default function App() {
               </Route>
               <Route exact path={APP_PATHS.PEOPLE + '/'}>
                 <Redirect to={APP_PATHS.PEOPLE} />
-              </Route>
-              <Route path={APP_PATHS.PLANTS_DASHBOARD + '/'}>
-                <Redirect to={APP_PATHS.PLANTS_DASHBOARD} />
-              </Route>
-              <Route path={APP_PATHS.PLANTS_LIST + '/'}>
-                <Redirect to={APP_PATHS.PLANTS_LIST} />
               </Route>
               <Route exact path={APP_PATHS.PROJECTS + '/'}>
                 <Redirect to={APP_PATHS.PROJECTS} />

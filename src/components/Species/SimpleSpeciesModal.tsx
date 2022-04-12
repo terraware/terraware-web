@@ -10,9 +10,9 @@ import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
 import { Species, SpeciesRequestError, SpeciesWithScientificName } from 'src/types/Species';
 import useForm from 'src/utils/useForm';
-import Button from '../../common/button/Button';
-import DialogCloseButton from '../../common/DialogCloseButton';
-import TextField from '../../common/TextField';
+import Button from '../common/button/Button';
+import DialogCloseButton from '../common/DialogCloseButton';
+import TextField from '../common/TextField';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
