@@ -5,6 +5,7 @@ import Button from 'src/components/common/button/Button';
 import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
 import strings from 'src/strings';
+import dictionary from 'src/strings/dictionary';
 import { ServerOrganization } from 'src/types/Organization';
 import { User } from 'src/types/User';
 import TextField from '../common/Textfield/Textfield';
@@ -51,20 +52,20 @@ export default function MyAccount({ user, organizations }: MyAccountProps): JSX.
       <Grid container spacing={3}>
         <Grid item xs={2}>
           <h1 className={classes.title}>{strings.MY_ACCOUNT}</h1>
-          <p>{strings.ENTER_DESCRIPTION}</p>
+          <p>{dictionary.ENTER_DESCRIPTION}</p>
         </Grid>
         <Grid item xs={8} />
         <Grid item xs={2} className={classes.centered}>
           <Button
             id='edit-account'
-            label={strings.EDIT_ACCOUNT}
+            label={dictionary.EDIT_ACCOUNT}
             onClick={() => true}
             size='medium'
             priority='secondary'
           />
         </Grid>
         <Grid item xs={12}>
-          <h2>{strings.GENERAL}</h2>
+          <h2>{dictionary.GENERAL}</h2>
         </Grid>
         <Grid item xs={4}>
           <TextField label={strings.NAME} id='name' type='text' value={user?.firstName} display={true} />
@@ -79,7 +80,7 @@ export default function MyAccount({ user, organizations }: MyAccountProps): JSX.
           <TfDivisor />
         </Grid>
         <Grid item xs={12}>
-          <h2>{strings.ORGANIZATIONS}</h2>
+          <h2>{dictionary.ORGANIZATIONS}</h2>
         </Grid>
         <Grid item xs={12}>
           <div className={classes.mainContent}>

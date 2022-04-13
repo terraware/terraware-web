@@ -29,6 +29,10 @@ const dictionary = new LocalizedStrings({
     REQUEST_MOBILE_APP: 'Request Mobile App',
     REQUIRED_FIELD: 'Required Field',
     SITE_PROFILE: 'Site Profile',
+    ENTER_DESCRIPTION: 'Enter description...',
+    EDIT_ACCOUNT: 'Edit Account',
+    GENERAL: 'General',
+    ORGANIZATIONS: 'Organizations',
   },
 });
 
