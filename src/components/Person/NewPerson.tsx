@@ -407,7 +407,6 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
                 />
               )}
             </div>
-            <span>{strings.ADD_TO_PROJECT_DESC}</span>
           </Grid>
           <Grid item xs={12}>
             {HighOrganizationRolesValues.includes(newPerson.role) ? (
@@ -417,7 +416,7 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
                 rows={projectsWithUserRole || []}
                 orderBy='name'
                 columns={projectColumns}
-                emptyTableMessage='No Projects to show.'
+                emptyTableMessage={strings.NO_PROJECTS_FOR_PERSON}
                 showCheckbox={true}
                 selectedRows={selectedProjectsRows}
                 setSelectedRows={setSelectedProjectsRows}

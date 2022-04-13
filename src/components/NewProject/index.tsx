@@ -467,14 +467,13 @@ export default function ProjectView({ organization, reloadOrganizationData }: Pr
                 }}
               />
             </div>
-            <span>{strings.PEOPLE_DESC}</span>
           </Grid>
           <Grid item xs={12}>
             <Table
               rows={peopleOnProject || []}
               orderBy='name'
               columns={peopleColumns}
-              emptyTableMessage='No People to show.'
+              emptyTableMessage={strings.NO_PEOPLE_IN_PROJECT}
               showCheckbox={true}
               selectedRows={selectedPeopleRows}
               setSelectedRows={setSelectedPeopleRows}
