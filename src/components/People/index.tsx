@@ -13,6 +13,7 @@ import { OrganizationUser } from 'src/types/User';
 import { getProjectsById } from 'src/utils/organization';
 import TfMain from '../common/TfMain';
 import TableCellRenderer from './TableCellRenderer';
+import PageSnackbar from 'src/components/PageSnackbar';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -123,6 +124,7 @@ export default function PeopleList({ organization }: PeopleListProps): JSX.Eleme
         <Grid item xs={2} className={classes.centered}>
           <Button id='new-person' label={strings.ADD_PERSON} onClick={goToNewPerson} size='medium' />
         </Grid>
+        <PageSnackbar />
         <Grid item xs={12}>
           <div className={classes.mainContent}>
             <Grid container spacing={4}>

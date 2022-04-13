@@ -7,6 +7,7 @@ import Title from '../common/Title';
 import { useHistory } from 'react-router-dom';
 import useStateLocation, { getLocation } from '../../utils/useStateLocation';
 import { SelectedOrgInfo, ServerOrganization } from 'src/types/Organization';
+import PageSnackbar from 'src/components/PageSnackbar';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -131,6 +132,7 @@ export default function PageHeader({
             <Typography id='subtitle' variant='h6' className={classes.subtitle}>
               {subtitle}
             </Typography>
+            <PageSnackbar />
             {children}
           </div>
         </Grid>
