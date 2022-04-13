@@ -359,8 +359,11 @@ export default function App() {
               <Route exact path={APP_PATHS.CONTACT_US}>
                 <ContactUs />
               </Route>
-              <Route path={APP_PATHS.MY_ACCOUNT}>
-                <MyAccount user={user} organizations={organizations} />
+              <Route exact path={APP_PATHS.MY_ACCOUNT_EDIT}>
+                <MyAccount user={user} organizations={organizations} edit={true} />
+              </Route>
+              <Route exact path={APP_PATHS.MY_ACCOUNT}>
+                <MyAccount user={user} organizations={organizations} edit={false} />
               </Route>
 
               {/* Redirects. Invalid paths will redirect to the closest valid path. */}

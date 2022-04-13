@@ -35,4 +35,5 @@ export enum APP_PATHS {
   SPECIES = '/species',
   WELCOME = '/welcome',
   MY_ACCOUNT = '/myaccount',
+  MY_ACCOUNT_EDIT = '/myaccount/edit',
 }
