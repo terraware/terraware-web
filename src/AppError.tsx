@@ -37,5 +37,5 @@ export default function AppError() {
 function QueryParamsError() {
   const query = useQuery();
 
-  return <ErrorBox text={query.get('message') ?? 'An unexpected error occurred.'} />;
+  return <ErrorBox text={query.get('message') ?? strings.UNEXPECTED_ERROR} />;
 }

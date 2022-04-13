@@ -13,9 +13,6 @@ const strings = new LocalizedStrings({
     DELETE_SPECIES: 'Delete Species',
     DELETE_CONFIRMATION_MODAL_MAIN_TEXT:
       'Are you sure you want to delete this species? This action cannot be undone. Any plants with this species will now be categorized as “Other” for its species.',
-    DELETE_PLANT: 'Delete Plant',
-    DELETE_PLANT_CONFIRMATION_MODAL_MAIN_TEXT:
-      'Are you sure you want to delete this plant? This action cannot be undone.',
     SNACKBAR_MSG_NEW_SPECIES_ADDED: 'New species added just now.',
     SNACKBAR_MSG_CHANGES_SAVED: 'Changes saved just now.',
     SNACKBAR_MSG_SPECIES_DELETED: 'Species deleted just now.',
@@ -29,8 +26,6 @@ const strings = new LocalizedStrings({
     OTHER: 'Other',
     LOGOUT: 'Logout',
     DATE: 'Date',
-    GEOLOCATION: 'Geolocation',
-    PHOTO: 'Photo',
     NOTES: 'Notes',
     EXISTING_SPECIES_MSG: 'Choose Existing Species',
     CREATE_NEW_SPECIES: 'Create New Species',
@@ -251,27 +246,6 @@ const strings = new LocalizedStrings({
     STORED_BY: 'Stored By',
     WITHDRAWN_BY: 'Withdrawn By',
     GERMINATION_TESTED_BY: 'Germination Tested By',
-    TOUR_TITLE: 'Hey! Want a tour?',
-    TOUR_DESCRIPTION: 'There are many things you can do in Seed Bank App. Take the tour to find out what.',
-    ACCEPT_TOUR: 'Hell Yeah!',
-    DECLINE_TOUR: 'Maybe Later',
-    ONBOARDING_TITLE_STEP_1: 'Meet the Summary Page',
-    ONBOARDING_DESCRIPTION_STEP_1:
-      'Get an overview of all your data. This page includes statistics, such as active accessions, species, and families, alerts from the Seed Bank Dashboard, and updates regarding what stage your accessions are in.',
-    ONBOARDING_TITLE_STEP_2: 'All Your Accessions in One Place',
-    ONBOARDING_DESCRIPTION_STEP_2:
-      'Go to this page to view and easily manage all of your accessions. You can add or data any data as you complete each task in the seed bank.',
-    ONBOARDING_TITLE_STEP_3: 'Help/FAQs',
-    ONBOARDING_DESCRIPTION_STEP_3:
-      'Confused? Click on this icon to see more information on how to use this app to its fullest extent.',
-    ONBOARDING_TITLE_STEP_4: 'Find Your Notifications Here',
-    ONBOARDING_DESCRIPTION_STEP_4:
-      'Get all the latest reminders about your accessions. Never miss out on any important information.',
-    ONBOARDING_TITLE_STEP_5: 'Manually Add Accessions If Needed',
-    ONBOARDING_DESCRIPTION_STEP_5: 'Received a new bag of seeds? Click this button to add it to the database.',
-    ONBOARDING_NEXT_STEP: 'Got It!',
-    SKIP_ONBOARDING: 'Skip Tour',
-    ONBOARDING_LAST_STEP: 'All Done!',
     WILD_OUTPLANT: 'Wild/Outplant',
     WILD: 'Wild',
     OUTPLANT: 'Outplant',
@@ -405,6 +379,7 @@ const strings = new LocalizedStrings({
     OWNERS_ADMINS_ACCESS_ALL_PROJECTS: 'Owners and Admins automatically have access to all projects.',
     DETAILS: 'Details',
     NO_NOTIFICATIONS: 'No notifications',
+    UNEXPECTED_ERROR: 'An unexpected error occurred.',
   },
 });
 
