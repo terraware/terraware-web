@@ -2,6 +2,8 @@ import Grid from '@material-ui/core/Grid';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import { useSetRecoilState } from 'recoil';
+import { updateUserProfile } from 'src/api/user/user';
 import Button from 'src/components/common/button/Button';
 import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
@@ -10,11 +12,13 @@ import strings from 'src/strings';
 import dictionary from 'src/strings/dictionary';
 import { ServerOrganization } from 'src/types/Organization';
 import { User } from 'src/types/User';
+import useForm from 'src/utils/useForm';
 import FormBottomBar from '../common/FormBottomBar';
 import TextField from '../common/Textfield/Textfield';
 import TfDivisor from '../common/TfDivisor';
 import TfMain from '../common/TfMain';
 import AccountCellRenderer from './TableCellRenderer';
+import snackbarAtom from 'src/state/snackbar';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -42,22 +46,29 @@ const columns: TableColumnType[] = [
 ];
 
 type MyAccountProps = {
-  user?: User;
+  user: User;
   organizations?: ServerOrganization[];
   edit: boolean;
+  reloadUser: () => void;
 };
 
-export default function MyAccount({ user, organizations, edit }: MyAccountProps): JSX.Element {
+export default function MyAccount({ user, organizations, edit, reloadUser }: MyAccountProps): JSX.Element {
   const classes = useStyles();
   const [selectedRows, setSelectedRows] = useState<ServerOrganization[]>([]);
   const [personOrganizations, setPersonOrganizations] = useState<ServerOrganization[]>([]);
   const history = useHistory();
+  const [record, setRecord, onChange] = useForm<User>(user);
+  const setSnackbar = useSetRecoilState(snackbarAtom);
 
   useEffect(() => {
     if (organizations) {
       setPersonOrganizations(organizations);
     }
   }, [organizations]);
+
+  useEffect(() => {
+    setRecord(user);
+  }, [user, setRecord]);
 
   const removeSelectedOrgs = () => {
     if (personOrganizations) {
@@ -68,7 +79,25 @@ export default function MyAccount({ user, organizations, edit }: MyAccountProps)
     }
   };
 
-  const saveChanges = () => {};
+  const saveChanges = async () => {
+    // organizations validations (owner, no more in org, leave)
+    const response = await updateUserProfile(record);
+    if (response.requestSucceeded) {
+      reloadUser();
+      setSnackbar({
+        type: 'page',
+        priority: 'success',
+        msg: strings.CHANGES_SAVED,
+      });
+    } else {
+      setSnackbar({
+        type: 'page',
+        priority: 'critical',
+        msg: strings.GENERIC_ERROR,
+      });
+    }
+    history.push(APP_PATHS.MY_ACCOUNT);
+  };
 
   return (
     <>
@@ -92,13 +121,34 @@ export default function MyAccount({ user, organizations, edit }: MyAccountProps)
             <h2>{dictionary.GENERAL}</h2>
           </Grid>
           <Grid item xs={4}>
-            <TextField label={strings.NAME} id='name' type='text' value={user?.firstName} display={!edit} />
+            <TextField
+              label={strings.NAME}
+              id='firstName'
+              type='text'
+              value={record.firstName}
+              display={!edit}
+              onChange={onChange}
+            />
           </Grid>
           <Grid item xs={4}>
-            <TextField label={strings.LAST_NAME} id='lastName' type='text' value={user?.lastName} display={!edit} />
+            <TextField
+              label={strings.LAST_NAME}
+              id='lastName'
+              type='text'
+              value={record.lastName}
+              display={!edit}
+              onChange={onChange}
+            />
           </Grid>
           <Grid item xs={4}>
-            <TextField label={strings.EMAIL} id='email' type='text' value={user?.email} display={!edit} />
+            <TextField
+              label={strings.EMAIL}
+              id='email'
+              type='text'
+              value={record.email}
+              display={!edit}
+              readonly={true}
+            />
           </Grid>
           <Grid item xs={12}>
             <TfDivisor />
