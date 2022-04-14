@@ -28,7 +28,6 @@ const dictionary = new LocalizedStrings({
     REQUEST_FEATURE: 'Request Feature',
     REQUIRED_FIELD: 'Required Field',
     SITE_PROFILE: 'Site Profile',
-    ENTER_DESCRIPTION: 'Enter description...',
     EDIT_ACCOUNT: 'Edit Account',
     GENERAL: 'General',
     ORGANIZATIONS: 'Organizations',

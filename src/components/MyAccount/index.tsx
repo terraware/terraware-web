@@ -93,13 +93,13 @@ export default function MyAccount({ user, organizations, edit, reloadUser }: MyA
     if (response.requestSucceeded) {
       reloadUser();
       setSnackbar({
-        type: 'page',
+        type: 'toast',
         priority: 'success',
         msg: strings.CHANGES_SAVED,
       });
     } else {
       setSnackbar({
-        type: 'page',
+        type: 'toast',
         priority: 'critical',
         msg: strings.GENERIC_ERROR,
       });
@@ -113,7 +113,7 @@ export default function MyAccount({ user, organizations, edit, reloadUser }: MyA
         <Grid container spacing={3}>
           <Grid item xs={2}>
             <h1 className={classes.title}>{strings.MY_ACCOUNT}</h1>
-            <p>{dictionary.ENTER_DESCRIPTION}</p>
+            <p>{strings.MY_ACCOUNT_DESC}</p>
           </Grid>
           <Grid item xs={8} />
           <Grid item xs={2} className={classes.centered}>
