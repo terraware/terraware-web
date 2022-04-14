@@ -180,7 +180,7 @@ export default function ProjectView({ organization, reloadOrganizationData }: Pr
       }
     }
     setNewProject((previousProject: Project): Project => {
-      return { ...previousProject, types: projectTypes }
+      return { ...previousProject, types: projectTypes };
     });
   };
 
