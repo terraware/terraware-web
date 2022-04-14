@@ -411,8 +411,8 @@ export default function Database(props: DatabaseProps): JSX.Element {
               ) : HighOrganizationRolesValues.includes(organization?.role || '') ? (
                 <EmptyMessage
                   className={classes.message}
-                  title={emptyMessageStrings.PLANTS_EMPTY_MSG_TITLE}
-                  text={emptyMessageStrings.PLANTS_EMPTY_MSG_BODY}
+                  title={emptyMessageStrings.SEEDS_EMPTY_MSG_TITLE}
+                  text={emptyMessageStrings.SEEDS_EMPTY_MSG_BODY}
                   buttonText={strings.GO_TO_PROJECTS}
                   onClick={goToProjects}
                 />

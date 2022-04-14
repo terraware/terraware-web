@@ -26,7 +26,6 @@ const dictionary = new LocalizedStrings({
     PROJECT_PROFILE: 'Project Profile',
     REPORT_PROBLEM: 'Report Problem',
     REQUEST_FEATURE: 'Request Feature',
-    REQUEST_MOBILE_APP: 'Request Mobile App',
     REQUIRED_FIELD: 'Required Field',
     SITE_PROFILE: 'Site Profile',
     ENTER_DESCRIPTION: 'Enter description...',

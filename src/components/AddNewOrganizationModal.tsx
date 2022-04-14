@@ -14,7 +14,7 @@ import { ServerOrganization } from 'src/types/Organization';
 import useForm from 'src/utils/useForm';
 import Select from './common/Select/Select';
 import TextField from './common/Textfield/Textfield';
-import snackbarAtom from 'src/state/snackbar';
+import { snackbarAtoms } from 'src/state/snackbar';
 import { searchCountries } from 'src/api/country/country';
 import { Country } from 'src/types/Country';
 import { getCountryByCode, getSubdivisionByCode } from 'src/utils/country';
@@ -76,7 +76,8 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
   const classes = useStyles();
   const history = useHistory();
   const { onCancel, open, reloadOrganizationData } = props;
-  const setSnackbar = useSetRecoilState(snackbarAtom);
+  const setPageSnackbar = useSetRecoilState(snackbarAtoms.page);
+  const setToastSnackbar = useSetRecoilState(snackbarAtoms.toast);
   const [nameError, setNameError] = useState('');
   const [countries, setCountries] = useState<Country[]>();
   const [newOrganization, setNewOrganization, onChange] = useForm<ServerOrganization>({
@@ -127,19 +128,20 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
     }
     const response = await createOrganization(newOrganization);
     if (response.requestSucceeded && response.organization) {
-      setSnackbar({
-        type: 'page',
+      setPageSnackbar({
         priority: 'success',
         title: strings.formatString(strings.ORGANIZATION_CREATED_TITLE, response.organization.name),
         msg: strings.ORGANIZATION_CREATED_MSG,
+        onCloseCallback: undefined, // placeholder to update user preference when available
       });
       reloadOrganizationData(response.organization.id);
       history.push({ pathname: APP_PATHS.HOME });
     } else {
-      setSnackbar({
-        type: 'page',
+      setToastSnackbar({
         priority: 'critical',
+        title: strings.ORGANIZATION_CREATE_FAILED,
         msg: strings.GENERIC_ERROR,
+        type: 'toast',
       });
     }
     onCancel();

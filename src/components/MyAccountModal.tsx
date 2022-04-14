@@ -57,13 +57,13 @@ export default function MyAccountModal(props: MyAccountModalProps): JSX.Element 
     if (response.requestSucceeded) {
       reloadUser();
       setSnackbar({
-        type: 'page',
+        type: 'toast',
         priority: 'success',
         msg: strings.CHANGES_SAVED,
       });
     } else {
       setSnackbar({
-        type: 'page',
+        type: 'toast',
         priority: 'critical',
         msg: strings.GENERIC_ERROR,
       });

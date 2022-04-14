@@ -13,6 +13,7 @@ import { getOrganizationUsers } from 'src/api/organization/organization';
 import { OrganizationUser } from 'src/types/User';
 import { getCountryByCode, getSubdivisionByCode } from 'src/utils/country';
 import { getOrganizationProjects } from 'src/utils/organization';
+import PageSnackbar from 'src/components/PageSnackbar';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -95,6 +96,7 @@ export default function OrganizationView({ organization }: OrganizationViewProps
           <h2 className={classes.title}>{strings.ORGANIZATION}</h2>
           <p>{strings.ORGANIZATION_DESC}</p>
         </Grid>
+        <PageSnackbar />
         <Grid item xs={12} className={classes.titleWithButton}>
           <h2>{organization?.name}</h2>
           <Button label={strings.EDIT_ORGANIZATION} priority='secondary' onClick={goToEditOrganization} />
