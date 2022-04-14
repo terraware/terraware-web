@@ -404,6 +404,7 @@ const strings = new LocalizedStrings({
     OWNERS_ADMINS_ACCESS_ALL_PROJECTS: 'Owners and Admins automatically have access to all projects.',
     DETAILS: 'Details',
     NO_NOTIFICATIONS: 'No notifications',
+    REMOVE_ONLY_ONE_ORG_AT_A_TIME: 'You may only remove yourself from one organization at a time.',
   },
 });
 

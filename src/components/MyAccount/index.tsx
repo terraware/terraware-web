@@ -71,11 +71,19 @@ export default function MyAccount({ user, organizations, edit, reloadUser }: MyA
   }, [user, setRecord]);
 
   const removeSelectedOrgs = () => {
-    if (personOrganizations) {
-      setPersonOrganizations((currentPersonOrganizations) => {
-        const selectedRowsIds = selectedRows.map((sr) => sr.id);
-        return currentPersonOrganizations?.filter((org) => !selectedRowsIds?.includes(org.id));
-      });
+    if (organizations && personOrganizations) {
+      if (selectedRows.length > 1 || organizations.length - personOrganizations.length === 1) {
+        setSnackbar({
+          type: 'toast',
+          priority: 'critical',
+          msg: strings.REMOVE_ONLY_ONE_ORG_AT_A_TIME,
+        });
+      } else {
+        setPersonOrganizations((currentPersonOrganizations) => {
+          const selectedRowsIds = selectedRows.map((sr) => sr.id);
+          return currentPersonOrganizations?.filter((org) => !selectedRowsIds?.includes(org.id));
+        });
+      }
     }
   };
 
