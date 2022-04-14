@@ -363,7 +363,13 @@ export default function App() {
               {user && (
                 <>
                   <Route exact path={APP_PATHS.MY_ACCOUNT_EDIT}>
-                    <MyAccount user={user} organizations={organizations} edit={true} reloadUser={reloadUser} />
+                    <MyAccount
+                      user={user}
+                      organizations={organizations}
+                      edit={true}
+                      reloadUser={reloadUser}
+                      reloadData={reloadData}
+                    />
                   </Route>
                   <Route exact path={APP_PATHS.MY_ACCOUNT}>
                     <MyAccount user={user} organizations={organizations} edit={false} reloadUser={reloadUser} />

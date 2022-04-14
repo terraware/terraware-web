@@ -250,6 +250,29 @@ export interface paths {
 
 export interface components {
   schemas: {
+    AccessionNotificationPayload: {
+      /** Unique identifier for this notification. Clients should treat it as opaque. */
+      id: string;
+      timestamp: string;
+      type: "Alert" | "State" | "Date";
+      /** If true, this notification has been marked as read. */
+      read: boolean;
+      /** Plain-text body of notification. */
+      text: string;
+      /** For accession notifications, which accession caused the notification. */
+      accessionId?: number;
+      /** For state notifications, which state is being summarized. */
+      state?:
+        | "Awaiting Check-In"
+        | "Pending"
+        | "Processing"
+        | "Processed"
+        | "Drying"
+        | "Dried"
+        | "In Storage"
+        | "Withdrawn"
+        | "Nursery";
+    };
     AccessionPayload: {
       /** Server-generated human-readable identifier for the accession. This is unique within a single seed bank, but different seed banks may have accessions with the same number. */
       accessionNumber: string;
@@ -539,6 +562,21 @@ export interface components {
     };
     CreateSiteRequestPayload: {
       description?: string;
+      /** Create map layers of these types. Pass an empty list to skip creating layers. Default is to create a Plants Planted layer. */
+      layerTypes?: (
+        | "Aerial Photos"
+        | "Surface Color Map"
+        | "Terrain Color Map"
+        | "Boundaries"
+        | "Plants Planted"
+        | "Plants Existing"
+        | "Irrigation"
+        | "Infrastructure"
+        | "Partner Input"
+        | "Restoration Zones"
+        | "Site Prep"
+        | "Map notes"
+      )[];
       location?: components["schemas"]["Point"];
       locale?: string;
       name: string;
@@ -651,7 +689,6 @@ export interface components {
       facilityId: number;
       fields: string[];
       sortOrder?: components["schemas"]["SearchSortOrderElement"][];
-      filters?: components["schemas"]["SearchFilter"][];
       search?:
         | components["schemas"]["AndNodePayload"]
         | components["schemas"]["FieldNodePayload"]
@@ -853,6 +890,10 @@ export interface components {
     } & {
       coordinates: unknown;
     };
+    ListAccessionNotificationsResponsePayload: {
+      notifications: components["schemas"]["AccessionNotificationPayload"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
     ListAllFieldValuesRequestPayload: {
       facilityId: number;
       fields: string[];
@@ -887,7 +928,6 @@ export interface components {
     ListFieldValuesRequestPayload: {
       facilityId: number;
       fields: string[];
-      filters?: components["schemas"]["SearchFilter"][];
       search?:
         | components["schemas"]["AndNodePayload"]
         | components["schemas"]["FieldNodePayload"]
@@ -989,33 +1029,6 @@ export interface components {
       child?: components["schemas"]["SearchNodePayload"];
     } & {
       child: unknown;
-    };
-    NotificationListResponse: {
-      notifications: components["schemas"]["NotificationPayload"][];
-      status: components["schemas"]["SuccessOrError"];
-    };
-    NotificationPayload: {
-      /** Unique identifier for this notification. Clients should treat it as opaque. */
-      id: string;
-      timestamp: string;
-      type: "Alert" | "State" | "Date";
-      /** If true, this notification has been marked as read. */
-      read: boolean;
-      /** Plain-text body of notification. */
-      text: string;
-      /** For accession notifications, which accession caused the notification. */
-      accessionId?: number;
-      /** For state notifications, which state is being summarized. */
-      state?:
-        | "Awaiting Check-In"
-        | "Pending"
-        | "Processing"
-        | "Processed"
-        | "Drying"
-        | "Dried"
-        | "In Storage"
-        | "Withdrawn"
-        | "Nursery";
     };
     ObservationResponse: {
       id: number;
@@ -1130,7 +1143,6 @@ export interface components {
       facilityId: number;
       fields: string[];
       sortOrder?: components["schemas"]["SearchSortOrderElement"][];
-      filters?: components["schemas"]["SearchFilter"][];
       search?:
         | components["schemas"]["AndNodePayload"]
         | components["schemas"]["FieldNodePayload"]
@@ -1138,12 +1150,6 @@ export interface components {
         | components["schemas"]["OrNodePayload"];
       cursor?: string;
       count: number;
-    };
-    SearchFilter: {
-      field: string;
-      /** List of values to match. For exact and fuzzy searches, a list of at least one value to search for; the list may include null to match accessions where the field does not have a value. For range searches, the list must contain exactly two values, the minimum and maximum; one of the values may be null to search for all values above a minimum or below a maximum. */
-      values: (string | null)[];
-      type: "Exact" | "Fuzzy" | "Range";
     };
     /** A search criterion. The search will return results that match this criterion. The criterion can be composed of other search criteria to form arbitrary Boolean search expressions. TYPESCRIPT-OVERRIDE-TYPE-WITH-ANY */
     SearchNodePayload: any;
@@ -1476,6 +1482,8 @@ export interface components {
       gpsAccuracy?: number;
     };
     UserProfilePayload: {
+      /** User's unique ID. This should not be shown to the user, but is a required input to some API endpoints. */
+      id: number;
       email: string;
       firstName?: string;
       lastName?: string;
@@ -2446,6 +2454,12 @@ export interface operations {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
+      /** An organization must have at least one owner; cannot change the role of an organization's only owner. */
+      409: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
     };
     requestBody: {
       content: {
@@ -2470,6 +2484,12 @@ export interface operations {
       };
       /** The user is not a member of the organization. */
       404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+      /** The user is the organization's only owner and an organization must have at least one owner. */
+      409: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
@@ -2869,7 +2889,7 @@ export interface operations {
       /** Notifications in reverse time order (newest first). */
       200: {
         content: {
-          "application/json": components["schemas"]["NotificationListResponse"];
+          "application/json": components["schemas"]["ListAccessionNotificationsResponsePayload"];
         };
       };
     };

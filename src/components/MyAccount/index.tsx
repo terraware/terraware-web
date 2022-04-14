@@ -19,6 +19,8 @@ import TfDivisor from '../common/TfDivisor';
 import TfMain from '../common/TfMain';
 import AccountCellRenderer from './TableCellRenderer';
 import snackbarAtom from 'src/state/snackbar';
+import LeaveOrganizationDialog from './LeaveOrganizationModal';
+import { leaveOrganization } from 'src/api/organization/organization';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -50,15 +52,18 @@ type MyAccountProps = {
   organizations?: ServerOrganization[];
   edit: boolean;
   reloadUser: () => void;
+  reloadData?: () => void;
 };
 
-export default function MyAccount({ user, organizations, edit, reloadUser }: MyAccountProps): JSX.Element {
+export default function MyAccount({ user, organizations, edit, reloadUser, reloadData }: MyAccountProps): JSX.Element {
   const classes = useStyles();
   const [selectedRows, setSelectedRows] = useState<ServerOrganization[]>([]);
   const [personOrganizations, setPersonOrganizations] = useState<ServerOrganization[]>([]);
   const history = useHistory();
   const [record, setRecord, onChange] = useForm<User>(user);
   const setSnackbar = useSetRecoilState(snackbarAtom);
+  const [removedOrg, setRemovedOrg] = useState<ServerOrganization>();
+  const [leaveOrganizationModalOpened, setLeaveOrganizationModalOpened] = useState(false);
 
   useEffect(() => {
     if (organizations) {
@@ -79,6 +84,7 @@ export default function MyAccount({ user, organizations, edit, reloadUser }: MyA
           msg: strings.REMOVE_ONLY_ONE_ORG_AT_A_TIME,
         });
       } else {
+        setRemovedOrg(selectedRows[0]);
         setPersonOrganizations((currentPersonOrganizations) => {
           const selectedRowsIds = selectedRows.map((sr) => sr.id);
           return currentPersonOrganizations?.filter((org) => !selectedRowsIds?.includes(org.id));
@@ -87,10 +93,25 @@ export default function MyAccount({ user, organizations, edit, reloadUser }: MyA
     }
   };
 
-  const saveChanges = async () => {
+  const saveChanges = () => {
     // organizations validations (owner, no more in org, leave)
-    const response = await updateUserProfile(record);
-    if (response.requestSucceeded) {
+    if (removedOrg && removedOrg.role !== 'Owner') {
+      setLeaveOrganizationModalOpened(true);
+    }
+  };
+
+  const leaveOrgHndler = async () => {
+    const response1 = await updateUserProfile(record);
+    let response2 = {
+      requestSucceeded: true,
+    };
+    if (removedOrg) {
+      response2 = await leaveOrganization(removedOrg.id, user.id);
+    }
+    if (response1.requestSucceeded && response2.requestSucceeded) {
+      if (reloadData) {
+        reloadData();
+      }
       reloadUser();
       setSnackbar({
         type: 'toast',
@@ -109,6 +130,14 @@ export default function MyAccount({ user, organizations, edit, reloadUser }: MyA
 
   return (
     <>
+      {removedOrg && (
+        <LeaveOrganizationDialog
+          open={leaveOrganizationModalOpened}
+          onClose={() => setLeaveOrganizationModalOpened(false)}
+          onSubmit={leaveOrgHndler}
+          orgName={removedOrg.name}
+        />
+      )}
       <TfMain>
         <Grid container spacing={3}>
           <Grid item xs={2}>

@@ -31,6 +31,7 @@ const dictionary = new LocalizedStrings({
     EDIT_ACCOUNT: 'Edit Account',
     GENERAL: 'General',
     ORGANIZATIONS: 'Organizations',
+    LEAVE_ORGANIZATION: 'Leave Organization',
   },
 });
 

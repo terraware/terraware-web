@@ -382,6 +382,9 @@ const strings = new LocalizedStrings({
     NO_NOTIFICATIONS: 'No notifications',
     UNEXPECTED_ERROR: 'An unexpected error occurred.',
     REMOVE_ONLY_ONE_ORG_AT_A_TIME: 'You may only remove yourself from one organization at a time.',
+    REMOVING_ORG_WARNING:
+      'Removing yourself from {0} means you won’t have access to this organization’s data anymore. Are you sure you want to save your changes?',
+    LEAVE_AND_SAVE: 'Leave and Save',
   },
 });
 
