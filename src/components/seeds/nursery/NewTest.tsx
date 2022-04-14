@@ -103,9 +103,11 @@ export default function NewTestDialog(props: Props): JSX.Element {
 
   const onQuantityChange = (id: string, _value: unknown) => {
     const value = _value ? parseInt(_value as string, 10) : undefined;
-    setRecord({
-      ...record,
-      seedsSown: value,
+    setRecord((previousRecord: GerminationTest): GerminationTest => {
+      return {
+        ...previousRecord,
+        seedsSown: value,
+      };
     });
     if (value) {
       if (!props.allowTestInGrams) {
@@ -139,9 +141,13 @@ export default function NewTestDialog(props: Props): JSX.Element {
         recordingDate: newRecordingDate,
         seedsGerminated: newSeedsGerminated,
       };
-      setRecord({ ...record, germinations: [germination] });
+      setRecord((previousRecord: GerminationTest): GerminationTest => {
+        return { ...previousRecord, germinations: [germination] };
+      });
     } else {
-      setRecord({ ...record, germinations: undefined });
+      setRecord((previousRecord: GerminationTest): GerminationTest => {
+        return { ...previousRecord, germinations: undefined };
+      });
     }
   };
 
@@ -185,15 +191,18 @@ export default function NewTestDialog(props: Props): JSX.Element {
       [id]: _value,
     };
 
-    const newRecord = {
-      ...record,
-      remainingQuantity: newRemainingQuantity,
-    };
-
     if (id === 'quantity') {
       onSeedsRemainingChange('seedsRemaining', _value);
     }
-    setRecord(newRecord);
+
+    setRecord((previousRecord: GerminationTest): GerminationTest => {
+      const newRecord = {
+        ...previousRecord,
+        remainingQuantity: newRemainingQuantity,
+      };
+
+      return newRecord;
+    });
   };
 
   return (

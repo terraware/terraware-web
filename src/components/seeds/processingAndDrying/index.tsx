@@ -92,16 +92,20 @@ export default function ProcessingAndDrying({ accession, onSubmit }: Props): JSX
   const OnProcessingMethodChange = (id: string, value: unknown) => {
     if (value === 'Count') {
       setErrors([]);
-      setRecord({
-        ...record,
-        [id]: value,
-        subsetWeight: undefined,
-        subsetCount: undefined,
-        initialQuantity: undefined,
+      setRecord((previousRecord: Accession): Accession => {
+        return {
+          ...previousRecord,
+          [id]: value,
+          subsetWeight: undefined,
+          subsetCount: undefined,
+          initialQuantity: undefined,
+        };
       });
     }
     if (value === 'Weight') {
-      setRecord({ ...record, [id]: value, initialQuantity: undefined });
+      setRecord((previousRecord: Accession): Accession => {
+        return { ...previousRecord, [id]: value, initialQuantity: undefined };
+      });
     }
   };
 
@@ -142,6 +146,7 @@ export default function ProcessingAndDrying({ accession, onSubmit }: Props): JSX
     }
 
     setEstimatedSeedCount(calculteEstimatedSeedCount(newRecord));
+    // TODO: evaluate if this usage is correct, will we have used a stale value of 'record'?
     setRecord(newRecord);
   };
 
@@ -163,7 +168,9 @@ export default function ProcessingAndDrying({ accession, onSubmit }: Props): JSX
         germinationTestTypes = [id as GerminationTestType];
       }
     }
-    setRecord({ ...record, germinationTestTypes });
+    setRecord((previousRecord: Accession): Accession => {
+      return { ...previousRecord, germinationTestTypes };
+    });
   };
 
   const isChecked = (id: GerminationTestType) => {
@@ -192,6 +199,7 @@ export default function ProcessingAndDrying({ accession, onSubmit }: Props): JSX
       };
     }
 
+    // TODO: evaluate if we may have a stale value of record being passed downstream
     const newRecord = {
       ...record,
       processingMethod: record.processingMethod || 'Count',

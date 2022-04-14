@@ -107,7 +107,9 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
   const onChangeCountry = (newValue: string) => {
     const found = countries?.find((country) => country.name === newValue);
     if (found) {
-      setNewOrganization({ ...newOrganization, countryCode: found.code.toString(), countrySubdivisionCode: undefined });
+      setNewOrganization((previousNewOrganization: ServerOrganization): ServerOrganization => {
+        return { ...previousNewOrganization, countryCode: found.code.toString(), countrySubdivisionCode: undefined };
+      });
     }
   };
 

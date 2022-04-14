@@ -179,7 +179,9 @@ export default function ProjectView({ organization, reloadOrganizationData }: Pr
         projectTypes = [id as ProjectTypes];
       }
     }
-    setNewProject({ ...newProject, types: projectTypes });
+    setNewProject((previousProject: Project): Project => {
+      return { ...previousProject, types: projectTypes }
+    });
   };
 
   const onChangeStatus = (newStatus: string) => {
