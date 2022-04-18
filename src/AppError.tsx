@@ -20,9 +20,6 @@ export default function AppError() {
   return (
     <div className={classes.main}>
       <Switch>
-        <Route exact path={APP_PATHS.ERROR_MOBILE_NOT_SUPPORTED}>
-          <ErrorBox title={strings.NO_MOBILE_SUPPORT_TITLE} text={strings.NO_MOBILE_SUPPORT_DESC} />
-        </Route>
         <Route exact path={APP_PATHS.ERROR_FAILED_TO_FETCH_ORG_DATA}>
           <ErrorBox title={strings.ORGANIZATION_DATA_NOT_AVAILABLE} text={strings.CONTACT_US_TO_RESOLVE_ISSUE} />
         </Route>
