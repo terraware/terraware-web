@@ -43,8 +43,7 @@ const useStyles = makeStyles((theme) =>
 const columns: TableColumnType[] = [
   { key: 'name', name: strings.NAME, type: 'string' },
   { key: 'description', name: strings.DESCRIPTION, type: 'string' },
-  { key: 'projects', name: strings.PROJECTS, type: 'string' },
-  //   { key: 'totalUsers', name: strings.PEOPLE, type: 'string' },
+  { key: 'totalUsers', name: strings.PEOPLE, type: 'string' },
 ];
 
 type MyAccountProps = {

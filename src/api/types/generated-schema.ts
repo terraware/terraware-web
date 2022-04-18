@@ -33,67 +33,6 @@ export interface paths {
   "/api/v1/facility/{facilityId}/devices": {
     get: operations["listFacilityDevices"];
   };
-  "/api/v1/gis/features": {
-    post: operations["create_4"];
-  };
-  "/api/v1/gis/features/list/{layerId}": {
-    get: operations["list_1"];
-  };
-  "/api/v1/gis/features/{featureId}": {
-    get: operations["read_2"];
-    put: operations["update_4"];
-    delete: operations["delete_1"];
-  };
-  "/api/v1/gis/features/{featureId}/photos": {
-    get: operations["listFeaturePhotos"];
-    post: operations["createFeaturePhoto"];
-  };
-  "/api/v1/gis/features/{featureId}/photos/{photoId}": {
-    /** Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio. */
-    get: operations["downloadFeaturePhoto"];
-    delete: operations["deleteFeaturePhoto"];
-  };
-  "/api/v1/gis/features/{featureId}/photos/{photoId}/metadata": {
-    get: operations["getFeaturePhotoMetadata"];
-  };
-  "/api/v1/gis/layers": {
-    post: operations["create_3"];
-  };
-  "/api/v1/gis/layers/list/{siteId}": {
-    get: operations["list"];
-  };
-  "/api/v1/gis/layers/{layerId}": {
-    get: operations["read_1"];
-    put: operations["update_3"];
-    delete: operations["delete"];
-  };
-  "/api/v1/gis/plant_observations": {
-    post: operations["create_2"];
-  };
-  "/api/v1/gis/plant_observations/list/{featureId}": {
-    get: operations["getList"];
-  };
-  "/api/v1/gis/plant_observations/{plantObservationId}": {
-    get: operations["get_1"];
-    put: operations["update_2"];
-  };
-  "/api/v1/gis/plants": {
-    post: operations["create_1"];
-  };
-  "/api/v1/gis/plants/list/summary/{layerId}": {
-    get: operations["getPlantSummary"];
-  };
-  "/api/v1/gis/plants/list/{layerId}": {
-    get: operations["getPlantsList"];
-  };
-  "/api/v1/gis/plants/summary": {
-    /** Optionally also gets the plants and species counts as of a previous time, which clients can use to compute the amount of change over time. */
-    get: operations["getPlantsAndSpeciesSummary"];
-  };
-  "/api/v1/gis/plants/{featureId}": {
-    get: operations["get"];
-    put: operations["update_1"];
-  };
   "/api/v1/login": {
     /** For interactive web applications, this can be used to redirect the user to a login page to allow the application to make other API requests. The login process will set a cookie that will authenticate to the API, and will then redirect back to the application. One approach is to use this in error response handlers: if an API request returns HTTP 401 Unauthorized, set location.href to this endpoint and set "redirect" to the URL of the page the user was on so they'll return there after logging in. */
     get: operations["login"];
@@ -361,7 +300,7 @@ export interface components {
     };
     AddOrganizationUserRequestPayload: {
       email: string;
-      role: "Contributor" | "Manager" | "Admin" | "Owner";
+      role: "Contributor" | "Admin" | "Owner";
       projectIds?: number[];
     };
     AdvanceClockRequestPayload: {
@@ -452,75 +391,6 @@ export interface components {
       /** ID of parent device such as a hub or gateway, if any. The parent device must exist. */
       parentId?: number;
     };
-    CreateFeaturePhotoRequestPayload: {
-      capturedTime: string;
-      /** Compass heading of phone/camera when photo was taken. */
-      heading?: number;
-      location?: components["schemas"]["Point"];
-      /** Orientation of phone/camera when photo was taken. */
-      orientation?: number;
-      /** GPS horizontal accuracy in meters. */
-      gpsHorizAccuracy?: number;
-      /** GPS vertical (altitude) accuracy in meters. */
-      gpsVertAccuracy?: number;
-    };
-    CreateFeaturePhotoResponsePayload: {
-      photoId: number;
-      status: components["schemas"]["SuccessOrError"];
-    };
-    CreateFeatureRequestPayload: {
-      layerId: number;
-      geom?: components["schemas"]["Geometry"];
-      gpsHorizAccuracy?: number;
-      gpsVertAccuracy?: number;
-      attrib?: string;
-      notes?: string;
-      enteredTime?: string;
-      plant?: components["schemas"]["PlantDetailsPayload"];
-    };
-    CreateFeatureResponsePayload: {
-      feature: components["schemas"]["FeatureResponse"];
-      status: components["schemas"]["SuccessOrError"];
-    };
-    CreateLayerRequestPayload: {
-      siteId: number;
-      layerType:
-        | "Aerial Photos"
-        | "Surface Color Map"
-        | "Terrain Color Map"
-        | "Boundaries"
-        | "Plants Planted"
-        | "Plants Existing"
-        | "Irrigation"
-        | "Infrastructure"
-        | "Partner Input"
-        | "Restoration Zones"
-        | "Site Prep"
-        | "Map notes";
-      tileSetName?: string;
-      proposed: boolean;
-      hidden: boolean;
-    };
-    CreateLayerResponsePayload: {
-      layer: components["schemas"]["LayerResponse"];
-      status: components["schemas"]["SuccessOrError"];
-    };
-    CreateObservationRequestPayload: {
-      featureId: number;
-      timestamp: string;
-      healthState?: "Good" | "Moderate" | "Poor" | "Dead";
-      flowers?: boolean;
-      seeds?: boolean;
-      pests?: string;
-      /** Height in meters */
-      height?: number;
-      /** Diameter at breast height in meters */
-      diameterAtBreastHeight?: number;
-    };
-    CreateObservationResponsePayload: {
-      resp: components["schemas"]["ObservationResponse"];
-      status: components["schemas"]["SuccessOrError"];
-    };
     CreateOrganizationRequestPayload: {
       /** ISO 3166 alpha-2 code of organization's country. */
       countryCode?: string;
@@ -534,17 +404,6 @@ export interface components {
     CreateOrganizationUserResponsePayload: {
       /** The ID of the newly-added user. */
       id: number;
-      status: components["schemas"]["SuccessOrError"];
-    };
-    CreatePlantRequestPayload: {
-      featureId: number;
-      label?: string;
-      speciesId?: number;
-      naturalRegen?: boolean;
-      datePlanted?: string;
-    };
-    CreatePlantResponsePayload: {
-      plant: components["schemas"]["PlantResponse"];
       status: components["schemas"]["SuccessOrError"];
     };
     CreateProjectRequestPayload: {
@@ -562,21 +421,6 @@ export interface components {
     };
     CreateSiteRequestPayload: {
       description?: string;
-      /** Create map layers of these types. Pass an empty list to skip creating layers. Default is to create a Plants Planted layer. */
-      layerTypes?: (
-        | "Aerial Photos"
-        | "Surface Color Map"
-        | "Terrain Color Map"
-        | "Boundaries"
-        | "Plants Planted"
-        | "Plants Existing"
-        | "Irrigation"
-        | "Infrastructure"
-        | "Partner Input"
-        | "Restoration Zones"
-        | "Site Prep"
-        | "Map notes"
-      )[];
       location?: components["schemas"]["Point"];
       locale?: string;
       name: string;
@@ -617,25 +461,6 @@ export interface components {
     };
     CreateTimeseriesRequestPayload: {
       timeseries: components["schemas"]["CreateTimeseriesEntry"][];
-    };
-    /** Represents the current, and optionally a previous, count of a quantity such as the number of plants or species. */
-    CurrentAndPreviousCounts: {
-      /** The current value of the quantity in question. */
-      current: number;
-      /** The value of the quantity in question as of a previous point in time. Will not be present if no previousTime value was specified in the request. */
-      previous?: number;
-    };
-    DeleteFeatureResponsePayload: {
-      id: number;
-      status: components["schemas"]["SuccessOrError"];
-    };
-    DeleteLayerResponse: {
-      id: number;
-      siteId: number;
-    };
-    DeleteLayerResponsePayload: {
-      layer: components["schemas"]["DeleteLayerResponse"];
-      status: components["schemas"]["SuccessOrError"];
     };
     DeviceConfig: {
       /** Unique identifier of this device. */
@@ -701,35 +526,6 @@ export interface components {
       siteId: number;
       name: string;
       type: "Seed Bank" | "Desalination" | "Reverse Osmosis";
-    };
-    FeaturePhoto: {
-      capturedTime: string;
-      contentType: string;
-      featureId: number;
-      fileName: string;
-      /** GPS horizontal accuracy in meters. */
-      gpsHorizAccuracy?: number;
-      /** GPS vertical (altitude) accuracy in meters. */
-      gpsVertAccuracy?: number;
-      /** Compass heading of phone/camera when photo was taken. */
-      heading?: number;
-      id: number;
-      location?: components["schemas"]["Point"];
-      /** Orientation of phone/camera when photo was taken. */
-      orientation?: number;
-      size: number;
-    };
-    /** Describes a map feature. The coordinate reference system of the "geom" field will be longitude/latitude EPSG:4326. */
-    FeatureResponse: {
-      id: number;
-      layerId: number;
-      geom?: components["schemas"]["Geometry"];
-      gpsHorizAccuracy?: number;
-      gpsVertAccuracy?: number;
-      attrib?: string;
-      notes?: string;
-      enteredTime?: string;
-      plant?: components["schemas"]["PlantDetailsPayload"];
     };
     FieldNodePayload: components["schemas"]["SearchNodePayload"] & {
       field?: string;
@@ -817,32 +613,12 @@ export interface components {
       facility: components["schemas"]["FacilityPayload"];
       status: components["schemas"]["SuccessOrError"];
     };
-    GetFeaturePhotoMetadataResponsePayload: {
-      photo: components["schemas"]["FeaturePhoto"];
-      status: components["schemas"]["SuccessOrError"];
-    };
-    GetFeatureResponsePayload: {
-      feature: components["schemas"]["FeatureResponse"];
-      status: components["schemas"]["SuccessOrError"];
-    };
-    GetLayerResponsePayload: {
-      layer: components["schemas"]["LayerResponse"];
-      status: components["schemas"]["SuccessOrError"];
-    };
-    GetObservationResponsePayload: {
-      resp: components["schemas"]["ObservationResponse"];
-      status: components["schemas"]["SuccessOrError"];
-    };
     GetOrganizationResponsePayload: {
       organization: components["schemas"]["OrganizationPayload"];
       status: components["schemas"]["SuccessOrError"];
     };
     GetOrganizationUserResponsePayload: {
       user: components["schemas"]["OrganizationUserPayload"];
-      status: components["schemas"]["SuccessOrError"];
-    };
-    GetPlantResponsePayload: {
-      plant: components["schemas"]["PlantResponse"];
       status: components["schemas"]["SuccessOrError"];
     };
     GetProjectResponsePayload: {
@@ -864,26 +640,6 @@ export interface components {
     GetUserResponsePayload: {
       user: components["schemas"]["UserProfilePayload"];
       status: components["schemas"]["SuccessOrError"];
-    };
-    LayerResponse: {
-      id: number;
-      siteId: number;
-      layerType:
-        | "Aerial Photos"
-        | "Surface Color Map"
-        | "Terrain Color Map"
-        | "Boundaries"
-        | "Plants Planted"
-        | "Plants Existing"
-        | "Irrigation"
-        | "Infrastructure"
-        | "Partner Input"
-        | "Restoration Zones"
-        | "Site Prep"
-        | "Map notes";
-      tileSetName?: string;
-      proposed: boolean;
-      hidden: boolean;
     };
     LineString: components["schemas"]["Geometry"] & {
       coordinates?: number[][];
@@ -916,15 +672,6 @@ export interface components {
       facilities: components["schemas"]["FacilityPayload"][];
       status: components["schemas"]["SuccessOrError"];
     };
-    ListFeaturePhotosResponsePayload: {
-      photos: components["schemas"]["FeaturePhoto"][];
-      status: components["schemas"]["SuccessOrError"];
-    };
-    ListFeaturesResponsePayload: {
-      features: components["schemas"]["FeatureResponse"][];
-      totalCount: number;
-      status: components["schemas"]["SuccessOrError"];
-    };
     ListFieldValuesRequestPayload: {
       facilityId: number;
       fields: string[];
@@ -936,14 +683,6 @@ export interface components {
     };
     ListFieldValuesResponsePayload: {
       results: { [key: string]: components["schemas"]["FieldValuesPayload"] };
-      status: components["schemas"]["SuccessOrError"];
-    };
-    ListLayersResponsePayload: {
-      layers: components["schemas"]["LayerResponse"][];
-      status: components["schemas"]["SuccessOrError"];
-    };
-    ListObservationsResponsePayload: {
-      list: components["schemas"]["ObservationResponse"][];
       status: components["schemas"]["SuccessOrError"];
     };
     ListOrganizationUsersResponsePayload: {
@@ -968,24 +707,6 @@ export interface components {
     };
     ListPhotosResponsePayload: {
       photos: components["schemas"]["ListPhotosResponseElement"][];
-      status: components["schemas"]["SuccessOrError"];
-    };
-    ListPlantsResponseElement: {
-      featureId: number;
-      label?: string;
-      speciesId?: number;
-      naturalRegen?: boolean;
-      datePlanted?: string;
-      layerId: number;
-      gpsHorizAccuracy?: number;
-      gpsVertAccuracy?: number;
-      attrib?: string;
-      notes?: string;
-      enteredTime?: string;
-      geom?: components["schemas"]["Geometry"];
-    };
-    ListPlantsResponsePayload: {
-      list: components["schemas"]["ListPlantsResponseElement"][];
       status: components["schemas"]["SuccessOrError"];
     };
     ListProjectsResponsePayload: {
@@ -1030,19 +751,6 @@ export interface components {
     } & {
       child: unknown;
     };
-    ObservationResponse: {
-      id: number;
-      featureId: number;
-      timestamp: string;
-      healthState?: "Good" | "Moderate" | "Poor" | "Dead";
-      flowers?: boolean;
-      seeds?: boolean;
-      pests?: string;
-      /** Height in meters */
-      height?: number;
-      /** Diameter at breast height in meters */
-      diameterAtBreastHeight?: number;
-    };
     /** Search criterion that matches results that meet any of a set of other search criteria. That is, if the list of children is x, y, and z, this will require x OR y OR z. */
     OrNodePayload: components["schemas"]["SearchNodePayload"];
     OrganizationPayload: {
@@ -1057,7 +765,9 @@ export interface components {
       /** This organization's projects. Omitted if depth is "Organization". */
       projects?: components["schemas"]["ProjectPayload"][];
       /** The current user's role in the organization. */
-      role: "Contributor" | "Manager" | "Admin" | "Owner";
+      role: "Contributor" | "Admin" | "Owner";
+      /** The total number of users in the organization, including the current user. */
+      totalUsers: number;
     };
     OrganizationUserPayload: {
       /** Date and time the user was added to the organization. */
@@ -1070,31 +780,7 @@ export interface components {
       lastName?: string;
       /** IDs of projects the user is in. Users with admin and owner roles always have access to all projects. */
       projectIds: number[];
-      role: "Contributor" | "Manager" | "Admin" | "Owner";
-    };
-    /** Additional details for features that represent plants. */
-    PlantDetailsPayload: {
-      datePlanted?: string;
-      label?: string;
-      naturalRegen?: boolean;
-      speciesId?: number;
-    };
-    PlantResponse: {
-      featureId: number;
-      label?: string;
-      speciesId?: number;
-      naturalRegen?: boolean;
-      datePlanted?: string;
-    };
-    PlantSummaryResponsePayload: {
-      summary: { [key: string]: number };
-      status: components["schemas"]["SuccessOrError"];
-    };
-    PlantsAndSpeciesSummaryResponsePayload: {
-      previousTime?: string;
-      plants: components["schemas"]["CurrentAndPreviousCounts"];
-      species: components["schemas"]["CurrentAndPreviousCounts"];
-      status: components["schemas"]["SuccessOrError"];
+      role: "Contributor" | "Admin" | "Owner";
     };
     Point: components["schemas"]["Geometry"] & {
       /** A single position. In the terraware-server API, positions must always include 3 dimensions. The X and Y dimensions use the coordinate system specified by the crs field, and the Z dimension is in meters. */
@@ -1368,57 +1054,6 @@ export interface components {
       /** ID of parent device such as a hub or gateway, if any. The parent device must exist. */
       parentId?: number;
     };
-    UpdateFeatureRequestPayload: {
-      geom?: components["schemas"]["Geometry"];
-      gpsHorizAccuracy?: number;
-      gpsVertAccuracy?: number;
-      attrib?: string;
-      notes?: string;
-      enteredTime?: string;
-      plant?: components["schemas"]["PlantDetailsPayload"];
-    };
-    UpdateFeatureResponsePayload: {
-      feature: components["schemas"]["FeatureResponse"];
-      status: components["schemas"]["SuccessOrError"];
-    };
-    UpdateLayerRequestPayload: {
-      siteId: number;
-      layerType:
-        | "Aerial Photos"
-        | "Surface Color Map"
-        | "Terrain Color Map"
-        | "Boundaries"
-        | "Plants Planted"
-        | "Plants Existing"
-        | "Irrigation"
-        | "Infrastructure"
-        | "Partner Input"
-        | "Restoration Zones"
-        | "Site Prep"
-        | "Map notes";
-      tileSetName?: string;
-      proposed: boolean;
-      hidden: boolean;
-    };
-    UpdateLayerResponsePayload: {
-      layer: components["schemas"]["LayerResponse"];
-      status: components["schemas"]["SuccessOrError"];
-    };
-    UpdateObservationRequestPayload: {
-      timestamp: string;
-      healthState?: "Good" | "Moderate" | "Poor" | "Dead";
-      flowers?: boolean;
-      seeds?: boolean;
-      pests?: string;
-      /** Height in meters */
-      height?: number;
-      /** Diameter at breast height in meters */
-      diameterAtBreastHeight?: number;
-    };
-    UpdateObservationResponsePayload: {
-      resp: components["schemas"]["ObservationResponse"];
-      status: components["schemas"]["SuccessOrError"];
-    };
     UpdateOrganizationRequestPayload: {
       /** ISO 3166 alpha-2 code of organization's country. */
       countryCode?: string;
@@ -1428,17 +1063,7 @@ export interface components {
       name: string;
     };
     UpdateOrganizationUserRequestPayload: {
-      role: "Contributor" | "Manager" | "Admin" | "Owner";
-    };
-    UpdatePlantRequestPayload: {
-      label?: string;
-      speciesId?: number;
-      naturalRegen?: boolean;
-      datePlanted?: string;
-    };
-    UpdatePlantResponsePayload: {
-      plant: components["schemas"]["PlantResponse"];
-      status: components["schemas"]["SuccessOrError"];
+      role: "Contributor" | "Admin" | "Owner";
     };
     UpdateProjectRequestPayload: {
       description?: string;
@@ -1468,6 +1093,8 @@ export interface components {
       name: string;
     };
     UpdateUserRequestPayload: {
+      /** If true, the user wants to receive all the notifications for their organization and projects via email. This does not apply to certain kinds of notifications such as "You've been added to a new organization." If null, leave the existing value as-is. */
+      emailNotificationsEnabled?: boolean;
       firstName: string;
       lastName: string;
     };
@@ -1485,6 +1112,8 @@ export interface components {
       /** User's unique ID. This should not be shown to the user, but is a required input to some API endpoints. */
       id: number;
       email: string;
+      /** If true, the user wants to receive all the notifications for their organization and projects via email. This does not apply to certain kinds of notifications such as "You've been added to a new organization." */
+      emailNotificationsEnabled: boolean;
       firstName?: string;
       lastName?: string;
     };
@@ -1762,517 +1391,6 @@ export interface operations {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
-      };
-    };
-  };
-  create_4: {
-    responses: {
-      /** The feature was created successfully. Response includes fields populated by the server, including the feature id. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["CreateFeatureResponsePayload"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["CreateFeatureRequestPayload"];
-      };
-    };
-  };
-  list_1: {
-    parameters: {
-      query: {
-        minEnteredTime?: string;
-        maxEnteredTime?: string;
-        notes?: string;
-        speciesId?: number;
-        skip?: number;
-        limit?: number;
-      };
-      path: {
-        layerId: number;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["ListFeaturesResponsePayload"];
-        };
-      };
-    };
-  };
-  read_2: {
-    parameters: {
-      path: {
-        featureId: number;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["GetFeatureResponsePayload"];
-        };
-      };
-      /** The specified feature doesn't exist. */
-      404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-    };
-  };
-  update_4: {
-    parameters: {
-      path: {
-        featureId: number;
-      };
-    };
-    responses: {
-      /** The feature was updated successfully. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["UpdateFeatureResponsePayload"];
-        };
-      };
-      /** The specified feature doesn't exist. */
-      404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["UpdateFeatureRequestPayload"];
-      };
-    };
-  };
-  delete_1: {
-    parameters: {
-      path: {
-        featureId: number;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["DeleteFeatureResponsePayload"];
-        };
-      };
-      /** The specified feature doesn't exist. */
-      404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-    };
-  };
-  listFeaturePhotos: {
-    parameters: {
-      path: {
-        featureId: number;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["ListFeaturePhotosResponsePayload"];
-        };
-      };
-    };
-  };
-  createFeaturePhoto: {
-    parameters: {
-      path: {
-        featureId: number;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["CreateFeaturePhotoResponsePayload"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "multipart/form-data": {
-          metadata: components["schemas"]["CreateFeaturePhotoRequestPayload"];
-          file: string;
-        };
-      };
-    };
-  };
-  /** Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio. */
-  downloadFeaturePhoto: {
-    parameters: {
-      path: {
-        featureId: number;
-        photoId: number;
-      };
-      query: {
-        maxWidth?: number;
-        maxHeight?: number;
-      };
-    };
-    responses: {
-      /** The photo was successfully retrieved. */
-      200: {
-        content: {
-          "image/jpeg": string;
-        };
-      };
-      /** The accession does not exist, or does not have a photo with the requested filename. */
-      404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-    };
-  };
-  deleteFeaturePhoto: {
-    parameters: {
-      path: {
-        featureId: number;
-        photoId: number;
-      };
-    };
-    responses: {
-      /** Photo deleted. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-        };
-      };
-      /** The requested resource was not found. */
-      404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-    };
-  };
-  getFeaturePhotoMetadata: {
-    parameters: {
-      path: {
-        featureId: number;
-        photoId: number;
-      };
-    };
-    responses: {
-      /** Photo metadata retrieved. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["GetFeaturePhotoMetadataResponsePayload"];
-        };
-      };
-      /** The requested resource was not found. */
-      404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-    };
-  };
-  create_3: {
-    responses: {
-      /** The layer was created successfully. Response includes fields populated by the server, including the layer id. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["CreateLayerResponsePayload"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["CreateLayerRequestPayload"];
-      };
-    };
-  };
-  list: {
-    parameters: {
-      path: {
-        siteId: number;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["ListLayersResponsePayload"];
-        };
-      };
-    };
-  };
-  read_1: {
-    parameters: {
-      path: {
-        layerId: number;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["GetLayerResponsePayload"];
-        };
-      };
-      /** The specified layer doesn't exist. */
-      404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-    };
-  };
-  update_3: {
-    parameters: {
-      path: {
-        layerId: number;
-      };
-    };
-    responses: {
-      /** The layer was updated successfully. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["UpdateLayerResponsePayload"];
-        };
-      };
-      /** The specified layer doesn't exist. */
-      404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["UpdateLayerRequestPayload"];
-      };
-    };
-  };
-  delete: {
-    parameters: {
-      path: {
-        layerId: number;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["DeleteLayerResponsePayload"];
-        };
-      };
-      /** The specified layer doesn't exist. */
-      404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-    };
-  };
-  create_2: {
-    responses: {
-      /** The plant observation was created successfully. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["CreateObservationResponsePayload"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["CreateObservationRequestPayload"];
-      };
-    };
-  };
-  getList: {
-    parameters: {
-      path: {
-        featureId: number;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["ListObservationsResponsePayload"];
-        };
-      };
-    };
-  };
-  get_1: {
-    parameters: {
-      path: {
-        plantObservationId: number;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["GetObservationResponsePayload"];
-        };
-      };
-      /** The specified plant observation doesn't exist. */
-      404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-    };
-  };
-  update_2: {
-    parameters: {
-      path: {
-        plantObservationId: number;
-      };
-    };
-    responses: {
-      /** The plant observation was updated successfully. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["UpdateObservationResponsePayload"];
-        };
-      };
-      /** The specified plant observation doesn't exist. */
-      404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["UpdateObservationRequestPayload"];
-      };
-    };
-  };
-  create_1: {
-    responses: {
-      /** The plant was created successfully. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["CreatePlantResponsePayload"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["CreatePlantRequestPayload"];
-      };
-    };
-  };
-  getPlantSummary: {
-    parameters: {
-      query: {
-        minEnteredTime?: string;
-        maxEnteredTime?: string;
-      };
-      path: {
-        layerId: number;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["PlantSummaryResponsePayload"];
-        };
-      };
-    };
-  };
-  getPlantsList: {
-    parameters: {
-      query: {
-        speciesName?: string;
-        minEnteredTime?: string;
-        maxEnteredTime?: string;
-        notes?: string;
-      };
-      path: {
-        layerId: number;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["ListPlantsResponsePayload"];
-        };
-      };
-    };
-  };
-  /** Optionally also gets the plants and species counts as of a previous time, which clients can use to compute the amount of change over time. */
-  getPlantsAndSpeciesSummary: {
-    parameters: {
-      query: {
-        organizationId?: number;
-        projectId?: number;
-        siteId?: number;
-        previousTime?: string;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["PlantsAndSpeciesSummaryResponsePayload"];
-        };
-      };
-    };
-  };
-  get: {
-    parameters: {
-      path: {
-        featureId: number;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["GetPlantResponsePayload"];
-        };
-      };
-      /** The specified plant doesn't exist. */
-      404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-    };
-  };
-  update_1: {
-    parameters: {
-      path: {
-        featureId: number;
-      };
-    };
-    responses: {
-      /** The plant was updated successfully. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["UpdatePlantResponsePayload"];
-        };
-      };
-      /** The specified plant doesn't exist. */
-      404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["UpdatePlantRequestPayload"];
       };
     };
   };
