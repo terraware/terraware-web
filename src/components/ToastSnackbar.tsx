@@ -53,40 +53,6 @@ const useStyles = makeStyles((theme: Theme) =>
         padding: '16px 24px',
       },
     },
-    page: {
-      borderRadius: '8px',
-      '&.bodyinfo': {
-        border: '1px solid #708284',
-        background: '#F2F4F5',
-        '& .snackbarIcon': {
-          fill: '#708284',
-        },
-      },
-      '&.bodycritical': {
-        border: '1px solid #FE0003',
-        background: '#FFF1F1',
-        '& .snackbarIcon': {
-          fill: '#FE0003',
-        },
-      },
-      '&.bodywarning': {
-        border: '1px solid #BD6931',
-        background: '#FEF2EE',
-        '& .snackbarIcon': {
-          fill: '#BD6931',
-        },
-      },
-      '&.bodysuccess': {
-        border: '1px solid #308F5F',
-        background: '#D6FDE5',
-        '& .snackbarIcon': {
-          fill: '#308F5F',
-        },
-      },
-      '& .body': {
-        padding: '16px 16px 16px 0',
-      },
-    },
     body: {
       fontSize: '16px',
       fontWeight: 400,
@@ -111,7 +77,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function SnackbarMessage(): JSX.Element {
+export default function ToastSnackbarMessage(): JSX.Element {
   const classes = useStyles();
 
   const [snackbar, setSnackbar] = useRecoilState(snackbarAtom);
@@ -125,13 +91,13 @@ export default function SnackbarMessage(): JSX.Element {
   return (
     <Snackbar
       anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      open={Boolean(snackbar.msg && snackbar.type)}
+      open={Boolean(snackbar.msg)}
       onClose={handleClose}
       autoHideDuration={5000}
       id='snackbar'
       className={classes.mainSnackbar}
     >
-      <div className={`${classes.mainContainer} ${classes[snackbar.type]} body${snackbar.priority}`}>
+      <div className={`${classes.mainContainer} ${classes.toast} body${snackbar.priority}`}>
         <div className={`${classes.iconContainer} iconContainer`}>
           <Icon name={snackbar.priority} className='snackbarIcon' />
         </div>
