@@ -46,6 +46,8 @@ import { ServerOrganization } from 'src/types/Organization';
 import { User } from 'src/types/User';
 import { getAllSites } from 'src/utils/organization';
 import { useMediaQuery } from 'react-responsive';
+import ErrorBox from './components/common/ErrorBox/ErrorBox';
+import strings from './strings';
 
 // @ts-ignore
 mapboxgl.workerClass =
@@ -184,8 +186,7 @@ export default function App() {
     );
   } else if (isMobile) {
     window.stop();
-    history.push(APP_PATHS.ERROR_MOBILE_NOT_SUPPORTED);
-    return null;
+    return <ErrorBox title={strings.NO_MOBILE_SUPPORT_TITLE} text={strings.NO_MOBILE_SUPPORT_DESC} />;
   }
 
   const organizationWithoutSB = () => {
