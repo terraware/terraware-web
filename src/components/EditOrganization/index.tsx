@@ -52,10 +52,12 @@ export default function OrganizationView({ organization, reloadOrganizationData 
   const onChangeCountry = (newValue: string) => {
     const found = countries?.find((country) => country.name === newValue);
     if (found) {
-      setOrganizationRecord({
-        ...organizationRecord,
-        countryCode: found.code.toString(),
-        countrySubdivisionCode: undefined,
+      setOrganizationRecord((previousOrganizationRecord: ServerOrganization): ServerOrganization => {
+        return {
+          ...previousOrganizationRecord,
+          countryCode: found.code.toString(),
+          countrySubdivisionCode: undefined,
+        };
       });
     }
   };

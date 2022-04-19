@@ -92,16 +92,20 @@ export default function ProcessingAndDrying({ accession, onSubmit }: Props): JSX
   const OnProcessingMethodChange = (id: string, value: unknown) => {
     if (value === 'Count') {
       setErrors([]);
-      setRecord({
-        ...record,
-        [id]: value,
-        subsetWeight: undefined,
-        subsetCount: undefined,
-        initialQuantity: undefined,
+      setRecord((previousRecord: Accession): Accession => {
+        return {
+          ...previousRecord,
+          [id]: value,
+          subsetWeight: undefined,
+          subsetCount: undefined,
+          initialQuantity: undefined,
+        };
       });
     }
     if (value === 'Weight') {
-      setRecord({ ...record, [id]: value, initialQuantity: undefined });
+      setRecord((previousRecord: Accession): Accession => {
+        return { ...previousRecord, [id]: value, initialQuantity: undefined };
+      });
     }
   };
 
@@ -125,24 +129,26 @@ export default function ProcessingAndDrying({ accession, onSubmit }: Props): JSX
   };
 
   const onChangeWeightFields = (id: string, value: unknown) => {
-    let newRecord = {
-      ...record,
-      [id]: value,
-    };
-
-    if (id === 'subsetWeight') {
-      const newSubsetWeight = {
-        units: record.subsetWeight?.units || record.initialQuantity?.units || weightValues[0].value,
-        quantity: value as number,
+    setRecord((previousRecord: Accession): Accession => {
+      let newRecord = {
+        ...previousRecord,
+        [id]: value,
       };
-      newRecord = {
-        ...record,
-        subsetWeight: newSubsetWeight,
-      };
-    }
 
-    setEstimatedSeedCount(calculteEstimatedSeedCount(newRecord));
-    setRecord(newRecord);
+      if (id === 'subsetWeight') {
+        const newSubsetWeight = {
+          units: previousRecord.subsetWeight?.units || previousRecord.initialQuantity?.units || weightValues[0].value,
+          quantity: value as number,
+        };
+        newRecord = {
+          ...previousRecord,
+          subsetWeight: newSubsetWeight,
+        };
+      }
+
+      setEstimatedSeedCount(calculteEstimatedSeedCount(newRecord));
+      return newRecord;
+    });
   };
 
   type GerminationTestType = 'Lab' | 'Nursery';
@@ -163,7 +169,9 @@ export default function ProcessingAndDrying({ accession, onSubmit }: Props): JSX
         germinationTestTypes = [id as GerminationTestType];
       }
     }
-    setRecord({ ...record, germinationTestTypes });
+    setRecord((previousRecord: Accession): Accession => {
+      return { ...previousRecord, germinationTestTypes };
+    });
   };
 
   const isChecked = (id: GerminationTestType) => {
@@ -179,27 +187,30 @@ export default function ProcessingAndDrying({ accession, onSubmit }: Props): JSX
   };
 
   const onInitialQuantityChange = (id: string, value: unknown) => {
-    let newInitialQuantity = {
-      units: record.initialQuantity?.units || 'Seeds',
-      quantity: record.initialQuantity?.quantity || 0,
-      [id]: value,
-    };
-    if (record.processingMethod === 'Weight') {
-      newInitialQuantity = {
-        units: record.initialQuantity?.units || weightValues[0].value,
-        quantity: record.initialQuantity?.quantity || 0,
+    setRecord((previousRecord: Accession): Accession => {
+      let newInitialQuantity = {
+        units: previousRecord.initialQuantity?.units || 'Seeds',
+        quantity: previousRecord.initialQuantity?.quantity || 0,
         [id]: value,
       };
-    }
 
-    const newRecord = {
-      ...record,
-      processingMethod: record.processingMethod || 'Count',
-      initialQuantity: newInitialQuantity,
-    };
+      if (previousRecord.processingMethod === 'Weight') {
+        newInitialQuantity = {
+          units: previousRecord.initialQuantity?.units || weightValues[0].value,
+          quantity: previousRecord.initialQuantity?.quantity || 0,
+          [id]: value,
+        };
+      }
 
-    setEstimatedSeedCount(calculteEstimatedSeedCount(newRecord));
-    setRecord(newRecord);
+      const newRecord = {
+        ...previousRecord,
+        processingMethod: previousRecord.processingMethod || 'Count',
+        initialQuantity: newInitialQuantity,
+      };
+
+      setEstimatedSeedCount(calculteEstimatedSeedCount(newRecord));
+      return newRecord;
+    });
   };
 
   const weightValues: Unit[] = [

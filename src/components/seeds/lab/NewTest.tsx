@@ -90,9 +90,11 @@ export default function NewTestDialog(props: Props): JSX.Element {
 
   const onQuantityChange = (id: string, _value: unknown) => {
     const value = _value ? parseInt(_value as string, 10) : undefined;
-    setRecord({
-      ...record,
-      seedsSown: value,
+    setRecord((previousRecord: GerminationTest): GerminationTest => {
+      return {
+        ...previousRecord,
+        seedsSown: value,
+      };
     });
     if (!props.allowTestInGrams && value) {
       setSeedsRemaining(props.seedsAvailable - value);

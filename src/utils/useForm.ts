@@ -6,7 +6,9 @@ const useForm = <T>(originalRecord: T): [T, Dispatch<SetStateAction<T>>, Handler
   const [record, setRecord] = React.useState(originalRecord);
 
   const onChange = (id: string, value: unknown) => {
-    setRecord({ ...record, [id]: value });
+    setRecord((previousRecord: T): T => {
+      return { ...previousRecord, [id]: value };
+    });
   };
 
   return [record, setRecord, onChange];

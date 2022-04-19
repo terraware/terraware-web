@@ -107,12 +107,14 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
 
       setRemainingSeeds(props.seedsAvailable + (props.value?.withdrawnQuantity?.quantity ?? 0) - (value ?? 0));
     }
-    const newRecord = {
-      ...record,
-      withdrawnQuantity: newWithdrawnQuantity,
-    };
 
-    setRecord(newRecord);
+    setRecord((previousRecord: AccessionWithdrawal): AccessionWithdrawal => {
+      const newRecord = {
+        ...previousRecord,
+        withdrawnQuantity: newWithdrawnQuantity,
+      };
+      return newRecord;
+    });
   };
 
   const onWithdrawRemaining = () => {
@@ -191,9 +193,11 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
       [id]: value,
     };
 
-    setRecord({
-      ...record,
-      remainingQuantity: newRemainingQuantity,
+    setRecord((previousRecord: AccessionWithdrawal): AccessionWithdrawal => {
+      return {
+        ...previousRecord,
+        remainingQuantity: newRemainingQuantity,
+      };
     });
     if (id === 'quantity') {
       onSeedsRemainingChange('remainingSeeds', value);
