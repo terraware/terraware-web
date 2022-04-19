@@ -99,15 +99,15 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
     }
   };
 
-  const leaveOrgHndler = async () => {
-    const response1 = await updateUserProfile(record);
-    let response2 = {
+  const leaveOrgHandler = async () => {
+    const updateUserResponse = await updateUserProfile(record);
+    let leaveOrgResponse = {
       requestSucceeded: true,
     };
     if (removedOrg) {
-      response2 = await leaveOrganization(removedOrg.id, user.id);
+      leaveOrgResponse = await leaveOrganization(removedOrg.id, user.id);
     }
-    if (response1.requestSucceeded && response2.requestSucceeded) {
+    if (updateUserResponse.requestSucceeded && leaveOrgResponse.requestSucceeded) {
       if (reloadData) {
         reloadData();
       }
@@ -133,7 +133,7 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
         <LeaveOrganizationDialog
           open={leaveOrganizationModalOpened}
           onClose={() => setLeaveOrganizationModalOpened(false)}
-          onSubmit={leaveOrgHndler}
+          onSubmit={leaveOrgHandler}
           orgName={removedOrg.name}
         />
       )}
