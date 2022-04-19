@@ -92,15 +92,37 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
     }
   };
 
-  const saveChanges = () => {
+  const saveChanges = async () => {
     // organizations validations (owner, no more in org, leave)
     if (removedOrg && removedOrg.role !== 'Owner') {
       setLeaveOrganizationModalOpened(true);
+    } else {
+      const updateUserResponse = await saveProfileChanges();
+      if (updateUserResponse.requestSucceeded) {
+        reloadUser();
+        setSnackbar({
+          type: 'toast',
+          priority: 'success',
+          msg: strings.CHANGES_SAVED,
+        });
+      } else {
+        setSnackbar({
+          type: 'toast',
+          priority: 'critical',
+          msg: strings.GENERIC_ERROR,
+        });
+      }
+      history.push(APP_PATHS.MY_ACCOUNT);
     }
   };
 
-  const leaveOrgHandler = async () => {
+  const saveProfileChanges = async () => {
     const updateUserResponse = await updateUserProfile(record);
+    return updateUserResponse;
+  };
+
+  const leaveOrgHandler = async () => {
+    const updateUserResponse = await saveProfileChanges();
     let leaveOrgResponse = {
       requestSucceeded: true,
     };
