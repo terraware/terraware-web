@@ -6,7 +6,6 @@ import { User } from 'src/types/User';
 import strings from '../../src/strings';
 import { ReactComponent as AvatarIcon } from './avatar-default.svg';
 import Icon from './common/icon/Icon';
-import MyAccountModal from './MyAccountModal';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -43,7 +42,6 @@ export default function UserMenu({ user, reloadUser }: UserMenuProps): JSX.Eleme
   const classes = useStyles();
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [myAccountModalOpened, setMyAccountModalOpened] = useState(false);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -58,14 +56,6 @@ export default function UserMenu({ user, reloadUser }: UserMenuProps): JSX.Eleme
 
   return (
     <div>
-      {user && (
-        <MyAccountModal
-          open={myAccountModalOpened}
-          onClose={() => setMyAccountModalOpened(false)}
-          user={user}
-          reloadUser={reloadUser}
-        />
-      )}
       <IconButton onClick={handleClick} size='small' className={classes.iconContainer}>
         <AvatarIcon className={classes.icon} />
         <span className={classes.userName}>
@@ -89,9 +79,6 @@ export default function UserMenu({ user, reloadUser }: UserMenuProps): JSX.Eleme
         className={classes.popover}
       >
         <List id='notifications-popover'>
-          <ListItem button onClick={() => setMyAccountModalOpened(true)}>
-            {strings.MY_ACCOUNT}
-          </ListItem>
           <ListItem button onClick={onHandleLogout}>
             {strings.LOGOUT}
           </ListItem>

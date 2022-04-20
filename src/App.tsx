@@ -46,6 +46,7 @@ import { ServerOrganization } from 'src/types/Organization';
 import { User } from 'src/types/User';
 import { getAllSites } from 'src/utils/organization';
 import { useMediaQuery } from 'react-responsive';
+import MyAccount from './components/MyAccount';
 import ErrorBox from './components/common/ErrorBox/ErrorBox';
 import strings from './strings';
 
@@ -360,6 +361,22 @@ export default function App() {
               <Route exact path={APP_PATHS.CONTACT_US}>
                 <ContactUs />
               </Route>
+              {user && (
+                <>
+                  <Route exact path={APP_PATHS.MY_ACCOUNT_EDIT}>
+                    <MyAccount
+                      user={user}
+                      organizations={organizations}
+                      edit={true}
+                      reloadUser={reloadUser}
+                      reloadData={reloadData}
+                    />
+                  </Route>
+                  <Route exact path={APP_PATHS.MY_ACCOUNT}>
+                    <MyAccount user={user} organizations={organizations} edit={false} reloadUser={reloadUser} />
+                  </Route>
+                </>
+              )}
 
               {/* Redirects. Invalid paths will redirect to the closest valid path. */}
               {/* Only redirect 'major' paths, e.g. handle /projects/* not more granular projects paths */}

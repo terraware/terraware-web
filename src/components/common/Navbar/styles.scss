@@ -11,6 +11,8 @@
   position: fixed;
   z-index: 1101;
   width: $tw-sz-nvgtn-side-nav-width;
+  display: flex;
+  flex-direction: column;
 
   .logo {
     background-color: $tw-clr-nvgtn-side-nav-item-fill;
@@ -120,12 +122,6 @@
       background-color: $tw-clr-nvgtn-side-nav-item-indicator-fill;
     }
 
-    &--footer {
-      bottom: 16px;
-      position: absolute;
-      width: 100%;
-    }
-
     &--icon {
       fill: $tw-clr-icon-fill-text;
       margin-right: $tw-spc-base-x-small;
@@ -152,5 +148,10 @@
         padding-left: calc(#{$tw-spc-base-small} * 2);
       }
     }
+  }
+
+  .nav-footer {
+    margin-top: auto;
+    margin-bottom: 16px;
   }
 }

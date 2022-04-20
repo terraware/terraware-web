@@ -1,51 +1,8 @@
-import { AxiosResponse } from 'axios';
 import axios from 'src/api/index';
-import { PlantLayer, Site, ServerOrganization, Project } from 'src/types/Organization';
+import { Site, ServerOrganization, Project } from 'src/types/Organization';
 import { paths } from 'src/api/types/generated-schema';
 import { Facility } from '../types/facilities';
 import { OrganizationUser } from 'src/types/User';
-
-const LAYERS = '/api/v1/gis/layers/list/{siteId}';
-type ListLayersResponse = paths[typeof LAYERS]['get']['responses'][200]['content']['application/json'];
-type LayerResponse = ListLayersResponse['layers'][0];
-
-type GetPlantLayersResponse = {
-  layers: PlantLayer[];
-  requestSucceeded: boolean;
-};
-
-export async function getPlantLayers(sites: Site[]): Promise<GetPlantLayersResponse> {
-  // We may want to add functionality to allow fetching of some layers to fail
-  // while still returning those that were fetched successfully
-  const response: GetPlantLayersResponse = {
-    layers: [],
-    requestSucceeded: true,
-  };
-  try {
-    const axiosResponse: AxiosResponse<ListLayersResponse>[] = await Promise.all(
-      sites.map((site) => axios.get(LAYERS.replace('{siteId}', `${site.id}`)))
-    );
-
-    axiosResponse.forEach((serResponse) => {
-      serResponse.data.layers.forEach((layer: LayerResponse) => {
-        if (layer.layerType === 'Plants Planted') {
-          response.layers.push({
-            id: layer.id,
-            siteId: layer.siteId,
-          });
-        }
-      });
-    });
-  } catch {
-    response.requestSucceeded = false;
-  }
-
-  return response;
-}
-
-export const exportedForTesting = {
-  getLayers: getPlantLayers,
-};
 
 const ORGANIZATIONS = '/api/v1/organizations';
 type ListOrganizationsResponsePayload =
@@ -120,6 +77,7 @@ export async function getOrganizations(): Promise<OrganizationsResponse> {
       countryCode: organization.countryCode,
       countrySubdivisionCode: organization.countrySubdivisionCode,
       createdTime: organization.createdTime,
+      totalUsers: organization.totalUsers,
     }));
   } catch (error) {
     if (axios.isAxiosError(error) && error.response?.status === 401) {
@@ -196,6 +154,7 @@ export async function createOrganization(organization: ServerOrganization) {
         projects: serverResponse.organization.projects,
         countryCode: serverResponse.organization.countryCode,
         countrySubdivisionCode: serverResponse.organization.countrySubdivisionCode,
+        totalUsers: serverResponse.organization.totalUsers,
       };
     } else {
       response.requestSucceeded = false;
@@ -228,6 +187,32 @@ export async function updateOrganization(organization: ServerOrganization): Prom
     const serverResponse: SimpleSuccessResponsePayload = (
       await axios.put(UPDATE_ORGANIZATION.replace('{organizationId}', organization.id.toString()), updatedOrganization)
     ).data;
+
+    if (serverResponse.status === 'error') {
+      response.requestSucceeded = false;
+    }
+  } catch {
+    response.requestSucceeded = false;
+  }
+  return response;
+}
+
+const LEAVE_ORGANIZATION = '/api/v1/organizations/{organizationId}/users/{userId}';
+
+type LeaveOrganizationResponse = {
+  requestSucceeded: boolean;
+};
+
+export async function leaveOrganization(organizationId: number, userId: number): Promise<UpdateOrganizationResponse> {
+  const response: LeaveOrganizationResponse = {
+    requestSucceeded: true,
+  };
+  try {
+    const url = LEAVE_ORGANIZATION.replace('{organizationId}', organizationId.toString()).replace(
+      '{userId}',
+      userId.toString()
+    );
+    const serverResponse: SimpleSuccessResponsePayload = (await axios.delete(url)).data;
 
     if (serverResponse.status === 'error') {
       response.requestSucceeded = false;

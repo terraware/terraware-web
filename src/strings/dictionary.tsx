@@ -28,6 +28,10 @@ const dictionary = new LocalizedStrings({
     REQUEST_FEATURE: 'Request Feature',
     REQUIRED_FIELD: 'Required Field',
     SITE_PROFILE: 'Site Profile',
+    EDIT_ACCOUNT: 'Edit Account',
+    GENERAL: 'General',
+    ORGANIZATIONS: 'Organizations',
+    LEAVE_ORGANIZATION: 'Leave Organization',
   },
 });
 

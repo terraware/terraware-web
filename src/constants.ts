@@ -34,4 +34,6 @@ export enum APP_PATHS {
   SITES = '/sites',
   SPECIES = '/species',
   WELCOME = '/welcome',
+  MY_ACCOUNT = '/myaccount',
+  MY_ACCOUNT_EDIT = '/myaccount/edit',
 }

@@ -84,6 +84,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
     id: -1,
     name: '',
     role: 'Owner',
+    totalUsers: 0,
   });
 
   useEffect(() => {
@@ -101,6 +102,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
       id: -1,
       name: '',
       role: 'Owner',
+      totalUsers: 0,
     });
   }, [open, setNewOrganization]);
 

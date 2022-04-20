@@ -374,12 +374,17 @@ const strings = new LocalizedStrings({
     NO_MOBILE_SUPPORT_TITLE: 'Terraware web doesn’t support mobile yet.',
     NO_MOBILE_SUPPORT_DESC: 'Please access terraware.io on a desktop device.',
     MY_ACCOUNT: 'My Account',
+    MY_ACCOUNT_DESC: 'Manage your account information.',
     UNABLE_TO_ADD_PERSON: 'Unable to Add Person',
     FIX_HIGHLIGHTED_FIELDS: 'Fix the highlighted fields below.',
     OWNERS_ADMINS_ACCESS_ALL_PROJECTS: 'Owners and Admins automatically have access to all projects.',
     DETAILS: 'Details',
     NO_NOTIFICATIONS: 'No notifications',
     UNEXPECTED_ERROR: 'An unexpected error occurred.',
+    REMOVE_ONLY_ONE_ORG_AT_A_TIME: 'You may only remove yourself from one organization at a time.',
+    REMOVING_ORG_WARNING:
+      'Removing yourself from {0} means you won’t have access to this organization’s data anymore. Are you sure you want to save your changes?',
+    LEAVE_AND_SAVE: 'Leave and Save',
   },
 });
 

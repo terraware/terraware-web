@@ -22,6 +22,7 @@ export async function getUser(): Promise<GetUserResponse> {
   try {
     const serverResponse: UserResponse = (await axios.get(GET_USER_ENDPOINT)).data;
     response.user = {
+      id: serverResponse.user.id,
       email: serverResponse.user.email,
       firstName: serverResponse.user.firstName,
       lastName: serverResponse.user.lastName,
