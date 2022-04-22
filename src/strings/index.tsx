@@ -385,6 +385,8 @@ const strings = new LocalizedStrings({
     REMOVING_ORG_WARNING:
       'Removing yourself from {0} means you won’t have access to this organization’s data anymore. Are you sure you want to save your changes?',
     LEAVE_AND_SAVE: 'Leave and Save',
+    ASSIGN_NEW_OWNER_DESC: 'In order to remove the current owner, you must assign a new owner.',
+    ASSIGN: 'Assign',
   },
 });
 
