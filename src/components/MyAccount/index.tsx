@@ -20,7 +20,7 @@ import TfMain from '../common/TfMain';
 import AccountCellRenderer from './TableCellRenderer';
 import snackbarAtom from 'src/state/snackbar';
 import AssignNewOwnerDialog from './AssignNewOwnerModal';
-import { getOrganizationUsers, leaveOrganization } from 'src/api/organization/organization';
+import { getOrganizationUsers, leaveOrganization, listOrganizationRoles } from 'src/api/organization/organization';
 import LeaveOrganizationDialog from './LeaveOrganizationModal';
 
 const useStyles = makeStyles((theme) =>
@@ -113,16 +113,19 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
     if (removedOrg) {
       if (removedOrg.role !== 'Owner') {
         setLeaveOrganizationModalOpened(true);
-      } else {
-        if (removedOrg.totalUsers > 1) {
-          // TODO: check if it's necessary to assign new owner, if there is other owner in the org this step is not necessary
-          if (assignNewOwnerModalOpened) {
-            setAssignNewOwnerModalOpened(false);
-            setLeaveOrganizationModalOpened(true);
-          } else {
-            setAssignNewOwnerModalOpened(true);
-          }
+      } else if (assignNewOwnerModalOpened) {
+        setAssignNewOwnerModalOpened(false);
+        setLeaveOrganizationModalOpened(true);
+      } else if (removedOrg.totalUsers > 1) {
+        const organizationRoles = listOrganizationRoles(removedOrg.id);
+        const owners = (await organizationRoles).roles.find((role) => role.role === 'Owner');
+        if (owners?.totalUsers === 1) {
+          setAssignNewOwnerModalOpened(true);
+        } else {
+          setLeaveOrganizationModalOpened(true);
         }
+      } else {
+        // remove org
       }
     } else {
       const updateUserResponse = await saveProfileChanges();

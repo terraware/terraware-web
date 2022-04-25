@@ -50,6 +50,9 @@ export interface paths {
     /** Only projects that are accessible by the current user are included. */
     get: operations["listOrganizationProjects"];
   };
+  "/api/v1/organizations/{organizationId}/roles": {
+    get: operations["listOrganizationRoles"];
+  };
   "/api/v1/organizations/{organizationId}/users": {
     get: operations["listOrganizationUsers"];
     post: operations["addOrganizationUser"];
@@ -685,6 +688,10 @@ export interface components {
       results: { [key: string]: components["schemas"]["FieldValuesPayload"] };
       status: components["schemas"]["SuccessOrError"];
     };
+    ListOrganizationRolesResponsePayload: {
+      roles: components["schemas"]["OrganizationRolePayload"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
     ListOrganizationUsersResponsePayload: {
       users: components["schemas"]["OrganizationUserPayload"][];
       status: components["schemas"]["SuccessOrError"];
@@ -767,6 +774,11 @@ export interface components {
       /** The current user's role in the organization. */
       role: "Contributor" | "Admin" | "Owner";
       /** The total number of users in the organization, including the current user. */
+      totalUsers: number;
+    };
+    OrganizationRolePayload: {
+      role: "Contributor" | "Admin" | "Owner";
+      /** Total number of users in the organization with this role. */
       totalUsers: number;
     };
     OrganizationUserPayload: {
@@ -1496,6 +1508,21 @@ export interface operations {
       404: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  listOrganizationRoles: {
+    parameters: {
+      path: {
+        organizationId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListOrganizationRolesResponsePayload"];
         };
       };
     };
