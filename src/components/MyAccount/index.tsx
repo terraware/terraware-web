@@ -22,6 +22,8 @@ import snackbarAtom from 'src/state/snackbar';
 import AssignNewOwnerDialog from './AssignNewOwnerModal';
 import { getOrganizationUsers, leaveOrganization, listOrganizationRoles } from 'src/api/organization/organization';
 import LeaveOrganizationDialog from './LeaveOrganizationModal';
+import CannotRemoveOrgDialog from './CannotRemoveOrgModal';
+import DeleteOrgDialog from './DeleteOrgModal';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -65,6 +67,8 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
   const [removedOrg, setRemovedOrg] = useState<ServerOrganization>();
   const [leaveOrganizationModalOpened, setLeaveOrganizationModalOpened] = useState(false);
   const [assignNewOwnerModalOpened, setAssignNewOwnerModalOpened] = useState(false);
+  const [cannotRemoveOrgModalOpened, setCannotRemoveOrgModalOpened] = useState(false);
+  const [deleteOrgModalOpened, setDeleteOrgModalOpened] = useState(false);
   const [newOwner, setNewOwner] = useState<OrganizationUser>();
   const [orgPeople, setOrgPeople] = useState<OrganizationUser[]>();
 
@@ -125,7 +129,7 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
           setLeaveOrganizationModalOpened(true);
         }
       } else {
-        // remove org
+        setCannotRemoveOrgModalOpened(true);
       }
     } else {
       const updateUserResponse = await saveProfileChanges();
@@ -150,6 +154,11 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
   const saveProfileChanges = async () => {
     const updateUserResponse = await updateUserProfile(record);
     return updateUserResponse;
+  };
+
+  const openDeleteOrgModal = () => {
+    setDeleteOrgModalOpened(true);
+    setCannotRemoveOrgModalOpened(false);
   };
 
   const leaveOrgHandler = async () => {
@@ -186,6 +195,30 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
     history.push(APP_PATHS.MY_ACCOUNT);
   };
 
+  const deleteOrgHandler = async () => {
+    // const deleterOrgReponse = await deleteOrg();
+    const updateUserResponse = await saveProfileChanges();
+    if (updateUserResponse.requestSucceeded) {
+      // && deleterOrgReponse.requestSucceeded) {
+      if (reloadData) {
+        reloadData();
+      }
+      reloadUser();
+      setSnackbar({
+        type: 'toast',
+        priority: 'success',
+        msg: strings.CHANGES_SAVED,
+      });
+    } else {
+      setSnackbar({
+        type: 'toast',
+        priority: 'critical',
+        msg: strings.GENERIC_ERROR,
+      });
+    }
+    history.push(APP_PATHS.HOME);
+  };
+
   return (
     <>
       {removedOrg && (
@@ -203,6 +236,17 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
             onSubmit={saveChanges}
             setNewOwner={setNewOwner}
             selectedOwner={newOwner}
+          />
+          <CannotRemoveOrgDialog
+            open={cannotRemoveOrgModalOpened}
+            onClose={() => setCannotRemoveOrgModalOpened(false)}
+            onSubmit={openDeleteOrgModal}
+          />
+          <DeleteOrgDialog
+            open={deleteOrgModalOpened}
+            onClose={() => setDeleteOrgModalOpened(false)}
+            orgName={removedOrg.name}
+            onSubmit={deleteOrgHandler}
           />
         </>
       )}
