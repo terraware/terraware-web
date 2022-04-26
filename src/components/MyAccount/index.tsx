@@ -122,7 +122,7 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
         setLeaveOrganizationModalOpened(true);
       } else if (removedOrg.totalUsers > 1) {
         const organizationRoles = listOrganizationRoles(removedOrg.id);
-        const owners = (await organizationRoles).roles.find((role) => role.role === 'Owner');
+        const owners = (await organizationRoles).roles?.find((role) => role.role === 'Owner');
         if (owners?.totalUsers === 1) {
           setAssignNewOwnerModalOpened(true);
         } else {
@@ -169,7 +169,7 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
     if (removedOrg) {
       let assignNewOwnerResponse;
       if (newOwner) {
-        assignNewOwnerResponse = await updateOrganizationUser(user.id, removedOrg.id, 'Owner', [], []);
+        assignNewOwnerResponse = await updateOrganizationUser(newOwner.id, removedOrg.id, 'Owner', [], []);
       }
       if ((assignNewOwnerResponse && assignNewOwnerResponse.requestSucceeded === true) || !assignNewOwnerResponse) {
         leaveOrgResponse = await leaveOrganization(removedOrg.id, user.id);

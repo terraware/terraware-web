@@ -230,7 +230,7 @@ type OrganizationRolePayload = {
 
 type ListOrganizationRolesResponse = {
   requestSucceeded: boolean;
-  roles: OrganizationRolePayload[];
+  roles?: OrganizationRolePayload[];
 };
 
 type ListOrganizationRolesResponsePayload =
@@ -249,7 +249,13 @@ export async function listOrganizationRoles(organizationId: number): Promise<Lis
     if (serverResponse.status === 'error') {
       response.requestSucceeded = false;
     } else {
-      response.roles = serverResponse.roles;
+      serverResponse.roles.forEach((serverRole) => {
+        const roleToAdd = {
+          role: serverRole.role,
+          totalUsers: serverRole.totalUsers,
+        };
+        response.roles?.push(roleToAdd);
+      });
     }
   } catch {
     response.requestSucceeded = false;
