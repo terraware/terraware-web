@@ -3,7 +3,7 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
-import { updateUserProfile } from 'src/api/user/user';
+import { updateOrganizationUser, updateUserProfile } from 'src/api/user/user';
 import Button from 'src/components/common/button/Button';
 import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
@@ -11,7 +11,7 @@ import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import dictionary from 'src/strings/dictionary';
 import { ServerOrganization } from 'src/types/Organization';
-import { User } from 'src/types/User';
+import { OrganizationUser, User } from 'src/types/User';
 import useForm from 'src/utils/useForm';
 import FormBottomBar from '../common/FormBottomBar';
 import TextField from '../common/Textfield/Textfield';
@@ -19,8 +19,9 @@ import TfDivisor from '../common/TfDivisor';
 import TfMain from '../common/TfMain';
 import AccountCellRenderer from './TableCellRenderer';
 import snackbarAtom from 'src/state/snackbar';
+import AssignNewOwnerDialog from './AssignNewOwnerModal';
+import { getOrganizationUsers, leaveOrganization, listOrganizationRoles } from 'src/api/organization/organization';
 import LeaveOrganizationDialog from './LeaveOrganizationModal';
-import { leaveOrganization } from 'src/api/organization/organization';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -63,6 +64,9 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
   const setSnackbar = useSetRecoilState(snackbarAtom);
   const [removedOrg, setRemovedOrg] = useState<ServerOrganization>();
   const [leaveOrganizationModalOpened, setLeaveOrganizationModalOpened] = useState(false);
+  const [assignNewOwnerModalOpened, setAssignNewOwnerModalOpened] = useState(false);
+  const [newOwner, setNewOwner] = useState<OrganizationUser>();
+  const [orgPeople, setOrgPeople] = useState<OrganizationUser[]>();
 
   useEffect(() => {
     if (organizations) {
@@ -73,6 +77,19 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
   useEffect(() => {
     setRecord(user);
   }, [user, setRecord]);
+
+  useEffect(() => {
+    const populatePeople = async () => {
+      if (removedOrg) {
+        const response = await getOrganizationUsers(removedOrg);
+        if (response.requestSucceeded) {
+          const otherUsers = response.users.filter((orgUser) => orgUser.id !== user.id);
+          setOrgPeople(otherUsers);
+        }
+      }
+    };
+    populatePeople();
+  }, [removedOrg, user.id]);
 
   const removeSelectedOrgs = () => {
     if (organizations && personOrganizations) {
@@ -93,9 +110,23 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
   };
 
   const saveChanges = async () => {
-    // organizations validations (owner, no more in org, leave)
-    if (removedOrg && removedOrg.role !== 'Owner') {
-      setLeaveOrganizationModalOpened(true);
+    if (removedOrg) {
+      if (removedOrg.role !== 'Owner') {
+        setLeaveOrganizationModalOpened(true);
+      } else if (assignNewOwnerModalOpened) {
+        setAssignNewOwnerModalOpened(false);
+        setLeaveOrganizationModalOpened(true);
+      } else if (removedOrg.totalUsers > 1) {
+        const organizationRoles = listOrganizationRoles(removedOrg.id);
+        const owners = (await organizationRoles).roles?.find((role) => role.role === 'Owner');
+        if (owners?.totalUsers === 1) {
+          setAssignNewOwnerModalOpened(true);
+        } else {
+          setLeaveOrganizationModalOpened(true);
+        }
+      } else {
+        // remove org
+      }
     } else {
       const updateUserResponse = await saveProfileChanges();
       if (updateUserResponse.requestSucceeded) {
@@ -127,7 +158,13 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
       requestSucceeded: true,
     };
     if (removedOrg) {
-      leaveOrgResponse = await leaveOrganization(removedOrg.id, user.id);
+      let assignNewOwnerResponse;
+      if (newOwner) {
+        assignNewOwnerResponse = await updateOrganizationUser(newOwner.id, removedOrg.id, 'Owner', [], []);
+      }
+      if ((assignNewOwnerResponse && assignNewOwnerResponse.requestSucceeded === true) || !assignNewOwnerResponse) {
+        leaveOrgResponse = await leaveOrganization(removedOrg.id, user.id);
+      }
     }
     if (updateUserResponse.requestSucceeded && leaveOrgResponse.requestSucceeded) {
       if (reloadData) {
@@ -152,12 +189,22 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
   return (
     <>
       {removedOrg && (
-        <LeaveOrganizationDialog
-          open={leaveOrganizationModalOpened}
-          onClose={() => setLeaveOrganizationModalOpened(false)}
-          onSubmit={leaveOrgHandler}
-          orgName={removedOrg.name}
-        />
+        <>
+          <LeaveOrganizationDialog
+            open={leaveOrganizationModalOpened}
+            onClose={() => setLeaveOrganizationModalOpened(false)}
+            onSubmit={leaveOrgHandler}
+            orgName={removedOrg.name}
+          />
+          <AssignNewOwnerDialog
+            open={assignNewOwnerModalOpened}
+            onClose={() => setAssignNewOwnerModalOpened(false)}
+            people={orgPeople || []}
+            onSubmit={saveChanges}
+            setNewOwner={setNewOwner}
+            selectedOwner={newOwner}
+          />
+        </>
       )}
       <TfMain>
         <Grid container spacing={3}>

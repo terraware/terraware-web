@@ -222,3 +222,43 @@ export async function leaveOrganization(organizationId: number, userId: number):
   }
   return response;
 }
+
+type OrganizationRolePayload = {
+  role: 'Contributor' | 'Admin' | 'Owner';
+  totalUsers: number;
+};
+
+type ListOrganizationRolesResponse = {
+  requestSucceeded: boolean;
+  roles?: OrganizationRolePayload[];
+};
+
+type ListOrganizationRolesResponsePayload =
+  paths[typeof ORGANIZATION_ROLES]['get']['responses'][200]['content']['application/json'];
+
+const ORGANIZATION_ROLES = '/api/v1/organizations/{organizationId}/roles';
+export async function listOrganizationRoles(organizationId: number): Promise<ListOrganizationRolesResponse> {
+  const response: ListOrganizationRolesResponse = {
+    requestSucceeded: true,
+    roles: [],
+  };
+  try {
+    const url = ORGANIZATION_ROLES.replace('{organizationId}', organizationId.toString());
+    const serverResponse: ListOrganizationRolesResponsePayload = (await axios.get(url)).data;
+
+    if (serverResponse.status === 'error') {
+      response.requestSucceeded = false;
+    } else {
+      serverResponse.roles.forEach((serverRole) => {
+        const roleToAdd = {
+          role: serverRole.role,
+          totalUsers: serverRole.totalUsers,
+        };
+        response.roles?.push(roleToAdd);
+      });
+    }
+  } catch {
+    response.requestSucceeded = false;
+  }
+  return response;
+}
