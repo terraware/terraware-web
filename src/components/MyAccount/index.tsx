@@ -24,6 +24,7 @@ import { getOrganizationUsers, leaveOrganization, listOrganizationRoles } from '
 import LeaveOrganizationDialog from './LeaveOrganizationModal';
 import CannotRemoveOrgDialog from './CannotRemoveOrgModal';
 import DeleteOrgDialog from './DeleteOrgModal';
+import { deleteOrganization } from '../../api/organization/organization';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -196,27 +197,28 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
   };
 
   const deleteOrgHandler = async () => {
-    // const deleterOrgReponse = await deleteOrg();
-    const updateUserResponse = await saveProfileChanges();
-    if (updateUserResponse.requestSucceeded) {
-      // && deleterOrgReponse.requestSucceeded) {
-      if (reloadData) {
-        reloadData();
+    if (removedOrg) {
+      const deleterOrgReponse = await deleteOrganization(removedOrg.id);
+      const updateUserResponse = await saveProfileChanges();
+      if (updateUserResponse.requestSucceeded && deleterOrgReponse.requestSucceeded) {
+        if (reloadData) {
+          reloadData();
+        }
+        reloadUser();
+        setSnackbar({
+          type: 'toast',
+          priority: 'success',
+          msg: strings.CHANGES_SAVED,
+        });
+      } else {
+        setSnackbar({
+          type: 'toast',
+          priority: 'critical',
+          msg: strings.GENERIC_ERROR,
+        });
       }
-      reloadUser();
-      setSnackbar({
-        type: 'toast',
-        priority: 'success',
-        msg: strings.CHANGES_SAVED,
-      });
-    } else {
-      setSnackbar({
-        type: 'toast',
-        priority: 'critical',
-        msg: strings.GENERIC_ERROR,
-      });
+      history.push(APP_PATHS.HOME);
     }
-    history.push(APP_PATHS.HOME);
   };
 
   return (

@@ -45,6 +45,8 @@ export interface paths {
   "/api/v1/organizations/{organizationId}": {
     get: operations["getOrganization"];
     put: operations["updateOrganization"];
+    /** Organizations can only be deleted if they have no members other than the current user. */
+    delete: operations["deleteOrganization"];
   };
   "/api/v1/organizations/{organizationId}/projects": {
     /** Only projects that are accessible by the current user are included. */
@@ -1484,6 +1486,22 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["UpdateOrganizationRequestPayload"];
+      };
+    };
+  };
+  /** Organizations can only be deleted if they have no members other than the current user. */
+  deleteOrganization: {
+    parameters: {
+      path: {
+        organizationId: number;
+      };
+    };
+    responses: {
+      /** The organization has other members and cannot be deleted. */
+      409: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
       };
     };
   };
