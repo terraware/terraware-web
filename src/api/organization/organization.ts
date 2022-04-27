@@ -262,3 +262,20 @@ export async function listOrganizationRoles(organizationId: number): Promise<Lis
   }
   return response;
 }
+
+export async function deleteOrganization(organizationId: number): Promise<UpdateOrganizationResponse> {
+  const response: LeaveOrganizationResponse = {
+    requestSucceeded: true,
+  };
+  try {
+    const url = UPDATE_ORGANIZATION.replace('{organizationId}', organizationId.toString());
+    const serverResponse: SimpleSuccessResponsePayload = (await axios.delete(url)).data;
+
+    if (serverResponse.status === 'error') {
+      response.requestSucceeded = false;
+    }
+  } catch {
+    response.requestSucceeded = false;
+  }
+  return response;
+}

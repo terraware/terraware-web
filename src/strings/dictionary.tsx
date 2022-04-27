@@ -33,6 +33,8 @@ const dictionary = new LocalizedStrings({
     ORGANIZATIONS: 'Organizations',
     LEAVE_ORGANIZATION: 'Leave Organization',
     ASSIGN_NEW_OWNER: 'Assign New Owner',
+    CANNOT_REMOVE: 'Cannot Remove',
+    DELETE_ORGANIZATION: 'Delete Organization',
   },
 });
 
