@@ -167,7 +167,7 @@ export async function createOrganization(organization: ServerOrganization) {
 
 const UPDATE_ORGANIZATION = '/api/v1/organizations/{organizationId}';
 
-type UpdateOrganizationResponse = {
+export type UpdateOrganizationResponse = {
   requestSucceeded: boolean;
 };
 type SimpleSuccessResponsePayload =
