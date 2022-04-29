@@ -361,8 +361,7 @@ export default function App() {
               <Route exact path={APP_PATHS.CONTACT_US}>
                 <ContactUs />
               </Route>
-              {user && (
-                <>
+              {user &&
                   <Route exact path={APP_PATHS.MY_ACCOUNT_EDIT}>
                     <MyAccount
                       user={user}
@@ -372,11 +371,12 @@ export default function App() {
                       reloadData={reloadData}
                     />
                   </Route>
+              }
+              {user &&
                   <Route exact path={APP_PATHS.MY_ACCOUNT}>
                     <MyAccount user={user} organizations={organizations} edit={false} reloadUser={reloadUser} />
                   </Route>
-                </>
-              )}
+              }
 
               {/* Redirects. Invalid paths will redirect to the closest valid path. */}
               {/* Only redirect 'major' paths, e.g. handle /projects/* not more granular projects paths */}
