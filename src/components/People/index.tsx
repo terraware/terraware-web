@@ -92,23 +92,25 @@ export default function PeopleList({ organization, reloadData, user }: PeopleLis
     const addProjectsNamesToPeople = (users: OrganizationUser[]): OrganizationUserWithProjectName[] => {
       if (organization) {
         const allProjects = getProjectsById(organization);
-        return users.map((user) => {
-          const projectNamesOfPerson: string[] = user.projectIds.map((projectId) => {
+        return users.map((iUser) => {
+          const projectNamesOfPerson: string[] = iUser.projectIds.map((projectId) => {
             const projectName = allProjects.get(projectId)?.name;
             if (!projectName) {
-              console.error(`Could not find project name associated with user id ${user.id},  project id ${projectId}`);
+              console.error(
+                `Could not find project name associated with user id ${iUser.id},  project id ${projectId}`
+              );
             }
             return projectName ? projectName : '';
           });
           return {
-            firstName: user.firstName,
-            lastName: user.lastName,
-            email: user.email,
-            id: user.id,
-            role: user.role,
-            projectIds: user.projectIds,
+            firstName: iUser.firstName,
+            lastName: iUser.lastName,
+            email: iUser.email,
+            id: iUser.id,
+            role: iUser.role,
+            projectIds: iUser.projectIds,
             projectNames: projectNamesOfPerson,
-            addedTime: user.addedTime,
+            addedTime: iUser.addedTime,
           };
         });
       }
