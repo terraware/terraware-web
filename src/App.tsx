@@ -362,20 +362,20 @@ export default function App() {
                 <ContactUs />
               </Route>
               {user && (
-                <>
-                  <Route exact path={APP_PATHS.MY_ACCOUNT_EDIT}>
-                    <MyAccount
-                      user={user}
-                      organizations={organizations}
-                      edit={true}
-                      reloadUser={reloadUser}
-                      reloadData={reloadData}
-                    />
-                  </Route>
-                  <Route exact path={APP_PATHS.MY_ACCOUNT}>
-                    <MyAccount user={user} organizations={organizations} edit={false} reloadUser={reloadUser} />
-                  </Route>
-                </>
+                <Route exact path={APP_PATHS.MY_ACCOUNT_EDIT}>
+                  <MyAccount
+                    user={user}
+                    organizations={organizations}
+                    edit={true}
+                    reloadUser={reloadUser}
+                    reloadData={reloadData}
+                  />
+                </Route>
+              )}
+              {user && (
+                <Route exact path={APP_PATHS.MY_ACCOUNT}>
+                  <MyAccount user={user} organizations={organizations} edit={false} reloadUser={reloadUser} />
+                </Route>
               )}
 
               {/* Redirects. Invalid paths will redirect to the closest valid path. */}
