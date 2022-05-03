@@ -15,6 +15,7 @@ import { ReactComponent as Info } from './info.svg';
 import { ReactComponent as Key } from './key.svg';
 import { ReactComponent as Leaf } from './leaf.svg';
 import { ReactComponent as Lock } from './lock.svg';
+import { ReactComponent as MenuVertical } from './menu-vertical.svg';
 import { ReactComponent as Notification } from './notification.svg';
 import { ReactComponent as Organization } from './organization.svg';
 import { ReactComponent as People } from './people.svg';
@@ -51,6 +52,7 @@ export type IconName =
   | 'key'
   | 'leaf'
   | 'lock'
+  | 'menuVertical'
   | 'notification'
   | 'organization'
   | 'people'
@@ -91,6 +93,7 @@ const icons: Record<IconName, SVGComponent> = {
   key: Key,
   leaf: Leaf,
   lock: Lock,
+  menuVertical: MenuVertical,
   notification: Notification,
   organization: Organization,
   people: People,
