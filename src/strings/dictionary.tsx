@@ -35,6 +35,8 @@ const dictionary = new LocalizedStrings({
     ASSIGN_NEW_OWNER: 'Assign New Owner',
     CANNOT_REMOVE: 'Cannot Remove',
     DELETE_ORGANIZATION: 'Delete Organization',
+    IMPORT_SPECIES_LIST: 'Import Species List',
+    ADD_MANUALLY: 'Add Manually',
   },
 });
 

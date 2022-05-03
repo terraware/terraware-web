@@ -49,6 +49,7 @@ import { useMediaQuery } from 'react-responsive';
 import MyAccount from './components/MyAccount';
 import ErrorBox from './components/common/ErrorBox/ErrorBox';
 import strings from './strings';
+import { getAllSpecies } from './api/species/species';
 
 // @ts-ignore
 mapboxgl.workerClass =
@@ -120,6 +121,7 @@ export default function App() {
   const [user, setUser] = useState<User>();
   const history = useHistory();
   const isMobile = useMediaQuery({ query: `(max-width: 760px)` });
+  const [species, setSpecies] = useState(new Map());
 
   const reloadData = useCallback((selectedOrgId?: number) => {
     const populateOrganizations = async () => {
@@ -145,6 +147,18 @@ export default function App() {
   useEffect(() => {
     reloadData();
   }, [reloadData]);
+
+  useEffect(() => {
+    const populateSpecies = async () => {
+      if (selectedOrganization) {
+        const response = await getAllSpecies(selectedOrganization.id);
+        if (response.requestSucceeded) {
+          setSpecies(response.speciesById);
+        }
+      }
+    };
+    populateSpecies();
+  }, [selectedOrganization]);
 
   useEffect(() => {
     if (organizations) {
@@ -197,6 +211,13 @@ export default function App() {
         projects: selectedOrganization?.projects?.filter((proj) => !proj.hidden),
       };
     }
+  };
+
+  const selectedOrgHasSpecies = (): boolean => {
+    if (species.size === 0) {
+      return false;
+    }
+    return false;
   };
 
   const selectedOrgHasProjects = (): boolean => {
@@ -295,7 +316,11 @@ export default function App() {
               </Route>
               {selectedOrganization && (
                 <Route exact path={APP_PATHS.SPECIES}>
-                  <SpeciesList organization={selectedOrganization} />
+                  {selectedOrgHasSpecies() ? (
+                    <SpeciesList organization={selectedOrganization} />
+                  ) : (
+                    <EmptyStatePage pageName={'Species'} />
+                  )}
                 </Route>
               )}
               {selectedOrganization && (
