@@ -1,3 +1,5 @@
+import { ReactNode } from 'react';
+
 export interface TableColumnType {
   key: string;
   name: string;
@@ -8,7 +10,7 @@ export interface RendererProps<T> {
   index: number;
   row: T;
   column: TableColumnType;
-  value?: string | number | unknown[];
+  value?: string | number | unknown[] | ReactNode;
   onRowClick?: () => void;
 }
 

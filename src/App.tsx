@@ -376,7 +376,7 @@ export default function App() {
                 <PersonDetails organization={organizationWithoutSB()} />
               </Route>
               <Route exact path={APP_PATHS.PEOPLE}>
-                <People organization={selectedOrganization} />
+                <People organization={selectedOrganization} reloadData={reloadData} user={user} />
               </Route>
               <Route exact path={APP_PATHS.CONTACT_US}>
                 <ContactUs />

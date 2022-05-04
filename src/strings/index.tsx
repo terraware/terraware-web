@@ -391,6 +391,8 @@ const strings = new LocalizedStrings({
     CANNOT_REMOVE_MSG:
       'You cannot remove yourself because there is no one else in the organization. Would you like to delete the organization instead?',
     DELETE_ORGANIZATION_MSG: 'Are you sure you want to delete {0}?',
+    CANNOT_REMOVE_DELETE_MSG:
+      'You cannot remove yourself because there is no one else in the organization. Would you like to delete the organization instead?',
   },
 });
 

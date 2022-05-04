@@ -35,6 +35,12 @@ const dictionary = new LocalizedStrings({
     ASSIGN_NEW_OWNER: 'Assign New Owner',
     CANNOT_REMOVE: 'Cannot Remove',
     DELETE_ORGANIZATION: 'Delete Organization',
+    REMOVE_PERSON: 'Remove Person',
+    REMOVE_PERSON_DESC:
+      'Are you sure you want to remove {0}? Removing {0} means they won’t have access to your organization’s data anymore.',
+    REMOVE_PEOPLE: 'Remove People',
+    REMOVE_PEOPLE_DESC:
+      'Are you sure you want to remove these people? Removing these people means they won’t have access to your organization’s data anymore.',
     IMPORT_SPECIES_LIST: 'Import Species List',
     ADD_MANUALLY: 'Add Manually',
   },
