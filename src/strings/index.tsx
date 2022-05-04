@@ -19,6 +19,7 @@ const strings = new LocalizedStrings({
     SNACKBAR_MSG_PLANT_DELETED: 'Plant deleted just now.',
     EDIT_SPECIES: 'Edit Species',
     ADD_SPECIES: 'Add Species',
+    IMPORT_SPECIES: 'Import Species',
     ADD: 'Add',
     NEW_SPECIES: 'New Species',
     SPECIES: 'Species',
@@ -390,6 +391,8 @@ const strings = new LocalizedStrings({
     CANNOT_REMOVE_MSG:
       'You cannot remove yourself because there is no one else in the organization. Would you like to delete the organization instead?',
     DELETE_ORGANIZATION_MSG: 'Are you sure you want to delete {0}?',
+    CANNOT_REMOVE_DELETE_MSG:
+      'You cannot remove yourself because there is no one else in the organization. Would you like to delete the organization instead?',
   },
 });
 
