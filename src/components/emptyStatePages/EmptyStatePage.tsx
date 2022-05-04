@@ -77,7 +77,7 @@ const NO_SPECIES_CONTENT: PageContent = {
   subtitle: emptyStateStrings.NO_SPECIES_DESCRIPTION,
   listItems: [
     {
-      icon: 'sites',
+      icon: 'uploadCloud',
       title: dictionary.IMPORT_SPECIES_LIST,
       description: emptyStateStrings.IMPORT_SPECIES_DESCRIPTION,
       buttonText: strings.IMPORT_SPECIES,
@@ -88,7 +88,7 @@ const NO_SPECIES_CONTENT: PageContent = {
       linkPath: '/home',
     },
     {
-      icon: 'sites',
+      icon: 'edit',
       title: dictionary.ADD_MANUALLY,
       description: emptyStateStrings.ADD_MANUALLY_DESCRIPTION,
       buttonText: strings.ADD_SPECIES,
