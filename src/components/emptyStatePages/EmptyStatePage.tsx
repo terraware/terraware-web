@@ -106,12 +106,20 @@ type EmptyStatePageProps = {
 export default function EmptyStatePage({ pageName }: EmptyStatePageProps): JSX.Element {
   const classes = useStyles();
   const history = useHistory();
-  const pageContent =
-    pageName === 'Projects' ? NO_PROJECTS_CONTENT : pageName === 'Species' ? NO_SPECIES_CONTENT : NO_SITES_CONTENT;
+  const pageContent = (): PageContent => {
+    switch (pageName) {
+      case 'Projects':
+        return NO_PROJECTS_CONTENT;
+      case 'Species':
+        return NO_SPECIES_CONTENT;
+      default:
+        return NO_SITES_CONTENT;
+    }
+  };
 
   const goToNewLocation = () => {
     const newLocation = {
-      pathname: pageContent.linkLocation,
+      pathname: pageContent().linkLocation,
     };
     history.push(newLocation);
   };
@@ -119,13 +127,13 @@ export default function EmptyStatePage({ pageName }: EmptyStatePageProps): JSX.E
   return (
     <main>
       <Container className={classes.mainContainer}>
-        <PageHeader title={pageContent.title1} subtitle='' />
+        <PageHeader title={pageContent().title1} subtitle='' />
         <div className={classes.content}>
           <EmptyStateContent
-            title={pageContent.title2}
-            subtitle={pageContent.subtitle}
-            listItems={pageContent.listItems}
-            buttonText={pageContent.buttonText}
+            title={pageContent().title2}
+            subtitle={pageContent().subtitle}
+            listItems={pageContent().listItems}
+            buttonText={pageContent().buttonText}
             onClickButton={goToNewLocation}
             styles={EMPTY_STATE_CONTENT_STYLES}
           />
