@@ -213,12 +213,7 @@ export default function App() {
     }
   };
 
-  const selectedOrgHasSpecies = (): boolean => {
-    if (species.size === 0) {
-      return false;
-    }
-    return false;
-  };
+  const selectedOrgHasSpecies = (): boolean => species.size > 0;
 
   const selectedOrgHasProjects = (): boolean => {
     const selected = organizationWithoutSB();
