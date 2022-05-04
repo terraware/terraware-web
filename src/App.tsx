@@ -49,6 +49,7 @@ import { useMediaQuery } from 'react-responsive';
 import MyAccount from './components/MyAccount';
 import ErrorBox from './components/common/ErrorBox/ErrorBox';
 import strings from './strings';
+import { getAllSpecies } from './api/species/species';
 
 // @ts-ignore
 mapboxgl.workerClass =
@@ -120,6 +121,7 @@ export default function App() {
   const [user, setUser] = useState<User>();
   const history = useHistory();
   const isMobile = useMediaQuery({ query: `(max-width: 760px)` });
+  const [species, setSpecies] = useState(new Map());
 
   const reloadData = useCallback((selectedOrgId?: number) => {
     const populateOrganizations = async () => {
@@ -145,6 +147,18 @@ export default function App() {
   useEffect(() => {
     reloadData();
   }, [reloadData]);
+
+  useEffect(() => {
+    const populateSpecies = async () => {
+      if (selectedOrganization) {
+        const response = await getAllSpecies(selectedOrganization.id);
+        if (response.requestSucceeded) {
+          setSpecies(response.speciesById);
+        }
+      }
+    };
+    populateSpecies();
+  }, [selectedOrganization]);
 
   useEffect(() => {
     if (organizations) {
@@ -198,6 +212,8 @@ export default function App() {
       };
     }
   };
+
+  const selectedOrgHasSpecies = (): boolean => species.size > 0;
 
   const selectedOrgHasProjects = (): boolean => {
     const selected = organizationWithoutSB();
@@ -295,7 +311,11 @@ export default function App() {
               </Route>
               {selectedOrganization && (
                 <Route exact path={APP_PATHS.SPECIES}>
-                  <SpeciesList organization={selectedOrganization} />
+                  {selectedOrgHasSpecies() ? (
+                    <SpeciesList organization={selectedOrganization} />
+                  ) : (
+                    <EmptyStatePage pageName={'Species'} />
+                  )}
                 </Route>
               )}
               {selectedOrganization && (
@@ -362,20 +382,20 @@ export default function App() {
                 <ContactUs />
               </Route>
               {user && (
-                <>
-                  <Route exact path={APP_PATHS.MY_ACCOUNT_EDIT}>
-                    <MyAccount
-                      user={user}
-                      organizations={organizations}
-                      edit={true}
-                      reloadUser={reloadUser}
-                      reloadData={reloadData}
-                    />
-                  </Route>
-                  <Route exact path={APP_PATHS.MY_ACCOUNT}>
-                    <MyAccount user={user} organizations={organizations} edit={false} reloadUser={reloadUser} />
-                  </Route>
-                </>
+                <Route exact path={APP_PATHS.MY_ACCOUNT_EDIT}>
+                  <MyAccount
+                    user={user}
+                    organizations={organizations}
+                    edit={true}
+                    reloadUser={reloadUser}
+                    reloadData={reloadData}
+                  />
+                </Route>
+              )}
+              {user && (
+                <Route exact path={APP_PATHS.MY_ACCOUNT}>
+                  <MyAccount user={user} organizations={organizations} edit={false} reloadUser={reloadUser} />
+                </Route>
               )}
 
               {/* Redirects. Invalid paths will redirect to the closest valid path. */}

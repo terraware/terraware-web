@@ -5,6 +5,9 @@ import Button from 'src/components/common/button/Button';
 import Icon from 'src/components/common/icon/Icon';
 import { IconName } from 'src/components/common/icon/icons';
 
+import { Link as RouterLink } from 'react-router-dom';
+import { Link } from '@material-ui/core';
+
 type EmptyStateStyleProps = {
   titleFontSize: string;
   titleLineHeight: string;
@@ -60,6 +63,10 @@ const useStyles = makeStyles((theme) =>
     listItemDescription: {
       margin: '0 auto',
     },
+    listItemDescriptionWithButton: {
+      margin: '0 auto',
+      fontSize: '12px',
+    },
     button: {
       marginBottom: theme.spacing(3),
     },
@@ -73,6 +80,12 @@ const useStyles = makeStyles((theme) =>
     noSpacing: {
       margin: 0,
     },
+    subButton: {
+      marginTop: theme.spacing(2),
+    },
+    itemLink: {
+      fontSize: '12px',
+    },
   })
 );
 
@@ -80,14 +93,18 @@ export type ListItemContent = {
   icon: IconName;
   title: string;
   description: string;
+  buttonText?: string;
+  onClickButton?: () => void;
+  linkText?: string;
+  linkPath?: string;
 };
 
 type EmptyStateContentProps = {
   title: string;
   subtitle: string;
   listItems: ListItemContent[];
-  buttonText: string;
-  onClickButton: () => void;
+  buttonText?: string;
+  onClickButton?: () => void;
   footnote?: string[];
   styles: EmptyStateStyleProps;
 };
@@ -106,12 +123,24 @@ export default function EmptyStateContent(props: EmptyStateContentProps): JSX.El
             <div key={item.title} className={classes.listItem}>
               <Icon name={item.icon} className={classes.listItemIcon} />
               <p className={classes.listItemTitle}>{item.title}</p>
-              <p className={classes.listItemDescription}>{item.description}</p>
+              <div>
+                <p className={item.buttonText ? classes.listItemDescriptionWithButton : classes.listItemDescription}>
+                  {item.description}
+                </p>
+                {item.linkText && item.linkPath && (
+                  <Link component={RouterLink} to={item.linkPath} className={classes.itemLink}>
+                    {item.linkText}
+                  </Link>
+                )}
+              </div>
+              {item.buttonText && item.onClickButton && (
+                <Button className={classes.subButton} label={item.buttonText} onClick={item.onClickButton} />
+              )}
             </div>
           );
         })}
       </div>
-      <Button className={classes.button} label={buttonText} onClick={onClickButton} />
+      {buttonText && onClickButton && <Button className={classes.button} label={buttonText} onClick={onClickButton} />}
       {footnote && (
         <div className={classes.footNote}>
           {footnote.map((note, index) => {

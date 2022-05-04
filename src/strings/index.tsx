@@ -19,6 +19,7 @@ const strings = new LocalizedStrings({
     SNACKBAR_MSG_PLANT_DELETED: 'Plant deleted just now.',
     EDIT_SPECIES: 'Edit Species',
     ADD_SPECIES: 'Add Species',
+    IMPORT_SPECIES: 'Import Species',
     ADD: 'Add',
     NEW_SPECIES: 'New Species',
     SPECIES: 'Species',

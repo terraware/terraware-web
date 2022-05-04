@@ -41,6 +41,8 @@ const dictionary = new LocalizedStrings({
     REMOVE_PEOPLE: 'Remove People',
     REMOVE_PEOPLE_DESC:
       'Are you sure you want to remove these people? Removing these people means they won’t have access to your organization’s data anymore.',
+    IMPORT_SPECIES_LIST: 'Import Species List',
+    ADD_MANUALLY: 'Add Manually',
   },
 });
 

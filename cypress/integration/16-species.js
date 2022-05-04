@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 /// <reference types="cypress" />
 
-describe('Species', () => {
+describe.skip('Species', () => {
   it('should create a new species', () => {
     cy.visit('/species');
     cy.get('#new-species').click();

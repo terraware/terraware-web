@@ -7,6 +7,7 @@ import { ReactComponent as CaretUp } from './caret-up.svg';
 import { ReactComponent as ChevronDown } from './chevron-down.svg';
 import { ReactComponent as ChevronUp } from './chevron-up.svg';
 import { ReactComponent as Critical } from './critical.svg';
+import { ReactComponent as Edit } from './edit.svg';
 import { ReactComponent as Error } from './error.svg';
 import { ReactComponent as Folder } from './folder.svg';
 import { ReactComponent as Help } from './help.svg';
@@ -32,6 +33,7 @@ import { ReactComponent as Species2 } from './species2.svg';
 import { ReactComponent as Spinner } from './spinner.svg';
 import { ReactComponent as Success } from './success.svg';
 import { ReactComponent as Touchscreen } from './touchscreen.svg';
+import { ReactComponent as UploadCloud } from './upload-cloud.svg';
 import { ReactComponent as Warning } from './warning.svg';
 
 export type IconName =
@@ -43,6 +45,7 @@ export type IconName =
   | 'chevronUp'
   | 'chevronDown'
   | 'critical'
+  | 'edit'
   | 'error'
   | 'folder'
   | 'help'
@@ -68,6 +71,7 @@ export type IconName =
   | 'spinner'
   | 'success'
   | 'touchscreen'
+  | 'uploadCloud'
   | 'warning';
 
 type SVGComponent = React.FunctionComponent<
@@ -84,6 +88,8 @@ const icons: Record<IconName, SVGComponent> = {
   chevronUp: ChevronUp,
   chevronDown: ChevronDown,
   critical: Critical,
+  edit: Edit,
+  error: Error,
   folder: Folder,
   help: Help,
   home: Home,
@@ -108,7 +114,7 @@ const icons: Record<IconName, SVGComponent> = {
   spinner: Spinner,
   success: Success,
   touchscreen: Touchscreen,
-  error: Error,
+  uploadCloud: UploadCloud,
   warning: Warning,
 };
 
