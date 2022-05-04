@@ -1,6 +1,8 @@
-import { Divider, List, ListSubheader, Popover, Typography } from '@material-ui/core';
+import React, { useState } from 'react';
+import { Divider, List, ListItem, ListSubheader, Popover, Typography } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
-import PopoverHeaderMenu, { MenuItems } from './PopoverHeaderMenu';
+import IconButton from '@material-ui/core/IconButton';
+import Icon from 'src/components/common/icon/Icon';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -26,8 +28,8 @@ const useStyles = makeStyles((theme) =>
       paddingRight: theme.spacing(3),
     },
     popover: {
-      paddingTop: 0,
-      border: '1px solid #A9B7B8',
+      padding: 0,
+      borderTop: '1px solid #A9B7B8',
       borderRadius: '7px 7px 0 0',
       '&.small': {
         // TODO set small width
@@ -45,6 +47,9 @@ const useStyles = makeStyles((theme) =>
       overflowX: 'visible',
       overflowY: 'visible',
       borderRadius: '7px',
+      borderLeft: '1px solid #A9B7B8',
+      borderRight: '1px solid #A9B7B8',
+      borderBottom: '1px solid #A9B7B8',
     },
     divotWrapper: {
       display: 'flex',
@@ -63,8 +68,67 @@ const useStyles = makeStyles((theme) =>
       zIndex: 1400,
       backgroundColor: '#F2F4F5',
     },
+    iconContainer: {
+      borderRadius: 0,
+      fontSize: '16px',
+      height: '48px',
+    },
+    icon: {
+      fill: '#3A4445',
+      marginLeft: '8px',
+    },
   })
 );
+
+type MenuItem = {
+  text: string;
+  callback: () => void;
+};
+
+type PopoverHeaderMenuProps = {
+  menuItems: MenuItem[];
+};
+
+function PopoverHeaderMenu({ menuItems }: PopoverHeaderMenuProps): JSX.Element {
+  const classes = useStyles();
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  return (
+    <div>
+      <IconButton onClick={handleClick} size='small' className={classes.iconContainer}>
+        <Icon name='menuVertical' className={classes.icon} />
+      </IconButton>
+      <Popover
+        id='simple-popover'
+        open={Boolean(anchorEl)}
+        anchorEl={anchorEl}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'center',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+      >
+        <List id='popover-header-menu' onClick={handleClose}>
+          {menuItems.map((item, index) => (
+            <ListItem button onClick={item.callback} key={index}>
+              {item.text}
+            </ListItem>
+          ))}
+        </List>
+      </Popover>
+    </div>
+  );
+}
 
 type DivotPopoverProps = {
   anchorEl: Element | null;
@@ -74,7 +138,7 @@ type DivotPopoverProps = {
   title: string;
   size: 'small' | 'medium' | 'large';
   // list of { text: '', callback: fn }
-  headerMenuItems?: MenuItems;
+  headerMenuItems?: MenuItem[];
 };
 
 export default function DivotPopover({
@@ -116,8 +180,8 @@ export default function DivotPopover({
             </div>
             <Divider />
           </ListSubheader>
-          {children}
         </List>
+        {children}
       </Popover>
     </div>
   );
