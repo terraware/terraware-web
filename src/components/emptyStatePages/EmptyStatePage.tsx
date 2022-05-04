@@ -39,8 +39,8 @@ type PageContent = {
   title2: string;
   subtitle: string;
   listItems: ListItemContent[];
-  buttonText: string;
-  linkLocation: string;
+  buttonText?: string;
+  linkLocation?: string;
 };
 
 const NO_PROJECTS_CONTENT: PageContent = {
@@ -48,12 +48,15 @@ const NO_PROJECTS_CONTENT: PageContent = {
   title2: dict.CREATE_A_PROJECT,
   subtitle: emptyStateStrings.NO_PROJECTS_SUBTITLE,
   listItems: [
-    { icon: 'project', title: dict.PROJECT_PROFILE, description: emptyStateStrings.NO_PROJECTS_DESCRIPTION_PROJECTS },
+    {
+      icon: 'project',
+      title: dict.PROJECT_PROFILE,
+      description: emptyStateStrings.NO_PROJECTS_DESCRIPTION_PROJECTS,
+      buttonText: strings.ADD_PROJECT,
+    },
     { icon: 'people', title: strings.PEOPLE, description: emptyStateStrings.NO_PROJECTS_DESCRIPTION_PEOPLE },
     { icon: 'sites', title: strings.SITES, description: emptyStateStrings.NO_PROJECTS_DESCRIPTION_SITES },
   ],
-  buttonText: strings.ADD_PROJECT,
-  linkLocation: APP_PATHS.PROJECTS_NEW,
 };
 
 const NO_SITES_CONTENT: PageContent = {
@@ -68,18 +71,57 @@ const NO_SITES_CONTENT: PageContent = {
   linkLocation: APP_PATHS.SITES_NEW,
 };
 
+const NO_SPECIES_CONTENT: PageContent = {
+  title1: strings.SPECIES,
+  title2: strings.ADD_SPECIES,
+  subtitle: emptyStateStrings.NO_SPECIES_DESCRIPTION,
+  listItems: [
+    {
+      icon: 'uploadCloud',
+      title: dictionary.IMPORT_SPECIES_LIST,
+      description: emptyStateStrings.IMPORT_SPECIES_DESCRIPTION,
+      buttonText: strings.IMPORT_SPECIES,
+      onClickButton: () => {
+        return true;
+      },
+      linkText: emptyStateStrings.IMPORT_SPECIES_LINK,
+      linkPath: '/home',
+    },
+    {
+      icon: 'edit',
+      title: dictionary.ADD_MANUALLY,
+      description: emptyStateStrings.ADD_MANUALLY_DESCRIPTION,
+      buttonText: strings.ADD_SPECIES,
+      onClickButton: () => {
+        return true;
+      },
+    },
+  ],
+};
+
 type EmptyStatePageProps = {
-  pageName: 'Projects' | 'Sites';
+  pageName: 'Projects' | 'Sites' | 'Species';
 };
 
 export default function EmptyStatePage({ pageName }: EmptyStatePageProps): JSX.Element {
   const classes = useStyles();
   const history = useHistory();
-  const pageContent = pageName === 'Projects' ? NO_PROJECTS_CONTENT : NO_SITES_CONTENT;
+  const pageContent = (): PageContent => {
+    switch (pageName) {
+      case 'Projects':
+        return NO_PROJECTS_CONTENT;
+      case 'Species':
+        return NO_SPECIES_CONTENT;
+      default:
+        return NO_SITES_CONTENT;
+    }
+  };
+
+  const content = pageContent();
 
   const goToNewLocation = () => {
     const newLocation = {
-      pathname: pageContent.linkLocation,
+      pathname: content.linkLocation,
     };
     history.push(newLocation);
   };
@@ -87,13 +129,13 @@ export default function EmptyStatePage({ pageName }: EmptyStatePageProps): JSX.E
   return (
     <main>
       <Container className={classes.mainContainer}>
-        <PageHeader title={pageContent.title1} subtitle='' />
+        <PageHeader title={content.title1} subtitle='' />
         <div className={classes.content}>
           <EmptyStateContent
-            title={pageContent.title2}
-            subtitle={pageContent.subtitle}
-            listItems={pageContent.listItems}
-            buttonText={pageContent.buttonText}
+            title={content.title2}
+            subtitle={content.subtitle}
+            listItems={content.listItems}
+            buttonText={content.buttonText}
             onClickButton={goToNewLocation}
             styles={EMPTY_STATE_CONTENT_STYLES}
           />
