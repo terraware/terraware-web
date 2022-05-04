@@ -39,7 +39,7 @@ export default function CannotRemovePeopleDialog(props: CannotRemovePeopleDialog
   const { onClose, open, onSubmit } = props;
 
   return (
-    <Dialog onClose={() => onClose()} disableEscapeKeyDown open={open} maxWidth='sm'>
+    <Dialog onClose={onClose} disableEscapeKeyDown open={open} maxWidth='sm'>
       <DialogTitle className={classes.title}>
         <Typography variant='h6'>{dictionary.CANNOT_REMOVE}</Typography>
         <DialogCloseButton onClick={onClose} />

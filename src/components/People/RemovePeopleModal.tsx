@@ -41,7 +41,7 @@ export default function RemovePeopleDialog(props: RemovePeopleDialogProps): JSX.
   const { onClose, open, onSubmit, removedPeople } = props;
 
   return (
-    <Dialog onClose={() => onClose()} disableEscapeKeyDown open={open} maxWidth='sm'>
+    <Dialog onClose={onClose} disableEscapeKeyDown open={open} maxWidth='sm'>
       <DialogTitle className={classes.title}>
         <Typography variant='h6'>
           {removedPeople.length > 1 ? dictionary.REMOVE_PEOPLE : dictionary.REMOVE_PERSON}

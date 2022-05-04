@@ -10,22 +10,19 @@ export default function ProjectsCellRenderer(props: RendererProps<TableRowType>)
     return <CellRenderer index={index} column={column} value={value.join(', ')} row={row} />;
   }
 
-  if (column.key === 'firstName') {
+  const createLinkToPerson = (iValue: React.ReactNode | unknown[]) => {
     const personLocation = {
       pathname: APP_PATHS.PEOPLE_VIEW.replace(':personId', row.id.toString()),
     };
-    return (
-      <CellRenderer index={index} column={column} value={<Link to={personLocation.pathname}>{value}</Link>} row={row} />
-    );
+    return <Link to={personLocation.pathname}>{iValue}</Link>;
+  };
+
+  if (column.key === 'firstName') {
+    return <CellRenderer index={index} column={column} value={createLinkToPerson(value)} row={row} />;
   }
 
   if (column.key === 'lastName') {
-    const personLocation = {
-      pathname: APP_PATHS.PEOPLE_VIEW.replace(':personId', row.id.toString()),
-    };
-    return (
-      <CellRenderer index={index} column={column} value={<Link to={personLocation.pathname}>{value}</Link>} row={row} />
-    );
+    return <CellRenderer index={index} column={column} value={createLinkToPerson(value)} row={row} />;
   }
 
   return <CellRenderer {...props} />;

@@ -141,8 +141,8 @@ export default function PeopleList({ organization, reloadData, user }: PeopleLis
       } else {
         const selectedOwners = selectedPeopleRows.filter((selectedPerson) => selectedPerson.role === 'Owner');
         if (selectedOwners.length > 0) {
-          const organizationRoles = listOrganizationRoles(organization.id);
-          const totalOwners = (await organizationRoles).roles?.find((role) => role.role === 'Owner');
+          const organizationRoles = await listOrganizationRoles(organization.id);
+          const totalOwners = organizationRoles.roles?.find((role) => role.role === 'Owner');
           if (selectedOwners.length === totalOwners?.totalUsers) {
             setOrgPeople(
               people?.filter((person) => {
@@ -227,8 +227,8 @@ export default function PeopleList({ organization, reloadData, user }: PeopleLis
           }
         });
       }
-      const deleterOrgReponse = await deleteOrganization(organization.id);
-      if (allRemoved && deleterOrgReponse.requestSucceeded) {
+      const deleteOrgResponse = await deleteOrganization(organization.id);
+      if (allRemoved && deleteOrgResponse.requestSucceeded) {
         if (reloadData) {
           reloadData();
         }
