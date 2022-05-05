@@ -21,6 +21,7 @@ const useStyles = makeStyles((theme) =>
     error: {
       width: '432px',
       height: '88px',
+      margin: '20px 0',
     },
     notificationIcon: {
       fill: '#708284',
@@ -225,7 +226,7 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
         size='large'
       >
         <List className={classes.listContainer}>
-          {(notifications === undefined || notifications.items.length === 0) && (
+          {(notifications === undefined || (notifications.items.length === 0 && !notifications.errorOccurred)) && (
             <ListItem className={classes.noNotifications}>
               <ListItemText primary={strings.NO_NOTIFICATIONS} />
             </ListItem>
