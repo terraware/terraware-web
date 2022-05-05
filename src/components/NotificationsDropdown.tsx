@@ -122,16 +122,17 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
   const [lastSeen, setLastSeen] = useState<string>('');
 
   const populateNotifications = useCallback(async () => {
-    const notifications = await getNotifications();
+    const notificationsData = await getNotifications();
     if (organizationId) {
       const orgNotifications = await getNotifications(organizationId);
-      notifications.items = notifications.items.concat(orgNotifications.items).sort((a, b) => {
-        const dateA = new Date(a.createdTime);
-        const dateB = new Date(b.createdTime);
-        return dateB.getTime() - dateA.getTime();
-      });
+      notificationsData.items = notificationsData.items.concat(orgNotifications.items);
     }
-    setNotifications(notifications);
+    notificationsData.items = notificationsData.items.sort((a, b) => {
+      const dateA = new Date(a.createdTime);
+      const dateB = new Date(b.createdTime);
+      return dateB.getTime() - dateA.getTime();
+    });
+    setNotifications(notificationsData);
   }, [setNotifications, organizationId]);
 
   useEffect(() => {
@@ -256,12 +257,12 @@ type NotificationItemProps = {
 };
 
 function NotificationItem(props: NotificationItemProps): JSX.Element {
-  const [inFocus, setInFocus] = useState<Boolean>(false);
+  const [inFocus, setInFocus] = useState<boolean>(false);
   const classes = useStyles();
   const { notification, markAsRead } = props;
   const { id, title, body, localUrl, createdTime, isRead } = notification;
 
-  const onNotificationClick = async (read: boolean, close?: boolean) => {
+  const onNotificationClick = (read: boolean, close?: boolean) => {
     markAsRead(read, id, close);
   };
 

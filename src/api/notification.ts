@@ -82,7 +82,7 @@ export const unreadCount = async (): Promise<NotificationsCount> => {
   const response: NotificationsCount = { items: [], errorOccurred: false };
 
   try {
-    let endpoint = COUNT_ENDPOINT;
+    const endpoint = COUNT_ENDPOINT;
     const notifications: ListNotificationsCountResponseElement[] = (await axios.get(endpoint)).data.notifications;
     response.items = notifications;
   } catch {
