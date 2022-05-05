@@ -22,6 +22,8 @@ services:
       - 'KEYCLOAK_RESOURCE'
       - 'TERRAWARE_PHOTO_DIR=/photos'
       - 'TERRAWARE_ENABLE_AWAITING_CHECK_IN=true'
+      - 'TERRAWARE_ALLOW_ADMIN_UI_FOR_NON_ADMINS=true'
+      - 'SPRING_THYMELEAF_PREFIX=classpath:templates'
     volumes:
       - './photo-data:/photos'
     depends_on:
