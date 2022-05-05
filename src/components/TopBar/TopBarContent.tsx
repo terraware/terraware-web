@@ -37,7 +37,9 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
   const classes = useStyles();
   const {
     setNotifications,
+    // eslint-disable-next-line
     setSeedSearchCriteria,
+    // eslint-disable-next-line
     facilityId,
     setSelectedOrganization,
     selectedOrganization,
@@ -52,8 +54,7 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
       <NotificationsDropdown
         notifications={props.notifications}
         setNotifications={setNotifications}
-        setSeedSearchCriteria={setSeedSearchCriteria}
-        currFacilityId={facilityId || 0}
+        organizationId={selectedOrganization?.id}
       />
       <div className={classes.separator} />
       <OrganizationsDropdown

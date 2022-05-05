@@ -37,6 +37,17 @@ export interface paths {
     /** For interactive web applications, this can be used to redirect the user to a login page to allow the application to make other API requests. The login process will set a cookie that will authenticate to the API, and will then redirect back to the application. One approach is to use this in error response handlers: if an API request returns HTTP 401 Unauthorized, set location.href to this endpoint and set "redirect" to the URL of the page the user was on so they'll return there after logging in. */
     get: operations["login"];
   };
+  "/api/v1/notifications": {
+    get: operations["readAll"];
+    put: operations["markAllRead"];
+  };
+  "/api/v1/notifications/count": {
+    get: operations["count"];
+  };
+  "/api/v1/notifications/{id}": {
+    get: operations["read_1"];
+    put: operations["markRead"];
+  };
   "/api/v1/organizations": {
     /** Lists all organizations the user can access. */
     get: operations["listOrganizations"];
@@ -119,14 +130,14 @@ export interface paths {
     get: operations["listAll"];
   };
   "/api/v1/seedbank/notification/all/markRead": {
-    post: operations["markAllRead"];
+    post: operations["markAllRead_1"];
   };
   "/api/v1/seedbank/notification/all/markUnread": {
     /** For development and testing of notifications. Not available in production. */
     post: operations["markAllUnread"];
   };
   "/api/v1/seedbank/notification/{id}/markRead": {
-    post: operations["markRead"];
+    post: operations["markRead_1"];
   };
   "/api/v1/seedbank/search": {
     post: operations["searchAccessions"];
@@ -618,6 +629,18 @@ export interface components {
       facility: components["schemas"]["FacilityPayload"];
       status: components["schemas"]["SuccessOrError"];
     };
+    GetNotificationResponsePayload: {
+      notification: components["schemas"]["NotificationPayload"];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    GetNotificationsCountResponsePayload: {
+      notifications: components["schemas"]["NotificationCountPayload"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    GetNotificationsResponsePayload: {
+      notifications: components["schemas"]["NotificationPayload"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
     GetOrganizationResponsePayload: {
       organization: components["schemas"]["OrganizationPayload"];
       status: components["schemas"]["SuccessOrError"];
@@ -759,6 +782,24 @@ export interface components {
       child?: components["schemas"]["SearchNodePayload"];
     } & {
       child: unknown;
+    };
+    NotificationCountPayload: {
+      organizationId?: number;
+      unread: number;
+    };
+    NotificationPayload: {
+      id: number;
+      notificationType:
+        | "User Added to Organization"
+        | "Facility Idle"
+        | "Facility Alert Requested";
+      notificationCriticality: "Info" | "Warning" | "Error" | "Success";
+      organizationId?: number;
+      title: string;
+      body: string;
+      localUrl: string;
+      createdTime: string;
+      isRead: boolean;
     };
     /** Search criterion that matches results that meet any of a set of other search criteria. That is, if the list of children is x, y, and z, this will require x OR y OR z. */
     OrNodePayload: components["schemas"]["SearchNodePayload"];
@@ -1067,6 +1108,13 @@ export interface components {
       pollingInterval?: number;
       /** ID of parent device such as a hub or gateway, if any. The parent device must exist. */
       parentId?: number;
+    };
+    UpdateNotificationRequestPayload: {
+      read: boolean;
+    };
+    UpdateNotificationsRequestPayload: {
+      read: boolean;
+      organizationId?: number;
     };
     UpdateOrganizationRequestPayload: {
       /** ISO 3166 alpha-2 code of organization's country. */
@@ -1418,6 +1466,93 @@ export interface operations {
     responses: {
       /** Redirects to a login page. After login, the user will be redirected back to the URL specified in the "redirect" parameter. */
       302: never;
+    };
+  };
+  readAll: {
+    parameters: {
+      query: {
+        organizationId?: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetNotificationsResponsePayload"];
+        };
+      };
+    };
+  };
+  markAllRead: {
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateNotificationsRequestPayload"];
+      };
+    };
+  };
+  count: {
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetNotificationsCountResponsePayload"];
+        };
+      };
+    };
+  };
+  read_1: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetNotificationResponsePayload"];
+        };
+      };
+      /** The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  markRead: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateNotificationRequestPayload"];
+      };
     };
   };
   /** Lists all organizations the user can access. */
@@ -2057,7 +2192,7 @@ export interface operations {
       };
     };
   };
-  markAllRead: {
+  markAllRead_1: {
     responses: {
       /** All notifications have been marked as read. */
       200: {
@@ -2078,7 +2213,7 @@ export interface operations {
       };
     };
   };
-  markRead: {
+  markRead_1: {
     parameters: {
       path: {
         /** ID of notification to mark as read */
