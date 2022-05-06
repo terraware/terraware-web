@@ -158,26 +158,18 @@ export interface paths {
     get: operations["listSpecies"];
     post: operations["createSpecies"];
   };
-  "/api/v1/species/names": {
-    get: operations["listAllSpeciesNames"];
-    post: operations["createSpeciesName"];
+  "/api/v1/species/lookup/details": {
+    get: operations["getSpeciesDetails"];
   };
-  "/api/v1/species/names/{speciesNameId}": {
-    /** Gets information about a single species name. */
-    get: operations["getSpeciesName"];
-    /** Updates one of the names of a species. */
-    put: operations["updateSpeciesName"];
-    /** Deletes one of the secondary names of a species. */
-    delete: operations["deleteSpeciesName"];
+  "/api/v1/species/lookup/names": {
+    /** Gets a list of known scientific names whose words begin with particular letters. */
+    get: operations["listSpeciesNames"];
   };
   "/api/v1/species/{speciesId}": {
     get: operations["getSpecies"];
     put: operations["updateSpecies"];
     /** The species will no longer appear in the organization's list of species, but existing data (plants, seeds, etc.) that refer to the species will still refer to it. */
     delete: operations["deleteSpecies"];
-  };
-  "/api/v1/species/{speciesId}/names": {
-    get: operations["listSpeciesNames"];
   };
   "/api/v1/timeseries/create": {
     /** If there are existing timeseries with the same names, the old definitions will be overwritten. */
@@ -436,19 +428,6 @@ export interface components {
       id: number;
       status: components["schemas"]["SuccessOrError"];
     };
-    CreateSpeciesNameRequestPayload: {
-      /** True if name is a scientific name for the species. */
-      isScientific?: boolean;
-      locale?: string;
-      name: string;
-      /** Which organization's species list to update. */
-      organizationId: number;
-      speciesId: number;
-    };
-    CreateSpeciesNameResponsePayload: {
-      id: number;
-      status: components["schemas"]["SuccessOrError"];
-    };
     CreateSpeciesResponsePayload: {
       id: number;
       status: components["schemas"]["SuccessOrError"];
@@ -634,10 +613,6 @@ export interface components {
       site: components["schemas"]["SiteElement"];
       status: components["schemas"]["SuccessOrError"];
     };
-    GetSpeciesNameResponsePayload: {
-      speciesName: components["schemas"]["SpeciesNamesResponseElement"];
-      status: components["schemas"]["SuccessOrError"];
-    };
     GetSpeciesResponsePayload: {
       species: components["schemas"]["SpeciesResponseElement"];
       status: components["schemas"]["SuccessOrError"];
@@ -724,10 +699,6 @@ export interface components {
     };
     ListSitesResponsePayload: {
       sites: components["schemas"]["SiteElement"][];
-      status: components["schemas"]["SuccessOrError"];
-    };
-    ListSpeciesNamesResponsePayload: {
-      speciesNames: components["schemas"]["SpeciesNamesResponseElement"][];
       status: components["schemas"]["SuccessOrError"];
     };
     ListSpeciesResponsePayload: {
@@ -915,36 +886,53 @@ export interface components {
       timezone?: string;
       facilities?: components["schemas"]["FacilityPayload"][];
     };
-    SpeciesNamesResponseElement: {
-      id: number;
-      /** True if name is the scientific name for the species. */
-      isScientific: boolean;
+    SpeciesLookupCommonNamePayload: {
       name: string;
-      organizationId: number;
-      speciesId: number;
+      /** ISO 639-1 two-letter language code indicating the name's language. Some common names in the server's taxonomic database are not tagged with languages; this value will not be present for those names. */
+      language?: string;
+    };
+    SpeciesLookupDetailsResponsePayload: {
+      scientificName: string;
+      /** List of known common names for the species, if any. */
+      commonNames?: components["schemas"]["SpeciesLookupCommonNamePayload"][];
+      familyName: string;
+      /** True if the species is known to be endangered, false if the species is known to not be endangered. This value will not be present if the server's taxonomic database doesn't indicate whether or not the species is endangered. */
+      endangered?: boolean;
+    };
+    SpeciesLookupNamesResponsePayload: {
+      names: string[];
+      /** True if there were more matching names than could be included in the response. */
+      partial: boolean;
+      status: components["schemas"]["SuccessOrError"];
     };
     SpeciesRequestPayload: {
-      conservationStatus?: string;
-      /** True if name is the scientific name for the species. */
-      isScientific?: boolean;
-      name: string;
+      commonName?: string;
+      endangered?: boolean;
+      familyName?: string;
+      growthForm?: "Tree" | "Shrub" | "Forb" | "Graminoid" | "Fern";
       /** Which organization's species list to update. */
       organizationId: number;
-      plantForm?: "Tree" | "Shrub" | "Vine" | "Liana" | "Herbaceous";
-      rare?: "No" | "Yes" | "Unsure";
-      /** Taxonomic serial number from ITIS database. */
-      tsn?: string;
+      rare?: boolean;
+      scientificName: string;
+      seedStorageBehavior?:
+        | "Orthodox"
+        | "Recalcitrant"
+        | "Intermediate"
+        | "Unknown";
     };
     SpeciesResponseElement: {
-      conservationStatus?: string;
+      commonName?: string;
+      endangered?: boolean;
+      familyName?: string;
+      growthForm?: "Tree" | "Shrub" | "Forb" | "Graminoid" | "Fern";
       id: number;
-      /** True if name is the scientific name for the species. */
-      isScientific: boolean;
-      name: string;
-      plantForm?: "Tree" | "Shrub" | "Vine" | "Liana" | "Herbaceous";
-      rare?: "No" | "Yes" | "Unsure";
-      /** Taxonomic serial number from ITIS database. */
-      tsn?: string;
+      rare?: boolean;
+      scientificName: string;
+      seedStorageBehavior?:
+        | "Orthodox"
+        | "Recalcitrant"
+        | "Intermediate"
+        | "Unknown";
     };
     StorageLocationDetails: {
       storageLocation: string;
@@ -1099,12 +1087,6 @@ export interface components {
       /** If present, move the site to this project. Project must be owned by the same organization as the site's current project. User must have permission to add sites to the new project and remove them from the existing one. */
       projectId?: number;
       timezone?: string;
-    };
-    UpdateSpeciesNameRequestPayload: {
-      /** True if name is a scientific name for the species. */
-      isScientific?: boolean;
-      locale?: string;
-      name: string;
     };
     UpdateUserRequestPayload: {
       /** If true, the user wants to receive all the notifications for their organization and projects via email. This does not apply to certain kinds of notifications such as "You've been added to a new organization." If null, leave the existing value as-is. */
@@ -2300,63 +2282,21 @@ export interface operations {
       };
     };
   };
-  listAllSpeciesNames: {
+  getSpeciesDetails: {
     parameters: {
       query: {
-        organizationId: number;
+        scientificName: string;
+        language?: string;
       };
     };
     responses: {
       /** OK */
       200: {
         content: {
-          "application/json": components["schemas"]["ListSpeciesNamesResponsePayload"];
+          "application/json": components["schemas"]["SpeciesLookupDetailsResponsePayload"];
         };
       };
-    };
-  };
-  createSpeciesName: {
-    responses: {
-      /** Species name added. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["CreateSpeciesNameResponsePayload"];
-        };
-      };
-      /** The species does not exist. */
-      404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-      /** The species already has the requested name. */
-      409: {
-        content: {
-          "application/json": components["schemas"]["CreateSpeciesNameResponsePayload"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["CreateSpeciesNameRequestPayload"];
-      };
-    };
-  };
-  /** Gets information about a single species name. */
-  getSpeciesName: {
-    parameters: {
-      path: {
-        speciesNameId: number;
-      };
-    };
-    responses: {
-      /** Species name retrieved. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["GetSpeciesNameResponsePayload"];
-        };
-      };
-      /** The requested resource was not found. */
+      /** The scientific name was not found in the server's taxonomic database. */
       404: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
@@ -2364,51 +2304,19 @@ export interface operations {
       };
     };
   };
-  /** Updates one of the names of a species. */
-  updateSpeciesName: {
+  /** Gets a list of known scientific names whose words begin with particular letters. */
+  listSpeciesNames: {
     parameters: {
-      path: {
-        speciesNameId: number;
+      query: {
+        search: string;
+        maxResults?: number;
       };
     };
     responses: {
       /** OK */
       200: {
         content: {
-          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["UpdateSpeciesNameRequestPayload"];
-      };
-    };
-  };
-  /** Deletes one of the secondary names of a species. */
-  deleteSpeciesName: {
-    parameters: {
-      path: {
-        speciesNameId: number;
-      };
-    };
-    responses: {
-      /** Species name deleted. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-        };
-      };
-      /** The requested resource was not found. */
-      404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-      /** Cannot delete the primary name of a species. */
-      409: {
-        content: {
-          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+          "application/json": components["schemas"]["SpeciesLookupNamesResponsePayload"];
         };
       };
     };
@@ -2490,30 +2398,6 @@ export interface operations {
       409: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-        };
-      };
-    };
-  };
-  listSpeciesNames: {
-    parameters: {
-      path: {
-        speciesId: number;
-      };
-      query: {
-        organizationId: number;
-      };
-    };
-    responses: {
-      /** Species names retrieved. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["ListSpeciesNamesResponsePayload"];
-        };
-      };
-      /** The species does not exist. */
-      404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };

@@ -391,6 +391,15 @@ const strings = new LocalizedStrings({
     CANNOT_REMOVE_MSG:
       'You cannot remove yourself because there is no one else in the organization. Would you like to delete the organization instead?',
     DELETE_ORGANIZATION_MSG: 'Are you sure you want to delete {0}?',
+    ADD_A_SPECIES: 'Add a Species',
+    COMMON_OR_LOCAL_NAME_OPT: 'Common or Local Name (optional)',
+    CONSERVATION_STATUS_OPT: 'Conservation Status (optional)',
+    GROWTH_FORM_OPT: 'Growth Form (optional)',
+    SEED_STORAGE_BEHAVIOR: 'Seed Storage Behavior',
+    TYPE_TO_SEARCH: 'Type to search...',
+    TYPE: 'Type...',
+    FAMILY_OPTIONAL: 'Family (optional)',
+    SELECT: 'Select...',
   },
 });
 

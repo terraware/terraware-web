@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router';
 import Container from '@material-ui/core/Container';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
@@ -9,6 +9,10 @@ import strings from 'src/strings';
 import dict from 'src/strings/dictionary';
 import emptyStateStrings from 'src/strings/emptyStatePages';
 import dictionary from 'src/strings/dictionary';
+import AddSpeciesModal from '../Species/AddSpeciesModal';
+import snackbarAtom from 'src/state/snackbar';
+import { useSetRecoilState } from 'recoil';
+import { ServerOrganization } from 'src/types/Organization';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -71,41 +75,54 @@ const NO_SITES_CONTENT: PageContent = {
   linkLocation: APP_PATHS.SITES_NEW,
 };
 
-const NO_SPECIES_CONTENT: PageContent = {
-  title1: strings.SPECIES,
-  title2: strings.ADD_SPECIES,
-  subtitle: emptyStateStrings.NO_SPECIES_DESCRIPTION,
-  listItems: [
-    {
-      icon: 'uploadCloud',
-      title: dictionary.IMPORT_SPECIES_LIST,
-      description: emptyStateStrings.IMPORT_SPECIES_DESCRIPTION,
-      buttonText: strings.IMPORT_SPECIES,
-      onClickButton: () => {
-        return true;
-      },
-      linkText: emptyStateStrings.IMPORT_SPECIES_LINK,
-      linkPath: '/home',
-    },
-    {
-      icon: 'edit',
-      title: dictionary.ADD_MANUALLY,
-      description: emptyStateStrings.ADD_MANUALLY_DESCRIPTION,
-      buttonText: strings.ADD_SPECIES,
-      onClickButton: () => {
-        return true;
-      },
-    },
-  ],
-};
-
 type EmptyStatePageProps = {
   pageName: 'Projects' | 'Sites' | 'Species';
+  organization?: ServerOrganization;
+  reloadData?: () => void;
 };
 
-export default function EmptyStatePage({ pageName }: EmptyStatePageProps): JSX.Element {
+export default function EmptyStatePage({ pageName, organization, reloadData }: EmptyStatePageProps): JSX.Element {
   const classes = useStyles();
   const history = useHistory();
+  const setSnackbar = useSetRecoilState(snackbarAtom);
+
+  const goToNewLocation = () => {
+    const newLocation = {
+      pathname: content.linkLocation,
+    };
+    history.push(newLocation);
+  };
+
+  const [addSpeciesModalOpened, setAddSpeciesModalOpened] = useState(false);
+
+  const NO_SPECIES_CONTENT: PageContent = {
+    title1: strings.SPECIES,
+    title2: strings.ADD_SPECIES,
+    subtitle: emptyStateStrings.NO_SPECIES_DESCRIPTION,
+    listItems: [
+      {
+        icon: 'uploadCloud',
+        title: dictionary.IMPORT_SPECIES_LIST,
+        description: emptyStateStrings.IMPORT_SPECIES_DESCRIPTION,
+        buttonText: strings.IMPORT_SPECIES,
+        onClickButton: () => {
+          return true;
+        },
+        linkText: emptyStateStrings.IMPORT_SPECIES_LINK,
+        linkPath: '/home',
+      },
+      {
+        icon: 'edit',
+        title: dictionary.ADD_MANUALLY,
+        description: emptyStateStrings.ADD_MANUALLY_DESCRIPTION,
+        buttonText: strings.ADD_SPECIES,
+        onClickButton: () => {
+          setAddSpeciesModalOpened(true);
+        },
+      },
+    ],
+  };
+
   const pageContent = (): PageContent => {
     switch (pageName) {
       case 'Projects':
@@ -119,15 +136,28 @@ export default function EmptyStatePage({ pageName }: EmptyStatePageProps): JSX.E
 
   const content = pageContent();
 
-  const goToNewLocation = () => {
-    const newLocation = {
-      pathname: content.linkLocation,
-    };
-    history.push(newLocation);
+  const onCloseEditSpeciesModal = (saved: boolean, snackbarMessage?: string) => {
+    if (saved) {
+      if (reloadData) {
+        reloadData();
+      }
+      history.push(APP_PATHS.SPECIES);
+    }
+    setAddSpeciesModalOpened(false);
+    if (snackbarMessage) {
+      setSnackbar({
+        type: 'toast',
+        priority: 'success',
+        msg: snackbarMessage,
+      });
+    }
   };
 
   return (
     <main>
+      {organization && (
+        <AddSpeciesModal open={addSpeciesModalOpened} onClose={onCloseEditSpeciesModal} organization={organization} />
+      )}
       <Container className={classes.mainContainer}>
         <PageHeader title={content.title1} subtitle='' />
         <div className={classes.content}>
