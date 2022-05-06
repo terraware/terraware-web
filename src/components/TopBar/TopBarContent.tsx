@@ -1,6 +1,5 @@
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React from 'react';
-import { SeedSearchCriteria } from 'src/api/seeds/search';
 import { Notifications } from 'src/types/Notifications';
 import { ServerOrganization } from 'src/types/Organization';
 import { User } from 'src/types/User';
@@ -23,8 +22,6 @@ const useStyles = makeStyles((theme) =>
 type TopBarProps = {
   notifications?: Notifications;
   setNotifications: (notifications?: Notifications) => void;
-  setSeedSearchCriteria: (criteria: SeedSearchCriteria) => void;
-  facilityId?: number;
   organizations?: ServerOrganization[];
   setSelectedOrganization: React.Dispatch<React.SetStateAction<ServerOrganization | undefined>>;
   selectedOrganization?: ServerOrganization;
@@ -37,10 +34,6 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
   const classes = useStyles();
   const {
     setNotifications,
-    // eslint-disable-next-line
-    setSeedSearchCriteria,
-    // eslint-disable-next-line
-    facilityId,
     setSelectedOrganization,
     selectedOrganization,
     organizations,

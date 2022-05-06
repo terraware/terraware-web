@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { List, ListItem, ListItemText, Popover } from '@material-ui/core';
+import { List, ListItem, ListItemIcon, ListItemText, Popover } from '@material-ui/core';
 import Badge from '@material-ui/core/Badge';
 import IconButton from '@material-ui/core/IconButton';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
@@ -47,21 +47,24 @@ const useStyles = makeStyles((theme) =>
     },
     listContainer: {
       padding: 0,
+      overflowY: 'auto',
     },
     unreadNotification: {
       backgroundColor: '#F0F4FF',
-      '&::after': {
-        content: '""',
-        width: '8px',
-        height: '8px',
-        borderRadius: '4px',
-        backgroundColor: '#007DF2',
-        position: 'relative',
-        right: '30px',
+      '&.error': {
+        backgroundColor: '#FFF1F1',
       },
     },
+    unreadNotificationIndicator: {
+      width: '8px',
+      height: '8px',
+      borderRadius: '4px',
+      backgroundColor: '#007DF2',
+    },
     notification: {
-      padding: '0px',
+      display: 'flex',
+      alignItems: 'flex-start',
+      padding: '8px 20px 8px 26px',
       borderBottom: '1px solid #A9B7B8',
       '&:last-child': {
         borderBottom: 'none',
@@ -74,34 +77,58 @@ const useStyles = makeStyles((theme) =>
       fontSize: '14px',
       fontWeight: 400,
       margin: '0px',
-      padding: '0px 0px 0px 26px',
     },
     notificationTitle: {
       display: 'block',
       color: '#3A4445',
       fontSize: '16px',
       fontWeight: 600,
-      margin: '8px 0px',
+      margin: '8px',
     },
     notificationBody: {
       display: 'block',
       color: '#3A4445',
-      margin: '8px 0px',
+      margin: '8px',
     },
     notificationTimestamp: {
       display: 'block',
       color: '#5C6B6C',
-      margin: '8px 0px',
+      margin: '8px',
     },
     iconContainer: {
       borderRadius: 0,
       fontSize: '16px',
-      height: '48px',
-      right: '22px',
     },
     icon: {
       fill: '#3A4445',
-      marginLeft: '8px',
+    },
+    notificationType: {
+      margin: '12px 0',
+      minWidth: '16px',
+    },
+    notificationTypeIcon: {
+      width: '16px',
+      height: '16px',
+      fill: 'grey',
+      '&.info': {
+        fill: '#708284',
+      },
+      '&.warning': {
+        fill: '#BD6931',
+      },
+      '&.error': {
+        fill: '#FE0003',
+      },
+      '&.success': {
+        fill: '#308F5F',
+      },
+    },
+    notificationMenuWrapper: {
+      maxWidth: '40px',
+      margin: 'auto auto',
+      marginLeft: '4px',
+      display: 'flex',
+      justifyContent: 'center',
     },
   })
 );
@@ -119,7 +146,7 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
   // notificationsInterval value is only being used when it is set.
   const [, setNotificationsInterval] = useState<ReturnType<typeof setInterval>>();
   const [anchorEl, setAnchorEl] = useState<Element | null>(null);
-  const [lastSeen, setLastSeen] = useState<string>('');
+  const [lastSeen, setLastSeen] = useState<number>(0);
 
   const populateNotifications = useCallback(async () => {
     const notificationsData = await getNotifications();
@@ -145,7 +172,7 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
         if (currInterval) {
           clearInterval(currInterval);
         }
-        return organizationId ? setInterval(populateNotifications, API_PULL_INTERVAL) : undefined;
+        return setInterval(populateNotifications, API_PULL_INTERVAL);
       });
     }
 
@@ -160,14 +187,16 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
     };
   }, [populateNotifications, organizationId]);
 
+  const getTimeStamp = (notification: Notification) => moment(notification.createdTime).valueOf();
+
   const getRecentUnreadTime = () => {
     if (notifications) {
       const unread = notifications.items.filter((item) => !item.isRead);
       if (unread.length) {
-        return unread[0].createdTime;
+        return getTimeStamp(unread[0]);
       }
     }
-    return '';
+    return 0;
   };
 
   const onIconClick = (event: React.MouseEvent<any>) => {
@@ -198,14 +227,13 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
     }
     await MarkNotificationRead(read, id);
     await populateNotifications();
+    if (notifications) {
+      setLastSeen(getTimeStamp(notifications.items[0]));
+    }
   };
 
   const hasUnseen = () => {
-    const recentUnread = getRecentUnreadTime();
-    if (recentUnread === '') {
-      return false;
-    }
-    return lastSeen !== getRecentUnreadTime();
+    return lastSeen < getRecentUnreadTime();
   };
 
   return (
@@ -221,8 +249,8 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
         onClose={onPopoverClose}
         title={'Notifications'}
         headerMenuItems={[
-          { text: 'Mark All As Read', callback: markAllAsRead },
-          { text: 'Settings', callback: goToSettings },
+          { text: strings.MARK_ALL_AS_READ, callback: markAllAsRead },
+          { text: strings.SETTINGS, callback: goToSettings },
         ]}
         size='large'
       >
@@ -260,7 +288,8 @@ function NotificationItem(props: NotificationItemProps): JSX.Element {
   const [inFocus, setInFocus] = useState<boolean>(false);
   const classes = useStyles();
   const { notification, markAsRead } = props;
-  const { id, title, body, localUrl, createdTime, isRead } = notification;
+  const { id, title, body, localUrl, createdTime, isRead, notificationCriticality } = notification;
+  const criticality = notificationCriticality.toLowerCase();
 
   const onNotificationClick = (read: boolean, close?: boolean) => {
     markAsRead(read, id, close);
@@ -274,17 +303,33 @@ function NotificationItem(props: NotificationItemProps): JSX.Element {
     setInFocus(false);
   };
 
+  const getTypeIcon = () => {
+    switch (criticality) {
+      case 'success':
+        return 'success';
+      case 'warning':
+        return 'warning';
+      case 'error':
+        return 'error';
+      default:
+        return 'info';
+    }
+  };
+
   return (
     <ListItem
       id={`notification${id}`}
       button
-      className={(isRead || inFocus ? '' : classes.unreadNotification) + ' ' + classes.notification}
+      className={(isRead || inFocus ? '' : classes.unreadNotification) + ' ' + classes.notification + ' ' + criticality}
       onClick={() => onNotificationClick(true, true)}
       component={Link}
       to={localUrl}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
+      <ListItemIcon className={classes.notificationType}>
+        <Icon name={getTypeIcon()} className={classes.notificationTypeIcon + ' ' + criticality} />
+      </ListItemIcon>
       <ListItemText
         className={classes.notificationContent}
         primary={<span className={classes.notificationTitle}>{title}</span>}
@@ -297,7 +342,10 @@ function NotificationItem(props: NotificationItemProps): JSX.Element {
           </>
         }
       />
-      {inFocus && <NotificationItemMenu markAsRead={onNotificationClick} notification={notification} />}
+      <ListItem className={classes.notificationMenuWrapper}>
+        {!inFocus && !isRead && <div className={classes.unreadNotificationIndicator} />}
+        {inFocus && <NotificationItemMenu markAsRead={onNotificationClick} notification={notification} />}
+      </ListItem>
     </ListItem>
   );
 }

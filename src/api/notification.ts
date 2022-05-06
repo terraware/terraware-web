@@ -14,15 +14,39 @@ type ListNotificationsResponse =
   paths[typeof NOTIFICATIONS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 type ListNotificationsResponseElement = ListNotificationsResponse['notifications'][0];
 
-export const getNotifications = async (organizationId?: number): Promise<Notifications> => {
+export const getNotifications = async (orgId?: number): Promise<Notifications> => {
   const response: Notifications = { items: [], errorOccurred: false };
 
   try {
-    const queryParams: ListNotificationsQuery = { organizationId };
+    const queryParams: ListNotificationsQuery = { organizationId: orgId };
     let endpoint = NOTIFICATIONS_ENDPOINT;
     endpoint = addQueryParams(endpoint, queryParams);
     const notifications: ListNotificationsResponseElement[] = (await axios.get(endpoint)).data.notifications;
-    response.items = notifications;
+    response.items = notifications.map((notification) => {
+      const {
+        id,
+        notificationType,
+        notificationCriticality,
+        organizationId,
+        title,
+        body,
+        localUrl,
+        createdTime,
+        isRead,
+      } = notification;
+
+      return {
+        id,
+        notificationType,
+        notificationCriticality,
+        organizationId,
+        title,
+        body,
+        localUrl,
+        createdTime,
+        isRead,
+      };
+    });
   } catch {
     // Do not return a partially filled list of notifications.
     response.items = [];
@@ -82,9 +106,12 @@ export const unreadCount = async (): Promise<NotificationsCount> => {
   const response: NotificationsCount = { items: [], errorOccurred: false };
 
   try {
-    const endpoint = COUNT_ENDPOINT;
-    const notifications: ListNotificationsCountResponseElement[] = (await axios.get(endpoint)).data.notifications;
-    response.items = notifications;
+    const notificationsCount: ListNotificationsCountResponseElement[] = (await axios.get(COUNT_ENDPOINT)).data
+      .notifications;
+    response.items = notificationsCount.map((notificationCount) => {
+      const { organizationId, unread } = notificationCount;
+      return { organizationId, unread };
+    });
   } catch {
     // Do not return a partially filled list of notifications.
     response.items = [];
