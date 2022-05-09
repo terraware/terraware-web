@@ -403,6 +403,8 @@ const strings = new LocalizedStrings({
     SCIENTIFIC_NAME_NOT_FOUND: '“{0}” was not found in our database, but you can still add it.',
     FILL_OUT_ALL_FIELDS: 'Please fill out all required fields.',
     DUPLICATE_SPECIES_FOUND: 'Duplicate species found.',
+    CANNOT_REMOVE_DELETE_MSG:
+      'You cannot remove yourself because there is no one else in the organization. Would you like to delete the organization instead?',
   },
 });
 
