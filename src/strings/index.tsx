@@ -28,7 +28,7 @@ const strings = new LocalizedStrings({
     LOGOUT: 'Logout',
     DATE: 'Date',
     NOTES: 'Notes',
-    EXISTING_SPECIES_MSG: 'Choose Existing Species',
+    EXISTING_SPECIES_MSG: '“{0}” is already in your species list. ',
     CREATE_NEW_SPECIES: 'Create New Species',
     TOTAL: 'Total',
     FILTERS: 'Filters',
@@ -400,6 +400,9 @@ const strings = new LocalizedStrings({
     TYPE: 'Type...',
     FAMILY_OPTIONAL: 'Family (optional)',
     SELECT: 'Select...',
+    SCIENTIFIC_NAME_NOT_FOUND: '“{0}” was not found in our database, but you can still add it.',
+    FILL_OUT_ALL_FIELDS: 'Please fill out all required fields.',
+    DUPLICATE_SPECIES_FOUND: 'Duplicate species found.',
   },
 });
 

@@ -5,7 +5,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React, { useEffect, useState } from 'react';
-import { createSpecies, listSpeciesNames, updateSpecies } from 'src/api/species/species';
+import { createSpecies, getSpeciesDetails, listSpeciesNames, updateSpecies } from 'src/api/species/species';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
 import {
@@ -19,6 +19,7 @@ import useForm from 'src/utils/useForm';
 import Button from '../common/button/Button';
 import Checkbox from '../common/Checkbox';
 import DialogCloseButton from '../common/DialogCloseButton';
+import ErrorBox from '../common/ErrorBox/ErrorBox';
 import Select from '../common/Select/Select';
 import TextField from '../common/Textfield/Textfield';
 
@@ -65,8 +66,18 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
   const classes = useStyles();
   const { open, onClose, organization, initialSpecies } = props;
   const [record, setRecord, onChange] = useForm<Species>(initSpecies());
-  const [nameFormatError, setNameFormatError] = useState('');
+  const [nameFormatError, setNameFormatError] = useState<string | string[]>('');
   const [optionsForName, setOptionsForName] = useState<string[]>();
+  const [optionsForCommonName, setOptionsForCommonName] = useState<string[]>();
+  const [newScientificName, setNewScientificName] = useState(false);
+
+  React.useEffect(() => {
+    if (props.open) {
+      setRecord(initSpecies(props.initialSpecies));
+    }
+
+    setNameFormatError('');
+  }, [props.open, setRecord]);
 
   useEffect(() => {
     const getOptionsForTyped = async () => {
@@ -78,7 +89,39 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
       }
     };
 
+    const getDetails = async () => {
+      if (!record.scientificName) {
+        setNewScientificName(false);
+      }
+      if (record.scientificName.length > 1) {
+        const response = await getSpeciesDetails(record.scientificName);
+        if (response.requestSucceeded) {
+          setNewScientificName(false);
+          setRecord((previousRecord: Species) => {
+            if (response.commonNames.length === 1) {
+              return {
+                ...previousRecord,
+                familyName: response.familyName,
+                endangered: response.endangered,
+                commonName: response.commonNames[0].name,
+              };
+            } else {
+              setOptionsForCommonName(response.commonNames.map((cN) => cN.name));
+              return {
+                ...previousRecord,
+                familyName: response.familyName,
+                endangered: response.endangered,
+              };
+            }
+          });
+        } else {
+          setNewScientificName(true);
+        }
+      }
+    };
+
     getOptionsForTyped();
+    getDetails();
   }, [record.scientificName]);
 
   const handleCancel = () => {
@@ -86,10 +129,25 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
   };
 
   const saveSpecies = async () => {
-    const response = await createSpecies(record, organization.id);
-    if (response.id) {
-      onClose(true);
+    if (!record.scientificName) {
+      setNameFormatError(strings.REQUIRED_FIELD);
+    } else {
+      const response = await createSpecies(record, organization.id);
+      if (response.id !== -1) {
+        onClose(true);
+      } else {
+        if (response.error === SpeciesRequestError.PreexistingSpecies) {
+          setNameFormatError(strings.formatString(strings.EXISTING_SPECIES_MSG, record.scientificName));
+        }
+      }
     }
+  };
+
+  const validateScientificName = () => {};
+
+  const onChangeScientificName = (value: string) => {
+    setNameFormatError('');
+    onChange('scientificName', value);
   };
 
   return (
@@ -100,27 +158,44 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
       </DialogTitle>
       <DialogContent dividers>
         <Grid container spacing={4}>
+          {nameFormatError && (
+            <ErrorBox
+              text={
+                nameFormatError === strings.formatString(strings.EXISTING_SPECIES_MSG, record.scientificName)
+                  ? strings.DUPLICATE_SPECIES_FOUND
+                  : strings.FILL_OUT_ALL_FIELDS
+              }
+            />
+          )}
           <Grid item xs={12}>
             <Select
               id='scientificName'
               selectedValue={record.scientificName}
-              onChange={(value) => onChange('scientificName', value)}
+              onChange={(value) => onChangeScientificName(value)}
               options={optionsForName}
               label={strings.SCIENTIFIC_NAME}
               aria-label={strings.SCIENTIFIC_NAME}
               placeholder={strings.SELECT}
               readonly={false}
+              fullWidth={true}
+              onBlur={validateScientificName}
+              warningText={
+                newScientificName ? strings.formatString(strings.SCIENTIFIC_NAME_NOT_FOUND, record.scientificName) : ''
+              }
+              errorText={nameFormatError}
             />
           </Grid>
           <Grid item xs={12}>
-            <TextField
+            <Select
               id='commonName'
-              value={record.commonName}
-              onChange={onChange}
+              selectedValue={record.commonName}
+              onChange={(value) => onChange('commonName', value)}
+              options={optionsForCommonName}
               label={strings.COMMON_OR_LOCAL_NAME_OPT}
               aria-label={strings.COMMON_OR_LOCAL_NAME_OPT}
-              type={'text'}
               placeholder={strings.TYPE}
+              readonly={false}
+              fullWidth={true}
             />
           </Grid>
           <Grid item xs={12}>
@@ -162,6 +237,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
               label={strings.GROWTH_FORM_OPT}
               aria-label={strings.GROWTH_FORM_OPT}
               placeholder={strings.SELECT}
+              fullWidth={true}
             />
           </Grid>
           <Grid item xs={12}>
@@ -173,6 +249,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
               label={strings.SEED_STORAGE_BEHAVIOR}
               aria-label={strings.SEED_STORAGE_BEHAVIOR}
               placeholder={strings.SELECT}
+              fullWidth={true}
             />
           </Grid>
         </Grid>

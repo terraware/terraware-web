@@ -149,10 +149,56 @@ export async function listSpeciesNames(search: string) {
   };
   const queryParams: LookupSpeciesQuery = { search };
   const endpoint = addQueryParams(LOOKUP_SPECIES_ENDPOINT, queryParams);
-  const serverResponse: GetSpeciesResponsePayload = (await axios.get(endpoint)).data;
-  if (serverResponse.status !== 'error') {
-    response.names = serverResponse.names;
-  } else {
+  try {
+    const serverResponse: GetSpeciesResponsePayload = (await axios.get(endpoint)).data;
+    if (serverResponse.status !== 'error') {
+      response.names = serverResponse.names;
+    } else {
+      response.requestSucceeded = false;
+    }
+  } catch {
+    response.requestSucceeded = false;
+  }
+  return response;
+}
+
+const LOOKUP_SPECIES_DETAILS_ENDPOINT = '/api/v1/species/lookup/details';
+type LookupSpeciesDetailsQuery = paths[typeof LOOKUP_SPECIES_DETAILS_ENDPOINT]['get']['parameters']['query'];
+type GetSpeciesDetailsResponsePayload =
+  paths[typeof LOOKUP_SPECIES_DETAILS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
+
+type CommonName = {
+  name: string;
+};
+export type SpeciesDetailsResponse = {
+  scientificName: string;
+  commonNames: CommonName[];
+  familyName: string;
+  endangered?: boolean;
+  requestSucceeded: boolean;
+};
+
+export async function getSpeciesDetails(scientificName: string) {
+  const response: SpeciesDetailsResponse = {
+    scientificName: '',
+    commonNames: [],
+    familyName: '',
+    endangered: false,
+    requestSucceeded: true,
+  };
+  const queryParams: LookupSpeciesDetailsQuery = { scientificName };
+  try {
+    const endpoint = addQueryParams(LOOKUP_SPECIES_DETAILS_ENDPOINT, queryParams);
+    const serverResponse: GetSpeciesDetailsResponsePayload = (await axios.get(endpoint)).data;
+    response.scientificName = serverResponse.scientificName;
+    response.familyName = serverResponse.familyName;
+    serverResponse.commonNames?.map((commonName) => {
+      response.commonNames.push({
+        name: commonName.name,
+      });
+    });
+    response.endangered = serverResponse.endangered;
+  } catch {
     response.requestSucceeded = false;
   }
   return response;
