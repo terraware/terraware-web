@@ -1,7 +1,7 @@
 import { Box, createStyles, Link, makeStyles, TableCell, Typography } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import NotesIcon from '@material-ui/icons/Notes';
-import React from 'react';
+import React, { ReactNode } from 'react';
 import preventDefaultEvent from 'src/utils/preventDefaultEvent';
 import { RendererProps } from './types';
 
@@ -44,7 +44,13 @@ export function CellDateRenderer({ id, value }: { id: string; value: string }): 
   );
 }
 
-export function CellTextRenderer({ id, value }: { id: string; value?: string | number | any[] }): JSX.Element {
+export function CellTextRenderer({
+  id,
+  value,
+}: {
+  id: string;
+  value?: string | number | any[] | ReactNode;
+}): JSX.Element {
   return (
     <TableCell id={id} align='left'>
       <Typography component='p' variant='body1'>
@@ -54,7 +60,13 @@ export function CellTextRenderer({ id, value }: { id: string; value?: string | n
   );
 }
 
-export function CellBooleanRenderer({ id, value }: { id: string; value?: string | number | any[] }): JSX.Element {
+export function CellBooleanRenderer({
+  id,
+  value,
+}: {
+  id: string;
+  value?: string | number | any[] | ReactNode;
+}): JSX.Element {
   return (
     <TableCell id={id} align='left'>
       <Typography component='p' variant='body1'>
