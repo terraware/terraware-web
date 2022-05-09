@@ -17,7 +17,6 @@ interface SelectProps {
   readonly?: boolean;
   options?: string[];
   fullWidth?: boolean;
-  onBlur?: () => void;
 }
 
 export default function Select(props: SelectProps): JSX.Element {
@@ -35,7 +34,6 @@ export default function Select(props: SelectProps): JSX.Element {
     readonly = true,
     options,
     fullWidth,
-    onBlur,
   } = props;
 
   const selectClass = classNames({
@@ -127,7 +125,7 @@ export default function Select(props: SelectProps): JSX.Element {
   };
 
   return (
-    <div className={`select ${className}`} onBlur={onBlur}>
+    <div className={`select ${className}`}>
       {label && (
         <label htmlFor={id} className='textfield-label'>
           {label}

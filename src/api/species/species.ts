@@ -1,6 +1,6 @@
 import axios from 'src/api/index';
 import { paths } from 'src/api/types/generated-schema';
-import { Species, SpeciesById, SpeciesRequestError, SpeciesWithScientificName } from 'src/types/Species';
+import { Species, SpeciesRequestError } from 'src/types/Species';
 import addQueryParams from '../helpers/addQueryParams';
 
 /*
@@ -9,9 +9,6 @@ import addQueryParams from '../helpers/addQueryParams';
  */
 
 const GET_SPECIES_ENDPOINT = '/api/v1/species';
-type SpeciesList =
-  paths[typeof GET_SPECIES_ENDPOINT]['get']['responses'][200]['content']['application/json']['species'];
-type SpeciesListItem = [0];
 
 export type GetSpeciesListResponse = {
   species: Species[];
@@ -63,7 +60,7 @@ export async function createSpecies(species: Species, organizationId: number): P
     familyName: species.familyName,
     growthForm: species.growthForm,
     scientificName: species.scientificName,
-    organizationId: organizationId,
+    organizationId,
     rare: species.rare,
   };
 
@@ -106,7 +103,7 @@ export async function updateSpecies(species: Species, organizationId: number): P
     familyName: species.familyName,
     growthForm: species.growthForm,
     scientificName: species.scientificName,
-    organizationId: organizationId,
+    organizationId,
     rare: species.rare,
   };
   try {
@@ -192,7 +189,7 @@ export async function getSpeciesDetails(scientificName: string) {
     const serverResponse: GetSpeciesDetailsResponsePayload = (await axios.get(endpoint)).data;
     response.scientificName = serverResponse.scientificName;
     response.familyName = serverResponse.familyName;
-    serverResponse.commonNames?.map((commonName) => {
+    serverResponse.commonNames?.forEach((commonName) => {
       response.commonNames.push({
         name: commonName.name,
       });

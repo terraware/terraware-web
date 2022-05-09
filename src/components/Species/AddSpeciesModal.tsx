@@ -5,16 +5,10 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React, { useEffect, useState } from 'react';
-import { createSpecies, getSpeciesDetails, listSpeciesNames, updateSpecies } from 'src/api/species/species';
+import { createSpecies, getSpeciesDetails, listSpeciesNames } from 'src/api/species/species';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
-import {
-  GrowthForms,
-  Species,
-  SpeciesRequestError,
-  SpeciesWithScientificName,
-  StorageBehaviors,
-} from 'src/types/Species';
+import { GrowthForms, Species, SpeciesRequestError, StorageBehaviors } from 'src/types/Species';
 import useForm from 'src/utils/useForm';
 import Button from '../common/button/Button';
 import Checkbox from '../common/Checkbox';
@@ -72,12 +66,12 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
   const [newScientificName, setNewScientificName] = useState(false);
 
   React.useEffect(() => {
-    if (props.open) {
-      setRecord(initSpecies(props.initialSpecies));
+    if (open) {
+      setRecord(initSpecies(initialSpecies));
     }
 
     setNameFormatError('');
-  }, [props.open, setRecord]);
+  }, [open, setRecord, initialSpecies]);
 
   useEffect(() => {
     const getOptionsForTyped = async () => {
@@ -122,7 +116,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
 
     getOptionsForTyped();
     getDetails();
-  }, [record.scientificName]);
+  }, [record.scientificName, setRecord]);
 
   const handleCancel = () => {
     onClose(false);
@@ -142,8 +136,6 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
       }
     }
   };
-
-  const validateScientificName = () => {};
 
   const onChangeScientificName = (value: string) => {
     setNameFormatError('');
@@ -178,7 +170,6 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
               placeholder={strings.SELECT}
               readonly={false}
               fullWidth={true}
-              onBlur={validateScientificName}
               warningText={
                 newScientificName ? strings.formatString(strings.SCIENTIFIC_NAME_NOT_FOUND, record.scientificName) : ''
               }
