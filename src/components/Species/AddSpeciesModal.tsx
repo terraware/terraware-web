@@ -5,7 +5,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React, { useEffect, useState } from 'react';
-import { createSpecies, updateSpecies } from 'src/api/species/species';
+import { createSpecies, listSpeciesNames, updateSpecies } from 'src/api/species/species';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
 import {
@@ -66,6 +66,20 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
   const { open, onClose, organization, initialSpecies } = props;
   const [record, setRecord, onChange] = useForm<Species>(initSpecies());
   const [nameFormatError, setNameFormatError] = useState('');
+  const [optionsForName, setOptionsForName] = useState<string[]>();
+
+  useEffect(() => {
+    const getOptionsForTyped = async () => {
+      if (record.scientificName.length > 1) {
+        const response = await listSpeciesNames(record.scientificName);
+        if (response.names) {
+          setOptionsForName(response.names);
+        }
+      }
+    };
+
+    getOptionsForTyped();
+  }, [record.scientificName]);
 
   const handleCancel = () => {
     onClose(false);
@@ -87,14 +101,15 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
       <DialogContent dividers>
         <Grid container spacing={4}>
           <Grid item xs={12}>
-            <TextField
+            <Select
               id='scientificName'
-              value={record.scientificName}
-              onChange={onChange}
+              selectedValue={record.scientificName}
+              onChange={(value) => onChange('scientificName', value)}
+              options={optionsForName}
               label={strings.SCIENTIFIC_NAME}
               aria-label={strings.SCIENTIFIC_NAME}
-              type={'text'}
-              placeholder={strings.TYPE_TO_SEARCH}
+              placeholder={strings.SELECT}
+              readonly={false}
             />
           </Grid>
           <Grid item xs={12}>

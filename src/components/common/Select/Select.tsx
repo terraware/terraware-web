@@ -30,7 +30,7 @@ export default function Select(props: SelectProps): JSX.Element {
     placeholder,
     errorText,
     warningText,
-    readonly,
+    readonly = true,
     options,
   } = props;
 
@@ -133,7 +133,7 @@ export default function Select(props: SelectProps): JSX.Element {
         <div id={id} className={selectClass} onClick={toggleOptions} ref={inputRef}>
           <input
             value={selectedValue}
-            readOnly={true}
+            readOnly={readonly}
             placeholder={placeholder}
             onChange={onChangeHandler}
             onKeyDown={onKeyDownHandler}

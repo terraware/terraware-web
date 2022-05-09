@@ -1,6 +1,7 @@
 import axios from 'src/api/index';
 import { paths } from 'src/api/types/generated-schema';
 import { Species, SpeciesById, SpeciesRequestError, SpeciesWithScientificName } from 'src/types/Species';
+import addQueryParams from '../helpers/addQueryParams';
 
 /*
  * All functions in this module ALWAYS returns a promise that resolves. All errors will be caught and
@@ -129,5 +130,30 @@ export async function deleteSpecies(speciesId: number, organizationId: number): 
   const endpoint = PUT_SPECIES_ENDPOINT.replace('{speciesId}', `${speciesId}`) + `?organizationId=${organizationId}`;
   const response: SpeciesDeleteResponse = (await axios.delete(endpoint)).data;
 
+  return response;
+}
+
+const LOOKUP_SPECIES_ENDPOINT = '/api/v1/species/lookup/names';
+type LookupSpeciesQuery = paths[typeof LOOKUP_SPECIES_ENDPOINT]['get']['parameters']['query'];
+type GetSpeciesResponsePayload =
+  paths[typeof LOOKUP_SPECIES_ENDPOINT]['get']['responses'][200]['content']['application/json'];
+export type LookupSpeciesListResponse = {
+  names: string[];
+  requestSucceeded: boolean;
+};
+
+export async function listSpeciesNames(search: string) {
+  const response: LookupSpeciesListResponse = {
+    names: [],
+    requestSucceeded: true,
+  };
+  const queryParams: LookupSpeciesQuery = { search };
+  const endpoint = addQueryParams(LOOKUP_SPECIES_ENDPOINT, queryParams);
+  const serverResponse: GetSpeciesResponsePayload = (await axios.get(endpoint)).data;
+  if (serverResponse.status !== 'error') {
+    response.names = serverResponse.names;
+  } else {
+    response.requestSucceeded = false;
+  }
   return response;
 }
