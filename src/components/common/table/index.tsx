@@ -48,13 +48,17 @@ export interface Props<T> {
   emptyTableMessage?: string;
   showCheckbox?: boolean;
   showTopBar?: boolean;
-  buttonText?: string;
-  buttonType?: 'productive' | 'passive' | 'destructive' | undefined;
-  onButtonClick?: () => void;
+  topBarButtons?: TopBarButton[];
   selectedRows?: T[];
   setSelectedRows?: React.Dispatch<React.SetStateAction<T[]>>;
   showPagination?: boolean;
 }
+
+export type TopBarButton = {
+  buttonText: string;
+  buttonType: 'productive' | 'passive' | 'destructive' | undefined;
+  onButtonClick: () => void;
+};
 
 export default function EnhancedTable<T>({
   id,
@@ -73,9 +77,7 @@ export default function EnhancedTable<T>({
   emptyTableMessage,
   showCheckbox,
   showTopBar,
-  buttonText,
-  buttonType,
-  onButtonClick,
+  topBarButtons,
   selectedRows,
   setSelectedRows,
   showPagination = true,
@@ -160,13 +162,8 @@ export default function EnhancedTable<T>({
 
   return (
     <>
-      {showTopBar && buttonText && buttonType && onButtonClick && (
-        <EnhancedTableToolbar
-          numSelected={selectedRows ? selectedRows.length : 0}
-          buttonText={buttonText}
-          buttonType={buttonType}
-          onButtonClick={onButtonClick}
-        />
+      {showTopBar && (
+        <EnhancedTableToolbar numSelected={selectedRows ? selectedRows.length : 0} topBarButtons={topBarButtons} />
       )}
       <TableContainer id={id}>
         <Table

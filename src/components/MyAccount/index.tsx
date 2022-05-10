@@ -321,9 +321,9 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
                       setSelectedRows={setSelectedRows}
                       showCheckbox={edit}
                       showTopBar={edit}
-                      buttonType='destructive'
-                      buttonText={strings.REMOVE}
-                      onButtonClick={removeSelectedOrgs}
+                      topBarButtons={[
+                        { buttonType: 'destructive', buttonText: strings.REMOVE, onButtonClick: removeSelectedOrgs },
+                      ]}
                       Renderer={AccountCellRenderer}
                     />
                   )}

@@ -407,6 +407,7 @@ const strings = new LocalizedStrings({
       'You cannot remove yourself because there is no one else in the organization. Would you like to delete the organization instead?',
     GROWTH_FORM: 'Growth Form',
     CONSERV_STATUS: 'Conserv. Status',
+    EDIT: 'Edit',
   },
 });
 

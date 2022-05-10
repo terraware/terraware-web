@@ -70,6 +70,7 @@ export default function SpeciesList({ organization }: SpeciesListProps): JSX.Ele
   const [species, setSpecies] = useState<Species[]>();
   const [speciesAPIRequest, setSpeciesAPIRequest] = useState<'AWAITING' | 'SUCCEEDED' | 'FAILED'>('AWAITING');
   const [selectedSpecies, setSelectedSpecies] = useState<Species>();
+  const [selectedSpeciesRows, setSelectedSpeciesRows] = useState<Species[]>([]);
   const [editSpeciesModalOpen, setEditSpeciesModalOpen] = useState(false);
   const setSnackbar = useSetRecoilState(snackbarAtom);
 
@@ -100,10 +101,6 @@ export default function SpeciesList({ organization }: SpeciesListProps): JSX.Ele
       });
     }
   };
-  const onSelect = (selected: Species) => {
-    setSelectedSpecies(selected);
-    setEditSpeciesModalOpen(true);
-  };
   const onNewSpecies = () => {
     setSelectedSpecies(undefined);
     setEditSpeciesModalOpen(true);
@@ -131,6 +128,11 @@ export default function SpeciesList({ organization }: SpeciesListProps): JSX.Ele
     );
   }
 
+  const OnEditSpecie = () => {
+    setSelectedSpecies(selectedSpeciesRows[0]);
+    setEditSpeciesModalOpen(true);
+  };
+
   return (
     <TfMain>
       <AddSpeciesModal
@@ -152,7 +154,27 @@ export default function SpeciesList({ organization }: SpeciesListProps): JSX.Ele
           {species && species.length ? (
             <Grid item xs={12}>
               {species && (
-                <Table id='species-table' columns={columns} rows={species} orderBy='name' onSelect={onSelect} />
+                <Table
+                  id='species-table'
+                  columns={columns}
+                  rows={species}
+                  orderBy='name'
+                  showCheckbox={true}
+                  selectedRows={selectedSpeciesRows}
+                  setSelectedRows={setSelectedSpeciesRows}
+                  showTopBar={true}
+                  topBarButtons={
+                    selectedSpeciesRows.length === 1
+                      ? [
+                          {
+                            buttonType: 'passive',
+                            buttonText: strings.EDIT,
+                            onButtonClick: OnEditSpecie,
+                          },
+                        ]
+                      : []
+                  }
+                />
               )}
             </Grid>
           ) : (
