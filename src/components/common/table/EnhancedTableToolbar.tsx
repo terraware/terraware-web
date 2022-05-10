@@ -28,6 +28,7 @@ export default function EnhancedTableToolbar(props: EnhancedTableToolbarProps): 
       {topBarButtons?.map((tbButton) => {
         return (
           <Button
+            key={tbButton.buttonText}
             label={tbButton.buttonText}
             priority='secondary'
             type={tbButton.buttonType}
