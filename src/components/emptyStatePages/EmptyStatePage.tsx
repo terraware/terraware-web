@@ -52,11 +52,12 @@ const NO_PROJECTS_CONTENT: PageContent = {
       icon: 'project',
       title: dict.PROJECT_PROFILE,
       description: emptyStateStrings.NO_PROJECTS_DESCRIPTION_PROJECTS,
-      buttonText: strings.ADD_PROJECT,
     },
     { icon: 'people', title: strings.PEOPLE, description: emptyStateStrings.NO_PROJECTS_DESCRIPTION_PEOPLE },
     { icon: 'sites', title: strings.SITES, description: emptyStateStrings.NO_PROJECTS_DESCRIPTION_SITES },
   ],
+  buttonText: strings.ADD_PROJECT,
+  linkLocation: APP_PATHS.PROJECTS_NEW,
 };
 
 const NO_SITES_CONTENT: PageContent = {
