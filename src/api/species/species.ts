@@ -60,6 +60,7 @@ export async function createSpecies(species: Species, organizationId: number): P
     familyName: species.familyName,
     growthForm: species.growthForm,
     scientificName: species.scientificName,
+    seedStorageBehavior: species.seedStorageBehavior,
     organizationId,
     rare: species.rare,
   };
