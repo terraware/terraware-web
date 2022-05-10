@@ -4,7 +4,7 @@ import Grid from '@material-ui/core/Grid';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSetRecoilState } from 'recoil';
-import { getAllSpecies } from 'src/api/species/species';
+import { deleteSpecies, getAllSpecies } from 'src/api/species/species';
 import Button from 'src/components/common/button/Button';
 import EmptyMessage from 'src/components/common/EmptyMessage';
 import ErrorBox from 'src/components/common/ErrorBox/ErrorBox';
@@ -19,6 +19,7 @@ import { Species } from 'src/types/Species';
 import TfMain from 'src/components/common/TfMain';
 import PageSnackbar from 'src/components/PageSnackbar';
 import AddSpeciesModal from './AddSpeciesModal';
+import DeleteSpeciesModal from './DeleteSpeciesModal';
 
 type SpeciesListProps = {
   organization: ServerOrganization;
@@ -72,6 +73,7 @@ export default function SpeciesList({ organization }: SpeciesListProps): JSX.Ele
   const [selectedSpecies, setSelectedSpecies] = useState<Species>();
   const [selectedSpeciesRows, setSelectedSpeciesRows] = useState<Species[]>([]);
   const [editSpeciesModalOpen, setEditSpeciesModalOpen] = useState(false);
+  const [deleteSpeciesModalOpen, setDeleteSpeciesModalOpen] = useState(false);
   const setSnackbar = useSetRecoilState(snackbarAtom);
 
   const populateSpecies = useCallback(async () => {
@@ -133,8 +135,27 @@ export default function SpeciesList({ organization }: SpeciesListProps): JSX.Ele
     setEditSpeciesModalOpen(true);
   };
 
+  const OnDeleteSpecies = () => {
+    setDeleteSpeciesModalOpen(true);
+  };
+
+  const deleteSelectedSpecies = () => {
+    if (selectedSpeciesRows.length > 0) {
+      selectedSpeciesRows.forEach(async (iSelectedSpecies) => {
+        await deleteSpecies(iSelectedSpecies.id, organization.id);
+      });
+      setDeleteSpeciesModalOpen(false);
+      populateSpecies();
+    }
+  };
+
   return (
     <TfMain>
+      <DeleteSpeciesModal
+        open={deleteSpeciesModalOpen}
+        onClose={() => setDeleteSpeciesModalOpen(false)}
+        onSubmit={deleteSelectedSpecies}
+      />
       <AddSpeciesModal
         open={editSpeciesModalOpen}
         onClose={onCloseEditSpeciesModal}
@@ -168,11 +189,22 @@ export default function SpeciesList({ organization }: SpeciesListProps): JSX.Ele
                       ? [
                           {
                             buttonType: 'passive',
+                            buttonText: strings.DELETE,
+                            onButtonClick: OnDeleteSpecies,
+                          },
+                          {
+                            buttonType: 'passive',
                             buttonText: strings.EDIT,
                             onButtonClick: OnEditSpecie,
                           },
                         ]
-                      : []
+                      : [
+                          {
+                            buttonType: 'passive',
+                            buttonText: strings.DELETE,
+                            onButtonClick: OnDeleteSpecies,
+                          },
+                        ]
                   }
                 />
               )}

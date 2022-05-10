@@ -12,7 +12,7 @@ const strings = new LocalizedStrings({
     DASHBOARD: 'Dashboard',
     DELETE_SPECIES: 'Delete Species',
     DELETE_CONFIRMATION_MODAL_MAIN_TEXT:
-      'Are you sure you want to delete this species? This action cannot be undone. Any plants with this species will now be categorized as “Other” for its species.',
+      'Are you sure you want to delete your selected species? This will delete them from your list, but you’ll keep all data attached to existing entries.',
     SNACKBAR_MSG_NEW_SPECIES_ADDED: 'New species added just now.',
     SNACKBAR_MSG_CHANGES_SAVED: 'Changes saved just now.',
     SNACKBAR_MSG_SPECIES_DELETED: 'Species deleted just now.',
