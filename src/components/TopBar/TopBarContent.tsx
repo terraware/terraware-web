@@ -48,6 +48,7 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
         notifications={props.notifications}
         setNotifications={setNotifications}
         organizationId={selectedOrganization?.id}
+        reloadOrganizationData={reloadOrganizationData}
       />
       <div className={classes.separator} />
       <OrganizationsDropdown
