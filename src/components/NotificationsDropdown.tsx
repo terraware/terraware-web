@@ -56,7 +56,6 @@ const useStyles = makeStyles((theme) =>
       },
     },
     unreadNotificationIndicator: {
-      marginLeft: '8px',
       width: '8px',
       height: '8px',
       borderRadius: '4px',
@@ -75,9 +74,6 @@ const useStyles = makeStyles((theme) =>
       },
     },
     notificationContent: {
-      display: 'flex',
-      flexDirection: 'column',
-      minWidth: '375px',
       fontSize: '14px',
       fontWeight: 400,
       margin: '0px',
@@ -92,7 +88,7 @@ const useStyles = makeStyles((theme) =>
     notificationBody: {
       display: 'block',
       color: '#3A4445',
-      margin: '0px 8px',
+      margin: '8px',
     },
     notificationTimestamp: {
       display: 'block',
@@ -129,10 +125,10 @@ const useStyles = makeStyles((theme) =>
     },
     notificationMenuWrapper: {
       maxWidth: '40px',
-      margin: 'auto 0',
+      margin: 'auto auto',
+      marginLeft: '4px',
       display: 'flex',
-      justifyContent: 'left',
-      padding: '0px 8px',
+      justifyContent: 'center',
     },
   })
 );
@@ -141,14 +137,14 @@ type NotificationsDropdownProps = {
   notifications?: Notifications;
   setNotifications: (notifications?: Notifications) => void;
   organizationId?: number;
-  reloadOrganizationData: () => void;
 };
 
 export default function NotificationsDropdown(props: NotificationsDropdownProps): JSX.Element {
   const classes = useStyles();
   const history = useHistory();
-  const { notifications, setNotifications, organizationId, reloadOrganizationData } = props;
+  const { notifications, setNotifications, organizationId } = props;
   // notificationsInterval value is only being used when it is set.
+  const [, setNotificationsInterval] = useState<ReturnType<typeof setInterval>>();
   const [anchorEl, setAnchorEl] = useState<Element | null>(null);
   const [lastSeen, setLastSeen] = useState<number>(0);
 
@@ -171,14 +167,23 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
     populateNotifications();
 
     // Create interval to fetch future notifications.
-    let interval: ReturnType<typeof setInterval>;
     if (!process.env.REACT_APP_DISABLE_RECURRENT_REQUESTS) {
-      interval = setInterval(populateNotifications, API_PULL_INTERVAL);
+      setNotificationsInterval((currInterval) => {
+        if (currInterval) {
+          clearInterval(currInterval);
+        }
+        return setInterval(populateNotifications, API_PULL_INTERVAL);
+      });
     }
 
     // Clean up existing interval.
     return () => {
-      clearInterval(interval);
+      setNotificationsInterval((currInterval) => {
+        if (currInterval) {
+          clearInterval(currInterval);
+        }
+        return undefined;
+      });
     };
   }, [populateNotifications, organizationId]);
 
@@ -257,12 +262,7 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
           )}
           {notifications &&
             notifications.items.map((notification) => (
-              <NotificationItem
-                key={notification.id}
-                notification={notification}
-                markAsRead={markAsRead}
-                reloadOrganizationData={reloadOrganizationData}
-              />
+              <NotificationItem key={notification.id} notification={notification} markAsRead={markAsRead} />
             ))}
           {notifications?.errorOccurred && (
             <ListItem>
@@ -282,20 +282,16 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
 type NotificationItemProps = {
   notification: Notification;
   markAsRead: (read: boolean, id: number, close?: boolean) => void;
-  reloadOrganizationData: () => void;
 };
 
 function NotificationItem(props: NotificationItemProps): JSX.Element {
   const [inFocus, setInFocus] = useState<boolean>(false);
   const classes = useStyles();
-  const { notification, markAsRead, reloadOrganizationData } = props;
-  const { id, title, body, localUrl, createdTime, isRead, notificationCriticality, notificationType } = notification;
+  const { notification, markAsRead } = props;
+  const { id, title, body, localUrl, createdTime, isRead, notificationCriticality } = notification;
   const criticality = notificationCriticality.toLowerCase();
 
-  const onNotificationClick = async (read: boolean, close?: boolean) => {
-    if (close && (notificationType === 'User Added to Organization' || notificationType === 'User Added to Project')) {
-      await reloadOrganizationData();
-    }
+  const onNotificationClick = (read: boolean, close?: boolean) => {
     markAsRead(read, id, close);
   };
 

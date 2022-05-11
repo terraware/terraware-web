@@ -792,8 +792,7 @@ export interface components {
       notificationType:
         | "User Added to Organization"
         | "Facility Idle"
-        | "Facility Alert Requested"
-        | "User Added to Project";
+        | "Facility Alert Requested";
       notificationCriticality: "Info" | "Warning" | "Error" | "Success";
       organizationId?: number;
       title: string;
