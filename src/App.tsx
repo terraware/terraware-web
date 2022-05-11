@@ -109,12 +109,6 @@ export default function App() {
    */
   const [accessionsDisplayColumns, setAccessionsDisplayColumns] = useState<string[]>(DefaultColumns.fields);
 
-  /*
-   * facilityIdSelected saves the value of the facilityId selected on "Accessions" and "Seeds summary" page.
-   * We can then pass its value to "New accession page", when creating a new accession and to the top bar
-   * to how notifications.
-   */
-  const [facilityIdSelected, setFacilityIdSelected] = useState<number>();
   const [orgAPIRequestStatus, setOrgAPIRequestStatus] = useState<APIRequestStatus>(APIRequestStatus.AWAITING);
   // get the selected values on database to pass it to new accession page
   const [organizations, setOrganizations] = useState<ServerOrganization[]>();
@@ -258,8 +252,6 @@ export default function App() {
             <TopBarContent
               notifications={notifications}
               setNotifications={setNotifications}
-              setSeedSearchCriteria={setSeedSearchCriteria}
-              facilityId={facilityIdSelected}
               organizations={organizations}
               selectedOrganization={selectedOrganization}
               setSelectedOrganization={setSelectedOrganization}
@@ -279,11 +271,7 @@ export default function App() {
                 />
               </Route>
               <Route exact path={APP_PATHS.SEEDS_DASHBOARD}>
-                <SeedSummary
-                  organization={filteredOrganization()}
-                  setSeedSearchCriteria={setSeedSearchCriteria}
-                  setFacilityIdSelected={setFacilityIdSelected}
-                />
+                <SeedSummary organization={filteredOrganization()} setSeedSearchCriteria={setSeedSearchCriteria} />
               </Route>
               <Route exact path={APP_PATHS.CHECKIN}>
                 <CheckIn organization={selectedOrganization} />
