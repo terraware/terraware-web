@@ -1,39 +1,29 @@
-export type NotificationCount = {
-  organizationId?: number;
-  unread: number;
-};
-
-export type MarkNotificationRead = {
-  read: boolean;
-};
-
-export type MarkNotificationsRead = {
-  read: boolean;
-  organizationId?: number;
-};
-
-export type NotificationType = 'User Added to Organization' | 'Facility Idle' | 'Facility Alert Requested';
-
-export type NotificationCriticality = 'Info' | 'Warning' | 'Error' | 'Success';
+export enum NotificationTypes {
+  'Alert' = 0,
+  'State' = 1,
+  'Date' = 2,
+}
 
 export type Notification = {
-  id: number;
-  notificationType: NotificationType;
-  notificationCriticality: NotificationCriticality;
-  organizationId?: number;
-  title: string;
-  body: string;
-  localUrl: string;
-  createdTime: string;
-  isRead: boolean;
+  id: string;
+  timestamp: string;
+  type: NotificationTypes;
+  read: boolean;
+  text: string;
+  accessionId?: number;
+  state?:
+    | 'Awaiting Check-In'
+    | 'Pending'
+    | 'Processing'
+    | 'Processed'
+    | 'Drying'
+    | 'Dried'
+    | 'In Storage'
+    | 'Withdrawn'
+    | 'Nursery';
 };
 
 export type Notifications = {
   items: Notification[];
-  errorOccurred: boolean;
-};
-
-export type NotificationsCount = {
-  items: NotificationCount[];
   errorOccurred: boolean;
 };

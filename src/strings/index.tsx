@@ -380,7 +380,7 @@ const strings = new LocalizedStrings({
     FIX_HIGHLIGHTED_FIELDS: 'Fix the highlighted fields below.',
     OWNERS_ADMINS_ACCESS_ALL_PROJECTS: 'Owners and Admins automatically have access to all projects.',
     DETAILS: 'Details',
-    NO_NOTIFICATIONS: 'No notifications to show.',
+    NO_NOTIFICATIONS: 'No notifications',
     UNEXPECTED_ERROR: 'An unexpected error occurred.',
     REMOVE_ONLY_ONE_ORG_AT_A_TIME: 'You may only remove yourself from one organization at a time.',
     REMOVING_ORG_WARNING:
@@ -393,14 +393,6 @@ const strings = new LocalizedStrings({
     DELETE_ORGANIZATION_MSG: 'Are you sure you want to delete {0}?',
     CANNOT_REMOVE_DELETE_MSG:
       'You cannot remove yourself because there is no one else in the organization. Would you like to delete the organization instead?',
-    SETTINGS: 'Settings',
-    MARK_ALL_AS_READ: 'Mark All As Read',
-    SOMETHING_WENT_WRONG: 'Something went wrong.',
-    UNABLE_TO_LOAD_NOTIFICATIONS: 'Unable to load notifications. Try again later.',
-    NOTIFICATIONS: 'Notifications',
-    MARK_AS_READ: 'Mark As Read',
-    MARK_AS_UNREAD: 'Mark As Unread',
-    TAKE_ME_THERE: 'Take Me There',
   },
 });
 

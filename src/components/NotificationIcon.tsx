@@ -4,7 +4,7 @@ import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
 import WarningIcon from '@material-ui/icons/Warning';
 import WifiTetheringIcon from '@material-ui/icons/WifiTethering';
 import React from 'react';
-import { NotificationCriticality } from 'src/types/Notifications';
+import { NotificationTypes } from 'src/types/Notifications';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -31,19 +31,19 @@ const useStyles = makeStyles((theme) =>
 );
 
 interface Props {
-  type: NotificationCriticality;
+  type: NotificationTypes;
 }
 
 export default function NotificationIcon({ type }: Props): JSX.Element {
   const classes = useStyles();
-  if (type === 'Error') {
+  if (type === NotificationTypes.Alert) {
     return (
       <Fab color='secondary' aria-label='add' className={classes.fab} variant='round'>
         <WarningIcon htmlColor='#fff' fontSize='small' />
       </Fab>
     );
   }
-  if (type === 'Info') {
+  if (type === NotificationTypes.Date) {
     return (
       <Fab color='secondary' aria-label='add' className={`${classes.fab} ${classes.dateNotification}`} variant='round'>
         <CalendarTodayIcon htmlColor='#fff' fontSize='small' />

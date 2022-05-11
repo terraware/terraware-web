@@ -1,7 +1,4 @@
-/**
- * TODO: redo notifications tests
- */
-describe.skip('Notifications', () => {
+describe('Notifications', () => {
   beforeEach(() => {
     cy.intercept('GET', '/api/v1/seedbank/notification?*').as('notification');
     cy.visit('/seeds-dashboard');

@@ -1,7 +1,4 @@
-/**
- * TODO redo tests
- */
-describe.skip('Summary page', () => {
+describe('Summary page', () => {
   beforeEach(() => {
     cy.intercept('GET', '/api/v1/seedbank/notification?*').as('notification');
     cy.intercept('GET', '/api/v1/seedbank/summary/*').as('summary');

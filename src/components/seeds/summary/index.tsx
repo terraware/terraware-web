@@ -54,12 +54,13 @@ Cookies.defaults = {
 type SeedSummaryProps = {
   organization?: ServerOrganization;
   setSeedSearchCriteria: (criteria: SeedSearchCriteria) => void;
+  setFacilityIdSelected: (facilityId: number) => void;
 };
 
 export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
   const classes = useStyles();
   const history = useHistory();
-  const { setSeedSearchCriteria, organization } = props;
+  const { setSeedSearchCriteria, organization, setFacilityIdSelected } = props;
   // populateSummaryInterval value is only being used when it is set.
   const [, setPopulateSummaryInterval] = useState<ReturnType<typeof setInterval>>();
   const [summary, setSummary] = useState<GetSummaryResponse>();
@@ -80,6 +81,7 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
 
       // Update summary information
       if (seedbankFacility) {
+        setFacilityIdSelected(seedbankFacility.id);
         populateSummary();
       } else {
         setSummary(undefined);
@@ -112,7 +114,7 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
         return undefined;
       });
     };
-  }, [organization, setSelectedOrgInfo]);
+  }, [setFacilityIdSelected, organization, setSelectedOrgInfo]);
 
   const goToProjects = () => {
     const projectsLocation = {
