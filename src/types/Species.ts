@@ -3,18 +3,15 @@ export type Species = {
   commonName?: string;
   endangered?: boolean;
   familyName?: string;
-  growthForm?: GrowthForm;
+  growthForm?: 'Tree' | 'Shrub' | 'Forb' | 'Graminoid' | 'Fern';
   scientificName: string;
   rare?: boolean;
-  seedStorageBehavior?: StorageBehavior;
+  seedStorageBehavior?: 'Orthodox' | 'Recalcitrant' | 'Intermediate' | 'Unknown';
 };
 
 export const GrowthForms = ['Tree', 'Shrub', 'Forb', 'Graminoid', 'Fern'];
 
 export const StorageBehaviors = ['Orthodox', 'Recalcitrant', 'Intermediate', 'Unknown'];
-
-export type GrowthForm = typeof GrowthForms[number];
-export type StorageBehavior = typeof StorageBehaviors[number];
 
 export type SpeciesWithScientificName = Species & {
   scientificName?: string;
