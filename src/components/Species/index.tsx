@@ -25,7 +25,6 @@ import { FieldNodePayload, search, searchCsv, SearchNodePayload } from 'src/api/
 import SpeciesFilters from './SpeciesFiltersPopover';
 import useForm from 'src/utils/useForm';
 import Icon from '../common/icon/Icon';
-import { downloadReport } from 'src/api/seeds/report';
 
 type SpeciesListProps = {
   organization: ServerOrganization;
