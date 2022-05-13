@@ -12,17 +12,10 @@ export type MarkNotificationsRead = {
   organizationId?: number;
 };
 
-export type NotificationType =
-  | 'User Added to Organization'
-  | 'Facility Idle'
-  | 'Facility Alert Requested'
-  | 'User Added to Project';
-
 export type NotificationCriticality = 'Info' | 'Warning' | 'Error' | 'Success';
 
 export type Notification = {
   id: number;
-  notificationType: NotificationType;
   notificationCriticality: NotificationCriticality;
   organizationId?: number;
   title: string;
