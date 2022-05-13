@@ -21,15 +21,8 @@ import PageSnackbar from 'src/components/PageSnackbar';
 import AddSpeciesModal from './AddSpeciesModal';
 import DeleteSpeciesModal from './DeleteSpeciesModal';
 import TextField from '../common/Textfield/Textfield';
-import {
-  convertToSearchNodePayload,
-  FieldNodePayload,
-  search,
-  SearchNodePayload,
-  SearchResponseElement,
-} from 'src/api/seeds/search';
-import Icon from '../common/icon/Icon';
-import SpeciesFilters from './SpeciesFilters';
+import { FieldNodePayload, search, SearchNodePayload } from 'src/api/seeds/search';
+import SpeciesFilters from './SpeciesFiltersPopover';
 import useForm from 'src/utils/useForm';
 
 type SpeciesListProps = {
@@ -84,7 +77,7 @@ const columns: TableColumnType[] = [
   { key: 'seedStorageBehavior', name: strings.SEED_STORAGE_BEHAVIOR, type: 'string' },
 ];
 
-export type SpeciesFilters = {
+export type SpeciesFiltersType = {
   growthForm?: 'Tree' | 'Shrub' | 'Forb' | 'Graminoid' | 'Fern';
   seedStorageBehavior?: 'Orthodox' | 'Recalcitrant' | 'Intermediate' | 'Unknown';
   rare?: boolean;
@@ -102,7 +95,7 @@ export default function SpeciesList({ organization }: SpeciesListProps): JSX.Ele
   const setSnackbar = useSetRecoilState(snackbarAtom);
   const [searchValue, setSearchValue] = useState('');
   const [results, setResults] = useState<Species[]>();
-  const [record, setRecord, onChange] = useForm<SpeciesFilters>({});
+  const [record, setRecord, onChange] = useForm<SpeciesFiltersType>({});
 
   const populateSpecies = useCallback(async () => {
     const response = await getAllSpecies(organization.id);
@@ -171,7 +164,7 @@ export default function SpeciesList({ organization }: SpeciesListProps): JSX.Ele
   const onChangeSearch = (id: string, value: unknown) => {
     setSearchValue(value as string);
   };
-  const onKeyDownHandler = async (key: string) => {
+  const onKeyDownHandler = (key: string) => {
     if (key === 'Enter') {
       onApplyFilters();
     }
@@ -256,9 +249,9 @@ export default function SpeciesList({ organization }: SpeciesListProps): JSX.Ele
       params.search.children.push(newNode);
     }
     if (params.search.children.length) {
-      const results = await search(params);
+      const searchResults = await search(params);
       const speciesResults: Species[] = [];
-      results?.map((result) => {
+      searchResults?.forEach((result) => {
         speciesResults.push({
           id: result.id as number,
           scientificName: result.scientificName as string,
