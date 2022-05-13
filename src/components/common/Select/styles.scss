@@ -165,7 +165,6 @@
     }
 
     &--readonly {
-      background-color: $tw-clr-frm-fld-text-input-fill-read-only;
       &:hover {
         border: $tw-sz-frm-fld-text-input-stroke solid $tw-clr-frm-fld-text-input-stroke;
       }
@@ -173,6 +172,10 @@
       &:active {
         border: $tw-sz-frm-fld-text-input-stroke solid $tw-clr-frm-fld-text-input-stroke;
       }
+    }
+
+    &--readonly input {
+        cursor: auto;
     }
   }
 

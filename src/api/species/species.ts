@@ -106,6 +106,7 @@ export async function updateSpecies(species: Species, organizationId: number): P
     scientificName: species.scientificName,
     organizationId,
     rare: species.rare,
+    seedStorageBehavior: species.seedStorageBehavior,
   };
   try {
     const endpoint = PUT_SPECIES_ENDPOINT.replace('{speciesId}', `${species.id}`);

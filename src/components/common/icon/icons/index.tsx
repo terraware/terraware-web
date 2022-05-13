@@ -9,6 +9,7 @@ import { ReactComponent as ChevronUp } from './chevron-up.svg';
 import { ReactComponent as Critical } from './critical.svg';
 import { ReactComponent as Edit } from './edit.svg';
 import { ReactComponent as Error } from './error.svg';
+import { ReactComponent as Filter } from './filter.svg';
 import { ReactComponent as Folder } from './folder.svg';
 import { ReactComponent as Help } from './help.svg';
 import { ReactComponent as Home } from './home.svg';
@@ -48,6 +49,7 @@ export type IconName =
   | 'critical'
   | 'edit'
   | 'error'
+  | 'filter'
   | 'folder'
   | 'help'
   | 'home'
@@ -92,6 +94,7 @@ const icons: Record<IconName, SVGComponent> = {
   critical: Critical,
   edit: Edit,
   error: Error,
+  filter: Filter,
   folder: Folder,
   help: Help,
   home: Home,
