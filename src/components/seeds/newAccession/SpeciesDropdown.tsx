@@ -22,7 +22,7 @@ export default function SpeciesDropdown(props: SpeciesDropdownProps): JSX.Elemen
         const response = await getAllSpecies(organization.id);
         // TODO: what if we cannot fetch the species list?
         if (response.requestSucceeded) {
-          setSpeciesList(Array.from(response.speciesById.values()));
+          setSpeciesList(response.species);
         }
       }
     };
@@ -35,7 +35,7 @@ export default function SpeciesDropdown(props: SpeciesDropdownProps): JSX.Elemen
       selected={selectedSpecies}
       onChange={onChange}
       label={strings.SPECIES}
-      values={speciesList.map((item) => item.name)}
+      values={speciesList.map((item) => item.scientificName)}
       disabled={disabled}
       freeSolo={false}
     />
