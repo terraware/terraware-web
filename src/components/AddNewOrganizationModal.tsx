@@ -202,7 +202,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
           />
         </Grid>
         <Grid item xs={12}>
-          <TextField label={strings.DESCRIPTION_OPTIONAL} type='text' id='description' onChange={onChange} />
+          <TextField label={strings.DESCRIPTION} type='text' id='description' onChange={onChange} />
         </Grid>
         <Grid item xs={12}>
           <Select
