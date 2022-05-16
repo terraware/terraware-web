@@ -1,7 +1,17 @@
 export type Species = {
   id: number;
-  name: string;
+  commonName?: string;
+  endangered?: boolean;
+  familyName?: string;
+  growthForm?: 'Tree' | 'Shrub' | 'Forb' | 'Graminoid' | 'Fern';
+  scientificName: string;
+  rare?: boolean;
+  seedStorageBehavior?: 'Orthodox' | 'Recalcitrant' | 'Intermediate' | 'Unknown';
 };
+
+export const GrowthForms = ['Tree', 'Shrub', 'Forb', 'Graminoid', 'Fern'];
+
+export const StorageBehaviors = ['Orthodox', 'Recalcitrant', 'Intermediate', 'Unknown'];
 
 export type SpeciesWithScientificName = Species & {
   scientificName?: string;

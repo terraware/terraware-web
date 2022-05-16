@@ -9,13 +9,14 @@ interface SelectProps {
   disabled?: boolean;
   id?: string;
   className?: string;
-  helperText?: string;
+  helperText?: string | string[];
   placeholder?: string;
-  errorText?: string;
-  warningText?: string;
+  errorText?: string | string[];
+  warningText?: string | string[];
   selectedValue?: string;
   readonly?: boolean;
   options?: string[];
+  fullWidth?: boolean;
 }
 
 export default function Select(props: SelectProps): JSX.Element {
@@ -30,8 +31,9 @@ export default function Select(props: SelectProps): JSX.Element {
     placeholder,
     errorText,
     warningText,
-    readonly,
+    readonly = true,
     options,
+    fullWidth,
   } = props;
 
   const selectClass = classNames({
@@ -129,11 +131,11 @@ export default function Select(props: SelectProps): JSX.Element {
           {label}
         </label>
       )}
-      <div className='textfield-container'>
+      <div className={`textfield-container ${fullWidth ? 'textfield-container--fullWidth' : ''}`}>
         <div id={id} className={selectClass} onClick={toggleOptions} ref={inputRef}>
           <input
             value={selectedValue}
-            readOnly={true}
+            readOnly={readonly}
             placeholder={placeholder}
             onChange={onChangeHandler}
             onKeyDown={onKeyDownHandler}

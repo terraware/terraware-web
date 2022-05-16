@@ -26,6 +26,7 @@ export async function getUser(): Promise<GetUserResponse> {
       email: serverResponse.user.email,
       firstName: serverResponse.user.firstName,
       lastName: serverResponse.user.lastName,
+      emailNotificationsEnabled: serverResponse.user.emailNotificationsEnabled,
     };
   } catch {
     response.requestSucceeded = false;
@@ -45,6 +46,9 @@ export async function updateUserProfile(user: User): Promise<UpdateUserResponse>
       firstName: user.firstName || '',
       lastName: user.lastName || '',
     };
+    if (user.emailNotificationsEnabled !== undefined) {
+      serverRequest.emailNotificationsEnabled = user.emailNotificationsEnabled;
+    }
     const serverResponse: UPDATE_USER_RESPONSE_PAYLOAD = (await axios.put(GET_USER_ENDPOINT, serverRequest)).data;
     if (serverResponse.status === 'error') {
       response.requestSucceeded = false;

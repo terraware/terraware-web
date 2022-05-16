@@ -16,9 +16,9 @@ import strings from 'src/strings';
 import emptyMessageStrings from 'src/strings/emptyMessageModal';
 import { ServerOrganization } from 'src/types/Organization';
 import { Species, SpeciesWithScientificName } from 'src/types/Species';
-import SimpleSpeciesModal from './SimpleSpeciesModal';
 import TfMain from 'src/components/common/TfMain';
 import PageSnackbar from 'src/components/PageSnackbar';
+import AddSpeciesModal from './AddSpeciesModal';
 
 type SpeciesListProps = {
   organization: ServerOrganization;
@@ -74,7 +74,7 @@ export default function SpeciesList({ organization }: SpeciesListProps): JSX.Ele
     const response = await getAllSpecies(organization.id);
     if (response.requestSucceeded) {
       setSpeciesAPIRequest('SUCCEEDED');
-      setSpecies(Array.from(response.speciesById.values()));
+      setSpecies(response.species);
     } else {
       setSpeciesAPIRequest('FAILED');
     }
@@ -130,7 +130,7 @@ export default function SpeciesList({ organization }: SpeciesListProps): JSX.Ele
 
   return (
     <TfMain>
-      <SimpleSpeciesModal
+      <AddSpeciesModal
         open={editSpeciesModalOpen}
         onClose={onCloseEditSpeciesModal}
         initialSpecies={selectedSpecies}

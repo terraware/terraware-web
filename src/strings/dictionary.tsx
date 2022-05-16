@@ -30,6 +30,7 @@ const dictionary = new LocalizedStrings({
     SITE_PROFILE: 'Site Profile',
     EDIT_ACCOUNT: 'Edit Account',
     GENERAL: 'General',
+    NOTIFICATIONS: 'Notifications',
     ORGANIZATIONS: 'Organizations',
     LEAVE_ORGANIZATION: 'Leave Organization',
     ASSIGN_NEW_OWNER: 'Assign New Owner',
