@@ -289,11 +289,11 @@ function NotificationItem(props: NotificationItemProps): JSX.Element {
   const [inFocus, setInFocus] = useState<boolean>(false);
   const classes = useStyles();
   const { notification, markAsRead, reloadOrganizationData } = props;
-  const { id, title, body, localUrl, createdTime, isRead, notificationCriticality, notificationType } = notification;
+  const { id, title, body, localUrl, createdTime, isRead, notificationCriticality } = notification;
   const criticality = notificationCriticality.toLowerCase();
 
   const onNotificationClick = async (read: boolean, close?: boolean) => {
-    if (close && (notificationType === 'User Added to Organization' || notificationType === 'User Added to Project')) {
+    if (close && (localUrl.startsWith('/home') || localUrl.startsWith('/projects'))) {
       await reloadOrganizationData();
     }
     markAsRead(read, id, close);
