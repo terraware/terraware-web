@@ -6,6 +6,7 @@ import { ReactComponent as CaretLeft } from './caret-left.svg';
 import { ReactComponent as CaretUp } from './caret-up.svg';
 import { ReactComponent as ChevronDown } from './chevron-down.svg';
 import { ReactComponent as ChevronUp } from './chevron-up.svg';
+import { ReactComponent as Close } from './close.svg';
 import { ReactComponent as Critical } from './critical.svg';
 import { ReactComponent as Edit } from './edit.svg';
 import { ReactComponent as Error } from './error.svg';
@@ -45,8 +46,9 @@ export type IconName =
   | 'caretDown'
   | 'caretLeft'
   | 'caretUp'
-  | 'chevronUp'
   | 'chevronDown'
+  | 'chevronUp'
+  | 'close'
   | 'critical'
   | 'edit'
   | 'error'
@@ -91,8 +93,9 @@ const icons: Record<IconName, SVGComponent> = {
   caretDown: CaretDown,
   caretLeft: CaretLeft,
   caretUp: CaretUp,
-  chevronUp: ChevronUp,
   chevronDown: ChevronDown,
+  chevronUp: ChevronUp,
+  close: Close,
   critical: Critical,
   edit: Edit,
   error: Error,
