@@ -191,7 +191,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
           </Grid>
           <Grid item xs={12}>
             <TextField
-              id='family'
+              id='familyName'
               value={record.familyName}
               onChange={onChange}
               label={strings.FAMILY_OPTIONAL}
