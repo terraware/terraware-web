@@ -5,7 +5,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React, { useEffect, useState } from 'react';
-import { createSpecies, getSpeciesDetails, listSpeciesNames } from 'src/api/species/species';
+import { createSpecies, getSpeciesDetails, listSpeciesNames, updateSpecies } from 'src/api/species/species';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
 import { GrowthForms, Species, SpeciesRequestError, StorageBehaviors } from 'src/types/Species';
@@ -122,7 +122,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
     onClose(false);
   };
 
-  const saveSpecies = async () => {
+  const createNewSpecies = async () => {
     if (!record.scientificName) {
       setNameFormatError(strings.REQUIRED_FIELD);
     } else {
@@ -137,6 +137,17 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
     }
   };
 
+  const saveChanges = async () => {
+    if (!record.scientificName) {
+      setNameFormatError(strings.REQUIRED_FIELD);
+    } else {
+      const response = await updateSpecies(record, organization.id);
+      if (response.requestSucceeded) {
+        onClose(true);
+      }
+    }
+  };
+
   const onChangeScientificName = (value: string) => {
     setNameFormatError('');
     onChange('scientificName', value);
@@ -145,7 +156,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
   return (
     <Dialog onClose={handleCancel} disableEscapeKeyDown open={open} maxWidth='md' classes={{ paper: classes.paper }}>
       <DialogTitle>
-        <Typography variant='h6'>{strings.ADD_A_SPECIES}</Typography>
+        <Typography variant='h6'>{initialSpecies ? strings.EDIT_SPECIES : strings.ADD_A_SPECIES}</Typography>
         <DialogCloseButton onClick={handleCancel} />
       </DialogTitle>
       <DialogContent dividers>
@@ -171,7 +182,9 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
               readonly={false}
               fullWidth={true}
               warningText={
-                newScientificName ? strings.formatString(strings.SCIENTIFIC_NAME_NOT_FOUND, record.scientificName) : ''
+                !initialSpecies && newScientificName
+                  ? strings.formatString(strings.SCIENTIFIC_NAME_NOT_FOUND, record.scientificName)
+                  : ''
               }
               errorText={nameFormatError}
             />
@@ -191,7 +204,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
           </Grid>
           <Grid item xs={12}>
             <TextField
-              id='family'
+              id='familyName'
               value={record.familyName}
               onChange={onChange}
               label={strings.FAMILY_OPTIONAL}
@@ -257,7 +270,11 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
               type='passive'
               className={classes.spacing}
             />
-            <Button onClick={saveSpecies} id='add-species' label={strings.ADD_SPECIES} />
+            <Button
+              onClick={initialSpecies ? saveChanges : createNewSpecies}
+              id='add-species'
+              label={initialSpecies ? strings.SAVE : strings.ADD_SPECIES}
+            />
           </Box>
         </Box>
       </DialogActions>

@@ -405,6 +405,9 @@ const strings = new LocalizedStrings({
     DUPLICATE_SPECIES_FOUND: 'Duplicate species found.',
     CANNOT_REMOVE_DELETE_MSG:
       'You cannot remove yourself because there is no one else in the organization. Would you like to delete the organization instead?',
+    GROWTH_FORM: 'Growth Form',
+    CONSERV_STATUS: 'Conserv. Status',
+    EDIT: 'Edit',
     SETTINGS: 'Settings',
     MARK_ALL_AS_READ: 'Mark All As Read',
     SOMETHING_WENT_WRONG: 'Something went wrong.',

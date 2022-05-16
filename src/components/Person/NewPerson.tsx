@@ -421,9 +421,13 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
                 selectedRows={selectedProjectsRows}
                 setSelectedRows={setSelectedProjectsRows}
                 showTopBar={true}
-                buttonType='destructive'
-                buttonText={strings.REMOVE}
-                onButtonClick={removeSelectedProjectsOfPerson}
+                topBarButtons={[
+                  {
+                    buttonType: 'destructive',
+                    buttonText: strings.REMOVE,
+                    onButtonClick: removeSelectedProjectsOfPerson,
+                  },
+                ]}
                 Renderer={TableCellRenderer}
               />
             )}

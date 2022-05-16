@@ -15,7 +15,7 @@ import dictionary from 'src/strings/dictionary';
 import strings from 'src/strings';
 import emptyMessageStrings from 'src/strings/emptyMessageModal';
 import { ServerOrganization } from 'src/types/Organization';
-import { Species, SpeciesWithScientificName } from 'src/types/Species';
+import { Species } from 'src/types/Species';
 import TfMain from 'src/components/common/TfMain';
 import PageSnackbar from 'src/components/PageSnackbar';
 import AddSpeciesModal from './AddSpeciesModal';
@@ -58,15 +58,19 @@ const useStyles = makeStyles((theme) =>
 );
 
 const columns: TableColumnType[] = [
-  { key: 'name', name: strings.COMMON_NAME, type: 'string' },
   { key: 'scientificName', name: strings.SCIENTIFIC_NAME, type: 'string' },
+  { key: 'commonName', name: strings.COMMON_NAME, type: 'string' },
+  { key: 'familyName', name: strings.FAMILY, type: 'string' },
+  { key: 'growthForm', name: strings.GROWTH_FORM, type: 'string' },
+  { key: 'seedStorageBehavior', name: strings.SEED_STORAGE_BEHAVIOR, type: 'string' },
 ];
 
 export default function SpeciesList({ organization }: SpeciesListProps): JSX.Element {
   const classes = useStyles();
-  const [species, setSpecies] = useState<SpeciesWithScientificName[]>();
+  const [species, setSpecies] = useState<Species[]>();
   const [speciesAPIRequest, setSpeciesAPIRequest] = useState<'AWAITING' | 'SUCCEEDED' | 'FAILED'>('AWAITING');
-  const [selectedSpecies, setSelectedSpecies] = useState<SpeciesWithScientificName>();
+  const [selectedSpecies, setSelectedSpecies] = useState<Species>();
+  const [selectedSpeciesRows, setSelectedSpeciesRows] = useState<Species[]>([]);
   const [editSpeciesModalOpen, setEditSpeciesModalOpen] = useState(false);
   const setSnackbar = useSetRecoilState(snackbarAtom);
 
@@ -97,10 +101,6 @@ export default function SpeciesList({ organization }: SpeciesListProps): JSX.Ele
       });
     }
   };
-  const onSelect = (selected: Species) => {
-    setSelectedSpecies(selected);
-    setEditSpeciesModalOpen(true);
-  };
   const onNewSpecies = () => {
     setSelectedSpecies(undefined);
     setEditSpeciesModalOpen(true);
@@ -128,6 +128,11 @@ export default function SpeciesList({ organization }: SpeciesListProps): JSX.Ele
     );
   }
 
+  const OnEditSpecies = () => {
+    setSelectedSpecies(selectedSpeciesRows[0]);
+    setEditSpeciesModalOpen(true);
+  };
+
   return (
     <TfMain>
       <AddSpeciesModal
@@ -141,7 +146,7 @@ export default function SpeciesList({ organization }: SpeciesListProps): JSX.Ele
         <Grid item xs={12} className={classes.titleContainer}>
           <h1 className={classes.pageTitle}>{strings.SPECIES}</h1>
           {species && species.length > 0 && (
-            <Button id='new-species' label={strings.NEW_SPECIES} onClick={onNewSpecies} icon='plus' size='medium' />
+            <Button id='new-species' label={strings.ADD_SPECIES} onClick={onNewSpecies} size='medium' />
           )}
         </Grid>
         <PageSnackbar />
@@ -149,7 +154,27 @@ export default function SpeciesList({ organization }: SpeciesListProps): JSX.Ele
           {species && species.length ? (
             <Grid item xs={12}>
               {species && (
-                <Table id='species-table' columns={columns} rows={species} orderBy='name' onSelect={onSelect} />
+                <Table
+                  id='species-table'
+                  columns={columns}
+                  rows={species}
+                  orderBy='name'
+                  showCheckbox={true}
+                  selectedRows={selectedSpeciesRows}
+                  setSelectedRows={setSelectedSpeciesRows}
+                  showTopBar={true}
+                  topBarButtons={
+                    selectedSpeciesRows.length === 1
+                      ? [
+                          {
+                            buttonType: 'passive',
+                            buttonText: strings.EDIT,
+                            onButtonClick: OnEditSpecies,
+                          },
+                        ]
+                      : []
+                  }
+                />
               )}
             </Grid>
           ) : (

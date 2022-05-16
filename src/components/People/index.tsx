@@ -304,9 +304,13 @@ export default function PeopleList({ organization, reloadData, user }: PeopleLis
                     selectedRows={selectedPeopleRows}
                     setSelectedRows={setSelectedPeopleRows}
                     showTopBar={true}
-                    buttonType='passive'
-                    buttonText={strings.REMOVE}
-                    onButtonClick={removeSelectedPeopleFromOrg}
+                    topBarButtons={[
+                      {
+                        buttonType: 'passive',
+                        buttonText: strings.REMOVE,
+                        onButtonClick: removeSelectedPeopleFromOrg,
+                      },
+                    ]}
                   />
                 )}
               </Grid>
