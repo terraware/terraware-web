@@ -313,8 +313,8 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
             <Checkbox
               disabled={!edit}
               id='emailNotificationsEnabled'
-              name='Recieve Email Notifications'
-              label='Receive Email Notifications'
+              name={strings.RECEIVE_EMAIL_NOTIFICATIONS}
+              label={strings.RECEIVE_EMAIL_NOTIFICATIONS}
               value={record.emailNotificationsEnabled}
               onChange={onChange}
             />
