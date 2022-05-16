@@ -1,7 +1,6 @@
 import { Container, Grid } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router';
 import { getUser } from 'src/api/user/user';
 import PageCard from 'src/components/common/PageCard';
 import PageHeader from 'src/components/seeds/PageHeader';
@@ -11,7 +10,6 @@ import strings from 'src/strings';
 import homePageStrings from 'src/strings/homePage';
 import { HighOrganizationRolesValues, ServerOrganization } from 'src/types/Organization';
 import { User } from 'src/types/User';
-import useQuery from 'src/utils/useQuery';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -45,8 +43,6 @@ export type HomeProps = {
 
 export default function Home({ organizations, selectedOrganization, setSelectedOrganization }: HomeProps): JSX.Element {
   const classes = useStyles();
-  const query = useQuery();
-  const history = useHistory();
   const [user, setUser] = useState<User>();
 
   useEffect(() => {
@@ -58,17 +54,6 @@ export default function Home({ organizations, selectedOrganization, setSelectedO
     };
     populateUser();
   }, []);
-
-  useEffect(() => {
-    const organizationId = query.get('organizationId');
-    if (organizationId) {
-      const newlySelectedOrg = organizations?.find((org) => org.id === parseInt(organizationId, 10));
-      if (newlySelectedOrg) {
-        setSelectedOrganization(newlySelectedOrg);
-        history.push({ pathname: APP_PATHS.HOME });
-      }
-    }
-  }, [organizations, query, setSelectedOrganization, history]);
 
   return (
     <main className={classes.main}>

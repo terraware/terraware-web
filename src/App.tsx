@@ -3,7 +3,8 @@ import { CircularProgress, createStyles, CssBaseline, makeStyles } from '@materi
 import mapboxgl from 'mapbox-gl';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
-import { Redirect, Route, Switch } from 'react-router-dom';
+import { Redirect, Route, Switch, useLocation } from 'react-router-dom';
+import useQuery from './utils/useQuery';
 import { getOrganizations } from 'src/api/organization/organization';
 import {
   DEFAULT_SEED_SEARCH_FILTERS,
@@ -89,6 +90,8 @@ enum APIRequestStatus {
 
 export default function App() {
   const classes = useStyles();
+  const query = useQuery();
+  const location = useLocation();
   const [selectedOrganization, setSelectedOrganization] = useState<ServerOrganization>();
   const [notifications, setNotifications] = useState<Notifications>();
 
@@ -110,12 +113,6 @@ export default function App() {
    */
   const [accessionsDisplayColumns, setAccessionsDisplayColumns] = useState<string[]>(DefaultColumns.fields);
 
-  /*
-   * facilityIdSelected saves the value of the facilityId selected on "Accessions" and "Seeds summary" page.
-   * We can then pass its value to "New accession page", when creating a new accession and to the top bar
-   * to how notifications.
-   */
-  const [facilityIdSelected, setFacilityIdSelected] = useState<number>();
   const [orgAPIRequestStatus, setOrgAPIRequestStatus] = useState<APIRequestStatus>(APIRequestStatus.AWAITING);
   // get the selected values on database to pass it to new accession page
   const [organizations, setOrganizations] = useState<ServerOrganization[]>();
@@ -124,7 +121,7 @@ export default function App() {
   const isMobile = useMediaQuery({ query: `(max-width: 760px)` });
   const [species, setSpecies] = useState<Species[]>([]);
 
-  const reloadData = useCallback((selectedOrgId?: number) => {
+  const reloadData = useCallback(async (selectedOrgId?: number) => {
     const populateOrganizations = async () => {
       const response = await getOrganizations();
       if (!response.error) {
@@ -142,7 +139,7 @@ export default function App() {
         setOrgAPIRequestStatus(APIRequestStatus.FAILED);
       }
     };
-    populateOrganizations();
+    await populateOrganizations();
   }, []);
 
   useEffect(() => {
@@ -167,12 +164,17 @@ export default function App() {
 
   useEffect(() => {
     if (organizations) {
+      const organizationId = query.get('organizationId');
+      const querySelectionOrg = organizationId && organizations.find((org) => org.id === parseInt(organizationId, 10));
       setSelectedOrganization((previouslySelectedOrg: ServerOrganization | undefined) => {
-        const updatedOrg = organizations.find((org) => org.id === previouslySelectedOrg?.id);
+        const updatedOrg = querySelectionOrg || organizations.find((org) => org.id === previouslySelectedOrg?.id);
         return updatedOrg ? updatedOrg : organizations[0];
       });
+      if (organizationId) {
+        history.push(location.pathname);
+      }
     }
-  }, [organizations, selectedOrganization]);
+  }, [organizations, selectedOrganization, query, location, history]);
 
   const reloadUser = useCallback(() => {
     const populateUser = async () => {
@@ -263,8 +265,6 @@ export default function App() {
             <TopBarContent
               notifications={notifications}
               setNotifications={setNotifications}
-              setSeedSearchCriteria={setSeedSearchCriteria}
-              facilityId={facilityIdSelected}
               organizations={organizations}
               selectedOrganization={selectedOrganization}
               setSelectedOrganization={setSelectedOrganization}
@@ -284,11 +284,7 @@ export default function App() {
                 />
               </Route>
               <Route exact path={APP_PATHS.SEEDS_DASHBOARD}>
-                <SeedSummary
-                  organization={filteredOrganization()}
-                  setSeedSearchCriteria={setSeedSearchCriteria}
-                  setFacilityIdSelected={setFacilityIdSelected}
-                />
+                <SeedSummary organization={filteredOrganization()} setSeedSearchCriteria={setSeedSearchCriteria} />
               </Route>
               <Route exact path={APP_PATHS.CHECKIN}>
                 <CheckIn organization={selectedOrganization} />
