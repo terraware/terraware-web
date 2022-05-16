@@ -25,6 +25,7 @@ import LeaveOrganizationDialog from './LeaveOrganizationModal';
 import CannotRemoveOrgDialog from './CannotRemoveOrgModal';
 import DeleteOrgDialog from './DeleteOrgModal';
 import { deleteOrganization } from '../../api/organization/organization';
+import Checkbox from '../common/Checkbox';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -299,6 +300,23 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
               value={record.email}
               display={!edit}
               readonly={true}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TfDivisor />
+          </Grid>
+          <Grid item xs={12}>
+            <h2>{dictionary.NOTIFICATIONS}</h2>
+            <p>{strings.MY_ACCOUNT_NOTIFICATIONS_DESC}</p>
+          </Grid>
+          <Grid item xs={4}>
+            <Checkbox
+              disabled={!edit}
+              id='emailNotificationsEnabled'
+              name={strings.RECEIVE_EMAIL_NOTIFICATIONS}
+              label={strings.RECEIVE_EMAIL_NOTIFICATIONS}
+              value={record.emailNotificationsEnabled}
+              onChange={onChange}
             />
           </Grid>
           <Grid item xs={12}>
