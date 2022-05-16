@@ -51,6 +51,7 @@ import MyAccount from './components/MyAccount';
 import ErrorBox from './components/common/ErrorBox/ErrorBox';
 import strings from './strings';
 import { getAllSpecies } from './api/species/species';
+import { Species } from './types/Species';
 
 // @ts-ignore
 mapboxgl.workerClass =
@@ -118,7 +119,7 @@ export default function App() {
   const [user, setUser] = useState<User>();
   const history = useHistory();
   const isMobile = useMediaQuery({ query: `(max-width: 760px)` });
-  const [species, setSpecies] = useState(new Map());
+  const [species, setSpecies] = useState<Species[]>([]);
 
   const reloadData = useCallback(async (selectedOrgId?: number) => {
     const populateOrganizations = async () => {
@@ -145,17 +146,21 @@ export default function App() {
     reloadData();
   }, [reloadData]);
 
-  useEffect(() => {
+  const reloadSpecies = useCallback(() => {
     const populateSpecies = async () => {
       if (selectedOrganization) {
         const response = await getAllSpecies(selectedOrganization.id);
         if (response.requestSucceeded) {
-          setSpecies(response.speciesById);
+          setSpecies(response.species);
         }
       }
     };
     populateSpecies();
   }, [selectedOrganization]);
+
+  useEffect(() => {
+    reloadSpecies();
+  }, [reloadSpecies]);
 
   useEffect(() => {
     if (organizations) {
@@ -215,7 +220,7 @@ export default function App() {
     }
   };
 
-  const selectedOrgHasSpecies = (): boolean => species.size > 0;
+  const selectedOrgHasSpecies = (): boolean => species.length > 0;
 
   const selectedOrgHasProjects = (): boolean => {
     const selected = organizationWithoutSB();
@@ -310,7 +315,11 @@ export default function App() {
                   {selectedOrgHasSpecies() ? (
                     <SpeciesList organization={selectedOrganization} />
                   ) : (
-                    <EmptyStatePage pageName={'Species'} />
+                    <EmptyStatePage
+                      pageName={'Species'}
+                      organization={selectedOrganization}
+                      reloadData={reloadSpecies}
+                    />
                   )}
                 </Route>
               )}
