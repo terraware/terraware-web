@@ -267,7 +267,7 @@ export default function SpeciesList({ organization }: SpeciesListProps): JSX.Ele
     );
   }
 
-  const OnEditSpecie = () => {
+  const OnEditSpecies = () => {
     setSelectedSpecies(selectedSpeciesRows[0]);
     setEditSpeciesModalOpen(true);
   };
@@ -279,6 +279,7 @@ export default function SpeciesList({ organization }: SpeciesListProps): JSX.Ele
   const onChangeSearch = (id: string, value: unknown) => {
     setTemporalSearchValue(value as string);
   };
+
   const onKeyDownHandler = (key: string) => {
     if (key === 'Enter') {
       setSearchValue(temporalSearchValue);
@@ -312,6 +313,12 @@ export default function SpeciesList({ organization }: SpeciesListProps): JSX.Ele
     }
   };
 
+  const onRemoveFilterHandler = (filterRemoved: keyof SpeciesFiltersType) => {
+    return () =>
+      setRecord((previousRecord: SpeciesFiltersType): SpeciesFiltersType => {
+        return { ...previousRecord, [filterRemoved]: undefined };
+      });
+  };
   return (
     <TfMain>
       <DeleteSpeciesModal
@@ -357,37 +364,21 @@ export default function SpeciesList({ organization }: SpeciesListProps): JSX.Ele
               <Pill
                 filter={strings.GROWTH_FORM}
                 value={record.growthForm}
-                onRemoveFilter={() =>
-                  setRecord((previousRecord: SpeciesFiltersType): SpeciesFiltersType => {
-                    return { ...previousRecord, growthForm: undefined };
-                  })
-                }
+                onRemoveFilter={onRemoveFilterHandler('growthForm')}
               />
             )}
             {(record.rare || record.endangered) && (
               <Pill
                 filter={strings.SEED_STORAGE_BEHAVIOR}
                 value={record.rare ? strings.RARE : strings.ENDANGERED}
-                onRemoveFilter={() =>
-                  setRecord((previousRecord: SpeciesFiltersType): SpeciesFiltersType => {
-                    if (record.rare) {
-                      return { ...previousRecord, rare: undefined };
-                    } else {
-                      return { ...previousRecord, endangered: undefined };
-                    }
-                  })
-                }
+                onRemoveFilter={record.rare ? onRemoveFilterHandler('rare') : onRemoveFilterHandler('endangered')}
               />
             )}
             {record.seedStorageBehavior && (
               <Pill
                 filter={strings.SEED_STORAGE_BEHAVIOR}
                 value={record.seedStorageBehavior}
-                onRemoveFilter={() =>
-                  setRecord((previousRecord: SpeciesFiltersType): SpeciesFiltersType => {
-                    return { ...previousRecord, seedStorageBehavior: undefined };
-                  })
-                }
+                onRemoveFilter={onRemoveFilterHandler('seedStorageBehavior')}
               />
             )}
           </Grid>
@@ -414,7 +405,7 @@ export default function SpeciesList({ organization }: SpeciesListProps): JSX.Ele
                           {
                             buttonType: 'passive',
                             buttonText: strings.EDIT,
-                            onButtonClick: OnEditSpecie,
+                            onButtonClick: OnEditSpecies,
                           },
                         ]
                       : [
