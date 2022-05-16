@@ -1,4 +1,5 @@
 import { makeStyles, Toolbar, Typography } from '@material-ui/core';
+import { TopBarButton } from '.';
 import Button from '../button/Button';
 
 const styles = makeStyles((theme) => ({
@@ -12,13 +13,11 @@ const styles = makeStyles((theme) => ({
 
 interface EnhancedTableToolbarProps {
   numSelected: number;
-  buttonText: string;
-  buttonType: 'productive' | 'passive' | 'destructive' | undefined;
-  onButtonClick: () => void;
+  topBarButtons?: TopBarButton[];
 }
 
 export default function EnhancedTableToolbar(props: EnhancedTableToolbarProps): JSX.Element | null {
-  const { numSelected, buttonText, buttonType, onButtonClick } = props;
+  const { numSelected, topBarButtons } = props;
   const classes = styles();
 
   return numSelected > 0 ? (
@@ -26,7 +25,17 @@ export default function EnhancedTableToolbar(props: EnhancedTableToolbarProps): 
       <Typography color='inherit' variant='subtitle1' component='div' className={classes.flexText}>
         {numSelected} selected
       </Typography>
-      <Button label={buttonText} priority='secondary' type={buttonType} onClick={onButtonClick} />
+      {topBarButtons?.map((tbButton) => {
+        return (
+          <Button
+            key={tbButton.buttonText}
+            label={tbButton.buttonText}
+            priority='secondary'
+            type={tbButton.buttonType}
+            onClick={tbButton.onButtonClick}
+          />
+        );
+      })}
     </Toolbar>
   ) : null;
 }

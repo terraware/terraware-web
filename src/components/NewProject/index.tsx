@@ -480,9 +480,13 @@ export default function ProjectView({ organization, reloadOrganizationData }: Pr
               selectedRows={selectedPeopleRows}
               setSelectedRows={setSelectedPeopleRows}
               showTopBar={true}
-              buttonType='destructive'
-              buttonText={strings.REMOVE}
-              onButtonClick={removeSelectedPeople}
+              topBarButtons={[
+                {
+                  buttonType: 'destructive',
+                  buttonText: strings.REMOVE,
+                  onButtonClick: removeSelectedPeople,
+                },
+              ]}
             />
           </Grid>
           <Grid item xs={12} />
@@ -503,9 +507,13 @@ export default function ProjectView({ organization, reloadOrganizationData }: Pr
                   showTopBar={true}
                   selectedRows={selectedSitesRows}
                   setSelectedRows={setSelectedSitesRows}
-                  buttonType='passive'
-                  buttonText={strings.MOVE}
-                  onButtonClick={moveSelectedSites}
+                  topBarButtons={[
+                    {
+                      buttonType: 'passive',
+                      buttonText: strings.MOVE,
+                      onButtonClick: moveSelectedSites,
+                    },
+                  ]}
                 />
               </Grid>
             )}
