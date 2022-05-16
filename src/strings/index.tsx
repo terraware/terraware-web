@@ -413,6 +413,9 @@ const strings = new LocalizedStrings({
     MARK_AS_READ: 'Mark As Read',
     MARK_AS_UNREAD: 'Mark As Unread',
     TAKE_ME_THERE: 'Take Me There',
+    MY_ACCOUNT_NOTIFICATIONS_DESC:
+      'Notifications alert you when there are important updates about your organizations. You will receive them through email.',
+    RECEIVE_EMAIL_NOTIFICATIONS: 'Receive Email Notifications',
   },
 });
 
