@@ -3,7 +3,8 @@ import { CircularProgress, createStyles, CssBaseline, makeStyles } from '@materi
 import mapboxgl from 'mapbox-gl';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
-import { Redirect, Route, Switch } from 'react-router-dom';
+import { Redirect, Route, Switch, useLocation } from 'react-router-dom';
+import useQuery from './utils/useQuery';
 import { getOrganizations } from 'src/api/organization/organization';
 import {
   DEFAULT_SEED_SEARCH_FILTERS,
@@ -89,6 +90,8 @@ enum APIRequestStatus {
 
 export default function App() {
   const classes = useStyles();
+  const query = useQuery();
+  const location = useLocation();
   const [selectedOrganization, setSelectedOrganization] = useState<ServerOrganization>();
   const [notifications, setNotifications] = useState<Notifications>();
 
@@ -161,17 +164,17 @@ export default function App() {
 
   useEffect(() => {
     if (organizations) {
-      const organizationId = new URLSearchParams(window.location.search).get('organizationId');
+      const organizationId = query.get('organizationId');
       const querySelectionOrg = organizationId && organizations.find((org) => org.id === parseInt(organizationId, 10));
       setSelectedOrganization((previouslySelectedOrg: ServerOrganization | undefined) => {
         const updatedOrg = querySelectionOrg || organizations.find((org) => org.id === previouslySelectedOrg?.id);
         return updatedOrg ? updatedOrg : organizations[0];
       });
       if (organizationId) {
-        history.push(window.location.pathname);
+        history.push(location.pathname);
       }
     }
-  }, [organizations, selectedOrganization, history]);
+  }, [organizations, selectedOrganization, query, location, history]);
 
   const reloadUser = useCallback(() => {
     const populateUser = async () => {
@@ -193,7 +196,9 @@ export default function App() {
     history.push(APP_PATHS.ERROR_FAILED_TO_FETCH_ORG_DATA);
     return null;
   } else if (orgAPIRequestStatus === APIRequestStatus.SUCCEEDED && organizations?.length === 0) {
-    history.push(APP_PATHS.WELCOME);
+    if (location.pathname !== APP_PATHS.WELCOME) {
+      history.push(APP_PATHS.WELCOME);
+    }
     return (
       <>
         <TopBar>
