@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import Icon from 'src/components/common/icon/Icon';
 import strings from 'src/strings';
 import { GrowthForms, StorageBehaviors } from 'src/types/Species';
+import useForm from 'src/utils/useForm';
 import { SpeciesFiltersType } from '.';
 import Button from '../common/button/Button';
 import Select from '../common/Select/Select';
@@ -58,18 +59,12 @@ const useStyles = makeStyles((theme) =>
 type SpeciesFiltersPopoverProps = {
   filters: SpeciesFiltersType;
   setFilters: React.Dispatch<React.SetStateAction<SpeciesFiltersType>>;
-  onChangeFilters: (id: string, value: unknown) => void;
-  onApplyFilters: () => void;
 };
 
-export default function SpeciesFiltersPopover({
-  filters,
-  setFilters,
-  onChangeFilters,
-  onApplyFilters,
-}: SpeciesFiltersPopoverProps): JSX.Element {
+export default function SpeciesFiltersPopover({ filters, setFilters }: SpeciesFiltersPopoverProps): JSX.Element {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [temporalRecord, setTemporalRecord, onChange] = useForm<SpeciesFiltersType>({});
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -77,12 +72,9 @@ export default function SpeciesFiltersPopover({
     setAnchorEl(null);
   };
 
-  // this use effect is used to clear filters
   useEffect(() => {
-    if (Object.values(filters).every((value) => value === undefined)) {
-      onApplyFilters();
-    }
-  }, [filters, onApplyFilters]);
+    setTemporalRecord(filters);
+  }, [filters, setTemporalRecord]);
 
   const onReset = () => {
     setFilters({
@@ -95,25 +87,25 @@ export default function SpeciesFiltersPopover({
   };
 
   const onDone = () => {
-    onApplyFilters();
+    setFilters(temporalRecord);
     handleClose();
   };
 
   const getSelectedConservationStatusValue = () => {
-    if (filters.rare) {
+    if (temporalRecord.rare) {
       return 'Rare';
     }
-    if (filters.endangered) {
+    if (temporalRecord.endangered) {
       return 'Endangered';
     }
   };
 
   const onChangeConservationStatus = (newValue: string) => {
     if (newValue === 'Rare') {
-      onChangeFilters('rare', true);
+      onChange('rare', true);
     }
     if (newValue === 'Endangered') {
-      onChangeFilters('endangered', true);
+      onChange('endangered', true);
     }
   };
 
@@ -143,8 +135,8 @@ export default function SpeciesFiltersPopover({
             <Grid item xs={12}>
               <Select
                 id='growthForm'
-                selectedValue={filters.growthForm}
-                onChange={(value) => onChangeFilters('growthForm', value)}
+                selectedValue={temporalRecord.growthForm}
+                onChange={(value) => onChange('growthForm', value)}
                 options={GrowthForms}
                 label={strings.GROWTH_FORM}
                 aria-label={strings.GROWTH_FORM}
@@ -167,8 +159,8 @@ export default function SpeciesFiltersPopover({
             <Grid item xs={12}>
               <Select
                 id='seedStorageBehavior'
-                selectedValue={filters.seedStorageBehavior}
-                onChange={(value) => onChangeFilters('seedStorageBehavior', value)}
+                selectedValue={temporalRecord.seedStorageBehavior}
+                onChange={(value) => onChange('seedStorageBehavior', value)}
                 options={StorageBehaviors}
                 label={strings.SEED_STORAGE_BEHAVIOR}
                 aria-label={strings.SEED_STORAGE_BEHAVIOR}

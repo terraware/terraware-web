@@ -25,6 +25,7 @@ import { FieldNodePayload, search, searchCsv, SearchNodePayload } from 'src/api/
 import SpeciesFilters from './SpeciesFiltersPopover';
 import useForm from 'src/utils/useForm';
 import Icon from '../common/icon/Icon';
+import Pill from './Pill';
 
 type SpeciesListProps = {
   organization: ServerOrganization;
@@ -101,8 +102,9 @@ export default function SpeciesList({ organization }: SpeciesListProps): JSX.Ele
   const [deleteSpeciesModalOpen, setDeleteSpeciesModalOpen] = useState(false);
   const setSnackbar = useSetRecoilState(snackbarAtom);
   const [searchValue, setSearchValue] = useState('');
+  const [temporalSearchValue, setTemporalSearchValue] = useState('');
   const [results, setResults] = useState<Species[]>();
-  const [record, setRecord, onChange] = useForm<SpeciesFiltersType>({});
+  const [record, setRecord] = useForm<SpeciesFiltersType>({});
 
   const populateSpecies = useCallback(async () => {
     const response = await getAllSpecies(organization.id);
@@ -119,65 +121,7 @@ export default function SpeciesList({ organization }: SpeciesListProps): JSX.Ele
     populateSpecies();
   }, [populateSpecies]);
 
-  const onCloseEditSpeciesModal = (saved: boolean, snackbarMessage?: string) => {
-    if (saved) {
-      populateSpecies();
-    }
-    setEditSpeciesModalOpen(false);
-    if (snackbarMessage) {
-      setSnackbar({
-        type: 'toast',
-        priority: 'success',
-        msg: snackbarMessage,
-      });
-    }
-  };
-  const onNewSpecies = () => {
-    setSelectedSpecies(undefined);
-    setEditSpeciesModalOpen(true);
-  };
-
-  const setErrorSnackbar = (snackbarMessage: string) => {
-    setSnackbar({
-      priority: 'critical',
-      type: 'toast',
-      msg: snackbarMessage,
-    });
-  };
-
-  if (speciesAPIRequest === 'AWAITING') {
-    return <CircularProgress id='species-spinner' className={classes.spinner} />;
-  }
-
-  if (speciesAPIRequest === 'FAILED') {
-    return (
-      <ErrorBox
-        title={strings.SPECIES_DATA_NOT_AVAILABLE}
-        text={strings.CONTACT_US_TO_RESOLVE_ISSUE}
-        className={classes.errorBox}
-      />
-    );
-  }
-
-  const OnEditSpecies = () => {
-    setSelectedSpecies(selectedSpeciesRows[0]);
-    setEditSpeciesModalOpen(true);
-  };
-
-  const OnDeleteSpecies = () => {
-    setDeleteSpeciesModalOpen(true);
-  };
-
-  const onChangeSearch = (id: string, value: unknown) => {
-    setSearchValue(value as string);
-  };
-  const onKeyDownHandler = (key: string) => {
-    if (key === 'Enter') {
-      onApplyFilters();
-    }
-  };
-
-  const getParams = () => {
+  const getParams = useCallback(() => {
     const params: SearchNodePayload = {
       prefix: 'species',
       fields: [
@@ -256,9 +200,9 @@ export default function SpeciesList({ organization }: SpeciesListProps): JSX.Ele
     }
 
     return params;
-  };
+  }, [record, searchValue]);
 
-  const onApplyFilters = async () => {
+  const onApplyFilters = useCallback(async () => {
     const params: SearchNodePayload = getParams();
     if (params.search.children.length) {
       const searchResults = await search(params);
@@ -277,6 +221,69 @@ export default function SpeciesList({ organization }: SpeciesListProps): JSX.Ele
     } else {
       setResults(species);
     }
+  }, [getParams, species]);
+
+  useEffect(() => {
+    onApplyFilters();
+  }, [record, onApplyFilters]);
+
+  const onCloseEditSpeciesModal = (saved: boolean, snackbarMessage?: string) => {
+    if (saved) {
+      populateSpecies();
+    }
+    setEditSpeciesModalOpen(false);
+    if (snackbarMessage) {
+      setSnackbar({
+        type: 'toast',
+        priority: 'success',
+        msg: snackbarMessage,
+      });
+    }
+  };
+  const onNewSpecies = () => {
+    setSelectedSpecies(undefined);
+    setEditSpeciesModalOpen(true);
+  };
+
+  const setErrorSnackbar = (snackbarMessage: string) => {
+    setSnackbar({
+      priority: 'critical',
+      type: 'toast',
+      msg: snackbarMessage,
+    });
+  };
+
+  if (speciesAPIRequest === 'AWAITING') {
+    return <CircularProgress id='species-spinner' className={classes.spinner} />;
+  }
+
+  if (speciesAPIRequest === 'FAILED') {
+    return (
+      <ErrorBox
+        title={strings.SPECIES_DATA_NOT_AVAILABLE}
+        text={strings.CONTACT_US_TO_RESOLVE_ISSUE}
+        className={classes.errorBox}
+      />
+    );
+  }
+
+  const OnEditSpecies = () => {
+    setSelectedSpecies(selectedSpeciesRows[0]);
+    setEditSpeciesModalOpen(true);
+  };
+
+  const OnDeleteSpecies = () => {
+    setDeleteSpeciesModalOpen(true);
+  };
+
+  const onChangeSearch = (id: string, value: unknown) => {
+    setTemporalSearchValue(value as string);
+  };
+
+  const onKeyDownHandler = (key: string) => {
+    if (key === 'Enter') {
+      setSearchValue(temporalSearchValue);
+    }
   };
 
   const deleteSelectedSpecies = () => {
@@ -291,6 +298,9 @@ export default function SpeciesList({ organization }: SpeciesListProps): JSX.Ele
 
   const downloadReportHandler = async () => {
     const params = getParams();
+    if (!params.search.children.length) {
+      params.search = null;
+    }
     const apiResponse = await searchCsv(params);
 
     if (apiResponse !== null) {
@@ -303,6 +313,12 @@ export default function SpeciesList({ organization }: SpeciesListProps): JSX.Ele
     }
   };
 
+  const onRemoveFilterHandler = (filterRemoved: keyof SpeciesFiltersType) => {
+    return () =>
+      setRecord((previousRecord: SpeciesFiltersType): SpeciesFiltersType => {
+        return { ...previousRecord, [filterRemoved]: undefined };
+      });
+  };
   return (
     <TfMain>
       <DeleteSpeciesModal
@@ -338,15 +354,33 @@ export default function SpeciesList({ organization }: SpeciesListProps): JSX.Ele
               onChange={onChangeSearch}
               onKeyDown={onKeyDownHandler}
             />
-            <SpeciesFilters
-              filters={record}
-              setFilters={setRecord}
-              onChangeFilters={onChange}
-              onApplyFilters={onApplyFilters}
-            />
+            <SpeciesFilters filters={record} setFilters={setRecord} />
             <IconButton onClick={downloadReportHandler} size='small' className={classes.iconContainer}>
               <Icon name='export' />
             </IconButton>
+          </Grid>
+          <Grid item xs={12} className={classes.searchBar}>
+            {record.growthForm && (
+              <Pill
+                filter={strings.GROWTH_FORM}
+                value={record.growthForm}
+                onRemoveFilter={onRemoveFilterHandler('growthForm')}
+              />
+            )}
+            {(record.rare || record.endangered) && (
+              <Pill
+                filter={strings.SEED_STORAGE_BEHAVIOR}
+                value={record.rare ? strings.RARE : strings.ENDANGERED}
+                onRemoveFilter={record.rare ? onRemoveFilterHandler('rare') : onRemoveFilterHandler('endangered')}
+              />
+            )}
+            {record.seedStorageBehavior && (
+              <Pill
+                filter={strings.SEED_STORAGE_BEHAVIOR}
+                value={record.seedStorageBehavior}
+                onRemoveFilter={onRemoveFilterHandler('seedStorageBehavior')}
+              />
+            )}
           </Grid>
           {species && species.length ? (
             <Grid item xs={12}>
