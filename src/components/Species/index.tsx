@@ -1,4 +1,4 @@
-import { CircularProgress } from '@material-ui/core';
+import { CircularProgress, IconButton } from '@material-ui/core';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
@@ -21,9 +21,10 @@ import PageSnackbar from 'src/components/PageSnackbar';
 import AddSpeciesModal from './AddSpeciesModal';
 import DeleteSpeciesModal from './DeleteSpeciesModal';
 import TextField from '../common/Textfield/Textfield';
-import { FieldNodePayload, search, SearchNodePayload } from 'src/api/seeds/search';
+import { FieldNodePayload, search, searchCsv, SearchNodePayload } from 'src/api/seeds/search';
 import SpeciesFilters from './SpeciesFiltersPopover';
 import useForm from 'src/utils/useForm';
+import Icon from '../common/icon/Icon';
 
 type SpeciesListProps = {
   organization: ServerOrganization;
@@ -65,6 +66,12 @@ const useStyles = makeStyles((theme) =>
     searchBar: {
       display: 'flex',
       marginBottom: '16px',
+    },
+    iconContainer: {
+      borderRadius: 0,
+      fontSize: '16px',
+      height: '48px',
+      marginLeft: '8px',
     },
   })
 );
@@ -170,7 +177,7 @@ export default function SpeciesList({ organization }: SpeciesListProps): JSX.Ele
     }
   };
 
-  const onApplyFilters = async () => {
+  const getParams = () => {
     const params: SearchNodePayload = {
       prefix: 'species',
       fields: [
@@ -247,6 +254,12 @@ export default function SpeciesList({ organization }: SpeciesListProps): JSX.Ele
       };
       params.search.children.push(newNode);
     }
+
+    return params;
+  };
+
+  const onApplyFilters = async () => {
+    const params: SearchNodePayload = getParams();
     if (params.search.children.length) {
       const searchResults = await search(params);
       const speciesResults: Species[] = [];
@@ -273,6 +286,20 @@ export default function SpeciesList({ organization }: SpeciesListProps): JSX.Ele
       });
       setDeleteSpeciesModalOpen(false);
       populateSpecies();
+    }
+  };
+
+  const downloadReportHandler = async () => {
+    const params = getParams();
+    const apiResponse = await searchCsv(params);
+
+    if (apiResponse !== null) {
+      const csvContent = 'data:text/csv;charset=utf-8,' + apiResponse;
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement('a');
+      link.setAttribute('href', encodedUri);
+      link.setAttribute('download', `species.csv`);
+      link.click();
     }
   };
 
@@ -317,6 +344,9 @@ export default function SpeciesList({ organization }: SpeciesListProps): JSX.Ele
               onChangeFilters={onChange}
               onApplyFilters={onApplyFilters}
             />
+            <IconButton onClick={downloadReportHandler} size='small' className={classes.iconContainer}>
+              <Icon name='export' />
+            </IconButton>
           </Grid>
           {species && species.length ? (
             <Grid item xs={12}>
