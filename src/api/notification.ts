@@ -23,21 +23,10 @@ export const getNotifications = async (orgId?: number): Promise<Notifications> =
     endpoint = addQueryParams(endpoint, queryParams);
     const notifications: ListNotificationsResponseElement[] = (await axios.get(endpoint)).data.notifications;
     response.items = notifications.map((notification) => {
-      const {
-        id,
-        notificationType,
-        notificationCriticality,
-        organizationId,
-        title,
-        body,
-        localUrl,
-        createdTime,
-        isRead,
-      } = notification;
+      const { id, notificationCriticality, organizationId, title, body, localUrl, createdTime, isRead } = notification;
 
       return {
         id,
-        notificationType,
         notificationCriticality,
         organizationId,
         title,
