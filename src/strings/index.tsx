@@ -411,7 +411,6 @@ const strings = new LocalizedStrings({
     CONSERVATION_STATUS: 'Conservation Status',
     EDIT: 'Edit',
     SEARCH_BY_NAME_OR_FAMILY: 'Search by name or family...',
-    EDIT: 'Edit',
     SETTINGS: 'Settings',
     MARK_ALL_AS_READ: 'Mark All As Read',
     SOMETHING_WENT_WRONG: 'Something went wrong.',
