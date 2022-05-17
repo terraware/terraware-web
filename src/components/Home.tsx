@@ -46,13 +46,17 @@ export default function Home({ organizations, selectedOrganization, setSelectedO
   const [user, setUser] = useState<User>();
 
   useEffect(() => {
+    let cancel = false;
     const populateUser = async () => {
       const response = await getUser();
-      if (response.requestSucceeded) {
+      if (response.requestSucceeded && !cancel) {
         setUser(response.user ?? undefined);
       }
     };
     populateUser();
+    return () => {
+      cancel = true;
+    };
   }, []);
 
   return (
