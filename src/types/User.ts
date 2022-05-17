@@ -5,6 +5,7 @@ export type User = {
   firstName?: string;
   lastName?: string;
   email?: string;
+  emailNotificationsEnabled?: boolean;
 };
 
 export type OrganizationUser = {

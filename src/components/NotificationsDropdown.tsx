@@ -1,71 +1,138 @@
-import {
-  Divider,
-  Link as LinkMui,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  ListSubheader,
-  Popover,
-  Typography,
-} from '@material-ui/core';
+import moment from 'moment';
+import { List, ListItem, ListItemIcon, ListItemText, Popover } from '@material-ui/core';
 import Badge from '@material-ui/core/Badge';
 import IconButton from '@material-ui/core/IconButton';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FieldNodePayload, SeedSearchCriteria } from 'src/api/seeds/search';
+import { useHistory } from 'react-router';
 import { getNotifications, MarkAllNotificationsRead, MarkNotificationRead } from 'src/api/notification';
-import { AccessionState } from 'src/api/types/accessions';
 import { API_PULL_INTERVAL, APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
-import { Notifications, NotificationTypes } from 'src/types/Notifications';
-import preventDefaultEvent from 'src/utils/preventDefaultEvent';
-import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
-import NotificationIcon from './NotificationIcon';
+import { Notification, Notifications } from 'src/types/Notifications';
 import Icon from './common/icon/Icon';
+import DivotPopover from './common/DivotPopover';
+import ErrorBox from './common/ErrorBox/ErrorBox';
+import preventDefault from 'src/utils/preventDefaultEvent';
+import stopPropagation from 'src/utils/stopPropagationEvent';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
-    subheader: {
-      paddingLeft: 0,
-      paddingRight: 0,
-    },
-    mainTitle: {
-      display: 'flex',
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      paddingLeft: theme.spacing(3),
-      paddingRight: theme.spacing(3),
-      backgroundColor: theme.palette.common.white,
-    },
-    action: {
-      margin: theme.spacing(1),
-    },
-    popover: {
-      width: '350px',
-      paddingTop: 0,
-    },
-    noHover: {
-      '&:hover': {
-        backgroundColor: 'transparent',
-      },
-    },
-    readNotification: {
-      backgroundColor: theme.palette.neutral[200],
-      '&:hover': {
-        backgroundColor: theme.palette.neutral[200],
-      },
+    error: {
+      width: '432px',
+      height: '88px',
+      margin: '20px 0',
     },
     notificationIcon: {
       fill: '#708284',
+      margin: 'auto auto',
     },
     noNotifications: {
       color: '#3A4445',
-      paddingLeft: '8px',
-      paddingTop: '8px',
-      margin: 0,
+      height: '107px',
+      textAlign: 'center',
+    },
+    notificationsBadgeWrapper: {
+      width: '24px',
+      height: '24px',
+    },
+    newNotificationsIndicator: {
+      minWidth: '8px',
+      height: '8px',
+      borderRadius: '4px',
+      background: '#FE0003',
+      position: 'absolute',
+      left: '15px',
+      top: '2px',
+    },
+    listContainer: {
+      padding: 0,
+      overflowY: 'auto',
+    },
+    unreadNotification: {
+      backgroundColor: '#F0F4FF',
+      '&.error': {
+        backgroundColor: '#FFF1F1',
+      },
+    },
+    unreadNotificationIndicator: {
+      marginLeft: '8px',
+      width: '8px',
+      height: '8px',
+      borderRadius: '4px',
+      backgroundColor: '#007DF2',
+    },
+    notification: {
+      display: 'flex',
+      alignItems: 'flex-start',
+      padding: '8px 20px 8px 26px',
+      borderBottom: '1px solid #A9B7B8',
+      '&:last-child': {
+        borderBottom: 'none',
+      },
+      '&:hover': {
+        backgroundColor: 'rgba(0, 103, 200, 0.1)',
+      },
+    },
+    notificationContent: {
+      display: 'flex',
+      flexDirection: 'column',
+      minWidth: '375px',
+      fontSize: '14px',
+      fontWeight: 400,
+      margin: '0px',
+    },
+    notificationTitle: {
+      display: 'block',
+      color: '#3A4445',
+      fontSize: '16px',
+      fontWeight: 600,
+      margin: '8px',
+    },
+    notificationBody: {
+      display: 'block',
+      color: '#3A4445',
+      margin: '0px 8px',
+    },
+    notificationTimestamp: {
+      display: 'block',
+      color: '#5C6B6C',
+      margin: '8px',
+    },
+    iconContainer: {
+      borderRadius: 0,
+      fontSize: '16px',
+    },
+    icon: {
+      fill: '#3A4445',
+    },
+    notificationType: {
+      margin: '12px 0',
+      minWidth: '16px',
+    },
+    notificationTypeIcon: {
+      width: '16px',
+      height: '16px',
+      fill: 'grey',
+      '&.info': {
+        fill: '#708284',
+      },
+      '&.warning': {
+        fill: '#BD6931',
+      },
+      '&.error': {
+        fill: '#FE0003',
+      },
+      '&.success': {
+        fill: '#308F5F',
+      },
+    },
+    notificationMenuWrapper: {
+      maxWidth: '40px',
+      margin: 'auto 0',
+      display: 'flex',
+      justifyContent: 'left',
+      padding: '0px 8px',
     },
   })
 );
@@ -73,113 +140,278 @@ const useStyles = makeStyles((theme) =>
 type NotificationsDropdownProps = {
   notifications?: Notifications;
   setNotifications: (notifications?: Notifications) => void;
-  setSeedSearchCriteria: (criteria: SeedSearchCriteria) => void;
-  currFacilityId: number;
+  organizationId?: number;
+  reloadOrganizationData: () => void;
 };
 
 export default function NotificationsDropdown(props: NotificationsDropdownProps): JSX.Element {
   const classes = useStyles();
-  const { notifications, setNotifications, setSeedSearchCriteria, currFacilityId } = props;
+  const history = useHistory();
+  const { notifications, setNotifications, organizationId, reloadOrganizationData } = props;
   // notificationsInterval value is only being used when it is set.
-  const [, setNotificationsInterval] = useState<ReturnType<typeof setInterval>>();
   const [anchorEl, setAnchorEl] = useState<Element | null>(null);
+  const [lastSeen, setLastSeen] = useState<number>(0);
 
   const populateNotifications = useCallback(async () => {
-    if (currFacilityId) {
-      setNotifications(await getNotifications(currFacilityId));
-    } else {
-      setNotifications(undefined);
+    const notificationsData = await getNotifications();
+    if (organizationId) {
+      const orgNotifications = await getNotifications(organizationId);
+      notificationsData.items = notificationsData.items.concat(orgNotifications.items);
     }
-  }, [setNotifications, currFacilityId]);
+    notificationsData.items = notificationsData.items.sort((a, b) => {
+      const dateA = new Date(a.createdTime);
+      const dateB = new Date(b.createdTime);
+      return dateB.getTime() - dateA.getTime();
+    });
+    setNotifications(notificationsData);
+  }, [setNotifications, organizationId]);
 
   useEffect(() => {
     // Update notifications now.
     populateNotifications();
 
     // Create interval to fetch future notifications.
+    let interval: ReturnType<typeof setInterval>;
     if (!process.env.REACT_APP_DISABLE_RECURRENT_REQUESTS) {
-      setNotificationsInterval((currInterval) => {
-        if (currInterval) {
-          clearInterval(currInterval);
-        }
-        return currFacilityId ? setInterval(populateNotifications, API_PULL_INTERVAL) : undefined;
-      });
+      interval = setInterval(populateNotifications, API_PULL_INTERVAL);
     }
 
     // Clean up existing interval.
     return () => {
-      setNotificationsInterval((currInterval) => {
-        if (currInterval) {
-          clearInterval(currInterval);
-        }
-        return undefined;
-      });
+      clearInterval(interval);
     };
-    // TODO update this to handle notifications from more than one facility
-  }, [populateNotifications, currFacilityId]);
+  }, [populateNotifications, organizationId]);
+
+  const getTimeStamp = (notification: Notification) => moment(notification.createdTime).valueOf();
+
+  const getRecentUnreadTime = () => {
+    if (notifications) {
+      const unread = notifications.items.filter((item) => !item.isRead);
+      if (unread.length) {
+        return getTimeStamp(unread[0]);
+      }
+    }
+    return 0;
+  };
 
   const onIconClick = (event: React.MouseEvent<any>) => {
     setAnchorEl(event.currentTarget);
+    setLastSeen(getRecentUnreadTime());
   };
 
   const onPopoverClose = () => {
     setAnchorEl(null);
   };
 
-  const onNotificationClick = async (id: string, state?: AccessionState) => {
-    if (state) {
-      const filter: FieldNodePayload = {
-        field: 'state',
-        values: [state],
-        type: 'Exact',
-        operation: 'field',
-      };
-      setSeedSearchCriteria({ state: filter });
-    }
-
-    await MarkNotificationRead(id);
-    await populateNotifications();
+  const goToSettings = () => {
+    history.push({ pathname: APP_PATHS.MY_ACCOUNT });
+    onPopoverClose();
   };
 
   const markAllAsRead = async () => {
-    await MarkAllNotificationsRead();
+    await MarkAllNotificationsRead(true);
+    if (organizationId) {
+      await MarkAllNotificationsRead(true, organizationId);
+    }
     await populateNotifications();
   };
 
-  const getUnreadNotifications = () => {
-    const unreadNotifications = notifications ? notifications.items.filter((notification) => !notification.read) : [];
-
-    return unreadNotifications.length;
+  const markAsRead = async (read: boolean, id: number, close?: boolean) => {
+    if (close) {
+      onPopoverClose();
+    }
+    await MarkNotificationRead(read, id);
+    await populateNotifications();
+    if (notifications) {
+      setLastSeen(getTimeStamp(notifications.items[0]));
+    }
   };
 
-  const location = useStateLocation();
-  const databaseLocation = getLocation(APP_PATHS.ACCESSIONS, location);
-  const getDestination = (type: NotificationTypes, accessionId?: number) => {
-    if (type === NotificationTypes.Date && accessionId) {
-      return getLocation(APP_PATHS.ACCESSIONS_ITEM.replace(':accessionId', accessionId.toString()), location);
-    } else if (type === NotificationTypes.State) {
-      return databaseLocation;
-    } else {
-      return '';
-    }
+  const hasUnseen = () => {
+    return lastSeen < getRecentUnreadTime();
   };
 
   return (
     <div>
       <IconButton id='notifications-button' onClick={onIconClick}>
-        <Badge
-          id='notifications-badge'
-          badgeContent={notifications ? getUnreadNotifications() : undefined}
-          color='secondary'
-        >
+        <Badge id='notifications-badge' color='secondary' className={classes.notificationsBadgeWrapper}>
           <Icon name='notification' className={classes.notificationIcon} />
+          {hasUnseen() && <div className={classes.newNotificationsIndicator} />}
         </Badge>
       </IconButton>
-      <Popover
-        id='simple-popover'
-        open={Boolean(anchorEl)}
+      <DivotPopover
         anchorEl={anchorEl}
         onClose={onPopoverClose}
+        title={'Notifications'}
+        headerMenuItems={[
+          { text: strings.MARK_ALL_AS_READ, callback: markAllAsRead },
+          { text: strings.SETTINGS, callback: goToSettings },
+        ]}
+        size='large'
+      >
+        <List className={classes.listContainer}>
+          {(notifications === undefined || (notifications.items.length === 0 && !notifications.errorOccurred)) && (
+            <ListItem className={classes.noNotifications}>
+              <ListItemText primary={strings.NO_NOTIFICATIONS} />
+            </ListItem>
+          )}
+          {notifications &&
+            notifications.items.map((notification) => (
+              <NotificationItem
+                key={notification.id}
+                notification={notification}
+                markAsRead={markAsRead}
+                reloadOrganizationData={reloadOrganizationData}
+              />
+            ))}
+          {notifications?.errorOccurred && (
+            <ListItem>
+              <ErrorBox
+                title={strings.SOMETHING_WENT_WRONG}
+                text={strings.UNABLE_TO_LOAD_NOTIFICATIONS}
+                className={classes.error}
+              />
+            </ListItem>
+          )}
+        </List>
+      </DivotPopover>
+    </div>
+  );
+}
+
+type NotificationItemProps = {
+  notification: Notification;
+  markAsRead: (read: boolean, id: number, close?: boolean) => void;
+  reloadOrganizationData: () => void;
+};
+
+function NotificationItem(props: NotificationItemProps): JSX.Element {
+  const [inFocus, setInFocus] = useState<boolean>(false);
+  const classes = useStyles();
+  const { notification, markAsRead, reloadOrganizationData } = props;
+  const { id, title, body, localUrl, createdTime, isRead, notificationCriticality } = notification;
+  const criticality = notificationCriticality.toLowerCase();
+
+  const onNotificationClick = async (read: boolean, close?: boolean) => {
+    if (close && (localUrl.startsWith('/home') || localUrl.startsWith('/projects'))) {
+      await reloadOrganizationData();
+    }
+    markAsRead(read, id, close);
+  };
+
+  const onMouseEnter = () => {
+    setInFocus(true);
+  };
+
+  const onMouseLeave = () => {
+    setInFocus(false);
+  };
+
+  const getTypeIcon = () => {
+    switch (criticality) {
+      case 'success':
+        return 'success';
+      case 'warning':
+        return 'warning';
+      case 'error':
+        return 'error';
+      default:
+        return 'info';
+    }
+  };
+
+  return (
+    <ListItem
+      id={`notification${id}`}
+      button
+      className={(isRead || inFocus ? '' : classes.unreadNotification) + ' ' + classes.notification + ' ' + criticality}
+      onClick={() => onNotificationClick(true, true)}
+      component={Link}
+      to={localUrl}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+    >
+      <ListItemIcon className={classes.notificationType}>
+        <Icon name={getTypeIcon()} className={classes.notificationTypeIcon + ' ' + criticality} />
+      </ListItemIcon>
+      <ListItemText
+        className={classes.notificationContent}
+        primary={<span className={classes.notificationTitle}>{title}</span>}
+        secondary={
+          <>
+            <span className={classes.notificationBody}>{body}</span>
+            <span className={classes.notificationTimestamp}>
+              {moment(createdTime).format('MMMM Do YYYY \\a\\t h:mm:ss a')}
+            </span>
+          </>
+        }
+      />
+      <ListItem className={classes.notificationMenuWrapper}>
+        {!inFocus && !isRead && <div className={classes.unreadNotificationIndicator} />}
+        {inFocus && <NotificationItemMenu markAsRead={onNotificationClick} notification={notification} />}
+      </ListItem>
+    </ListItem>
+  );
+}
+
+type NotificationItemMenuProps = {
+  markAsRead: (read: boolean, close?: boolean) => void;
+  notification: Notification;
+};
+
+function NotificationItemMenu(props: NotificationItemMenuProps): JSX.Element {
+  const {
+    markAsRead,
+    notification: { localUrl, isRead },
+  } = props;
+  const classes = useStyles();
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
+  const disableEventPropagation = (event: React.MouseEvent<HTMLElement>, allowDefault?: boolean) => {
+    if (!allowDefault) {
+      preventDefault(event);
+    }
+    stopPropagation(event);
+  };
+
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    disableEventPropagation(event);
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleEventAndMarkRead = (
+    event: React.MouseEvent<HTMLElement>,
+    read: boolean,
+    close?: boolean,
+    allowDefault?: boolean
+  ) => {
+    disableEventPropagation(event, allowDefault);
+    handleClose();
+    markAsRead(read, close);
+  };
+
+  const handleMarkRead = (event: React.MouseEvent<HTMLElement>) => {
+    handleEventAndMarkRead(event, !isRead);
+  };
+
+  const handleGoToLink = (event: React.MouseEvent<HTMLElement>) => {
+    handleEventAndMarkRead(event, true, true, true);
+  };
+
+  return (
+    <div>
+      <IconButton onClick={handleClick} size='small' className={classes.iconContainer}>
+        <Icon name='menuVertical' className={classes.icon} />
+      </IconButton>
+      <Popover
+        onClick={disableEventPropagation}
+        open={Boolean(anchorEl)}
+        anchorEl={anchorEl}
+        onClose={handleClose}
         anchorOrigin={{
           vertical: 'bottom',
           horizontal: 'center',
@@ -189,69 +421,15 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
           horizontal: 'center',
         }}
       >
-        <List id='notifications-popover' className={classes.popover}>
-          <ListSubheader inset className={classes.subheader}>
-            <div className={classes.mainTitle}>
-              <Typography>Notifications</Typography>
-              <LinkMui
-                href='#'
-                onClick={(event: React.SyntheticEvent) => {
-                  preventDefaultEvent(event);
-                  markAllAsRead();
-                }}
-              >
-                Mark all as read
-              </LinkMui>
-            </div>
-            <Divider />
-          </ListSubheader>
-          {notifications === undefined && (
-            <ListItem>
-              <ListItemText primary={strings.NO_NOTIFICATIONS} className={classes.noNotifications} />
-            </ListItem>
-          )}
-          {notifications?.errorOccurred && strings.GENERIC_ERROR}
-          {notifications &&
-            notifications.items.map(({ id, state, type, accessionId, read, text, timestamp }, index) => (
-              <ListItem
-                id={`notification${index + 1}`}
-                key={id}
-                button
-                className={read ? `${classes.readNotification}` : classes.noHover}
-                onClick={() => onNotificationClick(id, state)}
-                component={Link}
-                to={getDestination(type, accessionId)}
-              >
-                <ListItemIcon>
-                  <NotificationIcon type={type} />
-                </ListItemIcon>
-                <ListItemText primary={text} secondary={createSecondaryText(timestamp)} />
-              </ListItem>
-            ))}
+        <List>
+          <ListItem button onClick={handleMarkRead}>
+            {strings[isRead ? 'MARK_AS_UNREAD' : 'MARK_AS_READ']}
+          </ListItem>
+          <ListItem button onClick={handleGoToLink} component={Link} to={localUrl}>
+            {strings.TAKE_ME_THERE}
+          </ListItem>
         </List>
       </Popover>
     </div>
   );
-}
-
-function createSecondaryText(timestamp: string): string {
-  const notificationDate = new Date(timestamp);
-  const currentDate = new Date();
-  const year = notificationDate.getFullYear();
-  const month = notificationDate.getMonth();
-  const date = notificationDate.getDate();
-
-  if (currentDate.getDate() === notificationDate.getDate()) {
-    return 'Today';
-  }
-  if (currentDate.getDate() - 1 === notificationDate.getDate()) {
-    return '1 day ago';
-  }
-  for (let i = 2; i < 6; i++) {
-    if (currentDate.getDate() - i === notificationDate.getDate()) {
-      return `${i} days ago`;
-    }
-  }
-
-  return `${month}/${date}/${year}`;
 }

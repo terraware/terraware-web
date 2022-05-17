@@ -12,11 +12,12 @@ const useStyles = makeStyles((theme) =>
       borderBottom: '1px solid #A9B7B8',
       borderRadius: '7px 7px 0 0',
       backgroundColor: '#F2F4F5',
-      minHeight: '59px',
       display: 'flex',
     },
     title: {
+      fontSize: '20px',
       fontWeight: 'bold',
+      color: '#3A4445',
     },
     mainTitle: {
       display: 'flex',
@@ -24,13 +25,22 @@ const useStyles = makeStyles((theme) =>
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
-      paddingLeft: theme.spacing(3),
-      paddingRight: theme.spacing(3),
+      lineHeight: '28px',
+      padding: `${theme.spacing(2)}px ${theme.spacing(3)}px`,
     },
     popover: {
       padding: 0,
       borderTop: '1px solid #A9B7B8',
       borderRadius: '7px 7px 0 0',
+      height: '64px',
+    },
+    paper: {
+      overflowX: 'visible',
+      overflowY: 'visible',
+      borderRadius: '7px',
+      borderLeft: '1px solid #A9B7B8',
+      borderRight: '1px solid #A9B7B8',
+      borderBottom: '1px solid #A9B7B8',
       '&.small': {
         // TODO set small width
         width: '478px',
@@ -42,27 +52,22 @@ const useStyles = makeStyles((theme) =>
       '&.large': {
         width: '478px',
       },
-    },
-    paper: {
-      overflowX: 'visible',
-      overflowY: 'visible',
-      borderRadius: '7px',
-      borderLeft: '1px solid #A9B7B8',
-      borderRight: '1px solid #A9B7B8',
-      borderBottom: '1px solid #A9B7B8',
+      maxHeight: 'calc(100vh - 100px)',
+      display: 'flex',
+      flexDirection: 'column',
     },
     divotWrapper: {
       display: 'flex',
       height: 0,
     },
     divot: {
-      width: '12px',
-      height: '12px',
+      width: '16px',
+      height: '16px',
       border: '2px solid transparent',
       borderLeft: '2px solid #A9B7B8',
       borderTop: '2px solid #A9B7B8',
-      left: 'calc(50% - 6px)',
-      top: '-5px',
+      left: 'calc(50% - 8px)',
+      top: '-8px',
       position: 'absolute',
       transform: 'rotate(45deg)',
       zIndex: 1400,
@@ -71,7 +76,6 @@ const useStyles = makeStyles((theme) =>
     iconContainer: {
       borderRadius: 0,
       fontSize: '16px',
-      height: '48px',
     },
     icon: {
       fill: '#3A4445',
@@ -102,7 +106,7 @@ function PopoverHeaderMenu({ menuItems }: PopoverHeaderMenuProps): JSX.Element {
   return (
     <div>
       <IconButton onClick={handleClick} size='small' className={classes.iconContainer}>
-        <Icon name='menuVertical' className={classes.icon} />
+        <Icon name='menuVertical' size='medium' className={classes.icon} />
       </IconButton>
       <Popover
         id='simple-popover'
@@ -166,7 +170,7 @@ export default function DivotPopover({
           horizontal: 'center',
         }}
         classes={{
-          paper: classes.paper,
+          paper: classes.paper + ' ' + size,
         }}
       >
         <List id='divot-popover' className={classes.popover + ' ' + size}>

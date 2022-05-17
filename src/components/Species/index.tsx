@@ -152,7 +152,7 @@ export default function SpeciesList({ organization }: SpeciesListProps): JSX.Ele
     );
   }
 
-  const OnEditSpecie = () => {
+  const OnEditSpecies = () => {
     setSelectedSpecies(selectedSpeciesRows[0]);
     setEditSpeciesModalOpen(true);
   };
@@ -190,7 +190,6 @@ export default function SpeciesList({ organization }: SpeciesListProps): JSX.Ele
       count: 0,
     };
 
-    console.log(searchValue);
     if (searchValue) {
       const nameNode: FieldNodePayload = {
         operation: 'field',
@@ -342,7 +341,7 @@ export default function SpeciesList({ organization }: SpeciesListProps): JSX.Ele
                           {
                             buttonType: 'passive',
                             buttonText: strings.EDIT,
-                            onButtonClick: OnEditSpecie,
+                            onButtonClick: OnEditSpecies,
                           },
                         ]
                       : [

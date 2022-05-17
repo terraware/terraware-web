@@ -145,7 +145,7 @@ export default function OrganizationView({ organization, reloadOrganizationData 
           <Grid item xs={4}>
             <TextField
               id='description'
-              label={strings.DESCRIPTION_OPTIONAL}
+              label={strings.DESCRIPTION}
               type='textarea'
               onChange={onChange}
               value={organizationRecord.description}
