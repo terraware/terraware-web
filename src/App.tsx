@@ -196,7 +196,9 @@ export default function App() {
     history.push(APP_PATHS.ERROR_FAILED_TO_FETCH_ORG_DATA);
     return null;
   } else if (orgAPIRequestStatus === APIRequestStatus.SUCCEEDED && organizations?.length === 0) {
-    history.push(APP_PATHS.WELCOME);
+    if (location.pathname !== APP_PATHS.WELCOME) {
+      history.push(APP_PATHS.WELCOME);
+    }
     return (
       <>
         <TopBar>
