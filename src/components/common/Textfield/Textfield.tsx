@@ -24,6 +24,7 @@ export interface Props {
   readonly?: boolean;
   display?: boolean;
   type: TextfieldType;
+  onKeyDown?: (key: string) => void;
 }
 
 export default function TextField(props: Props): JSX.Element {
@@ -43,6 +44,7 @@ export default function TextField(props: Props): JSX.Element {
     readonly,
     display,
     type,
+    onKeyDown,
   } = props;
 
   const textfieldClass = classNames({
@@ -56,6 +58,12 @@ export default function TextField(props: Props): JSX.Element {
   const textfieldOnChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     if (onChange) {
       onChange(id, event.target.value);
+    }
+  };
+
+  const onKeyDownHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (onKeyDown) {
+      onKeyDown(e.key);
     }
   };
 
@@ -73,6 +81,7 @@ export default function TextField(props: Props): JSX.Element {
               disabled={readonly || disabled}
               placeholder={placeholder}
               onChange={textfieldOnChange}
+              onKeyDown={onKeyDownHandler}
             />
             {iconRight && <Icon name={iconRight} className='textfield-value--icon-right' />}
           </div>
