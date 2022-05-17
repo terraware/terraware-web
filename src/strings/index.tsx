@@ -291,8 +291,8 @@ const strings = new LocalizedStrings({
     ADD_SITE: 'Add Site',
     SITES_DESCRIPTION: 'Manage your Sites.',
     NAME: 'Name',
+    DESCRIPTION_REQUIRED: 'Description *',
     DESCRIPTION: 'Description',
-    DESCRIPTION_OPTIONAL: 'Description (optional)',
     START_DATE_OPT: 'Start Date (optional)',
     STATUS_OPT: 'Status (optional)',
     PROJECT_TYPE_OPT: 'Project Type(s) (optional)',
@@ -381,7 +381,7 @@ const strings = new LocalizedStrings({
     FIX_HIGHLIGHTED_FIELDS: 'Fix the highlighted fields below.',
     OWNERS_ADMINS_ACCESS_ALL_PROJECTS: 'Owners and Admins automatically have access to all projects.',
     DETAILS: 'Details',
-    NO_NOTIFICATIONS: 'No notifications',
+    NO_NOTIFICATIONS: 'No notifications to show.',
     UNEXPECTED_ERROR: 'An unexpected error occurred.',
     REMOVE_ONLY_ONE_ORG_AT_A_TIME: 'You may only remove yourself from one organization at a time.',
     REMOVING_ORG_WARNING:
@@ -411,6 +411,17 @@ const strings = new LocalizedStrings({
     CONSERVATION_STATUS: 'Conservation Status',
     EDIT: 'Edit',
     SEARCH_BY_NAME_OR_FAMILY: 'Search by name or family...',
+    SETTINGS: 'Settings',
+    MARK_ALL_AS_READ: 'Mark All As Read',
+    SOMETHING_WENT_WRONG: 'Something went wrong.',
+    UNABLE_TO_LOAD_NOTIFICATIONS: 'Unable to load notifications. Try again later.',
+    NOTIFICATIONS: 'Notifications',
+    MARK_AS_READ: 'Mark As Read',
+    MARK_AS_UNREAD: 'Mark As Unread',
+    TAKE_ME_THERE: 'Take Me There',
+    MY_ACCOUNT_NOTIFICATIONS_DESC:
+      'Notifications alert you when there are important updates about your organizations. You will receive them through email.',
+    RECEIVE_EMAIL_NOTIFICATIONS: 'Receive Email Notifications',
   },
 });
 
