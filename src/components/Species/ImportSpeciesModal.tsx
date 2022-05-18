@@ -265,8 +265,8 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
           <>
             <p>{strings.formatString(strings.DUPLICATED_SPECIES, fileStatus?.details.warnings?.length)}</p>
             <ul>
-              {fileStatus?.details.warnings?.map((wr) => (
-                <li>{wr.value}</li>
+              {fileStatus?.details.warnings?.map((wr, index) => (
+                <li key={`duplicate-sp-${index}`}>{wr.value}</li>
               ))}
             </ul>
           </>
