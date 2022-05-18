@@ -322,7 +322,7 @@ export default function App() {
               {selectedOrganization && (
                 <Route exact path={APP_PATHS.SPECIES}>
                   {selectedOrgHasSpecies() ? (
-                    <SpeciesList organization={selectedOrganization} />
+                    <SpeciesList organization={selectedOrganization} reloadData={reloadSpecies} species={species} />
                   ) : (
                     <EmptyStatePage
                       pageName={'Species'}

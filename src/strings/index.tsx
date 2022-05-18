@@ -429,6 +429,15 @@ const strings = new LocalizedStrings({
     DOWNLOAD_CSV_TEMPLATE: 'Download a CSV template here.',
     CHOOSE_FILE: 'Choose File...',
     REPLACE_FILE: 'Replace File...',
+    DATA_IMPORT_FAILED: 'Data import failed',
+    TRY_AGAIN: 'Try Again',
+    CANCEL_IMPORT: 'Cancel Import',
+    IMPORTING_SPECIES: 'Importing species...this may take a few minutes.',
+    SPECIES_IMPORT_COMPLETE: 'Species data import complete!',
+    NICE: 'Nice!',
+    DUPLICATED_SPECIES: 'We found {0} duplicated species:',
+    REPLACE: 'Replace',
+    KEEP_ORIGINAL: 'Keep Original',
   },
 });
 

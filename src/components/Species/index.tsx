@@ -1,13 +1,12 @@
-import { CircularProgress, IconButton } from '@material-ui/core';
+import { IconButton } from '@material-ui/core';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSetRecoilState } from 'recoil';
-import { deleteSpecies, getAllSpecies } from 'src/api/species/species';
+import { deleteSpecies } from 'src/api/species/species';
 import Button from 'src/components/common/button/Button';
 import EmptyMessage from 'src/components/common/EmptyMessage';
-import ErrorBox from 'src/components/common/ErrorBox/ErrorBox';
 import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
 import snackbarAtom from 'src/state/snackbar';
@@ -30,6 +29,8 @@ import ImportSpeciesModal from './ImportSpeciesModal';
 
 type SpeciesListProps = {
   organization: ServerOrganization;
+  reloadData: () => void;
+  species: Species[];
 };
 
 const useStyles = makeStyles((theme) =>
@@ -96,10 +97,8 @@ export type SpeciesFiltersType = {
   endangered?: boolean;
 };
 
-export default function SpeciesList({ organization }: SpeciesListProps): JSX.Element {
+export default function SpeciesList({ organization, reloadData, species }: SpeciesListProps): JSX.Element {
   const classes = useStyles();
-  const [species, setSpecies] = useState<Species[]>();
-  const [speciesAPIRequest, setSpeciesAPIRequest] = useState<'AWAITING' | 'SUCCEEDED' | 'FAILED'>('AWAITING');
   const [selectedSpecies, setSelectedSpecies] = useState<Species>();
   const [selectedSpeciesRows, setSelectedSpeciesRows] = useState<Species[]>([]);
   const [editSpeciesModalOpen, setEditSpeciesModalOpen] = useState(false);
@@ -110,21 +109,6 @@ export default function SpeciesList({ organization }: SpeciesListProps): JSX.Ele
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
   const [results, setResults] = useState<Species[]>();
   const [record, setRecord] = useForm<SpeciesFiltersType>({});
-
-  const populateSpecies = useCallback(async () => {
-    const response = await getAllSpecies(organization.id);
-    if (response.requestSucceeded) {
-      setSpeciesAPIRequest('SUCCEEDED');
-      setSpecies(response.species);
-      setResults(response.species);
-    } else {
-      setSpeciesAPIRequest('FAILED');
-    }
-  }, [organization]);
-
-  useEffect(() => {
-    populateSpecies();
-  }, [populateSpecies]);
 
   const getParams = useCallback(() => {
     const params: SearchNodePayload = {
@@ -234,7 +218,7 @@ export default function SpeciesList({ organization }: SpeciesListProps): JSX.Ele
 
   const onCloseEditSpeciesModal = (saved: boolean, snackbarMessage?: string) => {
     if (saved) {
-      populateSpecies();
+      reloadData();
     }
     setEditSpeciesModalOpen(false);
     if (snackbarMessage) {
@@ -257,20 +241,6 @@ export default function SpeciesList({ organization }: SpeciesListProps): JSX.Ele
       msg: snackbarMessage,
     });
   };
-
-  if (speciesAPIRequest === 'AWAITING') {
-    return <CircularProgress id='species-spinner' className={classes.spinner} />;
-  }
-
-  if (speciesAPIRequest === 'FAILED') {
-    return (
-      <ErrorBox
-        title={strings.SPECIES_DATA_NOT_AVAILABLE}
-        text={strings.CONTACT_US_TO_RESOLVE_ISSUE}
-        className={classes.errorBox}
-      />
-    );
-  }
 
   const OnEditSpecies = () => {
     setSelectedSpecies(selectedSpeciesRows[0]);
@@ -297,7 +267,7 @@ export default function SpeciesList({ organization }: SpeciesListProps): JSX.Ele
         await deleteSpecies(iSelectedSpecies.id, organization.id);
       });
       setDeleteSpeciesModalOpen(false);
-      populateSpecies();
+      reloadData();
     }
   };
 
@@ -329,7 +299,10 @@ export default function SpeciesList({ organization }: SpeciesListProps): JSX.Ele
     setImportSpeciesModalOpen(true);
   };
 
-  const onCloseImportSpeciesModal = () => {
+  const onCloseImportSpeciesModal = (completed: boolean) => {
+    if (completed && reloadData) {
+      reloadData();
+    }
     setImportSpeciesModalOpen(false);
   };
   return (
