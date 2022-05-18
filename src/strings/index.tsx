@@ -422,6 +422,13 @@ const strings = new LocalizedStrings({
     MY_ACCOUNT_NOTIFICATIONS_DESC:
       'Notifications alert you when there are important updates about your organizations. You will receive them through email.',
     RECEIVE_EMAIL_NOTIFICATIONS: 'Receive Email Notifications',
+    IMPORT_DATA: 'Import Data',
+    FILE_SELECTED: 'File Selected',
+    IMPORT_SPECIES_LIST: 'Import Species List',
+    IMPORT_SPECIES_LIST_DESC: 'Browse or drag and drop a CSV with scientific names and other optional fields.',
+    DOWNLOAD_CSV_TEMPLATE: 'Download a CSV template here.',
+    CHOOSE_FILE: 'Choose File...',
+    REPLACE_FILE: 'Replace File...',
   },
 });
 

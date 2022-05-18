@@ -26,6 +26,7 @@ import SpeciesFilters from './SpeciesFiltersPopover';
 import useForm from 'src/utils/useForm';
 import Icon from '../common/icon/Icon';
 import Pill from './Pill';
+import ImportSpeciesModal from './ImportSpeciesModal';
 
 type SpeciesListProps = {
   organization: ServerOrganization;
@@ -74,6 +75,9 @@ const useStyles = makeStyles((theme) =>
       height: '48px',
       marginLeft: '8px',
     },
+    buttonSpace: {
+      marginRight: '8px',
+    },
   })
 );
 
@@ -100,6 +104,7 @@ export default function SpeciesList({ organization }: SpeciesListProps): JSX.Ele
   const [selectedSpeciesRows, setSelectedSpeciesRows] = useState<Species[]>([]);
   const [editSpeciesModalOpen, setEditSpeciesModalOpen] = useState(false);
   const [deleteSpeciesModalOpen, setDeleteSpeciesModalOpen] = useState(false);
+  const [importSpeciesModalOpen, setImportSpeciesModalOpen] = useState(false);
   const setSnackbar = useSetRecoilState(snackbarAtom);
   const [searchValue, setSearchValue] = useState('');
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
@@ -319,6 +324,14 @@ export default function SpeciesList({ organization }: SpeciesListProps): JSX.Ele
         return { ...previousRecord, [filterRemoved]: undefined };
       });
   };
+
+  const onImportSpecies = () => {
+    setImportSpeciesModalOpen(true);
+  };
+
+  const onCloseImportSpeciesModal = () => {
+    setImportSpeciesModalOpen(false);
+  };
   return (
     <TfMain>
       <DeleteSpeciesModal
@@ -333,11 +346,26 @@ export default function SpeciesList({ organization }: SpeciesListProps): JSX.Ele
         organization={organization}
         onError={setErrorSnackbar}
       />
+      <ImportSpeciesModal
+        open={importSpeciesModalOpen}
+        onClose={onCloseImportSpeciesModal}
+        organization={organization}
+      />
       <Grid container>
         <Grid item xs={12} className={classes.titleContainer}>
           <h1 className={classes.pageTitle}>{strings.SPECIES}</h1>
           {species && species.length > 0 && (
-            <Button id='new-species' label={strings.ADD_SPECIES} onClick={onNewSpecies} size='medium' />
+            <div>
+              <Button
+                id='import-species'
+                label={strings.IMPORT_SPECIES}
+                onClick={onImportSpecies}
+                priority='secondary'
+                size='medium'
+                className={classes.buttonSpace}
+              />
+              <Button id='add-species' label={strings.ADD_SPECIES} onClick={onNewSpecies} size='medium' />
+            </div>
           )}
         </Grid>
         <p>{strings.SPECIES_DESCRIPTION}</p>

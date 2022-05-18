@@ -1,4 +1,6 @@
 import React from 'react';
+
+import { ReactComponent as BlobbyGrayIconUploadToTheCloud } from './blobby-gray-icon-upload-to-the-cloud.svg';
 import { ReactComponent as Bug } from './bug.svg';
 import { ReactComponent as Calendar } from './calendar.svg';
 import { ReactComponent as CaretDown } from './caret-down.svg';
@@ -41,6 +43,7 @@ import { ReactComponent as UploadCloud } from './upload-cloud.svg';
 import { ReactComponent as Warning } from './warning.svg';
 
 export type IconName =
+  | 'blobbyGrayIconUploadToTheCloud'
   | 'bug'
   | 'calendar'
   | 'caretDown'
@@ -88,6 +91,7 @@ type SVGComponent = React.FunctionComponent<
   }
 >;
 const icons: Record<IconName, SVGComponent> = {
+  blobbyGrayIconUploadToTheCloud: BlobbyGrayIconUploadToTheCloud,
   bug: Bug,
   calendar: Calendar,
   caretDown: CaretDown,

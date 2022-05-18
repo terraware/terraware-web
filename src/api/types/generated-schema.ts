@@ -176,6 +176,23 @@ export interface paths {
     /** Gets a list of known scientific names whose words begin with particular letters. */
     get: operations["listSpeciesNames"];
   };
+  "/api/v1/species/uploads": {
+    /** The uploaded file must be in CSV format. A template with the correct headers may be downloaded from the `/api/v1/species/uploads/template` endpoint. */
+    post: operations["uploadSpeciesList"];
+  };
+  "/api/v1/species/uploads/template": {
+    get: operations["getSpeciesListUploadTemplate"];
+  };
+  "/api/v1/species/uploads/{uploadId}": {
+    /** Clients may poll this endpoint to monitor the progress of the file. */
+    get: operations["getSpeciesListUploadStatus"];
+    /** This may only be called if the status of the upload is "Awaiting User Action". */
+    delete: operations["deleteSpeciesListUpload"];
+  };
+  "/api/v1/species/uploads/{uploadId}/resolve": {
+    /** This may only be called if the status of the upload is "Awaiting User Action". */
+    post: operations["resolveSpeciesListUpload"];
+  };
   "/api/v1/species/{speciesId}": {
     get: operations["getSpecies"];
     put: operations["updateSpecies"];
@@ -640,6 +657,28 @@ export interface components {
       species: components["schemas"]["SpeciesResponseElement"];
       status: components["schemas"]["SuccessOrError"];
     };
+    GetSpeciesUploadStatusDetailsPayload: {
+      id: number;
+      status:
+        | "Receiving"
+        | "Validating"
+        | "Processing"
+        | "Completed"
+        | "Processing Failed"
+        | "Invalid"
+        | "Receiving Failed"
+        | "Awaiting Validation"
+        | "Awaiting User Action"
+        | "Awaiting Processing";
+      errors?: components["schemas"]["SpeciesUploadProblemPayload"][];
+      warnings?: components["schemas"]["SpeciesUploadProblemPayload"][];
+      /** True if the server is finished processing the file, either successfully or not. */
+      finished: boolean;
+    };
+    GetSpeciesUploadStatusResponsePayload: {
+      details: components["schemas"]["GetSpeciesUploadStatusDetailsPayload"];
+      status: components["schemas"]["SuccessOrError"];
+    };
     GetUserResponsePayload: {
       user: components["schemas"]["UserProfilePayload"];
       status: components["schemas"]["SuccessOrError"];
@@ -847,6 +886,10 @@ export interface components {
       status: components["schemas"]["SuccessOrError"];
       error?: components["schemas"]["ErrorDetails"];
     };
+    ResolveSpeciesUploadRequestPayload: {
+      /** If true, the data for entries that already exist will be overwritten with the values in the uploaded file. If false, only entries that don't already exist will be imported. */
+      overwriteExisting: boolean;
+    };
     SearchAccessionsRequestPayload: {
       facilityId: number;
       fields: string[];
@@ -970,6 +1013,22 @@ export interface components {
         | "Recalcitrant"
         | "Intermediate"
         | "Unknown";
+    };
+    /** List of conditions that might cause the user to want to cancel the upload but that can be automatically resolved if desired. */
+    SpeciesUploadProblemPayload: {
+      /** Name of the field with the problem. Absent if the problem isn't specific to a single field. */
+      fieldName?: string;
+      /** Human-readable description of the problem. */
+      message?: string;
+      /** Position (row number) of the record with the problem. */
+      position?: number;
+      type:
+        | "Unrecognized Value"
+        | "Missing Required Value"
+        | "Duplicate Value"
+        | "Malformed Value";
+      /** The value that caused the problem. Absent if the problem wasn't caused by a specific field value. */
+      value?: string;
     };
     StorageLocationDetails: {
       storageLocation: string;
@@ -1147,6 +1206,11 @@ export interface components {
       location?: components["schemas"]["Point"];
       /** GPS accuracy in meters. */
       gpsAccuracy?: number;
+    };
+    UploadSpeciesListResponsePayload: {
+      /** ID of uploaded file. This may be used to poll for the file's status. */
+      id: number;
+      status: components["schemas"]["SuccessOrError"];
     };
     UserProfilePayload: {
       /** User's unique ID. This should not be shown to the user, but is a required input to some API endpoints. */
@@ -2449,6 +2513,104 @@ export interface operations {
         content: {
           "application/json": components["schemas"]["SpeciesLookupNamesResponsePayload"];
         };
+      };
+    };
+  };
+  /** The uploaded file must be in CSV format. A template with the correct headers may be downloaded from the `/api/v1/species/uploads/template` endpoint. */
+  uploadSpeciesList: {
+    parameters: {
+      query: {
+        organizationId: number;
+      };
+    };
+    responses: {
+      /** The file has been successfully received. It will be processed asynchronously; use the ID returned in the response payload to poll for its status using the `/api/v1/species/uploads/{uploadId}` GET endpoint. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UploadSpeciesListResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "multipart/form-data": {
+          file: string;
+        };
+      };
+    };
+  };
+  getSpeciesListUploadTemplate: {
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": string;
+        };
+      };
+    };
+  };
+  /** Clients may poll this endpoint to monitor the progress of the file. */
+  getSpeciesListUploadStatus: {
+    parameters: {
+      path: {
+        uploadId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetSpeciesUploadStatusResponsePayload"];
+        };
+      };
+    };
+  };
+  /** This may only be called if the status of the upload is "Awaiting User Action". */
+  deleteSpeciesListUpload: {
+    parameters: {
+      path: {
+        uploadId: number;
+      };
+    };
+    responses: {
+      /** The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** The upload was not awaiting user action. */
+      409: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** This may only be called if the status of the upload is "Awaiting User Action". */
+  resolveSpeciesListUpload: {
+    parameters: {
+      path: {
+        uploadId: number;
+      };
+    };
+    responses: {
+      /** The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** The upload was not awaiting user action. */
+      409: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ResolveSpeciesUploadRequestPayload"];
       };
     };
   };
