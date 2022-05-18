@@ -4,6 +4,7 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import useQuery from '../../../utils/useQuery';
 import {
   AllFieldValuesMap,
   convertToSearchNodePayload,
@@ -36,6 +37,7 @@ import { useRecoilState } from 'recoil';
 import EmptyMessage from 'src/components/common/EmptyMessage';
 import { APP_PATHS } from 'src/constants';
 import TfMain from 'src/components/common/TfMain';
+import { ACCESSION_STATES } from '../../../types/Accession';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -111,6 +113,8 @@ type DatabaseProps = {
 export default function Database(props: DatabaseProps): JSX.Element {
   const classes = useStyles();
   const history = useHistory();
+  const query = useQuery();
+  const location = useStateLocation();
   const {
     searchCriteria,
     setSearchCriteria,
@@ -129,6 +133,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const [reportModalOpen, setReportModalOpen] = useState(false);
   const [pendingAccessions, setPendingAccessions] = useState<SearchResponseElement[] | null>();
   const [selectedOrgInfo, setSelectedOrgInfo] = useRecoilState(seedsDatabaseSelectedOrgInfo);
+
   /*
    * fieldOptions is a list of records
    * keys: all single and multi select search fields.
@@ -147,6 +152,25 @@ export default function Database(props: DatabaseProps): JSX.Element {
 
   // Remove this when download report receives site/project/org id
   const [facilityIdForReport, setFacilityIdForReport] = useState<number>();
+
+  useEffect(() => {
+    // if url has stage=<accession state>, apply that filter
+    const stage = query.get('stage');
+    if (stage) {
+      if (ACCESSION_STATES.indexOf(stage) !== -1) {
+        setSearchCriteria({
+          state: {
+            field: 'state',
+            values: [stage],
+            type: 'Exact',
+            operation: 'field',
+          },
+        });
+      }
+      query.delete('stage');
+      history.push(getLocation(location.pathname, location, query.toString()));
+    }
+  }, [query, location, history, setSearchCriteria]);
 
   useEffect(() => {
     if (organization) {
@@ -303,8 +327,6 @@ export default function Database(props: DatabaseProps): JSX.Element {
     const newAccessionLocation = getLocation(APP_PATHS.ACCESSIONS_NEW, location);
     history.push(newAccessionLocation);
   };
-
-  const location = useStateLocation();
 
   return (
     <MuiPickersUtilsProvider utils={MomentUtils}>

@@ -3,8 +3,9 @@ import { CircularProgress, createStyles, CssBaseline, makeStyles } from '@materi
 import mapboxgl from 'mapbox-gl';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
-import { Redirect, Route, Switch, useLocation } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import useQuery from './utils/useQuery';
+import useStateLocation, { getLocation } from './utils/useStateLocation';
 import { getOrganizations } from 'src/api/organization/organization';
 import {
   DEFAULT_SEED_SEARCH_FILTERS,
@@ -91,7 +92,7 @@ enum APIRequestStatus {
 export default function App() {
   const classes = useStyles();
   const query = useQuery();
-  const location = useLocation();
+  const location = useStateLocation();
   const [selectedOrganization, setSelectedOrganization] = useState<ServerOrganization>();
   const [notifications, setNotifications] = useState<Notifications>();
 
@@ -171,7 +172,9 @@ export default function App() {
         return updatedOrg ? updatedOrg : organizations[0];
       });
       if (organizationId) {
-        history.push(location.pathname);
+        query.delete('organizationId');
+        // preserve other url params
+        history.push(getLocation(location.pathname, location, query.toString()));
       }
     }
   }, [organizations, selectedOrganization, query, location, history]);
