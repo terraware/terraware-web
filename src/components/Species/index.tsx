@@ -1,13 +1,12 @@
-import { CircularProgress, IconButton } from '@material-ui/core';
+import { IconButton } from '@material-ui/core';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSetRecoilState } from 'recoil';
-import { deleteSpecies, getAllSpecies } from 'src/api/species/species';
+import { deleteSpecies } from 'src/api/species/species';
 import Button from 'src/components/common/button/Button';
 import EmptyMessage from 'src/components/common/EmptyMessage';
-import ErrorBox from 'src/components/common/ErrorBox/ErrorBox';
 import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
 import snackbarAtom from 'src/state/snackbar';
@@ -26,9 +25,12 @@ import SpeciesFilters from './SpeciesFiltersPopover';
 import useForm from 'src/utils/useForm';
 import Icon from '../common/icon/Icon';
 import Pill from './Pill';
+import ImportSpeciesModal from './ImportSpeciesModal';
 
 type SpeciesListProps = {
   organization: ServerOrganization;
+  reloadData: () => void;
+  species: Species[];
 };
 
 const useStyles = makeStyles((theme) =>
@@ -74,6 +76,9 @@ const useStyles = makeStyles((theme) =>
       height: '48px',
       marginLeft: '8px',
     },
+    buttonSpace: {
+      marginRight: '8px',
+    },
   })
 );
 
@@ -92,34 +97,18 @@ export type SpeciesFiltersType = {
   endangered?: boolean;
 };
 
-export default function SpeciesList({ organization }: SpeciesListProps): JSX.Element {
+export default function SpeciesList({ organization, reloadData, species }: SpeciesListProps): JSX.Element {
   const classes = useStyles();
-  const [species, setSpecies] = useState<Species[]>();
-  const [speciesAPIRequest, setSpeciesAPIRequest] = useState<'AWAITING' | 'SUCCEEDED' | 'FAILED'>('AWAITING');
   const [selectedSpecies, setSelectedSpecies] = useState<Species>();
   const [selectedSpeciesRows, setSelectedSpeciesRows] = useState<Species[]>([]);
   const [editSpeciesModalOpen, setEditSpeciesModalOpen] = useState(false);
   const [deleteSpeciesModalOpen, setDeleteSpeciesModalOpen] = useState(false);
+  const [importSpeciesModalOpen, setImportSpeciesModalOpen] = useState(false);
   const setSnackbar = useSetRecoilState(snackbarAtom);
   const [searchValue, setSearchValue] = useState('');
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
   const [results, setResults] = useState<Species[]>();
   const [record, setRecord] = useForm<SpeciesFiltersType>({});
-
-  const populateSpecies = useCallback(async () => {
-    const response = await getAllSpecies(organization.id);
-    if (response.requestSucceeded) {
-      setSpeciesAPIRequest('SUCCEEDED');
-      setSpecies(response.species);
-      setResults(response.species);
-    } else {
-      setSpeciesAPIRequest('FAILED');
-    }
-  }, [organization]);
-
-  useEffect(() => {
-    populateSpecies();
-  }, [populateSpecies]);
 
   const getParams = useCallback(() => {
     const params: SearchNodePayload = {
@@ -229,7 +218,7 @@ export default function SpeciesList({ organization }: SpeciesListProps): JSX.Ele
 
   const onCloseEditSpeciesModal = (saved: boolean, snackbarMessage?: string) => {
     if (saved) {
-      populateSpecies();
+      reloadData();
     }
     setEditSpeciesModalOpen(false);
     if (snackbarMessage) {
@@ -252,20 +241,6 @@ export default function SpeciesList({ organization }: SpeciesListProps): JSX.Ele
       msg: snackbarMessage,
     });
   };
-
-  if (speciesAPIRequest === 'AWAITING') {
-    return <CircularProgress id='species-spinner' className={classes.spinner} />;
-  }
-
-  if (speciesAPIRequest === 'FAILED') {
-    return (
-      <ErrorBox
-        title={strings.SPECIES_DATA_NOT_AVAILABLE}
-        text={strings.CONTACT_US_TO_RESOLVE_ISSUE}
-        className={classes.errorBox}
-      />
-    );
-  }
 
   const OnEditSpecies = () => {
     setSelectedSpecies(selectedSpeciesRows[0]);
@@ -292,7 +267,7 @@ export default function SpeciesList({ organization }: SpeciesListProps): JSX.Ele
         await deleteSpecies(iSelectedSpecies.id, organization.id);
       });
       setDeleteSpeciesModalOpen(false);
-      populateSpecies();
+      reloadData();
     }
   };
 
@@ -319,6 +294,17 @@ export default function SpeciesList({ organization }: SpeciesListProps): JSX.Ele
         return { ...previousRecord, [filterRemoved]: undefined };
       });
   };
+
+  const onImportSpecies = () => {
+    setImportSpeciesModalOpen(true);
+  };
+
+  const onCloseImportSpeciesModal = (completed: boolean) => {
+    if (completed && reloadData) {
+      reloadData();
+    }
+    setImportSpeciesModalOpen(false);
+  };
   return (
     <TfMain>
       <DeleteSpeciesModal
@@ -333,11 +319,26 @@ export default function SpeciesList({ organization }: SpeciesListProps): JSX.Ele
         organization={organization}
         onError={setErrorSnackbar}
       />
+      <ImportSpeciesModal
+        open={importSpeciesModalOpen}
+        onClose={onCloseImportSpeciesModal}
+        organization={organization}
+      />
       <Grid container>
         <Grid item xs={12} className={classes.titleContainer}>
           <h1 className={classes.pageTitle}>{strings.SPECIES}</h1>
           {species && species.length > 0 && (
-            <Button id='new-species' label={strings.ADD_SPECIES} onClick={onNewSpecies} size='medium' />
+            <div>
+              <Button
+                id='import-species'
+                label={strings.IMPORT_SPECIES}
+                onClick={onImportSpecies}
+                priority='secondary'
+                size='medium'
+                className={classes.buttonSpace}
+              />
+              <Button id='add-species' label={strings.ADD_SPECIES} onClick={onNewSpecies} size='medium' />
+            </div>
           )}
         </Grid>
         <p>{strings.SPECIES_DESCRIPTION}</p>

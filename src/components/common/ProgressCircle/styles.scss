@@ -1,0 +1,85 @@
+@import './style-dictionary-dist/progressCircle_variables.scss';
+
+.circleContainer {
+  position: relative;
+  display: inline-flex;
+}
+
+.circleTrack {
+  color: $tw-clr-base-semantic-productive-bg !important;
+}
+
+.circleFill {
+  position: absolute;
+  left: 0;
+  color: $tw-clr-base-semantic-productive;
+}
+
+.small {
+  width: $tw-spc-base-x-large !important;
+  height: $tw-spc-base-x-large !important;
+
+  & svg {
+    & circle {
+      stroke-width: 3.67;
+      r: 20;
+    }
+  }
+}
+
+.medium {
+  width: calc(#{$tw-spc-base-x-large} * 2) !important;
+  height: calc(#{$tw-spc-base-x-large} * 2) !important;
+  & svg {
+    & circle {
+      stroke-width: 3.67;
+      r: 18;
+    }
+  }
+}
+
+.large {
+  width: calc(#{$tw-spc-base-x-large} * 4) !important;
+  height: calc(#{$tw-spc-base-x-large} * 4) !important;
+  & svg {
+    & circle {
+      stroke-width: 3.67;
+      r: 14;
+    }
+  }
+}
+
+.labelContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.progressCircle_label {
+  &__small {
+    font-family: $tw-fnt-prgrss-circle-value-small-font-family;
+    font-size: $tw-fnt-prgrss-circle-value-small-font-size;
+    font-weight: $tw-fnt-prgrss-circle-value-small-font-weight;
+    line-height: $tw-fnt-prgrss-circle-value-small-line-height;
+    color: $tw-clr-text-fill;
+  }
+  &__medium {
+    font-family: $tw-fnt-prgrss-circle-value-medium-font-family;
+    font-size: $tw-fnt-prgrss-circle-value-medium-font-size;
+    font-weight: $tw-fnt-prgrss-circle-value-medium-font-weight;
+    line-height: $tw-fnt-prgrss-circle-value-medium-line-height;
+    color: $tw-clr-text-fill;
+  }
+  &__large {
+    font-family: $tw-fnt-prgrss-circle-value-large-font-family;
+    font-size: $tw-fnt-prgrss-circle-value-large-font-size;
+    font-weight: $tw-fnt-prgrss-circle-value-large-font-weight;
+    line-height: $tw-fnt-prgrss-circle-value-large-line-height;
+    color: $tw-clr-text-fill;
+  }
+}
