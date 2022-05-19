@@ -187,6 +187,16 @@ export default function App() {
   }, []);
 
   useEffect(() => {
+    if (
+      orgAPIRequestStatus === APIRequestStatus.SUCCEEDED &&
+      organizations?.length === 0 &&
+      location.pathname !== APP_PATHS.WELCOME
+    ) {
+      history.push(APP_PATHS.WELCOME);
+    }
+  }, [orgAPIRequestStatus, organizations, location, history]);
+
+  useEffect(() => {
     reloadUser();
   }, [reloadUser]);
 
@@ -196,7 +206,6 @@ export default function App() {
     history.push(APP_PATHS.ERROR_FAILED_TO_FETCH_ORG_DATA);
     return null;
   } else if (orgAPIRequestStatus === APIRequestStatus.SUCCEEDED && organizations?.length === 0) {
-    history.push(APP_PATHS.WELCOME);
     return (
       <>
         <TopBar>
@@ -313,7 +322,7 @@ export default function App() {
               {selectedOrganization && (
                 <Route exact path={APP_PATHS.SPECIES}>
                   {selectedOrgHasSpecies() ? (
-                    <SpeciesList organization={selectedOrganization} />
+                    <SpeciesList organization={selectedOrganization} reloadData={reloadSpecies} species={species} />
                   ) : (
                     <EmptyStatePage
                       pageName={'Species'}

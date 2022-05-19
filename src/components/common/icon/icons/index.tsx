@@ -1,4 +1,7 @@
 import React from 'react';
+
+import { ReactComponent as BlobbyGrayIconUploadToTheCloud } from './blobby-gray-icon-upload-to-the-cloud.svg';
+import { ReactComponent as BlobbyIconLeaf } from './blobby-icon-leaf.svg';
 import { ReactComponent as Bug } from './bug.svg';
 import { ReactComponent as Calendar } from './calendar.svg';
 import { ReactComponent as CaretDown } from './caret-down.svg';
@@ -6,9 +9,12 @@ import { ReactComponent as CaretLeft } from './caret-left.svg';
 import { ReactComponent as CaretUp } from './caret-up.svg';
 import { ReactComponent as ChevronDown } from './chevron-down.svg';
 import { ReactComponent as ChevronUp } from './chevron-up.svg';
+import { ReactComponent as Close } from './close.svg';
 import { ReactComponent as Critical } from './critical.svg';
 import { ReactComponent as Edit } from './edit.svg';
 import { ReactComponent as Error } from './error.svg';
+import { ReactComponent as Export } from './export.svg';
+import { ReactComponent as Filter } from './filter.svg';
 import { ReactComponent as Folder } from './folder.svg';
 import { ReactComponent as Help } from './help.svg';
 import { ReactComponent as Home } from './home.svg';
@@ -38,16 +44,21 @@ import { ReactComponent as UploadCloud } from './upload-cloud.svg';
 import { ReactComponent as Warning } from './warning.svg';
 
 export type IconName =
+  | 'blobbyGrayIconUploadToTheCloud'
+  | 'blobbyIconLeaf'
   | 'bug'
   | 'calendar'
   | 'caretDown'
   | 'caretLeft'
   | 'caretUp'
-  | 'chevronUp'
   | 'chevronDown'
+  | 'chevronUp'
+  | 'close'
   | 'critical'
   | 'edit'
   | 'error'
+  | 'export'
+  | 'filter'
   | 'folder'
   | 'help'
   | 'home'
@@ -82,16 +93,21 @@ type SVGComponent = React.FunctionComponent<
   }
 >;
 const icons: Record<IconName, SVGComponent> = {
+  blobbyGrayIconUploadToTheCloud: BlobbyGrayIconUploadToTheCloud,
+  blobbyIconLeaf: BlobbyIconLeaf,
   bug: Bug,
   calendar: Calendar,
   caretDown: CaretDown,
   caretLeft: CaretLeft,
   caretUp: CaretUp,
-  chevronUp: ChevronUp,
   chevronDown: ChevronDown,
+  chevronUp: ChevronUp,
+  close: Close,
   critical: Critical,
   edit: Edit,
   error: Error,
+  export: Export,
+  filter: Filter,
   folder: Folder,
   help: Help,
   home: Home,

@@ -13,6 +13,7 @@ import AddSpeciesModal from '../Species/AddSpeciesModal';
 import snackbarAtom from 'src/state/snackbar';
 import { useSetRecoilState } from 'recoil';
 import { ServerOrganization } from 'src/types/Organization';
+import ImportSpeciesModal from '../Species/ImportSpeciesModal';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -95,6 +96,7 @@ export default function EmptyStatePage({ pageName, organization, reloadData }: E
   };
 
   const [addSpeciesModalOpened, setAddSpeciesModalOpened] = useState(false);
+  const [importSpeciesModalOpened, setImportSpeciesModalOpened] = useState(false);
 
   const NO_SPECIES_CONTENT: PageContent = {
     title1: strings.SPECIES,
@@ -107,7 +109,7 @@ export default function EmptyStatePage({ pageName, organization, reloadData }: E
         description: emptyStateStrings.IMPORT_SPECIES_DESCRIPTION,
         buttonText: strings.IMPORT_SPECIES,
         onClickButton: () => {
-          return true;
+          setImportSpeciesModalOpened(true);
         },
         linkText: emptyStateStrings.IMPORT_SPECIES_LINK,
         linkPath: '/home',
@@ -154,10 +156,34 @@ export default function EmptyStatePage({ pageName, organization, reloadData }: E
     }
   };
 
+  const onCloseImportSpeciesModal = (saved: boolean, snackbarMessage?: string) => {
+    if (saved) {
+      if (reloadData) {
+        reloadData();
+      }
+      history.push(APP_PATHS.SPECIES);
+    }
+    setImportSpeciesModalOpened(false);
+    if (snackbarMessage) {
+      setSnackbar({
+        type: 'toast',
+        priority: 'success',
+        msg: snackbarMessage,
+      });
+    }
+  };
+
   return (
     <main>
       {organization && (
-        <AddSpeciesModal open={addSpeciesModalOpened} onClose={onCloseEditSpeciesModal} organization={organization} />
+        <>
+          <AddSpeciesModal open={addSpeciesModalOpened} onClose={onCloseEditSpeciesModal} organization={organization} />
+          <ImportSpeciesModal
+            open={importSpeciesModalOpened}
+            onClose={onCloseImportSpeciesModal}
+            organization={organization}
+          />
+        </>
       )}
       <Container className={classes.mainContainer}>
         <PageHeader title={content.title1} subtitle='' />

@@ -88,13 +88,17 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
   });
 
   useEffect(() => {
+    let cancel = false;
     const populateCountries = async () => {
       const response = await searchCountries();
-      if (response) {
+      if (response && !cancel) {
         setCountries(response);
       }
     };
     populateCountries();
+    return () => {
+      cancel = true;
+    };
   }, []);
 
   useEffect(() => {

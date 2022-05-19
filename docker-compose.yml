@@ -10,7 +10,7 @@ services:
       POSTGRES_PASSWORD: 'terraware'
 
   terraware-server:
-    image: 'terraware/terraware-server:species'
+    image: 'terraware/terraware-server:STAGING'
     ports:
       - '8080:8080'
     environment:

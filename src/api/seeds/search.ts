@@ -92,6 +92,20 @@ export async function search(params: SearchRequestPayload): Promise<SearchRespon
   }
 }
 
+export async function searchCsv(params: SearchRequestPayload): Promise<any> {
+  const config = {
+    headers: {
+      accept: 'text/csv',
+    },
+  };
+  try {
+    const response = (await axios.post(SEARCH_ENDPOINT, params, config)).data;
+    return response;
+  } catch {
+    return null;
+  }
+}
+
 export async function getPendingAccessions(
   selectedValues: SelectedOrgInfo,
   organizationId: number

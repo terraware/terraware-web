@@ -106,6 +106,7 @@ export async function updateSpecies(species: Species, organizationId: number): P
     scientificName: species.scientificName,
     organizationId,
     rare: species.rare,
+    seedStorageBehavior: species.seedStorageBehavior,
   };
   try {
     const endpoint = PUT_SPECIES_ENDPOINT.replace('{speciesId}', `${species.id}`);
@@ -196,6 +197,68 @@ export async function getSpeciesDetails(scientificName: string) {
       });
     });
     response.endangered = serverResponse.endangered;
+  } catch {
+    response.requestSucceeded = false;
+  }
+  return response;
+}
+
+type UploadSpeciesResponse = {
+  id: number;
+  requestSucceeded: boolean;
+};
+const UPLOAD_SPECIES_FILE = '/api/v1/species/uploads';
+type UploadSpeciesFileResponse =
+  paths[typeof UPLOAD_SPECIES_FILE]['post']['responses'][200]['content']['application/json'];
+
+type UploadSpeciesQuery = paths[typeof UPLOAD_SPECIES_FILE]['post']['parameters']['query'];
+export async function uploadSpeciesFile(file: File, organizationId: number) {
+  const queryParams: UploadSpeciesQuery = { organizationId };
+
+  const endpoint = addQueryParams(UPLOAD_SPECIES_FILE, queryParams);
+  const response: UploadSpeciesResponse = {
+    id: -1,
+    requestSucceeded: true,
+  };
+  const formData = new FormData();
+  formData.append('file', file);
+  const config = {
+    headers: {
+      'content-type': 'multipart/form-data',
+    },
+  };
+  try {
+    const serverResponse: UploadSpeciesFileResponse = (await axios.post(endpoint, formData, config)).data;
+    response.id = serverResponse.id;
+  } catch (error) {
+    response.requestSucceeded = false;
+  }
+  return response;
+}
+
+const DOWNLOAD_SPECIES_TEMPLATE = '/api/v1/species/uploads/template';
+export async function downloadSpeciesTemplate() {
+  const response = (await axios.get(DOWNLOAD_SPECIES_TEMPLATE)).data;
+  return response;
+}
+
+const UPLOAD_STATUS = '/api/v1/species/uploads/{uploadId}';
+export type GetSpeciesUploadStatusResponsePayload =
+  paths[typeof UPLOAD_STATUS]['get']['responses'][200]['content']['application/json'];
+export async function getUploadStatus(uploadId: number): Promise<GetSpeciesUploadStatusResponsePayload> {
+  const serverResponse: GetSpeciesUploadStatusResponsePayload = (
+    await axios.get(UPLOAD_STATUS.replace('{uploadId}', uploadId.toString()))
+  ).data;
+  return serverResponse;
+}
+
+const RESOLVE_SPECIES_UPLOAD = '/api/v1/species/uploads/{uploadId}/resolve';
+export async function resolveSpeciesUpload(uploadId: number, overwriteExisting: boolean) {
+  const response: UpdateSpeciesResponse = {
+    requestSucceeded: true,
+  };
+  try {
+    await axios.post(RESOLVE_SPECIES_UPLOAD.replace('{uploadId}', uploadId.toString()), { overwriteExisting });
   } catch {
     response.requestSucceeded = false;
   }
