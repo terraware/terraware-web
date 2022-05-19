@@ -176,8 +176,8 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
               selectedValue={record.scientificName}
               onChange={(value) => onChangeScientificName(value)}
               options={optionsForName}
-              label={strings.SCIENTIFIC_NAME}
-              aria-label={strings.SCIENTIFIC_NAME}
+              label={strings.SCIENTIFIC_NAME_REQUIRED}
+              aria-label={strings.SCIENTIFIC_NAME_REQUIRED}
               placeholder={strings.SELECT}
               readonly={false}
               fullWidth={true}
@@ -195,8 +195,8 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
               selectedValue={record.commonName}
               onChange={(value) => onChange('commonName', value)}
               options={optionsForCommonName}
-              label={strings.COMMON_OR_LOCAL_NAME_OPT}
-              aria-label={strings.COMMON_OR_LOCAL_NAME_OPT}
+              label={strings.COMMON_OR_LOCAL_NAME}
+              aria-label={strings.COMMON_OR_LOCAL_NAME}
               placeholder={strings.TYPE}
               readonly={false}
               fullWidth={true}
@@ -207,14 +207,14 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
               id='familyName'
               value={record.familyName}
               onChange={onChange}
-              label={strings.FAMILY_OPTIONAL}
-              aria-label={strings.FAMILY_OPTIONAL}
+              label={strings.FAMILY}
+              aria-label={strings.FAMILY}
               type={'text'}
               placeholder={strings.TYPE}
             />
           </Grid>
           <Grid item xs={12}>
-            <span>{strings.CONSERVATION_STATUS_OPT}</span>
+            <span>{strings.CONSERVATION_STATUS}</span>
             <Checkbox
               id='Endangered'
               name='conservationStatus'
@@ -238,8 +238,8 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
               selectedValue={record.growthForm}
               onChange={(value) => onChange('growthForm', value)}
               options={GrowthForms}
-              label={strings.GROWTH_FORM_OPT}
-              aria-label={strings.GROWTH_FORM_OPT}
+              label={strings.GROWTH_FORM}
+              aria-label={strings.GROWTH_FORM}
               placeholder={strings.SELECT}
               fullWidth={true}
             />

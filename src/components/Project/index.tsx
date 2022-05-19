@@ -122,7 +122,7 @@ export default function ProjectDetails({ organization }: ProjectDetailsProps): J
         </Grid>
         <Grid item xs={4}>
           <Textfield
-            label={strings.START_DATE_OPT}
+            label={strings.START_DATE}
             display={true}
             value={projectSelected?.startDate}
             id='startDate'
@@ -130,17 +130,11 @@ export default function ProjectDetails({ organization }: ProjectDetailsProps): J
           />
         </Grid>
         <Grid item xs={4}>
-          <Textfield
-            label={strings.STATUS_OPT}
-            display={true}
-            value={projectSelected?.status}
-            id='status'
-            type='text'
-          />
+          <Textfield label={strings.STATUS} display={true} value={projectSelected?.status} id='status' type='text' />
         </Grid>
         <Grid item xs={4}>
           <Textfield
-            label={strings.PROJECT_TYPE_OPT}
+            label={strings.PROJECT_TYPE}
             display={true}
             value={projectSelected?.types?.join(', ')}
             id='projectType'

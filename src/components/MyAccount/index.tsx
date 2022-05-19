@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme) =>
 );
 
 const columns: TableColumnType[] = [
-  { key: 'name', name: strings.NAME, type: 'string' },
+  { key: 'name', name: strings.ORGANIZATION_NAME, type: 'string' },
   { key: 'description', name: strings.DESCRIPTION, type: 'string' },
   { key: 'totalUsers', name: strings.PEOPLE, type: 'string' },
 ];
@@ -274,7 +274,7 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
           </Grid>
           <Grid item xs={4}>
             <TextField
-              label={strings.NAME}
+              label={strings.FIRST_NAME}
               id='firstName'
               type='text'
               value={record.firstName}

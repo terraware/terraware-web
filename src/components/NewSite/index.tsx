@@ -87,7 +87,7 @@ export default function SiteView({ organization, reloadOrganizationData }: SiteV
 
   const saveSite = async () => {
     if (record.name === '') {
-      setNameError('Required Field');
+      setNameError('Required field.');
     } else {
       if (selectedSite) {
         const response = await updateSite({ ...record, id: selectedSite.id } as Site);
@@ -163,7 +163,7 @@ export default function SiteView({ organization, reloadOrganizationData }: SiteV
           <Grid item xs={4}>
             <TextField
               id='name'
-              label={strings.NAME}
+              label={strings.NAME_REQUIRED}
               type='text'
               onChange={onChange}
               value={record.name}

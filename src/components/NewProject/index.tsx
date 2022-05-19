@@ -297,7 +297,7 @@ export default function ProjectView({ organization, reloadOrganizationData }: Pr
 
   const saveProject = () => {
     if (newProject.name === '') {
-      setNameError('Required Field');
+      setNameError('Required field.');
       return;
     }
 
@@ -378,7 +378,7 @@ export default function ProjectView({ organization, reloadOrganizationData }: Pr
           <Grid item xs={4}>
             <TextField
               id='name'
-              label={strings.NAME}
+              label={strings.NAME_REQUIRED}
               type='text'
               onChange={onChange}
               value={newProject.name}
@@ -396,14 +396,14 @@ export default function ProjectView({ organization, reloadOrganizationData }: Pr
           </Grid>
           <Grid item xs={4}>
             <label htmlFor={newProject.startDate} className={classes.label}>
-              {strings.START_DATE_OPT}
+              {strings.START_DATE}
             </label>
             <DatePicker
               id='startDate'
               value={newProject.startDate}
               onChange={onChange}
               label=''
-              aria-label={strings.START_DATE_OPT}
+              aria-label={strings.START_DATE}
               className={classes.datePicker}
               autocomplete='off'
             />
@@ -411,14 +411,14 @@ export default function ProjectView({ organization, reloadOrganizationData }: Pr
           <Grid item xs={4}>
             <Select
               id='status'
-              label={strings.STATUS_OPT}
+              label={strings.STATUS}
               onChange={onChangeStatus}
               options={['Propagating', 'Planting', 'Completed/Monitoring']}
               selectedValue={newProject.status}
             />
           </Grid>
           <Grid item xs={4}>
-            <span className={classes.label}>{strings.PROJECT_TYPE_OPT}</span>
+            <span className={classes.label}>{strings.PROJECT_TYPE}</span>
             <Checkbox
               id='Native Forest Restoration'
               name='projectType'
