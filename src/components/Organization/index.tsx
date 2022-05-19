@@ -102,7 +102,13 @@ export default function OrganizationView({ organization }: OrganizationViewProps
           <Button label={strings.EDIT_ORGANIZATION} priority='secondary' onClick={goToEditOrganization} />
         </Grid>
         <Grid item xs={4}>
-          <TextField label={strings.NAME} id='name' type='text' value={organization?.name} display={true} />
+          <TextField
+            label={strings.ORGANIZATION_NAME}
+            id='name'
+            type='text'
+            value={organization?.name}
+            display={true}
+          />
         </Grid>
         <Grid item xs={4}>
           <TextField
@@ -118,7 +124,7 @@ export default function OrganizationView({ organization }: OrganizationViewProps
         </Grid>
         <Grid item xs={4}>
           <TextField
-            label={strings.COUNTRY_OPTIONAL}
+            label={strings.COUNTRY}
             id='country'
             type='text'
             value={
@@ -129,13 +135,7 @@ export default function OrganizationView({ organization }: OrganizationViewProps
         </Grid>
         <Grid item xs={4}>
           {organization?.countrySubdivisionCode && (
-            <TextField
-              label={strings.STATE_OPTIONAL}
-              id='state'
-              type='text'
-              value={organizationState()}
-              display={true}
-            />
+            <TextField label={strings.STATE} id='state' type='text' value={organizationState()} display={true} />
           )}
         </Grid>
         <Grid item xs={4} />

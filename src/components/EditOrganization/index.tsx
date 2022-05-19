@@ -103,7 +103,7 @@ export default function OrganizationView({ organization, reloadOrganizationData 
 
   const saveOrganization = async () => {
     if (organizationRecord.name === '') {
-      setNameError('Required Field');
+      setNameError('Required field.');
     } else {
       const response = await updateOrganization(organizationRecord);
       if (response.requestSucceeded) {
@@ -135,7 +135,7 @@ export default function OrganizationView({ organization, reloadOrganizationData 
           <Grid item xs={4}>
             <TextField
               id='name'
-              label={strings.NAME}
+              label={strings.ORGANIZATION_NAME_REQUIRED}
               type='text'
               onChange={onChange}
               value={organizationRecord.name}
@@ -154,7 +154,7 @@ export default function OrganizationView({ organization, reloadOrganizationData 
           <Grid item xs={4} />
           <Grid item xs={4}>
             <Select
-              label={strings.COUNTRY_OPTIONAL}
+              label={strings.COUNTRY}
               id='countyCode'
               onChange={onChangeCountry}
               options={countries?.map((country) => country.name)}
@@ -164,7 +164,7 @@ export default function OrganizationView({ organization, reloadOrganizationData 
           {getSelectedCountry()?.subdivisions && (
             <Grid item xs={4}>
               <Select
-                label={strings.STATE_OPTIONAL}
+                label={strings.STATE}
                 id='countySubdivisionCode'
                 onChange={onChangeSubdivision}
                 options={getSelectedCountry()?.subdivisions.map((subdivision) => subdivision.name)}

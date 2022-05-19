@@ -343,7 +343,7 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
           <Grid item xs={4}>
             <TextField
               id='email'
-              label={strings.EMAIL}
+              label={strings.EMAIL_REQUIRED}
               type='text'
               onChange={onChange}
               value={newPerson.email}

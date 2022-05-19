@@ -194,7 +194,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
       <DialogContent dividers className={classes.content}>
         <Grid item xs={12}>
           <TextField
-            label={strings.ORGANIZATION_NAME}
+            label={strings.ORGANIZATION_NAME_REQUIRED}
             type='text'
             id='name'
             onChange={onChange}
@@ -206,7 +206,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
         </Grid>
         <Grid item xs={12}>
           <Select
-            label={strings.COUNTRY_OPTIONAL}
+            label={strings.COUNTRY}
             id='countyCode'
             onChange={onChangeCountry}
             options={countries?.map((country) => country.name)}
@@ -216,7 +216,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
         {getSelectedCountry()?.subdivisions && (
           <Grid item xs={12}>
             <Select
-              label={strings.STATE_OPTIONAL}
+              label={strings.STATE}
               id='countySubdivisionCode'
               onChange={onChangeSubdivision}
               options={getSelectedCountry()?.subdivisions.map((subdivision) => subdivision.name)}
