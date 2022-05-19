@@ -261,11 +261,13 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
     }
   };
 
-  const deleteSelectedSpecies = () => {
+  const deleteSelectedSpecies = async () => {
     if (selectedSpeciesRows.length > 0) {
-      selectedSpeciesRows.forEach(async (iSelectedSpecies) => {
-        await deleteSpecies(iSelectedSpecies.id, organization.id);
-      });
+      await Promise.all(
+        selectedSpeciesRows.map(async (iSelectedSpecies) => {
+          await deleteSpecies(iSelectedSpecies.id, organization.id);
+        })
+      );
       setDeleteSpeciesModalOpen(false);
       reloadData();
     }
