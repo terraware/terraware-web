@@ -131,12 +131,16 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
       return errors;
     };
 
-    if (fileStatus?.details.finished) {
-      setLoading(false);
+    const clearUploadInterval = () => {
       if (uploadInterval) {
         clearInterval(uploadInterval);
         setUploadInterval(undefined);
       }
+    };
+
+    if (fileStatus?.details.finished) {
+      setLoading(false);
+      clearUploadInterval();
       if (fileStatus.details.status === 'Invalid') {
         setError(getErrors());
       } else if (fileStatus.details.status === 'Completed') {
@@ -144,10 +148,7 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
       }
     } else if (fileStatus?.details.status === 'Awaiting User Action') {
       setLoading(false);
-      if (uploadInterval) {
-        clearInterval(uploadInterval);
-        setUploadInterval(undefined);
-      }
+      clearUploadInterval();
       setWarning(true);
     }
   }, [fileStatus, uploadInterval]);
@@ -202,9 +203,9 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
     link.click();
   };
 
-  const resolveSpeciesUploadHandler = async (overriteValues: boolean) => {
+  const resolveSpeciesUploadHandler = async (overwriteValues: boolean) => {
     if (uploadId) {
-      const serverResponse = await resolveSpeciesUpload(uploadId, overriteValues);
+      const serverResponse = await resolveSpeciesUpload(uploadId, overwriteValues);
       if (serverResponse.requestSucceeded) {
         setFileStatus(undefined);
         setWarning(false);
