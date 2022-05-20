@@ -1,4 +1,4 @@
-import { Box, Link, Typography } from '@material-ui/core';
+import { Link } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React, { useEffect, useRef, useState } from 'react';
 import {
@@ -213,12 +213,13 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
           priority='secondary'
           type='passive'
           className={classes.spacing}
+          key='mb-1'
         />,
-        <Button onClick={importDataHandler} label={error ? strings.TRY_AGAIN : strings.IMPORT_DATA} />,
+        <Button onClick={importDataHandler} label={error ? strings.TRY_AGAIN : strings.IMPORT_DATA} key='mb-2' />,
       ];
     }
     if (completed) {
-      return [<Button onClick={handleCancel} label={strings.NICE} />];
+      return [<Button onClick={handleCancel} label={strings.NICE} key='mb-1' />];
     }
   };
 
@@ -252,12 +253,14 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
                 label={strings.REPLACE}
                 priority='secondary'
                 type='passive'
+                key='button-1'
               />,
               <Button
                 onClick={() => resolveSpeciesUploadHandler(false)}
                 label={strings.KEEP_ORIGINAL}
                 priority='secondary'
                 type='passive'
+                key='button-2'
               />,
             ]
           : undefined

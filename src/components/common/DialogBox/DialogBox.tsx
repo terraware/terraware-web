@@ -6,7 +6,7 @@ import { IconButton } from '@material-ui/core';
 export interface Props {
   title: string;
   size: 'small' | 'medium' | 'large' | 'x-large';
-  message?: string;
+  message?: string | string[];
   children?: ReactNode;
   leftButton?: ReactNode;
   rightButtons?: JSX.Element[];
