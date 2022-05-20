@@ -246,6 +246,20 @@ export default function App() {
     return selected && getAllSites(selected).length > 0 ? true : false;
   };
 
+  const selectedOrgHasSeedBanks = (): boolean => {
+    if (selectedOrganization && selectedOrganization.projects) {
+      return selectedOrganization.projects.some((proj) => {
+        return proj.sites?.some((site) => {
+          return site.facilities?.some((facility) => {
+            return facility.type === 'Seed Bank';
+          });
+        });
+      });
+    } else {
+      return false;
+    }
+  };
+
   const getSitesView = (): JSX.Element => {
     if (selectedOrgHasSites()) {
       return <SitesList organization={selectedOrganization} />;
@@ -255,6 +269,13 @@ export default function App() {
     }
 
     return <EmptyStatePage pageName={'Projects'} />;
+  };
+
+  const getSeedBanksView = (): JSX.Element => {
+    if (selectedOrganization && selectedOrgHasSeedBanks()) {
+      return <SeedBanks organization={selectedOrganization} />;
+    }
+    return <EmptyStatePage pageName={'SeedBanks'} />;
   };
 
   const filteredOrganization = () => {
@@ -404,6 +425,7 @@ export default function App() {
               </Route>
               {selectedOrganization && (
                 <Route exact path={APP_PATHS.SEED_BANKS}>
+                  {getSeedBanksView()}
                   <SeedBanks organization={selectedOrganization} />
                 </Route>
               )}
