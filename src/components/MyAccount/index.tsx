@@ -115,6 +115,15 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
     }
   };
 
+  const onCancel = () => {
+    if (organizations) {
+      setPersonOrganizations(organizations);
+    }
+    setRemovedOrg(undefined);
+    setSelectedRows([]);
+    history.push(APP_PATHS.MY_ACCOUNT);
+  };
+
   const saveChanges = async () => {
     if (removedOrg) {
       if (removedOrg.role !== 'Owner') {
@@ -194,6 +203,7 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
         msg: strings.GENERIC_ERROR,
       });
     }
+    setLeaveOrganizationModalOpened(false);
     history.push(APP_PATHS.MY_ACCOUNT);
   };
 
@@ -351,7 +361,7 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
           </Grid>
         </Grid>
       </TfMain>
-      {edit && <FormBottomBar onCancel={() => history.push(APP_PATHS.MY_ACCOUNT)} onSave={saveChanges} />}
+      {edit && <FormBottomBar onCancel={onCancel} onSave={saveChanges} />}
     </>
   );
 }
