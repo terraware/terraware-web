@@ -11,6 +11,7 @@ import { ReactComponent as ChevronDown } from './chevron-down.svg';
 import { ReactComponent as ChevronUp } from './chevron-up.svg';
 import { ReactComponent as Close } from './close.svg';
 import { ReactComponent as Critical } from './critical.svg';
+import { ReactComponent as Dashboard } from './icon-dashboard.svg';
 import { ReactComponent as Edit } from './edit.svg';
 import { ReactComponent as Error } from './error.svg';
 import { ReactComponent as Export } from './export.svg';
@@ -22,15 +23,22 @@ import { ReactComponent as Info } from './info.svg';
 import { ReactComponent as Key } from './key.svg';
 import { ReactComponent as Leaf } from './leaf.svg';
 import { ReactComponent as Lock } from './lock.svg';
+import { ReactComponent as Mail } from './icon-mail.svg';
 import { ReactComponent as MenuVertical } from './menu-vertical.svg';
+import { ReactComponent as Monitoring } from './blobby-icon-heart-monitor.svg';
+import { ReactComponent as MonitoringNav } from './icon-heart-monitor.svg';
 import { ReactComponent as Notification } from './notification.svg';
-import { ReactComponent as Organization } from './organization.svg';
-import { ReactComponent as People } from './people.svg';
+import { ReactComponent as Organization } from './blobby-icon-organization.svg';
+import { ReactComponent as OrganizationNav } from './icon-org.svg';
+import { ReactComponent as People } from './blobby-icon-people.svg';
+import { ReactComponent as PeopleNav } from './icon-manager.svg';
 import { ReactComponent as Person } from './person.svg';
 import { ReactComponent as Plus } from './plus.svg';
 import { ReactComponent as Project } from './project.svg';
 import { ReactComponent as RestorationSite } from './restoration-site.svg';
 import { ReactComponent as Search } from './search.svg';
+import { ReactComponent as SeedBank } from './blobby-icon-seed-bank.svg';
+import { ReactComponent as SeedBankNav } from './icon-seed-bank.svg';
 import { ReactComponent as Seeds } from './seeds.svg';
 import { ReactComponent as Site } from './site.svg';
 import { ReactComponent as Sites } from './sites.svg';
@@ -55,6 +63,7 @@ export type IconName =
   | 'chevronUp'
   | 'close'
   | 'critical'
+  | 'dashboard'
   | 'edit'
   | 'error'
   | 'export'
@@ -66,15 +75,22 @@ export type IconName =
   | 'key'
   | 'leaf'
   | 'lock'
+  | 'mail'
   | 'menuVertical'
+  | 'monitoring'
+  | 'monitoringNav'
   | 'notification'
   | 'organization'
+  | 'organizationNav'
   | 'people'
+  | 'peopleNav'
   | 'person'
   | 'plus'
   | 'project'
   | 'restorationSite'
   | 'search'
+  | 'seedbank'
+  | 'seedbankNav'
   | 'seeds'
   | 'site'
   | 'sites'
@@ -104,6 +120,7 @@ const icons: Record<IconName, SVGComponent> = {
   chevronUp: ChevronUp,
   close: Close,
   critical: Critical,
+  dashboard: Dashboard,
   edit: Edit,
   error: Error,
   export: Export,
@@ -115,15 +132,22 @@ const icons: Record<IconName, SVGComponent> = {
   key: Key,
   leaf: Leaf,
   lock: Lock,
+  mail: Mail,
   menuVertical: MenuVertical,
+  monitoring: Monitoring,
+  monitoringNav: MonitoringNav,
   notification: Notification,
   organization: Organization,
+  organizationNav: OrganizationNav,
   people: People,
+  peopleNav: PeopleNav,
   person: Person,
   plus: Plus,
   project: Project,
   restorationSite: RestorationSite,
   search: Search,
+  seedbank: SeedBank,
+  seedbankNav: SeedBankNav,
   seeds: Seeds,
   site: Site,
   sites: Sites,
