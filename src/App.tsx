@@ -53,6 +53,8 @@ import ErrorBox from './components/common/ErrorBox/ErrorBox';
 import strings from './strings';
 import { getAllSpecies } from './api/species/species';
 import { Species } from './types/Species';
+import Monitoring from './components/Monitoring';
+import SeedBanks from './components/SeedBanks';
 
 // @ts-ignore
 mapboxgl.workerClass =
@@ -323,6 +325,11 @@ export default function App() {
                 />
               </Route>
               {selectedOrganization && (
+                <Route exact path={APP_PATHS.MONITORING}>
+                  <Monitoring organization={selectedOrganization} />
+                </Route>
+              )}
+              {selectedOrganization && (
                 <Route exact path={APP_PATHS.SPECIES}>
                   {selectedOrgHasSpecies() ? (
                     <SpeciesList organization={selectedOrganization} reloadData={reloadSpecies} species={species} />
@@ -395,6 +402,11 @@ export default function App() {
               <Route exact path={APP_PATHS.PEOPLE}>
                 <People organization={selectedOrganization} reloadData={reloadData} user={user} />
               </Route>
+              {selectedOrganization && (
+                <Route exact path={APP_PATHS.SEED_BANKS}>
+                  <SeedBanks organization={selectedOrganization} />
+                </Route>
+              )}
               <Route exact path={APP_PATHS.CONTACT_US}>
                 <ContactUs />
               </Route>

@@ -440,6 +440,7 @@ const strings = new LocalizedStrings({
     ADD_A_SEED_BANK: 'Add a Seed Bank',
     SEED_BANK_SETUP: 'Seed Bank Setup',
     ADD_SEED_BANK: 'Add Seed Bank',
+    MONITORING: 'Monitoring',
   },
 });
 
