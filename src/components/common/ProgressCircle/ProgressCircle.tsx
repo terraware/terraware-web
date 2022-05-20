@@ -12,15 +12,15 @@ export default function ProgressCircle(props: Props): JSX.Element {
   const { size = 'small', determinate, value } = props;
 
   return (
-    <Box className='circleContainer'>
-      <CircularProgress variant='determinate' value={100} className={`${size} circleTrack`} />
-      <Box className='labelContainer'>
-        {value && <p className={`progressCircle_label__${size}`}>{`${Math.round(value)}%`}</p>}
+    <Box className='circle-container'>
+      <CircularProgress variant='determinate' value={100} className={`circle-track circle-track--${size}`} />
+      <Box className='label-container'>
+        {value && <p className={`progress-circle-label--{size}`}>{`${Math.round(value)}%`}</p>}
       </Box>
       <CircularProgress
         value={value}
         variant={determinate ? 'determinate' : 'indeterminate'}
-        className={`${size} circleFill`}
+        className={`circle-fill circle-track--${size}`}
       />
     </Box>
   );
