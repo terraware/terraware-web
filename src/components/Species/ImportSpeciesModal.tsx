@@ -1,8 +1,4 @@
 import { Box, Link, Typography } from '@material-ui/core';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React, { useEffect, useRef, useState } from 'react';
 import {
@@ -15,23 +11,12 @@ import {
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
 import Button from '../common/button/Button';
-import DialogCloseButton from '../common/DialogCloseButton';
+import DialogBox from '../common/DialogBox/DialogBox';
 import Icon from '../common/icon/Icon';
 import ProgressCircle from '../common/ProgressCircle/ProgressCircle';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    actions: {
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      paddingLeft: theme.spacing(2),
-      paddingTop: theme.spacing(3),
-      paddingBottom: theme.spacing(1),
-    },
-    paper: {
-      minWidth: '500px',
-    },
     spacing: {
       marginRight: theme.spacing(2),
     },
@@ -84,6 +69,9 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
+    },
+    warningContent: {
+      textAlign: 'left',
     },
   })
 );
@@ -215,13 +203,67 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
     }
   };
 
+  const getMiddleButtons = () => {
+    if (file && !completed && !warning && !loading) {
+      return [
+        <Button
+          onClick={handleCancel}
+          id='cancel'
+          label={error ? strings.CANCEL_IMPORT : strings.CANCEL}
+          priority='secondary'
+          type='passive'
+          className={classes.spacing}
+        />,
+        <Button onClick={importDataHandler} label={error ? strings.TRY_AGAIN : strings.IMPORT_DATA} />,
+      ];
+    }
+    if (completed) {
+      return [<Button onClick={handleCancel} label={strings.NICE} />];
+    }
+  };
+
+  const getSize = () => {
+    if (loading || warning || error) {
+      return 'medium';
+    }
+    if (completed) {
+      return 'small';
+    }
+    return 'large';
+  };
+
   return (
-    <Dialog onClose={handleCancel} disableEscapeKeyDown open={open} maxWidth='md' classes={{ paper: classes.paper }}>
-      <DialogTitle>
-        <Typography variant='h6'>{strings.IMPORT_SPECIES}</Typography>
-        <DialogCloseButton onClick={handleCancel} />
-      </DialogTitle>
-      <DialogContent dividers>
+    <DialogBox
+      onClose={handleCancel}
+      open={open}
+      title={strings.IMPORT_SPECIES}
+      size={getSize()}
+      middleButtons={getMiddleButtons()}
+      leftButton={
+        warning ? (
+          <Button onClick={handleCancel} label={strings.CANCEL_IMPORT} priority='secondary' type='passive' />
+        ) : undefined
+      }
+      rightButtons={
+        warning
+          ? [
+              <Button
+                onClick={() => resolveSpeciesUploadHandler(true)}
+                label={strings.REPLACE}
+                priority='secondary'
+                type='passive'
+              />,
+              <Button
+                onClick={() => resolveSpeciesUploadHandler(false)}
+                label={strings.KEEP_ORIGINAL}
+                priority='secondary'
+                type='passive'
+              />,
+            ]
+          : undefined
+      }
+    >
+      <>
         {error && !loading && <p>{error}</p>}
         {!error && !loading && !completed && !warning && (
           <div onDrop={dropHandler} onDragOver={enableDropping} className={classes.dropContainer}>
@@ -263,55 +305,16 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
           </div>
         )}
         {warning && fileStatus?.details.warnings?.length && (
-          <>
+          <div className={classes.warningContent}>
             <p>{strings.formatString(strings.DUPLICATED_SPECIES, fileStatus?.details.warnings?.length)}</p>
             <ul>
               {fileStatus?.details.warnings?.map((wr, index) => (
                 <li key={`duplicate-sp-${index}`}>{wr.value}</li>
               ))}
             </ul>
-          </>
+          </div>
         )}
-      </DialogContent>
-      <DialogActions>
-        {file && !completed && !warning && !loading && (
-          <Box width={'100%'} className={classes.actions}>
-            <Box>
-              <Button
-                onClick={handleCancel}
-                id='cancel'
-                label={error ? strings.CANCEL_IMPORT : strings.CANCEL}
-                priority='secondary'
-                type='passive'
-                className={classes.spacing}
-              />
-              <Button onClick={importDataHandler} label={error ? strings.TRY_AGAIN : strings.IMPORT_DATA} />
-            </Box>
-          </Box>
-        )}
-        {completed && (
-          <Box width={'100%'} className={classes.actions}>
-            <Button onClick={handleCancel} label={strings.NICE} />
-          </Box>
-        )}
-        {warning && (
-          <Box width={'100%'} className={classes.actions}>
-            <Button onClick={handleCancel} label={strings.CANCEL_IMPORT} priority='secondary' type='passive' />
-            <Button
-              onClick={() => resolveSpeciesUploadHandler(true)}
-              label={strings.REPLACE}
-              priority='secondary'
-              type='passive'
-            />
-            <Button
-              onClick={() => resolveSpeciesUploadHandler(false)}
-              label={strings.KEEP_ORIGINAL}
-              priority='secondary'
-              type='passive'
-            />
-          </Box>
-        )}
-      </DialogActions>
-    </Dialog>
+      </>
+    </DialogBox>
   );
 }

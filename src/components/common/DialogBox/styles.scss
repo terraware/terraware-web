@@ -23,6 +23,7 @@
   border-radius: $tw-sz-base-small;
   display: flex;
   flex-direction: column;
+  background: $tw-clr-base-white;
 
   &--closed {
     display: none;
