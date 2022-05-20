@@ -1,43 +1,14 @@
-import { Typography } from '@material-ui/core';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React from 'react';
 import strings from 'src/strings';
-import DialogCloseButton from '../common/DialogCloseButton';
 import Button from '../common/button/Button';
 import dictionary from 'src/strings/dictionary';
 import Select from '../common/Select/Select';
 import { OrganizationUser } from 'src/types/User';
+import DialogBox from '../common/DialogBox/DialogBox';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    mainModal: {
-      '& .MuiDialog-scrollPaper': {
-        '& .MuiDialog-paper': {
-          overflow: 'visible',
-        },
-      },
-    },
-    paper: {
-      minWidth: '515px',
-    },
-    title: {
-      textAlign: 'center',
-      padding: theme.spacing(6, 6, 2, 6),
-    },
-    actions: {
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      padding: theme.spacing(4),
-    },
-    content: {
-      textAlign: 'center',
-      overflow: 'visible',
-    },
     select: {
       width: '100%',
       textAlign: 'left',
@@ -62,19 +33,17 @@ export default function AssignNewOwnerDialog(props: AssignNewOwnerDialogProps): 
   const { onClose, open, onSubmit, people, setNewOwner, selectedOwner } = props;
 
   return (
-    <Dialog
-      onClose={() => onClose()}
-      disableEscapeKeyDown
+    <DialogBox
+      onClose={onClose}
       open={open}
-      maxWidth='sm'
-      className={classes.mainModal}
-      classes={{ paper: classes.paper }}
+      title={dictionary.ASSIGN_NEW_OWNER}
+      size='medium'
+      middleButtons={[
+        <Button label={strings.CANCEL} priority='secondary' type='passive' onClick={onClose} key='button-1' />,
+        <Button label={strings.ASSIGN} onClick={onSubmit} key='button-2' />,
+      ]}
     >
-      <DialogTitle className={classes.title}>
-        <Typography variant='h6'>{dictionary.ASSIGN_NEW_OWNER}</Typography>
-        <DialogCloseButton onClick={onClose} />
-      </DialogTitle>
-      <DialogContent className={classes.content}>
+      <div>
         <p>{strings.ASSIGN_NEW_OWNER_DESC}</p>
         <Select
           options={people.map((person) => {
@@ -84,11 +53,7 @@ export default function AssignNewOwnerDialog(props: AssignNewOwnerDialogProps): 
           selectedValue={selectedOwner?.email}
           className={classes.select}
         />
-      </DialogContent>
-      <DialogActions className={classes.actions}>
-        <Button label={strings.CANCEL} priority='secondary' type='passive' onClick={onClose} />
-        <Button label={strings.ASSIGN} onClick={onSubmit} />
-      </DialogActions>
-    </Dialog>
+      </div>
+    </DialogBox>
   );
 }
