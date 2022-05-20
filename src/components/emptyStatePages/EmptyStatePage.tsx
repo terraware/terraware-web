@@ -14,6 +14,7 @@ import snackbarAtom from 'src/state/snackbar';
 import { useSetRecoilState } from 'recoil';
 import { ServerOrganization } from 'src/types/Organization';
 import ImportSpeciesModal from '../Species/ImportSpeciesModal';
+import TfMain from '../common/TfMain';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -191,7 +192,7 @@ export default function EmptyStatePage({ pageName, organization, reloadData }: E
   };
 
   return (
-    <main>
+    <TfMain>
       {organization && (
         <>
           <AddSpeciesModal open={addSpeciesModalOpened} onClose={onCloseEditSpeciesModal} organization={organization} />
@@ -215,6 +216,6 @@ export default function EmptyStatePage({ pageName, organization, reloadData }: E
           />
         </div>
       </Container>
-    </main>
+    </TfMain>
   );
 }
