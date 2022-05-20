@@ -1,5 +1,5 @@
 import { createStyles, makeStyles } from '@material-ui/core/styles';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { ServerOrganization } from 'src/types/Organization';
 
 const useStyles = makeStyles((theme) =>
