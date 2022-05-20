@@ -436,6 +436,8 @@ const strings = new LocalizedStrings({
     DUPLICATED_SPECIES: 'We found {0} duplicated species:',
     REPLACE: 'Replace',
     KEEP_ORIGINAL: 'Keep Original',
+    MONITORING: 'Monitoring',
+    SEED_BANKS: 'Seed Banks',
   },
 });
 

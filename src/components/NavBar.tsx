@@ -3,7 +3,6 @@ import { useHistory, useRouteMatch } from 'react-router-dom';
 import Navbar from 'src/components/common/Navbar/Navbar';
 import NavItem from 'src/components/common/Navbar/NavItem';
 import NavSection from 'src/components/common/Navbar/NavSection';
-import SubNavbar from 'src/components/common/Navbar/SubNavbar';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import dictionary from 'src/strings/dictionary';
@@ -34,6 +33,8 @@ export default function NavBar({ organization }: NavBarProps): JSX.Element | nul
   const isSpeciesRoute = useRouteMatch(APP_PATHS.SPECIES + '/');
   const isOrganizationRoute = useRouteMatch(APP_PATHS.ORGANIZATION + '/');
   const isMyAccountRoute = useRouteMatch(APP_PATHS.MY_ACCOUNT + '/');
+  const isMonitoringRoute = useRouteMatch(APP_PATHS.MONITORING + '/');
+  const isSeedbanksRoute = useRouteMatch(APP_PATHS.SEED_BANKS + '/');
 
   const navigate = (url: string) => {
     history.push(url);
@@ -43,35 +44,36 @@ export default function NavBar({ organization }: NavBarProps): JSX.Element | nul
     <Navbar>
       <NavItem label='Home' icon='home' selected={!!isHomeRoute} onClick={() => navigate(APP_PATHS.HOME)} id='home' />
       <NavItem
-        label='Seeds'
-        icon='seeds'
-        id='seeds'
-        onClick={() => !isAccessionDashboardRoute && navigate(APP_PATHS.SEEDS_DASHBOARD)}
-      >
-        <SubNavbar>
-          <NavItem
-            label='Dashboard'
-            selected={!!isAccessionDashboardRoute}
-            onClick={() => !isAccessionDashboardRoute && navigate(APP_PATHS.SEEDS_DASHBOARD)}
-            id='seeds-dashboard'
-          />
-
-          <NavItem
-            label='Accessions'
-            selected={isAccessionsRoute || isCheckinRoute ? true : false}
-            onClick={() => navigate(APP_PATHS.ACCESSIONS)}
-            id='accessions'
-          />
-        </SubNavbar>
-      </NavItem>
-
-      <NavItem
         label={strings.SPECIES}
         icon='species'
         selected={!!isSpeciesRoute}
         onClick={() => navigate(APP_PATHS.SPECIES)}
         id='speciesNb'
       />
+
+      <NavSection title={strings.SEEDS.toUpperCase()} />
+      <NavItem
+        label='Dashboard'
+        icon='dashboard'
+        selected={!!isAccessionDashboardRoute}
+        onClick={() => !isAccessionDashboardRoute && navigate(APP_PATHS.SEEDS_DASHBOARD)}
+        id='seeds-dashboard'
+      />
+      <NavItem
+        label='Accessions'
+        icon='seeds'
+        selected={isAccessionsRoute || isCheckinRoute ? true : false}
+        onClick={() => navigate(APP_PATHS.ACCESSIONS)}
+        id='accessions'
+      />
+      <NavItem
+        label={strings.MONITORING}
+        icon='monitoringNav'
+        selected={!!isMonitoringRoute}
+        onClick={() => navigate(APP_PATHS.MONITORING)}
+        id='monitoring'
+      />
+
       {role && HighOrganizationRolesValues.includes(role) && (
         <>
           <NavSection />
@@ -93,30 +95,31 @@ export default function NavBar({ organization }: NavBarProps): JSX.Element | nul
       )}
       {role && ['Admin', 'Owner'].includes(role) && (
         <>
-          <NavSection />
+          <NavSection title={strings.ADMIN.toUpperCase()} />
           <NavItem
-            label={strings.ADMIN}
-            icon='key'
+            label={strings.ORGANIZATION}
+            icon='organizationNav'
+            selected={!!isOrganizationRoute}
             onClick={() => !isOrganizationRoute && navigate(APP_PATHS.ORGANIZATION)}
-            id='admin'
-          >
-            <SubNavbar>
-              <NavItem
-                label={strings.ORGANIZATION}
-                selected={!!isOrganizationRoute}
-                onClick={() => !isOrganizationRoute && navigate(APP_PATHS.ORGANIZATION)}
-                id='organization'
-              />
-              <NavItem
-                label={strings.PEOPLE}
-                selected={!!isPeopleRoute}
-                onClick={() => navigate(APP_PATHS.PEOPLE)}
-                id='people'
-              />
-            </SubNavbar>
-          </NavItem>
+            id='organization'
+          />
+          <NavItem
+            label={strings.PEOPLE}
+            icon='peopleNav'
+            selected={!!isPeopleRoute}
+            onClick={() => navigate(APP_PATHS.PEOPLE)}
+            id='people'
+          />
+          <NavItem
+            label={strings.SEED_BANKS}
+            icon='seedbankNav'
+            selected={!!isSeedbanksRoute}
+            onClick={() => navigate(APP_PATHS.SEED_BANKS)}
+            id='seedbanks'
+          />
         </>
       )}
+
       <NavFooter>
         <NavItem
           label={strings.MY_ACCOUNT}
@@ -127,7 +130,7 @@ export default function NavBar({ organization }: NavBarProps): JSX.Element | nul
         />
         <NavItem
           label={dictionary.CONTACT_US}
-          icon={'help'}
+          icon='mail'
           selected={!!isContactUsRoute}
           onClick={() => navigate(APP_PATHS.CONTACT_US)}
           id='contactus'
