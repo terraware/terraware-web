@@ -15,6 +15,8 @@ const strings = new LocalizedStrings({
     IMPORT_SPECIES_DESCRIPTION: 'Upload a CSV with scientific names and other optional fields.',
     IMPORT_SPECIES_LINK: 'Download a CSV template here.',
     ADD_MANUALLY_DESCRIPTION: 'Enter scientific name and other optional fields manually, one species at a time.',
+    ADD_SEED_BANK_SUBTITLE:
+      'How do you process and store your seeds? Set up your seed bank so you can keep track of where your seeds are stored.',
   },
 });
 

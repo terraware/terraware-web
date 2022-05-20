@@ -77,8 +77,23 @@ const NO_SITES_CONTENT: PageContent = {
   linkLocation: APP_PATHS.SITES_NEW,
 };
 
+const NO_SEEDBANKS_CONTENT: PageContent = {
+  title1: strings.SEED_BANKS,
+  title2: strings.ADD_A_SEED_BANK,
+  subtitle: emptyStateStrings.ADD_SEED_BANK_SUBTITLE,
+  listItems: [
+    {
+      icon: 'blobbyIconSeedBank',
+      title: strings.SEED_BANK_SETUP,
+      description: '',
+    },
+  ],
+  buttonText: strings.ADD_SEED_BANK,
+  linkLocation: APP_PATHS.SITES_NEW,
+};
+
 type EmptyStatePageProps = {
-  pageName: 'Projects' | 'Sites' | 'Species';
+  pageName: 'Projects' | 'Sites' | 'Species' | 'SeedBanks';
   organization?: ServerOrganization;
   reloadData?: () => void;
 };
@@ -132,6 +147,8 @@ export default function EmptyStatePage({ pageName, organization, reloadData }: E
         return NO_PROJECTS_CONTENT;
       case 'Species':
         return NO_SPECIES_CONTENT;
+      case 'SeedBanks':
+        return NO_SEEDBANKS_CONTENT;
       default:
         return NO_SITES_CONTENT;
     }

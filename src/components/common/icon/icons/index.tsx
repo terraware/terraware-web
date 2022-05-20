@@ -2,6 +2,7 @@ import React from 'react';
 
 import { ReactComponent as BlobbyGrayIconUploadToTheCloud } from './blobby-gray-icon-upload-to-the-cloud.svg';
 import { ReactComponent as BlobbyIconLeaf } from './blobby-icon-leaf.svg';
+import { ReactComponent as BlobbyIconSeedBank } from './blobby-icon-seed-bank.svg';
 import { ReactComponent as Bug } from './bug.svg';
 import { ReactComponent as Calendar } from './calendar.svg';
 import { ReactComponent as CaretDown } from './caret-down.svg';
@@ -45,6 +46,7 @@ import { ReactComponent as Warning } from './warning.svg';
 
 export type IconName =
   | 'blobbyGrayIconUploadToTheCloud'
+  | 'blobbyIconSeedBank'
   | 'blobbyIconLeaf'
   | 'bug'
   | 'calendar'
@@ -94,6 +96,7 @@ type SVGComponent = React.FunctionComponent<
 >;
 const icons: Record<IconName, SVGComponent> = {
   blobbyGrayIconUploadToTheCloud: BlobbyGrayIconUploadToTheCloud,
+  blobbyIconSeedBank: BlobbyIconSeedBank,
   blobbyIconLeaf: BlobbyIconLeaf,
   bug: Bug,
   calendar: Calendar,
