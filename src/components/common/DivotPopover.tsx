@@ -41,15 +41,15 @@ const useStyles = makeStyles((theme) =>
       borderLeft: '1px solid #A9B7B8',
       borderRight: '1px solid #A9B7B8',
       borderBottom: '1px solid #A9B7B8',
-      '&.small': {
+      '&.divot-popover-small': {
         // TODO set small width
         width: '478px',
       },
-      '&.medium': {
+      '&.divot-popover-medium': {
         // TODO set medium width
         width: '478px',
       },
-      '&.large': {
+      '&.divot-popover-large': {
         width: '478px',
       },
       maxHeight: 'calc(100vh - 100px)',
@@ -170,10 +170,10 @@ export default function DivotPopover({
           horizontal: 'center',
         }}
         classes={{
-          paper: classes.paper + ' ' + size,
+          paper: classes.paper + ' divot-popover-' + size,
         }}
       >
-        <List id='divot-popover' className={classes.popover + ' ' + size}>
+        <List id='divot-popover' className={classes.popover}>
           <div className={classes.divotWrapper}>
             <div className={classes.divot} />
           </div>
