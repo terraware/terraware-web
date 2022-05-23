@@ -90,7 +90,7 @@ const NO_SEEDBANKS_CONTENT: PageContent = {
     },
   ],
   buttonText: strings.ADD_SEED_BANK,
-  linkLocation: APP_PATHS.SITES_NEW,
+  linkLocation: APP_PATHS.SEED_BANKS_NEW,
 };
 
 type EmptyStatePageProps = {

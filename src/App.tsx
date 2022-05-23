@@ -55,6 +55,7 @@ import { getAllSpecies } from './api/species/species';
 import { Species } from './types/Species';
 import Monitoring from './components/Monitoring';
 import SeedBanks from './components/SeedBanks';
+import NewSeedBank from './components/NewSeedBank';
 
 // @ts-ignore
 mapboxgl.workerClass =
@@ -424,9 +425,13 @@ export default function App() {
                 <People organization={selectedOrganization} reloadData={reloadData} user={user} />
               </Route>
               {selectedOrganization && (
+                <Route exact path={APP_PATHS.SEED_BANKS_NEW}>
+                  <NewSeedBank organization={selectedOrganization} reloadOrganizationData={reloadData} />
+                </Route>
+              )}
+              {selectedOrganization && (
                 <Route exact path={APP_PATHS.SEED_BANKS}>
                   {getSeedBanksView()}
-                  <SeedBanks organization={selectedOrganization} />
                 </Route>
               )}
               <Route exact path={APP_PATHS.CONTACT_US}>
