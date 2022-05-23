@@ -48,6 +48,7 @@ type SiteViewProps = {
 
 export default function SeedBankView({ organization, reloadOrganizationData }: SiteViewProps): JSX.Element {
   const [nameError, setNameError] = useState('');
+  const [descriptionError, setDescriptionError] = useState('');
 
   const [siteId, setSiteId] = useState<number>();
   const [record, setRecord, onChange] = useForm<Facility>({
@@ -65,7 +66,7 @@ export default function SeedBankView({ organization, reloadOrganizationData }: S
 
   useEffect(() => {
     const seedBanks = getAllSeedBanks(organization);
-    setSelectedSeedBank(seedBanks?.find((sb) => sb.id === parseInt(seedBankId, 10)));
+    setSelectedSeedBank(seedBanks?.find((sb) => sb?.id === parseInt(seedBankId, 10)));
     const seedBankSite = getSeedBankSite(organization);
     if (seedBankSite) {
       setSiteId(seedBankSite.id);
@@ -91,7 +92,9 @@ export default function SeedBankView({ organization, reloadOrganizationData }: S
 
   const saveSeedBank = async () => {
     if (record.name === '') {
-      setNameError('Required field.');
+      setNameError(strings.REQUIRED_FIELD);
+    } else if (record.description === '') {
+      setDescriptionError(strings.REQUIRED_FIELD);
     } else {
       if (selectedSeedBank) {
         const response = await updateFacility({ ...record, id: selectedSeedBank.id } as Facility);
@@ -154,6 +157,7 @@ export default function SeedBankView({ organization, reloadOrganizationData }: S
               type='textarea'
               onChange={onChange}
               value={record.description}
+              errorText={record.description ? '' : descriptionError}
             />
           </Grid>
         </Grid>

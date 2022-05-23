@@ -65,16 +65,12 @@ export const getAllSitesWithProjectName = (organization: ServerOrganization): Si
   return newSites;
 };
 
-export const getAllSeedBanks = (organization: ServerOrganization): Facility[] | undefined => {
-  let seedBanks: Facility[] | undefined;
+export const getAllSeedBanks = (organization: ServerOrganization): (Facility | undefined)[] => {
+  let seedBanks: (Facility | undefined)[] = [];
   if (organization && organization.projects) {
-    organization.projects.forEach((proj) => {
-      proj.sites?.forEach((site) => {
-        seedBanks = site.facilities?.filter((facility) => {
-          return facility.type === 'Seed Bank';
-        });
-      });
-    });
+    seedBanks = organization?.projects?.flatMap((project) =>
+      project.sites?.flatMap((site) => site.facilities?.filter((facility) => facility.type === 'Seed Bank'))
+    );
   }
   return seedBanks;
 };
