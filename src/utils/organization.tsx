@@ -80,7 +80,7 @@ export const getAllSeedBanks = (organization: ServerOrganization): Facility[] | 
 };
 
 export const getSeedBankSite = (organization: ServerOrganization): Site | undefined => {
-  let seedBankSite = undefined;
+  let seedBankSite;
   if (organization && organization.projects) {
     organization.projects.forEach((proj) => {
       proj.sites?.forEach((site) => {
