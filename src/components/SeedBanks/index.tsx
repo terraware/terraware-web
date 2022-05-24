@@ -49,8 +49,8 @@ export default function SeedBanksList({ organization }: SeedBanksListProps): JSX
   useEffect(() => {
     const getSeedBanks = () => {
       if (organization) {
-        const seedBanks = getAllSeedBanks(organization).filter((sb) => sb !== undefined) as Facility[];
-        setSeedBanks(seedBanks);
+        const orgSeedBanks = getAllSeedBanks(organization).filter((sb) => sb !== undefined) as Facility[];
+        setSeedBanks(orgSeedBanks);
       }
     };
 
