@@ -51,6 +51,7 @@ const parseFacility = (facility: ServerFacility): Facility => {
     name: facility.name,
     type: facility.type,
     siteId: facility.siteId,
+    description: facility.description,
   };
   return parsedFacility;
 };

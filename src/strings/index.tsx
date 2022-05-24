@@ -442,6 +442,8 @@ const strings = new LocalizedStrings({
     ADD_SEED_BANK: 'Add Seed Bank',
     MONITORING: 'Monitoring',
     SEED_BANK_ADDED: 'Seed Bank added.',
+    SENSOR_KIT: 'Sensor Kit',
+    SENSOR_KIT_SET_UP: 'Sensor Kit has been set up. Go to the {0} page to see them.',
   },
 });
 

@@ -96,7 +96,7 @@ export default function TextField(props: Props): JSX.Element {
         ))}
       {display && <p className='textfield-value--display'>{value}</p>}
       {errorText && (
-        <div className='label-container'>
+        <div className='textfield-label-container'>
           <Icon name='error' className='textfield-error-text--icon' />
           <label htmlFor={id} className='textfield-error-text'>
             {errorText}
@@ -104,7 +104,7 @@ export default function TextField(props: Props): JSX.Element {
         </div>
       )}
       {warningText && (
-        <div className='label-container'>
+        <div className='textfield-label-container'>
           <Icon name='warning' className='textfield-warning-text--icon' />
           <label htmlFor={id} className='textfield-warning-text'>
             {warningText}
