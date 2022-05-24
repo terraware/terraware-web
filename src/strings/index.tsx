@@ -164,7 +164,7 @@ const strings = new LocalizedStrings({
     FACILITY: 'Facility',
     ENVIRONMENTAL_NOTES: 'Environmental Notes',
     ENVIRONMENTAL_NOTES_PLACEHOLDER: 'Important notes about landscape, climate, and environmental conditions',
-    NEW_ACCESSION: 'New Accession',
+    NEW_ACCESSION: 'Add Accession',
     NEW_ACCESSION_DESCRIPTION: 'An accession number will be generated once you create the accession.',
     NEW_ACCESSION_INFO:
       'Information like Seed Bags, Photos and Geolocations can only be added via the Seed Collector Android app. All the other information about processing, drying, storage and withdrawals can be added after first creating the accession.',
@@ -445,6 +445,10 @@ const strings = new LocalizedStrings({
     SEED_BANK_ADDED: 'Seed Bank added.',
     SENSOR_KIT: 'Sensor Kit',
     SENSOR_KIT_SET_UP: 'Sensor Kit has been set up. Go to the {0} page to see them.',
+    SELECT_SEED_BANK: 'Select Seed Bank',
+    SELECT_SEED_BANK_INFO: 'Accessions require a seed bank storage location. Please select a seed bank.',
+    SELECT_BUTTON: 'Select',
+    SEED_BANK: 'Seed Bank',
   },
 });
 

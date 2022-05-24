@@ -25,6 +25,7 @@ import { Order } from 'src/components/common/table/sort';
 import strings from 'src/strings';
 import emptyMessageStrings from 'src/strings/emptyMessageModal';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
+import { getAllSeedBanks, getSeedBankSite } from 'src/utils/organization';
 import PageHeader from '../PageHeader';
 import { COLUMNS_INDEXED } from './columns';
 import DownloadReportModal from './DownloadReportModal';
@@ -32,12 +33,14 @@ import EditColumns from './EditColumns';
 import Filters from './Filters';
 import SearchCellRenderer from './TableCellRenderer';
 import { HighOrganizationRolesValues, ServerOrganization } from 'src/types/Organization';
+import { Facility } from 'src/api/types/facilities';
 import { seedsDatabaseSelectedOrgInfo } from 'src/state/selectedOrgInfoPerPage';
 import { useRecoilState } from 'recoil';
 import EmptyMessage from 'src/components/common/EmptyMessage';
 import { APP_PATHS } from 'src/constants';
 import TfMain from 'src/components/common/TfMain';
 import { ACCESSION_STATES } from '../../../types/Accession';
+import SelectSeedBankModal from '../../SeedBank/SelectSeedBankModal';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -151,13 +154,12 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const [availableFieldOptions, setAvailableFieldOptions] = useState<FieldValuesMap | null>();
   const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>();
   const [unfilteredResults, setUnfilteredResults] = useState<SearchResponseElement[] | null>();
-
-  // Remove this when download report receives site/project/org id
-  const [facilityIdForReport, setFacilityIdForReport] = useState<number>();
+  const [selectSeedBankModalOpen, setSelectSeedBankModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
     // if url has stage=<accession state>, apply that filter
     const stage = query.get('stage');
+    const facilityId = query.get('facilityId');
     if (stage) {
       if (ACCESSION_STATES.indexOf(stage) !== -1) {
         setSearchCriteria({
@@ -170,22 +172,34 @@ export default function Database(props: DatabaseProps): JSX.Element {
         });
       }
       query.delete('stage');
+    }
+    if (facilityId && organization) {
+      const seedBanks = getAllSeedBanks(organization);
+      if (seedBanks) {
+        const facility = seedBanks.find((seedBank) => seedBank?.id === parseInt(facilityId, 10));
+        if (facility) {
+          setSearchCriteria({
+            facility_name: {
+              field: 'facility_name',
+              values: [facility.name],
+              type: 'Exact',
+              operation: 'field',
+            },
+          });
+        }
+      }
+      query.delete('facilityId');
+    }
+    if (stage || (facilityId && organization)) {
       history.push(getLocation(location.pathname, location, query.toString()));
     }
-  }, [query, location, history, setSearchCriteria]);
+  }, [query, location, history, setSearchCriteria, organization]);
 
   useEffect(() => {
     if (organization) {
-      const seedbankProject = organization?.projects?.length ? organization?.projects[0] : undefined;
-      const seedbankSite = seedbankProject?.sites?.find((site) => site.name === 'Seed Bank');
-      const seedbankFacility = seedbankSite?.facilities?.find((facility) => facility.name === 'Seed Bank');
-
       const selected = {
-        selectedFacility: seedbankFacility,
-        selectedProject: seedbankProject,
-        selectedSite: seedbankSite,
+        selectedSite: getSeedBankSite(organization),
       };
-      setFacilityIdForReport(seedbankFacility?.id);
       setSelectedOrgInfo(selected);
 
       const populateUnfilteredResults = async () => {
@@ -214,13 +228,11 @@ export default function Database(props: DatabaseProps): JSX.Element {
 
       const populateAvailableFieldOptions = async () => {
         const singleAndMultiChoiceFields = filterSelectFields(searchColumns);
-        setAvailableFieldOptions(
-          await searchFieldValues(singleAndMultiChoiceFields, searchCriteria, seedbankFacility?.id || 0)
-        );
+        setAvailableFieldOptions(await searchFieldValues(singleAndMultiChoiceFields, searchCriteria, 0));
       };
 
       const populatePendingAccessions = async () => {
-        if (organization && seedbankFacility?.id) {
+        if (organization) {
           setPendingAccessions(await getPendingAccessions(selected, organization.id));
         }
       };
@@ -326,20 +338,31 @@ export default function Database(props: DatabaseProps): JSX.Element {
   };
 
   const goToNewAccession = () => {
-    const newAccessionLocation = getLocation(APP_PATHS.ACCESSIONS_NEW, location);
-    history.push(newAccessionLocation);
+    setSelectSeedBankModalOpen(true);
+  };
+
+  const onSeedBankSelected = (selectedFacility: Facility | undefined) => {
+    setSelectSeedBankModalOpen(false);
+    if (selectedFacility) {
+      setSelectedOrgInfo({ ...selectedOrgInfo, selectedFacility });
+      const newAccessionLocation = getLocation(APP_PATHS.ACCESSIONS_NEW, location);
+      history.push(newAccessionLocation);
+    }
   };
 
   return (
     <MuiPickersUtilsProvider utils={MomentUtils}>
+      {organization && (
+        <SelectSeedBankModal organization={organization} open={selectSeedBankModalOpen} onClose={onSeedBankSelected} />
+      )}
       <TfMain>
         <EditColumns open={editColumnsModalOpen} value={displayColumnNames} onClose={onCloseEditColumnsModal} />
-        {facilityIdForReport && (
+        {organization && (
           <DownloadReportModal
             searchCriteria={searchCriteria}
             searchSortOrder={searchSortOrder}
             searchColumns={searchColumns}
-            facilityId={facilityIdForReport}
+            organization={organization}
             open={reportModalOpen}
             onClose={onCloseDownloadReportModal}
           />
@@ -371,7 +394,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
                   size='medium'
                   className={classes.buttonSpc}
                 />
-                {selectedOrgInfo.selectedFacility && (
+                {organization && (
                   <Button label={strings.NEW_ACCESSION} onClick={goToNewAccession} size='medium' id='newAccession' />
                 )}
               </div>

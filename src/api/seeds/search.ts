@@ -45,30 +45,18 @@ export function addOrgInfoToSearch(
   previousCriteria?: SeedSearchCriteria
 ) {
   const newCriteria = previousCriteria ? Object.values(previousCriteria) : [];
-  if (selectedOrgInfo.selectedFacility) {
-    newCriteria.unshift({ field: 'facility_id', values: [selectedOrgInfo.selectedFacility.id], operation: 'field' });
+  if (selectedOrgInfo.selectedSite) {
+    newCriteria.unshift({
+      field: 'facility_site_id',
+      values: [selectedOrgInfo.selectedSite.id.toString()],
+      operation: 'field',
+    });
   } else {
-    if (selectedOrgInfo.selectedSite) {
-      newCriteria.unshift({
-        field: 'facility_site_id',
-        values: [selectedOrgInfo.selectedSite.id],
-        operation: 'field',
-      });
-    } else {
-      if (selectedOrgInfo.selectedProject) {
-        newCriteria.unshift({
-          field: 'facility_site_project_id',
-          values: [selectedOrgInfo.selectedProject.id],
-          operation: 'field',
-        });
-      } else {
-        newCriteria.unshift({
-          field: 'facility_site_project_organization_id',
-          values: [organizationId],
-          operation: 'field',
-        });
-      }
-    }
+    newCriteria.unshift({
+      field: 'facility_site_project_organization_id',
+      values: [organizationId.toString()],
+      operation: 'field',
+    });
   }
   return newCriteria;
 }
