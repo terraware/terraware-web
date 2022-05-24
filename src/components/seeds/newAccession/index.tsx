@@ -255,8 +255,12 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
     setTimeout(() => onSubmit(newRecord), 1000);
   };
 
-  const onCheckInHandler = () => {
+  const onCheckInHandler = async () => {
     setIsCheckingIn(true);
+    if (accession.facilityId?.toString() !== record.facilityId?.toString()) {
+      // update new seed bank prior to checkin
+      await onSubmit(record);
+    }
     setTimeout(() => onCheckIn((accession as unknown as Accession).id), 1000);
   };
 
@@ -505,7 +509,6 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
               selected={record.facilityId?.toString()}
               values={seedBanks.map((seedBank) => ({ label: seedBank!.name, value: seedBank!.id.toString() }))}
               onChange={onChange}
-              disabled={isPendingCheckIn}
             />
           </Grid>
         </Grid>
