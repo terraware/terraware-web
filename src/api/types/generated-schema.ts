@@ -11,15 +11,39 @@ export interface paths {
     get: operations["getDevice"];
     put: operations["updateDevice"];
   };
+  "/api/v1/facilities": {
+    get: operations["listAllFacilities_1"];
+    post: operations["createFacility_1"];
+  };
+  "/api/v1/facilities/{facilityId}": {
+    get: operations["getFacility"];
+    put: operations["updateFacility"];
+  };
+  "/api/v1/facilities/{facilityId}/alert/send": {
+    post: operations["sendFacilityAlert"];
+  };
+  "/api/v1/facilities/{facilityId}/automations": {
+    get: operations["listAutomations_1"];
+    post: operations["createAutomation_1"];
+  };
+  "/api/v1/facilities/{facilityId}/automations/{automationId}": {
+    get: operations["getAutomation_1"];
+    put: operations["updateAutomation_1"];
+    delete: operations["deleteAutomation_1"];
+  };
+  "/api/v1/facilities/{facilityId}/devices": {
+    get: operations["listFacilityDevices"];
+  };
   "/api/v1/facility": {
-    /** List all the facilities the current user can access. */
     get: operations["listAllFacilities"];
+    post: operations["createFacility"];
   };
   "/api/v1/facility/{facilityId}": {
-    get: operations["getFacility"];
+    get: operations["getFacility_1"];
+    put: operations["updateFacility_1"];
   };
   "/api/v1/facility/{facilityId}/alert/send": {
-    post: operations["sendFacilityAlert"];
+    post: operations["sendFacilityAlert_1"];
   };
   "/api/v1/facility/{facilityId}/automations": {
     get: operations["listAutomations"];
@@ -31,7 +55,7 @@ export interface paths {
     delete: operations["deleteAutomation"];
   };
   "/api/v1/facility/{facilityId}/devices": {
-    get: operations["listFacilityDevices"];
+    get: operations["listFacilityDevices_1"];
   };
   "/api/v1/login": {
     /** For interactive web applications, this can be used to redirect the user to a login page to allow the application to make other API requests. The login process will set a cookie that will authenticate to the API, and will then redirect back to the application. One approach is to use this in error response handlers: if an API request returns HTTP 401 Unauthorized, set location.href to this endpoint and set "redirect" to the URL of the page the user was on so they'll return there after logging in. */
@@ -416,12 +440,22 @@ export interface components {
       /** ID of parent device such as a hub or gateway, if any. The parent device must exist. */
       parentId?: number;
     };
+    CreateFacilityRequestPayload: {
+      description?: string;
+      name: string;
+      type: "Seed Bank" | "Desalination" | "Reverse Osmosis";
+      siteId: number;
+    };
+    CreateFacilityResponsePayload: {
+      id: number;
+      status: components["schemas"]["SuccessOrError"];
+    };
     CreateOrganizationRequestPayload: {
       /** ISO 3166 alpha-2 code of organization's country. */
       countryCode?: string;
       /** ISO 3166-2 code of organization's country subdivision (state, province, region, etc.) This is the full ISO 3166-2 code including the country prefix. If this is set, countryCode must also be set. */
       countrySubdivisionCode?: string;
-      /** If true or not specified, create a project, site, and seed bank facility automatically. */
+      /** If true or not specified, automatically create a project and site to hold seed bank facilities. */
       createSeedBank?: boolean;
       description?: string;
       name: string;
@@ -534,6 +568,7 @@ export interface components {
     };
     FacilityPayload: {
       createdTime: string;
+      description?: string;
       id: number;
       siteId: number;
       name: string;
@@ -1152,6 +1187,10 @@ export interface components {
       /** ID of parent device such as a hub or gateway, if any. The parent device must exist. */
       parentId?: number;
     };
+    UpdateFacilityRequestPayload: {
+      description?: string;
+      name: string;
+    };
     UpdateNotificationRequestPayload: {
       read: boolean;
     };
@@ -1313,14 +1352,28 @@ export interface operations {
       };
     };
   };
-  /** List all the facilities the current user can access. */
-  listAllFacilities: {
+  listAllFacilities_1: {
     responses: {
       /** OK */
       200: {
         content: {
           "application/json": components["schemas"]["ListFacilitiesResponse"];
         };
+      };
+    };
+  };
+  createFacility_1: {
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CreateFacilityResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateFacilityRequestPayload"];
       };
     };
   };
@@ -1339,7 +1392,246 @@ export interface operations {
       };
     };
   };
+  updateFacility: {
+    parameters: {
+      path: {
+        facilityId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateFacilityRequestPayload"];
+      };
+    };
+  };
   sendFacilityAlert: {
+    parameters: {
+      path: {
+        facilityId: number;
+      };
+    };
+    responses: {
+      /** The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SendFacilityAlertRequestPayload"];
+      };
+    };
+  };
+  listAutomations_1: {
+    parameters: {
+      path: {
+        facilityId: number;
+      };
+    };
+    responses: {
+      /** Success */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListAutomationsResponsePayload"];
+        };
+      };
+      /** The facility does not exist or is not accessible. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  createAutomation_1: {
+    parameters: {
+      path: {
+        facilityId: number;
+      };
+    };
+    responses: {
+      /** Success */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CreateAutomationResponsePayload"];
+        };
+      };
+      /** The facility does not exist or is not accessible. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ModifyAutomationRequestPayload"];
+      };
+    };
+  };
+  getAutomation_1: {
+    parameters: {
+      path: {
+        facilityId: number;
+        automationId: number;
+      };
+    };
+    responses: {
+      /** Success */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetAutomationResponsePayload"];
+        };
+      };
+      /** The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  updateAutomation_1: {
+    parameters: {
+      path: {
+        facilityId: number;
+        automationId: number;
+      };
+    };
+    responses: {
+      /** The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ModifyAutomationRequestPayload"];
+      };
+    };
+  };
+  deleteAutomation_1: {
+    parameters: {
+      path: {
+        facilityId: number;
+        automationId: number;
+      };
+    };
+    responses: {
+      /** The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  listFacilityDevices: {
+    parameters: {
+      path: {
+        facilityId: number;
+      };
+    };
+    responses: {
+      /** Successfully listed the facility's devices. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListDeviceConfigsResponse"];
+        };
+      };
+      /** The facility does not exist or is not accessible by the current user. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  listAllFacilities: {
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListFacilitiesResponse"];
+        };
+      };
+    };
+  };
+  createFacility: {
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CreateFacilityResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateFacilityRequestPayload"];
+      };
+    };
+  };
+  getFacility_1: {
+    parameters: {
+      path: {
+        facilityId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetFacilityResponse"];
+        };
+      };
+    };
+  };
+  updateFacility_1: {
+    parameters: {
+      path: {
+        facilityId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateFacilityRequestPayload"];
+      };
+    };
+  };
+  sendFacilityAlert_1: {
     parameters: {
       path: {
         facilityId: number;
@@ -1477,7 +1769,7 @@ export interface operations {
       };
     };
   };
-  listFacilityDevices: {
+  listFacilityDevices_1: {
     parameters: {
       path: {
         facilityId: number;

@@ -38,4 +38,5 @@ export enum APP_PATHS {
   MY_ACCOUNT_EDIT = '/myaccount/edit',
   MONITORING = '/monitoring',
   SEED_BANKS = '/seedbanks',
+  SEED_BANKS_NEW = '/seedbanks/new',
 }

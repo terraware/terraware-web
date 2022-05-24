@@ -8,5 +8,7 @@ export type FacilitiesListResponse =
 export interface Facility {
   id: number;
   name: string;
+  description?: string;
+  siteId: number;
   type: FacilitiesListResponse['facilities'][0]['type'];
 }

@@ -1,0 +1,64 @@
+import axios from 'axios';
+import { Facility } from '../types/facilities';
+import { paths } from '../types/generated-schema';
+
+const FACILITIES = '/api/v1/facilities';
+type CreateFacilityResponsePayload = paths[typeof FACILITIES]['post']['responses'][200]['content']['application/json'];
+
+type CreateFacilityRequestPayload = paths[typeof FACILITIES]['post']['requestBody']['content']['application/json'];
+
+type CreateFacilityResponse = {
+  facilityId: number | null;
+  requestSucceeded: boolean;
+};
+
+export async function createFacility(facility: Facility): Promise<CreateFacilityResponse> {
+  const response: CreateFacilityResponse = {
+    facilityId: null,
+    requestSucceeded: true,
+  };
+  const createFacilityRequestPayload: CreateFacilityRequestPayload = {
+    name: facility.name,
+    description: facility.description,
+    siteId: facility.siteId,
+    type: facility.type,
+  };
+  try {
+    const serverResponse: CreateFacilityResponsePayload = (await axios.post(FACILITIES, createFacilityRequestPayload))
+      .data;
+    if (serverResponse.status === 'ok') {
+      response.facilityId = serverResponse.id;
+    } else {
+      response.requestSucceeded = false;
+    }
+  } catch {
+    response.requestSucceeded = false;
+  }
+
+  return response;
+}
+
+const FACILITY = '/api/v1/facilities/{facilityId}';
+
+type SimpleResponse = {
+  requestSucceeded: boolean;
+};
+
+type UpdateFacilityRequestPayload = paths[typeof FACILITY]['put']['requestBody']['content']['application/json'];
+
+export async function updateFacility(facility: Facility): Promise<SimpleResponse> {
+  const response: SimpleResponse = {
+    requestSucceeded: true,
+  };
+  const updateFacilityRequestPayload: UpdateFacilityRequestPayload = {
+    name: facility.name,
+    description: facility.description,
+  };
+  try {
+    await axios.put(FACILITY.replace('{facilityId}', facility.id.toString()), updateFacilityRequestPayload);
+  } catch {
+    response.requestSucceeded = false;
+  }
+
+  return response;
+}
