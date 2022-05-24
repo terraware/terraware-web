@@ -94,8 +94,6 @@ export default function SeedBankDetails({ organization }: SeedBankDetailsProps):
         </Grid>
         <Grid item xs={12}>
           <h2>{strings.SENSOR_KIT}</h2>
-        </Grid>
-        <Grid item xs={12}>
           <p>
             {strings.formatString(
               strings.SENSOR_KIT_SET_UP,
