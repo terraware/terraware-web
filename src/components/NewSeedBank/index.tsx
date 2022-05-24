@@ -91,46 +91,48 @@ export default function SeedBankView({ organization, reloadOrganizationData }: S
   };
 
   const saveSeedBank = async () => {
-    if (record.name === '') {
+    if (!record.name) {
       setNameError(strings.REQUIRED_FIELD);
-    } else if (record.description === '') {
-      setDescriptionError(strings.REQUIRED_FIELD);
-    } else {
-      if (selectedSeedBank) {
-        const response = await updateFacility({ ...record, id: selectedSeedBank.id } as Facility);
-        if (response.requestSucceeded) {
-          reloadOrganizationData();
-          setSnackbar({
-            type: 'toast',
-            priority: 'success',
-            msg: strings.CHANGES_SAVED,
-          });
-        } else {
-          setSnackbar({
-            type: 'toast',
-            priority: 'critical',
-            msg: strings.GENERIC_ERROR,
-          });
-        }
-      } else {
-        const response = await createFacility(record);
-        if (response.requestSucceeded) {
-          reloadOrganizationData();
-          setSnackbar({
-            type: 'toast',
-            priority: 'success',
-            msg: strings.SEED_BANK_ADDED,
-          });
-        } else {
-          setSnackbar({
-            type: 'toast',
-            priority: 'critical',
-            msg: strings.GENERIC_ERROR,
-          });
-        }
-      }
-      goToSeedBanks();
+      return;
     }
+    if (!record.description) {
+      setDescriptionError(strings.REQUIRED_FIELD);
+      return;
+    }
+    if (selectedSeedBank) {
+      const response = await updateFacility({ ...record, id: selectedSeedBank.id } as Facility);
+      if (response.requestSucceeded) {
+        reloadOrganizationData();
+        setSnackbar({
+          type: 'toast',
+          priority: 'success',
+          msg: strings.CHANGES_SAVED,
+        });
+      } else {
+        setSnackbar({
+          type: 'toast',
+          priority: 'critical',
+          msg: strings.GENERIC_ERROR,
+        });
+      }
+    } else {
+      const response = await createFacility(record);
+      if (response.requestSucceeded) {
+        reloadOrganizationData();
+        setSnackbar({
+          type: 'toast',
+          priority: 'success',
+          msg: strings.SEED_BANK_ADDED,
+        });
+      } else {
+        setSnackbar({
+          type: 'toast',
+          priority: 'critical',
+          msg: strings.GENERIC_ERROR,
+        });
+      }
+    }
+    goToSeedBanks();
   };
 
   return (

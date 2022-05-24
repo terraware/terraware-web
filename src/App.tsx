@@ -56,6 +56,7 @@ import { Species } from './types/Species';
 import Monitoring from './components/Monitoring';
 import SeedBanks from './components/SeedBanks';
 import NewSeedBank from './components/NewSeedBank';
+import SeedBankDetails from './components/SeedBank';
 
 // @ts-ignore
 mapboxgl.workerClass =
@@ -429,6 +430,14 @@ export default function App() {
                   <NewSeedBank organization={selectedOrganization} reloadOrganizationData={reloadData} />
                 </Route>
               )}
+              {selectedOrganization && (
+                <Route exact path={APP_PATHS.SEED_BANKS_EDIT}>
+                  <NewSeedBank organization={selectedOrganization} reloadOrganizationData={reloadData} />
+                </Route>
+              )}
+              <Route path={APP_PATHS.SEED_BANKS_VIEW}>
+                <SeedBankDetails organization={selectedOrganization} />
+              </Route>
               {selectedOrganization && (
                 <Route exact path={APP_PATHS.SEED_BANKS}>
                   {getSeedBanksView()}

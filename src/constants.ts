@@ -39,4 +39,6 @@ export enum APP_PATHS {
   MONITORING = '/monitoring',
   SEED_BANKS = '/seedbanks',
   SEED_BANKS_NEW = '/seedbanks/new',
+  SEED_BANKS_EDIT = '/seedbanks/:seedBankId/edit',
+  SEED_BANKS_VIEW = '/seedbanks/:seedBankId',
 }
