@@ -59,7 +59,7 @@ export default function SelectSeedBankModal(props: SelectSeedBankProps): JSX.Ele
       middleButtons={[
         <Button
           onClick={onCancel}
-          id='cancel'
+          id='cancel-select-seed-bank'
           label={strings.CANCEL}
           priority='secondary'
           type='passive'
