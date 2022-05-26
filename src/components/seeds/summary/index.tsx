@@ -73,17 +73,11 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
       const seedbankFacility = seedbankSite?.facilities?.find((facility) => facility.name === 'Seed Bank');
 
       const populateSummary = async () => {
-        if (seedbankFacility) {
-          setSummary(await getSummary(seedbankFacility.id));
-        }
+        setSummary(await getSummary(organization.id));
       };
 
       // Update summary information
-      if (seedbankFacility) {
-        populateSummary();
-      } else {
-        setSummary(undefined);
-      }
+      populateSummary();
 
       // Update interval that keeps summary up to date
       if (!process.env.REACT_APP_DISABLE_RECURRENT_REQUESTS) {
