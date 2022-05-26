@@ -168,11 +168,11 @@ async function listAllFieldValues(
  * existing accessions in the given facility. This example simplifies the input and return type details;
  * see the type definitions for more precise information.
  */
-export async function getAllFieldValues(fields: string[], facilityId: number): Promise<AllFieldValuesMap | null> {
+export async function getAllFieldValues(fields: string[], organizationId: number): Promise<AllFieldValuesMap | null> {
   try {
     const params: ListAllFieldValuesRequestPayload = {
-      facilityId,
       fields,
+      organizationId,
     };
     return (await listAllFieldValues(params)).results;
   } catch {
@@ -188,18 +188,17 @@ export type FieldValuesMap = ValuesPostResponse['results'];
 /*
  * searchFieldValues() returns values for the specified fields, given that those values are associated
  * with an accession that match the given search criteria. If no search criteria is specified, the default
- * "search" will be "all accession associated with the given facilityId".
+ * "search" will be "all accession associated with the given organizationId".
  * Returns null if the API request failed.
  */
 export async function searchFieldValues(
   fields: string[],
   searchCriteria: SeedSearchCriteria,
-  facilityId: number
+  organizationId: number
 ): Promise<FieldValuesMap | null> {
   try {
-    const formattedSearch = convertToSearchNodePayload(searchCriteria);
+    const formattedSearch = convertToSearchNodePayload(searchCriteria, {}, organizationId);
     const params: ValuesPostRequestBody = {
-      facilityId,
       fields,
       search: formattedSearch,
     };
@@ -217,10 +216,10 @@ export async function searchFieldValues(
 /*
  * Returns all the Primary Collectors associated with a facility, or null if the API request failed.
  */
-export async function getPrimaryCollectors(facilityId: number): Promise<string[] | null> {
+export async function getPrimaryCollectors(organizationId: number): Promise<string[] | null> {
   try {
     const params: ListAllFieldValuesRequestPayload = {
-      facilityId,
+      organizationId,
       fields: ['primaryCollectorName'],
     };
 

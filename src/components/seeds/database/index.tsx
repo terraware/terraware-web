@@ -228,7 +228,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
 
       const populateAvailableFieldOptions = async () => {
         const singleAndMultiChoiceFields = filterSelectFields(searchColumns);
-        setAvailableFieldOptions(await searchFieldValues(singleAndMultiChoiceFields, searchCriteria, 0));
+        setAvailableFieldOptions(await searchFieldValues(singleAndMultiChoiceFields, searchCriteria, organization.id));
       };
 
       const populatePendingAccessions = async () => {
@@ -239,7 +239,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
 
       const populateFieldOptions = async () => {
         const singleAndMultiChoiceFields = filterSelectFields(searchColumns);
-        setFieldOptions(await getAllFieldValues(singleAndMultiChoiceFields, 0));
+        setFieldOptions(await getAllFieldValues(singleAndMultiChoiceFields, organization.id));
       };
 
       populateUnfilteredResults();
