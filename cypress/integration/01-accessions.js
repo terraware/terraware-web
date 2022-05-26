@@ -3,7 +3,7 @@ describe('Accessions', () => {
     beforeEach(() => {
       cy.visit('/seeds-dashboard');
     });
-    it.only('has the right summary results', () => {
+    it('has the right summary results', () => {
       cy.intercept('GET', '/api/v1/seedbank/summary?organizationId=*').as('summary');
       cy.visit('/seeds-dashboard');
       cy.wait('@summary');
