@@ -1,4 +1,4 @@
-describe.only('Accessions', () => {
+describe('Accessions', () => {
   context('Summary Start Results', () => {
     beforeEach(() => {
       cy.visit('/seeds-dashboard');

@@ -16,11 +16,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     mainGrid: {
       textAlign: 'left',
-    },
-    message: {
-      fontSize: '16px',
-      marginBottom: '16px',
-      textAlign: 'center',
+      marginTop: theme.spacing(2) / 2,
     },
   })
 );
@@ -68,10 +64,10 @@ export default function SelectSeedBankModal(props: SelectSeedBankProps): JSX.Ele
         />,
         <Button onClick={onSelect} id='select-seed-bank' label={strings.SELECT_BUTTON} key='button-2' />,
       ]}
+      message={strings.SELECT_SEED_BANK_INFO}
     >
       <Grid container spacing={4} className={classes.mainGrid}>
         <Grid item xs={12}>
-          <div className={classes.message}>{strings.SELECT_SEED_BANK_INFO}</div>
           <Select
             id='seedBank'
             selectedValue={selectedFacility?.name}
