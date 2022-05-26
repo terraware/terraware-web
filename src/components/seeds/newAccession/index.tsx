@@ -451,12 +451,14 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
             }
           >
             <Grid item xs={4}>
-              {organization && <MainCollector
-                organizationId={organization.id!}
-                onChange={onChange}
-                mainCollector={record.primaryCollector}
-                disabled={isPendingCheckIn}
-              />}
+              {organization && (
+                <MainCollector
+                  organizationId={organization.id!}
+                  onChange={onChange}
+                  mainCollector={record.primaryCollector}
+                  disabled={isPendingCheckIn}
+                />
+              )}
             </Grid>
           </Suspense>
           <Grid item xs={4}>
