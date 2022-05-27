@@ -345,6 +345,7 @@ export default function App() {
                   setSearchColumns={setSeedSearchColumns}
                   displayColumnNames={accessionsDisplayColumns}
                   setDisplayColumnNames={setAccessionsDisplayColumns}
+                  hasSeedBanks={selectedOrgHasSeedBanks()}
                 />
               </Route>
               {selectedOrganization && (
