@@ -755,8 +755,8 @@ export interface components {
     };
     ListFieldValuesRequestPayload: {
       facilityId?: number;
-      organizationId?: number;
       fields: string[];
+      organizationId?: number;
       search?:
         | components["schemas"]["AndNodePayload"]
         | components["schemas"]["FieldNodePayload"]
