@@ -4,7 +4,7 @@
 describe.skip('Summary page', () => {
   beforeEach(() => {
     cy.intercept('GET', '/api/v1/seedbank/notification?*').as('notification');
-    cy.intercept('GET', '/api/v1/seedbank/summary/*').as('summary');
+    cy.intercept('GET', '/api/v1/seedbank/summary?organizationId=*').as('summary');
     cy.visit('/seeds-dashboard');
     cy.wait('@notification');
     cy.wait('@summary');
@@ -57,7 +57,7 @@ describe.skip('Summary page', () => {
 describe.skip('Summary page - Spinners', () => {
   it('display loading spinner', () => {
     cy.intercept('GET', '/api/v1/seedbank/notification').as('notification');
-    cy.intercept('GET', '/api/v1/seedbank/summary/*').as('summary');
+    cy.intercept('GET', '/api/v1/seedbank/summary?organizationId=*').as('summary');
 
     cy.visit('/');
 

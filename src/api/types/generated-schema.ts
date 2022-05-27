@@ -169,6 +169,9 @@ export interface paths {
   "/api/v1/seedbank/search/export": {
     post: operations["exportAccessions"];
   };
+  "/api/v1/seedbank/summary": {
+    get: operations["getSeedBankSummary"];
+  };
   "/api/v1/seedbank/summary/{facilityId}": {
     get: operations["getSummary"];
   };
@@ -1128,6 +1131,7 @@ export interface components {
       dryingStartDate?: string;
       endangered?: "No" | "Yes" | "Unsure";
       environmentalNotes?: string;
+      facilityId?: number;
       family?: string;
       fieldNotes?: string;
       founderId?: string;
@@ -2599,6 +2603,22 @@ export interface operations {
       };
     };
   };
+  getSeedBankSummary: {
+    parameters: {
+      query: {
+        organizationId?: number;
+        facilityId?: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SummaryResponse"];
+        };
+      };
+    };
+  };
   getSummary: {
     parameters: {
       path: {
@@ -3009,6 +3029,12 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["RecordTimeseriesValuesResponsePayload"];
+        };
+      };
+      /** The request had more than 1000 values. */
+      413: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
