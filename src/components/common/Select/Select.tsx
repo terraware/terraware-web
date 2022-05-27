@@ -161,7 +161,7 @@ export default function Select(props: SelectProps): JSX.Element {
         )}
       </div>
       {errorText && (
-        <div className='textfield-label-container'>
+        <div className='label-container'>
           <Icon name='error' className='textfield-error-text--icon' />
           <label htmlFor={id} className='textfield-error-text'>
             {errorText}
@@ -169,7 +169,7 @@ export default function Select(props: SelectProps): JSX.Element {
         </div>
       )}
       {warningText && (
-        <div className='textfield-label-container'>
+        <div className='label-container'>
           <Icon name='warning' className='textfield-warning-text--icon' />
           <label htmlFor={id} className='textfield-warning-text'>
             {warningText}
