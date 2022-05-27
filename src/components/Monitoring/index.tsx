@@ -1,11 +1,12 @@
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React from 'react';
-import { HighOrganizationRolesValues, ServerOrganization } from 'src/types/Organization';
+import { ServerOrganization } from 'src/types/Organization';
 import EmptyMessage from '../common/EmptyMessage';
 import emptyMessageStrings from 'src/strings/emptyMessageModal';
 import strings from 'src/strings';
 import { APP_PATHS } from 'src/constants';
 import { useHistory } from 'react-router-dom';
+import { isAdmin } from 'src/utils/organization';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -48,7 +49,7 @@ export default function Monitoring(props: MonitoringProps): JSX.Element {
         <div className={classes.placeholder}>
           <span className={classes.text}>Monitoring placeholder for {organization.name}</span>
         </div>
-      ) : HighOrganizationRolesValues.includes(organization?.role || '') ? (
+      ) : isAdmin(organization) ? (
         <EmptyMessage
           className={classes.message}
           title={emptyMessageStrings.NO_SEEDBANKS_ADMIN_TITLE}

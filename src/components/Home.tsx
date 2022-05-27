@@ -8,8 +8,9 @@ import TfDivisor from 'src/components/common/TfDivisor';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import homePageStrings from 'src/strings/homePage';
-import { HighOrganizationRolesValues, ServerOrganization } from 'src/types/Organization';
+import { ServerOrganization } from 'src/types/Organization';
 import { User } from 'src/types/User';
+import { isAdmin } from 'src/utils/organization';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -72,7 +73,7 @@ export default function Home({ organizations, selectedOrganization, setSelectedO
       />
       <Container maxWidth={false} className={classes.mainContainer}>
         <Grid container spacing={3} className={classes.mainGrid}>
-          {selectedOrganization?.role && HighOrganizationRolesValues.includes(selectedOrganization.role) && (
+          {selectedOrganization?.role && isAdmin(selectedOrganization) && (
             <>
               <Grid item xs={4}>
                 <PageCard
