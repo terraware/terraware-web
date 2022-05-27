@@ -15,7 +15,8 @@ import { API_PULL_INTERVAL, APP_PATHS } from 'src/constants';
 import { seedsSummarySelectedOrgInfo } from 'src/state/selectedOrgInfoPerPage';
 import strings from 'src/strings';
 import emptyMessageStrings from 'src/strings/emptyMessageModal';
-import { HighOrganizationRolesValues, ServerOrganization } from 'src/types/Organization';
+import { ServerOrganization } from 'src/types/Organization';
+import { isAdmin } from 'src/utils/organization';
 import PageHeader from '../PageHeader';
 import SummaryPaper from './SummaryPaper';
 import Updates from './Updates';
@@ -169,7 +170,7 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
                   </Grid>
                 </Grid>
               </Grid>
-            ) : HighOrganizationRolesValues.includes(organization?.role || '') ? (
+            ) : isAdmin(organization) ? (
               <EmptyMessage
                 className={classes.message}
                 title={emptyMessageStrings.SEEDS_EMPTY_MSG_TITLE}

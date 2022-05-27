@@ -31,13 +31,14 @@ import DownloadReportModal from './DownloadReportModal';
 import EditColumns from './EditColumns';
 import Filters from './Filters';
 import SearchCellRenderer from './TableCellRenderer';
-import { HighOrganizationRolesValues, ServerOrganization } from 'src/types/Organization';
+import { ServerOrganization } from 'src/types/Organization';
 import { seedsDatabaseSelectedOrgInfo } from 'src/state/selectedOrgInfoPerPage';
 import { useRecoilState } from 'recoil';
 import EmptyMessage from 'src/components/common/EmptyMessage';
 import { APP_PATHS } from 'src/constants';
 import TfMain from 'src/components/common/TfMain';
 import { ACCESSION_STATES } from '../../../types/Accession';
+import { isAdmin } from 'src/utils/organization';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -434,7 +435,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
                     {searchResults === null && strings.GENERIC_ERROR}
                   </Grid>
                 </>
-              ) : HighOrganizationRolesValues.includes(organization?.role || '') ? (
+              ) : isAdmin(organization) ? (
                 <EmptyMessage
                   className={classes.message}
                   title={emptyMessageStrings.NO_SEEDBANKS_ADMIN_TITLE}

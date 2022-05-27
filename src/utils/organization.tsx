@@ -1,5 +1,5 @@
 import { Facility } from 'src/api/types/facilities';
-import { Project, ServerOrganization, Site } from 'src/types/Organization';
+import { HighOrganizationRolesValues, Project, ServerOrganization, Site } from 'src/types/Organization';
 
 export const getAllSites = (organization: ServerOrganization): Site[] => {
   const sites: Site[] = [];
@@ -124,4 +124,8 @@ export const getFirstFacility = (organization: ServerOrganization | undefined): 
 
 export const getOrganizationProjects = (organization: ServerOrganization | undefined) => {
   return organization?.projects?.filter((proj) => proj.name !== 'Seed Bank') || [];
+};
+
+export const isAdmin = (organization: ServerOrganization | undefined) => {
+  return HighOrganizationRolesValues.includes(organization?.role || '');
 };
