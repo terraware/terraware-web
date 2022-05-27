@@ -731,8 +731,9 @@ export interface components {
       status: components["schemas"]["SuccessOrError"];
     };
     ListAllFieldValuesRequestPayload: {
-      facilityId: number;
+      facilityId?: number;
       fields: string[];
+      organizationId?: number;
     };
     ListAllFieldValuesResponsePayload: {
       results: {
@@ -753,8 +754,9 @@ export interface components {
       status: components["schemas"]["SuccessOrError"];
     };
     ListFieldValuesRequestPayload: {
-      facilityId: number;
+      facilityId?: number;
       fields: string[];
+      organizationId?: number;
       search?:
         | components["schemas"]["AndNodePayload"]
         | components["schemas"]["FieldNodePayload"]

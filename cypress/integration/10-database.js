@@ -2,7 +2,7 @@ describe('Database', () => {
   context('Customize columns', () => {
     it('should display the default columns', () => {
       cy.visit('/accessions');
-      cy.get('#table-header').children().should('have.length', 7);
+      cy.get('#table-header').children().should('have.length', 8);
       cy.get('#table-header-accessionNumber').contains('ACCESSION');
       cy.get('#table-header-state').contains('STAGE');
       cy.get('#table-header-speciesName').contains('SPECIES');
@@ -12,12 +12,13 @@ describe('Database', () => {
     });
 
     it('should handle cancel edit columns action', () => {
+      cy.visit('/accessions');
       cy.get('#edit-columns').click();
 
       cy.get('#cancel').click();
       cy.get('#editColumnsDialog').should('not.exist');
 
-      cy.get('#table-header').children().should('have.length', 7);
+      cy.get('#table-header').children().should('have.length', 8);
       cy.get('#table-header-accessionNumber').contains('ACCESSION');
       cy.get('#table-header-state').contains('STAGE');
       cy.get('#table-header-speciesName').contains('SPECIES');
@@ -28,6 +29,7 @@ describe('Database', () => {
     });
 
     it('should be able to select the columns', () => {
+      cy.visit('/accessions');
       cy.intercept('POST', '/api/v1/search').as('search');
       cy.intercept('POST', '/api/v1/seedbank/values').as('values');
 
@@ -38,6 +40,7 @@ describe('Database', () => {
       cy.get('#collectedDate').click();
       cy.get('#primaryCollectorName').click();
       cy.get('#active').click();
+      cy.get('#facility_name').click();
       cy.get('#saveColumnsButton').click();
       cy.wait('@search');
       cy.wait('@values');
@@ -101,7 +104,7 @@ describe('Database', () => {
         cy.wait('@values');
         cy.get('#editColumnsDialog').should('not.exist');
 
-        cy.get('#table-header').children().should('have.length', 7);
+        cy.get('#table-header').children().should('have.length', 8);
         cy.get('#table-header-accessionNumber').contains('ACCESSION');
         cy.get('#table-header-state').contains('STAGE');
         cy.get('#table-header-speciesName').contains('SPECIES');
@@ -363,7 +366,7 @@ describe('Database', () => {
     });
 
     it('Should download report', () => {
-      cy.intercept('POST', '/api/v1/seedbank/search/export').as('postReport');
+      cy.intercept('POST', '/api/v1/search').as('postReport');
 
       cy.get('#download-report').click();
       cy.get('#reportName').type('report');

@@ -16,6 +16,7 @@ import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
 import useForm from 'src/utils/useForm';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
+import { getAllSeedBanks } from 'src/utils/organization';
 import Divisor from '../../common/Divisor';
 import Dropdown from '../../common/Dropdown';
 import Note from '../../common/Note';
@@ -188,6 +189,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
   const [isPendingCheckIn, setIsPendingCheckIn] = useState(false);
   const [isCheckingIn, setIsCheckingIn] = useState(false);
   const [isCheckedIn, setIsCheckedIn] = useState(false);
+  const seedBanks = organization ? getAllSeedBanks(organization) : [];
 
   useEffect(() => {
     if (updating) {
@@ -445,12 +447,14 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
             }
           >
             <Grid item xs={4}>
-              <MainCollector
-                facilityId={accession.facilityId!}
-                onChange={onChange}
-                mainCollector={record.primaryCollector}
-                disabled={isPendingCheckIn}
-              />
+              {organization && (
+                <MainCollector
+                  organizationId={organization.id!}
+                  onChange={onChange}
+                  mainCollector={record.primaryCollector}
+                  disabled={isPendingCheckIn}
+                />
+              )}
             </Grid>
           </Suspense>
           <Grid item xs={4}>
@@ -490,6 +494,19 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
               onChange={onChange}
               label={strings.ENVIRONMENTAL_NOTES}
               placeholder={strings.ENVIRONMENTAL_NOTES_PLACEHOLDER}
+              disabled={isPendingCheckIn}
+            />
+          </Grid>
+        </Grid>
+        <Divisor />
+        <Grid container spacing={4}>
+          <Grid item xs={12}>
+            <Dropdown
+              id='facilityId'
+              label={strings.SEED_BANK}
+              selected={record.facilityId?.toString()}
+              values={seedBanks.map((seedBank) => ({ label: seedBank!.name, value: seedBank!.id.toString() }))}
+              onChange={onChange}
               disabled={isPendingCheckIn}
             />
           </Grid>
