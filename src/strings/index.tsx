@@ -363,6 +363,7 @@ const strings = new LocalizedStrings({
     ORGANIZATION_CREATED_MSG:
       'You can access the organizations you’re in by clicking the arrow in the top right corner next to your profile.',
     GO_TO_PROJECTS: 'Go to Projects',
+    GO_TO_SEED_BANKS: 'Go to Seed Banks',
     COMMON_NAME: 'Common Name',
     SCIENTIFIC_NAME_REQUIRED: 'Scientific Name *',
     SCIENTIFIC_NAME: 'Scientific Name',

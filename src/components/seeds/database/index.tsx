@@ -108,6 +108,7 @@ type DatabaseProps = {
   setSearchColumns: (fields: string[]) => void;
   displayColumnNames: string[];
   setDisplayColumnNames: (fields: string[]) => void;
+  hasSeedBanks: boolean;
 };
 
 export default function Database(props: DatabaseProps): JSX.Element {
@@ -125,6 +126,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
     displayColumnNames,
     setDisplayColumnNames,
     organization,
+    hasSeedBanks,
   } = props;
   const displayColumnDetails = displayColumnNames.map((name) => {
     return COLUMNS_INDEXED[name];
@@ -316,11 +318,11 @@ export default function Database(props: DatabaseProps): JSX.Element {
     history.push(APP_PATHS.CHECKIN);
   };
 
-  const goToProjects = () => {
-    const projectsLocation = {
-      pathname: APP_PATHS.PROJECTS,
+  const goToSeedBanks = () => {
+    const seedBanksLocation = {
+      pathname: APP_PATHS.SEED_BANKS,
     };
-    history.push(projectsLocation);
+    history.push(seedBanksLocation);
   };
 
   const goToNewAccession = () => {
@@ -345,36 +347,38 @@ export default function Database(props: DatabaseProps): JSX.Element {
         <PageHeader
           title=''
           allowAll={true}
-          subtitle={getSubtitle()}
+          subtitle={hasSeedBanks ? getSubtitle() : undefined}
           page={strings.ACCESSIONS}
           parentPage={strings.SEEDS}
           rightComponent={
-            <div>
-              <Button
-                id='edit-columns'
-                label={strings.ADD_COLUMNS}
-                onClick={onOpenEditColumnsModal}
-                priority='secondary'
-                type='passive'
-                size='medium'
-                className={classes.buttonSpc}
-              />
-              <Button
-                id='download-report'
-                label={strings.DOWNLOAD_AS_REPORT}
-                onClick={onDownloadReport}
-                priority='secondary'
-                type='passive'
-                size='medium'
-                className={classes.buttonSpc}
-              />
-              {selectedOrgInfo.selectedFacility && (
-                <Button label={strings.NEW_ACCESSION} onClick={goToNewAccession} size='medium' id='newAccession' />
-              )}
-            </div>
+            hasSeedBanks ? (
+              <div>
+                <Button
+                  id='edit-columns'
+                  label={strings.ADD_COLUMNS}
+                  onClick={onOpenEditColumnsModal}
+                  priority='secondary'
+                  type='passive'
+                  size='medium'
+                  className={classes.buttonSpc}
+                />
+                <Button
+                  id='download-report'
+                  label={strings.DOWNLOAD_AS_REPORT}
+                  onClick={onDownloadReport}
+                  priority='secondary'
+                  type='passive'
+                  size='medium'
+                  className={classes.buttonSpc}
+                />
+                {selectedOrgInfo.selectedFacility && (
+                  <Button label={strings.NEW_ACCESSION} onClick={goToNewAccession} size='medium' id='newAccession' />
+                )}
+              </div>
+            ) : undefined
           }
         >
-          {availableFieldOptions && fieldOptions && (
+          {hasSeedBanks && availableFieldOptions && fieldOptions && (
             <Filters
               filters={searchCriteria}
               availableValues={availableFieldOptions}
@@ -388,7 +392,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
         <Container maxWidth={false} className={classes.mainContainer}>
           {organization && unfilteredResults ? (
             <Grid container>
-              {!!organization?.projects?.length ? (
+              {hasSeedBanks ? (
                 <>
                   {pendingAccessions && pendingAccessions.length > 0 && (
                     <Grid item xs={12} className={classes.checkinMessage}>
@@ -433,16 +437,16 @@ export default function Database(props: DatabaseProps): JSX.Element {
               ) : HighOrganizationRolesValues.includes(organization?.role || '') ? (
                 <EmptyMessage
                   className={classes.message}
-                  title={emptyMessageStrings.SEEDS_EMPTY_MSG_TITLE}
-                  text={emptyMessageStrings.SEEDS_EMPTY_MSG_BODY}
-                  buttonText={strings.GO_TO_PROJECTS}
-                  onClick={goToProjects}
+                  title={emptyMessageStrings.NO_SEEDBANKS_ADMIN_TITLE}
+                  text={emptyMessageStrings.NO_SEEDBANKS_ADMIN_MSG}
+                  buttonText={strings.GO_TO_SEED_BANKS}
+                  onClick={goToSeedBanks}
                 />
               ) : (
                 <EmptyMessage
                   className={classes.message}
-                  title={emptyMessageStrings.CHECK_BACK_LATER}
-                  text={emptyMessageStrings.EMPTY_MESSAGE_CONTRIBUTOR}
+                  title={emptyMessageStrings.NO_SEEDBANKS_NON_ADMIN_TITLE}
+                  text={emptyMessageStrings.NO_SEEDBANKS_NON_ADMIN_MSG}
                 />
               )}
             </Grid>
