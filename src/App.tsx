@@ -350,7 +350,7 @@ export default function App() {
               </Route>
               {selectedOrganization && (
                 <Route exact path={APP_PATHS.MONITORING}>
-                  <Monitoring organization={selectedOrganization} />
+                  <Monitoring organization={selectedOrganization} hasSeedBanks={selectedOrgHasSeedBanks()} />
                 </Route>
               )}
               {selectedOrganization && (
