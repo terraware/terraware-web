@@ -95,10 +95,15 @@ export default function SeedBankDetails({ organization }: SeedBankDetailsProps):
         <Grid item xs={12}>
           <h2>{strings.SENSOR_KIT}</h2>
           <p>
-            {strings.formatString(
-              strings.SENSOR_KIT_HAS_BEEN_SET_UP,
-              <Link to={APP_PATHS.MONITORING}>{strings.MONITORING}</Link>
-            )}
+            {seedBank?.connectionState === 'Configured'
+              ? strings.formatString(
+                  strings.SENSOR_KIT_HAS_BEEN_SET_UP,
+                  <Link to={APP_PATHS.MONITORING}>{strings.MONITORING}</Link>
+                )
+              : strings.formatString(
+                  strings.SENSOR_KIT_READY_TO_SET_UP,
+                  <Link to={APP_PATHS.MONITORING}>{strings.MONITORING}</Link>
+                )}
           </p>
         </Grid>
         <Grid item xs={12}>

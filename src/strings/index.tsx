@@ -445,6 +445,8 @@ const strings = new LocalizedStrings({
     SEED_BANK_ADDED: 'Seed Bank added.',
     SENSOR_KIT: 'Sensor Kit',
     SENSOR_KIT_HAS_BEEN_SET_UP: 'Sensor Kit has been set up. Go to the {0} page to see them.',
+    SENSOR_KIT_READY_TO_SET_UP:
+      'If you have a Terraformation seed bank, its sensor kit is ready to be set up. Take me to the {0} page to set it up.',
     SELECT_SEED_BANK: 'Select Seed Bank',
     SELECT_SEED_BANK_INFO: 'Accessions require a seed bank storage location. Please select a seed bank.',
     SELECT_BUTTON: 'Select',
