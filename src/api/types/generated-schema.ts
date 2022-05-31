@@ -7,6 +7,15 @@ export interface paths {
   "/api/v1/devices": {
     post: operations["createDevice"];
   };
+  "/api/v1/devices/managers": {
+    get: operations["getDeviceManagers"];
+  };
+  "/api/v1/devices/managers/{deviceManagerId}": {
+    get: operations["getDeviceManager"];
+  };
+  "/api/v1/devices/managers/{deviceManagerId}/connect": {
+    post: operations["connectDeviceManager"];
+  };
   "/api/v1/devices/{id}": {
     get: operations["getDevice"];
     put: operations["updateDevice"];
@@ -389,6 +398,9 @@ export interface components {
       /** Name of the coordinate reference system. This must be in the form EPSG:nnnn where nnnn is the numeric identifier of a coordinate system in the EPSG dataset. The default is Longitude/Latitude EPSG:4326, which is the coordinate system +for GeoJSON. */
       name: string;
     };
+    ConnectDeviceManagerRequestPayload: {
+      facilityId: number;
+    };
     CreateAccessionRequestPayload: {
       bagNumbers?: string[];
       collectedDate?: string;
@@ -556,6 +568,16 @@ export interface components {
       /** Unique identifier of the hardware device, e.g., from React Native getUniqueId(). */
       uniqueId?: string;
     };
+    DeviceManagerPayload: {
+      id: number;
+      shortCode: string;
+      /** If true, this device manager is available to connect to a facility. */
+      available: boolean;
+      /** The facility this device manager is connected to, or null if it is not connected. */
+      facilityId?: number;
+      /** If an update is being downloaded or installed, its progress as a percentage. Not present if no update is in progress. */
+      updateProgress?: number;
+    };
     ErrorDetails: {
       message: string;
     };
@@ -570,6 +592,7 @@ export interface components {
         | components["schemas"]["OrNodePayload"];
     };
     FacilityPayload: {
+      connectionState: "Not Connected" | "Connected" | "Configured";
       createdTime: string;
       description?: string;
       id: number;
@@ -653,6 +676,15 @@ export interface components {
     };
     GetCurrentTimeResponsePayload: {
       currentTime: string;
+      status: components["schemas"]["SuccessOrError"];
+    };
+    GetDeviceManagerResponsePayload: {
+      manager: components["schemas"]["DeviceManagerPayload"];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    GetDeviceManagersResponsePayload: {
+      /** List of device managers that match the conditions in the request. Empty if there were no matches, e.g., the requested short code didn't exist. */
+      managers: components["schemas"]["DeviceManagerPayload"][];
       status: components["schemas"]["SuccessOrError"];
     };
     GetDeviceResponsePayload: {
@@ -1308,6 +1340,56 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["CreateDeviceRequestPayload"];
+      };
+    };
+  };
+  getDeviceManagers: {
+    parameters: {
+      query: {
+        shortCode: string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetDeviceManagersResponsePayload"];
+        };
+      };
+    };
+  };
+  getDeviceManager: {
+    parameters: {
+      path: {
+        deviceManagerId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetDeviceManagerResponsePayload"];
+        };
+      };
+    };
+  };
+  connectDeviceManager: {
+    parameters: {
+      path: {
+        deviceManagerId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ConnectDeviceManagerRequestPayload"];
       };
     };
   };

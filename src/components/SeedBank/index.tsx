@@ -96,7 +96,7 @@ export default function SeedBankDetails({ organization }: SeedBankDetailsProps):
           <h2>{strings.SENSOR_KIT}</h2>
           <p>
             {strings.formatString(
-              strings.SENSOR_KIT_SET_UP,
+              strings.SENSOR_KIT_HAS_BEEN_SET_UP,
               <Link to={APP_PATHS.MONITORING}>{strings.MONITORING}</Link>
             )}
           </p>

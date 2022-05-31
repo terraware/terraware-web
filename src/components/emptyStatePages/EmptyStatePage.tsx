@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-const EMPTY_STATE_CONTENT_STYLES = {
+export const EMPTY_STATE_CONTENT_STYLES = {
   titleFontSize: '20px',
   titleLineHeight: '28px',
   subtitleFontSize: '16px',

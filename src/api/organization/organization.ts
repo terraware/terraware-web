@@ -52,6 +52,7 @@ const parseFacility = (facility: ServerFacility): Facility => {
     type: facility.type,
     siteId: facility.siteId,
     description: facility.description,
+    connectionState: facility.connectionState,
   };
   return parsedFacility;
 };

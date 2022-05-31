@@ -444,11 +444,16 @@ const strings = new LocalizedStrings({
     MONITORING: 'Monitoring',
     SEED_BANK_ADDED: 'Seed Bank added.',
     SENSOR_KIT: 'Sensor Kit',
-    SENSOR_KIT_SET_UP: 'Sensor Kit has been set up. Go to the {0} page to see them.',
+    SENSOR_KIT_HAS_BEEN_SET_UP: 'Sensor Kit has been set up. Go to the {0} page to see them.',
     SELECT_SEED_BANK: 'Select Seed Bank',
     SELECT_SEED_BANK_INFO: 'Accessions require a seed bank storage location. Please select a seed bank.',
     SELECT_BUTTON: 'Select',
     SEED_BANK: 'Seed Bank',
+    SET_UP_YOUR_SENSOR_KIT: 'Set Up Your Sensor Kit',
+    SET_UP_YOUR_SENSOR_KIT_MSG:
+      "If your seed bank was built by Terraformation, it is equipped with a sensor kit that you can remotely monitor things like the seed bank's temperature and humidity. To set this up, you'll need to connect your seed bank to the Terraware web app. This may take up to 30 minutes.",
+    START_SET_UP: 'Start Setup',
+    SENSOR_KIT_SET_UP: 'Sensor Kit Set Up',
   },
 });
 

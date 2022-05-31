@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) =>
 
 interface Props {
   title?: string | string[];
-  subtitle: string | React.ReactNode;
+  subtitle?: string | React.ReactNode;
   children?: React.ReactNode;
   rightComponent?: React.ReactNode;
   page?: string;
