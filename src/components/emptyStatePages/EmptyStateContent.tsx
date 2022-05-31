@@ -92,7 +92,7 @@ const useStyles = makeStyles((theme) =>
 export type ListItemContent = {
   icon: IconName;
   title: string;
-  description: string;
+  description?: string;
   buttonText?: string;
   onClickButton?: () => void;
   linkText?: string;

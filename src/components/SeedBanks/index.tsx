@@ -116,6 +116,7 @@ export default function SeedBanksList({ organization }: SeedBanksListProps): JSX
             description: result.description as string,
             siteId: 0,
             type: result.type as 'Seed Bank' | 'Desalination' | 'Reverse Osmosis',
+            connectionState: result.connectionState as 'Not Connected' | 'Connected' | 'Configured',
           });
         });
         setResults(seedBanksResults);

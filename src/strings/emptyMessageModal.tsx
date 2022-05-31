@@ -18,6 +18,8 @@ const strings = new LocalizedStrings({
       'Before you can add and manage your accessions, you’ll need to add a seed bank within Terraware. Only admins can add seed banks, so please reach out to yours for assistance.',
     NO_SEEDBANKS_MONITORING_NON_ADMIN_MSG:
       'Before you can begin remotely monitoring things like temperature and humidity through a seed bank’s sensor kit, you’ll need to add a seed bank within Terraware. Only admins can add seed banks, so please reach out to yours for assistance.',
+    NO_SEEDBANKS_SET_UP_NON_ADMIN_MSG:
+      "If your seed bank was built by Terraformation, it is equipped with a sensor kit that you can remotely monitor things like the seed bank's temperature and humidity. Your seed bank either does not have a sensor kit, or it has not yet been set up by your administrator.",
   },
 });
 

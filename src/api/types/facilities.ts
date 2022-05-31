@@ -11,4 +11,5 @@ export interface Facility {
   description?: string;
   siteId: number;
   type: FacilitiesListResponse['facilities'][0]['type'];
+  connectionState: 'Not Connected' | 'Connected' | 'Configured';
 }

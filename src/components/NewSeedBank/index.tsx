@@ -56,6 +56,7 @@ export default function SeedBankView({ organization, reloadOrganizationData }: S
     id: -1,
     type: 'Seed Bank',
     siteId: siteId || -1,
+    connectionState: 'Not Connected',
   });
   const setSnackbar = useSetRecoilState(snackbarAtom);
   const { seedBankId } = useParams<{ seedBankId: string }>();
@@ -80,6 +81,7 @@ export default function SeedBankView({ organization, reloadOrganizationData }: S
       id: -1,
       siteId: selectedSeedBank?.siteId || siteId || -1,
       type: 'Seed Bank',
+      connectionState: 'Not Connected',
     });
   }, [selectedSeedBank, setRecord, siteId]);
 
