@@ -176,9 +176,11 @@ export default function Select(props: SelectProps): JSX.Element {
           </label>
         </div>
       )}
-      <label htmlFor={id} className='textfield-help-text'>
-        {helperText}
-      </label>
+      {helperText && (
+        <label htmlFor={id} className='textfield-help-text'>
+          {helperText}
+        </label>
+      )}
     </div>
   );
 }
