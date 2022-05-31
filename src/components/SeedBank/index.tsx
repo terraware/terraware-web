@@ -102,7 +102,7 @@ export default function SeedBankDetails({ organization }: SeedBankDetailsProps):
                 )
               : strings.formatString(
                   strings.SENSOR_KIT_READY_TO_SET_UP,
-                  <Link to={APP_PATHS.MONITORING}>{strings.MONITORING}</Link>
+                  <Link to={`${APP_PATHS.MONITORING}/${seedBankId}`}>{strings.MONITORING}</Link>
                 )}
           </p>
         </Grid>
