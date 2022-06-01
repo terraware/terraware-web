@@ -1,5 +1,5 @@
 import { createStyles, makeStyles } from '@material-ui/core/styles';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import IconButton from '@material-ui/core/IconButton';
 import Icon from '../common/icon/Icon';
 
@@ -9,6 +9,7 @@ const useStyles = makeStyles((theme) =>
       borderRadius: '8px',
       border: '1px solid #A9B7B8',
       width: '584px',
+      padding: `${theme.spacing(1)}px`,
     },
     disabledExpandable: {
       opacity: 0.4,
@@ -35,7 +36,15 @@ type ExpandableProps = {
 export default function Expandable(props: ExpandableProps): JSX.Element {
   const classes = useStyles();
   const { title, children, opened, disabled } = props;
-  const [open, setOpen] = useState<boolean>(opened);
+  const [open, setOpen] = useState<boolean>(false);
+  const [lastOpened, setLastOpened] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (lastOpened !== opened) {
+      setOpen(opened);
+      setLastOpened(opened);
+    }
+  }, [opened, open, setOpen, lastOpened, setLastOpened]);
 
   return (
     <div className={classes.expandable + ' ' + (disabled ? classes.disabledExpandable : '')}>
