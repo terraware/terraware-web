@@ -1,11 +1,11 @@
 import { createStyles, makeStyles } from '@material-ui/core/styles';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { ServerOrganization } from 'src/types/Organization';
 import EmptyMessage from '../common/EmptyMessage';
 import emptyMessageStrings from 'src/strings/emptyMessageModal';
 import strings from 'src/strings';
 import { APP_PATHS } from 'src/constants';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { getAllSeedBanks, isAdmin } from 'src/utils/organization';
 import TfMain from '../common/TfMain';
 import Select from '../common/Select/Select';
@@ -69,6 +69,7 @@ export default function Monitoring(props: MonitoringProps): JSX.Element {
   const history = useHistory();
   const { organization, hasSeedBanks } = props;
   const [selectedSeedBank, setSelectedSeedBank] = useState<Facility>();
+  const { seedBankId } = useParams<{ seedBankId: string }>();
 
   const seedBanks = getAllSeedBanks(organization);
 
@@ -79,12 +80,31 @@ export default function Monitoring(props: MonitoringProps): JSX.Element {
     history.push(seedBanksLocation);
   };
 
+  const setActiveSeedBank = useCallback(
+    (seedBank: Facility | undefined) => {
+      if (seedBank) {
+        history.push(APP_PATHS.SEED_BANK_MONITORING.replace(':seedBankId', seedBank.id.toString()));
+      }
+    },
+    [history]
+  );
+
   useEffect(() => {
-    setSelectedSeedBank(getAllSeedBanks(organization)[0]);
-  }, [organization]);
+    const initializeSeedBank = () => {
+      if (seedBanks.length) {
+        const requestedSeedBank = seedBanks.find((sb) => sb?.id === parseInt(seedBankId, 10));
+        if (requestedSeedBank) {
+          setSelectedSeedBank(requestedSeedBank);
+        } else {
+          setActiveSeedBank(seedBanks[0]);
+        }
+      }
+    };
+    initializeSeedBank();
+  }, [seedBankId, seedBanks, setActiveSeedBank]);
 
   const onChangeSeedBank = (newValue: string) => {
-    setSelectedSeedBank(seedBanks.find((sb) => sb?.name === newValue));
+    setActiveSeedBank(seedBanks.find((sb) => sb?.name === newValue));
   };
 
   return (
