@@ -10,24 +10,15 @@ import { getAllSeedBanks, isAdmin } from 'src/utils/organization';
 import TfMain from '../common/TfMain';
 import Select from '../common/Select/Select';
 import { Facility } from 'src/api/types/facilities';
-import EmptyStateContent from '../emptyStatePages/EmptyStateContent';
-import { EMPTY_STATE_CONTENT_STYLES } from '../emptyStatePages/EmptyStatePage';
+import SeedBankMonitoring from './SeedBankMonitoring';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
-    placeholder: {
-      display: 'flex',
-      height: '100%',
-    },
     pageTitle: {
       fontSize: '24px',
       lineHeight: '32px',
       fontWeight: 600,
       margin: 0,
-    },
-    text: {
-      fontSize: '24px',
-      margin: 'auto auto',
     },
     message: {
       margin: '0 auto',
@@ -48,13 +39,6 @@ const useStyles = makeStyles((theme) =>
       margin: '0 8px 0 0',
       fontWeight: 500,
       fontSize: '16px',
-    },
-    notSetUpContent: {
-      border: '1px solid #A9B7B8',
-      borderRadius: '8px',
-      margin: 'auto',
-      marginTop: `max(10vh, ${theme.spacing(8)}px)`,
-      maxWidth: '800px',
     },
   })
 );
@@ -121,32 +105,7 @@ export default function Monitoring(props: MonitoringProps): JSX.Element {
               selectedValue={selectedSeedBank?.name}
             />
           </div>
-          {selectedSeedBank?.connectionState === 'Configured' ? (
-            <div className={classes.placeholder}>
-              <span className={classes.text}>Monitoring placeholder for {organization.name}</span>
-            </div>
-          ) : (
-            <>
-              {isAdmin(organization) ? (
-                <div className={classes.notSetUpContent}>
-                  <EmptyStateContent
-                    title={strings.SET_UP_YOUR_SENSOR_KIT}
-                    subtitle={strings.SET_UP_YOUR_SENSOR_KIT_MSG}
-                    listItems={[{ icon: 'monitoring', title: strings.SENSOR_KIT_SET_UP }]}
-                    buttonText={strings.START_SET_UP}
-                    onClickButton={() => true}
-                    styles={EMPTY_STATE_CONTENT_STYLES}
-                  />
-                </div>
-              ) : (
-                <EmptyMessage
-                  className={classes.message}
-                  title={emptyMessageStrings.NO_SEEDBANKS_NON_ADMIN_TITLE}
-                  text={emptyMessageStrings.NO_SEEDBANKS_SET_UP_NON_ADMIN_MSG}
-                />
-              )}
-            </>
-          )}
+          {selectedSeedBank && <SeedBankMonitoring seedBank={selectedSeedBank} organization={organization} />}
         </TfMain>
       ) : isAdmin(organization) ? (
         <EmptyMessage

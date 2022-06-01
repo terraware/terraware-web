@@ -8,6 +8,7 @@ import { ReactComponent as Calendar } from './calendar.svg';
 import { ReactComponent as CaretDown } from './caret-down.svg';
 import { ReactComponent as CaretLeft } from './caret-left.svg';
 import { ReactComponent as CaretUp } from './caret-up.svg';
+import { ReactComponent as Checkmark } from './icon-checkmark.svg';
 import { ReactComponent as ChevronDown } from './chevron-down.svg';
 import { ReactComponent as ChevronUp } from './chevron-up.svg';
 import { ReactComponent as Close } from './close.svg';
@@ -61,6 +62,7 @@ export type IconName =
   | 'caretDown'
   | 'caretLeft'
   | 'caretUp'
+  | 'checkmark'
   | 'chevronDown'
   | 'chevronUp'
   | 'close'
@@ -119,6 +121,7 @@ const icons: Record<IconName, SVGComponent> = {
   caretDown: CaretDown,
   caretLeft: CaretLeft,
   caretUp: CaretUp,
+  checkmark: Checkmark,
   chevronDown: ChevronDown,
   chevronUp: ChevronUp,
   close: Close,
