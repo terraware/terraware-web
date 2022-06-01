@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) =>
     },
     icon: {
       fill: '#3A4445',
-    }
+    },
   })
 );
 
@@ -42,7 +42,7 @@ export default function Expandable(props: ExpandableProps): JSX.Element {
       <div className={classes.titleExpandable}>
         <span>{title}</span>
         <IconButton onClick={() => setOpen(!open)} disabled={disabled}>
-          <Icon name={open ? 'chevronUp' : 'chevronDown'} className={classes.icon}/>
+          <Icon name={open ? 'chevronUp' : 'chevronDown'} className={classes.icon} />
         </IconButton>
       </div>
       {open && <div>{children}</div>}
