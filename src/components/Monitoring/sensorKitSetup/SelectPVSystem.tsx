@@ -5,7 +5,7 @@ import { Facility } from 'src/api/types/facilities';
 import { DeviceTemplate } from 'src/types/Device';
 import Select from '../../common/Select/Select';
 import FlowStep from './FlowStep';
-import { listDeviceTemplates, createDevice, listDeviceConfigs } from 'src/api/device/device';
+import { listDeviceTemplates, createDevice } from 'src/api/device/device';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -62,22 +62,12 @@ export default function SelectPVSystem(props: SelectPVSystemProps): JSX.Element 
 
     setProcessing(true);
     const createDeviceFromTemplate = async () => {
-      const deviceConfigs = await listDeviceConfigs(seedBank.id);
-      if (deviceConfigs.requestSucceeded === false) {
+      const createDeviceResponse = await createDevice(seedBank.id, selectedPVSystem);
+      setProcessing(false);
+      if (createDeviceResponse.requestSucceeded === false) {
         setGenericError(strings.GENERIC_ERROR);
-        setProcessing(false);
         return;
       }
-      const foundDevice = deviceConfigs.devices.find((config) => config.name === selectedPVSystem.name);
-      if (!foundDevice) {
-        const createDeviceResponse = await createDevice(seedBank.id, selectedPVSystem);
-        if (createDeviceResponse.requestSucceeded === false) {
-          setGenericError(strings.GENERIC_ERROR);
-          setProcessing(false);
-          return;
-        }
-      }
-      setProcessing(false);
       onNext();
     };
     createDeviceFromTemplate();

@@ -1,11 +1,10 @@
 import axios from '..';
-import { DeviceTemplate, DeviceConfig } from 'src/types/Device';
+import { DeviceTemplate } from 'src/types/Device';
 import { paths } from 'src/api/types/generated-schema';
 import addQueryParams from '../helpers/addQueryParams';
 
 const DEVICES_ENDPOINT = '/api/v1/devices';
 const TEMPLATES_ENDPOINT = '/api/v1/devices/templates';
-const FACILITIES_DEVICE_CONFIGS_ENDPOINT = '/api/v1/facilities/{facilityId}/devices';
 
 type ListDeviceTemplatesResponsePayload =
   paths[typeof TEMPLATES_ENDPOINT]['get']['responses'][200]['content']['application/json'];
@@ -79,47 +78,6 @@ export const createDevice = async (facilityId: number, template: DeviceTemplate)
     };
 
     await axios.post(DEVICES_ENDPOINT, createDeviceRequestPayload);
-  } catch {
-    response.requestSucceeded = false;
-  }
-
-  return response;
-};
-
-/**
- * List device configs for facility
- */
-type ListDeviceConfigsResponse =
-  paths[typeof FACILITIES_DEVICE_CONFIGS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
-type DeviceConfigsResponse = {
-  devices: DeviceConfig[];
-  requestSucceeded: boolean;
-};
-
-export const listDeviceConfigs = async (facilityId: number): Promise<DeviceConfigsResponse> => {
-  const url = FACILITIES_DEVICE_CONFIGS_ENDPOINT.replace('{facilityId}', facilityId.toString());
-  const response: DeviceConfigsResponse = {
-    devices: [],
-    requestSucceeded: true,
-  };
-
-  try {
-    const serverResponse: ListDeviceConfigsResponse = (await axios.get(url)).data;
-
-    response.devices = serverResponse.devices.map((device) => ({
-      id: device.id,
-      facilityId: device.facilityId,
-      name: device.name,
-      type: device.type,
-      make: device.make,
-      model: device.model,
-      protocol: device.protocol,
-      address: device.address,
-      port: device.port,
-      settings: device.settings,
-      pollingInterval: device.pollingInterval,
-      parentId: device.parentId,
-    }));
   } catch {
     response.requestSucceeded = false;
   }
