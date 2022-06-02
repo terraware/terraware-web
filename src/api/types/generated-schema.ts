@@ -16,6 +16,9 @@ export interface paths {
   "/api/v1/devices/managers/{deviceManagerId}/connect": {
     post: operations["connectDeviceManager"];
   };
+  "/api/v1/devices/templates": {
+    get: operations["listDeviceTemplates"];
+  };
   "/api/v1/devices/{id}": {
     get: operations["getDevice"];
     put: operations["updateDevice"];
@@ -40,6 +43,10 @@ export interface paths {
     put: operations["updateAutomation_1"];
     delete: operations["deleteAutomation_1"];
   };
+  "/api/v1/facilities/{facilityId}/configured": {
+    /** After connecting a device manager and finishing any necessary configuration of the facility's devices, send this request to enable processing of timeseries values and alerts from the device manager. Only valid if the facility's connection state is `Connected`. */
+    post: operations["postConfigured_1"];
+  };
   "/api/v1/facilities/{facilityId}/devices": {
     get: operations["listFacilityDevices"];
   };
@@ -62,6 +69,10 @@ export interface paths {
     get: operations["getAutomation"];
     put: operations["updateAutomation"];
     delete: operations["deleteAutomation"];
+  };
+  "/api/v1/facility/{facilityId}/configured": {
+    /** After connecting a device manager and finishing any necessary configuration of the facility's devices, send this request to enable processing of timeseries values and alerts from the device manager. Only valid if the facility's connection state is `Connected`. */
+    post: operations["postConfigured"];
   };
   "/api/v1/facility/{facilityId}/devices": {
     get: operations["listFacilityDevices_1"];
@@ -578,6 +589,30 @@ export interface components {
       /** If an update is being downloaded or installed, its progress as a percentage. Not present if no update is in progress. */
       updateProgress?: number;
     };
+    DeviceTemplatePayload: {
+      /** Device template id */
+      id: number;
+      /** Device template category */
+      category: "PV";
+      /** Device template name */
+      name: string;
+      /** Device template type */
+      type: string;
+      /** Device template make */
+      make: string;
+      /** Device template model */
+      model: string;
+      /** Device template protocol */
+      protocol?: string;
+      /** Device template address */
+      address?: string;
+      /** Device template port */
+      port?: number;
+      /** Device template settings */
+      settings?: { [key: string]: { [key: string]: unknown } };
+      /** Device template polling interval */
+      pollingInterval?: number;
+    };
     ErrorDetails: {
       message: string;
     };
@@ -779,6 +814,10 @@ export interface components {
     };
     ListDeviceConfigsResponse: {
       devices: components["schemas"]["DeviceConfig"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    ListDeviceTemplatesResponsePayload: {
+      templates: components["schemas"]["DeviceTemplatePayload"][];
       status: components["schemas"]["SuccessOrError"];
     };
     ListFacilitiesResponse: {
@@ -1393,6 +1432,21 @@ export interface operations {
       };
     };
   };
+  listDeviceTemplates: {
+    parameters: {
+      query: {
+        category?: "PV";
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListDeviceTemplatesResponsePayload"];
+        };
+      };
+    };
+  };
   getDevice: {
     parameters: {
       path: {
@@ -1509,6 +1563,12 @@ export interface operations {
     responses: {
       /** The requested operation succeeded. */
       200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** The request was received, but the user is still configuring or placing sensors, so no notification has been generated. */
+      202: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
@@ -1638,6 +1698,28 @@ export interface operations {
       };
     };
   };
+  /** After connecting a device manager and finishing any necessary configuration of the facility's devices, send this request to enable processing of timeseries values and alerts from the device manager. Only valid if the facility's connection state is `Connected`. */
+  postConfigured_1: {
+    parameters: {
+      path: {
+        facilityId: number;
+      };
+    };
+    responses: {
+      /** The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** The facility's device manager was not in the process of being configured. */
+      409: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
   listFacilityDevices: {
     parameters: {
       path: {
@@ -1728,6 +1810,12 @@ export interface operations {
     responses: {
       /** The requested operation succeeded. */
       200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** The request was received, but the user is still configuring or placing sensors, so no notification has been generated. */
+      202: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
@@ -1851,6 +1939,28 @@ export interface operations {
       };
       /** The requested resource was not found. */
       404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** After connecting a device manager and finishing any necessary configuration of the facility's devices, send this request to enable processing of timeseries values and alerts from the device manager. Only valid if the facility's connection state is `Connected`. */
+  postConfigured: {
+    parameters: {
+      path: {
+        facilityId: number;
+      };
+    };
+    responses: {
+      /** The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** The facility's device manager was not in the process of being configured. */
+      409: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
@@ -3111,6 +3221,12 @@ export interface operations {
     responses: {
       /** Successfully processed the request. Note that this status will be returned even if the server was unable to record some of the values. In that case, the failed values will be returned in the response payload. */
       200: {
+        content: {
+          "application/json": components["schemas"]["RecordTimeseriesValuesResponsePayload"];
+        };
+      };
+      /** The request was valid, but the user is still configuring or placing sensors, so the timeseries values have not been recorded. */
+      202: {
         content: {
           "application/json": components["schemas"]["RecordTimeseriesValuesResponsePayload"];
         };
