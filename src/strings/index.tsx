@@ -461,6 +461,8 @@ const strings = new LocalizedStrings({
     SENSOR_KIT_SET_UP_DESCRIPTION: "If your seed bank has a sensor kit, let's set it up below.",
     SENSOR_KIT_SET_UP_TIME: 'This may take up to 30 minutes.',
     SENSOR_KIT_SET_UP_PV_SYSTEM: 'Select PV System',
+    SENSOR_KIT_SET_UP_PV_SYSTEM_DESCRIPTION:
+      'Our seed banks support multiple types of PV systems; select which one you have so that we can accurately display battery charge.',
     SENSOR_KIT_SET_UP_SENSOR_KIT_ID: 'Enter Sensor Kit ID',
     SENSOR_KIT_SET_UP_DEVICE_MANAGER: 'Install Device Manager Update',
     SENSOR_KIT_SET_UP_DETECT_SENSORS: 'Detect Sensors',
@@ -468,6 +470,7 @@ const strings = new LocalizedStrings({
     SENSOR_KIT_SET_UP_COMPLETE: 'Setup Complete!',
     SENSOR_KIT_SET_UP_COMPLETE_DESCRIPTION:
       'You will now be able to view solar battery charge and sensor data in your sensor monitoring dashboard.',
+    PV_SYSTEM: 'PV system',
   },
 });
 

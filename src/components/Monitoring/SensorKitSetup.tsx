@@ -4,9 +4,8 @@ import React, { useState } from 'react';
 import { ServerOrganization } from 'src/types/Organization';
 import strings from 'src/strings';
 import { Facility } from 'src/api/types/facilities';
-import Button from 'src/components/common/button/Button';
-import Expandable from '../common/Expandable';
-import Icon from '../common/icon/Icon';
+import FlowStep from './sensorKitSetup/FlowStep';
+import SelectPVSystem from './sensorKitSetup/SelectPVSystem';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -31,26 +30,6 @@ const useStyles = makeStyles((theme) =>
       margin: ' auto',
       marginTop: `${theme.spacing(5)}px`,
       justifyContent: 'center',
-    },
-    gridItem: {
-      display: 'flex',
-      justifyContent: 'center',
-      marginBottom: `${theme.spacing(2)}px`,
-    },
-    nextButton: {
-      float: 'right',
-      margin: `${theme.spacing(2)}px`,
-    },
-    flowFooter: {
-      float: 'left',
-      margin: `${theme.spacing(2)}px`,
-    },
-    icon: {
-      marginRight: `${theme.spacing(1)}px`,
-    },
-    titleContainer: {
-      display: 'flex',
-      alignItems: 'center',
     },
   })
 );
@@ -90,16 +69,12 @@ export default function SensorKitSetup(props: SensorKitSetupProps): JSX.Element 
         <div>{strings.SENSOR_KIT_SET_UP_TIME}</div>
       </div>
       <Grid container className={classes.onboardingContainer}>
-        <FlowStep
-          flowState='PVSystem'
+        <SelectPVSystem
           active={flowState === 'PVSystem'}
-          showNext={true}
           onNext={() => setCompletedAndNext('PVSystem', 'SensorKitID')}
-          title={strings.SENSOR_KIT_SET_UP_PV_SYSTEM}
           completed={completedSteps.PVSystem}
-        >
-          <div className={classes.text}>Onboarding PVSystem placeholder for {seedBank.id}</div>
-        </FlowStep>
+          seedBank={seedBank}
+        />
         <FlowStep
           flowState='SensorKitID'
           active={flowState === 'SensorKitID'}
@@ -155,50 +130,3 @@ export default function SensorKitSetup(props: SensorKitSetupProps): JSX.Element 
     </Container>
   );
 }
-
-type FlowStepProps = {
-  flowState: SetupFlowState;
-  title: string;
-  active: boolean;
-  completed: boolean | undefined;
-  children: React.ReactNode;
-  footer?: React.ReactNode;
-  showNext: boolean;
-  buttonText?: string;
-  onNext: () => void;
-};
-
-const FlowStep = (props: FlowStepProps) => {
-  const classes = useStyles();
-  const { flowState, title, active, completed, children, footer, showNext, buttonText, onNext } = props;
-
-  return (
-    <Grid item xs={12} className={classes.gridItem}>
-      <Expandable
-        title={
-          <div className={classes.titleContainer}>
-            {completed && <Icon name='checkmark' className={classes.icon} />}
-            <span className={classes.setupTitle}>{title}</span>
-          </div>
-        }
-        opened={active}
-        disabled={!active}
-      >
-        {children}
-        <div>
-          {footer && <div className={classes.flowFooter}>{footer}</div>}
-          {showNext && (
-            <Button
-              id={'flow-state-next-' + flowState}
-              label={buttonText || strings.NEXT}
-              onClick={onNext}
-              priority='secondary'
-              size='small'
-              className={classes.nextButton}
-            />
-          )}
-        </div>
-      </Expandable>
-    </Grid>
-  );
-};
