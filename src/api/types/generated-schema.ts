@@ -40,6 +40,10 @@ export interface paths {
     put: operations["updateAutomation_1"];
     delete: operations["deleteAutomation_1"];
   };
+  "/api/v1/facilities/{facilityId}/configured": {
+    /** After connecting a device manager and finishing any necessary configuration of the facility's devices, send this request to enable processing of timeseries values and alerts from the device manager. Only valid if the facility's connection state is `Connected`. */
+    post: operations["postConfigured_1"];
+  };
   "/api/v1/facilities/{facilityId}/devices": {
     get: operations["listFacilityDevices"];
   };
@@ -62,6 +66,10 @@ export interface paths {
     get: operations["getAutomation"];
     put: operations["updateAutomation"];
     delete: operations["deleteAutomation"];
+  };
+  "/api/v1/facility/{facilityId}/configured": {
+    /** After connecting a device manager and finishing any necessary configuration of the facility's devices, send this request to enable processing of timeseries values and alerts from the device manager. Only valid if the facility's connection state is `Connected`. */
+    post: operations["postConfigured"];
   };
   "/api/v1/facility/{facilityId}/devices": {
     get: operations["listFacilityDevices_1"];
@@ -1638,6 +1646,28 @@ export interface operations {
       };
     };
   };
+  /** After connecting a device manager and finishing any necessary configuration of the facility's devices, send this request to enable processing of timeseries values and alerts from the device manager. Only valid if the facility's connection state is `Connected`. */
+  postConfigured_1: {
+    parameters: {
+      path: {
+        facilityId: number;
+      };
+    };
+    responses: {
+      /** The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** The facility's device manager was not in the process of being configured. */
+      409: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
   listFacilityDevices: {
     parameters: {
       path: {
@@ -1851,6 +1881,28 @@ export interface operations {
       };
       /** The requested resource was not found. */
       404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** After connecting a device manager and finishing any necessary configuration of the facility's devices, send this request to enable processing of timeseries values and alerts from the device manager. Only valid if the facility's connection state is `Connected`. */
+  postConfigured: {
+    parameters: {
+      path: {
+        facilityId: number;
+      };
+    };
+    responses: {
+      /** The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** The facility's device manager was not in the process of being configured. */
+      409: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
