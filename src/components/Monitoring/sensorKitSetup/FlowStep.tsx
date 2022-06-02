@@ -58,6 +58,7 @@ type FlowStepProps = {
   buttonText?: string;
   onNext: () => void;
   genericError?: string;
+  genericErrorTitle?: string;
 };
 
 export default function FlowStep(props: FlowStepProps): JSX.Element {
@@ -75,6 +76,7 @@ export default function FlowStep(props: FlowStepProps): JSX.Element {
     buttonText,
     onNext,
     genericError,
+    genericErrorTitle,
   } = props;
 
   return (
@@ -90,7 +92,9 @@ export default function FlowStep(props: FlowStepProps): JSX.Element {
         disabled={!active}
       >
         <div className={classes.flowContent}>
-          {genericError && <ErrorBox text={genericError} className={classes.errorBox} />}
+          {(genericError || genericErrorTitle) && (
+            <ErrorBox text={genericError || ''} title={genericErrorTitle || ''} className={classes.errorBox} />
+          )}
           {children}
           <div className={classes.flowFooter + (footerError ? ' ' + classes.flowFooterError : '')}>
             <span>{footer}</span>
