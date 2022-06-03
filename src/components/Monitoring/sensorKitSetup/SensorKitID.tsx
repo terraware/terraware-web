@@ -34,8 +34,7 @@ export default function SensorKitID(props: SensorKitIDProps): JSX.Element {
     if (!active) {
       return;
     }
-    const connectionState = seedBank.connectionState;
-    if (connectionState === 'Not Connected') {
+    if (seedBank.connectionState === 'Not Connected') {
       setInitialized(true);
     } else {
       onNext(undefined);

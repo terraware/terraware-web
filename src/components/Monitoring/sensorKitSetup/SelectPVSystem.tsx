@@ -6,6 +6,7 @@ import { DeviceTemplate } from 'src/types/Device';
 import Select from '../../common/Select/Select';
 import FlowStep, { FlowError } from './FlowStep';
 import { listDeviceTemplates, createDevice } from 'src/api/device/device';
+import { listFacilityDevices } from 'src/api/facility/facility';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -30,6 +31,7 @@ export default function SelectPVSystem(props: SelectPVSystemProps): JSX.Element 
   const [showError, setShowError] = useState<boolean>(false);
   const [flowError, setFlowError] = useState<FlowError | undefined>();
   const [processing, setProcessing] = useState<boolean>(false);
+  const [initialized, setInitialized] = useState<boolean>(false);
 
   const onChange = (pvSystemName: string) => {
     const foundPVSystem = availablePVSystems.find((pvSystem) => pvSystem.name === pvSystemName);
@@ -39,10 +41,38 @@ export default function SelectPVSystem(props: SelectPVSystemProps): JSX.Element 
   };
 
   useEffect(() => {
-    const fetchDeviceTemplates = async () => {
+    const fetchDevices = async () => {
+      const response = await listFacilityDevices(seedBank);
+      if (!response.requestSucceeded) {
+        setFlowError({
+          title: strings.SERVER_ERROR,
+          text: strings.GENERIC_ERROR,
+        });
+        return null;
+      }
+      return response.devices;
+    };
+
+    const initializeDeviceTemplates = async () => {
       const deviceTemplates = await listDeviceTemplates('PV');
       if (deviceTemplates.requestSucceeded) {
+        const devices = await fetchDevices();
+        if (!devices) {
+          return;
+        }
+        if (
+          devices.find((device) => {
+            return deviceTemplates.templates.find((template) => {
+              return template.make === device.make && template.model === device.model && template.type === device.type;
+            });
+          })
+        ) {
+          // advance to next step as user has already picked a PV system
+          onNext();
+          return;
+        }
         setAvailablePVSystems(deviceTemplates.templates);
+        setInitialized(true);
       } else {
         setFlowError({
           title: strings.SERVER_ERROR,
@@ -51,8 +81,14 @@ export default function SelectPVSystem(props: SelectPVSystemProps): JSX.Element 
       }
     };
 
-    fetchDeviceTemplates();
-  }, [setAvailablePVSystems, seedBank]);
+    if (active) {
+      if (seedBank.connectionState === 'Not Connected') {
+        initializeDeviceTemplates();
+      } else {
+        onNext();
+      }
+    }
+  }, [setAvailablePVSystems, seedBank, onNext, setInitialized, active]);
 
   const goToNext = () => {
     setFlowError(undefined);
@@ -82,7 +118,7 @@ export default function SelectPVSystem(props: SelectPVSystemProps): JSX.Element 
   return (
     <FlowStep
       flowState='PVSystem'
-      active={active}
+      active={active && initialized}
       showNext={true}
       disableNext={processing}
       flowError={flowError}
