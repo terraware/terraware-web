@@ -62,7 +62,6 @@ export default function SelectPVSystem(props: SelectPVSystemProps): JSX.Element 
             return deviceTemplates.templates.find((template) => {
               return (
                 template.name === device.name &&
-                template.name === device.name &&
                 template.make === device.make &&
                 template.model === device.model &&
                 template.type === device.type
