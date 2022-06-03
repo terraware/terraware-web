@@ -44,7 +44,10 @@ export default function SelectPVSystem(props: SelectPVSystemProps): JSX.Element 
     const fetchDevices = async () => {
       const response = await listFacilityDevices(seedBank);
       if (!response.requestSucceeded) {
-        setGenericError(strings.GENERIC_ERROR);
+        setFlowError({
+          title: strings.SERVER_ERROR,
+          text: strings.GENERIC_ERROR,
+        });
         return null;
       }
       return response.devices;
@@ -84,7 +87,11 @@ export default function SelectPVSystem(props: SelectPVSystemProps): JSX.Element 
     };
 
     if (active) {
-      initializeDeviceTemplates();
+      if (seedBank.connectionState === 'Not Connected') {
+        initializeDeviceTemplates();
+      } else {
+        onNext();
+      }
     }
   }, [setAvailablePVSystems, seedBank, onNext, setInitialized, active]);
 
