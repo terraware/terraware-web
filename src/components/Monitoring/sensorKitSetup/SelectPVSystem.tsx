@@ -63,11 +63,7 @@ export default function SelectPVSystem(props: SelectPVSystemProps): JSX.Element 
         if (
           devices.find((device) => {
             return deviceTemplates.templates.find((template) => {
-              return (
-                template.make === device.make &&
-                template.model === device.model &&
-                template.type === device.type
-              );
+              return template.make === device.make && template.model === device.model && template.type === device.type;
             });
           })
         ) {
