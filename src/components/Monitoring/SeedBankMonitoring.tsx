@@ -15,6 +15,7 @@ import { Chart } from 'chart.js';
 import { Device } from 'src/types/Device';
 import Icon from '../common/icon/Icon';
 import { Grid } from '@material-ui/core';
+import { listTimeseries } from 'src/api/device/device';
 
 declare global {
   interface Window {
@@ -102,6 +103,7 @@ export default function Monitoring(props: SeedBankMonitoringProps): JSX.Element 
   const [availableLocations, setAvailableLocations] = useState<Device[]>();
   const [selectedLocation, setSelectedLocation] = useState<Device>();
   const [selectedPeriod, setSelectedPeriod] = useState<string>();
+  const [batteryLevel, setBatteryLevel] = useState<string>();
 
   useEffect(() => {
     const isConnected = seedBank.connectionState === 'Connected';
@@ -121,6 +123,24 @@ export default function Monitoring(props: SeedBankMonitoringProps): JSX.Element 
     };
     populateLocations();
   }, [seedBank]);
+
+  useEffect(() => {
+    const populateBaterryLevel = async () => {
+      const BMU = availableLocations?.filter((device) => device.type === 'BMU');
+      if (BMU) {
+        const response = await listTimeseries(BMU[0]);
+        if (response.requestSucceeded) {
+          const bmuTimeseries = response.timeseries;
+          console.log(bmuTimeseries);
+          const battery = bmuTimeseries.filter((bmuTs) => bmuTs.timeseriesName === 'relative_state_of_charge');
+          if (battery[0] && battery[0].latestValue) {
+            setBatteryLevel(battery[0].latestValue?.value);
+          }
+        }
+      }
+    };
+    populateBaterryLevel();
+  }, [availableLocations]);
 
   const onChangeLocation = (newValue: string) => {
     setSelectedLocation(availableLocations?.find((aL) => aL.name === newValue));
@@ -291,7 +311,7 @@ export default function Monitoring(props: SeedBankMonitoringProps): JSX.Element 
                       <p>{strings.PV_BATTERY_CHARGE}</p>
                       <Icon name='chargingBattery' />
                     </div>
-                    <p className={classes.panelValue}>80%</p>
+                    <p className={classes.panelValue}>{batteryLevel}</p>
                   </div>
                 </Grid>
                 <Grid item xs={6}>

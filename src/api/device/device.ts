@@ -1,7 +1,8 @@
 import axios from '..';
-import { DeviceTemplate } from 'src/types/Device';
+import { Device, DeviceTemplate } from 'src/types/Device';
 import { paths } from 'src/api/types/generated-schema';
 import addQueryParams from '../helpers/addQueryParams';
+import { Timeseries } from 'src/types/TimeSerie';
 
 const DEVICES_ENDPOINT = '/api/v1/devices';
 const TEMPLATES_ENDPOINT = '/api/v1/devices/templates';
@@ -78,6 +79,42 @@ export const createDevice = async (facilityId: number, template: DeviceTemplate)
     };
 
     await axios.post(DEVICES_ENDPOINT, createDeviceRequestPayload);
+  } catch {
+    response.requestSucceeded = false;
+  }
+
+  return response;
+};
+
+const TIMESERIES_ENDPOINT = '/api/v1/timeseries';
+type TimeseriesResponse = {
+  timeseries: Timeseries[];
+  requestSucceeded: boolean;
+};
+
+type ListTimeseriesResponsePayload =
+  paths[typeof TIMESERIES_ENDPOINT]['get']['responses'][200]['content']['application/json'];
+type TimeseriesQuery = paths[typeof TIMESERIES_ENDPOINT]['get']['parameters']['query'];
+
+export const listTimeseries = async (device: Device): Promise<TimeseriesResponse> => {
+  const response: TimeseriesResponse = {
+    timeseries: [],
+    requestSucceeded: true,
+  };
+
+  try {
+    const queryParams: TimeseriesQuery = { deviceId: [device.id] };
+    const endpoint = addQueryParams(TIMESERIES_ENDPOINT, queryParams);
+    const serverResponse: ListTimeseriesResponsePayload = (await axios.get(endpoint)).data;
+
+    response.timeseries = serverResponse.timeseries.map((ts) => ({
+      deviceId: ts.deviceId,
+      timeseriesName: ts.timeseriesName,
+      type: ts.type,
+      decimalPlaces: ts.decimalPlaces,
+      units: ts.units,
+      latestValue: ts.latestValue,
+    }));
   } catch {
     response.requestSucceeded = false;
   }

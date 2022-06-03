@@ -246,6 +246,9 @@ export interface paths {
     /** The species will no longer appear in the organization's list of species, but existing data (plants, seeds, etc.) that refer to the species will still refer to it. */
     delete: operations["deleteSpecies"];
   };
+  "/api/v1/timeseries": {
+    get: operations["listTimeseries"];
+  };
   "/api/v1/timeseries/create": {
     /** If there are existing timeseries with the same names, the old definitions will be overwritten. */
     post: operations["createMultipleTimeseries"];
@@ -590,27 +593,16 @@ export interface components {
       updateProgress?: number;
     };
     DeviceTemplatePayload: {
-      /** Device template id */
       id: number;
-      /** Device template category */
       category: "PV";
-      /** Device template name */
       name: string;
-      /** Device template type */
       type: string;
-      /** Device template make */
       make: string;
-      /** Device template model */
       model: string;
-      /** Device template protocol */
       protocol?: string;
-      /** Device template address */
       address?: string;
-      /** Device template port */
       port?: number;
-      /** Device template settings */
       settings?: { [key: string]: { [key: string]: unknown } };
-      /** Device template polling interval */
       pollingInterval?: number;
     };
     ErrorDetails: {
@@ -876,6 +868,10 @@ export interface components {
     };
     ListSpeciesResponsePayload: {
       species: components["schemas"]["SpeciesResponseElement"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    ListTimeseriesResponsePayload: {
+      timeseries: components["schemas"]["TimeseriesPayload"][];
       status: components["schemas"]["SuccessOrError"];
     };
     ModifyAutomationRequestPayload: {
@@ -1169,6 +1165,17 @@ export interface components {
     SummaryStatistic: {
       current: number;
       lastWeek: number;
+    };
+    TimeseriesPayload: {
+      /** ID of device that produces this timeseries. */
+      deviceId: number;
+      timeseriesName: string;
+      type: "Numeric" | "Text";
+      /** Number of significant fractional digits (after the decimal point), if this is a timeseries with non-integer numeric values. */
+      decimalPlaces?: number;
+      /** Units of measure for values in this timeseries. */
+      units?: string;
+      latestValue?: components["schemas"]["TimeseriesValuePayload"];
     };
     TimeseriesValuePayload: {
       timestamp: string;
@@ -3197,6 +3204,21 @@ export interface operations {
       409: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  listTimeseries: {
+    parameters: {
+      query: {
+        deviceId: number[];
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListTimeseriesResponsePayload"];
         };
       };
     };
