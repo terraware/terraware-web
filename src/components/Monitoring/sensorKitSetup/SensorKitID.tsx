@@ -4,7 +4,7 @@ import strings from 'src/strings';
 import { Facility } from 'src/api/types/facilities';
 import { DeviceManager } from 'src/types/DeviceManager';
 import TextField from '../../common/Textfield/Textfield';
-import FlowStep from './FlowStep';
+import FlowStep, { FlowError } from './FlowStep';
 import { listDeviceManagers } from 'src/api/deviceManager/deviceManager';
 
 const useStyles = makeStyles((theme) =>
@@ -27,8 +27,7 @@ export default function SensorKitID(props: SensorKitIDProps): JSX.Element {
   const { seedBank, active, completed, onNext } = props;
   const [shortCode, setShortCode] = useState<string | undefined>();
   const [error, setError] = useState<string | undefined>();
-  const [genericErrorTitle, setGenericErrorTitle] = useState<string | undefined>();
-  const [genericError, setGenericError] = useState<string | undefined>();
+  const [flowError, setFlowError] = useState<FlowError | undefined>();
   const [initialized, setInitialized] = useState<boolean>(false);
 
   useEffect(() => {
@@ -49,32 +48,33 @@ export default function SensorKitID(props: SensorKitIDProps): JSX.Element {
 
   const goToNext = () => {
     setError(undefined);
-    setGenericError(undefined);
-    setGenericErrorTitle(undefined);
+    setFlowError(undefined);
 
     if (!shortCode) {
       setError(strings.REQUIRED_FIELD);
-      setGenericError(strings.FILL_OUT_ALL_FIELDS);
+      setFlowError({ text: strings.FILL_OUT_ALL_FIELDS });
       return;
     }
 
     const fetchDeviceManager = async () => {
       const response = await listDeviceManagers(shortCode);
       if (response.requestSucceeded === false) {
-        setGenericError(strings.PLEASE_TRY_AGAIN);
-        setGenericErrorTitle(strings.SERVER_ERROR);
+        setFlowError({
+          title: strings.SERVER_ERROR,
+          text: strings.PLEASE_TRY_AGAIN,
+        });
         return;
       }
       if (!response.managers.length) {
         setError(strings.KEY_WAS_NOT_RECOGNIZED);
-        setGenericError(strings.PLEASE_TRY_AGAIN);
+        setFlowError({ text: strings.PLEASE_TRY_AGAIN });
         return;
       }
 
       const manager = response.managers[0];
       if (manager.facilityId && manager.facilityId !== seedBank.id) {
         setError(strings.KEY_BELONGS_TO_ANOTHER_SEED_BANK);
-        setGenericError(strings.PLEASE_TRY_AGAIN);
+        setFlowError({ text: strings.PLEASE_TRY_AGAIN });
         return;
       }
 
@@ -89,8 +89,7 @@ export default function SensorKitID(props: SensorKitIDProps): JSX.Element {
       flowState='SensorKitID'
       active={active && initialized}
       showNext={true}
-      genericError={genericError}
-      genericErrorTitle={genericErrorTitle}
+      flowError={flowError}
       onNext={goToNext}
       title={strings.SENSOR_KIT_SET_UP_SENSOR_KIT_ID}
       completed={completed}
