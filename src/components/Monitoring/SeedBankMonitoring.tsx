@@ -13,6 +13,8 @@ import Select from '../common/Select/Select';
 import { listFacilityDevices } from 'src/api/facility/facility';
 import { Chart } from 'chart.js';
 import { Device } from 'src/types/Device';
+import Icon from '../common/icon/Icon';
+import { Grid } from '@material-ui/core';
 
 declare global {
   interface Window {
@@ -33,7 +35,6 @@ const useStyles = makeStyles((theme) =>
     },
     text: {
       fontSize: '24px',
-      margin: 'auto auto',
     },
     message: {
       margin: '0 auto',
@@ -64,6 +65,26 @@ const useStyles = makeStyles((theme) =>
     },
     chart: {
       width: '800px',
+    },
+    panelTitle: {
+      display: 'flex',
+      fontSize: '20px',
+      fontWeight: 600,
+      justifyContent: 'space-between',
+
+      '& p': {
+        margin: '0 0 32px 0',
+      },
+    },
+    panelValue: {
+      fontWeight: 600,
+      fontSize: '48px',
+      margin: 0,
+    },
+    mainGrid: {
+      display: 'flex',
+      width: '100%',
+      margin: 0,
     },
   })
 );
@@ -263,26 +284,48 @@ export default function Monitoring(props: SeedBankMonitoringProps): JSX.Element 
         <div className={classes.placeholder}>
           <span className={classes.text}>
             {seedBank?.connectionState === 'Configured' ? (
-              <div className={classes.graphContainer}>
-                <p className={classes.graphTitle}>{strings.TEMPERATURE_AND_HUMIDITY_SENSOR_DATA}</p>
-                <div className={classes.dropDownsContainer}>
-                  <Select
-                    options={availableLocations?.map((aL) => aL.name)}
-                    selectedValue={selectedLocation?.name}
-                    onChange={onChangeLocation}
-                    label={strings.LOCATION}
-                  />
-                  <Select
-                    options={['Last 12 hours', 'Last 24 hours', 'Last 7 days', 'Last 30 days']}
-                    onChange={onChangeSelectedPeriod}
-                    selectedValue={selectedPeriod}
-                    label={strings.TIME_PERIOD}
-                  />
-                </div>
-                <div className={classes.chartContainer}>
-                  <canvas id='myChart' ref={chartRef} className={classes.chart} />
-                </div>
-              </div>
+              <Grid container spacing={3} className={classes.mainGrid}>
+                <Grid item xs={6}>
+                  <div className={classes.graphContainer}>
+                    <div className={classes.panelTitle}>
+                      <p>{strings.PV_BATTERY_CHARGE}</p>
+                      <Icon name='chargingBattery' />
+                    </div>
+                    <p className={classes.panelValue}>80%</p>
+                  </div>
+                </Grid>
+                <Grid item xs={6}>
+                  <div className={classes.graphContainer}>
+                    <div className={classes.panelTitle}>
+                      <p>{strings.SEED_BANK_INTERNET}</p>
+                      <Icon name='wifi' />
+                    </div>
+                    <p className={classes.panelValue}>{strings.CONNECTED}</p>
+                  </div>
+                </Grid>
+                <Grid item xs={12}>
+                  <div className={classes.graphContainer}>
+                    <p className={classes.graphTitle}>{strings.TEMPERATURE_AND_HUMIDITY_SENSOR_DATA}</p>
+                    <div className={classes.dropDownsContainer}>
+                      <Select
+                        options={availableLocations?.map((aL) => aL.name)}
+                        selectedValue={selectedLocation?.name}
+                        onChange={onChangeLocation}
+                        label={strings.LOCATION}
+                      />
+                      <Select
+                        options={['Last 12 hours', 'Last 24 hours', 'Last 7 days', 'Last 30 days']}
+                        onChange={onChangeSelectedPeriod}
+                        selectedValue={selectedPeriod}
+                        label={strings.TIME_PERIOD}
+                      />
+                    </div>
+                    <div className={classes.chartContainer}>
+                      <canvas id='myChart' ref={chartRef} className={classes.chart} />
+                    </div>
+                  </div>
+                </Grid>
+              </Grid>
             ) : (
               <>
                 {isAdmin(organization) ? (

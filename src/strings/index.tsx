@@ -474,6 +474,9 @@ const strings = new LocalizedStrings({
     SENSOR_KIT_SET_UP_COMPLETE_DESCRIPTION:
       'You will now be able to view solar battery charge and sensor data in your sensor monitoring dashboard.',
     PV_SYSTEM: 'PV system',
+    PV_BATTERY_CHARGE: 'PV Battery Charge',
+    SEED_BANK_INTERNET: 'Seed Bank Internet',
+    CONNECTED: 'Connected',
   },
 });
 
