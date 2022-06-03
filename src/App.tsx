@@ -212,16 +212,21 @@ export default function App() {
   } else if (orgAPIRequestStatus === APIRequestStatus.FAILED) {
     history.push(APP_PATHS.ERROR_FAILED_TO_FETCH_ORG_DATA);
     return null;
-  } else if (orgAPIRequestStatus === APIRequestStatus.SUCCEEDED && organizations?.length === 0) {
-    return (
-      <>
-        <TopBar>
-          <UserMenu user={user} reloadUser={reloadUser} />
-        </TopBar>
-        <ToastSnackbar />
-        <NoOrgLandingPage reloadOrganizationData={reloadData} />
-      </>
-    );
+  } else if (orgAPIRequestStatus === APIRequestStatus.SUCCEEDED) {
+    if (organizations?.length === 0) {
+      return (
+        <>
+          <TopBar>
+            <UserMenu user={user} reloadUser={reloadUser} />
+          </TopBar>
+          <ToastSnackbar />
+          <NoOrgLandingPage reloadOrganizationData={reloadData} />
+        </>
+      );
+    } else if (!selectedOrganization) {
+      // This allows is to reload open views that require an organization
+      return <CircularProgress className={classes.spinner} size='193' />;
+    }
   } else if (isMobile) {
     window.stop();
     return <ErrorBox title={strings.NO_MOBILE_SUPPORT_TITLE} text={strings.NO_MOBILE_SUPPORT_DESC} />;
@@ -350,6 +355,11 @@ export default function App() {
               </Route>
               {selectedOrganization && (
                 <Route exact path={APP_PATHS.MONITORING}>
+                  <Monitoring organization={selectedOrganization} hasSeedBanks={selectedOrgHasSeedBanks()} />
+                </Route>
+              )}
+              {selectedOrganization && (
+                <Route exact path={APP_PATHS.SEED_BANK_MONITORING}>
                   <Monitoring organization={selectedOrganization} hasSeedBanks={selectedOrgHasSeedBanks()} />
                 </Route>
               )}

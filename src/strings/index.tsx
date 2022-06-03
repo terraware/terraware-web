@@ -455,10 +455,25 @@ const strings = new LocalizedStrings({
     SET_UP_YOUR_SENSOR_KIT_MSG:
       "If your seed bank was built by Terraformation, it is equipped with a sensor kit that you can remotely monitor things like the seed bank's temperature and humidity. To set this up, you'll need to connect your seed bank to the Terraware web app. This may take up to 30 minutes.",
     START_SET_UP: 'Start Setup',
+    NEXT: 'Next',
     SENSOR_KIT_SET_UP: 'Sensor Kit Set Up',
     TEMPERATURE_AND_HUMIDITY_SENSOR_DATA: 'Temperature & Humidity Sensor Data',
     TIME_PERIOD: 'Time Period',
     REFRESH_DATA: 'Refresh Data',
+    SENSOR_KIT_SET_UP_TITLE: "Let's Set Up Your Sensor Kit!",
+    SENSOR_KIT_SET_UP_DESCRIPTION: "If your seed bank has a sensor kit, let's set it up below.",
+    SENSOR_KIT_SET_UP_TIME: 'This may take up to 30 minutes.',
+    SENSOR_KIT_SET_UP_PV_SYSTEM: 'Select PV System',
+    SENSOR_KIT_SET_UP_PV_SYSTEM_DESCRIPTION:
+      'Our seed banks support multiple types of PV systems; select which one you have so that we can accurately display battery charge.',
+    SENSOR_KIT_SET_UP_SENSOR_KIT_ID: 'Enter Sensor Kit ID',
+    SENSOR_KIT_SET_UP_DEVICE_MANAGER: 'Install Device Manager Update',
+    SENSOR_KIT_SET_UP_DETECT_SENSORS: 'Detect Sensors',
+    SENSOR_KIT_SET_UP_SENSOR_LOCATIONS: 'Assign Sensor Locations',
+    SENSOR_KIT_SET_UP_COMPLETE: 'Setup Complete!',
+    SENSOR_KIT_SET_UP_COMPLETE_DESCRIPTION:
+      'You will now be able to view solar battery charge and sensor data in your sensor monitoring dashboard.',
+    PV_SYSTEM: 'PV system',
   },
 });
 
