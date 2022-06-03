@@ -464,6 +464,8 @@ const strings = new LocalizedStrings({
     SENSOR_KIT_SET_UP_PV_SYSTEM_DESCRIPTION:
       'Our seed banks support multiple types of PV systems; select which one you have so that we can accurately display battery charge.',
     SENSOR_KIT_SET_UP_SENSOR_KIT_ID: 'Enter Sensor Kit ID',
+    SENSOR_KIT_SET_UP_SENSOR_KIT_ID_DESCRIPTION:
+      'Find your sensor kit ID on the outside of your sensor kit. This will connect the Device Manager inside the kit to our database.',
     SENSOR_KIT_SET_UP_DEVICE_MANAGER: 'Install Device Manager Update',
     SENSOR_KIT_SET_UP_DETECT_SENSORS: 'Detect Sensors',
     SENSOR_KIT_SET_UP_SENSOR_LOCATIONS: 'Assign Sensor Locations',
@@ -471,6 +473,12 @@ const strings = new LocalizedStrings({
     SENSOR_KIT_SET_UP_COMPLETE_DESCRIPTION:
       'You will now be able to view solar battery charge and sensor data in your sensor monitoring dashboard.',
     PV_SYSTEM: 'PV system',
+    ENTER_SIX_DIGIT_KEY: 'Enter 6-digit key',
+    SENSOR_KIT_ID_PLACEHOLDER: 'XXXXXX',
+    KEY_WAS_NOT_RECOGNIZED: 'Key was not recognized.',
+    PLEASE_TRY_AGAIN: 'Please try again.',
+    SERVER_ERROR: 'Server Error',
+    KEY_BELONGS_TO_ANOTHER_SEED_BANK: 'Key is associated with another seed bank.',
   },
 });
 

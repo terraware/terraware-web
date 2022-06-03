@@ -4,8 +4,10 @@ import React, { useState } from 'react';
 import { ServerOrganization } from 'src/types/Organization';
 import strings from 'src/strings';
 import { Facility } from 'src/api/types/facilities';
+import { DeviceManager } from 'src/types/DeviceManager';
 import FlowStep from './sensorKitSetup/FlowStep';
 import SelectPVSystem from './sensorKitSetup/SelectPVSystem';
+import SensorKitID from './sensorKitSetup/SensorKitID';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -51,6 +53,7 @@ export default function SensorKitSetup(props: SensorKitSetupProps): JSX.Element 
   const { seedBank, onFinish } = props;
   const [flowState, setFlowState] = useState<SetupFlowState>('PVSystem');
   const [completedSteps, setCompletedSteps] = useState<Completed>({});
+  const [, setDeviceManager] = useState<DeviceManager | undefined>();
 
   const setCompletedAndNext = (currentState: SetupFlowState, nextState: SetupFlowState) => {
     setCompletedSteps((currentCompleted) => {
@@ -75,16 +78,15 @@ export default function SensorKitSetup(props: SensorKitSetupProps): JSX.Element 
           completed={completedSteps.PVSystem}
           seedBank={seedBank}
         />
-        <FlowStep
-          flowState='SensorKitID'
+        <SensorKitID
           active={flowState === 'SensorKitID'}
-          showNext={true}
-          onNext={() => setCompletedAndNext('SensorKitID', 'DeviceManager')}
-          title={strings.SENSOR_KIT_SET_UP_SENSOR_KIT_ID}
+          onNext={(deviceManager) => {
+            setDeviceManager(deviceManager);
+            setCompletedAndNext('SensorKitID', 'DeviceManager');
+          }}
           completed={completedSteps.SensorKitID}
-        >
-          <div className={classes.text}>Onboarding SensorKitID placeholder for {seedBank.id}</div>
-        </FlowStep>
+          seedBank={seedBank}
+        />
         <FlowStep
           flowState='DeviceManager'
           active={flowState === 'DeviceManager'}
