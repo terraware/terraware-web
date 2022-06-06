@@ -45,6 +45,11 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
+export type FlowError = {
+  title?: string;
+  text?: string;
+};
+
 type FlowStepProps = {
   flowState: string;
   title: string;
@@ -57,7 +62,7 @@ type FlowStepProps = {
   disableNext?: boolean;
   buttonText?: string;
   onNext: () => void;
-  genericError?: string;
+  flowError?: FlowError;
 };
 
 export default function FlowStep(props: FlowStepProps): JSX.Element {
@@ -74,7 +79,7 @@ export default function FlowStep(props: FlowStepProps): JSX.Element {
     disableNext,
     buttonText,
     onNext,
-    genericError,
+    flowError,
   } = props;
 
   return (
@@ -90,7 +95,9 @@ export default function FlowStep(props: FlowStepProps): JSX.Element {
         disabled={!active}
       >
         <div className={classes.flowContent}>
-          {genericError && <ErrorBox text={genericError} className={classes.errorBox} />}
+          {(flowError?.title || flowError?.text) && (
+            <ErrorBox text={flowError?.text || ''} title={flowError?.title || ''} className={classes.errorBox} />
+          )}
           {children}
           <div className={classes.flowFooter + (footerError ? ' ' + classes.flowFooterError : '')}>
             <span>{footer}</span>

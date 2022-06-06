@@ -4,8 +4,9 @@ import strings from 'src/strings';
 import { Facility } from 'src/api/types/facilities';
 import { DeviceTemplate } from 'src/types/Device';
 import Select from '../../common/Select/Select';
-import FlowStep from './FlowStep';
+import FlowStep, { FlowError } from './FlowStep';
 import { listDeviceTemplates, createDevice } from 'src/api/device/device';
+import { listFacilityDevices } from 'src/api/facility/facility';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -28,35 +29,73 @@ export default function SelectPVSystem(props: SelectPVSystemProps): JSX.Element 
   const [availablePVSystems, setAvailablePVSystems] = useState<DeviceTemplate[]>([]);
   const [selectedPVSystem, setSelectedPVSystem] = useState<DeviceTemplate | undefined>();
   const [showError, setShowError] = useState<boolean>(false);
-  const [genericError, setGenericError] = useState<string | undefined>();
+  const [flowError, setFlowError] = useState<FlowError | undefined>();
   const [processing, setProcessing] = useState<boolean>(false);
+  const [initialized, setInitialized] = useState<boolean>(false);
 
   const onChange = (pvSystemName: string) => {
     const foundPVSystem = availablePVSystems.find((pvSystem) => pvSystem.name === pvSystemName);
     setSelectedPVSystem(foundPVSystem);
     setShowError(foundPVSystem === undefined);
-    setGenericError(undefined);
+    setFlowError(undefined);
   };
 
   useEffect(() => {
-    const fetchDeviceTemplates = async () => {
+    const fetchDevices = async () => {
+      const response = await listFacilityDevices(seedBank);
+      if (!response.requestSucceeded) {
+        setFlowError({
+          title: strings.SERVER_ERROR,
+          text: strings.GENERIC_ERROR,
+        });
+        return null;
+      }
+      return response.devices;
+    };
+
+    const initializeDeviceTemplates = async () => {
       const deviceTemplates = await listDeviceTemplates('PV');
       if (deviceTemplates.requestSucceeded) {
+        const devices = await fetchDevices();
+        if (!devices) {
+          return;
+        }
+        if (
+          devices.find((device) => {
+            return deviceTemplates.templates.find((template) => {
+              return template.make === device.make && template.model === device.model && template.type === device.type;
+            });
+          })
+        ) {
+          // advance to next step as user has already picked a PV system
+          onNext();
+          return;
+        }
         setAvailablePVSystems(deviceTemplates.templates);
+        setInitialized(true);
       } else {
-        setGenericError(strings.GENERIC_ERROR);
+        setFlowError({
+          title: strings.SERVER_ERROR,
+          text: strings.GENERIC_ERROR,
+        });
       }
     };
 
-    fetchDeviceTemplates();
-  }, [setAvailablePVSystems, seedBank]);
+    if (active) {
+      if (seedBank.connectionState === 'Not Connected') {
+        initializeDeviceTemplates();
+      } else {
+        onNext();
+      }
+    }
+  }, [setAvailablePVSystems, seedBank, onNext, setInitialized, active]);
 
   const goToNext = () => {
-    setGenericError(undefined);
+    setFlowError(undefined);
 
     if (!selectedPVSystem) {
       setShowError(true);
-      setGenericError(strings.FILL_OUT_ALL_FIELDS);
+      setFlowError({ text: strings.FILL_OUT_ALL_FIELDS });
       return;
     }
 
@@ -65,7 +104,10 @@ export default function SelectPVSystem(props: SelectPVSystemProps): JSX.Element 
       const createDeviceResponse = await createDevice(seedBank.id, selectedPVSystem);
       setProcessing(false);
       if (createDeviceResponse.requestSucceeded === false) {
-        setGenericError(strings.GENERIC_ERROR);
+        setFlowError({
+          title: strings.SERVER_ERROR,
+          text: strings.GENERIC_ERROR,
+        });
         return;
       }
       onNext();
@@ -76,10 +118,10 @@ export default function SelectPVSystem(props: SelectPVSystemProps): JSX.Element 
   return (
     <FlowStep
       flowState='PVSystem'
-      active={active}
+      active={active && initialized}
       showNext={true}
       disableNext={processing}
-      genericError={genericError}
+      flowError={flowError}
       onNext={goToNext}
       title={strings.SENSOR_KIT_SET_UP_PV_SYSTEM}
       completed={completed}

@@ -111,9 +111,11 @@ export default function TextField(props: Props): JSX.Element {
           </label>
         </div>
       )}
-      <label htmlFor={id} className='textfield-help-text'>
-        {helperText}
-      </label>
+      {helperText && (
+        <label htmlFor={id} className='textfield-help-text'>
+          {helperText}
+        </label>
+      )}
     </div>
   );
 }
