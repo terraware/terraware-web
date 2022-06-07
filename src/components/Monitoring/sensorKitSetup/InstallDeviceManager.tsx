@@ -64,7 +64,7 @@ export default function InstallDeviceManager(props: InstallDeviceManagerProps): 
 
       // if we have polled for over 20 minutes, stop and error out
       const currentTime = Date.now();
-      if (pollingStartedOn && currentTime - pollingStartedOn >= 1 * 60 * 1000) {
+      if (pollingStartedOn && currentTime - pollingStartedOn >= 20 * 60 * 1000) {
         setFlowError({
           title: strings.DOWNLOAD_FAILED,
           text: strings.DOWNLOAD_FAILED_DESCRIPTION,
