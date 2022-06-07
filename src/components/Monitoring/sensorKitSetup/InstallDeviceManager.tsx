@@ -128,7 +128,7 @@ export default function InstallDeviceManager(props: InstallDeviceManagerProps): 
 
   return (
     <FlowStep
-      flowState='SensorKitID'
+      flowState='DeviceManager'
       active={active && initialized}
       showNext={updateFinished}
       flowError={flowError}
