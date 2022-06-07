@@ -3,7 +3,6 @@ import { Device, DeviceTemplate } from 'src/types/Device';
 import { paths } from 'src/api/types/generated-schema';
 import addQueryParams from '../helpers/addQueryParams';
 import { Timeseries, TimeseriesHistory } from 'src/types/Timeseries';
-import { count } from 'console';
 
 const DEVICES_ENDPOINT = '/api/v1/devices';
 const TEMPLATES_ENDPOINT = '/api/v1/devices/templates';
@@ -152,10 +151,10 @@ export const getTimeseriesHistory = async (
   };
 
   const getTimeseriesRequestPayload: GetTimeseriesRequestPayload = {
-    startTime: startTime,
-    endTime: endTime,
-    timeseries: timeseries,
-    count: count,
+    startTime,
+    endTime,
+    timeseries,
+    count,
   };
 
   try {

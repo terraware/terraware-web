@@ -167,7 +167,7 @@ export default function Monitoring(props: SeedBankMonitoringProps): JSX.Element 
 
   const onChangeSelectedPeriod = async (newValue: string) => {
     setSelectedPeriod(newValue);
-    let startTime = getStartTime(newValue);
+    const startTime = getStartTime(newValue);
     const endTime = moment();
 
     if (selectedLocation) {
@@ -192,7 +192,7 @@ export default function Monitoring(props: SeedBankMonitoringProps): JSX.Element 
 
   const onChangePVBatterySelectedPeriod = async (newValue: string) => {
     setSelectedPVBatteryPeriod(newValue);
-    let startTime = getStartTime(newValue);
+    const startTime = getStartTime(newValue);
     const endTime = moment();
     if (BMU) {
       const response = await getTimeseriesHistory(
@@ -319,7 +319,7 @@ export default function Monitoring(props: SeedBankMonitoringProps): JSX.Element 
             ],
             x: {
               ticks: {
-                callback: function (value, index, ticks) {
+                callback: (value, index, ticks) => {
                   return moment(value).format('YYYY-MM-DDTHH:mm');
                 },
               },
@@ -345,8 +345,8 @@ export default function Monitoring(props: SeedBankMonitoringProps): JSX.Element 
             },
             tooltip: {
               callbacks: {
-                label: function (context) {
-                  var label = '';
+                label: (context) => {
+                  let label = '';
 
                   if (context.parsed.x !== null) {
                     label += moment(context.parsed.x).format('YYYY-MM-DDTHH:mm');
@@ -423,7 +423,7 @@ export default function Monitoring(props: SeedBankMonitoringProps): JSX.Element 
             ],
             x: {
               ticks: {
-                callback: function (value, index, ticks) {
+                callback: (value, index, ticks) => {
                   return moment(value).format('YYYY-MM-DDTHH:mm');
                 },
               },
@@ -458,8 +458,8 @@ export default function Monitoring(props: SeedBankMonitoringProps): JSX.Element 
             },
             tooltip: {
               callbacks: {
-                label: function (context) {
-                  var label = '';
+                label: (context) => {
+                  let label = '';
 
                   if (context.parsed.x !== null) {
                     label += moment(context.parsed.x).format('YYYY-MM-DDTHH:mm');
@@ -529,7 +529,9 @@ export default function Monitoring(props: SeedBankMonitoringProps): JSX.Element 
                     <p className={classes.graphTitle}>{strings.TEMPERATURE_AND_HUMIDITY_SENSOR_DATA}</p>
                     <div className={classes.dropDownsContainer}>
                       <Select
-                        options={availableLocations?.map((aL) => aL.name)}
+                        options={availableLocations
+                          ?.filter((location) => location.type === 'sensor')
+                          .map((aL) => aL.name)}
                         selectedValue={selectedLocation?.name}
                         onChange={onChangeLocation}
                         label={strings.LOCATION}
