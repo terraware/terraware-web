@@ -9,6 +9,7 @@ import FlowStep from './sensorKitSetup/FlowStep';
 import SelectPVSystem from './sensorKitSetup/SelectPVSystem';
 import SensorKitID from './sensorKitSetup/SensorKitID';
 import InstallDeviceManager from './sensorKitSetup/InstallDeviceManager';
+import DetectSensors from './sensorKitSetup/DetectSensors';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -95,16 +96,12 @@ export default function SensorKitSetup(props: SensorKitSetupProps): JSX.Element 
           deviceManager={deviceManager}
           seedBank={seedBank}
         />
-        <FlowStep
-          flowState='DetectSensors'
+        <DetectSensors
           active={flowState === 'DetectSensors'}
-          showNext={true}
           onNext={() => setCompletedAndNext('DetectSensors', 'SensorLocations')}
-          title={strings.SENSOR_KIT_SET_UP_DETECT_SENSORS}
           completed={completedSteps.DetectSensors}
-        >
-          <div className={classes.text}>Onboarding DetectSensors placeholder for {seedBank.id}</div>
-        </FlowStep>
+          seedBank={seedBank}
+        />
         <FlowStep
           flowState='SensorLocations'
           active={flowState === 'SensorLocations'}
