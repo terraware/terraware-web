@@ -34,3 +34,63 @@ export const listDeviceManagers = async (shortCode: string): Promise<DeviceManag
 
   return response;
 };
+
+/**
+ * Get device manager by id
+ */
+
+const DEVICE_MANAGER_ENDPOINT = '/api/v1/devices/managers/{deviceManagerId}';
+
+type GetDeviceManagerResponsePayload =
+  paths[typeof DEVICE_MANAGER_ENDPOINT]['get']['responses'][200]['content']['application/json'];
+type DeviceManagerResponse = {
+  manager?: DeviceManager;
+  requestSucceeded: boolean;
+};
+
+export const getDeviceManager = async (deviceManagerId: number): Promise<DeviceManagerResponse> => {
+  const response: DeviceManagerResponse = {
+    manager: undefined,
+    requestSucceeded: false,
+  };
+
+  try {
+    const url = DEVICE_MANAGER_ENDPOINT.replace('{deviceManagerId}', deviceManagerId.toString());
+    const serverResponse: GetDeviceManagerResponsePayload = (await axios.get(url)).data;
+
+    response.manager = serverResponse.manager;
+    response.requestSucceeded = true;
+  } catch {
+    response.requestSucceeded = false;
+  }
+
+  return response;
+};
+
+/**
+ * Connect device manager to facility
+ */
+
+const DEVICE_MANAGER_CONNECT_ENDPOINT = '/api/v1/devices/managers/{deviceManagerId}/connect';
+type ConnectDeviceManagerRequestPayload =
+  paths[typeof DEVICE_MANAGER_CONNECT_ENDPOINT]['post']['requestBody']['content']['application/json'];
+type ConnectResponse = {
+  requestSucceeded: boolean;
+};
+
+export const connectDeviceManager = async (deviceManagerId: number, facilityId: number): Promise<ConnectResponse> => {
+  const response: ConnectResponse = {
+    requestSucceeded: true,
+  };
+
+  try {
+    const url = DEVICE_MANAGER_CONNECT_ENDPOINT.replace('{deviceManagerId}', deviceManagerId.toString());
+    const connectRequestPayload: ConnectDeviceManagerRequestPayload = { facilityId };
+
+    await axios.post(url, connectRequestPayload);
+  } catch {
+    response.requestSucceeded = false;
+  }
+
+  return response;
+};
