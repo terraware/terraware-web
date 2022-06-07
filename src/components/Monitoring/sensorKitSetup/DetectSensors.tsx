@@ -1,5 +1,5 @@
 import { createStyles, makeStyles } from '@material-ui/core/styles';
-import { CircularProgress } from '@material-ui/core';
+import ProgressCircle from 'src/components/common/ProgressCircle/ProgressCircle';
 import React, { useCallback, useEffect, useState } from 'react';
 import strings from 'src/strings';
 import { Facility } from 'src/api/types/facilities';
@@ -11,8 +11,6 @@ const useStyles = makeStyles((theme) =>
     detectSensors: {
       width: '432px',
       fontStyle: 'italic',
-    },
-    spinnerContainer: {
       display: 'flex',
       alignItems: 'center',
     },
@@ -120,15 +118,16 @@ export default function DetectSensors(props: DetectSensorsProps): JSX.Element {
       completed={completed}
       footer={
         <div className={classes.detectSensors}>
-          {detectFinished && <span>{strings.ALL_SENSORS_FOUND}</span>}
-          {!detectFinished && (
-            <div className={classes.spinnerContainer}>
-              <CircularProgress />
-              <span className={classes.detectInProgress}>
-                {strings.formatString(strings.SENSORS_FOUND, sensorsFound, TOTAL_SENSORS)}
-              </span>
-            </div>
-          )}
+          <ProgressCircle
+            size='small'
+            determinate={true}
+            value={(sensorsFound / TOTAL_SENSORS) * 100}
+            hideValue={true}
+          />
+          <span className={classes.detectInProgress}>
+            {detectFinished && strings.ALL_SENSORS_FOUND}
+            {!detectFinished && strings.formatString(strings.SENSORS_FOUND, sensorsFound, TOTAL_SENSORS)}
+          </span>
         </div>
       }
     >
