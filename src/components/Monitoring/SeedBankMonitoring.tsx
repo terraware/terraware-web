@@ -15,11 +15,13 @@ import { Chart } from 'chart.js';
 import { Device } from 'src/types/Device';
 import Icon from '../common/icon/Icon';
 import { Grid } from '@material-ui/core';
-import { listTimeseries } from 'src/api/device/device';
+import { getTimeseriesHistory, listTimeseries } from 'src/api/device/device';
+import moment from 'moment';
 
 declare global {
   interface Window {
     myChart: any;
+    pvBatteryChart: any;
   }
 }
 
@@ -103,7 +105,9 @@ export default function Monitoring(props: SeedBankMonitoringProps): JSX.Element 
   const [availableLocations, setAvailableLocations] = useState<Device[]>();
   const [selectedLocation, setSelectedLocation] = useState<Device>();
   const [selectedPeriod, setSelectedPeriod] = useState<string>();
+  const [selectedPVBatteryPeriod, setSelectedPVBatteryPeriod] = useState<string>();
   const [batteryLevel, setBatteryLevel] = useState<string>();
+  const [BMU, setBMU] = useState<Device>();
 
   useEffect(() => {
     const isConnected = seedBank.connectionState === 'Connected';
@@ -126,12 +130,12 @@ export default function Monitoring(props: SeedBankMonitoringProps): JSX.Element 
 
   useEffect(() => {
     const populateBaterryLevel = async () => {
-      const BMU = availableLocations?.filter((device) => device.type === 'BMU');
-      if (BMU) {
-        const response = await listTimeseries(BMU[0]);
+      const BMUDevices = availableLocations?.filter((device) => device.type === 'BMU');
+      if (BMUDevices) {
+        setBMU(BMUDevices[0]);
+        const response = await listTimeseries(BMUDevices[0]);
         if (response.requestSucceeded) {
           const bmuTimeseries = response.timeseries;
-          console.log(bmuTimeseries);
           const battery = bmuTimeseries.filter((bmuTs) => bmuTs.timeseriesName === 'relative_state_of_charge');
           if (battery[0] && battery[0].latestValue) {
             setBatteryLevel(battery[0].latestValue?.value);
@@ -146,68 +150,98 @@ export default function Monitoring(props: SeedBankMonitoringProps): JSX.Element 
     setSelectedLocation(availableLocations?.find((aL) => aL.name === newValue));
   };
 
-  // const getStartTime = (period: string) => {
-  //   switch (period) {
-  //     case 'Last 12 hours':
-  //       return moment(Date.now()).subtract(12, 'h');
-  //     case 'Last 24 hours':
-  //       return moment(Date.now()).subtract(24, 'h');
-  //     case 'Last 7 days':
-  //       return moment(Date.now()).subtract(7, 'd');
-  //     case 'Last 30 days':
-  //       return moment(Date.now()).subtract(30, 'd');
-  //     default:
-  //       return moment();
-  //   }
-  // };
-
-  const onChangeSelectedPeriod = (newValue: string) => {
-    setSelectedPeriod(newValue);
-    // let startTime = getStartTime(newValue);
-    // const endTime = moment();
-
-    const response = {
-      values: [
-        {
-          deviceId: 123,
-          timeseriesName: 'Temperature',
-          values: [
-            { timestamp: '1', value: '567.89' },
-            { timestamp: '4', value: '570.91' },
-            { timestamp: '5', value: '535.13' },
-          ],
-        },
-        {
-          deviceId: 123,
-          timeseriesName: 'Humidity',
-          values: [
-            { timestamp: '2', value: '350.89' },
-            { timestamp: '3', value: '200.89' },
-            { timestamp: '4', value: '160.91' },
-            { timestamp: '6', value: '110.13' },
-          ],
-        },
-      ],
-    };
-
-    if (window.myChart instanceof Chart) {
-      window.myChart.destroy();
+  const getStartTime = (period: string) => {
+    switch (period) {
+      case 'Last 12 hours':
+        return moment(Date.now()).subtract(12, 'h');
+      case 'Last 24 hours':
+        return moment(Date.now()).subtract(24, 'h');
+      case 'Last 7 days':
+        return moment(Date.now()).subtract(7, 'd');
+      case 'Last 30 days':
+        return moment(Date.now()).subtract(30, 'd');
+      default:
+        return moment();
     }
-    createChart(response.values[0].values, response.values[1].values);
+  };
+
+  const onChangeSelectedPeriod = async (newValue: string) => {
+    setSelectedPeriod(newValue);
+    let startTime = getStartTime(newValue);
+    const endTime = moment();
+
+    if (selectedLocation) {
+      const response = await getTimeseriesHistory(
+        startTime.format(),
+        endTime.format(),
+        [
+          { deviceId: selectedLocation.id, timeseriesName: 'temperature' },
+          { deviceId: selectedLocation.id, timeseriesName: 'humidity' },
+        ],
+        12
+      );
+
+      if (response.requestSucceeded) {
+        if (window.myChart instanceof Chart) {
+          window.myChart.destroy();
+        }
+        createHTChart(response.values[0]?.values, response.values[1]?.values, chartRef, 'myChart');
+      }
+    }
+  };
+
+  const onChangePVBatterySelectedPeriod = async (newValue: string) => {
+    setSelectedPVBatteryPeriod(newValue);
+    let startTime = getStartTime(newValue);
+    const endTime = moment();
+    if (BMU) {
+      const response = await getTimeseriesHistory(
+        startTime.format(),
+        endTime.format(),
+        [
+          { deviceId: BMU.id, timeseriesName: 'relative_state_of_charge' },
+          { deviceId: BMU.id, timeseriesName: 'dc_voltage' },
+          { deviceId: BMU.id, timeseriesName: 'current' },
+        ],
+        12
+      );
+
+      if (response.requestSucceeded) {
+        if (window.myChart instanceof Chart) {
+          window.myChart.destroy();
+        }
+        if (window.pvBatteryChart instanceof Chart) {
+          window.pvBatteryChart.destroy();
+        }
+        createBatteryChart(
+          response.values[0]?.values,
+          response.values[1]?.values,
+          response.values[2]?.values,
+          pvBatteryRef,
+          'pvBatteryChart'
+        );
+      }
+    }
   };
 
   const chartRef = React.useRef<HTMLCanvasElement>(null);
+  const pvBatteryRef = React.useRef<HTMLCanvasElement>(null);
 
-  const createChart = (values1: HumidityValues[], values2: HumidityValues[]) => {
-    const ctx = chartRef?.current?.getContext('2d');
+  const createHTChart = (
+    temperatureValues: HumidityValues[],
+    humidityValues: HumidityValues[],
+    chartReference: React.RefObject<HTMLCanvasElement>,
+    chartName: 'myChart' | 'pvBatteryChart'
+  ) => {
+    const ctx = chartReference?.current?.getContext('2d');
     if (ctx) {
-      window.myChart = new Chart(ctx, {
+      window[chartName] = new Chart(ctx, {
         type: 'scatter',
         data: {
           datasets: [
             {
-              data: values1?.map((entry) => {
-                return { x: entry.timestamp, y: entry.value };
+              data: temperatureValues?.map((entry) => {
+                return { x: moment(entry.timestamp), y: Number(entry.value) };
               }),
               label: 'Temperature',
               showLine: true,
@@ -216,8 +250,8 @@ export default function Monitoring(props: SeedBankMonitoringProps): JSX.Element 
               backgroundColor: '#FF5A5B',
             },
             {
-              data: values2?.map((entry) => {
-                return { x: entry.timestamp, y: entry.value };
+              data: humidityValues?.map((entry) => {
+                return { x: moment(entry.timestamp), y: Number(entry.value) };
               }),
               label: 'Humidity',
               showLine: true,
@@ -226,8 +260,8 @@ export default function Monitoring(props: SeedBankMonitoringProps): JSX.Element 
               backgroundColor: '#007DF2',
             },
             {
-              data: ['1', '2', '3', '4', '5', '6'].map((entry) => {
-                return { x: entry, y: '200' };
+              data: temperatureValues?.map((entry) => {
+                return { x: moment(entry.timestamp), y: 23 };
               }),
               label: 'Temperature Thresholds',
               showLine: false,
@@ -237,8 +271,8 @@ export default function Monitoring(props: SeedBankMonitoringProps): JSX.Element 
               pointRadius: 0,
             },
             {
-              data: ['1', '2', '3', '4', '5', '6'].map((entry) => {
-                return { x: entry, y: '250' };
+              data: temperatureValues?.map((entry) => {
+                return { x: moment(entry.timestamp), y: 26 };
               }),
               showLine: false,
               borderColor: '#FF9797',
@@ -246,6 +280,29 @@ export default function Monitoring(props: SeedBankMonitoringProps): JSX.Element 
               fill: {
                 target: 2,
                 above: '#FFBFD035', // Area will be red above the origin
+              },
+            },
+            {
+              data: humidityValues?.map((entry) => {
+                return { x: moment(entry.timestamp), y: 26 };
+              }),
+              label: 'Humidity Thresholds',
+              showLine: false,
+              borderColor: '#BED0FF',
+              backgroundColor: '#E2E9FF',
+              fill: false,
+              pointRadius: 0,
+            },
+            {
+              data: humidityValues?.map((entry) => {
+                return { x: moment(entry.timestamp), y: 30 };
+              }),
+              showLine: false,
+              borderColor: '#BED0FF',
+              pointRadius: 0,
+              fill: {
+                target: 2,
+                above: '#E2E9FF35', // Area will be red above the origin
               },
             },
           ],
@@ -260,12 +317,97 @@ export default function Monitoring(props: SeedBankMonitoringProps): JSX.Element 
                 },
               },
             ],
+            x: {
+              ticks: {
+                callback: function (value, index, ticks) {
+                  return moment(value).format();
+                },
+              },
+            },
           },
           plugins: {
             legend: {
               labels: {
                 filter(legendItem: { text: string | string[] }, data: any) {
                   // only show 2nd dataset in legend
+                  return legendItem.text !== undefined;
+                },
+              },
+            },
+          },
+        },
+      });
+    }
+  };
+
+  const createBatteryChart = (
+    stateOfChargeValues: HumidityValues[],
+    voltageValues: HumidityValues[],
+    currentValues: HumidityValues[],
+    chartReference: React.RefObject<HTMLCanvasElement>,
+    chartName: 'myChart' | 'pvBatteryChart'
+  ) => {
+    const ctx = chartReference?.current?.getContext('2d');
+    if (ctx) {
+      window[chartName] = new Chart(ctx, {
+        type: 'scatter',
+        data: {
+          datasets: [
+            {
+              data: stateOfChargeValues?.map((entry) => {
+                return { x: moment(entry.timestamp), y: Number(entry.value) };
+              }),
+              label: 'State of Charge',
+              showLine: true,
+              fill: false,
+              borderColor: '#FE0003',
+              backgroundColor: '#FF5A5B',
+            },
+            {
+              data: voltageValues?.map((entry) => {
+                return { x: moment(entry.timestamp), y: Number(entry.value) };
+              }),
+              label: 'System Voltage',
+              showLine: true,
+              fill: false,
+              borderColor: '#0067C8',
+              backgroundColor: '#007DF2',
+            },
+            {
+              data: currentValues?.map((entry) => {
+                return { x: moment(entry.timestamp), y: Number(entry.value) };
+              }),
+              label: 'System Current',
+              showLine: true,
+              borderColor: '#DAAF38',
+              backgroundColor: '#FBCA47',
+              fill: false,
+            },
+          ],
+        },
+        options: {
+          scales: {
+            // @ts-ignore
+            yAxes: [
+              {
+                ticks: {
+                  beginAtZero: true,
+                },
+              },
+            ],
+            x: {
+              ticks: {
+                callback: function (value, index, ticks) {
+                  return moment(value).format();
+                },
+              },
+            },
+          },
+          plugins: {
+            legend: {
+              labels: {
+                filter(legendItem: { text: string | string[] }, data: any) {
+                  // only show datasets with name on legend
                   return legendItem.text !== undefined;
                 },
               },
@@ -342,6 +484,22 @@ export default function Monitoring(props: SeedBankMonitoringProps): JSX.Element 
                     </div>
                     <div className={classes.chartContainer}>
                       <canvas id='myChart' ref={chartRef} className={classes.chart} />
+                    </div>
+                  </div>
+                </Grid>
+                <Grid item xs={12}>
+                  <div className={classes.graphContainer}>
+                    <p className={classes.graphTitle}>{strings.PV_BATTERY}</p>
+                    <div className={classes.dropDownsContainer}>
+                      <Select
+                        options={['Last 12 hours', 'Last 24 hours', 'Last 7 days', 'Last 30 days']}
+                        onChange={onChangePVBatterySelectedPeriod}
+                        selectedValue={selectedPVBatteryPeriod}
+                        label={strings.TIME_PERIOD}
+                      />
+                    </div>
+                    <div className={classes.chartContainer}>
+                      <canvas id='pvBatteryChart' ref={pvBatteryRef} className={classes.chart} />
                     </div>
                   </div>
                 </Grid>

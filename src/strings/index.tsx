@@ -485,6 +485,7 @@ const strings = new LocalizedStrings({
     PLEASE_TRY_AGAIN: 'Please try again.',
     SERVER_ERROR: 'Server Error',
     KEY_BELONGS_TO_ANOTHER_SEED_BANK: 'Key is associated with another seed bank.',
+    PV_BATTERY: 'PV Battery',
   },
 });
 

@@ -253,6 +253,9 @@ export interface paths {
     /** If there are existing timeseries with the same names, the old definitions will be overwritten. */
     post: operations["createMultipleTimeseries"];
   };
+  "/api/v1/timeseries/history": {
+    post: operations["getTimeseriesHistory"];
+  };
   "/api/v1/timeseries/values": {
     post: operations["recordTimeseriesValues"];
   };
@@ -776,6 +779,21 @@ export interface components {
       details: components["schemas"]["GetSpeciesUploadStatusDetailsPayload"];
       status: components["schemas"]["SuccessOrError"];
     };
+    GetTimeseriesHistoryRequestPayload: {
+      /** Start of time range to query. If this is non-null, endTime must also be specified, and seconds must be null or absent. */
+      startTime?: string;
+      /** End of time range to query. If this is non-null, startTime must also be specified, and seconds must be null or absent. */
+      endTime?: string;
+      /** Number of seconds in the past to start the time range. If this is non-null, startTime and endTime must be null or absent. */
+      seconds?: number;
+      /** Number of values to return. The time range is divided into this many equal intervals, and a value is returned from each interval if available. */
+      count: number;
+      /** Timeseries to query. May be from different devices. */
+      timeseries: components["schemas"]["TimeseriesIdPayload"][];
+    };
+    GetTimeseriesHistoryResponsePayload: {
+      values: components["schemas"]["TimeseriesValuesPayload"][];
+    };
     GetUserResponsePayload: {
       user: components["schemas"]["UserProfilePayload"];
       status: components["schemas"]["SuccessOrError"];
@@ -1165,6 +1183,11 @@ export interface components {
     SummaryStatistic: {
       current: number;
       lastWeek: number;
+    };
+    /** Timeseries to query. May be from different devices. */
+    TimeseriesIdPayload: {
+      deviceId: number;
+      timeseriesName: string;
     };
     TimeseriesPayload: {
       /** ID of device that produces this timeseries. */
@@ -3236,6 +3259,21 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["CreateTimeseriesRequestPayload"];
+      };
+    };
+  };
+  getTimeseriesHistory: {
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetTimeseriesHistoryResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["GetTimeseriesHistoryRequestPayload"];
       };
     };
   };

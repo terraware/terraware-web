@@ -15,3 +15,11 @@ export type TimeseriesValue = {
   /** Value to record. If the timeseries is of type Numeric, this must be a decimal or integer value in string form. If the timeseries is of type Text, this can be an arbitrary string. */
   value: string;
 };
+
+export type TimeseriesHistory = {
+  /** ID of device that produced this value. */
+  deviceId: number;
+  /** Name of timeseries. This must be the name of a timeseries that has already been created for the device. */
+  timeseriesName: string;
+  values: TimeseriesValue[];
+};

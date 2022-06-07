@@ -2,7 +2,8 @@ import axios from '..';
 import { Device, DeviceTemplate } from 'src/types/Device';
 import { paths } from 'src/api/types/generated-schema';
 import addQueryParams from '../helpers/addQueryParams';
-import { Timeseries } from 'src/types/Timeseries';
+import { Timeseries, TimeseriesHistory } from 'src/types/Timeseries';
+import { count } from 'console';
 
 const DEVICES_ENDPOINT = '/api/v1/devices';
 const TEMPLATES_ENDPOINT = '/api/v1/devices/templates';
@@ -115,6 +116,54 @@ export const listTimeseries = async (device: Device): Promise<TimeseriesResponse
       units: ts.units,
       latestValue: ts.latestValue,
     }));
+  } catch {
+    response.requestSucceeded = false;
+  }
+
+  return response;
+};
+
+const TIMESERIES_HISTORY_ENDPOINT = '/api/v1/timeseries/history';
+type TimeseriesHistoryResponse = {
+  values: TimeseriesHistory[];
+  requestSucceeded: boolean;
+};
+
+type GetTimeseriesResponsePayload =
+  paths[typeof TIMESERIES_HISTORY_ENDPOINT]['post']['responses'][200]['content']['application/json'];
+
+type GetTimeseriesRequestPayload =
+  paths[typeof TIMESERIES_HISTORY_ENDPOINT]['post']['requestBody']['content']['application/json'];
+
+export type timeseriesType = {
+  deviceId: number;
+  timeseriesName: string;
+};
+
+export const getTimeseriesHistory = async (
+  startTime: string,
+  endTime: string,
+  timeseries: timeseriesType[],
+  count: number
+): Promise<TimeseriesHistoryResponse> => {
+  const response: TimeseriesHistoryResponse = {
+    values: [],
+    requestSucceeded: true,
+  };
+
+  const getTimeseriesRequestPayload: GetTimeseriesRequestPayload = {
+    startTime: startTime,
+    endTime: endTime,
+    timeseries: timeseries,
+    count: count,
+  };
+
+  try {
+    const serverResponse: GetTimeseriesResponsePayload = (
+      await axios.post(TIMESERIES_HISTORY_ENDPOINT, getTimeseriesRequestPayload)
+    ).data;
+
+    response.values = serverResponse.values;
   } catch {
     response.requestSucceeded = false;
   }
