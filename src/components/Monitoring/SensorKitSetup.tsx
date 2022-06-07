@@ -8,6 +8,7 @@ import { DeviceManager } from 'src/types/DeviceManager';
 import FlowStep from './sensorKitSetup/FlowStep';
 import SelectPVSystem from './sensorKitSetup/SelectPVSystem';
 import SensorKitID from './sensorKitSetup/SensorKitID';
+import InstallDeviceManager from './sensorKitSetup/InstallDeviceManager';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -53,7 +54,7 @@ export default function SensorKitSetup(props: SensorKitSetupProps): JSX.Element 
   const { seedBank, onFinish } = props;
   const [flowState, setFlowState] = useState<SetupFlowState>('PVSystem');
   const [completedSteps, setCompletedSteps] = useState<Completed>({});
-  const [, setDeviceManager] = useState<DeviceManager | undefined>();
+  const [deviceManager, setDeviceManager] = useState<DeviceManager | undefined>();
 
   const setCompletedAndNext = (currentState: SetupFlowState, nextState: SetupFlowState) => {
     setCompletedSteps((currentCompleted) => {
@@ -80,23 +81,20 @@ export default function SensorKitSetup(props: SensorKitSetupProps): JSX.Element 
         />
         <SensorKitID
           active={flowState === 'SensorKitID'}
-          onNext={(deviceManager) => {
-            setDeviceManager(deviceManager);
+          onNext={(manager) => {
+            setDeviceManager(manager);
             setCompletedAndNext('SensorKitID', 'DeviceManager');
           }}
           completed={completedSteps.SensorKitID}
           seedBank={seedBank}
         />
-        <FlowStep
-          flowState='DeviceManager'
+        <InstallDeviceManager
           active={flowState === 'DeviceManager'}
-          showNext={true}
           onNext={() => setCompletedAndNext('DeviceManager', 'DetectSensors')}
-          title={strings.SENSOR_KIT_SET_UP_DEVICE_MANAGER}
           completed={completedSteps.DeviceManager}
-        >
-          <div className={classes.text}>Onboarding DeviceManager placeholder for {seedBank.id}</div>
-        </FlowStep>
+          deviceManager={deviceManager}
+          seedBank={seedBank}
+        />
         <FlowStep
           flowState='DetectSensors'
           active={flowState === 'DetectSensors'}

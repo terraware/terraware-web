@@ -467,6 +467,8 @@ const strings = new LocalizedStrings({
     SENSOR_KIT_SET_UP_SENSOR_KIT_ID_DESCRIPTION:
       'Find your sensor kit ID on the outside of your sensor kit. This will connect the Device Manager inside the kit to our database.',
     SENSOR_KIT_SET_UP_DEVICE_MANAGER: 'Install Device Manager Update',
+    SENSOR_KIT_SET_UP_DEVICE_MANAGER_DESCRIPTION:
+      'To detect your sensors, the device manager in your sensor kit needs to download the latest code; this may take up to 20 minutes. The download starts the moment your sensor kit is connected to the internet, so this step might alread be complete.',
     SENSOR_KIT_SET_UP_DETECT_SENSORS: 'Detect Sensors',
     SENSOR_KIT_SET_UP_SENSOR_LOCATIONS: 'Assign Sensor Locations',
     SENSOR_KIT_SET_UP_COMPLETE: 'Setup Complete!',
@@ -479,6 +481,14 @@ const strings = new LocalizedStrings({
     PLEASE_TRY_AGAIN: 'Please try again.',
     SERVER_ERROR: 'Server Error',
     KEY_BELONGS_TO_ANOTHER_SEED_BANK: 'Key is associated with another seed bank.',
+    DOWNLOAD_IN_PROGRESS: 'Download in progress...',
+    CONNECT_FAILED: 'Connect failed',
+    UNABLE_TO_CONNECT_TO_SENSOR_KIT:
+      'We were unable to connect to your sensor kit. Sometimes this is because it is not connected to power or internet. Please email help@terraformation.com so we can assist you.',
+    DOWNLOAD_COMPLETE: 'Download complete',
+    DOWNLOAD_FAILED: 'Download failed',
+    DOWNLOAD_FAILED_DESCRIPTION: 'The download has failed. Please email help@terraformation.com so we can assist you.',
+    WAITING_TO_DOWNLOAD: 'Waiting to download...',
   },
 });
 

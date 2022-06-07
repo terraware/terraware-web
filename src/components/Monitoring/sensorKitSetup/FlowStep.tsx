@@ -47,7 +47,9 @@ const useStyles = makeStyles((theme) =>
 
 export type FlowError = {
   title?: string;
-  text?: string;
+  text: string;
+  buttonText?: string;
+  onClick?: () => void;
 };
 
 type FlowStepProps = {
@@ -95,9 +97,7 @@ export default function FlowStep(props: FlowStepProps): JSX.Element {
         disabled={!active}
       >
         <div className={classes.flowContent}>
-          {(flowError?.title || flowError?.text) && (
-            <ErrorBox text={flowError?.text || ''} title={flowError?.title || ''} className={classes.errorBox} />
-          )}
+          {flowError !== undefined && <ErrorBox {...flowError} className={classes.errorBox} />}
           {children}
           <div className={classes.flowFooter + (footerError ? ' ' + classes.flowFooterError : '')}>
             <span>{footer}</span>
