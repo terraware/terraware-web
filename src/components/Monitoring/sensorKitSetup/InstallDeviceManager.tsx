@@ -1,5 +1,5 @@
 import { createStyles, makeStyles } from '@material-ui/core/styles';
-import { CircularProgress } from '@material-ui/core';
+import ProgressCircle from 'src/components/common/ProgressCircle/ProgressCircle';
 import React, { useCallback, useEffect, useState } from 'react';
 import strings from 'src/strings';
 import { Facility } from 'src/api/types/facilities';
@@ -128,7 +128,7 @@ export default function InstallDeviceManager(props: InstallDeviceManagerProps): 
 
   return (
     <FlowStep
-      flowState='SensorKitID'
+      flowState='DeviceManager'
       active={active && initialized}
       showNext={updateFinished}
       flowError={flowError}
@@ -140,7 +140,7 @@ export default function InstallDeviceManager(props: InstallDeviceManagerProps): 
           {updateFinished && <span>{strings.DOWNLOAD_COMPLETE}</span>}
           {!updateFinished && pollingStartedOn > 0 && flowError === undefined && (
             <div className={classes.spinnerContainer}>
-              <CircularProgress value={progressPercentage} />
+              <ProgressCircle size='small' determinate={true} value={progressPercentage} />
               <span className={classes.downloadInProgress}>{strings.DOWNLOAD_IN_PROGRESS}</span>
             </div>
           )}
