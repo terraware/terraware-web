@@ -200,16 +200,13 @@ export default function Monitoring(props: SeedBankMonitoringProps): JSX.Element 
         endTime.format(),
         [
           { deviceId: BMU.id, timeseriesName: 'relative_state_of_charge' },
-          { deviceId: BMU.id, timeseriesName: 'dc_voltage' },
-          { deviceId: BMU.id, timeseriesName: 'current' },
+          { deviceId: BMU.id, timeseriesName: 'system_voltage' },
+          { deviceId: BMU.id, timeseriesName: 'system_current' },
         ],
         12
       );
 
       if (response.requestSucceeded) {
-        if (window.myChart instanceof Chart) {
-          window.myChart.destroy();
-        }
         if (window.pvBatteryChart instanceof Chart) {
           window.pvBatteryChart.destroy();
         }
@@ -258,6 +255,7 @@ export default function Monitoring(props: SeedBankMonitoringProps): JSX.Element 
               fill: false,
               borderColor: '#0067C8',
               backgroundColor: '#007DF2',
+              yAxisID: 'y1',
             },
             {
               data: temperatureValues?.map((entry) => {
@@ -292,6 +290,7 @@ export default function Monitoring(props: SeedBankMonitoringProps): JSX.Element 
               backgroundColor: '#E2E9FF',
               fill: false,
               pointRadius: 0,
+              yAxisID: 'y1',
             },
             {
               data: humidityValues?.map((entry) => {
@@ -304,6 +303,7 @@ export default function Monitoring(props: SeedBankMonitoringProps): JSX.Element 
                 target: 2,
                 above: '#E2E9FF35', // Area will be red above the origin
               },
+              yAxisID: 'y1',
             },
           ],
         },
@@ -320,8 +320,17 @@ export default function Monitoring(props: SeedBankMonitoringProps): JSX.Element 
             x: {
               ticks: {
                 callback: function (value, index, ticks) {
-                  return moment(value).format();
+                  return moment(value).format('YYYY-MM-DDTHH:mm');
                 },
+              },
+            },
+            y1: {
+              type: 'linear',
+              display: true,
+              position: 'right',
+              // grid line settings
+              grid: {
+                drawOnChartArea: false, // only want the grid lines for one axis to show up
               },
             },
           },
@@ -331,6 +340,21 @@ export default function Monitoring(props: SeedBankMonitoringProps): JSX.Element 
                 filter(legendItem: { text: string | string[] }, data: any) {
                   // only show 2nd dataset in legend
                   return legendItem.text !== undefined;
+                },
+              },
+            },
+            tooltip: {
+              callbacks: {
+                label: function (context) {
+                  var label = '';
+
+                  if (context.parsed.x !== null) {
+                    label += moment(context.parsed.x).format('YYYY-MM-DDTHH:mm');
+                  }
+                  if (context.parsed.y !== null) {
+                    label += ', ' + context.parsed.y;
+                  }
+                  return label;
                 },
               },
             },
@@ -372,6 +396,7 @@ export default function Monitoring(props: SeedBankMonitoringProps): JSX.Element 
               fill: false,
               borderColor: '#0067C8',
               backgroundColor: '#007DF2',
+              yAxisID: 'y1',
             },
             {
               data: currentValues?.map((entry) => {
@@ -382,6 +407,7 @@ export default function Monitoring(props: SeedBankMonitoringProps): JSX.Element 
               borderColor: '#DAAF38',
               backgroundColor: '#FBCA47',
               fill: false,
+              yAxisID: 'y2',
             },
           ],
         },
@@ -398,8 +424,26 @@ export default function Monitoring(props: SeedBankMonitoringProps): JSX.Element 
             x: {
               ticks: {
                 callback: function (value, index, ticks) {
-                  return moment(value).format();
+                  return moment(value).format('YYYY-MM-DDTHH:mm');
                 },
+              },
+            },
+            y1: {
+              type: 'linear',
+              display: true,
+              position: 'right',
+              // grid line settings
+              grid: {
+                drawOnChartArea: false, // only want the grid lines for one axis to show up
+              },
+            },
+            y2: {
+              type: 'linear',
+              display: true,
+              position: 'right',
+              // grid line settings
+              grid: {
+                drawOnChartArea: false, // only want the grid lines for one axis to show up
               },
             },
           },
@@ -409,6 +453,21 @@ export default function Monitoring(props: SeedBankMonitoringProps): JSX.Element 
                 filter(legendItem: { text: string | string[] }, data: any) {
                   // only show datasets with name on legend
                   return legendItem.text !== undefined;
+                },
+              },
+            },
+            tooltip: {
+              callbacks: {
+                label: function (context) {
+                  var label = '';
+
+                  if (context.parsed.x !== null) {
+                    label += moment(context.parsed.x).format('YYYY-MM-DDTHH:mm');
+                  }
+                  if (context.parsed.y !== null) {
+                    label += ', ' + context.parsed.y;
+                  }
+                  return label;
                 },
               },
             },
