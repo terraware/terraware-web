@@ -70,7 +70,7 @@ export default function DetectSensors(props: DetectSensorsProps): JSX.Element {
 
       // if we have polled for over 20 minutes, stop and error out
       const currentTime = Date.now();
-      if (pollingStartedOn && currentTime - pollingStartedOn >= 1 * 60 * 1000) {
+      if (pollingStartedOn && currentTime - pollingStartedOn >= 20 * 60 * 1000) {
         setFlowError({
           title: strings.SENSOR_SCAN_TIMEOUT,
           text: strings.formatString(strings.SENSOR_SCAN_TIMEOUT_ERROR, sensorsFound, TOTAL_SENSORS) as string,
