@@ -94,3 +94,27 @@ export async function listFacilityDevicesById(facilityId: number): Promise<ListF
 
   return response;
 }
+
+/**
+ * Mark sensor kit as configured
+ */
+
+const CONFIGURED_ENDPOINT = '/api/v1/facilities/{facilityId}/configured';
+
+type ConfiguredResponse = {
+  requestSucceeded: boolean;
+};
+
+export async function markSensorKitConfigured(facilityId: number): Promise<ConfiguredResponse> {
+  const response: ConfiguredResponse = {
+    requestSucceeded: true,
+  };
+
+  try {
+    await axios.post(CONFIGURED_ENDPOINT.replace('{facilityId}', facilityId.toString()));
+  } catch {
+    response.requestSucceeded = false;
+  }
+
+  return response;
+}

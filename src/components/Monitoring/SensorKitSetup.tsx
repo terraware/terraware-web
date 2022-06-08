@@ -7,12 +7,12 @@ import { Facility } from 'src/api/types/facilities';
 import { DeviceManager } from 'src/types/DeviceManager';
 import { Device } from 'src/types/Device';
 import { listFacilityDevicesById } from 'src/api/facility/facility';
-import FlowStep from './sensorKitSetup/FlowStep';
 import SelectPVSystem from './sensorKitSetup/SelectPVSystem';
 import SensorKitID from './sensorKitSetup/SensorKitID';
 import InstallDeviceManager from './sensorKitSetup/InstallDeviceManager';
 import DetectSensors from './sensorKitSetup/DetectSensors';
 import SensorLocations from './sensorKitSetup/SensorLocations';
+import ConfigureSensorKit from './sensorKitSetup/ConfigureSensorKit';
 import { LOCATIONS } from './sensorKitSetup/Locations';
 
 const useStyles = makeStyles((theme) =>
@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-type SetupFlowState = 'PVSystem' | 'SensorKitID' | 'DeviceManager' | 'DetectSensors' | 'SensorLocations' | 'Complete';
+type SetupFlowState = 'PVSystem' | 'SensorKitID' | 'DeviceManager' | 'DetectSensors' | 'SensorLocations' | 'Configure';
 
 type SensorKitSetupProps = {
   seedBank: Facility;
@@ -102,7 +102,7 @@ export default function SensorKitSetup(props: SensorKitSetupProps): JSX.Element 
         sensorDevices.forEach((device) => delete presetNames[device.name]);
         setSensors(sensorDevices);
         if (Object.keys(presetNames).length === 0) {
-          state = 'Complete';
+          state = 'Configure';
           completed = {
             PVSystem: true,
             SensorKitID: true,
@@ -160,22 +160,12 @@ export default function SensorKitSetup(props: SensorKitSetupProps): JSX.Element 
         />
         <SensorLocations
           active={flowState === 'SensorLocations'}
-          onNext={(reload) => setCompletedAndNext('SensorLocations', 'Complete', reload)}
+          onNext={(reload) => setCompletedAndNext('SensorLocations', 'Configure', reload)}
           completed={completedSteps.SensorLocations}
           seedBank={seedBank}
           sensors={sensors}
         />
-        <FlowStep
-          flowState='Complete'
-          active={flowState === 'Complete'}
-          showNext={true}
-          onNext={onFinish}
-          buttonText={strings.TAKE_ME_THERE}
-          title={strings.SENSOR_KIT_SET_UP_COMPLETE}
-          completed={false}
-        >
-          <div className={classes.text}>{strings.SENSOR_KIT_SET_UP_COMPLETE_DESCRIPTION}</div>
-        </FlowStep>
+        <ConfigureSensorKit active={flowState === 'Configure'} onNext={onFinish} seedBank={seedBank} />
       </Grid>
     </Container>
   );
