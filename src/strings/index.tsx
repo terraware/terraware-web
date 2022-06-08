@@ -473,6 +473,8 @@ const strings = new LocalizedStrings({
     SENSOR_KIT_SET_UP_DEVICE_MANAGER_DESCRIPTION:
       'To detect your sensors, the device manager in your sensor kit needs to download the latest code; this may take up to 20 minutes. The download starts the moment your sensor kit is connected to the internet, so this step might alread be complete.',
     SENSOR_KIT_SET_UP_DETECT_SENSORS: 'Detect Sensors',
+    SENSOR_KIT_SET_UP_DETECT_SENSORS_DESCRIPTION:
+      "To power on sensors, remove the paper tabs blocking the batteries. When sensors are powered on and within range, they'll be detected by the device manager automatically.",
     SENSOR_KIT_SET_UP_SENSOR_LOCATIONS: 'Assign Sensor Locations',
     SENSOR_KIT_SET_UP_COMPLETE: 'Setup Complete!',
     SENSOR_KIT_SET_UP_COMPLETE_DESCRIPTION:
@@ -496,6 +498,11 @@ const strings = new LocalizedStrings({
     DOWNLOAD_FAILED: 'Download failed',
     DOWNLOAD_FAILED_DESCRIPTION: 'The download has failed. Please email help@terraformation.com so we can assist you.',
     WAITING_TO_DOWNLOAD: 'Waiting to download...',
+    SENSORS_FOUND: '{0}/{1} sensors found...',
+    ALL_SENSORS_FOUND: 'All sensors found.',
+    SENSOR_SCAN_TIMEOUT: 'Sensor Scan Timeout',
+    SENSOR_SCAN_TIMEOUT_ERROR:
+      "Only {0}/{1} sensors were found. Please make sure all sensors are powered on and within range, then try again. If this problem persists, you might have broken sensors; if you think that's the case, email us at help@terraformation.com.",
   },
 });
 
