@@ -25,7 +25,7 @@ import './commands';
 
 // Make all requests look like they are associated with an existing login session
 // so we don't have to depend on a Keycloak server to run the test suite. The
-// session value here is the base64-encoded session ID from dump/dump.sql.
+// session value here is the base64-encoded session ID from dump/session.sql.
 beforeEach(() => {
   cy.setCookie('SESSION', 'Mjc2NzE0YWQtYWIwYS00OGFhLThlZjgtZGI2NWVjMmU5NTBh');
 });
