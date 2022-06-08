@@ -221,6 +221,75 @@ export default function Monitoring(props: SeedBankMonitoringProps): JSX.Element 
     }
   };
 
+  const getFirstWord = (sensorName: string) => {
+    const sensorNameWords = sensorName.split(' ');
+    return sensorNameWords[0];
+  };
+
+  const getTemperatureMinValue = (sensorName: string) => {
+    switch (getFirstWord(sensorName)) {
+      case 'Fridge':
+        return 0;
+      case 'Freezer':
+        return -25;
+      case 'Ambient':
+        return 21;
+      case 'Dry':
+      case 'Drying':
+        return 21;
+      default:
+        return 21;
+    }
+  };
+
+  const getTemperatureMaxValue = (sensorName: string) => {
+    switch (getFirstWord(sensorName)) {
+      case 'Fridge':
+        return 10;
+      case 'Freezer':
+        return -15;
+      case 'Ambient':
+        return 25;
+      case 'Dry':
+      case 'Drying':
+        return 25;
+      default:
+        return 25;
+    }
+  };
+
+  const getHumidityMinValue = (sensorName: string) => {
+    switch (getFirstWord(sensorName)) {
+      case 'Fridge':
+        return 34;
+      case 'Freezer':
+        return 34;
+      case 'Ambient':
+        return 34;
+      case 'Dry':
+      case 'Drying':
+        return 37;
+      default:
+        return 34;
+    }
+  };
+
+  const getHumidityMaxValue = (sensorName: string) => {
+    switch (getFirstWord(sensorName)) {
+      case 'Fridge':
+        return 40;
+      case 'Freezer':
+        return 40;
+      case 'Ambient':
+        return 40;
+      case 'Dry':
+      case 'Drying':
+        return 43;
+      default:
+        return 40;
+    }
+  };
+
   const chartRef = React.useRef<HTMLCanvasElement>(null);
   const pvBatteryRef = React.useRef<HTMLCanvasElement>(null);
 
@@ -231,7 +300,7 @@ export default function Monitoring(props: SeedBankMonitoringProps): JSX.Element 
     chartName: 'myChart' | 'pvBatteryChart'
   ) => {
     const ctx = chartReference?.current?.getContext('2d');
-    if (ctx) {
+    if (ctx && selectedLocation) {
       window[chartName] = new Chart(ctx, {
         type: 'scatter',
         data: {
@@ -259,7 +328,7 @@ export default function Monitoring(props: SeedBankMonitoringProps): JSX.Element 
             },
             {
               data: temperatureValues?.map((entry) => {
-                return { x: moment(entry.timestamp), y: 23 };
+                return { x: moment(entry.timestamp), y: getTemperatureMinValue(selectedLocation?.name) };
               }),
               label: 'Temperature Thresholds',
               showLine: false,
@@ -270,7 +339,7 @@ export default function Monitoring(props: SeedBankMonitoringProps): JSX.Element 
             },
             {
               data: temperatureValues?.map((entry) => {
-                return { x: moment(entry.timestamp), y: 26 };
+                return { x: moment(entry.timestamp), y: getTemperatureMaxValue(selectedLocation?.name) };
               }),
               showLine: false,
               borderColor: '#FF9797',
@@ -282,7 +351,7 @@ export default function Monitoring(props: SeedBankMonitoringProps): JSX.Element 
             },
             {
               data: humidityValues?.map((entry) => {
-                return { x: moment(entry.timestamp), y: 26 };
+                return { x: moment(entry.timestamp), y: getHumidityMinValue(selectedLocation?.name) };
               }),
               label: 'Humidity Thresholds',
               showLine: false,
@@ -294,7 +363,7 @@ export default function Monitoring(props: SeedBankMonitoringProps): JSX.Element 
             },
             {
               data: humidityValues?.map((entry) => {
-                return { x: moment(entry.timestamp), y: 30 };
+                return { x: moment(entry.timestamp), y: getHumidityMaxValue(selectedLocation?.name) };
               }),
               showLine: false,
               borderColor: '#BED0FF',
