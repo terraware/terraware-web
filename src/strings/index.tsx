@@ -474,7 +474,7 @@ const strings = new LocalizedStrings({
       "To power on sensors, remove the paper tabs blocking the batteries. When sensors are powered on and within range, they'll be detected by the device manager automatically.",
     SENSOR_KIT_SET_UP_SENSOR_LOCATIONS: 'Assign Sensor Locations',
     SENSOR_KIT_SET_UP_SENSOR_LOCATIONS_DESCRIPTION:
-      'Your sensor includes 14 temperature/humidity sensors. Please put one sensor in each location. Select which sensor you put in each location using the dropdown.',
+      'Your sensor kit includes 14 temperature/humidity sensors. Please put one sensor in each location. Select which sensor you put in each location using the dropdown.',
     SENSOR_KIT_SET_UP_COMPLETE: 'Setup Complete!',
     SENSOR_KIT_SET_UP_COMPLETE_DESCRIPTION:
       'You will now be able to view solar battery charge and sensor data in your sensor monitoring dashboard.',
