@@ -74,6 +74,10 @@ type ListFacilityDevicesResponse = {
 };
 
 export async function listFacilityDevices(facility: Facility): Promise<ListFacilityDevicesResponse> {
+  return listFacilityDevicesById(facility.id);
+}
+
+export async function listFacilityDevicesById(facilityId: number): Promise<ListFacilityDevicesResponse> {
   const response: ListFacilityDevicesResponse = {
     requestSucceeded: true,
     devices: [],
@@ -81,7 +85,7 @@ export async function listFacilityDevices(facility: Facility): Promise<ListFacil
 
   try {
     const serverResponse: ListFacilityDevices = (
-      await axios.get(FACILITY_DEVICES.replace('{facilityId}', facility.id.toString()))
+      await axios.get(FACILITY_DEVICES.replace('{facilityId}', facilityId.toString()))
     ).data;
     response.devices = serverResponse.devices;
   } catch {

@@ -38,11 +38,12 @@ const useStyles = makeStyles((theme) =>
 type SeedBankMonitoringProps = {
   seedBank: Facility;
   organization: ServerOrganization;
+  reloadData: () => void;
 };
 
 export default function Monitoring(props: SeedBankMonitoringProps): JSX.Element {
   const classes = useStyles();
-  const { organization, seedBank } = props;
+  const { organization, seedBank, reloadData } = props;
   const [onboarding, setOnboarding] = useState<boolean>(false);
   const isConfigured = seedBank.connectionState === 'Configured';
 
@@ -86,7 +87,14 @@ export default function Monitoring(props: SeedBankMonitoringProps): JSX.Element 
           </span>
         </div>
       )}
-      {onboarding && <SensorKitSetup organization={organization} seedBank={seedBank} onFinish={onFinishOnboarding} />}
+      {onboarding && (
+        <SensorKitSetup
+          organization={organization}
+          seedBank={seedBank}
+          onFinish={onFinishOnboarding}
+          reloadData={reloadData}
+        />
+      )}
     </>
   );
 }

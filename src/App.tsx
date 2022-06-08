@@ -355,12 +355,20 @@ export default function App() {
               </Route>
               {selectedOrganization && (
                 <Route exact path={APP_PATHS.MONITORING}>
-                  <Monitoring organization={selectedOrganization} hasSeedBanks={selectedOrgHasSeedBanks()} />
+                  <Monitoring
+                    organization={selectedOrganization}
+                    hasSeedBanks={selectedOrgHasSeedBanks()}
+                    reloadData={reloadData}
+                  />
                 </Route>
               )}
               {selectedOrganization && (
                 <Route exact path={APP_PATHS.SEED_BANK_MONITORING}>
-                  <Monitoring organization={selectedOrganization} hasSeedBanks={selectedOrgHasSeedBanks()} />
+                  <Monitoring
+                    organization={selectedOrganization}
+                    hasSeedBanks={selectedOrgHasSeedBanks()}
+                    reloadData={reloadData}
+                  />
                 </Route>
               )}
               {selectedOrganization && (

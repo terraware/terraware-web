@@ -1,15 +1,19 @@
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import { Container, Grid } from '@material-ui/core';
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { ServerOrganization } from 'src/types/Organization';
 import strings from 'src/strings';
 import { Facility } from 'src/api/types/facilities';
 import { DeviceManager } from 'src/types/DeviceManager';
+import { Device } from 'src/types/Device';
+import { listFacilityDevicesById } from 'src/api/facility/facility';
 import FlowStep from './sensorKitSetup/FlowStep';
 import SelectPVSystem from './sensorKitSetup/SelectPVSystem';
 import SensorKitID from './sensorKitSetup/SensorKitID';
 import InstallDeviceManager from './sensorKitSetup/InstallDeviceManager';
 import DetectSensors from './sensorKitSetup/DetectSensors';
+import SensorLocations from './sensorKitSetup/SensorLocations';
+import { LOCATIONS } from './sensorKitSetup/Locations';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -44,6 +48,7 @@ type SensorKitSetupProps = {
   seedBank: Facility;
   organization: ServerOrganization;
   onFinish: () => void;
+  reloadData: () => void;
 };
 
 type Completed = {
@@ -52,19 +57,67 @@ type Completed = {
 
 export default function SensorKitSetup(props: SensorKitSetupProps): JSX.Element {
   const classes = useStyles();
-  const { seedBank, onFinish } = props;
+  const { seedBank, onFinish, reloadData } = props;
   const [flowState, setFlowState] = useState<SetupFlowState>('PVSystem');
   const [completedSteps, setCompletedSteps] = useState<Completed>({});
   const [deviceManager, setDeviceManager] = useState<DeviceManager | undefined>();
+  const [sensors, setSensors] = useState<Device[]>([]);
 
-  const setCompletedAndNext = (currentState: SetupFlowState, nextState: SetupFlowState) => {
-    setCompletedSteps((currentCompleted) => {
-      const newCompleted = { ...currentCompleted };
-      newCompleted[currentState] = true;
-      return newCompleted;
-    });
-    setFlowState(nextState);
+  const fetchSensors = useCallback(async () => {
+    const response = await listFacilityDevicesById(seedBank.id);
+    const sensorDevices = response.devices.filter((device) => device.type === 'sensor');
+    return sensorDevices;
+  }, [seedBank.id]);
+
+  const setCompletedAndNext = (currentState: SetupFlowState, nextState: SetupFlowState, reload?: boolean) => {
+    const processData = async () => {
+      if (reload) {
+        reloadData();
+      }
+      if (nextState === 'SensorLocations' && !sensors.length) {
+        const sensorDevices = await fetchSensors();
+        setSensors(sensorDevices);
+      }
+      setCompletedSteps((currentCompleted) => {
+        const newCompleted = { ...currentCompleted };
+        newCompleted[currentState] = true;
+        return newCompleted;
+      });
+      setFlowState(nextState);
+    };
+    processData();
   };
+
+  useEffect(() => {
+    const initializeDevices = async () => {
+      let state: SetupFlowState = 'PVSystem';
+      let completed: Completed = {};
+      if (seedBank.connectionState === 'Connected') {
+        const sensorDevices = await fetchSensors();
+        // see if all sensors match the preset names, in which case we already have the sensors mapped to locations
+        const presetNames = LOCATIONS.reduce((data: { [name: string]: boolean }, location) => {
+          data[location.name] = true;
+          return data;
+        }, {});
+        sensorDevices.forEach((device) => delete presetNames[device.name]);
+        setSensors(sensorDevices);
+        if (Object.keys(presetNames).length === 0) {
+          state = 'Complete';
+          completed = {
+            PVSystem: true,
+            SensorKitID: true,
+            DeviceManager: true,
+            DetectSensors: true,
+            SensorLocations: true,
+          };
+        }
+      }
+      setFlowState(state);
+      setCompletedSteps(completed);
+    };
+
+    initializeDevices();
+  }, [fetchSensors, seedBank.connectionState]);
 
   return (
     <Container maxWidth={false}>
@@ -91,27 +144,27 @@ export default function SensorKitSetup(props: SensorKitSetupProps): JSX.Element 
         />
         <InstallDeviceManager
           active={flowState === 'DeviceManager'}
-          onNext={() => setCompletedAndNext('DeviceManager', 'DetectSensors')}
+          onNext={(reload) => setCompletedAndNext('DeviceManager', 'DetectSensors', reload)}
           completed={completedSteps.DeviceManager}
           deviceManager={deviceManager}
           seedBank={seedBank}
         />
         <DetectSensors
           active={flowState === 'DetectSensors'}
-          onNext={() => setCompletedAndNext('DetectSensors', 'SensorLocations')}
+          onNext={(reload, sensorDevices) => {
+            setCompletedAndNext('DetectSensors', 'SensorLocations', reload);
+            setSensors(sensorDevices);
+          }}
           completed={completedSteps.DetectSensors}
           seedBank={seedBank}
         />
-        <FlowStep
-          flowState='SensorLocations'
+        <SensorLocations
           active={flowState === 'SensorLocations'}
-          showNext={true}
-          onNext={() => setCompletedAndNext('SensorLocations', 'Complete')}
-          title={strings.SENSOR_KIT_SET_UP_SENSOR_LOCATIONS}
+          onNext={(reload) => setCompletedAndNext('SensorLocations', 'Complete', reload)}
           completed={completedSteps.SensorLocations}
-        >
-          <div className={classes.text}>Onboarding SensorLocations placeholder for {seedBank.id}</div>
-        </FlowStep>
+          seedBank={seedBank}
+          sensors={sensors}
+        />
         <FlowStep
           flowState='Complete'
           active={flowState === 'Complete'}
