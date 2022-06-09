@@ -52,14 +52,14 @@ export default function SensorLocations(props: SensorLocationsProps): JSX.Elemen
           setAvailableDevices((currentAvailable) => currentAvailable.filter((device) => device.name !== deviceName));
         }
       } else {
-        if (currentValue) {
-          // add device back to list of available devices to select from
-          setAvailableDevices((currentAvailable) => {
-            const newAvailable = [...currentAvailable, currentValue].sort((a, b) => a.name.localeCompare(b.name));
-            return newAvailable;
-          });
-        }
         delete newLocations[locationName];
+      }
+      if (currentValue) {
+        // add device back to list of available devices to select from
+        setAvailableDevices((currentAvailable) => {
+          const newAvailable = [...currentAvailable, currentValue].sort((a, b) => a.name.localeCompare(b.name));
+          return newAvailable;
+        });
       }
       if (Object.keys(newLocations).length === LOCATIONS.length) {
         setShowError(false);
