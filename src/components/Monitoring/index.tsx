@@ -46,16 +46,16 @@ const useStyles = makeStyles((theme) =>
 type MonitoringProps = {
   organization: ServerOrganization;
   hasSeedBanks: boolean;
+  reloadData: () => void;
 };
 
 export default function Monitoring(props: MonitoringProps): JSX.Element {
   const classes = useStyles();
   const history = useHistory();
-  const { organization, hasSeedBanks } = props;
+  const { organization, hasSeedBanks, reloadData } = props;
   const [selectedSeedBank, setSelectedSeedBank] = useState<Facility>();
+  const [seedBanks, setSeedBanks] = useState<Facility[]>([]);
   const { seedBankId } = useParams<{ seedBankId: string }>();
-
-  const seedBanks = getAllSeedBanks(organization);
 
   const goToSeedBanks = () => {
     const seedBanksLocation = {
@@ -73,6 +73,20 @@ export default function Monitoring(props: MonitoringProps): JSX.Element {
     [history]
   );
 
+  const onChangeSeedBank = (newValue: string) => {
+    setActiveSeedBank(seedBanks.find((sb) => sb?.name === newValue));
+  };
+
+  useEffect(() => {
+    const facilities: Facility[] = [];
+    getAllSeedBanks(organization).forEach((facility) => {
+      if (facility !== undefined) {
+        facilities.push(facility);
+      }
+    });
+    setSeedBanks(facilities);
+  }, [organization]);
+
   useEffect(() => {
     const initializeSeedBank = () => {
       if (seedBanks.length) {
@@ -86,10 +100,6 @@ export default function Monitoring(props: MonitoringProps): JSX.Element {
     };
     initializeSeedBank();
   }, [seedBankId, seedBanks, setActiveSeedBank]);
-
-  const onChangeSeedBank = (newValue: string) => {
-    setActiveSeedBank(seedBanks.find((sb) => sb?.name === newValue));
-  };
 
   return (
     <>
@@ -105,7 +115,9 @@ export default function Monitoring(props: MonitoringProps): JSX.Element {
               selectedValue={selectedSeedBank?.name}
             />
           </div>
-          {selectedSeedBank && <SeedBankMonitoring seedBank={selectedSeedBank} organization={organization} />}
+          {selectedSeedBank && (
+            <SeedBankMonitoring seedBank={selectedSeedBank} organization={organization} reloadData={reloadData} />
+          )}
         </TfMain>
       ) : isAdmin(organization) ? (
         <EmptyMessage

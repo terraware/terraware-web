@@ -3,8 +3,9 @@ import ProgressCircle from 'src/components/common/ProgressCircle/ProgressCircle'
 import React, { useCallback, useEffect, useState } from 'react';
 import strings from 'src/strings';
 import { Facility } from 'src/api/types/facilities';
+import { Device } from 'src/types/Device';
 import FlowStep, { FlowError } from './FlowStep';
-import { listFacilityDevices } from 'src/api/facility/facility';
+import { listFacilityDevicesById } from 'src/api/facility/facility';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -26,7 +27,7 @@ type DetectSensorsProps = {
   seedBank: Facility;
   active: boolean;
   completed: boolean | undefined;
-  onNext: () => void;
+  onNext: (reload: boolean, sensors: Device[]) => void;
 };
 
 export default function DetectSensors(props: DetectSensorsProps): JSX.Element {
@@ -37,7 +38,7 @@ export default function DetectSensors(props: DetectSensorsProps): JSX.Element {
   const [detectFinished, setDetectFinished] = useState<boolean>(false);
   const [pollingStartedOn, setPollingStartedOn] = useState<number>(0);
   const [keepPolling, setKeepPolling] = useState<boolean>(false);
-  const [sensorsFound, setSensorsFound] = useState<number>(0);
+  const [sensorsFound, setSensorsFound] = useState<Device[]>([]);
 
   const pollForSensors = useCallback(() => {
     const tryAgain = () => {
@@ -47,7 +48,8 @@ export default function DetectSensors(props: DetectSensorsProps): JSX.Element {
     };
 
     const poll = async () => {
-      const response = await listFacilityDevices(seedBank);
+      setKeepPolling(false);
+      const response = await listFacilityDevicesById(seedBank.id);
       if (response.requestSucceeded === false) {
         setFlowError({
           title: strings.SERVER_ERROR,
@@ -58,10 +60,10 @@ export default function DetectSensors(props: DetectSensorsProps): JSX.Element {
         return;
       }
 
-      const numSensors = response.devices.filter((device) => device.type === 'sensor').length;
-      setSensorsFound(numSensors);
+      const sensors = response.devices.filter((device) => device.type === 'sensor');
+      setSensorsFound(sensors);
 
-      if (numSensors === TOTAL_SENSORS) {
+      if (sensors.length >= TOTAL_SENSORS) {
         setDetectFinished(true);
         return;
       }
@@ -71,7 +73,7 @@ export default function DetectSensors(props: DetectSensorsProps): JSX.Element {
       if (pollingStartedOn && currentTime - pollingStartedOn >= 20 * 60 * 1000) {
         setFlowError({
           title: strings.SENSOR_SCAN_TIMEOUT,
-          text: strings.formatString(strings.SENSOR_SCAN_TIMEOUT_ERROR, sensorsFound, TOTAL_SENSORS) as string,
+          text: strings.formatString(strings.SENSOR_SCAN_TIMEOUT_ERROR, sensorsFound.length, TOTAL_SENSORS) as string,
           buttonText: strings.TRY_AGAIN,
           onClick: tryAgain,
         });
@@ -82,29 +84,39 @@ export default function DetectSensors(props: DetectSensorsProps): JSX.Element {
     };
 
     poll();
-  }, [pollingStartedOn, seedBank, sensorsFound]);
+  }, [pollingStartedOn, seedBank.id, sensorsFound]);
 
   useEffect(() => {
-    if (!active) {
-      return;
-    }
-    if (seedBank.connectionState === 'Connected') {
+    // re initialize if seed bank id changes
+    setFlowError(undefined);
+    setInitialized(false);
+    setDetectFinished(false);
+    setPollingStartedOn(0);
+    setKeepPolling(false);
+    setSensorsFound([]);
+  }, [seedBank.id]);
+
+  useEffect(() => {
+    if (active && seedBank.connectionState === 'Connected') {
       setInitialized(true);
       if (!pollingStartedOn) {
         setPollingStartedOn(Date.now());
-        setKeepPolling(true);
+        pollForSensors();
       }
-    } else {
-      onNext();
     }
-  }, [seedBank, active, onNext, pollingStartedOn]);
+  }, [seedBank, active, pollingStartedOn, pollForSensors]);
 
   useEffect(() => {
+    let timeout: ReturnType<typeof setTimeout> | null = null;
     if (keepPolling) {
       setFlowError(undefined);
-      setTimeout(pollForSensors, 5 * 1000);
-      setKeepPolling(false);
+      timeout = setTimeout(pollForSensors, 5 * 1000);
     }
+    return () => {
+      if (timeout) {
+        clearTimeout(timeout);
+      }
+    };
   }, [keepPolling, pollForSensors]);
 
   return (
@@ -113,7 +125,7 @@ export default function DetectSensors(props: DetectSensorsProps): JSX.Element {
       active={active && initialized}
       showNext={detectFinished}
       flowError={flowError}
-      onNext={onNext}
+      onNext={() => onNext(true, sensorsFound)}
       title={strings.SENSOR_KIT_SET_UP_DETECT_SENSORS}
       completed={completed}
       footer={
@@ -121,12 +133,12 @@ export default function DetectSensors(props: DetectSensorsProps): JSX.Element {
           <ProgressCircle
             size='small'
             determinate={true}
-            value={(sensorsFound / TOTAL_SENSORS) * 100}
+            value={(sensorsFound.length / TOTAL_SENSORS) * 100}
             hideValue={true}
           />
           <span className={classes.detectInProgress}>
             {detectFinished && strings.ALL_SENSORS_FOUND}
-            {!detectFinished && strings.formatString(strings.SENSORS_FOUND, sensorsFound, TOTAL_SENSORS)}
+            {!detectFinished && strings.formatString(strings.SENSORS_FOUND, sensorsFound.length, TOTAL_SENSORS)}
           </span>
         </div>
       }

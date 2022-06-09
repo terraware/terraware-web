@@ -6,7 +6,7 @@ import { DeviceTemplate } from 'src/types/Device';
 import Select from '../../common/Select/Select';
 import FlowStep, { FlowError } from './FlowStep';
 import { listDeviceTemplates, createDevice } from 'src/api/device/device';
-import { listFacilityDevices } from 'src/api/facility/facility';
+import { listFacilityDevicesById } from 'src/api/facility/facility';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -40,9 +40,43 @@ export default function SelectPVSystem(props: SelectPVSystemProps): JSX.Element 
     setFlowError(undefined);
   };
 
+  const goToNext = () => {
+    setFlowError(undefined);
+
+    if (!selectedPVSystem) {
+      setShowError(true);
+      setFlowError({ text: strings.FILL_OUT_ALL_FIELDS });
+      return;
+    }
+
+    setProcessing(true);
+    const createDeviceFromTemplate = async () => {
+      const createDeviceResponse = await createDevice(seedBank.id, selectedPVSystem);
+      setProcessing(false);
+      if (createDeviceResponse.requestSucceeded === false) {
+        setFlowError({
+          title: strings.SERVER_ERROR,
+          text: strings.GENERIC_ERROR,
+        });
+        return;
+      }
+      onNext();
+    };
+    createDeviceFromTemplate();
+  };
+
+  useEffect(() => {
+    // re initialize if seedbank id changes
+    setAvailablePVSystems([]);
+    setShowError(false);
+    setFlowError(undefined);
+    setProcessing(false);
+    setInitialized(false);
+  }, [seedBank.id]);
+
   useEffect(() => {
     const fetchDevices = async () => {
-      const response = await listFacilityDevices(seedBank);
+      const response = await listFacilityDevicesById(seedBank.id);
       if (!response.requestSucceeded) {
         setFlowError({
           title: strings.SERVER_ERROR,
@@ -88,32 +122,7 @@ export default function SelectPVSystem(props: SelectPVSystemProps): JSX.Element 
         onNext();
       }
     }
-  }, [setAvailablePVSystems, seedBank, onNext, setInitialized, active]);
-
-  const goToNext = () => {
-    setFlowError(undefined);
-
-    if (!selectedPVSystem) {
-      setShowError(true);
-      setFlowError({ text: strings.FILL_OUT_ALL_FIELDS });
-      return;
-    }
-
-    setProcessing(true);
-    const createDeviceFromTemplate = async () => {
-      const createDeviceResponse = await createDevice(seedBank.id, selectedPVSystem);
-      setProcessing(false);
-      if (createDeviceResponse.requestSucceeded === false) {
-        setFlowError({
-          title: strings.SERVER_ERROR,
-          text: strings.GENERIC_ERROR,
-        });
-        return;
-      }
-      onNext();
-    };
-    createDeviceFromTemplate();
-  };
+  }, [setAvailablePVSystems, seedBank.id, seedBank.connectionState, onNext, setInitialized, active]);
 
   return (
     <FlowStep

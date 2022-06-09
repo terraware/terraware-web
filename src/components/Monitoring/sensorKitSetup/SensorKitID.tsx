@@ -30,17 +30,6 @@ export default function SensorKitID(props: SensorKitIDProps): JSX.Element {
   const [flowError, setFlowError] = useState<FlowError | undefined>();
   const [initialized, setInitialized] = useState<boolean>(false);
 
-  useEffect(() => {
-    if (!active) {
-      return;
-    }
-    if (seedBank.connectionState === 'Not Connected') {
-      setInitialized(true);
-    } else {
-      onNext(undefined);
-    }
-  }, [seedBank, active, onNext]);
-
   const onChange = (id: string, value: unknown) => {
     setShortCode(value as string);
   };
@@ -82,6 +71,25 @@ export default function SensorKitID(props: SensorKitIDProps): JSX.Element {
 
     fetchDeviceManager();
   };
+
+  useEffect(() => {
+    // re initialize if seed bank id changes
+    setShortCode(undefined);
+    setError(undefined);
+    setFlowError(undefined);
+    setInitialized(false);
+  }, [seedBank.id]);
+
+  useEffect(() => {
+    if (!active) {
+      return;
+    }
+    if (seedBank.connectionState === 'Not Connected') {
+      setInitialized(true);
+    } else {
+      onNext(undefined);
+    }
+  }, [seedBank, active, onNext]);
 
   return (
     <FlowStep
