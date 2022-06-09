@@ -268,7 +268,7 @@ export default function Monitoring(props: SeedBankMonitoringProps): JSX.Element 
         return 34;
       case 'Dry':
       case 'Drying':
-        return 37;
+        return 27;
       default:
         return 34;
     }
@@ -284,7 +284,7 @@ export default function Monitoring(props: SeedBankMonitoringProps): JSX.Element 
         return 40;
       case 'Dry':
       case 'Drying':
-        return 43;
+        return 33;
       default:
         return 40;
     }
@@ -301,80 +301,113 @@ export default function Monitoring(props: SeedBankMonitoringProps): JSX.Element 
   ) => {
     const ctx = chartReference?.current?.getContext('2d');
     if (ctx && selectedLocation) {
+      const commonDatasets = [
+        {
+          data: temperatureValues?.map((entry) => {
+            return { x: moment(entry.timestamp), y: Number(entry.value) };
+          }),
+          label: 'Temperature',
+          showLine: true,
+          fill: false,
+          borderColor: '#FE0003',
+          backgroundColor: '#FF5A5B',
+        },
+        {
+          data: humidityValues?.map((entry) => {
+            return { x: moment(entry.timestamp), y: Number(entry.value) };
+          }),
+          label: 'Humidity',
+          showLine: true,
+          fill: false,
+          borderColor: '#0067C8',
+          backgroundColor: '#007DF2',
+          yAxisID: 'y1',
+        },
+        {
+          data: temperatureValues?.map((entry) => {
+            return { x: moment(entry.timestamp), y: getTemperatureMinValue(selectedLocation?.name) };
+          }),
+          label: 'Temperature Thresholds',
+          showLine: false,
+          borderColor: '#FF9797',
+          backgroundColor: '#FFC1C1',
+          fill: false,
+          pointRadius: 0,
+        },
+        {
+          data: temperatureValues?.map((entry) => {
+            return { x: moment(entry.timestamp), y: getTemperatureMaxValue(selectedLocation?.name) };
+          }),
+          showLine: false,
+          borderColor: '#FF9797',
+          pointRadius: 0,
+          fill: {
+            target: 2,
+            above: '#FFBFD035', // Area will be red above the origin
+          },
+        },
+        {
+          data: humidityValues?.map((entry) => {
+            return { x: moment(entry.timestamp), y: getHumidityMinValue(selectedLocation?.name) };
+          }),
+          label: 'Humidity Thresholds',
+          showLine: false,
+          borderColor: '#BED0FF',
+          backgroundColor: '#E2E9FF',
+          fill: false,
+          pointRadius: 0,
+          yAxisID: 'y1',
+        },
+        {
+          data: humidityValues?.map((entry) => {
+            return { x: moment(entry.timestamp), y: getHumidityMaxValue(selectedLocation?.name) };
+          }),
+          showLine: false,
+          borderColor: '#BED0FF',
+          pointRadius: 0,
+          fill: {
+            target: 2,
+            above: '#E2E9FF35', // Area will be red above the origin
+          },
+          yAxisID: 'y1',
+        },
+      ];
+
+      const humidityThresholds = [
+        {
+          data: humidityValues?.map((entry) => {
+            return { x: moment(entry.timestamp), y: getHumidityMinValue(selectedLocation?.name) };
+          }),
+          label: 'Humidity Thresholds',
+          showLine: false,
+          borderColor: '#BED0FF',
+          backgroundColor: '#E2E9FF',
+          fill: false,
+          pointRadius: 0,
+          yAxisID: 'y1',
+        },
+        {
+          data: humidityValues?.map((entry) => {
+            return { x: moment(entry.timestamp), y: getHumidityMaxValue(selectedLocation?.name) };
+          }),
+          showLine: false,
+          borderColor: '#BED0FF',
+          pointRadius: 0,
+          fill: {
+            target: 2,
+            above: '#E2E9FF35', // Area will be red above the origin
+          },
+          yAxisID: 'y1',
+        },
+      ];
+      let datasetsToUse = commonDatasets;
+      if (getFirstWord(selectedLocation.name) !== 'Fridge' && getFirstWord(selectedLocation.name) !== 'Freezer') {
+        datasetsToUse = [...commonDatasets, ...humidityThresholds];
+      }
       window[chartName] = new Chart(ctx, {
         type: 'scatter',
         data: {
-          datasets: [
-            {
-              data: temperatureValues?.map((entry) => {
-                return { x: moment(entry.timestamp), y: Number(entry.value) };
-              }),
-              label: 'Temperature',
-              showLine: true,
-              fill: false,
-              borderColor: '#FE0003',
-              backgroundColor: '#FF5A5B',
-            },
-            {
-              data: humidityValues?.map((entry) => {
-                return { x: moment(entry.timestamp), y: Number(entry.value) };
-              }),
-              label: 'Humidity',
-              showLine: true,
-              fill: false,
-              borderColor: '#0067C8',
-              backgroundColor: '#007DF2',
-              yAxisID: 'y1',
-            },
-            {
-              data: temperatureValues?.map((entry) => {
-                return { x: moment(entry.timestamp), y: getTemperatureMinValue(selectedLocation?.name) };
-              }),
-              label: 'Temperature Thresholds',
-              showLine: false,
-              borderColor: '#FF9797',
-              backgroundColor: '#FFC1C1',
-              fill: false,
-              pointRadius: 0,
-            },
-            {
-              data: temperatureValues?.map((entry) => {
-                return { x: moment(entry.timestamp), y: getTemperatureMaxValue(selectedLocation?.name) };
-              }),
-              showLine: false,
-              borderColor: '#FF9797',
-              pointRadius: 0,
-              fill: {
-                target: 2,
-                above: '#FFBFD035', // Area will be red above the origin
-              },
-            },
-            {
-              data: humidityValues?.map((entry) => {
-                return { x: moment(entry.timestamp), y: getHumidityMinValue(selectedLocation?.name) };
-              }),
-              label: 'Humidity Thresholds',
-              showLine: false,
-              borderColor: '#BED0FF',
-              backgroundColor: '#E2E9FF',
-              fill: false,
-              pointRadius: 0,
-              yAxisID: 'y1',
-            },
-            {
-              data: humidityValues?.map((entry) => {
-                return { x: moment(entry.timestamp), y: getHumidityMaxValue(selectedLocation?.name) };
-              }),
-              showLine: false,
-              borderColor: '#BED0FF',
-              pointRadius: 0,
-              fill: {
-                target: 2,
-                above: '#E2E9FF35', // Area will be red above the origin
-              },
-              yAxisID: 'y1',
-            },
-          ],
+          datasets: datasetsToUse,
         },
         options: {
           scales: {
