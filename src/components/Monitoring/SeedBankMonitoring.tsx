@@ -53,7 +53,7 @@ export default function Monitoring(props: SeedBankMonitoringProps): JSX.Element 
   }, [seedBank, setOnboarding]);
 
   const onFinishOnboarding = () => {
-    setOnboarding(false);
+    reloadData();
   };
 
   return (
