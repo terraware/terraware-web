@@ -230,7 +230,7 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
     setSelectedLocation(availableLocations?.find((aL) => aL.name === newValue));
   };
 
-  const onChangeSelectedPeriod = async (newValue: string) => {
+  const onChangeSelectedPeriod = (newValue: string) => {
     setSelectedPeriod(newValue);
   };
 
