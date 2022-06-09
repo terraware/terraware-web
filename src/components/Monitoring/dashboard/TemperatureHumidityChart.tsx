@@ -1,5 +1,5 @@
 import { createStyles, makeStyles } from '@material-ui/core/styles';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import strings from 'src/strings';
 import Select from '../../common/Select/Select';
 import { Chart } from 'chart.js';
@@ -47,33 +47,191 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
   const [selectedLocation, setSelectedLocation] = useState<Device>();
   const [selectedPeriod, setSelectedPeriod] = useState<string>();
 
+  useEffect(() => {
+    const createHTChart = (
+      temperatureValues: HumidityValues[],
+      humidityValues: HumidityValues[],
+      chartReference: React.RefObject<HTMLCanvasElement>
+    ) => {
+      const ctx = chartReference?.current?.getContext('2d');
+      if (ctx && selectedLocation) {
+        const commonDatasets = [
+          {
+            data: temperatureValues?.map((entry) => {
+              return { x: moment(entry.timestamp), y: Number(entry.value) };
+            }),
+            label: 'Temperature',
+            showLine: true,
+            fill: false,
+            borderColor: '#FE0003',
+            backgroundColor: '#FF5A5B',
+          },
+          {
+            data: humidityValues?.map((entry) => {
+              return { x: moment(entry.timestamp), y: Number(entry.value) };
+            }),
+            label: 'Humidity',
+            showLine: true,
+            fill: false,
+            borderColor: '#0067C8',
+            backgroundColor: '#007DF2',
+            yAxisID: 'y1',
+          },
+          {
+            data: temperatureValues?.map((entry) => {
+              return { x: moment(entry.timestamp), y: getTemperatureMinValue(selectedLocation?.name) };
+            }),
+            label: 'Temperature Thresholds',
+            showLine: false,
+            borderColor: '#FF9797',
+            backgroundColor: '#FFC1C1',
+            fill: false,
+            pointRadius: 0,
+          },
+          {
+            data: temperatureValues?.map((entry) => {
+              return { x: moment(entry.timestamp), y: getTemperatureMaxValue(selectedLocation?.name) };
+            }),
+            showLine: false,
+            borderColor: '#FF9797',
+            pointRadius: 0,
+            fill: {
+              target: 2,
+              above: '#FFBFD035', // Area will be red above the origin
+            },
+          },
+        ];
+
+        const humidityThresholds = [
+          {
+            data: humidityValues?.map((entry) => {
+              return { x: moment(entry.timestamp), y: getHumidityMinValue(selectedLocation?.name) };
+            }),
+            label: 'Humidity Thresholds',
+            showLine: false,
+            borderColor: '#BED0FF',
+            backgroundColor: '#E2E9FF',
+            fill: false,
+            pointRadius: 0,
+            yAxisID: 'y1',
+          },
+          {
+            data: humidityValues?.map((entry) => {
+              return { x: moment(entry.timestamp), y: getHumidityMaxValue(selectedLocation?.name) };
+            }),
+            showLine: false,
+            borderColor: '#BED0FF',
+            pointRadius: 0,
+            fill: {
+              target: 2,
+              above: '#E2E9FF35', // Area will be red above the origin
+            },
+            yAxisID: 'y1',
+          },
+        ];
+        let datasetsToUse;
+        if (getFirstWord(selectedLocation.name) !== 'Fridge' && getFirstWord(selectedLocation.name) !== 'Freezer') {
+          datasetsToUse = [...commonDatasets, ...humidityThresholds];
+        } else {
+          datasetsToUse = [...commonDatasets];
+        }
+        window.temperatureHumidityChart = new Chart(ctx, {
+          type: 'scatter',
+          data: {
+            datasets: datasetsToUse,
+          },
+          options: {
+            scales: {
+              // @ts-ignore
+              yAxes: [
+                {
+                  ticks: {
+                    beginAtZero: true,
+                  },
+                },
+              ],
+              x: {
+                ticks: {
+                  callback: (value, index, ticks) => {
+                    return moment(value).format('YYYY-MM-DDTHH:mm');
+                  },
+                },
+              },
+              y1: {
+                type: 'linear',
+                display: true,
+                position: 'right',
+                // grid line settings
+                grid: {
+                  drawOnChartArea: false, // only want the grid lines for one axis to show up
+                },
+              },
+            },
+            plugins: {
+              legend: {
+                labels: {
+                  filter(legendItem: { text: string | string[] }, data: any) {
+                    // only show 2nd dataset in legend
+                    return legendItem.text !== undefined;
+                  },
+                },
+              },
+              tooltip: {
+                callbacks: {
+                  label: (context) => {
+                    let label = '';
+
+                    if (context.parsed.x !== null) {
+                      label += moment(context.parsed.x).format('YYYY-MM-DDTHH:mm');
+                    }
+                    if (context.parsed.y !== null) {
+                      label += ', ' + context.parsed.y;
+                    }
+                    return label;
+                  },
+                },
+              },
+            },
+          },
+        });
+      }
+    };
+
+    const getChartData = async () => {
+      if (selectedPeriod) {
+        const startTime = getStartTime(selectedPeriod);
+        const endTime = moment();
+        if (selectedLocation) {
+          const response = await getTimeseriesHistory(
+            startTime.format(),
+            endTime.format(),
+            [
+              { deviceId: selectedLocation.id, timeseriesName: 'temperature' },
+              { deviceId: selectedLocation.id, timeseriesName: 'humidity' },
+            ],
+            12
+          );
+
+          if (response.requestSucceeded) {
+            if (window.temperatureHumidityChart instanceof Chart) {
+              window.temperatureHumidityChart.destroy();
+            }
+            createHTChart(response.values[0]?.values, response.values[1]?.values, chartRef);
+          }
+        }
+      }
+    };
+    if (selectedLocation) {
+      getChartData();
+    }
+  }, [availableLocations, selectedPeriod, selectedLocation]);
+
   const onChangeLocation = (newValue: string) => {
     setSelectedLocation(availableLocations?.find((aL) => aL.name === newValue));
   };
 
   const onChangeSelectedPeriod = async (newValue: string) => {
     setSelectedPeriod(newValue);
-    const startTime = getStartTime(newValue);
-    const endTime = moment();
-
-    if (selectedLocation) {
-      const response = await getTimeseriesHistory(
-        startTime.format(),
-        endTime.format(),
-        [
-          { deviceId: selectedLocation.id, timeseriesName: 'temperature' },
-          { deviceId: selectedLocation.id, timeseriesName: 'humidity' },
-        ],
-        12
-      );
-
-      if (response.requestSucceeded) {
-        if (window.temperatureHumidityChart instanceof Chart) {
-          window.temperatureHumidityChart.destroy();
-        }
-        createHTChart(response.values[0]?.values, response.values[1]?.values, chartRef);
-      }
-    }
   };
 
   const getTemperatureMinValue = (sensorName: string) => {
@@ -141,155 +299,6 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
   };
 
   const chartRef = React.useRef<HTMLCanvasElement>(null);
-
-  const createHTChart = (
-    temperatureValues: HumidityValues[],
-    humidityValues: HumidityValues[],
-    chartReference: React.RefObject<HTMLCanvasElement>
-  ) => {
-    const ctx = chartReference?.current?.getContext('2d');
-    if (ctx && selectedLocation) {
-      const commonDatasets = [
-        {
-          data: temperatureValues?.map((entry) => {
-            return { x: moment(entry.timestamp), y: Number(entry.value) };
-          }),
-          label: 'Temperature',
-          showLine: true,
-          fill: false,
-          borderColor: '#FE0003',
-          backgroundColor: '#FF5A5B',
-        },
-        {
-          data: humidityValues?.map((entry) => {
-            return { x: moment(entry.timestamp), y: Number(entry.value) };
-          }),
-          label: 'Humidity',
-          showLine: true,
-          fill: false,
-          borderColor: '#0067C8',
-          backgroundColor: '#007DF2',
-          yAxisID: 'y1',
-        },
-        {
-          data: temperatureValues?.map((entry) => {
-            return { x: moment(entry.timestamp), y: getTemperatureMinValue(selectedLocation?.name) };
-          }),
-          label: 'Temperature Thresholds',
-          showLine: false,
-          borderColor: '#FF9797',
-          backgroundColor: '#FFC1C1',
-          fill: false,
-          pointRadius: 0,
-        },
-        {
-          data: temperatureValues?.map((entry) => {
-            return { x: moment(entry.timestamp), y: getTemperatureMaxValue(selectedLocation?.name) };
-          }),
-          showLine: false,
-          borderColor: '#FF9797',
-          pointRadius: 0,
-          fill: {
-            target: 2,
-            above: '#FFBFD035', // Area will be red above the origin
-          },
-        },
-      ];
-
-      const humidityThresholds = [
-        {
-          data: humidityValues?.map((entry) => {
-            return { x: moment(entry.timestamp), y: getHumidityMinValue(selectedLocation?.name) };
-          }),
-          label: 'Humidity Thresholds',
-          showLine: false,
-          borderColor: '#BED0FF',
-          backgroundColor: '#E2E9FF',
-          fill: false,
-          pointRadius: 0,
-          yAxisID: 'y1',
-        },
-        {
-          data: humidityValues?.map((entry) => {
-            return { x: moment(entry.timestamp), y: getHumidityMaxValue(selectedLocation?.name) };
-          }),
-          showLine: false,
-          borderColor: '#BED0FF',
-          pointRadius: 0,
-          fill: {
-            target: 2,
-            above: '#E2E9FF35', // Area will be red above the origin
-          },
-          yAxisID: 'y1',
-        },
-      ];
-      let datasetsToUse;
-      if (getFirstWord(selectedLocation.name) !== 'Fridge' && getFirstWord(selectedLocation.name) !== 'Freezer') {
-        datasetsToUse = [...commonDatasets, ...humidityThresholds];
-      } else {
-        datasetsToUse = [...commonDatasets];
-      }
-      window.temperatureHumidityChart = new Chart(ctx, {
-        type: 'scatter',
-        data: {
-          datasets: datasetsToUse,
-        },
-        options: {
-          scales: {
-            // @ts-ignore
-            yAxes: [
-              {
-                ticks: {
-                  beginAtZero: true,
-                },
-              },
-            ],
-            x: {
-              ticks: {
-                callback: (value, index, ticks) => {
-                  return moment(value).format('YYYY-MM-DDTHH:mm');
-                },
-              },
-            },
-            y1: {
-              type: 'linear',
-              display: true,
-              position: 'right',
-              // grid line settings
-              grid: {
-                drawOnChartArea: false, // only want the grid lines for one axis to show up
-              },
-            },
-          },
-          plugins: {
-            legend: {
-              labels: {
-                filter(legendItem: { text: string | string[] }, data: any) {
-                  // only show 2nd dataset in legend
-                  return legendItem.text !== undefined;
-                },
-              },
-            },
-            tooltip: {
-              callbacks: {
-                label: (context) => {
-                  let label = '';
-
-                  if (context.parsed.x !== null) {
-                    label += moment(context.parsed.x).format('YYYY-MM-DDTHH:mm');
-                  }
-                  if (context.parsed.y !== null) {
-                    label += ', ' + context.parsed.y;
-                  }
-                  return label;
-                },
-              },
-            },
-          },
-        },
-      });
-    }
-  };
 
   return (
     <div className={classes.graphContainer}>

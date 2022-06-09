@@ -122,7 +122,7 @@ export default function Monitoring(props: MonitoringProps): JSX.Element {
               />
             </div>
             {selectedSeedBank?.connectionState === 'Configured' ? (
-              <Button label={strings.REFRESH_DATA} onClick={() => true} />
+              <Button label={strings.REFRESH_DATA} onClick={reloadData} />
             ) : null}
           </div>
           {selectedSeedBank && (

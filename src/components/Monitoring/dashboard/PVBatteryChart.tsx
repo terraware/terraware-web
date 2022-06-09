@@ -1,5 +1,5 @@
 import { createStyles, makeStyles } from '@material-ui/core/styles';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import strings from 'src/strings';
 import Select from '../../common/Select/Select';
 import { Chart } from 'chart.js';
@@ -46,35 +46,46 @@ export default function PVBatteryChart(props: PVBatteryChartProps): JSX.Element 
   const { BMU } = props;
   const [selectedPVBatteryPeriod, setSelectedPVBatteryPeriod] = useState<string>();
 
-  const onChangePVBatterySelectedPeriod = async (newValue: string) => {
-    setSelectedPVBatteryPeriod(newValue);
-    const startTime = getStartTime(newValue);
-    const endTime = moment();
-    if (BMU) {
-      const response = await getTimeseriesHistory(
-        startTime.format(),
-        endTime.format(),
-        [
-          { deviceId: BMU.id, timeseriesName: 'relative_state_of_charge' },
-          { deviceId: BMU.id, timeseriesName: 'system_voltage' },
-          { deviceId: BMU.id, timeseriesName: 'system_current' },
-        ],
-        12
-      );
+  useEffect(() => {
+    const getChartData = async () => {
+      if (selectedPVBatteryPeriod) {
+        const startTime = getStartTime(selectedPVBatteryPeriod);
+        const endTime = moment();
+        if (BMU) {
+          const response = await getTimeseriesHistory(
+            startTime.format(),
+            endTime.format(),
+            [
+              { deviceId: BMU.id, timeseriesName: 'relative_state_of_charge' },
+              { deviceId: BMU.id, timeseriesName: 'system_voltage' },
+              { deviceId: BMU.id, timeseriesName: 'system_current' },
+            ],
+            12
+          );
 
-      if (response.requestSucceeded) {
-        if (window.pvBatteryChart instanceof Chart) {
-          window.pvBatteryChart.destroy();
+          if (response.requestSucceeded) {
+            if (window.pvBatteryChart instanceof Chart) {
+              window.pvBatteryChart.destroy();
+            }
+            createBatteryChart(
+              response.values[0]?.values,
+              response.values[1]?.values,
+              response.values[2]?.values,
+              pvBatteryRef
+            );
+          }
         }
-        createBatteryChart(
-          response.values[0]?.values,
-          response.values[1]?.values,
-          response.values[2]?.values,
-          pvBatteryRef
-        );
       }
+    };
+    if (selectedPVBatteryPeriod) {
+      getChartData();
     }
+  }, [BMU, selectedPVBatteryPeriod]);
+
+  const onChangePVBatterySelectedPeriod = (newValue: string) => {
+    setSelectedPVBatteryPeriod(newValue);
   };
+
   const pvBatteryRef = React.useRef<HTMLCanvasElement>(null);
 
   const createBatteryChart = (
