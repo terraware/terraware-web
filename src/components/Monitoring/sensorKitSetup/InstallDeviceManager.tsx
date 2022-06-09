@@ -6,6 +6,7 @@ import { Facility } from 'src/api/types/facilities';
 import { DeviceManager } from 'src/types/DeviceManager';
 import FlowStep, { FlowError } from './FlowStep';
 import { connectDeviceManager, getDeviceManager } from 'src/api/deviceManager/deviceManager';
+import getHelpEmail from 'src/components/common/HelpEmail';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -41,6 +42,10 @@ export default function InstallDeviceManager(props: InstallDeviceManagerProps): 
   const [progressPercentage, setProgressPercentage] = useState<number>(0);
   const [keepPolling, setKeepPolling] = useState<boolean>(false);
 
+  const formatEmailErrorMessage = (message: string): string => {
+    return strings.formatString(message, getHelpEmail()) as string;
+  };
+
   const checkDeviceManagerProgress = useCallback(() => {
     const checkProgress = async () => {
       setKeepPolling(false);
@@ -48,7 +53,7 @@ export default function InstallDeviceManager(props: InstallDeviceManagerProps): 
       if (response.manager === undefined) {
         setFlowError({
           title: strings.CONNECT_FAILED,
-          text: strings.UNABLE_TO_CONNECT_TO_SENSOR_KIT,
+          text: formatEmailErrorMessage(strings.UNABLE_TO_CONNECT_TO_SENSOR_KIT),
         });
         return;
       }
@@ -68,7 +73,7 @@ export default function InstallDeviceManager(props: InstallDeviceManagerProps): 
       if (pollingStartedOn && currentTime - pollingStartedOn >= 20 * 60 * 1000) {
         setFlowError({
           title: strings.DOWNLOAD_FAILED,
-          text: strings.DOWNLOAD_FAILED_DESCRIPTION,
+          text: formatEmailErrorMessage(strings.DOWNLOAD_FAILED_DESCRIPTION),
           buttonText: strings.TRY_AGAIN,
           onClick: () => {
             setPollingStartedOn(Date.now());
@@ -94,7 +99,7 @@ export default function InstallDeviceManager(props: InstallDeviceManagerProps): 
       if (response.requestSucceeded === false) {
         setFlowError({
           title: strings.CONNECT_FAILED,
-          text: strings.UNABLE_TO_CONNECT_TO_SENSOR_KIT,
+          text: formatEmailErrorMessage(strings.UNABLE_TO_CONNECT_TO_SENSOR_KIT),
           buttonText: strings.TRY_AGAIN,
           onClick: connect,
         });
