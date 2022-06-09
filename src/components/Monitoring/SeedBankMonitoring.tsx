@@ -54,10 +54,6 @@ export default function Monitoring(props: SeedBankMonitoringProps): JSX.Element 
 
   const onFinishOnboarding = () => {
     reloadData();
-    // delay completion by a bit to allow reloadData to possibly finish
-    setTimeout(() => {
-      setOnboarding(false);
-    }, 100);
   };
 
   return (
