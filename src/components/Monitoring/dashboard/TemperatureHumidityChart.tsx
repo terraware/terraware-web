@@ -143,13 +143,14 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
           options: {
             scales: {
               // @ts-ignore
-              yAxes: [
-                {
-                  ticks: {
-                    beginAtZero: true,
+              y: {
+                ticks: {
+                  callback: (value, index, ticks) => {
+                    return `${value}ºC`;
                   },
                 },
-              ],
+              },
+
               x: {
                 ticks: {
                   callback: (value, index, ticks) => {
@@ -164,6 +165,11 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
                 // grid line settings
                 grid: {
                   drawOnChartArea: false, // only want the grid lines for one axis to show up
+                },
+                ticks: {
+                  callback: (value, index, ticks) => {
+                    return `${value}%`;
+                  },
                 },
               },
             },

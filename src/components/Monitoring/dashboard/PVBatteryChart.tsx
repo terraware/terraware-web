@@ -137,13 +137,13 @@ export default function PVBatteryChart(props: PVBatteryChartProps): JSX.Element 
         options: {
           scales: {
             // @ts-ignore
-            yAxes: [
-              {
-                ticks: {
-                  beginAtZero: true,
+            y: {
+              ticks: {
+                callback: (value, index, ticks) => {
+                  return `${value}%`;
                 },
               },
-            ],
+            },
             x: {
               ticks: {
                 callback: (value, index, ticks) => {
@@ -159,6 +159,11 @@ export default function PVBatteryChart(props: PVBatteryChartProps): JSX.Element 
               grid: {
                 drawOnChartArea: false, // only want the grid lines for one axis to show up
               },
+              ticks: {
+                callback: (value, index, ticks) => {
+                  return `${value}V`;
+                },
+              },
             },
             y2: {
               type: 'linear',
@@ -167,6 +172,11 @@ export default function PVBatteryChart(props: PVBatteryChartProps): JSX.Element 
               // grid line settings
               grid: {
                 drawOnChartArea: false, // only want the grid lines for one axis to show up
+              },
+              ticks: {
+                callback: (value, index, ticks) => {
+                  return `${value}A`;
+                },
               },
             },
           },
