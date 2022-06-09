@@ -13,19 +13,6 @@ export interface Props {
 
 export default function ErrorBox(props: Props): JSX.Element {
   const { text, onClick, buttonText, title, className } = props;
-  const matchEmail = text.match(/(.*)(help@terraformation.com)(.*)/i);
-
-  let textElements: JSX.Element | string = text;
-  if (matchEmail && matchEmail.length === 4) {
-    const [, preEmail, email, postEmail] = matchEmail;
-    textElements = (
-      <>
-        <span>{preEmail}</span>
-        <a href={'mailto:' + email}>{email}</a>
-        <span>{postEmail}</span>
-      </>
-    );
-  }
 
   return (
     <div className={`error-box ${className}`}>
@@ -33,7 +20,7 @@ export default function ErrorBox(props: Props): JSX.Element {
         <Icon name='error' className='error-icon' size='large' />
         <div>
           {title && <h1 className='error-title'>{title}</h1>}
-          <p className='error-text'>{textElements}</p>
+          <p className='error-text'>{text}</p>
         </div>
       </div>
       {buttonText && onClick && (
