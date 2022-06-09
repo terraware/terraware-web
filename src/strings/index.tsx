@@ -497,6 +497,7 @@ const strings = new LocalizedStrings({
     ALL_SENSORS_FOUND: 'All sensors found.',
     SENSOR_SCAN_TIMEOUT: 'Sensor Scan Timeout',
     SENSOR_SCAN_TIMEOUT_ERROR:
+      "Only {0}/{1} sensors were found. Please make sure all sensors are powered on and within range, then try again. If this problem persists, you might have broken sensors; if you think that's the case, email us at {2}.",
     FRIDGE: 'Fridge',
     FREEZER: 'Freezer',
     DRY_CABINET: 'Dry Cabinet',
@@ -506,7 +507,6 @@ const strings = new LocalizedStrings({
     BACK_OF_SEED_BANK: 'Back of Seed Bank',
     FINISH: 'Finish',
     SENSOR_LOCATION_ERROR: 'Each location much have one sensor assigned to it.',
-      "Only {0}/{1} sensors were found. Please make sure all sensors are powered on and within range, then try again. If this problem persists, you might have broken sensors; if you think that's the case, email us at {2}.",
   },
 });
 
