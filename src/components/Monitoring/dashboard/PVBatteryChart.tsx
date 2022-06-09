@@ -4,7 +4,7 @@ import strings from 'src/strings';
 import Select from '../../common/Select/Select';
 import { Chart } from 'chart.js';
 import { Device } from 'src/types/Device';
-import { getTimeseriesHistory } from 'src/api/device/device';
+import { getTimeseriesHistory } from 'src/api/timeseries/timeseries';
 import moment from 'moment';
 import { getStartTime, HumidityValues } from './SeedBankDashboard';
 
@@ -70,8 +70,7 @@ export default function PVBatteryChart(props: PVBatteryChartProps): JSX.Element 
           response.values[0]?.values,
           response.values[1]?.values,
           response.values[2]?.values,
-          pvBatteryRef,
-          'pvBatteryChart'
+          pvBatteryRef
         );
       }
     }
@@ -82,12 +81,11 @@ export default function PVBatteryChart(props: PVBatteryChartProps): JSX.Element 
     stateOfChargeValues: HumidityValues[],
     voltageValues: HumidityValues[],
     currentValues: HumidityValues[],
-    chartReference: React.RefObject<HTMLCanvasElement>,
-    chartName: 'myChart' | 'pvBatteryChart'
+    chartReference: React.RefObject<HTMLCanvasElement>
   ) => {
     const ctx = chartReference?.current?.getContext('2d');
     if (ctx) {
-      window[chartName] = new Chart(ctx, {
+      window.pvBatteryChart = new Chart(ctx, {
         type: 'scatter',
         data: {
           datasets: [

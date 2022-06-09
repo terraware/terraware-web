@@ -11,12 +11,6 @@ import { EMPTY_STATE_CONTENT_STYLES } from '../emptyStatePages/EmptyStatePage';
 import SensorKitSetup from './SensorKitSetup';
 import SeedBankDashboard from './dashboard/SeedBankDashboard';
 
-declare global {
-  interface Window {
-    myChart: any;
-    pvBatteryChart: any;
-  }
-}
 const useStyles = makeStyles((theme) =>
   createStyles({
     placeholder: {
@@ -37,44 +31,6 @@ const useStyles = makeStyles((theme) =>
       margin: 'auto',
       marginTop: `max(10vh, ${theme.spacing(8)}px)`,
       maxWidth: '800px',
-    },
-    graphContainer: {
-      border: '1px solid #A9B7B8',
-      padding: '24px',
-    },
-    graphTitle: {
-      fontWeight: 600,
-      fontSize: '20px',
-      margin: '0 0 24px 0',
-    },
-    dropDownsContainer: {
-      display: 'flex',
-    },
-    chartContainer: {
-      marginTop: '40px',
-    },
-    chart: {
-      width: '800px',
-    },
-    panelTitle: {
-      display: 'flex',
-      fontSize: '20px',
-      fontWeight: 600,
-      justifyContent: 'space-between',
-
-      '& p': {
-        margin: '0 0 32px 0',
-      },
-    },
-    panelValue: {
-      fontWeight: 600,
-      fontSize: '48px',
-      margin: 0,
-    },
-    mainGrid: {
-      display: 'flex',
-      width: '100%',
-      margin: 0,
     },
   })
 );
@@ -126,30 +82,7 @@ export default function Monitoring(props: SeedBankMonitoringProps): JSX.Element 
       {isConfigured && !onboarding && (
         <div className={classes.placeholder}>
           <span className={classes.text}>
-            {seedBank?.connectionState === 'Configured' ? (
-              <SeedBankDashboard seedBank={seedBank} />
-            ) : (
-              <>
-                {isAdmin(organization) ? (
-                  <div className={classes.notSetUpContent}>
-                    <EmptyStateContent
-                      title={strings.SET_UP_YOUR_SENSOR_KIT}
-                      subtitle={strings.SET_UP_YOUR_SENSOR_KIT_MSG}
-                      listItems={[{ icon: 'monitoring', title: strings.SENSOR_KIT_SET_UP }]}
-                      buttonText={strings.START_SET_UP}
-                      onClickButton={() => true}
-                      styles={EMPTY_STATE_CONTENT_STYLES}
-                    />
-                  </div>
-                ) : (
-                  <EmptyMessage
-                    className={classes.message}
-                    title={emptyMessageStrings.NO_SEEDBANKS_NON_ADMIN_TITLE}
-                    text={emptyMessageStrings.NO_SEEDBANKS_SET_UP_NON_ADMIN_MSG}
-                  />
-                )}
-              </>
-            )}
+            <SeedBankDashboard seedBank={seedBank} />
           </span>
         </div>
       )}

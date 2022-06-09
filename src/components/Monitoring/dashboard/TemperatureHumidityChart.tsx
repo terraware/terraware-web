@@ -4,13 +4,13 @@ import strings from 'src/strings';
 import Select from '../../common/Select/Select';
 import { Chart } from 'chart.js';
 import { Device } from 'src/types/Device';
-import { getTimeseriesHistory } from 'src/api/device/device';
+import { getTimeseriesHistory } from 'src/api/timeseries/timeseries';
 import moment from 'moment';
 import { getFirstWord, getStartTime, HumidityValues } from './SeedBankDashboard';
 
 declare global {
   interface Window {
-    myChart: any;
+    temperatureHumidityChart: any;
   }
 }
 
@@ -68,10 +68,10 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
       );
 
       if (response.requestSucceeded) {
-        if (window.myChart instanceof Chart) {
-          window.myChart.destroy();
+        if (window.temperatureHumidityChart instanceof Chart) {
+          window.temperatureHumidityChart.destroy();
         }
-        createHTChart(response.values[0]?.values, response.values[1]?.values, chartRef, 'myChart');
+        createHTChart(response.values[0]?.values, response.values[1]?.values, chartRef);
       }
     }
   };
@@ -145,8 +145,7 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
   const createHTChart = (
     temperatureValues: HumidityValues[],
     humidityValues: HumidityValues[],
-    chartReference: React.RefObject<HTMLCanvasElement>,
-    chartName: 'myChart' | 'pvBatteryChart'
+    chartReference: React.RefObject<HTMLCanvasElement>
   ) => {
     const ctx = chartReference?.current?.getContext('2d');
     if (ctx && selectedLocation) {
@@ -195,31 +194,6 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
             above: '#FFBFD035', // Area will be red above the origin
           },
         },
-        {
-          data: humidityValues?.map((entry) => {
-            return { x: moment(entry.timestamp), y: getHumidityMinValue(selectedLocation?.name) };
-          }),
-          label: 'Humidity Thresholds',
-          showLine: false,
-          borderColor: '#BED0FF',
-          backgroundColor: '#E2E9FF',
-          fill: false,
-          pointRadius: 0,
-          yAxisID: 'y1',
-        },
-        {
-          data: humidityValues?.map((entry) => {
-            return { x: moment(entry.timestamp), y: getHumidityMaxValue(selectedLocation?.name) };
-          }),
-          showLine: false,
-          borderColor: '#BED0FF',
-          pointRadius: 0,
-          fill: {
-            target: 2,
-            above: '#E2E9FF35', // Area will be red above the origin
-          },
-          yAxisID: 'y1',
-        },
       ];
 
       const humidityThresholds = [
@@ -249,11 +223,13 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
           yAxisID: 'y1',
         },
       ];
-      let datasetsToUse = commonDatasets;
+      let datasetsToUse;
       if (getFirstWord(selectedLocation.name) !== 'Fridge' && getFirstWord(selectedLocation.name) !== 'Freezer') {
         datasetsToUse = [...commonDatasets, ...humidityThresholds];
+      } else {
+        datasetsToUse = [...commonDatasets];
       }
-      window[chartName] = new Chart(ctx, {
+      window.temperatureHumidityChart = new Chart(ctx, {
         type: 'scatter',
         data: {
           datasets: datasetsToUse,
@@ -333,7 +309,7 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
         />
       </div>
       <div className={classes.chartContainer}>
-        <canvas id='myChart' ref={chartRef} className={classes.chart} />
+        <canvas id='temperatureHumidityChart' ref={chartRef} className={classes.chart} />
       </div>
     </div>
   );

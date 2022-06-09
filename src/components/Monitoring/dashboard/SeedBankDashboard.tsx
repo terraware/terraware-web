@@ -6,17 +6,10 @@ import { listFacilityDevices } from 'src/api/facility/facility';
 import { Device } from 'src/types/Device';
 import Icon from '../../common/icon/Icon';
 import { Grid } from '@material-ui/core';
-import { listTimeseries } from 'src/api/device/device';
+import { listTimeseries } from 'src/api/timeseries/timeseries';
 import moment from 'moment';
 import TemperatureHumidityChart from './TemperatureHumidityChart';
 import PVBatteryChart from './PVBatteryChart';
-
-declare global {
-  interface Window {
-    myChart: any;
-    pvBatteryChart: any;
-  }
-}
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -94,7 +87,7 @@ export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.El
   }, [seedBank]);
 
   useEffect(() => {
-    const populateBaterryLevel = async () => {
+    const populateBatteryLevel = async () => {
       const BMUDevices = availableLocations?.filter((device) => device.type === 'BMU');
       if (BMUDevices) {
         setBMU(BMUDevices[0]);
@@ -108,7 +101,7 @@ export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.El
         }
       }
     };
-    populateBaterryLevel();
+    populateBatteryLevel();
   }, [availableLocations]);
 
   return (
