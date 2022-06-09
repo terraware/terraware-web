@@ -6,6 +6,7 @@ import { Facility } from 'src/api/types/facilities';
 import { DeviceManager } from 'src/types/DeviceManager';
 import FlowStep, { FlowError } from './FlowStep';
 import { connectDeviceManager, getDeviceManager } from 'src/api/deviceManager/deviceManager';
+import getHelpEmail from 'src/components/common/HelpEmail';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -28,7 +29,7 @@ type InstallDeviceManagerProps = {
   deviceManager?: DeviceManager;
   active: boolean;
   completed: boolean | undefined;
-  onNext: () => void;
+  onNext: (reload?: boolean) => void;
 };
 
 export default function InstallDeviceManager(props: InstallDeviceManagerProps): JSX.Element {
@@ -41,13 +42,18 @@ export default function InstallDeviceManager(props: InstallDeviceManagerProps): 
   const [progressPercentage, setProgressPercentage] = useState<number>(0);
   const [keepPolling, setKeepPolling] = useState<boolean>(false);
 
+  const formatEmailErrorMessage = (message: string): string => {
+    return strings.formatString(message, getHelpEmail()) as string;
+  };
+
   const checkDeviceManagerProgress = useCallback(() => {
     const checkProgress = async () => {
+      setKeepPolling(false);
       const response = await getDeviceManager(deviceManager!.id);
       if (response.manager === undefined) {
         setFlowError({
           title: strings.CONNECT_FAILED,
-          text: strings.UNABLE_TO_CONNECT_TO_SENSOR_KIT,
+          text: formatEmailErrorMessage(strings.UNABLE_TO_CONNECT_TO_SENSOR_KIT),
         });
         return;
       }
@@ -67,7 +73,7 @@ export default function InstallDeviceManager(props: InstallDeviceManagerProps): 
       if (pollingStartedOn && currentTime - pollingStartedOn >= 20 * 60 * 1000) {
         setFlowError({
           title: strings.DOWNLOAD_FAILED,
-          text: strings.DOWNLOAD_FAILED_DESCRIPTION,
+          text: formatEmailErrorMessage(strings.DOWNLOAD_FAILED_DESCRIPTION),
           buttonText: strings.TRY_AGAIN,
           onClick: () => {
             setPollingStartedOn(Date.now());
@@ -82,14 +88,6 @@ export default function InstallDeviceManager(props: InstallDeviceManagerProps): 
     checkProgress();
   }, [deviceManager, pollingStartedOn]);
 
-  useEffect(() => {
-    if (keepPolling) {
-      setFlowError(undefined);
-      setTimeout(checkDeviceManagerProgress, 5 * 1000);
-      setKeepPolling(false);
-    }
-  }, [keepPolling, checkDeviceManagerProgress]);
-
   const connectAndWaitForDeviceManager = useCallback(() => {
     const connect = async () => {
       if (pollingStartedOn) {
@@ -101,7 +99,7 @@ export default function InstallDeviceManager(props: InstallDeviceManagerProps): 
       if (response.requestSucceeded === false) {
         setFlowError({
           title: strings.CONNECT_FAILED,
-          text: strings.UNABLE_TO_CONNECT_TO_SENSOR_KIT,
+          text: formatEmailErrorMessage(strings.UNABLE_TO_CONNECT_TO_SENSOR_KIT),
           buttonText: strings.TRY_AGAIN,
           onClick: connect,
         });
@@ -115,6 +113,16 @@ export default function InstallDeviceManager(props: InstallDeviceManagerProps): 
   }, [deviceManager, seedBank, pollingStartedOn, setKeepPolling]);
 
   useEffect(() => {
+    // reinitialize if seed bank id changes
+    setFlowError(undefined);
+    setInitialized(false);
+    setUpdateFinished(false);
+    setPollingStartedOn(0);
+    setProgressPercentage(0);
+    setKeepPolling(false);
+  }, [seedBank.id]);
+
+  useEffect(() => {
     if (!active) {
       return;
     }
@@ -126,13 +134,26 @@ export default function InstallDeviceManager(props: InstallDeviceManagerProps): 
     }
   }, [seedBank, active, onNext, connectAndWaitForDeviceManager, deviceManager]);
 
+  useEffect(() => {
+    let timeout: ReturnType<typeof setTimeout> | null = null;
+    if (keepPolling) {
+      setFlowError(undefined);
+      timeout = setTimeout(checkDeviceManagerProgress, 5 * 1000);
+    }
+    return () => {
+      if (timeout) {
+        clearTimeout(timeout);
+      }
+    };
+  }, [keepPolling, checkDeviceManagerProgress]);
+
   return (
     <FlowStep
       flowState='DeviceManager'
       active={active && initialized}
       showNext={updateFinished}
       flowError={flowError}
-      onNext={onNext}
+      onNext={() => onNext(true)}
       title={strings.SENSOR_KIT_SET_UP_DEVICE_MANAGER}
       completed={completed}
       footer={

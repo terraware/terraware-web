@@ -1,5 +1,5 @@
 import axios from '..';
-import { DeviceTemplate } from 'src/types/Device';
+import { Device, DeviceTemplate } from 'src/types/Device';
 import { paths } from 'src/api/types/generated-schema';
 import addQueryParams from '../helpers/addQueryParams';
 
@@ -78,6 +78,35 @@ export const createDevice = async (facilityId: number, template: DeviceTemplate)
     };
 
     await axios.post(DEVICES_ENDPOINT, createDeviceRequestPayload);
+  } catch {
+    response.requestSucceeded = false;
+  }
+
+  return response;
+};
+
+/**
+ * Update device
+ */
+
+const UPDATE_ENDPOINT = '/api/v1/devices/{id}';
+
+type UpdateDeviceRequestPayload = paths[typeof UPDATE_ENDPOINT]['put']['requestBody']['content']['application/json'];
+
+type UpdateDeviceResponse = {
+  requestSucceeded: boolean;
+};
+
+export const updateDevice = async (device: Device): Promise<UpdateDeviceResponse> => {
+  const response: UpdateDeviceResponse = {
+    requestSucceeded: true,
+  };
+
+  try {
+    const { id, ...deviceProps } = device;
+    const updateDeviceRequestPayload: UpdateDeviceRequestPayload = deviceProps;
+
+    await axios.put(UPDATE_ENDPOINT.replace('{id}', id.toString()), updateDeviceRequestPayload);
   } catch {
     response.requestSucceeded = false;
   }

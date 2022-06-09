@@ -476,6 +476,8 @@ const strings = new LocalizedStrings({
     SENSOR_KIT_SET_UP_DETECT_SENSORS_DESCRIPTION:
       "To power on sensors, remove the paper tabs blocking the batteries. When sensors are powered on and within range, they'll be detected by the device manager automatically.",
     SENSOR_KIT_SET_UP_SENSOR_LOCATIONS: 'Assign Sensor Locations',
+    SENSOR_KIT_SET_UP_SENSOR_LOCATIONS_DESCRIPTION:
+      'Your sensor kit includes 14 temperature/humidity sensors. Please put one sensor in each location. Select which sensor you put in each location using the dropdown.',
     SENSOR_KIT_SET_UP_COMPLETE: 'Setup Complete!',
     SENSOR_KIT_SET_UP_COMPLETE_DESCRIPTION:
       'You will now be able to view solar battery charge and sensor data in your sensor monitoring dashboard.',
@@ -493,16 +495,25 @@ const strings = new LocalizedStrings({
     DOWNLOAD_IN_PROGRESS: 'Download in progress...',
     CONNECT_FAILED: 'Connect failed',
     UNABLE_TO_CONNECT_TO_SENSOR_KIT:
-      'We were unable to connect to your sensor kit. Sometimes this is because it is not connected to power or internet. Please email help@terraformation.com so we can assist you.',
+      'We were unable to connect to your sensor kit. Sometimes this is because it is not connected to power or internet. Please email {0} so we can assist you.',
     DOWNLOAD_COMPLETE: 'Download complete',
     DOWNLOAD_FAILED: 'Download failed',
-    DOWNLOAD_FAILED_DESCRIPTION: 'The download has failed. Please email help@terraformation.com so we can assist you.',
+    DOWNLOAD_FAILED_DESCRIPTION: 'The download has failed. Please email {0} so we can assist you.',
     WAITING_TO_DOWNLOAD: 'Waiting to download...',
     SENSORS_FOUND: '{0}/{1} sensors found...',
     ALL_SENSORS_FOUND: 'All sensors found.',
     SENSOR_SCAN_TIMEOUT: 'Sensor Scan Timeout',
     SENSOR_SCAN_TIMEOUT_ERROR:
-      "Only {0}/{1} sensors were found. Please make sure all sensors are powered on and within range, then try again. If this problem persists, you might have broken sensors; if you think that's the case, email us at help@terraformation.com.",
+      "Only {0}/{1} sensors were found. Please make sure all sensors are powered on and within range, then try again. If this problem persists, you might have broken sensors; if you think that's the case, email us at {2}.",
+    FRIDGE: 'Fridge',
+    FREEZER: 'Freezer',
+    DRY_CABINET: 'Dry Cabinet',
+    DRYING_RACKS: 'Drying Racks',
+    FRONT_OF_SEED_BANK: 'Front of Seed Bank',
+    MIDDLE_OF_SEED_BANK: 'Middle of Seed Bank',
+    BACK_OF_SEED_BANK: 'Back of Seed Bank',
+    FINISH: 'Finish',
+    SENSOR_LOCATION_ERROR: 'Each location much have one sensor assigned to it.',
   },
 });
 
