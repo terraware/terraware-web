@@ -6,6 +6,7 @@ import { Facility } from 'src/api/types/facilities';
 import { Device } from 'src/types/Device';
 import FlowStep, { FlowError } from './FlowStep';
 import { listFacilityDevicesById } from 'src/api/facility/facility';
+import getHelpEmail from 'src/components/common/HelpEmail';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -73,7 +74,12 @@ export default function DetectSensors(props: DetectSensorsProps): JSX.Element {
       if (pollingStartedOn && currentTime - pollingStartedOn >= 20 * 60 * 1000) {
         setFlowError({
           title: strings.SENSOR_SCAN_TIMEOUT,
-          text: strings.formatString(strings.SENSOR_SCAN_TIMEOUT_ERROR, sensorsFound.length, TOTAL_SENSORS) as string,
+          text: strings.formatString(
+            strings.SENSOR_SCAN_TIMEOUT_ERROR,
+            sensorsFound as any,
+            TOTAL_SENSORS as any,
+            getHelpEmail() as any
+          ) as string,
           buttonText: strings.TRY_AGAIN,
           onClick: tryAgain,
         });
