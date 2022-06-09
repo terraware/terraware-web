@@ -28,7 +28,7 @@ type DetectSensorsProps = {
   seedBank: Facility;
   active: boolean;
   completed: boolean | undefined;
-  onNext: (reload: boolean, sensors: Device[]) => void;
+  onNext: (sensors: Device[]) => void;
 };
 
 export default function DetectSensors(props: DetectSensorsProps): JSX.Element {
@@ -131,7 +131,7 @@ export default function DetectSensors(props: DetectSensorsProps): JSX.Element {
       active={active && initialized}
       showNext={detectFinished}
       flowError={flowError}
-      onNext={() => onNext(true, sensorsFound)}
+      onNext={() => onNext(sensorsFound)}
       title={strings.SENSOR_KIT_SET_UP_DETECT_SENSORS}
       completed={completed}
       footer={

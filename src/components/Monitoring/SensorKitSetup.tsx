@@ -7,6 +7,7 @@ import { Facility } from 'src/api/types/facilities';
 import { DeviceManager } from 'src/types/DeviceManager';
 import { Device } from 'src/types/Device';
 import { listFacilityDevicesById } from 'src/api/facility/facility';
+import { listDeviceManagers } from 'src/api/deviceManager/deviceManager';
 import SelectPVSystem from './sensorKitSetup/SelectPVSystem';
 import SensorKitID from './sensorKitSetup/SensorKitID';
 import InstallDeviceManager from './sensorKitSetup/InstallDeviceManager';
@@ -58,7 +59,7 @@ type Completed = {
 export default function SensorKitSetup(props: SensorKitSetupProps): JSX.Element {
   const classes = useStyles();
   const { seedBank, onFinish, reloadData } = props;
-  const [flowState, setFlowState] = useState<SetupFlowState>('PVSystem');
+  const [flowState, setFlowState] = useState<SetupFlowState | undefined>();
   const [completedSteps, setCompletedSteps] = useState<Completed>({});
   const [deviceManager, setDeviceManager] = useState<DeviceManager | undefined>();
   const [sensors, setSensors] = useState<Device[]>([]);
@@ -88,36 +89,56 @@ export default function SensorKitSetup(props: SensorKitSetupProps): JSX.Element 
     processData();
   };
 
-  useEffect(() => {
-    const initializeDevices = async () => {
-      let state: SetupFlowState = 'PVSystem';
-      let completed: Completed = {};
-      if (seedBank.connectionState === 'Connected') {
-        const sensorDevices = await fetchSensors();
-        // see if all sensors match the preset names, in which case we already have the sensors mapped to locations
-        const presetNames = LOCATIONS.reduce((data: { [name: string]: boolean }, location) => {
-          data[location.name] = true;
-          return data;
-        }, {});
-        sensorDevices.forEach((device) => delete presetNames[device.name]);
-        setSensors(sensorDevices);
-        if (Object.keys(presetNames).length === 0) {
-          state = 'Configure';
-          completed = {
-            PVSystem: true,
-            SensorKitID: true,
-            DeviceManager: true,
-            DetectSensors: true,
-            SensorLocations: true,
-          };
+  const onSensorKitID = (manager?: DeviceManager) => {
+    const delegateDeviceManager = async () => {
+      if (manager) {
+        setDeviceManager(manager);
+      } else {
+        // this is a user visiting setup after navigating away from it
+        // fetch device manager again from seed bank id
+        const { managers } = await listDeviceManagers({ facilityId: seedBank.id });
+        if (managers.length) {
+          setDeviceManager(managers[0]);
         }
       }
-      setFlowState(state);
-      setCompletedSteps(completed);
+      setCompletedAndNext('SensorKitID', 'DeviceManager');
+    };
+    delegateDeviceManager();
+  };
+
+  const transitionDetectSensors = () => {
+    const initializeDevices = async () => {
+      const sensorDevices = await fetchSensors();
+      // see if all sensors match the preset names, in which case we already have the sensors mapped to locations
+      const presetNames = LOCATIONS.reduce((data: { [name: string]: boolean }, location) => {
+        data[location.name] = true;
+        return data;
+      }, {});
+      sensorDevices.forEach((device) => delete presetNames[device.name]);
+      if (Object.keys(presetNames).length === 0) {
+        setFlowState('Configure');
+        setCompletedSteps({
+          PVSystem: true,
+          SensorKitID: true,
+          DeviceManager: true,
+          DetectSensors: true,
+          SensorLocations: true,
+        });
+      } else {
+        setCompletedAndNext('DeviceManager', 'DetectSensors');
+      }
     };
 
     initializeDevices();
-  }, [fetchSensors, seedBank.connectionState]);
+  };
+
+  useEffect(() => {
+    // reset all if seed bank changes
+    setFlowState('PVSystem');
+    setCompletedSteps({});
+    setDeviceManager(undefined);
+    setSensors([]);
+  }, [seedBank.id]);
 
   return (
     <Container maxWidth={false}>
@@ -135,24 +156,22 @@ export default function SensorKitSetup(props: SensorKitSetupProps): JSX.Element 
         />
         <SensorKitID
           active={flowState === 'SensorKitID'}
-          onNext={(manager) => {
-            setDeviceManager(manager);
-            setCompletedAndNext('SensorKitID', 'DeviceManager');
-          }}
+          onNext={onSensorKitID}
           completed={completedSteps.SensorKitID}
           seedBank={seedBank}
         />
         <InstallDeviceManager
           active={flowState === 'DeviceManager'}
-          onNext={(reload) => setCompletedAndNext('DeviceManager', 'DetectSensors', reload)}
+          onNext={transitionDetectSensors}
           completed={completedSteps.DeviceManager}
           deviceManager={deviceManager}
           seedBank={seedBank}
+          reloadData={reloadData}
         />
         <DetectSensors
           active={flowState === 'DetectSensors'}
-          onNext={(reload, sensorDevices) => {
-            setCompletedAndNext('DetectSensors', 'SensorLocations', reload);
+          onNext={(sensorDevices) => {
+            setCompletedAndNext('DetectSensors', 'SensorLocations');
             setSensors(sensorDevices);
           }}
           completed={completedSteps.DetectSensors}
@@ -160,7 +179,7 @@ export default function SensorKitSetup(props: SensorKitSetupProps): JSX.Element 
         />
         <SensorLocations
           active={flowState === 'SensorLocations'}
-          onNext={(reload) => setCompletedAndNext('SensorLocations', 'Configure', reload)}
+          onNext={() => setCompletedAndNext('SensorLocations', 'Configure', true)}
           completed={completedSteps.SensorLocations}
           seedBank={seedBank}
           sensors={sensors}

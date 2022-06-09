@@ -29,12 +29,13 @@ type InstallDeviceManagerProps = {
   deviceManager?: DeviceManager;
   active: boolean;
   completed: boolean | undefined;
-  onNext: (reload?: boolean) => void;
+  onNext: () => void;
+  reloadData: () => void;
 };
 
 export default function InstallDeviceManager(props: InstallDeviceManagerProps): JSX.Element {
   const classes = useStyles();
-  const { seedBank, active, completed, onNext, deviceManager } = props;
+  const { seedBank, active, completed, onNext, deviceManager, reloadData } = props;
   const [flowError, setFlowError] = useState<FlowError | undefined>();
   const [initialized, setInitialized] = useState<boolean>(false);
   const [updateFinished, setUpdateFinished] = useState<boolean>(false);
@@ -46,47 +47,57 @@ export default function InstallDeviceManager(props: InstallDeviceManagerProps): 
     return strings.formatString(message, getHelpEmail()) as string;
   };
 
-  const checkDeviceManagerProgress = useCallback(() => {
-    const checkProgress = async () => {
-      setKeepPolling(false);
-      const response = await getDeviceManager(deviceManager!.id);
-      if (response.manager === undefined) {
-        setFlowError({
-          title: strings.CONNECT_FAILED,
-          text: formatEmailErrorMessage(strings.UNABLE_TO_CONNECT_TO_SENSOR_KIT),
-        });
-        return;
-      }
+  const checkDeviceManagerProgress = useCallback(
+    (sanityCheck) => {
+      const checkProgress = async () => {
+        setKeepPolling(false);
+        const response = await getDeviceManager(deviceManager!.id);
+        if (response.manager === undefined) {
+          setFlowError({
+            title: strings.CONNECT_FAILED,
+            text: formatEmailErrorMessage(strings.UNABLE_TO_CONNECT_TO_SENSOR_KIT),
+          });
+          return;
+        }
 
-      const {
-        manager: { updateProgress },
-      } = response;
-      if (updateProgress === undefined || updateProgress === 100) {
-        setUpdateFinished(true);
-        return;
-      } else {
-        setProgressPercentage(updateProgress);
-      }
+        const {
+          manager: { updateProgress },
+        } = response;
+        if (updateProgress === undefined || updateProgress === 100) {
+          if (sanityCheck) {
+            onNext();
+          } else {
+            setUpdateFinished(true);
+          }
+          return;
+        } else {
+          setProgressPercentage(updateProgress);
+          if (!initialized) {
+            setInitialized(true); // for sanity check, now wait for progress to complete
+          }
+        }
 
-      // if we have polled for over 20 minutes, stop and error out
-      const currentTime = Date.now();
-      if (pollingStartedOn && currentTime - pollingStartedOn >= 20 * 60 * 1000) {
-        setFlowError({
-          title: strings.DOWNLOAD_FAILED,
-          text: formatEmailErrorMessage(strings.DOWNLOAD_FAILED_DESCRIPTION),
-          buttonText: strings.TRY_AGAIN,
-          onClick: () => {
-            setPollingStartedOn(Date.now());
-            setKeepPolling(true);
-          },
-        });
-        return;
-      }
-      setKeepPolling(true);
-    };
+        // if we have polled for over 20 minutes, stop and error out
+        const currentTime = Date.now();
+        if (pollingStartedOn && currentTime - pollingStartedOn >= 20 * 60 * 1000) {
+          setFlowError({
+            title: strings.DOWNLOAD_FAILED,
+            text: formatEmailErrorMessage(strings.DOWNLOAD_FAILED_DESCRIPTION),
+            buttonText: strings.TRY_AGAIN,
+            onClick: () => {
+              setPollingStartedOn(Date.now());
+              setKeepPolling(true);
+            },
+          });
+          return;
+        }
+        setKeepPolling(true);
+      };
 
-    checkProgress();
-  }, [deviceManager, pollingStartedOn]);
+      checkProgress();
+    },
+    [deviceManager, pollingStartedOn, onNext, initialized]
+  );
 
   const connectAndWaitForDeviceManager = useCallback(() => {
     const connect = async () => {
@@ -105,12 +116,13 @@ export default function InstallDeviceManager(props: InstallDeviceManagerProps): 
         });
         return;
       }
+      reloadData(); // update connection state of seed bank, don't wait until user clicks Next
       setPollingStartedOn(Date.now());
       setKeepPolling(true);
     };
 
     connect();
-  }, [deviceManager, seedBank, pollingStartedOn, setKeepPolling]);
+  }, [deviceManager, seedBank, pollingStartedOn, setKeepPolling, reloadData]);
 
   useEffect(() => {
     // reinitialize if seed bank id changes
@@ -123,16 +135,28 @@ export default function InstallDeviceManager(props: InstallDeviceManagerProps): 
   }, [seedBank.id]);
 
   useEffect(() => {
-    if (!active) {
+    if (!active || pollingStartedOn || initialized) {
       return;
     }
     if (seedBank.connectionState === 'Not Connected') {
       setInitialized(true);
       connectAndWaitForDeviceManager();
+    } else if (deviceManager) {
+      setPollingStartedOn(Date.now());
+      checkDeviceManagerProgress(true);
     } else {
       onNext();
     }
-  }, [seedBank, active, onNext, connectAndWaitForDeviceManager, deviceManager]);
+  }, [
+    initialized,
+    seedBank.connectionState,
+    active,
+    checkDeviceManagerProgress,
+    connectAndWaitForDeviceManager,
+    pollingStartedOn,
+    onNext,
+    deviceManager,
+  ]);
 
   useEffect(() => {
     let timeout: ReturnType<typeof setTimeout> | null = null;
@@ -153,7 +177,7 @@ export default function InstallDeviceManager(props: InstallDeviceManagerProps): 
       active={active && initialized}
       showNext={updateFinished}
       flowError={flowError}
-      onNext={() => onNext(true)}
+      onNext={onNext}
       title={strings.SENSOR_KIT_SET_UP_DEVICE_MANAGER}
       completed={completed}
       footer={
