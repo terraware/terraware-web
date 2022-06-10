@@ -106,7 +106,7 @@ export default function SensorKitSetup(props: SensorKitSetupProps): JSX.Element 
     delegateDeviceManager();
   };
 
-  const transitionDetectSensors = () => {
+  const onDeviceManager = () => {
     const initializeDevices = async () => {
       const sensorDevices = await fetchSensors();
       // see if all sensors match the preset names, in which case we already have the sensors mapped to locations
@@ -162,7 +162,7 @@ export default function SensorKitSetup(props: SensorKitSetupProps): JSX.Element 
         />
         <InstallDeviceManager
           active={flowState === 'DeviceManager'}
-          onNext={transitionDetectSensors}
+          onNext={onDeviceManager}
           completed={completedSteps.DeviceManager}
           deviceManager={deviceManager}
           seedBank={seedBank}

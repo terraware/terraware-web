@@ -53,6 +53,9 @@ export default function InstallDeviceManager(props: InstallDeviceManagerProps): 
         setKeepPolling(false);
         const response = await getDeviceManager(deviceManager!.id);
         if (response.manager === undefined) {
+          if (!initialized) {
+            setInitialized(true); // for sanity check, show error and stop
+          }
           setFlowError({
             title: strings.CONNECT_FAILED,
             text: formatEmailErrorMessage(strings.UNABLE_TO_CONNECT_TO_SENSOR_KIT),
