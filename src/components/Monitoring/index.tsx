@@ -11,9 +11,14 @@ import TfMain from '../common/TfMain';
 import Select from '../common/Select/Select';
 import { Facility } from 'src/api/types/facilities';
 import SeedBankMonitoring from './SeedBankMonitoring';
+import Button from '../common/button/Button';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
+    mainTitle: {
+      display: 'flex',
+      justifyContent: 'space-between',
+    },
     pageTitle: {
       fontSize: '24px',
       lineHeight: '32px',
@@ -105,15 +110,20 @@ export default function Monitoring(props: MonitoringProps): JSX.Element {
     <>
       {hasSeedBanks ? (
         <TfMain>
-          <div className={classes.titleContainer}>
-            <h1 className={classes.pageTitle}>{strings.MONITORING}</h1>
-            <div className={classes.divider} />
-            <p className={classes.seedBankLabel}>{strings.SEED_BANK}</p>
-            <Select
-              options={seedBanks.map((sb) => sb?.name || '')}
-              onChange={onChangeSeedBank}
-              selectedValue={selectedSeedBank?.name}
-            />
+          <div className={classes.mainTitle}>
+            <div className={classes.titleContainer}>
+              <h1 className={classes.pageTitle}>{strings.MONITORING}</h1>
+              <div className={classes.divider} />
+              <p className={classes.seedBankLabel}>{strings.SEED_BANK}</p>
+              <Select
+                options={seedBanks.map((sb) => sb?.name || '')}
+                onChange={onChangeSeedBank}
+                selectedValue={selectedSeedBank?.name}
+              />
+            </div>
+            {selectedSeedBank?.connectionState === 'Configured' ? (
+              <Button label={strings.REFRESH_DATA} onClick={reloadData} />
+            ) : null}
           </div>
           {selectedSeedBank && (
             <SeedBankMonitoring seedBank={selectedSeedBank} organization={organization} reloadData={reloadData} />

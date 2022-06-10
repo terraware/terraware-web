@@ -45,7 +45,7 @@ export default function SensorKitID(props: SensorKitIDProps): JSX.Element {
     }
 
     const fetchDeviceManager = async () => {
-      const response = await listDeviceManagers(shortCode);
+      const response = await listDeviceManagers({ shortCode });
       if (response.requestSucceeded === false) {
         setFlowError({
           title: strings.SERVER_ERROR,
@@ -81,20 +81,19 @@ export default function SensorKitID(props: SensorKitIDProps): JSX.Element {
   }, [seedBank.id]);
 
   useEffect(() => {
-    if (!active) {
+    if (!active || initialized) {
       return;
     }
-    if (seedBank.connectionState === 'Not Connected') {
-      setInitialized(true);
-    } else {
+    setInitialized(true);
+    if (seedBank.connectionState !== 'Not Connected') {
       onNext(undefined);
     }
-  }, [seedBank, active, onNext]);
+  }, [seedBank, active, onNext, initialized]);
 
   return (
     <FlowStep
       flowState='SensorKitID'
-      active={active && initialized}
+      active={active && seedBank.connectionState === 'Not Connected'}
       showNext={true}
       flowError={flowError}
       onNext={goToNext}

@@ -8,6 +8,7 @@ import { ReactComponent as Calendar } from './calendar.svg';
 import { ReactComponent as CaretDown } from './caret-down.svg';
 import { ReactComponent as CaretLeft } from './caret-left.svg';
 import { ReactComponent as CaretUp } from './caret-up.svg';
+import { ReactComponent as ChargingBattery } from './icon-charging-battery.svg';
 import { ReactComponent as Checkmark } from './icon-checkmark.svg';
 import { ReactComponent as ChevronDown } from './chevron-down.svg';
 import { ReactComponent as ChevronUp } from './chevron-up.svg';
@@ -52,6 +53,7 @@ import { ReactComponent as Success } from './success.svg';
 import { ReactComponent as Touchscreen } from './touchscreen.svg';
 import { ReactComponent as UploadCloud } from './upload-cloud.svg';
 import { ReactComponent as Warning } from './warning.svg';
+import { ReactComponent as Wifi } from './icon-wifi.svg';
 
 export type IconName =
   | 'blobbyGrayIconUploadToTheCloud'
@@ -62,6 +64,7 @@ export type IconName =
   | 'caretDown'
   | 'caretLeft'
   | 'caretUp'
+  | 'chargingBattery'
   | 'checkmark'
   | 'chevronDown'
   | 'chevronUp'
@@ -105,7 +108,8 @@ export type IconName =
   | 'success'
   | 'touchscreen'
   | 'uploadCloud'
-  | 'warning';
+  | 'warning'
+  | 'wifi';
 
 type SVGComponent = React.FunctionComponent<
   React.SVGProps<SVGSVGElement> & {
@@ -121,6 +125,7 @@ const icons: Record<IconName, SVGComponent> = {
   caretDown: CaretDown,
   caretLeft: CaretLeft,
   caretUp: CaretUp,
+  chargingBattery: ChargingBattery,
   checkmark: Checkmark,
   chevronDown: ChevronDown,
   chevronUp: ChevronUp,
@@ -165,6 +170,7 @@ const icons: Record<IconName, SVGComponent> = {
   touchscreen: Touchscreen,
   uploadCloud: UploadCloud,
   warning: Warning,
+  wifi: Wifi,
 };
 
 export default icons;

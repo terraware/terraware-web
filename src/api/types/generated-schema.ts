@@ -246,9 +246,15 @@ export interface paths {
     /** The species will no longer appear in the organization's list of species, but existing data (plants, seeds, etc.) that refer to the species will still refer to it. */
     delete: operations["deleteSpecies"];
   };
+  "/api/v1/timeseries": {
+    get: operations["listTimeseries"];
+  };
   "/api/v1/timeseries/create": {
     /** If there are existing timeseries with the same names, the old definitions will be overwritten. */
     post: operations["createMultipleTimeseries"];
+  };
+  "/api/v1/timeseries/history": {
+    post: operations["getTimeseriesHistory"];
   };
   "/api/v1/timeseries/values": {
     post: operations["recordTimeseriesValues"];
@@ -586,31 +592,24 @@ export interface components {
       available: boolean;
       /** The facility this device manager is connected to, or null if it is not connected. */
       facilityId?: number;
+      /** If true, this device manager is currently online. */
+      isOnline: boolean;
+      /** When the device manager's isOnline value changed most recently. In other words, if isOnline is true, the device manager has been online since this time; if isOnline is false, the device manager has been offline since this time. This may be null if the device manager has not come online for the first time yet. */
+      onlineChangedTime?: string;
       /** If an update is being downloaded or installed, its progress as a percentage. Not present if no update is in progress. */
       updateProgress?: number;
     };
     DeviceTemplatePayload: {
-      /** Device template id */
       id: number;
-      /** Device template category */
       category: "PV";
-      /** Device template name */
       name: string;
-      /** Device template type */
       type: string;
-      /** Device template make */
       make: string;
-      /** Device template model */
       model: string;
-      /** Device template protocol */
       protocol?: string;
-      /** Device template address */
       address?: string;
-      /** Device template port */
       port?: number;
-      /** Device template settings */
       settings?: { [key: string]: { [key: string]: unknown } };
-      /** Device template polling interval */
       pollingInterval?: number;
     };
     ErrorDetails: {
@@ -784,6 +783,21 @@ export interface components {
       details: components["schemas"]["GetSpeciesUploadStatusDetailsPayload"];
       status: components["schemas"]["SuccessOrError"];
     };
+    GetTimeseriesHistoryRequestPayload: {
+      /** Start of time range to query. If this is non-null, endTime must also be specified, and seconds must be null or absent. */
+      startTime?: string;
+      /** End of time range to query. If this is non-null, startTime must also be specified, and seconds must be null or absent. */
+      endTime?: string;
+      /** Number of seconds in the past to start the time range. If this is non-null, startTime and endTime must be null or absent. */
+      seconds?: number;
+      /** Number of values to return. The time range is divided into this many equal intervals, and a value is returned from each interval if available. */
+      count: number;
+      /** Timeseries to query. May be from different devices. */
+      timeseries: components["schemas"]["TimeseriesIdPayload"][];
+    };
+    GetTimeseriesHistoryResponsePayload: {
+      values: components["schemas"]["TimeseriesValuesPayload"][];
+    };
     GetUserResponsePayload: {
       user: components["schemas"]["UserProfilePayload"];
       status: components["schemas"]["SuccessOrError"];
@@ -876,6 +890,10 @@ export interface components {
     };
     ListSpeciesResponsePayload: {
       species: components["schemas"]["SpeciesResponseElement"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    ListTimeseriesResponsePayload: {
+      timeseries: components["schemas"]["TimeseriesPayload"][];
       status: components["schemas"]["SuccessOrError"];
     };
     ModifyAutomationRequestPayload: {
@@ -1170,6 +1188,22 @@ export interface components {
       current: number;
       lastWeek: number;
     };
+    /** Timeseries to query. May be from different devices. */
+    TimeseriesIdPayload: {
+      deviceId: number;
+      timeseriesName: string;
+    };
+    TimeseriesPayload: {
+      /** ID of device that produces this timeseries. */
+      deviceId: number;
+      timeseriesName: string;
+      type: "Numeric" | "Text";
+      /** Number of significant fractional digits (after the decimal point), if this is a timeseries with non-integer numeric values. */
+      decimalPlaces?: number;
+      /** Units of measure for values in this timeseries. */
+      units?: string;
+      latestValue?: components["schemas"]["TimeseriesValuePayload"];
+    };
     TimeseriesValuePayload: {
       timestamp: string;
       /** Value to record. If the timeseries is of type Numeric, this must be a decimal or integer value in string form. If the timeseries is of type Text, this can be an arbitrary string. */
@@ -1385,7 +1419,8 @@ export interface operations {
   getDeviceManagers: {
     parameters: {
       query: {
-        shortCode: string;
+        shortCode?: string;
+        facilityId?: number;
       };
     };
     responses: {
@@ -3201,6 +3236,21 @@ export interface operations {
       };
     };
   };
+  listTimeseries: {
+    parameters: {
+      query: {
+        deviceId: number[];
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListTimeseriesResponsePayload"];
+        };
+      };
+    };
+  };
   /** If there are existing timeseries with the same names, the old definitions will be overwritten. */
   createMultipleTimeseries: {
     responses: {
@@ -3214,6 +3264,21 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["CreateTimeseriesRequestPayload"];
+      };
+    };
+  };
+  getTimeseriesHistory: {
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetTimeseriesHistoryResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["GetTimeseriesHistoryRequestPayload"];
       };
     };
   };

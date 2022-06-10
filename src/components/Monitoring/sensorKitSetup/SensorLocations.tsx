@@ -26,7 +26,7 @@ type SensorLocationsProps = {
   seedBank: Facility;
   active: boolean;
   completed: boolean | undefined;
-  onNext: (reload?: boolean) => void;
+  onNext: () => void;
   sensors: Device[];
 };
 
@@ -44,7 +44,7 @@ export default function SensorLocations(props: SensorLocationsProps): JSX.Elemen
     setAssignedLocations((currentLocations) => {
       const newLocations = { ...currentLocations };
       const currentValue = currentLocations[locationName];
-      if (deviceName) {
+      if (deviceName && deviceName !== strings.SELECT) {
         const selectedDevice = availableDevices.find((device) => device.name === deviceName);
         if (selectedDevice) {
           newLocations[locationName] = selectedDevice;
@@ -86,7 +86,7 @@ export default function SensorLocations(props: SensorLocationsProps): JSX.Elemen
       });
       try {
         await Promise.all(promises);
-        onNext(true);
+        onNext();
       } catch (e) {
         setFlowError({
           title: strings.SERVER_ERROR,
@@ -142,7 +142,7 @@ export default function SensorLocations(props: SensorLocationsProps): JSX.Elemen
               id={location.name}
               selectedValue={assignedLocations[location.name]?.name || ''}
               onChange={(value) => onChange(location.name, value)}
-              options={(assignedLocations[location.name] ? [''] : []).concat(
+              options={(assignedLocations[location.name] ? [strings.SELECT] : []).concat(
                 availableDevices.map((device) => device.name)
               )}
               label={location.label}

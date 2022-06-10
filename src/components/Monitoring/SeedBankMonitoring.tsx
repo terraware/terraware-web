@@ -9,6 +9,7 @@ import { Facility } from 'src/api/types/facilities';
 import EmptyStateContent from '../emptyStatePages/EmptyStateContent';
 import { EMPTY_STATE_CONTENT_STYLES } from '../emptyStatePages/EmptyStatePage';
 import SensorKitSetup from './SensorKitSetup';
+import SeedBankDashboard from './dashboard/SeedBankDashboard';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -18,7 +19,6 @@ const useStyles = makeStyles((theme) =>
     },
     text: {
       fontSize: '24px',
-      margin: 'auto auto',
     },
     message: {
       margin: '0 auto',
@@ -83,7 +83,7 @@ export default function Monitoring(props: SeedBankMonitoringProps): JSX.Element 
       {isConfigured && !onboarding && (
         <div className={classes.placeholder}>
           <span className={classes.text}>
-            Monitoring dashboard and charts for selected seedbank in {organization.name}
+            <SeedBankDashboard seedBank={seedBank} />
           </span>
         </div>
       )}
