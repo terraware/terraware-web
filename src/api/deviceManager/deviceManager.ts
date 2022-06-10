@@ -21,6 +21,7 @@ export type ListDeviceManagersParams = {
   shortCode?: string;
   facilityId?: number;
 };
+
 export const listDeviceManagers = async ({
   shortCode,
   facilityId,
