@@ -45,7 +45,7 @@ export default function SensorKitID(props: SensorKitIDProps): JSX.Element {
     }
 
     const fetchDeviceManager = async () => {
-      const response = await listDeviceManagers({ facilityId: seedBank.id });
+      const response = await listDeviceManagers({ shortCode });
       if (response.requestSucceeded === false) {
         setFlowError({
           title: strings.SERVER_ERROR,
