@@ -14,16 +14,24 @@ type DeviceManagersResponse = {
 };
 
 /*
- * search device managers by short code
+ * search device managers by short code or facility id
  */
-export const listDeviceManagers = async (shortCode: string): Promise<DeviceManagersResponse> => {
+
+export type ListDeviceManagersParams = {
+  shortCode?: string;
+  facilityId?: number;
+};
+export const listDeviceManagers = async ({
+  shortCode,
+  facilityId,
+}: ListDeviceManagersParams): Promise<DeviceManagersResponse> => {
   const response: DeviceManagersResponse = {
     managers: [],
     requestSucceeded: true,
   };
 
   try {
-    const queryParams: DeviceManagersQuery = { shortCode };
+    const queryParams: DeviceManagersQuery = { shortCode, facilityId };
     const endpoint = addQueryParams(DEVICE_MANAGERS_ENDPOINT, queryParams);
     const serverResponse: GetDeviceManagersResponsePayload = (await axios.get(endpoint)).data;
 

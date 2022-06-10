@@ -10,6 +10,8 @@ import { listTimeseries } from 'src/api/timeseries/timeseries';
 import moment from 'moment';
 import TemperatureHumidityChart from './TemperatureHumidityChart';
 import PVBatteryChart from './PVBatteryChart';
+import { listDeviceManagers } from 'src/api/deviceManager/deviceManager';
+import { DeviceManager } from 'src/types/DeviceManager';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -75,6 +77,7 @@ export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.El
   const [availableLocations, setAvailableLocations] = useState<Device[]>();
   const [batteryLevel, setBatteryLevel] = useState<string>();
   const [BMU, setBMU] = useState<Device>();
+  const [deviceManager, setDeviceManager] = useState<DeviceManager | undefined>();
 
   useEffect(() => {
     const populateLocations = async () => {
@@ -84,6 +87,18 @@ export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.El
       }
     };
     populateLocations();
+  }, [seedBank]);
+
+  useEffect(() => {
+    const getDeviceManager = async () => {
+      if (seedBank) {
+        const { managers } = await listDeviceManagers({ facilityId: seedBank.id });
+        if (managers.length) {
+          setDeviceManager(managers[0]);
+        }
+      }
+    };
+    getDeviceManager();
   }, [seedBank]);
 
   useEffect(() => {
@@ -121,7 +136,7 @@ export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.El
             <p>{strings.SEED_BANK_INTERNET}</p>
             <Icon name='wifi' />
           </div>
-          <p className={classes.panelValue}>{strings.CONNECTED}</p>
+          <p className={classes.panelValue}>{deviceManager?.isOnline ? strings.CONNECTED : strings.NOT_CONNECTED}</p>
         </div>
       </Grid>
       <Grid item xs={12}>
