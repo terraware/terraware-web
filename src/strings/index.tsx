@@ -485,6 +485,7 @@ const strings = new LocalizedStrings({
     PV_BATTERY_CHARGE: 'PV Battery Charge',
     SEED_BANK_INTERNET: 'Seed Bank Internet',
     CONNECTED: 'Connected',
+    NOT_CONNECTED: 'Not Connected',
     ENTER_SIX_DIGIT_KEY: 'Enter 6-digit key',
     SENSOR_KIT_ID_PLACEHOLDER: 'XXXXXX',
     KEY_WAS_NOT_RECOGNIZED: 'Key was not recognized.',

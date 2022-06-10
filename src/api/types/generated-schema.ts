@@ -592,6 +592,10 @@ export interface components {
       available: boolean;
       /** The facility this device manager is connected to, or null if it is not connected. */
       facilityId?: number;
+      /** If true, this device manager is currently online. */
+      isOnline: boolean;
+      /** When the device manager's isOnline value changed most recently. In other words, if isOnline is true, the device manager has been online since this time; if isOnline is false, the device manager has been offline since this time. This may be null if the device manager has not come online for the first time yet. */
+      onlineChangedTime?: string;
       /** If an update is being downloaded or installed, its progress as a percentage. Not present if no update is in progress. */
       updateProgress?: number;
     };
@@ -1415,7 +1419,8 @@ export interface operations {
   getDeviceManagers: {
     parameters: {
       query: {
-        shortCode: string;
+        shortCode?: string;
+        facilityId?: number;
       };
     };
     responses: {

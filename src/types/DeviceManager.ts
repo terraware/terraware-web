@@ -4,4 +4,5 @@ export type DeviceManager = {
   available: boolean;
   facilityId?: number;
   updateProgress?: number;
+  isOnline: boolean;
 };
