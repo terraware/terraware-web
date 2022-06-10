@@ -8,9 +8,10 @@
       function gtag() {
         dataLayer.push(arguments);
       }
-      gtag('js', new Date());
-
-      gtag('config', 'G-P46DQLKKXK');
+      if (window.location.hostname.match(/^(www.)?terraware.io$/i)) {
+        gtag('js', new Date());
+        gtag('config', 'G-P46DQLKKXK')
+      }
     </script>
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
