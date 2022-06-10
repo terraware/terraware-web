@@ -144,12 +144,12 @@ export default function Select(props: SelectProps): JSX.Element {
         </div>
         {options && openedOptions && (
           <ul className='options-container' ref={dropdownRef}>
-            {options.map((option) => {
+            {options.map((option, index) => {
               return (
                 <li
                   data-key={option.charAt(0).toUpperCase()}
                   data-selected={option === selectedValue}
-                  key={option}
+                  key={index}
                   onClick={() => onOptionSelected(option)}
                   className={`${itemClass} ${option === selectedValue ? 'select-value--selected' : ''} `}
                 >
