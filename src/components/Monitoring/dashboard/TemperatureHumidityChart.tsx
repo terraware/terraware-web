@@ -65,11 +65,11 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
             data: temperatureValues?.map((entry) => {
               return { x: moment(entry.timestamp), y: Number(entry.value) };
             }),
-            label: 'Temperature',
-            showLine: true,
-            fill: false,
-            borderColor: '#FE0003',
-            backgroundColor: '#FF5A5B',
+            label: 'Temperature', // Text to show in legend
+            showLine: true, // If false, the line is not drawn for this dataset.
+            borderColor: '#FE0003', // The line border color.
+            backgroundColor: '#FF5A5B', // The line fill color.
+            fill: false, // How to fill the area under the line
           },
           {
             data: temperatureValues?.map((entry) => {
@@ -100,10 +100,10 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
             }),
             label: 'Humidity',
             showLine: true,
-            fill: false,
             borderColor: '#0067C8',
             backgroundColor: '#007DF2',
             yAxisID: 'y1',
+            fill: false,
           },
         ];
 
@@ -114,9 +114,9 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
             }),
             label: 'Temperature',
             showLine: true,
-            fill: false,
             borderColor: '#FE0003',
             backgroundColor: '#FF5A5B',
+            fill: false,
           },
           {
             data: temperatureValues?.map((entry) => {
@@ -160,11 +160,11 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
             }),
             showLine: false,
             borderColor: '#BED0FF',
-            pointRadius: 0,
             fill: {
               target: 3,
               above: '#E2E9FF35',
             },
+            pointRadius: 0,
             yAxisID: 'y1',
           },
           {
@@ -173,9 +173,9 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
             }),
             label: 'Humidity',
             showLine: true,
-            fill: false,
             borderColor: '#0067C8',
             backgroundColor: '#007DF2',
+            fill: false,
             yAxisID: 'y1',
           },
         ];
