@@ -7,6 +7,7 @@ import { Device } from 'src/types/Device';
 import { getTimeseriesHistory } from 'src/api/timeseries/timeseries';
 import moment from 'moment';
 import { getFirstWord, getStartTime, HumidityValues } from './SeedBankDashboard';
+import { htmlLegendPlugin } from './htmlLegendPlugin';
 
 declare global {
   interface Window {
@@ -34,6 +35,10 @@ const useStyles = makeStyles((theme) =>
     chart: {
       width: '800px',
     },
+    legendContainer: {
+      marginBottom: '32px',
+      padding: '0 55px 0 41px',
+    },
   })
 );
 
@@ -60,22 +65,11 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
             data: temperatureValues?.map((entry) => {
               return { x: moment(entry.timestamp), y: Number(entry.value) };
             }),
-            label: 'Temperature',
-            showLine: true,
-            fill: false,
-            borderColor: '#FE0003',
-            backgroundColor: '#FF5A5B',
-          },
-          {
-            data: humidityValues?.map((entry) => {
-              return { x: moment(entry.timestamp), y: Number(entry.value) };
-            }),
-            label: 'Humidity',
-            showLine: true,
-            fill: false,
-            borderColor: '#0067C8',
-            backgroundColor: '#007DF2',
-            yAxisID: 'y1',
+            label: 'Temperature', // Text to show in legend
+            showLine: true, // If false, the line is not drawn for this dataset.
+            borderColor: '#FE0003', // The line border color.
+            backgroundColor: '#FF5A5B', // The line fill color.
+            fill: false, // How to fill the area under the line. See filling modes here: https://www.chartjs.org/docs/latest/charts/area.html#filling-modes
           },
           {
             data: temperatureValues?.map((entry) => {
@@ -96,13 +90,58 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
             borderColor: '#FF9797',
             pointRadius: 0,
             fill: {
-              target: 2,
+              target: 1, // fill to dataset 1
               above: '#FFBFD035', // Area will be red above the origin
             },
           },
+          {
+            data: humidityValues?.map((entry) => {
+              return { x: moment(entry.timestamp), y: Number(entry.value) };
+            }),
+            label: 'Humidity',
+            showLine: true,
+            borderColor: '#0067C8',
+            backgroundColor: '#007DF2',
+            yAxisID: 'y1',
+            fill: false,
+          },
         ];
 
-        const humidityThresholds = [
+        const allDatasets = [
+          {
+            data: temperatureValues?.map((entry) => {
+              return { x: moment(entry.timestamp), y: Number(entry.value) };
+            }),
+            label: 'Temperature',
+            showLine: true,
+            borderColor: '#FE0003',
+            backgroundColor: '#FF5A5B',
+            fill: false,
+          },
+          {
+            data: temperatureValues?.map((entry) => {
+              return { x: moment(entry.timestamp), y: getTemperatureMinValue(selectedLocation?.name) };
+            }),
+            label: 'Temperature Thresholds',
+            showLine: false,
+            borderColor: '#FF9797',
+            backgroundColor: '#FFC1C1',
+            fill: false,
+            pointRadius: 0,
+          },
+          {
+            data: temperatureValues?.map((entry) => {
+              return { x: moment(entry.timestamp), y: getTemperatureMaxValue(selectedLocation?.name) };
+            }),
+            showLine: false,
+            borderColor: '#FF9797',
+            pointRadius: 0,
+            fill: {
+              target: 1, // fill to dataset 1
+              above: '#FFBFD035', // Area will be red above the origin
+            },
+          },
+
           {
             data: humidityValues?.map((entry) => {
               return { x: moment(entry.timestamp), y: getHumidityMinValue(selectedLocation?.name) };
@@ -121,19 +160,31 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
             }),
             showLine: false,
             borderColor: '#BED0FF',
-            pointRadius: 0,
             fill: {
-              target: 2,
-              above: '#E2E9FF35', // Area will be red above the origin
+              target: 3,
+              above: '#E2E9FF35',
             },
+            pointRadius: 0,
+            yAxisID: 'y1',
+          },
+          {
+            data: humidityValues?.map((entry) => {
+              return { x: moment(entry.timestamp), y: Number(entry.value) };
+            }),
+            label: 'Humidity',
+            showLine: true,
+            borderColor: '#0067C8',
+            backgroundColor: '#007DF2',
+            fill: false,
             yAxisID: 'y1',
           },
         ];
+
         let datasetsToUse;
         if (getFirstWord(selectedLocation.name) !== 'Fridge' && getFirstWord(selectedLocation.name) !== 'Freezer') {
-          datasetsToUse = [...commonDatasets, ...humidityThresholds];
+          datasetsToUse = allDatasets;
         } else {
-          datasetsToUse = [...commonDatasets];
+          datasetsToUse = commonDatasets;
         }
         window.temperatureHumidityChart = new Chart(ctx, {
           type: 'scatter',
@@ -142,7 +193,6 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
           },
           options: {
             scales: {
-              // @ts-ignore
               y: {
                 ticks: {
                   callback: (value, index, ticks) => {
@@ -174,13 +224,12 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
               },
             },
             plugins: {
+              // @ts-ignore
+              htmlLegend: {
+                containerID: 'legend-container-th',
+              },
               legend: {
-                labels: {
-                  filter(legendItem: { text: string | string[] }, data: any) {
-                    // only show 2nd dataset in legend
-                    return legendItem.text !== undefined;
-                  },
-                },
+                display: false,
               },
               tooltip: {
                 callbacks: {
@@ -199,6 +248,7 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
               },
             },
           },
+          plugins: [htmlLegendPlugin],
         });
       }
     };
@@ -324,6 +374,7 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
         />
       </div>
       <div className={classes.chartContainer}>
+        <div id='legend-container-th' className={classes.legendContainer} />
         <canvas id='temperatureHumidityChart' ref={chartRef} className={classes.chart} />
       </div>
     </div>
