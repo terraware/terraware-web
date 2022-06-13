@@ -7,7 +7,6 @@ import { Device } from 'src/types/Device';
 import Icon from '../../common/icon/Icon';
 import { Grid } from '@material-ui/core';
 import { listTimeseries } from 'src/api/timeseries/timeseries';
-import moment from 'moment';
 import TemperatureHumidityChart from './TemperatureHumidityChart';
 import PVBatteryChart from './PVBatteryChart';
 import { listDeviceManagers } from 'src/api/deviceManager/deviceManager';
@@ -46,31 +45,6 @@ type SeedBankDashboardProps = {
   seedBank: Facility;
 };
 
-export type HumidityValues = {
-  timestamp: string;
-  value: string;
-};
-
-export const getStartTime = (period: string) => {
-  switch (period) {
-    case 'Last 12 hours':
-      return moment(Date.now()).subtract(12, 'h');
-    case 'Last 24 hours':
-      return moment(Date.now()).subtract(24, 'h');
-    case 'Last 7 days':
-      return moment(Date.now()).subtract(7, 'd');
-    case 'Last 30 days':
-      return moment(Date.now()).subtract(30, 'd');
-    default:
-      return moment();
-  }
-};
-
-export const getFirstWord = (sensorName: string) => {
-  const sensorNameWords = sensorName.split(' ');
-  return sensorNameWords[0];
-};
-
 export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.Element {
   const classes = useStyles();
   const { seedBank } = props;
@@ -83,7 +57,7 @@ export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.El
     const populateLocations = async () => {
       if (seedBank) {
         const locations = await listFacilityDevices(seedBank);
-        setAvailableLocations(locations.devices);
+        setAvailableLocations(locations.devices.sort((deviceA, deviceB) => deviceA.name.localeCompare(deviceB.name)));
       }
     };
     populateLocations();

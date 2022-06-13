@@ -1,12 +1,15 @@
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
+import useQuery from '../../../utils/useQuery';
 import strings from 'src/strings';
 import Select from '../../common/Select/Select';
 import { Chart } from 'chart.js';
 import { Device } from 'src/types/Device';
 import { getTimeseriesHistory } from 'src/api/timeseries/timeseries';
 import moment from 'moment';
-import { getFirstWord, getStartTime, HumidityValues } from './SeedBankDashboard';
+import { TIME_PERIODS, getFirstWord, getStartTime, HumidityValues } from './Common';
 import { htmlLegendPlugin } from './htmlLegendPlugin';
 
 declare global {
@@ -48,9 +51,56 @@ type TemperatureHumidityChartProps = {
 
 export default function TemperatureHumidityChart(props: TemperatureHumidityChartProps): JSX.Element {
   const classes = useStyles();
+  const history = useHistory();
+  const query = useQuery();
+  const stateLocation = useStateLocation();
   const { availableLocations } = props;
   const [selectedLocation, setSelectedLocation] = useState<Device>();
   const [selectedPeriod, setSelectedPeriod] = useState<string>();
+
+  useEffect(() => {
+    if (!availableLocations?.length) {
+      return;
+    }
+    const urlDeviceId = query.get('deviceId');
+    const urlTimePeriod = query.get('timePeriod');
+    let location;
+    let timePeriod;
+
+    // set location to what url search param is set at
+    if (urlDeviceId) {
+      query.delete('deviceId');
+      location = availableLocations?.find((device) => device.id.toString() === urlDeviceId);
+    }
+    // set time period to what url search param is set at
+    if (urlTimePeriod) {
+      query.delete('timePeriod');
+      timePeriod = TIME_PERIODS.find((period) => period === urlTimePeriod);
+    }
+
+    // if location is not in url, keep existing selection (or default to first one if none-selected)
+    if (!location) {
+      location = selectedLocation || (availableLocations && availableLocations[0]);
+    }
+    // if time period is not in url, keep existing selection (or default to first one if none-selected)
+    if (!timePeriod) {
+      timePeriod = selectedPeriod || 'Last 12 hours';
+    }
+
+    // set new location if there is a change
+    if (location !== selectedLocation) {
+      setSelectedLocation(location);
+    }
+    // set new time period if there is a change
+    if (timePeriod !== selectedPeriod) {
+      setSelectedPeriod(timePeriod);
+    }
+
+    // clear url param if necessary
+    if (urlDeviceId || urlTimePeriod) {
+      history.push(getLocation(stateLocation.pathname, stateLocation, query.toString()));
+    }
+  }, [availableLocations, selectedLocation, selectedPeriod, history, query, stateLocation]);
 
   useEffect(() => {
     const createHTChart = (
@@ -367,7 +417,7 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
           label={strings.LOCATION}
         />
         <Select
-          options={['Last 12 hours', 'Last 24 hours', 'Last 7 days', 'Last 30 days']}
+          options={TIME_PERIODS}
           onChange={onChangeSelectedPeriod}
           selectedValue={selectedPeriod}
           label={strings.TIME_PERIOD}

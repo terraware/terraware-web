@@ -6,7 +6,7 @@ import { Chart } from 'chart.js';
 import { Device } from 'src/types/Device';
 import { getTimeseriesHistory } from 'src/api/timeseries/timeseries';
 import moment from 'moment';
-import { getStartTime, HumidityValues } from './SeedBankDashboard';
+import { TIME_PERIODS, getStartTime, HumidityValues } from './Common';
 import { htmlLegendPlugin } from './htmlLegendPlugin';
 
 declare global {
@@ -50,6 +50,12 @@ export default function PVBatteryChart(props: PVBatteryChartProps): JSX.Element 
   const classes = useStyles();
   const { BMU } = props;
   const [selectedPVBatteryPeriod, setSelectedPVBatteryPeriod] = useState<string>();
+
+  useEffect(() => {
+    if (!selectedPVBatteryPeriod) {
+      setSelectedPVBatteryPeriod(TIME_PERIODS[0]);
+    }
+  }, [selectedPVBatteryPeriod]);
 
   useEffect(() => {
     const getChartData = async () => {
@@ -220,7 +226,7 @@ export default function PVBatteryChart(props: PVBatteryChartProps): JSX.Element 
       <p className={classes.graphTitle}>{strings.PV_BATTERY}</p>
       <div className={classes.dropDownsContainer}>
         <Select
-          options={['Last 12 hours', 'Last 24 hours', 'Last 7 days', 'Last 30 days']}
+          options={TIME_PERIODS}
           onChange={onChangePVBatterySelectedPeriod}
           selectedValue={selectedPVBatteryPeriod}
           label={strings.TIME_PERIOD}
