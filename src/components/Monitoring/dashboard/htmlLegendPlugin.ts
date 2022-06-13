@@ -20,6 +20,7 @@ export const getOrCreateLegendList = (chart: any, id: string) => {
 // Plugin to create a custom legend. To use it it is necessary to disable the default legend plugin from chart.js and add this plugin on the plugins section with plugins: [htmlLegendPlugin]
 export const htmlLegendPlugin = {
   id: 'htmlLegend',
+  // See how this get called here https://www.chartjs.org/docs/latest/developers/plugins.html
   afterUpdate(chart: Chart, args: any, options: { containerID: string }) {
     const ul = getOrCreateLegendList(chart, options.containerID);
 
