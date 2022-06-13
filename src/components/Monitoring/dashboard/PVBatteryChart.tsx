@@ -7,6 +7,7 @@ import { Device } from 'src/types/Device';
 import { getTimeseriesHistory } from 'src/api/timeseries/timeseries';
 import moment from 'moment';
 import { getStartTime, HumidityValues } from './SeedBankDashboard';
+import { htmlLegendPlugin } from './htmlLegendPlugin';
 
 declare global {
   interface Window {
@@ -33,6 +34,10 @@ const useStyles = makeStyles((theme) =>
     },
     chart: {
       width: '800px',
+    },
+    legendContainer: {
+      marginBottom: '32px',
+      padding: '0 78px 0 41px',
     },
   })
 );
@@ -181,13 +186,12 @@ export default function PVBatteryChart(props: PVBatteryChartProps): JSX.Element 
             },
           },
           plugins: {
+            // @ts-ignore
+            htmlLegend: {
+              containerID: 'legend-container-pvbattery',
+            },
             legend: {
-              labels: {
-                filter(legendItem: { text: string | string[] }, data: any) {
-                  // only show datasets with name on legend
-                  return legendItem.text !== undefined;
-                },
-              },
+              display: false,
             },
             tooltip: {
               callbacks: {
@@ -206,6 +210,7 @@ export default function PVBatteryChart(props: PVBatteryChartProps): JSX.Element 
             },
           },
         },
+        plugins: [htmlLegendPlugin],
       });
     }
   };
@@ -222,6 +227,7 @@ export default function PVBatteryChart(props: PVBatteryChartProps): JSX.Element 
         />
       </div>
       <div className={classes.chartContainer}>
+        <div id='legend-container-pvbattery' className={classes.legendContainer} />
         <canvas id='pvBatteryChart' ref={pvBatteryRef} className={classes.chart} />
       </div>
     </div>
