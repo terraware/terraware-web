@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) =>
     },
     legendContainer: {
       marginBottom: '32px',
-      padding: '0 55px 0 41px;',
+      padding: '0 55px 0 41px',
     },
   })
 );
@@ -90,7 +90,7 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
             borderColor: '#FF9797',
             pointRadius: 0,
             fill: {
-              target: 1, //fill to dataset 1
+              target: 1, // fill to dataset 1
               above: '#FFBFD035', // Area will be red above the origin
             },
           },
@@ -137,7 +137,7 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
             borderColor: '#FF9797',
             pointRadius: 0,
             fill: {
-              target: 1, //fill to dataset 1
+              target: 1, // fill to dataset 1
               above: '#FFBFD035', // Area will be red above the origin
             },
           },

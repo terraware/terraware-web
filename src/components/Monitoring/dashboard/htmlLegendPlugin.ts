@@ -31,6 +31,7 @@ export const htmlLegendPlugin = {
     const generateLabelsFunction = chart.options?.plugins?.legend?.labels?.generateLabels;
     if (generateLabelsFunction) {
       const items = generateLabelsFunction(chart);
+      const hasHumidityTresholds = items.find((item) => item.text === 'Humidity Thresholds');
       items.forEach((item, index) => {
         const li = document.createElement('li');
         li.style.alignItems = 'center';
@@ -40,6 +41,9 @@ export const htmlLegendPlugin = {
         li.style.marginLeft = '10px';
 
         if (item.text === 'Humidity Thresholds' || item.text === 'System Voltage') {
+          li.style.marginLeft = 'auto';
+        }
+        if (!hasHumidityTresholds && item.text === 'Humidity') {
           li.style.marginLeft = 'auto';
         }
 
