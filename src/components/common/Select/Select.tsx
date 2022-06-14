@@ -17,6 +17,7 @@ interface SelectProps {
   readonly?: boolean;
   options?: string[];
   fullWidth?: boolean;
+  hideArrow?: boolean;
 }
 
 export default function Select(props: SelectProps): JSX.Element {
@@ -34,6 +35,7 @@ export default function Select(props: SelectProps): JSX.Element {
     readonly = true,
     options,
     fullWidth,
+    hideArrow,
   } = props;
 
   const selectClass = classNames({
@@ -95,6 +97,7 @@ export default function Select(props: SelectProps): JSX.Element {
     if (onChange) {
       onChange(e.target.value);
     }
+    setOpenedOptions(true);
   };
 
   const onKeyDownHandler = (e: KeyboardEvent<HTMLInputElement>) => {
@@ -140,9 +143,9 @@ export default function Select(props: SelectProps): JSX.Element {
             onChange={onChangeHandler}
             onKeyDown={onKeyDownHandler}
           />
-          <Icon name={'caretDown'} className='textfield-value--icon-right' />
+          {!hideArrow && <Icon name={'caretDown'} className='textfield-value--icon-right' />}
         </div>
-        {options && openedOptions && (
+        {options && options.length > 0 && openedOptions && (
           <ul className='options-container' ref={dropdownRef}>
             {options.map((option, index) => {
               return (

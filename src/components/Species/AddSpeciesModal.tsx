@@ -192,6 +192,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
                 : ''
             }
             errorText={nameFormatError}
+            hideArrow={true}
           />
         </Grid>
         <Grid item xs={12}>
@@ -205,6 +206,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
             placeholder={strings.TYPE}
             readonly={false}
             fullWidth={true}
+            hideArrow={true}
           />
         </Grid>
         <Grid item xs={12}>
