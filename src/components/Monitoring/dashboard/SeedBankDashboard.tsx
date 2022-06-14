@@ -66,14 +66,14 @@ export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.El
     if (!availableLocations?.length) {
       return;
     }
-    const urlDeviceId = query.get('deviceId');
+    const urlDeviceId = query.get('sensor');
     const urlTimePeriod = query.get('timePeriod');
     let location;
     let timePeriod;
 
     // set location to what url search param is set at
     if (urlDeviceId) {
-      query.delete('deviceId');
+      query.delete('sensor');
       location = availableLocations?.find((device) => device.id.toString() === urlDeviceId);
     }
     // set time period to what url search param is set at
