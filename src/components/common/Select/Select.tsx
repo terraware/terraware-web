@@ -97,6 +97,7 @@ export default function Select(props: SelectProps): JSX.Element {
     if (onChange) {
       onChange(e.target.value);
     }
+    setOpenedOptions(true);
   };
 
   const onKeyDownHandler = (e: KeyboardEvent<HTMLInputElement>) => {
