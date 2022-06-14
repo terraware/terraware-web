@@ -11,6 +11,10 @@ import TemperatureHumidityChart from './TemperatureHumidityChart';
 import PVBatteryChart from './PVBatteryChart';
 import { listDeviceManagers } from 'src/api/deviceManager/deviceManager';
 import { DeviceManager } from 'src/types/DeviceManager';
+import { useHistory } from 'react-router-dom';
+import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
+import useQuery from '../../../utils/useQuery';
+import { TIME_PERIODS } from './Common';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -47,11 +51,60 @@ type SeedBankDashboardProps = {
 
 export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.Element {
   const classes = useStyles();
+  const history = useHistory();
+  const query = useQuery();
+  const stateLocation = useStateLocation();
   const { seedBank } = props;
   const [availableLocations, setAvailableLocations] = useState<Device[]>();
   const [batteryLevel, setBatteryLevel] = useState<string>();
   const [BMU, setBMU] = useState<Device>();
   const [deviceManager, setDeviceManager] = useState<DeviceManager | undefined>();
+  const [defaultTimePeriod, setDefaultTimePeriod] = useState<string>();
+  const [defaultSensor, setDefaultSensor] = useState<Device>();
+
+  useEffect(() => {
+    if (!availableLocations?.length) {
+      return;
+    }
+    const urlDeviceId = query.get('deviceId');
+    const urlTimePeriod = query.get('timePeriod');
+    let location;
+    let timePeriod;
+
+    // set location to what url search param is set at
+    if (urlDeviceId) {
+      query.delete('deviceId');
+      location = availableLocations?.find((device) => device.id.toString() === urlDeviceId);
+    }
+    // set time period to what url search param is set at
+    if (urlTimePeriod) {
+      query.delete('timePeriod');
+      timePeriod = TIME_PERIODS.find((period) => period === urlTimePeriod);
+    }
+
+    // if location is not in url, keep existing selection (or default to first one if none-selected)
+    if (!location) {
+      location = defaultSensor || (availableLocations && availableLocations[0]);
+    }
+    // if time period is not in url, keep existing selection (or default to first one if none-selected)
+    if (!timePeriod) {
+      timePeriod = defaultTimePeriod || TIME_PERIODS[0];
+    }
+
+    // set new location if there is a change
+    if (location !== defaultSensor) {
+      setDefaultSensor(location);
+    }
+    // set new time period if there is a change
+    if (timePeriod !== defaultTimePeriod) {
+      setDefaultTimePeriod(timePeriod);
+    }
+
+    // clear url param if necessary
+    if (urlDeviceId || urlTimePeriod) {
+      history.push(getLocation(stateLocation.pathname, stateLocation, query.toString()));
+    }
+  }, [availableLocations, defaultSensor, defaultTimePeriod, history, query, stateLocation]);
 
   useEffect(() => {
     const populateLocations = async () => {
@@ -114,10 +167,14 @@ export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.El
         </div>
       </Grid>
       <Grid item xs={12}>
-        <TemperatureHumidityChart availableLocations={availableLocations} />
+        <TemperatureHumidityChart
+          availableLocations={availableLocations}
+          defaultSensor={defaultSensor}
+          defaultTimePeriod={defaultTimePeriod}
+        />
       </Grid>
       <Grid item xs={12}>
-        <PVBatteryChart BMU={BMU} />
+        <PVBatteryChart BMU={BMU} defaultTimePeriod={defaultTimePeriod} />
       </Grid>
     </Grid>
   );

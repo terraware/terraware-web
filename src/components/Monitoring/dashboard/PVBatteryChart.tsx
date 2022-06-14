@@ -44,18 +44,19 @@ const useStyles = makeStyles((theme) =>
 
 type PVBatteryChartProps = {
   BMU?: Device;
+  defaultTimePeriod?: string;
 };
 
 export default function PVBatteryChart(props: PVBatteryChartProps): JSX.Element {
   const classes = useStyles();
-  const { BMU } = props;
+  const { BMU, defaultTimePeriod } = props;
   const [selectedPVBatteryPeriod, setSelectedPVBatteryPeriod] = useState<string>();
 
   useEffect(() => {
-    if (!selectedPVBatteryPeriod) {
-      setSelectedPVBatteryPeriod(TIME_PERIODS[0]);
+    if (!selectedPVBatteryPeriod && defaultTimePeriod) {
+      setSelectedPVBatteryPeriod(defaultTimePeriod);
     }
-  }, [selectedPVBatteryPeriod]);
+  }, [selectedPVBatteryPeriod, defaultTimePeriod]);
 
   useEffect(() => {
     const getChartData = async () => {
