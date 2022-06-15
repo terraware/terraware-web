@@ -285,15 +285,6 @@ export default function App() {
     return <EmptyStatePage pageName={'SeedBanks'} />;
   };
 
-  const filteredOrganization = () => {
-    if (selectedOrganization) {
-      return {
-        ...selectedOrganization,
-        projects: selectedOrganization?.projects?.filter((proj) => proj.hidden && proj.name === 'Seed Bank'),
-      };
-    }
-  };
-
   return (
     <>
       <CssBaseline />
@@ -326,7 +317,7 @@ export default function App() {
                 />
               </Route>
               <Route exact path={APP_PATHS.SEEDS_DASHBOARD}>
-                <SeedSummary organization={filteredOrganization()} setSeedSearchCriteria={setSeedSearchCriteria} />
+                <SeedSummary organization={selectedOrganization} setSeedSearchCriteria={setSeedSearchCriteria} />
               </Route>
               <Route exact path={APP_PATHS.CHECKIN}>
                 <CheckIn organization={selectedOrganization} />
@@ -341,7 +332,7 @@ export default function App() {
               </Route>
               <Route exact path={APP_PATHS.ACCESSIONS}>
                 <Database
-                  organization={filteredOrganization()}
+                  organization={selectedOrganization}
                   searchCriteria={seedSearchCriteria}
                   setSearchCriteria={setSeedSearchCriteria}
                   searchSortOrder={seedSearchSort}
