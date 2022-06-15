@@ -74,7 +74,9 @@ export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.El
     // set location to what url search param is set at
     if (urlDeviceId) {
       query.delete('sensor');
-      location = availableLocations?.find((device) => device.id.toString() === urlDeviceId);
+      location = availableLocations?.find((device) => {
+        return device.type === 'sensor' && device.id.toString() === urlDeviceId;
+      });
     }
     // set time period to what url search param is set at
     if (urlTimePeriod) {
