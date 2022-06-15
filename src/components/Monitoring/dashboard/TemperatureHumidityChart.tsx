@@ -55,13 +55,13 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
   const [selectedPeriod, setSelectedPeriod] = useState<string>();
 
   useEffect(() => {
-    if (!selectedLocation && defaultSensor) {
+    if (defaultSensor) {
       setSelectedLocation(defaultSensor);
     }
-    if (!selectedPeriod && defaultTimePeriod) {
+    if (defaultTimePeriod) {
       setSelectedPeriod(defaultTimePeriod);
     }
-  }, [selectedLocation, selectedPeriod, defaultSensor, defaultTimePeriod]);
+  }, [defaultSensor, defaultTimePeriod]);
 
   useEffect(() => {
     const createHTChart = (

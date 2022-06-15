@@ -63,6 +63,17 @@ export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.El
   const [defaultSensor, setDefaultSensor] = useState<Device>();
 
   useEffect(() => {
+    if (defaultSensor && defaultTimePeriod) {
+      return;
+    }
+    if (!availableLocations?.length) {
+      return;
+    }
+    setDefaultSensor(availableLocations[0]);
+    setDefaultTimePeriod(TIME_PERIODS[0]);
+  }, [availableLocations, defaultSensor, defaultTimePeriod]);
+
+  useEffect(() => {
     if (!availableLocations?.length) {
       return;
     }
@@ -84,21 +95,12 @@ export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.El
       timePeriod = TIME_PERIODS.find((period) => period === urlTimePeriod);
     }
 
-    // if location is not in url, keep existing selection (or default to first one if none-selected)
-    if (!location) {
-      location = defaultSensor || (availableLocations && availableLocations[0]);
-    }
-    // if time period is not in url, keep existing selection (or default to first one if none-selected)
-    if (!timePeriod) {
-      timePeriod = defaultTimePeriod || TIME_PERIODS[0];
-    }
-
-    // set new location if there is a change
-    if (location !== defaultSensor) {
+    // set new location if valid
+    if (location) {
       setDefaultSensor(location);
     }
-    // set new time period if there is a change
-    if (timePeriod !== defaultTimePeriod) {
+    // set new time period if valid
+    if (timePeriod) {
       setDefaultTimePeriod(timePeriod);
     }
 
@@ -106,7 +108,7 @@ export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.El
     if (urlDeviceId || urlTimePeriod) {
       history.push(getLocation(stateLocation.pathname, stateLocation, query.toString()));
     }
-  }, [availableLocations, defaultSensor, defaultTimePeriod, history, query, stateLocation]);
+  }, [availableLocations, history, query, stateLocation]);
 
   useEffect(() => {
     const populateLocations = async () => {
