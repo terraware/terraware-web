@@ -7,11 +7,14 @@ import { Device } from 'src/types/Device';
 import Icon from '../../common/icon/Icon';
 import { Grid } from '@material-ui/core';
 import { listTimeseries } from 'src/api/timeseries/timeseries';
-import moment from 'moment';
 import TemperatureHumidityChart from './TemperatureHumidityChart';
 import PVBatteryChart from './PVBatteryChart';
 import { listDeviceManagers } from 'src/api/deviceManager/deviceManager';
 import { DeviceManager } from 'src/types/DeviceManager';
+import { useHistory } from 'react-router-dom';
+import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
+import useQuery from '../../../utils/useQuery';
+import { TIME_PERIODS } from './Common';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -47,44 +50,72 @@ type SeedBankDashboardProps = {
   seedBank: Facility;
 };
 
-export type HumidityValues = {
-  timestamp: string;
-  value: string;
-};
-
-export const getStartTime = (period: string) => {
-  switch (period) {
-    case 'Last 12 hours':
-      return moment(Date.now()).subtract(12, 'h');
-    case 'Last 24 hours':
-      return moment(Date.now()).subtract(24, 'h');
-    case 'Last 7 days':
-      return moment(Date.now()).subtract(7, 'd');
-    case 'Last 30 days':
-      return moment(Date.now()).subtract(30, 'd');
-    default:
-      return moment();
-  }
-};
-
-export const getFirstWord = (sensorName: string) => {
-  const sensorNameWords = sensorName.split(' ');
-  return sensorNameWords[0];
-};
-
 export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.Element {
   const classes = useStyles();
+  const history = useHistory();
+  const query = useQuery();
+  const stateLocation = useStateLocation();
   const { seedBank } = props;
   const [availableLocations, setAvailableLocations] = useState<Device[]>();
   const [batteryLevel, setBatteryLevel] = useState<string>();
   const [BMU, setBMU] = useState<Device>();
   const [deviceManager, setDeviceManager] = useState<DeviceManager | undefined>();
+  const [defaultTimePeriod, setDefaultTimePeriod] = useState<string>();
+  const [defaultSensor, setDefaultSensor] = useState<Device>();
+
+  useEffect(() => {
+    if (defaultSensor && defaultTimePeriod) {
+      return;
+    }
+    if (!availableLocations?.length) {
+      return;
+    }
+    setDefaultSensor(availableLocations[0]);
+    setDefaultTimePeriod(TIME_PERIODS[0]);
+  }, [availableLocations, defaultSensor, defaultTimePeriod]);
+
+  useEffect(() => {
+    if (!availableLocations?.length) {
+      return;
+    }
+    const urlDeviceId = query.get('sensor');
+    const urlTimePeriod = query.get('timePeriod');
+    let location;
+    let timePeriod;
+
+    // set location to what url search param is set at
+    if (urlDeviceId) {
+      query.delete('sensor');
+      location = availableLocations?.find((device) => {
+        return device.type === 'sensor' && device.id.toString() === urlDeviceId;
+      });
+    }
+    // set time period to what url search param is set at
+    if (urlTimePeriod) {
+      query.delete('timePeriod');
+      timePeriod = TIME_PERIODS.find((period) => period === urlTimePeriod);
+    }
+
+    // set new location if valid
+    if (location) {
+      setDefaultSensor(location);
+    }
+    // set new time period if valid
+    if (timePeriod) {
+      setDefaultTimePeriod(timePeriod);
+    }
+
+    // clear url param if necessary
+    if (urlDeviceId || urlTimePeriod) {
+      history.push(getLocation(stateLocation.pathname, stateLocation, query.toString()));
+    }
+  }, [availableLocations, history, query, stateLocation]);
 
   useEffect(() => {
     const populateLocations = async () => {
       if (seedBank) {
         const locations = await listFacilityDevices(seedBank);
-        setAvailableLocations(locations.devices);
+        setAvailableLocations(locations.devices.sort((deviceA, deviceB) => deviceA.name.localeCompare(deviceB.name)));
       }
     };
     populateLocations();
@@ -141,10 +172,14 @@ export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.El
         </div>
       </Grid>
       <Grid item xs={12}>
-        <TemperatureHumidityChart availableLocations={availableLocations} />
+        <TemperatureHumidityChart
+          availableLocations={availableLocations}
+          defaultSensor={defaultSensor}
+          defaultTimePeriod={defaultTimePeriod}
+        />
       </Grid>
       <Grid item xs={12}>
-        <PVBatteryChart BMU={BMU} />
+        <PVBatteryChart BMU={BMU} defaultTimePeriod={defaultTimePeriod} />
       </Grid>
     </Grid>
   );

@@ -6,7 +6,7 @@ import { Chart } from 'chart.js';
 import { Device } from 'src/types/Device';
 import { getTimeseriesHistory } from 'src/api/timeseries/timeseries';
 import moment from 'moment';
-import { getFirstWord, getStartTime, HumidityValues } from './SeedBankDashboard';
+import { TIME_PERIODS, getFirstWord, getStartTime, HumidityValues } from './Common';
 import { htmlLegendPlugin } from './htmlLegendPlugin';
 
 declare global {
@@ -44,13 +44,27 @@ const useStyles = makeStyles((theme) =>
 
 type TemperatureHumidityChartProps = {
   availableLocations?: Device[];
+  defaultSensor?: Device;
+  defaultTimePeriod?: string;
 };
 
 export default function TemperatureHumidityChart(props: TemperatureHumidityChartProps): JSX.Element {
   const classes = useStyles();
-  const { availableLocations } = props;
+  const { availableLocations, defaultSensor, defaultTimePeriod } = props;
   const [selectedLocation, setSelectedLocation] = useState<Device>();
   const [selectedPeriod, setSelectedPeriod] = useState<string>();
+
+  useEffect(() => {
+    if (defaultSensor) {
+      setSelectedLocation(defaultSensor);
+    }
+  }, [defaultSensor]);
+
+  useEffect(() => {
+    if (defaultTimePeriod) {
+      setSelectedPeriod(defaultTimePeriod);
+    }
+  }, [defaultTimePeriod]);
 
   useEffect(() => {
     const createHTChart = (
@@ -367,7 +381,7 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
           label={strings.LOCATION}
         />
         <Select
-          options={['Last 12 hours', 'Last 24 hours', 'Last 7 days', 'Last 30 days']}
+          options={TIME_PERIODS}
           onChange={onChangeSelectedPeriod}
           selectedValue={selectedPeriod}
           label={strings.TIME_PERIOD}
