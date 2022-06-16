@@ -18,6 +18,7 @@ const useStyles = makeStyles((theme) =>
     graphContainer: {
       border: '1px solid #A9B7B8',
       padding: '24px',
+      height: '179px',
     },
     panelTitle: {
       display: 'flex',
@@ -127,7 +128,7 @@ export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.El
             <p>{strings.PV_BATTERY_CHARGE}</p>
             <Icon name='chargingBattery' />
           </div>
-          <p className={classes.panelValue}>{batteryLevel}</p>
+          <p className={classes.panelValue}>{batteryLevel || strings.NO_DATA_YET}</p>
         </div>
       </Grid>
       <Grid item xs={6}>
