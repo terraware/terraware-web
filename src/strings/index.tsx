@@ -515,6 +515,7 @@ const strings = new LocalizedStrings({
     BACK_OF_SEED_BANK: 'Back of Seed Bank',
     FINISH: 'Finish',
     SENSOR_LOCATION_ERROR: 'Each location much have one sensor assigned to it.',
+    NO_DATA_YET: 'No data yet',
   },
 });
 
