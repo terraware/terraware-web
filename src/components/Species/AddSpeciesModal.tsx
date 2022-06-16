@@ -5,6 +5,7 @@ import { createSpecies, getSpeciesDetails, listSpeciesNames, updateSpecies } fro
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
 import { GrowthForms, Species, SpeciesRequestError, StorageBehaviors } from 'src/types/Species';
+import useDebounce from 'src/utils/useDebounce';
 import useForm from 'src/utils/useForm';
 import Button from '../common/button/Button';
 import Checkbox from '../common/Checkbox';
@@ -52,6 +53,8 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
   const [optionsForName, setOptionsForName] = useState<string[]>();
   const [optionsForCommonName, setOptionsForCommonName] = useState<string[]>();
   const [newScientificName, setNewScientificName] = useState(false);
+  // Debounce search term so that it only gives us latest value if searchTerm has not been updated within last 500ms.
+  const debouncedSearchTerm = useDebounce(record.scientificName, 500);
 
   React.useEffect(() => {
     if (open) {
@@ -63,8 +66,8 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
 
   useEffect(() => {
     const getOptionsForTyped = async () => {
-      if (record.scientificName.length > 1) {
-        const response = await listSpeciesNames(record.scientificName);
+      if (debouncedSearchTerm.length > 1) {
+        const response = await listSpeciesNames(debouncedSearchTerm);
         if (response.names) {
           setOptionsForName(response.names);
         }
@@ -72,11 +75,11 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
     };
 
     const getDetails = async () => {
-      if (!record.scientificName) {
+      if (!debouncedSearchTerm) {
         setNewScientificName(false);
       }
-      if (record.scientificName.length > 1) {
-        const response = await getSpeciesDetails(record.scientificName);
+      if (debouncedSearchTerm.length > 1) {
+        const response = await getSpeciesDetails(debouncedSearchTerm);
         if (response.requestSucceeded) {
           setNewScientificName(false);
           setRecord((previousRecord: Species) => {
@@ -104,7 +107,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
 
     getOptionsForTyped();
     getDetails();
-  }, [record.scientificName, setRecord]);
+  }, [debouncedSearchTerm, setRecord]);
 
   const handleCancel = () => {
     onClose(false);
