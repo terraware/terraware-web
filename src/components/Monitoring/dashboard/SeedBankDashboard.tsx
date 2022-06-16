@@ -18,6 +18,7 @@ const useStyles = makeStyles((theme) =>
     graphContainer: {
       border: '1px solid #A9B7B8',
       padding: '24px',
+      height: '179px',
     },
     panelTitle: {
       display: 'flex',
