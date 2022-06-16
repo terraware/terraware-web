@@ -53,10 +53,10 @@ export default function PVBatteryChart(props: PVBatteryChartProps): JSX.Element 
   const [selectedPVBatteryPeriod, setSelectedPVBatteryPeriod] = useState<string>();
 
   useEffect(() => {
-    if (!selectedPVBatteryPeriod && defaultTimePeriod) {
+    if (defaultTimePeriod) {
       setSelectedPVBatteryPeriod(defaultTimePeriod);
     }
-  }, [selectedPVBatteryPeriod, defaultTimePeriod]);
+  }, [defaultTimePeriod]);
 
   useEffect(() => {
     const getChartData = async () => {
