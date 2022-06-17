@@ -18,6 +18,8 @@ interface SelectProps {
   options?: string[];
   fullWidth?: boolean;
   hideArrow?: boolean;
+  onBlur?: () => void;
+  onFocus?: () => void;
 }
 
 export default function Select(props: SelectProps): JSX.Element {
@@ -36,6 +38,8 @@ export default function Select(props: SelectProps): JSX.Element {
     options,
     fullWidth,
     hideArrow,
+    onBlur,
+    onFocus,
   } = props;
 
   const selectClass = classNames({
@@ -142,6 +146,8 @@ export default function Select(props: SelectProps): JSX.Element {
             placeholder={placeholder}
             onChange={onChangeHandler}
             onKeyDown={onKeyDownHandler}
+            onBlur={onBlur}
+            onFocus={onFocus}
           />
           {!hideArrow && <Icon name={'caretDown'} className='textfield-value--icon-right' />}
         </div>
