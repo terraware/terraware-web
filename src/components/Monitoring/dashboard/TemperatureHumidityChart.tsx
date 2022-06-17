@@ -68,6 +68,18 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
   }, [defaultTimePeriod]);
 
   useEffect(() => {
+    const getMaxValue = (temperatureValues: HumidityValues[]) => {
+      if (temperatureValues && temperatureValues.length) {
+        return Math.max(...temperatureValues.map((tv) => Number(tv.value)));
+      }
+    };
+
+    const getMinValue = (temperatureValues: HumidityValues[]) => {
+      if (temperatureValues && temperatureValues.length) {
+        return Math.min(...temperatureValues.map((tv) => Number(tv.value)));
+      }
+    };
+
     const createHTChart = (
       temperatureValues: HumidityValues[],
       humidityValues: HumidityValues[],
@@ -214,6 +226,8 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
                     return `${value}ºC`;
                   },
                 },
+                suggestedMax: Number(getMaxValue(temperatureValues)) + 10,
+                suggestedMin: Number(getMinValue(temperatureValues)) - 10,
               },
               x: {
                 type: 'time',
@@ -223,8 +237,8 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
                     hour: 'MMM d h:mm',
                   },
                 },
-                max: moment().valueOf(),
-                min: getStartTime(selectedPeriod).valueOf(),
+                max: temperatureValues?.length < 12 ? moment().valueOf() : undefined,
+                min: temperatureValues?.length < 12 ? getStartTime(selectedPeriod).valueOf() : undefined,
               },
               y1: {
                 type: 'linear',
