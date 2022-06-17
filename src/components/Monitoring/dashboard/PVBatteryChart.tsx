@@ -6,7 +6,7 @@ import { Chart } from 'chart.js';
 import { Device } from 'src/types/Device';
 import { getTimeseriesHistory } from 'src/api/timeseries/timeseries';
 import moment from 'moment';
-import { TIME_PERIODS, getStartTime, HumidityValues } from './Common';
+import { TIME_PERIODS, getStartTime, HumidityValues, getUnit } from './Common';
 import { htmlLegendPlugin } from './htmlLegendPlugin';
 
 declare global {
@@ -59,6 +59,130 @@ export default function PVBatteryChart(props: PVBatteryChartProps): JSX.Element 
   }, [defaultTimePeriod]);
 
   useEffect(() => {
+    const createBatteryChart = (
+      stateOfChargeValues: HumidityValues[],
+      voltageValues: HumidityValues[],
+      currentValues: HumidityValues[],
+      chartReference: React.RefObject<HTMLCanvasElement>
+    ) => {
+      const ctx = chartReference?.current?.getContext('2d');
+      if (ctx) {
+        window.pvBatteryChart = new Chart(ctx, {
+          type: 'scatter',
+          data: {
+            datasets: [
+              {
+                data: stateOfChargeValues?.map((entry) => {
+                  return { x: entry.timestamp, y: Number(entry.value) };
+                }),
+                label: 'State of Charge',
+                showLine: true,
+                fill: false,
+                borderColor: '#FE0003',
+                backgroundColor: '#FF5A5B',
+              },
+              {
+                data: voltageValues?.map((entry) => {
+                  return { x: entry.timestamp, y: Number(entry.value) };
+                }),
+                label: 'System Voltage',
+                showLine: true,
+                fill: false,
+                borderColor: '#0067C8',
+                backgroundColor: '#007DF2',
+                yAxisID: 'y1',
+              },
+              {
+                data: currentValues?.map((entry) => {
+                  return { x: entry.timestamp, y: Number(entry.value) };
+                }),
+                label: 'System Current',
+                showLine: true,
+                borderColor: '#DAAF38',
+                backgroundColor: '#FBCA47',
+                fill: false,
+                yAxisID: 'y2',
+              },
+            ],
+          },
+          options: {
+            scales: {
+              // @ts-ignore
+              y: {
+                ticks: {
+                  callback: (value, index, ticks) => {
+                    return `${value}%`;
+                  },
+                },
+              },
+              x: {
+                type: 'time',
+                time: {
+                  unit: getUnit(selectedPVBatteryPeriod),
+                  displayFormats: {
+                    hour: 'MMM d h:mm',
+                  },
+                },
+              },
+              y1: {
+                type: 'linear',
+                display: true,
+                position: 'right',
+                // grid line settings
+                grid: {
+                  drawOnChartArea: false, // only want the grid lines for one axis to show up
+                },
+                ticks: {
+                  callback: (value, index, ticks) => {
+                    return `${value}V`;
+                  },
+                },
+              },
+              y2: {
+                type: 'linear',
+                display: true,
+                position: 'right',
+                // grid line settings
+                grid: {
+                  drawOnChartArea: false, // only want the grid lines for one axis to show up
+                },
+                ticks: {
+                  callback: (value, index, ticks) => {
+                    return `${value}A`;
+                  },
+                },
+              },
+            },
+            plugins: {
+              // @ts-ignore
+              htmlLegend: {
+                containerID: 'legend-container-pvbattery',
+              },
+              legend: {
+                display: false,
+              },
+              tooltip: {
+                callbacks: {
+                  label: (context) => {
+                    let label = '';
+
+                    if (context.parsed.x !== null) {
+                      label += moment(context.parsed.x).format('YYYY-MM-DDTHH:mm');
+                    }
+                    if (context.parsed.y !== null) {
+                      label += ', ' + context.parsed.y;
+                    }
+                    return label;
+                  },
+                },
+              },
+            },
+          },
+          plugins: [htmlLegendPlugin],
+        });
+      }
+    };
+
     const getChartData = async () => {
       if (selectedPVBatteryPeriod) {
         const startTime = getStartTime(selectedPVBatteryPeriod);
@@ -99,128 +223,6 @@ export default function PVBatteryChart(props: PVBatteryChartProps): JSX.Element 
   };
 
   const pvBatteryRef = React.useRef<HTMLCanvasElement>(null);
-
-  const createBatteryChart = (
-    stateOfChargeValues: HumidityValues[],
-    voltageValues: HumidityValues[],
-    currentValues: HumidityValues[],
-    chartReference: React.RefObject<HTMLCanvasElement>
-  ) => {
-    const ctx = chartReference?.current?.getContext('2d');
-    if (ctx) {
-      window.pvBatteryChart = new Chart(ctx, {
-        type: 'scatter',
-        data: {
-          datasets: [
-            {
-              data: stateOfChargeValues?.map((entry) => {
-                return { x: moment(entry.timestamp), y: Number(entry.value) };
-              }),
-              label: 'State of Charge',
-              showLine: true,
-              fill: false,
-              borderColor: '#FE0003',
-              backgroundColor: '#FF5A5B',
-            },
-            {
-              data: voltageValues?.map((entry) => {
-                return { x: moment(entry.timestamp), y: Number(entry.value) };
-              }),
-              label: 'System Voltage',
-              showLine: true,
-              fill: false,
-              borderColor: '#0067C8',
-              backgroundColor: '#007DF2',
-              yAxisID: 'y1',
-            },
-            {
-              data: currentValues?.map((entry) => {
-                return { x: moment(entry.timestamp), y: Number(entry.value) };
-              }),
-              label: 'System Current',
-              showLine: true,
-              borderColor: '#DAAF38',
-              backgroundColor: '#FBCA47',
-              fill: false,
-              yAxisID: 'y2',
-            },
-          ],
-        },
-        options: {
-          scales: {
-            // @ts-ignore
-            y: {
-              ticks: {
-                callback: (value, index, ticks) => {
-                  return `${value}%`;
-                },
-              },
-            },
-            x: {
-              ticks: {
-                callback: (value, index, ticks) => {
-                  return moment(value).format('YYYY-MM-DDTHH:mm');
-                },
-              },
-            },
-            y1: {
-              type: 'linear',
-              display: true,
-              position: 'right',
-              // grid line settings
-              grid: {
-                drawOnChartArea: false, // only want the grid lines for one axis to show up
-              },
-              ticks: {
-                callback: (value, index, ticks) => {
-                  return `${value}V`;
-                },
-              },
-            },
-            y2: {
-              type: 'linear',
-              display: true,
-              position: 'right',
-              // grid line settings
-              grid: {
-                drawOnChartArea: false, // only want the grid lines for one axis to show up
-              },
-              ticks: {
-                callback: (value, index, ticks) => {
-                  return `${value}A`;
-                },
-              },
-            },
-          },
-          plugins: {
-            // @ts-ignore
-            htmlLegend: {
-              containerID: 'legend-container-pvbattery',
-            },
-            legend: {
-              display: false,
-            },
-            tooltip: {
-              callbacks: {
-                label: (context) => {
-                  let label = '';
-
-                  if (context.parsed.x !== null) {
-                    label += moment(context.parsed.x).format('YYYY-MM-DDTHH:mm');
-                  }
-                  if (context.parsed.y !== null) {
-                    label += ', ' + context.parsed.y;
-                  }
-                  return label;
-                },
-              },
-            },
-          },
-        },
-        plugins: [htmlLegendPlugin],
-      });
-    }
-  };
 
   return (
     <div className={classes.graphContainer}>

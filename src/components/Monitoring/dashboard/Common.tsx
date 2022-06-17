@@ -26,3 +26,11 @@ export const getFirstWord = (sensorName: string) => {
   const sensorNameWords = sensorName.split(' ');
   return sensorNameWords[0];
 };
+
+export const getUnit = (selectedPeriod?: string) => {
+  if (selectedPeriod?.includes('hours')) {
+    return 'hour';
+  } else {
+    return 'day';
+  }
+};
