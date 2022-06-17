@@ -76,7 +76,7 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
 
     const getMinValue = (temperatureValues: HumidityValues[]) => {
       if (temperatureValues && temperatureValues.length) {
-        Math.min(...temperatureValues.map((tv) => Number(tv.value)));
+        return Math.min(...temperatureValues.map((tv) => Number(tv.value)));
       }
     };
 
