@@ -67,7 +67,7 @@ export default function PVBatteryChart(props: PVBatteryChartProps): JSX.Element 
       chartReference: React.RefObject<HTMLCanvasElement>
     ) => {
       const ctx = chartReference?.current?.getContext('2d');
-      if (ctx) {
+      if (ctx && selectedPVBatteryPeriod) {
         window.pvBatteryChart = new Chart(ctx, {
           type: 'scatter',
           data: {
@@ -124,6 +124,8 @@ export default function PVBatteryChart(props: PVBatteryChartProps): JSX.Element 
                     hour: 'MMM d h:mm',
                   },
                 },
+                max: moment().valueOf(),
+                min: getStartTime(selectedPVBatteryPeriod).valueOf(),
               },
               y1: {
                 type: 'linear',

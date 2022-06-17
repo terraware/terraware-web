@@ -74,7 +74,7 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
       chartReference: React.RefObject<HTMLCanvasElement>
     ) => {
       const ctx = chartReference?.current?.getContext('2d');
-      if (ctx && selectedLocation) {
+      if (ctx && selectedLocation && selectedPeriod) {
         const commonDatasets = [
           {
             data: temperatureValues?.map((entry) => {
@@ -223,6 +223,8 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
                     hour: 'MMM d h:mm',
                   },
                 },
+                max: moment().valueOf(),
+                min: getStartTime(selectedPeriod).valueOf(),
               },
               y1: {
                 type: 'linear',
