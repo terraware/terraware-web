@@ -8,6 +8,7 @@ import { getTimeseriesHistory } from 'src/api/timeseries/timeseries';
 import moment from 'moment';
 import { TIME_PERIODS, getStartTime, HumidityValues, getUnit } from './Common';
 import { htmlLegendPlugin } from './htmlLegendPlugin';
+import 'chartjs-adapter-date-fns';
 
 declare global {
   interface Window {
