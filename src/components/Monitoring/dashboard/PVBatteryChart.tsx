@@ -124,8 +124,8 @@ export default function PVBatteryChart(props: PVBatteryChartProps): JSX.Element 
                     hour: 'MMM d h:mm',
                   },
                 },
-                max: moment().valueOf(),
-                min: getStartTime(selectedPVBatteryPeriod).valueOf(),
+                max: stateOfChargeValues.length < 12 ? moment().valueOf() : undefined,
+                min: stateOfChargeValues.length < 12 ? getStartTime(selectedPVBatteryPeriod).valueOf() : undefined,
               },
               y1: {
                 type: 'linear',

@@ -248,8 +248,8 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
                     hour: 'MMM d h:mm',
                   },
                 },
-                max: moment().valueOf(),
-                min: getStartTime(selectedPeriod).valueOf(),
+                max: temperatureValues.length < 12 ? moment().valueOf() : undefined,
+                min: temperatureValues.length < 12 ? getStartTime(selectedPeriod).valueOf() : undefined,
               },
               y1: {
                 type: 'linear',
