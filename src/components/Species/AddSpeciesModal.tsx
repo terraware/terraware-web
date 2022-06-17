@@ -55,6 +55,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
   const [newScientificName, setNewScientificName] = useState(false);
   // Debounce search term so that it only gives us latest value if searchTerm has not been updated within last 500ms.
   const debouncedSearchTerm = useDebounce(record.scientificName, 250);
+  const [showWarning, setShowWarning] = useState(false);
 
   React.useEffect(() => {
     if (open) {
@@ -141,6 +142,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
 
   const onChangeScientificName = (value: string) => {
     setNameFormatError('');
+    setNewScientificName(false);
     onChange('scientificName', value);
   };
 
@@ -190,12 +192,14 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
             readonly={false}
             fullWidth={true}
             warningText={
-              !initialSpecies && newScientificName && !nameFormatError
+              showWarning && !initialSpecies && newScientificName && !nameFormatError
                 ? strings.formatString(strings.SCIENTIFIC_NAME_NOT_FOUND, record.scientificName)
                 : ''
             }
             errorText={nameFormatError}
             hideArrow={true}
+            onBlur={() => setShowWarning(true)}
+            onFocus={() => setShowWarning(false)}
           />
         </Grid>
         <Grid item xs={12}>
