@@ -25,7 +25,7 @@ type TopBarProps = {
   organizations?: ServerOrganization[];
   setSelectedOrganization: React.Dispatch<React.SetStateAction<ServerOrganization | undefined>>;
   selectedOrganization?: ServerOrganization;
-  reloadOrganizationData: () => void;
+  reloadOrganizationData: (selectedOrgId?: number) => void;
   user?: User;
   reloadUser: () => void;
 };
