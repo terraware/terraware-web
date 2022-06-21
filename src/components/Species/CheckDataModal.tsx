@@ -73,11 +73,12 @@ export type CheckDataModalProps = {
   onClose: (saved: boolean, snackbarMessage?: string) => void;
   species: Species[];
   reviewErrors: () => void;
+  reloadData: () => void;
 };
 
 export default function CheckDataModal(props: CheckDataModalProps): JSX.Element {
   const classes = useStyles();
-  const { open, onClose, species, reviewErrors } = props;
+  const { open, onClose, species, reviewErrors, reloadData } = props;
   const [error, setError] = useState<string>();
   const [loading, setLoading] = useState(false);
   const [completed, setCompleted] = useState(false);
@@ -88,6 +89,11 @@ export default function CheckDataModal(props: CheckDataModalProps): JSX.Element 
     setError(undefined);
     setCompleted(false);
     setLoading(false);
+  };
+
+  const reviewErrorsHandler = () => {
+    handleCancel();
+    reviewErrors();
   };
 
   useEffect(() => {
@@ -106,6 +112,7 @@ export default function CheckDataModal(props: CheckDataModalProps): JSX.Element 
 
   const startDataCheck = () => {
     setLoading(true);
+    reloadData();
     setTimeout(finishDataCheck, 1000);
   };
 
@@ -128,7 +135,7 @@ export default function CheckDataModal(props: CheckDataModalProps): JSX.Element 
       return [<Button onClick={handleCancel} label={strings.NICE} key='mb-1' />];
     }
     if (completed && speciesWithProblems) {
-      return [<Button onClick={reviewErrors} label={strings.REVIEW_ERRORS} key='mb-1' />];
+      return [<Button onClick={reviewErrorsHandler} label={strings.REVIEW_ERRORS} key='mb-1' />];
     }
   };
 

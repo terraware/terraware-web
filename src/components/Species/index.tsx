@@ -346,6 +346,7 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
         onClose={() => setCheckDataModalOpen(false)}
         species={species}
         reviewErrors={reviewErrorsHandler}
+        reloadData={reloadData}
       />
       <DeleteSpeciesModal
         open={deleteSpeciesModalOpen}
