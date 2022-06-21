@@ -4,8 +4,6 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 import Button from 'src/components/common/button/Button';
 import Icon from 'src/components/common/icon/Icon';
 import { IconName } from 'src/components/common/icon/icons';
-
-import { Link as RouterLink } from 'react-router-dom';
 import { Link } from '@material-ui/core';
 
 type EmptyStateStyleProps = {
@@ -96,7 +94,7 @@ export type ListItemContent = {
   buttonText?: string;
   onClickButton?: () => void;
   linkText?: string;
-  linkPath?: string;
+  onLinkClick?: () => void;
 };
 
 type EmptyStateContentProps = {
@@ -127,8 +125,8 @@ export default function EmptyStateContent(props: EmptyStateContentProps): JSX.El
                 <p className={item.buttonText ? classes.listItemDescriptionWithButton : classes.listItemDescription}>
                   {item.description}
                 </p>
-                {item.linkText && item.linkPath && (
-                  <Link component={RouterLink} to={item.linkPath} className={classes.itemLink}>
+                {item.linkText && item.onLinkClick && (
+                  <Link onClick={item.onLinkClick} className={classes.itemLink}>
                     {item.linkText}
                   </Link>
                 )}

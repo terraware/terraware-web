@@ -363,6 +363,7 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
         open={importSpeciesModalOpen}
         onClose={onCloseImportSpeciesModal}
         organization={organization}
+        setCheckDataModalOpen={setCheckDataModalOpen}
       />
       <Grid container>
         <Grid item xs={12} className={classes.titleContainer}>
