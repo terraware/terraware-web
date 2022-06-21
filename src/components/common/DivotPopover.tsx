@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Divider, List, ListItem, ListSubheader, Popover, Typography } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
@@ -66,7 +66,6 @@ const useStyles = makeStyles((theme) =>
       border: '2px solid transparent',
       borderLeft: '2px solid #A9B7B8',
       borderTop: '2px solid #A9B7B8',
-      left: 'calc(50% - 8px)',
       top: '-8px',
       position: 'absolute',
       transform: 'rotate(45deg)',
@@ -145,6 +144,11 @@ type DivotPopoverProps = {
   headerMenuItems?: MenuItem[];
 };
 
+type DivotPositionProps = {
+  left?: string;
+  visibility: 'hidden' | 'visible';
+};
+
 export default function DivotPopover({
   anchorEl,
   onClose,
@@ -154,6 +158,22 @@ export default function DivotPopover({
   size,
 }: DivotPopoverProps): JSX.Element {
   const classes = useStyles();
+  const [divotStyle, setDivotStyle] = useState<DivotPositionProps>({ visibility: 'hidden' });
+  const [divotRef, setDivotRef] = useState<HTMLElement | null>();
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (divotRef && anchorEl) {
+        const left = anchorEl.getBoundingClientRect().x - divotRef.getBoundingClientRect().x + 16;
+        if (!divotStyle.left || divotStyle.left !== `${left}px`) {
+          setDivotStyle({ left: `${left}px`, visibility: 'hidden' });
+        } else if (divotStyle.visibility !== 'visible') {
+          setDivotStyle((current) => ({ ...current, visibility: 'visible' }));
+        }
+      }
+    }, 10);
+  }, [anchorEl, divotRef, divotStyle]);
+
   return (
     <div>
       <Popover
@@ -173,9 +193,9 @@ export default function DivotPopover({
           paper: classes.paper + ' divot-popover-' + size,
         }}
       >
-        <List id='divot-popover' className={classes.popover}>
+        <List id='divot-popover' className={classes.popover} ref={setDivotRef}>
           <div className={classes.divotWrapper}>
-            <div className={classes.divot} />
+            <div className={classes.divot} style={divotStyle} />
           </div>
           <ListSubheader inset className={classes.subheader}>
             <div className={classes.mainTitle}>
