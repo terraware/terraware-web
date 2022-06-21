@@ -49,27 +49,27 @@ export default function ProblemTooltip({
   const ignoreFix = async (problemId: number) => {
     await ignoreProblemSuggestion(problemId);
     setOpenedTooltip(false);
+    if (reloadData) {
+      reloadData();
+    }
   };
 
   const acceptFix = async (problemId: number) => {
     await acceptProblemSuggestion(problemId);
     setOpenedTooltip(false);
+    if (reloadData) {
+      reloadData();
+    }
   };
 
-  const handleIgnore = (problemId: number) => {
+  const handleIgnore = (problemId: number, e?: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e?.stopPropagation();
     ignoreFix(problemId);
-    setOpenedTooltip(false);
-    if (reloadData) {
-      reloadData();
-    }
   };
 
-  const handleAccept = (problemId: number) => {
+  const handleAccept = (problemId: number, e?: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e?.stopPropagation();
     acceptFix(problemId);
-    setOpenedTooltip(false);
-    if (reloadData) {
-      reloadData();
-    }
   };
 
   const handleEdit = (e?: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -109,18 +109,23 @@ export default function ProblemTooltip({
               className={classes.spacing}
             />
             <Button
-              onClick={() => handleIgnore(problems[0].id)}
+              onClick={(event) => handleIgnore(problems[0].id, event)}
               label={strings.IGNORE}
               priority='secondary'
               type='passive'
               className={classes.spacing}
             />
-            <Button onClick={() => handleAccept(problems[0].id)} label={strings.ACCEPT} priority='secondary' />,
+            <Button
+              onClick={(event) => handleAccept(problems[0].id, event)}
+              label={strings.ACCEPT}
+              priority='secondary'
+            />
+            ,
           </>
         ) : (
           <>
             <Button
-              onClick={() => handleIgnore(problems[0].id)}
+              onClick={(event) => handleIgnore(problems[0].id, event)}
               label={strings.IGNORE}
               priority='secondary'
               type='passive'
