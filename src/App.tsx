@@ -46,7 +46,7 @@ import ErrorBoundary from 'src/ErrorBoundary';
 import { Notifications } from 'src/types/Notifications';
 import { ServerOrganization } from 'src/types/Organization';
 import { User } from 'src/types/User';
-import { getAllSites } from 'src/utils/organization';
+import { getAllSites, setLastVisitedOrganizationId, getLastVisitedOrganizationId } from 'src/utils/organization';
 import { useMediaQuery } from 'react-responsive';
 import MyAccount from './components/MyAccount';
 import ErrorBox from './components/common/ErrorBox/ErrorBox';
@@ -136,6 +136,7 @@ export default function App() {
           const orgToSelect = response.organizations.find((org) => org.id === selectedOrgId);
           if (orgToSelect) {
             setSelectedOrganization(orgToSelect);
+            setLastVisitedOrganizationId(orgToSelect.id);
           }
         }
       } else if (response.error === 'NotAuthenticated') {
@@ -172,8 +173,18 @@ export default function App() {
       const organizationId = query.get('organizationId');
       const querySelectionOrg = organizationId && organizations.find((org) => org.id === parseInt(organizationId, 10));
       setSelectedOrganization((previouslySelectedOrg: ServerOrganization | undefined) => {
-        const updatedOrg = querySelectionOrg || organizations.find((org) => org.id === previouslySelectedOrg?.id);
-        return updatedOrg ? updatedOrg : organizations[0];
+        let orgToUse = querySelectionOrg || organizations.find((org) => org.id === previouslySelectedOrg?.id);
+        const lastVisitedOrgId = getLastVisitedOrganizationId();
+        if (!orgToUse && lastVisitedOrgId) {
+          orgToUse = organizations.find((org) => org.id === lastVisitedOrgId);
+        }
+        if (!orgToUse) {
+          orgToUse = organizations[0];
+        }
+        if (lastVisitedOrgId !== orgToUse.id) {
+          setLastVisitedOrganizationId(orgToUse.id);
+        }
+        return orgToUse;
       });
       if (organizationId) {
         query.delete('organizationId');
