@@ -141,7 +141,7 @@ type NotificationsDropdownProps = {
   notifications?: Notifications;
   setNotifications: (notifications?: Notifications) => void;
   organizationId?: number;
-  reloadOrganizationData: () => void;
+  reloadOrganizationData: (selectedOrgId?: number) => void;
 };
 
 export default function NotificationsDropdown(props: NotificationsDropdownProps): JSX.Element {
@@ -282,7 +282,7 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
 type NotificationItemProps = {
   notification: Notification;
   markAsRead: (read: boolean, id: number, close?: boolean) => void;
-  reloadOrganizationData: () => void;
+  reloadOrganizationData: (selectedOrgId?: number) => void;
 };
 
 function NotificationItem(props: NotificationItemProps): JSX.Element {
@@ -294,7 +294,8 @@ function NotificationItem(props: NotificationItemProps): JSX.Element {
 
   const onNotificationClick = async (read: boolean, close?: boolean) => {
     if (close && (localUrl.startsWith('/home') || localUrl.startsWith('/projects'))) {
-      await reloadOrganizationData();
+      const orgId: string | null = new URL(localUrl, window.location.origin).searchParams.get('organizationId');
+      await reloadOrganizationData(orgId ? parseInt(orgId, 10) : undefined);
     }
     markAsRead(read, id, close);
   };
