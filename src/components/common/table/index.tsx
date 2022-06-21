@@ -52,6 +52,8 @@ export interface Props<T> {
   selectedRows?: T[];
   setSelectedRows?: React.Dispatch<React.SetStateAction<T[]>>;
   showPagination?: boolean;
+  controlledOnSelect?: boolean;
+  reloadData?: () => void;
 }
 
 export type TopBarButton = {
@@ -81,6 +83,8 @@ export default function EnhancedTable<T>({
   selectedRows,
   setSelectedRows,
   showPagination = true,
+  controlledOnSelect,
+  reloadData,
 }: Props<T>): JSX.Element {
   const classes = tableStyles();
   const [order, setOrder] = React.useState<Order>(_order);
@@ -196,7 +200,7 @@ export default function EnhancedTable<T>({
                 rows.slice(itemsToSkip, itemsToSkip + maxItemsPerPage),
                 getComparator(order, orderBy, sortComparator)
               ).map((row, index) => {
-                const onClick = onSelect ? () => onSelect(row as T) : undefined;
+                const onClick = onSelect && !controlledOnSelect ? () => onSelect(row as T) : undefined;
                 const isItemSelected = isSelected(row as T);
 
                 return (
@@ -232,7 +236,8 @@ export default function EnhancedTable<T>({
                           row={row as T}
                           column={c}
                           value={row[c.key]}
-                          onRowClick={onClick}
+                          onRowClick={onSelect && controlledOnSelect ? () => onSelect(row as T) : onClick}
+                          reloadData={reloadData}
                         />
                       ))}
                     </TableRow>

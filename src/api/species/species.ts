@@ -34,6 +34,7 @@ export async function getAllSpecies(organizationId: number): Promise<GetSpeciesL
         growthForm: iSpecies.growthForm,
         scientificName: iSpecies.scientificName,
         seedStorageBehavior: iSpecies.seedStorageBehavior,
+        problems: iSpecies.problems,
       });
     });
   } catch (error) {
@@ -174,6 +175,10 @@ export type SpeciesDetailsResponse = {
   commonNames: CommonName[];
   familyName: string;
   endangered?: boolean;
+  /** If this is not the accepted name for the species, the type of problem the name has. Currently, this will always be "Name Is Synonym". */
+  problemType?: 'Name Misspelled' | 'Name Not Found' | 'Name Is Synonym';
+  /** If this is not the accepted name for the species, the name to suggest as an alternative. */
+  suggestedScientificName?: string;
   requestSucceeded: boolean;
 };
 
@@ -197,6 +202,8 @@ export async function getSpeciesDetails(scientificName: string) {
       });
     });
     response.endangered = serverResponse.endangered;
+    response.problemType = serverResponse.problemType;
+    response.suggestedScientificName = serverResponse.suggestedScientificName;
   } catch {
     response.requestSucceeded = false;
   }
@@ -259,6 +266,31 @@ export async function resolveSpeciesUpload(uploadId: number, overwriteExisting: 
   };
   try {
     await axios.post(RESOLVE_SPECIES_UPLOAD.replace('{uploadId}', uploadId.toString()), { overwriteExisting });
+  } catch {
+    response.requestSucceeded = false;
+  }
+  return response;
+}
+
+const SPECIES_PROBLEM = '/api/v1/species/problems/{problemId}';
+export async function acceptProblemSuggestion(problemId: number) {
+  const response: UpdateSpeciesResponse = {
+    requestSucceeded: true,
+  };
+  try {
+    await axios.post(SPECIES_PROBLEM.replace('{problemId}', problemId.toString()));
+  } catch {
+    response.requestSucceeded = false;
+  }
+  return response;
+}
+
+export async function ignoreProblemSuggestion(problemId: number) {
+  const response: UpdateSpeciesResponse = {
+    requestSucceeded: true,
+  };
+  try {
+    await axios.delete(SPECIES_PROBLEM.replace('{problemId}', problemId.toString()));
   } catch {
     response.requestSucceeded = false;
   }

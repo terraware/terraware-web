@@ -14,7 +14,7 @@ import dictionary from 'src/strings/dictionary';
 import strings from 'src/strings';
 import emptyMessageStrings from 'src/strings/emptyMessageModal';
 import { ServerOrganization } from 'src/types/Organization';
-import { Species } from 'src/types/Species';
+import { Species, SpeciesProblemElement } from 'src/types/Species';
 import TfMain from 'src/components/common/TfMain';
 import PageSnackbar from 'src/components/PageSnackbar';
 import AddSpeciesModal from './AddSpeciesModal';
@@ -26,6 +26,8 @@ import useForm from 'src/utils/useForm';
 import Icon from '../common/icon/Icon';
 import Pill from './Pill';
 import ImportSpeciesModal from './ImportSpeciesModal';
+import CheckDataModal from './CheckDataModal';
+import SpeciesCellRenderer from './TableCellRenderer';
 
 type SpeciesListProps = {
   organization: ServerOrganization;
@@ -79,6 +81,9 @@ const useStyles = makeStyles((theme) =>
     buttonSpace: {
       marginRight: '8px',
     },
+    icon: {
+      fill: '#3A4445',
+    },
   })
 );
 
@@ -104,11 +109,18 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
   const [editSpeciesModalOpen, setEditSpeciesModalOpen] = useState(false);
   const [deleteSpeciesModalOpen, setDeleteSpeciesModalOpen] = useState(false);
   const [importSpeciesModalOpen, setImportSpeciesModalOpen] = useState(false);
+  const [checkDataModalOpen, setCheckDataModalOpen] = useState(false);
   const setSnackbar = useSetRecoilState(snackbarAtom);
   const [searchValue, setSearchValue] = useState('');
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
   const [results, setResults] = useState<Species[]>();
   const [record, setRecord] = useForm<SpeciesFiltersType>({});
+  const [selectedColumns, setSelectedColumns] = useForm(columns);
+  const problemsColumn: TableColumnType = {
+    key: 'problems',
+    name: <Icon name='warning' className={classes.icon} />,
+    type: 'string',
+  };
 
   const getParams = useCallback(() => {
     const params: SearchNodePayload = {
@@ -191,26 +203,30 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
     return params;
   }, [record, searchValue]);
 
-  const onApplyFilters = useCallback(async () => {
-    const params: SearchNodePayload = getParams();
-    if (params.search.children.length) {
-      const searchResults = await search(params);
-      const speciesResults: Species[] = [];
-      searchResults?.forEach((result) => {
-        speciesResults.push({
-          id: result.id as number,
-          scientificName: result.scientificName as string,
-          commonName: result.commonName as string,
-          familyName: result.familyName as string,
-          growthForm: result.growthForm as any,
-          seedStorageBehavior: result.seedStorageBehavior as any,
+  const onApplyFilters = useCallback(
+    async (reviewErrors?: boolean) => {
+      const params: SearchNodePayload = getParams();
+      if (params.search.children.length) {
+        const searchResults = await search(params);
+        const speciesResults: Species[] = [];
+        searchResults?.forEach((result) => {
+          speciesResults.push({
+            id: result.id as number,
+            problems: result.problems as SpeciesProblemElement[],
+            scientificName: result.scientificName as string,
+            commonName: result.commonName as string,
+            familyName: result.familyName as string,
+            growthForm: result.growthForm as any,
+            seedStorageBehavior: result.seedStorageBehavior as any,
+          });
         });
-      });
-      setResults(speciesResults);
-    } else {
-      setResults(species);
-    }
-  }, [getParams, species]);
+        setResults(speciesResults);
+      } else {
+        setResults(species);
+      }
+    },
+    [getParams, species]
+  );
 
   useEffect(() => {
     onApplyFilters();
@@ -244,6 +260,11 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
 
   const OnEditSpecies = () => {
     setSelectedSpecies(selectedSpeciesRows[0]);
+    setEditSpeciesModalOpen(true);
+  };
+
+  const selectAndEditSpecies = (value: Species) => {
+    setSelectedSpeciesRows([value]);
     setEditSpeciesModalOpen(true);
   };
 
@@ -304,11 +325,28 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
   const onCloseImportSpeciesModal = (completed: boolean) => {
     if (completed && reloadData) {
       reloadData();
+      setCheckDataModalOpen(true);
     }
     setImportSpeciesModalOpen(false);
   };
+
+  const onCheckData = () => {
+    setCheckDataModalOpen(true);
+  };
+
+  const reviewErrorsHandler = () => {
+    setCheckDataModalOpen(false);
+    setSelectedColumns([problemsColumn, ...columns]);
+    onApplyFilters(true);
+  };
   return (
     <TfMain>
+      <CheckDataModal
+        open={checkDataModalOpen}
+        onClose={() => setCheckDataModalOpen(false)}
+        species={species}
+        reviewErrors={reviewErrorsHandler}
+      />
       <DeleteSpeciesModal
         open={deleteSpeciesModalOpen}
         onClose={() => setDeleteSpeciesModalOpen(false)}
@@ -331,6 +369,14 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
           <h1 className={classes.pageTitle}>{strings.SPECIES}</h1>
           {species && species.length > 0 && (
             <div>
+              <Button
+                id='check-data'
+                label={strings.CHECK_DATA}
+                onClick={onCheckData}
+                priority='secondary'
+                size='medium'
+                className={classes.buttonSpace}
+              />
               <Button
                 id='import-species'
                 label={strings.IMPORT_SPECIES}
@@ -390,13 +436,17 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
               {results && (
                 <Table
                   id='species-table'
-                  columns={columns}
+                  columns={selectedColumns}
                   rows={results}
                   orderBy='name'
                   showCheckbox={true}
                   selectedRows={selectedSpeciesRows}
                   setSelectedRows={setSelectedSpeciesRows}
                   showTopBar={true}
+                  Renderer={SpeciesCellRenderer}
+                  onSelect={selectAndEditSpecies}
+                  controlledOnSelect={true}
+                  reloadData={reloadData}
                   topBarButtons={
                     selectedSpeciesRows.length === 1
                       ? [

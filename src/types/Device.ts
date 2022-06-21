@@ -14,7 +14,7 @@ export type Device = {
 
 export type DeviceTemplate = {
   id: number;
-  category: 'PV';
+  category: 'PV' | 'Seed Bank Default';
   name: string;
   type: string;
   make: string;
