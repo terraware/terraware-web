@@ -15,6 +15,7 @@ import { useSetRecoilState } from 'recoil';
 import { ServerOrganization } from 'src/types/Organization';
 import ImportSpeciesModal, { downloadCsvTemplate } from '../Species/ImportSpeciesModal';
 import TfMain from '../common/TfMain';
+import speciesAtom from 'src/state/species';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -103,6 +104,7 @@ export default function EmptyStatePage({ pageName, organization, reloadData }: E
   const classes = useStyles();
   const history = useHistory();
   const setSnackbar = useSetRecoilState(snackbarAtom);
+  const setSpeciesState = useSetRecoilState(speciesAtom);
 
   const goToNewLocation = () => {
     const newLocation = {
@@ -166,6 +168,7 @@ export default function EmptyStatePage({ pageName, organization, reloadData }: E
       if (reloadData) {
         reloadData();
       }
+      setSpeciesState({ checkData: true });
       history.push(APP_PATHS.SPECIES);
     }
     setAddSpeciesModalOpened(false);
@@ -183,6 +186,7 @@ export default function EmptyStatePage({ pageName, organization, reloadData }: E
       if (reloadData) {
         reloadData();
       }
+      setSpeciesState({ checkData: true });
       history.push(APP_PATHS.SPECIES);
     }
     setImportSpeciesModalOpened(false);

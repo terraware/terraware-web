@@ -3,13 +3,14 @@ import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { deleteSpecies } from 'src/api/species/species';
 import Button from 'src/components/common/button/Button';
 import EmptyMessage from 'src/components/common/EmptyMessage';
 import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
 import snackbarAtom from 'src/state/snackbar';
+import speciesAtom from 'src/state/species';
 import dictionary from 'src/strings/dictionary';
 import strings from 'src/strings';
 import emptyMessageStrings from 'src/strings/emptyMessageModal';
@@ -114,6 +115,7 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
   const [importSpeciesModalOpen, setImportSpeciesModalOpen] = useState(false);
   const [checkDataModalOpen, setCheckDataModalOpen] = useState(false);
   const setSnackbar = useSetRecoilState(snackbarAtom);
+  const [speciesState, setSpeciesState] = useRecoilState(speciesAtom);
   const [searchValue, setSearchValue] = useState('');
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
   const [results, setResults] = useState<Species[]>();
@@ -236,6 +238,13 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
     },
     [getParams, species]
   );
+
+  useEffect(() => {
+    if (speciesState?.checkData) {
+      setSpeciesState({ checkData: false });
+      setCheckDataModalOpen(true);
+    }
+  }, [setCheckDataModalOpen, speciesState, setSpeciesState]);
 
   useEffect(() => {
     onApplyFilters();
