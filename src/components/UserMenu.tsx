@@ -2,10 +2,12 @@ import { List, ListItem, Popover } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { User } from 'src/types/User';
 import strings from '../../src/strings';
 import { ReactComponent as AvatarIcon } from './avatar-default.svg';
 import Icon from './common/icon/Icon';
+import { APP_PATHS } from 'src/constants';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -37,8 +39,9 @@ const useStyles = makeStyles((theme) =>
 type UserMenuProps = {
   user?: User;
   reloadUser: () => void;
+  hasOrganizations?: boolean;
 };
-export default function UserMenu({ user, reloadUser }: UserMenuProps): JSX.Element {
+export default function UserMenu({ user, reloadUser, hasOrganizations }: UserMenuProps): JSX.Element {
   const classes = useStyles();
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -79,6 +82,11 @@ export default function UserMenu({ user, reloadUser }: UserMenuProps): JSX.Eleme
         className={classes.popover}
       >
         <List id='notifications-popover'>
+          {hasOrganizations && (
+            <ListItem component={Link} to={APP_PATHS.MY_ACCOUNT}>
+              {strings.MY_ACCOUNT}
+            </ListItem>
+          )}
           <ListItem button onClick={onHandleLogout}>
             {strings.LOGOUT}
           </ListItem>
