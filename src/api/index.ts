@@ -44,7 +44,7 @@ axios.interceptors.request.use((x) => {
 });
 
 axios.interceptors.response.use((x) => {
-  //@ts-ignore
+  // @ts-ignore
   x.responseTime = new Date().getTime() - x.config.meta.beginTimer;
   return x;
 });
