@@ -85,7 +85,7 @@ export default function Filters(props: Props): JSX.Element {
     setPopover(undefined);
   };
 
-  const getLabel = (col: DatabaseColumn): string => {
+  const getLabel = (col: DatabaseColumn): string | JSX.Element => {
     const filter = props.filters[col.key];
     let totalFilteredValues = filter?.values?.length ?? 0;
     const isBoolean = col.type === 'boolean';
@@ -99,7 +99,11 @@ export default function Filters(props: Props): JSX.Element {
       totalFilteredValues = filter.children.length;
     }
 
-    return totalFilteredValues ? `${col.name} (${totalFilteredValues})` : col.name;
+    if (typeof col.name === 'string') {
+      return totalFilteredValues ? `${col.name} (${totalFilteredValues})` : col.name;
+    } else {
+      return col.name;
+    }
   };
 
   return (

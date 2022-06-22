@@ -5,7 +5,7 @@ import { Size } from '../types';
 import './styles.scss';
 
 export interface Props {
-  onClick: () => void;
+  onClick: (event?: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   label: string;
   type?: 'productive' | 'passive' | 'destructive';
   priority?: 'primary' | 'secondary';

@@ -4,6 +4,9 @@
  */
 
 export interface paths {
+  "/api/v1/automations/{automationId}/trigger": {
+    post: operations["postAutomationTrigger"];
+  };
   "/api/v1/devices": {
     post: operations["createDevice"];
   };
@@ -22,6 +25,10 @@ export interface paths {
   "/api/v1/devices/{id}": {
     get: operations["getDevice"];
     put: operations["updateDevice"];
+  };
+  "/api/v1/devices/{id}/unresponsive": {
+    /** Notifies the appropriate users so they can troubleshoot the problem. */
+    post: operations["deviceUnresponsive"];
   };
   "/api/v1/facilities": {
     get: operations["listAllFacilities_1"];
@@ -223,6 +230,13 @@ export interface paths {
     /** Gets a list of known scientific names whose words begin with particular letters. */
     get: operations["listSpeciesNames"];
   };
+  "/api/v1/species/problems/{problemId}": {
+    /** Returns details about a problem with a species. */
+    get: operations["getSpeciesProblem"];
+    /** Only valid for problems that include suggested changes. */
+    post: operations["acceptProblemSuggestion"];
+    delete: operations["deleteProblem"];
+  };
   "/api/v1/species/uploads": {
     /** The uploaded file must be in CSV format. A template with the correct headers may be downloaded from the `/api/v1/species/uploads/template` endpoint. */
     post: operations["uploadSpeciesList"];
@@ -405,6 +419,12 @@ export interface components {
       description?: string;
       /** Client-defined configuration data for this automation. */
       configuration?: { [key: string]: unknown };
+    };
+    AutomationTriggerRequestPayload: {
+      /** For automations that are triggered by changes to timeseries values, the value that triggered the automation. */
+      timeseriesValue?: number;
+      /** Default message to publish if the automation type isn't yet supported by the server. */
+      message?: string;
     };
     /** Coordinate reference system used for X and Y coordinates in this geometry. By default, coordinates are in WGS 84, with longitude and latitude in degrees. In that case, this element is not present. Otherwise, it specifies which coordinate system to use. */
     CRS: {
@@ -601,7 +621,7 @@ export interface components {
     };
     DeviceTemplatePayload: {
       id: number;
-      category: "PV";
+      category: "PV" | "Seed Bank Default";
       name: string;
       type: string;
       make: string;
@@ -611,6 +631,12 @@ export interface components {
       port?: number;
       settings?: { [key: string]: { [key: string]: unknown } };
       pollingInterval?: number;
+    };
+    DeviceUnresponsiveRequestPayload: {
+      /** When the device most recently responded. Null or absent if the device has never responded. */
+      lastRespondedTime?: string;
+      /** The expected amount of time between updates from the device. Null or absent if there is no fixed update interval. */
+      expectedIntervalSecs?: number;
     };
     ErrorDetails: {
       message: string;
@@ -755,6 +781,10 @@ export interface components {
     };
     GetSiteResponsePayload: {
       site: components["schemas"]["SiteElement"];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    GetSpeciesProblemResponsePayload: {
+      problem: components["schemas"]["SpeciesProblemElement"];
       status: components["schemas"]["SuccessOrError"];
     };
     GetSpeciesResponsePayload: {
@@ -1107,12 +1137,23 @@ export interface components {
       familyName: string;
       /** True if the species is known to be endangered, false if the species is known to not be endangered. This value will not be present if the server's taxonomic database doesn't indicate whether or not the species is endangered. */
       endangered?: boolean;
+      /** If this is not the accepted name for the species, the type of problem the name has. Currently, this will always be "Name Is Synonym". */
+      problemType?: "Name Misspelled" | "Name Not Found" | "Name Is Synonym";
+      /** If this is not the accepted name for the species, the name to suggest as an alternative. */
+      suggestedScientificName?: string;
     };
     SpeciesLookupNamesResponsePayload: {
       names: string[];
       /** True if there were more matching names than could be included in the response. */
       partial: boolean;
       status: components["schemas"]["SuccessOrError"];
+    };
+    SpeciesProblemElement: {
+      id: number;
+      field: "Scientific Name";
+      type: "Name Misspelled" | "Name Not Found" | "Name Is Synonym";
+      /** Value for the field in question that would correct the problem. Absent if the system is unable to calculate a corrected value. */
+      suggestedValue?: string;
     };
     SpeciesRequestPayload: {
       commonName?: string;
@@ -1135,6 +1176,7 @@ export interface components {
       familyName?: string;
       growthForm?: "Tree" | "Shrub" | "Forb" | "Graminoid" | "Fern";
       id: number;
+      problems?: components["schemas"]["SpeciesProblemElement"][];
       rare?: boolean;
       scientificName: string;
       seedStorageBehavior?:
@@ -1401,6 +1443,26 @@ export interface components {
 }
 
 export interface operations {
+  postAutomationTrigger: {
+    parameters: {
+      path: {
+        automationId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["AutomationTriggerRequestPayload"];
+      };
+    };
+  };
   createDevice: {
     responses: {
       /** The requested operation succeeded. */
@@ -1470,7 +1532,7 @@ export interface operations {
   listDeviceTemplates: {
     parameters: {
       query: {
-        category?: "PV";
+        category?: "PV" | "Seed Bank Default";
       };
     };
     responses: {
@@ -1526,6 +1588,33 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["UpdateDeviceRequestPayload"];
+      };
+    };
+  };
+  /** Notifies the appropriate users so they can troubleshoot the problem. */
+  deviceUnresponsive: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["DeviceUnresponsiveRequestPayload"];
       };
     };
   };
@@ -3053,6 +3142,77 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["SpeciesLookupNamesResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Returns details about a problem with a species. */
+  getSpeciesProblem: {
+    parameters: {
+      path: {
+        problemId: number;
+      };
+    };
+    responses: {
+      /** Problem retrieved. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetSpeciesProblemResponsePayload"];
+        };
+      };
+      /** The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Only valid for problems that include suggested changes. */
+  acceptProblemSuggestion: {
+    parameters: {
+      path: {
+        problemId: number;
+      };
+    };
+    responses: {
+      /** Suggestion applied. Response contains the updated species information. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetSpeciesResponsePayload"];
+        };
+      };
+      /** The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+      /** There is no suggested change for this problem. */
+      409: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  deleteProblem: {
+    parameters: {
+      path: {
+        problemId: number;
+      };
+    };
+    responses: {
+      /** The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };

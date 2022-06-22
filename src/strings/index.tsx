@@ -516,6 +516,21 @@ const strings = new LocalizedStrings({
     FINISH: 'Finish',
     SENSOR_LOCATION_ERROR: 'Each location much have one sensor assigned to it.',
     NO_DATA_YET: 'No data yet',
+    CANCEL_DATA_CHECK: 'Cancel Data Check',
+    RUN_A_DATABASE_CHECK: 'Run a Database Check',
+    CHECK_DATA: 'Check Data',
+    CHECKING_DATA: 'Running database check. Please wait, this may take a few minutes...',
+    CHECK_DATA_DESCRIPTION:
+      'You can run a database check to compare your species information with what’s stored in the GBIF Database. This will flag entries if the scientific name of your species is spelled wrong, or is missing from the database. This could take a few minutes, and you can’t cancel it once it starts.',
+    DATA_CHECK_COMPLETED: 'Database check complete. No errors were found!',
+    DATA_CHECK_WITH_PROBLEMS: 'Database check complete. {0} potential errors were found.',
+    REVIEW_ERRORS: 'Review Errors',
+    PROBLEMS: 'Problems',
+    ISSUE: 'Issue',
+    SUGGESTION: 'Suggestion',
+    IGNORE: 'Ignore',
+    ACCEPT: 'Accept',
+    CHANGE_TO: 'Change to {0}',
   },
 });
 
