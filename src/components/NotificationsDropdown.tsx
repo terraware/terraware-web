@@ -231,6 +231,17 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
     return lastSeen < getRecentUnreadTime();
   };
 
+  const getHeaderMenuItems = () => {
+    if (organizationId) {
+      return [
+        { text: strings.MARK_ALL_AS_READ, callback: markAllAsRead },
+        { text: strings.SETTINGS, callback: goToSettings },
+      ];
+    } else {
+      return [{ text: strings.MARK_ALL_AS_READ, callback: markAllAsRead }];
+    }
+  };
+
   return (
     <div>
       <IconButton id='notifications-button' onClick={onIconClick}>
@@ -243,10 +254,7 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
         anchorEl={anchorEl}
         onClose={onPopoverClose}
         title={'Notifications'}
-        headerMenuItems={[
-          { text: strings.MARK_ALL_AS_READ, callback: markAllAsRead },
-          { text: strings.SETTINGS, callback: goToSettings },
-        ]}
+        headerMenuItems={getHeaderMenuItems()}
         size='large'
       >
         <List className={classes.listContainer}>
