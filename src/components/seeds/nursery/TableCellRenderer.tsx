@@ -49,7 +49,8 @@ export default function NurseryCellRenderer(props: RendererProps<GerminationTest
     }
   }
   if (column.key === 'seedsSown') {
-    return <CellRenderer index={index} column={column} value={`${value} Seeds`} row={row} />;
+    const valueStr = value ? `${value} Seeds` : '';
+    return <CellRenderer index={index} column={column} value={valueStr} row={row} />;
   }
   if (column.key === 'viability') {
     const id = `row${index}-${column.key}`;
