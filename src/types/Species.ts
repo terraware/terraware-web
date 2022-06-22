@@ -7,6 +7,15 @@ export type Species = {
   scientificName: string;
   rare?: boolean;
   seedStorageBehavior?: 'Orthodox' | 'Recalcitrant' | 'Intermediate' | 'Unknown';
+  problems?: SpeciesProblemElement[];
+};
+
+export type SpeciesProblemElement = {
+  id: number;
+  field: 'Scientific Name';
+  type: 'Name Misspelled' | 'Name Not Found' | 'Name Is Synonym';
+  /** Value for the field in question that would correct the problem. Absent if the system is unable to calculate a corrected value. */
+  suggestedValue?: string;
 };
 
 export const GrowthForms = ['Tree', 'Shrub', 'Forb', 'Graminoid', 'Fern'];

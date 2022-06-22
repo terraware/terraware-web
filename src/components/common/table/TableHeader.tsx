@@ -41,14 +41,14 @@ interface Props {
 interface HeadCell {
   disablePadding: boolean;
   id: string;
-  label: string;
+  label: string | JSX.Element;
 }
 
 function columnsToHeadCells(columns: TableColumnType[]): HeadCell[] {
   return columns.map((c) => ({
     id: c.key,
     disablePadding: false,
-    label: c.name.toUpperCase(),
+    label: typeof c.name === 'string' ? c.name.toUpperCase() : c.name,
   }));
 }
 
