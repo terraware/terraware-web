@@ -83,7 +83,9 @@ export default function PeopleList({ organization, reloadData, user }: PeopleLis
       if (organization) {
         const response = await getOrganizationUsers(organization);
         if (response.requestSucceeded) {
-          const peopleWithProjectName = addProjectsNamesToPeople(response.users);
+          const peopleWithProjectName = addProjectsNamesToPeople(
+            response.users.filter((userData) => userData.email.match(/\S+@\S+/))
+          );
           setPeople(peopleWithProjectName);
         }
       }
