@@ -83,7 +83,7 @@ export default function UserMenu({ user, reloadUser, hasOrganizations }: UserMen
       >
         <List id='notifications-popover'>
           {hasOrganizations && (
-            <ListItem component={Link} to={APP_PATHS.MY_ACCOUNT}>
+            <ListItem component={Link} to={APP_PATHS.MY_ACCOUNT} onClick={handleClose}>
               {strings.MY_ACCOUNT}
             </ListItem>
           )}
