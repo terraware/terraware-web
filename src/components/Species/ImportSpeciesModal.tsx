@@ -99,6 +99,7 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
   const { open, onClose, organization, setCheckDataModalOpen } = props;
   const [file, setFile] = useState<File>();
   const inputRef = useRef<HTMLInputElement>(null);
+  const divRef = useRef<HTMLDivElement>(null);
   const [error, setError] = useState<string>();
   const [loading, setLoading] = useState(false);
   const [fileStatus, setFileStatus] = useState<GetSpeciesUploadStatusResponsePayload>();
@@ -191,6 +192,7 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
 
   const onChooseFileHandler = () => {
     inputRef.current?.click();
+    divRef.current?.focus();
   };
 
   const onFileChosen = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -274,7 +276,7 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
           : undefined
       }
     >
-      <>
+      <div ref={divRef} tabIndex={0}>
         {error && !loading && <p>{error}</p>}
         {!error && !loading && !completed && !warning && (
           <div onDrop={dropHandler} onDragOver={enableDropping} className={classes.dropContainer}>
@@ -325,7 +327,7 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
             </ul>
           </div>
         )}
-      </>
+      </div>
     </DialogBox>
   );
 }
