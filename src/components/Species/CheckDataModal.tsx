@@ -72,7 +72,7 @@ export type CheckDataModalProps = {
   open: boolean;
   onClose: (saved: boolean, snackbarMessage?: string) => void;
   species: Species[];
-  reviewErrors: () => void;
+  reviewErrors: (hasErrors: boolean) => void;
   reloadData: () => void;
 };
 
@@ -93,7 +93,7 @@ export default function CheckDataModal(props: CheckDataModalProps): JSX.Element 
 
   const reviewErrorsHandler = () => {
     handleCancel();
-    reviewErrors();
+    reviewErrors(speciesWithProblems !== undefined && speciesWithProblems.length > 0);
   };
 
   useEffect(() => {
@@ -131,10 +131,10 @@ export default function CheckDataModal(props: CheckDataModalProps): JSX.Element 
         <Button onClick={startDataCheck} label={error ? strings.TRY_AGAIN : strings.RUN_A_DATABASE_CHECK} key='mb-2' />,
       ];
     }
-    if (completed && !speciesWithProblems) {
+    if (completed && !speciesWithProblems?.length) {
       return [<Button onClick={handleCancel} label={strings.NICE} key='mb-1' />];
     }
-    if (completed && speciesWithProblems) {
+    if (completed && speciesWithProblems?.length) {
       return [<Button onClick={reviewErrorsHandler} label={strings.REVIEW_ERRORS} key='mb-1' />];
     }
   };
@@ -168,7 +168,7 @@ export default function CheckDataModal(props: CheckDataModalProps): JSX.Element 
         {completed && (
           <div className={classes.container}>
             <p className={classes.loadingText}>
-              {speciesWithProblems
+              {speciesWithProblems && speciesWithProblems.length
                 ? strings.formatString(strings.DATA_CHECK_WITH_PROBLEMS, speciesWithProblems.length)
                 : strings.DATA_CHECK_COMPLETED}
             </p>

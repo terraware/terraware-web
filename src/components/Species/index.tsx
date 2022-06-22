@@ -84,6 +84,9 @@ const useStyles = makeStyles((theme) =>
     icon: {
       fill: '#3A4445',
     },
+    headerIconContainer: {
+      marginLeft: '12px',
+    },
   })
 );
 
@@ -116,11 +119,17 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
   const [results, setResults] = useState<Species[]>();
   const [record, setRecord] = useForm<SpeciesFiltersType>({});
   const [selectedColumns, setSelectedColumns] = useForm(columns);
-  const problemsColumn: TableColumnType = {
+  const [handleProblemsColumn, setHandleProblemsColumn] = useState<boolean>(false);
+  const [hasNewData, setHasNewData] = useState<boolean>(false);
+  const [problemsColumn] = useState<TableColumnType>({
     key: 'problems',
-    name: <Icon name='warning' className={classes.icon} />,
+    name: (
+      <span className={classes.headerIconContainer}>
+        <Icon name='warning' className={classes.icon} />
+      </span>
+    ),
     type: 'string',
-  };
+  });
 
   const getParams = useCallback(() => {
     const params: SearchNodePayload = {
@@ -334,11 +343,41 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
     setCheckDataModalOpen(true);
   };
 
-  const reviewErrorsHandler = () => {
+  const reviewErrorsHandler = (hasErrors: boolean) => {
     setCheckDataModalOpen(false);
-    setSelectedColumns([problemsColumn, ...columns]);
+    if (hasErrors) {
+      setSelectedColumns([problemsColumn, ...columns]);
+    } else {
+      setSelectedColumns(columns);
+    }
     onApplyFilters(true);
   };
+
+  const reloadDataProblemsHandler = async () => {
+    setHasNewData(false);
+    await reloadData();
+    setHandleProblemsColumn(true);
+  };
+
+  useEffect(() => {
+    setHasNewData(true);
+  }, [results, setHasNewData]);
+
+  useEffect(() => {
+    if (handleProblemsColumn && hasNewData) {
+      const hasErrors = results && results.filter((result) => result.problems && result.problems.length);
+      let newColumns = columns;
+      if (hasErrors?.length) {
+        newColumns = [problemsColumn, ...columns];
+      }
+      if (selectedColumns[0].key !== newColumns[0].key) {
+        setSelectedColumns(newColumns);
+      }
+      setHandleProblemsColumn(false);
+      setHasNewData(false);
+    }
+  }, [handleProblemsColumn, problemsColumn, results, selectedColumns, setSelectedColumns, hasNewData, setHasNewData]);
+
   return (
     <TfMain>
       <CheckDataModal
@@ -448,7 +487,7 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
                   Renderer={SpeciesCellRenderer}
                   onSelect={selectAndEditSpecies}
                   controlledOnSelect={true}
-                  reloadData={reloadData}
+                  reloadData={reloadDataProblemsHandler}
                   topBarButtons={
                     selectedSpeciesRows.length === 1
                       ? [
