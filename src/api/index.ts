@@ -35,4 +35,18 @@ axios.interceptors.response.use(
   }
 );
 
+axios.interceptors.request.use((x) => {
+  // @ts-ignore
+  x.meta = x.meta || {};
+  // @ts-ignore
+  x.meta.beginTimer = new Date().getTime();
+  return x;
+});
+
+axios.interceptors.response.use((x) => {
+  //@ts-ignore
+  x.responseTime = new Date().getTime() - x.config.meta.beginTimer;
+  return x;
+});
+
 export default new Proxy(axios, handler);

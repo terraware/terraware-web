@@ -150,9 +150,12 @@ export async function listSpeciesNames(search: string) {
   const queryParams: LookupSpeciesQuery = { search };
   const endpoint = addQueryParams(LOOKUP_SPECIES_ENDPOINT, queryParams);
   try {
-    const serverResponse: GetSpeciesResponsePayload = (await axios.get(endpoint)).data;
-    if (serverResponse.status !== 'error') {
-      response.names = serverResponse.names;
+    const serverResponse = await axios.get(endpoint);
+    // @ts-ignore
+    console.log(`Response Time: ${serverResponse.responseTime}`);
+    const serverResponseData: GetSpeciesResponsePayload = serverResponse.data;
+    if (serverResponseData.status !== 'error') {
+      response.names = serverResponseData.names;
     } else {
       response.requestSucceeded = false;
     }
