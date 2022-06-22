@@ -161,16 +161,18 @@ export default function Database(props: DatabaseProps): JSX.Element {
     // if url has stage=<accession state>, apply that filter
     const stage = query.get('stage');
     const facilityId = query.get('facilityId');
+    let newSearchCriteria = searchCriteria || {};
     if (stage) {
       if (ACCESSION_STATES.indexOf(stage) !== -1) {
-        setSearchCriteria({
+        newSearchCriteria = {
+          ...newSearchCriteria,
           state: {
             field: 'state',
             values: [stage],
             type: 'Exact',
             operation: 'field',
           },
-        });
+        };
       }
       query.delete('stage');
     }
@@ -179,22 +181,24 @@ export default function Database(props: DatabaseProps): JSX.Element {
       if (seedBanks) {
         const facility = seedBanks.find((seedBank) => seedBank?.id === parseInt(facilityId, 10));
         if (facility) {
-          setSearchCriteria({
+          newSearchCriteria = {
+            ...newSearchCriteria,
             facility_name: {
               field: 'facility_name',
               values: [facility.name],
               type: 'Exact',
               operation: 'field',
             },
-          });
+          };
         }
       }
       query.delete('facilityId');
     }
     if (stage || (facilityId && organization)) {
       history.push(getLocation(location.pathname, location, query.toString()));
+      setSearchCriteria(newSearchCriteria);
     }
-  }, [query, location, history, setSearchCriteria, organization]);
+  }, [query, location, history, setSearchCriteria, organization, searchCriteria]);
 
   useEffect(() => {
     if (organization) {
