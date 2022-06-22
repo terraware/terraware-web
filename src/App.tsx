@@ -40,7 +40,6 @@ import SitesList from 'src/components/Sites';
 import ToastSnackbar from 'src/components/ToastSnackbar';
 import TopBar from 'src/components/TopBar/TopBar';
 import TopBarContent from 'src/components/TopBar/TopBarContent';
-import UserMenu from 'src/components/UserMenu';
 import { APP_PATHS } from 'src/constants';
 import ErrorBoundary from 'src/ErrorBoundary';
 import { Notifications } from 'src/types/Notifications';
@@ -181,7 +180,7 @@ export default function App() {
         if (!orgToUse) {
           orgToUse = organizations[0];
         }
-        if (lastVisitedOrgId !== orgToUse.id) {
+        if (orgToUse && lastVisitedOrgId !== orgToUse.id) {
           setLastVisitedOrganizationId(orgToUse.id);
         }
         return orgToUse;
@@ -228,7 +227,16 @@ export default function App() {
       return (
         <>
           <TopBar>
-            <UserMenu user={user} reloadUser={reloadUser} />
+            <TopBarContent
+              notifications={notifications}
+              setNotifications={setNotifications}
+              organizations={organizations}
+              selectedOrganization={selectedOrganization}
+              setSelectedOrganization={setSelectedOrganization}
+              reloadOrganizationData={reloadData}
+              user={user}
+              reloadUser={reloadUser}
+            />
           </TopBar>
           <ToastSnackbar />
           <NoOrgLandingPage reloadOrganizationData={reloadData} />

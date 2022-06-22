@@ -32,7 +32,6 @@ export default function NavBar({ organization }: NavBarProps): JSX.Element | nul
   const isSitesRoute = useRouteMatch(APP_PATHS.SITES + '/');
   const isSpeciesRoute = useRouteMatch(APP_PATHS.SPECIES + '/');
   const isOrganizationRoute = useRouteMatch(APP_PATHS.ORGANIZATION + '/');
-  const isMyAccountRoute = useRouteMatch(APP_PATHS.MY_ACCOUNT + '/');
   const isMonitoringRoute = useRouteMatch(APP_PATHS.MONITORING + '/');
   const isSeedbanksRoute = useRouteMatch(APP_PATHS.SEED_BANKS + '/');
 
@@ -121,13 +120,6 @@ export default function NavBar({ organization }: NavBarProps): JSX.Element | nul
       )}
 
       <NavFooter>
-        <NavItem
-          label={strings.MY_ACCOUNT}
-          icon={'person'}
-          selected={!!isMyAccountRoute}
-          onClick={() => navigate(APP_PATHS.MY_ACCOUNT)}
-          id='myaccount'
-        />
         <NavItem
           label={dictionary.CONTACT_US}
           icon='mail'

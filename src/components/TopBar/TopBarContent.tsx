@@ -51,14 +51,18 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
         reloadOrganizationData={reloadOrganizationData}
       />
       <div className={classes.separator} />
-      <OrganizationsDropdown
-        organizations={organizations}
-        selectedOrganization={selectedOrganization}
-        setSelectedOrganization={setSelectedOrganization}
-        reloadOrganizationData={reloadOrganizationData}
-      />
-      <div className={classes.separator} />
-      <UserMenu user={user} reloadUser={reloadUser} />
+      {organizations && organizations.length > 0 && (
+        <>
+          <OrganizationsDropdown
+            organizations={organizations}
+            selectedOrganization={selectedOrganization}
+            setSelectedOrganization={setSelectedOrganization}
+            reloadOrganizationData={reloadOrganizationData}
+          />
+          <div className={classes.separator} />
+        </>
+      )}
+      <UserMenu user={user} reloadUser={reloadUser} hasOrganizations={organizations && organizations.length > 0} />
     </>
   );
 }
