@@ -157,7 +157,7 @@ export default function EditColumnsDialog(props: Props): JSX.Element {
 }
 
 interface Option {
-  name: string;
+  name: string | JSX.Element;
   key: string;
   disabled?: boolean;
 }

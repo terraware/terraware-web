@@ -13,7 +13,7 @@ import AddSpeciesModal from '../Species/AddSpeciesModal';
 import snackbarAtom from 'src/state/snackbar';
 import { useSetRecoilState } from 'recoil';
 import { ServerOrganization } from 'src/types/Organization';
-import ImportSpeciesModal from '../Species/ImportSpeciesModal';
+import ImportSpeciesModal, { downloadCsvTemplate } from '../Species/ImportSpeciesModal';
 import TfMain from '../common/TfMain';
 
 const useStyles = makeStyles((theme) =>
@@ -111,6 +111,10 @@ export default function EmptyStatePage({ pageName, organization, reloadData }: E
     history.push(newLocation);
   };
 
+  const downloadCsvTemplateHandler = () => {
+    downloadCsvTemplate();
+  };
+
   const [addSpeciesModalOpened, setAddSpeciesModalOpened] = useState(false);
   const [importSpeciesModalOpened, setImportSpeciesModalOpened] = useState(false);
 
@@ -128,7 +132,7 @@ export default function EmptyStatePage({ pageName, organization, reloadData }: E
           setImportSpeciesModalOpened(true);
         },
         linkText: emptyStateStrings.IMPORT_SPECIES_LINK,
-        linkPath: '/home',
+        onLinkClick: downloadCsvTemplateHandler,
       },
       {
         icon: 'edit',

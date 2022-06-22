@@ -76,16 +76,27 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
+export const downloadCsvTemplate = async () => {
+  const apiResponse = await downloadSpeciesTemplate();
+  const csvContent = 'data:text/csv;charset=utf-8,' + apiResponse;
+  const encodedUri = encodeURI(csvContent);
+  const link = document.createElement('a');
+  link.setAttribute('href', encodedUri);
+  link.setAttribute('download', `template.csv`);
+  link.click();
+};
+
 export type ImportSpeciesModalProps = {
   open: boolean;
   onClose: (saved: boolean, snackbarMessage?: string) => void;
   organization: ServerOrganization;
   onError?: (snackbarMessage: string) => void;
+  setCheckDataModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.Element {
   const classes = useStyles();
-  const { open, onClose, organization } = props;
+  const { open, onClose, organization, setCheckDataModalOpen } = props;
   const [file, setFile] = useState<File>();
   const inputRef = useRef<HTMLInputElement>(null);
   const [error, setError] = useState<string>();
@@ -108,6 +119,13 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
     setFileStatus(undefined);
     setLoading(false);
     setWarning(false);
+  };
+
+  const handleFinishImport = () => {
+    handleCancel();
+    if (setCheckDataModalOpen) {
+      setCheckDataModalOpen(true);
+    }
   };
 
   useEffect(() => {
@@ -181,16 +199,6 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
     }
   };
 
-  const downloadCsvTemplate = async () => {
-    const apiResponse = await downloadSpeciesTemplate();
-    const csvContent = 'data:text/csv;charset=utf-8,' + apiResponse;
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement('a');
-    link.setAttribute('href', encodedUri);
-    link.setAttribute('download', `template.csv`);
-    link.click();
-  };
-
   const resolveSpeciesUploadHandler = async (overwriteValues: boolean) => {
     if (uploadId) {
       const serverResponse = await resolveSpeciesUpload(uploadId, overwriteValues);
@@ -219,7 +227,7 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
       ];
     }
     if (completed) {
-      return [<Button onClick={handleCancel} label={strings.NICE} key='mb-1' />];
+      return [<Button onClick={handleFinishImport} label={strings.NICE} key='mb-1' />];
     }
   };
 
