@@ -94,7 +94,7 @@ export default function NavBar({ organization }: NavBarProps): JSX.Element | nul
       )}
       {role && ['Admin', 'Owner'].includes(role) && (
         <>
-          <NavSection title={strings.ADMIN.toUpperCase()} />
+          <NavSection title={strings.SETTINGS.toUpperCase()} />
           <NavItem
             label={strings.ORGANIZATION}
             icon='organizationNav'

@@ -9,6 +9,9 @@ const styles = makeStyles((theme) => ({
   flexText: {
     flex: '1 1 100%',
   },
+  buttonSpacing: {
+    marginLeft: `${theme.spacing(1)}px`,
+  },
 }));
 
 interface EnhancedTableToolbarProps {
@@ -28,6 +31,7 @@ export default function EnhancedTableToolbar(props: EnhancedTableToolbarProps): 
       {topBarButtons?.map((tbButton) => {
         return (
           <Button
+            className={classes.buttonSpacing}
             key={tbButton.buttonText}
             label={tbButton.buttonText}
             priority='secondary'

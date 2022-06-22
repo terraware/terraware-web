@@ -386,6 +386,7 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
               options={['Contributor', 'Admin']}
               disabled={newPerson.role === 'Owner'}
               selectedValue={newPerson.role}
+              fullWidth
             />
           </Grid>
           <Grid item xs={12} />
