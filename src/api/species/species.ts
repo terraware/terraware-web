@@ -152,7 +152,7 @@ export async function listSpeciesNames(search: string) {
   try {
     const serverResponse = await axios.get(endpoint);
     // @ts-ignore
-    console.log(`Response Time: ${serverResponse.responseTime}`);
+    console.log(`Species lookup response time for "${search}": ${serverResponse.responseTime}`);
     const serverResponseData: GetSpeciesResponsePayload = serverResponse.data;
     if (serverResponseData.status !== 'error') {
       response.names = serverResponseData.names;
