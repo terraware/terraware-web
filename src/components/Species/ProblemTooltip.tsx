@@ -16,6 +16,9 @@ const useStyles = makeStyles((theme: Theme) =>
     spacing: {
       marginRight: theme.spacing(1),
     },
+    verticalSpacing: {
+      marginTop: theme.spacing(1),
+    },
     buttonsContainer: {
       background: '#F2F4F5',
       display: 'flex',
@@ -91,7 +94,7 @@ export default function ProblemTooltip({
         <p>{strings.ISSUE}</p>
         <p className={classes.value}>{problems[0].type}</p>
         {problems[0].suggestedValue ? (
-          <div>
+          <div className={classes.verticalSpacing}>
             <p>{strings.SUGGESTION}</p>
             <p className={classes.value}>{strings.formatString(strings.CHANGE_TO, problems[0].suggestedValue)}</p>
           </div>
