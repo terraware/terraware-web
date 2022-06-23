@@ -465,6 +465,7 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
               className={classes.searchField}
               onChange={onChangeSearch}
               onKeyDown={onKeyDownHandler}
+              value={temporalSearchValue}
             />
             <SpeciesFilters filters={record} setFilters={setRecord} />
             <IconButton onClick={downloadReportHandler} size='small' className={classes.iconContainer}>
