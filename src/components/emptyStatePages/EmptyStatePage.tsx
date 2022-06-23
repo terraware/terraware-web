@@ -211,8 +211,8 @@ export default function EmptyStatePage({ pageName, organization, reloadData }: E
           />
         </>
       )}
+      <PageHeader title={content.title1} subtitle='' />
       <Container className={classes.mainContainer}>
-        <PageHeader title={content.title1} subtitle='' />
         <div className={classes.content}>
           <EmptyStateContent
             title={content.title2}
