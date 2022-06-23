@@ -77,11 +77,16 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
       if (debouncedSearchTerm.length > 1) {
         const requestId = Math.random().toString();
         const response = await listSpeciesNames(debouncedSearchTerm, requestId);
-        if (response.names && getLastSpeciesNamesRequestId() === requestId) {
+        if (response.names) {
           if (getLastSpeciesNamesRequestId() === requestId) {
+            console.log(
+              `Using species names response for value ${debouncedSearchTerm}, ${getLastSpeciesNamesRequestId()}, ${requestId}`
+            );
             setOptionsForName(response.names);
           } else {
-            console.log(`Skipping species names response for stale value ${debouncedSearchTerm}`);
+            console.log(
+              `Skipping species names response for value ${debouncedSearchTerm}, ${getLastSpeciesNamesRequestId()}, ${requestId}`
+            );
           }
         }
       }
@@ -96,6 +101,9 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
         const response = await getSpeciesDetails(debouncedSearchTerm, requestId);
         if (response.requestSucceeded) {
           if (getLastSpeciesDetailsRequestId() === requestId) {
+            console.log(
+              `Using species details response for value ${debouncedSearchTerm}, ${getLastSpeciesDetailsRequestId()}, ${requestId}`
+            );
             setNewScientificName(false);
             setRecord((previousRecord: Species) => {
               if (response.commonNames.length === 1) {
@@ -115,7 +123,9 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
               }
             });
           } else {
-            console.log(`Skipping species details response for stale value ${debouncedSearchTerm}`);
+            console.log(
+              `Skipping species details response for value ${debouncedSearchTerm}, ${getLastSpeciesDetailsRequestId()}, ${requestId}`
+            );
           }
         } else {
           setNewScientificName(true);

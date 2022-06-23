@@ -150,6 +150,7 @@ export type LookupSpeciesListResponse = {
 
 export async function listSpeciesNames(search: string, requestId: string = '') {
   REQUEST_IDS[LOOKUP_SPECIES_ENDPOINT] = requestId || Math.random().toString();
+  console.log(`Setting request id to ${REQUEST_IDS[LOOKUP_SPECIES_ENDPOINT]} for ${search}`);
   const response: LookupSpeciesListResponse = {
     names: [],
     requestSucceeded: true,
