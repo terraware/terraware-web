@@ -149,6 +149,7 @@ export default function SeedBanksList({ organization }: SeedBanksListProps): JSX
             className={classes.searchField}
             onChange={onChangeSearch}
             onKeyDown={onKeyDownHandler}
+            value={temporalSearchValue}
           />
         </Grid>
         <Grid item xs={12}>
