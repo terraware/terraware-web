@@ -54,7 +54,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
   const [optionsForCommonName, setOptionsForCommonName] = useState<string[]>();
   const [newScientificName, setNewScientificName] = useState(false);
   // Debounce search term so that it only gives us latest value if searchTerm has not been updated within last 500ms.
-  const debouncedSearchTerm = useDebounce(record.scientificName, 250);
+  const debouncedSearchTerm = useDebounce(record.scientificName, 500);
   const [showWarning, setShowWarning] = useState(false);
 
   React.useEffect(() => {
