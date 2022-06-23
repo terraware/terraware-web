@@ -203,10 +203,17 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
             id='name'
             onChange={onChange}
             errorText={newOrganization.name ? '' : nameError}
+            value={newOrganization.name}
           />
         </Grid>
         <Grid item xs={12}>
-          <TextField label={strings.DESCRIPTION} type='text' id='description' onChange={onChange} />
+          <TextField
+            label={strings.DESCRIPTION}
+            type='text'
+            id='description'
+            onChange={onChange}
+            value={newOrganization.description}
+          />
         </Grid>
         <Grid item xs={12}>
           <Select
