@@ -69,6 +69,7 @@ const strings = new LocalizedStrings({
     SITE_LOCATION: 'Site Location',
     ENDANGERED: 'Endangered',
     RARE: 'Rare',
+    RARE_ENDANGERED: 'Rare, Endangered',
     NUMBER_OF_TREES: 'Number of Trees',
     ESTIMATED_SEEDS_INCOMING: 'Estimated Seeds Incoming',
     LANDOWNER: 'Landowner',

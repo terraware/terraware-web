@@ -96,6 +96,7 @@ const columns: TableColumnType[] = [
   { key: 'commonName', name: strings.COMMON_NAME, type: 'string' },
   { key: 'familyName', name: strings.FAMILY, type: 'string' },
   { key: 'growthForm', name: strings.GROWTH_FORM, type: 'string' },
+  { key: 'conservationStatus', name: strings.CONSERVATION_STATUS, type: 'string' },
   { key: 'seedStorageBehavior', name: strings.SEED_STORAGE_BEHAVIOR, type: 'string' },
 ];
 
@@ -242,6 +243,8 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
             familyName: result.familyName as string,
             growthForm: result.growthForm as any,
             seedStorageBehavior: result.seedStorageBehavior as any,
+            rare: result.rare as boolean,
+            endangered: result.endangered as boolean,
           });
         });
         setResults(speciesResults);
@@ -481,7 +484,7 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
             )}
             {(record.rare || record.endangered) && (
               <Pill
-                filter={strings.SEED_STORAGE_BEHAVIOR}
+                filter={strings.CONSERVATION_STATUS}
                 value={record.rare ? strings.RARE : strings.ENDANGERED}
                 onRemoveFilter={record.rare ? onRemoveFilterHandler('rare') : onRemoveFilterHandler('endangered')}
               />
