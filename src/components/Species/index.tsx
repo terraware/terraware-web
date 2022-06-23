@@ -134,6 +134,7 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
   });
 
   const getParams = useCallback(() => {
+    const searchChildren: FieldNodePayload[] = [];
     const params: SearchNodePayload = {
       prefix: 'species',
       fields: [
@@ -145,10 +146,22 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
         'rare',
         'growthForm',
         'seedStorageBehavior',
+        'organization_id',
       ],
       search: {
-        operation: 'or',
-        children: [],
+        operation: 'and',
+        children: [
+          {
+            operation: 'field',
+            field: 'organization_id',
+            type: 'Exact',
+            values: [organization.id],
+          },
+          {
+            operation: 'or',
+            children: searchChildren,
+          },
+        ],
       },
       count: 0,
     };
@@ -160,7 +173,7 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
         type: 'Fuzzy',
         values: [searchValue],
       };
-      params.search.children.push(nameNode);
+      searchChildren.push(nameNode);
 
       const familyNode: FieldNodePayload = {
         operation: 'field',
@@ -168,7 +181,7 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
         type: 'Fuzzy',
         values: [searchValue],
       };
-      params.search.children.push(familyNode);
+      searchChildren.push(familyNode);
     }
 
     if (record.endangered !== undefined) {
@@ -178,7 +191,7 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
         type: 'Exact',
         values: [record.endangered],
       };
-      params.search.children.push(newNode);
+      searchChildren.push(newNode);
     }
 
     if (record.rare !== undefined) {
@@ -188,7 +201,7 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
         type: 'Exact',
         values: [record.rare],
       };
-      params.search.children.push(newNode);
+      searchChildren.push(newNode);
     }
 
     if (record.seedStorageBehavior !== undefined) {
@@ -198,7 +211,7 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
         type: 'Exact',
         values: [record.seedStorageBehavior],
       };
-      params.search.children.push(newNode);
+      searchChildren.push(newNode);
     }
 
     if (record.growthForm !== undefined) {
@@ -208,16 +221,16 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
         type: 'Exact',
         values: [record.growthForm],
       };
-      params.search.children.push(newNode);
+      searchChildren.push(newNode);
     }
 
     return params;
-  }, [record, searchValue]);
+  }, [record, searchValue, organization.id]);
 
   const onApplyFilters = useCallback(
     async (reviewErrors?: boolean) => {
       const params: SearchNodePayload = getParams();
-      if (params.search.children.length) {
+      if (params.search.children[1].children.length) {
         const searchResults = await search(params);
         const speciesResults: Species[] = [];
         searchResults?.forEach((result) => {
