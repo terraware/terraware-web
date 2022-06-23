@@ -1,7 +1,14 @@
 import { Grid } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React, { useEffect, useState } from 'react';
-import { createSpecies, getSpeciesDetails, listSpeciesNames, updateSpecies } from 'src/api/species/species';
+import {
+  createSpecies,
+  getSpeciesDetails,
+  listSpeciesNames,
+  updateSpecies,
+  getLastSpeciesDetailsRequestId,
+  getLastSpeciesNamesRequestId,
+} from 'src/api/species/species';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
 import { GrowthForms, Species, SpeciesRequestError, StorageBehaviors } from 'src/types/Species';
@@ -68,9 +75,14 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
   useEffect(() => {
     const getOptionsForTyped = async () => {
       if (debouncedSearchTerm.length > 1) {
-        const response = await listSpeciesNames(debouncedSearchTerm);
-        if (response.names) {
-          setOptionsForName(response.names);
+        const requestId = Math.random().toString();
+        const response = await listSpeciesNames(debouncedSearchTerm, requestId);
+        if (response.names && getLastSpeciesNamesRequestId() === requestId) {
+          if (getLastSpeciesNamesRequestId() === requestId) {
+            setOptionsForName(response.names);
+          } else {
+            console.log(`Skipping species names response for stale value ${debouncedSearchTerm}`);
+          }
         }
       }
     };
@@ -80,26 +92,31 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
         setNewScientificName(false);
       }
       if (debouncedSearchTerm.length > 1) {
-        const response = await getSpeciesDetails(debouncedSearchTerm);
+        const requestId = Math.random().toString();
+        const response = await getSpeciesDetails(debouncedSearchTerm, requestId);
         if (response.requestSucceeded) {
-          setNewScientificName(false);
-          setRecord((previousRecord: Species) => {
-            if (response.commonNames.length === 1) {
-              return {
-                ...previousRecord,
-                familyName: response.familyName,
-                endangered: response.endangered,
-                commonName: response.commonNames[0].name,
-              };
-            } else {
-              setOptionsForCommonName(response.commonNames.map((cN) => cN.name));
-              return {
-                ...previousRecord,
-                familyName: response.familyName,
-                endangered: response.endangered,
-              };
-            }
-          });
+          if (getLastSpeciesDetailsRequestId() === requestId) {
+            setNewScientificName(false);
+            setRecord((previousRecord: Species) => {
+              if (response.commonNames.length === 1) {
+                return {
+                  ...previousRecord,
+                  familyName: response.familyName,
+                  endangered: response.endangered,
+                  commonName: response.commonNames[0].name,
+                };
+              } else {
+                setOptionsForCommonName(response.commonNames.map((cN) => cN.name));
+                return {
+                  ...previousRecord,
+                  familyName: response.familyName,
+                  endangered: response.endangered,
+                };
+              }
+            });
+          } else {
+            console.log(`Skipping species details response for stale value ${debouncedSearchTerm}`);
+          }
         } else {
           setNewScientificName(true);
         }

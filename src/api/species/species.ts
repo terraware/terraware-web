@@ -8,6 +8,12 @@ import addQueryParams from '../helpers/addQueryParams';
  * surfaced to the caller via the requestSucceeded or error field.
  */
 
+type RequestIds = {
+  [endpoint: string]: string;
+};
+
+const REQUEST_IDS: RequestIds = {};
+
 const GET_SPECIES_ENDPOINT = '/api/v1/species';
 
 export type GetSpeciesListResponse = {
@@ -142,7 +148,8 @@ export type LookupSpeciesListResponse = {
   requestSucceeded: boolean;
 };
 
-export async function listSpeciesNames(search: string) {
+export async function listSpeciesNames(search: string, requestId: string = '') {
+  REQUEST_IDS[LOOKUP_SPECIES_ENDPOINT] = requestId || Math.random().toString();
   const response: LookupSpeciesListResponse = {
     names: [],
     requestSucceeded: true,
@@ -185,7 +192,7 @@ export type SpeciesDetailsResponse = {
   requestSucceeded: boolean;
 };
 
-export async function getSpeciesDetails(scientificName: string) {
+export async function getSpeciesDetails(scientificName: string, requestId: string = '') {
   const response: SpeciesDetailsResponse = {
     scientificName: '',
     commonNames: [],
@@ -299,3 +306,6 @@ export async function ignoreProblemSuggestion(problemId: number) {
   }
   return response;
 }
+
+export const getLastSpeciesDetailsRequestId = (): string => REQUEST_IDS[LOOKUP_SPECIES_DETAILS_ENDPOINT] || '';
+export const getLastSpeciesNamesRequestId = (): string => REQUEST_IDS[LOOKUP_SPECIES_ENDPOINT] || '';
