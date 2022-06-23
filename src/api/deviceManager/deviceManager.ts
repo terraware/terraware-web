@@ -18,12 +18,12 @@ type DeviceManagersResponse = {
  */
 
 export type ListDeviceManagersParams = {
-  shortCode?: string;
+  sensorKitId?: string;
   facilityId?: number;
 };
 
 export const listDeviceManagers = async ({
-  shortCode,
+  sensorKitId,
   facilityId,
 }: ListDeviceManagersParams): Promise<DeviceManagersResponse> => {
   const response: DeviceManagersResponse = {
@@ -32,7 +32,7 @@ export const listDeviceManagers = async ({
   };
 
   try {
-    const queryParams: DeviceManagersQuery = { shortCode, facilityId };
+    const queryParams: DeviceManagersQuery = { sensorKitId, facilityId };
     const endpoint = addQueryParams(DEVICE_MANAGERS_ENDPOINT, queryParams);
     const serverResponse: GetDeviceManagersResponsePayload = (await axios.get(endpoint)).data;
 

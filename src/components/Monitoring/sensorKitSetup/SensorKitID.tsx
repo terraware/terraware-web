@@ -25,27 +25,27 @@ type SensorKitIDProps = {
 export default function SensorKitID(props: SensorKitIDProps): JSX.Element {
   const classes = useStyles();
   const { seedBank, active, completed, onNext } = props;
-  const [shortCode, setShortCode] = useState<string | undefined>();
+  const [sensorKitId, setSensorKitId] = useState<string | undefined>();
   const [error, setError] = useState<string | undefined>();
   const [flowError, setFlowError] = useState<FlowError | undefined>();
   const [initialized, setInitialized] = useState<boolean>(false);
 
   const onChange = (id: string, value: unknown) => {
-    setShortCode(value as string);
+    setSensorKitId(value as string);
   };
 
   const goToNext = () => {
     setError(undefined);
     setFlowError(undefined);
 
-    if (!shortCode) {
+    if (!sensorKitId) {
       setError(strings.REQUIRED_FIELD);
       setFlowError({ text: strings.FILL_OUT_ALL_FIELDS });
       return;
     }
 
     const fetchDeviceManager = async () => {
-      const response = await listDeviceManagers({ shortCode });
+      const response = await listDeviceManagers({ sensorKitId });
       if (response.requestSucceeded === false) {
         setFlowError({
           title: strings.SERVER_ERROR,
@@ -74,7 +74,7 @@ export default function SensorKitID(props: SensorKitIDProps): JSX.Element {
 
   useEffect(() => {
     // re initialize if seed bank id changes
-    setShortCode(undefined);
+    setSensorKitId(undefined);
     setError(undefined);
     setFlowError(undefined);
     setInitialized(false);
@@ -107,7 +107,7 @@ export default function SensorKitID(props: SensorKitIDProps): JSX.Element {
             label={strings.ENTER_SIX_DIGIT_KEY}
             type='text'
             onChange={onChange}
-            value={shortCode}
+            value={sensorKitId}
             errorText={error}
             placeholder={strings.SENSOR_KIT_ID_PLACEHOLDER}
           />

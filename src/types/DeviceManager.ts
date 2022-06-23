@@ -1,6 +1,6 @@
 export type DeviceManager = {
   id: number;
-  shortCode: string;
+  sensorKitId: string;
   available: boolean;
   facilityId?: number;
   updateProgress?: number;
