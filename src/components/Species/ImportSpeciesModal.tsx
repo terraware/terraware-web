@@ -213,20 +213,44 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
     }
   };
 
+  const tryAgainHandler = () => {
+    setError(undefined);
+    setCompleted(false);
+    setFile(undefined);
+    setFileStatus(undefined);
+    setLoading(false);
+    setWarning(false);
+  };
+
   const getMiddleButtons = () => {
     if (file && !completed && !warning && !loading) {
-      return [
-        <Button
-          onClick={handleCancel}
-          id='cancel'
-          label={error ? strings.CANCEL_IMPORT : strings.CANCEL}
-          priority='secondary'
-          type='passive'
-          className={classes.spacing}
-          key='mb-1'
-        />,
-        <Button onClick={importDataHandler} label={error ? strings.TRY_AGAIN : strings.IMPORT_DATA} key='mb-2' />,
-      ];
+      if (error) {
+        return [
+          <Button
+            onClick={handleCancel}
+            id='cancel'
+            label={strings.CANCEL_IMPORT}
+            priority='secondary'
+            type='passive'
+            className={classes.spacing}
+            key='mb-1'
+          />,
+          <Button onClick={tryAgainHandler} label={strings.TRY_AGAIN} key='mb-2' />,
+        ];
+      } else {
+        return [
+          <Button
+            onClick={handleCancel}
+            id='cancel'
+            label={strings.CANCEL}
+            priority='secondary'
+            type='passive'
+            className={classes.spacing}
+            key='mb-1'
+          />,
+          <Button onClick={importDataHandler} label={strings.IMPORT_DATA} key='mb-2' />,
+        ];
+      }
     }
     if (completed) {
       return [<Button onClick={handleFinishImport} label={strings.NICE} key='mb-1' />];
