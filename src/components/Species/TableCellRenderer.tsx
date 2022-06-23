@@ -51,12 +51,12 @@ export default function SpeciesCellRenderer(props: RendererProps<TableRowType>):
     setOpenedTooltip(!openedTooltip);
   };
 
-  const getConservationStatusString = (row: TableRowType) => {
-    if (row.endangered && row.rare) {
+  const getConservationStatusString = (iRow: TableRowType) => {
+    if (iRow.endangered && iRow.rare) {
       return strings.RARE_ENDANGERED;
-    } else if (row.endangered) {
+    } else if (iRow.endangered) {
       return strings.ENDANGERED;
-    } else if (row.rare) {
+    } else if (iRow.rare) {
       return strings.RARE;
     } else {
       return '';
