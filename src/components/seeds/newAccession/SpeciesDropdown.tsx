@@ -39,19 +39,26 @@ export default function SpeciesDropdown<T extends AccessionPostRequestBody>(
     populateSpecies();
   }, [organization]);
 
-  const onChangeHandler = (id: string, value: string) => {
-    const filteredSpecies = speciesList.filter((species) => species.scientificName === value);
+  useEffect(() => {
+    const filteredSpecies = speciesList.filter((species) => species.scientificName === selectedSpecies);
     if (filteredSpecies && filteredSpecies[0]) {
       setFamily(filteredSpecies[0].familyName);
       setEndangered(filteredSpecies[0].endangered ? 'Yes' : 'No');
       setRare(filteredSpecies[0].rare ? 'Yes' : 'No');
-      setRecord((previousRecord: T): T => {
-        return {
-          ...previousRecord,
-          [id]: value,
-        };
-      });
+    } else {
+      setFamily(undefined);
+      setEndangered(undefined);
+      setRare(undefined);
     }
+  }, [selectedSpecies, speciesList]);
+
+  const onChangeHandler = (id: string, value: string) => {
+    setRecord((previousRecord: T): T => {
+      return {
+        ...previousRecord,
+        [id]: value,
+      };
+    });
   };
 
   return (
