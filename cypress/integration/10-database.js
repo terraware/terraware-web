@@ -206,7 +206,7 @@ describe('Database', () => {
 
         cy.get('#Germination\\ Testing\\ To\\ Do').click();
         cy.get('#primaryCollectorName').click();
-        cy.get('#rare').click();
+        cy.get('#species-rare').click();
         cy.get('#saveColumnsButton').click();
         cy.wait('@search');
         cy.wait('@values');
@@ -651,7 +651,7 @@ describe('Database', () => {
       cy.intercept('POST', '/api/v1/seedbank/values').as('values2');
 
       cy.get('#edit-columns').click();
-      cy.get('#rare').click();
+      cy.get('#species-rare').click();
       cy.get('#saveColumnsButton').click();
       cy.get('#editColumnsDialog').should('not.exist');
 
@@ -681,7 +681,7 @@ describe('Database', () => {
 
       cy.get('#row1-speciesName').contains('Other Dogwood');
 
-      cy.get('#filter-rare').should('exist');
+      cy.get('#filter-species-rare').should('exist');
 
       // Should remember the filters
 
@@ -693,7 +693,7 @@ describe('Database', () => {
 
       cy.get('#subtitle').should('contain', '4 total');
       cy.get('#row1-speciesName').contains('Other Dogwood');
-      cy.get('#filter-rare').contains('Rare');
+      cy.get('#filter-species-rare').contains('Rare');
     });
   });
 
