@@ -72,13 +72,13 @@ const COLUMNS: DatabaseColumn[] = [
     filter: { type: 'search' },
   },
   {
-    key: 'endangered',
+    key: 'species_endangered',
     name: strings.ENDANGERED,
     type: 'string',
     filter: { type: 'single_selection' },
   },
   {
-    key: 'rare',
+    key: 'species_rare',
     name: strings.RARE,
     type: 'string',
     filter: { type: 'single_selection' },
@@ -102,7 +102,7 @@ const COLUMNS: DatabaseColumn[] = [
     filter: { type: 'number_range' },
   },
   {
-    key: 'familyName',
+    key: 'species_familyName',
     name: strings.FAMILY,
     type: 'string',
     filter: { type: 'search' },
