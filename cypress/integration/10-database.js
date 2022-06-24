@@ -81,8 +81,6 @@ describe('Database', () => {
         cy.get('#table-header-collectedDate').contains('COLLECTED DATE');
         cy.get('#table-header-primaryCollectorName').contains('COLLECTOR');
         cy.get('#table-header-siteLocation').contains('SITE LOCATION');
-        cy.get('#table-header-endangered').contains('ENDANGERED');
-        cy.get('#table-header-rare').contains('RARE');
         cy.get('#table-header-treesCollectedFrom').contains('NUMBER OF TREES');
         cy.get('#table-header-estimatedSeedsIncoming').contains('ESTIMATED SEEDS INCOMING');
         cy.get('#table-header-landowner').contains('LANDOWNER');
