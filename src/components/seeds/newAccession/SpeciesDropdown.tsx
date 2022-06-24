@@ -20,8 +20,11 @@ interface SpeciesDropdownProps<T extends AccessionPostRequestBody> {
 export default function SpeciesDropdown<T extends AccessionPostRequestBody>(
   props: SpeciesDropdownProps<T>
 ): JSX.Element {
-  const { selectedSpecies, organization, onChange, record, setRecord, disabled } = props;
+  const { selectedSpecies, organization, onChange, setRecord, disabled } = props;
   const [speciesList, setSpeciesList] = useState<Species[]>([]);
+  const [family, setFamily] = useState<string>();
+  const [endangered, setEndangered] = useState<string>();
+  const [rare, setRare] = useState<string>();
 
   useEffect(() => {
     const populateSpecies = async () => {
@@ -39,14 +42,13 @@ export default function SpeciesDropdown<T extends AccessionPostRequestBody>(
   const onChangeHandler = (id: string, value: string) => {
     const filteredSpecies = speciesList.filter((species) => species.scientificName === value);
     if (filteredSpecies && filteredSpecies[0]) {
-      console.log(filteredSpecies[0].endangered);
+      setFamily(filteredSpecies[0].familyName);
+      setEndangered(filteredSpecies[0].endangered ? 'Yes' : 'No');
+      setRare(filteredSpecies[0].rare ? 'Yes' : 'No');
       setRecord((previousRecord: T): T => {
         return {
           ...previousRecord,
           [id]: value,
-          family: filteredSpecies[0].familyName,
-          endangered: filteredSpecies[0].endangered ? 'Yes' : 'No',
-          rare: filteredSpecies[0].rare ? 'Yes' : 'No',
         };
       });
     }
@@ -66,20 +68,14 @@ export default function SpeciesDropdown<T extends AccessionPostRequestBody>(
         />
       </Grid>
       <Grid item xs={4}>
-        <TextField id='family' value={record.family} onChange={onChange} label={strings.FAMILY} disabled={true} />
+        <TextField id='family' value={family} onChange={onChange} label={strings.FAMILY} disabled={true} />
       </Grid>
       <Grid item xs={4} />
       <Grid item xs={4}>
-        <TextField
-          id='endangered'
-          value={record.endangered}
-          onChange={onChange}
-          label={strings.ENDANGERED}
-          disabled={true}
-        />
+        <TextField id='endangered' value={endangered} onChange={onChange} label={strings.ENDANGERED} disabled={true} />
       </Grid>
       <Grid item xs={4}>
-        <TextField id='rare' value={record.rare} onChange={onChange} label={strings.RARE} disabled={true} />
+        <TextField id='rare' value={rare} onChange={onChange} label={strings.RARE} disabled={true} />
       </Grid>
     </>
   );
