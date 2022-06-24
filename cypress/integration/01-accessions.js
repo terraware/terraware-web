@@ -72,13 +72,8 @@ describe('Accessions', () => {
       cy.get('#select-seed-bank').click().url().should('contain', '/accessions/new');
 
       cy.get('#species').type('Kousa Dogwood{downArrow}{enter}');
-      cy.get('#family').type('Cornaceae');
       cy.get('#numberOfTrees').type('3');
       cy.get('#founderId').type('234908098');
-      cy.get('#endangered').click();
-      cy.get('#Yes').click();
-      cy.get('#rare').click();
-      cy.get('#Yes').click();
       cy.get('#sourcePlantOrigin').click();
       cy.get('#Outplant').click();
 
@@ -105,11 +100,8 @@ describe('Accessions', () => {
       cy.get('#header-state').contains('Awaiting Check-In');
 
       cy.get('#species').should('have.value', 'Kousa Dogwood');
-      cy.get('#family').should('have.value', 'Cornaceae');
       cy.get('#numberOfTrees').should('have.value', '3');
       cy.get('#founderId').should('have.value', '234908098');
-      cy.get('#endangered + input').should('have.value', 'Yes');
-      cy.get('#rare + input').should('have.value', 'Yes');
       cy.get('#sourcePlantOrigin + input').should('have.value', 'Outplant');
       cy.get('#fieldNotes').should('have.value', 'Some notes');
       cy.get('#collectedDate').should('have.value', '02/01/2021');
