@@ -37,16 +37,16 @@ export default function SpeciesDropdown<T extends AccessionPostRequestBody>(
   }, [organization]);
 
   const onChangeHandler = (id: string, value: string) => {
-    const selectedSpecies = speciesList.filter((species) => species.scientificName === value);
-    if (selectedSpecies && selectedSpecies[0]) {
-      console.log(selectedSpecies[0].endangered);
+    const filteredSpecies = speciesList.filter((species) => species.scientificName === value);
+    if (filteredSpecies && filteredSpecies[0]) {
+      console.log(filteredSpecies[0].endangered);
       setRecord((previousRecord: T): T => {
         return {
           ...previousRecord,
           [id]: value,
-          family: selectedSpecies[0].familyName,
-          endangered: selectedSpecies[0].endangered ? 'Yes' : 'No',
-          rare: selectedSpecies[0].rare ? 'Yes' : 'No',
+          family: filteredSpecies[0].familyName,
+          endangered: filteredSpecies[0].endangered ? 'Yes' : 'No',
+          rare: filteredSpecies[0].rare ? 'Yes' : 'No',
         };
       });
     }
