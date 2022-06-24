@@ -1,14 +1,7 @@
 import { Grid } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React, { useEffect, useState } from 'react';
-import {
-  createSpecies,
-  getSpeciesDetails,
-  listSpeciesNames,
-  updateSpecies,
-  getLastSpeciesDetailsRequestId,
-  getLastSpeciesNamesRequestId,
-} from 'src/api/species/species';
+import { createSpecies, getSpeciesDetails, listSpeciesNames, updateSpecies } from 'src/api/species/species';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
 import { GrowthForms, Species, SpeciesRequestError, StorageBehaviors } from 'src/types/Species';
@@ -20,6 +13,18 @@ import DialogBox from '../common/DialogBox/DialogBox';
 import ErrorBox from '../common/ErrorBox/ErrorBox';
 import Select from '../common/Select/Select';
 import TextField from '../common/Textfield/Textfield';
+
+type RequestIds = {
+  [endpoint: string]: string;
+};
+
+const requestIds: RequestIds = {};
+
+const setRequestId = (key: string, id: string) => {
+  requestIds[key] = id || Math.random().toString();
+};
+
+const getRequestId = (key: string): string => requestIds[key] || '';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -76,9 +81,10 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
     const getOptionsForTyped = async () => {
       if (debouncedSearchTerm.length > 1) {
         const requestId = Math.random().toString();
-        const response = await listSpeciesNames(debouncedSearchTerm, requestId);
+        setRequestId('names', requestId);
+        const response = await listSpeciesNames(debouncedSearchTerm);
         if (response.names) {
-          if (getLastSpeciesNamesRequestId() === requestId) {
+          if (getRequestId('names') === requestId) {
             console.log(`Using species names response for value ${debouncedSearchTerm}`);
             setOptionsForName(response.names);
           } else {
@@ -94,9 +100,10 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
       }
       if (debouncedSearchTerm.length > 1) {
         const requestId = Math.random().toString();
-        const response = await getSpeciesDetails(debouncedSearchTerm, requestId);
+        setRequestId('details', requestId);
+        const response = await getSpeciesDetails(debouncedSearchTerm);
         if (response.requestSucceeded) {
-          if (getLastSpeciesDetailsRequestId() === requestId) {
+          if (getRequestId('details') === requestId) {
             console.log(`Using species details response for value ${debouncedSearchTerm}`);
             setNewScientificName(false);
             setRecord((previousRecord: Species) => {
