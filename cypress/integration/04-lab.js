@@ -351,8 +351,8 @@ describe('Lab', () => {
       cy.get('#species-change').contains('100% since last week');
       cy.get('#species-arrow-increase').should('exist');
 
-      cy.get('#families-current').contains('2');
-      cy.get('#families-change').contains('100% since last week');
+      cy.get('#families-current').contains('1');
+      cy.get('#families-change').contains('0% since last week');
       cy.get('#families-arrow-increase').should('exist');
 
       cy.get('#update-row-Pending').contains('0 seed collection');
