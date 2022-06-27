@@ -124,8 +124,16 @@ export default function Select(props: SelectProps): JSX.Element {
       const arrayOfItems = Array.from(items);
       for (const item of arrayOfItems) {
         if (item.dataset.selected === 'true') {
-          item.scrollIntoView();
-          return;
+          console.log(dropdownRef.current?.scrollHeight);
+          console.log(dropdownRef.current?.clientHeight);
+          if (
+            dropdownRef.current?.scrollHeight &&
+            dropdownRef.current?.clientHeight &&
+            dropdownRef.current?.scrollHeight > dropdownRef.current?.clientHeight
+          ) {
+            item.scrollIntoView();
+            return;
+          }
         }
       }
     }
