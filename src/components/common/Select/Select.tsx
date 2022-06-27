@@ -125,7 +125,7 @@ export default function Select(props: SelectProps): JSX.Element {
       for (const item of arrayOfItems) {
         if (item.dataset.selected === 'true') {
           if (dropdownRef.current) {
-            var topPos = item.offsetTop;
+            const topPos = item.offsetTop;
             dropdownRef.current.scrollTop = topPos;
             return;
           }
