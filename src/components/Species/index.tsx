@@ -3,13 +3,14 @@ import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { deleteSpecies } from 'src/api/species/species';
 import Button from 'src/components/common/button/Button';
 import EmptyMessage from 'src/components/common/EmptyMessage';
 import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
 import snackbarAtom from 'src/state/snackbar';
+import speciesAtom from 'src/state/species';
 import dictionary from 'src/strings/dictionary';
 import strings from 'src/strings';
 import emptyMessageStrings from 'src/strings/emptyMessageModal';
@@ -95,6 +96,7 @@ const columns: TableColumnType[] = [
   { key: 'commonName', name: strings.COMMON_NAME, type: 'string' },
   { key: 'familyName', name: strings.FAMILY, type: 'string' },
   { key: 'growthForm', name: strings.GROWTH_FORM, type: 'string' },
+  { key: 'conservationStatus', name: strings.CONSERVATION_STATUS, type: 'string' },
   { key: 'seedStorageBehavior', name: strings.SEED_STORAGE_BEHAVIOR, type: 'string' },
 ];
 
@@ -114,6 +116,7 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
   const [importSpeciesModalOpen, setImportSpeciesModalOpen] = useState(false);
   const [checkDataModalOpen, setCheckDataModalOpen] = useState(false);
   const setSnackbar = useSetRecoilState(snackbarAtom);
+  const [speciesState, setSpeciesState] = useRecoilState(speciesAtom);
   const [searchValue, setSearchValue] = useState('');
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
   const [results, setResults] = useState<Species[]>();
@@ -143,22 +146,31 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
         'rare',
         'growthForm',
         'seedStorageBehavior',
+        'organization_id',
       ],
       search: {
-        operation: 'or',
-        children: [],
+        operation: 'and',
+        children: [
+          {
+            operation: 'field',
+            field: 'organization_id',
+            type: 'Exact',
+            values: [organization.id],
+          },
+        ],
       },
       count: 0,
     };
 
     if (searchValue) {
+      const searchValueChildren: FieldNodePayload[] = [];
       const nameNode: FieldNodePayload = {
         operation: 'field',
         field: 'scientificName',
         type: 'Fuzzy',
         values: [searchValue],
       };
-      params.search.children.push(nameNode);
+      searchValueChildren.push(nameNode);
 
       const familyNode: FieldNodePayload = {
         operation: 'field',
@@ -166,7 +178,11 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
         type: 'Fuzzy',
         values: [searchValue],
       };
-      params.search.children.push(familyNode);
+      searchValueChildren.push(familyNode);
+      params.search.children.push({
+        operation: 'or',
+        children: searchValueChildren,
+      });
     }
 
     if (record.endangered !== undefined) {
@@ -210,12 +226,13 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
     }
 
     return params;
-  }, [record, searchValue]);
+  }, [record, searchValue, organization.id]);
 
   const onApplyFilters = useCallback(
     async (reviewErrors?: boolean) => {
       const params: SearchNodePayload = getParams();
-      if (params.search.children.length) {
+      if (params.search.children.length > 1) {
+        // organization id filter will always exist
         const searchResults = await search(params);
         const speciesResults: Species[] = [];
         searchResults?.forEach((result) => {
@@ -227,6 +244,8 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
             familyName: result.familyName as string,
             growthForm: result.growthForm as any,
             seedStorageBehavior: result.seedStorageBehavior as any,
+            rare: result.rare as boolean,
+            endangered: result.endangered as boolean,
           });
         });
         setResults(speciesResults);
@@ -236,6 +255,13 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
     },
     [getParams, species]
   );
+
+  useEffect(() => {
+    if (speciesState?.checkData) {
+      setSpeciesState({ checkData: false });
+      setCheckDataModalOpen(true);
+    }
+  }, [setCheckDataModalOpen, speciesState, setSpeciesState]);
 
   useEffect(() => {
     onApplyFilters();
@@ -443,6 +469,7 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
               className={classes.searchField}
               onChange={onChangeSearch}
               onKeyDown={onKeyDownHandler}
+              value={temporalSearchValue}
             />
             <SpeciesFilters filters={record} setFilters={setRecord} />
             <IconButton onClick={downloadReportHandler} size='small' className={classes.iconContainer}>
@@ -459,7 +486,7 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
             )}
             {(record.rare || record.endangered) && (
               <Pill
-                filter={strings.SEED_STORAGE_BEHAVIOR}
+                filter={strings.CONSERVATION_STATUS}
                 value={record.rare ? strings.RARE : strings.ENDANGERED}
                 onRemoveFilter={record.rare ? onRemoveFilterHandler('rare') : onRemoveFilterHandler('endangered')}
               />

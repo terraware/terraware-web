@@ -187,7 +187,12 @@ const sections: Section[] = [
         COLUMNS_INDEXED.primaryCollectorName,
         COLUMNS_INDEXED.siteLocation,
       ],
-      [COLUMNS_INDEXED.endangered, COLUMNS_INDEXED.rare, COLUMNS_INDEXED.sourcePlantOrigin, COLUMNS_INDEXED.familyName],
+      [
+        COLUMNS_INDEXED.species_endangered,
+        COLUMNS_INDEXED.species_rare,
+        COLUMNS_INDEXED.sourcePlantOrigin,
+        COLUMNS_INDEXED.species_familyName,
+      ],
       [
         COLUMNS_INDEXED.treesCollectedFrom,
         COLUMNS_INDEXED.bagNumber,

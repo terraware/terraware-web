@@ -170,10 +170,6 @@ export interface paths {
     /** In test environments, the clock can be advanced artificially, which will cause it to differ from the real-world date and time. */
     get: operations["getCurrentTime"];
   };
-  "/api/v1/seedbank/clock/advance": {
-    /** Advancing the clock causes any scheduled processes to run. Subsequent GET requests to read the current time will take the advancement into account. Only supported in test and development environments. */
-    post: operations["advanceClock"];
-  };
   "/api/v1/seedbank/log/{tag}": {
     post: operations["recordLogMessage"];
   };
@@ -395,9 +391,6 @@ export interface components {
       role: "Contributor" | "Admin" | "Owner";
       projectIds?: number[];
     };
-    AdvanceClockRequestPayload: {
-      days: number;
-    };
     AllFieldValuesPayload: {
       /** All the values this field could possibly have, whether or not any accessions have them. For fields that allow the user to enter arbitrary values, this is equivalent to querying the list of values without any filter criteria, that is, it's a list of all the user-entered values. */
       values: string[];
@@ -607,6 +600,7 @@ export interface components {
     };
     DeviceManagerPayload: {
       id: number;
+      sensorKitId: string;
       shortCode: string;
       /** If true, this device manager is available to connect to a facility. */
       available: boolean;
@@ -1481,6 +1475,7 @@ export interface operations {
   getDeviceManagers: {
     parameters: {
       query: {
+        sensorKitId?: string;
         shortCode?: string;
         facilityId?: number;
       };
@@ -2794,22 +2789,6 @@ export interface operations {
         content: {
           "application/json": components["schemas"]["GetCurrentTimeResponsePayload"];
         };
-      };
-    };
-  };
-  /** Advancing the clock causes any scheduled processes to run. Subsequent GET requests to read the current time will take the advancement into account. Only supported in test and development environments. */
-  advanceClock: {
-    responses: {
-      /** The clock has been advanced. The response includes the newly-adjusted time. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["GetCurrentTimeResponsePayload"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["AdvanceClockRequestPayload"];
       };
     };
   };

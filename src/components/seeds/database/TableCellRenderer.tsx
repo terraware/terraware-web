@@ -58,5 +58,12 @@ export default function SearchCellRenderer(props: RendererProps<SearchResponseEl
     return <CellRenderer index={index} column={column} value={`${value} ${units}`} row={row} />;
   }
 
+  if (
+    (column.key === 'species_endangered' || column.key === 'species_rare') &&
+    (value === 'false' || value === 'true')
+  ) {
+    return <CellRenderer index={index} column={column} value={`${value === 'true' ? 'Yes' : 'No'}`} row={row} />;
+  }
+
   return <CellRenderer {...props} />;
 }

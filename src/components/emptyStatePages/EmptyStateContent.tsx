@@ -83,6 +83,7 @@ const useStyles = makeStyles((theme) =>
     },
     itemLink: {
       fontSize: '12px',
+      cursor: 'pointer',
     },
   })
 );

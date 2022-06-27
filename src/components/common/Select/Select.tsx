@@ -141,7 +141,7 @@ export default function Select(props: SelectProps): JSX.Element {
       <div className={`textfield-container ${fullWidth ? 'textfield-container--fullWidth' : ''}`}>
         <div id={id} className={selectClass} onClick={toggleOptions} ref={inputRef}>
           <input
-            value={selectedValue}
+            value={selectedValue || ''}
             readOnly={readonly}
             placeholder={placeholder}
             onChange={onChangeHandler}

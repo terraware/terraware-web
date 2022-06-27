@@ -14,6 +14,18 @@ import ErrorBox from '../common/ErrorBox/ErrorBox';
 import Select from '../common/Select/Select';
 import TextField from '../common/Textfield/Textfield';
 
+type RequestIds = {
+  [endpoint: string]: string;
+};
+
+const requestIds: RequestIds = {};
+
+const setRequestId = (key: string, id: string) => {
+  requestIds[key] = id || Math.random().toString();
+};
+
+const getRequestId = (key: string): string => requestIds[key] || '';
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     spacing: {
@@ -68,9 +80,16 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
   useEffect(() => {
     const getOptionsForTyped = async () => {
       if (debouncedSearchTerm.length > 1) {
+        const requestId = Math.random().toString();
+        setRequestId('names', requestId);
         const response = await listSpeciesNames(debouncedSearchTerm);
         if (response.names) {
-          setOptionsForName(response.names);
+          if (getRequestId('names') === requestId) {
+            console.log(`Using species names response for value ${debouncedSearchTerm}`);
+            setOptionsForName(response.names);
+          } else {
+            console.log(`Skipping species names response for stale value ${debouncedSearchTerm}`);
+          }
         }
       }
     };
@@ -80,26 +99,33 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
         setNewScientificName(false);
       }
       if (debouncedSearchTerm.length > 1) {
+        const requestId = Math.random().toString();
+        setRequestId('details', requestId);
         const response = await getSpeciesDetails(debouncedSearchTerm);
         if (response.requestSucceeded) {
-          setNewScientificName(false);
-          setRecord((previousRecord: Species) => {
-            if (response.commonNames.length === 1) {
-              return {
-                ...previousRecord,
-                familyName: response.familyName,
-                endangered: response.endangered,
-                commonName: response.commonNames[0].name,
-              };
-            } else {
-              setOptionsForCommonName(response.commonNames.map((cN) => cN.name));
-              return {
-                ...previousRecord,
-                familyName: response.familyName,
-                endangered: response.endangered,
-              };
-            }
-          });
+          if (getRequestId('details') === requestId) {
+            console.log(`Using species details response for value ${debouncedSearchTerm}`);
+            setNewScientificName(false);
+            setRecord((previousRecord: Species) => {
+              if (response.commonNames.length === 1) {
+                return {
+                  ...previousRecord,
+                  familyName: response.familyName,
+                  endangered: response.endangered,
+                  commonName: response.commonNames[0].name,
+                };
+              } else {
+                setOptionsForCommonName(response.commonNames.map((cN) => cN.name));
+                return {
+                  ...previousRecord,
+                  familyName: response.familyName,
+                  endangered: response.endangered,
+                };
+              }
+            });
+          } else {
+            console.log(`Skipping species details response for stale value ${debouncedSearchTerm}`);
+          }
         } else {
           setNewScientificName(true);
         }

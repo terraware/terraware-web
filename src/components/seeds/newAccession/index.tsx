@@ -326,24 +326,16 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
               </Grid>
             }
           >
-            <Grid item xs={4}>
-              <Species
-                selectedSpecies={record.species}
-                organization={organization}
-                onChange={onChange}
-                disabled={isPendingCheckIn}
-              />
-            </Grid>
-          </Suspense>
-          <Grid item xs={4}>
-            <TextField
-              id='family'
-              value={record.family}
+            <Species
+              selectedSpecies={record.species}
+              organization={organization}
               onChange={onChange}
-              label={strings.FAMILY}
               disabled={isPendingCheckIn}
+              record={record}
+              setRecord={setRecord}
             />
-          </Grid>
+          </Suspense>
+
           <Grid item xs={4} />
           <Grid item xs={4}>
             <TextField
@@ -364,35 +356,6 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
               value={record.founderId}
               onChange={onChange}
               label={strings.FOUNDER_ID}
-              disabled={isPendingCheckIn}
-            />
-          </Grid>
-          <Grid item xs={4} />
-          <Grid item xs={4}>
-            <Dropdown
-              id='endangered'
-              label={strings.ENDANGERED}
-              selected={record.endangered}
-              values={[
-                { label: strings.YES, value: 'Yes' },
-                { label: strings.NO, value: 'No' },
-                { label: strings.UNSURE, value: 'Unsure' },
-              ]}
-              onChange={onChange}
-              disabled={isPendingCheckIn}
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <Dropdown
-              id='rare'
-              label={strings.RARE}
-              selected={record.rare}
-              values={[
-                { label: strings.YES, value: 'Yes' },
-                { label: strings.NO, value: 'No' },
-                { label: strings.UNSURE, value: 'Unsure' },
-              ]}
-              onChange={onChange}
               disabled={isPendingCheckIn}
             />
           </Grid>
