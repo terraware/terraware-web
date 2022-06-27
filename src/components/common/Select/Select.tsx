@@ -131,7 +131,7 @@ export default function Select(props: SelectProps): JSX.Element {
             dropdownRef.current?.clientHeight &&
             dropdownRef.current?.scrollHeight > dropdownRef.current?.clientHeight
           ) {
-            const offset = 64;
+            const offset = 200;
             const bodyRect = document.body.getBoundingClientRect().top;
             const elementRect = item.getBoundingClientRect().top;
             const elementPosition = elementRect - bodyRect;
