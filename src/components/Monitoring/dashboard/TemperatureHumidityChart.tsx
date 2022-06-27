@@ -33,12 +33,14 @@ const useStyles = makeStyles((theme) =>
     chartContainer: {
       marginTop: '40px',
     },
-    chart: {
-      width: '800px',
-    },
     legendContainer: {
       marginBottom: '32px',
       padding: '0 55px 0 41px',
+    },
+    chartResizableParent: {
+      position: 'relative',
+      width: 'calc(100vw - 300px)',
+      paddingRight: `${theme.spacing(4)}px`,
     },
   })
 );
@@ -407,7 +409,9 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
       </div>
       <div className={classes.chartContainer}>
         <div id='legend-container-th' className={classes.legendContainer} />
-        <canvas id='temperatureHumidityChart' ref={chartRef} className={classes.chart} />
+        <div className={classes.chartResizableParent}>
+          <canvas id='temperatureHumidityChart' ref={chartRef} />
+        </div>
       </div>
     </div>
   );
