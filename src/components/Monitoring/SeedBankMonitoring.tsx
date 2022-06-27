@@ -15,6 +15,7 @@ const useStyles = makeStyles((theme) =>
   createStyles({
     placeholder: {
       display: 'flex',
+      flexDirection: 'column',
       height: '100%',
     },
     text: {
