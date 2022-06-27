@@ -311,7 +311,12 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
         }
       }
     };
-    if (selectedLocation) {
+    // don't reload chart when we are in-between switching seedbanks
+    if (
+      availableLocations?.length &&
+      selectedLocation &&
+      availableLocations.find((location) => location.id === selectedLocation.id)
+    ) {
       getChartData();
     }
   }, [availableLocations, selectedPeriod, selectedLocation]);
