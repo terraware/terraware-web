@@ -131,7 +131,15 @@ export default function Select(props: SelectProps): JSX.Element {
             dropdownRef.current?.clientHeight &&
             dropdownRef.current?.scrollHeight > dropdownRef.current?.clientHeight
           ) {
-            item.scrollIntoView();
+            const offset = 64;
+            const bodyRect = document.body.getBoundingClientRect().top;
+            const elementRect = item.getBoundingClientRect().top;
+            const elementPosition = elementRect - bodyRect;
+            const offsetPosition = elementPosition - offset;
+            window.scrollTo({
+              top: offsetPosition,
+              behavior: 'smooth',
+            });
             return;
           }
         }
