@@ -58,6 +58,7 @@ export default function Select(props: SelectProps): JSX.Element {
   const [openedOptions, setOpenedOptions] = useState(false);
   const inputRef = useRef<HTMLDivElement>(null);
   const dropdownRef = useRef<HTMLUListElement>(null);
+  const divRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     window.addEventListener('click', handleClick);
@@ -131,15 +132,8 @@ export default function Select(props: SelectProps): JSX.Element {
             dropdownRef.current?.clientHeight &&
             dropdownRef.current?.scrollHeight > dropdownRef.current?.clientHeight
           ) {
-            const offset = 200;
-            const bodyRect = document.body.getBoundingClientRect().top;
-            const elementRect = item.getBoundingClientRect().top;
-            const elementPosition = elementRect - bodyRect;
-            const offsetPosition = elementPosition - offset;
-            window.scrollTo({
-              top: offsetPosition,
-              behavior: 'smooth',
-            });
+            item.scrollIntoView();
+            divRef.current?.focus();
             return;
           }
         }
@@ -148,7 +142,7 @@ export default function Select(props: SelectProps): JSX.Element {
   };
 
   return (
-    <div className={`select ${className}`}>
+    <div className={`select ${className}`} tabIndex={0}>
       {label && (
         <label htmlFor={id} className='textfield-label'>
           {label}
