@@ -133,7 +133,7 @@ export default function Select(props: SelectProps): JSX.Element {
             dropdownRef.current?.scrollHeight > dropdownRef.current?.clientHeight
           ) {
             item.scrollIntoView();
-            divRef.current?.focus();
+            divRef.current?.scrollIntoView();
             return;
           }
         }
