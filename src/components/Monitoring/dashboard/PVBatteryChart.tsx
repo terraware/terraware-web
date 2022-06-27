@@ -33,9 +33,6 @@ const useStyles = makeStyles((theme) =>
     chartContainer: {
       marginTop: '40px',
     },
-    chart: {
-      width: '800px',
-    },
     legendContainer: {
       marginBottom: '32px',
       padding: '0 78px 0 41px',
@@ -246,7 +243,7 @@ export default function PVBatteryChart(props: PVBatteryChartProps): JSX.Element 
       <div className={classes.chartContainer}>
         <div id='legend-container-pvbattery' className={classes.legendContainer} />
         <div className={classes.chartResizableParent}>
-          <canvas id='pvBatteryChart' ref={pvBatteryRef} className={classes.chart} />
+          <canvas id='pvBatteryChart' ref={pvBatteryRef} />
         </div>
       </div>
     </div>
