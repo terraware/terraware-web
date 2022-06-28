@@ -214,7 +214,6 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
             options={optionsForName}
             label={strings.SCIENTIFIC_NAME_REQUIRED}
             aria-label={strings.SCIENTIFIC_NAME_REQUIRED}
-            placeholder={strings.SELECT}
             readonly={false}
             fullWidth={true}
             warningText={
@@ -234,9 +233,8 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
             selectedValue={record.commonName}
             onChange={(value) => onChange('commonName', value)}
             options={optionsForCommonName}
-            label={strings.COMMON_OR_LOCAL_NAME}
-            aria-label={strings.COMMON_OR_LOCAL_NAME}
-            placeholder={strings.TYPE}
+            label={strings.COMMON_NAME}
+            aria-label={strings.COMMON_NAME}
             readonly={false}
             fullWidth={true}
             hideArrow={true}
@@ -250,7 +248,6 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
             label={strings.FAMILY}
             aria-label={strings.FAMILY}
             type={'text'}
-            placeholder={strings.TYPE}
           />
         </Grid>
         <Grid item xs={12}>
