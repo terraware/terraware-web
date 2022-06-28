@@ -80,8 +80,8 @@ export default function SeedBanksList({ organization }: SeedBanksListProps): JSX
     setTemporalSearchValue(value as string);
   };
 
-  const onKeyDownHandler = async (key: string) => {
-    if (key === 'Enter') {
+  useEffect(() => {
+    const refreshSearch = async () => {
       if (temporalSearchValue) {
         const params: SearchNodePayload = {
           prefix: 'projects.sites.facilities',
@@ -123,8 +123,9 @@ export default function SeedBanksList({ organization }: SeedBanksListProps): JSX
       } else {
         setResults(seedBanks);
       }
-    }
-  };
+    };
+    refreshSearch();
+  }, [temporalSearchValue, seedBanks, organization]);
 
   return (
     <TfMain>
@@ -148,7 +149,6 @@ export default function SeedBanksList({ organization }: SeedBanksListProps): JSX
             type='text'
             className={classes.searchField}
             onChange={onChangeSearch}
-            onKeyDown={onKeyDownHandler}
             value={temporalSearchValue}
           />
         </Grid>
