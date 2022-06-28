@@ -64,6 +64,11 @@ export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.El
   const [defaultSensor, setDefaultSensor] = useState<Device>();
 
   useEffect(() => {
+    setDefaultSensor(undefined);
+    setAvailableLocations([]);
+  }, [seedBank.id]);
+
+  useEffect(() => {
     if (defaultSensor && defaultTimePeriod) {
       return;
     }
