@@ -26,6 +26,9 @@ const useStyles = makeStyles((theme) =>
     mainContainer: {
       padding: '32px 0',
     },
+    verticalSpacing: {
+      marginTop: `${theme.spacing(1)}px`,
+    },
   })
 );
 
@@ -128,6 +131,7 @@ function Content({ organization }: AccessionPageProps): JSX.Element {
         <Grid container spacing={3}>
           <Grid item xs={3}>
             <DetailsMenu state={accession.state} />
+            <div className={classes.verticalSpacing} />
             <GerminationMenu accession={accession} />
           </Grid>
           <Grid item xs={9}>

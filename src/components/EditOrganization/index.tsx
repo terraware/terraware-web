@@ -159,6 +159,7 @@ export default function OrganizationView({ organization, reloadOrganizationData 
               onChange={onChangeCountry}
               options={countries?.map((country) => country.name)}
               selectedValue={getSelectedCountry()?.name}
+              fullWidth
             />
           </Grid>
           {getSelectedCountry()?.subdivisions && (
@@ -169,6 +170,7 @@ export default function OrganizationView({ organization, reloadOrganizationData 
                 onChange={onChangeSubdivision}
                 options={getSelectedCountry()?.subdivisions.map((subdivision) => subdivision.name)}
                 selectedValue={getSelectedSubdivision()?.name}
+                fullWidth
               />
             </Grid>
           )}
