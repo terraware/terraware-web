@@ -15,6 +15,8 @@ import { getAllSeedBanks } from 'src/utils/organization';
 import SeedBanksCellRenderer from './TableCellRenderer';
 import TextField from '../common/Textfield/Textfield';
 import { search, SearchNodePayload } from 'src/api/seeds/search';
+import useDebounce from 'src/utils/useDebounce';
+import { getRequestId, setRequestId } from 'src/utils/requestsId';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -55,6 +57,7 @@ export default function SeedBanksList({ organization }: SeedBanksListProps): JSX
   const history = useHistory();
   const [seedBanks, setSeedBanks] = useState<Facility[]>();
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
+  const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
   const [results, setResults] = useState<Facility[]>();
 
   useEffect(() => {
@@ -82,7 +85,7 @@ export default function SeedBanksList({ organization }: SeedBanksListProps): JSX
 
   useEffect(() => {
     const refreshSearch = async () => {
-      if (temporalSearchValue) {
+      if (debouncedSearchTerm) {
         const params: SearchNodePayload = {
           prefix: 'projects.sites.facilities',
           fields: ['id', 'name', 'description', 'type'],
@@ -92,8 +95,8 @@ export default function SeedBanksList({ organization }: SeedBanksListProps): JSX
               {
                 operation: 'or',
                 children: [
-                  { operation: 'field', field: 'name', type: 'Fuzzy', values: [temporalSearchValue] },
-                  { operation: 'field', field: 'description', type: 'Fuzzy', values: [temporalSearchValue] },
+                  { operation: 'field', field: 'name', type: 'Fuzzy', values: [debouncedSearchTerm] },
+                  { operation: 'field', field: 'description', type: 'Fuzzy', values: [debouncedSearchTerm] },
                 ],
               },
               { operation: 'field', field: 'type', type: 'Exact', values: ['Seed Bank'] },
@@ -107,6 +110,8 @@ export default function SeedBanksList({ organization }: SeedBanksListProps): JSX
           },
           count: 0,
         };
+        const requestId = Math.random().toString();
+        setRequestId('searchSeedbanks', requestId);
         const searchResults = await search(params);
         const seedBanksResults: Facility[] = [];
         searchResults?.forEach((result) => {
@@ -119,13 +124,17 @@ export default function SeedBanksList({ organization }: SeedBanksListProps): JSX
             connectionState: result.connectionState as 'Not Connected' | 'Connected' | 'Configured',
           });
         });
-        setResults(seedBanksResults);
+        if (getRequestId('searchSeedbanks') === requestId) {
+          setResults(seedBanksResults);
+        } else {
+          console.log(`Skipping search response for stale value ${debouncedSearchTerm}`);
+        }
       } else {
         setResults(seedBanks);
       }
     };
     refreshSearch();
-  }, [temporalSearchValue, seedBanks, organization]);
+  }, [debouncedSearchTerm, seedBanks, organization]);
 
   return (
     <TfMain>

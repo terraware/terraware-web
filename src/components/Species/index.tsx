@@ -29,6 +29,8 @@ import Pill from './Pill';
 import ImportSpeciesModal from './ImportSpeciesModal';
 import CheckDataModal from './CheckDataModal';
 import SpeciesCellRenderer from './TableCellRenderer';
+import useDebounce from 'src/utils/useDebounce';
+import { getRequestId, setRequestId } from 'src/utils/requestsId';
 
 type SpeciesListProps = {
   organization: ServerOrganization;
@@ -118,6 +120,7 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
   const setSnackbar = useSetRecoilState(snackbarAtom);
   const [speciesState, setSpeciesState] = useRecoilState(speciesAtom);
   const [searchValue, setSearchValue] = useState('');
+  const debouncedSearchTerm = useDebounce(searchValue, 250);
   const [results, setResults] = useState<Species[]>();
   const [record, setRecord] = useForm<SpeciesFiltersType>({});
   const [selectedColumns, setSelectedColumns] = useForm(columns);
@@ -161,13 +164,13 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
       count: 0,
     };
 
-    if (searchValue) {
+    if (debouncedSearchTerm) {
       const searchValueChildren: FieldNodePayload[] = [];
       const nameNode: FieldNodePayload = {
         operation: 'field',
         field: 'scientificName',
         type: 'Fuzzy',
-        values: [searchValue],
+        values: [debouncedSearchTerm],
       };
       searchValueChildren.push(nameNode);
 
@@ -175,7 +178,7 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
         operation: 'field',
         field: 'familyName',
         type: 'Fuzzy',
-        values: [searchValue],
+        values: [debouncedSearchTerm],
       };
       searchValueChildren.push(familyNode);
       params.search.children.push({
@@ -225,29 +228,33 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
     }
 
     return params;
-  }, [record, searchValue, organization.id]);
+  }, [record, debouncedSearchTerm, organization.id]);
 
   const onApplyFilters = useCallback(
     async (reviewErrors?: boolean) => {
       const params: SearchNodePayload = getParams();
       if (params.search.children.length > 1) {
         // organization id filter will always exist
+        const requestId = Math.random().toString();
+        setRequestId('searchSpecies', requestId);
         const searchResults = await search(params);
-        const speciesResults: Species[] = [];
-        searchResults?.forEach((result) => {
-          speciesResults.push({
-            id: result.id as number,
-            problems: result.problems as SpeciesProblemElement[],
-            scientificName: result.scientificName as string,
-            commonName: result.commonName as string,
-            familyName: result.familyName as string,
-            growthForm: result.growthForm as any,
-            seedStorageBehavior: result.seedStorageBehavior as any,
-            rare: result.rare as boolean,
-            endangered: result.endangered as boolean,
+        if (getRequestId('searchSpecies') === requestId) {
+          const speciesResults: Species[] = [];
+          searchResults?.forEach((result) => {
+            speciesResults.push({
+              id: result.id as number,
+              problems: result.problems as SpeciesProblemElement[],
+              scientificName: result.scientificName as string,
+              commonName: result.commonName as string,
+              familyName: result.familyName as string,
+              growthForm: result.growthForm as any,
+              seedStorageBehavior: result.seedStorageBehavior as any,
+              rare: result.rare as boolean,
+              endangered: result.endangered as boolean,
+            });
           });
-        });
-        setResults(speciesResults);
+          setResults(speciesResults);
+        }
       } else {
         setResults(species);
       }

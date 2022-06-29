@@ -5,6 +5,7 @@ import { createSpecies, getSpeciesDetails, listSpeciesNames, updateSpecies } fro
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
 import { GrowthForms, Species, SpeciesRequestError, StorageBehaviors } from 'src/types/Species';
+import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import useDebounce from 'src/utils/useDebounce';
 import useForm from 'src/utils/useForm';
 import Button from '../common/button/Button';
@@ -13,18 +14,6 @@ import DialogBox from '../common/DialogBox/DialogBox';
 import ErrorBox from '../common/ErrorBox/ErrorBox';
 import Select from '../common/Select/Select';
 import TextField from '../common/Textfield/Textfield';
-
-type RequestIds = {
-  [endpoint: string]: string;
-};
-
-const requestIds: RequestIds = {};
-
-const setRequestId = (key: string, id: string) => {
-  requestIds[key] = id || Math.random().toString();
-};
-
-const getRequestId = (key: string): string => requestIds[key] || '';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
