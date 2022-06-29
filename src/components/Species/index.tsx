@@ -118,7 +118,6 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
   const setSnackbar = useSetRecoilState(snackbarAtom);
   const [speciesState, setSpeciesState] = useRecoilState(speciesAtom);
   const [searchValue, setSearchValue] = useState('');
-  const [temporalSearchValue, setTemporalSearchValue] = useState('');
   const [results, setResults] = useState<Species[]>();
   const [record, setRecord] = useForm<SpeciesFiltersType>({});
   const [selectedColumns, setSelectedColumns] = useForm(columns);
@@ -308,13 +307,7 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
   };
 
   const onChangeSearch = (id: string, value: unknown) => {
-    setTemporalSearchValue(value as string);
-  };
-
-  const onKeyDownHandler = (key: string) => {
-    if (key === 'Enter') {
-      setSearchValue(temporalSearchValue);
-    }
+    setSearchValue(value as string);
   };
 
   const deleteSelectedSpecies = async () => {
@@ -468,8 +461,7 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
               type='text'
               className={classes.searchField}
               onChange={onChangeSearch}
-              onKeyDown={onKeyDownHandler}
-              value={temporalSearchValue}
+              value={searchValue}
             />
             <SpeciesFilters filters={record} setFilters={setRecord} />
             <IconButton onClick={downloadReportHandler} size='small' className={classes.iconContainer}>
