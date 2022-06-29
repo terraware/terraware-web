@@ -280,11 +280,11 @@ export default function PeopleList({ organization, reloadData, user }: PeopleLis
         </>
       )}
       <Grid container spacing={3}>
-        <Grid item xs={2}>
+        <Grid item xs={4}>
           <h1 className={classes.title}>{strings.PEOPLE}</h1>
           <p>{strings.PEOPLE_DESCRIPTION}</p>
         </Grid>
-        <Grid item xs={8} />
+        <Grid item xs={6} />
         <Grid item xs={2} className={classes.centered}>
           <Button id='new-person' label={strings.ADD_PERSON} onClick={goToNewPerson} size='medium' />
         </Grid>
