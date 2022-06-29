@@ -127,7 +127,7 @@ export default function SeedBanksList({ organization }: SeedBanksListProps): JSX
         if (getRequestId('searchSeedbanks') === requestId) {
           setResults(seedBanksResults);
         } else {
-          console.log(`Skipping search response for stale value ${debouncedSearchTerm}`);
+          console.log(`Skipping seed-bank search response for stale value ${debouncedSearchTerm}`);
         }
       } else {
         setResults(seedBanks);
