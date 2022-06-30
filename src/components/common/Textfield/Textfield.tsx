@@ -25,6 +25,7 @@ export interface Props {
   display?: boolean;
   type: TextfieldType;
   onKeyDown?: (key: string) => void;
+  onClickRightIcon?: () => void;
 }
 
 export default function TextField(props: Props): JSX.Element {
@@ -45,6 +46,7 @@ export default function TextField(props: Props): JSX.Element {
     display,
     type,
     onKeyDown,
+    onClickRightIcon,
   } = props;
 
   const textfieldClass = classNames({
@@ -83,7 +85,11 @@ export default function TextField(props: Props): JSX.Element {
               onChange={textfieldOnChange}
               onKeyDown={onKeyDownHandler}
             />
-            {iconRight && <Icon name={iconRight} className='textfield-value--icon-right' />}
+            {iconRight && (
+              <button onClick={onClickRightIcon} className='textfield-value--icon-container'>
+                <Icon name={iconRight} className='textfield-value--icon-right' />
+              </button>
+            )}
           </div>
         ) : (
           <textarea

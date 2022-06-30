@@ -8,6 +8,7 @@ import { ReactComponent as BlobbyIconSeedBank } from './blobby-icon-seed-bank.sv
 import { ReactComponent as BlobbyIconWrench } from './blobby-icon-wrench.svg';
 import { ReactComponent as Bug } from './bug.svg';
 import { ReactComponent as Calendar } from './calendar.svg';
+import { ReactComponent as Cancel } from './icon-cancel.svg';
 import { ReactComponent as CaretDown } from './caret-down.svg';
 import { ReactComponent as CaretLeft } from './caret-left.svg';
 import { ReactComponent as CaretUp } from './caret-up.svg';
@@ -67,6 +68,7 @@ export type IconName =
   | 'blobbyIconWrench'
   | 'bug'
   | 'calendar'
+  | 'cancel'
   | 'caretDown'
   | 'caretLeft'
   | 'caretUp'
@@ -131,6 +133,7 @@ const icons: Record<IconName, SVGComponent> = {
   blobbyIconWrench: BlobbyIconWrench,
   bug: Bug,
   calendar: Calendar,
+  cancel: Cancel,
   caretDown: CaretDown,
   caretLeft: CaretLeft,
   caretUp: CaretUp,

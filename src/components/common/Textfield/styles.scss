@@ -113,6 +113,11 @@
       }
     }
 
+    &--icon-container {
+      background: none;
+      border: 0;
+    }
+
     &--icon-right {
       width: $tw-fnt-frm-fld-text-value-line-height;
       height: $tw-fnt-frm-fld-text-value-line-height;
