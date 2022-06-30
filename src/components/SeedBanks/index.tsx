@@ -79,6 +79,10 @@ export default function SeedBanksList({ organization }: SeedBanksListProps): JSX
     history.push(newSeedBankLocation);
   };
 
+  const clearSearch = () => {
+    setTemporalSearchValue('');
+  };
+
   const onChangeSearch = (id: string, value: unknown) => {
     setTemporalSearchValue(value as string);
   };
@@ -159,6 +163,8 @@ export default function SeedBanksList({ organization }: SeedBanksListProps): JSX
             className={classes.searchField}
             onChange={onChangeSearch}
             value={temporalSearchValue}
+            iconRight='cancel'
+            onClickRightIcon={clearSearch}
           />
         </Grid>
         <Grid item xs={12}>
