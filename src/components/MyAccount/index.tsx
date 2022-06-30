@@ -33,14 +33,17 @@ const useStyles = makeStyles((theme) =>
       marginTop: 0,
       fontSize: '24px',
     },
-    mainContent: {
-      paddingTop: theme.spacing(4),
-    },
     centered: {
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'center',
       alignItems: 'flex-end',
+    },
+    organizationsHeading: {
+      marginBottom: 0,
+    },
+    editContainer: {
+      marginBottom: `${theme.spacing(8)}px`,
     },
   })
 );
@@ -264,12 +267,12 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
         </>
       )}
       <TfMain>
-        <Grid container spacing={3}>
-          <Grid item xs={2}>
+        <Grid container spacing={3} className={edit ? classes.editContainer : ''}>
+          <Grid item xs={4}>
             <h1 className={classes.title}>{strings.MY_ACCOUNT}</h1>
             <p>{strings.MY_ACCOUNT_DESC}</p>
           </Grid>
-          <Grid item xs={8} />
+          <Grid item xs={6} />
           <Grid item xs={2} className={classes.centered}>
             <Button
               id='edit-account'
@@ -333,10 +336,10 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
             <TfDivisor />
           </Grid>
           <Grid item xs={12}>
-            <h2>{dictionary.ORGANIZATIONS}</h2>
+            <h2 className={classes.organizationsHeading}>{dictionary.ORGANIZATIONS}</h2>
           </Grid>
           <Grid item xs={12}>
-            <div className={classes.mainContent}>
+            <div>
               <Grid container spacing={4}>
                 <Grid item xs={12}>
                   {organizations && (
