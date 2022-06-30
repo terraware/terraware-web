@@ -24,9 +24,6 @@ const useStyles = makeStyles((theme) =>
       marginTop: 0,
       fontSize: '24px',
     },
-    mainContent: {
-      paddingTop: theme.spacing(4),
-    },
     centered: {
       display: 'flex',
       flexDirection: 'column',
@@ -168,7 +165,7 @@ export default function SeedBanksList({ organization }: SeedBanksListProps): JSX
           />
         </Grid>
         <Grid item xs={12}>
-          <div className={classes.mainContent}>
+          <div>
             <Grid container spacing={4}>
               <Grid item xs={12}>
                 {seedBanks && (
