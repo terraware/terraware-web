@@ -12,6 +12,7 @@ import Select from '../common/Select/Select';
 import { Facility } from 'src/api/types/facilities';
 import SeedBankMonitoring from './SeedBankMonitoring';
 import Button from '../common/button/Button';
+import Title from '../common/Title';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -19,16 +20,10 @@ const useStyles = makeStyles((theme) =>
       display: 'flex',
       justifyContent: 'space-between',
     },
-    pageTitle: {
-      fontSize: '24px',
-      lineHeight: '32px',
-      fontWeight: 600,
-      margin: 0,
-    },
     message: {
       margin: '0 auto',
-      width: '50%',
       marginTop: '10%',
+      maxWidth: '800px',
     },
     titleContainer: {
       display: 'flex',
@@ -106,13 +101,15 @@ export default function Monitoring(props: MonitoringProps): JSX.Element {
     initializeSeedBank();
   }, [seedBankId, seedBanks, setActiveSeedBank]);
 
+  const getPageHeading = () => <Title page={strings.MONITORING} parentPage={strings.SEEDS} />;
+
   return (
-    <>
+    <TfMain>
       {hasSeedBanks ? (
-        <TfMain>
+        <>
           <div className={classes.mainTitle}>
             <div className={classes.titleContainer}>
-              <h1 className={classes.pageTitle}>{strings.MONITORING}</h1>
+              {getPageHeading()}
               <div className={classes.divider} />
               <p className={classes.seedBankLabel}>{strings.SEED_BANK}</p>
               <Select
@@ -128,22 +125,28 @@ export default function Monitoring(props: MonitoringProps): JSX.Element {
           {selectedSeedBank && (
             <SeedBankMonitoring seedBank={selectedSeedBank} organization={organization} reloadData={reloadData} />
           )}
-        </TfMain>
+        </>
       ) : isAdmin(organization) ? (
-        <EmptyMessage
-          className={classes.message}
-          title={emptyMessageStrings.NO_SEEDBANKS_ADMIN_TITLE}
-          text={emptyMessageStrings.NO_SEEDBANKS_MONITORING_ADMIN_MSG}
-          buttonText={strings.GO_TO_SEED_BANKS}
-          onClick={goToSeedBanks}
-        />
+        <>
+          {getPageHeading()}
+          <EmptyMessage
+            className={classes.message}
+            title={emptyMessageStrings.NO_SEEDBANKS_ADMIN_TITLE}
+            text={emptyMessageStrings.NO_SEEDBANKS_MONITORING_ADMIN_MSG}
+            buttonText={strings.GO_TO_SEED_BANKS}
+            onClick={goToSeedBanks}
+          />
+        </>
       ) : (
-        <EmptyMessage
-          className={classes.message}
-          title={emptyMessageStrings.NO_SEEDBANKS_NON_ADMIN_TITLE}
-          text={emptyMessageStrings.NO_SEEDBANKS_MONITORING_NON_ADMIN_MSG}
-        />
+        <>
+          {getPageHeading()}
+          <EmptyMessage
+            className={classes.message}
+            title={emptyMessageStrings.NO_SEEDBANKS_NON_ADMIN_TITLE}
+            text={emptyMessageStrings.NO_SEEDBANKS_MONITORING_NON_ADMIN_MSG}
+          />
+        </>
       )}
-    </>
+    </TfMain>
   );
 }

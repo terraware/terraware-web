@@ -78,8 +78,8 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     message: {
       margin: '0 auto',
-      width: '50%',
       marginTop: '10%',
+      maxWidth: '800px',
     },
     checkInText: {
       marginBottom: 0,
@@ -98,6 +98,9 @@ const useStyles = makeStyles((theme: Theme) =>
       position: 'fixed',
       top: '50%',
       left: 'calc(50% + 100px)',
+    },
+    buttonsContainer: {
+      marginBottom: theme.spacing(3),
     },
   })
 );
@@ -380,7 +383,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
           parentPage={strings.SEEDS}
           rightComponent={
             hasSeedBanks ? (
-              <div>
+              <div className={classes.buttonsContainer}>
                 <Button
                   id='edit-columns'
                   label={strings.ADD_COLUMNS}

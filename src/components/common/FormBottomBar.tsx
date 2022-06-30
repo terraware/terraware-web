@@ -33,8 +33,8 @@ export default function FormBottomBar({ onCancel, onSave }: Props): JSX.Element 
       style={{ top: 'auto', bottom: 0, right: 'auto' }}
       className={classes.bottomBar}
     >
-      <Button label='Cancel' onClick={onCancel} priority='secondary' type='passive' />
-      <Button label='Save' onClick={onSave} />
+      <Button size='medium' label='Cancel' onClick={onCancel} priority='secondary' type='passive' />
+      <Button size='medium' label='Save' onClick={onSave} />
     </AppBar>
   );
 }

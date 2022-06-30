@@ -170,8 +170,8 @@ export default function SpeciesFiltersPopover({ filters, setFilters }: SpeciesFi
             </Grid>
           </Grid>
           <div className={classes.footer}>
-            <Button label='Reset' onClick={onReset} size='small' priority='secondary' type='passive' />
-            <Button label='Done' onClick={onDone} size='small' />
+            <Button label='Reset' onClick={onReset} size='medium' priority='secondary' type='passive' />
+            <Button label='Done' onClick={onDone} size='medium' />
           </div>
         </div>
       </Popover>

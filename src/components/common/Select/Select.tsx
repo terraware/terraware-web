@@ -152,7 +152,7 @@ export default function Select(props: SelectProps): JSX.Element {
             onBlur={onBlur}
             onFocus={onFocus}
           />
-          {!hideArrow && <Icon name={'caretDown'} className='textfield-value--icon-right' />}
+          {!hideArrow && <Icon name={'chevronDown'} className='textfield-value--icon-right' />}
         </div>
         {options && options.length > 0 && openedOptions && (
           <ul className='options-container' ref={dropdownRef}>

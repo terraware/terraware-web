@@ -276,7 +276,13 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
       middleButtons={getMiddleButtons()}
       leftButton={
         warning ? (
-          <Button onClick={handleCancel} label={strings.CANCEL_IMPORT} priority='secondary' type='passive' />
+          <Button
+            onClick={handleCancel}
+            label={strings.CANCEL_IMPORT}
+            priority='secondary'
+            type='passive'
+            size='medium'
+          />
         ) : undefined
       }
       rightButtons={

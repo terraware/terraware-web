@@ -67,7 +67,8 @@
     }
 
     &:active {
-      border: $tw-sz-frm-fld-text-input-stroke-active solid $tw-clr-frm-fld-text-input-stroke-hover;
+      border: $tw-sz-frm-fld-text-input-stroke-active/2 solid $tw-clr-frm-fld-text-input-stroke-hover;
+      outline: $tw-sz-frm-fld-text-input-stroke-active/2 solid $tw-clr-frm-fld-text-input-stroke-hover;
     }
 
     input {
