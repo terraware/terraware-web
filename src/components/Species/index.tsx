@@ -313,6 +313,10 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
     setDeleteSpeciesModalOpen(true);
   };
 
+  const clearSearch = () => {
+    setSearchValue('');
+  };
+
   const onChangeSearch = (id: string, value: unknown) => {
     setSearchValue(value as string);
   };
@@ -469,6 +473,8 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
               className={classes.searchField}
               onChange={onChangeSearch}
               value={searchValue}
+              iconRight='cancel'
+              onClickRightIcon={clearSearch}
             />
             <SpeciesFilters filters={record} setFilters={setRecord} />
             <IconButton onClick={downloadReportHandler} size='small' className={classes.iconContainer}>
