@@ -42,9 +42,6 @@ const useStyles = makeStyles((theme) =>
     mainContent: {
       width: '100%',
     },
-    rightComponent: {
-      paddingTop: '32px',
-    },
   })
 );
 
@@ -134,7 +131,7 @@ export default function PageHeader({
               <Typography id='title' variant='h4' className={`${classes.pageTitle} ${titleClassName}`}>
                 {title || getPageHeading()}
               </Typography>
-              {!!rightComponent && <div className={classes.rightComponent}>{rightComponent}</div>}
+              {!!rightComponent && <div>{rightComponent}</div>}
             </Box>
             <Typography id='subtitle' variant='h6' className={classes.subtitle}>
               {subtitle}

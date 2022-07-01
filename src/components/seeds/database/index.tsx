@@ -99,9 +99,6 @@ const useStyles = makeStyles((theme: Theme) =>
       top: '50%',
       left: 'calc(50% + 100px)',
     },
-    buttonsContainer: {
-      marginBottom: theme.spacing(3),
-    },
   })
 );
 
@@ -383,7 +380,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
           parentPage={strings.SEEDS}
           rightComponent={
             hasSeedBanks ? (
-              <div className={classes.buttonsContainer}>
+              <>
                 <Button
                   id='edit-columns'
                   label={strings.ADD_COLUMNS}
@@ -405,7 +402,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
                 {organization && (
                   <Button label={strings.NEW_ACCESSION} onClick={goToNewAccession} size='medium' id='newAccession' />
                 )}
-              </div>
+              </>
             ) : undefined
           }
         >
