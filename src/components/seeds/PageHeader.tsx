@@ -42,9 +42,6 @@ const useStyles = makeStyles((theme) =>
     mainContent: {
       width: '100%',
     },
-    rightComponent: {
-      paddingTop: '32px',
-    },
   })
 );
 
@@ -85,20 +82,28 @@ export default function PageHeader({
   const history = useHistory();
   const location = useStateLocation();
 
+  const getPageHeading = () => {
+    if (page && parentPage) {
+      return (
+        <Title
+          page={page}
+          parentPage={parentPage}
+          organization={organization}
+          allowAll={allowAll}
+          selectedOrgInfo={selectedOrgInfo}
+          onChangeSelectedOrgInfo={onChangeSelectedOrgInfo}
+          showFacility={showFacility}
+        />
+      );
+    }
+  };
+
   return (
     <Container maxWidth={false} className={classes.mainContainer}>
       <Grid container spacing={0} className={classes.container}>
-        {page && parentPage && (
+        {page && parentPage && title && (
           <Grid item xs={12}>
-            <Title
-              page={page}
-              parentPage={parentPage}
-              organization={organization}
-              allowAll={allowAll}
-              selectedOrgInfo={selectedOrgInfo}
-              onChangeSelectedOrgInfo={onChangeSelectedOrgInfo}
-              showFacility={showFacility}
-            />
+            {getPageHeading()}
           </Grid>
         )}
         <Grid item xs={12} className={classes.flex}>
@@ -124,10 +129,9 @@ export default function PageHeader({
           <div className={classes.mainContent}>
             <Box display='flex' justifyContent='space-between' alignItems='center'>
               <Typography id='title' variant='h4' className={`${classes.pageTitle} ${titleClassName}`}>
-                {title}
+                {title || getPageHeading()}
               </Typography>
-
-              {!!rightComponent && <div className={classes.rightComponent}>{rightComponent}</div>}
+              {!!rightComponent && <div>{rightComponent}</div>}
             </Box>
             <Typography id='subtitle' variant='h6' className={classes.subtitle}>
               {subtitle}

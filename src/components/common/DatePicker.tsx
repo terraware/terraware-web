@@ -26,6 +26,7 @@ export interface Props {
   disabled?: boolean;
   className?: string;
   autocomplete?: string;
+  autoOk?: boolean;
 }
 
 export default function DatePicker(props: Props): JSX.Element {
@@ -66,6 +67,7 @@ export default function DatePicker(props: Props): JSX.Element {
       helperText={props.helperText}
       disabled={props.disabled}
       autoComplete={props.autocomplete}
+      autoOk={props.autoOk === undefined ? true : props.autoOk}
     />
   );
 }

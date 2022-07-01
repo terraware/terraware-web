@@ -1,4 +1,4 @@
-import { AppBar, Container, createStyles, Grid, makeStyles } from '@material-ui/core';
+import { Container, createStyles, Grid, makeStyles } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import strings from 'src/strings';
@@ -24,6 +24,7 @@ import { APP_PATHS } from 'src/constants';
 import dictionary from 'src/strings/dictionary';
 import RemovedProjectsWarningModal from './RemovedProjectsWarningModal';
 import InfoBox from '../common/InfoBox';
+import FormBottomBar from '../common/FormBottomBar';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -46,16 +47,6 @@ const useStyles = makeStyles((theme) =>
     },
     value: {
       fontSize: '16px',
-    },
-    bottomBar: {
-      filter: 'drop-shadow(0px 0px 8px rgba(0, 0, 0, 0.2))',
-      background: '#ffffff',
-      boxShadow: 'none',
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      display: 'flex',
-      padding: '16px 24px',
-      width: 'calc(100% - 200px)',
     },
     titleWithButton: {
       display: 'flex',
@@ -436,15 +427,7 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
           <Grid item xs={12} />
         </Grid>
       </Container>
-      <AppBar
-        position='fixed'
-        color='primary'
-        style={{ top: 'auto', bottom: 0, right: 'auto' }}
-        className={classes.bottomBar}
-      >
-        <Button label='Cancel' onClick={goToPeople} priority='secondary' type='passive' />
-        <Button label='Save' onClick={() => saveUser(false)} />
-      </AppBar>
+      <FormBottomBar onCancel={goToPeople} onSave={() => saveUser(false)} />
     </>
   );
 }

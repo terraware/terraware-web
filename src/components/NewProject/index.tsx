@@ -1,4 +1,4 @@
-import { AppBar, Container, createStyles, Grid, makeStyles } from '@material-ui/core';
+import { Container, createStyles, Grid, makeStyles } from '@material-ui/core';
 import { useEffect, useState } from 'react';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
@@ -28,6 +28,7 @@ import RemovedPeopleOrSitesModal from './RemovedPeopleOrSitesModal';
 import MoveSiteModal from './MoveSiteModal';
 import axios from 'axios';
 import { updateSite } from 'src/api/site/site';
+import FormBottomBar from '../common/FormBottomBar';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -50,16 +51,6 @@ const useStyles = makeStyles((theme) =>
     },
     value: {
       fontSize: '16px',
-    },
-    bottomBar: {
-      filter: 'drop-shadow(0px 0px 8px rgba(0, 0, 0, 0.2))',
-      background: '#ffffff',
-      boxShadow: 'none',
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      display: 'flex',
-      padding: '16px 24px',
-      width: 'calc(100% - 200px)',
     },
     titleWithButton: {
       display: 'flex',
@@ -520,15 +511,7 @@ export default function ProjectView({ organization, reloadOrganizationData }: Pr
           </Grid>
         )}
       </Container>
-      <AppBar
-        position='fixed'
-        color='primary'
-        style={{ top: 'auto', bottom: 0, right: 'auto' }}
-        className={classes.bottomBar}
-      >
-        <Button label='Cancel' onClick={goToProjects} priority='secondary' type='passive' />
-        <Button label='Save' onClick={saveProject} />
-      </AppBar>
+      <FormBottomBar onCancel={goToProjects} onSave={saveProject} />
     </MuiPickersUtilsProvider>
   );
 }

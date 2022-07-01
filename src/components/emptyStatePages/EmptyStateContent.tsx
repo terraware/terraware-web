@@ -133,13 +133,20 @@ export default function EmptyStateContent(props: EmptyStateContentProps): JSX.El
                 )}
               </div>
               {item.buttonText && item.onClickButton && (
-                <Button className={classes.subButton} label={item.buttonText} onClick={item.onClickButton} />
+                <Button
+                  size='medium'
+                  className={classes.subButton}
+                  label={item.buttonText}
+                  onClick={item.onClickButton}
+                />
               )}
             </div>
           );
         })}
       </div>
-      {buttonText && onClickButton && <Button className={classes.button} label={buttonText} onClick={onClickButton} />}
+      {buttonText && onClickButton && (
+        <Button size='medium' className={classes.button} label={buttonText} onClick={onClickButton} />
+      )}
       {footnote && (
         <div className={classes.footNote}>
           {footnote.map((note, index) => {

@@ -245,8 +245,9 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
             priority='secondary'
             type='passive'
             className={classes.spacing}
+            size='medium'
           />
-          <Button onClick={saveOrganization} id='saveSpecies' label={strings.CREATE} />
+          <Button onClick={saveOrganization} id='saveSpecies' label={strings.CREATE} size='medium' />
         </Box>
       </DialogActions>
     </Dialog>

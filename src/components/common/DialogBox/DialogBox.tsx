@@ -40,7 +40,11 @@ export default function DialogBox(props: Props): JSX.Element {
                 <div className='left-button'>{leftButton}</div>
                 <div className='right-buttons'>
                   {rightButtons?.map((rb, index) => {
-                    const rbWithKey = { ...rb, key: `rb-${index}` };
+                    const rbWithKey = {
+                      ...rb,
+                      key: `rb-${index}`,
+                      props: { ...rb.props, size: rb.props.size || 'medium' },
+                    };
 
                     return rbWithKey;
                   })}
@@ -50,7 +54,11 @@ export default function DialogBox(props: Props): JSX.Element {
             {middleButtons && (
               <div className='dialog-box--actions-container'>
                 {middleButtons?.map((mb, index) => {
-                  const mbWithKey = { ...mb, key: `mb-${index}` };
+                  const mbWithKey = {
+                    ...mb,
+                    key: `mb-${index}`,
+                    props: { ...mb.props, size: mb.props.size || 'medium' },
+                  };
 
                   return mbWithKey;
                 })}

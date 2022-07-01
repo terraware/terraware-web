@@ -1,3 +1,5 @@
+@use 'sass:math';
+
 @import './style-dictionary-dist/textfield_variables.scss';
 
 @font-face {
@@ -67,7 +69,8 @@
     }
 
     &:active {
-      border: $tw-sz-frm-fld-text-input-stroke-active solid $tw-clr-frm-fld-text-input-stroke-hover;
+      border: math.div($tw-sz-frm-fld-text-input-stroke-active, 2) solid $tw-clr-frm-fld-text-input-stroke-hover;
+      outline: math.div($tw-sz-frm-fld-text-input-stroke-active, 2) solid $tw-clr-frm-fld-text-input-stroke-hover;
     }
 
     input {

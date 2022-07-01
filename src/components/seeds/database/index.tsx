@@ -78,8 +78,8 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     message: {
       margin: '0 auto',
-      width: '50%',
       marginTop: '10%',
+      maxWidth: '800px',
     },
     checkInText: {
       marginBottom: 0,
@@ -380,7 +380,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
           parentPage={strings.SEEDS}
           rightComponent={
             hasSeedBanks ? (
-              <div>
+              <>
                 <Button
                   id='edit-columns'
                   label={strings.ADD_COLUMNS}
@@ -402,7 +402,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
                 {organization && (
                   <Button label={strings.NEW_ACCESSION} onClick={goToNewAccession} size='medium' id='newAccession' />
                 )}
-              </div>
+              </>
             ) : undefined
           }
         >
