@@ -66,7 +66,7 @@ export default function MultipleSelection(props: Props): JSX.Element {
   const indexNull = options.findIndex((o) => o.value === null);
   if (indexNull >= 0) {
     if (options.find((o) => o.value === null)) {
-      options.push({ label: 'None', value: null, disabled: false });
+      options.push({ label: 'Unspecified', value: null, disabled: false });
     }
     options.splice(indexNull, 1);
   }
