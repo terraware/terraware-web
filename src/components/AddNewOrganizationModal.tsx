@@ -1,9 +1,4 @@
-import { Box, Grid, Typography } from '@material-ui/core';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import { Box, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Theme, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { createOrganization } from 'src/api/organization/organization';
@@ -20,51 +15,50 @@ import { Country } from 'src/types/Country';
 import { getCountryByCode, getSubdivisionByCode } from 'src/utils/country';
 import { APP_PATHS } from '../constants';
 import { useHistory } from 'react-router';
+import { makeStyles } from '@mui/styles';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    mainModal: {
-      '& .MuiDialog-scrollPaper': {
-        '& .MuiDialog-paper': {
-          overflow: 'visible',
-        },
+const useStyles = makeStyles((theme: Theme) => ({
+  mainModal: {
+    '& .MuiDialog-scrollPaper': {
+      '& .MuiDialog-paper': {
+        overflow: 'visible',
       },
     },
-    submit: {
-      marginLeft: theme.spacing(2),
-      color: theme.palette.common.white,
-    },
-    actions: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      paddingLeft: theme.spacing(2),
-      paddingTop: theme.spacing(2),
-      paddingBottom: theme.spacing(3),
-    },
-    paper: {
-      minWidth: '515px',
-    },
-    container: {
-      border: `1px solid ${theme.palette.grey[400]}`,
-      borderRadius: '4px',
-      display: 'block',
-      padding: theme.spacing(1),
-    },
-    deleteSpecies: {
-      backgroundColor: theme.palette.common.white,
-      borderColor: theme.palette.secondary.main,
-      color: theme.palette.secondary.main,
-      borderWidth: 1,
-    },
-    spacing: {
-      marginRight: theme.spacing(2),
-    },
-    content: {
-      overflow: 'visible',
-    },
-  })
-);
+  },
+  submit: {
+    marginLeft: theme.spacing(2),
+    color: theme.palette.common.white,
+  },
+  actions: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingLeft: theme.spacing(2),
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(3),
+  },
+  paper: {
+    minWidth: '515px',
+  },
+  container: {
+    border: `1px solid ${theme.palette.grey[400]}`,
+    borderRadius: '4px',
+    display: 'block',
+    padding: theme.spacing(1),
+  },
+  deleteSpecies: {
+    backgroundColor: theme.palette.common.white,
+    borderColor: theme.palette.secondary.main,
+    color: theme.palette.secondary.main,
+    borderWidth: 1,
+  },
+  spacing: {
+    marginRight: theme.spacing(2),
+  },
+  content: {
+    overflow: 'visible',
+  },
+}));
 
 export type AddNewOrganizationModalProps = {
   open: boolean;

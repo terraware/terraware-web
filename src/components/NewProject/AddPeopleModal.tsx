@@ -1,9 +1,4 @@
-import { Grid, Typography } from '@material-ui/core';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import { Dialog, DialogActions, DialogContent, DialogTitle, Grid, Theme, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import strings from 'src/strings';
 import dictionary from 'src/strings/dictionary';
@@ -12,34 +7,33 @@ import Button from '../common/button/Button';
 import { OrganizationUser } from 'src/types/User';
 import { TableColumnType } from '../common/table/types';
 import Table from 'src/components/common/table';
+import { makeStyles } from '@mui/styles';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    title: {
-      textAlign: 'center',
-      paddingTop: '32px',
-      // Needed so that the title text doesn't overlap with the 'x' button
-      paddingRight: '50px',
+const useStyles = makeStyles((theme: Theme) => ({
+  title: {
+    textAlign: 'center',
+    paddingTop: '32px',
+    // Needed so that the title text doesn't overlap with the 'x' button
+    paddingRight: '50px',
+  },
+  actions: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: theme.spacing(4),
+  },
+  peopleModal: {
+    '& .MuiDialog-paper': {
+      minWidth: '720px',
+      minHeight: '232px',
     },
-    actions: {
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      padding: theme.spacing(4),
-    },
-    peopleModal: {
-      '& .MuiDialog-paper': {
-        minWidth: '720px',
-        minHeight: '232px',
-      },
-    },
-    emptyMessage: {
-      marginBottom: '30px',
-      textAlign: 'center',
-      width: '100%',
-    },
-  })
-);
+  },
+  emptyMessage: {
+    marginBottom: '30px',
+    textAlign: 'center',
+    width: '100%',
+  },
+}));
 
 export interface AddPeopleDialogProps {
   open: boolean;

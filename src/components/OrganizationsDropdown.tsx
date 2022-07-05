@@ -1,6 +1,5 @@
-import { List, ListItem, Popover } from '@material-ui/core';
-import IconButton from '@material-ui/core/IconButton';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { IconButton, List, ListItem, Popover } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import React, { useState } from 'react';
 import { useHistory } from 'react-router';
 import Icon from 'src/components/common/icon/Icon';
@@ -9,19 +8,17 @@ import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
 import AddNewOrganizationModal from './AddNewOrganizationModal';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    iconContainer: {
-      borderRadius: 0,
-      fontSize: '16px',
-      height: '48px',
-    },
-    icon: {
-      fill: '#3A4445',
-      marginLeft: '8px',
-    },
-  })
-);
+const useStyles = makeStyles(() => ({
+  iconContainer: {
+    borderRadius: 0,
+    fontSize: '16px',
+    height: '48px',
+  },
+  icon: {
+    fill: '#3A4445',
+    marginLeft: '8px',
+  },
+}));
 
 type OrganizationsDropdownProps = {
   organizations?: ServerOrganization[];

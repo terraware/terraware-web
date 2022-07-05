@@ -1,16 +1,15 @@
-import { createStyles, InputAdornment, makeStyles, TextField } from '@material-ui/core';
-import SearchIcon from '@material-ui/icons/Search';
+import { Search as SearchIcon } from '@mui/icons-material';
+import { InputAdornment, TextField, Theme } from '@mui/material';
 import React from 'react';
 import strings from 'src/strings';
 import { FieldNodePayload } from '../../../../api/seeds/search';
+import { makeStyles } from '@mui/styles';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    box: {
-      padding: theme.spacing(1.75),
-    },
-  })
-);
+const useStyles = makeStyles((theme: Theme) => ({
+  box: {
+    padding: theme.spacing(1.75),
+  },
+}));
 
 interface Props {
   field: string;

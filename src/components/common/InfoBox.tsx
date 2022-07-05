@@ -1,30 +1,28 @@
-import { createStyles, makeStyles } from '@material-ui/core';
 import React from 'react';
 import Icon from 'src/components/common/icon/Icon';
+import { makeStyles } from '@mui/styles';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    container: {
-      backgroundColor: '#F2F4F5',
-      border: '1px solid #708284',
-      borderRadius: '8px',
-      boxSizing: 'border-box',
-      display: 'flex',
-      margin: '12px auto',
-      width: '584px',
-    },
-    message: {
-      padding: '16px',
-      paddingLeft: 0,
-    },
-    iconContainer: {
-      padding: '18px',
-    },
-    iconBackground: {
-      fill: '#708284',
-    },
-  })
-);
+const useStyles = makeStyles(() => ({
+  container: {
+    backgroundColor: '#F2F4F5',
+    border: '1px solid #708284',
+    borderRadius: '8px',
+    boxSizing: 'border-box',
+    display: 'flex',
+    margin: '12px auto',
+    width: '584px',
+  },
+  message: {
+    padding: '16px',
+    paddingLeft: 0,
+  },
+  iconContainer: {
+    padding: '18px',
+  },
+  iconBackground: {
+    fill: '#708284',
+  },
+}));
 
 type InfoBoxProps = {
   message: string;

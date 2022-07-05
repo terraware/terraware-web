@@ -1,8 +1,6 @@
-import { Box, Chip, Collapse, createStyles, Grid, makeStyles, TableCell } from '@material-ui/core';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableRow from '@material-ui/core/TableRow';
-import CloseIcon from '@material-ui/icons/Close';
+import { Close } from '@mui/icons-material';
+import { Box, Chip, Collapse, Grid, Table, TableBody, TableCell, TableRow, Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import React from 'react';
 import { GerminationTest } from 'src/api/types/tests';
 import strings from 'src/strings';
@@ -12,40 +10,38 @@ import { descendingComparator, getComparator, Order, stableSort } from '../../co
 import { DetailsProps } from '../../common/table/types';
 import LabChart from './LabChart';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    hover: {
-      '&:hover': {
-        cursor: 'pointer',
-        backgroundColor: `${theme.palette.neutral[100]}!important`,
-      },
-    },
-    expander: {
-      color: theme.palette.primary.main,
-      textAlign: 'center',
+const useStyles = makeStyles((theme: Theme) => ({
+  hover: {
+    '&:hover': {
       cursor: 'pointer',
-      padding: theme.spacing(1),
-      fontWeight: theme.typography.fontWeightBold,
+      backgroundColor: `${theme.palette.neutral[100]}!important`,
     },
-    close: {
-      color: theme.palette.primary.main,
-      textAlign: 'right',
-      cursor: 'pointer',
-      paddingBottom: 0,
-      fontWeight: theme.typography.fontWeightBold,
-      border: 'none',
-    },
-    newEntry: {
-      marginTop: theme.spacing(3),
-      marginLeft: theme.spacing(2),
-      marginBottom: theme.spacing(2),
+  },
+  expander: {
+    color: theme.palette.primary.main,
+    textAlign: 'center',
+    cursor: 'pointer',
+    padding: theme.spacing(1),
+    fontWeight: theme.typography.fontWeightBold,
+  },
+  close: {
+    color: theme.palette.primary.main,
+    textAlign: 'right',
+    cursor: 'pointer',
+    paddingBottom: 0,
+    fontWeight: theme.typography.fontWeightBold,
+    border: 'none',
+  },
+  newEntry: {
+    marginTop: theme.spacing(3),
+    marginLeft: theme.spacing(2),
+    marginBottom: theme.spacing(2),
+    backgroundColor: theme.palette.neutral[700],
+    '&:hover': {
       backgroundColor: theme.palette.neutral[700],
-      '&:hover': {
-        backgroundColor: theme.palette.neutral[700],
-      },
     },
-  })
-);
+  },
+}));
 
 export default function EnhancedTableDetails<T>({
   accessionId,
@@ -129,7 +125,7 @@ export default function EnhancedTableDetails<T>({
               localStorage.setItem(`${accessionId}-lab-opened-entries`, JSON.stringify(prevOpens));
             }}
           >
-            <CloseIcon />
+            <Close />
           </TableCell>
         </TableRow>
       )}

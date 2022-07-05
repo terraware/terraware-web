@@ -1,17 +1,15 @@
-import { Box, Typography } from '@material-ui/core';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { Box, Theme, Typography } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import React from 'react';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    note: {
-      borderRadius: 8,
-      backgroundColor: theme.palette.neutral[200],
-      marginBottom: theme.spacing(3),
-      padding: theme.spacing(2),
-    },
-  })
-);
+const useStyles = makeStyles((theme: Theme) => ({
+  note: {
+    borderRadius: 8,
+    backgroundColor: theme.palette.neutral[200],
+    marginBottom: theme.spacing(3),
+    padding: theme.spacing(2),
+  },
+}));
 
 export interface Props {
   children: string;

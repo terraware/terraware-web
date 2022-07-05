@@ -1,5 +1,5 @@
 /* eslint-disable import/no-webpack-loader-syntax */
-import { CircularProgress, createStyles, CssBaseline, makeStyles } from '@material-ui/core';
+import { CircularProgress, CssBaseline } from '@mui/material';
 import mapboxgl from 'mapbox-gl';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
@@ -56,34 +56,33 @@ import Monitoring from './components/Monitoring';
 import SeedBanks from './components/SeedBanks';
 import NewSeedBank from './components/NewSeedBank';
 import SeedBankDetails from './components/SeedBank';
+import { makeStyles } from '@mui/styles';
 
 // @ts-ignore
 mapboxgl.workerClass =
   // tslint:disable-next-line: no-var-requires
   require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker').default;
 
-const useStyles = makeStyles(() =>
-  createStyles({
-    content: {
-      marginLeft: '200px',
-      height: '100%',
-      paddingTop: '64px',
-      overflow: 'auto',
+const useStyles = makeStyles(() => ({
+  content: {
+    marginLeft: '200px',
+    height: '100%',
+    paddingTop: '64px',
+    overflow: 'auto',
+  },
+  spinner: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    textAlign: 'center',
+    margin: 'auto',
+    minHeight: '100vh',
+    '& .MuiCircularProgress-svg': {
+      color: '#007DF2',
+      height: '193px',
     },
-    spinner: {
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      textAlign: 'center',
-      margin: 'auto',
-      minHeight: '100vh',
-      '& .MuiCircularProgress-svg': {
-        color: '#007DF2',
-        height: '193px',
-      },
-    },
-  })
-);
+  },
+}));
 
 enum APIRequestStatus {
   'AWAITING',

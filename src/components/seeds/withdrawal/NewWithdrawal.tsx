@@ -1,13 +1,19 @@
-import MomentUtils from '@date-io/moment';
-import { Box, Chip, Grid, InputAdornment, Link, Typography } from '@material-ui/core';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import {
+  Dialog,
+  DialogTitle,
+  Typography,
+  DialogContent,
+  Grid,
+  InputAdornment,
+  DialogActions,
+  Box,
+  Chip,
+  Theme,
+} from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import moment from 'moment';
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { AccessionWithdrawal } from 'src/api/types/accessions';
 import strings from 'src/strings';
 import preventDefault from 'src/utils/preventDefaultEvent';
@@ -23,24 +29,24 @@ import TextArea from '../../common/TextArea';
 import TextField from '../../common/TextField';
 import { FieldError } from '../newAccession';
 import { Unit, WEIGHT_UNITS } from '../nursery/NewTest';
+import { LocalizationProvider } from '@mui/lab';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    submit: {
-      marginLeft: theme.spacing(2),
-      color: theme.palette.common.white,
-    },
-    actions: {
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      paddingLeft: theme.spacing(2),
-    },
-    paper: {
-      minWidth: '650px',
-    },
-  })
-);
+const useStyles = makeStyles((theme: Theme) => ({
+  submit: {
+    marginLeft: theme.spacing(2),
+    color: theme.palette.common.white,
+  },
+  actions: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingLeft: theme.spacing(2),
+  },
+  paper: {
+    minWidth: '650px',
+  },
+}));
 
 export interface Props {
   allowWithdrawalInGrams: boolean;
@@ -211,7 +217,7 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
         <DialogCloseButton onClick={handleCancel} />
       </DialogTitle>
       <DialogContent dividers>
-        <MuiPickersUtilsProvider utils={MomentUtils}>
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
           <Grid container spacing={4}>
             <Grid item xs={12}>
               <SummaryBox
@@ -351,12 +357,13 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
               />
             </Grid>
           </Grid>
-        </MuiPickersUtilsProvider>
+        </LocalizationProvider>
       </DialogContent>
       <DialogActions>
         <Box width={record.id && '100%'} className={classes.actions}>
           {record.id && (
             <Link
+              to=''
               id='delete-withdrawn-button'
               color='secondary'
               href='#'

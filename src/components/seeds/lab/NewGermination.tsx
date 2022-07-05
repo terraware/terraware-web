@@ -1,13 +1,19 @@
-import MomentUtils from '@date-io/moment';
-import { Box, Chip, Grid, InputAdornment, Link, Typography } from '@material-ui/core';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import {
+  Dialog,
+  DialogTitle,
+  Typography,
+  DialogContent,
+  Grid,
+  InputAdornment,
+  DialogActions,
+  Box,
+  Chip,
+  Theme,
+} from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import moment from 'moment';
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Germination } from 'src/api/types/tests';
 import strings from 'src/strings';
 import preventDefault from 'src/utils/preventDefaultEvent';
@@ -16,24 +22,24 @@ import CancelButton from '../../common/CancelButton';
 import DatePicker from '../../common/DatePicker';
 import DialogCloseButton from '../../common/DialogCloseButton';
 import TextField from '../../common/TextField';
+import { LocalizationProvider } from '@mui/lab';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    submit: {
-      marginLeft: theme.spacing(2),
-      color: theme.palette.common.white,
-    },
-    actions: {
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      paddingLeft: theme.spacing(2),
-    },
-    adornment: {
-      marginRight: theme.spacing(1),
-    },
-  })
-);
+const useStyles = makeStyles((theme: Theme) => ({
+  submit: {
+    marginLeft: theme.spacing(2),
+    color: theme.palette.common.white,
+  },
+  actions: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingLeft: theme.spacing(2),
+  },
+  adornment: {
+    marginRight: theme.spacing(1),
+  },
+}));
 
 export interface Props {
   value?: Germination;
@@ -78,7 +84,7 @@ export default function NewGermination(props: Props): JSX.Element {
         <DialogCloseButton onClick={handleCancel} />
       </DialogTitle>
       <DialogContent dividers>
-        <MuiPickersUtilsProvider utils={MomentUtils}>
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
           <Grid container spacing={4}>
             <Grid item xs={12}>
               <TextField
@@ -104,7 +110,7 @@ export default function NewGermination(props: Props): JSX.Element {
               />
             </Grid>
           </Grid>
-        </MuiPickersUtilsProvider>
+        </LocalizationProvider>
       </DialogContent>
       <DialogActions>
         <Box width={props.value && '100%'} className={classes.actions}>
@@ -117,6 +123,7 @@ export default function NewGermination(props: Props): JSX.Element {
                 preventDefault(event);
                 onDelete(record);
               }}
+              to=''
             >
               <Typography component='p' variant='body2'>
                 {strings.DELETE}

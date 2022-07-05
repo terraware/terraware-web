@@ -1,15 +1,12 @@
-import { Checkbox, createStyles, makeStyles, Theme } from '@material-ui/core';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import TableSortLabel from '@material-ui/core/TableSortLabel';
-import DragIndicatorIcon from '@material-ui/icons/DragIndicator';
+import { DragIndicator } from '@mui/icons-material';
+import { Checkbox, TableCell, TableHead, TableRow, TableSortLabel, Theme } from '@mui/material';
 import React from 'react';
 import { SortableContainer, SortableElement, SortableHandle } from 'react-sortable-hoc';
 import { Order } from './sort';
 import { TableColumnType } from './types';
+import { makeStyles } from '@mui/styles';
 
-const dragIconStyles = makeStyles((theme) => ({
+const dragIconStyles = makeStyles((theme: Theme) => ({
   root: {
     marginLeft: -20,
     color: theme.palette.common.white,
@@ -19,13 +16,11 @@ const dragIconStyles = makeStyles((theme) => ({
   },
 }));
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    headcell: {
-      background: theme.palette.common.white,
-    },
-  })
-);
+const useStyles = makeStyles((theme: Theme) => ({
+  headcell: {
+    background: theme.palette.common.white,
+  },
+}));
 
 interface Props {
   onRequestSort: (event: React.MouseEvent<unknown>, property: string) => void;
@@ -110,7 +105,7 @@ export default function EnhancedTableHead(props: Props): JSX.Element {
   );
 }
 
-const DragHandle = SortableHandle(() => <DragIndicatorIcon fontSize='small' classes={dragIconStyles()} />);
+const DragHandle = SortableHandle(() => <DragIndicator fontSize='small' classes={dragIconStyles()} />);
 
 const SortableHead = SortableContainer(({ children }: { children: React.ReactNode }) => {
   return <TableHead>{children}</TableHead>;

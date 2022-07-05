@@ -1,4 +1,4 @@
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@mui/styles';
 import React, { useEffect, useState } from 'react';
 import strings from 'src/strings';
 import { Facility } from 'src/api/types/facilities';
@@ -7,13 +7,11 @@ import TextField from '../../common/Textfield/Textfield';
 import FlowStep, { FlowError } from './FlowStep';
 import { listDeviceManagers } from 'src/api/deviceManager/deviceManager';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    sensorKitId: {
-      width: '432px',
-    },
-  })
-);
+const useStyles = makeStyles(() => ({
+  sensorKitId: {
+    width: '432px',
+  },
+}));
 
 type SensorKitIDProps = {
   seedBank: Facility;

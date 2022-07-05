@@ -1,11 +1,16 @@
-import MomentUtils from '@date-io/moment';
-import { Box, Chip, Grid, InputAdornment, Link, Typography } from '@material-ui/core';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import {
+  Box,
+  Chip,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Grid,
+  InputAdornment,
+  Link,
+  Theme,
+  Typography,
+} from '@mui/material';
 import React from 'react';
 import { GerminationTest } from 'src/api/types/tests';
 import strings from 'src/strings';
@@ -20,24 +25,25 @@ import TextArea from '../../common/TextArea';
 import TextField from '../../common/TextField';
 import { FieldError } from '../newAccession';
 import { WEIGHT_UNITS } from '../nursery/NewTest';
+import { LocalizationProvider } from '@mui/lab';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { makeStyles } from '@mui/styles';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    submit: {
-      marginLeft: theme.spacing(2),
-      color: theme.palette.common.white,
-    },
-    actions: {
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      paddingLeft: theme.spacing(2),
-    },
-    adornment: {
-      marginRight: theme.spacing(1),
-    },
-  })
-);
+const useStyles = makeStyles((theme: Theme) => ({
+  submit: {
+    marginLeft: theme.spacing(2),
+    color: theme.palette.common.white,
+  },
+  actions: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingLeft: theme.spacing(2),
+  },
+  adornment: {
+    marginRight: theme.spacing(1),
+  },
+}));
 
 export interface Props {
   value?: GerminationTest;
@@ -159,7 +165,7 @@ export default function NewTestDialog(props: Props): JSX.Element {
         <DialogCloseButton onClick={handleCancel} />
       </DialogTitle>
       <DialogContent dividers>
-        <MuiPickersUtilsProvider utils={MomentUtils}>
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
           <Grid container spacing={4}>
             <Grid item xs={6}>
               <DatePicker
@@ -306,7 +312,7 @@ export default function NewTestDialog(props: Props): JSX.Element {
               />
             </Grid>
           </Grid>
-        </MuiPickersUtilsProvider>
+        </LocalizationProvider>
       </DialogContent>
       <DialogActions>
         <Box width={record?.id && '100%'} className={classes.actions}>

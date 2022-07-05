@@ -1,5 +1,5 @@
-import { Link, Typography } from '@material-ui/core';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { Link, Theme, Typography } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import React from 'react';
 import { Link as RouterLink, useHistory, useParams, useRouteMatch } from 'react-router-dom';
 import { Accession } from 'src/api/types/accessions';
@@ -10,17 +10,15 @@ import strings from 'src/strings';
 import useStateLocation from 'src/utils/useStateLocation';
 import Divisor from '../../common/Divisor';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    bold: {
-      fontWeight: theme.typography.fontWeightBold,
-      color: theme.palette.common.black,
-    },
-    link: {
-      color: theme.palette.common.black,
-    },
-  })
-);
+const useStyles = makeStyles((theme: Theme) => ({
+  bold: {
+    fontWeight: theme.typography.fontWeightBold,
+    color: theme.palette.common.black,
+  },
+  link: {
+    color: theme.palette.common.black,
+  },
+}));
 
 interface Props {
   accession: Accession;

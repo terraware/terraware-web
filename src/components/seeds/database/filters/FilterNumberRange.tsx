@@ -1,21 +1,20 @@
-import { createStyles, Grid, makeStyles } from '@material-ui/core';
-import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
+import { Grid, Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import React from 'react';
 import TextField from '../../../common/TextField';
 import { FieldNodePayload } from '../../../../api/seeds/search';
+import { ArrowForward } from '@mui/icons-material';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    box: {
-      padding: theme.spacing(1.75),
-    },
-    flexContainer: {
-      alignItems: 'center',
-      display: 'flex',
-      justifyContent: 'center',
-    },
-  })
-);
+const useStyles = makeStyles((theme: Theme) => ({
+  box: {
+    padding: theme.spacing(1.75),
+  },
+  flexContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    justifyContent: 'center',
+  },
+}));
 
 interface Props {
   field: string;
@@ -70,7 +69,7 @@ export default function NumberRange(props: Props): JSX.Element {
           <TextField id='minValue' value={minValue} onChange={onChange} label='Min' onKeyPress={(e) => onEnter(e)} />
         </Grid>
         <Grid item xs={1} className={classes.flexContainer}>
-          <ArrowForwardIcon />
+          <ArrowForward />
         </Grid>
         <Grid item xs={5}>
           <TextField id='maxValue' value={maxValue} onChange={onChange} label='Max' onKeyPress={(e) => onEnter(e)} />

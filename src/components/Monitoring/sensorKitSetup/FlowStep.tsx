@@ -1,5 +1,5 @@
-import { createStyles, makeStyles } from '@material-ui/core/styles';
-import { Grid } from '@material-ui/core';
+import { makeStyles } from '@mui/styles';
+import { Grid, Theme } from '@mui/material';
 import React from 'react';
 import strings from 'src/strings';
 import Button from 'src/components/common/button/Button';
@@ -7,43 +7,41 @@ import Expandable from '../../common/Expandable';
 import Icon from '../../common/icon/Icon';
 import ErrorBox from '../../common/ErrorBox/ErrorBox';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    setupTitle: {
-      fontWeight: 'bold',
-      fontSize: '18px',
-      lineHeight: '28px',
-    },
-    flowContent: {
-      padding: `${theme.spacing(2)}px`,
-    },
-    flowFooter: {
-      display: 'flex',
-      marginTop: `${theme.spacing(2)}px`,
-      justifyContent: 'space-between',
-      alignItems: 'end',
-    },
-    flowFooterError: {
-      alignItems: 'center',
-    },
-    icon: {
-      marginRight: `${theme.spacing(1)}px`,
-    },
-    titleContainer: {
-      display: 'flex',
-      alignItems: 'center',
-    },
-    gridItem: {
-      display: 'flex',
-      justifyContent: 'center',
-      marginBottom: `${theme.spacing(2)}px`,
-    },
-    errorBox: {
-      width: '100%',
-      marginBottom: `${theme.spacing(2)}px`,
-    },
-  })
-);
+const useStyles = makeStyles((theme: Theme) => ({
+  setupTitle: {
+    fontWeight: 'bold',
+    fontSize: '18px',
+    lineHeight: '28px',
+  },
+  flowContent: {
+    padding: `${theme.spacing(2)}px`,
+  },
+  flowFooter: {
+    display: 'flex',
+    marginTop: `${theme.spacing(2)}px`,
+    justifyContent: 'space-between',
+    alignItems: 'end',
+  },
+  flowFooterError: {
+    alignItems: 'center',
+  },
+  icon: {
+    marginRight: `${theme.spacing(1)}px`,
+  },
+  titleContainer: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  gridItem: {
+    display: 'flex',
+    justifyContent: 'center',
+    marginBottom: `${theme.spacing(2)}px`,
+  },
+  errorBox: {
+    width: '100%',
+    marginBottom: `${theme.spacing(2)}px`,
+  },
+}));
 
 export type FlowError = {
   title?: string;

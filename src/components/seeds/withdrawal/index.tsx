@@ -1,8 +1,5 @@
-import MomentUtils from '@date-io/moment';
-import { Chip, Grid, Typography } from '@material-ui/core';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
-import AddIcon from '@material-ui/icons/Add';
-import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import { Chip, Grid, Theme, Typography } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import React from 'react';
 import { Accession, AccessionWithdrawal } from 'src/api/types/accessions';
 import MainPaper from 'src/components/MainPaper';
@@ -17,29 +14,30 @@ import { TableColumnType } from '../../common/table/types';
 import InfoModal from './InfoModal';
 import NewWithdrawal from './NewWithdrawal';
 import WithdrawalCellRenderer from './TableCellRenderer';
+import { Add } from '@mui/icons-material';
+import { LocalizationProvider } from '@mui/lab';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    mainContainer: {
-      paddingBottom: theme.spacing(4),
-    },
-    bold: {
-      fontWeight: theme.typography.fontWeightBold,
-    },
-    right: {
-      marginLeft: 'auto',
-    },
-    greenChip: {
-      color: theme.palette.common.white,
-    },
-    grayChip: {
-      backgroundColor: theme.palette.neutral[500],
-      color: theme.palette.common.white,
-    },
-  })
-);
+const useStyles = makeStyles((theme: Theme) => ({
+  mainContainer: {
+    paddingBottom: theme.spacing(4),
+  },
+  bold: {
+    fontWeight: theme.typography.fontWeightBold,
+  },
+  right: {
+    marginLeft: 'auto',
+  },
+  greenChip: {
+    color: theme.palette.common.white,
+  },
+  grayChip: {
+    backgroundColor: theme.palette.neutral[500],
+    color: theme.palette.common.white,
+  },
+}));
 
-const newWithdrawalChipStyles = makeStyles((theme) => ({
+const newWithdrawalChipStyles = makeStyles((theme: Theme) => ({
   root: {
     color: theme.palette.common.white,
   },
@@ -130,7 +128,7 @@ export default function WithdrawalView({ accession, onSubmit }: Props): JSX.Elem
 
   return (
     <main>
-      <MuiPickersUtilsProvider utils={MomentUtils}>
+      <LocalizationProvider dateAdapter={AdapterDateFns}>
         <NewWithdrawal
           open={open}
           onClose={onCloseModal}
@@ -201,7 +199,7 @@ export default function WithdrawalView({ accession, onSubmit }: Props): JSX.Elem
                 label={strings.NEW_WITHDRAWAL}
                 clickable={seedsAvailable > 0}
                 disabled={seedsAvailable <= 0}
-                deleteIcon={<AddIcon classes={newWithdrawalChipStyles()} />}
+                deleteIcon={<Add classes={newWithdrawalChipStyles()} />}
                 color={seedsAvailable > 0 ? 'primary' : undefined}
                 onClick={seedsAvailable > 0 ? onNewWithdrawal : undefined}
                 onDelete={onNewWithdrawal}
@@ -209,7 +207,7 @@ export default function WithdrawalView({ accession, onSubmit }: Props): JSX.Elem
             </Grid>
           </Grid>
         </MainPaper>
-      </MuiPickersUtilsProvider>
+      </LocalizationProvider>
     </main>
   );
 }

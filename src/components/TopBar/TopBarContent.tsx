@@ -1,4 +1,5 @@
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import React from 'react';
 import { Notifications } from 'src/types/Notifications';
 import { ServerOrganization } from 'src/types/Organization';
@@ -7,17 +8,15 @@ import NotificationsDropdown from '../NotificationsDropdown';
 import OrganizationsDropdown from '../OrganizationsDropdown';
 import UserMenu from '../UserMenu';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    separator: {
-      width: '1px',
-      height: '32px',
-      backgroundColor: theme.palette.gray[200],
-      marginRight: '16px',
-      marginLeft: '16px',
-    },
-  })
-);
+const useStyles = makeStyles((theme: Theme) => ({
+  separator: {
+    width: '1px',
+    height: '32px',
+    backgroundColor: theme.palette.gray[200],
+    marginRight: '16px',
+    marginLeft: '16px',
+  },
+}));
 
 type TopBarProps = {
   notifications?: Notifications;

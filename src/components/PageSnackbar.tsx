@@ -1,92 +1,91 @@
-import { Snackbar, Typography } from '@material-ui/core';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import { Snackbar, Typography } from '@mui/material';
+import { Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import { useRecoilState } from 'recoil';
 import { snackbarAtoms } from 'src/state/snackbar';
 import Icon from './common/icon/Icon';
-import CloseIcon from '@material-ui/icons/Close';
 import { useEffect } from 'react';
+import { Close } from '@mui/icons-material';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    mainSnackbar: {
-      '&.MuiSnackbar-anchorOriginTopCenter': {
-        top: '0px',
-      },
-      '&.MuiSnackbar-root': {
-        position: 'relative',
-        margin: '32px 0px',
-        zIndex: 0,
+const useStyles = makeStyles((theme: Theme) => ({
+  mainSnackbar: {
+    '&.MuiSnackbar-anchorOriginTopCenter': {
+      top: '0px',
+    },
+    '&.MuiSnackbar-root': {
+      position: 'relative',
+      margin: '32px 0px',
+      zIndex: 0,
+    },
+  },
+  mainContainer: {
+    display: 'flex',
+    backgroundColor: '#ffffff',
+  },
+  page: {
+    width: '584px',
+    borderRadius: '8px',
+    '&.bodyinfo': {
+      border: '1px solid #708284',
+      background: '#F2F4F5',
+      '& .snackbarIcon': {
+        fill: '#708284',
       },
     },
-    mainContainer: {
-      display: 'flex',
-      backgroundColor: '#ffffff',
-    },
-    page: {
-      width: '584px',
-      borderRadius: '8px',
-      '&.bodyinfo': {
-        border: '1px solid #708284',
-        background: '#F2F4F5',
-        '& .snackbarIcon': {
-          fill: '#708284',
-        },
-      },
-      '&.bodycritical': {
-        border: '1px solid #FE0003',
-        background: '#FFF1F1',
-        '& .snackbarIcon': {
-          fill: '#FE0003',
-        },
-      },
-      '&.bodywarning': {
-        border: '1px solid #BD6931',
-        background: '#FEF2EE',
-        '& .snackbarIcon': {
-          fill: '#BD6931',
-        },
-      },
-      '&.bodysuccess': {
-        border: '1px solid #308F5F',
-        background: '#D6FDE5',
-        '& .snackbarIcon': {
-          fill: '#308F5F',
-        },
-      },
-      '& .body': {
-        padding: '16px 16px 16px 0',
+    '&.bodycritical': {
+      border: '1px solid #FE0003',
+      background: '#FFF1F1',
+      '& .snackbarIcon': {
+        fill: '#FE0003',
       },
     },
-    body: {
-      fontSize: '16px',
-      fontWeight: 400,
-      lineHeight: '24px',
-      color: '#3A4445',
-    },
-    snackbarTitle: {
-      fontSize: '16px',
-      fontWeight: 600,
-      lineHeight: '24px',
-      color: '#3A4445',
-      marginBottom: '8px',
-    },
-    iconContainer: {
-      borderRadius: '14px 0 0 14px',
-      padding: '16px',
-      '& svg': {
-        width: '24px',
-        height: '24px',
+    '&.bodywarning': {
+      border: '1px solid #BD6931',
+      background: '#FEF2EE',
+      '& .snackbarIcon': {
+        fill: '#BD6931',
       },
     },
-    closeIconContainer: {
-      cursor: 'pointer',
-      display: 'flex',
-      flexGrow: 1,
-      justifyContent: 'flex-end',
-      padding: '10px',
+    '&.bodysuccess': {
+      border: '1px solid #308F5F',
+      background: '#D6FDE5',
+      '& .snackbarIcon': {
+        fill: '#308F5F',
+      },
     },
-  })
-);
+    '& .body': {
+      padding: '16px 16px 16px 0',
+    },
+  },
+  body: {
+    fontSize: '16px',
+    fontWeight: 400,
+    lineHeight: '24px',
+    color: '#3A4445',
+  },
+  snackbarTitle: {
+    fontSize: '16px',
+    fontWeight: 600,
+    lineHeight: '24px',
+    color: '#3A4445',
+    marginBottom: '8px',
+  },
+  iconContainer: {
+    borderRadius: '14px 0 0 14px',
+    padding: '16px',
+    '& svg': {
+      width: '24px',
+      height: '24px',
+    },
+  },
+  closeIconContainer: {
+    cursor: 'pointer',
+    display: 'flex',
+    flexGrow: 1,
+    justifyContent: 'flex-end',
+    padding: '10px',
+  },
+}));
 
 export default function PageSnackbarMessage(): JSX.Element {
   const classes = useStyles();
@@ -147,7 +146,7 @@ export default function PageSnackbarMessage(): JSX.Element {
           </Typography>
         </div>
         <div className={classes.closeIconContainer} onClick={clearSnackbar}>
-          <CloseIcon />
+          <Close />
         </div>
       </div>
     </Snackbar>

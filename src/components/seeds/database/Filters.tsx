@@ -1,6 +1,6 @@
-import { Chip, Container, Divider, Link, Popover, Typography } from '@material-ui/core';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
-import ArrowDropDown from '@material-ui/icons/ArrowDropDown';
+import { ArrowDropDown } from '@mui/icons-material';
+import { Chip, Container, Divider, Link, Popover, Theme, Typography } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import React from 'react';
 import { FieldNodePayload, FieldValuesPayload, OrNodePayload, SearchNodePayload } from 'src/api/seeds/search';
 import strings from 'src/strings';
@@ -13,46 +13,44 @@ import FilterNumberRange from './filters/FilterNumberRange';
 import Search from './filters/FilterSearch';
 import SingleSelection from './filters/FilterSingleSelection';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    mainContainer: {
-      margin: theme.spacing(2, 0, 0, 0),
-      padding: theme.spacing(0),
-      display: 'flex',
-    },
-    pill: {
-      margin: theme.spacing(0, 1.5, 0, 0),
-      height: '32px',
-      display: 'inline-block',
-    },
-    stateBox: {
-      width: '264px',
-      padding: theme.spacing(1.75),
-    },
-    stateItem: {
-      display: 'flex',
-      alignItems: 'center',
-    },
-    mainTitle: {
-      display: 'flex',
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      padding: theme.spacing(1, 3),
-      backgroundColor: theme.palette.common.white,
-    },
-    link: {
-      paddingTop: '6px',
-    },
-    selectedFilter: {
-      border: `2px solid ${theme.palette.neutral[600]}`,
-    },
-    filtersContainer: {
-      minHeight: '32px',
-      flex: '8 0 600px',
-    },
-  })
-);
+const useStyles = makeStyles((theme: Theme) => ({
+  mainContainer: {
+    margin: theme.spacing(2, 0, 0, 0),
+    padding: theme.spacing(0),
+    display: 'flex',
+  },
+  pill: {
+    margin: theme.spacing(0, 1.5, 0, 0),
+    height: '32px',
+    display: 'inline-block',
+  },
+  stateBox: {
+    width: '264px',
+    padding: theme.spacing(1.75),
+  },
+  stateItem: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  mainTitle: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: theme.spacing(1, 3),
+    backgroundColor: theme.palette.common.white,
+  },
+  link: {
+    paddingTop: '6px',
+  },
+  selectedFilter: {
+    border: `2px solid ${theme.palette.neutral[600]}`,
+  },
+  filtersContainer: {
+    minHeight: '32px',
+    flex: '8 0 600px',
+  },
+}));
 
 interface Props {
   columns: DatabaseColumn[];

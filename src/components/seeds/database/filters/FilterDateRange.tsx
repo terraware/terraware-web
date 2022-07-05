@@ -1,22 +1,21 @@
-import { createStyles, Grid, makeStyles } from '@material-ui/core';
-import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
+import { ArrowForward } from '@mui/icons-material';
+import { Grid, Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import React from 'react';
 import { FieldNodePayload } from 'src/api/seeds/search';
 import DatePicker from 'src/components/common/DatePicker';
 import strings from 'src/strings';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    box: {
-      padding: theme.spacing(1.75),
-    },
-    flexContainer: {
-      alignItems: 'center',
-      display: 'flex',
-      justifyContent: 'center',
-    },
-  })
-);
+const useStyles = makeStyles((theme: Theme) => ({
+  box: {
+    padding: theme.spacing(1.75),
+  },
+  flexContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    justifyContent: 'center',
+  },
+}));
 
 interface Props {
   field: string;
@@ -34,8 +33,8 @@ export default function DateRange(props: Props): JSX.Element {
     setEndDate(props.values[1] || null);
   }, [props.values]);
 
-  const onChangeDate = (id: string, value?: string) => {
-    const formatedValue = value ? value.substr(0, 10) : null;
+  const onChangeDate = (id: string, value?: unknown) => {
+    const formatedValue = value && typeof value === 'string' ? value.substr(0, 10) : null;
     const newValues = props.values.length ? [...props.values] : [startDate, endDate];
     if (id === 'startDate' && value) {
       setStartDate(formatedValue);
@@ -78,7 +77,7 @@ export default function DateRange(props: Props): JSX.Element {
           />
         </Grid>
         <Grid item xs={1} className={classes.flexContainer}>
-          <ArrowForwardIcon />
+          <ArrowForward />
         </Grid>
         <Grid item xs={5}>
           <DatePicker

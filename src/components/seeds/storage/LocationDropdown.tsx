@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Grid } from '@material-ui/core';
+import { Grid } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { ConditionType, getLocations, StorageLocation } from 'src/api/seeds/locations';
 import Dropdown from 'src/components/common/Dropdown';

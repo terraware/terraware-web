@@ -1,60 +1,58 @@
-import { Box, Link, Typography } from '@material-ui/core';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { Box, Link, Typography } from '@mui/material';
 import React from 'react';
 import Icon from './icon/Icon';
 import { IconName } from './icon/icons';
 import { Link as RouterLink } from 'react-router-dom';
 import Button from 'src/components/common/button/Button';
+import { makeStyles } from '@mui/styles';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    container: {
-      background: '#ffffff',
-      border: '1px solid #A9B7B8',
-      borderRadius: '8px',
-      display: 'flex',
-      flexDirection: 'column',
-      height: '100%',
-      minHeight: '300px',
-      padding: '24px',
-    },
-    title: {
-      display: 'flex',
-      paddingBottom: '16px',
-      alignItems: 'center',
-    },
-    bold: {
-      fontWeight: 600,
-    },
-    icon: {
-      fill: '#708284',
-    },
-    titleText: {
-      fontSize: '20px',
-      lineHeight: '28px',
-      paddingLeft: '10px',
-      fontWeight: 600,
-    },
-    description: {
-      fontSize: '16px',
-      lineHeight: '24px',
-      height: '100%',
-      fontWeight: 400,
-    },
-    underlinedLink: {
-      marginTop: '28px',
-      display: 'block',
-      fontSize: '16px',
-    },
-    buttonLink: {
-      fontSize: '14px',
-      lineHeight: '20px',
-      marginLeft: 'auto',
-      marginTop: '14px',
-      maxWidth: 'fit-content',
-    },
-  })
-);
+const useStyles = makeStyles(() => ({
+  container: {
+    background: '#ffffff',
+    border: '1px solid #A9B7B8',
+    borderRadius: '8px',
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+    minHeight: '300px',
+    padding: '24px',
+  },
+  title: {
+    display: 'flex',
+    paddingBottom: '16px',
+    alignItems: 'center',
+  },
+  bold: {
+    fontWeight: 600,
+  },
+  icon: {
+    fill: '#708284',
+  },
+  titleText: {
+    fontSize: '20px',
+    lineHeight: '28px',
+    paddingLeft: '10px',
+    fontWeight: 600,
+  },
+  description: {
+    fontSize: '16px',
+    lineHeight: '24px',
+    height: '100%',
+    fontWeight: 400,
+  },
+  underlinedLink: {
+    marginTop: '28px',
+    display: 'block',
+    fontSize: '16px',
+  },
+  buttonLink: {
+    fontSize: '14px',
+    lineHeight: '20px',
+    marginLeft: 'auto',
+    marginTop: '14px',
+    maxWidth: 'fit-content',
+  },
+}));
 
 export interface PageCardProps {
   name: string;

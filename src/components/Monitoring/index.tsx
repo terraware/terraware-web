@@ -1,4 +1,4 @@
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@mui/styles';
 import React, { useEffect, useState, useCallback } from 'react';
 import { ServerOrganization } from 'src/types/Organization';
 import EmptyMessage from '../common/EmptyMessage';
@@ -14,34 +14,32 @@ import SeedBankMonitoring from './SeedBankMonitoring';
 import Button from '../common/button/Button';
 import Title from '../common/Title';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    mainTitle: {
-      display: 'flex',
-      justifyContent: 'space-between',
-    },
-    message: {
-      margin: '0 auto',
-      marginTop: '10%',
-      maxWidth: '800px',
-    },
-    titleContainer: {
-      display: 'flex',
-      alignItems: 'center',
-    },
-    divider: {
-      margin: '0 16px',
-      width: '1px',
-      height: '32px',
-      backgroundColor: '#A9B7B8',
-    },
-    seedBankLabel: {
-      margin: '0 8px 0 0',
-      fontWeight: 500,
-      fontSize: '16px',
-    },
-  })
-);
+const useStyles = makeStyles(() => ({
+  mainTitle: {
+    display: 'flex',
+    justifyContent: 'space-between',
+  },
+  message: {
+    margin: '0 auto',
+    marginTop: '10%',
+    maxWidth: '800px',
+  },
+  titleContainer: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  divider: {
+    margin: '0 16px',
+    width: '1px',
+    height: '32px',
+    backgroundColor: '#A9B7B8',
+  },
+  seedBankLabel: {
+    margin: '0 8px 0 0',
+    fontWeight: 500,
+    fontSize: '16px',
+  },
+}));
 
 type MonitoringProps = {
   organization: ServerOrganization;

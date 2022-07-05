@@ -1,21 +1,20 @@
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import React from 'react';
 import Checkbox from '../../../common/Checkbox';
 import { Option } from '../columns';
 import { FieldNodePayload } from '../../../../api/seeds/search';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    box: {
-      width: '264px',
-      padding: theme.spacing(1.75),
-    },
-    item: {
-      display: 'flex',
-      alignItems: 'center',
-    },
-  })
-);
+const useStyles = makeStyles((theme: Theme) => ({
+  box: {
+    width: '264px',
+    padding: theme.spacing(1.75),
+  },
+  item: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+}));
 
 interface Props {
   field: string;

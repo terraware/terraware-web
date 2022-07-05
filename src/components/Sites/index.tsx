@@ -1,5 +1,3 @@
-import Grid from '@material-ui/core/Grid';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import Button from 'src/components/common/button/Button';
@@ -11,24 +9,24 @@ import { ServerOrganization, Site } from 'src/types/Organization';
 import { getAllSitesWithProjectName } from 'src/utils/organization';
 import TfMain from '../common/TfMain';
 import PageSnackbar from 'src/components/PageSnackbar';
+import { Grid, Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    title: {
-      marginTop: 0,
-      fontSize: '24px',
-    },
-    mainContent: {
-      paddingTop: theme.spacing(4),
-    },
-    centered: {
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'center',
-      alignItems: 'flex-end',
-    },
-  })
-);
+const useStyles = makeStyles((theme: Theme) => ({
+  title: {
+    marginTop: 0,
+    fontSize: '24px',
+  },
+  mainContent: {
+    paddingTop: theme.spacing(4),
+  },
+  centered: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'flex-end',
+  },
+}));
 
 const columns: TableColumnType[] = [
   { key: 'name', name: 'Name', type: 'string' },

@@ -3,16 +3,14 @@ import { Route, Switch } from 'react-router-dom';
 import ErrorBox from 'src/components/common/ErrorBox/ErrorBox';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
-import { createStyles, makeStyles } from '@material-ui/core';
 import useQuery from './utils/useQuery';
+import { makeStyles } from '@mui/styles';
 
-const useStyles = makeStyles(() =>
-  createStyles({
-    main: {
-      marginTop: '120px',
-    },
-  })
-);
+const useStyles = makeStyles(() => ({
+  main: {
+    marginTop: '120px',
+  },
+}));
 
 export default function AppError() {
   const classes = useStyles();

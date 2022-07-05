@@ -1,4 +1,4 @@
-import { TextField as MUITextField } from '@material-ui/core';
+import { TextField as MUITextField } from '@mui/material';
 import React from 'react';
 import { Props } from './TextField';
 

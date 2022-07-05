@@ -1,5 +1,5 @@
-import { Box, IconButton, Link } from '@material-ui/core';
-import CloseIcon from '@material-ui/icons/Close';
+import { Close } from '@mui/icons-material';
+import { Box, IconButton, Link } from '@mui/material';
 import React from 'react';
 import strings from 'src/strings';
 import preventDefaultEvent from 'src/utils/preventDefaultEvent';
@@ -55,7 +55,7 @@ export default function SecondaryCollectors({
               size='small'
               onClick={() => onDeleteCollector(index)}
             >
-              <CloseIcon />
+              <Close />
             </IconButton>
           )}
         </Box>

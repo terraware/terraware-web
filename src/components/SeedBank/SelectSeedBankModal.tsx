@@ -1,5 +1,5 @@
-import { Grid } from '@material-ui/core';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import { Grid, Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import React, { useState } from 'react';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
@@ -9,17 +9,15 @@ import Select from '../common/Select/Select';
 import DialogBox from '../common/DialogBox/DialogBox';
 import { getAllSeedBanks } from 'src/utils/organization';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    spacing: {
-      marginRight: theme.spacing(2),
-    },
-    mainGrid: {
-      textAlign: 'left',
-      marginTop: theme.spacing(2) / 2,
-    },
-  })
-);
+const useStyles = makeStyles((theme: Theme) => ({
+  spacing: {
+    marginRight: theme.spacing(2),
+  },
+  mainGrid: {
+    textAlign: 'left',
+    marginTop: Number(theme.spacing(2)) / 2,
+  },
+}));
 
 export type SelectSeedBankProps = {
   open: boolean;

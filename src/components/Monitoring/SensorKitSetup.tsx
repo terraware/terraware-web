@@ -1,5 +1,6 @@
-import { createStyles, makeStyles } from '@material-ui/core/styles';
-import { Container, Grid } from '@material-ui/core';
+import { makeStyles } from '@mui/styles';
+import { Theme } from '@mui/material';
+import { Container, Grid } from '@mui/material';
 import React, { useCallback, useEffect, useState } from 'react';
 import { ServerOrganization } from 'src/types/Organization';
 import strings from 'src/strings';
@@ -16,32 +17,30 @@ import SensorLocations from './sensorKitSetup/SensorLocations';
 import ConfigureSensorKit from './sensorKitSetup/ConfigureSensorKit';
 import { LOCATIONS } from './sensorKitSetup/Locations';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    setupInfo: {
-      textAlign: 'center',
-      lineHeight: '28px',
-      fontSize: '16px',
-      marginTop: `${theme.spacing(10)}px`,
-    },
-    setupTitle: {
-      fontWeight: 'bold',
-      fontSize: '18px',
-      lineHeight: '28px',
-    },
-    text: {
-      textAlign: 'center',
-      fontSize: '14px',
-      margin: 'auto auto',
-    },
-    onboardingContainer: {
-      display: 'flex',
-      margin: ' auto',
-      marginTop: `${theme.spacing(5)}px`,
-      justifyContent: 'center',
-    },
-  })
-);
+const useStyles = makeStyles((theme: Theme) => ({
+  setupInfo: {
+    textAlign: 'center',
+    lineHeight: '28px',
+    fontSize: '16px',
+    marginTop: `${theme.spacing(10)}px`,
+  },
+  setupTitle: {
+    fontWeight: 'bold',
+    fontSize: '18px',
+    lineHeight: '28px',
+  },
+  text: {
+    textAlign: 'center',
+    fontSize: '14px',
+    margin: 'auto auto',
+  },
+  onboardingContainer: {
+    display: 'flex',
+    margin: ' auto',
+    marginTop: `${theme.spacing(5)}px`,
+    justifyContent: 'center',
+  },
+}));
 
 type SetupFlowState = 'PVSystem' | 'SensorKitID' | 'DeviceManager' | 'DetectSensors' | 'SensorLocations' | 'Configure';
 

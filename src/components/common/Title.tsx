@@ -1,38 +1,36 @@
-import { createStyles, makeStyles } from '@material-ui/core';
 import React, { useEffect } from 'react';
 import strings from 'src/strings';
 import { SelectedOrgInfo, ServerOrganization } from 'src/types/Organization';
 import { getFirstFacility, getFirstProject, getFirstSite } from 'src/utils/organization';
 import Select from './Select/Select';
+import { makeStyles } from '@mui/styles';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    titleContainer: {
-      display: 'flex',
-      alignItems: 'center',
-    },
-    title: {
-      fontWeight: 600,
-      fontSize: 24,
-      color: 'gray',
-    },
-    selectedSection: {
-      color: 'black',
-      paddingLeft: '5px',
-    },
-    separator: {
-      height: '32px',
-      width: '1px',
-      backgroundColor: 'gray',
-      marginLeft: '10px',
-    },
-    titleLabel: {
-      fontSize: '16px',
-      paddingLeft: '16px',
-      paddingRight: '8px',
-    },
-  })
-);
+const useStyles = makeStyles(() => ({
+  titleContainer: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  title: {
+    fontWeight: 600,
+    fontSize: 24,
+    color: 'gray',
+  },
+  selectedSection: {
+    color: 'black',
+    paddingLeft: '5px',
+  },
+  separator: {
+    height: '32px',
+    width: '1px',
+    backgroundColor: 'gray',
+    marginLeft: '10px',
+  },
+  titleLabel: {
+    fontSize: '16px',
+    paddingLeft: '16px',
+    paddingRight: '8px',
+  },
+}));
 
 interface TitleProps {
   page: string;

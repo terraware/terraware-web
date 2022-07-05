@@ -1,41 +1,35 @@
-import { Typography } from '@material-ui/core';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React, { useEffect, useState } from 'react';
 import strings from 'src/strings';
 import DialogCloseButton from '../common/DialogCloseButton';
 import Button from '../common/button/Button';
 import { Project, Site } from 'src/types/Organization';
 import Select from '../common/Select/Select';
+import { makeStyles } from '@mui/styles';
+import { Dialog, DialogActions, DialogContent, DialogTitle, Theme, Typography } from '@mui/material';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    moveSiteModal: {
-      '& .MuiDialog-scrollPaper': {
-        '& .MuiDialog-paper': {
-          overflow: 'visible',
-        },
+const useStyles = makeStyles((theme: Theme) => ({
+  moveSiteModal: {
+    '& .MuiDialog-scrollPaper': {
+      '& .MuiDialog-paper': {
+        overflow: 'visible',
       },
     },
-    title: {
-      textAlign: 'center',
-      padding: theme.spacing(6, 6, 2, 6),
-    },
-    actions: {
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      padding: theme.spacing(4),
-    },
-    content: {
-      margin: '0 auto',
-      overflow: 'visible',
-    },
-  })
-);
+  },
+  title: {
+    textAlign: 'center',
+    padding: theme.spacing(6, 6, 2, 6),
+  },
+  actions: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: theme.spacing(4),
+  },
+  content: {
+    margin: '0 auto',
+    overflow: 'visible',
+  },
+}));
 
 export interface MoveSiteDialogProps {
   open: boolean;

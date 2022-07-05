@@ -1,7 +1,5 @@
-import MomentUtils from '@date-io/moment';
-import { Grid, Typography } from '@material-ui/core';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
-import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import { Grid, Theme, Typography } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import React from 'react';
 import { Accession } from 'src/api/types/accessions';
 import MainPaper from 'src/components/MainPaper';
@@ -18,25 +16,25 @@ import TextField from '../../common/TextField';
 import FooterButtons from '../accession/FooterButtons';
 import { FieldError } from '../newAccession';
 import { Unit } from '../nursery/NewTest';
+import { LocalizationProvider } from '@mui/lab';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    right: {
-      marginLeft: 'auto',
-    },
-    alignMiddle: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    caption: {
-      paddingLeft: theme.spacing(1),
-    },
-    bold: {
-      fontWeight: theme.typography.fontWeightBold,
-    },
-  })
-);
+const useStyles = makeStyles((theme: Theme) => ({
+  right: {
+    marginLeft: 'auto',
+  },
+  alignMiddle: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  caption: {
+    paddingLeft: theme.spacing(1),
+  },
+  bold: {
+    fontWeight: theme.typography.fontWeightBold,
+  },
+}));
 
 interface Props {
   accession: Accession;
@@ -222,7 +220,7 @@ export default function ProcessingAndDrying({ accession, onSubmit }: Props): JSX
   ];
 
   return (
-    <MuiPickersUtilsProvider utils={MomentUtils}>
+    <LocalizationProvider dateAdapter={AdapterDateFns}>
       <MainPaper>
         <PanelTitle title={strings.PROCESSING_AND_DRYING} />
         <Typography component='p'>{strings.PROCESSING_AND_DRYING_DESCRIPTION}</Typography>
@@ -266,7 +264,7 @@ export default function ProcessingAndDrying({ accession, onSubmit }: Props): JSX
           {record.processingMethod === 'Weight' && (
             <>
               <Grid item xs={4} />
-              <Grid item xs={4} justify='center' alignItems='center' wrap='nowrap' direction='column'>
+              <Grid item xs={4} wrap='nowrap' direction='column'>
                 <Grid item>
                   <TextField
                     id='quantity'
@@ -429,7 +427,7 @@ export default function ProcessingAndDrying({ accession, onSubmit }: Props): JSX
           </Grid>
         </Grid>
       </MainPaper>
-    </MuiPickersUtilsProvider>
+    </LocalizationProvider>
   );
 }
 

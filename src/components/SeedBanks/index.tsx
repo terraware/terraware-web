@@ -1,5 +1,3 @@
-import Grid from '@material-ui/core/Grid';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import Button from 'src/components/common/button/Button';
@@ -17,28 +15,28 @@ import TextField from '../common/Textfield/Textfield';
 import { search, SearchNodePayload } from 'src/api/seeds/search';
 import useDebounce from 'src/utils/useDebounce';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
+import { Grid } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    title: {
-      marginTop: 0,
-      fontSize: '24px',
-    },
-    centered: {
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'center',
-      alignItems: 'flex-end',
-    },
-    searchField: {
-      width: '300px',
-    },
-    searchBar: {
-      display: 'flex',
-      marginBottom: '16px',
-    },
-  })
-);
+const useStyles = makeStyles(() => ({
+  title: {
+    marginTop: 0,
+    fontSize: '24px',
+  },
+  centered: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'flex-end',
+  },
+  searchField: {
+    width: '300px',
+  },
+  searchBar: {
+    display: 'flex',
+    marginBottom: '16px',
+  },
+}));
 
 const columns: TableColumnType[] = [
   { key: 'name', name: 'Name', type: 'string' },

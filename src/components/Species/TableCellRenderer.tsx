@@ -1,4 +1,5 @@
-import { ClickAwayListener, createStyles, IconButton, makeStyles, Theme, Tooltip } from '@material-ui/core';
+import { ClickAwayListener, IconButton, Theme, Tooltip } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import React, { useState } from 'react';
 import strings from 'src/strings';
 import { SpeciesProblemElement } from 'src/types/Species';
@@ -7,36 +8,34 @@ import CellRenderer, { TableRowType } from '../common/table/TableCellRenderer';
 import { RendererProps } from '../common/table/types';
 import ProblemTooltip from './ProblemTooltip';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    icon: {
-      fill: '#BD6931',
-    },
-    iconContainer: {
-      borderRadius: 0,
-      fontSize: '16px',
-      height: '48px',
-    },
-    customPopper: {
-      pointerEvents: 'all',
-    },
-    customTooltip: {
-      padding: 0,
-      background: '#ffffff',
-      border: '1px solid #F2F4F5',
-      borderRadius: '7px',
-      color: '#4B5758',
-      fontSize: '12px',
+const useStyles = makeStyles((theme: Theme) => ({
+  icon: {
+    fill: '#BD6931',
+  },
+  iconContainer: {
+    borderRadius: 0,
+    fontSize: '16px',
+    height: '48px',
+  },
+  customPopper: {
+    pointerEvents: 'all',
+  },
+  customTooltip: {
+    padding: 0,
+    background: '#ffffff',
+    border: '1px solid #F2F4F5',
+    borderRadius: '7px',
+    color: '#4B5758',
+    fontSize: '12px',
 
-      '& .MuiTooltip-arrow': {
-        color: '#ffffff',
-        '&:before': {
-          border: '1px solid #F2F4F5',
-        },
+    '& .MuiTooltip-arrow': {
+      color: '#ffffff',
+      '&:before': {
+        border: '1px solid #F2F4F5',
       },
     },
-  })
-);
+  },
+}));
 export default function SpeciesCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
   const classes = useStyles();
   const { column, row, value, index, onRowClick, reloadData } = props;

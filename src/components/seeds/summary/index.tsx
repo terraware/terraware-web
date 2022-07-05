@@ -1,7 +1,5 @@
-import { CircularProgress } from '@material-ui/core';
-import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { Container, Grid, CircularProgress } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import Cookies from 'cookies-js';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
@@ -21,31 +19,29 @@ import PageHeader from '../PageHeader';
 import SummaryPaper from './SummaryPaper';
 import Updates from './Updates';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    mainContainer: {
-      padding: '32px 0',
-    },
-    paper: {
-      display: 'flex',
-      overflow: 'auto',
-      flexDirection: 'column',
-    },
-    fixedHeight: {
-      height: '100%',
-    },
-    message: {
-      margin: '0 auto',
-      width: '50%',
-      marginTop: '10%',
-    },
-    spinnerContainer: {
-      position: 'fixed',
-      top: '50%',
-      left: 'calc(50% + 100px)',
-    },
-  })
-);
+const useStyles = makeStyles(() => ({
+  mainContainer: {
+    padding: '32px 0',
+  },
+  paper: {
+    display: 'flex',
+    overflow: 'auto',
+    flexDirection: 'column',
+  },
+  fixedHeight: {
+    height: '100%',
+  },
+  message: {
+    margin: '0 auto',
+    width: '50%',
+    marginTop: '10%',
+  },
+  spinnerContainer: {
+    position: 'fixed',
+    top: '50%',
+    left: 'calc(50% + 100px)',
+  },
+}));
 
 Cookies.defaults = {
   path: '/',

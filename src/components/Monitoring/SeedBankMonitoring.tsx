@@ -1,4 +1,4 @@
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@mui/styles';
 import React, { useEffect, useState } from 'react';
 import { ServerOrganization } from 'src/types/Organization';
 import EmptyMessage from '../common/EmptyMessage';
@@ -10,31 +10,30 @@ import EmptyStateContent from '../emptyStatePages/EmptyStateContent';
 import { EMPTY_STATE_CONTENT_STYLES } from '../emptyStatePages/EmptyStatePage';
 import SensorKitSetup from './SensorKitSetup';
 import SeedBankDashboard from './dashboard/SeedBankDashboard';
+import { Theme } from '@mui/material';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    placeholder: {
-      display: 'flex',
-      flexDirection: 'column',
-      height: '100%',
-    },
-    text: {
-      fontSize: '24px',
-    },
-    message: {
-      margin: '0 auto',
-      width: '50%',
-      marginTop: '10%',
-    },
-    notSetUpContent: {
-      border: '1px solid #A9B7B8',
-      borderRadius: '8px',
-      margin: 'auto',
-      marginTop: `max(10vh, ${theme.spacing(8)}px)`,
-      maxWidth: '800px',
-    },
-  })
-);
+const useStyles = makeStyles((theme: Theme) => ({
+  placeholder: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+  },
+  text: {
+    fontSize: '24px',
+  },
+  message: {
+    margin: '0 auto',
+    width: '50%',
+    marginTop: '10%',
+  },
+  notSetUpContent: {
+    border: '1px solid #A9B7B8',
+    borderRadius: '8px',
+    margin: 'auto',
+    marginTop: `max(10vh, ${theme.spacing(8)}px)`,
+    maxWidth: '800px',
+  },
+}));
 
 type SeedBankMonitoringProps = {
   seedBank: Facility;

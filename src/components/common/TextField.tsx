@@ -1,13 +1,12 @@
-import { createStyles, makeStyles, TextField as MUITextField } from '@material-ui/core';
+import { TextField as MUITextField } from '@mui/material';
 import React, { KeyboardEventHandler } from 'react';
+import { makeStyles } from '@mui/styles';
 
-const useStyles = makeStyles(() =>
-  createStyles({
-    adornedEnd: {
-      paddingRight: 0,
-    },
-  })
-);
+const useStyles = makeStyles(() => ({
+  adornedEnd: {
+    paddingRight: 0,
+  },
+}));
 
 export interface Props {
   id: string;

@@ -1,4 +1,4 @@
-import { Grid } from '@material-ui/core';
+import { Grid } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { getAllSpecies } from 'src/api/species/species';
 import { AccessionPostRequestBody } from 'src/api/types/accessions';

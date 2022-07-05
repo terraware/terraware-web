@@ -1,4 +1,5 @@
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import { makeStyles } from '@mui/styles';
+import { Theme } from '@mui/material';
 import React from 'react';
 import strings from 'src/strings';
 import Button from '../common/button/Button';
@@ -7,17 +8,15 @@ import Select from '../common/Select/Select';
 import { OrganizationUser } from 'src/types/User';
 import DialogBox from '../common/DialogBox/DialogBox';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    select: {
+const useStyles = makeStyles((theme: Theme) => ({
+  select: {
+    width: '100%',
+    textAlign: 'left',
+    '& .textfield-container': {
       width: '100%',
-      textAlign: 'left',
-      '& .textfield-container': {
-        width: '100%',
-      },
     },
-  })
-);
+  },
+}));
 
 export interface AssignNewOwnerDialogProps {
   open: boolean;

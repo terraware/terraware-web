@@ -1,12 +1,6 @@
-import MomentUtils from '@date-io/moment';
-import { CircularProgress, Container, Grid, Link, Typography } from '@material-ui/core';
-import Fab from '@material-ui/core/Fab';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
-import CloseIcon from '@material-ui/icons/Close';
-import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import moment from 'moment';
 import React, { Suspense, useEffect, useState } from 'react';
-import { Redirect, useHistory } from 'react-router-dom';
+import { Link, Redirect, useHistory } from 'react-router-dom';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { checkIn, getPhotoEndpoint, postAccession } from 'src/api/seeds/accession';
 import { Accession, AccessionPostRequestBody } from 'src/api/types/accessions';
@@ -34,31 +28,34 @@ import { APP_PATHS } from '../../../constants';
 import TfMain from 'src/components/common/TfMain';
 import PanelTitle from 'src/components/PanelTitle';
 import MainPaper from 'src/components/MainPaper';
+import { makeStyles } from '@mui/styles';
+import { CircularProgress, Fab, Container, Grid, Typography, Theme } from '@mui/material';
+import { Close } from '@mui/icons-material';
+import { LocalizationProvider } from '@mui/lab';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    mainContainer: {
-      padding: '32px 0',
-    },
-    closeIcon: {
-      backgroundColor: theme.palette.common.white,
-    },
-    right: {
-      marginLeft: 'auto',
-    },
-    listItem: {
-      marginBottom: theme.spacing(1),
-    },
-    photoLink: {
-      marginBottom: theme.spacing(1),
-      color: theme.palette.neutral[800],
-      textDecoration: 'underline',
-    },
-    bold: {
-      fontWeight: theme.typography.fontWeightBold,
-    },
-  })
-);
+const useStyles = makeStyles((theme: Theme) => ({
+  mainContainer: {
+    padding: '32px 0',
+  },
+  closeIcon: {
+    backgroundColor: theme.palette.common.white,
+  },
+  right: {
+    marginLeft: 'auto',
+  },
+  listItem: {
+    marginBottom: theme.spacing(1),
+  },
+  photoLink: {
+    marginBottom: theme.spacing(1),
+    color: theme.palette.neutral[800],
+    textDecoration: 'underline',
+  },
+  bold: {
+    fontWeight: theme.typography.fontWeightBold,
+  },
+}));
 
 type NewAccessionProps = {
   organization: ServerOrganization;
@@ -130,7 +127,7 @@ export default function NewAccessionWrapper(props: NewAccessionProps): JSX.Eleme
               history.goBack();
             }}
           >
-            <CloseIcon />
+            <Close />
           </Fab>
         }
       />
@@ -313,7 +310,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
   const showCheckIn = isPendingCheckIn || isCheckedIn;
 
   return (
-    <MuiPickersUtilsProvider utils={MomentUtils}>
+    <LocalizationProvider dateAdapter={AdapterDateFns}>
       <MainPaper>
         <PanelTitle title={strings.SEED_COLLECTION} />
         <Typography component='p'>{strings.SEED_COLLECTION_DESCRIPTION}</Typography>
@@ -494,6 +491,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
               </Typography>
               {photoFilenames?.map((photo, index) => (
                 <Link
+                  to=''
                   id={`photo-${index}`}
                   key={index}
                   target='_blank'
@@ -560,6 +558,6 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
           </Grid>
         </Grid>
       </MainPaper>
-    </MuiPickersUtilsProvider>
+    </LocalizationProvider>
   );
 }

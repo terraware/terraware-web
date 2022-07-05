@@ -1,4 +1,4 @@
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@mui/styles';
 import React, { useEffect, useState } from 'react';
 import strings from 'src/strings';
 import { Facility } from 'src/api/types/facilities';
@@ -8,13 +8,11 @@ import FlowStep, { FlowError } from './FlowStep';
 import { listDeviceTemplates, createDevice } from 'src/api/device/device';
 import { listFacilityDevicesById } from 'src/api/facility/facility';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    selectPvSystem: {
-      width: '432px',
-    },
-  })
-);
+const useStyles = makeStyles(() => ({
+  selectPvSystem: {
+    width: '432px',
+  },
+}));
 
 type SelectPVSystemProps = {
   seedBank: Facility;

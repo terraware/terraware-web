@@ -1,4 +1,3 @@
-import MomentUtils from '@date-io/moment';
 import {
   Container,
   Grid,
@@ -9,9 +8,9 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-} from '@material-ui/core';
-import { createStyles, makeStyles, Theme, withStyles } from '@material-ui/core/styles';
-import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+} from '@mui/material';
+import { Theme } from '@mui/material';
+import { makeStyles, withStyles } from '@mui/styles';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import { useRecoilState } from 'recoil';
@@ -22,37 +21,37 @@ import { APP_PATHS } from 'src/constants';
 import { checkInSelectedOrgInfo } from 'src/state/selectedOrgInfoPerPage';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
+import { LocalizationProvider } from '@mui/lab';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
 import useStateLocation from 'src/utils/useStateLocation';
 import PageHeader from '../PageHeader';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    mainContainer: {
-      padding: '32px 0',
+const useStyles = makeStyles((theme: Theme) => ({
+  mainContainer: {
+    padding: '32px 0',
+  },
+  downloadReport: {
+    background: theme.palette.common.black,
+    color: theme.palette.common.white,
+    marginLeft: theme.spacing(2),
+    '&:hover, &:focus': {
+      backgroundColor: `${theme.palette.common.black}!important`,
     },
-    downloadReport: {
-      background: theme.palette.common.black,
-      color: theme.palette.common.white,
-      marginLeft: theme.spacing(2),
-      '&:hover, &:focus': {
-        backgroundColor: `${theme.palette.common.black}!important`,
-      },
-    },
-    addAccession: {
-      marginLeft: theme.spacing(2),
-      color: theme.palette.common.white,
-    },
-    checkinMessage: {
-      marginBottom: theme.spacing(6),
-    },
-    title: {
-      fontSize: '18px',
-      color: theme.palette.gray[800],
-      fontWeight: 600,
-    },
-  })
-);
+  },
+  addAccession: {
+    marginLeft: theme.spacing(2),
+    color: theme.palette.common.white,
+  },
+  checkinMessage: {
+    marginBottom: theme.spacing(6),
+  },
+  title: {
+    fontSize: '18px',
+    color: theme.palette.gray[800],
+    fontWeight: 600,
+  },
+}));
 
 const TableCell = withStyles({
   root: {
@@ -116,7 +115,7 @@ export default function CheckIn(props: CheckInProps): JSX.Element {
   const pendingAccessionsById = transformPendingAccessions();
 
   return (
-    <MuiPickersUtilsProvider utils={MomentUtils}>
+    <LocalizationProvider dateAdapter={AdapterDateFns}>
       <TfMain>
         <PageHeader
           title={strings.CHECKIN_BAGS}
@@ -182,6 +181,6 @@ export default function CheckIn(props: CheckInProps): JSX.Element {
           </Grid>
         </Container>
       </TfMain>
-    </MuiPickersUtilsProvider>
+    </LocalizationProvider>
   );
 }

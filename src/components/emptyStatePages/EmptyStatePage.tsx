@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router';
-import Container from '@material-ui/core/Container';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
 import EmptyStateContent, { ListItemContent } from 'src/components/emptyStatePages/EmptyStateContent';
 import PageHeader from 'src/components/seeds/PageHeader';
 import { APP_PATHS } from 'src/constants';
@@ -16,22 +14,22 @@ import { ServerOrganization } from 'src/types/Organization';
 import ImportSpeciesModal, { downloadCsvTemplate } from '../Species/ImportSpeciesModal';
 import TfMain from '../common/TfMain';
 import speciesAtom from 'src/state/species';
+import { Container, Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    mainContainer: {
-      padding: '24px',
-      marginBottom: theme.spacing(8),
-    },
-    content: {
-      border: '1px solid #A9B7B8',
-      borderRadius: '8px',
-      margin: 'auto',
-      marginTop: `max(10vh, ${theme.spacing(8)}px)`,
-      maxWidth: '800px',
-    },
-  })
-);
+const useStyles = makeStyles((theme: Theme) => ({
+  mainContainer: {
+    padding: '24px',
+    marginBottom: theme.spacing(8),
+  },
+  content: {
+    border: '1px solid #A9B7B8',
+    borderRadius: '8px',
+    margin: 'auto',
+    marginTop: `max(10vh, ${theme.spacing(8)}px)`,
+    maxWidth: '800px',
+  },
+}));
 
 export const EMPTY_STATE_CONTENT_STYLES = {
   titleFontSize: '20px',

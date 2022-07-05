@@ -1,26 +1,24 @@
-import { Link } from '@material-ui/core';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
-import DoneIcon from '@material-ui/icons/Done';
+import { Done } from '@mui/icons-material';
+import { Link, Theme } from '@mui/material';
 import React from 'react';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import preventDefaultEvent from 'src/utils/preventDefaultEvent';
+import { makeStyles } from '@mui/styles';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    submit: {
-      color: theme.palette.neutral[800],
-      textDecoration: 'underline',
-      fontWeight: theme.typography.fontWeightMedium,
-      marginLeft: theme.spacing(0.5),
-    },
-    second: {
-      textDecoration: 'underline',
-      fontWeight: theme.typography.fontWeightMedium,
-      marginLeft: theme.spacing(2),
-    },
-  })
-);
+const useStyles = makeStyles((theme: Theme) => ({
+  submit: {
+    color: theme.palette.neutral[800],
+    textDecoration: 'underline',
+    fontWeight: theme.typography.fontWeightMedium,
+    marginLeft: theme.spacing(0.5),
+  },
+  second: {
+    textDecoration: 'underline',
+    fontWeight: theme.typography.fontWeightMedium,
+    marginLeft: theme.spacing(2),
+  },
+}));
 
 interface Props {
   isSendingToNursery: boolean;
@@ -56,7 +54,7 @@ export default function NurseryButtons({
       )}
       {(isSendingToNursery || isSentToNursery) && (
         <>
-          {isSentToNursery && <DoneIcon fontSize='inherit' />}
+          {isSentToNursery && <Done fontSize='inherit' />}
           {isSendingToNursery && <img src='/assets/loading.gif' height={16} alt='loading' />}
           <Link
             className={classes.submit}

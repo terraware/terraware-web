@@ -1,4 +1,5 @@
-import { Container, createStyles, Grid, makeStyles } from '@material-ui/core';
+import { Container, Grid, Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import { useEffect, useState } from 'react';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
@@ -15,32 +16,30 @@ import { getOrganizationUsers } from 'src/api/organization/organization';
 import Button from '../common/button/Button';
 import Textfield from '../common/Textfield/Textfield';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    mainContainer: {
-      paddingTop: theme.spacing(4),
-      paddingBottom: theme.spacing(4),
-      background: '#ffffff',
-    },
-    backIcon: {
-      fill: '#007DF2',
-      marginRight: theme.spacing(1),
-    },
-    back: {
-      display: 'flex',
-      textDecoration: 'none',
-      color: '#0067C8',
-      fontSize: '20px',
-      alignItems: 'center',
-    },
-    titleWithButton: {
-      display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-    },
-  })
-);
+const useStyles = makeStyles((theme: Theme) => ({
+  mainContainer: {
+    paddingTop: theme.spacing(4),
+    paddingBottom: theme.spacing(4),
+    background: '#ffffff',
+  },
+  backIcon: {
+    fill: '#007DF2',
+    marginRight: theme.spacing(1),
+  },
+  back: {
+    display: 'flex',
+    textDecoration: 'none',
+    color: '#0067C8',
+    fontSize: '20px',
+    alignItems: 'center',
+  },
+  titleWithButton: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+}));
 
 type ProjectDetailsProps = {
   organization?: ServerOrganization;

@@ -1,8 +1,5 @@
-import MomentUtils from '@date-io/moment';
-import { Chip, Grid, Typography } from '@material-ui/core';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
-import AddIcon from '@material-ui/icons/Add';
-import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import { Chip, Grid, Theme, Typography } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { getDate } from 'src/api/clock';
@@ -19,22 +16,23 @@ import strings from 'src/strings';
 import NewTest from './NewTest';
 import NurseryCellRenderer from './TableCellRenderer';
 import { COLUMNS } from './types';
+import { Add } from '@mui/icons-material';
+import { LocalizationProvider } from '@mui/lab';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    right: {
-      marginLeft: 'auto',
-    },
-    bold: {
-      fontWeight: theme.typography.fontWeightBold,
-    },
-    greenChip: {
-      color: theme.palette.common.white,
-    },
-  })
-);
+const useStyles = makeStyles((theme: Theme) => ({
+  right: {
+    marginLeft: 'auto',
+  },
+  bold: {
+    fontWeight: theme.typography.fontWeightBold,
+  },
+  greenChip: {
+    color: theme.palette.common.white,
+  },
+}));
 
-const newWithdrawalChipStyles = makeStyles((theme) => ({
+const newWithdrawalChipStyles = makeStyles((theme: Theme) => ({
   root: {
     color: theme.palette.common.white,
   },
@@ -123,7 +121,7 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
 
   return (
     <main>
-      <MuiPickersUtilsProvider utils={MomentUtils}>
+      <LocalizationProvider dateAdapter={AdapterDateFns}>
         <NewTest
           open={open}
           onClose={onCloseModal}
@@ -176,7 +174,7 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
                 label={strings.NEW_TEST}
                 clickable
                 disabled={seedsAvailable <= 0}
-                deleteIcon={<AddIcon classes={newWithdrawalChipStyles()} />}
+                deleteIcon={<Add classes={newWithdrawalChipStyles()} />}
                 color={'primary'}
                 onClick={onNew}
                 onDelete={onNew}
@@ -184,7 +182,7 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
             </Grid>
           </Grid>
         </MainPaper>
-      </MuiPickersUtilsProvider>
+      </LocalizationProvider>
     </main>
   );
 }

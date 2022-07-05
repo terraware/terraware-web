@@ -1,4 +1,4 @@
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@mui/styles';
 import ProgressCircle from 'src/components/common/ProgressCircle/ProgressCircle';
 import React, { useCallback, useEffect, useState } from 'react';
 import strings from 'src/strings';
@@ -7,20 +7,19 @@ import { Device } from 'src/types/Device';
 import FlowStep, { FlowError } from './FlowStep';
 import { listFacilityDevicesById } from 'src/api/facility/facility';
 import getHelpEmail from 'src/components/common/HelpEmail';
+import { Theme } from '@mui/material';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    detectSensors: {
-      width: '432px',
-      fontStyle: 'italic',
-      display: 'flex',
-      alignItems: 'center',
-    },
-    detectInProgress: {
-      marginLeft: `${theme.spacing(2)}px`,
-    },
-  })
-);
+const useStyles = makeStyles((theme: Theme) => ({
+  detectSensors: {
+    width: '432px',
+    fontStyle: 'italic',
+    display: 'flex',
+    alignItems: 'center',
+  },
+  detectInProgress: {
+    marginLeft: `${theme.spacing(2)}px`,
+  },
+}));
 
 const TOTAL_SENSORS = 14;
 

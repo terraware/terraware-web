@@ -1,30 +1,28 @@
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { IconButton, Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import React, { useEffect, useState } from 'react';
-import IconButton from '@material-ui/core/IconButton';
 import Icon from '../common/icon/Icon';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    expandable: {
-      borderRadius: '8px',
-      border: '1px solid #A9B7B8',
-      width: '584px',
-      padding: `${theme.spacing(1)}px`,
-    },
-    disabledExpandable: {
-      opacity: 0.4,
-    },
-    titleExpandable: {
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      paddingLeft: `${theme.spacing(2)}px`,
-    },
-    icon: {
-      fill: '#3A4445',
-    },
-  })
-);
+const useStyles = makeStyles((theme: Theme) => ({
+  expandable: {
+    borderRadius: '8px',
+    border: '1px solid #A9B7B8',
+    width: '584px',
+    padding: `${theme.spacing(1)}px`,
+  },
+  disabledExpandable: {
+    opacity: 0.4,
+  },
+  titleExpandable: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingLeft: `${theme.spacing(2)}px`,
+  },
+  icon: {
+    fill: '#3A4445',
+  },
+}));
 
 type ExpandableProps = {
   title: React.ReactNode;

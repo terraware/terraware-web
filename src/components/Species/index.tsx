@@ -1,7 +1,5 @@
-import { IconButton } from '@material-ui/core';
-import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { Container, Grid, IconButton } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { deleteSpecies } from 'src/api/species/species';
@@ -38,60 +36,58 @@ type SpeciesListProps = {
   species: Species[];
 };
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    mainContainer: {
-      padding: '32px 0',
-    },
-    pageTitle: {
-      fontSize: '24px',
-      lineHeight: '32px',
-      fontWeight: 600,
-      margin: 0,
-    },
-    titleContainer: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-    },
-    createSpeciesMessage: {
-      margin: '0 auto',
-      width: '50%',
-      marginTop: '10%',
-    },
-    spinner: {
-      display: 'flex',
-      margin: 'auto',
-      minHeight: '50%',
-    },
-    errorBox: {
-      width: '400px',
-      marginTop: '120px',
-    },
-    searchField: {
-      width: '300px',
-    },
-    searchBar: {
-      display: 'flex',
-      marginBottom: '16px',
-    },
-    iconContainer: {
-      borderRadius: 0,
-      fontSize: '16px',
-      height: '48px',
-      marginLeft: '8px',
-    },
-    buttonSpace: {
-      marginRight: '8px',
-    },
-    icon: {
-      fill: '#3A4445',
-    },
-    headerIconContainer: {
-      marginLeft: '12px',
-    },
-  })
-);
+const useStyles = makeStyles(() => ({
+  mainContainer: {
+    padding: '32px 0',
+  },
+  pageTitle: {
+    fontSize: '24px',
+    lineHeight: '32px',
+    fontWeight: 600,
+    margin: 0,
+  },
+  titleContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  createSpeciesMessage: {
+    margin: '0 auto',
+    width: '50%',
+    marginTop: '10%',
+  },
+  spinner: {
+    display: 'flex',
+    margin: 'auto',
+    minHeight: '50%',
+  },
+  errorBox: {
+    width: '400px',
+    marginTop: '120px',
+  },
+  searchField: {
+    width: '300px',
+  },
+  searchBar: {
+    display: 'flex',
+    marginBottom: '16px',
+  },
+  iconContainer: {
+    borderRadius: 0,
+    fontSize: '16px',
+    height: '48px',
+    marginLeft: '8px',
+  },
+  buttonSpace: {
+    marginRight: '8px',
+  },
+  icon: {
+    fill: '#3A4445',
+  },
+  headerIconContainer: {
+    marginLeft: '12px',
+  },
+}));
 
 const columns: TableColumnType[] = [
   { key: 'scientificName', name: strings.SCIENTIFIC_NAME, type: 'string' },

@@ -1,4 +1,4 @@
-import { TableCell, Typography } from '@material-ui/core';
+import { TableCell, Typography } from '@mui/material';
 import moment from 'moment';
 import React from 'react';
 import strings from 'src/strings';

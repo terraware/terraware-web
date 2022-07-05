@@ -1,4 +1,5 @@
-import { Container, createStyles, Grid, makeStyles } from '@material-ui/core';
+import { Container, Grid, Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import { useEffect, useState } from 'react';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
@@ -20,8 +21,6 @@ import { useSetRecoilState } from 'recoil';
 import snackbarAtom from 'src/state/snackbar';
 import AddPeopleModal from './AddPeopleModal';
 import DatePicker from '../common/DatePicker';
-import MomentUtils from '@date-io/moment';
-import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { getProjectsById } from 'src/utils/organization';
 import Icon from '../common/icon/Icon';
 import RemovedPeopleOrSitesModal from './RemovedPeopleOrSitesModal';
@@ -29,53 +28,53 @@ import MoveSiteModal from './MoveSiteModal';
 import axios from 'axios';
 import { updateSite } from 'src/api/site/site';
 import FormBottomBar from '../common/FormBottomBar';
+import { LocalizationProvider } from '@mui/lab';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    mainContainer: {
-      paddingTop: theme.spacing(4),
-      paddingBottom: theme.spacing(7),
-      marginBottom: theme.spacing(6),
-      background: '#ffffff',
-    },
-    backIcon: {
-      fill: '#007DF2',
-      marginRight: theme.spacing(1),
-    },
-    back: {
-      display: 'flex',
-      textDecoration: 'none',
-      color: '#0067C8',
-      fontSize: '20px',
-      alignItems: 'center',
-    },
-    value: {
-      fontSize: '16px',
-    },
-    titleWithButton: {
-      display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-    },
-    label: {
-      color: '#5C6B6C',
-      lineHeight: '20px',
-      fontFamily: '"Inter", sans-serif',
-    },
-    datePicker: {
-      marginTop: '4px',
-      '& .MuiOutlinedInput-root': {
-        '& fieldset': {
-          borderColor: '#708284',
-        },
+const useStyles = makeStyles((theme: Theme) => ({
+  mainContainer: {
+    paddingTop: theme.spacing(4),
+    paddingBottom: theme.spacing(7),
+    marginBottom: theme.spacing(6),
+    background: '#ffffff',
+  },
+  backIcon: {
+    fill: '#007DF2',
+    marginRight: theme.spacing(1),
+  },
+  back: {
+    display: 'flex',
+    textDecoration: 'none',
+    color: '#0067C8',
+    fontSize: '20px',
+    alignItems: 'center',
+  },
+  value: {
+    fontSize: '16px',
+  },
+  titleWithButton: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  label: {
+    color: '#5C6B6C',
+    lineHeight: '20px',
+    fontFamily: '"Inter", sans-serif',
+  },
+  datePicker: {
+    marginTop: '4px',
+    '& .MuiOutlinedInput-root': {
+      '& fieldset': {
+        borderColor: '#708284',
       },
     },
-    blockCheckbox: {
-      display: 'block',
-    },
-  })
-);
+  },
+  blockCheckbox: {
+    display: 'block',
+  },
+}));
 
 type ProjectViewProps = {
   organization: ServerOrganization;
@@ -324,7 +323,7 @@ export default function ProjectView({ organization, reloadOrganizationData }: Pr
   };
 
   return (
-    <MuiPickersUtilsProvider utils={MomentUtils}>
+    <LocalizationProvider dateAdapter={AdapterDateFns}>
       <MoveSiteModal
         open={moveSiteModalOpened}
         onClose={() => setMoveSiteModalOpened(false)}
@@ -512,6 +511,6 @@ export default function ProjectView({ organization, reloadOrganizationData }: Pr
         )}
       </Container>
       <FormBottomBar onCancel={goToProjects} onSave={saveProject} />
-    </MuiPickersUtilsProvider>
+    </LocalizationProvider>
   );
 }

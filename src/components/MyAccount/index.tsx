@@ -1,5 +1,3 @@
-import Grid from '@material-ui/core/Grid';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
@@ -26,27 +24,27 @@ import CannotRemoveOrgDialog from './CannotRemoveOrgModal';
 import DeleteOrgDialog from './DeleteOrgModal';
 import { deleteOrganization } from '../../api/organization/organization';
 import Checkbox from '../common/Checkbox';
+import { Grid, Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    title: {
-      marginTop: 0,
-      fontSize: '24px',
-    },
-    centered: {
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'center',
-      alignItems: 'flex-end',
-    },
-    organizationsHeading: {
-      marginBottom: 0,
-    },
-    editContainer: {
-      marginBottom: `${theme.spacing(8)}px`,
-    },
-  })
-);
+const useStyles = makeStyles((theme: Theme) => ({
+  title: {
+    marginTop: 0,
+    fontSize: '24px',
+  },
+  centered: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'flex-end',
+  },
+  organizationsHeading: {
+    marginBottom: 0,
+  },
+  editContainer: {
+    marginBottom: `${theme.spacing(8)}px`,
+  },
+}));
 
 const columns: TableColumnType[] = [
   { key: 'name', name: strings.ORGANIZATION_NAME, type: 'string' },

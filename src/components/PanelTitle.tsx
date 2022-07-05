@@ -1,17 +1,15 @@
-import { Typography } from '@material-ui/core';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { Typography } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import React from 'react';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    panelTitle: {
-      fontSize: '20px',
-      lineHeight: '28px',
-      fontWeight: 600,
-      color: '#3A4445',
-    },
-  })
-);
+const useStyles = makeStyles(() => ({
+  panelTitle: {
+    fontSize: '20px',
+    lineHeight: '28px',
+    fontWeight: 600,
+    color: '#3A4445',
+  },
+}));
 
 interface Props {
   title: string;

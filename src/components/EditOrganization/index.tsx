@@ -1,4 +1,4 @@
-import { Container, createStyles, Grid, makeStyles } from '@material-ui/core';
+import { Container, Grid, Theme } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
@@ -14,17 +14,16 @@ import { Country, Subdivision } from 'src/types/Country';
 import { searchCountries } from 'src/api/country/country';
 import { updateOrganization } from 'src/api/organization/organization';
 import { getCountryByCode, getSubdivisionByCode } from 'src/utils/country';
+import { makeStyles } from '@mui/styles';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    mainContainer: {
-      paddingTop: theme.spacing(4),
-      paddingBottom: theme.spacing(7),
-      marginBottom: theme.spacing(6),
-      background: '#ffffff',
-    },
-  })
-);
+const useStyles = makeStyles((theme: Theme) => ({
+  mainContainer: {
+    paddingTop: theme.spacing(4),
+    paddingBottom: theme.spacing(7),
+    marginBottom: theme.spacing(6),
+    background: '#ffffff',
+  },
+}));
 
 type OrganizationViewProps = {
   organization: ServerOrganization;

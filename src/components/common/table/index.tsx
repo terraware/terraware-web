@@ -1,17 +1,13 @@
-import { Checkbox, TableCell, TablePagination } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableRow from '@material-ui/core/TableRow';
+import { Checkbox, Table, TableBody, TableCell, TableContainer, TablePagination, TableRow, Theme } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import EnhancedTableToolbar from './EnhancedTableToolbar';
 import { descendingComparator, getComparator, Order, stableSort } from './sort';
 import TableCellRenderer from './TableCellRenderer';
 import TableHeader from './TableHeader';
 import { DetailsRendererProps, RendererProps, TableColumnType } from './types';
+import { makeStyles } from '@mui/styles';
 
-const tableStyles = makeStyles((theme) => ({
+const tableStyles = makeStyles((theme: Theme) => ({
   hover: {
     '&:hover': {
       cursor: 'pointer',
