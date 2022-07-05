@@ -3,10 +3,8 @@
  */
 describe.skip('Summary page', () => {
   beforeEach(() => {
-    cy.intercept('GET', '/api/v1/seedbank/notification?*').as('notification');
     cy.intercept('GET', '/api/v1/seedbank/summary?organizationId=*').as('summary');
     cy.visit('/seeds-dashboard');
-    cy.wait('@notification');
     cy.wait('@summary');
   });
 
@@ -56,7 +54,6 @@ describe.skip('Summary page', () => {
 
 describe.skip('Summary page - Spinners', () => {
   it('display loading spinner', () => {
-    cy.intercept('GET', '/api/v1/seedbank/notification').as('notification');
     cy.intercept('GET', '/api/v1/seedbank/summary?organizationId=*').as('summary');
 
     cy.visit('/');
@@ -67,7 +64,6 @@ describe.skip('Summary page - Spinners', () => {
     cy.get('#spinner-alerts').should('exist');
     cy.get('#spinner-updates').should('exist');
 
-    cy.wait('@notification');
     cy.wait('@summary');
 
     cy.get('#spinner-summary-sessions').should('not.exist');

@@ -40,7 +40,7 @@ export const listDeviceTemplates = async (category?: DeviceTemplateCategory): Pr
       address: template.address,
       port: template.port,
       settings: template.settings,
-      pollingInterval: template.pollingInterval,
+      verbosity: template.verbosity,
     }));
   } catch {
     response.requestSucceeded = false;
@@ -74,7 +74,7 @@ export const createDevice = async (facilityId: number, template: DeviceTemplate)
       address: template.address,
       port: template.port,
       settings: template.settings,
-      pollingInterval: template.pollingInterval,
+      verbosity: template.verbosity,
     };
 
     await axios.post(DEVICES_ENDPOINT, createDeviceRequestPayload);
