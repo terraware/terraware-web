@@ -33,7 +33,7 @@ export default function DatePicker(props: Props): JSX.Element {
         props.onChange(props.id, newValue);
       }}
       label={props.label}
-      renderInput={(params) => <TextField {...params} />}
+      renderInput={(params) => <TextField {...params} id={props.id} />}
     />
   );
 }
