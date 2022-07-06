@@ -46,12 +46,12 @@ export default function SpeciesDropdown<T extends AccessionPostRequestBody>(
       if (filteredSpecies[0].endangered !== undefined) {
         setEndangered(filteredSpecies[0].endangered ? 'Yes' : 'No');
       } else {
-        setEndangered(strings.UNESPECIFIED);
+        setEndangered(strings.UNSPECIFIED);
       }
       if (filteredSpecies[0].rare !== undefined) {
         setRare(filteredSpecies[0].rare ? 'Yes' : 'No');
       } else {
-        setRare(strings.UNESPECIFIED);
+        setRare(strings.UNSPECIFIED);
       }
     } else {
       setFamily(undefined);

@@ -531,7 +531,7 @@ const strings = new LocalizedStrings({
     IGNORE: 'Ignore',
     ACCEPT: 'Accept',
     CHANGE_TO: 'Change to {0}',
-    UNESPECIFIED: 'Unspecified',
+    UNSPECIFIED: 'Unspecified',
   },
 });
 
