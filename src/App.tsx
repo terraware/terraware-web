@@ -1,5 +1,5 @@
 /* eslint-disable import/no-webpack-loader-syntax */
-import { CircularProgress, CssBaseline } from '@mui/material';
+import { CircularProgress, CssBaseline, StyledEngineProvider } from '@mui/material';
 import mapboxgl from 'mapbox-gl';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
@@ -304,7 +304,7 @@ export default function App() {
   };
 
   return (
-    <>
+    <StyledEngineProvider injectFirst>
       <CssBaseline />
       <ToastSnackbar />
       <>
@@ -528,6 +528,6 @@ export default function App() {
           </ErrorBoundary>
         </div>
       </>
-    </>
+    </StyledEngineProvider>
   );
 }
