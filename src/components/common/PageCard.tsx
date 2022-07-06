@@ -72,11 +72,20 @@ export default function PageCard(props: PageCardProps): JSX.Element {
     <Box className={classes.container}>
       <div className={classes.title}>
         <Icon name={icon} className={classes.icon} />
-        <Typography component='p' className={`${classes.titleText} ${isNameBold ? classes.bold : ''}`}>
+        <Typography
+          component='p'
+          className={`${classes.titleText} ${isNameBold ? classes.bold : ''}`}
+          sx={{ fontSize: '20px', lineHeight: '28px', paddingLeft: '10px', fontWeight: 600 }}
+        >
           {name}
         </Typography>
       </div>
-      <Typography component='p' variant='h6' className={classes.description}>
+      <Typography
+        component='p'
+        variant='h6'
+        className={classes.description}
+        sx={{ fontSize: '16px', fontWeight: 400, lineHeight: '24px', height: '100%', color: '#3a4445' }}
+      >
         {description}
       </Typography>
       {linkStyle === 'underline' && (

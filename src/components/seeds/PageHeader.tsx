@@ -10,8 +10,10 @@ import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
-    paddingLeft: 0,
-    paddingRight: 0,
+    '&.MuiContainer-root': {
+      paddingLeft: 0,
+      paddingRight: 0,
+    },
   },
   container: {
     maxWidth: '100%',
@@ -125,7 +127,12 @@ export default function PageHeader({
           )}
           <div className={classes.mainContent}>
             <Box display='flex' justifyContent='space-between' alignItems='center'>
-              <Typography id='title' variant='h4' className={`${classes.pageTitle} ${titleClassName}`}>
+              <Typography
+                id='title'
+                variant='h4'
+                className={`${classes.pageTitle} ${titleClassName}`}
+                sx={{ fontSize: '24px', lineHeight: '32px', fontWeight: 600 }}
+              >
                 {title || getPageHeading()}
               </Typography>
               {!!rightComponent && <div>{rightComponent}</div>}

@@ -71,7 +71,7 @@ export default function Home({ organizations, selectedOrganization, setSelectedO
         titleClassName={classes.extraPadding}
       />
       <Container maxWidth={false} className={classes.mainContainer}>
-        <Grid container spacing={3} className={classes.mainGrid}>
+        <Grid container spacing={3} className={classes.mainGrid} sx={{ padding: 0 }}>
           {selectedOrganization?.role && isAdmin(selectedOrganization) && (
             <>
               <Grid item xs={4}>
