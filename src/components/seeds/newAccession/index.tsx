@@ -329,7 +329,6 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
             <Species
               selectedSpecies={record.species}
               organization={organization}
-              onChange={onChange}
               disabled={isPendingCheckIn}
               record={record}
               setRecord={setRecord}

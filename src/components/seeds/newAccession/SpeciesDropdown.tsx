@@ -10,7 +10,6 @@ import Autocomplete from '../../common/Autocomplete';
 interface SpeciesDropdownProps<T extends AccessionPostRequestBody> {
   selectedSpecies?: string;
   organization?: ServerOrganization;
-  onChange: (id: string, value: unknown) => void;
   record: T;
   setRecord: React.Dispatch<React.SetStateAction<T>>;
   disabled?: boolean;
