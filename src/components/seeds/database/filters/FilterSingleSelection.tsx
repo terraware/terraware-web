@@ -37,7 +37,7 @@ export default function SingleSelection(props: Props): JSX.Element {
       }
     } else {
       if (options.find((o) => o.value === null)) {
-        options.push({ label: 'None', value: null, disabled: false });
+        options.push({ label: strings.UNSPECIFIED, value: null, disabled: false });
       }
     }
     options.splice(indexEnabledNull, 1);

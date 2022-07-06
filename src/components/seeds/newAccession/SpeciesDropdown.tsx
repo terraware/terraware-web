@@ -43,8 +43,12 @@ export default function SpeciesDropdown<T extends AccessionPostRequestBody>(
     const filteredSpecies = speciesList.filter((species) => species.scientificName === selectedSpecies);
     if (filteredSpecies && filteredSpecies[0]) {
       setFamily(filteredSpecies[0].familyName);
-      setEndangered(filteredSpecies[0].endangered ? 'Yes' : 'No');
-      setRare(filteredSpecies[0].rare ? 'Yes' : 'No');
+      if (filteredSpecies[0].endangered !== undefined) {
+        setEndangered(filteredSpecies[0].endangered ? 'Yes' : 'No');
+      }
+      if (filteredSpecies[0].rare !== undefined) {
+        setRare(filteredSpecies[0].rare ? 'Yes' : 'No');
+      }
     } else {
       setFamily(undefined);
       setEndangered(undefined);

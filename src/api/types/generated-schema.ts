@@ -4,6 +4,15 @@
  */
 
 export interface paths {
+  "/api/v1/automations": {
+    get: operations["listAutomations_2"];
+    post: operations["createAutomation_2"];
+  };
+  "/api/v1/automations/{automationId}": {
+    get: operations["getAutomation_2"];
+    put: operations["updateAutomation_2"];
+    delete: operations["deleteAutomation_2"];
+  };
   "/api/v1/automations/{automationId}/trigger": {
     post: operations["postAutomationTrigger"];
   };
@@ -173,19 +182,6 @@ export interface paths {
   "/api/v1/seedbank/log/{tag}": {
     post: operations["recordLogMessage"];
   };
-  "/api/v1/seedbank/notification": {
-    get: operations["listAll"];
-  };
-  "/api/v1/seedbank/notification/all/markRead": {
-    post: operations["markAllRead_1"];
-  };
-  "/api/v1/seedbank/notification/all/markUnread": {
-    /** For development and testing of notifications. Not available in production. */
-    post: operations["markAllUnread"];
-  };
-  "/api/v1/seedbank/notification/{id}/markRead": {
-    post: operations["markRead_1"];
-  };
   "/api/v1/seedbank/search": {
     post: operations["searchAccessions"];
   };
@@ -277,29 +273,6 @@ export interface paths {
 
 export interface components {
   schemas: {
-    AccessionNotificationPayload: {
-      /** Unique identifier for this notification. Clients should treat it as opaque. */
-      id: string;
-      timestamp: string;
-      type: "Alert" | "State" | "Date";
-      /** If true, this notification has been marked as read. */
-      read: boolean;
-      /** Plain-text body of notification. */
-      text: string;
-      /** For accession notifications, which accession caused the notification. */
-      accessionId?: number;
-      /** For state notifications, which state is being summarized. */
-      state?:
-        | "Awaiting Check-In"
-        | "Pending"
-        | "Processing"
-        | "Processed"
-        | "Drying"
-        | "Dried"
-        | "In Storage"
-        | "Withdrawn"
-        | "Nursery";
-    };
     AccessionPayload: {
       /** Server-generated human-readable identifier for the accession. This is unique within a single seed bank, but different seed banks may have accessions with the same number. */
       accessionNumber: string;
@@ -457,6 +430,18 @@ export interface components {
       accession: components["schemas"]["AccessionPayload"];
       status: components["schemas"]["SuccessOrError"];
     };
+    CreateAutomationRequestPayload: {
+      facilityId: number;
+      type: string;
+      name: string;
+      description?: string;
+      deviceId?: number;
+      timeseriesName?: string;
+      verbosity?: number;
+      lowerThreshold?: number;
+      upperThreshold?: number;
+      settings?: { [key: string]: { [key: string]: unknown } };
+    };
     CreateAutomationResponsePayload: {
       id: number;
       status: components["schemas"]["SuccessOrError"];
@@ -480,8 +465,8 @@ export interface components {
       port?: number;
       /** Protocol- and device-specific custom settings. This is an arbitrary JSON object; the exact settings depend on the device type. */
       settings?: { [key: string]: unknown };
-      /** How often the device manager should poll for status updates, in seconds. */
-      pollingInterval?: number;
+      /** Level of diagnostic information to log. */
+      verbosity?: number;
       /** ID of parent device such as a hub or gateway, if any. The parent device must exist. */
       parentId?: number;
     };
@@ -574,8 +559,8 @@ export interface components {
       port?: number;
       /** Protocol- and device-specific custom settings. This is an arbitrary JSON object; the exact settings depend on the device type. */
       settings?: { [key: string]: unknown };
-      /** How often the device manager should poll for status updates, in seconds. */
-      pollingInterval?: number;
+      /** Level of diagnostic information to log. */
+      verbosity?: number;
       /** ID of parent device such as a hub or gateway, if any. */
       parentId?: number;
     };
@@ -601,7 +586,6 @@ export interface components {
     DeviceManagerPayload: {
       id: number;
       sensorKitId: string;
-      shortCode: string;
       /** If true, this device manager is available to connect to a facility. */
       available: boolean;
       /** The facility this device manager is connected to, or null if it is not connected. */
@@ -624,7 +608,7 @@ export interface components {
       address?: string;
       port?: number;
       settings?: { [key: string]: { [key: string]: unknown } };
-      pollingInterval?: number;
+      verbosity?: number;
     };
     DeviceUnresponsiveRequestPayload: {
       /** When the device most recently responded. Null or absent if the device has never responded. */
@@ -831,10 +815,6 @@ export interface components {
     } & {
       coordinates: unknown;
     };
-    ListAccessionNotificationsResponsePayload: {
-      notifications: components["schemas"]["AccessionNotificationPayload"][];
-      status: components["schemas"]["SuccessOrError"];
-    };
     ListAllFieldValuesRequestPayload: {
       facilityId?: number;
       fields: string[];
@@ -924,6 +904,13 @@ export interface components {
       name: string;
       description?: string;
       configuration?: { [key: string]: unknown };
+      type: string;
+      settings?: { [key: string]: { [key: string]: unknown } };
+      timeseriesName?: string;
+      deviceId?: number;
+      lowerThreshold?: number;
+      upperThreshold?: number;
+      verbosity: number;
     };
     MultiLineString: components["schemas"]["Geometry"] & {
       coordinates?: number[][][];
@@ -1312,6 +1299,17 @@ export interface components {
       accession: components["schemas"]["AccessionPayload"];
       status: components["schemas"]["SuccessOrError"];
     };
+    UpdateAutomationRequestPayload: {
+      type: string;
+      name: string;
+      description?: string;
+      deviceId?: number;
+      timeseriesName?: string;
+      verbosity?: number;
+      lowerThreshold?: number;
+      upperThreshold?: number;
+      settings?: { [key: string]: { [key: string]: unknown } };
+    };
     UpdateDeviceRequestPayload: {
       /** Name of this device. */
       name: string;
@@ -1329,8 +1327,8 @@ export interface components {
       port?: number;
       /** Protocol- and device-specific custom settings. This is an arbitrary JSON object; the exact settings depend on the device type. */
       settings?: { [key: string]: unknown };
-      /** How often the device manager should poll for status updates, in seconds. */
-      pollingInterval?: number;
+      /** Level of diagnostic information to log. */
+      verbosity?: number;
       /** ID of parent device such as a hub or gateway, if any. The parent device must exist. */
       parentId?: number;
     };
@@ -1437,6 +1435,87 @@ export interface components {
 }
 
 export interface operations {
+  listAutomations_2: {
+    parameters: {
+      query: {
+        deviceId?: number;
+        facilityId?: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListAutomationsResponsePayload"];
+        };
+      };
+    };
+  };
+  createAutomation_2: {
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CreateAutomationResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateAutomationRequestPayload"];
+      };
+    };
+  };
+  getAutomation_2: {
+    parameters: {
+      path: {
+        automationId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetAutomationResponsePayload"];
+        };
+      };
+    };
+  };
+  updateAutomation_2: {
+    parameters: {
+      path: {
+        automationId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateAutomationRequestPayload"];
+      };
+    };
+  };
+  deleteAutomation_2: {
+    parameters: {
+      path: {
+        automationId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
   postAutomationTrigger: {
     parameters: {
       path: {
@@ -1476,7 +1555,6 @@ export interface operations {
     parameters: {
       query: {
         sensorKitId?: string;
-        shortCode?: string;
         facilityId?: number;
       };
     };
@@ -2805,68 +2883,6 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": { [key: string]: { [key: string]: unknown } };
-      };
-    };
-  };
-  listAll: {
-    parameters: {
-      query: {
-        facilityId: number;
-        /** Don't return notifications older than this; default is 1 month ago */
-        since?: string;
-        /** Return at most this many notifications; default is no limit */
-        limit?: number;
-      };
-    };
-    responses: {
-      /** Notifications in reverse time order (newest first). */
-      200: {
-        content: {
-          "application/json": components["schemas"]["ListAccessionNotificationsResponsePayload"];
-        };
-      };
-    };
-  };
-  markAllRead_1: {
-    responses: {
-      /** All notifications have been marked as read. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-        };
-      };
-    };
-  };
-  /** For development and testing of notifications. Not available in production. */
-  markAllUnread: {
-    responses: {
-      /** All notifications have been marked as unread. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-        };
-      };
-    };
-  };
-  markRead_1: {
-    parameters: {
-      path: {
-        /** ID of notification to mark as read */
-        id: string;
-      };
-    };
-    responses: {
-      /** Notification has been marked as read. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-        };
-      };
-      /** The requested notification ID was not valid. */
-      404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
       };
     };
   };

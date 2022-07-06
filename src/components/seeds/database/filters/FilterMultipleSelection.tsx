@@ -4,6 +4,7 @@ import React from 'react';
 import Checkbox from '../../../common/Checkbox';
 import { Option } from '../columns';
 import { FieldNodePayload } from '../../../../api/seeds/search';
+import strings from 'src/strings';
 
 const useStyles = makeStyles((theme: Theme) => ({
   box: {
@@ -65,7 +66,7 @@ export default function MultipleSelection(props: Props): JSX.Element {
   const indexNull = options.findIndex((o) => o.value === null);
   if (indexNull >= 0) {
     if (options.find((o) => o.value === null)) {
-      options.push({ label: 'None', value: null, disabled: false });
+      options.push({ label: strings.UNSPECIFIED, value: null, disabled: false });
     }
     options.splice(indexNull, 1);
   }

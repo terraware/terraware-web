@@ -8,7 +8,7 @@ export type Device = {
   protocol?: string | undefined;
   address?: string | undefined;
   port?: number | undefined;
-  pollingInterval?: number | undefined;
+  verbosity?: number | undefined;
   parentId?: number | undefined;
 };
 
@@ -23,5 +23,5 @@ export type DeviceTemplate = {
   address?: string;
   port?: number;
   settings?: { [key: string]: { [key: string]: unknown } };
-  pollingInterval?: number;
+  verbosity?: number;
 };
