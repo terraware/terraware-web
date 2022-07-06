@@ -25,7 +25,7 @@ import TextArea from '../../common/TextArea';
 import TextField from '../../common/TextField';
 import { FieldError } from '../newAccession';
 import { WEIGHT_UNITS } from '../nursery/NewTest';
-import { LocalizationProvider } from '@mui/lab';
+import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { makeStyles } from '@mui/styles';
 

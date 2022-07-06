@@ -31,7 +31,7 @@ import MainPaper from 'src/components/MainPaper';
 import { makeStyles } from '@mui/styles';
 import { CircularProgress, Fab, Container, Grid, Typography, Theme } from '@mui/material';
 import { Close } from '@mui/icons-material';
-import { LocalizationProvider } from '@mui/lab';
+import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
 const useStyles = makeStyles((theme: Theme) => ({

@@ -28,7 +28,7 @@ import MoveSiteModal from './MoveSiteModal';
 import axios from 'axios';
 import { updateSite } from 'src/api/site/site';
 import FormBottomBar from '../common/FormBottomBar';
-import { LocalizationProvider } from '@mui/lab';
+import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
 const useStyles = makeStyles((theme: Theme) => ({

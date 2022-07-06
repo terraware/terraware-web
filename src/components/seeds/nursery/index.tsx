@@ -17,7 +17,7 @@ import NewTest from './NewTest';
 import NurseryCellRenderer from './TableCellRenderer';
 import { COLUMNS } from './types';
 import { Add } from '@mui/icons-material';
-import { LocalizationProvider } from '@mui/lab';
+import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
 const useStyles = makeStyles((theme: Theme) => ({

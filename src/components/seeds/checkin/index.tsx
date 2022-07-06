@@ -21,7 +21,7 @@ import { APP_PATHS } from 'src/constants';
 import { checkInSelectedOrgInfo } from 'src/state/selectedOrgInfoPerPage';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
-import { LocalizationProvider } from '@mui/lab';
+import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
 import useStateLocation from 'src/utils/useStateLocation';

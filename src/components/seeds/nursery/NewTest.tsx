@@ -25,7 +25,7 @@ import Dropdown from '../../common/Dropdown';
 import TextArea from '../../common/TextArea';
 import TextField from '../../common/TextField';
 import { FieldError } from '../newAccession';
-import { LocalizationProvider } from '@mui/lab';
+import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
 const useStyles = makeStyles((theme: Theme) => ({

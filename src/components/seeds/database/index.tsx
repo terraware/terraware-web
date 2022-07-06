@@ -41,7 +41,7 @@ import TfMain from 'src/components/common/TfMain';
 import { ACCESSION_STATES } from '../../../types/Accession';
 import SelectSeedBankModal from '../../SeedBank/SelectSeedBankModal';
 import { isAdmin } from 'src/utils/organization';
-import { LocalizationProvider } from '@mui/lab';
+import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
 const useStyles = makeStyles((theme: Theme) => ({

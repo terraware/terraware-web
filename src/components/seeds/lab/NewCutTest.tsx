@@ -7,7 +7,7 @@ import useForm from 'src/utils/useForm';
 import CancelButton from '../../common/CancelButton';
 import DialogCloseButton from '../../common/DialogCloseButton';
 import TextField from '../../common/TextField';
-import { LocalizationProvider } from '@mui/lab';
+import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
 const useStyles = makeStyles((theme: Theme) => ({

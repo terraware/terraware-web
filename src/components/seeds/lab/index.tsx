@@ -20,7 +20,7 @@ import NewTest from './NewTest';
 import LabCellRenderer from './TableCellRenderer';
 import { CUT_TEST_COLUMNS, TEST_COLUMNS, TEST_ENTRY_COLUMNS } from './types';
 import { Add } from '@mui/icons-material';
-import { LocalizationProvider } from '@mui/lab';
+import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
 const useStyles = makeStyles((theme: Theme) => ({
