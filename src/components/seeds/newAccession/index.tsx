@@ -335,8 +335,6 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
               setRecord={setRecord}
             />
           </Suspense>
-
-          <Grid item xs={4} />
           <Grid item xs={4}>
             <TextField
               id='numberOfTrees'
