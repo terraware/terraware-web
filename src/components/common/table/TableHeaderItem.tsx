@@ -15,7 +15,7 @@ type Props = {
   order: Order;
   orderBy?: string;
   onRequestSort: (event: React.MouseEvent<unknown>, property: string) => void;
-  i: Number;
+  i: number;
 };
 export default function TableHeaderItem(props: Props): JSX.Element {
   const { headCell, order, orderBy, onRequestSort, i } = props;

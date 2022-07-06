@@ -168,8 +168,8 @@ export default function EnhancedTable<T>({
     setItemsToSkip(0);
   };
 
-  function columnsToHeadCells(columns: TableColumnType[]): HeadCell[] {
-    return columns.map((c) => ({
+  function columnsToHeadCells(columnsR: TableColumnType[]): HeadCell[] {
+    return columnsR.map((c) => ({
       id: c.key,
       disablePadding: false,
       label: typeof c.name === 'string' ? c.name.toUpperCase() : c.name,
