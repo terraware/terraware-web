@@ -348,6 +348,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
               disabled={isPendingCheckIn}
             />
           </Grid>
+          <Grid item xs={4} />
           <Grid item xs={4}>
             <TextField
               id='founderId'
@@ -357,7 +358,6 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
               disabled={isPendingCheckIn}
             />
           </Grid>
-          <Grid item xs={4} />
           <Grid item xs={4}>
             <Dropdown
               id='sourcePlantOrigin'

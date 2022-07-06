@@ -2,7 +2,6 @@ import { Grid } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import { getAllSpecies } from 'src/api/species/species';
 import { AccessionPostRequestBody } from 'src/api/types/accessions';
-import TextField from 'src/components/common/TextField';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
 import { Species } from 'src/types/Species';
@@ -20,9 +19,8 @@ interface SpeciesDropdownProps<T extends AccessionPostRequestBody> {
 export default function SpeciesDropdown<T extends AccessionPostRequestBody>(
   props: SpeciesDropdownProps<T>
 ): JSX.Element {
-  const { selectedSpecies, organization, onChange, setRecord, disabled } = props;
+  const { selectedSpecies, organization, setRecord, disabled } = props;
   const [speciesList, setSpeciesList] = useState<Species[]>([]);
-  const [family, setFamily] = useState<string>();
 
   useEffect(() => {
     const populateSpecies = async () => {
@@ -36,15 +34,6 @@ export default function SpeciesDropdown<T extends AccessionPostRequestBody>(
     };
     populateSpecies();
   }, [organization]);
-
-  useEffect(() => {
-    const filteredSpecies = speciesList.filter((species) => species.scientificName === selectedSpecies);
-    if (filteredSpecies && filteredSpecies[0]) {
-      setFamily(filteredSpecies[0].familyName);
-    } else {
-      setFamily(undefined);
-    }
-  }, [selectedSpecies, speciesList]);
 
   const onChangeHandler = (id: string, value: string) => {
     setRecord((previousRecord: T): T => {
@@ -68,10 +57,6 @@ export default function SpeciesDropdown<T extends AccessionPostRequestBody>(
           freeSolo={false}
         />
       </Grid>
-      <Grid item xs={4}>
-        <TextField id='family' value={family} onChange={onChange} label={strings.FAMILY} disabled={true} />
-      </Grid>
-      <Grid item xs={4} />
     </>
   );
 }
