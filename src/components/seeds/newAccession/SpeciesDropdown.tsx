@@ -23,8 +23,6 @@ export default function SpeciesDropdown<T extends AccessionPostRequestBody>(
   const { selectedSpecies, organization, onChange, setRecord, disabled } = props;
   const [speciesList, setSpeciesList] = useState<Species[]>([]);
   const [family, setFamily] = useState<string>();
-  const [endangered, setEndangered] = useState<string>();
-  const [rare, setRare] = useState<string>();
 
   useEffect(() => {
     const populateSpecies = async () => {
@@ -43,20 +41,8 @@ export default function SpeciesDropdown<T extends AccessionPostRequestBody>(
     const filteredSpecies = speciesList.filter((species) => species.scientificName === selectedSpecies);
     if (filteredSpecies && filteredSpecies[0]) {
       setFamily(filteredSpecies[0].familyName);
-      if (filteredSpecies[0].endangered !== undefined) {
-        setEndangered(filteredSpecies[0].endangered ? 'Yes' : 'No');
-      } else {
-        setEndangered(strings.UNSPECIFIED);
-      }
-      if (filteredSpecies[0].rare !== undefined) {
-        setRare(filteredSpecies[0].rare ? 'Yes' : 'No');
-      } else {
-        setRare(strings.UNSPECIFIED);
-      }
     } else {
       setFamily(undefined);
-      setEndangered(undefined);
-      setRare(undefined);
     }
   }, [selectedSpecies, speciesList]);
 
@@ -86,12 +72,6 @@ export default function SpeciesDropdown<T extends AccessionPostRequestBody>(
         <TextField id='family' value={family} onChange={onChange} label={strings.FAMILY} disabled={true} />
       </Grid>
       <Grid item xs={4} />
-      <Grid item xs={4}>
-        <TextField id='endangered' value={endangered} onChange={onChange} label={strings.ENDANGERED} disabled={true} />
-      </Grid>
-      <Grid item xs={4}>
-        <TextField id='rare' value={rare} onChange={onChange} label={strings.RARE} disabled={true} />
-      </Grid>
     </>
   );
 }
