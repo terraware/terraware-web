@@ -95,7 +95,9 @@ export default function ProblemTooltip({
         {problems[0].suggestedValue ? (
           <div className={classes.verticalSpacing}>
             <p>{strings.SUGGESTION}</p>
-            <p className={classes.value}>{strings.formatString(strings.CHANGE_TO, problems[0].suggestedValue)}</p>
+            <p className={classes.value}>
+              {strings.formatString(strings.CHANGE_TO, <b>{problems[0].suggestedValue}</b>)}
+            </p>
           </div>
         ) : null}
       </div>

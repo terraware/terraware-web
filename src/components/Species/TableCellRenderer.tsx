@@ -23,7 +23,8 @@ const useStyles = makeStyles((theme: Theme) => ({
   customTooltip: {
     padding: 0,
     background: '#ffffff',
-    border: '1px solid #F2F4F5',
+    border: '1px solid #bbb',
+    boxShadow: '1px 1px',
     borderRadius: '7px',
     color: '#4B5758',
     fontSize: '12px',
@@ -31,7 +32,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     '& .MuiTooltip-arrow': {
       color: '#ffffff',
       '&:before': {
-        border: '1px solid #F2F4F5',
+        border: '1px solid #bbb',
       },
     },
   },
@@ -71,6 +72,7 @@ export default function SpeciesCellRenderer(props: RendererProps<TableRowType>):
           Array.isArray(value) ? (
             <ClickAwayListener onClickAway={handleClickAway}>
               <Tooltip
+                placement='bottom-start'
                 title={
                   <ProblemTooltip
                     problems={value as SpeciesProblemElement[]}
