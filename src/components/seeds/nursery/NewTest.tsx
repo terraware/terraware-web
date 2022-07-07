@@ -215,7 +215,7 @@ export default function NewTestDialog(props: Props): JSX.Element {
   return (
     <Dialog onClose={handleCancel} disableEscapeKeyDown open={open} maxWidth='sm'>
       <DialogTitle>
-        <Typography variant='h6'>{strings.NEW_TEST}</Typography>
+        <Typography variant='body1'>{strings.NEW_TEST}</Typography>
         <DialogCloseButton onClick={handleCancel} />
       </DialogTitle>
       <DialogContent dividers>

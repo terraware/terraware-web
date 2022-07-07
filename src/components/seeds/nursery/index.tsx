@@ -50,6 +50,7 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
   const [selectedRecord, setSelectedRecord] = useState<GerminationTest>();
   const allowTestInGrams = Boolean(accession.processingMethod === 'Weight');
   const seedsAvailable = accession.remainingQuantity?.quantity ?? 0;
+  const [nurseryRows, setNurseryRows] = useState<GerminationTest[]>();
 
   useEffect(() => {
     window.scrollTo({ top: 0 });
@@ -62,6 +63,10 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
     };
     populateDate();
   }, []);
+
+  useEffect(() => {
+    setNurseryRows(accession.germinationTests?.filter((germinationTest) => germinationTest.testType === 'Nursery'));
+  }, [accession]);
 
   const onEdit = (row: TableRowType) => {
     setSelectedRecord(row as GerminationTest);
@@ -95,14 +100,6 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
     accession.germinationTests = newGerminationsTests;
     onSubmit(accession);
     setOpen(false);
-  };
-
-  const getNurseryRows = (): GerminationTest[] => {
-    const nurseryTests = accession.germinationTests?.filter(
-      (germinationTest) => germinationTest.testType === 'Nursery'
-    );
-
-    return nurseryTests ?? [];
   };
 
   const getTotalScheduled = (): number => {
@@ -158,7 +155,7 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
             <Grid item xs={12}>
               <Table
                 columns={COLUMNS}
-                rows={getNurseryRows()}
+                rows={nurseryRows || []}
                 orderBy='date'
                 Renderer={NurseryCellRenderer}
                 onSelect={onEdit}
