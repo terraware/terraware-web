@@ -491,11 +491,10 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
               </Typography>
               {photoFilenames?.map((photo, index) => (
                 <Link
-                  to=''
+                  to={getPhotoEndpoint((record as unknown as Accession).id, photo)}
                   id={`photo-${index}`}
                   key={index}
                   target='_blank'
-                  href={getPhotoEndpoint((record as unknown as Accession).id, photo)}
                 >
                   <Typography component='p' variant='body1' className={classes.photoLink}>
                     {photo}
