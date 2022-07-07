@@ -34,6 +34,7 @@ export default function DatePicker(props: Props): JSX.Element {
       }}
       label={props.label}
       renderInput={(params) => <TextField {...params} id={props.id} />}
+      disabled={props.disabled}
     />
   );
 }
