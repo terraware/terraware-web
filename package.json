@@ -41,12 +41,13 @@
     "styled-components": "^4.0.0",
     "tslint-plugin-cypress": "^1.0.4",
     "typescript": "^4.3.2",
+    "universal-cookie": "^4.0.4",
     "utm": "^1.1.1",
     "web-vitals": "^1.0.1",
     "worker-loader": "^3.0.8"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "HTTPS=true react-scripts start",
     "start:dev": "react-scripts -r @cypress/instrument-cra start",
     "build": "react-scripts build",
     "test": "TZ=America/Los_Angeles react-scripts test",

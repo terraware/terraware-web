@@ -10,6 +10,10 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { ThemeProvider } from '@material-ui/core';
 import theme from './theme';
 import { APP_PATHS } from './constants';
+import Cookies from 'universal-cookie';
+
+const cookies = new Cookies();
+cookies.set('KC_REDIRECT', 'https://localhost:3000/', { path: '/' });
 
 ReactDOM.render(
   <React.StrictMode>
