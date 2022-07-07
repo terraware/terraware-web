@@ -56,6 +56,7 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
   const seedsAvailable = accession.remainingQuantity?.quantity ?? 0;
   const [selectedTestEntry, setSelectedTestEntry] = useState<Germination>();
   const [date, setDate] = useState<number>();
+  const [labRows, setLabRows] = useState<GerminationTest[]>();
 
   useEffect(() => {
     window.scrollTo({ top: 0 });
@@ -69,6 +70,10 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
     populateDate();
   }, []);
 
+  useEffect(() => {
+    setLabRows(accession.germinationTests?.filter((germinationTest) => germinationTest.testType === 'Lab'));
+  }, [accession]);
+
   const getTotalScheduled = (): number => {
     const totalS = accession.germinationTests?.reduce((acum, germinationTest) => {
       if (germinationTest.testType === 'Lab' && moment(germinationTest.startDate).isAfter(date)) {
@@ -80,8 +85,6 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
 
     return totalS || 0;
   };
-
-  const labRows = accession.germinationTests?.filter((germinationTest) => germinationTest.testType === 'Lab') || [];
 
   const onEditTest = (row: TableRowType) => {
     setSelectedTest(row as GerminationTest);
@@ -238,7 +241,7 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
               <Table
                 id='lab-table'
                 columns={TEST_COLUMNS}
-                rows={labRows}
+                rows={labRows || []}
                 orderBy='date'
                 Renderer={LabCellRenderer}
                 onSelect={onEditTest}
@@ -276,7 +279,7 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
           </Grid>
           <Grid container spacing={4}>
             <Grid item xs={11}>
-              <Typography variant='h6' className={classes.bold}>
+              <Typography variant='subtitle1' className={classes.bold}>
                 {strings.CUT_TEST}
               </Typography>
             </Grid>
