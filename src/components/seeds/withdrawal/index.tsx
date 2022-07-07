@@ -53,10 +53,15 @@ export default function WithdrawalView({ accession, onSubmit }: Props): JSX.Elem
   const [open, setOpen] = React.useState(false);
   const [selectedRecord, setSelectedRecord] = React.useState<AccessionWithdrawal>();
   const [openInfoModal, setOpenInfoModal] = React.useState(false);
+  const [withdrawalRows, setWithdrawalRows] = React.useState<AccessionWithdrawal[]>();
 
   React.useEffect(() => {
     window.scrollTo({ top: 0 });
   }, []);
+
+  React.useEffect(() => {
+    setWithdrawalRows(accession.withdrawals);
+  }, [accession]);
 
   const seedsTotal = accession.initialQuantity
     ? `${accession.initialQuantity?.quantity} ${accession.initialQuantity?.units}`
@@ -181,7 +186,7 @@ export default function WithdrawalView({ accession, onSubmit }: Props): JSX.Elem
             <Grid item xs={12}>
               <Table
                 columns={COLUMNS}
-                rows={accession.withdrawals ?? []}
+                rows={withdrawalRows || []}
                 orderBy='date'
                 Renderer={WithdrawalCellRenderer}
                 onSelect={onEdit}
