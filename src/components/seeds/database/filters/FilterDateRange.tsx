@@ -1,6 +1,7 @@
 import { ArrowForward } from '@mui/icons-material';
 import { Grid, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import { format } from 'date-fns';
 import React from 'react';
 import { FieldNodePayload } from 'src/api/seeds/search';
 import DatePicker from 'src/components/common/DatePicker';
@@ -33,16 +34,16 @@ export default function DateRange(props: Props): JSX.Element {
     setEndDate(props.values[1] || null);
   }, [props.values]);
 
-  const onChangeDate = (id: string, value?: unknown) => {
-    const formatedValue = value && typeof value === 'string' ? value.substr(0, 10) : null;
+  const onChangeDate = (id: string, value?: Date | null) => {
+    const formattedDate = value ? format(value, 'yyyy-MM-dd') : null;
     const newValues = props.values.length ? [...props.values] : [startDate, endDate];
     if (id === 'startDate' && value) {
-      setStartDate(formatedValue);
-      newValues[0] = formatedValue;
+      setStartDate(formattedDate);
+      newValues[0] = formattedDate;
     }
     if (id === 'endDate' && value) {
-      setEndDate(formatedValue);
-      newValues[1] = formatedValue;
+      setEndDate(formattedDate);
+      newValues[1] = formattedDate;
     }
   };
 

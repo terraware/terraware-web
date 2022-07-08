@@ -1,14 +1,14 @@
-import { DatePicker as DatePickerMUI } from '@mui/x-date-pickers/DatePicker';
 import moment from 'moment';
 import 'moment/min/locales';
 import React, { KeyboardEventHandler } from 'react';
 import { TextField } from '@mui/material';
+import { DesktopDatePicker } from '@mui/x-date-pickers';
 
 export interface Props {
   id: string;
   label: React.ReactNode;
-  value?: string | null;
-  onChange: (id: string, value?: string | unknown) => void;
+  value?: string | Date | null;
+  onChange: (id: string, value?: Date | null) => void;
   'aria-label': string;
   onKeyPress?: KeyboardEventHandler;
   maxDate?: string;
@@ -27,13 +27,14 @@ export default function DatePicker(props: Props): JSX.Element {
   }, [window.navigator.language]);
 
   return (
-    <DatePickerMUI
-      value={props.value ?? null}
-      onChange={(newValue) => {
+    <DesktopDatePicker
+      label={props.label}
+      inputFormat='MM/dd/yyyy'
+      value={props.value}
+      onChange={(newValue: Date | null) => {
         props.onChange(props.id, newValue);
       }}
-      label={props.label}
-      renderInput={(params) => <TextField {...params} id={props.id} />}
+      renderInput={(params) => <TextField {...params} id={props.id} onKeyPress={props.onKeyPress} />}
       disabled={props.disabled}
     />
   );
