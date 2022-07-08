@@ -21,22 +21,16 @@ import NoOrgLandingPage from 'src/components/emptyStatePages/NoOrgLandingPage';
 import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
 import NavBar from 'src/components/NavBar';
 import NewPerson from 'src/components/Person/NewPerson';
-import NewProject from 'src/components/NewProject';
-import NewSite from 'src/components/NewSite';
 import Organization from 'src/components/Organization';
 import People from 'src/components/People';
 import PersonDetails from 'src/components/Person';
 import SpeciesList from 'src/components/Species';
-import Project from 'src/components/Project';
-import ProjectsList from 'src/components/Projects';
 import Accession from 'src/components/seeds/accession';
 import CheckIn from 'src/components/seeds/checkin';
 import Database from 'src/components/seeds/database';
 import { defaultPreset as DefaultColumns } from 'src/components/seeds/database/columns';
 import NewAccession from 'src/components/seeds/newAccession';
 import SeedSummary from 'src/components/seeds/summary';
-import SiteView from 'src/components/Site';
-import SitesList from 'src/components/Sites';
 import ToastSnackbar from 'src/components/ToastSnackbar';
 import TopBar from 'src/components/TopBar/TopBar';
 import TopBarContent from 'src/components/TopBar/TopBarContent';
@@ -45,7 +39,7 @@ import ErrorBoundary from 'src/ErrorBoundary';
 import { Notifications } from 'src/types/Notifications';
 import { ServerOrganization } from 'src/types/Organization';
 import { User } from 'src/types/User';
-import { getAllSites, setLastVisitedOrganizationId, getLastVisitedOrganizationId } from 'src/utils/organization';
+import { setLastVisitedOrganizationId, getLastVisitedOrganizationId } from 'src/utils/organization';
 import { useMediaQuery } from 'react-responsive';
 import MyAccount from './components/MyAccount';
 import ErrorBox from './components/common/ErrorBox/ErrorBox';
@@ -262,16 +256,6 @@ export default function App() {
 
   const selectedOrgHasSpecies = (): boolean => species.length > 0;
 
-  const selectedOrgHasProjects = (): boolean => {
-    const selected = organizationWithoutSB();
-    return selected && selected.projects && selected.projects.length > 0 ? true : false;
-  };
-
-  const selectedOrgHasSites = (): boolean => {
-    const selected = organizationWithoutSB();
-    return selected && getAllSites(selected).length > 0 ? true : false;
-  };
-
   const selectedOrgHasSeedBanks = (): boolean => {
     if (selectedOrganization && selectedOrganization.projects) {
       return selectedOrganization.projects.some((proj) => {
@@ -284,17 +268,6 @@ export default function App() {
     } else {
       return false;
     }
-  };
-
-  const getSitesView = (): JSX.Element => {
-    if (selectedOrgHasSites()) {
-      return <SitesList organization={selectedOrganization} />;
-    }
-    if (selectedOrgHasProjects()) {
-      return <EmptyStatePage pageName={'Sites'} />;
-    }
-
-    return <EmptyStatePage pageName={'Projects'} />;
   };
 
   const getSeedBanksView = (): JSX.Element => {
@@ -394,42 +367,6 @@ export default function App() {
                   )}
                 </Route>
               )}
-              {selectedOrganization && (
-                <Route exact path={APP_PATHS.PROJECTS_NEW}>
-                  <NewProject organization={selectedOrganization} reloadOrganizationData={reloadData} />
-                </Route>
-              )}
-              {selectedOrganization && (
-                <Route exact path={APP_PATHS.PROJECTS_EDIT}>
-                  <NewProject organization={selectedOrganization} reloadOrganizationData={reloadData} />
-                </Route>
-              )}
-              <Route path={APP_PATHS.PROJECTS_VIEW}>
-                <Project organization={selectedOrganization} />
-              </Route>
-              <Route exact path={APP_PATHS.PROJECTS}>
-                {selectedOrgHasProjects() ? (
-                  <ProjectsList organization={organizationWithoutSB()} />
-                ) : (
-                  <EmptyStatePage pageName={'Projects'} />
-                )}
-              </Route>
-              {selectedOrganization && (
-                <Route exact path={APP_PATHS.SITES_NEW}>
-                  <NewSite organization={organizationWithoutSB()!} reloadOrganizationData={reloadData} />
-                </Route>
-              )}
-              {selectedOrganization && (
-                <Route exact path={APP_PATHS.SITES_EDIT}>
-                  <NewSite organization={selectedOrganization} reloadOrganizationData={reloadData} />
-                </Route>
-              )}
-              <Route path={APP_PATHS.SITES_VIEW}>
-                <SiteView organization={selectedOrganization} />
-              </Route>
-              <Route exact path={APP_PATHS.SITES}>
-                {getSitesView()}
-              </Route>
               {selectedOrganization && (
                 <Route exact path={APP_PATHS.ORGANIZATION_EDIT}>
                   <EditOrganization organization={selectedOrganization} reloadOrganizationData={reloadData} />
