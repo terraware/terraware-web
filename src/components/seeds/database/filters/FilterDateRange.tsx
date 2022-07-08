@@ -1,7 +1,7 @@
 import { ArrowForward } from '@mui/icons-material';
 import { Grid, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { format } from 'date-fns';
+import { format, isValid } from 'date-fns';
 import React from 'react';
 import { FieldNodePayload } from 'src/api/seeds/search';
 import DatePicker from 'src/components/common/DatePicker';
@@ -34,23 +34,25 @@ export default function DateRange(props: Props): JSX.Element {
     setEndDate(props.values[1] || null);
   }, [props.values]);
 
-  const onChangeDate = (id: string, value?: Date | null) => {
-    const formattedDate = value ? format(value, 'yyyy-MM-dd') : null;
+  const onChangeDate = (id: string, value?: string | null) => {
     const newValues = props.values.length ? [...props.values] : [startDate, endDate];
     if (id === 'startDate' && value) {
-      setStartDate(formattedDate);
-      newValues[0] = formattedDate;
+      setStartDate(value);
+      newValues[0] = value;
     }
     if (id === 'endDate' && value) {
-      setEndDate(formattedDate);
-      newValues[1] = formattedDate;
+      setEndDate(value);
+      newValues[1] = value;
     }
   };
 
   const onEnter = (e: React.KeyboardEvent<Element>) => {
     if (e.key === 'Enter') {
       if (startDate || endDate) {
-        const newValues = [startDate, endDate];
+        const formattedStartDate =
+          startDate && isValid(startDate) ? format(startDate as unknown as Date, 'yyyy-MM-dd') : null;
+        const formattedEndDate = endDate && isValid(endDate) ? format(endDate as unknown as Date, 'yyyy-MM-dd') : null;
+        const newValues = [formattedStartDate, formattedEndDate];
 
         const newFilter: FieldNodePayload = {
           field: props.field,

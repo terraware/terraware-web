@@ -7,8 +7,8 @@ import { DesktopDatePicker } from '@mui/x-date-pickers';
 export interface Props {
   id: string;
   label: React.ReactNode;
-  value?: string | Date | null;
-  onChange: (id: string, value?: Date | null) => void;
+  value?: string | null;
+  onChange: (id: string, value?: string | null) => void;
   'aria-label': string;
   onKeyPress?: KeyboardEventHandler;
   maxDate?: string;
@@ -31,7 +31,7 @@ export default function DatePicker(props: Props): JSX.Element {
       label={props.label}
       inputFormat='MM/dd/yyyy'
       value={props.value ?? null}
-      onChange={(newValue: Date | null) => {
+      onChange={(newValue: string | null) => {
         props.onChange(props.id, newValue);
       }}
       renderInput={(params) => <TextField {...params} id={props.id} onKeyPress={props.onKeyPress} />}
