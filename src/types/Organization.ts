@@ -49,6 +49,7 @@ export type ServerOrganization = {
   id: number;
   name: string;
   role: AllOrganizationRoles;
+  facilities?: Facility[];
   projects?: Project[];
   countryCode?: string;
   countrySubdivisionCode?: string;
@@ -63,7 +64,7 @@ export const HighOrganizationRolesValues = ['Admin', 'Owner'];
 
 // Manager role included here so we don't get type issues with the server response,
 // which could contain a user with a manger role.
-export type AllOrganizationRoles = HighOrganizationRoles | 'Contributor';
+export type AllOrganizationRoles = HighOrganizationRoles | 'Contributor' | 'Manager';
 
 export interface SelectedOrgInfo {
   selectedProject?: Project;
