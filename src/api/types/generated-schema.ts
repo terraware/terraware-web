@@ -472,9 +472,12 @@ export interface components {
     };
     CreateFacilityRequestPayload: {
       description?: string;
+      /** Which organization this facility belongs to. Either this or siteId must be specified. */
+      organizationId?: number;
       name: string;
       type: "Seed Bank" | "Desalination" | "Reverse Osmosis";
-      siteId: number;
+      /** Which site this facility belongs to. Either this or organizationId must be specified. */
+      siteId?: number;
     };
     CreateFacilityResponsePayload: {
       id: number;
@@ -907,11 +910,11 @@ export interface components {
       configuration?: { [key: string]: unknown };
       type: string;
       settings?: { [key: string]: { [key: string]: unknown } };
-      timeseriesName?: string;
-      deviceId?: number;
       lowerThreshold?: number;
       upperThreshold?: number;
       verbosity: number;
+      timeseriesName?: string;
+      deviceId?: number;
     };
     MultiLineString: components["schemas"]["Geometry"] & {
       coordinates?: number[][][];

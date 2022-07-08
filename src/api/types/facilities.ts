@@ -9,6 +9,7 @@ export interface Facility {
   id: number;
   name: string;
   description?: string;
+  organizationId: number;
   siteId: number;
   type: FacilitiesListResponse['facilities'][0]['type'];
   connectionState: 'Not Connected' | 'Connected' | 'Configured';
