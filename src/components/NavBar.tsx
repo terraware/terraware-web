@@ -6,7 +6,7 @@ import NavSection from 'src/components/common/Navbar/NavSection';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import dictionary from 'src/strings/dictionary';
-import { AllOrganizationRoles, ServerOrganization, HighOrganizationRolesValues } from 'src/types/Organization';
+import { AllOrganizationRoles, ServerOrganization } from 'src/types/Organization';
 import NavFooter from './common/Navbar/NavFooter';
 
 type NavBarProps = {
@@ -28,8 +28,6 @@ export default function NavBar({ organization }: NavBarProps): JSX.Element | nul
   const isContactUsRoute = useRouteMatch(APP_PATHS.CONTACT_US + '/');
   const isHomeRoute = useRouteMatch(APP_PATHS.HOME + '/');
   const isPeopleRoute = useRouteMatch(APP_PATHS.PEOPLE + '/');
-  const isProjectsRoute = useRouteMatch(APP_PATHS.PROJECTS + '/');
-  const isSitesRoute = useRouteMatch(APP_PATHS.SITES + '/');
   const isSpeciesRoute = useRouteMatch(APP_PATHS.SPECIES + '/');
   const isOrganizationRoute = useRouteMatch(APP_PATHS.ORGANIZATION + '/');
   const isMonitoringRoute = useRouteMatch(APP_PATHS.MONITORING + '/');
@@ -72,26 +70,6 @@ export default function NavBar({ organization }: NavBarProps): JSX.Element | nul
         onClick={() => navigate(APP_PATHS.MONITORING)}
         id='monitoring'
       />
-
-      {role && HighOrganizationRolesValues.includes(role) && (
-        <>
-          <NavSection />
-          <NavItem
-            label={strings.PROJECTS}
-            icon='folder'
-            selected={!!isProjectsRoute}
-            onClick={() => navigate(APP_PATHS.PROJECTS)}
-            id='projects'
-          />
-          <NavItem
-            label={strings.SITES}
-            icon='site'
-            selected={!!isSitesRoute}
-            onClick={() => navigate(APP_PATHS.SITES)}
-            id='sites'
-          />
-        </>
-      )}
       {role && ['Admin', 'Owner'].includes(role) && (
         <>
           <NavSection title={strings.SETTINGS.toUpperCase()} />
