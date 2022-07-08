@@ -4,8 +4,8 @@ const strings = new LocalizedStrings({
   en: {
     TITLE_WELCOME: 'Welcome to Terraware',
     SUBTITLE_GET_STARTED:
-      "To get started, please create your organization now. You'll also be able to set up and manage information on projects, sites, people, and species.",
-    DESCRIPTION_ORGANIZATION: 'Your organization may include projects, sites, people, and species.',
+      "To get started, please create your organization now. You'll also be able to set up and manage information on people and species.",
+    DESCRIPTION_ORGANIZATION: 'Your organization may include people, and species.',
     NO_PROJECTS_DESCRIPTION_PROJECTS: 'Projects are folders that allow you to group your planting sites.',
     NO_PROJECTS_DESCRIPTION_SITES: 'Sites represent each of your planting locations.',
     NO_PROJECTS_DESCRIPTION_PEOPLE: 'Invite those who contribute to the organization’s success.',
