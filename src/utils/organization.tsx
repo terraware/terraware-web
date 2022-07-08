@@ -13,10 +13,8 @@ export const getProjectsById = (organization: ServerOrganization): ProjectsById 
 
 export const getAllSeedBanks = (organization: ServerOrganization): (Facility | undefined)[] => {
   let seedBanks: (Facility | undefined)[] = [];
-  if (organization && organization.projects) {
-    seedBanks = organization?.projects?.flatMap((project) =>
-      project.sites?.flatMap((site) => site.facilities?.filter((facility) => facility.type === 'Seed Bank'))
-    );
+  if (organization && organization.facilities) {
+    seedBanks = organization?.facilities?.filter((facility) => facility.type === 'Seed Bank');
   }
   return seedBanks;
 };
@@ -55,15 +53,8 @@ export const getFirstSite = (organization: ServerOrganization | undefined): Site
 };
 
 export const getFirstFacility = (organization: ServerOrganization | undefined): Facility | null => {
-  if (
-    organization?.projects &&
-    organization.projects[0] &&
-    organization.projects[0].sites &&
-    organization.projects[0].sites[0] &&
-    organization.projects[0].sites[0].facilities &&
-    organization.projects[0].sites[0].facilities[0]
-  ) {
-    return organization.projects[0].sites[0].facilities[0];
+  if (organization?.facilities && organization.facilities[0]) {
+    return organization.facilities[0];
   }
   return null;
 };

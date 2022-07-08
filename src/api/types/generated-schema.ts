@@ -361,7 +361,7 @@ export interface components {
     };
     AddOrganizationUserRequestPayload: {
       email: string;
-      role: "Contributor" | "Admin" | "Owner";
+      role: "Contributor" | "Manager" | "Admin" | "Owner";
       projectIds?: number[];
     };
     AllFieldValuesPayload: {
@@ -634,8 +634,9 @@ export interface components {
       createdTime: string;
       description?: string;
       id: number;
-      siteId: number;
       name: string;
+      organizationId: number;
+      siteId: number;
       type: "Seed Bank" | "Desalination" | "Reverse Osmosis";
     };
     FieldNodePayload: components["schemas"]["SearchNodePayload"] & {
@@ -956,17 +957,19 @@ export interface components {
       countrySubdivisionCode?: string;
       createdTime: string;
       description?: string;
+      /** This organization's facilities. Only included if depth is "Facility". */
+      facilities?: components["schemas"]["FacilityPayload"][];
       id: number;
       name: string;
       /** This organization's projects. Omitted if depth is "Organization". */
       projects?: components["schemas"]["ProjectPayload"][];
       /** The current user's role in the organization. */
-      role: "Contributor" | "Admin" | "Owner";
+      role: "Contributor" | "Manager" | "Admin" | "Owner";
       /** The total number of users in the organization, including the current user. */
       totalUsers: number;
     };
     OrganizationRolePayload: {
-      role: "Contributor" | "Admin" | "Owner";
+      role: "Contributor" | "Manager" | "Admin" | "Owner";
       /** Total number of users in the organization with this role. */
       totalUsers: number;
     };
@@ -981,7 +984,7 @@ export interface components {
       lastName?: string;
       /** IDs of projects the user is in. Users with admin and owner roles always have access to all projects. */
       projectIds: number[];
-      role: "Contributor" | "Admin" | "Owner";
+      role: "Contributor" | "Manager" | "Admin" | "Owner";
     };
     Point: components["schemas"]["Geometry"] & {
       /** A single position. In the terraware-server API, positions must always include 3 dimensions. The X and Y dimensions use the coordinate system specified by the crs field, and the Z dimension is in meters. */
@@ -1352,7 +1355,7 @@ export interface components {
       name: string;
     };
     UpdateOrganizationUserRequestPayload: {
-      role: "Contributor" | "Admin" | "Owner";
+      role: "Contributor" | "Manager" | "Admin" | "Owner";
     };
     UpdateProjectRequestPayload: {
       description?: string;
