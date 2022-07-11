@@ -71,30 +71,6 @@ export async function updateProject(project: Project): Promise<SimpleResponse> {
   return response;
 }
 
-const USER_IN_PROJECT = '/api/v1/projects/{projectId}/users/{userId}';
-type SimpleSuccessResponsePayload =
-  paths[typeof USER_IN_PROJECT]['post']['responses'][200]['content']['application/json'];
-
-export async function updateProjectUser(
-  projectId: number,
-  userId: number,
-  operation: (url: string, data?: any) => Promise<AxiosResponse<any>>
-): Promise<SimpleResponse> {
-  const response: SimpleResponse = {
-    requestSucceeded: true,
-  };
-  const url = USER_IN_PROJECT.replace('{projectId}', projectId.toString()).replace('{userId}', userId.toString());
-  try {
-    const serverResponse: SimpleSuccessResponsePayload = (await operation(url)).data;
-    if (serverResponse.status === 'error') {
-      response.requestSucceeded = false;
-    }
-  } catch {
-    response.requestSucceeded = false;
-  }
-  return response;
-}
-
 type ListAllProjectsResponse = {
   requestSucceeded: boolean;
   projects: Project[] | null;
