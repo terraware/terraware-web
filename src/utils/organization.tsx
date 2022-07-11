@@ -1,16 +1,6 @@
 import { Facility } from 'src/api/types/facilities';
 import { HighOrganizationRolesValues, Project, ServerOrganization, Site } from 'src/types/Organization';
 
-export type ProjectsById = Map<number, Project>;
-
-export const getProjectsById = (organization: ServerOrganization): ProjectsById => {
-  const projectById = new Map();
-  getOrganizationProjects(organization)?.forEach((project) => {
-    projectById.set(project.id, project);
-  });
-  return projectById;
-};
-
 export const getAllSeedBanks = (organization: ServerOrganization): (Facility | undefined)[] => {
   let seedBanks: (Facility | undefined)[] = [];
   if (organization && organization.facilities) {
