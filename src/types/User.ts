@@ -14,6 +14,5 @@ export type OrganizationUser = {
   email: string;
   id: number;
   role: AllOrganizationRoles;
-  projectIds: number[];
   addedTime?: string;
 };

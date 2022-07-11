@@ -12,7 +12,7 @@ type PostProjectResponse = {
   requestSucceeded: boolean;
 };
 
-export async function createProject(project: Project, organizationId: number): Promise<PostProjectResponse> {
+ async function createProject(project: Project, organizationId: number): Promise<PostProjectResponse> {
   const response: PostProjectResponse = {
     project: null,
     requestSucceeded: true,
@@ -51,7 +51,7 @@ type SimpleResponse = {
 
 type UpdateProjectRequestPayload = paths[typeof PROJECT]['put']['requestBody']['content']['application/json'];
 
-export async function updateProject(project: Project): Promise<SimpleResponse> {
+ async function updateProject(project: Project): Promise<SimpleResponse> {
   const response: SimpleResponse = {
     requestSucceeded: true,
   };
@@ -76,7 +76,7 @@ type ListAllProjectsResponse = {
   projects: Project[] | null;
 };
 type ListProjectsResponsePayload = paths[typeof PROJECTS]['get']['responses'][200]['content']['application/json'];
-export async function listAllProjects(): Promise<ListAllProjectsResponse> {
+ async function listAllProjects(): Promise<ListAllProjectsResponse> {
   const response: ListAllProjectsResponse = {
     requestSucceeded: true,
     projects: null,
