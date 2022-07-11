@@ -8,8 +8,6 @@ const ORGANIZATIONS = '/api/v1/organizations';
 type ListOrganizationsResponsePayload =
   paths[typeof ORGANIZATIONS]['get']['responses'][200]['content']['application/json'];
 
-type ServerOrg = ListOrganizationsResponsePayload['organizations'][0];
-
 type ServerFacility = Required<ServerOrganization>['facilities'][0];
 
 const parseFacility = (facility: ServerFacility): Facility => {

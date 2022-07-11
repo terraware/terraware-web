@@ -1,7 +1,6 @@
 import axios from '..';
 import { components, paths } from 'src/api/types/generated-schema';
 import { COLUMNS_INDEXED, DatabaseColumn } from 'src/components/seeds/database/columns';
-import { SelectedOrgInfo } from 'src/types/Organization';
 
 export type SeedSearchCriteria = Record<string, SearchNodePayload>;
 export const DEFAULT_SEED_SEARCH_FILTERS = {};
@@ -23,15 +22,14 @@ export type FieldValuesPayload = { [key: string]: components['schemas']['FieldVa
  */
 export function convertToSearchNodePayload(
   criteria: SeedSearchCriteria,
-  selectedOrgInfo?: SelectedOrgInfo,
   organizationId?: number
 ): SearchNodePayload | undefined {
   if (criteria === {}) {
     return undefined;
   }
   let newCriteria = criteria;
-  if (selectedOrgInfo && organizationId) {
-    newCriteria = addOrgInfoToSearch(selectedOrgInfo, organizationId, criteria);
+  if (organizationId) {
+    newCriteria = addOrgInfoToSearch(organizationId, criteria);
   }
   return {
     operation: 'and',
@@ -39,25 +37,13 @@ export function convertToSearchNodePayload(
   };
 }
 
-export function addOrgInfoToSearch(
-  selectedOrgInfo: SelectedOrgInfo,
-  organizationId: number,
-  previousCriteria?: SeedSearchCriteria
-) {
+function addOrgInfoToSearch(organizationId: number, previousCriteria?: SeedSearchCriteria) {
   const newCriteria = previousCriteria ? Object.values(previousCriteria) : [];
-  if (selectedOrgInfo.selectedSite) {
-    newCriteria.unshift({
-      field: 'facility_site_id',
-      values: [selectedOrgInfo.selectedSite.id.toString()],
-      operation: 'field',
-    });
-  } else {
-    newCriteria.unshift({
-      field: 'facility_site_project_organization_id',
-      values: [organizationId.toString()],
-      operation: 'field',
-    });
-  }
+  newCriteria.unshift({
+    field: 'facility_organization_id',
+    values: [organizationId.toString()],
+    operation: 'field',
+  });
   return newCriteria;
 }
 
@@ -94,10 +80,7 @@ export async function searchCsv(params: SearchRequestPayload): Promise<any> {
   }
 }
 
-export async function getPendingAccessions(
-  selectedValues: SelectedOrgInfo,
-  organizationId: number
-): Promise<SearchResponseElement[] | null> {
+export async function getPendingAccessions(organizationId: number): Promise<SearchResponseElement[] | null> {
   const searchParams: SearchRequestPayload = {
     prefix: 'facilities.accessions',
     fields: ['accessionNumber', 'bagNumber', 'speciesName', 'siteLocation', 'collectedDate', 'receivedDate', 'id'],
@@ -109,7 +92,6 @@ export async function getPendingAccessions(
           operation: 'field',
         },
       ],
-      selectedValues,
       organizationId
     ),
     sortOrder: [{ field: 'accessionNumber', direction: 'Ascending' }],
@@ -197,7 +179,7 @@ export async function searchFieldValues(
   organizationId: number
 ): Promise<FieldValuesMap | null> {
   try {
-    const formattedSearch = convertToSearchNodePayload(searchCriteria, {}, organizationId);
+    const formattedSearch = convertToSearchNodePayload(searchCriteria, organizationId);
     const params: ValuesPostRequestBody = {
       fields,
       search: formattedSearch,

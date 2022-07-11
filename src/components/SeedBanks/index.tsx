@@ -121,7 +121,6 @@ export default function SeedBanksList({ organization }: SeedBanksListProps): JSX
             name: result.name as string,
             description: result.description as string,
             organizationId: parseInt(result.organization_id as string, 10),
-            siteId: 0,
             type: result.type as 'Seed Bank' | 'Desalination' | 'Reverse Osmosis',
             connectionState: result.connectionState as 'Not Connected' | 'Connected' | 'Configured',
           });
