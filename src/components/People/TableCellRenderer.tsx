@@ -17,10 +17,6 @@ export default function ProjectsCellRenderer(props: RendererProps<TableRowType>)
   const classes = useStyles();
   const { column, row, value, index } = props;
 
-  if (column.key === 'projectNames' && Array.isArray(value)) {
-    return <CellRenderer index={index} column={column} value={value.join(', ')} row={row} />;
-  }
-
   const createLinkToPerson = (iValue: React.ReactNode | unknown[]) => {
     const personLocation = {
       pathname: APP_PATHS.PEOPLE_VIEW.replace(':personId', row.id.toString()),
