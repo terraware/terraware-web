@@ -65,7 +65,7 @@ const NO_SEEDBANKS_CONTENT: PageContent = {
 };
 
 type EmptyStatePageProps = {
-  pageName: 'Projects' | 'Sites' | 'Species' | 'SeedBanks';
+  pageName: 'Species' | 'SeedBanks';
   organization?: ServerOrganization;
   reloadData?: () => void;
 };
