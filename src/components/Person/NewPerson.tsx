@@ -24,6 +24,7 @@ const useStyles = makeStyles((theme) =>
       paddingBottom: theme.spacing(7),
       marginBottom: theme.spacing(6),
       background: '#ffffff',
+      height: '100%',
     },
     backIcon: {
       fill: '#007DF2',
