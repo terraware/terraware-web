@@ -2,7 +2,6 @@ import LocalizedStrings from 'react-localization';
 
 const strings = new LocalizedStrings({
   en: {
-    DESCRIPTION_PEOPLE: 'Add people for each project.',
     NO_SPECIES_DESCRIPTION:
       'It looks like you haven’t added any species yet. Having a master species list helps streamline your organization’s seed and plant data entry. You can either add species manually and individually, or import data from a CSV.',
     IMPORT_SPECIES_DESCRIPTION: 'Upload a CSV with scientific names and other optional fields.',
