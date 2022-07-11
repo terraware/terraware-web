@@ -75,6 +75,7 @@ export async function getOrganizations(): Promise<OrganizationsResponse> {
       id: organization.id,
       name: organization.name,
       role: organization.role,
+      facilities: organization.facilities?.map((facility) => parseFacility(facility)),
       projects: organization.projects?.map((project) => parseProject(project)),
       description: organization.description,
       countryCode: organization.countryCode,
@@ -227,7 +228,7 @@ export async function leaveOrganization(organizationId: number, userId: number):
 }
 
 type OrganizationRolePayload = {
-  role: 'Contributor' | 'Admin' | 'Owner';
+  role: 'Contributor' | 'Admin' | 'Owner' | 'Manager';
   totalUsers: number;
 };
 
