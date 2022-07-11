@@ -34,7 +34,7 @@ const EMPTY_STATE_CONTENT_STYLES = {
 
 const LIST_ITEM_CONTENT: ListItemContent[] = [
   { icon: 'organization', title: strings.ORGANIZATION, description: landingPageStrings.DESCRIPTION_ORGANIZATION },
-  { icon: 'people', title: strings.PEOPLE, description: landingPageStrings.NO_PROJECTS_DESCRIPTION_PEOPLE },
+  { icon: 'people', title: strings.PEOPLE, description: landingPageStrings.DESCRIPTION_PEOPLE },
   { icon: 'species2', title: strings.SPECIES, description: landingPageStrings.DESCRIPTION_SPECIES },
 ];
 

@@ -6,7 +6,6 @@ import EmptyStateContent, { ListItemContent } from 'src/components/emptyStatePag
 import PageHeader from 'src/components/seeds/PageHeader';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
-import dict from 'src/strings/dictionary';
 import emptyStateStrings from 'src/strings/emptyStatePages';
 import dictionary from 'src/strings/dictionary';
 import AddSpeciesModal from '../Species/AddSpeciesModal';
@@ -48,35 +47,6 @@ type PageContent = {
   listItems: ListItemContent[];
   buttonText?: string;
   linkLocation?: string;
-};
-
-const NO_PROJECTS_CONTENT: PageContent = {
-  title1: strings.PROJECTS,
-  title2: dict.CREATE_A_PROJECT,
-  subtitle: emptyStateStrings.NO_PROJECTS_SUBTITLE,
-  listItems: [
-    {
-      icon: 'project',
-      title: dict.PROJECT_PROFILE,
-      description: emptyStateStrings.NO_PROJECTS_DESCRIPTION_PROJECTS,
-    },
-    { icon: 'people', title: strings.PEOPLE, description: emptyStateStrings.NO_PROJECTS_DESCRIPTION_PEOPLE },
-    { icon: 'sites', title: strings.SITES, description: emptyStateStrings.NO_PROJECTS_DESCRIPTION_SITES },
-  ],
-  buttonText: strings.ADD_PROJECT,
-  linkLocation: APP_PATHS.PROJECTS_NEW,
-};
-
-const NO_SITES_CONTENT: PageContent = {
-  title1: strings.SITES,
-  title2: dict.CREATE_A_SITE,
-  subtitle: emptyStateStrings.NO_SITES_SUBTITLE,
-  listItems: [
-    { icon: 'sites', title: dictionary.SITE_PROFILE, description: emptyStateStrings.NO_SITES_DESCRIPTION_SITES },
-    { icon: 'project', title: strings.PROJECT, description: emptyStateStrings.NO_SITES_DESCRIPTION_PROJECTS },
-  ],
-  buttonText: strings.ADD_SITE,
-  linkLocation: APP_PATHS.SITES_NEW,
 };
 
 const NO_SEEDBANKS_CONTENT: PageContent = {
@@ -150,14 +120,12 @@ export default function EmptyStatePage({ pageName, organization, reloadData }: E
 
   const pageContent = (): PageContent => {
     switch (pageName) {
-      case 'Projects':
-        return NO_PROJECTS_CONTENT;
       case 'Species':
         return NO_SPECIES_CONTENT;
       case 'SeedBanks':
         return NO_SEEDBANKS_CONTENT;
       default:
-        return NO_SITES_CONTENT;
+        return NO_SEEDBANKS_CONTENT;
     }
   };
 
