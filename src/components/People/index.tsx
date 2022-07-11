@@ -173,7 +173,7 @@ export default function PeopleList({ organization, reloadData, user }: PeopleLis
     if (organization) {
       let assignNewOwnerResponse;
       if (newOwner) {
-        assignNewOwnerResponse = await updateOrganizationUser(newOwner.id, organization.id, 'Owner', [], []);
+        assignNewOwnerResponse = await updateOrganizationUser(newOwner.id, organization.id, 'Owner');
       }
       const promises: Promise<UpdateOrganizationResponse>[] = [];
       if ((assignNewOwnerResponse && assignNewOwnerResponse.requestSucceeded === true) || !assignNewOwnerResponse) {

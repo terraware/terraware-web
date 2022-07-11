@@ -183,7 +183,7 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
     if (removedOrg) {
       let assignNewOwnerResponse;
       if (newOwner) {
-        assignNewOwnerResponse = await updateOrganizationUser(newOwner.id, removedOrg.id, 'Owner', [], []);
+        assignNewOwnerResponse = await updateOrganizationUser(newOwner.id, removedOrg.id, 'Owner');
       }
       if ((assignNewOwnerResponse && assignNewOwnerResponse.requestSucceeded === true) || !assignNewOwnerResponse) {
         leaveOrgResponse = await leaveOrganization(removedOrg.id, user.id);

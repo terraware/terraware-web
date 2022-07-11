@@ -338,8 +338,7 @@ const strings = new LocalizedStrings({
     LAST_NAME: 'Last Name',
     ROLES_INFO: 'Select a role for this person.',
     CONTRIBUTOR_INFO: 'A contributor can only input and edit data entries for seeds and plants.',
-    ADMIN_INFO:
-      'An admin can edit the organization profile, manage users in the organization, manage projects, and manage sites, and manage species.',
+    ADMIN_INFO: 'An admin can edit the organization profile, manage users in the organization and manage species.',
     ROLE: 'Role',
     ADD_TO_PROJECT: 'Add to Project',
     NO_PROJECTS_IN_ORG: 'No Projects in Organization',
