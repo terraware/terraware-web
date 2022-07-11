@@ -77,26 +77,6 @@ export default function Home({ organizations, selectedOrganization, setSelectedO
             <>
               <Grid item xs={4}>
                 <PageCard
-                  name={strings.PROJECTS}
-                  icon='folder'
-                  description={homePageStrings.PROJECTS_CARD_DESCRIPTION}
-                  link={APP_PATHS.PROJECTS}
-                  linkText={strings.formatString(homePageStrings.GO_TO, strings.PROJECTS) as string}
-                  linkStyle={'underline'}
-                />
-              </Grid>
-              <Grid item xs={4}>
-                <PageCard
-                  name={strings.SITES}
-                  icon='site'
-                  description={homePageStrings.SITES_CARD_DESCRIPTION}
-                  link={APP_PATHS.SITES}
-                  linkText={strings.formatString(homePageStrings.GO_TO, strings.SITES) as string}
-                  linkStyle={'underline'}
-                />
-              </Grid>
-              <Grid item xs={4}>
-                <PageCard
                   name={strings.PEOPLE}
                   icon='person'
                   description={homePageStrings.PEOPLE_CARD_DESCRIPTION}
@@ -104,10 +84,6 @@ export default function Home({ organizations, selectedOrganization, setSelectedO
                   linkText={strings.formatString(homePageStrings.GO_TO, strings.PEOPLE) as string}
                   linkStyle={'underline'}
                 />
-              </Grid>
-
-              <Grid item xs={12}>
-                <TfDivisor />
               </Grid>
             </>
           )}
@@ -131,6 +107,9 @@ export default function Home({ organizations, selectedOrganization, setSelectedO
                 linkText={strings.formatString(homePageStrings.GO_TO, strings.SPECIES) as string}
                 linkStyle={'underline'}
               />
+            </Grid>
+            <Grid item xs={12}>
+              <TfDivisor />
             </Grid>
           </>
         </Grid>
