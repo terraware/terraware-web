@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { updateProjectUser } from 'src/api/project/project';
 import { paths } from 'src/api/types/generated-schema';
 import { OrganizationUser, User } from 'src/types/User';
 import { AllOrganizationRoles } from 'src/types/Organization';
@@ -124,9 +123,7 @@ export type UpdateUserResponse = {
 export async function updateOrganizationUser(
   userId: number,
   organizationId: number,
-  newRole: AllOrganizationRoles,
-  addedProjectIds: number[],
-  removedProjectIds: number[]
+  newRole: AllOrganizationRoles
 ): Promise<UpdateUserResponse> {
   const response: UpdateUserResponse = { requestSucceeded: true };
 
@@ -141,18 +138,6 @@ export async function updateOrganizationUser(
       response.requestSucceeded = false;
       throw Error;
     }
-
-    // TODO: rollback changes if one change fails.
-    const addedPromises = addedProjectIds.map((projectId) => updateProjectUser(projectId, userId, axios.post));
-    const removedPromises = removedProjectIds.map((projectId) => updateProjectUser(projectId, userId, axios.delete));
-    const projectUpdatePromises = addedPromises.concat(removedPromises);
-    const projectUpdateResponses = await Promise.all(projectUpdatePromises);
-
-    projectUpdateResponses.forEach((resp) => {
-      if (!resp.requestSucceeded) {
-        throw Error;
-      }
-    });
   } catch (error) {
     response.requestSucceeded = false;
   }
