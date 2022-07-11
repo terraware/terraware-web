@@ -99,7 +99,7 @@ export async function getPendingAccessions(
   organizationId: number
 ): Promise<SearchResponseElement[] | null> {
   const searchParams: SearchRequestPayload = {
-    prefix: 'projects.sites.facilities.accessions',
+    prefix: 'facilities.accessions',
     fields: ['accessionNumber', 'bagNumber', 'speciesName', 'siteLocation', 'collectedDate', 'receivedDate', 'id'],
     search: convertToSearchNodePayload(
       [
