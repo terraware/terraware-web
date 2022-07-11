@@ -46,7 +46,7 @@ const columns: TableColumnType[] = [
 ];
 
 type SeedBanksListProps = {
-  organization?: ServerOrganization;
+  organization: ServerOrganization;
 };
 
 export default function SeedBanksList({ organization }: SeedBanksListProps): JSX.Element {
@@ -88,8 +88,8 @@ export default function SeedBanksList({ organization }: SeedBanksListProps): JSX
     const refreshSearch = async () => {
       if (debouncedSearchTerm) {
         const params: SearchNodePayload = {
-          prefix: 'projects.sites.facilities',
-          fields: ['id', 'name', 'description', 'type'],
+          prefix: 'facilities',
+          fields: ['id', 'name', 'description', 'type', 'organization_id'],
           search: {
             operation: 'and',
             children: [
@@ -103,9 +103,9 @@ export default function SeedBanksList({ organization }: SeedBanksListProps): JSX
               { operation: 'field', field: 'type', type: 'Exact', values: ['Seed Bank'] },
               {
                 operation: 'field',
-                field: 'site_project_organization_id',
+                field: 'organization_id',
                 type: 'Exact',
-                values: [organization?.id],
+                values: [organization.id],
               },
             ],
           },
@@ -120,7 +120,7 @@ export default function SeedBanksList({ organization }: SeedBanksListProps): JSX
             id: result.id as number,
             name: result.name as string,
             description: result.description as string,
-            organizationId: 0,
+            organizationId: parseInt(result.organization_id as string, 10),
             siteId: 0,
             type: result.type as 'Seed Bank' | 'Desalination' | 'Reverse Osmosis',
             connectionState: result.connectionState as 'Not Connected' | 'Connected' | 'Configured',
@@ -146,7 +146,7 @@ export default function SeedBanksList({ organization }: SeedBanksListProps): JSX
         </Grid>
         <Grid item xs={8} />
         <Grid item xs={2} className={classes.centered}>
-          {organization && ['Admin', 'Owner'].includes(organization?.role) && (
+          {['Admin', 'Owner'].includes(organization.role) && (
             <Button id='new-facility' label={strings.ADD} onClick={goToNewSeedBank} size='medium' />
           )}
         </Grid>
