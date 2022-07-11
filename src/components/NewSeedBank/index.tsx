@@ -55,6 +55,7 @@ export default function SeedBankView({ organization, reloadOrganizationData }: S
     name: '',
     id: -1,
     type: 'Seed Bank',
+    organizationId: organization.id,
     siteId: siteId || -1,
     connectionState: 'Not Connected',
   });
@@ -79,11 +80,12 @@ export default function SeedBankView({ organization, reloadOrganizationData }: S
       name: selectedSeedBank?.name || '',
       description: selectedSeedBank?.description,
       id: -1,
+      organizationId: organization.id,
       siteId: selectedSeedBank?.siteId || siteId || -1,
       type: 'Seed Bank',
       connectionState: 'Not Connected',
     });
-  }, [selectedSeedBank, setRecord, siteId]);
+  }, [selectedSeedBank, setRecord, siteId, organization.id]);
 
   const goToSeedBanks = () => {
     const sitesLocation = {
