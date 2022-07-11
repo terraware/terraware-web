@@ -84,17 +84,7 @@ export default function PageHeader({
 
   const getPageHeading = () => {
     if (page && parentPage) {
-      return (
-        <Title
-          page={page}
-          parentPage={parentPage}
-          organization={organization}
-          allowAll={allowAll}
-          selectedOrgInfo={selectedOrgInfo}
-          onChangeSelectedOrgInfo={onChangeSelectedOrgInfo}
-          showFacility={showFacility}
-        />
-      );
+      return <Title page={page} parentPage={parentPage} />;
     }
   };
 

@@ -12,7 +12,6 @@ import { searchCountries } from 'src/api/country/country';
 import { getOrganizationUsers } from 'src/api/organization/organization';
 import { OrganizationUser } from 'src/types/User';
 import { getCountryByCode, getSubdivisionByCode } from 'src/utils/country';
-import { getOrganizationProjects } from 'src/utils/organization';
 import PageSnackbar from 'src/components/PageSnackbar';
 
 const useStyles = makeStyles((theme) =>
@@ -139,15 +138,6 @@ export default function OrganizationView({ organization }: OrganizationViewProps
           )}
         </Grid>
         <Grid item xs={4} />
-        <Grid item xs={4}>
-          <TextField
-            label={strings.NUMBER_OF_PROJECTS}
-            id='numberOfProjects'
-            type='text'
-            value={getOrganizationProjects(organization).length.toString()}
-            display={true}
-          />
-        </Grid>
         <Grid item xs={4}>
           <TextField
             label={strings.NUMBER_OF_PEOPLE}
