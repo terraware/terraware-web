@@ -209,7 +209,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
 
       const populateUnfilteredResults = async () => {
         const apiResponse = await search({
-          prefix: 'projects.sites.facilities.accessions',
+          prefix: 'facilities.accessions',
           fields: searchColumns.includes('active') ? [...searchColumns, 'id'] : [...searchColumns, 'active', 'id'],
           sortOrder: [searchSortOrder],
           search: convertToSearchNodePayload({}, selected, organization.id),
@@ -221,7 +221,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
 
       const populateSearchResults = async () => {
         const apiResponse = await search({
-          prefix: 'projects.sites.facilities.accessions',
+          prefix: 'facilities.accessions',
           fields: searchColumns.includes('active') ? [...searchColumns, 'id'] : [...searchColumns, 'active', 'id'],
           sortOrder: [searchSortOrder],
           search: convertToSearchNodePayload(searchCriteria, selected, organization.id),

@@ -55,7 +55,7 @@ export default function DownloadReportModal(props: DownloadReportModalProps): JS
 
   const handleOk = async () => {
     const apiResponse = await searchCsv({
-      prefix: 'projects.sites.facilities.accessions',
+      prefix: 'facilities.accessions',
       fields: searchColumns.includes('active') ? [...searchColumns, 'id'] : [...searchColumns, 'active', 'id'],
       sortOrder: [searchSortOrder],
       search: convertToSearchNodePayload(searchCriteria, selectedOrgInfo, organization.id),
