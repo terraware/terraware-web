@@ -202,7 +202,6 @@ const strings = new LocalizedStrings({
       'By adding information about storage and saving changes, you will be automatically changing this accession’s stage from Pending to Stored.',
     NEXT_WITHDRAWAL: 'Next: Withdrawal',
     LOCATION: 'Location',
-    CONDITION: 'Condition',
     SUMMARY: 'Summary',
     WELCOME_MSG: 'Welcome and happy seeding!',
     ACTIVE_ACCESSIONS: 'Active Accessions',

@@ -131,7 +131,6 @@ export default function Storage({ accession, onSubmit }: Props): JSX.Element {
               facilityId={record.facilityId}
               onChange={onChange}
               storageLocation={record.storageLocation}
-              storageCondition={record.storageCondition}
             />
           </Suspense>
           <Grid item xs={12}>
