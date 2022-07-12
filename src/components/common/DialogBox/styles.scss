@@ -75,7 +75,9 @@
     border-bottom: 1px solid $tw-clr-dvdr-fill;
     padding: $tw-spc-base-medium;
     text-align: center;
-    overflow: auto;
+    &.scrolled {
+      overflow: auto;
+    }
   }
 
   &--body-no-footer {

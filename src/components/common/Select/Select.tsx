@@ -20,6 +20,7 @@ interface SelectProps {
   hideArrow?: boolean;
   onBlur?: () => void;
   onFocus?: () => void;
+  scrolled?: boolean;
 }
 
 export default function Select(props: SelectProps): JSX.Element {
@@ -40,6 +41,7 @@ export default function Select(props: SelectProps): JSX.Element {
     hideArrow,
     onBlur,
     onFocus,
+    scrolled,
   } = props;
 
   const selectClass = classNames({
@@ -84,7 +86,9 @@ export default function Select(props: SelectProps): JSX.Element {
   useEffect(() => {
     if (openedOptions) {
       scrollToSelectedElement();
-      scrollRef?.current?.scrollIntoView();
+      if (scrolled && scrollRef?.current) {
+        scrollRef?.current?.scrollIntoView();
+      }
     }
   }, [openedOptions]);
 
@@ -171,7 +175,7 @@ export default function Select(props: SelectProps): JSX.Element {
                 </li>
               );
             })}
-            <div ref={scrollRef} />
+            {scrolled && <div ref={scrollRef} />}
           </ul>
         )}
       </div>
