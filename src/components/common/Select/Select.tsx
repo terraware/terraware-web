@@ -57,6 +57,7 @@ export default function Select(props: SelectProps): JSX.Element {
 
   const [openedOptions, setOpenedOptions] = useState(false);
   const inputRef = useRef<HTMLDivElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
   const dropdownRef = useRef<HTMLUListElement>(null);
 
   useEffect(() => {
@@ -83,6 +84,7 @@ export default function Select(props: SelectProps): JSX.Element {
   useEffect(() => {
     if (openedOptions) {
       scrollToSelectedElement();
+      scrollRef?.current?.scrollIntoView();
     }
   }, [openedOptions]);
 
@@ -169,6 +171,7 @@ export default function Select(props: SelectProps): JSX.Element {
                 </li>
               );
             })}
+            <div ref={scrollRef} />
           </ul>
         )}
       </div>
