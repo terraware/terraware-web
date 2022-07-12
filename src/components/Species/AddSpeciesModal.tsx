@@ -215,7 +215,6 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
             hideArrow={true}
             onBlur={() => setShowWarning(true)}
             onFocus={() => setShowWarning(false)}
-            scrolled
           />
         </Grid>
         <Grid item xs={12}>
@@ -229,7 +228,6 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
             readonly={false}
             fullWidth={true}
             hideArrow={true}
-            scrolled
           />
         </Grid>
         <Grid item xs={12}>
@@ -271,7 +269,6 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
             aria-label={strings.GROWTH_FORM}
             placeholder={strings.SELECT}
             fullWidth={true}
-            scrolled
           />
         </Grid>
         <Grid item xs={12}>
@@ -284,7 +281,6 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
             aria-label={strings.SEED_STORAGE_BEHAVIOR}
             placeholder={strings.SELECT}
             fullWidth={true}
-            scrolled
           />
         </Grid>
       </Grid>
