@@ -25,7 +25,7 @@ import { Order } from 'src/components/common/table/sort';
 import strings from 'src/strings';
 import emptyMessageStrings from 'src/strings/emptyMessageModal';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
-import { getAllSeedBanks, getSeedBankSite } from 'src/utils/organization';
+import { getAllSeedBanks } from 'src/utils/organization';
 import PageHeader from '../PageHeader';
 import { COLUMNS_INDEXED } from './columns';
 import DownloadReportModal from './DownloadReportModal';
@@ -203,17 +203,12 @@ export default function Database(props: DatabaseProps): JSX.Element {
 
   useEffect(() => {
     if (organization) {
-      const selected = {
-        selectedSite: getSeedBankSite(organization),
-      };
-      setSelectedOrgInfo(selected);
-
       const populateUnfilteredResults = async () => {
         const apiResponse = await search({
           prefix: 'facilities.accessions',
           fields: searchColumns.includes('active') ? [...searchColumns, 'id'] : [...searchColumns, 'active', 'id'],
           sortOrder: [searchSortOrder],
-          search: convertToSearchNodePayload({}, selected, organization.id),
+          search: convertToSearchNodePayload({}, organization.id),
           count: 1000,
         });
 
@@ -225,7 +220,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
           prefix: 'facilities.accessions',
           fields: searchColumns.includes('active') ? [...searchColumns, 'id'] : [...searchColumns, 'active', 'id'],
           sortOrder: [searchSortOrder],
-          search: convertToSearchNodePayload(searchCriteria, selected, organization.id),
+          search: convertToSearchNodePayload(searchCriteria, organization.id),
           count: 1000,
         });
 
@@ -239,7 +234,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
 
       const populatePendingAccessions = async () => {
         if (organization) {
-          setPendingAccessions(await getPendingAccessions(selected, organization.id));
+          setPendingAccessions(await getPendingAccessions(organization.id));
         }
       };
 
@@ -254,7 +249,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
       populatePendingAccessions();
       populateFieldOptions();
     }
-  }, [setSelectedOrgInfo, searchCriteria, searchSortOrder, searchColumns, organization]);
+  }, [searchCriteria, searchSortOrder, searchColumns, organization]);
 
   const onSelect = (row: SearchResponseElement) => {
     if (row.id) {

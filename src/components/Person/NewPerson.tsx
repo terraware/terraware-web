@@ -85,7 +85,6 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
     id: -1,
     email: '',
     role: 'Contributor',
-    projectIds: [],
   });
 
   useEffect(() => {
@@ -94,7 +93,6 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
         id: personSelectedToEdit.id,
         email: personSelectedToEdit.email,
         role: personSelectedToEdit.role,
-        projectIds: personSelectedToEdit.projectIds,
       });
     }
   }, [organization, personSelectedToEdit, setNewPerson]);
@@ -126,7 +124,7 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
     history.push({ pathname: APP_PATHS.PEOPLE_VIEW.replace(':personId', userId) });
   };
 
-  const saveUser = async (didConfirmProjectRemoval: boolean) => {
+  const saveUser = async () => {
     setPageError(undefined);
 
     if (newPerson.email === '') {
@@ -275,7 +273,7 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
           </Grid>
         </Grid>
       </Container>
-      <FormBottomBar onCancel={goToPeople} onSave={() => saveUser(false)} />
+      <FormBottomBar onCancel={goToPeople} onSave={() => saveUser()} />
     </>
   );
 }

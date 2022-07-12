@@ -1,4 +1,3 @@
-import { Project, Site } from 'src/types/Organization';
 import { paths } from './generated-schema';
 
 export const facilitiesEndpoint = '/api/v1/facility';
@@ -10,7 +9,6 @@ export interface Facility {
   name: string;
   description?: string;
   organizationId: number;
-  siteId: number;
   type: FacilitiesListResponse['facilities'][0]['type'];
   connectionState: 'Not Connected' | 'Connected' | 'Configured';
 }

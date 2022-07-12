@@ -4,9 +4,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React from 'react';
-import { useRecoilValue } from 'recoil';
 import { convertToSearchNodePayload, searchCsv, SeedSearchCriteria, SeedSearchSortOrder } from 'src/api/seeds/search';
-import { seedsDatabaseSelectedOrgInfo } from 'src/state/selectedOrgInfoPerPage';
 import { ServerOrganization } from 'src/types/Organization';
 
 import CancelButton from 'src/components/common/CancelButton';
@@ -46,7 +44,6 @@ export default function DownloadReportModal(props: DownloadReportModalProps): JS
   const classes = useStyles();
   const { searchCriteria, searchSortOrder, searchColumns, organization, open, onClose } = props;
   const [name, setName] = React.useState('');
-  const selectedOrgInfo = useRecoilValue(seedsDatabaseSelectedOrgInfo);
 
   const handleCancel = () => {
     setName('');
@@ -58,7 +55,7 @@ export default function DownloadReportModal(props: DownloadReportModalProps): JS
       prefix: 'facilities.accessions',
       fields: searchColumns.includes('active') ? [...searchColumns, 'id'] : [...searchColumns, 'active', 'id'],
       sortOrder: [searchSortOrder],
-      search: convertToSearchNodePayload(searchCriteria, selectedOrgInfo, organization.id),
+      search: convertToSearchNodePayload(searchCriteria, organization.id),
       count: 1000,
     });
 
