@@ -80,6 +80,7 @@ const useStyles = makeStyles((theme: Theme) =>
       margin: '0 auto',
       marginTop: '10%',
       maxWidth: '800px',
+      width: '800px',
     },
     checkInText: {
       marginBottom: 0,
