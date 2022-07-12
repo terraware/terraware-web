@@ -13,10 +13,11 @@ export interface Props {
   middleButtons?: JSX.Element[];
   onClose?: () => void;
   open: boolean;
+  scrolled?: boolean;
 }
 
 export default function DialogBox(props: Props): JSX.Element {
-  const { title, size, message, children, leftButton, rightButtons, middleButtons, onClose, open } = props;
+  const { title, size, message, children, leftButton, rightButtons, middleButtons, onClose, open, scrolled } = props;
 
   const hasFooter = leftButton || rightButtons || middleButtons;
 
@@ -29,7 +30,9 @@ export default function DialogBox(props: Props): JSX.Element {
             <Icon name='close' className='icon-close' />
           </IconButton>
         </div>
-        <div className={hasFooter ? 'dialog-box--body' : 'dialog-box--body-no-footer'}>
+        <div
+          className={(hasFooter ? 'dialog-box--body' : 'dialog-box--body-no-footer') + (scrolled ? ' scrolled' : '')}
+        >
           <div className='dialog-box--message'>{message}</div>
           <div className='dialog-box--boundary'>{children}</div>
         </div>
