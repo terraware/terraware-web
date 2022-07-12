@@ -20,6 +20,7 @@ interface SelectProps {
   hideArrow?: boolean;
   onBlur?: () => void;
   onFocus?: () => void;
+  fixedMenu?: boolean;
 }
 
 export default function Select(props: SelectProps): JSX.Element {
@@ -40,6 +41,7 @@ export default function Select(props: SelectProps): JSX.Element {
     hideArrow,
     onBlur,
     onFocus,
+    fixedMenu,
   } = props;
 
   const selectClass = classNames({
@@ -61,9 +63,11 @@ export default function Select(props: SelectProps): JSX.Element {
 
   useEffect(() => {
     window.addEventListener('click', handleClick);
+    window.addEventListener('resize', handleResize);
 
     return () => {
       window.removeEventListener('click', handleClick);
+      window.removeEventListener('resize', handleResize);
     };
   }, []);
 
@@ -80,11 +84,27 @@ export default function Select(props: SelectProps): JSX.Element {
     }
   };
 
+  const handleResize = () => {
+    setOpenedOptions(false);
+  };
+
   useEffect(() => {
     if (openedOptions) {
       scrollToSelectedElement();
+      if (fixedMenu && inputRef.current && dropdownRef.current) {
+        dropdownRef.current.style.width = `${inputRef.current.offsetWidth}px`;
+        const bbox = inputRef.current.getBoundingClientRect();
+        dropdownRef.current.style.top = `${bbox.top + bbox.height}px`;
+        const dropdownBottom = dropdownRef.current.clientHeight + bbox.top + bbox.height;
+        const windowHeightThreshold = window.innerHeight - bbox.height;
+        if (dropdownBottom > windowHeightThreshold) {
+          dropdownRef.current.style.maxHeight = `${
+            dropdownRef.current.clientHeight - (dropdownBottom - windowHeightThreshold)
+          }px`;
+        }
+      }
     }
-  }, [openedOptions]);
+  }, [fixedMenu, openedOptions]);
 
   const toggleOptions = () => {
     setOpenedOptions((isOpen) => !isOpen);
@@ -155,21 +175,24 @@ export default function Select(props: SelectProps): JSX.Element {
           {!hideArrow && <Icon name={'chevronDown'} className='textfield-value--icon-right' />}
         </div>
         {options && options.length > 0 && openedOptions && (
-          <ul className='options-container' ref={dropdownRef}>
-            {options.map((option, index) => {
-              return (
-                <li
-                  data-key={option.charAt(0).toUpperCase()}
-                  data-selected={option === selectedValue}
-                  key={index}
-                  onClick={() => onOptionSelected(option)}
-                  className={`${itemClass} ${option === selectedValue ? 'select-value--selected' : ''} `}
-                >
-                  {option}
-                </li>
-              );
-            })}
-          </ul>
+          <>
+            {fixedMenu && <div className='scroll-block' />}
+            <ul className={'options-container' + (fixedMenu ? ' fixed-menu' : '')} ref={dropdownRef}>
+              {options.map((option, index) => {
+                return (
+                  <li
+                    data-key={option.charAt(0).toUpperCase()}
+                    data-selected={option === selectedValue}
+                    key={index}
+                    onClick={() => onOptionSelected(option)}
+                    className={`${itemClass} ${option === selectedValue ? 'select-value--selected' : ''} `}
+                  >
+                    {option}
+                  </li>
+                );
+              })}
+            </ul>
+          </>
         )}
       </div>
       {errorText && (

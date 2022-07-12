@@ -163,6 +163,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
 
   return (
     <DialogBox
+      scrolled
       onClose={handleCancel}
       open={open}
       title={initialSpecies ? strings.EDIT_SPECIES : strings.ADD_A_SPECIES}
@@ -268,6 +269,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
             aria-label={strings.GROWTH_FORM}
             placeholder={strings.SELECT}
             fullWidth={true}
+            fixedMenu
           />
         </Grid>
         <Grid item xs={12}>
@@ -280,6 +282,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
             aria-label={strings.SEED_STORAGE_BEHAVIOR}
             placeholder={strings.SELECT}
             fullWidth={true}
+            fixedMenu
           />
         </Grid>
       </Grid>

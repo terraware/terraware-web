@@ -237,6 +237,11 @@
     max-height: 200px;
     overflow: scroll;
 
+    &.fixed-menu {
+      position: fixed;
+      z-index: 11;
+    }
+
     .select-value {
       font-family: $tw-fnt-frm-fld-select-value-font-family;
       font-size: $tw-fnt-frm-fld-select-value-font-size;
@@ -264,5 +269,14 @@
         opacity: $tw-opcty-semantic-off;
       }
     }
+  }
+
+  .scroll-block {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
   }
 }
