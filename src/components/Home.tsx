@@ -130,7 +130,6 @@ export default function Home({ organizations, selectedOrganization, setSelectedO
               linkStyle={'underline'}
             />
           </Grid>
-          <></>
         </Grid>
       </Container>
     </main>
