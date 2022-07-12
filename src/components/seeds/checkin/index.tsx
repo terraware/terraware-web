@@ -76,11 +76,11 @@ export default function CheckIn(props: CheckInProps): JSX.Element {
   useEffect(() => {
     const populatePendingAccessions = async () => {
       if (organization) {
-        setPendingAccessions(await getPendingAccessions(selectedOrgInfo, organization?.id));
+        setPendingAccessions(await getPendingAccessions(organization?.id));
       }
     };
     populatePendingAccessions();
-  }, [selectedOrgInfo, organization]);
+  }, [organization]);
 
   const transformPendingAccessions = () => {
     const accessionsById: Record<number, SearchResponseElement> = {};

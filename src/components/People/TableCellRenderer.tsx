@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-export default function ProjectsCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
+export default function Renderer(props: RendererProps<TableRowType>): JSX.Element {
   const classes = useStyles();
   const { column, row, value, index } = props;
 

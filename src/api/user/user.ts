@@ -81,7 +81,6 @@ export async function addOrganizationUser(user: OrganizationUser, organizationId
   };
   const addOrganizationUserRequestPayload: AddOrganizationUserRequestPayload = {
     email: user.email,
-    projectIds: user.projectIds,
     role: user.role,
   };
   try {

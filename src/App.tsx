@@ -249,7 +249,6 @@ export default function App() {
     if (selectedOrganization) {
       return {
         ...selectedOrganization,
-        projects: selectedOrganization?.projects?.filter((proj) => !proj.hidden),
       };
     }
   };
@@ -257,13 +256,9 @@ export default function App() {
   const selectedOrgHasSpecies = (): boolean => species.length > 0;
 
   const selectedOrgHasSeedBanks = (): boolean => {
-    if (selectedOrganization && selectedOrganization.projects) {
-      return selectedOrganization.projects.some((proj) => {
-        return proj.sites?.some((site) => {
-          return site.facilities?.some((facility) => {
-            return facility.type === 'Seed Bank';
-          });
-        });
+    if (selectedOrganization && selectedOrganization.facilities) {
+      return selectedOrganization.facilities.some((facility) => {
+        return facility.type === 'Seed Bank';
       });
     } else {
       return false;
@@ -430,7 +425,6 @@ export default function App() {
               )}
 
               {/* Redirects. Invalid paths will redirect to the closest valid path. */}
-              {/* Only redirect 'major' paths, e.g. handle /projects/* not more granular projects paths */}
               {/* In alphabetical order for easy reference with APP_PATHS, except for /home which must go last */}
               <Route path={APP_PATHS.ACCESSIONS + '/'}>
                 <Redirect to={APP_PATHS.ACCESSIONS} />
@@ -447,14 +441,8 @@ export default function App() {
               <Route exact path={APP_PATHS.PEOPLE + '/'}>
                 <Redirect to={APP_PATHS.PEOPLE} />
               </Route>
-              <Route exact path={APP_PATHS.PROJECTS + '/'}>
-                <Redirect to={APP_PATHS.PROJECTS} />
-              </Route>
               <Route path={APP_PATHS.SEEDS_DASHBOARD + '/'}>
                 <Redirect to={APP_PATHS.SEEDS_DASHBOARD} />
-              </Route>
-              <Route exact path={APP_PATHS.SITES + '/'}>
-                <Redirect to={APP_PATHS.SITES} />
               </Route>
               <Route path={APP_PATHS.SPECIES + '/'}>
                 <Redirect to={APP_PATHS.SPECIES} />

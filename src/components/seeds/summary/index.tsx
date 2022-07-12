@@ -64,9 +64,8 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
 
   useEffect(() => {
     if (organization) {
-      const seedbankProject = organization?.projects?.length ? organization?.projects[0] : undefined;
-      const seedbankSite = seedbankProject?.sites?.find((site) => site.name === 'Seed Bank');
-      const seedbankFacility = seedbankSite?.facilities?.find((facility) => facility.name === 'Seed Bank');
+      const seedbankFacility =
+        organization && organization.facilities?.find((facility) => facility.name === 'Seed Bank');
 
       const populateSummary = async () => {
         setSummary(await getSummary(organization.id));
@@ -88,8 +87,6 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
 
       setSelectedOrgInfo({
         selectedFacility: seedbankFacility,
-        selectedProject: seedbankProject,
-        selectedSite: seedbankSite,
       });
     }
 
