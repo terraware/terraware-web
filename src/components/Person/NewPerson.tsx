@@ -261,7 +261,7 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
               id='role'
               label={strings.ROLE}
               onChange={onChangeRole}
-              options={['Contributor', 'Admin']}
+              options={['Contributor', 'Admin', 'Manager']}
               disabled={newPerson.role === 'Owner'}
               selectedValue={newPerson.role}
               fullWidth
