@@ -41,14 +41,11 @@ import { ReactComponent as People } from './blobby-icon-people.svg';
 import { ReactComponent as PeopleNav } from './icon-manager.svg';
 import { ReactComponent as Person } from './person.svg';
 import { ReactComponent as Plus } from './plus.svg';
-import { ReactComponent as Project } from './project.svg';
 import { ReactComponent as RestorationSite } from './restoration-site.svg';
 import { ReactComponent as Search } from './search.svg';
 import { ReactComponent as SeedBank } from './blobby-icon-seed-bank.svg';
 import { ReactComponent as SeedBankNav } from './icon-seed-bank.svg';
 import { ReactComponent as Seeds } from './seeds.svg';
-import { ReactComponent as Site } from './site.svg';
-import { ReactComponent as Sites } from './sites.svg';
 import { ReactComponent as Sparkles } from './sparkles.svg';
 import { ReactComponent as Species } from './species.svg';
 import { ReactComponent as Species2 } from './species2.svg';
@@ -101,14 +98,11 @@ export type IconName =
   | 'peopleNav'
   | 'person'
   | 'plus'
-  | 'project'
   | 'restorationSite'
   | 'search'
   | 'seedbank'
   | 'seedbankNav'
   | 'seeds'
-  | 'site'
-  | 'sites'
   | 'sparkles'
   | 'species'
   | 'species2'
@@ -166,14 +160,11 @@ const icons: Record<IconName, SVGComponent> = {
   peopleNav: PeopleNav,
   person: Person,
   plus: Plus,
-  project: Project,
   restorationSite: RestorationSite,
   search: Search,
   seedbank: SeedBank,
   seedbankNav: SeedBankNav,
   seeds: Seeds,
-  site: Site,
-  sites: Sites,
   sparkles: Sparkles,
   species: Species,
   species2: Species2,
