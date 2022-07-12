@@ -34,11 +34,9 @@ describe('Storage', () => {
     cy.get('#storagePackets').type('5');
     cy.get('#storageLocation').click();
     cy.get('#Freezer\\ 1').click();
-    cy.get('#storageCondition').should('have.value', 'Freezer');
 
     cy.get('#storageLocation').click();
     cy.get('#Refrigerator\\ 1').click();
-    cy.get('#storageCondition').should('have.value', 'Refrigerator');
 
     cy.get('#storageNotes').type('A storage note');
     cy.get('#storageStaffResponsible').type('Constanza');
@@ -50,7 +48,6 @@ describe('Storage', () => {
     cy.get('#storageStartDate').should('have.value', '02/04/2021');
     cy.get('#storagePackets').should('have.value', '5');
     cy.get('#storageLocation + input').should('have.value', 'Refrigerator 1');
-    cy.get('#storageCondition').should('have.value', 'Refrigerator');
     cy.get('#storageNotes').should('have.value', 'A storage note');
     cy.get('#storageStaffResponsible').should('have.value', 'Constanza');
   });
