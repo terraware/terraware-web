@@ -75,7 +75,7 @@ export default function Home({ organizations, selectedOrganization, setSelectedO
         <Grid container spacing={3} className={classes.mainGrid}>
           {selectedOrganization?.role && isAdmin(selectedOrganization) && (
             <>
-              <Grid item xs={4}>
+              <Grid item xs={6}>
                 <PageCard
                   name={strings.PEOPLE}
                   icon='person'
@@ -85,33 +85,51 @@ export default function Home({ organizations, selectedOrganization, setSelectedO
                   linkStyle={'underline'}
                 />
               </Grid>
+              <Grid item xs={6}>
+                <PageCard
+                  name={strings.SEED_BANKS}
+                  icon='seedbankNav'
+                  description={homePageStrings.SEED_BANKS_CARD_DESCRIPTION}
+                  link={APP_PATHS.SEED_BANKS}
+                  linkText={strings.formatString(homePageStrings.GO_TO, strings.SEED_BANKS) as string}
+                  linkStyle={'underline'}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TfDivisor />
+              </Grid>
             </>
           )}
-          <>
-            <Grid item xs={4}>
-              <PageCard
-                name={strings.SEEDS}
-                icon='seeds'
-                description={homePageStrings.SEEDS_CARD_DESCRIPTION}
-                link={APP_PATHS.SEEDS_DASHBOARD}
-                linkText={strings.formatString(homePageStrings.GO_TO, strings.SEEDS) as string}
-                linkStyle={'underline'}
-              />
-            </Grid>
-            <Grid item xs={4}>
-              <PageCard
-                name={strings.SPECIES}
-                icon='species'
-                description={homePageStrings.SPECIES_CARD_DESCRIPTION}
-                link={APP_PATHS.SPECIES}
-                linkText={strings.formatString(homePageStrings.GO_TO, strings.SPECIES) as string}
-                linkStyle={'underline'}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TfDivisor />
-            </Grid>
-          </>
+          <Grid item xs={4}>
+            <PageCard
+              name={strings.SPECIES}
+              icon='species'
+              description={homePageStrings.SPECIES_CARD_DESCRIPTION}
+              link={APP_PATHS.SPECIES}
+              linkText={strings.formatString(homePageStrings.GO_TO, strings.SPECIES) as string}
+              linkStyle={'underline'}
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <PageCard
+              name={strings.ACCESSIONS}
+              icon='seeds'
+              description={homePageStrings.ACCESSIONS_CARD_DESCRIPTION}
+              link={APP_PATHS.ACCESSIONS}
+              linkText={strings.formatString(homePageStrings.GO_TO, strings.ACCESSIONS) as string}
+              linkStyle={'underline'}
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <PageCard
+              name={strings.MONITORING}
+              icon='monitoringNav'
+              description={homePageStrings.MONITORING_CARD_DESCRIPTION}
+              link={APP_PATHS.MONITORING}
+              linkText={strings.formatString(homePageStrings.GO_TO, strings.MONITORING) as string}
+              linkStyle={'underline'}
+            />
+          </Grid>
         </Grid>
       </Container>
     </main>
