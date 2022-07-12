@@ -8,7 +8,7 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import moment from 'moment';
 import React from 'react';
-import { AccessionWithdrawal } from 'src/api/types/accessions';
+import { Accession, AccessionWithdrawal } from 'src/api/types/accessions';
 import strings from 'src/strings';
 import preventDefault from 'src/utils/preventDefaultEvent';
 import useForm from 'src/utils/useForm';
@@ -43,8 +43,9 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export interface Props {
-  allowWithdrawalInGrams: boolean;
-  value?: AccessionWithdrawal;
+  allowWithdrawalInWeight: boolean;
+  accession: Accession;
+  withdrawal?: AccessionWithdrawal;
   seedsAvailable: number;
   open: boolean;
   onClose: (value?: AccessionWithdrawal) => void;
@@ -62,27 +63,27 @@ function initWithdrawal(withdrawal?: AccessionWithdrawal): AccessionWithdrawal {
 
 export default function NewWithdrawalDialog(props: Props): JSX.Element {
   const classes = useStyles();
-  const { onClose, open, onDelete } = props;
+  const { onClose, open, onDelete, withdrawal, seedsAvailable, accession, allowWithdrawalInWeight } = props;
   const [withdrawRemaining, setWithdrawRemaining] = React.useState(false);
   const [remainingSeeds, setRemainingSeeds] = React.useState(0);
   const [errors, setErrors] = React.useState<FieldError[]>([]);
-  const [withdrawalType, setWithdrawalType] = React.useState(props.allowWithdrawalInGrams ? 'weight' : 'count');
+  const [withdrawalType, setWithdrawalType] = React.useState(allowWithdrawalInWeight ? 'weight' : 'count');
 
-  const [record, setRecord, onChange] = useForm<AccessionWithdrawal>(initWithdrawal(props.value));
+  const [record, setRecord, onChange] = useForm<AccessionWithdrawal>(initWithdrawal(withdrawal));
   React.useEffect(() => {
-    setRecord(initWithdrawal(props.value));
-    setWithdrawalType(props.allowWithdrawalInGrams ? 'weight' : 'count');
+    setRecord(initWithdrawal(withdrawal));
+    setWithdrawalType(allowWithdrawalInWeight ? 'weight' : 'count');
     setErrors([]);
-    if (!props.allowWithdrawalInGrams) {
-      setRemainingSeeds(props.value?.remainingQuantity?.quantity || props.seedsAvailable);
+    if (!allowWithdrawalInWeight) {
+      setRemainingSeeds(withdrawal?.remainingQuantity?.quantity || seedsAvailable);
     } else {
-      setRemainingSeeds(props.value?.remainingQuantity?.quantity || 0);
+      setRemainingSeeds(withdrawal?.remainingQuantity?.quantity || 0);
     }
     setWithdrawRemaining(false);
-  }, [props.allowWithdrawalInGrams, props.open, props.seedsAvailable, props.value, setRecord]);
+  }, [allowWithdrawalInWeight, open, seedsAvailable, withdrawal, setRecord]);
 
   const handleCancel = () => {
-    setRecord(initWithdrawal(props.value));
+    setRecord(initWithdrawal(withdrawal));
     onClose();
   };
 
@@ -105,7 +106,7 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
         [id]: _value,
       };
 
-      setRemainingSeeds(props.seedsAvailable + (props.value?.withdrawnQuantity?.quantity ?? 0) - (value ?? 0));
+      setRemainingSeeds(seedsAvailable + (withdrawal?.withdrawnQuantity?.quantity ?? 0) - (value ?? 0));
     }
 
     setRecord((previousRecord: AccessionWithdrawal): AccessionWithdrawal => {
@@ -122,7 +123,7 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
       setWithdrawRemaining(false);
     } else {
       setWithdrawRemaining(true);
-      onQuantityChange('quantity', '' + (props.seedsAvailable + (props.value?.withdrawnQuantity?.quantity ?? 0)));
+      onQuantityChange('quantity', '' + (seedsAvailable + (withdrawal?.withdrawnQuantity?.quantity ?? 0)));
     }
   };
 
@@ -130,7 +131,7 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
 
   const withdrawalOptions = (includeSeedCount: boolean) => {
     let values = [];
-    if (props.allowWithdrawalInGrams) {
+    if (allowWithdrawalInWeight) {
       values = [...WEIGHT_UNITS];
 
       if (includeSeedCount) {
@@ -147,7 +148,7 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
   const dateSubtext = schedule
     ? strings.formatString(strings.SCHEDULING_FOR, moment(record.date).format('MMMM Do, YYYY'))
     : strings.SCHEDULE_DATE_INFO;
-  const submitText = props.value
+  const submitText = withdrawal
     ? strings.SAVE_CHANGES
     : schedule
     ? strings.SCHEDULE_WITHDRAWAL
@@ -217,10 +218,12 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
               <SummaryBox
                 id='modal-seeds-available'
                 title={strings.SEEDS_REMAINING}
-                value={`${props.seedsAvailable} ${
-                  props.allowWithdrawalInGrams ? WEIGHT_UNITS[0].value : countUnits[0].value
-                }`}
-                variant={props.seedsAvailable === 0 ? 'zero' : 'default'}
+                value={
+                  accession.remainingQuantity
+                    ? `${seedsAvailable} ${accession.remainingQuantity?.units}`
+                    : seedsAvailable
+                }
+                variant={seedsAvailable === 0 ? 'zero' : 'default'}
               />
             </Grid>
 
@@ -253,7 +256,7 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
                       id='units'
                       label=''
                       selected={
-                        props.allowWithdrawalInGrams
+                        allowWithdrawalInWeight
                           ? record.withdrawnQuantity?.units || WEIGHT_UNITS[0].value
                           : countUnits[0].value
                       }
