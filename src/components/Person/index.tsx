@@ -5,7 +5,6 @@ import { getOrganizationUsers } from 'src/api/organization/organization';
 import Button from 'src/components/common/button/Button';
 import Icon from 'src/components/common/icon/Icon';
 import TextField from 'src/components/common/Textfield/Textfield';
-import TfDivisor from 'src/components/common/TfDivisor';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import dictionary from 'src/strings/dictionary';
@@ -114,10 +113,6 @@ export default function PersonDetails({ organization }: PersonDetailsProps): JSX
           <TextField label={strings.DATE_ADDED} id='addedTime' type='text' value={getDateAdded()} display={true} />
         </Grid>
         <Grid item xs={4} />
-        <Grid item xs={12} />
-        <Grid item xs={12}>
-          <TfDivisor />
-        </Grid>
       </Grid>
     </Container>
   );
