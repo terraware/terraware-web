@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     alignItems: 'center',
   },
   downloadInProgress: {
-    marginLeft: `${theme.spacing(2)}px`,
+    marginLeft: theme.spacing(2),
   },
 }));
 

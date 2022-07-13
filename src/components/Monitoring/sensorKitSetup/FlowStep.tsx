@@ -14,11 +14,11 @@ const useStyles = makeStyles((theme: Theme) => ({
     lineHeight: '28px',
   },
   flowContent: {
-    padding: `${theme.spacing(2)}px`,
+    padding: theme.spacing(2),
   },
   flowFooter: {
     display: 'flex',
-    marginTop: `${theme.spacing(2)}px`,
+    marginTop: theme.spacing(2),
     justifyContent: 'space-between',
     alignItems: 'end',
   },
@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     alignItems: 'center',
   },
   icon: {
-    marginRight: `${theme.spacing(1)}px`,
+    marginRight: theme.spacing(1),
   },
   titleContainer: {
     display: 'flex',
@@ -35,11 +35,11 @@ const useStyles = makeStyles((theme: Theme) => ({
   gridItem: {
     display: 'flex',
     justifyContent: 'center',
-    marginBottom: `${theme.spacing(2)}px`,
+    marginBottom: theme.spacing(2),
   },
   errorBox: {
     width: '100%',
-    marginBottom: `${theme.spacing(2)}px`,
+    marginBottom: theme.spacing(2),
   },
 }));
 

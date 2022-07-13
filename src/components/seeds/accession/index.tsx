@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     padding: '32px 0',
   },
   verticalSpacing: {
-    marginTop: `${theme.spacing(1)}px`,
+    marginTop: theme.spacing(1),
   },
 }));
 

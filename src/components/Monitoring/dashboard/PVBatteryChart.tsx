@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   chartResizableParent: {
     position: 'relative',
     width: 'calc(100vw - 300px)',
-    paddingRight: `${theme.spacing(4)}px`,
+    paddingRight: theme.spacing(4),
   },
 }));
 

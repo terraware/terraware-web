@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     alignItems: 'center',
     justifyContent: 'space-between',
     lineHeight: '28px',
-    padding: `${theme.spacing(2)}px ${theme.spacing(3)}px`,
+    padding: theme.spacing(2, 3),
   },
   popover: {
     padding: 0,

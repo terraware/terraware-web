@@ -8,7 +8,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     borderRadius: '8px',
     border: '1px solid #A9B7B8',
     width: '584px',
-    padding: `${theme.spacing(1)}px`,
+    padding: theme.spacing(1),
   },
   disabledExpandable: {
     opacity: 0.4,

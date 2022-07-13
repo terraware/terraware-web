@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   onboardingContainer: {
     display: 'flex',
     margin: ' auto',
-    marginTop: `${theme.spacing(5)}px`,
+    marginTop: theme.spacing(5),
     justifyContent: 'center',
   },
 }));

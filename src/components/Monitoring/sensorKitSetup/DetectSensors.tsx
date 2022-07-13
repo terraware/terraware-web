@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     alignItems: 'center',
   },
   detectInProgress: {
-    marginLeft: `${theme.spacing(2)}px`,
+    marginLeft: theme.spacing(2),
   },
 }));
 

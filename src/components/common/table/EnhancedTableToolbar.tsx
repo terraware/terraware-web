@@ -11,7 +11,7 @@ const styles = makeStyles((theme: Theme) => ({
     flex: '1 1 100%',
   },
   buttonSpacing: {
-    marginLeft: `${theme.spacing(1)}px`,
+    marginLeft: theme.spacing(1),
   },
 }));
 

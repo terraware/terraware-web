@@ -85,6 +85,7 @@ export default function DetailsMenu({ state }: Props): JSX.Element | null {
             id={`menu-${getAccessionPathSuffix(route)}`}
             component={RouterLink}
             key={title}
+            underline='hover'
             to={{
               pathname: route.replace(':accessionId', accessionId),
               state: {

@@ -11,8 +11,8 @@ import { LOCATIONS } from './Locations';
 
 const useStyles = makeStyles((theme: Theme) => ({
   location: {
-    paddingTop: `${theme.spacing(2)}px`,
-    paddingRight: `${theme.spacing(2)}px`,
+    paddingTop: theme.spacing(2),
+    paddingRight: theme.spacing(2),
   },
 }));
 
