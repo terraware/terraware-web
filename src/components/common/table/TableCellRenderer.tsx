@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme) =>
       marginLeft: theme.spacing(1),
     },
     textRoot: {
-      maxWidth: 400,
+      maxWidth: 300,
     },
   })
 );
@@ -64,9 +64,9 @@ export function CellTextRenderer({
 }): JSX.Element {
   const classes = useStyles();
   return (
-    <TableCell id={id} align='left'>
+    <TableCell id={id} align='left' title={typeof value === 'string' ? value : ''}>
       <Typography component='p' variant='body1' noWrap classes={{ root: classes.textRoot }}>
-        <span title={typeof value === 'string' ? value : ''}>{value}</span>
+        {value}
       </Typography>
     </TableCell>
   );
