@@ -4,6 +4,7 @@ import NotesIcon from '@material-ui/icons/Notes';
 import React, { ReactNode } from 'react';
 import preventDefaultEvent from 'src/utils/preventDefaultEvent';
 import { RendererProps } from './types';
+import getDateDisplayValue from 'src/utils/date';
 
 export type TableRowType = Record<string, any>;
 
@@ -25,12 +26,7 @@ export default function CellRenderer(props: RendererProps<TableRowType>): JSX.El
 
 export const cellDateFormatter = (value?: string): string | undefined => {
   if (value) {
-    return new Date(value).toLocaleDateString('en-US', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-      timeZone: 'UTC',
-    });
+    return getDateDisplayValue(value);
   }
 };
 
