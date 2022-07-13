@@ -62,6 +62,16 @@ const useStyles = makeStyles((theme) =>
     blockCheckbox: {
       display: 'block',
     },
+    generalTitle: {
+      fontSize: '20px',
+      marginBottom: '8px',
+    },
+    titleSubtitle: {
+      marginTop: '8px',
+    },
+    title: {
+      marginBottom: '8px',
+    },
   })
 );
 
@@ -205,7 +215,12 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
       <Container maxWidth={false} className={classes.mainContainer}>
         <Grid container spacing={3}>
           <Grid item xs={12}>
-            {personSelectedToEdit ? <h2>{strings.EDIT_PERSON}</h2> : <h2>{strings.ADD_PERSON}</h2>}
+            {
+              <h2 className={classes.title}>
+                {personSelectedToEdit ? personSelectedToEdit.email : strings.ADD_PERSON}
+              </h2>
+            }
+            {!personSelectedToEdit ? <p className={classes.titleSubtitle}>{strings.ADD_PERSON_DESC}</p> : null}
             {pageError === 'REPEATED_EMAIL' && repeatedEmail && (
               <ErrorBox
                 text={strings.ALREADY_INVITED_PERSON_ERROR}
@@ -216,8 +231,13 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
             {pageError === 'INVALID_EMAIL' && (
               <ErrorBox title={strings.UNABLE_TO_ADD_PERSON} text={strings.FIX_HIGHLIGHTED_FIELDS} />
             )}
-            <p>{strings.ADD_PERSON_DESC}</p>
           </Grid>
+          {!personSelectedToEdit ? (
+            <Grid item xs={12}>
+              <h3 className={classes.generalTitle}>{strings.GENERAL}</h3>
+              <p className={classes.titleSubtitle}>{strings.ADD_PERSON_GENERAL_DESC}</p>
+            </Grid>
+          ) : null}
           <Grid item xs={4}>
             <TextField
               id='email'
@@ -253,13 +273,14 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
             <p>{strings.ROLES_INFO}</p>
             <ul>
               <li>{strings.CONTRIBUTOR_INFO}</li>
+              <li>{strings.MANAGER_INFO}</li>
               <li>{strings.ADMIN_INFO}</li>
             </ul>
           </Grid>
           <Grid item xs={4}>
             <Select
               id='role'
-              label={strings.ROLE}
+              label={strings.ROLE_REQUIRED}
               onChange={onChangeRole}
               options={['Contributor', 'Admin', 'Manager']}
               disabled={newPerson.role === 'Owner'}
