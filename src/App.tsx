@@ -211,7 +211,11 @@ export default function App() {
   }, [reloadUser]);
 
   if (orgAPIRequestStatus === APIRequestStatus.AWAITING || orgAPIRequestStatus === APIRequestStatus.FAILED_NO_AUTH) {
-    return <CircularProgress className={classes.spinner} size='193' />;
+    return (
+      <StyledEngineProvider injectFirst>
+        <CircularProgress className={classes.spinner} size='193' />
+      </StyledEngineProvider>
+    );
   } else if (orgAPIRequestStatus === APIRequestStatus.FAILED) {
     history.push(APP_PATHS.ERROR_FAILED_TO_FETCH_ORG_DATA);
     return null;
@@ -237,7 +241,11 @@ export default function App() {
       );
     } else if (!selectedOrganization) {
       // This allows is to reload open views that require an organization
-      return <CircularProgress className={classes.spinner} size='193' />;
+      return (
+        <StyledEngineProvider injectFirst>
+          <CircularProgress className={classes.spinner} size='193' />;
+        </StyledEngineProvider>
+      );
     }
   } else if (isMobile) {
     window.stop();

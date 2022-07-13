@@ -140,6 +140,7 @@ export default function Filters(props: Props): JSX.Element {
             preventDefaultEvent(event);
             clearAllFilters();
           }}
+          underline='hover'
         >
           {strings.CLEAR_FILTERS}
         </Link>

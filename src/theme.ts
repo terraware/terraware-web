@@ -61,6 +61,24 @@ export default createTheme({
   typography: {
     fontFamily: 'Inter',
   },
+  components: {
+    MuiCssBaseline: {
+      styleOverrides: {
+        '*::-webkit-scrollbar': {
+          '-webkit-appearance': 'none',
+          width: '7px',
+          height: '7px',
+        },
+        '*::-webkit-scrollbar-thumb': {
+          borderRadius: '4px',
+          backgroundColor: '#6C757D',
+        },
+        body: {
+          color: '#3a4445',
+        },
+      },
+    },
+  },
   palette: {
     primary: {
       main: '#0067C8',
