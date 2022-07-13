@@ -3,28 +3,19 @@ import { makeStyles } from '@mui/styles';
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import strings from 'src/strings';
-import { HighOrganizationRolesValues, Project, ServerOrganization } from 'src/types/Organization';
+import { ServerOrganization } from 'src/types/Organization';
 import TfDivisor from '../common/TfDivisor';
-import Table from 'src/components/common/table';
-import { TableColumnType } from '../common/table/types';
 import { OrganizationUser } from 'src/types/User';
 import TextField from '../common/Textfield/Textfield';
 import useForm from 'src/utils/useForm';
 import Select from '../common/Select/Select';
-import Button from '../common/button/Button';
-import AddToProjectModal from './AddToProjectModal';
 import { addOrganizationUser, updateOrganizationUser } from 'src/api/user/user';
 import snackbarAtom from 'src/state/snackbar';
 import { useSetRecoilState } from 'recoil';
 import ErrorBox from '../common/ErrorBox/ErrorBox';
 import { getOrganizationUsers } from 'src/api/organization/organization';
-import TableCellRenderer from './TableCellRenderer';
-import { listAllProjects } from 'src/api/project/project';
-import { getOrganizationProjects } from 'src/utils/organization';
 import { APP_PATHS } from 'src/constants';
 import dictionary from 'src/strings/dictionary';
-import RemovedProjectsWarningModal from './RemovedProjectsWarningModal';
-import InfoBox from '../common/InfoBox';
 import FormBottomBar from '../common/FormBottomBar';
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -33,6 +24,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     paddingBottom: theme.spacing(7),
     marginBottom: theme.spacing(6),
     background: '#ffffff',
+    height: '100%',
   },
   backIcon: {
     fill: '#007DF2',
@@ -70,6 +62,16 @@ const useStyles = makeStyles((theme: Theme) => ({
   blockCheckbox: {
     display: 'block',
   },
+  generalTitle: {
+    fontSize: '20px',
+    marginBottom: '8px',
+  },
+  titleSubtitle: {
+    marginTop: '8px',
+  },
+  title: {
+    marginBottom: '8px',
+  },
 }));
 
 type PersonViewProps = {
@@ -77,50 +79,21 @@ type PersonViewProps = {
   reloadOrganizationData: () => void;
 };
 
-const projectColumns: TableColumnType[] = [
-  { key: 'name', name: strings.NAME, type: 'string' },
-  { key: 'description', name: strings.DESCRIPTION, type: 'string' },
-  { key: 'sites', name: strings.SITES, type: 'string' },
-  { key: 'totalUsers', name: strings.PEOPLE, type: 'string' },
-  { key: 'role', name: strings.ROLE, type: 'string' },
-];
-
-export type ProjectWithUserRole = Project & {
-  role: string;
-};
-
-const getProjectsOfPerson = (projectsOfPerson: Project[] | undefined, role: string): ProjectWithUserRole[] => {
-  if (projectsOfPerson) {
-    return projectsOfPerson.map((project) => {
-      return { ...project, role } as ProjectWithUserRole;
-    });
-  }
-  return [];
-};
-
 export default function PersonView({ organization, reloadOrganizationData }: PersonViewProps): JSX.Element {
   const classes = useStyles();
   const history = useHistory();
-  const [isAddProjectsModalOpen, setIsAddProjectsModalOpen] = useState(false);
   const [emailError, setEmailError] = useState('');
-  const [projectsOfPerson, setProjectsOfPerson] = useState<Project[]>();
-  const [projectsWithUserRole, setProjectsWithUserRole] = useState<ProjectWithUserRole[]>();
-  const [selectedProjectsRows, setSelectedProjectsRows] = useState<ProjectWithUserRole[]>([]);
   const setSnackbar = useSetRecoilState(snackbarAtom);
   const [repeatedEmail, setRepeatedEmail] = useState('');
   const [pageError, setPageError] = useState<'REPEATED_EMAIL' | 'INVALID_EMAIL'>();
   const [people, setPeople] = useState<OrganizationUser[]>();
-  const [allProjects, setAllProjects] = useState<Project[]>();
   const { personId } = useParams<{ personId: string }>();
   const [personSelectedToEdit, setPersonSelectedToEdit] = useState<OrganizationUser>();
-  const [shouldConfirmProjectRemoval, setShouldConfirmProjectRemoval] = useState<boolean>(false);
-  const [namesOfProjectsRemovedForModal, setNamesOfProjectsRemovedForModal] = useState<string[]>([]);
 
   const [newPerson, setNewPerson, onChange] = useForm<OrganizationUser>({
     id: -1,
     email: '',
     role: 'Contributor',
-    projectIds: [],
   });
 
   useEffect(() => {
@@ -129,29 +102,11 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
         id: personSelectedToEdit.id,
         email: personSelectedToEdit.email,
         role: personSelectedToEdit.role,
-        projectIds: personSelectedToEdit.projectIds,
       });
-      setProjectsOfPerson(
-        organization.projects?.filter((project) => personSelectedToEdit.projectIds.includes(project.id))
-      );
     }
   }, [organization, personSelectedToEdit, setNewPerson]);
 
   useEffect(() => {
-    setProjectsWithUserRole(getProjectsOfPerson(projectsOfPerson, newPerson.role));
-  }, [projectsOfPerson, newPerson.role]);
-
-  useEffect(() => {
-    const populateAllProjects = async () => {
-      const response = await listAllProjects();
-      if (response.requestSucceeded && organization) {
-        const allProjectsServer = response.projects?.filter((project) => project.organizationId === organization.id);
-        const projectsWithTotalUsers = getOrganizationProjects(organization)?.map((orgProj) => {
-          return { ...orgProj, totalUsers: allProjectsServer?.find((pro) => pro.id === orgProj.id)?.totalUsers };
-        });
-        setAllProjects(projectsWithTotalUsers);
-      }
-    };
     const populatePeople = async () => {
       if (organization) {
         const response = await getOrganizationUsers(organization);
@@ -163,7 +118,6 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
     };
     if (organization) {
       populatePeople();
-      populateAllProjects();
     }
   }, [organization, personId]);
 
@@ -179,18 +133,7 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
     history.push({ pathname: APP_PATHS.PEOPLE_VIEW.replace(':personId', userId) });
   };
 
-  const removeSelectedProjectsOfPerson = () => {
-    if (projectsOfPerson && selectedProjectsRows) {
-      setProjectsOfPerson((currentProjectsOfPerson) => {
-        return currentProjectsOfPerson?.filter((project) => {
-          const found = selectedProjectsRows?.find((selectedProject) => selectedProject.id === project.id);
-          return !found;
-        });
-      });
-    }
-  };
-
-  const saveUser = async (didConfirmProjectRemoval: boolean) => {
+  const saveUser = async () => {
     setPageError(undefined);
 
     if (newPerson.email === '') {
@@ -208,37 +151,15 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
       return;
     }
 
-    const currentProjectIds = projectsOfPerson?.map((project) => project.id) || [];
     let successMessage: string | null = null;
     let userId: number = -1;
 
     if (!!personSelectedToEdit) {
-      const addedProjectIds = currentProjectIds.filter((id) => !personSelectedToEdit.projectIds.includes(id));
-      const removedProjectIds = personSelectedToEdit.projectIds.filter((id) => !currentProjectIds.includes(id));
-
-      if (removedProjectIds && removedProjectIds.length > 0 && !didConfirmProjectRemoval) {
-        if (organization.projects) {
-          setNamesOfProjectsRemovedForModal(
-            organization.projects
-              .filter((project) => removedProjectIds.includes(project.id))
-              .map((project) => project.name)
-          );
-        }
-        setShouldConfirmProjectRemoval(true);
-        return;
-      }
-
-      const response = await updateOrganizationUser(
-        newPerson.id,
-        organization.id,
-        newPerson.role,
-        addedProjectIds,
-        removedProjectIds
-      );
+      const response = await updateOrganizationUser(newPerson.id, organization.id, newPerson.role);
       successMessage = response.requestSucceeded ? strings.CHANGES_SAVED : null;
       userId = newPerson.id;
     } else {
-      const response = await addOrganizationUser({ ...newPerson, projectIds: currentProjectIds }, organization.id);
+      const response = await addOrganizationUser({ ...newPerson }, organization.id);
       if (!response.requestSucceeded) {
         if (response.errorDetails === 'PRE_EXISTING_USER') {
           setRepeatedEmail(newPerson.email);
@@ -275,14 +196,6 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
     }
   };
 
-  const getProjectsNotOfPerson = () => {
-    if (projectsOfPerson) {
-      const projectsOfPersonIds = projectsOfPerson.map((project) => project.id);
-      return allProjects?.filter((project) => !projectsOfPersonIds.includes(project.id));
-    }
-    return allProjects;
-  };
-
   const goToProfile = () => {
     if (people && repeatedEmail) {
       const profile = people.find((person) => person.email === repeatedEmail);
@@ -298,26 +211,15 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
   // TODO: Handle the case where we cannot find the requested person to edit in the list of people.
   return (
     <>
-      <AddToProjectModal
-        open={isAddProjectsModalOpen}
-        onClose={() => setIsAddProjectsModalOpen(false)}
-        projects={getProjectsNotOfPerson()}
-        projectsOfPerson={projectsOfPerson}
-        setProjectsOfPerson={setProjectsOfPerson}
-      />
-      <RemovedProjectsWarningModal
-        open={shouldConfirmProjectRemoval}
-        onClose={() => setShouldConfirmProjectRemoval(false)}
-        onSubmit={() => {
-          setShouldConfirmProjectRemoval(false);
-          saveUser(true);
-        }}
-        removedProjectNames={namesOfProjectsRemovedForModal}
-      />
       <Container maxWidth={false} className={classes.mainContainer}>
         <Grid container spacing={3}>
           <Grid item xs={12}>
-            {personSelectedToEdit ? <h2>{strings.EDIT_PERSON}</h2> : <h2>{strings.ADD_PERSON}</h2>}
+            {
+              <h2 className={classes.title}>
+                {personSelectedToEdit ? personSelectedToEdit.email : strings.ADD_PERSON}
+              </h2>
+            }
+            {!personSelectedToEdit ? <p className={classes.titleSubtitle}>{strings.ADD_PERSON_DESC}</p> : null}
             {pageError === 'REPEATED_EMAIL' && repeatedEmail && (
               <ErrorBox
                 text={strings.ALREADY_INVITED_PERSON_ERROR}
@@ -328,8 +230,13 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
             {pageError === 'INVALID_EMAIL' && (
               <ErrorBox title={strings.UNABLE_TO_ADD_PERSON} text={strings.FIX_HIGHLIGHTED_FIELDS} />
             )}
-            <p>{strings.ADD_PERSON_DESC}</p>
           </Grid>
+          {!personSelectedToEdit ? (
+            <Grid item xs={12}>
+              <h3 className={classes.generalTitle}>{strings.GENERAL}</h3>
+              <p className={classes.titleSubtitle}>{strings.ADD_PERSON_GENERAL_DESC}</p>
+            </Grid>
+          ) : null}
           <Grid item xs={4}>
             <TextField
               id='email'
@@ -365,15 +272,16 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
             <p>{strings.ROLES_INFO}</p>
             <ul>
               <li>{strings.CONTRIBUTOR_INFO}</li>
+              <li>{strings.MANAGER_INFO}</li>
               <li>{strings.ADMIN_INFO}</li>
             </ul>
           </Grid>
           <Grid item xs={4}>
             <Select
               id='role'
-              label={strings.ROLE}
+              label={strings.ROLE_REQUIRED}
               onChange={onChangeRole}
-              options={['Contributor', 'Admin']}
+              options={['Contributor', 'Admin', 'Manager']}
               disabled={newPerson.role === 'Owner'}
               selectedValue={newPerson.role}
               fullWidth
@@ -384,49 +292,8 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
             <TfDivisor />
           </Grid>
         </Grid>
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <div className={classes.titleWithButton}>
-              <h2>{strings.PROJECTS}</h2>
-              {!HighOrganizationRolesValues.includes(newPerson.role) && (
-                <Button
-                  label={strings.ADD_TO_PROJECT}
-                  priority='secondary'
-                  onClick={() => {
-                    setIsAddProjectsModalOpen(true);
-                  }}
-                />
-              )}
-            </div>
-          </Grid>
-          <Grid item xs={12}>
-            {HighOrganizationRolesValues.includes(newPerson.role) ? (
-              <InfoBox message={strings.OWNERS_ADMINS_ACCESS_ALL_PROJECTS} />
-            ) : (
-              <Table
-                rows={projectsWithUserRole || []}
-                orderBy='name'
-                columns={projectColumns}
-                emptyTableMessage={strings.NO_PROJECTS_FOR_PERSON}
-                showCheckbox={true}
-                selectedRows={selectedProjectsRows}
-                setSelectedRows={setSelectedProjectsRows}
-                showTopBar={true}
-                topBarButtons={[
-                  {
-                    buttonType: 'destructive',
-                    buttonText: strings.REMOVE,
-                    onButtonClick: removeSelectedProjectsOfPerson,
-                  },
-                ]}
-                Renderer={TableCellRenderer}
-              />
-            )}
-          </Grid>
-          <Grid item xs={12} />
-        </Grid>
       </Container>
-      <FormBottomBar onCancel={goToPeople} onSave={() => saveUser(false)} />
+      <FormBottomBar onCancel={goToPeople} onSave={() => saveUser()} />
     </>
   );
 }

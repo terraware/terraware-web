@@ -326,14 +326,11 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
             <Species
               selectedSpecies={record.species}
               organization={organization}
-              onChange={onChange}
               disabled={isPendingCheckIn}
               record={record}
               setRecord={setRecord}
             />
           </Suspense>
-
-          <Grid item xs={4} />
           <Grid item xs={4}>
             <TextField
               id='numberOfTrees'
@@ -347,6 +344,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
               disabled={isPendingCheckIn}
             />
           </Grid>
+          <Grid item xs={4} />
           <Grid item xs={4}>
             <TextField
               id='founderId'
@@ -356,7 +354,6 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
               disabled={isPendingCheckIn}
             />
           </Grid>
-          <Grid item xs={4} />
           <Grid item xs={4}>
             <Dropdown
               id='sourcePlantOrigin'

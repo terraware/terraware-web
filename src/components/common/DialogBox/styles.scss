@@ -24,6 +24,9 @@
   display: flex;
   flex-direction: column;
   background: $tw-clr-base-white;
+  max-height: calc(100vh - 128px); //64 from top and bottom
+  margin-top: auto;
+  margin-bottom: auto;
 
   &--closed {
     display: none;
@@ -72,6 +75,9 @@
     border-bottom: 1px solid $tw-clr-dvdr-fill;
     padding: $tw-spc-base-medium;
     text-align: center;
+    &.scrolled {
+      overflow: auto;
+    }
   }
 
   &--body-no-footer {

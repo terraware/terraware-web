@@ -119,10 +119,6 @@ export interface paths {
     /** Organizations can only be deleted if they have no members other than the current user. */
     delete: operations["deleteOrganization"];
   };
-  "/api/v1/organizations/{organizationId}/projects": {
-    /** Only projects that are accessible by the current user are included. */
-    get: operations["listOrganizationProjects"];
-  };
   "/api/v1/organizations/{organizationId}/roles": {
     get: operations["listOrganizationRoles"];
   };
@@ -132,27 +128,10 @@ export interface paths {
   };
   "/api/v1/organizations/{organizationId}/users/{userId}": {
     get: operations["getOrganizationUser"];
-    /** Only includes organization-level information that can be modified by organization administrators. Use /api/v1/projects/{projectId}/users/{userId} to change the user's projects. */
+    /** Only includes organization-level information that can be modified by organization administrators. */
     put: operations["updateOrganizationUser"];
     /** Does not remove any data created by the user. */
     delete: operations["deleteOrganizationUser"];
-  };
-  "/api/v1/projects": {
-    get: operations["listAllProjects"];
-    post: operations["createProject"];
-  };
-  "/api/v1/projects/{id}": {
-    get: operations["getProject"];
-    /** Overwrites existing values; if a payload field is null, any existing value is removed from the project. */
-    put: operations["updateProject"];
-  };
-  "/api/v1/projects/{projectId}/sites": {
-    get: operations["listProjectSites"];
-  };
-  "/api/v1/projects/{projectId}/users/{userId}": {
-    /** The user must already be a member of, or already be invited to, the organization. */
-    post: operations["addProjectUser"];
-    delete: operations["deleteProjectUser"];
   };
   "/api/v1/search": {
     post: operations["search_1"];
@@ -202,14 +181,6 @@ export interface paths {
   };
   "/api/v1/seedbank/values/storageLocation/{facilityId}": {
     get: operations["getStorageLocations"];
-  };
-  "/api/v1/sites": {
-    get: operations["listAllSites"];
-    post: operations["createSite"];
-  };
-  "/api/v1/sites/{siteId}": {
-    get: operations["getSite"];
-    put: operations["updateSite"];
   };
   "/api/v1/species": {
     get: operations["listSpecies"];
@@ -361,8 +332,7 @@ export interface components {
     };
     AddOrganizationUserRequestPayload: {
       email: string;
-      role: "Contributor" | "Admin" | "Owner";
-      projectIds?: number[];
+      role: "Contributor" | "Manager" | "Admin" | "Owner";
     };
     AllFieldValuesPayload: {
       /** All the values this field could possibly have, whether or not any accessions have them. For fields that allow the user to enter arbitrary values, this is equivalent to querying the list of values without any filter criteria, that is, it's a list of all the user-entered values. */
@@ -472,9 +442,10 @@ export interface components {
     };
     CreateFacilityRequestPayload: {
       description?: string;
+      /** Which organization this facility belongs to. */
+      organizationId: number;
       name: string;
       type: "Seed Bank" | "Desalination" | "Reverse Osmosis";
-      siteId: number;
     };
     CreateFacilityResponsePayload: {
       id: number;
@@ -485,38 +456,11 @@ export interface components {
       countryCode?: string;
       /** ISO 3166-2 code of organization's country subdivision (state, province, region, etc.) This is the full ISO 3166-2 code including the country prefix. If this is set, countryCode must also be set. */
       countrySubdivisionCode?: string;
-      /** If true or not specified, automatically create a project and site to hold seed bank facilities. */
-      createSeedBank?: boolean;
       description?: string;
       name: string;
     };
     CreateOrganizationUserResponsePayload: {
       /** The ID of the newly-added user. */
-      id: number;
-      status: components["schemas"]["SuccessOrError"];
-    };
-    CreateProjectRequestPayload: {
-      description?: string;
-      name: string;
-      organizationId: number;
-      startDate?: string;
-      status?: "Propagating" | "Planting" | "Completed/Monitoring";
-      types?: (
-        | "Native Forest Restoration"
-        | "Agroforestry"
-        | "Silvopasture"
-        | "Sustainable Timber"
-      )[];
-    };
-    CreateSiteRequestPayload: {
-      description?: string;
-      location?: components["schemas"]["Point"];
-      locale?: string;
-      name: string;
-      projectId: number;
-      timezone?: string;
-    };
-    CreateSiteResponsePayload: {
       id: number;
       status: components["schemas"]["SuccessOrError"];
     };
@@ -629,13 +573,14 @@ export interface components {
         | components["schemas"]["NotNodePayload"]
         | components["schemas"]["OrNodePayload"];
     };
+    /** This organization's facilities. Only included if depth is "Facility". */
     FacilityPayload: {
       connectionState: "Not Connected" | "Connected" | "Configured";
       createdTime: string;
       description?: string;
       id: number;
-      siteId: number;
       name: string;
+      organizationId: number;
       type: "Seed Bank" | "Desalination" | "Reverse Osmosis";
     };
     FieldNodePayload: components["schemas"]["SearchNodePayload"] & {
@@ -751,14 +696,6 @@ export interface components {
     };
     GetOrganizationUserResponsePayload: {
       user: components["schemas"]["OrganizationUserPayload"];
-      status: components["schemas"]["SuccessOrError"];
-    };
-    GetProjectResponsePayload: {
-      project: components["schemas"]["ProjectPayload"];
-      status: components["schemas"]["SuccessOrError"];
-    };
-    GetSiteResponsePayload: {
-      site: components["schemas"]["SiteElement"];
       status: components["schemas"]["SuccessOrError"];
     };
     GetSpeciesProblemResponsePayload: {
@@ -884,14 +821,6 @@ export interface components {
       photos: components["schemas"]["ListPhotosResponseElement"][];
       status: components["schemas"]["SuccessOrError"];
     };
-    ListProjectsResponsePayload: {
-      projects: components["schemas"]["ProjectPayload"][];
-      status: components["schemas"]["SuccessOrError"];
-    };
-    ListSitesResponsePayload: {
-      sites: components["schemas"]["SiteElement"][];
-      status: components["schemas"]["SuccessOrError"];
-    };
     ListSpeciesResponsePayload: {
       species: components["schemas"]["SpeciesResponseElement"][];
       status: components["schemas"]["SuccessOrError"];
@@ -904,8 +833,8 @@ export interface components {
       name: string;
       description?: string;
       configuration?: { [key: string]: unknown };
-      type: string;
       settings?: { [key: string]: { [key: string]: unknown } };
+      type: string;
       timeseriesName?: string;
       deviceId?: number;
       lowerThreshold?: number;
@@ -956,17 +885,17 @@ export interface components {
       countrySubdivisionCode?: string;
       createdTime: string;
       description?: string;
+      /** This organization's facilities. Only included if depth is "Facility". */
+      facilities?: components["schemas"]["FacilityPayload"][];
       id: number;
       name: string;
-      /** This organization's projects. Omitted if depth is "Organization". */
-      projects?: components["schemas"]["ProjectPayload"][];
       /** The current user's role in the organization. */
-      role: "Contributor" | "Admin" | "Owner";
+      role: "Contributor" | "Manager" | "Admin" | "Owner";
       /** The total number of users in the organization, including the current user. */
       totalUsers: number;
     };
     OrganizationRolePayload: {
-      role: "Contributor" | "Admin" | "Owner";
+      role: "Contributor" | "Manager" | "Admin" | "Owner";
       /** Total number of users in the organization with this role. */
       totalUsers: number;
     };
@@ -979,9 +908,7 @@ export interface components {
       firstName?: string;
       /** The user's last name. Not present if the user has been added to the organization but has not signed up for an account yet. */
       lastName?: string;
-      /** IDs of projects the user is in. Users with admin and owner roles always have access to all projects. */
-      projectIds: number[];
-      role: "Contributor" | "Admin" | "Owner";
+      role: "Contributor" | "Manager" | "Admin" | "Owner";
     };
     Point: components["schemas"]["Geometry"] & {
       /** A single position. In the terraware-server API, positions must always include 3 dimensions. The X and Y dimensions use the coordinate system specified by the crs field, and the Z dimension is in meters. */
@@ -993,28 +920,6 @@ export interface components {
       coordinates?: number[][][];
     } & {
       coordinates: unknown;
-    };
-    ProjectPayload: {
-      createdTime: string;
-      description?: string;
-      /** If true, the project and its associated sites and facilities should not be displayed to end users. */
-      hidden: boolean;
-      id: number;
-      name: string;
-      organizationId: number;
-      /** If false, the project is accessible by the entire organization and users may not be added. If true, the project is only accessible by users who are specifically added to it (as well as to admins and owners). */
-      organizationWide: boolean;
-      sites?: components["schemas"]["SiteElement"][];
-      startDate?: string;
-      status?: "Propagating" | "Planting" | "Completed/Monitoring";
-      /** Total number of users with access to the project. This includes administrators, who have access to all the organization's projects. Only included if the client specifically requested it. */
-      totalUsers?: number;
-      types?: (
-        | "Native Forest Restoration"
-        | "Agroforestry"
-        | "Silvopasture"
-        | "Sustainable Timber"
-      )[];
     };
     RecordTimeseriesValuesRequestPayload: {
       timeseries: components["schemas"]["TimeseriesValuesPayload"][];
@@ -1094,17 +999,6 @@ export interface components {
     };
     SimpleSuccessResponsePayload: {
       status: components["schemas"]["SuccessOrError"];
-    };
-    SiteElement: {
-      createdTime: string;
-      description?: string;
-      id: number;
-      name: string;
-      projectId: number;
-      location?: components["schemas"]["Point"];
-      locale?: string;
-      timezone?: string;
-      facilities?: components["schemas"]["FacilityPayload"][];
     };
     SpeciesLookupCommonNamePayload: {
       name: string;
@@ -1352,31 +1246,10 @@ export interface components {
       name: string;
     };
     UpdateOrganizationUserRequestPayload: {
-      role: "Contributor" | "Admin" | "Owner";
-    };
-    UpdateProjectRequestPayload: {
-      description?: string;
-      name: string;
-      startDate?: string;
-      status?: "Propagating" | "Planting" | "Completed/Monitoring";
-      types?: (
-        | "Native Forest Restoration"
-        | "Agroforestry"
-        | "Silvopasture"
-        | "Sustainable Timber"
-      )[];
-    };
-    UpdateSiteRequestPayload: {
-      description?: string;
-      location?: components["schemas"]["Point"];
-      locale?: string;
-      name: string;
-      /** If present, move the site to this project. Project must be owned by the same organization as the site's current project. User must have permission to add sites to the new project and remove them from the existing one. */
-      projectId?: number;
-      timezone?: string;
+      role: "Contributor" | "Manager" | "Admin" | "Owner";
     };
     UpdateUserRequestPayload: {
-      /** If true, the user wants to receive all the notifications for their organization and projects via email. This does not apply to certain kinds of notifications such as "You've been added to a new organization." If null, leave the existing value as-is. */
+      /** If true, the user wants to receive all the notifications for their organizations via email. This does not apply to certain kinds of notifications such as "You've been added to a new organization." If null, leave the existing value as-is. */
       emailNotificationsEnabled?: boolean;
       firstName: string;
       lastName: string;
@@ -1400,7 +1273,7 @@ export interface components {
       /** User's unique ID. This should not be shown to the user, but is a required input to some API endpoints. */
       id: number;
       email: string;
-      /** If true, the user wants to receive all the notifications for their organization and projects via email. This does not apply to certain kinds of notifications such as "You've been added to a new organization." */
+      /** If true, the user wants to receive all the notifications for their organizations via email. This does not apply to certain kinds of notifications such as "You've been added to a new organization." */
       emailNotificationsEnabled: boolean;
       firstName?: string;
       lastName?: string;
@@ -2288,7 +2161,7 @@ export interface operations {
   listOrganizations: {
     parameters: {
       query: {
-        depth?: "Organization" | "Project" | "Site" | "Facility";
+        depth?: "Organization" | "Facility";
       };
     };
     responses: {
@@ -2321,7 +2194,7 @@ export interface operations {
         organizationId: number;
       };
       query: {
-        depth?: "Organization" | "Project" | "Site" | "Facility";
+        depth?: "Organization" | "Facility";
       };
     };
     responses: {
@@ -2363,31 +2236,6 @@ export interface operations {
     responses: {
       /** The organization has other members and cannot be deleted. */
       409: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-    };
-  };
-  /** Only projects that are accessible by the current user are included. */
-  listOrganizationProjects: {
-    parameters: {
-      path: {
-        organizationId: number;
-      };
-      query: {
-        totalUsers?: boolean;
-      };
-    };
-    responses: {
-      /** Projects retrieved. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["ListProjectsResponsePayload"];
-        };
-      };
-      /** The user is not a member of the organization, or the organization does not exist. */
-      404: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
@@ -2460,7 +2308,7 @@ export interface operations {
       };
     };
   };
-  /** Only includes organization-level information that can be modified by organization administrators. Use /api/v1/projects/{projectId}/users/{userId} to change the user's projects. */
+  /** Only includes organization-level information that can be modified by organization administrators. */
   updateOrganizationUser: {
     parameters: {
       path: {
@@ -2517,156 +2365,6 @@ export interface operations {
       };
       /** The user is the organization's only owner and an organization must have at least one owner. */
       409: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-    };
-  };
-  listAllProjects: {
-    parameters: {
-      query: {
-        totalUsers?: boolean;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["ListProjectsResponsePayload"];
-        };
-      };
-    };
-  };
-  createProject: {
-    responses: {
-      /** Project created. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["GetProjectResponsePayload"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["CreateProjectRequestPayload"];
-      };
-    };
-  };
-  getProject: {
-    parameters: {
-      path: {
-        id: number;
-      };
-      query: {
-        totalUsers?: boolean;
-      };
-    };
-    responses: {
-      /** Project retrieved. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["GetProjectResponsePayload"];
-        };
-      };
-      /** The requested resource was not found. */
-      404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-    };
-  };
-  /** Overwrites existing values; if a payload field is null, any existing value is removed from the project. */
-  updateProject: {
-    parameters: {
-      path: {
-        id: number;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["UpdateProjectRequestPayload"];
-      };
-    };
-  };
-  listProjectSites: {
-    parameters: {
-      path: {
-        projectId: number;
-      };
-      query: {
-        srid?: number;
-      };
-    };
-    responses: {
-      /** Retrieved list of sites. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["ListSitesResponsePayload"];
-        };
-      };
-      /** The project does not exist or is not accessible. */
-      404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-    };
-  };
-  /** The user must already be a member of, or already be invited to, the organization. */
-  addProjectUser: {
-    parameters: {
-      path: {
-        projectId: number;
-        userId: number;
-      };
-    };
-    responses: {
-      /** The requested operation succeeded. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-        };
-      };
-      /** The user does not exist or is not a member of the organization. */
-      404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-      /** The user is already a member of the project, or the project is organization-wide. */
-      409: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-    };
-  };
-  deleteProjectUser: {
-    parameters: {
-      path: {
-        projectId: number;
-        userId: number;
-      };
-    };
-    responses: {
-      /** The requested operation succeeded. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-        };
-      };
-      /** The user does not exist or is not a member of the project. */
-      404: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
@@ -2989,80 +2687,6 @@ export interface operations {
         content: {
           "application/json": components["schemas"]["StorageLocationsResponsePayload"];
         };
-      };
-    };
-  };
-  listAllSites: {
-    parameters: {
-      query: {
-        srid?: number;
-      };
-    };
-    responses: {
-      /** Retrieved list of sites. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["ListSitesResponsePayload"];
-        };
-      };
-    };
-  };
-  createSite: {
-    responses: {
-      /** Site created. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["CreateSiteResponsePayload"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["CreateSiteRequestPayload"];
-      };
-    };
-  };
-  getSite: {
-    parameters: {
-      path: {
-        siteId: number;
-      };
-      query: {
-        srid?: number;
-      };
-    };
-    responses: {
-      /** Site retrieved. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["GetSiteResponsePayload"];
-        };
-      };
-      /** The requested resource was not found. */
-      404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-    };
-  };
-  updateSite: {
-    parameters: {
-      path: {
-        siteId: number;
-      };
-    };
-    responses: {
-      /** The requested operation succeeded. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["UpdateSiteRequestPayload"];
       };
     };
   };

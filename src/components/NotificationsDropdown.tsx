@@ -297,7 +297,7 @@ function NotificationItem(props: NotificationItemProps): JSX.Element {
   const criticality = notificationCriticality.toLowerCase();
 
   const onNotificationClick = async (read: boolean, close?: boolean) => {
-    if (close && (localUrl.startsWith('/home') || localUrl.startsWith('/projects'))) {
+    if (close && localUrl.startsWith('/home')) {
       const orgId: string | null = new URL(localUrl, window.location.origin).searchParams.get('organizationId');
       await reloadOrganizationData(orgId ? parseInt(orgId, 10) : undefined);
     }

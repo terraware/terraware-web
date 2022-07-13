@@ -14,7 +14,7 @@ const useStyles = makeStyles(() => ({
     display: 'flex',
     flexDirection: 'column',
     height: '100%',
-    minHeight: '300px',
+    minHeight: '220px',
     padding: '24px',
   },
   title: {

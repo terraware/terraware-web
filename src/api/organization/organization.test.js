@@ -9,31 +9,6 @@ const ORGANIZATIONS = [
     id: 1,
     name: 'Terraformation (staging)',
     role: 'Owner',
-    projects: [
-      {
-        id: 0,
-        name: 'Example Project',
-        sites: [
-          {
-            id: 10,
-            name: 'Example Site',
-            projectId: 10,
-            facilities: [
-              {
-                id: 100,
-                name: 'ohana',
-                type: 'Seed Bank',
-              },
-              {
-                id: 101,
-                name: 'garage',
-                type: 'Seed Bank',
-              },
-            ],
-          },
-        ],
-      },
-    ],
   },
 ];
 

@@ -1,5 +1,5 @@
 import axios from 'src/api/index';
-import { Site, ServerOrganization, Project } from 'src/types/Organization';
+import { ServerOrganization } from 'src/types/Organization';
 import { paths } from 'src/api/types/generated-schema';
 import { Facility } from '../types/facilities';
 import { OrganizationUser } from 'src/types/User';
@@ -8,49 +8,14 @@ const ORGANIZATIONS = '/api/v1/organizations';
 type ListOrganizationsResponsePayload =
   paths[typeof ORGANIZATIONS]['get']['responses'][200]['content']['application/json'];
 
-type ServerOrg = ListOrganizationsResponsePayload['organizations'][0];
-
-type ServerProject = Required<ServerOrg>['projects'][0];
-
-type ServerSite = Required<ServerProject>['sites'][0];
-
-type ServerFacility = Required<ServerSite>['facilities'][0];
-
-const parseProject = (project: ServerProject): Project => {
-  const parsedProject: Project = {
-    id: project.id,
-    name: project.name,
-    description: project.description,
-    startDate: project.startDate,
-    status: project.status,
-    types: project.types,
-    sites: project.sites?.map((site) => parseSite(site)),
-    organizationId: project.organizationId,
-    totalUsers: project.totalUsers,
-    hidden: project.hidden,
-  };
-  return parsedProject;
-};
-
-const parseSite = (site: ServerSite): Site => {
-  const parsedSite: Site = {
-    id: site.id,
-    name: site.name,
-    description: site.description,
-    projectId: site.projectId,
-    facilities: site.facilities?.map((facility) => parseFacility(facility)),
-    latitude: site.location?.coordinates ? site.location.coordinates[1] : undefined,
-    longitude: site.location?.coordinates ? site.location.coordinates[0] : undefined,
-  };
-  return parsedSite;
-};
+type ServerFacility = Required<ServerOrganization>['facilities'][0];
 
 const parseFacility = (facility: ServerFacility): Facility => {
   const parsedFacility: Facility = {
     id: facility.id,
     name: facility.name,
     type: facility.type,
-    siteId: facility.siteId,
+    organizationId: facility.organizationId,
     description: facility.description,
     connectionState: facility.connectionState,
   };
@@ -75,7 +40,7 @@ export async function getOrganizations(): Promise<OrganizationsResponse> {
       id: organization.id,
       name: organization.name,
       role: organization.role,
-      projects: organization.projects?.map((project) => parseProject(project)),
+      facilities: organization.facilities?.map((facility) => parseFacility(facility)),
       description: organization.description,
       countryCode: organization.countryCode,
       countrySubdivisionCode: organization.countrySubdivisionCode,
@@ -116,7 +81,6 @@ export async function getOrganizationUsers(organization: ServerOrganization): Pr
       lastName: user.lastName,
       email: user.email,
       role: user.role,
-      projectIds: user.projectIds,
       addedTime: user.addedTime,
     }));
   } catch {
@@ -154,7 +118,7 @@ export async function createOrganization(organization: ServerOrganization) {
         name: serverResponse.organization.name,
         role: serverResponse.organization.role,
         description: serverResponse.organization.description,
-        projects: serverResponse.organization.projects,
+        facilities: serverResponse.organization.facilities,
         countryCode: serverResponse.organization.countryCode,
         countrySubdivisionCode: serverResponse.organization.countrySubdivisionCode,
         totalUsers: serverResponse.organization.totalUsers,
@@ -227,7 +191,7 @@ export async function leaveOrganization(organizationId: number, userId: number):
 }
 
 type OrganizationRolePayload = {
-  role: 'Contributor' | 'Admin' | 'Owner';
+  role: 'Contributor' | 'Admin' | 'Owner' | 'Manager';
   totalUsers: number;
 };
 

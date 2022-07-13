@@ -14,7 +14,6 @@ import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
 import { OrganizationUser, User } from 'src/types/User';
-import { getProjectsById } from 'src/utils/organization';
 import TfMain from '../common/TfMain';
 import TableCellRenderer from './TableCellRenderer';
 import PageSnackbar from 'src/components/PageSnackbar';
@@ -49,13 +48,8 @@ const columns: TableColumnType[] = [
   { key: 'lastName', name: strings.LAST_NAME, type: 'string' },
   { key: 'email', name: strings.EMAIL, type: 'string' },
   { key: 'role', name: strings.ROLE, type: 'string' },
-  { key: 'projectNames', name: strings.PROJECTS, type: 'string' },
   { key: 'addedTime', name: strings.DATE_ADDED, type: 'date' },
 ];
-
-type OrganizationUserWithProjectName = OrganizationUser & {
-  projectNames: string[];
-};
 
 type PeopleListProps = {
   organization?: ServerOrganization;
@@ -66,7 +60,7 @@ type PeopleListProps = {
 export default function PeopleList({ organization, reloadData, user }: PeopleListProps): JSX.Element {
   const classes = useStyles();
   const history = useHistory();
-  const [people, setPeople] = useState<OrganizationUserWithProjectName[]>();
+  const [people, setPeople] = useState<OrganizationUser[]>();
   const [selectedPeopleRows, setSelectedPeopleRows] = useState<OrganizationUser[]>([]);
   const [orgPeople, setOrgPeople] = useState<OrganizationUser[]>();
   const [removePeopleModalOpened, setRemovePeopleModalOpened] = useState(false);
@@ -81,38 +75,9 @@ export default function PeopleList({ organization, reloadData, user }: PeopleLis
       if (organization) {
         const response = await getOrganizationUsers(organization);
         if (response.requestSucceeded) {
-          const peopleWithProjectName = addProjectsNamesToPeople(response.users);
-          setPeople(peopleWithProjectName);
+          setPeople(response.users);
         }
       }
-    };
-
-    const addProjectsNamesToPeople = (users: OrganizationUser[]): OrganizationUserWithProjectName[] => {
-      if (organization) {
-        const allProjects = getProjectsById(organization);
-        return users.map((iUser) => {
-          const projectNamesOfPerson: string[] = iUser.projectIds.map((projectId) => {
-            const projectName = allProjects.get(projectId)?.name;
-            if (!projectName) {
-              console.error(
-                `Could not find project name associated with user id ${iUser.id},  project id ${projectId}`
-              );
-            }
-            return projectName ? projectName : '';
-          });
-          return {
-            firstName: iUser.firstName,
-            lastName: iUser.lastName,
-            email: iUser.email,
-            id: iUser.id,
-            role: iUser.role,
-            projectIds: iUser.projectIds,
-            projectNames: projectNamesOfPerson,
-            addedTime: iUser.addedTime,
-          };
-        });
-      }
-      return [];
     };
 
     if (organization) {
@@ -171,7 +136,7 @@ export default function PeopleList({ organization, reloadData, user }: PeopleLis
     if (organization) {
       let assignNewOwnerResponse;
       if (newOwner) {
-        assignNewOwnerResponse = await updateOrganizationUser(newOwner.id, organization.id, 'Owner', [], []);
+        assignNewOwnerResponse = await updateOrganizationUser(newOwner.id, organization.id, 'Owner');
       }
       const promises: Promise<UpdateOrganizationResponse>[] = [];
       if ((assignNewOwnerResponse && assignNewOwnerResponse.requestSucceeded === true) || !assignNewOwnerResponse) {

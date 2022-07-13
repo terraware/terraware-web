@@ -15,7 +15,6 @@ import FormBottomBar from '../common/FormBottomBar';
 import TextField from '../common/Textfield/Textfield';
 import TfDivisor from '../common/TfDivisor';
 import TfMain from '../common/TfMain';
-import AccountCellRenderer from './TableCellRenderer';
 import snackbarAtom from 'src/state/snackbar';
 import AssignNewOwnerDialog from './AssignNewOwnerModal';
 import { getOrganizationUsers, leaveOrganization, listOrganizationRoles } from 'src/api/organization/organization';
@@ -181,7 +180,7 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
     if (removedOrg) {
       let assignNewOwnerResponse;
       if (newOwner) {
-        assignNewOwnerResponse = await updateOrganizationUser(newOwner.id, removedOrg.id, 'Owner', [], []);
+        assignNewOwnerResponse = await updateOrganizationUser(newOwner.id, removedOrg.id, 'Owner');
       }
       if ((assignNewOwnerResponse && assignNewOwnerResponse.requestSucceeded === true) || !assignNewOwnerResponse) {
         leaveOrgResponse = await leaveOrganization(removedOrg.id, user.id);
@@ -353,7 +352,6 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
                       topBarButtons={[
                         { buttonType: 'destructive', buttonText: strings.REMOVE, onButtonClick: removeSelectedOrgs },
                       ]}
-                      Renderer={AccountCellRenderer}
                     />
                   )}
                 </Grid>

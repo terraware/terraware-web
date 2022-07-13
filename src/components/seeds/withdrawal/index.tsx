@@ -74,7 +74,7 @@ export default function WithdrawalView({ accession, onSubmit }: Props): JSX.Elem
   } ${accession.totalScheduledWithdrawalQuantity ? strings.SCHEDULED : ''}`;
   const seedsAvailable = accession.remainingQuantity?.quantity || 0;
 
-  const allowWithdrawalInGrams = Boolean(accession.processingMethod === 'Weight');
+  const allowWithdrawalInWeight = Boolean(accession.processingMethod === 'Weight');
 
   const onEdit = (row: AccessionWithdrawal) => {
     setSelectedRecord(row);
@@ -139,8 +139,9 @@ export default function WithdrawalView({ accession, onSubmit }: Props): JSX.Elem
           onClose={onCloseModal}
           onDelete={onDelete}
           seedsAvailable={seedsAvailable}
-          value={selectedRecord}
-          allowWithdrawalInGrams={allowWithdrawalInGrams}
+          withdrawal={selectedRecord}
+          allowWithdrawalInWeight={allowWithdrawalInWeight}
+          accession={accession}
         />
         <InfoModal open={openInfoModal} onClose={onCloseInfoModal} />
         <MainPaper>

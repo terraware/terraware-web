@@ -21,7 +21,7 @@ export async function createFacility(facility: Facility): Promise<CreateFacility
   const createFacilityRequestPayload: CreateFacilityRequestPayload = {
     name: facility.name,
     description: facility.description,
-    siteId: facility.siteId,
+    organizationId: facility.organizationId,
     type: facility.type,
   };
   try {

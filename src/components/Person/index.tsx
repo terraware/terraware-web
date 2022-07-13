@@ -3,22 +3,14 @@ import { Theme } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import { getOrganizationUsers } from 'src/api/organization/organization';
-import { listAllProjects } from 'src/api/project/project';
 import Button from 'src/components/common/button/Button';
 import Icon from 'src/components/common/icon/Icon';
-import InfoBox from 'src/components/common/InfoBox';
-import Table from 'src/components/common/table';
-import { TableColumnType } from 'src/components/common/table/types';
 import TextField from 'src/components/common/Textfield/Textfield';
-import TfDivisor from 'src/components/common/TfDivisor';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import dictionary from 'src/strings/dictionary';
-import { HighOrganizationRolesValues, Project, ServerOrganization } from 'src/types/Organization';
+import { ServerOrganization } from 'src/types/Organization';
 import { OrganizationUser } from 'src/types/User';
-import { getOrganizationProjects } from 'src/utils/organization';
-import { ProjectWithUserRole } from './NewPerson';
-import TableCellRenderer from './TableCellRenderer';
 import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -51,21 +43,11 @@ type PersonDetailsProps = {
   organization?: ServerOrganization;
 };
 
-const projectColumns: TableColumnType[] = [
-  { key: 'name', name: strings.NAME, type: 'string' },
-  { key: 'description', name: strings.DESCRIPTION, type: 'string' },
-  { key: 'sites', name: strings.SITES, type: 'string' },
-  { key: 'totalUsers', name: strings.PEOPLE, type: 'string' },
-  { key: 'role', name: strings.ROLE, type: 'string' },
-];
-
 export default function PersonDetails({ organization }: PersonDetailsProps): JSX.Element {
   const classes = useStyles();
   const history = useHistory();
   const { personId } = useParams<{ personId: string }>();
   const [person, setPerson] = useState<OrganizationUser>();
-  const [projectsOfPerson, setProjectsOfPerson] = useState<ProjectWithUserRole[]>([]);
-  const [allProjects, setAllProjects] = useState<Project[]>();
 
   useEffect(() => {
     const populatePersonData = async () => {
@@ -79,32 +61,10 @@ export default function PersonDetails({ organization }: PersonDetailsProps): JSX
         }
       }
     };
-    const populateAllProjects = async () => {
-      const response = await listAllProjects();
-      if (response.requestSucceeded && organization) {
-        const allProjectsServer = response.projects?.filter((project) => project.organizationId === organization.id);
-        const projectsWithTotalUsers = getOrganizationProjects(organization)?.map((orgProj) => {
-          return { ...orgProj, totalUsers: allProjectsServer?.find((pro) => pro.id === orgProj.id)?.totalUsers };
-        });
-        setAllProjects(projectsWithTotalUsers);
-      }
-    };
     if (organization) {
       populatePersonData();
-      populateAllProjects();
     }
   }, [personId, organization, history]);
-
-  useEffect(() => {
-    const projects = person?.projectIds.reduce((filtered, projectId) => {
-      const found = allProjects?.find((project) => project.id === projectId);
-      if (found) {
-        filtered.push({ ...found, role: person.role } as ProjectWithUserRole);
-      }
-      return filtered;
-    }, [] as ProjectWithUserRole[]);
-    setProjectsOfPerson(projects ?? []);
-  }, [person, organization?.projects, allProjects]);
 
   const getDateAdded = () => {
     if (person?.addedTime) {
@@ -153,23 +113,6 @@ export default function PersonDetails({ organization }: PersonDetailsProps): JSX
           <TextField label={strings.DATE_ADDED} id='addedTime' type='text' value={getDateAdded()} display={true} />
         </Grid>
         <Grid item xs={4} />
-        <Grid item xs={12} />
-        <Grid item xs={12}>
-          <TfDivisor />
-        </Grid>
-      </Grid>
-      <Grid container spacing={3}>
-        <Grid item xs={12}>
-          <h2>{strings.PROJECTS}</h2>
-          <p>{strings.PROJECTS_DESC}</p>
-        </Grid>
-        {person && HighOrganizationRolesValues.includes(person.role) ? (
-          <InfoBox message={strings.OWNERS_ADMINS_ACCESS_ALL_PROJECTS} />
-        ) : (
-          <Grid item xs={12}>
-            <Table rows={projectsOfPerson} orderBy='name' columns={projectColumns} Renderer={TableCellRenderer} />
-          </Grid>
-        )}
       </Grid>
     </Container>
   );

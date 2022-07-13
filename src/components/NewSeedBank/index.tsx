@@ -10,7 +10,7 @@ import useForm from 'src/utils/useForm';
 import { useSetRecoilState } from 'recoil';
 import snackbarAtom from 'src/state/snackbar';
 import FormBottomBar from '../common/FormBottomBar';
-import { getAllSeedBanks, getSeedBankSite } from 'src/utils/organization';
+import { getAllSeedBanks } from 'src/utils/organization';
 import { Facility } from 'src/api/types/facilities';
 import { createFacility, updateFacility } from 'src/api/facility/facility';
 import { Theme } from '@mui/material';
@@ -50,12 +50,11 @@ export default function SeedBankView({ organization, reloadOrganizationData }: S
   const [nameError, setNameError] = useState('');
   const [descriptionError, setDescriptionError] = useState('');
 
-  const [siteId, setSiteId] = useState<number>();
   const [record, setRecord, onChange] = useForm<Facility>({
     name: '',
     id: -1,
     type: 'Seed Bank',
-    siteId: siteId || -1,
+    organizationId: organization.id,
     connectionState: 'Not Connected',
   });
   const setSnackbar = useSetRecoilState(snackbarAtom);
@@ -68,10 +67,6 @@ export default function SeedBankView({ organization, reloadOrganizationData }: S
   useEffect(() => {
     const seedBanks = getAllSeedBanks(organization);
     setSelectedSeedBank(seedBanks?.find((sb) => sb?.id === parseInt(seedBankId, 10)));
-    const seedBankSite = getSeedBankSite(organization);
-    if (seedBankSite) {
-      setSiteId(seedBankSite.id);
-    }
   }, [seedBankId, organization]);
 
   useEffect(() => {
@@ -79,11 +74,11 @@ export default function SeedBankView({ organization, reloadOrganizationData }: S
       name: selectedSeedBank?.name || '',
       description: selectedSeedBank?.description,
       id: -1,
-      siteId: selectedSeedBank?.siteId || siteId || -1,
+      organizationId: organization.id,
       type: 'Seed Bank',
       connectionState: 'Not Connected',
     });
-  }, [selectedSeedBank, setRecord, siteId]);
+  }, [selectedSeedBank, setRecord, organization.id]);
 
   const goToSeedBanks = () => {
     const sitesLocation = {

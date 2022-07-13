@@ -11,13 +11,9 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export default function ProjectsCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
+export default function Renderer(props: RendererProps<TableRowType>): JSX.Element {
   const classes = useStyles();
   const { column, row, value, index } = props;
-
-  if (column.key === 'projectNames' && Array.isArray(value)) {
-    return <CellRenderer index={index} column={column} value={value.join(', ')} row={row} />;
-  }
 
   const createLinkToPerson = (iValue: React.ReactNode | unknown[]) => {
     const personLocation = {
