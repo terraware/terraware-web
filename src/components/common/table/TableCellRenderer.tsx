@@ -5,6 +5,17 @@ import React, { ReactNode } from 'react';
 import preventDefaultEvent from 'src/utils/preventDefaultEvent';
 import { RendererProps } from './types';
 
+const useStyles = makeStyles((theme) =>
+  createStyles({
+    editIcon: {
+      marginLeft: theme.spacing(1),
+    },
+    textRoot: {
+      maxWidth: 400,
+    },
+  })
+);
+
 export type TableRowType = Record<string, any>;
 
 export default function CellRenderer(props: RendererProps<TableRowType>): JSX.Element {
@@ -51,10 +62,11 @@ export function CellTextRenderer({
   id: string;
   value?: string | number | any[] | ReactNode;
 }): JSX.Element {
+  const classes = useStyles();
   return (
     <TableCell id={id} align='left'>
-      <Typography component='p' variant='body1'>
-        {value}
+      <Typography component='p' variant='body1' noWrap classes={{ root: classes.textRoot }}>
+        <span title={typeof value === 'string' ? value : ''}>{value}</span>
       </Typography>
     </TableCell>
   );
@@ -85,14 +97,6 @@ export function CellNotesRenderer({ id, value }: { id: string; value?: string })
     </TableCell>
   );
 }
-
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    editIcon: {
-      marginLeft: theme.spacing(1),
-    },
-  })
-);
 
 export function CellEditRenderer({ id, onRowClick }: { id: string; onRowClick?: () => void }): JSX.Element {
   const classes = useStyles();
