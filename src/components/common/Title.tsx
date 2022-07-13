@@ -1,4 +1,3 @@
-import React, { useEffect } from 'react';
 import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles(() => ({
