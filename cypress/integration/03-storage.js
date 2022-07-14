@@ -19,8 +19,8 @@ describe('Storage', () => {
     cy.get('#Count').click();
     cy.get('#quantity').type(10);
     cy.get('#check-Nursery').click();
-    cy.get('#dryingStartDate').type('01/01/2021');
-    cy.get('#dryingEndDate').type('01/01/2021');
+    cy.get('#dryingStartDate').type('2021-01-01');
+    cy.get('#dryingEndDate').type('2021-01-01');
     cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
     cy.get('#saveAccession').click();
     cy.wait('@getAccession');
@@ -30,7 +30,7 @@ describe('Storage', () => {
   });
 
   it('should add storage information', () => {
-    cy.get('#storageStartDate').type('02/04/2021');
+    cy.get('#storageStartDate').type('2021-02-04');
     cy.get('#storagePackets').type('5');
     cy.get('#storageLocation').click();
     cy.get('#Freezer\\ 1').click();
@@ -47,7 +47,7 @@ describe('Storage', () => {
     cy.get('#saveAccession').click();
     cy.wait('@getAccession');
 
-    cy.get('#storageStartDate').should('have.value', '02/04/2021');
+    cy.get('#storageStartDate').should('have.value', '2021-02-04');
     cy.get('#storagePackets').should('have.value', '5');
     cy.get('#storageLocation + input').should('have.value', 'Refrigerator 1');
     cy.get('#storageCondition').should('have.value', 'Refrigerator');
