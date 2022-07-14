@@ -94,11 +94,7 @@ export default function AccessionPageHeader({ accession }: Props): JSX.Element {
                 {accession.species && <DetailDivisor />}
                 <span id='header-species'>{accession.species}</span>
                 {accession.receivedDate && <DetailDivisor />}
-                {accession.receivedDate && (
-                  <span id='header-date'>
-                    {getDateDisplayValue(accession.receivedDate)}
-                  </span>
-                )}
+                {accession.receivedDate && <span id='header-date'>{getDateDisplayValue(accession.receivedDate)}</span>}
                 <DetailDivisor />
                 <span id='header-state'>{accession.state}</span>
               </Typography>
