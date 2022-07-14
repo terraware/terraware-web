@@ -1,10 +1,10 @@
 import { TableCell, Typography } from '@material-ui/core';
-import moment from 'moment';
 import React from 'react';
 import { AccessionWithdrawal } from 'src/api/types/accessions';
 import strings from 'src/strings';
 import CellRenderer, { CellDateRenderer } from '../../common/table/TableCellRenderer';
 import { RendererProps } from '../../common/table/types';
+import getDateDisplayValue from 'src/utils/date';
 
 export default function WithdrawalCellRenderer(props: RendererProps<AccessionWithdrawal>): JSX.Element {
   const { column, value, row, index } = props;
@@ -28,7 +28,7 @@ export default function WithdrawalCellRenderer(props: RendererProps<AccessionWit
             {strings.SCHEDULED_FOR}
           </Typography>
           <Typography component='p' variant='body1'>
-            {moment(value).format('L')}
+            {getDateDisplayValue(value)}
           </Typography>
         </TableCell>
       );
