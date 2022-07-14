@@ -78,8 +78,8 @@ describe('Accessions', () => {
       cy.get('#Outplant').click();
 
       cy.get('#fieldNotes').type('Some notes');
-      cy.get('#collectedDate').type('02/01/2021');
-      cy.get('#receivedDate').clear().type('02/03/2021');
+      cy.get('#collectedDate').type('2021-02-01');
+      cy.get('#receivedDate').clear().type('2021-02-03');
       cy.get('#primaryCollector').type('Carlos');
       cy.get('#secondaryCollectors0').type('Constanza');
       cy.get('#addCollectorButton').click();
@@ -96,7 +96,7 @@ describe('Accessions', () => {
 
       cy.get('#header-status').contains('Active');
       cy.get('#header-species').contains('Kousa Dogwood');
-      cy.get('#header-date').contains('02/03/2021');
+      cy.get('#header-date').contains('2021-02-03');
       cy.get('#header-state').contains('Awaiting Check-In');
 
       cy.get('#species').should('have.value', 'Kousa Dogwood');
@@ -104,8 +104,8 @@ describe('Accessions', () => {
       cy.get('#founderId').should('have.value', '234908098');
       cy.get('#sourcePlantOrigin + input').should('have.value', 'Outplant');
       cy.get('#fieldNotes').should('have.value', 'Some notes');
-      cy.get('#collectedDate').should('have.value', '02/01/2021');
-      cy.get('#receivedDate').should('have.value', '02/03/2021');
+      cy.get('#collectedDate').should('have.value', '2021-02-01');
+      cy.get('#receivedDate').should('have.value', '2021-02-03');
       cy.get('#primaryCollector').should('have.value', 'Carlos');
       cy.get('#secondaryCollectors0').should('have.value', 'Constanza');
       cy.get('#secondaryCollectors1').should('have.value', 'Leann');

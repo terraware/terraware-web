@@ -13,6 +13,7 @@ import { getOrganizationUsers } from 'src/api/organization/organization';
 import { OrganizationUser } from 'src/types/User';
 import { getCountryByCode, getSubdivisionByCode } from 'src/utils/country';
 import PageSnackbar from 'src/components/PageSnackbar';
+import getDateDisplayValue from 'src/utils/date';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -79,12 +80,7 @@ export default function OrganizationView({ organization }: OrganizationViewProps
 
   const getDateAdded = () => {
     if (organization?.createdTime) {
-      return new Date(organization.createdTime).toLocaleDateString('en-US', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
-        timeZone: 'UTC',
-      });
+      return getDateDisplayValue(organization.createdTime);
     }
   };
 

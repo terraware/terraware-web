@@ -56,7 +56,7 @@ export default function DatePicker(props: Props): JSX.Element {
       disableToolbar
       variant='inline'
       inputVariant='outlined'
-      format={moment.localeData().longDateFormat('L')}
+      format='YYYY-MM-DD'
       margin='normal'
       size='small'
       fullWidth={true}

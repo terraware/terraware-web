@@ -36,9 +36,9 @@ describe('Processing and Drying', () => {
   });
 
   it('should add dates', () => {
-    cy.get('#dryingStartDate').type('01/01/2021');
-    cy.get('#dryingEndDate').type('01/01/2021');
-    cy.get('#dryingMoveDate').type('01/01/2021');
+    cy.get('#dryingStartDate').type('2021-01-01');
+    cy.get('#dryingEndDate').type('2021-01-01');
+    cy.get('#dryingMoveDate').type('2021-01-01');
   });
 
   it('should add note', () => {
@@ -59,9 +59,9 @@ describe('Processing and Drying', () => {
     cy.get('#processingMethod + input').should('have.value', 'Count');
     cy.get('#quantity').should('have.value', '300');
     cy.get('#check-Nursery').should('have.checked', 'true');
-    cy.get('#dryingStartDate').should('have.value', '01/01/2021');
-    cy.get('#dryingEndDate').should('have.value', '01/01/2021');
-    cy.get('#dryingMoveDate').should('have.value', '01/01/2021');
+    cy.get('#dryingStartDate').should('have.value', '2021-01-01');
+    cy.get('#dryingEndDate').should('have.value', '2021-01-01');
+    cy.get('#dryingMoveDate').should('have.value', '2021-01-01');
     cy.get('#processingNotes').should('have.value', 'A processing note');
     cy.get('#processingStaffResponsible').should('have.value', 'Constanza');
   });
