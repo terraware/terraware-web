@@ -42,7 +42,7 @@ export const htmlLegendPlugin = {
         li.style.flexDirection = 'row';
         li.style.marginLeft = '10px';
 
-        if (item.text === 'Humidity Thresholds' || item.text === 'System Voltage') {
+        if (item.text === 'Humidity Thresholds' || item.text === 'System Power') {
           li.style.marginLeft = 'auto';
         }
         if (!hasHumidityTresholds && item.text === 'Humidity') {

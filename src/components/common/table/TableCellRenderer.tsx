@@ -17,6 +17,17 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
+const useStyles = makeStyles((theme) =>
+  createStyles({
+    editIcon: {
+      marginLeft: theme.spacing(1),
+    },
+    textRoot: {
+      maxWidth: 400,
+    },
+  })
+);
+
 export type TableRowType = Record<string, any>;
 
 export default function CellRenderer(props: RendererProps<TableRowType>): JSX.Element {
@@ -59,9 +70,10 @@ export function CellTextRenderer({
   id: string;
   value?: string | number | any[] | ReactNode;
 }): JSX.Element {
+  const classes = useStyles();
   return (
-    <TableCell id={id} align='left'>
-      <Typography component='p' variant='body1'>
+    <TableCell id={id} align='left' title={typeof value === 'string' ? value : ''}>
+      <Typography component='p' variant='body1' noWrap classes={{ root: classes.textRoot }}>
         {value}
       </Typography>
     </TableCell>
