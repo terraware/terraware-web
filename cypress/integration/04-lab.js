@@ -327,7 +327,7 @@ describe('Lab', () => {
 
   it('should show schedule testing box when creating a future test', () => {
     cy.get('#newTest').click();
-    cy.get('#startDate').type('2021-02-09');
+    cy.get('#startDate').type('3021-02-09');
     cy.get('#seedsSown').type('25');
 
     cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');

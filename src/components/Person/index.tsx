@@ -10,6 +10,7 @@ import strings from 'src/strings';
 import dictionary from 'src/strings/dictionary';
 import { ServerOrganization } from 'src/types/Organization';
 import { OrganizationUser } from 'src/types/User';
+import getDateDisplayValue from 'src/utils/date';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -68,12 +69,7 @@ export default function PersonDetails({ organization }: PersonDetailsProps): JSX
 
   const getDateAdded = () => {
     if (person?.addedTime) {
-      return new Date(person.addedTime).toLocaleDateString('en-US', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
-        timeZone: 'UTC',
-      });
+      return getDateDisplayValue(person.addedTime);
     }
   };
 

@@ -8,6 +8,7 @@ import { useHistory } from 'react-router-dom';
 import { Accession } from 'src/api/types/accessions';
 import { APP_PATHS } from 'src/constants';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
+import getDateDisplayValue from 'src/utils/date';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -95,12 +96,7 @@ export default function AccessionPageHeader({ accession }: Props): JSX.Element {
                 {accession.receivedDate && <DetailDivisor />}
                 {accession.receivedDate && (
                   <span id='header-date'>
-                    {new Date(accession.receivedDate).toLocaleDateString('en-US', {
-                      day: '2-digit',
-                      month: '2-digit',
-                      year: 'numeric',
-                      timeZone: 'UTC',
-                    })}
+                    {getDateDisplayValue(accession.receivedDate)}
                   </span>
                 )}
                 <DetailDivisor />
