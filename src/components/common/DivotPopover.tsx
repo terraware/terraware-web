@@ -73,6 +73,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   iconContainer: {
     borderRadius: 0,
     fontSize: '16px',
+    padding: 0,
   },
   icon: {
     fill: '#3A4445',
@@ -161,7 +162,7 @@ export default function DivotPopover({
   useEffect(() => {
     setTimeout(() => {
       if (divotRef && anchorEl) {
-        const left = anchorEl.getBoundingClientRect().x - divotRef.getBoundingClientRect().x + 16;
+        const left = anchorEl.getBoundingClientRect().x - divotRef.getBoundingClientRect().x + 12;
         if (!divotStyle.left || divotStyle.left !== `${left}px`) {
           setDivotStyle({ left: `${left}px`, visibility: 'hidden' });
         } else if (divotStyle.visibility !== 'visible') {
