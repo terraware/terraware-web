@@ -1,6 +1,6 @@
 import { paths } from './generated-schema';
 
-export const facilitiesEndpoint = '/api/v1/facility';
+export const facilitiesEndpoint = '/api/v1/facilities';
 export type FacilitiesListResponse =
   paths[typeof facilitiesEndpoint]['get']['responses'][200]['content']['application/json'];
 
