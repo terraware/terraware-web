@@ -11,19 +11,11 @@ const useStyles = makeStyles((theme) =>
     editIcon: {
       marginLeft: theme.spacing(1),
     },
-    date: {
-      whiteSpace: 'nowrap',
-    },
-  })
-);
-
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    editIcon: {
-      marginLeft: theme.spacing(1),
-    },
     textRoot: {
       maxWidth: 400,
+    },
+    date: {
+      whiteSpace: 'nowrap',
     },
   })
 );
