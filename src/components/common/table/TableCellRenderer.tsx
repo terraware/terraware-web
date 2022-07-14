@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme) =>
       marginLeft: theme.spacing(1),
     },
     textRoot: {
-      maxWidth: 300,
+      maxWidth: 400,
     },
   })
 );
