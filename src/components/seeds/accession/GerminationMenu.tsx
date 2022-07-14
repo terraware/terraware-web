@@ -30,15 +30,15 @@ export default function GerminationMenu({ accession }: Props): JSX.Element | nul
   const classes = useStyles();
   const { accessionId } = useParams<{ accessionId: string }>();
 
-  const hasNurseryGerminationTest = accession.germinationTestTypes?.includes('Nursery');
+  const hasNurseryGerminationTest = accession.viabilityTestTypes?.includes('Nursery');
 
-  const hasLabGerminationTest = accession.germinationTestTypes?.includes('Lab');
+  const hasLabGerminationTest = accession.viabilityTestTypes?.includes('Lab');
 
   const TypographyClass = (route: string) => (useRouteMatch(route) ? classes.bold : classes.link);
   const location = useStateLocation();
   const history = useHistory();
 
-  if (!accession.germinationTestTypes) {
+  if (!accession.viabilityTestTypes) {
     return null;
   }
 
@@ -48,7 +48,7 @@ export default function GerminationMenu({ accession }: Props): JSX.Element | nul
 
   return (
     <MainPaper>
-      <PanelTitle title={strings.GERMINATION_TESTING} />
+      <PanelTitle title={strings.VIABILITY_TESTING} />
       <Divisor mt={1} />
       {hasNurseryGerminationTest && (
         <Link

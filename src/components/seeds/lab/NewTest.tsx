@@ -7,7 +7,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import React from 'react';
-import { GerminationTest } from 'src/api/types/tests';
+import { ViabilityTest } from 'src/api/types/tests';
 import strings from 'src/strings';
 import preventDefault from 'src/utils/preventDefaultEvent';
 import useForm from 'src/utils/useForm';
@@ -40,15 +40,15 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export interface Props {
-  value?: GerminationTest;
+  value?: ViabilityTest;
   open: boolean;
-  onClose: (value?: GerminationTest) => void;
-  onDelete: (value: GerminationTest) => void;
+  onClose: (value?: ViabilityTest) => void;
+  onDelete: (value: ViabilityTest) => void;
   allowTestInGrams: boolean;
   seedsAvailable: number;
 }
 
-function initTest(test?: GerminationTest): GerminationTest {
+function initTest(test?: ViabilityTest): ViabilityTest {
   return (
     test ?? {
       testType: 'Lab',
@@ -59,7 +59,7 @@ function initTest(test?: GerminationTest): GerminationTest {
 export default function NewTestDialog(props: Props): JSX.Element {
   const classes = useStyles();
   const { onClose, open, onDelete } = props;
-  const [record, setRecord, onChange] = useForm<GerminationTest>(initTest(props.value));
+  const [record, setRecord, onChange] = useForm<ViabilityTest>(initTest(props.value));
   const [seedsRemaining, setSeedsRemaining] = React.useState(0);
   const [unit, setUnit] = React.useState('');
   const [errors, setErrors] = React.useState<FieldError[]>([]);
@@ -90,7 +90,7 @@ export default function NewTestDialog(props: Props): JSX.Element {
 
   const onQuantityChange = (id: string, _value: unknown) => {
     const value = _value ? parseInt(_value as string, 10) : undefined;
-    setRecord((previousRecord: GerminationTest): GerminationTest => {
+    setRecord((previousRecord: ViabilityTest): ViabilityTest => {
       return {
         ...previousRecord,
         seedsSown: value,

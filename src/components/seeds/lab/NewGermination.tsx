@@ -8,7 +8,7 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import moment from 'moment';
 import React from 'react';
-import { Germination } from 'src/api/types/tests';
+import { ViabilityTestResult } from 'src/api/types/tests';
 import strings from 'src/strings';
 import preventDefault from 'src/utils/preventDefaultEvent';
 import useForm from 'src/utils/useForm';
@@ -36,18 +36,18 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export interface Props {
-  value?: Germination;
+  value?: ViabilityTestResult;
   open: boolean;
-  onClose: (value?: Germination) => void;
-  onDelete: (value: Germination) => void;
+  onClose: (value?: ViabilityTestResult) => void;
+  onDelete: (value: ViabilityTestResult) => void;
 }
 
 export default function NewGermination(props: Props): JSX.Element {
   const classes = useStyles();
   const { onClose, open, onDelete } = props;
-  const [record, setRecord, onChange] = useForm<Germination>(initEntry(props.value));
+  const [record, setRecord, onChange] = useForm<ViabilityTestResult>(initEntry(props.value));
 
-  function initEntry(entry?: Germination): Germination {
+  function initEntry(entry?: ViabilityTestResult): ViabilityTestResult {
     return (
       entry ?? {
         seedsGerminated: 0,

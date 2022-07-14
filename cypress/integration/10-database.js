@@ -85,7 +85,7 @@ describe('Database', () => {
         cy.get('#table-header-estimatedSeedsIncoming').contains('ESTIMATED SEEDS INCOMING');
         cy.get('#table-header-landowner').contains('LANDOWNER');
         cy.get('#table-header-storageCondition').contains('STORAGE CONDITION');
-        cy.get('#table-header-latestGerminationTestDate').contains('MOST RECENT GERMINATION TEST DATE');
+        cy.get('#table-header-latestViabilityTestDate').contains('MOST RECENT GERMINATION TEST DATE');
         cy.get('#table-header-latestViabilityPercent').contains('MOST RECENT % VIABILITY');
       });
 
@@ -158,21 +158,23 @@ describe('Database', () => {
         cy.get('#table-header-state').contains('STAGE');
         cy.get('#table-header-speciesName').contains('SPECIES');
         cy.get('#table-header-collectedDate').contains('COLLECTED DATE');
-        cy.get('#table-header-germinationTestType').contains('GERMINATION TEST TYPE');
-        cy.get('#table-header-germinationSeedType').contains('SEED TYPE');
-        cy.get('#table-header-germinationTreatment').contains('GERMINATION TREATMENT');
+        cy.get('#table-header-viabilityTests_type').contains('GERMINATION TEST TYPE');
+        cy.get('#table-header-viabilityTests_seedType').contains('SEED TYPE');
+        cy.get('#table-header-viabilityTests_treatment').contains('GERMINATION TREATMENT');
         cy.get('#table-header-cutTestSeedsFilled').contains('NUMBER OF SEEDS FILLED');
-        cy.get('#table-header-germinationTestNotes').contains('NOTES');
-        cy.get('#table-header-germinationSeedsSown').contains('NUMBER OF SEEDS SOWN');
-        cy.get('#table-header-germinationSeedsGerminated').contains('TOTAL OF SEEDS GERMINATED');
+        cy.get('#table-header-viabilityTests_notes').contains('NOTES');
+        cy.get('#table-header-viabilityTests_seedsSown').contains('NUMBER OF SEEDS SOWN');
+        cy.get('#table-header-viabilityTests_viabilityTestResults_seedsGerminated').contains(
+          'TOTAL OF SEEDS GERMINATED'
+        );
         cy.get('#table-header-cutTestSeedsEmpty').contains('NUMBER OF SEEDS EMPTY');
-        cy.get('#table-header-germinationSubstrate').contains('GERMINATION SUBSTRATE');
-        cy.get('#table-header-germinationPercentGerminated').contains('% VIABILITY');
+        cy.get('#table-header-viabilityTests_substrate').contains('GERMINATION SUBSTRATE');
+        cy.get('#table-header-viabilityTests_percentGerminated').contains('% VIABILITY');
         cy.get('#table-header-cutTestSeedsCompromised').contains('NUMBER OF SEEDS COMPROMISED');
         cy.get('#table-header-latestViabilityPercent').contains('MOST RECENT % VIABILITY');
       });
 
-      it('Germination Testing To Do', () => {
+      it('Viability Testing To Do', () => {
         cy.intercept('POST', '/api/v1/search').as('search');
         cy.intercept('POST', '/api/v1/seedbank/values').as('values');
 
@@ -194,8 +196,8 @@ describe('Database', () => {
         cy.get('#table-header-storageLocationName').contains('STORAGE LOCATION');
         cy.get('#table-header-storagePackets').contains('NUMBER OF STORAGE PACKETS');
         cy.get('#table-header-storageNotes').contains('NOTES');
-        cy.get('#table-header-germinationTestType').contains('GERMINATION TEST TYPE');
-        cy.get('#table-header-germinationStartDate').contains('GERMINATION START DATE');
+        cy.get('#table-header-viabilityTests_type').contains('GERMINATION TEST TYPE');
+        cy.get('#table-header-viabilityTests_startDate').contains('GERMINATION START DATE');
       });
 
       it('Custom columns', () => {
