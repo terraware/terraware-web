@@ -44,7 +44,7 @@ describe('Lab', () => {
   it('should create a new test', () => {
     cy.get('#newTest').click();
     cy.get('#seedsRemaining').should('have.value', 1000);
-    cy.get('#startDate').type('02/09/2021');
+    cy.get('#startDate').type('2021-02-09');
     cy.get('#seedType').click();
     cy.get('#Stored').click();
     cy.get('#substrate').click();
@@ -60,7 +60,7 @@ describe('Lab', () => {
     cy.get('#saveTest').click();
     cy.wait('@getAccession');
 
-    cy.get('#row1-startDate').should('contain', '02/09/2021');
+    cy.get('#row1-startDate').should('contain', '2021-02-09');
     cy.get('#row1-seedType').should('contain', 'Stored');
     cy.get('#row1-substrate').should('contain', 'Paper Petri Dish');
     cy.get('#row1-treatment').should('contain', 'Scarify');
@@ -79,7 +79,7 @@ describe('Lab', () => {
     cy.get('#saveTest').click();
     cy.wait('@getAccession');
 
-    cy.get('#row1-startDate').should('contain', '02/09/2021');
+    cy.get('#row1-startDate').should('contain', '2021-02-09');
     cy.get('#row1-seedType').should('contain', 'Stored');
     cy.get('#row1-substrate').should('contain', 'Nursery Media');
     cy.get('#row1-treatment').should('contain', 'Scarify');
@@ -90,7 +90,7 @@ describe('Lab', () => {
 
   it('should create another test', () => {
     cy.get('#newTest').click();
-    cy.get('#startDate').type('02/12/2021');
+    cy.get('#startDate').type('2021-02-12');
     cy.get('#seedType').click();
     cy.get('#Stored').click();
     cy.get('#substrate').click();
@@ -106,7 +106,7 @@ describe('Lab', () => {
 
   it('should create another test', () => {
     cy.get('#newTest').click();
-    cy.get('#startDate').type('02/01/2021');
+    cy.get('#startDate').type('2021-02-01');
     cy.get('#seedType').click();
     cy.get('#Fresh').click();
     cy.get('#substrate').click();
@@ -122,18 +122,18 @@ describe('Lab', () => {
   });
 
   it('should display the records in the right order', () => {
-    cy.get('#row1-startDate').contains('02/09/2021');
-    cy.get('#row2-startDate').contains('02/12/2021');
-    cy.get('#row3-startDate').contains('02/01/2021');
+    cy.get('#row1-startDate').contains('2021-02-09');
+    cy.get('#row2-startDate').contains('2021-02-12');
+    cy.get('#row3-startDate').contains('2021-02-01');
   });
 
   it('by start date', () => {
     // by start date
     cy.get('#mostRecentViabiliy').should('be.visible');
     cy.get('#table-header-startDate').click({ scrollBehavior: false });
-    cy.get('#row1-startDate').contains('02/01/2021');
-    cy.get('#row2-startDate').contains('02/09/2021');
-    cy.get('#row3-startDate').contains('02/12/2021');
+    cy.get('#row1-startDate').contains('2021-02-01');
+    cy.get('#row2-startDate').contains('2021-02-09');
+    cy.get('#row3-startDate').contains('2021-02-12');
     cy.get('.scrollable-content').scrollTo(0, 0);
   });
 
@@ -191,13 +191,13 @@ describe('Lab', () => {
     cy.intercept('PUT', '/api/v1/seedbank/accession/**').as('putAccession');
     cy.intercept('GET', '/api/v1/seedbank/accession/**').as('getAccession');
     cy.get('#seedsGerminated').type('10');
-    cy.get('#recordingDate').clear().type('02/09/2021');
+    cy.get('#recordingDate').clear().type('2021-02-09');
 
     cy.get('#saveGermination').click();
     cy.wait('@putAccession');
     cy.wait('@getAccession');
 
-    cy.get('#row2-startDate').should('contain', '02/09/2021');
+    cy.get('#row2-startDate').should('contain', '2021-02-09');
     cy.get('#row2-seedType').should('contain', 'Stored');
     cy.get('#row2-substrate').should('contain', 'Nursery Media');
     cy.get('#row2-treatment').should('contain', 'Scarify');
@@ -210,7 +210,7 @@ describe('Lab', () => {
     cy.get('#totalSeedsGerminated').contains('10 (10.0%)');
 
     cy.get('#row2-details #row1-seedsGerminated').should('contain', '10 seeds germinated');
-    cy.get('#row2-details #row1-recordingDate').should('contain', '02/09/2021');
+    cy.get('#row2-details #row1-recordingDate').should('contain', '2021-02-09');
     cy.get('#myChart').should('exist');
   });
 
@@ -222,13 +222,13 @@ describe('Lab', () => {
     cy.intercept('PUT', '/api/v1/seedbank/accession/**').as('putAccession');
     cy.intercept('GET', '/api/v1/seedbank/accession/**').as('getAccession');
     cy.get('#seedsGerminated').clear().type('15');
-    cy.get('#recordingDate').clear().type('05/09/2021');
+    cy.get('#recordingDate').clear().type('2021-05-09');
 
     cy.get('#saveGermination').click();
     cy.wait('@putAccession');
     cy.wait('@getAccession');
 
-    cy.get('#row2-startDate').should('contain', '02/09/2021');
+    cy.get('#row2-startDate').should('contain', '2021-02-09');
     cy.get('#row2-seedType').should('contain', 'Stored');
     cy.get('#row2-substrate').should('contain', 'Nursery Media');
     cy.get('#row2-treatment').should('contain', 'Scarify');
@@ -241,7 +241,7 @@ describe('Lab', () => {
     cy.get('#totalSeedsGerminated').contains('25 (25.0%)');
 
     cy.get('#row2-details #row2-seedsGerminated').contains('15 seeds germinated');
-    cy.get('#row2-details #row2-recordingDate').contains('05/09/2021');
+    cy.get('#row2-details #row2-recordingDate').contains('2021-05-09');
     cy.get('#myChart').should('exist');
   });
 
@@ -256,7 +256,7 @@ describe('Lab', () => {
     cy.wait('@putAccession');
     cy.wait('@getAccession');
 
-    cy.get('#row2-startDate').should('contain', '02/09/2021');
+    cy.get('#row2-startDate').should('contain', '2021-02-09');
     cy.get('#row2-seedType').should('contain', 'Stored');
     cy.get('#row2-substrate').should('contain', 'Nursery Media');
     cy.get('#row2-treatment').should('contain', 'Scarify');
@@ -268,7 +268,7 @@ describe('Lab', () => {
     cy.get('#row2-expand').click();
 
     cy.get('#row2-details #row2-seedsGerminated').contains('25 seeds germinated');
-    cy.get('#row2-details #row2-recordingDate').contains('05/09/2021');
+    cy.get('#row2-details #row2-recordingDate').contains('2021-05-09');
     cy.get('#myChart').should('exist');
   });
 
@@ -281,7 +281,7 @@ describe('Lab', () => {
     cy.wait('@putAccession');
     cy.wait('@getAccession');
 
-    cy.get('#row2-startDate').should('contain', '02/09/2021');
+    cy.get('#row2-startDate').should('contain', '2021-02-09');
     cy.get('#row2-seedType').should('contain', 'Stored');
     cy.get('#row2-substrate').should('contain', 'Nursery Media');
     cy.get('#row2-treatment').should('contain', 'Scarify');
@@ -327,7 +327,7 @@ describe('Lab', () => {
 
   it('should show schedule testing box when creating a future test', () => {
     cy.get('#newTest').click();
-    cy.get('#startDate').type('02/09/3021');
+    cy.get('#startDate').type('3021-02-09');
     cy.get('#seedsSown').type('25');
 
     cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');

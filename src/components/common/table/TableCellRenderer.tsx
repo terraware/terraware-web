@@ -4,6 +4,7 @@ import NotesIcon from '@material-ui/icons/Notes';
 import React, { ReactNode } from 'react';
 import preventDefaultEvent from 'src/utils/preventDefaultEvent';
 import { RendererProps } from './types';
+import getDateDisplayValue from 'src/utils/date';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -12,6 +13,9 @@ const useStyles = makeStyles((theme) =>
     },
     textRoot: {
       maxWidth: 400,
+    },
+    date: {
+      whiteSpace: 'nowrap',
     },
   })
 );
@@ -36,18 +40,14 @@ export default function CellRenderer(props: RendererProps<TableRowType>): JSX.El
 
 export const cellDateFormatter = (value?: string): string | undefined => {
   if (value) {
-    return new Date(value).toLocaleDateString('en-US', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-      timeZone: 'UTC',
-    });
+    return getDateDisplayValue(value);
   }
 };
 
 export function CellDateRenderer({ id, value }: { id: string; value: string }): JSX.Element {
+  const classes = useStyles();
   return (
-    <TableCell id={id} align='left'>
+    <TableCell id={id} align='left' className={classes.date}>
       <Typography component='p' variant='body1'>
         {cellDateFormatter(value)}
       </Typography>
