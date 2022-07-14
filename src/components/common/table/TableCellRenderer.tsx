@@ -6,6 +6,17 @@ import preventDefaultEvent from 'src/utils/preventDefaultEvent';
 import { RendererProps } from './types';
 import getDateDisplayValue from 'src/utils/date';
 
+const useStyles = makeStyles((theme) =>
+  createStyles({
+    editIcon: {
+      marginLeft: theme.spacing(1),
+    },
+    date: {
+      whiteSpace: 'nowrap',
+    },
+  })
+);
+
 export type TableRowType = Record<string, any>;
 
 export default function CellRenderer(props: RendererProps<TableRowType>): JSX.Element {
@@ -31,8 +42,9 @@ export const cellDateFormatter = (value?: string): string | undefined => {
 };
 
 export function CellDateRenderer({ id, value }: { id: string; value: string }): JSX.Element {
+  const classes = useStyles();
   return (
-    <TableCell id={id} align='left'>
+    <TableCell id={id} align='left' className={classes.date}>
       <Typography component='p' variant='body1'>
         {cellDateFormatter(value)}
       </Typography>
@@ -81,14 +93,6 @@ export function CellNotesRenderer({ id, value }: { id: string; value?: string })
     </TableCell>
   );
 }
-
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    editIcon: {
-      marginLeft: theme.spacing(1),
-    },
-  })
-);
 
 export function CellEditRenderer({ id, onRowClick }: { id: string; onRowClick?: () => void }): JSX.Element {
   const classes = useStyles();
