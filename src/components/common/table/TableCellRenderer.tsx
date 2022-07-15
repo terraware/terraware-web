@@ -4,6 +4,19 @@ import React, { ReactNode } from 'react';
 import preventDefaultEvent from 'src/utils/preventDefaultEvent';
 import { RendererProps } from './types';
 import { makeStyles } from '@mui/styles';
+import getDateDisplayValue from 'src/utils/date';
+
+const useStyles = makeStyles((theme: Theme) => ({
+  editIcon: {
+    marginLeft: theme.spacing(1),
+  },
+  textRoot: {
+    maxWidth: 400,
+  },
+  date: {
+    whiteSpace: 'nowrap',
+  },
+}));
 
 export type TableRowType = Record<string, any>;
 
@@ -25,18 +38,14 @@ export default function CellRenderer(props: RendererProps<TableRowType>): JSX.El
 
 export const cellDateFormatter = (value?: string): string | undefined => {
   if (value) {
-    return new Date(value).toLocaleDateString('en-US', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-      timeZone: 'UTC',
-    });
+    return getDateDisplayValue(value);
   }
 };
 
 export function CellDateRenderer({ id, value }: { id: string; value: string }): JSX.Element {
+  const classes = useStyles();
   return (
-    <TableCell id={id} align='left'>
+    <TableCell id={id} align='left' className={classes.date}>
       <Typography component='p' variant='body1'>
         {cellDateFormatter(value)}
       </Typography>
@@ -51,9 +60,10 @@ export function CellTextRenderer({
   id: string;
   value?: string | number | any[] | ReactNode;
 }): JSX.Element {
+  const classes = useStyles();
   return (
-    <TableCell id={id} align='left'>
-      <Typography component='p' variant='body1'>
+    <TableCell id={id} align='left' title={typeof value === 'string' ? value : ''}>
+      <Typography component='p' variant='body1' noWrap classes={{ root: classes.textRoot }}>
         {value}
       </Typography>
     </TableCell>
@@ -85,12 +95,6 @@ export function CellNotesRenderer({ id, value }: { id: string; value?: string })
     </TableCell>
   );
 }
-
-const useStyles = makeStyles((theme: Theme) => ({
-  editIcon: {
-    marginLeft: theme.spacing(1),
-  },
-}));
 
 export function CellEditRenderer({ id, onRowClick }: { id: string; onRowClick?: () => void }): JSX.Element {
   const classes = useStyles();

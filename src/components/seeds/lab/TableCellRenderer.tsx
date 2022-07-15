@@ -1,9 +1,9 @@
 import { TableCell, Typography } from '@mui/material';
-import moment from 'moment';
 import React from 'react';
 import strings from 'src/strings';
 import CellRenderer, { CellDateRenderer, TableRowType } from '../../common/table/TableCellRenderer';
 import { RendererProps } from '../../common/table/types';
+import getDateDisplayValue from 'src/utils/date';
 
 export default function LabCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
   const { column, row, value, index } = props;
@@ -27,7 +27,7 @@ export default function LabCellRenderer(props: RendererProps<TableRowType>): JSX
             {strings.SCHEDULED_FOR}
           </Typography>
           <Typography component='p' variant='body1'>
-            {moment(value).format('L')}
+            {getDateDisplayValue(value)}
           </Typography>
         </TableCell>
       );

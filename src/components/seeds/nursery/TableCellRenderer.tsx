@@ -1,10 +1,10 @@
 import { TableCell, Typography } from '@mui/material';
-import moment from 'moment';
 import React from 'react';
 import { GerminationTest } from 'src/api/types/tests';
 import strings from 'src/strings';
 import CellRenderer, { CellDateRenderer } from '../../common/table/TableCellRenderer';
 import { RendererProps } from '../../common/table/types';
+import getDateDisplayValue from 'src/utils/date';
 
 export default function NurseryCellRenderer(props: RendererProps<GerminationTest>): JSX.Element {
   const { column, row, value, index } = props;
@@ -23,7 +23,7 @@ export default function NurseryCellRenderer(props: RendererProps<GerminationTest
             {strings.SCHEDULED_FOR}
           </Typography>
           <Typography component='p' variant='body1'>
-            {moment(value).format('L')}
+            {getDateDisplayValue(value)}
           </Typography>
         </TableCell>
       );

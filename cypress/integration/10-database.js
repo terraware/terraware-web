@@ -341,8 +341,8 @@ describe('Database', () => {
 
       cy.get('#filter-receivedDate').click();
       cy.get('#startDate').should('be.visible');
-      cy.get('#startDate').clear().type('02/03/2021');
-      cy.get('#endDate').clear().type('02/04/2021').type('{enter}');
+      cy.get('#startDate').clear().type('2021-02-03');
+      cy.get('#endDate').clear().type('2021-02-04').type('{enter}');
 
       cy.wait('@search');
       cy.wait('@values');

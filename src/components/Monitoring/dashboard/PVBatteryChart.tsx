@@ -63,8 +63,7 @@ export default function PVBatteryChart(props: PVBatteryChartProps): JSX.Element 
   useEffect(() => {
     const createBatteryChart = (
       stateOfChargeValues: HumidityValues[],
-      voltageValues: HumidityValues[],
-      currentValues: HumidityValues[],
+      powerValues: HumidityValues[],
       chartReference: React.RefObject<HTMLCanvasElement>
     ) => {
       const ctx = chartReference?.current?.getContext('2d');
@@ -84,26 +83,15 @@ export default function PVBatteryChart(props: PVBatteryChartProps): JSX.Element 
                 backgroundColor: '#FF5A5B',
               },
               {
-                data: voltageValues?.map((entry) => {
+                data: powerValues?.map((entry) => {
                   return { x: entry.timestamp, y: Number(entry.value) };
                 }),
-                label: 'System Voltage',
+                label: 'System Power',
                 showLine: true,
                 fill: false,
                 borderColor: '#0067C8',
                 backgroundColor: '#007DF2',
                 yAxisID: 'y1',
-              },
-              {
-                data: currentValues?.map((entry) => {
-                  return { x: entry.timestamp, y: Number(entry.value) };
-                }),
-                label: 'System Current',
-                showLine: true,
-                borderColor: '#DAAF38',
-                backgroundColor: '#FBCA47',
-                fill: false,
-                yAxisID: 'y2',
               },
             ],
           },
@@ -138,21 +126,7 @@ export default function PVBatteryChart(props: PVBatteryChartProps): JSX.Element 
                 },
                 ticks: {
                   callback: (value, index, ticks) => {
-                    return `${value}V`;
-                  },
-                },
-              },
-              y2: {
-                type: 'linear',
-                display: true,
-                position: 'right',
-                // grid line settings
-                grid: {
-                  drawOnChartArea: false, // only want the grid lines for one axis to show up
-                },
-                ticks: {
-                  callback: (value, index, ticks) => {
-                    return `${value}A`;
+                    return `${value}W`;
                   },
                 },
               },
@@ -197,8 +171,7 @@ export default function PVBatteryChart(props: PVBatteryChartProps): JSX.Element 
             endTime.format(),
             [
               { deviceId: BMU.id, timeseriesName: 'relative_state_of_charge' },
-              { deviceId: BMU.id, timeseriesName: 'system_voltage' },
-              { deviceId: BMU.id, timeseriesName: 'system_current' },
+              { deviceId: BMU.id, timeseriesName: 'system_power' },
             ],
             12
           );
@@ -207,12 +180,7 @@ export default function PVBatteryChart(props: PVBatteryChartProps): JSX.Element 
             if (window.pvBatteryChart instanceof Chart) {
               window.pvBatteryChart.destroy();
             }
-            createBatteryChart(
-              response.values[0]?.values,
-              response.values[1]?.values,
-              response.values[2]?.values,
-              pvBatteryRef
-            );
+            createBatteryChart(response.values[0]?.values, response.values[1]?.values, pvBatteryRef);
           }
         }
       }

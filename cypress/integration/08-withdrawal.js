@@ -51,7 +51,7 @@ describe('Withdrawal', () => {
       cy.get('#remaining').should('have.value', '300');
       cy.get('#quantity').type('50');
       cy.get('#remaining').should('have.value', '250');
-      cy.get('#date').clear().type('01/31/2030');
+      cy.get('#date').clear().type('2030-01-31');
       cy.get('#save-withdrawn-button').contains('Schedule Withdrawal');
       cy.get('#date-tip').contains('Scheduling for: January 31st, 2030');
       cy.get('#destination').type('Panama');
@@ -68,7 +68,7 @@ describe('Withdrawal', () => {
       cy.get('#seeds-available').contains('250');
 
       cy.get('#row1-date').contains('Scheduled for');
-      cy.get('#row1-date').contains('01/31/2030');
+      cy.get('#row1-date').contains('2030-01-31');
       cy.get('#row1-quantity').contains('50 Seeds');
       cy.get('#row1-destination').contains('Panama');
       cy.get('#row1-purpose').contains('Outreach or Education');
@@ -87,7 +87,7 @@ describe('Withdrawal', () => {
       cy.get('#remaining').should('have.value', '300');
       cy.get('#quantity').type('10');
       cy.get('#remaining').should('have.value', '290');
-      cy.get('#date').clear().type('01/29/2020');
+      cy.get('#date').clear().type('2020-01-29');
       cy.get('#destination').clear().type('USA');
       cy.get('#purpose').click();
       cy.get('#Research').click();
@@ -101,7 +101,7 @@ describe('Withdrawal', () => {
       cy.get('#seeds-withdrawn').contains('10');
       cy.get('#seeds-available').contains('290');
 
-      cy.get('#row1-date').contains('01/29/2020');
+      cy.get('#row1-date').contains('2020-01-29');
       cy.get('#row1-quantity').contains('10 Seeds');
       cy.get('#row1-destination').contains('USA');
       cy.get('#row1-purpose').contains('Research');
@@ -133,7 +133,7 @@ describe('Withdrawal', () => {
 
       cy.get('#quantity').type('50');
       cy.get('#remaining').should('have.value', '250');
-      cy.get('#date').clear().type('01/31/2030');
+      cy.get('#date').clear().type('2030-01-31');
       cy.get('#destination').type('Panama');
       cy.get('#purpose').click();
       cy.get('#Outreach\\ or\\ Education').click();
@@ -154,7 +154,7 @@ describe('Withdrawal', () => {
       cy.get('#remaining').should('have.value', '250');
       cy.get('#quantity').type('150');
       cy.get('#remaining').should('have.value', '100');
-      cy.get('#date').clear().type('01/31/2020');
+      cy.get('#date').clear().type('2020-01-31');
       cy.get('#destination').type('USA');
       cy.get('#purpose').click();
       cy.get('#Research').click();
@@ -176,7 +176,7 @@ describe('Withdrawal', () => {
       cy.get('#withdraw_remaining').click();
       cy.get('#quantity').should('have.value', '100');
       cy.get('#remaining').should('have.value', '0');
-      cy.get('#date').clear().type('03/28/2020');
+      cy.get('#date').clear().type('2020-03-28');
       cy.get('#destination').type('Paris');
       cy.get('#purpose').click();
       cy.get('#Propagation').click();
@@ -243,7 +243,7 @@ describe('Withdrawal', () => {
 
       cy.get('#withdrawnQuantity #quantity').type('20');
       cy.get('#remainingQuantity #quantity').type('80');
-      cy.get('#date').clear().type('01/31/2030');
+      cy.get('#date').clear().type('2030-01-31');
       cy.get('#destination').type('Panama');
       cy.get('#purpose').click();
       cy.get('#Outreach\\ or\\ Education').click();
@@ -258,7 +258,7 @@ describe('Withdrawal', () => {
       cy.get('#seeds-available').contains('8');
 
       cy.get('#row1-date').contains('Scheduled for');
-      cy.get('#row1-date').contains('01/31/2030');
+      cy.get('#row1-date').contains('2030-01-31');
       cy.get('#row1-quantity').contains('20 Grams');
 
       cy.get('#row1-destination').contains('Panama');
@@ -277,7 +277,7 @@ describe('Withdrawal', () => {
 
       cy.get('#withdrawnQuantity #quantity').clear().type('30');
       cy.get('#remainingQuantity #quantity').clear().type('7');
-      cy.get('#date').clear().type('01/29/2020');
+      cy.get('#date').clear().type('2020-01-29');
       cy.get('#destination').clear().type('USA');
       cy.get('#purpose').click();
       cy.get('#Research').click();
@@ -291,7 +291,7 @@ describe('Withdrawal', () => {
       cy.get('#seeds-withdrawn').contains('3');
       cy.get('#seeds-available').contains('7');
 
-      cy.get('#row1-date').contains('01/29/2020');
+      cy.get('#row1-date').contains('2020-01-29');
       cy.get('#row1-quantity').contains('30 Grams');
 
       cy.get('#row1-destination').contains('USA');
@@ -306,7 +306,7 @@ describe('Withdrawal', () => {
 
       cy.get('#withdrawnQuantity #quantity').type('3');
       cy.get('#remainingQuantity #quantity').type('6');
-      cy.get('#date').clear().type('01/31/2030');
+      cy.get('#date').clear().type('2030-01-31');
       cy.get('#destination').type('Panama');
       cy.get('#purpose').click();
       cy.get('#Outreach\\ or\\ Education').click();
@@ -326,7 +326,7 @@ describe('Withdrawal', () => {
 
       cy.get('#withdrawnQuantity #quantity').type('1');
       cy.get('#remainingQuantity #quantity').type('5');
-      cy.get('#date').clear().type('01/31/2020');
+      cy.get('#date').clear().type('2020-01-31');
       cy.get('#destination').type('USA');
       cy.get('#purpose').click();
       cy.get('#Research').click();
@@ -348,7 +348,7 @@ describe('Withdrawal', () => {
       cy.get('#Grams').click();
       cy.get('#withdrawnQuantity #quantity').type('77');
       cy.get('#remainingQuantity #quantity').type('2');
-      cy.get('#date').clear().type('03/28/2020');
+      cy.get('#date').clear().type('2020-03-28');
       cy.get('#destination').type('Paris');
       cy.get('#purpose').click();
       cy.get('#Propagation').click();
@@ -368,7 +368,7 @@ describe('Withdrawal', () => {
       cy.get('#Grams').click();
       cy.get('#withdrawnQuantity #quantity').type('70');
       cy.get('#remainingQuantity #quantity').type('0');
-      cy.get('#date').clear().type('03/28/2020');
+      cy.get('#date').clear().type('2020-03-28');
       cy.get('#destination').type('Paris');
       cy.get('#purpose').click();
       cy.get('#Propagation').click();
@@ -388,19 +388,19 @@ describe('Withdrawal', () => {
 
     it('should display the records in the right order', () => {
       // by date
-      cy.get('#row1-date').contains('01/29/2020');
-      cy.get('#row2-date').contains('01/31/2020');
-      cy.get('#row4-date').contains('03/28/2020');
+      cy.get('#row1-date').contains('2020-01-29');
+      cy.get('#row2-date').contains('2020-01-31');
+      cy.get('#row4-date').contains('2020-03-28');
       cy.get('#row5-date').contains('Scheduled for');
-      cy.get('#row5-date').contains('01/31/2030');
+      cy.get('#row5-date').contains('2030-01-31');
 
       // by date descending
       cy.get('#table-header-date').click();
       cy.get('#row1-date').contains('Scheduled for');
-      cy.get('#row1-date').contains('01/31/2030');
-      cy.get('#row2-date').contains('03/28/2020');
-      cy.get('#row4-date').contains('01/31/2020');
-      cy.get('#row5-date').contains('01/29/2020');
+      cy.get('#row1-date').contains('2030-01-31');
+      cy.get('#row2-date').contains('2020-03-28');
+      cy.get('#row4-date').contains('2020-01-31');
+      cy.get('#row5-date').contains('2020-01-29');
 
       // by quantity
       cy.get('#table-header-quantity').click();
