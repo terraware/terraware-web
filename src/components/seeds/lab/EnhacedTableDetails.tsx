@@ -4,7 +4,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
 import CloseIcon from '@material-ui/icons/Close';
 import React from 'react';
-import { GerminationTest } from 'src/api/types/tests';
+import { ViabilityTest } from 'src/api/types/tests';
 import strings from 'src/strings';
 import Divisor from '../../common/Divisor';
 import SummaryBox from '../../common/SummaryBox';
@@ -71,11 +71,11 @@ export default function EnhancedTableDetails<T>({
 
   const calculateTotalSeedsGerminated = () => {
     let total = 0;
-    const selectedTest = row as unknown as GerminationTest;
+    const selectedTest = row as unknown as ViabilityTest;
 
-    if (selectedTest.germinations) {
-      selectedTest.germinations.forEach((germination) => {
-        total += germination.seedsGerminated;
+    if (selectedTest.testResults) {
+      selectedTest.testResults.forEach((testResult) => {
+        total += testResult.seedsGerminated;
       });
     }
 

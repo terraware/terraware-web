@@ -151,33 +151,33 @@ export default function ProcessingAndDrying({ accession, onSubmit }: Props): JSX
     });
   };
 
-  type GerminationTestType = 'Lab' | 'Nursery';
+  type ViabilityTestType = 'Lab' | 'Nursery';
 
-  const onChangeGerminationTestType = (id: string, value: unknown) => {
-    let germinationTestTypes = record.germinationTestTypes ? [...record.germinationTestTypes] : undefined;
-    if (germinationTestTypes) {
-      const index = germinationTestTypes.indexOf(id as GerminationTestType, 0);
+  const onChangeViabilityTestType = (id: string, value: unknown) => {
+    let viabilityTestTypes = record.viabilityTestTypes ? [...record.viabilityTestTypes] : undefined;
+    if (viabilityTestTypes) {
+      const index = viabilityTestTypes.indexOf(id as ViabilityTestType, 0);
       if (index !== -1 && value === false) {
-        germinationTestTypes.splice(index, 1);
+        viabilityTestTypes.splice(index, 1);
       }
 
       if (index === -1 && value === true) {
-        germinationTestTypes.push(id as GerminationTestType);
+        viabilityTestTypes.push(id as ViabilityTestType);
       }
     } else {
       if (value === true) {
-        germinationTestTypes = [id as GerminationTestType];
+        viabilityTestTypes = [id as ViabilityTestType];
       }
     }
     setRecord((previousRecord: Accession): Accession => {
-      return { ...previousRecord, germinationTestTypes };
+      return { ...previousRecord, viabilityTestTypes };
     });
   };
 
-  const isChecked = (id: GerminationTestType) => {
-    const germinationTestTypes = record.germinationTestTypes;
+  const isChecked = (id: ViabilityTestType) => {
+    const viabilityTestTypes = record.viabilityTestTypes;
 
-    return germinationTestTypes?.includes(id);
+    return viabilityTestTypes?.includes(id);
   };
 
   const getErrorText = (id: string) => {
@@ -327,15 +327,15 @@ export default function ProcessingAndDrying({ accession, onSubmit }: Props): JSX
             id='Nursery'
             name='nurseryGermination'
             label={strings.NURSERY_GERMINATION}
-            value={isChecked('Nursery' as GerminationTestType)}
-            onChange={onChangeGerminationTestType}
+            value={isChecked('Nursery' as ViabilityTestType)}
+            onChange={onChangeViabilityTestType}
           />
           <Checkbox
             id='Lab'
             name='labGermination'
             label={strings.LAB_GERMINATION}
-            value={isChecked('Lab' as GerminationTestType)}
-            onChange={onChangeGerminationTestType}
+            value={isChecked('Lab' as ViabilityTestType)}
+            onChange={onChangeViabilityTestType}
           />
         </Grid>
         <Divisor />

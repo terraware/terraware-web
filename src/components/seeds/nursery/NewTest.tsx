@@ -6,7 +6,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import React from 'react';
-import { Germination, GerminationTest } from 'src/api/types/tests';
+import { ViabilityTestResult, ViabilityTest } from 'src/api/types/tests';
 import strings from 'src/strings';
 import preventDefault from 'src/utils/preventDefaultEvent';
 import useForm from 'src/utils/useForm';
@@ -38,15 +38,15 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export interface Props {
-  value?: GerminationTest;
+  value?: ViabilityTest;
   open: boolean;
-  onClose: (value?: GerminationTest) => void;
-  onDelete: (value: GerminationTest) => void;
+  onClose: (value?: ViabilityTest) => void;
+  onDelete: (value: ViabilityTest) => void;
   allowTestInGrams: boolean;
   seedsAvailable: number;
 }
 
-function initTest(test?: GerminationTest): GerminationTest {
+function initTest(test?: ViabilityTest): ViabilityTest {
   return (
     test ?? {
       testType: 'Nursery',
@@ -58,15 +58,15 @@ export default function NewTestDialog(props: Props): JSX.Element {
   const classes = useStyles();
   const { onClose, open, onDelete } = props;
 
-  const [record, setRecord, onChange] = useForm<GerminationTest>(initTest(props.value));
+  const [record, setRecord, onChange] = useForm<ViabilityTest>(initTest(props.value));
   const [seedsRemaining, setSeedsRemaining] = React.useState(0);
   const [viability, setSeedsViability] = React.useState('');
   const [unit, setUnit] = React.useState('');
 
   React.useEffect(() => {
     setRecord(initTest(props.value));
-    if (record.germinations && record.germinations[0].seedsGerminated && record.seedsSown) {
-      setSeedsViability(((record.germinations[0].seedsGerminated / record.seedsSown) * 100).toFixed(1));
+    if (record.testResults && record.testResults[0].seedsGerminated && record.seedsSown) {
+      setSeedsViability(((record.testResults[0].seedsGerminated / record.seedsSown) * 100).toFixed(1));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.open]);
@@ -94,16 +94,14 @@ export default function NewTestDialog(props: Props): JSX.Element {
     } else {
       setSeedsRemaining(props.value?.remainingQuantity?.quantity || 0);
     }
-    setRecordingDate(props.value && props.value.germinations ? props.value.germinations[0].recordingDate : undefined);
-    setSeedsGerminated(
-      props.value && props.value.germinations ? props.value.germinations[0].seedsGerminated : undefined
-    );
+    setRecordingDate(props.value && props.value.testResults ? props.value.testResults[0].recordingDate : undefined);
+    setSeedsGerminated(props.value && props.value.testResults ? props.value.testResults[0].seedsGerminated : undefined);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.open]);
 
   const onQuantityChange = (id: string, _value: unknown) => {
     const value = _value ? parseInt(_value as string, 10) : undefined;
-    setRecord((previousRecord: GerminationTest): GerminationTest => {
+    setRecord((previousRecord: ViabilityTest): ViabilityTest => {
       return {
         ...previousRecord,
         seedsSown: value,
@@ -137,16 +135,16 @@ export default function NewTestDialog(props: Props): JSX.Element {
     }
 
     if (newRecordingDate && newSeedsGerminated) {
-      const germination: Germination = {
+      const germination: ViabilityTestResult = {
         recordingDate: newRecordingDate,
         seedsGerminated: newSeedsGerminated,
       };
-      setRecord((previousRecord: GerminationTest): GerminationTest => {
-        return { ...previousRecord, germinations: [germination] };
+      setRecord((previousRecord: ViabilityTest): ViabilityTest => {
+        return { ...previousRecord, testResults: [germination] };
       });
     } else {
-      setRecord((previousRecord: GerminationTest): GerminationTest => {
-        return { ...previousRecord, germinations: undefined };
+      setRecord((previousRecord: ViabilityTest): ViabilityTest => {
+        return { ...previousRecord, testResults: undefined };
       });
     }
   };
@@ -195,7 +193,7 @@ export default function NewTestDialog(props: Props): JSX.Element {
       onSeedsRemainingChange('seedsRemaining', _value);
     }
 
-    setRecord((previousRecord: GerminationTest): GerminationTest => {
+    setRecord((previousRecord: ViabilityTest): ViabilityTest => {
       const newRecord = {
         ...previousRecord,
         remainingQuantity: newRemainingQuantity,
