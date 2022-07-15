@@ -29,7 +29,7 @@ export default function DatePicker(props: Props): JSX.Element {
   return (
     <DesktopDatePicker
       label={props.label}
-      inputFormat='YYYY-MM-DD'
+      inputFormat='yyyy-mm-dd'
       value={props.value ?? null}
       onChange={(newValue: string | null) => {
         props.onChange(props.id, newValue);
