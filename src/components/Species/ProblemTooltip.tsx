@@ -130,7 +130,6 @@ export default function ProblemTooltip({
               label={strings.ACCEPT}
               priority='secondary'
             />
-            ,
           </>
         ) : (
           <>

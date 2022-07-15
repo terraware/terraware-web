@@ -33,6 +33,7 @@ const useStyles = makeStyles((theme: Theme) =>
         color: '#ffffff',
         '&:before': {
           border: '1px solid #bbb',
+          background: '#F2F4F5',
         },
       },
     },
