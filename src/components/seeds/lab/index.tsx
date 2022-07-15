@@ -249,7 +249,7 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
                     accessionId={accession.id ?? ''}
                     row={row}
                     index={index}
-                    rowName='germinations'
+                    rowName='testResults'
                     columns={TEST_ENTRY_COLUMNS}
                     defaultSort='recordingDate'
                     Renderer={LabCellRenderer}
