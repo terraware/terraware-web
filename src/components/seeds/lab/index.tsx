@@ -131,6 +131,7 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
         newGerminationTests.push(value);
       }
       accession.germinationTests = newGerminationTests;
+      accession.viabilityTests = undefined;
       onSubmit(accession);
     }
     setTestOpen(false);
@@ -160,6 +161,7 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
   const onDeleteTest = (value: GerminationTest) => {
     const newGerminationsTests = accession?.germinationTests?.filter((germination) => germination !== value) ?? [];
     accession.germinationTests = newGerminationsTests;
+    accession.viabilityTests = undefined;
     onSubmit(accession);
     setTestOpen(false);
   };

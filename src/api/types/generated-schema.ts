@@ -267,15 +267,19 @@ export interface components {
       fieldNotes?: string;
       founderId?: string;
       geolocations?: components["schemas"]["Geolocation"][];
-      germinationTests?: components["schemas"]["GerminationTestPayload"][];
+      /** @deprecated */
+      germinationTests?: components["schemas"]["ViabilityTestPayload"][];
+      /** @deprecated */
       germinationTestTypes?: ("Lab" | "Nursery")[];
       /** Server-generated unique identifier for the accession. This is unique across all seed banks, but is not suitable for display to end users. */
       id: number;
       /** Initial size of accession. The units of this value must match the measurement type in "processingMethod". */
       initialQuantity?: components["schemas"]["SeedQuantityPayload"];
       landowner?: string;
+      /** @deprecated */
       latestGerminationTestDate?: string;
       latestViabilityPercent?: number;
+      latestViabilityTestDate?: string;
       numberOfTrees?: number;
       nurseryStartDate?: string;
       photoFilenames?: string[];
@@ -317,17 +321,19 @@ export interface components {
       /** Weight of subset of seeds. Units must be a weight measurement, not "Seeds". */
       subsetWeight?: components["schemas"]["SeedQuantityPayload"];
       targetStorageCondition?: "Refrigerator" | "Freezer";
-      /** Total quantity of all past withdrawals, including germination tests. */
+      /** Total quantity of all past withdrawals, including viability tests. */
       totalPastWithdrawalQuantity?: components["schemas"]["SeedQuantityPayload"];
-      /** Total quantity of scheduled withdrawals, not counting germination tests. */
+      /** Total quantity of scheduled withdrawals, not counting viability tests. */
       totalScheduledNonTestQuantity?: components["schemas"]["SeedQuantityPayload"];
-      /** Total quantity of scheduled withdrawals for germination tests. */
+      /** Total quantity of scheduled withdrawals for viability tests. */
       totalScheduledTestQuantity?: components["schemas"]["SeedQuantityPayload"];
-      /** Total quantity of scheduled withdrawals, including germination tests. */
+      /** Total quantity of scheduled withdrawals, including viability tests. */
       totalScheduledWithdrawalQuantity?: components["schemas"]["SeedQuantityPayload"];
       totalViabilityPercent?: number;
-      /** Total quantity of all past and scheduled withdrawals, including germination tests. */
+      /** Total quantity of all past and scheduled withdrawals, including viability tests. */
       totalWithdrawalQuantity?: components["schemas"]["SeedQuantityPayload"];
+      viabilityTests?: components["schemas"]["ViabilityTestPayload"][];
+      viabilityTestTypes?: ("Lab" | "Nursery")[];
       withdrawals?: components["schemas"]["WithdrawalPayload"][];
     };
     AddOrganizationUserRequestPayload: {
@@ -385,6 +391,7 @@ export interface components {
       fieldNotes?: string;
       founderId?: string;
       geolocations?: components["schemas"]["Geolocation"][];
+      /** @deprecated */
       germinationTestTypes?: ("Lab" | "Nursery")[];
       landowner?: string;
       numberOfTrees?: number;
@@ -395,6 +402,7 @@ export interface components {
       siteLocation?: string;
       sourcePlantOrigin?: "Wild" | "Outplant";
       species?: string;
+      viabilityTestTypes?: ("Lab" | "Nursery")[];
     };
     CreateAccessionResponsePayload: {
       accession: components["schemas"]["AccessionPayload"];
@@ -622,33 +630,6 @@ export interface components {
     } & {
       geometries: unknown;
     };
-    GerminationPayload: {
-      recordingDate: string;
-      seedsGerminated: number;
-    };
-    GerminationTestPayload: {
-      /** Server-assigned unique ID of this germination test. Null when creating a new test. */
-      id?: string;
-      /** Which type of test is described. At most one of each test type is allowed. */
-      testType: "Lab" | "Nursery";
-      startDate?: string;
-      endDate?: string;
-      seedType?: "Fresh" | "Stored";
-      substrate?:
-        | "Nursery Media"
-        | "Agar Petri Dish"
-        | "Paper Petri Dish"
-        | "Other";
-      treatment?: "Soak" | "Scarify" | "GA3" | "Stratification" | "Other";
-      notes?: string;
-      /** Quantity of seeds remaining. For weight-based accessions, this is user input and is required. For count-based accessions, it is calculated by the server and ignored on input. */
-      remainingQuantity?: components["schemas"]["SeedQuantityPayload"];
-      staffResponsible?: string;
-      seedsSown?: number;
-      totalPercentGerminated?: number;
-      totalSeedsGerminated?: number;
-      germinations?: components["schemas"]["GerminationPayload"][];
-    };
     GetAccessionResponsePayload: {
       accession: components["schemas"]["AccessionPayload"];
       status: components["schemas"]["SuccessOrError"];
@@ -833,8 +814,8 @@ export interface components {
       name: string;
       description?: string;
       configuration?: { [key: string]: unknown };
-      settings?: { [key: string]: { [key: string]: unknown } };
       type: string;
+      settings?: { [key: string]: { [key: string]: unknown } };
       timeseriesName?: string;
       deviceId?: number;
       lowerThreshold?: number;
@@ -1160,8 +1141,10 @@ export interface components {
       fieldNotes?: string;
       founderId?: string;
       geolocations?: components["schemas"]["Geolocation"][];
+      /** @deprecated */
       germinationTestTypes?: ("Lab" | "Nursery")[];
-      germinationTests?: components["schemas"]["GerminationTestPayload"][];
+      /** @deprecated */
+      germinationTests?: components["schemas"]["ViabilityTestPayload"][];
       /** Initial size of accession. The units of this value must match the measurement type in "processingMethod". */
       initialQuantity?: components["schemas"]["SeedQuantityPayload"];
       landowner?: string;
@@ -1187,6 +1170,8 @@ export interface components {
       /** Weight of subset of seeds. Units must be a weight measurement, not "Seeds". */
       subsetWeight?: components["schemas"]["SeedQuantityPayload"];
       targetStorageCondition?: "Refrigerator" | "Freezer";
+      viabilityTests?: components["schemas"]["ViabilityTestPayload"][];
+      viabilityTestTypes?: ("Lab" | "Nursery")[];
       withdrawals?: components["schemas"]["WithdrawalPayload"][];
     };
     UpdateAccessionResponsePayload: {
@@ -1278,6 +1263,36 @@ export interface components {
       firstName?: string;
       lastName?: string;
     };
+    ViabilityTestPayload: {
+      /** Server-assigned unique ID of this viability test. Null when creating a new test. */
+      id?: string;
+      /** Which type of test is described. At most one of each test type is allowed. */
+      testType: "Lab" | "Nursery";
+      startDate?: string;
+      endDate?: string;
+      seedType?: "Fresh" | "Stored";
+      substrate?:
+        | "Nursery Media"
+        | "Agar Petri Dish"
+        | "Paper Petri Dish"
+        | "Other";
+      treatment?: "Soak" | "Scarify" | "GA3" | "Stratification" | "Other";
+      notes?: string;
+      /** Quantity of seeds remaining. For weight-based accessions, this is user input and is required. For count-based accessions, it is calculated by the server and ignored on input. */
+      remainingQuantity?: components["schemas"]["SeedQuantityPayload"];
+      staffResponsible?: string;
+      seedsSown?: number;
+      testResults?: components["schemas"]["ViabilityTestResultPayload"][];
+      totalPercentGerminated?: number;
+      totalSeedsGerminated?: number;
+      /** @deprecated */
+      germinations?: components["schemas"]["ViabilityTestResultPayload"][];
+    };
+    /** @deprecated */
+    ViabilityTestResultPayload: {
+      recordingDate: string;
+      seedsGerminated: number;
+    };
     WithdrawalPayload: {
       /** Server-assigned unique ID of this withdrawal, its ID. Omit when creating a new withdrawal. */
       id?: number;
@@ -1289,17 +1304,20 @@ export interface components {
         | "Broadcast"
         | "Share with Another Site"
         | "Other"
-        | "Germination Testing";
+        | "Germination Testing"
+        | "Viability Testing";
       destination?: string;
       notes?: string;
       /** Quantity of seeds remaining. For weight-based accessions, this is user input and is required. For count-based accessions, it is calculated by the server and ignored on input. */
       remainingQuantity?: components["schemas"]["SeedQuantityPayload"];
       staffResponsible?: string;
-      /** If this withdrawal is of type "Germination Testing", the ID of the test it is associated with. This is always set by the server and cannot be modified. */
+      /** @deprecated If this withdrawal is of purpose "Germination Testing", the ID of the test it is associated with. This is always set by the server and cannot be modified. */
       germinationTestId?: number;
+      /** If this withdrawal is of purpose "Germination Testing", the ID of the test it is associated with. This is always set by the server and cannot be modified. */
+      viabilityTestId?: number;
       /** For weight-based accessions, the difference between the weight remaining before this withdrawal and the weight remaining after it. This is a server-calculated value and is ignored on input. */
       weightDifference?: components["schemas"]["SeedQuantityPayload"];
-      /** Quantity of seeds withdrawn. For germination testing withdrawals, this is always the same as the test's "seedsSown" value, if that value is present. Otherwise, it is a user-supplied value. For count-based accessions, the units must always be "Seeds". For weight-based accessions, the units may either be a weight measurement or "Seeds". */
+      /** Quantity of seeds withdrawn. For viability testing withdrawals, this is always the same as the test's "seedsSown" value, if that value is present. Otherwise, it is a user-supplied value. For count-based accessions, the units must always be "Seeds". For weight-based accessions, the units may either be a weight measurement or "Seeds". */
       withdrawnQuantity?: components["schemas"]["SeedQuantityPayload"];
       /** The best estimate of the number of seeds withdrawn. This is the same as "withdrawnQuantity" if that is present, or else the same as "weightDifference" if this is a weight-based accession. If this is a count-based accession and "withdrawnQuantity" does not have a value, this field will not be present. This is a server-calculated value and is ignored on input. */
       estimatedQuantity?: components["schemas"]["SeedQuantityPayload"];
