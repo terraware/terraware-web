@@ -37,7 +37,9 @@ type DeviceInfoProps = {
 
 const useDeviceInfo = ({ onChange }: DeviceInfoProps = {}) => {
   const deviceChangeCallback = (matches: boolean) => {
-    if (matches && onChange) onChange();
+    if (matches && onChange) {
+      onChange();
+    }
   };
 
   const isDesktop = useMediaQuery({ minWidth: 1024 }, undefined, deviceChangeCallback);
@@ -51,13 +53,22 @@ const useDeviceInfo = ({ onChange }: DeviceInfoProps = {}) => {
   const isRetina = useMediaQuery({ query: '(min-resolution: 2dppx)' }, undefined, deviceChangeCallback);
 
   const getDeviceType = (): DeviceType => {
-    if (isTablet) return 'tablet';
-    if (isMobile) return 'mobile';
+    if (isTablet) {
+      return 'tablet';
+    }
+
+    if (isMobile) {
+      return 'mobile';
+    }
+
     return 'desktop';
   };
 
   const getDeviceOrientation = (): DeviceOrientation => {
-    if (isPortrait) return 'portrait';
+    if (isPortrait) {
+      return 'portrait';
+    }
+
     return 'landscape';
   };
 
