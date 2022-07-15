@@ -40,7 +40,6 @@ import { Notifications } from 'src/types/Notifications';
 import { ServerOrganization } from 'src/types/Organization';
 import { User } from 'src/types/User';
 import { setLastVisitedOrganizationId, getLastVisitedOrganizationId } from 'src/utils/organization';
-import { useMediaQuery } from 'react-responsive';
 import MyAccount from './components/MyAccount';
 import ErrorBox from './components/common/ErrorBox/ErrorBox';
 import strings from './strings';
@@ -50,6 +49,7 @@ import Monitoring from './components/Monitoring';
 import SeedBanks from './components/SeedBanks';
 import NewSeedBank from './components/NewSeedBank';
 import SeedBankDetails from './components/SeedBank';
+import useDeviceInfo from 'src/utils/device';
 
 // @ts-ignore
 mapboxgl.workerClass =
@@ -116,7 +116,7 @@ export default function App() {
   const [organizations, setOrganizations] = useState<ServerOrganization[]>();
   const [user, setUser] = useState<User>();
   const history = useHistory();
-  const isMobile = useMediaQuery({ query: `(max-width: 760px)` });
+  const { isMobile } = useDeviceInfo();
   const [species, setSpecies] = useState<Species[]>([]);
 
   const reloadData = useCallback(async (selectedOrgId?: number) => {
