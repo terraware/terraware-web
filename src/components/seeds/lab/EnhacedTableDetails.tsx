@@ -2,7 +2,7 @@ import { Close } from '@mui/icons-material';
 import { Box, Chip, Collapse, Grid, Table, TableBody, TableCell, TableRow, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React from 'react';
-import { GerminationTest } from 'src/api/types/tests';
+import { ViabilityTest } from 'src/api/types/tests';
 import strings from 'src/strings';
 import Divisor from '../../common/Divisor';
 import SummaryBox from '../../common/SummaryBox';
@@ -67,11 +67,11 @@ export default function EnhancedTableDetails<T>({
 
   const calculateTotalSeedsGerminated = () => {
     let total = 0;
-    const selectedTest = row as unknown as GerminationTest;
+    const selectedTest = row as unknown as ViabilityTest;
 
-    if (selectedTest.germinations) {
-      selectedTest.germinations.forEach((germination) => {
-        total += germination.seedsGerminated;
+    if (selectedTest.testResults) {
+      selectedTest.testResults.forEach((testResult) => {
+        total += testResult.seedsGerminated;
       });
     }
 

@@ -1,7 +1,7 @@
 import { useTheme } from '@mui/material';
 import Chart from 'chart.js/auto';
 import React from 'react';
-import { Germination } from 'src/api/types/tests';
+import { ViabilityTestResult } from 'src/api/types/tests';
 import { descendingComparator, getComparator, Order, stableSort } from '../../common/table/sort';
 import { EnhancedTableDetailsRow } from '../../common/table/types';
 import { makeStyles } from '@mui/styles';
@@ -92,10 +92,10 @@ export default function LabChart<T>({ row, rowName, defaultSort }: Props): JSX.E
   }, []);
 
   const barData = () => {
-    const orderedGerminations: Germination[] = stableSort(
+    const orderedGerminations: ViabilityTestResult[] = stableSort(
       row[rowName] as T[],
       getComparator(order, orderBy, descendingComparator)
-    ) as Germination[];
+    ) as ViabilityTestResult[];
 
     let total = 0;
 

@@ -1,9 +1,9 @@
 import { components } from './generated-schema';
 
-export type GerminationTests = components['schemas']['AccessionPayload']['germinationTests'];
+export type ViabilityTests = components['schemas']['AccessionPayload']['viabilityTests'];
 
-export type GerminationTest = components['schemas']['GerminationTestPayload'];
+export type ViabilityTest = components['schemas']['ViabilityTestPayload'];
 
-export type Germination = components['schemas']['GerminationPayload'];
+export type ViabilityTestResult = components['schemas']['ViabilityTestResultPayload'];
 
-export type GerminationKey = keyof Germination;
+export type ViabilityTestResultKey = keyof ViabilityTestResult;

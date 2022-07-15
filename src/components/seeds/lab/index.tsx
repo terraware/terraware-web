@@ -4,7 +4,7 @@ import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { getDate } from 'src/api/clock';
 import { Accession } from 'src/api/types/accessions';
-import { Germination, GerminationTest } from 'src/api/types/tests';
+import { ViabilityTestResult, ViabilityTest } from 'src/api/types/tests';
 import Divisor from 'src/components/common/Divisor';
 import SummaryBox from 'src/components/common/SummaryBox';
 import Table from 'src/components/common/table';
@@ -51,12 +51,12 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
   const [testOpen, setTestOpen] = useState(false);
   const [testEntryOpen, setTestEntryOpen] = useState(false);
   const [cutTestOpen, setCutTestOpen] = useState(false);
-  const [selectedTest, setSelectedTest] = useState<GerminationTest>();
+  const [selectedTest, setSelectedTest] = useState<ViabilityTest>();
   const allowTestInGrams = Boolean(accession.processingMethod === 'Weight');
   const seedsAvailable = accession.remainingQuantity?.quantity ?? 0;
-  const [selectedTestEntry, setSelectedTestEntry] = useState<Germination>();
+  const [selectedTestEntry, setSelectedTestEntry] = useState<ViabilityTestResult>();
   const [date, setDate] = useState<number>();
-  const [labRows, setLabRows] = useState<GerminationTest[]>();
+  const [labRows, setLabRows] = useState<ViabilityTest[]>();
 
   useEffect(() => {
     window.scrollTo({ top: 0 });
@@ -71,13 +71,13 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
   }, []);
 
   useEffect(() => {
-    setLabRows(accession.germinationTests?.filter((germinationTest) => germinationTest.testType === 'Lab'));
+    setLabRows(accession.viabilityTests?.filter((viabilityTest) => viabilityTest.testType === 'Lab'));
   }, [accession]);
 
   const getTotalScheduled = (): number => {
-    const totalS = accession.germinationTests?.reduce((acum, germinationTest) => {
-      if (germinationTest.testType === 'Lab' && moment(germinationTest.startDate).isAfter(date)) {
-        acum += germinationTest.seedsSown || 0;
+    const totalS = accession.viabilityTests?.reduce((acum, viabilityTest) => {
+      if (viabilityTest.testType === 'Lab' && moment(viabilityTest.startDate).isAfter(date)) {
+        acum += viabilityTest.seedsSown || 0;
       }
 
       return acum;
@@ -87,13 +87,13 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
   };
 
   const onEditTest = (row: TableRowType) => {
-    setSelectedTest(row as GerminationTest);
+    setSelectedTest(row as ViabilityTest);
     setTestOpen(true);
   };
 
   const onEditTestEntry = (row: TableRowType, parentRow: TableRowType) => {
-    setSelectedTestEntry(row as Germination);
-    setSelectedTest(parentRow as GerminationTest);
+    setSelectedTestEntry(row as ViabilityTestResult);
+    setSelectedTest(parentRow as ViabilityTest);
     setTestEntryOpen(true);
   };
 
@@ -107,7 +107,7 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
   };
 
   const onNewTestEntry = (parentRow: TableRowType) => {
-    setSelectedTest(parentRow as GerminationTest);
+    setSelectedTest(parentRow as ViabilityTest);
     setSelectedTestEntry(undefined);
     setTestEntryOpen(true);
   };
@@ -119,9 +119,9 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
     setCutTestOpen(false);
   };
 
-  const onCloseTestModal = (value?: GerminationTest | undefined) => {
+  const onCloseTestModal = (value?: ViabilityTest | undefined) => {
     if (value) {
-      const newGerminationTests = !accession.germinationTests ? [] : [...accession.germinationTests];
+      const newGerminationTests = !accession.viabilityTests ? [] : [...accession.viabilityTests];
 
       if (selectedTest) {
         const germinationTestIndex = newGerminationTests.findIndex(
@@ -131,15 +131,15 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
       } else {
         newGerminationTests.push(value);
       }
-      accession.germinationTests = newGerminationTests;
+      accession.viabilityTests = newGerminationTests;
       onSubmit(accession);
     }
     setTestOpen(false);
   };
 
-  const onCloseTestEntryModal = (value?: Germination | undefined) => {
+  const onCloseTestEntryModal = (value?: ViabilityTestResult | undefined) => {
     if (selectedTest && value) {
-      const newGerminations = !selectedTest?.germinations ? [] : [...selectedTest.germinations];
+      const newGerminations = !selectedTest?.testResults ? [] : [...selectedTest.testResults];
 
       if (selectedTestEntry) {
         const germinationIndex = newGerminations.findIndex((germination) => germination === selectedTestEntry);
@@ -150,7 +150,7 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
 
       const newGerminationTest = {
         ...selectedTest,
-        germinations: newGerminations,
+        testResults: newGerminations,
       };
 
       onCloseTestModal(newGerminationTest);
@@ -158,20 +158,20 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
     setTestEntryOpen(false);
   };
 
-  const onDeleteTest = (value: GerminationTest) => {
-    const newGerminationsTests = accession?.germinationTests?.filter((germination) => germination !== value) ?? [];
-    accession.germinationTests = newGerminationsTests;
+  const onDeleteTest = (value: ViabilityTest) => {
+    const newGerminationsTests = accession?.viabilityTests?.filter((germination) => germination !== value) ?? [];
+    accession.viabilityTests = newGerminationsTests;
     onSubmit(accession);
     setTestOpen(false);
   };
 
-  const onDeleteTestEntry = (value: Germination) => {
-    if (selectedTest && selectedTest.germinations) {
-      const newGerminations = selectedTest.germinations.filter((germination) => germination !== value) ?? [];
+  const onDeleteTestEntry = (value: ViabilityTestResult) => {
+    if (selectedTest && selectedTest.testResults) {
+      const newGerminations = selectedTest.testResults.filter((testResult) => testResult !== value) ?? [];
 
       const newGerminationTest = {
         ...selectedTest,
-        germinations: newGerminations,
+        testResults: newGerminations,
       };
 
       onCloseTestModal(newGerminationTest);
@@ -250,7 +250,7 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
                     accessionId={accession.id ?? ''}
                     row={row}
                     index={index}
-                    rowName='germinations'
+                    rowName='testResults'
                     columns={TEST_ENTRY_COLUMNS}
                     defaultSort='recordingDate'
                     Renderer={LabCellRenderer}

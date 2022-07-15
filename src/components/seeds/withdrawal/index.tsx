@@ -112,11 +112,11 @@ export default function WithdrawalView({ accession, onSubmit }: Props): JSX.Elem
   };
 
   const isInactive = (row: AccessionWithdrawal) => {
-    return row.purpose === 'Germination Testing';
+    return row.purpose === 'Viability Testing' || row.purpose === 'Germination Testing';
   };
 
   const isClickable = (row: AccessionWithdrawal) => {
-    return row.purpose !== 'Germination Testing';
+    return row.purpose !== 'Viability Testing' && row.purpose !== 'Germination Testing';
   };
 
   const onDelete = (value: AccessionWithdrawal) => {
