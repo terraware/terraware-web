@@ -7,7 +7,7 @@ import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { getDate } from 'src/api/clock';
 import { Accession } from 'src/api/types/accessions';
-import { Germination, GerminationTest } from 'src/api/types/tests';
+import { ViabilityTestResult, ViabilityTest } from 'src/api/types/tests';
 import Divisor from 'src/components/common/Divisor';
 import SummaryBox from 'src/components/common/SummaryBox';
 import Table from 'src/components/common/table';
@@ -49,7 +49,7 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
   const classes = useStyles();
   const [date, setDate] = useState<number>();
   const [open, setOpen] = useState(false);
-  const [selectedRecord, setSelectedRecord] = useState<GerminationTest>();
+  const [selectedRecord, setSelectedRecord] = useState<ViabilityTest>();
   const allowTestInGrams = Boolean(accession.processingMethod === 'Weight');
   const seedsAvailable = accession.remainingQuantity?.quantity ?? 0;
 
@@ -66,7 +66,7 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
   }, []);
 
   const onEdit = (row: TableRowType) => {
-    setSelectedRecord(row as GerminationTest);
+    setSelectedRecord(row as ViabilityTest);
     setOpen(true);
   };
 
@@ -75,9 +75,9 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
     setOpen(true);
   };
 
-  const onCloseModal = (value?: GerminationTest | undefined) => {
+  const onCloseModal = (value?: ViabilityTest | undefined) => {
     if (value) {
-      const newGerminationTests = !accession.germinationTests ? [] : [...accession.germinationTests];
+      const newGerminationTests = !accession.viabilityTests ? [] : [...accession.viabilityTests];
 
       if (selectedRecord) {
         const index = newGerminationTests.findIndex((test) => test.id === selectedRecord.id);
@@ -86,29 +86,27 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
         newGerminationTests.push(value);
       }
 
-      accession.germinationTests = newGerminationTests;
+      accession.viabilityTests = newGerminationTests;
       onSubmit(accession);
     }
     setOpen(false);
   };
 
-  const onDelete = (value: GerminationTest) => {
-    const newGerminationsTests = accession?.germinationTests?.filter((germination) => germination !== value) ?? [];
-    accession.germinationTests = newGerminationsTests;
+  const onDelete = (value: ViabilityTest) => {
+    const newGerminationsTests = accession?.viabilityTests?.filter((germination) => germination !== value) ?? [];
+    accession.viabilityTests = newGerminationsTests;
     onSubmit(accession);
     setOpen(false);
   };
 
-  const getNurseryRows = (): GerminationTest[] => {
-    const nurseryTests = accession.germinationTests?.filter(
-      (germinationTest) => germinationTest.testType === 'Nursery'
-    );
+  const getNurseryRows = (): ViabilityTest[] => {
+    const nurseryTests = accession.viabilityTests?.filter((germinationTest) => germinationTest.testType === 'Nursery');
 
     return nurseryTests ?? [];
   };
 
   const getTotalScheduled = (): number => {
-    const totali = accession.germinationTests?.reduce((acum, germinationTest) => {
+    const totali = accession.viabilityTests?.reduce((acum, germinationTest) => {
       if (germinationTest.testType === 'Nursery' && moment(germinationTest.startDate).isAfter(date)) {
         acum += germinationTest.seedsSown || 0;
       }
@@ -189,10 +187,10 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
   );
 }
 
-function sortComparator(a: GerminationTest, b: GerminationTest, orderBy: any): 1 | -1 | 0 {
+function sortComparator(a: ViabilityTest, b: ViabilityTest, orderBy: any): 1 | -1 | 0 {
   if (orderBy === 'recordingDate' || orderBy === 'seedsGerminated') {
-    const aValue = a.germinations ? a.germinations[0][orderBy as keyof Germination] : 0;
-    const bValue = b.germinations ? b.germinations[0][orderBy as keyof Germination] : 0;
+    const aValue = a.testResults ? a.testResults[0][orderBy as keyof ViabilityTestResult] : 0;
+    const bValue = b.testResults ? b.testResults[0][orderBy as keyof ViabilityTestResult] : 0;
 
     if (bValue < aValue) {
       return -1;

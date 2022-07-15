@@ -1,5 +1,5 @@
 describe('Nursery', () => {
-  it('should not create Germination menu if not selecting any test', () => {
+  it('should not create viability menu if not selecting any test', () => {
     cy.visit('/accessions');
     cy.get('#newAccession').click();
     cy.get('#seedBank').click();
