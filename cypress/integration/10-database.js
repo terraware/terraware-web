@@ -85,7 +85,7 @@ describe('Database', () => {
         cy.get('#table-header-estimatedSeedsIncoming').contains('ESTIMATED SEEDS INCOMING');
         cy.get('#table-header-landowner').contains('LANDOWNER');
         cy.get('#table-header-storageCondition').contains('STORAGE CONDITION');
-        cy.get('#table-header-latestViabilityTestDate').contains('MOST RECENT GERMINATION TEST DATE');
+        cy.get('#table-header-latestViabilityTestDate').contains('MOST RECENT VIABILITY TEST DATE');
         cy.get('#table-header-latestViabilityPercent').contains('MOST RECENT % VIABILITY');
       });
 
@@ -158,9 +158,9 @@ describe('Database', () => {
         cy.get('#table-header-state').contains('STAGE');
         cy.get('#table-header-speciesName').contains('SPECIES');
         cy.get('#table-header-collectedDate').contains('COLLECTED DATE');
-        cy.get('#table-header-viabilityTests_type').contains('GERMINATION TEST TYPE');
+        cy.get('#table-header-viabilityTests_type').contains('VIABILITY TEST TYPE');
         cy.get('#table-header-viabilityTests_seedType').contains('SEED TYPE');
-        cy.get('#table-header-viabilityTests_treatment').contains('GERMINATION TREATMENT');
+        cy.get('#table-header-viabilityTests_treatment').contains('VIABILITY TREATMENT');
         cy.get('#table-header-cutTestSeedsFilled').contains('NUMBER OF SEEDS FILLED');
         cy.get('#table-header-viabilityTests_notes').contains('NOTES');
         cy.get('#table-header-viabilityTests_seedsSown').contains('NUMBER OF SEEDS SOWN');
@@ -168,7 +168,7 @@ describe('Database', () => {
           'TOTAL OF SEEDS GERMINATED'
         );
         cy.get('#table-header-cutTestSeedsEmpty').contains('NUMBER OF SEEDS EMPTY');
-        cy.get('#table-header-viabilityTests_substrate').contains('GERMINATION SUBSTRATE');
+        cy.get('#table-header-viabilityTests_substrate').contains('VIABILITY SUBSTRATE');
         cy.get('#table-header-viabilityTests_percentGerminated').contains('% VIABILITY');
         cy.get('#table-header-cutTestSeedsCompromised').contains('NUMBER OF SEEDS COMPROMISED');
         cy.get('#table-header-latestViabilityPercent').contains('MOST RECENT % VIABILITY');
@@ -180,7 +180,7 @@ describe('Database', () => {
 
         cy.get('#edit-columns').click();
 
-        cy.get('#Germination\\ Testing\\ To\\ Do').click();
+        cy.get('#Viability\\ Testing\\ To\\ Do').click();
         cy.get('#saveColumnsButton').click();
         cy.wait('@search');
         cy.wait('@values');
@@ -196,8 +196,8 @@ describe('Database', () => {
         cy.get('#table-header-storageLocationName').contains('STORAGE LOCATION');
         cy.get('#table-header-storagePackets').contains('NUMBER OF STORAGE PACKETS');
         cy.get('#table-header-storageNotes').contains('NOTES');
-        cy.get('#table-header-viabilityTests_type').contains('GERMINATION TEST TYPE');
-        cy.get('#table-header-viabilityTests_startDate').contains('GERMINATION START DATE');
+        cy.get('#table-header-viabilityTests_type').contains('VIABILITY TEST TYPE');
+        cy.get('#table-header-viabilityTests_startDate').contains('VIABILITY START DATE');
       });
 
       it('Custom columns', () => {
@@ -206,7 +206,7 @@ describe('Database', () => {
 
         cy.get('#edit-columns').click();
 
-        cy.get('#Germination\\ Testing\\ To\\ Do').click();
+        cy.get('#Viability\\ Testing\\ To\\ Do').click();
         cy.get('#primaryCollectorName').click();
         cy.get('#species_rare').click();
         cy.get('#saveColumnsButton').click();
@@ -224,8 +224,8 @@ describe('Database', () => {
         cy.get('#table-header > :nth-child(7)').contains('STORAGE CONDITION');
         cy.get('#table-header > :nth-child(8)').contains('STORAGE LOCATION');
         cy.get('#table-header > :nth-child(9)').contains('NOTES');
-        cy.get('#table-header > :nth-child(10)').contains('GERMINATION TEST TYPE');
-        cy.get('#table-header > :nth-child(11)').contains('GERMINATION START DATE');
+        cy.get('#table-header > :nth-child(10)').contains('VIABILITY TEST TYPE');
+        cy.get('#table-header > :nth-child(11)').contains('VIABILITY START DATE');
         cy.get('#table-header > :nth-child(12)').contains('COLLECTOR');
         cy.get('#table-header > :nth-child(13)').contains('RARE');
       });

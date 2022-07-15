@@ -264,7 +264,7 @@ describe('Lab', () => {
     cy.get('#row2-staffResponsible').should('contain', 'Constanza');
     cy.get('#row2-notes > .MuiTypography-root > .MuiSvgIcon-root').should('not.exist');
 
-    cy.get('#mostRecentViabiliy').contains('35%');
+    cy.get('#mostRecentViabiliy').contains('40%');
     cy.get('#row2-expand').click();
 
     cy.get('#row2-details #row2-seedsGerminated').contains('25 seeds germinated');
