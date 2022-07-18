@@ -3,9 +3,12 @@ import React from 'react';
 import { Notifications } from 'src/types/Notifications';
 import { ServerOrganization } from 'src/types/Organization';
 import { User } from 'src/types/User';
+import Icon from '../common/icon/Icon';
 import NotificationsDropdown from '../NotificationsDropdown';
 import OrganizationsDropdown from '../OrganizationsDropdown';
 import UserMenu from '../UserMenu';
+import { ReactComponent as Logo } from '../common/Navbar/logo.svg';
+import useDeviceInfo from 'src/utils/device';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -15,6 +18,9 @@ const useStyles = makeStyles((theme) =>
       backgroundColor: theme.palette.gray[200],
       marginRight: '16px',
       marginLeft: '16px',
+    },
+    flex: {
+      display: 'flex',
     },
   })
 );
@@ -41,8 +47,9 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
     user,
     reloadUser,
   } = props;
+  const { isDesktop } = useDeviceInfo();
 
-  return (
+  return isDesktop ? (
     <>
       <NotificationsDropdown
         notifications={props.notifications}
@@ -63,6 +70,22 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
         </>
       )}
       <UserMenu user={user} reloadUser={reloadUser} hasOrganizations={organizations && organizations.length > 0} />
+    </>
+  ) : (
+    <>
+      <Icon name='iconMenu' />
+      <div className='logo'>
+        <Logo />
+      </div>
+      <div className={classes.flex}>
+        <NotificationsDropdown
+          notifications={props.notifications}
+          setNotifications={setNotifications}
+          organizationId={selectedOrganization?.id}
+          reloadOrganizationData={reloadOrganizationData}
+        />
+        <UserMenu user={user} reloadUser={reloadUser} hasOrganizations={organizations && organizations.length > 0} />
+      </div>
     </>
   );
 }
