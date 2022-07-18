@@ -59,11 +59,11 @@ export const ChartPalette: ChartPaletteType = {
     backgroundColor: '#007DF2',
   },
   STATE_OF_CHARGE: {
-    borderColor: 'BD6931',
+    borderColor: '#BD6931',
     backgroundColor: '#DE7935',
   },
   TEMPERATURE: {
-    borderColor: 'BD6931',
+    borderColor: '#BD6931',
     backgroundColor: '#DE7935',
   },
   TEMPERATURE_THRESHOLD: {
