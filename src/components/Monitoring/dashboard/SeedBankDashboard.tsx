@@ -42,6 +42,16 @@ const useStyles = makeStyles((theme: Theme) => ({
     width: '100%',
     margin: 0,
   },
+  overridePadding: {
+    paddingLeft: '12px !important',
+    paddingTop: '12px !important',
+  },
+  overrideTopPadding: {
+    paddingTop: '12px !important',
+  },
+  overrideLeftPadding: {
+    paddingLeft: '12px !important',
+  },
 }));
 
 type SeedBankDashboardProps = {
@@ -156,7 +166,7 @@ export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.El
 
   return (
     <Grid container spacing={3} className={classes.mainGrid}>
-      <Grid item xs={6}>
+      <Grid item xs={6} className={classes.overridePadding}>
         <div className={classes.graphContainer}>
           <div className={classes.panelTitle}>
             <p>{strings.PV_BATTERY_CHARGE}</p>
@@ -165,7 +175,7 @@ export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.El
           <p className={classes.panelValue}>{batteryLevel || strings.NO_DATA_YET}</p>
         </div>
       </Grid>
-      <Grid item xs={6}>
+      <Grid item xs={6} className={classes.overrideTopPadding} paddingRight={'12px'}>
         <div className={classes.graphContainer}>
           <div className={classes.panelTitle}>
             <p>{strings.SEED_BANK_INTERNET}</p>
@@ -174,14 +184,14 @@ export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.El
           <p className={classes.panelValue}>{deviceManager?.isOnline ? strings.CONNECTED : strings.NOT_CONNECTED}</p>
         </div>
       </Grid>
-      <Grid item xs={12}>
+      <Grid item xs={12} className={classes.overrideLeftPadding} paddingRight={'12px'}>
         <TemperatureHumidityChart
           availableLocations={availableLocations}
           defaultSensor={defaultSensor}
           defaultTimePeriod={defaultTimePeriod}
         />
       </Grid>
-      <Grid item xs={12}>
+      <Grid item xs={12} className={classes.overrideLeftPadding} paddingRight={'12px'}>
         <PVBatteryChart BMU={BMU} defaultTimePeriod={defaultTimePeriod} />
       </Grid>
     </Grid>
