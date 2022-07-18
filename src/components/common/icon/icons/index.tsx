@@ -27,6 +27,7 @@ import { ReactComponent as Folder } from './folder.svg';
 import { ReactComponent as Help } from './help.svg';
 import { ReactComponent as Home } from './home.svg';
 import { ReactComponent as Info } from './info.svg';
+import { ReactComponent as IconMenu } from './icon-menu.svg';
 import { ReactComponent as Key } from './key.svg';
 import { ReactComponent as Leaf } from './leaf.svg';
 import { ReactComponent as Lock } from './lock.svg';
@@ -83,6 +84,7 @@ export type IconName =
   | 'folder'
   | 'help'
   | 'home'
+  | 'iconMenu'
   | 'info'
   | 'key'
   | 'leaf'
@@ -145,6 +147,7 @@ const icons: Record<IconName, SVGComponent> = {
   folder: Folder,
   help: Help,
   home: Home,
+  iconMenu: IconMenu,
   info: Info,
   key: Key,
   leaf: Leaf,

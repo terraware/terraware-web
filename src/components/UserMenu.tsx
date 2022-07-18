@@ -8,6 +8,7 @@ import strings from '../../src/strings';
 import { ReactComponent as AvatarIcon } from './avatar-default.svg';
 import Icon from './common/icon/Icon';
 import { APP_PATHS } from 'src/constants';
+import useDeviceInfo from 'src/utils/device';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -56,8 +57,9 @@ export default function UserMenu({ user, reloadUser, hasOrganizations }: UserMen
   const onHandleLogout = () => {
     window.location.href = `/sso/logout`;
   };
+  const { isDesktop } = useDeviceInfo();
 
-  return (
+  return isDesktop ? (
     <div>
       <IconButton onClick={handleClick} size='small' className={classes.iconContainer}>
         <AvatarIcon className={classes.icon} />
@@ -92,6 +94,12 @@ export default function UserMenu({ user, reloadUser, hasOrganizations }: UserMen
           </ListItem>
         </List>
       </Popover>
+    </div>
+  ) : (
+    <div>
+      <IconButton onClick={handleClick} size='small' className={classes.iconContainer}>
+        <AvatarIcon className={classes.icon} />
+      </IconButton>
     </div>
   );
 }
