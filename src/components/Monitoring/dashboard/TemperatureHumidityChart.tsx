@@ -96,7 +96,7 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
             }),
             label: 'Temperature', // Text to show in legend
             showLine: true, // If false, the line is not drawn for this dataset.
-            borderColor: '#FE0003', // The line border color.
+            borderColor: '#BD6931', // The line border color.
             backgroundColor: '#FF5A5B', // The line fill color.
             fill: false, // How to fill the area under the line. See filling modes here: https://www.chartjs.org/docs/latest/charts/area.html#filling-modes
           },
@@ -143,7 +143,7 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
             }),
             label: 'Temperature',
             showLine: true,
-            borderColor: '#FE0003',
+            borderColor: '#BD6931',
             backgroundColor: '#FF5A5B',
             fill: false,
           },

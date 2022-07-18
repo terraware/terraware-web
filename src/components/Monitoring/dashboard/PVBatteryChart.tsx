@@ -80,7 +80,7 @@ export default function PVBatteryChart(props: PVBatteryChartProps): JSX.Element 
                 label: 'State of Charge',
                 showLine: true,
                 fill: false,
-                borderColor: '#FE0003',
+                borderColor: '#BD6931',
                 backgroundColor: '#FF5A5B',
               },
               {
