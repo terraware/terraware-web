@@ -49,7 +49,7 @@ import Monitoring from './components/Monitoring';
 import SeedBanks from './components/SeedBanks';
 import NewSeedBank from './components/NewSeedBank';
 import SeedBankDetails from './components/SeedBank';
-import useDeviceInfo from 'src/utils/device';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 // @ts-ignore
 mapboxgl.workerClass =
