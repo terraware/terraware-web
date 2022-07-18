@@ -21,7 +21,7 @@ describe('Storage', () => {
     cy.get('#check-Nursery').click();
     cy.get('#dryingStartDate').type('2021-01-01');
     cy.get('#dryingEndDate').type('2021-01-01');
-    cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
+    cy.intercept('GET', 'api/v1/seedbank/accessions/*').as('getAccession');
     cy.get('#saveAccession').click();
     cy.wait('@getAccession');
     cy.get('a#menu-storage').should('exist');
@@ -43,7 +43,7 @@ describe('Storage', () => {
     cy.get('#storageNotes').type('A storage note');
     cy.get('#storageStaffResponsible').type('Constanza');
 
-    cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
+    cy.intercept('GET', 'api/v1/seedbank/accessions/*').as('getAccession');
     cy.get('#saveAccession').click();
     cy.wait('@getAccession');
 
