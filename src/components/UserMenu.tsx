@@ -8,7 +8,6 @@ import strings from '../../src/strings';
 import { ReactComponent as AvatarIcon } from './avatar-default.svg';
 import Icon from './common/icon/Icon';
 import { APP_PATHS } from 'src/constants';
-import { Desktop, Tablet } from './common/Device';
 import useDeviceInfo from 'src/utils/device';
 
 const useStyles = makeStyles((theme) =>
