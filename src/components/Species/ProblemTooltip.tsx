@@ -22,13 +22,18 @@ const useStyles = makeStyles((theme: Theme) => ({
   buttonsContainer: {
     background: '#F2F4F5',
     display: 'flex',
-    boderTop: '1px solid #A9B7B8',
+    borderTop: '1px solid #A9B7B8',
     padding: '16px',
     borderRadius: '0 0 6px 6px',
   },
   value: {
     fontSize: '14px',
     color: '#000000',
+    fontWeight: 400,
+    paddingTop: '4px',
+  },
+  noBold: {
+    fontWeight: 400,
   },
 }));
 
@@ -90,11 +95,11 @@ export default function ProblemTooltip({
   return (
     <div>
       <div className={classes.tooltipContainer}>
-        <p>{strings.ISSUE}</p>
+        <p className={classes.noBold}>{strings.ISSUE}</p>
         <p className={classes.value}>{problems[0].type}</p>
         {problems[0].suggestedValue ? (
           <div className={classes.verticalSpacing}>
-            <p>{strings.SUGGESTION}</p>
+            <p className={classes.noBold}>{strings.SUGGESTION}</p>
             <p className={classes.value}>
               {strings.formatString(strings.CHANGE_TO, <b>{problems[0].suggestedValue}</b>)}
             </p>
@@ -124,7 +129,6 @@ export default function ProblemTooltip({
               label={strings.ACCEPT}
               priority='secondary'
             />
-            ,
           </>
         ) : (
           <>
