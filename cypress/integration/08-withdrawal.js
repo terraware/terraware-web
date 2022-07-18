@@ -19,7 +19,7 @@ describe('Withdrawal', () => {
       cy.get('#Count').click();
       cy.get('#quantity').type(300);
 
-      cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
+      cy.intercept('GET', 'api/v1/seedbank/accessions/*').as('getAccession');
       cy.get('#saveAccession').click();
       cy.wait('@getAccession');
 
@@ -60,7 +60,7 @@ describe('Withdrawal', () => {
       cy.get('#notes').type('Some notes');
       cy.get('#staffResponsible').type('Carlos');
 
-      cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
+      cy.intercept('GET', 'api/v1/seedbank/accessions/*').as('getAccession');
       cy.get('#save-withdrawn-button').click();
       cy.wait('@getAccession');
 
@@ -94,7 +94,7 @@ describe('Withdrawal', () => {
       cy.get('#notes').clear();
       cy.get('#staffResponsible').clear().type('Leann');
 
-      cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
+      cy.intercept('GET', 'api/v1/seedbank/accessions/*').as('getAccession');
       cy.get('#save-withdrawn-button').click();
       cy.wait('@getAccession');
 
@@ -115,8 +115,8 @@ describe('Withdrawal', () => {
 
       cy.get('#modal-seeds-available').contains('290');
 
-      cy.intercept('PUT', '/api/v1/seedbank/accession/**').as('putAccession');
-      cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
+      cy.intercept('PUT', '/api/v1/seedbank/accessions/**').as('putAccession');
+      cy.intercept('GET', 'api/v1/seedbank/accessions/*').as('getAccession');
       cy.get('#delete-withdrawn-button').click();
       cy.wait('@putAccession');
       cy.wait('@getAccession');
@@ -140,7 +140,7 @@ describe('Withdrawal', () => {
       cy.get('#notes').type('Some notes');
       cy.get('#staffResponsible').type('Carlos');
 
-      cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
+      cy.intercept('GET', 'api/v1/seedbank/accessions/*').as('getAccession');
       cy.get('#save-withdrawn-button').click();
       cy.wait('@getAccession');
 
@@ -161,7 +161,7 @@ describe('Withdrawal', () => {
       cy.get('#notes').type('Other notes');
       cy.get('#staffResponsible').type('Leann');
 
-      cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
+      cy.intercept('GET', 'api/v1/seedbank/accessions/*').as('getAccession');
       cy.get('#save-withdrawn-button').click();
       cy.wait('@getAccession');
 
@@ -182,7 +182,7 @@ describe('Withdrawal', () => {
       cy.get('#Propagation').click();
       cy.get('#staffResponsible').type('Constanza');
 
-      cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
+      cy.intercept('GET', 'api/v1/seedbank/accessions/*').as('getAccession');
       cy.get('#save-withdrawn-button').click();
       cy.wait('@getAccession');
 
@@ -219,7 +219,7 @@ describe('Withdrawal', () => {
       cy.get('#subsetCount').type(10);
       cy.get('#quantity').type(100);
 
-      cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
+      cy.intercept('GET', 'api/v1/seedbank/accessions/*').as('getAccession');
       cy.get('#saveAccession').click();
       cy.wait('@getAccession');
 
@@ -250,7 +250,7 @@ describe('Withdrawal', () => {
       cy.get('#notes').type('Some notes');
       cy.get('#staffResponsible').type('Carlos');
 
-      cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
+      cy.intercept('GET', 'api/v1/seedbank/accessions/*').as('getAccession');
       cy.get('#save-withdrawn-button').click();
       cy.wait('@getAccession');
 
@@ -284,7 +284,7 @@ describe('Withdrawal', () => {
       cy.get('#notes').clear();
       cy.get('#staffResponsible').clear().type('Leann');
 
-      cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
+      cy.intercept('GET', 'api/v1/seedbank/accessions/*').as('getAccession');
       cy.get('#save-withdrawn-button').click();
       cy.wait('@getAccession');
 
@@ -313,7 +313,7 @@ describe('Withdrawal', () => {
       cy.get('#notes').type('Some notes');
       cy.get('#staffResponsible').type('Carlos');
 
-      cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
+      cy.intercept('GET', 'api/v1/seedbank/accessions/*').as('getAccession');
       cy.get('#save-withdrawn-button').click();
       cy.wait('@getAccession');
 
@@ -333,7 +333,7 @@ describe('Withdrawal', () => {
       cy.get('#notes').type('Other notes');
       cy.get('#staffResponsible').type('Leann');
 
-      cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
+      cy.intercept('GET', 'api/v1/seedbank/accessions/*').as('getAccession');
       cy.get('#save-withdrawn-button').click();
       cy.wait('@getAccession');
 
@@ -354,7 +354,7 @@ describe('Withdrawal', () => {
       cy.get('#Propagation').click();
       cy.get('#staffResponsible').type('Constanza');
 
-      cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
+      cy.intercept('GET', 'api/v1/seedbank/accessions/*').as('getAccession');
       cy.get('#save-withdrawn-button').click();
       cy.wait('@getAccession');
 
@@ -374,7 +374,7 @@ describe('Withdrawal', () => {
       cy.get('#Propagation').click();
       cy.get('#staffResponsible').type('Constanza');
 
-      cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
+      cy.intercept('GET', 'api/v1/seedbank/accessions/*').as('getAccession');
       cy.get('#save-withdrawn-button').click();
       cy.wait('@getAccession');
 
