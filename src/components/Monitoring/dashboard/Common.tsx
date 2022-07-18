@@ -78,6 +78,6 @@ export const ChartPalette: ChartPaletteType = {
   HUMIDITY_THRESHOLD: {
     borderColor: '#BED0FF',
     backgroundColor: '#E2E9FF',
-    fillColor: '#E2E9FF',
+    fillColor: '#E2E9FF35',
   },
 };
