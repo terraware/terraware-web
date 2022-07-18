@@ -34,3 +34,50 @@ export const getUnit = (selectedPeriod?: string) => {
     return 'day';
   }
 };
+
+type ChartLine =
+  | 'SYSTEM_POWER'
+  | 'STATE_OF_CHARGE'
+  | 'TEMPERATURE'
+  | 'TEMPERATURE_THRESHOLD'
+  | 'HUMIDITY'
+  | 'HUMIDITY_THRESHOLD';
+
+type ChartLinePalette = {
+  borderColor: string;
+  backgroundColor: string;
+  fillColor?: string;
+};
+
+type ChartPaletteType = {
+  [key in ChartLine]: ChartLinePalette;
+};
+
+export const ChartPalette: ChartPaletteType = {
+  SYSTEM_POWER: {
+    borderColor: '#0067C8',
+    backgroundColor: '#007DF2',
+  },
+  STATE_OF_CHARGE: {
+    borderColor: 'BD6931',
+    backgroundColor: '#DE7935',
+  },
+  TEMPERATURE: {
+    borderColor: 'BD6931',
+    backgroundColor: '#DE7935',
+  },
+  TEMPERATURE_THRESHOLD: {
+    borderColor: '#F89E74',
+    backgroundColor: '#FAC4B1',
+    fillColor: '#FFBFD035',
+  },
+  HUMIDITY: {
+    borderColor: '#0067C8',
+    backgroundColor: '#007DF2',
+  },
+  HUMIDITY_THRESHOLD: {
+    borderColor: '#BED0FF',
+    backgroundColor: '#E2E9FF',
+    fillColor: '#E2E9FF',
+  },
+};
