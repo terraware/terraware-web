@@ -15,7 +15,7 @@ export type AccessionPostRequestBody =
 export type AccessionPostResponse =
   paths[typeof postAccessionEndpoint]['post']['responses'][200]['content']['application/json'];
 
-export const photoEndpoint = '/api/v1/seedbank/accessions/{id}/photo/{photoFilename}';
+export const photoEndpoint = '/api/v1/seedbank/accessions/{id}/photos/{photoFilename}';
 
 export const checkInEndpoint = '/api/v1/seedbank/accessions/{id}/checkIn';
 

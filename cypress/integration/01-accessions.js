@@ -169,22 +169,22 @@ describe('Accessions', () => {
 
       cy.get('#photo-0').contains('accession1.jpg');
       cy.get('#photo-0')
-        .should('have.attr', 'href', '/api/v1/seedbank/accessions/1002/photo/accession1.jpg')
+        .should('have.attr', 'href', '/api/v1/seedbank/accessions/1002/photos/accession1.jpg')
         .should('have.attr', 'target', '_blank');
 
       cy.get('#photo-1').contains('accession2.jpg');
       cy.get('#photo-1')
-        .should('have.attr', 'href', '/api/v1/seedbank/accessions/1002/photo/accession2.jpg')
+        .should('have.attr', 'href', '/api/v1/seedbank/accessions/1002/photos/accession2.jpg')
         .should('have.attr', 'target', '_blank');
 
       // cy.request({
-      //   url: Cypress.config().baseUrl + '/api/v1/seedbank/accessions/1002/photo/accession1.jpg',
+      //   url: Cypress.config().baseUrl + '/api/v1/seedbank/accessions/1002/photos/accession1.jpg',
       //   headers: { 'X-Forwarded-User': 'dummy-auth-id' },
       // })
       //   .its('status')
       //   .should('eq', 200);
       // cy.request({
-      //   url: Cypress.config().baseUrl + '/api/v1/seedbank/accessions/1002/photo/accession2.jpg',
+      //   url: Cypress.config().baseUrl + '/api/v1/seedbank/accessions/1002/photos/accession2.jpg',
       //   headers: { 'X-Forwarded-User': 'dummy-auth-id' },
       // })
       //   .its('status')
