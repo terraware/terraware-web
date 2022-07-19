@@ -17,31 +17,17 @@ const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
     padding: '20px 0',
   },
-  mainGrid: {
-    display: 'flex',
-    width: '100%',
-    margin: 0,
-  },
+  mainGrid: {},
   main: {
     background:
       'url(/assets/trees-right.png) no-repeat 100% 100%/auto 248px, url(/assets/trees-left.png) no-repeat 0 100%/auto 175px, url(/assets/water.png) repeat-x 0 100%/auto 142px, url(/assets/mountain.png) no-repeat 0 100%/auto 233px, url(/assets/far-mountain.png) no-repeat 100% 100%/auto 317px, url(/assets/background.png) no-repeat 100% 0/90% 633px, linear-gradient(to bottom right, rgb(255, 255, 255) 0%, rgb(199, 226, 234) 100%) no-repeat 0 0/auto',
     minHeight: 'calc(100vh - 64px)',
     display: 'flex',
     flexDirection: 'column',
-    padding: '24px 12px',
+    padding: '24px',
   },
   extraPadding: {
     paddingLeft: '12px',
-  },
-  overridePadding: {
-    paddingLeft: '12px !important',
-    paddingTop: '12px !important',
-  },
-  overrideTopPadding: {
-    paddingTop: '12px !important',
-  },
-  overrideLeftPadding: {
-    paddingLeft: '12px !important',
   },
 }));
 
@@ -84,7 +70,7 @@ export default function Home({ organizations, selectedOrganization, setSelectedO
         <Grid container spacing={3} className={classes.mainGrid} sx={{ padding: 0 }}>
           {selectedOrganization?.role && isAdmin(selectedOrganization) && (
             <>
-              <Grid item xs={6} className={classes.overridePadding}>
+              <Grid item xs={6}>
                 <PageCard
                   name={strings.PEOPLE}
                   icon='person'
@@ -94,7 +80,7 @@ export default function Home({ organizations, selectedOrganization, setSelectedO
                   linkStyle={'underline'}
                 />
               </Grid>
-              <Grid item xs={6} className={classes.overrideTopPadding} paddingRight={'12px'}>
+              <Grid item xs={6}>
                 <PageCard
                   name={strings.SEED_BANKS}
                   icon='seedbankNav'
@@ -109,7 +95,7 @@ export default function Home({ organizations, selectedOrganization, setSelectedO
               </Grid>
             </>
           )}
-          <Grid item xs={4} className={classes.overrideLeftPadding}>
+          <Grid item xs={4}>
             <PageCard
               name={strings.SPECIES}
               icon='species'
@@ -129,7 +115,7 @@ export default function Home({ organizations, selectedOrganization, setSelectedO
               linkStyle={'underline'}
             />
           </Grid>
-          <Grid item xs={4} paddingRight={'12px'}>
+          <Grid item xs={4}>
             <PageCard
               name={strings.MONITORING}
               icon='monitoringNav'
