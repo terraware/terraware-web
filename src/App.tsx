@@ -41,8 +41,6 @@ import { ServerOrganization } from 'src/types/Organization';
 import { User } from 'src/types/User';
 import { setLastVisitedOrganizationId, getLastVisitedOrganizationId } from 'src/utils/organization';
 import MyAccount from './components/MyAccount';
-import ErrorBox from './components/common/ErrorBox/ErrorBox';
-import strings from './strings';
 import { getAllSpecies } from './api/species/species';
 import { Species } from './types/Species';
 import Monitoring from './components/Monitoring';
@@ -59,10 +57,24 @@ mapboxgl.workerClass =
 const useStyles = makeStyles(() =>
   createStyles({
     content: {
-      marginLeft: '200px',
       height: '100%',
       paddingTop: '64px',
       overflow: 'auto',
+    },
+    contentWithNavBar: {
+      marginLeft: '200px',
+    },
+    navBarOpened: {
+      '& .blurred': {
+        backdropFilter: 'blur(8px)',
+        background: 'rgba(249, 250, 250, 0.8)',
+        height: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        position: 'fixed',
+        zIndex: 1300,
+        inset: '0px',
+      },
     },
     spinner: {
       display: 'flex',
@@ -116,8 +128,9 @@ export default function App() {
   const [organizations, setOrganizations] = useState<ServerOrganization[]>();
   const [user, setUser] = useState<User>();
   const history = useHistory();
-  const { isMobile } = useDeviceInfo();
+  const { type } = useDeviceInfo();
   const [species, setSpecies] = useState<Species[]>([]);
+  const [showNavBar, setShowNavBar] = useState(true);
 
   const reloadData = useCallback(async (selectedOrgId?: number) => {
     const populateOrganizations = async () => {
@@ -211,6 +224,14 @@ export default function App() {
     reloadUser();
   }, [reloadUser]);
 
+  useEffect(() => {
+    if (type === 'mobile' || type === 'tablet') {
+      setShowNavBar(false);
+    } else {
+      setShowNavBar(true);
+    }
+  }, [type]);
+
   if (orgAPIRequestStatus === APIRequestStatus.AWAITING || orgAPIRequestStatus === APIRequestStatus.FAILED_NO_AUTH) {
     return <CircularProgress className={classes.spinner} size='193' />;
   } else if (orgAPIRequestStatus === APIRequestStatus.FAILED) {
@@ -230,6 +251,7 @@ export default function App() {
               reloadOrganizationData={reloadData}
               user={user}
               reloadUser={reloadUser}
+              setShowNavBar={setShowNavBar}
             />
           </TopBar>
           <ToastSnackbar />
@@ -240,9 +262,6 @@ export default function App() {
       // This allows is to reload open views that require an organization
       return <CircularProgress className={classes.spinner} size='193' />;
     }
-  } else if (isMobile) {
-    window.stop();
-    return <ErrorBox title={strings.NO_MOBILE_SUPPORT_TITLE} text={strings.NO_MOBILE_SUPPORT_DESC} />;
   }
 
   const organizationWithoutSB = () => {
@@ -277,10 +296,14 @@ export default function App() {
       <CssBaseline />
       <ToastSnackbar />
       <>
-        <div>
-          <NavBar organization={selectedOrganization} />
-        </div>
-        <div className={`${classes.content} scrollable-content`}>
+        {showNavBar ? (
+          <div className={type !== 'desktop' ? classes.navBarOpened : ''}>
+            <div className='blurred'>
+              <NavBar organization={selectedOrganization} setShowNavBar={setShowNavBar} />
+            </div>
+          </div>
+        ) : null}
+        <div className={`${type === 'desktop' ? classes.contentWithNavBar : ''} ${classes.content} scrollable-content`}>
           <TopBar>
             <TopBarContent
               notifications={notifications}
@@ -291,6 +314,7 @@ export default function App() {
               reloadOrganizationData={reloadData}
               user={user}
               reloadUser={reloadUser}
+              setShowNavBar={setShowNavBar}
             />
           </TopBar>
           <ErrorBoundary>
