@@ -1,4 +1,5 @@
 import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { IconButton } from '@material-ui/core';
 import React from 'react';
 import { Notifications } from 'src/types/Notifications';
 import { ServerOrganization } from 'src/types/Organization';
@@ -7,7 +8,6 @@ import Icon from '../common/icon/Icon';
 import NotificationsDropdown from '../NotificationsDropdown';
 import OrganizationsDropdown from '../OrganizationsDropdown';
 import UserMenu from '../UserMenu';
-import { ReactComponent as Logo } from '../common/Navbar/logo.svg';
 import useDeviceInfo from 'src/utils/device';
 
 const useStyles = makeStyles((theme) =>
@@ -34,6 +34,7 @@ type TopBarProps = {
   reloadOrganizationData: (selectedOrgId?: number) => void;
   user?: User;
   reloadUser: () => void;
+  setShowNavBar: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export default function TopBarContent(props: TopBarProps): JSX.Element | null {
@@ -46,6 +47,7 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
     reloadOrganizationData,
     user,
     reloadUser,
+    setShowNavBar,
   } = props;
   const { isDesktop } = useDeviceInfo();
 
@@ -73,10 +75,10 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
     </>
   ) : (
     <>
-      <Icon name='iconMenu' />
-      <div className='logo'>
-        <Logo />
-      </div>
+      <IconButton onClick={() => setShowNavBar(true)} size='small'>
+        <Icon name='iconMenu' />
+      </IconButton>
+
       <div className={classes.flex}>
         <NotificationsDropdown
           notifications={props.notifications}

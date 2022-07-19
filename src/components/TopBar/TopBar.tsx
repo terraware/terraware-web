@@ -10,9 +10,6 @@ const useStyles = makeStyles((theme) =>
       color: theme.palette.common.black,
       boxShadow: '0px 2px 4px rgba(58, 68, 69, 0.2)',
     },
-    appBarOnTop: {
-      zIndex: 1111,
-    },
     flex: {
       display: 'flex',
       alignItems: 'center',
@@ -35,7 +32,7 @@ export default function TopBar(props: TopBarProps): JSX.Element {
   const { isDesktop } = useDeviceInfo();
 
   return (
-    <AppBar position='fixed' className={isDesktop ? classes.appBar : `${classes.appBar} ${classes.appBarOnTop}`}>
+    <AppBar position='fixed' className={classes.appBar}>
       <Toolbar className={isDesktop ? classes.right : ''}>
         <div className={classes.flex}>{props.children}</div>
       </Toolbar>
