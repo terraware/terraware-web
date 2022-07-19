@@ -285,17 +285,11 @@ export interface components {
       fieldNotes?: string;
       founderId?: string;
       geolocations?: components["schemas"]["Geolocation"][];
-      /** @deprecated */
-      germinationTests?: components["schemas"]["ViabilityTestPayload"][];
-      /** @deprecated */
-      germinationTestTypes?: ("Lab" | "Nursery")[];
       /** Server-generated unique identifier for the accession. This is unique across all seed banks, but is not suitable for display to end users. */
       id: number;
       /** Initial size of accession. The units of this value must match the measurement type in "processingMethod". */
       initialQuantity?: components["schemas"]["SeedQuantityPayload"];
       landowner?: string;
-      /** @deprecated */
-      latestGerminationTestDate?: string;
       latestViabilityPercent?: number;
       latestViabilityTestDate?: string;
       numberOfTrees?: number;
@@ -409,8 +403,6 @@ export interface components {
       fieldNotes?: string;
       founderId?: string;
       geolocations?: components["schemas"]["Geolocation"][];
-      /** @deprecated */
-      germinationTestTypes?: ("Lab" | "Nursery")[];
       landowner?: string;
       numberOfTrees?: number;
       primaryCollector?: string;
@@ -832,13 +824,13 @@ export interface components {
       name: string;
       description?: string;
       configuration?: { [key: string]: unknown };
+      settings?: { [key: string]: { [key: string]: unknown } };
       type: string;
       timeseriesName?: string;
       deviceId?: number;
       lowerThreshold?: number;
       upperThreshold?: number;
       verbosity: number;
-      settings?: { [key: string]: { [key: string]: unknown } };
     };
     MultiLineString: components["schemas"]["Geometry"] & {
       coordinates?: number[][][];
@@ -1159,10 +1151,6 @@ export interface components {
       fieldNotes?: string;
       founderId?: string;
       geolocations?: components["schemas"]["Geolocation"][];
-      /** @deprecated */
-      germinationTestTypes?: ("Lab" | "Nursery")[];
-      /** @deprecated */
-      germinationTests?: components["schemas"]["ViabilityTestPayload"][];
       /** Initial size of accession. The units of this value must match the measurement type in "processingMethod". */
       initialQuantity?: components["schemas"]["SeedQuantityPayload"];
       landowner?: string;
@@ -1303,10 +1291,7 @@ export interface components {
       testResults?: components["schemas"]["ViabilityTestResultPayload"][];
       totalPercentGerminated?: number;
       totalSeedsGerminated?: number;
-      /** @deprecated */
-      germinations?: components["schemas"]["ViabilityTestResultPayload"][];
     };
-    /** @deprecated */
     ViabilityTestResultPayload: {
       recordingDate: string;
       seedsGerminated: number;
@@ -1322,15 +1307,12 @@ export interface components {
         | "Broadcast"
         | "Share with Another Site"
         | "Other"
-        | "Germination Testing"
         | "Viability Testing";
       destination?: string;
       notes?: string;
       /** Quantity of seeds remaining. For weight-based accessions, this is user input and is required. For count-based accessions, it is calculated by the server and ignored on input. */
       remainingQuantity?: components["schemas"]["SeedQuantityPayload"];
       staffResponsible?: string;
-      /** @deprecated If this withdrawal is of purpose "Germination Testing", the ID of the test it is associated with. This is always set by the server and cannot be modified. */
-      germinationTestId?: number;
       /** If this withdrawal is of purpose "Germination Testing", the ID of the test it is associated with. This is always set by the server and cannot be modified. */
       viabilityTestId?: number;
       /** For weight-based accessions, the difference between the weight remaining before this withdrawal and the weight remaining after it. This is a server-calculated value and is ignored on input. */
