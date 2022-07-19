@@ -8,7 +8,7 @@ import NotificationsDropdown from '../NotificationsDropdown';
 import OrganizationsDropdown from '../OrganizationsDropdown';
 import UserMenu from '../UserMenu';
 import { ReactComponent as Logo } from '../common/Navbar/logo.svg';
-import useDeviceInfo from 'src/utils/device';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
