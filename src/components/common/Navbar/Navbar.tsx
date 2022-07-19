@@ -16,6 +16,7 @@ const useStyles = makeStyles(() => ({
     fill: '#708284',
     width: '27px',
     height: '27px',
+    margin: '15px 0 15px 20px',
   },
   closeButton: {
     background: 'none',
@@ -23,9 +24,7 @@ const useStyles = makeStyles(() => ({
     cursor: 'pointer',
   },
   navBarTop: {
-    height: '56px',
     display: 'flex',
-    paddingLeft: '20px',
   },
 }));
 

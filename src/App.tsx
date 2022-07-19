@@ -69,7 +69,6 @@ const useStyles = makeStyles(() => ({
       backdropFilter: 'blur(8px)',
       background: 'rgba(249, 250, 250, 0.8)',
       height: '100%',
-      display: 'flex',
       alignItems: 'center',
       position: 'fixed',
       zIndex: 1300,
@@ -87,9 +86,6 @@ const useStyles = makeStyles(() => ({
       color: '#007DF2',
       height: '193px',
     },
-  },
-  animatedNavBar: {
-    position: 'relative',
   },
 }));
 
@@ -312,11 +308,7 @@ export default function App() {
               {type !== 'desktop' ? (
                 <Slide direction='right' in={showNavBar} mountOnEnter unmountOnExit>
                   <div>
-                    <NavBar
-                      organization={selectedOrganization}
-                      setShowNavBar={setShowNavBar}
-                      className={classes.animatedNavBar}
-                    />
+                    <NavBar organization={selectedOrganization} setShowNavBar={setShowNavBar} />
                   </div>
                 </Slide>
               ) : (
