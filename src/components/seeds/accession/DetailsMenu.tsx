@@ -1,5 +1,5 @@
-import { Box, Divider, Link, Typography } from '@material-ui/core';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { Box, Divider, Link, Theme, Typography } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import React from 'react';
 import { Link as RouterLink, useHistory, useParams, useRouteMatch } from 'react-router-dom';
 import MainPaper from 'src/components/MainPaper';
@@ -8,21 +8,19 @@ import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import useStateLocation from 'src/utils/useStateLocation';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    bold: {
-      fontWeight: theme.typography.fontWeightBold,
-      color: theme.palette.common.black,
-    },
-    link: {
-      color: theme.palette.common.black,
-    },
-    disabled: {
-      color: theme.palette.neutral[400],
-      pointerEvents: 'none',
-    },
-  })
-);
+const useStyles = makeStyles((theme: Theme) => ({
+  bold: {
+    fontWeight: theme.typography.fontWeightBold,
+    color: theme.palette.common.black,
+  },
+  link: {
+    color: theme.palette.common.black,
+  },
+  disabled: {
+    color: theme.palette.neutral[400],
+    pointerEvents: 'none',
+  },
+}));
 
 interface Props {
   state: string;
@@ -87,6 +85,7 @@ export default function DetailsMenu({ state }: Props): JSX.Element | null {
             id={`menu-${getAccessionPathSuffix(route)}`}
             component={RouterLink}
             key={title}
+            underline='hover'
             to={{
               pathname: route.replace(':accessionId', accessionId),
               state: {

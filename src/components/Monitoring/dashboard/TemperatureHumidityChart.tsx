@@ -1,4 +1,4 @@
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@mui/styles';
 import React, { useEffect, useState } from 'react';
 import strings from 'src/strings';
 import Select from '../../common/Select/Select';
@@ -9,6 +9,7 @@ import moment from 'moment';
 import { ChartPalette, TIME_PERIODS, getFirstWord, getStartTime, HumidityValues, getUnit } from './Common';
 import { htmlLegendPlugin } from './htmlLegendPlugin';
 import 'chartjs-adapter-date-fns';
+import { Theme } from '@mui/material';
 
 declare global {
   interface Window {
@@ -16,34 +17,32 @@ declare global {
   }
 }
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    graphContainer: {
-      border: '1px solid #A9B7B8',
-      padding: '24px',
-    },
-    graphTitle: {
-      fontWeight: 600,
-      fontSize: '20px',
-      margin: '0 0 24px 0',
-    },
-    dropDownsContainer: {
-      display: 'flex',
-    },
-    chartContainer: {
-      marginTop: '40px',
-    },
-    legendContainer: {
-      marginBottom: '32px',
-      padding: '0 55px 0 41px',
-    },
-    chartResizableParent: {
-      position: 'relative',
-      width: 'calc(100vw - 300px)',
-      paddingRight: `${theme.spacing(4)}px`,
-    },
-  })
-);
+const useStyles = makeStyles((theme: Theme) => ({
+  graphContainer: {
+    border: '1px solid #A9B7B8',
+    padding: '24px',
+  },
+  graphTitle: {
+    fontWeight: 600,
+    fontSize: '20px',
+    margin: '0 0 24px 0',
+  },
+  dropDownsContainer: {
+    display: 'flex',
+  },
+  chartContainer: {
+    marginTop: '40px',
+  },
+  legendContainer: {
+    marginBottom: '32px',
+    padding: '0 55px 0 41px',
+  },
+  chartResizableParent: {
+    position: 'relative',
+    width: 'calc(100vw - 300px)',
+    paddingRight: `${theme.spacing(4)}px`,
+  },
+}));
 
 type TemperatureHumidityChartProps = {
   availableLocations?: Device[];

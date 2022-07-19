@@ -1,28 +1,26 @@
 import React, { useState } from 'react';
-import Container from '@material-ui/core/Container';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
 import AddNewOrganizationModal from 'src/components/AddNewOrganizationModal';
 import EmptyStateContent, { ListItemContent } from 'src/components/emptyStatePages/EmptyStateContent';
 import landingPageStrings from 'src/strings/noOrgLandingPage';
 import strings from 'src/strings';
 import dictionary from 'src/strings/dictionary';
+import { Container, Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    main: {
-      paddingTop: '64px',
-      minHeight: '100vh',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    mainContainer: {
-      maxWidth: '1500px',
-      margin: 'auto',
-      marginTop: `max(40px, calc(50% - 1500px/2))`,
-    },
-  })
-);
+const useStyles = makeStyles((theme: Theme) => ({
+  main: {
+    paddingTop: '64px',
+    minHeight: '100vh',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  mainContainer: {
+    maxWidth: '1500px',
+    margin: 'auto',
+    marginTop: `max(40px, calc(50% - 1500px/2))`,
+  },
+}));
 
 const EMPTY_STATE_CONTENT_STYLES = {
   titleFontSize: '28px',

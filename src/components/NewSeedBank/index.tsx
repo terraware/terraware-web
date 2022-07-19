@@ -1,4 +1,5 @@
-import { Container, createStyles, Grid, makeStyles } from '@material-ui/core';
+import { Container, Grid } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
@@ -12,34 +13,33 @@ import FormBottomBar from '../common/FormBottomBar';
 import { getAllSeedBanks } from 'src/utils/organization';
 import { Facility } from 'src/api/types/facilities';
 import { createFacility, updateFacility } from 'src/api/facility/facility';
+import { Theme } from '@mui/material';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    mainContainer: {
-      height: '-webkit-fill-available',
-      paddingTop: theme.spacing(4),
-      paddingBottom: theme.spacing(7),
-      marginBottom: theme.spacing(6),
-      background: '#ffffff',
-    },
-    backIcon: {
-      fill: '#007DF2',
-      marginRight: theme.spacing(1),
-    },
-    back: {
-      display: 'flex',
-      textDecoration: 'none',
-      color: '#0067C8',
-      fontSize: '20px',
-      alignItems: 'center',
-    },
-    label: {
-      color: '#5C6B6C',
-      lineHeight: '20px',
-      fontFamily: '"Inter", sans-serif',
-    },
-  })
-);
+const useStyles = makeStyles((theme: Theme) => ({
+  mainContainer: {
+    height: '-webkit-fill-available',
+    paddingTop: theme.spacing(4),
+    paddingBottom: theme.spacing(7),
+    marginBottom: theme.spacing(6),
+    background: '#ffffff',
+  },
+  backIcon: {
+    fill: '#007DF2',
+    marginRight: theme.spacing(1),
+  },
+  back: {
+    display: 'flex',
+    textDecoration: 'none',
+    color: '#0067C8',
+    fontSize: '20px',
+    alignItems: 'center',
+  },
+  label: {
+    color: '#5C6B6C',
+    lineHeight: '20px',
+    fontFamily: '"Inter", sans-serif',
+  },
+}));
 
 type SiteViewProps = {
   organization: ServerOrganization;

@@ -1,17 +1,15 @@
-import { Paper } from '@material-ui/core';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { Paper, Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import React from 'react';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    paper: {
-      padding: theme.spacing(2),
-      border: '1px solid #A9B7B8',
-      borderRadius: '8px',
-      boxShadow: 'none',
-    },
-  })
-);
+const useStyles = makeStyles((theme: Theme) => ({
+  paper: {
+    padding: theme.spacing(2),
+    border: '1px solid #A9B7B8',
+    borderRadius: '8px',
+    boxShadow: 'none',
+  },
+}));
 
 interface Props {
   children?: React.ReactNode;

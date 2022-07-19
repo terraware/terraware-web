@@ -1,5 +1,5 @@
-import { Checkbox as MUICheckbox, FormControlLabel } from '@material-ui/core';
-import React from 'react';
+import { Checkbox as MUICheckbox, FormControlLabel } from '@mui/material';
+import React, { SyntheticEvent } from 'react';
 
 export interface Props {
   id: string;
@@ -12,7 +12,7 @@ export interface Props {
 }
 
 export default function Checkbox(props: Props): JSX.Element {
-  const onChange = (event: React.ChangeEvent<Record<string, never>>, checked: boolean) => {
+  const onChange = (event: SyntheticEvent<Element, Event>, checked: boolean) => {
     props.onChange(props.id, checked);
   };
 

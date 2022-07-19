@@ -1,10 +1,10 @@
 import React from 'react';
-import Container from '@material-ui/core/Container';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { Container, Theme } from '@mui/material';
 import Button from 'src/components/common/button/Button';
 import Icon from 'src/components/common/icon/Icon';
 import { IconName } from 'src/components/common/icon/icons';
-import { Link } from '@material-ui/core';
+import { Link } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 
 type EmptyStateStyleProps = {
   titleFontSize: string;
@@ -14,79 +14,77 @@ type EmptyStateStyleProps = {
   listContainerVerticalMargin: string;
 };
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    container: {
-      fontWeight: 400,
-      maxWidth: '1500px',
-      textAlign: 'center',
-    },
-    title: (props: EmptyStateStyleProps) => ({
-      fontSize: props.titleFontSize,
-      fontWeight: 600,
-      lineHeight: props.titleLineHeight,
-      margin: theme.spacing(3, 0, 2, 0),
-    }),
-    subtitle: (props: EmptyStateStyleProps) => ({
-      fontSize: props.subtitleFontSize,
-      lineHeight: props.subtitleLineHeight,
-      margin: '0 auto',
-      marginBottom: theme.spacing(3),
-      maxWidth: '700px',
-    }),
-    listContainer: (props: EmptyStateStyleProps) => ({
-      display: 'flex',
-      flexWrap: 'wrap',
-      fontSize: '14px',
-      justifyContent: 'center',
-      lineHeight: '20px',
-      margin: `${props.listContainerVerticalMargin} auto`,
-    }),
-    listItem: {
-      flex: '1 1 auto',
-      margin: '0 25px',
-      maxWidth: '200px',
-      textAlign: 'center',
-    },
-    listItemIcon: {
-      width: '200px',
-      height: '128px',
-      marginBottom: theme.spacing(2),
-    },
-    listItemTitle: {
-      fontWeight: 'bold',
-      lineHeight: '20px',
-      margin: '0 auto',
-    },
-    listItemDescription: {
-      margin: '0 auto',
-    },
-    listItemDescriptionWithButton: {
-      margin: '0 auto',
-      fontSize: '12px',
-    },
-    button: {
-      marginBottom: theme.spacing(3),
-    },
-    footNote: {
-      fontSize: '12px',
-      lineHeight: '16px',
-      margin: '0 auto',
-      maxWidth: '550px',
-      marginBottom: '24px',
-    },
-    noSpacing: {
-      margin: 0,
-    },
-    subButton: {
-      marginTop: theme.spacing(2),
-    },
-    itemLink: {
-      fontSize: '12px',
-      cursor: 'pointer',
-    },
-  })
-);
+const useStyles = makeStyles((theme: Theme) => ({
+  container: {
+    fontWeight: 400,
+    maxWidth: '1500px',
+    textAlign: 'center',
+  },
+  title: (props: EmptyStateStyleProps) => ({
+    fontSize: props.titleFontSize,
+    fontWeight: 600,
+    lineHeight: props.titleLineHeight,
+    margin: theme.spacing(3, 0, 2, 0),
+  }),
+  subtitle: (props: EmptyStateStyleProps) => ({
+    fontSize: props.subtitleFontSize,
+    lineHeight: props.subtitleLineHeight,
+    margin: '0 auto',
+    marginBottom: theme.spacing(3),
+    maxWidth: '700px',
+  }),
+  listContainer: (props: EmptyStateStyleProps) => ({
+    display: 'flex',
+    flexWrap: 'wrap',
+    fontSize: '14px',
+    justifyContent: 'center',
+    lineHeight: '20px',
+    margin: `${props.listContainerVerticalMargin} auto`,
+  }),
+  listItem: {
+    flex: '1 1 auto',
+    margin: '0 25px',
+    maxWidth: '200px',
+    textAlign: 'center',
+  },
+  listItemIcon: {
+    width: '200px',
+    height: '128px',
+    marginBottom: theme.spacing(2),
+  },
+  listItemTitle: {
+    fontWeight: 'bold',
+    lineHeight: '20px',
+    margin: '0 auto',
+  },
+  listItemDescription: {
+    margin: '0 auto',
+  },
+  listItemDescriptionWithButton: {
+    margin: '0 auto',
+    fontSize: '12px',
+  },
+  button: {
+    marginBottom: theme.spacing(3),
+  },
+  footNote: {
+    fontSize: '12px',
+    lineHeight: '16px',
+    margin: '0 auto',
+    maxWidth: '550px',
+    marginBottom: '24px',
+  },
+  noSpacing: {
+    margin: 0,
+  },
+  subButton: {
+    marginTop: theme.spacing(2),
+  },
+  itemLink: {
+    fontSize: '12px',
+    cursor: 'pointer',
+  },
+}));
 
 export type ListItemContent = {
   icon: IconName;

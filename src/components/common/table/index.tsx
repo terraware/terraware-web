@@ -1,17 +1,15 @@
-import { Checkbox, TableCell, TablePagination } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableRow from '@material-ui/core/TableRow';
+import { Checkbox, Table, TableBody, TableCell, TableContainer, TablePagination, TableRow, Theme } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import EnhancedTableToolbar from './EnhancedTableToolbar';
 import { descendingComparator, getComparator, Order, stableSort } from './sort';
 import TableCellRenderer from './TableCellRenderer';
 import TableHeader from './TableHeader';
 import { DetailsRendererProps, RendererProps, TableColumnType } from './types';
+import { makeStyles } from '@mui/styles';
+import { DndContext, KeyboardSensor, MouseSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core';
+import { sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 
-const tableStyles = makeStyles((theme) => ({
+const tableStyles = makeStyles((theme: Theme) => ({
   hover: {
     '&:hover': {
       cursor: 'pointer',
@@ -30,6 +28,12 @@ const tableStyles = makeStyles((theme) => ({
     },
   },
 }));
+
+export interface HeadCell {
+  disablePadding: boolean;
+  id: string;
+  label: string | JSX.Element;
+}
 
 export interface Props<T> {
   id?: string;
@@ -164,89 +168,123 @@ export default function EnhancedTable<T>({
     setItemsToSkip(0);
   };
 
+  function columnsToHeadCells(columnsR: TableColumnType[]): HeadCell[] {
+    return columnsR.map((c) => ({
+      id: c.key,
+      disablePadding: false,
+      label: typeof c.name === 'string' ? c.name.toUpperCase() : c.name,
+    }));
+  }
+
+  const [headCells, setHeadCells] = React.useState<HeadCell[]>(columnsToHeadCells(columns));
+  React.useEffect(() => {
+    setHeadCells(columnsToHeadCells(columns));
+  }, [columns]);
+
+  const sensors = useSensors(
+    useSensor(MouseSensor),
+    useSensor(TouchSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  function handleDragEnd(event: { active: any; over: any }) {
+    const { active, over } = event;
+    console.log(event);
+    if (active && over && active.id !== over.id && onReorderEnd) {
+      const oldIndex = headCells.findIndex((item) => item.id === active.id);
+      const newIndex = headCells.findIndex((item) => item.id === over.id);
+
+      onReorderEnd({ oldIndex, newIndex });
+    }
+  }
+
   return (
     <>
       {showTopBar && (
         <EnhancedTableToolbar numSelected={selectedRows ? selectedRows.length : 0} topBarButtons={topBarButtons} />
       )}
       <TableContainer id={id}>
-        <Table
-          stickyHeader
-          aria-labelledby='tableTitle'
-          size='medium'
-          aria-label='enhanced table'
-          className={classes.table}
-        >
-          <TableHeader
-            order={order}
-            orderBy={orderBy}
-            onRequestSort={handleRequestSort}
-            columns={columns}
-            onReorderEnd={onReorderEnd}
-            numSelected={showCheckbox ? selectedRows?.length : undefined}
-            onSelectAllClick={showCheckbox ? handleSelectAllClick : undefined}
-            rowCount={showCheckbox ? rows?.length : undefined}
-          />
-          <TableBody>
-            {rows.length < 1 && emptyTableMessage && (
-              <TableRow>
-                <TableCell colSpan={columns.length + 1} align='center'>
-                  <p>{emptyTableMessage}</p>
-                </TableCell>
-              </TableRow>
-            )}
-            {rows &&
-              stableSort(
-                rows.slice(itemsToSkip, itemsToSkip + maxItemsPerPage),
-                getComparator(order, orderBy, sortComparator)
-              ).map((row, index) => {
-                const onClick = onSelect && !controlledOnSelect ? () => onSelect(row as T) : undefined;
-                const isItemSelected = isSelected(row as T);
+        <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
+          <Table
+            stickyHeader
+            aria-labelledby='tableTitle'
+            size='medium'
+            aria-label='enhanced table'
+            className={classes.table}
+          >
+            <TableHeader
+              order={order}
+              orderBy={orderBy}
+              onRequestSort={handleRequestSort}
+              columns={columns}
+              onReorderEnd={onReorderEnd}
+              numSelected={showCheckbox ? selectedRows?.length : undefined}
+              onSelectAllClick={showCheckbox ? handleSelectAllClick : undefined}
+              rowCount={showCheckbox ? rows?.length : undefined}
+            />
+            <TableBody>
+              {rows.length < 1 && emptyTableMessage && (
+                <TableRow>
+                  <TableCell colSpan={columns.length + 1} align='center'>
+                    <p>{emptyTableMessage}</p>
+                  </TableCell>
+                </TableRow>
+              )}
+              {rows &&
+                stableSort(
+                  rows.slice(itemsToSkip, itemsToSkip + maxItemsPerPage),
+                  getComparator(order, orderBy, sortComparator)
+                ).map((row, index) => {
+                  const onClick = onSelect && !controlledOnSelect ? () => onSelect(row as T) : undefined;
+                  const isItemSelected = isSelected(row as T);
 
-                return (
-                  <React.Fragment key={index}>
-                    <TableRow
-                      id={`row${index + 1}`}
-                      classes={{ hover: classes.hover }}
-                      hover={Boolean(onSelect) && (isClickable ? isClickable(row as T) : true) && !hasEditColumn}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        if (onClick && !hasEditColumn && (isClickable ? isClickable(row as T) : true)) {
-                          onClick();
-                        }
-                        if (!onClick && !hasEditColumn && (isClickable ? isClickable(row as T) : true)) {
-                          handleClick(e, row as T);
-                        }
-                      }}
-                      className={`${isInactive && isInactive(row as T) ? classes.inactiveRow : undefined} ${
-                        classes.tableRow
-                      }`}
-                      selected={isItemSelected}
-                      aria-checked={isItemSelected}
-                    >
-                      {showCheckbox && (
-                        <TableCell padding='checkbox'>
-                          <Checkbox color='primary' checked={isItemSelected} />
-                        </TableCell>
-                      )}
-                      {columns.map((c) => (
-                        <Renderer
-                          index={index + 1}
-                          key={c.key}
-                          row={row as T}
-                          column={c}
-                          value={row[c.key]}
-                          onRowClick={onSelect && controlledOnSelect ? () => onSelect(row as T) : onClick}
-                          reloadData={reloadData}
-                        />
-                      ))}
-                    </TableRow>
-                    {DetailsRenderer && <DetailsRenderer index={index} row={row} />}
-                  </React.Fragment>
-                );
-              })}
-          </TableBody>
-        </Table>
+                  return (
+                    <React.Fragment key={index}>
+                      <TableRow
+                        id={`row${index + 1}`}
+                        classes={{ hover: classes.hover }}
+                        hover={Boolean(onSelect) && (isClickable ? isClickable(row as T) : true) && !hasEditColumn}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (onClick && !hasEditColumn && (isClickable ? isClickable(row as T) : true)) {
+                            onClick();
+                          }
+                          if (!onClick && !hasEditColumn && (isClickable ? isClickable(row as T) : true)) {
+                            handleClick(e, row as T);
+                          }
+                        }}
+                        className={`${isInactive && isInactive(row as T) ? classes.inactiveRow : undefined} ${
+                          classes.tableRow
+                        }`}
+                        selected={isItemSelected}
+                        aria-checked={isItemSelected}
+                      >
+                        {showCheckbox && (
+                          <TableCell padding='checkbox'>
+                            <Checkbox color='primary' checked={isItemSelected} />
+                          </TableCell>
+                        )}
+                        {columns.map((c) => (
+                          <Renderer
+                            index={index + 1}
+                            key={c.key}
+                            row={row as T}
+                            column={c}
+                            value={row[c.key]}
+                            onRowClick={onSelect && controlledOnSelect ? () => onSelect(row as T) : onClick}
+                            reloadData={reloadData}
+                          />
+                        ))}
+                      </TableRow>
+                      {DetailsRenderer && <DetailsRenderer index={index} row={row} />}
+                    </React.Fragment>
+                  );
+                })}
+            </TableBody>
+          </Table>
+        </DndContext>
       </TableContainer>
       {showPagination && (
         /* @ts-ignore */
@@ -254,10 +292,10 @@ export default function EnhancedTable<T>({
           component='div'
           count={rows.length}
           page={itemsToSkip / maxItemsPerPage}
-          onChangePage={handleChangePage}
+          onPageChange={handleChangePage}
           rowsPerPage={maxItemsPerPage}
           rowsPerPageOptions={[10, 25, 50, 100]}
-          onChangeRowsPerPage={handleChangeRowsPerPage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
         />
       )}
     </>

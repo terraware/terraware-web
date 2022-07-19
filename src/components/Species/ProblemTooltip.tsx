@@ -1,42 +1,41 @@
-import { createStyles, makeStyles, Theme } from '@material-ui/core';
+import { Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import { acceptProblemSuggestion, ignoreProblemSuggestion } from 'src/api/species/species';
 import strings from 'src/strings';
 import { SpeciesProblemElement } from 'src/types/Species';
 import Button from '../common/button/Button';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    tooltipContainer: {
-      padding: '24px',
+const useStyles = makeStyles((theme: Theme) => ({
+  tooltipContainer: {
+    padding: '24px',
 
-      '& p': {
-        margin: 0,
-      },
+    '& p': {
+      margin: 0,
     },
-    spacing: {
-      marginRight: theme.spacing(1),
-    },
-    verticalSpacing: {
-      marginTop: theme.spacing(1),
-    },
-    buttonsContainer: {
-      background: '#F2F4F5',
-      display: 'flex',
-      borderTop: '1px solid #A9B7B8',
-      padding: '16px',
-      borderRadius: '0 0 6px 6px',
-    },
-    value: {
-      fontSize: '14px',
-      color: '#000000',
-      fontWeight: 400,
-      paddingTop: '4px',
-    },
-    noBold: {
-      fontWeight: 400,
-    },
-  })
-);
+  },
+  spacing: {
+    marginRight: theme.spacing(1),
+  },
+  verticalSpacing: {
+    marginTop: theme.spacing(1),
+  },
+  buttonsContainer: {
+    background: '#F2F4F5',
+    display: 'flex',
+    borderTop: '1px solid #A9B7B8',
+    padding: '16px',
+    borderRadius: '0 0 6px 6px',
+  },
+  value: {
+    fontSize: '14px',
+    color: '#000000',
+    fontWeight: 400,
+    paddingTop: '4px',
+  },
+  noBold: {
+    fontWeight: 400,
+  },
+}));
 
 type ProblemTooltipProps = {
   problems: SpeciesProblemElement[];

@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import './styles.scss';
 import Icon from '../icon/Icon';
-import { IconButton } from '@material-ui/core';
+import { IconButton } from '@mui/material';
 
 export interface Props {
   title: string;

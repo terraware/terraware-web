@@ -1,22 +1,20 @@
-import { AppBar } from '@material-ui/core';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { AppBar } from '@mui/material';
 import React from 'react';
 import Button from './button/Button';
+import { makeStyles } from '@mui/styles';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    bottomBar: {
-      filter: 'drop-shadow(0px 0px 8px rgba(0, 0, 0, 0.2))',
-      background: '#ffffff',
-      boxShadow: 'none',
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      display: 'flex',
-      padding: '16px 24px',
-      width: 'calc(100% - 200px)',
-    },
-  })
-);
+const useStyles = makeStyles(() => ({
+  bottomBar: {
+    filter: 'drop-shadow(0px 0px 8px rgba(0, 0, 0, 0.2))',
+    background: '#ffffff',
+    boxShadow: 'none',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    display: 'flex',
+    padding: '16px 24px',
+    width: 'calc(100% - 200px)',
+  },
+}));
 
 export interface Props {
   onCancel: () => void;

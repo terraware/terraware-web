@@ -1,36 +1,34 @@
 import React from 'react';
-import { Grid } from '@material-ui/core';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import { Grid, Theme } from '@mui/material';
 import { IconName } from 'src/components/common/icon/icons';
 import PageCard from 'src/components/common/PageCard';
 import dictionary from 'src/strings/dictionary';
 import strings from 'src/strings/contactUsPage';
 import { TERRAWARE_SUPPORT_LINK } from 'src/constants';
 import TfMain from './common/TfMain';
+import { makeStyles } from '@mui/styles';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    title: {
-      fontSize: '24px',
-      fontWeight: 600,
-      lineHeight: '32px',
-      margin: '0 0 12px 0',
+const useStyles = makeStyles((theme: Theme) => ({
+  title: {
+    fontSize: '24px',
+    fontWeight: 600,
+    lineHeight: '32px',
+    margin: '0 0 12px 0',
+  },
+  mainGrid: {
+    display: 'flex',
+    margin: 0,
+    width: '100%',
+
+    '& .MuiGrid-item:first-child': {
+      paddingLeft: 0,
     },
-    mainGrid: {
-      display: 'flex',
-      margin: 0,
-      width: '100%',
 
-      '& .MuiGrid-item:first-child': {
-        paddingLeft: 0,
-      },
-
-      '& .MuiGrid-item:last-child': {
-        paddingRight: 0,
-      },
+    '& .MuiGrid-item:last-child': {
+      paddingRight: 0,
     },
-  })
-);
+  },
+}));
 
 type ListItemContent = {
   icon: IconName;

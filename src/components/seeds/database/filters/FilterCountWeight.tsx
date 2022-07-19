@@ -1,5 +1,7 @@
-import { createStyles, Grid, makeStyles } from '@material-ui/core';
-import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
+import { ArrowForward } from '@mui/icons-material';
+import { Grid } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import { Theme } from '@mui/material';
 import React from 'react';
 import { AndNodePayload, FieldNodePayload, OrNodePayload, SearchNodePayload } from 'src/api/seeds/search';
 import Checkbox from 'src/components/common/Checkbox';
@@ -9,19 +11,17 @@ import TextField from 'src/components/common/TextField';
 import strings from 'src/strings';
 import { WEIGHT_UNITS } from '../../nursery/NewTest';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    box: {
-      width: '460px',
-      padding: theme.spacing(1.75),
-    },
-    flexContainer: {
-      alignItems: 'center',
-      display: 'flex',
-      justifyContent: 'center',
-    },
-  })
-);
+const useStyles = makeStyles((theme: Theme) => ({
+  box: {
+    width: '460px',
+    padding: theme.spacing(1.75),
+  },
+  flexContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    justifyContent: 'center',
+  },
+}));
 
 export type WEIGHT_QUANTITY_FIELDS = 'remainingQuantity' | 'totalQuantity' | 'withdrawalQuantity';
 export const COUNT_WEIGHT_VALID_FIELDS: Record<WEIGHT_QUANTITY_FIELDS, string[]> = {
@@ -173,7 +173,7 @@ export default function FilterCountWeight(props: Props): JSX.Element {
           <TextField id='countMinValue' value={countMinValue} onChange={onChange} label='Min' />
         </Grid>
         <Grid item xs={1} className={classes.flexContainer}>
-          <ArrowForwardIcon />
+          <ArrowForward />
         </Grid>
         <Grid item xs={5}>
           <TextField id='countMaxValue' value={countMaxValue} onChange={onChange} label='Max' />
@@ -191,7 +191,7 @@ export default function FilterCountWeight(props: Props): JSX.Element {
           <TextField id='weightMinValue' value={weightMinValue} onChange={onChange} label='Min' />
         </Grid>
         <Grid item xs={1} className={classes.flexContainer}>
-          <ArrowForwardIcon />
+          <ArrowForward />
         </Grid>
         <Grid item xs={5}>
           <TextField id='weightMaxValue' value={weightMaxValue} onChange={onChange} label='Max' />

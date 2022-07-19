@@ -1,17 +1,15 @@
-import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React from 'react';
+import { makeStyles } from '@mui/styles';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    main: {
-      background: '#ffffff',
-      minHeight: 'calc(100vh - 64px)',
-      display: 'flex',
-      flexDirection: 'column',
-      padding: '24px',
-    },
-  })
-);
+const useStyles = makeStyles(() => ({
+  main: {
+    background: '#ffffff',
+    minHeight: 'calc(100vh - 64px)',
+    display: 'flex',
+    flexDirection: 'column',
+    padding: '24px',
+  },
+}));
 
 interface Props {
   children?: React.ReactNode;

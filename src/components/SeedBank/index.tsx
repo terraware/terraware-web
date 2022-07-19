@@ -1,4 +1,4 @@
-import { Container, createStyles, Grid, makeStyles } from '@material-ui/core';
+import { Container, Grid, Theme } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
@@ -10,34 +10,33 @@ import { getAllSeedBanks } from 'src/utils/organization';
 import TextField from '../common/Textfield/Textfield';
 import Button from '../common/button/Button';
 import { Facility } from 'src/api/types/facilities';
+import { makeStyles } from '@mui/styles';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    mainContainer: {
-      height: '-webkit-fill-available',
-      paddingTop: theme.spacing(4),
-      paddingBottom: theme.spacing(4),
-      background: '#ffffff',
-    },
-    backIcon: {
-      fill: '#007DF2',
-      marginRight: theme.spacing(1),
-    },
-    back: {
-      display: 'flex',
-      textDecoration: 'none',
-      color: '#0067C8',
-      fontSize: '20px',
-      alignItems: 'center',
-    },
-    titleWithButton: {
-      display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-    },
-  })
-);
+const useStyles = makeStyles((theme: Theme) => ({
+  mainContainer: {
+    height: '-webkit-fill-available',
+    paddingTop: theme.spacing(4),
+    paddingBottom: theme.spacing(4),
+    background: '#ffffff',
+  },
+  backIcon: {
+    fill: '#007DF2',
+    marginRight: theme.spacing(1),
+  },
+  back: {
+    display: 'flex',
+    textDecoration: 'none',
+    color: '#0067C8',
+    fontSize: '20px',
+    alignItems: 'center',
+  },
+  titleWithButton: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+}));
 
 type SeedBankDetailsProps = {
   organization?: ServerOrganization;

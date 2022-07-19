@@ -1,9 +1,5 @@
-import { Box, Chip, Grid, Typography } from '@material-ui/core';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import { Theme, Dialog, DialogTitle, Typography, DialogContent, Grid, DialogActions, Box, Chip } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import React from 'react';
 import strings from 'src/strings';
 import CancelButton from '../../common/CancelButton';
@@ -13,23 +9,21 @@ import Divisor from '../../common/Divisor';
 import RadioButton from '../../common/RadioButton';
 import { COLUMNS_INDEXED, Preset, searchPresets } from './columns';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    submit: {
-      marginLeft: theme.spacing(2),
-      color: theme.palette.common.white,
-    },
-    actions: {
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      paddingLeft: theme.spacing(2),
-    },
-    bold: {
-      fontWeight: theme.typography.fontWeightBold,
-    },
-  })
-);
+const useStyles = makeStyles((theme: Theme) => ({
+  submit: {
+    marginLeft: theme.spacing(2),
+    color: theme.palette.common.white,
+  },
+  actions: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingLeft: theme.spacing(2),
+  },
+  bold: {
+    fontWeight: theme.typography.fontWeightBold,
+  },
+}));
 
 export interface Props {
   open: boolean;

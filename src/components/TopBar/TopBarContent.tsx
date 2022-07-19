@@ -1,5 +1,5 @@
-import { createStyles, makeStyles } from '@material-ui/core/styles';
-import { IconButton } from '@material-ui/core';
+import { IconButton, Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import React from 'react';
 import { Notifications } from 'src/types/Notifications';
 import { ServerOrganization } from 'src/types/Organization';
@@ -11,20 +11,18 @@ import UserMenu from '../UserMenu';
 import { ReactComponent as Logo } from '../common/Navbar/logo.svg';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    separator: {
-      width: '1px',
-      height: '32px',
-      backgroundColor: theme.palette.gray[200],
-      marginRight: '16px',
-      marginLeft: '16px',
-    },
-    flex: {
-      display: 'flex',
-    },
-  })
-);
+const useStyles = makeStyles((theme: Theme) => ({
+  separator: {
+    width: '1px',
+    height: '32px',
+    backgroundColor: theme.palette.gray[200],
+    marginRight: '16px',
+    marginLeft: '16px',
+  },
+  flex: {
+    display: 'flex',
+  },
+}));
 
 type TopBarProps = {
   notifications?: Notifications;

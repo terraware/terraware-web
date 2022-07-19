@@ -1,87 +1,85 @@
 import React, { useEffect, useState } from 'react';
-import { Divider, List, ListItem, ListSubheader, Popover, Typography } from '@material-ui/core';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
-import IconButton from '@material-ui/core/IconButton';
+import { Divider, IconButton, List, ListItem, ListSubheader, Popover, Theme, Typography } from '@mui/material';
 import Icon from 'src/components/common/icon/Icon';
+import { makeStyles } from '@mui/styles';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    subheader: {
-      paddingLeft: 0,
-      paddingRight: 0,
-      borderBottom: '1px solid #A9B7B8',
-      borderRadius: '7px 7px 0 0',
-      backgroundColor: '#F2F4F5',
-      display: 'flex',
+const useStyles = makeStyles((theme: Theme) => ({
+  subheader: {
+    paddingLeft: 0,
+    paddingRight: 0,
+    borderBottom: '1px solid #A9B7B8',
+    borderRadius: '7px 7px 0 0',
+    backgroundColor: '#F2F4F5',
+    display: 'flex',
+  },
+  title: {
+    fontSize: '20px',
+    fontWeight: 'bold',
+    color: '#3A4445',
+  },
+  mainTitle: {
+    display: 'flex',
+    flexGrow: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    lineHeight: '28px',
+    padding: theme.spacing(2, 3),
+  },
+  popover: {
+    padding: 0,
+    borderTop: '1px solid #A9B7B8',
+    borderRadius: '7px 7px 0 0',
+    height: '64px',
+  },
+  paper: {
+    overflowX: 'visible',
+    overflowY: 'visible',
+    borderRadius: '7px',
+    borderLeft: '1px solid #A9B7B8',
+    borderRight: '1px solid #A9B7B8',
+    borderBottom: '1px solid #A9B7B8',
+    '&.divot-popover-small': {
+      // TODO set small width
+      width: '478px',
     },
-    title: {
-      fontSize: '20px',
-      fontWeight: 'bold',
-      color: '#3A4445',
+    '&.divot-popover-medium': {
+      // TODO set medium width
+      width: '478px',
     },
-    mainTitle: {
-      display: 'flex',
-      flexGrow: 1,
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      lineHeight: '28px',
-      padding: `${theme.spacing(2)}px ${theme.spacing(3)}px`,
+    '&.divot-popover-large': {
+      width: '478px',
     },
-    popover: {
-      padding: 0,
-      borderTop: '1px solid #A9B7B8',
-      borderRadius: '7px 7px 0 0',
-      height: '64px',
-    },
-    paper: {
-      overflowX: 'visible',
-      overflowY: 'visible',
-      borderRadius: '7px',
-      borderLeft: '1px solid #A9B7B8',
-      borderRight: '1px solid #A9B7B8',
-      borderBottom: '1px solid #A9B7B8',
-      '&.divot-popover-small': {
-        // TODO set small width
-        width: '478px',
-      },
-      '&.divot-popover-medium': {
-        // TODO set medium width
-        width: '478px',
-      },
-      '&.divot-popover-large': {
-        width: '478px',
-      },
-      maxHeight: 'calc(100vh - 100px)',
-      display: 'flex',
-      flexDirection: 'column',
-    },
-    divotWrapper: {
-      display: 'flex',
-      height: 0,
-    },
-    divot: {
-      width: '16px',
-      height: '16px',
-      border: '2px solid transparent',
-      borderLeft: '2px solid #A9B7B8',
-      borderTop: '2px solid #A9B7B8',
-      top: '-8px',
-      position: 'absolute',
-      transform: 'rotate(45deg)',
-      zIndex: 1400,
-      backgroundColor: '#F2F4F5',
-    },
-    iconContainer: {
-      borderRadius: 0,
-      fontSize: '16px',
-    },
-    icon: {
-      fill: '#3A4445',
-      marginLeft: '8px',
-    },
-  })
-);
+    maxHeight: 'calc(100vh - 100px)',
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  divotWrapper: {
+    display: 'flex',
+    height: 0,
+  },
+  divot: {
+    width: '16px',
+    height: '16px',
+    border: '2px solid transparent',
+    borderLeft: '2px solid #A9B7B8',
+    borderTop: '2px solid #A9B7B8',
+    top: '-8px',
+    position: 'absolute',
+    transform: 'rotate(45deg)',
+    zIndex: 1400,
+    backgroundColor: '#F2F4F5',
+  },
+  iconContainer: {
+    borderRadius: 0,
+    fontSize: '16px',
+    padding: 0,
+  },
+  icon: {
+    fill: '#3A4445',
+    marginLeft: '8px',
+  },
+}));
 
 type MenuItem = {
   text: string;
@@ -164,7 +162,7 @@ export default function DivotPopover({
   useEffect(() => {
     setTimeout(() => {
       if (divotRef && anchorEl) {
-        const left = anchorEl.getBoundingClientRect().x - divotRef.getBoundingClientRect().x + 16;
+        const left = anchorEl.getBoundingClientRect().x - divotRef.getBoundingClientRect().x + 12;
         if (!divotStyle.left || divotStyle.left !== `${left}px`) {
           setDivotStyle({ left: `${left}px`, visibility: 'hidden' });
         } else if (divotStyle.visibility !== 'visible') {

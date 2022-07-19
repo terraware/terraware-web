@@ -1,18 +1,17 @@
-import { IconButton } from '@material-ui/core';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import CloseIcon from '@material-ui/icons/Close';
+import { IconButton } from '@mui/material';
+import { Theme } from '@mui/material';
+import { Close } from '@mui/icons-material';
 import React from 'react';
+import { makeStyles } from '@mui/styles';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    closeButton: {
-      position: 'absolute',
-      right: theme.spacing(1),
-      top: theme.spacing(1),
-      color: theme.palette.neutral[600],
-    },
-  })
-);
+const useStyles = makeStyles((theme: Theme) => ({
+  closeButton: {
+    position: 'absolute',
+    right: theme.spacing(1),
+    top: theme.spacing(1),
+    color: theme.palette.neutral[600],
+  },
+}));
 
 export interface Props {
   onClick: () => void;
@@ -23,7 +22,7 @@ export default function DialogCloseButton({ onClick }: Props): JSX.Element {
 
   return (
     <IconButton aria-label='close' className={classes.closeButton} onClick={onClick}>
-      <CloseIcon />
+      <Close />
     </IconButton>
   );
 }

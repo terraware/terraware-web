@@ -393,6 +393,8 @@ describe('Database', () => {
       cy.get('#seedCount').should('be.visible');
       cy.get('#seedCount').click();
 
+      cy.get('#countMinValue').should('be.visible');
+      cy.get('#countMaxValue').should('be.visible');
       cy.get('#countMinValue').clear().type('0');
       cy.get('#countMaxValue').clear().type('10');
       cy.get('#countMinValue').type('{esc}');

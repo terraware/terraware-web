@@ -1,7 +1,6 @@
-import MomentUtils from '@date-io/moment';
-import { CircularProgress, Container, Grid, Paper } from '@material-ui/core';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import { CircularProgress, Container, Grid, Paper } from '@mui/material';
+import { Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import useQuery from '../../../utils/useQuery';
@@ -42,66 +41,65 @@ import TfMain from 'src/components/common/TfMain';
 import { ACCESSION_STATES } from '../../../types/Accession';
 import SelectSeedBankModal from '../../SeedBank/SelectSeedBankModal';
 import { isAdmin } from 'src/utils/organization';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    mainContainer: {
-      padding: '32px 0',
+const useStyles = makeStyles((theme: Theme) => ({
+  mainContainer: {
+    padding: '32px 0',
+  },
+  downloadReport: {
+    background: theme.palette.common.black,
+    color: theme.palette.common.white,
+    marginLeft: theme.spacing(2),
+    '&:hover, &:focus': {
+      backgroundColor: `${theme.palette.common.black}!important`,
     },
-    downloadReport: {
-      background: theme.palette.common.black,
-      color: theme.palette.common.white,
-      marginLeft: theme.spacing(2),
-      '&:hover, &:focus': {
-        backgroundColor: `${theme.palette.common.black}!important`,
-      },
+  },
+  addAccession: {
+    marginLeft: theme.spacing(2),
+    color: theme.palette.common.white,
+  },
+  addAccessionIcon: {
+    color: theme.palette.common.white,
+  },
+  checkinMessage: {
+    marginBottom: theme.spacing(6),
+  },
+  checkInContent: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: '24px',
+  },
+  checkInButton: {
+    marginTop: theme.spacing(2),
+    marginRight: theme.spacing(3),
+  },
+  message: {
+    margin: '0 auto',
+    marginTop: '10%',
+    maxWidth: '800px',
+    width: '800px',
+  },
+  checkInText: {
+    marginBottom: 0,
+  },
+  buttonSpc: {
+    marginRight: '8px',
+    '&:last-child': {
+      marginRight: '0',
     },
-    addAccession: {
-      marginLeft: theme.spacing(2),
-      color: theme.palette.common.white,
-    },
-    addAccessionIcon: {
-      color: theme.palette.common.white,
-    },
-    checkinMessage: {
-      marginBottom: theme.spacing(6),
-    },
-    checkInContent: {
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      padding: '24px',
-    },
-    checkInButton: {
-      marginTop: theme.spacing(2),
-      marginRight: theme.spacing(3),
-    },
-    message: {
-      margin: '0 auto',
-      marginTop: '10%',
-      maxWidth: '800px',
-      width: '800px',
-    },
-    checkInText: {
-      marginBottom: 0,
-    },
-    buttonSpc: {
-      marginRight: '8px',
-
-      '&:last-child': {
-        marginRight: '0',
-      },
-    },
-    requestMobileMessage: {
-      marginBottom: '32px',
-    },
-    spinnerContainer: {
-      position: 'fixed',
-      top: '50%',
-      left: 'calc(50% + 100px)',
-    },
-  })
-);
+  },
+  requestMobileMessage: {
+    marginBottom: '32px',
+  },
+  spinnerContainer: {
+    position: 'fixed',
+    top: '50%',
+    left: 'calc(50% + 100px)',
+  },
+}));
 
 type DatabaseProps = {
   organization?: ServerOrganization;
@@ -352,7 +350,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
   };
 
   return (
-    <MuiPickersUtilsProvider utils={MomentUtils}>
+    <LocalizationProvider dateAdapter={AdapterDateFns}>
       {organization && (
         <SelectSeedBankModal organization={organization} open={selectSeedBankModalOpen} onClose={onSeedBankSelected} />
       )}
@@ -481,6 +479,6 @@ export default function Database(props: DatabaseProps): JSX.Element {
           )}
         </Container>
       </TfMain>
-    </MuiPickersUtilsProvider>
+    </LocalizationProvider>
   );
 }

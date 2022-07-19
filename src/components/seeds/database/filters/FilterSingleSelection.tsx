@@ -1,22 +1,20 @@
-import { List, ListItem, ListItemText } from '@material-ui/core';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { List, ListItem, ListItemText, Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import React from 'react';
 import { FieldNodePayload } from 'src/api/seeds/search';
 import strings from 'src/strings';
 import { Option } from '../columns';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    box: {
-      width: '264px',
-      padding: theme.spacing(1.75),
-    },
-    item: {
-      display: 'flex',
-      alignItems: 'center',
-    },
-  })
-);
+const useStyles = makeStyles((theme: Theme) => ({
+  box: {
+    width: '264px',
+    padding: theme.spacing(1.75),
+  },
+  item: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+}));
 
 interface Props {
   field: string;

@@ -1,4 +1,4 @@
-import { Container, createStyles, Grid, makeStyles } from '@material-ui/core';
+import { Container, Grid } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
@@ -13,29 +13,28 @@ import { getOrganizationUsers } from 'src/api/organization/organization';
 import { OrganizationUser } from 'src/types/User';
 import { getCountryByCode, getSubdivisionByCode } from 'src/utils/country';
 import PageSnackbar from 'src/components/PageSnackbar';
+import { makeStyles } from '@mui/styles';
 import getDateDisplayValue from 'src/utils/date';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    mainContainer: {
-      paddingTop: '24px',
-      background: '#ffffff',
-      minHeight: 'calc(100vh - 64px)',
-      display: 'flex',
-      flexDirection: 'column',
-    },
-    titleWithButton: {
-      display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-    },
-    title: {
-      marginTop: 0,
-      fontSize: '24px',
-    },
-  })
-);
+const useStyles = makeStyles(() => ({
+  mainContainer: {
+    paddingTop: '24px',
+    background: '#ffffff',
+    minHeight: 'calc(100vh - 64px)',
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  titleWithButton: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  title: {
+    marginTop: 0,
+    fontSize: '24px',
+  },
+}));
 
 type OrganizationViewProps = {
   organization?: ServerOrganization;

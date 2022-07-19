@@ -1,32 +1,26 @@
-import { Typography } from '@material-ui/core';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React from 'react';
 import strings from 'src/strings';
 import DialogCloseButton from '../common/DialogCloseButton';
 import Button from '../common/button/Button';
 import dictionary from 'src/strings/dictionary';
+import { Dialog, DialogActions, DialogContent, DialogTitle, Theme, Typography } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    title: {
-      textAlign: 'center',
-      padding: theme.spacing(6, 6, 2, 6),
-    },
-    actions: {
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      padding: theme.spacing(4),
-    },
-    content: {
-      textAlign: 'center',
-    },
-  })
-);
+const useStyles = makeStyles((theme: Theme) => ({
+  title: {
+    textAlign: 'center',
+    padding: theme.spacing(6, 6, 2, 6),
+  },
+  actions: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: theme.spacing(4),
+  },
+  content: {
+    textAlign: 'center',
+  },
+}));
 
 export interface CannotRemovePeopleDialogProps {
   open: boolean;

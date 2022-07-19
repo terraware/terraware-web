@@ -1,26 +1,25 @@
-import { createStyles, makeStyles, TableCell, Typography } from '@material-ui/core';
-import FiberManualRecord from '@material-ui/icons/FiberManualRecord';
+import { FiberManualRecord } from '@mui/icons-material';
+import { TableCell, Theme, Typography } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import React from 'react';
 import { SearchResponseElement } from 'src/api/seeds/search';
 import CellRenderer from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
 
-const statusStyles = makeStyles((theme) =>
-  createStyles({
-    flex: {
-      display: 'flex',
-      alignItems: 'center',
-    },
-    statusIndicator: {
-      fontSize: theme.typography.overline.fontSize,
-    },
-    inactive: {
-      display: 'flex',
-      alignItems: 'center',
-      color: theme.palette.neutral[600],
-    },
-  })
-);
+const statusStyles = makeStyles((theme: Theme) => ({
+  flex: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  statusIndicator: {
+    fontSize: theme.typography.overline.fontSize,
+  },
+  inactive: {
+    display: 'flex',
+    alignItems: 'center',
+    color: theme.palette.neutral[600],
+  },
+}));
 
 export default function SearchCellRenderer(props: RendererProps<SearchResponseElement>): JSX.Element {
   const { column, value, index, row } = props;

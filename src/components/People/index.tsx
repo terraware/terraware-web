@@ -1,5 +1,3 @@
-import Grid from '@material-ui/core/Grid';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import {
@@ -26,24 +24,24 @@ import CannotRemovePeopleDialog from './CannotRemovePeopleModal';
 import { updateOrganizationUser } from 'src/api/user/user';
 import snackbarAtom from 'src/state/snackbar';
 import { useSetRecoilState } from 'recoil';
+import { Grid, Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    title: {
-      marginTop: 0,
-      fontSize: '24px',
-    },
-    mainContent: {
-      paddingTop: theme.spacing(4),
-    },
-    centered: {
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'center',
-      alignItems: 'flex-end',
-    },
-  })
-);
+const useStyles = makeStyles((theme: Theme) => ({
+  title: {
+    marginTop: 0,
+    fontSize: '24px',
+  },
+  mainContent: {
+    paddingTop: theme.spacing(4),
+  },
+  centered: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'flex-end',
+  },
+}));
 
 const columns: TableColumnType[] = [
   { key: 'firstName', name: strings.FIRST_NAME, type: 'string' },

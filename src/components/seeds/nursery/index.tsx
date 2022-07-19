@@ -1,8 +1,5 @@
-import MomentUtils from '@date-io/moment';
-import { Chip, Grid, Typography } from '@material-ui/core';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
-import AddIcon from '@material-ui/icons/Add';
-import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import { Chip, Grid, Theme, Typography } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { getDate } from 'src/api/clock';
@@ -19,22 +16,23 @@ import strings from 'src/strings';
 import NewTest from './NewTest';
 import NurseryCellRenderer from './TableCellRenderer';
 import { COLUMNS } from './types';
+import { Add } from '@mui/icons-material';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    right: {
-      marginLeft: 'auto',
-    },
-    bold: {
-      fontWeight: theme.typography.fontWeightBold,
-    },
-    greenChip: {
-      color: theme.palette.common.white,
-    },
-  })
-);
+const useStyles = makeStyles((theme: Theme) => ({
+  right: {
+    marginLeft: 'auto',
+  },
+  bold: {
+    fontWeight: theme.typography.fontWeightBold,
+  },
+  greenChip: {
+    color: theme.palette.common.white,
+  },
+}));
 
-const newWithdrawalChipStyles = makeStyles((theme) => ({
+const newWithdrawalChipStyles = makeStyles((theme: Theme) => ({
   root: {
     color: theme.palette.common.white,
   },
@@ -52,6 +50,7 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
   const [selectedRecord, setSelectedRecord] = useState<ViabilityTest>();
   const allowTestInGrams = Boolean(accession.processingMethod === 'Weight');
   const seedsAvailable = accession.remainingQuantity?.quantity ?? 0;
+  const [nurseryRows, setNurseryRows] = useState<ViabilityTest[]>();
 
   useEffect(() => {
     window.scrollTo({ top: 0 });
@@ -64,6 +63,10 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
     };
     populateDate();
   }, []);
+
+  useEffect(() => {
+    setNurseryRows(accession.viabilityTests?.filter((germinationTest) => germinationTest.testType === 'Nursery'));
+  }, [accession]);
 
   const onEdit = (row: TableRowType) => {
     setSelectedRecord(row as ViabilityTest);
@@ -99,12 +102,6 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
     setOpen(false);
   };
 
-  const getNurseryRows = (): ViabilityTest[] => {
-    const nurseryTests = accession.viabilityTests?.filter((germinationTest) => germinationTest.testType === 'Nursery');
-
-    return nurseryTests ?? [];
-  };
-
   const getTotalScheduled = (): number => {
     const totali = accession.viabilityTests?.reduce((acum, germinationTest) => {
       if (germinationTest.testType === 'Nursery' && moment(germinationTest.startDate).isAfter(date)) {
@@ -121,7 +118,7 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
 
   return (
     <main>
-      <MuiPickersUtilsProvider utils={MomentUtils}>
+      <LocalizationProvider dateAdapter={AdapterDateFns}>
         <NewTest
           open={open}
           onClose={onCloseModal}
@@ -158,7 +155,7 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
             <Grid item xs={12}>
               <Table
                 columns={COLUMNS}
-                rows={getNurseryRows()}
+                rows={nurseryRows || []}
                 orderBy='date'
                 Renderer={NurseryCellRenderer}
                 onSelect={onEdit}
@@ -174,7 +171,7 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
                 label={strings.NEW_TEST}
                 clickable
                 disabled={seedsAvailable <= 0}
-                deleteIcon={<AddIcon classes={newWithdrawalChipStyles()} />}
+                deleteIcon={<Add classes={newWithdrawalChipStyles()} />}
                 color={'primary'}
                 onClick={onNew}
                 onDelete={onNew}
@@ -182,7 +179,7 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
             </Grid>
           </Grid>
         </MainPaper>
-      </MuiPickersUtilsProvider>
+      </LocalizationProvider>
     </main>
   );
 }

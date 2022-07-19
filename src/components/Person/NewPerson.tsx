@@ -1,4 +1,5 @@
-import { Container, createStyles, Grid, makeStyles } from '@material-ui/core';
+import { Container, Grid, Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import strings from 'src/strings';
@@ -17,63 +18,61 @@ import { APP_PATHS } from 'src/constants';
 import dictionary from 'src/strings/dictionary';
 import FormBottomBar from '../common/FormBottomBar';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    mainContainer: {
-      paddingTop: theme.spacing(4),
-      paddingBottom: theme.spacing(7),
-      marginBottom: theme.spacing(6),
-      background: '#ffffff',
-      height: '100%',
-    },
-    backIcon: {
-      fill: '#007DF2',
-      marginRight: theme.spacing(1),
-    },
-    back: {
-      display: 'flex',
-      textDecoration: 'none',
-      color: '#0067C8',
-      fontSize: '20px',
-      alignItems: 'center',
-    },
-    value: {
-      fontSize: '16px',
-    },
-    titleWithButton: {
-      display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-    },
-    label: {
-      color: '#5C6B6C',
-      lineHeight: '20px',
-      fontFamily: '"Inter", sans-serif',
-    },
-    datePicker: {
-      marginTop: '4px',
-      '& .MuiOutlinedInput-root': {
-        '& fieldset': {
-          borderColor: '#708284',
-        },
+const useStyles = makeStyles((theme: Theme) => ({
+  mainContainer: {
+    paddingTop: theme.spacing(4),
+    paddingBottom: theme.spacing(7),
+    marginBottom: theme.spacing(6),
+    background: '#ffffff',
+    height: '100%',
+  },
+  backIcon: {
+    fill: '#007DF2',
+    marginRight: theme.spacing(1),
+  },
+  back: {
+    display: 'flex',
+    textDecoration: 'none',
+    color: '#0067C8',
+    fontSize: '20px',
+    alignItems: 'center',
+  },
+  value: {
+    fontSize: '16px',
+  },
+  titleWithButton: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  label: {
+    color: '#5C6B6C',
+    lineHeight: '20px',
+    fontFamily: '"Inter", sans-serif',
+  },
+  datePicker: {
+    marginTop: '4px',
+    '& .MuiOutlinedInput-root': {
+      '& fieldset': {
+        borderColor: '#708284',
       },
     },
-    blockCheckbox: {
-      display: 'block',
-    },
-    generalTitle: {
-      fontSize: '20px',
-      marginBottom: '8px',
-    },
-    titleSubtitle: {
-      marginTop: '8px',
-    },
-    title: {
-      marginBottom: '8px',
-    },
-  })
-);
+  },
+  blockCheckbox: {
+    display: 'block',
+  },
+  generalTitle: {
+    fontSize: '20px',
+    marginBottom: '8px',
+  },
+  titleSubtitle: {
+    marginTop: '8px',
+  },
+  title: {
+    marginBottom: '8px',
+  },
+}));
 
 type PersonViewProps = {
   organization: ServerOrganization;

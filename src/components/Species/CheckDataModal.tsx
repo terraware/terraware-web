@@ -1,4 +1,5 @@
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import { Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import React, { useEffect, useState } from 'react';
 import strings from 'src/strings';
 import { Species } from 'src/types/Species';
@@ -7,66 +8,64 @@ import DialogBox from '../common/DialogBox/DialogBox';
 import Icon from '../common/icon/Icon';
 import ProgressCircle from '../common/ProgressCircle/ProgressCircle';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    spacing: {
-      marginRight: theme.spacing(2),
-    },
-    dropContainer: {
-      background: '#F9FAFA',
-      border: '1px dashed #A9B7B8',
-      borderRadius: '8px',
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      padding: '32px',
-    },
-    hiddenInput: {
-      display: 'none',
-    },
-    title: {
-      color: '#3A4445',
-      fontSize: '14px',
-      fontWeight: 600,
-      margin: '0 0 8px 0',
-    },
-    description: {
-      color: '#3A4445',
-      fontSize: '12px',
-      fontWeight: 400,
-      margin: 0,
-    },
-    link: {
-      color: '#0067C8',
-      fontSize: '12px',
-      fontWeight: 400,
-      margin: 0,
-    },
-    icon: {
-      height: '120px',
-      width: '120px',
-    },
-    importButton: {
-      marginTop: '24px',
-    },
-    loadingText: {
-      fontSie: '16px',
-      margin: 0,
-      color: '#3A4445',
-    },
-    spinnerContainer: {
-      margin: '40px auto',
-    },
-    container: {
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-    },
-    warningContent: {
-      textAlign: 'left',
-    },
-  })
-);
+const useStyles = makeStyles((theme: Theme) => ({
+  spacing: {
+    marginRight: theme.spacing(2),
+  },
+  dropContainer: {
+    background: '#F9FAFA',
+    border: '1px dashed #A9B7B8',
+    borderRadius: '8px',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    padding: '32px',
+  },
+  hiddenInput: {
+    display: 'none',
+  },
+  title: {
+    color: '#3A4445',
+    fontSize: '14px',
+    fontWeight: 600,
+    margin: '0 0 8px 0',
+  },
+  description: {
+    color: '#3A4445',
+    fontSize: '12px',
+    fontWeight: 400,
+    margin: 0,
+  },
+  link: {
+    color: '#0067C8',
+    fontSize: '12px',
+    fontWeight: 400,
+    margin: 0,
+  },
+  icon: {
+    height: '120px',
+    width: '120px',
+  },
+  importButton: {
+    marginTop: '24px',
+  },
+  loadingText: {
+    fontSie: '16px',
+    margin: 0,
+    color: '#3A4445',
+  },
+  spinnerContainer: {
+    margin: '40px auto',
+  },
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  warningContent: {
+    textAlign: 'left',
+  },
+}));
 
 export type CheckDataModalProps = {
   open: boolean;

@@ -1,11 +1,11 @@
-import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React, { useEffect, useState } from 'react';
+import { makeStyles } from '@mui/styles';
 import strings from 'src/strings';
 import { Facility } from 'src/api/types/facilities';
 import { listFacilityDevices } from 'src/api/facility/facility';
 import { Device } from 'src/types/Device';
 import Icon from '../../common/icon/Icon';
-import { Grid } from '@material-ui/core';
+import { Grid, Theme } from '@mui/material';
 import { listTimeseries } from 'src/api/timeseries/timeseries';
 import TemperatureHumidityChart from './TemperatureHumidityChart';
 import PVBatteryChart from './PVBatteryChart';
@@ -16,35 +16,28 @@ import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import useQuery from '../../../utils/useQuery';
 import { TIME_PERIODS } from './Common';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    graphContainer: {
-      border: '1px solid #A9B7B8',
-      padding: '24px',
-      height: '179px',
-    },
-    panelTitle: {
-      display: 'flex',
-      fontSize: '20px',
-      fontWeight: 600,
-      justifyContent: 'space-between',
+const useStyles = makeStyles((theme: Theme) => ({
+  graphContainer: {
+    border: '1px solid #A9B7B8',
+    padding: '24px',
+    height: '179px',
+  },
+  panelTitle: {
+    display: 'flex',
+    fontSize: '20px',
+    fontWeight: 600,
+    justifyContent: 'space-between',
 
-      '& p': {
-        margin: '0 0 32px 0',
-      },
+    '& p': {
+      margin: '0 0 32px 0',
     },
-    panelValue: {
-      fontWeight: 600,
-      fontSize: '48px',
-      margin: 0,
-    },
-    mainGrid: {
-      display: 'flex',
-      width: '100%',
-      margin: 0,
-    },
-  })
-);
+  },
+  panelValue: {
+    fontWeight: 600,
+    fontSize: '48px',
+    margin: 0,
+  },
+}));
 
 type SeedBankDashboardProps = {
   seedBank: Facility;
@@ -157,7 +150,7 @@ export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.El
   }, [availableLocations]);
 
   return (
-    <Grid container spacing={3} className={classes.mainGrid}>
+    <Grid container spacing={3} marginTop={0}>
       <Grid item xs={6}>
         <div className={classes.graphContainer}>
           <div className={classes.panelTitle}>

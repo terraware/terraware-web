@@ -1,6 +1,3 @@
-import { List, ListItem, Popover } from '@material-ui/core';
-import IconButton from '@material-ui/core/IconButton';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { User } from 'src/types/User';
@@ -8,34 +5,34 @@ import strings from '../../src/strings';
 import { ReactComponent as AvatarIcon } from './avatar-default.svg';
 import Icon from './common/icon/Icon';
 import { APP_PATHS } from 'src/constants';
+import { IconButton, List, ListItem, Popover } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    iconContainer: {
-      height: '48px',
-      borderRadius: 0,
+const useStyles = makeStyles((theme) => ({
+  iconContainer: {
+    height: '48px',
+    borderRadius: 0,
+  },
+  icon: {
+    width: '32px',
+    height: '32px',
+  },
+  chevronDown: {
+    marginLeft: '8px',
+    fill: '#3A4445',
+  },
+  userName: {
+    fontSize: '16px',
+    paddingLeft: '8px',
+    color: '#3A4445',
+  },
+  popover: {
+    '& .MuiPaper-rounded': {
+      minWidth: '200px',
     },
-    icon: {
-      width: '32px',
-      height: '32px',
-    },
-    chevronDown: {
-      marginLeft: '8px',
-      fill: '#3A4445',
-    },
-    userName: {
-      fontSize: '16px',
-      paddingLeft: '8px',
-      color: '#3A4445',
-    },
-    popover: {
-      '& .MuiPaper-rounded': {
-        minWidth: '200px',
-      },
-    },
-  })
-);
+  },
+}));
 
 type UserMenuProps = {
   user?: User;

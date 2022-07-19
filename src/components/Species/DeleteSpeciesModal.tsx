@@ -1,17 +1,15 @@
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import { makeStyles } from '@mui/styles';
 import React from 'react';
 import strings from 'src/strings';
 import Button from '../common/button/Button';
 import DialogBox from '../common/DialogBox/DialogBox';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    mainContent: {
-      color: '#3A4445',
-      fontSize: '16px',
-    },
-  })
-);
+const useStyles = makeStyles(() => ({
+  mainContent: {
+    color: '#3A4445',
+    fontSize: '16px',
+  },
+}));
 
 export interface DeleteSpeciesDialogProps {
   open: boolean;

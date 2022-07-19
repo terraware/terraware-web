@@ -1,34 +1,32 @@
 import React, { ReactNode } from 'react';
 import { ReactComponent as Logo } from './logo.svg';
 import './styles.scss';
-import { createStyles, makeStyles } from '@material-ui/core';
 import Icon from '../icon/Icon';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import { makeStyles } from '@mui/styles';
 
 export interface Props {
   children: ReactNode;
   setShowNavBar: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    icon: {
-      fill: '#708284',
-      width: '27px',
-      height: '27px',
-    },
-    closeButton: {
-      background: 'none',
-      border: 'none',
-      cursor: 'pointer',
-    },
-    navBarTop: {
-      height: '56px',
-      display: 'flex',
-      paddingLeft: '20px',
-    },
-  })
-);
+const useStyles = makeStyles(() => ({
+  icon: {
+    fill: '#708284',
+    width: '27px',
+    height: '27px',
+  },
+  closeButton: {
+    background: 'none',
+    border: 'none',
+    cursor: 'pointer',
+  },
+  navBarTop: {
+    height: '56px',
+    display: 'flex',
+    paddingLeft: '20px',
+  },
+}));
 
 export default function Navbar(props: Props): JSX.Element {
   const { children, setShowNavBar } = props;

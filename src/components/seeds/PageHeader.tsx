@@ -1,49 +1,48 @@
-import { Box, Container, Fab, Grid } from '@material-ui/core';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import React from 'react';
 import Title from '../common/Title';
 import { useHistory } from 'react-router-dom';
 import useStateLocation, { getLocation } from '../../utils/useStateLocation';
 import { SelectedOrgInfo, ServerOrganization } from 'src/types/Organization';
 import PageSnackbar from 'src/components/PageSnackbar';
+import { ArrowBack } from '@mui/icons-material';
+import { Container, Grid, Fab, Box, Typography, Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    mainContainer: {
+const useStyles = makeStyles((theme: Theme) => ({
+  mainContainer: {
+    '&.MuiContainer-root': {
       paddingLeft: 0,
       paddingRight: 0,
     },
-    container: {
-      maxWidth: '100%',
-    },
-    pageTitle: {
-      fontSize: '24px',
-      lineHeight: '32px',
-      fontWeight: 600,
-    },
-    subtitle: {
-      fontWeight: 400,
-      paddingTop: '16px',
-      fontSize: '14px',
-      lineHeight: '20px',
-    },
-    flex: {
-      display: 'flex',
-    },
-    back: {
-      marginTop: theme.spacing(4),
-    },
-    backIcon: {
-      marginRight: theme.spacing(4),
-      backgroundColor: theme.palette.common.white,
-    },
-    mainContent: {
-      width: '100%',
-    },
-  })
-);
+  },
+  container: {
+    maxWidth: '100%',
+  },
+  pageTitle: {
+    fontSize: '24px',
+    lineHeight: '32px',
+    fontWeight: 600,
+  },
+  subtitle: {
+    fontWeight: 400,
+    paddingTop: '16px',
+    fontSize: '14px',
+    lineHeight: '20px',
+  },
+  flex: {
+    display: 'flex',
+  },
+  back: {
+    marginTop: theme.spacing(4),
+  },
+  backIcon: {
+    marginRight: theme.spacing(4),
+    backgroundColor: theme.palette.common.white,
+  },
+  mainContent: {
+    width: '100%',
+  },
+}));
 
 interface Props {
   title?: string | string[];
@@ -112,13 +111,18 @@ export default function PageHeader({
                   }
                 }}
               >
-                <ArrowBackIcon />
+                <ArrowBack />
               </Fab>
             </div>
           )}
           <div className={classes.mainContent}>
             <Box display='flex' justifyContent='space-between' alignItems='center'>
-              <Typography id='title' variant='h4' className={`${classes.pageTitle} ${titleClassName}`}>
+              <Typography
+                id='title'
+                variant='h4'
+                className={`${classes.pageTitle} ${titleClassName}`}
+                sx={{ fontSize: '24px', lineHeight: '32px', fontWeight: 600 }}
+              >
                 {title || getPageHeading()}
               </Typography>
               {!!rightComponent && <div>{rightComponent}</div>}

@@ -1,17 +1,15 @@
 import React from 'react';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@mui/styles';
 import { Link } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
 import CellRenderer, { TableRowType } from '../common/table/TableCellRenderer';
 import { RendererProps } from '../common/table/types';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    link: {
-      color: '#0067C8',
-    },
-  })
-);
+const useStyles = makeStyles(() => ({
+  link: {
+    color: '#0067C8',
+  },
+}));
 
 export default function Renderer(props: RendererProps<TableRowType>): JSX.Element {
   const classes = useStyles();

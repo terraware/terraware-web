@@ -1,5 +1,6 @@
-import { Grid } from '@material-ui/core';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import { Grid } from '@mui/material';
+import { Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import React, { useEffect, useState } from 'react';
 import { createSpecies, getSpeciesDetails, listSpeciesNames, updateSpecies } from 'src/api/species/species';
 import strings from 'src/strings';
@@ -15,19 +16,17 @@ import ErrorBox from '../common/ErrorBox/ErrorBox';
 import Select from '../common/Select/Select';
 import TextField from '../common/Textfield/Textfield';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    spacing: {
-      marginRight: theme.spacing(2),
-    },
-    blockCheckbox: {
-      display: 'block',
-    },
-    mainGrid: {
-      textAlign: 'left',
-    },
-  })
-);
+const useStyles = makeStyles((theme: Theme) => ({
+  spacing: {
+    marginRight: theme.spacing(2),
+  },
+  blockCheckbox: {
+    display: 'block',
+  },
+  mainGrid: {
+    textAlign: 'left',
+  },
+}));
 
 export type AddSpeciesModalProps = {
   open: boolean;

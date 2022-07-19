@@ -1,8 +1,9 @@
-import { makeStyles, Toolbar, Typography } from '@material-ui/core';
+import { Theme, Toolbar, Typography } from '@mui/material';
 import { TopBarButton } from '.';
 import Button from '../button/Button';
+import { makeStyles } from '@mui/styles';
 
-const styles = makeStyles((theme) => ({
+const styles = makeStyles((theme: Theme) => ({
   toolbar: {
     background: '#EDF0F1',
   },
@@ -10,7 +11,7 @@ const styles = makeStyles((theme) => ({
     flex: '1 1 100%',
   },
   buttonSpacing: {
-    marginLeft: `${theme.spacing(1)}px`,
+    marginLeft: theme.spacing(1),
   },
 }));
 

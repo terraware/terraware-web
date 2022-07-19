@@ -1,45 +1,43 @@
-import { Box, IconButton, Typography } from '@material-ui/core';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
-import InfoIcon from '@material-ui/icons/Info';
+import { Info } from '@mui/icons-material';
+import { Box, IconButton, Theme, Typography } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import React from 'react';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    bold: {
-      fontWeight: theme.typography.fontWeightBold,
-      whiteSpace: 'pre-line',
-    },
-    summaryDefault: {
-      position: 'relative',
-      borderRadius: 8,
-      backgroundColor: theme.palette.neutral[200],
-      padding: theme.spacing(2),
-    },
-    summaryAvailable: {
-      borderRadius: 8,
-      backgroundColor: theme.palette.neutral[700],
-      padding: theme.spacing(2),
-      color: theme.palette.common.white,
-    },
-    summaryZero: {
-      borderRadius: 8,
-      backgroundColor: theme.palette.state[5],
-      padding: theme.spacing(2),
-      color: theme.palette.common.white,
-    },
-    full: {
-      borderRadius: 8,
-      backgroundColor: theme.palette.neutral[200],
-      padding: theme.spacing(2),
-      height: '100%',
-      boxSizing: 'border-box',
-    },
-    infoIcon: {
-      position: 'absolute',
-      right: theme.spacing(2),
-    },
-  })
-);
+const useStyles = makeStyles((theme: Theme) => ({
+  bold: {
+    fontWeight: theme.typography.fontWeightBold,
+    whiteSpace: 'pre-line',
+  },
+  summaryDefault: {
+    position: 'relative',
+    borderRadius: 8,
+    backgroundColor: theme.palette.neutral[200],
+    padding: theme.spacing(2),
+  },
+  summaryAvailable: {
+    borderRadius: 8,
+    backgroundColor: theme.palette.neutral[700],
+    padding: theme.spacing(2),
+    color: theme.palette.common.white,
+  },
+  summaryZero: {
+    borderRadius: 8,
+    backgroundColor: theme.palette.state[5],
+    padding: theme.spacing(2),
+    color: theme.palette.common.white,
+  },
+  full: {
+    borderRadius: 8,
+    backgroundColor: theme.palette.neutral[200],
+    padding: theme.spacing(2),
+    height: '100%',
+    boxSizing: 'border-box',
+  },
+  infoIcon: {
+    position: 'absolute',
+    right: theme.spacing(2),
+  },
+}));
 
 export interface Props {
   id?: string;
@@ -66,7 +64,7 @@ export default function SummaryBox({ title, value, variant = 'default', id, icon
     <Box className={style} id={id}>
       {icon && (
         <IconButton className={classes.infoIcon} onClick={onIconClick}>
-          <InfoIcon />
+          <Info />
         </IconButton>
       )}
       <Typography component='p'>{title}</Typography>

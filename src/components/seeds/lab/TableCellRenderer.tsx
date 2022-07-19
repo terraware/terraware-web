@@ -1,4 +1,4 @@
-import { TableCell, Typography } from '@material-ui/core';
+import { TableCell, Typography } from '@mui/material';
 import React from 'react';
 import strings from 'src/strings';
 import CellRenderer, { CellDateRenderer, TableRowType } from '../../common/table/TableCellRenderer';

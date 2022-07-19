@@ -1,5 +1,5 @@
 /* eslint-disable import/no-webpack-loader-syntax */
-import { CircularProgress, createStyles, CssBaseline, makeStyles } from '@material-ui/core';
+import { CircularProgress, CssBaseline, StyledEngineProvider } from '@mui/material';
 import mapboxgl from 'mapbox-gl';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
@@ -47,6 +47,7 @@ import Monitoring from './components/Monitoring';
 import SeedBanks from './components/SeedBanks';
 import NewSeedBank from './components/NewSeedBank';
 import SeedBankDetails from './components/SeedBank';
+import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 // @ts-ignore
@@ -54,42 +55,40 @@ mapboxgl.workerClass =
   // tslint:disable-next-line: no-var-requires
   require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker').default;
 
-const useStyles = makeStyles(() =>
-  createStyles({
-    content: {
+const useStyles = makeStyles(() => ({
+  content: {
+    height: '100%',
+    paddingTop: '64px',
+    overflow: 'auto',
+  },
+  contentWithNavBar: {
+    marginLeft: '200px',
+  },
+  navBarOpened: {
+    '& .blurred': {
+      backdropFilter: 'blur(8px)',
+      background: 'rgba(249, 250, 250, 0.8)',
       height: '100%',
-      paddingTop: '64px',
-      overflow: 'auto',
-    },
-    contentWithNavBar: {
-      marginLeft: '200px',
-    },
-    navBarOpened: {
-      '& .blurred': {
-        backdropFilter: 'blur(8px)',
-        background: 'rgba(249, 250, 250, 0.8)',
-        height: '100%',
-        display: 'flex',
-        alignItems: 'center',
-        position: 'fixed',
-        zIndex: 1300,
-        inset: '0px',
-      },
-    },
-    spinner: {
       display: 'flex',
-      justifyContent: 'center',
       alignItems: 'center',
-      textAlign: 'center',
-      margin: 'auto',
-      minHeight: '100vh',
-      '& .MuiCircularProgress-svg': {
-        color: '#007DF2',
-        height: '193px',
-      },
+      position: 'fixed',
+      zIndex: 1300,
+      inset: '0px',
     },
-  })
-);
+  },
+  spinner: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    textAlign: 'center',
+    margin: 'auto',
+    minHeight: '100vh',
+    '& .MuiCircularProgress-svg': {
+      color: '#007DF2',
+      height: '193px',
+    },
+  },
+}));
 
 enum APIRequestStatus {
   'AWAITING',
@@ -233,7 +232,11 @@ export default function App() {
   }, [type]);
 
   if (orgAPIRequestStatus === APIRequestStatus.AWAITING || orgAPIRequestStatus === APIRequestStatus.FAILED_NO_AUTH) {
-    return <CircularProgress className={classes.spinner} size='193' />;
+    return (
+      <StyledEngineProvider injectFirst>
+        <CircularProgress className={classes.spinner} size='193' />
+      </StyledEngineProvider>
+    );
   } else if (orgAPIRequestStatus === APIRequestStatus.FAILED) {
     history.push(APP_PATHS.ERROR_FAILED_TO_FETCH_ORG_DATA);
     return null;
@@ -260,7 +263,11 @@ export default function App() {
       );
     } else if (!selectedOrganization) {
       // This allows is to reload open views that require an organization
-      return <CircularProgress className={classes.spinner} size='193' />;
+      return (
+        <StyledEngineProvider injectFirst>
+          <CircularProgress className={classes.spinner} size='193' />;
+        </StyledEngineProvider>
+      );
     }
   }
 
@@ -292,7 +299,7 @@ export default function App() {
   };
 
   return (
-    <>
+    <StyledEngineProvider injectFirst>
       <CssBaseline />
       <ToastSnackbar />
       <>
@@ -478,6 +485,6 @@ export default function App() {
           </ErrorBoundary>
         </div>
       </>
-    </>
+    </StyledEngineProvider>
   );
 }

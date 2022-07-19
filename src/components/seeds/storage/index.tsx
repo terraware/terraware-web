@@ -1,7 +1,5 @@
-import MomentUtils from '@date-io/moment';
-import { CircularProgress, Grid, Typography } from '@material-ui/core';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
-import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import { CircularProgress, Grid, Theme, Typography } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import React, { Suspense } from 'react';
 import { Accession } from 'src/api/types/accessions';
 import MainPaper from 'src/components/MainPaper';
@@ -16,25 +14,25 @@ import FooterButtons from '../accession/FooterButtons';
 import { FieldError } from '../newAccession';
 import LocationDropdown from './LocationDropdown';
 import { StorageStartDate } from './StorageStartDate';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    right: {
-      marginLeft: 'auto',
-    },
-    alignMiddle: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    caption: {
-      paddingLeft: theme.spacing(1),
-    },
-    bold: {
-      fontWeight: theme.typography.fontWeightBold,
-    },
-  })
-);
+const useStyles = makeStyles((theme: Theme) => ({
+  right: {
+    marginLeft: 'auto',
+  },
+  alignMiddle: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  caption: {
+    paddingLeft: theme.spacing(1),
+  },
+  bold: {
+    fontWeight: theme.typography.fontWeightBold,
+  },
+}));
 
 interface Props {
   accession: Accession;
@@ -100,7 +98,7 @@ export default function Storage({ accession, onSubmit }: Props): JSX.Element {
   };
 
   return (
-    <MuiPickersUtilsProvider utils={MomentUtils}>
+    <LocalizationProvider dateAdapter={AdapterDateFns}>
       <MainPaper>
         <PanelTitle title={strings.STORAGE} />
         <Typography component='p'>{strings.STORAGE_DESCRIPTION}</Typography>
@@ -164,6 +162,6 @@ export default function Storage({ accession, onSubmit }: Props): JSX.Element {
           </Grid>
         </Grid>
       </MainPaper>
-    </MuiPickersUtilsProvider>
+    </LocalizationProvider>
   );
 }

@@ -1,5 +1,5 @@
-import { createStyles, makeStyles } from '@material-ui/core/styles';
-import { Grid } from '@material-ui/core';
+import { makeStyles } from '@mui/styles';
+import { Grid, Theme } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import strings from 'src/strings';
 import { Facility } from 'src/api/types/facilities';
@@ -9,14 +9,12 @@ import FlowStep, { FlowError } from './FlowStep';
 import { updateDevice } from 'src/api/device/device';
 import { LOCATIONS } from './Locations';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    location: {
-      paddingTop: `${theme.spacing(2)}px`,
-      paddingRight: `${theme.spacing(2)}px`,
-    },
-  })
-);
+const useStyles = makeStyles((theme: Theme) => ({
+  location: {
+    paddingTop: theme.spacing(2),
+    paddingRight: theme.spacing(2),
+  },
+}));
 
 type Location = {
   [name: string]: Device;

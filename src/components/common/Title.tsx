@@ -1,22 +1,20 @@
-import { createStyles, makeStyles } from '@material-ui/core';
+import { makeStyles } from '@mui/styles';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    titleContainer: {
-      display: 'flex',
-      alignItems: 'center',
-    },
-    title: {
-      fontWeight: 600,
-      fontSize: 24,
-      color: 'gray',
-    },
-    selectedSection: {
-      color: 'black',
-      paddingLeft: '5px',
-    },
-  })
-);
+const useStyles = makeStyles(() => ({
+  titleContainer: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  title: {
+    fontWeight: 600,
+    fontSize: 24,
+    color: 'gray',
+  },
+  selectedSection: {
+    color: 'black',
+    paddingLeft: '5px',
+  },
+}));
 
 interface TitleProps {
   page: string;

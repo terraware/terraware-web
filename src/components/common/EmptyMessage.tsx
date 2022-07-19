@@ -1,24 +1,22 @@
-import { createStyles, makeStyles } from '@material-ui/core';
+import { makeStyles } from '@mui/styles';
 import Button from 'src/components/common/button/Button';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    mainContainer: {
-      border: '1px solid #A9B7B8',
-      background: '#fff',
-      padding: '24px',
-      borderRadius: '8px',
-      textAlign: 'center',
-    },
-    text: {
-      paddingBottom: '24px',
-      fontSize: '16px',
-    },
-    title: {
-      fontSize: '20px',
-    },
-  })
-);
+const useStyles = makeStyles(() => ({
+  mainContainer: {
+    border: '1px solid #A9B7B8',
+    background: '#fff',
+    padding: '24px',
+    borderRadius: '8px',
+    textAlign: 'center',
+  },
+  text: {
+    paddingBottom: '24px',
+    fontSize: '16px',
+  },
+  title: {
+    fontSize: '20px',
+  },
+}));
 
 type EmptyMessageProps = {
   title: string;

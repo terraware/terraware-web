@@ -1,24 +1,22 @@
-import { Box, createStyles, Link, makeStyles, TableCell, Typography } from '@material-ui/core';
-import EditIcon from '@material-ui/icons/Edit';
-import NotesIcon from '@material-ui/icons/Notes';
+import { Edit, Notes } from '@mui/icons-material';
+import { Box, Link, TableCell, Theme, Typography } from '@mui/material';
 import React, { ReactNode } from 'react';
 import preventDefaultEvent from 'src/utils/preventDefaultEvent';
 import { RendererProps } from './types';
+import { makeStyles } from '@mui/styles';
 import getDateDisplayValue from 'src/utils/date';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    editIcon: {
-      marginLeft: theme.spacing(1),
-    },
-    textRoot: {
-      maxWidth: 400,
-    },
-    date: {
-      whiteSpace: 'nowrap',
-    },
-  })
-);
+const useStyles = makeStyles((theme: Theme) => ({
+  editIcon: {
+    marginLeft: theme.spacing(1),
+  },
+  textRoot: {
+    maxWidth: 400,
+  },
+  date: {
+    whiteSpace: 'nowrap',
+  },
+}));
 
 export type TableRowType = Record<string, any>;
 
@@ -92,7 +90,7 @@ export function CellNotesRenderer({ id, value }: { id: string; value?: string })
   return (
     <TableCell id={id} align='left'>
       <Typography id={id} component='p' variant='body1'>
-        {value && value.length > 0 ? <NotesIcon /> : ''}
+        {value && value.length > 0 ? <Notes /> : ''}
       </Typography>
     </TableCell>
   );
@@ -117,7 +115,7 @@ export function CellEditRenderer({ id, onRowClick }: { id: string; onRowClick?: 
           <Typography component='p' variant='body1'>
             Edit
           </Typography>
-          <EditIcon fontSize='small' className={classes.editIcon} />
+          <Edit fontSize='small' className={classes.editIcon} />
         </Box>
       </Link>
     </TableCell>

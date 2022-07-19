@@ -1,6 +1,5 @@
-import { Grid, Popover } from '@material-ui/core';
-import IconButton from '@material-ui/core/IconButton';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { Grid, IconButton, Popover } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import React, { useEffect, useState } from 'react';
 import Icon from 'src/components/common/icon/Icon';
 import strings from 'src/strings';
@@ -10,51 +9,49 @@ import { SpeciesFiltersType } from '.';
 import Button from '../common/button/Button';
 import Select from '../common/Select/Select';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    iconContainer: {
-      borderRadius: 0,
-      fontSize: '16px',
-      height: '48px',
-      marginLeft: '8px',
-    },
-    icon: {
-      fill: '#3A4445',
-      marginLeft: '8px',
-    },
-    popoverContainer: {
-      '& .MuiPaper-root': {
-        border: '1px solid #A9B7B8',
-        borderRadius: '8px',
-        overflow: 'visible',
-      },
-    },
-    popover: {
-      width: '478px',
-      paddingTop: 0,
+const useStyles = makeStyles(() => ({
+  iconContainer: {
+    borderRadius: 0,
+    fontSize: '16px',
+    height: '48px',
+    marginLeft: '8px',
+  },
+  icon: {
+    fill: '#3A4445',
+    marginLeft: '8px',
+  },
+  popoverContainer: {
+    '& .MuiPaper-root': {
+      border: '1px solid #A9B7B8',
       borderRadius: '8px',
+      overflow: 'visible',
     },
-    title: {
-      padding: '16px 24px',
-      background: '#F2F4F5',
-      fontSize: '20px',
-      fontWeight: 600,
-    },
-    container: {
-      padding: '24px',
-    },
-    footer: {
-      background: '#F2F4F5',
-      padding: '16px 24px',
-      display: 'flex',
-      justifyContent: 'end',
+  },
+  popover: {
+    width: '478px',
+    paddingTop: 0,
+    borderRadius: '8px',
+  },
+  title: {
+    padding: '16px 24px',
+    background: '#F2F4F5',
+    fontSize: '20px',
+    fontWeight: 600,
+  },
+  container: {
+    padding: '24px',
+  },
+  footer: {
+    background: '#F2F4F5',
+    padding: '16px 24px',
+    display: 'flex',
+    justifyContent: 'end',
 
-      '& button+button': {
-        marginLeft: '8px',
-      },
+    '& button+button': {
+      marginLeft: '8px',
     },
-  })
-);
+  },
+}));
 
 type SpeciesFiltersPopoverProps = {
   filters: SpeciesFiltersType;

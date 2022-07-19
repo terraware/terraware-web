@@ -1,4 +1,4 @@
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@mui/styles';
 import ProgressCircle from 'src/components/common/ProgressCircle/ProgressCircle';
 import React, { useCallback, useEffect, useState } from 'react';
 import strings from 'src/strings';
@@ -7,22 +7,21 @@ import { DeviceManager } from 'src/types/DeviceManager';
 import FlowStep, { FlowError } from './FlowStep';
 import { connectDeviceManager, getDeviceManager } from 'src/api/deviceManager/deviceManager';
 import getHelpEmail from 'src/components/common/HelpEmail';
+import { Theme } from '@mui/material';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    installDeviceManager: {
-      width: '432px',
-      fontStyle: 'italic',
-    },
-    spinnerContainer: {
-      display: 'flex',
-      alignItems: 'center',
-    },
-    downloadInProgress: {
-      marginLeft: `${theme.spacing(2)}px`,
-    },
-  })
-);
+const useStyles = makeStyles((theme: Theme) => ({
+  installDeviceManager: {
+    width: '432px',
+    fontStyle: 'italic',
+  },
+  spinnerContainer: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  downloadInProgress: {
+    marginLeft: theme.spacing(2),
+  },
+}));
 
 type InstallDeviceManagerProps = {
   seedBank: Facility;

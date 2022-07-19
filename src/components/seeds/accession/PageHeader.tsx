@@ -1,8 +1,6 @@
-import { Box, Fab, Grid } from '@material-ui/core';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import FiberManualRecord from '@material-ui/icons/FiberManualRecord';
+import { ArrowBack, FiberManualRecord } from '@mui/icons-material';
+import { Grid, Box, Fab, Typography, Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { Accession } from 'src/api/types/accessions';
@@ -10,42 +8,40 @@ import { APP_PATHS } from 'src/constants';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import getDateDisplayValue from 'src/utils/date';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    container: {
-      backgroundColor: theme.palette.common.white,
-      maxWidth: '100%',
-      margin: '0',
-    },
-    backIcon: {
-      marginRight: theme.spacing(4),
-      backgroundColor: theme.palette.common.white,
-      height: '32px',
-      width: '32px',
-      minHeight: '32px',
-    },
-    pageTitle: {
-      fontSize: '24px',
-      lineHeight: '32px',
-      fontWeight: 600,
-    },
-    titleBox: {
-      paddingBottom: '16px',
-    },
-    subtitle: {
-      fontWeight: theme.typography.fontWeightLight,
-    },
-    activeIndicator: {
-      marginRight: theme.spacing(1),
-      fontSize: theme.typography.h6.fontSize,
-    },
-    detailDivisor: {
-      marginRight: theme.spacing(1),
-      marginLeft: theme.spacing(1),
-      fontSize: theme.typography.caption.fontSize,
-    },
-  })
-);
+const useStyles = makeStyles((theme: Theme) => ({
+  container: {
+    backgroundColor: theme.palette.common.white,
+    maxWidth: '100%',
+    margin: '0',
+  },
+  backIcon: {
+    marginRight: theme.spacing(4),
+    backgroundColor: theme.palette.common.white,
+    height: '32px',
+    width: '32px',
+    minHeight: '32px',
+  },
+  pageTitle: {
+    fontSize: '24px',
+    lineHeight: '32px',
+    fontWeight: 600,
+  },
+  titleBox: {
+    paddingBottom: '16px',
+  },
+  subtitle: {
+    fontWeight: theme.typography.fontWeightLight,
+  },
+  activeIndicator: {
+    marginRight: theme.spacing(1),
+    fontSize: theme.typography.h6.fontSize,
+  },
+  detailDivisor: {
+    marginRight: theme.spacing(1),
+    marginLeft: theme.spacing(1),
+    fontSize: theme.typography.caption.fontSize,
+  },
+}));
 
 interface Props {
   accession: Accession;
@@ -75,7 +71,7 @@ export default function AccessionPageHeader({ accession }: Props): JSX.Element {
                 }
               }}
             >
-              <ArrowBackIcon />
+              <ArrowBack />
             </Fab>
           </Box>
           <Box display='flex' flexDirection='column'>

@@ -7,9 +7,9 @@ import reportWebVitals from './reportWebVitals';
 import { RecoilRoot } from 'recoil';
 import strings from './strings';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { ThemeProvider } from '@material-ui/core';
 import theme from './theme';
 import { APP_PATHS } from './constants';
+import { ThemeProvider } from '@mui/material';
 
 ReactDOM.render(
   <React.StrictMode>

@@ -1,10 +1,5 @@
-import { CircularProgress, createStyles, makeStyles } from '@material-ui/core';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import React from 'react';
+import { CircularProgress, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import { Link } from 'react-router-dom';
 import { FieldNodePayload, SeedSearchCriteria } from 'src/api/seeds/search';
 import { SeedbankSummary } from 'src/api/seeds/summary';
@@ -12,17 +7,15 @@ import { AccessionState } from 'src/api/types/accessions';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 
-const useStyles = makeStyles(() =>
-  createStyles({
-    state: {
-      fontWeight: 500,
-      color: 'inherit',
-    },
-    alertCell: {
-      paddingLeft: 0,
-    },
-  })
-);
+const useStyles = makeStyles(() => ({
+  state: {
+    fontWeight: 500,
+    color: 'inherit',
+  },
+  alertCell: {
+    paddingLeft: 0,
+  },
+}));
 
 interface UpdatesProps {
   summaryResponse?: SeedbankSummary;

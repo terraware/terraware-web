@@ -1,5 +1,4 @@
-import { TextField } from '@material-ui/core';
-import { Autocomplete as MUIAutocomplete } from '@material-ui/lab';
+import { Autocomplete as MUIAutocomplete, TextField } from '@mui/material';
 import React, { ChangeEvent } from 'react';
 
 export interface Props {

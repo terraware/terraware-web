@@ -1,6 +1,6 @@
-import { createTheme } from '@material-ui/core/styles';
+import { createTheme } from '@mui/material/styles';
 
-declare module '@material-ui/core/styles/createPalette' {
+declare module '@mui/material/styles/createPalette' {
   interface Palette {
     neutral: Palette['grey'];
     state: {
@@ -61,9 +61,9 @@ export default createTheme({
   typography: {
     fontFamily: 'Inter',
   },
-  overrides: {
+  components: {
     MuiCssBaseline: {
-      '@global': {
+      styleOverrides: {
         '*::-webkit-scrollbar': {
           '-webkit-appearance': 'none',
           width: '7px',

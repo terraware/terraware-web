@@ -1,8 +1,5 @@
 import moment from 'moment';
-import { List, ListItem, ListItemIcon, ListItemText, Popover } from '@material-ui/core';
-import Badge from '@material-ui/core/Badge';
-import IconButton from '@material-ui/core/IconButton';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { Badge, IconButton, List, ListItem, ListItemIcon, ListItemText, Popover } from '@mui/material';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router';
@@ -15,127 +12,126 @@ import DivotPopover from './common/DivotPopover';
 import ErrorBox from './common/ErrorBox/ErrorBox';
 import preventDefault from 'src/utils/preventDefaultEvent';
 import stopPropagation from 'src/utils/stopPropagationEvent';
+import { makeStyles } from '@mui/styles';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    error: {
-      width: '432px',
-      height: '88px',
-      margin: '20px 0',
+const useStyles = makeStyles(() => ({
+  error: {
+    width: '432px',
+    height: '88px',
+    margin: '20px 0',
+  },
+  notificationIcon: {
+    fill: '#708284',
+    margin: 'auto auto',
+  },
+  noNotifications: {
+    color: '#3A4445',
+    height: '107px',
+    textAlign: 'center',
+  },
+  notificationsBadgeWrapper: {
+    width: '24px',
+    height: '24px',
+  },
+  newNotificationsIndicator: {
+    minWidth: '8px',
+    height: '8px',
+    borderRadius: '4px',
+    background: '#FE0003',
+    position: 'absolute',
+    left: '15px',
+    top: '2px',
+  },
+  listContainer: {
+    padding: 0,
+    overflowY: 'auto',
+  },
+  unreadNotification: {
+    backgroundColor: '#F0F4FF',
+    '&.error': {
+      backgroundColor: '#FFF1F1',
     },
-    notificationIcon: {
+  },
+  unreadNotificationIndicator: {
+    marginLeft: '8px',
+    width: '8px',
+    height: '8px',
+    borderRadius: '4px',
+    backgroundColor: '#007DF2',
+  },
+  notification: {
+    display: 'flex',
+    alignItems: 'flex-start',
+    padding: '8px 20px 8px 26px',
+    borderBottom: '1px solid #A9B7B8',
+    '&:last-child': {
+      borderBottom: 'none',
+    },
+    '&:hover': {
+      backgroundColor: 'rgba(0, 103, 200, 0.1)',
+    },
+  },
+  notificationContent: {
+    display: 'flex',
+    flexDirection: 'column',
+    minWidth: '375px',
+    fontSize: '14px',
+    fontWeight: 400,
+    margin: '0px',
+  },
+  notificationTitle: {
+    display: 'block',
+    color: '#3A4445',
+    fontSize: '16px',
+    fontWeight: 600,
+    margin: '8px',
+  },
+  notificationBody: {
+    display: 'block',
+    color: '#3A4445',
+    margin: '0px 8px',
+  },
+  notificationTimestamp: {
+    display: 'block',
+    color: '#5C6B6C',
+    margin: '8px',
+  },
+  iconContainer: {
+    borderRadius: 0,
+    fontSize: '16px',
+  },
+  icon: {
+    fill: '#3A4445',
+  },
+  notificationType: {
+    margin: '12px 0',
+    minWidth: '16px',
+  },
+  notificationTypeIcon: {
+    width: '16px',
+    height: '16px',
+    fill: 'grey',
+    '&.info': {
       fill: '#708284',
-      margin: 'auto auto',
     },
-    noNotifications: {
-      color: '#3A4445',
-      height: '107px',
-      textAlign: 'center',
+    '&.warning': {
+      fill: '#BD6931',
     },
-    notificationsBadgeWrapper: {
-      width: '24px',
-      height: '24px',
+    '&.error': {
+      fill: '#FE0003',
     },
-    newNotificationsIndicator: {
-      minWidth: '8px',
-      height: '8px',
-      borderRadius: '4px',
-      background: '#FE0003',
-      position: 'absolute',
-      left: '15px',
-      top: '2px',
+    '&.success': {
+      fill: '#308F5F',
     },
-    listContainer: {
-      padding: 0,
-      overflowY: 'auto',
-    },
-    unreadNotification: {
-      backgroundColor: '#F0F4FF',
-      '&.error': {
-        backgroundColor: '#FFF1F1',
-      },
-    },
-    unreadNotificationIndicator: {
-      marginLeft: '8px',
-      width: '8px',
-      height: '8px',
-      borderRadius: '4px',
-      backgroundColor: '#007DF2',
-    },
-    notification: {
-      display: 'flex',
-      alignItems: 'flex-start',
-      padding: '8px 20px 8px 26px',
-      borderBottom: '1px solid #A9B7B8',
-      '&:last-child': {
-        borderBottom: 'none',
-      },
-      '&:hover': {
-        backgroundColor: 'rgba(0, 103, 200, 0.1)',
-      },
-    },
-    notificationContent: {
-      display: 'flex',
-      flexDirection: 'column',
-      minWidth: '375px',
-      fontSize: '14px',
-      fontWeight: 400,
-      margin: '0px',
-    },
-    notificationTitle: {
-      display: 'block',
-      color: '#3A4445',
-      fontSize: '16px',
-      fontWeight: 600,
-      margin: '8px',
-    },
-    notificationBody: {
-      display: 'block',
-      color: '#3A4445',
-      margin: '0px 8px',
-    },
-    notificationTimestamp: {
-      display: 'block',
-      color: '#5C6B6C',
-      margin: '8px',
-    },
-    iconContainer: {
-      borderRadius: 0,
-      fontSize: '16px',
-    },
-    icon: {
-      fill: '#3A4445',
-    },
-    notificationType: {
-      margin: '12px 0',
-      minWidth: '16px',
-    },
-    notificationTypeIcon: {
-      width: '16px',
-      height: '16px',
-      fill: 'grey',
-      '&.info': {
-        fill: '#708284',
-      },
-      '&.warning': {
-        fill: '#BD6931',
-      },
-      '&.error': {
-        fill: '#FE0003',
-      },
-      '&.success': {
-        fill: '#308F5F',
-      },
-    },
-    notificationMenuWrapper: {
-      maxWidth: '40px',
-      margin: 'auto 0',
-      display: 'flex',
-      justifyContent: 'left',
-      padding: '0px 8px',
-    },
-  })
-);
+  },
+  notificationMenuWrapper: {
+    maxWidth: '40px',
+    margin: 'auto 0',
+    display: 'flex',
+    justifyContent: 'left',
+    padding: '0px 8px',
+  },
+}));
 
 type NotificationsDropdownProps = {
   notifications?: Notifications;

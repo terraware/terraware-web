@@ -1,5 +1,6 @@
-import { CircularProgress, Container, Grid } from '@material-ui/core';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { CircularProgress, Container, Grid } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import { Theme } from '@mui/material';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Route, Switch, useHistory, useParams } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
@@ -21,16 +22,14 @@ import DetailsMenu from './DetailsMenu';
 import GerminationMenu from './GerminationMenu';
 import AccessionPageHeader from './PageHeader';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    mainContainer: {
-      padding: '32px 0',
-    },
-    verticalSpacing: {
-      marginTop: `${theme.spacing(1)}px`,
-    },
-  })
-);
+const useStyles = makeStyles((theme: Theme) => ({
+  mainContainer: {
+    padding: '32px 0',
+  },
+  verticalSpacing: {
+    marginTop: theme.spacing(1),
+  },
+}));
 
 interface AccessionPageProps {
   organization?: ServerOrganization;

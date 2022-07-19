@@ -1,8 +1,5 @@
-import MomentUtils from '@date-io/moment';
-import { Chip, Grid, Typography } from '@material-ui/core';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
-import AddIcon from '@material-ui/icons/Add';
-import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import { Chip, Grid, Theme, Typography } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { getDate } from 'src/api/clock';
@@ -22,22 +19,23 @@ import NewGermination from './NewGermination';
 import NewTest from './NewTest';
 import LabCellRenderer from './TableCellRenderer';
 import { CUT_TEST_COLUMNS, TEST_COLUMNS, TEST_ENTRY_COLUMNS } from './types';
+import { Add } from '@mui/icons-material';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    right: {
-      marginLeft: 'auto',
-    },
-    bold: {
-      fontWeight: theme.typography.fontWeightBold,
-    },
-    greenChip: {
-      color: theme.palette.common.white,
-    },
-  })
-);
+const useStyles = makeStyles((theme: Theme) => ({
+  right: {
+    marginLeft: 'auto',
+  },
+  bold: {
+    fontWeight: theme.typography.fontWeightBold,
+  },
+  greenChip: {
+    color: theme.palette.common.white,
+  },
+}));
 
-const newWithdrawalChipStyles = makeStyles((theme) => ({
+const newWithdrawalChipStyles = makeStyles((theme: Theme) => ({
   root: {
     color: theme.palette.common.white,
   },
@@ -58,6 +56,7 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
   const seedsAvailable = accession.remainingQuantity?.quantity ?? 0;
   const [selectedTestEntry, setSelectedTestEntry] = useState<ViabilityTestResult>();
   const [date, setDate] = useState<number>();
+  const [labRows, setLabRows] = useState<ViabilityTest[]>();
 
   useEffect(() => {
     window.scrollTo({ top: 0 });
@@ -71,6 +70,10 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
     populateDate();
   }, []);
 
+  useEffect(() => {
+    setLabRows(accession.viabilityTests?.filter((viabilityTest) => viabilityTest.testType === 'Lab'));
+  }, [accession]);
+
   const getTotalScheduled = (): number => {
     const totalS = accession.viabilityTests?.reduce((acum, viabilityTest) => {
       if (viabilityTest.testType === 'Lab' && moment(viabilityTest.startDate).isAfter(date)) {
@@ -82,8 +85,6 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
 
     return totalS || 0;
   };
-
-  const labRows = accession.viabilityTests?.filter((viabilityTest) => viabilityTest.testType === 'Lab') || [];
 
   const onEditTest = (row: TableRowType) => {
     setSelectedTest(row as ViabilityTest);
@@ -195,7 +196,7 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
 
   return (
     <main>
-      <MuiPickersUtilsProvider utils={MomentUtils}>
+      <LocalizationProvider dateAdapter={AdapterDateFns}>
         <NewTest
           open={testOpen}
           onClose={onCloseTestModal}
@@ -240,7 +241,7 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
               <Table
                 id='lab-table'
                 columns={TEST_COLUMNS}
-                rows={labRows}
+                rows={labRows || []}
                 orderBy='date'
                 Renderer={LabCellRenderer}
                 onSelect={onEditTest}
@@ -269,21 +270,21 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
                 label={strings.NEW_TEST}
                 clickable
                 disabled={seedsAvailable <= 0}
-                deleteIcon={<AddIcon classes={newWithdrawalChipStyles()} />}
+                deleteIcon={<Add classes={newWithdrawalChipStyles()} />}
                 color={'primary'}
                 onClick={onNewTest}
                 onDelete={onNewTest}
               />
             </Grid>
           </Grid>
-          <Grid container justify='center' alignItems='center' spacing={4}>
+          <Grid container spacing={4}>
             <Grid item xs={11}>
-              <Typography variant='h6' className={classes.bold}>
+              <Typography variant='subtitle1' className={classes.bold}>
                 {strings.CUT_TEST}
               </Typography>
             </Grid>
           </Grid>
-          <Grid container justify='center' alignItems='center' spacing={4}>
+          <Grid container spacing={4}>
             <Grid item xs={11} id='cutTest'>
               <Table
                 columns={CUT_TEST_COLUMNS}
@@ -295,7 +296,7 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
             </Grid>
           </Grid>
         </MainPaper>
-      </MuiPickersUtilsProvider>
+      </LocalizationProvider>
     </main>
   );
 }
