@@ -55,29 +55,29 @@ type ChartPaletteType = {
 
 export const ChartPalette: ChartPaletteType = {
   SYSTEM_POWER: {
-    borderColor: '#0067C8',
-    backgroundColor: '#007DF2',
+    borderColor: '#0067C8' /* tw-clr-base-blue-600 */,
+    backgroundColor: '#007DF2' /* tw-clr-base-blue-500 */,
   },
   STATE_OF_CHARGE: {
-    borderColor: '#BD6931',
-    backgroundColor: '#DE7935',
+    borderColor: '#9A572B' /* tw-clr-base-orange-600 */,
+    backgroundColor: '#BD6931' /* tw-clr-base-orange-500 */,
   },
   TEMPERATURE: {
-    borderColor: '#BD6931',
-    backgroundColor: '#DE7935',
+    borderColor: '#9A572B' /* tw-clr-base-orange-600 */,
+    backgroundColor: '#BD6931' /* tw-clr-base-orange-500 */,
   },
   TEMPERATURE_THRESHOLD: {
-    borderColor: '#F89E74',
-    backgroundColor: '#FAC4B1',
-    fillColor: '#FFBFD035',
+    borderColor: '#FAC4B1' /* tw-clr-base-orange-200 */,
+    backgroundColor: '#FCE5DE' /* tw-clr-base-orange-100 */,
+    fillColor: '#FCE5DE80' /* tw-clr-base-orange-100 @ 50% */,
   },
   HUMIDITY: {
-    borderColor: '#0067C8',
-    backgroundColor: '#007DF2',
+    borderColor: '#0067C8' /* tw-clr-base-blue-600 */,
+    backgroundColor: '#007DF2' /* tw-clr-base-blue-500 */,
   },
   HUMIDITY_THRESHOLD: {
-    borderColor: '#BED0FF',
-    backgroundColor: '#E2E9FF',
-    fillColor: '#E2E9FF35',
+    borderColor: '#BED0FF' /* tw-clr-base-blue-200 */,
+    backgroundColor: '#E2E9FF' /* tw-clr-base-blue-100 */,
+    fillColor: '#E2E9FF80' /* tw-clr-base-blue-100 @ 50% */,
   },
 };
