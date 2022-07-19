@@ -17,7 +17,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
     padding: '20px 0',
   },
-  mainGrid: {},
   main: {
     background:
       'url(/assets/trees-right.png) no-repeat 100% 100%/auto 248px, url(/assets/trees-left.png) no-repeat 0 100%/auto 175px, url(/assets/water.png) repeat-x 0 100%/auto 142px, url(/assets/mountain.png) no-repeat 0 100%/auto 233px, url(/assets/far-mountain.png) no-repeat 100% 100%/auto 317px, url(/assets/background.png) no-repeat 100% 0/90% 633px, linear-gradient(to bottom right, rgb(255, 255, 255) 0%, rgb(199, 226, 234) 100%) no-repeat 0 0/auto',
@@ -25,9 +24,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     display: 'flex',
     flexDirection: 'column',
     padding: '24px',
-  },
-  extraPadding: {
-    paddingLeft: '12px',
   },
 }));
 
@@ -64,10 +60,9 @@ export default function Home({ organizations, selectedOrganization, setSelectedO
             : homePageStrings.WELCOME
         }
         subtitle=''
-        titleClassName={classes.extraPadding}
       />
       <Container maxWidth={false} className={classes.mainContainer}>
-        <Grid container spacing={3} className={classes.mainGrid} sx={{ padding: 0 }}>
+        <Grid container spacing={3} sx={{ padding: 0 }}>
           {selectedOrganization?.role && isAdmin(selectedOrganization) && (
             <>
               <Grid item xs={6}>

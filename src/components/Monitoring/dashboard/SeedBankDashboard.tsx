@@ -37,21 +37,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     fontSize: '48px',
     margin: 0,
   },
-  mainGrid: {
-    display: 'flex',
-    width: '100%',
-    margin: 0,
-  },
-  overridePadding: {
-    paddingLeft: '12px !important',
-    paddingTop: '12px !important',
-  },
-  overrideTopPadding: {
-    paddingTop: '12px !important',
-  },
-  overrideLeftPadding: {
-    paddingLeft: '12px !important',
-  },
 }));
 
 type SeedBankDashboardProps = {
@@ -165,8 +150,8 @@ export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.El
   }, [availableLocations]);
 
   return (
-    <Grid container spacing={3} className={classes.mainGrid}>
-      <Grid item xs={6} className={classes.overridePadding}>
+    <Grid container spacing={3} marginTop={0}>
+      <Grid item xs={6}>
         <div className={classes.graphContainer}>
           <div className={classes.panelTitle}>
             <p>{strings.PV_BATTERY_CHARGE}</p>
@@ -175,7 +160,7 @@ export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.El
           <p className={classes.panelValue}>{batteryLevel || strings.NO_DATA_YET}</p>
         </div>
       </Grid>
-      <Grid item xs={6} className={classes.overrideTopPadding} paddingRight={'12px'}>
+      <Grid item xs={6}>
         <div className={classes.graphContainer}>
           <div className={classes.panelTitle}>
             <p>{strings.SEED_BANK_INTERNET}</p>
@@ -184,14 +169,14 @@ export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.El
           <p className={classes.panelValue}>{deviceManager?.isOnline ? strings.CONNECTED : strings.NOT_CONNECTED}</p>
         </div>
       </Grid>
-      <Grid item xs={12} className={classes.overrideLeftPadding} paddingRight={'12px'}>
+      <Grid item xs={12}>
         <TemperatureHumidityChart
           availableLocations={availableLocations}
           defaultSensor={defaultSensor}
           defaultTimePeriod={defaultTimePeriod}
         />
       </Grid>
-      <Grid item xs={12} className={classes.overrideLeftPadding} paddingRight={'12px'}>
+      <Grid item xs={12}>
         <PVBatteryChart BMU={BMU} defaultTimePeriod={defaultTimePeriod} />
       </Grid>
     </Grid>
