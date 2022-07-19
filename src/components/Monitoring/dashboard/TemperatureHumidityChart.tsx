@@ -6,7 +6,7 @@ import { Chart } from 'chart.js';
 import { Device } from 'src/types/Device';
 import { getTimeseriesHistory } from 'src/api/timeseries/timeseries';
 import moment from 'moment';
-import { TIME_PERIODS, getFirstWord, getStartTime, HumidityValues, getUnit } from './Common';
+import { ChartPalette, TIME_PERIODS, getFirstWord, getStartTime, HumidityValues, getUnit } from './Common';
 import { htmlLegendPlugin } from './htmlLegendPlugin';
 import 'chartjs-adapter-date-fns';
 
@@ -96,8 +96,8 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
             }),
             label: 'Temperature', // Text to show in legend
             showLine: true, // If false, the line is not drawn for this dataset.
-            borderColor: '#FE0003', // The line border color.
-            backgroundColor: '#FF5A5B', // The line fill color.
+            borderColor: ChartPalette.TEMPERATURE.borderColor,
+            backgroundColor: ChartPalette.TEMPERATURE.backgroundColor,
             fill: false, // How to fill the area under the line. See filling modes here: https://www.chartjs.org/docs/latest/charts/area.html#filling-modes
           },
           {
@@ -106,8 +106,8 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
             }),
             label: 'Temperature Thresholds',
             showLine: false,
-            borderColor: '#FF9797',
-            backgroundColor: '#FFC1C1',
+            borderColor: ChartPalette.TEMPERATURE_THRESHOLD.borderColor,
+            backgroundColor: ChartPalette.TEMPERATURE_THRESHOLD.backgroundColor,
             fill: false,
             pointRadius: 0,
           },
@@ -116,11 +116,11 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
               return { x: entry.timestamp, y: getTemperatureMaxValue(selectedLocation?.name) };
             }),
             showLine: false,
-            borderColor: '#FF9797',
+            borderColor: ChartPalette.TEMPERATURE_THRESHOLD.borderColor,
             pointRadius: 0,
             fill: {
               target: 1, // fill to dataset 1
-              above: '#FFBFD035', // Area will be red above the origin
+              above: ChartPalette.TEMPERATURE_THRESHOLD.fillColor,
             },
           },
           {
@@ -129,8 +129,8 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
             }),
             label: 'Humidity',
             showLine: true,
-            borderColor: '#0067C8',
-            backgroundColor: '#007DF2',
+            borderColor: ChartPalette.HUMIDITY.borderColor,
+            backgroundColor: ChartPalette.HUMIDITY.backgroundColor,
             yAxisID: 'y1',
             fill: false,
           },
@@ -143,8 +143,8 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
             }),
             label: 'Temperature',
             showLine: true,
-            borderColor: '#FE0003',
-            backgroundColor: '#FF5A5B',
+            borderColor: ChartPalette.TEMPERATURE.borderColor,
+            backgroundColor: ChartPalette.TEMPERATURE.backgroundColor,
             fill: false,
           },
           {
@@ -153,8 +153,8 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
             }),
             label: 'Temperature Thresholds',
             showLine: false,
-            borderColor: '#FF9797',
-            backgroundColor: '#FFC1C1',
+            borderColor: ChartPalette.TEMPERATURE_THRESHOLD.borderColor,
+            backgroundColor: ChartPalette.TEMPERATURE_THRESHOLD.backgroundColor,
             fill: false,
             pointRadius: 0,
           },
@@ -163,11 +163,11 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
               return { x: entry.timestamp, y: getTemperatureMaxValue(selectedLocation?.name) };
             }),
             showLine: false,
-            borderColor: '#FF9797',
+            borderColor: ChartPalette.TEMPERATURE_THRESHOLD.borderColor,
             pointRadius: 0,
             fill: {
               target: 1, // fill to dataset 1
-              above: '#FFBFD035', // Area will be red above the origin
+              above: ChartPalette.TEMPERATURE_THRESHOLD.fillColor,
             },
           },
 
@@ -177,8 +177,8 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
             }),
             label: 'Humidity Thresholds',
             showLine: false,
-            borderColor: '#BED0FF',
-            backgroundColor: '#E2E9FF',
+            borderColor: ChartPalette.HUMIDITY_THRESHOLD.borderColor,
+            backgroundColor: ChartPalette.HUMIDITY_THRESHOLD.backgroundColor,
             fill: false,
             pointRadius: 0,
             yAxisID: 'y1',
@@ -188,10 +188,10 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
               return { x: entry.timestamp, y: getHumidityMaxValue(selectedLocation?.name) };
             }),
             showLine: false,
-            borderColor: '#BED0FF',
+            borderColor: ChartPalette.HUMIDITY_THRESHOLD.borderColor,
             fill: {
               target: 3,
-              above: '#E2E9FF35',
+              above: ChartPalette.HUMIDITY_THRESHOLD.fillColor,
             },
             pointRadius: 0,
             yAxisID: 'y1',
@@ -202,8 +202,8 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
             }),
             label: 'Humidity',
             showLine: true,
-            borderColor: '#0067C8',
-            backgroundColor: '#007DF2',
+            borderColor: ChartPalette.HUMIDITY.borderColor,
+            backgroundColor: ChartPalette.HUMIDITY.backgroundColor,
             fill: false,
             yAxisID: 'y1',
           },

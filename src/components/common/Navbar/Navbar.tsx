@@ -1,9 +1,9 @@
 import React, { ReactNode } from 'react';
-import useDeviceInfo from 'src/utils/device';
 import { ReactComponent as Logo } from './logo.svg';
 import './styles.scss';
 import { createStyles, makeStyles } from '@material-ui/core';
 import Icon from '../icon/Icon';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 export interface Props {
   children: ReactNode;

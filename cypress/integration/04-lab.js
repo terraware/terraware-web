@@ -32,7 +32,7 @@ describe('Lab', () => {
     cy.get('#Lab').click();
     cy.get('#quantity').type('1000');
 
-    cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
+    cy.intercept('GET', 'api/v1/seedbank/accessions/*').as('getAccession');
     cy.get('#saveAccession').click();
     cy.wait('@getAccession');
 
@@ -56,7 +56,7 @@ describe('Lab', () => {
     cy.get('#notes').type('A lab test note');
     cy.get('#staffResponsible').type('Constanza');
 
-    cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
+    cy.intercept('GET', 'api/v1/seedbank/accessions/*').as('getAccession');
     cy.get('#saveTest').click();
     cy.wait('@getAccession');
 
@@ -75,7 +75,7 @@ describe('Lab', () => {
     cy.get('#Nursery\\ Media').click();
     cy.get('#notes').clear();
 
-    cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
+    cy.intercept('GET', 'api/v1/seedbank/accessions/*').as('getAccession');
     cy.get('#saveTest').click();
     cy.wait('@getAccession');
 
@@ -99,7 +99,7 @@ describe('Lab', () => {
     cy.get('#Soak').click();
     cy.get('#seedsSown').type('200');
 
-    cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
+    cy.intercept('GET', 'api/v1/seedbank/accessions/*').as('getAccession');
     cy.get('#saveTest').click();
     cy.wait('@getAccession');
   });
@@ -115,7 +115,7 @@ describe('Lab', () => {
     cy.get('#Other').click();
     cy.get('#seedsSown').type('50');
 
-    cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
+    cy.intercept('GET', 'api/v1/seedbank/accessions/*').as('getAccession');
     cy.get('#saveTest').click();
     cy.wait('@getAccession');
     cy.get('.scrollable-content').scrollTo(0, 0);
@@ -175,8 +175,8 @@ describe('Lab', () => {
   it('should delete test', () => {
     cy.get('#row3').click();
 
-    cy.intercept('PUT', '/api/v1/seedbank/accession/**').as('putAccession');
-    cy.intercept('GET', '/api/v1/seedbank/accession/**').as('getAccession');
+    cy.intercept('PUT', '/api/v1/seedbank/accessions/**').as('putAccession');
+    cy.intercept('GET', '/api/v1/seedbank/accessions/**').as('getAccession');
     cy.get('#deleteTest').click();
     cy.wait('@putAccession');
     cy.wait('@getAccession');
@@ -188,8 +188,8 @@ describe('Lab', () => {
     cy.get('#row2-expand').click();
     cy.get('#newEntry').click();
 
-    cy.intercept('PUT', '/api/v1/seedbank/accession/**').as('putAccession');
-    cy.intercept('GET', '/api/v1/seedbank/accession/**').as('getAccession');
+    cy.intercept('PUT', '/api/v1/seedbank/accessions/**').as('putAccession');
+    cy.intercept('GET', '/api/v1/seedbank/accessions/**').as('getAccession');
     cy.get('#seedsGerminated').type('10');
     cy.get('#recordingDate').clear().type('2021-02-09');
 
@@ -219,8 +219,8 @@ describe('Lab', () => {
     cy.get('#newEntry').click();
     cy.get('.MuiDialogTitle-root').should('be.visible');
 
-    cy.intercept('PUT', '/api/v1/seedbank/accession/**').as('putAccession');
-    cy.intercept('GET', '/api/v1/seedbank/accession/**').as('getAccession');
+    cy.intercept('PUT', '/api/v1/seedbank/accessions/**').as('putAccession');
+    cy.intercept('GET', '/api/v1/seedbank/accessions/**').as('getAccession');
     cy.get('#seedsGerminated').clear().type('15');
     cy.get('#recordingDate').clear().type('2021-05-09');
 
@@ -248,8 +248,8 @@ describe('Lab', () => {
   it('should modify entry', () => {
     cy.get('#row2-details #row2').click();
 
-    cy.intercept('PUT', '/api/v1/seedbank/accession/**').as('putAccession');
-    cy.intercept('GET', '/api/v1/seedbank/accession/**').as('getAccession');
+    cy.intercept('PUT', '/api/v1/seedbank/accessions/**').as('putAccession');
+    cy.intercept('GET', '/api/v1/seedbank/accessions/**').as('getAccession');
     cy.get('#seedsGerminated').clear().type('25');
 
     cy.get('#saveGermination').click();
@@ -275,8 +275,8 @@ describe('Lab', () => {
   it('should delete entry', () => {
     cy.get('#row2-details #row2').click();
 
-    cy.intercept('PUT', '/api/v1/seedbank/accession/**').as('putAccession');
-    cy.intercept('GET', '/api/v1/seedbank/accession/**').as('getAccession');
+    cy.intercept('PUT', '/api/v1/seedbank/accessions/**').as('putAccession');
+    cy.intercept('GET', '/api/v1/seedbank/accessions/**').as('getAccession');
     cy.get('#deleteGermination').click();
     cy.wait('@putAccession');
     cy.wait('@getAccession');
@@ -302,7 +302,7 @@ describe('Lab', () => {
     cy.get('#cutTestSeedsEmpty').type('50');
     cy.get('#cutTestSeedsCompromised').type('10');
 
-    cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
+    cy.intercept('GET', 'api/v1/seedbank/accessions/*').as('getAccession');
     cy.get('#saveCutTest').click();
     cy.wait('@getAccession');
 
@@ -316,7 +316,7 @@ describe('Lab', () => {
 
     cy.get('#cutTestSeedsFilled').clear().type('500');
 
-    cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
+    cy.intercept('GET', 'api/v1/seedbank/accessions/*').as('getAccession');
     cy.get('#saveCutTest').click();
     cy.wait('@getAccession');
 
@@ -330,7 +330,7 @@ describe('Lab', () => {
     cy.get('#startDate').type('3021-02-09');
     cy.get('#seedsSown').type('25');
 
-    cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
+    cy.intercept('GET', 'api/v1/seedbank/accessions/*').as('getAccession');
     cy.get('#saveTest').click();
     cy.wait('@getAccession');
 

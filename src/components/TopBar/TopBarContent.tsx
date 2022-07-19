@@ -8,7 +8,8 @@ import Icon from '../common/icon/Icon';
 import NotificationsDropdown from '../NotificationsDropdown';
 import OrganizationsDropdown from '../OrganizationsDropdown';
 import UserMenu from '../UserMenu';
-import useDeviceInfo from 'src/utils/device';
+import { ReactComponent as Logo } from '../common/Navbar/logo.svg';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -78,6 +79,9 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
       <IconButton onClick={() => setShowNavBar(true)} size='small'>
         <Icon name='iconMenu' />
       </IconButton>
+      <div className='logo'>
+        <Logo />
+      </div>
 
       <div className={classes.flex}>
         <NotificationsDropdown

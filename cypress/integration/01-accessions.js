@@ -115,8 +115,8 @@ describe('Accessions', () => {
     });
 
     it('should check in the accession', () => {
-      cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
-      cy.intercept('POST', '/api/v1/seedbank/accession/*/checkIn').as('checkInAccession');
+      cy.intercept('GET', 'api/v1/seedbank/accessions/*').as('getAccession');
+      cy.intercept('POST', '/api/v1/seedbank/accessions/*/checkIn').as('checkInAccession');
       cy.get('#checkIn').click();
       cy.wait('@checkInAccession');
       cy.wait('@getAccession');
@@ -129,7 +129,7 @@ describe('Accessions', () => {
       cy.get('#primaryCollector').clear().type('Leann');
       cy.get('#fieldNotes').clear().type('Other notes');
 
-      cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
+      cy.intercept('GET', 'api/v1/seedbank/accessions/*').as('getAccession');
       cy.get('#saveAccession').click();
       cy.wait('@getAccession');
 
@@ -140,7 +140,7 @@ describe('Accessions', () => {
 
     it('should send the accession to Nursery', () => {
       cy.get('#sendToNursery').should('contain', 'Send to Nursery');
-      cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
+      cy.intercept('GET', 'api/v1/seedbank/accessions/*').as('getAccession');
       cy.get('#sendToNursery').click();
       cy.get('#sendToNursery').should('contain', 'Sending');
       cy.wait('@getAccession');
@@ -152,7 +152,7 @@ describe('Accessions', () => {
 
     it('should unsend the accession to Nursery', () => {
       cy.get('#undoSendToNursery').should('exist');
-      cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
+      cy.intercept('GET', 'api/v1/seedbank/accessions/*').as('getAccession');
       cy.get('#undoSendToNursery').click();
       cy.wait('@getAccession');
       cy.get('#sendToNursery').should('exist');
@@ -169,22 +169,22 @@ describe('Accessions', () => {
 
       cy.get('#photo-0').contains('accession1.jpg');
       cy.get('#photo-0')
-        .should('have.attr', 'href', '/api/v1/seedbank/accession/1002/photo/accession1.jpg')
+        .should('have.attr', 'href', '/api/v1/seedbank/accessions/1002/photos/accession1.jpg')
         .should('have.attr', 'target', '_blank');
 
       cy.get('#photo-1').contains('accession2.jpg');
       cy.get('#photo-1')
-        .should('have.attr', 'href', '/api/v1/seedbank/accession/1002/photo/accession2.jpg')
+        .should('have.attr', 'href', '/api/v1/seedbank/accessions/1002/photos/accession2.jpg')
         .should('have.attr', 'target', '_blank');
 
       // cy.request({
-      //   url: Cypress.config().baseUrl + '/api/v1/seedbank/accession/1002/photo/accession1.jpg',
+      //   url: Cypress.config().baseUrl + '/api/v1/seedbank/accessions/1002/photos/accession1.jpg',
       //   headers: { 'X-Forwarded-User': 'dummy-auth-id' },
       // })
       //   .its('status')
       //   .should('eq', 200);
       // cy.request({
-      //   url: Cypress.config().baseUrl + '/api/v1/seedbank/accession/1002/photo/accession2.jpg',
+      //   url: Cypress.config().baseUrl + '/api/v1/seedbank/accessions/1002/photos/accession2.jpg',
       //   headers: { 'X-Forwarded-User': 'dummy-auth-id' },
       // })
       //   .its('status')

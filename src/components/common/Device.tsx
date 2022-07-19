@@ -1,5 +1,5 @@
 import React from 'react';
-import useDeviceInfo from 'src/utils/device';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 /**
  * Utility components that can be used for device forms.
