@@ -34,3 +34,50 @@ export const getUnit = (selectedPeriod?: string) => {
     return 'day';
   }
 };
+
+type ChartLine =
+  | 'SYSTEM_POWER'
+  | 'STATE_OF_CHARGE'
+  | 'TEMPERATURE'
+  | 'TEMPERATURE_THRESHOLD'
+  | 'HUMIDITY'
+  | 'HUMIDITY_THRESHOLD';
+
+type ChartLinePalette = {
+  borderColor: string;
+  backgroundColor: string;
+  fillColor?: string;
+};
+
+type ChartPaletteType = {
+  [key in ChartLine]: ChartLinePalette;
+};
+
+export const ChartPalette: ChartPaletteType = {
+  SYSTEM_POWER: {
+    borderColor: '#0067C8' /* tw-clr-base-blue-600 */,
+    backgroundColor: '#007DF2' /* tw-clr-base-blue-500 */,
+  },
+  STATE_OF_CHARGE: {
+    borderColor: '#9A572B' /* tw-clr-base-orange-600 */,
+    backgroundColor: '#BD6931' /* tw-clr-base-orange-500 */,
+  },
+  TEMPERATURE: {
+    borderColor: '#9A572B' /* tw-clr-base-orange-600 */,
+    backgroundColor: '#BD6931' /* tw-clr-base-orange-500 */,
+  },
+  TEMPERATURE_THRESHOLD: {
+    borderColor: '#FAC4B1' /* tw-clr-base-orange-200 */,
+    backgroundColor: '#FCE5DE' /* tw-clr-base-orange-100 */,
+    fillColor: '#FCE5DE80' /* tw-clr-base-orange-100 @ 50% */,
+  },
+  HUMIDITY: {
+    borderColor: '#0067C8' /* tw-clr-base-blue-600 */,
+    backgroundColor: '#007DF2' /* tw-clr-base-blue-500 */,
+  },
+  HUMIDITY_THRESHOLD: {
+    borderColor: '#BED0FF' /* tw-clr-base-blue-200 */,
+    backgroundColor: '#E2E9FF' /* tw-clr-base-blue-100 */,
+    fillColor: '#E2E9FF80' /* tw-clr-base-blue-100 @ 50% */,
+  },
+};

@@ -105,7 +105,7 @@ export interface paths {
     get: operations["count"];
   };
   "/api/v1/notifications/{id}": {
-    get: operations["read_1"];
+    get: operations["read_2"];
     put: operations["markRead"];
   };
   "/api/v1/organizations": {
@@ -137,19 +137,37 @@ export interface paths {
     post: operations["search_1"];
   };
   "/api/v1/seedbank/accession": {
-    post: operations["create"];
+    post: operations["create_1"];
   };
   "/api/v1/seedbank/accession/{id}": {
-    get: operations["read"];
-    put: operations["update"];
+    get: operations["read_1"];
+    put: operations["update_1"];
   };
   "/api/v1/seedbank/accession/{id}/checkIn": {
-    post: operations["checkIn"];
+    post: operations["checkIn_1"];
   };
   "/api/v1/seedbank/accession/{id}/photo": {
     get: operations["listPhotos"];
   };
   "/api/v1/seedbank/accession/{id}/photo/{photoFilename}": {
+    /** Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio. */
+    get: operations["getPhoto_1"];
+    post: operations["uploadPhoto_1"];
+  };
+  "/api/v1/seedbank/accessions": {
+    post: operations["create"];
+  };
+  "/api/v1/seedbank/accessions/{id}": {
+    get: operations["read"];
+    put: operations["update"];
+  };
+  "/api/v1/seedbank/accessions/{id}/checkIn": {
+    post: operations["checkIn"];
+  };
+  "/api/v1/seedbank/accessions/{id}/photos": {
+    get: operations["listPhotos_1"];
+  };
+  "/api/v1/seedbank/accessions/{id}/photos/{photoFilename}": {
     /** Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio. */
     get: operations["getPhoto"];
     post: operations["uploadPhoto"];
@@ -267,17 +285,11 @@ export interface components {
       fieldNotes?: string;
       founderId?: string;
       geolocations?: components["schemas"]["Geolocation"][];
-      /** @deprecated */
-      germinationTests?: components["schemas"]["ViabilityTestPayload"][];
-      /** @deprecated */
-      germinationTestTypes?: ("Lab" | "Nursery")[];
       /** Server-generated unique identifier for the accession. This is unique across all seed banks, but is not suitable for display to end users. */
       id: number;
       /** Initial size of accession. The units of this value must match the measurement type in "processingMethod". */
       initialQuantity?: components["schemas"]["SeedQuantityPayload"];
       landowner?: string;
-      /** @deprecated */
-      latestGerminationTestDate?: string;
       latestViabilityPercent?: number;
       latestViabilityTestDate?: string;
       numberOfTrees?: number;
@@ -391,8 +403,6 @@ export interface components {
       fieldNotes?: string;
       founderId?: string;
       geolocations?: components["schemas"]["Geolocation"][];
-      /** @deprecated */
-      germinationTestTypes?: ("Lab" | "Nursery")[];
       landowner?: string;
       numberOfTrees?: number;
       primaryCollector?: string;
@@ -1141,10 +1151,6 @@ export interface components {
       fieldNotes?: string;
       founderId?: string;
       geolocations?: components["schemas"]["Geolocation"][];
-      /** @deprecated */
-      germinationTestTypes?: ("Lab" | "Nursery")[];
-      /** @deprecated */
-      germinationTests?: components["schemas"]["ViabilityTestPayload"][];
       /** Initial size of accession. The units of this value must match the measurement type in "processingMethod". */
       initialQuantity?: components["schemas"]["SeedQuantityPayload"];
       landowner?: string;
@@ -1285,10 +1291,7 @@ export interface components {
       testResults?: components["schemas"]["ViabilityTestResultPayload"][];
       totalPercentGerminated?: number;
       totalSeedsGerminated?: number;
-      /** @deprecated */
-      germinations?: components["schemas"]["ViabilityTestResultPayload"][];
     };
-    /** @deprecated */
     ViabilityTestResultPayload: {
       recordingDate: string;
       seedsGerminated: number;
@@ -1304,15 +1307,12 @@ export interface components {
         | "Broadcast"
         | "Share with Another Site"
         | "Other"
-        | "Germination Testing"
         | "Viability Testing";
       destination?: string;
       notes?: string;
       /** Quantity of seeds remaining. For weight-based accessions, this is user input and is required. For count-based accessions, it is calculated by the server and ignored on input. */
       remainingQuantity?: components["schemas"]["SeedQuantityPayload"];
       staffResponsible?: string;
-      /** @deprecated If this withdrawal is of purpose "Germination Testing", the ID of the test it is associated with. This is always set by the server and cannot be modified. */
-      germinationTestId?: number;
       /** If this withdrawal is of purpose "Germination Testing", the ID of the test it is associated with. This is always set by the server and cannot be modified. */
       viabilityTestId?: number;
       /** For weight-based accessions, the difference between the weight remaining before this withdrawal and the weight remaining after it. This is a server-calculated value and is ignored on input. */
@@ -2128,7 +2128,7 @@ export interface operations {
       };
     };
   };
-  read_1: {
+  read_2: {
     parameters: {
       path: {
         id: number;
@@ -2405,6 +2405,176 @@ export interface operations {
       };
     };
   };
+  create_1: {
+    responses: {
+      /** The accession was created successfully. Response includes fields populated by the server, including the accession number and ID. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CreateAccessionResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateAccessionRequestPayload"];
+      };
+    };
+  };
+  read_1: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetAccessionResponsePayload"];
+        };
+      };
+      /** The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  update_1: {
+    parameters: {
+      path: {
+        id: number;
+      };
+      query: {
+        simulate?: boolean;
+      };
+    };
+    responses: {
+      /** The accession was updated successfully. Response includes fields populated or modified by the server as a result of the update. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UpdateAccessionResponsePayload"];
+        };
+      };
+      /** The specified accession doesn't exist. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateAccessionRequestPayload"];
+      };
+    };
+  };
+  checkIn_1: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UpdateAccessionResponsePayload"];
+        };
+      };
+      /** The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  listPhotos: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** The accession's photos are listed in the response. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListPhotosResponsePayload"];
+        };
+      };
+      /** The accession does not exist. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio. */
+  getPhoto_1: {
+    parameters: {
+      path: {
+        id: number;
+        photoFilename: string;
+      };
+      query: {
+        maxWidth?: number;
+        maxHeight?: number;
+      };
+    };
+    responses: {
+      /** The photo was successfully retrieved. */
+      200: {
+        content: {
+          "image/jpeg": string;
+        };
+      };
+      /** The accession does not exist, or does not have a photo with the requested filename. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  uploadPhoto_1: {
+    parameters: {
+      path: {
+        id: number;
+        photoFilename: string;
+      };
+    };
+    responses: {
+      /** The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** The specified accession does not exist. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+      /** The requested photo already exists on the accession. */
+      409: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "multipart/form-data": {
+          file: string;
+          metadata: components["schemas"]["UploadPhotoMetadataPayload"];
+        };
+      };
+    };
+  };
   create: {
     responses: {
       /** The accession was created successfully. Response includes fields populated by the server, including the accession number and ID. */
@@ -2491,7 +2661,7 @@ export interface operations {
       };
     };
   };
-  listPhotos: {
+  listPhotos_1: {
     parameters: {
       path: {
         id: number;

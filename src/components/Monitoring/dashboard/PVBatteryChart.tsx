@@ -7,7 +7,7 @@ import { Chart } from 'chart.js';
 import { Device } from 'src/types/Device';
 import { getTimeseriesHistory } from 'src/api/timeseries/timeseries';
 import moment from 'moment';
-import { TIME_PERIODS, getStartTime, HumidityValues, getUnit } from './Common';
+import { ChartPalette, TIME_PERIODS, getStartTime, HumidityValues, getUnit } from './Common';
 import { htmlLegendPlugin } from './htmlLegendPlugin';
 import 'chartjs-adapter-date-fns';
 
@@ -79,8 +79,8 @@ export default function PVBatteryChart(props: PVBatteryChartProps): JSX.Element 
                 label: 'State of Charge',
                 showLine: true,
                 fill: false,
-                borderColor: '#FE0003',
-                backgroundColor: '#FF5A5B',
+                borderColor: ChartPalette.STATE_OF_CHARGE.borderColor,
+                backgroundColor: ChartPalette.STATE_OF_CHARGE.backgroundColor,
               },
               {
                 data: powerValues?.map((entry) => {
@@ -89,8 +89,8 @@ export default function PVBatteryChart(props: PVBatteryChartProps): JSX.Element 
                 label: 'System Power',
                 showLine: true,
                 fill: false,
-                borderColor: '#0067C8',
-                backgroundColor: '#007DF2',
+                borderColor: ChartPalette.SYSTEM_POWER.borderColor,
+                backgroundColor: ChartPalette.SYSTEM_POWER.backgroundColor,
                 yAxisID: 'y1',
               },
             ],

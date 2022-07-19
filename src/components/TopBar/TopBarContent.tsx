@@ -1,12 +1,15 @@
-import { Theme } from '@mui/material';
+import { IconButton, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React from 'react';
 import { Notifications } from 'src/types/Notifications';
 import { ServerOrganization } from 'src/types/Organization';
 import { User } from 'src/types/User';
+import Icon from '../common/icon/Icon';
 import NotificationsDropdown from '../NotificationsDropdown';
 import OrganizationsDropdown from '../OrganizationsDropdown';
 import UserMenu from '../UserMenu';
+import { ReactComponent as Logo } from '../common/Navbar/logo.svg';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const useStyles = makeStyles((theme: Theme) => ({
   separator: {
@@ -15,6 +18,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     backgroundColor: theme.palette.gray[200],
     marginRight: '16px',
     marginLeft: '16px',
+  },
+  flex: {
+    display: 'flex',
   },
 }));
 
@@ -27,6 +33,7 @@ type TopBarProps = {
   reloadOrganizationData: (selectedOrgId?: number) => void;
   user?: User;
   reloadUser: () => void;
+  setShowNavBar: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export default function TopBarContent(props: TopBarProps): JSX.Element | null {
@@ -39,9 +46,11 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
     reloadOrganizationData,
     user,
     reloadUser,
+    setShowNavBar,
   } = props;
+  const { isDesktop } = useDeviceInfo();
 
-  return (
+  return isDesktop ? (
     <>
       <NotificationsDropdown
         notifications={props.notifications}
@@ -62,6 +71,25 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
         </>
       )}
       <UserMenu user={user} reloadUser={reloadUser} hasOrganizations={organizations && organizations.length > 0} />
+    </>
+  ) : (
+    <>
+      <IconButton onClick={() => setShowNavBar(true)} size='small'>
+        <Icon name='iconMenu' />
+      </IconButton>
+      <div className='logo'>
+        <Logo />
+      </div>
+
+      <div className={classes.flex}>
+        <NotificationsDropdown
+          notifications={props.notifications}
+          setNotifications={setNotifications}
+          organizationId={selectedOrganization?.id}
+          reloadOrganizationData={reloadOrganizationData}
+        />
+        <UserMenu user={user} reloadUser={reloadUser} hasOrganizations={organizations && organizations.length > 0} />
+      </div>
     </>
   );
 }

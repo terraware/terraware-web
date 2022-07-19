@@ -50,7 +50,7 @@ describe('Processing and Drying', () => {
   });
 
   it('should save the accession', () => {
-    cy.intercept('PUT', '/api/v1/seedbank/accession/*').as('saveAccession');
+    cy.intercept('PUT', '/api/v1/seedbank/accessions/*').as('saveAccession');
     cy.get('#saveAccession', { timeout: 10000 }).click();
     cy.wait('@saveAccession', { timeout: 10000 });
   });
@@ -75,7 +75,7 @@ describe('Processing and Drying', () => {
     cy.get('#quantity').type(500);
     cy.get('#estimatedSeedCount').should('have.value', '500');
 
-    cy.intercept('GET', 'api/v1/seedbank/accession/*').as('getAccession');
+    cy.intercept('GET', 'api/v1/seedbank/accessions/*').as('getAccession');
     cy.get('#saveAccession').click();
     cy.wait('@getAccession');
 
