@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { Badge, IconButton, List, ListItem, ListItemIcon, ListItemText, Popover } from '@mui/material';
+import { Badge, IconButton, List, ListItem, ListItemIcon, ListItemText, Popover, Theme } from '@mui/material';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router';
@@ -13,8 +13,9 @@ import ErrorBox from './common/ErrorBox/ErrorBox';
 import preventDefault from 'src/utils/preventDefaultEvent';
 import stopPropagation from 'src/utils/stopPropagationEvent';
 import { makeStyles } from '@mui/styles';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme: Theme) => ({
   error: {
     width: '432px',
     height: '88px',
@@ -70,14 +71,19 @@ const useStyles = makeStyles(() => ({
     '&:hover': {
       backgroundColor: 'rgba(0, 103, 200, 0.1)',
     },
+    '&.mobile': {
+      padding: theme.spacing(1),
+    },
   },
   notificationContent: {
     display: 'flex',
     flexDirection: 'column',
-    minWidth: '375px',
     fontSize: '14px',
     fontWeight: 400,
     margin: '0px',
+    '&.non-mobile': {
+      minWidth: '375px',
+    },
   },
   notificationTitle: {
     display: 'block',
@@ -295,6 +301,7 @@ function NotificationItem(props: NotificationItemProps): JSX.Element {
   const { notification, markAsRead, reloadOrganizationData } = props;
   const { id, title, body, localUrl, createdTime, isRead, notificationCriticality } = notification;
   const criticality = notificationCriticality.toLowerCase();
+  const { isMobile, isDesktop } = useDeviceInfo();
 
   const onNotificationClick = async (read: boolean, close?: boolean) => {
     if (close && localUrl.startsWith('/home')) {
@@ -329,7 +336,14 @@ function NotificationItem(props: NotificationItemProps): JSX.Element {
     <ListItem
       id={`notification${id}`}
       button
-      className={(isRead || inFocus ? '' : classes.unreadNotification) + ' ' + classes.notification + ' ' + criticality}
+      className={
+        (isRead || inFocus ? '' : classes.unreadNotification) +
+        ' ' +
+        classes.notification +
+        ' ' +
+        criticality +
+        (isMobile ? ' mobile' : ' non-mobile')
+      }
       onClick={() => onNotificationClick(true, true)}
       component={Link}
       to={localUrl}
@@ -340,7 +354,7 @@ function NotificationItem(props: NotificationItemProps): JSX.Element {
         <Icon name={getTypeIcon()} className={classes.notificationTypeIcon + ' ' + criticality} />
       </ListItemIcon>
       <ListItemText
-        className={classes.notificationContent}
+        className={classes.notificationContent + (isMobile ? ' mobile' : ' non-mobile')}
         primary={<span className={classes.notificationTitle}>{title}</span>}
         secondary={
           <>
@@ -353,7 +367,9 @@ function NotificationItem(props: NotificationItemProps): JSX.Element {
       />
       <ListItem className={classes.notificationMenuWrapper}>
         {!inFocus && !isRead && <div className={classes.unreadNotificationIndicator} />}
-        {inFocus && <NotificationItemMenu markAsRead={onNotificationClick} notification={notification} />}
+        {(inFocus || (isRead && !isDesktop)) && (
+          <NotificationItemMenu markAsRead={onNotificationClick} notification={notification} />
+        )}
       </ListItem>
     </ListItem>
   );

@@ -2,15 +2,23 @@ import React, { useEffect, useState } from 'react';
 import { Divider, IconButton, List, ListItem, ListSubheader, Popover, Theme, Typography } from '@mui/material';
 import Icon from 'src/components/common/icon/Icon';
 import { makeStyles } from '@mui/styles';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const useStyles = makeStyles((theme: Theme) => ({
   subheader: {
     paddingLeft: 0,
     paddingRight: 0,
     borderBottom: '1px solid #A9B7B8',
-    borderRadius: '7px 7px 0 0',
-    backgroundColor: '#F2F4F5',
     display: 'flex',
+
+    '&.non-mobile': {
+      borderRadius: '7px 7px 0 0',
+      backgroundColor: '#F2F4F5',
+    },
+
+    '&.mobile': {
+      backgroundColor: '#FFFFFF',
+    },
   },
   title: {
     fontSize: '20px',
@@ -24,7 +32,12 @@ const useStyles = makeStyles((theme: Theme) => ({
     alignItems: 'center',
     justifyContent: 'space-between',
     lineHeight: '28px',
-    padding: theme.spacing(2, 3),
+    '&.non-mobile': {
+      padding: theme.spacing(2, 3),
+    },
+    '&.mobile': {
+      padding: theme.spacing(2, 2),
+    },
   },
   popover: {
     padding: 0,
@@ -39,6 +52,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     borderLeft: '1px solid #A9B7B8',
     borderRight: '1px solid #A9B7B8',
     borderBottom: '1px solid #A9B7B8',
+    display: 'flex',
+    flexDirection: 'column',
+
     '&.divot-popover-small': {
       // TODO set small width
       width: '478px',
@@ -50,9 +66,19 @@ const useStyles = makeStyles((theme: Theme) => ({
     '&.divot-popover-large': {
       width: '478px',
     },
-    maxHeight: 'calc(100vh - 100px)',
-    display: 'flex',
-    flexDirection: 'column',
+
+    '&.non-mobile': {
+      maxHeight: 'calc(100vh - 100px)',
+    },
+
+    '&.mobile': {
+      position: 'fixed !important',
+      top: '56px !important',
+      left: '0px !important',
+      right: '0px !important',
+      bottom: '0px !important',
+      maxWidth: '100vw',
+    },
   },
   divotWrapper: {
     display: 'flex',
@@ -78,6 +104,19 @@ const useStyles = makeStyles((theme: Theme) => ({
   icon: {
     fill: '#3A4445',
     marginLeft: '8px',
+  },
+  iconClose: {
+    fill: '#708284',
+    width: '22px',
+    height: '22px',
+  },
+  closeButton: {
+    background: 'none',
+    border: 'none',
+    cursor: 'pointer',
+  },
+  buttonContainer: {
+    display: 'flex',
   },
 }));
 
@@ -158,6 +197,7 @@ export default function DivotPopover({
   const classes = useStyles();
   const [divotStyle, setDivotStyle] = useState<DivotPositionProps>({ visibility: 'hidden' });
   const [divotRef, setDivotRef] = useState<HTMLElement | null>();
+  const { isMobile } = useDeviceInfo();
 
   useEffect(() => {
     setTimeout(() => {
@@ -188,17 +228,26 @@ export default function DivotPopover({
           horizontal: 'center',
         }}
         classes={{
-          paper: classes.paper + ' divot-popover-' + size,
+          paper: `${classes.paper}  ${isMobile ? 'mobile' : 'non-mobile divot-popover-' + size}`,
         }}
       >
         <List id='divot-popover' className={classes.popover} ref={setDivotRef}>
-          <div className={classes.divotWrapper}>
-            <div className={classes.divot} style={divotStyle} />
-          </div>
-          <ListSubheader inset className={classes.subheader}>
-            <div className={classes.mainTitle}>
+          {isMobile === false && (
+            <div className={classes.divotWrapper}>
+              <div className={classes.divot} style={divotStyle} />
+            </div>
+          )}
+          <ListSubheader inset className={`${classes.subheader} ${isMobile ? 'mobile' : 'non-mobile'}`}>
+            <div className={`${classes.mainTitle} ${isMobile ? 'mobile' : 'non-mobile'}`}>
               <Typography className={classes.title}>{title}</Typography>
-              {headerMenuItems !== undefined && <PopoverHeaderMenu menuItems={headerMenuItems} />}
+              <div className={classes.buttonContainer}>
+                {headerMenuItems !== undefined && <PopoverHeaderMenu menuItems={headerMenuItems} />}
+                {isMobile && (
+                  <button onClick={onClose} className={classes.closeButton}>
+                    <Icon name='close' className={classes.iconClose} />
+                  </button>
+                )}
+              </div>
             </div>
             <Divider />
           </ListSubheader>
