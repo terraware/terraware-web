@@ -12,9 +12,8 @@ import NavFooter from './common/Navbar/NavFooter';
 type NavBarProps = {
   organization?: ServerOrganization;
   setShowNavBar: React.Dispatch<React.SetStateAction<boolean>>;
-  className?: string;
 };
-export default function NavBar({ organization, setShowNavBar, className }: NavBarProps): JSX.Element | null {
+export default function NavBar({ organization, setShowNavBar }: NavBarProps): JSX.Element | null {
   const [role, setRole] = useState<AllOrganizationRoles>();
 
   useEffect(() => {
@@ -40,7 +39,7 @@ export default function NavBar({ organization, setShowNavBar, className }: NavBa
   };
 
   return (
-    <Navbar setShowNavBar={setShowNavBar} className={className}>
+    <Navbar setShowNavBar={setShowNavBar}>
       <NavItem label='Home' icon='home' selected={!!isHomeRoute} onClick={() => navigate(APP_PATHS.HOME)} id='home' />
       <NavItem
         label={strings.SPECIES}

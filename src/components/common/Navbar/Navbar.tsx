@@ -8,7 +8,6 @@ import { makeStyles } from '@mui/styles';
 export interface Props {
   children: ReactNode;
   setShowNavBar: React.Dispatch<React.SetStateAction<boolean>>;
-  className?: string;
 }
 
 const useStyles = makeStyles(() => ({
@@ -29,12 +28,12 @@ const useStyles = makeStyles(() => ({
 }));
 
 export default function Navbar(props: Props): JSX.Element {
-  const { children, setShowNavBar, className } = props;
+  const { children, setShowNavBar } = props;
   const { isDesktop } = useDeviceInfo();
   const classes = useStyles();
 
   return (
-    <div className={`navbar ${className}`}>
+    <div className='navbar'>
       {isDesktop ? (
         <div className='logo'>
           <Logo />
