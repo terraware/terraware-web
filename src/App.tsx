@@ -65,7 +65,7 @@ const useStyles = makeStyles(() =>
       marginLeft: '200px',
     },
     navBarOpened: {
-      '& .blured': {
+      '& .blurred': {
         backdropFilter: 'blur(8px)',
         background: 'rgba(249, 250, 250, 0.8)',
         height: '100%',
@@ -298,7 +298,7 @@ export default function App() {
       <>
         {showNavBar ? (
           <div className={type !== 'desktop' ? classes.navBarOpened : ''}>
-            <div className='blured'>
+            <div className='blurred'>
               <NavBar organization={selectedOrganization} setShowNavBar={setShowNavBar} />
             </div>
           </div>
