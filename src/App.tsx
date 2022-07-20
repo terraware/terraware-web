@@ -1,5 +1,5 @@
 /* eslint-disable import/no-webpack-loader-syntax */
-import { CircularProgress, CssBaseline, StyledEngineProvider } from '@mui/material';
+import { CircularProgress, CssBaseline, Slide, StyledEngineProvider } from '@mui/material';
 import mapboxgl from 'mapbox-gl';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
@@ -69,7 +69,6 @@ const useStyles = makeStyles(() => ({
       backdropFilter: 'blur(8px)',
       background: 'rgba(249, 250, 250, 0.8)',
       height: '100%',
-      display: 'flex',
       alignItems: 'center',
       position: 'fixed',
       zIndex: 1300,
@@ -306,7 +305,15 @@ export default function App() {
         {showNavBar ? (
           <div className={type !== 'desktop' ? classes.navBarOpened : ''}>
             <div className='blurred'>
-              <NavBar organization={selectedOrganization} setShowNavBar={setShowNavBar} />
+              {type !== 'desktop' ? (
+                <Slide direction='right' in={showNavBar} mountOnEnter unmountOnExit>
+                  <div>
+                    <NavBar organization={selectedOrganization} setShowNavBar={setShowNavBar} />
+                  </div>
+                </Slide>
+              ) : (
+                <NavBar organization={selectedOrganization} setShowNavBar={setShowNavBar} />
+              )}
             </div>
           </div>
         ) : null}
