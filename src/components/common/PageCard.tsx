@@ -5,6 +5,7 @@ import { IconName } from './icon/icons';
 import { Link as RouterLink } from 'react-router-dom';
 import Button from 'src/components/common/button/Button';
 import { makeStyles } from '@mui/styles';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const useStyles = makeStyles(() => ({
   container: {
@@ -14,8 +15,10 @@ const useStyles = makeStyles(() => ({
     display: 'flex',
     flexDirection: 'column',
     height: '100%',
-    minHeight: '220px',
     padding: '24px',
+    '&.min-height': {
+      minHeight: '220px',
+    },
   },
   title: {
     display: 'flex',
@@ -67,9 +70,10 @@ export interface PageCardProps {
 export default function PageCard(props: PageCardProps): JSX.Element {
   const classes = useStyles();
   const { name, isNameBold, icon, description, linkText, link, linkStyle } = props;
+  const { isMobile } = useDeviceInfo();
 
   return (
-    <Box className={classes.container}>
+    <Box className={`${classes.container} ${isMobile ? '' : 'min-height'}`}>
       <div className={classes.title}>
         <Icon name={icon} className={classes.icon} />
         <Typography
