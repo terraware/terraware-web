@@ -34,6 +34,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   right: {
     display: 'flex',
     justifyContent: 'right',
+    alignItems: 'center',
   },
 }));
 
@@ -99,7 +100,7 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
         <Logo />
       </Grid>
 
-      <Grid item xs={3} className={`${classes.flex} ${classes.right}`}>
+      <Grid item xs={3} className={classes.right}>
         <NotificationsDropdown
           notifications={props.notifications}
           setNotifications={setNotifications}
