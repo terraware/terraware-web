@@ -128,110 +128,108 @@ export default function MyAccountNavBar({
   };
 
   return (
-    <>
+    <div className={open ? classes.userMenuOpened : ''}>
       <AddNewOrganizationModal
         open={newOrganizationModalOpened}
         onCancel={onCloseCreateOrganizationModal}
         reloadOrganizationData={reloadOrganizationData}
       />
-      <div className={open ? classes.userMenuOpened : ''}>
-        <Button ref={anchorRef} id='composition-button' onClick={handleToggle}>
-          <AvatarIcon className={classes.icon} />
-        </Button>
-        <div className='blurred'>
-          <Popper
-            open={open}
-            anchorEl={anchorRef.current}
-            placement='top-end'
-            transition
-            sx={{ width: '300px', height: '100%', right: '0 !important', left: 'auto !important', zIndex: 1111 }}
-          >
-            <Slide direction='left' in={open} mountOnEnter unmountOnExit>
-              <Paper sx={{ width: '300px', height: '100%' }}>
-                <ClickAwayListener onClickAway={handleClose}>
-                  <MenuList
-                    autoFocusItem={open}
-                    id='composition-menu'
-                    aria-labelledby='composition-button'
-                    sx={{ padding: '24px' }}
-                  >
+      <Button ref={anchorRef} id='composition-button' onClick={handleToggle}>
+        <AvatarIcon className={classes.icon} />
+      </Button>
+      <div className='blurred'>
+        <Popper
+          open={open}
+          anchorEl={anchorRef.current}
+          placement='top-end'
+          transition
+          sx={{ width: '300px', height: '100%', right: '0 !important', left: 'auto !important', zIndex: 1111 }}
+        >
+          <Slide direction='left' in={open} mountOnEnter unmountOnExit>
+            <Paper sx={{ width: '300px', height: '100%' }}>
+              <ClickAwayListener onClickAway={handleClose}>
+                <MenuList
+                  autoFocusItem={open}
+                  id='composition-menu'
+                  aria-labelledby='composition-button'
+                  sx={{ padding: '24px' }}
+                >
+                  <Box sx={{ display: 'flex' }}>
                     <Box sx={{ display: 'flex' }}>
-                      <Box sx={{ display: 'flex' }}>
-                        <AvatarIcon className={classes.internalIcon} />
-                        <Typography sx={{ paddingLeft: '8px', color: '#3A4445' }}>
-                          {user?.firstName} {user?.lastName}
-                        </Typography>
-                      </Box>
-                      <button onClick={handleClose} className={classes.closeButton}>
-                        <Icon name='close' className={classes.closeIcon} />
-                      </button>
+                      <AvatarIcon className={classes.internalIcon} />
+                      <Typography sx={{ paddingLeft: '8px', color: '#3A4445' }}>
+                        {user?.firstName} {user?.lastName}
+                      </Typography>
                     </Box>
-                    <Divider sx={{ margin: '16px 0' }} />
-                    {hasOrganizations ? (
-                      <MenuItem
-                        onClick={(e) => {
-                          navigate(APP_PATHS.MY_ACCOUNT);
-                          handleClose(e);
-                        }}
-                        className={classes.menuItem}
-                      >
-                        {strings.MY_ACCOUNT}
-                      </MenuItem>
-                    ) : null}
+                    <button onClick={handleClose} className={classes.closeButton}>
+                      <Icon name='close' className={classes.closeIcon} />
+                    </button>
+                  </Box>
+                  <Divider sx={{ margin: '16px 0' }} />
+                  {hasOrganizations ? (
                     <MenuItem
                       onClick={(e) => {
-                        onLogout();
+                        navigate(APP_PATHS.MY_ACCOUNT);
                         handleClose(e);
                       }}
                       className={classes.menuItem}
                     >
-                      {strings.LOG_OUT}
+                      {strings.MY_ACCOUNT}
                     </MenuItem>
-                    {hasOrganizations ? (
-                      <>
-                        <Divider />
-                        {organizations?.map((org, index) => {
-                          return (
-                            <MenuItem
-                              onClick={(e) => {
-                                selectOrganization(org);
-                                handleClose(e);
-                              }}
-                              className={classes.menuItem}
-                              key={`item-${index}`}
+                  ) : null}
+                  <MenuItem
+                    onClick={(e) => {
+                      onLogout();
+                      handleClose(e);
+                    }}
+                    className={classes.menuItem}
+                  >
+                    {strings.LOG_OUT}
+                  </MenuItem>
+                  {hasOrganizations ? (
+                    <div>
+                      <Divider />
+                      {organizations?.map((org, index) => {
+                        return (
+                          <MenuItem
+                            onClick={(e) => {
+                              selectOrganization(org);
+                              handleClose(e);
+                            }}
+                            className={classes.menuItem}
+                            key={`item-${index}`}
+                          >
+                            <Typography
+                              sx={{ fontSize: '14px', fontWeight: selectedOrganization?.id === org.id ? 600 : 400 }}
                             >
-                              <Typography
-                                sx={{ fontSize: '14px', fontWeight: selectedOrganization?.id === org.id ? 600 : 400 }}
-                              >
-                                {org.name}
-                              </Typography>
-                              {selectedOrganization?.id === org.id ? (
-                                <Box className={classes.checkmarkIcon}>
-                                  <Icon name='checkmark' />
-                                </Box>
-                              ) : null}
-                            </MenuItem>
-                          );
-                        })}
-                        <MenuItem className={classes.menuItem}> --- </MenuItem>
-                        <MenuItem
-                          onClick={(e) => {
-                            handleClose(e);
-                            setNewOrganizationModalOpened(true);
-                          }}
-                          className={classes.menuItem}
-                        >
-                          {strings.CREATE_NEW_ORGANIZATION}
-                        </MenuItem>
-                      </>
-                    ) : null}
-                  </MenuList>
-                </ClickAwayListener>
-              </Paper>
-            </Slide>
-          </Popper>
-        </div>
+                              {org.name}
+                            </Typography>
+                            {selectedOrganization?.id === org.id ? (
+                              <Box className={classes.checkmarkIcon}>
+                                <Icon name='checkmark' />
+                              </Box>
+                            ) : null}
+                          </MenuItem>
+                        );
+                      })}
+                      <MenuItem className={classes.menuItem}> --- </MenuItem>
+                      <MenuItem
+                        onClick={(e) => {
+                          handleClose(e);
+                          setNewOrganizationModalOpened(true);
+                        }}
+                        className={classes.menuItem}
+                      >
+                        {strings.CREATE_NEW_ORGANIZATION}
+                      </MenuItem>
+                    </div>
+                  ) : null}
+                </MenuList>
+              </ClickAwayListener>
+            </Paper>
+          </Slide>
+        </Popper>
       </div>
-    </>
+    </div>
   );
 }
