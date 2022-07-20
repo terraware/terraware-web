@@ -75,9 +75,14 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
     </>
   ) : (
     <>
-      <IconButton onClick={() => setShowNavBar(true)} size='small'>
-        <Icon name='iconMenu' />
-      </IconButton>
+      <div>
+        {selectedOrganization && (
+          <IconButton onClick={() => setShowNavBar(true)} size='small'>
+            <Icon name='iconMenu' />
+          </IconButton>
+        )}
+      </div>
+
       <div className='logo'>
         <Logo />
       </div>

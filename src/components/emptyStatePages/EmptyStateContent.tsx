@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Theme } from '@mui/material';
+import { Container, Theme, Grid } from '@mui/material';
 import Button from 'src/components/common/button/Button';
 import Icon from 'src/components/common/icon/Icon';
 import { IconName } from 'src/components/common/icon/icons';
@@ -47,9 +47,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     margin: theme.spacing(0, 3),
     maxWidth: '200px',
     textAlign: 'center',
-    '&.tablet': {
-      margin: theme.spacing(0, 2.5),
-    },
   },
   listItemIcon: {
     width: '200px',
@@ -113,7 +110,14 @@ type EmptyStateContentProps = {
 export default function EmptyStateContent(props: EmptyStateContentProps): JSX.Element {
   const { title, subtitle, listItems, buttonText, onClickButton, footnote, styles } = props;
   const classes = useStyles(styles);
-  const { isTablet } = useDeviceInfo();
+  const { isMobile } = useDeviceInfo();
+
+  const gridSize = () => {
+    if (isMobile) {
+      return 12;
+    }
+    return 4;
+  };
 
   return (
     <Container className={classes.container}>
@@ -122,7 +126,7 @@ export default function EmptyStateContent(props: EmptyStateContentProps): JSX.El
       <div className={classes.listContainer}>
         {listItems.map((item) => {
           return (
-            <div key={item.title} className={`${classes.listItem} ${isTablet ? 'tablet' : ''}`}>
+            <Grid item xs={gridSize()} key={item.title} className={classes.listItem}>
               <Icon name={item.icon} className={classes.listItemIcon} />
               <p className={classes.listItemTitle}>{item.title}</p>
               <div>
@@ -143,7 +147,7 @@ export default function EmptyStateContent(props: EmptyStateContentProps): JSX.El
                   onClick={item.onClickButton}
                 />
               )}
-            </div>
+            </Grid>
           );
         })}
       </div>
