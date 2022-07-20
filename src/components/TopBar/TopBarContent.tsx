@@ -1,4 +1,4 @@
-import { IconButton, Theme } from '@mui/material';
+import { IconButton, Theme, Grid } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React from 'react';
 import { Notifications } from 'src/types/Notifications';
@@ -22,6 +22,19 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   flex: {
     display: 'flex',
+    alignItems: 'center',
+  },
+  left: {
+    display: 'flex',
+    justifyContent: 'left',
+  },
+  center: {
+    display: 'flex',
+    justifyContent: 'center',
+  },
+  right: {
+    display: 'flex',
+    justifyContent: 'right',
     alignItems: 'center',
   },
 }));
@@ -79,15 +92,20 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
       <UserMenu user={user} reloadUser={reloadUser} hasOrganizations={organizations && organizations.length > 0} />
     </>
   ) : (
-    <>
-      <IconButton onClick={() => setShowNavBar(true)} size='small'>
-        <Icon name='iconMenu' />
-      </IconButton>
-      <div className='logo'>
-        <Logo />
-      </div>
+    <Grid container className={classes.flex}>
+      <Grid item xs={3} className={classes.left}>
+        {selectedOrganization && (
+          <IconButton onClick={() => setShowNavBar(true)} size='small'>
+            <Icon name='iconMenu' />
+          </IconButton>
+        )}
+      </Grid>
 
-      <div className={classes.flex}>
+      <Grid item xs={6} className={`${classes.center} logo`}>
+        <Logo />
+      </Grid>
+
+      <Grid item xs={3} className={classes.right}>
         <NotificationsDropdown
           notifications={props.notifications}
           setNotifications={setNotifications}
@@ -102,7 +120,7 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
           setSelectedOrganization={setSelectedOrganization}
           reloadOrganizationData={reloadOrganizationData}
         />
-      </div>
-    </>
+      </Grid>
+    </Grid>
   );
 }
