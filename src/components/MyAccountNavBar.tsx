@@ -188,7 +188,7 @@ export default function MyAccountNavBar({
                   </MenuItem>
                   {hasOrganizations ? (
                     <div>
-                      <Divider />
+                      <Divider sx={{ margin: '16px 0' }} />
                       {organizations?.map((org, index) => {
                         return (
                           <MenuItem
