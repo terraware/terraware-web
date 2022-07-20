@@ -85,7 +85,7 @@ export default function UserMenu({ user, reloadUser, hasOrganizations }: UserMen
             </ListItem>
           )}
           <ListItem button onClick={onHandleLogout}>
-            {strings.LOGOUT}
+            {strings.LOG_OUT}
           </ListItem>
         </List>
       </Popover>
