@@ -71,6 +71,7 @@ type MyAccountNavBarNavBarProps = {
   reloadOrganizationData: (selectedOrgId?: number) => void;
   onLogout: () => void;
   user?: User;
+  hasOrganizations?: boolean;
 };
 export default function MyAccountNavBar({
   organizations,
@@ -79,6 +80,7 @@ export default function MyAccountNavBar({
   reloadOrganizationData,
   onLogout,
   user,
+  hasOrganizations,
 }: MyAccountNavBarNavBarProps): JSX.Element | null {
   const classes = useStyles();
   const history = useHistory();
@@ -165,37 +167,64 @@ export default function MyAccountNavBar({
                       </button>
                     </Box>
                     <Divider sx={{ margin: '16px 0' }} />
-                    <MenuItem onClick={() => navigate(APP_PATHS.MY_ACCOUNT)} className={classes.menuItem}>
-                      {strings.MY_ACCOUNT}
-                    </MenuItem>
-                    <MenuItem onClick={onLogout} className={classes.menuItem}>
+                    {hasOrganizations ? (
+                      <MenuItem
+                        onClick={(e) => {
+                          navigate(APP_PATHS.MY_ACCOUNT);
+                          handleClose(e);
+                        }}
+                        className={classes.menuItem}
+                      >
+                        {strings.MY_ACCOUNT}
+                      </MenuItem>
+                    ) : null}
+                    <MenuItem
+                      onClick={(e) => {
+                        onLogout();
+                        handleClose(e);
+                      }}
+                      className={classes.menuItem}
+                    >
                       {strings.LOG_OUT}
                     </MenuItem>
-                    <Divider />
-                    {organizations?.map((org, index) => {
-                      return (
+                    {hasOrganizations ? (
+                      <>
+                        <Divider />
+                        {organizations?.map((org, index) => {
+                          return (
+                            <MenuItem
+                              onClick={(e) => {
+                                selectOrganization(org);
+                                handleClose(e);
+                              }}
+                              className={classes.menuItem}
+                              key={`item-${index}`}
+                            >
+                              <Typography
+                                sx={{ fontSize: '14px', fontWeight: selectedOrganization?.id === org.id ? 600 : 400 }}
+                              >
+                                {org.name}
+                              </Typography>
+                              {selectedOrganization?.id === org.id ? (
+                                <Box className={classes.checkmarkIcon}>
+                                  <Icon name='checkmark' />
+                                </Box>
+                              ) : null}
+                            </MenuItem>
+                          );
+                        })}
+                        <MenuItem className={classes.menuItem}> --- </MenuItem>
                         <MenuItem
-                          onClick={() => selectOrganization(org)}
+                          onClick={(e) => {
+                            handleClose(e);
+                            setNewOrganizationModalOpened(true);
+                          }}
                           className={classes.menuItem}
-                          key={`item-${index}`}
                         >
-                          <Typography
-                            sx={{ fontSize: '14px', fontWeight: selectedOrganization?.id === org.id ? 600 : 400 }}
-                          >
-                            {org.name}
-                          </Typography>
-                          {selectedOrganization?.id === org.id ? (
-                            <Box className={classes.checkmarkIcon}>
-                              <Icon name='checkmark' />
-                            </Box>
-                          ) : null}
+                          {strings.CREATE_NEW_ORGANIZATION}
                         </MenuItem>
-                      );
-                    })}
-                    <MenuItem className={classes.menuItem}> --- </MenuItem>
-                    <MenuItem onClick={() => setNewOrganizationModalOpened(true)} className={classes.menuItem}>
-                      {strings.CREATE_NEW_ORGANIZATION}
-                    </MenuItem>
+                      </>
+                    ) : null}
                   </MenuList>
                 </ClickAwayListener>
               </Paper>
