@@ -12,6 +12,7 @@ import { ServerOrganization } from 'src/types/Organization';
 import { User } from 'src/types/User';
 import { isAdmin } from 'src/utils/organization';
 import { makeStyles } from '@mui/styles';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
@@ -36,6 +37,24 @@ export type HomeProps = {
 export default function Home({ organizations, selectedOrganization, setSelectedOrganization }: HomeProps): JSX.Element {
   const classes = useStyles();
   const [user, setUser] = useState<User>();
+  const { isTablet, isMobile } = useDeviceInfo();
+
+  const primaryGridSize = () => {
+    if (isMobile) {
+      return 12;
+    }
+    return 6;
+  };
+
+  const secondaryGridSize = () => {
+    if (isMobile) {
+      return 12;
+    }
+    if (isTablet) {
+      return 6;
+    }
+    return 4;
+  };
 
   useEffect(() => {
     let cancel = false;
@@ -65,7 +84,7 @@ export default function Home({ organizations, selectedOrganization, setSelectedO
         <Grid container spacing={3} sx={{ padding: 0 }}>
           {selectedOrganization?.role && isAdmin(selectedOrganization) && (
             <>
-              <Grid item xs={6}>
+              <Grid item xs={primaryGridSize()}>
                 <PageCard
                   name={strings.PEOPLE}
                   icon='person'
@@ -75,7 +94,7 @@ export default function Home({ organizations, selectedOrganization, setSelectedO
                   linkStyle={'underline'}
                 />
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={primaryGridSize()}>
                 <PageCard
                   name={strings.SEED_BANKS}
                   icon='seedbankNav'
@@ -90,7 +109,7 @@ export default function Home({ organizations, selectedOrganization, setSelectedO
               </Grid>
             </>
           )}
-          <Grid item xs={4}>
+          <Grid item xs={secondaryGridSize()}>
             <PageCard
               name={strings.SPECIES}
               icon='species'
@@ -100,7 +119,7 @@ export default function Home({ organizations, selectedOrganization, setSelectedO
               linkStyle={'underline'}
             />
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={secondaryGridSize()}>
             <PageCard
               name={strings.ACCESSIONS}
               icon='seeds'
@@ -110,7 +129,7 @@ export default function Home({ organizations, selectedOrganization, setSelectedO
               linkStyle={'underline'}
             />
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={secondaryGridSize()}>
             <PageCard
               name={strings.MONITORING}
               icon='monitoringNav'
