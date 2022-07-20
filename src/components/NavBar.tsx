@@ -1,4 +1,3 @@
-import { ClickAwayListener } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 import Navbar from 'src/components/common/Navbar/Navbar';
@@ -77,7 +76,9 @@ export default function NavBar({ organization, setShowNavBar }: NavBarProps): JS
         selected={!!isAccessionDashboardRoute}
         onClick={() => {
           closeNavBar();
-          !isAccessionDashboardRoute && navigate(APP_PATHS.SEEDS_DASHBOARD);
+          if (!isAccessionDashboardRoute) {
+            navigate(APP_PATHS.SEEDS_DASHBOARD);
+          }
         }}
         id='seeds-dashboard'
       />
@@ -110,7 +111,9 @@ export default function NavBar({ organization, setShowNavBar }: NavBarProps): JS
             selected={!!isOrganizationRoute}
             onClick={() => {
               closeNavBar();
-              !isOrganizationRoute && navigate(APP_PATHS.ORGANIZATION);
+              if (!isOrganizationRoute) {
+                navigate(APP_PATHS.ORGANIZATION);
+              }
             }}
             id='organization'
           />
