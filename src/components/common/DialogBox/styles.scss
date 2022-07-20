@@ -15,6 +15,10 @@
   position: fixed;
   z-index: 1300;
   inset: 0px;
+
+  &.mobile {
+    margin: 0 5px;
+  }
 }
 
 .dialog-box {
@@ -99,18 +103,30 @@
     border-radius: 0 0 $tw-sz-base-small $tw-sz-base-small;
     background-color: $tw-clr-base-gray-050;
     padding: $tw-spc-base-medium $tw-spc-base-medium;
-    button + button {
+    &:not(.mobile) button + button {
       margin-left: $tw-spc-base-x-small;
+    }
+    &.mobile button {
+      margin: $tw-spc-base-x-small 0 0 0;
     }
   }
 
   &--footer-container {
     display: flex;
     justify-content: space-between;
+    &.mobile,
+    &.mobile .left-button,
+    &.mobile .right-buttons {
+      display: flex;
+      flex-direction: column;
+    }
   }
 
   &--actions-container {
     display: flex;
     justify-content: center;
+    &.mobile {
+      flex-direction: column;
+    }
   }
 }

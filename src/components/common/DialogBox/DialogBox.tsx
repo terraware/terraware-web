@@ -2,6 +2,7 @@ import React, { ReactNode } from 'react';
 import './styles.scss';
 import Icon from '../icon/Icon';
 import { IconButton } from '@mui/material';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 export interface Props {
   title: string;
@@ -21,8 +22,14 @@ export default function DialogBox(props: Props): JSX.Element {
 
   const hasFooter = leftButton || rightButtons || middleButtons;
 
+  const { isMobile } = useDeviceInfo();
+
   return (
-    <div className={`dialog-box-container ${open ? 'dialog-box--opened' : 'dialog-box--closed'}`}>
+    <div
+      className={`dialog-box-container ${open ? 'dialog-box--opened' : 'dialog-box--closed'} ${
+        isMobile ? 'mobile' : ''
+      }`}
+    >
       <div className={`dialog-box dialog-box--${size}`}>
         <div className='dialog-box--header'>
           <p className='title'>{title}</p>
@@ -37,9 +44,9 @@ export default function DialogBox(props: Props): JSX.Element {
           <div className='dialog-box--boundary'>{children}</div>
         </div>
         {hasFooter && (
-          <div className='dialog-box--footer'>
+          <div className={`dialog-box--footer ${isMobile ? 'mobile' : ''}`}>
             {leftButton && (
-              <div className='dialog-box--footer-container'>
+              <div className={`dialog-box--footer-container ${isMobile ? 'mobile' : ''}`}>
                 <div className='left-button'>{leftButton}</div>
                 <div className='right-buttons'>
                   {rightButtons?.map((rb, index) => {
@@ -55,7 +62,7 @@ export default function DialogBox(props: Props): JSX.Element {
               </div>
             )}
             {middleButtons && (
-              <div className='dialog-box--actions-container'>
+              <div className={`dialog-box--actions-container ${isMobile ? 'mobile' : ''}`}>
                 {middleButtons?.map((mb, index) => {
                   const mbWithKey = {
                     ...mb,
