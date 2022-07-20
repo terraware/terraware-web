@@ -119,6 +119,7 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
           selectedOrganization={selectedOrganization}
           setSelectedOrganization={setSelectedOrganization}
           reloadOrganizationData={reloadOrganizationData}
+          hasOrganizations={organizations && organizations.length > 0}
         />
       </Grid>
     </Grid>
