@@ -7,7 +7,6 @@ import Icon from './common/icon/Icon';
 import { APP_PATHS } from 'src/constants';
 import { IconButton, List, ListItem, Popover } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const useStyles = makeStyles((theme) => ({
   iconContainer: {
@@ -54,9 +53,8 @@ export default function UserMenu({ user, reloadUser, hasOrganizations }: UserMen
   const onHandleLogout = () => {
     window.location.href = `/sso/logout`;
   };
-  const { isDesktop } = useDeviceInfo();
 
-  return isDesktop ? (
+  return (
     <div>
       <IconButton onClick={handleClick} size='small' className={classes.iconContainer}>
         <AvatarIcon className={classes.icon} />
@@ -91,12 +89,6 @@ export default function UserMenu({ user, reloadUser, hasOrganizations }: UserMen
           </ListItem>
         </List>
       </Popover>
-    </div>
-  ) : (
-    <div>
-      <IconButton onClick={handleClick} size='small' className={classes.iconContainer}>
-        <AvatarIcon className={classes.icon} />
-      </IconButton>
     </div>
   );
 }

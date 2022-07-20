@@ -26,6 +26,7 @@ const strings = new LocalizedStrings({
     AS_OF: 'As of',
     OTHER: 'Other',
     LOGOUT: 'Logout',
+    LOG_OUT: 'Log Out',
     DATE: 'Date',
     NOTES: 'Notes',
     EXISTING_SPECIES_MSG: '“{0}” is already in your species list. ',
