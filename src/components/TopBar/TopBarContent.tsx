@@ -10,6 +10,7 @@ import OrganizationsDropdown from '../OrganizationsDropdown';
 import UserMenu from '../UserMenu';
 import { ReactComponent as Logo } from '../common/Navbar/logo.svg';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import MyAccountNavBar from '../MyAccountNavBar';
 
 const useStyles = makeStyles((theme: Theme) => ({
   separator: {
@@ -64,6 +65,10 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
   } = props;
   const { isDesktop } = useDeviceInfo();
 
+  const onHandleLogout = () => {
+    window.location.href = `/sso/logout`;
+  };
+
   return isDesktop ? (
     <>
       <NotificationsDropdown
@@ -107,7 +112,15 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
           organizationId={selectedOrganization?.id}
           reloadOrganizationData={reloadOrganizationData}
         />
-        <UserMenu user={user} reloadUser={reloadUser} hasOrganizations={organizations && organizations.length > 0} />
+        <MyAccountNavBar
+          onLogout={onHandleLogout}
+          user={user}
+          organizations={organizations}
+          selectedOrganization={selectedOrganization}
+          setSelectedOrganization={setSelectedOrganization}
+          reloadOrganizationData={reloadOrganizationData}
+          hasOrganizations={organizations && organizations.length > 0}
+        />
       </Grid>
     </Grid>
   );
