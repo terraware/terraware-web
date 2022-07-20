@@ -91,7 +91,7 @@ export default function MyAccountNavBar({
   };
 
   const handleToggle = () => {
-    setOpen((prevOpen) => !prevOpen);
+    setOpen((pOpen) => !pOpen);
   };
 
   const handleClose = (event: Event | React.SyntheticEvent) => {
@@ -172,9 +172,13 @@ export default function MyAccountNavBar({
                       {strings.LOG_OUT}
                     </MenuItem>
                     <Divider />
-                    {organizations?.map((org) => {
+                    {organizations?.map((org, index) => {
                       return (
-                        <MenuItem onClick={() => selectOrganization(org)} className={classes.menuItem}>
+                        <MenuItem
+                          onClick={() => selectOrganization(org)}
+                          className={classes.menuItem}
+                          key={`item-${index}`}
+                        >
                           <Typography
                             sx={{ fontSize: '14px', fontWeight: selectedOrganization?.id === org.id ? 600 : 400 }}
                           >
