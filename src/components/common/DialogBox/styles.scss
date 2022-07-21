@@ -18,6 +18,24 @@
 
   &.mobile {
     margin: 0 5px;
+    .dialog-box {
+      &--footer {
+        button {
+          margin: $tw-spc-base-x-small 0 0 0;
+        }
+        &-container {
+          flex-direction: column;
+          .left-button,
+          .right-buttons {
+            display: flex;
+            flex-direction: column;
+          }
+        }
+      }
+      &--actions-container {
+        flex-direction: column;
+      }
+    }
   }
 }
 
@@ -103,30 +121,18 @@
     border-radius: 0 0 $tw-sz-base-small $tw-sz-base-small;
     background-color: $tw-clr-base-gray-050;
     padding: $tw-spc-base-medium $tw-spc-base-medium;
-    &:not(.mobile) button + button {
+    button + button {
       margin-left: $tw-spc-base-x-small;
-    }
-    &.mobile button {
-      margin: $tw-spc-base-x-small 0 0 0;
     }
   }
 
   &--footer-container {
     display: flex;
     justify-content: space-between;
-    &.mobile,
-    &.mobile .left-button,
-    &.mobile .right-buttons {
-      display: flex;
-      flex-direction: column;
-    }
   }
 
   &--actions-container {
     display: flex;
     justify-content: center;
-    &.mobile {
-      flex-direction: column;
-    }
   }
 }

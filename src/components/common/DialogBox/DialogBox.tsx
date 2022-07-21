@@ -44,9 +44,9 @@ export default function DialogBox(props: Props): JSX.Element {
           <div className='dialog-box--boundary'>{children}</div>
         </div>
         {hasFooter && (
-          <div className={`dialog-box--footer ${isMobile ? 'mobile' : ''}`}>
+          <div className='dialog-box--footer'>
             {leftButton && (
-              <div className={`dialog-box--footer-container ${isMobile ? 'mobile' : ''}`}>
+              <div className='dialog-box--footer-container'>
                 <div className='left-button'>{leftButton}</div>
                 <div className='right-buttons'>
                   {rightButtons?.map((rb, index) => {
@@ -62,7 +62,7 @@ export default function DialogBox(props: Props): JSX.Element {
               </div>
             )}
             {middleButtons && (
-              <div className={`dialog-box--actions-container ${isMobile ? 'mobile' : ''}`}>
+              <div className='dialog-box--actions-container'>
                 {middleButtons?.map((mb, index) => {
                   const mbWithKey = {
                     ...mb,
