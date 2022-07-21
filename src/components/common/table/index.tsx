@@ -1,4 +1,15 @@
-import { Checkbox, Table, TableBody, TableCell, TableContainer, TablePagination, TableRow, Theme } from '@mui/material';
+import {
+  Box,
+  Checkbox,
+  Pagination,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
+  Theme,
+  Typography,
+} from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import EnhancedTableToolbar from './EnhancedTableToolbar';
 import { descendingComparator, getComparator, Order, stableSort } from './sort';
@@ -8,6 +19,7 @@ import { DetailsRendererProps, RendererProps, TableColumnType } from './types';
 import { makeStyles } from '@mui/styles';
 import { DndContext, KeyboardSensor, MouseSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { sortableKeyboardCoordinates } from '@dnd-kit/sortable';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const tableStyles = makeStyles((theme: Theme) => ({
   hover: {
@@ -93,8 +105,9 @@ export default function EnhancedTable<T>({
   const classes = tableStyles();
   const [order, setOrder] = React.useState<Order>(_order);
   const [orderBy, setOrderBy] = React.useState(_orderBy);
-  const [maxItemsPerPage, setMaxItemsPerPage] = useState(100);
+  const [maxItemsPerPage] = useState(100);
   const [itemsToSkip, setItemsToSkip] = useState(0);
+  const { isMobile } = useDeviceInfo();
 
   useEffect(() => {
     if (setSelectedRows && rows.length >= 0) {
@@ -156,16 +169,7 @@ export default function EnhancedTable<T>({
   };
 
   const handleChangePage = (event: unknown, newPage: number) => {
-    if (newPage > itemsToSkip / maxItemsPerPage) {
-      setItemsToSkip(itemsToSkip + maxItemsPerPage);
-    } else {
-      setItemsToSkip(itemsToSkip - maxItemsPerPage);
-    }
-  };
-
-  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setMaxItemsPerPage(parseInt(event.target.value, 10));
-    setItemsToSkip(0);
+    setItemsToSkip(maxItemsPerPage * (newPage - 1));
   };
 
   function columnsToHeadCells(columnsR: TableColumnType[]): HeadCell[] {
@@ -287,16 +291,25 @@ export default function EnhancedTable<T>({
         </DndContext>
       </TableContainer>
       {showPagination && (
-        /* @ts-ignore */
-        <TablePagination
-          component='div'
-          count={rows.length}
-          page={itemsToSkip / maxItemsPerPage}
-          onPageChange={handleChangePage}
-          rowsPerPage={maxItemsPerPage}
-          rowsPerPageOptions={[10, 25, 50, 100]}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
+        <Box display='flex' alignItems='center' justifyContent='flex-end' paddingTop='24px' paddingBottom='24px'>
+          {itemsToSkip + maxItemsPerPage < rows.length ? (
+            <Typography paddingRight='24px' fontSize='14px'>
+              {itemsToSkip + 1} to {itemsToSkip + maxItemsPerPage} of {rows.length}
+            </Typography>
+          ) : (
+            <Typography paddingRight='24px' fontSize='14px'>
+              {itemsToSkip + 1} to {rows.length} of {rows.length}
+            </Typography>
+          )}
+          <Pagination
+            count={Math.ceil(rows.length / maxItemsPerPage)}
+            page={itemsToSkip / maxItemsPerPage + 1}
+            shape='rounded'
+            onChange={handleChangePage}
+            siblingCount={isMobile ? 0 : 1}
+            size={'small'}
+          />
+        </Box>
       )}
     </>
   );
