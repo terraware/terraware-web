@@ -80,11 +80,7 @@ export default function NavBar({ organization, setShowNavBar }: NavBarProps): JS
         icon='dashboard'
         selected={!!isAccessionDashboardRoute}
         onClick={() => {
-          if (!isAccessionDashboardRoute) {
-            closeAndNavigateTo(APP_PATHS.SEEDS_DASHBOARD);
-          } else {
-            closeAndNavigateTo('');
-          }
+          closeAndNavigateTo(isAccessionDashboardRoute ? '' : APP_PATHS.SEEDS_DASHBOARD);
         }}
         id='seeds-dashboard'
       />
@@ -114,7 +110,7 @@ export default function NavBar({ organization, setShowNavBar }: NavBarProps): JS
             icon='organizationNav'
             selected={!!isOrganizationRoute}
             onClick={() => {
-              closeAndNavigateTo(APP_PATHS.ORGANIZATION);
+              closeAndNavigateTo(isOrganizationRoute ? '' : APP_PATHS.ORGANIZATION);
             }}
             id='organization'
           />
