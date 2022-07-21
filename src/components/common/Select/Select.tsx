@@ -64,11 +64,15 @@ export default function Select(props: SelectProps): JSX.Element {
 
   useEffect(() => {
     if (options && selectedValue && selectedIndex === -1) {
-      setSelectedIndex(options.indexOf(selectedValue));
+      const newIndex = options.indexOf(selectedValue);
+      if (newIndex !== -1) {
+        setSelectedIndex(newIndex);
+      }
     } else if (!options) {
       setSelectedIndex(-1);
     }
-  }, [options]);
+  }, [options, selectedValue, selectedIndex]);
+
   useEffect(() => {
     window.addEventListener('click', handleClick);
     window.addEventListener('resize', handleResize);
