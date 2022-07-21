@@ -8,10 +8,16 @@ import TextField from 'src/components/common/TextField';
 import strings from 'src/strings';
 import { Dialog, DialogTitle, Typography, DialogContent, Grid, DialogActions, Box, Chip, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const useStyles = makeStyles((theme: Theme) => ({
   submit: {
-    marginLeft: theme.spacing(2),
+    '&:not(.mobile)': {
+      marginLeft: theme.spacing(2),
+    },
+    '&.mobile': {
+      marginTop: theme.spacing(1),
+    },
     color: theme.palette.common.white,
   },
   actions: {
@@ -23,6 +29,11 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   bold: {
     fontWeight: theme.typography.fontWeightBold,
+  },
+  mobileButtons: {
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
   },
 }));
 
@@ -39,6 +50,7 @@ export default function DownloadReportModal(props: DownloadReportModalProps): JS
   const classes = useStyles();
   const { searchCriteria, searchSortOrder, searchColumns, organization, open, onClose } = props;
   const [name, setName] = React.useState('');
+  const { isMobile } = useDeviceInfo();
 
   const handleCancel = () => {
     setName('');
@@ -92,11 +104,11 @@ export default function DownloadReportModal(props: DownloadReportModalProps): JS
       </DialogContent>
       <DialogActions>
         <Box width={'100%'} className={classes.actions}>
-          <Box>
+          <Box className={isMobile ? classes.mobileButtons : ''}>
             <CancelButton onClick={handleCancel} />
             <Chip
               id='downloadButton'
-              className={classes.submit}
+              className={`${classes.submit} ${isMobile ? 'mobile' : ''}`}
               label={strings.DOWNLOAD}
               clickable
               color='primary'
