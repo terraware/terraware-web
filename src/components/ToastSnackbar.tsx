@@ -4,11 +4,15 @@ import { makeStyles } from '@mui/styles';
 import { useRecoilState } from 'recoil';
 import snackbarAtom from 'src/state/snackbar';
 import Icon from './common/icon/Icon';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainSnackbar: {
     '&.MuiSnackbar-anchorOriginTopCenter': {
       top: '75px',
+    },
+    '&.MuiSnackbar-anchorOriginBottomCenter': {
+      bottom: '64px',
     },
   },
   mainContainer: {
@@ -81,6 +85,8 @@ export default function ToastSnackbarMessage(): JSX.Element {
 
   const [snackbar, setSnackbar] = useRecoilState(snackbarAtom);
 
+  const { isMobile } = useDeviceInfo();
+
   const handleClose = () => {
     if (snackbar) {
       setSnackbar({ ...snackbar, msg: '', title: undefined });
@@ -89,7 +95,7 @@ export default function ToastSnackbarMessage(): JSX.Element {
 
   return (
     <Snackbar
-      anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      anchorOrigin={{ vertical: isMobile ? 'bottom' : 'top', horizontal: 'center' }}
       open={Boolean(snackbar.msg)}
       onClose={handleClose}
       autoHideDuration={5000}
