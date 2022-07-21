@@ -430,7 +430,7 @@ describe('Database', () => {
       cy.get('#filter-remainingQuantity').should('contain', '(2)');
     });
 
-    it('Should search by SeedsRemaining - SeedWeight', () => {
+    it.skip('Should search by SeedsRemaining - SeedWeight', () => {
       cy.intercept('POST', '/api/v1/search').as('search');
       cy.intercept('POST', '/api/v1/seedbank/values').as('values');
 
