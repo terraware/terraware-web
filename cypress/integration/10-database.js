@@ -45,7 +45,7 @@ describe('Database', () => {
       cy.wait('@values');
       cy.get('#editColumnsDialog').should('not.exist');
 
-      cy.get('#table-header').children().should('have.length', 3);
+      cy.get('#table-header').children().should('have.length', 4);
       cy.get('#table-header > :nth-child(1)').contains('ACCESSION');
       cy.get('#table-header > :nth-child(2)').contains('SITE LOCATION');
       cy.get('#table-header > :nth-child(3)').contains('STAGE');
