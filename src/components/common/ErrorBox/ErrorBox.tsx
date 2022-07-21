@@ -1,6 +1,7 @@
 import React from 'react';
 import Button from '../button/Button';
 import Icon from '../icon/Icon';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 import './styles.scss';
 
 export interface Props {
@@ -13,9 +14,10 @@ export interface Props {
 
 export default function ErrorBox(props: Props): JSX.Element {
   const { text, onClick, buttonText, title, className } = props;
+  const { isMobile } = useDeviceInfo();
 
   return (
-    <div className={`error-box ${className}`}>
+    <div className={`error-box ${className} ${isMobile ? 'mobile' : ''}`}>
       <div className='error-box--container'>
         <Icon name='error' className='error-icon' size='large' />
         <div>
