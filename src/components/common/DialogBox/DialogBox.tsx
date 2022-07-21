@@ -2,6 +2,7 @@ import React, { ReactNode } from 'react';
 import './styles.scss';
 import Icon from '../icon/Icon';
 import { IconButton } from '@mui/material';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 export interface Props {
   title: string;
@@ -21,8 +22,14 @@ export default function DialogBox(props: Props): JSX.Element {
 
   const hasFooter = leftButton || rightButtons || middleButtons;
 
+  const { isMobile } = useDeviceInfo();
+
   return (
-    <div className={`dialog-box-container ${open ? 'dialog-box--opened' : 'dialog-box--closed'}`}>
+    <div
+      className={`dialog-box-container ${open ? 'dialog-box--opened' : 'dialog-box--closed'} ${
+        isMobile ? 'mobile' : ''
+      }`}
+    >
       <div className={`dialog-box dialog-box--${size}`}>
         <div className='dialog-box--header'>
           <p className='title'>{title}</p>
