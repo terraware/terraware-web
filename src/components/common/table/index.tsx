@@ -105,7 +105,7 @@ export default function EnhancedTable<T>({
   const classes = tableStyles();
   const [order, setOrder] = React.useState<Order>(_order);
   const [orderBy, setOrderBy] = React.useState(_orderBy);
-  const [maxItemsPerPage] = useState(3);
+  const [maxItemsPerPage] = useState(100);
   const [itemsToSkip, setItemsToSkip] = useState(0);
   const { isMobile } = useDeviceInfo();
 
