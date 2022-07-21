@@ -18,7 +18,7 @@ const useStyles = makeStyles(() => ({
 
 interface TitleProps {
   page: string;
-  parentPage: string;
+  parentPage?: string;
 }
 export default function Title({ page, parentPage }: TitleProps): JSX.Element {
   const classes = useStyles();
@@ -26,7 +26,13 @@ export default function Title({ page, parentPage }: TitleProps): JSX.Element {
   return (
     <div className={classes.titleContainer}>
       <div className={classes.title}>
-        {parentPage} / <span className={classes.selectedSection}>{page}</span>
+        {parentPage !== undefined ? (
+          <>
+            {parentPage} / <span className={classes.selectedSection}>{page}</span>
+          </>
+        ) : (
+          <span className={classes.selectedSection}>{page}</span>
+        )}
       </div>
     </div>
   );

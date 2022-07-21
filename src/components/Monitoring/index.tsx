@@ -99,7 +99,7 @@ export default function Monitoring(props: MonitoringProps): JSX.Element {
     initializeSeedBank();
   }, [seedBankId, seedBanks, setActiveSeedBank]);
 
-  const getPageHeading = () => <Title page={strings.MONITORING} parentPage={strings.SEEDS} />;
+  const getPageHeading = () => <Title page={strings.MONITORING} />;
 
   return (
     <TfMain>
