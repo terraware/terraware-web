@@ -10,6 +10,9 @@ const useStyles = makeStyles(() => ({
     fontSize: 24,
     color: 'gray',
   },
+  selectedMain: {
+    color: 'black',
+  },
   selectedSection: {
     color: 'black',
     paddingLeft: '5px',
@@ -31,7 +34,7 @@ export default function Title({ page, parentPage }: TitleProps): JSX.Element {
             {parentPage} / <span className={classes.selectedSection}>{page}</span>
           </>
         ) : (
-          <span className={classes.selectedSection}>{page}</span>
+          <span className={classes.selectedMain}>{page}</span>
         )}
       </div>
     </div>
