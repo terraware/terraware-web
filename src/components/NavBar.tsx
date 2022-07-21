@@ -40,6 +40,13 @@ export default function NavBar({ organization, setShowNavBar }: NavBarProps): JS
     history.push(url);
   };
 
+  const closeAndNavigateTo = (path: string) => {
+    closeNavBar();
+    if (path) {
+      navigate(path);
+    }
+  };
+
   const closeNavBar = () => {
     if (!isDesktop) {
       setShowNavBar(false);
@@ -53,8 +60,7 @@ export default function NavBar({ organization, setShowNavBar }: NavBarProps): JS
         icon='home'
         selected={!!isHomeRoute}
         onClick={() => {
-          closeNavBar();
-          navigate(APP_PATHS.HOME);
+          closeAndNavigateTo(APP_PATHS.HOME);
         }}
         id='home'
       />
@@ -63,8 +69,7 @@ export default function NavBar({ organization, setShowNavBar }: NavBarProps): JS
         icon='species'
         selected={!!isSpeciesRoute}
         onClick={() => {
-          closeNavBar();
-          navigate(APP_PATHS.SPECIES);
+          closeAndNavigateTo(APP_PATHS.SPECIES);
         }}
         id='speciesNb'
       />
@@ -75,9 +80,10 @@ export default function NavBar({ organization, setShowNavBar }: NavBarProps): JS
         icon='dashboard'
         selected={!!isAccessionDashboardRoute}
         onClick={() => {
-          closeNavBar();
           if (!isAccessionDashboardRoute) {
-            navigate(APP_PATHS.SEEDS_DASHBOARD);
+            closeAndNavigateTo(APP_PATHS.SEEDS_DASHBOARD);
+          } else {
+            closeAndNavigateTo('');
           }
         }}
         id='seeds-dashboard'
@@ -87,8 +93,7 @@ export default function NavBar({ organization, setShowNavBar }: NavBarProps): JS
         icon='seeds'
         selected={isAccessionsRoute || isCheckinRoute ? true : false}
         onClick={() => {
-          closeNavBar();
-          navigate(APP_PATHS.ACCESSIONS);
+          closeAndNavigateTo(APP_PATHS.ACCESSIONS);
         }}
         id='accessions'
       />
@@ -97,8 +102,7 @@ export default function NavBar({ organization, setShowNavBar }: NavBarProps): JS
         icon='monitoringNav'
         selected={!!isMonitoringRoute}
         onClick={() => {
-          closeNavBar();
-          navigate(APP_PATHS.MONITORING);
+          closeAndNavigateTo(APP_PATHS.MONITORING);
         }}
         id='monitoring'
       />
@@ -110,10 +114,7 @@ export default function NavBar({ organization, setShowNavBar }: NavBarProps): JS
             icon='organizationNav'
             selected={!!isOrganizationRoute}
             onClick={() => {
-              closeNavBar();
-              if (!isOrganizationRoute) {
-                navigate(APP_PATHS.ORGANIZATION);
-              }
+              closeAndNavigateTo(APP_PATHS.ORGANIZATION);
             }}
             id='organization'
           />
@@ -122,8 +123,7 @@ export default function NavBar({ organization, setShowNavBar }: NavBarProps): JS
             icon='peopleNav'
             selected={!!isPeopleRoute}
             onClick={() => {
-              closeNavBar();
-              navigate(APP_PATHS.PEOPLE);
+              closeAndNavigateTo(APP_PATHS.PEOPLE);
             }}
             id='people'
           />
@@ -132,8 +132,7 @@ export default function NavBar({ organization, setShowNavBar }: NavBarProps): JS
             icon='seedbankNav'
             selected={!!isSeedbanksRoute}
             onClick={() => {
-              closeNavBar();
-              navigate(APP_PATHS.SEED_BANKS);
+              closeAndNavigateTo(APP_PATHS.SEED_BANKS);
             }}
             id='seedbanks'
           />
@@ -146,8 +145,7 @@ export default function NavBar({ organization, setShowNavBar }: NavBarProps): JS
           icon='mail'
           selected={!!isContactUsRoute}
           onClick={() => {
-            closeNavBar();
-            navigate(APP_PATHS.CONTACT_US);
+            closeAndNavigateTo(APP_PATHS.CONTACT_US);
           }}
           id='contactus'
         />
