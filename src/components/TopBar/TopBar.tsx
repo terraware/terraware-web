@@ -33,7 +33,12 @@ export default function TopBar(props: TopBarProps): JSX.Element {
     <AppBar
       position='fixed'
       className={classes.appBar}
-      sx={{ background: '#ffffff', color: '#000000', boxShadow: '0px 2px 4px rgba(58, 68, 69, 0.2)' }}
+      sx={{
+        background: '#ffffff',
+        color: '#000000',
+        boxShadow: '0px 2px 4px rgba(58, 68, 69, 0.2)',
+        minHeight: '64px',
+      }}
     >
       <Toolbar className={isDesktop ? classes.right : ''}>
         <div className={classes.flex}>{props.children}</div>
