@@ -291,13 +291,13 @@ export default function EnhancedTable<T>({
         </DndContext>
       </TableContainer>
       {showPagination && (
-        <Box display='flex' alignItems='center' justifyContent='flex-end' paddingTop='24px'>
+        <Box display='flex' alignItems='center' justifyContent='flex-end' paddingTop='24px' paddingBottom='24px'>
           {itemsToSkip + maxItemsPerPage < rows.length ? (
             <Typography paddingRight='24px' fontSize='14px'>
               {itemsToSkip + 1} to {itemsToSkip + maxItemsPerPage} of {rows.length}
             </Typography>
           ) : (
-            <Typography paddingRight='24px'>
+            <Typography paddingRight='24px' fontSize='14px'>
               {itemsToSkip + 1} to {rows.length} of {rows.length}
             </Typography>
           )}
