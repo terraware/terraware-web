@@ -146,19 +146,19 @@ function Content({ organization }: AccessionPageProps): JSX.Element {
                 />
               </Route>
               <Route exact path={APP_PATHS.ACCESSIONS_ITEM_PROCESSING_DRYING}>
-                <ProcessingAndDrying accession={accession} onSubmit={onSubmit} />
+                <ProcessingAndDrying accession={accession} onSubmit={onSubmit} organization={organization} />
               </Route>
               <Route exact path={APP_PATHS.ACCESSIONS_ITEM_STORAGE}>
-                <Storage accession={accession} onSubmit={onSubmit} />
+                <Storage accession={accession} onSubmit={onSubmit} organization={organization} />
               </Route>
               <Route exact path={APP_PATHS.ACCESSIONS_ITEM_NURSERY}>
-                <Nursery accession={accession} onSubmit={onSubmit} />
+                <Nursery accession={accession} onSubmit={onSubmit} organization={organization} />
               </Route>
               <Route exact path={APP_PATHS.ACCESSIONS_ITEM_LAB}>
-                <Lab accession={accession} onSubmit={onSubmit} />
+                <Lab accession={accession} onSubmit={onSubmit} organization={organization} />
               </Route>
               <Route exact path={APP_PATHS.ACCESSIONS_ITEM_WITHDRAWAL}>
-                <Withdrawal accession={accession} onSubmit={onSubmit} />
+                <Withdrawal accession={accession} onSubmit={onSubmit} organization={organization} />
               </Route>
             </Switch>
           </Grid>

@@ -308,6 +308,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
   };
 
   const showCheckIn = isPendingCheckIn || isCheckedIn;
+  const isContributor = organization?.role === 'Contributor';
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -326,7 +327,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
             <Species
               selectedSpecies={record.species}
               organization={organization}
-              disabled={isPendingCheckIn}
+              disabled={isPendingCheckIn || isContributor}
               record={record}
               setRecord={setRecord}
             />
@@ -341,7 +342,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
               min={0}
               helperText={getErrorText('numberOfTrees')}
               error={getErrorText('numberOfTrees') ? true : false}
-              disabled={isPendingCheckIn}
+              disabled={isPendingCheckIn || isContributor}
             />
           </Grid>
           <Grid item xs={4} />
@@ -351,7 +352,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
               value={record.founderId}
               onChange={onChange}
               label={strings.FOUNDER_ID}
-              disabled={isPendingCheckIn}
+              disabled={isPendingCheckIn || isContributor}
             />
           </Grid>
           <Grid item xs={4}>
@@ -364,7 +365,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
                 { label: strings.OUTPLANT, value: 'Outplant' },
               ]}
               onChange={onChange}
-              disabled={isPendingCheckIn}
+              disabled={isPendingCheckIn || isContributor}
             />
           </Grid>
           <Grid item xs={12}>
@@ -374,7 +375,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
               onChange={onChange}
               label={strings.FIELD_NOTES}
               placeholder={strings.FIELD_NOTES_PLACEHOLDER}
-              disabled={isPendingCheckIn}
+              disabled={isPendingCheckIn || isContributor}
             />
           </Grid>
         </Grid>
@@ -391,7 +392,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
             receivedDate={record.receivedDate}
             refreshErrors={refreshErrors}
             onChange={onChange}
-            disabled={accession.deviceInfo !== undefined || isPendingCheckIn}
+            disabled={accession.deviceInfo !== undefined || isPendingCheckIn || isContributor}
           />
         </Suspense>
         <Divisor />
@@ -409,7 +410,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
                   organizationId={organization.id!}
                   onChange={onChange}
                   mainCollector={record.primaryCollector}
-                  disabled={isPendingCheckIn}
+                  disabled={isPendingCheckIn || isContributor}
                 />
               )}
             </Grid>
@@ -419,7 +420,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
               id='secondaryCollectors'
               secondaryCollectors={record.secondaryCollectors}
               onChange={onChange}
-              disabled={isPendingCheckIn}
+              disabled={isPendingCheckIn || isContributor}
             />
           </Grid>
         </Grid>
@@ -431,7 +432,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
               value={record.siteLocation}
               onChange={onChange}
               label={strings.SITE}
-              disabled={isPendingCheckIn}
+              disabled={isPendingCheckIn || isContributor}
             />
           </Grid>
           <Grid item xs={4}>
@@ -440,7 +441,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
               value={record.landowner}
               onChange={onChange}
               label={strings.LANDOWNER}
-              disabled={isPendingCheckIn}
+              disabled={isPendingCheckIn || isContributor}
             />
           </Grid>
           <Grid item xs={4} />
@@ -451,7 +452,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
               onChange={onChange}
               label={strings.ENVIRONMENTAL_NOTES}
               placeholder={strings.ENVIRONMENTAL_NOTES_PLACEHOLDER}
-              disabled={isPendingCheckIn}
+              disabled={isPendingCheckIn || isContributor}
             />
           </Grid>
         </Grid>
@@ -464,7 +465,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
               selected={record.facilityId?.toString()}
               values={seedBanks.map((seedBank) => ({ label: seedBank!.name, value: seedBank!.id.toString() }))}
               onChange={onChange}
-              disabled={isPendingCheckIn}
+              disabled={isPendingCheckIn || isContributor}
             />
           </Grid>
         </Grid>

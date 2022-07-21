@@ -11,10 +11,11 @@ interface LocationDropdownProps {
   onChange: (id: string, value: unknown) => void;
   storageLocation?: string;
   storageCondition?: string;
+  isContributor: boolean;
 }
 
 export default function LocationDropdown(props: LocationDropdownProps): JSX.Element {
-  const { facilityId, onChange, storageLocation, storageCondition } = props;
+  const { facilityId, onChange, storageLocation, storageCondition, isContributor } = props;
   const [locations, setLocations] = useState<StorageLocation[]>([]);
 
   useEffect(() => {
@@ -62,6 +63,7 @@ export default function LocationDropdown(props: LocationDropdownProps): JSX.Elem
           selected={storageLocation}
           values={generateLocationsValues}
           onChange={onStorageLocationChange}
+          disabled={isContributor}
         />
       </Grid>
       <Grid item xs={4}>
