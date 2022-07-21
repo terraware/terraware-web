@@ -58,8 +58,20 @@ export default function Select(props: SelectProps): JSX.Element {
   });
 
   const [openedOptions, setOpenedOptions] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState<number>(-1);
   const inputRef = useRef<HTMLDivElement>(null);
   const dropdownRef = useRef<HTMLUListElement>(null);
+
+  useEffect(() => {
+    if (options && selectedValue && selectedIndex === -1) {
+      const newIndex = options.indexOf(selectedValue);
+      if (newIndex !== -1) {
+        setSelectedIndex(newIndex);
+      }
+    } else if (!options) {
+      setSelectedIndex(-1);
+    }
+  }, [options, selectedValue, selectedIndex]);
 
   useEffect(() => {
     window.addEventListener('click', handleClick);
@@ -110,11 +122,12 @@ export default function Select(props: SelectProps): JSX.Element {
     setOpenedOptions((isOpen) => !isOpen);
   };
 
-  const onOptionSelected = (option: string) => {
+  const onOptionSelected = (option: string, index: number) => {
     if (onChange) {
       onChange(option);
     }
     setOpenedOptions(false);
+    setSelectedIndex(index);
   };
 
   const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
@@ -182,10 +195,10 @@ export default function Select(props: SelectProps): JSX.Element {
                 return (
                   <li
                     data-key={option.charAt(0).toUpperCase()}
-                    data-selected={option === selectedValue}
+                    data-selected={selectedIndex === index}
                     key={index}
-                    onClick={() => onOptionSelected(option)}
-                    className={`${itemClass} ${option === selectedValue ? 'select-value--selected' : ''} `}
+                    onClick={() => onOptionSelected(option, index)}
+                    className={`${itemClass} ${selectedIndex === index ? 'select-value--selected' : ''} `}
                   >
                     {option}
                   </li>
