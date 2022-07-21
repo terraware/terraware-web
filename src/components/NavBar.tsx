@@ -7,6 +7,7 @@ import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import dictionary from 'src/strings/dictionary';
 import { AllOrganizationRoles, ServerOrganization } from 'src/types/Organization';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 import NavFooter from './common/Navbar/NavFooter';
 
 type NavBarProps = {
@@ -15,6 +16,7 @@ type NavBarProps = {
 };
 export default function NavBar({ organization, setShowNavBar }: NavBarProps): JSX.Element | null {
   const [role, setRole] = useState<AllOrganizationRoles>();
+  const { isDesktop } = useDeviceInfo();
 
   useEffect(() => {
     if (organization) {
@@ -38,14 +40,37 @@ export default function NavBar({ organization, setShowNavBar }: NavBarProps): JS
     history.push(url);
   };
 
+  const closeAndNavigateTo = (path: string) => {
+    closeNavBar();
+    if (path) {
+      navigate(path);
+    }
+  };
+
+  const closeNavBar = () => {
+    if (!isDesktop) {
+      setShowNavBar(false);
+    }
+  };
+
   return (
     <Navbar setShowNavBar={setShowNavBar}>
-      <NavItem label='Home' icon='home' selected={!!isHomeRoute} onClick={() => navigate(APP_PATHS.HOME)} id='home' />
+      <NavItem
+        label='Home'
+        icon='home'
+        selected={!!isHomeRoute}
+        onClick={() => {
+          closeAndNavigateTo(APP_PATHS.HOME);
+        }}
+        id='home'
+      />
       <NavItem
         label={strings.SPECIES}
         icon='species'
         selected={!!isSpeciesRoute}
-        onClick={() => navigate(APP_PATHS.SPECIES)}
+        onClick={() => {
+          closeAndNavigateTo(APP_PATHS.SPECIES);
+        }}
         id='speciesNb'
       />
 
@@ -54,21 +79,27 @@ export default function NavBar({ organization, setShowNavBar }: NavBarProps): JS
         label='Dashboard'
         icon='dashboard'
         selected={!!isAccessionDashboardRoute}
-        onClick={() => !isAccessionDashboardRoute && navigate(APP_PATHS.SEEDS_DASHBOARD)}
+        onClick={() => {
+          closeAndNavigateTo(isAccessionDashboardRoute ? '' : APP_PATHS.SEEDS_DASHBOARD);
+        }}
         id='seeds-dashboard'
       />
       <NavItem
         label='Accessions'
         icon='seeds'
         selected={isAccessionsRoute || isCheckinRoute ? true : false}
-        onClick={() => navigate(APP_PATHS.ACCESSIONS)}
+        onClick={() => {
+          closeAndNavigateTo(APP_PATHS.ACCESSIONS);
+        }}
         id='accessions'
       />
       <NavItem
         label={strings.MONITORING}
         icon='monitoringNav'
         selected={!!isMonitoringRoute}
-        onClick={() => navigate(APP_PATHS.MONITORING)}
+        onClick={() => {
+          closeAndNavigateTo(APP_PATHS.MONITORING);
+        }}
         id='monitoring'
       />
       {role && ['Admin', 'Owner'].includes(role) && (
@@ -78,21 +109,27 @@ export default function NavBar({ organization, setShowNavBar }: NavBarProps): JS
             label={strings.ORGANIZATION}
             icon='organizationNav'
             selected={!!isOrganizationRoute}
-            onClick={() => !isOrganizationRoute && navigate(APP_PATHS.ORGANIZATION)}
+            onClick={() => {
+              closeAndNavigateTo(isOrganizationRoute ? '' : APP_PATHS.ORGANIZATION);
+            }}
             id='organization'
           />
           <NavItem
             label={strings.PEOPLE}
             icon='peopleNav'
             selected={!!isPeopleRoute}
-            onClick={() => navigate(APP_PATHS.PEOPLE)}
+            onClick={() => {
+              closeAndNavigateTo(APP_PATHS.PEOPLE);
+            }}
             id='people'
           />
           <NavItem
             label={strings.SEED_BANKS}
             icon='seedbankNav'
             selected={!!isSeedbanksRoute}
-            onClick={() => navigate(APP_PATHS.SEED_BANKS)}
+            onClick={() => {
+              closeAndNavigateTo(APP_PATHS.SEED_BANKS);
+            }}
             id='seedbanks'
           />
         </>
@@ -103,7 +140,9 @@ export default function NavBar({ organization, setShowNavBar }: NavBarProps): JS
           label={dictionary.CONTACT_US}
           icon='mail'
           selected={!!isContactUsRoute}
-          onClick={() => navigate(APP_PATHS.CONTACT_US)}
+          onClick={() => {
+            closeAndNavigateTo(APP_PATHS.CONTACT_US);
+          }}
           id='contactus'
         />
       </NavFooter>
