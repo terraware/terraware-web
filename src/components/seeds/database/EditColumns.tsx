@@ -8,10 +8,16 @@ import DialogCloseButton from '../../common/DialogCloseButton';
 import Divisor from '../../common/Divisor';
 import RadioButton from '../../common/RadioButton';
 import { COLUMNS_INDEXED, Preset, searchPresets } from './columns';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const useStyles = makeStyles((theme: Theme) => ({
   submit: {
-    marginLeft: theme.spacing(2),
+    '&:not(.mobile)': {
+      marginLeft: theme.spacing(2),
+    },
+    '&.mobile': {
+      marginTop: theme.spacing(1),
+    },
     color: theme.palette.common.white,
   },
   actions: {
@@ -19,9 +25,17 @@ const useStyles = makeStyles((theme: Theme) => ({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingLeft: theme.spacing(2),
+    '&.mobile': {
+      width: '100%',
+    },
   },
   bold: {
     fontWeight: theme.typography.fontWeightBold,
+  },
+  mobileButtons: {
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
   },
 }));
 
@@ -35,6 +49,7 @@ export default function EditColumnsDialog(props: Props): JSX.Element {
   const classes = useStyles();
   const { onClose, open } = props;
   const [preset, setPreset] = React.useState<Preset>();
+  const { isMobile } = useDeviceInfo();
 
   const [value, setValue] = React.useState(props.value ?? []);
 
@@ -132,12 +147,12 @@ export default function EditColumnsDialog(props: Props): JSX.Element {
       </DialogContent>
 
       <DialogActions>
-        <Box className={classes.actions}>
-          <Box>
+        <Box className={`${classes.actions} ${isMobile ? 'mobile' : ''}`}>
+          <Box className={isMobile ? classes.mobileButtons : ''}>
             <CancelButton onClick={handleCancel} />
             <Chip
               id='saveColumnsButton'
-              className={classes.submit}
+              className={`${classes.submit} ${isMobile ? 'mobile' : ''}`}
               label='Save changes'
               clickable
               color='primary'

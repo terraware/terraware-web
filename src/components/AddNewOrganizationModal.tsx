@@ -16,6 +16,7 @@ import { getCountryByCode, getSubdivisionByCode } from 'src/utils/country';
 import { APP_PATHS } from '../constants';
 import { useHistory } from 'react-router';
 import { makeStyles } from '@mui/styles';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainModal: {
@@ -38,7 +39,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     paddingBottom: theme.spacing(3),
   },
   paper: {
-    minWidth: '515px',
+    '&:not(.mobile)': {
+      minWidth: '515px',
+    },
   },
   container: {
     border: `1px solid ${theme.palette.grey[400]}`,
@@ -57,6 +60,11 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   content: {
     overflow: 'visible',
+  },
+  title: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
 }));
 
@@ -80,6 +88,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
     role: 'Owner',
     totalUsers: 0,
   });
+  const { isMobile } = useDeviceInfo();
 
   useEffect(() => {
     let cancel = false;
@@ -183,9 +192,9 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
       maxWidth='md'
       className={classes.mainModal}
       open={open}
-      classes={{ paper: classes.paper }}
+      classes={{ paper: `${classes.paper} ${isMobile ? 'mobile' : ''}` }}
     >
-      <DialogTitle>
+      <DialogTitle className={classes.title}>
         <Typography variant='h6'>{strings.ADD_NEW_ORGANIZATION}</Typography>
         <DialogCloseButton onClick={onCancelWrapper} />
       </DialogTitle>
