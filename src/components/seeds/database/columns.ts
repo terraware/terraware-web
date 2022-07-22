@@ -319,12 +319,6 @@ const COLUMNS: DatabaseColumn[] = [
     type: 'string',
     filter: { type: 'search' },
   },
-  {
-    key: 'facility_name',
-    name: strings.SEED_BANKS,
-    type: 'string',
-    filter: { type: 'multiple_selection' },
-  },
 ];
 
 export const COLUMNS_INDEXED = COLUMNS.reduce((acum, value) => {
@@ -348,7 +342,6 @@ export const defaultPreset: Preset = {
     'collectedDate',
     'receivedDate',
     'primaryCollectorName',
-    'facility_name',
   ],
 };
 

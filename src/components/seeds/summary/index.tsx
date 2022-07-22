@@ -99,7 +99,7 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
 
   return (
     <TfMain>
-      <PageHeader subtitle={strings.WELCOME_MSG} page={strings.DASHBOARD} parentPage={strings.SEEDS} />
+      <PageHeader subtitle={strings.WELCOME_MSG} page={strings.DASHBOARD} />
       <Container maxWidth={false} className={classes.mainContainer}>
         {organization && summary ? (
           <Grid container spacing={3}>
