@@ -8,11 +8,11 @@ import { APP_PATHS } from 'src/constants';
 import { useHistory, useParams } from 'react-router-dom';
 import { getAllSeedBanks, isAdmin } from 'src/utils/organization';
 import TfMain from '../common/TfMain';
-import Select from '../common/Select/Select';
 import { Facility } from 'src/api/types/facilities';
 import SeedBankMonitoring from './SeedBankMonitoring';
 import Button from '../common/button/Button';
 import Title from '../common/Title';
+import SeedBankSelector from '../SeedBank/SeedBankSelector';
 
 const useStyles = makeStyles(() => ({
   mainTitle: {
@@ -33,11 +33,6 @@ const useStyles = makeStyles(() => ({
     width: '1px',
     height: '32px',
     backgroundColor: '#A9B7B8',
-  },
-  seedBankLabel: {
-    margin: '0 8px 0 0',
-    fontWeight: 500,
-    fontSize: '16px',
   },
 }));
 
@@ -109,10 +104,9 @@ export default function Monitoring(props: MonitoringProps): JSX.Element {
             <div className={classes.titleContainer}>
               {getPageHeading()}
               <div className={classes.divider} />
-              <p className={classes.seedBankLabel}>{strings.SEED_BANK}</p>
-              <Select
-                options={seedBanks.map((sb) => sb?.name || '')}
-                onChange={onChangeSeedBank}
+              <SeedBankSelector
+                organization={organization}
+                onSelect={onChangeSeedBank}
                 selectedValue={selectedSeedBank?.name}
               />
             </div>

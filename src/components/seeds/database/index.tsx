@@ -42,7 +42,7 @@ import { ACCESSION_STATES } from '../../../types/Accession';
 import { isAdmin } from 'src/utils/organization';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import Select from '../../common/Select/Select';
+import SeedBankSelector from '../../SeedBank/SeedBankSelector';
 import _ from 'lodash';
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -99,12 +99,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     position: 'fixed',
     top: '50%',
     left: 'calc(50% + 100px)',
-  },
-  seedBankLabel: {
-    margin: '0 8px 0 0',
-    fontWeight: 500,
-    fontSize: '16px',
-    whiteSpace: 'pre',
   },
   seedBankSelectorContainer: {
     display: 'flex',
@@ -428,12 +422,11 @@ export default function Database(props: DatabaseProps): JSX.Element {
           page={strings.ACCESSIONS}
           subtitle={hasSeedBanks ? getSubtitle() : undefined}
           leftComponent={
-            hasSeedBanks ? (
+            hasSeedBanks && organization !== undefined ? (
               <div className={classes.seedBankSelectorContainer}>
-                <p className={classes.seedBankLabel}>{strings.SEED_BANK}</p>
-                <Select
-                  options={seedBanks.map((sb) => sb?.name || '')}
-                  onChange={onChangeSeedBank}
+                <SeedBankSelector
+                  organization={organization}
+                  onSelect={onChangeSeedBank}
                   selectedValue={selectedOrgInfo?.selectedFacility?.name}
                 />
               </div>
