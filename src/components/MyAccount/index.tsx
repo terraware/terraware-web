@@ -25,11 +25,17 @@ import { deleteOrganization } from '../../api/organization/organization';
 import Checkbox from '../common/Checkbox';
 import { Grid, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const useStyles = makeStyles((theme: Theme) => ({
   title: {
     marginTop: 0,
     fontSize: '24px',
+  },
+  titleContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'flex-start',
   },
   centered: {
     display: 'flex',
@@ -41,7 +47,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     marginBottom: 0,
   },
   editContainer: {
-    marginBottom: `${theme.spacing(8)}px`,
+    marginBottom: theme.spacing(8),
   },
 }));
 
@@ -73,6 +79,7 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
   const [deleteOrgModalOpened, setDeleteOrgModalOpened] = useState(false);
   const [newOwner, setNewOwner] = useState<OrganizationUser>();
   const [orgPeople, setOrgPeople] = useState<OrganizationUser[]>();
+  const { isMobile } = useDeviceInfo();
 
   useEffect(() => {
     if (organizations) {
@@ -265,24 +272,25 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
       )}
       <TfMain>
         <Grid container spacing={3} className={edit ? classes.editContainer : ''}>
-          <Grid item xs={4}>
-            <h1 className={classes.title}>{strings.MY_ACCOUNT}</h1>
-            <p>{strings.MY_ACCOUNT_DESC}</p>
-          </Grid>
-          <Grid item xs={6} />
-          <Grid item xs={2} className={classes.centered}>
-            <Button
-              id='edit-account'
-              label={dictionary.EDIT_ACCOUNT}
-              onClick={() => history.push(APP_PATHS.MY_ACCOUNT_EDIT)}
-              size='medium'
-              priority='secondary'
-            />
+          <Grid item xs={12} className={classes.titleContainer}>
+            <Grid item xs={7}>
+              <h1 className={classes.title}>{strings.MY_ACCOUNT}</h1>
+              <p>{strings.MY_ACCOUNT_DESC}</p>
+            </Grid>
+            <Grid item xs={5} className={classes.centered}>
+              <Button
+                id='edit-account'
+                label={dictionary.EDIT_ACCOUNT}
+                onClick={() => history.push(APP_PATHS.MY_ACCOUNT_EDIT)}
+                size='medium'
+                priority='secondary'
+              />
+            </Grid>
           </Grid>
           <Grid item xs={12}>
             <h2>{dictionary.GENERAL}</h2>
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={isMobile ? 12 : 4}>
             <TextField
               label={strings.FIRST_NAME}
               id='firstName'
@@ -292,7 +300,7 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
               onChange={onChange}
             />
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={isMobile ? 12 : 4}>
             <TextField
               label={strings.LAST_NAME}
               id='lastName'
@@ -302,7 +310,7 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
               onChange={onChange}
             />
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={isMobile ? 12 : 4}>
             <TextField
               label={strings.EMAIL}
               id='email'
