@@ -17,6 +17,7 @@ import WithdrawalCellRenderer from './TableCellRenderer';
 import { Add } from '@mui/icons-material';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { ServerOrganization } from 'src/types/Organization';
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
@@ -46,14 +47,16 @@ const newWithdrawalChipStyles = makeStyles((theme: Theme) => ({
 interface Props {
   accession: Accession;
   onSubmit: (record: Accession) => void;
+  organization?: ServerOrganization;
 }
 
-export default function WithdrawalView({ accession, onSubmit }: Props): JSX.Element {
+export default function WithdrawalView({ accession, onSubmit, organization }: Props): JSX.Element {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const [selectedRecord, setSelectedRecord] = React.useState<AccessionWithdrawal>();
   const [openInfoModal, setOpenInfoModal] = React.useState(false);
   const [withdrawalRows, setWithdrawalRows] = React.useState<AccessionWithdrawal[]>();
+  const isContributor = organization?.role === 'Contributor';
 
   React.useEffect(() => {
     window.scrollTo({ top: 0 });
@@ -204,7 +207,7 @@ export default function WithdrawalView({ accession, onSubmit }: Props): JSX.Elem
                 className={seedsAvailable > 0 ? classes.greenChip : classes.grayChip}
                 label={strings.NEW_WITHDRAWAL}
                 clickable={seedsAvailable > 0}
-                disabled={seedsAvailable <= 0}
+                disabled={seedsAvailable <= 0 || isContributor}
                 deleteIcon={<Add classes={newWithdrawalChipStyles()} />}
                 color={seedsAvailable > 0 ? 'primary' : undefined}
                 onClick={seedsAvailable > 0 ? onNewWithdrawal : undefined}

@@ -18,6 +18,7 @@ import { FieldError } from '../newAccession';
 import { Unit } from '../nursery/NewTest';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { ServerOrganization } from 'src/types/Organization';
 
 const useStyles = makeStyles((theme: Theme) => ({
   right: {
@@ -39,9 +40,10 @@ const useStyles = makeStyles((theme: Theme) => ({
 interface Props {
   accession: Accession;
   onSubmit: (record: Accession) => void;
+  organization?: ServerOrganization;
 }
 
-export default function ProcessingAndDrying({ accession, onSubmit }: Props): JSX.Element {
+export default function ProcessingAndDrying({ accession, onSubmit, organization }: Props): JSX.Element {
   const classes = useStyles();
 
   const [record, setRecord, onChange] = useForm(accession);
@@ -219,6 +221,8 @@ export default function ProcessingAndDrying({ accession, onSubmit }: Props): JSX
     { label: strings.POUNDS, value: 'Pounds' },
   ];
 
+  const isContributor = organization?.role === 'Contributor';
+
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <MainPaper>
@@ -236,7 +240,7 @@ export default function ProcessingAndDrying({ accession, onSubmit }: Props): JSX
                 { label: strings.SEED_WEIGHT, value: 'Weight' },
               ]}
               onChange={OnProcessingMethodChange}
-              disabled={record.withdrawals && record.withdrawals.length > 0}
+              disabled={(record.withdrawals && record.withdrawals.length > 0) || isContributor}
             />
           </Grid>
           {record.processingMethod === 'Weight' && (
@@ -247,6 +251,7 @@ export default function ProcessingAndDrying({ accession, onSubmit }: Props): JSX
                 selected={record.initialQuantity?.units || weightValues[0].value}
                 values={weightValues}
                 onChange={onTotalWeightGramsChange}
+                disabled={isContributor}
               />
             </Grid>
           )}
@@ -258,6 +263,7 @@ export default function ProcessingAndDrying({ accession, onSubmit }: Props): JSX
                 onChange={onInitialQuantityChange}
                 label={strings.SEED_COUNT}
                 type='Number'
+                disabled={isContributor}
               />
             </Grid>
           )}
@@ -275,6 +281,7 @@ export default function ProcessingAndDrying({ accession, onSubmit }: Props): JSX
                     required={true}
                     helperText={getErrorText('quantity') || strings.REQUIRED_FIELD}
                     error={getErrorText('quantity') ? true : false}
+                    disabled={isContributor}
                   />
                 </Grid>
               </Grid>
@@ -285,6 +292,7 @@ export default function ProcessingAndDrying({ accession, onSubmit }: Props): JSX
                   onChange={onChangeWeightFields}
                   label={strings.SUBSET_WEIGHT}
                   type='number'
+                  disabled={isContributor}
                 />
               </Grid>
               <Grid item xs={4}>
@@ -294,6 +302,7 @@ export default function ProcessingAndDrying({ accession, onSubmit }: Props): JSX
                   onChange={onChangeWeightFields}
                   label={strings.NUMBER_OF_SEEDS_IN_SUBSET}
                   type='number'
+                  disabled={isContributor}
                 />
               </Grid>
               <Grid item xs={4} className={classes.alignMiddle}>
@@ -327,6 +336,7 @@ export default function ProcessingAndDrying({ accession, onSubmit }: Props): JSX
             label={strings.NURSERY_GERMINATION}
             value={isChecked('Nursery' as ViabilityTestType)}
             onChange={onChangeViabilityTestType}
+            disabled={isContributor}
           />
           <Checkbox
             id='Lab'
@@ -334,6 +344,7 @@ export default function ProcessingAndDrying({ accession, onSubmit }: Props): JSX
             label={strings.LAB_GERMINATION}
             value={isChecked('Lab' as ViabilityTestType)}
             onChange={onChangeViabilityTestType}
+            disabled={isContributor}
           />
         </Grid>
         <Divisor />
@@ -348,6 +359,7 @@ export default function ProcessingAndDrying({ accession, onSubmit }: Props): JSX
                 { label: '40% frozen', value: 'Freezer' },
               ]}
               onChange={onChange}
+              disabled={isContributor}
             />
           </Grid>
         </Grid>
@@ -360,6 +372,7 @@ export default function ProcessingAndDrying({ accession, onSubmit }: Props): JSX
               onChange={onChange}
               label={strings.DRYING_START_DATE}
               aria-label='Drying start date'
+              disabled={isContributor}
             />
           </Grid>
           <Grid item xs={4}>
@@ -369,6 +382,7 @@ export default function ProcessingAndDrying({ accession, onSubmit }: Props): JSX
               onChange={onChange}
               label={strings.ESTIMATED_DRYING_END_DATE}
               aria-label='Estimated drying end date'
+              disabled={isContributor}
             />
           </Grid>
         </Grid>
@@ -380,6 +394,7 @@ export default function ProcessingAndDrying({ accession, onSubmit }: Props): JSX
               onChange={onChange}
               label={strings.SCHEDULE_DATE_TO_MOVE}
               aria-label='Drying move date'
+              disabled={isContributor}
             />
             <Typography component='p' variant='caption' className={classes.caption}>
               {strings.IF_APPLIES}
@@ -394,6 +409,7 @@ export default function ProcessingAndDrying({ accession, onSubmit }: Props): JSX
               value={record.processingNotes || ''}
               onChange={onChange}
               label={strings.NOTES}
+              disabled={isContributor}
             />
           </Grid>
           <Grid item xs={4}>
@@ -402,6 +418,7 @@ export default function ProcessingAndDrying({ accession, onSubmit }: Props): JSX
               value={record.processingStaffResponsible}
               onChange={onChange}
               label={strings.PROCESSED_AND_DRIED_BY}
+              disabled={isContributor}
             />
           </Grid>
         </Grid>
