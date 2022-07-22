@@ -183,6 +183,7 @@ const sections: Section[] = [
       [{ ...COLUMNS_INDEXED.accessionNumber, disabled: true }],
       [COLUMNS_INDEXED.active],
       [COLUMNS_INDEXED.state],
+      [COLUMNS_INDEXED.facility_name],
     ],
   },
   {

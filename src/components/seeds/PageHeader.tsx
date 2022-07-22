@@ -7,7 +7,6 @@ import PageSnackbar from 'src/components/PageSnackbar';
 import { ArrowBack } from '@mui/icons-material';
 import { Container, Grid, Fab, Box, Typography, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
@@ -43,23 +42,12 @@ const useStyles = makeStyles((theme: Theme) => ({
   mainContent: {
     width: '100%',
   },
-  divider: {
-    margin: '0 16px',
-    width: '1px',
-    height: '32px',
-    backgroundColor: '#A9B7B8',
-  },
-  leftComponentContainer: {
-    marginLeft: theme.spacing(1),
-    marginTop: theme.spacing(2),
-  },
 }));
 
 interface Props {
   title?: string | string[];
   subtitle?: string | React.ReactNode;
   children?: React.ReactNode;
-  leftComponent?: React.ReactNode;
   rightComponent?: React.ReactNode;
   page?: string;
   parentPage?: string;
@@ -77,7 +65,6 @@ export default function PageHeader({
   title,
   subtitle,
   children,
-  leftComponent,
   rightComponent,
   back,
   backUrl,
@@ -93,10 +80,9 @@ export default function PageHeader({
   const classes = useStyles();
   const history = useHistory();
   const location = useStateLocation();
-  const { isMobile } = useDeviceInfo();
 
   const getPageHeading = () => {
-    if (page) {
+    if (page && parentPage) {
       return <Title page={page} parentPage={parentPage} />;
     }
   };
@@ -136,22 +122,11 @@ export default function PageHeader({
                 variant='h4'
                 className={`${classes.pageTitle} ${titleClassName}`}
                 sx={{ fontSize: '24px', lineHeight: '32px', fontWeight: 600 }}
-                display='flex'
-                alignItems='center'
               >
                 {title || getPageHeading()}
-                {leftComponent !== undefined && isMobile === false && (
-                  <>
-                    <div className={classes.divider} />
-                    {leftComponent}
-                  </>
-                )}
               </Typography>
               {!!rightComponent && <div>{rightComponent}</div>}
             </Box>
-            {isMobile === true && leftComponent !== undefined && (
-              <div className={classes.leftComponentContainer}>{leftComponent}</div>
-            )}
             <Typography id='subtitle' variant='h6' className={classes.subtitle}>
               {subtitle}
             </Typography>

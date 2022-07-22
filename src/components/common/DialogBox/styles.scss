@@ -21,7 +21,7 @@
     .dialog-box {
       &--footer {
         button {
-          margin: 0 0 $tw-spc-base-x-small 0;
+          margin: $tw-spc-base-x-small 0 0 0;
         }
         &-container {
           flex-direction: column;
@@ -33,7 +33,7 @@
         }
       }
       &--actions-container {
-        flex-direction: column-reverse;
+        flex-direction: column;
       }
     }
   }
