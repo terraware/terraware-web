@@ -327,7 +327,7 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
             <h2>{dictionary.NOTIFICATIONS}</h2>
             <p>{strings.MY_ACCOUNT_NOTIFICATIONS_DESC}</p>
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={12}>
             <Checkbox
               disabled={!edit}
               id='emailNotificationsEnabled'
