@@ -47,6 +47,12 @@ const useStyles = makeStyles((theme: Theme) => ({
     margin: theme.spacing(0, 3),
     maxWidth: '200px',
     textAlign: 'center',
+    '&.mobile': {
+      marginTop: theme.spacing(4),
+    },
+    '&.mobile:first-child': {
+      marginTop: 0,
+    },
   },
   listItemIcon: {
     width: '200px',
@@ -126,7 +132,7 @@ export default function EmptyStateContent(props: EmptyStateContentProps): JSX.El
       <div className={classes.listContainer}>
         {listItems.map((item) => {
           return (
-            <Grid item xs={gridSize()} key={item.title} className={classes.listItem}>
+            <Grid item xs={gridSize()} key={item.title} className={`${classes.listItem} ${isMobile ? 'mobile' : ''}`}>
               <Icon name={item.icon} className={classes.listItemIcon} />
               <p className={classes.listItemTitle}>{item.title}</p>
               <div>
