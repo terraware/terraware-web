@@ -14,6 +14,7 @@ import { ServerOrganization } from 'src/types/Organization';
 import PageHeader from '../PageHeader';
 import SummaryPaper from './SummaryPaper';
 import Updates from './Updates';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const useStyles = makeStyles(() => ({
   mainContainer: {
@@ -57,6 +58,7 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
   const [summary, setSummary] = useState<GetSummaryResponse>();
   const errorOccurred = summary ? summary.errorOccurred : false;
   const [, setSelectedOrgInfo] = useRecoilState(seedsSummarySelectedOrgInfo);
+  const { isMobile } = useDeviceInfo();
 
   useEffect(() => {
     if (organization) {
@@ -97,6 +99,13 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
     };
   }, [organization, setSelectedOrgInfo]);
 
+  const cardGridSize = () => {
+    if (isMobile) {
+      return 12;
+    }
+    return 4;
+  };
+
   return (
     <TfMain>
       <PageHeader subtitle={strings.WELCOME_MSG} page={strings.DASHBOARD} parentPage={strings.SEEDS} />
@@ -105,7 +114,7 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
           <Grid container spacing={3}>
             <Grid item xs={12}>
               <Grid container spacing={3}>
-                <Grid item xs={4}>
+                <Grid item xs={cardGridSize()}>
                   <MainPaper className={classes.paper}>
                     <SummaryPaper
                       id='sessions'
@@ -116,7 +125,7 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
                     />
                   </MainPaper>
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item xs={cardGridSize()}>
                   <MainPaper className={classes.paper}>
                     <SummaryPaper
                       id='species'
@@ -127,7 +136,7 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
                     />
                   </MainPaper>
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item xs={cardGridSize()}>
                   <MainPaper className={classes.paper}>
                     <SummaryPaper
                       id='families'
