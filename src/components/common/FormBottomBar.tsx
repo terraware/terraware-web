@@ -16,6 +16,7 @@ const useStyles = makeStyles(() => ({
     '&.desktop': {
       width: 'calc(100% - 200px)',
     },
+    zIndex: 1000,
   },
 }));
 
