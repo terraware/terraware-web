@@ -9,13 +9,14 @@ interface Props {
   onChange: (id: string, value: string) => void;
   refreshErrors: (newErrors: FieldError[]) => void;
   storageDate?: string;
+  disabled?: boolean;
 }
 
 type FieldError = {
   id: string;
   msg: string;
 };
-export function StorageStartDate({ onChange, refreshErrors, storageDate }: Props): JSX.Element {
+export function StorageStartDate({ onChange, refreshErrors, storageDate, disabled }: Props): JSX.Element {
   const [dateErrors, setDateErrors] = useState<FieldError[]>([]);
   const [date, setDate] = useState<number>();
 
@@ -64,6 +65,7 @@ export function StorageStartDate({ onChange, refreshErrors, storageDate }: Props
         maxDate={moment(date).format('YYYY-MM-DD')}
         helperText={getErrorText('storageStartDate')}
         error={getErrorText('storageStartDate') ? true : false}
+        disabled={disabled}
       />
     </Grid>
   );

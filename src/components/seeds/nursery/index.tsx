@@ -19,6 +19,7 @@ import { COLUMNS } from './types';
 import { Add } from '@mui/icons-material';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { ServerOrganization } from 'src/types/Organization';
 
 const useStyles = makeStyles((theme: Theme) => ({
   right: {
@@ -41,9 +42,10 @@ const newWithdrawalChipStyles = makeStyles((theme: Theme) => ({
 interface Props {
   accession: Accession;
   onSubmit: (record: Accession) => void;
+  organization?: ServerOrganization;
 }
 
-export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
+export default function Nursery({ accession, onSubmit, organization }: Props): JSX.Element {
   const classes = useStyles();
   const [date, setDate] = useState<number>();
   const [open, setOpen] = useState(false);
@@ -51,6 +53,7 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
   const allowTestInGrams = Boolean(accession.processingMethod === 'Weight');
   const seedsAvailable = accession.remainingQuantity?.quantity ?? 0;
   const [nurseryRows, setNurseryRows] = useState<ViabilityTest[]>();
+  const isContributor = organization?.role === 'Contributor';
 
   useEffect(() => {
     window.scrollTo({ top: 0 });
@@ -170,7 +173,7 @@ export default function Nursery({ accession, onSubmit }: Props): JSX.Element {
                 className={classes.greenChip}
                 label={strings.NEW_TEST}
                 clickable
-                disabled={seedsAvailable <= 0}
+                disabled={seedsAvailable <= 0 || isContributor}
                 deleteIcon={<Add classes={newWithdrawalChipStyles()} />}
                 color={'primary'}
                 onClick={onNew}

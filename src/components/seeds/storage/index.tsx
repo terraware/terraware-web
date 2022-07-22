@@ -16,6 +16,7 @@ import LocationDropdown from './LocationDropdown';
 import { StorageStartDate } from './StorageStartDate';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { ServerOrganization } from 'src/types/Organization';
 
 const useStyles = makeStyles((theme: Theme) => ({
   right: {
@@ -37,9 +38,10 @@ const useStyles = makeStyles((theme: Theme) => ({
 interface Props {
   accession: Accession;
   onSubmit: (record: Accession) => void;
+  organization?: ServerOrganization;
 }
 
-export default function Storage({ accession, onSubmit }: Props): JSX.Element {
+export default function Storage({ accession, onSubmit, organization }: Props): JSX.Element {
   const classes = useStyles();
 
   const [record, setRecord, onChange] = useForm(accession);
@@ -97,6 +99,8 @@ export default function Storage({ accession, onSubmit }: Props): JSX.Element {
     setErrors(combinedErrors);
   };
 
+  const isContributor = organization?.role === 'Contributor';
+
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <MainPaper>
@@ -104,7 +108,12 @@ export default function Storage({ accession, onSubmit }: Props): JSX.Element {
         <Typography component='p'>{strings.STORAGE_DESCRIPTION}</Typography>
         <Divisor />
         <Grid container spacing={4}>
-          <StorageStartDate onChange={onChange} refreshErrors={refreshErrors} storageDate={record.storageStartDate} />
+          <StorageStartDate
+            onChange={onChange}
+            refreshErrors={refreshErrors}
+            storageDate={record.storageStartDate}
+            disabled={isContributor}
+          />
           <Grid item xs={4} />
           <Grid item xs={4} />
           <Grid item xs={4}>
@@ -114,6 +123,7 @@ export default function Storage({ accession, onSubmit }: Props): JSX.Element {
               onChange={onChange}
               label={strings.NUMBER_OF_PACKETS}
               type='Number'
+              disabled={isContributor}
             />
           </Grid>
           <Grid item xs={4} />
@@ -130,10 +140,17 @@ export default function Storage({ accession, onSubmit }: Props): JSX.Element {
               onChange={onChange}
               storageLocation={record.storageLocation}
               storageCondition={record.storageCondition}
+              isContributor={isContributor}
             />
           </Suspense>
           <Grid item xs={12}>
-            <TextArea id='storageNotes' value={record.storageNotes || ''} onChange={onChange} label={strings.NOTES} />
+            <TextArea
+              id='storageNotes'
+              value={record.storageNotes || ''}
+              onChange={onChange}
+              label={strings.NOTES}
+              disabled={isContributor}
+            />
           </Grid>
           <Grid item xs={4}>
             <TextField
@@ -141,6 +158,7 @@ export default function Storage({ accession, onSubmit }: Props): JSX.Element {
               value={record.storageStaffResponsible}
               onChange={onChange}
               label={strings.STORED_BY}
+              disabled={isContributor}
             />
           </Grid>
           <Divisor />
