@@ -39,11 +39,10 @@ import EmptyMessage from 'src/components/common/EmptyMessage';
 import { APP_PATHS } from 'src/constants';
 import TfMain from 'src/components/common/TfMain';
 import { ACCESSION_STATES } from '../../../types/Accession';
+import SelectSeedBankModal from '../../SeedBank/SelectSeedBankModal';
 import { isAdmin } from 'src/utils/organization';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import SeedBankSelector from '../../SeedBank/SeedBankSelector';
-import _ from 'lodash';
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
@@ -100,11 +99,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     top: '50%',
     left: 'calc(50% + 100px)',
   },
-  seedBankSelectorContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
 }));
 
 type DatabaseProps = {
@@ -144,7 +138,6 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const [reportModalOpen, setReportModalOpen] = useState(false);
   const [pendingAccessions, setPendingAccessions] = useState<SearchResponseElement[] | null>();
   const [selectedOrgInfo, setSelectedOrgInfo] = useRecoilState(seedsDatabaseSelectedOrgInfo);
-  const [seedBanks, setSeedBanks] = useState<Facility[]>([]);
 
   /*
    * fieldOptions is a list of records
@@ -161,51 +154,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const [availableFieldOptions, setAvailableFieldOptions] = useState<FieldValuesMap | null>();
   const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>();
   const [unfilteredResults, setUnfilteredResults] = useState<SearchResponseElement[] | null>();
-
-  const updateSeedBankSearchCriteria = useCallback(
-    (selectedFacility: Facility) => {
-      let newSearchCriteria = searchCriteria || {};
-      newSearchCriteria = {
-        ...newSearchCriteria,
-        facility_name: {
-          field: 'facility_name',
-          values: [selectedFacility.name],
-          type: 'Exact',
-          operation: 'field',
-        },
-      };
-      setSearchCriteria(newSearchCriteria);
-      setSelectedOrgInfo({ ...selectedOrgInfo, selectedFacility });
-    },
-    [searchCriteria, selectedOrgInfo, setSearchCriteria, setSelectedOrgInfo]
-  );
-
-  useEffect(() => {
-    if (!organization) {
-      return;
-    }
-    const facilities: Facility[] = [];
-    getAllSeedBanks(organization).forEach((facility) => {
-      if (facility !== undefined) {
-        facilities.push(facility);
-      }
-    });
-    if (_.isEqual(seedBanks, facilities)) {
-      return;
-    }
-    setSeedBanks(facilities);
-    if (facilities.length) {
-      let facility = null;
-      const { selectedFacility } = selectedOrgInfo;
-      if (selectedFacility) {
-        facility = facilities.find((sb) => sb.id === selectedFacility.id);
-      }
-      if (!facility) {
-        facility = facilities[0];
-      }
-      updateSeedBankSearchCriteria(facility);
-    }
-  }, [organization, seedBanks, updateSeedBankSearchCriteria, selectedOrgInfo]);
+  const [selectSeedBankModalOpen, setSelectSeedBankModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
     // if url has stage=<accession state>, apply that filter
@@ -227,11 +176,10 @@ export default function Database(props: DatabaseProps): JSX.Element {
       query.delete('stage');
     }
     if (facilityId && organization) {
-      const allseedBanks = getAllSeedBanks(organization);
-      if (allseedBanks) {
-        const facility = allseedBanks.find((seedBank) => seedBank?.id === parseInt(facilityId, 10));
+      const seedBanks = getAllSeedBanks(organization);
+      if (seedBanks) {
+        const facility = seedBanks.find((seedBank) => seedBank?.id === parseInt(facilityId, 10));
         if (facility) {
-          setSelectedOrgInfo({ ...selectedOrgInfo, selectedFacility: facility });
           newSearchCriteria = {
             ...newSearchCriteria,
             facility_name: {
@@ -249,7 +197,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
       history.push(getLocation(location.pathname, location, query.toString()));
       setSearchCriteria(newSearchCriteria);
     }
-  }, [query, location, history, setSearchCriteria, organization, searchCriteria, selectedOrgInfo, setSelectedOrgInfo]);
+  }, [query, location, history, setSearchCriteria, organization, searchCriteria]);
 
   useEffect(() => {
     if (organization) {
@@ -389,20 +337,23 @@ export default function Database(props: DatabaseProps): JSX.Element {
   };
 
   const goToNewAccession = () => {
-    const newAccessionLocation = getLocation(APP_PATHS.ACCESSIONS_NEW, location);
-    history.push(newAccessionLocation);
+    setSelectSeedBankModalOpen(true);
   };
 
-  const onChangeSeedBank = (name: string) => {
-    const selectedFacility = seedBanks.find((sb) => sb.name === name);
-    if (!selectedFacility) {
-      return;
+  const onSeedBankSelected = (selectedFacility: Facility | undefined) => {
+    setSelectSeedBankModalOpen(false);
+    if (selectedFacility) {
+      setSelectedOrgInfo({ ...selectedOrgInfo, selectedFacility });
+      const newAccessionLocation = getLocation(APP_PATHS.ACCESSIONS_NEW, location);
+      history.push(newAccessionLocation);
     }
-    updateSeedBankSearchCriteria(selectedFacility);
   };
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
+      {organization && (
+        <SelectSeedBankModal organization={organization} open={selectSeedBankModalOpen} onClose={onSeedBankSelected} />
+      )}
       <TfMain>
         <EditColumns open={editColumnsModalOpen} value={displayColumnNames} onClose={onCloseEditColumnsModal} />
         {organization && (
@@ -415,23 +366,12 @@ export default function Database(props: DatabaseProps): JSX.Element {
             onClose={onCloseDownloadReportModal}
           />
         )}
-
         <PageHeader
           title=''
           allowAll={true}
-          page={strings.ACCESSIONS}
           subtitle={hasSeedBanks ? getSubtitle() : undefined}
-          leftComponent={
-            hasSeedBanks && organization !== undefined ? (
-              <div className={classes.seedBankSelectorContainer}>
-                <SeedBankSelector
-                  organization={organization}
-                  onSelect={onChangeSeedBank}
-                  selectedValue={selectedOrgInfo?.selectedFacility?.name}
-                />
-              </div>
-            ) : undefined
-          }
+          page={strings.ACCESSIONS}
+          parentPage={strings.SEEDS}
           rightComponent={
             hasSeedBanks ? (
               <>

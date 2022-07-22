@@ -35,10 +35,24 @@ describe('Accessions', () => {
     });
 
     it('should navigate in and out of the new accession page', () => {
-      cy.get('#newAccession').click().url().should('contain', '/accessions/new');
+      cy.get('#newAccession').click();
+      cy.get('#seedBank').click();
+      cy.get('ul')
+        .children()
+        .each(($el, index) => {
+          if (index === 0) $el.click();
+        });
+      cy.get('#select-seed-bank').click().url().should('contain', '/accessions/new');
       cy.get('#closenewAccession').click().url().should('contain', '/');
 
-      cy.get('#newAccession').click().url().should('contain', '/accessions/new');
+      cy.get('#newAccession').click();
+      cy.get('#seedBank').click();
+      cy.get('ul')
+        .children()
+        .each(($el, index) => {
+          if (index === 0) $el.click();
+        });
+      cy.get('#select-seed-bank').click().url().should('contain', '/accessions/new');
       cy.get('#cancelButton').click().url().should('contain', '/');
     });
   });
@@ -48,7 +62,14 @@ describe('Accessions', () => {
       cy.intercept('POST', '/api/v1/search').as('search');
       cy.visit('/accessions');
       cy.wait('@search');
-      cy.get('#newAccession').click().url().should('contain', '/accessions/new');
+      cy.get('#newAccession').click();
+      cy.get('#seedBank').click();
+      cy.get('ul')
+        .children()
+        .each(($el, index) => {
+          if (index === 0) $el.click();
+        });
+      cy.get('#select-seed-bank').click().url().should('contain', '/accessions/new');
 
       cy.get('#species').type('Kousa Dogwood{downArrow}{enter}');
       cy.get('#numberOfTrees').type('3');
