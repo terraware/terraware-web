@@ -11,6 +11,7 @@ import TextField from '../common/Textfield/Textfield';
 import Button from '../common/button/Button';
 import { Facility } from 'src/api/types/facilities';
 import { makeStyles } from '@mui/styles';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
@@ -66,6 +67,14 @@ export default function SeedBankDetails({ organization }: SeedBankDetailsProps):
     history.push(editSeedBankLocation);
   };
 
+  const { isMobile } = useDeviceInfo();
+  const gridSize = () => {
+    if (isMobile) {
+      return 12;
+    }
+    return 4;
+  };
+
   return (
     <Container maxWidth={false} className={classes.mainContainer}>
       <Grid container spacing={3}>
@@ -79,10 +88,10 @@ export default function SeedBankDetails({ organization }: SeedBankDetailsProps):
           <h2>{seedBank?.name}</h2>
           <Button label={strings.EDIT} priority='secondary' onClick={goToEditSeedBank} />
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={gridSize()}>
           <TextField label={strings.NAME_REQUIRED} id='name' type='text' value={seedBank?.name} display={true} />
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={gridSize()}>
           <TextField
             label={strings.DESCRIPTION_REQUIRED}
             id='description'
