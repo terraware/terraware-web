@@ -14,6 +14,7 @@ import { getAllSeedBanks } from 'src/utils/organization';
 import { Facility } from 'src/api/types/facilities';
 import { createFacility, updateFacility } from 'src/api/facility/facility';
 import { Theme } from '@mui/material';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
@@ -61,6 +62,7 @@ export default function SeedBankView({ organization, reloadOrganizationData }: S
   const { seedBankId } = useParams<{ seedBankId: string }>();
   const [selectedSeedBank, setSelectedSeedBank] = useState<Facility | null>();
   const history = useHistory();
+  const { isMobile } = useDeviceInfo();
 
   const classes = useStyles();
 
@@ -139,7 +141,7 @@ export default function SeedBankView({ organization, reloadOrganizationData }: S
           <Grid item xs={12}>
             {selectedSeedBank ? <h2>{selectedSeedBank?.name}</h2> : <h2>{strings.ADD_SEED_BANK}</h2>}
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={isMobile ? 12 : 4}>
             <TextField
               id='name'
               label={strings.NAME_REQUIRED}
@@ -149,7 +151,7 @@ export default function SeedBankView({ organization, reloadOrganizationData }: S
               errorText={record.name ? '' : nameError}
             />
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={isMobile ? 12 : 4}>
             <TextField
               id='description'
               label={strings.DESCRIPTION_REQUIRED}
