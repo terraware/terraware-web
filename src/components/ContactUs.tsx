@@ -7,6 +7,7 @@ import strings from 'src/strings/contactUsPage';
 import { TERRAWARE_SUPPORT_LINK } from 'src/constants';
 import TfMain from './common/TfMain';
 import { makeStyles } from '@mui/styles';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const useStyles = makeStyles((theme: Theme) => ({
   title: {
@@ -26,6 +27,11 @@ const useStyles = makeStyles((theme: Theme) => ({
 
     '& .MuiGrid-item:last-child': {
       paddingRight: 0,
+    },
+  },
+  mobileCard: {
+    '&.MuiGrid-item': {
+      paddingLeft: 0,
     },
   },
 }));
@@ -58,6 +64,7 @@ const listItemContent: ListItemContent[] = [
 
 export default function ContactUs(): JSX.Element {
   const classes = useStyles();
+  const { isMobile } = useDeviceInfo();
 
   return (
     <TfMain>
@@ -65,7 +72,7 @@ export default function ContactUs(): JSX.Element {
       <Grid container spacing={3} className={classes.mainGrid}>
         {listItemContent.map((item) => {
           return (
-            <Grid key={item.title} item xs={4}>
+            <Grid key={item.title} item xs={isMobile ? 12 : 4} className={isMobile ? classes.mobileCard : ''}>
               <PageCard
                 name={item.title}
                 isNameBold={true}
