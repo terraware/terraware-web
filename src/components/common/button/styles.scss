@@ -48,8 +48,11 @@
         margin-right: calc((#{$tw-sz-btn-small-height} - #{$tw-fnt-btn-label-small-line-height}) / 2);
       }
     }
-    &.button-no-label.button-with-icon .tw-icon--medium {
-      margin-right: 0;
+    &.button-no-label.button-with-icon {
+      padding: 6px;
+      .tw-icon--small {
+        margin-right: 0;
+      }
     }
   }
 
@@ -86,8 +89,11 @@
         margin-right: calc((#{$tw-sz-btn-medium-height} - #{$tw-fnt-btn-label-medium-line-height}) / 2);
       }
     }
-    &.button-no-label.button-with-icon .tw-icon--medium {
-      margin-right: 0;
+    &.button-no-label.button-with-icon {
+      padding: 8px;
+      .tw-icon--medium {
+        margin-right: 0;
+      }
     }
   }
 
@@ -123,8 +129,11 @@
         margin-right: calc((#{$tw-sz-btn-large-height} - #{$tw-fnt-btn-label-large-line-height}) / 2);
       }
     }
-    &.button-no-label.button-with-icon .tw-icon--medium {
-      margin-right: 0;
+    &.button-no-label.button-with-icon {
+      padding: 10px;
+      .tw-icon--large {
+        margin-right: 0;
+      }
     }
   }
 
@@ -162,13 +171,15 @@
       }
     }
 
-    &.button-no-label.button-with-icon .tw-icon--medium {
-      margin-right: 0;
+    &.button-no-label.button-with-icon {
+      padding: 12px;
+      .tw-icon--xlarge {
+        margin-right: 0;
+      }
     }
   }
 
   &.button-no-label {
-    padding: 8px;
     min-width: auto;
   }
 }
