@@ -65,7 +65,7 @@ export default createTheme({
     MuiCssBaseline: {
       styleOverrides: {
         '*::-webkit-scrollbar': {
-          '-webkit-appearance': 'none',
+          WebkitAppearance: 'none',
           width: '7px',
           height: '7px',
         },
