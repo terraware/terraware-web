@@ -7,18 +7,40 @@ export type HumidityValues = {
   value: string;
 };
 
-export const getStartTime = (period: string) => {
+export const getTimePeriodParams = (period: string) => {
+  const end = moment();
+
   switch (period) {
     case 'Last 12 hours':
-      return moment(Date.now()).subtract(12, 'h');
+      return {
+        start: moment(Date.now()).subtract(12, 'h'),
+        end,
+        numDataPoints: 12 * 3,
+      };
     case 'Last 24 hours':
-      return moment(Date.now()).subtract(24, 'h');
+      return {
+        start: moment(Date.now()).subtract(24, 'h'),
+        end,
+        numDataPoints: 24 * 3,
+      };
     case 'Last 7 days':
-      return moment(Date.now()).subtract(7, 'd');
+      return {
+        start: moment(Date.now()).subtract(7, 'd'),
+        end,
+        numDataPoints: 7 * 24 * 3,
+      };
     case 'Last 30 days':
-      return moment(Date.now()).subtract(30, 'd');
+      return {
+        start: moment(Date.now()).subtract(30, 'd'),
+        end,
+        numDataPoints: 30 * 24 * 3,
+      };
     default:
-      return moment();
+      return {
+        start: moment(),
+        end,
+        numDataPoints: 12,
+      };
   }
 };
 

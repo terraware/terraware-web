@@ -7,7 +7,7 @@ import { Chart } from 'chart.js';
 import { Device } from 'src/types/Device';
 import { getTimeseriesHistory } from 'src/api/timeseries/timeseries';
 import moment from 'moment';
-import { ChartPalette, TIME_PERIODS, getStartTime, HumidityValues, getUnit } from './Common';
+import { ChartPalette, TIME_PERIODS, getTimePeriodParams, HumidityValues, getUnit } from './Common';
 import { htmlLegendPlugin } from './htmlLegendPlugin';
 import 'chartjs-adapter-date-fns';
 
@@ -68,6 +68,7 @@ export default function PVBatteryChart(props: PVBatteryChartProps): JSX.Element 
     ) => {
       const ctx = chartReference?.current?.getContext('2d');
       if (ctx && selectedPVBatteryPeriod) {
+        const timePeriodParams = getTimePeriodParams(selectedPVBatteryPeriod);
         window.pvBatteryChart = new Chart(ctx, {
           type: 'scatter',
           data: {
@@ -113,8 +114,14 @@ export default function PVBatteryChart(props: PVBatteryChartProps): JSX.Element 
                     hour: 'MMM d h:mm',
                   },
                 },
-                max: stateOfChargeValues?.length < 12 ? moment().valueOf() : undefined,
-                min: stateOfChargeValues?.length < 12 ? getStartTime(selectedPVBatteryPeriod).valueOf() : undefined,
+                max:
+                  stateOfChargeValues?.length < timePeriodParams.numDataPoints
+                    ? timePeriodParams.end.valueOf()
+                    : undefined,
+                min:
+                  stateOfChargeValues?.length < timePeriodParams.numDataPoints
+                    ? timePeriodParams.start.valueOf()
+                    : undefined,
               },
               y1: {
                 type: 'linear',
@@ -163,8 +170,9 @@ export default function PVBatteryChart(props: PVBatteryChartProps): JSX.Element 
 
     const getChartData = async () => {
       if (selectedPVBatteryPeriod) {
-        const startTime = getStartTime(selectedPVBatteryPeriod);
-        const endTime = moment();
+        const timePeriodParams = getTimePeriodParams(selectedPVBatteryPeriod);
+        const startTime = timePeriodParams.start;
+        const endTime = timePeriodParams.end;
         if (BMU) {
           const response = await getTimeseriesHistory(
             startTime.format(),
@@ -173,7 +181,7 @@ export default function PVBatteryChart(props: PVBatteryChartProps): JSX.Element 
               { deviceId: BMU.id, timeseriesName: 'relative_state_of_charge' },
               { deviceId: BMU.id, timeseriesName: 'system_power' },
             ],
-            12
+            timePeriodParams.numDataPoints
           );
 
           if (response.requestSucceeded) {
