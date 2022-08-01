@@ -13,6 +13,7 @@ import { ServerOrganization } from 'src/types/Organization';
 import { OrganizationUser } from 'src/types/User';
 import { makeStyles } from '@mui/styles';
 import getDateDisplayValue from 'src/utils/date';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
@@ -37,6 +38,10 @@ const useStyles = makeStyles((theme: Theme) => ({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    '&.mobile': {
+      flexDirection: 'column',
+      alignItems: 'flex-start',
+    },
   },
 }));
 
@@ -49,6 +54,7 @@ export default function PersonDetails({ organization }: PersonDetailsProps): JSX
   const history = useHistory();
   const { personId } = useParams<{ personId: string }>();
   const [person, setPerson] = useState<OrganizationUser>();
+  const { isMobile } = useDeviceInfo();
 
   useEffect(() => {
     const populatePersonData = async () => {
@@ -80,6 +86,13 @@ export default function PersonDetails({ organization }: PersonDetailsProps): JSX
     history.push(newLocation);
   };
 
+  const gridSize = (defaultSize?: number) => {
+    if (isMobile) {
+      return 12;
+    }
+    return defaultSize || 4;
+  };
+
   return (
     <Container maxWidth={false} className={classes.mainContainer}>
       <Grid container spacing={3}>
@@ -89,26 +102,30 @@ export default function PersonDetails({ organization }: PersonDetailsProps): JSX
             {strings.PEOPLE}
           </Link>
         </Grid>
-        <Grid item xs={12} className={classes.titleWithButton}>
+        <Grid item xs={12} className={`${classes.titleWithButton} ${isMobile ? 'mobile' : ''}`}>
           <h2>{person?.email}</h2>
-          <Button label={dictionary.EDIT_PERSON} priority='secondary' onClick={goToEditPerson} />
+          <Button
+            label={isMobile ? strings.EDIT : dictionary.EDIT_PERSON}
+            priority='secondary'
+            onClick={goToEditPerson}
+          />
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={gridSize()}>
           <TextField label={strings.EMAIL} id='email' type='text' value={person?.email} display={true} />
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={gridSize()}>
           <TextField label={strings.FIRST_NAME} id='firstName' type='text' value={person?.firstName} display={true} />
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={gridSize()}>
           <TextField label={strings.LAST_NAME} id='lastName' type='text' value={person?.lastName} display={true} />
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={gridSize()}>
           <TextField label={strings.ROLE} id='role' type='text' value={person?.role} display={true} />
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={gridSize()}>
           <TextField label={strings.DATE_ADDED} id='addedTime' type='text' value={getDateAdded()} display={true} />
         </Grid>
-        <Grid item xs={4} />
+        <Grid item xs={gridSize()} />
       </Grid>
     </Container>
   );
