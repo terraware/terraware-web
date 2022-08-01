@@ -15,6 +15,7 @@ import { getCountryByCode, getSubdivisionByCode } from 'src/utils/country';
 import PageSnackbar from 'src/components/PageSnackbar';
 import { makeStyles } from '@mui/styles';
 import getDateDisplayValue from 'src/utils/date';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const useStyles = makeStyles(() => ({
   mainContainer: {
@@ -34,6 +35,10 @@ const useStyles = makeStyles(() => ({
     marginTop: 0,
     fontSize: '24px',
   },
+  titleButtonContainer: {
+    display: 'flex',
+    justifyContent: 'right',
+  },
 }));
 
 type OrganizationViewProps = {
@@ -44,6 +49,7 @@ export default function OrganizationView({ organization }: OrganizationViewProps
   const history = useHistory();
   const [countries, setCountries] = useState<Country[]>();
   const [people, setPeople] = useState<OrganizationUser[]>();
+  const { isMobile } = useDeviceInfo();
 
   useEffect(() => {
     const populateCountries = async () => {
@@ -83,6 +89,13 @@ export default function OrganizationView({ organization }: OrganizationViewProps
     }
   };
 
+  const gridSize = () => {
+    if (isMobile) {
+      return 12;
+    }
+    return 4;
+  };
+
   return (
     <Container maxWidth={false} className={classes.mainContainer}>
       <Grid container spacing={3}>
@@ -92,10 +105,18 @@ export default function OrganizationView({ organization }: OrganizationViewProps
         </Grid>
         <PageSnackbar />
         <Grid item xs={12} className={classes.titleWithButton}>
-          <h2>{organization?.name}</h2>
-          <Button label={strings.EDIT_ORGANIZATION} priority='secondary' onClick={goToEditOrganization} />
+          <Grid item xs={8}>
+            <h2>{organization?.name}</h2>
+          </Grid>
+          <Grid item xs={4} className={classes.titleButtonContainer}>
+            <Button
+              label={isMobile ? strings.EDIT : strings.EDIT_ORGANIZATION}
+              priority='secondary'
+              onClick={goToEditOrganization}
+            />
+          </Grid>
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={gridSize()}>
           <TextField
             label={strings.ORGANIZATION_NAME}
             id='name'
@@ -104,7 +125,7 @@ export default function OrganizationView({ organization }: OrganizationViewProps
             display={true}
           />
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={gridSize()}>
           <TextField
             label={strings.DESCRIPTION}
             id='description'
@@ -113,10 +134,10 @@ export default function OrganizationView({ organization }: OrganizationViewProps
             display={true}
           />
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={gridSize()}>
           <TextField label={strings.DATE_ADDED} id='dateAdded' type='text' value={getDateAdded()} display={true} />
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={gridSize()}>
           <TextField
             label={strings.COUNTRY}
             id='country'
@@ -127,13 +148,13 @@ export default function OrganizationView({ organization }: OrganizationViewProps
             display={true}
           />
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={gridSize()}>
           {organization?.countrySubdivisionCode && (
             <TextField label={strings.STATE} id='state' type='text' value={organizationState()} display={true} />
           )}
         </Grid>
-        <Grid item xs={4} />
-        <Grid item xs={4}>
+        {isMobile === false && <Grid item xs={4} />}
+        <Grid item xs={gridSize()}>
           <TextField
             label={strings.NUMBER_OF_PEOPLE}
             id='numberOfPeople'

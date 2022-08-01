@@ -17,10 +17,12 @@ import useDebounce from 'src/utils/useDebounce';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import { Grid } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const useStyles = makeStyles(() => ({
   title: {
     marginTop: 0,
+    marginBottom: 0,
     fontSize: '24px',
   },
   centered: {
@@ -28,6 +30,7 @@ const useStyles = makeStyles(() => ({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'flex-end',
+    marginBottom: '16px',
   },
   searchField: {
     width: '300px',
@@ -54,6 +57,7 @@ export default function SeedBanksList({ organization }: SeedBanksListProps): JSX
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
   const [results, setResults] = useState<Facility[]>();
+  const { isMobile } = useDeviceInfo();
 
   useEffect(() => {
     const getSeedBanks = () => {
@@ -138,14 +142,16 @@ export default function SeedBanksList({ organization }: SeedBanksListProps): JSX
   return (
     <TfMain>
       <Grid container spacing={3}>
-        <Grid item xs={2}>
+        <Grid item xs={10}>
           <h1 className={classes.title}>{strings.SEED_BANKS}</h1>
         </Grid>
-        <Grid item xs={8} />
         <Grid item xs={2} className={classes.centered}>
-          {['Admin', 'Owner'].includes(organization.role) && (
-            <Button id='new-facility' label={strings.ADD} onClick={goToNewSeedBank} size='medium' />
-          )}
+          {['Admin', 'Owner'].includes(organization.role) &&
+            (isMobile ? (
+              <Button id='new-facility' icon='plus' onClick={goToNewSeedBank} size='medium' />
+            ) : (
+              <Button id='new-facility' label={strings.ADD} onClick={goToNewSeedBank} size='medium' />
+            ))}
         </Grid>
         <PageSnackbar />
         <Grid item xs={12} className={classes.searchBar}>
