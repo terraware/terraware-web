@@ -29,6 +29,7 @@ import CheckDataModal from './CheckDataModal';
 import SpeciesCellRenderer from './TableCellRenderer';
 import useDebounce from 'src/utils/useDebounce';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 type SpeciesListProps = {
   organization: ServerOrganization;
@@ -131,6 +132,8 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
     ),
     type: 'string',
   });
+
+  const { isMobile } = useDeviceInfo();
 
   const getParams = useCallback(() => {
     const params: SearchNodePayload = {
@@ -434,7 +437,7 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
       <Grid container>
         <Grid item xs={12} className={classes.titleContainer}>
           <h1 className={classes.pageTitle}>{strings.SPECIES}</h1>
-          {species && species.length > 0 && (
+          {species && species.length > 0 && !isMobile && (
             <div>
               <Button
                 id='check-data'
@@ -455,6 +458,7 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
               <Button id='add-species' label={strings.ADD_SPECIES} onClick={onNewSpecies} size='medium' />
             </div>
           )}
+          {isMobile && <Button id='add-species' onClick={onNewSpecies} size='medium' icon='plus' />}
         </Grid>
         <p>{strings.SPECIES_DESCRIPTION}</p>
         <PageSnackbar />

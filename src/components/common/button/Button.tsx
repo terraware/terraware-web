@@ -6,7 +6,7 @@ import './styles.scss';
 
 export interface Props {
   onClick: (event?: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
-  label: string;
+  label?: string;
   type?: 'productive' | 'passive' | 'destructive';
   priority?: 'primary' | 'secondary';
   size?: Size;
@@ -37,12 +37,12 @@ export default function Button(props: Props): JSX.Element {
       onClick={onClick}
       className={`button ${type}-${priority} button--${size} ${type}-${priority}--${size} ${
         icon && !processing ? 'button-with-icon' : ''
-      } ${className ?? ''}`}
+      } ${!label ? 'button-no-label' : ''} ${className ?? ''}`}
       disabled={disabled}
     >
       {processing && <Icon name='spinner' size={size} />}
       {!processing && icon && <Icon name={icon} size={size} />}
-      {!processing && label}
+      {!processing && !!label && label}
     </button>
   );
 }
