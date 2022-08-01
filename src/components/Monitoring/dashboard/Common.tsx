@@ -15,31 +15,31 @@ export const getTimePeriodParams = (period: string) => {
       return {
         start: moment(Date.now()).subtract(12, 'h'),
         end,
-        numDataPoints: 12 * 3,
+        numDataPoints: 50,
       };
     case 'Last 24 hours':
       return {
         start: moment(Date.now()).subtract(24, 'h'),
         end,
-        numDataPoints: 24 * 3,
+        numDataPoints: 50,
       };
     case 'Last 7 days':
       return {
         start: moment(Date.now()).subtract(7, 'd'),
         end,
-        numDataPoints: 7 * 24 * 3,
+        numDataPoints: 50,
       };
     case 'Last 30 days':
       return {
         start: moment(Date.now()).subtract(30, 'd'),
         end,
-        numDataPoints: 30 * 24 * 3,
+        numDataPoints: 50,
       };
     default:
       return {
         start: moment(),
         end,
-        numDataPoints: 12,
+        numDataPoints: 50,
       };
   }
 };
