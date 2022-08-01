@@ -63,6 +63,12 @@ export default function SeedBankView({ organization, reloadOrganizationData }: S
   const [selectedSeedBank, setSelectedSeedBank] = useState<Facility | null>();
   const history = useHistory();
   const { isMobile } = useDeviceInfo();
+  const gridSize = () => {
+    if (isMobile) {
+      return 12;
+    }
+    return 4;
+  };
 
   const classes = useStyles();
 
@@ -141,7 +147,7 @@ export default function SeedBankView({ organization, reloadOrganizationData }: S
           <Grid item xs={12}>
             {selectedSeedBank ? <h2>{selectedSeedBank?.name}</h2> : <h2>{strings.ADD_SEED_BANK}</h2>}
           </Grid>
-          <Grid item xs={isMobile ? 12 : 4}>
+          <Grid item xs={gridSize()}>
             <TextField
               id='name'
               label={strings.NAME_REQUIRED}
@@ -151,7 +157,7 @@ export default function SeedBankView({ organization, reloadOrganizationData }: S
               errorText={record.name ? '' : nameError}
             />
           </Grid>
-          <Grid item xs={isMobile ? 12 : 4}>
+          <Grid item xs={gridSize()}>
             <TextField
               id='description'
               label={strings.DESCRIPTION_REQUIRED}

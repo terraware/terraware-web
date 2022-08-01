@@ -68,6 +68,12 @@ export default function SeedBankDetails({ organization }: SeedBankDetailsProps):
   };
 
   const { isMobile } = useDeviceInfo();
+  const gridSize = () => {
+    if (isMobile) {
+      return 12;
+    }
+    return 4;
+  };
 
   return (
     <Container maxWidth={false} className={classes.mainContainer}>
@@ -82,10 +88,10 @@ export default function SeedBankDetails({ organization }: SeedBankDetailsProps):
           <h2>{seedBank?.name}</h2>
           <Button label={strings.EDIT} priority='secondary' onClick={goToEditSeedBank} />
         </Grid>
-        <Grid item xs={isMobile ? 12 : 4}>
+        <Grid item xs={gridSize()}>
           <TextField label={strings.NAME_REQUIRED} id='name' type='text' value={seedBank?.name} display={true} />
         </Grid>
-        <Grid item xs={isMobile ? 12 : 4}>
+        <Grid item xs={gridSize()}>
           <TextField
             label={strings.DESCRIPTION_REQUIRED}
             id='description'
