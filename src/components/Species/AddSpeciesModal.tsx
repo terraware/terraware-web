@@ -26,6 +26,9 @@ const useStyles = makeStyles((theme: Theme) => ({
   mainGrid: {
     textAlign: 'left',
   },
+  errorBox: {
+    marginTop: theme.spacing(1),
+  },
 }));
 
 export type AddSpeciesModalProps = {
@@ -129,9 +132,11 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
   };
 
   const createNewSpecies = async () => {
-    if (!record.scientificName) {
+    if (!record.scientificName.trim()) {
       setNameFormatError(strings.REQUIRED_FIELD);
     } else {
+      onChange('scientificName', record.scientificName.trim());
+      record.scientificName = record.scientificName.trim();
       const response = await createSpecies(record, organization.id);
       if (response.id !== -1) {
         onClose(true);
@@ -144,9 +149,11 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
   };
 
   const saveChanges = async () => {
-    if (!record.scientificName) {
+    if (!record.scientificName.trim()) {
       setNameFormatError(strings.REQUIRED_FIELD);
     } else {
+      onChange('scientificName', record.scientificName.trim());
+      record.scientificName = record.scientificName.trim();
       const response = await updateSpecies(record, organization.id);
       if (response.requestSucceeded) {
         onClose(true);
@@ -188,6 +195,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
       <Grid container spacing={4} className={classes.mainGrid}>
         {nameFormatError && (
           <ErrorBox
+            className={classes.errorBox}
             text={
               nameFormatError === strings.formatString(strings.EXISTING_SPECIES_MSG, record.scientificName)
                 ? strings.DUPLICATE_SPECIES_FOUND
