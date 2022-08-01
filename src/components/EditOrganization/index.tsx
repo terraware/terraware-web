@@ -15,6 +15,7 @@ import { searchCountries } from 'src/api/country/country';
 import { updateOrganization } from 'src/api/organization/organization';
 import { getCountryByCode, getSubdivisionByCode } from 'src/utils/country';
 import { makeStyles } from '@mui/styles';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
@@ -37,6 +38,7 @@ export default function OrganizationView({ organization, reloadOrganizationData 
   const [nameError, setNameError] = useState('');
   const [countries, setCountries] = useState<Country[]>();
   const history = useHistory();
+  const { isMobile } = useDeviceInfo();
 
   useEffect(() => {
     const populateCountries = async () => {
@@ -123,6 +125,13 @@ export default function OrganizationView({ organization, reloadOrganizationData 
     }
   };
 
+  const gridSize = () => {
+    if (isMobile) {
+      return 12;
+    }
+    return 4;
+  };
+
   return (
     <>
       <Container maxWidth={false} className={classes.mainContainer}>
@@ -131,7 +140,7 @@ export default function OrganizationView({ organization, reloadOrganizationData 
             <h2>{strings.ORGANIZATION}</h2>
             <p>{strings.ORGANIZATION_DESC}</p>
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={gridSize()}>
             <TextField
               id='name'
               label={strings.ORGANIZATION_NAME_REQUIRED}
@@ -141,7 +150,7 @@ export default function OrganizationView({ organization, reloadOrganizationData 
               errorText={organizationRecord.name ? '' : nameError}
             />
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={gridSize()}>
             <TextField
               id='description'
               label={strings.DESCRIPTION}
@@ -150,8 +159,8 @@ export default function OrganizationView({ organization, reloadOrganizationData 
               value={organizationRecord.description}
             />
           </Grid>
-          <Grid item xs={4} />
-          <Grid item xs={4}>
+          {isMobile === false && <Grid item xs={4} />}
+          <Grid item xs={gridSize()}>
             <Select
               label={strings.COUNTRY}
               id='countyCode'
@@ -162,7 +171,7 @@ export default function OrganizationView({ organization, reloadOrganizationData 
             />
           </Grid>
           {getSelectedCountry()?.subdivisions && (
-            <Grid item xs={4}>
+            <Grid item xs={gridSize()}>
               <Select
                 label={strings.STATE}
                 id='countySubdivisionCode'
