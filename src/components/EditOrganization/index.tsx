@@ -17,11 +17,15 @@ import { getCountryByCode, getSubdivisionByCode } from 'src/utils/country';
 import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
+interface StyleProps {
+  isMobile: boolean;
+}
+
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(7),
-    marginBottom: theme.spacing(6),
+    marginBottom: (props: StyleProps) => (props.isMobile ? theme.spacing(40) : theme.spacing(6)),
     background: '#ffffff',
   },
 }));
@@ -32,13 +36,13 @@ type OrganizationViewProps = {
 };
 
 export default function OrganizationView({ organization, reloadOrganizationData }: OrganizationViewProps): JSX.Element {
-  const classes = useStyles();
+  const { isMobile } = useDeviceInfo();
+  const classes = useStyles({ isMobile });
   const [organizationRecord, setOrganizationRecord, onChange] = useForm<ServerOrganization>(organization);
   const setSnackbar = useSetRecoilState(snackbarAtom);
   const [nameError, setNameError] = useState('');
   const [countries, setCountries] = useState<Country[]>();
   const history = useHistory();
-  const { isMobile } = useDeviceInfo();
 
   useEffect(() => {
     const populateCountries = async () => {
