@@ -17,6 +17,7 @@ import { getOrganizationUsers } from 'src/api/organization/organization';
 import { APP_PATHS } from 'src/constants';
 import dictionary from 'src/strings/dictionary';
 import FormBottomBar from '../common/FormBottomBar';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
@@ -25,6 +26,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     marginBottom: theme.spacing(6),
     background: '#ffffff',
     height: '100%',
+  },
+  mobileContainer: {
+    paddingBottom: theme.spacing(35),
   },
   backIcon: {
     fill: '#007DF2',
@@ -89,6 +93,7 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
   const [people, setPeople] = useState<OrganizationUser[]>();
   const { personId } = useParams<{ personId: string }>();
   const [personSelectedToEdit, setPersonSelectedToEdit] = useState<OrganizationUser>();
+  const { isMobile } = useDeviceInfo();
 
   const [newPerson, setNewPerson, onChange] = useForm<OrganizationUser>({
     id: -1,
@@ -208,17 +213,28 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
     }
   };
 
+  const gridSize = () => {
+    if (isMobile) {
+      return 12;
+    }
+    return 4;
+  };
+
   // TODO: Handle the case where we cannot find the requested person to edit in the list of people.
   return (
     <>
       <Container maxWidth={false} className={classes.mainContainer}>
-        <Grid container spacing={3}>
+        <Grid container spacing={3} className={`${isMobile ? classes.mobileContainer : ''}`}>
           <Grid item xs={12}>
-            {
+            {isMobile ? (
+              <h3 className={classes.title}>
+                {personSelectedToEdit ? personSelectedToEdit.email : strings.ADD_PERSON}
+              </h3>
+            ) : (
               <h2 className={classes.title}>
                 {personSelectedToEdit ? personSelectedToEdit.email : strings.ADD_PERSON}
               </h2>
-            }
+            )}
             {!personSelectedToEdit ? <p className={classes.titleSubtitle}>{strings.ADD_PERSON_DESC}</p> : null}
             {pageError === 'REPEATED_EMAIL' && repeatedEmail && (
               <ErrorBox
@@ -237,7 +253,7 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
               <p className={classes.titleSubtitle}>{strings.ADD_PERSON_GENERAL_DESC}</p>
             </Grid>
           ) : null}
-          <Grid item xs={4}>
+          <Grid item xs={gridSize()}>
             <TextField
               id='email'
               label={strings.EMAIL_REQUIRED}
@@ -248,7 +264,7 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
               errorText={emailError}
             />
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={gridSize()}>
             <TextField
               id='firstName'
               label={strings.FIRST_NAME}
@@ -258,7 +274,7 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
               value='--'
             />
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={gridSize()}>
             <TextField
               id='lastName'
               label={strings.LAST_NAME}
@@ -276,7 +292,7 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
               <li>{strings.ADMIN_INFO}</li>
             </ul>
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={gridSize()}>
             <Select
               id='role'
               label={strings.ROLE_REQUIRED}
