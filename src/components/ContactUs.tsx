@@ -21,8 +21,13 @@ const useStyles = makeStyles((theme: Theme) => ({
     margin: 0,
     width: '100%',
 
-    '& .MuiGrid-item:first-child': {
+    '& .MuiGrid-item': {
       paddingLeft: 0,
+      marginLeft: theme.spacing(3),
+    },
+
+    '& .MuiGrid-item:first-child': {
+      marginLeft: 0,
     },
 
     '& .MuiGrid-item:last-child': {
@@ -31,7 +36,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   mobileCard: {
     '&.MuiGrid-item': {
-      paddingLeft: 0,
+      marginLeft: 0,
     },
   },
 }));
