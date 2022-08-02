@@ -38,10 +38,12 @@ const useStyles = makeStyles((theme: Theme) => ({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    '&.mobile': {
-      flexDirection: 'column',
-      alignItems: 'flex-start',
-    },
+  },
+  email: {
+    wordBreak: 'break-all',
+  },
+  editButton: {
+    float: 'right',
   },
 }));
 
@@ -102,13 +104,18 @@ export default function PersonDetails({ organization }: PersonDetailsProps): JSX
             {strings.PEOPLE}
           </Link>
         </Grid>
-        <Grid item xs={12} className={`${classes.titleWithButton} ${isMobile ? 'mobile' : ''}`}>
-          <h2>{person?.email}</h2>
-          <Button
-            label={isMobile ? strings.EDIT : dictionary.EDIT_PERSON}
-            priority='secondary'
-            onClick={goToEditPerson}
-          />
+        <Grid item xs={12} className={classes.titleWithButton}>
+          <Grid item xs={9}>
+            {isMobile ? <h3 className={classes.email}>{person?.email}</h3> : <h2>{person?.email}</h2>}
+          </Grid>
+          <Grid item xs={3}>
+            <Button
+              label={isMobile ? strings.EDIT : dictionary.EDIT_PERSON}
+              priority='secondary'
+              onClick={goToEditPerson}
+              className={classes.editButton}
+            />
+          </Grid>
         </Grid>
         <Grid item xs={gridSize()}>
           <TextField label={strings.EMAIL} id='email' type='text' value={person?.email} display={true} />
