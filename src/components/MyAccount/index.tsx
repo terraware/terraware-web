@@ -27,6 +27,10 @@ import { Grid, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
+interface StyleProps {
+  isMobile: boolean;
+}
+
 const useStyles = makeStyles((theme: Theme) => ({
   title: {
     marginTop: 0,
@@ -47,7 +51,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     marginBottom: 0,
   },
   editContainer: {
-    marginBottom: theme.spacing(8),
+    marginBottom: (props: StyleProps) => (props.isMobile ? theme.spacing(16) : theme.spacing(8)),
   },
 }));
 
@@ -66,7 +70,8 @@ type MyAccountProps = {
 };
 
 export default function MyAccount({ user, organizations, edit, reloadUser, reloadData }: MyAccountProps): JSX.Element {
-  const classes = useStyles();
+  const { isMobile } = useDeviceInfo();
+  const classes = useStyles({ isMobile });
   const [selectedRows, setSelectedRows] = useState<ServerOrganization[]>([]);
   const [personOrganizations, setPersonOrganizations] = useState<ServerOrganization[]>([]);
   const history = useHistory();
@@ -79,7 +84,6 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
   const [deleteOrgModalOpened, setDeleteOrgModalOpened] = useState(false);
   const [newOwner, setNewOwner] = useState<OrganizationUser>();
   const [orgPeople, setOrgPeople] = useState<OrganizationUser[]>();
-  const { isMobile } = useDeviceInfo();
 
   useEffect(() => {
     if (organizations) {
@@ -280,7 +284,7 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
             <Grid item xs={5} className={classes.centered}>
               <Button
                 id='edit-account'
-                label={dictionary.EDIT_ACCOUNT}
+                label={isMobile ? strings.EDIT : dictionary.EDIT_ACCOUNT}
                 onClick={() => history.push(APP_PATHS.MY_ACCOUNT_EDIT)}
                 size='medium'
                 priority='secondary'
