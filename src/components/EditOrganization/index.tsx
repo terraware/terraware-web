@@ -23,6 +23,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     paddingBottom: theme.spacing(7),
     marginBottom: theme.spacing(6),
     background: '#ffffff',
+    '&.mobile': {
+      marginBottom: theme.spacing(40),
+    },
   },
 }));
 
@@ -134,7 +137,7 @@ export default function OrganizationView({ organization, reloadOrganizationData 
 
   return (
     <>
-      <Container maxWidth={false} className={classes.mainContainer}>
+      <Container maxWidth={false} className={`${classes.mainContainer} ${isMobile ? 'mobile' : ''}`}>
         <Grid container spacing={3}>
           <Grid item xs={12}>
             <h2>{strings.ORGANIZATION}</h2>
