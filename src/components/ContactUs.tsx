@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Theme } from '@mui/material';
+import { Grid } from '@mui/material';
 import { IconName } from 'src/components/common/icon/icons';
 import PageCard from 'src/components/common/PageCard';
 import dictionary from 'src/strings/dictionary';
@@ -9,35 +9,12 @@ import TfMain from './common/TfMain';
 import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles(() => ({
   title: {
     fontSize: '24px',
     fontWeight: 600,
     lineHeight: '32px',
     margin: '0 0 12px 0',
-  },
-  mainGrid: {
-    display: 'flex',
-    margin: 0,
-    width: '100%',
-
-    '& .MuiGrid-item': {
-      paddingLeft: 0,
-      marginLeft: theme.spacing(3),
-    },
-
-    '& .MuiGrid-item:first-child': {
-      marginLeft: 0,
-    },
-
-    '& .MuiGrid-item:last-child': {
-      paddingRight: 0,
-    },
-  },
-  mobileCard: {
-    '&.MuiGrid-item': {
-      marginLeft: 0,
-    },
   },
 }));
 
@@ -74,10 +51,10 @@ export default function ContactUs(): JSX.Element {
   return (
     <TfMain>
       <h1 className={classes.title}>{dictionary.CONTACT_US}</h1>
-      <Grid container spacing={3} className={classes.mainGrid}>
+      <Grid container spacing={3}>
         {listItemContent.map((item) => {
           return (
-            <Grid key={item.title} item xs={isMobile ? 12 : 4} className={isMobile ? classes.mobileCard : ''}>
+            <Grid key={item.title} item xs={isMobile ? 12 : 4}>
               <PageCard
                 name={item.title}
                 isNameBold={true}
