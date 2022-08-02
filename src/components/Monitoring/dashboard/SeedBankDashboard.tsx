@@ -15,6 +15,7 @@ import { useHistory } from 'react-router-dom';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import useQuery from '../../../utils/useQuery';
 import { TIME_PERIODS } from './Common';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const useStyles = makeStyles((theme: Theme) => ({
   graphContainer: {
@@ -55,6 +56,14 @@ export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.El
   const [deviceManager, setDeviceManager] = useState<DeviceManager | undefined>();
   const [defaultTimePeriod, setDefaultTimePeriod] = useState<string>();
   const [defaultSensor, setDefaultSensor] = useState<Device>();
+  const { isMobile } = useDeviceInfo();
+
+  const gridSize = () => {
+    if (isMobile) {
+      return 12;
+    }
+    return 6;
+  };
 
   useEffect(() => {
     setDefaultSensor(undefined);
@@ -151,7 +160,7 @@ export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.El
 
   return (
     <Grid container spacing={3} marginTop={0}>
-      <Grid item xs={6}>
+      <Grid item xs={gridSize()}>
         <div className={classes.graphContainer}>
           <div className={classes.panelTitle}>
             <p>{strings.PV_BATTERY_CHARGE}</p>
@@ -160,7 +169,7 @@ export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.El
           <p className={classes.panelValue}>{batteryLevel || strings.NO_DATA_YET}</p>
         </div>
       </Grid>
-      <Grid item xs={6}>
+      <Grid item xs={gridSize()}>
         <div className={classes.graphContainer}>
           <div className={classes.panelTitle}>
             <p>{strings.SEED_BANK_INTERNET}</p>

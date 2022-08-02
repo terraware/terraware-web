@@ -425,6 +425,7 @@ const strings = new LocalizedStrings({
     TEMPERATURE_AND_HUMIDITY_SENSOR_DATA: 'Temperature & Humidity Sensor Data',
     TIME_PERIOD: 'Time Period',
     REFRESH_DATA: 'Refresh Data',
+    REFRESH: 'Refresh',
     SENSOR_KIT_SET_UP_TITLE: "Let's Set Up Your Sensor Kit!",
     SENSOR_KIT_SET_UP_DESCRIPTION: "If your seed bank has a sensor kit, let's set it up below.",
     SENSOR_KIT_SET_UP_TIME: 'This may take up to 30 minutes.',

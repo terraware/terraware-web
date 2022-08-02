@@ -6,7 +6,6 @@ export const getOrCreateLegendList = (chart: any, id: string) => {
 
   if (!listContainer) {
     listContainer = document.createElement('ul');
-    listContainer.style.display = 'flex';
     listContainer.style.flexDirection = 'row';
     listContainer.style.margin = '0';
     listContainer.style.padding = '0';
@@ -40,7 +39,6 @@ export const htmlLegendPlugin = {
         li.style.cursor = 'pointer';
         li.style.display = 'flex';
         li.style.flexDirection = 'row';
-        li.style.marginLeft = '10px';
 
         if (item.text === 'Humidity Thresholds' || item.text === 'System Power') {
           li.style.marginLeft = 'auto';
