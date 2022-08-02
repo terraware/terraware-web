@@ -13,6 +13,7 @@ import { ServerOrganization } from 'src/types/Organization';
 import { OrganizationUser } from 'src/types/User';
 import { makeStyles } from '@mui/styles';
 import getDateDisplayValue from 'src/utils/date';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
@@ -38,6 +39,12 @@ const useStyles = makeStyles((theme: Theme) => ({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+  email: {
+    wordBreak: 'break-all',
+  },
+  editButton: {
+    float: 'right',
+  },
 }));
 
 type PersonDetailsProps = {
@@ -49,6 +56,7 @@ export default function PersonDetails({ organization }: PersonDetailsProps): JSX
   const history = useHistory();
   const { personId } = useParams<{ personId: string }>();
   const [person, setPerson] = useState<OrganizationUser>();
+  const { isMobile } = useDeviceInfo();
 
   useEffect(() => {
     const populatePersonData = async () => {
@@ -80,6 +88,13 @@ export default function PersonDetails({ organization }: PersonDetailsProps): JSX
     history.push(newLocation);
   };
 
+  const gridSize = (defaultSize?: number) => {
+    if (isMobile) {
+      return 12;
+    }
+    return defaultSize || 4;
+  };
+
   return (
     <Container maxWidth={false} className={classes.mainContainer}>
       <Grid container spacing={3}>
@@ -90,25 +105,34 @@ export default function PersonDetails({ organization }: PersonDetailsProps): JSX
           </Link>
         </Grid>
         <Grid item xs={12} className={classes.titleWithButton}>
-          <h2>{person?.email}</h2>
-          <Button label={dictionary.EDIT_PERSON} priority='secondary' onClick={goToEditPerson} />
+          <Grid item xs={9}>
+            {isMobile ? <h3 className={classes.email}>{person?.email}</h3> : <h2>{person?.email}</h2>}
+          </Grid>
+          <Grid item xs={3}>
+            <Button
+              label={isMobile ? strings.EDIT : dictionary.EDIT_PERSON}
+              priority='secondary'
+              onClick={goToEditPerson}
+              className={classes.editButton}
+            />
+          </Grid>
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={gridSize()}>
           <TextField label={strings.EMAIL} id='email' type='text' value={person?.email} display={true} />
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={gridSize()}>
           <TextField label={strings.FIRST_NAME} id='firstName' type='text' value={person?.firstName} display={true} />
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={gridSize()}>
           <TextField label={strings.LAST_NAME} id='lastName' type='text' value={person?.lastName} display={true} />
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={gridSize()}>
           <TextField label={strings.ROLE} id='role' type='text' value={person?.role} display={true} />
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={gridSize()}>
           <TextField label={strings.DATE_ADDED} id='addedTime' type='text' value={getDateAdded()} display={true} />
         </Grid>
-        <Grid item xs={4} />
+        <Grid item xs={gridSize()} />
       </Grid>
     </Container>
   );

@@ -26,6 +26,7 @@ import snackbarAtom from 'src/state/snackbar';
 import { useSetRecoilState } from 'recoil';
 import { Grid, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const useStyles = makeStyles((theme: Theme) => ({
   title: {
@@ -69,6 +70,7 @@ export default function PeopleList({ organization, reloadData, user }: PeopleLis
   const [deleteOrgModalOpened, setDeleteOrgModalOpened] = useState(false);
   const [newOwner, setNewOwner] = useState<OrganizationUser>();
   const setSnackbar = useSetRecoilState(snackbarAtom);
+  const { isMobile } = useDeviceInfo();
 
   useEffect(() => {
     const populatePeople = async () => {
@@ -243,13 +245,16 @@ export default function PeopleList({ organization, reloadData, user }: PeopleLis
         </>
       )}
       <Grid container spacing={3}>
-        <Grid item xs={4}>
+        <Grid item xs={8}>
           <h1 className={classes.title}>{strings.PEOPLE}</h1>
           <p>{strings.PEOPLE_DESCRIPTION}</p>
         </Grid>
-        <Grid item xs={6} />
-        <Grid item xs={2} className={classes.centered}>
-          <Button id='new-person' label={strings.ADD_PERSON} onClick={goToNewPerson} size='medium' />
+        <Grid item xs={4} className={classes.centered}>
+          {isMobile ? (
+            <Button id='new-person' icon='plus' onClick={goToNewPerson} size='medium' />
+          ) : (
+            <Button id='new-person' label={strings.ADD_PERSON} onClick={goToNewPerson} size='medium' />
+          )}
         </Grid>
         <PageSnackbar />
         <Grid item xs={12}>

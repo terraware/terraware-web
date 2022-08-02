@@ -6,7 +6,7 @@ import { Chart } from 'chart.js';
 import { Device } from 'src/types/Device';
 import { getTimeseriesHistory } from 'src/api/timeseries/timeseries';
 import moment from 'moment';
-import { ChartPalette, TIME_PERIODS, getFirstWord, getStartTime, HumidityValues, getUnit } from './Common';
+import { ChartPalette, TIME_PERIODS, getFirstWord, getTimePeriodParams, HumidityValues, getUnit } from './Common';
 import { htmlLegendPlugin } from './htmlLegendPlugin';
 import 'chartjs-adapter-date-fns';
 import { Theme } from '@mui/material';
@@ -214,6 +214,8 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
         } else {
           datasetsToUse = commonDatasets;
         }
+
+        const timePeriodParams = getTimePeriodParams(selectedPeriod);
         window.temperatureHumidityChart = new Chart(ctx, {
           type: 'scatter',
           data: {
@@ -238,8 +240,14 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
                     hour: 'MMM d h:mm',
                   },
                 },
-                max: temperatureValues?.length < 12 ? moment().valueOf() : undefined,
-                min: temperatureValues?.length < 12 ? getStartTime(selectedPeriod).valueOf() : undefined,
+                max:
+                  temperatureValues?.length < timePeriodParams.numDataPoints
+                    ? timePeriodParams.end.valueOf()
+                    : undefined,
+                min:
+                  temperatureValues?.length < timePeriodParams.numDataPoints
+                    ? timePeriodParams.start.valueOf()
+                    : undefined,
               },
               y1: {
                 type: 'linear',
@@ -288,8 +296,9 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
 
     const getChartData = async () => {
       if (selectedPeriod) {
-        const startTime = getStartTime(selectedPeriod);
-        const endTime = moment();
+        const timePeriodParams = getTimePeriodParams(selectedPeriod);
+        const startTime = timePeriodParams.start;
+        const endTime = timePeriodParams.end;
         if (selectedLocation) {
           const response = await getTimeseriesHistory(
             startTime.format(),
@@ -298,7 +307,7 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
               { deviceId: selectedLocation.id, timeseriesName: 'temperature' },
               { deviceId: selectedLocation.id, timeseriesName: 'humidity' },
             ],
-            12
+            timePeriodParams.numDataPoints
           );
 
           if (response.requestSucceeded) {
