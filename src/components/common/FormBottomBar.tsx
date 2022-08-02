@@ -4,26 +4,25 @@ import Button from './button/Button';
 import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
+interface StyleProps {
+  isMobile: boolean;
+  isDesktop: boolean;
+}
+
 const useStyles = makeStyles((theme: Theme) => ({
   bottomBar: {
     filter: 'drop-shadow(0px 0px 8px rgba(0, 0, 0, 0.2))',
     background: '#ffffff',
     boxShadow: 'none',
-    flexDirection: 'row',
     justifyContent: 'space-between',
     display: 'flex',
-    padding: '16px 24px',
-    '&.desktop': {
-      width: 'calc(100% - 200px)',
-    },
-    '&.mobile': {
-      flexDirection: 'column-reverse',
-      paddingBottom: theme.spacing(5),
-    },
+    flexDirection: (props: StyleProps) => (props.isMobile ? 'column-reverse' : 'row'),
+    padding: (props: StyleProps) => (props.isDesktop ? '16px 24px' : `16px 24px ${theme.spacing(5)}`),
+    width: (props: StyleProps) => (props.isDesktop ? 'calc(100% - 200px)' : '100%'),
     zIndex: 1000,
   },
-  buttonMobile: {
-    marginTop: theme.spacing(1),
+  button: {
+    marginTop: (props: StyleProps) => (props.isMobile ? theme.spacing(1) : 'auto'),
   },
 }));
 
@@ -33,15 +32,15 @@ export interface Props {
 }
 
 export default function FormBottomBar({ onCancel, onSave }: Props): JSX.Element {
-  const classes = useStyles();
   const { isMobile, isDesktop } = useDeviceInfo();
+  const classes = useStyles({ isMobile, isDesktop });
 
   return (
     <AppBar
       position='fixed'
       color='primary'
       style={{ top: 'auto', bottom: 0, right: 'auto' }}
-      className={`${classes.bottomBar} ${isDesktop ? 'desktop' : ''} ${isMobile ? 'mobile' : ''}`}
+      className={classes.bottomBar}
     >
       <Button
         size='medium'
@@ -49,9 +48,9 @@ export default function FormBottomBar({ onCancel, onSave }: Props): JSX.Element 
         onClick={onCancel}
         priority='secondary'
         type='passive'
-        className={isMobile ? classes.buttonMobile : ''}
+        className={classes.button}
       />
-      <Button size='medium' label='Save' onClick={onSave} className={isMobile ? classes.buttonMobile : ''} />
+      <Button size='medium' label='Save' onClick={onSave} className={classes.button} />
     </AppBar>
   );
 }

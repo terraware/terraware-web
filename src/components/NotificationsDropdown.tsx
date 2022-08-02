@@ -15,6 +15,10 @@ import stopPropagation from 'src/utils/stopPropagationEvent';
 import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
+interface StyleProps {
+  isMobile?: boolean;
+}
+
 const useStyles = makeStyles((theme: Theme) => ({
   error: {
     width: '432px',
@@ -63,16 +67,13 @@ const useStyles = makeStyles((theme: Theme) => ({
   notification: {
     display: 'flex',
     alignItems: 'flex-start',
-    padding: '8px 20px 8px 26px',
+    padding: (props: StyleProps) => (props.isMobile ? theme.spacing(1) : '8px 20px 8px 26px'),
     borderBottom: '1px solid #A9B7B8',
     '&:last-child': {
       borderBottom: 'none',
     },
     '&:hover': {
       backgroundColor: 'rgba(0, 103, 200, 0.1)',
-    },
-    '&.mobile': {
-      padding: theme.spacing(1),
     },
   },
   notificationContent: {
@@ -81,9 +82,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     fontSize: '14px',
     fontWeight: 400,
     margin: '0px',
-    '&.non-mobile': {
-      minWidth: '375px',
-    },
+    minWidth: (props: StyleProps) => (props.isMobile ? 'auto' : '375px'),
   },
   notificationTitle: {
     display: 'block',
@@ -147,7 +146,7 @@ type NotificationsDropdownProps = {
 };
 
 export default function NotificationsDropdown(props: NotificationsDropdownProps): JSX.Element {
-  const classes = useStyles();
+  const classes = useStyles({});
   const history = useHistory();
   const { notifications, setNotifications, organizationId, reloadOrganizationData } = props;
   // notificationsInterval value is only being used when it is set.
@@ -296,12 +295,12 @@ type NotificationItemProps = {
 };
 
 function NotificationItem(props: NotificationItemProps): JSX.Element {
+  const { isMobile, isDesktop } = useDeviceInfo();
   const [inFocus, setInFocus] = useState<boolean>(false);
-  const classes = useStyles();
+  const classes = useStyles({ isMobile });
   const { notification, markAsRead, reloadOrganizationData } = props;
   const { id, title, body, localUrl, createdTime, isRead, notificationCriticality } = notification;
   const criticality = notificationCriticality.toLowerCase();
-  const { isMobile, isDesktop } = useDeviceInfo();
 
   const onNotificationClick = async (read: boolean, close?: boolean) => {
     if (close && localUrl.startsWith('/home')) {
@@ -336,14 +335,7 @@ function NotificationItem(props: NotificationItemProps): JSX.Element {
     <ListItem
       id={`notification${id}`}
       button
-      className={
-        (isRead || inFocus ? '' : classes.unreadNotification) +
-        ' ' +
-        classes.notification +
-        ' ' +
-        criticality +
-        (isMobile ? ' mobile' : ' non-mobile')
-      }
+      className={(isRead || inFocus ? '' : classes.unreadNotification) + ' ' + classes.notification + ' ' + criticality}
       onClick={() => onNotificationClick(true, true)}
       component={Link}
       to={localUrl}
@@ -354,7 +346,7 @@ function NotificationItem(props: NotificationItemProps): JSX.Element {
         <Icon name={getTypeIcon()} className={classes.notificationTypeIcon + ' ' + criticality} />
       </ListItemIcon>
       <ListItemText
-        className={classes.notificationContent + (isMobile ? ' mobile' : ' non-mobile')}
+        className={classes.notificationContent}
         primary={<span className={classes.notificationTitle}>{title}</span>}
         secondary={
           <>
@@ -385,7 +377,7 @@ function NotificationItemMenu(props: NotificationItemMenuProps): JSX.Element {
     markAsRead,
     notification: { localUrl, isRead },
   } = props;
-  const classes = useStyles();
+  const classes = useStyles({});
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const disableEventPropagation = (event: React.MouseEvent<HTMLElement>, allowDefault?: boolean) => {

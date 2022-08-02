@@ -4,6 +4,10 @@ import Icon from 'src/components/common/icon/Icon';
 import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
+interface StyleProps {
+  isMobile?: boolean;
+}
+
 const useStyles = makeStyles((theme: Theme) => ({
   subheader: {
     paddingLeft: 0,
@@ -11,14 +15,8 @@ const useStyles = makeStyles((theme: Theme) => ({
     borderBottom: '1px solid #A9B7B8',
     display: 'flex',
 
-    '&.non-mobile': {
-      borderRadius: '7px 7px 0 0',
-      backgroundColor: '#F2F4F5',
-    },
-
-    '&.mobile': {
-      backgroundColor: '#FFFFFF',
-    },
+    borderRadius: (props: StyleProps) => (props.isMobile ? 'unset' : '7px 7px 0 0'),
+    backgroundColor: (props: StyleProps) => (props.isMobile ? '#FFFFFF' : '#F2F4F5'),
   },
   title: {
     fontSize: '20px',
@@ -32,17 +30,12 @@ const useStyles = makeStyles((theme: Theme) => ({
     alignItems: 'center',
     justifyContent: 'space-between',
     lineHeight: '28px',
-    '&.non-mobile': {
-      padding: theme.spacing(2, 3),
-    },
-    '&.mobile': {
-      padding: theme.spacing(2, 2),
-    },
+    padding: (props: StyleProps) => (props.isMobile ? theme.spacing(2, 2) : theme.spacing(2, 3)),
   },
   popover: {
     padding: 0,
     borderTop: '1px solid #A9B7B8',
-    borderRadius: '7px 7px 0 0',
+    borderRadius: (props: StyleProps) => (props.isMobile ? 'unset' : '7px 7px 0 0'),
     height: '64px',
   },
   paper: {
@@ -78,6 +71,7 @@ const useStyles = makeStyles((theme: Theme) => ({
       right: '0px !important',
       bottom: '0px !important',
       maxWidth: '100vw',
+      borderRadius: 'unset',
     },
   },
   divotWrapper: {
@@ -130,7 +124,7 @@ type PopoverHeaderMenuProps = {
 };
 
 function PopoverHeaderMenu({ menuItems }: PopoverHeaderMenuProps): JSX.Element {
-  const classes = useStyles();
+  const classes = useStyles({});
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -194,10 +188,10 @@ export default function DivotPopover({
   title,
   size,
 }: DivotPopoverProps): JSX.Element {
-  const classes = useStyles();
+  const { isMobile } = useDeviceInfo();
+  const classes = useStyles({ isMobile });
   const [divotStyle, setDivotStyle] = useState<DivotPositionProps>({ visibility: 'hidden' });
   const [divotRef, setDivotRef] = useState<HTMLElement | null>();
-  const { isMobile } = useDeviceInfo();
 
   useEffect(() => {
     setTimeout(() => {
@@ -237,8 +231,8 @@ export default function DivotPopover({
               <div className={classes.divot} style={divotStyle} />
             </div>
           )}
-          <ListSubheader inset className={`${classes.subheader} ${isMobile ? 'mobile' : 'non-mobile'}`}>
-            <div className={`${classes.mainTitle} ${isMobile ? 'mobile' : 'non-mobile'}`}>
+          <ListSubheader inset className={classes.subheader}>
+            <div className={classes.mainTitle}>
               <Typography className={classes.title}>{title}</Typography>
               <div className={classes.buttonContainer}>
                 {headerMenuItems !== undefined && <PopoverHeaderMenu menuItems={headerMenuItems} />}
