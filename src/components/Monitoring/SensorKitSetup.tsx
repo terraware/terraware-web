@@ -16,13 +16,18 @@ import DetectSensors from './sensorKitSetup/DetectSensors';
 import SensorLocations from './sensorKitSetup/SensorLocations';
 import ConfigureSensorKit from './sensorKitSetup/ConfigureSensorKit';
 import { LOCATIONS } from './sensorKitSetup/Locations';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+
+interface StyleProps {
+  isMobile: boolean;
+}
 
 const useStyles = makeStyles((theme: Theme) => ({
   setupInfo: {
     textAlign: 'center',
     lineHeight: '28px',
     fontSize: '16px',
-    marginTop: `${theme.spacing(10)}px`,
+    marginTop: `${theme.spacing(10)}`,
   },
   setupTitle: {
     fontWeight: 'bold',
@@ -36,7 +41,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   onboardingContainer: {
     display: 'flex',
-    margin: ' auto',
+    margin: (props: StyleProps) => (props.isMobile ? `auto auto ${theme.spacing(3)}` : 'auto'),
     marginTop: theme.spacing(5),
     justifyContent: 'center',
   },
@@ -56,7 +61,8 @@ type Completed = {
 };
 
 export default function SensorKitSetup(props: SensorKitSetupProps): JSX.Element {
-  const classes = useStyles();
+  const { isMobile } = useDeviceInfo();
+  const classes = useStyles({ isMobile });
   const { seedBank, onFinish, reloadData } = props;
   const [flowState, setFlowState] = useState<SetupFlowState | undefined>();
   const [completedSteps, setCompletedSteps] = useState<Completed>({});
