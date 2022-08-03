@@ -10,11 +10,17 @@ import { ChartPalette, TIME_PERIODS, getFirstWord, getTimePeriodParams, Humidity
 import { htmlLegendPlugin } from './htmlLegendPlugin';
 import 'chartjs-adapter-date-fns';
 import { Theme } from '@mui/material';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 declare global {
   interface Window {
     temperatureHumidityChart: any;
   }
+}
+
+interface StyleProps {
+  isMobile: boolean;
+  isDesktop: boolean;
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -35,11 +41,19 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   legendContainer: {
     marginBottom: '32px',
-    padding: '0 55px 0 41px',
+    padding: (props: StyleProps) => (props.isMobile ? 0 : '0 55px 0 41px'),
+
+    '& ul': {
+      display: (props: StyleProps) => (props.isMobile ? 'block ' : 'flex'),
+
+      '& li': {
+        marginLeft: (props: StyleProps) => (props.isMobile ? 0 : '10px'),
+      },
+    },
   },
   chartResizableParent: {
     position: 'relative',
-    width: 'calc(100vw - 300px)',
+    width: (props: StyleProps) => (props.isDesktop ? 'calc(100vw - 300px)' : 'calc(100vw - 136px)'),
     paddingRight: `${theme.spacing(4)}px`,
   },
 }));
@@ -51,7 +65,8 @@ type TemperatureHumidityChartProps = {
 };
 
 export default function TemperatureHumidityChart(props: TemperatureHumidityChartProps): JSX.Element {
-  const classes = useStyles();
+  const { isMobile, isDesktop } = useDeviceInfo();
+  const classes = useStyles({ isMobile, isDesktop });
   const { availableLocations, defaultSensor, defaultTimePeriod } = props;
   const [selectedLocation, setSelectedLocation] = useState<Device>();
   const [selectedPeriod, setSelectedPeriod] = useState<string>();
@@ -406,7 +421,7 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
   return (
     <div className={classes.graphContainer}>
       <p className={classes.graphTitle}>{strings.TEMPERATURE_AND_HUMIDITY_SENSOR_DATA}</p>
-      <div className={classes.dropDownsContainer}>
+      <div className={isMobile ? '' : classes.dropDownsContainer}>
         <Select
           options={availableLocations?.filter((location) => location.type === 'sensor').map((aL) => aL.name)}
           selectedValue={selectedLocation?.name}

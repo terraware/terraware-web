@@ -10,11 +10,17 @@ import moment from 'moment';
 import { ChartPalette, TIME_PERIODS, getTimePeriodParams, HumidityValues, getUnit } from './Common';
 import { htmlLegendPlugin } from './htmlLegendPlugin';
 import 'chartjs-adapter-date-fns';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 declare global {
   interface Window {
     pvBatteryChart: any;
   }
+}
+
+interface StyleProps {
+  isMobile: boolean;
+  isDesktop: boolean;
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -35,11 +41,19 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   legendContainer: {
     marginBottom: '32px',
-    padding: '0 78px 0 41px',
+    padding: (props: StyleProps) => (props.isMobile ? 0 : '0 78px 0 41px'),
+
+    '& ul': {
+      display: (props: StyleProps) => (props.isMobile ? 'block' : 'flex'),
+
+      '& li': {
+        marginLeft: (props: StyleProps) => (props.isMobile ? 0 : '10px'),
+      },
+    },
   },
   chartResizableParent: {
     position: 'relative',
-    width: 'calc(100vw - 300px)',
+    width: (props: StyleProps) => (props.isDesktop ? 'calc(100vw - 300px)' : 'calc(100vw - 136px)'),
     paddingRight: theme.spacing(4),
   },
 }));
@@ -50,7 +64,8 @@ type PVBatteryChartProps = {
 };
 
 export default function PVBatteryChart(props: PVBatteryChartProps): JSX.Element {
-  const classes = useStyles();
+  const { isMobile, isDesktop } = useDeviceInfo();
+  const classes = useStyles({ isMobile, isDesktop });
   const { BMU, defaultTimePeriod } = props;
   const [selectedPVBatteryPeriod, setSelectedPVBatteryPeriod] = useState<string>();
 

@@ -1,3 +1,4 @@
+import { Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles(() => ({
@@ -6,12 +7,12 @@ const useStyles = makeStyles(() => ({
     alignItems: 'center',
   },
   title: {
-    fontWeight: 600,
-    fontSize: 24,
     color: 'gray',
   },
   selectedSection: {
     color: 'black',
+    fontWeight: 600,
+    fontSize: 24,
   },
 }));
 
@@ -25,7 +26,7 @@ export default function Title({ page }: TitleProps): JSX.Element {
   return (
     <div className={classes.titleContainer}>
       <div className={classes.title}>
-        <span className={classes.selectedSection}>{page}</span>
+        <Typography className={classes.selectedSection}>{page}</Typography>
       </div>
     </div>
   );

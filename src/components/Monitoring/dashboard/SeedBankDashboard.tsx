@@ -15,6 +15,11 @@ import { useHistory } from 'react-router-dom';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import useQuery from '../../../utils/useQuery';
 import { TIME_PERIODS } from './Common';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+
+interface StyleProps {
+  isDesktop: boolean;
+}
 
 const useStyles = makeStyles((theme: Theme) => ({
   graphContainer: {
@@ -34,7 +39,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   panelValue: {
     fontWeight: 600,
-    fontSize: '48px',
+    fontSize: (props: StyleProps) => (props.isDesktop ? '48px' : '36px'),
     margin: 0,
   },
 }));
@@ -44,7 +49,8 @@ type SeedBankDashboardProps = {
 };
 
 export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.Element {
-  const classes = useStyles();
+  const { isMobile, isDesktop } = useDeviceInfo();
+  const classes = useStyles({ isDesktop });
   const history = useHistory();
   const query = useQuery();
   const stateLocation = useStateLocation();
@@ -55,6 +61,13 @@ export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.El
   const [deviceManager, setDeviceManager] = useState<DeviceManager | undefined>();
   const [defaultTimePeriod, setDefaultTimePeriod] = useState<string>();
   const [defaultSensor, setDefaultSensor] = useState<Device>();
+
+  const gridSize = () => {
+    if (isMobile) {
+      return 12;
+    }
+    return 6;
+  };
 
   useEffect(() => {
     setDefaultSensor(undefined);
@@ -151,7 +164,7 @@ export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.El
 
   return (
     <Grid container spacing={3} marginTop={0}>
-      <Grid item xs={6}>
+      <Grid item xs={gridSize()}>
         <div className={classes.graphContainer}>
           <div className={classes.panelTitle}>
             <p>{strings.PV_BATTERY_CHARGE}</p>
@@ -160,7 +173,7 @@ export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.El
           <p className={classes.panelValue}>{batteryLevel || strings.NO_DATA_YET}</p>
         </div>
       </Grid>
-      <Grid item xs={6}>
+      <Grid item xs={gridSize()}>
         <div className={classes.graphContainer}>
           <div className={classes.panelTitle}>
             <p>{strings.SEED_BANK_INTERNET}</p>

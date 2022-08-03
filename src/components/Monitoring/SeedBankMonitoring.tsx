@@ -10,7 +10,7 @@ import EmptyStateContent from '../emptyStatePages/EmptyStateContent';
 import { EMPTY_STATE_CONTENT_STYLES } from '../emptyStatePages/EmptyStatePage';
 import SensorKitSetup from './SensorKitSetup';
 import SeedBankDashboard from './dashboard/SeedBankDashboard';
-import { Theme } from '@mui/material';
+import { Grid, Theme } from '@mui/material';
 
 const useStyles = makeStyles((theme: Theme) => ({
   placeholder: {
@@ -61,16 +61,18 @@ export default function Monitoring(props: SeedBankMonitoringProps): JSX.Element 
       {!isConfigured && !onboarding && (
         <>
           {isAdmin(organization) ? (
-            <div className={classes.notSetUpContent}>
-              <EmptyStateContent
-                title={strings.SET_UP_YOUR_SENSOR_KIT}
-                subtitle={strings.SET_UP_YOUR_SENSOR_KIT_MSG}
-                listItems={[{ icon: 'monitoring', title: strings.SENSOR_KIT_SET_UP }]}
-                buttonText={strings.START_SET_UP}
-                onClickButton={() => setOnboarding(true)}
-                styles={EMPTY_STATE_CONTENT_STYLES}
-              />
-            </div>
+            <Grid item xs={12} marginTop='10%'>
+              <div className={classes.notSetUpContent}>
+                <EmptyStateContent
+                  title={strings.SET_UP_YOUR_SENSOR_KIT}
+                  subtitle={strings.SET_UP_YOUR_SENSOR_KIT_MSG}
+                  listItems={[{ icon: 'monitoring', title: strings.SENSOR_KIT_SET_UP }]}
+                  buttonText={strings.START_SET_UP}
+                  onClickButton={() => setOnboarding(true)}
+                  styles={EMPTY_STATE_CONTENT_STYLES}
+                />
+              </div>
+            </Grid>
           ) : (
             <EmptyMessage
               className={classes.message}

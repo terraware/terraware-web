@@ -13,6 +13,8 @@ import { Facility } from 'src/api/types/facilities';
 import SeedBankMonitoring from './SeedBankMonitoring';
 import Button from '../common/button/Button';
 import Title from '../common/Title';
+import { Box, Grid } from '@mui/material';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const useStyles = makeStyles(() => ({
   mainTitle: {
@@ -29,7 +31,7 @@ const useStyles = makeStyles(() => ({
     alignItems: 'center',
   },
   divider: {
-    margin: '0 16px',
+    margin: '0 1%',
     width: '1px',
     height: '32px',
     backgroundColor: '#A9B7B8',
@@ -48,6 +50,7 @@ type MonitoringProps = {
 };
 
 export default function Monitoring(props: MonitoringProps): JSX.Element {
+  const { isMobile } = useDeviceInfo();
   const classes = useStyles();
   const history = useHistory();
   const { organization, hasSeedBanks, reloadData } = props;
@@ -105,24 +108,54 @@ export default function Monitoring(props: MonitoringProps): JSX.Element {
     <TfMain>
       {hasSeedBanks ? (
         <>
-          <div className={classes.mainTitle}>
-            <div className={classes.titleContainer}>
-              {getPageHeading()}
-              <div className={classes.divider} />
-              <p className={classes.seedBankLabel}>{strings.SEED_BANK}</p>
-              <Select
-                options={seedBanks.map((sb) => sb?.name || '')}
-                onChange={onChangeSeedBank}
-                selectedValue={selectedSeedBank?.name}
-              />
-            </div>
-            {selectedSeedBank?.connectionState === 'Configured' ? (
-              <Button label={strings.REFRESH_DATA} onClick={reloadData} />
-            ) : null}
-          </div>
-          {selectedSeedBank && (
-            <SeedBankMonitoring seedBank={selectedSeedBank} organization={organization} reloadData={reloadData} />
-          )}
+          <Grid container>
+            <Grid item xs={12} className={isMobile ? '' : classes.titleContainer}>
+              {isMobile ? (
+                <>
+                  <Box display='flex'>
+                    <Grid item xs={10}>
+                      {getPageHeading()}
+                    </Grid>
+                    {selectedSeedBank?.connectionState === 'Configured' ? (
+                      <Grid item xs={2} display='flex' justifyContent='end'>
+                        <Button label={strings.REFRESH} onClick={reloadData} />
+                      </Grid>
+                    ) : null}
+                  </Box>
+                  <Grid item xs={12} className={classes.titleContainer} paddingTop='12px'>
+                    <p className={classes.seedBankLabel}>{strings.SEED_BANK}</p>
+                    <Select
+                      options={seedBanks.map((sb) => sb?.name || '')}
+                      onChange={onChangeSeedBank}
+                      selectedValue={selectedSeedBank?.name}
+                    />
+                  </Grid>
+                </>
+              ) : (
+                <>
+                  <Grid item xs={10} alignItems='center' className={classes.titleContainer}>
+                    {getPageHeading()}
+                    <div className={classes.divider} />
+                    <p className={classes.seedBankLabel}>{strings.SEED_BANK}</p>
+                    <Select
+                      options={seedBanks.map((sb) => sb?.name || '')}
+                      onChange={onChangeSeedBank}
+                      selectedValue={selectedSeedBank?.name}
+                    />
+                  </Grid>
+                  {selectedSeedBank?.connectionState === 'Configured' ? (
+                    <Grid item xs={2} display='flex' justifyContent='end'>
+                      <Button label={strings.REFRESH_DATA} onClick={reloadData} />
+                    </Grid>
+                  ) : null}
+                </>
+              )}
+            </Grid>
+
+            {selectedSeedBank && (
+              <SeedBankMonitoring seedBank={selectedSeedBank} organization={organization} reloadData={reloadData} />
+            )}
+          </Grid>
         </>
       ) : isAdmin(organization) ? (
         <>
