@@ -10,7 +10,7 @@ import OrganizationsDropdown from '../OrganizationsDropdown';
 import UserMenu from '../UserMenu';
 import { ReactComponent as Logo } from '../common/Navbar/logo.svg';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import MyAccountNavBar from '../MyAccountNavBar';
+import SmallDeviceUserMenu from '../SmallDeviceUserMenu';
 
 const useStyles = makeStyles((theme: Theme) => ({
   separator: {
@@ -112,7 +112,7 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
           organizationId={selectedOrganization?.id}
           reloadOrganizationData={reloadOrganizationData}
         />
-        <MyAccountNavBar
+        <SmallDeviceUserMenu
           onLogout={onHandleLogout}
           user={user}
           organizations={organizations}

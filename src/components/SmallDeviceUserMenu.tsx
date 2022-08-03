@@ -62,12 +62,20 @@ const useStyles = makeStyles(() => ({
   checkmarkIcon: {
     marginLeft: 'auto',
   },
+  menuList: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+  },
+  orgsList: {
+    overflow: 'auto',
+  },
   avatarButton: {
     minWidth: 'auto',
   },
 }));
 
-type MyAccountNavBarNavBarProps = {
+type SmallDeviceUserMenuNavBarProps = {
   organizations?: ServerOrganization[];
   selectedOrganization?: ServerOrganization;
   setSelectedOrganization: React.Dispatch<React.SetStateAction<ServerOrganization | undefined>>;
@@ -76,7 +84,7 @@ type MyAccountNavBarNavBarProps = {
   user?: User;
   hasOrganizations?: boolean;
 };
-export default function MyAccountNavBar({
+export default function SmallDeviceUserMenu({
   organizations,
   selectedOrganization,
   setSelectedOrganization,
@@ -84,7 +92,7 @@ export default function MyAccountNavBar({
   onLogout,
   user,
   hasOrganizations,
-}: MyAccountNavBarNavBarProps): JSX.Element | null {
+}: SmallDeviceUserMenuNavBarProps): JSX.Element | null {
   const classes = useStyles();
   const history = useHistory();
   const [newOrganizationModalOpened, setNewOrganizationModalOpened] = useState(false);
@@ -156,6 +164,7 @@ export default function MyAccountNavBar({
                   id='composition-menu'
                   aria-labelledby='composition-button'
                   sx={{ padding: '24px' }}
+                  className={classes.menuList}
                 >
                   <Box sx={{ display: 'flex' }}>
                     <Box sx={{ display: 'flex' }}>
@@ -189,9 +198,9 @@ export default function MyAccountNavBar({
                   >
                     {strings.LOG_OUT}
                   </MenuItem>
+                  {hasOrganizations ? <Divider sx={{ margin: '16px 0' }} /> : null}
                   {hasOrganizations ? (
-                    <div>
-                      <Divider sx={{ margin: '16px 0' }} />
+                    <div className={classes.orgsList}>
                       {organizations?.map((org, index) => {
                         return (
                           <MenuItem
@@ -215,6 +224,10 @@ export default function MyAccountNavBar({
                           </MenuItem>
                         );
                       })}
+                    </div>
+                  ) : null}
+                  {hasOrganizations ? (
+                    <>
                       <MenuItem className={classes.menuItem}> --- </MenuItem>
                       <MenuItem
                         onClick={(e) => {
@@ -225,7 +238,7 @@ export default function MyAccountNavBar({
                       >
                         {strings.CREATE_NEW_ORGANIZATION}
                       </MenuItem>
-                    </div>
+                    </>
                   ) : null}
                 </MenuList>
               </ClickAwayListener>
