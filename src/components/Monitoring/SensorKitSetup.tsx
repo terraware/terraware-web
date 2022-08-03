@@ -27,8 +27,8 @@ const useStyles = makeStyles((theme: Theme) => ({
     textAlign: 'center',
     lineHeight: '28px',
     fontSize: '16px',
-    marginTop: `${theme.spacing(5)}`,
-    marginBottom: `${theme.spacing(5)}`,
+    marginTop: theme.spacing(5),
+    marginBottom: theme.spacing(5),
   },
   setupTitle: {
     fontWeight: 'bold',
