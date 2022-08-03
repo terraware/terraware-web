@@ -15,6 +15,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     paddingTop: theme.spacing(2),
     paddingRight: theme.spacing(2),
   },
+  gridContainer: {
+    alignItems: 'end',
+  },
 }));
 
 type Location = {
@@ -135,7 +138,7 @@ export default function SensorLocations(props: SensorLocationsProps): JSX.Elemen
       buttonText={strings.FINISH}
     >
       <div>{strings.SENSOR_KIT_SET_UP_SENSOR_LOCATIONS_DESCRIPTION}</div>
-      <Grid container xs={12}>
+      <Grid container xs={12} className={classes.gridContainer}>
         {LOCATIONS.map((location) => (
           <Grid item xs={isMobile ? 6 : 4} key={location.name} className={classes.location}>
             <Select
