@@ -13,7 +13,7 @@ import { Facility } from 'src/api/types/facilities';
 import SeedBankMonitoring from './SeedBankMonitoring';
 import Button from '../common/button/Button';
 import Title from '../common/Title';
-import { Grid } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const useStyles = makeStyles(() => ({
@@ -109,17 +109,20 @@ export default function Monitoring(props: MonitoringProps): JSX.Element {
       {hasSeedBanks ? (
         <>
           <Grid container>
-            <Grid
-              item
-              xs={selectedSeedBank?.connectionState === 'Configured' ? 10 : 12}
-              className={isMobile ? '' : classes.titleContainer}
-            >
+            <Grid item xs={12} className={isMobile ? '' : classes.titleContainer}>
               {isMobile ? (
                 <>
-                  <Grid item xs={12}>
-                    {getPageHeading()}
-                  </Grid>
-                  <Grid item xs={12} className={classes.titleContainer}>
+                  <Box display='flex'>
+                    <Grid item xs={10}>
+                      {getPageHeading()}
+                    </Grid>
+                    {selectedSeedBank?.connectionState === 'Configured' ? (
+                      <Grid item xs={2} display='flex' justifyContent='end'>
+                        <Button label={isMobile ? strings.REFRESH : strings.REFRESH_DATA} onClick={reloadData} />
+                      </Grid>
+                    ) : null}
+                  </Box>
+                  <Grid item xs={12} className={classes.titleContainer} paddingTop='12px'>
                     <p className={classes.seedBankLabel}>{strings.SEED_BANK}</p>
                     <Select
                       options={seedBanks.map((sb) => sb?.name || '')}
@@ -129,24 +132,26 @@ export default function Monitoring(props: MonitoringProps): JSX.Element {
                   </Grid>
                 </>
               ) : (
-                <Grid item xs={12} alignItems='center' className={classes.titleContainer}>
-                  {getPageHeading()}
-                  <div className={classes.divider} />
-                  <p className={classes.seedBankLabel}>{strings.SEED_BANK}</p>
-                  <Select
-                    options={seedBanks.map((sb) => sb?.name || '')}
-                    onChange={onChangeSeedBank}
-                    selectedValue={selectedSeedBank?.name}
-                  />
-                </Grid>
+                <>
+                  <Grid item xs={10} alignItems='center' className={classes.titleContainer}>
+                    {getPageHeading()}
+                    <div className={classes.divider} />
+                    <p className={classes.seedBankLabel}>{strings.SEED_BANK}</p>
+                    <Select
+                      options={seedBanks.map((sb) => sb?.name || '')}
+                      onChange={onChangeSeedBank}
+                      selectedValue={selectedSeedBank?.name}
+                    />
+                  </Grid>
+                  {selectedSeedBank?.connectionState === 'Configured' ? (
+                    <Grid item xs={2} display='flex' justifyContent='end'>
+                      <Button label={isMobile ? strings.REFRESH : strings.REFRESH_DATA} onClick={reloadData} />
+                    </Grid>
+                  ) : null}
+                </>
               )}
             </Grid>
 
-            {selectedSeedBank?.connectionState === 'Configured' ? (
-              <Grid item xs={2} display='flex' justifyContent='end'>
-                <Button label={isMobile ? strings.REFRESH : strings.REFRESH_DATA} onClick={reloadData} />
-              </Grid>
-            ) : null}
             {selectedSeedBank && (
               <SeedBankMonitoring seedBank={selectedSeedBank} organization={organization} reloadData={reloadData} />
             )}
