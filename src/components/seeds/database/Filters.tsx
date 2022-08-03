@@ -16,6 +16,7 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 interface StyleProps {
   isMobile?: boolean;
+  isDesktop?: boolean;
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -29,7 +30,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     margin: theme.spacing(0, 1.5, 0, 0),
     height: '32px',
     display: 'inline-block',
-    marginBottom: (props: StyleProps) => (props.isMobile ? theme.spacing(1) : 0),
+    marginBottom: (props: StyleProps) => (props.isDesktop ? 0 : theme.spacing(1)),
   },
   stateBox: {
     width: '264px',
@@ -68,8 +69,8 @@ interface Props {
 }
 
 export default function Filters(props: Props): JSX.Element {
-  const { isMobile } = useDeviceInfo();
-  const classes = useStyles({ isMobile });
+  const { isMobile, isDesktop } = useDeviceInfo();
+  const classes = useStyles({ isMobile, isDesktop });
   const [popover, setPopover] = React.useState<FilterPopover>();
 
   const onChange = (col: DatabaseColumn, filter: SearchNodePayload) => {
