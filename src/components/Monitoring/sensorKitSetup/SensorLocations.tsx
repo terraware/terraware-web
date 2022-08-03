@@ -8,11 +8,15 @@ import Select from '../../common/Select/Select';
 import FlowStep, { FlowError } from './FlowStep';
 import { updateDevice } from 'src/api/device/device';
 import { LOCATIONS } from './Locations';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const useStyles = makeStyles((theme: Theme) => ({
   location: {
     paddingTop: theme.spacing(2),
     paddingRight: theme.spacing(2),
+  },
+  gridContainer: {
+    alignItems: 'end',
   },
 }));
 
@@ -37,6 +41,7 @@ export default function SensorLocations(props: SensorLocationsProps): JSX.Elemen
   const [availableDevices, setAvailableDevices] = useState<Device[]>([]);
   const [assignedLocations, setAssignedLocations] = useState<Location>({});
   const [showError, setShowError] = useState<boolean>(false);
+  const { isMobile } = useDeviceInfo();
 
   const onChange = (locationName: string, deviceName?: string) => {
     setAssignedLocations((currentLocations) => {
@@ -133,9 +138,9 @@ export default function SensorLocations(props: SensorLocationsProps): JSX.Elemen
       buttonText={strings.FINISH}
     >
       <div>{strings.SENSOR_KIT_SET_UP_SENSOR_LOCATIONS_DESCRIPTION}</div>
-      <Grid container xs={12}>
+      <Grid container xs={12} className={classes.gridContainer}>
         {LOCATIONS.map((location) => (
-          <Grid item xs={4} key={location.name} className={classes.location}>
+          <Grid item xs={isMobile ? 6 : 4} key={location.name} className={classes.location}>
             <Select
               id={location.name}
               selectedValue={assignedLocations[location.name]?.name || ''}

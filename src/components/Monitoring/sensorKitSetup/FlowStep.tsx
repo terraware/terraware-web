@@ -6,6 +6,11 @@ import Button from 'src/components/common/button/Button';
 import Expandable from '../../common/Expandable';
 import Icon from '../../common/icon/Icon';
 import ErrorBox from '../../common/ErrorBox/ErrorBox';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+
+interface StyleProps {
+  isMobile: boolean;
+}
 
 const useStyles = makeStyles((theme: Theme) => ({
   setupTitle: {
@@ -19,7 +24,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   flowFooter: {
     display: 'flex',
     marginTop: theme.spacing(2),
-    justifyContent: 'space-between',
     alignItems: 'end',
   },
   flowFooterError: {
@@ -31,6 +35,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   titleContainer: {
     display: 'flex',
     alignItems: 'center',
+    paddingLeft: theme.spacing(2),
   },
   gridItem: {
     display: 'flex',
@@ -40,6 +45,9 @@ const useStyles = makeStyles((theme: Theme) => ({
   errorBox: {
     width: '100%',
     marginBottom: theme.spacing(2),
+  },
+  button: {
+    marginLeft: (props: StyleProps) => theme.spacing(props.isMobile ? 1 : 3),
   },
 }));
 
@@ -66,7 +74,8 @@ type FlowStepProps = {
 };
 
 export default function FlowStep(props: FlowStepProps): JSX.Element {
-  const classes = useStyles();
+  const { isMobile } = useDeviceInfo();
+  const classes = useStyles({ isMobile });
   const {
     flowState,
     title,
@@ -107,6 +116,7 @@ export default function FlowStep(props: FlowStepProps): JSX.Element {
                 priority='secondary'
                 size='small'
                 disabled={disableNext}
+                className={footer === undefined ? '' : classes.button}
               />
             )}
           </div>

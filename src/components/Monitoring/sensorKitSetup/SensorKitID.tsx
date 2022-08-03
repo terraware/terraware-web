@@ -6,10 +6,15 @@ import { DeviceManager } from 'src/types/DeviceManager';
 import TextField from '../../common/Textfield/Textfield';
 import FlowStep, { FlowError } from './FlowStep';
 import { listDeviceManagers } from 'src/api/deviceManager/deviceManager';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+
+interface StyleProps {
+  isMobile: boolean;
+}
 
 const useStyles = makeStyles(() => ({
   sensorKitId: {
-    width: '432px',
+    width: (props: StyleProps) => (props.isMobile ? '100%' : '432px'),
   },
 }));
 
@@ -21,7 +26,8 @@ type SensorKitIDProps = {
 };
 
 export default function SensorKitID(props: SensorKitIDProps): JSX.Element {
-  const classes = useStyles();
+  const { isMobile } = useDeviceInfo();
+  const classes = useStyles({ isMobile });
   const { seedBank, active, completed, onNext } = props;
   const [sensorKitId, setSensorKitId] = useState<string | undefined>();
   const [error, setError] = useState<string | undefined>();

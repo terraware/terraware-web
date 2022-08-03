@@ -8,10 +8,15 @@ import FlowStep, { FlowError } from './FlowStep';
 import { listFacilityDevicesById } from 'src/api/facility/facility';
 import getHelpEmail from 'src/components/common/HelpEmail';
 import { Theme } from '@mui/material';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+
+interface StyleProps {
+  isMobile: boolean;
+}
 
 const useStyles = makeStyles((theme: Theme) => ({
   detectSensors: {
-    width: '432px',
+    width: (props: StyleProps) => (props.isMobile ? '100%' : '432px'),
     fontStyle: 'italic',
     display: 'flex',
     alignItems: 'center',
@@ -31,7 +36,8 @@ type DetectSensorsProps = {
 };
 
 export default function DetectSensors(props: DetectSensorsProps): JSX.Element {
-  const classes = useStyles();
+  const { isMobile } = useDeviceInfo();
+  const classes = useStyles({ isMobile });
   const { seedBank, active, completed, onNext } = props;
   const [flowError, setFlowError] = useState<FlowError | undefined>();
   const [initialized, setInitialized] = useState<boolean>(false);
