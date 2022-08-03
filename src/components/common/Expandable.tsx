@@ -2,12 +2,17 @@ import { IconButton, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useEffect, useState } from 'react';
 import Icon from '../common/icon/Icon';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+
+interface StyleProps {
+  isMobile: boolean;
+}
 
 const useStyles = makeStyles((theme: Theme) => ({
   expandable: {
     borderRadius: '8px',
     border: '1px solid #A9B7B8',
-    width: '584px',
+    width: (props: StyleProps) => (props.isMobile ? '100%' : '584px'),
     padding: theme.spacing(1),
   },
   disabledExpandable: {
@@ -32,7 +37,8 @@ type ExpandableProps = {
 };
 
 export default function Expandable(props: ExpandableProps): JSX.Element {
-  const classes = useStyles();
+  const { isMobile } = useDeviceInfo();
+  const classes = useStyles({ isMobile });
   const { title, children, opened, disabled } = props;
   const [open, setOpen] = useState<boolean>(false);
   const [lastOpened, setLastOpened] = useState<boolean>(false);

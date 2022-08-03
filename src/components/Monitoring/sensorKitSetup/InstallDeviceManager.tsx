@@ -8,10 +8,15 @@ import FlowStep, { FlowError } from './FlowStep';
 import { connectDeviceManager, getDeviceManager } from 'src/api/deviceManager/deviceManager';
 import getHelpEmail from 'src/components/common/HelpEmail';
 import { Theme } from '@mui/material';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+
+interface StyleProps {
+  isMobile: boolean;
+}
 
 const useStyles = makeStyles((theme: Theme) => ({
   installDeviceManager: {
-    width: '432px',
+    width: (props: StyleProps) => (props.isMobile ? '100%' : '432px'),
     fontStyle: 'italic',
   },
   spinnerContainer: {
@@ -33,7 +38,8 @@ type InstallDeviceManagerProps = {
 };
 
 export default function InstallDeviceManager(props: InstallDeviceManagerProps): JSX.Element {
-  const classes = useStyles();
+  const { isMobile } = useDeviceInfo();
+  const classes = useStyles({ isMobile });
   const { seedBank, active, completed, onNext, deviceManager, reloadData } = props;
   const [flowError, setFlowError] = useState<FlowError | undefined>();
   const [initialized, setInitialized] = useState<boolean>(false);

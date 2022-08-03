@@ -7,10 +7,15 @@ import Select from '../../common/Select/Select';
 import FlowStep, { FlowError } from './FlowStep';
 import { listDeviceTemplates, createDevice } from 'src/api/device/device';
 import { listFacilityDevicesById } from 'src/api/facility/facility';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+
+interface StyleProps {
+  isMobile: boolean;
+}
 
 const useStyles = makeStyles(() => ({
   selectPvSystem: {
-    width: '432px',
+    width: (props: StyleProps) => (props.isMobile ? '100%' : '432px'),
   },
 }));
 
@@ -22,7 +27,8 @@ type SelectPVSystemProps = {
 };
 
 export default function SelectPVSystem(props: SelectPVSystemProps): JSX.Element {
-  const classes = useStyles();
+  const { isMobile } = useDeviceInfo();
+  const classes = useStyles({ isMobile });
   const { seedBank, active, completed, onNext } = props;
   const [availablePVSystems, setAvailablePVSystems] = useState<DeviceTemplate[]>([]);
   const [selectedPVSystem, setSelectedPVSystem] = useState<DeviceTemplate | undefined>();
