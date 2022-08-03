@@ -31,6 +31,7 @@ import { FieldError } from '../newAccession';
 import { Unit, WEIGHT_UNITS } from '../nursery/NewTest';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const useStyles = makeStyles((theme: Theme) => ({
   submit: {
@@ -74,6 +75,7 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
   const [remainingSeeds, setRemainingSeeds] = React.useState(0);
   const [errors, setErrors] = React.useState<FieldError[]>([]);
   const [withdrawalType, setWithdrawalType] = React.useState(allowWithdrawalInWeight ? 'weight' : 'count');
+  const { isMobile, isDesktop } = useDeviceInfo();
 
   const [record, setRecord, onChange] = useForm<AccessionWithdrawal>(initWithdrawal(withdrawal));
   React.useEffect(() => {
@@ -211,8 +213,15 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
     }
   };
 
+  const gridSize = () => {
+    if (isMobile) {
+      return 12;
+    }
+    return 6;
+  };
+
   return (
-    <Dialog onClose={handleCancel} disableEscapeKeyDown open={open} maxWidth='sm' classes={{ paper: classes.paper }}>
+    <Dialog onClose={handleCancel} disableEscapeKeyDown open={open} classes={{ paper: isDesktop ? classes.paper : '' }}>
       <DialogTitle>
         <Typography variant='h6'>New withdrawal</Typography>
         <DialogCloseButton onClick={handleCancel} />
@@ -233,7 +242,7 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
               />
             </Grid>
 
-            <Grid item xs={6}>
+            <Grid item xs={gridSize()}>
               <DatePicker
                 id='date'
                 value={record.date}
@@ -245,33 +254,59 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
                 {dateSubtext}
               </Typography>
             </Grid>
-            <Grid item xs={6} />
-            <Grid item xs={6} id='withdrawnQuantity'>
-              <TextField
-                id='quantity'
-                value={record.withdrawnQuantity?.quantity}
-                onChange={(id, value) => {
-                  setWithdrawRemaining(false);
-                  onQuantityChange(id, value);
-                }}
-                label={strings.SEEDS_WITHDRAWN}
-                type='number'
-                endAdornment={
-                  <InputAdornment position='end'>
-                    <Dropdown
-                      id='units'
-                      label=''
-                      selected={
-                        allowWithdrawalInWeight
-                          ? record.withdrawnQuantity?.units || WEIGHT_UNITS[0].value
-                          : countUnits[0].value
-                      }
-                      values={withdrawalOptions(true)}
-                      onChange={onQuantityChange}
-                    />
-                  </InputAdornment>
-                }
-              />
+            {!isMobile ? <Grid item xs={6} /> : null}
+            <Grid item xs={gridSize()} id='withdrawnQuantity'>
+              {isDesktop ? (
+                <TextField
+                  id='quantity'
+                  value={record.withdrawnQuantity?.quantity}
+                  onChange={(id, value) => {
+                    setWithdrawRemaining(false);
+                    onQuantityChange(id, value);
+                  }}
+                  label={strings.SEEDS_WITHDRAWN}
+                  type='number'
+                  endAdornment={
+                    <InputAdornment position='end'>
+                      <Dropdown
+                        id='units'
+                        label=''
+                        selected={
+                          allowWithdrawalInWeight
+                            ? record.withdrawnQuantity?.units || WEIGHT_UNITS[0].value
+                            : countUnits[0].value
+                        }
+                        values={withdrawalOptions(true)}
+                        onChange={onQuantityChange}
+                      />
+                    </InputAdornment>
+                  }
+                />
+              ) : (
+                <>
+                  <TextField
+                    id='quantity'
+                    value={record.withdrawnQuantity?.quantity}
+                    onChange={(id, value) => {
+                      setWithdrawRemaining(false);
+                      onQuantityChange(id, value);
+                    }}
+                    label={strings.SEEDS_WITHDRAWN}
+                    type='number'
+                  />
+                  <Dropdown
+                    id='units'
+                    label=''
+                    selected={
+                      allowWithdrawalInWeight
+                        ? record.withdrawnQuantity?.units || WEIGHT_UNITS[0].value
+                        : countUnits[0].value
+                    }
+                    values={withdrawalOptions(true)}
+                    onChange={onQuantityChange}
+                  />
+                </>
+              )}
               {withdrawalType !== 'weight' && (
                 <Checkbox
                   id='withdraw_remaining'
@@ -286,7 +321,7 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
                 />
               )}
             </Grid>
-            <Grid item xs={6} id='remainingQuantity'>
+            <Grid item xs={gridSize()} id='remainingQuantity'>
               {withdrawalType !== 'weight' && (
                 <TextField
                   id='remaining'
@@ -320,10 +355,10 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
                 />
               )}
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={gridSize()}>
               <TextField id='destination' value={record.destination} onChange={onChange} label={strings.DESTINATION} />
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={gridSize()}>
               <Dropdown
                 id='purpose'
                 label='Purpose'
@@ -351,7 +386,7 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
             <Grid item xs={12}>
               <TextArea id='notes' value={record.notes} onChange={onChange} label={strings.NOTES} />
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={gridSize()}>
               <TextField
                 id='staffResponsible'
                 value={record.staffResponsible}

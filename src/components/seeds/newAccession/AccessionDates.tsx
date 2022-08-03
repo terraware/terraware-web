@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { getDate } from 'src/api/clock';
 import DatePicker from 'src/components/common/DatePicker';
 import strings from 'src/strings';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 interface Props {
   onChange: (id: string, value: string) => void;
@@ -20,6 +21,7 @@ type FieldError = {
 export function AccessionDates({ onChange, refreshErrors, collectedDate, receivedDate, disabled }: Props): JSX.Element {
   const [dateErrors, setDateErrors] = useState<FieldError[]>([]);
   const [date, setDate] = useState<number>();
+  const { isMobile } = useDeviceInfo();
 
   useEffect(() => {
     const populateDate = async () => {
@@ -28,6 +30,13 @@ export function AccessionDates({ onChange, refreshErrors, collectedDate, receive
     };
     populateDate();
   }, []);
+
+  const gridSize = () => {
+    if (isMobile) {
+      return 12;
+    }
+    return 4;
+  };
 
   const onChangeDate = (id: string, value: unknown) => {
     const newErrors = [...dateErrors];
@@ -57,7 +66,7 @@ export function AccessionDates({ onChange, refreshErrors, collectedDate, receive
 
   return (
     <Grid container spacing={4}>
-      <Grid item xs={4}>
+      <Grid item xs={gridSize()}>
         <DatePicker
           id='collectedDate'
           value={collectedDate}
@@ -70,7 +79,7 @@ export function AccessionDates({ onChange, refreshErrors, collectedDate, receive
           disabled={disabled}
         />
       </Grid>
-      <Grid item xs={4}>
+      <Grid item xs={gridSize()}>
         <DatePicker
           id='receivedDate'
           value={receivedDate}

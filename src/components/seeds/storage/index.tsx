@@ -17,6 +17,7 @@ import { StorageStartDate } from './StorageStartDate';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { ServerOrganization } from 'src/types/Organization';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const useStyles = makeStyles((theme: Theme) => ({
   right: {
@@ -49,6 +50,7 @@ export default function Storage({ accession, onSubmit, organization }: Props): J
   const [isSaving, setIsSaving] = React.useState(false);
   const [isSaved, setIsSaved] = React.useState(false);
   const [errors, setErrors] = React.useState<FieldError[]>([]);
+  const { isMobile } = useDeviceInfo();
 
   React.useEffect(() => {
     setRecord(accession);
@@ -100,6 +102,12 @@ export default function Storage({ accession, onSubmit, organization }: Props): J
   };
 
   const isContributor = organization?.role === 'Contributor';
+  const gridSize = () => {
+    if (isMobile) {
+      return 12;
+    }
+    return 4;
+  };
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -114,9 +122,9 @@ export default function Storage({ accession, onSubmit, organization }: Props): J
             storageDate={record.storageStartDate}
             disabled={isContributor}
           />
-          <Grid item xs={4} />
-          <Grid item xs={4} />
-          <Grid item xs={4}>
+          {!isMobile ? <Grid item xs={4} /> : null}
+          {!isMobile ? <Grid item xs={4} /> : null}
+          <Grid item xs={gridSize()}>
             <TextField
               id='storagePackets'
               value={record.storagePackets}
@@ -126,8 +134,8 @@ export default function Storage({ accession, onSubmit, organization }: Props): J
               disabled={isContributor}
             />
           </Grid>
-          <Grid item xs={4} />
-          <Grid item xs={4} />
+          {!isMobile ? <Grid item xs={4} /> : null}
+          {!isMobile ? <Grid item xs={4} /> : null}
           <Suspense
             fallback={
               <Grid item xs={12}>
@@ -152,7 +160,7 @@ export default function Storage({ accession, onSubmit, organization }: Props): J
               disabled={isContributor}
             />
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={gridSize()}>
             <TextField
               id='storageStaffResponsible'
               value={record.storageStaffResponsible}

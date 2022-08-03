@@ -5,6 +5,7 @@ import { ConditionType, getLocations, StorageLocation } from 'src/api/seeds/loca
 import Dropdown from 'src/components/common/Dropdown';
 import TextField from 'src/components/common/TextField';
 import strings from 'src/strings';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 interface LocationDropdownProps {
   facilityId: number;
@@ -17,6 +18,14 @@ interface LocationDropdownProps {
 export default function LocationDropdown(props: LocationDropdownProps): JSX.Element {
   const { facilityId, onChange, storageLocation, storageCondition, isContributor } = props;
   const [locations, setLocations] = useState<StorageLocation[]>([]);
+  const { isMobile } = useDeviceInfo();
+
+  const gridSize = () => {
+    if (isMobile) {
+      return 12;
+    }
+    return 4;
+  };
 
   useEffect(() => {
     const populateLocations = async () => {
@@ -56,7 +65,7 @@ export default function LocationDropdown(props: LocationDropdownProps): JSX.Elem
 
   return (
     <>
-      <Grid item xs={4}>
+      <Grid item xs={gridSize()}>
         <Dropdown
           id='storageLocation'
           label={strings.LOCATION}
@@ -66,7 +75,7 @@ export default function LocationDropdown(props: LocationDropdownProps): JSX.Elem
           disabled={isContributor}
         />
       </Grid>
-      <Grid item xs={4}>
+      <Grid item xs={gridSize()}>
         <TextField
           id='storageCondition'
           value={storageCondition}

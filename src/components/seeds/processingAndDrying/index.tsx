@@ -19,6 +19,7 @@ import { Unit } from '../nursery/NewTest';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { ServerOrganization } from 'src/types/Organization';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const useStyles = makeStyles((theme: Theme) => ({
   right: {
@@ -51,6 +52,7 @@ export default function ProcessingAndDrying({ accession, onSubmit, organization 
   const [isSaving, setIsSaving] = React.useState(false);
   const [isSaved, setIsSaved] = React.useState(false);
   const [errors, setErrors] = React.useState<FieldError[]>([]);
+  const { isMobile } = useDeviceInfo();
 
   React.useEffect(() => {
     setRecord(accession);
@@ -223,6 +225,13 @@ export default function ProcessingAndDrying({ accession, onSubmit, organization 
 
   const isContributor = organization?.role === 'Contributor';
 
+  const gridSize = () => {
+    if (isMobile) {
+      return 12;
+    }
+    return 4;
+  };
+
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <MainPaper>
@@ -230,7 +239,7 @@ export default function ProcessingAndDrying({ accession, onSubmit, organization 
         <Typography component='p'>{strings.PROCESSING_AND_DRYING_DESCRIPTION}</Typography>
         <Divisor />
         <Grid container spacing={4}>
-          <Grid item xs={4}>
+          <Grid item xs={gridSize()}>
             <Dropdown
               id='processingMethod'
               label={strings.QUANTIFY}
@@ -244,7 +253,7 @@ export default function ProcessingAndDrying({ accession, onSubmit, organization 
             />
           </Grid>
           {record.processingMethod === 'Weight' && (
-            <Grid item xs={4}>
+            <Grid item xs={gridSize()}>
               <Dropdown
                 id='units'
                 label={strings.UNITS}
@@ -256,7 +265,7 @@ export default function ProcessingAndDrying({ accession, onSubmit, organization 
             </Grid>
           )}
           {(record.processingMethod === 'Count' || !record.processingMethod) && (
-            <Grid item xs={4} className={classes.alignMiddle}>
+            <Grid item xs={gridSize()} className={classes.alignMiddle}>
               <TextField
                 id='quantity'
                 value={record.initialQuantity?.quantity}
@@ -269,8 +278,8 @@ export default function ProcessingAndDrying({ accession, onSubmit, organization 
           )}
           {record.processingMethod === 'Weight' && (
             <>
-              <Grid item xs={4} />
-              <Grid item xs={4} wrap='nowrap' direction='column'>
+              {!isMobile ? <Grid item xs={4} /> : null}
+              <Grid item xs={gridSize()} wrap='nowrap' direction='column'>
                 <Grid item>
                   <TextField
                     id='quantity'
@@ -285,7 +294,7 @@ export default function ProcessingAndDrying({ accession, onSubmit, organization 
                   />
                 </Grid>
               </Grid>
-              <Grid item xs={4}>
+              <Grid item xs={gridSize()}>
                 <TextField
                   id='subsetWeight'
                   value={record.subsetWeight?.quantity}
@@ -295,7 +304,7 @@ export default function ProcessingAndDrying({ accession, onSubmit, organization 
                   disabled={isContributor}
                 />
               </Grid>
-              <Grid item xs={4}>
+              <Grid item xs={gridSize()}>
                 <TextField
                   id='subsetCount'
                   value={record.subsetCount}
@@ -305,7 +314,7 @@ export default function ProcessingAndDrying({ accession, onSubmit, organization 
                   disabled={isContributor}
                 />
               </Grid>
-              <Grid item xs={4} className={classes.alignMiddle}>
+              <Grid item xs={gridSize()} className={classes.alignMiddle}>
                 <TextField
                   id='estimatedSeedCount'
                   value={estimatedSeedCount}
@@ -349,7 +358,7 @@ export default function ProcessingAndDrying({ accession, onSubmit, organization 
         </Grid>
         <Divisor />
         <Grid container spacing={4}>
-          <Grid item xs={4}>
+          <Grid item xs={gridSize()}>
             <Dropdown
               id='targetStorageCondition'
               label={strings.TARGET_RH}
@@ -365,7 +374,7 @@ export default function ProcessingAndDrying({ accession, onSubmit, organization 
         </Grid>
         <Divisor />
         <Grid container spacing={4}>
-          <Grid item xs={4}>
+          <Grid item xs={gridSize()}>
             <DatePicker
               id='dryingStartDate'
               value={record.dryingStartDate}
@@ -375,7 +384,7 @@ export default function ProcessingAndDrying({ accession, onSubmit, organization 
               disabled={isContributor}
             />
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={gridSize()}>
             <DatePicker
               id='dryingEndDate'
               value={record.dryingEndDate}
@@ -387,7 +396,7 @@ export default function ProcessingAndDrying({ accession, onSubmit, organization 
           </Grid>
         </Grid>
         <Grid container spacing={4}>
-          <Grid item xs={8}>
+          <Grid item xs={gridSize()}>
             <DatePicker
               id='dryingMoveDate'
               value={record.dryingMoveDate}
@@ -412,7 +421,7 @@ export default function ProcessingAndDrying({ accession, onSubmit, organization 
               disabled={isContributor}
             />
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={gridSize()}>
             <TextField
               id='processingStaffResponsible'
               value={record.processingStaffResponsible}
