@@ -43,6 +43,11 @@ import SelectSeedBankModal from '../../SeedBank/SelectSeedBankModal';
 import { isAdmin } from 'src/utils/organization';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+
+interface StyleProps {
+  isMobile: boolean;
+};
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
@@ -115,7 +120,8 @@ type DatabaseProps = {
 };
 
 export default function Database(props: DatabaseProps): JSX.Element {
-  const classes = useStyles();
+  const { isMobile } = useDeviceInfo();
+  const classes = useStyles({ isMobile });
   const history = useHistory();
   const query = useQuery();
   const location = useStateLocation();
