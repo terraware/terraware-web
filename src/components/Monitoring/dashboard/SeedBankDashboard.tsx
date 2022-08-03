@@ -17,6 +17,10 @@ import useQuery from '../../../utils/useQuery';
 import { TIME_PERIODS } from './Common';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
+interface StyleProps {
+  isDesktop: boolean;
+}
+
 const useStyles = makeStyles((theme: Theme) => ({
   graphContainer: {
     border: '1px solid #A9B7B8',
@@ -35,7 +39,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   panelValue: {
     fontWeight: 600,
-    fontSize: '48px',
+    fontSize: (props: StyleProps) => (props.isDesktop ? '48px' : '36px'),
     margin: 0,
   },
 }));
@@ -45,7 +49,8 @@ type SeedBankDashboardProps = {
 };
 
 export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.Element {
-  const classes = useStyles();
+  const { isMobile, isDesktop } = useDeviceInfo();
+  const classes = useStyles({ isDesktop });
   const history = useHistory();
   const query = useQuery();
   const stateLocation = useStateLocation();
@@ -56,7 +61,6 @@ export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.El
   const [deviceManager, setDeviceManager] = useState<DeviceManager | undefined>();
   const [defaultTimePeriod, setDefaultTimePeriod] = useState<string>();
   const [defaultSensor, setDefaultSensor] = useState<Device>();
-  const { isMobile } = useDeviceInfo();
 
   const gridSize = () => {
     if (isMobile) {

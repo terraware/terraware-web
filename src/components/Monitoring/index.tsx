@@ -109,7 +109,11 @@ export default function Monitoring(props: MonitoringProps): JSX.Element {
       {hasSeedBanks ? (
         <>
           <Grid container>
-            <Grid item xs={10} className={isMobile ? '' : classes.titleContainer}>
+            <Grid
+              item
+              xs={selectedSeedBank?.connectionState === 'Configured' ? 10 : 12}
+              className={isMobile ? '' : classes.titleContainer}
+            >
               {isMobile ? (
                 <>
                   <Grid item xs={12}>
