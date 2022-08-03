@@ -118,7 +118,7 @@ export default function Monitoring(props: MonitoringProps): JSX.Element {
                     </Grid>
                     {selectedSeedBank?.connectionState === 'Configured' ? (
                       <Grid item xs={2} display='flex' justifyContent='end'>
-                        <Button label={isMobile ? strings.REFRESH : strings.REFRESH_DATA} onClick={reloadData} />
+                        <Button label={strings.REFRESH} onClick={reloadData} />
                       </Grid>
                     ) : null}
                   </Box>
@@ -145,7 +145,7 @@ export default function Monitoring(props: MonitoringProps): JSX.Element {
                   </Grid>
                   {selectedSeedBank?.connectionState === 'Configured' ? (
                     <Grid item xs={2} display='flex' justifyContent='end'>
-                      <Button label={isMobile ? strings.REFRESH : strings.REFRESH_DATA} onClick={reloadData} />
+                      <Button label={strings.REFRESH_DATA} onClick={reloadData} />
                     </Grid>
                   ) : null}
                 </>
