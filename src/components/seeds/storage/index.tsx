@@ -122,8 +122,8 @@ export default function Storage({ accession, onSubmit, organization }: Props): J
             storageDate={record.storageStartDate}
             disabled={isContributor}
           />
-          {!isMobile ? <Grid item xs={4} /> : null}
-          {!isMobile ? <Grid item xs={4} /> : null}
+          {isMobile ? null : <Grid item xs={4} />}
+          {isMobile ? null : <Grid item xs={4} />}
           <Grid item xs={gridSize()}>
             <TextField
               id='storagePackets'
@@ -134,8 +134,8 @@ export default function Storage({ accession, onSubmit, organization }: Props): J
               disabled={isContributor}
             />
           </Grid>
-          {!isMobile ? <Grid item xs={4} /> : null}
-          {!isMobile ? <Grid item xs={4} /> : null}
+          {isMobile ? null : <Grid item xs={4} />}
+          {isMobile ? null : <Grid item xs={4} />}
           <Suspense
             fallback={
               <Grid item xs={12}>

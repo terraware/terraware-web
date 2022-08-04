@@ -278,7 +278,7 @@ export default function ProcessingAndDrying({ accession, onSubmit, organization 
           )}
           {record.processingMethod === 'Weight' && (
             <>
-              {!isMobile ? <Grid item xs={4} /> : null}
+              {isMobile ? null : <Grid item xs={4} />}
               <Grid item xs={gridSize()} wrap='nowrap' direction='column'>
                 <Grid item>
                   <TextField

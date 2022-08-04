@@ -254,7 +254,7 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
                 {dateSubtext}
               </Typography>
             </Grid>
-            {!isMobile ? <Grid item xs={6} /> : null}
+            {isMobile ? null : <Grid item xs={6} />}
             <Grid item xs={gridSize()} id='withdrawnQuantity'>
               {isDesktop ? (
                 <TextField

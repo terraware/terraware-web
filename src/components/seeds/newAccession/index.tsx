@@ -453,7 +453,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
               disabled={isPendingCheckIn || isContributor}
             />
           </Grid>
-          {!isMobile ? <Grid item xs={4} /> : null}
+          {isMobile ? null : <Grid item xs={4} />}
           <Grid item xs={12}>
             <TextArea
               id='environmentalNotes'
