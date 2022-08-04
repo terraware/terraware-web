@@ -19,6 +19,9 @@ const useStyles = makeStyles((theme: Theme) => ({
   right: {
     marginLeft: 'auto',
   },
+  mobile: {
+    minHeight: '64px',
+  },
 }));
 
 type TopBarProps = {
@@ -40,7 +43,7 @@ export default function TopBar(props: TopBarProps): JSX.Element {
         minHeight: '64px',
       }}
     >
-      <Toolbar className={isDesktop ? classes.right : ''}>
+      <Toolbar className={isDesktop ? classes.right : classes.mobile}>
         <div className={classes.flex}>{props.children}</div>
       </Toolbar>
     </AppBar>
