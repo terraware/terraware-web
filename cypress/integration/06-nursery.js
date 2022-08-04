@@ -223,8 +223,6 @@ describe('Nursery', () => {
 
       cy.get('#species-current').contains('4');
 
-      cy.get('#families-current').contains('1');
-
       cy.get('#update-row-Pending').contains('0 seed collection');
       cy.get('#update-row-Processed').contains('0 accessions');
       cy.get('#update-row-Dried').contains('1 accessions');

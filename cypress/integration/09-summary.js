@@ -13,8 +13,6 @@ describe.skip('Summary page', () => {
 
     cy.get('#species-current').contains('4');
 
-    cy.get('#families-current').contains('1');
-
     cy.get('#update-row-Pending').contains('0 seed collection');
     cy.get('#update-row-Processed').contains('0 accessions');
     cy.get('#update-row-Dried').contains('1 accessions');
@@ -54,7 +52,6 @@ describe.skip('Summary page - Spinners', () => {
 
     cy.get('#spinner-summary-sessions').should('exist');
     cy.get('#spinner-summary-species').should('exist');
-    cy.get('#spinner-summary-families').should('exist');
     cy.get('#spinner-alerts').should('exist');
     cy.get('#spinner-updates').should('exist');
 
@@ -62,7 +59,6 @@ describe.skip('Summary page - Spinners', () => {
 
     cy.get('#spinner-summary-sessions').should('not.exist');
     cy.get('#spinner-summary-species').should('not.exist');
-    cy.get('#spinner-summary-families').should('not.exist');
     cy.get('#spinner-alerts').should('not.exist');
     cy.get('#spinner-updates').should('not.exist');
   });
