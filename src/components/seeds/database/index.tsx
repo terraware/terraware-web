@@ -414,7 +414,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
           rightComponent={
             hasSeedBanks ? (
               <>
-                {isMobile ? null : <>{getHeaderButtons()}</>}
+                {isMobile ? null : getHeaderButtons()}
                 {organization &&
                   (isMobile ? (
                     <Button icon='plus' onClick={goToNewAccession} size='medium' id='newAccession' />

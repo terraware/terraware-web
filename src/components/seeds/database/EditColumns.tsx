@@ -81,13 +81,6 @@ export default function EditColumnsDialog(props: Props): JSX.Element {
     }
   };
 
-  const spacingSize = () => {
-    if (isMobile) {
-      return 1;
-    }
-    return 4;
-  };
-
   const gridSize = () => {
     if (isMobile) {
       return 12;
@@ -136,7 +129,7 @@ export default function EditColumnsDialog(props: Props): JSX.Element {
           <React.Fragment key={name}>
             <Divisor />
             <Typography component='p'>{name}</Typography>
-            <Grid container spacing={spacingSize()}>
+            <Grid container spacing={isMobile ? 1 : 4}>
               {options.map((optionsColumn, index) => (
                 <Grid key={index} item xs={gridSize()}>
                   <Grid container>
