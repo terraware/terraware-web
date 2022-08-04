@@ -5,6 +5,7 @@ import { AccessionPostRequestBody } from 'src/api/types/accessions';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
 import { Species } from 'src/types/Species';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 import Autocomplete from '../../common/Autocomplete';
 
 interface SpeciesDropdownProps<T extends AccessionPostRequestBody> {
@@ -21,6 +22,7 @@ export default function SpeciesDropdown<T extends AccessionPostRequestBody>(
   const { selectedSpecies, organization, setRecord, disabled } = props;
   const [speciesList, setSpeciesList] = useState<Species[]>([]);
 
+  const { isMobile } = useDeviceInfo();
   useEffect(() => {
     const populateSpecies = async () => {
       if (organization) {
@@ -45,7 +47,7 @@ export default function SpeciesDropdown<T extends AccessionPostRequestBody>(
 
   return (
     <>
-      <Grid item xs={4}>
+      <Grid item xs={isMobile ? 12 : 4}>
         <Autocomplete
           id='species'
           selected={selectedSpecies}

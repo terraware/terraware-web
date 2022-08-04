@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { getDate } from 'src/api/clock';
 import DatePicker from 'src/components/common/DatePicker';
 import strings from 'src/strings';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 interface Props {
   onChange: (id: string, value: string) => void;
@@ -19,6 +20,7 @@ type FieldError = {
 export function StorageStartDate({ onChange, refreshErrors, storageDate, disabled }: Props): JSX.Element {
   const [dateErrors, setDateErrors] = useState<FieldError[]>([]);
   const [date, setDate] = useState<number>();
+  const { isMobile } = useDeviceInfo();
 
   useEffect(() => {
     const populateDate = async () => {
@@ -55,7 +57,7 @@ export function StorageStartDate({ onChange, refreshErrors, storageDate, disable
   };
 
   return (
-    <Grid item xs={4}>
+    <Grid item xs={isMobile ? 12 : 4}>
       <DatePicker
         id='storageStartDate'
         value={storageDate}

@@ -20,6 +20,7 @@ import { Add } from '@mui/icons-material';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { ServerOrganization } from 'src/types/Organization';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const useStyles = makeStyles((theme: Theme) => ({
   right: {
@@ -54,6 +55,7 @@ export default function Nursery({ accession, onSubmit, organization }: Props): J
   const seedsAvailable = accession.remainingQuantity?.quantity ?? 0;
   const [nurseryRows, setNurseryRows] = useState<ViabilityTest[]>();
   const isContributor = organization?.role === 'Contributor';
+  const { isMobile } = useDeviceInfo();
 
   useEffect(() => {
     window.scrollTo({ top: 0 });
@@ -119,6 +121,13 @@ export default function Nursery({ accession, onSubmit, organization }: Props): J
 
   const total = getTotalScheduled();
 
+  const gridSize = () => {
+    if (isMobile) {
+      return 12;
+    }
+    return 4;
+  };
+
   return (
     <main>
       <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -136,7 +145,7 @@ export default function Nursery({ accession, onSubmit, organization }: Props): J
           <Divisor />
           <Grid container spacing={4}>
             {Boolean(total) && (
-              <Grid item xs={6}>
+              <Grid item xs={gridSize()}>
                 <SummaryBox
                   id='scheduledForTesting'
                   title={strings.SCHEDULED_FOR_TESTING}
@@ -145,7 +154,7 @@ export default function Nursery({ accession, onSubmit, organization }: Props): J
                 />
               </Grid>
             )}
-            <Grid item xs={total ? 6 : 12}>
+            <Grid item xs={isMobile ? 12 : total ? 6 : 12}>
               <SummaryBox
                 id='mostRecentViabiliy'
                 title={strings.MOST_RECENT_PERCENTAGE_VIABILITY}

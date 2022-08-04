@@ -18,6 +18,7 @@ import { Add } from '@mui/icons-material';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { ServerOrganization } from 'src/types/Organization';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
@@ -57,6 +58,7 @@ export default function WithdrawalView({ accession, onSubmit, organization }: Pr
   const [openInfoModal, setOpenInfoModal] = React.useState(false);
   const [withdrawalRows, setWithdrawalRows] = React.useState<AccessionWithdrawal[]>();
   const isContributor = organization?.role === 'Contributor';
+  const { isMobile } = useDeviceInfo();
 
   React.useEffect(() => {
     window.scrollTo({ top: 0 });
@@ -134,6 +136,12 @@ export default function WithdrawalView({ accession, onSubmit, organization }: Pr
     accession.withdrawals?.some((withdrawal) => withdrawal.withdrawnQuantity?.units !== 'Seeds') &&
     accession.withdrawals?.some((withdrawal) => withdrawal.withdrawnQuantity?.units === 'Seeds');
 
+  const gridSize = () => {
+    if (isMobile) {
+      return 12;
+    }
+    return 4;
+  };
   return (
     <main>
       <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -160,10 +168,10 @@ export default function WithdrawalView({ accession, onSubmit, organization }: Pr
           )}
 
           <Grid container spacing={4}>
-            <Grid item xs={4}>
+            <Grid item xs={gridSize()}>
               <SummaryBox id='total-seeds' title={strings.INITIAL_SEEDS} value={seedsTotal} variant='default' />
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={gridSize()}>
               <SummaryBox
                 id='seeds-withdrawn'
                 title={strings.SEEDS_WITHDRAWN}
@@ -173,7 +181,7 @@ export default function WithdrawalView({ accession, onSubmit, organization }: Pr
                 onIconClick={onOpenInfoModal}
               />
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={gridSize()}>
               <SummaryBox
                 id='seeds-available'
                 title={strings.SEEDS_REMAINING}
