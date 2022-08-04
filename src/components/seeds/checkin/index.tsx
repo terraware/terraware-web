@@ -23,9 +23,9 @@ import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-
 import useStateLocation from 'src/utils/useStateLocation';
 import PageHeader from '../PageHeader';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
@@ -51,6 +51,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     color: theme.palette.gray[800],
     fontWeight: 600,
   },
+  tableHead: {
+    whiteSpace: 'nowrap',
+  },
 }));
 
 const TableCell = withStyles({
@@ -65,6 +68,7 @@ export type CheckInProps = {
 };
 
 export default function CheckIn(props: CheckInProps): JSX.Element {
+  const { isDesktop } = useDeviceInfo();
   const classes = useStyles();
   const { organization } = props;
   const history = useHistory();
@@ -139,7 +143,7 @@ export default function CheckIn(props: CheckInProps): JSX.Element {
                         style={{ padding: '24px', marginBottom: '32px' }}
                       >
                         <Table aria-label='simple table'>
-                          <TableHead>
+                          <TableHead className={classes.tableHead}>
                             <TableRow>
                               <TableCell className={classes.title}>{result.bagNumber as string}</TableCell>
                             </TableRow>
@@ -164,7 +168,7 @@ export default function CheckIn(props: CheckInProps): JSX.Element {
                                 <Button
                                   onClick={() => goToAccession(result.id! as string)}
                                   id='viewCollections'
-                                  label={strings.VIEW_ACCESSION}
+                                  label={isDesktop ? strings.VIEW_ACCESSION : strings.VIEW}
                                   priority='secondary'
                                   type='passive'
                                 />

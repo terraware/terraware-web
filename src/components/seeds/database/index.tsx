@@ -43,6 +43,11 @@ import SelectSeedBankModal from '../../SeedBank/SelectSeedBankModal';
 import { isAdmin } from 'src/utils/organization';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+
+interface StyleProps {
+  isMobile: boolean;
+}
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
@@ -74,7 +79,11 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   checkInButton: {
     marginTop: theme.spacing(2),
-    marginRight: theme.spacing(3),
+    marginRight: (props: StyleProps) => (props.isMobile ? 0 : theme.spacing(3)),
+    marginLeft: (props: StyleProps) => (props.isMobile ? theme.spacing(1) : 0),
+    '&.mobile': {
+      minWidth: '60px',
+    },
   },
   message: {
     margin: '0 auto',
@@ -99,6 +108,12 @@ const useStyles = makeStyles((theme: Theme) => ({
     top: '50%',
     left: 'calc(50% + 100px)',
   },
+  headerButtonsContainer: {
+    display: 'flex',
+    '& .button--medium': {
+      fontSize: '14px',
+    },
+  },
 }));
 
 type DatabaseProps = {
@@ -115,7 +130,8 @@ type DatabaseProps = {
 };
 
 export default function Database(props: DatabaseProps): JSX.Element {
-  const classes = useStyles();
+  const { isMobile, isDesktop } = useDeviceInfo();
+  const classes = useStyles({ isMobile });
   const history = useHistory();
   const query = useQuery();
   const location = useStateLocation();
@@ -349,6 +365,29 @@ export default function Database(props: DatabaseProps): JSX.Element {
     }
   };
 
+  const getHeaderButtons = () => (
+    <>
+      <Button
+        id='edit-columns'
+        label={strings.ADD_COLUMNS}
+        onClick={onOpenEditColumnsModal}
+        priority='secondary'
+        type='passive'
+        size='medium'
+        className={classes.buttonSpc}
+      />
+      <Button
+        id='download-report'
+        label={strings.DOWNLOAD_AS_REPORT}
+        onClick={onDownloadReport}
+        priority='secondary'
+        type='passive'
+        size='medium'
+        className={classes.buttonSpc}
+      />
+    </>
+  );
+
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       {organization && (
@@ -375,27 +414,13 @@ export default function Database(props: DatabaseProps): JSX.Element {
           rightComponent={
             hasSeedBanks ? (
               <>
-                <Button
-                  id='edit-columns'
-                  label={strings.ADD_COLUMNS}
-                  onClick={onOpenEditColumnsModal}
-                  priority='secondary'
-                  type='passive'
-                  size='medium'
-                  className={classes.buttonSpc}
-                />
-                <Button
-                  id='download-report'
-                  label={strings.DOWNLOAD_AS_REPORT}
-                  onClick={onDownloadReport}
-                  priority='secondary'
-                  type='passive'
-                  size='medium'
-                  className={classes.buttonSpc}
-                />
-                {organization && (
-                  <Button label={strings.NEW_ACCESSION} onClick={goToNewAccession} size='medium' id='newAccession' />
-                )}
+                {isMobile ? null : getHeaderButtons()}
+                {organization &&
+                  (isMobile ? (
+                    <Button icon='plus' onClick={goToNewAccession} size='medium' id='newAccession' />
+                  ) : (
+                    <Button label={strings.NEW_ACCESSION} onClick={goToNewAccession} size='medium' id='newAccession' />
+                  ))}
               </>
             ) : undefined
           }
@@ -427,10 +452,10 @@ export default function Database(props: DatabaseProps): JSX.Element {
                             </p>
                           </div>
                           <Button
-                            className={classes.checkInButton}
+                            className={`${classes.checkInButton} ${isMobile ? 'mobile' : ''}`}
                             onClick={handleViewCollections}
                             id='viewCollections'
-                            label={strings.VIEW_COLLECTIONS}
+                            label={isDesktop ? strings.VIEW_COLLECTIONS : strings.VIEW}
                             priority='secondary'
                             type='passive'
                           />
@@ -439,6 +464,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
                     </Grid>
                   )}
                   <Grid item xs={12}>
+                    {isMobile === true && <div className={classes.headerButtonsContainer}>{getHeaderButtons()}</div>}
                     {searchResults && (
                       <Table
                         columns={displayColumnDetails}

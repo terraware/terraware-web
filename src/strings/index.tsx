@@ -271,6 +271,7 @@ const strings = new LocalizedStrings({
     OZ_OUNCES: 'oz (ounces)',
     GOT_IT: 'Got It!',
     VIEW_COLLECTIONS: 'View collections',
+    VIEW: 'View',
     BAGS_TOTAL: 'Bags Total',
     CHECKIN_BAGS: 'Check In Bags',
     VIEW_ACCESSION: 'View accession',

@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme: Theme) => ({
       marginLeft: theme.spacing(2),
     },
     '&.mobile': {
-      marginTop: theme.spacing(1),
+      marginBottom: theme.spacing(1),
     },
     color: theme.palette.common.white,
   },
@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   mobileButtons: {
     display: 'flex',
-    flexDirection: 'column',
+    flexDirection: 'column-reverse',
     width: '100%',
   },
 }));
@@ -81,6 +81,13 @@ export default function EditColumnsDialog(props: Props): JSX.Element {
     }
   };
 
+  const gridSize = () => {
+    if (isMobile) {
+      return 12;
+    }
+    return 4;
+  };
+
   return (
     <Dialog
       id='editColumnsDialog'
@@ -101,7 +108,7 @@ export default function EditColumnsDialog(props: Props): JSX.Element {
       <DialogContent>
         <Typography component='p'>{strings.TEMPLATES}</Typography>
         <Grid container>
-          <Grid item xs={4}>
+          <Grid item xs={gridSize()}>
             <Grid container>
               {searchPresets.map((p) => (
                 <Grid key={p.name} item xs={12}>
@@ -122,9 +129,9 @@ export default function EditColumnsDialog(props: Props): JSX.Element {
           <React.Fragment key={name}>
             <Divisor />
             <Typography component='p'>{name}</Typography>
-            <Grid container spacing={4}>
+            <Grid container spacing={isMobile ? 1 : 4}>
               {options.map((optionsColumn, index) => (
-                <Grid key={index} item xs={4}>
+                <Grid key={index} item xs={gridSize()}>
                   <Grid container>
                     {optionsColumn.map(({ key, disabled, name: oName }) => (
                       <Grid key={key} item xs={12}>
