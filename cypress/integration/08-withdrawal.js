@@ -455,16 +455,10 @@ describe('Withdrawal', () => {
       cy.wait('@summary');
 
       cy.get('#sessions-current').contains('11');
-      cy.get('#sessions-change').contains('267% since last week');
-      cy.get('#sessions-arrow-increase').should('exist');
 
       cy.get('#species-current').contains('4');
-      cy.get('#species-change').contains('100% since last week');
-      cy.get('#species-arrow-increase').should('exist');
 
       cy.get('#families-current').contains('1');
-      cy.get('#families-change').contains('0% since last week');
-      cy.get('#families-arrow-increase').should('exist');
 
       cy.get('#update-row-Pending').contains('0 seed collection');
       cy.get('#update-row-Processed').contains('0 accessions');
