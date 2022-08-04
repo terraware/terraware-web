@@ -103,7 +103,7 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
     if (isMobile) {
       return 12;
     }
-    return 4;
+    return 6;
   };
 
   return (
@@ -131,17 +131,6 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
                       id='species'
                       title={strings.SPECIES}
                       statistics={summary?.value?.species}
-                      loading={summary === undefined}
-                      error={errorOccurred}
-                    />
-                  </MainPaper>
-                </Grid>
-                <Grid item xs={cardGridSize()}>
-                  <MainPaper className={classes.paper}>
-                    <SummaryPaper
-                      id='families'
-                      title={strings.FAMILY}
-                      statistics={summary?.value?.families}
                       loading={summary === undefined}
                       error={errorOccurred}
                     />
