@@ -33,6 +33,7 @@ import { CircularProgress, Fab, Container, Grid, Typography, Theme } from '@mui/
 import { Close } from '@mui/icons-material';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
@@ -187,6 +188,14 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
   const [isCheckingIn, setIsCheckingIn] = useState(false);
   const [isCheckedIn, setIsCheckedIn] = useState(false);
   const seedBanks = organization ? getAllSeedBanks(organization) : [];
+  const { isMobile } = useDeviceInfo();
+
+  const gridSize = () => {
+    if (isMobile) {
+      return 12;
+    }
+    return 4;
+  };
 
   useEffect(() => {
     if (updating) {
@@ -332,7 +341,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
               setRecord={setRecord}
             />
           </Suspense>
-          <Grid item xs={4}>
+          <Grid item xs={gridSize()}>
             <TextField
               id='numberOfTrees'
               value={record.numberOfTrees}
@@ -345,8 +354,8 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
               disabled={isPendingCheckIn || isContributor}
             />
           </Grid>
-          <Grid item xs={4} />
-          <Grid item xs={4}>
+          {isMobile ? null : <Grid item xs={4} />}
+          <Grid item xs={gridSize()}>
             <TextField
               id='founderId'
               value={record.founderId}
@@ -355,7 +364,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
               disabled={isPendingCheckIn || isContributor}
             />
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={gridSize()}>
             <Dropdown
               id='sourcePlantOrigin'
               label={strings.WILD_OUTPLANT}
@@ -404,7 +413,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
               </Grid>
             }
           >
-            <Grid item xs={4}>
+            <Grid item xs={gridSize()}>
               {organization && (
                 <MainCollector
                   organizationId={organization.id!}
@@ -415,7 +424,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
               )}
             </Grid>
           </Suspense>
-          <Grid item xs={4}>
+          <Grid item xs={gridSize()}>
             <SecondaryCollectors
               id='secondaryCollectors'
               secondaryCollectors={record.secondaryCollectors}
@@ -426,7 +435,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
         </Grid>
         <Divisor />
         <Grid container spacing={4}>
-          <Grid item xs={4}>
+          <Grid item xs={gridSize()}>
             <TextField
               id='siteLocation'
               value={record.siteLocation}
@@ -435,7 +444,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
               disabled={isPendingCheckIn || isContributor}
             />
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={gridSize()}>
             <TextField
               id='landowner'
               value={record.landowner}
@@ -444,7 +453,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
               disabled={isPendingCheckIn || isContributor}
             />
           </Grid>
-          <Grid item xs={4} />
+          {isMobile ? null : <Grid item xs={4} />}
           <Grid item xs={12}>
             <TextArea
               id='environmentalNotes'
@@ -473,7 +482,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
         {!updating && <Note>{strings.NEW_ACCESSION_INFO}</Note>}
         {updating && (
           <Grid container spacing={4}>
-            <Grid item xs={3}>
+            <Grid item xs={isMobile ? 12 : 3}>
               <Typography component='p' variant='body2' className={classes.listItem}>
                 {strings.BAG_IDS}
               </Typography>
@@ -483,7 +492,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
                 </Typography>
               ))}
             </Grid>
-            <Grid item xs={5}>
+            <Grid item xs={isMobile ? 12 : 5}>
               <Typography component='p' variant='body2' className={classes.listItem}>
                 {strings.PHOTOS}
               </Typography>
@@ -500,7 +509,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
                 </Link>
               ))}
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={isMobile ? 12 : 4}>
               <Typography component='p' variant='body2' className={classes.listItem}>
                 {strings.GEOLOCATIONS}
               </Typography>
@@ -547,7 +556,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
                 isSaving={isSaving}
                 isSaved={isSaved}
                 nextStepTo='processing-drying'
-                nextStep={strings.NEXT_PROCESSING_AND_DRYING}
+                nextStep={isMobile ? strings.NEXT : strings.NEXT_PROCESSING_AND_DRYING}
                 onSubmitHandler={onSubmitHandler}
                 handleCancel={handleCancel}
               />

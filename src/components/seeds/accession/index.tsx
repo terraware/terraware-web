@@ -21,6 +21,7 @@ import Withdrawal from '../withdrawal';
 import DetailsMenu from './DetailsMenu';
 import GerminationMenu from './GerminationMenu';
 import AccessionPageHeader from './PageHeader';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
@@ -62,6 +63,7 @@ function Content({ organization }: AccessionPageProps): JSX.Element {
   const [accession, setAccession] = useState<Accession>();
   const setSnackbar = useSetRecoilState(snackbarAtom);
   const history = useHistory();
+  const { isMobile } = useDeviceInfo();
 
   const reloadAccession = useCallback(() => {
     const populateAccession = async () => {
@@ -128,12 +130,12 @@ function Content({ organization }: AccessionPageProps): JSX.Element {
       <AccessionPageHeader accession={accession} />
       <Container maxWidth={false} className={classes.mainContainer}>
         <Grid container spacing={3}>
-          <Grid item xs={3}>
+          <Grid item xs={isMobile ? 12 : 3}>
             <DetailsMenu state={accession.state} />
             <div className={classes.verticalSpacing} />
             <GerminationMenu accession={accession} />
           </Grid>
-          <Grid item xs={9}>
+          <Grid item xs={isMobile ? 12 : 9}>
             <Switch>
               <Route exact path={APP_PATHS.ACCESSIONS_ITEM_SEED_COLLECTION}>
                 <AccessionForm

@@ -27,6 +27,7 @@ import TextField from '../../common/TextField';
 import { FieldError } from '../newAccession';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const useStyles = makeStyles((theme: Theme) => ({
   submit: {
@@ -69,6 +70,7 @@ export default function NewTestDialog(props: Props): JSX.Element {
   const [seedsRemaining, setSeedsRemaining] = React.useState(0);
   const [viability, setSeedsViability] = React.useState('');
   const [unit, setUnit] = React.useState('');
+  const { isMobile } = useDeviceInfo();
 
   React.useEffect(() => {
     setRecord(initTest(props.value));
@@ -210,6 +212,13 @@ export default function NewTestDialog(props: Props): JSX.Element {
     });
   };
 
+  const gridSize = () => {
+    if (isMobile) {
+      return 12;
+    }
+    return 6;
+  };
+
   return (
     <Dialog onClose={handleCancel} disableEscapeKeyDown open={open} maxWidth='sm'>
       <DialogTitle>
@@ -219,7 +228,7 @@ export default function NewTestDialog(props: Props): JSX.Element {
       <DialogContent dividers>
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <Grid container spacing={4}>
-            <Grid item xs={6}>
+            <Grid item xs={gridSize()}>
               <DatePicker
                 id='startDate'
                 value={record?.startDate}
@@ -231,7 +240,7 @@ export default function NewTestDialog(props: Props): JSX.Element {
                 {strings.SCHEDULE_DATE_INFO}
               </Typography>
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={gridSize()}>
               <Dropdown
                 id='seedType'
                 label={strings.SEED_TYPE}
@@ -246,7 +255,7 @@ export default function NewTestDialog(props: Props): JSX.Element {
                 onChange={onChange}
               />
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={gridSize()}>
               <Dropdown
                 id='substrate'
                 label={strings.SUBSTRATE}
@@ -266,7 +275,7 @@ export default function NewTestDialog(props: Props): JSX.Element {
                 onChange={onChange}
               />
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={gridSize()}>
               <Dropdown
                 id='treatment'
                 label='Treatment'
@@ -293,7 +302,7 @@ export default function NewTestDialog(props: Props): JSX.Element {
                 onChange={onChange}
               />
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={gridSize()}>
               <TextField
                 id='seedsSown'
                 value={record?.seedsSown}
@@ -310,7 +319,7 @@ export default function NewTestDialog(props: Props): JSX.Element {
               />
             </Grid>
             {unit === 'count' && (
-              <Grid item xs={6}>
+              <Grid item xs={gridSize()}>
                 <TextField
                   id='seedsRemaining'
                   value={seedsRemaining}
@@ -322,7 +331,7 @@ export default function NewTestDialog(props: Props): JSX.Element {
               </Grid>
             )}
             {unit === 'weight' && (
-              <Grid item xs={6}>
+              <Grid item xs={gridSize()}>
                 <TextField
                   id='quantity'
                   value={record.remainingQuantity?.quantity}
@@ -346,7 +355,7 @@ export default function NewTestDialog(props: Props): JSX.Element {
                 />
               </Grid>
             )}
-            <Grid item xs={6}>
+            <Grid item xs={gridSize()}>
               <TextField
                 id='seedsGerminated'
                 value={seedsGerminated}
@@ -360,7 +369,7 @@ export default function NewTestDialog(props: Props): JSX.Element {
                 }
               />
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={gridSize()}>
               <DatePicker
                 id='recordingDate'
                 value={recordingDate}
@@ -369,7 +378,7 @@ export default function NewTestDialog(props: Props): JSX.Element {
                 aria-label='Recording date'
               />
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={gridSize()}>
               <TextField
                 id='viability'
                 value={viability}
@@ -388,7 +397,7 @@ export default function NewTestDialog(props: Props): JSX.Element {
             <Grid item xs={12}>
               <TextArea id='notes' value={record?.notes} onChange={onChange} label={strings.NOTES} />
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={gridSize()}>
               <TextField
                 id='staffResponsible'
                 value={record?.staffResponsible}
