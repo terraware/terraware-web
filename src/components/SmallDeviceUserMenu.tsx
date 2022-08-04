@@ -9,6 +9,7 @@ import {
   Popper,
   Slide,
   Typography,
+  Theme,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useState } from 'react';
@@ -22,7 +23,7 @@ import AddNewOrganizationModal from './AddNewOrganizationModal';
 import { ReactComponent as AvatarIcon } from './avatar-default.svg';
 import Icon from './common/icon/Icon';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme: Theme) => ({
   icon: {
     width: '32px',
     height: '32px',
@@ -70,12 +71,18 @@ const useStyles = makeStyles(() => ({
   orgsList: {
     overflow: 'auto',
   },
+  divider: {
+    '&.MuiDivider-root': {
+      marginTop: theme.spacing(2),
+      marginBottom: theme.spacing(2),
+    },
+  },
   avatarButton: {
     minWidth: 'auto',
   },
 }));
 
-type SmallDeviceUserMenuNavBarProps = {
+type SmallDeviceUserMenuProps = {
   organizations?: ServerOrganization[];
   selectedOrganization?: ServerOrganization;
   setSelectedOrganization: React.Dispatch<React.SetStateAction<ServerOrganization | undefined>>;
@@ -92,7 +99,7 @@ export default function SmallDeviceUserMenu({
   onLogout,
   user,
   hasOrganizations,
-}: SmallDeviceUserMenuNavBarProps): JSX.Element | null {
+}: SmallDeviceUserMenuProps): JSX.Element | null {
   const classes = useStyles();
   const history = useHistory();
   const [newOrganizationModalOpened, setNewOrganizationModalOpened] = useState(false);
@@ -198,7 +205,7 @@ export default function SmallDeviceUserMenu({
                   >
                     {strings.LOG_OUT}
                   </MenuItem>
-                  {hasOrganizations ? <Divider sx={{ margin: '16px 0' }} /> : null}
+                  {hasOrganizations ? <Divider className={classes.divider} sx={{ margin: '16px 0' }} /> : null}
                   {hasOrganizations ? (
                     <div className={classes.orgsList}>
                       {organizations?.map((org, index) => {
