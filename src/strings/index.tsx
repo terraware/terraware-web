@@ -36,7 +36,6 @@ const strings = new LocalizedStrings({
     TO: 'To',
     APPLY_FILTERS: 'Apply Filters',
     CLEAR_FILTERS: 'Clear Filters',
-    GROWTH_SINCE_LAST_WEEK: '{0}% since last week',
     LOADING: 'Loading...',
     SEEDS: 'Seeds',
     ACCESSIONS: 'Accessions',
