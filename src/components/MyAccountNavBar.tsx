@@ -62,6 +62,9 @@ const useStyles = makeStyles(() => ({
   checkmarkIcon: {
     marginLeft: 'auto',
   },
+  avatarButton: {
+    minWidth: 'auto',
+  },
 }));
 
 type MyAccountNavBarNavBarProps = {
@@ -134,7 +137,7 @@ export default function MyAccountNavBar({
         onCancel={onCloseCreateOrganizationModal}
         reloadOrganizationData={reloadOrganizationData}
       />
-      <Button ref={anchorRef} id='composition-button' onClick={handleToggle}>
+      <Button ref={anchorRef} id='composition-button' onClick={handleToggle} className={classes.avatarButton}>
         <AvatarIcon className={classes.icon} />
       </Button>
       <div className='blurred'>
