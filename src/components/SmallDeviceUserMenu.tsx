@@ -9,6 +9,7 @@ import {
   Popper,
   Slide,
   Typography,
+  Theme,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useState } from 'react';
@@ -22,7 +23,7 @@ import AddNewOrganizationModal from './AddNewOrganizationModal';
 import { ReactComponent as AvatarIcon } from './avatar-default.svg';
 import Icon from './common/icon/Icon';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme: Theme) => ({
   icon: {
     width: '32px',
     height: '32px',
@@ -62,12 +63,26 @@ const useStyles = makeStyles(() => ({
   checkmarkIcon: {
     marginLeft: 'auto',
   },
+  menuList: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+  },
+  orgsList: {
+    overflow: 'auto',
+  },
+  divider: {
+    '&.MuiDivider-root': {
+      marginTop: theme.spacing(2),
+      marginBottom: theme.spacing(2),
+    },
+  },
   avatarButton: {
     minWidth: 'auto',
   },
 }));
 
-type MyAccountNavBarNavBarProps = {
+type SmallDeviceUserMenuProps = {
   organizations?: ServerOrganization[];
   selectedOrganization?: ServerOrganization;
   setSelectedOrganization: React.Dispatch<React.SetStateAction<ServerOrganization | undefined>>;
@@ -76,7 +91,7 @@ type MyAccountNavBarNavBarProps = {
   user?: User;
   hasOrganizations?: boolean;
 };
-export default function MyAccountNavBar({
+export default function SmallDeviceUserMenu({
   organizations,
   selectedOrganization,
   setSelectedOrganization,
@@ -84,7 +99,7 @@ export default function MyAccountNavBar({
   onLogout,
   user,
   hasOrganizations,
-}: MyAccountNavBarNavBarProps): JSX.Element | null {
+}: SmallDeviceUserMenuProps): JSX.Element | null {
   const classes = useStyles();
   const history = useHistory();
   const [newOrganizationModalOpened, setNewOrganizationModalOpened] = useState(false);
@@ -156,6 +171,7 @@ export default function MyAccountNavBar({
                   id='composition-menu'
                   aria-labelledby='composition-button'
                   sx={{ padding: '24px' }}
+                  className={classes.menuList}
                 >
                   <Box sx={{ display: 'flex' }}>
                     <Box sx={{ display: 'flex' }}>
@@ -189,9 +205,9 @@ export default function MyAccountNavBar({
                   >
                     {strings.LOG_OUT}
                   </MenuItem>
+                  {hasOrganizations ? <Divider className={classes.divider} sx={{ margin: '16px 0' }} /> : null}
                   {hasOrganizations ? (
-                    <div>
-                      <Divider sx={{ margin: '16px 0' }} />
+                    <div className={classes.orgsList}>
                       {organizations?.map((org, index) => {
                         return (
                           <MenuItem
@@ -215,6 +231,10 @@ export default function MyAccountNavBar({
                           </MenuItem>
                         );
                       })}
+                    </div>
+                  ) : null}
+                  {hasOrganizations ? (
+                    <>
                       <MenuItem className={classes.menuItem}> --- </MenuItem>
                       <MenuItem
                         onClick={(e) => {
@@ -225,7 +245,7 @@ export default function MyAccountNavBar({
                       >
                         {strings.CREATE_NEW_ORGANIZATION}
                       </MenuItem>
-                    </div>
+                    </>
                   ) : null}
                 </MenuList>
               </ClickAwayListener>
