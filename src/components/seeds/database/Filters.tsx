@@ -12,17 +12,25 @@ import MultipleSelection from './filters/FilterMultipleSelection';
 import FilterNumberRange from './filters/FilterNumberRange';
 import Search from './filters/FilterSearch';
 import SingleSelection from './filters/FilterSingleSelection';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+
+interface StyleProps {
+  isMobile?: boolean;
+  isDesktop?: boolean;
+}
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
     margin: theme.spacing(2, 0, 0, 0),
     padding: theme.spacing(0),
     display: 'flex',
+    flexDirection: (props: StyleProps) => (props.isMobile ? 'column' : 'row'),
   },
   pill: {
     margin: theme.spacing(0, 1.5, 0, 0),
     height: '32px',
     display: 'inline-block',
+    marginBottom: (props: StyleProps) => (props.isDesktop ? 0 : theme.spacing(1)),
   },
   stateBox: {
     width: '264px',
@@ -48,7 +56,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   filtersContainer: {
     minHeight: '32px',
-    flex: '8 0 600px',
+    flex: (props: StyleProps) => (props.isMobile ? '1 0' : '8 0 600px'),
   },
 }));
 
@@ -61,7 +69,8 @@ interface Props {
 }
 
 export default function Filters(props: Props): JSX.Element {
-  const classes = useStyles();
+  const { isMobile, isDesktop } = useDeviceInfo();
+  const classes = useStyles({ isMobile, isDesktop });
   const [popover, setPopover] = React.useState<FilterPopover>();
 
   const onChange = (col: DatabaseColumn, filter: SearchNodePayload) => {
@@ -218,7 +227,7 @@ export function SimplePopover({
   onFilterChange: filterChange,
   onClose,
 }: ChipPopoverProps): JSX.Element {
-  const classes = useStyles();
+  const classes = useStyles({});
 
   const clearFilter = () => {
     if (popover) {

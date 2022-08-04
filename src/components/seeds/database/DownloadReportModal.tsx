@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme: Theme) => ({
       marginLeft: theme.spacing(2),
     },
     '&.mobile': {
-      marginTop: theme.spacing(1),
+      marginBottom: theme.spacing(1),
     },
     color: theme.palette.common.white,
   },
@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   mobileButtons: {
     display: 'flex',
-    flexDirection: 'column',
+    flexDirection: 'column-reverse',
     width: '100%',
   },
 }));
