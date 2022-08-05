@@ -327,7 +327,7 @@ describe('Lab', () => {
       cy.visit('/seeds-dashboard');
       cy.wait('@summary');
 
-      cy.get('#sessions-current').contains('8');
+      cy.get('#sessions-current').contains('7');
 
       cy.get('#species-current').contains('4');
 

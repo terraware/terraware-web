@@ -202,7 +202,7 @@ describe('Nursery', () => {
       cy.visit('/seeds-dashboard');
       cy.wait('@summary');
 
-      cy.get('#sessions-current').contains('10');
+      cy.get('#sessions-current').contains('8');
 
       cy.get('#species-current').contains('4');
 

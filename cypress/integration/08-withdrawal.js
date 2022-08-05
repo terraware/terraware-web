@@ -454,7 +454,7 @@ describe('Withdrawal', () => {
       cy.visit('/seeds-dashboard');
       cy.wait('@summary');
 
-      cy.get('#sessions-current').contains('11');
+      cy.get('#sessions-current').contains('9');
 
       cy.get('#species-current').contains('4');
 
