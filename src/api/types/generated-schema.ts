@@ -1081,7 +1081,6 @@ export interface components {
     SummaryResponse: {
       activeAccessions: components["schemas"]["SummaryStatistic"] | number;
       species: components["schemas"]["SummaryStatistic"] | number;
-      families: components["schemas"]["SummaryStatistic"];
       /** Number of accessions in Pending state overdue for processing */
       overduePendingAccessions: number;
       /** Number of accessions in Processed state overdue for drying */

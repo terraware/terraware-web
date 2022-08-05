@@ -4,10 +4,7 @@ import addQueryParams from '../helpers/addQueryParams';
 
 const SUMMARY_ENDPOINT = '/api/v1/seedbank/summary';
 export type SeedbankSummary = paths[typeof SUMMARY_ENDPOINT]['get']['responses'][200]['content']['application/json'];
-export type SummaryStatistic =
-  | SeedbankSummary['activeAccessions']
-  | SeedbankSummary['species']
-  | SeedbankSummary['families'];
+export type SummaryStatistic = SeedbankSummary['activeAccessions'] | SeedbankSummary['species'];
 type SeedBankSummaryQuery = paths[typeof SUMMARY_ENDPOINT]['get']['parameters']['query'];
 
 /*
