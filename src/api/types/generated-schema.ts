@@ -1079,9 +1079,8 @@ export interface components {
     SuccessOrError: "ok" | "error";
     /** Summary of important statistics about the seed bank for the Summary page. */
     SummaryResponse: {
-      activeAccessions: components["schemas"]["SummaryStatistic"];
-      species: components["schemas"]["SummaryStatistic"];
-      families: components["schemas"]["SummaryStatistic"];
+      activeAccessions: components["schemas"]["SummaryStatistic"] | number;
+      species: components["schemas"]["SummaryStatistic"] | number;
       /** Number of accessions in Pending state overdue for processing */
       overduePendingAccessions: number;
       /** Number of accessions in Processed state overdue for drying */
