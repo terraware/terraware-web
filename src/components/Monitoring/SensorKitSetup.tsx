@@ -23,6 +23,9 @@ interface StyleProps {
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
+  mobileSetupContainer: {
+    padding: 0,
+  },
   setupInfo: {
     textAlign: 'center',
     lineHeight: '28px',
@@ -147,7 +150,7 @@ export default function SensorKitSetup(props: SensorKitSetupProps): JSX.Element 
   }, [seedBank.id]);
 
   return (
-    <Container maxWidth={false}>
+    <Container maxWidth={false} className={isMobile ? classes.mobileSetupContainer : ''}>
       <div className={classes.setupInfo}>
         <div className={classes.setupTitle}>{strings.SENSOR_KIT_SET_UP_TITLE} &#127881;</div>
         <div>{strings.SENSOR_KIT_SET_UP_DESCRIPTION}</div>
