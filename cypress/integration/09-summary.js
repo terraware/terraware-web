@@ -9,7 +9,7 @@ describe.skip('Summary page', () => {
   });
 
   it('display endpoint result', () => {
-    cy.get('#sessions-current').contains('11');
+    cy.get('#sessions-current').contains('9');
 
     cy.get('#species-current').contains('4');
 

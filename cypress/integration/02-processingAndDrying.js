@@ -31,10 +31,6 @@ describe('Processing and Drying', () => {
     cy.get('#quantity').type(300);
   });
 
-  it('should add check nursery', () => {
-    cy.get('#check-Nursery').click();
-  });
-
   it('should add dates', () => {
     cy.get('#dryingStartDate').type('2021-01-01');
     cy.get('#dryingEndDate').type('2021-01-01');
@@ -58,7 +54,6 @@ describe('Processing and Drying', () => {
   it('should display processing and drying information after saving', () => {
     cy.get('#processingMethod + input').should('have.value', 'Count');
     cy.get('#quantity').should('have.value', '300');
-    cy.get('#check-Nursery').should('have.checked', 'true');
     cy.get('#dryingStartDate').should('have.value', '2021-01-01');
     cy.get('#dryingEndDate').should('have.value', '2021-01-01');
     cy.get('#dryingMoveDate').should('have.value', '2021-01-01');
