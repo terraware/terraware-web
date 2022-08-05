@@ -18,7 +18,6 @@ describe('Storage', () => {
     cy.get('#processingMethod').click();
     cy.get('#Count').click();
     cy.get('#quantity').type(10);
-    cy.get('#check-Nursery').click();
     cy.get('#dryingStartDate').type('2021-01-01');
     cy.get('#dryingEndDate').type('2021-01-01');
     cy.intercept('GET', 'api/v1/seedbank/accessions/*').as('getAccession');

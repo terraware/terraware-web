@@ -260,7 +260,7 @@ describe('Database', () => {
       cy.wait('@values2');
 
       cy.get('#filter-list-active').should('not.exist');
-      cy.get('#subtitle').should('contain', '11 total');
+      cy.get('#subtitle').should('contain', '9 total');
     });
 
     it('Should clear Status filter', () => {
@@ -275,7 +275,7 @@ describe('Database', () => {
       cy.wait('@values');
 
       cy.get('#filter-list-active').should('not.exist');
-      cy.get('#subtitle').should('contain', '13 total');
+      cy.get('#subtitle').should('contain', '11 total');
     });
 
     it('Should filter by Processing state', () => {
@@ -304,7 +304,7 @@ describe('Database', () => {
       cy.wait('@values');
 
       cy.get('#filter-list-state').should('not.exist');
-      cy.get('#subtitle').should('contain', '13 total');
+      cy.get('#subtitle').should('contain', '11 total');
     });
 
     it('Should search by species', () => {
@@ -334,7 +334,7 @@ describe('Database', () => {
       cy.wait('@values');
 
       cy.get('#speciesName').should('not.exist');
-      cy.get('#subtitle').should('contain', '13 total');
+      cy.get('#subtitle').should('contain', '11 total');
     });
 
     it('Should search by Received on', () => {
@@ -362,7 +362,7 @@ describe('Database', () => {
       cy.wait('@search');
       cy.wait('@values');
 
-      cy.get('#subtitle').contains('13 total');
+      cy.get('#subtitle').contains('11 total');
     });
 
     it('Should download report', () => {
@@ -423,7 +423,7 @@ describe('Database', () => {
       cy.wait('@values');
 
       cy.get('#seedCount').should('not.exist');
-      cy.get('#subtitle').should('contain', '9 total');
+      cy.get('#subtitle').should('contain', '7 total');
 
       cy.get('#row1-remainingQuantity').should('contain', '10 Seeds');
       cy.get('#row2-remainingQuantity').should('contain', '');
@@ -468,7 +468,7 @@ describe('Database', () => {
       cy.wait('@search');
       cy.wait('@values');
 
-      cy.get('#subtitle').contains('13 total');
+      cy.get('#subtitle').contains('11 total');
     });
 
     it('Should search by QuantityFfSeeds and SeedsRemaining - SeedCount', () => {
@@ -540,7 +540,7 @@ describe('Database', () => {
       cy.wait('@search');
       cy.wait('@values');
 
-      cy.get('#subtitle').contains('13 total');
+      cy.get('#subtitle').contains('11 total');
     });
 
     it('Should combine filters', () => {
@@ -563,7 +563,7 @@ describe('Database', () => {
       cy.wait('@values');
 
       cy.get('#filter-list-active').should('not.exist');
-      cy.get('#subtitle').should('contain', '11 total');
+      cy.get('#subtitle').should('contain', '9 total');
 
       // re-checking state list
       cy.get('#filter-state').click();
@@ -616,8 +616,8 @@ describe('Database', () => {
       cy.get('#table-header-speciesName').click({ scrollBehavior: false });
       cy.wait('@search2');
 
-      cy.get('#row13-speciesName').contains('Other Dogwood');
-      cy.get('#row10-speciesName').contains('Kousa');
+      cy.get('#row11-speciesName').contains('Other Dogwood');
+      cy.get('#row8-speciesName').contains('Kousa');
     });
 
     it('Should be able to sort by state', () => {
@@ -705,8 +705,8 @@ describe('Database', () => {
     it('should handle the Pending navigation', () => {
       cy.visit('/accessions');
 
-      cy.get('#row10-state').contains('Pending');
-      cy.get('#row3')
+      cy.get('#row8-state').contains('Pending');
+      cy.get('#row8')
         .click()
         .url()
         .should('match', /accessions\/[A-Za-z0-9]+\/seed-collection/);
@@ -715,8 +715,8 @@ describe('Database', () => {
     it('should handle the Processing navigation', () => {
       cy.visit('/accessions');
 
-      cy.get('#row12-state').contains('Processing');
-      cy.get('#row12')
+      cy.get('#row10-state').contains('Processing');
+      cy.get('#row10')
         .click()
         .url()
         .should('match', /accessions\/[A-Za-z0-9]+\/processing-drying/);
@@ -735,8 +735,8 @@ describe('Database', () => {
     it('should handle the Withdrawn navigation', () => {
       cy.visit('/accessions');
 
-      cy.get('#row8-state').contains('Withdrawn');
-      cy.get('#row8')
+      cy.get('#row6-state').contains('Withdrawn');
+      cy.get('#row6')
         .click()
         .url()
         .should('match', /accessions\/[A-Za-z0-9]+\/withdrawal/);

@@ -6,7 +6,6 @@ import MainPaper from 'src/components/MainPaper';
 import PanelTitle from 'src/components/PanelTitle';
 import strings from 'src/strings';
 import useForm from 'src/utils/useForm';
-import Checkbox from '../../common/Checkbox';
 import DatePicker from '../../common/DatePicker';
 import Divisor from '../../common/Divisor';
 import Dropdown from '../../common/Dropdown';
@@ -153,35 +152,6 @@ export default function ProcessingAndDrying({ accession, onSubmit, organization 
     });
   };
 
-  type ViabilityTestType = 'Lab' | 'Nursery';
-
-  const onChangeViabilityTestType = (id: string, value: unknown) => {
-    let viabilityTestTypes = record.viabilityTestTypes ? [...record.viabilityTestTypes] : undefined;
-    if (viabilityTestTypes) {
-      const index = viabilityTestTypes.indexOf(id as ViabilityTestType, 0);
-      if (index !== -1 && value === false) {
-        viabilityTestTypes.splice(index, 1);
-      }
-
-      if (index === -1 && value === true) {
-        viabilityTestTypes.push(id as ViabilityTestType);
-      }
-    } else {
-      if (value === true) {
-        viabilityTestTypes = [id as ViabilityTestType];
-      }
-    }
-    setRecord((previousRecord: Accession): Accession => {
-      return { ...previousRecord, viabilityTestTypes };
-    });
-  };
-
-  const isChecked = (id: ViabilityTestType) => {
-    const viabilityTestTypes = record.viabilityTestTypes;
-
-    return viabilityTestTypes?.includes(id);
-  };
-
   const getErrorText = (id: string) => {
     const error = errors.find((_error) => _error.id === id);
 
@@ -326,35 +296,6 @@ export default function ProcessingAndDrying({ accession, onSubmit, organization 
               </Grid>
             </>
           )}
-        </Grid>
-        <Divisor />
-        <Grid container spacing={4}>
-          <Grid item xs={12}>
-            <Typography component='p' variant='body1'>
-              {strings.VIABILITY_TEST_TYPES}
-            </Typography>
-            <Typography component='p' variant='body2'>
-              {strings.VIABILITY_TEST_TYPES_INFO}
-            </Typography>
-          </Grid>
-        </Grid>
-        <Grid item xs={12}>
-          <Checkbox
-            id='Nursery'
-            name='nurseryGermination'
-            label={strings.NURSERY_GERMINATION}
-            value={isChecked('Nursery' as ViabilityTestType)}
-            onChange={onChangeViabilityTestType}
-            disabled={isContributor}
-          />
-          <Checkbox
-            id='Lab'
-            name='labGermination'
-            label={strings.LAB_GERMINATION}
-            value={isChecked('Lab' as ViabilityTestType)}
-            onChange={onChangeViabilityTestType}
-            disabled={isContributor}
-          />
         </Grid>
         <Divisor />
         <Grid container spacing={4}>

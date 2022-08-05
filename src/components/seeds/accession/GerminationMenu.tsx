@@ -28,17 +28,9 @@ export default function GerminationMenu({ accession }: Props): JSX.Element | nul
   const classes = useStyles();
   const { accessionId } = useParams<{ accessionId: string }>();
 
-  const hasNurseryGerminationTest = accession.viabilityTestTypes?.includes('Nursery');
-
-  const hasLabGerminationTest = accession.viabilityTestTypes?.includes('Lab');
-
   const TypographyClass = (route: string) => (useRouteMatch(route) ? classes.bold : classes.link);
   const location = useStateLocation();
   const history = useHistory();
-
-  if (!accession.viabilityTestTypes) {
-    return null;
-  }
 
   if (history.location.pathname.endsWith(accessionId)) {
     return null;
@@ -48,36 +40,32 @@ export default function GerminationMenu({ accession }: Props): JSX.Element | nul
     <MainPaper>
       <PanelTitle title={strings.VIABILITY_TESTING} />
       <Divisor mt={1} />
-      {hasNurseryGerminationTest && (
-        <Link
-          id='nursery'
-          component={RouterLink}
-          to={{
-            pathname: APP_PATHS.ACCESSIONS_ITEM_NURSERY.replace(':accessionId', accessionId),
-            state: {
-              from: location.state?.from ?? '',
-            },
-          }}
-        >
-          <Typography component='p' variant='body1' className={TypographyClass(APP_PATHS.ACCESSIONS_ITEM_NURSERY)}>
-            {strings.NURSERY}
-          </Typography>
-        </Link>
-      )}
-      {hasLabGerminationTest && (
-        <Link
-          id='lab'
-          component={RouterLink}
-          to={{
-            pathname: APP_PATHS.ACCESSIONS_ITEM_LAB.replace(':accessionId', accessionId),
-            state: { from: location.state?.from ?? '' },
-          }}
-        >
-          <Typography component='p' variant='body1' className={TypographyClass(APP_PATHS.ACCESSIONS_ITEM_LAB)}>
-            {strings.LAB}
-          </Typography>
-        </Link>
-      )}
+      <Link
+        id='nursery'
+        component={RouterLink}
+        to={{
+          pathname: APP_PATHS.ACCESSIONS_ITEM_NURSERY.replace(':accessionId', accessionId),
+          state: {
+            from: location.state?.from ?? '',
+          },
+        }}
+      >
+        <Typography component='p' variant='body1' className={TypographyClass(APP_PATHS.ACCESSIONS_ITEM_NURSERY)}>
+          {strings.NURSERY}
+        </Typography>
+      </Link>
+      <Link
+        id='lab'
+        component={RouterLink}
+        to={{
+          pathname: APP_PATHS.ACCESSIONS_ITEM_LAB.replace(':accessionId', accessionId),
+          state: { from: location.state?.from ?? '' },
+        }}
+      >
+        <Typography component='p' variant='body1' className={TypographyClass(APP_PATHS.ACCESSIONS_ITEM_LAB)}>
+          {strings.LAB}
+        </Typography>
+      </Link>
     </MainPaper>
   );
 }
