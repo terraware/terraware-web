@@ -1,19 +1,4 @@
 describe('Lab', () => {
-  it('should not create Lab menu if not selecting any test', () => {
-    cy.visit('/accessions');
-    cy.get('#newAccession').click();
-    cy.get('#seedBank').click();
-    cy.get('ul')
-      .children()
-      .each(($el, index) => {
-        if (index === 0) $el.click();
-      });
-    cy.get('#select-seed-bank').click().url().should('contain', '/accessions/new');
-    cy.get('#saveAccession').click();
-    cy.get('#snackbar').contains('Accession saved');
-
-    cy.get('#lab').should('not.exist');
-  });
   it('should create the accession with lab test and navigate to lab section', () => {
     cy.visit('/accessions');
     cy.get('#newAccession').click();
@@ -29,7 +14,6 @@ describe('Lab', () => {
     cy.get('#checkIn').click();
 
     cy.get('#menu-processing-drying').click();
-    cy.get('#Lab').click();
     cy.get('#quantity').type('1000');
 
     cy.intercept('GET', 'api/v1/seedbank/accessions/*').as('getAccession');
