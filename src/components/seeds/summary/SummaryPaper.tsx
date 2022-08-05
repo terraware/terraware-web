@@ -22,7 +22,7 @@ export default function SummaryPaper({ id, title, statistics, loading, error }: 
       {statistics && (
         <>
           <Typography id={`${id}-current`} component='p' variant='h4'>
-            {statistics.current}
+            {typeof statistics === 'object' ? statistics.current : statistics}
           </Typography>
         </>
       )}
