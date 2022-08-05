@@ -18,6 +18,10 @@ import { useHistory } from 'react-router';
 import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
+interface StyleProps {
+  isMobile: boolean;
+}
+
 const useStyles = makeStyles((theme: Theme) => ({
   mainModal: {
     '& .MuiDialog-scrollPaper': {
@@ -34,14 +38,15 @@ const useStyles = makeStyles((theme: Theme) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingLeft: theme.spacing(2),
-    paddingTop: theme.spacing(2),
-    paddingBottom: theme.spacing(3),
+    padding: (props: StyleProps) => (props.isMobile ? `${theme.spacing(1)} ${theme.spacing(2)}` : theme.spacing(2)),
+    flexDirection: (props: StyleProps) => (props.isMobile ? 'column-reverse' : 'row'),
+    '& .button--medium': {
+      width: (props: StyleProps) => (props.isMobile ? '100%' : 'auto'),
+      marginTop: (props: StyleProps) => (props.isMobile ? theme.spacing(1) : 0),
+    },
   },
   paper: {
-    '&:not(.mobile)': {
-      minWidth: '515px',
-    },
+    minWidth: (props: StyleProps) => (props.isMobile ? 'auto' : '515px'),
   },
   container: {
     border: `1px solid ${theme.palette.grey[400]}`,
@@ -56,7 +61,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     borderWidth: 1,
   },
   spacing: {
-    marginRight: theme.spacing(2),
+    marginRight: (props: StyleProps) => (props.isMobile ? 0 : theme.spacing(2)),
   },
   content: {
     overflow: 'visible',
@@ -75,7 +80,8 @@ export type AddNewOrganizationModalProps = {
 };
 
 export default function AddNewOrganizationModal(props: AddNewOrganizationModalProps): JSX.Element {
-  const classes = useStyles();
+  const { isMobile } = useDeviceInfo();
+  const classes = useStyles({ isMobile });
   const history = useHistory();
   const { onCancel, open, reloadOrganizationData } = props;
   const setPageSnackbar = useSetRecoilState(snackbarAtoms.page);
@@ -88,7 +94,6 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
     role: 'Owner',
     totalUsers: 0,
   });
-  const { isMobile } = useDeviceInfo();
 
   useEffect(() => {
     let cancel = false;
@@ -192,7 +197,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
       maxWidth='md'
       className={classes.mainModal}
       open={open}
-      classes={{ paper: `${classes.paper} ${isMobile ? 'mobile' : ''}` }}
+      classes={{ paper: classes.paper }}
     >
       <DialogTitle className={classes.title}>
         <Typography variant='h6'>{strings.ADD_NEW_ORGANIZATION}</Typography>
@@ -225,6 +230,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
             onChange={onChangeCountry}
             options={countries?.map((country) => country.name)}
             selectedValue={getSelectedCountry()?.name}
+            fullWidth
           />
         </Grid>
         {getSelectedCountry()?.subdivisions && (
@@ -235,6 +241,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
               onChange={onChangeSubdivision}
               options={getSelectedCountry()?.subdivisions.map((subdivision) => subdivision.name)}
               selectedValue={getSelectedSubdivision()?.name}
+              fullWidth
             />
           </Grid>
         )}
