@@ -101,7 +101,7 @@ export default function App() {
   const query = useQuery();
   const location = useStateLocation();
   const [selectedOrganization, setSelectedOrganization] = useState<ServerOrganization>();
-  const [preferencesOrg, setPreferencesOrg] = useState<ServerOrganization>();
+  const [preferencesOrg, setPreferencesOrg] = useState<{ [key: string]: unknown }>();
   const [notifications, setNotifications] = useState<Notifications>();
 
   // seedSearchCriteria describes which criteria to apply when searching accession data.
@@ -176,9 +176,8 @@ export default function App() {
   useEffect(() => {
     const getUserPreferences = async () => {
       const response = await getPreferences();
-      if (organizations && response.preferences && response.preferences.lastVisitedOrg) {
-        const orgToUse = organizations?.find((org) => org.id === response.preferences?.lastVisitedOrg);
-        setPreferencesOrg(orgToUse);
+      if (organizations && response.requestSucceeded) {
+        setPreferencesOrg(response.preferences);
       }
     };
     getUserPreferences();
@@ -190,13 +189,13 @@ export default function App() {
       const querySelectionOrg = organizationId && organizations.find((org) => org.id === parseInt(organizationId, 10));
       setSelectedOrganization((previouslySelectedOrg: ServerOrganization | undefined) => {
         let orgToUse = querySelectionOrg || organizations.find((org) => org.id === previouslySelectedOrg?.id);
-        if (!orgToUse && preferencesOrg) {
-          orgToUse = preferencesOrg;
+        if (!orgToUse && preferencesOrg.lastVisitedOrg) {
+          orgToUse = organizations.find((org) => org.id === preferencesOrg.lastVisitedOrg);
         }
         if (!orgToUse) {
           orgToUse = organizations[0];
         }
-        if (orgToUse && preferencesOrg?.id !== orgToUse.id) {
+        if (orgToUse && preferencesOrg?.lastVisitedOrg !== orgToUse.id) {
           updatePreferences('lastVisitedOrg', orgToUse.id);
         }
         return orgToUse;

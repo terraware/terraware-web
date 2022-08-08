@@ -18,7 +18,7 @@ export async function getPreferences(): Promise<PreferencesResponse> {
 
   try {
     const serverResponse: GetUserPreferencesResponsePayload = (await axios.get(`${PREFERENCES}`)).data;
-    response.preferences = serverResponse.preferences;
+    response.preferences = serverResponse.preferences || {};
   } catch (error) {
     response.requestSucceeded = false;
   }
