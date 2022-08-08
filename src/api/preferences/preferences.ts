@@ -43,8 +43,8 @@ export async function updatePreferences(
   };
   try {
     const updatedPreferences: UpdateUserPreferencesRequestPayload = {
-      organizationId: organizationId,
-      preferences: preferences,
+      organizationId,
+      preferences,
     };
     const serverResponse: SimpleSuccessResponsePayload = (await axios.put(PREFERENCES, updatedPreferences)).data;
 
