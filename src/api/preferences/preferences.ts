@@ -35,16 +35,20 @@ export type UpdateUserPreferences = {
 type SimpleSuccessResponsePayload = paths[typeof PREFERENCES]['put']['responses'][200]['content']['application/json'];
 
 export async function updatePreferences(
-  preferences: { [key: string]: unknown },
+  name: string,
+  value: any,
   organizationId?: number
 ): Promise<UpdateUserPreferences> {
   const response: UpdateUserPreferences = {
     requestSucceeded: true,
   };
   try {
+    const serverPreferences = await getPreferences();
+    const existingPrefs = serverPreferences.preferences;
+    const newPrefs = { ...existingPrefs, [name]: value };
     const updatedPreferences: UpdateUserPreferencesRequestPayload = {
       organizationId,
-      preferences,
+      preferences: newPrefs,
     };
     const serverResponse: SimpleSuccessResponsePayload = (await axios.put(PREFERENCES, updatedPreferences)).data;
 

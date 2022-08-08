@@ -12,15 +12,3 @@ export const getAllSeedBanks = (organization: ServerOrganization): (Facility | u
 export const isAdmin = (organization: ServerOrganization | undefined) => {
   return HighOrganizationRolesValues.includes(organization?.role || '');
 };
-
-export const setLastVisitedOrganizationId = (organizationId: number) => {
-  localStorage.setItem('lastVisitedOrganization', organizationId.toString());
-};
-
-export const getLastVisitedOrganizationId = (): number | null => {
-  const orgId = localStorage.getItem('lastVisitedOrganization');
-  if (orgId) {
-    return parseInt(orgId, 10);
-  }
-  return null;
-};

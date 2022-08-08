@@ -39,7 +39,6 @@ import ErrorBoundary from 'src/ErrorBoundary';
 import { Notifications } from 'src/types/Notifications';
 import { ServerOrganization } from 'src/types/Organization';
 import { User } from 'src/types/User';
-import { setLastVisitedOrganizationId, getLastVisitedOrganizationId } from 'src/utils/organization';
 import MyAccount from './components/MyAccount';
 import { getAllSpecies } from './api/species/species';
 import { Species } from './types/Species';
@@ -49,7 +48,7 @@ import NewSeedBank from './components/NewSeedBank';
 import SeedBankDetails from './components/SeedBank';
 import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import { getPreferences } from './api/preferences/preferences';
+import { getPreferences, updatePreferences } from './api/preferences/preferences';
 
 // @ts-ignore
 mapboxgl.workerClass =
@@ -102,6 +101,7 @@ export default function App() {
   const query = useQuery();
   const location = useStateLocation();
   const [selectedOrganization, setSelectedOrganization] = useState<ServerOrganization>();
+  const [preferencesOrg, setPreferencesOrg] = useState<ServerOrganization>();
   const [notifications, setNotifications] = useState<Notifications>();
 
   // seedSearchCriteria describes which criteria to apply when searching accession data.
@@ -141,7 +141,6 @@ export default function App() {
           const orgToSelect = response.organizations.find((org) => org.id === selectedOrgId);
           if (orgToSelect) {
             setSelectedOrganization(orgToSelect);
-            setLastVisitedOrganizationId(orgToSelect.id);
           }
         }
       } else if (response.error === 'NotAuthenticated') {
@@ -176,29 +175,29 @@ export default function App() {
   useEffect(() => {
     const getUserPreferences = async () => {
       const response = await getPreferences();
-      if (response.preferences && response.preferences.lastVisitedOrg) {
+      if (organizations && response.preferences && response.preferences.lastVisitedOrg) {
         const orgToUse = organizations?.find((org) => org.id === response.preferences?.lastVisitedOrg);
-        setSelectedOrganization(orgToUse);
+        setPreferencesOrg(orgToUse);
       }
     };
     getUserPreferences();
-  }, [organizations]);
+  }, [organizations, setPreferencesOrg]);
 
   useEffect(() => {
-    if (organizations) {
+    if (organizations && preferencesOrg) {
       const organizationId = query.get('organizationId');
       const querySelectionOrg = organizationId && organizations.find((org) => org.id === parseInt(organizationId, 10));
       setSelectedOrganization((previouslySelectedOrg: ServerOrganization | undefined) => {
+        console.log(previouslySelectedOrg);
         let orgToUse = querySelectionOrg || organizations.find((org) => org.id === previouslySelectedOrg?.id);
-        const lastVisitedOrgId = getLastVisitedOrganizationId();
-        if (!orgToUse && lastVisitedOrgId) {
-          orgToUse = organizations.find((org) => org.id === lastVisitedOrgId);
+        if (!orgToUse && preferencesOrg) {
+          orgToUse = preferencesOrg;
         }
         if (!orgToUse) {
           orgToUse = organizations[0];
         }
-        if (orgToUse && lastVisitedOrgId !== orgToUse.id) {
-          setLastVisitedOrganizationId(orgToUse.id);
+        if (orgToUse && preferencesOrg?.id !== orgToUse.id) {
+          updatePreferences('lastVisitedOrg', orgToUse.id);
         }
         return orgToUse;
       });
@@ -208,7 +207,7 @@ export default function App() {
         history.push(getLocation(location.pathname, location, query.toString()));
       }
     }
-  }, [organizations, selectedOrganization, query, location, history]);
+  }, [organizations, selectedOrganization, query, location, history, preferencesOrg]);
 
   const reloadUser = useCallback(() => {
     const populateUser = async () => {

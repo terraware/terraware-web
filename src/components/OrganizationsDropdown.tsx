@@ -2,7 +2,6 @@ import { IconButton, List, ListItem, Popover } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useState } from 'react';
 import { useHistory } from 'react-router';
-import { updatePreferences } from 'src/api/preferences/preferences';
 import Icon from 'src/components/common/icon/Icon';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
@@ -52,7 +51,6 @@ export default function OrganizationsDropdown({
       }
       return newlySelectedOrg;
     });
-    updatePreferences({ lastVisitedOrg: newlySelectedOrg.id });
     setAnchorEl(null);
   };
 
