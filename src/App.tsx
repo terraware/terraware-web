@@ -49,6 +49,7 @@ import NewSeedBank from './components/NewSeedBank';
 import SeedBankDetails from './components/SeedBank';
 import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import { getPreferences } from './api/preferences/preferences';
 
 // @ts-ignore
 mapboxgl.workerClass =
@@ -171,6 +172,17 @@ export default function App() {
   useEffect(() => {
     reloadSpecies();
   }, [reloadSpecies]);
+
+  useEffect(() => {
+    const getUserPreferences = async () => {
+      const response = await getPreferences();
+      if (response.preferences && response.preferences.lastVisitedOrg) {
+        const orgToUse = organizations?.find((org) => org.id === response.preferences?.lastVisitedOrg);
+        setSelectedOrganization(orgToUse);
+      }
+    };
+    getUserPreferences();
+  }, [organizations]);
 
   useEffect(() => {
     if (organizations) {

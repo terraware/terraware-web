@@ -105,7 +105,7 @@ export interface paths {
     get: operations["count"];
   };
   "/api/v1/notifications/{id}": {
-    get: operations["read_2"];
+    get: operations["read_1"];
     put: operations["markRead"];
   };
   "/api/v1/organizations": {
@@ -136,36 +136,19 @@ export interface paths {
   "/api/v1/search": {
     post: operations["search_1"];
   };
-  "/api/v1/seedbank/accession": {
-    post: operations["create_1"];
-  };
-  "/api/v1/seedbank/accession/{id}": {
-    get: operations["read_1"];
-    put: operations["update_1"];
-  };
-  "/api/v1/seedbank/accession/{id}/checkIn": {
-    post: operations["checkIn_1"];
-  };
-  "/api/v1/seedbank/accession/{id}/photo": {
-    get: operations["listPhotos"];
-  };
-  "/api/v1/seedbank/accession/{id}/photo/{photoFilename}": {
-    /** Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio. */
-    get: operations["getPhoto_1"];
-    post: operations["uploadPhoto_1"];
-  };
   "/api/v1/seedbank/accessions": {
     post: operations["create"];
   };
   "/api/v1/seedbank/accessions/{id}": {
     get: operations["read"];
     put: operations["update"];
+    delete: operations["delete"];
   };
   "/api/v1/seedbank/accessions/{id}/checkIn": {
     post: operations["checkIn"];
   };
   "/api/v1/seedbank/accessions/{id}/photos": {
-    get: operations["listPhotos_1"];
+    get: operations["listPhotos"];
   };
   "/api/v1/seedbank/accessions/{id}/photos/{photoFilename}": {
     /** Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio. */
@@ -258,6 +241,10 @@ export interface paths {
     get: operations["getMyself"];
     put: operations["updateMyself"];
   };
+  "/api/v1/users/me/preferences": {
+    get: operations["getUserPreferences"];
+    put: operations["updateUserPreferences"];
+  };
 }
 
 export interface components {
@@ -309,7 +296,10 @@ export interface components {
       /** Which application this accession originally came from. This is currently based on the presence of the deviceInfo field. */
       source?: "Web" | "SeedCollectorApp";
       sourcePlantOrigin?: "Wild" | "Outplant";
+      /** Scientific name of the species. */
       species?: string;
+      /** Common name of the species, if defined. */
+      speciesCommonName?: string;
       /** Server-generated unique ID of the species. */
       speciesId?: number;
       /** Server-calculated accession state. Can change due to modifications to accession data or based on passage of time. */
@@ -734,6 +724,11 @@ export interface components {
     GetTimeseriesHistoryResponsePayload: {
       values: components["schemas"]["TimeseriesValuesPayload"][];
     };
+    GetUserPreferencesResponsePayload: {
+      /** The user's preferences, or null if no preferences have been stored yet. */
+      preferences?: { [key: string]: unknown };
+      status: components["schemas"]["SuccessOrError"];
+    };
     GetUserResponsePayload: {
       user: components["schemas"]["UserProfilePayload"];
       status: components["schemas"]["SuccessOrError"];
@@ -824,8 +819,8 @@ export interface components {
       name: string;
       description?: string;
       configuration?: { [key: string]: unknown };
-      settings?: { [key: string]: { [key: string]: unknown } };
       type: string;
+      settings?: { [key: string]: { [key: string]: unknown } };
       timeseriesName?: string;
       deviceId?: number;
       lowerThreshold?: number;
@@ -1079,8 +1074,9 @@ export interface components {
     SuccessOrError: "ok" | "error";
     /** Summary of important statistics about the seed bank for the Summary page. */
     SummaryResponse: {
-      activeAccessions: components["schemas"]["SummaryStatistic"] | number;
-      species: components["schemas"]["SummaryStatistic"] | number;
+      activeAccessions: components["schemas"]["SummaryStatistic"];
+      species: components["schemas"]["SummaryStatistic"];
+      families: components["schemas"]["SummaryStatistic"];
       /** Number of accessions in Pending state overdue for processing */
       overduePendingAccessions: number;
       /** Number of accessions in Processed state overdue for drying */
@@ -1237,6 +1233,11 @@ export interface components {
     };
     UpdateOrganizationUserRequestPayload: {
       role: "Contributor" | "Manager" | "Admin" | "Owner";
+    };
+    UpdateUserPreferencesRequestPayload: {
+      /** If present, update the user's per-organization preferences for this organization. If not present, update the user's global preferences. */
+      organizationId?: number;
+      preferences: { [key: string]: unknown };
     };
     UpdateUserRequestPayload: {
       /** If true, the user wants to receive all the notifications for their organizations via email. This does not apply to certain kinds of notifications such as "You've been added to a new organization." If null, leave the existing value as-is. */
@@ -2127,7 +2128,7 @@ export interface operations {
       };
     };
   };
-  read_2: {
+  read_1: {
     parameters: {
       path: {
         id: number;
@@ -2404,176 +2405,6 @@ export interface operations {
       };
     };
   };
-  create_1: {
-    responses: {
-      /** The accession was created successfully. Response includes fields populated by the server, including the accession number and ID. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["CreateAccessionResponsePayload"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["CreateAccessionRequestPayload"];
-      };
-    };
-  };
-  read_1: {
-    parameters: {
-      path: {
-        id: number;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["GetAccessionResponsePayload"];
-        };
-      };
-      /** The requested resource was not found. */
-      404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-    };
-  };
-  update_1: {
-    parameters: {
-      path: {
-        id: number;
-      };
-      query: {
-        simulate?: boolean;
-      };
-    };
-    responses: {
-      /** The accession was updated successfully. Response includes fields populated or modified by the server as a result of the update. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["UpdateAccessionResponsePayload"];
-        };
-      };
-      /** The specified accession doesn't exist. */
-      404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["UpdateAccessionRequestPayload"];
-      };
-    };
-  };
-  checkIn_1: {
-    parameters: {
-      path: {
-        id: number;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["UpdateAccessionResponsePayload"];
-        };
-      };
-      /** The requested resource was not found. */
-      404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-    };
-  };
-  listPhotos: {
-    parameters: {
-      path: {
-        id: number;
-      };
-    };
-    responses: {
-      /** The accession's photos are listed in the response. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["ListPhotosResponsePayload"];
-        };
-      };
-      /** The accession does not exist. */
-      404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-    };
-  };
-  /** Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio. */
-  getPhoto_1: {
-    parameters: {
-      path: {
-        id: number;
-        photoFilename: string;
-      };
-      query: {
-        maxWidth?: number;
-        maxHeight?: number;
-      };
-    };
-    responses: {
-      /** The photo was successfully retrieved. */
-      200: {
-        content: {
-          "image/jpeg": string;
-        };
-      };
-      /** The accession does not exist, or does not have a photo with the requested filename. */
-      404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-    };
-  };
-  uploadPhoto_1: {
-    parameters: {
-      path: {
-        id: number;
-        photoFilename: string;
-      };
-    };
-    responses: {
-      /** The requested operation succeeded. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-        };
-      };
-      /** The specified accession does not exist. */
-      404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-      /** The requested photo already exists on the accession. */
-      409: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "multipart/form-data": {
-          file: string;
-          metadata: components["schemas"]["UploadPhotoMetadataPayload"];
-        };
-      };
-    };
-  };
   create: {
     responses: {
       /** The accession was created successfully. Response includes fields populated by the server, including the accession number and ID. */
@@ -2639,6 +2470,27 @@ export interface operations {
       };
     };
   };
+  delete: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
   checkIn: {
     parameters: {
       path: {
@@ -2660,7 +2512,7 @@ export interface operations {
       };
     };
   };
-  listPhotos_1: {
+  listPhotos: {
     parameters: {
       path: {
         id: number;
@@ -3297,6 +3149,36 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["UpdateUserRequestPayload"];
+      };
+    };
+  };
+  getUserPreferences: {
+    parameters: {
+      query: {
+        organizationId?: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetUserPreferencesResponsePayload"];
+        };
+      };
+    };
+  };
+  updateUserPreferences: {
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateUserPreferencesRequestPayload"];
       };
     };
   };
