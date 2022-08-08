@@ -141,6 +141,7 @@ export default function App() {
           const orgToSelect = response.organizations.find((org) => org.id === selectedOrgId);
           if (orgToSelect) {
             setSelectedOrganization(orgToSelect);
+            updatePreferences('lastVisitedOrg', orgToSelect.id);
           }
         }
       } else if (response.error === 'NotAuthenticated') {
@@ -188,7 +189,6 @@ export default function App() {
       const organizationId = query.get('organizationId');
       const querySelectionOrg = organizationId && organizations.find((org) => org.id === parseInt(organizationId, 10));
       setSelectedOrganization((previouslySelectedOrg: ServerOrganization | undefined) => {
-        console.log(previouslySelectedOrg);
         let orgToUse = querySelectionOrg || organizations.find((org) => org.id === previouslySelectedOrg?.id);
         if (!orgToUse && preferencesOrg) {
           orgToUse = preferencesOrg;
