@@ -31,3 +31,6 @@ cypress/screenshots
 out.json
 photo-data
 report.csv
+
+# license report
+public/license-report.html
