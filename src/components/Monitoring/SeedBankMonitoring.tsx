@@ -39,11 +39,13 @@ type SeedBankMonitoringProps = {
   seedBank: Facility;
   organization: ServerOrganization;
   reloadData: () => void;
+  monitoringPreferences: { [key: string]: unknown };
+  updatePreferences: (data: { [key: string]: unknown }) => void;
 };
 
 export default function Monitoring(props: SeedBankMonitoringProps): JSX.Element {
   const classes = useStyles();
-  const { organization, seedBank, reloadData } = props;
+  const { organization, seedBank, reloadData, monitoringPreferences, updatePreferences } = props;
   const [onboarding, setOnboarding] = useState<boolean>(false);
   const isConfigured = seedBank.connectionState === 'Configured';
 
@@ -85,7 +87,11 @@ export default function Monitoring(props: SeedBankMonitoringProps): JSX.Element 
       {isConfigured && !onboarding && (
         <div className={classes.placeholder}>
           <span className={classes.text}>
-            <SeedBankDashboard seedBank={seedBank} />
+            <SeedBankDashboard
+              seedBank={seedBank}
+              monitoringPreferences={monitoringPreferences}
+              updatePreferences={updatePreferences}
+            />
           </span>
         </div>
       )}

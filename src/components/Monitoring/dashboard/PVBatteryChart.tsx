@@ -61,12 +61,13 @@ const useStyles = makeStyles((theme: Theme) => ({
 type PVBatteryChartProps = {
   BMU?: Device;
   defaultTimePeriod?: string;
+  updateTimePeriodPreferences: (timePeriod: string) => void;
 };
 
 export default function PVBatteryChart(props: PVBatteryChartProps): JSX.Element {
   const { isMobile, isDesktop } = useDeviceInfo();
   const classes = useStyles({ isMobile, isDesktop });
-  const { BMU, defaultTimePeriod } = props;
+  const { BMU, defaultTimePeriod, updateTimePeriodPreferences } = props;
   const [selectedPVBatteryPeriod, setSelectedPVBatteryPeriod] = useState<string>();
 
   useEffect(() => {
@@ -215,6 +216,7 @@ export default function PVBatteryChart(props: PVBatteryChartProps): JSX.Element 
 
   const onChangePVBatterySelectedPeriod = (newValue: string) => {
     setSelectedPVBatteryPeriod(newValue);
+    updateTimePeriodPreferences(newValue);
   };
 
   const pvBatteryRef = React.useRef<HTMLCanvasElement>(null);
