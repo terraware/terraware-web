@@ -10,6 +10,7 @@ import { getAllSeedBanks, isAdmin } from 'src/utils/organization';
 import TfMain from '../common/TfMain';
 import Select from '../common/Select/Select';
 import { Facility } from 'src/api/types/facilities';
+import { getPreferences, updatePreferences } from 'src/api/preferences/preferences';
 import SeedBankMonitoring from './SeedBankMonitoring';
 import Button from '../common/button/Button';
 import Title from '../common/Title';
@@ -56,6 +57,7 @@ export default function Monitoring(props: MonitoringProps): JSX.Element {
   const { organization, hasSeedBanks, reloadData } = props;
   const [selectedSeedBank, setSelectedSeedBank] = useState<Facility>();
   const [seedBanks, setSeedBanks] = useState<Facility[]>([]);
+  const [monitoringPreferences, setMonitoringPreferences] = useState<{ [key: string]: unknown }>();
   const { seedBankId } = useParams<{ seedBankId: string }>();
 
   const goToSeedBanks = () => {
@@ -89,18 +91,37 @@ export default function Monitoring(props: MonitoringProps): JSX.Element {
   }, [organization]);
 
   useEffect(() => {
-    const initializeSeedBank = () => {
+    const initializeSeedBank = async () => {
       if (seedBanks.length) {
-        const requestedSeedBank = seedBanks.find((sb) => sb?.id === parseInt(seedBankId, 10));
-        if (requestedSeedBank) {
-          setSelectedSeedBank(requestedSeedBank);
+        let lastMonitoringSeedBank: any = {};
+        const response = await getPreferences(organization.id);
+        if (response.requestSucceeded && response.preferences?.lastMonitoringSeedBank) {
+          lastMonitoringSeedBank = response.preferences.lastMonitoringSeedBank;
+        }
+        const seedBankIdToUse = seedBankId || lastMonitoringSeedBank.facilityId;
+        const requestedSeedBank = seedBanks.find((sb) => sb?.id === parseInt(seedBankIdToUse, 10));
+        const seedBankToUse = requestedSeedBank || seedBanks[0];
+        if (seedBankToUse.id !== lastMonitoringSeedBank.facilityId) {
+          lastMonitoringSeedBank = { facilityId: seedBankToUse.id };
+          if (seedBankToUse.connectionState !== 'Configured') {
+            updatePreferences('lastMonitoringSeedBank', lastMonitoringSeedBank, organization.id); // no need to wait for response
+          }
+        }
+        setMonitoringPreferences(lastMonitoringSeedBank);
+        if (seedBankToUse.id.toString() === seedBankId) {
+          setSelectedSeedBank(seedBankToUse);
         } else {
-          setActiveSeedBank(seedBanks[0]);
+          setActiveSeedBank(seedBankToUse);
         }
       }
     };
     initializeSeedBank();
-  }, [seedBankId, seedBanks, setActiveSeedBank]);
+  }, [seedBankId, seedBanks, setActiveSeedBank, organization.id]);
+
+  const updateMonitoringPreferences = (data: { [key: string]: unknown }) => {
+    setMonitoringPreferences(data);
+    updatePreferences('lastMonitoringSeedBank', data, organization.id); // no need to wait for response
+  };
 
   const getPageHeading = () => <Title page={strings.MONITORING} parentPage={strings.SEEDS} />;
 
@@ -152,8 +173,14 @@ export default function Monitoring(props: MonitoringProps): JSX.Element {
               )}
             </Grid>
 
-            {selectedSeedBank && (
-              <SeedBankMonitoring seedBank={selectedSeedBank} organization={organization} reloadData={reloadData} />
+            {selectedSeedBank && monitoringPreferences && (
+              <SeedBankMonitoring
+                monitoringPreferences={monitoringPreferences}
+                updatePreferences={(data) => updateMonitoringPreferences(data)}
+                seedBank={selectedSeedBank}
+                organization={organization}
+                reloadData={reloadData}
+              />
             )}
           </Grid>
         </>

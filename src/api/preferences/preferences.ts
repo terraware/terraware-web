@@ -10,14 +10,15 @@ type PreferencesResponse = {
   requestSucceeded: boolean;
 };
 
-export async function getPreferences(): Promise<PreferencesResponse> {
+export async function getPreferences(organizationId?: number): Promise<PreferencesResponse> {
   const response: PreferencesResponse = {
     preferences: {},
     requestSucceeded: true,
   };
 
   try {
-    const serverResponse: GetUserPreferencesResponsePayload = (await axios.get(`${PREFERENCES}`)).data;
+    const endPoint = organizationId ? `${PREFERENCES}?organizationId=${organizationId}` : PREFERENCES;
+    const serverResponse: GetUserPreferencesResponsePayload = (await axios.get(`${endPoint}`)).data;
     response.preferences = serverResponse.preferences || {};
   } catch (error) {
     response.requestSucceeded = false;
