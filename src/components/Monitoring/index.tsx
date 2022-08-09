@@ -100,7 +100,7 @@ export default function Monitoring(props: MonitoringProps): JSX.Element {
             lastMonitoringSeedBank = response.preferences.lastMonitoringSeedBank;
           }
         } catch (e) {
-          // eslint-disable-next-line no-empty 
+          // eslint-disable-next-line no-empty
         }
         const seedBankIdToUse = seedBankId || lastMonitoringSeedBank.facilityId;
         const requestedSeedBank = seedBanks.find((sb) => sb?.id === parseInt(seedBankIdToUse, 10));
