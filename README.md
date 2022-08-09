@@ -1,4 +1,4 @@
-# Plant Locator App
+# Terraware Web
 
 ## How to Run the App in Development Mode
 
