@@ -1,9 +1,7 @@
-import { Box, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Theme, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { createOrganization } from 'src/api/organization/organization';
 import Button from 'src/components/common/button/Button';
-import DialogCloseButton from 'src/components/common/DialogCloseButton';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
 import useForm from 'src/utils/useForm';
@@ -14,64 +12,9 @@ import { searchCountries } from 'src/api/country/country';
 import { Country } from 'src/types/Country';
 import { getCountryByCode, getSubdivisionByCode } from 'src/utils/country';
 import { APP_PATHS } from '../constants';
-import { useHistory } from 'react-router';
-import { makeStyles } from '@mui/styles';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
-
-interface StyleProps {
-  isMobile: boolean;
-}
-
-const useStyles = makeStyles((theme: Theme) => ({
-  mainModal: {
-    '& .MuiDialog-scrollPaper': {
-      '& .MuiDialog-paper': {
-        overflow: 'visible',
-      },
-    },
-  },
-  submit: {
-    marginLeft: theme.spacing(2),
-    color: theme.palette.common.white,
-  },
-  actions: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: (props: StyleProps) => (props.isMobile ? `${theme.spacing(1)} ${theme.spacing(2)}` : theme.spacing(2)),
-    flexDirection: (props: StyleProps) => (props.isMobile ? 'column-reverse' : 'row'),
-    '& .button--medium': {
-      width: (props: StyleProps) => (props.isMobile ? '100%' : 'auto'),
-      marginTop: (props: StyleProps) => (props.isMobile ? theme.spacing(1) : 0),
-    },
-  },
-  paper: {
-    minWidth: (props: StyleProps) => (props.isMobile ? 'auto' : '515px'),
-  },
-  container: {
-    border: `1px solid ${theme.palette.grey[400]}`,
-    borderRadius: '4px',
-    display: 'block',
-    padding: theme.spacing(1),
-  },
-  deleteSpecies: {
-    backgroundColor: theme.palette.common.white,
-    borderColor: theme.palette.secondary.main,
-    color: theme.palette.secondary.main,
-    borderWidth: 1,
-  },
-  spacing: {
-    marginRight: (props: StyleProps) => (props.isMobile ? 0 : theme.spacing(2)),
-  },
-  content: {
-    overflow: 'visible',
-  },
-  title: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-}));
+import DialogBox from './common/DialogBox/DialogBox';
+import { Grid } from '@mui/material';
+import { useHistory } from 'react-router-dom';
 
 export type AddNewOrganizationModalProps = {
   open: boolean;
@@ -80,8 +23,6 @@ export type AddNewOrganizationModalProps = {
 };
 
 export default function AddNewOrganizationModal(props: AddNewOrganizationModalProps): JSX.Element {
-  const { isMobile } = useDeviceInfo();
-  const classes = useStyles({ isMobile });
   const history = useHistory();
   const { onCancel, open, reloadOrganizationData } = props;
   const setPageSnackbar = useSetRecoilState(snackbarAtoms.page);
@@ -191,19 +132,17 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
   };
 
   return (
-    <Dialog
+    <DialogBox
       onClose={onCancelWrapper}
-      disableEscapeKeyDown
-      maxWidth='md'
-      className={classes.mainModal}
       open={open}
-      classes={{ paper: classes.paper }}
+      title={strings.ADD_NEW_ORGANIZATION}
+      size='medium'
+      middleButtons={[
+        <Button label={strings.CANCEL} priority='secondary' type='passive' onClick={onCancelWrapper} key='button-1' />,
+        <Button label={strings.CREATE} onClick={saveOrganization} key='button-2' />,
+      ]}
     >
-      <DialogTitle className={classes.title}>
-        <Typography variant='h6'>{strings.ADD_NEW_ORGANIZATION}</Typography>
-        <DialogCloseButton onClick={onCancelWrapper} />
-      </DialogTitle>
-      <DialogContent dividers className={classes.content}>
+      <Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'>
         <Grid item xs={12}>
           <TextField
             label={strings.ORGANIZATION_NAME_REQUIRED}
@@ -245,21 +184,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
             />
           </Grid>
         )}
-      </DialogContent>
-      <DialogActions>
-        <Box width={'100%'} className={classes.actions}>
-          <Button
-            onClick={onCancelWrapper}
-            id='cancel'
-            label={strings.CANCEL}
-            priority='secondary'
-            type='passive'
-            className={classes.spacing}
-            size='medium'
-          />
-          <Button onClick={saveOrganization} id='saveSpecies' label={strings.CREATE} size='medium' />
-        </Box>
-      </DialogActions>
-    </Dialog>
+      </Grid>
+    </DialogBox>
   );
 }
