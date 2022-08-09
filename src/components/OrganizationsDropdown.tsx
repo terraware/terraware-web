@@ -59,6 +59,11 @@ export default function OrganizationsDropdown({
     setAnchorEl(null);
   };
 
+  const openNewOrganizationModal = () => {
+    setAnchorEl(null);
+    setNewOrganizationModalOpened(true);
+  };
+
   return (
     <div>
       <AddNewOrganizationModal
@@ -93,7 +98,7 @@ export default function OrganizationsDropdown({
             );
           })}
           <ListItem>---</ListItem>
-          <ListItem button onClick={() => setNewOrganizationModalOpened(true)}>
+          <ListItem button onClick={openNewOrganizationModal}>
             {strings.CREATE_NEW_ORGANIZATION}
           </ListItem>
         </List>
