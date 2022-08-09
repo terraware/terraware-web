@@ -119,7 +119,7 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
                     <SummaryPaper
                       id='sessions'
                       title={strings.ACTIVE_ACCESSIONS}
-                      statistics={summary?.value?.activeAccessions}
+                      statistic={summary?.value?.activeAccessions}
                       loading={summary === undefined}
                       error={errorOccurred}
                     />
@@ -130,7 +130,7 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
                     <SummaryPaper
                       id='species'
                       title={strings.SPECIES}
-                      statistics={summary?.value?.species}
+                      statistic={summary?.value?.species}
                       loading={summary === undefined}
                       error={errorOccurred}
                     />

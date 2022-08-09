@@ -335,7 +335,6 @@ export interface components {
       /** Total quantity of all past and scheduled withdrawals, including viability tests. */
       totalWithdrawalQuantity?: components["schemas"]["SeedQuantityPayload"];
       viabilityTests?: components["schemas"]["ViabilityTestPayload"][];
-      viabilityTestTypes?: ("Lab" | "Nursery")[];
       withdrawals?: components["schemas"]["WithdrawalPayload"][];
     };
     AddOrganizationUserRequestPayload: {
@@ -402,7 +401,6 @@ export interface components {
       siteLocation?: string;
       sourcePlantOrigin?: "Wild" | "Outplant";
       species?: string;
-      viabilityTestTypes?: ("Lab" | "Nursery")[];
     };
     CreateAccessionResponsePayload: {
       accession: components["schemas"]["AccessionPayload"];
@@ -819,13 +817,13 @@ export interface components {
       name: string;
       description?: string;
       configuration?: { [key: string]: unknown };
-      type: string;
       settings?: { [key: string]: { [key: string]: unknown } };
-      timeseriesName?: string;
-      deviceId?: number;
+      type: string;
       lowerThreshold?: number;
       upperThreshold?: number;
       verbosity: number;
+      timeseriesName?: string;
+      deviceId?: number;
     };
     MultiLineString: components["schemas"]["Geometry"] & {
       coordinates?: number[][][];
@@ -1074,22 +1072,19 @@ export interface components {
     SuccessOrError: "ok" | "error";
     /** Summary of important statistics about the seed bank for the Summary page. */
     SummaryResponse: {
-      activeAccessions: components["schemas"]["SummaryStatistic"] | number;
-      species: components["schemas"]["SummaryStatistic"] | number;
-      families: components["schemas"]["SummaryStatistic"];
-      /** Number of accessions in Pending state overdue for processing */
+      activeAccessions: number;
+      species: number;
+      /** Number of accessions in Pending state overdue for processing. */
       overduePendingAccessions: number;
-      /** Number of accessions in Processed state overdue for drying */
+      /** Number of accessions in Processed state overdue for drying. */
       overdueProcessedAccessions: number;
-      /** Number of accessions in Dried state overdue for storage */
+      /** Number of accessions in Dried state overdue for storage. */
       overdueDriedAccessions: number;
-      /** Number of accessions withdrawn so far this week */
+      /** Number of accessions withdrawn so far this week. */
       recentlyWithdrawnAccessions: number;
-    };
-    /** The current value and value as of last week for a summary statistic */
-    SummaryStatistic: {
-      current: number;
-      lastWeek: number;
+      /** Number of accessions in each state. */
+      accessionsByState: { [key: string]: number };
+      status: components["schemas"]["SuccessOrError"];
     };
     /** Timeseries to query. May be from different devices. */
     TimeseriesIdPayload: {
@@ -1172,7 +1167,6 @@ export interface components {
       subsetWeight?: components["schemas"]["SeedQuantityPayload"];
       targetStorageCondition?: "Refrigerator" | "Freezer";
       viabilityTests?: components["schemas"]["ViabilityTestPayload"][];
-      viabilityTestTypes?: ("Lab" | "Nursery")[];
       withdrawals?: components["schemas"]["WithdrawalPayload"][];
     };
     UpdateAccessionResponsePayload: {
@@ -1288,6 +1282,8 @@ export interface components {
       remainingQuantity?: components["schemas"]["SeedQuantityPayload"];
       staffResponsible?: string;
       seedsSown?: number;
+      /** If true, this viability test's results are used as the viability percentage for the accession as a whole. At most one test can be marked as selected. */
+      selected: boolean;
       testResults?: components["schemas"]["ViabilityTestResultPayload"][];
       totalPercentGerminated?: number;
       totalSeedsGerminated?: number;
