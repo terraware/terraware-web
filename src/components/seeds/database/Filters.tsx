@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     flexDirection: (props: StyleProps) => (props.isMobile ? 'column' : 'row'),
   },
   pill: {
-    margin: theme.spacing(0, 1.5, 0, 0),
+    margin: theme.spacing(1, 1.5, 0, 0),
     height: '32px',
     display: 'inline-block',
     marginBottom: (props: StyleProps) => (props.isDesktop ? 0 : theme.spacing(1)),
@@ -57,6 +57,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   filtersContainer: {
     minHeight: '32px',
     flex: (props: StyleProps) => (props.isMobile ? '1 0' : '8 0 600px'),
+    marginTop: `-${theme.spacing(1)}`,
   },
 }));
 

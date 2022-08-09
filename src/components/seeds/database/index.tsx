@@ -82,8 +82,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     marginRight: (props: StyleProps) => (props.isMobile ? 0 : theme.spacing(3)),
     marginLeft: (props: StyleProps) => (props.isMobile ? theme.spacing(1) : 0),
     '&.mobile': {
-      minWidth: '60px',
+      minWidth: '70px',
     },
+    height: 'auto',
   },
   message: {
     margin: '0 auto',
