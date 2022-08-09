@@ -94,13 +94,9 @@ export default function Monitoring(props: MonitoringProps): JSX.Element {
     const initializeSeedBank = async () => {
       if (seedBanks.length) {
         let lastMonitoringSeedBank: any = {};
-        try {
-          const response = await getPreferences(organization.id);
-          if (response.requestSucceeded && response.preferences?.lastMonitoringSeedBank) {
-            lastMonitoringSeedBank = response.preferences.lastMonitoringSeedBank;
-          }
-        } catch (e) {
-          // eslint-disable-next-line no-empty
+        const response = await getPreferences(organization.id);
+        if (response.requestSucceeded && response.preferences?.lastMonitoringSeedBank) {
+          lastMonitoringSeedBank = response.preferences.lastMonitoringSeedBank;
         }
         const seedBankIdToUse = seedBankId || lastMonitoringSeedBank.facilityId;
         const requestedSeedBank = seedBanks.find((sb) => sb?.id === parseInt(seedBankIdToUse, 10));
