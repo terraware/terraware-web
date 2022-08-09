@@ -7,21 +7,21 @@ import strings from 'src/strings';
 interface Props {
   id: string;
   title: string;
-  statistics?: number;
+  statistic?: number;
   loading: boolean;
   error: boolean;
 }
 
-export default function SummaryPaper({ id, title, statistics, loading, error }: Props): JSX.Element {
+export default function SummaryPaper({ id, title, statistic, loading, error }: Props): JSX.Element {
   return (
     <>
       <PanelTitle title={title} gutterBottom={true} />
       {error && strings.GENERIC_ERROR}
       {loading && <CircularProgress id={`spinner-summary-${id}`} />}
-      {statistics && (
+      {statistic && (
         <>
           <Typography id={`${id}-current`} component='p' variant='h4'>
-            {statistics}
+            {statistic}
           </Typography>
         </>
       )}
