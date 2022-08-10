@@ -46,6 +46,8 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 type SeedBankDashboardProps = {
   seedBank: Facility;
+  monitoringPreferences: { [key: string]: unknown };
+  updatePreferences: (data: { [key: string]: unknown }) => void;
 };
 
 export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.Element {
@@ -54,12 +56,13 @@ export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.El
   const history = useHistory();
   const query = useQuery();
   const stateLocation = useStateLocation();
-  const { seedBank } = props;
+  const { seedBank, monitoringPreferences, updatePreferences } = props;
   const [availableLocations, setAvailableLocations] = useState<Device[]>();
   const [batteryLevel, setBatteryLevel] = useState<string>();
   const [BMU, setBMU] = useState<Device>();
   const [deviceManager, setDeviceManager] = useState<DeviceManager | undefined>();
-  const [defaultTimePeriod, setDefaultTimePeriod] = useState<string>();
+  const [defaultSensorTimePeriod, setDefaultSensorTimePeriod] = useState<string>();
+  const [defaultPvTimePeriod, setDefaultPvTimePeriod] = useState<string>();
   const [defaultSensor, setDefaultSensor] = useState<Device>();
 
   const gridSize = () => {
@@ -75,15 +78,42 @@ export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.El
   }, [seedBank.id]);
 
   useEffect(() => {
-    if (defaultSensor && defaultTimePeriod) {
+    if (defaultSensor && defaultSensorTimePeriod && defaultPvTimePeriod) {
       return;
     }
     if (!availableLocations?.length) {
       return;
     }
-    setDefaultSensor(availableLocations[0]);
-    setDefaultTimePeriod(TIME_PERIODS[0]);
-  }, [availableLocations, defaultSensor, defaultTimePeriod]);
+
+    const lastVisitedLocation = availableLocations.find((loc) => loc.id === monitoringPreferences.sensorId);
+    const locationToUse = lastVisitedLocation || availableLocations[0];
+    const sensorTimePeriodToUse = (monitoringPreferences.sensorTimePeriod as string) || TIME_PERIODS[0];
+    const pvTimePeriodToUse = (monitoringPreferences.pvTimePeriod as string) || TIME_PERIODS[0];
+
+    setDefaultSensor(locationToUse);
+    setDefaultSensorTimePeriod(sensorTimePeriodToUse);
+    setDefaultPvTimePeriod(pvTimePeriodToUse);
+
+    if (
+      monitoringPreferences.sensorId !== locationToUse.id ||
+      monitoringPreferences.sensorTimePeriod !== sensorTimePeriodToUse ||
+      monitoringPreferences.pvTimePeriod !== pvTimePeriodToUse
+    ) {
+      updatePreferences({
+        ...monitoringPreferences,
+        sensorId: locationToUse.id,
+        sensorTimePeriod: sensorTimePeriodToUse,
+        pvTimePeriod: pvTimePeriodToUse,
+      });
+    }
+  }, [
+    availableLocations,
+    defaultSensor,
+    defaultSensorTimePeriod,
+    defaultPvTimePeriod,
+    monitoringPreferences,
+    updatePreferences,
+  ]);
 
   useEffect(() => {
     if (!availableLocations?.length) {
@@ -93,6 +123,7 @@ export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.El
     const urlTimePeriod = query.get('timePeriod');
     let location;
     let timePeriod;
+    const updates: { [key: string]: unknown } = {};
 
     // set location to what url search param is set at
     if (urlDeviceId) {
@@ -110,17 +141,28 @@ export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.El
     // set new location if valid
     if (location) {
       setDefaultSensor(location);
+      updates.sensorId = location.id;
     }
     // set new time period if valid
     if (timePeriod) {
-      setDefaultTimePeriod(timePeriod);
+      setDefaultSensorTimePeriod(timePeriod);
+      setDefaultPvTimePeriod(timePeriod);
+      updates.sensorTimePeriod = timePeriod;
+      updates.pvTimePeriod = timePeriod;
     }
 
     // clear url param if necessary
     if (urlDeviceId || urlTimePeriod) {
       history.push(getLocation(stateLocation.pathname, stateLocation, query.toString()));
     }
-  }, [availableLocations, history, query, stateLocation]);
+
+    if (location || timePeriod) {
+      updatePreferences({
+        ...monitoringPreferences,
+        ...updates,
+      });
+    }
+  }, [availableLocations, history, query, stateLocation, monitoringPreferences, updatePreferences]);
 
   useEffect(() => {
     const populateLocations = async () => {
@@ -186,11 +228,19 @@ export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.El
         <TemperatureHumidityChart
           availableLocations={availableLocations}
           defaultSensor={defaultSensor}
-          defaultTimePeriod={defaultTimePeriod}
+          defaultTimePeriod={defaultSensorTimePeriod}
+          updateSensorPreferences={(sensorId) => updatePreferences({ ...monitoringPreferences, sensorId })}
+          updateTimePeriodPreferences={(sensorTimePeriod) =>
+            updatePreferences({ ...monitoringPreferences, sensorTimePeriod })
+          }
         />
       </Grid>
       <Grid item xs={12}>
-        <PVBatteryChart BMU={BMU} defaultTimePeriod={defaultTimePeriod} />
+        <PVBatteryChart
+          BMU={BMU}
+          defaultTimePeriod={defaultPvTimePeriod}
+          updateTimePeriodPreferences={(pvTimePeriod) => updatePreferences({ ...monitoringPreferences, pvTimePeriod })}
+        />
       </Grid>
     </Grid>
   );

@@ -62,12 +62,15 @@ type TemperatureHumidityChartProps = {
   availableLocations?: Device[];
   defaultSensor?: Device;
   defaultTimePeriod?: string;
+  updateSensorPreferences: (sensorId: number) => void;
+  updateTimePeriodPreferences: (timePeriod: string) => void;
 };
 
 export default function TemperatureHumidityChart(props: TemperatureHumidityChartProps): JSX.Element {
   const { isMobile, isDesktop } = useDeviceInfo();
   const classes = useStyles({ isMobile, isDesktop });
-  const { availableLocations, defaultSensor, defaultTimePeriod } = props;
+  const { availableLocations, defaultSensor, defaultTimePeriod, updateSensorPreferences, updateTimePeriodPreferences } =
+    props;
   const [selectedLocation, setSelectedLocation] = useState<Device>();
   const [selectedPeriod, setSelectedPeriod] = useState<string>();
 
@@ -345,11 +348,16 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
   }, [availableLocations, selectedPeriod, selectedLocation]);
 
   const onChangeLocation = (newValue: string) => {
-    setSelectedLocation(availableLocations?.find((aL) => aL.name === newValue));
+    const location = availableLocations?.find((aL) => aL.name === newValue);
+    setSelectedLocation(location);
+    if (location) {
+      updateSensorPreferences(location.id);
+    }
   };
 
   const onChangeSelectedPeriod = (newValue: string) => {
     setSelectedPeriod(newValue);
+    updateTimePeriodPreferences(newValue);
   };
 
   const getTemperatureMinValue = (sensorName: string) => {
