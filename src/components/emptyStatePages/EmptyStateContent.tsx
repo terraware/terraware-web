@@ -13,6 +13,7 @@ type EmptyStateStyleProps = {
   subtitleFontSize: string;
   subtitleLineHeight: string;
   listContainerVerticalMargin: string;
+  isMobile?: boolean;
 };
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -36,6 +37,8 @@ const useStyles = makeStyles((theme: Theme) => ({
   }),
   listContainer: (props: EmptyStateStyleProps) => ({
     display: 'flex',
+    flexDirection: props.isMobile ? 'column' : 'row',
+    alignContent: 'center',
     flexWrap: 'wrap',
     fontSize: '14px',
     justifyContent: 'center',
@@ -44,15 +47,13 @@ const useStyles = makeStyles((theme: Theme) => ({
   }),
   listItem: {
     flex: '1 1 auto',
-    margin: theme.spacing(0, 3),
     maxWidth: '200px',
     textAlign: 'center',
-    '&.mobile': {
-      marginTop: theme.spacing(4),
-    },
-    '&.mobile:first-child': {
+    margin: (props: EmptyStateStyleProps) => (props.isMobile ? theme.spacing(4, 3, 0, 3) : theme.spacing(0, 3)),
+    '&:first-child': {
       marginTop: 0,
     },
+    padding: '0 5px',
   },
   listItemIcon: {
     width: '200px',
@@ -115,8 +116,8 @@ type EmptyStateContentProps = {
 
 export default function EmptyStateContent(props: EmptyStateContentProps): JSX.Element {
   const { title, subtitle, listItems, buttonText, onClickButton, footnote, styles } = props;
-  const classes = useStyles(styles);
   const { isMobile } = useDeviceInfo();
+  const classes = useStyles({ ...styles, isMobile });
 
   const gridSize = () => {
     if (isMobile) {
@@ -132,7 +133,7 @@ export default function EmptyStateContent(props: EmptyStateContentProps): JSX.El
       <div className={classes.listContainer}>
         {listItems.map((item) => {
           return (
-            <Grid item xs={gridSize()} key={item.title} className={`${classes.listItem} ${isMobile ? 'mobile' : ''}`}>
+            <Grid item xs={gridSize()} key={item.title} className={`${classes.listItem}`}>
               <Icon name={item.icon} className={classes.listItemIcon} />
               <p className={classes.listItemTitle}>{item.title}</p>
               <div>
