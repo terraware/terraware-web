@@ -270,7 +270,6 @@ const strings = new LocalizedStrings({
     LB_POUNDS: 'lb (pounds)',
     OZ_OUNCES: 'oz (ounces)',
     GOT_IT: 'Got It!',
-    VIEW_COLLECTIONS: 'View collections',
     VIEW: 'View',
     BAGS_TOTAL: 'Bags Total',
     CHECKIN_BAGS: 'Check In Bags',
