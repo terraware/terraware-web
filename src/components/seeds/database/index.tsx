@@ -131,7 +131,7 @@ type DatabaseProps = {
 };
 
 export default function Database(props: DatabaseProps): JSX.Element {
-  const { isMobile, isDesktop } = useDeviceInfo();
+  const { isMobile } = useDeviceInfo();
   const classes = useStyles({ isMobile });
   const history = useHistory();
   const query = useQuery();
@@ -456,7 +456,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
                             className={`${classes.checkInButton} ${isMobile ? 'mobile' : ''}`}
                             onClick={handleViewCollections}
                             id='viewCollections'
-                            label={isDesktop ? strings.VIEW_COLLECTIONS : strings.VIEW}
+                            label={strings.VIEW}
                             priority='secondary'
                             type='passive'
                           />
