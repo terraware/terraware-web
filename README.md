@@ -2,7 +2,7 @@
 
 ## How to Run the App in Development Mode
 
-1. Configure the `.env` file using the sample file `.env.sample`
+1. Configure the `.env` file using the sample file `.env.sample` located at the root directory of this repo.
 2. Login to Docker hub
 
 ```shell
