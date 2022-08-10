@@ -53,7 +53,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     '&:first-child': {
       marginTop: 0,
     },
-    padding: '0 5px',
+    padding: (props: EmptyStateStyleProps) => (props.isMobile ? '20px 0' : '0 5px'),
   },
   listItemIcon: {
     width: '200px',
