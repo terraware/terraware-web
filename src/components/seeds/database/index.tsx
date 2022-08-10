@@ -82,8 +82,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     marginRight: (props: StyleProps) => (props.isMobile ? 0 : theme.spacing(3)),
     marginLeft: (props: StyleProps) => (props.isMobile ? theme.spacing(1) : 0),
     '&.mobile': {
-      minWidth: '60px',
+      minWidth: '70px',
     },
+    height: 'auto',
   },
   message: {
     margin: '0 auto',
@@ -130,7 +131,7 @@ type DatabaseProps = {
 };
 
 export default function Database(props: DatabaseProps): JSX.Element {
-  const { isMobile, isDesktop } = useDeviceInfo();
+  const { isMobile } = useDeviceInfo();
   const classes = useStyles({ isMobile });
   const history = useHistory();
   const query = useQuery();
@@ -455,7 +456,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
                             className={`${classes.checkInButton} ${isMobile ? 'mobile' : ''}`}
                             onClick={handleViewCollections}
                             id='viewCollections'
-                            label={isDesktop ? strings.VIEW_COLLECTIONS : strings.VIEW}
+                            label={strings.VIEW}
                             priority='secondary'
                             type='passive'
                           />
