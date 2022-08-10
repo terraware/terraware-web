@@ -1,41 +1,11 @@
 import React from 'react';
 import { convertToSearchNodePayload, searchCsv, SeedSearchCriteria, SeedSearchSortOrder } from 'src/api/seeds/search';
 import { ServerOrganization } from 'src/types/Organization';
-
-import CancelButton from 'src/components/common/CancelButton';
-import DialogCloseButton from 'src/components/common/DialogCloseButton';
 import TextField from 'src/components/common/TextField';
 import strings from 'src/strings';
-import { Dialog, DialogTitle, Typography, DialogContent, Grid, DialogActions, Box, Chip, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
-
-const useStyles = makeStyles((theme: Theme) => ({
-  submit: {
-    '&:not(.mobile)': {
-      marginLeft: theme.spacing(2),
-    },
-    '&.mobile': {
-      marginBottom: theme.spacing(1),
-    },
-    color: theme.palette.common.white,
-  },
-  actions: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingLeft: theme.spacing(2),
-    flexDirection: 'row-reverse',
-  },
-  bold: {
-    fontWeight: theme.typography.fontWeightBold,
-  },
-  mobileButtons: {
-    display: 'flex',
-    flexDirection: 'column-reverse',
-    width: '100%',
-  },
-}));
+import DialogBox from 'src/components/common/DialogBox/DialogBox';
+import Button from 'src/components/common/button/Button';
+import { Grid } from '@mui/material';
 
 interface DownloadReportModalProps {
   searchCriteria: SeedSearchCriteria;
@@ -47,10 +17,8 @@ interface DownloadReportModalProps {
 }
 
 export default function DownloadReportModal(props: DownloadReportModalProps): JSX.Element {
-  const classes = useStyles();
   const { searchCriteria, searchSortOrder, searchColumns, organization, open, onClose } = props;
   const [name, setName] = React.useState('');
-  const { isMobile } = useDeviceInfo();
 
   const handleCancel = () => {
     setName('');
@@ -79,44 +47,30 @@ export default function DownloadReportModal(props: DownloadReportModalProps): JS
   };
 
   return (
-    <Dialog onClose={handleCancel} disableEscapeKeyDown open={open} maxWidth='sm'>
-      <DialogTitle>
-        <Typography component='p' variant='h6' className={classes.bold}>
-          {strings.REPORT}
-        </Typography>
-        <Typography component='p'>{strings.DOWNLOAD_REPORT_DESCRIPTION}</Typography>
-        <DialogCloseButton onClick={handleCancel} />
-      </DialogTitle>
-      <DialogContent dividers>
-        <Grid container spacing={4}>
-          <Grid item xs={12}>
-            <TextField
-              id='reportName'
-              value={name}
-              onChange={(id, value) => {
-                setName(value as string);
-              }}
-              label={strings.REPORT_NAME}
-              aria-label='Report name'
-            />
-          </Grid>
+    <DialogBox
+      onClose={handleCancel}
+      open={open}
+      title={strings.REPORT}
+      size='medium'
+      middleButtons={[
+        <Button label={strings.CANCEL} priority='secondary' type='passive' onClick={handleCancel} key='button-1' />,
+        <Button label={strings.DOWNLOAD} onClick={handleOk} key='button-2' />,
+      ]}
+      message={strings.DOWNLOAD_REPORT_DESCRIPTION}
+    >
+      <Grid container spacing={4} paddingTop='20px'>
+        <Grid item xs={12}>
+          <TextField
+            id='reportName'
+            value={name}
+            onChange={(id, value) => {
+              setName(value as string);
+            }}
+            label={strings.REPORT_NAME}
+            aria-label='Report name'
+          />
         </Grid>
-      </DialogContent>
-      <DialogActions>
-        <Box width={'100%'} className={classes.actions}>
-          <Box className={isMobile ? classes.mobileButtons : ''}>
-            <CancelButton onClick={handleCancel} />
-            <Chip
-              id='downloadButton'
-              className={`${classes.submit} ${isMobile ? 'mobile' : ''}`}
-              label={strings.DOWNLOAD}
-              clickable
-              color='primary'
-              onClick={handleOk}
-            />
-          </Box>
-        </Box>
-      </DialogActions>
-    </Dialog>
+      </Grid>
+    </DialogBox>
   );
 }

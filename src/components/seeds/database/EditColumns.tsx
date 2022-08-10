@@ -1,43 +1,13 @@
-import { Theme, Dialog, DialogTitle, Typography, DialogContent, Grid, DialogActions, Box, Chip } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Typography, Grid, Box } from '@mui/material';
 import React from 'react';
 import strings from 'src/strings';
-import CancelButton from '../../common/CancelButton';
 import Checkbox from '../../common/Checkbox';
-import DialogCloseButton from '../../common/DialogCloseButton';
 import Divisor from '../../common/Divisor';
 import RadioButton from '../../common/RadioButton';
 import { COLUMNS_INDEXED, Preset, searchPresets } from './columns';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-
-const useStyles = makeStyles((theme: Theme) => ({
-  submit: {
-    '&:not(.mobile)': {
-      marginLeft: theme.spacing(2),
-    },
-    '&.mobile': {
-      marginBottom: theme.spacing(1),
-    },
-    color: theme.palette.common.white,
-  },
-  actions: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingLeft: theme.spacing(2),
-    '&.mobile': {
-      width: '100%',
-    },
-  },
-  bold: {
-    fontWeight: theme.typography.fontWeightBold,
-  },
-  mobileButtons: {
-    display: 'flex',
-    flexDirection: 'column-reverse',
-    width: '100%',
-  },
-}));
+import DialogBox from 'src/components/common/DialogBox/DialogBox';
+import Button from 'src/components/common/button/Button';
 
 export interface Props {
   open: boolean;
@@ -46,7 +16,6 @@ export interface Props {
 }
 
 export default function EditColumnsDialog(props: Props): JSX.Element {
-  const classes = useStyles();
   const { onClose, open } = props;
   const [preset, setPreset] = React.useState<Preset>();
   const { isMobile } = useDeviceInfo();
@@ -89,23 +58,20 @@ export default function EditColumnsDialog(props: Props): JSX.Element {
   };
 
   return (
-    <Dialog
-      id='editColumnsDialog'
-      disableEscapeKeyDown
-      open={open}
-      maxWidth='md'
-      fullWidth={true}
+    <DialogBox
       onClose={handleCancel}
+      open={open}
+      title={strings.ADD_COLUMNS}
+      size='x-large'
+      middleButtons={[
+        <Button label={strings.CANCEL} priority='secondary' type='passive' onClick={handleCancel} key='button-1' />,
+        <Button label={strings.SAVE_CHANGES} onClick={handleOk} key='button-2' />,
+      ]}
     >
-      <DialogTitle>
-        <Typography component='p' variant='h6' className={classes.bold}>
-          {strings.ADD_COLUMNS}
+      <Box textAlign='left'>
+        <Typography component='p' sx={{ paddingBottom: '15px' }}>
+          {strings.ADD_COLUMNS_DESCRIPTION}
         </Typography>
-        <Typography component='p'>{strings.ADD_COLUMNS_DESCRIPTION}</Typography>
-        <DialogCloseButton onClick={handleCancel} />
-      </DialogTitle>
-
-      <DialogContent>
         <Typography component='p'>{strings.TEMPLATES}</Typography>
         <Grid container>
           <Grid item xs={gridSize()}>
@@ -151,24 +117,8 @@ export default function EditColumnsDialog(props: Props): JSX.Element {
             </Grid>
           </React.Fragment>
         ))}
-      </DialogContent>
-
-      <DialogActions>
-        <Box className={`${classes.actions} ${isMobile ? 'mobile' : ''}`}>
-          <Box className={isMobile ? classes.mobileButtons : ''}>
-            <CancelButton onClick={handleCancel} />
-            <Chip
-              id='saveColumnsButton'
-              className={`${classes.submit} ${isMobile ? 'mobile' : ''}`}
-              label='Save changes'
-              clickable
-              color='primary'
-              onClick={handleOk}
-            />
-          </Box>
-        </Box>
-      </DialogActions>
-    </Dialog>
+      </Box>
+    </DialogBox>
   );
 }
 
