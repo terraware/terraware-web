@@ -64,8 +64,15 @@ export default function EditColumnsDialog(props: Props): JSX.Element {
       title={strings.ADD_COLUMNS}
       size='x-large'
       middleButtons={[
-        <Button label={strings.CANCEL} priority='secondary' type='passive' onClick={handleCancel} key='button-1' />,
-        <Button label={strings.SAVE_CHANGES} onClick={handleOk} key='button-2' />,
+        <Button
+          label={strings.CANCEL}
+          priority='secondary'
+          type='passive'
+          onClick={handleCancel}
+          key='button-1'
+          id='cancel'
+        />,
+        <Button label={strings.SAVE_CHANGES} onClick={handleOk} key='button-2' id='saveColumnsButton' />,
       ]}
     >
       <Box textAlign='left'>

@@ -53,8 +53,15 @@ export default function DownloadReportModal(props: DownloadReportModalProps): JS
       title={strings.REPORT}
       size='medium'
       middleButtons={[
-        <Button label={strings.CANCEL} priority='secondary' type='passive' onClick={handleCancel} key='button-1' />,
-        <Button label={strings.DOWNLOAD} onClick={handleOk} key='button-2' />,
+        <Button
+          label={strings.CANCEL}
+          priority='secondary'
+          type='passive'
+          onClick={handleCancel}
+          key='button-1'
+          id='downloadButton'
+        />,
+        <Button label={strings.DOWNLOAD} onClick={handleOk} key='button-2' id='cancel' />,
       ]}
       message={strings.DOWNLOAD_REPORT_DESCRIPTION}
     >
