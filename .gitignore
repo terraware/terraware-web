@@ -34,3 +34,4 @@ report.csv
 
 # license report
 public/license-report.html
+public/build-version.txt
