@@ -2,7 +2,7 @@ import LocalizedStrings from 'react-localization';
 
 const strings = new LocalizedStrings({
   en: {
-    DESCRIPTION_REPORT_PROBLEM: `If you’re having trouble using Terraware, please report any issues you’re having and we’ll make it right. Provide us with this build version {0}.`,
+    DESCRIPTION_REPORT_PROBLEM: `If you’re having trouble using Terraware, please report any issues you’re having and we’ll make it right. Please mention this build version {0}.`,
     DESCRIPTION_REQUEST_FEATURE:
       'We’re always working to improve your Terraware experience and welcome your feedback on our products.',
     DESCRIPTION_TEST_APP: 'Be the first to try our new, field-tested mobile app and let us know what you think.',
