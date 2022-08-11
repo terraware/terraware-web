@@ -17,14 +17,14 @@ export interface Props {
   scrolled?: boolean;
 }
 
-export default function DialogBox(props: Props): JSX.Element {
+export default function DialogBox(props: Props): JSX.Element | null {
   const { title, size, message, children, leftButton, rightButtons, middleButtons, onClose, open, scrolled } = props;
 
   const hasFooter = leftButton || rightButtons || middleButtons;
 
   const { isMobile } = useDeviceInfo();
 
-  return (
+  return open ? (
     <div
       className={`dialog-box-container ${open ? 'dialog-box--opened' : 'dialog-box--closed'} ${
         isMobile ? 'mobile' : ''
@@ -78,5 +78,5 @@ export default function DialogBox(props: Props): JSX.Element {
         )}
       </div>
     </div>
-  );
+  ) : null;
 }
