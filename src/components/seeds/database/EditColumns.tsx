@@ -59,6 +59,7 @@ export default function EditColumnsDialog(props: Props): JSX.Element {
 
   return (
     <DialogBox
+      scrolled
       onClose={handleCancel}
       open={open}
       title={strings.ADD_COLUMNS}
