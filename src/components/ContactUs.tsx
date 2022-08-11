@@ -33,7 +33,7 @@ const listItemContent: ListItemContent[] = [
     title: strings.TITLE_REPORT_PROBLEM,
     description: strings.formatString(
       strings.DESCRIPTION_REPORT_PROBLEM,
-      process.env.REACT_APP_TERRAWARE_FE_BUILD_VERSION || 'n/a'
+      <i>"{process.env.REACT_APP_TERRAWARE_FE_BUILD_VERSION || 'n/a'}"</i>
     ) as string,
     buttonText: dictionary.REPORT_PROBLEM,
     link: TERRAWARE_SUPPORT_LINK,
