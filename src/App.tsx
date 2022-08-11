@@ -97,7 +97,6 @@ enum APIRequestStatus {
 }
 
 export default function App() {
-  console.log(`Build Version: ${process.env.REACT_APP_TERRAWARE_FE_BUILD_VERSION}`);
   const classes = useStyles();
   const query = useQuery();
   const location = useStateLocation();
