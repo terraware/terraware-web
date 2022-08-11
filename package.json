@@ -55,7 +55,7 @@
   "scripts": {
     "start": "react-scripts start",
     "start:dev": "react-scripts -r @cypress/instrument-cra start",
-    "build": "npm run license-report && react-scripts build",
+    "build": "npm run license-report && export REACT_APP_TERRAWARE_FE_BUILD_VERSION=$(git rev-parse HEAD) && react-scripts build",
     "test": "TZ=America/Los_Angeles react-scripts test",
     "eject": "react-scripts eject",
     "generate-types": "node -r esm scripts/openapi-typescript-formatter.js",
