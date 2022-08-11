@@ -69,6 +69,17 @@ export default function TextField(props: Props): JSX.Element {
     }
   };
 
+  const renderRightIcon = () => {
+    if (iconRight === 'cancel' && !value) {
+      return null;
+    }
+    return (
+      <button onClick={onClickRightIcon} className='textfield-value--icon-container'>
+        <Icon name={iconRight!} className='textfield-value--icon-right' />
+      </button>
+    );
+  };
+
   return (
     <div className={`textfield ${className}`}>
       <label htmlFor={id} className='textfield-label'>
@@ -85,11 +96,7 @@ export default function TextField(props: Props): JSX.Element {
               onChange={textfieldOnChange}
               onKeyDown={onKeyDownHandler}
             />
-            {iconRight && (
-              <button onClick={onClickRightIcon} className='textfield-value--icon-container'>
-                <Icon name={iconRight} className='textfield-value--icon-right' />
-              </button>
-            )}
+            {iconRight ? renderRightIcon() : null}
           </div>
         ) : (
           <textarea
