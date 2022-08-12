@@ -253,7 +253,7 @@ export default function App() {
     if (organizations?.length === 0) {
       return (
         <StyledEngineProvider injectFirst>
-          <TopBar>
+          <TopBar fullWidth={true}>
             <TopBarContent
               notifications={notifications}
               setNotifications={setNotifications}
