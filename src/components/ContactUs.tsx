@@ -31,7 +31,10 @@ const listItemContent: ListItemContent[] = [
   {
     icon: 'bug',
     title: strings.TITLE_REPORT_PROBLEM,
-    description: strings.DESCRIPTION_REPORT_PROBLEM,
+    description: strings.formatString(
+      strings.DESCRIPTION_REPORT_PROBLEM,
+      <i>"{process.env.REACT_APP_TERRAWARE_FE_BUILD_VERSION || 'n/a'}"</i>
+    ) as string,
     buttonText: dictionary.REPORT_PROBLEM,
     link: TERRAWARE_SUPPORT_LINK,
   },
