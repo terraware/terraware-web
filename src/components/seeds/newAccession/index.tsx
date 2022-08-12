@@ -20,9 +20,7 @@ import FooterButtons from '../accession/FooterButtons';
 import PageHeader from '../PageHeader';
 import { AccessionDates } from './AccessionDates';
 import CheckInButtons from './CheckInButtons';
-import MainCollector from './MainCollectorDropdown';
 import NurseryButtons from './NurseryButtons';
-import SecondaryCollectors from './SecondaryCollectors';
 import Species from './SpeciesDropdown';
 import { APP_PATHS } from '../../../constants';
 import TfMain from 'src/components/common/TfMain';
@@ -34,6 +32,7 @@ import { Close } from '@mui/icons-material';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import Collectors from './Collectors';
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
@@ -249,7 +248,15 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
   const onSubmitHandler = () => {
     setIsEditing(false);
     setIsSaving(true);
-    setTimeout(() => onSubmit(record), 1000);
+    // filter empty collectors and set primaryCollector and secondaryCollectors to undefined until server is updated
+    const filteredCollectors = record.collectors?.filter((iValue) => iValue !== '');
+    const newRecord = {
+      ...record,
+      collectors: filteredCollectors,
+      primaryCollector: undefined,
+      secondaryCollectors: undefined,
+    };
+    setTimeout(() => onSubmit(newRecord), 1000);
   };
 
   const onSendToNurseryHandler = () => {
@@ -415,23 +422,16 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
           >
             <Grid item xs={gridSize()}>
               {organization && (
-                <MainCollector
+                <Collectors
                   organizationId={organization.id!}
+                  id='collectors'
+                  collectors={record.collectors}
                   onChange={onChange}
-                  mainCollector={record.primaryCollector}
                   disabled={isPendingCheckIn || isContributor}
                 />
               )}
             </Grid>
           </Suspense>
-          <Grid item xs={gridSize()}>
-            <SecondaryCollectors
-              id='secondaryCollectors'
-              secondaryCollectors={record.secondaryCollectors}
-              onChange={onChange}
-              disabled={isPendingCheckIn || isContributor}
-            />
-          </Grid>
         </Grid>
         <Divisor />
         <Grid container spacing={4}>
