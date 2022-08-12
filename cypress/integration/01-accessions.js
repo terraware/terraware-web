@@ -72,10 +72,10 @@ describe('Accessions', () => {
       cy.get('#fieldNotes').type('Some notes');
       cy.get('#collectedDate').type('2021-02-01');
       cy.get('#receivedDate').clear().type('2021-02-03');
-      cy.get('#primaryCollector').type('Carlos');
-      cy.get('#secondaryCollectors0').type('Constanza');
+      cy.get('#collector0').type('Carlos');
+      cy.get('#collector1').type('Constanza');
       cy.get('#addCollectorButton').click();
-      cy.get('#secondaryCollectors1').type('Leann');
+      cy.get('#collector2').type('Leann');
       cy.get('#siteLocation').type('Sunset Overdrive');
       cy.get('#landowner').type('Yacin');
       cy.get('#environmentalNotes').type('Cold day');
@@ -98,9 +98,9 @@ describe('Accessions', () => {
       cy.get('#fieldNotes').should('have.value', 'Some notes');
       cy.get('#collectedDate').should('have.value', '2021-02-01');
       cy.get('#receivedDate').should('have.value', '2021-02-03');
-      cy.get('#primaryCollector').should('have.value', 'Carlos');
-      cy.get('#secondaryCollectors0').should('have.value', 'Constanza');
-      cy.get('#secondaryCollectors1').should('have.value', 'Leann');
+      cy.get('#collector0').should('have.value', 'Carlos');
+      cy.get('#collector1').should('have.value', 'Constanza');
+      cy.get('#collector2').should('have.value', 'Leann');
       cy.get('#siteLocation').should('have.value', 'Sunset Overdrive');
       cy.get('#landowner').should('have.value', 'Yacin');
       cy.get('#environmentalNotes').should('have.value', 'Cold day');
@@ -117,8 +117,8 @@ describe('Accessions', () => {
     });
 
     it('should update the accession', () => {
-      cy.get('#delete-secondaryCollectors1').click();
-      cy.get('#primaryCollector').clear().type('Leann');
+      cy.get('#delete-collector2').click();
+      cy.get('#collector0').clear().type('Leann');
       cy.get('#fieldNotes').clear().type('Other notes');
 
       cy.intercept('GET', 'api/v1/seedbank/accessions/*').as('getAccession');
@@ -126,8 +126,8 @@ describe('Accessions', () => {
       cy.wait('@getAccession');
 
       cy.get('#fieldNotes').contains('Other notes');
-      cy.get('#secondaryCollectors1').should('not.exist');
-      cy.get('#primaryCollector').should('have.value', 'Leann');
+      cy.get('#collector2').should('not.exist');
+      cy.get('#collector0').should('have.value', 'Leann');
     });
 
     it('should send the accession to Nursery', () => {

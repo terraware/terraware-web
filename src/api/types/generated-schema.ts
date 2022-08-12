@@ -171,9 +171,6 @@ export interface paths {
   "/api/v1/seedbank/summary": {
     get: operations["getSeedBankSummary"];
   };
-  "/api/v1/seedbank/summary/{facilityId}": {
-    get: operations["getSummary"];
-  };
   "/api/v1/seedbank/values": {
     post: operations["listFieldValues"];
   };
@@ -257,6 +254,8 @@ export interface components {
       bagNumbers?: string[];
       checkedInTime?: string;
       collectedDate?: string;
+      /** Names of the people who collected the seeds. */
+      collectors?: string[];
       deviceInfo?: components["schemas"]["DeviceInfoPayload"];
       cutTestSeedsCompromised?: number;
       cutTestSeedsEmpty?: number;
@@ -282,6 +281,7 @@ export interface components {
       numberOfTrees?: number;
       nurseryStartDate?: string;
       photoFilenames?: string[];
+      /** @deprecated */
       primaryCollector?: string;
       processingMethod?: "Count" | "Weight";
       processingNotes?: string;
@@ -291,6 +291,7 @@ export interface components {
       receivedDate?: string;
       /** Number or weight of seeds remaining for withdrawal and testing. Calculated by the server when the accession's total size is known. */
       remainingQuantity?: components["schemas"]["SeedQuantityPayload"];
+      /** @deprecated */
       secondaryCollectors?: string[];
       siteLocation?: string;
       /** Which application this accession originally came from. This is currently based on the presence of the deviceInfo field. */
@@ -384,6 +385,7 @@ export interface components {
     CreateAccessionRequestPayload: {
       bagNumbers?: string[];
       collectedDate?: string;
+      collectors?: string[];
       deviceInfo?: components["schemas"]["DeviceInfoPayload"];
       endangered?: "No" | "Yes" | "Unsure";
       environmentalNotes?: string;
@@ -394,9 +396,11 @@ export interface components {
       geolocations?: components["schemas"]["Geolocation"][];
       landowner?: string;
       numberOfTrees?: number;
+      /** @deprecated */
       primaryCollector?: string;
       rare?: "No" | "Yes" | "Unsure";
       receivedDate?: string;
+      /** @deprecated */
       secondaryCollectors?: string[];
       siteLocation?: string;
       sourcePlantOrigin?: "Wild" | "Outplant";
@@ -817,13 +821,13 @@ export interface components {
       name: string;
       description?: string;
       configuration?: { [key: string]: unknown };
-      settings?: { [key: string]: { [key: string]: unknown } };
       type: string;
+      settings?: { [key: string]: { [key: string]: unknown } };
+      timeseriesName?: string;
+      deviceId?: number;
       lowerThreshold?: number;
       upperThreshold?: number;
       verbosity: number;
-      timeseriesName?: string;
-      deviceId?: number;
     };
     MultiLineString: components["schemas"]["Geometry"] & {
       coordinates?: number[][][];
@@ -958,6 +962,17 @@ export interface components {
       field: string;
       direction?: "Ascending" | "Descending";
     };
+    /** Summary of the number of seeds remaining across all active accessions. */
+    SeedCountSummaryPayload: {
+      /** Total number of seeds remaining. The sum of subtotalBySeedCount and subtotalByWeightEstimate. */
+      total: number;
+      /** Total number of seeds remaining in accessions whose quantities are measured in seeds. */
+      subtotalBySeedCount: number;
+      /** Estimated total number of seeds remaining in accessions whose quantities are measured by weight. This estimate is based on the subset weight and count. Accessions measured by weight that don't have subset weights and counts are not included in this estimate. */
+      subtotalByWeightEstimate: number;
+      /** Number of accessions that are measured by weight and don't have subset weight and count data. The system cannot estimate how many seeds they have. */
+      unknownQuantityAccessions: number;
+    };
     /** Represents a quantity of seeds, measured either in individual seeds or by weight. */
     SeedQuantityPayload: {
       /** Number of units of seeds. If "units" is "Seeds", this is the number of seeds and must be an integer. Otherwise it is a measurement in the weight units specified in the "units" field, and may have a fractional part. */
@@ -1084,6 +1099,7 @@ export interface components {
       recentlyWithdrawnAccessions: number;
       /** Number of accessions in each state. */
       accessionsByState: { [key: string]: number };
+      seedsRemaining: components["schemas"]["SeedCountSummaryPayload"];
       status: components["schemas"]["SuccessOrError"];
     };
     /** Timeseries to query. May be from different devices. */
@@ -1128,6 +1144,7 @@ export interface components {
     UpdateAccessionRequestPayload: {
       bagNumbers?: string[];
       collectedDate?: string;
+      collectors?: string[];
       cutTestSeedsCompromised?: number;
       cutTestSeedsEmpty?: number;
       cutTestSeedsFilled?: number;
@@ -1146,6 +1163,7 @@ export interface components {
       landowner?: string;
       numberOfTrees?: number;
       nurseryStartDate?: string;
+      /** @deprecated */
       primaryCollector?: string;
       processingMethod?: "Count" | "Weight";
       processingNotes?: string;
@@ -1153,6 +1171,7 @@ export interface components {
       processingStartDate?: string;
       rare?: "No" | "Yes" | "Unsure";
       receivedDate?: string;
+      /** @deprecated */
       secondaryCollectors?: string[];
       siteLocation?: string;
       sourcePlantOrigin?: "Wild" | "Outplant";
@@ -2654,21 +2673,6 @@ export interface operations {
       query: {
         organizationId?: number;
         facilityId?: number;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["SummaryResponse"];
-        };
-      };
-    };
-  };
-  getSummary: {
-    parameters: {
-      path: {
-        facilityId: number;
       };
     };
     responses: {

@@ -192,21 +192,22 @@ export async function searchFieldValues(
 }
 
 /****************************
- * PRIMARY COLLECTORS SEARCH
+ * COLLECTORS SEARCH
  ****************************/
 
 /*
- * Returns all the Primary Collectors associated with a facility, or null if the API request failed.
+ * Returns all the Collectors associated with a facility, or undefined if the API request failed.
  */
-export async function getPrimaryCollectors(organizationId: number): Promise<string[] | null> {
+export async function getCollectors(organizationId: number): Promise<string[] | undefined> {
   try {
     const params: ListAllFieldValuesRequestPayload = {
       organizationId,
-      fields: ['primaryCollectorName'],
+      fields: ['collectors_name'],
     };
 
-    return (await listAllFieldValues(params)).results.primaryCollectorName.values;
+    const collectors = (await listAllFieldValues(params)).results.collectors_name.values;
+    return collectors.filter((colector) => colector !== null);
   } catch {
-    return null;
+    return undefined;
   }
 }
