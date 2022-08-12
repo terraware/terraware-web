@@ -73,6 +73,7 @@ describe('Accessions', () => {
       cy.get('#collectedDate').type('2021-02-01');
       cy.get('#receivedDate').clear().type('2021-02-03');
       cy.get('#collector0').type('Carlos');
+      cy.get('#addCollectorButton').click();
       cy.get('#collector1').type('Constanza');
       cy.get('#addCollectorButton').click();
       cy.get('#collector2').type('Leann');
@@ -98,9 +99,9 @@ describe('Accessions', () => {
       cy.get('#fieldNotes').should('have.value', 'Some notes');
       cy.get('#collectedDate').should('have.value', '2021-02-01');
       cy.get('#receivedDate').should('have.value', '2021-02-03');
-      cy.get('#collector0').should('have.value', 'Carlos');
-      cy.get('#collector1').should('have.value', 'Constanza');
-      cy.get('#collector2').should('have.value', 'Leann');
+      cy.get('#collector0 > input').should('have.value', 'Carlos');
+      cy.get('#collector1 > input').should('have.value', 'Constanza');
+      cy.get('#collector2 > input').should('have.value', 'Leann');
       cy.get('#siteLocation').should('have.value', 'Sunset Overdrive');
       cy.get('#landowner').should('have.value', 'Yacin');
       cy.get('#environmentalNotes').should('have.value', 'Cold day');
@@ -118,7 +119,7 @@ describe('Accessions', () => {
 
     it('should update the accession', () => {
       cy.get('#delete-collector2').click();
-      cy.get('#collector0').clear().type('Leann');
+      cy.get('#collector0 > input').clear().type('Leann');
       cy.get('#fieldNotes').clear().type('Other notes');
 
       cy.intercept('GET', 'api/v1/seedbank/accessions/*').as('getAccession');
@@ -127,7 +128,7 @@ describe('Accessions', () => {
 
       cy.get('#fieldNotes').contains('Other notes');
       cy.get('#collector2').should('not.exist');
-      cy.get('#collector0').should('have.value', 'Leann');
+      cy.get('#collector0 > input').should('have.value', 'Leann');
     });
 
     it('should send the accession to Nursery', () => {
