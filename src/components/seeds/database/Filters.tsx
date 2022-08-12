@@ -278,16 +278,18 @@ export function SimplePopover({
     >
       <div className={classes.mainTitle}>
         <Typography variant='caption'>{popover?.col.name}</Typography>
-        <Link
-          id='clear'
-          href='#'
-          onClick={(event: React.SyntheticEvent) => {
-            preventDefaultEvent(event);
-            clearFilter();
-          }}
-        >
-          {strings.CLEAR}
-        </Link>
+        {popover && filters[popover?.col.key]?.values ? (
+          <Link
+            id='clear'
+            href='#'
+            onClick={(event: React.SyntheticEvent) => {
+              preventDefaultEvent(event);
+              clearFilter();
+            }}
+          >
+            {strings.CLEAR}
+          </Link>
+        ) : null}
       </div>
       <Divider />
       {popover?.col.filter?.type === 'multiple_selection' && (
