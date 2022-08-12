@@ -89,6 +89,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     transform: 'rotate(45deg)',
     zIndex: 1400,
     backgroundColor: '#F2F4F5',
+    boxSizing: 'border-box',
   },
   iconContainer: {
     borderRadius: 0,
