@@ -248,7 +248,15 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
   const onSubmitHandler = () => {
     setIsEditing(false);
     setIsSaving(true);
-    setTimeout(() => onSubmit(record), 1000);
+    //filter empty collectors and set primaryCollector and secondaryCollectors to undefined until server is updated
+    const filteredCollectors = record.collectors?.filter((iValue) => iValue !== '');
+    const newRecord = {
+      ...record,
+      collectors: filteredCollectors,
+      primaryCollector: undefined,
+      secondaryCollectors: undefined,
+    };
+    setTimeout(() => onSubmit(newRecord), 1000);
   };
 
   const onSendToNurseryHandler = () => {
@@ -317,13 +325,6 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
 
   const showCheckIn = isPendingCheckIn || isCheckedIn;
   const isContributor = organization?.role === 'Contributor';
-
-  // Update collectors and set primaryCollector and secondaryCollectors to undefined until server is updated
-  const onChangeCollectors = (id: string, value: string[]) => {
-    setRecord((previousRecord: T): T => {
-      return { ...previousRecord, collectors: value, primaryCollector: undefined, secondaryCollectors: undefined };
-    });
-  };
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -425,7 +426,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
                   organizationId={organization.id!}
                   id='collectors'
                   collectors={record.collectors}
-                  onChange={onChangeCollectors}
+                  onChange={onChange}
                   disabled={isPendingCheckIn || isContributor}
                 />
               )}
