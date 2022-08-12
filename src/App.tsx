@@ -49,6 +49,7 @@ import SeedBankDetails from './components/SeedBank';
 import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { getPreferences, updatePreferences } from './api/preferences/preferences';
+import AppVersionBar from './components/AppVersionBar';
 
 // @ts-ignore
 mapboxgl.workerClass =
@@ -341,6 +342,7 @@ export default function App() {
               setShowNavBar={setShowNavBar}
             />
           </TopBar>
+          <AppVersionBar />
           <ErrorBoundary>
             <Switch>
               {/* Routes, in order of their appearance down the side NavBar */}

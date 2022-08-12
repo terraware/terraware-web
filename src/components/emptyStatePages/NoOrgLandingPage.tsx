@@ -6,6 +6,7 @@ import strings from 'src/strings';
 import dictionary from 'src/strings/dictionary';
 import { Container, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import AppVersionBar from 'src/components/AppVersionBar';
 
 const useStyles = makeStyles((theme: Theme) => ({
   main: {
@@ -14,6 +15,10 @@ const useStyles = makeStyles((theme: Theme) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    flexDirection: 'column',
+  },
+  appVersionContainer: {
+    width: '100%',
   },
   mainContainer: {
     maxWidth: '1500px',
@@ -46,6 +51,9 @@ export default function NoOrgLandingPage(props: LandingPageProps): JSX.Element {
 
   return (
     <main className={classes.main}>
+      <div className={classes.appVersionContainer}>
+        <AppVersionBar />
+      </div>
       <Container className={classes.mainContainer}>
         <AddNewOrganizationModal
           open={isOrgModalOpen}

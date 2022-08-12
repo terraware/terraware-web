@@ -497,6 +497,8 @@ const strings = new LocalizedStrings({
     ACCEPT: 'Accept',
     CHANGE_TO: 'Change to {0}',
     UNSPECIFIED: 'Unspecified',
+    NEW_APP_VERSION: 'A newer version of the web app is available. Please refresh your browser for latest updates.',
+    NEW_APP_VERSION_MOBILE: 'A newer version is available.',
   },
 });
 
