@@ -37,4 +37,4 @@ DOCKER_TAGS=$docker_tags
 APP_VERSION=$APP_VERSION" >> $GITHUB_ENV
 
 # Store app version in build version file
-echo $APP_VERSION > $(dirname "$BASH_SOURCE")/../../public/build-version.txt
+echo $APP_VERSION > public/build-version.txt
