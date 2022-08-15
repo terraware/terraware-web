@@ -19,12 +19,15 @@ const useStyles = makeStyles((theme: Theme) => ({
     alignItems: 'center',
     color: '#ffffff',
   },
+  refreshButton: {
+    marginLeft: theme.spacing(1),
+  },
 }));
 
 const ONE_MINUTE_INTERVAL_MS = 60 * 1000;
 
 export default function AppVersionBar(): JSX.Element | null {
-  const { isDesktop, isMobile } = useDeviceInfo();
+  const { isMobile } = useDeviceInfo();
   const classes = useStyles({ isMobile });
   const [lastCheck, setLastCheck] = useState<number>(0);
   const [needsRefresh, setNeedsRefresh] = useState<boolean>(false);
@@ -54,8 +57,9 @@ export default function AppVersionBar(): JSX.Element | null {
       <div className={classes.mainContainer}>
         <span>{isMobile ? strings.NEW_APP_VERSION_MOBILE : strings.NEW_APP_VERSION}</span>
         <Button
+          className={classes.refreshButton}
           label={strings.REFRESH}
-          icon={isDesktop ? 'leaf' : undefined}
+          icon={isMobile ? undefined : 'leaf'}
           onClick={() => window.location.reload()}
         />
       </div>

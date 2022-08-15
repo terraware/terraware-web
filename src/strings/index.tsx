@@ -497,8 +497,8 @@ const strings = new LocalizedStrings({
     ACCEPT: 'Accept',
     CHANGE_TO: 'Change to {0}',
     UNSPECIFIED: 'Unspecified',
-    NEW_APP_VERSION: 'A newer version of the web app is available. Please refresh your browser for the latest updates.',
-    NEW_APP_VERSION_MOBILE: 'A newer version is available.',
+    NEW_APP_VERSION: 'Please refresh to use the latest version of Terraware.',
+    NEW_APP_VERSION_MOBILE: 'Refresh for the latest Terraware version.',
   },
 });
 
