@@ -22,6 +22,7 @@ import DetailsMenu from './DetailsMenu';
 import GerminationMenu from './GerminationMenu';
 import AccessionPageHeader from './PageHeader';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import PageSnackbar from 'src/components/PageSnackbar';
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
@@ -128,6 +129,7 @@ function Content({ organization }: AccessionPageProps): JSX.Element {
   return (
     <TfMain>
       <AccessionPageHeader accession={accession} />
+      <PageSnackbar />
       <Container maxWidth={false} className={classes.mainContainer}>
         <Grid container spacing={3}>
           <Grid item xs={isMobile ? 12 : 3}>

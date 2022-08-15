@@ -16,6 +16,7 @@ import { updateOrganization } from 'src/api/organization/organization';
 import { getCountryByCode, getSubdivisionByCode } from 'src/utils/country';
 import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import PageSnackbar from 'src/components/PageSnackbar';
 
 interface StyleProps {
   isMobile: boolean;
@@ -143,6 +144,7 @@ export default function OrganizationView({ organization, reloadOrganizationData 
           <Grid item xs={12}>
             <h2>{strings.ORGANIZATION}</h2>
             <p>{strings.ORGANIZATION_DESC}</p>
+            <PageSnackbar />
           </Grid>
           <Grid item xs={gridSize()}>
             <TextField

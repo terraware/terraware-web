@@ -8,6 +8,7 @@ import { TERRAWARE_SUPPORT_LINK } from 'src/constants';
 import TfMain from './common/TfMain';
 import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import PageSnackbar from 'src/components/PageSnackbar';
 
 const useStyles = makeStyles(() => ({
   title: {
@@ -54,6 +55,7 @@ export default function ContactUs(): JSX.Element {
   return (
     <TfMain>
       <h1 className={classes.title}>{dictionary.CONTACT_US}</h1>
+      <PageSnackbar />
       <Grid container spacing={3}>
         {listItemContent.map((item) => {
           return (
