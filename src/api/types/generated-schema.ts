@@ -147,6 +147,9 @@ export interface paths {
   "/api/v1/seedbank/accessions/{id}/checkIn": {
     post: operations["checkIn"];
   };
+  "/api/v1/seedbank/accessions/{id}/history": {
+    get: operations["getAccessionHistory"];
+  };
   "/api/v1/seedbank/accessions/{id}/photos": {
     get: operations["listPhotos"];
   };
@@ -246,6 +249,19 @@ export interface paths {
 
 export interface components {
   schemas: {
+    AccessionHistoryEntryPayload: {
+      date: string;
+      /** Human-readable description of the event. Does not include date or userName. */
+      description: string;
+      /** Full name of the person responsible for the event, if known. */
+      fullName?: string;
+      type:
+        | "Created"
+        | "QuantityUpdated"
+        | "StateChanged"
+        | "ViabilityTesting"
+        | "Withdrawal";
+    };
     AccessionPayload: {
       /** Server-generated human-readable identifier for the accession. This is unique within a single seed bank, but different seed banks may have accessions with the same number. */
       accessionNumber: string;
@@ -254,6 +270,13 @@ export interface components {
       bagNumbers?: string[];
       checkedInTime?: string;
       collectedDate?: string;
+      collectionSiteCity?: string;
+      collectionSiteCountryCode?: string;
+      collectionSiteCountrySubdivision?: string;
+      collectionSiteLandowner?: string;
+      collectionSiteName?: string;
+      collectionSiteNotes?: string;
+      collectionSource?: "Wild" | "Reintroduced" | "Cultivated" | "Other";
       /** Names of the people who collected the seeds. */
       collectors?: string[];
       deviceInfo?: components["schemas"]["DeviceInfoPayload"];
@@ -264,6 +287,7 @@ export interface components {
       dryingMoveDate?: string;
       dryingStartDate?: string;
       endangered?: "No" | "Yes" | "Unsure";
+      /** @deprecated Backward-compatibility alias for collectionSiteNotes */
       environmentalNotes?: string;
       estimatedSeedCount?: number;
       facilityId: number;
@@ -275,6 +299,7 @@ export interface components {
       id: number;
       /** Initial size of accession. The units of this value must match the measurement type in "processingMethod". */
       initialQuantity?: components["schemas"]["SeedQuantityPayload"];
+      /** @deprecated Backward-compatibility alias for collectionSiteLandowner */
       landowner?: string;
       latestViabilityPercent?: number;
       latestViabilityTestDate?: string;
@@ -293,6 +318,7 @@ export interface components {
       remainingQuantity?: components["schemas"]["SeedQuantityPayload"];
       /** @deprecated */
       secondaryCollectors?: string[];
+      /** @deprecated Backward-compatibility alias for collectionSiteName */
       siteLocation?: string;
       /** Which application this accession originally came from. This is currently based on the presence of the deviceInfo field. */
       source?: "Web" | "SeedCollectorApp";
@@ -385,15 +411,24 @@ export interface components {
     CreateAccessionRequestPayload: {
       bagNumbers?: string[];
       collectedDate?: string;
+      collectionSiteCity?: string;
+      collectionSiteCountryCode?: string;
+      collectionSiteCountrySubdivision?: string;
+      collectionSiteLandowner?: string;
+      collectionSiteName?: string;
+      collectionSiteNotes?: string;
+      collectionSource?: "Wild" | "Reintroduced" | "Cultivated" | "Other";
       collectors?: string[];
       deviceInfo?: components["schemas"]["DeviceInfoPayload"];
       endangered?: "No" | "Yes" | "Unsure";
+      /** @deprecated Backward-compatibility alias for collectionSiteNotes */
       environmentalNotes?: string;
       facilityId?: number;
       family?: string;
       fieldNotes?: string;
       founderId?: string;
       geolocations?: components["schemas"]["Geolocation"][];
+      /** @deprecated Backward-compatibility alias for collectionSiteLandowner */
       landowner?: string;
       numberOfTrees?: number;
       /** @deprecated */
@@ -402,6 +437,7 @@ export interface components {
       receivedDate?: string;
       /** @deprecated */
       secondaryCollectors?: string[];
+      /** @deprecated Backward-compatibility alias for collectionSiteName */
       siteLocation?: string;
       sourcePlantOrigin?: "Wild" | "Outplant";
       species?: string;
@@ -631,6 +667,11 @@ export interface components {
       geometries?: components["schemas"]["Geometry"][];
     } & {
       geometries: unknown;
+    };
+    GetAccessionHistoryResponsePayload: {
+      /** History of changes in descending time order (newest first.) */
+      history: components["schemas"]["AccessionHistoryEntryPayload"][];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetAccessionResponsePayload: {
       accession: components["schemas"]["AccessionPayload"];
@@ -1144,6 +1185,13 @@ export interface components {
     UpdateAccessionRequestPayload: {
       bagNumbers?: string[];
       collectedDate?: string;
+      collectionSiteCity?: string;
+      collectionSiteCountryCode?: string;
+      collectionSiteCountrySubdivision?: string;
+      collectionSiteLandowner?: string;
+      collectionSiteName?: string;
+      collectionSiteNotes?: string;
+      collectionSource?: "Wild" | "Reintroduced" | "Cultivated" | "Other";
       collectors?: string[];
       cutTestSeedsCompromised?: number;
       cutTestSeedsEmpty?: number;
@@ -1152,6 +1200,7 @@ export interface components {
       dryingMoveDate?: string;
       dryingStartDate?: string;
       endangered?: "No" | "Yes" | "Unsure";
+      /** @deprecated Backward-compatibility alias for collectionSiteNotes */
       environmentalNotes?: string;
       facilityId?: number;
       family?: string;
@@ -1160,6 +1209,7 @@ export interface components {
       geolocations?: components["schemas"]["Geolocation"][];
       /** Initial size of accession. The units of this value must match the measurement type in "processingMethod". */
       initialQuantity?: components["schemas"]["SeedQuantityPayload"];
+      /** @deprecated Backward-compatibility alias for collectionSiteLandowner */
       landowner?: string;
       numberOfTrees?: number;
       nurseryStartDate?: string;
@@ -1173,6 +1223,7 @@ export interface components {
       receivedDate?: string;
       /** @deprecated */
       secondaryCollectors?: string[];
+      /** @deprecated Backward-compatibility alias for collectionSiteName */
       siteLocation?: string;
       sourcePlantOrigin?: "Wild" | "Outplant";
       species?: string;
@@ -1315,14 +1366,16 @@ export interface components {
       /** Server-assigned unique ID of this withdrawal, its ID. Omit when creating a new withdrawal. */
       id?: number;
       date: string;
-      purpose:
+      purpose?:
         | "Propagation"
         | "Outreach or Education"
         | "Research"
         | "Broadcast"
         | "Share with Another Site"
         | "Other"
-        | "Viability Testing";
+        | "Viability Testing"
+        | "Out-planting"
+        | "Nursery";
       destination?: string;
       notes?: string;
       /** Quantity of seeds remaining. For weight-based accessions, this is user input and is required. For count-based accessions, it is calculated by the server and ignored on input. */
@@ -2517,6 +2570,27 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["UpdateAccessionResponsePayload"];
+        };
+      };
+      /** The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  getAccessionHistory: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetAccessionHistoryResponsePayload"];
         };
       };
       /** The requested resource was not found. */

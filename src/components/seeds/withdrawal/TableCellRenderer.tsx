@@ -5,6 +5,7 @@ import strings from 'src/strings';
 import CellRenderer, { CellDateRenderer } from '../../common/table/TableCellRenderer';
 import { RendererProps } from '../../common/table/types';
 import getDateDisplayValue from 'src/utils/date';
+import { getSelectedPurpose } from 'src/utils/withdrawalPurposes';
 
 export default function WithdrawalCellRenderer(props: RendererProps<AccessionWithdrawal>): JSX.Element {
   const { column, value, row, index } = props;
@@ -45,6 +46,10 @@ export default function WithdrawalCellRenderer(props: RendererProps<AccessionWit
         row={row}
       />
     );
+  }
+
+  if (column.key === 'purpose' && typeof value === 'string') {
+    return <CellRenderer index={index} column={column} value={getSelectedPurpose(value)} row={row} />;
   }
 
   return <CellRenderer {...props} />;

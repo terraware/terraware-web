@@ -228,6 +228,7 @@ const strings = new LocalizedStrings({
     SCHEDULING_FOR: 'Scheduling for: {0}',
     WITHDRAW_SEEDS: 'Withdraw seeds',
     WITHDRAWN_ON: 'Withdrawn On',
+    OUT_PLANTING: 'Out-planting',
     PROPAGATION: 'Propagation',
     OUTREACH_OR_EDUCATION: 'Outreach or Education',
     RESEARCH: 'Research',

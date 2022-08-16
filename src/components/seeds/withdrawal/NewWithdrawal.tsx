@@ -32,6 +32,7 @@ import { Unit, WEIGHT_UNITS } from '../nursery/NewTest';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import { getSelectedPurpose } from 'src/utils/withdrawalPurposes';
 
 const useStyles = makeStyles((theme: Theme) => ({
   submit: {
@@ -63,7 +64,7 @@ function initWithdrawal(withdrawal?: AccessionWithdrawal): AccessionWithdrawal {
   return (
     withdrawal ?? {
       date: moment().format('YYYY-MM-DD'),
-      purpose: 'Propagation',
+      purpose: 'Out-planting',
     }
   );
 }
@@ -362,18 +363,12 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
               <Dropdown
                 id='purpose'
                 label='Purpose'
-                selected={record.purpose}
+                selected={getSelectedPurpose(record.purpose)}
                 values={[
-                  { label: strings.PROPAGATION, value: 'Propagation' },
+                  { label: strings.OUT_PLANTING, value: 'Out-planting' },
                   {
-                    label: strings.OUTREACH_OR_EDUCATION,
-                    value: 'Outreach or Education',
-                  },
-                  { label: strings.RESEARCH, value: 'Research' },
-                  { label: strings.BROADCAST, value: 'Broadcast' },
-                  {
-                    label: strings.SHARE_WITH_ANOTHER_SITE,
-                    value: 'Share with Another Site',
+                    label: strings.NURSERY,
+                    value: 'Nursery',
                   },
                   { label: strings.OTHER, value: 'Other' },
                 ]}
