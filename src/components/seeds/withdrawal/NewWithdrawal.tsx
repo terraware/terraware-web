@@ -63,7 +63,7 @@ function initWithdrawal(withdrawal?: AccessionWithdrawal): AccessionWithdrawal {
   return (
     withdrawal ?? {
       date: moment().format('YYYY-MM-DD'),
-      purpose: 'Propagation',
+      purpose: 'Out-planting',
     }
   );
 }
@@ -220,6 +220,26 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
     return 6;
   };
 
+  const NEW_PURPOSES = ['Out-planting', 'Other', 'Nursery', 'Viability Testing'];
+
+  const getSelectedPurpose = () => {
+    if (record.purpose && NEW_PURPOSES.indexOf(record.purpose) > -1) {
+      return record.purpose;
+    } else {
+      switch (record.purpose) {
+        case 'Propagation':
+          return 'Out-planting';
+        case 'Outreach or Education':
+        case 'Research':
+        case 'Broadcast':
+        case 'Share with Another Site':
+          return 'Other';
+        default:
+          return '';
+      }
+    }
+  };
+
   return (
     <Dialog onClose={handleCancel} disableEscapeKeyDown open={open} classes={{ paper: isDesktop ? classes.paper : '' }}>
       <DialogTitle>
@@ -362,18 +382,12 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
               <Dropdown
                 id='purpose'
                 label='Purpose'
-                selected={record.purpose}
+                selected={getSelectedPurpose()}
                 values={[
-                  { label: strings.PROPAGATION, value: 'Propagation' },
+                  { label: strings.OUT_PLANTING, value: 'Out-planting' },
                   {
-                    label: strings.OUTREACH_OR_EDUCATION,
-                    value: 'Outreach or Education',
-                  },
-                  { label: strings.RESEARCH, value: 'Research' },
-                  { label: strings.BROADCAST, value: 'Broadcast' },
-                  {
-                    label: strings.SHARE_WITH_ANOTHER_SITE,
-                    value: 'Share with Another Site',
+                    label: strings.NURSERY,
+                    value: 'Nursery',
                   },
                   { label: strings.OTHER, value: 'Other' },
                 ]}

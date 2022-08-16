@@ -7,6 +7,26 @@ import { RendererProps } from '../../common/table/types';
 import getDateDisplayValue from 'src/utils/date';
 
 export default function WithdrawalCellRenderer(props: RendererProps<AccessionWithdrawal>): JSX.Element {
+  const NEW_PURPOSES = ['Out-planting', 'Other', 'Nursery', 'Viability Testing'];
+
+  const getSelectedPurpose = (purpose: string | undefined) => {
+    if (purpose && NEW_PURPOSES.indexOf(purpose) > -1) {
+      return purpose;
+    } else {
+      switch (purpose) {
+        case 'Propagation':
+          return 'Out-planting';
+        case 'Outreach or Education':
+        case 'Research':
+        case 'Broadcast':
+        case 'Share with Another Site':
+          return 'Other';
+        default:
+          return '';
+      }
+    }
+  };
+
   const { column, value, row, index } = props;
   if (column.key === 'quantity') {
     return (
@@ -45,6 +65,10 @@ export default function WithdrawalCellRenderer(props: RendererProps<AccessionWit
         row={row}
       />
     );
+  }
+
+  if (column.key === 'purpose' && typeof value === 'string') {
+    return <CellRenderer index={index} column={column} value={getSelectedPurpose(value)} row={row} />;
   }
 
   return <CellRenderer {...props} />;
