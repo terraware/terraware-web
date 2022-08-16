@@ -56,7 +56,7 @@ describe('Withdrawal', () => {
       cy.get('#date-tip').contains('Scheduling for: January 31st, 2030');
       cy.get('#destination').type('Panama');
       cy.get('#purpose').click();
-      cy.get('#Outreach\\ or\\ Education').click();
+      cy.get('#Other').click();
       cy.get('#notes').type('Some notes');
       cy.get('#staffResponsible').type('Carlos');
 
@@ -71,7 +71,7 @@ describe('Withdrawal', () => {
       cy.get('#row1-date').contains('2030-01-31');
       cy.get('#row1-quantity').contains('50 Seeds');
       cy.get('#row1-destination').contains('Panama');
-      cy.get('#row1-purpose').contains('Outreach or Education');
+      cy.get('#row1-purpose').contains('Other');
       cy.get('#row1-staffResponsible').contains('Carlos');
       cy.get('#row1-notes > .MuiTypography-root > .MuiSvgIcon-root').should('exist');
     });
@@ -90,7 +90,7 @@ describe('Withdrawal', () => {
       cy.get('#date').clear().type('2020-01-29');
       cy.get('#destination').clear().type('USA');
       cy.get('#purpose').click();
-      cy.get('#Research').click();
+      cy.get('#Other').click();
       cy.get('#notes').clear();
       cy.get('#staffResponsible').clear().type('Leann');
 
@@ -104,7 +104,7 @@ describe('Withdrawal', () => {
       cy.get('#row1-date').contains('2020-01-29');
       cy.get('#row1-quantity').contains('10 Seeds');
       cy.get('#row1-destination').contains('USA');
-      cy.get('#row1-purpose').contains('Research');
+      cy.get('#row1-purpose').contains('Other');
       cy.get('#row1-staffResponsible').contains('Leann');
       cy.get('#row1-notes > .MuiTypography-root > .MuiSvgIcon-root').should('not.exist');
     });
@@ -136,7 +136,7 @@ describe('Withdrawal', () => {
       cy.get('#date').clear().type('2030-01-31');
       cy.get('#destination').type('Panama');
       cy.get('#purpose').click();
-      cy.get('#Outreach\\ or\\ Education').click();
+      cy.get('#Other').click();
       cy.get('#notes').type('Some notes');
       cy.get('#staffResponsible').type('Carlos');
 
@@ -157,7 +157,7 @@ describe('Withdrawal', () => {
       cy.get('#date').clear().type('2020-01-31');
       cy.get('#destination').type('USA');
       cy.get('#purpose').click();
-      cy.get('#Research').click();
+      cy.get('#Other').click();
       cy.get('#notes').type('Other notes');
       cy.get('#staffResponsible').type('Leann');
 
@@ -179,7 +179,7 @@ describe('Withdrawal', () => {
       cy.get('#date').clear().type('2020-03-28');
       cy.get('#destination').type('Paris');
       cy.get('#purpose').click();
-      cy.get('#Propagation').click();
+      cy.get('#Other').click();
       cy.get('#staffResponsible').type('Constanza');
 
       cy.intercept('GET', 'api/v1/seedbank/accessions/*').as('getAccession');
@@ -246,7 +246,7 @@ describe('Withdrawal', () => {
       cy.get('#date').clear().type('2030-01-31');
       cy.get('#destination').type('Panama');
       cy.get('#purpose').click();
-      cy.get('#Outreach\\ or\\ Education').click();
+      cy.get('#Other').click();
       cy.get('#notes').type('Some notes');
       cy.get('#staffResponsible').type('Carlos');
 
@@ -262,7 +262,7 @@ describe('Withdrawal', () => {
       cy.get('#row1-quantity').contains('20 Grams');
 
       cy.get('#row1-destination').contains('Panama');
-      cy.get('#row1-purpose').contains('Outreach or Education');
+      cy.get('#row1-purpose').contains('Other');
       cy.get('#row1-staffResponsible').contains('Carlos');
       cy.get('#row1-notes > .MuiTypography-root > .MuiSvgIcon-root').should('exist');
     });
@@ -280,7 +280,7 @@ describe('Withdrawal', () => {
       cy.get('#date').clear().type('2020-01-29');
       cy.get('#destination').clear().type('USA');
       cy.get('#purpose').click();
-      cy.get('#Research').click();
+      cy.get('#Other').click();
       cy.get('#notes').clear();
       cy.get('#staffResponsible').clear().type('Leann');
 
@@ -295,7 +295,7 @@ describe('Withdrawal', () => {
       cy.get('#row1-quantity').contains('30 Grams');
 
       cy.get('#row1-destination').contains('USA');
-      cy.get('#row1-purpose').contains('Research');
+      cy.get('#row1-purpose').contains('Other');
       cy.get('#row1-staffResponsible').contains('Leann');
       cy.get('#row1-notes > .MuiTypography-root > .MuiSvgIcon-root').should('not.exist');
     });
@@ -309,7 +309,7 @@ describe('Withdrawal', () => {
       cy.get('#date').clear().type('2030-01-31');
       cy.get('#destination').type('Panama');
       cy.get('#purpose').click();
-      cy.get('#Outreach\\ or\\ Education').click();
+      cy.get('#Other').click();
       cy.get('#notes').type('Some notes');
       cy.get('#staffResponsible').type('Carlos');
 
@@ -329,7 +329,7 @@ describe('Withdrawal', () => {
       cy.get('#date').clear().type('2020-01-31');
       cy.get('#destination').type('USA');
       cy.get('#purpose').click();
-      cy.get('#Research').click();
+      cy.get('#Other').click();
       cy.get('#notes').type('Other notes');
       cy.get('#staffResponsible').type('Leann');
 
@@ -351,7 +351,7 @@ describe('Withdrawal', () => {
       cy.get('#date').clear().type('2020-03-28');
       cy.get('#destination').type('Paris');
       cy.get('#purpose').click();
-      cy.get('#Propagation').click();
+      cy.get('#Other').click();
       cy.get('#staffResponsible').type('Constanza');
 
       cy.intercept('GET', 'api/v1/seedbank/accessions/*').as('getAccession');
@@ -371,7 +371,7 @@ describe('Withdrawal', () => {
       cy.get('#date').clear().type('2020-03-28');
       cy.get('#destination').type('Paris');
       cy.get('#purpose').click();
-      cy.get('#Propagation').click();
+      cy.get('#Other').click();
       cy.get('#staffResponsible').type('Constanza');
 
       cy.intercept('GET', 'api/v1/seedbank/accessions/*').as('getAccession');
@@ -419,10 +419,10 @@ describe('Withdrawal', () => {
       // by Purpose, descending
       cy.get('#table-header-purpose').click();
       cy.get('#table-header-purpose').click();
-      cy.get('#row1-purpose').contains('Research');
-      cy.get('#row2-purpose').contains('Research');
-      cy.get('#row3-purpose').contains('Propagation');
-      cy.get('#row5-purpose').contains('Outreach or Education');
+      cy.get('#row1-purpose').contains('Other');
+      cy.get('#row2-purpose').contains('Other');
+      cy.get('#row3-purpose').contains('Other');
+      cy.get('#row5-purpose').contains('Other');
 
       // by staff, descending
       cy.get('#table-header-staffResponsible').click();
