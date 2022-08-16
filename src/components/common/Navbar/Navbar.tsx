@@ -15,7 +15,7 @@ const useStyles = makeStyles(() => ({
     fill: '#708284',
     width: '27px',
     height: '27px',
-    margin: '15px 0 15px 20px',
+    margin: '15px 0 15px 14px',
   },
   closeButton: {
     background: 'none',
