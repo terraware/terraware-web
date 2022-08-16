@@ -1,7 +1,5 @@
 # Dependencies
 node_modules
-typings
-reactour.d.ts
 
 # Tools
 .nyc_output
@@ -28,3 +26,6 @@ src/api/types/generated-schema.ts
 .DS_Store
 .env*
 yarn.lock
+
+# npm license report
+license-report.html
