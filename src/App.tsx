@@ -1,6 +1,5 @@
 /* eslint-disable import/no-webpack-loader-syntax */
 import { CircularProgress, CssBaseline, Slide, StyledEngineProvider } from '@mui/material';
-import mapboxgl from 'mapbox-gl';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import { Redirect, Route, Switch } from 'react-router-dom';
@@ -49,11 +48,6 @@ import SeedBankDetails from './components/SeedBank';
 import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { getPreferences, updatePreferences } from './api/preferences/preferences';
-
-// @ts-ignore
-mapboxgl.workerClass =
-  // tslint:disable-next-line: no-var-requires
-  require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker').default;
 
 const useStyles = makeStyles(() => ({
   content: {
