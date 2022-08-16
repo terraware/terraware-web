@@ -5,28 +5,9 @@ import strings from 'src/strings';
 import CellRenderer, { CellDateRenderer } from '../../common/table/TableCellRenderer';
 import { RendererProps } from '../../common/table/types';
 import getDateDisplayValue from 'src/utils/date';
+import { getSelectedPurpose } from 'src/utils/withdrawalPurposes';
 
 export default function WithdrawalCellRenderer(props: RendererProps<AccessionWithdrawal>): JSX.Element {
-  const NEW_PURPOSES = ['Out-planting', 'Other', 'Nursery', 'Viability Testing'];
-
-  const getSelectedPurpose = (purpose: string | undefined) => {
-    if (purpose && NEW_PURPOSES.indexOf(purpose) > -1) {
-      return purpose;
-    } else {
-      switch (purpose) {
-        case 'Propagation':
-          return 'Out-planting';
-        case 'Outreach or Education':
-        case 'Research':
-        case 'Broadcast':
-        case 'Share with Another Site':
-          return 'Other';
-        default:
-          return '';
-      }
-    }
-  };
-
   const { column, value, row, index } = props;
   if (column.key === 'quantity') {
     return (

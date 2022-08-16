@@ -32,6 +32,7 @@ import { Unit, WEIGHT_UNITS } from '../nursery/NewTest';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import { getSelectedPurpose } from 'src/utils/withdrawalPurposes';
 
 const useStyles = makeStyles((theme: Theme) => ({
   submit: {
@@ -220,26 +221,6 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
     return 6;
   };
 
-  const NEW_PURPOSES = ['Out-planting', 'Other', 'Nursery', 'Viability Testing'];
-
-  const getSelectedPurpose = () => {
-    if (record.purpose && NEW_PURPOSES.indexOf(record.purpose) > -1) {
-      return record.purpose;
-    } else {
-      switch (record.purpose) {
-        case 'Propagation':
-          return 'Out-planting';
-        case 'Outreach or Education':
-        case 'Research':
-        case 'Broadcast':
-        case 'Share with Another Site':
-          return 'Other';
-        default:
-          return '';
-      }
-    }
-  };
-
   return (
     <Dialog onClose={handleCancel} disableEscapeKeyDown open={open} classes={{ paper: isDesktop ? classes.paper : '' }}>
       <DialogTitle>
@@ -382,7 +363,7 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
               <Dropdown
                 id='purpose'
                 label='Purpose'
-                selected={getSelectedPurpose()}
+                selected={getSelectedPurpose(record.purpose)}
                 values={[
                   { label: strings.OUT_PLANTING, value: 'Out-planting' },
                   {
