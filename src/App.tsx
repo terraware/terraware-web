@@ -252,8 +252,8 @@ export default function App() {
   } else if (orgAPIRequestStatus === APIRequestStatus.SUCCEEDED) {
     if (organizations?.length === 0) {
       return (
-        <>
-          <TopBar>
+        <StyledEngineProvider injectFirst>
+          <TopBar fullWidth={true}>
             <TopBarContent
               notifications={notifications}
               setNotifications={setNotifications}
@@ -268,7 +268,7 @@ export default function App() {
           </TopBar>
           <ToastSnackbar />
           <NoOrgLandingPage reloadOrganizationData={reloadData} />
-        </>
+        </StyledEngineProvider>
       );
     } else if (!selectedOrganization) {
       // This allows is to reload open views that require an organization

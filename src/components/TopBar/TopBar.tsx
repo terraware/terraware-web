@@ -5,6 +5,7 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 interface StyleProps {
   isDesktop?: boolean;
+  fullWidth?: boolean;
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -12,8 +13,8 @@ const useStyles = makeStyles((theme: Theme) => ({
     background: theme.palette.common.white,
     color: theme.palette.common.black,
     boxShadow: '2px 2px 4px rgba(58, 68, 69, 0.2)',
-    left: (props: StyleProps) => (props.isDesktop ? '200px' : 0),
-    width: (props: StyleProps) => (props.isDesktop ? 'calc(100% - 200px)' : '100%'),
+    left: (props: StyleProps) => (props.isDesktop && !props.fullWidth ? '200px' : 0),
+    width: (props: StyleProps) => (props.isDesktop && !props.fullWidth ? 'calc(100% - 200px)' : '100%'),
   },
   flex: {
     display: 'flex',
@@ -31,12 +32,13 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 type TopBarProps = {
+  fullWidth?: boolean;
   children: React.ReactNode;
 };
 
 export default function TopBar(props: TopBarProps): JSX.Element {
   const { isDesktop } = useDeviceInfo();
-  const classes = useStyles({ isDesktop });
+  const classes = useStyles({ isDesktop, fullWidth: props.fullWidth });
 
   return (
     <AppBar
