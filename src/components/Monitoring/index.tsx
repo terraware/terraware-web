@@ -16,6 +16,7 @@ import Button from '../common/button/Button';
 import Title from '../common/Title';
 import { Box, Grid } from '@mui/material';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import PageSnackbar from 'src/components/PageSnackbar';
 
 const useStyles = makeStyles(() => ({
   mainTitle: {
@@ -173,6 +174,7 @@ export default function Monitoring(props: MonitoringProps): JSX.Element {
               )}
             </Grid>
 
+            <PageSnackbar />
             {selectedSeedBank && monitoringPreferences && (
               <SeedBankMonitoring
                 monitoringPreferences={monitoringPreferences}
@@ -187,6 +189,7 @@ export default function Monitoring(props: MonitoringProps): JSX.Element {
       ) : isAdmin(organization) ? (
         <>
           {getPageHeading()}
+          <PageSnackbar />
           <EmptyMessage
             className={classes.message}
             title={emptyMessageStrings.NO_SEEDBANKS_ADMIN_TITLE}
@@ -198,6 +201,7 @@ export default function Monitoring(props: MonitoringProps): JSX.Element {
       ) : (
         <>
           {getPageHeading()}
+          <PageSnackbar />
           <EmptyMessage
             className={classes.message}
             title={emptyMessageStrings.NO_SEEDBANKS_NON_ADMIN_TITLE}

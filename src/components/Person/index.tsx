@@ -14,6 +14,7 @@ import { OrganizationUser } from 'src/types/User';
 import { makeStyles } from '@mui/styles';
 import getDateDisplayValue from 'src/utils/date';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import PageSnackbar from 'src/components/PageSnackbar';
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
@@ -116,6 +117,9 @@ export default function PersonDetails({ organization }: PersonDetailsProps): JSX
               className={classes.editButton}
             />
           </Grid>
+        </Grid>
+        <Grid item xs={12}>
+          <PageSnackbar />
         </Grid>
         <Grid item xs={gridSize()}>
           <TextField label={strings.EMAIL} id='email' type='text' value={person?.email} display={true} />

@@ -15,6 +15,7 @@ import { Facility } from 'src/api/types/facilities';
 import { createFacility, updateFacility } from 'src/api/facility/facility';
 import { Theme } from '@mui/material';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import PageSnackbar from 'src/components/PageSnackbar';
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
@@ -147,6 +148,7 @@ export default function SeedBankView({ organization, reloadOrganizationData }: S
           <Grid item xs={12}>
             {selectedSeedBank ? <h2>{selectedSeedBank?.name}</h2> : <h2>{strings.ADD_SEED_BANK}</h2>}
           </Grid>
+          <PageSnackbar />
           <Grid item xs={gridSize()}>
             <TextField
               id='name'

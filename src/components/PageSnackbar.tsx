@@ -1,13 +1,12 @@
-import { Snackbar, Typography } from '@mui/material';
-import { Theme } from '@mui/material';
+import { Snackbar } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { useRecoilState } from 'recoil';
 import { snackbarAtoms } from 'src/state/snackbar';
-import Icon from './common/icon/Icon';
-import { useEffect } from 'react';
-import { Close } from '@mui/icons-material';
+import { useEffect, useState } from 'react';
+import PageMessage from 'src/components/common/PageMessage';
+import DetectAppVersion from 'src/components/common/DetectAppVersion';
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles(() => ({
   mainSnackbar: {
     '&.MuiSnackbar-anchorOriginTopCenter': {
       top: '0px',
@@ -18,78 +17,12 @@ const useStyles = makeStyles((theme: Theme) => ({
       zIndex: 0,
     },
   },
-  mainContainer: {
-    display: 'flex',
-    backgroundColor: '#ffffff',
-  },
-  page: {
-    width: '584px',
-    borderRadius: '8px',
-    '&.bodyinfo': {
-      border: '1px solid #708284',
-      background: '#F2F4F5',
-      '& .snackbarIcon': {
-        fill: '#708284',
-      },
-    },
-    '&.bodycritical': {
-      border: '1px solid #FE0003',
-      background: '#FFF1F1',
-      '& .snackbarIcon': {
-        fill: '#FE0003',
-      },
-    },
-    '&.bodywarning': {
-      border: '1px solid #BD6931',
-      background: '#FEF2EE',
-      '& .snackbarIcon': {
-        fill: '#BD6931',
-      },
-    },
-    '&.bodysuccess': {
-      border: '1px solid #308F5F',
-      background: '#D6FDE5',
-      '& .snackbarIcon': {
-        fill: '#308F5F',
-      },
-    },
-    '& .body': {
-      padding: '16px 16px 16px 0',
-    },
-  },
-  body: {
-    fontSize: '16px',
-    fontWeight: 400,
-    lineHeight: '24px',
-    color: '#3A4445',
-  },
-  snackbarTitle: {
-    fontSize: '16px',
-    fontWeight: 600,
-    lineHeight: '24px',
-    color: '#3A4445',
-    marginBottom: '8px',
-  },
-  iconContainer: {
-    borderRadius: '14px 0 0 14px',
-    padding: '16px',
-    '& svg': {
-      width: '24px',
-      height: '24px',
-    },
-  },
-  closeIconContainer: {
-    cursor: 'pointer',
-    display: 'flex',
-    flexGrow: 1,
-    justifyContent: 'flex-end',
-    padding: '10px',
-  },
 }));
 
 export default function PageSnackbarMessage(): JSX.Element {
   const classes = useStyles();
 
+  const [newVersionDetected, setNewVersionDetected] = useState<boolean>(false);
   const [snackbar, setSnackbar] = useRecoilState(snackbarAtoms.page);
 
   const clearSnackbar = () => {
@@ -123,32 +56,25 @@ export default function PageSnackbarMessage(): JSX.Element {
   }, [setSnackbar, snackbar]);
 
   return (
-    <Snackbar
-      anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      open={Boolean(snackbar.msg)}
-      onClose={handleClose}
-      autoHideDuration={null}
-      id='snackbar_page'
-      className={classes.mainSnackbar}
-    >
-      <div className={`${classes.mainContainer} ${classes.page} body${snackbar.priority}`}>
-        <div className={`${classes.iconContainer} iconContainer`}>
-          <Icon name={snackbar.priority} className='snackbarIcon' />
+    <>
+      {(!snackbar.msg || newVersionDetected) && <DetectAppVersion onNewVersion={() => setNewVersionDetected(true)} />}
+      <Snackbar
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        open={!newVersionDetected && Boolean(snackbar.msg)}
+        onClose={handleClose}
+        autoHideDuration={null}
+        id='snackbar_page'
+        className={classes.mainSnackbar}
+      >
+        <div>
+          <PageMessage
+            title={snackbar.title}
+            message={snackbar.msg}
+            priority={snackbar.priority}
+            onClose={clearSnackbar}
+          />
         </div>
-        <div className={`${classes.body} body`}>
-          {snackbar.title && (
-            <Typography component='p' variant='body1' className={classes.snackbarTitle}>
-              {snackbar.title}
-            </Typography>
-          )}
-          <Typography component='p' variant='body1'>
-            {snackbar.msg}
-          </Typography>
-        </div>
-        <div className={classes.closeIconContainer} onClick={clearSnackbar}>
-          <Close />
-        </div>
-      </div>
-    </Snackbar>
+      </Snackbar>
+    </>
   );
 }

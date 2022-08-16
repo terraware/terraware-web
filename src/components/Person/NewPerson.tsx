@@ -18,6 +18,7 @@ import { APP_PATHS } from 'src/constants';
 import dictionary from 'src/strings/dictionary';
 import FormBottomBar from '../common/FormBottomBar';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import PageSnackbar from 'src/components/PageSnackbar';
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
@@ -237,6 +238,7 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
               </h2>
             )}
             {!personSelectedToEdit ? <p className={classes.titleSubtitle}>{strings.ADD_PERSON_DESC}</p> : null}
+            <PageSnackbar />
             {pageError === 'REPEATED_EMAIL' && repeatedEmail && (
               <ErrorBox
                 text={strings.ALREADY_INVITED_PERSON_ERROR}

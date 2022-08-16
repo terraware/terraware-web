@@ -12,6 +12,7 @@ import Button from '../common/button/Button';
 import { Facility } from 'src/api/types/facilities';
 import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import PageSnackbar from 'src/components/PageSnackbar';
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
@@ -87,6 +88,9 @@ export default function SeedBankDetails({ organization }: SeedBankDetailsProps):
         <Grid item xs={12} className={classes.titleWithButton}>
           <h2>{seedBank?.name}</h2>
           <Button label={strings.EDIT} priority='secondary' onClick={goToEditSeedBank} />
+        </Grid>
+        <Grid item xs={12}>
+          <PageSnackbar />
         </Grid>
         <Grid item xs={gridSize()}>
           <TextField label={strings.NAME_REQUIRED} id='name' type='text' value={seedBank?.name} display={true} />
