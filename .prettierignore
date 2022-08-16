@@ -1,7 +1,5 @@
 # Dependencies
 node_modules
-typings
-reactour.d.ts
 
 # Tools
 .nyc_output

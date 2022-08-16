@@ -32,6 +32,5 @@ out.json
 photo-data
 report.csv
 
-# license report
-public/license-report.html
+# build version file
 public/build-version.txt
