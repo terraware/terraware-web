@@ -2,7 +2,7 @@ import { Snackbar } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { useRecoilState } from 'recoil';
 import { snackbarAtoms } from 'src/state/snackbar';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import PageMessage from 'src/components/common/PageMessage';
 import DetectAppVersion from 'src/components/common/DetectAppVersion';
 
@@ -22,6 +22,7 @@ const useStyles = makeStyles(() => ({
 export default function PageSnackbarMessage(): JSX.Element {
   const classes = useStyles();
 
+  const [newVersionDetected, setNewVersionDetected] = useState<boolean>(false);
   const [snackbar, setSnackbar] = useRecoilState(snackbarAtoms.page);
 
   const clearSnackbar = () => {
@@ -56,10 +57,10 @@ export default function PageSnackbarMessage(): JSX.Element {
 
   return (
     <>
-      <DetectAppVersion />
+      {(!snackbar.msg || newVersionDetected) && <DetectAppVersion onNewVersion={() => setNewVersionDetected(true)} />}
       <Snackbar
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-        open={Boolean(snackbar.msg)}
+        open={!newVersionDetected && Boolean(snackbar.msg)}
         onClose={handleClose}
         autoHideDuration={null}
         id='snackbar_page'

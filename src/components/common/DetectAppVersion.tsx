@@ -17,7 +17,11 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 const ONE_MINUTE_INTERVAL_MS = 60 * 1000;
 
-export default function DetectAppVersion(): JSX.Element | null {
+type DetectAppVersionProps = {
+  onNewVersion?: () => void;
+};
+
+export default function DetectAppVersion({ onNewVersion }: DetectAppVersionProps): JSX.Element | null {
   const { isMobile } = useDeviceInfo();
   const classes = useStyles();
   const [lastCheck, setLastCheck] = useState<number>(0);
@@ -28,10 +32,13 @@ export default function DetectAppVersion(): JSX.Element | null {
     const response = await getLatestAppVersion();
     const isStale = !!response.version && response.version.trim() !== currentAppVersion;
     setNeedsRefresh(isStale);
+    if (isStale && onNewVersion) {
+      onNewVersion();
+    }
     // this is needed to trigger the next useEffect, so we keep checking for app version
     // (unless we have already decided app needs refresh)
     setLastCheck(Date.now());
-  }, [currentAppVersion]);
+  }, [currentAppVersion, onNewVersion]);
 
   useEffect(() => {
     let timeoutVar: any = null;
