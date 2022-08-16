@@ -80,7 +80,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   buttonContainer: {
     width: '100%',
     textAlign: 'right',
-    padding: `0 ${theme.spacing(1)} ${theme.spacing(1)}`,
+    padding: `0 ${theme.spacing(2)} ${theme.spacing(2)}`,
   },
 }));
 
