@@ -1,4 +1,4 @@
-// Check if web app is in production mode - check for both https://www.terraware.io and https://terraware.io
+// Check if web app environment
 const useEnvironment = () => {
   const isProduction = !!window.location.origin.match(/^https:\/\/(www.)?terraware.io/);
   const isStaging = !!window.location.origin.match(/^https:\/\/(www.)?staging.terraware.io/);
