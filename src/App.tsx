@@ -346,7 +346,7 @@ export default function App() {
                 />
               </Route>
               <Route exact path={APP_PATHS.SEEDS_DASHBOARD}>
-                <SeedSummary organization={selectedOrganization} />
+                <SeedSummary organization={selectedOrganization} setSeedSearchCriteria={setSeedSearchCriteria} />
               </Route>
               <Route exact path={APP_PATHS.CHECKIN}>
                 <CheckIn organization={selectedOrganization} />

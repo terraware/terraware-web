@@ -15,6 +15,7 @@ import SummaryPaper from './SummaryPaper';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import AccessionByStatus from './AccessionByStatus';
 import { Link } from 'react-router-dom';
+import { SeedSearchCriteria } from 'src/api/seeds/search';
 
 const useStyles = makeStyles(() => ({
   mainContainer: {
@@ -45,11 +46,12 @@ Cookies.defaults = {
 
 type SeedSummaryProps = {
   organization?: ServerOrganization;
+  setSeedSearchCriteria: (criteria: SeedSearchCriteria) => void;
 };
 
 export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
   const classes = useStyles();
-  const { organization } = props;
+  const { setSeedSearchCriteria, organization } = props;
   // populateSummaryInterval value is only being used when it is set.
   const [, setPopulateSummaryInterval] = useState<ReturnType<typeof setInterval>>();
   const [summary, setSummary] = useState<GetSummaryResponse>();
@@ -144,16 +146,35 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
                   </Box>
                   <Box display='flex' flexDirection={isMobile ? 'column' : 'row'}>
                     <AccessionByStatus
-                      status='Awaiting Check-in'
+                      label='Awaiting Check-in'
+                      status='Awaiting Check-In'
                       quantity={summary.value?.accessionsByState['Awaiting Check-In']}
+                      setSeedSearchCriteria={setSeedSearchCriteria}
                     />
                     <AccessionByStatus
-                      status='Awaiting Processing'
+                      label='Awaiting Processing'
+                      status='Processing'
                       quantity={summary.value?.accessionsByState['Processing']}
+                      setSeedSearchCriteria={setSeedSearchCriteria}
                     />
-                    <AccessionByStatus status='Cleaning' quantity={summary.value?.accessionsByState['Processed']} />
-                    <AccessionByStatus status='Drying' quantity={summary.value?.accessionsByState['Drying']} />
-                    <AccessionByStatus status='In Storage' quantity={summary.value?.accessionsByState['In Storage']} />
+                    <AccessionByStatus
+                      label='Cleaning'
+                      status='Processed'
+                      quantity={summary.value?.accessionsByState['Processed']}
+                      setSeedSearchCriteria={setSeedSearchCriteria}
+                    />
+                    <AccessionByStatus
+                      label='Drying'
+                      status='Drying'
+                      quantity={summary.value?.accessionsByState['Drying']}
+                      setSeedSearchCriteria={setSeedSearchCriteria}
+                    />
+                    <AccessionByStatus
+                      label='In Storage'
+                      status='In Storage'
+                      quantity={summary.value?.accessionsByState['In Storage']}
+                      setSeedSearchCriteria={setSeedSearchCriteria}
+                    />
                   </Box>
                 </Grid>
               </Grid>
