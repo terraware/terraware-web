@@ -8,9 +8,9 @@ describe('Accessions', () => {
       cy.visit('/seeds-dashboard');
       cy.wait('@summary');
 
-      cy.get('#sessions-current').contains('3');
+      cy.get('#sessions-current').contains('4');
 
-      cy.get('#species-current').contains('4');
+      cy.get('#species-current').contains('2');
 
       cy.get('#update-row-Pending').contains('0 seed collection');
       cy.get('#update-row-Processed').contains('0 accessions');
