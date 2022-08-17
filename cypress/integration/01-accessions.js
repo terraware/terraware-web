@@ -8,7 +8,7 @@ describe('Accessions', () => {
       cy.visit('/seeds-dashboard');
       cy.wait('@summary');
 
-      cy.get('#sessions-current').contains('4');
+      cy.get('#sessions-current').contains('3');
 
       cy.get('#species-current').contains('2');
 
