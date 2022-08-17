@@ -23,6 +23,8 @@ const strings = new LocalizedStrings({
     ADD: 'Add',
     NEW_SPECIES: 'New Species',
     SPECIES: 'Species',
+    ACCESSION_BY_STATUS: 'Accession by Status',
+    SEE_ALL_ACCESSIONS: 'See All Accessions',
     AS_OF: 'As of',
     OTHER: 'Other',
     LOG_OUT: 'Log Out',

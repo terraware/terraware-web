@@ -1,20 +1,20 @@
-import { Container, Grid, CircularProgress } from '@mui/material';
+import { Container, Grid, CircularProgress, Box, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import Cookies from 'cookies-js';
 import React, { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
-import { SeedSearchCriteria } from 'src/api/seeds/search';
 import { getSummary, GetSummaryResponse } from 'src/api/seeds/summary';
 import TfMain from 'src/components/common/TfMain';
 import MainPaper from 'src/components/MainPaper';
-import { API_PULL_INTERVAL } from 'src/constants';
+import { API_PULL_INTERVAL, APP_PATHS } from 'src/constants';
 import { seedsSummarySelectedOrgInfo } from 'src/state/selectedOrgInfoPerPage';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
 import PageHeader from '../PageHeader';
 import SummaryPaper from './SummaryPaper';
-import Updates from './Updates';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import AccessionByStatus from './AccessionByStatus';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles(() => ({
   mainContainer: {
@@ -25,18 +25,16 @@ const useStyles = makeStyles(() => ({
     overflow: 'auto',
     flexDirection: 'column',
   },
-  fixedHeight: {
-    height: '100%',
-  },
-  message: {
-    margin: '0 auto',
-    width: '50%',
-    marginTop: '10%',
-  },
   spinnerContainer: {
     position: 'fixed',
     top: '50%',
     left: 'calc(50% + 100px)',
+  },
+  accessionsLink: {
+    textDecoration: 'none',
+    fontWeight: 500,
+    color: '#0067C8',
+    marginRight: '12px',
   },
 }));
 
@@ -47,12 +45,11 @@ Cookies.defaults = {
 
 type SeedSummaryProps = {
   organization?: ServerOrganization;
-  setSeedSearchCriteria: (criteria: SeedSearchCriteria) => void;
 };
 
 export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
   const classes = useStyles();
-  const { setSeedSearchCriteria, organization } = props;
+  const { organization } = props;
   // populateSummaryInterval value is only being used when it is set.
   const [, setPopulateSummaryInterval] = useState<ReturnType<typeof setInterval>>();
   const [summary, setSummary] = useState<GetSummaryResponse>();
@@ -137,14 +134,27 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
                   </MainPaper>
                 </Grid>
                 <Grid item xs={12}>
-                  <MainPaper className={`${classes.paper} ${classes.fixedHeight}`}>
-                    <Updates
-                      setSeedSearchCriteria={setSeedSearchCriteria}
-                      summaryResponse={summary?.value}
-                      loading={summary === undefined}
-                      error={errorOccurred}
+                  <Box display='flex' alignContent='center' justifyContent='space-between' alignItems='center'>
+                    <Typography fontSize='20px' color='#000000' paddingBottom='8px' paddingLeft='28px'>
+                      {strings.ACCESSION_BY_STATUS}
+                    </Typography>
+                    <Link className={classes.accessionsLink} to={APP_PATHS.ACCESSIONS}>
+                      {strings.SEE_ALL_ACCESSIONS}
+                    </Link>
+                  </Box>
+                  <Box display='flex' flexDirection={isMobile ? 'column' : 'row'}>
+                    <AccessionByStatus
+                      status='Awaiting Check-in'
+                      quantity={summary.value?.accessionsByState['Awaiting Check-In']}
                     />
-                  </MainPaper>
+                    <AccessionByStatus
+                      status='Awaiting Processing'
+                      quantity={summary.value?.accessionsByState['Processing']}
+                    />
+                    <AccessionByStatus status='Cleaning' quantity={summary.value?.accessionsByState['Processed']} />
+                    <AccessionByStatus status='Drying' quantity={summary.value?.accessionsByState['Drying']} />
+                    <AccessionByStatus status='In Storage' quantity={summary.value?.accessionsByState['In Storage']} />
+                  </Box>
                 </Grid>
               </Grid>
             </Grid>
