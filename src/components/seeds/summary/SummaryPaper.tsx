@@ -7,7 +7,7 @@ import strings from 'src/strings';
 interface Props {
   id: string;
   title: string;
-  statistic?: number;
+  statistic?: number | string;
   loading: boolean;
   error: boolean;
 }
@@ -18,7 +18,7 @@ export default function SummaryPaper({ id, title, statistic, loading, error }: P
       <PanelTitle title={title} gutterBottom={true} />
       {error && strings.GENERIC_ERROR}
       {loading && <CircularProgress id={`spinner-summary-${id}`} />}
-      {statistic && (
+      {statistic !== undefined && (
         <>
           <Typography id={`${id}-current`} component='p' variant='h4'>
             {statistic}

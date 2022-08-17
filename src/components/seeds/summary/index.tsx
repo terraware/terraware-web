@@ -1,4 +1,4 @@
-import { Container, Grid, CircularProgress } from '@mui/material';
+import { Container, Grid, CircularProgress, Box, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import Cookies from 'cookies-js';
 import React, { useEffect, useState } from 'react';
@@ -15,6 +15,9 @@ import PageHeader from '../PageHeader';
 import SummaryPaper from './SummaryPaper';
 import Updates from './Updates';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import PageMessage from 'src/components/common/PageMessage';
+import Button from 'src/components/common/button/Button';
+import Icon from 'src/components/common/icon/Icon';
 
 const useStyles = makeStyles(() => ({
   mainContainer: {
@@ -24,6 +27,7 @@ const useStyles = makeStyles(() => ({
     display: 'flex',
     overflow: 'auto',
     flexDirection: 'column',
+    alignItems: 'center',
   },
   fixedHeight: {
     height: '100%',
@@ -37,6 +41,9 @@ const useStyles = makeStyles(() => ({
     position: 'fixed',
     top: '50%',
     left: 'calc(50% + 100px)',
+  },
+  messageIcon: {
+    fill: '#3A4445',
   },
 }));
 
@@ -103,22 +110,57 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
     if (isMobile) {
       return 12;
     }
-    return 6;
+    return 4;
   };
 
   return (
     <TfMain>
-      <PageHeader subtitle={strings.WELCOME_MSG} page={strings.DASHBOARD} parentPage={strings.SEEDS} />
+      <PageHeader subtitle={strings.WELCOME_MSG} page={strings.SEED_DASHBOARD} parentPage={strings.SEEDS} />
       <Container maxWidth={false} className={classes.mainContainer}>
         {organization && summary ? (
           <Grid container spacing={3}>
+            <Grid item xs={12}>
+              <Box
+                sx={{
+                  background: '#F2F4F5',
+                  borderRadius: '14px',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  padding: (theme) => theme.spacing(3, 4),
+                }}
+              >
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                  <Icon name='seedbankNav' className={classes.messageIcon} size='large' />
+                  <Typography sx={{ color: '#000000', size: '20px', paddingLeft: 1 }}>
+                    {strings.DASHBOARD_MESSAGE}
+                  </Typography>
+                </Box>
+                <Button label={strings.GET_STARTED} onClick={() => true} />
+              </Box>
+            </Grid>
             <Grid item xs={12}>
               <Grid container spacing={3}>
                 <Grid item xs={cardGridSize()}>
                   <MainPaper className={classes.paper}>
                     <SummaryPaper
+                      id='species'
+                      title={strings.TOTAL_SEED_COUNT}
+                      statistic={`${summary?.value?.seedsRemaining.total}${
+                        summary?.value?.seedsRemaining && summary?.value?.seedsRemaining.unknownQuantityAccessions > 0
+                          ? '+'
+                          : ''
+                      }`}
+                      loading={summary === undefined}
+                      error={errorOccurred}
+                    />
+                  </MainPaper>
+                </Grid>
+                <Grid item xs={cardGridSize()}>
+                  <MainPaper className={classes.paper}>
+                    <SummaryPaper
                       id='sessions'
-                      title={strings.ACTIVE_ACCESSIONS}
+                      title={strings.TOTAL_ACTIVE_ACCESSIONS}
                       statistic={summary?.value?.activeAccessions}
                       loading={summary === undefined}
                       error={errorOccurred}
@@ -129,7 +171,7 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
                   <MainPaper className={classes.paper}>
                     <SummaryPaper
                       id='species'
-                      title={strings.SPECIES}
+                      title={strings.NUMBER_OF_SPECIES}
                       statistic={summary?.value?.species}
                       loading={summary === undefined}
                       error={errorOccurred}

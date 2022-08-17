@@ -9,7 +9,10 @@ const strings = new LocalizedStrings({
     PREEXISTING_SPECIES: 'This species already exists',
     DELETE: 'Delete',
     SPECIES_NAME: 'Species Name',
+    SEED_DASHBOARD: 'Seed Dashboard',
     DASHBOARD: 'Dashboard',
+    DASHBOARD_MESSAGE: 'Manage, track and analysize your seed inventories. ',
+    GET_STARTED: 'Get Started',
     DELETE_SPECIES: 'Delete Species',
     DELETE_CONFIRMATION_MODAL_MAIN_TEXT:
       'Are you sure you want to delete your selected species? This will delete them from your list, but you’ll keep all data attached to existing entries.',
@@ -23,6 +26,7 @@ const strings = new LocalizedStrings({
     ADD: 'Add',
     NEW_SPECIES: 'New Species',
     SPECIES: 'Species',
+    NUMBER_OF_SPECIES: 'Number Of Species',
     AS_OF: 'As of',
     OTHER: 'Other',
     LOG_OUT: 'Log Out',
@@ -204,7 +208,8 @@ const strings = new LocalizedStrings({
     CONDITION: 'Condition',
     SUMMARY: 'Summary',
     WELCOME_MSG: 'Welcome and happy seeding!',
-    ACTIVE_ACCESSIONS: 'Active Accessions',
+    TOTAL_ACTIVE_ACCESSIONS: 'Total Active Accessions',
+    TOTAL_SEED_COUNT: 'Total Seed Count',
     MOST_RECENT_STAGE_UPDATES: 'Most Recent Stage Updates',
     PENDING_UPDATES:
       'There are {0} seed collection bags have been waiting since drop off for at least 1 week and are ready to be processed.',
