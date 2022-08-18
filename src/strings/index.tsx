@@ -44,6 +44,7 @@ const strings = new LocalizedStrings({
     CLEAR_FILTERS: 'Clear Filters',
     LOADING: 'Loading...',
     SEEDS: 'Seeds',
+    SEED: 'Seed',
     ACCESSIONS: 'Accessions',
     OR: 'OR',
     FLORA: 'Flora',

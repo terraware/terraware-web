@@ -482,7 +482,11 @@ export default function Database(props: DatabaseProps): JSX.Element {
                         <Typography sx={{ paddingLeft: '4px', fontWeight: 500 }}>
                           {searchSummaryResults.accessions}
                         </Typography>
-                        <Typography sx={{ paddingLeft: '4px' }}>{strings.ACCESSIONS.toLowerCase()}</Typography>
+                        <Typography sx={{ paddingLeft: '4px' }}>
+                          {searchSummaryResults.accessions === 1
+                            ? strings.ACCESSION.toLowerCase()
+                            : strings.ACCESSIONS.toLowerCase()}
+                        </Typography>
                         <Typography sx={{ paddingLeft: '12px', fontWeight: 500 }}>
                           {searchSummaryResults.species}
                         </Typography>
@@ -495,7 +499,11 @@ export default function Database(props: DatabaseProps): JSX.Element {
                             ? '+'
                             : ''
                         }`}</Typography>
-                        <Typography sx={{ paddingLeft: '4px' }}>{strings.SEEDS.toLowerCase()}</Typography>
+                        <Typography sx={{ paddingLeft: '4px' }}>
+                          {searchSummaryResults.seedsRemaining.total === 1
+                            ? strings.SEED.toLowerCase()
+                            : strings.SEEDS.toLowerCase()}
+                        </Typography>
                       </Box>
                     )}
                   </Grid>
