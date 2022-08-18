@@ -161,13 +161,13 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
                       <AccessionByStatus
                         label='Cleaning'
                         status='Cleaning'
-                        quantity={summary.value?.accessionsByState['Cleaning']}
+                        quantity={summary.value?.accessionsByState.Cleaning}
                       />
                     ) : null}
                     <AccessionByStatus
                       label='Drying'
                       status='Drying'
-                      quantity={summary.value?.accessionsByState['Drying']}
+                      quantity={summary.value?.accessionsByState.Drying}
                     />
                     <AccessionByStatus
                       label='In Storage'
