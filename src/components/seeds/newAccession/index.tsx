@@ -138,7 +138,7 @@ export default function NewAccessionWrapper(props: NewAccessionProps): JSX.Eleme
             <AccessionForm
               accession={{
                 facilityId: selectedOrgInfoDatabase.selectedFacility?.id,
-                receivedDate: moment().toString(),
+                receivedDate: moment().format('YYYY-MM-DD'),
               }}
               organization={organization}
               onSubmit={onSubmit}
