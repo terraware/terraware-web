@@ -1,4 +1,4 @@
-import { CircularProgress, Container, Grid, Paper } from '@mui/material';
+import { Box, CircularProgress, Container, Grid, Paper, Typography } from '@mui/material';
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -15,6 +15,8 @@ import {
   searchFieldValues,
   SearchNodePayload,
   SearchResponseElement,
+  searchSummary,
+  SearchSummaryResponsePayload,
   SeedSearchCriteria,
   SeedSearchSortOrder,
 } from 'src/api/seeds/search';
@@ -172,6 +174,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
    */
   const [availableFieldOptions, setAvailableFieldOptions] = useState<FieldValuesMap | null>();
   const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>();
+  const [searchSummaryResults, setSearchSummaryResults] = useState<SearchSummaryResponsePayload | null>();
   const [unfilteredResults, setUnfilteredResults] = useState<SearchResponseElement[] | null>();
   const [selectSeedBankModalOpen, setSelectSeedBankModalOpen] = useState<boolean>(false);
 
@@ -269,11 +272,18 @@ export default function Database(props: DatabaseProps): JSX.Element {
         setFieldOptions(allValues);
       };
 
+      const populateSearchSummary = async () => {
+        const apiResponse = await searchSummary({
+          search: convertToSearchNodePayload(searchCriteria, organization.id),
+        });
+        setSearchSummaryResults(apiResponse);
+      };
       populateUnfilteredResults();
       populateSearchResults();
       populateAvailableFieldOptions();
       populatePendingAccessions();
       populateFieldOptions();
+      populateSearchSummary();
     }
   }, [searchCriteria, searchSortOrder, searchColumns, organization, isProduction]);
 
@@ -473,6 +483,39 @@ export default function Database(props: DatabaseProps): JSX.Element {
                           />
                         </Grid>
                       </Paper>
+                    </Grid>
+                  )}
+
+                  {searchSummaryResults && (
+                    <Grid item xs={12}>
+                      <Box sx={{ background: '#F2F4F5', display: 'flex', color: '#000000', padding: 2 }}>
+                        <Typography>{strings.TOTAL}</Typography>
+                        <Typography sx={{ paddingLeft: '4px', fontWeight: 500 }}>
+                          {searchSummaryResults.accessions}
+                        </Typography>
+                        <Typography sx={{ paddingLeft: '4px' }}>
+                          {searchSummaryResults.accessions === 1
+                            ? strings.ACCESSION.toLowerCase()
+                            : strings.ACCESSIONS.toLowerCase()}
+                        </Typography>
+                        <Typography sx={{ paddingLeft: '12px', fontWeight: 500 }}>
+                          {searchSummaryResults.species}
+                        </Typography>
+                        <Typography sx={{ paddingLeft: '4px' }}>{strings.SPECIES.toLowerCase()}</Typography>
+                        <Typography sx={{ paddingLeft: '12px', fontWeight: 500 }}>{`${
+                          searchSummaryResults.seedsRemaining.total
+                        }${
+                          searchSummaryResults.seedsRemaining &&
+                          searchSummaryResults.seedsRemaining.unknownQuantityAccessions > 0
+                            ? '+'
+                            : ''
+                        }`}</Typography>
+                        <Typography sx={{ paddingLeft: '4px' }}>
+                          {searchSummaryResults.seedsRemaining.total === 1
+                            ? strings.SEED.toLowerCase()
+                            : strings.SEEDS.toLowerCase()}
+                        </Typography>
+                      </Box>
                     </Grid>
                   )}
                   <Grid item xs={12}>
