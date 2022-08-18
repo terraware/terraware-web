@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { makeStyles } from '@mui/styles';
-import { Slide, Theme } from '@mui/material';
+import { Theme } from '@mui/material';
 import strings from 'src/strings';
 import { getLatestAppVersion } from 'src/api/appVersion';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -59,15 +59,13 @@ export default function DetectAppVersion({ onNewVersion }: DetectAppVersionProps
   }
 
   return (
-    <Slide in={true} direction='down' className={classes.container}>
-      <div>
-        <PageMessage
-          message={isMobile ? strings.NEW_APP_VERSION_MOBILE : strings.NEW_APP_VERSION}
-          priority={'info'}
-          buttonText={strings.REFRESH}
-          onClick={() => window.location.reload()}
-        />
-      </div>
-    </Slide>
+    <div className={classes.container}>
+      <PageMessage
+        message={isMobile ? strings.NEW_APP_VERSION_MOBILE : strings.NEW_APP_VERSION}
+        priority={'info'}
+        buttonText={strings.REFRESH}
+        onClick={() => window.location.reload()}
+      />
+    </div>
   );
 }
