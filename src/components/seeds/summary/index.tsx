@@ -146,7 +146,7 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
                 <Grid item xs={cardGridSize()}>
                   <MainPaper className={classes.paper}>
                     <SummaryPaper
-                      id='species'
+                      id='seedCount'
                       title={strings.TOTAL_SEED_COUNT}
                       statistic={`${summary?.value?.seedsRemaining.total}${
                         summary?.value?.seedsRemaining && summary?.value?.seedsRemaining.unknownQuantityAccessions > 0
