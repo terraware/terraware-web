@@ -16,7 +16,7 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import Button from 'src/components/common/button/Button';
 import Icon from 'src/components/common/icon/Icon';
 import AccessionByStatus from './AccessionByStatus';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import useEnvironment from 'src/utils/useEnvironment';
 
 const useStyles = makeStyles(() => ({
@@ -57,6 +57,7 @@ type SeedSummaryProps = {
 export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
   const classes = useStyles();
   const { organization } = props;
+  const history = useHistory();
   // populateSummaryInterval value is only being used when it is set.
   const [, setPopulateSummaryInterval] = useState<ReturnType<typeof setInterval>>();
   const [summary, setSummary] = useState<GetSummaryResponse>();
@@ -134,7 +135,10 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
                     {strings.DASHBOARD_MESSAGE}
                   </Typography>
                 </Box>
-                <Button label={strings.GET_STARTED} onClick={() => true} />
+                <Button
+                  label={strings.GET_STARTED}
+                  onClick={() => history.push(isProduction ? APP_PATHS.ACCESSIONS : APP_PATHS.ACCESSIONS2)}
+                />
               </Box>
             </Grid>
             <Grid item xs={12}>
