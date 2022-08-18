@@ -550,8 +550,8 @@ describe('Database', () => {
       // checking state list
       cy.get('#filter-state').click();
       cy.get('#filter-list-state').should('be.visible');
-      cy.get('#filter-list-state').children().should('have.length', 9);
-      cy.get('#filter-list-state .Mui-disabled .MuiCheckbox-root').should('have.length', 2);
+      cy.get('#filter-list-state').children().should('have.length', 12);
+      cy.get('#filter-list-state .Mui-disabled .MuiCheckbox-root').should('have.length', 5);
       cy.get('#filter-list-state').type('{esc}');
       cy.get('#filter-list-state').should('not.exist');
 
@@ -568,7 +568,7 @@ describe('Database', () => {
       // re-checking state list
       cy.get('#filter-state').click();
       cy.get('#filter-list-state').should('be.visible');
-      cy.get('#filter-list-state .Mui-disabled .MuiCheckbox-root').should('have.length', 3);
+      cy.get('#filter-list-state .Mui-disabled .MuiCheckbox-root').should('have.length', 6);
       cy.get('#filter-list-state').type('{esc}');
       cy.get('#filter-list-state').should('not.exist');
 
@@ -588,7 +588,7 @@ describe('Database', () => {
       // re-checking state list
       cy.get('#filter-state').click();
       cy.get('#filter-list-state').should('be.visible');
-      cy.get('#filter-list-state .Mui-disabled .MuiCheckbox-root').should('have.length', 8);
+      cy.get('#filter-list-state .Mui-disabled .MuiCheckbox-root').should('have.length', 11);
       cy.get('#filter-list-state').type('{esc}');
       cy.get('#filter-list-state').should('not.exist');
     });

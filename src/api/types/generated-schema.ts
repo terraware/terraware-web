@@ -328,12 +328,15 @@ export interface components {
       state:
         | "Awaiting Check-In"
         | "Pending"
+        | "Awaiting Processing"
         | "Processing"
+        | "Cleaning"
         | "Processed"
         | "Drying"
         | "Dried"
         | "In Storage"
         | "Withdrawn"
+        | "Used Up"
         | "Nursery";
       storageCondition?: "Refrigerator" | "Freezer";
       storageLocation?: string;

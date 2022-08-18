@@ -10,12 +10,7 @@ describe('Accessions', () => {
 
       cy.get('#sessions-current').contains('3');
 
-      cy.get('#species-current').contains('4');
-
-      cy.get('#update-row-Pending').contains('0 seed collection');
-      cy.get('#update-row-Processed').contains('0 accessions');
-      cy.get('#update-row-Dried').contains('0 accessions');
-      cy.get('#update-row-Withdrawn').contains('0 accessions');
+      cy.get('#species-current').contains('2');
     });
   });
 
@@ -198,12 +193,7 @@ describe('Accessions', () => {
 
       cy.get('#sessions-current').contains('4');
 
-      cy.get('#species-current').contains('4');
-
-      cy.get('#update-row-Pending').contains('0 seed collection');
-      cy.get('#update-row-Processed').contains('0 accessions');
-      cy.get('#update-row-Dried').contains('0 accessions');
-      cy.get('#update-row-Withdrawn').contains('0 accessions');
+      cy.get('#species-current').contains('2');
     });
   });
 });

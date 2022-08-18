@@ -48,6 +48,7 @@ import SeedBankDetails from './components/SeedBank';
 import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { getPreferences, updatePreferences } from './api/preferences/preferences';
+import useEnvironment from 'src/utils/useEnvironment';
 
 const useStyles = makeStyles(() => ({
   content: {
@@ -97,6 +98,7 @@ export default function App() {
   const [selectedOrganization, setSelectedOrganization] = useState<ServerOrganization>();
   const [preferencesOrg, setPreferencesOrg] = useState<{ [key: string]: unknown }>();
   const [notifications, setNotifications] = useState<Notifications>();
+  const { isProduction } = useEnvironment();
 
   // seedSearchCriteria describes which criteria to apply when searching accession data.
   const [seedSearchCriteria, setSeedSearchCriteria] = useState<SeedSearchCriteria>(DEFAULT_SEED_SEARCH_FILTERS);
@@ -346,7 +348,7 @@ export default function App() {
                 />
               </Route>
               <Route exact path={APP_PATHS.SEEDS_DASHBOARD}>
-                <SeedSummary organization={selectedOrganization} setSeedSearchCriteria={setSeedSearchCriteria} />
+                <SeedSummary organization={selectedOrganization} />
               </Route>
               <Route exact path={APP_PATHS.CHECKIN}>
                 <CheckIn organization={selectedOrganization} />
@@ -373,6 +375,16 @@ export default function App() {
                   hasSeedBanks={selectedOrgHasSeedBanks()}
                 />
               </Route>
+              {!isProduction && (
+                <Route exact path={APP_PATHS.ACCESSIONS2}>
+                  <div>Accessions2 Database Coming Soon!</div>
+                </Route>
+              )}
+              {!isProduction && (
+                <Route exact path={APP_PATHS.ACCESSIONS2_NEW}>
+                  <div>Accessions2 Create Coming Soon!</div>
+                </Route>
+              )}
               {selectedOrganization && (
                 <Route exact path={APP_PATHS.MONITORING}>
                   <Monitoring

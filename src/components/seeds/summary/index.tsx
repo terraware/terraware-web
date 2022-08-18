@@ -3,21 +3,21 @@ import { makeStyles } from '@mui/styles';
 import Cookies from 'cookies-js';
 import React, { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
-import { SeedSearchCriteria } from 'src/api/seeds/search';
 import { getSummary, GetSummaryResponse } from 'src/api/seeds/summary';
 import TfMain from 'src/components/common/TfMain';
 import MainPaper from 'src/components/MainPaper';
-import { API_PULL_INTERVAL } from 'src/constants';
+import { API_PULL_INTERVAL, APP_PATHS } from 'src/constants';
 import { seedsSummarySelectedOrgInfo } from 'src/state/selectedOrgInfoPerPage';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
 import PageHeader from '../PageHeader';
 import SummaryPaper from './SummaryPaper';
-import Updates from './Updates';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import PageMessage from 'src/components/common/PageMessage';
 import Button from 'src/components/common/button/Button';
 import Icon from 'src/components/common/icon/Icon';
+import AccessionByStatus from './AccessionByStatus';
+import { Link } from 'react-router-dom';
+import useEnvironment from 'src/utils/useEnvironment';
 
 const useStyles = makeStyles(() => ({
   mainContainer: {
@@ -29,14 +29,6 @@ const useStyles = makeStyles(() => ({
     flexDirection: 'column',
     alignItems: 'center',
   },
-  fixedHeight: {
-    height: '100%',
-  },
-  message: {
-    margin: '0 auto',
-    width: '50%',
-    marginTop: '10%',
-  },
   spinnerContainer: {
     position: 'fixed',
     top: '50%',
@@ -44,6 +36,12 @@ const useStyles = makeStyles(() => ({
   },
   messageIcon: {
     fill: '#3A4445',
+  },
+  accessionsLink: {
+    textDecoration: 'none',
+    fontWeight: 500,
+    color: '#0067C8',
+    marginRight: '12px',
   },
 }));
 
@@ -54,18 +52,18 @@ Cookies.defaults = {
 
 type SeedSummaryProps = {
   organization?: ServerOrganization;
-  setSeedSearchCriteria: (criteria: SeedSearchCriteria) => void;
 };
 
 export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
   const classes = useStyles();
-  const { setSeedSearchCriteria, organization } = props;
+  const { organization } = props;
   // populateSummaryInterval value is only being used when it is set.
   const [, setPopulateSummaryInterval] = useState<ReturnType<typeof setInterval>>();
   const [summary, setSummary] = useState<GetSummaryResponse>();
   const errorOccurred = summary ? summary.errorOccurred : false;
   const [, setSelectedOrgInfo] = useRecoilState(seedsSummarySelectedOrgInfo);
   const { isMobile } = useDeviceInfo();
+  const { isProduction } = useEnvironment();
 
   useEffect(() => {
     if (organization) {
@@ -179,14 +177,45 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
                   </MainPaper>
                 </Grid>
                 <Grid item xs={12}>
-                  <MainPaper className={`${classes.paper} ${classes.fixedHeight}`}>
-                    <Updates
-                      setSeedSearchCriteria={setSeedSearchCriteria}
-                      summaryResponse={summary?.value}
-                      loading={summary === undefined}
-                      error={errorOccurred}
+                  <Box display='flex' alignContent='center' justifyContent='space-between' alignItems='center'>
+                    <Typography fontSize='20px' color='#000000' paddingBottom='8px' paddingLeft='28px'>
+                      {strings.ACCESSION_BY_STATUS}
+                    </Typography>
+                    <Link className={classes.accessionsLink} to={APP_PATHS.ACCESSIONS}>
+                      {strings.SEE_ALL_ACCESSIONS}
+                    </Link>
+                  </Box>
+                  <Box display='flex' flexDirection={isMobile ? 'column' : 'row'}>
+                    <AccessionByStatus
+                      label='Awaiting Check-in'
+                      status='Awaiting Check-In'
+                      quantity={summary.value?.accessionsByState['Awaiting Check-In']}
                     />
-                  </MainPaper>
+                    {!isProduction ? (
+                      <AccessionByStatus
+                        label='Awaiting Processing'
+                        status='Awaiting Processing'
+                        quantity={summary.value?.accessionsByState['Awaiting Processing']}
+                      />
+                    ) : null}
+                    {!isProduction ? (
+                      <AccessionByStatus
+                        label='Cleaning'
+                        status='Cleaning'
+                        quantity={summary.value?.accessionsByState.Cleaning}
+                      />
+                    ) : null}
+                    <AccessionByStatus
+                      label='Drying'
+                      status='Drying'
+                      quantity={summary.value?.accessionsByState.Drying}
+                    />
+                    <AccessionByStatus
+                      label='In Storage'
+                      status='In Storage'
+                      quantity={summary.value?.accessionsByState['In Storage']}
+                    />
+                  </Box>
                 </Grid>
               </Grid>
             </Grid>
