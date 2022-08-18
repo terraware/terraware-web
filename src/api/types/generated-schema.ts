@@ -165,14 +165,9 @@ export interface paths {
   "/api/v1/seedbank/log/{tag}": {
     post: operations["recordLogMessage"];
   };
-  "/api/v1/seedbank/search": {
-    post: operations["searchAccessions"];
-  };
-  "/api/v1/seedbank/search/export": {
-    post: operations["exportAccessions"];
-  };
   "/api/v1/seedbank/summary": {
     get: operations["getSeedBankSummary"];
+    post: operations["summarizeAccessionSearch"];
   };
   "/api/v1/seedbank/values": {
     post: operations["listFieldValues"];
@@ -333,12 +328,15 @@ export interface components {
       state:
         | "Awaiting Check-In"
         | "Pending"
+        | "Awaiting Processing"
         | "Processing"
+        | "Cleaning"
         | "Processed"
         | "Drying"
         | "Dried"
         | "In Storage"
         | "Withdrawn"
+        | "Used Up"
         | "Nursery";
       storageCondition?: "Refrigerator" | "Freezer";
       storageLocation?: string;
@@ -608,16 +606,6 @@ export interface components {
     };
     ErrorDetails: {
       message: string;
-    };
-    ExportAccessionsRequestPayload: {
-      facilityId: number;
-      fields: string[];
-      sortOrder?: components["schemas"]["SearchSortOrderElement"][];
-      search?:
-        | components["schemas"]["AndNodePayload"]
-        | components["schemas"]["FieldNodePayload"]
-        | components["schemas"]["NotNodePayload"]
-        | components["schemas"]["OrNodePayload"];
     };
     /** This organization's facilities. Only included if depth is "Facility". */
     FacilityPayload: {
@@ -964,18 +952,6 @@ export interface components {
       /** If true, the data for entries that already exist will be overwritten with the values in the uploaded file. If false, only entries that don't already exist will be imported. */
       overwriteExisting: boolean;
     };
-    SearchAccessionsRequestPayload: {
-      facilityId: number;
-      fields: string[];
-      sortOrder?: components["schemas"]["SearchSortOrderElement"][];
-      search?:
-        | components["schemas"]["AndNodePayload"]
-        | components["schemas"]["FieldNodePayload"]
-        | components["schemas"]["NotNodePayload"]
-        | components["schemas"]["OrNodePayload"];
-      cursor?: string;
-      count: number;
-    };
     /** A search criterion. The search will return results that match this criterion. The criterion can be composed of other search criteria to form arbitrary Boolean search expressions. TYPESCRIPT-OVERRIDE-TYPE-WITH-ANY */
     SearchNodePayload: any;
     SearchRequestPayload: {
@@ -999,11 +975,11 @@ export interface components {
       results: { [key: string]: unknown }[];
       cursor?: string;
     };
+    /** How to sort the search results. This controls both the order of the top-level results and the order of any lists of child objects. */
     SearchSortOrderElement: {
       field: string;
       direction?: "Ascending" | "Descending";
     };
-    /** Summary of the number of seeds remaining across all active accessions. */
     SeedCountSummaryPayload: {
       /** Total number of seeds remaining. The sum of subtotalBySeedCount and subtotalByWeightEstimate. */
       total: number;
@@ -1126,6 +1102,19 @@ export interface components {
     };
     /** Indicates of success or failure of the requested operation. */
     SuccessOrError: "ok" | "error";
+    SummarizeAccessionSearchRequestPayload: {
+      search?:
+        | components["schemas"]["AndNodePayload"]
+        | components["schemas"]["FieldNodePayload"]
+        | components["schemas"]["NotNodePayload"]
+        | components["schemas"]["OrNodePayload"];
+    };
+    SummarizeAccessionSearchResponsePayload: {
+      accessions: number;
+      species: number;
+      seedsRemaining: components["schemas"]["SeedCountSummaryPayload"];
+      status: components["schemas"]["SuccessOrError"];
+    };
     /** Summary of important statistics about the seed bank for the Summary page. */
     SummaryResponse: {
       activeAccessions: number;
@@ -2712,36 +2701,6 @@ export interface operations {
       };
     };
   };
-  searchAccessions: {
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["SearchResponsePayload"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["SearchAccessionsRequestPayload"];
-      };
-    };
-  };
-  exportAccessions: {
-    responses: {
-      /** Export succeeded. */
-      200: {
-        content: {
-          "text/csv": string;
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["ExportAccessionsRequestPayload"];
-      };
-    };
-  };
   getSeedBankSummary: {
     parameters: {
       query: {
@@ -2755,6 +2714,21 @@ export interface operations {
         content: {
           "application/json": components["schemas"]["SummaryResponse"];
         };
+      };
+    };
+  };
+  summarizeAccessionSearch: {
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SummarizeAccessionSearchResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SummarizeAccessionSearchRequestPayload"];
       };
     };
   };
