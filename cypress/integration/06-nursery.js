@@ -205,11 +205,6 @@ describe('Nursery', () => {
       cy.get('#sessions-current').contains('8');
 
       cy.get('#species-current').contains('2');
-
-      cy.get('#update-row-Pending').contains('0 seed collection');
-      cy.get('#update-row-Processed').contains('0 accessions');
-      cy.get('#update-row-Dried').contains('1 accessions');
-      cy.get('#update-row-Withdrawn').contains('0 accessions');
     });
   });
 });

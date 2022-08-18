@@ -15,6 +15,7 @@ import SummaryPaper from './SummaryPaper';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import AccessionByStatus from './AccessionByStatus';
 import { Link } from 'react-router-dom';
+import useEnvironment from 'src/utils/useEnvironment';
 
 const useStyles = makeStyles(() => ({
   mainContainer: {
@@ -56,6 +57,7 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
   const errorOccurred = summary ? summary.errorOccurred : false;
   const [, setSelectedOrgInfo] = useRecoilState(seedsSummarySelectedOrgInfo);
   const { isMobile } = useDeviceInfo();
+  const { isProduction } = useEnvironment();
 
   useEffect(() => {
     if (organization) {
@@ -148,16 +150,20 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
                       status='Awaiting Check-In'
                       quantity={summary.value?.accessionsByState['Awaiting Check-In']}
                     />
-                    <AccessionByStatus
-                      label='Awaiting Processing'
-                      status='Processing'
-                      quantity={summary.value?.accessionsByState['Processing']}
-                    />
-                    <AccessionByStatus
-                      label='Cleaning'
-                      status='Processed'
-                      quantity={summary.value?.accessionsByState['Processed']}
-                    />
+                    {!isProduction ? (
+                      <AccessionByStatus
+                        label='Awaiting Processing'
+                        status='Awaiting Processing'
+                        quantity={summary.value?.accessionsByState['Awaiting Processing']}
+                      />
+                    ) : null}
+                    {!isProduction ? (
+                      <AccessionByStatus
+                        label='Cleaning'
+                        status='Cleaning'
+                        quantity={summary.value?.accessionsByState['Cleaning']}
+                      />
+                    ) : null}
                     <AccessionByStatus
                       label='Drying'
                       status='Drying'
