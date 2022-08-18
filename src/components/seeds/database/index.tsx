@@ -44,6 +44,7 @@ import { isAdmin } from 'src/utils/organization';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import useEnvironment from 'src/utils/useEnvironment';
 
 interface StyleProps {
   isMobile: boolean;
@@ -131,6 +132,7 @@ type DatabaseProps = {
 };
 
 export default function Database(props: DatabaseProps): JSX.Element {
+  const { isProduction } = useEnvironment();
   const { isMobile } = useDeviceInfo();
   const classes = useStyles({ isMobile });
   const history = useHistory();
@@ -255,7 +257,16 @@ export default function Database(props: DatabaseProps): JSX.Element {
 
       const populateFieldOptions = async () => {
         const singleAndMultiChoiceFields = filterSelectFields(searchColumns);
-        setFieldOptions(await getAllFieldValues(singleAndMultiChoiceFields, organization.id));
+        const allValues = await getAllFieldValues(singleAndMultiChoiceFields, organization.id);
+
+        // TODO: remove this when v2 seed management is ready for production
+        if (isProduction && allValues?.state?.values) {
+          allValues.state.values = allValues.state.values.filter(
+            (state) => ['Awaiting Processing', 'Cleaning', 'Used Up'].indexOf(state) === -1
+          );
+        }
+
+        setFieldOptions(allValues);
       };
 
       populateUnfilteredResults();
@@ -264,7 +275,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
       populatePendingAccessions();
       populateFieldOptions();
     }
-  }, [searchCriteria, searchSortOrder, searchColumns, organization]);
+  }, [searchCriteria, searchSortOrder, searchColumns, organization, isProduction]);
 
   const onSelect = (row: SearchResponseElement) => {
     if (row.id) {
