@@ -63,7 +63,7 @@ export interface Props {
 function initWithdrawal(withdrawal?: AccessionWithdrawal): AccessionWithdrawal {
   return (
     withdrawal ?? {
-      date: moment().format('YYYY-MM-DD'),
+      date: moment().toString(),
       purpose: 'Out-planting',
     }
   );

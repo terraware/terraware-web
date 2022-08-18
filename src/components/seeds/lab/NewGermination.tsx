@@ -57,7 +57,7 @@ export default function NewGermination(props: Props): JSX.Element {
     return (
       entry ?? {
         seedsGerminated: 0,
-        recordingDate: moment().format('YYYY-MM-DD'),
+        recordingDate: moment().toString(),
       }
     );
   }
