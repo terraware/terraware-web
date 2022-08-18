@@ -475,8 +475,8 @@ export default function Database(props: DatabaseProps): JSX.Element {
                     </Grid>
                   )}
 
-                  <Grid item xs={12}>
-                    {searchSummaryResults && (
+                  {searchSummaryResults && (
+                    <Grid item xs={12}>
                       <Box sx={{ background: '#F2F4F5', display: 'flex', color: '#000000', padding: 2 }}>
                         <Typography>{strings.TOTAL}</Typography>
                         <Typography sx={{ paddingLeft: '4px', fontWeight: 500 }}>
@@ -505,8 +505,8 @@ export default function Database(props: DatabaseProps): JSX.Element {
                             : strings.SEEDS.toLowerCase()}
                         </Typography>
                       </Box>
-                    )}
-                  </Grid>
+                    </Grid>
+                  )}
                   <Grid item xs={12}>
                     {isMobile === true && <div className={classes.headerButtonsContainer}>{getHeaderButtons()}</div>}
                     {searchResults && (
