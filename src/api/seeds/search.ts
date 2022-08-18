@@ -211,3 +211,18 @@ export async function getCollectors(organizationId: number): Promise<string[] | 
     return undefined;
   }
 }
+
+const SEARCH_SUMMARY_ENDPOINT = '/api/v1/seedbank/summary';
+type SearchSummaryRequestPayload =
+  paths[typeof SEARCH_SUMMARY_ENDPOINT]['post']['requestBody']['content']['application/json'];
+export type SearchSummaryResponsePayload =
+  paths[typeof SEARCH_SUMMARY_ENDPOINT]['post']['responses'][200]['content']['application/json'];
+
+export async function searchSummary(params: SearchSummaryRequestPayload): Promise<SearchSummaryResponsePayload | null> {
+  try {
+    const response: SearchSummaryResponsePayload = (await axios.post(SEARCH_SUMMARY_ENDPOINT, params)).data;
+    return response;
+  } catch {
+    return null;
+  }
+}
