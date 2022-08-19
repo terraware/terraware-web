@@ -274,7 +274,6 @@ export interface components {
       collectionSource?: "Wild" | "Reintroduced" | "Cultivated" | "Other";
       /** Names of the people who collected the seeds. */
       collectors?: string[];
-      deviceInfo?: components["schemas"]["DeviceInfoPayload"];
       cutTestSeedsCompromised?: number;
       cutTestSeedsEmpty?: number;
       cutTestSeedsFilled?: number;
@@ -316,7 +315,7 @@ export interface components {
       /** @deprecated Backward-compatibility alias for collectionSiteName */
       siteLocation?: string;
       /** Which application this accession originally came from. This is currently based on the presence of the deviceInfo field. */
-      source?: "Web" | "SeedCollectorApp";
+      source?: "Web" | "Seed Collector App" | "File Import";
       sourcePlantOrigin?: "Wild" | "Outplant";
       /** Scientific name of the species. */
       species?: string;
@@ -417,7 +416,6 @@ export interface components {
       collectionSiteNotes?: string;
       collectionSource?: "Wild" | "Reintroduced" | "Cultivated" | "Other";
       collectors?: string[];
-      deviceInfo?: components["schemas"]["DeviceInfoPayload"];
       endangered?: "No" | "Yes" | "Unsure";
       /** @deprecated Backward-compatibility alias for collectionSiteNotes */
       environmentalNotes?: string;
@@ -437,6 +435,7 @@ export interface components {
       secondaryCollectors?: string[];
       /** @deprecated Backward-compatibility alias for collectionSiteName */
       siteLocation?: string;
+      source?: "Web" | "Seed Collector App" | "File Import";
       sourcePlantOrigin?: "Wild" | "Outplant";
       species?: string;
     };
@@ -551,25 +550,6 @@ export interface components {
       verbosity?: number;
       /** ID of parent device such as a hub or gateway, if any. */
       parentId?: number;
-    };
-    /** Details about the device and the application that created the accession. All these values are optional and most of them are platform-dependent. */
-    DeviceInfoPayload: {
-      /** Build number of application that is submitting the accession, e.g., from React Native getBuildId() */
-      appBuild?: string;
-      /** Name of application */
-      appName?: string;
-      /** Brand of device, e.g., from React Native getBrand(). */
-      brand?: string;
-      /** Model of device hardware, e.g., from React Native getDeviceId(). */
-      model?: string;
-      /** Name the user has assigned to the device, e.g., from React Native getDeviceName(). */
-      name?: string;
-      /** Type of operating system, e.g., from React Native getSystemName(). */
-      osType?: string;
-      /** Version of operating system, e.g., from React Native getSystemVersion(). */
-      osVersion?: string;
-      /** Unique identifier of the hardware device, e.g., from React Native getUniqueId(). */
-      uniqueId?: string;
     };
     DeviceManagerPayload: {
       id: number;
@@ -1119,14 +1099,6 @@ export interface components {
     SummaryResponse: {
       activeAccessions: number;
       species: number;
-      /** Number of accessions in Pending state overdue for processing. */
-      overduePendingAccessions: number;
-      /** Number of accessions in Processed state overdue for drying. */
-      overdueProcessedAccessions: number;
-      /** Number of accessions in Dried state overdue for storage. */
-      overdueDriedAccessions: number;
-      /** Number of accessions withdrawn so far this week. */
-      recentlyWithdrawnAccessions: number;
       /** Number of accessions in each state. */
       accessionsByState: { [key: string]: number };
       seedsRemaining: components["schemas"]["SeedCountSummaryPayload"];

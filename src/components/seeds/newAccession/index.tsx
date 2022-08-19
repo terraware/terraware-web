@@ -408,7 +408,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
             receivedDate={record.receivedDate}
             refreshErrors={refreshErrors}
             onChange={onChange}
-            disabled={accession.deviceInfo !== undefined || isPendingCheckIn || isContributor}
+            disabled={isPendingCheckIn || isContributor}
           />
         </Suspense>
         <Divisor />
