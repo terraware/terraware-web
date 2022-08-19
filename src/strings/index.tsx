@@ -99,6 +99,8 @@ const strings = new LocalizedStrings({
     NUMBER_OF_SEEDS_SOWN: 'Number of Seeds Sown',
     TOTAL_OF_SEEDS_GERMINATED: 'Total of Seeds Germinated',
     NUMBER_OF_SEEDS_EMPTY: 'Number of Seeds Empty',
+    DETAIL: 'Detail',
+    HISTORY: 'History',
     VIABILITY_TESTING: 'Viability Testing',
     VIABILITY_TREATMENT: 'Viability Treatment',
     VIABILITY_START_DATE: 'Viability Start Date',

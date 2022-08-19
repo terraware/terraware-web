@@ -49,6 +49,7 @@ import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { getPreferences, updatePreferences } from './api/preferences/preferences';
 import useEnvironment from 'src/utils/useEnvironment';
+import Accession2 from './components/accession2';
 
 const useStyles = makeStyles(() => ({
   content: {
@@ -378,6 +379,11 @@ export default function App() {
               {!isProduction && (
                 <Route exact path={APP_PATHS.ACCESSIONS2}>
                   <div>Accessions2 Database Coming Soon!</div>
+                </Route>
+              )}
+              {!isProduction && (
+                <Route path={APP_PATHS.ACCESSIONS2_ITEM}>
+                  <Accession2 />
                 </Route>
               )}
               {!isProduction && (
