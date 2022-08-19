@@ -13,6 +13,7 @@ export enum APP_PATHS {
   ACCESSIONS_ITEM_NURSERY = '/accessions/:accessionId/nursery',
   ACCESSIONS_ITEM_LAB = '/accessions/:accessionId/lab',
   ACCESSIONS_ITEM = '/accessions/:accessionId',
+  ACCESSIONS2_ITEM = '/accessions2/:accessionId',
   CHECKIN = '/checkin',
   CONTACT_US = '/contactus',
   ERROR = '/error',

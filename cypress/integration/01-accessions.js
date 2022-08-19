@@ -178,11 +178,6 @@ describe('Accessions', () => {
       //   .its('status')
       //   .should('eq', 200);
     });
-    it('should have disabled dates', () => {
-      cy.visit('/accessions/1002/seed-collection');
-      cy.get('#collectedDate').should('have.class', 'Mui-disabled');
-      cy.get('#receivedDate').should('have.class', 'Mui-disabled');
-    });
   });
 
   context('Summary End Results', () => {
