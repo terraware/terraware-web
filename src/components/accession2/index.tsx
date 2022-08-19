@@ -13,6 +13,14 @@ export default function Accession2(): JSX.Element {
     setSelectedTab(newValue);
   };
 
+  const tabStyles = {
+    textTransform: 'capitalize',
+    '&.Mui-selected': {
+      color: '#3A4445',
+      fontWeight: 600,
+    },
+  };
+
   return (
     <TfMain>
       <Box>
@@ -22,9 +30,9 @@ export default function Accession2(): JSX.Element {
         <TabContext value={selectedTab}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
             <TabList onChange={handleChange}>
-              <Tab label={strings.DETAIL} value='detail' />
-              <Tab label={strings.HISTORY} value='history' />
-              <Tab label={strings.VIABILITY_TESTING} value='viabilityTesting' />
+              <Tab label={strings.DETAIL} value='detail' sx={tabStyles} />
+              <Tab label={strings.HISTORY} value='history' sx={tabStyles} />
+              <Tab label={strings.VIABILITY_TESTING} value='viabilityTesting' sx={tabStyles} />
             </TabList>
           </Box>
           <TabPanel value='detail'>{strings.DETAIL}</TabPanel>
