@@ -58,8 +58,12 @@ export default function TextField(props: Props): JSX.Element {
   });
 
   const textfieldOnChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+    const textValue = event.target.value;
+    if (textValue.match(/^\s+$/)) {
+      return;
+    }
     if (onChange) {
-      onChange(id, event.target.value);
+      onChange(id, textValue);
     }
   };
 

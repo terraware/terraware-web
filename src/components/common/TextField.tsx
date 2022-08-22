@@ -29,7 +29,11 @@ export default function TextField(props: Props): JSX.Element {
   const classes = useStyles();
 
   const onChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-    props.onChange(props.id, event.target.value);
+    const textValue = event.target.value;
+    if (textValue.match(/^\s+$/)) {
+      return;
+    }
+    props.onChange(props.id, textValue);
   };
 
   return (

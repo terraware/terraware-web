@@ -131,8 +131,12 @@ export default function Select(props: SelectProps): JSX.Element {
   };
 
   const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    const textValue = e.target.value;
+    if (textValue.match(/^\s+$/)) {
+      return;
+    }
     if (onChange) {
-      onChange(e.target.value);
+      onChange(textValue);
     }
     setOpenedOptions(true);
   };
