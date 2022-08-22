@@ -41,12 +41,12 @@ export default function AppError() {
                 onClick={() => history.push(APP_PATHS.WELCOME)}
                 className={classes.buttonLeft}
                 type='passive'
-              ></Button>
+              />
               <Button
                 size='medium'
                 label={strings.CONTACT_US}
                 onClick={() => (window.location.href = TERRAWARE_SUPPORT_LINK)}
-              ></Button>
+              />
             </Box>
           </Grid>
         </Route>
