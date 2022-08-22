@@ -8,7 +8,10 @@ import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles(() => ({
   main: {
-    marginTop: '120px',
+    paddingTop: '120px',
+    height: 'calc(100% - 120px)',
+    background:
+      'url(/assets/error/wind.png) no-repeat 0% 100%/auto 30%, url(/assets/error/moon.png) no-repeat 900px 52%/auto 19%, url(/assets/error/ufo.png) no-repeat 0 100%/auto 53%, url(/assets/error/land.png) repeat-x 0 100%/auto 142px, url(/assets/error/mountains.png) no-repeat 0 100%/auto 392px, url(/assets/error/stars.png) no-repeat 0 100%/auto 100%, url(/assets/error/background.png) no-repeat 100% 0/100% 100%, linear-gradient(to bottom right, rgb(255, 255, 255) 0%, rgb(199, 226, 234) 100%) no-repeat 0 0/auto',
   },
 }));
 
