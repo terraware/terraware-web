@@ -1,6 +1,7 @@
 import { TextField as MUITextField } from '@mui/material';
 import React, { KeyboardEventHandler } from 'react';
 import { makeStyles } from '@mui/styles';
+import { isWhitespaces } from 'src/utils/text';
 
 const useStyles = makeStyles(() => ({
   adornedEnd: {
@@ -30,7 +31,7 @@ export default function TextField(props: Props): JSX.Element {
 
   const onChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     const textValue = event.target.value;
-    if (textValue.match(/^\s+$/)) {
+    if (isWhitespaces(textValue)) {
       return;
     }
     props.onChange(props.id, textValue);

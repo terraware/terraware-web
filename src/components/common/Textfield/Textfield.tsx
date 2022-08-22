@@ -3,6 +3,7 @@ import React from 'react';
 import Icon from '../icon/Icon';
 import { IconName } from '../icon/icons';
 import './styles.scss';
+import { isWhitespaces } from 'src/utils/text';
 
 type TextfieldType = 'text' | 'textarea';
 
@@ -59,7 +60,7 @@ export default function TextField(props: Props): JSX.Element {
 
   const textfieldOnChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     const textValue = event.target.value;
-    if (textValue.match(/^\s+$/)) {
+    if (isWhitespaces(textValue)) {
       return;
     }
     if (onChange) {

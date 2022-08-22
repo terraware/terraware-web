@@ -2,6 +2,7 @@ import classNames from 'classnames';
 import React, { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from 'react';
 import Icon from '../icon/Icon';
 import './styles.scss';
+import { isWhitespaces } from 'src/utils/text';
 
 interface SelectProps {
   onChange: (newValue: string) => void;
@@ -132,7 +133,7 @@ export default function Select(props: SelectProps): JSX.Element {
 
   const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     const textValue = e.target.value;
-    if (textValue.match(/^\s+$/)) {
+    if (isWhitespaces(textValue)) {
       return;
     }
     if (onChange) {
