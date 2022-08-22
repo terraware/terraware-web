@@ -33,7 +33,6 @@ export default function AppError() {
               <Typography sx={{ fontSize: '40px', fontWeight: 600, paddingBottom: '32px' }}>
                 {strings.SOMETHING_WENT_WRONG_TITLE}
               </Typography>
-              <Typography>{strings.ORGANIZATION_DATA_NOT_AVAILABLE}</Typography>
               <Typography sx={{ paddingBottom: '24px' }}>{strings.SOMETHING_WENT_WRONG_MESSAGE}</Typography>
               <Button
                 label={strings.BACK_TO_TERRAWARE}
