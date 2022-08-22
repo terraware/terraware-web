@@ -389,6 +389,11 @@ const strings = new LocalizedStrings({
     SETTINGS: 'Settings',
     MARK_ALL_AS_READ: 'Mark All As Read',
     SOMETHING_WENT_WRONG: 'Something went wrong.',
+    SOMETHING_WENT_WRONG_TITLE: 'Something went wrong...',
+    SOMETHING_WENT_WRONG_MESSAGE:
+      'If you’re having trouble using Terraware, please report any issues you’re having and we’ll make it right.',
+    BACK_TO_TERRAWARE: 'Back to Terraware',
+    CONTACT_US: 'Contact Us',
     UNABLE_TO_LOAD_NOTIFICATIONS: 'Unable to load notifications. Try again later.',
     NOTIFICATIONS: 'Notifications',
     MARK_AS_READ: 'Mark As Read',
