@@ -18,7 +18,6 @@ import { Accession, AccessionWithdrawal } from 'src/api/types/accessions';
 import strings from 'src/strings';
 import preventDefault from 'src/utils/preventDefaultEvent';
 import useForm from 'src/utils/useForm';
-import CancelButton from '../../common/CancelButton';
 import Checkbox from '../../common/Checkbox';
 import DatePicker from '../../common/DatePicker';
 import DialogCloseButton from '../../common/DialogCloseButton';
@@ -33,6 +32,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { getSelectedPurpose } from 'src/utils/withdrawalPurposes';
+import Button from 'src/components/common/button/Button';
 
 const useStyles = makeStyles((theme: Theme) => ({
   submit: {
@@ -411,7 +411,14 @@ export default function NewWithdrawalDialog(props: Props): JSX.Element {
             </Link>
           )}
           <Box>
-            <CancelButton onClick={handleCancel} />
+            <Button
+              label={strings.CANCEL}
+              priority='secondary'
+              type='passive'
+              onClick={handleCancel}
+              key='button-1'
+              id='cancel'
+            />
             <Chip
               id='save-withdrawn-button'
               className={classes.submit}

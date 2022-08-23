@@ -18,12 +18,12 @@ import { ViabilityTestResult } from 'src/api/types/tests';
 import strings from 'src/strings';
 import preventDefault from 'src/utils/preventDefaultEvent';
 import useForm from 'src/utils/useForm';
-import CancelButton from '../../common/CancelButton';
 import DatePicker from '../../common/DatePicker';
 import DialogCloseButton from '../../common/DialogCloseButton';
 import TextField from '../../common/TextField';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import Button from 'src/components/common/button/Button';
 
 const useStyles = makeStyles((theme: Theme) => ({
   submit: {
@@ -131,7 +131,14 @@ export default function NewGermination(props: Props): JSX.Element {
             </Link>
           )}
           <Box>
-            <CancelButton onClick={handleCancel} />
+            <Button
+              label={strings.CANCEL}
+              priority='secondary'
+              type='passive'
+              onClick={handleCancel}
+              key='button-1'
+              id='cancel'
+            />
             <Chip
               id='saveGermination'
               className={classes.submit}

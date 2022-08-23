@@ -16,7 +16,6 @@ import { ViabilityTest } from 'src/api/types/tests';
 import strings from 'src/strings';
 import preventDefault from 'src/utils/preventDefaultEvent';
 import useForm from 'src/utils/useForm';
-import CancelButton from '../../common/CancelButton';
 import DatePicker from '../../common/DatePicker';
 import DialogCloseButton from '../../common/DialogCloseButton';
 import Divisor from '../../common/Divisor';
@@ -29,6 +28,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import Button from 'src/components/common/button/Button';
 
 const useStyles = makeStyles((theme: Theme) => ({
   submit: {
@@ -342,7 +342,14 @@ export default function NewTestDialog(props: Props): JSX.Element {
             </Link>
           )}
           <Box>
-            <CancelButton onClick={handleCancel} />
+            <Button
+              label={strings.CANCEL}
+              priority='secondary'
+              type='passive'
+              onClick={handleCancel}
+              key='button-1'
+              id='cancel'
+            />
             <Chip
               id='saveTest'
               className={classes.submit}
