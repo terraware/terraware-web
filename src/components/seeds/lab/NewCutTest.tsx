@@ -4,11 +4,11 @@ import React from 'react';
 import { Accession } from 'src/api/types/accessions';
 import strings from 'src/strings';
 import useForm from 'src/utils/useForm';
-import CancelButton from '../../common/CancelButton';
 import DialogCloseButton from '../../common/DialogCloseButton';
 import TextField from '../../common/TextField';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import Button from 'src/components/common/button/Button';
 
 const useStyles = makeStyles((theme: Theme) => ({
   submit: {
@@ -93,7 +93,14 @@ export default function NewCutTest(props: Props): JSX.Element {
       <DialogActions>
         <Box width={'100%'} className={classes.actions}>
           <Box>
-            <CancelButton onClick={handleCancel} />
+            <Button
+              label={strings.CANCEL}
+              priority='secondary'
+              type='passive'
+              onClick={handleCancel}
+              key='button-1'
+              id='cancel'
+            />
             <Chip
               id='saveCutTest'
               className={classes.submit}
