@@ -1,11 +1,11 @@
 import React from 'react';
 import { convertToSearchNodePayload, searchCsv, SeedSearchCriteria, SeedSearchSortOrder } from 'src/api/seeds/search';
 import { ServerOrganization } from 'src/types/Organization';
-import TextField from 'src/components/common/TextField';
 import strings from 'src/strings';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
 import { Grid } from '@mui/material';
+import TextField from 'src/components/common/Textfield/Textfield';
 
 interface DownloadReportModalProps {
   searchCriteria: SeedSearchCriteria;
@@ -66,15 +66,15 @@ export default function DownloadReportModal(props: DownloadReportModalProps): JS
       message={strings.DOWNLOAD_REPORT_DESCRIPTION}
     >
       <Grid container spacing={4} paddingTop='20px'>
-        <Grid item xs={12}>
+        <Grid item xs={12} textAlign='left'>
           <TextField
+            type='text'
             id='reportName'
             value={name}
             onChange={(id, value) => {
               setName(value as string);
             }}
             label={strings.REPORT_NAME}
-            aria-label='Report name'
           />
         </Grid>
       </Grid>
