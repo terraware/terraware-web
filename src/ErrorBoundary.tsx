@@ -1,5 +1,5 @@
 import React, { Component, ErrorInfo, ReactNode } from 'react';
-import strings from './strings';
+import ErrorContent from './ErrorContent';
 
 interface Props {
   children: ReactNode;
@@ -37,7 +37,7 @@ export default class ErrorBoundary extends Component<Props, State> {
       if (this.props.handler) {
         return <div />;
       } else {
-        return <div>{strings.GENERIC_ERROR}</div>;
+        return <ErrorContent />;
       }
     }
 
