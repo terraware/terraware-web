@@ -1,7 +1,6 @@
 import { TextField as MUITextField } from '@mui/material';
 import React, { KeyboardEventHandler } from 'react';
 import { makeStyles } from '@mui/styles';
-import isWhitespaces from 'src/utils/text';
 
 const useStyles = makeStyles(() => ({
   adornedEnd: {
