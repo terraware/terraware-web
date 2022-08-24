@@ -8,7 +8,7 @@ import Icon from '../common/icon/Icon';
 import NotificationsDropdown from '../NotificationsDropdown';
 import OrganizationsDropdown from '../OrganizationsDropdown';
 import UserMenu from '../UserMenu';
-import { ReactComponent as Logo } from '../common/Navbar/logo.svg';
+import { Svg } from '@terraware/web-components';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import SmallDeviceUserMenu from '../SmallDeviceUserMenu';
 
@@ -102,7 +102,7 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
       </Grid>
 
       <Grid item xs={6} className={`${classes.center} logo`}>
-        <Logo />
+        <Svg.Logo />
       </Grid>
 
       <Grid item xs={3} className={classes.right}>
