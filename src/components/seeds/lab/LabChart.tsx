@@ -2,7 +2,7 @@ import { useTheme } from '@mui/material';
 import Chart from 'chart.js/auto';
 import React from 'react';
 import { ViabilityTestResult } from 'src/api/types/tests';
-import { descendingComparator, getComparator, Order, stableSort } from '../../common/table/sort';
+import { descendingComparator, getComparator, SortOrder as Order, stableSort } from '../../common/table/sort';
 import { EnhancedTableDetailsRow } from '../../common/table/types';
 import { makeStyles } from '@mui/styles';
 

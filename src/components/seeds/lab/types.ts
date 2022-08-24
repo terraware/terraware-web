@@ -1,5 +1,5 @@
 import strings from 'src/strings';
-import { TableColumnType } from '../../common/table/types';
+import { EnhancedTableDetailsRow, RendererProps, TableColumnType } from '../../common/table/types';
 
 export const TEST_COLUMNS: TableColumnType[] = [
   { key: 'startDate', name: strings.START_DATE, type: 'date' },
@@ -23,3 +23,16 @@ export const CUT_TEST_COLUMNS: TableColumnType[] = [
   { key: 'compromisedSeeds', name: strings.COMPROMISED_SEEDS, type: 'number' },
   { key: 'edit', name: '', type: 'edit' },
 ];
+
+export interface DetailsProps<T> {
+  accessionId: number;
+  index: number;
+  expandText: string;
+  rowName: string;
+  defaultSort: string;
+  columns: TableColumnType[];
+  onClick: (parentValue: EnhancedTableDetailsRow) => void;
+  onSelect: (value: EnhancedTableDetailsRow, parentValue: EnhancedTableDetailsRow) => void;
+  Renderer: (props: RendererProps<T>) => JSX.Element;
+  row: EnhancedTableDetailsRow;
+}
