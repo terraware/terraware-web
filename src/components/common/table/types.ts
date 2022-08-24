@@ -1,38 +1,8 @@
-import { ReactNode } from 'react';
+import {
+  EnhancedTableDetailsRow,
+  RendererProps,
+  TableColumnType,
+  DetailsProps,
+} from '@terraware/web-components/components/table/types';
 
-export interface TableColumnType {
-  key: string;
-  name: string | JSX.Element;
-  type: 'string' | 'number' | 'date' | 'notes' | 'edit' | 'boolean';
-}
-
-export interface RendererProps<T> {
-  index: number;
-  row: T;
-  column: TableColumnType;
-  value?: string | number | unknown[] | ReactNode;
-  onRowClick?: () => void;
-  reloadData?: () => void;
-}
-
-export type EnhancedTableDetailsRow = {
-  [x: string]: string | number | [] | undefined;
-};
-
-export interface DetailsProps<T> {
-  accessionId: number;
-  index: number;
-  expandText: string;
-  rowName: string;
-  defaultSort: string;
-  columns: TableColumnType[];
-  onClick: (parentValue: EnhancedTableDetailsRow) => void;
-  onSelect: (value: EnhancedTableDetailsRow, parentValue: EnhancedTableDetailsRow) => void;
-  Renderer: (props: RendererProps<T>) => JSX.Element;
-  row: EnhancedTableDetailsRow;
-}
-
-export interface DetailsRendererProps {
-  index: number;
-  row: EnhancedTableDetailsRow;
-}
+export type { TableColumnType, EnhancedTableDetailsRow, RendererProps, DetailsProps };
