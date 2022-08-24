@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     background: '#F2F4F5',
     display: 'flex',
     borderTop: '1px solid #A9B7B8',
-    padding: '16px',
+    padding: '16px 24px',
     borderRadius: '0 0 6px 6px',
   },
   value: {
