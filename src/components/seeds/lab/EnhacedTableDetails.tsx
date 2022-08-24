@@ -6,9 +6,9 @@ import { ViabilityTest } from 'src/api/types/tests';
 import strings from 'src/strings';
 import Divisor from '../../common/Divisor';
 import SummaryBox from '../../common/SummaryBox';
-import { descendingComparator, getComparator, Order, stableSort } from '../../common/table/sort';
-import { DetailsProps } from '../../common/table/types';
+import { descendingComparator, getComparator, SortOrder as Order, stableSort } from '../../common/table/sort';
 import LabChart from './LabChart';
+import { DetailsProps } from './types';
 
 const useStyles = makeStyles((theme: Theme) => ({
   hover: {

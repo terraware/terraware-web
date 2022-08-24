@@ -1,4 +1,3 @@
-import { descendingComparator, getComparator, stableSort } from '@terraware/web-components';
-import { Order } from '@terraware/web-components/components/table/sort';
+import { descendingComparator, getComparator, stableSort, SortOrder } from '@terraware/web-components';
 export { descendingComparator, getComparator, stableSort };
-export type { Order };
+export type { SortOrder };

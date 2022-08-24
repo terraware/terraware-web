@@ -22,7 +22,7 @@ import {
 } from 'src/api/seeds/search';
 import Button from 'src/components/common/button/Button';
 import Table from 'src/components/common/table';
-import { Order } from 'src/components/common/table/sort';
+import { SortOrder as Order } from 'src/components/common/table/sort';
 import strings from 'src/strings';
 import emptyMessageStrings from 'src/strings/emptyMessageModal';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
