@@ -1,9 +1,10 @@
 import React, { Component, ErrorInfo, ReactNode } from 'react';
-import strings from './strings';
+import ErrorContent from './ErrorContent';
 
 interface Props {
   children: ReactNode;
   handler?: () => void;
+  setShowNavBar?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 interface State {
@@ -25,8 +26,6 @@ export default class ErrorBoundary extends Component<Props, State> {
   // when an error ocurred log the message
   public componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
     // tslint:disable-next-line: no-console
-    console.log('Uncaught error:', error, errorInfo);
-
     if (this.props.handler) {
       this.props.handler();
     }
@@ -34,10 +33,13 @@ export default class ErrorBoundary extends Component<Props, State> {
 
   public render(): ReactNode {
     if (this.state.hasError) {
+      if (this.props.setShowNavBar) {
+        this.props.setShowNavBar(false);
+      }
       if (this.props.handler) {
         return <div />;
       } else {
-        return <div>{strings.GENERIC_ERROR}</div>;
+        return <ErrorContent inApp={true} />;
       }
     }
 

@@ -324,7 +324,11 @@ export default function App() {
             </div>
           </div>
         ) : null}
-        <div className={`${type === 'desktop' ? classes.contentWithNavBar : ''} ${classes.content} scrollable-content`}>
+        <div
+          className={`${type === 'desktop' && showNavBar ? classes.contentWithNavBar : ''} ${
+            classes.content
+          } scrollable-content`}
+        >
           <TopBar>
             <TopBarContent
               notifications={notifications}
@@ -338,7 +342,7 @@ export default function App() {
               setShowNavBar={setShowNavBar}
             />
           </TopBar>
-          <ErrorBoundary>
+          <ErrorBoundary setShowNavBar={setShowNavBar}>
             <Switch>
               {/* Routes, in order of their appearance down the side NavBar */}
               <Route exact path={APP_PATHS.HOME}>
