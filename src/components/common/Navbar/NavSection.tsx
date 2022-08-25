@@ -1,17 +1,2 @@
-import React from 'react';
-import './styles.scss';
-
-export interface Props {
-  title?: string;
-}
-
-export default function NavSection(props: Props): JSX.Element {
-  const { title } = props;
-
-  return (
-    <div className='nav-section'>
-      <div className='divider' />
-      {title && <span className='nav-section--title'>{title}</span>}
-    </div>
-  );
-}
+import { NavSection } from '@terraware/web-components';
+export default NavSection;

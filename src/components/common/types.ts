@@ -1,1 +1,2 @@
-export type Size = 'small' | 'medium' | 'large' | 'xlarge';
+import { Size as size } from '@terraware/web-components';
+export type Size = size;
