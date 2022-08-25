@@ -13,6 +13,9 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import SmallDeviceUserMenu from '../SmallDeviceUserMenu';
 
 const useStyles = makeStyles((theme: Theme) => ({
+  logo: {
+    width: 137,
+  },
   separator: {
     width: '1px',
     height: '32px',
@@ -102,7 +105,7 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
       </Grid>
 
       <Grid item xs={6} className={`${classes.center} logo`}>
-        <Svg.Logo />
+        <Svg.Logo className={classes.logo} />
       </Grid>
 
       <Grid item xs={3} className={classes.right}>
