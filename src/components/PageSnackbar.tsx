@@ -3,7 +3,7 @@ import { makeStyles } from '@mui/styles';
 import { useRecoilState } from 'recoil';
 import { snackbarAtoms } from 'src/state/snackbar';
 import { useEffect, useState } from 'react';
-import PageMessage from 'src/components/common/PageMessage';
+import { Message } from '@terraware/web-components';
 import DetectAppVersion from 'src/components/common/DetectAppVersion';
 
 const useStyles = makeStyles(() => ({
@@ -67,11 +67,13 @@ export default function PageSnackbarMessage(): JSX.Element {
         className={classes.mainSnackbar}
       >
         <div>
-          <PageMessage
+          <Message
+            type='page'
             title={snackbar.title}
-            message={snackbar.msg}
+            body={snackbar.msg}
             priority={snackbar.priority}
-            onClose={clearSnackbar}
+            showCloseButton={true}
+            onClose={handleClose}
           />
         </div>
       </Snackbar>
