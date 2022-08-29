@@ -18,7 +18,7 @@ export const getNotifications = async (orgId?: number): Promise<Notifications> =
   const response: Notifications = { items: [], errorOccurred: false };
 
   try {
-    const queryParams: ListNotificationsQuery = { organizationId: orgId };
+    const queryParams: ListNotificationsQuery = { organizationId: orgId?.toString() };
     let endpoint = NOTIFICATIONS_ENDPOINT;
     endpoint = addQueryParams(endpoint, queryParams);
     const notifications: ListNotificationsResponseElement[] = (await axios.get(endpoint)).data.notifications;
