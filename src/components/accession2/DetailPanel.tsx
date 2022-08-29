@@ -31,14 +31,12 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
   const age = seedCollectionDate ? today.diff(seedCollectionDate, 'months') : undefined;
 
   const displayAge = () => {
-    if (age !== undefined) {
-      if (age < 1) {
-        return strings.LESS_THAN_A_MONTH;
-      } else {
-        return `${age} ${strings.MONTHS}`;
-      }
-    } else {
+    if (age === undefined) {
       return '';
+    } else if (age < 1) {
+      return strings.LESS_THAN_A_MONTH;
+    } else {
+      return `${age} ${strings.MONTHS}`;
     }
   };
 
