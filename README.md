@@ -97,7 +97,18 @@ yarn cy:run && yarn e2e:report  # run the tests on the command line and generate
 yarn docker:stop   # don't forget to stop the server when you're done
 ```
 
+## Connecting to the Database
+
+If you want to examine or change the database that's used for your local testing, you can run the PostgreSQL interactive command-line client. This will only work after you've run `scripts/resetdb.sh` or `yarn docker:start`.
+
+```shell
+docker-compose exec postgres psql -U postgres terraware
+```
+
+To exit the PostgreSQL client, type `\quit` or hit control-D.
+
 ## Useful links
 
 - The API Swagger documentation [link](http://localhost:8080/docs)
 - Github deployment information [link](https://github.com/terraware/terraware-web/actions/workflows/workflow.yml)
+- PostgreSQL command line client docs [link](https://www.postgresql.org/docs/current/app-psql.html)
