@@ -4,7 +4,7 @@ import { Theme } from '@mui/material';
 import strings from 'src/strings';
 import { getLatestAppVersion } from 'src/api/appVersion';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import PageMessage from './PageMessage';
+import { Message, Button } from '@terraware/web-components';
 
 const useStyles = makeStyles((theme: Theme) => ({
   container: {
@@ -60,11 +60,18 @@ export default function DetectAppVersion({ onNewVersion }: DetectAppVersionProps
 
   return (
     <div className={classes.container}>
-      <PageMessage
-        message={isMobile ? strings.NEW_APP_VERSION_MOBILE : strings.NEW_APP_VERSION}
-        priority={'info'}
-        buttonText={strings.REFRESH}
-        onClick={() => window.location.reload()}
+      <Message
+        type='page'
+        body={isMobile ? strings.NEW_APP_VERSION_MOBILE : strings.NEW_APP_VERSION}
+        priority='info'
+        pageButtons={[
+          <Button
+            label={strings.REFRESH}
+            onClick={() => window.location.reload()}
+            size='small' key={'1'}
+            priority='secondary'
+            type='passive' />,
+        ]}
       />
     </div>
   );
