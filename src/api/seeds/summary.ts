@@ -22,7 +22,7 @@ export const getSummary = async (organizationId: number): Promise<GetSummaryResp
   };
 
   try {
-    const queryParams: SeedBankSummaryQuery = { organizationId };
+    const queryParams: SeedBankSummaryQuery = { organizationId: organizationId.toString() };
     const endpoint = addQueryParams(SUMMARY_ENDPOINT, queryParams);
     response.value = (await axios.get(endpoint)).data;
   } catch {

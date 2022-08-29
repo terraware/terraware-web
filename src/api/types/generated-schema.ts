@@ -240,6 +240,13 @@ export interface paths {
     get: operations["getUserPreferences"];
     put: operations["updateUserPreferences"];
   };
+  "/api/v2/seedbank/accessions": {
+    post: operations["createAccession"];
+  };
+  "/api/v2/seedbank/accessions/{id}": {
+    get: operations["getAccession"];
+    put: operations["updateAccession"];
+  };
 }
 
 export interface components {
@@ -361,6 +368,71 @@ export interface components {
       viabilityTests?: components["schemas"]["ViabilityTestPayload"][];
       withdrawals?: components["schemas"]["WithdrawalPayload"][];
     };
+    AccessionPayloadV2: {
+      /** Server-generated human-readable identifier for the accession. This is unique within a single seed bank, but different seed banks may have accessions with the same number. */
+      accessionNumber: string;
+      /** Server-calculated active indicator. This is based on the accession's state. */
+      active: "Inactive" | "Active";
+      bagNumbers?: string[];
+      collectedDate?: string;
+      collectionSiteCity?: string;
+      collectionSiteCoordinates?: components["schemas"]["Geolocation"][];
+      collectionSiteCountryCode?: string;
+      collectionSiteCountrySubdivision?: string;
+      collectionSiteLandowner?: string;
+      collectionSiteName?: string;
+      collectionSiteNotes?: string;
+      collectionSource?: "Wild" | "Reintroduced" | "Cultivated" | "Other";
+      /** Names of the people who collected the seeds. */
+      collectors?: string[];
+      dryingEndDate?: string;
+      estimatedSeedCount?: number;
+      facilityId: number;
+      family?: string;
+      founderId?: string;
+      /** Server-generated unique identifier for the accession. This is unique across all seed banks, but is not suitable for display to end users. */
+      id: number;
+      initialQuantity?: components["schemas"]["SeedQuantityPayload"];
+      latestViabilityPercent?: number;
+      latestViabilityTestDate?: string;
+      notes?: string;
+      photoFilenames?: string[];
+      plantsCollectedFromMax?: number;
+      plantsCollectedFromMin?: number;
+      processingMethod?: "Count" | "Weight";
+      receivedDate?: string;
+      remainingQuantity?: components["schemas"]["SeedQuantityPayload"];
+      /** Which source of data this accession originally came from. */
+      source?: "Web" | "Seed Collector App" | "File Import";
+      /** Scientific name of the species. */
+      speciesScientificName?: string;
+      /** Common name of the species, if defined. */
+      speciesCommonName?: string;
+      /** Server-generated unique ID of the species. */
+      speciesId?: number;
+      /** Server-calculated accession state. Can change due to modifications to accession data or based on passage of time. */
+      state:
+        | "Awaiting Check-In"
+        | "Pending"
+        | "Awaiting Processing"
+        | "Processing"
+        | "Cleaning"
+        | "Processed"
+        | "Drying"
+        | "Dried"
+        | "In Storage"
+        | "Withdrawn"
+        | "Used Up"
+        | "Nursery";
+      storageCondition?: "Refrigerator" | "Freezer";
+      storageLocation?: string;
+      subsetCount?: number;
+      subsetWeight?: components["schemas"]["SeedQuantityPayload"];
+      targetStorageCondition?: "Refrigerator" | "Freezer";
+      totalViabilityPercent?: number;
+      viabilityTests?: components["schemas"]["ViabilityTestPayload"][];
+      withdrawals?: components["schemas"]["WithdrawalPayload"][];
+    };
     AddOrganizationUserRequestPayload: {
       email: string;
       role: "Contributor" | "Manager" | "Admin" | "Owner";
@@ -439,8 +511,45 @@ export interface components {
       sourcePlantOrigin?: "Wild" | "Outplant";
       species?: string;
     };
+    CreateAccessionRequestPayloadV2: {
+      bagNumbers?: string[];
+      collectedDate?: string;
+      collectionSiteCity?: string;
+      collectionSiteCoordinates?: components["schemas"]["Geolocation"][];
+      collectionSiteCountryCode?: string;
+      collectionSiteCountrySubdivision?: string;
+      collectionSiteLandowner?: string;
+      collectionSiteName?: string;
+      collectionSiteNotes?: string;
+      collectionSource?: "Wild" | "Reintroduced" | "Cultivated" | "Other";
+      collectors?: string[];
+      facilityId?: number;
+      founderId?: string;
+      plantsCollectedFromMax?: number;
+      plantsCollectedFromMin?: number;
+      receivedDate?: string;
+      source?: "Web" | "Seed Collector App" | "File Import";
+      speciesId?: number;
+      state?:
+        | "Awaiting Check-In"
+        | "Pending"
+        | "Awaiting Processing"
+        | "Processing"
+        | "Cleaning"
+        | "Processed"
+        | "Drying"
+        | "Dried"
+        | "In Storage"
+        | "Withdrawn"
+        | "Used Up"
+        | "Nursery";
+    };
     CreateAccessionResponsePayload: {
       accession: components["schemas"]["AccessionPayload"];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    CreateAccessionResponsePayloadV2: {
+      accession: components["schemas"]["AccessionPayloadV2"];
       status: components["schemas"]["SuccessOrError"];
     };
     CreateAutomationRequestPayload: {
@@ -643,6 +752,10 @@ export interface components {
     };
     GetAccessionResponsePayload: {
       accession: components["schemas"]["AccessionPayload"];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    GetAccessionResponsePayloadV2: {
+      accession: components["schemas"]["AccessionPayloadV2"];
       status: components["schemas"]["SuccessOrError"];
     };
     GetAutomationResponsePayload: {
@@ -1200,8 +1313,54 @@ export interface components {
       viabilityTests?: components["schemas"]["ViabilityTestPayload"][];
       withdrawals?: components["schemas"]["WithdrawalPayload"][];
     };
+    UpdateAccessionRequestPayloadV2: {
+      bagNumbers?: string[];
+      collectedDate?: string;
+      collectionSiteCity?: string;
+      collectionSiteCoordinates?: components["schemas"]["Geolocation"][];
+      collectionSiteCountryCode?: string;
+      collectionSiteCountrySubdivision?: string;
+      collectionSiteLandowner?: string;
+      collectionSiteName?: string;
+      collectionSiteNotes?: string;
+      collectionSource?: "Wild" | "Reintroduced" | "Cultivated" | "Other";
+      collectors?: string[];
+      dryingEndDate?: string;
+      facilityId?: number;
+      founderId?: string;
+      initialQuantity?: components["schemas"]["SeedQuantityPayload"];
+      notes?: string;
+      plantsCollectedFromMax?: number;
+      plantsCollectedFromMin?: number;
+      processingMethod?: "Count" | "Weight";
+      receivedDate?: string;
+      speciesId?: number;
+      state?:
+        | "Awaiting Check-In"
+        | "Pending"
+        | "Awaiting Processing"
+        | "Processing"
+        | "Cleaning"
+        | "Processed"
+        | "Drying"
+        | "Dried"
+        | "In Storage"
+        | "Withdrawn"
+        | "Used Up"
+        | "Nursery";
+      storageLocation?: string;
+      subsetCount?: number;
+      subsetWeight?: components["schemas"]["SeedQuantityPayload"];
+      targetStorageCondition?: "Refrigerator" | "Freezer";
+      viabilityTests?: components["schemas"]["ViabilityTestPayload"][];
+      withdrawals?: components["schemas"]["WithdrawalPayload"][];
+    };
     UpdateAccessionResponsePayload: {
       accession: components["schemas"]["AccessionPayload"];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    UpdateAccessionResponsePayloadV2: {
+      accession: components["schemas"]["AccessionPayloadV2"];
       status: components["schemas"]["SuccessOrError"];
     };
     UpdateAutomationRequestPayload: {
@@ -2109,6 +2268,7 @@ export interface operations {
   login: {
     parameters: {
       query: {
+        /** URL to redirect to after login. The list of valid redirect URLs is restricted; this must be the URL of a Terraware web application. */
         redirect: string;
       };
     };
@@ -2120,7 +2280,8 @@ export interface operations {
   readAll: {
     parameters: {
       query: {
-        organizationId?: number;
+        /** If set, return notifications relevant to that organization. */
+        organizationId?: string;
       };
     };
     responses: {
@@ -2208,7 +2369,8 @@ export interface operations {
   listOrganizations: {
     parameters: {
       query: {
-        depth?: "Organization" | "Facility";
+        /** Return this level of information about the organization's contents. */
+        depth?: string;
       };
     };
     responses: {
@@ -2238,10 +2400,12 @@ export interface operations {
   getOrganization: {
     parameters: {
       path: {
-        organizationId: number;
+        /** ID of organization to get. User must be a member of the organization. */
+        organizationId: string;
       };
       query: {
-        depth?: "Organization" | "Facility";
+        /** Return this level of information about the organization's contents. */
+        depth?: string;
       };
     };
     responses: {
@@ -2476,7 +2640,8 @@ export interface operations {
         id: number;
       };
       query: {
-        simulate?: boolean;
+        /** If true, do not actually save the accession; just return the result that would have been returned if it had been saved. */
+        simulate?: string;
       };
     };
     responses: {
@@ -2591,8 +2756,10 @@ export interface operations {
         photoFilename: string;
       };
       query: {
-        maxWidth?: number;
-        maxHeight?: number;
+        /** Maximum desired width in pixels. If neither this nor maxHeight is specified, the full-sized original image will be returned. If this is specified, an image no wider than this will be returned. The image may be narrower than this value if needed to preserve the aspect ratio of the original. */
+        maxWidth?: string;
+        /** Maximum desired height in pixels. If neither this nor maxWidth is specified, the full-sized original image will be returned. If this is specified, an image no taller than this will be returned. The image may be shorter than this value if needed to preserve the aspect ratio of the original. */
+        maxHeight?: string;
       };
     };
     responses: {
@@ -2660,6 +2827,7 @@ export interface operations {
   recordLogMessage: {
     parameters: {
       path: {
+        /** Source of the log message. */
         tag: string;
       };
     };
@@ -2669,15 +2837,17 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": { [key: string]: { [key: string]: unknown } };
+        "application/json": string;
       };
     };
   };
   getSeedBankSummary: {
     parameters: {
       query: {
-        organizationId?: number;
-        facilityId?: number;
+        /** If set, return summary on all seedbanks for that organization. */
+        organizationId?: string;
+        /** If set, return summary on that specific seedbank. */
+        facilityId?: string;
       };
     };
     responses: {
@@ -2752,7 +2922,8 @@ export interface operations {
   listSpecies: {
     parameters: {
       query: {
-        organizationId: number;
+        /** Organization whose species should be listed. */
+        organizationId: string;
       };
     };
     responses: {
@@ -2788,7 +2959,9 @@ export interface operations {
   getSpeciesDetails: {
     parameters: {
       query: {
+        /** Exact scientific name to look up. This name is case-sensitive. */
         scientificName: string;
+        /** If specified, only return common names in this language or whose language is unknown. Names with unknown languages are always included. This is a two-letter ISO 639-1 language code. */
         language?: string;
       };
     };
@@ -2811,8 +2984,10 @@ export interface operations {
   listSpeciesNames: {
     parameters: {
       query: {
+        /** Space-delimited list of word prefixes to search for. Non-alphabetic characters are ignored, and matches are case-insensitive. The order of prefixes is significant; "ag sc" will match "Aglaonema schottianum" but won't match "Scabiosa agrestis". */
         search: string;
-        maxResults?: number;
+        /** Maximum number of results to return. */
+        maxResults?: string;
       };
     };
     responses: {
@@ -2897,11 +3072,6 @@ export interface operations {
   };
   /** The uploaded file must be in CSV format. A template with the correct headers may be downloaded from the `/api/v1/species/uploads/template` endpoint. */
   uploadSpeciesList: {
-    parameters: {
-      query: {
-        organizationId: number;
-      };
-    };
     responses: {
       /** The file has been successfully received. It will be processed asynchronously; use the ID returned in the response payload to poll for its status using the `/api/v1/species/uploads/{uploadId}` GET endpoint. */
       200: {
@@ -2914,6 +3084,7 @@ export interface operations {
       content: {
         "multipart/form-data": {
           file: string;
+          organizationId?: unknown;
         };
       };
     };
@@ -2999,7 +3170,8 @@ export interface operations {
         speciesId: number;
       };
       query: {
-        organizationId: number;
+        /** Organization whose information about the species should be returned. */
+        organizationId: string;
       };
     };
     responses: {
@@ -3050,7 +3222,8 @@ export interface operations {
         speciesId: number;
       };
       query: {
-        organizationId: number;
+        /** Organization from which the species should be deleted. */
+        organizationId: string;
       };
     };
     responses: {
@@ -3175,7 +3348,8 @@ export interface operations {
   getUserPreferences: {
     parameters: {
       query: {
-        organizationId?: number;
+        /** If present, get the user's per-organization preferences for this organization. If not present, get the user's global preferences. */
+        organizationId?: string;
       };
     };
     responses: {
@@ -3199,6 +3373,72 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["UpdateUserPreferencesRequestPayload"];
+      };
+    };
+  };
+  createAccession: {
+    responses: {
+      /** The accession was created successfully. Response includes fields populated by the server, including the accession number and ID. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CreateAccessionResponsePayloadV2"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateAccessionRequestPayloadV2"];
+      };
+    };
+  };
+  getAccession: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetAccessionResponsePayloadV2"];
+        };
+      };
+      /** The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  updateAccession: {
+    parameters: {
+      path: {
+        id: number;
+      };
+      query: {
+        /** If true, do not actually save the accession; just return the result that would have been returned if it had been saved. */
+        simulate?: string;
+      };
+    };
+    responses: {
+      /** The accession was updated successfully. Response includes fields populated or modified by the server as a result of the update. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UpdateAccessionResponsePayloadV2"];
+        };
+      };
+      /** The specified accession doesn't exist. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateAccessionRequestPayloadV2"];
       };
     };
   };

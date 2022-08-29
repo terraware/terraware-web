@@ -221,16 +221,13 @@ const UPLOAD_SPECIES_FILE = '/api/v1/species/uploads';
 type UploadSpeciesFileResponse =
   paths[typeof UPLOAD_SPECIES_FILE]['post']['responses'][200]['content']['application/json'];
 
-type UploadSpeciesQuery = paths[typeof UPLOAD_SPECIES_FILE]['post']['parameters']['query'];
 export async function uploadSpeciesFile(file: File, organizationId: number) {
-  const queryParams: UploadSpeciesQuery = { organizationId };
-
-  const endpoint = addQueryParams(UPLOAD_SPECIES_FILE, queryParams);
   const response: UploadSpeciesResponse = {
     id: -1,
     requestSucceeded: true,
   };
   const formData = new FormData();
+  formData.append('organizationId', organizationId.toString());
   formData.append('file', file);
   const config = {
     headers: {
@@ -238,7 +235,7 @@ export async function uploadSpeciesFile(file: File, organizationId: number) {
     },
   };
   try {
-    const serverResponse: UploadSpeciesFileResponse = (await axios.post(endpoint, formData, config)).data;
+    const serverResponse: UploadSpeciesFileResponse = (await axios.post(UPLOAD_SPECIES_FILE, formData, config)).data;
     response.id = serverResponse.id;
   } catch (error) {
     response.requestSucceeded = false;
