@@ -128,7 +128,7 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
             <Grid item xs={gridLeftSide} sx={categoryStyle}>
               {strings.PHOTOS}
             </Grid>
-            <Grid item xs={gridRightSide}></Grid>
+            <Grid item xs={gridRightSide} />
           </Grid>
         </Grid>
       ) : (
