@@ -1,12 +1,8 @@
-import { TabContext, TabList, TabPanel } from '@mui/lab';
-import { Box, Grid, Tab, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import moment from 'moment';
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { Accession2, getAccession2 } from 'src/api/accessions2/accession';
+import { Accession2 } from 'src/api/accessions2/accession';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import TfMain from '../common/TfMain';
 
 type DetailPanelProps = {
   accession?: Accession2;
@@ -35,10 +31,14 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
   const age = seedCollectionDate ? today.diff(seedCollectionDate, 'months') : undefined;
 
   const displayAge = () => {
-    if (age! < 1) {
-      return strings.LESS_THAN_A_MONTH;
+    if (age !== undefined) {
+      if (age < 1) {
+        return strings.LESS_THAN_A_MONTH;
+      } else {
+        return `${age} ${strings.MONTHS}`;
+      }
     } else {
-      return `${age} ${strings.MONTHS}`;
+      return '';
     }
   };
 
@@ -72,7 +72,7 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
             {strings.AGE}
           </Grid>
           <Grid item xs={gridRightSide}>
-            {age !== undefined ? displayAge() : ''}
+            {displayAge()}
           </Grid>
         </Grid>
         <Grid item xs={12} sx={gridRowStyle}>
