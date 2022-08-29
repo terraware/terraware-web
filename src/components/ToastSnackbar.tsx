@@ -43,12 +43,7 @@ export default function ToastSnackbarMessage(): JSX.Element {
       className={classes.mainSnackbar}
     >
       <div className={classes.toastContainer}>
-        <Message
-          type='toast'
-          title={snackbar.title}
-          body={snackbar.msg}
-          priority={snackbar.priority}
-        />
+        <Message type='toast' title={snackbar.title} body={snackbar.msg} priority={snackbar.priority} />
       </div>
     </Snackbar>
   );

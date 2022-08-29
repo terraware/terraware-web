@@ -68,9 +68,11 @@ export default function DetectAppVersion({ onNewVersion }: DetectAppVersionProps
           <Button
             label={strings.REFRESH}
             onClick={() => window.location.reload()}
-            size='small' key={'1'}
+            size='small'
+            key={'1'}
             priority='secondary'
-            type='passive' />,
+            type='passive'
+          />,
         ]}
       />
     </div>
