@@ -15,6 +15,9 @@ const useStyles = makeStyles((theme: Theme) => ({
       bottom: '64px',
     },
   },
+  toastContainer: {
+    width: '100%',
+  },
 }));
 
 export default function ToastSnackbarMessage(): JSX.Element {
@@ -39,15 +42,14 @@ export default function ToastSnackbarMessage(): JSX.Element {
       id='snackbar'
       className={classes.mainSnackbar}
     >
-<div>
-      <Message
-        type='toast'
-        title={snackbar.title}
-        body={snackbar.msg}
-        priority={snackbar.priority}
-      />
-
-</div>
+      <div className={classes.toastContainer}>
+        <Message
+          type='toast'
+          title={snackbar.title}
+          body={snackbar.msg}
+          priority={snackbar.priority}
+        />
+      </div>
     </Snackbar>
   );
 }
