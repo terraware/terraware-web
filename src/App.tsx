@@ -49,7 +49,7 @@ import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { getPreferences, updatePreferences } from './api/preferences/preferences';
 import useEnvironment from 'src/utils/useEnvironment';
-import Accession2View from './components/accession2';
+import { Accession2View } from './components/accession2';
 
 const useStyles = makeStyles(() => ({
   content: {
