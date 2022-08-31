@@ -60,12 +60,6 @@ const COLUMNS: DatabaseColumn[] = [
     filter: { type: 'date_range' },
   },
   {
-    key: 'primaryCollectorName',
-    name: strings.PRIMARY_COLLECTOR,
-    type: 'string',
-    filter: { type: 'search' },
-  },
-  {
     key: 'siteLocation',
     name: strings.SITE_LOCATION,
     type: 'string',
@@ -340,16 +334,7 @@ export interface Preset {
 
 export const defaultPreset: Preset = {
   name: 'Default',
-  fields: [
-    'accessionNumber',
-    'speciesName',
-    'siteLocation',
-    'state',
-    'collectedDate',
-    'receivedDate',
-    'primaryCollectorName',
-    'facility_name',
-  ],
+  fields: ['accessionNumber', 'speciesName', 'siteLocation', 'state', 'collectedDate', 'receivedDate', 'facility_name'],
 };
 
 const generalInventoryPreset: Preset = {
@@ -363,7 +348,6 @@ const generalInventoryPreset: Preset = {
     'state',
     'collectedDate',
     'receivedDate',
-    'primaryCollectorName',
     'species_endangered',
     'species_rare',
     'treesCollectedFrom',

@@ -165,7 +165,6 @@ const strings = new LocalizedStrings({
     FOUNDER_ID: 'Founder ID',
     FIELD_NOTES: 'Field Notes',
     FIELD_NOTES_PLACEHOLDER: 'Important notes about seeds, fruits, or plants',
-    PRIMARY_COLLECTOR: 'Primary Collector',
     COLLECTORS: 'Collectors',
     SITE: 'Site',
     FACILITY: 'Facility',
