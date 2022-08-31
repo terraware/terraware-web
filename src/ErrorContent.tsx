@@ -37,8 +37,8 @@ export default function ErrorContent({ text, inApp }: ErrorContentProps) {
         <Box sx={{ margin: '0 auto', color: '#FFFFFF', width: '550px', textAlign: 'center' }}>
           <Typography sx={{ fontSize: '40px', fontWeight: 600, paddingBottom: '32px' }}>
             {strings.SOMETHING_WENT_WRONG_TITLE}
+            {text && <div>{text}</div>}
           </Typography>
-          {text && <Typography sx={{ fontSize: '40px', fontWeight: 600, paddingBottom: '32px' }}>{text}</Typography>}
           <Typography sx={{ paddingBottom: '24px' }}>{strings.SOMETHING_WENT_WRONG_MESSAGE}</Typography>
           <Button
             label={strings.BACK_TO_TERRAWARE}
