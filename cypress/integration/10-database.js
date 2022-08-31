@@ -221,8 +221,7 @@ describe('Database', () => {
         cy.get('#table-header > :nth-child(9)').contains('NOTES');
         cy.get('#table-header > :nth-child(10)').contains('VIABILITY TEST TYPE');
         cy.get('#table-header > :nth-child(11)').contains('VIABILITY START DATE');
-        cy.get('#table-header > :nth-child(12)').contains('COLLECTOR');
-        cy.get('#table-header > :nth-child(13)').contains('RARE');
+        cy.get('#table-header > :nth-child(12)').contains('RARE');
       });
     });
   });
