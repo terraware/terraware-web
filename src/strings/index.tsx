@@ -530,6 +530,15 @@ const strings = new LocalizedStrings({
     UNSPECIFIED: 'Unspecified',
     NEW_APP_VERSION: 'Please refresh to use the latest version of Terraware.',
     NEW_APP_VERSION_MOBILE: 'Refresh for the latest Terraware version.',
+    EDIT_ACCESSION: 'Edit Accession',
+    ACCESSION_ID: 'Accession ID',
+    COLLECTING_DATE_REQUIRED: 'Collecting Date *',
+    COLLECTING_SITE: 'Collecting Site',
+    CITY: 'City',
+    STATE_PROVINCE_REGION: 'State/Province/Region',
+    DIRECTION_OR_DESCRIPTION: 'Direction or Description',
+    GPS_COORDINATES: 'GPS Coordinates (Latitude, Longitude)',
+    COLLECTION_SOURCE: 'Collection Source',
   },
 });
 
