@@ -57,16 +57,6 @@ export default function Accession2Edit(): JSX.Element {
           <Grid container xs={12} spacing={2}>
             <Grid item xs={mainStructureSize}>
               <Textfield
-                id='accessionNumber'
-                type='text'
-                label={strings.ACCESSION_ID}
-                value={record?.accessionNumber}
-                onChange={onChange}
-              />
-            </Grid>
-
-            <Grid item xs={mainStructureSize}>
-              <Textfield
                 id='speciesCommonName'
                 type='text'
                 label={strings.SPECIES}
@@ -123,7 +113,7 @@ export default function Accession2Edit(): JSX.Element {
                 onChange={onChange}
               />
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={isMobile ? 12 : 6}>
               <Textfield
                 id='collectionSiteCountrySubdivision'
                 type='text'
@@ -132,7 +122,7 @@ export default function Accession2Edit(): JSX.Element {
                 onChange={onChange}
               />
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={isMobile ? 12 : 6}>
               <Textfield
                 id='collectionSiteCountryCode'
                 type='text'
