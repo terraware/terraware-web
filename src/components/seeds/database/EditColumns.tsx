@@ -158,7 +158,6 @@ const sections: Section[] = [
         COLUMNS_INDEXED.speciesName,
         COLUMNS_INDEXED.receivedDate,
         COLUMNS_INDEXED.collectedDate,
-        COLUMNS_INDEXED.primaryCollectorName,
         COLUMNS_INDEXED.siteLocation,
       ],
       [

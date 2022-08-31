@@ -24,7 +24,6 @@ describe('Database', () => {
       cy.get('#table-header-speciesName').contains('SPECIES');
       cy.get('#table-header-receivedDate').contains('RECEIVED DATE');
       cy.get('#table-header-collectedDate').contains('COLLECTED DATE');
-      cy.get('#table-header-primaryCollectorName').contains('COLLECTOR');
       cy.get('#table-header-siteLocation').contains('SITE LOCATION');
     });
 
@@ -38,7 +37,6 @@ describe('Database', () => {
       cy.get('#speciesName').click();
       cy.get('#receivedDate').click();
       cy.get('#collectedDate').click();
-      cy.get('#primaryCollectorName').click();
       cy.get('#active').click();
       cy.get('#facility_name').click();
       cy.get('#saveColumnsButton').click();
@@ -79,7 +77,6 @@ describe('Database', () => {
         cy.get('#table-header-speciesName').contains('SPECIES');
         cy.get('#table-header-receivedDate').contains('RECEIVED DATE');
         cy.get('#table-header-collectedDate').contains('COLLECTED DATE');
-        cy.get('#table-header-primaryCollectorName').contains('COLLECTOR');
         cy.get('#table-header-siteLocation').contains('SITE LOCATION');
         cy.get('#table-header-treesCollectedFrom').contains('NUMBER OF TREES');
         cy.get('#table-header-estimatedSeedsIncoming').contains('ESTIMATED SEEDS INCOMING');
@@ -108,7 +105,6 @@ describe('Database', () => {
         cy.get('#table-header-speciesName').contains('SPECIES');
         cy.get('#table-header-receivedDate').contains('RECEIVED DATE');
         cy.get('#table-header-collectedDate').contains('COLLECTED DATE');
-        cy.get('#table-header-primaryCollectorName').contains('COLLECTOR');
         cy.get('#table-header-siteLocation').contains('SITE LOCATION');
       });
 
@@ -207,7 +203,6 @@ describe('Database', () => {
         cy.get('#edit-columns').click();
 
         cy.get('#Viability\\ Testing\\ To\\ Do').click();
-        cy.get('#primaryCollectorName').click();
         cy.get('#species_rare').click();
         cy.get('#saveColumnsButton').click();
         cy.wait('@search');
