@@ -248,13 +248,10 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
   const onSubmitHandler = () => {
     setIsEditing(false);
     setIsSaving(true);
-    // filter empty collectors and set primaryCollector and secondaryCollectors to undefined until server is updated
     const filteredCollectors = record.collectors?.filter((iValue) => iValue !== '');
     const newRecord = {
       ...record,
       collectors: filteredCollectors,
-      primaryCollector: undefined,
-      secondaryCollectors: undefined,
     };
     setTimeout(() => onSubmit(newRecord), 1000);
   };
