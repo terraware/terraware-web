@@ -247,6 +247,18 @@ export interface paths {
     get: operations["getAccession"];
     put: operations["updateAccession"];
   };
+  "/api/v2/seedbank/withdrawals": {
+    get: operations["listWithdrawals"];
+    /** May cause the accession's remaining quantity to change. */
+    post: operations["createWithdrawal"];
+  };
+  "/api/v2/seedbank/withdrawals/{id}": {
+    get: operations["getWithdrawal"];
+    /** May cause the accession's remaining quantity to change. */
+    put: operations["updateWithdrawal"];
+    /** May cause the accession's remaining quantity to change. */
+    delete: operations["deleteWithdrawal"];
+  };
 }
 
 export interface components {
@@ -307,8 +319,6 @@ export interface components {
       numberOfTrees?: number;
       nurseryStartDate?: string;
       photoFilenames?: string[];
-      /** @deprecated */
-      primaryCollector?: string;
       processingMethod?: "Count" | "Weight";
       processingNotes?: string;
       processingStaffResponsible?: string;
@@ -317,8 +327,6 @@ export interface components {
       receivedDate?: string;
       /** Number or weight of seeds remaining for withdrawal and testing. Calculated by the server when the accession's total size is known. */
       remainingQuantity?: components["schemas"]["SeedQuantityPayload"];
-      /** @deprecated */
-      secondaryCollectors?: string[];
       /** @deprecated Backward-compatibility alias for collectionSiteName */
       siteLocation?: string;
       /** Which application this accession originally came from. This is currently based on the presence of the deviceInfo field. */
@@ -393,6 +401,8 @@ export interface components {
       /** Server-generated unique identifier for the accession. This is unique across all seed banks, but is not suitable for display to end users. */
       id: number;
       initialQuantity?: components["schemas"]["SeedQuantityPayload"];
+      latestObservedQuantity?: components["schemas"]["SeedQuantityPayload"];
+      latestObservedTime?: string;
       latestViabilityPercent?: number;
       latestViabilityTestDate?: string;
       notes?: string;
@@ -431,7 +441,7 @@ export interface components {
       targetStorageCondition?: "Refrigerator" | "Freezer";
       totalViabilityPercent?: number;
       viabilityTests?: components["schemas"]["ViabilityTestPayload"][];
-      withdrawals?: components["schemas"]["WithdrawalPayload"][];
+      withdrawals?: components["schemas"]["GetWithdrawalPayload"][];
     };
     AddOrganizationUserRequestPayload: {
       email: string;
@@ -499,12 +509,8 @@ export interface components {
       /** @deprecated Backward-compatibility alias for collectionSiteLandowner */
       landowner?: string;
       numberOfTrees?: number;
-      /** @deprecated */
-      primaryCollector?: string;
       rare?: "No" | "Yes" | "Unsure";
       receivedDate?: string;
-      /** @deprecated */
-      secondaryCollectors?: string[];
       /** @deprecated Backward-compatibility alias for collectionSiteName */
       siteLocation?: string;
       source?: "Web" | "Seed Collector App" | "File Import";
@@ -633,6 +639,24 @@ export interface components {
     };
     CreateTimeseriesRequestPayload: {
       timeseries: components["schemas"]["CreateTimeseriesEntry"][];
+    };
+    CreateWithdrawalRequestPayload: {
+      accessionId?: number;
+      date?: string;
+      purpose?:
+        | "Propagation"
+        | "Outreach or Education"
+        | "Research"
+        | "Broadcast"
+        | "Share with Another Site"
+        | "Other"
+        | "Viability Testing"
+        | "Out-planting"
+        | "Nursery";
+      notes?: string;
+      /** ID of the user who withdrew the seeds. Default for new withdrawals is the current user; for existing withdrawals, default is the withdrawal's existing user ID. Ignored if the current user does not have permission to list organization users. V1 COMPATIBILITY: If this is null and the withdrawal doesn't have a user ID, the existing "staffResponsible" value will be preserved. */
+      withdrawnByUserId?: number;
+      withdrawnQuantity?: components["schemas"]["SeedQuantityPayload"];
     };
     DeviceConfig: {
       /** Unique identifier of this device. */
@@ -857,6 +881,40 @@ export interface components {
       user: components["schemas"]["UserProfilePayload"];
       status: components["schemas"]["SuccessOrError"];
     };
+    GetWithdrawalPayload: {
+      date: string;
+      /** Number of seeds withdrawn. Calculated by server. This is an estimate if "withdrawnQuantity" is a weight quantity and the accession has subset weight and count data. Absent if "withdrawnQuantity" is a weight quantity and the accession has no subset weight and count. */
+      estimatedCount?: number;
+      estimatedWeight?: components["schemas"]["SeedQuantityPayload"];
+      /** Server-assigned unique ID of this withdrawal. */
+      id?: number;
+      purpose?:
+        | "Propagation"
+        | "Outreach or Education"
+        | "Research"
+        | "Broadcast"
+        | "Share with Another Site"
+        | "Other"
+        | "Viability Testing"
+        | "Out-planting"
+        | "Nursery";
+      notes?: string;
+      /** If this withdrawal is of purpose "Viability Testing", the ID of the test it is associated with. */
+      viabilityTestId?: number;
+      /** Full name of the person who withdrew the seeds. V1 COMPATIBILITY: This is the "staffResponsible" v1 field, which may not be the name of an organization user. */
+      withdrawnByName?: string;
+      /** ID of the user who withdrew the seeds. Only present if the current user has permission to list the users in the organization. V1 COMPATIBILITY: Also absent if the withdrawal was written with the v1 API and we haven't yet written the code to figure out which user ID to assign. */
+      withdrawnByUserId?: number;
+      withdrawnQuantity?: components["schemas"]["SeedQuantityPayload"];
+    };
+    GetWithdrawalResponsePayload: {
+      withdrawal: components["schemas"]["GetWithdrawalPayload"];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    GetWithdrawalsResponsePayload: {
+      withdrawals: components["schemas"]["GetWithdrawalPayload"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
     LineString: components["schemas"]["Geometry"] & {
       coordinates?: number[][];
     } & {
@@ -947,9 +1005,9 @@ export interface components {
       settings?: { [key: string]: { [key: string]: unknown } };
       timeseriesName?: string;
       deviceId?: number;
-      lowerThreshold?: number;
       upperThreshold?: number;
       verbosity: number;
+      lowerThreshold?: number;
     };
     MultiLineString: components["schemas"]["Geometry"] & {
       coordinates?: number[][][];
@@ -1287,16 +1345,12 @@ export interface components {
       landowner?: string;
       numberOfTrees?: number;
       nurseryStartDate?: string;
-      /** @deprecated */
-      primaryCollector?: string;
       processingMethod?: "Count" | "Weight";
       processingNotes?: string;
       processingStaffResponsible?: string;
       processingStartDate?: string;
       rare?: "No" | "Yes" | "Unsure";
       receivedDate?: string;
-      /** @deprecated */
-      secondaryCollectors?: string[];
       /** @deprecated Backward-compatibility alias for collectionSiteName */
       siteLocation?: string;
       sourcePlantOrigin?: "Wild" | "Outplant";
@@ -1353,7 +1407,6 @@ export interface components {
       subsetWeight?: components["schemas"]["SeedQuantityPayload"];
       targetStorageCondition?: "Refrigerator" | "Freezer";
       viabilityTests?: components["schemas"]["ViabilityTestPayload"][];
-      withdrawals?: components["schemas"]["WithdrawalPayload"][];
     };
     UpdateAccessionResponsePayload: {
       accession: components["schemas"]["AccessionPayload"];
@@ -1428,6 +1481,27 @@ export interface components {
       emailNotificationsEnabled?: boolean;
       firstName: string;
       lastName: string;
+    };
+    UpdateWithdrawalRequestPayload: {
+      date?: string;
+      purpose?:
+        | "Propagation"
+        | "Outreach or Education"
+        | "Research"
+        | "Broadcast"
+        | "Share with Another Site"
+        | "Other"
+        | "Viability Testing"
+        | "Out-planting"
+        | "Nursery";
+      notes?: string;
+      /** ID of the user who withdrew the seeds. Default for new withdrawals is the current user; for existing withdrawals, default is the withdrawal's existing user ID. Ignored if the current user does not have permission to list organization users. V1 COMPATIBILITY: If this is null and the withdrawal doesn't have a user ID, the existing "staffResponsible" value will be preserved. */
+      withdrawnByUserId?: number;
+      withdrawnQuantity?: components["schemas"]["SeedQuantityPayload"];
+    };
+    UpdateWithdrawalResponsePayload: {
+      withdrawal: components["schemas"]["GetWithdrawalPayload"];
+      status: components["schemas"]["SuccessOrError"];
     };
     UploadPhotoMetadataPayload: {
       capturedTime: string;
@@ -3439,6 +3513,89 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["UpdateAccessionRequestPayloadV2"];
+      };
+    };
+  };
+  listWithdrawals: {
+    parameters: {
+      query: {
+        accessionId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetWithdrawalsResponsePayload"];
+        };
+      };
+    };
+  };
+  /** May cause the accession's remaining quantity to change. */
+  createWithdrawal: {
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UpdateWithdrawalResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateWithdrawalRequestPayload"];
+      };
+    };
+  };
+  getWithdrawal: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetWithdrawalResponsePayload"];
+        };
+      };
+    };
+  };
+  /** May cause the accession's remaining quantity to change. */
+  updateWithdrawal: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UpdateWithdrawalResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateWithdrawalRequestPayload"];
+      };
+    };
+  };
+  /** May cause the accession's remaining quantity to change. */
+  deleteWithdrawal: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
       };
     };
   };
