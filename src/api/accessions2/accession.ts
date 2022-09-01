@@ -14,3 +14,27 @@ export const getAccession2 = async (accessionId: number): Promise<Accession2> =>
 
   return response.accession;
 };
+
+type UpdateAcccessionResponse = {
+  requestSucceeded: boolean;
+};
+
+type UpdateAccessionResponsePayloadV2 =
+  paths[typeof ACCESSIONS2_ENDPOINT]['put']['responses'][200]['content']['application/json'];
+
+export const updateAccession2 = async (accession: Accession2): Promise<UpdateAcccessionResponse> => {
+  const response: UpdateAcccessionResponse = {
+    requestSucceeded: true,
+  };
+  const endpoint = ACCESSIONS2_ENDPOINT.replace('{id}', `${accession.id}`);
+  try {
+    const serverResponse: UpdateAccessionResponsePayloadV2 = (await axios.put(endpoint, accession)).data;
+    if (serverResponse.status === 'error') {
+      response.requestSucceeded = false;
+    }
+  } catch {
+    response.requestSucceeded = false;
+  }
+
+  return response;
+};

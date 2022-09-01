@@ -50,6 +50,7 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { getPreferences, updatePreferences } from './api/preferences/preferences';
 import useEnvironment from 'src/utils/useEnvironment';
 import { Accession2View } from './components/accession2';
+import Accession2Edit from './components/accession2/Accession2Edit';
 
 const useStyles = makeStyles(() => ({
   content: {
@@ -383,6 +384,11 @@ export default function App() {
               {!isProduction && (
                 <Route exact path={APP_PATHS.ACCESSIONS2}>
                   <div>Accessions2 Database Coming Soon!</div>
+                </Route>
+              )}
+              {!isProduction && (
+                <Route exact path={APP_PATHS.ACCESSIONS2_EDIT}>
+                  <Accession2Edit />
                 </Route>
               )}
               {!isProduction && (
