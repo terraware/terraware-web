@@ -1,5 +1,7 @@
 import { TabContext, TabList, TabPanel } from '@mui/lab';
-import { Box, Tab, Typography } from '@mui/material';
+import { Box, Link, Tab, Typography } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import { Icon } from '@terraware/web-components';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Accession2, getAccession2 } from 'src/api/accessions2/accession';
@@ -7,10 +9,18 @@ import strings from 'src/strings';
 import TfMain from '../common/TfMain';
 import DetailPanel from './DetailPanel';
 
+const useStyles = makeStyles(() => ({
+  iconStyle: {
+    fill: '#3A4445',
+  },
+}));
+
 export default function Accession2View(): JSX.Element {
   const { accessionId } = useParams<{ accessionId: string }>();
   const [selectedTab, setSelectedTab] = useState('detail');
   const [accession, setAccession] = useState<Accession2>();
+
+  const classes = useStyles();
 
   useEffect(() => {
     const populateAccession = async () => {
@@ -37,6 +47,10 @@ export default function Accession2View(): JSX.Element {
     },
   };
 
+  const linkStyle = {
+    textDecoration: 'none',
+  };
+
   return (
     <TfMain>
       <Box padding={3}>
@@ -45,6 +59,46 @@ export default function Accession2View(): JSX.Element {
           {accession?.speciesScientificName}
         </Typography>
         <Typography color='#708284'>{accession?.speciesCommonName}</Typography>
+      </Box>
+
+      <Box display='flex'>
+        {accession?.state && (
+          <Box display='flex' padding={(theme) => theme.spacing(0, 3)}>
+            <Icon name='seedbankNav' className={classes.iconStyle} />
+            <Typography paddingLeft={1}>{accession.state}</Typography>
+          </Box>
+        )}
+        {accession?.storageLocation && (
+          <Box display='flex' padding={(theme) => theme.spacing(0, 2)}>
+            <Icon name='info' className={classes.iconStyle} />
+            <Typography paddingLeft={1}>{accession.storageLocation}</Typography>
+          </Box>
+        )}
+        <Box display='flex' padding={(theme) => theme.spacing(0, 2)}>
+          <Icon name='notification' className={classes.iconStyle} />
+          <Typography paddingLeft={1}>Notification</Typography>
+        </Box>
+      </Box>
+
+      <Box display='flex'>
+        <Box padding={4}>
+          <Typography>{strings.QUANTITY} </Typography>
+          <Link sx={linkStyle} onClick={() => true}>
+            + {strings.ADD}
+          </Link>
+        </Box>
+        <Box padding={4}>
+          <Typography>{strings.AGE}</Typography>
+          <Link sx={linkStyle} onClick={() => true}>
+            + {strings.ADD}
+          </Link>
+        </Box>
+        <Box padding={4}>
+          <Typography>{strings.VIABILITY}</Typography>
+          <Link sx={linkStyle} onClick={() => true}>
+            + {strings.ADD}
+          </Link>
+        </Box>
       </Box>
       <Box sx={{ width: '100%' }}>
         <TabContext value={selectedTab}>
