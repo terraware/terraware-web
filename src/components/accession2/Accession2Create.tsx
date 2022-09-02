@@ -5,13 +5,15 @@ import { APP_PATHS } from 'src/constants';
 import { ServerOrganization } from 'src/types/Organization';
 import useForm from 'src/utils/useForm';
 import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
-import { AccessionPostRequestBody, postAccession } from 'src/api/accessions2/accession';
+import { Accession2Status, AccessionPostRequestBody, postAccession } from 'src/api/accessions2/accession';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { DatePicker } from '@terraware/web-components';
 import Species2Dropdown from './Species2Dropdown';
 import Collectors2 from './Collectors2';
 import Textfield from '../common/Textfield/Textfield';
 import FormBottomBar from '../common/FormBottomBar';
+import Select from '../common/Select/Select';
+import SeedBank2Selector from './SeedBank2Selector';
 
 type CreateAccessionProps = {
   organization: ServerOrganization;
@@ -22,10 +24,14 @@ const SubTitleStyle = {
   fontWeight: 'bold',
 };
 
-const defaultAccession = (): AccessionPostRequestBody => ({} as AccessionPostRequestBody);
+const defaultAccession = (): AccessionPostRequestBody =>
+  ({
+    state: 'Awaiting Check-In',
+  } as AccessionPostRequestBody);
 
 type Dates = {
   collectedDate?: any;
+  receivedDate?: any;
 };
 
 export default function CreateAccession(props: CreateAccessionProps): JSX.Element {
@@ -36,6 +42,7 @@ export default function CreateAccession(props: CreateAccessionProps): JSX.Elemen
   const [record, setRecord, onChange] = useForm<AccessionPostRequestBody>(defaultAccession());
   const [dates, setDates] = useState<Dates>({
     collectedDate: record.collectedDate,
+    receivedDate: record.receivedDate,
   });
   const accessions2Database = {
     pathname: APP_PATHS.ACCESSIONS2,
@@ -53,7 +60,7 @@ export default function CreateAccession(props: CreateAccessionProps): JSX.Elemen
   };
 
   const changeDate = (id: string, value?: any) => {
-    setDates((curr) => ({ ...curr, collectedDate: value }));
+    setDates((curr) => ({ ...curr, [id]: value }));
     const date = new Date(value).getTime();
     const now = Date.now();
     if (isNaN(date) || date > now) {
@@ -63,31 +70,32 @@ export default function CreateAccession(props: CreateAccessionProps): JSX.Elemen
     }
   };
 
+  const getAccessionStatuses = () => {
+    // TODO: return statuses that can be used for create, for now return all statuses
+    return Accession2Status;
+  };
+
   const goToAccessions2 = () => {
     history.push(accessions2Database);
   };
 
   const saveAccession = async () => {
+    // TODO data validation and show errors
     try {
-      const accessionNumber = await postAccession(record);
+      const id = await postAccession(record);
       history.replace(accessions2Database);
       history.push({
-        pathname: APP_PATHS.ACCESSIONS2_ITEM.replace(':accessionId', accessionNumber),
+        pathname: APP_PATHS.ACCESSIONS2_ITEM.replace(':accessionId', id),
       });
     } catch (e) {
-      // show toast error
+      // TODO show toast error
     }
   };
 
   const gridSize = () => (isMobile ? 12 : 6);
 
   return (
-    <Box
-      display='flex'
-      flexDirection='column'
-      marginTop={theme.spacing(5)}
-      marginBottom={isMobile ? theme.spacing(15) : theme.spacing(5)}
-    >
+    <Box display='flex' flexDirection='column' marginTop={theme.spacing(5)} marginBottom={theme.spacing(25)}>
       <Typography variant='h2' sx={{ fontSize: '24px', fontWeight: 'bold', margin: '0 auto' }}>
         {strings.ADD_AN_ACCESSION}
       </Typography>
@@ -128,7 +136,7 @@ export default function CreateAccession(props: CreateAccessionProps): JSX.Elemen
               onChange={onChange}
             />
           </Grid>
-          <Grid xs={12} display='flex' flexDirection={isMobile ? 'column' : 'row'} justifyContent='space-between'>
+          <Grid item xs={12} display='flex' flexDirection={isMobile ? 'column' : 'row'} justifyContent='space-between'>
             <Grid item xs={gridSize()} sx={{ ...marginTop, marginRight: isMobile ? 0 : theme.spacing(2) }}>
               <Textfield
                 id='collectionSiteName'
@@ -155,6 +163,27 @@ export default function CreateAccession(props: CreateAccessionProps): JSX.Elemen
               {strings.SEED_PROCESSING_DETAIL}
             </Typography>
           </Grid>
+          <Grid item xs={12} sx={datePickerStyle}>
+            <DatePicker
+              id='receivedDate'
+              label={strings.RECEIVED_DATE_REQUIRED}
+              aria-label={strings.RECEIVED_DATE_REQUIRED}
+              value={dates.receivedDate}
+              onChange={changeDate}
+            />
+          </Grid>
+          <Grid item xs={12} sx={marginTop}>
+            <Select
+              id='state'
+              selectedValue={record.state}
+              onChange={(value: string) => onChange('state', value)}
+              label={strings.PROCESSING_STATUS_REQUIRED}
+              readonly={false}
+              options={getAccessionStatuses()}
+              fullWidth={true}
+            />
+          </Grid>
+          <SeedBank2Selector organization={organization} record={record} onChange={onChange} />
         </Grid>
       </Container>
       <FormBottomBar onCancel={goToAccessions2} onSave={saveAccession} />

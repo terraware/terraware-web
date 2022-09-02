@@ -9,6 +9,21 @@ type ListAutomationsResponsePayload =
 
 export type Accession2 = ListAutomationsResponsePayload['accession'];
 
+export const Accession2Status = [
+  'Awaiting Check-In',
+  'Pending',
+  'Awaiting Processing',
+  'Processing',
+  'Cleaning',
+  'Processed',
+  'Drying',
+  'Dried',
+  'In Storage',
+  'Withdrawn',
+  'Used Up',
+  'Nursery',
+];
+
 export const getAccession2 = async (accessionId: number): Promise<Accession2> => {
   const endpoint = ACCESSIONS2_ENDPOINT.replace('{id}', `${accessionId}`);
   const response: ListAutomationsResponsePayload = (await axios.get(endpoint)).data;

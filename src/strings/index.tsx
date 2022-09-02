@@ -545,6 +545,10 @@ const strings = new LocalizedStrings({
     SPECIES_REQUIRED: 'Species *',
     COLLECTED_DATE_REQUIRED: 'Collected Date *',
     COLLECTION_SITE: 'Collection Site',
+    RECEIVED_DATE_REQUIRED: 'Received Date *',
+    PROCESSING_STATUS_REQUIRED: 'Processing Status *',
+    LOCATION_REQUIRED: 'Location *',
+    SUB_LOCATION_REQUIRED: 'Sub-Location *',
   },
 });
 
