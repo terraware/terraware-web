@@ -1,16 +1,10 @@
-import moment from 'moment';
-import React, { Suspense, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import strings from 'src/strings';
 import { APP_PATHS } from 'src/constants';
 import { ServerOrganization } from 'src/types/Organization';
 import useForm from 'src/utils/useForm';
-import { getAllSeedBanks } from 'src/utils/organization';
-import TfMain from 'src/components/common/TfMain';
-import PanelTitle from 'src/components/PanelTitle';
-import MainPaper from 'src/components/MainPaper';
-import { Box, CircularProgress, Fab, Container, Grid, Typography, Theme, useTheme } from '@mui/material';
-import { Close } from '@mui/icons-material';
+import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
 import { AccessionPostRequestBody, postAccession } from 'src/api/accessions2/accession';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { DatePicker } from '@terraware/web-components';
@@ -30,10 +24,6 @@ const SubTitleStyle = {
 
 const defaultAccession = (): AccessionPostRequestBody => ({} as AccessionPostRequestBody);
 
-type DateErrors = {
-  collectedDate?: boolean;
-};
-
 type Dates = {
   collectedDate?: any;
 };
@@ -47,7 +37,6 @@ export default function CreateAccession(props: CreateAccessionProps): JSX.Elemen
   const [dates, setDates] = useState<Dates>({
     collectedDate: record.collectedDate,
   });
-  const [dateErrors, setDateErrors] = useState<DateErrors>({});
   const accessions2Database = {
     pathname: APP_PATHS.ACCESSIONS2,
   };
@@ -68,9 +57,8 @@ export default function CreateAccession(props: CreateAccessionProps): JSX.Elemen
     const date = new Date(value).getTime();
     const now = Date.now();
     if (isNaN(date) || date > now) {
-      setDateErrors((curr) => ({ ...curr, [id]: true }));
+      return;
     } else {
-      setDateErrors((curr) => ({ ...curr, [id]: false }));
       onChange(id, value);
     }
   };
@@ -130,7 +118,6 @@ export default function CreateAccession(props: CreateAccessionProps): JSX.Elemen
               aria-label={strings.COLLECTED_DATE_REQUIRED}
               value={dates.collectedDate}
               onChange={changeDate}
-              error={dateErrors.collectedDate === true}
             />
           </Grid>
           <Grid item xs={12} sx={marginTop}>
