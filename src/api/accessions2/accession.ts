@@ -61,8 +61,8 @@ type AccessionPostResponse =
 export type AccessionPostRequestBody =
   paths[typeof ACCESSIONS2_ROOT_ENDPOINT]['post']['requestBody']['content']['application/json'];
 
-export const postAccession = async (accession: AccessionPostRequestBody): Promise<string> => {
+export const postAccession = async (accession: AccessionPostRequestBody): Promise<number> => {
   const response: AccessionPostResponse = (await axios.post(ACCESSIONS2_ROOT_ENDPOINT, accession)).data;
 
-  return response.accession.accessionNumber;
+  return response.accession.id;
 };

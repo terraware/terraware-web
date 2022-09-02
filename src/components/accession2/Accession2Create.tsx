@@ -85,7 +85,7 @@ export default function CreateAccession(props: CreateAccessionProps): JSX.Elemen
       const id = await postAccession(record);
       history.replace(accessions2Database);
       history.push({
-        pathname: APP_PATHS.ACCESSIONS2_ITEM.replace(':accessionId', id),
+        pathname: APP_PATHS.ACCESSIONS2_ITEM.replace(':accessionId', id.toString()),
       });
     } catch (e) {
       // TODO show toast error
