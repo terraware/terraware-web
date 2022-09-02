@@ -147,6 +147,9 @@ export async function listSpeciesNames(search: string) {
     names: [],
     requestSucceeded: true,
   };
+  if (search.length < 2) {
+    return response;
+  }
   const queryParams: LookupSpeciesQuery = { search };
   const endpoint = addQueryParams(LOOKUP_SPECIES_ENDPOINT, queryParams);
   try {

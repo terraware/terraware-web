@@ -67,17 +67,15 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
 
   useEffect(() => {
     const getOptionsForTyped = async () => {
-      if (debouncedSearchTerm.length > 1) {
-        const requestId = Math.random().toString();
-        setRequestId('names', requestId);
-        const response = await listSpeciesNames(debouncedSearchTerm);
-        if (response.names) {
-          if (getRequestId('names') === requestId) {
-            console.log(`Using species names response for value ${debouncedSearchTerm}`);
-            setOptionsForName(response.names);
-          } else {
-            console.log(`Skipping species names response for stale value ${debouncedSearchTerm}`);
-          }
+      const requestId = Math.random().toString();
+      setRequestId('names', requestId);
+      const response = await listSpeciesNames(debouncedSearchTerm);
+      if (response.requestSucceeded) {
+        if (getRequestId('names') === requestId) {
+          console.log(`Using species names response for value ${debouncedSearchTerm}`);
+          setOptionsForName(response.names);
+        } else {
+          console.log(`Skipping species names response for stale value ${debouncedSearchTerm}`);
         }
       }
     };
