@@ -81,13 +81,13 @@ export default function CreateAccession(props: CreateAccessionProps): JSX.Elemen
 
   const saveAccession = async () => {
     // TODO data validation and show errors
-    try {
-      const id = await postAccession(record);
+    const response = await postAccession(record);
+    if (response.requestSucceeded) {
       history.replace(accessions2Database);
       history.push({
-        pathname: APP_PATHS.ACCESSIONS2_ITEM.replace(':accessionId', id.toString()),
+        pathname: APP_PATHS.ACCESSIONS2_ITEM.replace(':accessionId', response.id.toString()),
       });
-    } catch (e) {
+    } else {
       // TODO show toast error
     }
   };
