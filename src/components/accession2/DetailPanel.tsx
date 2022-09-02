@@ -143,7 +143,9 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
             {accession.photoFilenames?.map((file, index) => {
               return (
                 <Box paddingRight={theme.spacing(2)} key={`photo-${index}`}>
-                  <img src={`/api/v1/seedbank/accessions/${accession.id}/photos/${file}`} width={'200px'} alt='' />
+                  <a href={`/api/v1/seedbank/accessions/${accession.id}/photos/${file}`} target='blank'>
+                    <img src={`/api/v1/seedbank/accessions/${accession.id}/photos/${file}?maxHeight=100`} alt='' />
+                  </a>
                 </Box>
               );
             })}
