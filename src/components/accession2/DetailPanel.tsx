@@ -139,7 +139,17 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
           <Grid item xs={gridLeftSide} sx={categoryStyle}>
             {strings.PHOTOS}
           </Grid>
-          <Grid item xs={gridRightSide} />
+          <Grid item xs={gridRightSide} display='flex'>
+            {accession.photoFilenames?.map((file, index) => {
+              return (
+                <Box paddingRight={theme.spacing(2)} key={`photo-${index}`}>
+                  <a href={`/api/v1/seedbank/accessions/${accession.id}/photos/${file}`} target='blank'>
+                    <img src={`/api/v1/seedbank/accessions/${accession.id}/photos/${file}?maxHeight=100`} alt='' />
+                  </a>
+                </Box>
+              );
+            })}
+          </Grid>
         </Grid>
       </Grid>
 
