@@ -69,7 +69,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
     const getOptionsForTyped = async () => {
       const requestId = Math.random().toString();
       setRequestId('names', requestId);
-      const response = await getSuggestedSpecies(debouncedSearchTerm);
+      const response = await listSpeciesNames(debouncedSearchTerm);
       if (response.requestSucceeded) {
         if (getRequestId('names') === requestId) {
           console.log(`Using species names response for value ${debouncedSearchTerm}`);
@@ -138,18 +138,6 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
           setNameFormatError(strings.formatString(strings.EXISTING_SPECIES_MSG, record.scientificName));
         }
       }
-    }
-  };
-
-  const getSuggestedSpecies = async (search: string) => {
-    const response = {
-      names: [],
-      requestSucceeded: true,
-    };
-    if(search.length < 2) {
-      return response;
-    } else {
-      return(await listSpeciesNames(search));
     }
   };
 
