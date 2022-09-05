@@ -70,7 +70,7 @@ export default function ViewPhotosDialog(props: ViewPhotosDialogProps): JSX.Elem
       >
         <Carousel responsive={responsive} ref={myCarousel} showDots={true} arrows={false} ssr={true}>
           {photosNames.map((photoName, i) => (
-            <div>
+            <div key={`photo-${i}-container`}>
               <img src={`/api/v1/seedbank/accessions/${accessionId}/photos/${photoName}?maxHeight=500`} alt='' />
             </div>
           ))}
