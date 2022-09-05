@@ -190,6 +190,8 @@ const strings = new LocalizedStrings({
     OWNER: 'Owner',
     PLANT_ID: 'Plant ID',
     PHOTOS: 'Photos',
+    PREVIOUS_ARROW: '< Pevious',
+    NEXT_ARROW: 'Next >',
     GEOLOCATIONS: 'Geolocations',
     NEXT_PROCESSING_AND_DRYING: 'Next: Processing & Drying',
     UNSURE: 'Unsure',
