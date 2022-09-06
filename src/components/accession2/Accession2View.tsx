@@ -10,6 +10,7 @@ import { ServerOrganization } from 'src/types/Organization';
 import TfMain from '../common/TfMain';
 import DetailPanel from './DetailPanel';
 import EditLocationModal from './EditLocationModal';
+import EditStateModal from './EditStateModal';
 
 const useStyles = makeStyles(() => ({
   iconStyle: {
@@ -29,6 +30,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
   const [selectedTab, setSelectedTab] = useState('detail');
   const [accession, setAccession] = useState<Accession2>();
   const [openEditLocationModal, setOpenEditLocationModal] = useState(false);
+  const [openEditStateModal, setOpenEditStateModal] = useState(false);
   const { organization } = props;
   const classes = useStyles();
 
@@ -68,13 +70,21 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
   return (
     <TfMain>
       {organization && (
-        <EditLocationModal
-          open={openEditLocationModal}
-          onClose={() => setOpenEditLocationModal(false)}
-          accession={accession}
-          organization={organization}
-          reload={reloadData}
-        />
+        <>
+          <EditLocationModal
+            open={openEditLocationModal}
+            onClose={() => setOpenEditLocationModal(false)}
+            accession={accession}
+            organization={organization}
+            reload={reloadData}
+          />
+          <EditStateModal
+            open={openEditStateModal}
+            onClose={() => setOpenEditStateModal(false)}
+            accession={accession}
+            reload={reloadData}
+          />
+        </>
       )}
       <Box padding={3}>
         <Typography>{accession?.accessionNumber}</Typography>
@@ -88,7 +98,19 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
         {accession?.state && (
           <Box display='flex' padding={(theme) => theme.spacing(0, 3)}>
             <Icon name='seedbankNav' className={classes.iconStyle} />
-            <Typography paddingLeft={1}>{accession.state}</Typography>
+            <Box
+              display='flex'
+              sx={{
+                '&:hover .edit-icon': {
+                  display: 'block',
+                },
+              }}
+            >
+              <Typography paddingLeft={1}>{accession.state}</Typography>
+              <IconButton sx={{ marginLeft: 3, height: '24px' }} onClick={() => setOpenEditStateModal(true)}>
+                <Icon name='plus' className={`${classes.editIcon} edit-icon`} />
+              </IconButton>
+            </Box>
           </Box>
         )}
         {accession?.storageLocation && (
