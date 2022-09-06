@@ -32,7 +32,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
   const { organization } = props;
   const classes = useStyles();
 
-  const reloadData = useCallback(async () => {
+  const reloadData = useCallback(() => {
     const populateAccession = async () => {
       const response = await getAccession2(parseInt(accessionId, 10));
       setAccession(response);
