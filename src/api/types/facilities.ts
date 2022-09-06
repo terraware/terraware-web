@@ -12,3 +12,8 @@ export interface Facility {
   type: FacilitiesListResponse['facilities'][0]['type'];
   connectionState: 'Not Connected' | 'Connected' | 'Configured';
 }
+
+export interface StorageLocationDetails {
+  storageLocation: string;
+  storageCondition: 'Refrigerator' | 'Freezer';
+}
