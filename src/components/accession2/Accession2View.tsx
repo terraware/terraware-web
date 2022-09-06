@@ -2,7 +2,7 @@ import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { Box, IconButton, Link, Tab, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Icon } from '@terraware/web-components';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Accession2, getAccession2 } from 'src/api/accessions2/accession';
 import strings from 'src/strings';
@@ -32,7 +32,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
   const { organization } = props;
   const classes = useStyles();
 
-  useEffect(() => {
+  const reloadData = useCallback(async () => {
     const populateAccession = async () => {
       const response = await getAccession2(parseInt(accessionId, 10));
       setAccession(response);
@@ -44,6 +44,10 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
       setAccession(undefined);
     }
   }, [accessionId]);
+
+  useEffect(() => {
+    reloadData();
+  }, [accessionId, reloadData]);
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setSelectedTab(newValue);
@@ -69,6 +73,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
           onClose={() => setOpenEditLocationModal(false)}
           accession={accession}
           organization={organization}
+          reload={reloadData}
         />
       )}
       <Box padding={3}>

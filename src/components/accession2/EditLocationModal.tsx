@@ -18,6 +18,7 @@ export interface EditLocationDialogProps {
   accession?: Accession2;
   onClose: () => void;
   organization: ServerOrganization;
+  reload: () => void;
 }
 
 interface StorageLocationDetails {
@@ -26,7 +27,7 @@ interface StorageLocationDetails {
 }
 
 export default function EditLocationDialog(props: EditLocationDialogProps): JSX.Element {
-  const { onClose, open, accession, organization } = props;
+  const { onClose, open, accession, organization, reload } = props;
   const seedBanks: Facility[] = (getAllSeedBanks(organization).filter((sb) => !!sb) as Facility[]) || [];
   const [storageLocations, setStorageLocations] = useState<StorageLocationDetails[]>([]);
   const [storageLocationSelected, setStorageLocationSelected] = useState<StorageLocationDetails>();
@@ -51,14 +52,17 @@ export default function EditLocationDialog(props: EditLocationDialogProps): JSX.
     setLocations();
   }, [record.facilityId]);
 
-  const saveLocation = () => {
+  const saveLocation = async () => {
     if (accession) {
-      updateAccession2({
+      const response = await updateAccession2({
         ...accession,
         ...record,
         storageCondition: storageLocationSelected?.storageCondition,
         storageLocation: storageLocationSelected?.storageLocation,
       });
+      if (response.requestSucceeded) {
+        reload();
+      }
       onClose();
     }
   };
