@@ -5,7 +5,7 @@ import { APP_PATHS } from 'src/constants';
 import { ServerOrganization } from 'src/types/Organization';
 import useForm from 'src/utils/useForm';
 import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
-import { Accession2Status, AccessionPostRequestBody, postAccession } from 'src/api/accessions2/accession';
+import { AccessionPostRequestBody, postAccession } from 'src/api/accessions2/accession';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { DatePicker } from '@terraware/web-components';
 import Species2Dropdown from './Species2Dropdown';
@@ -14,6 +14,7 @@ import Textfield from '../common/Textfield/Textfield';
 import FormBottomBar from '../common/FormBottomBar';
 import Select from '../common/Select/Select';
 import SeedBank2Selector from './SeedBank2Selector';
+import { ACCESSION_2_STATES } from 'src/types/Accession';
 
 type CreateAccessionProps = {
   organization: ServerOrganization;
@@ -72,7 +73,7 @@ export default function CreateAccession(props: CreateAccessionProps): JSX.Elemen
 
   const getAccessionStatuses = () => {
     // TODO: return statuses that can be used for create, for now return all statuses
-    return Accession2Status;
+    return ACCESSION_2_STATES;
   };
 
   const goToAccessions2 = () => {

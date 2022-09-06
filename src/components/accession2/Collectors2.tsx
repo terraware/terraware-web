@@ -3,7 +3,7 @@ import { makeStyles } from '@mui/styles';
 import { Theme, Box, IconButton, Link } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { getCollectors } from 'src/api/seeds/search';
-import Select from 'src/components/common/Select/Select';
+import Autocomplete from 'src/components/common/Autocomplete';
 import strings from 'src/strings';
 import preventDefaultEvent from 'src/utils/preventDefaultEvent';
 
@@ -65,15 +65,14 @@ export default function Collectors({ organizationId, id, collectors = [''], onCh
     <>
       {collectorsList.map((collector, index) => (
         <Box key={index} mb={2} display='flex' alignItems='center' sx={{ display: 'block', position: 'relative' }}>
-          <Select
+          <Autocomplete
             id={`collector${index}`}
-            selectedValue={collector}
-            onChange={(value) => onCollectorChange(value, index)}
+            selected={collector}
+            onChange={(id, value) => onCollectorChange(value, index)}
             label={index === 0 ? strings.COLLECTORS : ''}
+            values={collectorsOpt||[]}
             disabled={disabled}
-            readonly={false}
-            options={collectorsOpt}
-            fullWidth={true}
+            freeSolo={true}
           />
           {index !== 0 && (
             <IconButton
