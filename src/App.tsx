@@ -49,8 +49,7 @@ import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { getPreferences, updatePreferences } from './api/preferences/preferences';
 import useEnvironment from 'src/utils/useEnvironment';
-import { Accession2View } from './components/accession2';
-import Accession2Edit from './components/accession2/Accession2Edit';
+import { Accession2Create, Accession2View, Accession2Edit } from './components/accession2';
 
 const useStyles = makeStyles(() => ({
   content: {
@@ -391,14 +390,14 @@ export default function App() {
                   <Accession2Edit />
                 </Route>
               )}
-              {!isProduction && (
-                <Route path={APP_PATHS.ACCESSIONS2_ITEM}>
-                  <Accession2View />
+              {!isProduction && selectedOrganization && (
+                <Route exact path={APP_PATHS.ACCESSIONS2_NEW}>
+                  <Accession2Create organization={selectedOrganization} />
                 </Route>
               )}
               {!isProduction && (
-                <Route exact path={APP_PATHS.ACCESSIONS2_NEW}>
-                  <div>Accessions2 Create Coming Soon!</div>
+                <Route path={APP_PATHS.ACCESSIONS2_ITEM}>
+                  <Accession2View />
                 </Route>
               )}
               {selectedOrganization && (

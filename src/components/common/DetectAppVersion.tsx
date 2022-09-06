@@ -30,7 +30,7 @@ export default function DetectAppVersion({ onNewVersion }: DetectAppVersionProps
 
   const checkVersion = useCallback(async () => {
     const response = await getLatestAppVersion();
-    const isStale = !!response.version && response.version.trim() !== currentAppVersion;
+    const isStale = !!response.version && response.version.toString().trim() !== currentAppVersion;
     setNeedsRefresh(isStale);
     if (isStale && onNewVersion) {
       onNewVersion();

@@ -538,6 +538,17 @@ const strings = new LocalizedStrings({
     DIRECTION_OR_DESCRIPTION: 'Direction or Description',
     GPS_COORDINATES: 'GPS Coordinates (Latitude, Longitude)',
     COLLECTION_SOURCE: 'Collection Source',
+    ADD_AN_ACCESSION: 'Add an Accession',
+    SEED_COLLECTION_DETAIL: 'Seed Collection Detail',
+    SEED_PROCESSING_DETAIL: 'Seed Processing Detail',
+    SEARCH_OR_SELECT: 'Search or Select...',
+    SPECIES_REQUIRED: 'Species *',
+    COLLECTED_DATE_REQUIRED: 'Collected Date *',
+    COLLECTION_SITE: 'Collection Site',
+    RECEIVED_DATE_REQUIRED: 'Received Date *',
+    PROCESSING_STATUS_REQUIRED: 'Processing Status *',
+    LOCATION_REQUIRED: 'Location *',
+    SUB_LOCATION_REQUIRED: 'Sub-Location *',
   },
 });
 
