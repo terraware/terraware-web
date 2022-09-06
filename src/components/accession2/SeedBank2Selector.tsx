@@ -7,7 +7,8 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { getAllSeedBanks } from 'src/utils/organization';
 import { Facility, StorageLocationDetails } from 'src/api/types/facilities';
 import { listStorageLocations } from 'src/api/facility/facility';
-import { SelectT } from '@terraware/web-components';
+import StorageSubLocationSelector from './StorageSubLocationSelector';
+import StorageLocationSelector from './StorageLocationSelector';
 
 type SeedBankSelectorProps = {
   organization: ServerOrganization;
@@ -17,8 +18,6 @@ type SeedBankSelectorProps = {
 
 export default function SeedBankSelector(props: SeedBankSelectorProps): JSX.Element {
   const { organization, record, onChange } = props;
-  // TODO: replace this with record.storageLocation (not supported today, needs a BE enhancements)
-  const [storageLocation, setStorageLocation] = useState<StorageLocationDetails>();
   const [storageLocations, setStorageLocations] = useState<StorageLocationDetails[]>([]);
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
@@ -47,32 +46,20 @@ export default function SeedBankSelector(props: SeedBankSelectorProps): JSX.Elem
   return (
     <Grid item xs={12} display='flex' flexDirection={isMobile ? 'column' : 'row'} justifyContent='space-between'>
       <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2), marginRight: isMobile ? 0 : theme.spacing(2) }}>
-        <SelectT<Facility>
+        <StorageLocationSelector
           label={strings.LOCATION_REQUIRED}
-          placeholder={strings.SELECT}
-          options={seedBanks}
+          selectedStorageLocation={seedBanks.find((sb) => sb.id === record.facilityId)}
+          storageLocations={seedBanks}
           onChange={(value: Facility) => onChange('facilityId', value.id)}
-          isEqual={(a: Facility, b: Facility) => a.id === b.id}
-          renderOption={(facility) => facility.name}
-          displayLabel={(facility) => facility?.name || ''}
-          selectedValue={seedBanks.find((sb) => sb.id === record.facilityId)}
-          toT={(name: string) => ({ name } as Facility)}
-          fullWidth={true}
           readonly={false}
         />
       </Grid>
       <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }}>
-        <SelectT<StorageLocationDetails>
+        <StorageSubLocationSelector
           label={strings.SUB_LOCATION_REQUIRED}
-          placeholder={strings.SELECT}
-          options={storageLocations}
-          onChange={(value: StorageLocationDetails) => setStorageLocation(value)}
-          isEqual={(a: StorageLocationDetails, b: StorageLocationDetails) => a.storageLocation === b.storageLocation}
-          renderOption={(details) => details.storageLocation}
-          displayLabel={(details) => details?.storageLocation || ''}
-          selectedValue={storageLocation}
-          toT={(name: string) => ({ storageLocation: name } as StorageLocationDetails)}
-          fullWidth={true}
+          selectedStorageSubLocation={record.storageLocation}
+          storageSubLocations={storageLocations.map((obj) => obj.storageLocation)}
+          onChange={(value: string) => onChange('storageLocation', value)}
           readonly={false}
         />
       </Grid>

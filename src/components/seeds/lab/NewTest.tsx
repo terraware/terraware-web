@@ -59,7 +59,6 @@ function initTest(test?: ViabilityTest): ViabilityTest {
   return (
     test ?? {
       testType: 'Lab',
-      selected: false,
     }
   );
 }

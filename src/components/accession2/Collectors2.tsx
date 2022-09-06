@@ -68,9 +68,9 @@ export default function Collectors({ organizationId, id, collectors = [''], onCh
           <Autocomplete
             id={`collector${index}`}
             selected={collector}
-            onChange={(id, value) => onCollectorChange(value, index)}
+            onChange={(unused, value) => onCollectorChange(value, index)}
             label={index === 0 ? strings.COLLECTORS : ''}
-            values={collectorsOpt||[]}
+            values={collectorsOpt || []}
             disabled={disabled}
             freeSolo={true}
           />

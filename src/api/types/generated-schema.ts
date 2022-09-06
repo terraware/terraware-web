@@ -243,21 +243,21 @@ export interface paths {
   "/api/v2/seedbank/accessions": {
     post: operations["createAccession"];
   };
-  "/api/v2/seedbank/accessions/{id}": {
-    get: operations["getAccession"];
-    put: operations["updateAccession"];
-  };
-  "/api/v2/seedbank/withdrawals": {
+  "/api/v2/seedbank/accessions/{accessionId}/withdrawals": {
     get: operations["listWithdrawals"];
     /** May cause the accession's remaining quantity to change. */
     post: operations["createWithdrawal"];
   };
-  "/api/v2/seedbank/withdrawals/{id}": {
+  "/api/v2/seedbank/accessions/{accessionId}/withdrawals/{withdrawalId}": {
     get: operations["getWithdrawal"];
     /** May cause the accession's remaining quantity to change. */
     put: operations["updateWithdrawal"];
     /** May cause the accession's remaining quantity to change. */
     delete: operations["deleteWithdrawal"];
+  };
+  "/api/v2/seedbank/accessions/{id}": {
+    get: operations["getAccession"];
+    put: operations["updateAccession"];
   };
 }
 
@@ -402,6 +402,7 @@ export interface components {
       id: number;
       initialQuantity?: components["schemas"]["SeedQuantityPayload"];
       latestObservedQuantity?: components["schemas"]["SeedQuantityPayload"];
+      /** Time of most recent user observation of seeds remaining in the accession. This is updated by the server whenever the "remainingQuantity" field is edited. */
       latestObservedTime?: string;
       latestViabilityPercent?: number;
       latestViabilityTestDate?: string;
@@ -420,7 +421,6 @@ export interface components {
       speciesCommonName?: string;
       /** Server-generated unique ID of the species. */
       speciesId?: number;
-      /** Server-calculated accession state. Can change due to modifications to accession data or based on passage of time. */
       state:
         | "Awaiting Check-In"
         | "Pending"
@@ -434,11 +434,9 @@ export interface components {
         | "Withdrawn"
         | "Used Up"
         | "Nursery";
-      storageCondition?: "Refrigerator" | "Freezer";
       storageLocation?: string;
       subsetCount?: number;
       subsetWeight?: components["schemas"]["SeedQuantityPayload"];
-      targetStorageCondition?: "Refrigerator" | "Freezer";
       totalViabilityPercent?: number;
       viabilityTests?: components["schemas"]["ViabilityTestPayload"][];
       withdrawals?: components["schemas"]["GetWithdrawalPayload"][];
@@ -549,6 +547,7 @@ export interface components {
         | "Withdrawn"
         | "Used Up"
         | "Nursery";
+      storageLocation?: string;
     };
     CreateAccessionResponsePayload: {
       accession: components["schemas"]["AccessionPayload"];
@@ -641,7 +640,6 @@ export interface components {
       timeseries: components["schemas"]["CreateTimeseriesEntry"][];
     };
     CreateWithdrawalRequestPayload: {
-      accessionId?: number;
       date?: string;
       purpose?:
         | "Propagation"
@@ -1001,13 +999,13 @@ export interface components {
       name: string;
       description?: string;
       configuration?: { [key: string]: unknown };
-      type: string;
       settings?: { [key: string]: { [key: string]: unknown } };
+      type: string;
+      verbosity: number;
+      upperThreshold?: number;
+      lowerThreshold?: number;
       timeseriesName?: string;
       deviceId?: number;
-      upperThreshold?: number;
-      verbosity: number;
-      lowerThreshold?: number;
     };
     MultiLineString: components["schemas"]["Geometry"] & {
       coordinates?: number[][][];
@@ -1382,12 +1380,11 @@ export interface components {
       dryingEndDate?: string;
       facilityId?: number;
       founderId?: string;
-      initialQuantity?: components["schemas"]["SeedQuantityPayload"];
       notes?: string;
       plantsCollectedFromMax?: number;
       plantsCollectedFromMin?: number;
-      processingMethod?: "Count" | "Weight";
       receivedDate?: string;
+      remainingQuantity?: components["schemas"]["SeedQuantityPayload"];
       speciesId?: number;
       state?:
         | "Awaiting Check-In"
@@ -1405,7 +1402,6 @@ export interface components {
       storageLocation?: string;
       subsetCount?: number;
       subsetWeight?: components["schemas"]["SeedQuantityPayload"];
-      targetStorageCondition?: "Refrigerator" | "Freezer";
       viabilityTests?: components["schemas"]["ViabilityTestPayload"][];
     };
     UpdateAccessionResponsePayload: {
@@ -1499,10 +1495,6 @@ export interface components {
       withdrawnByUserId?: number;
       withdrawnQuantity?: components["schemas"]["SeedQuantityPayload"];
     };
-    UpdateWithdrawalResponsePayload: {
-      withdrawal: components["schemas"]["GetWithdrawalPayload"];
-      status: components["schemas"]["SuccessOrError"];
-    };
     UploadPhotoMetadataPayload: {
       capturedTime: string;
       /** @deprecated Use location field instead. */
@@ -1546,8 +1538,6 @@ export interface components {
       remainingQuantity?: components["schemas"]["SeedQuantityPayload"];
       staffResponsible?: string;
       seedsSown?: number;
-      /** If true, this viability test's results are used as the viability percentage for the accession as a whole. At most one test can be marked as selected. */
-      selected: boolean;
       testResults?: components["schemas"]["ViabilityTestResultPayload"][];
       totalPercentGerminated?: number;
       totalSeedsGerminated?: number;
@@ -3465,6 +3455,97 @@ export interface operations {
       };
     };
   };
+  listWithdrawals: {
+    parameters: {
+      path: {
+        accessionId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetWithdrawalsResponsePayload"];
+        };
+      };
+    };
+  };
+  /** May cause the accession's remaining quantity to change. */
+  createWithdrawal: {
+    parameters: {
+      path: {
+        accessionId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UpdateAccessionResponsePayloadV2"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateWithdrawalRequestPayload"];
+      };
+    };
+  };
+  getWithdrawal: {
+    parameters: {
+      path: {
+        accessionId: number;
+        withdrawalId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetWithdrawalResponsePayload"];
+        };
+      };
+    };
+  };
+  /** May cause the accession's remaining quantity to change. */
+  updateWithdrawal: {
+    parameters: {
+      path: {
+        accessionId: number;
+        withdrawalId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UpdateAccessionResponsePayloadV2"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateWithdrawalRequestPayload"];
+      };
+    };
+  };
+  /** May cause the accession's remaining quantity to change. */
+  deleteWithdrawal: {
+    parameters: {
+      path: {
+        accessionId: number;
+        withdrawalId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UpdateAccessionResponsePayloadV2"];
+        };
+      };
+    };
+  };
   getAccession: {
     parameters: {
       path: {
@@ -3513,89 +3594,6 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["UpdateAccessionRequestPayloadV2"];
-      };
-    };
-  };
-  listWithdrawals: {
-    parameters: {
-      query: {
-        accessionId: number;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["GetWithdrawalsResponsePayload"];
-        };
-      };
-    };
-  };
-  /** May cause the accession's remaining quantity to change. */
-  createWithdrawal: {
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["UpdateWithdrawalResponsePayload"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["CreateWithdrawalRequestPayload"];
-      };
-    };
-  };
-  getWithdrawal: {
-    parameters: {
-      path: {
-        id: number;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["GetWithdrawalResponsePayload"];
-        };
-      };
-    };
-  };
-  /** May cause the accession's remaining quantity to change. */
-  updateWithdrawal: {
-    parameters: {
-      path: {
-        id: number;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["UpdateWithdrawalResponsePayload"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["UpdateWithdrawalRequestPayload"];
-      };
-    };
-  };
-  /** May cause the accession's remaining quantity to change. */
-  deleteWithdrawal: {
-    parameters: {
-      path: {
-        id: number;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-        };
       };
     };
   };
