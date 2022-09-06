@@ -187,7 +187,7 @@ export default function CreateAccession(props: CreateAccessionProps): JSX.Elemen
           <SeedBank2Selector organization={organization} record={record} onChange={onChange} />
         </Grid>
       </Container>
-      <FormBottomBar onCancel={goToAccessions2} onSave={saveAccession} />
+      <FormBottomBar onCancel={goToAccessions2} onSave={saveAccession} saveButtonText={strings.ADD} />
     </Box>
   );
 }
