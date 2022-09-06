@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import strings from 'src/strings';
 import Button from '../common/button/Button';
 import DialogBox from '../common/DialogBox/DialogBox';
-import 'react-multi-carousel/lib/styles.css';
 import { Grid } from '@mui/material';
 import { Facility } from 'src/api/types/facilities';
 import theme from 'src/theme';
@@ -13,8 +12,6 @@ import { Accession2 } from 'src/api/accessions2/accession';
 import useForm from 'src/utils/useForm';
 import { getLocations } from 'src/api/seeds/locations';
 import { updateAccession2 } from 'src/api/accessions2/accession';
-
-type AccessionState = Pick<Accession2, 'state'>;
 
 export interface EditLocationDialogProps {
   open: boolean;
@@ -28,8 +25,6 @@ interface StorageLocationDetails {
   storageCondition: 'Refrigerator' | 'Freezer';
 }
 
-type AccessionLocation = Pick<Accession2, 'facilityId' | 'storageLocation'>;
-
 export default function EditLocationDialog(props: EditLocationDialogProps): JSX.Element {
   const { onClose, open, accession, organization } = props;
   const seedBanks: Facility[] = (getAllSeedBanks(organization).filter((sb) => !!sb) as Facility[]) || [];
@@ -40,7 +35,7 @@ export default function EditLocationDialog(props: EditLocationDialogProps): JSX.
     facilityId: 0,
     storageLocation: '',
   };
-  const [record, setRecord, onChange] = useForm(newRecord);
+  const [record, , onChange] = useForm(newRecord);
 
   useEffect(() => {
     const setLocations = async () => {
