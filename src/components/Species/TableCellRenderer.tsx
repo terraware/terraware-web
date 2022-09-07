@@ -28,6 +28,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     borderRadius: '7px',
     color: '#4B5758',
     fontSize: '12px',
+    maxWidth: '350px',
 
     '& .MuiTooltip-arrow': {
       color: '#ffffff',
