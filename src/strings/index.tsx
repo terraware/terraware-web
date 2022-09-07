@@ -558,6 +558,9 @@ const strings = new LocalizedStrings({
     ADD_GPS_COORDINATES: '+ Add GPS Coordinates',
     ADD_PLANT_SITE_DESCRIPTION: '+ Add Plant and Site Description',
     DESCRIPTION_NOTES: 'Description/Notes',
+    DELETE_ACCESSION: 'Delete Accession',
+    DELETE_ACCESSION_MESSAGE: 'You’re about to delete accession {0}.',
+    ARE_YOU_SURE: 'Are you sure?',
     LATITUDE_LONGITUDE: 'Latitude, Longitude',
   },
 });
