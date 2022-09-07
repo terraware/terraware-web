@@ -17,6 +17,8 @@ import SeedBank2Selector from './SeedBank2Selector';
 import { ACCESSION_2_STATES } from 'src/types/Accession';
 import Accession2Address from './Accession2Address';
 import Accession2GPS from './Accession2GPS';
+import Accession2PlantSiteDetails from './Accession2PlantSiteDetails';
+import getDateDisplayValue from 'src/utils/date';
 
 type CreateAccessionProps = {
   organization: ServerOrganization;
@@ -30,6 +32,7 @@ const SubTitleStyle = {
 const defaultAccession = (): AccessionPostRequestBody =>
   ({
     state: 'Awaiting Check-In',
+    receivedDate: getDateDisplayValue(Date.now()),
   } as AccessionPostRequestBody);
 
 type Dates = {
@@ -125,8 +128,8 @@ export default function CreateAccession(props: CreateAccessionProps): JSX.Elemen
           <Grid item xs={12} sx={datePickerStyle}>
             <DatePicker
               id='collectedDate'
-              label={strings.COLLECTED_DATE_REQUIRED}
-              aria-label={strings.COLLECTED_DATE_REQUIRED}
+              label={strings.COLLECTION_DATE_REQUIRED}
+              aria-label={strings.COLLECTION_DATE_REQUIRED}
               value={dates.collectedDate}
               onChange={changeDate}
             />
@@ -161,6 +164,7 @@ export default function CreateAccession(props: CreateAccessionProps): JSX.Elemen
           </Grid>
           <Accession2Address record={record} onChange={onChange} />
           <Accession2GPS record={record} onChange={onChange} />
+          <Accession2PlantSiteDetails record={record} onChange={onChange} />
         </Grid>
         <Grid container>
           <Grid item xs={12} sx={{ marginTop: theme.spacing(4) }}>
@@ -171,8 +175,8 @@ export default function CreateAccession(props: CreateAccessionProps): JSX.Elemen
           <Grid item xs={12} sx={datePickerStyle}>
             <DatePicker
               id='receivedDate'
-              label={strings.RECEIVED_DATE_REQUIRED}
-              aria-label={strings.RECEIVED_DATE_REQUIRED}
+              label={strings.RECEIVING_DATE_REQUIRED}
+              aria-label={strings.RECEIVING_DATE_REQUIRED}
               value={dates.receivedDate}
               onChange={changeDate}
             />
