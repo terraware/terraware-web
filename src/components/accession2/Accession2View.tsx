@@ -8,6 +8,7 @@ import { Accession2, getAccession2 } from 'src/api/accessions2/accession';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
 import TfMain from '../common/TfMain';
+import DeleteAccessionModal from './DeleteAccessionModal';
 import DetailPanel from './DetailPanel';
 import EditLocationModal from './EditLocationModal';
 import EditStateModal from './EditStateModal';
@@ -31,6 +32,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
   const [accession, setAccession] = useState<Accession2>();
   const [openEditLocationModal, setOpenEditLocationModal] = useState(false);
   const [openEditStateModal, setOpenEditStateModal] = useState(false);
+  const [openDeleteAccession, setOpenDeleteAccession] = useState(false);
   const { organization } = props;
   const classes = useStyles();
 
@@ -84,10 +86,21 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
             accession={accession}
             reload={reloadData}
           />
+          <DeleteAccessionModal
+            open={openDeleteAccession}
+            onClose={() => setOpenDeleteAccession(false)}
+            accession={accession}
+          />
         </>
       )}
       <Box padding={3}>
-        <Typography>{accession?.accessionNumber}</Typography>
+        <Box display='flex' justifyContent='space-between'>
+          <Typography>{accession?.accessionNumber}</Typography>
+
+          <IconButton sx={{ marginLeft: 3, height: '24px' }} onClick={() => setOpenDeleteAccession(true)}>
+            <Icon name='iconTrashCan' />
+          </IconButton>
+        </Box>
         <Typography color='#343A40' fontSize='24px' fontStyle='italic' fontWeight={500}>
           {accession?.speciesScientificName}
         </Typography>

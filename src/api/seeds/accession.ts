@@ -38,3 +38,8 @@ export const checkIn = async (id: number): Promise<Accession> => {
 
   return (await axios.post(endpoint)).data;
 };
+
+export const deleteAccession = async (accessionId: number): Promise<void> => {
+  const endpoint = accessionEndpoint.replace('{id}', `${accessionId}`);
+  return await axios.delete(endpoint);
+};
