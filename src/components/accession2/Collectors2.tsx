@@ -20,10 +20,9 @@ interface Props {
   id: string;
   collectors?: string[];
   onChange: (id: string, value: string[]) => void;
-  disabled?: boolean;
 }
 
-export default function Collectors({ organizationId, id, collectors = [''], onChange, disabled }: Props): JSX.Element {
+export default function Collectors({ organizationId, id, collectors = [''], onChange }: Props): JSX.Element {
   const classes = useStyles();
   const [collectorsList, setCollectorsList] = useState<string[]>([...collectors]);
   const [collectorsOpt, setCollectorsOpt] = useState<string[]>();
@@ -71,7 +70,6 @@ export default function Collectors({ organizationId, id, collectors = [''], onCh
             onChange={(unused, value) => onCollectorChange(value, index)}
             label={index === 0 ? strings.COLLECTORS : ''}
             values={collectorsOpt || []}
-            disabled={disabled}
             freeSolo={true}
           />
           {index !== 0 && (
@@ -87,21 +85,19 @@ export default function Collectors({ organizationId, id, collectors = [''], onCh
           )}
         </Box>
       ))}
-      {!disabled && (
-        <Box display='flex' justifyContent='flex-end'>
-          <Link
-            sx={{ textDecoration: 'none' }}
-            href='#'
-            id='addCollectorButton'
-            onClick={(event: React.SyntheticEvent) => {
-              preventDefaultEvent(event);
-              onAddCollector();
-            }}
-          >
-            + {strings.ADD}
-          </Link>
-        </Box>
-      )}
+      <Box display='flex' justifyContent='flex-end'>
+        <Link
+          sx={{ textDecoration: 'none' }}
+          href='#'
+          id='addCollectorButton'
+          onClick={(event: React.SyntheticEvent) => {
+            preventDefaultEvent(event);
+            onAddCollector();
+          }}
+        >
+          + {strings.ADD}
+        </Link>
+      </Box>
     </>
   );
 }
