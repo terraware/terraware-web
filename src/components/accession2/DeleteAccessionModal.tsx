@@ -7,6 +7,8 @@ import { Accession2 } from 'src/api/accessions2/accession';
 import { deleteAccession } from 'src/api/seeds/accession';
 import { APP_PATHS } from 'src/constants';
 import { useHistory } from 'react-router-dom';
+import { useSetRecoilState } from 'recoil';
+import { snackbarAtoms } from 'src/state/snackbar';
 
 export interface DelteAccessionDialogProps {
   open: boolean;
@@ -17,11 +19,18 @@ export interface DelteAccessionDialogProps {
 export default function DelteAccessionModal(props: DelteAccessionDialogProps): JSX.Element {
   const { onClose, open, accession } = props;
   const history = useHistory();
+  const setToastSnackbar = useSetRecoilState(snackbarAtoms.toast);
 
   const deleteHandler = async () => {
     const response = await deleteAccession(accession.id);
     if (response.requestSucceeded) {
       history.push(APP_PATHS.ACCESSIONS2);
+    } else {
+      setToastSnackbar({
+        priority: 'critical',
+        msg: strings.GENERIC_ERROR,
+        type: 'toast',
+      });
     }
   };
 
