@@ -104,7 +104,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
             >
               <Typography paddingLeft={1}>{accession.storageLocation}</Typography>
               <IconButton sx={{ marginLeft: 3, height: '24px' }} onClick={() => setOpenEditLocationModal(true)}>
-                <Icon name='plus' className={`${classes.editIcon} edit-icon`} />
+                <Icon name='iconEdit' className={`${classes.editIcon} edit-icon`} />
               </IconButton>
             </Box>
           </Box>
