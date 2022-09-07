@@ -1,28 +1,38 @@
 import { TabContext, TabList, TabPanel } from '@mui/lab';
-import { Box, Link, Tab, Typography } from '@mui/material';
+import { Box, IconButton, Link, Tab, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Icon } from '@terraware/web-components';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Accession2, getAccession2 } from 'src/api/accessions2/accession';
 import strings from 'src/strings';
+import { ServerOrganization } from 'src/types/Organization';
 import TfMain from '../common/TfMain';
 import DetailPanel from './DetailPanel';
+import EditLocationModal from './EditLocationModal';
 
 const useStyles = makeStyles(() => ({
   iconStyle: {
     fill: '#3A4445',
   },
+  editIcon: {
+    display: 'none',
+    fill: '#3A4445',
+  },
 }));
+interface Accession2ViewProps {
+  organization?: ServerOrganization;
+}
 
-export default function Accession2View(): JSX.Element {
+export default function Accession2View(props: Accession2ViewProps): JSX.Element {
   const { accessionId } = useParams<{ accessionId: string }>();
   const [selectedTab, setSelectedTab] = useState('detail');
   const [accession, setAccession] = useState<Accession2>();
-
+  const [openEditLocationModal, setOpenEditLocationModal] = useState(false);
+  const { organization } = props;
   const classes = useStyles();
 
-  useEffect(() => {
+  const reloadData = useCallback(() => {
     const populateAccession = async () => {
       const response = await getAccession2(parseInt(accessionId, 10));
       setAccession(response);
@@ -34,6 +44,10 @@ export default function Accession2View(): JSX.Element {
       setAccession(undefined);
     }
   }, [accessionId]);
+
+  useEffect(() => {
+    reloadData();
+  }, [accessionId, reloadData]);
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setSelectedTab(newValue);
@@ -53,6 +67,15 @@ export default function Accession2View(): JSX.Element {
 
   return (
     <TfMain>
+      {organization && (
+        <EditLocationModal
+          open={openEditLocationModal}
+          onClose={() => setOpenEditLocationModal(false)}
+          accession={accession}
+          organization={organization}
+          reload={reloadData}
+        />
+      )}
       <Box padding={3}>
         <Typography>{accession?.accessionNumber}</Typography>
         <Typography color='#343A40' fontSize='24px' fontStyle='italic' fontWeight={500}>
@@ -71,7 +94,19 @@ export default function Accession2View(): JSX.Element {
         {accession?.storageLocation && (
           <Box display='flex' padding={(theme) => theme.spacing(0, 2)}>
             <Icon name='info' className={classes.iconStyle} />
-            <Typography paddingLeft={1}>{accession.storageLocation}</Typography>
+            <Box
+              display='flex'
+              sx={{
+                '&:hover .edit-icon': {
+                  display: 'block',
+                },
+              }}
+            >
+              <Typography paddingLeft={1}>{accession.storageLocation}</Typography>
+              <IconButton sx={{ marginLeft: 3, height: '24px' }} onClick={() => setOpenEditLocationModal(true)}>
+                <Icon name='iconEdit' className={`${classes.editIcon} edit-icon`} />
+              </IconButton>
+            </Box>
           </Box>
         )}
         <Box display='flex' padding={(theme) => theme.spacing(0, 2)}>
