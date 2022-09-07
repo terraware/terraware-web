@@ -42,6 +42,24 @@ export default function EditLocationDialog(props: EditStateDialogProps): JSX.Ele
     }
   };
 
+  const getStatesForCurrentState = () => {
+    if (accession) {
+      switch (accession.state) {
+        case 'Awaiting Check-In': {
+          return ['Awaiting Processing', 'Cleaning', 'Drying', 'In Storage', 'Used Up'];
+        }
+        case 'Awaiting Processing':
+        case 'Cleaning':
+        case 'Drying':
+        case 'In Storage': {
+          return ['Awaiting Check-In', 'Awaiting Processing', 'Cleaning', 'Drying', 'In Storage', 'Used Up'];
+        }
+        default:
+          return ACCESSION_2_STATES;
+      }
+    }
+  };
+
   return (
     <DialogBox
       onClose={onClose}
@@ -58,7 +76,7 @@ export default function EditLocationDialog(props: EditStateDialogProps): JSX.Ele
           <Select
             label={strings.STATUS}
             placeholder={strings.SELECT}
-            options={ACCESSION_2_STATES}
+            options={getStatesForCurrentState()}
             onChange={(value: string) => onChange('state', value)}
             selectedValue={record?.state}
             fullWidth={true}
