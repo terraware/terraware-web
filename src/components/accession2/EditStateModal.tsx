@@ -51,7 +51,7 @@ export default function EditLocationDialog(props: EditStateDialogProps): JSX.Ele
       case 'Cleaning':
       case 'Drying':
       case 'In Storage': {
-        return ['Awaiting Check-In', 'Awaiting Processing', 'Cleaning', 'Drying', 'In Storage', 'Used Up'];
+        return ['Awaiting Processing', 'Cleaning', 'Drying', 'In Storage'];
       }
       default:
         return ACCESSION_2_STATES;
