@@ -18,7 +18,7 @@ const useStyles = makeStyles(() => ({
 
 export interface EditStateDialogProps {
   open: boolean;
-  accession?: Accession2;
+  accession: Accession2;
   onClose: () => void;
   reload: () => void;
 }
@@ -33,7 +33,7 @@ export default function EditLocationDialog(props: EditStateDialogProps): JSX.Ele
   }, [accession, setRecord]);
 
   const saveState = async () => {
-    if (accession && record) {
+    if (record) {
       const response = await updateAccession2(record);
       if (response.requestSucceeded) {
         reload();
@@ -43,20 +43,18 @@ export default function EditLocationDialog(props: EditStateDialogProps): JSX.Ele
   };
 
   const getStatesForCurrentState = () => {
-    if (accession) {
-      switch (accession.state) {
-        case 'Awaiting Check-In': {
-          return ['Awaiting Processing', 'Cleaning', 'Drying', 'In Storage', 'Used Up'];
-        }
-        case 'Awaiting Processing':
-        case 'Cleaning':
-        case 'Drying':
-        case 'In Storage': {
-          return ['Awaiting Check-In', 'Awaiting Processing', 'Cleaning', 'Drying', 'In Storage', 'Used Up'];
-        }
-        default:
-          return ACCESSION_2_STATES;
+    switch (accession.state) {
+      case 'Awaiting Check-In': {
+        return ['Awaiting Processing', 'Cleaning', 'Drying', 'In Storage', 'Used Up'];
       }
+      case 'Awaiting Processing':
+      case 'Cleaning':
+      case 'Drying':
+      case 'In Storage': {
+        return ['Awaiting Check-In', 'Awaiting Processing', 'Cleaning', 'Drying', 'In Storage', 'Used Up'];
+      }
+      default:
+        return ACCESSION_2_STATES;
     }
   };
 

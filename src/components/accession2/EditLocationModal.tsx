@@ -16,7 +16,7 @@ import StorageSubLocationSelector from './StorageSubLocationSelector';
 
 export interface EditLocationDialogProps {
   open: boolean;
-  accession?: Accession2;
+  accession: Accession2;
   onClose: () => void;
   organization: ServerOrganization;
   reload: () => void;
@@ -28,14 +28,14 @@ export default function EditLocationDialog(props: EditLocationDialogProps): JSX.
   const [storageLocations, setStorageLocations] = useState<StorageLocationDetails[]>([]);
 
   const newRecord = {
-    facilityId: accession?.facilityId || 0,
-    storageLocation: accession?.storageLocation,
+    facilityId: accession.facilityId || 0,
+    storageLocation: accession.storageLocation,
   };
 
   const [record, setRecord, onChange] = useForm(newRecord);
 
   useEffect(() => {
-    setRecord({ facilityId: accession?.facilityId || 0, storageLocation: accession?.storageLocation });
+    setRecord({ facilityId: accession.facilityId || 0, storageLocation: accession.storageLocation });
   }, [accession, setRecord]);
 
   useEffect(() => {
@@ -53,16 +53,14 @@ export default function EditLocationDialog(props: EditLocationDialogProps): JSX.
   }, [record.facilityId]);
 
   const saveLocation = async () => {
-    if (accession) {
-      const response = await updateAccession2({
-        ...accession,
-        ...record,
-      });
-      if (response.requestSucceeded) {
-        reload();
-      }
-      onClose();
+    const response = await updateAccession2({
+      ...accession,
+      ...record,
+    });
+    if (response.requestSucceeded) {
+      reload();
     }
+    onClose();
   };
 
   const onChangeHandler = (value: Facility) => {
@@ -70,9 +68,7 @@ export default function EditLocationDialog(props: EditLocationDialogProps): JSX.
   };
 
   const onCloseHandler = () => {
-    if (accession) {
-      setRecord({ facilityId: accession?.facilityId, storageLocation: accession?.storageLocation });
-    }
+    setRecord({ facilityId: accession.facilityId, storageLocation: accession.storageLocation });
     onClose();
   };
 

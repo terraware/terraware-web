@@ -69,7 +69,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
 
   return (
     <TfMain>
-      {organization && (
+      {organization && accession && (
         <>
           <EditLocationModal
             open={openEditLocationModal}
