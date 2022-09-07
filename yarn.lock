@@ -2698,6 +2698,11 @@
   dependencies:
     "@types/node" "*"
 
+"@types/lodash@^4.14.184":
+  version "4.14.184"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.184.tgz#23f96cd2a21a28e106dc24d825d4aa966de7a9fe"
+  integrity sha512-RoZphVtHbxPZizt4IcILciSWiC6dcn+eZ8oX9IWEYfDMcocdd42f7NPI6fQj+6zI8y4E0L7gu2pcZKLGTRaV9Q==
+
 "@types/mapbox-gl@^2.0.3":
   version "2.4.2"
   resolved "https://registry.npmjs.org/@types/mapbox-gl/-/mapbox-gl-2.4.2.tgz"
@@ -4966,6 +4971,11 @@ cookies-js@^1.2.3:
   version "1.2.3"
   resolved "https://registry.npmjs.org/cookies-js/-/cookies-js-1.2.3.tgz"
   integrity sha1-AzFQSefFK+4/cxhqaRZ+qw3bLTE=
+
+coordinate-parser@^1.0.7:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/coordinate-parser/-/coordinate-parser-1.0.7.tgz#9350485f03146af0f377dd51a0907a0ac684363e"
+  integrity sha512-pkcjigkAEjU5JsTYnuXLkRgR6T5fF/7GXR4p9vWJesy8fKwsheN8zC5d3sSvdMmWihHB4u48xWZ5mUCcgBIEpw==
 
 copy-concurrently@^1.0.0:
   version "1.0.5"

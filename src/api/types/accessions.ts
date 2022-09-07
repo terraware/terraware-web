@@ -1,4 +1,4 @@
-import { paths } from './generated-schema';
+import { paths, components } from './generated-schema';
 
 export const accessionEndpoint = '/api/v1/seedbank/accessions/{id}';
 export type AccessionGetResponse =
@@ -20,3 +20,7 @@ export const photoEndpoint = '/api/v1/seedbank/accessions/{id}/photos/{photoFile
 export const checkInEndpoint = '/api/v1/seedbank/accessions/{id}/checkIn';
 
 export type Accession = AccessionGetResponse['accession'];
+
+export const schemas = 'schemas';
+export type Geolocation = components[typeof schemas]['Geolocation'];
+console.log(Geolocation, 'wut');

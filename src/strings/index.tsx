@@ -556,6 +556,7 @@ const strings = new LocalizedStrings({
     ADD_GPS_COORDINATES: '+ Add GPS Coordinates',
     ADD_PLANT_SITE_DESCRIPTION: '+ Add Plant and Site Description',
     DESCRIPTION_NOTES: 'Description/Notes',
+    LATITUDE_LONGITUDE: 'Latitude, Longitude',
   },
 });
 
