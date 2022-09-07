@@ -58,7 +58,6 @@ function initTest(test?: ViabilityTest): ViabilityTest {
   return (
     test ?? {
       testType: 'Nursery',
-      selected: false,
     }
   );
 }

@@ -56,6 +56,7 @@ export default function SpeciesDropdown<T extends AccessionPostRequestBody>(
           values={speciesList.map((item) => item.scientificName)}
           disabled={disabled}
           freeSolo={false}
+          isV1={true}
         />
       </Grid>
     </>
