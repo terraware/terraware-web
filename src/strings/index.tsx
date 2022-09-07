@@ -561,6 +561,7 @@ const strings = new LocalizedStrings({
     DELETE_ACCESSION: 'Delete Accession',
     DELETE_ACCESSION_MESSAGE: 'You’re about to delete accession {0}.',
     ARE_YOU_SURE: 'Are you sure?',
+    LATITUDE_LONGITUDE: 'Latitude, Longitude',
   },
 });
 

@@ -29,8 +29,6 @@ export default function ViewPhotosDialog(props: ViewPhotosDialogProps): JSX.Elem
 
   const disableButtons = () => {
     if (myCarousel.current) {
-      console.log('entraaaa');
-      console.log(myCarousel.current.state.currentSlide);
       if (myCarousel.current.state.currentSlide + 1 >= photosNames.length) {
         setIsNextDisabled(true);
       } else {

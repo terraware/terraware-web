@@ -19,7 +19,7 @@
       "options": ["ban-keywords", "check-format", "allow-leading-underscore", "allow-pascal-case"]
     },
     "curly": true,
-    "no-console": false,
+    "no-console": true,
     "no-constant-condition": true,
     "no-empty": [true],
     "no-async-without-await": true,

@@ -16,6 +16,7 @@ import Select from '../common/Select/Select';
 import SeedBank2Selector from './SeedBank2Selector';
 import { ACCESSION_2_STATES } from 'src/types/Accession';
 import Accession2Address from './Accession2Address';
+import Accession2GPS from './Accession2GPS';
 
 type CreateAccessionProps = {
   organization: ServerOrganization;
@@ -159,6 +160,7 @@ export default function CreateAccession(props: CreateAccessionProps): JSX.Elemen
             </Grid>
           </Grid>
           <Accession2Address record={record} onChange={onChange} />
+          <Accession2GPS record={record} onChange={onChange} />
         </Grid>
         <Grid container>
           <Grid item xs={12} sx={{ marginTop: theme.spacing(4) }}>
