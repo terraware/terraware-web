@@ -24,6 +24,7 @@ export async function getDate(): Promise<GetDateResponse> {
     const apiResponse: ClockGetResponse = (await axios.get(clockEndpoint)).data;
     response.serverTime = Date.parse(apiResponse.currentTime);
   } catch {
+    // tslint:disable-next-line: no-console
     console.error('getDate() unable to fetch the server time. Callers will be forced to use the fallback local time');
   }
 
