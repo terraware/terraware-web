@@ -10,6 +10,7 @@ import {
   photoEndpoint,
   postAccessionEndpoint,
 } from '../types/accessions';
+import { paths } from '../types/generated-schema';
 
 export const getAccession = async (accessionId: number): Promise<Accession> => {
   const endpoint = accessionEndpoint.replace('{id}', `${accessionId}`);
@@ -39,7 +40,26 @@ export const checkIn = async (id: number): Promise<Accession> => {
   return (await axios.post(endpoint)).data;
 };
 
-export const deleteAccession = async (accessionId: number): Promise<void> => {
+type DeleteAcccessionResponse = {
+  requestSucceeded: boolean;
+};
+
+type SimpleSuccessResponsePayload =
+  paths[typeof accessionEndpoint]['delete']['responses'][200]['content']['application/json'];
+
+export const deleteAccession = async (accessionId: number): Promise<DeleteAcccessionResponse> => {
+  const response = {
+    requestSucceeded: true,
+  };
   const endpoint = accessionEndpoint.replace('{id}', `${accessionId}`);
-  return await axios.delete(endpoint);
+  try {
+    const serverResponse: SimpleSuccessResponsePayload = await axios.delete(endpoint);
+    if (serverResponse.status === 'error') {
+      response.requestSucceeded = false;
+    }
+  } catch {
+    response.requestSucceeded = false;
+  }
+
+  return response;
 };

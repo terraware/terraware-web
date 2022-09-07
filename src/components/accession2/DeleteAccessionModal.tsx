@@ -19,8 +19,10 @@ export default function DelteAccessionModal(props: DelteAccessionDialogProps): J
   const history = useHistory();
 
   const deleteHandler = async () => {
-    await deleteAccession(accession.id);
-    history.push(APP_PATHS.ACCESSIONS2);
+    const response = await deleteAccession(accession.id);
+    if (response.requestSucceeded) {
+      history.push(APP_PATHS.ACCESSIONS2);
+    }
   };
 
   return (
