@@ -69,12 +69,10 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
   };
 
   const onChangeSubdivision = (newValue: string) => {
-    if (countries && newOrganization.countryCode) {
-      const selectedCountry = getCountryByCode(countries, newOrganization.countryCode);
-      const found = selectedCountry?.subdivisions.find((subdivision) => subdivision.name === newValue);
-      if (found) {
-        onChange('countrySubdivisionCode', found.code);
-      }
+    const selectedCountry = getSelectedCountry();
+    const found = selectedCountry?.subdivisions?.find((subdivision) => subdivision.name === newValue);
+    if (found) {
+      onChange('countrySubdivisionCode', found.code);
     }
   };
 
@@ -178,7 +176,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
               label={strings.STATE}
               id='countySubdivisionCode'
               onChange={onChangeSubdivision}
-              options={getSelectedCountry()?.subdivisions.map((subdivision) => subdivision.name)}
+              options={getSelectedCountry()?.subdivisions?.map((subdivision) => subdivision.name)}
               selectedValue={getSelectedSubdivision()?.name}
               fullWidth
             />

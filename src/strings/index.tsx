@@ -552,6 +552,10 @@ const strings = new LocalizedStrings({
     PROCESSING_STATUS_REQUIRED: 'Processing Status *',
     LOCATION_REQUIRED: 'Location *',
     SUB_LOCATION_REQUIRED: 'Sub-Location *',
+    ADD_ADDRESS: '+ Add Address',
+    ADD_GPS_COORDINATES: '+ Add GPS Coordinates',
+    ADD_PLANT_SITE_DESCRIPTION: '+ Add Plant and Site Description',
+    DESCRIPTION_NOTES: 'Description/Notes',
   },
 });
 
