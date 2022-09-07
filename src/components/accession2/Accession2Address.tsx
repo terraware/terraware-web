@@ -76,7 +76,7 @@ export default function Accession2Address(props: Accession2AddressProps): JSX.El
     return (
       <Grid item xs={12} marginTop={theme.spacing(2)}>
         <Box display='flex' justifyContent='flex-start'>
-          <Link sx={{ textDecoration: 'none' }} href='#' id='addCollectorButton' onClick={() => setIsOpen(true)}>
+          <Link sx={{ textDecoration: 'none' }} href='#' id='addAddress' onClick={() => setIsOpen(true)}>
             {strings.ADD_ADDRESS}
           </Link>
         </Box>
