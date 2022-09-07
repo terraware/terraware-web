@@ -72,10 +72,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
       const response = await listSpeciesNames(debouncedSearchTerm);
       if (response.requestSucceeded) {
         if (getRequestId('names') === requestId) {
-          console.log(`Using species names response for value ${debouncedSearchTerm}`);
           setOptionsForName(response.names);
-        } else {
-          console.log(`Skipping species names response for stale value ${debouncedSearchTerm}`);
         }
       }
     };
@@ -90,7 +87,6 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
         const response = await getSpeciesDetails(debouncedSearchTerm);
         if (response.requestSucceeded) {
           if (getRequestId('details') === requestId) {
-            console.log(`Using species details response for value ${debouncedSearchTerm}`);
             setNewScientificName(false);
             setRecord((previousRecord: Species) => {
               if (response.commonNames.length === 1) {
@@ -109,8 +105,6 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
                 };
               }
             });
-          } else {
-            console.log(`Skipping species details response for stale value ${debouncedSearchTerm}`);
           }
         } else {
           setNewScientificName(true);
