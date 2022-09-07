@@ -390,11 +390,6 @@ export default function App() {
                   <Accession2Edit />
                 </Route>
               )}
-              {!isProduction && (
-                <Route path={APP_PATHS.ACCESSIONS2_ITEM}>
-                  <Accession2View organization={selectedOrganization} />
-                  </Route>
-              )}
               {!isProduction && selectedOrganization && (
                 <Route exact path={APP_PATHS.ACCESSIONS2_NEW}>
                   <Accession2Create organization={selectedOrganization} />
