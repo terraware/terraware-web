@@ -41,12 +41,10 @@ export default function Accession2Address(props: Accession2AddressProps): JSX.El
   };
 
   const onChangeSubdivision = (newValue: string) => {
-    if (countries && record.collectionSiteCountryCode) {
-      const selectedCountry = getCountryByCode(countries, record.collectionSiteCountryCode);
-      const found = selectedCountry?.subdivisions?.find((subdivision) => subdivision.name === newValue);
-      if (found) {
-        onChange('collectionSiteCountrySubdivision', found.code.toString());
-      }
+    const selectedCountry = getSelectedCountry();
+    const found = selectedCountry?.subdivisions?.find((subdivision) => subdivision.name === newValue);
+    if (found) {
+      onChange('collectionSiteCountrySubdivision', found.code.toString());
     }
   };
 
