@@ -23,4 +23,3 @@ export type Accession = AccessionGetResponse['accession'];
 
 export const schemas = 'schemas';
 export type Geolocation = components[typeof schemas]['Geolocation'];
-console.log(Geolocation, 'wut');

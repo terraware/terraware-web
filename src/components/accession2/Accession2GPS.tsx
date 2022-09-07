@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { makeStyles } from '@mui/styles';
 import strings from 'src/strings';
 import { Close } from '@mui/icons-material';
-import { Link, Grid, Box, IconButton, Theme, useTheme } from '@mui/material';
+import { Link, Grid, Box, IconButton, useTheme } from '@mui/material';
 import { AccessionPostRequestBody } from 'src/api/accessions2/accession';
 import Textfield from 'src/components/common/Textfield/Textfield';
 import { Geolocation } from 'src/api/types/accessions';
@@ -10,21 +9,12 @@ import preventDefaultEvent from 'src/utils/preventDefaultEvent';
 import Coordinates from 'coordinate-parser';
 import _ from 'lodash';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  delete: {
-    position: 'absolute',
-    top: theme.spacing(1),
-    right: `-${theme.spacing(4)}`,
-  },
-}));
-
 type Accession2GPSProps = {
   record: AccessionPostRequestBody;
   onChange: (id: string, value?: any) => void;
 };
 
 export default function Accession2GPS(props: Accession2GPSProps): JSX.Element {
-  const classes = useStyles();
   const { record, onChange } = props;
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [gpsCoordsList, setGpsCoordsList] = useState<string[]>(['']);
@@ -110,7 +100,7 @@ export default function Accession2GPS(props: Accession2GPSProps): JSX.Element {
               aria-label='delete'
               size='small'
               onClick={() => onDeleteGpsCoords(index)}
-              className={classes.delete}
+              sx={{ position: 'absolute', top: theme.spacing(1), right: `-${theme.spacing(4)}` }}
             >
               <Close />
             </IconButton>

@@ -1,19 +1,10 @@
 import { Close } from '@mui/icons-material';
-import { makeStyles } from '@mui/styles';
-import { Theme, Box, IconButton, Link } from '@mui/material';
+import { useTheme, Box, IconButton, Link } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { getCollectors } from 'src/api/seeds/search';
 import Autocomplete from 'src/components/common/Autocomplete';
 import strings from 'src/strings';
 import preventDefaultEvent from 'src/utils/preventDefaultEvent';
-
-const useStyles = makeStyles((theme: Theme) => ({
-  delete: {
-    position: 'absolute',
-    top: `calc(${theme.spacing(1)}/2)`,
-    right: `-${theme.spacing(4)}`,
-  },
-}));
 
 interface Props {
   organizationId: number;
@@ -23,9 +14,9 @@ interface Props {
 }
 
 export default function Collectors({ organizationId, id, collectors = [''], onChange }: Props): JSX.Element {
-  const classes = useStyles();
   const [collectorsList, setCollectorsList] = useState<string[]>([...collectors]);
   const [collectorsOpt, setCollectorsOpt] = useState<string[]>();
+  const theme = useTheme();
 
   useEffect(() => {
     const populateCollectors = async () => {
@@ -78,7 +69,7 @@ export default function Collectors({ organizationId, id, collectors = [''], onCh
               aria-label='delete'
               size='small'
               onClick={() => onDeleteCollector(index)}
-              className={classes.delete}
+              sx={{ position: 'absolute', top: `calc(${theme.spacing(1)}/2)`, right: `-${theme.spacing(4)}` }}
             >
               <Close />
             </IconButton>
