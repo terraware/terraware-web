@@ -29,9 +29,11 @@ const useStyles = makeStyles((theme: Theme) => ({
 export interface Props {
   onCancel: () => void;
   onSave: () => void;
+  cancelButtonText?: string;
+  saveButtonText?: string;
 }
 
-export default function FormBottomBar({ onCancel, onSave }: Props): JSX.Element {
+export default function FormBottomBar({ onCancel, onSave, cancelButtonText, saveButtonText }: Props): JSX.Element {
   const { isMobile, isDesktop } = useDeviceInfo();
   const classes = useStyles({ isMobile, isDesktop });
 
@@ -44,13 +46,13 @@ export default function FormBottomBar({ onCancel, onSave }: Props): JSX.Element 
     >
       <Button
         size='medium'
-        label='Cancel'
+        label={cancelButtonText || 'Cancel'}
         onClick={onCancel}
         priority='secondary'
         type='passive'
         className={classes.button}
       />
-      <Button size='medium' label='Save' onClick={onSave} className={classes.button} />
+      <Button size='medium' label={saveButtonText || 'Save'} onClick={onSave} className={classes.button} />
     </AppBar>
   );
 }
