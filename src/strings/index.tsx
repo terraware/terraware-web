@@ -4,6 +4,7 @@ const strings = new LocalizedStrings({
   en: {
     CANCEL: 'Cancel',
     SAVE: 'Save',
+    UPDATE: 'Update',
     SAVE_CHANGES: 'Save Changes',
     GENERIC_ERROR: 'An error occurred',
     PREEXISTING_SPECIES: 'This species already exists',
@@ -541,6 +542,7 @@ const strings = new LocalizedStrings({
     DIRECTION_OR_DESCRIPTION: 'Direction or Description',
     GPS_COORDINATES: 'GPS Coordinates (Latitude, Longitude)',
     COLLECTION_SOURCE: 'Collection Source',
+    UPDATE_STATUS_WARNING: 'You‘re about to update the staus',
     ADD_AN_ACCESSION: 'Add an Accession',
     SEED_COLLECTION_DETAIL: 'Seed Collection Detail',
     SEED_PROCESSING_DETAIL: 'Seed Processing Detail',
