@@ -50,6 +50,7 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { getPreferences, updatePreferences } from './api/preferences/preferences';
 import useEnvironment from 'src/utils/useEnvironment';
 import { Accession2Create, Accession2View, Accession2Edit } from './components/accession2';
+import OptInFeatures from './components/OptInFeatures';
 
 const useStyles = makeStyles(() => ({
   content: {
@@ -490,6 +491,12 @@ export default function App() {
               {user && (
                 <Route exact path={APP_PATHS.MY_ACCOUNT}>
                   <MyAccount user={user} organizations={organizations} edit={false} reloadUser={reloadUser} />
+                </Route>
+              )}
+
+              {selectedOrganization && (
+                <Route exact path={APP_PATHS.OPT_IN}>
+                  <OptInFeatures organization={selectedOrganization} />
                 </Route>
               )}
 

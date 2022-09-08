@@ -1,0 +1,119 @@
+import React, { useEffect, useState } from 'react';
+import { Box, Container, LinearProgress, Switch, Stack, Grid } from '@mui/material';
+import { ServerOrganization } from 'src/types/Organization';
+import { getPreferences, updatePreferences } from 'src/api/preferences/preferences';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+import PageSnackbar from 'src/components/PageSnackbar';
+
+type Feature = {
+  name: string;
+  preferenceName: string;
+  description: string[];
+  disclosure: string[];
+};
+
+// list of feature names and associated properties
+const OPT_IN_FEATURES: Feature[] = [
+  {
+    name: 'V2 Accessions',
+    preferenceName: 'enableUIV2Accessions',
+    description: [
+      'Shows V2 accession workflows (instead of V1).',
+      'You can switch between V2 and V1 flows by turning this option on or off.',
+    ],
+    disclosure: [
+      'Saving V2 accessions and re-editing them in V1 workflows may cause some data loss.',
+      'Withdrawal quantities tracked in V2 may not seem correct in V1 workflows.',
+    ],
+  },
+];
+
+type OptInFeaturesProps = {
+  organization: ServerOrganization;
+};
+
+export default function OptInFeatures({ organization }: OptInFeaturesProps): JSX.Element {
+  const { isMobile } = useDeviceInfo();
+  const [preferences, setPreferences] = useState<{ [key: string]: boolean }>();
+
+  useEffect(() => {
+    const loadPreferences = async () => {
+      const response = await getPreferences(organization.id);
+      let data: any = {};
+      // collect preferences related to our opt-in feature set
+      if (response.requestSucceeded && response.preferences) {
+        const prefs = response.preferences;
+        Object.keys(prefs).forEach(key => {
+          if (OPT_IN_FEATURES.find(f => f.preferenceName === key)) {
+            data[key] = prefs[key] || false;
+          }
+        });
+      }
+      setPreferences(data);
+    };
+
+    if (!preferences) {
+      loadPreferences();
+    }
+  });
+
+  const savePreference = async (feature: Feature, value: boolean) => {
+    const response = await updatePreferences(feature.preferenceName, value, organization.id);
+    if (response.requestSucceeded) {
+      setPreferences(prev => ({
+        ...prev,
+        [feature.preferenceName]: value,
+      }));
+    } else {
+    }
+  };
+
+  const gridSize = () => isMobile ? 12 : 4;
+
+  const gridStyle = (isDisclosure: boolean) => ({
+    marginLeft: isMobile ? 0 : '20px !important',
+    paddingLeft: isMobile ? 0 : '20px !important',
+    marginTop: isMobile ? '20px !important' : '0px !important',
+    paddingTop: isMobile ? '20px !important' : 0,
+    borderLeft: isMobile ? 'none' : ( isDisclosure ? '1px solid #b86f6f' : '1px solid #ddd'),
+    borderTop: isMobile ? (isDisclosure ? '1px solid #b86f6f' : '1px solid #ddd') : 'none',
+    fontSize: '16px',
+    color: isDisclosure ? '#b86f6f' : 'inherit',
+  });
+
+  return (
+    <Container sx={{height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', fontFamily: 'fantasy', fontWeight: 'bold'}}>
+      <PageSnackbar />
+      {
+        preferences === undefined ? (
+          <LinearProgress color="success"/>
+        ) : (
+          <Grid item xs={12}>
+            <Box sx={{display: 'flex', color: '#777', fontWeight: 'bold', fontSize: '22px', marginBottom: '30px', justifyContent: 'center'}}>
+              Opt-in to see experimental or work-in-progress features
+            </Box>
+            {
+              OPT_IN_FEATURES.map((f, i) => (
+                <Stack spacing={2} sx={{border: '1px solid #ddd', padding: '10px', borderRadius: '5px', flexDirection: 'row', alignItems: 'center'}} key={i}>
+                  <Grid item xs={gridSize()}>
+                    <Switch
+                      checked={preferences[f.preferenceName] === true}
+                      onChange={event => savePreference(f, event.target.checked)}
+                    />&nbsp;
+                    <Box sx={{display: 'inline-block', color: '#555', fontWeight: 'bold', fontSize: '18'}}>{f.name}</Box>
+                  </Grid>
+                  <Grid item xs={gridSize()} sx={gridStyle(false)}>
+                    {f.description.map((d, i) => <Box key={i} sx={{marginBottom: '5px'}}>{d}</Box>)}
+                  </Grid>
+                  <Grid item xs={gridSize()} sx={gridStyle(true)}>
+                    {f.disclosure.map((d, i) => <Box key={i} sx={{marginBottom: '5px', fontStyle: 'italic'}}>{d}</Box>)}
+                  </Grid>
+                </Stack>
+              ))
+            }
+          </Grid>
+        )
+      }
+    </Container>
+  );
+}
