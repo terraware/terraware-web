@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, Dispatch, SetStateAction } from 'react';
 import strings from 'src/strings';
 import { Link, Grid, Box, useTheme } from '@mui/material';
 import { AccessionPostRequestBody } from 'src/api/accessions2/accession';
@@ -10,10 +10,11 @@ import { ACCESSION_2_COLLECTION_SOURCES } from 'src/types/Accession';
 type Accession2PlantSiteDetailsProps = {
   record: AccessionPostRequestBody;
   onChange: (id: string, value?: any) => void;
+  setRecord: Dispatch<SetStateAction<AccessionPostRequestBody>>;
 };
 
 export default function Accession2PlantSiteDetails(props: Accession2PlantSiteDetailsProps): JSX.Element {
-  const { record, onChange } = props;
+  const { record, onChange, setRecord } = props;
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [numPlants, setNumPlants] = useState<string>('');
   const { isMobile } = useDeviceInfo();
@@ -24,10 +25,8 @@ export default function Accession2PlantSiteDetails(props: Accession2PlantSiteDet
   const onChangeNumPlants = (value: any) => {
     const numPlantsStr = value as string;
     setNumPlants(numPlantsStr);
-    // tslint:disable-next-line: no-unnecessary-initializer
-    let min = undefined;
-    // tslint:disable-next-line: no-unnecessary-initializer
-    let max = undefined;
+    let min: number | undefined;
+    let max: number | undefined;
     // we support either a number or a range of two numbers, eg. 2 - 5
     const numbers = value.split('-').map((num: string) => num.trim());
     if (numbers.length < 3) {
@@ -52,8 +51,13 @@ export default function Accession2PlantSiteDetails(props: Accession2PlantSiteDet
         max = Math.max(temp, max);
       }
     }
-    onChange('plantsCollectedFromMin', min);
-    onChange('plantsCollectedFromMax', max);
+    setRecord((prev) => {
+      return {
+        ...prev,
+        plantsCollectedFromMin: min,
+        plantsCollectedFromMax: max,
+      };
+    });
   };
 
   if (!isOpen) {
@@ -99,6 +103,7 @@ export default function Accession2PlantSiteDetails(props: Accession2PlantSiteDet
             onChange={onChange}
             type='text'
             label={strings.PLANT_ID + ' ' + strings.IF_APPLICABLE}
+            tooltipText={strings.PLANT_ID_TOOLTIP}
           />
         </Grid>
       </Grid>
@@ -108,7 +113,7 @@ export default function Accession2PlantSiteDetails(props: Accession2PlantSiteDet
           value={record.collectionSiteNotes}
           onChange={onChange}
           type='textarea'
-          label={strings.DESCRIPTION_NOTES}
+          label={strings.PLANT_DESCRIPTION}
         />
       </Grid>
     </Grid>

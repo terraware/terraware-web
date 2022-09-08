@@ -566,6 +566,7 @@ const strings = new LocalizedStrings({
     IF_APPLICABLE: '(if applicable)',
     PLANT_ID_TOOLTIP:
       'It’s the ID of a plant for tracking or conservation purpose. Ideally seeds from a tracked plant do not mix with others in a same accession.',
+    PLANT_DESCRIPTION: 'Plant Description',
   },
 });
 

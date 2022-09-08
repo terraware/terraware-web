@@ -164,7 +164,7 @@ export default function CreateAccession(props: CreateAccessionProps): JSX.Elemen
           </Grid>
           <Accession2Address record={record} onChange={onChange} />
           <Accession2GPS record={record} onChange={onChange} />
-          <Accession2PlantSiteDetails record={record} onChange={onChange} />
+          <Accession2PlantSiteDetails setRecord={setRecord} record={record} onChange={onChange} />
         </Grid>
         <Grid container>
           <Grid item xs={12} sx={{ marginTop: theme.spacing(4) }}>
