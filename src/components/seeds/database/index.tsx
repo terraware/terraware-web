@@ -131,6 +131,7 @@ type DatabaseProps = {
   displayColumnNames: string[];
   setDisplayColumnNames: (fields: string[]) => void;
   hasSeedBanks: boolean;
+  preferences?: { [key: string]: unknown };
 };
 
 export default function Database(props: DatabaseProps): JSX.Element {
@@ -151,6 +152,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
     setDisplayColumnNames,
     organization,
     hasSeedBanks,
+    preferences,
   } = props;
   const displayColumnDetails = displayColumnNames.map((name) => {
     return COLUMNS_INDEXED[name];
@@ -375,7 +377,12 @@ export default function Database(props: DatabaseProps): JSX.Element {
   };
 
   const goToNewAccession = () => {
-    setSelectSeedBankModalOpen(true);
+    if (!isProduction && preferences?.enableUIV2Accessions === true) {
+      const newAccessionLocation = getLocation(APP_PATHS.ACCESSIONS2_NEW, location);
+      history.push(newAccessionLocation);
+    } else {
+      setSelectSeedBankModalOpen(true);
+    }
   };
 
   const onSeedBankSelected = (selectedFacility: Facility | undefined) => {

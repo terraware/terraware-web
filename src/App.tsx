@@ -171,7 +171,7 @@ export default function App() {
     reloadSpecies();
   }, [reloadSpecies]);
 
-  useEffect(() => {
+  const reloadPreferences = useCallback(() => {
     const getUserPreferences = async () => {
       const response = await getPreferences();
       if (organizations && response.requestSucceeded) {
@@ -180,6 +180,10 @@ export default function App() {
     };
     getUserPreferences();
   }, [organizations, setPreferencesOrg]);
+
+  useEffect(() => {
+    reloadPreferences();
+  }, [reloadPreferences]);
 
   useEffect(() => {
     if (organizations && preferencesOrg) {
@@ -379,6 +383,7 @@ export default function App() {
                   displayColumnNames={accessionsDisplayColumns}
                   setDisplayColumnNames={setAccessionsDisplayColumns}
                   hasSeedBanks={selectedOrgHasSeedBanks()}
+                  preferences={preferencesOrg}
                 />
               </Route>
               {!isProduction && (
@@ -494,9 +499,9 @@ export default function App() {
                 </Route>
               )}
 
-              {selectedOrganization && (
+              {!isProduction && (
                 <Route exact path={APP_PATHS.OPT_IN}>
-                  <OptInFeatures organization={selectedOrganization} />
+                  <OptInFeatures refresh={reloadPreferences} />
                 </Route>
               )}
 

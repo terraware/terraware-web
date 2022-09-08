@@ -7,6 +7,7 @@ import Icon from './common/icon/Icon';
 import { APP_PATHS } from 'src/constants';
 import { IconButton, List, ListItem, Popover } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import useEnvironment from 'src/utils/useEnvironment';
 
 const useStyles = makeStyles((theme) => ({
   iconContainer: {
@@ -40,7 +41,7 @@ type UserMenuProps = {
 };
 export default function UserMenu({ user, reloadUser, hasOrganizations }: UserMenuProps): JSX.Element {
   const classes = useStyles();
-
+  const { isProduction } = useEnvironment();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -82,6 +83,11 @@ export default function UserMenu({ user, reloadUser, hasOrganizations }: UserMen
           {hasOrganizations && (
             <ListItem component={Link} to={APP_PATHS.MY_ACCOUNT} onClick={handleClose}>
               {strings.MY_ACCOUNT}
+            </ListItem>
+          )}
+          {!isProduction && hasOrganizations && (
+            <ListItem component={Link} to={APP_PATHS.OPT_IN} onClick={handleClose}>
+              {strings.OPT_IN}
             </ListItem>
           )}
           <ListItem button onClick={onHandleLogout}>
