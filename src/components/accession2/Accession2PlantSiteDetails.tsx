@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import strings from 'src/strings';
 import { Link, Grid, Box, useTheme } from '@mui/material';
 import { AccessionPostRequestBody } from 'src/api/accessions2/accession';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import Textfield from 'src/components/common/Textfield/Textfield';
-import Autocomplete from 'src/components/common/Autocomplete';
 import { Select } from '@terraware/web-components';
 import { ACCESSION_2_COLLECTION_SOURCES } from 'src/types/Accession';
 
