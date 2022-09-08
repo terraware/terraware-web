@@ -109,8 +109,8 @@ export default function Accession2PlantSiteDetails(props: Accession2PlantSiteDet
       </Grid>
       <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
         <Textfield
-          id='collectionSiteNotes'
-          value={record.collectionSiteNotes}
+          id='notes'
+          value={record.notes}
           onChange={onChange}
           type='textarea'
           label={strings.PLANT_DESCRIPTION}
