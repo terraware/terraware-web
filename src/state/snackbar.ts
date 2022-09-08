@@ -1,9 +1,14 @@
 import { atom } from 'recoil';
 
+export type Priority = 'info' | 'critical' | 'warning' | 'success';
+export type Title = string | string[] | undefined;
+export type Message = string | string[];
+export type OnCloseCallback = () => {} | undefined;
+
 export interface Snackbar {
-  title?: string | string[] | undefined;
-  msg: string | string[];
-  priority: 'info' | 'critical' | 'warning' | 'success';
+  title?: Title;
+  msg: Message;
+  priority: Priority;
 }
 
 export interface ToastSnackbar extends Snackbar {
@@ -13,7 +18,7 @@ export interface ToastSnackbar extends Snackbar {
 export interface PageSnackbar extends Snackbar {
   // Snackbar will execute this callback if provided.
   // Potential use-case is to persist user 'has seen message' statuses, etc.
-  onCloseCallback?: () => {} | undefined;
+  onCloseCallback?: OnCloseCallback;
 }
 
 /**
