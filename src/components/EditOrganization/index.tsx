@@ -112,7 +112,7 @@ export default function OrganizationView({ organization, reloadOrganizationData 
     } else {
       const response = await updateOrganization(organizationRecord);
       if (response.requestSucceeded) {
-        snackbar.toastSuccess('Changes saved');
+        snackbar.toastSuccess(strings.CHANGES_SAVED);
         reloadOrganizationData();
       } else {
         snackbar.toastError();
