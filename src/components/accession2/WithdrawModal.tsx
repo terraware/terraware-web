@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import strings from 'src/strings';
 import Button from '../common/button/Button';
 import DialogBox from '../common/DialogBox/DialogBox';
-import { Box, Grid } from '@mui/material';
+import { Box, Grid, Link, useTheme } from '@mui/material';
 import { Checkbox, DatePicker, Select, SelectT, Textfield } from '@terraware/web-components';
 import { Accession2, Withdrawal2 } from 'src/api/accessions2/accession';
 import useForm from 'src/utils/useForm';
@@ -35,6 +35,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
       accession.initialQuantity?.units === 'Seeds'
         ? { quantity: 0, units: 'Seeds' }
         : { quantity: 0, units: accession.initialQuantity?.units || 'Grams' },
+    notes: '',
   };
 
   const newViabilityTesting: ViabilityTest = {
@@ -45,6 +46,8 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
   const [viabilityTesting, , onChangeViabilityTesting] = useForm(newViabilityTesting);
   const [users, setUsers] = useState<OrganizationUser[]>();
   const [withdrawAllSelected, setWithdrawAllSelected] = useState(false);
+  const [isNotesOpened, setIsNotesOpened] = useState(false);
+  const theme = useTheme();
 
   useEffect(() => {
     const getOrgUsers = async () => {
@@ -150,6 +153,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
 
   const onCloseHandler = () => {
     setWithdrawAllSelected(false);
+    setIsNotesOpened(false);
     setRecord(newWithdrawal);
     onClose();
   };
@@ -209,33 +213,35 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
           </>
         ) : null}
         <Grid item xs={12}>
-          <Textfield
-            label={strings
-              .formatString(
-                strings.AMOUNT_REMAINING,
-                `${accession.remainingQuantity?.quantity} ${accession.remainingQuantity?.units}`
-              )
-              .toString()}
-            id='withdrawnQuantity'
-            onChange={(id, value) => onChangeWithdrawnQuantity(value as number)}
-            type='text'
-            value={record.withdrawnQuantity?.quantity.toString()}
-          />
-          {accession.initialQuantity?.units === 'Seeds' ? (
-            <Box>{strings.CT}</Box>
-          ) : (
-            <SelectT<Unit>
-              options={WEIGHT_UNITS_V2}
-              placeholder={strings.SELECT}
-              onChange={onChangeUnit}
-              isEqual={(a: Unit, b: Unit) => a.value === b.value}
-              renderOption={(unit) => unit.label}
-              displayLabel={(unit) => unit.label}
-              selectedValue={WEIGHT_UNITS_V2.find((wu) => wu.value === record.withdrawnQuantity?.units)}
-              toT={(label: string) => ({ label } as Unit)}
-              fullWidth={true}
+          <Box display='flex' alignItems='end'>
+            <Textfield
+              label={strings
+                .formatString(
+                  strings.AMOUNT_REMAINING,
+                  `${accession.remainingQuantity?.quantity} ${accession.remainingQuantity?.units}`
+                )
+                .toString()}
+              id='withdrawnQuantity'
+              onChange={(id, value) => onChangeWithdrawnQuantity(value as number)}
+              type='text'
+              value={record.withdrawnQuantity?.quantity.toString()}
             />
-          )}
+            {accession.initialQuantity?.units === 'Seeds' ? (
+              <Box>{strings.CT}</Box>
+            ) : (
+              <SelectT<Unit>
+                options={WEIGHT_UNITS_V2}
+                placeholder={strings.SELECT}
+                onChange={onChangeUnit}
+                isEqual={(a: Unit, b: Unit) => a.value === b.value}
+                renderOption={(unit) => unit.label}
+                displayLabel={(unit) => unit.label}
+                selectedValue={WEIGHT_UNITS_V2.find((wu) => wu.value === record.withdrawnQuantity?.units)}
+                toT={(label: string) => ({ label } as Unit)}
+                fullWidth={true}
+              />
+            )}
+          </Box>
           <Checkbox
             id='withdrawAll'
             name=''
@@ -251,9 +257,9 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
             options={users}
             onChange={onChangeUser}
             isEqual={(a: OrganizationUser, b: OrganizationUser) => a.id === b.id}
-            renderOption={(user) => `${user?.firstName} ${user?.lastName}`}
-            displayLabel={(user) => `${user?.firstName} ${user?.lastName}`}
-            selectedValue={users?.find((user) => user.id === record.withdrawnByUserId)}
+            renderOption={(userSel) => `${userSel?.firstName} ${userSel?.lastName}`}
+            displayLabel={(userSel) => `${userSel?.firstName} ${userSel?.lastName}`}
+            selectedValue={users?.find((userSel) => userSel.id === record.withdrawnByUserId)}
             toT={(firstName: string) => ({ firstName } as OrganizationUser)}
             fullWidth={true}
           />
@@ -266,6 +272,17 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
             value={record.date}
             onChange={onChangeDate}
           />
+        </Grid>
+        <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
+          {isNotesOpened ? (
+            <Textfield id='notes' value={record.notes} onChange={onChange} type='textarea' label={strings.NOTES} />
+          ) : (
+            <Box display='flex' justifyContent='flex-start'>
+              <Link sx={{ textDecoration: 'none' }} href='#' id='addNotes' onClick={() => setIsNotesOpened(true)}>
+                + {strings.ADD_NOTES}
+              </Link>
+            </Box>
+          )}
         </Grid>
       </Grid>
     </DialogBox>

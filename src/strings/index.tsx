@@ -572,6 +572,7 @@ const strings = new LocalizedStrings({
     WITHDRAW_ALL: 'Withdraw all',
     CT: 'ct',
     TEST_TYPE: 'Test Type',
+    ADD_NOTES: 'Add Notes',
   },
 });
 
