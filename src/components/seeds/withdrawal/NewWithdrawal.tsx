@@ -33,6 +33,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { getSelectedPurpose } from 'src/utils/withdrawalPurposes';
 import Button from 'src/components/common/button/Button';
+import { getTodaysDateFormatted } from 'src/utils/date';
 
 const useStyles = makeStyles((theme: Theme) => ({
   submit: {
@@ -63,7 +64,7 @@ export interface Props {
 function initWithdrawal(withdrawal?: AccessionWithdrawal): AccessionWithdrawal {
   return (
     withdrawal ?? {
-      date: moment().format('YYYY-MM-DD'),
+      date: getTodaysDateFormatted(),
       purpose: 'Out-planting',
     }
   );

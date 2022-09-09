@@ -243,6 +243,18 @@ export interface paths {
   "/api/v2/seedbank/accessions": {
     post: operations["createAccession"];
   };
+  "/api/v2/seedbank/accessions/{accessionId}/viabilityTests": {
+    get: operations["listViabilityTests"];
+    /** May cause the accession's remaining quantity to change. */
+    post: operations["createViabilityTest"];
+  };
+  "/api/v2/seedbank/accessions/{accessionId}/viabilityTests/{viabilityTestId}": {
+    get: operations["getViabilityTest"];
+    /** May cause the accession's remaining quantity to change. */
+    put: operations["updateViabilityTest"];
+    /** May cause the accession's remaining quantity to change. */
+    delete: operations["deleteViabilityTest"];
+  };
   "/api/v2/seedbank/accessions/{accessionId}/withdrawals": {
     get: operations["listWithdrawals"];
     /** May cause the accession's remaining quantity to change. */
@@ -394,23 +406,21 @@ export interface components {
       /** Names of the people who collected the seeds. */
       collectors?: string[];
       dryingEndDate?: string;
-      estimatedSeedCount?: number;
+      /** Estimated number of seeds remaining. Absent if there isn't enough information to calculate an estimate. */
+      estimatedCount?: number;
+      estimatedWeight?: components["schemas"]["SeedQuantityPayload"];
       facilityId: number;
       family?: string;
       founderId?: string;
       /** Server-generated unique identifier for the accession. This is unique across all seed banks, but is not suitable for display to end users. */
       id: number;
-      initialQuantity?: components["schemas"]["SeedQuantityPayload"];
       latestObservedQuantity?: components["schemas"]["SeedQuantityPayload"];
       /** Time of most recent user observation of seeds remaining in the accession. This is updated by the server whenever the "remainingQuantity" field is edited. */
       latestObservedTime?: string;
-      latestViabilityPercent?: number;
-      latestViabilityTestDate?: string;
       notes?: string;
       photoFilenames?: string[];
       plantsCollectedFromMax?: number;
       plantsCollectedFromMin?: number;
-      processingMethod?: "Count" | "Weight";
       receivedDate?: string;
       remainingQuantity?: components["schemas"]["SeedQuantityPayload"];
       /** Which source of data this accession originally came from. */
@@ -437,8 +447,8 @@ export interface components {
       storageLocation?: string;
       subsetCount?: number;
       subsetWeight?: components["schemas"]["SeedQuantityPayload"];
-      totalViabilityPercent?: number;
-      viabilityTests?: components["schemas"]["ViabilityTestPayload"][];
+      viabilityPercent?: number;
+      viabilityTests?: components["schemas"]["GetViabilityTestPayload"][];
       withdrawals?: components["schemas"]["GetWithdrawalPayload"][];
     };
     AddOrganizationUserRequestPayload: {
@@ -472,15 +482,6 @@ export interface components {
       timeseriesValue?: number;
       /** Default message to publish if the automation type isn't yet supported by the server. */
       message?: string;
-    };
-    /** Coordinate reference system used for X and Y coordinates in this geometry. By default, coordinates are in WGS 84, with longitude and latitude in degrees. In that case, this element is not present. Otherwise, it specifies which coordinate system to use. */
-    CRS: {
-      type: "name";
-      properties: components["schemas"]["CRSProperties"];
-    };
-    CRSProperties: {
-      /** Name of the coordinate reference system. This must be in the form EPSG:nnnn where nnnn is the numeric identifier of a coordinate system in the EPSG dataset. The default is Longitude/Latitude EPSG:4326, which is the coordinate system +for GeoJSON. */
-      name: string;
     };
     ConnectDeviceManagerRequestPayload: {
       facilityId: number;
@@ -640,6 +641,21 @@ export interface components {
     CreateTimeseriesRequestPayload: {
       timeseries: components["schemas"]["CreateTimeseriesEntry"][];
     };
+    CreateViabilityTestRequestPayload: {
+      endDate?: string;
+      notes?: string;
+      seedsSown?: number;
+      seedType?: "Fresh" | "Stored";
+      startDate?: string;
+      substrate?:
+        | "Nursery Media"
+        | "Agar Petri Dish"
+        | "Paper Petri Dish"
+        | "Other";
+      testingStaffUserId?: number;
+      testType?: "Lab" | "Nursery" | "Cut";
+      treatment?: "Soak" | "Scarify" | "GA3" | "Stratification" | "Other";
+    };
     CreateWithdrawalRequestPayload: {
       date?: string;
       purpose?:
@@ -749,24 +765,6 @@ export interface components {
       latitude: number;
       longitude: number;
       accuracy?: number;
-    };
-    /** GEOMETRY-FIX-TYPE-ON-CLIENT-SIDE */
-    Geometry: {
-      type:
-        | "Point"
-        | "LineString"
-        | "Polygon"
-        | "MultiPoint"
-        | "MultiLineString"
-        | "MultiPolygon"
-        | "GeometryCollection";
-      coordinates: number[];
-      crs?: components["schemas"]["CRS"];
-    };
-    GeometryCollection: components["schemas"]["Geometry"] & {
-      geometries?: components["schemas"]["Geometry"][];
-    } & {
-      geometries: unknown;
     };
     GetAccessionHistoryResponsePayload: {
       /** History of changes in descending time order (newest first.) */
@@ -880,6 +878,31 @@ export interface components {
       user: components["schemas"]["UserProfilePayload"];
       status: components["schemas"]["SuccessOrError"];
     };
+    GetViabilityTestPayload: {
+      accessionId: number;
+      endDate?: string;
+      id: number;
+      notes?: string;
+      seedsTested?: number;
+      seedType?: "Fresh" | "Stored";
+      startDate?: string;
+      substrate?:
+        | "Nursery Media"
+        | "Agar Petri Dish"
+        | "Paper Petri Dish"
+        | "Other";
+      treatment?: "Soak" | "Scarify" | "GA3" | "Stratification" | "Other";
+      testingStaffName?: string;
+      testingStaffUserId?: number;
+      testResults?: components["schemas"]["ViabilityTestResultPayload"][];
+      testType: "Lab" | "Nursery" | "Cut";
+      totalPercentGerminated?: number;
+      totalSeedsGerminated?: number;
+    };
+    GetViabilityTestResponsePayload: {
+      viabilityTest: components["schemas"]["GetViabilityTestPayload"];
+      status: components["schemas"]["SuccessOrError"];
+    };
     GetWithdrawalPayload: {
       date: string;
       /** Number of seeds withdrawn. Calculated by server. This is an estimate if "withdrawnQuantity" is a weight quantity and the accession has subset weight and count data. Absent if "withdrawnQuantity" is a weight quantity and the accession has no subset weight and count. */
@@ -913,11 +936,6 @@ export interface components {
     GetWithdrawalsResponsePayload: {
       withdrawals: components["schemas"]["GetWithdrawalPayload"][];
       status: components["schemas"]["SuccessOrError"];
-    };
-    LineString: components["schemas"]["Geometry"] & {
-      coordinates?: number[][];
-    } & {
-      coordinates: unknown;
     };
     ListAllFieldValuesRequestPayload: {
       facilityId?: number;
@@ -975,14 +993,6 @@ export interface components {
     ListPhotosResponseElement: {
       filename: string;
       size: number;
-      capturedTime: string;
-      /** @deprecated Use location field instead. */
-      latitude?: number;
-      /** @deprecated Use location field instead. */
-      longitude?: number;
-      location?: components["schemas"]["Point"];
-      /** GPS accuracy in meters. */
-      gpsAccuracy?: number;
     };
     ListPhotosResponsePayload: {
       photos: components["schemas"]["ListPhotosResponseElement"][];
@@ -996,32 +1006,21 @@ export interface components {
       timeseries: components["schemas"]["TimeseriesPayload"][];
       status: components["schemas"]["SuccessOrError"];
     };
+    ListViabilityTestsResponsePayload: {
+      viabilityTests: components["schemas"]["GetViabilityTestPayload"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
     ModifyAutomationRequestPayload: {
       name: string;
       description?: string;
       configuration?: { [key: string]: unknown };
-      settings?: { [key: string]: { [key: string]: unknown } };
       type: string;
-      upperThreshold?: number;
-      verbosity: number;
+      settings?: { [key: string]: { [key: string]: unknown } };
       timeseriesName?: string;
       deviceId?: number;
       lowerThreshold?: number;
-    };
-    MultiLineString: components["schemas"]["Geometry"] & {
-      coordinates?: number[][][];
-    } & {
-      coordinates: unknown;
-    };
-    MultiPoint: components["schemas"]["Geometry"] & {
-      coordinates?: number[][];
-    } & {
-      coordinates: unknown;
-    };
-    MultiPolygon: components["schemas"]["Geometry"] & {
-      coordinates?: number[][][][];
-    } & {
-      coordinates: unknown;
+      upperThreshold?: number;
+      verbosity: number;
     };
     /** Search criterion that matches results that do not match a set of search criteria. */
     NotNodePayload: components["schemas"]["SearchNodePayload"] & {
@@ -1076,17 +1075,6 @@ export interface components {
       /** The user's last name. Not present if the user has been added to the organization but has not signed up for an account yet. */
       lastName?: string;
       role: "Contributor" | "Manager" | "Admin" | "Owner";
-    };
-    Point: components["schemas"]["Geometry"] & {
-      /** A single position. In the terraware-server API, positions must always include 3 dimensions. The X and Y dimensions use the coordinate system specified by the crs field, and the Z dimension is in meters. */
-      coordinates?: number[];
-    } & {
-      coordinates: unknown;
-    };
-    Polygon: components["schemas"]["Geometry"] & {
-      coordinates?: number[][][];
-    } & {
-      coordinates: unknown;
     };
     RecordTimeseriesValuesRequestPayload: {
       timeseries: components["schemas"]["TimeseriesValuesPayload"][];
@@ -1403,7 +1391,7 @@ export interface components {
       storageLocation?: string;
       subsetCount?: number;
       subsetWeight?: components["schemas"]["SeedQuantityPayload"];
-      viabilityTests?: components["schemas"]["ViabilityTestPayload"][];
+      viabilityPercent?: number;
     };
     UpdateAccessionResponsePayload: {
       accession: components["schemas"]["AccessionPayload"];
@@ -1479,6 +1467,22 @@ export interface components {
       firstName: string;
       lastName: string;
     };
+    UpdateViabilityTestRequestPayload: {
+      endDate?: string;
+      notes?: string;
+      seedsSown?: number;
+      seedType?: "Fresh" | "Stored";
+      startDate?: string;
+      substrate?:
+        | "Nursery Media"
+        | "Agar Petri Dish"
+        | "Paper Petri Dish"
+        | "Other";
+      testingStaffUserId?: number;
+      testResults?: components["schemas"]["ViabilityTestResultPayload"][];
+      testType?: "Lab" | "Nursery" | "Cut";
+      treatment?: "Soak" | "Scarify" | "GA3" | "Stratification" | "Other";
+    };
     UpdateWithdrawalRequestPayload: {
       date?: string;
       purpose?:
@@ -1495,16 +1499,6 @@ export interface components {
       /** ID of the user who withdrew the seeds. Default for new withdrawals is the current user; for existing withdrawals, default is the withdrawal's existing user ID. Ignored if the current user does not have permission to list organization users. V1 COMPATIBILITY: If this is null and the withdrawal doesn't have a user ID, the existing "staffResponsible" value will be preserved. */
       withdrawnByUserId?: number;
       withdrawnQuantity?: components["schemas"]["SeedQuantityPayload"];
-    };
-    UploadPhotoMetadataPayload: {
-      capturedTime: string;
-      /** @deprecated Use location field instead. */
-      latitude?: number;
-      /** @deprecated Use location field instead. */
-      longitude?: number;
-      location?: components["schemas"]["Point"];
-      /** GPS accuracy in meters. */
-      gpsAccuracy?: number;
     };
     UploadSpeciesListResponsePayload: {
       /** ID of uploaded file. This may be used to poll for the file's status. */
@@ -2873,7 +2867,6 @@ export interface operations {
       content: {
         "multipart/form-data": {
           file: string;
-          metadata: components["schemas"]["UploadPhotoMetadataPayload"];
         };
       };
     };
@@ -3453,6 +3446,97 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["CreateAccessionRequestPayloadV2"];
+      };
+    };
+  };
+  listViabilityTests: {
+    parameters: {
+      path: {
+        accessionId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListViabilityTestsResponsePayload"];
+        };
+      };
+    };
+  };
+  /** May cause the accession's remaining quantity to change. */
+  createViabilityTest: {
+    parameters: {
+      path: {
+        accessionId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UpdateAccessionResponsePayloadV2"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateViabilityTestRequestPayload"];
+      };
+    };
+  };
+  getViabilityTest: {
+    parameters: {
+      path: {
+        accessionId: number;
+        viabilityTestId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetViabilityTestResponsePayload"];
+        };
+      };
+    };
+  };
+  /** May cause the accession's remaining quantity to change. */
+  updateViabilityTest: {
+    parameters: {
+      path: {
+        accessionId: number;
+        viabilityTestId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UpdateAccessionResponsePayloadV2"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateViabilityTestRequestPayload"];
+      };
+    };
+  };
+  /** May cause the accession's remaining quantity to change. */
+  deleteViabilityTest: {
+    parameters: {
+      path: {
+        accessionId: number;
+        viabilityTestId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UpdateAccessionResponsePayloadV2"];
+        };
       };
     };
   };

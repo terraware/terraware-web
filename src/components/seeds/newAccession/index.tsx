@@ -1,4 +1,3 @@
-import moment from 'moment';
 import React, { Suspense, useEffect, useState } from 'react';
 import { Link, Redirect, useHistory } from 'react-router-dom';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
@@ -33,6 +32,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import Collectors from './Collectors';
+import { getTodaysDateFormatted } from 'src/utils/date';
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
@@ -138,7 +138,7 @@ export default function NewAccessionWrapper(props: NewAccessionProps): JSX.Eleme
             <AccessionForm
               accession={{
                 facilityId: selectedOrgInfoDatabase.selectedFacility?.id,
-                receivedDate: moment().format('YYYY-MM-DD'),
+                receivedDate: getTodaysDateFormatted(),
               }}
               organization={organization}
               onSubmit={onSubmit}
@@ -259,7 +259,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
   const onSendToNurseryHandler = () => {
     const newRecord = {
       ...record,
-      nurseryStartDate: moment().format('YYYY-MM-DD'),
+      nurseryStartDate: getTodaysDateFormatted(),
     };
     setIsSendingToNursery(true);
     setTimeout(() => onSubmit(newRecord), 1000);
