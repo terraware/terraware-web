@@ -103,7 +103,6 @@ export default function OptInFeatures({ refresh }: OptInFeaturesProps): JSX.Elem
         height: '100%',
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'center',
         fontFamily: 'monospace',
         padding: '40px',
         ...background,
