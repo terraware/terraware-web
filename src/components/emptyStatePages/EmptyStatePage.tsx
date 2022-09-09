@@ -7,7 +7,6 @@ import strings from 'src/strings';
 import emptyStateStrings from 'src/strings/emptyStatePages';
 import dictionary from 'src/strings/dictionary';
 import AddSpeciesModal from '../Species/AddSpeciesModal';
-import snackbarAtom from 'src/state/snackbar';
 import { useSetRecoilState } from 'recoil';
 import { ServerOrganization } from 'src/types/Organization';
 import ImportSpeciesModal, { downloadCsvTemplate } from '../Species/ImportSpeciesModal';
@@ -15,6 +14,7 @@ import TfMain from '../common/TfMain';
 import speciesAtom from 'src/state/species';
 import { Container, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import useSnackbar from 'src/utils/useSnackbar';
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
@@ -71,7 +71,7 @@ type EmptyStatePageProps = {
 export default function EmptyStatePage({ pageName, organization, reloadData }: EmptyStatePageProps): JSX.Element {
   const classes = useStyles();
   const history = useHistory();
-  const setSnackbar = useSetRecoilState(snackbarAtom);
+  const snackbar = useSnackbar();
   const setSpeciesState = useSetRecoilState(speciesAtom);
 
   const goToNewLocation = () => {
@@ -139,11 +139,7 @@ export default function EmptyStatePage({ pageName, organization, reloadData }: E
     }
     setAddSpeciesModalOpened(false);
     if (snackbarMessage) {
-      setSnackbar({
-        type: 'toast',
-        priority: 'success',
-        msg: snackbarMessage,
-      });
+      snackbar.toastSuccess(snackbarMessage);
     }
   };
 
@@ -157,11 +153,7 @@ export default function EmptyStatePage({ pageName, organization, reloadData }: E
     }
     setImportSpeciesModalOpened(false);
     if (snackbarMessage) {
-      setSnackbar({
-        type: 'toast',
-        priority: 'success',
-        msg: snackbarMessage,
-      });
+      snackbar.toastSuccess(snackbarMessage);
     }
   };
 
