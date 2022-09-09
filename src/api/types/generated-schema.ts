@@ -644,7 +644,7 @@ export interface components {
     CreateViabilityTestRequestPayload: {
       endDate?: string;
       notes?: string;
-      seedsSown?: number;
+      seedsTested?: number;
       seedType?: "Fresh" | "Stored";
       startDate?: string;
       substrate?:
@@ -1014,12 +1014,13 @@ export interface components {
       name: string;
       description?: string;
       configuration?: { [key: string]: unknown };
+      settings?: { [key: string]: { [key: string]: unknown } };
       type: string;
+      timeseriesName?: string;
+      deviceId?: number;
       lowerThreshold?: number;
       upperThreshold?: number;
       verbosity: number;
-      timeseriesName?: string;
-      deviceId?: number;
     };
     /** Search criterion that matches results that do not match a set of search criteria. */
     NotNodePayload: components["schemas"]["SearchNodePayload"] & {
@@ -1469,7 +1470,7 @@ export interface components {
     UpdateViabilityTestRequestPayload: {
       endDate?: string;
       notes?: string;
-      seedsSown?: number;
+      seedsTested?: number;
       seedType?: "Fresh" | "Stored";
       startDate?: string;
       substrate?:
