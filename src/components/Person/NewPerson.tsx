@@ -10,8 +10,6 @@ import TextField from '../common/Textfield/Textfield';
 import useForm from 'src/utils/useForm';
 import Select from '../common/Select/Select';
 import { addOrganizationUser, updateOrganizationUser } from 'src/api/user/user';
-import snackbarAtom from 'src/state/snackbar';
-import { useSetRecoilState } from 'recoil';
 import ErrorBox from '../common/ErrorBox/ErrorBox';
 import { getOrganizationUsers } from 'src/api/organization/organization';
 import { APP_PATHS } from 'src/constants';
@@ -19,6 +17,7 @@ import dictionary from 'src/strings/dictionary';
 import FormBottomBar from '../common/FormBottomBar';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageSnackbar from 'src/components/PageSnackbar';
+import useSnackbar from 'src/utils/useSnackbar';
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
@@ -89,7 +88,7 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
   const classes = useStyles();
   const history = useHistory();
   const [emailError, setEmailError] = useState('');
-  const setSnackbar = useSetRecoilState(snackbarAtom);
+  const snackbar = useSnackbar();
   const [repeatedEmail, setRepeatedEmail] = useState('');
   const [pageError, setPageError] = useState<'REPEATED_EMAIL' | 'INVALID_EMAIL'>();
   const [people, setPeople] = useState<OrganizationUser[]>();
@@ -186,19 +185,11 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
     }
 
     if (successMessage) {
-      setSnackbar({
-        type: 'toast',
-        priority: 'success',
-        msg: successMessage,
-      });
+      snackbar.toastSuccess(successMessage);
       await reloadOrganizationData();
       goToViewPerson(userId.toString());
     } else {
-      setSnackbar({
-        type: 'toast',
-        priority: 'critical',
-        msg: strings.GENERIC_ERROR,
-      });
+      snackbar.toastError();
       goToPeople();
     }
   };

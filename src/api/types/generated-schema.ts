@@ -1014,7 +1014,6 @@ export interface components {
       name: string;
       description?: string;
       configuration?: { [key: string]: unknown };
-      settings?: { [key: string]: { [key: string]: unknown } };
       type: string;
       lowerThreshold?: number;
       upperThreshold?: number;

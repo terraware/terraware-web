@@ -22,11 +22,10 @@ import AssignNewOwnerDialog from '../MyAccount/AssignNewOwnerModal';
 import DeleteOrgDialog from '../MyAccount/DeleteOrgModal';
 import CannotRemovePeopleDialog from './CannotRemovePeopleModal';
 import { updateOrganizationUser } from 'src/api/user/user';
-import snackbarAtom from 'src/state/snackbar';
-import { useSetRecoilState } from 'recoil';
 import { Grid, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import useSnackbar from 'src/utils/useSnackbar';
 
 const useStyles = makeStyles((theme: Theme) => ({
   title: {
@@ -69,7 +68,7 @@ export default function PeopleList({ organization, reloadData, user }: PeopleLis
   const [cannotRemovePeopleModalOpened, setCannotRemovePeopleModalOpened] = useState(false);
   const [deleteOrgModalOpened, setDeleteOrgModalOpened] = useState(false);
   const [newOwner, setNewOwner] = useState<OrganizationUser>();
-  const setSnackbar = useSetRecoilState(snackbarAtom);
+  const snackbar = useSnackbar();
   const { isMobile } = useDeviceInfo();
 
   useEffect(() => {
@@ -159,17 +158,9 @@ export default function PeopleList({ organization, reloadData, user }: PeopleLis
         if (reloadData) {
           reloadData();
         }
-        setSnackbar({
-          type: 'toast',
-          priority: 'success',
-          msg: strings.CHANGES_SAVED,
-        });
+        snackbar.toastSuccess(strings.CHANGES_SAVED);
       } else {
-        setSnackbar({
-          type: 'toast',
-          priority: 'critical',
-          msg: strings.GENERIC_ERROR,
-        });
+        snackbar.toastError();
       }
       history.push(APP_PATHS.PEOPLE);
     }
@@ -197,17 +188,9 @@ export default function PeopleList({ organization, reloadData, user }: PeopleLis
         if (reloadData) {
           reloadData();
         }
-        setSnackbar({
-          type: 'toast',
-          priority: 'success',
-          msg: strings.CHANGES_SAVED,
-        });
+        snackbar.toastSuccess(strings.CHANGES_SAVED);
       } else {
-        setSnackbar({
-          type: 'toast',
-          priority: 'critical',
-          msg: strings.GENERIC_ERROR,
-        });
+        snackbar.toastError();
       }
       history.push(APP_PATHS.HOME);
     }
