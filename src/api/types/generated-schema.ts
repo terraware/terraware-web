@@ -419,8 +419,8 @@ export interface components {
       latestObservedTime?: string;
       notes?: string;
       photoFilenames?: string[];
-      plantsCollectedFromMax?: number;
-      plantsCollectedFromMin?: number;
+      /** Estimated number of plants the seeds were collected from. */
+      plantsCollectedFrom?: number;
       receivedDate?: string;
       remainingQuantity?: components["schemas"]["SeedQuantityPayload"];
       /** Which source of data this accession originally came from. */
@@ -531,8 +531,8 @@ export interface components {
       facilityId?: number;
       founderId?: string;
       notes?: string;
-      plantsCollectedFromMax?: number;
-      plantsCollectedFromMin?: number;
+      /** Estimated number of plants the seeds were collected from. */
+      plantsCollectedFrom?: number;
       receivedDate?: string;
       source?: "Web" | "Seed Collector App" | "File Import";
       speciesId?: number;
@@ -644,7 +644,7 @@ export interface components {
     CreateViabilityTestRequestPayload: {
       endDate?: string;
       notes?: string;
-      seedsSown?: number;
+      seedsTested?: number;
       seedType?: "Fresh" | "Stored";
       startDate?: string;
       substrate?:
@@ -1014,8 +1014,8 @@ export interface components {
       name: string;
       description?: string;
       configuration?: { [key: string]: unknown };
-      type: string;
       settings?: { [key: string]: { [key: string]: unknown } };
+      type: string;
       timeseriesName?: string;
       deviceId?: number;
       lowerThreshold?: number;
@@ -1370,8 +1370,8 @@ export interface components {
       facilityId?: number;
       founderId?: string;
       notes?: string;
-      plantsCollectedFromMax?: number;
-      plantsCollectedFromMin?: number;
+      /** Estimated number of plants the seeds were collected from. */
+      plantsCollectedFrom?: number;
       receivedDate?: string;
       remainingQuantity?: components["schemas"]["SeedQuantityPayload"];
       speciesId?: number;
@@ -1470,7 +1470,7 @@ export interface components {
     UpdateViabilityTestRequestPayload: {
       endDate?: string;
       notes?: string;
-      seedsSown?: number;
+      seedsTested?: number;
       seedType?: "Fresh" | "Stored";
       startDate?: string;
       substrate?:

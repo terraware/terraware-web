@@ -187,7 +187,6 @@ const strings = new LocalizedStrings({
     COLLECTING_LOCATION: 'Collecting Location',
     PLANT_AND_SITE: 'Plant and Site',
     COLLECTED_FROM: 'Collected from',
-    WILD_PLANT: 'Wild Plant',
     OWNER: 'Owner',
     PLANT_ID: 'Plant ID',
     PHOTOS: 'Photos',
@@ -578,6 +577,8 @@ const strings = new LocalizedStrings({
     PLANT_ID_TOOLTIP:
       'It’s the ID of a plant for tracking or conservation purpose. Ideally seeds from a tracked plant do not mix with others in a same accession.',
     PLANT_DESCRIPTION: 'Plant Description',
+    PLANT: 'plant',
+    PLANTS: 'plants',
   },
 });
 
