@@ -85,7 +85,7 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
               {strings.VIABILITY}
             </Grid>
             <Grid item xs={gridRightSide}>
-              {accession.latestViabilityPercent}
+              {accession.viabilityPercent}
             </Grid>
           </Grid>
           <Grid item xs={12} sx={gridRowStyle}>

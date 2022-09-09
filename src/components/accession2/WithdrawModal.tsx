@@ -7,6 +7,7 @@ import { Checkbox, DatePicker, Select, SelectT, Textfield } from '@terraware/web
 import { Accession2, Withdrawal2 } from 'src/api/accessions2/accession';
 import useForm from 'src/utils/useForm';
 import { updateAccession2 } from 'src/api/accessions2/accession';
+import { postViabilityTest } from 'src/api/accessions2/viabilityTest';
 import { WITHDRAWAL_PURPOSES } from 'src/utils/withdrawalPurposes';
 import { getOrganizationUsers } from 'src/api/organization/organization';
 import { OrganizationUser, User } from 'src/types/User';
@@ -34,9 +35,9 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
     withdrawnByUserId: user.id,
     date: getTodaysDateFormatted(),
     withdrawnQuantity:
-      accession.initialQuantity?.units === 'Seeds'
+      accession.remainingQuantity?.units === 'Seeds'
         ? { quantity: 0, units: 'Seeds' }
-        : { quantity: 0, units: accession.initialQuantity?.units || 'Grams' },
+        : { quantity: 0, units: accession.remainingQuantity?.units || 'Grams' },
     notes: '',
   };
 
@@ -63,26 +64,25 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
   }, [organization]);
 
   const saveWithdrawal = async () => {
+    let response;
     if (record) {
       if (record.purpose === 'Viability Testing') {
-        if (accession.viabilityTests) {
-          accession.viabilityTests.push(viabilityTesting);
-        } else {
-          accession.viabilityTests = [viabilityTesting];
-        }
-      }
-      if (accession.withdrawals) {
-        accession.withdrawals?.push(record);
+        response = await postViabilityTest(viabilityTesting, accession.id);
       } else {
-        accession.withdrawals = [record];
+        if (accession.withdrawals) {
+          accession.withdrawals?.push(record);
+        } else {
+          accession.withdrawals = [record];
+        }
+        response = await updateAccession2(accession);
       }
-      const response = await updateAccession2(accession);
+
       if (response.requestSucceeded) {
         reload();
       } else {
         snackbar.toastError();
       }
-      onClose();
+      onCloseHandler();
     }
   };
 
@@ -231,7 +231,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
               type='text'
               value={record.withdrawnQuantity?.quantity.toString()}
             />
-            {accession.initialQuantity?.units === 'Seeds' ? (
+            {accession.remainingQuantity?.units === 'Seeds' ? (
               <Box>{strings.CT}</Box>
             ) : (
               <SelectT<Unit>
