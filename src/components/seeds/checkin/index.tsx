@@ -26,8 +26,8 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import useStateLocation from 'src/utils/useStateLocation';
 import PageHeader from '../PageHeader';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import useEnvironment from 'src/utils/useEnvironment';
 import { getPreferences } from 'src/api/preferences/preferences';
+import featureEnabled from 'src/features';
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
@@ -78,7 +78,6 @@ export default function CheckIn(props: CheckInProps): JSX.Element {
   const [pendingAccessions, setPendingAccessions] = useState<SearchResponseElement[] | null>();
   const [selectedOrgInfo, setSelectedOrgInfo] = useRecoilState(checkInSelectedOrgInfo);
   const [preferences, setPreferences] = useState<{ [key: string]: unknown }>();
-  const { isProduction } = useEnvironment();
 
   useEffect(() => {
     const fetchPreferences = async () => {
@@ -122,7 +121,7 @@ export default function CheckIn(props: CheckInProps): JSX.Element {
   };
 
   const goToAccession = (id: string) => {
-    const isV2 = !isProduction && preferences?.enableUIV2Accessions === true;
+    const isV2 = featureEnabled('V2 Accessions', preferences);
     const accessionLocation = {
       pathname: (isV2 ? APP_PATHS.ACCESSIONS2_ITEM : APP_PATHS.ACCESSIONS_ITEM).replace(':accessionId', id),
       // eslint-disable-next-line no-restricted-globals

@@ -4,29 +4,7 @@ import { getPreferences, updatePreferences } from 'src/api/preferences/preferenc
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
 import PageSnackbar from 'src/components/PageSnackbar';
-
-type Feature = {
-  name: string;
-  preferenceName: string;
-  description: string[];
-  disclosure: string[];
-};
-
-// list of feature names and associated properties
-const OPT_IN_FEATURES: Feature[] = [
-  {
-    name: 'V2 Accessions',
-    preferenceName: 'enableUIV2Accessions',
-    description: [
-      'Shows V2 accession workflows (instead of V1).',
-      'You can switch between V2 and V1 flows by turning this option on or off.',
-    ],
-    disclosure: [
-      'Saving V2 accessions and re-editing them in V1 workflows may cause some data loss, and vice versa.',
-      'Withdrawal quantities tracked may appear different across V1/V2 workflows.',
-    ],
-  },
-];
+import { Feature, OPT_IN_FEATURES } from 'src/features';
 
 type OptInFeaturesProps = {
   refresh?: () => void;
@@ -125,7 +103,7 @@ export default function OptInFeatures({ refresh }: OptInFeaturesProps): JSX.Elem
           >
             Opt-in to see experimental or work-in-progress features
           </Box>
-          {OPT_IN_FEATURES.map((f, i) => (
+          {OPT_IN_FEATURES.filter((f) => f.enabled).map((f, i) => (
             <Stack
               spacing={2}
               sx={{
