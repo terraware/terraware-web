@@ -544,7 +544,7 @@ describe('Database', () => {
       // checking state list
       cy.get('#filter-state').click();
       cy.get('#filter-list-state').should('be.visible');
-      cy.get('#filter-list-state').children().should('have.length', 12);
+      cy.get('#filter-list-state').children().should('have.length', 9);
       cy.get('#filter-list-state .Mui-disabled .MuiCheckbox-root').should('have.length', 5);
       cy.get('#filter-list-state').type('{esc}');
       cy.get('#filter-list-state').should('not.exist');
