@@ -55,6 +55,10 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
     }
   };
 
+  const collectionSource = accession?.collectionSource;
+  const numPlants = accession?.plantsCollectedFrom;
+  const isNotPlural = numPlants === 1;
+
   return accession ? (
     <>
       <ViewPhotosModal
@@ -143,7 +147,9 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
               {strings.PLANT_AND_SITE}
             </Grid>
             <Grid item xs={gridRightSide}>
-              {`${strings.COLLECTED_FROM} ${accession.plantsCollectedFrom} ${strings.WILD_PLANT}`}
+              {`${strings.COLLECTED_FROM}${numPlants === undefined ? '' : ' ' + numPlants}${
+                collectionSource ? ' ' + collectionSource : ''
+              } ${isNotPlural ? strings.PLANT : strings.PLANTS}`}
               {accession.founderId ? <Typography>{`${strings.PLANT_ID}: ${accession.founderId}`}</Typography> : ''}
               {accession.notes}
             </Grid>
