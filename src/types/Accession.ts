@@ -24,3 +24,5 @@ export const ACCESSION_2_STATES = [
   'Used Up',
   'Nursery',
 ];
+
+export const ACCESSION_2_COLLECTION_SOURCES = ['Wild', 'Reintroduced', 'Cultivated', 'Other'];

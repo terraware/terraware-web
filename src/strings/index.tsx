@@ -553,9 +553,9 @@ const strings = new LocalizedStrings({
     SEED_PROCESSING_DETAIL: 'Seed Processing Detail',
     SEARCH_OR_SELECT: 'Search or Select...',
     SPECIES_REQUIRED: 'Species *',
-    COLLECTED_DATE_REQUIRED: 'Collected Date *',
+    COLLECTION_DATE_REQUIRED: 'Collection Date *',
     COLLECTION_SITE: 'Collection Site',
-    RECEIVED_DATE_REQUIRED: 'Received Date *',
+    RECEIVING_DATE_REQUIRED: 'Receiving Date *',
     PROCESSING_STATUS_REQUIRED: 'Processing Status *',
     LOCATION_REQUIRED: 'Location *',
     SUB_LOCATION_REQUIRED: 'Sub-Location *',
@@ -572,6 +572,11 @@ const strings = new LocalizedStrings({
     WITHDRAW_ALL: 'Withdraw all',
     CT: 'ct',
     TEST_TYPE: 'Test Type',
+    NUMBER_PLANTS_COLLECTED_FROM: 'Number of plants collected from',
+    IF_APPLICABLE: '(if applicable)',
+    PLANT_ID_TOOLTIP:
+      'It’s the ID of a plant for tracking or conservation purpose. Ideally seeds from a tracked plant do not mix with others in a same accession.',
+    PLANT_DESCRIPTION: 'Plant Description',
   },
 });
 
