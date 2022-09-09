@@ -11,7 +11,6 @@ import {
   Theme,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import moment from 'moment';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ViabilityTestResult } from 'src/api/types/tests';
@@ -24,6 +23,7 @@ import TextField from '../../common/TextField';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import Button from 'src/components/common/button/Button';
+import { getTodaysDateFormatted } from 'src/utils/date';
 
 const useStyles = makeStyles((theme: Theme) => ({
   submit: {
@@ -57,7 +57,7 @@ export default function NewGermination(props: Props): JSX.Element {
     return (
       entry ?? {
         seedsGerminated: 0,
-        recordingDate: moment().format('YYYY-MM-DD'),
+        recordingDate: getTodaysDateFormatted(),
       }
     );
   }

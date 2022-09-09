@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useSetRecoilState } from 'recoil';
 import { updateOrganizationUser, updateUserProfile } from 'src/api/user/user';
 import Button from 'src/components/common/button/Button';
 import Table from 'src/components/common/table';
@@ -15,7 +14,6 @@ import FormBottomBar from '../common/FormBottomBar';
 import TextField from '../common/Textfield/Textfield';
 import TfDivisor from '../common/TfDivisor';
 import TfMain from '../common/TfMain';
-import snackbarAtom from 'src/state/snackbar';
 import AssignNewOwnerDialog from './AssignNewOwnerModal';
 import { getOrganizationUsers, leaveOrganization, listOrganizationRoles } from 'src/api/organization/organization';
 import LeaveOrganizationDialog from './LeaveOrganizationModal';
@@ -26,6 +24,7 @@ import Checkbox from '../common/Checkbox';
 import { Grid, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import useSnackbar from 'src/utils/useSnackbar';
 
 interface StyleProps {
   isMobile: boolean;
@@ -76,7 +75,6 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
   const [personOrganizations, setPersonOrganizations] = useState<ServerOrganization[]>([]);
   const history = useHistory();
   const [record, setRecord, onChange] = useForm<User>(user);
-  const setSnackbar = useSetRecoilState(snackbarAtom);
   const [removedOrg, setRemovedOrg] = useState<ServerOrganization>();
   const [leaveOrganizationModalOpened, setLeaveOrganizationModalOpened] = useState(false);
   const [assignNewOwnerModalOpened, setAssignNewOwnerModalOpened] = useState(false);
@@ -84,6 +82,7 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
   const [deleteOrgModalOpened, setDeleteOrgModalOpened] = useState(false);
   const [newOwner, setNewOwner] = useState<OrganizationUser>();
   const [orgPeople, setOrgPeople] = useState<OrganizationUser[]>();
+  const snackbar = useSnackbar();
 
   useEffect(() => {
     if (organizations) {
@@ -111,11 +110,7 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
   const removeSelectedOrgs = () => {
     if (organizations && personOrganizations) {
       if (selectedRows.length > 1 || organizations.length - personOrganizations.length === 1) {
-        setSnackbar({
-          type: 'toast',
-          priority: 'critical',
-          msg: strings.REMOVE_ONLY_ONE_ORG_AT_A_TIME,
-        });
+        snackbar.toastError(strings.REMOVE_ONLY_ONE_ORG_AT_A_TIME);
       } else {
         setRemovedOrg(selectedRows[0]);
         setPersonOrganizations((currentPersonOrganizations) => {
@@ -157,17 +152,9 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
       const updateUserResponse = await saveProfileChanges();
       if (updateUserResponse.requestSucceeded) {
         reloadUser();
-        setSnackbar({
-          type: 'toast',
-          priority: 'success',
-          msg: strings.CHANGES_SAVED,
-        });
+        snackbar.toastSuccess(strings.CHANGES_SAVED);
       } else {
-        setSnackbar({
-          type: 'toast',
-          priority: 'critical',
-          msg: strings.GENERIC_ERROR,
-        });
+        snackbar.toastError();
       }
       history.push(APP_PATHS.MY_ACCOUNT);
     }
@@ -202,17 +189,9 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
         reloadData();
       }
       reloadUser();
-      setSnackbar({
-        type: 'toast',
-        priority: 'success',
-        msg: strings.CHANGES_SAVED,
-      });
+      snackbar.toastSuccess(strings.CHANGES_SAVED);
     } else {
-      setSnackbar({
-        type: 'toast',
-        priority: 'critical',
-        msg: strings.GENERIC_ERROR,
-      });
+      snackbar.toastError();
     }
     setLeaveOrganizationModalOpened(false);
     history.push(APP_PATHS.MY_ACCOUNT);
@@ -227,17 +206,9 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
           reloadData();
         }
         reloadUser();
-        setSnackbar({
-          type: 'toast',
-          priority: 'success',
-          msg: strings.CHANGES_SAVED,
-        });
+        snackbar.toastSuccess(strings.CHANGES_SAVED);
       } else {
-        setSnackbar({
-          type: 'toast',
-          priority: 'critical',
-          msg: strings.GENERIC_ERROR,
-        });
+        snackbar.toastError();
       }
       history.push(APP_PATHS.HOME);
     }

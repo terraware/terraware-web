@@ -1,4 +1,4 @@
-const WITHDRAWAL_PURPOSES = ['Out-planting', 'Other', 'Nursery', 'Viability Testing'];
+export const WITHDRAWAL_PURPOSES = ['Out-planting', 'Other', 'Nursery', 'Viability Testing'];
 
 export const getSelectedPurpose = (value: string | undefined) => {
   if (value && WITHDRAWAL_PURPOSES.indexOf(value) > -1) {

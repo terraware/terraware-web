@@ -1,13 +1,12 @@
 import { Container, Grid, IconButton } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { deleteSpecies } from 'src/api/species/species';
 import Button from 'src/components/common/button/Button';
 import EmptyMessage from 'src/components/common/EmptyMessage';
 import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
-import snackbarAtom from 'src/state/snackbar';
 import speciesAtom from 'src/state/species';
 import dictionary from 'src/strings/dictionary';
 import strings from 'src/strings';
@@ -30,6 +29,7 @@ import SpeciesCellRenderer from './TableCellRenderer';
 import useDebounce from 'src/utils/useDebounce';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import useSnackbar from 'src/utils/useSnackbar';
 
 type SpeciesListProps = {
   organization: ServerOrganization;
@@ -114,7 +114,7 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
   const [deleteSpeciesModalOpen, setDeleteSpeciesModalOpen] = useState(false);
   const [importSpeciesModalOpen, setImportSpeciesModalOpen] = useState(false);
   const [checkDataModalOpen, setCheckDataModalOpen] = useState(false);
-  const setSnackbar = useSetRecoilState(snackbarAtom);
+  const snackbar = useSnackbar();
   const [speciesState, setSpeciesState] = useRecoilState(speciesAtom);
   const [searchValue, setSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(searchValue, 250);
@@ -278,11 +278,7 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
     }
     setEditSpeciesModalOpen(false);
     if (snackbarMessage) {
-      setSnackbar({
-        type: 'toast',
-        priority: 'success',
-        msg: snackbarMessage,
-      });
+      snackbar.toastSuccess(snackbarMessage);
     }
   };
   const onNewSpecies = () => {
@@ -291,11 +287,7 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
   };
 
   const setErrorSnackbar = (snackbarMessage: string) => {
-    setSnackbar({
-      priority: 'critical',
-      type: 'toast',
-      msg: snackbarMessage,
-    });
+    snackbar.toastError(snackbarMessage);
   };
 
   const OnEditSpecies = () => {

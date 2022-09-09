@@ -1,4 +1,4 @@
-import React, { useState, Dispatch, SetStateAction } from 'react';
+import React, { useState } from 'react';
 import strings from 'src/strings';
 import { Link, Grid, Box, useTheme } from '@mui/material';
 import { AccessionPostRequestBody } from 'src/api/accessions2/accession';
@@ -10,55 +10,15 @@ import { ACCESSION_2_COLLECTION_SOURCES } from 'src/types/Accession';
 type Accession2PlantSiteDetailsProps = {
   record: AccessionPostRequestBody;
   onChange: (id: string, value?: any) => void;
-  setRecord: Dispatch<SetStateAction<AccessionPostRequestBody>>;
 };
 
 export default function Accession2PlantSiteDetails(props: Accession2PlantSiteDetailsProps): JSX.Element {
-  const { record, onChange, setRecord } = props;
+  const { record, onChange } = props;
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [numPlants, setNumPlants] = useState<string>('');
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
 
   const gridSize = () => (isMobile ? 12 : 6);
-
-  const onChangeNumPlants = (value: any) => {
-    const numPlantsStr = value as string;
-    setNumPlants(numPlantsStr);
-    let min: number | undefined;
-    let max: number | undefined;
-    // we support either a number or a range of two numbers, eg. 2 - 5
-    const numbers = value.split('-').map((num: string) => num.trim());
-    if (numbers.length < 3) {
-      // Parse the numbers
-      min = parseInt(numbers[0], 10);
-      max = parseInt(numbers[1], 10);
-      const noMin = isNaN(min) || min === 0;
-      const noMax = isNaN(max) || max === 0;
-      if (noMin) {
-        min = undefined;
-      }
-      if (noMax) {
-        max = min;
-      } else if (noMin) {
-        // if we have " - 3" use 3 as min and max
-        min = max;
-      } else {
-        // if we have "4 - 3" use 3 as min and 4 as max;
-        // if we have "3 - 4" use 3 as min and 4 as max;
-        const temp = min as number;
-        min = Math.min(temp, max);
-        max = Math.max(temp, max);
-      }
-    }
-    setRecord((prev) => {
-      return {
-        ...prev,
-        plantsCollectedFromMin: min,
-        plantsCollectedFromMax: max,
-      };
-    });
-  };
 
   if (!isOpen) {
     return (
@@ -89,10 +49,11 @@ export default function Accession2PlantSiteDetails(props: Accession2PlantSiteDet
       <Grid item xs={12} display='flex' flexDirection={isMobile ? 'column' : 'row'} marginTop={theme.spacing(2)}>
         <Grid item xs={gridSize()} sx={{ marginRight: isMobile ? 0 : theme.spacing(2) }}>
           <Textfield
-            id='numPlants'
-            value={numPlants}
-            onChange={(unused, value) => onChangeNumPlants(value)}
-            type='text'
+            id='plantsCollectedFrom'
+            value={record.plantsCollectedFrom}
+            onChange={onChange}
+            type='number'
+            min={0}
             label={strings.NUMBER_PLANTS_COLLECTED_FROM}
           />
         </Grid>

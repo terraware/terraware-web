@@ -38,7 +38,7 @@ describe('Withdrawal', () => {
     it('should create a withdrawal ', () => {
       cy.get('#new-withdrawal-button').click();
 
-      cy.get('#save-withdrawn-button').contains('Withdraw seeds');
+      cy.get('#save-withdrawn-button').contains('Withdraw Seeds');
       cy.get('#modal-seeds-available').contains('300');
 
       cy.get('#date-tip').contains('Schedule a date by selecting a future date.');

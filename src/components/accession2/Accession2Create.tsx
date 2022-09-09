@@ -19,6 +19,7 @@ import Accession2Address from './Accession2Address';
 import Accession2GPS from './Accession2GPS';
 import Accession2PlantSiteDetails from './Accession2PlantSiteDetails';
 import getDateDisplayValue from 'src/utils/date';
+import useSnackbar from 'src/utils/useSnackbar';
 
 type CreateAccessionProps = {
   organization: ServerOrganization;
@@ -45,6 +46,7 @@ export default function CreateAccession(props: CreateAccessionProps): JSX.Elemen
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const history = useHistory();
+  const snackbar = useSnackbar();
   const [record, setRecord, onChange] = useForm<AccessionPostRequestBody>(defaultAccession());
   const [dates, setDates] = useState<Dates>({
     collectedDate: record.collectedDate,
@@ -94,7 +96,7 @@ export default function CreateAccession(props: CreateAccessionProps): JSX.Elemen
         pathname: APP_PATHS.ACCESSIONS2_ITEM.replace(':accessionId', response.id.toString()),
       });
     } else {
-      // TODO show toast error
+      snackbar.toastError();
     }
   };
 
@@ -164,7 +166,7 @@ export default function CreateAccession(props: CreateAccessionProps): JSX.Elemen
           </Grid>
           <Accession2Address record={record} onChange={onChange} />
           <Accession2GPS record={record} onChange={onChange} />
-          <Accession2PlantSiteDetails setRecord={setRecord} record={record} onChange={onChange} />
+          <Accession2PlantSiteDetails record={record} onChange={onChange} />
         </Grid>
         <Grid container>
           <Grid item xs={12} sx={{ marginTop: theme.spacing(4) }}>
