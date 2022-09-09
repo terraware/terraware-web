@@ -577,6 +577,7 @@ const strings = new LocalizedStrings({
     PLANT_ID_TOOLTIP:
       'It’s the ID of a plant for tracking or conservation purpose. Ideally seeds from a tracked plant do not mix with others in a same accession.',
     PLANT_DESCRIPTION: 'Plant Description',
+    OPT_IN: 'Opt-In Features',
     PLANT: 'plant',
     PLANTS: 'plants',
   },

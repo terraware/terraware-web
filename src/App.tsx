@@ -50,6 +50,7 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { getPreferences, updatePreferences } from './api/preferences/preferences';
 import useEnvironment from 'src/utils/useEnvironment';
 import { Accession2Create, Accession2View, Accession2Edit } from './components/accession2';
+import OptInFeatures from './components/OptInFeatures';
 
 const useStyles = makeStyles(() => ({
   content: {
@@ -170,7 +171,7 @@ export default function App() {
     reloadSpecies();
   }, [reloadSpecies]);
 
-  useEffect(() => {
+  const reloadPreferences = useCallback(() => {
     const getUserPreferences = async () => {
       const response = await getPreferences();
       if (organizations && response.requestSucceeded) {
@@ -179,6 +180,10 @@ export default function App() {
     };
     getUserPreferences();
   }, [organizations, setPreferencesOrg]);
+
+  useEffect(() => {
+    reloadPreferences();
+  }, [reloadPreferences]);
 
   useEffect(() => {
     if (organizations && preferencesOrg) {
@@ -378,6 +383,7 @@ export default function App() {
                   displayColumnNames={accessionsDisplayColumns}
                   setDisplayColumnNames={setAccessionsDisplayColumns}
                   hasSeedBanks={selectedOrgHasSeedBanks()}
+                  preferences={preferencesOrg}
                 />
               </Route>
               {!isProduction && (
@@ -490,6 +496,12 @@ export default function App() {
               {user && (
                 <Route exact path={APP_PATHS.MY_ACCOUNT}>
                   <MyAccount user={user} organizations={organizations} edit={false} reloadUser={reloadUser} />
+                </Route>
+              )}
+
+              {!isProduction && (
+                <Route exact path={APP_PATHS.OPT_IN}>
+                  <OptInFeatures refresh={reloadPreferences} />
                 </Route>
               )}
 

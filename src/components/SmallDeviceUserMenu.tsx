@@ -22,6 +22,7 @@ import { User } from 'src/types/User';
 import AddNewOrganizationModal from './AddNewOrganizationModal';
 import { ReactComponent as AvatarIcon } from './avatar-default.svg';
 import Icon from './common/icon/Icon';
+import useEnvironment from 'src/utils/useEnvironment';
 
 const useStyles = makeStyles((theme: Theme) => ({
   icon: {
@@ -105,6 +106,7 @@ export default function SmallDeviceUserMenu({
   const [newOrganizationModalOpened, setNewOrganizationModalOpened] = useState(false);
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef<HTMLButtonElement>(null);
+  const { isProduction } = useEnvironment();
 
   const navigate = (url: string) => {
     history.push(url);
@@ -244,6 +246,20 @@ export default function SmallDeviceUserMenu({
                         className={classes.menuItem}
                       >
                         {strings.CREATE_NEW_ORGANIZATION}
+                      </MenuItem>
+                    </>
+                  ) : null}
+                  {!isProduction && hasOrganizations ? (
+                    <>
+                      <MenuItem className={classes.menuItem}> --- </MenuItem>
+                      <MenuItem
+                        onClick={(e) => {
+                          navigate(APP_PATHS.OPT_IN);
+                          handleClose(e);
+                        }}
+                        className={classes.menuItem}
+                      >
+                        {strings.OPT_IN}
                       </MenuItem>
                     </>
                   ) : null}
