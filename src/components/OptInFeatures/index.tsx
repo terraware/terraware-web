@@ -22,8 +22,8 @@ const OPT_IN_FEATURES: Feature[] = [
       'You can switch between V2 and V1 flows by turning this option on or off.',
     ],
     disclosure: [
-      'Saving V2 accessions and re-editing them in V1 workflows may cause some data loss.',
-      'Withdrawal quantities tracked in V2 may not seem correct in V1 workflows.',
+      'Saving V2 accessions and re-editing them in V1 workflows may cause some data loss, and vice versa.',
+      'Withdrawal quantities tracked may appear different across V1/V2 workflows.',
     ],
   },
 ];
