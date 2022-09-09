@@ -529,6 +529,7 @@ export interface components {
       collectors?: string[];
       facilityId?: number;
       founderId?: string;
+      notes?: string;
       plantsCollectedFromMax?: number;
       plantsCollectedFromMin?: number;
       receivedDate?: string;
@@ -1001,11 +1002,11 @@ export interface components {
       configuration?: { [key: string]: unknown };
       settings?: { [key: string]: { [key: string]: unknown } };
       type: string;
-      verbosity: number;
       upperThreshold?: number;
-      lowerThreshold?: number;
+      verbosity: number;
       timeseriesName?: string;
       deviceId?: number;
+      lowerThreshold?: number;
     };
     MultiLineString: components["schemas"]["Geometry"] & {
       coordinates?: number[][][];

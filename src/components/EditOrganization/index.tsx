@@ -7,8 +7,6 @@ import { ServerOrganization } from 'src/types/Organization';
 import TextField from '../common/Textfield/Textfield';
 import useForm from 'src/utils/useForm';
 import Select from '../common/Select/Select';
-import { useSetRecoilState } from 'recoil';
-import snackbarAtom from 'src/state/snackbar';
 import FormBottomBar from '../common/FormBottomBar';
 import { Country, Subdivision } from 'src/types/Country';
 import { searchCountries } from 'src/api/country/country';
@@ -17,6 +15,7 @@ import { getCountryByCode, getSubdivisionByCode } from 'src/utils/country';
 import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageSnackbar from 'src/components/PageSnackbar';
+import useSnackbar from 'src/utils/useSnackbar';
 
 interface StyleProps {
   isMobile: boolean;
@@ -40,10 +39,10 @@ export default function OrganizationView({ organization, reloadOrganizationData 
   const { isMobile } = useDeviceInfo();
   const classes = useStyles({ isMobile });
   const [organizationRecord, setOrganizationRecord, onChange] = useForm<ServerOrganization>(organization);
-  const setSnackbar = useSetRecoilState(snackbarAtom);
   const [nameError, setNameError] = useState('');
   const [countries, setCountries] = useState<Country[]>();
   const history = useHistory();
+  const snackbar = useSnackbar();
 
   useEffect(() => {
     const populateCountries = async () => {
@@ -113,18 +112,10 @@ export default function OrganizationView({ organization, reloadOrganizationData 
     } else {
       const response = await updateOrganization(organizationRecord);
       if (response.requestSucceeded) {
-        setSnackbar({
-          type: 'toast',
-          priority: 'success',
-          msg: 'Changes saved',
-        });
+        snackbar.toastSuccess(strings.CHANGES_SAVED);
         reloadOrganizationData();
       } else {
-        setSnackbar({
-          type: 'toast',
-          priority: 'critical',
-          msg: strings.GENERIC_ERROR,
-        });
+        snackbar.toastError();
       }
       goToOrganization();
     }
