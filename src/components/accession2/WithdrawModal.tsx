@@ -7,13 +7,15 @@ import { Checkbox, DatePicker, Select, SelectT, Textfield } from '@terraware/web
 import { Accession2, Withdrawal2 } from 'src/api/accessions2/accession';
 import useForm from 'src/utils/useForm';
 import { updateAccession2 } from 'src/api/accessions2/accession';
-import moment from 'moment';
 import { WITHDRAWAL_PURPOSES } from 'src/utils/withdrawalPurposes';
 import { getOrganizationUsers } from 'src/api/organization/organization';
 import { OrganizationUser, User } from 'src/types/User';
 import { ServerOrganization } from 'src/types/Organization';
 import { Unit, WEIGHT_UNITS_V2 } from '../seeds/nursery/NewTest';
 import { ViabilityTest } from 'src/api/types/tests';
+import { getTodaysDateFormatted } from 'src/utils/date';
+import { WITHDRAWAL_SUBSTRATES, WITHDRAWAL_TREATMENTS, WITHDRAWAL_TYPES } from 'src/types/Accession';
+import useSnackbar from 'src/utils/useSnackbar';
 
 export interface WithdrawDialogProps {
   open: boolean;
@@ -30,7 +32,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
   const newWithdrawal: Withdrawal2 = {
     purpose: 'Nursery',
     withdrawnByUserId: user.id,
-    date: moment().format('YYYY-MM-DD'),
+    date: getTodaysDateFormatted(),
     withdrawnQuantity:
       accession.initialQuantity?.units === 'Seeds'
         ? { quantity: 0, units: 'Seeds' }
@@ -48,6 +50,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
   const [withdrawAllSelected, setWithdrawAllSelected] = useState(false);
   const [isNotesOpened, setIsNotesOpened] = useState(false);
   const theme = useTheme();
+  const snackbar = useSnackbar();
 
   useEffect(() => {
     const getOrgUsers = async () => {
@@ -76,6 +79,8 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
       const response = await updateAccession2(accession);
       if (response.requestSucceeded) {
         reload();
+      } else {
+        snackbar.toastError();
       }
       onClose();
     }
@@ -186,7 +191,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
             <Select
               label={strings.TEST_TYPE}
               placeholder={strings.SELECT}
-              options={['Lab', 'Nursery']}
+              options={WITHDRAWAL_TYPES}
               onChange={(value: string) => onChangeViabilityTesting('testType', value)}
               selectedValue={viabilityTesting?.testType}
               fullWidth={true}
@@ -195,7 +200,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
             <Select
               label={strings.SUBSTRATE}
               placeholder={strings.SELECT}
-              options={['Nursery Media', 'Agar Petri Dish', 'Paper Petri Dish', 'Other']}
+              options={WITHDRAWAL_SUBSTRATES}
               onChange={(value: string) => onChangeViabilityTesting('substrate', value)}
               selectedValue={viabilityTesting.substrate}
               fullWidth={true}
@@ -204,7 +209,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
             <Select
               label={strings.TREATMENT}
               placeholder={strings.SELECT}
-              options={['Soak', 'Scarify', 'GA3', 'Stratification', 'Other']}
+              options={WITHDRAWAL_TREATMENTS}
               onChange={(value: string) => onChangeViabilityTesting('treatment', value)}
               selectedValue={viabilityTesting.treatment}
               fullWidth={true}
