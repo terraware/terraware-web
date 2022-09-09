@@ -291,8 +291,12 @@ export default function Database(props: DatabaseProps): JSX.Element {
 
   const onSelect = (row: SearchResponseElement) => {
     if (row.id) {
+      const isV2 = !isProduction && preferences?.enableUIV2Accessions === true;
       const seedCollectionLocation = {
-        pathname: APP_PATHS.ACCESSIONS_ITEM.replace(':accessionId', row.id as string),
+        pathname: (isV2 ? APP_PATHS.ACCESSIONS2_ITEM : APP_PATHS.ACCESSIONS_ITEM).replace(
+          ':accessionId',
+          row.id as string
+        ),
         // eslint-disable-next-line no-restricted-globals
         state: { from: location.pathname },
       };
