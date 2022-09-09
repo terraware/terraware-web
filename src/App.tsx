@@ -395,9 +395,9 @@ export default function App() {
                   <Accession2Create organization={selectedOrganization} />
                 </Route>
               )}
-              {!isProduction && selectedOrganization && (
+              {!isProduction && selectedOrganization && user && (
                 <Route path={APP_PATHS.ACCESSIONS2_ITEM}>
-                  <Accession2View organization={selectedOrganization} />
+                  <Accession2View organization={selectedOrganization} user={user} />
                 </Route>
               )}
               {selectedOrganization && (

@@ -1,17 +1,19 @@
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { Box, IconButton, Link, Tab, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { Icon } from '@terraware/web-components';
+import { Button, Icon } from '@terraware/web-components';
 import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Accession2, getAccession2 } from 'src/api/accessions2/accession';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
+import { User } from 'src/types/User';
 import TfMain from '../common/TfMain';
 import DeleteAccessionModal from './DeleteAccessionModal';
 import DetailPanel from './DetailPanel';
 import EditLocationModal from './EditLocationModal';
 import EditStateModal from './EditStateModal';
+import WithdrawModal from './WithdrawModal';
 
 const useStyles = makeStyles(() => ({
   iconStyle: {
@@ -24,6 +26,7 @@ const useStyles = makeStyles(() => ({
 }));
 interface Accession2ViewProps {
   organization?: ServerOrganization;
+  user: User;
 }
 
 export default function Accession2View(props: Accession2ViewProps): JSX.Element {
@@ -33,7 +36,8 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
   const [openEditLocationModal, setOpenEditLocationModal] = useState(false);
   const [openEditStateModal, setOpenEditStateModal] = useState(false);
   const [openDeleteAccession, setOpenDeleteAccession] = useState(false);
-  const { organization } = props;
+  const [openWithdrawModal, setOpenWithdrawModal] = useState(false);
+  const { organization, user } = props;
   const classes = useStyles();
 
   const reloadData = useCallback(() => {
@@ -91,15 +95,25 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
             onClose={() => setOpenDeleteAccession(false)}
             accession={accession}
           />
+          <WithdrawModal
+            open={openWithdrawModal}
+            onClose={() => setOpenWithdrawModal(false)}
+            accession={accession}
+            reload={reloadData}
+            organization={organization}
+            user={user}
+          />
         </>
       )}
       <Box padding={3}>
         <Box display='flex' justifyContent='space-between'>
           <Typography>{accession?.accessionNumber}</Typography>
-
-          <IconButton sx={{ marginLeft: 3, height: '24px' }} onClick={() => setOpenDeleteAccession(true)}>
-            <Icon name='iconTrashCan' />
-          </IconButton>
+          <Box display='flex'>
+            <IconButton sx={{ marginLeft: 3, height: '24px' }} onClick={() => setOpenDeleteAccession(true)}>
+              <Icon name='iconTrashCan' />
+            </IconButton>
+            <Button onClick={() => setOpenWithdrawModal(true)} label={strings.WITHDRAW} />
+          </Box>
         </Box>
         <Typography color='#343A40' fontSize='24px' fontStyle='italic' fontWeight={500}>
           {accession?.speciesScientificName}
