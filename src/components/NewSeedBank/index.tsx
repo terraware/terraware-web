@@ -7,8 +7,6 @@ import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
 import TextField from '../common/Textfield/Textfield';
 import useForm from 'src/utils/useForm';
-import { useSetRecoilState } from 'recoil';
-import snackbarAtom from 'src/state/snackbar';
 import FormBottomBar from '../common/FormBottomBar';
 import { getAllSeedBanks } from 'src/utils/organization';
 import { Facility } from 'src/api/types/facilities';
@@ -16,6 +14,7 @@ import { createFacility, updateFacility } from 'src/api/facility/facility';
 import { Theme } from '@mui/material';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageSnackbar from 'src/components/PageSnackbar';
+import useSnackbar from 'src/utils/useSnackbar';
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
@@ -51,6 +50,7 @@ type SiteViewProps = {
 export default function SeedBankView({ organization, reloadOrganizationData }: SiteViewProps): JSX.Element {
   const [nameError, setNameError] = useState('');
   const [descriptionError, setDescriptionError] = useState('');
+  const snackbar = useSnackbar();
 
   const [record, setRecord, onChange] = useForm<Facility>({
     name: '',
@@ -59,7 +59,6 @@ export default function SeedBankView({ organization, reloadOrganizationData }: S
     organizationId: organization.id,
     connectionState: 'Not Connected',
   });
-  const setSnackbar = useSetRecoilState(snackbarAtom);
   const { seedBankId } = useParams<{ seedBankId: string }>();
   const [selectedSeedBank, setSelectedSeedBank] = useState<Facility | null>();
   const history = useHistory();
@@ -109,33 +108,17 @@ export default function SeedBankView({ organization, reloadOrganizationData }: S
       const response = await updateFacility({ ...record, id: selectedSeedBank.id } as Facility);
       if (response.requestSucceeded) {
         reloadOrganizationData();
-        setSnackbar({
-          type: 'toast',
-          priority: 'success',
-          msg: strings.CHANGES_SAVED,
-        });
+        snackbar.toastSuccess(strings.CHANGES_SAVED);
       } else {
-        setSnackbar({
-          type: 'toast',
-          priority: 'critical',
-          msg: strings.GENERIC_ERROR,
-        });
+        snackbar.toastError();
       }
     } else {
       const response = await createFacility(record);
       if (response.requestSucceeded) {
         reloadOrganizationData();
-        setSnackbar({
-          type: 'toast',
-          priority: 'success',
-          msg: strings.SEED_BANK_ADDED,
-        });
+        snackbar.toastSuccess(strings.SEED_BANK_ADDED);
       } else {
-        setSnackbar({
-          type: 'toast',
-          priority: 'critical',
-          msg: strings.GENERIC_ERROR,
-        });
+        snackbar.toastError();
       }
     }
     goToSeedBanks();
