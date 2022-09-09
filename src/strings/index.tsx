@@ -571,6 +571,7 @@ const strings = new LocalizedStrings({
     AMOUNT_REMAINING: 'Amount ({0} remaining)',
     WITHDRAW_ALL: 'Withdraw all',
     CT: 'ct',
+    TEST_TYPE: 'Test Type',
   },
 });
 

@@ -13,6 +13,7 @@ import { getOrganizationUsers } from 'src/api/organization/organization';
 import { OrganizationUser, User } from 'src/types/User';
 import { ServerOrganization } from 'src/types/Organization';
 import { Unit, WEIGHT_UNITS_V2 } from '../seeds/nursery/NewTest';
+import { ViabilityTest } from 'src/api/types/tests';
 
 export interface WithdrawDialogProps {
   open: boolean;
@@ -36,7 +37,12 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
         : { quantity: 0, units: accession.initialQuantity?.units || 'Grams' },
   };
 
+  const newViabilityTesting: ViabilityTest = {
+    testType: 'Lab',
+  };
+
   const [record, setRecord, onChange] = useForm(newWithdrawal);
+  const [viabilityTesting, , onChangeViabilityTesting] = useForm(newViabilityTesting);
   const [users, setUsers] = useState<OrganizationUser[]>();
   const [withdrawAllSelected, setWithdrawAllSelected] = useState(false);
 
@@ -50,8 +56,15 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
     getOrgUsers();
   }, [organization]);
 
-  const saveState = async () => {
+  const saveWithdrawal = async () => {
     if (record) {
+      if (record.purpose === 'Viability Testing') {
+        if (accession.viabilityTests) {
+          accession.viabilityTests.push(viabilityTesting);
+        } else {
+          accession.viabilityTests = [viabilityTesting];
+        }
+      }
       if (accession.withdrawals) {
         accession.withdrawals?.push(record);
       } else {
@@ -149,7 +162,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
       size='medium'
       middleButtons={[
         <Button label={strings.CANCEL} type='passive' onClick={onCloseHandler} priority='secondary' key='button-1' />,
-        <Button onClick={saveState} label={strings.WITHDRAW} key='button-2' />,
+        <Button onClick={saveWithdrawal} label={strings.WITHDRAW} key='button-2' />,
       ]}
     >
       <Grid item xs={12} textAlign='left'>
@@ -164,6 +177,37 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
             readonly={true}
           />
         </Grid>
+        {record.purpose === 'Viability Testing' ? (
+          <>
+            <Select
+              label={strings.TEST_TYPE}
+              placeholder={strings.SELECT}
+              options={['Lab', 'Nursery']}
+              onChange={(value: string) => onChangeViabilityTesting('testType', value)}
+              selectedValue={viabilityTesting?.testType}
+              fullWidth={true}
+              readonly={true}
+            />
+            <Select
+              label={strings.SUBSTRATE}
+              placeholder={strings.SELECT}
+              options={['Nursery Media', 'Agar Petri Dish', 'Paper Petri Dish', 'Other']}
+              onChange={(value: string) => onChangeViabilityTesting('substrate', value)}
+              selectedValue={viabilityTesting.substrate}
+              fullWidth={true}
+              readonly={true}
+            />
+            <Select
+              label={strings.TREATMENT}
+              placeholder={strings.SELECT}
+              options={['Soak', 'Scarify', 'GA3', 'Stratification', 'Other']}
+              onChange={(value: string) => onChangeViabilityTesting('treatment', value)}
+              selectedValue={viabilityTesting.treatment}
+              fullWidth={true}
+              readonly={true}
+            />
+          </>
+        ) : null}
         <Grid item xs={12}>
           <Textfield
             label={strings
