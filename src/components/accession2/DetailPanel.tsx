@@ -85,7 +85,7 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
               {strings.VIABILITY}
             </Grid>
             <Grid item xs={gridRightSide}>
-              {accession.latestViabilityPercent}
+              {accession.viabilityPercent}
             </Grid>
           </Grid>
           <Grid item xs={12} sx={gridRowStyle}>
@@ -143,7 +143,7 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
               {strings.PLANT_AND_SITE}
             </Grid>
             <Grid item xs={gridRightSide}>
-              {`${strings.COLLECTED_FROM} ${accession.plantsCollectedFromMax}-${accession.plantsCollectedFromMin} ${strings.WILD_PLANT}`}
+              {`${strings.COLLECTED_FROM} ${accession.plantsCollectedFrom} ${strings.WILD_PLANT}`}
               {accession.founderId ? <Typography>{`${strings.PLANT_ID}: ${accession.founderId}`}</Typography> : ''}
               {accession.notes}
             </Grid>
