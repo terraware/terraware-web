@@ -55,7 +55,25 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
     }
   };
 
-  const collectionSource = accession?.collectionSource;
+  const getCollectionSource = () => {
+    const source = accession?.collectionSource;
+
+    if (source === 'Wild') {
+      return strings.WILD_IN_SITU;
+    }
+
+    if (source === 'Reintroduced') {
+      return strings.REINTRODUCED;
+    }
+
+    if (source === 'Cultivated') {
+      return strings.CULTIVATED_EX_SITU;
+    }
+
+    return strings.OTHER;
+  };
+
+  const collectionSource = getCollectionSource();
   const numPlants = accession?.plantsCollectedFrom;
   const isNotPlural = numPlants === 1;
 

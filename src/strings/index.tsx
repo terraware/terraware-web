@@ -586,6 +586,9 @@ const strings = new LocalizedStrings({
     TOTAL_WEIGHT: '× Total Weight ',
     GET_TOTAL_COUNT: 'Get Total Count',
     BACK: '< Back',
+    WILD_IN_SITU: 'Wild (In Situ)',
+    REINTRODUCED: 'Reintroduced',
+    CULTIVATED_EX_SITU: 'Cultivated (Ex Situ)',
   },
 });
 

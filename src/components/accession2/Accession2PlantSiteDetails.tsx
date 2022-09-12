@@ -4,8 +4,7 @@ import { Link, Grid, Box, useTheme } from '@mui/material';
 import { AccessionPostRequestBody } from 'src/api/accessions2/accession';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import Textfield from 'src/components/common/Textfield/Textfield';
-import { Select } from '@terraware/web-components';
-import { ACCESSION_2_COLLECTION_SOURCES } from 'src/types/Accession';
+import CollectionSource from './CollectionSource';
 
 type Accession2PlantSiteDetailsProps = {
   record: AccessionPostRequestBody;
@@ -35,15 +34,12 @@ export default function Accession2PlantSiteDetails(props: Accession2PlantSiteDet
   return (
     <Grid item xs={12} display='flex' flexDirection={'column'} marginTop={theme.spacing(2)}>
       <Grid item xs={12}>
-        <Select
+        <CollectionSource
           id='collectionSource'
           label={strings.COLLECTION_SOURCE}
           placeholder={strings.SELECT}
           selectedValue={record.collectionSource}
-          options={ACCESSION_2_COLLECTION_SOURCES}
           onChange={(value) => onChange('collectionSource', value)}
-          fullWidth={true}
-          readonly={true}
         />
       </Grid>
       <Grid item xs={12} display='flex' flexDirection={isMobile ? 'column' : 'row'} marginTop={theme.spacing(2)}>
