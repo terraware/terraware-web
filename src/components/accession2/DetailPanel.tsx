@@ -77,15 +77,6 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
         <Grid item xs={mainStructureSize}>
           <Grid item xs={12} sx={gridRowStyle}>
             <Grid item xs={gridLeftSide} sx={categoryStyle}>
-              {strings.QUANTITY}
-            </Grid>
-            <Grid item xs={gridRightSide}>
-              {accession.remainingQuantity?.quantity} {accession.remainingQuantity?.units}
-              {accession.remainingQuantity?.grams ? ` (${accession.remainingQuantity?.grams} ${strings.GRAMS})` : ''}
-            </Grid>
-          </Grid>
-          <Grid item xs={12} sx={gridRowStyle}>
-            <Grid item xs={gridLeftSide} sx={categoryStyle}>
               {strings.VIABILITY}
             </Grid>
             <Grid item xs={gridRightSide}>

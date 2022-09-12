@@ -14,6 +14,7 @@ import DeleteAccessionModal from './DeleteAccessionModal';
 import DetailPanel from './DetailPanel';
 import EditLocationModal from './EditLocationModal';
 import EditStateModal from './EditStateModal';
+import QuantityModal from './QuantityModal';
 import WithdrawModal from './WithdrawModal';
 
 const useStyles = makeStyles(() => ({
@@ -38,6 +39,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
   const [openEditStateModal, setOpenEditStateModal] = useState(false);
   const [openDeleteAccession, setOpenDeleteAccession] = useState(false);
   const [openWithdrawModal, setOpenWithdrawModal] = useState(false);
+  const [quantityModalOpened, setQuantityModalOpened] = useState(false);
   const { organization, user } = props;
   const classes = useStyles();
 
@@ -111,6 +113,14 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
             organization={organization}
             user={user}
           />
+          <QuantityModal
+            open={quantityModalOpened}
+            onClose={() => setQuantityModalOpened(false)}
+            accession={accession}
+            organization={organization}
+            reload={reloadData}
+            setOpen={() => setQuantityModalOpened(true)}
+          />
         </>
       )}
       <Box padding={3}>
@@ -154,7 +164,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
         )}
         {accession?.storageLocation && (
           <Box display='flex' padding={(theme) => theme.spacing(0, 2)}>
-            <Icon name='info' className={classes.iconStyle} />
+            <Icon name='iconMyLocation' className={classes.iconStyle} />
             <Box
               display='flex'
               sx={{
@@ -179,9 +189,28 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
       <Box display='flex'>
         <Box padding={4}>
           <Typography>{strings.QUANTITY} </Typography>
-          <Link sx={linkStyle} onClick={() => true}>
-            + {strings.ADD}
-          </Link>
+          {accession?.remainingQuantity?.quantity ? (
+            <Box
+              display='flex'
+              sx={{
+                '&:hover .edit-icon': {
+                  display: 'block',
+                },
+              }}
+            >
+              <Typography>
+                {accession.estimatedCount} {strings.CT}
+                {accession.estimatedWeight?.grams ? ` (${accession.estimatedWeight?.grams} ${strings.GRAMS})` : ''}
+              </Typography>
+              <IconButton sx={{ marginLeft: 3, height: '24px' }} onClick={() => setQuantityModalOpened(true)}>
+                <Icon name='iconEdit' className={`${classes.editIcon} edit-icon`} />
+              </IconButton>
+            </Box>
+          ) : (
+            <Link sx={linkStyle} onClick={() => setQuantityModalOpened(true)}>
+              + {strings.ADD}
+            </Link>
+          )}
         </Box>
         <Box padding={4}>
           <Typography>{strings.AGE}</Typography>
