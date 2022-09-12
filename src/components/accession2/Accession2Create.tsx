@@ -52,8 +52,8 @@ export default function CreateAccession(props: CreateAccessionProps): JSX.Elemen
     collectedDate: record.collectedDate,
     receivedDate: record.receivedDate,
   });
-  const accessions2Database = {
-    pathname: APP_PATHS.ACCESSIONS2,
+  const accessionsDatabase = {
+    pathname: APP_PATHS.ACCESSIONS,
   };
 
   const marginTop = {
@@ -83,15 +83,15 @@ export default function CreateAccession(props: CreateAccessionProps): JSX.Elemen
     return ACCESSION_2_STATES;
   };
 
-  const goToAccessions2 = () => {
-    history.push(accessions2Database);
+  const goToAccessions = () => {
+    history.push(accessionsDatabase);
   };
 
   const saveAccession = async () => {
     // TODO data validation and show errors
     const response = await postAccession(record);
     if (response.requestSucceeded) {
-      history.replace(accessions2Database);
+      history.replace(accessionsDatabase);
       history.push({
         pathname: APP_PATHS.ACCESSIONS2_ITEM.replace(':accessionId', response.id.toString()),
       });
@@ -197,7 +197,7 @@ export default function CreateAccession(props: CreateAccessionProps): JSX.Elemen
           <SeedBank2Selector organization={organization} record={record} onChange={onChange} />
         </Grid>
       </Container>
-      <FormBottomBar onCancel={goToAccessions2} onSave={saveAccession} saveButtonText={strings.ADD} />
+      <FormBottomBar onCancel={goToAccessions} onSave={saveAccession} saveButtonText={strings.ADD} />
     </Box>
   );
 }

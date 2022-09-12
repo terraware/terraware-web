@@ -135,10 +135,7 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
                     {strings.DASHBOARD_MESSAGE}
                   </Typography>
                 </Box>
-                <Button
-                  label={strings.GET_STARTED}
-                  onClick={() => history.push(isProduction ? APP_PATHS.ACCESSIONS : APP_PATHS.ACCESSIONS2)}
-                />
+                <Button label={strings.GET_STARTED} onClick={() => history.push(APP_PATHS.ACCESSIONS)} />
               </Box>
             </Grid>
             <Grid item xs={12}>
