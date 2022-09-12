@@ -649,12 +649,23 @@ export interface components {
       startDate?: string;
       substrate?:
         | "Nursery Media"
-        | "Agar Petri Dish"
-        | "Paper Petri Dish"
-        | "Other";
+        | "Agar"
+        | "Paper"
+        | "Other"
+        | "Sand"
+        | "Media Mix"
+        | "Soil"
+        | "Moss"
+        | "Perlite/Vermiculite";
       testingStaffUserId?: number;
       testType?: "Lab" | "Nursery" | "Cut";
-      treatment?: "Soak" | "Scarify" | "GA3" | "Stratification" | "Other";
+      treatment?:
+        | "Soak"
+        | "Scarify"
+        | "Chemical"
+        | "Stratification"
+        | "Other"
+        | "Light";
     };
     CreateWithdrawalRequestPayload: {
       date?: string;
@@ -888,10 +899,21 @@ export interface components {
       startDate?: string;
       substrate?:
         | "Nursery Media"
-        | "Agar Petri Dish"
-        | "Paper Petri Dish"
-        | "Other";
-      treatment?: "Soak" | "Scarify" | "GA3" | "Stratification" | "Other";
+        | "Agar"
+        | "Paper"
+        | "Other"
+        | "Sand"
+        | "Media Mix"
+        | "Soil"
+        | "Moss"
+        | "Perlite/Vermiculite";
+      treatment?:
+        | "Soak"
+        | "Scarify"
+        | "Chemical"
+        | "Stratification"
+        | "Other"
+        | "Light";
       testingStaffName?: string;
       testingStaffUserId?: number;
       testResults?: components["schemas"]["ViabilityTestResultPayload"][];
@@ -1014,8 +1036,8 @@ export interface components {
       name: string;
       description?: string;
       configuration?: { [key: string]: unknown };
-      settings?: { [key: string]: { [key: string]: unknown } };
       type: string;
+      settings?: { [key: string]: { [key: string]: unknown } };
       timeseriesName?: string;
       deviceId?: number;
       lowerThreshold?: number;
@@ -1475,13 +1497,24 @@ export interface components {
       startDate?: string;
       substrate?:
         | "Nursery Media"
-        | "Agar Petri Dish"
-        | "Paper Petri Dish"
-        | "Other";
+        | "Agar"
+        | "Paper"
+        | "Other"
+        | "Sand"
+        | "Media Mix"
+        | "Soil"
+        | "Moss"
+        | "Perlite/Vermiculite";
       testingStaffUserId?: number;
       testResults?: components["schemas"]["ViabilityTestResultPayload"][];
       testType?: "Lab" | "Nursery" | "Cut";
-      treatment?: "Soak" | "Scarify" | "GA3" | "Stratification" | "Other";
+      treatment?:
+        | "Soak"
+        | "Scarify"
+        | "Chemical"
+        | "Stratification"
+        | "Other"
+        | "Light";
     };
     UpdateWithdrawalRequestPayload: {
       date?: string;
@@ -1523,8 +1556,8 @@ export interface components {
       endDate?: string;
       seedType?: "Fresh" | "Stored";
       substrate?:
-        | "Nursery Media"
         | "Agar Petri Dish"
+        | "Nursery Media"
         | "Paper Petri Dish"
         | "Other";
       treatment?: "Soak" | "Scarify" | "GA3" | "Stratification" | "Other";
