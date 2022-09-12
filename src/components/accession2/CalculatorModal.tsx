@@ -2,7 +2,7 @@ import React from 'react';
 import strings from 'src/strings';
 import Button from '../common/button/Button';
 import DialogBox from '../common/DialogBox/DialogBox';
-import { Grid } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 import { SelectT, Textfield } from '@terraware/web-components';
 import { Accession2, updateAccession2 } from 'src/api/accessions2/accession';
 import { ServerOrganization } from 'src/types/Organization';
@@ -17,11 +17,11 @@ export interface CalculatorDialogProps {
   reload: () => void;
   organization: ServerOrganization;
   onChange: (id: string, value: unknown) => void;
-  openPreviousModal: () => void;
+  onPrevious: () => void;
 }
 
 export default function CalculatorDialog(props: CalculatorDialogProps): JSX.Element {
-  const { onClose, open, record, onChange, setRecord, openPreviousModal } = props;
+  const { onClose, open, record, onChange, setRecord, onPrevious } = props;
 
   const snackbar = useSnackbar();
 
@@ -40,7 +40,7 @@ export default function CalculatorDialog(props: CalculatorDialogProps): JSX.Elem
   };
 
   const goToPrev = () => {
-    openPreviousModal();
+    onPrevious();
     onCloseHandler();
   };
 
@@ -80,57 +80,66 @@ export default function CalculatorDialog(props: CalculatorDialogProps): JSX.Elem
         onClose={onCloseHandler}
         open={open}
         title={strings.QUANTITY}
-        size='medium'
+        size='small'
         middleButtons={[
           <Button label={strings.BACK} type='passive' onClick={goToPrev} priority='secondary' key='button-1' />,
           <Button onClick={getTotalCount} label={strings.GET_TOTAL_COUNT} key='button-2' />,
         ]}
       >
-        <Grid item xs={12} textAlign='left'>
-          <Textfield
-            label={strings.SUBSET_WEIGHT}
-            id='subsetWeight'
-            onChange={(id, value) => onChangeSubsetWeight(value as number)}
-            type='text'
-            value={record.subsetWeight?.quantity}
-          />
-          <SelectT<Unit>
-            options={WEIGHT_UNITS_V2}
-            placeholder={strings.SELECT}
-            onChange={onChangeSubsetUnit}
-            isEqual={(a: Unit, b: Unit) => a.value === b.value}
-            renderOption={(unit) => unit.label}
-            displayLabel={(unit) => (unit ? unit.label : 'g')}
-            selectedValue={WEIGHT_UNITS_V2.find((wu) => wu.value === record.subsetWeight?.units)}
-            toT={(label: string) => ({ label } as Unit)}
-            fullWidth={true}
-          />
-          <Textfield
-            label={strings.SUBSET_COUNT}
-            id='subsetCount'
-            onChange={onChange}
-            type='text'
-            value={record.subsetCount}
-          />
-
-          <Textfield
-            label={strings.TOTAL_WEIGHT}
-            id='remainingQuantity'
-            onChange={(id, value) => onChangeRemainingQuantity(value as number)}
-            type='text'
-            value={record.remainingQuantity?.quantity}
-          />
-          <SelectT<Unit>
-            options={WEIGHT_UNITS_V2}
-            placeholder={strings.SELECT}
-            onChange={onChangeRemainingQuantityUnit}
-            isEqual={(a: Unit, b: Unit) => a.value === b.value}
-            renderOption={(unit) => unit.label}
-            displayLabel={(unit) => (unit ? unit.label : 'g')}
-            selectedValue={WEIGHT_UNITS_V2.find((wu) => wu.value === record.remainingQuantity?.units)}
-            toT={(label: string) => ({ label } as Unit)}
-            fullWidth={true}
-          />
+        <Grid container spacing={2}>
+          <Grid item xs={12} textAlign='left'>
+            <Box display='flex' textAlign='left' alignItems='end'>
+              <Textfield
+                label={strings.SUBSET_WEIGHT}
+                id='subsetWeight'
+                onChange={(id, value) => onChangeSubsetWeight(value as number)}
+                type='text'
+                value={record.subsetWeight?.quantity}
+              />
+              <SelectT<Unit>
+                options={WEIGHT_UNITS_V2}
+                placeholder={strings.SELECT}
+                onChange={onChangeSubsetUnit}
+                isEqual={(a: Unit, b: Unit) => a.value === b.value}
+                renderOption={(unit) => unit.label}
+                displayLabel={(unit) => (unit ? unit.label : 'g')}
+                selectedValue={WEIGHT_UNITS_V2.find((wu) => wu.value === record.subsetWeight?.units)}
+                toT={(label: string) => ({ label } as Unit)}
+                fullWidth={true}
+              />
+            </Box>
+          </Grid>
+          <Grid item xs={12} textAlign='left'>
+            <Textfield
+              label={strings.SUBSET_COUNT}
+              id='subsetCount'
+              onChange={onChange}
+              type='text'
+              value={record.subsetCount}
+            />
+          </Grid>
+          <Grid item xs={12} textAlign='left'>
+            <Box display='flex' textAlign='left' alignItems='end'>
+              <Textfield
+                label={strings.TOTAL_WEIGHT}
+                id='remainingQuantity'
+                onChange={(id, value) => onChangeRemainingQuantity(value as number)}
+                type='text'
+                value={record.remainingQuantity?.quantity}
+              />
+              <SelectT<Unit>
+                options={WEIGHT_UNITS_V2}
+                placeholder={strings.SELECT}
+                onChange={onChangeRemainingQuantityUnit}
+                isEqual={(a: Unit, b: Unit) => a.value === b.value}
+                renderOption={(unit) => unit.label}
+                displayLabel={(unit) => (unit ? unit.label : 'g')}
+                selectedValue={WEIGHT_UNITS_V2.find((wu) => wu.value === record.remainingQuantity?.units)}
+                toT={(label: string) => ({ label } as Unit)}
+                fullWidth={true}
+              />
+            </Box>
+          </Grid>
         </Grid>
       </DialogBox>
     </>

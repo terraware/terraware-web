@@ -94,46 +94,52 @@ export default function QuantityDialog(props: QuantityDialogProps): JSX.Element 
         onChange={onChange}
         organization={organization}
         reload={reload}
-        openPreviousModal={setOpen}
+        onPrevious={setOpen}
       />
       <DialogBox
         onClose={onCloseHandler}
         open={open}
         title={strings.QUANTITY}
-        size='medium'
+        size='small'
         middleButtons={[
           <Button label={strings.CANCEL} type='passive' onClick={onCloseHandler} priority='secondary' key='button-1' />,
           <Button onClick={saveQuantity} label={strings.SAVE} key='button-2' />,
         ]}
       >
-        <Grid item xs={12} textAlign='left'>
-          <Textfield
-            label={strings.SEED_COUNT}
-            id='seedsQuantity'
-            onChange={(id, value) => onChangeRemainingQuantity(id, value as number)}
-            type='text'
-            value={
-              record.remainingQuantity?.units === 'Seeds' ? record.remainingQuantity?.quantity : record.estimatedCount
-            }
-          />
-          <Textfield
-            label={strings.OR_SEED_WEIGHT}
-            id='quantity'
-            onChange={(id, value) => onChangeRemainingQuantity(id, value as number)}
-            type='text'
-            value={record.remainingQuantity?.units !== 'Seeds' ? record.remainingQuantity?.quantity : ''}
-          />
-          <SelectT<Unit>
-            options={WEIGHT_UNITS_V2}
-            placeholder={strings.SELECT}
-            onChange={onChangeUnit}
-            isEqual={(a: Unit, b: Unit) => a.value === b.value}
-            renderOption={(unit) => unit.label}
-            displayLabel={(unit) => (unit ? unit.label : 'g')}
-            selectedValue={WEIGHT_UNITS_V2.find((wu) => wu.value === record.remainingQuantity?.units)}
-            toT={(label: string) => ({ label } as Unit)}
-            fullWidth={true}
-          />
+        <Grid container spacing={2}>
+          <Grid item xs={12} textAlign='left'>
+            <Textfield
+              label={strings.SEED_COUNT}
+              id='seedsQuantity'
+              onChange={(id, value) => onChangeRemainingQuantity(id, value as number)}
+              type='text'
+              value={
+                record.remainingQuantity?.units === 'Seeds' ? record.remainingQuantity?.quantity : record.estimatedCount
+              }
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Box display='flex' textAlign='left' alignItems='end'>
+              <Textfield
+                label={strings.OR_SEED_WEIGHT}
+                id='quantity'
+                onChange={(id, value) => onChangeRemainingQuantity(id, value as number)}
+                type='text'
+                value={record.remainingQuantity?.units !== 'Seeds' ? record.remainingQuantity?.quantity : ''}
+              />
+              <SelectT<Unit>
+                options={WEIGHT_UNITS_V2}
+                placeholder={strings.SELECT}
+                onChange={onChangeUnit}
+                isEqual={(a: Unit, b: Unit) => a.value === b.value}
+                renderOption={(unit) => unit.label}
+                displayLabel={(unit) => (unit ? unit.label : 'g')}
+                selectedValue={WEIGHT_UNITS_V2.find((wu) => wu.value === record.remainingQuantity?.units)}
+                toT={(label: string) => ({ label } as Unit)}
+                fullWidth={true}
+              />
+            </Box>
+          </Grid>
           <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
             {!isCalculatorOpened ? (
               <Box display='flex' justifyContent='flex-start'>

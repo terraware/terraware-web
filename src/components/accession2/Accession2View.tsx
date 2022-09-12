@@ -74,6 +74,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
 
   const linkStyle = {
     textDecoration: 'none',
+    cursor: 'pointer',
   };
 
   const checkInAccession = async () => {
