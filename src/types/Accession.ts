@@ -27,8 +27,18 @@ export const ACCESSION_2_STATES = [
 
 export const ACCESSION_2_COLLECTION_SOURCES = ['Wild', 'Reintroduced', 'Cultivated', 'Other'];
 
-export const WITHDRAWAL_SUBSTRATES = ['Nursery Media', 'Agar Petri Dish', 'Paper Petri Dish', 'Other'];
+export const WITHDRAWAL_SUBSTRATES = [
+  'Nursery Media',
+  'Agar',
+  'Paper',
+  'Other',
+  'Sand',
+  'Media Mix',
+  'Soil',
+  'Moss',
+  'Perlite/Vermiculite',
+];
 
-export const WITHDRAWAL_TREATMENTS = ['Soak', 'Scarify', 'GA3', 'Stratification', 'Other'];
+export const WITHDRAWAL_TREATMENTS = ['Soak', 'Scarify', 'Chemical', 'Stratification', 'Other', 'Light'];
 
 export const WITHDRAWAL_TYPES = ['Lab', 'Nursery'];

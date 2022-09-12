@@ -5,6 +5,7 @@ import { Button, Icon } from '@terraware/web-components';
 import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Accession2, getAccession2 } from 'src/api/accessions2/accession';
+import { checkIn } from 'src/api/seeds/accession';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
 import { User } from 'src/types/User';
@@ -73,6 +74,13 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
     textDecoration: 'none',
   };
 
+  const checkInAccession = async () => {
+    if (accession) {
+      await checkIn(accession.id);
+      reloadData();
+    }
+  };
+
   return (
     <TfMain>
       {organization && accession && (
@@ -112,7 +120,11 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
             <IconButton sx={{ marginLeft: 3, height: '24px' }} onClick={() => setOpenDeleteAccession(true)}>
               <Icon name='iconTrashCan' />
             </IconButton>
-            <Button onClick={() => setOpenWithdrawModal(true)} label={strings.WITHDRAW} />
+            {accession && accession.state === 'Awaiting Check-In' ? (
+              <Button onClick={() => checkInAccession()} label={strings.CHECK_IN} />
+            ) : (
+              <Button onClick={() => setOpenWithdrawModal(true)} label={strings.WITHDRAW} />
+            )}
           </Box>
         </Box>
         <Typography color='#343A40' fontSize='24px' fontStyle='italic' fontWeight={500}>
