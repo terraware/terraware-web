@@ -1,2 +1,2 @@
-import { Dropdown } from '@terraware/web-components';
-export default Dropdown;
+import { DropdownV1 } from '@terraware/web-components';
+export default DropdownV1;
