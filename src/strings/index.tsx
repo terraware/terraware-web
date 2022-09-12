@@ -580,6 +580,9 @@ const strings = new LocalizedStrings({
     OPT_IN: 'Opt-In Features',
     PLANT: 'plant',
     PLANTS: 'plants',
+    WILD_IN_SITU: 'Wild (In Situ)',
+    REINTRODUCED: 'Reintroduced',
+    CULTIVATED_EX_SITU: 'Cultivated (Ex Situ)',
   },
 });
 
