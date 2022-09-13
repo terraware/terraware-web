@@ -10,8 +10,7 @@ import { ServerOrganization } from 'src/types/Organization';
 import { Unit, WEIGHT_UNITS_V2 } from '../seeds/nursery/NewTest';
 import useSnackbar from 'src/utils/useSnackbar';
 import CalculatorModal from './CalculatorModal';
-
-import { SelectValue } from 'src/components/common/Select/Select';
+import { Dropdown } from '@terraware/web-components';
 
 export interface QuantityDialogProps {
   open: boolean;
@@ -133,7 +132,7 @@ export default function QuantityDialog(props: QuantityDialogProps): JSX.Element 
                 type='text'
                 value={record.remainingQuantity?.units !== 'Seeds' ? record.remainingQuantity?.quantity : ''}
               />
-              <SelectValue
+              <Dropdown
                 options={WEIGHT_UNITS_V2}
                 placeholder={strings.SELECT}
                 onChange={onChangeUnit}

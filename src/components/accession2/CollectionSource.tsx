@@ -1,6 +1,6 @@
 import React from 'react';
 import strings from 'src/strings';
-import { SelectValue } from 'src/components/common/Select/Select';
+import { Dropdown } from '@terraware/web-components';
 
 interface Props {
   placeholder: string;
@@ -12,7 +12,7 @@ interface Props {
 
 export default function CollectionSource(props: Props): JSX.Element {
   return (
-    <SelectValue
+    <Dropdown
       {...props}
       fullWidth={true}
       readonly={true}

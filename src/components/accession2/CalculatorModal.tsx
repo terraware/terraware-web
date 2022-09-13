@@ -8,7 +8,7 @@ import { Accession2, updateAccession2 } from 'src/api/accessions2/accession';
 import { ServerOrganization } from 'src/types/Organization';
 import { Unit, WEIGHT_UNITS_V2 } from '../seeds/nursery/NewTest';
 import useSnackbar from 'src/utils/useSnackbar';
-import { SelectValue } from '../common/Select/Select';
+import { Dropdown } from '@terraware/web-components';
 
 export interface CalculatorDialogProps {
   open: boolean;
@@ -97,7 +97,7 @@ export default function CalculatorDialog(props: CalculatorDialogProps): JSX.Elem
                 type='text'
                 value={record.subsetWeight?.quantity}
               />
-              <SelectValue
+              <Dropdown
                 options={WEIGHT_UNITS_V2}
                 placeholder={strings.SELECT}
                 onChange={onChangeSubsetUnit}
@@ -124,7 +124,7 @@ export default function CalculatorDialog(props: CalculatorDialogProps): JSX.Elem
                 type='text'
                 value={record.remainingQuantity?.quantity}
               />
-              <SelectValue
+              <Dropdown
                 options={WEIGHT_UNITS_V2}
                 placeholder={strings.SELECT}
                 onChange={onChangeRemainingQuantityUnit}

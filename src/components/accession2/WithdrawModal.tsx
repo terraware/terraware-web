@@ -17,7 +17,7 @@ import { ViabilityTest } from 'src/api/types/tests';
 import { getTodaysDateFormatted } from 'src/utils/date';
 import { WITHDRAWAL_SUBSTRATES, WITHDRAWAL_TREATMENTS, WITHDRAWAL_TYPES } from 'src/types/Accession';
 import useSnackbar from 'src/utils/useSnackbar';
-import { SelectValue } from '../common/Select/Select';
+import { Dropdown } from '@terraware/web-components';
 
 export interface WithdrawDialogProps {
   open: boolean;
@@ -164,6 +164,8 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
     onClose();
   };
 
+  const renderUser = (userSel: User) => `${userSel?.firstName} ${userSel?.lastName}`;
+
   return (
     <DialogBox
       onClose={onCloseHandler}
@@ -235,7 +237,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
             {accession.remainingQuantity?.units === 'Seeds' ? (
               <Box>{strings.CT}</Box>
             ) : (
-              <SelectValue
+              <Dropdown
                 options={WEIGHT_UNITS_V2}
                 placeholder={strings.SELECT}
                 onChange={onChangeUnit}
@@ -259,8 +261,8 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
             options={users}
             onChange={onChangeUser}
             isEqual={(a: OrganizationUser, b: OrganizationUser) => a.id === b.id}
-            renderOption={(userSel) => `${userSel?.firstName} ${userSel?.lastName}`}
-            displayLabel={(userSel) => `${userSel?.firstName} ${userSel?.lastName}`}
+            renderOption={renderUser}
+            displayLabel={renderUser}
             selectedValue={users?.find((userSel) => userSel.id === record.withdrawnByUserId)}
             toT={(firstName: string) => ({ firstName } as OrganizationUser)}
             fullWidth={true}

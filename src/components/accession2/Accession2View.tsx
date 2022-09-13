@@ -142,7 +142,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
       <Box padding={3}>
         <Box display='flex' justifyContent='space-between'>
           <Typography>{accession?.accessionNumber}</Typography>
-          <Box display='flex'>
+          <Box display='flex' alignItems='center'>
             <IconButton sx={{ marginLeft: 3, height: '24px' }} onClick={() => setOpenDeleteAccession(true)}>
               <Icon name='iconTrashCan' />
             </IconButton>
