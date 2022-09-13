@@ -65,13 +65,13 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
   useEffect(() => {
     const today = moment();
     const seedCollectionDate = accession?.collectedDate ? moment(accession?.collectedDate, 'YYYY-MM-DD') : undefined;
-    const age = seedCollectionDate ? today.diff(seedCollectionDate, 'months') : undefined;
-    if (age === undefined) {
+    const accessionAge = seedCollectionDate ? today.diff(seedCollectionDate, 'months') : undefined;
+    if (accessionAge === undefined) {
       setAge('');
-    } else if (age < 1) {
+    } else if (accessionAge < 1) {
       setAge(strings.LESS_THAN_A_MONTH);
     } else {
-      setAge(`${age} ${strings.MONTHS}`);
+      setAge(`${accessionAge} ${strings.MONTHS}`);
     }
   }, [accession]);
 
