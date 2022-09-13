@@ -10,22 +10,29 @@ import CollectedReceivedDate2 from './CollectedReceivedDate2';
 import Collectors2 from './Collectors2';
 import Species2Dropdown from './Species2Dropdown';
 import Accession2PlantSiteDetails from './Accession2PlantSiteDetails';
+import useSnackbar from 'src/utils/useSnackbar';
 
 export interface Accession2EditModalProps {
   open: boolean;
   accession: Accession2;
   onClose: () => void;
   organization: ServerOrganization;
+  reload: () => void;
 }
 
 export default function Accession2EditModal(props: Accession2EditModalProps): JSX.Element {
-  const { onClose, open, accession, organization } = props;
+  const { onClose, open, accession, organization, reload } = props;
   const [record, setRecord, onChange] = useForm(accession);
+  const snackbar = useSnackbar();
 
   const saveAccession = async () => {
     if (record) {
       const response = await updateAccession2(record);
       if (response.requestSucceeded && accession) {
+        reload();
+        onCloseHandler();
+      } else {
+        snackbar.toastError();
         onCloseHandler();
       }
     }

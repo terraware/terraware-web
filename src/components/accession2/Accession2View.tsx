@@ -250,7 +250,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
               </TabList>
             </Box>
             <TabPanel value='detail'>
-              <DetailPanel accession={accession} organization={organization} />
+              <DetailPanel accession={accession} organization={organization} reload={reloadData} />
             </TabPanel>
             <TabPanel value='history'>{strings.HISTORY}</TabPanel>
             <TabPanel value='viabilityTesting'>{strings.VIABILITY_TESTING}</TabPanel>

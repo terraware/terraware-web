@@ -11,9 +11,10 @@ import ViewPhotosModal from './ViewPhotosModal';
 type DetailPanelProps = {
   accession?: Accession2;
   organization: ServerOrganization;
+  reload: () => void;
 };
 export default function DetailPanel(props: DetailPanelProps): JSX.Element {
-  const { accession, organization } = props;
+  const { accession, organization, reload } = props;
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
 
@@ -62,6 +63,7 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
         open={openEditAccessionModal}
         onClose={() => setOpenEditAccessionModal(false)}
         organization={organization}
+        reload={reload}
       />
       <ViewPhotosModal
         accessionId={accession.id.toString()}
