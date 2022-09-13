@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import strings from 'src/strings';
 import Button from '../common/button/Button';
 import DialogBox from '../common/DialogBox/DialogBox';
@@ -39,6 +39,10 @@ export default function QuantityDialog(props: QuantityDialogProps): JSX.Element 
       onCloseHandler();
     }
   };
+
+  useEffect(() => {
+    setRecord(accession);
+  }, [accession, setRecord]);
 
   const onChangeRemainingQuantity = (id: string, value: number) => {
     if (record) {

@@ -26,7 +26,7 @@ export default function CalculatorDialog(props: CalculatorDialogProps): JSX.Elem
   const snackbar = useSnackbar();
 
   const getTotalCount = async () => {
-    const response = await updateAccession2(record);
+    const response = await updateAccession2(record, true);
     if (response.requestSucceeded && response.accession) {
       goToPrev();
       setRecord(response.accession);
