@@ -23,7 +23,7 @@ export default function DelteAccessionModal(props: DelteAccessionDialogProps): J
   const deleteHandler = async () => {
     const response = await deleteAccession(accession.id);
     if (response.requestSucceeded) {
-      history.push(APP_PATHS.ACCESSIONS2);
+      history.push(APP_PATHS.ACCESSIONS);
     } else {
       snackbar.toastError();
     }

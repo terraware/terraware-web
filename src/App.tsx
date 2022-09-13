@@ -387,11 +387,6 @@ export default function App() {
                 />
               </Route>
               {!isProduction && (
-                <Route exact path={APP_PATHS.ACCESSIONS2}>
-                  <div>Accessions2 Database Coming Soon!</div>
-                </Route>
-              )}
-              {!isProduction && (
                 <Route exact path={APP_PATHS.ACCESSIONS2_EDIT}>
                   <Accession2Edit />
                 </Route>
