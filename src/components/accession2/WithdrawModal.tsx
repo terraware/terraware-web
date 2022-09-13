@@ -17,6 +17,7 @@ import { ViabilityTest } from 'src/api/types/tests';
 import { getTodaysDateFormatted } from 'src/utils/date';
 import { WITHDRAWAL_SUBSTRATES, WITHDRAWAL_TREATMENTS, WITHDRAWAL_TYPES } from 'src/types/Accession';
 import useSnackbar from 'src/utils/useSnackbar';
+import { SelectValue } from '../common/Select/Select';
 
 export interface WithdrawDialogProps {
   open: boolean;
@@ -107,9 +108,9 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
     onChange('withdrawnByUserId', newValue.id);
   };
 
-  const onChangeUnit = (newValue: Unit) => {
+  const onChangeUnit = (newValue: string) => {
     if (
-      newValue.value === accession.remainingQuantity?.units &&
+      newValue === accession.remainingQuantity?.units &&
       record.withdrawnQuantity?.quantity.toString() === accession.remainingQuantity?.quantity.toString()
     ) {
       setWithdrawAllSelected(true);
@@ -119,7 +120,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
     if (record) {
       setRecord({
         ...record,
-        withdrawnQuantity: { quantity: record.withdrawnQuantity?.quantity || 0, units: newValue.value },
+        withdrawnQuantity: { quantity: record.withdrawnQuantity?.quantity || 0, units: newValue as Unit['value'] },
       });
     }
   };
@@ -234,15 +235,11 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
             {accession.remainingQuantity?.units === 'Seeds' ? (
               <Box>{strings.CT}</Box>
             ) : (
-              <SelectT<Unit>
+              <SelectValue
                 options={WEIGHT_UNITS_V2}
                 placeholder={strings.SELECT}
                 onChange={onChangeUnit}
-                isEqual={(a: Unit, b: Unit) => a.value === b.value}
-                renderOption={(unit) => unit.label}
-                displayLabel={(unit) => unit.label}
-                selectedValue={WEIGHT_UNITS_V2.find((wu) => wu.value === record.withdrawnQuantity?.units)}
-                toT={(label: string) => ({ label } as Unit)}
+                selectedValue={record.withdrawnQuantity?.units}
                 fullWidth={true}
               />
             )}

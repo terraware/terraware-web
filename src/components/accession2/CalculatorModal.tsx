@@ -3,11 +3,12 @@ import strings from 'src/strings';
 import Button from '../common/button/Button';
 import DialogBox from '../common/DialogBox/DialogBox';
 import { Box, Grid } from '@mui/material';
-import { SelectT, Textfield } from '@terraware/web-components';
+import { Textfield } from '@terraware/web-components';
 import { Accession2, updateAccession2 } from 'src/api/accessions2/accession';
 import { ServerOrganization } from 'src/types/Organization';
 import { Unit, WEIGHT_UNITS_V2 } from '../seeds/nursery/NewTest';
 import useSnackbar from 'src/utils/useSnackbar';
+import { SelectValue } from '../common/Select/Select';
 
 export interface CalculatorDialogProps {
   open: boolean;
@@ -51,10 +52,10 @@ export default function CalculatorDialog(props: CalculatorDialogProps): JSX.Elem
     });
   };
 
-  const onChangeSubsetUnit = (newValue: Unit) => {
+  const onChangeSubsetUnit = (newValue: string) => {
     setRecord({
       ...record,
-      subsetWeight: { quantity: record.subsetWeight?.quantity || 0, units: newValue.value },
+      subsetWeight: { quantity: record.subsetWeight?.quantity || 0, units: newValue as Unit['value'] },
     });
   };
 
@@ -65,11 +66,11 @@ export default function CalculatorDialog(props: CalculatorDialogProps): JSX.Elem
     });
   };
 
-  const onChangeRemainingQuantityUnit = (newValue: Unit) => {
+  const onChangeRemainingQuantityUnit = (newValue: string) => {
     if (record) {
       setRecord({
         ...record,
-        remainingQuantity: { quantity: record.remainingQuantity?.quantity || 0, units: newValue.value },
+        remainingQuantity: { quantity: record.remainingQuantity?.quantity || 0, units: newValue as Unit['value'] },
       });
     }
   };
@@ -96,15 +97,11 @@ export default function CalculatorDialog(props: CalculatorDialogProps): JSX.Elem
                 type='text'
                 value={record.subsetWeight?.quantity}
               />
-              <SelectT<Unit>
+              <SelectValue
                 options={WEIGHT_UNITS_V2}
                 placeholder={strings.SELECT}
                 onChange={onChangeSubsetUnit}
-                isEqual={(a: Unit, b: Unit) => a.value === b.value}
-                renderOption={(unit) => unit.label}
-                displayLabel={(unit) => (unit ? unit.label : 'g')}
-                selectedValue={WEIGHT_UNITS_V2.find((wu) => wu.value === record.subsetWeight?.units)}
-                toT={(label: string) => ({ label } as Unit)}
+                selectedValue={record.subsetWeight?.units}
                 fullWidth={true}
               />
             </Box>
@@ -127,15 +124,11 @@ export default function CalculatorDialog(props: CalculatorDialogProps): JSX.Elem
                 type='text'
                 value={record.remainingQuantity?.quantity}
               />
-              <SelectT<Unit>
+              <SelectValue
                 options={WEIGHT_UNITS_V2}
                 placeholder={strings.SELECT}
                 onChange={onChangeRemainingQuantityUnit}
-                isEqual={(a: Unit, b: Unit) => a.value === b.value}
-                renderOption={(unit) => unit.label}
-                displayLabel={(unit) => (unit ? unit.label : 'g')}
-                selectedValue={WEIGHT_UNITS_V2.find((wu) => wu.value === record.remainingQuantity?.units)}
-                toT={(label: string) => ({ label } as Unit)}
+                selectedValue={record.remainingQuantity?.units}
                 fullWidth={true}
               />
             </Box>

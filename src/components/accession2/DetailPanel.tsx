@@ -1,6 +1,5 @@
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
-import moment from 'moment';
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Accession2 } from 'src/api/accessions2/accession';
@@ -29,25 +28,9 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
 
   const mainStructureSize = isMobile ? 12 : 9;
   const gridLeftSide = isMobile ? 12 : 4;
-
   const gridRightSide = isMobile ? 12 : 8;
-  const today = moment();
-  const seedCollectionDate = accession?.collectedDate ? moment(accession?.collectedDate, 'YYYY-MM-DD') : undefined;
-
-  const age = seedCollectionDate ? today.diff(seedCollectionDate, 'months') : undefined;
-
   const [photosModalOpened, setPhotosModalOpened] = useState(false);
   const [selectedSlide, setSelectedSlide] = useState(0);
-
-  const displayAge = () => {
-    if (age === undefined) {
-      return '';
-    } else if (age < 1) {
-      return strings.LESS_THAN_A_MONTH;
-    } else {
-      return `${age} ${strings.MONTHS}`;
-    }
-  };
 
   const goToEdit = () => {
     if (accession) {
@@ -99,14 +82,6 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
             </Grid>
             <Grid item xs={gridRightSide}>
               {accession.viabilityPercent}
-            </Grid>
-          </Grid>
-          <Grid item xs={12} sx={gridRowStyle}>
-            <Grid item xs={gridLeftSide} sx={categoryStyle}>
-              {strings.AGE}
-            </Grid>
-            <Grid item xs={gridRightSide}>
-              {displayAge()}
             </Grid>
           </Grid>
           <Grid item xs={12} sx={gridRowStyle}>

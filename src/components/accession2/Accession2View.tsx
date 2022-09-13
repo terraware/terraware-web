@@ -2,6 +2,7 @@ import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { Box, IconButton, Link, Tab, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Button, Icon } from '@terraware/web-components';
+import moment from 'moment';
 import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Accession2, getAccession2 } from 'src/api/accessions2/accession';
@@ -40,6 +41,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
   const [openDeleteAccession, setOpenDeleteAccession] = useState(false);
   const [openWithdrawModal, setOpenWithdrawModal] = useState(false);
   const [quantityModalOpened, setQuantityModalOpened] = useState(false);
+  const [age, setAge] = useState('');
   const { organization, user } = props;
   const classes = useStyles();
 
@@ -59,6 +61,19 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
   useEffect(() => {
     reloadData();
   }, [accessionId, reloadData]);
+
+  useEffect(() => {
+    const today = moment();
+    const seedCollectionDate = accession?.collectedDate ? moment(accession?.collectedDate, 'YYYY-MM-DD') : undefined;
+    const age = seedCollectionDate ? today.diff(seedCollectionDate, 'months') : undefined;
+    if (age === undefined) {
+      setAge('');
+    } else if (age < 1) {
+      setAge(strings.LESS_THAN_A_MONTH);
+    } else {
+      setAge(`${age} ${strings.MONTHS}`);
+    }
+  }, [accession]);
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setSelectedTab(newValue);
@@ -215,9 +230,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
         </Box>
         <Box padding={4}>
           <Typography>{strings.AGE}</Typography>
-          <Link sx={linkStyle} onClick={() => true}>
-            + {strings.ADD}
-          </Link>
+          {accession?.collectedDate ? <Typography> {age} </Typography> : null}
         </Box>
         <Box padding={4}>
           <Typography>{strings.VIABILITY}</Typography>

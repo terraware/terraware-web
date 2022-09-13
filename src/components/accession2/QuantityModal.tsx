@@ -3,13 +3,15 @@ import strings from 'src/strings';
 import Button from '../common/button/Button';
 import DialogBox from '../common/DialogBox/DialogBox';
 import { Box, Grid, Link, useTheme } from '@mui/material';
-import { SelectT, Textfield } from '@terraware/web-components';
+import { Textfield } from '@terraware/web-components';
 import { Accession2, updateAccession2 } from 'src/api/accessions2/accession';
 import useForm from 'src/utils/useForm';
 import { ServerOrganization } from 'src/types/Organization';
 import { Unit, WEIGHT_UNITS_V2 } from '../seeds/nursery/NewTest';
 import useSnackbar from 'src/utils/useSnackbar';
 import CalculatorModal from './CalculatorModal';
+
+import { SelectValue } from 'src/components/common/Select/Select';
 
 export interface QuantityDialogProps {
   open: boolean;
@@ -66,13 +68,13 @@ export default function QuantityDialog(props: QuantityDialogProps): JSX.Element 
     }
   };
 
-  const onChangeUnit = (newValue: Unit) => {
+  const onChangeUnit = (newValue: string) => {
     if (record) {
       setRecord({
         ...record,
         remainingQuantity: {
           quantity: record.remainingQuantity?.quantity || 0,
-          units: newValue.value,
+          units: newValue as Unit['value'],
         },
       });
     }
@@ -131,15 +133,11 @@ export default function QuantityDialog(props: QuantityDialogProps): JSX.Element 
                 type='text'
                 value={record.remainingQuantity?.units !== 'Seeds' ? record.remainingQuantity?.quantity : ''}
               />
-              <SelectT<Unit>
+              <SelectValue
                 options={WEIGHT_UNITS_V2}
                 placeholder={strings.SELECT}
                 onChange={onChangeUnit}
-                isEqual={(a: Unit, b: Unit) => a.value === b.value}
-                renderOption={(unit) => unit.label}
-                displayLabel={(unit) => (unit ? unit.label : 'g')}
-                selectedValue={WEIGHT_UNITS_V2.find((wu) => wu.value === record.remainingQuantity?.units)}
-                toT={(label: string) => ({ label } as Unit)}
+                selectedValue={record.remainingQuantity?.units}
                 fullWidth={true}
               />
             </Box>
