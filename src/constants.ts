@@ -3,7 +3,6 @@ export const TERRAWARE_SUPPORT_LINK = 'https://www.terraformation.com/contact-us
 
 export enum APP_PATHS {
   ACCESSIONS = '/accessions',
-  ACCESSIONS2 = '/accessions2',
   ACCESSIONS_NEW = '/accessions/new',
   ACCESSIONS2_NEW = '/accessions2/new',
   ACCESSIONS_ITEM_SEED_COLLECTION = '/accessions/:accessionId/seed-collection',

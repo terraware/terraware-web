@@ -2,6 +2,7 @@ import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { Box, IconButton, Link, Tab, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Button, Icon } from '@terraware/web-components';
+import moment from 'moment';
 import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Accession2, getAccession2 } from 'src/api/accessions2/accession';
@@ -14,6 +15,7 @@ import DeleteAccessionModal from './DeleteAccessionModal';
 import DetailPanel from './DetailPanel';
 import EditLocationModal from './EditLocationModal';
 import EditStateModal from './EditStateModal';
+import QuantityModal from './QuantityModal';
 import WithdrawModal from './WithdrawModal';
 
 const useStyles = makeStyles(() => ({
@@ -38,6 +40,8 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
   const [openEditStateModal, setOpenEditStateModal] = useState(false);
   const [openDeleteAccession, setOpenDeleteAccession] = useState(false);
   const [openWithdrawModal, setOpenWithdrawModal] = useState(false);
+  const [quantityModalOpened, setQuantityModalOpened] = useState(false);
+  const [age, setAge] = useState('');
   const { organization, user } = props;
   const classes = useStyles();
 
@@ -58,6 +62,19 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
     reloadData();
   }, [accessionId, reloadData]);
 
+  useEffect(() => {
+    const today = moment();
+    const seedCollectionDate = accession?.collectedDate ? moment(accession?.collectedDate, 'YYYY-MM-DD') : undefined;
+    const accessionAge = seedCollectionDate ? today.diff(seedCollectionDate, 'months') : undefined;
+    if (accessionAge === undefined) {
+      setAge('');
+    } else if (accessionAge < 1) {
+      setAge(strings.LESS_THAN_A_MONTH);
+    } else {
+      setAge(`${accessionAge} ${strings.MONTHS}`);
+    }
+  }, [accession]);
+
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setSelectedTab(newValue);
   };
@@ -72,6 +89,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
 
   const linkStyle = {
     textDecoration: 'none',
+    cursor: 'pointer',
   };
 
   const checkInAccession = async () => {
@@ -110,6 +128,14 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
             reload={reloadData}
             organization={organization}
             user={user}
+          />
+          <QuantityModal
+            open={quantityModalOpened}
+            onClose={() => setQuantityModalOpened(false)}
+            accession={accession}
+            organization={organization}
+            reload={reloadData}
+            setOpen={() => setQuantityModalOpened(true)}
           />
         </>
       )}
@@ -154,7 +180,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
         )}
         {accession?.storageLocation && (
           <Box display='flex' padding={(theme) => theme.spacing(0, 2)}>
-            <Icon name='info' className={classes.iconStyle} />
+            <Icon name='iconMyLocation' className={classes.iconStyle} />
             <Box
               display='flex'
               sx={{
@@ -179,15 +205,32 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
       <Box display='flex'>
         <Box padding={4}>
           <Typography>{strings.QUANTITY} </Typography>
-          <Link sx={linkStyle} onClick={() => true}>
-            + {strings.ADD}
-          </Link>
+          {accession?.remainingQuantity?.quantity ? (
+            <Box
+              display='flex'
+              sx={{
+                '&:hover .edit-icon': {
+                  display: 'block',
+                },
+              }}
+            >
+              <Typography>
+                {accession.estimatedCount} {strings.CT}
+                {accession.estimatedWeight?.grams ? ` (${accession.estimatedWeight?.grams} ${strings.GRAMS})` : ''}
+              </Typography>
+              <IconButton sx={{ marginLeft: 3, height: '24px' }} onClick={() => setQuantityModalOpened(true)}>
+                <Icon name='iconEdit' className={`${classes.editIcon} edit-icon`} />
+              </IconButton>
+            </Box>
+          ) : (
+            <Link sx={linkStyle} onClick={() => setQuantityModalOpened(true)}>
+              + {strings.ADD}
+            </Link>
+          )}
         </Box>
         <Box padding={4}>
           <Typography>{strings.AGE}</Typography>
-          <Link sx={linkStyle} onClick={() => true}>
-            + {strings.ADD}
-          </Link>
+          {accession?.collectedDate ? <Typography> {age} </Typography> : null}
         </Box>
         <Box padding={4}>
           <Typography>{strings.VIABILITY}</Typography>
