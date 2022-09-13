@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useHistory } from 'react-router-dom';
 import strings from 'src/strings';
 import { APP_PATHS } from 'src/constants';
@@ -7,7 +7,6 @@ import useForm from 'src/utils/useForm';
 import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
 import { AccessionPostRequestBody, postAccession } from 'src/api/accessions2/accession';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import { DatePicker } from '@terraware/web-components';
 import Species2Dropdown from './Species2Dropdown';
 import Collectors2 from './Collectors2';
 import Textfield from '../common/Textfield/Textfield';
@@ -20,6 +19,7 @@ import Accession2GPS from './Accession2GPS';
 import Accession2PlantSiteDetails from './Accession2PlantSiteDetails';
 import getDateDisplayValue from 'src/utils/date';
 import useSnackbar from 'src/utils/useSnackbar';
+import CollectedReceivedDate2 from './CollectedReceivedDate2';
 
 type CreateAccessionProps = {
   organization: ServerOrganization;
@@ -36,11 +36,6 @@ const defaultAccession = (): AccessionPostRequestBody =>
     receivedDate: getDateDisplayValue(Date.now()),
   } as AccessionPostRequestBody);
 
-type Dates = {
-  collectedDate?: any;
-  receivedDate?: any;
-};
-
 export default function CreateAccession(props: CreateAccessionProps): JSX.Element {
   const { organization } = props;
   const { isMobile } = useDeviceInfo();
@@ -48,34 +43,13 @@ export default function CreateAccession(props: CreateAccessionProps): JSX.Elemen
   const history = useHistory();
   const snackbar = useSnackbar();
   const [record, setRecord, onChange] = useForm<AccessionPostRequestBody>(defaultAccession());
-  const [dates, setDates] = useState<Dates>({
-    collectedDate: record.collectedDate,
-    receivedDate: record.receivedDate,
-  });
+
   const accessionsDatabase = {
     pathname: APP_PATHS.ACCESSIONS,
   };
 
   const marginTop = {
     marginTop: theme.spacing(2),
-  };
-
-  const datePickerStyle = {
-    '.MuiFormControl-root': {
-      width: '100%',
-    },
-    ...marginTop,
-  };
-
-  const changeDate = (id: string, value?: any) => {
-    setDates((curr) => ({ ...curr, [id]: value }));
-    const date = new Date(value).getTime();
-    const now = Date.now();
-    if (isNaN(date) || date > now) {
-      return;
-    } else {
-      onChange(id, value);
-    }
   };
 
   const getAccessionStatuses = () => {
@@ -127,15 +101,7 @@ export default function CreateAccession(props: CreateAccessionProps): JSX.Elemen
           <Grid item xs={12} sx={marginTop}>
             <Species2Dropdown record={record} organization={organization} setRecord={setRecord} />
           </Grid>
-          <Grid item xs={12} sx={datePickerStyle}>
-            <DatePicker
-              id='collectedDate'
-              label={strings.COLLECTION_DATE_REQUIRED}
-              aria-label={strings.COLLECTION_DATE_REQUIRED}
-              value={dates.collectedDate}
-              onChange={changeDate}
-            />
-          </Grid>
+          <CollectedReceivedDate2 record={record} onChange={onChange} type='collected' />
           <Grid item xs={12} sx={marginTop}>
             <Collectors2
               organizationId={organization.id}
@@ -174,15 +140,7 @@ export default function CreateAccession(props: CreateAccessionProps): JSX.Elemen
               {strings.SEED_PROCESSING_DETAIL}
             </Typography>
           </Grid>
-          <Grid item xs={12} sx={datePickerStyle}>
-            <DatePicker
-              id='receivedDate'
-              label={strings.RECEIVING_DATE_REQUIRED}
-              aria-label={strings.RECEIVING_DATE_REQUIRED}
-              value={dates.receivedDate}
-              onChange={changeDate}
-            />
-          </Grid>
+          <CollectedReceivedDate2 record={record} onChange={onChange} type='received' />
           <Grid item xs={12} sx={marginTop}>
             <Select
               id='state'

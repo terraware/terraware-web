@@ -28,7 +28,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 interface Accession2ViewProps {
-  organization?: ServerOrganization;
+  organization: ServerOrganization;
   user: User;
 }
 
@@ -101,7 +101,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
 
   return (
     <TfMain>
-      {organization && accession && (
+      {accession && (
         <>
           <EditLocationModal
             open={openEditLocationModal}
@@ -240,20 +240,22 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
         </Box>
       </Box>
       <Box sx={{ width: '100%' }}>
-        <TabContext value={selectedTab}>
-          <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-            <TabList onChange={handleChange}>
-              <Tab label={strings.DETAIL} value='detail' sx={tabStyles} />
-              <Tab label={strings.HISTORY} value='history' sx={tabStyles} />
-              <Tab label={strings.VIABILITY_TESTING} value='viabilityTesting' sx={tabStyles} />
-            </TabList>
-          </Box>
-          <TabPanel value='detail'>
-            <DetailPanel accession={accession} />
-          </TabPanel>
-          <TabPanel value='history'>{strings.HISTORY}</TabPanel>
-          <TabPanel value='viabilityTesting'>{strings.VIABILITY_TESTING}</TabPanel>
-        </TabContext>
+        {organization ? (
+          <TabContext value={selectedTab}>
+            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+              <TabList onChange={handleChange}>
+                <Tab label={strings.DETAIL} value='detail' sx={tabStyles} />
+                <Tab label={strings.HISTORY} value='history' sx={tabStyles} />
+                <Tab label={strings.VIABILITY_TESTING} value='viabilityTesting' sx={tabStyles} />
+              </TabList>
+            </Box>
+            <TabPanel value='detail'>
+              <DetailPanel accession={accession} organization={organization} />
+            </TabPanel>
+            <TabPanel value='history'>{strings.HISTORY}</TabPanel>
+            <TabPanel value='viabilityTesting'>{strings.VIABILITY_TESTING}</TabPanel>
+          </TabContext>
+        ) : null}
       </Box>
     </TfMain>
   );

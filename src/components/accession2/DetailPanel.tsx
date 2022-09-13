@@ -1,21 +1,21 @@
-import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { Button } from '@terraware/web-components';
+import { Box, Grid, IconButton, Typography, useTheme } from '@mui/material';
+import { Icon } from '@terraware/web-components';
 import { useState } from 'react';
-import { useHistory } from 'react-router-dom';
 import { Accession2 } from 'src/api/accessions2/accession';
-import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
+import { ServerOrganization } from 'src/types/Organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import Accession2EditModal from './Accession2EditModal';
 import ViewPhotosModal from './ViewPhotosModal';
 
 type DetailPanelProps = {
   accession?: Accession2;
+  organization: ServerOrganization;
 };
 export default function DetailPanel(props: DetailPanelProps): JSX.Element {
-  const { accession } = props;
+  const { accession, organization } = props;
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
-  const history = useHistory();
 
   const categoryStyle = {
     color: '#708284',
@@ -31,12 +31,7 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
   const gridRightSide = isMobile ? 12 : 8;
   const [photosModalOpened, setPhotosModalOpened] = useState(false);
   const [selectedSlide, setSelectedSlide] = useState(0);
-
-  const goToEdit = () => {
-    if (accession) {
-      history.push(APP_PATHS.ACCESSIONS2_EDIT.replace(':accessionId', accession.id.toString()));
-    }
-  };
+  const [openEditAccessionModal, setOpenEditAccessionModal] = useState(false);
 
   const getCollectionSource = () => {
     const source = accession?.collectionSource;
@@ -62,6 +57,12 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
 
   return accession ? (
     <>
+      <Accession2EditModal
+        accession={accession}
+        open={openEditAccessionModal}
+        onClose={() => setOpenEditAccessionModal(false)}
+        organization={organization}
+      />
       <ViewPhotosModal
         accessionId={accession.id.toString()}
         photosNames={accession.photoFilenames || []}
@@ -72,7 +73,9 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
       <Grid container>
         {isMobile ? (
           <Grid item xs={12}>
-            <Button label={strings.EDIT} onClick={goToEdit} />
+            <IconButton sx={{ marginLeft: 3, height: '24px' }} onClick={() => setOpenEditAccessionModal(true)}>
+              <Icon name='iconEdit' />
+            </IconButton>
           </Grid>
         ) : null}
         <Grid item xs={mainStructureSize}>
@@ -164,7 +167,9 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
         <Grid />
         {!isMobile ? (
           <Grid item xs={3}>
-            <Button label={strings.EDIT} onClick={goToEdit} />
+            <IconButton sx={{ marginLeft: 3, height: '24px' }} onClick={() => setOpenEditAccessionModal(true)}>
+              <Icon name='iconEdit' />
+            </IconButton>
           </Grid>
         ) : null}
       </Grid>

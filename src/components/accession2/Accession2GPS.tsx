@@ -12,10 +12,11 @@ import _ from 'lodash';
 type Accession2GPSProps = {
   record: AccessionPostRequestBody;
   onChange: (id: string, value?: any) => void;
+  opened?: boolean;
 };
 
 export default function Accession2GPS(props: Accession2GPSProps): JSX.Element {
-  const { record, onChange } = props;
+  const { record, onChange, opened } = props;
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [gpsCoordsList, setGpsCoordsList] = useState<string[]>(['']);
   const theme = useTheme();
@@ -65,7 +66,7 @@ export default function Accession2GPS(props: Accession2GPSProps): JSX.Element {
     });
   };
 
-  if (!isOpen) {
+  if (!isOpen && !opened) {
     return (
       <Grid item xs={12} marginTop={theme.spacing(2)}>
         <Box display='flex' justifyContent='flex-start'>
