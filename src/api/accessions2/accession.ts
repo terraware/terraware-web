@@ -20,18 +20,32 @@ export const getAccession2 = async (accessionId: number): Promise<Accession2> =>
 
 type UpdateAcccessionResponse = {
   requestSucceeded: boolean;
+  accession: Accession2 | undefined;
 };
 
 type UpdateAccessionResponsePayloadV2 =
   paths[typeof ACCESSIONS2_ENDPOINT]['put']['responses'][200]['content']['application/json'];
 
-export const updateAccession2 = async (accession: Accession2): Promise<UpdateAcccessionResponse> => {
+type updateAccessionQuery = paths[typeof ACCESSIONS2_ENDPOINT]['put']['parameters']['query'];
+
+export const updateAccession2 = async (
+  accession: Accession2,
+  simulate?: boolean
+): Promise<UpdateAcccessionResponse> => {
+  const queryParams: updateAccessionQuery = {
+    simulate: simulate !== undefined ? simulate.toString() : 'false',
+  };
+
   const response: UpdateAcccessionResponse = {
     requestSucceeded: true,
+    accession: undefined,
   };
   const endpoint = ACCESSIONS2_ENDPOINT.replace('{id}', `${accession.id}`);
   try {
-    const serverResponse: UpdateAccessionResponsePayloadV2 = (await axios.put(endpoint, accession)).data;
+    const serverResponse: UpdateAccessionResponsePayloadV2 = (
+      await axios.put(endpoint, accession, { params: queryParams })
+    ).data;
+    response.accession = serverResponse.accession;
     if (serverResponse.status === 'error') {
       response.requestSucceeded = false;
     }
