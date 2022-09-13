@@ -14,10 +14,11 @@ type SeedBankSelectorProps = {
   organization: ServerOrganization;
   record: AccessionPostRequestBody;
   onChange: (id: string, value?: any) => void;
+  validate?: boolean;
 };
 
 export default function SeedBankSelector(props: SeedBankSelectorProps): JSX.Element {
-  const { organization, record, onChange } = props;
+  const { organization, record, onChange, validate } = props;
   const [storageLocations, setStorageLocations] = useState<StorageLocationDetails[]>([]);
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
@@ -51,7 +52,7 @@ export default function SeedBankSelector(props: SeedBankSelectorProps): JSX.Elem
           selectedStorageLocation={seedBanks.find((sb) => sb.id === record.facilityId)}
           storageLocations={seedBanks}
           onChange={(value: Facility) => onChange('facilityId', value.id)}
-          readonly={false}
+          errorText={validate && !record.facilityId ? strings.REQUIRED_FIELD : ''}
         />
       </Grid>
       <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }}>
@@ -60,7 +61,7 @@ export default function SeedBankSelector(props: SeedBankSelectorProps): JSX.Elem
           selectedStorageSubLocation={record.storageLocation}
           storageSubLocations={storageLocations.map((obj) => obj.storageLocation)}
           onChange={(value: string) => onChange('storageLocation', value)}
-          readonly={false}
+          errorText={validate && !record.storageLocation ? strings.REQUIRED_FIELD : ''}
         />
       </Grid>
     </Grid>

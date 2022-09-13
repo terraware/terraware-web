@@ -65,8 +65,7 @@ export function StorageStartDate({ onChange, refreshErrors, storageDate, disable
         label={strings.STARTING_ON}
         aria-label='Starting on'
         maxDate={moment(date).format('YYYY-MM-DD')}
-        helperText={getErrorText('storageStartDate')}
-        error={getErrorText('storageStartDate') ? true : false}
+        errorText={getErrorText('storageStartDate')}
         disabled={disabled}
       />
     </Grid>

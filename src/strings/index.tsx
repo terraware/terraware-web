@@ -589,6 +589,7 @@ const strings = new LocalizedStrings({
     WILD_IN_SITU: 'Wild (In Situ)',
     REINTRODUCED: 'Reintroduced',
     CULTIVATED_EX_SITU: 'Cultivated (Ex Situ)',
+    INVALID_DATE: 'Invalid date',
   },
 });
 

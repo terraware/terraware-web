@@ -75,7 +75,7 @@ export function AccessionDates({ onChange, refreshErrors, collectedDate, receive
           aria-label='collected on'
           maxDate={moment(date).format('YYYY-MM-DD')}
           helperText={getErrorText('collectedDate')}
-          error={getErrorText('collectedDate') ? true : false}
+          errorText={getErrorText('collectedDate')}
           disabled={disabled}
         />
       </Grid>
@@ -88,7 +88,7 @@ export function AccessionDates({ onChange, refreshErrors, collectedDate, receive
           aria-label='received on'
           maxDate={moment(date).format('YYYY-MM-DD')}
           helperText={getErrorText('receivedDate')}
-          error={getErrorText('receivedDate') ? true : false}
+          errorText={getErrorText('receivedDate')}
           disabled={disabled}
         />
       </Grid>

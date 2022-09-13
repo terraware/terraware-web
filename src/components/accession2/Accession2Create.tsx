@@ -14,7 +14,7 @@ import Textfield from '../common/Textfield/Textfield';
 import FormBottomBar from '../common/FormBottomBar';
 import Select from '../common/Select/Select';
 import SeedBank2Selector from './SeedBank2Selector';
-import { ACCESSION_2_STATES } from 'src/types/Accession';
+import { ACCESSION_2_CREATE_STATES } from 'src/types/Accession';
 import Accession2Address from './Accession2Address';
 import Accession2GPS from './Accession2GPS';
 import Accession2PlantSiteDetails from './Accession2PlantSiteDetails';
@@ -41,12 +41,25 @@ type Dates = {
   receivedDate?: any;
 };
 
+const MANDATORY_FIELDS = [
+  'speciesId',
+  'collectedDate',
+  'receivedDate',
+  'state',
+  'facilityId',
+  'storageLocation',
+] as const;
+
+type MandatoryField = typeof MANDATORY_FIELDS[number];
+
 export default function CreateAccession(props: CreateAccessionProps): JSX.Element {
   const { organization } = props;
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const history = useHistory();
   const snackbar = useSnackbar();
+  const [validateFields, setValidateFields] = useState<boolean>(false);
+  const [dateErrors, setDateErrors] = useState<{ [key: string]: string | undefined }>({});
   const [record, setRecord, onChange] = useForm<AccessionPostRequestBody>(defaultAccession());
   const [dates, setDates] = useState<Dates>({
     collectedDate: record.collectedDate,
@@ -67,28 +80,48 @@ export default function CreateAccession(props: CreateAccessionProps): JSX.Elemen
     ...marginTop,
   };
 
+  const setDateError = (id: string, error?: string) => {
+    setDateErrors((prev) => ({
+      ...prev,
+      [id]: error,
+    }));
+  };
+
   const changeDate = (id: string, value?: any) => {
     setDates((curr) => ({ ...curr, [id]: value }));
     const date = new Date(value).getTime();
     const now = Date.now();
-    if (isNaN(date) || date > now) {
+
+    setDateError(id, '');
+
+    if (isNaN(date)) {
+      setDateError(id, strings.INVALID_DATE);
+      return;
+    } else if (date > now) {
+      setDateError(id, strings.NO_FUTURE_DATES);
       return;
     } else {
       onChange(id, value);
     }
   };
 
-  const getAccessionStatuses = () => {
-    // TODO: return statuses that can be used for create, for now return all statuses
-    return ACCESSION_2_STATES;
-  };
-
   const goToAccessions = () => {
     history.push(accessionsDatabase);
   };
 
+  const hasErrors = () => {
+    const missingRequiredField = MANDATORY_FIELDS.some((field: MandatoryField) => record[field] === undefined);
+    const hasDateErrors = dateErrors.recordedDate || dateErrors.collectedDate;
+    return missingRequiredField || hasDateErrors;
+  };
+
   const saveAccession = async () => {
-    // TODO data validation and show errors
+    if (hasErrors()) {
+      setDateError('collectedDate', record.collectedDate ? dateErrors.collectedDate : strings.REQUIRED_FIELD);
+      setDateError('receivedDate', record.receivedDate ? dateErrors.receivedDate : strings.REQUIRED_FIELD);
+      setValidateFields(true);
+      return;
+    }
     const response = await postAccession(record);
     if (response.requestSucceeded) {
       history.replace(accessionsDatabase);
@@ -125,7 +158,12 @@ export default function CreateAccession(props: CreateAccessionProps): JSX.Elemen
             </Typography>
           </Grid>
           <Grid item xs={12} sx={marginTop}>
-            <Species2Dropdown record={record} organization={organization} setRecord={setRecord} />
+            <Species2Dropdown
+              record={record}
+              organization={organization}
+              setRecord={setRecord}
+              validate={validateFields}
+            />
           </Grid>
           <Grid item xs={12} sx={datePickerStyle}>
             <DatePicker
@@ -134,6 +172,8 @@ export default function CreateAccession(props: CreateAccessionProps): JSX.Elemen
               aria-label={strings.COLLECTION_DATE_REQUIRED}
               value={dates.collectedDate}
               onChange={changeDate}
+              errorText={dateErrors.collectedDate}
+              maxDate={Date.now()}
             />
           </Grid>
           <Grid item xs={12} sx={marginTop}>
@@ -181,6 +221,7 @@ export default function CreateAccession(props: CreateAccessionProps): JSX.Elemen
               aria-label={strings.RECEIVING_DATE_REQUIRED}
               value={dates.receivedDate}
               onChange={changeDate}
+              errorText={dateErrors.receivedDate}
             />
           </Grid>
           <Grid item xs={12} sx={marginTop}>
@@ -189,12 +230,17 @@ export default function CreateAccession(props: CreateAccessionProps): JSX.Elemen
               selectedValue={record.state}
               onChange={(value: string) => onChange('state', value)}
               label={strings.PROCESSING_STATUS_REQUIRED}
-              readonly={false}
-              options={getAccessionStatuses()}
+              readonly={true}
+              options={ACCESSION_2_CREATE_STATES}
               fullWidth={true}
             />
           </Grid>
-          <SeedBank2Selector organization={organization} record={record} onChange={onChange} />
+          <SeedBank2Selector
+            organization={organization}
+            record={record}
+            onChange={onChange}
+            validate={validateFields}
+          />
         </Grid>
       </Container>
       <FormBottomBar onCancel={goToAccessions} onSave={saveAccession} saveButtonText={strings.ADD} />
