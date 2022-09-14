@@ -119,6 +119,50 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
     }
   };
 
+  const getStylesForState = () => {
+    switch (accession?.state) {
+      case 'Awaiting Check-In':
+        return {
+          background: '#FFF1F4',
+          border: '1px solid #FFBFD0',
+          color: '#CD0069',
+        };
+
+      case 'Awaiting Processing':
+        return {
+          background: '#FFF1F1',
+          border: '1px solid #FFC1C1',
+          color: '#D40002',
+        };
+      case 'Processing':
+        return {
+          background: '#FEF2EE',
+          border: '1px solid #FAC4B1',
+          color: '#9A572B',
+        };
+      case 'Drying':
+        return {
+          background: '#FEF3E1',
+          border: '1px solid #FBCA47',
+          color: '#9A7B25',
+        };
+      case 'In Storage': {
+        return {
+          background: '#8CBA441A',
+          border: '1px solid #8CBA4480',
+          color: '#27764E',
+        };
+      }
+      default: {
+        return {
+          background: '#F2F4F5',
+          border: '1px solid #CAD2D3',
+          color: '#5C6B6C',
+        };
+      }
+    }
+  };
+
   const getEstimatedQuantity = () => {
     if (accession?.remainingQuantity?.units === 'Seeds') {
       if (accession.estimatedWeight?.grams) {
@@ -200,9 +244,9 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
         <Typography color='#708284'>{accession?.speciesCommonName}</Typography>
       </Box>
 
-      <Box display='flex'>
+      <Box display='flex' alignItems='center'>
         {accession?.state && (
-          <Box display='flex' padding={(theme) => theme.spacing(0, 3)}>
+          <Box display='flex' padding={(theme) => theme.spacing(0, 3)} alignItems='center'>
             <Icon name='seedbankNav' className={classes.iconStyle} />
             <Box
               display='flex'
@@ -211,8 +255,14 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
                   display: 'block',
                 },
               }}
+              alignItems='center'
             >
-              <Typography paddingLeft={1}>{accession.state}</Typography>
+              <Typography
+                paddingLeft={1}
+                sx={{ ...getStylesForState(), padding: 1, borderRadius: '8px', fontSize: '14px', marginLeft: 1 }}
+              >
+                {accession.state}
+              </Typography>
               <IconButton sx={{ marginLeft: 3, height: '24px' }} onClick={() => setOpenEditStateModal(true)}>
                 <Icon name='iconEdit' className={`${classes.editIcon} edit-icon`} />
               </IconButton>
@@ -220,7 +270,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
           </Box>
         )}
         {accession?.storageLocation && (
-          <Box display='flex' padding={(theme) => theme.spacing(0, 2)}>
+          <Box display='flex' padding={(theme) => theme.spacing(0, 2)} alignItems='center'>
             <Icon name='iconMyLocation' className={classes.iconStyle} />
             <Box
               display='flex'
@@ -229,6 +279,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
                   display: 'block',
                 },
               }}
+              alignItems='center'
             >
               <Typography paddingLeft={1}>{accession.storageLocation}</Typography>
               <IconButton sx={{ marginLeft: 3, height: '24px' }} onClick={() => setOpenEditLocationModal(true)}>
@@ -237,7 +288,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
             </Box>
           </Box>
         )}
-        <Box display='flex' padding={(theme) => theme.spacing(0, 2)}>
+        <Box display='flex' padding={(theme) => theme.spacing(0, 2)} alignItems='center'>
           <Icon name='notification' className={classes.iconStyle} />
           <Typography paddingLeft={1}>Notification</Typography>
         </Box>
