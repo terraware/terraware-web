@@ -1,6 +1,6 @@
+import React, { useCallback, useState, useEffect } from 'react';
 import { useTheme, Grid } from '@mui/material';
 import { DatePicker } from '@terraware/web-components';
-import React, { useCallback, useState, useEffect } from 'react';
 import { Accession2, AccessionPostRequestBody } from 'src/api/accessions2/accession';
 import strings from 'src/strings';
 
@@ -39,23 +39,26 @@ export default function CollecteReceivedDate2({ onChange, record, type, validate
     }));
   };
 
-  const validateDate = useCallback((id: string, value?: any) => {
-    const date = new Date(value).getTime();
-    const now = Date.now();
+  const validateDate = useCallback(
+    (id: string, value?: any) => {
+      const date = new Date(value).getTime();
+      const now = Date.now();
 
-    setDateError(id, '');
+      setDateError(id, '');
 
-    if (!value || isNaN(date)) {
-      const required = validate && !value;
-      setDateError(id, required ? strings.REQUIRED_FIELD : strings.INVALID_DATE);
-      return false;
-    } else if (date > now) {
-      setDateError(id, strings.NO_FUTURE_DATES);
-      return false;
-    } else {
-      return true;
-    }
-  }, [validate]);
+      if (!value || isNaN(date)) {
+        const required = validate && !value;
+        setDateError(id, required ? strings.REQUIRED_FIELD : strings.INVALID_DATE);
+        return false;
+      } else if (date > now) {
+        setDateError(id, strings.NO_FUTURE_DATES);
+        return false;
+      } else {
+        return true;
+      }
+    },
+    [validate]
+  );
 
   const changeDate = (id: string, value?: any) => {
     setDates((curr) => ({ ...curr, [id]: value }));
@@ -69,7 +72,7 @@ export default function CollecteReceivedDate2({ onChange, record, type, validate
       validateDate('collectedDate', dates.collectedDate);
       validateDate('receivedDate', dates.receivedDate);
     }
-  }, [validate, dates.collectedDate, dates.receivedDate, validateDate]); 
+  }, [validate, dates.collectedDate, dates.receivedDate, validateDate]);
 
   return (
     <Grid item xs={12} sx={datePickerStyle}>

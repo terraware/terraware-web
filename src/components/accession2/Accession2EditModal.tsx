@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Grid, Typography } from '@mui/material';
 import { Button, DialogBox, Textfield } from '@terraware/web-components';
 import { Accession2, updateAccession2 } from 'src/api/accessions2/accession';
@@ -20,13 +21,27 @@ export interface Accession2EditModalProps {
   reload: () => void;
 }
 
+const MANDATORY_FIELDS = ['speciesId', 'collectedDate'] as const;
+
+type MandatoryField = typeof MANDATORY_FIELDS[number];
+
 export default function Accession2EditModal(props: Accession2EditModalProps): JSX.Element {
   const { onClose, open, accession, organization, reload } = props;
   const [record, setRecord, onChange] = useForm(accession);
+  const [validateFields, setValidateFields] = useState<boolean>(false);
   const snackbar = useSnackbar();
+
+  const hasErrors = () => {
+    const missingRequiredField = MANDATORY_FIELDS.some((field: MandatoryField) => !record || !record[field]);
+    return missingRequiredField;
+  };
 
   const saveAccession = async () => {
     if (record) {
+      if (hasErrors()) {
+        setValidateFields(true);
+        return;
+      }
       const response = await updateAccession2(record);
       if (response.requestSucceeded && accession) {
         reload();
@@ -65,8 +80,8 @@ export default function Accession2EditModal(props: Accession2EditModalProps): JS
             readonly={true}
           />
         </Grid>
-        <Species2Dropdown record={record} organization={organization} setRecord={setRecord} />
-        <CollectedReceivedDate2 record={record} onChange={onChange} type='collected' />
+        <Species2Dropdown record={record} organization={organization} setRecord={setRecord} validate={validateFields} />
+        <CollectedReceivedDate2 record={record} onChange={onChange} type='collected' validate={validateFields} />
         <Grid item xs={12}>
           <Collectors2
             organizationId={organization.id}
