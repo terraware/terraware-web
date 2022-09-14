@@ -1,6 +1,6 @@
+import React, { useCallback, useState, useEffect } from 'react';
 import { useTheme, Grid } from '@mui/material';
 import { DatePicker } from '@terraware/web-components';
-import React, { useState } from 'react';
 import { Accession2, AccessionPostRequestBody } from 'src/api/accessions2/accession';
 import strings from 'src/strings';
 
@@ -8,6 +8,7 @@ interface Props {
   onChange: (id: string, value: string) => void;
   record: Accession2 | AccessionPostRequestBody;
   type: 'collected' | 'received';
+  validate?: boolean;
 }
 
 export type Dates = {
@@ -15,9 +16,10 @@ export type Dates = {
   receivedDate?: any;
 };
 
-export default function CollecteReceivedDate2({ onChange, record, type }: Props): JSX.Element {
+export default function CollecteReceivedDate2({ onChange, record, type, validate }: Props): JSX.Element {
   const theme = useTheme();
 
+  const [dateErrors, setDateErrors] = useState<{ [key: string]: string | undefined }>({});
   const [dates, setDates] = useState<Dates>({
     collectedDate: record.collectedDate,
     receivedDate: record.receivedDate,
@@ -30,16 +32,47 @@ export default function CollecteReceivedDate2({ onChange, record, type }: Props)
     marginTop: theme.spacing(2),
   };
 
+  const setDateError = (id: string, error?: string) => {
+    setDateErrors((prev) => ({
+      ...prev,
+      [id]: error,
+    }));
+  };
+
+  const validateDate = useCallback(
+    (id: string, value?: any) => {
+      const date = new Date(value).getTime();
+      const now = Date.now();
+
+      setDateError(id, '');
+
+      if (!value || isNaN(date)) {
+        const required = validate && !value;
+        setDateError(id, required ? strings.REQUIRED_FIELD : strings.INVALID_DATE);
+        return false;
+      } else if (date > now) {
+        setDateError(id, strings.NO_FUTURE_DATES);
+        return false;
+      } else {
+        return true;
+      }
+    },
+    [validate]
+  );
+
   const changeDate = (id: string, value?: any) => {
     setDates((curr) => ({ ...curr, [id]: value }));
-    const date = new Date(value).getTime();
-    const now = Date.now();
-    if (isNaN(date) || date > now) {
-      return;
-    } else {
-      onChange(id, value);
-    }
+
+    const valid = validateDate(id, value);
+    onChange(id, valid ? value : '');
   };
+
+  useEffect(() => {
+    if (validate) {
+      validateDate('collectedDate', dates.collectedDate);
+      validateDate('receivedDate', dates.receivedDate);
+    }
+  }, [validate, dates.collectedDate, dates.receivedDate, validateDate]);
 
   return (
     <Grid item xs={12} sx={datePickerStyle}>
@@ -50,6 +83,8 @@ export default function CollecteReceivedDate2({ onChange, record, type }: Props)
           aria-label={strings.COLLECTION_DATE_REQUIRED}
           value={dates.collectedDate}
           onChange={changeDate}
+          errorText={dateErrors.collectedDate}
+          maxDate={Date.now()}
         />
       ) : (
         <DatePicker
@@ -58,6 +93,7 @@ export default function CollecteReceivedDate2({ onChange, record, type }: Props)
           aria-label={strings.RECEIVING_DATE_REQUIRED}
           value={dates.receivedDate}
           onChange={changeDate}
+          errorText={dateErrors.receivedDate}
         />
       )}
     </Grid>

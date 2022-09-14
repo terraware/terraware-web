@@ -90,7 +90,6 @@ export default function EditLocationDialog(props: EditLocationDialogProps): JSX.
             selectedStorageLocation={seedBanks.find((sb) => sb.id === record.facilityId)}
             storageLocations={seedBanks}
             onChange={(value: Facility) => onChangeHandler(value)}
-            readonly={true}
           />
         </Grid>
         <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
@@ -99,7 +98,6 @@ export default function EditLocationDialog(props: EditLocationDialogProps): JSX.
             selectedStorageSubLocation={record.storageLocation}
             storageSubLocations={storageLocations.map((obj) => obj.storageLocation)}
             onChange={(value: string) => onChange('storageLocation', value)}
-            readonly={false}
           />
         </Grid>
       </Grid>

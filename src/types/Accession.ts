@@ -12,17 +12,19 @@ export const ACCESSION_STATES = [
 
 export const ACCESSION_2_STATES = [
   'Awaiting Check-In',
-  'Pending',
   'Awaiting Processing',
-  'Processing',
   'Cleaning',
-  'Processed',
   'Drying',
-  'Dried',
   'In Storage',
-  'Withdrawn',
   'Used Up',
-  'Nursery',
+];
+
+export const ACCESSION_2_CREATE_STATES = [
+  'Awaiting Check-In',
+  'Awaiting Processing',
+  'Cleaning',
+  'Drying',
+  'In Storage',
 ];
 
 export const ACCESSION_2_COLLECTION_SOURCES = ['Wild', 'Reintroduced', 'Cultivated', 'Other'];

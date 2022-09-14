@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import strings from 'src/strings';
 import { APP_PATHS } from 'src/constants';
@@ -13,7 +13,7 @@ import Textfield from '../common/Textfield/Textfield';
 import FormBottomBar from '../common/FormBottomBar';
 import Select from '../common/Select/Select';
 import SeedBank2Selector from './SeedBank2Selector';
-import { ACCESSION_2_STATES } from 'src/types/Accession';
+import { ACCESSION_2_CREATE_STATES } from 'src/types/Accession';
 import Accession2Address from './Accession2Address';
 import Accession2GPS from './Accession2GPS';
 import Accession2PlantSiteDetails from './Accession2PlantSiteDetails';
@@ -36,12 +36,24 @@ const defaultAccession = (): AccessionPostRequestBody =>
     receivedDate: getDateDisplayValue(Date.now()),
   } as AccessionPostRequestBody);
 
+const MANDATORY_FIELDS = [
+  'speciesId',
+  'collectedDate',
+  'receivedDate',
+  'state',
+  'facilityId',
+  'storageLocation',
+] as const;
+
+type MandatoryField = typeof MANDATORY_FIELDS[number];
+
 export default function CreateAccession(props: CreateAccessionProps): JSX.Element {
   const { organization } = props;
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const history = useHistory();
   const snackbar = useSnackbar();
+  const [validateFields, setValidateFields] = useState<boolean>(false);
   const [record, setRecord, onChange] = useForm<AccessionPostRequestBody>(defaultAccession());
 
   const accessionsDatabase = {
@@ -52,17 +64,20 @@ export default function CreateAccession(props: CreateAccessionProps): JSX.Elemen
     marginTop: theme.spacing(2),
   };
 
-  const getAccessionStatuses = () => {
-    // TODO: return statuses that can be used for create, for now return all statuses
-    return ACCESSION_2_STATES;
-  };
-
   const goToAccessions = () => {
     history.push(accessionsDatabase);
   };
 
+  const hasErrors = () => {
+    const missingRequiredField = MANDATORY_FIELDS.some((field: MandatoryField) => !record[field]);
+    return missingRequiredField;
+  };
+
   const saveAccession = async () => {
-    // TODO data validation and show errors
+    if (hasErrors()) {
+      setValidateFields(true);
+      return;
+    }
     const response = await postAccession(record);
     if (response.requestSucceeded) {
       history.replace(accessionsDatabase);
@@ -99,9 +114,14 @@ export default function CreateAccession(props: CreateAccessionProps): JSX.Elemen
             </Typography>
           </Grid>
           <Grid item xs={12} sx={marginTop}>
-            <Species2Dropdown record={record} organization={organization} setRecord={setRecord} />
+            <Species2Dropdown
+              record={record}
+              organization={organization}
+              setRecord={setRecord}
+              validate={validateFields}
+            />
           </Grid>
-          <CollectedReceivedDate2 record={record} onChange={onChange} type='collected' />
+          <CollectedReceivedDate2 record={record} onChange={onChange} type='collected' validate={validateFields} />
           <Grid item xs={12} sx={marginTop}>
             <Collectors2
               organizationId={organization.id}
@@ -140,19 +160,24 @@ export default function CreateAccession(props: CreateAccessionProps): JSX.Elemen
               {strings.SEED_PROCESSING_DETAIL}
             </Typography>
           </Grid>
-          <CollectedReceivedDate2 record={record} onChange={onChange} type='received' />
+          <CollectedReceivedDate2 record={record} onChange={onChange} type='received' validate={validateFields} />
           <Grid item xs={12} sx={marginTop}>
             <Select
               id='state'
               selectedValue={record.state}
               onChange={(value: string) => onChange('state', value)}
               label={strings.PROCESSING_STATUS_REQUIRED}
-              readonly={false}
-              options={getAccessionStatuses()}
+              readonly={true}
+              options={ACCESSION_2_CREATE_STATES}
               fullWidth={true}
             />
           </Grid>
-          <SeedBank2Selector organization={organization} record={record} onChange={onChange} />
+          <SeedBank2Selector
+            organization={organization}
+            record={record}
+            onChange={onChange}
+            validate={validateFields}
+          />
         </Grid>
       </Container>
       <FormBottomBar onCancel={goToAccessions} onSave={saveAccession} saveButtonText={strings.ADD} />

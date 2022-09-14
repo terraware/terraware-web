@@ -8,11 +8,11 @@ type StorageLocationSelectorProps = {
   selectedStorageLocation?: Facility;
   storageLocations: Facility[];
   onChange: (value: Facility) => void;
-  readonly: boolean;
+  errorText?: string;
 };
 
 export default function StorageLocationSelector(props: StorageLocationSelectorProps): JSX.Element {
-  const { label, selectedStorageLocation, storageLocations, onChange, readonly } = props;
+  const { label, selectedStorageLocation, storageLocations, onChange, errorText } = props;
 
   return (
     <SelectT<Facility>
@@ -26,7 +26,8 @@ export default function StorageLocationSelector(props: StorageLocationSelectorPr
       selectedValue={selectedStorageLocation}
       toT={(name: string) => ({ name } as Facility)}
       fullWidth={true}
-      readonly={readonly}
+      readonly={true}
+      errorText={errorText}
     />
   );
 }

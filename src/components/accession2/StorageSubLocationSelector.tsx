@@ -7,11 +7,11 @@ type StorageSubLocationSelectorProps = {
   selectedStorageSubLocation?: string;
   storageSubLocations: string[];
   onChange: (value: string) => void;
-  readonly: boolean;
+  errorText?: string;
 };
 
 export default function StorageSubLocationSelector(props: StorageSubLocationSelectorProps): JSX.Element {
-  const { label, selectedStorageSubLocation, storageSubLocations, onChange, readonly } = props;
+  const { label, selectedStorageSubLocation, storageSubLocations, onChange, errorText } = props;
 
   return (
     <Select
@@ -21,7 +21,8 @@ export default function StorageSubLocationSelector(props: StorageSubLocationSele
       onChange={onChange}
       selectedValue={selectedStorageSubLocation}
       fullWidth={true}
-      readonly={readonly}
+      readonly={true}
+      errorText={errorText}
     />
   );
 }
