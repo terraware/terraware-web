@@ -14,13 +14,13 @@ type Accession2PlantSiteDetailsProps = {
 
 export default function Accession2PlantSiteDetails(props: Accession2PlantSiteDetailsProps): JSX.Element {
   const { record, onChange, opened } = props;
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(opened || false);
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
 
   const gridSize = () => (isMobile ? 12 : 6);
 
-  if (!isOpen && !opened) {
+  if (!isOpen) {
     return (
       <Grid item xs={12} marginTop={theme.spacing(2)}>
         <Box display='flex' justifyContent='flex-start'>

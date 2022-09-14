@@ -17,7 +17,7 @@ type Accession2GPSProps = {
 
 export default function Accession2GPS(props: Accession2GPSProps): JSX.Element {
   const { record, onChange, opened } = props;
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(opened || false);
   const [gpsCoordsList, setGpsCoordsList] = useState<string[]>(['']);
   const theme = useTheme();
 
@@ -66,7 +66,7 @@ export default function Accession2GPS(props: Accession2GPSProps): JSX.Element {
     });
   };
 
-  if (!isOpen && !opened) {
+  if (!isOpen) {
     return (
       <Grid item xs={12} marginTop={theme.spacing(2)}>
         <Box display='flex' justifyContent='flex-start'>

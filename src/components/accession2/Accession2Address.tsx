@@ -17,7 +17,7 @@ type Accession2AddressProps = {
 
 export default function Accession2Address(props: Accession2AddressProps): JSX.Element {
   const { record, onChange, opened } = props;
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(opened || false);
   const [countries, setCountries] = useState<Country[]>();
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
@@ -71,7 +71,7 @@ export default function Accession2Address(props: Accession2AddressProps): JSX.El
     }
   };
 
-  if (!isOpen && !opened) {
+  if (!isOpen) {
     return (
       <Grid item xs={12} marginTop={theme.spacing(2)}>
         <Box display='flex' justifyContent='flex-start'>
