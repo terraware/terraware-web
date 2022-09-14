@@ -7,7 +7,6 @@ import useForm from 'src/utils/useForm';
 import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
 import { AccessionPostRequestBody, postAccession } from 'src/api/accessions2/accession';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import { DatePicker } from '@terraware/web-components';
 import Species2Dropdown from './Species2Dropdown';
 import Collectors2 from './Collectors2';
 import Textfield from '../common/Textfield/Textfield';
@@ -20,6 +19,7 @@ import Accession2GPS from './Accession2GPS';
 import Accession2PlantSiteDetails from './Accession2PlantSiteDetails';
 import getDateDisplayValue from 'src/utils/date';
 import useSnackbar from 'src/utils/useSnackbar';
+import CollectedReceivedDate2 from './CollectedReceivedDate2';
 
 type CreateAccessionProps = {
   organization: ServerOrganization;
@@ -35,11 +35,6 @@ const defaultAccession = (): AccessionPostRequestBody =>
     state: 'Awaiting Check-In',
     receivedDate: getDateDisplayValue(Date.now()),
   } as AccessionPostRequestBody);
-
-type Dates = {
-  collectedDate?: any;
-  receivedDate?: any;
-};
 
 const MANDATORY_FIELDS = [
   'speciesId',
@@ -59,12 +54,8 @@ export default function CreateAccession(props: CreateAccessionProps): JSX.Elemen
   const history = useHistory();
   const snackbar = useSnackbar();
   const [validateFields, setValidateFields] = useState<boolean>(false);
-  const [dateErrors, setDateErrors] = useState<{ [key: string]: string | undefined }>({});
   const [record, setRecord, onChange] = useForm<AccessionPostRequestBody>(defaultAccession());
-  const [dates, setDates] = useState<Dates>({
-    collectedDate: record.collectedDate,
-    receivedDate: record.receivedDate,
-  });
+
   const accessionsDatabase = {
     pathname: APP_PATHS.ACCESSIONS,
   };
@@ -73,52 +64,17 @@ export default function CreateAccession(props: CreateAccessionProps): JSX.Elemen
     marginTop: theme.spacing(2),
   };
 
-  const datePickerStyle = {
-    '.MuiFormControl-root': {
-      width: '100%',
-    },
-    ...marginTop,
-  };
-
-  const setDateError = (id: string, error?: string) => {
-    setDateErrors((prev) => ({
-      ...prev,
-      [id]: error,
-    }));
-  };
-
-  const changeDate = (id: string, value?: any) => {
-    setDates((curr) => ({ ...curr, [id]: value }));
-    const date = new Date(value).getTime();
-    const now = Date.now();
-
-    setDateError(id, '');
-
-    if (isNaN(date)) {
-      setDateError(id, strings.INVALID_DATE);
-      return;
-    } else if (date > now) {
-      setDateError(id, strings.NO_FUTURE_DATES);
-      return;
-    } else {
-      onChange(id, value);
-    }
-  };
-
   const goToAccessions = () => {
     history.push(accessionsDatabase);
   };
 
   const hasErrors = () => {
-    const missingRequiredField = MANDATORY_FIELDS.some((field: MandatoryField) => record[field] === undefined);
-    const hasDateErrors = dateErrors.recordedDate || dateErrors.collectedDate;
-    return missingRequiredField || hasDateErrors;
+    const missingRequiredField = MANDATORY_FIELDS.some((field: MandatoryField) => !record[field]);
+    return missingRequiredField;
   };
 
   const saveAccession = async () => {
     if (hasErrors()) {
-      setDateError('collectedDate', record.collectedDate ? dateErrors.collectedDate : strings.REQUIRED_FIELD);
-      setDateError('receivedDate', record.receivedDate ? dateErrors.receivedDate : strings.REQUIRED_FIELD);
       setValidateFields(true);
       return;
     }
@@ -165,17 +121,7 @@ export default function CreateAccession(props: CreateAccessionProps): JSX.Elemen
               validate={validateFields}
             />
           </Grid>
-          <Grid item xs={12} sx={datePickerStyle}>
-            <DatePicker
-              id='collectedDate'
-              label={strings.COLLECTION_DATE_REQUIRED}
-              aria-label={strings.COLLECTION_DATE_REQUIRED}
-              value={dates.collectedDate}
-              onChange={changeDate}
-              errorText={dateErrors.collectedDate}
-              maxDate={Date.now()}
-            />
-          </Grid>
+          <CollectedReceivedDate2 record={record} onChange={onChange} type='collected' validate={validateFields} />
           <Grid item xs={12} sx={marginTop}>
             <Collectors2
               organizationId={organization.id}
@@ -214,16 +160,7 @@ export default function CreateAccession(props: CreateAccessionProps): JSX.Elemen
               {strings.SEED_PROCESSING_DETAIL}
             </Typography>
           </Grid>
-          <Grid item xs={12} sx={datePickerStyle}>
-            <DatePicker
-              id='receivedDate'
-              label={strings.RECEIVING_DATE_REQUIRED}
-              aria-label={strings.RECEIVING_DATE_REQUIRED}
-              value={dates.receivedDate}
-              onChange={changeDate}
-              errorText={dateErrors.receivedDate}
-            />
-          </Grid>
+          <CollectedReceivedDate2 record={record} onChange={onChange} type='received' validate={validateFields} />
           <Grid item xs={12} sx={marginTop}>
             <Select
               id='state'

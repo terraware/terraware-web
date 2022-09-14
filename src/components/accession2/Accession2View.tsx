@@ -28,7 +28,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 interface Accession2ViewProps {
-  organization?: ServerOrganization;
+  organization: ServerOrganization;
   user: User;
 }
 
@@ -101,7 +101,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
 
   return (
     <TfMain>
-      {organization && accession && (
+      {accession && (
         <>
           <EditLocationModal
             open={openEditLocationModal}
@@ -249,7 +249,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
             </TabList>
           </Box>
           <TabPanel value='detail'>
-            <DetailPanel accession={accession} />
+            <DetailPanel accession={accession} organization={organization} reload={reloadData} />
           </TabPanel>
           <TabPanel value='history'>{strings.HISTORY}</TabPanel>
           <TabPanel value='viabilityTesting'>{strings.VIABILITY_TESTING}</TabPanel>

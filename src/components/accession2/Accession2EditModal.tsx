@@ -1,0 +1,114 @@
+import { Grid, Typography } from '@mui/material';
+import { Button, DialogBox, Textfield } from '@terraware/web-components';
+import { Accession2, updateAccession2 } from 'src/api/accessions2/accession';
+import strings from 'src/strings';
+import { ServerOrganization } from 'src/types/Organization';
+import useForm from 'src/utils/useForm';
+import Accession2Address from './Accession2Address';
+import Accession2GPS from './Accession2GPS';
+import CollectedReceivedDate2 from './CollectedReceivedDate2';
+import Collectors2 from './Collectors2';
+import Species2Dropdown from './Species2Dropdown';
+import Accession2PlantSiteDetails from './Accession2PlantSiteDetails';
+import useSnackbar from 'src/utils/useSnackbar';
+
+export interface Accession2EditModalProps {
+  open: boolean;
+  accession: Accession2;
+  onClose: () => void;
+  organization: ServerOrganization;
+  reload: () => void;
+}
+
+export default function Accession2EditModal(props: Accession2EditModalProps): JSX.Element {
+  const { onClose, open, accession, organization, reload } = props;
+  const [record, setRecord, onChange] = useForm(accession);
+  const snackbar = useSnackbar();
+
+  const saveAccession = async () => {
+    if (record) {
+      const response = await updateAccession2(record);
+      if (response.requestSucceeded && accession) {
+        reload();
+        onCloseHandler();
+      } else {
+        snackbar.toastError();
+        onCloseHandler();
+      }
+    }
+  };
+
+  const onCloseHandler = () => {
+    onClose();
+  };
+
+  return (
+    <DialogBox
+      onClose={onCloseHandler}
+      open={open}
+      title={strings.ACCESSION_DETAIL}
+      size='x-large'
+      middleButtons={[
+        <Button label={strings.CANCEL} type='passive' onClick={onCloseHandler} priority='secondary' key='button-1' />,
+        <Button onClick={saveAccession} label={strings.SAVE} key='button-2' />,
+      ]}
+      scrolled={true}
+    >
+      <Grid container xs={12} spacing={2} textAlign='left'>
+        <Grid item xs={12}>
+          <Textfield
+            id='accessionNumber'
+            type='text'
+            label={strings.ID}
+            value={record?.accessionNumber}
+            onChange={onChange}
+            readonly={true}
+          />
+        </Grid>
+        <Species2Dropdown record={record} organization={organization} setRecord={setRecord} />
+        <CollectedReceivedDate2 record={record} onChange={onChange} type='collected' />
+        <Grid item xs={12}>
+          <Collectors2
+            organizationId={organization.id}
+            id='collectors'
+            onChange={onChange}
+            collectors={record.collectors}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <Typography>{strings.SITE_DETAIL} </Typography>
+        </Grid>
+        <Grid item xs={12}>
+          <Textfield
+            id='collectionSiteName'
+            type='text'
+            label={strings.COLLECTING_SITE}
+            value={record?.collectionSiteName}
+            onChange={onChange}
+          />
+        </Grid>
+
+        <Grid item xs={12}>
+          <Textfield
+            id='collectionSiteLandowner'
+            type='text'
+            label={strings.LANDOWNER}
+            value={record?.collectionSiteLandowner}
+            onChange={onChange}
+          />
+        </Grid>
+        <Accession2Address record={record} onChange={onChange} opened={true} />
+        <Grid item xs={12}>
+          <Typography>{strings.GPS_COORDINATES} </Typography>
+        </Grid>
+        <Grid item xs={12}>
+          <Accession2GPS record={record} onChange={onChange} opened={true} />
+        </Grid>
+        <Grid item xs={12}>
+          <Typography>{strings.PLANT_DETAIL} </Typography>
+        </Grid>
+        <Accession2PlantSiteDetails record={record} onChange={onChange} opened={true} />
+      </Grid>
+    </DialogBox>
+  );
+}

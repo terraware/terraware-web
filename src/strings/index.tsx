@@ -544,7 +544,7 @@ const strings = new LocalizedStrings({
     CITY: 'City',
     STATE_PROVINCE_REGION: 'State/Province/Region',
     DIRECTION_OR_DESCRIPTION: 'Direction or Description',
-    GPS_COORDINATES: 'GPS Coordinates (Latitude, Longitude)',
+    GPS_COORDINATES: 'GPS Coordinates',
     COLLECTION_SOURCE: 'Collection Source',
     UPDATE_STATUS_WARNING: 'You‘re about to update the staus',
     ADD_AN_ACCESSION: 'Add an Accession',
@@ -590,6 +590,10 @@ const strings = new LocalizedStrings({
     REINTRODUCED: 'Reintroduced',
     CULTIVATED_EX_SITU: 'Cultivated (Ex Situ)',
     INVALID_DATE: 'Invalid date',
+    ACCESSION_DETAIL: 'Accession Detail',
+    ID: 'ID',
+    SITE_DETAIL: 'Site Detail',
+    PLANT_DETAIL: 'Plant Detail',
   },
 });
 
