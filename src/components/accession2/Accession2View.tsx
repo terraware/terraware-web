@@ -184,7 +184,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
     return '';
   };
 
-  const showWithdrawalButton = () => {
+  const renderWithdrawalButton = () => {
     if (accession?.remainingQuantity?.quantity) {
       return <Button onClick={() => setOpenWithdrawModal(true)} label={strings.WITHDRAW} />;
     }
@@ -241,7 +241,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
             {accession && accession.state === 'Awaiting Check-In' ? (
               <Button onClick={() => checkInAccession()} label={strings.CHECK_IN} />
             ) : (
-              showWithdrawalButton()
+              renderWithdrawalButton()
             )}
           </Box>
         </Box>
