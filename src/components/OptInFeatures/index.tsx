@@ -66,14 +66,9 @@ export default function OptInFeatures({ refresh }: OptInFeaturesProps): JSX.Elem
     paddingTop: isMobile ? '20px !important' : 0,
     borderLeft: isMobile ? 'none' : isDisclosure ? '1px solid #b86f6f' : '1px solid #ddd',
     borderTop: isMobile ? (isDisclosure ? '1px solid #b86f6f' : '1px solid #ddd') : 'none',
-    fontSize: '12px',
+    fontSize: '14px',
     color: isDisclosure ? '#b86f6f' : 'inherit',
   });
-
-  const background = {
-    background:
-      'url(/assets/trees-right.png) no-repeat 100% 100%/auto 248px, url(/assets/trees-left.png) no-repeat 0 100%/auto 175px, url(/assets/water.png) repeat-x 0 100%/auto 142px, url(/assets/mountain.png) no-repeat 0 100%/auto 233px, url(/assets/far-mountain.png) no-repeat 100% 100%/auto 317px, url(/assets/background.png) no-repeat 100% 0/90% 633px, linear-gradient(to bottom right, rgb(255, 255, 255) 0%, rgb(199, 226, 234) 100%) no-repeat 0 0/auto',
-  };
 
   return (
     <Box
@@ -81,9 +76,7 @@ export default function OptInFeatures({ refresh }: OptInFeaturesProps): JSX.Elem
         height: '100%',
         display: 'flex',
         flexDirection: 'column',
-        fontFamily: 'monospace',
         padding: '40px',
-        ...background,
       }}
     >
       <PageSnackbar />
@@ -96,7 +89,7 @@ export default function OptInFeatures({ refresh }: OptInFeaturesProps): JSX.Elem
               display: 'flex',
               color: '#444',
               fontWeight: 'bold',
-              fontSize: '18px',
+              fontSize: '20px',
               marginBottom: '30px',
               justifyContent: 'center',
             }}
@@ -121,7 +114,7 @@ export default function OptInFeatures({ refresh }: OptInFeaturesProps): JSX.Elem
                 sx={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', alignItems: 'center' }}
               >
                 <Grid item xs={gridSize()}>
-                  <Box sx={{ display: 'inline-block', color: '#444', fontSize: '14px', whiteSpace: 'pre' }}>
+                  <Box sx={{ display: 'inline-block', color: '#444', fontSize: '16px', whiteSpace: 'pre' }}>
                     <Switch
                       checked={preferences[f.preferenceName] === true}
                       onChange={(event) => savePreference(f, event.target.checked)}
@@ -130,18 +123,22 @@ export default function OptInFeatures({ refresh }: OptInFeaturesProps): JSX.Elem
                   </Box>
                 </Grid>
                 <Grid item xs={gridSize()} sx={gridStyle(false)}>
-                  {f.description.map((d, index) => (
-                    <Box key={index} sx={{ marginBottom: '5px' }}>
-                      {d}
-                    </Box>
-                  ))}
+                  <ul>
+                    {f.description.map((d, index) => (
+                      <li key={index}>
+                        <Box sx={{ marginBottom: '5px' }}>{d}</Box>
+                      </li>
+                    ))}
+                  </ul>
                 </Grid>
                 <Grid item xs={gridSize()} sx={gridStyle(true)}>
-                  {f.disclosure.map((d, index) => (
-                    <Box key={index} sx={{ marginBottom: '5px', fontStyle: 'italic' }}>
-                      {d}
-                    </Box>
-                  ))}
+                  <ul>
+                    {f.disclosure.map((d, index) => (
+                      <li key={index}>
+                        <Box sx={{ marginBottom: '5px' }}>{d}</Box>
+                      </li>
+                    ))}
+                  </ul>
                 </Grid>
               </Grid>
             </Stack>
