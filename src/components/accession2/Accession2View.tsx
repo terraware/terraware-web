@@ -44,7 +44,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
   const [openDeleteAccession, setOpenDeleteAccession] = useState(false);
   const [openWithdrawModal, setOpenWithdrawModal] = useState(false);
   const [quantityModalOpened, setQuantityModalOpened] = useState(false);
-  const [checkInConfirmationModalOpened, setCheckInConfirmationModalOpened] = useState(false);
+  const [checkInConfirmationModalOpened, setCheckInConfirmationModalOpened] = useState(true);
   const [age, setAge] = useState('');
   const { organization, user } = props;
   const classes = useStyles();

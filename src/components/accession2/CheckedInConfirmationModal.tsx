@@ -18,7 +18,7 @@ export default function CheckedInConfirmationModal(props: CheckedInConfirmationM
       onClose={onClose}
       open={open}
       title={strings.ACCESSION_CHECKED_IN}
-      size='small'
+      size='medium'
       middleButtons={[<Button onClick={onClose} type='passive' label={strings.CLOSE} key='button-1' />]}
       message={strings.formatString(strings.ACCESSION_NUMBER_CHECKED_IN, accession.accessionNumber.toString())}
     />
