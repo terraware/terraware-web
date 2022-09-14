@@ -594,6 +594,9 @@ const strings = new LocalizedStrings({
     ID: 'ID',
     SITE_DETAIL: 'Site Detail',
     PLANT_DETAIL: 'Plant Detail',
+    ACCESSION_CHECKED_IN: 'Accession checked in!',
+    ACCESSION_NUMBER_CHECKED_IN: 'Accession {0} was successfully checked in!',
+    CLOSE: 'Close',
   },
 });
 
