@@ -597,6 +597,7 @@ const strings = new LocalizedStrings({
     ACCESSION_CHECKED_IN: 'Accession checked in!',
     ACCESSION_NUMBER_CHECKED_IN: 'Accession {0} was successfully checked in!',
     CLOSE: 'Close',
+    PRIVACY_POLICY: 'Privacy Policy',
   },
 });
 
