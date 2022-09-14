@@ -69,7 +69,7 @@ export default function Accession2EditModal(props: Accession2EditModalProps): JS
       ]}
       scrolled={true}
     >
-      <Grid container xs={12} spacing={2} textAlign='left'>
+      <Grid container item xs={12} spacing={2} textAlign='left'>
         <Grid item xs={12}>
           <Textfield
             id='accessionNumber'

@@ -18,6 +18,7 @@ import { getTodaysDateFormatted } from 'src/utils/date';
 import { WITHDRAWAL_SUBSTRATES, WITHDRAWAL_TREATMENTS, WITHDRAWAL_TYPES } from 'src/types/Accession';
 import useSnackbar from 'src/utils/useSnackbar';
 import { Dropdown } from '@terraware/web-components';
+import { isContributor } from 'src/utils/organization';
 
 export interface WithdrawDialogProps {
   open: boolean;
@@ -53,6 +54,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
   const [isNotesOpened, setIsNotesOpened] = useState(false);
   const theme = useTheme();
   const snackbar = useSnackbar();
+  const contributor = isContributor(organization);
 
   useEffect(() => {
     const getOrgUsers = async () => {
@@ -164,7 +166,19 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
     onClose();
   };
 
-  const renderUser = (userSel: User) => `${userSel?.firstName} ${userSel?.lastName}`;
+  const renderUser = (userSel: User): string => {
+    const firstName = contributor ? user.firstName : userSel?.firstName;
+    const lastName = contributor ? user.lastName : userSel?.lastName;
+    const email = contributor ? user.email : userSel?.email;
+
+    if (!firstName && !lastName) {
+      return email as string;
+    } else if (firstName && lastName) {
+      return `${firstName} ${lastName}`;
+    } else {
+      return (firstName || lastName) as string;
+    }
+  };
 
   return (
     <DialogBox
@@ -266,6 +280,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
             selectedValue={users?.find((userSel) => userSel.id === record.withdrawnByUserId)}
             toT={(firstName: string) => ({ firstName } as OrganizationUser)}
             fullWidth={true}
+            disabled={contributor}
           />
         </Grid>
         <Grid item xs={12}>
