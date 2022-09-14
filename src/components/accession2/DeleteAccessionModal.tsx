@@ -9,13 +9,13 @@ import { APP_PATHS } from 'src/constants';
 import { useHistory } from 'react-router-dom';
 import useSnackbar from 'src/utils/useSnackbar';
 
-export interface DelteAccessionDialogProps {
+export interface DeleteAccessionDialogProps {
   open: boolean;
   accession: Accession2;
   onClose: () => void;
 }
 
-export default function DelteAccessionModal(props: DelteAccessionDialogProps): JSX.Element {
+export default function DeleteAccessionModal(props: DeleteAccessionDialogProps): JSX.Element {
   const { onClose, open, accession } = props;
   const history = useHistory();
   const snackbar = useSnackbar();

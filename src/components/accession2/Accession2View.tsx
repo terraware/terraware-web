@@ -17,6 +17,8 @@ import EditLocationModal from './EditLocationModal';
 import EditStateModal from './EditStateModal';
 import QuantityModal from './QuantityModal';
 import WithdrawModal from './WithdrawModal';
+import CheckedInConfirmationModal from './CheckedInConfirmationModal';
+import useSnackbar from 'src/utils/useSnackbar';
 
 const useStyles = makeStyles(() => ({
   iconStyle: {
@@ -27,6 +29,7 @@ const useStyles = makeStyles(() => ({
     fill: '#3A4445',
   },
 }));
+
 interface Accession2ViewProps {
   organization: ServerOrganization;
   user: User;
@@ -41,9 +44,11 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
   const [openDeleteAccession, setOpenDeleteAccession] = useState(false);
   const [openWithdrawModal, setOpenWithdrawModal] = useState(false);
   const [quantityModalOpened, setQuantityModalOpened] = useState(false);
+  const [checkInConfirmationModalOpened, setCheckInConfirmationModalOpened] = useState(false);
   const [age, setAge] = useState('');
   const { organization, user } = props;
   const classes = useStyles();
+  const snackbar = useSnackbar();
 
   const reloadData = useCallback(() => {
     const populateAccession = async () => {
@@ -94,8 +99,14 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
 
   const checkInAccession = async () => {
     if (accession) {
-      await checkIn(accession.id);
-      reloadData();
+      try {
+        await checkIn(accession.id);
+        reloadData();
+        setCheckInConfirmationModalOpened(true);
+      } catch (e) {
+        // swallow error?
+        snackbar.toastError();
+      }
     }
   };
 
@@ -195,6 +206,11 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
     <TfMain>
       {accession && (
         <>
+          <CheckedInConfirmationModal
+            open={checkInConfirmationModalOpened}
+            onClose={() => setCheckInConfirmationModalOpened(false)}
+            accession={accession}
+          />
           <EditLocationModal
             open={openEditLocationModal}
             onClose={() => setOpenEditLocationModal(false)}
