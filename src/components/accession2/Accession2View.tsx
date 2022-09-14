@@ -99,6 +99,26 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
     }
   };
 
+  const getAbsoluteQuantity = () => {
+    if (accession && accession.remainingQuantity) {
+      if (accession.remainingQuantity.units === 'Seeds') {
+        return (
+          <Typography display='flex' sx={{ marginRight: '5px' }}>
+            <Typography sx={{ fontWeight: 600, marginRight: '5px' }}>{accession.remainingQuantity.quantity}</Typography>
+            <Typography>{strings.CT}</Typography>
+          </Typography>
+        );
+      } else {
+        return (
+          <Typography display='flex' sx={{ marginRight: '5px' }}>
+            <Typography sx={{ fontWeight: 600, marginRight: '5px' }}>{accession.remainingQuantity.grams}</Typography>
+            <Typography>{strings.GRAMS}</Typography>
+          </Typography>
+        );
+      }
+    }
+  };
+
   const getStylesForState = () => {
     switch (accession?.state) {
       case 'Awaiting Check-In':
@@ -141,6 +161,27 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
         };
       }
     }
+  };
+
+  const getEstimatedQuantity = () => {
+    if (accession?.remainingQuantity?.units === 'Seeds') {
+      if (accession.estimatedWeight?.grams) {
+        return (
+          <Typography>
+            (~{accession.estimatedWeight?.grams} {strings.GRAMS})
+          </Typography>
+        );
+      }
+    } else {
+      if (accession?.estimatedCount) {
+        return (
+          <Typography>
+            (~{accession?.estimatedCount} {strings.CT})
+          </Typography>
+        );
+      }
+    }
+    return '';
   };
 
   return (
@@ -265,10 +306,9 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
                 },
               }}
             >
-              <Typography>
-                {accession.estimatedCount} {strings.CT}
-                {accession.estimatedWeight?.grams ? ` (${accession.estimatedWeight?.grams} ${strings.GRAMS})` : ''}
-              </Typography>
+              <Box display='flex'>
+                {getAbsoluteQuantity()} {getEstimatedQuantity()}
+              </Box>
               <IconButton sx={{ marginLeft: 3, height: '24px' }} onClick={() => setQuantityModalOpened(true)}>
                 <Icon name='iconEdit' className={`${classes.editIcon} edit-icon`} />
               </IconButton>
