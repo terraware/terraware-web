@@ -9,11 +9,12 @@ import CollectionSource from './CollectionSource';
 type Accession2PlantSiteDetailsProps = {
   record: AccessionPostRequestBody;
   onChange: (id: string, value?: any) => void;
+  opened?: boolean;
 };
 
 export default function Accession2PlantSiteDetails(props: Accession2PlantSiteDetailsProps): JSX.Element {
-  const { record, onChange } = props;
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const { record, onChange, opened } = props;
+  const [isOpen, setIsOpen] = useState<boolean>(opened || false);
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
 

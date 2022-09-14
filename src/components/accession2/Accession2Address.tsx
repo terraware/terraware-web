@@ -12,11 +12,12 @@ import { Country } from 'src/types/Country';
 type Accession2AddressProps = {
   record: AccessionPostRequestBody;
   onChange: (id: string, value?: any) => void;
+  opened?: boolean;
 };
 
 export default function Accession2Address(props: Accession2AddressProps): JSX.Element {
-  const { record, onChange } = props;
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const { record, onChange, opened } = props;
+  const [isOpen, setIsOpen] = useState<boolean>(opened || false);
   const [countries, setCountries] = useState<Country[]>();
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
