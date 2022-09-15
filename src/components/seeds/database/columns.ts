@@ -13,7 +13,8 @@ type DatabaseColumnFilterType =
   | 'search'
   | 'date_range'
   | 'number_range'
-  | 'count_weight';
+  | 'count_weight'
+  | 'hidden';
 
 export interface DatabaseColumn extends Omit<TableColumnType, 'key'> {
   key: string;
@@ -319,6 +320,12 @@ const COLUMNS: DatabaseColumn[] = [
     type: 'string',
     filter: { type: 'multiple_selection' },
   },
+  {
+    key: 'age',
+    name: 'Age',
+    type: 'string',
+    filter: { type: 'hidden' },
+  },
 ];
 
 export const COLUMNS_INDEXED = COLUMNS.reduce((acum, value) => {
@@ -334,7 +341,7 @@ export interface Preset {
 
 export const defaultPreset: Preset = {
   name: 'Default',
-  fields: ['accessionNumber', 'speciesName', 'siteLocation', 'state', 'collectedDate', 'receivedDate', 'facility_name'],
+  fields: ['accessionNumber', 'speciesName', 'state', 'siteLocation', 'collectedDate', 'age'],
 };
 
 const generalInventoryPreset: Preset = {
