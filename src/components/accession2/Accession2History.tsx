@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { Accession2, AccessionHistoryEntry, getAccessionHistory } from 'src/api/accessions2/accession';
 import strings from 'src/strings';
 import useSnackbar from 'src/utils/useSnackbar';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
 import _ from 'lodash';
 
 interface Accession2HistoryProps {
@@ -15,7 +14,6 @@ export default function Accession2History(props: Accession2HistoryProps): JSX.El
   const [history, setHistory] = useState<AccessionHistoryEntry[]>();
   const theme = useTheme();
   const snackbar = useSnackbar();
-  const { isMobile } = useDeviceInfo();
 
   useEffect(() => {
     const loadHistory = async () => {
@@ -49,7 +47,7 @@ export default function Accession2History(props: Accession2HistoryProps): JSX.El
         <Box
           key={index}
           display='flex'
-          flexDirection={isMobile ? 'column' : 'row'}
+          flexDirection='row'
           fontSize='15px'
           fontWeight={400}
           color='#3A4445'
