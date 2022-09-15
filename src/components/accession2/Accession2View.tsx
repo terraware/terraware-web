@@ -4,7 +4,7 @@ import { makeStyles } from '@mui/styles';
 import { Button, Icon } from '@terraware/web-components';
 import moment from 'moment';
 import { useCallback, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { Accession2, getAccession2 } from 'src/api/accessions2/accession';
 import { checkIn } from 'src/api/seeds/accession';
 import strings from 'src/strings';
@@ -18,7 +18,10 @@ import EditStateModal from './EditStateModal';
 import QuantityModal from './QuantityModal';
 import WithdrawModal from './WithdrawModal';
 import CheckedInConfirmationModal from './CheckedInConfirmationModal';
+import Accession2History from './Accession2History';
 import useSnackbar from 'src/utils/useSnackbar';
+import useQuery from 'src/utils/useQuery';
+import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
 const useStyles = makeStyles(() => ({
   iconStyle: {
@@ -30,14 +33,21 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
+const TABS = ['detail', 'history', 'viabilityTesting'];
+
 interface Accession2ViewProps {
   organization: ServerOrganization;
   user: User;
 }
 
 export default function Accession2View(props: Accession2ViewProps): JSX.Element {
+  const query = useQuery();
+  const history = useHistory();
+  const location = useStateLocation();
+  const tab = (query.get('tab') || '').toLowerCase();
+  const preselectedTab = TABS.indexOf(tab) === -1 ? 'detail' : tab;
   const { accessionId } = useParams<{ accessionId: string }>();
-  const [selectedTab, setSelectedTab] = useState('detail');
+  const [selectedTab, setSelectedTab] = useState(preselectedTab);
   const [accession, setAccession] = useState<Accession2>();
   const [openEditLocationModal, setOpenEditLocationModal] = useState(false);
   const [openEditStateModal, setOpenEditStateModal] = useState(false);
@@ -80,8 +90,13 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
     }
   }, [accession]);
 
+  useEffect(() => {
+    setSelectedTab((query.get('tab') || 'detail') as string);
+  }, [query]);
+
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
-    setSelectedTab(newValue);
+    query.set('tab', newValue);
+    history.push(getLocation(location.pathname, location, query.toString()));
   };
 
   const tabStyles = {
@@ -365,7 +380,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
           <TabPanel value='detail'>
             <DetailPanel accession={accession} organization={organization} reload={reloadData} />
           </TabPanel>
-          <TabPanel value='history'>{strings.HISTORY}</TabPanel>
+          <TabPanel value='history'>{accession && <Accession2History accession={accession} />}</TabPanel>
           <TabPanel value='viabilityTesting'>{strings.VIABILITY_TESTING}</TabPanel>
         </TabContext>
       </Box>
