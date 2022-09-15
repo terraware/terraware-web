@@ -10,19 +10,19 @@ import { checkIn } from 'src/api/seeds/accession';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
 import { User } from 'src/types/User';
-import TfMain from '../common/TfMain';
-import DeleteAccessionModal from './DeleteAccessionModal';
+import TfMain from 'src/components/common/TfMain';
+import DeleteAccessionModal from '../edit/DeleteAccessionModal';
 import DetailPanel from './DetailPanel';
-import EditLocationModal from './EditLocationModal';
-import EditStateModal from './EditStateModal';
-import QuantityModal from './QuantityModal';
-import WithdrawModal from './WithdrawModal';
-import CheckedInConfirmationModal from './CheckedInConfirmationModal';
-import Accession2History from './Accession2History';
+import EditLocationModal from '../edit/EditLocationModal';
+import EditStateModal from '../edit/EditStateModal';
+import QuantityModal from '../edit/QuantityModal';
+import WithdrawModal from '../withdraw/WithdrawModal';
+import CheckedInConfirmationModal from '../edit/CheckedInConfirmationModal';
+import Accession2History from '../history/Accession2History';
+import ViabilityTestingPanel from '../viabilityTesting/ViabilityTestingPanel';
 import useSnackbar from 'src/utils/useSnackbar';
 import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
-import ViabilityTestingPanel from './ViabilityTestingPanel';
 
 const useStyles = makeStyles(() => ({
   iconStyle: {

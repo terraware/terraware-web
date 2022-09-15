@@ -1,7 +1,7 @@
 import React from 'react';
 import strings from 'src/strings';
-import Button from '../common/button/Button';
-import DialogBox from '../common/DialogBox/DialogBox';
+import Button from 'src/components/common/button/Button';
+import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import { Typography } from '@mui/material';
 import { Accession2 } from 'src/api/accessions2/accession';
 import { deleteAccession } from 'src/api/seeds/accession';

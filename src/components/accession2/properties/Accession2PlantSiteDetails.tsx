@@ -4,7 +4,7 @@ import { Link, Grid, Box, useTheme } from '@mui/material';
 import { AccessionPostRequestBody } from 'src/api/accessions2/accession';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import Textfield from 'src/components/common/Textfield/Textfield';
-import CollectionSource from './CollectionSource';
+import { CollectionSource } from './';
 
 type Accession2PlantSiteDetailsProps = {
   record: AccessionPostRequestBody;

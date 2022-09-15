@@ -7,17 +7,16 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { getAllSeedBanks } from 'src/utils/organization';
 import { Facility, StorageLocationDetails } from 'src/api/types/facilities';
 import { listStorageLocations } from 'src/api/facility/facility';
-import StorageSubLocationSelector from './StorageSubLocationSelector';
-import StorageLocationSelector from './StorageLocationSelector';
+import { StorageSubLocationSelector, StorageLocationSelector } from './';
 
-type SeedBankSelectorProps = {
+type SeedBank2SelectorProps = {
   organization: ServerOrganization;
   record: AccessionPostRequestBody;
   onChange: (id: string, value?: any) => void;
   validate?: boolean;
 };
 
-export default function SeedBankSelector(props: SeedBankSelectorProps): JSX.Element {
+export default function SeedBank2Selector(props: SeedBank2SelectorProps): JSX.Element {
   const { organization, record, onChange, validate } = props;
   const [storageLocations, setStorageLocations] = useState<StorageLocationDetails[]>([]);
   const { isMobile } = useDeviceInfo();

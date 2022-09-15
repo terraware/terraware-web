@@ -4,7 +4,7 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 import { useState } from 'react';
 import { Accession2 } from 'src/api/accessions2/accession';
 import strings from 'src/strings';
-import NewViabilityTestModal from './NewTestModal';
+import NewViabilityTestModal from './NewViabilityTestModal';
 
 type ViabilityTestingPanelProps = {
   accession: Accession2;

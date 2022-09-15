@@ -13,7 +13,7 @@ interface Props {
   onChange: (id: string, value: string[]) => void;
 }
 
-export default function Collectors({ organizationId, id, collectors = [''], onChange }: Props): JSX.Element {
+export default function Collectors2({ organizationId, id, collectors = [''], onChange }: Props): JSX.Element {
   const [collectorsList, setCollectorsList] = useState<string[]>([...collectors]);
   const [collectorsOpt, setCollectorsOpt] = useState<string[]>();
   const theme = useTheme();

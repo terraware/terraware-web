@@ -16,7 +16,7 @@ export type Dates = {
   receivedDate?: any;
 };
 
-export default function CollecteReceivedDate2({ onChange, record, type, validate }: Props): JSX.Element {
+export default function CollectedReceivedDate2({ onChange, record, type, validate }: Props): JSX.Element {
   const theme = useTheme();
 
   const [dateErrors, setDateErrors] = useState<{ [key: string]: string | undefined }>({});

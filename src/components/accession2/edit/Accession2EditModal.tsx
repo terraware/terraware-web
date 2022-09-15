@@ -5,12 +5,14 @@ import { Accession2, updateAccession2 } from 'src/api/accessions2/accession';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
 import useForm from 'src/utils/useForm';
-import Accession2Address from './Accession2Address';
-import Accession2GPS from './Accession2GPS';
-import CollectedReceivedDate2 from './CollectedReceivedDate2';
-import Collectors2 from './Collectors2';
-import Species2Dropdown from './Species2Dropdown';
-import Accession2PlantSiteDetails from './Accession2PlantSiteDetails';
+import {
+  Accession2Address,
+  Accession2GPS,
+  CollectedReceivedDate2,
+  Collectors2,
+  Species2Dropdown,
+  Accession2PlantSiteDetails,
+} from '../properties';
 import useSnackbar from 'src/utils/useSnackbar';
 
 export interface Accession2EditModalProps {
