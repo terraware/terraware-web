@@ -601,6 +601,7 @@ const strings = new LocalizedStrings({
     COUNT: 'Count',
     AGE_YEARS: 'Age (yr)',
     AGE_MONTHS: 'Age (month)',
+    PRIVACY_POLICY: 'Privacy Policy',
   },
 });
 

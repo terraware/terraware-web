@@ -100,6 +100,8 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
     id: -1,
     email: '',
     role: 'Contributor',
+    firstName: '--',
+    lastName: '--',
   });
 
   useEffect(() => {
@@ -108,6 +110,8 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
         id: personSelectedToEdit.id,
         email: personSelectedToEdit.email,
         role: personSelectedToEdit.role,
+        firstName: personSelectedToEdit.firstName,
+        lastName: personSelectedToEdit.lastName,
       });
     }
   }, [organization, personSelectedToEdit, setNewPerson]);
@@ -265,7 +269,7 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
               type='text'
               onChange={onChange}
               disabled={true}
-              value='--'
+              value={newPerson.firstName}
             />
           </Grid>
           <Grid item xs={gridSize()}>
@@ -275,7 +279,7 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
               type='text'
               onChange={onChange}
               disabled={true}
-              value='--'
+              value={newPerson.lastName}
             />
           </Grid>
           <Grid item xs={12}>
