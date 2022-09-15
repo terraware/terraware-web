@@ -402,7 +402,7 @@ export interface components {
       collectionSiteLandowner?: string;
       collectionSiteName?: string;
       collectionSiteNotes?: string;
-      collectionSource?: "Wild" | "Reintroduced" | "Cultivated" | "Other";
+      collectionSource?: "Wild" | "Reintroduced" | "Cultivated" | "Other"; 
       /** Names of the people who collected the seeds. */
       collectors?: string[];
       dryingEndDate?: string;
@@ -422,7 +422,7 @@ export interface components {
       /** Estimated number of plants the seeds were collected from. */
       plantsCollectedFrom?: number;
       receivedDate?: string;
-      remainingQuantity?: components["schemas"]["SeedQuantityPayload"];
+      remainingQuantity?: components["schemas"]["SeedQuantityPayload"]; 
       /** Which source of data this accession originally came from. */
       source?: "Web" | "Seed Collector App" | "File Import";
       /** Scientific name of the species. */

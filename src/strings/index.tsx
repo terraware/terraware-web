@@ -599,6 +599,11 @@ const strings = new LocalizedStrings({
     CLOSE: 'Close',
     ACCESSION_HISTORY: 'Accession History',
     NAME_UNKNOWN: '(name unknown)',
+    WEIGHT_GRAMS: 'Weight (g)',
+    COUNT: 'Count',
+    AGE_YEARS: 'Age (yr)',
+    AGE_MONTHS: 'Age (month)',
+    PRIVACY_POLICY: 'Privacy Policy',
   },
 });
 

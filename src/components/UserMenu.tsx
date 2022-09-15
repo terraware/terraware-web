@@ -4,7 +4,7 @@ import { User } from 'src/types/User';
 import strings from '../../src/strings';
 import { ReactComponent as AvatarIcon } from './avatar-default.svg';
 import Icon from './common/icon/Icon';
-import { APP_PATHS } from 'src/constants';
+import { APP_PATHS, TERRAFORMATION_PRIVACY_POLICY } from 'src/constants';
 import { IconButton, List, ListItem, Popover } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import useEnvironment from 'src/utils/useEnvironment';
@@ -90,6 +90,14 @@ export default function UserMenu({ user, reloadUser, hasOrganizations }: UserMen
               {strings.OPT_IN}
             </ListItem>
           )}
+          <ListItem
+            component={Link}
+            to={{ pathname: TERRAFORMATION_PRIVACY_POLICY }}
+            target='_blank'
+            onClick={handleClose}
+          >
+            {strings.PRIVACY_POLICY}
+          </ListItem>
           <ListItem button onClick={onHandleLogout}>
             {strings.LOG_OUT}
           </ListItem>

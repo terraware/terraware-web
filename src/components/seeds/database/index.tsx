@@ -223,11 +223,22 @@ export default function Database(props: DatabaseProps): JSX.Element {
   }, [query, location, history, setSearchCriteria, organization, searchCriteria]);
 
   useEffect(() => {
+    const getFieldsFromSearchColumns = () => {
+      let columnsNamesToSearch = Array<string>();
+      if (searchColumns.includes('active')) {
+        columnsNamesToSearch = [...searchColumns, 'id'];
+      } else {
+        columnsNamesToSearch = [...searchColumns, 'active', 'id'];
+      }
+
+      return columnsNamesToSearch;
+    };
+
     if (organization) {
       const populateUnfilteredResults = async () => {
         const apiResponse = await search({
           prefix: 'facilities.accessions',
-          fields: searchColumns.includes('active') ? [...searchColumns, 'id'] : [...searchColumns, 'active', 'id'],
+          fields: getFieldsFromSearchColumns(),
           sortOrder: [searchSortOrder],
           search: convertToSearchNodePayload({}, organization.id),
           count: 1000,
@@ -239,12 +250,11 @@ export default function Database(props: DatabaseProps): JSX.Element {
       const populateSearchResults = async () => {
         const apiResponse = await search({
           prefix: 'facilities.accessions',
-          fields: searchColumns.includes('active') ? [...searchColumns, 'id'] : [...searchColumns, 'active', 'id'],
+          fields: getFieldsFromSearchColumns(),
           sortOrder: [searchSortOrder],
           search: convertToSearchNodePayload(searchCriteria, organization.id),
           count: 1000,
         });
-
         setSearchResults(apiResponse);
       };
 
