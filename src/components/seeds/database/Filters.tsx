@@ -127,22 +127,19 @@ export default function Filters(props: Props): JSX.Element {
           onClose={onClosePopover}
         />
         {props.columns.map((col) => {
-          if (col.filter?.type !== 'hidden') {
-            return (
-              <div key={col.key} className={classes.pill}>
-                <Chip
-                  id={`filter-${col.key}`}
-                  variant='outlined'
-                  size='medium'
-                  label={getLabel(col)}
-                  onClick={(event) => handleClick(event, col)}
-                  icon={<ArrowDropDown />}
-                  className={props.filters[col.key] ? classes.selectedFilter : ''}
-                />
-              </div>
-            );
-          }
-          return null;
+          return (
+            <div key={col.key} className={classes.pill}>
+              <Chip
+                id={`filter-${col.key}`}
+                variant='outlined'
+                size='medium'
+                label={getLabel(col)}
+                onClick={(event) => handleClick(event, col)}
+                icon={<ArrowDropDown />}
+                className={props.filters[col.key] ? classes.selectedFilter : ''}
+              />
+            </div>
+          );
         })}
       </div>
       <div className={classes.link}>

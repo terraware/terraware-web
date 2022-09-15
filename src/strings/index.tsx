@@ -599,6 +599,8 @@ const strings = new LocalizedStrings({
     CLOSE: 'Close',
     WEIGHT_GRAMS: 'Weight (g)',
     COUNT: 'Count',
+    AGE_YEARS: 'Age (yr)',
+    AGE_MONTHS: 'Age (month)',
   },
 });
 

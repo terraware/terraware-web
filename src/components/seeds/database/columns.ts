@@ -321,10 +321,16 @@ const COLUMNS: DatabaseColumn[] = [
     filter: { type: 'multiple_selection' },
   },
   {
-    key: 'age',
-    name: strings.AGE,
+    key: 'ageMonths',
+    name: strings.AGE_MONTHS,
     type: 'string',
-    filter: { type: 'hidden' },
+    filter: { type: 'number_range' },
+  },
+  {
+    key: 'ageYears',
+    name: strings.AGE_YEARS,
+    type: 'string',
+    filter: { type: 'number_range' },
   },
   {
     key: 'estimatedWeightGrams',
@@ -359,7 +365,7 @@ export const defaultPreset: Preset = {
     'state',
     'siteLocation',
     'collectedDate',
-    'age',
+    'ageMonths',
     'estimatedWeightGrams',
     'estimatedCount',
   ],

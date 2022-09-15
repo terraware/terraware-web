@@ -47,7 +47,6 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import featureEnabled from 'src/features';
-import moment from 'moment';
 
 interface StyleProps {
   isMobile: boolean;
@@ -179,7 +178,6 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const [searchSummaryResults, setSearchSummaryResults] = useState<SearchSummaryResponsePayload | null>();
   const [unfilteredResults, setUnfilteredResults] = useState<SearchResponseElement[] | null>();
   const [selectSeedBankModalOpen, setSelectSeedBankModalOpen] = useState<boolean>(false);
-  const [includesAge, setIncludesAge] = useState(false);
 
   useEffect(() => {
     // if url has stage=<accession state>, apply that filter
@@ -233,39 +231,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
         columnsNamesToSearch = [...searchColumns, 'active', 'id'];
       }
 
-      if (columnsNamesToSearch.includes('age')) {
-        setIncludesAge(true);
-        columnsNamesToSearch = columnsNamesToSearch.filter((cn) => cn !== 'age');
-      } else {
-        setIncludesAge(false);
-      }
-
       return columnsNamesToSearch;
-    };
-
-    const addAgeColumn = (apiResponse: { [key: string]: unknown }[] | null) => {
-      if (includesAge) {
-        const apiResponseWithAge = apiResponse?.map((element) => {
-          if (element.collectedDate) {
-            const today = moment();
-            const seedCollectionDate = element.collectedDate
-              ? moment(element.collectedDate as string, 'YYYY-MM-DD')
-              : undefined;
-            const accessionAge = seedCollectionDate ? today.diff(seedCollectionDate, 'months') : undefined;
-            if (accessionAge !== undefined) {
-              if (accessionAge < 1) {
-                element.age = strings.LESS_THAN_A_MONTH;
-              } else {
-                element.age = `${accessionAge} ${strings.MONTHS}`;
-              }
-            }
-          }
-          return element;
-        });
-        return apiResponseWithAge;
-      } else {
-        return apiResponse;
-      }
     };
 
     if (organization) {
@@ -278,7 +244,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
           count: 1000,
         });
 
-        setUnfilteredResults(addAgeColumn(apiResponse));
+        setUnfilteredResults(apiResponse);
       };
 
       const populateSearchResults = async () => {
@@ -289,7 +255,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
           search: convertToSearchNodePayload(searchCriteria, organization.id),
           count: 1000,
         });
-        setSearchResults(addAgeColumn(apiResponse));
+        setSearchResults(apiResponse);
       };
 
       const populateAvailableFieldOptions = async () => {
@@ -330,7 +296,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
       populateFieldOptions();
       populateSearchSummary();
     }
-  }, [searchCriteria, searchSortOrder, searchColumns, organization, preferences, includesAge]);
+  }, [searchCriteria, searchSortOrder, searchColumns, organization, preferences]);
 
   const onSelect = (row: SearchResponseElement) => {
     if (row.id) {
