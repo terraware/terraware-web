@@ -597,6 +597,8 @@ const strings = new LocalizedStrings({
     ACCESSION_CHECKED_IN: 'Accession checked in!',
     ACCESSION_NUMBER_CHECKED_IN: 'Accession {0} was successfully checked in!',
     CLOSE: 'Close',
+    ACCESSION_HISTORY: 'Accession History',
+    NAME_UNKNOWN: '(name unknown)',
     WEIGHT_GRAMS: 'Weight (g)',
     COUNT: 'Count',
     AGE_YEARS: 'Age (yr)',
