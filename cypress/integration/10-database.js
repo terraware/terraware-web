@@ -2,13 +2,15 @@ describe('Database', () => {
   context('Customize columns', () => {
     it('should display the default columns', () => {
       cy.visit('/accessions');
-      cy.get('#table-header').children().should('have.length', 7);
+      cy.get('#table-header').children().should('have.length', 8);
       cy.get('#table-header-accessionNumber').contains('ACCESSION');
       cy.get('#table-header-state').contains('STAGE');
       cy.get('#table-header-speciesName').contains('SPECIES');
-      cy.get('#table-header-receivedDate').contains('RECEIVED DATE');
       cy.get('#table-header-collectedDate').contains('COLLECTED DATE');
       cy.get('#table-header-siteLocation').contains('SITE LOCATION');
+      cy.get('#table-header-age').contains('AGE');
+      cy.get('#table-header-estimatedWeightGrams').contains('WEIGHT (G)');
+      cy.get('#table-header-estimatedCount').contains('COUNT');
     });
 
     it('should handle cancel edit columns action', () => {
@@ -18,13 +20,15 @@ describe('Database', () => {
       cy.get('#cancel').click();
       cy.get('#editColumnsDialog').should('not.exist');
 
-      cy.get('#table-header').children().should('have.length', 7);
+      cy.get('#table-header').children().should('have.length', 8);
       cy.get('#table-header-accessionNumber').contains('ACCESSION');
       cy.get('#table-header-state').contains('STAGE');
       cy.get('#table-header-speciesName').contains('SPECIES');
-      cy.get('#table-header-receivedDate').contains('RECEIVED DATE');
       cy.get('#table-header-collectedDate').contains('COLLECTED DATE');
       cy.get('#table-header-siteLocation').contains('SITE LOCATION');
+      cy.get('#table-header-age').contains('AGE');
+      cy.get('#table-header-estimatedWeightGrams').contains('WEIGHT (G)');
+      cy.get('#table-header-estimatedCount').contains('COUNT');
     });
 
     it('should be able to select the columns', () => {
@@ -44,11 +48,16 @@ describe('Database', () => {
       cy.wait('@values');
       cy.get('#editColumnsDialog').should('not.exist');
 
-      cy.get('#table-header').children().should('have.length', 4);
+      cy.get('#table-header').children().should('have.length', 9);
       cy.get('#table-header > :nth-child(1)').contains('ACCESSION');
-      cy.get('#table-header > :nth-child(2)').contains('SITE LOCATION');
-      cy.get('#table-header > :nth-child(3)').contains('STAGE');
-      cy.get('#table-header > :nth-child(4)').contains('ACTIVE/INACTIVE');
+      cy.get('#table-header > :nth-child(2)').contains('STAGE');
+      cy.get('#table-header > :nth-child(3)').contains('SITE LOCATION');
+      cy.get('#table-header > :nth-child(4)').contains('AGE');
+      cy.get('#table-header > :nth-child(5)').contains('WEIGHT (G)');
+      cy.get('#table-header > :nth-child(6)').contains('COUNT');
+      cy.get('#table-header > :nth-child(7)').contains('RECEIVED DATE');
+      cy.get('#table-header > :nth-child(8)').contains('ACTIVE/INACTIVE');
+      cy.get('#table-header > :nth-child(9)').contains('SEED BANKS');
     });
 
     context('Presets', () => {
@@ -99,11 +108,10 @@ describe('Database', () => {
         cy.wait('@values');
         cy.get('#editColumnsDialog').should('not.exist');
 
-        cy.get('#table-header').children().should('have.length', 7);
+        cy.get('#table-header').children().should('have.length', 8);
         cy.get('#table-header-accessionNumber').contains('ACCESSION');
         cy.get('#table-header-state').contains('STAGE');
         cy.get('#table-header-speciesName').contains('SPECIES');
-        cy.get('#table-header-receivedDate').contains('RECEIVED DATE');
         cy.get('#table-header-collectedDate').contains('COLLECTED DATE');
         cy.get('#table-header-siteLocation').contains('SITE LOCATION');
       });
@@ -329,34 +337,6 @@ describe('Database', () => {
 
       cy.get('#speciesName').should('not.exist');
       cy.get('#subtitle').should('contain', '11 total');
-    });
-
-    it('Should search by Received on', () => {
-      cy.intercept('POST', '/api/v1/search').as('search');
-      cy.intercept('POST', '/api/v1/seedbank/values').as('values');
-
-      cy.get('#filter-receivedDate').click();
-      cy.get('#startDate').should('be.visible');
-      cy.get('#startDate').clear().type('2021-02-03');
-      cy.get('#endDate').clear().type('2021-02-04').type('{enter}');
-
-      cy.wait('@search');
-      cy.wait('@values');
-
-      cy.get('#startDate').should('not.exist');
-      cy.get('#subtitle').should('contain', '1 total');
-    });
-
-    it('Should clear all filters', () => {
-      cy.intercept('POST', '/api/v1/search').as('search');
-      cy.intercept('POST', '/api/v1/seedbank/values').as('values');
-
-      cy.get('#clearAll').click({ force: true });
-
-      cy.wait('@search');
-      cy.wait('@values');
-
-      cy.get('#subtitle').contains('11 total');
     });
 
     it('Should download report', () => {
