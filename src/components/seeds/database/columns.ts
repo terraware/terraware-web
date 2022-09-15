@@ -322,9 +322,15 @@ const COLUMNS: DatabaseColumn[] = [
   },
   {
     key: 'age',
-    name: 'Age',
+    name: strings.AGE,
     type: 'string',
     filter: { type: 'hidden' },
+  },
+  {
+    key: 'estimatedWeightGrams',
+    name: strings.WEIGHT_GRAMS,
+    type: 'string',
+    filter: { type: 'number_range' },
   },
 ];
 
@@ -341,7 +347,7 @@ export interface Preset {
 
 export const defaultPreset: Preset = {
   name: 'Default',
-  fields: ['accessionNumber', 'speciesName', 'state', 'siteLocation', 'collectedDate', 'age'],
+  fields: ['accessionNumber', 'speciesName', 'state', 'siteLocation', 'collectedDate', 'age', 'estimatedWeightGrams'],
 };
 
 const generalInventoryPreset: Preset = {
