@@ -604,6 +604,10 @@ const strings = new LocalizedStrings({
     AGE_YEARS: 'Age (yr)',
     AGE_MONTHS: 'Age (month)',
     PRIVACY_POLICY: 'Privacy Policy',
+    VIABILITY_TESTING_EMPTY_MESSAGE:
+      'Viability Testing helps you track seed quality. You can conduct nursery or lab germination test, or perform cut test to get the result.',
+    START_TESTING: 'Start Testing',
+    VIABILITY_TEST: 'Viability Test',
   },
 });
 
