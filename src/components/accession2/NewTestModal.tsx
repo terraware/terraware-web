@@ -3,14 +3,14 @@ import { Button, DialogBox } from '@terraware/web-components';
 import { Accession2 } from 'src/api/accessions2/accession';
 import strings from 'src/strings';
 
-export interface NewTestModalProps {
+export interface NewViabilityTestModalProps {
   open: boolean;
   accession: Accession2;
   onClose: () => void;
   reload: () => void;
 }
 
-export default function NewTestModal(props: NewTestModalProps): JSX.Element {
+export default function NewViabilityTestModal(props: NewViabilityTestModalProps): JSX.Element {
   const { onClose, open } = props;
 
   const saveTest = () => {

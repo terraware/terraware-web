@@ -4,7 +4,7 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 import { useState } from 'react';
 import { Accession2 } from 'src/api/accessions2/accession';
 import strings from 'src/strings';
-import NewTestModal from './NewTestModal';
+import NewViabilityTestModal from './NewTestModal';
 
 type ViabilityTestingPanelProps = {
   accession: Accession2;
@@ -14,15 +14,15 @@ export default function ViabilityTestingPanel(props: ViabilityTestingPanelProps)
   const { accession, reload } = props;
   const { isMobile } = useDeviceInfo();
 
-  const [newTestOpened, setNewTestOpened] = useState(false);
+  const [newViabilityTestOpened, setNewViabilityTestOpened] = useState(false);
 
   return (
     <>
-      <NewTestModal
-        open={newTestOpened}
+      <NewViabilityTestModal
+        open={newViabilityTestOpened}
         reload={reload}
         accession={accession}
-        onClose={() => setNewTestOpened(false)}
+        onClose={() => setNewViabilityTestOpened(false)}
       />
       {accession?.viabilityTests ? (
         <Box>Viability Testing</Box>
@@ -30,7 +30,11 @@ export default function ViabilityTestingPanel(props: ViabilityTestingPanelProps)
         <Box width={isMobile ? '100%' : '420px'} textAlign='center' sx={{ margin: '0 auto', paddingTop: 4 }}>
           <Typography>{strings.VIABILITY_TESTING_EMPTY_MESSAGE}</Typography>
           <Box sx={{ marginTop: 4 }}>
-            <Button priority='secondary' label={strings.START_TESTING} onClick={() => setNewTestOpened(true)} />
+            <Button
+              priority='secondary'
+              label={strings.START_TESTING}
+              onClick={() => setNewViabilityTestOpened(true)}
+            />
           </Box>
         </Box>
       )}
