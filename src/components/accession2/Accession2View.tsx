@@ -22,6 +22,7 @@ import Accession2History from './Accession2History';
 import useSnackbar from 'src/utils/useSnackbar';
 import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
+import ViabilityTestingPanel from './ViabilityTestingPanel';
 
 const useStyles = makeStyles(() => ({
   iconStyle: {
@@ -381,7 +382,9 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
             <DetailPanel accession={accession} organization={organization} reload={reloadData} />
           </TabPanel>
           <TabPanel value='history'>{accession && <Accession2History accession={accession} />}</TabPanel>
-          <TabPanel value='viabilityTesting'>{strings.VIABILITY_TESTING}</TabPanel>
+          <TabPanel value='viabilityTesting'>
+            {accession && <ViabilityTestingPanel accession={accession} reload={reloadData} />}
+          </TabPanel>
         </TabContext>
       </Box>
     </TfMain>
