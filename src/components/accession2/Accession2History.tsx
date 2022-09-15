@@ -4,6 +4,7 @@ import { Accession2, AccessionHistoryEntry, getAccessionHistory } from 'src/api/
 import strings from 'src/strings';
 import useSnackbar from 'src/utils/useSnackbar';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import _ from 'lodash';
 
 interface Accession2HistoryProps {
   accession: Accession2;
@@ -20,14 +21,16 @@ export default function Accession2History(props: Accession2HistoryProps): JSX.El
     const loadHistory = async () => {
       const response = await getAccessionHistory(accession.id);
       if (response.requestSucceeded) {
-        setHistory(response.history);
+        if (!_.isEqual(history, response.history)) {
+          setHistory(response.history);
+        }
       } else {
         setHistory([]);
         snackbar.toastError();
       }
     };
     loadHistory();
-  }, [accession.id, snackbar]);
+  }, [accession.id, snackbar, history]);
 
   if (!history) {
     return (
@@ -55,7 +58,7 @@ export default function Accession2History(props: Accession2HistoryProps): JSX.El
         >
           <Typography marginRight={theme.spacing(3)}>{item.date}</Typography>
           <Typography>
-            {item.fullName || '--'}&nbsp;{item.description}
+            {item.fullName || strings.NAME_UNKNOWN}&nbsp;{item.description}
           </Typography>
         </Box>
       ))}
