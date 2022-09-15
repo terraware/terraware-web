@@ -8,7 +8,7 @@ describe('Database', () => {
       cy.get('#table-header-speciesName').contains('SPECIES');
       cy.get('#table-header-collectedDate').contains('COLLECTED DATE');
       cy.get('#table-header-siteLocation').contains('SITE LOCATION');
-      cy.get('#table-header-age').contains('AGE (MONTH)');
+      cy.get('#table-header-ageMonths').contains('AGE (MONTH)');
       cy.get('#table-header-estimatedWeightGrams').contains('WEIGHT (G)');
       cy.get('#table-header-estimatedCount').contains('COUNT');
     });
@@ -26,7 +26,7 @@ describe('Database', () => {
       cy.get('#table-header-speciesName').contains('SPECIES');
       cy.get('#table-header-collectedDate').contains('COLLECTED DATE');
       cy.get('#table-header-siteLocation').contains('SITE LOCATION');
-      cy.get('#table-header-age').contains('AGE (MONTH)');
+      cy.get('#table-header-ageMonths').contains('AGE (MONTH)');
       cy.get('#table-header-estimatedWeightGrams').contains('WEIGHT (G)');
       cy.get('#table-header-estimatedCount').contains('COUNT');
     });
