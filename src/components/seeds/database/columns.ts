@@ -332,6 +332,12 @@ const COLUMNS: DatabaseColumn[] = [
     type: 'string',
     filter: { type: 'number_range' },
   },
+  {
+    key: 'estimatedCount',
+    name: strings.COUNT,
+    type: 'string',
+    filter: { type: 'number_range' },
+  },
 ];
 
 export const COLUMNS_INDEXED = COLUMNS.reduce((acum, value) => {
@@ -347,7 +353,16 @@ export interface Preset {
 
 export const defaultPreset: Preset = {
   name: 'Default',
-  fields: ['accessionNumber', 'speciesName', 'state', 'siteLocation', 'collectedDate', 'age', 'estimatedWeightGrams'],
+  fields: [
+    'accessionNumber',
+    'speciesName',
+    'state',
+    'siteLocation',
+    'collectedDate',
+    'age',
+    'estimatedWeightGrams',
+    'estimatedCount',
+  ],
 };
 
 const generalInventoryPreset: Preset = {
