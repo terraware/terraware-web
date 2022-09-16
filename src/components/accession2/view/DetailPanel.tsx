@@ -5,7 +5,7 @@ import { Accession2 } from 'src/api/accessions2/accession';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import Accession2EditModal from './Accession2EditModal';
+import Accession2EditModal from '../edit/Accession2EditModal';
 import ViewPhotosModal from './ViewPhotosModal';
 
 type DetailPanelProps = {

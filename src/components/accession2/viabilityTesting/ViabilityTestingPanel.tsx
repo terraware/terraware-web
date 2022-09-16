@@ -6,7 +6,7 @@ import { Accession2 } from 'src/api/accessions2/accession';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
 import { User } from 'src/types/User';
-import NewViabilityTestModal from './NewTestModal';
+import NewViabilityTestModal from './NewViabilityTestModal';
 
 type ViabilityTestingPanelProps = {
   accession: Accession2;

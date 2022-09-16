@@ -7,19 +7,21 @@ import useForm from 'src/utils/useForm';
 import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
 import { AccessionPostRequestBody, postAccession } from 'src/api/accessions2/accession';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import Species2Dropdown from './Species2Dropdown';
-import Collectors2 from './Collectors2';
-import Textfield from '../common/Textfield/Textfield';
-import FormBottomBar from '../common/FormBottomBar';
-import Select from '../common/Select/Select';
-import SeedBank2Selector from './SeedBank2Selector';
+import {
+  Accession2Address,
+  Accession2GPS,
+  Accession2PlantSiteDetails,
+  CollectedReceivedDate2,
+  Collectors2,
+  SeedBank2Selector,
+  Species2Dropdown,
+} from '../properties';
+import Textfield from 'src/components/common/Textfield/Textfield';
+import FormBottomBar from 'src/components/common/FormBottomBar';
+import Select from 'src/components/common/Select/Select';
 import { ACCESSION_2_CREATE_STATES } from 'src/types/Accession';
-import Accession2Address from './Accession2Address';
-import Accession2GPS from './Accession2GPS';
-import Accession2PlantSiteDetails from './Accession2PlantSiteDetails';
 import getDateDisplayValue from 'src/utils/date';
 import useSnackbar from 'src/utils/useSnackbar';
-import CollectedReceivedDate2 from './CollectedReceivedDate2';
 
 type CreateAccessionProps = {
   organization: ServerOrganization;

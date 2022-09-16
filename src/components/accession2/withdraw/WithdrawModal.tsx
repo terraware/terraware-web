@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import strings from 'src/strings';
-import Button from '../common/button/Button';
-import DialogBox from '../common/DialogBox/DialogBox';
+import Button from 'src/components/common/button/Button';
+import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import { Box, Grid, Link, useTheme } from '@mui/material';
 import { Checkbox, DatePicker, Select, SelectT, Textfield } from '@terraware/web-components';
 import { Accession2, Withdrawal2 } from 'src/api/accessions2/accession';
@@ -12,7 +12,7 @@ import { WITHDRAWAL_PURPOSES } from 'src/utils/withdrawalPurposes';
 import { getOrganizationUsers } from 'src/api/organization/organization';
 import { OrganizationUser, User } from 'src/types/User';
 import { ServerOrganization } from 'src/types/Organization';
-import { Unit, WEIGHT_UNITS_V2 } from '../seeds/nursery/NewTest';
+import { Unit, WEIGHT_UNITS_V2 } from 'src/components/seeds/nursery/NewTest';
 import { getTodaysDateFormatted } from 'src/utils/date';
 import { SUBSTRATES, TREATMENTS, WITHDRAWAL_TYPES } from 'src/types/Accession';
 import useSnackbar from 'src/utils/useSnackbar';
