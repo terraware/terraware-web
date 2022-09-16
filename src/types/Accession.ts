@@ -1,3 +1,5 @@
+import strings from 'src/strings';
+
 export const ACCESSION_STATES = [
   'Awaiting Check-In',
   'Pending',
@@ -46,9 +48,9 @@ export const TREATMENTS = ['Soak', 'Scarify', 'Chemical', 'Stratification', 'Oth
 export const WITHDRAWAL_TYPES = ['Lab', 'Nursery'];
 
 export const TEST_METHODS = [
-  { label: 'Lab Germination', value: 'Lab' },
-  { label: 'Nursery Germination', value: 'Nursery' },
-  { label: 'Cut Test', value: 'Cut' },
+  { label: strings.LAB_GERMINATION, value: 'Lab' },
+  { label: strings.NURSERY_GERMINATION, value: 'Nursery' },
+  { label: strings.CUT_TEST, value: 'Cut' },
 ];
 
 export const SEED_TYPES = ['Fresh', 'Stored'];

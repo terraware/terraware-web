@@ -18,6 +18,7 @@ import { SUBSTRATES, TREATMENTS, WITHDRAWAL_TYPES } from 'src/types/Accession';
 import useSnackbar from 'src/utils/useSnackbar';
 import { Dropdown } from '@terraware/web-components';
 import { isContributor } from 'src/utils/organization';
+import { renderUser } from 'src/utils/renderUser';
 
 export interface WithdrawDialogProps {
   open: boolean;
@@ -27,20 +28,6 @@ export interface WithdrawDialogProps {
   organization: ServerOrganization;
   user: User;
 }
-
-export const renderUser = (userSel: User, accUser: User, contributor: boolean): string => {
-  const firstName = contributor ? accUser.firstName : userSel?.firstName;
-  const lastName = contributor ? accUser.lastName : userSel?.lastName;
-  const email = contributor ? accUser.email : userSel?.email;
-
-  if (!firstName && !lastName) {
-    return email as string;
-  } else if (firstName && lastName) {
-    return `${firstName} ${lastName}`;
-  } else {
-    return (firstName || lastName) as string;
-  }
-};
 
 export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element {
   const { onClose, open, accession, reload, organization, user } = props;

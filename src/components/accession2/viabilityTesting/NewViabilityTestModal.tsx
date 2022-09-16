@@ -14,7 +14,7 @@ import { isContributor } from 'src/utils/organization';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 import { postViabilityTest } from 'src/api/accessions2/viabilityTest';
 import useSnackbar from 'src/utils/useSnackbar';
-import { renderUser } from '../withdraw/WithdrawModal';
+import { renderUser } from 'src/utils/renderUser';
 
 export interface NewViabilityTestModalProps {
   open: boolean;
