@@ -73,14 +73,11 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
   };
 
   const getSubstratesAccordingToType = (type?: string) => {
-    if (type) {
-      if (type === 'Lab') {
-        return LAB_SUBSTRATES;
-      } else {
-        return NURSERY_SUBSTRATES;
-      }
-    }
-    return [];
+    if (type === 'Lab') {
+      return LAB_SUBSTRATES;
+    } else if (type === 'Nursery') {
+      return NURSERY_SUBSTRATES;
+    } else return [];
   };
 
   return (
