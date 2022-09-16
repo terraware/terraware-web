@@ -226,6 +226,36 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
     right: isMobile ? 0 : `-${themeObj.spacing(1)}`,
   };
 
+  const editableProps = {
+    display: 'flex',
+    whiteSpace: 'pre',
+    '&:hover .edit-icon': {
+      display: 'block',
+      ...iconProps,
+    },
+    '.edit-icon': {
+      display: isMobile ? 'block' : 'none',
+      ...iconProps,
+    },
+    alignItems: 'center',
+    justifyContent: isMobile ? 'space-between' : 'normal',
+    width: isMobile ? '100%' : 'auto',
+  };
+
+  const editableParentProps = {
+    display: 'flex',
+    padding: themeObj.spacing(0, 2, isMobile ? 3 : 0),
+    alignItems: 'center',
+    width: isMobile ? '100%' : 'auto',
+  };
+
+  const editableDynamicValuesProps = {
+    display: 'flex',
+    flexDirection: isMobile ? 'row' : 'column',
+    padding: isMobile ? 1 : 4,
+    width: isMobile ? '100%' : 'auto',
+  };
+
   return (
     <TfMain>
       {accession && (
@@ -298,30 +328,9 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
         padding={(theme) => theme.spacing(0, 1)}
       >
         {accession?.state && (
-          <Box
-            display='flex'
-            padding={(theme) => theme.spacing(0, 2, isMobile ? 3 : 0)}
-            alignItems='center'
-            width={isMobile ? '100%' : 'auto'}
-          >
+          <Box sx={editableParentProps}>
             <Icon name='seedbankNav' className={classes.iconStyle} />
-            <Box
-              display='flex'
-              whiteSpace='pre'
-              sx={{
-                '&:hover .edit-icon': {
-                  display: 'block',
-                  ...iconProps,
-                },
-                '.edit-icon': {
-                  display: isMobile ? 'block' : 'none',
-                  ...iconProps,
-                },
-              }}
-              alignItems='center'
-              justifyContent={isMobile ? 'space-between' : 'normal'}
-              width={isMobile ? '100%' : 'auto'}
-            >
+            <Box sx={editableProps}>
               <Typography
                 paddingLeft={1}
                 sx={{ ...getStylesForState(), padding: 1, borderRadius: '8px', fontSize: '14px', marginLeft: 1 }}
@@ -335,30 +344,9 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
           </Box>
         )}
         {accession?.storageLocation && (
-          <Box
-            display='flex'
-            padding={(theme) => theme.spacing(0, 2, isMobile ? 3 : 0)}
-            alignItems='center'
-            width={isMobile ? '100%' : 'auto'}
-          >
+          <Box sx={editableParentProps}>
             <Icon name='iconMyLocation' className={classes.iconStyle} />
-            <Box
-              display='flex'
-              whiteSpace='pre'
-              sx={{
-                '&:hover .edit-icon': {
-                  display: 'block',
-                  ...iconProps,
-                },
-                '.edit-icon': {
-                  display: isMobile ? 'block' : 'none',
-                  ...iconProps,
-                },
-              }}
-              alignItems='center'
-              justifyContent={isMobile ? 'space-between' : 'normal'}
-              width={isMobile ? '100%' : 'auto'}
-            >
+            <Box sx={editableProps}>
               <Typography paddingLeft={1}>{accession.storageLocation}</Typography>
               <IconButton sx={{ marginLeft: 3, height: '24px' }} onClick={() => setOpenEditLocationModal(true)}>
                 <Icon name='iconEdit' className={`${classes.editIcon} edit-icon`} />
@@ -378,30 +366,10 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
       </Box>
 
       <Box display='flex' flexDirection={isMobile ? 'column' : 'row'} padding={isMobile ? 2 : 0}>
-        <Box
-          padding={isMobile ? 1 : 4}
-          flexDirection={isMobile ? 'row' : 'column'}
-          display='flex'
-          width={isMobile ? '100%' : 'auto'}
-        >
+        <Box sx={editableDynamicValuesProps}>
           <Typography minWidth={isMobile ? '100px' : 0}>{strings.QUANTITY} </Typography>
           {accession?.remainingQuantity?.quantity ? (
-            <Box
-              display='flex'
-              sx={{
-                '&:hover .edit-icon': {
-                  display: 'block',
-                  ...iconProps,
-                },
-                '.edit-icon': {
-                  display: isMobile ? 'block' : 'none',
-                  ...iconProps,
-                },
-              }}
-              alignItems='center'
-              justifyContent={isMobile ? 'space-between' : 'normal'}
-              width={isMobile ? '100%' : 'auto'}
-            >
+            <Box sx={editableProps}>
               <Box display='flex'>
                 {getAbsoluteQuantity()} {getEstimatedQuantity()}
               </Box>
@@ -415,11 +383,11 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
             </Link>
           )}
         </Box>
-        <Box padding={isMobile ? 1 : 4} flexDirection={isMobile ? 'row' : 'column'} display='flex'>
+        <Box sx={editableDynamicValuesProps}>
           <Typography minWidth={isMobile ? '100px' : 0}>{strings.AGE}</Typography>
           {accession?.collectedDate ? <Typography> {age} </Typography> : null}
         </Box>
-        <Box padding={isMobile ? 1 : 4} flexDirection={isMobile ? 'row' : 'column'} display='flex'>
+        <Box sx={editableDynamicValuesProps}>
           <Typography minWidth={isMobile ? '100px' : 0}>{strings.VIABILITY}</Typography>
           <Link sx={linkStyle} onClick={() => true}>
             + {strings.ADD}
