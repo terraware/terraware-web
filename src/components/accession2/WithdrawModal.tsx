@@ -7,15 +7,14 @@ import { Checkbox, DatePicker, Select, SelectT, Textfield } from '@terraware/web
 import { Accession2, Withdrawal2 } from 'src/api/accessions2/accession';
 import useForm from 'src/utils/useForm';
 import { updateAccession2 } from 'src/api/accessions2/accession';
-import { postViabilityTest } from 'src/api/accessions2/viabilityTest';
+import { postViabilityTest, ViabilityTestPostRequest } from 'src/api/accessions2/viabilityTest';
 import { WITHDRAWAL_PURPOSES } from 'src/utils/withdrawalPurposes';
 import { getOrganizationUsers } from 'src/api/organization/organization';
 import { OrganizationUser, User } from 'src/types/User';
 import { ServerOrganization } from 'src/types/Organization';
 import { Unit, WEIGHT_UNITS_V2 } from '../seeds/nursery/NewTest';
-import { ViabilityTest } from 'src/api/types/tests';
 import { getTodaysDateFormatted } from 'src/utils/date';
-import { WITHDRAWAL_SUBSTRATES, WITHDRAWAL_TREATMENTS, WITHDRAWAL_TYPES } from 'src/types/Accession';
+import { SUBSTRATES, TREATMENTS, WITHDRAWAL_TYPES } from 'src/types/Accession';
 import useSnackbar from 'src/utils/useSnackbar';
 import { Dropdown } from '@terraware/web-components';
 import { isContributor } from 'src/utils/organization';
@@ -28,6 +27,20 @@ export interface WithdrawDialogProps {
   organization: ServerOrganization;
   user: User;
 }
+
+export const renderUser = (userSel: User, accUser: User, contributor: boolean): string => {
+  const firstName = contributor ? accUser.firstName : userSel?.firstName;
+  const lastName = contributor ? accUser.lastName : userSel?.lastName;
+  const email = contributor ? accUser.email : userSel?.email;
+
+  if (!firstName && !lastName) {
+    return email as string;
+  } else if (firstName && lastName) {
+    return `${firstName} ${lastName}`;
+  } else {
+    return (firstName || lastName) as string;
+  }
+};
 
 export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element {
   const { onClose, open, accession, reload, organization, user } = props;
@@ -43,7 +56,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
     notes: '',
   };
 
-  const newViabilityTesting: ViabilityTest = {
+  const newViabilityTesting: ViabilityTestPostRequest = {
     testType: 'Lab',
   };
 
@@ -166,20 +179,6 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
     onClose();
   };
 
-  const renderUser = (userSel: User): string => {
-    const firstName = contributor ? user.firstName : userSel?.firstName;
-    const lastName = contributor ? user.lastName : userSel?.lastName;
-    const email = contributor ? user.email : userSel?.email;
-
-    if (!firstName && !lastName) {
-      return email as string;
-    } else if (firstName && lastName) {
-      return `${firstName} ${lastName}`;
-    } else {
-      return (firstName || lastName) as string;
-    }
-  };
-
   return (
     <DialogBox
       onClose={onCloseHandler}
@@ -217,7 +216,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
             <Select
               label={strings.SUBSTRATE}
               placeholder={strings.SELECT}
-              options={WITHDRAWAL_SUBSTRATES}
+              options={SUBSTRATES}
               onChange={(value: string) => onChangeViabilityTesting('substrate', value)}
               selectedValue={viabilityTesting.substrate}
               fullWidth={true}
@@ -226,7 +225,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
             <Select
               label={strings.TREATMENT}
               placeholder={strings.SELECT}
-              options={WITHDRAWAL_TREATMENTS}
+              options={TREATMENTS}
               onChange={(value: string) => onChangeViabilityTesting('treatment', value)}
               selectedValue={viabilityTesting.treatment}
               fullWidth={true}
@@ -275,8 +274,8 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
             options={users}
             onChange={onChangeUser}
             isEqual={(a: OrganizationUser, b: OrganizationUser) => a.id === b.id}
-            renderOption={renderUser}
-            displayLabel={renderUser}
+            renderOption={(option) => renderUser(option, user, contributor)}
+            displayLabel={(option) => renderUser(option, user, contributor)}
             selectedValue={users?.find((userSel) => userSel.id === record.withdrawnByUserId)}
             toT={(firstName: string) => ({ firstName } as OrganizationUser)}
             fullWidth={true}

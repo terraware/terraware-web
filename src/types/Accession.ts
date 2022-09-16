@@ -29,7 +29,7 @@ export const ACCESSION_2_CREATE_STATES = [
 
 export const ACCESSION_2_COLLECTION_SOURCES = ['Wild', 'Reintroduced', 'Cultivated', 'Other'];
 
-export const WITHDRAWAL_SUBSTRATES = [
+export const SUBSTRATES = [
   'Nursery Media',
   'Agar',
   'Paper',
@@ -41,6 +41,14 @@ export const WITHDRAWAL_SUBSTRATES = [
   'Perlite/Vermiculite',
 ];
 
-export const WITHDRAWAL_TREATMENTS = ['Soak', 'Scarify', 'Chemical', 'Stratification', 'Other', 'Light'];
+export const TREATMENTS = ['Soak', 'Scarify', 'Chemical', 'Stratification', 'Other', 'Light'];
 
 export const WITHDRAWAL_TYPES = ['Lab', 'Nursery'];
+
+export const TEST_METHODS = [
+  { label: 'Lab Germination', value: 'Lab' },
+  { label: 'Nursery Germination', value: 'Nursery' },
+  { label: 'Cut Test', value: 'Cut' },
+];
+
+export const SEED_TYPES = ['Fresh', 'Stored'];

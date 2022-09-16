@@ -608,6 +608,10 @@ const strings = new LocalizedStrings({
       'Viability Testing helps you track seed quality. You can conduct nursery or lab germination test, or perform cut test to get the result.',
     START_TESTING: 'Start Testing',
     VIABILITY_TEST: 'Viability Test',
+    TEST_METHOD_REQUIRED: 'Test Method *',
+    TESTING_STAFF: 'Testing Staff',
+    START_DATE_REQUIRED: 'Start Date *',
+    NUMBER_OF_SEEDS_TESTED_REQUIRED: '# Seeds Tested *',
   },
 });
 

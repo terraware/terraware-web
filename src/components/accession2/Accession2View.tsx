@@ -383,7 +383,14 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
           </TabPanel>
           <TabPanel value='history'>{accession && <Accession2History accession={accession} />}</TabPanel>
           <TabPanel value='viabilityTesting'>
-            {accession && <ViabilityTestingPanel accession={accession} reload={reloadData} />}
+            {accession && (
+              <ViabilityTestingPanel
+                accession={accession}
+                reload={reloadData}
+                organization={organization}
+                user={user}
+              />
+            )}
           </TabPanel>
         </TabContext>
       </Box>
