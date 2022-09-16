@@ -77,7 +77,9 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
       return LAB_SUBSTRATES;
     } else if (type === 'Nursery') {
       return NURSERY_SUBSTRATES;
-    } else return [];
+    } else {
+      return [];
+    }
   };
 
   return (
