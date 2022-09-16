@@ -10,11 +10,11 @@ import { OrganizationUser, User } from 'src/types/User';
 import { ServerOrganization } from 'src/types/Organization';
 import { useEffect, useState } from 'react';
 import { getOrganizationUsers } from 'src/api/organization/organization';
-import { renderUser } from './WithdrawModal';
 import { isContributor } from 'src/utils/organization';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 import { postViabilityTest } from 'src/api/accessions2/viabilityTest';
 import useSnackbar from 'src/utils/useSnackbar';
+import { renderUser } from '../withdraw/WithdrawModal';
 
 export interface NewViabilityTestModalProps {
   open: boolean;
