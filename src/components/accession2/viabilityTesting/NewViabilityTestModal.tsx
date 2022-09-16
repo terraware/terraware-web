@@ -204,7 +204,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
                     onChange={(id, value) => onResultChange(id, value, index)}
                   />
                 </Grid>
-                <Grid item xs={12} marginLeft={1}>
+                <Grid item xs={12} marginLeft={1} display='flex'>
                   <TextField
                     label={strings.NUMBER_OF_SEEDS_GERMINATED_REQUIRED}
                     type='text'
@@ -212,15 +212,16 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
                     id='seedsGerminated'
                     value={testResult.seedsGerminated}
                   />
+                  <IconButton
+                    id={`delete-result${index}`}
+                    aria-label='delete'
+                    size='small'
+                    onClick={() => onDeleteResult(index)}
+                    sx={{ marginTop: 3 }}
+                  >
+                    <Close />
+                  </IconButton>
                 </Grid>
-                <IconButton
-                  id={`delete-result${index}`}
-                  aria-label='delete'
-                  size='small'
-                  onClick={() => onDeleteResult(index)}
-                >
-                  <Close />
-                </IconButton>
               </Box>
             ))}
 
