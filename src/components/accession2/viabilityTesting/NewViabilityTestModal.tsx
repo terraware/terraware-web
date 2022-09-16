@@ -1,4 +1,4 @@
-import { Box, Grid } from '@mui/material';
+import { Box, Grid, IconButton, Link } from '@mui/material';
 import { Button, DatePicker, DialogBox, Select, SelectT } from '@terraware/web-components';
 import { Accession2 } from 'src/api/accessions2/accession';
 import { ViabilityTestPostRequest } from 'src/api/accessions2/viabilityTest';
@@ -15,6 +15,8 @@ import TextField from '@terraware/web-components/components/Textfield/Textfield'
 import { postViabilityTest } from 'src/api/accessions2/viabilityTest';
 import useSnackbar from 'src/utils/useSnackbar';
 import { renderUser } from 'src/utils/renderUser';
+import { Close } from '@mui/icons-material';
+import { preventDefaultEvent } from '@terraware/web-components/utils';
 
 export interface NewViabilityTestModalProps {
   open: boolean;
@@ -27,7 +29,7 @@ export interface NewViabilityTestModalProps {
 
 export default function NewViabilityTestModal(props: NewViabilityTestModalProps): JSX.Element {
   const { onClose, open, accession, organization, user, reload } = props;
-  const newViabilityTest: ViabilityTestPostRequest = {};
+  const newViabilityTest: ViabilityTestPostRequest = { testResults: [] };
   const [record, setRecord, onChange] = useForm(newViabilityTest);
   const [users, setUsers] = useState<OrganizationUser[]>();
   const contributor = isContributor(organization);
@@ -54,7 +56,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
   };
 
   const onChangeUser = (newValue: OrganizationUser) => {
-    onChange('testingStaffUserId', newValue.id);
+    onChange('withdrawnByUserId', newValue.id);
   };
 
   const onChangeDate = (id: string, value?: any) => {
@@ -68,8 +70,33 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
   };
 
   const onCloseHandler = () => {
-    setRecord({});
+    setRecord({ testResults: [] });
     onClose();
+  };
+
+  const onDeleteResult = (index: number) => {
+    if (record.testResults) {
+      const updatedResults = [...record.testResults];
+      updatedResults.splice(index, 1);
+      onChange('testResults', updatedResults);
+    }
+  };
+
+  const onAddResult = () => {
+    if (record.testResults) {
+      const updatedResults = [...record.testResults];
+      updatedResults.push({ recordingDate: '', seedsGerminated: 0 });
+
+      onChange('testResults', updatedResults);
+    }
+  };
+
+  const onResultChange = (id: string, value: unknown, index: number) => {
+    if (record.testResults) {
+      const updatedResults = [...record.testResults];
+      updatedResults[index] = { ...updatedResults[index], [id]: value as string };
+      onChange('testResults', updatedResults);
+    }
   };
 
   return (
@@ -137,32 +164,76 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
             isEqual={(a: OrganizationUser, b: OrganizationUser) => a.id === b.id}
             renderOption={(option) => renderUser(option, user, contributor)}
             displayLabel={(option) => renderUser(option, user, contributor)}
-            selectedValue={users?.find((userSel) => userSel.id === record.testingStaffUserId)}
+            selectedValue={users?.find((userSel) => userSel.id === record.withdrawnByUserId)}
             toT={(firstName: string) => ({ firstName } as OrganizationUser)}
             fullWidth={true}
             disabled={contributor}
           />
         </Grid>
         <Grid item xs={12}>
-          <Box sx={{ display: 'flex', background: '#F2F4F5', borderRadius: '16px', padding: 3, alignItems: 'center' }}>
-            <Grid item xs={12}>
-              <DatePicker
-                id='startDate'
-                label={strings.START_DATE_REQUIRED}
-                aria-label={strings.DATE}
-                value={record.startDate}
-                onChange={onChangeDate}
-              />
-            </Grid>
-            <Grid item xs={12} marginLeft={1}>
-              <TextField
-                label={strings.NUMBER_OF_SEEDS_TESTED_REQUIRED}
-                type='text'
-                onChange={onChange}
-                id='seedsTested'
-                value={record.seedsTested}
-              />
-            </Grid>
+          <Box sx={{ background: '#F2F4F5', borderRadius: '16px', padding: 3 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center' }} mb={2}>
+              <Grid item xs={12}>
+                <DatePicker
+                  id='startDate'
+                  label={strings.START_DATE_REQUIRED}
+                  aria-label={strings.DATE}
+                  value={record.startDate}
+                  onChange={onChangeDate}
+                />
+              </Grid>
+              <Grid item xs={12} marginLeft={1}>
+                <TextField
+                  label={strings.NUMBER_OF_SEEDS_TESTED_REQUIRED}
+                  type='text'
+                  onChange={onChange}
+                  id='seedsTested'
+                  value={record.seedsTested}
+                />
+              </Grid>
+            </Box>
+
+            {record.testResults?.map((testResult, index) => (
+              <Box key={index} mb={2} display='flex' alignItems='center'>
+                <Grid item xs={12}>
+                  <DatePicker
+                    id='recordingDate'
+                    label={strings.CHECK_DATE_REQUIRED}
+                    aria-label={strings.DATE}
+                    value={testResult.recordingDate}
+                    onChange={(id, value) => onResultChange(id, value, index)}
+                  />
+                </Grid>
+                <Grid item xs={12} marginLeft={1}>
+                  <TextField
+                    label={strings.NUMBER_OF_SEEDS_GERMINATED_REQUIRED}
+                    type='text'
+                    onChange={(id, value) => onResultChange(id, value, index)}
+                    id='seedsGerminated'
+                    value={testResult.seedsGerminated}
+                  />
+                </Grid>
+                <IconButton
+                  id={`delete-result${index}`}
+                  aria-label='delete'
+                  size='small'
+                  onClick={() => onDeleteResult(index)}
+                >
+                  <Close />
+                </IconButton>
+              </Box>
+            ))}
+
+            <Link
+              href='#'
+              id='addResultButton'
+              onClick={(event: React.SyntheticEvent) => {
+                preventDefaultEvent(event);
+                onAddResult();
+              }}
+            >
+              + {strings.ADD_OBSERVATION}
+            </Link>
           </Box>
         </Grid>
         <Grid item xs={12}>

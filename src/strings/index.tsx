@@ -612,6 +612,9 @@ const strings = new LocalizedStrings({
     TESTING_STAFF: 'Testing Staff',
     START_DATE_REQUIRED: 'Start Date *',
     NUMBER_OF_SEEDS_TESTED_REQUIRED: '# Seeds Tested *',
+    CHECK_DATE_REQUIRED: 'Check Date *',
+    NUMBER_OF_SEEDS_GERMINATED_REQUIRED: '# Seeds Germinated *',
+    ADD_OBSERVATION: 'Add Observation',
   },
 });
 
