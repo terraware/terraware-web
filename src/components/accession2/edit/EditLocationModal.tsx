@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import strings from 'src/strings';
-import Button from '../common/button/Button';
-import DialogBox from '../common/DialogBox/DialogBox';
+import Button from 'src/components/common/button/Button';
+import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import { Grid } from '@mui/material';
 import { Facility, StorageLocationDetails } from 'src/api/types/facilities';
 import theme from 'src/theme';
@@ -11,8 +11,7 @@ import { Accession2 } from 'src/api/accessions2/accession';
 import useForm from 'src/utils/useForm';
 import { getLocations } from 'src/api/seeds/locations';
 import { updateAccession2 } from 'src/api/accessions2/accession';
-import StorageLocationSelector from './StorageLocationSelector';
-import StorageSubLocationSelector from './StorageSubLocationSelector';
+import { StorageLocationSelector, StorageSubLocationSelector } from '../properties';
 
 export interface EditLocationDialogProps {
   open: boolean;

@@ -17,7 +17,7 @@ interface SpeciesDropdownProps<T extends AccessionPostRequestBody> {
   validate?: boolean;
 }
 
-export default function SpeciesDropdown<T extends AccessionPostRequestBody>(
+export default function Species2Dropdown<T extends AccessionPostRequestBody>(
   props: SpeciesDropdownProps<T>
 ): JSX.Element {
   const { speciesId, organization, record, setRecord, disabled, validate } = props;

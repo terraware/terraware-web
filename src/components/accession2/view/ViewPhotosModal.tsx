@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import strings from 'src/strings';
-import Button from '../common/button/Button';
-import DialogBox from '../common/DialogBox/DialogBox';
+import Button from 'src/components/common/button/Button';
+import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import { Box } from '@mui/material';
