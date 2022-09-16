@@ -1,13 +1,12 @@
 import axios from 'axios';
 import { paths } from '../types/generated-schema';
-import { ViabilityTest } from '../types/tests';
 
 const VIABILITY_TEST_ENDPOINT = '/api/v2/seedbank/accessions/{accessionId}/viabilityTests';
 
 export type ViabilityTestPostRequest =
   paths[typeof VIABILITY_TEST_ENDPOINT]['post']['requestBody']['content']['application/json'];
 
-type ViabilityTestPostResponse =
+export type ViabilityTestPostResponse =
   paths[typeof VIABILITY_TEST_ENDPOINT]['post']['responses'][200]['content']['application/json'];
 
 type CreateViabilityTestResponse = {
@@ -15,7 +14,7 @@ type CreateViabilityTestResponse = {
 };
 
 export const postViabilityTest = async (
-  viabilityTest: ViabilityTest,
+  viabilityTest: ViabilityTestPostRequest,
   accessionId: number
 ): Promise<CreateViabilityTestResponse> => {
   const response: CreateViabilityTestResponse = {

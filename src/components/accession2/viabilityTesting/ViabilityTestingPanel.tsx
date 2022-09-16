@@ -4,14 +4,18 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 import { useState } from 'react';
 import { Accession2 } from 'src/api/accessions2/accession';
 import strings from 'src/strings';
+import { ServerOrganization } from 'src/types/Organization';
+import { User } from 'src/types/User';
 import NewViabilityTestModal from './NewViabilityTestModal';
 
 type ViabilityTestingPanelProps = {
   accession: Accession2;
   reload: () => void;
+  organization: ServerOrganization;
+  user: User;
 };
 export default function ViabilityTestingPanel(props: ViabilityTestingPanelProps): JSX.Element {
-  const { accession, reload } = props;
+  const { accession, reload, organization, user } = props;
   const { isMobile } = useDeviceInfo();
 
   const [newViabilityTestOpened, setNewViabilityTestOpened] = useState(false);
@@ -23,6 +27,8 @@ export default function ViabilityTestingPanel(props: ViabilityTestingPanelProps)
         reload={reload}
         accession={accession}
         onClose={() => setNewViabilityTestOpened(false)}
+        organization={organization}
+        user={user}
       />
       {accession?.viabilityTests ? (
         <Box>Viability Testing</Box>
