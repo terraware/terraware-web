@@ -1,5 +1,5 @@
 import { TabContext, TabList, TabPanel } from '@mui/lab';
-import { Box, IconButton, Link, Tab, Typography } from '@mui/material';
+import { useTheme, Box, IconButton, Link, Tab, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Button, Icon } from '@terraware/web-components';
 import moment from 'moment';
@@ -23,6 +23,7 @@ import ViabilityTestingPanel from '../viabilityTesting/ViabilityTestingPanel';
 import useSnackbar from 'src/utils/useSnackbar';
 import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const useStyles = makeStyles(() => ({
   iconStyle: {
@@ -60,6 +61,8 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
   const { organization, user } = props;
   const classes = useStyles();
   const snackbar = useSnackbar();
+  const { isMobile } = useDeviceInfo();
+  const themeObj = useTheme();
 
   const reloadData = useCallback(() => {
     const populateAccession = async () => {
@@ -218,6 +221,11 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
     return null;
   };
 
+  const iconProps = {
+    position: 'absolute',
+    right: isMobile ? 0 : `-${themeObj.spacing(1)}`,
+  };
+
   return (
     <TfMain>
       {accession && (
@@ -283,18 +291,36 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
         <Typography color='#708284'>{accession?.speciesCommonName}</Typography>
       </Box>
 
-      <Box display='flex' alignItems='center'>
+      <Box
+        display='flex'
+        alignItems={isMobile ? 'flex-start' : 'center'}
+        flexDirection={isMobile ? 'column' : 'row'}
+        padding={(theme) => theme.spacing(0, 1)}
+      >
         {accession?.state && (
-          <Box display='flex' padding={(theme) => theme.spacing(0, 3)} alignItems='center'>
+          <Box
+            display='flex'
+            padding={(theme) => theme.spacing(0, 2, isMobile ? 3 : 0)}
+            alignItems='center'
+            width={isMobile ? '100%' : 'auto'}
+          >
             <Icon name='seedbankNav' className={classes.iconStyle} />
             <Box
               display='flex'
+              whiteSpace='pre'
               sx={{
                 '&:hover .edit-icon': {
                   display: 'block',
+                  ...iconProps,
+                },
+                '.edit-icon': {
+                  display: isMobile ? 'block' : 'none',
+                  ...iconProps,
                 },
               }}
               alignItems='center'
+              justifyContent={isMobile ? 'space-between' : 'normal'}
+              width={isMobile ? '100%' : 'auto'}
             >
               <Typography
                 paddingLeft={1}
@@ -309,16 +335,29 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
           </Box>
         )}
         {accession?.storageLocation && (
-          <Box display='flex' padding={(theme) => theme.spacing(0, 2)} alignItems='center'>
+          <Box
+            display='flex'
+            padding={(theme) => theme.spacing(0, 2, isMobile ? 3 : 0)}
+            alignItems='center'
+            width={isMobile ? '100%' : 'auto'}
+          >
             <Icon name='iconMyLocation' className={classes.iconStyle} />
             <Box
               display='flex'
+              whiteSpace='pre'
               sx={{
                 '&:hover .edit-icon': {
                   display: 'block',
+                  ...iconProps,
+                },
+                '.edit-icon': {
+                  display: isMobile ? 'block' : 'none',
+                  ...iconProps,
                 },
               }}
               alignItems='center'
+              justifyContent={isMobile ? 'space-between' : 'normal'}
+              width={isMobile ? '100%' : 'auto'}
             >
               <Typography paddingLeft={1}>{accession.storageLocation}</Typography>
               <IconButton sx={{ marginLeft: 3, height: '24px' }} onClick={() => setOpenEditLocationModal(true)}>
@@ -327,23 +366,41 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
             </Box>
           </Box>
         )}
-        <Box display='flex' padding={(theme) => theme.spacing(0, 2)} alignItems='center'>
+        <Box
+          display='flex'
+          padding={(theme) => theme.spacing(0, 2)}
+          alignItems='center'
+          width={isMobile ? '100%' : 'auto'}
+        >
           <Icon name='notification' className={classes.iconStyle} />
           <Typography paddingLeft={1}>Notification</Typography>
         </Box>
       </Box>
 
-      <Box display='flex'>
-        <Box padding={4}>
-          <Typography>{strings.QUANTITY} </Typography>
+      <Box display='flex' flexDirection={isMobile ? 'column' : 'row'} padding={isMobile ? 2 : 0}>
+        <Box
+          padding={isMobile ? 1 : 4}
+          flexDirection={isMobile ? 'row' : 'column'}
+          display='flex'
+          width={isMobile ? '100%' : 'auto'}
+        >
+          <Typography minWidth={isMobile ? '100px' : 0}>{strings.QUANTITY} </Typography>
           {accession?.remainingQuantity?.quantity ? (
             <Box
               display='flex'
               sx={{
                 '&:hover .edit-icon': {
                   display: 'block',
+                  ...iconProps,
+                },
+                '.edit-icon': {
+                  display: isMobile ? 'block' : 'none',
+                  ...iconProps,
                 },
               }}
+              alignItems='center'
+              justifyContent={isMobile ? 'space-between' : 'normal'}
+              width={isMobile ? '100%' : 'auto'}
             >
               <Box display='flex'>
                 {getAbsoluteQuantity()} {getEstimatedQuantity()}
@@ -358,12 +415,12 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
             </Link>
           )}
         </Box>
-        <Box padding={4}>
-          <Typography>{strings.AGE}</Typography>
+        <Box padding={isMobile ? 1 : 4} flexDirection={isMobile ? 'row' : 'column'} display='flex'>
+          <Typography minWidth={isMobile ? '100px' : 0}>{strings.AGE}</Typography>
           {accession?.collectedDate ? <Typography> {age} </Typography> : null}
         </Box>
-        <Box padding={4}>
-          <Typography>{strings.VIABILITY}</Typography>
+        <Box padding={isMobile ? 1 : 4} flexDirection={isMobile ? 'row' : 'column'} display='flex'>
+          <Typography minWidth={isMobile ? '100px' : 0}>{strings.VIABILITY}</Typography>
           <Link sx={linkStyle} onClick={() => true}>
             + {strings.ADD}
           </Link>

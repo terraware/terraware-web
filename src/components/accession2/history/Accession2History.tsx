@@ -52,10 +52,12 @@ export default function Accession2History(props: Accession2HistoryProps): JSX.El
           fontWeight={400}
           color='#3A4445'
           marginBottom={theme.spacing(3)}
-          whiteSpace='pre'
+          whiteSpace='break-spaces'
         >
-          <Typography marginRight={theme.spacing(3)}>{item.date}</Typography>
-          <Typography>
+          <Typography whiteSpace='pre' marginRight={theme.spacing(3)}>
+            {item.date}
+          </Typography>
+          <Typography sx={{ wordBreak: 'break-all' }}>
             {item.fullName || strings.NAME_UNKNOWN}&nbsp;{item.description}
           </Typography>
         </Box>
