@@ -1,5 +1,5 @@
-import { Box, Grid, IconButton, Link } from '@mui/material';
-import { Button, DatePicker, DialogBox, Select, SelectT } from '@terraware/web-components';
+import { Box, Grid, IconButton, Link, useTheme } from '@mui/material';
+import { Button, Checkbox, DatePicker, DialogBox, Select, SelectT } from '@terraware/web-components';
 import { Accession2 } from 'src/api/accessions2/accession';
 import { ViabilityTestPostRequest } from 'src/api/accessions2/viabilityTest';
 import strings from 'src/strings';
@@ -17,6 +17,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 import { renderUser } from 'src/utils/renderUser';
 import { Close } from '@mui/icons-material';
 import { preventDefaultEvent } from '@terraware/web-components/utils';
+import { getTodaysDateFormatted } from 'src/utils/date';
 
 export interface NewViabilityTestModalProps {
   open: boolean;
@@ -29,11 +30,13 @@ export interface NewViabilityTestModalProps {
 
 export default function NewViabilityTestModal(props: NewViabilityTestModalProps): JSX.Element {
   const { onClose, open, accession, organization, user, reload } = props;
-  const newViabilityTest: ViabilityTestPostRequest = { testResults: [] };
+  const newViabilityTest: ViabilityTestPostRequest = { testResults: [], withdrawnByUserId: user.id };
   const [record, setRecord, onChange] = useForm(newViabilityTest);
   const [users, setUsers] = useState<OrganizationUser[]>();
+  const [testCompleted, setTestCompleted] = useState<boolean>(false);
   const contributor = isContributor(organization);
   const snackbar = useSnackbar();
+  const theme = useTheme();
 
   useEffect(() => {
     const getOrgUsers = async () => {
@@ -46,6 +49,9 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
   }, [organization]);
 
   const saveTest = async () => {
+    if (testCompleted) {
+      record.endDate = getTodaysDateFormatted();
+    }
     const response = await postViabilityTest(record, accession.id);
     if (response.requestSucceeded) {
       reload();
@@ -70,7 +76,8 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
   };
 
   const onCloseHandler = () => {
-    setRecord({ testResults: [] });
+    setTestCompleted(false);
+    setRecord(newViabilityTest);
     onClose();
   };
 
@@ -99,6 +106,10 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
     }
   };
 
+  const markTestAsComplete = (value: boolean) => {
+    setTestCompleted(value);
+  };
+
   return (
     <DialogBox
       onClose={onCloseHandler}
@@ -112,7 +123,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
       scrolled={true}
     >
       <Grid container item xs={12} spacing={2} textAlign='left'>
-        <Grid item xs={12}>
+        <Grid xs={12} padding={theme.spacing(0, 3, 0, 5)}>
           <Dropdown
             options={TEST_METHODS}
             placeholder={strings.SELECT}
@@ -122,7 +133,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
             label={strings.TEST_METHOD_REQUIRED}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid padding={theme.spacing(0, 3, 0, 5)} xs={12}>
           <Select
             label={strings.SEED_TYPE}
             placeholder={strings.SELECT}
@@ -133,7 +144,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
             readonly={true}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid padding={theme.spacing(0, 3, 0, 5)} xs={12}>
           <Select
             label={strings.SUBSTRATE}
             placeholder={strings.SELECT}
@@ -144,7 +155,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
             readonly={true}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid padding={theme.spacing(0, 3, 0, 5)} xs={12}>
           <Select
             label={strings.TREATMENT}
             placeholder={strings.SELECT}
@@ -155,7 +166,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
             readonly={true}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid padding={theme.spacing(0, 3, 0, 5)} xs={12}>
           <SelectT<OrganizationUser>
             label={strings.TESTING_STAFF}
             placeholder={strings.SELECT}
@@ -170,8 +181,9 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
             disabled={contributor}
           />
         </Grid>
+
         <Grid item xs={12}>
-          <Box sx={{ background: '#F2F4F5', borderRadius: '16px', padding: 3 }}>
+          <Grid item sx={{ background: '#F2F4F5', borderRadius: '16px', padding: 3 }}>
             <Box sx={{ display: 'flex', alignItems: 'center' }} mb={2}>
               <Grid item xs={12}>
                 <DatePicker
@@ -225,19 +237,31 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
               </Box>
             ))}
 
-            <Link
-              href='#'
-              id='addResultButton'
-              onClick={(event: React.SyntheticEvent) => {
-                preventDefaultEvent(event);
-                onAddResult();
-              }}
-            >
-              + {strings.ADD_OBSERVATION}
-            </Link>
-          </Box>
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <Link
+                href='#'
+                id='addResultButton'
+                onClick={(event: React.SyntheticEvent) => {
+                  preventDefaultEvent(event);
+                  onAddResult();
+                }}
+                sx={{ textDecoration: 'none' }}
+              >
+                + {strings.ADD_OBSERVATION}
+              </Link>
+              {record.testResults && record.testResults.length > 0 && (
+                <Checkbox
+                  label={strings.MARK_AS_COMPLETE}
+                  onChange={(id, value) => markTestAsComplete(value)}
+                  id='markAsCompplete'
+                  name='markAsCompplete'
+                  value={testCompleted}
+                />
+              )}
+            </Box>
+          </Grid>
         </Grid>
-        <Grid item xs={12}>
+        <Grid padding={theme.spacing(0, 3, 0, 5)} xs={12}>
           <TextField id='notes' value={record.notes} onChange={onChange} type='textarea' label={strings.NOTES} />
         </Grid>
       </Grid>
