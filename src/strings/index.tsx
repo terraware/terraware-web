@@ -613,6 +613,10 @@ const strings = new LocalizedStrings({
     START_DATE_REQUIRED: 'Start Date *',
     NUMBER_OF_SEEDS_TESTED_REQUIRED: '# Seeds Tested *',
     ADD_TEST: 'Add Test',
+    CHECK_DATE_REQUIRED: 'Check Date *',
+    NUMBER_OF_SEEDS_GERMINATED_REQUIRED: '# Seeds Germinated *',
+    ADD_OBSERVATION: 'Add Observation',
+    MARK_AS_COMPLETE: 'Mark as Complete',
   },
 });
 

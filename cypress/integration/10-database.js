@@ -463,7 +463,7 @@ describe('Database', () => {
       cy.get('#seedCount').should('not.exist');
       cy.get('#subtitle').should('contain', '4 total');
       cy.get('#row1-remainingQuantity').should('contain', '10 Seeds');
-      cy.get('#row2-remainingQuantity').should('contain', '825 Seeds');
+      cy.get('#row2-remainingQuantity').should('contain', '265 Seeds');
       cy.get('#filter-remainingQuantity').should('contain', '(1)');
 
       cy.intercept('POST', '/api/v1/search').as('search');
