@@ -5,7 +5,7 @@ import { ViabilityTestPostRequest } from 'src/api/accessions2/viabilityTest';
 import strings from 'src/strings';
 import useForm from 'src/utils/useForm';
 import { Dropdown } from '@terraware/web-components';
-import { SEED_TYPES, SUBSTRATES, TEST_METHODS, TREATMENTS } from 'src/types/Accession';
+import { LAB_SUBSTRATES, NURSERY_SUBSTRATES, SEED_TYPES, TEST_METHODS, TREATMENTS } from 'src/types/Accession';
 import { OrganizationUser, User } from 'src/types/User';
 import { ServerOrganization } from 'src/types/Organization';
 import { useEffect, useState } from 'react';
@@ -110,6 +110,16 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
     setTestCompleted(value);
   };
 
+  const getSubstratesAccordingToType = (type?: string) => {
+    if (type === 'Lab') {
+      return LAB_SUBSTRATES;
+    } else if (type === 'Nursery') {
+      return NURSERY_SUBSTRATES;
+    } else {
+      return [];
+    }
+  };
+
   return (
     <DialogBox
       onClose={onCloseHandler}
@@ -148,7 +158,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
           <Select
             label={strings.SUBSTRATE}
             placeholder={strings.SELECT}
-            options={SUBSTRATES}
+            options={getSubstratesAccordingToType(record.testType)}
             onChange={(value: string) => onChange('substrate', value)}
             selectedValue={record.substrate}
             fullWidth={true}
