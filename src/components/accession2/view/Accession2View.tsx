@@ -24,6 +24,8 @@ import useSnackbar from 'src/utils/useSnackbar';
 import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import ViabilityModal from '../edit/ViabilityModal';
+import NewViabilityTestModal from '../viabilityTesting/NewViabilityTestModal';
 
 const useStyles = makeStyles(() => ({
   iconStyle: {
@@ -56,6 +58,8 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
   const [openDeleteAccession, setOpenDeleteAccession] = useState(false);
   const [openWithdrawModal, setOpenWithdrawModal] = useState(false);
   const [quantityModalOpened, setQuantityModalOpened] = useState(false);
+  const [viabilityModalOpened, setViabilityModalOpened] = useState(false);
+  const [newViabilityTestOpened, setNewViabilityTestOpened] = useState(false);
   const [checkInConfirmationModalOpened, setCheckInConfirmationModalOpened] = useState(false);
   const [age, setAge] = useState('');
   const { organization, user } = props;
@@ -260,6 +264,14 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
     <TfMain>
       {accession && (
         <>
+          <NewViabilityTestModal
+            open={newViabilityTestOpened}
+            reload={reloadData}
+            accession={accession}
+            onClose={() => setNewViabilityTestOpened(false)}
+            organization={organization}
+            user={user}
+          />
           <CheckedInConfirmationModal
             open={checkInConfirmationModalOpened}
             onClose={() => setCheckInConfirmationModalOpened(false)}
@@ -298,6 +310,13 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
             organization={organization}
             reload={reloadData}
             setOpen={() => setQuantityModalOpened(true)}
+          />
+          <ViabilityModal
+            open={viabilityModalOpened}
+            onClose={() => setViabilityModalOpened(false)}
+            accession={accession}
+            reload={reloadData}
+            setNewViabilityTestOpened={setNewViabilityTestOpened}
           />
         </>
       )}
@@ -389,9 +408,20 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
         </Box>
         <Box sx={editableDynamicValuesProps}>
           <Typography minWidth={isMobile ? '100px' : 0}>{strings.VIABILITY}</Typography>
-          <Link sx={linkStyle} onClick={() => true}>
-            + {strings.ADD}
-          </Link>
+          {accession?.viabilityPercent ? (
+            <Box sx={editableProps}>
+              <Box display='flex'>
+                <Typography fontWeight={500}>{accession?.viabilityPercent}</Typography>%
+              </Box>
+              <IconButton sx={{ marginLeft: 3, height: '24px' }} onClick={() => setViabilityModalOpened(true)}>
+                <Icon name='iconEdit' className={`${classes.editIcon} edit-icon`} />
+              </IconButton>
+            </Box>
+          ) : (
+            <Link sx={linkStyle} onClick={() => setViabilityModalOpened(true)}>
+              + {strings.ADD}
+            </Link>
+          )}
         </Box>
       </Box>
       <Box sx={{ width: '100%' }}>
@@ -414,6 +444,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
                 reload={reloadData}
                 organization={organization}
                 user={user}
+                setNewViabilityTestOpened={setNewViabilityTestOpened}
               />
             )}
           </TabPanel>

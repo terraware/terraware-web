@@ -617,6 +617,8 @@ const strings = new LocalizedStrings({
     NUMBER_OF_SEEDS_GERMINATED_REQUIRED: '# Seeds Germinated *',
     ADD_OBSERVATION: 'Add Observation',
     MARK_AS_COMPLETE: 'Mark as Complete',
+    VIABILITY_RATE: 'Viability Rate',
+    ADD_A_VIABILITY_TESTING: 'Add a Viability Testing',
   },
 });
 
