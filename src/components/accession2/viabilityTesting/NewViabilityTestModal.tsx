@@ -5,7 +5,14 @@ import { putViabilityTest, ViabilityTestPostRequest } from 'src/api/accessions2/
 import strings from 'src/strings';
 import useForm from 'src/utils/useForm';
 import { Dropdown } from '@terraware/web-components';
-import { LAB_SUBSTRATES, NURSERY_SUBSTRATES, SEED_TYPES, TEST_METHODS, TREATMENTS } from 'src/types/Accession';
+import {
+  LAB_SUBSTRATES,
+  NURSERY_SUBSTRATES,
+  SEED_TYPES,
+  TEST_METHODS,
+  TEST_TYPES,
+  TREATMENTS,
+} from 'src/types/Accession';
 import { OrganizationUser, User } from 'src/types/User';
 import { ServerOrganization } from 'src/types/Organization';
 import { useEffect, useState } from 'react';
@@ -66,7 +73,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
           ...newViabilityTest,
           id: -1,
           accessionId: accession.id,
-          testType: 'Lab' as 'Lab' | 'Nursery' | 'Cut',
+          testType: 'Lab' as TEST_TYPES,
         };
       }
     };
