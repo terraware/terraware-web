@@ -5,7 +5,14 @@ import { putViabilityTest, ViabilityTestPostRequest } from 'src/api/accessions2/
 import strings from 'src/strings';
 import useForm from 'src/utils/useForm';
 import { Dropdown } from '@terraware/web-components';
-import { LAB_SUBSTRATES, NURSERY_SUBSTRATES, SEED_TYPES, TEST_METHODS, TREATMENTS } from 'src/types/Accession';
+import {
+  LAB_SUBSTRATES,
+  NURSERY_SUBSTRATES,
+  SEED_TYPES,
+  TEST_METHODS,
+  TEST_TYPES,
+  TREATMENTS,
+} from 'src/types/Accession';
 import { OrganizationUser, User } from 'src/types/User';
 import { ServerOrganization } from 'src/types/Organization';
 import { useEffect, useState } from 'react';
@@ -51,7 +58,12 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
   }, [organization]);
 
   useEffect(() => {
-    const newViabilityTest: ViabilityTestPostRequest = { testResults: [], withdrawnByUserId: user.id, testType: 'Lab' };
+    const newViabilityTest: ViabilityTestPostRequest = {
+      testResults: [],
+      withdrawnByUserId: user.id,
+      testType: 'Lab',
+      seedsTested: 0,
+    };
 
     const initViabilityTest = () => {
       if (selectedTest) {
@@ -61,7 +73,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
           ...newViabilityTest,
           id: -1,
           accessionId: accession.id,
-          testType: 'Lab' as 'Lab' | 'Nursery' | 'Cut',
+          testType: 'Lab' as TEST_TYPES,
         };
       }
     };
@@ -161,7 +173,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
       scrolled={true}
     >
       <Grid container item xs={12} spacing={2} textAlign='left'>
-        <Grid xs={12} padding={theme.spacing(0, 3, 0, 5)}>
+        <Grid xs={12} padding={theme.spacing(1, 3, 1, 5)}>
           <Dropdown
             options={TEST_METHODS}
             placeholder={strings.SELECT}
@@ -171,7 +183,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
             label={strings.TEST_METHOD_REQUIRED}
           />
         </Grid>
-        <Grid padding={theme.spacing(0, 3, 0, 5)} xs={12}>
+        <Grid padding={theme.spacing(1, 3, 1, 5)} xs={12}>
           <Select
             label={strings.SEED_TYPE}
             placeholder={strings.SELECT}
@@ -182,7 +194,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
             readonly={true}
           />
         </Grid>
-        <Grid padding={theme.spacing(0, 3, 0, 5)} xs={12}>
+        <Grid padding={theme.spacing(1, 3, 1, 5)} xs={12}>
           <Select
             label={strings.SUBSTRATE}
             placeholder={strings.SELECT}
@@ -193,7 +205,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
             readonly={true}
           />
         </Grid>
-        <Grid padding={theme.spacing(0, 3, 0, 5)} xs={12}>
+        <Grid padding={theme.spacing(1, 3, 1, 5)} xs={12}>
           <Select
             label={strings.TREATMENT}
             placeholder={strings.SELECT}
@@ -204,7 +216,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
             readonly={true}
           />
         </Grid>
-        <Grid padding={theme.spacing(0, 3, 0, 5)} xs={12}>
+        <Grid padding={theme.spacing(1, 3, 1, 5)} xs={12}>
           <SelectT<OrganizationUser>
             label={strings.TESTING_STAFF}
             placeholder={strings.SELECT}
@@ -277,17 +289,22 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
 
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <Link
-                href='#'
+                component='button'
                 id='addResultButton'
                 onClick={(event: React.SyntheticEvent) => {
                   preventDefaultEvent(event);
                   onAddResult();
                 }}
-                sx={{ textDecoration: 'none' }}
+                sx={{
+                  textDecoration: 'none',
+                  fontSize: '16px',
+                  '&[disabled]': { color: '#0067C84D', pointerEvents: 'none' },
+                }}
+                disabled={testCompleted}
               >
                 + {strings.ADD_OBSERVATION}
               </Link>
-              {record?.testResults && record?.testResults.length > 0 && (
+              {record?.testResults && record.testResults.length > 0 && (
                 <Checkbox
                   label={strings.MARK_AS_COMPLETE}
                   onChange={(id, value) => markTestAsComplete(value)}
@@ -299,7 +316,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
             </Box>
           </Grid>
         </Grid>
-        <Grid padding={theme.spacing(0, 3, 0, 5)} xs={12}>
+        <Grid padding={theme.spacing(1, 3, 1, 5)} xs={12}>
           <TextField id='notes' value={record?.notes} onChange={onChange} type='textarea' label={strings.NOTES} />
         </Grid>
       </Grid>

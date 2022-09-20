@@ -628,6 +628,8 @@ const strings = new LocalizedStrings({
     TEST_METHOD: 'Test Method',
     NUMBER_OF_SEEDS_TESTED: '# Seeds Tested',
     CHECK_DATE: 'Check Date',
+    ADD_A_VIABILITY_TEST: 'Add a Viability Test',
+    VALUE_CANT_EXCEED_100: 'Value can’t exceed 100%',
   },
 });
 
