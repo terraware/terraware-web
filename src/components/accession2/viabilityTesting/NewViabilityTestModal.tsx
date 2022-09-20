@@ -1,5 +1,5 @@
-import { Box, Grid } from '@mui/material';
-import { Button, DatePicker, DialogBox, Select, SelectT } from '@terraware/web-components';
+import { Box, Grid, IconButton, Link, useTheme } from '@mui/material';
+import { Button, Checkbox, DatePicker, DialogBox, Select, SelectT } from '@terraware/web-components';
 import { Accession2 } from 'src/api/accessions2/accession';
 import { ViabilityTestPostRequest } from 'src/api/accessions2/viabilityTest';
 import strings from 'src/strings';
@@ -15,6 +15,9 @@ import TextField from '@terraware/web-components/components/Textfield/Textfield'
 import { postViabilityTest } from 'src/api/accessions2/viabilityTest';
 import useSnackbar from 'src/utils/useSnackbar';
 import { renderUser } from 'src/utils/renderUser';
+import { Close } from '@mui/icons-material';
+import { preventDefaultEvent } from '@terraware/web-components/utils';
+import { getTodaysDateFormatted } from 'src/utils/date';
 
 export interface NewViabilityTestModalProps {
   open: boolean;
@@ -27,11 +30,18 @@ export interface NewViabilityTestModalProps {
 
 export default function NewViabilityTestModal(props: NewViabilityTestModalProps): JSX.Element {
   const { onClose, open, accession, organization, user, reload } = props;
-  const newViabilityTest: ViabilityTestPostRequest = {};
+  const newViabilityTest: ViabilityTestPostRequest = {
+    testResults: [],
+    withdrawnByUserId: user.id,
+    seedsTested: 0,
+    testType: 'Lab',
+  };
   const [record, setRecord, onChange] = useForm(newViabilityTest);
   const [users, setUsers] = useState<OrganizationUser[]>();
+  const [testCompleted, setTestCompleted] = useState<boolean>(false);
   const contributor = isContributor(organization);
   const snackbar = useSnackbar();
+  const theme = useTheme();
 
   useEffect(() => {
     const getOrgUsers = async () => {
@@ -44,6 +54,9 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
   }, [organization]);
 
   const saveTest = async () => {
+    if (testCompleted) {
+      record.endDate = getTodaysDateFormatted();
+    }
     const response = await postViabilityTest(record, accession.id);
     if (response.requestSucceeded) {
       reload();
@@ -68,8 +81,38 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
   };
 
   const onCloseHandler = () => {
-    setRecord({});
+    setTestCompleted(false);
+    setRecord(newViabilityTest);
     onClose();
+  };
+
+  const onDeleteResult = (index: number) => {
+    if (record.testResults) {
+      const updatedResults = [...record.testResults];
+      updatedResults.splice(index, 1);
+      onChange('testResults', updatedResults);
+    }
+  };
+
+  const onAddResult = () => {
+    if (record.testResults) {
+      const updatedResults = [...record.testResults];
+      updatedResults.push({ recordingDate: '', seedsGerminated: 0 });
+
+      onChange('testResults', updatedResults);
+    }
+  };
+
+  const onResultChange = (id: string, value: unknown, index: number) => {
+    if (record.testResults) {
+      const updatedResults = [...record.testResults];
+      updatedResults[index] = { ...updatedResults[index], [id]: value as string };
+      onChange('testResults', updatedResults);
+    }
+  };
+
+  const markTestAsComplete = (value: boolean) => {
+    setTestCompleted(value);
   };
 
   const getSubstratesAccordingToType = (type?: string) => {
@@ -95,7 +138,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
       scrolled={true}
     >
       <Grid container item xs={12} spacing={2} textAlign='left'>
-        <Grid item xs={12}>
+        <Grid xs={12} padding={theme.spacing(1, 3, 1, 5)}>
           <Dropdown
             options={TEST_METHODS}
             placeholder={strings.SELECT}
@@ -105,7 +148,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
             label={strings.TEST_METHOD_REQUIRED}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid padding={theme.spacing(1, 3, 1, 5)} xs={12}>
           <Select
             label={strings.SEED_TYPE}
             placeholder={strings.SELECT}
@@ -116,7 +159,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
             readonly={true}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid padding={theme.spacing(1, 3, 1, 5)} xs={12}>
           <Select
             label={strings.SUBSTRATE}
             placeholder={strings.SELECT}
@@ -127,7 +170,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
             readonly={true}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid padding={theme.spacing(1, 3, 1, 5)} xs={12}>
           <Select
             label={strings.TREATMENT}
             placeholder={strings.SELECT}
@@ -138,7 +181,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
             readonly={true}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid padding={theme.spacing(1, 3, 1, 5)} xs={12}>
           <SelectT<OrganizationUser>
             label={strings.TESTING_STAFF}
             placeholder={strings.SELECT}
@@ -153,29 +196,92 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
             disabled={contributor}
           />
         </Grid>
+
         <Grid item xs={12}>
-          <Box sx={{ display: 'flex', background: '#F2F4F5', borderRadius: '16px', padding: 3, alignItems: 'center' }}>
-            <Grid item xs={12}>
-              <DatePicker
-                id='startDate'
-                label={strings.START_DATE_REQUIRED}
-                aria-label={strings.DATE}
-                value={record.startDate}
-                onChange={onChangeDate}
-              />
-            </Grid>
-            <Grid item xs={12} marginLeft={1}>
-              <TextField
-                label={strings.NUMBER_OF_SEEDS_TESTED_REQUIRED}
-                type='text'
-                onChange={onChange}
-                id='seedsTested'
-                value={record.seedsTested}
-              />
-            </Grid>
-          </Box>
+          <Grid item sx={{ background: '#F2F4F5', borderRadius: '16px', padding: 3 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center' }} mb={2}>
+              <Grid item xs={12}>
+                <DatePicker
+                  id='startDate'
+                  label={strings.START_DATE_REQUIRED}
+                  aria-label={strings.DATE}
+                  value={record.startDate}
+                  onChange={onChangeDate}
+                />
+              </Grid>
+              <Grid item xs={12} marginLeft={1}>
+                <TextField
+                  label={strings.NUMBER_OF_SEEDS_TESTED_REQUIRED}
+                  type='text'
+                  onChange={onChange}
+                  id='seedsTested'
+                  value={record.seedsTested}
+                />
+              </Grid>
+            </Box>
+
+            {record.testResults?.map((testResult, index) => (
+              <Box key={index} mb={2} display='flex' alignItems='center'>
+                <Grid item xs={12}>
+                  <DatePicker
+                    id='recordingDate'
+                    label={strings.CHECK_DATE_REQUIRED}
+                    aria-label={strings.DATE}
+                    value={testResult.recordingDate}
+                    onChange={(id, value) => onResultChange(id, value, index)}
+                  />
+                </Grid>
+                <Grid item xs={12} marginLeft={1} display='flex'>
+                  <TextField
+                    label={strings.NUMBER_OF_SEEDS_GERMINATED_REQUIRED}
+                    type='text'
+                    onChange={(id, value) => onResultChange(id, value, index)}
+                    id='seedsGerminated'
+                    value={testResult.seedsGerminated}
+                  />
+                  <IconButton
+                    id={`delete-result${index}`}
+                    aria-label='delete'
+                    size='small'
+                    onClick={() => onDeleteResult(index)}
+                    sx={{ marginTop: 3 }}
+                  >
+                    <Close />
+                  </IconButton>
+                </Grid>
+              </Box>
+            ))}
+
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <Link
+                component='button'
+                id='addResultButton'
+                onClick={(event: React.SyntheticEvent) => {
+                  preventDefaultEvent(event);
+                  onAddResult();
+                }}
+                sx={{
+                  textDecoration: 'none',
+                  fontSize: '16px',
+                  '&[disabled]': { color: '#0067C84D', pointerEvents: 'none' },
+                }}
+                disabled={testCompleted}
+              >
+                + {strings.ADD_OBSERVATION}
+              </Link>
+              {record.testResults && record.testResults.length > 0 && (
+                <Checkbox
+                  label={strings.MARK_AS_COMPLETE}
+                  onChange={(id, value) => markTestAsComplete(value)}
+                  id='markAsCompplete'
+                  name='markAsCompplete'
+                  value={testCompleted}
+                />
+              )}
+            </Box>
+          </Grid>
         </Grid>
-        <Grid item xs={12}>
+        <Grid padding={theme.spacing(1, 3, 1, 5)} xs={12}>
           <TextField id='notes' value={record.notes} onChange={onChange} type='textarea' label={strings.NOTES} />
         </Grid>
       </Grid>
