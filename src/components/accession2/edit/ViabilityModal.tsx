@@ -15,23 +15,33 @@ export interface ViabilityDialogProps {
   onClose: () => void;
   reload: () => void;
   setNewViabilityTestOpened: React.Dispatch<React.SetStateAction<boolean>>;
+  changeTab: (newValue: string) => void;
 }
 
 export default function ViabilityDialog(props: ViabilityDialogProps): JSX.Element {
-  const { onClose, open, accession, reload, setNewViabilityTestOpened } = props;
+  const { onClose, open, accession, reload, setNewViabilityTestOpened, changeTab } = props;
 
   const [record, setRecord, onChange] = useForm(accession);
+  const [error, setError] = useForm('');
   const snackbar = useSnackbar();
 
   const saveQuantity = async () => {
+    if (record.viabilityPercent) {
+      if (record.viabilityPercent > 100) {
+        setError(strings.VALUE_CANT_EXCEED_100);
+        return;
+      }
+    } else {
+      setError(strings.REQUIRED_FIELD);
+      return;
+    }
+    setError('');
     const response = await updateAccession2(record);
     if (response.requestSucceeded) {
       reload();
       onCloseHandler();
     } else {
       snackbar.toastError();
-      setRecord(accession);
-      onCloseHandler();
     }
   };
 
@@ -40,11 +50,13 @@ export default function ViabilityDialog(props: ViabilityDialogProps): JSX.Elemen
   }, [accession, setRecord]);
 
   const onCloseHandler = () => {
+    setError('');
     setRecord(accession);
     onClose();
   };
 
   const onAddViabilityTest = () => {
+    changeTab('viabilityTesting');
     setNewViabilityTestOpened(true);
     onCloseHandler();
   };
@@ -62,16 +74,17 @@ export default function ViabilityDialog(props: ViabilityDialogProps): JSX.Elemen
         ]}
       >
         <Grid container spacing={2} textAlign='left'>
-          <Grid item xs={8} textAlign='left'>
-            <Box sx={{ display: 'flex', alignItems: 'end', paddingBottom: '9px' }}>
+          <Grid item xs={10} textAlign='left'>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <Textfield
                 label={strings.VIABILITY_RATE}
                 id='viabilityPercent'
                 onChange={onChange}
                 type='text'
                 value={record.viabilityPercent}
+                errorText={error}
               />
-              <Box paddingLeft={1}>
+              <Box paddingLeft={2} sx={{ paddingTop: error === '' ? 3 : 0 }}>
                 <Typography>%</Typography>
               </Box>
             </Box>
@@ -86,7 +99,7 @@ export default function ViabilityDialog(props: ViabilityDialogProps): JSX.Elemen
               }}
               sx={{ textDecoration: 'none' }}
             >
-              {strings.ADD_A_VIABILITY_TESTING}
+              {strings.ADD_A_VIABILITY_TEST}
             </Link>
           </Grid>
         </Grid>

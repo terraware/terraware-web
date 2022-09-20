@@ -27,6 +27,8 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import ViabilityModal from '../edit/ViabilityModal';
 import NewViabilityTestModal from '../viabilityTesting/NewViabilityTestModal';
 import { ViabilityTest } from 'src/api/types/accessions';
+import { getSeedBank } from 'src/utils/organization';
+import _ from 'lodash';
 
 const useStyles = makeStyles(() => ({
   iconStyle: {
@@ -61,6 +63,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
   const [quantityModalOpened, setQuantityModalOpened] = useState(false);
   const [viabilityModalOpened, setViabilityModalOpened] = useState(false);
   const [newViabilityTestOpened, setNewViabilityTestOpened] = useState(false);
+  const [hasPendingTests, setHasPendingTests] = useState(false);
   const [checkInConfirmationModalOpened, setCheckInConfirmationModalOpened] = useState(false);
   const [selectedTest, setSelectedTest] = useState<ViabilityTest>();
   const [age, setAge] = useState('');
@@ -72,8 +75,15 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
 
   const reloadData = useCallback(() => {
     const populateAccession = async () => {
-      const response = await getAccession2(parseInt(accessionId, 10));
-      setAccession(response);
+      try {
+        const response = await getAccession2(parseInt(accessionId, 10));
+        if (!_.isEqual(response, accession)) {
+          setAccession(response);
+          setHasPendingTests(response?.viabilityTests?.some((test) => !test.endDate) || false);
+        }
+      } catch {
+        snackbar.toastError();
+      }
     };
 
     if (accessionId !== undefined) {
@@ -81,7 +91,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
     } else {
       setAccession(undefined);
     }
-  }, [accessionId]);
+  }, [accessionId, accession, snackbar]);
 
   useEffect(() => {
     reloadData();
@@ -104,7 +114,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
     setSelectedTab((query.get('tab') || 'detail') as string);
   }, [query]);
 
-  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+  const handleChange = (newValue: string) => {
     query.set('tab', newValue);
     history.push(getLocation(location.pathname, location, query.toString()));
   };
@@ -115,6 +125,26 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
       color: '#3A4445',
       fontWeight: 600,
     },
+  };
+
+  const viabilityTestingStyle = () => {
+    if (!hasPendingTests) {
+      return tabStyles;
+    }
+
+    return {
+      ...tabStyles,
+      '::after': {
+        background: '#D40002',
+        content: '""',
+        height: '10px',
+        width: '10px',
+        position: 'absolute',
+        right: themeObj.spacing(1),
+        top: themeObj.spacing(1),
+        borderRadius: '5px',
+      },
+    };
   };
 
   const linkStyle = {
@@ -320,6 +350,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
             accession={accession}
             reload={reloadData}
             setNewViabilityTestOpened={setNewViabilityTestOpened}
+            changeTab={handleChange}
           />
         </>
       )}
@@ -365,11 +396,13 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
             </Box>
           </Box>
         )}
-        {accession?.storageLocation && (
+        {accession?.facilityId !== undefined && accession?.storageLocation !== undefined && (
           <Box sx={editableParentProps}>
             <Icon name='iconMyLocation' className={classes.iconStyle} />
             <Box sx={editableProps}>
-              <Typography paddingLeft={1}>{accession.storageLocation}</Typography>
+              <Typography paddingLeft={1}>
+                {getSeedBank(organization, accession.facilityId)?.name} ({accession.storageLocation})
+              </Typography>
               <IconButton sx={{ marginLeft: 3, height: '24px' }} onClick={() => setOpenEditLocationModal(true)}>
                 <Icon name='iconEdit' className={`${classes.editIcon} edit-icon`} />
               </IconButton>
@@ -430,10 +463,10 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
       <Box sx={{ width: '100%' }}>
         <TabContext value={selectedTab}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-            <TabList onChange={handleChange}>
+            <TabList onChange={(unused, value) => handleChange(value)}>
               <Tab label={strings.DETAIL} value='detail' sx={tabStyles} />
               <Tab label={strings.HISTORY} value='history' sx={tabStyles} />
-              <Tab label={strings.VIABILITY_TESTING} value='viabilityTesting' sx={tabStyles} />
+              <Tab label={strings.VIABILITY_TESTING} value='viabilityTesting' sx={viabilityTestingStyle()} />
             </TabList>
           </Box>
           <TabPanel value='detail'>
