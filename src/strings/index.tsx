@@ -613,7 +613,7 @@ const strings = new LocalizedStrings({
     START_DATE_REQUIRED: 'Start Date *',
     NUMBER_OF_SEEDS_TESTED_REQUIRED: '# Seeds Tested *',
     VIABILITY_RATE: 'Viability Rate',
-    ADD_A_VIABILITY_TESTING: 'Add a Viability Testing',
+    ADD_A_VIABILITY_TEST: 'Add a Viability Test',
     VALUE_CANT_EXCEED_100: 'Value can’t exceed 100%',
   },
 });

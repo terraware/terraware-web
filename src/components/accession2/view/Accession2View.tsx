@@ -102,7 +102,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
     setSelectedTab((query.get('tab') || 'detail') as string);
   }, [query]);
 
-  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+  const handleChange = (newValue: string) => {
     query.set('tab', newValue);
     history.push(getLocation(location.pathname, location, query.toString()));
   };
@@ -428,7 +428,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
       <Box sx={{ width: '100%' }}>
         <TabContext value={selectedTab}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-            <TabList onChange={handleChange}>
+            <TabList onChange={(unused, value) => handleChange(value)}>
               <Tab label={strings.DETAIL} value='detail' sx={tabStyles} />
               <Tab label={strings.HISTORY} value='history' sx={tabStyles} />
               <Tab label={strings.VIABILITY_TESTING} value='viabilityTesting' sx={tabStyles} />

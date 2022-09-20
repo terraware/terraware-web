@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import strings from 'src/strings';
 import Button from 'src/components/common/button/Button';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
@@ -15,7 +15,7 @@ export interface ViabilityDialogProps {
   onClose: () => void;
   reload: () => void;
   setNewViabilityTestOpened: React.Dispatch<React.SetStateAction<boolean>>;
-  changeTab: (event: React.SyntheticEvent, newValue: string) => void;
+  changeTab: (newValue: string) => void;
 }
 
 export default function ViabilityDialog(props: ViabilityDialogProps): JSX.Element {
@@ -55,14 +55,8 @@ export default function ViabilityDialog(props: ViabilityDialogProps): JSX.Elemen
     onClose();
   };
 
-  const tabChangeEvent = {
-    target: {
-      value: 'viabilityTesting',
-    },
-  } as ChangeEvent<HTMLInputElement>;
-
   const onAddViabilityTest = () => {
-    changeTab(tabChangeEvent, 'viabilityTesting');
+    changeTab('viabilityTesting');
     setNewViabilityTestOpened(true);
     onCloseHandler();
   };
@@ -105,7 +99,7 @@ export default function ViabilityDialog(props: ViabilityDialogProps): JSX.Elemen
               }}
               sx={{ textDecoration: 'none' }}
             >
-              {strings.ADD_A_VIABILITY_TESTING}
+              {strings.ADD_A_VIABILITY_TEST}
             </Link>
           </Grid>
         </Grid>
