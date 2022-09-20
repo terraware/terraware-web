@@ -10,7 +10,7 @@ import { Unit, WEIGHT_UNITS_V2 } from 'src/components/seeds/nursery/NewTest';
 import useSnackbar from 'src/utils/useSnackbar';
 import { Dropdown } from '@terraware/web-components';
 
-export interface CalculatorDialogProps {
+export interface CalculatorModalProps {
   open: boolean;
   record: Accession2;
   setRecord: React.Dispatch<React.SetStateAction<Accession2>>;
@@ -21,7 +21,7 @@ export interface CalculatorDialogProps {
   onPrevious: () => void;
 }
 
-export default function CalculatorDialog(props: CalculatorDialogProps): JSX.Element {
+export default function CalculatorModal(props: CalculatorModalProps): JSX.Element {
   const { onClose, open, record, onChange, setRecord, onPrevious } = props;
 
   const snackbar = useSnackbar();

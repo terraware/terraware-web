@@ -160,6 +160,7 @@ const strings = new LocalizedStrings({
     COLLECTED_ON: 'Collected On',
     RECEIVED_ON: 'Received On',
     NO_FUTURE_DATES: 'No future dates allowed',
+    NO_PAST_DATES: 'No past dates allowed',
     NO_NEGATIVE_NUMBERS: 'No negative numbers allowed',
     SEED_COLLECTION_DESCRIPTION: 'All the details about the species, date collected, collectors and the site location.',
     FAMILY: 'Family',
@@ -617,6 +618,11 @@ const strings = new LocalizedStrings({
     ADD_OBSERVATION: 'Add Observation',
     MARK_AS_COMPLETE: 'Mark as Complete',
     ADD_TEST: 'Add Test',
+    END_DRYING_REMINDER: 'End-Drying Reminder',
+    END_DRYING_REMINDER_OFF: 'End-drying Reminder Off',
+    END_DRYING_REMINDER_ON: 'End-drying Reminder On',
+    TURN_ON_END_DRYING_REMINDER: 'Turn on End-drying Reminder',
+    REMINDER_DATE: 'Reminder Date',
   },
 });
 

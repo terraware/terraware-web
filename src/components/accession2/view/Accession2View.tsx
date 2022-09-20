@@ -15,6 +15,7 @@ import DeleteAccessionModal from '../edit/DeleteAccessionModal';
 import DetailPanel from './DetailPanel';
 import EditLocationModal from '../edit/EditLocationModal';
 import EditStateModal from '../edit/EditStateModal';
+import EndDryingReminderModal from '../edit/EndDryingReminderModal';
 import QuantityModal from '../edit/QuantityModal';
 import WithdrawModal from '../withdraw/WithdrawModal';
 import CheckedInConfirmationModal from '../edit/CheckedInConfirmationModal';
@@ -55,11 +56,12 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
   const [accession, setAccession] = useState<Accession2>();
   const [openEditLocationModal, setOpenEditLocationModal] = useState(false);
   const [openEditStateModal, setOpenEditStateModal] = useState(false);
+  const [openEndDryingReminderModal, setOpenEndDryingReminderModal] = useState(false);
   const [openDeleteAccession, setOpenDeleteAccession] = useState(false);
   const [openWithdrawModal, setOpenWithdrawModal] = useState(false);
-  const [quantityModalOpened, setQuantityModalOpened] = useState(false);
+  const [openQuantityModal, setOpenQuantityModal] = useState(false);
+  const [openCheckInConfirmationModal, setOpenCheckInConfirmationModal] = useState(false);
   const [hasPendingTests, setHasPendingTests] = useState(false);
-  const [checkInConfirmationModalOpened, setCheckInConfirmationModalOpened] = useState(false);
   const [age, setAge] = useState('');
   const { organization, user } = props;
   const classes = useStyles();
@@ -151,7 +153,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
       try {
         await checkIn(accession.id);
         reloadData();
-        setCheckInConfirmationModalOpened(true);
+        setOpenCheckInConfirmationModal(true);
       } catch (e) {
         // swallow error?
         snackbar.toastError();
@@ -291,8 +293,8 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
       {accession && (
         <>
           <CheckedInConfirmationModal
-            open={checkInConfirmationModalOpened}
-            onClose={() => setCheckInConfirmationModalOpened(false)}
+            open={openCheckInConfirmationModal}
+            onClose={() => setOpenCheckInConfirmationModal(false)}
             accession={accession}
           />
           <EditLocationModal
@@ -305,6 +307,12 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
           <EditStateModal
             open={openEditStateModal}
             onClose={() => setOpenEditStateModal(false)}
+            accession={accession}
+            reload={reloadData}
+          />
+          <EndDryingReminderModal
+            open={openEndDryingReminderModal}
+            onClose={() => setOpenEndDryingReminderModal(false)}
             accession={accession}
             reload={reloadData}
           />
@@ -322,12 +330,12 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
             user={user}
           />
           <QuantityModal
-            open={quantityModalOpened}
-            onClose={() => setQuantityModalOpened(false)}
+            open={openQuantityModal}
+            onClose={() => setOpenQuantityModal(false)}
             accession={accession}
             organization={organization}
             reload={reloadData}
-            setOpen={() => setQuantityModalOpened(true)}
+            setOpen={() => setOpenQuantityModal(true)}
           />
         </>
       )}
@@ -378,7 +386,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
             <Icon name='iconMyLocation' className={classes.iconStyle} />
             <Box sx={editableProps}>
               <Typography paddingLeft={1}>
-                {getSeedBank(organization, accession.facilityId)?.name} ({accession.storageLocation})
+                {getSeedBank(organization, accession.facilityId)?.name} / {accession.storageLocation}
               </Typography>
               <IconButton sx={{ marginLeft: 3, height: '24px' }} onClick={() => setOpenEditLocationModal(true)}>
                 <Icon name='iconEdit' className={`${classes.editIcon} edit-icon`} />
@@ -387,13 +395,17 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
           </Box>
         )}
         <Box
+          sx={{ cursor: 'pointer' }}
           display='flex'
           padding={(theme) => theme.spacing(0, 2)}
           alignItems='center'
           width={isMobile ? '100%' : 'auto'}
+          onClick={() => setOpenEndDryingReminderModal(true)}
         >
           <Icon name='notification' className={classes.iconStyle} />
-          <Typography paddingLeft={1}>Notification</Typography>
+          <Typography paddingLeft={1}>
+            {accession?.dryingEndDate ? strings.END_DRYING_REMINDER_ON : strings.END_DRYING_REMINDER_OFF}
+          </Typography>
         </Box>
       </Box>
 
@@ -405,12 +417,12 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
               <Box display='flex'>
                 {getAbsoluteQuantity()} {getEstimatedQuantity()}
               </Box>
-              <IconButton sx={{ marginLeft: 3, height: '24px' }} onClick={() => setQuantityModalOpened(true)}>
+              <IconButton sx={{ marginLeft: 3, height: '24px' }} onClick={() => setOpenQuantityModal(true)}>
                 <Icon name='iconEdit' className={`${classes.editIcon} edit-icon`} />
               </IconButton>
             </Box>
           ) : (
-            <Link sx={linkStyle} onClick={() => setQuantityModalOpened(true)}>
+            <Link sx={linkStyle} onClick={() => setOpenQuantityModal(true)}>
               + {strings.ADD}
             </Link>
           )}
