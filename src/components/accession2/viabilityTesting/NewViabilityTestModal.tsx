@@ -309,7 +309,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
                   fontSize: '16px',
                   '&[disabled]': { color: '#0067C84D', pointerEvents: 'none' },
                 }}
-                disabled={testCompleted}
+                disabled={testCompleted || readOnly}
               >
                 + {strings.ADD_OBSERVATION}
               </Link>
