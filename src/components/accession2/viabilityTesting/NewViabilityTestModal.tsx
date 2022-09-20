@@ -30,7 +30,12 @@ export interface NewViabilityTestModalProps {
 
 export default function NewViabilityTestModal(props: NewViabilityTestModalProps): JSX.Element {
   const { onClose, open, accession, organization, user, reload } = props;
-  const newViabilityTest: ViabilityTestPostRequest = { testResults: [], withdrawnByUserId: user.id };
+  const newViabilityTest: ViabilityTestPostRequest = {
+    testResults: [],
+    withdrawnByUserId: user.id,
+    seedsTested: 0,
+    testType: 'Lab',
+  };
   const [record, setRecord, onChange] = useForm(newViabilityTest);
   const [users, setUsers] = useState<OrganizationUser[]>();
   const [testCompleted, setTestCompleted] = useState<boolean>(false);
