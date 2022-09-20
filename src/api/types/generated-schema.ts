@@ -316,12 +316,10 @@ export interface components {
       dryingEndDate?: string;
       dryingMoveDate?: string;
       dryingStartDate?: string;
-      endangered?: "No" | "Yes" | "Unsure";
       /** @deprecated Backward-compatibility alias for collectionSiteNotes */
       environmentalNotes?: string;
       estimatedSeedCount?: number;
       facilityId: number;
-      family?: string;
       fieldNotes?: string;
       founderId?: string;
       geolocations?: components["schemas"]["Geolocation"][];
@@ -340,7 +338,6 @@ export interface components {
       processingNotes?: string;
       processingStaffResponsible?: string;
       processingStartDate?: string;
-      rare?: "No" | "Yes" | "Unsure";
       receivedDate?: string;
       /** Number or weight of seeds remaining for withdrawal and testing. Calculated by the server when the accession's total size is known. */
       remainingQuantity?: components["schemas"]["SeedQuantityPayload"];
@@ -415,7 +412,6 @@ export interface components {
       estimatedCount?: number;
       estimatedWeight?: components["schemas"]["SeedQuantityPayload"];
       facilityId: number;
-      family?: string;
       founderId?: string;
       /** Server-generated unique identifier for the accession. This is unique across all seed banks, but is not suitable for display to end users. */
       id: number;
@@ -502,18 +498,15 @@ export interface components {
       collectionSiteNotes?: string;
       collectionSource?: "Wild" | "Reintroduced" | "Cultivated" | "Other";
       collectors?: string[];
-      endangered?: "No" | "Yes" | "Unsure";
       /** @deprecated Backward-compatibility alias for collectionSiteNotes */
       environmentalNotes?: string;
       facilityId?: number;
-      family?: string;
       fieldNotes?: string;
       founderId?: string;
       geolocations?: components["schemas"]["Geolocation"][];
       /** @deprecated Backward-compatibility alias for collectionSiteLandowner */
       landowner?: string;
       numberOfTrees?: number;
-      rare?: "No" | "Yes" | "Unsure";
       receivedDate?: string;
       /** @deprecated Backward-compatibility alias for collectionSiteName */
       siteLocation?: string;
@@ -901,6 +894,9 @@ export interface components {
       endDate?: string;
       id: number;
       notes?: string;
+      seedsCompromised?: number;
+      seedsEmpty?: number;
+      seedsFilled?: number;
       seedsTested?: number;
       seedType?: "Fresh" | "Stored";
       startDate?: string;
@@ -924,10 +920,8 @@ export interface components {
         | "Stratification"
         | "Other"
         | "Light";
-      testResults?: components["schemas"]["ViabilityTestResultPayload"][];
-      testType: "Lab" | "Nursery" | "Cut";
-      totalPercentGerminated?: number;
-      totalSeedsGerminated?: number;
+      /** Server-calculated viability percent for this test. For lab and nursery tests, this is based on the total seeds germinated across all test results. For cut tests, it is based on the number of seeds filled. */
+      viabilityPercent?: number;
       /** Full name of user who withdrew seeds to perform the test. */
       withdrawnByName?: string;
       /** ID of user who withdrew seeds to perform the test. */
@@ -1352,11 +1346,9 @@ export interface components {
       dryingEndDate?: string;
       dryingMoveDate?: string;
       dryingStartDate?: string;
-      endangered?: "No" | "Yes" | "Unsure";
       /** @deprecated Backward-compatibility alias for collectionSiteNotes */
       environmentalNotes?: string;
       facilityId?: number;
-      family?: string;
       fieldNotes?: string;
       founderId?: string;
       geolocations?: components["schemas"]["Geolocation"][];
@@ -1370,7 +1362,6 @@ export interface components {
       processingNotes?: string;
       processingStaffResponsible?: string;
       processingStartDate?: string;
-      rare?: "No" | "Yes" | "Unsure";
       receivedDate?: string;
       /** @deprecated Backward-compatibility alias for collectionSiteName */
       siteLocation?: string;
@@ -1504,6 +1495,9 @@ export interface components {
     UpdateViabilityTestRequestPayload: {
       endDate?: string;
       notes?: string;
+      seedsCompromised?: number;
+      seedsEmpty?: number;
+      seedsFilled?: number;
       seedsTested?: number;
       seedType?: "Fresh" | "Stored";
       startDate?: string;
