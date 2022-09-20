@@ -15,15 +15,16 @@ type ViabilityTestingPanelProps = {
   user: User;
   setNewViabilityTestOpened: React.Dispatch<React.SetStateAction<boolean>>;
   setSelectedTest: React.Dispatch<React.SetStateAction<ViabilityTest | undefined>>;
+  setViewViabilityTestModalOpened: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export default function ViabilityTestingPanel(props: ViabilityTestingPanelProps): JSX.Element {
-  const { accession, setNewViabilityTestOpened, setSelectedTest } = props;
+  const { accession, setNewViabilityTestOpened, setSelectedTest, setViewViabilityTestModalOpened } = props;
   const { isMobile } = useDeviceInfo();
 
   const onTestSelected = (test: ViabilityTest) => {
     setSelectedTest(test);
-    setNewViabilityTestOpened(true);
+    setViewViabilityTestModalOpened(true);
   };
 
   return (

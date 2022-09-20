@@ -117,7 +117,6 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
 
   const onCloseHandler = () => {
     setTestCompleted(false);
-    setRecord(undefined);
     onClose();
   };
 
@@ -130,8 +129,8 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
   };
 
   const onAddResult = () => {
-    if (record?.testResults) {
-      const updatedResults = [...record.testResults];
+    if (record) {
+      const updatedResults = [...(record.testResults || [])];
       updatedResults.push({ recordingDate: '', seedsGerminated: 0 });
 
       onChange('testResults', updatedResults);
