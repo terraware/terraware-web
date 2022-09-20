@@ -51,7 +51,12 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
   }, [organization]);
 
   useEffect(() => {
-    const newViabilityTest: ViabilityTestPostRequest = { testResults: [], withdrawnByUserId: user.id, testType: 'Lab' };
+    const newViabilityTest: ViabilityTestPostRequest = {
+      testResults: [],
+      withdrawnByUserId: user.id,
+      testType: 'Lab',
+      seedsTested: 0,
+    };
 
     const initViabilityTest = () => {
       if (selectedTest) {
@@ -292,7 +297,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
               >
                 + {strings.ADD_OBSERVATION}
               </Link>
-              {record.testResults && record.testResults.length > 0 && (
+              {record?.testResults && record.testResults.length > 0 && (
                 <Checkbox
                   label={strings.MARK_AS_COMPLETE}
                   onChange={(id, value) => markTestAsComplete(value)}
@@ -305,7 +310,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
           </Grid>
         </Grid>
         <Grid padding={theme.spacing(1, 3, 1, 5)} xs={12}>
-          <TextField id='notes' value={record.notes} onChange={onChange} type='textarea' label={strings.NOTES} />
+          <TextField id='notes' value={record?.notes} onChange={onChange} type='textarea' label={strings.NOTES} />
         </Grid>
       </Grid>
     </DialogBox>
