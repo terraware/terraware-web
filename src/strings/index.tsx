@@ -614,6 +614,7 @@ const strings = new LocalizedStrings({
     NUMBER_OF_SEEDS_TESTED_REQUIRED: '# Seeds Tested *',
     VIABILITY_RATE: 'Viability Rate',
     ADD_A_VIABILITY_TESTING: 'Add a Viability Testing',
+    VALUE_CANT_EXCEED_100: 'Value can’t exceed 100%',
   },
 });
 
