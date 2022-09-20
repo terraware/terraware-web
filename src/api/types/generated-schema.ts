@@ -914,6 +914,9 @@ export interface components {
         | "Soil"
         | "Moss"
         | "Perlite/Vermiculite";
+      testResults?: components["schemas"]["ViabilityTestResultPayload"][];
+      testType: "Lab" | "Nursery" | "Cut";
+      totalSeedsGerminated?: number;
       treatment?:
         | "Soak"
         | "Scarify"
