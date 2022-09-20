@@ -302,20 +302,25 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
             <ViewViabilityTestModal
               open={viewViabilityTestModalOpened}
               accession={accession}
-              onClose={() => setViewViabilityTestModalOpened(false)}
-              selectedTest={selectedTest}
-              setNewViabilityTestOpened={setNewViabilityTestOpened}
-              setSelectedTest={setSelectedTest}
+              viabilityTest={selectedTest}
+              onClose={() => {
+                setViewViabilityTestModalOpened(false);
+                setSelectedTest(undefined);
+              }}
+              onEdit={() => setNewViabilityTestOpened(true)}
             />
           )}
           <NewViabilityTestModal
             open={newViabilityTestOpened}
             reload={reloadData}
             accession={accession}
-            onClose={() => setNewViabilityTestOpened(false)}
+            onClose={() => {
+              setNewViabilityTestOpened(false);
+              setSelectedTest(undefined);
+            }}
             organization={organization}
             user={user}
-            selectedTest={selectedTest}
+            viabilityTest={selectedTest}
           />
           <CheckedInConfirmationModal
             open={checkInConfirmationModalOpened}
