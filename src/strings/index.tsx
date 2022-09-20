@@ -612,6 +612,7 @@ const strings = new LocalizedStrings({
     TESTING_STAFF: 'Testing Staff',
     START_DATE_REQUIRED: 'Start Date *',
     NUMBER_OF_SEEDS_TESTED_REQUIRED: '# Seeds Tested *',
+    ADD_TEST: 'Add Test',
     VIABILITY_RATE: 'Viability Rate',
     ADD_A_VIABILITY_TEST: 'Add a Viability Test',
     VALUE_CANT_EXCEED_100: 'Value can’t exceed 100%',
@@ -619,7 +620,6 @@ const strings = new LocalizedStrings({
     NUMBER_OF_SEEDS_GERMINATED_REQUIRED: '# Seeds Germinated *',
     ADD_OBSERVATION: 'Add Observation',
     MARK_AS_COMPLETE: 'Mark as Complete',
-    ADD_TEST: 'Add Test',
   },
 });
 
