@@ -83,7 +83,7 @@ export default function Renderer(props: RendererProps<TableRowType>): JSX.Elemen
       );
     }
 
-    return <CellRenderer {...defaultProps} value={getValue(`${viabilityPercent}%`)} />;
+    return <CellRenderer {...defaultProps} value={getValue(`${viabilityPercent}%`, { fontWeight: 500 })} />;
   }
 
   return <CellRenderer {...props} />;
