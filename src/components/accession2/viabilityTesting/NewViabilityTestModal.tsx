@@ -54,7 +54,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
   };
 
   const onChangeUser = (newValue: OrganizationUser) => {
-    onChange('testingStaffUserId', newValue.id);
+    onChange('withdrawnByUserId', newValue.id);
   };
 
   const onChangeDate = (id: string, value?: any) => {
@@ -147,7 +147,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
             isEqual={(a: OrganizationUser, b: OrganizationUser) => a.id === b.id}
             renderOption={(option) => renderUser(option, user, contributor)}
             displayLabel={(option) => renderUser(option, user, contributor)}
-            selectedValue={users?.find((userSel) => userSel.id === record.testingStaffUserId)}
+            selectedValue={users?.find((userSel) => userSel.id === record.withdrawnByUserId)}
             toT={(firstName: string) => ({ firstName } as OrganizationUser)}
             fullWidth={true}
             disabled={contributor}

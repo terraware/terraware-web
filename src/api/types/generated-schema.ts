@@ -235,10 +235,15 @@ export interface paths {
   "/api/v1/users/me": {
     get: operations["getMyself"];
     put: operations["updateMyself"];
+    /** WARNING! This operation is not reversible. */
+    delete: operations["deleteMyself"];
   };
   "/api/v1/users/me/preferences": {
     get: operations["getUserPreferences"];
     put: operations["updateUserPreferences"];
+  };
+  "/api/v1/versions": {
+    get: operations["getVersions"];
   };
   "/api/v2/seedbank/accessions": {
     post: operations["createAccession"];
@@ -402,7 +407,7 @@ export interface components {
       collectionSiteLandowner?: string;
       collectionSiteName?: string;
       collectionSiteNotes?: string;
-      collectionSource?: "Wild" | "Reintroduced" | "Cultivated" | "Other"; 
+      collectionSource?: "Wild" | "Reintroduced" | "Cultivated" | "Other";
       /** Names of the people who collected the seeds. */
       collectors?: string[];
       dryingEndDate?: string;
@@ -422,7 +427,7 @@ export interface components {
       /** Estimated number of plants the seeds were collected from. */
       plantsCollectedFrom?: number;
       receivedDate?: string;
-      remainingQuantity?: components["schemas"]["SeedQuantityPayload"]; 
+      remainingQuantity?: components["schemas"]["SeedQuantityPayload"];
       /** Which source of data this accession originally came from. */
       source?: "Web" | "Seed Collector App" | "File Import";
       /** Scientific name of the species. */
@@ -657,7 +662,7 @@ export interface components {
         | "Soil"
         | "Moss"
         | "Perlite/Vermiculite";
-      testingStaffUserId?: number;
+      testResults?: components["schemas"]["ViabilityTestResultPayload"][];
       testType?: "Lab" | "Nursery" | "Cut";
       treatment?:
         | "Soak"
@@ -666,6 +671,8 @@ export interface components {
         | "Stratification"
         | "Other"
         | "Light";
+      /** ID of user who withdrew seeds to perform the test. Defaults to the current user. If non-null, the current user must have permission to see the referenced user's membership details in the organization. */
+      withdrawnByUserId?: number;
     };
     CreateWithdrawalRequestPayload: {
       date?: string;
@@ -680,7 +687,7 @@ export interface components {
         | "Out-planting"
         | "Nursery";
       notes?: string;
-      /** ID of the user who withdrew the seeds. Default for new withdrawals is the current user; for existing withdrawals, default is the withdrawal's existing user ID. Ignored if the current user does not have permission to list organization users. V1 COMPATIBILITY: If this is null and the withdrawal doesn't have a user ID, the existing "staffResponsible" value will be preserved. */
+      /** ID of the user who withdrew the seeds. Default is the current user's ID. If non-null, the current user must have permission to read the referenced user's membership details in the organization. */
       withdrawnByUserId?: number;
       withdrawnQuantity?: components["schemas"]["SeedQuantityPayload"];
     };
@@ -907,6 +914,9 @@ export interface components {
         | "Soil"
         | "Moss"
         | "Perlite/Vermiculite";
+      testResults?: components["schemas"]["ViabilityTestResultPayload"][];
+      testType: "Lab" | "Nursery" | "Cut";
+      totalSeedsGerminated?: number;
       treatment?:
         | "Soak"
         | "Scarify"
@@ -914,12 +924,11 @@ export interface components {
         | "Stratification"
         | "Other"
         | "Light";
-      testingStaffName?: string;
-      testingStaffUserId?: number;
-      testResults?: components["schemas"]["ViabilityTestResultPayload"][];
-      testType: "Lab" | "Nursery" | "Cut";
-      totalPercentGerminated?: number;
-      totalSeedsGerminated?: number;
+      viabilityPercent?: number;
+      /** Full name of user who withdrew seeds to perform the test. */
+      withdrawnByName?: string;
+      /** ID of user who withdrew seeds to perform the test. */
+      withdrawnByUserId?: number;
     };
     GetViabilityTestResponsePayload: {
       viabilityTest: components["schemas"]["GetViabilityTestPayload"];
@@ -1505,7 +1514,6 @@ export interface components {
         | "Soil"
         | "Moss"
         | "Perlite/Vermiculite";
-      testingStaffUserId?: number;
       testResults?: components["schemas"]["ViabilityTestResultPayload"][];
       testType?: "Lab" | "Nursery" | "Cut";
       treatment?:
@@ -1515,6 +1523,8 @@ export interface components {
         | "Stratification"
         | "Other"
         | "Light";
+      /** ID of user who withdrew seeds to perform the test. If non-null, the current user must have permission to see the referenced user's membership details in the organization. If absent or null, the existing value is left unchanged. */
+      withdrawnByUserId?: number;
     };
     UpdateWithdrawalRequestPayload: {
       date?: string;
@@ -1529,7 +1539,7 @@ export interface components {
         | "Out-planting"
         | "Nursery";
       notes?: string;
-      /** ID of the user who withdrew the seeds. Default for new withdrawals is the current user; for existing withdrawals, default is the withdrawal's existing user ID. Ignored if the current user does not have permission to list organization users. V1 COMPATIBILITY: If this is null and the withdrawal doesn't have a user ID, the existing "staffResponsible" value will be preserved. */
+      /** ID of the user who withdrew the seeds. Default is the withdrawal's existing user ID. If non-null, the current user must have permission to read the referenced user's membership details in the organization. */
       withdrawnByUserId?: number;
       withdrawnQuantity?: components["schemas"]["SeedQuantityPayload"];
     };
@@ -1546,6 +1556,16 @@ export interface components {
       emailNotificationsEnabled: boolean;
       firstName?: string;
       lastName?: string;
+    };
+    VersionsEntryPayload: {
+      appName: string;
+      platform: string;
+      minimumVersion: string;
+      recommendedVersion: string;
+    };
+    VersionsResponsePayload: {
+      versions: components["schemas"]["VersionsEntryPayload"][];
+      status: components["schemas"]["SuccessOrError"];
     };
     ViabilityTestPayload: {
       /** Server-assigned unique ID of this viability test. Null when creating a new test. */
@@ -3436,6 +3456,17 @@ export interface operations {
       };
     };
   };
+  /** WARNING! This operation is not reversible. */
+  deleteMyself: {
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
   getUserPreferences: {
     parameters: {
       query: {
@@ -3464,6 +3495,16 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["UpdateUserPreferencesRequestPayload"];
+      };
+    };
+  };
+  getVersions: {
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["VersionsResponsePayload"];
+        };
       };
     };
   };

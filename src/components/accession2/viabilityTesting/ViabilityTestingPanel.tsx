@@ -7,6 +7,7 @@ import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
 import { User } from 'src/types/User';
 import NewViabilityTestModal from './NewViabilityTestModal';
+import ViabilityTestingDatabase from './ViabilityTestingDatabase';
 
 type ViabilityTestingPanelProps = {
   accession: Accession2;
@@ -31,7 +32,13 @@ export default function ViabilityTestingPanel(props: ViabilityTestingPanelProps)
         user={user}
       />
       {accession?.viabilityTests ? (
-        <Box>Viability Testing</Box>
+        <Box>
+          <ViabilityTestingDatabase
+            accession={accession}
+            onNewViabilityTest={() => setNewViabilityTestOpened(true)}
+            onSelectViabilityTest={(test) => window.alert(`Selected viability test ${test.id}`)}
+          />
+        </Box>
       ) : (
         <Box width={isMobile ? '100%' : '420px'} textAlign='center' sx={{ margin: '0 auto', paddingTop: 4 }}>
           <Typography>{strings.VIABILITY_TESTING_EMPTY_MESSAGE}</Typography>

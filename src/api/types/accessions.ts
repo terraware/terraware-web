@@ -23,3 +23,4 @@ export type Accession = AccessionGetResponse['accession'];
 
 export const schemas = 'schemas';
 export type Geolocation = components[typeof schemas]['Geolocation'];
+export type ViabilityTest = components[typeof schemas]['GetViabilityTestPayload'];

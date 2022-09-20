@@ -2459,10 +2459,10 @@
   dependencies:
     defer-to-connect "^2.0.1"
 
-"@terraware/web-components@^1.0.23":
-  version "1.0.23"
-  resolved "https://registry.yarnpkg.com/@terraware/web-components/-/web-components-1.0.23.tgz#e538810601d7304d3116f512b6ea25a5780511d1"
-  integrity sha512-mIA+lXssoKSSdN19LDbNShAlQejro1FZNiNu9bvs5VgusEwk/HoNCDkDYbmpVWnBjSXMuUbibB6R9oSDZ35YNQ==
+"@terraware/web-components@^1.0.24":
+  version "1.0.24"
+  resolved "https://registry.yarnpkg.com/@terraware/web-components/-/web-components-1.0.24.tgz#a35a563f259c47c9761a0a26ad0756fa169061c1"
+  integrity sha512-lsN+pNNUSlgACC6Gl03jG5vrrB0eL/IVD1ypQHHCdH/q3Y0H4UcRuYC+/t4fryyiqn/c1EjlyBcnHqbTSZlWFA==
   dependencies:
     "@date-io/date-fns" "^2.14.0"
     "@date-io/moment" "^2.10.11"
