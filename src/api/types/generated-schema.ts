@@ -642,7 +642,7 @@ export interface components {
     CreateViabilityTestRequestPayload: {
       endDate?: string;
       notes?: string;
-      seedsTested?: number;
+      seedsTested: number;
       seedType?: "Fresh" | "Stored";
       startDate?: string;
       substrate?:
@@ -656,7 +656,7 @@ export interface components {
         | "Moss"
         | "Perlite/Vermiculite";
       testResults?: components["schemas"]["ViabilityTestResultPayload"][];
-      testType?: "Lab" | "Nursery" | "Cut";
+      testType: "Lab" | "Nursery" | "Cut";
       treatment?:
         | "Soak"
         | "Scarify"
@@ -897,7 +897,7 @@ export interface components {
       seedsCompromised?: number;
       seedsEmpty?: number;
       seedsFilled?: number;
-      seedsTested?: number;
+      seedsTested: number;
       seedType?: "Fresh" | "Stored";
       startDate?: string;
       substrate?:
@@ -1498,7 +1498,7 @@ export interface components {
       seedsCompromised?: number;
       seedsEmpty?: number;
       seedsFilled?: number;
-      seedsTested?: number;
+      seedsTested: number;
       seedType?: "Fresh" | "Stored";
       startDate?: string;
       substrate?:
@@ -1512,7 +1512,7 @@ export interface components {
         | "Moss"
         | "Perlite/Vermiculite";
       testResults?: components["schemas"]["ViabilityTestResultPayload"][];
-      testType?: "Lab" | "Nursery" | "Cut";
+      testType: "Lab" | "Nursery" | "Cut";
       treatment?:
         | "Soak"
         | "Scarify"
