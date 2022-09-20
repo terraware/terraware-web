@@ -615,6 +615,11 @@ const strings = new LocalizedStrings({
     VIABILITY_RATE: 'Viability Rate',
     ADD_A_VIABILITY_TEST: 'Add a Viability Test',
     VALUE_CANT_EXCEED_100: 'Value can’t exceed 100%',
+    CHECK_DATE_REQUIRED: 'Check Date *',
+    NUMBER_OF_SEEDS_GERMINATED_REQUIRED: '# Seeds Germinated *',
+    ADD_OBSERVATION: 'Add Observation',
+    MARK_AS_COMPLETE: 'Mark as Complete',
+    ADD_TEST: 'Add Test',
   },
 });
 

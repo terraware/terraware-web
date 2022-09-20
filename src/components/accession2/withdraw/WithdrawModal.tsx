@@ -45,6 +45,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
 
   const newViabilityTesting: ViabilityTestPostRequest = {
     testType: 'Lab',
+    seedsTested: 0,
   };
 
   const [record, setRecord, onChange] = useForm(newWithdrawal);

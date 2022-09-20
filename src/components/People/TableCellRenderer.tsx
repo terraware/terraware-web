@@ -26,11 +26,7 @@ export default function Renderer(props: RendererProps<TableRowType>): JSX.Elemen
     );
   };
 
-  if (column.key === 'firstName') {
-    return <CellRenderer index={index} column={column} value={createLinkToPerson(value)} row={row} />;
-  }
-
-  if (column.key === 'lastName') {
+  if (column.key === 'firstName' || column.key === 'lastName') {
     return <CellRenderer index={index} column={column} value={createLinkToPerson(value)} row={row} />;
   }
 
