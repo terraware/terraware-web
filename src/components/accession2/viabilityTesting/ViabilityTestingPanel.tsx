@@ -2,6 +2,7 @@ import { Box, Typography } from '@mui/material';
 import { Button } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import { Accession2 } from 'src/api/accessions2/accession';
+import { ViabilityTest } from 'src/api/types/accessions';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
 import { User } from 'src/types/User';
@@ -13,10 +14,17 @@ type ViabilityTestingPanelProps = {
   organization: ServerOrganization;
   user: User;
   setNewViabilityTestOpened: React.Dispatch<React.SetStateAction<boolean>>;
+  setSelectedTest: React.Dispatch<React.SetStateAction<ViabilityTest | undefined>>;
 };
+
 export default function ViabilityTestingPanel(props: ViabilityTestingPanelProps): JSX.Element {
-  const { accession, setNewViabilityTestOpened } = props;
+  const { accession, setNewViabilityTestOpened, setSelectedTest } = props;
   const { isMobile } = useDeviceInfo();
+
+  const onTestSelected = (test: ViabilityTest) => {
+    setSelectedTest(test);
+    setNewViabilityTestOpened(true);
+  };
 
   return (
     <>
@@ -25,7 +33,7 @@ export default function ViabilityTestingPanel(props: ViabilityTestingPanelProps)
           <ViabilityTestingDatabase
             accession={accession}
             onNewViabilityTest={() => setNewViabilityTestOpened(true)}
-            onSelectViabilityTest={(test) => window.alert(`Selected viability test ${test.id}`)}
+            onSelectViabilityTest={onTestSelected}
           />
         </Box>
       ) : (

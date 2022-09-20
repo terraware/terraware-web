@@ -1,7 +1,7 @@
 import { Box, Grid, IconButton, Link, useTheme } from '@mui/material';
 import { Button, Checkbox, DatePicker, DialogBox, Select, SelectT } from '@terraware/web-components';
 import { Accession2 } from 'src/api/accessions2/accession';
-import { ViabilityTestPostRequest } from 'src/api/accessions2/viabilityTest';
+import { putViabilityTest, ViabilityTestPostRequest } from 'src/api/accessions2/viabilityTest';
 import strings from 'src/strings';
 import useForm from 'src/utils/useForm';
 import { Dropdown } from '@terraware/web-components';
@@ -18,6 +18,7 @@ import { renderUser } from 'src/utils/renderUser';
 import { Close } from '@mui/icons-material';
 import { preventDefaultEvent } from '@terraware/web-components/utils';
 import { getTodaysDateFormatted } from 'src/utils/date';
+import { ViabilityTest } from 'src/api/types/accessions';
 
 export interface NewViabilityTestModalProps {
   open: boolean;
@@ -26,12 +27,13 @@ export interface NewViabilityTestModalProps {
   reload: () => void;
   organization: ServerOrganization;
   user: User;
+  selectedTest: ViabilityTest | undefined;
 }
 
 export default function NewViabilityTestModal(props: NewViabilityTestModalProps): JSX.Element {
-  const { onClose, open, accession, organization, user, reload } = props;
-  const newViabilityTest: ViabilityTestPostRequest = { testResults: [], withdrawnByUserId: user.id };
-  const [record, setRecord, onChange] = useForm(newViabilityTest);
+  const { onClose, open, accession, organization, user, reload, selectedTest } = props;
+
+  const [record, setRecord, onChange] = useForm(selectedTest);
   const [users, setUsers] = useState<OrganizationUser[]>();
   const [testCompleted, setTestCompleted] = useState<boolean>(false);
   const contributor = isContributor(organization);
@@ -48,16 +50,42 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
     getOrgUsers();
   }, [organization]);
 
+  useEffect(() => {
+    const newViabilityTest: ViabilityTestPostRequest = { testResults: [], withdrawnByUserId: user.id, testType: 'Lab' };
+
+    const initViabilityTest = () => {
+      if (selectedTest) {
+        return selectedTest;
+      } else {
+        return {
+          ...newViabilityTest,
+          id: -1,
+          accessionId: accession.id,
+          testType: 'Lab' as 'Lab' | 'Nursery' | 'Cut',
+        };
+      }
+    };
+
+    setRecord(initViabilityTest());
+  }, [selectedTest, setRecord, accession, user]);
+
   const saveTest = async () => {
-    if (testCompleted) {
-      record.endDate = getTodaysDateFormatted();
-    }
-    const response = await postViabilityTest(record, accession.id);
-    if (response.requestSucceeded) {
-      reload();
-      onCloseHandler();
-    } else {
-      snackbar.toastError();
+    if (record) {
+      if (testCompleted) {
+        record.endDate = getTodaysDateFormatted();
+      }
+      let response;
+      if (record.id === -1) {
+        response = await postViabilityTest(record, accession.id);
+      } else {
+        response = await putViabilityTest(record, accession.id, record.id);
+      }
+      if (response.requestSucceeded) {
+        reload();
+        onCloseHandler();
+      } else {
+        snackbar.toastError();
+      }
     }
   };
 
@@ -77,12 +105,12 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
 
   const onCloseHandler = () => {
     setTestCompleted(false);
-    setRecord(newViabilityTest);
+    setRecord(undefined);
     onClose();
   };
 
   const onDeleteResult = (index: number) => {
-    if (record.testResults) {
+    if (record?.testResults) {
       const updatedResults = [...record.testResults];
       updatedResults.splice(index, 1);
       onChange('testResults', updatedResults);
@@ -90,7 +118,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
   };
 
   const onAddResult = () => {
-    if (record.testResults) {
+    if (record?.testResults) {
       const updatedResults = [...record.testResults];
       updatedResults.push({ recordingDate: '', seedsGerminated: 0 });
 
@@ -99,7 +127,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
   };
 
   const onResultChange = (id: string, value: unknown, index: number) => {
-    if (record.testResults) {
+    if (record?.testResults) {
       const updatedResults = [...record.testResults];
       updatedResults[index] = { ...updatedResults[index], [id]: value as string };
       onChange('testResults', updatedResults);
@@ -138,7 +166,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
             options={TEST_METHODS}
             placeholder={strings.SELECT}
             onChange={(value: string) => onChange('testType', value)}
-            selectedValue={record.testType}
+            selectedValue={record?.testType}
             fullWidth={true}
             label={strings.TEST_METHOD_REQUIRED}
           />
@@ -149,7 +177,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
             placeholder={strings.SELECT}
             options={SEED_TYPES}
             onChange={(value: string) => onChange('seedType', value)}
-            selectedValue={record.seedType}
+            selectedValue={record?.seedType}
             fullWidth={true}
             readonly={true}
           />
@@ -158,9 +186,9 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
           <Select
             label={strings.SUBSTRATE}
             placeholder={strings.SELECT}
-            options={getSubstratesAccordingToType(record.testType)}
+            options={getSubstratesAccordingToType(record?.testType)}
             onChange={(value: string) => onChange('substrate', value)}
-            selectedValue={record.substrate}
+            selectedValue={record?.substrate}
             fullWidth={true}
             readonly={true}
           />
@@ -171,7 +199,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
             placeholder={strings.SELECT}
             options={TREATMENTS}
             onChange={(value: string) => onChange('treatment', value)}
-            selectedValue={record.treatment}
+            selectedValue={record?.treatment}
             fullWidth={true}
             readonly={true}
           />
@@ -185,7 +213,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
             isEqual={(a: OrganizationUser, b: OrganizationUser) => a.id === b.id}
             renderOption={(option) => renderUser(option, user, contributor)}
             displayLabel={(option) => renderUser(option, user, contributor)}
-            selectedValue={users?.find((userSel) => userSel.id === record.withdrawnByUserId)}
+            selectedValue={users?.find((userSel) => userSel.id === record?.withdrawnByUserId)}
             toT={(firstName: string) => ({ firstName } as OrganizationUser)}
             fullWidth={true}
             disabled={contributor}
@@ -200,7 +228,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
                   id='startDate'
                   label={strings.START_DATE_REQUIRED}
                   aria-label={strings.DATE}
-                  value={record.startDate}
+                  value={record?.startDate}
                   onChange={onChangeDate}
                 />
               </Grid>
@@ -210,12 +238,12 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
                   type='text'
                   onChange={onChange}
                   id='seedsTested'
-                  value={record.seedsTested}
+                  value={record?.seedsTested}
                 />
               </Grid>
             </Box>
 
-            {record.testResults?.map((testResult, index) => (
+            {record?.testResults?.map((testResult, index) => (
               <Box key={index} mb={2} display='flex' alignItems='center'>
                 <Grid item xs={12}>
                   <DatePicker
@@ -259,7 +287,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
               >
                 + {strings.ADD_OBSERVATION}
               </Link>
-              {record.testResults && record.testResults.length > 0 && (
+              {record?.testResults && record?.testResults.length > 0 && (
                 <Checkbox
                   label={strings.MARK_AS_COMPLETE}
                   onChange={(id, value) => markTestAsComplete(value)}
@@ -272,7 +300,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
           </Grid>
         </Grid>
         <Grid padding={theme.spacing(0, 3, 0, 5)} xs={12}>
-          <TextField id='notes' value={record.notes} onChange={onChange} type='textarea' label={strings.NOTES} />
+          <TextField id='notes' value={record?.notes} onChange={onChange} type='textarea' label={strings.NOTES} />
         </Grid>
       </Grid>
     </DialogBox>

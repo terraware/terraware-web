@@ -26,6 +26,7 @@ import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import ViabilityModal from '../edit/ViabilityModal';
 import NewViabilityTestModal from '../viabilityTesting/NewViabilityTestModal';
+import { ViabilityTest } from 'src/api/types/accessions';
 
 const useStyles = makeStyles(() => ({
   iconStyle: {
@@ -61,6 +62,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
   const [viabilityModalOpened, setViabilityModalOpened] = useState(false);
   const [newViabilityTestOpened, setNewViabilityTestOpened] = useState(false);
   const [checkInConfirmationModalOpened, setCheckInConfirmationModalOpened] = useState(false);
+  const [selectedTest, setSelectedTest] = useState<ViabilityTest>();
   const [age, setAge] = useState('');
   const { organization, user } = props;
   const classes = useStyles();
@@ -271,6 +273,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
             onClose={() => setNewViabilityTestOpened(false)}
             organization={organization}
             user={user}
+            selectedTest={selectedTest}
           />
           <CheckedInConfirmationModal
             open={checkInConfirmationModalOpened}
@@ -445,6 +448,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
                 organization={organization}
                 user={user}
                 setNewViabilityTestOpened={setNewViabilityTestOpened}
+                setSelectedTest={setSelectedTest}
               />
             )}
           </TabPanel>
