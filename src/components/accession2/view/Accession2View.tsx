@@ -24,6 +24,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import { getSeedBank } from 'src/utils/organization';
 import _ from 'lodash';
 
 const useStyles = makeStyles(() => ({
@@ -372,11 +373,11 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
             </Box>
           </Box>
         )}
-        {accession?.storageLocation && (
+        {accession?.facilityId && (
           <Box sx={editableParentProps}>
             <Icon name='iconMyLocation' className={classes.iconStyle} />
             <Box sx={editableProps}>
-              <Typography paddingLeft={1}>{accession.storageLocation}</Typography>
+              <Typography paddingLeft={1}>{getSeedBank(organization, accession.facilityId)?.name}</Typography>
               <IconButton sx={{ marginLeft: 3, height: '24px' }} onClick={() => setOpenEditLocationModal(true)}>
                 <Icon name='iconEdit' className={`${classes.editIcon} edit-icon`} />
               </IconButton>

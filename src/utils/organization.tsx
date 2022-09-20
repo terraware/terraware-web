@@ -10,6 +10,10 @@ export const getAllSeedBanks = (organization: ServerOrganization): (Facility | u
   return seedBanks;
 };
 
+export const getSeedBank = (organization: ServerOrganization, facilityId: number): Facility | undefined => {
+  return getAllSeedBanks(organization).find((sb) => sb?.id === facilityId);
+};
+
 export const isAdmin = (organization: ServerOrganization | undefined) => {
   return HighOrganizationRolesValues.includes(organization?.role || '');
 };
