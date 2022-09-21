@@ -4,6 +4,7 @@ import { Accession2 } from 'src/api/accessions2/accession';
 import strings from 'src/strings';
 import { ViabilityTest } from 'src/api/types/accessions';
 import { getFullTestType } from 'src/utils/viabilityTest';
+import ObservationsChart from './ObservationsChart';
 
 export interface ViewViabilityTestModalProps {
   open: boolean;
@@ -106,7 +107,7 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
           </Grid>
           {selectedTest.testResults?.map((testResult, index) => {
             return (
-              <Grid xs={12} key={`observation-${index}`}>
+              <Grid xs={12} key={`observation-${index}`} display='flex'>
                 <Grid xs={4}>
                   <Grid xs={12} sx={titleStyle}>
                     {strings.CHECK_DATE}
@@ -124,9 +125,11 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
             );
           })}
         </Grid>
-        <Grid item xs={12}>
-          Chart
-        </Grid>
+        {selectedTest.testResults && selectedTest.testResults.length > 0 ? (
+          <Grid item xs={12}>
+            <ObservationsChart observations={selectedTest.testResults} />
+          </Grid>
+        ) : null}
         <Grid item xs={12}>
           <Grid xs={12} sx={titleStyle}>
             {strings.NOTES}
