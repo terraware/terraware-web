@@ -373,16 +373,14 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
               user={user}
             />
           )}
-          {openQuantityModal && (
-            <QuantityModal
-              open={openQuantityModal}
-              onClose={() => setOpenQuantityModal(false)}
-              accession={accession}
-              organization={organization}
-              reload={reloadData}
-              setOpen={() => setOpenQuantityModal(true)}
-            />
-          )}
+          <QuantityModal
+            open={openQuantityModal}
+            onClose={() => setOpenQuantityModal(false)}
+            accession={accession}
+            organization={organization}
+            reload={reloadData}
+            setOpen={() => setOpenQuantityModal(true)}
+          />
           {openViabilityModal && (
             <ViabilityModal
               open={openViabilityModal}
