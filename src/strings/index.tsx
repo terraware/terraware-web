@@ -636,6 +636,11 @@ const strings = new LocalizedStrings({
     CHECK_DATE: 'Check Date',
     ADD_A_VIABILITY_TEST: 'Add a Viability Test',
     VALUE_CANT_EXCEED_100: 'Value can’t exceed 100%',
+    TEST_DATE_REQUIRED: 'Test Date *',
+    NUMBER_OF_SEEDS_FILLED_REQUIRED: '# Seeds Filled *',
+    NUMBER_OF_SEEDS_COMPROMISED_REQUIRED: '# Seeds Compromised *',
+    NUMBER_OF_SEEDS_EMPTY_REQUIRED: '# Seeds Empty *',
+    TOTAL_SEEDS_TESTED: 'Total Seeds Tested',
   },
 });
 

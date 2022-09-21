@@ -54,7 +54,7 @@ export const WITHDRAWAL_TYPES = ['Lab', 'Nursery'];
 export const TEST_METHODS = [
   { label: strings.LAB_GERMINATION, value: 'Lab' },
   { label: strings.NURSERY_GERMINATION, value: 'Nursery' },
-  // { label: strings.CUT_TEST, value: 'Cut' },
+  { label: strings.CUT_TEST, value: 'Cut' },
 ];
 
 export const SEED_TYPES = ['Fresh', 'Stored'];
