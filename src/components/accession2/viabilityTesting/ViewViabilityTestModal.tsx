@@ -5,6 +5,7 @@ import strings from 'src/strings';
 import { ViabilityTest } from 'src/api/types/accessions';
 import { getFullTestType } from 'src/utils/viabilityTest';
 import ObservationsChart from './ObservationsChart';
+import { useDeviceInfo } from '@terraware/web-components/utils';
 
 export interface ViewViabilityTestModalProps {
   open: boolean;
@@ -17,6 +18,7 @@ export interface ViewViabilityTestModalProps {
 
 export default function ViewViabilityTestModal(props: ViewViabilityTestModalProps): JSX.Element {
   const { onClose, open, selectedTest, setNewViabilityTestOpened, setSelectedTest } = props;
+  const { isMobile } = useDeviceInfo();
 
   const onCloseHandler = () => {
     setSelectedTest(undefined);
@@ -32,6 +34,7 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
     color: '#859799',
   };
 
+  const smallColumn = isMobile ? 6 : 4;
   return (
     <DialogBox
       onClose={onCloseHandler}
@@ -40,13 +43,13 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
       size='large'
       scrolled={true}
     >
-      <Grid container item xs={12} spacing={2} textAlign='left' color={'#000000'}>
+      <Grid container item xs={12} spacing={2} textAlign='left' color={'#000000'} fontSize='14px'>
         <Grid item xs={12} display='flex'>
           <Grid xs={6}>
             <Typography fontSize='20px'>
               {strings.TEST} #{selectedTest.id}
             </Typography>
-            <Typography>
+            <Typography fontSize='14px'>
               {strings.VIABILITY_RESULT}: {selectedTest.endDate ? strings.COMPLETE : strings.PENDING}
             </Typography>
           </Grid>
@@ -55,72 +58,95 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
           </Grid>
         </Grid>
         <Grid item xs={12} display='flex'>
-          <Grid xs={4}>
+          <Grid xs={smallColumn}>
             <Grid xs={12} sx={titleStyle}>
               {strings.TEST_METHOD}
             </Grid>
             <Grid xs={12}>{getFullTestType(selectedTest.testType)}</Grid>
           </Grid>
-          <Grid xs={4}>
+          <Grid xs={smallColumn}>
             <Grid xs={12} sx={titleStyle}>
               {strings.SEED_TYPE}
             </Grid>
             <Grid xs={12}>{selectedTest.seedType}</Grid>
           </Grid>
-          <Grid xs={4}>
-            <Grid xs={12} sx={titleStyle}>
-              {strings.SUBSTRATE}
+          {!isMobile && (
+            <Grid xs={smallColumn}>
+              <Grid xs={12} sx={titleStyle}>
+                {strings.SUBSTRATE}
+              </Grid>
+              <Grid xs={12}>{selectedTest.substrate}</Grid>
             </Grid>
-            <Grid xs={12}>{selectedTest.substrate}</Grid>
-          </Grid>
+          )}
         </Grid>
         <Grid item xs={12} display='flex'>
-          <Grid xs={4}>
+          {isMobile && (
+            <Grid xs={smallColumn}>
+              <Grid xs={12} sx={titleStyle}>
+                {strings.SUBSTRATE}
+              </Grid>
+              <Grid xs={12}>{selectedTest.substrate}</Grid>
+            </Grid>
+          )}
+          <Grid xs={smallColumn}>
             <Grid xs={12} sx={titleStyle}>
               {strings.TREATMENT}
             </Grid>
             <Grid xs={12}>{selectedTest.treatment}</Grid>
           </Grid>
-          <Grid xs={4}>
-            <Grid xs={12} sx={titleStyle}>
-              {strings.STAFF}
+          {!isMobile && (
+            <Grid xs={smallColumn}>
+              <Grid xs={12} sx={titleStyle}>
+                {strings.STAFF}
+              </Grid>
+              <Grid xs={12}>{selectedTest.withdrawnByName}</Grid>
             </Grid>
-            <Grid xs={12}>{selectedTest.withdrawnByName}</Grid>
-          </Grid>
-          <Grid xs={4} />
+          )}
         </Grid>
-        <Grid item xs={12} sx={{ background: '#F2F4F5', borderRadius: '16px', padding: 2, marginTop: 2 }}>
+        {isMobile && (
+          <Grid item xs={12} display='flex'>
+            <Grid xs={smallColumn}>
+              <Grid xs={12} sx={titleStyle}>
+                {strings.STAFF}
+              </Grid>
+              <Grid xs={12}>{selectedTest.withdrawnByName}</Grid>
+            </Grid>
+          </Grid>
+        )}
+        <Grid
+          item
+          xs={12}
+          sx={{ background: '#F2F4F5', borderRadius: '16px', padding: 2, marginTop: 2, marginLeft: 1 }}
+        >
           <Grid xs={12} display='flex'>
-            <Grid xs={4}>
+            <Grid xs={smallColumn}>
               <Grid xs={12} sx={titleStyle}>
                 {strings.START_DATE}
               </Grid>
               <Grid xs={12}>{selectedTest.startDate}</Grid>
             </Grid>
-            <Grid xs={4}>
+            <Grid xs={smallColumn}>
               <Grid xs={12} sx={titleStyle}>
                 {strings.NUMBER_OF_SEEDS_TESTED}
               </Grid>
               <Grid xs={12}>{selectedTest.seedsTested}</Grid>
             </Grid>
-            <Grid xs={4} />
           </Grid>
           {selectedTest.testResults?.map((testResult, index) => {
             return (
-              <Grid xs={12} key={`observation-${index}`} display='flex'>
-                <Grid xs={4}>
+              <Grid xs={12} key={`observation-${index}`} display='flex' paddingTop={1}>
+                <Grid xs={smallColumn}>
                   <Grid xs={12} sx={titleStyle}>
                     {strings.CHECK_DATE}
                   </Grid>
                   <Grid xs={12}>{testResult.recordingDate}</Grid>
                 </Grid>
-                <Grid xs={4}>
+                <Grid xs={smallColumn}>
                   <Grid xs={12} sx={titleStyle}>
                     {strings.NUMBER_OF_SEEDS_GERMINATED}
                   </Grid>
                   <Grid xs={12}>{testResult.seedsGerminated}</Grid>
                 </Grid>
-                <Grid xs={4} />
               </Grid>
             );
           })}

@@ -40,7 +40,7 @@ export default function ObservationsChart({ observations }: Props): JSX.Element 
           maintainAspectRatio: false,
           layout: {
             padding: {
-              left: 50,
+              left: 0,
               right: 50,
               top: 10,
             },
