@@ -304,58 +304,75 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
             <ViewViabilityTestModal
               open={openViewViabilityTestModal}
               accession={accession}
-              onClose={() => setOpenViewViabilityTestModal(false)}
-              selectedTest={selectedTest}
-              setNewViabilityTestOpened={setOpenNewViabilityTest}
-              setSelectedTest={setSelectedTest}
+              viabilityTest={selectedTest}
+              onClose={() => {
+                setOpenViewViabilityTestModal(false);
+                setSelectedTest(undefined);
+              }}
+              onEdit={() => setOpenNewViabilityTest(true)}
             />
           )}
-          <NewViabilityTestModal
-            open={openNewViabilityTest}
-            reload={reloadData}
-            accession={accession}
-            onClose={() => setOpenNewViabilityTest(false)}
-            organization={organization}
-            user={user}
-            selectedTest={selectedTest}
-          />
+          {openNewViabilityTest && (
+            <NewViabilityTestModal
+              open={openNewViabilityTest}
+              reload={reloadData}
+              accession={accession}
+              onClose={() => {
+                setOpenNewViabilityTest(false);
+                setSelectedTest(undefined);
+              }}
+              organization={organization}
+              user={user}
+              viabilityTest={selectedTest}
+            />
+          )}
           <CheckedInConfirmationModal
             open={openCheckInConfirmationModal}
             onClose={() => setOpenCheckInConfirmationModal(false)}
             accession={accession}
           />
-          <EditLocationModal
-            open={openEditLocationModal}
-            onClose={() => setOpenEditLocationModal(false)}
-            accession={accession}
-            organization={organization}
-            reload={reloadData}
-          />
-          <EditStateModal
-            open={openEditStateModal}
-            onClose={() => setOpenEditStateModal(false)}
-            accession={accession}
-            reload={reloadData}
-          />
-          <EndDryingReminderModal
-            open={openEndDryingReminderModal}
-            onClose={() => setOpenEndDryingReminderModal(false)}
-            accession={accession}
-            reload={reloadData}
-          />
-          <DeleteAccessionModal
-            open={openDeleteAccession}
-            onClose={() => setOpenDeleteAccession(false)}
-            accession={accession}
-          />
-          <WithdrawModal
-            open={openWithdrawModal}
-            onClose={() => setOpenWithdrawModal(false)}
-            accession={accession}
-            reload={reloadData}
-            organization={organization}
-            user={user}
-          />
+          {openEditLocationModal && (
+            <EditLocationModal
+              open={openEditLocationModal}
+              onClose={() => setOpenEditLocationModal(false)}
+              accession={accession}
+              organization={organization}
+              reload={reloadData}
+            />
+          )}
+          {openEditStateModal && (
+            <EditStateModal
+              open={openEditStateModal}
+              onClose={() => setOpenEditStateModal(false)}
+              accession={accession}
+              reload={reloadData}
+            />
+          )}
+          {openEndDryingReminderModal && (
+            <EndDryingReminderModal
+              open={openEndDryingReminderModal}
+              onClose={() => setOpenEndDryingReminderModal(false)}
+              accession={accession}
+              reload={reloadData}
+            />
+          )}
+          {openDeleteAccession && (
+            <DeleteAccessionModal
+              open={openDeleteAccession}
+              onClose={() => setOpenDeleteAccession(false)}
+              accession={accession}
+            />
+          )}
+          {openWithdrawModal && (
+            <WithdrawModal
+              open={openWithdrawModal}
+              onClose={() => setOpenWithdrawModal(false)}
+              accession={accession}
+              reload={reloadData}
+              organization={organization}
+              user={user}
+            />
+          )}
           <QuantityModal
             open={openQuantityModal}
             onClose={() => setOpenQuantityModal(false)}
@@ -364,14 +381,16 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
             reload={reloadData}
             setOpen={() => setOpenQuantityModal(true)}
           />
-          <ViabilityModal
-            open={openViabilityModal}
-            onClose={() => setOpenViabilityModal(false)}
-            accession={accession}
-            reload={reloadData}
-            setNewViabilityTestOpened={setOpenNewViabilityTest}
-            changeTab={handleChange}
-          />
+          {openViabilityModal && (
+            <ViabilityModal
+              open={openViabilityModal}
+              onClose={() => setOpenViabilityModal(false)}
+              accession={accession}
+              reload={reloadData}
+              setNewViabilityTestOpened={setOpenNewViabilityTest}
+              changeTab={handleChange}
+            />
+          )}
         </>
       )}
       <Box padding={3}>

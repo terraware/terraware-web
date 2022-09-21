@@ -1,5 +1,5 @@
 import { Box, Grid, IconButton, Link, useTheme } from '@mui/material';
-import { Button, Checkbox, DatePicker, DialogBox, Select, SelectT } from '@terraware/web-components';
+import { Button, Checkbox, DatePicker, DialogBox, Select, SelectT, Textfield } from '@terraware/web-components';
 import { Accession2 } from 'src/api/accessions2/accession';
 import { putViabilityTest, ViabilityTestPostRequest } from 'src/api/accessions2/viabilityTest';
 import strings from 'src/strings';
@@ -18,7 +18,6 @@ import { ServerOrganization } from 'src/types/Organization';
 import { useEffect, useState } from 'react';
 import { getOrganizationUsers } from 'src/api/organization/organization';
 import { isContributor } from 'src/utils/organization';
-import TextField from '@terraware/web-components/components/Textfield/Textfield';
 import { postViabilityTest } from 'src/api/accessions2/viabilityTest';
 import useSnackbar from 'src/utils/useSnackbar';
 import { renderUser } from 'src/utils/renderUser';
@@ -34,18 +33,20 @@ export interface NewViabilityTestModalProps {
   reload: () => void;
   organization: ServerOrganization;
   user: User;
-  selectedTest: ViabilityTest | undefined;
+  viabilityTest: ViabilityTest | undefined;
 }
 
 export default function NewViabilityTestModal(props: NewViabilityTestModalProps): JSX.Element {
-  const { onClose, open, accession, organization, user, reload, selectedTest } = props;
+  const { onClose, open, accession, organization, user, reload, viabilityTest } = props;
 
-  const [record, setRecord, onChange] = useForm(selectedTest);
+  const [record, setRecord, onChange] = useForm(viabilityTest);
   const [users, setUsers] = useState<OrganizationUser[]>();
-  const [testCompleted, setTestCompleted] = useState<boolean>(false);
+  const [testCompleted, setTestCompleted] = useState<boolean>(viabilityTest?.endDate !== undefined);
   const contributor = isContributor(organization);
   const snackbar = useSnackbar();
   const theme = useTheme();
+
+  const readOnly = !!viabilityTest?.endDate;
 
   useEffect(() => {
     const getOrgUsers = async () => {
@@ -66,8 +67,8 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
     };
 
     const initViabilityTest = () => {
-      if (selectedTest) {
-        return selectedTest;
+      if (viabilityTest) {
+        return viabilityTest;
       } else {
         return {
           ...newViabilityTest,
@@ -79,11 +80,11 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
     };
 
     setRecord(initViabilityTest());
-  }, [selectedTest, setRecord, accession, user]);
+  }, [viabilityTest, setRecord, accession, user]);
 
   const saveTest = async () => {
     if (record) {
-      if (testCompleted) {
+      if (testCompleted && !readOnly) {
         record.endDate = getTodaysDateFormatted();
       }
       let response;
@@ -180,6 +181,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
             selectedValue={record?.testType}
             fullWidth={true}
             label={strings.TEST_METHOD_REQUIRED}
+            disabled={readOnly}
           />
         </Grid>
         <Grid padding={theme.spacing(1, 3, 1, 5)} xs={12}>
@@ -191,6 +193,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
             selectedValue={record?.seedType}
             fullWidth={true}
             readonly={true}
+            disabled={readOnly}
           />
         </Grid>
         <Grid padding={theme.spacing(1, 3, 1, 5)} xs={12}>
@@ -202,6 +205,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
             selectedValue={record?.substrate}
             fullWidth={true}
             readonly={true}
+            disabled={readOnly}
           />
         </Grid>
         <Grid padding={theme.spacing(1, 3, 1, 5)} xs={12}>
@@ -213,6 +217,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
             selectedValue={record?.treatment}
             fullWidth={true}
             readonly={true}
+            disabled={readOnly}
           />
         </Grid>
         <Grid padding={theme.spacing(1, 3, 1, 5)} xs={12}>
@@ -227,7 +232,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
             selectedValue={users?.find((userSel) => userSel.id === record?.withdrawnByUserId)}
             toT={(firstName: string) => ({ firstName } as OrganizationUser)}
             fullWidth={true}
-            disabled={contributor}
+            disabled={contributor || readOnly}
           />
         </Grid>
 
@@ -241,15 +246,17 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
                   aria-label={strings.DATE}
                   value={record?.startDate}
                   onChange={onChangeDate}
+                  disabled={readOnly}
                 />
               </Grid>
               <Grid item xs={12} marginLeft={1}>
-                <TextField
+                <Textfield
                   label={strings.NUMBER_OF_SEEDS_TESTED_REQUIRED}
                   type='text'
                   onChange={onChange}
                   id='seedsTested'
                   value={record?.seedsTested}
+                  disabled={readOnly}
                 />
               </Grid>
             </Box>
@@ -263,20 +270,23 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
                     aria-label={strings.DATE}
                     value={testResult.recordingDate}
                     onChange={(id, value) => onResultChange(id, value, index)}
+                    disabled={readOnly}
                   />
                 </Grid>
                 <Grid item xs={12} marginLeft={1} display='flex'>
-                  <TextField
+                  <Textfield
                     label={strings.NUMBER_OF_SEEDS_GERMINATED_REQUIRED}
                     type='text'
                     onChange={(id, value) => onResultChange(id, value, index)}
                     id='seedsGerminated'
                     value={testResult.seedsGerminated}
+                    disabled={readOnly}
                   />
                   <IconButton
                     id={`delete-result${index}`}
                     aria-label='delete'
                     size='small'
+                    disabled={readOnly}
                     onClick={() => onDeleteResult(index)}
                     sx={{ marginTop: 3 }}
                   >
@@ -299,7 +309,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
                   fontSize: '16px',
                   '&[disabled]': { color: '#0067C84D', pointerEvents: 'none' },
                 }}
-                disabled={testCompleted}
+                disabled={testCompleted || readOnly}
               >
                 + {strings.ADD_OBSERVATION}
               </Link>
@@ -310,13 +320,14 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
                   id='markAsCompplete'
                   name='markAsCompplete'
                   value={testCompleted}
+                  disabled={readOnly}
                 />
               )}
             </Box>
           </Grid>
         </Grid>
         <Grid padding={theme.spacing(1, 3, 1, 5)} xs={12}>
-          <TextField id='notes' value={record?.notes} onChange={onChange} type='textarea' label={strings.NOTES} />
+          <Textfield id='notes' value={record?.notes} onChange={onChange} type='textarea' label={strings.NOTES} />
         </Grid>
       </Grid>
     </DialogBox>

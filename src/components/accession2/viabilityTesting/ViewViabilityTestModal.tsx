@@ -11,23 +11,20 @@ export interface ViewViabilityTestModalProps {
   open: boolean;
   accession: Accession2;
   onClose: () => void;
-  selectedTest: ViabilityTest;
-  setNewViabilityTestOpened: React.Dispatch<React.SetStateAction<boolean>>;
-  setSelectedTest: React.Dispatch<React.SetStateAction<ViabilityTest | undefined>>;
+  viabilityTest: ViabilityTest;
+  onEdit: () => void;
 }
 
 export default function ViewViabilityTestModal(props: ViewViabilityTestModalProps): JSX.Element {
-  const { onClose, open, selectedTest, setNewViabilityTestOpened, setSelectedTest } = props;
+  const { onClose, open, viabilityTest, onEdit } = props;
   const { isMobile } = useDeviceInfo();
 
   const onCloseHandler = () => {
-    setSelectedTest(undefined);
     onClose();
   };
 
   const openEdit = () => {
-    onClose();
-    setNewViabilityTestOpened(true);
+    onEdit();
   };
 
   const titleStyle = {
@@ -39,7 +36,7 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
     <DialogBox
       onClose={onCloseHandler}
       open={open}
-      title={strings.formatString(strings.VIABILITY_TEST_NUMBER, selectedTest?.id.toString()) as string}
+      title={strings.formatString(strings.VIABILITY_TEST_NUMBER, viabilityTest?.id.toString()) as string}
       size='large'
       scrolled={true}
     >
@@ -47,10 +44,10 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
         <Grid item xs={12} display='flex'>
           <Grid xs={6}>
             <Typography fontSize='20px'>
-              {strings.TEST} #{selectedTest.id}
+              {strings.TEST} #{viabilityTest.id}
             </Typography>
             <Typography fontSize='14px'>
-              {strings.VIABILITY_RESULT}: {selectedTest.endDate ? strings.COMPLETE : strings.PENDING}
+              {strings.VIABILITY_RESULT}: {viabilityTest.endDate ? strings.COMPLETE : strings.PENDING}
             </Typography>
           </Grid>
           <Grid xs={6} textAlign='right'>
@@ -62,20 +59,20 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
             <Grid xs={12} sx={titleStyle}>
               {strings.TEST_METHOD}
             </Grid>
-            <Grid xs={12}>{getFullTestType(selectedTest.testType)}</Grid>
+            <Grid xs={12}>{getFullTestType(viabilityTest.testType)}</Grid>
           </Grid>
           <Grid xs={smallColumn}>
             <Grid xs={12} sx={titleStyle}>
               {strings.SEED_TYPE}
             </Grid>
-            <Grid xs={12}>{selectedTest.seedType}</Grid>
+            <Grid xs={12}>{viabilityTest.seedType}</Grid>
           </Grid>
           {!isMobile && (
             <Grid xs={smallColumn}>
               <Grid xs={12} sx={titleStyle}>
                 {strings.SUBSTRATE}
               </Grid>
-              <Grid xs={12}>{selectedTest.substrate}</Grid>
+              <Grid xs={12}>{viabilityTest.substrate}</Grid>
             </Grid>
           )}
         </Grid>
@@ -85,21 +82,21 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
               <Grid xs={12} sx={titleStyle}>
                 {strings.SUBSTRATE}
               </Grid>
-              <Grid xs={12}>{selectedTest.substrate}</Grid>
+              <Grid xs={12}>{viabilityTest.substrate}</Grid>
             </Grid>
           )}
           <Grid xs={smallColumn}>
             <Grid xs={12} sx={titleStyle}>
               {strings.TREATMENT}
             </Grid>
-            <Grid xs={12}>{selectedTest.treatment}</Grid>
+            <Grid xs={12}>{viabilityTest.treatment}</Grid>
           </Grid>
           {!isMobile && (
             <Grid xs={smallColumn}>
               <Grid xs={12} sx={titleStyle}>
                 {strings.STAFF}
               </Grid>
-              <Grid xs={12}>{selectedTest.withdrawnByName}</Grid>
+              <Grid xs={12}>{viabilityTest.withdrawnByName}</Grid>
             </Grid>
           )}
         </Grid>
@@ -109,7 +106,7 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
               <Grid xs={12} sx={titleStyle}>
                 {strings.STAFF}
               </Grid>
-              <Grid xs={12}>{selectedTest.withdrawnByName}</Grid>
+              <Grid xs={12}>{viabilityTest.withdrawnByName}</Grid>
             </Grid>
           </Grid>
         )}
@@ -123,16 +120,16 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
               <Grid xs={12} sx={titleStyle}>
                 {strings.START_DATE}
               </Grid>
-              <Grid xs={12}>{selectedTest.startDate}</Grid>
+              <Grid xs={12}>{viabilityTest.startDate}</Grid>
             </Grid>
             <Grid xs={smallColumn}>
               <Grid xs={12} sx={titleStyle}>
                 {strings.NUMBER_OF_SEEDS_TESTED}
               </Grid>
-              <Grid xs={12}>{selectedTest.seedsTested}</Grid>
+              <Grid xs={12}>{viabilityTest.seedsTested}</Grid>
             </Grid>
           </Grid>
-          {selectedTest.testResults?.map((testResult, index) => {
+          {viabilityTest.testResults?.map((testResult, index) => {
             return (
               <Grid xs={12} key={`observation-${index}`} display='flex' paddingTop={1}>
                 <Grid xs={smallColumn}>
@@ -151,16 +148,16 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
             );
           })}
         </Grid>
-        {selectedTest.testResults && selectedTest.testResults.length > 0 ? (
+        {viabilityTest.testResults && viabilityTest.testResults.length > 0 ? (
           <Grid item xs={12}>
-            <ObservationsChart observations={selectedTest.testResults} />
+            <ObservationsChart observations={viabilityTest.testResults} />
           </Grid>
         ) : null}
         <Grid item xs={12}>
           <Grid xs={12} sx={titleStyle}>
             {strings.NOTES}
           </Grid>
-          <Grid xs={12}>{selectedTest.notes}</Grid>
+          <Grid xs={12}>{viabilityTest.notes}</Grid>
         </Grid>
       </Grid>
     </DialogBox>
