@@ -1,12 +1,11 @@
 import { Box, Typography } from '@mui/material';
 import { Button } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
-import { useState } from 'react';
 import { Accession2 } from 'src/api/accessions2/accession';
+import { ViabilityTest } from 'src/api/types/accessions';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
 import { User } from 'src/types/User';
-import NewViabilityTestModal from './NewViabilityTestModal';
 import ViabilityTestingDatabase from './ViabilityTestingDatabase';
 
 type ViabilityTestingPanelProps = {
@@ -14,29 +13,28 @@ type ViabilityTestingPanelProps = {
   reload: () => void;
   organization: ServerOrganization;
   user: User;
+  setNewViabilityTestOpened: React.Dispatch<React.SetStateAction<boolean>>;
+  setSelectedTest: React.Dispatch<React.SetStateAction<ViabilityTest | undefined>>;
+  setViewViabilityTestModalOpened: React.Dispatch<React.SetStateAction<boolean>>;
 };
+
 export default function ViabilityTestingPanel(props: ViabilityTestingPanelProps): JSX.Element {
-  const { accession, reload, organization, user } = props;
+  const { accession, setNewViabilityTestOpened, setSelectedTest, setViewViabilityTestModalOpened } = props;
   const { isMobile } = useDeviceInfo();
 
-  const [newViabilityTestOpened, setNewViabilityTestOpened] = useState(false);
+  const onTestSelected = (test: ViabilityTest) => {
+    setSelectedTest(test);
+    setViewViabilityTestModalOpened(true);
+  };
 
   return (
     <>
-      <NewViabilityTestModal
-        open={newViabilityTestOpened}
-        reload={reload}
-        accession={accession}
-        onClose={() => setNewViabilityTestOpened(false)}
-        organization={organization}
-        user={user}
-      />
       {accession?.viabilityTests ? (
         <Box>
           <ViabilityTestingDatabase
             accession={accession}
             onNewViabilityTest={() => setNewViabilityTestOpened(true)}
-            onSelectViabilityTest={(test) => window.alert(`Selected viability test ${test.id}`)}
+            onSelectViabilityTest={onTestSelected}
           />
         </Box>
       ) : (

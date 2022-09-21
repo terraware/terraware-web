@@ -58,3 +58,5 @@ export const TEST_METHODS = [
 ];
 
 export const SEED_TYPES = ['Fresh', 'Stored'];
+
+export type TEST_TYPES = 'Lab' | 'Nursery' | 'Cut';
