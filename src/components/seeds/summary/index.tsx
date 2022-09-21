@@ -201,9 +201,9 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
                     ) : null}
                     {!isProduction ? (
                       <AccessionByStatus
-                        label='Cleaning'
-                        status='Cleaning'
-                        quantity={summary.value?.accessionsByState.Cleaning}
+                        label='Processing'
+                        status='Processing'
+                        quantity={summary.value?.accessionsByState.Processing}
                       />
                     ) : null}
                     <AccessionByStatus
