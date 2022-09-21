@@ -25,6 +25,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import PageSnackbar from 'src/components/PageSnackbar';
 import ViabilityModal from '../edit/ViabilityModal';
 import NewViabilityTestModal from '../viabilityTesting/NewViabilityTestModal';
 import { ViabilityTest } from 'src/api/types/accessions';
@@ -411,6 +412,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
           {accession?.speciesScientificName}
         </Typography>
         <Typography color='#708284'>{accession?.speciesCommonName}</Typography>
+        <PageSnackbar />
       </Box>
 
       <Box
