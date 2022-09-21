@@ -70,7 +70,15 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
             </Grid>
             <Grid xs={12}>{selectedTest.seedType}</Grid>
           </Grid>
-          {!isMobile && (
+          {!isMobile && selectedTest.testType === 'Cut' && (
+            <Grid xs={smallColumn}>
+              <Grid xs={12} sx={titleStyle}>
+                {strings.STAFF}
+              </Grid>
+              <Grid xs={12}>{selectedTest.withdrawnByName}</Grid>
+            </Grid>
+          )}
+          {!isMobile && selectedTest.testType !== 'Cut' && (
             <Grid xs={smallColumn}>
               <Grid xs={12} sx={titleStyle}>
                 {strings.SUBSTRATE}
@@ -80,7 +88,7 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
           )}
         </Grid>
         <Grid item xs={12} display='flex'>
-          {isMobile && (
+          {isMobile && selectedTest.testType !== 'Cut' && (
             <Grid xs={smallColumn}>
               <Grid xs={12} sx={titleStyle}>
                 {strings.SUBSTRATE}
@@ -88,13 +96,15 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
               <Grid xs={12}>{selectedTest.substrate}</Grid>
             </Grid>
           )}
-          <Grid xs={smallColumn}>
-            <Grid xs={12} sx={titleStyle}>
-              {strings.TREATMENT}
+          {selectedTest.testType !== 'Cut' && (
+            <Grid xs={smallColumn}>
+              <Grid xs={12} sx={titleStyle}>
+                {strings.TREATMENT}
+              </Grid>
+              <Grid xs={12}>{selectedTest.treatment}</Grid>
             </Grid>
-            <Grid xs={12}>{selectedTest.treatment}</Grid>
-          </Grid>
-          {!isMobile && (
+          )}
+          {!isMobile && selectedTest.testType !== 'Cut' && (
             <Grid xs={smallColumn}>
               <Grid xs={12} sx={titleStyle}>
                 {strings.STAFF}
@@ -127,11 +137,37 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
             </Grid>
             <Grid xs={smallColumn}>
               <Grid xs={12} sx={titleStyle}>
-                {strings.NUMBER_OF_SEEDS_TESTED}
+                {selectedTest.testType === 'Cut' ? strings.NUMBER_OF_SEEDS_FILLED : strings.NUMBER_OF_SEEDS_TESTED}
               </Grid>
-              <Grid xs={12}>{selectedTest.seedsTested}</Grid>
+              <Grid xs={12}>
+                {selectedTest.testType === 'Cut' ? selectedTest.seedsFilled : selectedTest.seedsTested}
+              </Grid>
             </Grid>
           </Grid>
+          {selectedTest.testType === 'Cut' && (
+            <>
+              <Grid xs={12} display='flex' paddingTop={2}>
+                <Grid xs={smallColumn}>
+                  <Grid xs={12} sx={titleStyle}>
+                    {strings.NUMBER_OF_SEEDS_COMPROMISED}
+                  </Grid>
+                  <Grid xs={12}>{selectedTest.seedsCompromised}</Grid>
+                </Grid>
+                <Grid xs={smallColumn}>
+                  <Grid xs={12} sx={titleStyle}>
+                    {strings.NUMBER_OF_SEEDS_EMPTY}
+                  </Grid>
+                  <Grid xs={12}>{selectedTest.seedsEmpty}</Grid>
+                </Grid>
+              </Grid>
+              <Grid xs={12} paddingTop={2}>
+                <Grid xs={12} sx={titleStyle}>
+                  #{strings.TOTAL_SEEDS_TESTED}
+                </Grid>
+                <Grid xs={12}>{selectedTest.seedsTested}</Grid>
+              </Grid>
+            </>
+          )}
           {selectedTest.testResults?.map((testResult, index) => {
             return (
               <Grid xs={12} key={`observation-${index}`} display='flex' paddingTop={1}>

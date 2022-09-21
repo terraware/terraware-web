@@ -59,12 +59,6 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
   }, [organization]);
 
   useEffect(() => {
-    setTotalSeedsTested(
-      (Number(record?.seedsFilled) || 0) + (Number(record?.seedsCompromised) || 0) + (Number(record?.seedsEmpty) || 0)
-    );
-  }, [record?.seedsFilled, record?.seedsCompromised, record?.seedsEmpty]);
-
-  useEffect(() => {
     const newViabilityTest: ViabilityTestPostRequest = {
       testResults: [],
       withdrawnByUserId: user.id,
@@ -166,6 +160,27 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
     }
   };
 
+  const calculatNewTotal = (id: string, value: string) => {
+    if (record) {
+      switch (id) {
+        case 'seedsCompromised':
+          return (Number(record.seedsEmpty) || 0) + (Number(record.seedsFilled) || 0) + Number(value);
+        case 'seedsFilled':
+          return (Number(record.seedsEmpty) || 0) + (Number(record.seedsCompromised) || 0) + Number(value);
+        default:
+          return (Number(record.seedsFilled) || 0) + (Number(record.seedsCompromised) || 0) + Number(value);
+      }
+    }
+  };
+
+  const onChangeCutValue = (id: string, value: unknown) => {
+    if (record && typeof value === 'string') {
+      const newTotal = calculatNewTotal(id, value);
+      setRecord({ ...record, [id]: value, seedsTested: newTotal || 0 });
+      setTotalSeedsTested(newTotal || 0);
+    }
+  };
+
   return (
     <DialogBox
       onClose={onCloseHandler}
@@ -259,7 +274,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
                   <TextField
                     label={strings.NUMBER_OF_SEEDS_FILLED_REQUIRED}
                     type='text'
-                    onChange={onChange}
+                    onChange={onChangeCutValue}
                     id='seedsFilled'
                     value={record?.seedsFilled}
                   />
@@ -282,7 +297,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
                     <TextField
                       label={strings.NUMBER_OF_SEEDS_COMPROMISED_REQUIRED}
                       type='text'
-                      onChange={onChange}
+                      onChange={onChangeCutValue}
                       id='seedsCompromised'
                       value={record?.seedsCompromised}
                     />
@@ -291,7 +306,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
                     <TextField
                       label={strings.NUMBER_OF_SEEDS_EMPTY_REQUIRED}
                       type='text'
-                      onChange={onChange}
+                      onChange={onChangeCutValue}
                       id='seedsEmpty'
                       value={record?.seedsEmpty}
                     />
