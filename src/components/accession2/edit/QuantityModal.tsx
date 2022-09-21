@@ -12,7 +12,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 import CalculatorModal from './CalculatorModal';
 import { Dropdown } from '@terraware/web-components';
 
-export interface QuantityDialogProps {
+export interface QuantityModalProps {
   open: boolean;
   setOpen: () => void;
   accession: Accession2;
@@ -21,7 +21,7 @@ export interface QuantityDialogProps {
   organization: ServerOrganization;
 }
 
-export default function QuantityDialog(props: QuantityDialogProps): JSX.Element {
+export default function QuantityModal(props: QuantityModalProps): JSX.Element {
   const { onClose, open, accession, reload, organization, setOpen } = props;
 
   const [record, setRecord, onChange] = useForm(accession);

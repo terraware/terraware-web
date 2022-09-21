@@ -16,14 +16,14 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export interface EditStateDialogProps {
+export interface EditStateModalProps {
   open: boolean;
   accession: Accession2;
   onClose: () => void;
   reload: () => void;
 }
 
-export default function EditLocationDialog(props: EditStateDialogProps): JSX.Element {
+export default function EditStateModal(props: EditStateModalProps): JSX.Element {
   const classes = useStyles();
   const { onClose, open, accession, reload } = props;
   const [record, setRecord, onChange] = useForm(accession);
