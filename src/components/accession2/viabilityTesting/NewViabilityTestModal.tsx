@@ -161,7 +161,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
     }
   };
 
-  const calculatNewTotal = (id: string, value: string) => {
+  const calculateNewTotal = (id: string, value: string) => {
     if (record) {
       switch (id) {
         case 'seedsCompromised':
@@ -176,9 +176,10 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
 
   const onChangeCutValue = (id: string, value: unknown) => {
     if (record && typeof value === 'string') {
-      const newTotal = calculatNewTotal(id, value);
-      setRecord({ ...record, [id]: value, seedsTested: newTotal || 0 });
-      setTotalSeedsTested(newTotal || 0);
+      const calculatedTotal = calculateNewTotal(id, value) || 0;
+      const newTotal = isNaN(calculatedTotal) ? 0 : calculatedTotal;
+      setRecord({ ...record, [id]: value, seedsTested: newTotal });
+      setTotalSeedsTested(newTotal);
     }
   };
 
