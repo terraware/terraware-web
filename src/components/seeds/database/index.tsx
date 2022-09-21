@@ -276,7 +276,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
         const isV2 = featureEnabled('V2 Accessions', preferences);
         if (!isV2 && allValues?.state?.values) {
           allValues.state.values = allValues.state.values.filter(
-            (state) => ['Awaiting Processing', 'Cleaning', 'Used Up'].indexOf(state) === -1
+            (state) => ['Awaiting Processing', 'Used Up'].indexOf(state) === -1
           );
         }
 
