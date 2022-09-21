@@ -45,13 +45,13 @@ export default function EditStateModal(props: EditStateModalProps): JSX.Element 
   const getStatesForCurrentState = () => {
     switch (accession.state) {
       case 'Awaiting Check-In': {
-        return ['Awaiting Processing', 'Cleaning', 'Drying', 'In Storage', 'Used Up'];
+        return ['Awaiting Processing', 'Processing', 'Drying', 'In Storage', 'Used Up'];
       }
       case 'Awaiting Processing':
-      case 'Cleaning':
+      case 'Processing':
       case 'Drying':
       case 'In Storage': {
-        return ['Awaiting Processing', 'Cleaning', 'Drying', 'In Storage'];
+        return ['Awaiting Processing', 'Processing', 'Drying', 'In Storage'];
       }
       default:
         return ACCESSION_2_STATES;

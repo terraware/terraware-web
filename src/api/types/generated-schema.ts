@@ -358,7 +358,6 @@ export interface components {
         | "Pending"
         | "Awaiting Processing"
         | "Processing"
-        | "Cleaning"
         | "Processed"
         | "Drying"
         | "Dried"
@@ -437,7 +436,6 @@ export interface components {
         | "Pending"
         | "Awaiting Processing"
         | "Processing"
-        | "Cleaning"
         | "Processed"
         | "Drying"
         | "Dried"
@@ -539,7 +537,6 @@ export interface components {
         | "Pending"
         | "Awaiting Processing"
         | "Processing"
-        | "Cleaning"
         | "Processed"
         | "Drying"
         | "Dried"
@@ -642,6 +639,9 @@ export interface components {
     CreateViabilityTestRequestPayload: {
       endDate?: string;
       notes?: string;
+      seedsCompromised?: number;
+      seedsEmpty?: number;
+      seedsFilled?: number;
       seedsTested: number;
       seedType?: "Fresh" | "Stored";
       startDate?: string;
@@ -1405,7 +1405,6 @@ export interface components {
         | "Pending"
         | "Awaiting Processing"
         | "Processing"
-        | "Cleaning"
         | "Processed"
         | "Drying"
         | "Dried"
