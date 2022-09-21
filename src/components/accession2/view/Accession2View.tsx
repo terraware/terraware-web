@@ -15,6 +15,7 @@ import DeleteAccessionModal from '../edit/DeleteAccessionModal';
 import DetailPanel from './DetailPanel';
 import EditLocationModal from '../edit/EditLocationModal';
 import EditStateModal from '../edit/EditStateModal';
+import EndDryingReminderModal from '../edit/EndDryingReminderModal';
 import QuantityModal from '../edit/QuantityModal';
 import WithdrawModal from '../withdraw/WithdrawModal';
 import CheckedInConfirmationModal from '../edit/CheckedInConfirmationModal';
@@ -59,14 +60,15 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
   const [accession, setAccession] = useState<Accession2>();
   const [openEditLocationModal, setOpenEditLocationModal] = useState(false);
   const [openEditStateModal, setOpenEditStateModal] = useState(false);
+  const [openEndDryingReminderModal, setOpenEndDryingReminderModal] = useState(false);
   const [openDeleteAccession, setOpenDeleteAccession] = useState(false);
   const [openWithdrawModal, setOpenWithdrawModal] = useState(false);
-  const [quantityModalOpened, setQuantityModalOpened] = useState(false);
-  const [viabilityModalOpened, setViabilityModalOpened] = useState(false);
-  const [newViabilityTestOpened, setNewViabilityTestOpened] = useState(false);
-  const [checkInConfirmationModalOpened, setCheckInConfirmationModalOpened] = useState(false);
-  const [viewViabilityTestModalOpened, setViewViabilityTestModalOpened] = useState(false);
+  const [openQuantityModal, setOpenQuantityModal] = useState(false);
+  const [openCheckInConfirmationModal, setOpenCheckInConfirmationModal] = useState(false);
   const [hasPendingTests, setHasPendingTests] = useState(false);
+  const [openViabilityModal, setOpenViabilityModal] = useState(false);
+  const [openNewViabilityTest, setOpenNewViabilityTest] = useState(false);
+  const [openViewViabilityTestModal, setOpenViewViabilityTestModal] = useState(false);
   const [selectedTest, setSelectedTest] = useState<ViabilityTest>();
   const [age, setAge] = useState('');
   const { organization, user } = props;
@@ -159,7 +161,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
       try {
         await checkIn(accession.id);
         reloadData();
-        setCheckInConfirmationModalOpened(true);
+        setOpenCheckInConfirmationModal(true);
       } catch (e) {
         // swallow error?
         snackbar.toastError();
@@ -300,26 +302,26 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
         <>
           {selectedTest && (
             <ViewViabilityTestModal
-              open={viewViabilityTestModalOpened}
+              open={openViewViabilityTestModal}
               accession={accession}
-              onClose={() => setViewViabilityTestModalOpened(false)}
+              onClose={() => setOpenViewViabilityTestModal(false)}
               selectedTest={selectedTest}
-              setNewViabilityTestOpened={setNewViabilityTestOpened}
+              setNewViabilityTestOpened={setOpenNewViabilityTest}
               setSelectedTest={setSelectedTest}
             />
           )}
           <NewViabilityTestModal
-            open={newViabilityTestOpened}
+            open={openNewViabilityTest}
             reload={reloadData}
             accession={accession}
-            onClose={() => setNewViabilityTestOpened(false)}
+            onClose={() => setOpenNewViabilityTest(false)}
             organization={organization}
             user={user}
             selectedTest={selectedTest}
           />
           <CheckedInConfirmationModal
-            open={checkInConfirmationModalOpened}
-            onClose={() => setCheckInConfirmationModalOpened(false)}
+            open={openCheckInConfirmationModal}
+            onClose={() => setOpenCheckInConfirmationModal(false)}
             accession={accession}
           />
           <EditLocationModal
@@ -332,6 +334,12 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
           <EditStateModal
             open={openEditStateModal}
             onClose={() => setOpenEditStateModal(false)}
+            accession={accession}
+            reload={reloadData}
+          />
+          <EndDryingReminderModal
+            open={openEndDryingReminderModal}
+            onClose={() => setOpenEndDryingReminderModal(false)}
             accession={accession}
             reload={reloadData}
           />
@@ -349,19 +357,19 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
             user={user}
           />
           <QuantityModal
-            open={quantityModalOpened}
-            onClose={() => setQuantityModalOpened(false)}
+            open={openQuantityModal}
+            onClose={() => setOpenQuantityModal(false)}
             accession={accession}
             organization={organization}
             reload={reloadData}
-            setOpen={() => setQuantityModalOpened(true)}
+            setOpen={() => setOpenQuantityModal(true)}
           />
           <ViabilityModal
-            open={viabilityModalOpened}
-            onClose={() => setViabilityModalOpened(false)}
+            open={openViabilityModal}
+            onClose={() => setOpenViabilityModal(false)}
             accession={accession}
             reload={reloadData}
-            setNewViabilityTestOpened={setNewViabilityTestOpened}
+            setNewViabilityTestOpened={setOpenNewViabilityTest}
             changeTab={handleChange}
           />
         </>
@@ -413,7 +421,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
             <Icon name='iconMyLocation' className={classes.iconStyle} />
             <Box sx={editableProps}>
               <Typography paddingLeft={1}>
-                {getSeedBank(organization, accession.facilityId)?.name} ({accession.storageLocation})
+                {getSeedBank(organization, accession.facilityId)?.name} / {accession.storageLocation}
               </Typography>
               <IconButton sx={{ marginLeft: 3, height: '24px' }} onClick={() => setOpenEditLocationModal(true)}>
                 <Icon name='iconEdit' className={`${classes.editIcon} edit-icon`} />
@@ -422,13 +430,17 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
           </Box>
         )}
         <Box
+          sx={{ cursor: 'pointer' }}
           display='flex'
           padding={(theme) => theme.spacing(0, 2)}
           alignItems='center'
           width={isMobile ? '100%' : 'auto'}
+          onClick={() => setOpenEndDryingReminderModal(true)}
         >
           <Icon name='notification' className={classes.iconStyle} />
-          <Typography paddingLeft={1}>Notification</Typography>
+          <Typography paddingLeft={1}>
+            {accession?.dryingEndDate ? strings.END_DRYING_REMINDER_ON : strings.END_DRYING_REMINDER_OFF}
+          </Typography>
         </Box>
       </Box>
 
@@ -440,12 +452,12 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
               <Box display='flex'>
                 {getAbsoluteQuantity()} {getEstimatedQuantity()}
               </Box>
-              <IconButton sx={{ marginLeft: 3, height: '24px' }} onClick={() => setQuantityModalOpened(true)}>
+              <IconButton sx={{ marginLeft: 3, height: '24px' }} onClick={() => setOpenQuantityModal(true)}>
                 <Icon name='iconEdit' className={`${classes.editIcon} edit-icon`} />
               </IconButton>
             </Box>
           ) : (
-            <Link sx={linkStyle} onClick={() => setQuantityModalOpened(true)}>
+            <Link sx={linkStyle} onClick={() => setOpenQuantityModal(true)}>
               + {strings.ADD}
             </Link>
           )}
@@ -461,12 +473,12 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
               <Box display='flex'>
                 <Typography fontWeight={500}>{accession?.viabilityPercent}</Typography>%
               </Box>
-              <IconButton sx={{ marginLeft: 3, height: '24px' }} onClick={() => setViabilityModalOpened(true)}>
+              <IconButton sx={{ marginLeft: 3, height: '24px' }} onClick={() => setOpenViabilityModal(true)}>
                 <Icon name='iconEdit' className={`${classes.editIcon} edit-icon`} />
               </IconButton>
             </Box>
           ) : (
-            <Link sx={linkStyle} onClick={() => setViabilityModalOpened(true)}>
+            <Link sx={linkStyle} onClick={() => setOpenViabilityModal(true)}>
               + {strings.ADD}
             </Link>
           )}
@@ -492,8 +504,8 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
                 reload={reloadData}
                 organization={organization}
                 user={user}
-                setNewViabilityTestOpened={setNewViabilityTestOpened}
-                setViewViabilityTestModalOpened={setViewViabilityTestModalOpened}
+                setNewViabilityTestOpened={setOpenNewViabilityTest}
+                setViewViabilityTestModalOpened={setOpenViewViabilityTestModal}
                 setSelectedTest={setSelectedTest}
               />
             )}

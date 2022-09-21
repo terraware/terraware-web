@@ -13,7 +13,7 @@ import { getLocations } from 'src/api/seeds/locations';
 import { updateAccession2 } from 'src/api/accessions2/accession';
 import { StorageLocationSelector, StorageSubLocationSelector } from '../properties';
 
-export interface EditLocationDialogProps {
+export interface EditLocationModalProps {
   open: boolean;
   accession: Accession2;
   onClose: () => void;
@@ -21,7 +21,7 @@ export interface EditLocationDialogProps {
   reload: () => void;
 }
 
-export default function EditLocationDialog(props: EditLocationDialogProps): JSX.Element {
+export default function EditLocationModal(props: EditLocationModalProps): JSX.Element {
   const { onClose, open, accession, organization, reload } = props;
   const seedBanks: Facility[] = (getAllSeedBanks(organization).filter((sb) => !!sb) as Facility[]) || [];
   const [storageLocations, setStorageLocations] = useState<StorageLocationDetails[]>([]);
