@@ -448,18 +448,16 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
             </Box>
           </Box>
         )}
-        <Box
-          sx={{ cursor: 'pointer' }}
-          display='flex'
-          padding={(theme) => theme.spacing(0, 2)}
-          alignItems='center'
-          width={isMobile ? '100%' : 'auto'}
-          onClick={() => setOpenEndDryingReminderModal(true)}
-        >
+        <Box sx={editableParentProps}>
           <Icon name='notification' className={classes.iconStyle} />
-          <Typography paddingLeft={1}>
-            {accession?.dryingEndDate ? strings.END_DRYING_REMINDER_ON : strings.END_DRYING_REMINDER_OFF}
-          </Typography>
+          <Box sx={editableProps}>
+            <Typography paddingLeft={1}>
+              {accession?.dryingEndDate ? strings.END_DRYING_REMINDER_ON : strings.END_DRYING_REMINDER_OFF}
+            </Typography>
+            <IconButton sx={{ marginLeft: 3, height: '24px' }} onClick={() => setOpenEndDryingReminderModal(true)}>
+              <Icon name='iconEdit' className={`${classes.editIcon} edit-icon`} />
+            </IconButton>
+          </Box>
         </Box>
       </Box>
 
