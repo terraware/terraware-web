@@ -6,7 +6,7 @@ import { Box, Grid, Link, useTheme } from '@mui/material';
 import { Checkbox, DatePicker, Select, SelectT, Textfield } from '@terraware/web-components';
 import { Accession2, Withdrawal2 } from 'src/api/accessions2/accession';
 import useForm from 'src/utils/useForm';
-import { updateAccession2 } from 'src/api/accessions2/accession';
+import { postWithdrawal } from 'src/api/accessions2/withdrawals';
 import { postViabilityTest, ViabilityTestPostRequest } from 'src/api/accessions2/viabilityTest';
 import { WITHDRAWAL_PURPOSES } from 'src/utils/withdrawalPurposes';
 import { getOrganizationUsers } from 'src/api/organization/organization';
@@ -73,12 +73,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
       if (record.purpose === 'Viability Testing') {
         response = await postViabilityTest(viabilityTesting, accession.id);
       } else {
-        if (accession.withdrawals) {
-          accession.withdrawals?.push(record);
-        } else {
-          accession.withdrawals = [record];
-        }
-        response = await updateAccession2(accession);
+        response = await postWithdrawal(record, accession.id);
       }
 
       if (response.requestSucceeded) {
