@@ -135,7 +135,7 @@ export default function SensorLocations(props: SensorLocationsProps): JSX.Elemen
       onNext={goToNext}
       title={strings.SENSOR_KIT_SET_UP_SENSOR_LOCATIONS}
       completed={completed}
-      buttonText={strings.FINISH}
+      buttonText={strings.DONE}
     >
       <div>{strings.SENSOR_KIT_SET_UP_SENSOR_LOCATIONS_DESCRIPTION}</div>
       <Grid container xs={12} className={classes.gridContainer}>
