@@ -88,7 +88,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
     setRecord(initViabilityTest());
   }, [viabilityTest, setRecord, accession, user]);
 
-  const setIndiviualError = (id: string, error?: string) => {
+  const setIndividualError = (id: string, error?: string) => {
     setViabilityFieldsErrors((prev) => ({
       ...prev,
       [id]: error,
@@ -98,18 +98,18 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
   const validateSeedsTested = (value: any): boolean => {
     if (value) {
       if (isNaN(value)) {
-        setIndiviualError('seedsTested', strings.INVALID_VALUE);
+        setIndividualError('seedsTested', strings.INVALID_VALUE);
         return true;
       }
       if (value > (accession.estimatedCount || 0)) {
-        setIndiviualError('seedsTested', strings.SEEDS_TESTED_ERROR);
+        setIndividualError('seedsTested', strings.SEEDS_TESTED_ERROR);
         return true;
       }
     } else {
-      setIndiviualError('seedsTested', strings.REQUIRED_FIELD);
+      setIndividualError('seedsTested', strings.REQUIRED_FIELD);
       return true;
     }
-    setIndiviualError('seedsTested', '');
+    setIndividualError('seedsTested', '');
     return false;
   };
 
@@ -119,11 +119,11 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
       let errorFound = false;
       record?.testResults.forEach((tr, index) => {
         if (!tr.seedsGerminated) {
-          setIndiviualError(`seedsGerminated${index}`, strings.REQUIRED_FIELD);
+          setIndividualError(`seedsGerminated${index}`, strings.REQUIRED_FIELD);
           errorFound = true;
         }
         if (isNaN(tr.seedsGerminated)) {
-          setIndiviualError(`seedsGerminated${index}`, strings.INVALID_VALUE);
+          setIndividualError(`seedsGerminated${index}`, strings.INVALID_VALUE);
           errorFound = true;
         }
         totalSeedsGerminated = totalSeedsGerminated + Number(tr.seedsGerminated);
@@ -134,13 +134,13 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
 
       if (totalSeedsGerminated > record.seedsTested) {
         const lastIndex = record.testResults.length - 1;
-        setIndiviualError(`seedsGerminated${lastIndex}`, strings.SEEDS_GERMINATED_ERROR);
+        setIndividualError(`seedsGerminated${lastIndex}`, strings.SEEDS_GERMINATED_ERROR);
         return true;
       }
 
       // clean all errors
       record?.testResults.forEach((_tr, index) => {
-        setIndiviualError(`seedsGerminated${index}`, '');
+        setIndividualError(`seedsGerminated${index}`, '');
       });
       return false;
     }
@@ -213,9 +213,9 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
 
   const cleanAllErrors = () => {
     record?.testResults?.forEach((_tr, index) => {
-      setIndiviualError(`seedsGerminated${index}`, '');
+      setIndividualError(`seedsGerminated${index}`, '');
     });
-    setIndiviualError(`seedsTested`, '');
+    setIndividualError(`seedsTested`, '');
   };
 
   const onCloseHandler = () => {
