@@ -646,6 +646,8 @@ const strings = new LocalizedStrings({
     TOTAL_SEEDS_TESTED: 'Total Seeds Tested',
     APPLY_RESULT_QUESTION: 'Do you want to apply this result to the accession?',
     APPLY_RESULT: 'Apply Result',
+    DELETE_VIABILITY_TEST: 'Delete Viability Test',
+    DELETE_VIABILITY_TEST_MESSAGE: 'You’re about to delete viability test {0}.',
   },
 });
 

@@ -1,4 +1,5 @@
-import { Grid, Typography } from '@mui/material';
+import { useState } from 'react';
+import { Box, Grid, Typography } from '@mui/material';
 import { Button, DialogBox } from '@terraware/web-components';
 import { Accession2 } from 'src/api/accessions2/accession';
 import strings from 'src/strings';
@@ -6,6 +7,7 @@ import { ViabilityTest } from 'src/api/types/accessions';
 import { getFullTestType } from 'src/utils/viabilityTest';
 import ObservationsChart from './ObservationsChart';
 import { useDeviceInfo } from '@terraware/web-components/utils';
+import DeleteViabilityTestModal from './DeleteViabilityTestModal';
 
 export interface ViewViabilityTestModalProps {
   open: boolean;
@@ -13,10 +15,12 @@ export interface ViewViabilityTestModalProps {
   onClose: () => void;
   viabilityTest: ViabilityTest;
   onEdit: () => void;
+  reload: () => void;
 }
 
 export default function ViewViabilityTestModal(props: ViewViabilityTestModalProps): JSX.Element {
-  const { onClose, open, viabilityTest, onEdit } = props;
+  const { onClose, open, accession, viabilityTest, onEdit, reload } = props;
+  const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
   const { isMobile } = useDeviceInfo();
 
   const onCloseHandler = () => {
@@ -32,6 +36,22 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
   };
 
   const smallColumn = isMobile ? 6 : 4;
+
+  if (openDeleteModal) {
+    return (
+      <DeleteViabilityTestModal
+        open={openDeleteModal}
+        accession={accession}
+        viabilityTest={viabilityTest}
+        onCancel={() => setOpenDeleteModal(false)}
+        onDone={() => {
+          reload();
+          onCloseHandler();
+        }}
+      />
+    );
+  }
+
   return (
     <DialogBox
       onClose={onCloseHandler}
@@ -51,6 +71,14 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
             </Typography>
           </Grid>
           <Grid xs={6} textAlign='right'>
+            <Box marginRight={1} display='inline-block'>
+              <Button
+                type='passive'
+                priority='secondary'
+                label={strings.DELETE}
+                onClick={() => setOpenDeleteModal(true)}
+              />
+            </Box>
             <Button label={strings.EDIT} onClick={() => openEdit()} />
           </Grid>
         </Grid>
