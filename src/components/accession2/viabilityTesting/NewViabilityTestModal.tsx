@@ -99,18 +99,18 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
     if (value) {
       if (isNaN(value)) {
         setIndividualError('seedsTested', strings.INVALID_VALUE);
-        return true;
+        return false;
       }
       if (value > (accession.estimatedCount || 0)) {
         setIndividualError('seedsTested', strings.TOTAL_SEEDS_TESTED_ERROR);
-        return true;
+        return false;
       }
     } else {
       setIndividualError('seedsTested', strings.REQUIRED_FIELD);
-      return true;
+      return false;
     }
     setIndividualError('seedsTested', '');
-    return false;
+    return true;
   };
 
   const validateSeedsGerminated = () => {
@@ -129,20 +129,20 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
         totalSeedsGerminated = totalSeedsGerminated + Number(tr.seedsGerminated);
       });
       if (errorFound) {
-        return true;
+        return false;
       }
 
       if (totalSeedsGerminated > record.seedsTested) {
         const lastIndex = record.testResults.length - 1;
         setIndividualError(`seedsGerminated${lastIndex}`, strings.TOTAL_SEEDS_GERMINATED_ERROR);
-        return true;
+        return false;
       }
 
       // clean all errors
       record?.testResults.forEach((_tr, index) => {
         setIndividualError(`seedsGerminated${index}`, '');
       });
-      return false;
+      return true;
     }
   };
 
@@ -168,14 +168,14 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
         }
       });
       if (errorFound) {
-        return true;
+        return false;
       }
 
       // clean all errors
       record?.testResults.forEach((_tr, index) => {
         setIndividualError(`recordingDate${index}`, '');
       });
-      return false;
+      return true;
     }
   };
 
@@ -188,9 +188,9 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
 
   const hasErrors = () => {
     if (record) {
-      const seedTestedError = validateSeedsTested(record.seedsTested);
-      const seedsGerminatedError = validateSeedsGerminated();
-      const recordingDateError = validateRecordingDate();
+      const seedTestedError = !validateSeedsTested(record.seedsTested);
+      const seedsGerminatedError = !validateSeedsGerminated();
+      const recordingDateError = !validateRecordingDate();
       let missingRequiredField = MANDATORY_FIELDS.some((field: MandatoryField) => !record[field]);
       if (record.testResults && record.testResults.length > 0) {
         missingRequiredField =
