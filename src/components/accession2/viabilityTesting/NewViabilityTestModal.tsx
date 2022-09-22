@@ -100,7 +100,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
       if (response.requestSucceeded) {
         reload();
         onCloseHandler();
-        if (testCompleted) {
+        if (testCompleted && !readOnly) {
           setSavedRecord({ ...record });
           setOpenViabilityResultModal(true);
         }
