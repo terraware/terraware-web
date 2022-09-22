@@ -644,6 +644,8 @@ const strings = new LocalizedStrings({
     NUMBER_OF_SEEDS_COMPROMISED_REQUIRED: '# Seeds Compromised *',
     NUMBER_OF_SEEDS_EMPTY_REQUIRED: '# Seeds Empty *',
     TOTAL_SEEDS_TESTED: 'Total Seeds Tested',
+    APPLY_RESULT_QUESTION: 'Do you want to apply this result to the accession?',
+    APPLY_RESULT: 'Apply Result',
   },
 });
 
