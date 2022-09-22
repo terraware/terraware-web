@@ -138,7 +138,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
         return true;
       }
 
-      //removeAllErrors
+      // clean all errors
       record?.testResults.forEach((_tr, index) => {
         setIndiviualError(`seedsGerminated${index}`, '');
       });
