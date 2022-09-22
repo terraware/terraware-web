@@ -431,9 +431,13 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
               >
                 {accession.state}
               </Typography>
-              <IconButton sx={{ marginLeft: 3, height: '24px' }} onClick={() => setOpenEditStateModal(true)}>
-                <Icon name='iconEdit' className={`${classes.editIcon} edit-icon`} />
-              </IconButton>
+              {accession.state !== 'Awaiting Check-In' ? (
+                <IconButton sx={{ marginLeft: 3, height: '24px' }} onClick={() => setOpenEditStateModal(true)}>
+                  <Icon name='iconEdit' className={`${classes.editIcon} edit-icon`} />
+                </IconButton>
+              ) : (
+                <Box sx={{ marginLeft: 3, height: '24px', width: 2 }} />
+              )}
             </Box>
           </Box>
         )}
