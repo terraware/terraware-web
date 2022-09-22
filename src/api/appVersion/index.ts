@@ -14,7 +14,8 @@ export const getLatestAppVersion = async (): Promise<AppVersionResponse> => {
   };
 
   try {
-    response.version = (await axios.get(APPVERSION_ENDPOINT)).data;
+    const params = { timestamp: Date.now() };
+    response.version = (await axios.get(APPVERSION_ENDPOINT, { params })).data;
   } catch {
     response.requestSucceeded = false;
   }
