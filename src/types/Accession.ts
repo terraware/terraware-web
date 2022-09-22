@@ -15,7 +15,7 @@ export const ACCESSION_STATES = [
 export const ACCESSION_2_STATES = [
   'Awaiting Check-In',
   'Awaiting Processing',
-  'Cleaning',
+  'Processing',
   'Drying',
   'In Storage',
   'Used Up',
@@ -24,7 +24,7 @@ export const ACCESSION_2_STATES = [
 export const ACCESSION_2_CREATE_STATES = [
   'Awaiting Check-In',
   'Awaiting Processing',
-  'Cleaning',
+  'Processing',
   'Drying',
   'In Storage',
 ];
