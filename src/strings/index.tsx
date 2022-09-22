@@ -646,9 +646,10 @@ const strings = new LocalizedStrings({
     TOTAL_SEEDS_TESTED: 'Total Seeds Tested',
     APPLY_RESULT_QUESTION: 'Do you want to apply this result to the accession?',
     APPLY_RESULT: 'Apply Result',
-    SEEDS_TESTED_ERROR: 'Seeds tested should be less than remaining seeds',
-    SEEDS_GERMINATED_ERROR: 'Germinated amount should be less than tested amount.',
+    TOTAL_SEEDS_TESTED_ERROR: 'Seeds tested should not be more than remaining seeds',
+    TOTAL_SEEDS_GERMINATED_ERROR: 'Germinated amount should not be more than tested amount.',
     INVALID_VALUE: 'Invalid Value',
+    RECORDING_DATE_ERROR: 'This should be later than Start Date',
   },
 });
 

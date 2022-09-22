@@ -102,7 +102,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
         return true;
       }
       if (value > (accession.estimatedCount || 0)) {
-        setIndividualError('seedsTested', strings.SEEDS_TESTED_ERROR);
+        setIndividualError('seedsTested', strings.TOTAL_SEEDS_TESTED_ERROR);
         return true;
       }
     } else {
@@ -134,13 +134,46 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
 
       if (totalSeedsGerminated > record.seedsTested) {
         const lastIndex = record.testResults.length - 1;
-        setIndividualError(`seedsGerminated${lastIndex}`, strings.SEEDS_GERMINATED_ERROR);
+        setIndividualError(`seedsGerminated${lastIndex}`, strings.TOTAL_SEEDS_GERMINATED_ERROR);
         return true;
       }
 
       // clean all errors
       record?.testResults.forEach((_tr, index) => {
         setIndividualError(`seedsGerminated${index}`, '');
+      });
+      return false;
+    }
+  };
+
+  const validateRecordingDate = () => {
+    if (record?.testResults && record?.testResults.length > 0) {
+      let errorFound = false;
+      record?.testResults.forEach((tr, index) => {
+        if (!tr.recordingDate) {
+          setIndividualError(`recordingDate${index}`, strings.REQUIRED_FIELD);
+          errorFound = true;
+        }
+        const dateMs = new Date(tr.recordingDate).getTime();
+        if (isNaN(dateMs)) {
+          setIndividualError(`recordingDate${index}`, strings.INVALID_DATE);
+          errorFound = true;
+        }
+        if (record.startDate) {
+          const startDateMs = new Date(record.startDate).getTime();
+          if (dateMs < startDateMs) {
+            setIndividualError(`recordingDate${index}`, strings.RECORDING_DATE_ERROR);
+            errorFound = true;
+          }
+        }
+      });
+      if (errorFound) {
+        return true;
+      }
+
+      // clean all errors
+      record?.testResults.forEach((_tr, index) => {
+        setIndividualError(`recordingDate${index}`, '');
       });
       return false;
     }
@@ -157,6 +190,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
     if (record) {
       const seedTestedError = validateSeedsTested(record.seedsTested);
       const seedsGerminatedError = validateSeedsGerminated();
+      const recordingDateError = validateRecordingDate();
       let missingRequiredField = MANDATORY_FIELDS.some((field: MandatoryField) => !record[field]);
       if (record.testResults && record.testResults.length > 0) {
         missingRequiredField =
@@ -165,7 +199,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
         missingRequiredField =
           missingRequiredField || CUT_MANDATORY_FIELDS.some((field: MandatoryCutField) => !record[field]);
       }
-      return seedTestedError || seedsGerminatedError || missingRequiredField;
+      return seedTestedError || seedsGerminatedError || recordingDateError || missingRequiredField;
     }
   };
 
@@ -214,6 +248,9 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
   const cleanAllErrors = () => {
     record?.testResults?.forEach((_tr, index) => {
       setIndividualError(`seedsGerminated${index}`, '');
+    });
+    record?.testResults?.forEach((_tr, index) => {
+      setIndividualError(`recordingDate${index}`, '');
     });
     setIndividualError(`seedsTested`, '');
   };
@@ -481,7 +518,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
                       value={testResult.recordingDate}
                       onChange={(id, value) => onResultChange(id, value, index)}
                       disabled={readOnly}
-                      errorText={validateFields && !testResult?.recordingDate ? strings.REQUIRED_FIELD : ''}
+                      errorText={viabilityFieldsErrors[`recordingDate${index}`]}
                     />
                   </Grid>
                   <Grid item xs={12} marginLeft={1} display='flex'>
