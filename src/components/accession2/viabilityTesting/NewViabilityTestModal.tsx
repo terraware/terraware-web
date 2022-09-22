@@ -25,6 +25,7 @@ import { Close } from '@mui/icons-material';
 import { preventDefaultEvent } from '@terraware/web-components/utils';
 import { getTodaysDateFormatted } from 'src/utils/date';
 import { ViabilityTest } from 'src/api/types/accessions';
+import ViabilityResultModal from './ViabilityResultModal';
 
 export interface NewViabilityTestModalProps {
   open: boolean;
@@ -43,6 +44,8 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
   const [users, setUsers] = useState<OrganizationUser[]>();
   const [testCompleted, setTestCompleted] = useState<boolean>(viabilityTest?.endDate !== undefined);
   const [totalSeedsTested, setTotalSeedsTested] = useState(0);
+  const [openViabilityResultModal, setOpenViabilityResultModal] = useState(false);
+  const [savedRecord, setSavedRecord] = useState<ViabilityTest>();
   const contributor = isContributor(organization);
   const snackbar = useSnackbar();
   const theme = useTheme();
@@ -97,6 +100,10 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
       if (response.requestSucceeded) {
         reload();
         onCloseHandler();
+        if (testCompleted && !readOnly) {
+          setSavedRecord({ ...record });
+          setOpenViabilityResultModal(true);
+        }
       } else {
         snackbar.toastError();
       }
@@ -184,221 +191,234 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
   };
 
   return (
-    <DialogBox
-      onClose={onCloseHandler}
-      open={open}
-      title={strings.VIABILITY_TEST}
-      size='large'
-      middleButtons={[
-        <Button label={strings.CANCEL} type='passive' onClick={onCloseHandler} priority='secondary' key='button-1' />,
-        <Button onClick={saveTest} label={strings.SAVE} key='button-2' />,
-      ]}
-      scrolled={true}
-    >
-      <Grid container item xs={12} spacing={2} textAlign='left'>
-        <Grid xs={12} padding={theme.spacing(1, 3, 1, 5)}>
-          <Dropdown
-            options={TEST_METHODS}
-            placeholder={strings.SELECT}
-            onChange={(value: string) => onChange('testType', value)}
-            selectedValue={record?.testType}
-            fullWidth={true}
-            label={strings.TEST_METHOD_REQUIRED}
-            disabled={readOnly}
-          />
-        </Grid>
-        <Grid padding={theme.spacing(1, 3, 1, 5)} xs={12}>
-          <Select
-            label={strings.SEED_TYPE}
-            placeholder={strings.SELECT}
-            options={SEED_TYPES}
-            onChange={(value: string) => onChange('seedType', value)}
-            selectedValue={record?.seedType}
-            fullWidth={true}
-            readonly={true}
-            disabled={readOnly}
-          />
-        </Grid>
-        {record?.testType !== 'Cut' && (
-          <>
-            <Grid padding={theme.spacing(1, 3, 1, 5)} xs={12}>
-              <Select
-                label={strings.SUBSTRATE}
-                placeholder={strings.SELECT}
-                options={getSubstratesAccordingToType(record?.testType)}
-                onChange={(value: string) => onChange('substrate', value)}
-                selectedValue={record?.substrate}
-                fullWidth={true}
-                readonly={true}
-                disabled={readOnly}
-              />
-            </Grid>
-            <Grid padding={theme.spacing(1, 3, 1, 5)} xs={12}>
-              <Select
-                label={strings.TREATMENT}
-                placeholder={strings.SELECT}
-                options={TREATMENTS}
-                onChange={(value: string) => onChange('treatment', value)}
-                selectedValue={record?.treatment}
-                fullWidth={true}
-                readonly={true}
-                disabled={readOnly}
-              />
-            </Grid>
-          </>
-        )}
-        <Grid padding={theme.spacing(1, 3, 1, 5)} xs={12}>
-          <SelectT<OrganizationUser>
-            label={strings.TESTING_STAFF}
-            placeholder={strings.SELECT}
-            options={users}
-            onChange={onChangeUser}
-            isEqual={(a: OrganizationUser, b: OrganizationUser) => a.id === b.id}
-            renderOption={(option) => renderUser(option, user, contributor)}
-            displayLabel={(option) => renderUser(option, user, contributor)}
-            selectedValue={users?.find((userSel) => userSel.id === record?.withdrawnByUserId)}
-            toT={(firstName: string) => ({ firstName } as OrganizationUser)}
-            fullWidth={true}
-            disabled={contributor || readOnly}
-          />
-        </Grid>
-
-        <Grid item xs={12}>
-          <Grid item sx={{ background: '#F2F4F5', borderRadius: '16px', padding: 3 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center' }} mb={2}>
-              <Grid item xs={12}>
-                <DatePicker
-                  id='startDate'
-                  label={record?.testType === 'Cut' ? strings.TEST_DATE_REQUIRED : strings.START_DATE_REQUIRED}
-                  aria-label={strings.DATE}
-                  value={record?.startDate}
-                  onChange={onChangeDate}
+    <>
+      {openViabilityResultModal && savedRecord && (
+        <ViabilityResultModal
+          open={openViabilityResultModal}
+          reload={reload}
+          accession={accession}
+          onClose={() => {
+            setOpenViabilityResultModal(false);
+          }}
+          viabilityTest={savedRecord}
+        />
+      )}
+      <DialogBox
+        onClose={onCloseHandler}
+        open={open}
+        title={strings.VIABILITY_TEST}
+        size='large'
+        middleButtons={[
+          <Button label={strings.CANCEL} type='passive' onClick={onCloseHandler} priority='secondary' key='button-1' />,
+          <Button onClick={saveTest} label={strings.SAVE} key='button-2' />,
+        ]}
+        scrolled={true}
+      >
+        <Grid container item xs={12} spacing={2} textAlign='left'>
+          <Grid xs={12} padding={theme.spacing(1, 3, 1, 5)}>
+            <Dropdown
+              options={TEST_METHODS}
+              placeholder={strings.SELECT}
+              onChange={(value: string) => onChange('testType', value)}
+              selectedValue={record?.testType}
+              fullWidth={true}
+              label={strings.TEST_METHOD_REQUIRED}
+              disabled={readOnly}
+            />
+          </Grid>
+          <Grid padding={theme.spacing(1, 3, 1, 5)} xs={12}>
+            <Select
+              label={strings.SEED_TYPE}
+              placeholder={strings.SELECT}
+              options={SEED_TYPES}
+              onChange={(value: string) => onChange('seedType', value)}
+              selectedValue={record?.seedType}
+              fullWidth={true}
+              readonly={true}
+              disabled={readOnly}
+            />
+          </Grid>
+          {record?.testType !== 'Cut' && (
+            <>
+              <Grid padding={theme.spacing(1, 3, 1, 5)} xs={12}>
+                <Select
+                  label={strings.SUBSTRATE}
+                  placeholder={strings.SELECT}
+                  options={getSubstratesAccordingToType(record?.testType)}
+                  onChange={(value: string) => onChange('substrate', value)}
+                  selectedValue={record?.substrate}
+                  fullWidth={true}
+                  readonly={true}
                   disabled={readOnly}
                 />
               </Grid>
-              <Grid item xs={12} marginLeft={1}>
-                {record?.testType === 'Cut' ? (
-                  <Textfield
-                    label={strings.NUMBER_OF_SEEDS_FILLED_REQUIRED}
-                    type='text'
-                    onChange={onChangeCutValue}
-                    id='seedsFilled'
-                    value={record?.seedsFilled}
-                  />
-                ) : (
-                  <Textfield
-                    label={strings.NUMBER_OF_SEEDS_TESTED_REQUIRED}
-                    type='text'
-                    onChange={onChange}
-                    id='seedsTested'
-                    value={record?.seedsTested}
-                    disabled={readOnly}
-                  />
-                )}
+              <Grid padding={theme.spacing(1, 3, 1, 5)} xs={12}>
+                <Select
+                  label={strings.TREATMENT}
+                  placeholder={strings.SELECT}
+                  options={TREATMENTS}
+                  onChange={(value: string) => onChange('treatment', value)}
+                  selectedValue={record?.treatment}
+                  fullWidth={true}
+                  readonly={true}
+                  disabled={readOnly}
+                />
               </Grid>
-            </Box>
+            </>
+          )}
+          <Grid padding={theme.spacing(1, 3, 1, 5)} xs={12}>
+            <SelectT<OrganizationUser>
+              label={strings.TESTING_STAFF}
+              placeholder={strings.SELECT}
+              options={users}
+              onChange={onChangeUser}
+              isEqual={(a: OrganizationUser, b: OrganizationUser) => a.id === b.id}
+              renderOption={(option) => renderUser(option, user, contributor)}
+              displayLabel={(option) => renderUser(option, user, contributor)}
+              selectedValue={users?.find((userSel) => userSel.id === record?.withdrawnByUserId)}
+              toT={(firstName: string) => ({ firstName } as OrganizationUser)}
+              fullWidth={true}
+              disabled={contributor || readOnly}
+            />
+          </Grid>
 
-            {record?.testType === 'Cut' && (
-              <>
-                <Grid item xs={12} display='flex'>
-                  <Grid item xs={6}>
-                    <Textfield
-                      label={strings.NUMBER_OF_SEEDS_COMPROMISED_REQUIRED}
-                      type='text'
-                      onChange={onChangeCutValue}
-                      id='seedsCompromised'
-                      value={record?.seedsCompromised}
-                    />
-                  </Grid>
-                  <Grid item xs={6} marginLeft={1}>
-                    <Textfield
-                      label={strings.NUMBER_OF_SEEDS_EMPTY_REQUIRED}
-                      type='text'
-                      onChange={onChangeCutValue}
-                      id='seedsEmpty'
-                      value={record?.seedsEmpty}
-                    />
-                  </Grid>
-                </Grid>
-                <Grid item xs={12} display='flex' alignItems='center' sx={{ paddingTop: 2 }}>
-                  <Typography sx={{ color: '#5C6B6C', paddingRight: 1, fontSize: '14px' }}>
-                    # {strings.TOTAL_SEEDS_TESTED}:
-                  </Typography>
-                  <Typography>{totalSeedsTested}</Typography>
-                </Grid>
-              </>
-            )}
-
-            {record?.testResults?.map((testResult, index) => (
-              <Box key={index} mb={2} display='flex' alignItems='center'>
+          <Grid item xs={12}>
+            <Grid item sx={{ background: '#F2F4F5', borderRadius: '16px', padding: 3 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center' }} mb={2}>
                 <Grid item xs={12}>
                   <DatePicker
-                    id='recordingDate'
-                    label={strings.CHECK_DATE_REQUIRED}
+                    id='startDate'
+                    label={record?.testType === 'Cut' ? strings.TEST_DATE_REQUIRED : strings.START_DATE_REQUIRED}
                     aria-label={strings.DATE}
-                    value={testResult.recordingDate}
-                    onChange={(id, value) => onResultChange(id, value, index)}
+                    value={record?.startDate}
+                    onChange={onChangeDate}
                     disabled={readOnly}
                   />
                 </Grid>
-                <Grid item xs={12} marginLeft={1} display='flex'>
-                  <Textfield
-                    label={strings.NUMBER_OF_SEEDS_GERMINATED_REQUIRED}
-                    type='text'
-                    onChange={(id, value) => onResultChange(id, value, index)}
-                    id='seedsGerminated'
-                    value={testResult.seedsGerminated}
-                    disabled={readOnly}
-                  />
-                  <IconButton
-                    id={`delete-result${index}`}
-                    aria-label='delete'
-                    size='small'
-                    disabled={readOnly}
-                    onClick={() => onDeleteResult(index)}
-                    sx={{ marginTop: 3 }}
+                <Grid item xs={12} marginLeft={1}>
+                  {record?.testType === 'Cut' ? (
+                    <Textfield
+                      label={strings.NUMBER_OF_SEEDS_FILLED_REQUIRED}
+                      type='text'
+                      onChange={onChangeCutValue}
+                      id='seedsFilled'
+                      value={record?.seedsFilled}
+                    />
+                  ) : (
+                    <Textfield
+                      label={strings.NUMBER_OF_SEEDS_TESTED_REQUIRED}
+                      type='text'
+                      onChange={onChange}
+                      id='seedsTested'
+                      value={record?.seedsTested}
+                      disabled={readOnly}
+                    />
+                  )}
+                </Grid>
+              </Box>
+
+              {record?.testType === 'Cut' && (
+                <>
+                  <Grid item xs={12} display='flex'>
+                    <Grid item xs={6}>
+                      <Textfield
+                        label={strings.NUMBER_OF_SEEDS_COMPROMISED_REQUIRED}
+                        type='text'
+                        onChange={onChangeCutValue}
+                        id='seedsCompromised'
+                        value={record?.seedsCompromised}
+                      />
+                    </Grid>
+                    <Grid item xs={6} marginLeft={1}>
+                      <Textfield
+                        label={strings.NUMBER_OF_SEEDS_EMPTY_REQUIRED}
+                        type='text'
+                        onChange={onChangeCutValue}
+                        id='seedsEmpty'
+                        value={record?.seedsEmpty}
+                      />
+                    </Grid>
+                  </Grid>
+                  <Grid item xs={12} display='flex' alignItems='center' sx={{ paddingTop: 2 }}>
+                    <Typography sx={{ color: '#5C6B6C', paddingRight: 1, fontSize: '14px' }}>
+                      # {strings.TOTAL_SEEDS_TESTED}:
+                    </Typography>
+                    <Typography>{totalSeedsTested}</Typography>
+                  </Grid>
+                </>
+              )}
+
+              {record?.testResults?.map((testResult, index) => (
+                <Box key={index} mb={2} display='flex' alignItems='center'>
+                  <Grid item xs={12}>
+                    <DatePicker
+                      id='recordingDate'
+                      label={strings.CHECK_DATE_REQUIRED}
+                      aria-label={strings.DATE}
+                      value={testResult.recordingDate}
+                      onChange={(id, value) => onResultChange(id, value, index)}
+                      disabled={readOnly}
+                    />
+                  </Grid>
+                  <Grid item xs={12} marginLeft={1} display='flex'>
+                    <Textfield
+                      label={strings.NUMBER_OF_SEEDS_GERMINATED_REQUIRED}
+                      type='text'
+                      onChange={(id, value) => onResultChange(id, value, index)}
+                      id='seedsGerminated'
+                      value={testResult.seedsGerminated}
+                      disabled={readOnly}
+                    />
+                    <IconButton
+                      id={`delete-result${index}`}
+                      aria-label='delete'
+                      size='small'
+                      disabled={readOnly}
+                      onClick={() => onDeleteResult(index)}
+                      sx={{ marginTop: 3 }}
+                    >
+                      <Close />
+                    </IconButton>
+                  </Grid>
+                </Box>
+              ))}
+              {record?.testType !== 'Cut' && (
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <Link
+                    component='button'
+                    id='addResultButton'
+                    onClick={(event: React.SyntheticEvent) => {
+                      preventDefaultEvent(event);
+                      onAddResult();
+                    }}
+                    sx={{
+                      textDecoration: 'none',
+                      fontSize: '16px',
+                      '&[disabled]': { color: '#0067C84D', pointerEvents: 'none' },
+                    }}
+                    disabled={testCompleted || readOnly}
                   >
-                    <Close />
-                  </IconButton>
-                </Grid>
-              </Box>
-            ))}
-            {record?.testType !== 'Cut' && (
-              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <Link
-                  component='button'
-                  id='addResultButton'
-                  onClick={(event: React.SyntheticEvent) => {
-                    preventDefaultEvent(event);
-                    onAddResult();
-                  }}
-                  sx={{
-                    textDecoration: 'none',
-                    fontSize: '16px',
-                    '&[disabled]': { color: '#0067C84D', pointerEvents: 'none' },
-                  }}
-                  disabled={testCompleted || readOnly}
-                >
-                  + {strings.ADD_OBSERVATION}
-                </Link>
-                {record?.testResults && record.testResults.length > 0 && (
-                  <Checkbox
-                    label={strings.MARK_AS_COMPLETE}
-                    onChange={(id, value) => markTestAsComplete(value)}
-                    id='markAsCompplete'
-                    name='markAsCompplete'
-                    value={testCompleted}
-                    disabled={readOnly}
-                  />
-                )}
-              </Box>
-            )}
+                    + {strings.ADD_OBSERVATION}
+                  </Link>
+                  {record?.testResults && record.testResults.length > 0 && (
+                    <Checkbox
+                      label={strings.MARK_AS_COMPLETE}
+                      onChange={(id, value) => markTestAsComplete(value)}
+                      id='markAsCompplete'
+                      name='markAsCompplete'
+                      value={testCompleted}
+                      disabled={readOnly}
+                    />
+                  )}
+                </Box>
+              )}
+            </Grid>
+          </Grid>
+          <Grid padding={theme.spacing(1, 3, 1, 5)} xs={12}>
+            <Textfield id='notes' value={record?.notes} onChange={onChange} type='textarea' label={strings.NOTES} />
           </Grid>
         </Grid>
-        <Grid padding={theme.spacing(1, 3, 1, 5)} xs={12}>
-          <Textfield id='notes' value={record?.notes} onChange={onChange} type='textarea' label={strings.NOTES} />
-        </Grid>
-      </Grid>
-    </DialogBox>
+      </DialogBox>
+    </>
   );
 }
