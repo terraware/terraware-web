@@ -211,9 +211,17 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
     }
   };
 
+  const cleanAllErrors = () => {
+    record?.testResults?.forEach((_tr, index) => {
+      setIndiviualError(`seedsGerminated${index}`, '');
+    });
+    setIndiviualError(`seedsTested`, '');
+  };
+
   const onCloseHandler = () => {
     setValidateFields(false);
     setTestCompleted(false);
+    cleanAllErrors();
     onClose();
   };
 
