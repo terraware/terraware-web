@@ -377,7 +377,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
               selectedValue={record?.testType}
               fullWidth={true}
               label={strings.TEST_METHOD_REQUIRED}
-              disabled={readOnly}
+              disabled={readOnly || record?.id !== -1}
               errorText={validateFields && !record?.testType ? strings.REQUIRED_FIELD : ''}
             />
           </Grid>
