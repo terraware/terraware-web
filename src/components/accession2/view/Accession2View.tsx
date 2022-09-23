@@ -297,6 +297,10 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
     width: isMobile ? '100%' : 'auto',
   };
 
+  const spaceFiller = () => <Box sx={{ marginLeft: 3, height: '24px', width: 2 }} />;
+
+  const quantityEditable = accession?.state === 'Drying' || accession?.state === 'In Storage';
+
   return (
     <TfMain>
       {accession && (
@@ -437,7 +441,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
                   <Icon name='iconEdit' className={`${classes.editIcon} edit-icon`} />
                 </IconButton>
               ) : (
-                <Box sx={{ marginLeft: 3, height: '24px', width: 2 }} />
+                spaceFiller()
               )}
             </Box>
           </Box>
@@ -476,14 +480,20 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
               <Box display='flex'>
                 {getAbsoluteQuantity()} {getEstimatedQuantity()}
               </Box>
-              <IconButton sx={{ marginLeft: 3, height: '24px' }} onClick={() => setOpenQuantityModal(true)}>
-                <Icon name='iconEdit' className={`${classes.editIcon} edit-icon`} />
-              </IconButton>
+              {quantityEditable ? (
+                <IconButton sx={{ marginLeft: 3, height: '24px' }} onClick={() => setOpenQuantityModal(true)}>
+                  <Icon name='iconEdit' className={`${classes.editIcon} edit-icon`} />
+                </IconButton>
+              ) : (
+                spaceFiller()
+              )}
             </Box>
-          ) : (
+          ) : quantityEditable ? (
             <Link sx={linkStyle} onClick={() => setOpenQuantityModal(true)}>
               + {strings.ADD}
             </Link>
+          ) : (
+            spaceFiller()
           )}
         </Box>
         <Box sx={editableDynamicValuesProps}>
