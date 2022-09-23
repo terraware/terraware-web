@@ -200,7 +200,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
       setIndividualError('withdrawnQuantity', strings.REQUIRED_FIELD);
       return false;
     }
-    setIndividualError('', strings.REQUIRED_FIELD);
+    setIndividualError('withdrawnQuantity', '');
     return true;
   };
 
@@ -280,17 +280,19 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
               value={record.withdrawnQuantity?.quantity.toString()}
               errorText={fieldsErrors.withdrawnQuantity}
             />
-            {accession.remainingQuantity?.units === 'Seeds' || record.purpose === 'Viability Testing' ? (
-              <Box>{strings.CT}</Box>
-            ) : (
-              <Dropdown
-                options={WEIGHT_UNITS_V2}
-                placeholder={strings.SELECT}
-                onChange={onChangeUnit}
-                selectedValue={record.withdrawnQuantity?.units}
-                fullWidth={true}
-              />
-            )}
+            <Box paddingLeft={1}>
+              {accession.remainingQuantity?.units === 'Seeds' || record.purpose === 'Viability Testing' ? (
+                <Box>{strings.CT}</Box>
+              ) : (
+                <Dropdown
+                  options={WEIGHT_UNITS_V2}
+                  placeholder={strings.SELECT}
+                  onChange={onChangeUnit}
+                  selectedValue={record.withdrawnQuantity?.units}
+                  fullWidth={true}
+                />
+              )}
+            </Box>
           </Box>
           <Checkbox
             id='withdrawAll'
