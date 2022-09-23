@@ -53,6 +53,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
   const [users, setUsers] = useState<OrganizationUser[]>();
   const [withdrawAllSelected, setWithdrawAllSelected] = useState(false);
   const [isNotesOpened, setIsNotesOpened] = useState(false);
+  const [fieldsErrors, setFieldsErrors] = useState<{ [key: string]: string | undefined }>({});
   const theme = useTheme();
   const snackbar = useSnackbar();
   const contributor = isContributor(organization);
@@ -70,7 +71,11 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
   const saveWithdrawal = async () => {
     let response;
     if (record) {
+      if (!validateAmount()) {
+        return;
+      }
       if (record.purpose === 'Viability Testing') {
+        viabilityTesting.seedsTested = record.withdrawnQuantity?.quantity || 0;
         response = await postViabilityTest(viabilityTesting, accession.id);
       } else {
         response = await postWithdrawal(record, accession.id);
@@ -78,10 +83,10 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
 
       if (response.requestSucceeded) {
         reload();
+        onCloseHandler();
       } else {
         snackbar.toastError();
       }
-      onCloseHandler();
     }
   };
 
@@ -125,13 +130,24 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
 
   const onSelectAll = (id: string, value: boolean) => {
     if (!withdrawAllSelected) {
-      setRecord({
-        ...record,
-        withdrawnQuantity: {
-          quantity: accession.remainingQuantity?.quantity || 0,
-          units: accession.remainingQuantity?.units || 'Grams',
-        },
-      });
+      if (record.purpose === 'Viability Testing') {
+        // if purpose is VT we use estimated count
+        setRecord({
+          ...record,
+          withdrawnQuantity: {
+            quantity: accession.estimatedCount ? accession.estimatedCount : 0,
+            units: 'Seeds',
+          },
+        });
+      } else {
+        setRecord({
+          ...record,
+          withdrawnQuantity: {
+            quantity: accession.remainingQuantity?.quantity || 0,
+            units: accession.remainingQuantity?.units || 'Grams',
+          },
+        });
+      }
     } else {
       setRecord({
         ...record,
@@ -162,6 +178,32 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
     onClose();
   };
 
+  const setIndividualError = (id: string, error?: string) => {
+    setFieldsErrors((prev) => ({
+      ...prev,
+      [id]: error,
+    }));
+  };
+
+  const validateAmount = () => {
+    if (record.withdrawnQuantity?.quantity) {
+      if (isNaN(record.withdrawnQuantity.quantity)) {
+        setIndividualError('withdrawnQuantity', strings.INVALID_VALUE);
+        return false;
+      } else {
+        if (Number(record.withdrawnQuantity.quantity) <= 0) {
+          setIndividualError('withdrawnQuantity', strings.INVALID_VALUE);
+          return false;
+        }
+      }
+    } else {
+      setIndividualError('withdrawnQuantity', strings.REQUIRED_FIELD);
+      return false;
+    }
+    setIndividualError('withdrawnQuantity', '');
+    return true;
+  };
+
   return (
     <DialogBox
       onClose={onCloseHandler}
@@ -172,9 +214,10 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
         <Button label={strings.CANCEL} type='passive' onClick={onCloseHandler} priority='secondary' key='button-1' />,
         <Button onClick={saveWithdrawal} label={strings.WITHDRAW} key='button-2' />,
       ]}
+      scrolled={true}
     >
       <Grid item xs={12} textAlign='left'>
-        <Grid item xs={12}>
+        <Grid item xs={12} paddingBottom={2}>
           <Select
             label={strings.PURPOSE}
             placeholder={strings.SELECT}
@@ -187,37 +230,43 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
         </Grid>
         {record.purpose === 'Viability Testing' ? (
           <>
-            <Select
-              label={strings.TEST_TYPE}
-              placeholder={strings.SELECT}
-              options={WITHDRAWAL_TYPES}
-              onChange={(value: string) => onChangeViabilityTesting('testType', value)}
-              selectedValue={viabilityTesting?.testType}
-              fullWidth={true}
-              readonly={true}
-            />
-            <Select
-              label={strings.SUBSTRATE}
-              placeholder={strings.SELECT}
-              options={SUBSTRATES}
-              onChange={(value: string) => onChangeViabilityTesting('substrate', value)}
-              selectedValue={viabilityTesting.substrate}
-              fullWidth={true}
-              readonly={true}
-            />
-            <Select
-              label={strings.TREATMENT}
-              placeholder={strings.SELECT}
-              options={TREATMENTS}
-              onChange={(value: string) => onChangeViabilityTesting('treatment', value)}
-              selectedValue={viabilityTesting.treatment}
-              fullWidth={true}
-              readonly={true}
-            />
+            <Grid item xs={12} paddingBottom={2}>
+              <Select
+                label={strings.TEST_TYPE}
+                placeholder={strings.SELECT}
+                options={WITHDRAWAL_TYPES}
+                onChange={(value: string) => onChangeViabilityTesting('testType', value)}
+                selectedValue={viabilityTesting?.testType}
+                fullWidth={true}
+                readonly={true}
+              />
+            </Grid>
+            <Grid item xs={12} paddingBottom={2}>
+              <Select
+                label={strings.SUBSTRATE}
+                placeholder={strings.SELECT}
+                options={SUBSTRATES}
+                onChange={(value: string) => onChangeViabilityTesting('substrate', value)}
+                selectedValue={viabilityTesting.substrate}
+                fullWidth={true}
+                readonly={true}
+              />
+            </Grid>
+            <Grid item xs={12} paddingBottom={2}>
+              <Select
+                label={strings.TREATMENT}
+                placeholder={strings.SELECT}
+                options={TREATMENTS}
+                onChange={(value: string) => onChangeViabilityTesting('treatment', value)}
+                selectedValue={viabilityTesting.treatment}
+                fullWidth={true}
+                readonly={true}
+              />
+            </Grid>
           </>
         ) : null}
-        <Grid item xs={12}>
-          <Box display='flex' alignItems='end'>
+        <Grid item xs={12} paddingBottom={2}>
+          <Box display='flex' alignItems={fieldsErrors.withdrawnQuantity ? 'center' : 'end'}>
             <Textfield
               label={strings
                 .formatString(
@@ -229,18 +278,21 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
               onChange={(id, value) => onChangeWithdrawnQuantity(value as number)}
               type='text'
               value={record.withdrawnQuantity?.quantity.toString()}
+              errorText={fieldsErrors.withdrawnQuantity}
             />
-            {accession.remainingQuantity?.units === 'Seeds' ? (
-              <Box>{strings.CT}</Box>
-            ) : (
-              <Dropdown
-                options={WEIGHT_UNITS_V2}
-                placeholder={strings.SELECT}
-                onChange={onChangeUnit}
-                selectedValue={record.withdrawnQuantity?.units}
-                fullWidth={true}
-              />
-            )}
+            <Box paddingLeft={1}>
+              {accession.remainingQuantity?.units === 'Seeds' || record.purpose === 'Viability Testing' ? (
+                <Box>{strings.CT}</Box>
+              ) : (
+                <Dropdown
+                  options={WEIGHT_UNITS_V2}
+                  placeholder={strings.SELECT}
+                  onChange={onChangeUnit}
+                  selectedValue={record.withdrawnQuantity?.units}
+                  fullWidth={true}
+                />
+              )}
+            </Box>
           </Box>
           <Checkbox
             id='withdrawAll'
@@ -250,7 +302,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
             value={withdrawAllSelected}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={12} paddingBottom={2}>
           <SelectT<OrganizationUser>
             label={strings.WITHDRAWN_BY}
             placeholder={strings.SELECT}
