@@ -49,6 +49,8 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
   const contributor = isContributor(organization);
   const snackbar = useSnackbar();
   const theme = useTheme();
+  const [validateFields, setValidateFields] = useState<boolean>(false);
+  const [viabilityFieldsErrors, setViabilityFieldsErrors] = useState<{ [key: string]: string | undefined }>({});
 
   const readOnly = !!viabilityTest?.endDate;
 
@@ -86,8 +88,127 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
     setRecord(initViabilityTest());
   }, [viabilityTest, setRecord, accession, user]);
 
+  const setIndividualError = (id: string, error?: string) => {
+    setViabilityFieldsErrors((prev) => ({
+      ...prev,
+      [id]: error,
+    }));
+  };
+
+  const validateSeedsTested = (value: any): boolean => {
+    if (value) {
+      if (isNaN(value)) {
+        setIndividualError('seedsTested', strings.INVALID_VALUE);
+        return false;
+      }
+      if (value > (accession.estimatedCount || 0)) {
+        setIndividualError('seedsTested', strings.TOTAL_SEEDS_TESTED_ERROR);
+        return false;
+      }
+    } else {
+      setIndividualError('seedsTested', strings.REQUIRED_FIELD);
+      return false;
+    }
+    setIndividualError('seedsTested', '');
+    return true;
+  };
+
+  const validateSeedsGerminated = () => {
+    if (record?.testResults && record?.testResults.length > 0) {
+      let totalSeedsGerminated = 0;
+      let errorFound = false;
+      record?.testResults.forEach((tr, index) => {
+        if (!tr.seedsGerminated) {
+          setIndividualError(`seedsGerminated${index}`, strings.REQUIRED_FIELD);
+          errorFound = true;
+        }
+        if (isNaN(tr.seedsGerminated)) {
+          setIndividualError(`seedsGerminated${index}`, strings.INVALID_VALUE);
+          errorFound = true;
+        }
+        totalSeedsGerminated = totalSeedsGerminated + Number(tr.seedsGerminated);
+      });
+      if (errorFound) {
+        return false;
+      }
+
+      if (totalSeedsGerminated > record.seedsTested) {
+        const lastIndex = record.testResults.length - 1;
+        setIndividualError(`seedsGerminated${lastIndex}`, strings.TOTAL_SEEDS_GERMINATED_ERROR);
+        return false;
+      }
+
+      // clean all errors
+      record?.testResults.forEach((_tr, index) => {
+        setIndividualError(`seedsGerminated${index}`, '');
+      });
+      return true;
+    }
+  };
+
+  const validateRecordingDate = () => {
+    if (record?.testResults && record?.testResults.length > 0) {
+      let errorFound = false;
+      record?.testResults.forEach((tr, index) => {
+        if (!tr.recordingDate) {
+          setIndividualError(`recordingDate${index}`, strings.REQUIRED_FIELD);
+          errorFound = true;
+        }
+        const dateMs = new Date(tr.recordingDate).getTime();
+        if (isNaN(dateMs)) {
+          setIndividualError(`recordingDate${index}`, strings.INVALID_DATE);
+          errorFound = true;
+        }
+        if (record.startDate) {
+          const startDateMs = new Date(record.startDate).getTime();
+          if (dateMs < startDateMs) {
+            setIndividualError(`recordingDate${index}`, strings.RECORDING_DATE_ERROR);
+            errorFound = true;
+          }
+        }
+      });
+      if (errorFound) {
+        return false;
+      }
+
+      // clean all errors
+      record?.testResults.forEach((_tr, index) => {
+        setIndividualError(`recordingDate${index}`, '');
+      });
+      return true;
+    }
+  };
+
+  const MANDATORY_FIELDS = ['testType', 'startDate', 'seedsTested'] as const;
+
+  const CUT_MANDATORY_FIELDS = ['seedsFilled', 'seedsCompromised', 'seedsEmpty'] as const;
+
+  type MandatoryField = typeof MANDATORY_FIELDS[number];
+  type MandatoryCutField = typeof CUT_MANDATORY_FIELDS[number];
+
+  const hasErrors = () => {
+    if (record) {
+      const seedTestedError = !validateSeedsTested(record.seedsTested);
+      const seedsGerminatedError = !validateSeedsGerminated();
+      const recordingDateError = !validateRecordingDate();
+      let missingRequiredField = MANDATORY_FIELDS.some((field: MandatoryField) => !record[field]);
+      if (record.testResults && record.testResults.length > 0) {
+        missingRequiredField =
+          missingRequiredField || record.testResults?.some((tr) => !tr.recordingDate || !tr.seedsGerminated);
+      } else if (record.testType === 'Cut') {
+        missingRequiredField =
+          missingRequiredField || CUT_MANDATORY_FIELDS.some((field: MandatoryCutField) => !record[field]);
+      }
+      return seedTestedError || seedsGerminatedError || recordingDateError || missingRequiredField;
+    }
+  };
+
   const saveTest = async () => {
     if (record) {
+      if (hasErrors()) {
+        setValidateFields(true);
+        return;
+      }
       if (testCompleted && !readOnly) {
         record.endDate = getTodaysDateFormatted();
       }
@@ -124,8 +245,20 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
     }
   };
 
+  const cleanAllErrors = () => {
+    record?.testResults?.forEach((_tr, index) => {
+      setIndividualError(`seedsGerminated${index}`, '');
+    });
+    record?.testResults?.forEach((_tr, index) => {
+      setIndividualError(`recordingDate${index}`, '');
+    });
+    setIndividualError(`seedsTested`, '');
+  };
+
   const onCloseHandler = () => {
+    setValidateFields(false);
     setTestCompleted(false);
+    cleanAllErrors();
     onClose();
   };
 
@@ -190,6 +323,27 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
     }
   };
 
+  const onChangeTestType = (value: TEST_TYPES) => {
+    if (record) {
+      if (value === 'Cut') {
+        setRecord({
+          ...record,
+          testType: value,
+          accessionId: record.accessionId,
+          seedsTested: 0,
+          testResults: undefined,
+        });
+      } else {
+        setRecord({ ...record, testType: value, accessionId: record?.accessionId });
+      }
+    }
+  };
+
+  const onChangeSeedsTested = (id: string, value: unknown) => {
+    validateSeedsTested(Number(value));
+    onChange('seedsTested', value);
+  };
+
   return (
     <>
       {openViabilityResultModal && savedRecord && (
@@ -219,11 +373,12 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
             <Dropdown
               options={TEST_METHODS}
               placeholder={strings.SELECT}
-              onChange={(value: string) => onChange('testType', value)}
+              onChange={(value) => onChangeTestType(value as TEST_TYPES)}
               selectedValue={record?.testType}
               fullWidth={true}
               label={strings.TEST_METHOD_REQUIRED}
               disabled={readOnly}
+              errorText={validateFields && !record?.testType ? strings.REQUIRED_FIELD : ''}
             />
           </Grid>
           <Grid padding={theme.spacing(1, 3, 1, 5)} xs={12}>
@@ -284,7 +439,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
 
           <Grid item xs={12}>
             <Grid item sx={{ background: '#F2F4F5', borderRadius: '16px', padding: 3 }}>
-              <Box sx={{ display: 'flex', alignItems: 'center' }} mb={2}>
+              <Box sx={{ display: 'flex', alignItems: 'baseline' }} mb={2}>
                 <Grid item xs={12}>
                   <DatePicker
                     id='startDate'
@@ -293,6 +448,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
                     value={record?.startDate}
                     onChange={onChangeDate}
                     disabled={readOnly}
+                    errorText={validateFields && !record?.startDate ? strings.REQUIRED_FIELD : ''}
                   />
                 </Grid>
                 <Grid item xs={12} marginLeft={1}>
@@ -303,15 +459,17 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
                       onChange={onChangeCutValue}
                       id='seedsFilled'
                       value={record?.seedsFilled}
+                      errorText={validateFields && !record?.seedsFilled ? strings.REQUIRED_FIELD : ''}
                     />
                   ) : (
                     <Textfield
                       label={strings.NUMBER_OF_SEEDS_TESTED_REQUIRED}
                       type='text'
-                      onChange={onChange}
+                      onChange={onChangeSeedsTested}
                       id='seedsTested'
                       value={record?.seedsTested}
                       disabled={readOnly}
+                      errorText={viabilityFieldsErrors.seedsTested}
                     />
                   )}
                 </Grid>
@@ -327,6 +485,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
                         onChange={onChangeCutValue}
                         id='seedsCompromised'
                         value={record?.seedsCompromised}
+                        errorText={validateFields && !record?.seedsCompromised ? strings.REQUIRED_FIELD : ''}
                       />
                     </Grid>
                     <Grid item xs={6} marginLeft={1}>
@@ -336,6 +495,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
                         onChange={onChangeCutValue}
                         id='seedsEmpty'
                         value={record?.seedsEmpty}
+                        errorText={validateFields && !record?.seedsEmpty ? strings.REQUIRED_FIELD : ''}
                       />
                     </Grid>
                   </Grid>
@@ -349,7 +509,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
               )}
 
               {record?.testResults?.map((testResult, index) => (
-                <Box key={index} mb={2} display='flex' alignItems='center'>
+                <Box key={index} mb={2} display='flex' alignItems='baseline'>
                   <Grid item xs={12}>
                     <DatePicker
                       id='recordingDate'
@@ -358,6 +518,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
                       value={testResult.recordingDate}
                       onChange={(id, value) => onResultChange(id, value, index)}
                       disabled={readOnly}
+                      errorText={viabilityFieldsErrors[`recordingDate${index}`]}
                     />
                   </Grid>
                   <Grid item xs={12} marginLeft={1} display='flex'>
@@ -368,6 +529,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
                       id='seedsGerminated'
                       value={testResult.seedsGerminated}
                       disabled={readOnly}
+                      errorText={viabilityFieldsErrors[`seedsGerminated${index}`]}
                     />
                     <IconButton
                       id={`delete-result${index}`}
