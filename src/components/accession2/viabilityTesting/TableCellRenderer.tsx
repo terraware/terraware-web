@@ -76,14 +76,22 @@ export default function Renderer(props: RendererProps<TableRowType>): JSX.Elemen
   }
 
   if (column.key === 'viabilityPercent') {
-    const { viabilityPercent } = row;
-    if (!row.endDate || row.viabilityPercent === undefined) {
+    const { testType, viabilityPercent, seedsFilled, seedsCompromised, seedsTested } = row;
+
+    const getViabilityPercent = () => {
+      if (testType !== 'Cut') {
+        return viabilityPercent;
+      }
+      return Math.floor(((seedsFilled + seedsCompromised) / seedsTested) * 100);
+    };
+
+    if (testType !== 'Cut' && (!row.endDate || row.viabilityPercent === undefined)) {
       return (
         <CellRenderer {...defaultProps} value={getValue(<Icon name='iconSynced' className={classes.syncIcon} />)} />
       );
     }
 
-    return <CellRenderer {...defaultProps} value={getValue(`${viabilityPercent}%`, { fontWeight: 500 })} />;
+    return <CellRenderer {...defaultProps} value={getValue(`${getViabilityPercent()}%`, { fontWeight: 500 })} />;
   }
 
   return <CellRenderer {...props} />;

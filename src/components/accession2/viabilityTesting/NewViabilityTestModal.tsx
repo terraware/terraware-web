@@ -142,8 +142,8 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
       record?.testResults.forEach((_tr, index) => {
         setIndividualError(`seedsGerminated${index}`, '');
       });
-      return true;
     }
+    return true;
   };
 
   const validateRecordingDate = () => {
@@ -175,11 +175,11 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
       record?.testResults.forEach((_tr, index) => {
         setIndividualError(`recordingDate${index}`, '');
       });
-      return true;
     }
+    return true;
   };
 
-  const MANDATORY_FIELDS = ['testType', 'startDate', 'seedsTested'] as const;
+  const MANDATORY_FIELDS = ['testType', 'startDate'] as const;
 
   const CUT_MANDATORY_FIELDS = ['seedsFilled', 'seedsCompromised', 'seedsEmpty'] as const;
 

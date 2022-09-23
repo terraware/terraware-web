@@ -84,7 +84,9 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
         const response = await getAccession2(parseInt(accessionId, 10));
         if (!_.isEqual(response, accession)) {
           setAccession(response);
-          setHasPendingTests(response?.viabilityTests?.some((test) => !test.endDate) || false);
+          setHasPendingTests(
+            response?.viabilityTests?.some((test) => test.testType !== 'Cut' && !test.endDate) || false
+          );
         }
       } catch {
         snackbar.toastError();
