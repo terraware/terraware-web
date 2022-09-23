@@ -75,3 +75,37 @@ export const putViabilityTest = async (
 
   return response;
 };
+
+export type ViabilityTestDeleteResponse =
+  paths[typeof VIABILITY_TEST_ENDPOINT]['delete']['responses'][200]['content']['application/json'];
+
+type DeleteViabilityTestResponse = {
+  requestSucceeded: boolean;
+};
+
+export const deleteViabilityTest = async (
+  accessionId: number,
+  viabilityTestId: number
+): Promise<DeleteViabilityTestResponse> => {
+  const response: DeleteViabilityTestResponse = {
+    requestSucceeded: true,
+  };
+
+  try {
+    const serverResponse: ViabilityTestDeleteResponse = (
+      await axios.delete(
+        VIABILITY_TEST_ENDPOINT.replace('{accessionId}', accessionId.toString()).replace(
+          '{viabilityTestId}',
+          viabilityTestId.toString()
+        )
+      )
+    ).data;
+    if (serverResponse.status === 'error') {
+      response.requestSucceeded = false;
+    }
+  } catch {
+    response.requestSucceeded = false;
+  }
+
+  return response;
+};

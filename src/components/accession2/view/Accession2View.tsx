@@ -311,6 +311,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
                 setSelectedTest(undefined);
               }}
               onEdit={() => setOpenNewViabilityTest(true)}
+              reload={reloadData}
             />
           )}
 
