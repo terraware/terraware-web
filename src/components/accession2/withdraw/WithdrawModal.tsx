@@ -130,13 +130,24 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
 
   const onSelectAll = (id: string, value: boolean) => {
     if (!withdrawAllSelected) {
-      setRecord({
-        ...record,
-        withdrawnQuantity: {
-          quantity: accession.remainingQuantity?.quantity || 0,
-          units: accession.remainingQuantity?.units || 'Grams',
-        },
-      });
+      if (record.purpose === 'Viability Testing') {
+        // if purpose is VT we use estimated count
+        setRecord({
+          ...record,
+          withdrawnQuantity: {
+            quantity: accession.estimatedCount ? accession.estimatedCount : 0,
+            units: 'Seeds',
+          },
+        });
+      } else {
+        setRecord({
+          ...record,
+          withdrawnQuantity: {
+            quantity: accession.remainingQuantity?.quantity || 0,
+            units: accession.remainingQuantity?.units || 'Grams',
+          },
+        });
+      }
     } else {
       setRecord({
         ...record,
@@ -269,7 +280,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
               value={record.withdrawnQuantity?.quantity.toString()}
               errorText={fieldsErrors.withdrawnQuantity}
             />
-            {accession.remainingQuantity?.units === 'Seeds' ? (
+            {accession.remainingQuantity?.units === 'Seeds' || record.purpose === 'Viability Testing' ? (
               <Box>{strings.CT}</Box>
             ) : (
               <Dropdown
