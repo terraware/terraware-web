@@ -61,7 +61,7 @@ const COLUMNS: DatabaseColumn[] = [
     filter: { type: 'date_range' },
   },
   {
-    key: 'siteLocation',
+    key: 'collectionSiteName',
     name: strings.SITE_LOCATION,
     type: 'string',
     filter: { type: 'search' },
@@ -103,7 +103,7 @@ const COLUMNS: DatabaseColumn[] = [
     filter: { type: 'search' },
   },
   {
-    key: 'landowner',
+    key: 'collectionSiteLandowner',
     name: strings.LANDOWNER,
     type: 'string',
     filter: { type: 'search' },
@@ -363,7 +363,7 @@ export const defaultPreset: Preset = {
     'accessionNumber',
     'speciesName',
     'state',
-    'siteLocation',
+    'collectionSiteName',
     'collectedDate',
     'ageMonths',
     'estimatedWeightGrams',
@@ -376,8 +376,8 @@ const generalInventoryPreset: Preset = {
   fields: [
     'accessionNumber',
     'speciesName',
-    'siteLocation',
-    'landowner',
+    'collectionSiteName',
+    'collectionSiteLandowner',
     'active',
     'state',
     'collectedDate',

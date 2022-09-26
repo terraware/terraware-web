@@ -175,7 +175,7 @@ export default function CheckIn(props: CheckInProps): JSX.Element {
                                 {result.accessionNumber as string}
                               </TableCell>
                               <TableCell>{result.speciesName as string}</TableCell>
-                              <TableCell>{result.siteLocation as string}</TableCell>
+                              <TableCell>{result.collectionSiteName as string}</TableCell>
                               <TableCell>{result.collectedDate as string}</TableCell>
                               <TableCell>{result.receivedDate as string}</TableCell>
                               <TableCell>
