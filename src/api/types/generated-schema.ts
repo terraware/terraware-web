@@ -616,7 +616,7 @@ export interface components {
       /** Which organization this facility belongs to. */
       organizationId: number;
       name: string;
-      type: "Seed Bank" | "Desalination" | "Reverse Osmosis";
+      type: "Seed Bank" | "Desalination" | "Reverse Osmosis" | "Nursery";
     };
     CreateFacilityResponsePayload: {
       id: number;
@@ -771,7 +771,7 @@ export interface components {
       id: number;
       name: string;
       organizationId: number;
-      type: "Seed Bank" | "Desalination" | "Reverse Osmosis";
+      type: "Seed Bank" | "Desalination" | "Reverse Osmosis" | "Nursery";
     };
     FieldNodePayload: components["schemas"]["SearchNodePayload"] & {
       field?: string;
@@ -1059,8 +1059,8 @@ export interface components {
       name: string;
       description?: string;
       configuration?: { [key: string]: unknown };
-      settings?: { [key: string]: { [key: string]: unknown } };
       type: string;
+      settings?: { [key: string]: { [key: string]: unknown } };
       timeseriesName?: string;
       deviceId?: number;
       lowerThreshold?: number;
@@ -1512,7 +1512,6 @@ export interface components {
         | "Moss"
         | "Perlite/Vermiculite";
       testResults?: components["schemas"]["ViabilityTestResultPayload"][];
-      testType: "Lab" | "Nursery" | "Cut";
       treatment?:
         | "Soak"
         | "Scarify"
