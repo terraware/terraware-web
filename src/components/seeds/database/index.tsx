@@ -1,4 +1,14 @@
-import { Box, CircularProgress, Container, Grid, Paper, Typography } from '@mui/material';
+import {
+  Box,
+  CircularProgress,
+  Container,
+  Grid,
+  Paper,
+  Popover,
+  Typography,
+  Button as ButtonMUI,
+  IconButton,
+} from '@mui/material';
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -47,6 +57,8 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import featureEnabled from 'src/features';
+import ImportAccessionsModal from './ImportAccessionsModal';
+import { Icon } from '@terraware/web-components';
 
 interface StyleProps {
   isMobile: boolean;
@@ -178,6 +190,8 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const [searchSummaryResults, setSearchSummaryResults] = useState<SearchSummaryResponsePayload | null>();
   const [unfilteredResults, setUnfilteredResults] = useState<SearchResponseElement[] | null>();
   const [selectSeedBankModalOpen, setSelectSeedBankModalOpen] = useState<boolean>(false);
+  const [selectSeedBankForImportModalOpen, setSelectSeedBankForImportModalOpen] = useState<boolean>(false);
+  const [openImportModal, setOpenImportModal] = useState<boolean>(false);
 
   useEffect(() => {
     // if url has stage=<accession state>, apply that filter
@@ -325,10 +339,12 @@ export default function Database(props: DatabaseProps): JSX.Element {
   };
 
   const onOpenEditColumnsModal = () => {
+    setAnchorEl(null);
     setEditColumnsModalOpen(true);
   };
 
   const onDownloadReport = () => {
+    setAnchorEl(null);
     setReportModalOpen(true);
   };
 
@@ -407,33 +423,108 @@ export default function Database(props: DatabaseProps): JSX.Element {
     }
   };
 
+  const onSeedBankForImportSelected = (selectedFacility: Facility | undefined) => {
+    setSelectSeedBankForImportModalOpen(false);
+    if (selectedFacility) {
+      setSelectedOrgInfo({ ...selectedOrgInfo, selectedFacility });
+      setOpenImportModal(true);
+    }
+  };
+
+  const importAccessions = () => {
+    setSelectSeedBankForImportModalOpen(true);
+  };
+
+  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
+  const open = Boolean(anchorEl);
+  const id = open ? 'simple-popover' : undefined;
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   const getHeaderButtons = () => (
     <>
-      <Button
-        id='edit-columns'
-        label={strings.ADD_COLUMNS}
-        onClick={onOpenEditColumnsModal}
-        priority='secondary'
-        type='passive'
-        size='medium'
-        className={classes.buttonSpc}
-      />
-      <Button
-        id='download-report'
-        label={strings.DOWNLOAD_AS_REPORT}
-        onClick={onDownloadReport}
-        priority='secondary'
-        type='passive'
-        size='medium'
-        className={classes.buttonSpc}
-      />
+      <ButtonMUI
+        id='more-options'
+        aria-describedby={id}
+        variant='contained'
+        onClick={handleClick}
+        sx={{
+          borderRadius: '40px',
+          width: '40px',
+          minWidth: '40px',
+          color: '#0067C8',
+          background: '#fff',
+          border: '2px solid #0067C8',
+          padding: 0,
+          fontSize: '20px',
+          marginRight: 1,
+        }}
+      >
+        ...
+      </ButtonMUI>
+      <Popover
+        id={id}
+        open={open}
+        anchorEl={anchorEl}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+      >
+        <Box padding={2}>
+          <Box>
+            <IconButton
+              onClick={() => onDownloadReport()}
+              sx={{ ':hover': { background: 'none' } }}
+              id='download-report'
+            >
+              <Icon name='export' />
+              <Typography sx={{ color: '#136BD3', paddingLeft: 1 }}>{strings.EXPORT_RECORDS}</Typography>
+            </IconButton>
+          </Box>
+          <Box>
+            <IconButton
+              onClick={() => onOpenEditColumnsModal()}
+              sx={{ ':hover': { background: 'none' } }}
+              id='edit-columns'
+            >
+              <Icon name='iconColumns' />
+
+              <Typography sx={{ color: '#136BD3', paddingLeft: 1 }}>{strings.CUSTOMIZE_TABLE_COLUMNS}</Typography>
+            </IconButton>
+          </Box>
+        </Box>
+      </Popover>
+      <Box paddingRight={1} display='inline'>
+        <Button label={strings.IMPORT} size='medium' onClick={importAccessions} priority='secondary' />
+      </Box>
     </>
   );
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
+      {selectedOrgInfo.selectedFacility && (
+        <ImportAccessionsModal
+          open={openImportModal}
+          onClose={() => setOpenImportModal(false)}
+          facility={selectedOrgInfo.selectedFacility}
+        />
+      )}
       {organization && (
-        <SelectSeedBankModal organization={organization} open={selectSeedBankModalOpen} onClose={onSeedBankSelected} />
+        <>
+          <SelectSeedBankModal
+            organization={organization}
+            open={selectSeedBankModalOpen || selectSeedBankForImportModalOpen}
+            onClose={selectSeedBankModalOpen ? onSeedBankSelected : onSeedBankForImportSelected}
+          />
+        </>
       )}
       <TfMain>
         <EditColumns open={editColumnsModalOpen} value={displayColumnNames} onClose={onCloseEditColumnsModal} />

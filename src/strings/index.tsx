@@ -652,6 +652,14 @@ const strings = new LocalizedStrings({
     TOTAL_SEEDS_GERMINATED_ERROR: 'Germinated amount should not be more than tested amount.',
     INVALID_VALUE: 'Invalid Value',
     RECORDING_DATE_ERROR: 'This should be later than Start Date',
+    IMPORT: 'Import',
+    IMPORT_ACCESSIONS: 'Import Accessions',
+    IMPORT_ACCESSIONS_DESC: 'Browse or drag and drop a CSV with accessions.',
+    IMPORTING_ACCESSIONS: 'Importing accessions... this may take a few minutes.',
+    ACCESSIONS_IMPORT_COMPLETE: 'Accessions data import complete!',
+    DUPLICATED_ACCESSION_NUMBER: 'We found {0} duplicated accession numbers:',
+    EXPORT_RECORDS: 'Export records',
+    CUSTOMIZE_TABLE_COLUMNS: 'Customize table columns',
   },
 });
 
