@@ -658,6 +658,8 @@ const strings = new LocalizedStrings({
     IMPORTING_ACCESSIONS: 'Importing accessions... this may take a few minutes.',
     ACCESSIONS_IMPORT_COMPLETE: 'Accessions data import complete!',
     DUPLICATED_ACCESSION_NUMBER: 'We found {0} duplicated accession numbers:',
+    EXPORT_RECORDS: 'Export records',
+    CUSTOMIZE_TABLE_COLUMNS: 'Customize table columns',
   },
 });
 
