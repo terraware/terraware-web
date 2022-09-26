@@ -72,9 +72,9 @@ describe('Accessions', () => {
       cy.get('#collector1').type('Constanza');
       cy.get('#addCollectorButton').click();
       cy.get('#collector2').type('Leann');
-      cy.get('#siteLocation').type('Sunset Overdrive');
-      cy.get('#landowner').type('Yacin');
-      cy.get('#environmentalNotes').type('Cold day');
+      cy.get('#collectionSiteName').type('Sunset Overdrive');
+      cy.get('#collectionSiteLandowner').type('Yacin');
+      cy.get('#collectionSiteNotes').type('Cold day');
 
       cy.get('#saveAccession').click();
       cy.get('#snackbar').contains('Accession saved');
@@ -97,9 +97,9 @@ describe('Accessions', () => {
       cy.get('#collector0 > input').should('have.value', 'Carlos');
       cy.get('#collector1 > input').should('have.value', 'Constanza');
       cy.get('#collector2 > input').should('have.value', 'Leann');
-      cy.get('#siteLocation').should('have.value', 'Sunset Overdrive');
-      cy.get('#landowner').should('have.value', 'Yacin');
-      cy.get('#environmentalNotes').should('have.value', 'Cold day');
+      cy.get('#collectionSiteName').should('have.value', 'Sunset Overdrive');
+      cy.get('#collectionSiteLandowner').should('have.value', 'Yacin');
+      cy.get('#collectionSiteNotes').should('have.value', 'Cold day');
     });
 
     it('should check in the accession', () => {

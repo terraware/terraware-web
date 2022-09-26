@@ -83,7 +83,15 @@ export async function searchCsv(params: SearchRequestPayload): Promise<any> {
 export async function getPendingAccessions(organizationId: number): Promise<SearchResponseElement[] | null> {
   const searchParams: SearchRequestPayload = {
     prefix: 'facilities.accessions',
-    fields: ['accessionNumber', 'bagNumber', 'speciesName', 'siteLocation', 'collectedDate', 'receivedDate', 'id'],
+    fields: [
+      'accessionNumber',
+      'bagNumber',
+      'speciesName',
+      'collectionSiteName',
+      'collectedDate',
+      'receivedDate',
+      'id',
+    ],
     search: convertToSearchNodePayload(
       [
         {

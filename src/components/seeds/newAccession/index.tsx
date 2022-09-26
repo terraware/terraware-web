@@ -434,8 +434,8 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
         <Grid container spacing={4}>
           <Grid item xs={gridSize()}>
             <TextField
-              id='siteLocation'
-              value={record.siteLocation}
+              id='collectionSiteName'
+              value={record.collectionSiteName}
               onChange={onChange}
               label={strings.SITE}
               disabled={isPendingCheckIn || isContributor}
@@ -443,8 +443,8 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
           </Grid>
           <Grid item xs={gridSize()}>
             <TextField
-              id='landowner'
-              value={record.landowner}
+              id='collectionSiteLandowner'
+              value={record.collectionSiteLandowner}
               onChange={onChange}
               label={strings.LANDOWNER}
               disabled={isPendingCheckIn || isContributor}
@@ -453,8 +453,8 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
           {isMobile ? null : <Grid item xs={4} />}
           <Grid item xs={12}>
             <TextArea
-              id='environmentalNotes'
-              value={record.environmentalNotes}
+              id='collectionSiteNotes'
+              value={record.collectionSiteNotes}
               onChange={onChange}
               label={strings.ENVIRONMENTAL_NOTES}
               placeholder={strings.ENVIRONMENTAL_NOTES_PLACEHOLDER}

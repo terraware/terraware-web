@@ -158,7 +158,7 @@ const sections: Section[] = [
         COLUMNS_INDEXED.speciesName,
         COLUMNS_INDEXED.receivedDate,
         COLUMNS_INDEXED.collectedDate,
-        COLUMNS_INDEXED.siteLocation,
+        COLUMNS_INDEXED.collectionSiteName,
         COLUMNS_INDEXED.ageMonths,
         COLUMNS_INDEXED.estimatedCount,
       ],
@@ -172,7 +172,7 @@ const sections: Section[] = [
       [
         COLUMNS_INDEXED.treesCollectedFrom,
         COLUMNS_INDEXED.bagNumber,
-        COLUMNS_INDEXED.landowner,
+        COLUMNS_INDEXED.collectionSiteLandowner,
         COLUMNS_INDEXED.collectionNotes,
         COLUMNS_INDEXED.estimatedWeightGrams,
       ],
