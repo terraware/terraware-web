@@ -15,6 +15,7 @@ describe('Database', () => {
 
     it('should handle cancel edit columns action', () => {
       cy.visit('/accessions');
+      cy.get('#more-options').click();
       cy.get('#edit-columns').click();
 
       cy.get('#cancel').click();
@@ -36,6 +37,7 @@ describe('Database', () => {
       cy.intercept('POST', '/api/v1/search').as('search');
       cy.intercept('POST', '/api/v1/seedbank/values').as('values');
 
+      cy.get('#more-options').click();
       cy.get('#edit-columns').click();
 
       cy.get('#speciesName').click();
@@ -71,6 +73,7 @@ describe('Database', () => {
         cy.intercept('POST', '/api/v1/search').as('search2');
         cy.intercept('POST', '/api/v1/seedbank/values').as('values2');
 
+        cy.get('#more-options').click();
         cy.get('#edit-columns').click();
 
         cy.get('#General\\ Inventory').click();
@@ -99,6 +102,7 @@ describe('Database', () => {
         cy.intercept('POST', '/api/v1/search').as('search');
         cy.intercept('POST', '/api/v1/seedbank/values').as('values');
 
+        cy.get('#more-options').click();
         cy.get('#edit-columns').click();
 
         cy.get('#General\\ Inventory').click();
@@ -120,6 +124,7 @@ describe('Database', () => {
         cy.intercept('POST', '/api/v1/search').as('search');
         cy.intercept('POST', '/api/v1/seedbank/values').as('values');
 
+        cy.get('#more-options').click();
         cy.get('#edit-columns').click();
 
         cy.get('#Seed\\ Storage\\ Status').click();
@@ -148,6 +153,7 @@ describe('Database', () => {
         cy.intercept('POST', '/api/v1/search').as('search');
         cy.intercept('POST', '/api/v1/seedbank/values').as('values');
 
+        cy.get('#more-options').click();
         cy.get('#edit-columns').click();
 
         cy.get('#Viability\\ Summary').click();
@@ -182,6 +188,7 @@ describe('Database', () => {
         cy.intercept('POST', '/api/v1/search').as('search');
         cy.intercept('POST', '/api/v1/seedbank/values').as('values');
 
+        cy.get('#more-options').click();
         cy.get('#edit-columns').click();
 
         cy.get('#Viability\\ Testing\\ To\\ Do').click();
@@ -208,6 +215,7 @@ describe('Database', () => {
         cy.intercept('POST', '/api/v1/search').as('search');
         cy.intercept('POST', '/api/v1/seedbank/values').as('values');
 
+        cy.get('#more-options').click();
         cy.get('#edit-columns').click();
 
         cy.get('#Viability\\ Testing\\ To\\ Do').click();
@@ -244,6 +252,7 @@ describe('Database', () => {
 
       cy.intercept('POST', '/api/v1/search').as('search-c');
       cy.intercept('POST', '/api/v1/seedbank/values').as('values-c');
+      cy.get('#more-options').click();
       cy.get('#edit-columns').click();
       cy.get('#active').click();
       cy.get('#saveColumnsButton').click();
@@ -342,6 +351,7 @@ describe('Database', () => {
     it('Should download report', () => {
       cy.intercept('POST', '/api/v1/search').as('postReport');
 
+      cy.get('#more-options').click();
       cy.get('#download-report').click();
       cy.get('#reportName').type('report');
 
@@ -352,6 +362,7 @@ describe('Database', () => {
     it('Should search by SeedsRemaining - SeedCount', () => {
       cy.intercept('POST', '/api/v1/search').as('search-c');
       cy.intercept('POST', '/api/v1/seedbank/values').as('values-c');
+      cy.get('#more-options').click();
       cy.get('#edit-columns').click();
       cy.get('#remainingQuantity').click();
       cy.get('#totalQuantity').click();
@@ -578,6 +589,7 @@ describe('Database', () => {
 
       cy.intercept('POST', '/api/v1/search').as('search-c');
       cy.intercept('POST', '/api/v1/seedbank/values').as('values-c');
+      cy.get('#more-options').click();
       cy.get('#edit-columns').click();
       cy.get('#active').click();
       cy.get('#saveColumnsButton').click();
@@ -628,6 +640,7 @@ describe('Database', () => {
       cy.intercept('POST', '/api/v1/search').as('search2');
       cy.intercept('POST', '/api/v1/seedbank/values').as('values2');
 
+      cy.get('#more-options').click();
       cy.get('#edit-columns').click();
       cy.get('#species_rare').click();
       cy.get('#saveColumnsButton').click();

@@ -450,6 +450,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const getHeaderButtons = () => (
     <>
       <ButtonMUI
+        id='more-options'
         aria-describedby={id}
         variant='contained'
         onClick={handleClick}
@@ -479,13 +480,21 @@ export default function Database(props: DatabaseProps): JSX.Element {
       >
         <Box padding={2}>
           <Box>
-            <IconButton onClick={() => onDownloadReport()} sx={{ ':hover': { background: 'none' } }}>
+            <IconButton
+              onClick={() => onDownloadReport()}
+              sx={{ ':hover': { background: 'none' } }}
+              id='download-report'
+            >
               <Icon name='export' />
               <Typography sx={{ color: '#136BD3', paddingLeft: 1 }}>{strings.EXPORT_RECORDS}</Typography>
             </IconButton>
           </Box>
           <Box>
-            <IconButton onClick={() => onOpenEditColumnsModal()} sx={{ ':hover': { background: 'none' } }}>
+            <IconButton
+              onClick={() => onOpenEditColumnsModal()}
+              sx={{ ':hover': { background: 'none' } }}
+              id='edit-columns'
+            >
               <Icon name='iconColumns' />
 
               <Typography sx={{ color: '#136BD3', paddingLeft: 1 }}>{strings.CUSTOMIZE_TABLE_COLUMNS}</Typography>
