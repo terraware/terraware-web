@@ -3,7 +3,7 @@ import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useEffect, useRef, useState } from 'react';
 import { Facility } from 'src/api/types/facilities';
-import { GetUploadStatusResponsePayload, ResolveResponse, UploadFileResponse } from 'src/api/types/file';
+import { GetUploadStatusResponsePayload, ResolveResponse, UploadFileResponse } from 'src/api/types/uploadFile';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
 import Button from './button/Button';

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { GetUploadStatusResponsePayload, ResolveResponse, UploadFileResponse } from '../types/file';
+import { GetUploadStatusResponsePayload, ResolveResponse, UploadFileResponse } from '../types/uploadFile';
 import { paths } from '../types/generated-schema';
 
 const ACCESSIONS2_ROOT_ENDPOINT = '/api/v2/seedbank/accessions';
