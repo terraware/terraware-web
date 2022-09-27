@@ -2,6 +2,7 @@ import axios from 'src/api/index';
 import { paths } from 'src/api/types/generated-schema';
 import { Species, SpeciesRequestError } from 'src/types/Species';
 import addQueryParams from '../helpers/addQueryParams';
+import { GetUploadStatusResponsePayload, ResolveResponse, UploadFileResponse } from '../types/file';
 
 /*
  * All functions in this module ALWAYS returns a promise that resolves. All errors will be caught and
@@ -216,21 +217,17 @@ export async function getSpeciesDetails(scientificName: string) {
   return response;
 }
 
-type UploadSpeciesResponse = {
-  id: number;
-  requestSucceeded: boolean;
-};
 const UPLOAD_SPECIES_FILE = '/api/v1/species/uploads';
-type UploadSpeciesFileResponse =
+export type UploadSpeciesFileResponse =
   paths[typeof UPLOAD_SPECIES_FILE]['post']['responses'][200]['content']['application/json'];
 
-export async function uploadSpeciesFile(file: File, organizationId: number) {
-  const response: UploadSpeciesResponse = {
+export async function uploadSpeciesFile(file: File, organizationId: string) {
+  const response: UploadFileResponse = {
     id: -1,
     requestSucceeded: true,
   };
   const formData = new FormData();
-  formData.append('organizationId', organizationId.toString());
+  formData.append('organizationId', organizationId);
   formData.append('file', file);
   const config = {
     headers: {
@@ -253,10 +250,9 @@ export async function downloadSpeciesTemplate() {
 }
 
 const UPLOAD_STATUS = '/api/v1/species/uploads/{uploadId}';
-export type GetSpeciesUploadStatusResponsePayload =
-  paths[typeof UPLOAD_STATUS]['get']['responses'][200]['content']['application/json'];
-export async function getUploadStatus(uploadId: number): Promise<GetSpeciesUploadStatusResponsePayload> {
-  const serverResponse: GetSpeciesUploadStatusResponsePayload = (
+
+export async function getUploadStatus(uploadId: number): Promise<GetUploadStatusResponsePayload> {
+  const serverResponse: GetUploadStatusResponsePayload = (
     await axios.get(UPLOAD_STATUS.replace('{uploadId}', uploadId.toString()))
   ).data;
   return serverResponse;
@@ -264,7 +260,7 @@ export async function getUploadStatus(uploadId: number): Promise<GetSpeciesUploa
 
 const RESOLVE_SPECIES_UPLOAD = '/api/v1/species/uploads/{uploadId}/resolve';
 export async function resolveSpeciesUpload(uploadId: number, overwriteExisting: boolean) {
-  const response: UpdateSpeciesResponse = {
+  const response: ResolveResponse = {
     requestSucceeded: true,
   };
   try {

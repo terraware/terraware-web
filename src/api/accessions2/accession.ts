@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { GetUploadStatusResponsePayload, ResolveResponse, UploadFileResponse } from '../types/file';
 import { paths } from '../types/generated-schema';
 
 const ACCESSIONS2_ROOT_ENDPOINT = '/api/v2/seedbank/accessions';
@@ -121,16 +122,11 @@ export async function downloadAccessionsTemplate() {
   return response;
 }
 
-type UploadAccessionsResponse = {
-  id: number;
-  requestSucceeded: boolean;
-};
 const UPLOAD_ACCESSIONS_FILE = '/api/v2/seedbank/accessions/uploads';
 type UploadAccessionsFileResponse =
   paths[typeof UPLOAD_ACCESSIONS_FILE]['post']['responses'][200]['content']['application/json'];
-
 export async function uploadAccessionsFile(file: File, facilityId: string) {
-  const response: UploadAccessionsResponse = {
+  const response: UploadFileResponse = {
     id: -1,
     requestSucceeded: true,
   };
@@ -153,21 +149,16 @@ export async function uploadAccessionsFile(file: File, facilityId: string) {
 }
 
 const UPLOAD_ACCESSIONS_STATUS = '/api/v2/seedbank/accessions/uploads/{uploadId}';
-export type GetAccessionsUploadStatusResponsePayload =
-  paths[typeof UPLOAD_ACCESSIONS_STATUS]['get']['responses'][200]['content']['application/json'];
-export async function getAccessionsUploadStatus(uploadId: number): Promise<GetAccessionsUploadStatusResponsePayload> {
-  const serverResponse: GetAccessionsUploadStatusResponsePayload = (
+export async function getAccessionsUploadStatus(uploadId: number): Promise<GetUploadStatusResponsePayload> {
+  const serverResponse: GetUploadStatusResponsePayload = (
     await axios.get(UPLOAD_ACCESSIONS_STATUS.replace('{uploadId}', uploadId.toString()))
   ).data;
   return serverResponse;
 }
 
-type ResolveAccessionsResponse = {
-  requestSucceeded: boolean;
-};
 const RESOLVE_ACCESSIONS_UPLOAD = '/api/v2/seedbank/accessions/uploads/{uploadId}/resolve';
 export async function resolveAccessionsUpload(uploadId: number, overwriteExisting: boolean) {
-  const response: ResolveAccessionsResponse = {
+  const response: ResolveResponse = {
     requestSucceeded: true,
   };
   try {
