@@ -428,7 +428,6 @@ export interface components {
       estimatedCount?: number;
       estimatedWeight?: components["schemas"]["SeedQuantityPayload"];
       facilityId: number;
-      founderId?: string;
       /** Server-generated unique identifier for the accession. This is unique across all seed banks, but is not suitable for display to end users. */
       id: number;
       latestObservedQuantity?: components["schemas"]["SeedQuantityPayload"];
@@ -436,6 +435,7 @@ export interface components {
       latestObservedTime?: string;
       notes?: string;
       photoFilenames?: string[];
+      plantId?: string;
       /** Estimated number of plants the seeds were collected from. */
       plantsCollectedFrom?: number;
       receivedDate?: string;
@@ -542,8 +542,8 @@ export interface components {
       collectionSource?: "Wild" | "Reintroduced" | "Cultivated" | "Other";
       collectors?: string[];
       facilityId?: number;
-      founderId?: string;
       notes?: string;
+      plantId?: string;
       /** Estimated number of plants the seeds were collected from. */
       plantsCollectedFrom?: number;
       receivedDate?: string;
@@ -1061,11 +1061,11 @@ export interface components {
       configuration?: { [key: string]: unknown };
       type: string;
       settings?: { [key: string]: { [key: string]: unknown } };
-      timeseriesName?: string;
-      deviceId?: number;
       lowerThreshold?: number;
       upperThreshold?: number;
       verbosity: number;
+      timeseriesName?: string;
+      deviceId?: number;
     };
     /** Search criterion that matches results that do not match a set of search criteria. */
     NotNodePayload: components["schemas"]["SearchNodePayload"] & {
@@ -1394,8 +1394,8 @@ export interface components {
       collectors?: string[];
       dryingEndDate?: string;
       facilityId?: number;
-      founderId?: string;
       notes?: string;
+      plantId?: string;
       /** Estimated number of plants the seeds were collected from. */
       plantsCollectedFrom?: number;
       receivedDate?: string;

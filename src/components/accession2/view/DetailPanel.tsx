@@ -131,7 +131,7 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
               {`${strings.COLLECTED_FROM}${numPlants === undefined ? '' : ' ' + numPlants}${
                 collectionSource ? ' ' + collectionSource : ''
               } ${isNotPlural ? strings.PLANT : strings.PLANTS}`}
-              {accession.founderId ? <Typography>{`${strings.PLANT_ID}: ${accession.founderId}`}</Typography> : ''}
+              {accession.plantId ? <Typography>{`${strings.PLANT_ID}: ${accession.plantId}`}</Typography> : ''}
               {accession.notes}
             </Grid>
           </Grid>

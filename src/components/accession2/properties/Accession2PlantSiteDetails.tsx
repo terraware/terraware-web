@@ -56,8 +56,8 @@ export default function Accession2PlantSiteDetails(props: Accession2PlantSiteDet
         </Grid>
         <Grid item xs={gridSize()} sx={{ marginTop: isMobile ? theme.spacing(2) : 0 }}>
           <Textfield
-            id='founderId'
-            value={record.founderId}
+            id='plantId'
+            value={record.plantId}
             onChange={onChange}
             type='text'
             label={strings.PLANT_ID + ' ' + strings.IF_APPLICABLE}
