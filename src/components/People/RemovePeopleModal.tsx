@@ -23,7 +23,7 @@ export default function RemovePeopleDialog(props: RemovePeopleDialogProps): JSX.
       size='medium'
       middleButtons={[
         <Button label={strings.CANCEL} priority='secondary' type='passive' onClick={onClose} key='button-1' />,
-        <Button label={strings.REMOVE} type='destructive' onClick={onSubmit} key='button-2' />,
+        <Button label={strings.REMOVE} icon='iconTrashCan' type='destructive' onClick={onSubmit} key='button-2' />,
       ]}
       message={
         removedPeople.length > 1

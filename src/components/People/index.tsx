@@ -258,8 +258,9 @@ export default function PeopleList({ organization, reloadData, user }: PeopleLis
                     topBarButtons={[
                       {
                         buttonType: 'passive',
-                        buttonText: strings.REMOVE,
+                        ...(!isMobile && { buttonText: strings.REMOVE }),
                         onButtonClick: removeSelectedPeopleFromOrg,
+                        icon: 'iconTrashCan',
                       },
                     ]}
                   />

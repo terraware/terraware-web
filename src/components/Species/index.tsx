@@ -517,8 +517,9 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
                       ? [
                           {
                             buttonType: 'passive',
-                            buttonText: strings.DELETE,
+                            ...(!isMobile && { buttonText: strings.DELETE }),
                             onButtonClick: OnDeleteSpecies,
+                            icon: 'iconTrashCan',
                           },
                           {
                             buttonType: 'passive',
@@ -529,8 +530,9 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
                       : [
                           {
                             buttonType: 'passive',
-                            buttonText: strings.DELETE,
+                            ...(!isMobile && { buttonText: strings.DELETE }),
                             onButtonClick: OnDeleteSpecies,
+                            icon: 'iconTrashCan',
                           },
                         ]
                   }
