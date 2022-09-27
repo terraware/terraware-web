@@ -20,7 +20,7 @@ export default function CannotRemovePeopleDialog(props: CannotRemovePeopleDialog
       size='medium'
       middleButtons={[
         <Button label={strings.CANCEL} priority='secondary' type='passive' onClick={onClose} key='button-1' />,
-        <Button label={strings.DELETE} type='destructive' onClick={onSubmit} key='button-2' />,
+        <Button label={strings.DELETE} icon='iconTrashCan' type='destructive' onClick={onSubmit} key='button-2' />,
       ]}
       message={strings.CANNOT_REMOVE_MSG}
     />
