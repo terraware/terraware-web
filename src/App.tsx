@@ -1,5 +1,5 @@
 /* eslint-disable import/no-webpack-loader-syntax */
-import { CircularProgress, CssBaseline, Slide, StyledEngineProvider } from '@mui/material';
+import { CircularProgress, CssBaseline, Slide, StyledEngineProvider, Theme } from '@mui/material';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import { Redirect, Route, Switch } from 'react-router-dom';
@@ -52,7 +52,7 @@ import useEnvironment from 'src/utils/useEnvironment';
 import { Accession2Create, Accession2View } from './components/accession2';
 import OptInFeatures from './components/OptInFeatures';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme: Theme) => ({
   content: {
     height: '100%',
     paddingTop: '64px',
@@ -80,7 +80,7 @@ const useStyles = makeStyles(() => ({
     margin: 'auto',
     minHeight: '100vh',
     '& .MuiCircularProgress-svg': {
-      color: '#007DF2',
+      color: theme.palette.ClrIconFillProductive,
       height: '193px',
     },
   },
