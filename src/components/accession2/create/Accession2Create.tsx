@@ -20,7 +20,7 @@ import Textfield from 'src/components/common/Textfield/Textfield';
 import FormBottomBar from 'src/components/common/FormBottomBar';
 import Select from 'src/components/common/Select/Select';
 import { ACCESSION_2_CREATE_STATES } from 'src/types/Accession';
-import getDateDisplayValue from 'src/utils/date';
+import { getTodaysDateFormatted } from 'src/utils/date';
 import useSnackbar from 'src/utils/useSnackbar';
 
 type CreateAccessionProps = {
@@ -35,7 +35,7 @@ const SubTitleStyle = {
 const defaultAccession = (): AccessionPostRequestBody =>
   ({
     state: 'Awaiting Check-In',
-    receivedDate: getDateDisplayValue(Date.now()),
+    receivedDate: getTodaysDateFormatted(),
   } as AccessionPostRequestBody);
 
 const MANDATORY_FIELDS = ['speciesId', 'collectedDate', 'receivedDate', 'state', 'facilityId'] as const;
