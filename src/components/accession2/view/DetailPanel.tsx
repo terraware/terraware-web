@@ -135,8 +135,8 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
 
               {accession.collectionSiteCoordinates && accession.collectionSiteCoordinates.length > 0 ? (
                 <Box marginTop={2}>
-                  {accession.collectionSiteCoordinates?.map((coordinate) => (
-                    <Box>
+                  {accession.collectionSiteCoordinates?.map((coordinate, index) => (
+                    <Box key={`coordinates${index}`}>
                       {coordinate.longitude}, {coordinate.latitude}
                     </Box>
                   ))}
