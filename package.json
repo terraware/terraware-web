@@ -16,7 +16,7 @@
     "@mui/styled-engine-sc": "^5.8.0",
     "@mui/styles": "^5.8.7",
     "@mui/x-date-pickers": "^5.0.0-alpha.7",
-    "@terraware/web-components": "^1.0.28",
+    "@terraware/web-components": "^1.0.29",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
