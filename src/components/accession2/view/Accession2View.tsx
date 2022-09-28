@@ -448,12 +448,13 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
             </Box>
           </Box>
         )}
-        {accession?.facilityId !== undefined && accession?.storageLocation !== undefined && (
+        {accession?.facilityId !== undefined && (
           <Box sx={editableParentProps}>
             <Icon name='iconMyLocation' className={classes.iconStyle} />
             <Box sx={editableProps}>
               <Typography paddingLeft={1}>
-                {getSeedBank(organization, accession.facilityId)?.name} / {accession.storageLocation}
+                {getSeedBank(organization, accession.facilityId)?.name}
+                {accession.storageLocation ? ` / ${accession.storageLocation}` : ''}
               </Typography>
               <IconButton sx={{ marginLeft: 3, height: '24px' }} onClick={() => setOpenEditLocationModal(true)}>
                 <Icon name='iconEdit' className={`${classes.editIcon} edit-icon`} />

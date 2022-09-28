@@ -38,14 +38,7 @@ const defaultAccession = (): AccessionPostRequestBody =>
     receivedDate: getDateDisplayValue(Date.now()),
   } as AccessionPostRequestBody);
 
-const MANDATORY_FIELDS = [
-  'speciesId',
-  'collectedDate',
-  'receivedDate',
-  'state',
-  'facilityId',
-  'storageLocation',
-] as const;
+const MANDATORY_FIELDS = ['speciesId', 'collectedDate', 'receivedDate', 'state', 'facilityId'] as const;
 
 type MandatoryField = typeof MANDATORY_FIELDS[number];
 
