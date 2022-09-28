@@ -1,4 +1,5 @@
 import { Box, Grid, IconButton, Typography, useTheme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import { Icon } from '@terraware/web-components';
 import { useState } from 'react';
 import { Accession2 } from 'src/api/accessions2/accession';
@@ -27,12 +28,20 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
     padding: theme.spacing(2, 0),
   };
 
+  const useStyles = makeStyles(() => ({
+    folderIcon: {
+      fill: '#3A4445',
+      marginRight: theme.spacing(1),
+    },
+  }));
+
   const mainStructureSize = isMobile ? 12 : 9;
   const gridLeftSide = isMobile ? 12 : 4;
   const gridRightSide = isMobile ? 12 : 8;
   const [photosModalOpened, setPhotosModalOpened] = useState(false);
   const [selectedSlide, setSelectedSlide] = useState(0);
   const [openEditAccessionModal, setOpenEditAccessionModal] = useState(false);
+  const classes = useStyles();
 
   const getCollectionSource = () => {
     const source = accession?.collectionSource;
@@ -104,23 +113,37 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
             <Grid item xs={gridRightSide}>
               {accession.collectionSiteName}
               {accession.collectionSiteLandowner ? (
-                <Typography>
+                <Typography color='#708284'>
                   ({strings.OWNER}: {accession.collectionSiteLandowner})
                 </Typography>
               ) : (
                 ''
               )}
-              {accession.collectionSiteCity &&
-              accession.collectionSiteCountrySubdivision &&
-              accession.collectionSiteCountryCode
-                ? `${accession.collectionSiteCity}, ${accession.collectionSiteCountrySubdivision},
+              {accession.collectionSiteCity && accession.collectionSiteCountryCode
+                ? `${accession.collectionSiteCity}, ${
+                    accession.collectionSiteCountrySubdivision ? `${accession.collectionSiteCountrySubdivision}, ` : ''
+                  }
               ${accession.collectionSiteCountryCode}`
                 : ''}
-              {accession.collectionSiteCoordinates && accession.collectionSiteCoordinates.length > 0
-                ? accession.collectionSiteCoordinates?.map(
-                    (coordinate) => `${coordinate.longitude},  ${coordinate.latitude}`
-                  )
-                : ''}
+
+              {accession.collectionSiteNotes && (
+                <Box marginTop={2} display='flex'>
+                  <Icon name='folder' className={classes.folderIcon} />
+                  <Typography>{accession.collectionSiteNotes}</Typography>
+                </Box>
+              )}
+
+              {accession.collectionSiteCoordinates && accession.collectionSiteCoordinates.length > 0 ? (
+                <Box marginTop={2}>
+                  {accession.collectionSiteCoordinates?.map((coordinate) => (
+                    <Box>
+                      {coordinate.longitude}, {coordinate.latitude}
+                    </Box>
+                  ))}
+                </Box>
+              ) : (
+                ''
+              )}
             </Grid>
           </Grid>
           <Grid item xs={12} sx={gridRowStyle}>
@@ -132,7 +155,10 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
                 collectionSource ? ' ' + collectionSource : ''
               } ${isNotPlural ? strings.PLANT : strings.PLANTS}`}
               {accession.plantId ? <Typography>{`${strings.PLANT_ID}: ${accession.plantId}`}</Typography> : ''}
-              {accession.notes}
+              <Box marginTop={2} display='flex'>
+                <Icon name='folder' className={classes.folderIcon} />
+                <Typography>{accession.notes}</Typography>
+              </Box>
             </Grid>
           </Grid>
           <Grid item xs={12} sx={gridRowStyle}>
