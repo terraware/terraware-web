@@ -56,11 +56,10 @@ export default function SeedBank2Selector(props: SeedBank2SelectorProps): JSX.El
       </Grid>
       <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }}>
         <StorageSubLocationSelector
-          label={strings.SUB_LOCATION_REQUIRED}
+          label={strings.SUB_LOCATION}
           selectedStorageSubLocation={record.storageLocation}
           storageSubLocations={storageLocations.map((obj) => obj.storageLocation)}
           onChange={(value: string) => onChange('storageLocation', value)}
-          errorText={validate && !record.storageLocation ? strings.REQUIRED_FIELD : ''}
         />
       </Grid>
     </Grid>
