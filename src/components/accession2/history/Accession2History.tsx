@@ -57,7 +57,7 @@ export default function Accession2History(props: Accession2HistoryProps): JSX.El
           <Typography whiteSpace='pre' marginRight={theme.spacing(3)}>
             {item.date}
           </Typography>
-          <Typography sx={{ wordBreak: 'break-all' }}>
+          <Typography>
             {item.fullName || strings.NAME_UNKNOWN}&nbsp;{item.description}
           </Typography>
         </Box>
