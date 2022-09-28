@@ -82,7 +82,13 @@ export default function Accession2EditModal(props: Accession2EditModalProps): JS
             readonly={true}
           />
         </Grid>
-        <Species2Dropdown record={record} organization={organization} setRecord={setRecord} validate={validateFields} />
+        <Species2Dropdown
+          speciesId={record.speciesId}
+          record={record}
+          organization={organization}
+          setRecord={setRecord}
+          validate={validateFields}
+        />
         <CollectedReceivedDate2 record={record} onChange={onChange} type='collected' validate={validateFields} />
         <Grid item xs={12}>
           <Collectors2
