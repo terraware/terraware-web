@@ -182,7 +182,7 @@ export default function CreateAccession(props: CreateAccessionProps): JSX.Elemen
           />
         </Grid>
       </Container>
-      <FormBottomBar onCancel={goToAccessions} onSave={saveAccession} saveButtonText={strings.ADD} />
+      <FormBottomBar onCancel={goToAccessions} onSave={saveAccession} saveButtonText={strings.CREATE} />
     </Box>
   );
 }
