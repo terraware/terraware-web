@@ -7,7 +7,9 @@ import {
   Popover,
   Typography,
   Button as ButtonMUI,
-  IconButton,
+  MenuList,
+  MenuItem,
+  useTheme,
 } from '@mui/material';
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -149,6 +151,7 @@ type DatabaseProps = {
 export default function Database(props: DatabaseProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const classes = useStyles({ isMobile });
+  const theme = useTheme();
   const history = useHistory();
   const query = useQuery();
   const location = useStateLocation();
@@ -478,29 +481,16 @@ export default function Database(props: DatabaseProps): JSX.Element {
           horizontal: 'left',
         }}
       >
-        <Box padding={2}>
-          <Box>
-            <IconButton
-              onClick={() => onDownloadReport()}
-              sx={{ ':hover': { background: 'none' } }}
-              id='download-report'
-            >
-              <Icon name='export' />
-              <Typography sx={{ color: '#136BD3', paddingLeft: 1 }}>{strings.EXPORT_RECORDS}</Typography>
-            </IconButton>
-          </Box>
-          <Box>
-            <IconButton
-              onClick={() => onOpenEditColumnsModal()}
-              sx={{ ':hover': { background: 'none' } }}
-              id='edit-columns'
-            >
-              <Icon name='iconColumns' />
-
-              <Typography sx={{ color: '#136BD3', paddingLeft: 1 }}>{strings.CUSTOMIZE_TABLE_COLUMNS}</Typography>
-            </IconButton>
-          </Box>
-        </Box>
+        <MenuList sx={{ padding: theme.spacing(2, 0) }}>
+          <MenuItem onClick={() => onDownloadReport()} id='download-report' sx={{ padding: theme.spacing(1, 2) }}>
+            <Icon name='export' />
+            <Typography sx={{ color: '#136BD3', paddingLeft: 1 }}>{strings.EXPORT_RECORDS}</Typography>
+          </MenuItem>
+          <MenuItem onClick={() => onOpenEditColumnsModal()} id='edit-columns' sx={{ padding: theme.spacing(1, 2) }}>
+            <Icon name='iconColumns' />
+            <Typography sx={{ color: '#136BD3', paddingLeft: 1 }}>{strings.CUSTOMIZE_TABLE_COLUMNS}</Typography>
+          </MenuItem>
+        </MenuList>
       </Popover>
       {!isMobile && (
         <Box paddingRight={1} display='inline'>
