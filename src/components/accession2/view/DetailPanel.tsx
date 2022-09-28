@@ -128,7 +128,7 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
 
               {accession.collectionSiteNotes && (
                 <Box marginTop={2} display='flex'>
-                  <Icon name='folder' className={classes.folderIcon} />
+                  <Icon name='iconFile' className={classes.folderIcon} />
                   <Typography>{accession.collectionSiteNotes}</Typography>
                 </Box>
               )}
@@ -156,7 +156,7 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
               } ${isNotPlural ? strings.PLANT : strings.PLANTS}`}
               {accession.plantId ? <Typography>{`${strings.PLANT_ID}: ${accession.plantId}`}</Typography> : ''}
               <Box marginTop={2} display='flex'>
-                <Icon name='folder' className={classes.folderIcon} />
+                <Icon name='iconFile' className={classes.folderIcon} />
                 <Typography>{accession.notes}</Typography>
               </Box>
             </Grid>
