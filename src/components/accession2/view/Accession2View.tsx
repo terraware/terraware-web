@@ -259,7 +259,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
 
   const renderWithdrawalButton = () => {
     if (accession?.remainingQuantity?.quantity) {
-      return <Button onClick={() => setOpenWithdrawModal(true)} label={strings.WITHDRAW} />;
+      return <Button onClick={() => setOpenWithdrawModal(true)} label={strings.WITHDRAW} size='medium' />;
     }
     return null;
   };
@@ -402,14 +402,14 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
         </>
       )}
       <Box padding={3}>
-        <Box display='flex' justifyContent='space-between'>
+        <Box display='flex' justifyContent='space-between' alignItems='center'>
           <Typography>{accession?.accessionNumber}</Typography>
           <Box display='flex' alignItems='center'>
             <IconButton sx={{ marginLeft: 3, height: '24px' }} onClick={() => setOpenDeleteAccession(true)}>
               <Icon name='iconTrashCan' />
             </IconButton>
             {accession && accession.state === 'Awaiting Check-In' ? (
-              <Button onClick={() => checkInAccession()} label={strings.CHECK_IN} />
+              <Button onClick={() => checkInAccession()} label={strings.CHECK_IN} size='medium' />
             ) : (
               renderWithdrawalButton()
             )}
