@@ -18,7 +18,14 @@ type Accession2GPSProps = {
 export default function Accession2GPS(props: Accession2GPSProps): JSX.Element {
   const { record, onChange, opened } = props;
   const [isOpen, setIsOpen] = useState<boolean>(opened || false);
-  const [gpsCoordsList, setGpsCoordsList] = useState<string[]>(['']);
+  const [gpsCoordsList, setGpsCoordsList] = useState<string[]>(
+    (record.collectionSiteCoordinates?.length ? record.collectionSiteCoordinates : [undefined]).map((coord) => {
+      if (!coord) {
+        return '';
+      }
+      return `${coord.latitude}, ${coord.longitude}`;
+    })
+  );
   const theme = useTheme();
 
   useEffect(() => {

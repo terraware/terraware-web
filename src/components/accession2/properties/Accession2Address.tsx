@@ -94,28 +94,30 @@ export default function Accession2Address(props: Accession2AddressProps): JSX.El
           label={strings.CITY}
         />
       </Grid>
-      <Grid item xs={12} display='flex' flexDirection={isMobile ? 'column' : 'row'} marginTop={theme.spacing(2)}>
-        <Grid item xs={gridSize()} sx={{ marginRight: isMobile ? 0 : theme.spacing(2) }}>
-          <Autocomplete
-            id='collectionSiteCountrySubdivision'
-            selected={getSelectedSubdivision()?.name}
-            onChange={(index, value) => onChangeSubdivision(value)}
-            label={strings.STATE_PROVINCE_REGION}
-            values={getSelectedCountry()?.subdivisions?.map((subdivision) => subdivision.name) || []}
-            freeSolo={true}
-          />
+      {countries !== undefined && (
+        <Grid item xs={12} display='flex' flexDirection={isMobile ? 'column' : 'row'} marginTop={theme.spacing(2)}>
+          <Grid item xs={gridSize()} sx={{ marginRight: isMobile ? 0 : theme.spacing(2) }}>
+            <Autocomplete
+              id='collectionSiteCountryCode'
+              selected={getSelectedCountry()?.name}
+              onChange={(index, value) => onChangeCountry(value)}
+              label={strings.COUNTRY}
+              values={countries?.map((country) => country.name) || []}
+              freeSolo={true}
+            />
+          </Grid>
+          <Grid item xs={gridSize()} sx={{ marginTop: isMobile ? theme.spacing(2) : 0 }}>
+            <Autocomplete
+              id='collectionSiteCountrySubdivision'
+              selected={getSelectedSubdivision()?.name}
+              onChange={(index, value) => onChangeSubdivision(value)}
+              label={strings.STATE_PROVINCE_REGION}
+              values={getSelectedCountry()?.subdivisions?.map((subdivision) => subdivision.name) || []}
+              freeSolo={true}
+            />
+          </Grid>
         </Grid>
-        <Grid item xs={gridSize()} sx={{ marginTop: isMobile ? theme.spacing(2) : 0 }}>
-          <Autocomplete
-            id='collectionSiteCountryCode'
-            selected={getSelectedCountry()?.name}
-            onChange={(index, value) => onChangeCountry(value)}
-            label={strings.COUNTRY}
-            values={countries?.map((country) => country.name) || []}
-            freeSolo={true}
-          />
-        </Grid>
-      </Grid>
+      )}
       <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
         <Textfield
           id='collectionSiteNotes'
