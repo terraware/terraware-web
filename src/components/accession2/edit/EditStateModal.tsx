@@ -1,32 +1,27 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import strings from 'src/strings';
 import Button from 'src/components/common/button/Button';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
-import { Box, Grid, Typography } from '@mui/material';
-import { Icon, Select } from '@terraware/web-components';
 import { Accession2 } from 'src/api/accessions2/accession';
+import { ServerOrganization } from 'src/types/Organization';
 import useForm from 'src/utils/useForm';
 import { updateAccession2 } from 'src/api/accessions2/accession';
-import { ACCESSION_2_STATES } from 'src/types/Accession';
-import { makeStyles } from '@mui/styles';
-
-const useStyles = makeStyles(() => ({
-  messageIcon: {
-    fill: '#3A4445',
-  },
-}));
+import EditState from './EditState';
+import QuantityModal from './QuantityModal';
 
 export interface EditStateModalProps {
   open: boolean;
   accession: Accession2;
   onClose: () => void;
   reload: () => void;
+  organization: ServerOrganization;
 }
 
 export default function EditStateModal(props: EditStateModalProps): JSX.Element {
-  const classes = useStyles();
-  const { onClose, open, accession, reload } = props;
+  const { onClose, open, accession, reload, organization } = props;
   const [record, setRecord, onChange] = useForm(accession);
+  const [openQuantityModal, setOpenQuantityModal] = useState<boolean>(accession.state === 'Used Up');
+  const [calculatorOpen, setCalculatorOpen] = useState<boolean>(false);
 
   useEffect(() => {
     setRecord(accession);
@@ -42,21 +37,29 @@ export default function EditStateModal(props: EditStateModalProps): JSX.Element 
     }
   };
 
-  const getStatesForCurrentState = () => {
-    switch (accession.state) {
-      case 'Awaiting Check-In': {
-        return ['Awaiting Processing', 'Processing', 'Drying', 'In Storage', 'Used Up'];
-      }
-      case 'Awaiting Processing':
-      case 'Processing':
-      case 'Drying':
-      case 'In Storage': {
-        return ['Awaiting Processing', 'Processing', 'Drying', 'In Storage'];
-      }
-      default:
-        return ACCESSION_2_STATES;
-    }
-  };
+  if (openQuantityModal || calculatorOpen) {
+    return (
+      <QuantityModal
+        open={openQuantityModal}
+        onClose={() => {
+          setOpenQuantityModal(false);
+          onClose();
+        }}
+        accession={accession}
+        organization={organization}
+        reload={reload}
+        setOpen={() => {
+          setOpenQuantityModal(true);
+          setCalculatorOpen(false);
+        }}
+        statusEdit={true}
+        onCalculatorOpen={() => {
+          setOpenQuantityModal(false);
+          setCalculatorOpen(true);
+        }}
+      />
+    );
+  }
 
   return (
     <DialogBox
@@ -69,37 +72,7 @@ export default function EditStateModal(props: EditStateModalProps): JSX.Element 
         <Button onClick={saveState} label={strings.UPDATE} key='button-2' />,
       ]}
     >
-      <Grid item xs={12} textAlign='left'>
-        <Grid item xs={12}>
-          <Select
-            label={strings.STATUS}
-            placeholder={strings.SELECT}
-            options={getStatesForCurrentState()}
-            onChange={(value: string) => onChange('state', value)}
-            selectedValue={record?.state}
-            fullWidth={true}
-            readonly={true}
-          />
-        </Grid>
-      </Grid>
-      <Box
-        sx={{
-          background: '#FDE7C3',
-          borderRadius: '14px',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          padding: (theme) => theme.spacing(2, 1),
-          marginTop: (theme) => theme.spacing(4),
-        }}
-      >
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <Icon name='warning' className={classes.messageIcon} size='large' />
-          <Typography sx={{ color: '#000000', fontSize: '14px', paddingLeft: 1 }}>
-            {strings.UPDATE_STATUS_WARNING}
-          </Typography>
-        </Box>
-      </Box>
+      <EditState accession={accession} record={record} onChange={onChange} />
     </DialogBox>
   );
 }

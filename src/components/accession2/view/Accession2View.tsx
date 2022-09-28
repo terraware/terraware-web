@@ -354,6 +354,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
               onClose={() => setOpenEditStateModal(false)}
               accession={accession}
               reload={reloadData}
+              organization={organization}
             />
           )}
           {openEndDryingReminderModal && (
