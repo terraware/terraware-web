@@ -502,9 +502,11 @@ export default function Database(props: DatabaseProps): JSX.Element {
           </Box>
         </Box>
       </Popover>
-      <Box paddingRight={1} display='inline'>
-        <Button label={strings.IMPORT} size='medium' onClick={importAccessions} priority='secondary' />
-      </Box>
+      {!isMobile && (
+        <Box paddingRight={1} display='inline'>
+          <Button label={strings.IMPORT} size='medium' onClick={importAccessions} priority='secondary' />
+        </Box>
+      )}
     </>
   );
 
@@ -547,7 +549,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
           rightComponent={
             hasSeedBanks ? (
               <>
-                {isMobile ? null : getHeaderButtons()}
+                {getHeaderButtons()}
                 {organization &&
                   (isMobile ? (
                     <Button icon='plus' onClick={goToNewAccession} size='medium' id='newAccession' />
@@ -630,7 +632,6 @@ export default function Database(props: DatabaseProps): JSX.Element {
                     </Grid>
                   )}
                   <Grid item xs={12}>
-                    {isMobile === true && <div className={classes.headerButtonsContainer}>{getHeaderButtons()}</div>}
                     {searchResults && (
                       <Table
                         columns={displayColumnDetails}
