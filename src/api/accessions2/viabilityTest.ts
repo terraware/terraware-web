@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { paths } from '../types/generated-schema';
+import { addError } from './utils';
 
 const VIABILITY_TESTS_ENDPOINT = '/api/v2/seedbank/accessions/{accessionId}/viabilityTests';
 
@@ -11,6 +12,7 @@ export type ViabilityTestPostResponse =
 
 type CreateViabilityTestResponse = {
   requestSucceeded: boolean;
+  error?: string;
 };
 
 export const postViabilityTest = async (
@@ -27,9 +29,11 @@ export const postViabilityTest = async (
     ).data;
     if (serverResponse.status === 'error') {
       response.requestSucceeded = false;
+      addError(serverResponse, response);
     }
-  } catch {
+  } catch (e: any) {
     response.requestSucceeded = false;
+    addError(e?.response?.data || {}, response);
   }
 
   return response;
@@ -45,6 +49,7 @@ export type ViabilityTestUpdateResponse =
 
 type UpdateViabilityTestResponse = {
   requestSucceeded: boolean;
+  error?: string;
 };
 
 export const putViabilityTest = async (
@@ -68,9 +73,11 @@ export const putViabilityTest = async (
     ).data;
     if (serverResponse.status === 'error') {
       response.requestSucceeded = false;
+      addError(serverResponse, response);
     }
-  } catch {
+  } catch (e: any) {
     response.requestSucceeded = false;
+    addError(e?.response?.data || {}, response);
   }
 
   return response;

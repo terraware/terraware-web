@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { GetUploadStatusResponsePayload, ResolveResponse, UploadFileResponse } from '../types/uploadFile';
 import { paths } from '../types/generated-schema';
+import { addError } from './utils';
 
 const ACCESSIONS2_ROOT_ENDPOINT = '/api/v2/seedbank/accessions';
 const ACCESSIONS2_ENDPOINT = '/api/v2/seedbank/accessions/{id}';
@@ -23,6 +24,7 @@ export const getAccession2 = async (accessionId: number): Promise<Accession2> =>
 type UpdateAcccessionResponse = {
   requestSucceeded: boolean;
   accession: Accession2 | undefined;
+  error?: string;
 };
 
 type UpdateAccessionResponsePayloadV2 =
@@ -50,9 +52,11 @@ export const updateAccession2 = async (
     response.accession = serverResponse.accession;
     if (serverResponse.status === 'error') {
       response.requestSucceeded = false;
+      addError(serverResponse, response);
     }
-  } catch {
+  } catch (e: any) {
     response.requestSucceeded = false;
+    addError(e?.response?.data || {}, response);
   }
 
   return response;
@@ -67,6 +71,7 @@ export type AccessionPostRequestBody =
 type CreateAccessionResponse = {
   requestSucceeded: boolean;
   id: number;
+  error?: string;
 };
 
 export const postAccession = async (accession: AccessionPostRequestBody): Promise<CreateAccessionResponse> => {
@@ -78,8 +83,9 @@ export const postAccession = async (accession: AccessionPostRequestBody): Promis
   try {
     const serverResponse: AccessionPostResponse = (await axios.post(ACCESSIONS2_ROOT_ENDPOINT, accession)).data;
     response.id = serverResponse.accession.id;
-  } catch {
+  } catch (e: any) {
     response.requestSucceeded = false;
+    addError(e?.response?.data || {}, response);
   }
 
   return response;
