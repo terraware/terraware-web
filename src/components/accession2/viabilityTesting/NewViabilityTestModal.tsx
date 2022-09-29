@@ -221,7 +221,13 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
       if (response.requestSucceeded) {
         reload();
         onCloseHandler();
-        if ((testCompleted || record.testType === 'Cut') && !readOnly) {
+        const cutTestEdited =
+          record.testType === 'Cut' &&
+          (!viabilityTest ||
+            Number(record.seedsFilled) !== Number(viabilityTest.seedsFilled) ||
+            Number(record.seedsCompromised) !== Number(viabilityTest.seedsCompromised) ||
+            Number(record.seedsTested) !== Number(viabilityTest.seedsTested));
+        if ((testCompleted && !readOnly) || cutTestEdited) {
           setSavedRecord({ ...record });
           setOpenViabilityResultModal(true);
         }
