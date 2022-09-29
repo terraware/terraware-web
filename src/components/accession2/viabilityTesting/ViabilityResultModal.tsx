@@ -4,6 +4,7 @@ import { Accession2, updateAccession2 } from 'src/api/accessions2/accession';
 import strings from 'src/strings';
 import useSnackbar from 'src/utils/useSnackbar';
 import { ViabilityTest } from 'src/api/types/accessions';
+import { getCutTestViabilityPercent } from './utils';
 
 export interface ViabilityResultModalProps {
   open: boolean;
@@ -20,7 +21,7 @@ export default function ViabilityResultModal(props: ViabilityResultModalProps): 
 
   const saveResult = async () => {
     if (accession) {
-      const newAccession = { ...accession, viabilityPercent: getViabilityResult() };
+      const newAccession = { ...accession, viabilityPercent: getViabilityPercent() };
       const response = await updateAccession2(newAccession);
 
       if (response.requestSucceeded) {
@@ -32,7 +33,11 @@ export default function ViabilityResultModal(props: ViabilityResultModalProps): 
     }
   };
 
-  const getViabilityResult = () => {
+  const getViabilityPercent = () => {
+    if (viabilityTest?.testType === 'Cut') {
+      return getCutTestViabilityPercent(viabilityTest);
+    }
+
     let sum = 0;
     viabilityTest?.testResults?.forEach((tr) => {
       sum = sum + Number(tr.seedsGerminated);
@@ -56,7 +61,7 @@ export default function ViabilityResultModal(props: ViabilityResultModalProps): 
     >
       <Box padding={3}>
         <Typography color='#859799'>{strings.VIABILITY_RESULT}</Typography>
-        <Typography fontSize='24px'>{getViabilityResult()}%</Typography>
+        <Typography fontSize='24px'>{getViabilityPercent()}%</Typography>
       </Box>
 
       <Typography marginBottom={3}>{strings.APPLY_RESULT_QUESTION}</Typography>

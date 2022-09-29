@@ -197,7 +197,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
 
   const hasErrors = () => {
     if (record) {
-      const seedTestedError = !validateSeedsTested(record.seedsTested);
+      const seedTestedError = record.testType !== 'Cut' ? !validateSeedsTested(record.seedsTested) : false;
       const seedsGerminatedError = !validateSeedsGerminated();
       const recordingDateError = !validateRecordingDate();
       let missingRequiredField = MANDATORY_FIELDS.some((field: MandatoryField) => !record[field]);
@@ -230,7 +230,13 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
       if (response.requestSucceeded) {
         reload();
         onCloseHandler();
-        if (testCompleted && !readOnly) {
+        const cutTestEdited =
+          record.testType === 'Cut' &&
+          (!viabilityTest ||
+            Number(record.seedsFilled) !== Number(viabilityTest.seedsFilled) ||
+            Number(record.seedsCompromised) !== Number(viabilityTest.seedsCompromised) ||
+            Number(record.seedsTested) !== Number(viabilityTest.seedsTested));
+        if ((testCompleted && !readOnly) || cutTestEdited) {
           setSavedRecord({ ...record });
           setOpenViabilityResultModal(true);
         }
