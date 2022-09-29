@@ -364,6 +364,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
               onClose={() => setOpenEditStateModal(false)}
               accession={accession}
               reload={reloadData}
+              organization={organization}
             />
           )}
           {openEndDryingReminderModal && (
@@ -397,7 +398,6 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
             accession={accession}
             organization={organization}
             reload={reloadData}
-            setOpen={() => setOpenQuantityModal(true)}
           />
           {openViabilityModal && (
             <ViabilityModal
