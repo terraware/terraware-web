@@ -109,7 +109,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
         }
       } else {
         // only run this validation if editing an existing viability test
-        if (viabilityTest && value > (accession.estimatedCount || 0 + viabilityTest?.seedsTested)) {
+        if (viabilityTest && value > (accession.estimatedCount || 0 + viabilityTest.seedsTested)) {
           setIndividualError('seedsTested', strings.TOTAL_SEEDS_TESTED_ERROR);
           return false;
         }
