@@ -6,6 +6,7 @@ import { RendererProps } from 'src/components/common/table/types';
 import strings from 'src/strings';
 import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import { getCutTestViabilityPercent } from './utils';
 
 const useStyles = makeStyles(() => ({
   syncIcon: {
@@ -76,13 +77,13 @@ export default function Renderer(props: RendererProps<TableRowType>): JSX.Elemen
   }
 
   if (column.key === 'viabilityPercent') {
-    const { testType, viabilityPercent, seedsFilled, seedsCompromised, seedsTested } = row;
+    const { testType, viabilityPercent } = row;
 
     const getViabilityPercent = () => {
       if (testType !== 'Cut') {
         return viabilityPercent;
       }
-      return Math.floor(((seedsFilled + seedsCompromised) / seedsTested) * 100);
+      return getCutTestViabilityPercent(row);
     };
 
     if (testType !== 'Cut' && (!row.endDate || row.viabilityPercent === undefined)) {
