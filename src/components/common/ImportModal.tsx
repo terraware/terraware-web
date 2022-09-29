@@ -260,7 +260,7 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
           <Button
             onClick={handleCancel}
             id='cancel'
-            label={strings.CANCEL_IMPORT}
+            label={strings.CANCEL}
             priority='secondary'
             type='passive'
             className={classes.spacing}
@@ -309,7 +309,7 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
         warning ? (
           <Button
             onClick={handleCancel}
-            label={strings.CANCEL_IMPORT}
+            label={strings.CANCEL}
             priority='secondary'
             type='passive'
             size='medium'
