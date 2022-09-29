@@ -61,8 +61,6 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
       onCloseHandler();
     } else {
       snackbar.toastError(response.error);
-      setRecord(accession);
-      onCloseHandler();
     }
   };
 
