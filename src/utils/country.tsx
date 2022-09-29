@@ -10,5 +10,5 @@ export function getSubdivisionByCode(
   subdivisionCode: string
 ): Subdivision | undefined {
   const country = getCountryByCode(countries, countryCode);
-  return country?.subdivisions.find((subdivision) => subdivision.code.toString() === subdivisionCode);
+  return country?.subdivisions?.find((subdivision) => subdivision.code.toString() === subdivisionCode);
 }

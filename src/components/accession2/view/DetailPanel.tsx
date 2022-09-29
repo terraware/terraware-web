@@ -1,10 +1,13 @@
 import { Box, Grid, IconButton, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Icon } from '@terraware/web-components';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Accession2 } from 'src/api/accessions2/accession';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
+import { searchCountries } from 'src/api/country/country';
+import { getCountryByCode, getSubdivisionByCode } from 'src/utils/country';
+import { Country } from 'src/types/Country';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import Accession2EditModal from '../edit/Accession2EditModal';
 import ViewPhotosModal from './ViewPhotosModal';
@@ -41,7 +44,18 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
   const [photosModalOpened, setPhotosModalOpened] = useState(false);
   const [selectedSlide, setSelectedSlide] = useState(0);
   const [openEditAccessionModal, setOpenEditAccessionModal] = useState(false);
+  const [countries, setCountries] = useState<Country[]>();
   const classes = useStyles();
+
+  useEffect(() => {
+    const populateCountries = async () => {
+      const response = await searchCountries();
+      if (response) {
+        setCountries(response);
+      }
+    };
+    populateCountries();
+  }, []);
 
   const getCollectionSource = () => {
     const source = accession?.collectionSource;
@@ -59,6 +73,19 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
     }
 
     return strings.OTHER;
+  };
+
+  const getCollectionSiteAddress = () => {
+    const city = accession?.collectionSiteCity;
+    const country = accession?.collectionSiteCountryCode;
+    const subdivision = accession?.collectionSiteCountrySubdivision;
+    const data = [
+      city,
+      countries && country && subdivision ? getSubdivisionByCode(countries, country, subdivision)?.name : '',
+      countries && country ? getCountryByCode(countries, country)?.name : '',
+    ];
+
+    return data.filter((str) => str).join(', ');
   };
 
   const collectionSource = getCollectionSource();
@@ -127,12 +154,7 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
               ) : (
                 ''
               )}
-              {accession.collectionSiteCity && accession.collectionSiteCountryCode
-                ? `${accession.collectionSiteCity}, ${
-                    accession.collectionSiteCountrySubdivision ? `${accession.collectionSiteCountrySubdivision}, ` : ''
-                  }
-              ${accession.collectionSiteCountryCode}`
-                : ''}
+              {getCollectionSiteAddress()}
 
               {accession.collectionSiteNotes && (
                 <Box marginTop={2} display='flex'>
