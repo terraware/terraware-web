@@ -286,6 +286,7 @@ const strings = new LocalizedStrings({
     POUNDS: 'Pounds',
     UNITS: 'Units',
     REQUIRED_FIELD: 'Required field.',
+    REQUIRED_CHANGE: 'Required change.',
     SCHEDULED_FOR_TESTING: 'Scheduled for Testing',
     SCHEDULED_SEEDS: '{0} Seeds',
     SEND_TO_NURSERY: 'Send to Nursery',
@@ -550,7 +551,7 @@ const strings = new LocalizedStrings({
     DIRECTION_OR_DESCRIPTION: 'Direction or Description',
     GPS_COORDINATES: 'GPS Coordinates',
     COLLECTION_SOURCE: 'Collection Source',
-    UPDATE_STATUS_WARNING: 'You‘re about to update the staus',
+    UPDATE_STATUS_WARNING: 'You‘re about to update the status',
     ADD_AN_ACCESSION: 'Add an Accession',
     SEED_COLLECTION_DETAIL: 'Seed Collection Detail',
     SEED_PROCESSING_DETAIL: 'Seed Processing Detail',
@@ -660,6 +661,7 @@ const strings = new LocalizedStrings({
     EXPORT_RECORDS: 'Export records',
     CUSTOMIZE_TABLE_COLUMNS: 'Customize table columns',
     GO_TO_DASHBOARD: 'Go to Dashboard',
+    DONE: 'Done',
   },
 });
 

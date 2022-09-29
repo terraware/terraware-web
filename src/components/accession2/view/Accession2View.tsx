@@ -41,6 +41,9 @@ const useStyles = makeStyles(() => ({
     display: 'none',
     fill: '#3A4445',
   },
+  fullSizeButton: {
+    width: '100%',
+  },
 }));
 
 const TABS = ['detail', 'history', 'viabilityTesting'];
@@ -257,9 +260,16 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
     return '';
   };
 
-  const renderWithdrawalButton = () => {
+  const renderWithdrawalButton = (fullSize?: boolean) => {
     if (accession?.remainingQuantity?.quantity) {
-      return <Button onClick={() => setOpenWithdrawModal(true)} label={strings.WITHDRAW} size='medium' />;
+      return (
+        <Button
+          onClick={() => setOpenWithdrawModal(true)}
+          label={strings.WITHDRAW}
+          size='medium'
+          className={fullSize ? classes.fullSizeButton : ''}
+        />
+      );
     }
     return null;
   };
@@ -354,6 +364,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
               onClose={() => setOpenEditStateModal(false)}
               accession={accession}
               reload={reloadData}
+              organization={organization}
             />
           )}
           {openEndDryingReminderModal && (
@@ -387,7 +398,6 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
             accession={accession}
             organization={organization}
             reload={reloadData}
-            setOpen={() => setOpenQuantityModal(true)}
           />
           {openViabilityModal && (
             <ViabilityModal
@@ -404,16 +414,18 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
       <Box padding={3}>
         <Box display='flex' justifyContent='space-between' alignItems='center'>
           <Typography>{accession?.accessionNumber}</Typography>
-          <Box display='flex' alignItems='center'>
-            <IconButton sx={{ marginLeft: 3, height: '24px' }} onClick={() => setOpenDeleteAccession(true)}>
-              <Icon name='iconTrashCan' />
-            </IconButton>
-            {accession && accession.state === 'Awaiting Check-In' ? (
-              <Button onClick={() => checkInAccession()} label={strings.CHECK_IN} size='medium' />
-            ) : (
-              renderWithdrawalButton()
-            )}
-          </Box>
+          {!isMobile && (
+            <Box display='flex' alignItems='center'>
+              <IconButton sx={{ marginLeft: 3, height: '24px' }} onClick={() => setOpenDeleteAccession(true)}>
+                <Icon name='iconTrashCan' />
+              </IconButton>
+              {accession && accession.state === 'Awaiting Check-In' ? (
+                <Button onClick={() => checkInAccession()} label={strings.CHECK_IN} size='medium' />
+              ) : (
+                renderWithdrawalButton()
+              )}
+            </Box>
+          )}
         </Box>
         <Typography color='#343A40' fontSize='24px' fontStyle='italic' fontWeight={500}>
           {accession?.speciesScientificName}
@@ -521,6 +533,27 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
           )}
         </Box>
       </Box>
+
+      {isMobile && (
+        <Box display='flex' alignItems='center' paddingRight={2} marginBottom={4} marginTop={2}>
+          <IconButton sx={{ marginLeft: 3, height: '38px' }} onClick={() => setOpenDeleteAccession(true)}>
+            <Icon name='iconTrashCan' />
+          </IconButton>
+          <Box paddingLeft={2} width='100%'>
+            {accession && accession.state === 'Awaiting Check-In' ? (
+              <Button
+                onClick={() => checkInAccession()}
+                label={strings.CHECK_IN}
+                size='medium'
+                className={classes.fullSizeButton}
+              />
+            ) : (
+              renderWithdrawalButton(true)
+            )}
+          </Box>
+        </Box>
+      )}
+
       <Box sx={{ width: '100%' }}>
         <TabContext value={selectedTab}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
