@@ -101,9 +101,18 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
         setIndividualError('seedsTested', strings.INVALID_VALUE);
         return false;
       }
-      if (value > (accession.estimatedCount || 0)) {
-        setIndividualError('seedsTested', strings.TOTAL_SEEDS_TESTED_ERROR);
-        return false;
+      if (record?.id === -1) {
+        // only run this validation if creating a new viability test
+        if (value > (accession.estimatedCount || 0)) {
+          setIndividualError('seedsTested', strings.TOTAL_SEEDS_TESTED_ERROR);
+          return false;
+        }
+      } else {
+        // only run this validation if editing an existing viability test
+        if (viabilityTest && value > (accession.estimatedCount || 0 + viabilityTest.seedsTested)) {
+          setIndividualError('seedsTested', strings.TOTAL_SEEDS_TESTED_ERROR);
+          return false;
+        }
       }
     } else {
       setIndividualError('seedsTested', strings.REQUIRED_FIELD);
