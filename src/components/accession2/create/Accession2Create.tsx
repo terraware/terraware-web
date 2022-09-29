@@ -80,7 +80,7 @@ export default function CreateAccession(props: CreateAccessionProps): JSX.Elemen
         pathname: APP_PATHS.ACCESSIONS2_ITEM.replace(':accessionId', response.id.toString()),
       });
     } else {
-      snackbar.toastError();
+      snackbar.toastError(response.error);
     }
   };
 

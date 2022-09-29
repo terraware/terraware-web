@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { paths } from '../types/generated-schema';
+import { addError } from './utils';
 
 const WITHDRAWALS_ENDPOINT = '/api/v2/seedbank/accessions/{accessionId}/withdrawals';
 
@@ -11,6 +12,7 @@ export type WithdrawalsPostResponse =
 
 type CreateWithdrawalResponse = {
   requestSucceeded: boolean;
+  error?: string;
 };
 
 export const postWithdrawal = async (
@@ -27,9 +29,11 @@ export const postWithdrawal = async (
     ).data;
     if (serverResponse.status === 'error') {
       response.requestSucceeded = false;
+      addError(serverResponse, response);
     }
-  } catch {
+  } catch (e: any) {
     response.requestSucceeded = false;
+    addError(e?.response?.data || {}, response);
   }
 
   return response;

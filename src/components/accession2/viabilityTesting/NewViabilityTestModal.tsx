@@ -226,7 +226,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
           setOpenViabilityResultModal(true);
         }
       } else {
-        snackbar.toastError();
+        snackbar.toastError(response.error);
       }
     }
   };
