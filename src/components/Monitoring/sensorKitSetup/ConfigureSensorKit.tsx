@@ -44,7 +44,7 @@ export default function ConfigureSensorKit(props: ConfigureSensorKitProps): JSX.
       flowError={flowError}
       showNext={true}
       onNext={configureSensorKit}
-      buttonText={strings.TAKE_ME_THERE}
+      buttonText={strings.GO_TO_DASHBOARD}
       disableNext={processing}
       title={strings.SENSOR_KIT_SET_UP_COMPLETE}
       completed={false}
