@@ -83,13 +83,21 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
       />
       <Grid container>
         {isMobile ? (
-          <Grid item xs={12}>
+          <Grid item xs={12} display='flex' justifyContent='space-between'>
+            <Typography fontWeight={500}>{strings.ACCESSION_DETAIL}</Typography>
             <IconButton sx={{ marginLeft: 3, height: '24px' }} onClick={() => setOpenEditAccessionModal(true)}>
               <Icon name='iconEdit' />
             </IconButton>
           </Grid>
         ) : null}
         <Grid item xs={mainStructureSize}>
+          {!isMobile && (
+            <Grid item xs={12}>
+              <Typography fontSize='18px' fontWeight={500}>
+                {strings.ACCESSION_DETAIL}
+              </Typography>
+            </Grid>
+          )}
           <Grid item xs={12} sx={gridRowStyle}>
             <Grid item xs={gridLeftSide} sx={categoryStyle}>
               {strings.COLLECTION_DATE}
