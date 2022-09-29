@@ -15,17 +15,15 @@ import EditState from './EditState';
 
 export interface QuantityModalProps {
   open: boolean;
-  setOpen: () => void;
   accession: Accession2;
   onClose: () => void;
   reload: () => void;
   organization: ServerOrganization;
   statusEdit?: boolean;
-  onCalculatorOpen?: () => void;
 }
 
 export default function QuantityModal(props: QuantityModalProps): JSX.Element {
-  const { onClose, open, accession, reload, organization, setOpen, statusEdit, onCalculatorOpen } = props;
+  const { onClose, open, accession, reload, organization, statusEdit } = props;
 
   const [record, setRecord, onChange] = useForm(accession);
   const [isCalculatorOpened, setIsCalculatorOpened] = useState(false);
@@ -121,11 +119,6 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
 
   const openCalculator = () => {
     setIsCalculatorOpened(true);
-    if (onCalculatorOpen) {
-      onCalculatorOpen();
-    } else {
-      onClose();
-    }
   };
 
   return (
@@ -138,11 +131,11 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
         onChange={onChange}
         organization={organization}
         reload={reload}
-        onPrevious={setOpen}
+        onPrevious={() => setIsCalculatorOpened(false)}
       />
       <DialogBox
         onClose={onCloseHandler}
-        open={open}
+        open={open && !isCalculatorOpened}
         title={statusEdit ? strings.STATUS : strings.QUANTITY}
         size='small'
         middleButtons={[

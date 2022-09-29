@@ -20,8 +20,7 @@ export interface EditStateModalProps {
 export default function EditStateModal(props: EditStateModalProps): JSX.Element {
   const { onClose, open, accession, reload, organization } = props;
   const [record, setRecord, onChange] = useForm(accession);
-  const [openQuantityModal, setOpenQuantityModal] = useState<boolean>(accession.state === 'Used Up');
-  const [calculatorOpen, setCalculatorOpen] = useState<boolean>(false);
+  const [editUsedUpStatus] = useState<boolean>(accession.state === 'Used Up');
 
   useEffect(() => {
     setRecord(accession);
@@ -37,26 +36,15 @@ export default function EditStateModal(props: EditStateModalProps): JSX.Element 
     }
   };
 
-  if (openQuantityModal || calculatorOpen) {
+  if (editUsedUpStatus) {
     return (
       <QuantityModal
-        open={openQuantityModal}
-        onClose={() => {
-          setOpenQuantityModal(false);
-          onClose();
-        }}
+        open={editUsedUpStatus}
+        onClose={onClose}
         accession={accession}
         organization={organization}
         reload={reload}
-        setOpen={() => {
-          setOpenQuantityModal(true);
-          setCalculatorOpen(false);
-        }}
         statusEdit={true}
-        onCalculatorOpen={() => {
-          setOpenQuantityModal(false);
-          setCalculatorOpen(true);
-        }}
       />
     );
   }

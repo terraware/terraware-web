@@ -388,7 +388,6 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
             accession={accession}
             organization={organization}
             reload={reloadData}
-            setOpen={() => setOpenQuantityModal(true)}
           />
           {openViabilityModal && (
             <ViabilityModal
