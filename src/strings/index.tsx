@@ -660,6 +660,7 @@ const strings = new LocalizedStrings({
     DUPLICATED_ACCESSION_NUMBER: 'We found {0} duplicated accession numbers:',
     EXPORT_RECORDS: 'Export records',
     CUSTOMIZE_TABLE_COLUMNS: 'Customize table columns',
+    DONE: 'Done',
   },
 });
 
