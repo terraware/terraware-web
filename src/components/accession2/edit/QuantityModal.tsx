@@ -41,7 +41,8 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
         setStatusError(true);
         hasError = true;
       }
-      if (!record.remainingQuantity?.quantity) {
+      const quantity = parseFloat(record.remainingQuantity?.quantity as unknown as string);
+      if (isNaN(quantity) || quantity <= 0) {
         setQuantityError(true);
         hasError = true;
       }
