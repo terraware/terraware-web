@@ -61,6 +61,7 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
   // populateSummaryInterval value is only being used when it is set.
   const [, setPopulateSummaryInterval] = useState<ReturnType<typeof setInterval>>();
   const [summary, setSummary] = useState<GetSummaryResponse>();
+  const [isEmptyState, setIsEmptyState] = useState<boolean>(false);
   const errorOccurred = summary ? summary.errorOccurred : false;
   const [, setSelectedOrgInfo] = useRecoilState(seedsSummarySelectedOrgInfo);
   const { isMobile } = useDeviceInfo();
@@ -72,7 +73,11 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
         organization && organization.facilities?.find((facility) => facility.name === 'Seed Bank');
 
       const populateSummary = async () => {
-        setSummary(await getSummary(organization.id));
+        const response = await getSummary(organization.id);
+        if (!response.value?.activeAccessions) {
+          setIsEmptyState(true);
+        }
+        setSummary(response);
       };
 
       // Update summary information
@@ -118,26 +123,28 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
       <Container maxWidth={false} className={classes.mainContainer}>
         {organization && summary ? (
           <Grid container spacing={3}>
-            <Grid item xs={12}>
-              <Box
-                sx={{
-                  background: '#F2F4F5',
-                  borderRadius: '14px',
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  padding: (theme) => theme.spacing(3, 4),
-                }}
-              >
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <Icon name='seedbankNav' className={classes.messageIcon} size='large' />
-                  <Typography sx={{ color: '#000000', size: '20px', paddingLeft: 1 }}>
-                    {strings.DASHBOARD_MESSAGE}
-                  </Typography>
+            {isEmptyState === true && (
+              <Grid item xs={12}>
+                <Box
+                  sx={{
+                    background: '#F2F4F5',
+                    borderRadius: '14px',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    padding: (theme) => theme.spacing(3, 4),
+                  }}
+                >
+                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <Icon name='seedbankNav' className={classes.messageIcon} size='large' />
+                    <Typography sx={{ color: '#000000', size: '20px', paddingLeft: 1 }}>
+                      {strings.DASHBOARD_MESSAGE}
+                    </Typography>
+                  </Box>
+                  <Button label={strings.GET_STARTED} onClick={() => history.push(APP_PATHS.ACCESSIONS)} />
                 </Box>
-                <Button label={strings.GET_STARTED} onClick={() => history.push(APP_PATHS.ACCESSIONS)} />
-              </Box>
-            </Grid>
+              </Grid>
+            )}
             <Grid item xs={12}>
               <Grid container spacing={3}>
                 <Grid item xs={cardGridSize()}>
