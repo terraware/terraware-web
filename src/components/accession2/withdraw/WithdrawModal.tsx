@@ -36,10 +36,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
     purpose: 'Nursery',
     withdrawnByUserId: user.id,
     date: getTodaysDateFormatted(),
-    withdrawnQuantity:
-      accession.remainingQuantity?.units === 'Seeds'
-        ? { quantity: 0, units: 'Seeds' }
-        : { quantity: 0, units: accession.remainingQuantity?.units || 'Grams' },
+    withdrawnQuantity: undefined,
     notes: '',
   };
 
@@ -102,7 +99,13 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
     if (record) {
       setRecord({
         ...record,
-        withdrawnQuantity: { quantity: value || 0, units: record.withdrawnQuantity?.units || 'Grams' },
+        withdrawnQuantity:
+          value.toString().trim() === ''
+            ? undefined
+            : {
+                quantity: value || 0,
+                units: record.withdrawnQuantity?.units || accession.remainingQuantity?.units || 'Grams',
+              },
       });
     }
   };
@@ -128,8 +131,8 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
     }
   };
 
-  const onSelectAll = (id: string, value: boolean) => {
-    if (!withdrawAllSelected) {
+  const onSelectAll = (id: string, withdrawAll: boolean) => {
+    if (withdrawAll) {
       if (record.purpose === 'Viability Testing') {
         // if purpose is VT we use estimated count
         setRecord({
@@ -142,23 +145,22 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
       } else {
         setRecord({
           ...record,
-          withdrawnQuantity: {
-            quantity: accession.remainingQuantity?.quantity || 0,
-            units: accession.remainingQuantity?.units || 'Grams',
-          },
+          withdrawnQuantity: accession.remainingQuantity
+            ? {
+                quantity: accession.remainingQuantity.quantity,
+                units: accession.remainingQuantity.units,
+              }
+            : undefined,
         });
       }
     } else {
       setRecord({
         ...record,
-        withdrawnQuantity: {
-          quantity: 0,
-          units: 'Grams',
-        },
+        withdrawnQuantity: undefined,
       });
     }
 
-    setWithdrawAllSelected(!withdrawAllSelected);
+    setWithdrawAllSelected(withdrawAll);
   };
 
   const onChangeDate = (id: string, value?: any) => {
