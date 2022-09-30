@@ -279,7 +279,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
     right: isMobile ? 0 : `-${themeObj.spacing(1)}`,
   };
 
-  const editableProps = {
+  const readOnlyProps = {
     display: 'flex',
     whiteSpace: 'pre',
     '&:hover .edit-icon': {
@@ -293,6 +293,10 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
     alignItems: 'center',
     justifyContent: isMobile ? 'space-between' : 'normal',
     width: isMobile ? '100%' : 'auto',
+  };
+
+  const editableProps = {
+    ...readOnlyProps,
     cursor: 'pointer',
   };
 
@@ -494,7 +498,10 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
         <Box sx={editableDynamicValuesProps}>
           <Typography minWidth={isMobile ? '100px' : 0}>{strings.QUANTITY} </Typography>
           {accession?.remainingQuantity?.quantity ? (
-            <Box sx={editableProps} onClick={() => quantityEditable && setOpenQuantityModal(true)}>
+            <Box
+              sx={quantityEditable ? editableProps : readOnlyProps}
+              onClick={() => quantityEditable && setOpenQuantityModal(true)}
+            >
               <Box display='flex'>
                 {getAbsoluteQuantity()} {getEstimatedQuantity()}
               </Box>
