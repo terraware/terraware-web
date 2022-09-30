@@ -76,6 +76,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
       }
       if (record.purpose === 'Viability Testing') {
         viabilityTesting.seedsTested = record.withdrawnQuantity?.quantity || 0;
+        viabilityTesting.startDate = record.date;
         response = await postViabilityTest(viabilityTesting, accession.id);
       } else {
         response = await postWithdrawal(record, accession.id);
