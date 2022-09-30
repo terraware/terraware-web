@@ -185,10 +185,12 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
                 collectionSource ? ' ' + collectionSource : ''
               } ${isNotPlural ? strings.PLANT : strings.PLANTS}`}
               {accession.plantId ? <Typography>{`${strings.PLANT_ID}: ${accession.plantId}`}</Typography> : ''}
-              <Box marginTop={2} display='flex'>
-                <Icon name='iconFile' className={classes.folderIcon} />
-                <Typography>{accession.notes}</Typography>
-              </Box>
+              {accession.notes ? (
+                <Box marginTop={2} display='flex'>
+                  <Icon name='iconFile' className={classes.folderIcon} />
+                  <Typography>{accession.notes}</Typography>
+                </Box>
+              ) : null}
             </Grid>
           </Grid>
           <Grid item xs={12} sx={gridRowStyle}>
