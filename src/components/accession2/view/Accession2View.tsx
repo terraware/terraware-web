@@ -279,7 +279,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
     right: isMobile ? 0 : `-${themeObj.spacing(1)}`,
   };
 
-  const editableProps = {
+  const readOnlyProps = {
     display: 'flex',
     whiteSpace: 'pre',
     '&:hover .edit-icon': {
@@ -293,6 +293,11 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
     alignItems: 'center',
     justifyContent: isMobile ? 'space-between' : 'normal',
     width: isMobile ? '100%' : 'auto',
+  };
+
+  const editableProps = {
+    ...readOnlyProps,
+    cursor: 'pointer',
   };
 
   const editableParentProps = {
@@ -443,7 +448,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
         {accession?.state && (
           <Box sx={editableParentProps}>
             <Icon name='seedbankNav' className={classes.iconStyle} />
-            <Box sx={editableProps}>
+            <Box sx={editableProps} onClick={() => setOpenEditStateModal(true)}>
               <Typography
                 paddingLeft={1}
                 sx={{ ...getStylesForState(), padding: 1, borderRadius: '8px', fontSize: '14px', marginLeft: 1 }}
@@ -451,7 +456,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
                 {accession.state}
               </Typography>
               {accession.state !== 'Awaiting Check-In' ? (
-                <IconButton sx={{ marginLeft: 3, height: '24px' }} onClick={() => setOpenEditStateModal(true)}>
+                <IconButton sx={{ marginLeft: 3, height: '24px' }}>
                   <Icon name='iconEdit' className={`${classes.editIcon} edit-icon`} />
                 </IconButton>
               ) : (
@@ -463,40 +468,45 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
         {accession?.facilityId !== undefined && (
           <Box sx={editableParentProps}>
             <Icon name='iconMyLocation' className={classes.iconStyle} />
-            <Box sx={editableProps}>
+            <Box sx={editableProps} onClick={() => setOpenEditLocationModal(true)}>
               <Typography paddingLeft={1}>
                 {getSeedBank(organization, accession.facilityId)?.name}
                 {accession.storageLocation ? ` / ${accession.storageLocation}` : ''}
               </Typography>
-              <IconButton sx={{ marginLeft: 3, height: '24px' }} onClick={() => setOpenEditLocationModal(true)}>
+              <IconButton sx={{ marginLeft: 3, height: '24px' }}>
                 <Icon name='iconEdit' className={`${classes.editIcon} edit-icon`} />
               </IconButton>
             </Box>
           </Box>
         )}
-        <Box sx={editableParentProps}>
-          <Icon name='notification' className={classes.iconStyle} />
-          <Box sx={editableProps}>
-            <Typography paddingLeft={1}>
-              {accession?.dryingEndDate ? strings.END_DRYING_REMINDER_ON : strings.END_DRYING_REMINDER_OFF}
-            </Typography>
-            <IconButton sx={{ marginLeft: 3, height: '24px' }} onClick={() => setOpenEndDryingReminderModal(true)}>
-              <Icon name='iconEdit' className={`${classes.editIcon} edit-icon`} />
-            </IconButton>
+        {accession?.state === 'Drying' && (
+          <Box sx={editableParentProps}>
+            <Icon name='notification' className={classes.iconStyle} />
+            <Box sx={editableProps} onClick={() => setOpenEndDryingReminderModal(true)}>
+              <Typography paddingLeft={1}>
+                {accession?.dryingEndDate ? strings.END_DRYING_REMINDER_ON : strings.END_DRYING_REMINDER_OFF}
+              </Typography>
+              <IconButton sx={{ marginLeft: 3, height: '24px' }}>
+                <Icon name='iconEdit' className={`${classes.editIcon} edit-icon`} />
+              </IconButton>
+            </Box>
           </Box>
-        </Box>
+        )}
       </Box>
 
       <Box display='flex' flexDirection={isMobile ? 'column' : 'row'} padding={isMobile ? 2 : 0}>
         <Box sx={editableDynamicValuesProps}>
           <Typography minWidth={isMobile ? '100px' : 0}>{strings.QUANTITY} </Typography>
           {accession?.remainingQuantity?.quantity ? (
-            <Box sx={editableProps}>
+            <Box
+              sx={quantityEditable ? editableProps : readOnlyProps}
+              onClick={() => quantityEditable && setOpenQuantityModal(true)}
+            >
               <Box display='flex'>
                 {getAbsoluteQuantity()} {getEstimatedQuantity()}
               </Box>
               {quantityEditable ? (
-                <IconButton sx={{ marginLeft: 3, height: '24px' }} onClick={() => setOpenQuantityModal(true)}>
+                <IconButton sx={{ marginLeft: 3, height: '24px' }}>
                   <Icon name='iconEdit' className={`${classes.editIcon} edit-icon`} />
                 </IconButton>
               ) : (
@@ -518,11 +528,11 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
         <Box sx={editableDynamicValuesProps}>
           <Typography minWidth={isMobile ? '100px' : 0}>{strings.VIABILITY}</Typography>
           {accession?.viabilityPercent ? (
-            <Box sx={editableProps}>
+            <Box sx={editableProps} onClick={() => setOpenViabilityModal(true)}>
               <Box display='flex'>
                 <Typography fontWeight={500}>{accession?.viabilityPercent}</Typography>%
               </Box>
-              <IconButton sx={{ marginLeft: 3, height: '24px' }} onClick={() => setOpenViabilityModal(true)}>
+              <IconButton sx={{ marginLeft: 3, height: '24px' }}>
                 <Icon name='iconEdit' className={`${classes.editIcon} edit-icon`} />
               </IconButton>
             </Box>
