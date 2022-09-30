@@ -103,8 +103,13 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
       }
       if (record?.id === -1) {
         // only run this validation if creating a new viability test
-        if (value > (accession.estimatedCount || 0)) {
-          setIndividualError('seedsTested', strings.TOTAL_SEEDS_TESTED_ERROR);
+        if (accession.estimatedCount !== undefined) {
+          if (value > accession.estimatedCount) {
+            setIndividualError('seedsTested', strings.TOTAL_SEEDS_TESTED_ERROR);
+            return false;
+          }
+        } else {
+          setIndividualError('seedsTested', strings.MISSING_SUBSET_WEIGHT_ERROR);
           return false;
         }
       } else {
