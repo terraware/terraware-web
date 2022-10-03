@@ -52,7 +52,7 @@ import { useRecoilState } from 'recoil';
 import EmptyMessage from 'src/components/common/EmptyMessage';
 import { APP_PATHS } from 'src/constants';
 import TfMain from 'src/components/common/TfMain';
-import { ACCESSION_STATES } from '../../../types/Accession';
+import { ACCESSION_STATES, ACCESSION_2_STATES } from '../../../types/Accession';
 import SelectSeedBankModal from '../../SeedBank/SelectSeedBankModal';
 import { isAdmin } from 'src/utils/organization';
 import { LocalizationProvider } from '@mui/x-date-pickers';
@@ -201,8 +201,9 @@ export default function Database(props: DatabaseProps): JSX.Element {
     const stage = query.get('stage');
     const facilityId = query.get('facilityId');
     let newSearchCriteria = searchCriteria || {};
-    if (stage) {
-      if (ACCESSION_STATES.indexOf(stage) !== -1) {
+    if (stage || query.has('stage')) {
+      delete newSearchCriteria.state;
+      if (stage && [...ACCESSION_STATES, ...ACCESSION_2_STATES].indexOf(stage) !== -1) {
         newSearchCriteria = {
           ...newSearchCriteria,
           state: {
@@ -215,9 +216,10 @@ export default function Database(props: DatabaseProps): JSX.Element {
       }
       query.delete('stage');
     }
-    if (facilityId && organization) {
+    if ((facilityId || query.has('facilityId')) && organization) {
       const seedBanks = getAllSeedBanks(organization);
-      if (seedBanks) {
+      delete newSearchCriteria.facility_name;
+      if (seedBanks && facilityId) {
         const facility = seedBanks.find((seedBank) => seedBank?.id === parseInt(facilityId, 10));
         if (facility) {
           newSearchCriteria = {

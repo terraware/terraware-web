@@ -189,7 +189,7 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
                     <Typography fontSize='20px' color='#000000' paddingBottom='8px' paddingLeft='28px'>
                       {strings.ACCESSION_BY_STATUS}
                     </Typography>
-                    <Link className={classes.accessionsLink} to={APP_PATHS.ACCESSIONS}>
+                    <Link className={classes.accessionsLink} to={`${APP_PATHS.ACCESSIONS}?stage=}`}>
                       {strings.SEE_ALL_ACCESSIONS}
                     </Link>
                   </Box>
