@@ -49,6 +49,12 @@ const COLUMNS: DatabaseColumn[] = [
     filter: { type: 'search' },
   },
   {
+    key: 'species_commonName',
+    name: strings.COMMON_NAME,
+    type: 'string',
+    filter: { type: 'search' },
+  },
+  {
     key: 'receivedDate',
     name: strings.RECEIVED_DATE,
     type: 'date',

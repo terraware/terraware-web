@@ -156,18 +156,19 @@ const sections: Section[] = [
     options: [
       [
         COLUMNS_INDEXED.speciesName,
+        COLUMNS_INDEXED.species_commonName,
+        COLUMNS_INDEXED.species_familyName,
         COLUMNS_INDEXED.receivedDate,
         COLUMNS_INDEXED.collectedDate,
         COLUMNS_INDEXED.collectionSiteName,
-        COLUMNS_INDEXED.ageMonths,
-        COLUMNS_INDEXED.estimatedCount,
       ],
       [
         COLUMNS_INDEXED.species_endangered,
         COLUMNS_INDEXED.species_rare,
         COLUMNS_INDEXED.sourcePlantOrigin,
-        COLUMNS_INDEXED.species_familyName,
         COLUMNS_INDEXED.ageYears,
+        COLUMNS_INDEXED.ageMonths,
+        COLUMNS_INDEXED.estimatedCount,
       ],
       [
         COLUMNS_INDEXED.treesCollectedFrom,
