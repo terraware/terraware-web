@@ -276,7 +276,6 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
 
   const iconProps = {
     position: 'absolute',
-    right: isMobile ? 0 : `-${themeObj.spacing(1)}`,
   };
 
   const readOnlyProps = {
@@ -456,7 +455,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
                 {accession.state}
               </Typography>
               {accession.state !== 'Awaiting Check-In' ? (
-                <IconButton sx={{ marginLeft: 3, height: '24px' }}>
+                <IconButton sx={{ marginLeft: 3, height: '24px', width: '24px' }}>
                   <Icon name='iconEdit' className={`${classes.editIcon} edit-icon`} />
                 </IconButton>
               ) : (
@@ -473,7 +472,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
                 {getSeedBank(organization, accession.facilityId)?.name}
                 {accession.storageLocation ? ` / ${accession.storageLocation}` : ''}
               </Typography>
-              <IconButton sx={{ marginLeft: 3, height: '24px' }}>
+              <IconButton sx={{ marginLeft: 3, height: '24px', width: '24px' }}>
                 <Icon name='iconEdit' className={`${classes.editIcon} edit-icon`} />
               </IconButton>
             </Box>
@@ -486,7 +485,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
               <Typography paddingLeft={1}>
                 {accession?.dryingEndDate ? strings.END_DRYING_REMINDER_ON : strings.END_DRYING_REMINDER_OFF}
               </Typography>
-              <IconButton sx={{ marginLeft: 3, height: '24px' }}>
+              <IconButton sx={{ marginLeft: 3, height: '24px', width: '24px' }}>
                 <Icon name='iconEdit' className={`${classes.editIcon} edit-icon`} />
               </IconButton>
             </Box>
@@ -506,7 +505,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
                 {getAbsoluteQuantity()} {getEstimatedQuantity()}
               </Box>
               {quantityEditable ? (
-                <IconButton sx={{ marginLeft: 3, height: '24px' }}>
+                <IconButton sx={{ marginLeft: 3, height: '24px', width: '24px' }}>
                   <Icon name='iconEdit' className={`${classes.editIcon} edit-icon`} />
                 </IconButton>
               ) : (
@@ -532,7 +531,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
               <Box display='flex'>
                 <Typography fontWeight={500}>{accession?.viabilityPercent}</Typography>%
               </Box>
-              <IconButton sx={{ marginLeft: 3, height: '24px' }}>
+              <IconButton sx={{ marginLeft: 3, height: '24px', width: '24px' }}>
                 <Icon name='iconEdit' className={`${classes.editIcon} edit-icon`} />
               </IconButton>
             </Box>
