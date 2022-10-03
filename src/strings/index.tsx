@@ -624,7 +624,6 @@ const strings = new LocalizedStrings({
     MARK_AS_COMPLETE: 'Mark as Complete',
     END_DRYING_REMINDER: 'End-Drying Reminder',
     END_DRYING_REMINDER_OFF: 'End-drying Reminder Off',
-    END_DRYING_REMINDER_ON: 'End-drying Reminder On',
     TURN_ON_END_DRYING_REMINDER: 'Turn on End-drying Reminder',
     REMINDER_DATE: 'Reminder Date',
     VIABILITY_RATE: 'Viability Rate',
