@@ -186,6 +186,7 @@ const strings = new LocalizedStrings({
     MONTHS: 'Months',
     MONTH: 'Month',
     LESS_THAN_A_MONTH: '<1 month',
+    LESS_THAN_ONE: '<1',
     COLLECTION_DATE: 'Collection Date',
     COLLECTOR: 'Collector',
     COLLECTING_LOCATION: 'Collecting Location',

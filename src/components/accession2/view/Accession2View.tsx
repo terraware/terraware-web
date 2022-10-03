@@ -74,7 +74,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
   const [openNewViabilityTest, setOpenNewViabilityTest] = useState(false);
   const [openViewViabilityTestModal, setOpenViewViabilityTestModal] = useState(false);
   const [selectedTest, setSelectedTest] = useState<ViabilityTest>();
-  const [age, setAge] = useState('');
+  const [age, setAge] = useState({ value: '', unit: '' });
   const { organization, user } = props;
   const classes = useStyles();
   const snackbar = useSnackbar();
@@ -112,11 +112,11 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
     const seedCollectionDate = accession?.collectedDate ? moment(accession?.collectedDate, 'YYYY-MM-DD') : undefined;
     const accessionAge = seedCollectionDate ? today.diff(seedCollectionDate, 'months') : undefined;
     if (accessionAge === undefined) {
-      setAge('');
+      setAge({ value: '', unit: '' });
     } else if (accessionAge < 1) {
-      setAge(strings.LESS_THAN_A_MONTH);
+      setAge({ value: strings.LESS_THAN_ONE, unit: strings.MONTH.toLowerCase() });
     } else {
-      setAge(`${accessionAge} ${strings.MONTHS}`);
+      setAge({ value: accessionAge.toString(), unit: strings.MONTHS });
     }
   }, [accession]);
 
@@ -179,16 +179,20 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
     if (accession && accession.remainingQuantity) {
       if (accession.remainingQuantity.units === 'Seeds') {
         return (
-          <Typography display='flex' sx={{ marginRight: '5px' }}>
-            <Typography sx={{ fontWeight: 600, marginRight: '5px' }}>{accession.remainingQuantity.quantity}</Typography>
-            <Typography>{strings.CT}</Typography>
+          <Typography display='flex' sx={{ marginRight: '5px', alignItems: 'baseline' }}>
+            <Typography sx={{ fontWeight: 600, marginRight: '5px', fontSize: '20px' }}>
+              {accession.remainingQuantity.quantity}
+            </Typography>
+            <Typography fontSize='14px'>{strings.CT}</Typography>
           </Typography>
         );
       } else {
         return (
-          <Typography display='flex' sx={{ marginRight: '5px' }}>
-            <Typography sx={{ fontWeight: 600, marginRight: '5px' }}>{accession.remainingQuantity.grams}</Typography>
-            <Typography>{strings.GRAMS}</Typography>
+          <Typography display='flex' sx={{ marginRight: '5px', alignItems: 'baseline' }}>
+            <Typography sx={{ fontWeight: 600, marginRight: '5px', fontSize: '20px' }}>
+              {accession.remainingQuantity.grams}
+            </Typography>
+            <Typography fontSize='14px'>{strings.GRAMS}</Typography>
           </Typography>
         );
       }
@@ -243,7 +247,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
     if (accession?.remainingQuantity?.units === 'Seeds') {
       if (accession.estimatedWeight?.grams) {
         return (
-          <Typography>
+          <Typography fontSize='14px'>
             (~{accession.estimatedWeight?.grams} {strings.GRAMS})
           </Typography>
         );
@@ -251,7 +255,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
     } else {
       if (accession?.estimatedCount) {
         return (
-          <Typography>
+          <Typography fontSize='14px'>
             (~{accession?.estimatedCount} {strings.CT})
           </Typography>
         );
@@ -495,13 +499,15 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
 
       <Box display='flex' flexDirection={isMobile ? 'column' : 'row'} padding={isMobile ? 2 : 0}>
         <Box sx={editableDynamicValuesProps}>
-          <Typography minWidth={isMobile ? '100px' : 0}>{strings.QUANTITY} </Typography>
+          <Typography minWidth={isMobile ? '100px' : 0} fontSize='14px'>
+            {strings.QUANTITY}
+          </Typography>
           {accession?.remainingQuantity?.quantity ? (
             <Box
               sx={quantityEditable ? editableProps : readOnlyProps}
               onClick={() => quantityEditable && setOpenQuantityModal(true)}
             >
-              <Box display='flex'>
+              <Box display='flex' alignItems='baseline'>
                 {getAbsoluteQuantity()} {getEstimatedQuantity()}
               </Box>
               {quantityEditable ? (
@@ -521,15 +527,31 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
           )}
         </Box>
         <Box sx={editableDynamicValuesProps}>
-          <Typography minWidth={isMobile ? '100px' : 0}>{strings.AGE}</Typography>
-          {accession?.collectedDate ? <Typography> {age} </Typography> : null}
+          <Typography minWidth={isMobile ? '100px' : 0} fontSize='14px'>
+            {strings.AGE}
+          </Typography>
+          {accession?.collectedDate ? (
+            <Box display='flex' alignItems='baseline'>
+              <Typography fontSize='20px' fontWeight='600'>
+                {age.value}
+              </Typography>
+              <Typography fontSize='14px' marginLeft={1}>
+                {age.unit}
+              </Typography>
+            </Box>
+          ) : null}
         </Box>
         <Box sx={editableDynamicValuesProps}>
-          <Typography minWidth={isMobile ? '100px' : 0}>{strings.VIABILITY}</Typography>
+          <Typography minWidth={isMobile ? '100px' : 0} fontSize='14px'>
+            {strings.VIABILITY}
+          </Typography>
           {accession?.viabilityPercent ? (
             <Box sx={editableProps} onClick={() => setOpenViabilityModal(true)}>
-              <Box display='flex'>
-                <Typography fontWeight={500}>{accession?.viabilityPercent}</Typography>%
+              <Box display='flex' fontSize='14px' alignItems='baseline'>
+                <Typography fontWeight={500} fontSize='20px'>
+                  {accession?.viabilityPercent}
+                </Typography>
+                %
               </Box>
               <IconButton sx={{ marginLeft: 3, height: '24px', width: '24px' }}>
                 <Icon name='iconEdit' className={`${classes.editIcon} edit-icon`} />
