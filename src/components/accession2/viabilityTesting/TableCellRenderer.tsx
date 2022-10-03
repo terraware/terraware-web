@@ -27,7 +27,7 @@ export default function Renderer(props: RendererProps<TableRowType>): JSX.Elemen
     return <Typography sx={{ ...styleProps, cursor: 'pointer' }}>{iValue}</Typography>;
   };
 
-  const renderId = () => getValue(row.id, { color: '#0067C8' });
+  const renderId = () => getValue(`#${row.id}`, { fontWeight: 600 });
 
   const renderDate = () => {
     const { startDate, endDate } = row;
