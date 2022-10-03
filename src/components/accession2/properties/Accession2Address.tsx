@@ -21,6 +21,8 @@ export default function Accession2Address(props: Accession2AddressProps): JSX.El
   const [countries, setCountries] = useState<Country[]>();
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
+  const [temporalCountryValue, setTemporalCountryValue] = useState('');
+  const [temporalSubValue, setTemporalSubValue] = useState('');
 
   useEffect(() => {
     const populateCountries = async () => {
@@ -35,17 +37,23 @@ export default function Accession2Address(props: Accession2AddressProps): JSX.El
   const gridSize = () => (isMobile ? 12 : 6);
 
   const onChangeCountry = (newValue: string) => {
+    setTemporalCountryValue(newValue);
     const found = countries?.find((country) => country.name === newValue);
     if (found) {
       onChange('collectionSiteCountryCode', found.code.toString());
+    } else {
+      onChange('collectionSiteCountryCode', undefined);
     }
   };
 
   const onChangeSubdivision = (newValue: string) => {
+    setTemporalSubValue(newValue);
     const selectedCountry = getSelectedCountry();
     const found = selectedCountry?.subdivisions?.find((subdivision) => subdivision.name === newValue);
     if (found) {
       onChange('collectionSiteCountrySubdivision', found.code.toString());
+    } else {
+      onChange('collectionSiteCountrySubdivision', undefined);
     }
   };
 
@@ -99,7 +107,7 @@ export default function Accession2Address(props: Accession2AddressProps): JSX.El
           <Grid item xs={gridSize()} sx={{ marginRight: isMobile ? 0 : theme.spacing(2) }}>
             <Autocomplete
               id='collectionSiteCountryCode'
-              selected={getSelectedCountry()?.name}
+              selected={getSelectedCountry()?.name || temporalCountryValue}
               onChange={(index, value) => onChangeCountry(value)}
               label={strings.COUNTRY}
               values={countries?.map((country) => country.name) || []}
@@ -109,7 +117,7 @@ export default function Accession2Address(props: Accession2AddressProps): JSX.El
           <Grid item xs={gridSize()} sx={{ marginTop: isMobile ? theme.spacing(2) : 0 }}>
             <Autocomplete
               id='collectionSiteCountrySubdivision'
-              selected={getSelectedSubdivision()?.name}
+              selected={getSelectedSubdivision()?.name || temporalSubValue}
               onChange={(index, value) => onChangeSubdivision(value)}
               label={strings.STATE_PROVINCE_REGION}
               values={getSelectedCountry()?.subdivisions?.map((subdivision) => subdivision.name) || []}
