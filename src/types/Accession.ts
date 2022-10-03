@@ -47,7 +47,7 @@ export const LAB_SUBSTRATES = ['Agar', 'Paper', 'Sand', 'Nursery Media', 'Other'
 
 export const NURSERY_SUBSTRATES = ['Media Mix', 'Soil', 'Sand', 'Moss', 'Perlite/Vermiculite', 'Other'];
 
-export const TREATMENTS = ['Soak', 'Scarify', 'Chemical', 'Stratification', 'Other', 'Light'];
+export const TREATMENTS = ['Soak', 'Scarify', 'Chemical', 'Stratification', 'Light', 'Other'];
 
 export const WITHDRAWAL_TYPES = ['Lab', 'Nursery'];
 
