@@ -499,7 +499,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
 
       <Box display='flex' flexDirection={isMobile ? 'column' : 'row'} padding={isMobile ? 2 : 0}>
         <Box sx={editableDynamicValuesProps}>
-          <Typography minWidth={isMobile ? '100px' : 0} fontSize='14px'>
+          <Typography minWidth={isMobile ? '100px' : 0} fontSize='14px' color='#708284'>
             {strings.QUANTITY}
           </Typography>
           {accession?.remainingQuantity?.quantity ? (
@@ -527,7 +527,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
           )}
         </Box>
         <Box sx={editableDynamicValuesProps}>
-          <Typography minWidth={isMobile ? '100px' : 0} fontSize='14px'>
+          <Typography minWidth={isMobile ? '100px' : 0} fontSize='14px' color='#708284'>
             {strings.AGE}
           </Typography>
           {accession?.collectedDate ? (
@@ -542,7 +542,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
           ) : null}
         </Box>
         <Box sx={editableDynamicValuesProps}>
-          <Typography minWidth={isMobile ? '100px' : 0} fontSize='14px'>
+          <Typography minWidth={isMobile ? '100px' : 0} fontSize='14px' color='#708284'>
             {strings.VIABILITY}
           </Typography>
           {accession?.viabilityPercent ? (
