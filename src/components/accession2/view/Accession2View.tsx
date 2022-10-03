@@ -289,7 +289,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
       display: isMobile ? 'block' : 'none',
       ...iconProps,
     },
-    alignItems: 'center',
+    alignItems: isMobile ? 'flex-start' : 'center',
     justifyContent: isMobile ? 'space-between' : 'normal',
     width: isMobile ? '100%' : 'auto',
   };
@@ -302,7 +302,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
   const editableParentProps = {
     display: 'flex',
     padding: themeObj.spacing(0, isMobile ? 0 : 2, isMobile ? 3 : 0, isMobile ? 0 : 2),
-    alignItems: 'center',
+    alignItems: isMobile ? 'flex-start' : 'center',
     width: isMobile ? '100%' : 'auto',
   };
 
@@ -468,7 +468,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
           <Box sx={editableParentProps}>
             <Icon name='iconMyLocation' className={classes.iconStyle} />
             <Box sx={editableProps} onClick={() => setOpenEditLocationModal(true)}>
-              <Typography paddingLeft={1}>
+              <Typography paddingLeft={1} lineHeight={isMobile ? 1.2 : 1.5}>
                 {getSeedBank(organization, accession.facilityId)?.name}
                 {accession.storageLocation ? ` / ${accession.storageLocation}` : ''}
               </Typography>
@@ -482,12 +482,16 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
           <Box sx={editableParentProps}>
             <Icon name='notification' className={classes.iconStyle} />
             <Box sx={editableProps} onClick={() => setOpenEndDryingReminderModal(true)}>
-              <Typography paddingLeft={1}>
+              <Typography paddingLeft={1} lineHeight={isMobile ? 1.2 : 1.5}>
                 {accession?.dryingEndDate
                   ? `${strings.END_DRYING_REMINDER} ${moment(accession.dryingEndDate).fromNow()}`
                   : strings.END_DRYING_REMINDER_OFF}
                 {accession?.dryingEndDate ? (
-                  <Typography display={isMobile ? 'block' : 'inline-block'}>
+                  <Typography
+                    display={isMobile ? 'block' : 'inline-block'}
+                    lineHeight={isMobile ? 1.2 : 1.5}
+                    marginTop={isMobile ? 1 : 0}
+                  >
                     {isMobile ? '' : ' '}({accession.dryingEndDate})
                   </Typography>
                 ) : null}
