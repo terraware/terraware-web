@@ -415,7 +415,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
           )}
         </>
       )}
-      <Box padding={3}>
+      <Box padding={isMobile ? themeObj.spacing(3, 0) : 3}>
         <Box display='flex' justifyContent='space-between' alignItems='center'>
           <Typography>{accession?.accessionNumber}</Typography>
           {!isMobile && (
@@ -487,7 +487,9 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
                   ? `${strings.END_DRYING_REMINDER} ${moment(accession.dryingEndDate).fromNow()}`
                   : strings.END_DRYING_REMINDER_OFF}
                 {accession?.dryingEndDate ? (
-                  <Typography display={isMobile ? 'block' : 'inline-block'}>({accession.dryingEndDate})</Typography>
+                  <Typography display={isMobile ? 'block' : 'inline-block'}>
+                    {isMobile ? '' : ' '}({accession.dryingEndDate})
+                  </Typography>
                 ) : null}
               </Typography>
               <IconButton sx={{ marginLeft: 3, height: '24px', width: '24px' }}>
