@@ -39,8 +39,8 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
   }));
 
   const mainStructureSize = isMobile ? 12 : 9;
-  const gridLeftSide = isMobile ? 12 : 4;
-  const gridRightSide = isMobile ? 12 : 8;
+  const gridLeftSide = isMobile ? 12 : 2;
+  const gridRightSide = isMobile ? 12 : 10;
   const [photosModalOpened, setPhotosModalOpened] = useState(false);
   const [selectedSlide, setSelectedSlide] = useState(0);
   const [openEditAccessionModal, setOpenEditAccessionModal] = useState(false);
