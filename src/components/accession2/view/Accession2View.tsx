@@ -523,7 +523,9 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
               + {strings.ADD}
             </Link>
           ) : (
-            spaceFiller()
+            <Typography color='#CAD2D3' sx={{ pointerEvents: 'none' }}>
+              + {strings.ADD}
+            </Typography>
           )}
         </Box>
         <Box sx={editableDynamicValuesProps}>
