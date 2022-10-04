@@ -524,7 +524,6 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
             </Link>
           ) : (
             <Typography color='#CAD2D3' sx={{ pointerEvents: 'none' }}>
-              {' '}
               + {strings.ADD}
             </Typography>
           )}
