@@ -178,7 +178,7 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
           </Grid>
           <Grid item xs={12} sx={gridRowStyle}>
             <Grid item xs={gridLeftSide} sx={categoryStyle}>
-              {strings.PLANT_AND_SITE}
+              {strings.PLANT_LABEL}
             </Grid>
             <Grid item xs={gridRightSide}>
               {`${strings.COLLECTED_FROM}${numPlants === undefined ? '' : ' ' + numPlants}${

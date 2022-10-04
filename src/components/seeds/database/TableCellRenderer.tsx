@@ -5,6 +5,7 @@ import React from 'react';
 import { SearchResponseElement } from 'src/api/seeds/search';
 import CellRenderer from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
+import { RIGHT_ALIGNED_COLUMNS } from './columns';
 
 const statusStyles = makeStyles((theme: Theme) => ({
   flex: {
@@ -19,14 +20,17 @@ const statusStyles = makeStyles((theme: Theme) => ({
     alignItems: 'center',
     color: theme.palette.neutral[600],
   },
+  rightAligned: {
+    textAlign: 'right',
+  },
 }));
 
 export default function SearchCellRenderer(props: RendererProps<SearchResponseElement>): JSX.Element {
   const { column, value, index, row } = props;
+  const classes = statusStyles();
 
   const id = `row${index}-${column.key}`;
   if (column.key === 'active' && typeof value === 'string' && value) {
-    const classes = statusStyles();
     const active = value === 'Active';
 
     return (
@@ -64,5 +68,7 @@ export default function SearchCellRenderer(props: RendererProps<SearchResponseEl
     return <CellRenderer index={index} column={column} value={`${value === 'true' ? 'Yes' : 'No'}`} row={row} />;
   }
 
-  return <CellRenderer {...props} />;
+  const className = RIGHT_ALIGNED_COLUMNS.indexOf(column.key) !== -1 ? classes.rightAligned : '';
+
+  return <CellRenderer {...props} className={className} />;
 }

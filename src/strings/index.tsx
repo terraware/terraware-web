@@ -190,7 +190,7 @@ const strings = new LocalizedStrings({
     COLLECTION_DATE: 'Collection Date',
     COLLECTOR: 'Collector',
     COLLECTING_LOCATION: 'Collecting Location',
-    PLANT_AND_SITE: 'Plant and Site',
+    PLANT_LABEL: 'Plant',
     COLLECTED_FROM: 'Collected from',
     OWNER: 'Owner',
     PLANT_ID: 'Plant ID',
