@@ -623,7 +623,6 @@ describe('Database', () => {
       cy.wait('@search');
 
       cy.get('#row1-active').contains('Inactive');
-      cy.get('#row1').should('have.css', 'background-color', 'rgb(248, 249, 250)');
       cy.get('#row1-state').contains('Withdrawn');
       cy.get('#row5-speciesName').contains('Dogwood');
     });
