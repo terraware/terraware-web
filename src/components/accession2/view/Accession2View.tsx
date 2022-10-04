@@ -293,7 +293,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
       display: isMobile ? 'block' : 'none',
       ...iconProps,
     },
-    alignItems: 'center',
+    alignItems: isMobile ? 'flex-start' : 'center',
     justifyContent: isMobile ? 'space-between' : 'normal',
     width: isMobile ? '100%' : 'auto',
   };
@@ -305,15 +305,15 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
 
   const editableParentProps = {
     display: 'flex',
-    padding: themeObj.spacing(0, 2, isMobile ? 3 : 0),
-    alignItems: 'center',
+    padding: themeObj.spacing(0, isMobile ? 0 : 2, isMobile ? 3 : 0, isMobile ? 0 : 2),
+    alignItems: isMobile ? 'flex-start' : 'center',
     width: isMobile ? '100%' : 'auto',
   };
 
   const editableDynamicValuesProps = {
     display: 'flex',
     flexDirection: isMobile ? 'row' : 'column',
-    padding: isMobile ? 1 : 4,
+    padding: isMobile ? themeObj.spacing(1, 0) : 4,
     width: isMobile ? '100%' : 'auto',
   };
 
@@ -419,7 +419,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
           )}
         </>
       )}
-      <Box padding={3}>
+      <Box padding={isMobile ? themeObj.spacing(3, 0) : 3}>
         <Box display='flex' justifyContent='space-between' alignItems='center'>
           <Typography>{accession?.accessionNumber}</Typography>
           {!isMobile && (
@@ -446,7 +446,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
         display='flex'
         alignItems={isMobile ? 'flex-start' : 'center'}
         flexDirection={isMobile ? 'column' : 'row'}
-        padding={(theme) => theme.spacing(0, 1)}
+        padding={(theme) => theme.spacing(0, isMobile ? 0 : 1)}
       >
         {accession?.state && (
           <Box sx={editableParentProps}>
@@ -454,7 +454,14 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
             <Box sx={editableProps} onClick={() => setOpenEditStateModal(true)}>
               <Typography
                 paddingLeft={1}
-                sx={{ ...getStylesForState(), padding: 1, borderRadius: '8px', fontSize: '14px', marginLeft: 1 }}
+                sx={{
+                  ...getStylesForState(),
+                  padding: 1,
+                  borderRadius: '8px',
+                  fontSize: '14px',
+                  marginLeft: 1,
+                  marginTop: isMobile ? -0.5 : 0,
+                }}
               >
                 {accession.state}
               </Typography>
@@ -472,7 +479,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
           <Box sx={editableParentProps}>
             <Icon name='iconMyLocation' className={classes.iconStyle} />
             <Box sx={editableProps} onClick={() => setOpenEditLocationModal(true)}>
-              <Typography paddingLeft={1}>
+              <Typography paddingLeft={1} lineHeight={isMobile ? 1.2 : 1.5}>
                 {getSeedBank(organization, accession.facilityId)?.name}
                 {accession.storageLocation ? ` / ${accession.storageLocation}` : ''}
               </Typography>
@@ -486,8 +493,19 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
           <Box sx={editableParentProps}>
             <Icon name='notification' className={classes.iconStyle} />
             <Box sx={editableProps} onClick={() => setOpenEndDryingReminderModal(true)}>
-              <Typography paddingLeft={1}>
-                {accession?.dryingEndDate ? strings.END_DRYING_REMINDER_ON : strings.END_DRYING_REMINDER_OFF}
+              <Typography paddingLeft={1} lineHeight={isMobile ? 1.2 : 1.5}>
+                {accession?.dryingEndDate
+                  ? `${strings.END_DRYING_REMINDER} ${moment(accession.dryingEndDate).fromNow()}`
+                  : strings.END_DRYING_REMINDER_OFF}
+                {accession?.dryingEndDate ? (
+                  <Typography
+                    display={isMobile ? 'block' : 'inline-block'}
+                    lineHeight={isMobile ? 1.2 : 1.5}
+                    marginTop={isMobile ? 1 : 0}
+                  >
+                    {isMobile ? '' : ' '}({accession.dryingEndDate})
+                  </Typography>
+                ) : null}
               </Typography>
               <IconButton sx={{ marginLeft: 3, height: '24px', width: '24px' }}>
                 <Icon name='iconEdit' className={`${classes.editIcon} edit-icon`} />
@@ -497,7 +515,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
         )}
       </Box>
 
-      <Box display='flex' flexDirection={isMobile ? 'column' : 'row'} padding={isMobile ? 2 : 0}>
+      <Box display='flex' flexDirection={isMobile ? 'column' : 'row'} padding={isMobile ? themeObj.spacing(2, 0) : 0}>
         <Box sx={editableDynamicValuesProps}>
           <Typography minWidth={isMobile ? '100px' : 0} fontSize='14px' color='#708284'>
             {strings.QUANTITY}
@@ -596,11 +614,13 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
               <Tab label={strings.VIABILITY_TESTING} value='viabilityTesting' sx={viabilityTestingStyle()} />
             </TabList>
           </Box>
-          <TabPanel value='detail'>
+          <TabPanel value='detail' sx={{ paddingX: isMobile ? 0 : 3 }}>
             <DetailPanel accession={accession} organization={organization} reload={reloadData} />
           </TabPanel>
-          <TabPanel value='history'>{accession && <Accession2History accession={accession} />}</TabPanel>
-          <TabPanel value='viabilityTesting'>
+          <TabPanel value='history' sx={{ paddingX: isMobile ? 0 : 3 }}>
+            {accession && <Accession2History accession={accession} />}
+          </TabPanel>
+          <TabPanel value='viabilityTesting' sx={{ paddingX: isMobile ? 0 : 3 }}>
             {accession && (
               <ViabilityTestingPanel
                 accession={accession}
