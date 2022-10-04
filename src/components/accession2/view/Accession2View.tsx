@@ -468,6 +468,12 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
             </Box>
           </Box>
         )}
+        {accession?.bagNumbers !== undefined && (
+          <Box display='flex' margin={isMobile ? themeObj.spacing(0, 0, 3, 6) : 0}>
+            <Typography fontWeight={600}> {strings.BAG_ID}: </Typography>
+            <Typography paddingLeft={1}> {accession.bagNumbers.join(', ')} </Typography>
+          </Box>
+        )}
         {accession?.facilityId !== undefined && (
           <Box sx={editableParentProps}>
             <Icon name='iconMyLocation' className={classes.iconStyle} />
