@@ -451,7 +451,9 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
               <Button id='add-species' label={strings.ADD_SPECIES} onClick={onNewSpecies} size='medium' />
             </div>
           )}
-          {isMobile && <Button id='add-species' onClick={onNewSpecies} size='medium' icon='plus' />}
+          {isMobile && !isUserContributor && (
+            <Button id='add-species' onClick={onNewSpecies} size='medium' icon='plus' />
+          )}
         </Grid>
         <p>{strings.SPECIES_DESCRIPTION}</p>
         <PageSnackbar />
