@@ -115,6 +115,7 @@ const strings = new LocalizedStrings({
     MOST_RECENT_PERCENTAGE_VIABILITY: 'Most Recent % Viability',
     TOTAL_ESTIMATED_PERCENTAGE_VIABILITY: 'Total Estimated % Viability',
     BAG_IDS: 'Bag IDs',
+    BAG_ID: 'Bag ID',
     REPORT: 'Report',
     DOWNLOAD_REPORT_DESCRIPTION:
       'You are about to download this datatable as a report. This csv file can be found in your Downloads. Please name your report below.',
