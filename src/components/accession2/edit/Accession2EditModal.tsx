@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Grid, Typography } from '@mui/material';
 import { Button, DialogBox, Textfield } from '@terraware/web-components';
 import { Accession2, updateAccession2 } from 'src/api/accessions2/accession';
@@ -37,6 +37,10 @@ export default function Accession2EditModal(props: Accession2EditModalProps): JS
     const missingRequiredField = MANDATORY_FIELDS.some((field: MandatoryField) => !record || !record[field]);
     return missingRequiredField;
   };
+
+  useEffect(() => {
+    setRecord(accession);
+  }, [accession, setRecord]);
 
   const saveAccession = async () => {
     if (record) {
