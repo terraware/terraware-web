@@ -464,3 +464,11 @@ export const searchPresets = [
   viabilitySummaryPreset,
   germinationTestingPreset,
 ];
+
+export const RIGHT_ALIGNED_COLUMNS = [
+  'ageMonths',
+  'ageYears',
+  'estimatedWeightGrams',
+  'estimatedCount',
+  'latestViabilityPercent',
+];

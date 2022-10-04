@@ -40,7 +40,7 @@ import emptyMessageStrings from 'src/strings/emptyMessageModal';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import { getAllSeedBanks } from 'src/utils/organization';
 import PageHeader from '../PageHeader';
-import { COLUMNS_INDEXED } from './columns';
+import { COLUMNS_INDEXED, RIGHT_ALIGNED_COLUMNS } from './columns';
 import DownloadReportModal from './DownloadReportModal';
 import EditColumns from './EditColumns';
 import Filters from './Filters';
@@ -132,6 +132,9 @@ const useStyles = makeStyles((theme: Theme) => ({
       fontSize: '14px',
     },
   },
+  rightAligned: {
+    textAlign: 'right',
+  },
 }));
 
 type DatabaseProps = {
@@ -169,7 +172,14 @@ export default function Database(props: DatabaseProps): JSX.Element {
     preferences,
   } = props;
   const displayColumnDetails = displayColumnNames.map((name) => {
-    return COLUMNS_INDEXED[name];
+    const detail = { ...COLUMNS_INDEXED[name] };
+
+    // set the classname for right aligned columns
+    if (RIGHT_ALIGNED_COLUMNS.indexOf(name) !== -1) {
+      detail.className = classes.rightAligned;
+    }
+
+    return detail;
   });
   const [editColumnsModalOpen, setEditColumnsModalOpen] = useState(false);
   const [reportModalOpen, setReportModalOpen] = useState(false);
