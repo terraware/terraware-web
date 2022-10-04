@@ -450,7 +450,14 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
             <Box sx={editableProps} onClick={() => setOpenEditStateModal(true)}>
               <Typography
                 paddingLeft={1}
-                sx={{ ...getStylesForState(), padding: 1, borderRadius: '8px', fontSize: '14px', marginLeft: 1 }}
+                sx={{
+                  ...getStylesForState(),
+                  padding: 1,
+                  borderRadius: '8px',
+                  fontSize: '14px',
+                  marginLeft: 1,
+                  marginTop: isMobile ? -0.5 : 0,
+                }}
               >
                 {accession.state}
               </Typography>
