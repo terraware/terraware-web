@@ -39,6 +39,8 @@ export default function EditState(props: EditStateProps): JSX.Element {
     }
   };
 
+  const stateChanged = accession.state !== record.state;
+
   return (
     <>
       <Grid item xs={12} textAlign='left'>
@@ -57,21 +59,24 @@ export default function EditState(props: EditStateProps): JSX.Element {
       </Grid>
       <Box
         sx={{
-          background: '#FDE7C3',
+          background: stateChanged ? '#FDE7C3' : 'initial',
           borderRadius: '14px',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
           padding: (theme) => theme.spacing(2, 1),
           marginTop: (theme) => theme.spacing(4),
+          height: '74px',
         }}
       >
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <Icon name='warning' className={classes.messageIcon} size='large' />
-          <Typography sx={{ color: '#000000', fontSize: '14px', paddingLeft: 1 }}>
-            {strings.UPDATE_STATUS_WARNING}
-          </Typography>
-        </Box>
+        {stateChanged && (
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Icon name='warning' className={classes.messageIcon} size='large' />
+            <Typography sx={{ color: '#000000', fontSize: '14px', paddingLeft: 1 }}>
+              {strings.UPDATE_STATUS_WARNING}
+            </Typography>
+          </Box>
+        )}
       </Box>
     </>
   );

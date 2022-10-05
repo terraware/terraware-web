@@ -4,7 +4,6 @@ const strings = new LocalizedStrings({
   en: {
     CANCEL: 'Cancel',
     SAVE: 'Save',
-    UPDATE: 'Update',
     SAVE_CHANGES: 'Save Changes',
     GENERIC_ERROR: 'An error occurred',
     PREEXISTING_SPECIES: 'This species already exists',
@@ -288,7 +287,6 @@ const strings = new LocalizedStrings({
     POUNDS: 'Pounds',
     UNITS: 'Units',
     REQUIRED_FIELD: 'Required field.',
-    REQUIRED_CHANGE: 'Required change.',
     SCHEDULED_FOR_TESTING: 'Scheduled for Testing',
     SCHEDULED_SEEDS: '{0} Seeds',
     SEND_TO_NURSERY: 'Send to Nursery',
