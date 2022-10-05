@@ -109,11 +109,11 @@ export default function OrganizationView({ organization }: OrganizationViewProps
             <h2>{organization?.name}</h2>
           </Grid>
           <Grid item xs={4} className={classes.titleButtonContainer}>
-            <Button
-              label={isMobile ? strings.EDIT : strings.EDIT_ORGANIZATION}
-              priority='secondary'
-              onClick={goToEditOrganization}
-            />
+            {isMobile ? (
+              <Button icon='iconEdit' priority='secondary' onClick={goToEditOrganization} />
+            ) : (
+              <Button icon='iconEdit' label={strings.EDIT} priority='secondary' onClick={goToEditOrganization} />
+            )}
           </Grid>
         </Grid>
         <Grid item xs={gridSize()}>

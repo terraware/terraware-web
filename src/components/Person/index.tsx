@@ -8,7 +8,6 @@ import Icon from 'src/components/common/icon/Icon';
 import TextField from 'src/components/common/Textfield/Textfield';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
-import dictionary from 'src/strings/dictionary';
 import { ServerOrganization } from 'src/types/Organization';
 import { OrganizationUser } from 'src/types/User';
 import { makeStyles } from '@mui/styles';
@@ -110,12 +109,17 @@ export default function PersonDetails({ organization }: PersonDetailsProps): JSX
             {isMobile ? <h3 className={classes.email}>{person?.email}</h3> : <h2>{person?.email}</h2>}
           </Grid>
           <Grid item xs={3}>
-            <Button
-              label={isMobile ? strings.EDIT : dictionary.EDIT_PERSON}
-              priority='secondary'
-              onClick={goToEditPerson}
-              className={classes.editButton}
-            />
+            {isMobile ? (
+              <Button icon='iconEdit' priority='secondary' onClick={goToEditPerson} className={classes.editButton} />
+            ) : (
+              <Button
+                label={strings.EDIT}
+                icon='iconEdit'
+                priority='secondary'
+                onClick={goToEditPerson}
+                className={classes.editButton}
+              />
+            )}
           </Grid>
         </Grid>
         <Grid item xs={12}>

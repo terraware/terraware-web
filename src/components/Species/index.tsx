@@ -526,8 +526,9 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
                           },
                           {
                             buttonType: 'passive',
-                            buttonText: strings.EDIT,
+                            ...(!isMobile && { buttonText: strings.EDIT }),
                             onButtonClick: OnEditSpecies,
+                            icon: 'iconEdit',
                           },
                         ]
                       : [

@@ -37,7 +37,7 @@ export default function DeleteViabilityTestModal(props: DeleteViabilityTestModal
       size='medium'
       middleButtons={[
         <Button label={strings.CANCEL} type='passive' onClick={onCancel} priority='secondary' key='button-1' />,
-        <Button onClick={deleteHandler} type='destructive' label={strings.DELETE} key='button-2' />,
+        <Button onClick={deleteHandler} type='destructive' icon='iconTrashCan' label={strings.DELETE} key='button-2' />,
       ]}
       message={strings.formatString(strings.DELETE_VIABILITY_TEST_MESSAGE, viabilityTest.id.toString())}
     >
