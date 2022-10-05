@@ -246,7 +246,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
       query.delete('facilityId');
     }
     if (stage || (facilityId && organization)) {
-      history.push(getLocation(location.pathname, location, query.toString()));
+      history.replace(getLocation(location.pathname, location, query.toString()));
       setSearchCriteria(newSearchCriteria);
     }
   }, [query, location, history, setSearchCriteria, organization, searchCriteria]);
@@ -386,7 +386,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
   };
 
   const isInactive = (row: SearchResponseElement) => {
-    return row.active === 'Inactive';
+    return false;
   };
   const onReorderEnd = useCallback(
     ({ oldIndex, newIndex }) => {

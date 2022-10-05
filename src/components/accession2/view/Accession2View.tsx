@@ -456,7 +456,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
                 paddingLeft={1}
                 sx={{
                   ...getStylesForState(),
-                  padding: 1,
+                  padding: themeObj.spacing(0.5, 1),
                   borderRadius: '8px',
                   fontSize: '14px',
                   marginLeft: 1,
