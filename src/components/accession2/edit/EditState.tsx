@@ -69,7 +69,7 @@ export default function EditState(props: EditStateProps): JSX.Element {
           height: '74px',
         }}
       >
-        {accession.state !== record.state && (
+        {stateChanged && (
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Icon name='warning' className={classes.messageIcon} size='large' />
             <Typography sx={{ color: '#000000', fontSize: '14px', paddingLeft: 1 }}>
