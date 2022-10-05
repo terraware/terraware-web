@@ -30,6 +30,7 @@ import useDebounce from 'src/utils/useDebounce';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
+import { isContributor } from 'src/utils/organization';
 
 type SpeciesListProps = {
   organization: ServerOrganization;
@@ -132,7 +133,7 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
     ),
     type: 'string',
   });
-
+  const isUserContributor = isContributor(organization);
   const { isMobile } = useDeviceInfo();
 
   const getParams = useCallback(() => {
@@ -429,7 +430,7 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
       <Grid container>
         <Grid item xs={12} className={classes.titleContainer}>
           <h1 className={classes.pageTitle}>{strings.SPECIES}</h1>
-          {species && species.length > 0 && !isMobile && (
+          {species && species.length > 0 && !isMobile && !isUserContributor && (
             <div>
               <Button
                 id='check-data'
@@ -450,7 +451,9 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
               <Button id='add-species' label={strings.ADD_SPECIES} onClick={onNewSpecies} size='medium' />
             </div>
           )}
-          {isMobile && <Button id='add-species' onClick={onNewSpecies} size='medium' icon='plus' />}
+          {isMobile && !isUserContributor && (
+            <Button id='add-species' onClick={onNewSpecies} size='medium' icon='plus' />
+          )}
         </Grid>
         <p>{strings.SPECIES_DESCRIPTION}</p>
         <PageSnackbar />
@@ -504,9 +507,9 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
                   columns={selectedColumns}
                   rows={results}
                   orderBy='name'
-                  showCheckbox={true}
+                  showCheckbox={!isUserContributor}
                   selectedRows={selectedSpeciesRows}
-                  setSelectedRows={setSelectedSpeciesRows}
+                  setSelectedRows={isUserContributor ? undefined : setSelectedSpeciesRows}
                   showTopBar={true}
                   Renderer={SpeciesCellRenderer}
                   onSelect={selectAndEditSpecies}
