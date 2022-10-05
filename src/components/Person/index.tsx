@@ -8,7 +8,6 @@ import Icon from 'src/components/common/icon/Icon';
 import TextField from 'src/components/common/Textfield/Textfield';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
-import dictionary from 'src/strings/dictionary';
 import { ServerOrganization } from 'src/types/Organization';
 import { OrganizationUser } from 'src/types/User';
 import { makeStyles } from '@mui/styles';
