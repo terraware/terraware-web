@@ -50,7 +50,6 @@ export default function Accession2PlantSiteDetails(props: Accession2PlantSiteDet
             value={record.plantsCollectedFrom}
             onChange={onChange}
             type='number'
-            min={0}
             label={strings.NUMBER_PLANTS_COLLECTED_FROM}
           />
         </Grid>

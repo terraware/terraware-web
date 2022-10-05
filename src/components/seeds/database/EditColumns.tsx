@@ -165,7 +165,7 @@ const sections: Section[] = [
       [
         COLUMNS_INDEXED.species_endangered,
         COLUMNS_INDEXED.species_rare,
-        COLUMNS_INDEXED.sourcePlantOrigin,
+        COLUMNS_INDEXED.collectionSource,
         COLUMNS_INDEXED.ageYears,
         COLUMNS_INDEXED.ageMonths,
         COLUMNS_INDEXED.estimatedCount,
