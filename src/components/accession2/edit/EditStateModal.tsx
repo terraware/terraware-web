@@ -57,7 +57,7 @@ export default function EditStateModal(props: EditStateModalProps): JSX.Element 
       size='small'
       middleButtons={[
         <Button label={strings.CANCEL} type='passive' onClick={onClose} priority='secondary' key='button-1' />,
-        <Button onClick={saveState} label={strings.UPDATE} key='button-2' />,
+        <Button onClick={saveState} label={strings.SAVE} key='button-2' disabled={accession.state === record.state} />,
       ]}
     >
       <EditState accession={accession} record={record} onChange={onChange} />
