@@ -72,14 +72,28 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
           </Grid>
           <Grid xs={6} textAlign='right'>
             <Box marginRight={1} display='inline-block'>
-              <Button
-                type='passive'
-                priority='secondary'
-                label={strings.DELETE}
-                onClick={() => setOpenDeleteModal(true)}
-              />
+              {isMobile ? (
+                <Button
+                  type='passive'
+                  priority='secondary'
+                  icon='iconTrashCan'
+                  onClick={() => setOpenDeleteModal(true)}
+                />
+              ) : (
+                <Button
+                  type='passive'
+                  priority='secondary'
+                  label={strings.DELETE}
+                  icon='iconTrashCan'
+                  onClick={() => setOpenDeleteModal(true)}
+                />
+              )}
             </Box>
-            <Button label={strings.EDIT} onClick={() => openEdit()} />
+            {isMobile ? (
+              <Button icon='iconEdit' onClick={() => openEdit()} />
+            ) : (
+              <Button label={strings.EDIT} icon='iconEdit' onClick={() => openEdit()} />
+            )}
           </Grid>
         </Grid>
         <Grid item xs={12} display='flex'>

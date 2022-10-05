@@ -87,7 +87,11 @@ export default function SeedBankDetails({ organization }: SeedBankDetailsProps):
         </Grid>
         <Grid item xs={12} className={classes.titleWithButton}>
           <h2>{seedBank?.name}</h2>
-          <Button label={strings.EDIT} priority='secondary' onClick={goToEditSeedBank} />
+          {isMobile ? (
+            <Button icon='iconEdit' priority='secondary' onClick={goToEditSeedBank} />
+          ) : (
+            <Button icon='iconEdit' label={strings.EDIT} priority='secondary' onClick={goToEditSeedBank} />
+          )}
         </Grid>
         <Grid item xs={12}>
           <PageSnackbar />

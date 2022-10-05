@@ -22,7 +22,7 @@ export default function DeleteOrgDialog(props: DeleteOrgDialogProps): JSX.Elemen
       size='medium'
       middleButtons={[
         <Button label={strings.CANCEL} priority='secondary' type='passive' onClick={onClose} key='button-1' />,
-        <Button label={strings.DELETE} type='destructive' onClick={onSubmit} key='button-2' />,
+        <Button label={strings.DELETE} type='destructive' icon='iconTrashCan' onClick={onSubmit} key='button-2' />,
       ]}
       message={strings.formatString(strings.DELETE_ORGANIZATION_MSG, orgName)}
     />
