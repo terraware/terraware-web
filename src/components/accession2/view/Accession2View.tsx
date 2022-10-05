@@ -320,6 +320,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
   const spaceFiller = () => <Box sx={{ marginLeft: 1, height: '24px', width: 2 }} />;
 
   const quantityEditable = accession?.state === 'Drying' || accession?.state === 'In Storage';
+  const viabilityEditable = accession?.state !== 'Used Up';
 
   return (
     <TfMain>
@@ -526,7 +527,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
           <Typography minWidth={isMobile ? '100px' : 0} fontSize='14px' color='#708284'>
             {strings.QUANTITY}
           </Typography>
-          {accession?.remainingQuantity?.quantity ? (
+          {accession?.remainingQuantity?.quantity !== undefined ? (
             <Box
               sx={quantityEditable ? editableProps : readOnlyProps}
               onClick={() => quantityEditable && setOpenQuantityModal(true)}
@@ -572,21 +573,32 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
             {strings.VIABILITY}
           </Typography>
           {accession?.viabilityPercent ? (
-            <Box sx={editableProps} onClick={() => setOpenViabilityModal(true)}>
+            <Box
+              sx={viabilityEditable ? editableProps : readOnlyProps}
+              onClick={() => viabilityEditable && setOpenViabilityModal(true)}
+            >
               <Box display='flex' fontSize='14px' alignItems='baseline'>
                 <Typography fontWeight={500} fontSize='20px'>
                   {accession?.viabilityPercent}
                 </Typography>
                 %
               </Box>
-              <IconButton sx={{ marginLeft: 1, height: '24px', width: '24px' }}>
-                <Icon name='iconEdit' className={`${classes.editIcon} edit-icon`} />
-              </IconButton>
+              {viabilityEditable ? (
+                <IconButton sx={{ marginLeft: 1, height: '24px', width: '24px' }}>
+                  <Icon name='iconEdit' className={`${classes.editIcon} edit-icon`} />
+                </IconButton>
+              ) : (
+                spaceFiller()
+              )}
             </Box>
-          ) : (
+          ) : viabilityEditable ? (
             <Link sx={linkStyle} onClick={() => setOpenViabilityModal(true)}>
               + {strings.ADD}
             </Link>
+          ) : (
+            <Typography color='#CAD2D3' sx={{ pointerEvents: 'none' }}>
+              + {strings.ADD}
+            </Typography>
           )}
         </Box>
       </Box>
