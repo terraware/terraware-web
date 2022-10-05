@@ -43,7 +43,8 @@ export default function ViabilityTestingPanel(props: ViabilityTestingPanelProps)
           <Box sx={{ marginTop: 4 }}>
             <Button
               priority='secondary'
-              label={strings.START_TESTING}
+              label={strings.ADD_TEST}
+              icon='plus'
               onClick={() => setNewViabilityTestOpened(true)}
             />
           </Box>

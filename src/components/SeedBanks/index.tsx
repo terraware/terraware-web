@@ -140,15 +140,21 @@ export default function SeedBanksList({ organization }: SeedBanksListProps): JSX
   return (
     <TfMain>
       <Grid container spacing={3}>
-        <Grid item xs={10}>
+        <Grid item xs={8}>
           <h1 className={classes.title}>{strings.SEED_BANKS}</h1>
         </Grid>
-        <Grid item xs={2} className={classes.centered}>
+        <Grid item xs={4} className={classes.centered}>
           {['Admin', 'Owner'].includes(organization.role) &&
             (isMobile ? (
               <Button id='new-facility' icon='plus' onClick={goToNewSeedBank} size='medium' />
             ) : (
-              <Button id='new-facility' label={strings.ADD} onClick={goToNewSeedBank} size='medium' />
+              <Button
+                id='new-facility'
+                icon='plus'
+                label={strings.ADD_SEED_BANK}
+                onClick={goToNewSeedBank}
+                size='medium'
+              />
             ))}
         </Grid>
         <PageSnackbar />

@@ -236,7 +236,7 @@ export default function PeopleList({ organization, reloadData, user }: PeopleLis
           {isMobile ? (
             <Button id='new-person' icon='plus' onClick={goToNewPerson} size='medium' />
           ) : (
-            <Button id='new-person' label={strings.ADD_PERSON} onClick={goToNewPerson} size='medium' />
+            <Button id='new-person' label={strings.ADD_PERSON} icon='plus' onClick={goToNewPerson} size='medium' />
           )}
         </Grid>
         <PageSnackbar />

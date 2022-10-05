@@ -44,7 +44,11 @@ export default function ViabilityTestingDatabase(props: ViabilityTestingDatabase
         <Typography fontSize='16px' fontWeight={500}>
           {strings.VIABILITY_TESTING}
         </Typography>
-        <Button priority='secondary' label={strings.ADD_TEST} onClick={onNewViabilityTest} />
+        {isMobile ? (
+          <Button priority='secondary' icon='plus' onClick={onNewViabilityTest} />
+        ) : (
+          <Button priority='secondary' label={strings.ADD_TEST} icon='plus' onClick={onNewViabilityTest} />
+        )}
       </Box>
       <Box>
         <Table

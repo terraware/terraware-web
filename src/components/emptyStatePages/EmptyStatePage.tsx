@@ -15,6 +15,7 @@ import speciesAtom from 'src/state/species';
 import { Container, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import useSnackbar from 'src/utils/useSnackbar';
+import { IconName } from 'src/components/common/icon/icons';
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
@@ -44,6 +45,7 @@ type PageContent = {
   subtitle: string;
   listItems: ListItemContent[];
   buttonText?: string;
+  buttonIcon?: IconName;
   linkLocation?: string;
 };
 
@@ -59,6 +61,7 @@ const NO_SEEDBANKS_CONTENT: PageContent = {
     },
   ],
   buttonText: strings.ADD_SEED_BANK,
+  buttonIcon: 'plus',
   linkLocation: APP_PATHS.SEED_BANKS_NEW,
 };
 
@@ -109,6 +112,7 @@ export default function EmptyStatePage({ pageName, organization, reloadData }: E
         title: dictionary.ADD_MANUALLY,
         description: emptyStateStrings.ADD_MANUALLY_DESCRIPTION,
         buttonText: strings.ADD_SPECIES,
+        buttonIcon: 'plus',
         onClickButton: () => {
           setAddSpeciesModalOpened(true);
         },
@@ -177,6 +181,7 @@ export default function EmptyStatePage({ pageName, organization, reloadData }: E
             subtitle={content.subtitle}
             listItems={content.listItems}
             buttonText={content.buttonText}
+            buttonIcon={content.buttonIcon}
             onClickButton={goToNewLocation}
             styles={EMPTY_STATE_CONTENT_STYLES}
           />
