@@ -6,7 +6,6 @@ import {
   Paper,
   Popover,
   Typography,
-  Button as ButtonMUI,
   MenuList,
   MenuItem,
   useTheme,
@@ -464,25 +463,16 @@ export default function Database(props: DatabaseProps): JSX.Element {
 
   const getHeaderButtons = () => (
     <>
-      <ButtonMUI
-        id='more-options'
-        aria-describedby={id}
-        variant='contained'
-        onClick={handleClick}
-        sx={{
-          borderRadius: '40px',
-          width: '40px',
-          minWidth: '40px',
-          color: '#0067C8',
-          background: '#fff',
-          border: '2px solid #0067C8',
-          padding: 0,
-          fontSize: '20px',
-          marginRight: 1,
-        }}
-      >
-        ...
-      </ButtonMUI>
+      <Box marginRight={1} display='inline'>
+        <Button
+          id='more-options'
+          icon='menuVertical'
+          onClick={(event) => event && handleClick(event)}
+          priority='secondary'
+          size='medium'
+        />
+      </Box>
+
       <Popover
         id={id}
         open={open}
