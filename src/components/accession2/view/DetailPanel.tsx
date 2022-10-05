@@ -158,8 +158,10 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
 
               {accession.collectionSiteNotes && (
                 <Box marginTop={2} display='flex'>
-                  <Icon name='iconFile' className={classes.folderIcon} />
-                  <Typography>{accession.collectionSiteNotes}</Typography>
+                  <Typography>
+                    <Icon name='iconFile' className={classes.folderIcon} />
+                    {accession.collectionSiteNotes}
+                  </Typography>
                 </Box>
               )}
 
