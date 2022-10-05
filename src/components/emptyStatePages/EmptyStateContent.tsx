@@ -99,6 +99,7 @@ export type ListItemContent = {
   title: string;
   description?: string;
   buttonText?: string;
+  buttonIcon?: IconName;
   onClickButton?: () => void;
   linkText?: string;
   onLinkClick?: () => void;
@@ -109,13 +110,14 @@ type EmptyStateContentProps = {
   subtitle: string;
   listItems: ListItemContent[];
   buttonText?: string;
+  buttonIcon?: IconName;
   onClickButton?: () => void;
   footnote?: string[];
   styles: EmptyStateStyleProps;
 };
 
 export default function EmptyStateContent(props: EmptyStateContentProps): JSX.Element {
-  const { title, subtitle, listItems, buttonText, onClickButton, footnote, styles } = props;
+  const { title, subtitle, listItems, buttonText, buttonIcon, onClickButton, footnote, styles } = props;
   const { isMobile } = useDeviceInfo();
   const classes = useStyles({ ...styles, isMobile });
 
@@ -152,6 +154,7 @@ export default function EmptyStateContent(props: EmptyStateContentProps): JSX.El
                   className={classes.subButton}
                   label={item.buttonText}
                   onClick={item.onClickButton}
+                  icon={item.buttonIcon}
                 />
               )}
             </Grid>
@@ -159,7 +162,7 @@ export default function EmptyStateContent(props: EmptyStateContentProps): JSX.El
         })}
       </div>
       {buttonText && onClickButton && (
-        <Button size='medium' className={classes.button} label={buttonText} onClick={onClickButton} />
+        <Button size='medium' icon={buttonIcon} className={classes.button} label={buttonText} onClick={onClickButton} />
       )}
       {footnote && (
         <div className={classes.footNote}>

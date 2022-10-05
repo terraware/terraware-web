@@ -556,7 +556,13 @@ export default function Database(props: DatabaseProps): JSX.Element {
                   (isMobile ? (
                     <Button icon='plus' onClick={goToNewAccession} size='medium' id='newAccession' />
                   ) : (
-                    <Button label={strings.NEW_ACCESSION} onClick={goToNewAccession} size='medium' id='newAccession' />
+                    <Button
+                      label={strings.NEW_ACCESSION}
+                      icon='plus'
+                      onClick={goToNewAccession}
+                      size='medium'
+                      id='newAccession'
+                    />
                   ))}
               </>
             ) : undefined

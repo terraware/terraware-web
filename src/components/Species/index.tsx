@@ -447,7 +447,7 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
                 size='medium'
                 className={classes.buttonSpace}
               />
-              <Button id='add-species' label={strings.ADD_SPECIES} onClick={onNewSpecies} size='medium' />
+              <Button id='add-species' label={strings.ADD_SPECIES} icon='plus' onClick={onNewSpecies} size='medium' />
             </div>
           )}
           {isMobile && <Button id='add-species' onClick={onNewSpecies} size='medium' icon='plus' />}

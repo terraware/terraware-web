@@ -664,6 +664,7 @@ const strings = new LocalizedStrings({
     GO_TO_DASHBOARD: 'Go to Dashboard',
     DONE: 'Done',
     MISSING_SUBSET_WEIGHT_ERROR: 'You must enter in a subset weight in order to create a viability test',
+    SET_UP: 'Set Up',
   },
 });
 

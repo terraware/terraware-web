@@ -173,6 +173,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
           onClick={initialSpecies ? saveChanges : createNewSpecies}
           id='add-species'
           label={initialSpecies ? strings.SAVE : strings.ADD_SPECIES}
+          icon={initialSpecies ? undefined : 'plus'}
           key='button-2'
         />,
       ]}
