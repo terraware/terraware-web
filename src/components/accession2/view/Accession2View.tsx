@@ -547,11 +547,11 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
               )}
             </Box>
           ) : quantityEditable ? (
-            <Link sx={linkStyle} onClick={() => setOpenQuantityModal(true)}>
+            <Link sx={{ ...linkStyle, fontSize: '20px' }} onClick={() => setOpenQuantityModal(true)}>
               + {strings.ADD}
             </Link>
           ) : (
-            <Typography color='#CAD2D3' sx={{ pointerEvents: 'none' }}>
+            <Typography color='#CAD2D3' sx={{ pointerEvents: 'none', fontSize: '20px' }}>
               + {strings.ADD}
             </Typography>
           )}
@@ -595,11 +595,11 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
               )}
             </Box>
           ) : viabilityEditable ? (
-            <Link sx={linkStyle} onClick={() => setOpenViabilityModal(true)}>
+            <Link sx={{ ...linkStyle, fontSize: '20px' }} onClick={() => setOpenViabilityModal(true)}>
               + {strings.ADD}
             </Link>
           ) : (
-            <Typography color='#CAD2D3' sx={{ pointerEvents: 'none' }}>
+            <Typography color='#CAD2D3' sx={{ pointerEvents: 'none', fontSize: '20px' }}>
               + {strings.ADD}
             </Typography>
           )}
