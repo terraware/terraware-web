@@ -2,13 +2,20 @@ import React from 'react';
 import strings from 'src/strings';
 import Button from 'src/components/common/button/Button';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
-import { Box, Grid } from '@mui/material';
+import { Box, Grid, Theme } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
 import { Accession2, updateAccession2 } from 'src/api/accessions2/accession';
 import { ServerOrganization } from 'src/types/Organization';
 import { Unit, WEIGHT_UNITS_V2 } from 'src/components/seeds/nursery/NewTest';
 import useSnackbar from 'src/utils/useSnackbar';
 import { Dropdown } from '@terraware/web-components';
+import { makeStyles } from '@mui/styles';
+
+const useStyles = makeStyles((theme: Theme) => ({
+  units: {
+    marginLeft: theme.spacing(0.5),
+  },
+}));
 
 export interface CalculatorModalProps {
   open: boolean;
@@ -24,6 +31,7 @@ export interface CalculatorModalProps {
 export default function CalculatorModal(props: CalculatorModalProps): JSX.Element {
   const { onClose, open, record, onChange, setRecord, onPrevious } = props;
 
+  const classes = useStyles();
   const snackbar = useSnackbar();
 
   const getTotalCount = async () => {
@@ -103,6 +111,7 @@ export default function CalculatorModal(props: CalculatorModalProps): JSX.Elemen
                 onChange={onChangeSubsetUnit}
                 selectedValue={record.subsetWeight?.units}
                 fullWidth={true}
+                className={classes.units}
               />
             </Box>
           </Grid>
@@ -130,6 +139,7 @@ export default function CalculatorModal(props: CalculatorModalProps): JSX.Elemen
                 onChange={onChangeRemainingQuantityUnit}
                 selectedValue={record.remainingQuantity?.units}
                 fullWidth={true}
+                className={classes.units}
               />
             </Box>
           </Grid>

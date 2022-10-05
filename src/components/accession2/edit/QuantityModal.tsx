@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import strings from 'src/strings';
 import Button from 'src/components/common/button/Button';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
-import { Box, Grid, Link, useTheme } from '@mui/material';
+import { Box, Grid, Link, Theme, useTheme } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
 import { Accession2, updateAccession2 } from 'src/api/accessions2/accession';
 import useForm from 'src/utils/useForm';
@@ -13,6 +13,13 @@ import CalculatorModal from './CalculatorModal';
 import { Dropdown } from '@terraware/web-components';
 import EditState from './EditState';
 import _ from 'lodash';
+import { makeStyles } from '@mui/styles';
+
+const useStyles = makeStyles((theme: Theme) => ({
+  units: {
+    marginLeft: theme.spacing(0.5),
+  },
+}));
 
 export interface QuantityModalProps {
   open: boolean;
@@ -26,6 +33,7 @@ export interface QuantityModalProps {
 export default function QuantityModal(props: QuantityModalProps): JSX.Element {
   const { onClose, open, accession, reload, organization, statusEdit } = props;
 
+  const classes = useStyles();
   const [record, setRecord, onChange] = useForm(accession);
   const [isCalculatorOpened, setIsCalculatorOpened] = useState(false);
   const [quantityError, setQuantityError] = useState(false);
@@ -171,6 +179,7 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
                 onChange={onChangeUnit}
                 selectedValue={record.remainingQuantity?.units}
                 fullWidth={true}
+                className={classes.units}
               />
             </Box>
           </Grid>
