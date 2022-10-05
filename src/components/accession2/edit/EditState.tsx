@@ -72,7 +72,7 @@ export default function EditState(props: EditStateProps): JSX.Element {
         {stateChanged && (
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Icon name='warning' className={classes.messageIcon} size='large' />
-            <Typography sx={{ color: '#000000', fontSize: '14px', paddingLeft: 1 }}>
+            <Typography sx={{ color: '#000000', fontSize: '14px', paddingLeft: 0.5 }}>
               {strings.UPDATE_STATUS_WARNING}
             </Typography>
           </Box>
