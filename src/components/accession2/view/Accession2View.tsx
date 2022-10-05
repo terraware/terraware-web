@@ -425,7 +425,10 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
           <Typography>{accession?.accessionNumber}</Typography>
           {!isMobile && (
             <Box display='flex' alignItems='center'>
-              <IconButton sx={{ marginLeft: 3, height: '24px' }} onClick={() => setOpenDeleteAccession(true)}>
+              <IconButton
+                sx={{ marginLeft: 3, height: '24px', marginRight: 1 }}
+                onClick={() => setOpenDeleteAccession(true)}
+              >
                 <Icon name='iconTrashCan' />
               </IconButton>
               {accession && accession.state === 'Awaiting Check-In' ? (
