@@ -96,7 +96,7 @@ export default function OptInFeatures({ refresh }: OptInFeaturesProps): JSX.Elem
           >
             Opt-in to see experimental or work-in-progress features
           </Box>
-          {OPT_IN_FEATURES.filter((f) => f.enabled).map((f, i) => (
+          {OPT_IN_FEATURES.filter((f) => f.active).map((f, i) => (
             <Stack
               spacing={2}
               sx={{

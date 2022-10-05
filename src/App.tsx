@@ -51,6 +51,7 @@ import { getPreferences, updatePreferences } from './api/preferences/preferences
 import useEnvironment from 'src/utils/useEnvironment';
 import { Accession2Create, Accession2View } from './components/accession2';
 import OptInFeatures from './components/OptInFeatures';
+import { isRouteEnabled } from 'src/features';
 
 const useStyles = makeStyles((theme: Theme) => ({
   content: {
@@ -101,6 +102,7 @@ export default function App() {
   const [preferencesOrg, setPreferencesOrg] = useState<{ [key: string]: unknown }>();
   const [notifications, setNotifications] = useState<Notifications>();
   const { isProduction } = useEnvironment();
+  const v2AccessionsEnabled = isRouteEnabled('V2 Accessions');
 
   // seedSearchCriteria describes which criteria to apply when searching accession data.
   const [seedSearchCriteria, setSeedSearchCriteria] = useState<SeedSearchCriteria>(DEFAULT_SEED_SEARCH_FILTERS);
@@ -181,9 +183,22 @@ export default function App() {
     getUserPreferences();
   }, [organizations, setPreferencesOrg]);
 
+  const reloadOrgPreferences = useCallback(() => {
+    const getOrgPreferences = async () => {
+      if (selectedOrganization) {
+        await getPreferences(selectedOrganization.id);
+      }
+    };
+    getOrgPreferences();
+  }, [selectedOrganization]);
+
   useEffect(() => {
     reloadPreferences();
   }, [reloadPreferences]);
+
+  useEffect(() => {
+    reloadOrgPreferences();
+  }, [reloadOrgPreferences, selectedOrganization]);
 
   useEffect(() => {
     if (organizations && preferencesOrg) {
@@ -383,15 +398,14 @@ export default function App() {
                   displayColumnNames={accessionsDisplayColumns}
                   setDisplayColumnNames={setAccessionsDisplayColumns}
                   hasSeedBanks={selectedOrgHasSeedBanks()}
-                  preferences={preferencesOrg}
                 />
               </Route>
-              {!isProduction && selectedOrganization && (
+              {v2AccessionsEnabled && selectedOrganization && (
                 <Route exact path={APP_PATHS.ACCESSIONS2_NEW}>
                   <Accession2Create organization={selectedOrganization} />
                 </Route>
               )}
-              {!isProduction && selectedOrganization && user && (
+              {v2AccessionsEnabled && selectedOrganization && user && (
                 <Route path={APP_PATHS.ACCESSIONS2_ITEM}>
                   <Accession2View organization={selectedOrganization} user={user} />
                 </Route>

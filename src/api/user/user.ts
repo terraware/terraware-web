@@ -3,9 +3,19 @@ import { paths } from 'src/api/types/generated-schema';
 import { OrganizationUser, User } from 'src/types/User';
 import { AllOrganizationRoles } from 'src/types/Organization';
 
-const GET_USER_ENDPOINT = '/api/v1/users/me';
+const CURRENT_USER_ENDPOINT = '/api/v1/users/me';
 
-type UserResponse = paths[typeof GET_USER_ENDPOINT]['get']['responses'][200]['content']['application/json'];
+type UserResponse = paths[typeof CURRENT_USER_ENDPOINT]['get']['responses'][200]['content']['application/json'];
+
+let currentUser: any = {};
+
+const setCurrentUser = (user: User) => {
+  const { email } = user;
+  currentUser = {
+    ...user,
+    isTerraformation: !!email?.match(/@terraformation.com$/),
+  };
+};
 
 export type GetUserResponse = {
   user: User | null;
@@ -19,7 +29,7 @@ export async function getUser(): Promise<GetUserResponse> {
   };
 
   try {
-    const serverResponse: UserResponse = (await axios.get(GET_USER_ENDPOINT)).data;
+    const serverResponse: UserResponse = (await axios.get(CURRENT_USER_ENDPOINT)).data;
     response.user = {
       id: serverResponse.user.id,
       email: serverResponse.user.email,
@@ -27,6 +37,7 @@ export async function getUser(): Promise<GetUserResponse> {
       lastName: serverResponse.user.lastName,
       emailNotificationsEnabled: serverResponse.user.emailNotificationsEnabled,
     };
+    setCurrentUser(response.user);
   } catch {
     response.requestSucceeded = false;
   }
@@ -34,9 +45,10 @@ export async function getUser(): Promise<GetUserResponse> {
   return response;
 }
 
-type UPDATE_USER_REQUEST_PAYLOAD = paths[typeof GET_USER_ENDPOINT]['put']['requestBody']['content']['application/json'];
+type UPDATE_USER_REQUEST_PAYLOAD =
+  paths[typeof CURRENT_USER_ENDPOINT]['put']['requestBody']['content']['application/json'];
 type UPDATE_USER_RESPONSE_PAYLOAD =
-  paths[typeof GET_USER_ENDPOINT]['put']['responses'][200]['content']['application/json'];
+  paths[typeof CURRENT_USER_ENDPOINT]['put']['responses'][200]['content']['application/json'];
 
 export async function updateUserProfile(user: User): Promise<UpdateUserResponse> {
   const response: UpdateUserResponse = { requestSucceeded: true };
@@ -48,9 +60,11 @@ export async function updateUserProfile(user: User): Promise<UpdateUserResponse>
     if (user.emailNotificationsEnabled !== undefined) {
       serverRequest.emailNotificationsEnabled = user.emailNotificationsEnabled;
     }
-    const serverResponse: UPDATE_USER_RESPONSE_PAYLOAD = (await axios.put(GET_USER_ENDPOINT, serverRequest)).data;
+    const serverResponse: UPDATE_USER_RESPONSE_PAYLOAD = (await axios.put(CURRENT_USER_ENDPOINT, serverRequest)).data;
     if (serverResponse.status === 'error') {
       response.requestSucceeded = false;
+    } else {
+      getUser(); // async user retrieval to set current user in memory
     }
   } catch {
     response.requestSucceeded = false;
@@ -143,3 +157,6 @@ export async function updateOrganizationUser(
 
   return response;
 }
+
+// get current user from service
+export const getCurrentUser = () => ({ ...currentUser });

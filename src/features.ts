@@ -1,9 +1,17 @@
 import env from 'src/utils/useEnvironment';
+import { getCurrentUser } from 'src/api/user/user';
+import { getCurrentUserPreferences } from 'src/api/preferences/preferences';
 
 export type Feature = {
   name: string;
   preferenceName: string;
+  // whether this feature check is active
+  active: boolean;
+  // whether this feature is enabled for all, if not, check user preference
+  // feature is usually enabled prior to release - gives devs time to clean up code
   enabled: boolean;
+  // whether this feature is open to Terraformation employees on production (matches user email)
+  allowInternalProduction: boolean;
   description: string[];
   disclosure: string[];
 };
@@ -13,7 +21,9 @@ export const OPT_IN_FEATURES: Feature[] = [
   {
     name: 'V2 Accessions',
     preferenceName: 'enableUIV2Accessions',
-    enabled: true,
+    active: true,
+    enabled: false,
+    allowInternalProduction: false,
     description: [
       'Shows V2 accession workflows (instead of V1).',
       'You can switch between V2 and V1 flows by turning this option on or off.',
@@ -25,22 +35,52 @@ export const OPT_IN_FEATURES: Feature[] = [
   },
 ];
 
-type Preferences = { [key: string]: unknown };
+type FeatureMap = { [key: string]: Feature };
 
-const PREFERENCE_NAMES: { [key: string]: string } = {};
+const FEATURE_MAP: FeatureMap = {};
 
-// create a reverse map of feature name to preference name
+// create a reverse map of feature name to feature map
 OPT_IN_FEATURES.forEach((feature) => {
-  PREFERENCE_NAMES[feature.name] = feature.preferenceName;
+  FEATURE_MAP[feature.name] = feature;
 });
 
 /**
  * Utility function to check if a feature is enabled
  */
-export default function isEnabled(name: string, preferences?: Preferences) {
+export default function isEnabled(name: string, organizationId?: number) {
   const { isProduction } = env();
-  const preferenceName = PREFERENCE_NAMES[name];
-  const preferenceEnabled = preferences && preferences[preferenceName] === true;
+  const feature = FEATURE_MAP[name];
 
-  return !isProduction && preferenceEnabled;
+  if (!feature) {
+    return false;
+  }
+
+  if (!feature.active || feature.enabled) {
+    return feature.enabled;
+  }
+
+  const preferences = getCurrentUserPreferences(organizationId);
+  const preferenceName = feature.preferenceName;
+  const featureEnabled = preferences && preferences[preferenceName] === true;
+
+  if (!isProduction) {
+    return featureEnabled;
+  }
+
+  return feature.allowInternalProduction && getCurrentUser().isTerraformation;
+}
+
+export function isRouteEnabled(name: string) {
+  const { isProduction } = env();
+  const feature = FEATURE_MAP[name];
+
+  if (!feature) {
+    return false;
+  }
+
+  if (!feature.active || feature.enabled) {
+    return feature.enabled;
+  }
+
+  return !isProduction || (feature.allowInternalProduction && getCurrentUser().isTerraformation);
 }

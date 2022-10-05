@@ -148,7 +148,6 @@ type DatabaseProps = {
   displayColumnNames: string[];
   setDisplayColumnNames: (fields: string[]) => void;
   hasSeedBanks: boolean;
-  preferences?: { [key: string]: unknown };
 };
 
 export default function Database(props: DatabaseProps): JSX.Element {
@@ -169,7 +168,6 @@ export default function Database(props: DatabaseProps): JSX.Element {
     setDisplayColumnNames,
     organization,
     hasSeedBanks,
-    preferences,
   } = props;
   const displayColumnDetails = displayColumnNames.map((name) => {
     const detail = { ...COLUMNS_INDEXED[name] };
@@ -302,7 +300,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
         const singleAndMultiChoiceFields = filterSelectFields(searchColumns);
         const allValues = await getAllFieldValues(singleAndMultiChoiceFields, organization.id);
 
-        const isV2 = featureEnabled('V2 Accessions', preferences);
+        const isV2 = featureEnabled('V2 Accessions');
         if (!isV2 && allValues?.state?.values) {
           allValues.state.values = allValues.state.values.filter(
             (state) => ['Awaiting Processing', 'Used Up'].indexOf(state) === -1
@@ -325,11 +323,11 @@ export default function Database(props: DatabaseProps): JSX.Element {
       populateFieldOptions();
       populateSearchSummary();
     }
-  }, [searchCriteria, searchSortOrder, searchColumns, organization, preferences]);
+  }, [searchCriteria, searchSortOrder, searchColumns, organization]);
 
   const onSelect = (row: SearchResponseElement) => {
     if (row.id) {
-      const isV2 = featureEnabled('V2 Accessions', preferences);
+      const isV2 = featureEnabled('V2 Accessions');
       const seedCollectionLocation = {
         pathname: (isV2 ? APP_PATHS.ACCESSIONS2_ITEM : APP_PATHS.ACCESSIONS_ITEM).replace(
           ':accessionId',
@@ -421,7 +419,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
   };
 
   const goToNewAccession = () => {
-    if (featureEnabled('V2 Accessions', preferences)) {
+    if (featureEnabled('V2 Accessions')) {
       const newAccessionLocation = getLocation(APP_PATHS.ACCESSIONS2_NEW, location);
       history.push(newAccessionLocation);
     } else {
