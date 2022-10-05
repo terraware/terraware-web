@@ -12,6 +12,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 import CalculatorModal from './CalculatorModal';
 import { Dropdown } from '@terraware/web-components';
 import EditState from './EditState';
+import _ from 'lodash';
 
 export interface QuantityModalProps {
   open: boolean;
@@ -27,26 +28,15 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
 
   const [record, setRecord, onChange] = useForm(accession);
   const [isCalculatorOpened, setIsCalculatorOpened] = useState(false);
-  const [statusError, setStatusError] = useState(false);
   const [quantityError, setQuantityError] = useState(false);
   const theme = useTheme();
   const snackbar = useSnackbar();
 
   const validate = () => {
-    if (statusEdit) {
-      let hasError = false;
-      if (record.state === accession.state) {
-        setStatusError(true);
-        hasError = true;
-      }
-      const quantity = parseFloat(record.remainingQuantity?.quantity as unknown as string);
-      if (isNaN(quantity) || quantity <= 0) {
-        setQuantityError(true);
-        hasError = true;
-      }
-      if (hasError) {
-        return false;
-      }
+    const quantity = parseFloat(record.remainingQuantity?.quantity as unknown as string);
+    if (isNaN(quantity) || quantity <= 0) {
+      setQuantityError(true);
+      return false;
     }
     return true;
   };
@@ -104,9 +94,6 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
   };
 
   const onChangeStatus = (id: string, value: unknown) => {
-    if (accession.state !== value) {
-      setStatusError(false);
-    }
     onChange(id, value);
   };
 
@@ -118,6 +105,10 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
   const openCalculator = () => {
     setIsCalculatorOpened(true);
   };
+
+  const hasChanged =
+    (!statusEdit || accession.state !== record.state) &&
+    !_.isEqual(accession.remainingQuantity, record.remainingQuantity);
 
   return (
     <>
@@ -138,17 +129,12 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
         size='small'
         middleButtons={[
           <Button label={strings.CANCEL} type='passive' onClick={onCloseHandler} priority='secondary' key='button-1' />,
-          <Button onClick={saveQuantity} label={strings.SAVE} key='button-2' />,
+          <Button onClick={saveQuantity} label={strings.SAVE} key='button-2' disabled={!hasChanged} />,
         ]}
       >
         {statusEdit === true && (
           <Box sx={{ marginBottom: 2 }}>
-            <EditState
-              accession={accession}
-              record={record}
-              onChange={onChangeStatus}
-              error={statusError ? strings.REQUIRED_CHANGE : ''}
-            />
+            <EditState accession={accession} record={record} onChange={onChangeStatus} />
           </Box>
         )}
         <Grid container spacing={2}>
@@ -161,7 +147,13 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
               value={
                 record.remainingQuantity?.units === 'Seeds' ? record.remainingQuantity?.quantity : record.estimatedCount
               }
-              errorText={quantityError ? strings.REQUIRED_FIELD : ''}
+              errorText={
+                quantityError
+                  ? record.remainingQuantity?.quantity
+                    ? strings.INVALID_VALUE
+                    : strings.REQUIRED_FIELD
+                  : ''
+              }
             />
           </Grid>
           <Grid item xs={12}>
