@@ -70,6 +70,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
       withdrawnByUserId: user.id,
       testType: 'Lab',
       seedsTested: 0,
+      startDate: getTodaysDateFormatted(),
     };
 
     const initViabilityTest = () => {
@@ -292,7 +293,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
   const onAddResult = () => {
     if (record) {
       const updatedResults = [...(record.testResults || [])];
-      updatedResults.push({ recordingDate: '', seedsGerminated: 0 });
+      updatedResults.push({ recordingDate: getTodaysDateFormatted(), seedsGerminated: 0 });
 
       onChange('testResults', updatedResults);
     }
