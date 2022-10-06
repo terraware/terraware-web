@@ -61,8 +61,8 @@ describe('Accessions', () => {
       cy.get('#species').type('Kousa Dogwood{downArrow}{enter}');
       cy.get('#numberOfTrees').type('3');
       cy.get('#founderId').type('234908098');
-      cy.get('#sourcePlantOrigin').click();
-      cy.get('#Outplant').click();
+      cy.get('#collectionSource').click();
+      cy.get('#Wild').click();
 
       cy.get('#fieldNotes').type('Some notes');
       cy.get('#collectedDate').type('2021-02-01');
@@ -90,7 +90,7 @@ describe('Accessions', () => {
       cy.get('#species').should('have.value', 'Kousa Dogwood');
       cy.get('#numberOfTrees').should('have.value', '3');
       cy.get('#founderId').should('have.value', '234908098');
-      cy.get('#sourcePlantOrigin + input').should('have.value', 'Outplant');
+      cy.get('#collectionSource + input').should('have.value', 'Wild');
       cy.get('#fieldNotes').should('have.value', 'Some notes');
       cy.get('#collectedDate').should('have.value', '2021-02-01');
       cy.get('#receivedDate').should('have.value', '2021-02-03');

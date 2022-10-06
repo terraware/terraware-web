@@ -370,12 +370,14 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
           </Grid>
           <Grid item xs={gridSize()}>
             <Dropdown
-              id='sourcePlantOrigin'
-              label={strings.WILD_OUTPLANT}
-              selected={record.sourcePlantOrigin}
+              id='collectionSource'
+              label={strings.COLLECTION_SOURCE}
+              selected={record.collectionSource}
               values={[
                 { label: strings.WILD, value: 'Wild' },
-                { label: strings.OUTPLANT, value: 'Outplant' },
+                { label: strings.REINTRODUCED, value: 'Reintroduced' },
+                { label: strings.CULTIVATED, value: 'Cultivated' },
+                { label: strings.OTHER, value: 'Other' },
               ]}
               onChange={onChange}
               disabled={isPendingCheckIn || isContributor}
