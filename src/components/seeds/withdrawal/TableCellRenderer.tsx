@@ -4,7 +4,7 @@ import { AccessionWithdrawal } from 'src/api/types/accessions';
 import strings from 'src/strings';
 import CellRenderer, { CellDateRenderer } from '../../common/table/TableCellRenderer';
 import { RendererProps } from '../../common/table/types';
-import getDateDisplayValue from 'src/utils/date';
+import { getDateDisplayValue } from '@terraware/web-components/utils';
 import { getSelectedPurpose } from 'src/utils/withdrawalPurposes';
 
 export default function WithdrawalCellRenderer(props: RendererProps<AccessionWithdrawal>): JSX.Element {

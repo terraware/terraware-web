@@ -2,6 +2,7 @@ import React, { useCallback, useState, useEffect } from 'react';
 import { useTheme, Grid } from '@mui/material';
 import { DatePicker } from '@terraware/web-components';
 import { Accession2, AccessionPostRequestBody } from 'src/api/accessions2/accession';
+import { isInTheFuture } from '@terraware/web-components/utils';
 import strings from 'src/strings';
 
 interface Props {
@@ -41,16 +42,15 @@ export default function CollectedReceivedDate2({ onChange, record, type, validat
 
   const validateDate = useCallback(
     (id: string, value?: any) => {
-      const date = new Date(value).getTime();
-      const now = Date.now();
+      const date = new Date(value);
 
       setDateError(id, '');
 
-      if (!value || isNaN(date)) {
+      if (!value || isNaN(date.getTime())) {
         const required = validate && !value;
         setDateError(id, required ? strings.REQUIRED_FIELD : strings.INVALID_DATE);
         return false;
-      } else if (date > now) {
+      } else if (isInTheFuture(date)) {
         setDateError(id, strings.NO_FUTURE_DATES);
         return false;
       } else {

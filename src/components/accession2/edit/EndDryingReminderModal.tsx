@@ -7,7 +7,7 @@ import { Checkbox, DatePicker } from '@terraware/web-components';
 import { Accession2 } from 'src/api/accessions2/accession';
 import useForm from 'src/utils/useForm';
 import { updateAccession2 } from 'src/api/accessions2/accession';
-import { getTodaysDateFormatted } from 'src/utils/date';
+import { getTodaysDateFormatted } from '@terraware/web-components/utils';
 import useSnackbar from 'src/utils/useSnackbar';
 
 export interface EndDryingReminderModalProps {

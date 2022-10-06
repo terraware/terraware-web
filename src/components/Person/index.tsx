@@ -11,7 +11,7 @@ import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
 import { OrganizationUser } from 'src/types/User';
 import { makeStyles } from '@mui/styles';
-import getDateDisplayValue from 'src/utils/date';
+import { getDateDisplayValue } from '@terraware/web-components/utils';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageSnackbar from 'src/components/PageSnackbar';
 

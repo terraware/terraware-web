@@ -20,7 +20,7 @@ import Textfield from 'src/components/common/Textfield/Textfield';
 import FormBottomBar from 'src/components/common/FormBottomBar';
 import Select from 'src/components/common/Select/Select';
 import { ACCESSION_2_CREATE_STATES } from 'src/types/Accession';
-import { getTodaysDateFormatted } from 'src/utils/date';
+import { getTodaysDateFormatted } from '@terraware/web-components/utils';
 import useSnackbar from 'src/utils/useSnackbar';
 
 type CreateAccessionProps = {
