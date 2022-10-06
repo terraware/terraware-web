@@ -5,5 +5,3 @@ export default utils.getDateDisplayValue;
 export const getTodaysDateFormatted = utils.getTodaysDateFormatted;
 
 export const isInTheFuture = utils.isInTheFuture;
-
-
