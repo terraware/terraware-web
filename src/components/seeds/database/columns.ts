@@ -85,8 +85,8 @@ const COLUMNS: DatabaseColumn[] = [
     filter: { type: 'single_selection' },
   },
   {
-    key: 'sourcePlantOrigin',
-    name: strings.WILD_OUTPLANT,
+    key: 'collectionSource',
+    name: strings.COLLECTION_SOURCE,
     type: 'string',
     filter: { type: 'single_selection' },
   },

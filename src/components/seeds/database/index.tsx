@@ -250,6 +250,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
   }, [query, location, history, setSearchCriteria, organization, searchCriteria]);
 
   useEffect(() => {
+    let activeRequests = true;
     const getFieldsFromSearchColumns = () => {
       let columnsNamesToSearch = Array<string>();
       if (searchColumns.includes('active')) {
@@ -271,7 +272,9 @@ export default function Database(props: DatabaseProps): JSX.Element {
           count: 1000,
         });
 
-        setUnfilteredResults(apiResponse);
+        if (activeRequests) {
+          setUnfilteredResults(apiResponse);
+        }
       };
 
       const populateSearchResults = async () => {
@@ -282,17 +285,28 @@ export default function Database(props: DatabaseProps): JSX.Element {
           search: convertToSearchNodePayload(searchCriteria, organization.id),
           count: 1000,
         });
-        setSearchResults(apiResponse);
+
+        if (activeRequests) {
+          setSearchResults(apiResponse);
+        }
       };
 
       const populateAvailableFieldOptions = async () => {
         const singleAndMultiChoiceFields = filterSelectFields(searchColumns);
-        setAvailableFieldOptions(await searchFieldValues(singleAndMultiChoiceFields, searchCriteria, organization.id));
+        const data = await searchFieldValues(singleAndMultiChoiceFields, searchCriteria, organization.id);
+
+        if (activeRequests) {
+          setAvailableFieldOptions(data);
+        }
       };
 
       const populatePendingAccessions = async () => {
         if (organization) {
-          setPendingAccessions(await getPendingAccessions(organization.id));
+          const data = await getPendingAccessions(organization.id);
+
+          if (activeRequests) {
+            setPendingAccessions(data);
+          }
         }
       };
 
@@ -307,14 +321,19 @@ export default function Database(props: DatabaseProps): JSX.Element {
           );
         }
 
-        setFieldOptions(allValues);
+        if (activeRequests) {
+          setFieldOptions(allValues);
+        }
       };
 
       const populateSearchSummary = async () => {
         const apiResponse = await searchSummary({
           search: convertToSearchNodePayload(searchCriteria, organization.id),
         });
-        setSearchSummaryResults(apiResponse);
+
+        if (activeRequests) {
+          setSearchSummaryResults(apiResponse);
+        }
       };
       populateUnfilteredResults();
       populateSearchResults();
@@ -323,6 +342,10 @@ export default function Database(props: DatabaseProps): JSX.Element {
       populateFieldOptions();
       populateSearchSummary();
     }
+
+    return () => {
+      activeRequests = false;
+    };
   }, [searchCriteria, searchSortOrder, searchColumns, organization]);
 
   const onSelect = (row: SearchResponseElement) => {
