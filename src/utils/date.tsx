@@ -1,6 +1,9 @@
-import { getDateDisplayValue } from '@terraware/web-components/utils';
-export default getDateDisplayValue;
+import * as utils from '@terraware/web-components/utils';
 
-export const getTodaysDateFormatted = () => {
-  return getDateDisplayValue(Date.now());
-};
+export default utils.getDateDisplayValue;
+
+export const getTodaysDateFormatted = utils.getTodaysDateFormatted;
+
+export const isInTheFuture = utils.isInTheFuture;
+
+

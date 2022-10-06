@@ -13,7 +13,7 @@ import { getOrganizationUsers } from 'src/api/organization/organization';
 import { OrganizationUser, User } from 'src/types/User';
 import { ServerOrganization } from 'src/types/Organization';
 import { Unit, WEIGHT_UNITS_V2 } from 'src/components/seeds/nursery/NewTest';
-import { getTodaysDateFormatted } from 'src/utils/date';
+import { getTodaysDateFormatted, isInTheFuture } from 'src/utils/date';
 import { SUBSTRATES, TREATMENTS, WITHDRAWAL_TYPES } from 'src/types/Accession';
 import useSnackbar from 'src/utils/useSnackbar';
 import { Dropdown } from '@terraware/web-components';
@@ -165,9 +165,8 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
   };
 
   const onChangeDate = (id: string, value?: any) => {
-    const date = new Date(value).getTime();
-    const now = Date.now();
-    if (isNaN(date) || date > now) {
+    const date = new Date(value);
+    if (isNaN(date.getTime()) || isInTheFuture(date)) {
       return;
     } else {
       onChange(id, value);

@@ -23,7 +23,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 import { renderUser } from 'src/utils/renderUser';
 import { Close } from '@mui/icons-material';
 import { preventDefaultEvent } from '@terraware/web-components/utils';
-import { getTodaysDateFormatted } from 'src/utils/date';
+import { getTodaysDateFormatted, isInTheFuture } from 'src/utils/date';
 import { ViabilityTest } from 'src/api/types/accessions';
 import ViabilityResultModal from './ViabilityResultModal';
 
@@ -256,9 +256,8 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
   };
 
   const onChangeDate = (id: string, value?: any) => {
-    const date = new Date(value).getTime();
-    const now = Date.now();
-    if (isNaN(date) || date > now) {
+    const date = new Date(value);
+    if (isNaN(date.getTime()) || isInTheFuture(date)) {
       return;
     } else {
       onChange(id, value);
