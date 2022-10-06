@@ -663,6 +663,7 @@ const strings = new LocalizedStrings({
     DONE: 'Done',
     MISSING_SUBSET_WEIGHT_ERROR: 'You must enter in a subset weight in order to create a viability test',
     SET_UP: 'Set Up',
+    SUBSET_ERROR: 'Subset weight should be less than seed weight',
   },
 });
 

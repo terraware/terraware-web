@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import strings from 'src/strings';
 import Button from 'src/components/common/button/Button';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
@@ -33,14 +33,28 @@ export default function CalculatorModal(props: CalculatorModalProps): JSX.Elemen
 
   const classes = useStyles();
   const snackbar = useSnackbar();
+  const [subsetError, setSubsetError] = useState('');
+
+  const validateFields = () => {
+    if (record.subsetWeight?.units === record.remainingQuantity?.units) {
+      if ((record.subsetWeight?.quantity || 0) > (record.remainingQuantity?.quantity || 0)) {
+        setSubsetError(strings.SUBSET_ERROR);
+        return false;
+      }
+    }
+    setSubsetError('');
+    return true;
+  };
 
   const getTotalCount = async () => {
-    const response = await updateAccession2(record, true);
-    if (response.requestSucceeded && response.accession) {
-      goToPrev();
-      setRecord(response.accession);
-    } else {
-      snackbar.toastError();
+    if (validateFields()) {
+      const response = await updateAccession2(record, true);
+      if (response.requestSucceeded && response.accession) {
+        goToPrev();
+        setRecord(response.accession);
+      } else {
+        snackbar.toastError();
+      }
     }
   };
 
@@ -98,21 +112,26 @@ export default function CalculatorModal(props: CalculatorModalProps): JSX.Elemen
         <Grid container spacing={2}>
           <Grid item xs={12} textAlign='left'>
             <Box display='flex' textAlign='left' alignItems='end'>
-              <Textfield
-                label={strings.SUBSET_WEIGHT}
-                id='subsetWeight'
-                onChange={(id, value) => onChangeSubsetWeight(value as number)}
-                type='text'
-                value={record.subsetWeight?.quantity}
-              />
-              <Dropdown
-                options={WEIGHT_UNITS_V2}
-                placeholder={strings.SELECT}
-                onChange={onChangeSubsetUnit}
-                selectedValue={record.subsetWeight?.units}
-                fullWidth={true}
-                className={classes.units}
-              />
+              <Box width='600px'>
+                <Textfield
+                  label={strings.SUBSET_WEIGHT}
+                  id='subsetWeight'
+                  onChange={(id, value) => onChangeSubsetWeight(value as number)}
+                  type='text'
+                  value={record.subsetWeight?.quantity}
+                  errorText={subsetError}
+                />
+              </Box>
+              <Box height={subsetError ? '85px' : 'auto'}>
+                <Dropdown
+                  options={WEIGHT_UNITS_V2}
+                  placeholder={strings.SELECT}
+                  onChange={onChangeSubsetUnit}
+                  selectedValue={record.subsetWeight?.units}
+                  fullWidth={true}
+                  className={classes.units}
+                />
+              </Box>
             </Box>
           </Grid>
           <Grid item xs={12} textAlign='left'>
