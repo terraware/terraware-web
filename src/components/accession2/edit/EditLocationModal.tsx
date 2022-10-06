@@ -12,6 +12,7 @@ import useForm from 'src/utils/useForm';
 import { getLocations } from 'src/api/seeds/locations';
 import { updateAccession2 } from 'src/api/accessions2/accession';
 import { StorageLocationSelector, StorageSubLocationSelector } from '../properties';
+import useSnackbar from 'src/utils/useSnackbar';
 
 export interface EditLocationModalProps {
   open: boolean;
@@ -25,6 +26,7 @@ export default function EditLocationModal(props: EditLocationModalProps): JSX.El
   const { onClose, open, accession, organization, reload } = props;
   const seedBanks: Facility[] = (getAllSeedBanks(organization).filter((sb) => !!sb) as Facility[]) || [];
   const [storageLocations, setStorageLocations] = useState<StorageLocationDetails[]>([]);
+  const snackbar = useSnackbar();
 
   const newRecord = {
     facilityId: accession.facilityId || 0,
@@ -58,12 +60,14 @@ export default function EditLocationModal(props: EditLocationModalProps): JSX.El
     });
     if (response.requestSucceeded) {
       reload();
+      onClose();
+    } else {
+      snackbar.toastError();
     }
-    onClose();
   };
 
   const onChangeHandler = (value: Facility) => {
-    setRecord({ facilityId: value.id, storageLocation: '' });
+    setRecord({ facilityId: value.id, storageLocation: undefined });
   };
 
   const onCloseHandler = () => {
