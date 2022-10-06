@@ -35,20 +35,6 @@ export default function CalculatorModal(props: CalculatorModalProps): JSX.Elemen
   const snackbar = useSnackbar();
   const [subsetError, setSubsetError] = useState('');
 
-  const getTotalCount = async () => {
-    const response = await updateAccession2(record, true);
-    if (response.requestSucceeded && response.accession) {
-      goToPrev();
-      setRecord(response.accession);
-    } else {
-      snackbar.toastError();
-    }
-  };
-
-  const onCloseHandler = () => {
-    onClose();
-  };
-
   const validateFields = () => {
     if (record.subsetWeight?.units === record.remainingQuantity?.units) {
       if ((record.subsetWeight?.quantity || 0) > (record.remainingQuantity?.quantity || 0)) {
@@ -60,11 +46,25 @@ export default function CalculatorModal(props: CalculatorModalProps): JSX.Elemen
     return true;
   };
 
-  const goToPrev = () => {
+  const getTotalCount = async () => {
     if (validateFields()) {
-      onPrevious();
-      onCloseHandler();
+      const response = await updateAccession2(record, true);
+      if (response.requestSucceeded && response.accession) {
+        goToPrev();
+        setRecord(response.accession);
+      } else {
+        snackbar.toastError();
+      }
     }
+  };
+
+  const onCloseHandler = () => {
+    onClose();
+  };
+
+  const goToPrev = () => {
+    onPrevious();
+    onCloseHandler();
   };
 
   const onChangeSubsetWeight = (value: number) => {
