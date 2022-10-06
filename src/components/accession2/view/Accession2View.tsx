@@ -456,7 +456,10 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
         {accession?.state && (
           <Box sx={editableParentProps}>
             <Icon name='seedbankNav' className={classes.iconStyle} />
-            <Box sx={editableProps} onClick={() => !isAwaitingCheckin && setOpenEditStateModal(true)}>
+            <Box
+              sx={isAwaitingCheckin ? readOnlyProps : editableProps}
+              onClick={() => !isAwaitingCheckin && setOpenEditStateModal(true)}
+            >
               <Typography
                 paddingLeft={1}
                 sx={{
