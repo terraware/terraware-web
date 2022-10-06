@@ -3,7 +3,7 @@ import React from 'react';
 import strings from 'src/strings';
 import CellRenderer, { CellDateRenderer, TableRowType } from '../../common/table/TableCellRenderer';
 import { RendererProps } from '../../common/table/types';
-import getDateDisplayValue from 'src/utils/date';
+import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 export default function LabCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
   const { column, row, value, index } = props;

@@ -2,7 +2,7 @@ import React, { useCallback, useState, useEffect } from 'react';
 import { useTheme, Grid } from '@mui/material';
 import { DatePicker } from '@terraware/web-components';
 import { Accession2, AccessionPostRequestBody } from 'src/api/accessions2/accession';
-import { isInTheFuture } from 'src/utils/date';
+import { isInTheFuture } from '@terraware/web-components/utils';
 import strings from 'src/strings';
 
 interface Props {

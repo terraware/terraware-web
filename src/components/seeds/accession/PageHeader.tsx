@@ -6,7 +6,7 @@ import { useHistory } from 'react-router-dom';
 import { Accession } from 'src/api/types/accessions';
 import { APP_PATHS } from 'src/constants';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
-import getDateDisplayValue from 'src/utils/date';
+import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 const useStyles = makeStyles((theme: Theme) => ({
   container: {

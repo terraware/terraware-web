@@ -23,7 +23,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 import { renderUser } from 'src/utils/renderUser';
 import { Close } from '@mui/icons-material';
 import { preventDefaultEvent } from '@terraware/web-components/utils';
-import { getTodaysDateFormatted, isInTheFuture } from 'src/utils/date';
+import { getTodaysDateFormatted, isInTheFuture } from '@terraware/web-components/utils';
 import { ViabilityTest } from 'src/api/types/accessions';
 import ViabilityResultModal from './ViabilityResultModal';
 

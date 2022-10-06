@@ -4,7 +4,7 @@ import { ViabilityTest } from 'src/api/types/tests';
 import strings from 'src/strings';
 import CellRenderer, { CellDateRenderer } from '../../common/table/TableCellRenderer';
 import { RendererProps } from '../../common/table/types';
-import getDateDisplayValue from 'src/utils/date';
+import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 export default function NurseryCellRenderer(props: RendererProps<ViabilityTest>): JSX.Element {
   const { column, row, value, index } = props;
