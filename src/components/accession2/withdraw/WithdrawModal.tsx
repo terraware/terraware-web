@@ -198,6 +198,15 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
           setIndividualError('withdrawnQuantity', strings.INVALID_VALUE);
           return false;
         }
+        if (
+          accession.remainingQuantity?.units &&
+          Number(record.withdrawnQuantity.units === accession.remainingQuantity.units)
+        ) {
+          if (record.withdrawnQuantity.quantity > accession.remainingQuantity?.quantity) {
+            setIndividualError('withdrawnQuantity', strings.WITHDRAWN_QUANTITY_ERROR);
+            return false;
+          }
+        }
       }
     } else {
       setIndividualError('withdrawnQuantity', strings.REQUIRED_FIELD);
