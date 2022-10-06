@@ -23,7 +23,7 @@ import TextField from '../../common/TextField';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import Button from 'src/components/common/button/Button';
-import { getTodaysDateFormatted } from 'src/utils/date';
+import { getTodaysDateFormatted } from '@terraware/web-components/utils';
 
 const useStyles = makeStyles((theme: Theme) => ({
   submit: {

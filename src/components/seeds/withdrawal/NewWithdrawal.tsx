@@ -33,7 +33,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { getSelectedPurpose } from 'src/utils/withdrawalPurposes';
 import Button from 'src/components/common/button/Button';
-import { getTodaysDateFormatted } from 'src/utils/date';
+import { getTodaysDateFormatted } from '@terraware/web-components/utils';
 
 const useStyles = makeStyles((theme: Theme) => ({
   submit: {

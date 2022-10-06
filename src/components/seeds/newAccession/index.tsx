@@ -32,7 +32,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import Collectors from './Collectors';
-import { getTodaysDateFormatted } from 'src/utils/date';
+import { getTodaysDateFormatted } from '@terraware/web-components/utils';
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
