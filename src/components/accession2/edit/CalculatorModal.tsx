@@ -112,22 +112,26 @@ export default function CalculatorModal(props: CalculatorModalProps): JSX.Elemen
         <Grid container spacing={2}>
           <Grid item xs={12} textAlign='left'>
             <Box display='flex' textAlign='left' alignItems='end'>
-              <Textfield
-                label={strings.SUBSET_WEIGHT}
-                id='subsetWeight'
-                onChange={(id, value) => onChangeSubsetWeight(value as number)}
-                type='text'
-                value={record.subsetWeight?.quantity}
-                errorText={subsetError}
-              />
-              <Dropdown
-                options={WEIGHT_UNITS_V2}
-                placeholder={strings.SELECT}
-                onChange={onChangeSubsetUnit}
-                selectedValue={record.subsetWeight?.units}
-                fullWidth={true}
-                className={classes.units}
-              />
+              <Box width='600px'>
+                <Textfield
+                  label={strings.SUBSET_WEIGHT}
+                  id='subsetWeight'
+                  onChange={(id, value) => onChangeSubsetWeight(value as number)}
+                  type='text'
+                  value={record.subsetWeight?.quantity}
+                  errorText={subsetError}
+                />
+              </Box>
+              <Box height={subsetError ? '85px' : 'auto'}>
+                <Dropdown
+                  options={WEIGHT_UNITS_V2}
+                  placeholder={strings.SELECT}
+                  onChange={onChangeSubsetUnit}
+                  selectedValue={record.subsetWeight?.units}
+                  fullWidth={true}
+                  className={classes.units}
+                />
+              </Box>
             </Box>
           </Grid>
           <Grid item xs={12} textAlign='left'>
