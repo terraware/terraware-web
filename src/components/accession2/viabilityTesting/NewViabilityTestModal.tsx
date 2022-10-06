@@ -70,6 +70,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
       withdrawnByUserId: user.id,
       testType: 'Lab',
       seedsTested: 0,
+      startDate: getTodaysDateFormatted(),
     };
 
     const initViabilityTest = () => {
