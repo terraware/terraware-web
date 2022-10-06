@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import strings from 'src/strings';
 import Button from 'src/components/common/button/Button';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
@@ -33,6 +33,7 @@ export default function CalculatorModal(props: CalculatorModalProps): JSX.Elemen
 
   const classes = useStyles();
   const snackbar = useSnackbar();
+  const [subsetError, setSubsetError] = useState('');
 
   const getTotalCount = async () => {
     const response = await updateAccession2(record, true);
@@ -48,9 +49,22 @@ export default function CalculatorModal(props: CalculatorModalProps): JSX.Elemen
     onClose();
   };
 
+  const validateFields = () => {
+    if (record.subsetWeight?.units === record.remainingQuantity?.units) {
+      if ((record.subsetWeight?.quantity || 0) > (record.remainingQuantity?.quantity || 0)) {
+        setSubsetError(strings.SUBSET_ERROR);
+        return false;
+      }
+    }
+    setSubsetError('');
+    return true;
+  };
+
   const goToPrev = () => {
-    onPrevious();
-    onCloseHandler();
+    if (validateFields()) {
+      onPrevious();
+      onCloseHandler();
+    }
   };
 
   const onChangeSubsetWeight = (value: number) => {
@@ -104,6 +118,7 @@ export default function CalculatorModal(props: CalculatorModalProps): JSX.Elemen
                 onChange={(id, value) => onChangeSubsetWeight(value as number)}
                 type='text'
                 value={record.subsetWeight?.quantity}
+                errorText={subsetError}
               />
               <Dropdown
                 options={WEIGHT_UNITS_V2}
