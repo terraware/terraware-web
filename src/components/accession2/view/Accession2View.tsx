@@ -321,6 +321,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
 
   const quantityEditable = accession?.state === 'Drying' || accession?.state === 'In Storage';
   const viabilityEditable = accession?.state !== 'Used Up';
+  const isAwaitingCheckin = accession?.state === 'Awaiting Check-In';
 
   return (
     <TfMain>
@@ -431,7 +432,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
               >
                 <Icon name='iconTrashCan' />
               </IconButton>
-              {accession && accession.state === 'Awaiting Check-In' ? (
+              {accession && isAwaitingCheckin ? (
                 <Button onClick={() => checkInAccession()} label={strings.CHECK_IN} size='medium' />
               ) : (
                 renderWithdrawalButton()
@@ -455,7 +456,10 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
         {accession?.state && (
           <Box sx={editableParentProps}>
             <Icon name='seedbankNav' className={classes.iconStyle} />
-            <Box sx={editableProps} onClick={() => setOpenEditStateModal(true)}>
+            <Box
+              sx={isAwaitingCheckin ? readOnlyProps : editableProps}
+              onClick={() => !isAwaitingCheckin && setOpenEditStateModal(true)}
+            >
               <Typography
                 paddingLeft={1}
                 sx={{
@@ -469,7 +473,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
               >
                 {accession.state}
               </Typography>
-              {accession.state !== 'Awaiting Check-In' ? (
+              {!isAwaitingCheckin ? (
                 <IconButton sx={{ marginLeft: 1, height: '24px', width: '24px' }}>
                   <Icon name='iconEdit' className={`${classes.editIcon} edit-icon`} />
                 </IconButton>
@@ -612,7 +616,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
             <Icon name='iconTrashCan' />
           </IconButton>
           <Box paddingLeft={2} width='100%'>
-            {accession && accession.state === 'Awaiting Check-In' ? (
+            {accession && isAwaitingCheckin ? (
               <Button
                 onClick={() => checkInAccession()}
                 label={strings.CHECK_IN}
