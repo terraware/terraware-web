@@ -512,7 +512,7 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
                   setSelectedRows={isUserContributor ? undefined : setSelectedSpeciesRows}
                   showTopBar={true}
                   Renderer={SpeciesCellRenderer}
-                  onSelect={selectAndEditSpecies}
+                  onSelect={!isUserContributor ? selectAndEditSpecies : undefined}
                   controlledOnSelect={true}
                   reloadData={reloadDataProblemsHandler}
                   topBarButtons={
