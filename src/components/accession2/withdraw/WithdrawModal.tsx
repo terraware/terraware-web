@@ -71,6 +71,9 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
       if (!validateAmount()) {
         return;
       }
+      if (fieldsErrors.date) {
+        return;
+      }
       if (record.purpose === 'Viability Testing') {
         viabilityTesting.seedsTested = record.withdrawnQuantity?.quantity || 0;
         viabilityTesting.startDate = record.date;
@@ -164,11 +167,25 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
     setWithdrawAllSelected(withdrawAll);
   };
 
-  const onChangeDate = (id: string, value?: any) => {
-    const date = new Date(value);
-    if (isNaN(date.getTime()) || isInTheFuture(date)) {
-      return;
+  const validateDate = (value?: any) => {
+    if (!value) {
+      setIndividualError('date', strings.REQUIRED_FIELD);
+      return false;
+    } else if (isNaN(value.getTime())) {
+      setIndividualError('date', strings.INVALID_DATE);
+      return false;
+    } else if (isInTheFuture(value)) {
+      setIndividualError('date', strings.NO_FUTURE_DATES);
+      return false;
     } else {
+      setIndividualError('date', '');
+      return true;
+    }
+  };
+
+  const onChangeDate = (id: string, value?: any) => {
+    const valid = validateDate(value);
+    if (valid) {
       onChange(id, value);
     }
   };
@@ -335,6 +352,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
             aria-label={strings.DATE}
             value={record.date}
             onChange={onChangeDate}
+            errorText={fieldsErrors.date}
           />
         </Grid>
         <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
