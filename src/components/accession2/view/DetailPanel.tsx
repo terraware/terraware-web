@@ -189,8 +189,10 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
               {accession.plantId ? <Typography>{`${strings.PLANT_ID}: ${accession.plantId}`}</Typography> : ''}
               {accession.notes ? (
                 <Box marginTop={2} display='flex'>
-                  <Icon name='iconFile' className={classes.folderIcon} />
-                  <Typography>{accession.notes}</Typography>
+                  <Typography>
+                    <Icon name='iconFile' className={classes.folderIcon} />
+                    {accession.notes}
+                  </Typography>
                 </Box>
               ) : null}
             </Grid>
