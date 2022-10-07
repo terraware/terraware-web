@@ -133,7 +133,7 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
     ),
     type: 'string',
   });
-  const isUserContributor = isContributor(organization);
+  const userCanEdit = !isContributor(organization);
   const { isMobile } = useDeviceInfo();
 
   const getParams = useCallback(() => {
@@ -430,7 +430,7 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
       <Grid container>
         <Grid item xs={12} className={classes.titleContainer}>
           <h1 className={classes.pageTitle}>{strings.SPECIES}</h1>
-          {species && species.length > 0 && !isMobile && !isUserContributor && (
+          {species && species.length > 0 && !isMobile && userCanEdit && (
             <div>
               <Button
                 id='check-data'
@@ -451,9 +451,7 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
               <Button id='add-species' label={strings.ADD_SPECIES} icon='plus' onClick={onNewSpecies} size='medium' />
             </div>
           )}
-          {isMobile && !isUserContributor && (
-            <Button id='add-species' onClick={onNewSpecies} size='medium' icon='plus' />
-          )}
+          {isMobile && userCanEdit && <Button id='add-species' onClick={onNewSpecies} size='medium' icon='plus' />}
         </Grid>
         <p>{strings.SPECIES_DESCRIPTION}</p>
         <PageSnackbar />
@@ -507,12 +505,12 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
                   columns={selectedColumns}
                   rows={results}
                   orderBy='name'
-                  showCheckbox={!isUserContributor}
+                  showCheckbox={userCanEdit}
                   selectedRows={selectedSpeciesRows}
-                  setSelectedRows={isUserContributor ? undefined : setSelectedSpeciesRows}
+                  setSelectedRows={userCanEdit ? setSelectedSpeciesRows : undefined}
                   showTopBar={true}
                   Renderer={SpeciesCellRenderer}
-                  onSelect={!isUserContributor ? selectAndEditSpecies : undefined}
+                  onSelect={userCanEdit ? selectAndEditSpecies : undefined}
                   controlledOnSelect={true}
                   reloadData={reloadDataProblemsHandler}
                   topBarButtons={
