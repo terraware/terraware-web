@@ -184,7 +184,7 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
             </Grid>
             <Grid item xs={gridRightSide}>
               {`${strings.COLLECTED_FROM}${numPlants === undefined ? '' : ' ' + numPlants}${
-                collectionSource ? ' ' + collectionSource : ''
+                collectionSource && collectionSource !== 'Other' ? ' ' + collectionSource : ''
               } ${isNotPlural ? strings.PLANT : strings.PLANTS}`}
               {accession.plantId ? <Typography>{`${strings.PLANT_ID}: ${accession.plantId}`}</Typography> : ''}
               {accession.notes ? (
