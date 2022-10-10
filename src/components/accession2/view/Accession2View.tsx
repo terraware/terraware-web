@@ -30,7 +30,7 @@ import ViabilityModal from '../edit/ViabilityModal';
 import NewViabilityTestModal from '../viabilityTesting/NewViabilityTestModal';
 import { ViabilityTest } from 'src/api/types/accessions';
 import ViewViabilityTestModal from '../viabilityTesting/ViewViabilityTestModal';
-import { getSeedBank } from 'src/utils/organization';
+import { getSeedBank, isContributor } from 'src/utils/organization';
 import _ from 'lodash';
 
 const useStyles = makeStyles(() => ({
@@ -76,6 +76,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
   const [selectedTest, setSelectedTest] = useState<ViabilityTest>();
   const [age, setAge] = useState({ value: '', unit: '' });
   const { organization, user } = props;
+  const userCanEdit = !isContributor(organization);
   const classes = useStyles();
   const snackbar = useSnackbar();
   const { isMobile } = useDeviceInfo();
@@ -319,8 +320,8 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
 
   const spaceFiller = () => <Box sx={{ marginLeft: 1, height: '24px', width: 2 }} />;
 
-  const quantityEditable = accession?.state === 'Drying' || accession?.state === 'In Storage';
-  const viabilityEditable = accession?.state !== 'Used Up';
+  const quantityEditable = (userCanEdit && accession?.state === 'Drying') || accession?.state === 'In Storage';
+  const viabilityEditable = userCanEdit && accession?.state !== 'Used Up';
   const isAwaitingCheckin = accession?.state === 'Awaiting Check-In';
 
   return (
@@ -424,7 +425,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
       <Box padding={isMobile ? themeObj.spacing(3, 0) : 3}>
         <Box display='flex' justifyContent='space-between' alignItems='center'>
           <Typography>{accession?.accessionNumber}</Typography>
-          {!isMobile && (
+          {!isMobile && userCanEdit && (
             <Box display='flex' alignItems='center'>
               <IconButton
                 sx={{ marginLeft: 3, height: '24px', marginRight: 1 }}
@@ -457,8 +458,8 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
           <Box sx={editableParentProps}>
             <Icon name='seedbankNav' className={classes.iconStyle} />
             <Box
-              sx={isAwaitingCheckin ? readOnlyProps : editableProps}
-              onClick={() => !isAwaitingCheckin && setOpenEditStateModal(true)}
+              sx={isAwaitingCheckin || !userCanEdit ? readOnlyProps : editableProps}
+              onClick={() => !isAwaitingCheckin && userCanEdit && setOpenEditStateModal(true)}
             >
               <Typography
                 paddingLeft={1}
@@ -473,7 +474,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
               >
                 {accession.state}
               </Typography>
-              {!isAwaitingCheckin ? (
+              {!isAwaitingCheckin && userCanEdit ? (
                 <IconButton sx={{ marginLeft: 1, height: '24px', width: '24px' }}>
                   <Icon name='iconEdit' className={`${classes.editIcon} edit-icon`} />
                 </IconButton>
@@ -492,21 +493,31 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
         {accession?.facilityId !== undefined && (
           <Box sx={editableParentProps}>
             <Icon name='iconMyLocation' className={classes.iconStyle} />
-            <Box sx={editableProps} onClick={() => setOpenEditLocationModal(true)}>
+            <Box
+              sx={userCanEdit ? editableProps : readOnlyProps}
+              onClick={() => userCanEdit && setOpenEditLocationModal(true)}
+            >
               <Typography paddingLeft={1} lineHeight={isMobile ? 1.2 : 1.5}>
                 {getSeedBank(organization, accession.facilityId)?.name}
                 {accession.storageLocation ? ` / ${accession.storageLocation}` : ''}
               </Typography>
-              <IconButton sx={{ marginLeft: 1, height: '24px', width: '24px' }}>
-                <Icon name='iconEdit' className={`${classes.editIcon} edit-icon`} />
-              </IconButton>
+              {userCanEdit ? (
+                <IconButton sx={{ marginLeft: 1, height: '24px', width: '24px' }}>
+                  <Icon name='iconEdit' className={`${classes.editIcon} edit-icon`} />
+                </IconButton>
+              ) : (
+                spaceFiller()
+              )}
             </Box>
           </Box>
         )}
         {accession?.state === 'Drying' && (
           <Box sx={editableParentProps}>
             <Icon name='notification' className={classes.iconStyle} />
-            <Box sx={editableProps} onClick={() => setOpenEndDryingReminderModal(true)}>
+            <Box
+              sx={userCanEdit ? editableProps : readOnlyProps}
+              onClick={() => userCanEdit && setOpenEndDryingReminderModal(true)}
+            >
               <Typography paddingLeft={1} lineHeight={isMobile ? 1.2 : 1.5}>
                 {accession?.dryingEndDate
                   ? `${strings.END_DRYING_REMINDER} ${moment(accession.dryingEndDate).fromNow()}`
@@ -521,9 +532,13 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
                   </Typography>
                 ) : null}
               </Typography>
-              <IconButton sx={{ marginLeft: 1, height: '24px', width: '24px' }}>
-                <Icon name='iconEdit' className={`${classes.editIcon} edit-icon`} />
-              </IconButton>
+              {userCanEdit ? (
+                <IconButton sx={{ marginLeft: 1, height: '24px', width: '24px' }}>
+                  <Icon name='iconEdit' className={`${classes.editIcon} edit-icon`} />
+                </IconButton>
+              ) : (
+                spaceFiller()
+              )}
             </Box>
           </Box>
         )}
@@ -610,7 +625,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
         </Box>
       </Box>
 
-      {isMobile && (
+      {isMobile && userCanEdit && (
         <Box display='flex' alignItems='center' paddingRight={2} marginBottom={4} marginTop={2}>
           <IconButton sx={{ marginLeft: 3, height: '38px' }} onClick={() => setOpenDeleteAccession(true)}>
             <Icon name='iconTrashCan' />

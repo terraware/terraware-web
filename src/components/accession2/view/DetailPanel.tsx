@@ -11,6 +11,7 @@ import { Country } from 'src/types/Country';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import Accession2EditModal from '../edit/Accession2EditModal';
 import ViewPhotosModal from './ViewPhotosModal';
+import { isContributor } from 'src/utils/organization';
 
 type DetailPanelProps = {
   accession?: Accession2;
@@ -19,6 +20,7 @@ type DetailPanelProps = {
 };
 export default function DetailPanel(props: DetailPanelProps): JSX.Element {
   const { accession, organization, reload } = props;
+  const userCanEdit = !isContributor(organization);
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
 
@@ -92,6 +94,8 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
   const numPlants = accession?.plantsCollectedFrom;
   const isNotPlural = numPlants === 1;
 
+  const spaceFiller = () => <Box sx={{ marginLeft: 1, height: '24px', width: 2 }} />;
+
   return accession ? (
     <>
       <Accession2EditModal
@@ -112,9 +116,13 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
         {isMobile ? (
           <Grid item xs={12} display='flex' justifyContent='space-between'>
             <Typography fontWeight={500}>{strings.ACCESSION_DETAIL}</Typography>
-            <IconButton sx={{ marginLeft: 3, height: '24px' }} onClick={() => setOpenEditAccessionModal(true)}>
-              <Icon name='iconEdit' />
-            </IconButton>
+            {userCanEdit ? (
+              <IconButton sx={{ marginLeft: 3, height: '24px' }} onClick={() => setOpenEditAccessionModal(true)}>
+                <Icon name='iconEdit' />
+              </IconButton>
+            ) : (
+              spaceFiller()
+            )}
           </Grid>
         ) : null}
         <Grid item xs={mainStructureSize}>
@@ -223,9 +231,13 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
         <Grid />
         {!isMobile ? (
           <Grid item xs={3}>
-            <IconButton sx={{ marginLeft: 3, height: '24px' }} onClick={() => setOpenEditAccessionModal(true)}>
-              <Icon name='iconEdit' />
-            </IconButton>
+            {userCanEdit ? (
+              <IconButton sx={{ marginLeft: 3, height: '24px' }} onClick={() => setOpenEditAccessionModal(true)}>
+                <Icon name='iconEdit' />
+              </IconButton>
+            ) : (
+              spaceFiller()
+            )}
           </Grid>
         ) : null}
       </Grid>

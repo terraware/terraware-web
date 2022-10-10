@@ -108,6 +108,19 @@ export interface paths {
     get: operations["read_1"];
     put: operations["markRead"];
   };
+  "/api/v1/nursery/batches": {
+    post: operations["createBatch"];
+  };
+  "/api/v1/nursery/batches/{id}": {
+    get: operations["getBatch"];
+    put: operations["updateBatch"];
+  };
+  "/api/v1/nursery/batches/{id}/quantities": {
+    put: operations["updateBatchQuantities"];
+  };
+  "/api/v1/nursery/species/{speciesId}/summary": {
+    get: operations["getSpeciesSummary"];
+  };
   "/api/v1/organizations": {
     /** Lists all organizations the user can access. */
     get: operations["listOrganizations"];
@@ -499,6 +512,27 @@ export interface components {
       /** Default message to publish if the automation type isn't yet supported by the server. */
       message?: string;
     };
+    BatchPayload: {
+      /** If this batch was created via a seed withdrawal, the ID of the seed accession it came from. */
+      accessionId?: number;
+      addedDate: string;
+      batchNumber: string;
+      facilityId: number;
+      germinatingQuantity: number;
+      id: number;
+      latestObservedTime: string;
+      notes?: string;
+      notReadyQuantity: number;
+      readyByDate?: string;
+      readyQuantity: number;
+      speciesId: number;
+      /** Increases every time a batch is updated. Must be passed as a parameter for certain kinds of write operations to detect when a batch has changed since the client last retrieved it. */
+      version: number;
+    };
+    BatchResponsePayload: {
+      batch: components["schemas"]["BatchPayload"];
+      status: components["schemas"]["SuccessOrError"];
+    };
     ConnectDeviceManagerRequestPayload: {
       facilityId: number;
     };
@@ -586,6 +620,16 @@ export interface components {
     CreateAutomationResponsePayload: {
       id: number;
       status: components["schemas"]["SuccessOrError"];
+    };
+    CreateBatchRequestPayload: {
+      addedDate: string;
+      facilityId: number;
+      notes?: string;
+      readyByDate?: string;
+      speciesId: number;
+      germinatingQuantity: number;
+      notReadyQuantity: number;
+      readyQuantity: number;
     };
     CreateDeviceRequestPayload: {
       /** Identifier of facility where this device is located. */
@@ -860,6 +904,10 @@ export interface components {
       species: components["schemas"]["SpeciesResponseElement"];
       status: components["schemas"]["SuccessOrError"];
     };
+    GetSpeciesSummaryResponsePayload: {
+      summary: components["schemas"]["SpeciesSummaryPayload"];
+      status: components["schemas"]["SuccessOrError"];
+    };
     GetTimeseriesHistoryRequestPayload: {
       /** Start of time range to query. If this is non-null, endTime must also be specified, and seconds must be null or absent. */
       startTime?: string;
@@ -1061,11 +1109,11 @@ export interface components {
       configuration?: { [key: string]: unknown };
       type: string;
       settings?: { [key: string]: { [key: string]: unknown } };
+      timeseriesName?: string;
+      deviceId?: number;
       lowerThreshold?: number;
       upperThreshold?: number;
       verbosity: number;
-      timeseriesName?: string;
-      deviceId?: number;
     };
     /** Search criterion that matches results that do not match a set of search criteria. */
     NotNodePayload: components["schemas"]["SearchNodePayload"] & {
@@ -1259,6 +1307,25 @@ export interface components {
         | "Intermediate"
         | "Unknown";
     };
+    SpeciesSummaryNurseryPayload: {
+      facilityId: number;
+      name: string;
+    };
+    SpeciesSummaryPayload: {
+      germinatingQuantity: number;
+      /** Percentage of current and past inventory that was withdrawn due to death. */
+      lossRate: number;
+      notReadyQuantity: number;
+      nurseries: components["schemas"]["SpeciesSummaryNurseryPayload"][];
+      readyQuantity: number;
+      speciesId: number;
+      /** Total number of germinated plants that have been withdrawn due to death. */
+      totalDead: number;
+      /** Total number of germinated plants currently in inventory. */
+      totalQuantity: number;
+      /** Total number of germinated plants that have been withdrawn in the past. */
+      totalWithdrawn: number;
+    };
     StorageLocationDetails: {
       storageLocation: string;
       storageCondition: "Refrigerator" | "Freezer";
@@ -1436,6 +1503,17 @@ export interface components {
       lowerThreshold?: number;
       upperThreshold?: number;
       settings?: { [key: string]: { [key: string]: unknown } };
+    };
+    UpdateBatchQuantitiesRequestPayload: {
+      germinatingQuantity: number;
+      notReadyQuantity: number;
+      readyQuantity: number;
+      version: number;
+    };
+    UpdateBatchRequestPayload: {
+      notes?: string;
+      readyByDate?: string;
+      version: number;
     };
     UpdateDeviceRequestPayload: {
       /** Name of this device. */
@@ -2486,6 +2564,103 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["UpdateNotificationRequestPayload"];
+      };
+    };
+  };
+  createBatch: {
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["BatchResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateBatchRequestPayload"];
+      };
+    };
+  };
+  getBatch: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  updateBatch: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+      /** The requested resource has a newer version and was not updated. */
+      412: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateBatchRequestPayload"];
+      };
+    };
+  };
+  updateBatchQuantities: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+      /** The requested resource has a newer version and was not updated. */
+      412: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateBatchQuantitiesRequestPayload"];
+      };
+    };
+  };
+  getSpeciesSummary: {
+    parameters: {
+      path: {
+        speciesId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetSpeciesSummaryResponsePayload"];
+        };
       };
     };
   };
