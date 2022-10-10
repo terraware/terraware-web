@@ -320,7 +320,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
 
   const spaceFiller = () => <Box sx={{ marginLeft: 1, height: '24px', width: 2 }} />;
 
-  const quantityEditable = (userCanEdit && accession?.state === 'Drying') || accession?.state === 'In Storage';
+  const quantityEditable = userCanEdit && (accession?.state === 'Drying' || accession?.state === 'In Storage');
   const viabilityEditable = userCanEdit && accession?.state !== 'Used Up';
   const isAwaitingCheckin = accession?.state === 'Awaiting Check-In';
 
