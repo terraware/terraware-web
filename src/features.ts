@@ -39,7 +39,7 @@ export const OPT_IN_FEATURES: Feature[] = [
     active: true,
     enabled: false,
     allowInternalProduction: false,
-    description: ['Nursery management'],
+    description: ['Shows new nursery management workflows'],
     disclosure: ['This is WIP.'],
   },
 ];
