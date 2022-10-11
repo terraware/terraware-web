@@ -130,7 +130,7 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
         <Grid item xs={mainStructureSize}>
           {!isMobile && (
             <Grid item xs={12}>
-              <Typography fontSize='18px' fontWeight={500}>
+              <Typography fontSize='16px' fontWeight={500}>
                 {strings.ACCESSION_DETAIL}
               </Typography>
             </Grid>
