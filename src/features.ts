@@ -40,7 +40,7 @@ export const OPT_IN_FEATURES: Feature[] = [
     enabled: false,
     allowInternalProduction: false,
     description: ['Nursery management'],
-    disclosure: ['This is WIP.', "Production users won't see it"],
+    disclosure: ['This is WIP.'],
   },
 ];
 
