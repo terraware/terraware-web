@@ -33,6 +33,15 @@ export const OPT_IN_FEATURES: Feature[] = [
       'Withdrawal quantities tracked may appear different across V1/V2 workflows.',
     ],
   },
+  {
+    name: 'Nursery management',
+    preferenceName: 'enableUINursery',
+    active: true,
+    enabled: false,
+    allowInternalProduction: false,
+    description: ['Nursery management'],
+    disclosure: ['This is WIP.', "Production users won't see it"],
+  },
 ];
 
 type FeatureMap = { [key: string]: Feature };
