@@ -14,11 +14,12 @@ import { OrganizationUser, User } from 'src/types/User';
 import { ServerOrganization } from 'src/types/Organization';
 import { Unit, WEIGHT_UNITS_V2 } from 'src/components/seeds/nursery/NewTest';
 import { getTodaysDateFormatted, isInTheFuture } from '@terraware/web-components/utils';
-import { SUBSTRATES, TREATMENTS, WITHDRAWAL_TYPES } from 'src/types/Accession';
+import { TREATMENTS, WITHDRAWAL_TYPES } from 'src/types/Accession';
 import useSnackbar from 'src/utils/useSnackbar';
 import { Dropdown } from '@terraware/web-components';
 import { isContributor } from 'src/utils/organization';
 import { renderUser } from 'src/utils/renderUser';
+import { getSubstratesAccordingToType } from 'src/utils/viabilityTest';
 
 export interface WithdrawDialogProps {
   open: boolean;
@@ -273,7 +274,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
               <Select
                 label={strings.SUBSTRATE}
                 placeholder={strings.SELECT}
-                options={SUBSTRATES}
+                options={getSubstratesAccordingToType(viabilityTesting?.testType)}
                 onChange={(value: string) => onChangeViabilityTesting('substrate', value)}
                 selectedValue={viabilityTesting.substrate}
                 fullWidth={true}

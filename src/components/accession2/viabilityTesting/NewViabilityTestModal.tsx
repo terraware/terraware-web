@@ -5,14 +5,7 @@ import { putViabilityTest, ViabilityTestPostRequest } from 'src/api/accessions2/
 import strings from 'src/strings';
 import useForm from 'src/utils/useForm';
 import { Dropdown } from '@terraware/web-components';
-import {
-  LAB_SUBSTRATES,
-  NURSERY_SUBSTRATES,
-  SEED_TYPES,
-  TEST_METHODS,
-  TEST_TYPES,
-  TREATMENTS,
-} from 'src/types/Accession';
+import { SEED_TYPES, TEST_METHODS, TEST_TYPES, TREATMENTS } from 'src/types/Accession';
 import { OrganizationUser, User } from 'src/types/User';
 import { ServerOrganization } from 'src/types/Organization';
 import { useEffect, useState } from 'react';
@@ -26,6 +19,7 @@ import { preventDefaultEvent } from '@terraware/web-components/utils';
 import { getTodaysDateFormatted, isInTheFuture } from '@terraware/web-components/utils';
 import { ViabilityTest } from 'src/api/types/accessions';
 import ViabilityResultModal from './ViabilityResultModal';
+import { getSubstratesAccordingToType } from 'src/utils/viabilityTest';
 
 export interface NewViabilityTestModalProps {
   open: boolean;
@@ -309,16 +303,6 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
 
   const markTestAsComplete = (value: boolean) => {
     setTestCompleted(value);
-  };
-
-  const getSubstratesAccordingToType = (type?: string) => {
-    if (type === 'Lab') {
-      return LAB_SUBSTRATES;
-    } else if (type === 'Nursery') {
-      return NURSERY_SUBSTRATES;
-    } else {
-      return [];
-    }
   };
 
   const calculateNewTotal = (id: string, value: string) => {
