@@ -12,6 +12,7 @@ import DeleteViabilityTestModal from './DeleteViabilityTestModal';
 export interface ViewViabilityTestModalProps {
   open: boolean;
   accession: Accession2;
+  isEditable: boolean;
   onClose: () => void;
   viabilityTest: ViabilityTest;
   onEdit: () => void;
@@ -19,7 +20,7 @@ export interface ViewViabilityTestModalProps {
 }
 
 export default function ViewViabilityTestModal(props: ViewViabilityTestModalProps): JSX.Element {
-  const { onClose, open, accession, viabilityTest, onEdit, reload } = props;
+  const { onClose, open, accession, isEditable, viabilityTest, onEdit, reload } = props;
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
   const { isMobile } = useDeviceInfo();
 
@@ -62,7 +63,7 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
     >
       <Grid container item xs={12} spacing={2} textAlign='left' color={'#000000'} fontSize='14px'>
         <Grid item xs={12} display='flex'>
-          <Grid xs={6}>
+          <Grid xs={isEditable ? 6 : 12}>
             <Typography fontSize='20px'>
               {strings.TEST} #{viabilityTest.id}
             </Typography>
@@ -70,31 +71,20 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
               {strings.VIABILITY_RESULT}: {viabilityTest.endDate ? strings.COMPLETE : strings.PENDING}
             </Typography>
           </Grid>
-          <Grid xs={6} textAlign='right'>
-            <Box marginRight={1} display='inline-block'>
-              {isMobile ? (
+          {isEditable ? (
+            <Grid xs={6} textAlign='right'>
+              <Box marginRight={1} display='inline-block'>
                 <Button
                   type='passive'
                   priority='secondary'
+                  label={isMobile ? '' : strings.DELETE}
                   icon='iconTrashCan'
                   onClick={() => setOpenDeleteModal(true)}
                 />
-              ) : (
-                <Button
-                  type='passive'
-                  priority='secondary'
-                  label={strings.DELETE}
-                  icon='iconTrashCan'
-                  onClick={() => setOpenDeleteModal(true)}
-                />
-              )}
-            </Box>
-            {isMobile ? (
-              <Button icon='iconEdit' onClick={() => openEdit()} />
-            ) : (
-              <Button label={strings.EDIT} icon='iconEdit' onClick={() => openEdit()} />
-            )}
-          </Grid>
+              </Box>
+              <Button label={isMobile ? '' : strings.EDIT} icon='iconEdit' onClick={() => openEdit()} />
+            </Grid>
+          ) : null}
         </Grid>
         <Grid item xs={12} display='flex'>
           <Grid xs={smallColumn}>

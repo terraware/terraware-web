@@ -10,6 +10,7 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 interface ViabilityTestingDatabaseProps {
   accession: Accession2;
+  canAddTest: boolean;
   onNewViabilityTest: () => void;
   onSelectViabilityTest: (test: ViabilityTest) => void;
 }
@@ -27,7 +28,7 @@ const mobileColumns: TableColumnType[] = [
 ];
 
 export default function ViabilityTestingDatabase(props: ViabilityTestingDatabaseProps): JSX.Element {
-  const { accession, onNewViabilityTest, onSelectViabilityTest } = props;
+  const { accession, canAddTest, onNewViabilityTest, onSelectViabilityTest } = props;
   const { viabilityTests } = accession;
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
@@ -44,10 +45,15 @@ export default function ViabilityTestingDatabase(props: ViabilityTestingDatabase
         <Typography fontSize='16px' fontWeight={500}>
           {strings.VIABILITY_TESTING}
         </Typography>
-        {isMobile ? (
-          <Button priority='secondary' icon='plus' onClick={onNewViabilityTest} />
+        {canAddTest ? (
+          <Button
+            priority='secondary'
+            label={isMobile ? '' : strings.ADD_TEST}
+            icon='plus'
+            onClick={onNewViabilityTest}
+          />
         ) : (
-          <Button priority='secondary' label={strings.ADD_TEST} icon='plus' onClick={onNewViabilityTest} />
+          <Box sx={{ height: '32px', width: 2 }} />
         )}
       </Box>
       <Box>

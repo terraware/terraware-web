@@ -332,6 +332,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
             <ViewViabilityTestModal
               open={openViewViabilityTestModal}
               accession={accession}
+              isEditable={userCanEdit}
               viabilityTest={selectedTest}
               onClose={() => {
                 setOpenViewViabilityTestModal(false);
@@ -665,8 +666,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
               <ViabilityTestingPanel
                 accession={accession}
                 reload={reloadData}
-                organization={organization}
-                user={user}
+                canAddTest={userCanEdit}
                 setNewViabilityTestOpened={setOpenNewViabilityTest}
                 setViewViabilityTestModalOpened={setOpenViewViabilityTestModal}
                 setSelectedTest={setSelectedTest}
