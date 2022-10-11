@@ -7,7 +7,6 @@ const strings = new LocalizedStrings({
       'Enter species that you collect or plant now to simplify your experience when you’re out in the field.',
     ACCESSIONS_ONBOARDING_ADMIN_TITLE: 'Just a moment, let’s complete setup first',
     ACCESSIONS_ONBOARDING_SEEDBANKS_MSG: 'Define storage locations assigned to seed accessions',
-    ACCESSIONS_ONBOARDING_SEEDBANKS_BUTTON: 'Go To Seed Banks',
     ACCESSIONS_ONBOARDING_SPECIES_MSG: 'Define a list of species used in your seed inventory',
     NO_SEEDBANKS_ADMIN_TITLE: 'Just a moment, let’s add a seed bank first.',
     NO_SEEDBANKS_ADMIN_MSG: 'Start by adding a seed bank. You’ll then be able to access and create new accessions.',
