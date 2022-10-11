@@ -60,8 +60,6 @@ export default function OptInFeatures({ refresh }: OptInFeaturesProps): JSX.Elem
   const gridSize = () => (isMobile ? 12 : 4);
 
   const gridStyle = (isDisclosure: boolean) => ({
-    marginLeft: isMobile ? 0 : '20px !important',
-    paddingLeft: isMobile ? 0 : '20px !important',
     marginTop: isMobile ? '20px !important' : '0px !important',
     paddingTop: isMobile ? '20px !important' : 0,
     borderLeft: isMobile ? 'none' : isDisclosure ? '1px solid #b86f6f' : '1px solid #ddd',
@@ -108,13 +106,9 @@ export default function OptInFeatures({ refresh }: OptInFeaturesProps): JSX.Elem
               }}
               key={i}
             >
-              <Grid
-                item
-                xs={12}
-                sx={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', alignItems: 'center' }}
-              >
+              <Grid container spacing={0}>
                 <Grid item xs={gridSize()}>
-                  <Box sx={{ display: 'inline-block', color: '#444', fontSize: '16px', whiteSpace: 'pre' }}>
+                  <Box sx={{ color: '#444', fontSize: '16px', whiteSpace: 'pre', alignSelf: 'center' }}>
                     <Switch
                       checked={preferences[f.preferenceName] === true}
                       onChange={(event) => savePreference(f, event.target.checked)}
@@ -123,13 +117,15 @@ export default function OptInFeatures({ refresh }: OptInFeaturesProps): JSX.Elem
                   </Box>
                 </Grid>
                 <Grid item xs={gridSize()} sx={gridStyle(false)}>
-                  <ul>
-                    {f.description.map((d, index) => (
-                      <li key={index}>
-                        <Box sx={{ marginBottom: '5px' }}>{d}</Box>
-                      </li>
-                    ))}
-                  </ul>
+                  <Box sx={{ padding: isMobile ? 0 : '0 20px' }}>
+                    <ul>
+                      {f.description.map((d, index) => (
+                        <li key={index}>
+                          <Box sx={{ marginBottom: '5px' }}>{d}</Box>
+                        </li>
+                      ))}
+                    </ul>
+                  </Box>
                 </Grid>
                 <Grid item xs={gridSize()} sx={gridStyle(true)}>
                   <ul>
