@@ -115,7 +115,9 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
       <Grid container>
         {isMobile ? (
           <Grid item xs={12} display='flex' justifyContent='space-between'>
-            <Typography fontWeight={500}>{strings.ACCESSION_DETAIL}</Typography>
+            <Typography fontSize='16px' fontWeight={500}>
+              {strings.ACCESSION_DETAIL}
+            </Typography>
             {userCanEdit ? (
               <IconButton sx={{ marginLeft: 3, height: '24px' }} onClick={() => setOpenEditAccessionModal(true)}>
                 <Icon name='iconEdit' />
