@@ -1,4 +1,4 @@
-describe('Processing and Drying', () => {
+describe.skip('Processing and Drying', () => {
   beforeEach(() => {
     cy.window().then((win) => (win.onbeforeunload = undefined));
   });
