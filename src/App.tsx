@@ -398,6 +398,7 @@ export default function App() {
                   displayColumnNames={accessionsDisplayColumns}
                   setDisplayColumnNames={setAccessionsDisplayColumns}
                   hasSeedBanks={selectedOrgHasSeedBanks()}
+                  hasSpecies={selectedOrgHasSpecies()}
                 />
               </Route>
               {v2AccessionsEnabled && selectedOrganization && (
