@@ -170,6 +170,7 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
                       statistic={summary?.value?.activeAccessions}
                       loading={summary === undefined}
                       error={errorOccurred}
+                      tooltipTitle={strings.TOOLTIP_DASHBOARD_TOTAL_ACTIVE_ACCESSIONS}
                     />
                   </MainPaper>
                 </Grid>
