@@ -21,8 +21,8 @@ export const OPT_IN_FEATURES: Feature[] = [
   {
     name: 'V2 Accessions',
     preferenceName: 'enableUIV2Accessions',
-    active: true,
-    enabled: false,
+    active: false,
+    enabled: true,
     allowInternalProduction: false,
     description: [
       'Shows V2 accession workflows (instead of V1).',

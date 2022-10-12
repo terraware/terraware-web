@@ -1,4 +1,4 @@
-describe('Withdrawal', () => {
+describe.skip('Withdrawal', () => {
   context('quantity by seed', () => {
     it('should create the accession', () => {
       cy.visit('/accessions');
