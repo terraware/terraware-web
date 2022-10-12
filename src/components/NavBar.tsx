@@ -35,6 +35,7 @@ export default function NavBar({ organization, setShowNavBar }: NavBarProps): JS
   const isOrganizationRoute = useRouteMatch(APP_PATHS.ORGANIZATION + '/');
   const isMonitoringRoute = useRouteMatch(APP_PATHS.MONITORING + '/');
   const isSeedbanksRoute = useRouteMatch(APP_PATHS.SEED_BANKS + '/');
+  const isNurseryRoute = useRouteMatch(APP_PATHS.NURSERY + '/');
 
   const navigate = (url: string) => {
     history.push(url);
@@ -101,6 +102,16 @@ export default function NavBar({ organization, setShowNavBar }: NavBarProps): JS
           closeAndNavigateTo(APP_PATHS.MONITORING);
         }}
         id='monitoring'
+      />
+      <NavSection title={strings.SEEDLINGS.toUpperCase()} />
+      <NavItem
+        label={strings.INVENTORY}
+        icon='iconSeedling'
+        selected={!!isNurseryRoute}
+        onClick={() => {
+          closeAndNavigateTo(APP_PATHS.NURSERY);
+        }}
+        id='nursery'
       />
       {role && ['Admin', 'Owner'].includes(role) && (
         <>

@@ -665,6 +665,8 @@ const strings = new LocalizedStrings({
     SET_UP: 'Set Up',
     SUBSET_ERROR: 'Subset weight should be less than seed weight',
     WITHDRAWN_QUANTITY_ERROR: 'Exceeds remaining quantity',
+    INVENTORY: 'Inventory',
+    SEEDLINGS: 'Seedlings',
   },
 });
 
