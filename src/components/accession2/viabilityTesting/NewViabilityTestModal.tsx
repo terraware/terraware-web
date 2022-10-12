@@ -123,10 +123,6 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
     return true;
   };
 
-  const gridSize = () => {
-    return isMobile ? 12 : 6;
-  };
-
   const validateSeedsGerminated = () => {
     if (record?.testResults && record?.testResults.length > 0) {
       let totalSeedsGerminated = 0;
@@ -523,7 +519,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
                   mb={2}
                   display={isMobile ? 'block' : 'flex'}
                   alignItems='baseline'
-                  maxWidth={isMobile ? '90%' : '100%'}
+                  marginRight={isMobile ? '24px' : 0}
                 >
                   <Grid item xs={12} marginBottom={isMobile ? 1 : 0}>
                     <DatePicker
