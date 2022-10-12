@@ -92,12 +92,37 @@ const useStyles = makeStyles(() => ({
 }));
 
 const columns: TableColumnType[] = [
-  { key: 'scientificName', name: strings.SCIENTIFIC_NAME, type: 'string' },
-  { key: 'commonName', name: strings.COMMON_NAME, type: 'string' },
-  { key: 'familyName', name: strings.FAMILY, type: 'string' },
-  { key: 'growthForm', name: strings.GROWTH_FORM, type: 'string' },
-  { key: 'conservationStatus', name: strings.CONSERVATION_STATUS, type: 'string' },
-  { key: 'seedStorageBehavior', name: strings.SEED_STORAGE_BEHAVIOR, type: 'string' },
+  {
+    key: 'scientificName',
+    name: strings.SCIENTIFIC_NAME,
+    type: 'string',
+    tooltipTitle: strings.TOOLTIP_SPECIES_TABLE_SCIENTIFIC_NAME,
+  },
+  {
+    key: 'commonName',
+    name: strings.COMMON_NAME,
+    type: 'string',
+    tooltipTitle: strings.TOOLTIP_SPECIES_TABLE_COMMON_NAME,
+  },
+  { key: 'familyName', name: strings.FAMILY, type: 'string', tooltipTitle: strings.TOOLTIP_SPECIES_TABLE_FAMILY },
+  {
+    key: 'growthForm',
+    name: strings.GROWTH_FORM,
+    type: 'string',
+    tooltipTitle: strings.TOOLTIP_SPECIES_TABLE_GROWTH_FORM,
+  },
+  {
+    key: 'conservationStatus',
+    name: strings.CONSERVATION_STATUS,
+    type: 'string',
+    tooltipTitle: strings.TOOLTIP_SPECIES_TABLE_CONSERVATION_STATUS,
+  },
+  {
+    key: 'seedStorageBehavior',
+    name: strings.SEED_STORAGE_BEHAVIOR,
+    type: 'string',
+    tooltipTitle: strings.TOOLTIP_SPECIES_TABLE_SEED_STORAGE_BEHAVIOR,
+  },
 ];
 
 export type SpeciesFiltersType = {
