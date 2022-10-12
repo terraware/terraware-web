@@ -1,8 +1,7 @@
 import { Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import { IconTooltip } from '@terraware/web-components';
 import React from 'react';
-
-import IconTooltip from 'src/components/IconTooltip';
 
 const useStyles = makeStyles(() => ({
   panelTitle: {
