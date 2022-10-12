@@ -180,21 +180,21 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
     if (accession && accession.remainingQuantity) {
       if (accession.remainingQuantity.units === 'Seeds') {
         return (
-          <Typography display='flex' sx={{ marginRight: '5px', alignItems: 'baseline' }}>
+          <Box display='flex' sx={{ marginRight: '5px', alignItems: 'baseline' }}>
             <Typography sx={{ fontWeight: 600, marginRight: '5px', fontSize: '20px' }}>
               {accession.remainingQuantity.quantity}
             </Typography>
             <Typography fontSize='14px'>{strings.CT}</Typography>
-          </Typography>
+          </Box>
         );
       } else {
         return (
-          <Typography display='flex' sx={{ marginRight: '5px', alignItems: 'baseline' }}>
+          <Box display='flex' sx={{ marginRight: '5px', alignItems: 'baseline' }}>
             <Typography sx={{ fontWeight: 600, marginRight: '5px', fontSize: '20px' }}>
               {accession.remainingQuantity.grams}
             </Typography>
             <Typography fontSize='14px'>{strings.GRAMS}</Typography>
-          </Typography>
+          </Box>
         );
       }
     }

@@ -373,7 +373,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
         scrolled={true}
       >
         <Grid container item xs={12} spacing={2} textAlign='left'>
-          <Grid xs={12} padding={theme.spacing(1, 3, 1, 5)}>
+          <Grid item xs={12} padding={theme.spacing(1, 3, 1, 5)}>
             <Dropdown
               options={TEST_METHODS}
               placeholder={strings.SELECT}
@@ -385,7 +385,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
               errorText={validateFields && !record?.testType ? strings.REQUIRED_FIELD : ''}
             />
           </Grid>
-          <Grid padding={theme.spacing(1, 3, 1, 5)} xs={12}>
+          <Grid item padding={theme.spacing(1, 3, 1, 5)} xs={12}>
             <Select
               label={strings.SEED_TYPE}
               placeholder={strings.SELECT}
@@ -399,7 +399,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
           </Grid>
           {record?.testType !== 'Cut' && (
             <>
-              <Grid padding={theme.spacing(1, 3, 1, 5)} xs={12}>
+              <Grid item padding={theme.spacing(1, 3, 1, 5)} xs={12}>
                 <Select
                   label={strings.SUBSTRATE}
                   placeholder={strings.SELECT}
@@ -411,7 +411,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
                   disabled={readOnly}
                 />
               </Grid>
-              <Grid padding={theme.spacing(1, 3, 1, 5)} xs={12}>
+              <Grid item padding={theme.spacing(1, 3, 1, 5)} xs={12}>
                 <Select
                   label={strings.TREATMENT}
                   placeholder={strings.SELECT}
@@ -425,7 +425,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
               </Grid>
             </>
           )}
-          <Grid padding={theme.spacing(1, 3, 1, 5)} xs={12}>
+          <Grid item padding={theme.spacing(1, 3, 1, 5)} xs={12}>
             <SelectT<OrganizationUser>
               label={strings.TESTING_STAFF}
               placeholder={strings.SELECT}
@@ -580,7 +580,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
               )}
             </Grid>
           </Grid>
-          <Grid padding={theme.spacing(1, 3, 1, 5)} xs={12}>
+          <Grid item padding={theme.spacing(1, 3, 1, 5)} xs={12}>
             <Textfield id='notes' value={record?.notes} onChange={onChange} type='textarea' label={strings.NOTES} />
           </Grid>
         </Grid>
