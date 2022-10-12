@@ -15,7 +15,7 @@ import { postViabilityTest } from 'src/api/accessions2/viabilityTest';
 import useSnackbar from 'src/utils/useSnackbar';
 import { renderUser } from 'src/utils/renderUser';
 import { Close } from '@mui/icons-material';
-import { preventDefaultEvent } from '@terraware/web-components/utils';
+import { preventDefaultEvent, useDeviceInfo } from '@terraware/web-components/utils';
 import { getTodaysDateFormatted, isInTheFuture } from '@terraware/web-components/utils';
 import { ViabilityTest } from 'src/api/types/accessions';
 import ViabilityResultModal from './ViabilityResultModal';
@@ -47,6 +47,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
   const [viabilityFieldsErrors, setViabilityFieldsErrors] = useState<{ [key: string]: string | undefined }>({});
 
   const readOnly = !!viabilityTest?.endDate;
+  const { isMobile } = useDeviceInfo();
 
   useEffect(() => {
     const getOrgUsers = async () => {
@@ -120,6 +121,10 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
     }
     setIndividualError('seedsTested', '');
     return true;
+  };
+
+  const gridSize = () => {
+    return isMobile ? 12 : 6;
   };
 
   const validateSeedsGerminated = () => {
@@ -443,8 +448,8 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
 
           <Grid item xs={12}>
             <Grid item sx={{ background: '#F2F4F5', borderRadius: '16px', padding: 3 }}>
-              <Box sx={{ display: 'flex', alignItems: 'baseline' }} mb={2}>
-                <Grid item xs={12}>
+              <Box sx={{ display: isMobile ? 'block' : 'flex', alignItems: 'baseline' }} mb={2}>
+                <Grid item xs={12} marginBottom={isMobile ? 1 : 0}>
                   <DatePicker
                     id='startDate'
                     label={record?.testType === 'Cut' ? strings.TEST_DATE_REQUIRED : strings.START_DATE_REQUIRED}
@@ -455,7 +460,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
                     errorText={validateFields && !record?.startDate ? strings.REQUIRED_FIELD : ''}
                   />
                 </Grid>
-                <Grid item xs={12} marginLeft={1}>
+                <Grid item xs={12} marginLeft={isMobile ? 0 : 1} marginBottom={isMobile ? 1 : 0}>
                   {record?.testType === 'Cut' ? (
                     <Textfield
                       label={strings.NUMBER_OF_SEEDS_FILLED_REQUIRED}
@@ -513,8 +518,14 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
               )}
 
               {record?.testResults?.map((testResult, index) => (
-                <Box key={index} mb={2} display='flex' alignItems='baseline'>
-                  <Grid item xs={12}>
+                <Box
+                  key={index}
+                  mb={2}
+                  display={isMobile ? 'block' : 'flex'}
+                  alignItems='baseline'
+                  maxWidth={isMobile ? '90%' : '100%'}
+                >
+                  <Grid item xs={12} marginBottom={isMobile ? 1 : 0}>
                     <DatePicker
                       id='recordingDate'
                       label={strings.CHECK_DATE_REQUIRED}
@@ -525,31 +536,44 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
                       errorText={viabilityFieldsErrors[`recordingDate${index}`]}
                     />
                   </Grid>
-                  <Grid item xs={12} marginLeft={1} display='flex'>
-                    <Textfield
-                      label={strings.NUMBER_OF_SEEDS_GERMINATED_REQUIRED}
-                      type='text'
-                      onChange={(id, value) => onResultChange(id, value, index)}
-                      id='seedsGerminated'
-                      value={testResult.seedsGerminated}
-                      disabled={readOnly}
-                      errorText={viabilityFieldsErrors[`seedsGerminated${index}`]}
-                    />
-                    <IconButton
-                      id={`delete-result${index}`}
-                      aria-label='delete'
-                      size='small'
-                      disabled={readOnly}
-                      onClick={() => onDeleteResult(index)}
-                      sx={{ marginTop: 3 }}
-                    >
-                      <Close />
-                    </IconButton>
+                  <Grid item xs={12} marginLeft={isMobile ? 0 : 1} display={isMobile ? 'block' : 'flex'}>
+                    <Box sx={{ position: 'relative', display: isMobile ? 'block' : 'flex' }}>
+                      <Textfield
+                        label={strings.NUMBER_OF_SEEDS_GERMINATED_REQUIRED}
+                        type='text'
+                        onChange={(id, value) => onResultChange(id, value, index)}
+                        id='seedsGerminated'
+                        value={testResult.seedsGerminated}
+                        disabled={readOnly}
+                        errorText={viabilityFieldsErrors[`seedsGerminated${index}`]}
+                      />
+                      <IconButton
+                        id={`delete-result${index}`}
+                        aria-label='delete'
+                        size='small'
+                        disabled={readOnly}
+                        onClick={() => onDeleteResult(index)}
+                        sx={{
+                          marginTop: 3,
+                          position: isMobile ? 'absolute' : 'relative',
+                          top: isMobile ? '-33px' : 0,
+                          right: isMobile ? '-31px' : 0,
+                        }}
+                      >
+                        <Close />
+                      </IconButton>
+                    </Box>
                   </Grid>
                 </Box>
               ))}
               {record?.testType !== 'Cut' && (
-                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <Box
+                  sx={{
+                    display: isMobile ? 'block' : 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                  }}
+                >
                   <Link
                     component='button'
                     id='addResultButton'
@@ -561,6 +585,8 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
                       textDecoration: 'none',
                       fontSize: '16px',
                       '&[disabled]': { color: '#0067C84D', pointerEvents: 'none' },
+                      marginBottom: isMobile ? 1 : 0,
+                      display: isMobile ? 'block' : 'initial',
                     }}
                     disabled={testCompleted || readOnly}
                   >
