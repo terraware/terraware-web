@@ -52,6 +52,7 @@ import useEnvironment from 'src/utils/useEnvironment';
 import { Accession2Create, Accession2View } from './components/accession2';
 import OptInFeatures from './components/OptInFeatures';
 import { isRouteEnabled } from 'src/features';
+import Nurseries from './components/Nurseries';
 
 const useStyles = makeStyles((theme: Theme) => ({
   content: {
@@ -317,11 +318,28 @@ export default function App() {
     }
   };
 
+  const selectedOrgHasNurseries = (): boolean => {
+    if (selectedOrganization && selectedOrganization.facilities) {
+      return selectedOrganization.facilities.some((facility) => {
+        return facility.type === 'Nursery';
+      });
+    } else {
+      return false;
+    }
+  };
+
   const getSeedBanksView = (): JSX.Element => {
     if (selectedOrganization && selectedOrgHasSeedBanks()) {
       return <SeedBanks organization={selectedOrganization} />;
     }
     return <EmptyStatePage pageName={'SeedBanks'} />;
+  };
+
+  const getNurseriesView = (): JSX.Element => {
+    if (selectedOrganization && selectedOrgHasNurseries()) {
+      return <Nurseries />;
+    }
+    return <EmptyStatePage pageName={'Nurseries'} />;
   };
 
   return (
@@ -484,6 +502,9 @@ export default function App() {
                   {getSeedBanksView()}
                 </Route>
               )}
+              <Route exact path={APP_PATHS.NURSERIES}>
+                {getNurseriesView()}
+              </Route>
               <Route exact path={APP_PATHS.CONTACT_US}>
                 <ContactUs />
               </Route>

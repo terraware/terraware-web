@@ -65,8 +65,24 @@ const NO_SEEDBANKS_CONTENT: PageContent = {
   linkLocation: APP_PATHS.SEED_BANKS_NEW,
 };
 
+const NO_NURSERIES_CONTENT: PageContent = {
+  title1: strings.NURSERIES,
+  title2: strings.ADD_A_NURSERY,
+  subtitle: emptyStateStrings.ADD_NURSERY_SUBTITLE,
+  listItems: [
+    {
+      icon: 'blobbyIconSeedBank',
+      title: strings.INVENTORY_DATA,
+      description: strings.INVENTORY_DATA_DESCRIPTION,
+    },
+  ],
+  buttonText: strings.ADD_NURSERY,
+  buttonIcon: 'plus',
+  linkLocation: '',
+};
+
 type EmptyStatePageProps = {
-  pageName: 'Species' | 'SeedBanks';
+  pageName: 'Species' | 'SeedBanks' | 'Nurseries';
   organization?: ServerOrganization;
   reloadData?: () => void;
 };
@@ -126,6 +142,8 @@ export default function EmptyStatePage({ pageName, organization, reloadData }: E
         return NO_SPECIES_CONTENT;
       case 'SeedBanks':
         return NO_SEEDBANKS_CONTENT;
+      case 'Nurseries':
+        return NO_NURSERIES_CONTENT;
       default:
         return NO_SEEDBANKS_CONTENT;
     }

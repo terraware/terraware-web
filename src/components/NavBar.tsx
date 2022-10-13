@@ -36,7 +36,8 @@ export default function NavBar({ organization, setShowNavBar }: NavBarProps): JS
   const isOrganizationRoute = useRouteMatch(APP_PATHS.ORGANIZATION + '/');
   const isMonitoringRoute = useRouteMatch(APP_PATHS.MONITORING + '/');
   const isSeedbanksRoute = useRouteMatch(APP_PATHS.SEED_BANKS + '/');
-  const isNurseryRoute = useRouteMatch(APP_PATHS.NURSERY + '/');
+  const isNurseriesRoute = useRouteMatch(APP_PATHS.NURSERIES + '/');
+  const isInventoryRoute = useRouteMatch(APP_PATHS.INVENTORY + '/');
 
   const navigate = (url: string) => {
     history.push(url);
@@ -110,11 +111,11 @@ export default function NavBar({ organization, setShowNavBar }: NavBarProps): JS
           <NavItem
             label={strings.INVENTORY}
             icon='iconSeedling'
-            selected={!!isNurseryRoute}
+            selected={!!isInventoryRoute}
             onClick={() => {
-              closeAndNavigateTo(APP_PATHS.NURSERY);
+              closeAndNavigateTo(APP_PATHS.INVENTORY);
             }}
-            id='nursery'
+            id='inventory'
           />
         </>
       )}
@@ -148,6 +149,17 @@ export default function NavBar({ organization, setShowNavBar }: NavBarProps): JS
             }}
             id='seedbanks'
           />
+          {isEnabled('Nursery management') && (
+            <NavItem
+              label={strings.NURSERIES}
+              icon='iconSeedling'
+              selected={!!isNurseriesRoute}
+              onClick={() => {
+                closeAndNavigateTo(APP_PATHS.NURSERIES);
+              }}
+              id='nurseries'
+            />
+          )}
         </>
       )}
 

@@ -667,6 +667,11 @@ const strings = new LocalizedStrings({
     WITHDRAWN_QUANTITY_ERROR: 'Exceeds remaining quantity',
     INVENTORY: 'Inventory',
     SEEDLINGS: 'Seedlings',
+    NURSERIES: 'Nurseries',
+    ADD_A_NURSERY: 'Add a Nursery',
+    INVENTORY_DATA: 'Inventory Data',
+    INVENTORY_DATA_DESCRIPTION: "Monitor your nursery's inventory",
+    ADD_NURSERY: 'Add Nursery',
   },
 });
 
