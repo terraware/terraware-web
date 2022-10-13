@@ -114,12 +114,16 @@ export interface paths {
   "/api/v1/nursery/batches/{id}": {
     get: operations["getBatch"];
     put: operations["updateBatch"];
+    delete: operations["deleteBatch"];
   };
   "/api/v1/nursery/batches/{id}/quantities": {
     put: operations["updateBatchQuantities"];
   };
   "/api/v1/nursery/species/{speciesId}/summary": {
     get: operations["getSpeciesSummary"];
+  };
+  "/api/v1/nursery/withdrawals": {
+    post: operations["createBatchWithdrawal"];
   };
   "/api/v1/organizations": {
     /** Lists all organizations the user can access. */
@@ -277,6 +281,9 @@ export interface paths {
   "/api/v2/seedbank/accessions/uploads/{uploadId}/resolve": {
     /** This may only be called if the status of the upload is "Awaiting User Action". */
     post: operations["resolveAccessionsListUpload"];
+  };
+  "/api/v2/seedbank/accessions/{accessionId}/transfers/nursery": {
+    post: operations["createNurseryTransferWithdrawal"];
   };
   "/api/v2/seedbank/accessions/{accessionId}/viabilityTests": {
     get: operations["listViabilityTests"];
@@ -512,6 +519,7 @@ export interface components {
       /** Default message to publish if the automation type isn't yet supported by the server. */
       message?: string;
     };
+    /** Details of ewly-created seedling batch. */
     BatchPayload: {
       /** If this batch was created via a seed withdrawal, the ID of the seed accession it came from. */
       accessionId?: number;
@@ -532,6 +540,12 @@ export interface components {
     BatchResponsePayload: {
       batch: components["schemas"]["BatchPayload"];
       status: components["schemas"]["SuccessOrError"];
+    };
+    BatchWithdrawalPayload: {
+      batchId: number;
+      germinatingQuantityWithdrawn?: number;
+      notReadyQuantityWithdrawn: number;
+      readyQuantityWithdrawn: number;
     };
     ConnectDeviceManagerRequestPayload: {
       facilityId: number;
@@ -664,6 +678,36 @@ export interface components {
     };
     CreateFacilityResponsePayload: {
       id: number;
+      status: components["schemas"]["SuccessOrError"];
+    };
+    CreateNurseryTransferRequestPayload: {
+      date: string;
+      destinationFacilityId: number;
+      germinatingQuantity: number;
+      notes?: string;
+      notReadyQuantity: number;
+      readyByDate?: string;
+      readyQuantity: number;
+      /** ID of the user who withdrew the seeds. Default is the current user's ID. If non-null, the current user must have permission to read the referenced user's membership details in the organization. */
+      withdrawnByUserId?: number;
+    };
+    CreateNurseryTransferResponsePayload: {
+      accession: components["schemas"]["AccessionPayloadV2"];
+      batch: components["schemas"]["BatchPayload"];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    CreateNurseryWithdrawalRequestPayload: {
+      batchWithdrawals: components["schemas"]["BatchWithdrawalPayload"][];
+      /** If purpose is "Nursery Transfer", the ID of the facility to transfer to. Must be in the same organization as the originating facility. Not allowed for purposes other than "Nursery Transfer". */
+      destinationFacilityId?: number;
+      facilityId: number;
+      notes?: string;
+      purpose: "Nursery Transfer" | "Dead" | "Out Plant" | "Other";
+      withdrawnDate: string;
+    };
+    CreateNurseryWithdrawalResponsePayload: {
+      batches: components["schemas"]["BatchPayload"][];
+      withdrawal: components["schemas"]["NurseryWithdrawalPayload"];
       status: components["schemas"]["SuccessOrError"];
     };
     CreateOrganizationRequestPayload: {
@@ -1134,6 +1178,16 @@ export interface components {
       localUrl: string;
       createdTime: string;
       isRead: boolean;
+    };
+    NurseryWithdrawalPayload: {
+      batchWithdrawals: components["schemas"]["BatchWithdrawalPayload"][];
+      /** If purpose is "Nursery Transfer", the ID of the facility to which the seedlings were transferred. */
+      destinationFacilityId?: number;
+      facilityId: number;
+      id: number;
+      notes?: string;
+      purpose: "Nursery Transfer" | "Dead" | "Out Plant" | "Other";
+      withdrawnDate: string;
     };
     /** Search criterion that matches results that meet any of a set of other search criteria. That is, if the list of children is x, y, and z, this will require x OR y OR z. */
     OrNodePayload: components["schemas"]["SearchNodePayload"];
@@ -2623,6 +2677,21 @@ export interface operations {
       };
     };
   };
+  deleteBatch: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
   updateBatchQuantities: {
     parameters: {
       path: {
@@ -2661,6 +2730,21 @@ export interface operations {
         content: {
           "application/json": components["schemas"]["GetSpeciesSummaryResponsePayload"];
         };
+      };
+    };
+  };
+  createBatchWithdrawal: {
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CreateNurseryWithdrawalResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateNurseryWithdrawalRequestPayload"];
       };
     };
   };
@@ -3801,6 +3885,26 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["ResolveUploadRequestPayload"];
+      };
+    };
+  };
+  createNurseryTransferWithdrawal: {
+    parameters: {
+      path: {
+        accessionId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CreateNurseryTransferResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateNurseryTransferRequestPayload"];
       };
     };
   };
