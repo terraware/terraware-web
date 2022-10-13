@@ -147,6 +147,7 @@ type DatabaseProps = {
   displayColumnNames: string[];
   setDisplayColumnNames: (fields: string[]) => void;
   hasSeedBanks: boolean;
+  hasSpecies: boolean;
 };
 
 export default function Database(props: DatabaseProps): JSX.Element {
@@ -167,6 +168,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
     setDisplayColumnNames,
     organization,
     hasSeedBanks,
+    hasSpecies,
   } = props;
   const displayColumnDetails = displayColumnNames.map((name) => {
     const detail = { ...COLUMNS_INDEXED[name] };
@@ -433,11 +435,11 @@ export default function Database(props: DatabaseProps): JSX.Element {
     history.push(APP_PATHS.CHECKIN);
   };
 
-  const goToSeedBanks = () => {
-    const seedBanksLocation = {
-      pathname: APP_PATHS.SEED_BANKS,
+  const goTo = (appPath: string) => {
+    const appPathLocation = {
+      pathname: appPath,
     };
-    history.push(seedBanksLocation);
+    history.push(appPathLocation);
   };
 
   const goToNewAccession = () => {
@@ -481,6 +483,32 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const getEmptyState = () => {
+    const emptyState = [];
+
+    if (!hasSpecies) {
+      emptyState.push({
+        title: strings.SPECIES,
+        text: emptyMessageStrings.ACCESSIONS_ONBOARDING_SPECIES_MSG,
+        buttonText: strings.GO_TO_SPECIES,
+        onClick: () => goTo(APP_PATHS.SPECIES),
+      });
+    }
+
+    if (!hasSeedBanks) {
+      emptyState.push({
+        title: strings.SEED_BANKS,
+        text: emptyMessageStrings.ACCESSIONS_ONBOARDING_SEEDBANKS_MSG,
+        buttonText: strings.GO_TO_SEED_BANKS,
+        onClick: () => goTo(APP_PATHS.SEED_BANKS),
+      });
+    }
+
+    return emptyState;
+  };
+
+  const isOnboarded = hasSeedBanks && hasSpecies;
 
   const getHeaderButtons = () => (
     <>
@@ -556,11 +584,11 @@ export default function Database(props: DatabaseProps): JSX.Element {
         <PageHeader
           title=''
           allowAll={true}
-          subtitle={hasSeedBanks ? getSubtitle() : undefined}
+          subtitle={isOnboarded ? getSubtitle() : undefined}
           page={strings.ACCESSIONS}
           parentPage={strings.SEEDS}
           rightComponent={
-            hasSeedBanks ? (
+            isOnboarded ? (
               <>
                 {getHeaderButtons()}
                 {organization &&
@@ -579,7 +607,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
             ) : undefined
           }
         >
-          {hasSeedBanks && availableFieldOptions && fieldOptions && (
+          {isOnboarded && availableFieldOptions && fieldOptions && (
             <Filters
               filters={searchCriteria}
               availableValues={availableFieldOptions}
@@ -593,7 +621,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
         <Container maxWidth={false} className={classes.mainContainer}>
           {organization && unfilteredResults ? (
             <Grid container>
-              {hasSeedBanks ? (
+              {isOnboarded ? (
                 <>
                   {pendingAccessions && pendingAccessions.length > 0 && (
                     <Grid item xs={12} className={classes.checkinMessage}>
@@ -671,10 +699,8 @@ export default function Database(props: DatabaseProps): JSX.Element {
               ) : isAdmin(organization) ? (
                 <EmptyMessage
                   className={classes.message}
-                  title={emptyMessageStrings.NO_SEEDBANKS_ADMIN_TITLE}
-                  text={emptyMessageStrings.NO_SEEDBANKS_ADMIN_MSG}
-                  buttonText={strings.GO_TO_SEED_BANKS}
-                  onClick={goToSeedBanks}
+                  title={emptyMessageStrings.ACCESSIONS_ONBOARDING_ADMIN_TITLE}
+                  rowItems={getEmptyState()}
                 />
               ) : (
                 <EmptyMessage

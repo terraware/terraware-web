@@ -1,4 +1,4 @@
-describe('Lab', () => {
+describe.skip('Lab', () => {
   it('should create the accession with lab test and navigate to lab section', () => {
     cy.visit('/accessions');
     cy.get('#newAccession').click();

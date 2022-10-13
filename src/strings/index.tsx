@@ -369,6 +369,7 @@ const strings = new LocalizedStrings({
     ORGANIZATION_CREATED_MSG:
       'You can access the organizations you’re in by clicking the arrow in the top right corner next to your profile.',
     GO_TO_SEED_BANKS: 'Go to Seed Banks',
+    GO_TO_SPECIES: 'Go to Species',
     COMMON_NAME: 'Common Name',
     SCIENTIFIC_NAME_REQUIRED: 'Scientific Name *',
     SCIENTIFIC_NAME: 'Scientific Name',
@@ -666,6 +667,14 @@ const strings = new LocalizedStrings({
     WITHDRAWN_QUANTITY_ERROR: 'Exceeds remaining quantity',
     TOOLTIP_DASHBOARD_TOTAL_ACTIVE_ACCESSIONS:
       'This number represents all accessions with the statuses awaiting processing, cleaning, drying, and in storage.',
+    INVENTORY: 'Inventory',
+    SEEDLINGS: 'Seedlings',
+    NURSERIES: 'Nurseries',
+    ADD_A_NURSERY: 'Add a Nursery',
+    INVENTORY_DATA: 'Inventory Data',
+    INVENTORY_DATA_DESCRIPTION: "Monitor your nursery's inventory",
+    ADD_NURSERY: 'Add Nursery',
+    NURSERY_ADDED: 'Nursery Added',
   },
 });
 

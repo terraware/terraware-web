@@ -9,6 +9,8 @@ const strings = new LocalizedStrings({
     ADD_MANUALLY_DESCRIPTION: 'Enter scientific name and other optional fields manually, one species at a time.',
     ADD_SEED_BANK_SUBTITLE:
       'How do you process and store your seeds? Set up your seed bank so you can keep track of where your seeds are stored.',
+    ADD_NURSERY_SUBTITLE:
+      'How do you manage your seedlings? Set up your nursery so you can keep track of your seedlings’ growth.',
   },
 });
 

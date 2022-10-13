@@ -16,6 +16,14 @@ import { Container, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import useSnackbar from 'src/utils/useSnackbar';
 import { IconName } from 'src/components/common/icon/icons';
+import { isContributor } from 'src/utils/organization';
+import emptyMessageStrings from 'src/strings/emptyMessageModal';
+import EmptyMessage from 'src/components/common/EmptyMessage';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+
+interface StyleProps {
+  isMobile: boolean;
+}
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
@@ -28,6 +36,12 @@ const useStyles = makeStyles((theme: Theme) => ({
     margin: 'auto',
     marginTop: `max(10vh, ${theme.spacing(8)}px)`,
     maxWidth: '800px',
+  },
+  message: {
+    margin: '0 auto',
+    marginTop: '10%',
+    maxWidth: '800px',
+    width: (props: StyleProps) => (props.isMobile ? 'auto' : '800px'),
   },
 }));
 
@@ -65,14 +79,31 @@ const NO_SEEDBANKS_CONTENT: PageContent = {
   linkLocation: APP_PATHS.SEED_BANKS_NEW,
 };
 
+const NO_NURSERIES_CONTENT: PageContent = {
+  title1: strings.NURSERIES,
+  title2: strings.ADD_A_NURSERY,
+  subtitle: emptyStateStrings.ADD_NURSERY_SUBTITLE,
+  listItems: [
+    {
+      icon: 'blobbyIconNursery',
+      title: strings.INVENTORY_DATA,
+      description: strings.INVENTORY_DATA_DESCRIPTION,
+    },
+  ],
+  buttonText: strings.ADD_NURSERY,
+  buttonIcon: 'plus',
+  linkLocation: APP_PATHS.NURSERIES_NEW,
+};
+
 type EmptyStatePageProps = {
-  pageName: 'Species' | 'SeedBanks';
+  pageName: 'Species' | 'SeedBanks' | 'Nurseries';
   organization?: ServerOrganization;
   reloadData?: () => void;
 };
 
 export default function EmptyStatePage({ pageName, organization, reloadData }: EmptyStatePageProps): JSX.Element {
-  const classes = useStyles();
+  const { isMobile } = useDeviceInfo();
+  const classes = useStyles({ isMobile });
   const history = useHistory();
   const snackbar = useSnackbar();
   const setSpeciesState = useSetRecoilState(speciesAtom);
@@ -120,12 +151,23 @@ export default function EmptyStatePage({ pageName, organization, reloadData }: E
     ],
   };
 
+  const NO_SPECIES_CONTRIBUTOR_CONTENT: PageContent = {
+    title1: strings.SPECIES,
+    title2: emptyMessageStrings.NO_SEEDBANKS_NON_ADMIN_TITLE,
+    subtitle: emptyMessageStrings.NO_SPECIES_CONTRIBUTOR_MSG,
+    listItems: [],
+  };
+
   const pageContent = (): PageContent => {
+    const contributor = organization && isContributor(organization);
+
     switch (pageName) {
       case 'Species':
-        return NO_SPECIES_CONTENT;
+        return contributor ? NO_SPECIES_CONTRIBUTOR_CONTENT : NO_SPECIES_CONTENT;
       case 'SeedBanks':
         return NO_SEEDBANKS_CONTENT;
+      case 'Nurseries':
+        return NO_NURSERIES_CONTENT;
       default:
         return NO_SEEDBANKS_CONTENT;
     }
@@ -174,19 +216,23 @@ export default function EmptyStatePage({ pageName, organization, reloadData }: E
         </>
       )}
       <PageHeader title={content.title1} subtitle='' />
-      <Container className={classes.mainContainer}>
-        <div className={classes.content}>
-          <EmptyStateContent
-            title={content.title2}
-            subtitle={content.subtitle}
-            listItems={content.listItems}
-            buttonText={content.buttonText}
-            buttonIcon={content.buttonIcon}
-            onClickButton={goToNewLocation}
-            styles={EMPTY_STATE_CONTENT_STYLES}
-          />
-        </div>
-      </Container>
+      {content.listItems.length === 0 && content.linkLocation === undefined ? (
+        <EmptyMessage className={classes.message} title={content.title2} text={content.subtitle} />
+      ) : (
+        <Container className={classes.mainContainer}>
+          <div className={classes.content}>
+            <EmptyStateContent
+              title={content.title2}
+              subtitle={content.subtitle}
+              listItems={content.listItems}
+              buttonText={content.buttonText}
+              buttonIcon={content.buttonIcon}
+              onClickButton={goToNewLocation}
+              styles={EMPTY_STATE_CONTENT_STYLES}
+            />
+          </div>
+        </Container>
+      )}
     </TfMain>
   );
 }
