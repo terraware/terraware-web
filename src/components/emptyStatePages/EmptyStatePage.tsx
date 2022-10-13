@@ -71,7 +71,7 @@ const NO_NURSERIES_CONTENT: PageContent = {
   subtitle: emptyStateStrings.ADD_NURSERY_SUBTITLE,
   listItems: [
     {
-      icon: 'blobbyIconSeedBank',
+      icon: 'blobbyIconNursery',
       title: strings.INVENTORY_DATA,
       description: strings.INVENTORY_DATA_DESCRIPTION,
     },
