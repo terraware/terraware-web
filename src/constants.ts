@@ -22,6 +22,7 @@ export enum APP_PATHS {
   ERROR_FAILED_TO_FETCH_ORG_DATA = '/error/cannot-fetch-org-data',
   HOME = '/home',
   MONITORING = '/monitoring',
+  NURSERY = '/nursery',
   OPT_IN = '/opt-in',
   ORGANIZATION_EDIT = '/organization/edit',
   ORGANIZATION = '/organization',
