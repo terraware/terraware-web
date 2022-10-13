@@ -23,6 +23,7 @@ export enum APP_PATHS {
   HOME = '/home',
   MONITORING = '/monitoring',
   NURSERIES = '/nurseries',
+  NURSERIES_NEW = '/nurseries/new',
   INVENTORY = '/inventory',
   OPT_IN = '/opt-in',
   ORGANIZATION_EDIT = '/organization/edit',

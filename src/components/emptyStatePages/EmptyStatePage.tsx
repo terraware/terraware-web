@@ -78,7 +78,7 @@ const NO_NURSERIES_CONTENT: PageContent = {
   ],
   buttonText: strings.ADD_NURSERY,
   buttonIcon: 'plus',
-  linkLocation: '',
+  linkLocation: APP_PATHS.NURSERIES_NEW,
 };
 
 type EmptyStatePageProps = {

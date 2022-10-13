@@ -53,6 +53,7 @@ import { Accession2Create, Accession2View } from './components/accession2';
 import OptInFeatures from './components/OptInFeatures';
 import { isRouteEnabled } from 'src/features';
 import Nurseries from './components/Nurseries';
+import NewNursery from './components/NewNursery';
 
 const useStyles = makeStyles((theme: Theme) => ({
   content: {
@@ -104,6 +105,7 @@ export default function App() {
   const [notifications, setNotifications] = useState<Notifications>();
   const { isProduction } = useEnvironment();
   const v2AccessionsEnabled = isRouteEnabled('V2 Accessions');
+  const nurseryManagementEnabled = isRouteEnabled('Nursery management');
 
   // seedSearchCriteria describes which criteria to apply when searching accession data.
   const [seedSearchCriteria, setSeedSearchCriteria] = useState<SeedSearchCriteria>(DEFAULT_SEED_SEARCH_FILTERS);
@@ -503,7 +505,12 @@ export default function App() {
                 </Route>
               )}
 
-              {isRouteEnabled('Nursery management') && (
+              {nurseryManagementEnabled && selectedOrganization && (
+                <Route exact path={APP_PATHS.NURSERIES_NEW}>
+                  <NewNursery organization={selectedOrganization} reloadOrganizationData={reloadData} />
+                </Route>
+              )}
+              {nurseryManagementEnabled && (
                 <Route exact path={APP_PATHS.NURSERIES}>
                   {getNurseriesView()}
                 </Route>
