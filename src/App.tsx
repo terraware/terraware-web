@@ -502,9 +502,12 @@ export default function App() {
                   {getSeedBanksView()}
                 </Route>
               )}
-              <Route exact path={APP_PATHS.NURSERIES}>
-                {getNurseriesView()}
-              </Route>
+
+              {isRouteEnabled('Nursery management') && (
+                <Route exact path={APP_PATHS.NURSERIES}>
+                  {getNurseriesView()}
+                </Route>
+              )}
               <Route exact path={APP_PATHS.CONTACT_US}>
                 <ContactUs />
               </Route>
