@@ -60,12 +60,11 @@ export default function NurseryView({ organization, reloadOrganizationData }: Si
     const response = await createFacility(record);
     if (response.requestSucceeded) {
       reloadOrganizationData();
+      goToNurseries();
       snackbar.toastSuccess(strings.NURSERY_ADDED);
     } else {
       snackbar.toastError();
     }
-
-    goToNurseries();
   };
 
   return (
