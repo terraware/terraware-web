@@ -152,7 +152,7 @@ export default function NavBar({ organization, setShowNavBar }: NavBarProps): JS
           {isEnabled('Nursery management') && (
             <NavItem
               label={strings.NURSERIES}
-              icon='iconSeedling'
+              icon='iconNursery'
               selected={!!isNurseriesRoute}
               onClick={() => {
                 closeAndNavigateTo(APP_PATHS.NURSERIES);
