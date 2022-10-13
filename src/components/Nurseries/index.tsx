@@ -1,3 +1,5 @@
+import strings from 'src/strings';
+
 export default function NurseriesList(): JSX.Element {
-  return <p></p>;
+  return <p>{strings.NURSERIES}</p>;
 }
