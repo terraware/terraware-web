@@ -216,7 +216,7 @@ export default function EmptyStatePage({ pageName, organization, reloadData }: E
         </>
       )}
       <PageHeader title={content.title1} subtitle='' />
-      {content.listItems.length === 0 ? (
+      {content.listItems.length === 0 && content.linkLocation === undefined ? (
         <EmptyMessage className={classes.message} title={content.title2} text={content.subtitle} />
       ) : (
         <Container className={classes.mainContainer}>
