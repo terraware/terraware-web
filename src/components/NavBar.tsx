@@ -4,6 +4,7 @@ import Navbar from 'src/components/common/Navbar/Navbar';
 import NavItem from 'src/components/common/Navbar/NavItem';
 import NavSection from 'src/components/common/Navbar/NavSection';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import strings from 'src/strings';
 import dictionary from 'src/strings/dictionary';
 import { AllOrganizationRoles, ServerOrganization } from 'src/types/Organization';
@@ -35,6 +36,8 @@ export default function NavBar({ organization, setShowNavBar }: NavBarProps): JS
   const isOrganizationRoute = useRouteMatch(APP_PATHS.ORGANIZATION + '/');
   const isMonitoringRoute = useRouteMatch(APP_PATHS.MONITORING + '/');
   const isSeedbanksRoute = useRouteMatch(APP_PATHS.SEED_BANKS + '/');
+  const isNurseriesRoute = useRouteMatch(APP_PATHS.NURSERIES + '/');
+  const isInventoryRoute = useRouteMatch(APP_PATHS.INVENTORY + '/');
 
   const navigate = (url: string) => {
     history.push(url);
@@ -102,6 +105,20 @@ export default function NavBar({ organization, setShowNavBar }: NavBarProps): JS
         }}
         id='monitoring'
       />
+      {isEnabled('Nursery management') && (
+        <>
+          <NavSection title={strings.SEEDLINGS.toUpperCase()} />
+          <NavItem
+            label={strings.INVENTORY}
+            icon='iconSeedling'
+            selected={!!isInventoryRoute}
+            onClick={() => {
+              closeAndNavigateTo(APP_PATHS.INVENTORY);
+            }}
+            id='inventory'
+          />
+        </>
+      )}
       {role && ['Admin', 'Owner'].includes(role) && (
         <>
           <NavSection title={strings.SETTINGS.toUpperCase()} />
@@ -132,6 +149,17 @@ export default function NavBar({ organization, setShowNavBar }: NavBarProps): JS
             }}
             id='seedbanks'
           />
+          {isEnabled('Nursery management') && (
+            <NavItem
+              label={strings.NURSERIES}
+              icon='iconNursery'
+              selected={!!isNurseriesRoute}
+              onClick={() => {
+                closeAndNavigateTo(APP_PATHS.NURSERIES);
+              }}
+              id='nurseries'
+            />
+          )}
         </>
       )}
 

@@ -242,7 +242,7 @@ describe('Database', () => {
     });
   });
 
-  context('Filters', () => {
+  context.skip('Filters', () => {
     it('Should filter by Active Status', () => {
       cy.intercept('POST', '/api/v1/search').as('search');
       cy.intercept('POST', '/api/v1/seedbank/values').as('values');
@@ -579,7 +579,7 @@ describe('Database', () => {
     });
   });
 
-  context('Sort', () => {
+  context.skip('Sort', () => {
     it('Should be able to sort by species', () => {
       cy.intercept('POST', '/api/v1/search').as('search');
       cy.intercept('POST', '/api/v1/seedbank/values').as('values');
@@ -628,7 +628,7 @@ describe('Database', () => {
     });
   });
 
-  context('State management', () => {
+  context.skip('State management', () => {
     it('Should remember filters, sorting and selected columns when switching pages', () => {
       cy.intercept('POST', '/api/v1/search').as('search');
       cy.intercept('POST', '/api/v1/seedbank/values').as('values');
@@ -687,7 +687,7 @@ describe('Database', () => {
     });
   });
 
-  context('Navigation', () => {
+  context.skip('Navigation', () => {
     it('should handle the Pending navigation', () => {
       cy.visit('/accessions');
 
