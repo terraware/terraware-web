@@ -17,7 +17,6 @@ import Button from 'src/components/common/button/Button';
 import Icon from 'src/components/common/icon/Icon';
 import AccessionByStatus from './AccessionByStatus';
 import { Link, useHistory } from 'react-router-dom';
-import useEnvironment from 'src/utils/useEnvironment';
 
 const useStyles = makeStyles(() => ({
   mainContainer: {
@@ -65,7 +64,6 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
   const errorOccurred = summary ? summary.errorOccurred : false;
   const [, setSelectedOrgInfo] = useRecoilState(seedsSummarySelectedOrgInfo);
   const { isMobile } = useDeviceInfo();
-  const { isProduction } = useEnvironment();
 
   useEffect(() => {
     if (organization) {
@@ -170,6 +168,7 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
                       statistic={summary?.value?.activeAccessions}
                       loading={summary === undefined}
                       error={errorOccurred}
+                      tooltipTitle={strings.TOOLTIP_DASHBOARD_TOTAL_ACTIVE_ACCESSIONS}
                     />
                   </MainPaper>
                 </Grid>
@@ -199,20 +198,16 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
                       status='Awaiting Check-In'
                       quantity={summary.value?.accessionsByState['Awaiting Check-In']}
                     />
-                    {!isProduction ? (
-                      <AccessionByStatus
-                        label='Awaiting Processing'
-                        status='Awaiting Processing'
-                        quantity={summary.value?.accessionsByState['Awaiting Processing']}
-                      />
-                    ) : null}
-                    {!isProduction ? (
-                      <AccessionByStatus
-                        label='Processing'
-                        status='Processing'
-                        quantity={summary.value?.accessionsByState.Processing}
-                      />
-                    ) : null}
+                    <AccessionByStatus
+                      label='Awaiting Processing'
+                      status='Awaiting Processing'
+                      quantity={summary.value?.accessionsByState['Awaiting Processing']}
+                    />
+                    <AccessionByStatus
+                      label='Processing'
+                      status='Processing'
+                      quantity={summary.value?.accessionsByState.Processing}
+                    />
                     <AccessionByStatus
                       label='Drying'
                       status='Drying'

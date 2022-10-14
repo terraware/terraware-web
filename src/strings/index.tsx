@@ -668,6 +668,8 @@ const strings = new LocalizedStrings({
     SET_UP: 'Set Up',
     SUBSET_ERROR: 'Subset weight should be less than seed weight',
     WITHDRAWN_QUANTITY_ERROR: 'Exceeds remaining quantity',
+    TOOLTIP_DASHBOARD_TOTAL_ACTIVE_ACCESSIONS:
+      'This number represents all accessions with the statuses awaiting processing, cleaning, drying, and in storage.',
     INVENTORY: 'Inventory',
     SEEDLINGS: 'Seedlings',
     TOOLTIP_LEARN_MORE: 'Learn more.',
@@ -676,6 +678,12 @@ const strings = new LocalizedStrings({
     ACCESSIONS_ADD_TOOLTIP_PLANT_ID: 'The unique identifier given to a plant for tracking or conservation purposes. Ideally seeds from a plant with a plant ID are kept separate from other plants (not pooled together) in collections and accessions.',
     ACCESSIONS_TOOLTIP_LOCATION: 'Place where seeds are being processed.',
     ACCESSIONS_TOOLTIP_SUBLOCATION: 'Specific area within the place where seeds are being processed.',
+    NURSERIES: 'Nurseries',
+    ADD_A_NURSERY: 'Add a Nursery',
+    INVENTORY_DATA: 'Inventory Data',
+    INVENTORY_DATA_DESCRIPTION: "Monitor your nursery's inventory",
+    ADD_NURSERY: 'Add Nursery',
+    NURSERY_ADDED: 'Nursery Added',
   },
 });
 

@@ -10,12 +10,13 @@ interface Props {
   statistic?: number | string;
   loading: boolean;
   error: boolean;
+  tooltipTitle?: NonNullable<React.ReactNode>;
 }
 
-export default function SummaryPaper({ id, title, statistic, loading, error }: Props): JSX.Element {
+export default function SummaryPaper({ id, title, statistic, loading, error, tooltipTitle }: Props): JSX.Element {
   return (
     <>
-      <PanelTitle title={title} gutterBottom={true} />
+      <PanelTitle title={title} gutterBottom={true} tooltipTitle={tooltipTitle} />
       {error && strings.GENERIC_ERROR}
       {loading && <CircularProgress id={`spinner-summary-${id}`} />}
       {statistic !== undefined && (
