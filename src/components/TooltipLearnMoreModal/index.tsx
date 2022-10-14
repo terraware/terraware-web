@@ -1,4 +1,4 @@
-import { Box, Theme } from '@mui/material';
+import { Box, Link, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React from 'react';
 
@@ -44,6 +44,16 @@ export default function TooltipLearnMoreModal(props: TooltipLearnMoreModalProps)
     </DialogBox>
   );
 }
+
+export const LearnMoreLink = (props: { onClick: () => void }): JSX.Element => {
+  const { onClick } = props;
+
+  return (
+    <Link component='button' onClick={onClick} sx={{ color: '#fff' }}>
+      {strings.LEARN_MORE}
+    </Link>
+  );
+};
 
 export const LearnMoreModalContentGrowthForm = (): JSX.Element => (
   <>

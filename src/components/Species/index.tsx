@@ -1,4 +1,4 @@
-import { Container, Grid, IconButton } from '@mui/material';
+import { Container, Grid, IconButton, Link } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
@@ -35,6 +35,7 @@ import TooltipLearnMoreModal, {
   LearnMoreModalContentConservationStatus,
   LearnMoreModalContentGrowthForm,
   LearnMoreModalContentSeedStorageBehavior,
+  LearnMoreLink,
   TooltipLearnMoreModalData,
 } from 'src/components/TooltipLearnMoreModal';
 
@@ -152,8 +153,7 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
       tooltipTitle: (
         <>
           {strings.TOOLTIP_SPECIES_GROWTH_FORM}{' '}
-          <Button
-            label={strings.LEARN_MORE}
+          <LearnMoreLink
             onClick={() =>
               openTooltipLearnMoreModal({
                 title: strings.GROWTH_FORM,
@@ -171,8 +171,7 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
       tooltipTitle: (
         <>
           {strings.TOOLTIP_SPECIES_CONSERVATION_STATUS}{' '}
-          <Button
-            label={strings.LEARN_MORE}
+          <LearnMoreLink
             onClick={() =>
               openTooltipLearnMoreModal({
                 title: strings.CONSERVATION_STATUS,
@@ -190,8 +189,7 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
       tooltipTitle: (
         <>
           {strings.TOOLTIP_SPECIES_SEED_STORAGE_BEHAVIOR}{' '}
-          <Button
-            label={strings.LEARN_MORE}
+          <LearnMoreLink
             onClick={() =>
               openTooltipLearnMoreModal({
                 title: strings.SEED_STORAGE_BEHAVIOR,

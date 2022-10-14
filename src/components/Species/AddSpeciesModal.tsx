@@ -1,4 +1,4 @@
-import { Grid } from '@mui/material';
+import { Grid, Link } from '@mui/material';
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { IconTooltip } from '@terraware/web-components';
@@ -20,6 +20,7 @@ import TooltipLearnMoreModal, {
   LearnMoreModalContentConservationStatus,
   LearnMoreModalContentGrowthForm,
   LearnMoreModalContentSeedStorageBehavior,
+  LearnMoreLink,
   TooltipLearnMoreModalData,
 } from 'src/components/TooltipLearnMoreModal';
 
@@ -267,8 +268,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
               title={
                 <>
                   {strings.TOOLTIP_SPECIES_CONSERVATION_STATUS}{' '}
-                  <Button
-                    label={strings.LEARN_MORE}
+                  <LearnMoreLink
                     onClick={() =>
                       openTooltipLearnMoreModal({
                         title: strings.CONSERVATION_STATUS,
@@ -311,8 +311,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
             tooltipTitle={
               <>
                 {strings.TOOLTIP_SPECIES_GROWTH_FORM}{' '}
-                <Button
-                  label={strings.LEARN_MORE}
+                <LearnMoreLink
                   onClick={() =>
                     openTooltipLearnMoreModal({
                       title: strings.GROWTH_FORM,
@@ -338,8 +337,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
             tooltipTitle={
               <>
                 {strings.TOOLTIP_SPECIES_SEED_STORAGE_BEHAVIOR}{' '}
-                <Button
-                  label={strings.LEARN_MORE}
+                <LearnMoreLink
                   onClick={() =>
                     openTooltipLearnMoreModal({
                       title: strings.SEED_STORAGE_BEHAVIOR,
