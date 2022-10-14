@@ -21,3 +21,11 @@ export const isAdmin = (organization: ServerOrganization | undefined) => {
 export const isContributor = (roleHolder: ServerOrganization | OrganizationUser | undefined) => {
   return roleHolder?.role === 'Contributor';
 };
+
+export const getAllNurseries = (organization: ServerOrganization): (Facility | undefined)[] => {
+  let nurseries: (Facility | undefined)[] = [];
+  if (organization && organization.facilities) {
+    nurseries = organization?.facilities?.filter((facility) => facility.type === 'Nursery');
+  }
+  return nurseries;
+};

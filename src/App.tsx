@@ -339,7 +339,7 @@ export default function App() {
 
   const getNurseriesView = (): JSX.Element => {
     if (selectedOrganization && selectedOrgHasNurseries()) {
-      return <Nurseries />;
+      return <Nurseries organization={selectedOrganization} />;
     }
     return <EmptyStatePage pageName={'Nurseries'} />;
   };
