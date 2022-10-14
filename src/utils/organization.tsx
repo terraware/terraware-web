@@ -1,11 +1,8 @@
-import { Facility } from 'src/api/types/facilities';
+import { Facility, FacilityType } from 'src/api/types/facilities';
 import { HighOrganizationRolesValues, ServerOrganization } from 'src/types/Organization';
 import { OrganizationUser } from 'src/types/User';
 
-export const getFacilitiesByType = (
-  organization: ServerOrganization,
-  type: 'Nursery' | 'Seed Bank' | 'Desalination' | 'Reverse Osmosis'
-) => {
+export const getFacilitiesByType = (organization: ServerOrganization, type: FacilityType) => {
   let facilitiesByType: (Facility | undefined)[] = [];
   if (organization && organization.facilities) {
     facilitiesByType = organization?.facilities?.filter((facility) => facility.type === type);

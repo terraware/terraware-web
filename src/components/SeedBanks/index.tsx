@@ -8,7 +8,7 @@ import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
 import TfMain from '../common/TfMain';
 import PageSnackbar from 'src/components/PageSnackbar';
-import { Facility } from 'src/api/types/facilities';
+import { Facility, FacilityType } from 'src/api/types/facilities';
 import { getAllSeedBanks } from 'src/utils/organization';
 import SeedBanksCellRenderer from './TableCellRenderer';
 import TextField from '../common/Textfield/Textfield';
@@ -123,7 +123,7 @@ export default function SeedBanksList({ organization }: SeedBanksListProps): JSX
             name: result.name as string,
             description: result.description as string,
             organizationId: parseInt(result.organization_id as string, 10),
-            type: result.type as 'Seed Bank' | 'Desalination' | 'Reverse Osmosis',
+            type: result.type as FacilityType,
             connectionState: result.connectionState as 'Not Connected' | 'Connected' | 'Configured',
           });
         });

@@ -5,7 +5,7 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { search, SearchNodePayload } from 'src/api/seeds/search';
-import { Facility } from 'src/api/types/facilities';
+import { Facility, FacilityType } from 'src/api/types/facilities';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
@@ -81,7 +81,7 @@ export default function NurseriesList({ organization }: NurseriesListProps): JSX
           name: result.name as string,
           description: result.description as string,
           organizationId: parseInt(result.organization_id as string, 10),
-          type: result.type as 'Nursery' | 'Seed Bank' | 'Desalination' | 'Reverse Osmosis',
+          type: result.type as FacilityType,
           connectionState: result.connectionState as 'Not Connected' | 'Connected' | 'Configured',
         });
       });
