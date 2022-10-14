@@ -13,6 +13,11 @@ const useStyles = makeStyles((theme: Theme) => ({
   content: {
     textAlign: 'left',
   },
+  learnMoreLink: {
+    color: '#fff',
+    fontSize: 'inherit',
+    textDecorationColor: '#fff',
+  },
 }));
 
 export type TooltipLearnMoreModalData = {
@@ -46,10 +51,11 @@ export default function TooltipLearnMoreModal(props: TooltipLearnMoreModalProps)
 }
 
 export const LearnMoreLink = (props: { onClick: () => void }): JSX.Element => {
+  const classes = useStyles();
   const { onClick } = props;
 
   return (
-    <Link component='button' onClick={onClick} sx={{ color: '#fff' }}>
+    <Link className={classes.learnMoreLink} component='button' onClick={onClick}>
       {strings.LEARN_MORE}
     </Link>
   );
