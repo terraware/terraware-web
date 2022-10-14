@@ -86,12 +86,10 @@ export const LearnMoreModalContentGrowthForm = (): JSX.Element => (
 export const LearnMoreModalContentConservationStatus = (): JSX.Element => (
   <>
     <p>
-      <strong>Endangered:</strong> Species that are rare and whose wild populations have a high risk of extinction; see
-      also any local definitions.
+      <strong>{strings.ENDANGERED}:</strong> {strings.LEARN_MORE_CONSERVATION_STATUS_ENDANGERED}
     </p>
     <p>
-      <strong>Rare:</strong> Species with limited wild population sizes, often found in isolated geographical locations;
-      may meet criteria for endangered or threatened status but have not yet been legally listed or assessed.
+      <strong>{strings.RARE}:</strong> {strings.LEARN_MORE_CONSERVATION_STATUS_RARE}
     </p>
   </>
 );
@@ -99,17 +97,13 @@ export const LearnMoreModalContentConservationStatus = (): JSX.Element => (
 export const LearnMoreModalContentSeedStorageBehavior = (): JSX.Element => (
   <>
     <p>
-      <strong>Intermediate:</strong> Seeds are between orthodox and recalcitrant seeds in their behavior; may include
-      tolerating partial desiccation, tolerating cool but not freezing temperatures, or being short-lived regardless of
-      storage conditions.
+      <strong>{strings.INTERMEDIATE}:</strong> {strings.LEARN_MORE_SEED_STORAGE_BEHAVIOR_INTERMEDIATE}
     </p>
     <p>
-      <strong>Orthodox:</strong> Seeds tolerate levels of desiccation required for frozen storage (5-8% moisture
-      content) and temperatures of -20°C or lower.
+      <strong>{strings.ORTHODOX}:</strong> {strings.LEARN_MORE_SEED_STORAGE_BEHAVIOR_ORTHODOX}
     </p>
     <p>
-      <strong>Recalcitrant:</strong> Seeds do not tolerate levels of desiccation required for ex situ (off-site)
-      conservation.
+      <strong>{strings.RECALCITRANT}:</strong> {strings.LEARN_MORE_SEED_STORAGE_BEHAVIOR_RECALCITRANT}
     </p>
   </>
 );

@@ -670,7 +670,14 @@ const strings = new LocalizedStrings({
     FORB: 'Forb',
     SHRUB: 'Shrub',
     TREE: 'Tree',
+    INTERMEDIATE: 'Intermediate',
+    ORTHODOX: 'Orthodox',
+    RECALCITRANT: 'Recalcitrant',
     LEARN_MORE: 'Learn more',
+    LEARN_MORE_CONSERVATION_STATUS_ENDANGERED:
+      'Species that are rare and whose wild populations have a high risk of extinction; see also any local definitions.',
+    LEARN_MORE_CONSERVATION_STATUS_RARE:
+      'Species with limited wild population sizes, often found in isolated geographical locations; may meet criteria for endangered or threatened status but have not yet been legally listed or assessed.',
     LEARN_MORE_GROWTH_FORM_FERN:
       'A non-flowering vascular plant that reproduces by spores, in the plant division Pteridophyta.',
     LEARN_MORE_GROWTH_FORM_GRAMINOID:
@@ -680,6 +687,12 @@ const strings = new LocalizedStrings({
       'A woody plant which is smaller than a tree and has several main stems arising at or near the ground.',
     LEARN_MORE_GROWTH_FORM_TREE:
       'A woody perennial plant, typically having a single stem or trunk growing to a considerable height and bearing lateral branches at some distance from the ground.',
+    LEARN_MORE_SEED_STORAGE_BEHAVIOR_INTERMEDIATE:
+      'Seeds are between orthodox and recalcitrant seeds in their behavior; may include tolerating partial desiccation, tolerating cool but not freezing temperatures, or being short-lived regardless of storage conditions.',
+    LEARN_MORE_SEED_STORAGE_BEHAVIOR_ORTHODOX:
+      'Seeds tolerate levels of desiccation required for frozen storage (5-8% moisture content) and temperatures of -20°C or lower.',
+    LEARN_MORE_SEED_STORAGE_BEHAVIOR_RECALCITRANT:
+      'Seeds do not tolerate levels of desiccation required for ex situ (off-site) conservation.',
     TOOLTIP_SPECIES_SCIENTIFIC_NAME:
       'The binomial Latin name (genus + species) currently accepted in the botanical literature.',
     TOOLTIP_SPECIES_COMMON_NAME:
