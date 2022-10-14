@@ -675,6 +675,7 @@ const strings = new LocalizedStrings({
     INVENTORY_DATA_DESCRIPTION: "Monitor your nursery's inventory",
     ADD_NURSERY: 'Add Nursery',
     NURSERY_ADDED: 'Nursery Added',
+    GO_TO_NURSERIES: 'Go to Nurseries',
   },
 });
 

@@ -54,6 +54,7 @@ import OptInFeatures from './components/OptInFeatures';
 import { isRouteEnabled } from 'src/features';
 import Nurseries from './components/Nurseries';
 import NewNursery from './components/NewNursery';
+import Inventory from './components/Inventory';
 
 const useStyles = makeStyles((theme: Theme) => ({
   content: {
@@ -310,25 +311,19 @@ export default function App() {
 
   const selectedOrgHasSpecies = (): boolean => species.length > 0;
 
-  const selectedOrgHasSeedBanks = (): boolean => {
+  const selectedOrgHasFacilityType = (facilityType: string): boolean => {
     if (selectedOrganization && selectedOrganization.facilities) {
       return selectedOrganization.facilities.some((facility) => {
-        return facility.type === 'Seed Bank';
+        return facility.type === facilityType;
       });
     } else {
       return false;
     }
   };
 
-  const selectedOrgHasNurseries = (): boolean => {
-    if (selectedOrganization && selectedOrganization.facilities) {
-      return selectedOrganization.facilities.some((facility) => {
-        return facility.type === 'Nursery';
-      });
-    } else {
-      return false;
-    }
-  };
+  const selectedOrgHasSeedBanks = (): boolean => selectedOrgHasFacilityType('Seed Bank');
+
+  const selectedOrgHasNurseries = (): boolean => selectedOrgHasFacilityType('Nursery');
 
   const getSeedBanksView = (): JSX.Element => {
     if (selectedOrganization && selectedOrgHasSeedBanks()) {
@@ -513,6 +508,15 @@ export default function App() {
               {nurseryManagementEnabled && (
                 <Route exact path={APP_PATHS.NURSERIES}>
                   {getNurseriesView()}
+                </Route>
+              )}
+              {nurseryManagementEnabled && selectedOrganization && (
+                <Route exact path={APP_PATHS.INVENTORY}>
+                  <Inventory
+                    organization={selectedOrganization}
+                    hasNurseries={selectedOrgHasNurseries()}
+                    hasSpecies={selectedOrgHasSpecies()}
+                  />
                 </Route>
               )}
               <Route exact path={APP_PATHS.CONTACT_US}>

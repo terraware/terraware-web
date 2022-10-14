@@ -699,13 +699,13 @@ export default function Database(props: DatabaseProps): JSX.Element {
               ) : isAdmin(organization) ? (
                 <EmptyMessage
                   className={classes.message}
-                  title={emptyMessageStrings.ACCESSIONS_ONBOARDING_ADMIN_TITLE}
+                  title={emptyMessageStrings.ONBOARDING_ADMIN_TITLE}
                   rowItems={getEmptyState()}
                 />
               ) : (
                 <EmptyMessage
                   className={classes.message}
-                  title={emptyMessageStrings.NO_SEEDBANKS_NON_ADMIN_TITLE}
+                  title={emptyMessageStrings.REACH_OUT_TO_ADMIN_TITLE}
                   text={emptyMessageStrings.NO_SEEDBANKS_NON_ADMIN_MSG}
                 />
               )}
