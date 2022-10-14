@@ -94,7 +94,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     padding: '24px',
   },
   checkInButton: {
-    marginTop: theme.spacing(2),
     marginRight: (props: StyleProps) => (props.isMobile ? 0 : theme.spacing(3)),
     marginLeft: (props: StyleProps) => (props.isMobile ? theme.spacing(1) : 0),
     '&.mobile': {
@@ -628,10 +627,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
                       <Paper>
                         <Grid item xs={12} className={classes.checkInContent}>
                           <div>
-                            <span> {strings.CHECKIN_BAGS}</span>
-                            <p className={classes.checkInText}>
-                              {strings.formatString(strings.CHECK_IN_MESSAGE, pendingAccessions.length)}
-                            </p>
+                            <span> {strings.CHECKIN_ACCESSIONS}</span>
                           </div>
                           <Button
                             className={`${classes.checkInButton} ${isMobile ? 'mobile' : ''}`}

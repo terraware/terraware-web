@@ -13,6 +13,7 @@ import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import useDebounce from 'src/utils/useDebounce';
 import TfMain from '../common/TfMain';
 import PageSnackbar from '../PageSnackbar';
+import NurseriesCellRenderer from './TableCellRenderer';
 
 type NurseriesListProps = {
   organization: ServerOrganization;
@@ -128,7 +129,15 @@ export default function NurseriesList({ organization }: NurseriesListProps): JSX
           <div>
             <Grid container spacing={4}>
               <Grid item xs={12}>
-                {results && <Table id='nurseries-table' columns={columns} rows={results} orderBy='name' />}
+                {results && (
+                  <Table
+                    id='nurseries-table'
+                    columns={columns}
+                    rows={results}
+                    orderBy='name'
+                    Renderer={NurseriesCellRenderer}
+                  />
+                )}
               </Grid>
             </Grid>
           </div>
