@@ -31,6 +31,12 @@ import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
 import { isContributor } from 'src/utils/organization';
+import TooltipLearnMoreModal, {
+  LearnMoreModalContentConservationStatus,
+  LearnMoreModalContentGrowthForm,
+  LearnMoreModalContentSeedStorageBehavior,
+  TooltipLearnMoreModalData,
+} from 'src/components/TooltipLearnMoreModal';
 
 type SpeciesListProps = {
   organization: ServerOrganization;
@@ -91,40 +97,6 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const columns: TableColumnType[] = [
-  {
-    key: 'scientificName',
-    name: strings.SCIENTIFIC_NAME,
-    type: 'string',
-    tooltipTitle: strings.TOOLTIP_SPECIES_SCIENTIFIC_NAME,
-  },
-  {
-    key: 'commonName',
-    name: strings.COMMON_NAME,
-    type: 'string',
-    tooltipTitle: strings.TOOLTIP_SPECIES_COMMON_NAME,
-  },
-  { key: 'familyName', name: strings.FAMILY, type: 'string', tooltipTitle: strings.TOOLTIP_SPECIES_FAMILY },
-  {
-    key: 'growthForm',
-    name: strings.GROWTH_FORM,
-    type: 'string',
-    tooltipTitle: strings.TOOLTIP_SPECIES_GROWTH_FORM,
-  },
-  {
-    key: 'conservationStatus',
-    name: strings.CONSERVATION_STATUS,
-    type: 'string',
-    tooltipTitle: strings.TOOLTIP_SPECIES_CONSERVATION_STATUS,
-  },
-  {
-    key: 'seedStorageBehavior',
-    name: strings.SEED_STORAGE_BEHAVIOR,
-    type: 'string',
-    tooltipTitle: strings.TOOLTIP_SPECIES_SEED_STORAGE_BEHAVIOR,
-  },
-];
-
 export type SpeciesFiltersType = {
   growthForm?: 'Tree' | 'Shrub' | 'Forb' | 'Graminoid' | 'Fern';
   seedStorageBehavior?: 'Orthodox' | 'Recalcitrant' | 'Intermediate' | 'Unknown';
@@ -146,6 +118,92 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
   const debouncedSearchTerm = useDebounce(searchValue, 250);
   const [results, setResults] = useState<Species[]>();
   const [record, setRecord] = useForm<SpeciesFiltersType>({});
+
+  const [tooltipLearnMoreModalOpen, setTooltipLearnMoreModalOpen] = useState(false);
+  const [tooltipLearnMoreModalContent, setTooltipLearnMoreModalContent] = useState<
+    TooltipLearnMoreModalData | undefined
+  >(undefined);
+  const openTooltipLearnMoreModal = ({ content, title }: TooltipLearnMoreModalData) => {
+    setTooltipLearnMoreModalContent({ content, title });
+    setTooltipLearnMoreModalOpen(true);
+  };
+  const handleTooltipLearnMoreModalClose = () => {
+    setTooltipLearnMoreModalOpen(false);
+  };
+
+  const columns: TableColumnType[] = [
+    {
+      key: 'scientificName',
+      name: strings.SCIENTIFIC_NAME,
+      type: 'string',
+      tooltipTitle: strings.TOOLTIP_SPECIES_SCIENTIFIC_NAME,
+    },
+    {
+      key: 'commonName',
+      name: strings.COMMON_NAME,
+      type: 'string',
+      tooltipTitle: strings.TOOLTIP_SPECIES_COMMON_NAME,
+    },
+    { key: 'familyName', name: strings.FAMILY, type: 'string', tooltipTitle: strings.TOOLTIP_SPECIES_FAMILY },
+    {
+      key: 'growthForm',
+      name: strings.GROWTH_FORM,
+      type: 'string',
+      tooltipTitle: (
+        <>
+          {strings.TOOLTIP_SPECIES_GROWTH_FORM}{' '}
+          <Button
+            label={strings.LEARN_MORE}
+            onClick={() =>
+              openTooltipLearnMoreModal({
+                title: strings.GROWTH_FORM,
+                content: <LearnMoreModalContentGrowthForm />,
+              })
+            }
+          />
+        </>
+      ),
+    },
+    {
+      key: 'conservationStatus',
+      name: strings.CONSERVATION_STATUS,
+      type: 'string',
+      tooltipTitle: (
+        <>
+          {strings.TOOLTIP_SPECIES_CONSERVATION_STATUS}{' '}
+          <Button
+            label={strings.LEARN_MORE}
+            onClick={() =>
+              openTooltipLearnMoreModal({
+                title: strings.CONSERVATION_STATUS,
+                content: <LearnMoreModalContentConservationStatus />,
+              })
+            }
+          />
+        </>
+      ),
+    },
+    {
+      key: 'seedStorageBehavior',
+      name: strings.SEED_STORAGE_BEHAVIOR,
+      type: 'string',
+      tooltipTitle: (
+        <>
+          {strings.TOOLTIP_SPECIES_SEED_STORAGE_BEHAVIOR}{' '}
+          <Button
+            label={strings.LEARN_MORE}
+            onClick={() =>
+              openTooltipLearnMoreModal({
+                title: strings.SEED_STORAGE_BEHAVIOR,
+                content: <LearnMoreModalContentSeedStorageBehavior />,
+              })
+            }
+          />
+        </>
+      ),
+    },
+  ];
+
   const [selectedColumns, setSelectedColumns] = useForm(columns);
   const [handleProblemsColumn, setHandleProblemsColumn] = useState<boolean>(false);
   const [hasNewData, setHasNewData] = useState<boolean>(false);
@@ -451,6 +509,12 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
         onClose={onCloseImportSpeciesModal}
         organization={organization}
         setCheckDataModalOpen={setCheckDataModalOpen}
+      />
+      <TooltipLearnMoreModal
+        content={tooltipLearnMoreModalContent?.content}
+        onClose={handleTooltipLearnMoreModalClose}
+        open={tooltipLearnMoreModalOpen}
+        title={tooltipLearnMoreModalContent?.title}
       />
       <Grid container>
         <Grid item xs={12} className={classes.titleContainer}>

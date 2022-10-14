@@ -665,6 +665,7 @@ const strings = new LocalizedStrings({
     SET_UP: 'Set Up',
     SUBSET_ERROR: 'Subset weight should be less than seed weight',
     WITHDRAWN_QUANTITY_ERROR: 'Exceeds remaining quantity',
+    LEARN_MORE: 'Learn more',
     TOOLTIP_SPECIES_SCIENTIFIC_NAME:
       'The binomial Latin name (genus + species) currently accepted in the botanical literature.',
     TOOLTIP_SPECIES_COMMON_NAME:
