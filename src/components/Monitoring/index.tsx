@@ -204,7 +204,7 @@ export default function Monitoring(props: MonitoringProps): JSX.Element {
           <PageSnackbar />
           <EmptyMessage
             className={classes.message}
-            title={emptyMessageStrings.NO_SEEDBANKS_NON_ADMIN_TITLE}
+            title={emptyMessageStrings.REACH_OUT_TO_ADMIN_TITLE}
             text={emptyMessageStrings.NO_SEEDBANKS_MONITORING_NON_ADMIN_MSG}
           />
         </>

@@ -153,7 +153,7 @@ export default function EmptyStatePage({ pageName, organization, reloadData }: E
 
   const NO_SPECIES_CONTRIBUTOR_CONTENT: PageContent = {
     title1: strings.SPECIES,
-    title2: emptyMessageStrings.NO_SEEDBANKS_NON_ADMIN_TITLE,
+    title2: emptyMessageStrings.REACH_OUT_TO_ADMIN_TITLE,
     subtitle: emptyMessageStrings.NO_SPECIES_CONTRIBUTOR_MSG,
     listItems: [],
   };
