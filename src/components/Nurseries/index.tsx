@@ -9,7 +9,6 @@ import { Facility } from 'src/api/types/facilities';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
-import { getAllNurseries } from 'src/utils/organization';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import useDebounce from 'src/utils/useDebounce';
 import TfMain from '../common/TfMain';
@@ -27,22 +26,9 @@ const columns: TableColumnType[] = [
 export default function NurseriesList({ organization }: NurseriesListProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const history = useHistory();
-  const [nurseries, setNurseries] = useState<Facility[]>();
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
   const [results, setResults] = useState<Facility[]>();
-
-  useEffect(() => {
-    const getNurseries = () => {
-      if (organization) {
-        const orgNurseries = getAllNurseries(organization).filter((n) => n !== undefined) as Facility[];
-        setNurseries(orgNurseries);
-        setResults(orgNurseries);
-      }
-    };
-
-    getNurseries();
-  }, [organization]);
 
   const goToNewNursery = () => {
     const newNurseryLocation = {
@@ -61,54 +47,50 @@ export default function NurseriesList({ organization }: NurseriesListProps): JSX
 
   useEffect(() => {
     const refreshSearch = async () => {
-      if (debouncedSearchTerm) {
-        const params: SearchNodePayload = {
-          prefix: 'facilities',
-          fields: ['id', 'name', 'description', 'type', 'organization_id'],
-          search: {
-            operation: 'and',
-            children: [
-              {
-                operation: 'or',
-                children: [
-                  { operation: 'field', field: 'name', type: 'Fuzzy', values: [debouncedSearchTerm] },
-                  { operation: 'field', field: 'description', type: 'Fuzzy', values: [debouncedSearchTerm] },
-                ],
-              },
-              { operation: 'field', field: 'type', type: 'Exact', values: ['Nursery'] },
-              {
-                operation: 'field',
-                field: 'organization_id',
-                type: 'Exact',
-                values: [organization.id],
-              },
-            ],
-          },
-          count: 0,
-        };
-        const requestId = Math.random().toString();
-        setRequestId('searchNurseries', requestId);
-        const searchResults = await search(params);
-        const nurseriesResults: Facility[] = [];
-        searchResults?.forEach((result) => {
-          nurseriesResults.push({
-            id: result.id as number,
-            name: result.name as string,
-            description: result.description as string,
-            organizationId: parseInt(result.organization_id as string, 10),
-            type: result.type as 'Nursery' | 'Seed Bank' | 'Desalination' | 'Reverse Osmosis',
-            connectionState: result.connectionState as 'Not Connected' | 'Connected' | 'Configured',
-          });
+      const params: SearchNodePayload = {
+        prefix: 'facilities',
+        fields: ['id', 'name', 'description', 'type', 'organization_id'],
+        search: {
+          operation: 'and',
+          children: [
+            {
+              operation: 'or',
+              children: [
+                { operation: 'field', field: 'name', type: 'Fuzzy', values: [debouncedSearchTerm] },
+                { operation: 'field', field: 'description', type: 'Fuzzy', values: [debouncedSearchTerm] },
+              ],
+            },
+            { operation: 'field', field: 'type', type: 'Exact', values: ['Nursery'] },
+            {
+              operation: 'field',
+              field: 'organization_id',
+              type: 'Exact',
+              values: [organization.id],
+            },
+          ],
+        },
+        count: 0,
+      };
+      const requestId = Math.random().toString();
+      setRequestId('searchNurseries', requestId);
+      const searchResults = await search(params);
+      const nurseriesResults: Facility[] = [];
+      searchResults?.forEach((result) => {
+        nurseriesResults.push({
+          id: result.id as number,
+          name: result.name as string,
+          description: result.description as string,
+          organizationId: parseInt(result.organization_id as string, 10),
+          type: result.type as 'Nursery' | 'Seed Bank' | 'Desalination' | 'Reverse Osmosis',
+          connectionState: result.connectionState as 'Not Connected' | 'Connected' | 'Configured',
         });
-        if (getRequestId('searchNurseries') === requestId) {
-          setResults(nurseriesResults);
-        }
-      } else {
-        setResults(nurseries);
+      });
+      if (getRequestId('searchNurseries') === requestId) {
+        setResults(nurseriesResults);
       }
     };
     refreshSearch();
-  }, [debouncedSearchTerm, nurseries, organization]);
+  }, [debouncedSearchTerm, organization]);
 
   return (
     <TfMain>
@@ -146,9 +128,7 @@ export default function NurseriesList({ organization }: NurseriesListProps): JSX
           <div>
             <Grid container spacing={4}>
               <Grid item xs={12}>
-                {nurseries && (
-                  <Table id='nurseries-table' columns={columns} rows={results || nurseries} orderBy='name' />
-                )}
+                {results && <Table id='nurseries-table' columns={columns} rows={results} orderBy='name' />}
               </Grid>
             </Grid>
           </div>
