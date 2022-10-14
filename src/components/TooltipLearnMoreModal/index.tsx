@@ -18,6 +18,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     fontSize: 'inherit',
     marginLeft: '.5em',
     textDecorationColor: '#fff',
+    verticalAlign: 'text-top',
   },
 }));
 
