@@ -665,7 +665,21 @@ const strings = new LocalizedStrings({
     SET_UP: 'Set Up',
     SUBSET_ERROR: 'Subset weight should be less than seed weight',
     WITHDRAWN_QUANTITY_ERROR: 'Exceeds remaining quantity',
+    FERN: 'Fern',
+    GRAMINOID: 'Graminoid',
+    FORB: 'Forb',
+    SHRUB: 'Shrub',
+    TREE: 'Tree',
     LEARN_MORE: 'Learn more',
+    LEARN_MORE_GROWTH_FORM_FERN:
+      'A non-flowering vascular plant that reproduces by spores, in the plant division Pteridophyta.',
+    LEARN_MORE_GROWTH_FORM_GRAMINOID:
+      'A herbaceous (non-woody) plant with a grass-like morphology, that is elongated culms with long, blade-like leaves, in the grass, sedge, or rush family.',
+    LEARN_MORE_GROWTH_FORM_FORB: 'A herbaceous (non-woody) plant that is NOT a graminoid (grass, sedge, or rush).',
+    LEARN_MORE_GROWTH_FORM_SHRUB:
+      'A woody plant which is smaller than a tree and has several main stems arising at or near the ground.',
+    LEARN_MORE_GROWTH_FORM_TREE:
+      'A woody perennial plant, typically having a single stem or trunk growing to a considerable height and bearing lateral branches at some distance from the ground.',
     TOOLTIP_SPECIES_SCIENTIFIC_NAME:
       'The binomial Latin name (genus + species) currently accepted in the botanical literature.',
     TOOLTIP_SPECIES_COMMON_NAME:

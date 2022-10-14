@@ -66,23 +66,19 @@ export const LearnMoreLink = (props: { onClick: () => void }): JSX.Element => {
 export const LearnMoreModalContentGrowthForm = (): JSX.Element => (
   <>
     <p>
-      <strong>Fern:</strong> A non-flowering vascular plant that reproduces by spores, in the plant division
-      Pteridophyta.
+      <strong>{strings.FERN}:</strong> {strings.LEARN_MORE_GROWTH_FORM_FERN}
     </p>
     <p>
-      <strong>Graminoid:</strong> A herbaceous (non-woody) plant with a grass-like morphology, that is elongated culms
-      with long, blade-like leaves, in the grass, sedge, or rush family.
+      <strong>{strings.GRAMINOID}:</strong> {strings.LEARN_MORE_GROWTH_FORM_GRAMINOID}
     </p>
     <p>
-      <strong>Forb:</strong> A herbaceous (non-woody) plant that is NOT a graminoid (grass, sedge, or rush).
+      <strong>{strings.FORB}:</strong> {strings.LEARN_MORE_GROWTH_FORM_FORB}
     </p>
     <p>
-      <strong>Shrub:</strong> A woody plant which is smaller than a tree and has several main stems arising at or near
-      the ground.
+      <strong>{strings.SHRUB}:</strong> {strings.LEARN_MORE_GROWTH_FORM_SHRUB}
     </p>
     <p>
-      <strong>Tree:</strong> A woody perennial plant, typically having a single stem or trunk growing to a considerable
-      height and bearing lateral branches at some distance from the ground.
+      <strong>{strings.TREE}:</strong> {strings.LEARN_MORE_GROWTH_FORM_TREE}
     </p>
   </>
 );
