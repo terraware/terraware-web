@@ -38,6 +38,7 @@ import ErrorBoundary from 'src/ErrorBoundary';
 import { Notifications } from 'src/types/Notifications';
 import { ServerOrganization } from 'src/types/Organization';
 import { User } from 'src/types/User';
+import { FacilityType } from 'src/api/types/facilities';
 import MyAccount from './components/MyAccount';
 import { getAllSpecies } from './api/species/species';
 import { Species } from './types/Species';
@@ -311,7 +312,7 @@ export default function App() {
 
   const selectedOrgHasSpecies = (): boolean => species.length > 0;
 
-  const selectedOrgHasFacilityType = (facilityType: string): boolean => {
+  const selectedOrgHasFacilityType = (facilityType: FacilityType): boolean => {
     if (selectedOrganization && selectedOrganization.facilities) {
       return selectedOrganization.facilities.some((facility) => {
         return facility.type === facilityType;
