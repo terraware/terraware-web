@@ -1,6 +1,7 @@
 import { Grid } from '@mui/material';
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import { IconTooltip } from '@terraware/web-components';
 import React, { useEffect, useState } from 'react';
 import { createSpecies, getSpeciesDetails, listSpeciesNames, updateSpecies } from 'src/api/species/species';
 import strings from 'src/strings';
@@ -207,6 +208,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
             hideArrow={true}
             onBlur={() => setShowWarning(true)}
             onFocus={() => setShowWarning(false)}
+            tooltipTitle={strings.TOOLTIP_ADD_SPECIES_SCIENTIFIC_NAME}
           />
         </Grid>
         <Grid item xs={12}>
@@ -220,6 +222,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
             readonly={false}
             fullWidth={true}
             hideArrow={true}
+            tooltipTitle={strings.TOOLTIP_ADD_SPECIES_COMMON_NAME}
           />
         </Grid>
         <Grid item xs={12}>
@@ -230,10 +233,14 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
             label={strings.FAMILY}
             aria-label={strings.FAMILY}
             type={'text'}
+            tooltipTitle={strings.TOOLTIP_ADD_SPECIES_FAMILY}
           />
         </Grid>
         <Grid item xs={12}>
-          <span>{strings.CONSERVATION_STATUS}</span>
+          <span>
+            {strings.CONSERVATION_STATUS}
+            <IconTooltip title={strings.TOOLTIP_ADD_SPECIES_CONSERVATION_STATUS} />
+          </span>
           <Checkbox
             id='Endangered'
             name='conservationStatus'
@@ -262,6 +269,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
             placeholder={strings.SELECT}
             fullWidth={true}
             fixedMenu
+            tooltipTitle={strings.TOOLTIP_ADD_SPECIES_GROWTH_FORM}
           />
         </Grid>
         <Grid item xs={12}>
@@ -275,6 +283,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
             placeholder={strings.SELECT}
             fullWidth={true}
             fixedMenu
+            tooltipTitle={strings.TOOLTIP_ADD_SPECIES_SEED_STORAGE_BEHAVIOR}
           />
         </Grid>
       </Grid>
