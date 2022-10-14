@@ -54,6 +54,7 @@ import OptInFeatures from './components/OptInFeatures';
 import { isRouteEnabled } from 'src/features';
 import Nurseries from './components/Nurseries';
 import NewNursery from './components/NewNursery';
+import NurseryDetails from './components/Nursery';
 
 const useStyles = makeStyles((theme: Theme) => ({
   content: {
@@ -508,6 +509,16 @@ export default function App() {
               {nurseryManagementEnabled && selectedOrganization && (
                 <Route exact path={APP_PATHS.NURSERIES_NEW}>
                   <NewNursery organization={selectedOrganization} reloadOrganizationData={reloadData} />
+                </Route>
+              )}
+              {nurseryManagementEnabled && selectedOrganization && (
+                <Route exact path={APP_PATHS.NURSERIES_EDIT}>
+                  <NewNursery organization={selectedOrganization} reloadOrganizationData={reloadData} />
+                </Route>
+              )}
+              {nurseryManagementEnabled && (
+                <Route path={APP_PATHS.NURSERIES_VIEW}>
+                  <NurseryDetails organization={selectedOrganization} />
                 </Route>
               )}
               {nurseryManagementEnabled && (
