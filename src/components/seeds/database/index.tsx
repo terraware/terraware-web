@@ -628,7 +628,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
                       <Paper>
                         <Grid item xs={12} className={classes.checkInContent}>
                           <div>
-                            <span> {strings.CHECKIN_BAGS}</span>
+                            <span> {strings.CHECKIN_ACCESSIONS}</span>
                             <p className={classes.checkInText}>
                               {strings.formatString(strings.CHECK_IN_MESSAGE, pendingAccessions.length)}
                             </p>
