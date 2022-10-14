@@ -665,29 +665,16 @@ const strings = new LocalizedStrings({
     SET_UP: 'Set Up',
     SUBSET_ERROR: 'Subset weight should be less than seed weight',
     WITHDRAWN_QUANTITY_ERROR: 'Exceeds remaining quantity',
-    TOOLTIP_SPECIES_TABLE_SCIENTIFIC_NAME:
+    TOOLTIP_SPECIES_SCIENTIFIC_NAME:
       'The binomial Latin name (genus + species) currently accepted in the botanical literature.',
-    TOOLTIP_SPECIES_TABLE_COMMON_NAME:
+    TOOLTIP_SPECIES_COMMON_NAME:
       'The name an organism is known by to the general public, rather than its scientific name.',
-    TOOLTIP_SPECIES_TABLE_FAMILY:
-      'The scientific name of the plant family currently accepted in the botanical literature.',
-    TOOLTIP_SPECIES_TABLE_GROWTH_FORM:
+    TOOLTIP_SPECIES_FAMILY: 'The scientific name of the plant family currently accepted in the botanical literature.',
+    TOOLTIP_SPECIES_GROWTH_FORM:
       'A structural category consisting of individuals or species of the same general habit of growth but not necessarily related. Learn more.',
-    TOOLTIP_SPECIES_TABLE_CONSERVATION_STATUS:
+    TOOLTIP_SPECIES_CONSERVATION_STATUS:
       "A species' risk of extinction, usually a legal designation or a Red List assessment. Learn more.",
-    TOOLTIP_SPECIES_TABLE_SEED_STORAGE_BEHAVIOR:
-      'The capacity of seeds to survive desiccation and temperatures to levels necessary for ex site (off site) storage. Learn more.',
-    TOOLTIP_ADD_SPECIES_SCIENTIFIC_NAME:
-      'The binomial Latin name (genus + species) currently accepted in the botanical literature.',
-    TOOLTIP_ADD_SPECIES_COMMON_NAME:
-      'The name an organism is known by to the general public, rather than its scientific name',
-    TOOLTIP_ADD_SPECIES_FAMILY:
-      'The scientific name of the plant family currently accepted in the botanical literature.',
-    TOOLTIP_ADD_SPECIES_CONSERVATION_STATUS:
-      "A species' risk of extinction, usually a legal designation or a Red List assessment. Learn more.",
-    TOOLTIP_ADD_SPECIES_GROWTH_FORM:
-      'A structural category consisting of individuals or species of the same general habit of growth but not necessarily related. Learn more.',
-    TOOLTIP_ADD_SPECIES_SEED_STORAGE_BEHAVIOR:
+    TOOLTIP_SPECIES_SEED_STORAGE_BEHAVIOR:
       'The capacity of seeds to survive desiccation and temperatures to levels necessary for ex site (off site) storage. Learn more.',
     TOOLTIP_DASHBOARD_TOTAL_ACTIVE_ACCESSIONS:
       'This number represents all accessions with the statuses awaiting processing, cleaning, drying, and in storage.',

@@ -208,7 +208,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
             hideArrow={true}
             onBlur={() => setShowWarning(true)}
             onFocus={() => setShowWarning(false)}
-            tooltipTitle={strings.TOOLTIP_ADD_SPECIES_SCIENTIFIC_NAME}
+            tooltipTitle={strings.TOOLTIP_SPECIES_SCIENTIFIC_NAME}
           />
         </Grid>
         <Grid item xs={12}>
@@ -222,7 +222,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
             readonly={false}
             fullWidth={true}
             hideArrow={true}
-            tooltipTitle={strings.TOOLTIP_ADD_SPECIES_COMMON_NAME}
+            tooltipTitle={strings.TOOLTIP_SPECIES_COMMON_NAME}
           />
         </Grid>
         <Grid item xs={12}>
@@ -233,13 +233,13 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
             label={strings.FAMILY}
             aria-label={strings.FAMILY}
             type={'text'}
-            tooltipTitle={strings.TOOLTIP_ADD_SPECIES_FAMILY}
+            tooltipTitle={strings.TOOLTIP_SPECIES_FAMILY}
           />
         </Grid>
         <Grid item xs={12}>
           <span>
             {strings.CONSERVATION_STATUS}
-            <IconTooltip title={strings.TOOLTIP_ADD_SPECIES_CONSERVATION_STATUS} />
+            <IconTooltip title={strings.TOOLTIP_SPECIES_CONSERVATION_STATUS} />
           </span>
           <Checkbox
             id='Endangered'
@@ -269,7 +269,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
             placeholder={strings.SELECT}
             fullWidth={true}
             fixedMenu
-            tooltipTitle={strings.TOOLTIP_ADD_SPECIES_GROWTH_FORM}
+            tooltipTitle={strings.TOOLTIP_SPECIES_GROWTH_FORM}
           />
         </Grid>
         <Grid item xs={12}>
@@ -283,7 +283,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
             placeholder={strings.SELECT}
             fullWidth={true}
             fixedMenu
-            tooltipTitle={strings.TOOLTIP_ADD_SPECIES_SEED_STORAGE_BEHAVIOR}
+            tooltipTitle={strings.TOOLTIP_SPECIES_SEED_STORAGE_BEHAVIOR}
           />
         </Grid>
       </Grid>

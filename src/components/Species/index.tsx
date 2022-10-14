@@ -96,32 +96,32 @@ const columns: TableColumnType[] = [
     key: 'scientificName',
     name: strings.SCIENTIFIC_NAME,
     type: 'string',
-    tooltipTitle: strings.TOOLTIP_SPECIES_TABLE_SCIENTIFIC_NAME,
+    tooltipTitle: strings.TOOLTIP_SPECIES_SCIENTIFIC_NAME,
   },
   {
     key: 'commonName',
     name: strings.COMMON_NAME,
     type: 'string',
-    tooltipTitle: strings.TOOLTIP_SPECIES_TABLE_COMMON_NAME,
+    tooltipTitle: strings.TOOLTIP_SPECIES_COMMON_NAME,
   },
-  { key: 'familyName', name: strings.FAMILY, type: 'string', tooltipTitle: strings.TOOLTIP_SPECIES_TABLE_FAMILY },
+  { key: 'familyName', name: strings.FAMILY, type: 'string', tooltipTitle: strings.TOOLTIP_SPECIES_FAMILY },
   {
     key: 'growthForm',
     name: strings.GROWTH_FORM,
     type: 'string',
-    tooltipTitle: strings.TOOLTIP_SPECIES_TABLE_GROWTH_FORM,
+    tooltipTitle: strings.TOOLTIP_SPECIES_GROWTH_FORM,
   },
   {
     key: 'conservationStatus',
     name: strings.CONSERVATION_STATUS,
     type: 'string',
-    tooltipTitle: strings.TOOLTIP_SPECIES_TABLE_CONSERVATION_STATUS,
+    tooltipTitle: strings.TOOLTIP_SPECIES_CONSERVATION_STATUS,
   },
   {
     key: 'seedStorageBehavior',
     name: strings.SEED_STORAGE_BEHAVIOR,
     type: 'string',
-    tooltipTitle: strings.TOOLTIP_SPECIES_TABLE_SEED_STORAGE_BEHAVIOR,
+    tooltipTitle: strings.TOOLTIP_SPECIES_SEED_STORAGE_BEHAVIOR,
   },
 ];
 
