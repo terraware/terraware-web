@@ -672,11 +672,11 @@ const strings = new LocalizedStrings({
       'The name an organism is known by to the general public, rather than its scientific name.',
     TOOLTIP_SPECIES_FAMILY: 'The scientific name of the plant family currently accepted in the botanical literature.',
     TOOLTIP_SPECIES_GROWTH_FORM:
-      'A structural category consisting of individuals or species of the same general habit of growth but not necessarily related. Learn more.',
+      'A structural category consisting of individuals or species of the same general habit of growth but not necessarily related.',
     TOOLTIP_SPECIES_CONSERVATION_STATUS:
-      "A species' risk of extinction, usually a legal designation or a Red List assessment. Learn more.",
+      "A species' risk of extinction, usually a legal designation or a Red List assessment.",
     TOOLTIP_SPECIES_SEED_STORAGE_BEHAVIOR:
-      'The capacity of seeds to survive desiccation and temperatures to levels necessary for ex site (off site) storage. Learn more.',
+      'The capacity of seeds to survive desiccation and temperatures to levels necessary for ex site (off site) storage.',
     TOOLTIP_DASHBOARD_TOTAL_ACTIVE_ACCESSIONS:
       'This number represents all accessions with the statuses awaiting processing, cleaning, drying, and in storage.',
     INVENTORY: 'Inventory',
