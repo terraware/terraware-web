@@ -20,6 +20,13 @@ import { getTodaysDateFormatted, isInTheFuture } from '@terraware/web-components
 import { ViabilityTest } from 'src/api/types/accessions';
 import ViabilityResultModal from './ViabilityResultModal';
 import { getSubstratesAccordingToType } from 'src/utils/viabilityTest';
+import TooltipLearnMoreModal, {
+  LearnMoreLink,
+  LearnMoreModalContentSeedType,
+  LearnMoreModalContentSubstrate,
+  LearnMoreModalContentTreatment,
+  TooltipLearnMoreModalData,
+} from 'src/components/TooltipLearnMoreModal';
 
 export interface NewViabilityTestModalProps {
   open: boolean;
@@ -48,6 +55,18 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
 
   const readOnly = !!viabilityTest?.endDate;
   const { isMobile } = useDeviceInfo();
+
+  const [tooltipLearnMoreModalOpen, setTooltipLearnMoreModalOpen] = useState(false);
+  const [tooltipLearnMoreModalContent, setTooltipLearnMoreModalContent] = useState<
+    TooltipLearnMoreModalData | undefined
+  >(undefined);
+  const openTooltipLearnMoreModal = ({ content, title }: TooltipLearnMoreModalData) => {
+    setTooltipLearnMoreModalContent({ content, title });
+    setTooltipLearnMoreModalOpen(true);
+  };
+  const handleTooltipLearnMoreModalClose = () => {
+    setTooltipLearnMoreModalOpen(false);
+  };
 
   useEffect(() => {
     const getOrgUsers = async () => {
@@ -373,6 +392,12 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
         ]}
         scrolled={true}
       >
+        <TooltipLearnMoreModal
+          content={tooltipLearnMoreModalContent?.content}
+          onClose={handleTooltipLearnMoreModalClose}
+          open={tooltipLearnMoreModalOpen}
+          title={tooltipLearnMoreModalContent?.title}
+        />
         <Grid container item xs={12} spacing={2} textAlign='left'>
           <Grid xs={12} padding={theme.spacing(1, 3, 1, 5)}>
             <Dropdown
@@ -396,6 +421,19 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
               fullWidth={true}
               readonly={true}
               disabled={readOnly}
+              tooltipTitle={
+                <>
+                  {strings.TOOLTIP_VIABILITY_TEST_SEED_TYPE}
+                  <LearnMoreLink
+                    onClick={() =>
+                      openTooltipLearnMoreModal({
+                        title: strings.SEED_TYPE,
+                        content: <LearnMoreModalContentSeedType />,
+                      })
+                    }
+                  />
+                </>
+              }
             />
           </Grid>
           {record?.testType !== 'Cut' && (
@@ -410,6 +448,19 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
                   fullWidth={true}
                   readonly={true}
                   disabled={readOnly}
+                  tooltipTitle={
+                    <>
+                      {strings.TOOLTIP_VIABILITY_TEST_SUBSTRATE}
+                      <LearnMoreLink
+                        onClick={() =>
+                          openTooltipLearnMoreModal({
+                            title: strings.SUBSTRATE,
+                            content: <LearnMoreModalContentSubstrate />,
+                          })
+                        }
+                      />
+                    </>
+                  }
                 />
               </Grid>
               <Grid padding={theme.spacing(1, 3, 1, 5)} xs={12}>
@@ -422,6 +473,19 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
                   fullWidth={true}
                   readonly={true}
                   disabled={readOnly}
+                  tooltipTitle={
+                    <>
+                      {strings.TOOLTIP_VIABILITY_TEST_TREATMENT}
+                      <LearnMoreLink
+                        onClick={() =>
+                          openTooltipLearnMoreModal({
+                            title: strings.TREATMENT,
+                            content: <LearnMoreModalContentTreatment />,
+                          })
+                        }
+                      />
+                    </>
+                  }
                 />
               </Grid>
             </>

@@ -706,6 +706,38 @@ const strings = new LocalizedStrings({
       'The capacity of seeds to survive desiccation and temperatures to levels necessary for ex site (off site) storage.',
     TOOLTIP_DASHBOARD_TOTAL_ACTIVE_ACCESSIONS:
       'This number represents all accessions with the statuses awaiting processing, cleaning, drying, and in storage.',
+    TOOLTIP_VIABILITY_TEST_FRESH:
+      'Seeds which were recently collected and have not been stored in the seed bank; recommended to establish a baseline of viability for a new accession.',
+    TOOLTIP_VIABILITY_TEST_STORED:
+      'Seeds which have been stored for any length of time; recommended to monitor viability over time in order to use seeds before viability is lost in storage.',
+    TOOLTIP_VIABILITY_TEST_SEED_TYPE: 'Condition of seeds to be tested for viability.',
+    TOOLTIP_VIABILITY_TEST_SUBSTRATE:
+      'The surface or material that an organism lives, grows, or obtains its nourishment from.',
+    TOOLTIP_VIABILITY_TEST_TREATMENT:
+      'The biological, physical and chemical agents and techniques used to break dormancy and/or speed germination.',
+    TOOLTIP_VIABILITY_TEST_AGAR_PETRI_DISH: 'A dish that contains a growth medium of solidified agar.',
+    TOOLTIP_VIABILITY_TEST_PAPER_PETRI_DISH: 'A dish that contains a growth medium of germination paper.',
+    TOOLTIP_VIABILITY_TEST_SAND_PETRI_DISH: 'A dish that contains a growth medium of sand.',
+    TOOLTIP_VIABILITY_TEST_NURSERY_MEDIA:
+      'A substance through which roots grow and extract water and nutrients in a pot, tray, or other nursery container.',
+    TOOLTIP_VIABILITY_TEST_MEDIA_MIX:
+      'A mix of substances through which roots grow and extract water and nutrients; may contain any of the media below.',
+    TOOLTIP_VIABILITY_TEST_SOIL:
+      'A black or dark brown material typically consisting of a mixture of organic remains, clay, and rock particles.',
+    TOOLTIP_VIABILITY_TEST_SAND:
+      'A loose granular substance resulting from the erosion of siliceous and other rocks and forming a major constituent of beaches, riverbeds, the seabed, and deserts.',
+    TOOLTIP_VIABILITY_TEST_MOSS:
+      'A small non-flowering, non-vascular plant which can be sterilized and used as a growth medium with high moisture retaining capacity.',
+    TOOLTIP_VIABILITY_TEST_PERLITE_VERMICULITE:
+      'Lightweight sand substitutes for soilless potting mixes which are often used to improve aeration and texture in potting soil and garden soil mixtures.',
+    TOOLTIP_VIABILITY_TEST_SOAK:
+      'A process of imbibing a seed by immersing the seed in water, to break physical dormancy.',
+    TOOLTIP_VIABILITY_TEST_SCARIFY:
+      'Weakening, opening, or otherwise altering the seed coat to make it permeable to water, to break physical dormancy.',
+    TOOLTIP_VIABILITY_TEST_CHEMICAL:
+      'Treating seeds with a plant growth hormone or other chemical to break physiological dormancy.',
+    TOOLTIP_VIABILITY_TEST_STRATIFICATION:
+      'A process of exposing seeds to alternating temperatures, simulating natural conditions that seeds would experience, to break physiological dormancy.',
     INVENTORY: 'Inventory',
     SEEDLINGS: 'Seedlings',
     NURSERIES: 'Nurseries',
@@ -714,6 +746,18 @@ const strings = new LocalizedStrings({
     INVENTORY_DATA_DESCRIPTION: "Monitor your nursery's inventory",
     ADD_NURSERY: 'Add Nursery',
     NURSERY_ADDED: 'Nursery Added',
+    FRESH: 'Fresh',
+    STORED: 'Stored',
+    SAND_PETRI_DISH: 'Sand Petri Dish',
+    CHEMICAL: 'Chemical',
+    MEDIA_MIX: 'Media Mix',
+    SOIL: 'Soil',
+    SAND: 'Sand',
+    MOSS: 'Moss',
+    PERLITE_VERMICULITE: 'Perlite/Vermiculite',
+    FOR_LAB_GERMINATION: 'For Lab Germination',
+    FOR_NURSERY_GERMINATION: 'For Nursery Germination',
+    FOR_LAB_AND_NURSERY_GERMINATION: 'For Lab and Nursery Germination',
   },
 });
 
