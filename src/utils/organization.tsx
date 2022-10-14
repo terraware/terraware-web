@@ -1,13 +1,17 @@
-import { Facility } from 'src/api/types/facilities';
+import { Facility, FacilityType } from 'src/api/types/facilities';
 import { HighOrganizationRolesValues, ServerOrganization } from 'src/types/Organization';
 import { OrganizationUser } from 'src/types/User';
 
-export const getAllSeedBanks = (organization: ServerOrganization): (Facility | undefined)[] => {
-  let seedBanks: (Facility | undefined)[] = [];
+export const getFacilitiesByType = (organization: ServerOrganization, type: FacilityType) => {
+  let facilitiesByType: (Facility | undefined)[] = [];
   if (organization && organization.facilities) {
-    seedBanks = organization?.facilities?.filter((facility) => facility.type === 'Seed Bank');
+    facilitiesByType = organization?.facilities?.filter((facility) => facility.type === type);
   }
-  return seedBanks;
+  return facilitiesByType;
+};
+
+export const getAllSeedBanks = (organization: ServerOrganization): (Facility | undefined)[] => {
+  return getFacilitiesByType(organization, 'Seed Bank');
 };
 
 export const getSeedBank = (organization: ServerOrganization, facilityId: number): Facility | undefined => {
@@ -20,4 +24,8 @@ export const isAdmin = (organization: ServerOrganization | undefined) => {
 
 export const isContributor = (roleHolder: ServerOrganization | OrganizationUser | undefined) => {
   return roleHolder?.role === 'Contributor';
+};
+
+export const getAllNurseries = (organization: ServerOrganization): (Facility | undefined)[] => {
+  return getFacilitiesByType(organization, 'Nursery');
 };
