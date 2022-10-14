@@ -94,7 +94,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     padding: '24px',
   },
   checkInButton: {
-    marginTop: theme.spacing(2),
     marginRight: (props: StyleProps) => (props.isMobile ? 0 : theme.spacing(3)),
     marginLeft: (props: StyleProps) => (props.isMobile ? theme.spacing(1) : 0),
     '&.mobile': {
@@ -628,10 +627,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
                       <Paper>
                         <Grid item xs={12} className={classes.checkInContent}>
                           <div>
-                            <span> {strings.CHECKIN_BAGS}</span>
-                            <p className={classes.checkInText}>
-                              {strings.formatString(strings.CHECK_IN_MESSAGE, pendingAccessions.length)}
-                            </p>
+                            <span> {strings.CHECKIN_ACCESSIONS}</span>
                           </div>
                           <Button
                             className={`${classes.checkInButton} ${isMobile ? 'mobile' : ''}`}
@@ -699,13 +695,13 @@ export default function Database(props: DatabaseProps): JSX.Element {
               ) : isAdmin(organization) ? (
                 <EmptyMessage
                   className={classes.message}
-                  title={emptyMessageStrings.ACCESSIONS_ONBOARDING_ADMIN_TITLE}
+                  title={emptyMessageStrings.ONBOARDING_ADMIN_TITLE}
                   rowItems={getEmptyState()}
                 />
               ) : (
                 <EmptyMessage
                   className={classes.message}
-                  title={emptyMessageStrings.NO_SEEDBANKS_NON_ADMIN_TITLE}
+                  title={emptyMessageStrings.REACH_OUT_TO_ADMIN_TITLE}
                   text={emptyMessageStrings.NO_SEEDBANKS_NON_ADMIN_MSG}
                 />
               )}

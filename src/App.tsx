@@ -38,6 +38,7 @@ import ErrorBoundary from 'src/ErrorBoundary';
 import { Notifications } from 'src/types/Notifications';
 import { ServerOrganization } from 'src/types/Organization';
 import { User } from 'src/types/User';
+import { FacilityType } from 'src/api/types/facilities';
 import MyAccount from './components/MyAccount';
 import { getAllSpecies } from './api/species/species';
 import { Species } from './types/Species';
@@ -54,6 +55,8 @@ import OptInFeatures from './components/OptInFeatures';
 import { isRouteEnabled } from 'src/features';
 import Nurseries from './components/Nurseries';
 import NewNursery from './components/NewNursery';
+import Inventory from './components/Inventory';
+import NurseryDetails from './components/Nursery';
 
 const useStyles = makeStyles((theme: Theme) => ({
   content: {
@@ -310,25 +313,19 @@ export default function App() {
 
   const selectedOrgHasSpecies = (): boolean => species.length > 0;
 
-  const selectedOrgHasSeedBanks = (): boolean => {
+  const selectedOrgHasFacilityType = (facilityType: FacilityType): boolean => {
     if (selectedOrganization && selectedOrganization.facilities) {
       return selectedOrganization.facilities.some((facility) => {
-        return facility.type === 'Seed Bank';
+        return facility.type === facilityType;
       });
     } else {
       return false;
     }
   };
 
-  const selectedOrgHasNurseries = (): boolean => {
-    if (selectedOrganization && selectedOrganization.facilities) {
-      return selectedOrganization.facilities.some((facility) => {
-        return facility.type === 'Nursery';
-      });
-    } else {
-      return false;
-    }
-  };
+  const selectedOrgHasSeedBanks = (): boolean => selectedOrgHasFacilityType('Seed Bank');
+
+  const selectedOrgHasNurseries = (): boolean => selectedOrgHasFacilityType('Nursery');
 
   const getSeedBanksView = (): JSX.Element => {
     if (selectedOrganization && selectedOrgHasSeedBanks()) {
@@ -339,7 +336,7 @@ export default function App() {
 
   const getNurseriesView = (): JSX.Element => {
     if (selectedOrganization && selectedOrgHasNurseries()) {
-      return <Nurseries />;
+      return <Nurseries organization={selectedOrganization} />;
     }
     return <EmptyStatePage pageName={'Nurseries'} />;
   };
@@ -510,9 +507,28 @@ export default function App() {
                   <NewNursery organization={selectedOrganization} reloadOrganizationData={reloadData} />
                 </Route>
               )}
+              {nurseryManagementEnabled && selectedOrganization && (
+                <Route exact path={APP_PATHS.NURSERIES_EDIT}>
+                  <NewNursery organization={selectedOrganization} reloadOrganizationData={reloadData} />
+                </Route>
+              )}
+              {nurseryManagementEnabled && (
+                <Route path={APP_PATHS.NURSERIES_VIEW}>
+                  <NurseryDetails organization={selectedOrganization} />
+                </Route>
+              )}
               {nurseryManagementEnabled && (
                 <Route exact path={APP_PATHS.NURSERIES}>
                   {getNurseriesView()}
+                </Route>
+              )}
+              {nurseryManagementEnabled && selectedOrganization && (
+                <Route exact path={APP_PATHS.INVENTORY}>
+                  <Inventory
+                    organization={selectedOrganization}
+                    hasNurseries={selectedOrgHasNurseries()}
+                    hasSpecies={selectedOrgHasSpecies()}
+                  />
                 </Route>
               )}
               <Route exact path={APP_PATHS.CONTACT_US}>
