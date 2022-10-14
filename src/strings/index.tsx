@@ -236,13 +236,6 @@ const strings = new LocalizedStrings({
     WELCOME_MSG: 'Welcome and happy seeding!',
     TOTAL_ACTIVE_ACCESSIONS: 'Total Active Accessions',
     TOTAL_SEED_COUNT: 'Total Seed Count',
-    MOST_RECENT_STAGE_UPDATES: 'Most Recent Stage Updates',
-    PENDING_UPDATES:
-      'There are {0} seed collection bags have been waiting since drop off for at least 1 week and are ready to be processed.',
-    PROCESSED_UPDATES:
-      '{0} accessions have finished processing for at least 2 weeks and are ready to be tested for %RH (or dried).',
-    DRIED_UPDATES: '{0} accessions have past its drying end date and are ready to be stored.',
-    WITHDRAWN_UPDATES: '{0} accessions have been completely withdrawn this week and are now inactive.',
     WITHDRAWAL_DESCRIPTION: 'All the details about withdrawal of the seeds.',
     ALL_SEEDS_WITHDRAWN_MSG:
       "As all seeds have been withdrawn, new withdrawals are disabled, the accession's stage has been set to Withdrawn, and the accession itself marked as Inactive",
@@ -308,15 +301,13 @@ const strings = new LocalizedStrings({
     OZ: 'oz',
     GOT_IT: 'Got It!',
     VIEW: 'View',
-    BAGS_TOTAL: 'Bags Total',
-    CHECKIN_BAGS: 'Check In Bags',
+    ACCESSIONS_TOTAL: 'Accessions Total',
+    CHECKIN_ACCESSIONS: 'Check In Accessions',
     VIEW_ACCESSION: 'View accession',
     CHECKING_IN: 'Checking In...',
     CHECK_IN: 'Check In',
     CHECKED_IN: 'Checked In!',
     PEOPLE: 'People',
-    CHECK_IN_MESSAGE:
-      '{0} new seed collection bags should have been dropped off at the seed bank. Please verify their arrival and check them in.',
     SPECIES_DESCRIPTION: 'Manage your organization’s species list for planning, operation and reporting.',
     NAME: 'Name',
     NAME_REQUIRED: 'Name *',
