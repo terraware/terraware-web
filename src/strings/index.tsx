@@ -665,6 +665,8 @@ const strings = new LocalizedStrings({
     SET_UP: 'Set Up',
     SUBSET_ERROR: 'Subset weight should be less than seed weight',
     WITHDRAWN_QUANTITY_ERROR: 'Exceeds remaining quantity',
+    TOOLTIP_DASHBOARD_TOTAL_ACTIVE_ACCESSIONS:
+      'This number represents all accessions with the statuses awaiting processing, cleaning, drying, and in storage.',
     INVENTORY: 'Inventory',
     SEEDLINGS: 'Seedlings',
     NURSERIES: 'Nurseries',
