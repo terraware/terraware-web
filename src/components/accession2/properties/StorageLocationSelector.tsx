@@ -28,6 +28,7 @@ export default function StorageLocationSelector(props: StorageLocationSelectorPr
       fullWidth={true}
       readonly={true}
       errorText={errorText}
+      tooltipTitle={strings.ACCESSIONS_TOOLTIP_LOCATION}
     />
   );
 }
