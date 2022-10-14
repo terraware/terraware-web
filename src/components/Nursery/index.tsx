@@ -13,12 +13,6 @@ import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const useStyles = makeStyles((theme: Theme) => ({
-  mainContainer: {
-    height: '-webkit-fill-available',
-    paddingTop: theme.spacing(4),
-    paddingBottom: theme.spacing(4),
-    background: '#ffffff',
-  },
   backIcon: {
     fill: '#007DF2',
     marginRight: theme.spacing(1),

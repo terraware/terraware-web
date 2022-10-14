@@ -24,7 +24,6 @@ export default function NurseriesCellRenderer(props: RendererProps<TableRowType>
   };
 
   if (column.key === 'name') {
-    console.log(createLinkToNursery(value));
     return <CellRenderer index={index} column={column} value={createLinkToNursery(value)} row={row} />;
   }
 
