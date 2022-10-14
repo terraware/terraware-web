@@ -1,5 +1,6 @@
 import { Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import { IconTooltip } from '@terraware/web-components';
 import React from 'react';
 
 const useStyles = makeStyles(() => ({
@@ -15,14 +16,15 @@ interface Props {
   title: string;
   id?: string;
   gutterBottom?: boolean;
+  tooltipTitle?: NonNullable<React.ReactNode>;
 }
 
-export default function PanelTitle({ title, id, gutterBottom }: Props): JSX.Element {
+export default function PanelTitle({ title, id, gutterBottom, tooltipTitle }: Props): JSX.Element {
   const classes = useStyles();
 
   return (
     <Typography variant='h6' className={classes.panelTitle} id={id} gutterBottom={gutterBottom}>
-      {title}
+      {title} {tooltipTitle && <IconTooltip title={tooltipTitle} />}
     </Typography>
   );
 }

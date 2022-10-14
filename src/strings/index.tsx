@@ -689,6 +689,8 @@ const strings = new LocalizedStrings({
       'A structural category consisting of individuals or species of the same general habit of growth but not necessarily related. Learn more.',
     TOOLTIP_ADD_SPECIES_SEED_STORAGE_BEHAVIOR:
       'The capacity of seeds to survive desiccation and temperatures to levels necessary for ex site (off site) storage. Learn more.',
+    TOOLTIP_DASHBOARD_TOTAL_ACTIVE_ACCESSIONS:
+      'This number represents all accessions with the statuses awaiting processing, cleaning, drying, and in storage.',
     INVENTORY: 'Inventory',
     SEEDLINGS: 'Seedlings',
     NURSERIES: 'Nurseries',
