@@ -1,4 +1,4 @@
-import { Grid, Link } from '@mui/material';
+import { Grid } from '@mui/material';
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { IconTooltip } from '@terraware/web-components';
