@@ -267,7 +267,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
             <IconTooltip
               title={
                 <>
-                  {strings.TOOLTIP_SPECIES_CONSERVATION_STATUS}{' '}
+                  {strings.TOOLTIP_SPECIES_CONSERVATION_STATUS}
                   <LearnMoreLink
                     onClick={() =>
                       openTooltipLearnMoreModal({
@@ -310,7 +310,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
             fixedMenu
             tooltipTitle={
               <>
-                {strings.TOOLTIP_SPECIES_GROWTH_FORM}{' '}
+                {strings.TOOLTIP_SPECIES_GROWTH_FORM}
                 <LearnMoreLink
                   onClick={() =>
                     openTooltipLearnMoreModal({
@@ -336,7 +336,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
             fixedMenu
             tooltipTitle={
               <>
-                {strings.TOOLTIP_SPECIES_SEED_STORAGE_BEHAVIOR}{' '}
+                {strings.TOOLTIP_SPECIES_SEED_STORAGE_BEHAVIOR}
                 <LearnMoreLink
                   onClick={() =>
                     openTooltipLearnMoreModal({

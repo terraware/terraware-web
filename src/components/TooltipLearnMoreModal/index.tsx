@@ -16,6 +16,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   learnMoreLink: {
     color: '#fff',
     fontSize: 'inherit',
+    marginLeft: '.5em',
     textDecorationColor: '#fff',
   },
 }));

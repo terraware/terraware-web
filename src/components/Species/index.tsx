@@ -152,7 +152,7 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
       type: 'string',
       tooltipTitle: (
         <>
-          {strings.TOOLTIP_SPECIES_GROWTH_FORM}{' '}
+          {strings.TOOLTIP_SPECIES_GROWTH_FORM}
           <LearnMoreLink
             onClick={() =>
               openTooltipLearnMoreModal({
@@ -170,7 +170,7 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
       type: 'string',
       tooltipTitle: (
         <>
-          {strings.TOOLTIP_SPECIES_CONSERVATION_STATUS}{' '}
+          {strings.TOOLTIP_SPECIES_CONSERVATION_STATUS}
           <LearnMoreLink
             onClick={() =>
               openTooltipLearnMoreModal({
@@ -188,7 +188,7 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
       type: 'string',
       tooltipTitle: (
         <>
-          {strings.TOOLTIP_SPECIES_SEED_STORAGE_BEHAVIOR}{' '}
+          {strings.TOOLTIP_SPECIES_SEED_STORAGE_BEHAVIOR}
           <LearnMoreLink
             onClick={() =>
               openTooltipLearnMoreModal({
