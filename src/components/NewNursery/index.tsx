@@ -75,25 +75,16 @@ export default function NurseryView({ organization, reloadOrganizationData }: Si
       setDescriptionError(strings.REQUIRED_FIELD);
       return;
     }
+    const response = selectedNursery
+      ? await updateFacility({ ...record, id: selectedNursery.id } as Facility)
+      : await createFacility(record);
 
-    if (selectedNursery) {
-      const response = await updateFacility({ ...record, id: selectedNursery.id } as Facility);
-      if (response.requestSucceeded) {
-        reloadOrganizationData();
-        snackbar.toastSuccess(strings.CHANGES_SAVED);
-        goToNurseries();
-      } else {
-        snackbar.toastError();
-      }
+    if (response.requestSucceeded) {
+      reloadOrganizationData();
+      snackbar.toastSuccess(selectedNursery ? strings.CHANGES_SAVED : strings.NURSERY_ADDED);
+      goToNurseries();
     } else {
-      const response = await createFacility(record);
-      if (response.requestSucceeded) {
-        reloadOrganizationData();
-        goToNurseries();
-        snackbar.toastSuccess(strings.NURSERY_ADDED);
-      } else {
-        snackbar.toastError();
-      }
+      snackbar.toastError();
     }
   };
 
