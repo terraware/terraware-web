@@ -16,7 +16,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   learnMoreLink: {
     color: '#fff',
     fontSize: 'inherit',
-    marginLeft: '.5em',
     textDecorationColor: '#fff',
     verticalAlign: 'text-top',
   },
@@ -57,9 +56,12 @@ export const LearnMoreLink = (props: { onClick: () => void }): JSX.Element => {
   const { onClick } = props;
 
   return (
-    <Link className={classes.learnMoreLink} component='button' onClick={onClick}>
-      {strings.LEARN_MORE}
-    </Link>
+    <>
+      {' '}
+      <Link className={classes.learnMoreLink} component='button' onClick={onClick}>
+        {strings.LEARN_MORE}
+      </Link>
+    </>
   );
 };
 
