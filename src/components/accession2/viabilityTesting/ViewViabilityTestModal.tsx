@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Box, Grid, Typography } from '@mui/material';
-import { Button, DialogBox } from '@terraware/web-components';
+import { Button, DialogBox, IconTooltip } from '@terraware/web-components';
 import { Accession2 } from 'src/api/accessions2/accession';
 import strings from 'src/strings';
 import { ViabilityTest } from 'src/api/types/accessions';
@@ -8,6 +8,13 @@ import { getFullTestType } from 'src/utils/viabilityTest';
 import ObservationsChart from './ObservationsChart';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import DeleteViabilityTestModal from './DeleteViabilityTestModal';
+import TooltipLearnMoreModal, {
+  LearnMoreLink,
+  LearnMoreModalContentSeedType,
+  LearnMoreModalContentSubstrate,
+  LearnMoreModalContentTreatment,
+  TooltipLearnMoreModalData,
+} from 'src/components/TooltipLearnMoreModal';
 
 export interface ViewViabilityTestModalProps {
   open: boolean;
@@ -23,6 +30,18 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
   const { onClose, open, accession, isEditable, viabilityTest, onEdit, reload } = props;
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
   const { isMobile } = useDeviceInfo();
+
+  const [tooltipLearnMoreModalOpen, setTooltipLearnMoreModalOpen] = useState(false);
+  const [tooltipLearnMoreModalData, setTooltipLearnMoreModalData] = useState<TooltipLearnMoreModalData | undefined>(
+    undefined
+  );
+  const openTooltipLearnMoreModal = (data: TooltipLearnMoreModalData) => {
+    setTooltipLearnMoreModalData(data);
+    setTooltipLearnMoreModalOpen(true);
+  };
+  const handleTooltipLearnMoreModalClose = () => {
+    setTooltipLearnMoreModalOpen(false);
+  };
 
   const onCloseHandler = () => {
     onClose();
@@ -61,6 +80,12 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
       size='large'
       scrolled={true}
     >
+      <TooltipLearnMoreModal
+        content={tooltipLearnMoreModalData?.content}
+        onClose={handleTooltipLearnMoreModalClose}
+        open={tooltipLearnMoreModalOpen}
+        title={tooltipLearnMoreModalData?.title}
+      />
       <Grid container item xs={12} spacing={2} textAlign='left' color={'#000000'} fontSize='14px'>
         <Grid item xs={12} display='flex'>
           <Grid xs={isEditable ? 6 : 12}>
@@ -96,6 +121,21 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
           <Grid xs={smallColumn}>
             <Grid xs={12} sx={titleStyle}>
               {strings.SEED_TYPE}
+              <IconTooltip
+                title={
+                  <>
+                    {strings.TOOLTIP_VIABILITY_TEST_SEED_TYPE}
+                    <LearnMoreLink
+                      onClick={() =>
+                        openTooltipLearnMoreModal({
+                          title: strings.SEED_TYPE,
+                          content: <LearnMoreModalContentSeedType />,
+                        })
+                      }
+                    />
+                  </>
+                }
+              />
             </Grid>
             <Grid xs={12}>{viabilityTest.seedType}</Grid>
           </Grid>
@@ -111,6 +151,21 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
             <Grid xs={smallColumn}>
               <Grid xs={12} sx={titleStyle}>
                 {strings.SUBSTRATE}
+                <IconTooltip
+                  title={
+                    <>
+                      {strings.TOOLTIP_VIABILITY_TEST_SUBSTRATE}
+                      <LearnMoreLink
+                        onClick={() =>
+                          openTooltipLearnMoreModal({
+                            title: strings.SUBSTRATE,
+                            content: <LearnMoreModalContentSubstrate />,
+                          })
+                        }
+                      />
+                    </>
+                  }
+                />
               </Grid>
               <Grid xs={12}>{viabilityTest.substrate}</Grid>
             </Grid>
@@ -121,6 +176,21 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
             <Grid xs={smallColumn}>
               <Grid xs={12} sx={titleStyle}>
                 {strings.SUBSTRATE}
+                <IconTooltip
+                  title={
+                    <>
+                      {strings.TOOLTIP_VIABILITY_TEST_SUBSTRATE}
+                      <LearnMoreLink
+                        onClick={() =>
+                          openTooltipLearnMoreModal({
+                            title: strings.SUBSTRATE,
+                            content: <LearnMoreModalContentSubstrate />,
+                          })
+                        }
+                      />
+                    </>
+                  }
+                />
               </Grid>
               <Grid xs={12}>{viabilityTest.substrate}</Grid>
             </Grid>
@@ -129,6 +199,21 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
             <Grid xs={smallColumn}>
               <Grid xs={12} sx={titleStyle}>
                 {strings.TREATMENT}
+                <IconTooltip
+                  title={
+                    <>
+                      {strings.TOOLTIP_VIABILITY_TEST_TREATMENT}
+                      <LearnMoreLink
+                        onClick={() =>
+                          openTooltipLearnMoreModal({
+                            title: strings.TREATMENT,
+                            content: <LearnMoreModalContentTreatment />,
+                          })
+                        }
+                      />
+                    </>
+                  }
+                />
               </Grid>
               <Grid xs={12}>{viabilityTest.treatment}</Grid>
             </Grid>
