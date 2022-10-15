@@ -66,9 +66,9 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
   const [showWarning, setShowWarning] = useState(false);
 
   const [tooltipLearnMoreModalOpen, setTooltipLearnMoreModalOpen] = useState(false);
-  const [tooltipLearnMoreModalContent, setTooltipLearnMoreModalContent] = useState<
-    TooltipLearnMoreModalData | undefined
-  >(undefined);
+  const [tooltipLearnMoreModalData, setTooltipLearnMoreModalData] = useState<TooltipLearnMoreModalData | undefined>(
+    undefined
+  );
   const openTooltipLearnMoreModal = (data: TooltipLearnMoreModalData) => {
     setTooltipLearnMoreModalData(data);
     setTooltipLearnMoreModalOpen(true);
@@ -199,10 +199,10 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
       ]}
     >
       <TooltipLearnMoreModal
-        content={tooltipLearnMoreModalContent?.content}
+        content={tooltipLearnMoreModalData?.content}
         onClose={handleTooltipLearnMoreModalClose}
         open={tooltipLearnMoreModalOpen}
-        title={tooltipLearnMoreModalContent?.title}
+        title={tooltipLearnMoreModalData?.title}
       />
       <Grid container spacing={4} className={classes.mainGrid}>
         {nameFormatError && (

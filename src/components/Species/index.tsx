@@ -121,9 +121,9 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
   const [record, setRecord] = useForm<SpeciesFiltersType>({});
 
   const [tooltipLearnMoreModalOpen, setTooltipLearnMoreModalOpen] = useState(false);
-  const [tooltipLearnMoreModalContent, setTooltipLearnMoreModalContent] = useState<
-    TooltipLearnMoreModalData | undefined
-  >(undefined);
+  const [tooltipLearnMoreModalData, setTooltipLearnMoreModalData] = useState<TooltipLearnMoreModalData | undefined>(
+    undefined
+  );
   const openTooltipLearnMoreModal = (data: TooltipLearnMoreModalData) => {
     setTooltipLearnMoreModalData(data);
     setTooltipLearnMoreModalOpen(true);
@@ -509,10 +509,10 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
         setCheckDataModalOpen={setCheckDataModalOpen}
       />
       <TooltipLearnMoreModal
-        content={tooltipLearnMoreModalContent?.content}
+        content={tooltipLearnMoreModalData?.content}
         onClose={handleTooltipLearnMoreModalClose}
         open={tooltipLearnMoreModalOpen}
-        title={tooltipLearnMoreModalContent?.title}
+        title={tooltipLearnMoreModalData?.title}
       />
       <Grid container>
         <Grid item xs={12} className={classes.titleContainer}>

@@ -57,9 +57,9 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
   const { isMobile } = useDeviceInfo();
 
   const [tooltipLearnMoreModalOpen, setTooltipLearnMoreModalOpen] = useState(false);
-  const [tooltipLearnMoreModalContent, setTooltipLearnMoreModalContent] = useState<
-    TooltipLearnMoreModalData | undefined
-  >(undefined);
+  const [tooltipLearnMoreModalData, setTooltipLearnMoreModalData] = useState<TooltipLearnMoreModalData | undefined>(
+    undefined
+  );
   const openTooltipLearnMoreModal = (data: TooltipLearnMoreModalData) => {
     setTooltipLearnMoreModalData(data);
     setTooltipLearnMoreModalOpen(true);
@@ -393,10 +393,10 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
         scrolled={true}
       >
         <TooltipLearnMoreModal
-          content={tooltipLearnMoreModalContent?.content}
+          content={tooltipLearnMoreModalData?.content}
           onClose={handleTooltipLearnMoreModalClose}
           open={tooltipLearnMoreModalOpen}
-          title={tooltipLearnMoreModalContent?.title}
+          title={tooltipLearnMoreModalData?.title}
         />
         <Grid container item xs={12} spacing={2} textAlign='left'>
           <Grid xs={12} padding={theme.spacing(1, 3, 1, 5)}>
