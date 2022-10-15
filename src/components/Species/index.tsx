@@ -124,8 +124,8 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
   const [tooltipLearnMoreModalContent, setTooltipLearnMoreModalContent] = useState<
     TooltipLearnMoreModalData | undefined
   >(undefined);
-  const openTooltipLearnMoreModal = ({ content, title }: TooltipLearnMoreModalData) => {
-    setTooltipLearnMoreModalContent({ content, title });
+  const openTooltipLearnMoreModal = (data: TooltipLearnMoreModalData) => {
+    setTooltipLearnMoreModalData(data);
     setTooltipLearnMoreModalOpen(true);
   };
   const handleTooltipLearnMoreModalClose = () => {

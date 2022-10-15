@@ -35,8 +35,8 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
   const [tooltipLearnMoreModalContent, setTooltipLearnMoreModalContent] = useState<
     TooltipLearnMoreModalData | undefined
   >(undefined);
-  const openTooltipLearnMoreModal = ({ content, title }: TooltipLearnMoreModalData) => {
-    setTooltipLearnMoreModalContent({ content, title });
+  const openTooltipLearnMoreModal = (data: TooltipLearnMoreModalData) => {
+    setTooltipLearnMoreModalData(data);
     setTooltipLearnMoreModalOpen(true);
   };
   const handleTooltipLearnMoreModalClose = () => {
