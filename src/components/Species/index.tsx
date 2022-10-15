@@ -132,75 +132,78 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
     setTooltipLearnMoreModalOpen(false);
   };
 
-  const columns: TableColumnType[] = [
-    {
-      key: 'scientificName',
-      name: strings.SCIENTIFIC_NAME,
-      type: 'string',
-      tooltipTitle: strings.TOOLTIP_SPECIES_SCIENTIFIC_NAME,
-    },
-    {
-      key: 'commonName',
-      name: strings.COMMON_NAME,
-      type: 'string',
-      tooltipTitle: strings.TOOLTIP_SPECIES_COMMON_NAME,
-    },
-    { key: 'familyName', name: strings.FAMILY, type: 'string', tooltipTitle: strings.TOOLTIP_SPECIES_FAMILY },
-    {
-      key: 'growthForm',
-      name: strings.GROWTH_FORM,
-      type: 'string',
-      tooltipTitle: (
-        <>
-          {strings.TOOLTIP_SPECIES_GROWTH_FORM}
-          <LearnMoreLink
-            onClick={() =>
-              openTooltipLearnMoreModal({
-                title: strings.GROWTH_FORM,
-                content: <LearnMoreModalContentGrowthForm />,
-              })
-            }
-          />
-        </>
-      ),
-    },
-    {
-      key: 'conservationStatus',
-      name: strings.CONSERVATION_STATUS,
-      type: 'string',
-      tooltipTitle: (
-        <>
-          {strings.TOOLTIP_SPECIES_CONSERVATION_STATUS}
-          <LearnMoreLink
-            onClick={() =>
-              openTooltipLearnMoreModal({
-                title: strings.CONSERVATION_STATUS,
-                content: <LearnMoreModalContentConservationStatus />,
-              })
-            }
-          />
-        </>
-      ),
-    },
-    {
-      key: 'seedStorageBehavior',
-      name: strings.SEED_STORAGE_BEHAVIOR,
-      type: 'string',
-      tooltipTitle: (
-        <>
-          {strings.TOOLTIP_SPECIES_SEED_STORAGE_BEHAVIOR}
-          <LearnMoreLink
-            onClick={() =>
-              openTooltipLearnMoreModal({
-                title: strings.SEED_STORAGE_BEHAVIOR,
-                content: <LearnMoreModalContentSeedStorageBehavior />,
-              })
-            }
-          />
-        </>
-      ),
-    },
-  ];
+  const columns: TableColumnType[] = React.useMemo(
+    () => [
+      {
+        key: 'scientificName',
+        name: strings.SCIENTIFIC_NAME,
+        type: 'string',
+        tooltipTitle: strings.TOOLTIP_SPECIES_SCIENTIFIC_NAME,
+      },
+      {
+        key: 'commonName',
+        name: strings.COMMON_NAME,
+        type: 'string',
+        tooltipTitle: strings.TOOLTIP_SPECIES_COMMON_NAME,
+      },
+      { key: 'familyName', name: strings.FAMILY, type: 'string', tooltipTitle: strings.TOOLTIP_SPECIES_FAMILY },
+      {
+        key: 'growthForm',
+        name: strings.GROWTH_FORM,
+        type: 'string',
+        tooltipTitle: (
+          <>
+            {strings.TOOLTIP_SPECIES_GROWTH_FORM}
+            <LearnMoreLink
+              onClick={() =>
+                openTooltipLearnMoreModal({
+                  title: strings.GROWTH_FORM,
+                  content: <LearnMoreModalContentGrowthForm />,
+                })
+              }
+            />
+          </>
+        ),
+      },
+      {
+        key: 'conservationStatus',
+        name: strings.CONSERVATION_STATUS,
+        type: 'string',
+        tooltipTitle: (
+          <>
+            {strings.TOOLTIP_SPECIES_CONSERVATION_STATUS}
+            <LearnMoreLink
+              onClick={() =>
+                openTooltipLearnMoreModal({
+                  title: strings.CONSERVATION_STATUS,
+                  content: <LearnMoreModalContentConservationStatus />,
+                })
+              }
+            />
+          </>
+        ),
+      },
+      {
+        key: 'seedStorageBehavior',
+        name: strings.SEED_STORAGE_BEHAVIOR,
+        type: 'string',
+        tooltipTitle: (
+          <>
+            {strings.TOOLTIP_SPECIES_SEED_STORAGE_BEHAVIOR}
+            <LearnMoreLink
+              onClick={() =>
+                openTooltipLearnMoreModal({
+                  title: strings.SEED_STORAGE_BEHAVIOR,
+                  content: <LearnMoreModalContentSeedStorageBehavior />,
+                })
+              }
+            />
+          </>
+        ),
+      },
+    ],
+    []
+  );
 
   const [selectedColumns, setSelectedColumns] = useForm(columns);
   const [handleProblemsColumn, setHandleProblemsColumn] = useState<boolean>(false);
@@ -479,7 +482,16 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
       setHandleProblemsColumn(false);
       setHasNewData(false);
     }
-  }, [handleProblemsColumn, problemsColumn, results, selectedColumns, setSelectedColumns, hasNewData, setHasNewData]);
+  }, [
+    handleProblemsColumn,
+    problemsColumn,
+    results,
+    selectedColumns,
+    setSelectedColumns,
+    hasNewData,
+    setHasNewData,
+    columns,
+  ]);
 
   return (
     <TfMain>
