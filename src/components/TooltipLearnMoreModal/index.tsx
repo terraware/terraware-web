@@ -39,7 +39,7 @@ export default function TooltipLearnMoreModal(props: TooltipLearnMoreModalProps)
 
   return (
     <DialogBox
-      middleButtons={[<Button onClick={onClose} label={strings.DONE} />]}
+      middleButtons={[<Button key={strings.DONE} onClick={onClose} label={strings.DONE} />]}
       onClose={onClose}
       open={open}
       scrolled
