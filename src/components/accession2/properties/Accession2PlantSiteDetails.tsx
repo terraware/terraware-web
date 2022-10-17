@@ -61,7 +61,7 @@ export default function Accession2PlantSiteDetails(props: Accession2PlantSiteDet
             onChange={onChange}
             type='text'
             label={strings.PLANT_ID + ' ' + strings.IF_APPLICABLE}
-            tooltipTitle={strings.PLANT_ID_TOOLTIP}
+            tooltipTitle={strings.TOOLTIP_ACCESSIONS_ADD_PLANT_ID}
           />
         </Grid>
       </Grid>

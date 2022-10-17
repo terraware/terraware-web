@@ -84,6 +84,7 @@ export default function Accession2EditModal(props: Accession2EditModalProps): JS
             value={record?.accessionNumber}
             onChange={onChange}
             readonly={true}
+            tooltipTitle={strings.TOOLTIP_ACCESSIONS_ID}
           />
         </Grid>
         <Species2Dropdown
@@ -112,6 +113,7 @@ export default function Accession2EditModal(props: Accession2EditModalProps): JS
             label={strings.COLLECTING_SITE}
             value={record?.collectionSiteName}
             onChange={onChange}
+            tooltipTitle={strings.TOOLTIP_ACCESSIONS_ADD_COLLECTING_SITE}
           />
         </Grid>
 
