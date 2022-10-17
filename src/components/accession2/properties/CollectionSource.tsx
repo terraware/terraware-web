@@ -5,7 +5,7 @@ import TooltipLearnMoreModal, {
   LearnMoreLink,
   LearnMoreModalContentCollectionSource,
   TooltipLearnMoreModalData,
-} from '../../TooltipLearnMoreModal';
+} from 'src/components/TooltipLearnMoreModal';
 
 interface Props {
   placeholder: string;
