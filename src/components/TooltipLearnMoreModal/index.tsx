@@ -172,3 +172,17 @@ export const LearnMoreModalContentTreatment = (): JSX.Element => (
     </p>
   </>
 );
+
+export const LearnMoreModalContentCollectionSource = (): JSX.Element => (
+  <>
+    <p>
+      <strong>{strings.WILD_IN_SITU}:</strong> {strings.WILD_IN_SITU_DESCRIPTION}
+    </p>
+    <p>
+      <strong>{strings.REINTRODUCED}:</strong> {strings.REINTRODUCED_DESCRIPTION}
+    </p>
+    <p>
+      <strong>{strings.CULTIVATED_EX_SITU}:</strong> {strings.CULTIVATED_EX_SITU_DESCRIPTION}
+    </p>
+  </>
+);

@@ -583,9 +583,11 @@ const strings = new LocalizedStrings({
     WILD_IN_SITU: 'Wild (In Situ)',
     WILD_IN_SITU_DESCRIPTION: 'Plants that occur naturally in wild areas and were not planted by people.',
     REINTRODUCED: 'Reintroduced',
-    REINTRODUCED_DESCRIPTION: 'Plants that have been transplanted from a nursery, greenhouse, or other location to a restoration site.',
+    REINTRODUCED_DESCRIPTION:
+      'Plants that have been transplanted from a nursery, greenhouse, or other location to a restoration site.',
     CULTIVATED_EX_SITU: 'Cultivated (Ex Situ)',
-    CULTIVATED_EX_SITU_DESCRIPTION: 'Plants that have been grown in a nursery, seed production area, or other propagation facility.',
+    CULTIVATED_EX_SITU_DESCRIPTION:
+      'Plants that have been grown in a nursery, seed production area, or other propagation facility.',
     CULTIVATED: 'Cultivated',
     INVALID_DATE: 'Invalid date',
     ACCESSION_DETAIL: 'Accession Detail',
@@ -687,6 +689,15 @@ const strings = new LocalizedStrings({
       'Seeds tolerate levels of desiccation required for frozen storage (5-8% moisture content) and temperatures of -20°C or lower.',
     LEARN_MORE_SEED_STORAGE_BEHAVIOR_RECALCITRANT:
       'Seeds do not tolerate levels of desiccation required for ex situ (off-site) conservation.',
+    TOOLTIP_ACCESSIONS_ADD_COLLECTING_SITE:
+      'The place where seeds were collected. It is recommended to name these referencing stable landmarks or features that do not change.',
+    TOOLTIP_ACCESSIONS_COLLECTION_SOURCE: 'The type of plant population where seeds are collected.',
+    TOOLTIP_ACCESSIONS_ADD_PLANT_ID:
+      'The unique identifier given to a plant for tracking or conservation purposes. Ideally seeds from a plant with a plant ID are kept separate from other plants (not pooled together) in collections and accessions.',
+    TOOLTIP_ACCESSIONS_ID:
+      'A unique identifier for a seed collection accepted into a seed bank. Any collection from a new species, location, and/or date would typically become a new accession in the seed bank.',
+    TOOLTIP_ACCESSIONS_LOCATION: 'Place where seeds are being processed.',
+    TOOLTIP_ACCESSIONS_SUBLOCATION: 'Specific area within the place where seeds are being processed.',
     TOOLTIP_SPECIES_SCIENTIFIC_NAME:
       'The binomial Latin name (genus + species) currently accepted in the botanical literature.',
     TOOLTIP_SPECIES_COMMON_NAME:
@@ -734,12 +745,6 @@ const strings = new LocalizedStrings({
       'A process of exposing seeds to alternating temperatures, simulating natural conditions that seeds would experience, to break physiological dormancy.',
     INVENTORY: 'Inventory',
     SEEDLINGS: 'Seedlings',
-    TOOLTIP_LEARN_MORE: 'Learn more.',
-    ACCESSIONS_ADD_TOOLTIP_COLLECTING_SITE: 'The place where seeds were collected. It is recommended to name these referencing stable landmarks or features that do not change.',
-    ACCESSIONS_ADD_TOOLTIP_COLLECTION_SOURCE: 'The type of plant population where seeds are collected. (Learn more.)',
-    ACCESSIONS_ADD_TOOLTIP_PLANT_ID: 'The unique identifier given to a plant for tracking or conservation purposes. Ideally seeds from a plant with a plant ID are kept separate from other plants (not pooled together) in collections and accessions.',
-    ACCESSIONS_TOOLTIP_LOCATION: 'Place where seeds are being processed.',
-    ACCESSIONS_TOOLTIP_SUBLOCATION: 'Specific area within the place where seeds are being processed.',
     NURSERIES: 'Nurseries',
     ADD_A_NURSERY: 'Add a Nursery',
     INVENTORY_DATA: 'Inventory Data',

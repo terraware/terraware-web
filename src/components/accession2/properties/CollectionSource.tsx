@@ -1,6 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import strings from 'src/strings';
 import { Dropdown } from '@terraware/web-components';
+import TooltipLearnMoreModal, {
+  LearnMoreLink,
+  LearnMoreModalContentCollectionSource,
+  TooltipLearnMoreModalData,
+} from '../../TooltipLearnMoreModal';
 
 interface Props {
   placeholder: string;
@@ -11,29 +16,62 @@ interface Props {
 }
 
 export default function CollectionSource(props: Props): JSX.Element {
+  const [tooltipLearnMoreModalOpen, setTooltipLearnMoreModalOpen] = useState(false);
+  const [tooltipLearnMoreModalData, setTooltipLearnMoreModalData] = useState<TooltipLearnMoreModalData | undefined>(
+    undefined
+  );
+  const openTooltipLearnMoreModal = (data: TooltipLearnMoreModalData) => {
+    setTooltipLearnMoreModalData(data);
+    setTooltipLearnMoreModalOpen(true);
+  };
+  const handleTooltipLearnMoreModalClose = () => {
+    setTooltipLearnMoreModalOpen(false);
+  };
+
   return (
-    <Dropdown
-      {...props}
-      fullWidth={true}
-      readonly={true}
-      options={[
-        {
-          label: strings.WILD_IN_SITU,
-          value: 'Wild',
-        },
-        {
-          label: strings.REINTRODUCED,
-          value: 'Reintroduced',
-        },
-        {
-          label: strings.CULTIVATED_EX_SITU,
-          value: 'Cultivated',
-        },
-        {
-          label: strings.OTHER,
-          value: 'Other',
-        },
-      ]}
-    />
+    <>
+      <TooltipLearnMoreModal
+        content={tooltipLearnMoreModalData?.content}
+        onClose={handleTooltipLearnMoreModalClose}
+        open={tooltipLearnMoreModalOpen}
+        title={tooltipLearnMoreModalData?.title}
+      />
+      <Dropdown
+        {...props}
+        fullWidth={true}
+        readonly={true}
+        tooltipTitle={
+          <>
+            {strings.TOOLTIP_ACCESSIONS_COLLECTION_SOURCE}
+            <LearnMoreLink
+              onClick={() =>
+                openTooltipLearnMoreModal({
+                  title: strings.COLLECTION_SOURCE,
+                  content: <LearnMoreModalContentCollectionSource />,
+                })
+              }
+            />
+          </>
+        }
+        options={[
+          {
+            label: strings.WILD_IN_SITU,
+            value: 'Wild',
+          },
+          {
+            label: strings.REINTRODUCED,
+            value: 'Reintroduced',
+          },
+          {
+            label: strings.CULTIVATED_EX_SITU,
+            value: 'Cultivated',
+          },
+          {
+            label: strings.OTHER,
+            value: 'Other',
+          },
+        ]}
+      />
+    </>
   );
 }

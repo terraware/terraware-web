@@ -133,7 +133,7 @@ export default function CreateAccession(props: CreateAccessionProps): JSX.Elemen
                 onChange={onChange}
                 type='text'
                 label={strings.COLLECTION_SITE}
-                tooltipText={strings.ACCESSIONS_ADD_TOOLTIP_COLLECTING_SITE}
+                tooltipTitle={strings.TOOLTIP_ACCESSIONS_ADD_COLLECTING_SITE}
               />
             </Grid>
             <Grid item xs={gridSize()} sx={marginTop}>
