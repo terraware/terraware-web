@@ -327,10 +327,6 @@ export default function App() {
 
   const selectedOrgHasNurseries = (): boolean => selectedOrgHasFacilityType('Nursery');
 
-  const selectedOrgHasInventory = (): boolean => {
-    return false;
-  };
-
   const getSeedBanksView = (): JSX.Element => {
     if (selectedOrganization && selectedOrgHasSeedBanks()) {
       return <SeedBanks organization={selectedOrganization} />;
@@ -343,19 +339,6 @@ export default function App() {
       return <Nurseries organization={selectedOrganization} />;
     }
     return <EmptyStatePage pageName={'Nurseries'} />;
-  };
-
-  const getInventoryView = (): JSX.Element => {
-    if (selectedOrganization && selectedOrgHasInventory()) {
-      return (
-        <Inventory
-          organization={selectedOrganization}
-          hasNurseries={selectedOrgHasNurseries()}
-          hasSpecies={selectedOrgHasSpecies()}
-        />
-      );
-    }
-    return <EmptyStatePage pageName={'Inventory'} />;
   };
 
   return (
@@ -541,7 +524,13 @@ export default function App() {
               )}
               {nurseryManagementEnabled && selectedOrganization && (
                 <Route exact path={APP_PATHS.INVENTORY}>
-                  {getInventoryView()}
+                  {
+                    <Inventory
+                      organization={selectedOrganization}
+                      hasNurseries={selectedOrgHasNurseries()}
+                      hasSpecies={selectedOrgHasSpecies()}
+                    />
+                  }
                 </Route>
               )}
               <Route exact path={APP_PATHS.CONTACT_US}>

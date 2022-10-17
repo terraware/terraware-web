@@ -54,7 +54,7 @@ export const EMPTY_STATE_CONTENT_STYLES = {
 };
 
 type PageContent = {
-  title1: string;
+  title1?: string;
   title2: string;
   subtitle: string;
   listItems: ListItemContent[];
@@ -152,7 +152,6 @@ export default function EmptyStatePage({ pageName, organization, reloadData }: E
   };
 
   const NO_INVENTORY_CONTENT: PageContent = {
-    title1: strings.INVENTORY,
     title2: strings.ADD_INVENTORY,
     subtitle: emptyStateStrings.NO_INVENTORY_DESCRIPTION,
     listItems: [
@@ -246,7 +245,7 @@ export default function EmptyStatePage({ pageName, organization, reloadData }: E
           />
         </>
       )}
-      <PageHeader title={content.title1} subtitle='' />
+      {content.title1 && <PageHeader title={content.title1} subtitle='' />}
       {content.listItems.length === 0 && content.linkLocation === undefined ? (
         <EmptyMessage className={classes.message} title={content.title2} text={content.subtitle} />
       ) : (
