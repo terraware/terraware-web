@@ -422,15 +422,6 @@ export default function Database(props: DatabaseProps): JSX.Element {
     [displayColumnNames, setDisplayColumnNames]
   );
 
-  const getSubtitle = () => {
-    if (searchResults) {
-      return `${searchResults.length} total`;
-    }
-    if (searchResults === null) {
-      return strings.GENERIC_ERROR;
-    }
-  };
-
   const handleViewCollections = () => {
     history.push(APP_PATHS.CHECKIN);
   };
@@ -584,7 +575,6 @@ export default function Database(props: DatabaseProps): JSX.Element {
         <PageHeader
           title=''
           allowAll={true}
-          subtitle={isOnboarded ? getSubtitle() : undefined}
           page={strings.ACCESSIONS}
           parentPage={strings.SEEDS}
           rightComponent={
@@ -648,23 +638,23 @@ export default function Database(props: DatabaseProps): JSX.Element {
 
                   {searchSummaryResults && (
                     <Grid item xs={12}>
-                      <Box sx={{ background: '#F2F4F5', display: 'flex', color: '#000000', padding: 2 }}>
+                      <Box
+                        sx={{ background: '#F2F4F5', display: 'flex', color: '#000000', padding: 2, flexWrap: 'wrap' }}
+                      >
                         <Typography>{strings.TOTAL}</Typography>
                         <Typography sx={{ paddingLeft: '4px', fontWeight: 500 }}>
                           {searchSummaryResults.accessions}
                         </Typography>
-                        <Typography sx={{ paddingLeft: '4px' }}>
+                        <Typography sx={{ paddingLeft: '4px', paddingRight: '12px' }}>
                           {searchSummaryResults.accessions === 1
                             ? strings.ACCESSION.toLowerCase()
                             : strings.ACCESSIONS.toLowerCase()}
                         </Typography>
-                        <Typography sx={{ paddingLeft: '12px', fontWeight: 500 }}>
-                          {searchSummaryResults.species}
+                        <Typography sx={{ fontWeight: 500 }}>{searchSummaryResults.species}</Typography>
+                        <Typography sx={{ paddingLeft: '4px', paddingRight: '12px' }}>
+                          {strings.SPECIES.toLowerCase()}
                         </Typography>
-                        <Typography sx={{ paddingLeft: '4px' }}>{strings.SPECIES.toLowerCase()}</Typography>
-                        <Typography sx={{ paddingLeft: '12px', fontWeight: 500 }}>{`${
-                          searchSummaryResults.seedsRemaining.total
-                        }${
+                        <Typography sx={{ fontWeight: 500 }}>{`${searchSummaryResults.seedsRemaining.total}${
                           searchSummaryResults.seedsRemaining &&
                           searchSummaryResults.seedsRemaining.unknownQuantityAccessions > 0
                             ? '+'
