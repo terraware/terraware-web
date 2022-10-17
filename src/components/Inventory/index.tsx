@@ -13,6 +13,7 @@ import { isAdmin } from 'src/utils/organization';
 import Title from 'src/components/common/Title';
 import PageSnackbar from 'src/components/PageSnackbar';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import EmptyStatePage from '../emptyStatePages/EmptyStatePage';
 
 interface StyleProps {
   isMobile: boolean;
@@ -74,14 +75,20 @@ export default function Inventory(props: InventoryProps): JSX.Element {
   };
 
   const isOnboarded = hasNurseries && hasSpecies;
-
+  const orgHasInventory = (): boolean => {
+    return false;
+  };
   return (
     <TfMain>
       <Title page={strings.INVENTORY} parentPage={strings.SEEDLINGS} />
       <PageSnackbar />
       <Container maxWidth={false} className={classes.mainContainer}>
         {isOnboarded ? (
-          <div>{strings.INVENTORY}</div>
+          orgHasInventory() ? (
+            <div>{strings.INVENTORY}</div>
+          ) : (
+            <EmptyStatePage pageName={'Inventory'} />
+          )
         ) : isAdmin(organization) ? (
           <EmptyMessage
             className={classes.message}

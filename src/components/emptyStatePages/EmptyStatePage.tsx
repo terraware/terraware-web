@@ -54,7 +54,7 @@ export const EMPTY_STATE_CONTENT_STYLES = {
 };
 
 type PageContent = {
-  title1: string;
+  title1?: string;
   title2: string;
   subtitle: string;
   listItems: ListItemContent[];
@@ -96,7 +96,7 @@ const NO_NURSERIES_CONTENT: PageContent = {
 };
 
 type EmptyStatePageProps = {
-  pageName: 'Species' | 'SeedBanks' | 'Nurseries';
+  pageName: 'Species' | 'SeedBanks' | 'Nurseries' | 'Inventory';
   organization?: ServerOrganization;
   reloadData?: () => void;
 };
@@ -135,17 +135,45 @@ export default function EmptyStatePage({ pageName, organization, reloadData }: E
         onClickButton: () => {
           setImportSpeciesModalOpened(true);
         },
-        linkText: emptyStateStrings.IMPORT_SPECIES_LINK,
+        linkText: emptyStateStrings.DOWNLOAD_CSV_TEMPLATE,
         onLinkClick: downloadCsvTemplateHandler,
       },
       {
         icon: 'edit',
         title: dictionary.ADD_MANUALLY,
-        description: emptyStateStrings.ADD_MANUALLY_DESCRIPTION,
+        description: emptyStateStrings.ADD_SPECIES_MANUALLY_DESCRIPTION,
         buttonText: strings.ADD_SPECIES,
         buttonIcon: 'plus',
         onClickButton: () => {
           setAddSpeciesModalOpened(true);
+        },
+      },
+    ],
+  };
+
+  const NO_INVENTORY_CONTENT: PageContent = {
+    title2: strings.ADD_INVENTORY,
+    subtitle: emptyStateStrings.NO_INVENTORY_DESCRIPTION,
+    listItems: [
+      {
+        icon: 'uploadCloud',
+        title: strings.IMPORT_INVENTORY,
+        description: emptyStateStrings.IMPORT_INVENTORY_DESCRIPTION,
+        buttonText: strings.IMPORT_INVENTORY,
+        onClickButton: () => {
+          return true;
+        },
+        linkText: emptyStateStrings.DOWNLOAD_CSV_TEMPLATE,
+        onLinkClick: downloadCsvTemplateHandler,
+      },
+      {
+        icon: 'edit',
+        title: dictionary.ADD_MANUALLY,
+        description: emptyStateStrings.ADD_INVENTORY_MANUALLY_DESCRIPTION,
+        buttonText: strings.ADD_INVENTORY,
+        buttonIcon: 'plus',
+        onClickButton: () => {
+          return true;
         },
       },
     ],
@@ -168,6 +196,8 @@ export default function EmptyStatePage({ pageName, organization, reloadData }: E
         return NO_SEEDBANKS_CONTENT;
       case 'Nurseries':
         return NO_NURSERIES_CONTENT;
+      case 'Inventory':
+        return NO_INVENTORY_CONTENT;
       default:
         return NO_SEEDBANKS_CONTENT;
     }
@@ -215,7 +245,7 @@ export default function EmptyStatePage({ pageName, organization, reloadData }: E
           />
         </>
       )}
-      <PageHeader title={content.title1} subtitle='' />
+      {content.title1 && <PageHeader title={content.title1} subtitle='' />}
       {content.listItems.length === 0 && content.linkLocation === undefined ? (
         <EmptyMessage className={classes.message} title={content.title2} text={content.subtitle} />
       ) : (
