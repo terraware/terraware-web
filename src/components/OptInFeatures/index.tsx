@@ -27,6 +27,12 @@ export default function OptInFeatures({ refresh }: OptInFeaturesProps): JSX.Elem
             data[key] = prefs[key] || false;
           }
         });
+
+        OPT_IN_FEATURES.forEach((f) => {
+          if (f.get) {
+            data[f.preferenceName] = f.get();
+          }
+        });
       }
       setTimeout(() => {
         setPreferences(data);
@@ -39,7 +45,16 @@ export default function OptInFeatures({ refresh }: OptInFeaturesProps): JSX.Elem
   });
 
   const savePreference = async (feature: Feature, value: boolean) => {
-    const response = await updatePreferences(feature.preferenceName, value);
+    let response = {
+      requestSucceeded: true,
+    };
+
+    if (feature.set) {
+      feature.set(value);
+    } else {
+      response = await updatePreferences(feature.preferenceName, value);
+    }
+
     if (response.requestSucceeded) {
       setPreferences((prev) => ({
         ...prev,

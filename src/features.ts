@@ -14,6 +14,8 @@ export type Feature = {
   allowInternalProduction: boolean;
   description: string[];
   disclosure: string[];
+  get?: () => boolean;
+  set?: (val: boolean) => void;
 };
 
 // list of feature names and associated properties
@@ -42,6 +44,20 @@ export const OPT_IN_FEATURES: Feature[] = [
     description: ['Shows new nursery management workflows'],
     disclosure: ['This is WIP.'],
   },
+  {
+    name: 'Show Production View',
+    preferenceName: 'showProductionUIView',
+    active: true,
+    enabled: false,
+    allowInternalProduction: false,
+    description: ['Allow testing production view without any WIP UI features.'],
+    disclosure: [
+      'Does not test against production servers.',
+      'Clear "productionView" from session storage to clear this preference.',
+    ],
+    get: env().isForcedProductionView,
+    set: env().forceProductionView,
+  },
 ];
 
 type FeatureMap = { [key: string]: Feature };
@@ -64,16 +80,19 @@ export default function isEnabled(name: string, organizationId?: number) {
     return false;
   }
 
+  if (feature.get) {
+    return feature.get();
+  }
+
   if (!feature.active || feature.enabled) {
     return feature.enabled;
   }
 
-  const preferences = getCurrentUserPreferences(organizationId);
-  const preferenceName = feature.preferenceName;
-  const featureEnabled = preferences && preferences[preferenceName] === true;
-
   if (!isProduction) {
-    return featureEnabled;
+    const preferences = getCurrentUserPreferences(organizationId);
+    const preferenceName = feature.preferenceName;
+
+    return preferences && preferences[preferenceName] === true;
   }
 
   return feature.allowInternalProduction && getCurrentUser().isTerraformation;
