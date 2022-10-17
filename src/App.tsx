@@ -347,11 +347,13 @@ export default function App() {
 
   const getInventoryView = (): JSX.Element => {
     if (selectedOrganization && selectedOrgHasInventory()) {
-      <Inventory
-        organization={selectedOrganization}
-        hasNurseries={selectedOrgHasNurseries()}
-        hasSpecies={selectedOrgHasSpecies()}
-      />;
+      return (
+        <Inventory
+          organization={selectedOrganization}
+          hasNurseries={selectedOrgHasNurseries()}
+          hasSpecies={selectedOrgHasSpecies()}
+        />
+      );
     }
     return <EmptyStatePage pageName={'Inventory'} />;
   };
