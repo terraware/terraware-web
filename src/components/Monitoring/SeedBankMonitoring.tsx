@@ -78,7 +78,7 @@ export default function Monitoring(props: SeedBankMonitoringProps): JSX.Element 
           ) : (
             <EmptyMessage
               className={classes.message}
-              title={emptyMessageStrings.NO_SEEDBANKS_NON_ADMIN_TITLE}
+              title={emptyMessageStrings.REACH_OUT_TO_ADMIN_TITLE}
               text={emptyMessageStrings.NO_SEEDBANKS_SET_UP_NON_ADMIN_MSG}
             />
           )}

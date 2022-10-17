@@ -236,13 +236,6 @@ const strings = new LocalizedStrings({
     WELCOME_MSG: 'Welcome and happy seeding!',
     TOTAL_ACTIVE_ACCESSIONS: 'Total Active Accessions',
     TOTAL_SEED_COUNT: 'Total Seed Count',
-    MOST_RECENT_STAGE_UPDATES: 'Most Recent Stage Updates',
-    PENDING_UPDATES:
-      'There are {0} seed collection bags have been waiting since drop off for at least 1 week and are ready to be processed.',
-    PROCESSED_UPDATES:
-      '{0} accessions have finished processing for at least 2 weeks and are ready to be tested for %RH (or dried).',
-    DRIED_UPDATES: '{0} accessions have past its drying end date and are ready to be stored.',
-    WITHDRAWN_UPDATES: '{0} accessions have been completely withdrawn this week and are now inactive.',
     WITHDRAWAL_DESCRIPTION: 'All the details about withdrawal of the seeds.',
     ALL_SEEDS_WITHDRAWN_MSG:
       "As all seeds have been withdrawn, new withdrawals are disabled, the accession's stage has been set to Withdrawn, and the accession itself marked as Inactive",
@@ -308,15 +301,13 @@ const strings = new LocalizedStrings({
     OZ: 'oz',
     GOT_IT: 'Got It!',
     VIEW: 'View',
-    BAGS_TOTAL: 'Bags Total',
-    CHECKIN_BAGS: 'Check In Bags',
+    ACCESSIONS_TOTAL: 'Accessions Total',
+    CHECKIN_ACCESSIONS: 'Check In Accessions',
     VIEW_ACCESSION: 'View accession',
     CHECKING_IN: 'Checking In...',
     CHECK_IN: 'Check In',
     CHECKED_IN: 'Checked In!',
     PEOPLE: 'People',
-    CHECK_IN_MESSAGE:
-      '{0} new seed collection bags should have been dropped off at the seed bank. Please verify their arrival and check them in.',
     SPECIES_DESCRIPTION: 'Manage your organization’s species list for planning, operation and reporting.',
     NAME: 'Name',
     NAME_REQUIRED: 'Name *',
@@ -668,8 +659,79 @@ const strings = new LocalizedStrings({
     SET_UP: 'Set Up',
     SUBSET_ERROR: 'Subset weight should be less than seed weight',
     WITHDRAWN_QUANTITY_ERROR: 'Exceeds remaining quantity',
+    FERN: 'Fern',
+    GRAMINOID: 'Graminoid',
+    FORB: 'Forb',
+    SHRUB: 'Shrub',
+    TREE: 'Tree',
+    INTERMEDIATE: 'Intermediate',
+    ORTHODOX: 'Orthodox',
+    RECALCITRANT: 'Recalcitrant',
+    LEARN_MORE: 'Learn more',
+    LEARN_MORE_CONSERVATION_STATUS_ENDANGERED:
+      'Species that are rare and whose wild populations have a high risk of extinction; see also any local definitions.',
+    LEARN_MORE_CONSERVATION_STATUS_RARE:
+      'Species with limited wild population sizes, often found in isolated geographical locations; may meet criteria for endangered or threatened status but have not yet been legally listed or assessed.',
+    LEARN_MORE_GROWTH_FORM_FERN:
+      'A non-flowering vascular plant that reproduces by spores, in the plant division Pteridophyta.',
+    LEARN_MORE_GROWTH_FORM_GRAMINOID:
+      'A herbaceous (non-woody) plant with a grass-like morphology, that is elongated culms with long, blade-like leaves, in the grass, sedge, or rush family.',
+    LEARN_MORE_GROWTH_FORM_FORB: 'A herbaceous (non-woody) plant that is NOT a graminoid (grass, sedge, or rush).',
+    LEARN_MORE_GROWTH_FORM_SHRUB:
+      'A woody plant which is smaller than a tree and has several main stems arising at or near the ground.',
+    LEARN_MORE_GROWTH_FORM_TREE:
+      'A woody perennial plant, typically having a single stem or trunk growing to a considerable height and bearing lateral branches at some distance from the ground.',
+    LEARN_MORE_SEED_STORAGE_BEHAVIOR_INTERMEDIATE:
+      'Seeds are between orthodox and recalcitrant seeds in their behavior; may include tolerating partial desiccation, tolerating cool but not freezing temperatures, or being short-lived regardless of storage conditions.',
+    LEARN_MORE_SEED_STORAGE_BEHAVIOR_ORTHODOX:
+      'Seeds tolerate levels of desiccation required for frozen storage (5-8% moisture content) and temperatures of -20°C or lower.',
+    LEARN_MORE_SEED_STORAGE_BEHAVIOR_RECALCITRANT:
+      'Seeds do not tolerate levels of desiccation required for ex situ (off-site) conservation.',
+    TOOLTIP_SPECIES_SCIENTIFIC_NAME:
+      'The binomial Latin name (genus + species) currently accepted in the botanical literature.',
+    TOOLTIP_SPECIES_COMMON_NAME:
+      'The name an organism is known by to the general public, rather than its scientific name.',
+    TOOLTIP_SPECIES_FAMILY: 'The scientific name of the plant family currently accepted in the botanical literature.',
+    TOOLTIP_SPECIES_GROWTH_FORM:
+      'A structural category consisting of individuals or species of the same general habit of growth but not necessarily related.',
+    TOOLTIP_SPECIES_CONSERVATION_STATUS:
+      "A species' risk of extinction, usually a legal designation or a Red List assessment.",
+    TOOLTIP_SPECIES_SEED_STORAGE_BEHAVIOR:
+      'The capacity of seeds to survive desiccation and temperatures to levels necessary for ex site (off site) storage.',
     TOOLTIP_DASHBOARD_TOTAL_ACTIVE_ACCESSIONS:
       'This number represents all accessions with the statuses awaiting processing, cleaning, drying, and in storage.',
+    TOOLTIP_VIABILITY_TEST_FRESH:
+      'Seeds which were recently collected and have not been stored in the seed bank; recommended to establish a baseline of viability for a new accession.',
+    TOOLTIP_VIABILITY_TEST_STORED:
+      'Seeds which have been stored for any length of time; recommended to monitor viability over time in order to use seeds before viability is lost in storage.',
+    TOOLTIP_VIABILITY_TEST_SEED_TYPE: 'Condition of seeds to be tested for viability.',
+    TOOLTIP_VIABILITY_TEST_SUBSTRATE:
+      'The surface or material that an organism lives, grows, or obtains its nourishment from.',
+    TOOLTIP_VIABILITY_TEST_TREATMENT:
+      'The biological, physical and chemical agents and techniques used to break dormancy and/or speed germination.',
+    TOOLTIP_VIABILITY_TEST_AGAR_PETRI_DISH: 'A dish that contains a growth medium of solidified agar.',
+    TOOLTIP_VIABILITY_TEST_PAPER_PETRI_DISH: 'A dish that contains a growth medium of germination paper.',
+    TOOLTIP_VIABILITY_TEST_SAND_PETRI_DISH: 'A dish that contains a growth medium of sand.',
+    TOOLTIP_VIABILITY_TEST_NURSERY_MEDIA:
+      'A substance through which roots grow and extract water and nutrients in a pot, tray, or other nursery container.',
+    TOOLTIP_VIABILITY_TEST_MEDIA_MIX:
+      'A mix of substances through which roots grow and extract water and nutrients; may contain any of the media below.',
+    TOOLTIP_VIABILITY_TEST_SOIL:
+      'A black or dark brown material typically consisting of a mixture of organic remains, clay, and rock particles.',
+    TOOLTIP_VIABILITY_TEST_SAND:
+      'A loose granular substance resulting from the erosion of siliceous and other rocks and forming a major constituent of beaches, riverbeds, the seabed, and deserts.',
+    TOOLTIP_VIABILITY_TEST_MOSS:
+      'A small non-flowering, non-vascular plant which can be sterilized and used as a growth medium with high moisture retaining capacity.',
+    TOOLTIP_VIABILITY_TEST_PERLITE_VERMICULITE:
+      'Lightweight sand substitutes for soilless potting mixes which are often used to improve aeration and texture in potting soil and garden soil mixtures.',
+    TOOLTIP_VIABILITY_TEST_SOAK:
+      'A process of imbibing a seed by immersing the seed in water, to break physical dormancy.',
+    TOOLTIP_VIABILITY_TEST_SCARIFY:
+      'Weakening, opening, or otherwise altering the seed coat to make it permeable to water, to break physical dormancy.',
+    TOOLTIP_VIABILITY_TEST_CHEMICAL:
+      'Treating seeds with a plant growth hormone or other chemical to break physiological dormancy.',
+    TOOLTIP_VIABILITY_TEST_STRATIFICATION:
+      'A process of exposing seeds to alternating temperatures, simulating natural conditions that seeds would experience, to break physiological dormancy.',
     INVENTORY: 'Inventory',
     SEEDLINGS: 'Seedlings',
     TOOLTIP_LEARN_MORE: 'Learn more.',
@@ -684,6 +746,19 @@ const strings = new LocalizedStrings({
     INVENTORY_DATA_DESCRIPTION: "Monitor your nursery's inventory",
     ADD_NURSERY: 'Add Nursery',
     NURSERY_ADDED: 'Nursery Added',
+    GO_TO_NURSERIES: 'Go to Nurseries',
+    FRESH: 'Fresh',
+    STORED: 'Stored',
+    SAND_PETRI_DISH: 'Sand Petri Dish',
+    CHEMICAL: 'Chemical',
+    MEDIA_MIX: 'Media Mix',
+    SOIL: 'Soil',
+    SAND: 'Sand',
+    MOSS: 'Moss',
+    PERLITE_VERMICULITE: 'Perlite/Vermiculite',
+    FOR_LAB_GERMINATION: 'For Lab Germination',
+    FOR_NURSERY_GERMINATION: 'For Nursery Germination',
+    FOR_LAB_AND_NURSERY_GERMINATION: 'For Lab and Nursery Germination',
   },
 });
 

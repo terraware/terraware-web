@@ -1,6 +1,7 @@
 import { Grid } from '@mui/material';
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import { IconTooltip } from '@terraware/web-components';
 import React, { useEffect, useState } from 'react';
 import { createSpecies, getSpeciesDetails, listSpeciesNames, updateSpecies } from 'src/api/species/species';
 import strings from 'src/strings';
@@ -15,6 +16,13 @@ import DialogBox from '../common/DialogBox/DialogBox';
 import ErrorBox from '../common/ErrorBox/ErrorBox';
 import Select from '../common/Select/Select';
 import TextField from '../common/Textfield/Textfield';
+import TooltipLearnMoreModal, {
+  LearnMoreModalContentConservationStatus,
+  LearnMoreModalContentGrowthForm,
+  LearnMoreModalContentSeedStorageBehavior,
+  LearnMoreLink,
+  TooltipLearnMoreModalData,
+} from 'src/components/TooltipLearnMoreModal';
 
 const useStyles = makeStyles((theme: Theme) => ({
   spacing: {
@@ -56,6 +64,18 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
   // Debounce search term so that it only gives us latest value if searchTerm has not been updated within last 500ms.
   const debouncedSearchTerm = useDebounce(record.scientificName, 250);
   const [showWarning, setShowWarning] = useState(false);
+
+  const [tooltipLearnMoreModalOpen, setTooltipLearnMoreModalOpen] = useState(false);
+  const [tooltipLearnMoreModalData, setTooltipLearnMoreModalData] = useState<TooltipLearnMoreModalData | undefined>(
+    undefined
+  );
+  const openTooltipLearnMoreModal = (data: TooltipLearnMoreModalData) => {
+    setTooltipLearnMoreModalData(data);
+    setTooltipLearnMoreModalOpen(true);
+  };
+  const handleTooltipLearnMoreModalClose = () => {
+    setTooltipLearnMoreModalOpen(false);
+  };
 
   React.useEffect(() => {
     if (open) {
@@ -178,6 +198,12 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
         />,
       ]}
     >
+      <TooltipLearnMoreModal
+        content={tooltipLearnMoreModalData?.content}
+        onClose={handleTooltipLearnMoreModalClose}
+        open={tooltipLearnMoreModalOpen}
+        title={tooltipLearnMoreModalData?.title}
+      />
       <Grid container spacing={4} className={classes.mainGrid}>
         {nameFormatError && (
           <ErrorBox
@@ -207,6 +233,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
             hideArrow={true}
             onBlur={() => setShowWarning(true)}
             onFocus={() => setShowWarning(false)}
+            tooltipTitle={strings.TOOLTIP_SPECIES_SCIENTIFIC_NAME}
           />
         </Grid>
         <Grid item xs={12}>
@@ -220,6 +247,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
             readonly={false}
             fullWidth={true}
             hideArrow={true}
+            tooltipTitle={strings.TOOLTIP_SPECIES_COMMON_NAME}
           />
         </Grid>
         <Grid item xs={12}>
@@ -230,10 +258,28 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
             label={strings.FAMILY}
             aria-label={strings.FAMILY}
             type={'text'}
+            tooltipTitle={strings.TOOLTIP_SPECIES_FAMILY}
           />
         </Grid>
         <Grid item xs={12}>
-          <span>{strings.CONSERVATION_STATUS}</span>
+          <span>
+            {strings.CONSERVATION_STATUS}
+            <IconTooltip
+              title={
+                <>
+                  {strings.TOOLTIP_SPECIES_CONSERVATION_STATUS}
+                  <LearnMoreLink
+                    onClick={() =>
+                      openTooltipLearnMoreModal({
+                        title: strings.CONSERVATION_STATUS,
+                        content: <LearnMoreModalContentConservationStatus />,
+                      })
+                    }
+                  />
+                </>
+              }
+            />
+          </span>
           <Checkbox
             id='Endangered'
             name='conservationStatus'
@@ -262,6 +308,19 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
             placeholder={strings.SELECT}
             fullWidth={true}
             fixedMenu
+            tooltipTitle={
+              <>
+                {strings.TOOLTIP_SPECIES_GROWTH_FORM}
+                <LearnMoreLink
+                  onClick={() =>
+                    openTooltipLearnMoreModal({
+                      title: strings.GROWTH_FORM,
+                      content: <LearnMoreModalContentGrowthForm />,
+                    })
+                  }
+                />
+              </>
+            }
           />
         </Grid>
         <Grid item xs={12}>
@@ -275,6 +334,19 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
             placeholder={strings.SELECT}
             fullWidth={true}
             fixedMenu
+            tooltipTitle={
+              <>
+                {strings.TOOLTIP_SPECIES_SEED_STORAGE_BEHAVIOR}
+                <LearnMoreLink
+                  onClick={() =>
+                    openTooltipLearnMoreModal({
+                      title: strings.SEED_STORAGE_BEHAVIOR,
+                      content: <LearnMoreModalContentSeedStorageBehavior />,
+                    })
+                  }
+                />
+              </>
+            }
           />
         </Grid>
       </Grid>

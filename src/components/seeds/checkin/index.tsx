@@ -104,7 +104,7 @@ export default function CheckIn(props: CheckInProps): JSX.Element {
 
   const getSubtitle = () => {
     if (pendingAccessions) {
-      return `${pendingAccessions.length} ${strings.BAGS_TOTAL}`;
+      return `${pendingAccessions.length} ${strings.ACCESSIONS_TOTAL}`;
     }
   };
 
@@ -124,7 +124,7 @@ export default function CheckIn(props: CheckInProps): JSX.Element {
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <TfMain>
         <PageHeader
-          title={strings.CHECKIN_BAGS}
+          title={strings.CHECKIN_ACCESSIONS}
           subtitle={getSubtitle()}
           back={true}
           backUrl={APP_PATHS.ACCESSIONS}
