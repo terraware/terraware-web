@@ -308,6 +308,8 @@ const strings = new LocalizedStrings({
     CHECK_IN: 'Check In',
     CHECKED_IN: 'Checked In!',
     PEOPLE: 'People',
+    CHECK_IN_MESSAGE:
+      '{0} new accessions should have been dropped off at the seed bank. Please verify their arrival and check them in.',
     SPECIES_DESCRIPTION: 'Manage your organization’s species list for planning, operation and reporting.',
     NAME: 'Name',
     NAME_REQUIRED: 'Name *',
