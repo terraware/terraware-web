@@ -524,13 +524,11 @@ export default function App() {
               )}
               {nurseryManagementEnabled && selectedOrganization && (
                 <Route exact path={APP_PATHS.INVENTORY}>
-                  {
-                    <Inventory
-                      organization={selectedOrganization}
-                      hasNurseries={selectedOrgHasNurseries()}
-                      hasSpecies={selectedOrgHasSpecies()}
-                    />
-                  }
+                  <Inventory
+                    organization={selectedOrganization}
+                    hasNurseries={selectedOrgHasNurseries()}
+                    hasSpecies={selectedOrgHasSpecies()}
+                  />
                 </Route>
               )}
               <Route exact path={APP_PATHS.CONTACT_US}>
