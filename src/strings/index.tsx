@@ -750,6 +750,8 @@ const strings = new LocalizedStrings({
     FOR_LAB_GERMINATION: 'For Lab Germination',
     FOR_NURSERY_GERMINATION: 'For Nursery Germination',
     FOR_LAB_AND_NURSERY_GERMINATION: 'For Lab and Nursery Germination',
+    ADD_INVENTORY: 'Add Inventory',
+    IMPORT_INVENTORY: 'Import Inventory',
   },
 });
 

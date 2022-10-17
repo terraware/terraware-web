@@ -96,7 +96,7 @@ const NO_NURSERIES_CONTENT: PageContent = {
 };
 
 type EmptyStatePageProps = {
-  pageName: 'Species' | 'SeedBanks' | 'Nurseries';
+  pageName: 'Species' | 'SeedBanks' | 'Nurseries' | 'Inventory';
   organization?: ServerOrganization;
   reloadData?: () => void;
 };
@@ -135,17 +135,46 @@ export default function EmptyStatePage({ pageName, organization, reloadData }: E
         onClickButton: () => {
           setImportSpeciesModalOpened(true);
         },
-        linkText: emptyStateStrings.IMPORT_SPECIES_LINK,
+        linkText: emptyStateStrings.DOWNLOAD_CSV_TEMPLATE,
         onLinkClick: downloadCsvTemplateHandler,
       },
       {
         icon: 'edit',
         title: dictionary.ADD_MANUALLY,
-        description: emptyStateStrings.ADD_MANUALLY_DESCRIPTION,
+        description: emptyStateStrings.ADD_SPECIES_MANUALLY_DESCRIPTION,
         buttonText: strings.ADD_SPECIES,
         buttonIcon: 'plus',
         onClickButton: () => {
           setAddSpeciesModalOpened(true);
+        },
+      },
+    ],
+  };
+
+  const NO_INVENTORY_CONTENT: PageContent = {
+    title1: strings.INVENTORY,
+    title2: strings.ADD_INVENTORY,
+    subtitle: emptyStateStrings.NO_INVENTORY_DESCRIPTION,
+    listItems: [
+      {
+        icon: 'uploadCloud',
+        title: strings.IMPORT_INVENTORY,
+        description: emptyStateStrings.IMPORT_INVENTORY_DESCRIPTION,
+        buttonText: strings.IMPORT_INVENTORY,
+        onClickButton: () => {
+          return true;
+        },
+        linkText: emptyStateStrings.DOWNLOAD_CSV_TEMPLATE,
+        onLinkClick: downloadCsvTemplateHandler,
+      },
+      {
+        icon: 'edit',
+        title: dictionary.ADD_MANUALLY,
+        description: emptyStateStrings.ADD_INVENTORY_MANUALLY_DESCRIPTION,
+        buttonText: strings.ADD_INVENTORY,
+        buttonIcon: 'plus',
+        onClickButton: () => {
+          return true;
         },
       },
     ],
@@ -168,6 +197,8 @@ export default function EmptyStatePage({ pageName, organization, reloadData }: E
         return NO_SEEDBANKS_CONTENT;
       case 'Nurseries':
         return NO_NURSERIES_CONTENT;
+      case 'Inventory':
+        return NO_INVENTORY_CONTENT;
       default:
         return NO_SEEDBANKS_CONTENT;
     }
