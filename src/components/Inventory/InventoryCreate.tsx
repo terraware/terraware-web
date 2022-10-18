@@ -159,7 +159,12 @@ export default function CreateInventory(props: CreateInventoryProps): JSX.Elemen
               <Divider />
             </Grid>
 
-            <Grid item xs={gridSize()} sx={{ ...marginTop, marginRight: isMobile ? 0 : theme.spacing(2) }}>
+            <Grid
+              item
+              xs={gridSize()}
+              paddingRight={paddingSeparator}
+              sx={{ ...marginTop, marginRight: isMobile ? 0 : theme.spacing(2) }}
+            >
               <Textfield
                 id='germinatingQuantity'
                 value={record.germinatingQuantity}
@@ -193,7 +198,7 @@ export default function CreateInventory(props: CreateInventoryProps): JSX.Elemen
                 onChange={changeDate}
               />
             </Grid>
-            <Grid item xs={gridSize()} sx={marginTop}>
+            <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
               <Textfield
                 id='readyQuantity'
                 value={record.readyQuantity}
