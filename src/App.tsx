@@ -540,7 +540,7 @@ export default function App() {
               )}
               {nurseryManagementEnabled && selectedOrganization && (
                 <Route path={APP_PATHS.INVENTORY_ITEM}>
-                  <InventoryView organization={selectedOrganization} />
+                  <InventoryView organization={selectedOrganization} species={species} />
                 </Route>
               )}
               <Route exact path={APP_PATHS.CONTACT_US}>

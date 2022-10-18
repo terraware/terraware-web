@@ -1,15 +1,16 @@
 import { useTheme, Box, Typography } from '@mui/material';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import { SpeciesInventory } from 'src/api/inventory/search';
+import { SpeciesInventorySummary } from 'src/api/types/inventory';
 
 interface InventorySummaryProps {
-  inventory: SpeciesInventory;
+  summary: SpeciesInventorySummary;
 }
 
 export default function InventorySummary(props: InventorySummaryProps): JSX.Element {
-  const { inventory } = props;
-  const { germinatingQuantity, notReadyQuantity, readyQuantity, totalQuantity, facilityInventories } = inventory;
+  const { summary } = props;
+  const { germinatingQuantity, notReadyQuantity, readyQuantity, totalQuantity, nurseries, lossRate, totalWithdrawn } =
+    summary;
 
   const theme = useTheme();
 
@@ -38,17 +39,17 @@ export default function InventorySummary(props: InventorySummaryProps): JSX.Elem
     },
     {
       label: strings.TOTAL_WITHDRAWN,
-      value: 'TBD',
+      value: totalWithdrawn,
       tooltip: '',
     },
     {
       label: strings.LOSS_RATE,
-      value: 'TBD',
+      value: lossRate,
       tooltip: '',
     },
     {
       label: strings.NURSERIES,
-      value: facilityInventories?.map((i) => i.facility_name).join(', '),
+      value: nurseries.map((i) => i.name).join(', '),
       tooltip: '',
     },
   ];

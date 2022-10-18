@@ -2,14 +2,6 @@ import axios from '..';
 import { components, paths } from 'src/api/types/generated-schema';
 import { COLUMNS_INDEXED, DatabaseColumn } from 'src/components/seeds/database/columns';
 
-import {
-  SEARCH_ENDPOINT,
-  SearchRequestPayload,
-  SearchResponsePayload as SearchResponsePayloadType,
-  SearchResponseElement as SearchResponseElementType,
-  search as searchFn,
-} from 'src/api/search/search';
-
 export type SeedSearchCriteria = Record<string, SearchNodePayload>;
 export const DEFAULT_SEED_SEARCH_FILTERS = {};
 export type SeedSearchSortOrder = components['schemas']['SearchSortOrderElement'];
@@ -58,9 +50,21 @@ function addOrgInfoToSearch(organizationId: number, previousCriteria?: SeedSearc
 /*******************
  * ACCESSION SEARCH
  *******************/
-export type SearchResponsePayload = SearchResponsePayloadType;
-export type SearchResponseElement = SearchResponseElementType;
-export const search = searchFn;
+
+const SEARCH_ENDPOINT = '/api/v1/search';
+type SearchRequestPayload = paths[typeof SEARCH_ENDPOINT]['post']['requestBody']['content']['application/json'];
+export type SearchResponsePayload =
+  paths[typeof SEARCH_ENDPOINT]['post']['responses'][200]['content']['application/json'];
+export type SearchResponseElement = SearchResponsePayload['results'][0];
+
+export async function search(params: SearchRequestPayload): Promise<SearchResponseElement[] | null> {
+  try {
+    const response: SearchResponsePayload = (await axios.post(SEARCH_ENDPOINT, params)).data;
+    return response.results;
+  } catch {
+    return null;
+  }
+}
 
 export async function searchCsv(params: SearchRequestPayload): Promise<any> {
   const config = {

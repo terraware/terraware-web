@@ -9,8 +9,10 @@ import TfMain from 'src/components/common/TfMain';
 import useSnackbar from 'src/utils/useSnackbar';
 import PageSnackbar from 'src/components/PageSnackbar';
 import { APP_PATHS } from 'src/constants';
-import { SpeciesInventory, searchInventory } from 'src/api/inventory/search';
+import { SpeciesInventorySummary } from 'src/api/types/inventory';
+import { getSummary } from 'src/api/inventory/inventory';
 import { InventorySummary, InventorySeedlingsTable } from './view';
+import { Species } from 'src/types/Species';
 import _ from 'lodash';
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -29,42 +31,46 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 interface InventoryViewProps {
   organization: ServerOrganization;
+  species: Species[];
 }
 
 export default function InventoryView(props: InventoryViewProps): JSX.Element {
-  const { organization } = props;
+  const { species } = props;
   const { speciesId } = useParams<{ speciesId: string }>();
-  const [inventory, setInventory] = useState<SpeciesInventory>();
+  const [summary, setSummary] = useState<SpeciesInventorySummary>();
+  const [inventorySpecies, setInventorySpecies] = useState<Species>();
 
   const classes = useStyles();
   const theme = useTheme();
   const snackbar = useSnackbar();
 
   const reloadData = useCallback(() => {
-    const populateInventory = async () => {
-      try {
-        const response = await searchInventory(speciesId, organization.id, 1);
-        if (!_.isEqual(response, inventory)) {
-          setInventory(response || undefined);
-        }
-      } catch {
-        snackbar.toastError();
+    const populateSummary = async () => {
+      const response = await getSummary(speciesId);
+      if (response.requestSucceeded === false) {
+        snackbar.toastError(response.error);
+      } else if (!_.isEqual(response.summary, summary)) {
+        setSummary(response.summary || undefined);
       }
     };
 
     if (speciesId !== undefined) {
-      populateInventory();
+      populateSummary();
     } else {
-      setInventory(undefined);
+      setSummary(undefined);
     }
-  }, [speciesId, inventory, organization.id, snackbar]);
+  }, [speciesId, summary, snackbar]);
 
   useEffect(() => {
     reloadData();
   }, [speciesId, reloadData]);
 
+  useEffect(() => {
+    setInventorySpecies(species.find((s) => s.id === summary?.speciesId));
+  }, [summary, species]);
+
   const getSpeciesLabel = () => {
-    const { species_scientificName: scientificName, species_commonName: commonName } = inventory || {};
+    const { scientificName, commonName } = inventorySpecies || {};
 
     if (!scientificName && !commonName) {
       return ''; // will this happen?
@@ -95,10 +101,10 @@ export default function InventoryView(props: InventoryViewProps): JSX.Element {
         <Grid item xs={12}>
           <PageSnackbar />
         </Grid>
-        {inventory && (
+        {summary && (
           <Grid item xs={12}>
-            <InventorySummary inventory={inventory} />
-            <InventorySeedlingsTable inventory={inventory} />
+            <InventorySummary summary={summary} />
+            <InventorySeedlingsTable summary={summary} />
           </Grid>
         )}
       </Grid>
