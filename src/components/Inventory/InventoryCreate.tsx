@@ -92,6 +92,8 @@ export default function CreateInventory(props: CreateInventoryProps): JSX.Elemen
 
   const gridSize = () => (isMobile ? 12 : 6);
 
+  const paddingSeparator = () => (isMobile ? 0 : 1.5);
+
   const changeDate = (id: string, value?: any) => {
     onChange(id, value);
   };
@@ -134,7 +136,7 @@ export default function CreateInventory(props: CreateInventoryProps): JSX.Elemen
                 validate={validateFields}
               />
             </Grid>
-            <Grid item xs={gridSize()} sx={marginTop}>
+            <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
               <NurseryDropdown
                 organization={organization}
                 record={record}
@@ -142,7 +144,7 @@ export default function CreateInventory(props: CreateInventoryProps): JSX.Elemen
                 validate={validateFields}
               />
             </Grid>
-            <Grid item xs={gridSize()} sx={marginTop}>
+            <Grid item xs={gridSize()} sx={marginTop} paddingLeft={paddingSeparator}>
               <DatePicker
                 id='dateAdded'
                 label={strings.DATE_ADDED_REQUIRED}
@@ -171,7 +173,7 @@ export default function CreateInventory(props: CreateInventoryProps): JSX.Elemen
             <Grid item xs={12} sx={marginTop}>
               <Divider />
             </Grid>
-            <Grid item xs={gridSize()} sx={marginTop}>
+            <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
               <Textfield
                 id='notReadyQuantity'
                 value={record.notReadyQuantity}
@@ -182,7 +184,7 @@ export default function CreateInventory(props: CreateInventoryProps): JSX.Elemen
                 errorText={validateFields && !record.notReadyQuantity ? strings.REQUIRED_FIELD : ''}
               />
             </Grid>
-            <Grid item xs={6} sx={marginTop}>
+            <Grid item xs={gridSize()} sx={marginTop} paddingLeft={paddingSeparator}>
               <DatePicker
                 id='readyByDate'
                 label={strings.ESTIMATED_READY_DATE}
