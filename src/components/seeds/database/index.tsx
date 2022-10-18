@@ -642,29 +642,33 @@ export default function Database(props: DatabaseProps): JSX.Element {
                         sx={{ background: '#F2F4F5', display: 'flex', color: '#000000', padding: 2, flexWrap: 'wrap' }}
                       >
                         <Typography>{strings.TOTAL}</Typography>
-                        <Typography sx={{ paddingLeft: '4px', fontWeight: 500 }}>
-                          {searchSummaryResults.accessions}
-                        </Typography>
-                        <Typography sx={{ paddingLeft: '4px', paddingRight: '12px' }}>
-                          {searchSummaryResults.accessions === 1
-                            ? strings.ACCESSION.toLowerCase()
-                            : strings.ACCESSIONS.toLowerCase()}
-                        </Typography>
-                        <Typography sx={{ fontWeight: 500 }}>{searchSummaryResults.species}</Typography>
-                        <Typography sx={{ paddingLeft: '4px', paddingRight: '12px' }}>
-                          {strings.SPECIES.toLowerCase()}
-                        </Typography>
-                        <Typography sx={{ fontWeight: 500 }}>{`${searchSummaryResults.seedsRemaining.total}${
-                          searchSummaryResults.seedsRemaining &&
-                          searchSummaryResults.seedsRemaining.unknownQuantityAccessions > 0
-                            ? '+'
-                            : ''
-                        }`}</Typography>
-                        <Typography sx={{ paddingLeft: '4px' }}>
-                          {searchSummaryResults.seedsRemaining.total === 1
-                            ? strings.SEED.toLowerCase()
-                            : strings.SEEDS.toLowerCase()}
-                        </Typography>
+                        <Box sx={{ paddingRight: '12px', display: 'flex' }}>
+                          <Typography sx={{ paddingLeft: '4px', fontWeight: 500 }}>
+                            {searchSummaryResults.accessions}
+                          </Typography>
+                          <Typography sx={{ paddingLeft: '4px' }}>
+                            {searchSummaryResults.accessions === 1
+                              ? strings.ACCESSION.toLowerCase()
+                              : strings.ACCESSIONS.toLowerCase()}
+                          </Typography>
+                        </Box>
+                        <Box sx={{ paddingRight: '12px', display: 'flex' }}>
+                          <Typography sx={{ fontWeight: 500 }}>{searchSummaryResults.species}</Typography>
+                          <Typography sx={{ paddingLeft: '4px' }}>{strings.SPECIES.toLowerCase()}</Typography>
+                        </Box>
+                        <Box sx={{ paddingRight: '12px', display: 'flex' }}>
+                          <Typography sx={{ fontWeight: 500 }}>{`${searchSummaryResults.seedsRemaining.total}${
+                            searchSummaryResults.seedsRemaining &&
+                            searchSummaryResults.seedsRemaining.unknownQuantityAccessions > 0
+                              ? '+'
+                              : ''
+                          }`}</Typography>
+                          <Typography sx={{ paddingLeft: '4px' }}>
+                            {searchSummaryResults.seedsRemaining.total === 1
+                              ? strings.SEED.toLowerCase()
+                              : strings.SEEDS.toLowerCase()}
+                          </Typography>
+                        </Box>
                       </Box>
                     </Grid>
                   )}
