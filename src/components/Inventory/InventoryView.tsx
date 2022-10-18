@@ -25,16 +25,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     fontSize: '20px',
     alignItems: 'center',
   },
-  iconStyle: {
-    fill: '#3A4445',
-  },
-  editIcon: {
-    display: 'none',
-    fill: '#3A4445',
-  },
-  fullSizeButton: {
-    width: '100%',
-  },
 }));
 
 interface InventoryViewProps {
