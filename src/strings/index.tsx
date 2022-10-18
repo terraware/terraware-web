@@ -768,6 +768,18 @@ const strings = new LocalizedStrings({
     FOR_LAB_AND_NURSERY_GERMINATION: 'For Lab and Nursery Germination',
     ADD_INVENTORY: 'Add Inventory',
     IMPORT_INVENTORY: 'Import Inventory',
+    ADD_INVENTORY_DESCRIPTION:
+      'Add inventory from a new source. To add inventory from an existing seed accession, go to Accessions and withdraw from an accession entry.',
+    RECEIVING_NURSERY_REQUIRED: 'Receiving Nursery *',
+    DATE_ADDED_REQUIRED: 'Date Added *',
+    GERMINATING_QUANTITY: 'Germinating Quantity *',
+    NOT_READY_QUANTITY_REQUIRED: 'Not Ready Quantity *',
+    ESTIMATED_READY_DATE: 'Estimated Ready Date',
+    READY_QUANTITY_REQUIRED: 'Ready Quantity *',
+    TOTAL_QUANTITY: 'Total Quantity',
+    GERMINATING_QUANTITY_TOOLTIP: 'Germinating quantity does not count toward the total quantity.',
+    NOT_READY_QUANTITY_TOOLTIP: 'What determines a plant as “not ready” is up to your team.',
+    READY_QUANTITY_TOOLTIP: 'What determines a plant as “ready” is up to your team.',
   },
 });
 
