@@ -58,6 +58,7 @@ import NewNursery from './components/NewNursery';
 import Inventory from './components/Inventory';
 import NurseryDetails from './components/Nursery';
 import InventoryCreate from './components/Inventory/InventoryCreate';
+import InventoryView from './components/Inventory/InventoryView';
 
 const useStyles = makeStyles((theme: Theme) => ({
   content: {
@@ -535,6 +536,11 @@ export default function App() {
               {nurseryManagementEnabled && selectedOrganization && (
                 <Route exact path={APP_PATHS.INVENTORY_NEW}>
                   <InventoryCreate organization={selectedOrganization} />
+                </Route>
+              )}
+              {nurseryManagementEnabled && selectedOrganization && (
+                <Route path={APP_PATHS.INVENTORY_ITEM}>
+                  <InventoryView organization={selectedOrganization} />
                 </Route>
               )}
               <Route exact path={APP_PATHS.CONTACT_US}>
