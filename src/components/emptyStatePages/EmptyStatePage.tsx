@@ -173,7 +173,7 @@ export default function EmptyStatePage({ pageName, organization, reloadData }: E
         buttonText: strings.ADD_INVENTORY,
         buttonIcon: 'plus',
         onClickButton: () => {
-          return true;
+          history.push(APP_PATHS.INVENTORY_NEW);
         },
       },
     ],
