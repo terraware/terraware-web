@@ -22,7 +22,7 @@ export default function NurseryDropdown<T extends AccessionPostRequestBody>(
     setRecord((previousRecord: T): T => {
       return {
         ...previousRecord,
-        facilityId: facilityId,
+        facilityId,
       };
     });
   };
