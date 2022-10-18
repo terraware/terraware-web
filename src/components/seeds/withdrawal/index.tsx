@@ -239,7 +239,7 @@ const COLUMNS: TableColumnType[] = [
   { key: 'notes', name: strings.NOTES, type: 'notes' },
 ];
 
-function sortComparator(a: AccessionWithdrawal, b: AccessionWithdrawal, orderBy: any): 1 | -1 | 0 {
+function sortComparator(a: AccessionWithdrawal, b: AccessionWithdrawal, orderBy: any): number {
   if (orderBy === 'quantity') {
     const aValue =
       a.withdrawnQuantity?.units === 'Seeds'

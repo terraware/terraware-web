@@ -196,7 +196,7 @@ export default function Nursery({ accession, onSubmit, organization }: Props): J
   );
 }
 
-function sortComparator(a: ViabilityTest, b: ViabilityTest, orderBy: any): 1 | -1 | 0 {
+function sortComparator(a: ViabilityTest, b: ViabilityTest, orderBy: any): number {
   if (orderBy === 'recordingDate' || orderBy === 'seedsGerminated') {
     const aValue = a.testResults ? a.testResults[0][orderBy as keyof ViabilityTestResult] : 0;
     const bValue = b.testResults ? b.testResults[0][orderBy as keyof ViabilityTestResult] : 0;
