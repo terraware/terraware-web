@@ -3,7 +3,7 @@ import { HighOrganizationRolesValues, ServerOrganization } from 'src/types/Organ
 import { OrganizationUser } from 'src/types/User';
 
 export const getFacilitiesByType = (organization: ServerOrganization, type: FacilityType) => {
-  let facilitiesByType: (Facility | undefined)[] = [];
+  let facilitiesByType: Facility[] = [];
   if (organization && organization.facilities) {
     facilitiesByType = organization?.facilities?.filter((facility) => facility.type === type);
   }
@@ -26,6 +26,6 @@ export const isContributor = (roleHolder: ServerOrganization | OrganizationUser 
   return roleHolder?.role === 'Contributor';
 };
 
-export const getAllNurseries = (organization: ServerOrganization): (Facility | undefined)[] => {
+export const getAllNurseries = (organization: ServerOrganization): Facility[] => {
   return getFacilitiesByType(organization, 'Nursery');
 };
