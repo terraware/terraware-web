@@ -105,7 +105,7 @@ export interface paths {
     get: operations["count"];
   };
   "/api/v1/notifications/{id}": {
-    get: operations["read_1"];
+    get: operations["read"];
     put: operations["markRead"];
   };
   "/api/v1/nursery/batches": {
@@ -153,12 +153,7 @@ export interface paths {
   "/api/v1/search": {
     post: operations["search_1"];
   };
-  "/api/v1/seedbank/accessions": {
-    post: operations["create"];
-  };
   "/api/v1/seedbank/accessions/{id}": {
-    get: operations["read"];
-    put: operations["update"];
     delete: operations["delete"];
   };
   "/api/v1/seedbank/accessions/{id}/checkIn": {
@@ -330,102 +325,6 @@ export interface components {
         | "ViabilityTesting"
         | "Withdrawal";
     };
-    AccessionPayload: {
-      /** Server-generated human-readable identifier for the accession. This is unique within a single seed bank, but different seed banks may have accessions with the same number. */
-      accessionNumber: string;
-      /** Server-calculated active indicator. This is based on the accession's state. */
-      active: "Inactive" | "Active";
-      bagNumbers?: string[];
-      checkedInTime?: string;
-      collectedDate?: string;
-      collectionSiteCity?: string;
-      collectionSiteCountryCode?: string;
-      collectionSiteCountrySubdivision?: string;
-      collectionSiteLandowner?: string;
-      collectionSiteName?: string;
-      collectionSiteNotes?: string;
-      collectionSource?: "Wild" | "Reintroduced" | "Cultivated" | "Other";
-      /** Names of the people who collected the seeds. */
-      collectors?: string[];
-      cutTestSeedsCompromised?: number;
-      cutTestSeedsEmpty?: number;
-      cutTestSeedsFilled?: number;
-      dryingEndDate?: string;
-      dryingMoveDate?: string;
-      dryingStartDate?: string;
-      /** @deprecated Backward-compatibility alias for collectionSiteNotes */
-      environmentalNotes?: string;
-      estimatedSeedCount?: number;
-      facilityId: number;
-      fieldNotes?: string;
-      founderId?: string;
-      geolocations?: components["schemas"]["Geolocation"][];
-      /** Server-generated unique identifier for the accession. This is unique across all seed banks, but is not suitable for display to end users. */
-      id: number;
-      /** Initial size of accession. The units of this value must match the measurement type in "processingMethod". */
-      initialQuantity?: components["schemas"]["SeedQuantityPayload"];
-      /** @deprecated Backward-compatibility alias for collectionSiteLandowner */
-      landowner?: string;
-      latestViabilityPercent?: number;
-      latestViabilityTestDate?: string;
-      numberOfTrees?: number;
-      nurseryStartDate?: string;
-      photoFilenames?: string[];
-      processingMethod?: "Count" | "Weight";
-      processingNotes?: string;
-      processingStaffResponsible?: string;
-      processingStartDate?: string;
-      receivedDate?: string;
-      /** Number or weight of seeds remaining for withdrawal and testing. Calculated by the server when the accession's total size is known. */
-      remainingQuantity?: components["schemas"]["SeedQuantityPayload"];
-      /** @deprecated Backward-compatibility alias for collectionSiteName */
-      siteLocation?: string;
-      /** Which application this accession originally came from. This is currently based on the presence of the deviceInfo field. */
-      source?: "Web" | "Seed Collector App" | "File Import";
-      sourcePlantOrigin?: "Wild" | "Outplant";
-      /** Scientific name of the species. */
-      species?: string;
-      /** Common name of the species, if defined. */
-      speciesCommonName?: string;
-      /** Server-generated unique ID of the species. */
-      speciesId?: number;
-      /** Server-calculated accession state. Can change due to modifications to accession data or based on passage of time. */
-      state:
-        | "Awaiting Check-In"
-        | "Pending"
-        | "Awaiting Processing"
-        | "Processing"
-        | "Processed"
-        | "Drying"
-        | "Dried"
-        | "In Storage"
-        | "Withdrawn"
-        | "Used Up"
-        | "Nursery";
-      storageCondition?: "Refrigerator" | "Freezer";
-      storageLocation?: string;
-      storagePackets?: number;
-      storageNotes?: string;
-      storageStaffResponsible?: string;
-      storageStartDate?: string;
-      subsetCount?: number;
-      /** Weight of subset of seeds. Units must be a weight measurement, not "Seeds". */
-      subsetWeight?: components["schemas"]["SeedQuantityPayload"];
-      targetStorageCondition?: "Refrigerator" | "Freezer";
-      /** Total quantity of all past withdrawals, including viability tests. */
-      totalPastWithdrawalQuantity?: components["schemas"]["SeedQuantityPayload"];
-      /** Total quantity of scheduled withdrawals, not counting viability tests. */
-      totalScheduledNonTestQuantity?: components["schemas"]["SeedQuantityPayload"];
-      /** Total quantity of scheduled withdrawals for viability tests. */
-      totalScheduledTestQuantity?: components["schemas"]["SeedQuantityPayload"];
-      /** Total quantity of scheduled withdrawals, including viability tests. */
-      totalScheduledWithdrawalQuantity?: components["schemas"]["SeedQuantityPayload"];
-      totalViabilityPercent?: number;
-      /** Total quantity of all past and scheduled withdrawals, including viability tests. */
-      totalWithdrawalQuantity?: components["schemas"]["SeedQuantityPayload"];
-      viabilityTests?: components["schemas"]["ViabilityTestPayload"][];
-      withdrawals?: components["schemas"]["WithdrawalPayload"][];
-    };
     AccessionPayloadV2: {
       /** Server-generated human-readable identifier for the accession. This is unique within a single seed bank, but different seed banks may have accessions with the same number. */
       accessionNumber: string;
@@ -550,33 +449,6 @@ export interface components {
     ConnectDeviceManagerRequestPayload: {
       facilityId: number;
     };
-    CreateAccessionRequestPayload: {
-      bagNumbers?: string[];
-      collectedDate?: string;
-      collectionSiteCity?: string;
-      collectionSiteCountryCode?: string;
-      collectionSiteCountrySubdivision?: string;
-      collectionSiteLandowner?: string;
-      collectionSiteName?: string;
-      collectionSiteNotes?: string;
-      collectionSource?: "Wild" | "Reintroduced" | "Cultivated" | "Other";
-      collectors?: string[];
-      /** @deprecated Backward-compatibility alias for collectionSiteNotes */
-      environmentalNotes?: string;
-      facilityId?: number;
-      fieldNotes?: string;
-      founderId?: string;
-      geolocations?: components["schemas"]["Geolocation"][];
-      /** @deprecated Backward-compatibility alias for collectionSiteLandowner */
-      landowner?: string;
-      numberOfTrees?: number;
-      receivedDate?: string;
-      /** @deprecated Backward-compatibility alias for collectionSiteName */
-      siteLocation?: string;
-      source?: "Web" | "Seed Collector App" | "File Import";
-      sourcePlantOrigin?: "Wild" | "Outplant";
-      species?: string;
-    };
     CreateAccessionRequestPayloadV2: {
       bagNumbers?: string[];
       collectedDate?: string;
@@ -610,10 +482,6 @@ export interface components {
         | "Used Up"
         | "Nursery";
       storageLocation?: string;
-    };
-    CreateAccessionResponsePayload: {
-      accession: components["schemas"]["AccessionPayload"];
-      status: components["schemas"]["SuccessOrError"];
     };
     CreateAccessionResponsePayloadV2: {
       accession: components["schemas"]["AccessionPayloadV2"];
@@ -885,10 +753,6 @@ export interface components {
     GetAccessionHistoryResponsePayload: {
       /** History of changes in descending time order (newest first.) */
       history: components["schemas"]["AccessionHistoryEntryPayload"][];
-      status: components["schemas"]["SuccessOrError"];
-    };
-    GetAccessionResponsePayload: {
-      accession: components["schemas"]["AccessionPayload"];
       status: components["schemas"]["SuccessOrError"];
     };
     GetAccessionResponsePayloadV2: {
@@ -1451,56 +1315,6 @@ export interface components {
       timeseriesName: string;
       values: components["schemas"]["TimeseriesValuePayload"][];
     };
-    UpdateAccessionRequestPayload: {
-      bagNumbers?: string[];
-      collectedDate?: string;
-      collectionSiteCity?: string;
-      collectionSiteCountryCode?: string;
-      collectionSiteCountrySubdivision?: string;
-      collectionSiteLandowner?: string;
-      collectionSiteName?: string;
-      collectionSiteNotes?: string;
-      collectionSource?: "Wild" | "Reintroduced" | "Cultivated" | "Other";
-      collectors?: string[];
-      cutTestSeedsCompromised?: number;
-      cutTestSeedsEmpty?: number;
-      cutTestSeedsFilled?: number;
-      dryingEndDate?: string;
-      dryingMoveDate?: string;
-      dryingStartDate?: string;
-      /** @deprecated Backward-compatibility alias for collectionSiteNotes */
-      environmentalNotes?: string;
-      facilityId?: number;
-      fieldNotes?: string;
-      founderId?: string;
-      geolocations?: components["schemas"]["Geolocation"][];
-      /** Initial size of accession. The units of this value must match the measurement type in "processingMethod". */
-      initialQuantity?: components["schemas"]["SeedQuantityPayload"];
-      /** @deprecated Backward-compatibility alias for collectionSiteLandowner */
-      landowner?: string;
-      numberOfTrees?: number;
-      nurseryStartDate?: string;
-      processingMethod?: "Count" | "Weight";
-      processingNotes?: string;
-      processingStaffResponsible?: string;
-      processingStartDate?: string;
-      receivedDate?: string;
-      /** @deprecated Backward-compatibility alias for collectionSiteName */
-      siteLocation?: string;
-      sourcePlantOrigin?: "Wild" | "Outplant";
-      species?: string;
-      storageLocation?: string;
-      storageNotes?: string;
-      storagePackets?: number;
-      storageStaffResponsible?: string;
-      storageStartDate?: string;
-      subsetCount?: number;
-      /** Weight of subset of seeds. Units must be a weight measurement, not "Seeds". */
-      subsetWeight?: components["schemas"]["SeedQuantityPayload"];
-      targetStorageCondition?: "Refrigerator" | "Freezer";
-      viabilityTests?: components["schemas"]["ViabilityTestPayload"][];
-      withdrawals?: components["schemas"]["WithdrawalPayload"][];
-    };
     UpdateAccessionRequestPayloadV2: {
       bagNumbers?: string[];
       collectedDate?: string;
@@ -1538,10 +1352,6 @@ export interface components {
       subsetCount?: number;
       subsetWeight?: components["schemas"]["SeedQuantityPayload"];
       viabilityPercent?: number;
-    };
-    UpdateAccessionResponsePayload: {
-      accession: components["schemas"]["AccessionPayload"];
-      status: components["schemas"]["SuccessOrError"];
     };
     UpdateAccessionResponsePayloadV2: {
       accession: components["schemas"]["AccessionPayloadV2"];
@@ -1711,60 +1521,9 @@ export interface components {
       versions: components["schemas"]["VersionsEntryPayload"][];
       status: components["schemas"]["SuccessOrError"];
     };
-    ViabilityTestPayload: {
-      /** Server-assigned unique ID of this viability test. Null when creating a new test. */
-      id?: string;
-      /** Which type of test is described. At most one of each test type is allowed. */
-      testType: "Lab" | "Nursery";
-      startDate?: string;
-      endDate?: string;
-      seedType?: "Fresh" | "Stored";
-      substrate?:
-        | "Agar Petri Dish"
-        | "Nursery Media"
-        | "Paper Petri Dish"
-        | "Other";
-      treatment?: "Soak" | "Scarify" | "GA3" | "Stratification" | "Other";
-      notes?: string;
-      /** Quantity of seeds remaining. For weight-based accessions, this is user input and is required. For count-based accessions, it is calculated by the server and ignored on input. */
-      remainingQuantity?: components["schemas"]["SeedQuantityPayload"];
-      staffResponsible?: string;
-      seedsSown?: number;
-      testResults?: components["schemas"]["ViabilityTestResultPayload"][];
-      totalPercentGerminated?: number;
-      totalSeedsGerminated?: number;
-    };
     ViabilityTestResultPayload: {
       recordingDate: string;
       seedsGerminated: number;
-    };
-    WithdrawalPayload: {
-      /** Server-assigned unique ID of this withdrawal, its ID. Omit when creating a new withdrawal. */
-      id?: number;
-      date: string;
-      purpose?:
-        | "Propagation"
-        | "Outreach or Education"
-        | "Research"
-        | "Broadcast"
-        | "Share with Another Site"
-        | "Other"
-        | "Viability Testing"
-        | "Out-planting"
-        | "Nursery";
-      destination?: string;
-      notes?: string;
-      /** Quantity of seeds remaining. For weight-based accessions, this is user input and is required. For count-based accessions, it is calculated by the server and ignored on input. */
-      remainingQuantity?: components["schemas"]["SeedQuantityPayload"];
-      staffResponsible?: string;
-      /** If this withdrawal is of purpose "Germination Testing", the ID of the test it is associated with. This is always set by the server and cannot be modified. */
-      viabilityTestId?: number;
-      /** For weight-based accessions, the difference between the weight remaining before this withdrawal and the weight remaining after it. This is a server-calculated value and is ignored on input. */
-      weightDifference?: components["schemas"]["SeedQuantityPayload"];
-      /** Quantity of seeds withdrawn. For viability testing withdrawals, this is always the same as the test's "seedsSown" value, if that value is present. Otherwise, it is a user-supplied value. For count-based accessions, the units must always be "Seeds". For weight-based accessions, the units may either be a weight measurement or "Seeds". */
-      withdrawnQuantity?: components["schemas"]["SeedQuantityPayload"];
-      /** The best estimate of the number of seeds withdrawn. This is the same as "withdrawnQuantity" if that is present, or else the same as "weightDifference" if this is a weight-based accession. If this is a count-based accession and "withdrawnQuantity" does not have a value, this field will not be present. This is a server-calculated value and is ignored on input. */
-      estimatedQuantity?: components["schemas"]["SeedQuantityPayload"];
     };
   };
 }
@@ -2574,7 +2333,7 @@ export interface operations {
       };
     };
   };
-  read_1: {
+  read: {
     parameters: {
       path: {
         id: number;
@@ -2981,72 +2740,6 @@ export interface operations {
       };
     };
   };
-  create: {
-    responses: {
-      /** The accession was created successfully. Response includes fields populated by the server, including the accession number and ID. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["CreateAccessionResponsePayload"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["CreateAccessionRequestPayload"];
-      };
-    };
-  };
-  read: {
-    parameters: {
-      path: {
-        id: number;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["GetAccessionResponsePayload"];
-        };
-      };
-      /** The requested resource was not found. */
-      404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-    };
-  };
-  update: {
-    parameters: {
-      path: {
-        id: number;
-      };
-      query: {
-        /** If true, do not actually save the accession; just return the result that would have been returned if it had been saved. */
-        simulate?: string;
-      };
-    };
-    responses: {
-      /** The accession was updated successfully. Response includes fields populated or modified by the server as a result of the update. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["UpdateAccessionResponsePayload"];
-        };
-      };
-      /** The specified accession doesn't exist. */
-      404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["UpdateAccessionRequestPayload"];
-      };
-    };
-  };
   delete: {
     parameters: {
       path: {
@@ -3078,7 +2771,7 @@ export interface operations {
       /** OK */
       200: {
         content: {
-          "application/json": components["schemas"]["UpdateAccessionResponsePayload"];
+          "application/json": components["schemas"]["UpdateAccessionResponsePayloadV2"];
         };
       };
       /** The requested resource was not found. */

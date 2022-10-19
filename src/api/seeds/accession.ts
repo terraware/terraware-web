@@ -1,40 +1,25 @@
 import axios from '..';
-import {
-  Accession,
-  accessionEndpoint,
-  AccessionGetResponse,
-  AccessionPostRequestBody,
-  AccessionPostResponse,
-  AccessionPutRequestBody,
-  checkInEndpoint,
-  photoEndpoint,
-  postAccessionEndpoint,
-} from '../types/accessions';
+import { accessionEndpoint, checkInEndpoint, photoEndpoint } from '../types/accessions';
 import { paths } from '../types/generated-schema';
+import { Accession2 } from 'src/api/accessions2/accession';
 
-export const getAccession = async (accessionId: number): Promise<Accession> => {
-  const endpoint = accessionEndpoint.replace('{id}', `${accessionId}`);
-  const response: AccessionGetResponse = (await axios.get(endpoint)).data;
-
-  return response.accession;
+export const getAccession = async (accessionId: number): Promise<any> => {
+  return null;
 };
 
-export const postAccession = async (accession: AccessionPostRequestBody): Promise<number> => {
-  const response: AccessionPostResponse = (await axios.post(postAccessionEndpoint, accession)).data;
-
-  return response.accession.id;
+export const postAccession = async (accession: any): Promise<number> => {
+  return 0;
 };
 
-export const putAccession = async (accessionId: number, accession: AccessionPutRequestBody): Promise<void> => {
-  const endpoint = accessionEndpoint.replace('{id}', `${accessionId}`);
-  await axios.put(endpoint, accession);
+export const putAccession = async (accessionId: number, accession: unknown): Promise<void> => {
+  return;
 };
 
 export const getPhotoEndpoint = (accessionId: number, photoFilename: string): string => {
   return photoEndpoint.replace('{id}', `${accessionId}`).replace('{photoFilename}', `${photoFilename}`);
 };
 
-export const checkIn = async (id: number): Promise<Accession> => {
+export const checkIn = async (id: number): Promise<Accession2> => {
   const endpoint = checkInEndpoint.replace('{id}', `${id}`);
 
   return (await axios.post(endpoint)).data;

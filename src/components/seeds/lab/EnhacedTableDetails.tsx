@@ -70,7 +70,7 @@ export default function EnhancedTableDetails<T>({
     const selectedTest = row as unknown as ViabilityTest;
 
     if (selectedTest.testResults) {
-      selectedTest.testResults.forEach((testResult) => {
+      selectedTest.testResults.forEach((testResult: any) => {
         total += testResult.seedsGerminated;
       });
     }

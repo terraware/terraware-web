@@ -70,7 +70,7 @@ export default function Nursery({ accession, onSubmit, organization }: Props): J
   }, []);
 
   useEffect(() => {
-    setNurseryRows(accession.viabilityTests?.filter((germinationTest) => germinationTest.testType === 'Nursery'));
+    setNurseryRows(accession.viabilityTests?.filter((germinationTest: any) => germinationTest.testType === 'Nursery'));
   }, [accession]);
 
   const onEdit = (row: TableRowType) => {
@@ -101,14 +101,14 @@ export default function Nursery({ accession, onSubmit, organization }: Props): J
   };
 
   const onDelete = (value: ViabilityTest) => {
-    const newGerminationsTests = accession?.viabilityTests?.filter((germination) => germination !== value) ?? [];
+    const newGerminationsTests = accession?.viabilityTests?.filter((germination: any) => germination !== value) ?? [];
     accession.viabilityTests = newGerminationsTests;
     onSubmit(accession);
     setOpen(false);
   };
 
   const getTotalScheduled = (): number => {
-    const totali = accession.viabilityTests?.reduce((acum, germinationTest) => {
+    const totali = accession.viabilityTests?.reduce((acum: any, germinationTest: any) => {
       if (germinationTest.testType === 'Nursery' && moment(germinationTest.startDate).isAfter(date)) {
         acum += germinationTest.seedsSown || 0;
       }

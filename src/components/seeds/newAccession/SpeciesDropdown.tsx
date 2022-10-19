@@ -19,7 +19,7 @@ interface SpeciesDropdownProps<T extends AccessionPostRequestBody> {
 export default function SpeciesDropdown<T extends AccessionPostRequestBody>(
   props: SpeciesDropdownProps<T>
 ): JSX.Element {
-  const { selectedSpecies, organization, setRecord, disabled } = props;
+  const { selectedSpecies, organization, disabled } = props;
   const [speciesList, setSpeciesList] = useState<Species[]>([]);
 
   const { isMobile } = useDeviceInfo();
@@ -37,12 +37,7 @@ export default function SpeciesDropdown<T extends AccessionPostRequestBody>(
   }, [organization]);
 
   const onChangeHandler = (id: string, value: string) => {
-    setRecord((previousRecord: T): T => {
-      return {
-        ...previousRecord,
-        [id]: value,
-      };
-    });
+    return;
   };
 
   return (

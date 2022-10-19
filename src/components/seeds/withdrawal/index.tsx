@@ -125,7 +125,7 @@ export default function WithdrawalView({ accession, onSubmit, organization }: Pr
   };
 
   const onDelete = (value: AccessionWithdrawal) => {
-    const newWithdrawals = accession?.withdrawals?.filter((withdrawal) => withdrawal !== value) ?? [];
+    const newWithdrawals = accession?.withdrawals?.filter((withdrawal: any) => withdrawal !== value) ?? [];
     accession.withdrawals = newWithdrawals;
     onSubmit(accession);
 
@@ -133,8 +133,8 @@ export default function WithdrawalView({ accession, onSubmit, organization }: Pr
   };
 
   const hasBothWithdrawals =
-    accession.withdrawals?.some((withdrawal) => withdrawal.withdrawnQuantity?.units !== 'Seeds') &&
-    accession.withdrawals?.some((withdrawal) => withdrawal.withdrawnQuantity?.units === 'Seeds');
+    accession.withdrawals?.some((withdrawal: any) => withdrawal.withdrawnQuantity?.units !== 'Seeds') &&
+    accession.withdrawals?.some((withdrawal: any) => withdrawal.withdrawnQuantity?.units === 'Seeds');
 
   const gridSize = () => {
     if (isMobile) {
