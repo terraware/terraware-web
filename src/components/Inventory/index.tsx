@@ -160,12 +160,12 @@ export default function Inventory(props: InventoryProps): JSX.Element {
     const params: SearchNodePayload = getParams();
     const requestId = Math.random().toString();
     setRequestId('searchInventory', requestId);
-    const searchResults = await search(params);
+    const apiSearchResults = await search(params);
     if (params.search.children.length === 1) {
-      setUnfilteredInventory(searchResults);
+      setUnfilteredInventory(apiSearchResults);
     }
     if (getRequestId('searchInventory') === requestId) {
-      setSearchResults(searchResults);
+      setSearchResults(apiSearchResults);
     }
   }, [getParams]);
 
