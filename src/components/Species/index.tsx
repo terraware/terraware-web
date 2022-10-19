@@ -18,7 +18,7 @@ import PageSnackbar from 'src/components/PageSnackbar';
 import AddSpeciesModal from './AddSpeciesModal';
 import DeleteSpeciesModal from './DeleteSpeciesModal';
 import TextField from '../common/Textfield/Textfield';
-import { FieldNodePayload, search, searchCsv, SearchNodePayload } from 'src/api/seeds/search';
+import { FieldNodePayload, search, searchCsv, SearchNodePayload } from 'src/api/search';
 import SpeciesFilters from './SpeciesFiltersPopover';
 import useForm from 'src/utils/useForm';
 import Icon from '../common/icon/Icon';

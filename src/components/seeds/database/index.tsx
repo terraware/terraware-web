@@ -17,20 +17,22 @@ import { useHistory } from 'react-router-dom';
 import useQuery from '../../../utils/useQuery';
 import {
   AllFieldValuesMap,
-  convertToSearchNodePayload,
   FieldValuesMap,
   filterSelectFields,
   getAllFieldValues,
   getPendingAccessions,
-  search,
   searchFieldValues,
-  SearchNodePayload,
-  SearchResponseElement,
   searchSummary,
   SearchSummaryResponsePayload,
-  SeedSearchCriteria,
-  SeedSearchSortOrder,
 } from 'src/api/seeds/search';
+import {
+  convertToSearchNodePayload,
+  search,
+  SearchNodePayload,
+  SearchResponseElement,
+  SearchCriteria,
+  SearchSortOrder,
+} from 'src/api/search';
 import Button from 'src/components/common/button/Button';
 import Table from 'src/components/common/table';
 import { SortOrder as Order } from 'src/components/common/table/sort';
@@ -138,10 +140,10 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 type DatabaseProps = {
   organization?: ServerOrganization;
-  searchCriteria: SeedSearchCriteria;
-  setSearchCriteria: (criteria: SeedSearchCriteria) => void;
-  searchSortOrder: SeedSearchSortOrder;
-  setSearchSortOrder: (order: SeedSearchSortOrder) => void;
+  searchCriteria: SearchCriteria;
+  setSearchCriteria: (criteria: SearchCriteria) => void;
+  searchSortOrder: SearchSortOrder;
+  setSearchSortOrder: (order: SearchSortOrder) => void;
   searchColumns: string[];
   setSearchColumns: (fields: string[]) => void;
   displayColumnNames: string[];

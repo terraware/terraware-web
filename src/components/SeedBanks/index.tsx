@@ -12,7 +12,7 @@ import { Facility, FacilityType } from 'src/api/types/facilities';
 import { getAllSeedBanks } from 'src/utils/organization';
 import SeedBanksCellRenderer from './TableCellRenderer';
 import TextField from '../common/Textfield/Textfield';
-import { search, SearchNodePayload } from 'src/api/seeds/search';
+import { search, SearchNodePayload } from 'src/api/search';
 import useDebounce from 'src/utils/useDebounce';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import { Grid } from '@mui/material';

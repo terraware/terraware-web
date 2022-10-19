@@ -1,5 +1,5 @@
 import React from 'react';
-import { convertToSearchNodePayload, searchCsv, SeedSearchCriteria, SeedSearchSortOrder } from 'src/api/seeds/search';
+import { convertToSearchNodePayload, searchCsv, SearchCriteria, SearchSortOrder } from 'src/api/search';
 import { ServerOrganization } from 'src/types/Organization';
 import strings from 'src/strings';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
@@ -8,8 +8,8 @@ import { Grid } from '@mui/material';
 import TextField from 'src/components/common/Textfield/Textfield';
 
 interface DownloadReportModalProps {
-  searchCriteria: SeedSearchCriteria;
-  searchSortOrder: SeedSearchSortOrder;
+  searchCriteria: SearchCriteria;
+  searchSortOrder: SearchSortOrder;
   searchColumns: string[];
   organization: ServerOrganization;
   open: boolean;

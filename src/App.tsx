@@ -6,12 +6,8 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import useQuery from './utils/useQuery';
 import useStateLocation, { getLocation } from './utils/useStateLocation';
 import { getOrganizations } from 'src/api/organization/organization';
-import {
-  DEFAULT_SEED_SEARCH_FILTERS,
-  DEFAULT_SEED_SEARCH_SORT_ORDER,
-  SeedSearchSortOrder,
-  SeedSearchCriteria,
-} from 'src/api/seeds/search';
+import { DEFAULT_SEED_SEARCH_FILTERS, DEFAULT_SEED_SEARCH_SORT_ORDER } from 'src/api/seeds/search';
+import { SearchSortOrder, SearchCriteria } from 'src/api/search';
 import { getUser } from 'src/api/user/user';
 import ContactUs from 'src/components/ContactUs';
 import EditOrganization from 'src/components/EditOrganization';
@@ -113,10 +109,10 @@ export default function App() {
   const nurseryManagementEnabled = isRouteEnabled('Nursery management');
 
   // seedSearchCriteria describes which criteria to apply when searching accession data.
-  const [seedSearchCriteria, setSeedSearchCriteria] = useState<SeedSearchCriteria>(DEFAULT_SEED_SEARCH_FILTERS);
+  const [seedSearchCriteria, setSeedSearchCriteria] = useState<SearchCriteria>(DEFAULT_SEED_SEARCH_FILTERS);
 
   // seedSearchSort describes which sort criterion to apply when searching accession data.
-  const [seedSearchSort, setSeedSearchSort] = useState<SeedSearchSortOrder>(DEFAULT_SEED_SEARCH_SORT_ORDER);
+  const [seedSearchSort, setSeedSearchSort] = useState<SearchSortOrder>(DEFAULT_SEED_SEARCH_SORT_ORDER);
 
   // seedSearchColumns describes which accession columns to request when searching accession data.
   const [seedSearchColumns, setSeedSearchColumns] = useState<string[]>(DefaultColumns.fields);

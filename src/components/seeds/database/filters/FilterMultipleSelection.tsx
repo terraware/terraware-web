@@ -3,7 +3,7 @@ import { makeStyles } from '@mui/styles';
 import React from 'react';
 import Checkbox from '../../../common/Checkbox';
 import { Option } from '../columns';
-import { FieldNodePayload } from '../../../../api/seeds/search';
+import { FieldNodePayload } from '../../../../api/search';
 import strings from 'src/strings';
 
 const useStyles = makeStyles((theme: Theme) => ({
