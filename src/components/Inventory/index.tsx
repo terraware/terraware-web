@@ -13,7 +13,7 @@ import { isAdmin } from 'src/utils/organization';
 import PageSnackbar from 'src/components/PageSnackbar';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import EmptyStatePage from '../emptyStatePages/EmptyStatePage';
-import { search, SearchResponseElement } from 'src/api/seeds/search';
+import { search, SearchResponseElement } from 'src/api/search';
 import InventoryTable from './InventoryTable';
 import useDebounce from 'src/utils/useDebounce';
 

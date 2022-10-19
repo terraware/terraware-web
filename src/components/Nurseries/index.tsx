@@ -4,7 +4,7 @@ import TextField from '@terraware/web-components/components/Textfield/Textfield'
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { search, SearchNodePayload } from 'src/api/seeds/search';
+import { search, SearchNodePayload } from 'src/api/search';
 import { Facility, FacilityType } from 'src/api/types/facilities';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';

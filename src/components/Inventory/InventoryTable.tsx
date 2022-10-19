@@ -3,7 +3,7 @@ import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
 import { Button, Table, TableColumnType } from '@terraware/web-components';
 import { Box, Grid } from '@mui/material';
-import { SearchResponseElement } from 'src/api/seeds/search';
+import { SearchResponseElement } from 'src/api/search';
 import { useHistory } from 'react-router-dom';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import { APP_PATHS } from 'src/constants';

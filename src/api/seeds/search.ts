@@ -1,84 +1,17 @@
 import axios from '..';
-import { components, paths } from 'src/api/types/generated-schema';
+import { paths } from 'src/api/types/generated-schema';
 import { COLUMNS_INDEXED, DatabaseColumn } from 'src/components/seeds/database/columns';
+import {
+  SearchCriteria,
+  SearchRequestPayload,
+  SearchResponseElement,
+  SearchSortOrder,
+  convertToSearchNodePayload,
+  search,
+} from 'src/api/search';
 
-export type SeedSearchCriteria = Record<string, SearchNodePayload>;
 export const DEFAULT_SEED_SEARCH_FILTERS = {};
-export type SeedSearchSortOrder = components['schemas']['SearchSortOrderElement'];
-export const DEFAULT_SEED_SEARCH_SORT_ORDER = { field: 'receivedDate', direction: 'Descending' } as SeedSearchSortOrder;
-
-export type AndNodePayload = components['schemas']['AndNodePayload'] & { operation: 'and' };
-export type FieldNodePayload = components['schemas']['FieldNodePayload'] & { operation: 'field' };
-export type NotNodePayload = components['schemas']['NotNodePayload'] & { operation: 'not' };
-export type OrNodePayload = components['schemas']['OrNodePayload'] & { operation: 'or' };
-export type SearchNodePayload = AndNodePayload | FieldNodePayload | NotNodePayload | OrNodePayload;
-export type FieldValuesPayload = { [key: string]: components['schemas']['FieldValuesPayload'] };
-
-/*
- * convertToSearchNodePayload()
- * input: search criteria in the type of SeedSearchCriteria, which is used by the application
- * output: search criteria in the type of SearchNodePayload, which is required by API modules.
- *         undefined if the input represented no search criteria.
- */
-export function convertToSearchNodePayload(
-  criteria: SeedSearchCriteria,
-  organizationId?: number
-): SearchNodePayload | undefined {
-  if (criteria === {}) {
-    return undefined;
-  }
-  let newCriteria = criteria;
-  if (organizationId) {
-    newCriteria = addOrgInfoToSearch(organizationId, criteria);
-  }
-  return {
-    operation: 'and',
-    children: Object.values(newCriteria),
-  };
-}
-
-function addOrgInfoToSearch(organizationId: number, previousCriteria?: SeedSearchCriteria) {
-  const newCriteria = previousCriteria ? Object.values(previousCriteria) : [];
-  newCriteria.unshift({
-    field: 'facility_organization_id',
-    values: [organizationId.toString()],
-    operation: 'field',
-  });
-  return newCriteria;
-}
-
-/*******************
- * ACCESSION SEARCH
- *******************/
-
-const SEARCH_ENDPOINT = '/api/v1/search';
-type SearchRequestPayload = paths[typeof SEARCH_ENDPOINT]['post']['requestBody']['content']['application/json'];
-export type SearchResponsePayload =
-  paths[typeof SEARCH_ENDPOINT]['post']['responses'][200]['content']['application/json'];
-export type SearchResponseElement = SearchResponsePayload['results'][0];
-
-export async function search(params: SearchRequestPayload): Promise<SearchResponseElement[] | null> {
-  try {
-    const response: SearchResponsePayload = (await axios.post(SEARCH_ENDPOINT, params)).data;
-    return response.results;
-  } catch {
-    return null;
-  }
-}
-
-export async function searchCsv(params: SearchRequestPayload): Promise<any> {
-  const config = {
-    headers: {
-      accept: 'text/csv',
-    },
-  };
-  try {
-    const response = (await axios.post(SEARCH_ENDPOINT, params, config)).data;
-    return response;
-  } catch {
-    return null;
-  }
-}
+export const DEFAULT_SEED_SEARCH_SORT_ORDER = { field: 'receivedDate', direction: 'Descending' } as SearchSortOrder;
 
 export async function getPendingAccessions(organizationId: number): Promise<SearchResponseElement[] | null> {
   const searchParams: SearchRequestPayload = {
@@ -175,7 +108,7 @@ export type FieldValuesMap = ValuesPostResponse['results'];
  */
 export async function searchFieldValues(
   fields: string[],
-  searchCriteria: SeedSearchCriteria,
+  searchCriteria: SearchCriteria,
   organizationId: number
 ): Promise<FieldValuesMap | null> {
   try {

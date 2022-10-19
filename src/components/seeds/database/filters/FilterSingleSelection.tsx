@@ -1,7 +1,7 @@
 import { List, ListItem, ListItemText, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React from 'react';
-import { FieldNodePayload } from 'src/api/seeds/search';
+import { FieldNodePayload } from 'src/api/search';
 import strings from 'src/strings';
 import { Option } from '../columns';
 

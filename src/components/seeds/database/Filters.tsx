@@ -2,7 +2,7 @@ import { ArrowDropDown } from '@mui/icons-material';
 import { Chip, Container, Divider, Link, Popover, Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React from 'react';
-import { FieldNodePayload, FieldValuesPayload, OrNodePayload, SearchNodePayload } from 'src/api/seeds/search';
+import { FieldNodePayload, FieldValuesPayload, OrNodePayload, SearchNodePayload } from 'src/api/search';
 import strings from 'src/strings';
 import preventDefaultEvent from 'src/utils/preventDefaultEvent';
 import { DatabaseColumn, Option } from './columns';
