@@ -1,5 +1,5 @@
 import { Container, Grid, Typography } from '@mui/material';
-import { Theme } from '@mui/material';
+import { CircularProgress, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
@@ -44,7 +44,7 @@ export default function Inventory(props: InventoryProps): JSX.Element {
   const classes = useStyles({ isMobile });
   const history = useHistory();
   const { organization, hasNurseries, hasSpecies } = props;
-  const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>();
+  const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>(null);
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
 
@@ -154,6 +154,8 @@ export default function Inventory(props: InventoryProps): JSX.Element {
               temporalSearchValue={temporalSearchValue}
               setTemporalSearchValue={setTemporalSearchValue}
             />
+          ) : searchResults === null ? (
+            <CircularProgress />
           ) : (
             <Container maxWidth={false} className={classes.mainContainer}>
               <EmptyStatePage pageName={'Inventory'} />
