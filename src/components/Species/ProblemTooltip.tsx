@@ -4,7 +4,7 @@ import { acceptProblemSuggestion, ignoreProblemSuggestion } from 'src/api/specie
 import strings from 'src/strings';
 import { SpeciesProblemElement } from 'src/types/Species';
 import Button from '../common/button/Button';
-import useSnackbar from '../../utils/useSnackbar';
+import useSnackbar from 'src/utils/useSnackbar';
 
 const useStyles = makeStyles((theme: Theme) => ({
   tooltipContainer: {
