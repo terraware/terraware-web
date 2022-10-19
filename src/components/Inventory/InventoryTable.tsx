@@ -8,7 +8,7 @@ import { useHistory } from 'react-router-dom';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import { APP_PATHS } from 'src/constants';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
-import InventoryCellRenderer from './TableCellRenderer';
+import InventoryCellRenderer from './InventoryCellRenderer';
 
 const columns: TableColumnType[] = [
   { key: 'species_scientificName', name: strings.SPECIES, type: 'string' },
