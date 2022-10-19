@@ -277,10 +277,12 @@ export async function acceptProblemSuggestion(problemId: number) {
   const response: UpdateSpeciesResponse = {
     requestSucceeded: true,
   };
-  await axios.post(SPECIES_PROBLEM.replace('{problemId}', problemId.toString())).catch((e) => {
+  try {
+    await axios.post(SPECIES_PROBLEM.replace('{problemId}', problemId.toString()));
+  } catch (e: any) {
     response.requestSucceeded = false;
     response.error = e?.response?.data?.error?.message;
-  });
+  }
   return response;
 }
 
