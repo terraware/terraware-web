@@ -1,4 +1,4 @@
-import { Box, Container, Grid, Typography } from '@mui/material';
+import { Container, Grid, Typography } from '@mui/material';
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useEffect, useState } from 'react';
@@ -13,11 +13,9 @@ import { isAdmin } from 'src/utils/organization';
 import PageSnackbar from 'src/components/PageSnackbar';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import EmptyStatePage from '../emptyStatePages/EmptyStatePage';
-import { Button, Table, TableColumnType } from '@terraware/web-components';
-import TextField from '@terraware/web-components/components/Textfield/Textfield';
 import { search, SearchResponseElement } from 'src/api/seeds/search';
+import InventoryTable from './InventoryTable';
 import useDebounce from 'src/utils/useDebounce';
-import InventoryCellRenderer from './TableCellRenderer';
 
 interface StyleProps {
   isMobile: boolean;
@@ -40,16 +38,6 @@ type InventoryProps = {
   hasNurseries: boolean;
   hasSpecies: boolean;
 };
-
-const columns: TableColumnType[] = [
-  { key: 'species_scientificName', name: strings.SPECIES, type: 'string' },
-  { key: 'species_commonName', name: strings.COMMON_NAME, type: 'string' },
-  { key: 'facilityInventories', name: strings.NURSERIES, type: 'string' },
-  { key: 'germinatingQuantity', name: strings.GERMINATING, type: 'string' },
-  { key: 'notReadyQuantity', name: strings.NOT_READY, type: 'string' },
-  { key: 'readyQuantity', name: strings.READY, type: 'string' },
-  { key: 'totalQuantity', name: strings.TOTAL, type: 'string' },
-];
 
 export default function Inventory(props: InventoryProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
@@ -149,14 +137,6 @@ export default function Inventory(props: InventoryProps): JSX.Element {
     };
   }, [debouncedSearchTerm, organization]);
 
-  const clearSearch = () => {
-    setTemporalSearchValue('');
-  };
-
-  const onChangeSearch = (id: string, value: unknown) => {
-    setTemporalSearchValue(value as string);
-  };
-
   return (
     <TfMain>
       <Grid container spacing={3}>
@@ -168,57 +148,12 @@ export default function Inventory(props: InventoryProps): JSX.Element {
         <PageSnackbar />
         {isOnboarded ? (
           searchResults && searchResults.length > 0 ? (
-            <>
-              <Grid item xs={3} sx={{ textAlign: 'right' }}>
-                {['Admin', 'Owner'].includes(organization.role) &&
-                  (isMobile ? (
-                    <Button
-                      id='new-inventory'
-                      icon='plus'
-                      onClick={() => goTo(APP_PATHS.INVENTORY_NEW)}
-                      size='medium'
-                    />
-                  ) : (
-                    <Button
-                      id='new-inventory'
-                      icon='plus'
-                      label={strings.ADD_INVENTORY}
-                      onClick={() => goTo(APP_PATHS.INVENTORY_NEW)}
-                      size='medium'
-                    />
-                  ))}
-              </Grid>
-              <Grid item xs={12} marginTop={3}>
-                <Box width='300px'>
-                  <TextField
-                    placeholder={strings.SEARCH}
-                    iconLeft='search'
-                    label=''
-                    id='search'
-                    type='text'
-                    onChange={onChangeSearch}
-                    value={temporalSearchValue}
-                    iconRight='cancel'
-                    onClickRightIcon={clearSearch}
-                  />
-                </Box>
-              </Grid>
-              <Grid item xs={12}>
-                <div>
-                  <Grid container spacing={4}>
-                    <Grid item xs={12}>
-                      <Table
-                        id='inventory-table'
-                        columns={columns}
-                        rows={searchResults}
-                        orderBy='species_scientificName'
-                        Renderer={InventoryCellRenderer}
-                      />
-                    </Grid>
-                  </Grid>
-                </div>
-              </Grid>
-            </>
+            <InventoryTable
+              organization={organization}
+              results={searchResults}
+              temporalSearchValue={temporalSearchValue}
+              setTemporalSearchValue={setTemporalSearchValue}
+            />
           ) : (
             <Container maxWidth={false} className={classes.mainContainer}>
               <EmptyStatePage pageName={'Inventory'} />
