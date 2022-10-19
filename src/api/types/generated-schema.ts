@@ -519,7 +519,6 @@ export interface components {
       /** Default message to publish if the automation type isn't yet supported by the server. */
       message?: string;
     };
-    /** Details of ewly-created seedling batch. */
     BatchPayload: {
       /** If this batch was created via a seed withdrawal, the ID of the seed accession it came from. */
       accessionId?: number;
@@ -1151,13 +1150,13 @@ export interface components {
       name: string;
       description?: string;
       configuration?: { [key: string]: unknown };
-      type: string;
       settings?: { [key: string]: { [key: string]: unknown } };
-      timeseriesName?: string;
-      deviceId?: number;
+      type: string;
       lowerThreshold?: number;
       upperThreshold?: number;
       verbosity: number;
+      timeseriesName?: string;
+      deviceId?: number;
     };
     /** Search criterion that matches results that do not match a set of search criteria. */
     NotNodePayload: components["schemas"]["SearchNodePayload"] & {
@@ -2623,7 +2622,7 @@ export interface operations {
   };
   createBatch: {
     responses: {
-      /** OK */
+      /** The batch was created successfully. Response includes fields populated by the server, including the batch ID. */
       200: {
         content: {
           "application/json": components["schemas"]["BatchResponsePayload"];
@@ -2643,6 +2642,12 @@ export interface operations {
       };
     };
     responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["BatchResponsePayload"];
+        };
+      };
       /** The requested resource was not found. */
       404: {
         content: {
@@ -2658,6 +2663,12 @@ export interface operations {
       };
     };
     responses: {
+      /** The batch was updated successfully. Response includes fields populated or modified by the server as a result of the update. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["BatchResponsePayload"];
+        };
+      };
       /** The requested resource was not found. */
       404: {
         content: {
@@ -2684,7 +2695,7 @@ export interface operations {
       };
     };
     responses: {
-      /** OK */
+      /** The requested operation succeeded. */
       200: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];

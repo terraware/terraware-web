@@ -4,6 +4,7 @@ import { acceptProblemSuggestion, ignoreProblemSuggestion } from 'src/api/specie
 import strings from 'src/strings';
 import { SpeciesProblemElement } from 'src/types/Species';
 import Button from '../common/button/Button';
+import useSnackbar from '../../utils/useSnackbar';
 
 const useStyles = makeStyles((theme: Theme) => ({
   tooltipContainer: {
@@ -53,6 +54,7 @@ export default function ProblemTooltip({
   onRowClick,
 }: ProblemTooltipProps): JSX.Element {
   const classes = useStyles();
+  const snackbar = useSnackbar();
   const ignoreFix = async (problemId: number) => {
     await ignoreProblemSuggestion(problemId);
     setOpenedTooltip(false);
@@ -62,7 +64,10 @@ export default function ProblemTooltip({
   };
 
   const acceptFix = async (problemId: number) => {
-    await acceptProblemSuggestion(problemId);
+    const response = await acceptProblemSuggestion(problemId);
+    if (!(response && response.requestSucceeded)) {
+      snackbar.toastError(response.responseMessage ?? strings.UNEXPECTED_ERROR, strings.GENERIC_ERROR);
+    }
     setOpenedTooltip(false);
     if (reloadData) {
       reloadData();
