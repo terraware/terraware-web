@@ -170,7 +170,7 @@ export default function CreateInventory(props: CreateInventoryProps): JSX.Elemen
                 value={record.germinatingQuantity}
                 onChange={onChange}
                 type='text'
-                label={strings.GERMINATING_QUANTITY}
+                label={strings.GERMINATING_QUANTITY_REQUIRED}
                 tooltipTitle={strings.GERMINATING_QUANTITY_TOOLTIP}
                 errorText={validateFields && !record.germinatingQuantity ? strings.REQUIRED_FIELD : ''}
               />

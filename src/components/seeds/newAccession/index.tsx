@@ -246,23 +246,11 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
   };
 
   const onSubmitHandler = () => {
-    setIsEditing(false);
-    setIsSaving(true);
-    const filteredCollectors = record.collectors?.filter((iValue) => iValue !== '');
-    const newRecord = {
-      ...record,
-      collectors: filteredCollectors,
-    };
-    setTimeout(() => onSubmit(newRecord), 1000);
+    return;
   };
 
   const onSendToNurseryHandler = () => {
-    const newRecord = {
-      ...record,
-      nurseryStartDate: getTodaysDateFormatted(),
-    };
-    setIsSendingToNursery(true);
-    setTimeout(() => onSubmit(newRecord), 1000);
+    return;
   };
 
   const onCheckInHandler = () => {
@@ -271,11 +259,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
   };
 
   const onUndoSendToNursery = () => {
-    const newRecord = {
-      ...record,
-      nurseryStartDate: undefined,
-    };
-    onSubmit(newRecord);
+    return;
   };
 
   const OnNumberOfTreesChange = (id: string, value: unknown) => {
@@ -338,7 +322,6 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
             }
           >
             <Species
-              selectedSpecies={record.species}
               organization={organization}
               disabled={isPendingCheckIn || isContributor}
               record={record}
@@ -347,8 +330,8 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
           </Suspense>
           <Grid item xs={gridSize()}>
             <TextField
+              value={''}
               id='numberOfTrees'
-              value={record.numberOfTrees}
               onChange={OnNumberOfTreesChange}
               type='number'
               label={strings.NUMBER_OF_TREES}
@@ -362,7 +345,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
           <Grid item xs={gridSize()}>
             <TextField
               id='founderId'
-              value={record.founderId}
+              value={''}
               onChange={onChange}
               label={strings.FOUNDER_ID}
               disabled={isPendingCheckIn || isContributor}
@@ -371,8 +354,8 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
           <Grid item xs={gridSize()}>
             <Dropdown
               id='collectionSource'
+              selected={''}
               label={strings.COLLECTION_SOURCE}
-              selected={record.collectionSource}
               values={[
                 { label: strings.WILD, value: 'Wild' },
                 { label: strings.REINTRODUCED, value: 'Reintroduced' },
@@ -386,7 +369,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
           <Grid item xs={12}>
             <TextArea
               id='fieldNotes'
-              value={record.fieldNotes}
+              value={''}
               onChange={onChange}
               label={strings.FIELD_NOTES}
               placeholder={strings.FIELD_NOTES_PLACEHOLDER}
@@ -403,8 +386,8 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
           }
         >
           <AccessionDates
-            collectedDate={record.collectedDate}
-            receivedDate={record.receivedDate}
+            collectedDate={''}
+            receivedDate={''}
             refreshErrors={refreshErrors}
             onChange={onChange}
             disabled={isPendingCheckIn || isContributor}
@@ -424,7 +407,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
                 <Collectors
                   organizationId={organization.id!}
                   id='collectors'
-                  collectors={record.collectors}
+                  collectors={[]}
                   onChange={onChange}
                   disabled={isPendingCheckIn || isContributor}
                 />
@@ -437,7 +420,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
           <Grid item xs={gridSize()}>
             <TextField
               id='collectionSiteName'
-              value={record.collectionSiteName}
+              value={''}
               onChange={onChange}
               label={strings.SITE}
               disabled={isPendingCheckIn || isContributor}
@@ -446,7 +429,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
           <Grid item xs={gridSize()}>
             <TextField
               id='collectionSiteLandowner'
-              value={record.collectionSiteLandowner}
+              value={''}
               onChange={onChange}
               label={strings.LANDOWNER}
               disabled={isPendingCheckIn || isContributor}
@@ -456,7 +439,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
           <Grid item xs={12}>
             <TextArea
               id='collectionSiteNotes'
-              value={record.collectionSiteNotes}
+              value={''}
               onChange={onChange}
               label={strings.ENVIRONMENTAL_NOTES}
               placeholder={strings.ENVIRONMENTAL_NOTES_PLACEHOLDER}
@@ -470,7 +453,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
             <Dropdown
               id='facilityId'
               label={strings.SEED_BANK}
-              selected={record.facilityId?.toString()}
+              selected={''}
               values={seedBanks.map((seedBank) => ({ label: seedBank!.name, value: seedBank!.id.toString() }))}
               onChange={onChange}
               disabled={isPendingCheckIn || isContributor}
@@ -485,7 +468,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
               <Typography component='p' variant='body2' className={classes.listItem}>
                 {strings.BAG_IDS}
               </Typography>
-              {record.bagNumbers?.map((bag, index) => (
+              {[].map((bag, index) => (
                 <Typography id={`bag${index}`} key={index} component='p' variant='body1' className={classes.listItem}>
                   {bag}
                 </Typography>
@@ -512,16 +495,14 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
               <Typography component='p' variant='body2' className={classes.listItem}>
                 {strings.GEOLOCATIONS}
               </Typography>
-              {record.geolocations?.map((geolocation, index) => (
+              {[].map((geolocation, index) => (
                 <Typography
                   id={`location${index}`}
                   key={index}
                   component='p'
                   variant='body1'
                   className={classes.listItem}
-                >
-                  {`${geolocation.latitude}, ${geolocation.longitude}`}
-                </Typography>
+                />
               ))}
             </Grid>
           </Grid>

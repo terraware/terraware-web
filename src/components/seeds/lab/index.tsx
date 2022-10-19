@@ -76,11 +76,11 @@ export default function Nursery({ accession, onSubmit, organization }: Props): J
   }, []);
 
   useEffect(() => {
-    setLabRows(accession.viabilityTests?.filter((viabilityTest) => viabilityTest.testType === 'Lab'));
+    setLabRows(accession.viabilityTests?.filter((viabilityTest: any) => viabilityTest.testType === 'Lab'));
   }, [accession]);
 
   const getTotalScheduled = (): number => {
-    const totalS = accession.viabilityTests?.reduce((acum, viabilityTest) => {
+    const totalS = accession.viabilityTests?.reduce((acum: any, viabilityTest: any) => {
       if (viabilityTest.testType === 'Lab' && moment(viabilityTest.startDate).isAfter(date)) {
         acum += viabilityTest.seedsSown || 0;
       }
@@ -164,7 +164,7 @@ export default function Nursery({ accession, onSubmit, organization }: Props): J
   };
 
   const onDeleteTest = (value: ViabilityTest) => {
-    const newGerminationsTests = accession?.viabilityTests?.filter((germination) => germination !== value) ?? [];
+    const newGerminationsTests = accession?.viabilityTests?.filter((germination: any) => germination !== value) ?? [];
     accession.viabilityTests = newGerminationsTests;
     onSubmit(accession);
     setTestOpen(false);
@@ -172,7 +172,7 @@ export default function Nursery({ accession, onSubmit, organization }: Props): J
 
   const onDeleteTestEntry = (value: ViabilityTestResult) => {
     if (selectedTest && selectedTest.testResults) {
-      const newGerminations = selectedTest.testResults.filter((testResult) => testResult !== value) ?? [];
+      const newGerminations = selectedTest.testResults.filter((testResult: any) => testResult !== value) ?? [];
 
       const newGerminationTest = {
         ...selectedTest,
