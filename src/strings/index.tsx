@@ -772,7 +772,7 @@ const strings = new LocalizedStrings({
       'Add inventory from a new source. To add inventory from an existing seed accession, go to Accessions and withdraw from an accession entry.',
     RECEIVING_NURSERY_REQUIRED: 'Receiving Nursery *',
     DATE_ADDED_REQUIRED: 'Date Added *',
-    GERMINATING_QUANTITY: 'Germinating Quantity *',
+    GERMINATING_QUANTITY_REQUIRED: 'Germinating Quantity *',
     NOT_READY_QUANTITY_REQUIRED: 'Not Ready Quantity *',
     ESTIMATED_READY_DATE: 'Estimated Ready Date',
     READY_QUANTITY_REQUIRED: 'Ready Quantity *',
@@ -780,6 +780,11 @@ const strings = new LocalizedStrings({
     GERMINATING_QUANTITY_TOOLTIP: 'Germinating quantity does not count toward the total quantity.',
     NOT_READY_QUANTITY_TOOLTIP: 'What determines a plant as “not ready” is up to your team.',
     READY_QUANTITY_TOOLTIP: 'What determines a plant as “ready” is up to your team.',
+    GERMINATING_QUANTITY: 'Germinating Quantity',
+    NOT_READY_QUANTITY: 'Not Ready Quantity',
+    READY_QUANTITY: 'Ready Quantity',
+    TOTAL_WITHDRAWN: 'Total Withdrawn',
+    LOSS_RATE: 'Loss Rate',
   },
 });
 

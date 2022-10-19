@@ -28,6 +28,7 @@ export enum APP_PATHS {
   NURSERIES_VIEW = '/nurseries/:nurseryId',
   INVENTORY = '/inventory',
   INVENTORY_NEW = '/inventory/new',
+  INVENTORY_ITEM = '/inventory/:speciesId',
   OPT_IN = '/opt-in',
   ORGANIZATION_EDIT = '/organization/edit',
   ORGANIZATION = '/organization',
