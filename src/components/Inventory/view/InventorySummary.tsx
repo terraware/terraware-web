@@ -1,58 +1,90 @@
+import { useCallback, useEffect, useState } from 'react';
 import { useTheme, Box, Typography } from '@mui/material';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { SpeciesInventorySummary } from 'src/api/types/inventory';
+import { getSummary } from 'src/api/inventory/inventory';
+import useSnackbar from 'src/utils/useSnackbar';
+import _ from 'lodash';
 
 interface InventorySummaryProps {
-  summary: SpeciesInventorySummary;
+  speciesId: number;
 }
 
 export default function InventorySummary(props: InventorySummaryProps): JSX.Element {
-  const { summary } = props;
-  const { germinatingQuantity, notReadyQuantity, readyQuantity, totalQuantity, nurseries, lossRate, totalWithdrawn } =
-    summary;
+  const { speciesId } = props;
+  const [summary, setSummary] = useState<SpeciesInventorySummary>();
 
   const theme = useTheme();
-
+  const snackbar = useSnackbar();
   const { isMobile } = useDeviceInfo();
 
-  const data = [
-    {
-      label: strings.GERMINATING_QUANTITY,
-      value: germinatingQuantity,
-      tooltip: '',
-    },
-    {
-      label: strings.NOT_READY_QUANTITY,
-      value: notReadyQuantity,
-      tooltip: '',
-    },
-    {
-      label: strings.READY_QUANTITY,
-      value: readyQuantity,
-      tooltip: '',
-    },
-    {
-      label: strings.TOTAL_QUANTITY,
-      value: totalQuantity,
-      tooltip: '',
-    },
-    {
-      label: strings.TOTAL_WITHDRAWN,
-      value: totalWithdrawn,
-      tooltip: '',
-    },
-    {
-      label: strings.LOSS_RATE,
-      value: lossRate,
-      tooltip: '',
-    },
-    {
-      label: strings.NURSERIES,
-      value: nurseries.map((i) => i.name).join(', '),
-      tooltip: '',
-    },
-  ];
+  const reloadData = useCallback(() => {
+    const populateSummary = async () => {
+      const response = await getSummary(speciesId);
+      if (response.requestSucceeded === false) {
+        snackbar.toastError(response.error);
+      } else if (!_.isEqual(response.summary, summary)) {
+        setSummary(response.summary || undefined);
+      }
+    };
+
+    if (speciesId !== undefined) {
+      populateSummary();
+    } else {
+      setSummary(undefined);
+    }
+  }, [speciesId, summary, snackbar]);
+
+  useEffect(() => {
+    reloadData();
+  }, [speciesId, reloadData]);
+
+  const getData = () => {
+    if (!summary) {
+      return [];
+    }
+    const { germinatingQuantity, notReadyQuantity, readyQuantity, totalQuantity, nurseries, lossRate, totalWithdrawn } =
+      summary;
+
+    return [
+      {
+        label: strings.GERMINATING_QUANTITY,
+        value: germinatingQuantity,
+        tooltip: '',
+      },
+      {
+        label: strings.NOT_READY_QUANTITY,
+        value: notReadyQuantity,
+        tooltip: '',
+      },
+      {
+        label: strings.READY_QUANTITY,
+        value: readyQuantity,
+        tooltip: '',
+      },
+      {
+        label: strings.TOTAL_QUANTITY,
+        value: totalQuantity,
+        tooltip: '',
+      },
+      {
+        label: strings.TOTAL_WITHDRAWN,
+        value: totalWithdrawn,
+        tooltip: '',
+      },
+      {
+        label: strings.LOSS_RATE,
+        value: lossRate,
+        tooltip: '',
+      },
+      {
+        label: strings.NURSERIES,
+        value: nurseries.map((i) => i.name).join(', '),
+        tooltip: '',
+      },
+    ];
+  };
 
   return (
     <Box
@@ -69,7 +101,7 @@ export default function InventorySummary(props: InventorySummaryProps): JSX.Elem
         justifyContent: 'space-between',
       }}
     >
-      {data.map((datum) => (
+      {getData().map((datum) => (
         <Box
           key={datum.label}
           sx={{

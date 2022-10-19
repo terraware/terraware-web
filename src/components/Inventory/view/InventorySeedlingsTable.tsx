@@ -1,12 +1,11 @@
 import { Typography } from '@mui/material';
-import { SpeciesInventorySummary } from 'src/api/types/inventory';
 
 interface InventorySeedslingsTableProps {
-  summary: SpeciesInventorySummary;
+  speciesId: number;
 }
 
 export default function InventorySeedslingsTable(props: InventorySeedslingsTableProps): JSX.Element {
-  const { summary } = props;
+  const { speciesId } = props;
 
-  return <Typography>Inventory seedslings table for species-id {summary.speciesId} coming soon!</Typography>;
+  return <Typography>Inventory seedslings table for species-id {speciesId} coming soon!</Typography>;
 }
