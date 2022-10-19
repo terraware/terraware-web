@@ -97,7 +97,7 @@ type SimpleSuccessResponsePayload =
  */
 export type UpdateSpeciesResponse = {
   requestSucceeded: boolean;
-  responseMessage?: string;
+  error?: string;
 };
 
 export async function updateSpecies(species: Species, organizationId: number): Promise<UpdateSpeciesResponse> {
@@ -279,7 +279,7 @@ export async function acceptProblemSuggestion(problemId: number) {
   };
   await axios.post(SPECIES_PROBLEM.replace('{problemId}', problemId.toString())).catch((e) => {
     response.requestSucceeded = false;
-    response.responseMessage = e?.response?.data?.error?.message;
+    response.error = e?.response?.data?.error?.message;
   });
   return response;
 }
