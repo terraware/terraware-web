@@ -14,16 +14,6 @@ import Pill from 'src/components/Pill';
 import PageSnackbar from 'src/components/PageSnackbar';
 import { getNurseryName, removeFilter } from './FilterUtils';
 
-const columns: TableColumnType[] = [
-  { key: 'species_scientificName', name: strings.SPECIES, type: 'string' },
-  { key: 'species_commonName', name: strings.COMMON_NAME, type: 'string' },
-  { key: 'facilityInventories', name: strings.NURSERIES, type: 'string' },
-  { key: 'germinatingQuantity', name: strings.GERMINATING, type: 'string' },
-  { key: 'notReadyQuantity', name: strings.NOT_READY, type: 'string' },
-  { key: 'readyQuantity', name: strings.READY, type: 'string' },
-  { key: 'totalQuantity', name: strings.TOTAL, type: 'string' },
-];
-
 interface InventoryTableProps {
   organization: ServerOrganization;
   results: SearchResponseElement[];
@@ -37,6 +27,39 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
   const { organization, results, setTemporalSearchValue, temporalSearchValue, filters, setFilters } = props;
   const { isMobile } = useDeviceInfo();
   const history = useHistory();
+
+  const columns: TableColumnType[] = React.useMemo(
+    () => [
+      {
+        key: 'species_scientificName',
+        name: strings.SPECIES,
+        type: 'string',
+        tooltipTitle: strings.TOOLTIP_SCIENTIFIC_NAME,
+      },
+      {
+        key: 'species_commonName',
+        name: strings.COMMON_NAME,
+        type: 'string',
+        tooltipTitle: strings.TOOLTIP_COMMON_NAME,
+      },
+      { key: 'facilityInventories', name: strings.NURSERIES, type: 'string' },
+      {
+        key: 'germinatingQuantity',
+        name: strings.GERMINATING,
+        type: 'string',
+        tooltipTitle: strings.TOOLTIP_GERMINATING_QUANTITY,
+      },
+      {
+        key: 'notReadyQuantity',
+        name: strings.NOT_READY,
+        type: 'string',
+        tooltipTitle: strings.TOOLTIP_NOT_READY_QUANTITY,
+      },
+      { key: 'readyQuantity', name: strings.READY, type: 'string', tooltipTitle: strings.TOOLTIP_READY_QUANTITY },
+      { key: 'totalQuantity', name: strings.TOTAL, type: 'string', tooltipTitle: strings.TOOLTIP_TOTAL_QUANTITY },
+    ],
+    []
+  );
 
   const goTo = (appPath: string) => {
     const appPathLocation = {

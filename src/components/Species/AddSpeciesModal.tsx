@@ -233,7 +233,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
             hideArrow={true}
             onBlur={() => setShowWarning(true)}
             onFocus={() => setShowWarning(false)}
-            tooltipTitle={strings.TOOLTIP_SPECIES_SCIENTIFIC_NAME}
+            tooltipTitle={strings.TOOLTIP_SCIENTIFIC_NAME}
           />
         </Grid>
         <Grid item xs={12}>
@@ -247,7 +247,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
             readonly={false}
             fullWidth={true}
             hideArrow={true}
-            tooltipTitle={strings.TOOLTIP_SPECIES_COMMON_NAME}
+            tooltipTitle={strings.TOOLTIP_COMMON_NAME}
           />
         </Grid>
         <Grid item xs={12}>

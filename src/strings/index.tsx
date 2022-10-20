@@ -700,10 +700,16 @@ const strings = new LocalizedStrings({
       'A unique identifier for a seed collection accepted into a seed bank. Any collection from a new species, location, and/or date would typically become a new accession in the seed bank.',
     TOOLTIP_ACCESSIONS_LOCATION: 'Place where seeds are being processed.',
     TOOLTIP_ACCESSIONS_SUBLOCATION: 'Specific area within the place where seeds are being processed.',
-    TOOLTIP_SPECIES_SCIENTIFIC_NAME:
+    TOOLTIP_SCIENTIFIC_NAME:
       'The binomial Latin name (genus + species) currently accepted in the botanical literature.',
-    TOOLTIP_SPECIES_COMMON_NAME:
-      'The name an organism is known by to the general public, rather than its scientific name.',
+    TOOLTIP_COMMON_NAME: 'The name an organism is known by to the general public, rather than its scientific name.',
+    TOOLTIP_GERMINATING_QUANTITY:
+      'Germinating indicates that seedlings have not yet emerged from seeds. Germinating quantity does not count toward the total quantity.',
+    TOOLTIP_NOT_READY_QUANTITY:
+      'What determines a plant as “not ready” is up to your team and is often species specific. For example: size of plant or amount of time acclimated.',
+    TOOLTIP_READY_QUANTITY:
+      'What determines a plant as “ready” is up to your team and is often species specific. For example: size of plant or amount of time acclimated.',
+    TOOLTIP_TOTAL_QUANTITY: 'Total quantity is the sum of the not ready and ready quantities.',
     TOOLTIP_SPECIES_FAMILY: 'The scientific name of the plant family currently accepted in the botanical literature.',
     TOOLTIP_SPECIES_GROWTH_FORM:
       'A structural category consisting of individuals or species of the same general habit of growth but not necessarily related.',
