@@ -9,9 +9,9 @@ import BatchesCellRenderer from './BatchesCellRenderer';
 import { isContributor } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
-const columns = (editable: boolean): TableColumnType[] =>
-  [
-    { key: 'batchNumber', name: strings.SEEDLING_BATCH, type: 'string', editable },
+const columns = (editable: boolean): TableColumnType[] => {
+  const defaultColumns: TableColumnType[] = [
+    { key: 'batchNumber', name: strings.SEEDLING_BATCH, type: 'string' },
     { key: 'germinatingQuantity', name: strings.GERMINATING, type: 'string' },
     { key: 'notReadyQuantity', name: strings.NOT_READY, type: 'string' },
     { key: 'readyQuantity', name: strings.READY, type: 'string' },
@@ -20,8 +20,14 @@ const columns = (editable: boolean): TableColumnType[] =>
     { key: 'facility_name', name: strings.NURSERY, type: 'string' },
     { key: 'readyByDate', name: strings.EST_READY_DATE, type: 'string' },
     { key: 'addedDate', name: strings.DATE_ADDED, type: 'string' },
-    { key: 'withdraw', name: '', type: 'string', editable },
-  ] as TableColumnType[];
+  ];
+
+  if (editable) {
+    return [...defaultColumns, { key: 'withdraw', name: '', type: 'string' }];
+  } else {
+    return defaultColumns;
+  }
+};
 
 interface InventorySeedslingsTableProps {
   speciesId: number;
@@ -111,6 +117,11 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
     return;
   };
 
+  const onSelect = () => {
+    // TODO
+    return;
+  };
+
   return (
     <Grid item xs={12} sx={{ marginTop: theme.spacing(1) }}>
       <Box
@@ -160,6 +171,7 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
             orderBy='batchNumber'
             Renderer={BatchesCellRenderer}
             reloadData={reloadData}
+            onSelect={onSelect}
           />
         </Box>
       </Box>

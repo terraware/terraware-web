@@ -18,27 +18,15 @@ const useStyles = makeStyles(() => ({
 export default function BatchesCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
   const classes = useStyles();
   const { column, row, value, index } = props;
-  const editable = (column as any).editable;
 
   const withdraw = () => {
     // TODO
-    if (!editable) {
-      return;
-    }
-    return;
-  };
-
-  const editBatch = () => {
-    // TODO
-    if (!editable) {
-      return;
-    }
     return;
   };
 
   const createLinkToBatch = (iValue: React.ReactNode | unknown[]) => {
     return (
-      <Link component='button' className={classes.link + ' ' + classes.text} onClick={editBatch}>
+      <Link component='button' className={classes.link + ' ' + classes.text}>
         {iValue}
       </Link>
     );
@@ -62,7 +50,6 @@ export default function BatchesCellRenderer(props: RendererProps<TableRowType>):
             size='small'
             priority='secondary'
             className={classes.text}
-            disabled={!editable}
           />
         }
       />
