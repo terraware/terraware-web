@@ -1,7 +1,6 @@
 import { ClickAwayListener, IconButton, Theme, Tooltip } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useState } from 'react';
-import strings from 'src/strings';
 import { SpeciesProblemElement } from 'src/types/Species';
 import Icon from '../common/icon/Icon';
 import CellRenderer, { TableRowType } from '../common/table/TableCellRenderer';
@@ -52,18 +51,6 @@ export default function SpeciesCellRenderer(props: RendererProps<TableRowType>):
     setOpenedTooltip(!openedTooltip);
   };
 
-  const getConservationStatusString = (iRow: TableRowType) => {
-    if (iRow.endangered && iRow.rare) {
-      return strings.RARE_ENDANGERED;
-    } else if (iRow.endangered) {
-      return strings.ENDANGERED;
-    } else if (iRow.rare) {
-      return strings.RARE;
-    } else {
-      return '';
-    }
-  };
-
   if (column.key === 'problems') {
     return (
       <CellRenderer
@@ -97,10 +84,6 @@ export default function SpeciesCellRenderer(props: RendererProps<TableRowType>):
         row={row}
       />
     );
-  }
-
-  if (column.key === 'conservationStatus') {
-    return <CellRenderer index={index} column={column} value={getConservationStatusString(row)} row={row} />;
   }
 
   return <CellRenderer {...props} />;
