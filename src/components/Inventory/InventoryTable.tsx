@@ -10,7 +10,7 @@ import { APP_PATHS } from 'src/constants';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 import InventoryCellRenderer from './InventoryCellRenderer';
 import InventoryFilters, { InventoryFiltersType } from './InventoryFiltersPopover';
-import Pill from '../Species/Pill';
+import Pill from 'src/components/Pill';
 import PageSnackbar from 'src/components/PageSnackbar';
 import { getAllNurseries } from 'src/utils/organization';
 

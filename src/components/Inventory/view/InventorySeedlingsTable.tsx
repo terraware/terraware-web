@@ -6,8 +6,11 @@ import { ServerOrganization } from 'src/types/Organization';
 import useDebounce from 'src/utils/useDebounce';
 import { search, SearchResponseElement } from 'src/api/search';
 import BatchesCellRenderer from './BatchesCellRenderer';
-import { isContributor } from 'src/utils/organization';
+import { getAllNurseries, isContributor } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import useForm from 'src/utils/useForm';
+import Pill from 'src/components/Pill';
+import InventoryFilters, { InventoryFiltersType } from '../InventoryFiltersPopover';
 
 const columns = (editable: boolean): TableColumnType[] => {
   const defaultColumns: TableColumnType[] = [
@@ -40,11 +43,33 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
   const theme = useTheme();
   const [temporalSearchValue, setTemporalSearchValue] = useState<string>('');
   const [batches, setBatches] = useState<SearchResponseElement[]>([]);
+  const [filters, setFilters] = useForm<InventoryFiltersType>({});
   const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
   const editable = !isContributor(organization);
 
   useEffect(() => {
     let activeRequests = true;
+
+    const getSearchFields = () => {
+      const fields = [
+        {
+          operation: 'field',
+          field: 'facility_name',
+          type: 'Fuzzy',
+          values: [debouncedSearchTerm],
+        },
+      ];
+
+      if (filters.facilityIds && filters.facilityIds.length > 0) {
+        fields.push({
+          operation: 'field',
+          field: 'facility_id',
+          type: 'Exact',
+          values: filters.facilityIds.map((id) => id.toString()),
+        });
+      }
+      return fields;
+    };
 
     const populateResults = async () => {
       const searchResponse = await search({
@@ -58,10 +83,8 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
               values: [speciesId.toString()],
             },
             {
-              operation: 'field',
-              field: 'facility_name',
-              type: 'Fuzzy',
-              values: [debouncedSearchTerm],
+              operation: 'and',
+              children: getSearchFields(),
             },
           ],
         },
@@ -97,7 +120,7 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
     return () => {
       activeRequests = false;
     };
-  }, [debouncedSearchTerm, organization.id, speciesId]);
+  }, [debouncedSearchTerm, organization.id, speciesId, filters.facilityIds]);
 
   const clearSearch = () => {
     setTemporalSearchValue('');
@@ -120,6 +143,23 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
   const onSelect = () => {
     // TODO
     return;
+  };
+
+  const getFilteredNurseryName = (facilityId: number) => {
+    const found = getAllNurseries(organization).find((n) => n.id.toString() === facilityId.toString());
+    if (found) {
+      return found.name;
+    }
+    return '';
+  };
+
+  const removeFilter = (id: number) => {
+    setFilters((prev) => {
+      const { facilityIds } = prev;
+      return {
+        facilityIds: facilityIds?.filter((val) => val !== id) || [],
+      };
+    });
   };
 
   return (
@@ -150,19 +190,32 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
         )}
       </Box>
       <Box marginTop={theme.spacing(3)}>
-        <Box width='300px'>
-          <Textfield
-            placeholder={strings.SEARCH}
-            iconLeft='search'
-            label=''
-            id='search'
-            type='text'
-            onChange={onChangeSearch}
-            value={temporalSearchValue}
-            iconRight='cancel'
-            onClickRightIcon={clearSearch}
-          />
+        <Box display='flex' flexDirection='row'>
+          <Box width='300px'>
+            <Textfield
+              placeholder={strings.SEARCH}
+              iconLeft='search'
+              label=''
+              id='search'
+              type='text'
+              onChange={onChangeSearch}
+              value={temporalSearchValue}
+              iconRight='cancel'
+              onClickRightIcon={clearSearch}
+            />
+          </Box>
+          <InventoryFilters filters={filters} setFilters={setFilters} organization={organization} />
         </Box>
+        <Grid xs={12} display='flex' paddingTop={1}>
+          {filters.facilityIds?.map((id) => (
+            <Pill
+              key={id}
+              filter={strings.NURSERY}
+              value={getFilteredNurseryName(id)}
+              onRemoveFilter={() => removeFilter(id)}
+            />
+          ))}
+        </Grid>
         <Box marginTop={theme.spacing(2)}>
           <Table
             id='batches-table'
