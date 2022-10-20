@@ -1,5 +1,4 @@
-import { Container, Grid, Typography } from '@mui/material';
-import { CircularProgress, Theme } from '@mui/material';
+import { CircularProgress, Container, Grid, Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
@@ -14,7 +13,8 @@ import PageSnackbar from 'src/components/PageSnackbar';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import EmptyStatePage from '../emptyStatePages/EmptyStatePage';
 import { FieldNodePayload, search, SearchNodePayload, SearchResponseElement } from 'src/api/search';
-import InventoryTable, { InventoryFiltersType } from './InventoryTable';
+import InventoryTable from './InventoryTable';
+import { InventoryFiltersType } from './InventoryFiltersPopover';
 import useDebounce from 'src/utils/useDebounce';
 import useForm from 'src/utils/useForm';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
@@ -33,6 +33,11 @@ const useStyles = makeStyles((theme: Theme) => ({
     maxWidth: '800px',
     width: (props: StyleProps) => (props.isMobile ? 'auto' : '800px'),
   },
+  spinnerContainer: {
+    position: 'fixed',
+    top: '50%',
+    left: '50%',
+  },
 }));
 
 type InventoryProps = {
@@ -50,7 +55,7 @@ export default function Inventory(props: InventoryProps): JSX.Element {
   const [unfilteredInventory, setUnfilteredInventory] = useState<SearchResponseElement[] | null>(null);
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
-  const [record, setRecord] = useForm<InventoryFiltersType>({});
+  const [filters, setFilters] = useForm<InventoryFiltersType>({});
 
   const goTo = (appPath: string) => {
     const appPathLocation = {
@@ -111,8 +116,9 @@ export default function Inventory(props: InventoryProps): JSX.Element {
       count: 0,
     };
 
+    const searchValueChildren: FieldNodePayload[] = [];
+
     if (debouncedSearchTerm) {
-      const searchValueChildren: FieldNodePayload[] = [];
       const scientificNameNode: FieldNodePayload = {
         operation: 'field',
         field: 'species_scientificName',
@@ -136,25 +142,27 @@ export default function Inventory(props: InventoryProps): JSX.Element {
         values: [debouncedSearchTerm],
       };
       searchValueChildren.push(facilityNameNode);
+    }
 
+    filters.facilityIds?.forEach((id) => {
+      const newNode: FieldNodePayload = {
+        operation: 'field',
+        field: 'facilityInventories.facility_id',
+        type: 'Exact',
+        values: [id],
+      };
+      searchValueChildren.push(newNode);
+    });
+
+    if (searchValueChildren.length) {
       params.search.children.push({
         operation: 'or',
         children: searchValueChildren,
       });
     }
 
-    if (record.facilityId !== undefined) {
-      const newNode: FieldNodePayload = {
-        operation: 'field',
-        field: 'facilityInventories.facility_id',
-        type: 'Exact',
-        values: [record.facilityId],
-      };
-      params.search.children.push(newNode);
-    }
-
     return params;
-  }, [record, debouncedSearchTerm, organization]);
+  }, [filters, debouncedSearchTerm, organization]);
 
   const onApplyFilters = useCallback(async () => {
     const params: SearchNodePayload = getParams();
@@ -171,7 +179,7 @@ export default function Inventory(props: InventoryProps): JSX.Element {
 
   useEffect(() => {
     onApplyFilters();
-  }, [record, onApplyFilters]);
+  }, [filters, onApplyFilters]);
 
   return (
     <TfMain>
@@ -181,7 +189,6 @@ export default function Inventory(props: InventoryProps): JSX.Element {
             {strings.INVENTORY}
           </Typography>
         </Grid>
-        <PageSnackbar />
         {isOnboarded ? (
           unfilteredInventory && unfilteredInventory.length > 0 ? (
             <InventoryTable
@@ -189,11 +196,13 @@ export default function Inventory(props: InventoryProps): JSX.Element {
               results={searchResults || []}
               temporalSearchValue={temporalSearchValue}
               setTemporalSearchValue={setTemporalSearchValue}
-              record={record}
-              setRecord={setRecord}
+              filters={filters}
+              setFilters={setFilters}
             />
           ) : unfilteredInventory === null ? (
-            <CircularProgress />
+            <div className={classes.spinnerContainer}>
+              <CircularProgress />
+            </div>
           ) : (
             <Container maxWidth={false} className={classes.mainContainer}>
               <EmptyStatePage pageName={'Inventory'} />
@@ -201,6 +210,7 @@ export default function Inventory(props: InventoryProps): JSX.Element {
           )
         ) : (
           <Container maxWidth={false} className={classes.mainContainer}>
+            <PageSnackbar />
             {isAdmin(organization) ? (
               <EmptyMessage
                 className={classes.message}
