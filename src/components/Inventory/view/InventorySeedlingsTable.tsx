@@ -6,11 +6,12 @@ import { ServerOrganization } from 'src/types/Organization';
 import useDebounce from 'src/utils/useDebounce';
 import { search, SearchResponseElement } from 'src/api/search';
 import BatchesCellRenderer from './BatchesCellRenderer';
-import { getAllNurseries, isContributor } from 'src/utils/organization';
+import { isContributor } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useForm from 'src/utils/useForm';
 import Pill from 'src/components/Pill';
 import InventoryFilters, { InventoryFiltersType } from '../InventoryFiltersPopover';
+import { getNurseryName, removeFilter } from '../FilterUtils';
 
 const columns = (editable: boolean): TableColumnType[] => {
   const defaultColumns: TableColumnType[] = [
@@ -145,23 +146,6 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
     return;
   };
 
-  const getFilteredNurseryName = (facilityId: number) => {
-    const found = getAllNurseries(organization).find((n) => n.id.toString() === facilityId.toString());
-    if (found) {
-      return found.name;
-    }
-    return '';
-  };
-
-  const removeFilter = (id: number) => {
-    setFilters((prev) => {
-      const { facilityIds } = prev;
-      return {
-        facilityIds: facilityIds?.filter((val) => val !== id) || [],
-      };
-    });
-  };
-
   return (
     <Grid item xs={12} sx={{ marginTop: theme.spacing(1) }}>
       <Box
@@ -211,8 +195,8 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
             <Pill
               key={id}
               filter={strings.NURSERY}
-              value={getFilteredNurseryName(id)}
-              onRemoveFilter={() => removeFilter(id)}
+              value={getNurseryName(id, organization)}
+              onRemoveFilter={() => removeFilter(id, setFilters)}
             />
           ))}
         </Grid>
