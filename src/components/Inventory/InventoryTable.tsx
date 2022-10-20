@@ -9,6 +9,9 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 import { APP_PATHS } from 'src/constants';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 import InventoryCellRenderer from './InventoryCellRenderer';
+import InventoryFilters from './InventoryFiltersPopover';
+import Pill from '../Species/Pill';
+import { getAllNurseries } from 'src/utils/organization';
 
 const columns: TableColumnType[] = [
   { key: 'species_scientificName', name: strings.SPECIES, type: 'string' },
@@ -25,10 +28,16 @@ interface InventoryTableProps {
   results: SearchResponseElement[];
   temporalSearchValue: string;
   setTemporalSearchValue: React.Dispatch<React.SetStateAction<string>>;
+  record: InventoryFiltersType;
+  setRecord: React.Dispatch<React.SetStateAction<InventoryFiltersType>>;
 }
 
+export type InventoryFiltersType = {
+  facilityId?: number;
+};
+
 export default function InventoryTable(props: InventoryTableProps): JSX.Element {
-  const { organization, results, setTemporalSearchValue, temporalSearchValue } = props;
+  const { organization, results, setTemporalSearchValue, temporalSearchValue, record, setRecord } = props;
   const { isMobile } = useDeviceInfo();
   const history = useHistory();
 
@@ -47,6 +56,14 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
     setTemporalSearchValue(value as string);
   };
 
+  const getFilteredNurseryName = () => {
+    const found = getAllNurseries(organization).find((n) => n.id.toString() === record.facilityId?.toString());
+    if (found) {
+      return found.name;
+    }
+    return '';
+  };
+
   return (
     <>
       <Grid item xs={3} sx={{ textAlign: 'right' }}>
@@ -63,7 +80,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
             />
           ))}
       </Grid>
-      <Grid item xs={12} marginTop={3}>
+      <Grid item xs={12} marginTop={3} display='flex'>
         <Box width='300px'>
           <TextField
             placeholder={strings.SEARCH}
@@ -77,6 +94,13 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
             onClickRightIcon={clearSearch}
           />
         </Box>
+        <InventoryFilters filters={record} setFilters={setRecord} organization={organization} />
+      </Grid>
+
+      <Grid xs={12} display='flex' paddingLeft={3} paddingTop={1}>
+        {record.facilityId && (
+          <Pill filter={strings.NURSERY} value={getFilteredNurseryName()} onRemoveFilter={() => setRecord({})} />
+        )}
       </Grid>
       <Grid item xs={12}>
         <div>
