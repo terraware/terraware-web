@@ -105,6 +105,8 @@ export type SpeciesFiltersType = {
   endangered?: boolean;
 };
 
+type SpeciesCS = Species & { conservationStatus?: string };
+
 export default function SpeciesList({ organization, reloadData, species }: SpeciesListProps): JSX.Element {
   const classes = useStyles();
   const [selectedSpecies, setSelectedSpecies] = useState<Species>();
@@ -132,6 +134,17 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
     setTooltipLearnMoreModalOpen(false);
   };
 
+  const getConservationStatusString = (result: { [key: string]: unknown }) => {
+    if (result.endangered && result.rare) {
+      return strings.RARE_ENDANGERED;
+    } else if (result.endangered) {
+      return strings.ENDANGERED;
+    } else if (result.rare) {
+      return strings.RARE;
+    } else {
+      return '';
+    }
+  };
   const columns: TableColumnType[] = React.useMemo(
     () => [
       {
@@ -316,6 +329,14 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
 
   const onApplyFilters = useCallback(
     async (reviewErrors?: boolean) => {
+      const getSpeciesListWithCS = () => {
+        const speciesListWithCS: SpeciesCS[] = [];
+        species.forEach((sp) => {
+          speciesListWithCS.push({ ...sp, conservationStatus: getConservationStatusString(sp) });
+        });
+        return speciesListWithCS;
+      };
+
       const params: SearchNodePayload = getParams();
       if (params.search.children.length > 1) {
         // organization id filter will always exist
@@ -323,7 +344,7 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
         setRequestId('searchSpecies', requestId);
         const searchResults = await search(params);
         if (getRequestId('searchSpecies') === requestId) {
-          const speciesResults: Species[] = [];
+          const speciesResults: SpeciesCS[] = [];
           searchResults?.forEach((result) => {
             speciesResults.push({
               id: result.id as number,
@@ -335,12 +356,13 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
               seedStorageBehavior: result.seedStorageBehavior as any,
               rare: result.rare as boolean,
               endangered: result.endangered as boolean,
+              conservationStatus: getConservationStatusString(result),
             });
           });
           setResults(speciesResults);
         }
       } else {
-        setResults(species);
+        setResults(getSpeciesListWithCS());
       }
     },
     [getParams, species]
