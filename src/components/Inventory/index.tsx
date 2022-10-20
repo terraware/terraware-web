@@ -1,7 +1,7 @@
 import { Container, Grid, Typography } from '@mui/material';
 import { CircularProgress, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import strings from 'src/strings';
 import emptyMessageStrings from 'src/strings/emptyMessageModal';
@@ -13,9 +13,11 @@ import { isAdmin } from 'src/utils/organization';
 import PageSnackbar from 'src/components/PageSnackbar';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import EmptyStatePage from '../emptyStatePages/EmptyStatePage';
-import { search, SearchResponseElement } from 'src/api/search';
-import InventoryTable from './InventoryTable';
+import { FieldNodePayload, search, SearchNodePayload, SearchResponseElement } from 'src/api/search';
+import InventoryTable, { InventoryFiltersType } from './InventoryTable';
 import useDebounce from 'src/utils/useDebounce';
+import useForm from 'src/utils/useForm';
+import { getRequestId, setRequestId } from 'src/utils/requestsId';
 
 interface StyleProps {
   isMobile: boolean;
@@ -44,9 +46,11 @@ export default function Inventory(props: InventoryProps): JSX.Element {
   const classes = useStyles({ isMobile });
   const history = useHistory();
   const { organization, hasNurseries, hasSpecies } = props;
-  const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>(null);
+  const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>();
+  const [unfilteredInventory, setUnfilteredInventory] = useState<SearchResponseElement[] | null>(null);
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
+  const [record, setRecord] = useForm<InventoryFiltersType>({});
 
   const goTo = (appPath: string) => {
     const appPathLocation = {
@@ -81,61 +85,93 @@ export default function Inventory(props: InventoryProps): JSX.Element {
 
   const isOnboarded = hasNurseries && hasSpecies;
 
-  useEffect(() => {
-    let activeRequests = true;
-
-    if (organization) {
-      const populateResults = async () => {
-        const apiResponse = await search({
-          prefix: 'inventories',
-          fields: [
-            'species_id',
-            'species_scientificName',
-            'species_commonName',
-            'facilityInventories.facility_name',
-            'germinatingQuantity',
-            'notReadyQuantity',
-            'readyQuantity',
-            'totalQuantity',
-          ],
-          search: {
-            operation: 'and',
-            children: [
-              {
-                operation: 'or',
-                children: [
-                  { operation: 'field', field: 'species_scientificName', type: 'Fuzzy', values: [debouncedSearchTerm] },
-                  { operation: 'field', field: 'species_commonName', type: 'Fuzzy', values: [debouncedSearchTerm] },
-                  {
-                    operation: 'field',
-                    field: 'facilityInventories.facility_name',
-                    type: 'Fuzzy',
-                    values: [debouncedSearchTerm],
-                  },
-                ],
-              },
-              {
-                operation: 'field',
-                field: 'organization_id',
-                values: [organization.id],
-              },
-            ],
+  const getParams = useCallback(() => {
+    const params: SearchNodePayload = {
+      prefix: 'inventories',
+      fields: [
+        'species_id',
+        'species_scientificName',
+        'species_commonName',
+        'facilityInventories.facility_name',
+        'germinatingQuantity',
+        'notReadyQuantity',
+        'readyQuantity',
+        'totalQuantity',
+      ],
+      search: {
+        operation: 'and',
+        children: [
+          {
+            operation: 'field',
+            field: 'organization_id',
+            values: [organization.id],
           },
-          count: 1000,
-        });
+        ],
+      },
+      count: 0,
+    };
 
-        if (activeRequests) {
-          setSearchResults(apiResponse);
-        }
+    if (debouncedSearchTerm) {
+      const searchValueChildren: FieldNodePayload[] = [];
+      const scientificNameNode: FieldNodePayload = {
+        operation: 'field',
+        field: 'species_scientificName',
+        type: 'Fuzzy',
+        values: [debouncedSearchTerm],
       };
+      searchValueChildren.push(scientificNameNode);
 
-      populateResults();
+      const commonNameNode: FieldNodePayload = {
+        operation: 'field',
+        field: 'species_commonName',
+        type: 'Fuzzy',
+        values: [debouncedSearchTerm],
+      };
+      searchValueChildren.push(commonNameNode);
+
+      const facilityNameNode: FieldNodePayload = {
+        operation: 'field',
+        field: 'facilityInventories.facility_name',
+        type: 'Fuzzy',
+        values: [debouncedSearchTerm],
+      };
+      searchValueChildren.push(facilityNameNode);
+
+      params.search.children.push({
+        operation: 'or',
+        children: searchValueChildren,
+      });
     }
 
-    return () => {
-      activeRequests = false;
-    };
-  }, [debouncedSearchTerm, organization]);
+    if (record.facilityId !== undefined) {
+      const newNode: FieldNodePayload = {
+        operation: 'field',
+        field: 'facilityInventories.facility_id',
+        type: 'Exact',
+        values: [record.facilityId],
+      };
+      params.search.children.push(newNode);
+    }
+
+    return params;
+  }, [record, debouncedSearchTerm, organization]);
+
+  const onApplyFilters = useCallback(async () => {
+    const params: SearchNodePayload = getParams();
+    const requestId = Math.random().toString();
+    setRequestId('searchInventory', requestId);
+    const apiSearchResults = await search(params);
+    if (params.search.children.length === 1) {
+      setUnfilteredInventory(apiSearchResults);
+    }
+    if (getRequestId('searchInventory') === requestId) {
+      setSearchResults(apiSearchResults);
+    }
+  }, [getParams]);
+
+  useEffect(() => {
+    onApplyFilters();
+  }, [record, onApplyFilters]);
 
   return (
     <TfMain>
@@ -147,14 +183,16 @@ export default function Inventory(props: InventoryProps): JSX.Element {
         </Grid>
         <PageSnackbar />
         {isOnboarded ? (
-          searchResults && searchResults.length > 0 ? (
+          unfilteredInventory && unfilteredInventory.length > 0 ? (
             <InventoryTable
               organization={organization}
-              results={searchResults}
+              results={searchResults || []}
               temporalSearchValue={temporalSearchValue}
               setTemporalSearchValue={setTemporalSearchValue}
+              record={record}
+              setRecord={setRecord}
             />
-          ) : searchResults === null ? (
+          ) : unfilteredInventory === null ? (
             <CircularProgress />
           ) : (
             <Container maxWidth={false} className={classes.mainContainer}>

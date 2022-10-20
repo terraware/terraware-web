@@ -142,6 +142,7 @@ export default function CreateInventory(props: CreateInventoryProps): JSX.Elemen
                 record={record}
                 setRecord={setRecord}
                 validate={validateFields}
+                label={strings.RECEIVING_NURSERY_REQUIRED}
               />
             </Grid>
             <Grid item xs={gridSize()} sx={marginTop} paddingLeft={paddingSeparator}>

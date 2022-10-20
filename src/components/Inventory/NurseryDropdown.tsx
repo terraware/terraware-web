@@ -8,6 +8,7 @@ import { getAllNurseries } from 'src/utils/organization';
 interface NurseryDropdownProps<T extends AccessionPostRequestBody> {
   organization: ServerOrganization;
   record: T;
+  label: string;
   setRecord: React.Dispatch<React.SetStateAction<T>>;
   disabled?: boolean;
   validate?: boolean;
@@ -16,7 +17,7 @@ interface NurseryDropdownProps<T extends AccessionPostRequestBody> {
 export default function NurseryDropdown<T extends AccessionPostRequestBody>(
   props: NurseryDropdownProps<T>
 ): JSX.Element {
-  const { organization, setRecord, validate, record } = props;
+  const { organization, label, setRecord, validate, record } = props;
 
   const onChangeHandler = (facilityId: string) => {
     setRecord((previousRecord: T): T => {
@@ -30,7 +31,7 @@ export default function NurseryDropdown<T extends AccessionPostRequestBody>(
   return (
     <Dropdown
       id='facilityId'
-      label={strings.RECEIVING_NURSERY_REQUIRED}
+      label={label}
       selectedValue={record.facilityId?.toString()}
       options={getAllNurseries(organization).map((nursery) => ({ label: nursery.name, value: nursery.id.toString() }))}
       onChange={onChangeHandler}
