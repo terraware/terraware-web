@@ -9,8 +9,9 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 import { APP_PATHS } from 'src/constants';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 import InventoryCellRenderer from './InventoryCellRenderer';
-import InventoryFilters from './InventoryFiltersPopover';
+import InventoryFilters, { InventoryFiltersType } from './InventoryFiltersPopover';
 import Pill from '../Species/Pill';
+import PageSnackbar from 'src/components/PageSnackbar';
 import { getAllNurseries } from 'src/utils/organization';
 
 const columns: TableColumnType[] = [
@@ -28,16 +29,12 @@ interface InventoryTableProps {
   results: SearchResponseElement[];
   temporalSearchValue: string;
   setTemporalSearchValue: React.Dispatch<React.SetStateAction<string>>;
-  record: InventoryFiltersType;
-  setRecord: React.Dispatch<React.SetStateAction<InventoryFiltersType>>;
+  filters: InventoryFiltersType;
+  setFilters: React.Dispatch<React.SetStateAction<InventoryFiltersType>>;
 }
 
-export type InventoryFiltersType = {
-  facilityId?: number;
-};
-
 export default function InventoryTable(props: InventoryTableProps): JSX.Element {
-  const { organization, results, setTemporalSearchValue, temporalSearchValue, record, setRecord } = props;
+  const { organization, results, setTemporalSearchValue, temporalSearchValue, filters, setFilters } = props;
   const { isMobile } = useDeviceInfo();
   const history = useHistory();
 
@@ -56,12 +53,21 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
     setTemporalSearchValue(value as string);
   };
 
-  const getFilteredNurseryName = () => {
-    const found = getAllNurseries(organization).find((n) => n.id.toString() === record.facilityId?.toString());
+  const getFilteredNurseryName = (facilityId: number) => {
+    const found = getAllNurseries(organization).find((n) => n.id.toString() === facilityId.toString());
     if (found) {
       return found.name;
     }
     return '';
+  };
+
+  const removeFilter = (id: number) => {
+    setFilters((prev) => {
+      const { facilityIds } = prev;
+      return {
+        facilityIds: facilityIds?.filter((val) => val !== id) || [],
+      };
+    });
   };
 
   return (
@@ -80,6 +86,9 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
             />
           ))}
       </Grid>
+      <Grid item xs={12}>
+        <PageSnackbar />
+      </Grid>
       <Grid item xs={12} marginTop={3} display='flex'>
         <Box width='300px'>
           <TextField
@@ -94,13 +103,18 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
             onClickRightIcon={clearSearch}
           />
         </Box>
-        <InventoryFilters filters={record} setFilters={setRecord} organization={organization} />
+        <InventoryFilters filters={filters} setFilters={setFilters} organization={organization} />
       </Grid>
 
       <Grid xs={12} display='flex' paddingLeft={3} paddingTop={1}>
-        {record.facilityId && (
-          <Pill filter={strings.NURSERY} value={getFilteredNurseryName()} onRemoveFilter={() => setRecord({})} />
-        )}
+        {filters.facilityIds?.map((id) => (
+          <Pill
+            key={id}
+            filter={strings.NURSERY}
+            value={getFilteredNurseryName(id)}
+            onRemoveFilter={() => removeFilter(id)}
+          />
+        ))}
       </Grid>
       <Grid item xs={12}>
         <div>

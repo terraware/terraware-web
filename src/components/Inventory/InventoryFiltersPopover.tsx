@@ -1,4 +1,4 @@
-import { Grid, IconButton, Popover } from '@mui/material';
+import { Grid, IconButton, Popover, Theme, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useEffect, useState } from 'react';
 import Icon from 'src/components/common/icon/Icon';
@@ -6,10 +6,19 @@ import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
 import useForm from 'src/utils/useForm';
 import Button from '../common/button/Button';
-import { InventoryFiltersType } from './InventoryTable';
-import NurseryDropdown from './NurseryDropdown';
+import { Checkbox } from '@terraware/web-components';
+import { getAllNurseries } from 'src/utils/organization';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
-const useStyles = makeStyles(() => ({
+export type InventoryFiltersType = {
+  facilityIds?: number[];
+};
+
+interface StyleProps {
+  isMobile: boolean;
+}
+
+const useStyles = makeStyles((theme: Theme) => ({
   iconContainer: {
     borderRadius: 0,
     fontSize: '16px',
@@ -28,7 +37,7 @@ const useStyles = makeStyles(() => ({
     },
   },
   popover: {
-    width: '478px',
+    width: (props: StyleProps) => (props.isMobile ? '350px' : '478px'),
     paddingTop: 0,
     borderRadius: '8px',
   },
@@ -47,9 +56,11 @@ const useStyles = makeStyles(() => ({
     padding: '16px 24px',
     display: 'flex',
     justifyContent: 'end',
+    flexDirection: (props: StyleProps) => (props.isMobile ? 'column-reverse' : 'row'),
 
     '& button+button': {
-      marginLeft: '8px',
+      marginLeft: (props: StyleProps) => (props.isMobile ? 0 : theme.spacing(1)),
+      marginBottom: (props: StyleProps) => (props.isMobile ? theme.spacing(1) : 0),
     },
   },
 }));
@@ -65,7 +76,9 @@ export default function InventoryFiltersPopover({
   setFilters,
   organization,
 }: InventoryFiltersPopoverProps): JSX.Element {
-  const classes = useStyles();
+  const theme = useTheme();
+  const { isMobile } = useDeviceInfo();
+  const classes = useStyles({ isMobile });
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [temporalRecord, setTemporalRecord] = useForm<InventoryFiltersType>({});
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -81,7 +94,7 @@ export default function InventoryFiltersPopover({
 
   const onReset = () => {
     setFilters({
-      facilityId: undefined,
+      facilityIds: undefined,
     });
     handleClose();
   };
@@ -89,6 +102,35 @@ export default function InventoryFiltersPopover({
   const onDone = () => {
     setFilters(temporalRecord);
     handleClose();
+  };
+
+  const addFacility = (id: number) => {
+    setTemporalRecord((prev) => {
+      return {
+        facilityIds: [...(prev.facilityIds || []), id],
+      };
+    });
+  };
+
+  const removeFacility = (id: number) => {
+    setTemporalRecord((prev) => {
+      const { facilityIds } = prev;
+      return {
+        facilityIds: facilityIds?.filter((val) => val.toString() !== id.toString()) || [],
+      };
+    });
+  };
+
+  const onChange = (id: string, value: any) => {
+    if (value) {
+      addFacility(Number(id));
+    } else {
+      removeFacility(Number(id));
+    }
+  };
+
+  const hasFilter = (id: number) => {
+    return temporalRecord.facilityIds?.some((n) => n.toString() === id.toString()) === true;
   };
 
   return (
@@ -114,14 +156,20 @@ export default function InventoryFiltersPopover({
         <div className={classes.popover}>
           <div className={classes.title}>{strings.FILTERS}</div>
           <Grid container spacing={2} className={classes.container}>
-            <Grid item xs={12}>
-              <NurseryDropdown
-                organization={organization}
-                record={temporalRecord}
-                setRecord={setTemporalRecord}
-                label={strings.NURSERY}
-              />
-            </Grid>
+            <Typography fontSize='16px' paddingLeft={theme.spacing(2)} color='#708284'>
+              {strings.NURSERIES}
+            </Typography>
+            {getAllNurseries(organization).map((n) => (
+              <Grid item xs={12} key={n.id}>
+                <Checkbox
+                  id={n.id.toString()}
+                  name={n.name}
+                  label={n.name}
+                  value={hasFilter(n.id)}
+                  onChange={onChange}
+                />
+              </Grid>
+            ))}
           </Grid>
           <div className={classes.footer}>
             <Button label='Reset' onClick={onReset} size='medium' priority='secondary' type='passive' />
