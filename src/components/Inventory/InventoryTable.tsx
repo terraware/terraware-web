@@ -8,7 +8,7 @@ import { useHistory } from 'react-router-dom';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import { APP_PATHS } from 'src/constants';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
-import InventoryCellRenderer from './TableCellRenderer';
+import InventoryCellRenderer from './InventoryCellRenderer';
 import InventoryFilters from './InventoryFiltersPopover';
 import Pill from '../Species/Pill';
 import { getAllNurseries } from 'src/utils/organization';

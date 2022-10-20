@@ -788,6 +788,10 @@ const strings = new LocalizedStrings({
     READY_QUANTITY: 'Ready Quantity',
     TOTAL_WITHDRAWN: 'Total Withdrawn',
     LOSS_RATE: 'Loss Rate',
+    SEEDLINGS_BATCHES: 'Seedlings Batches',
+    ADD_BATCH: 'Add Batch',
+    SEEDLING_BATCH: 'Seedling Batch',
+    EST_READY_DATE: 'Est. Ready Date',
   },
 });
 
