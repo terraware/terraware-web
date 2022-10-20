@@ -48,7 +48,6 @@ export default function Inventory(props: InventoryProps): JSX.Element {
   const { organization, hasNurseries, hasSpecies } = props;
   const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>();
   const [unfilteredInventory, setUnfilteredInventory] = useState<SearchResponseElement[] | null>(null);
-  const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>(null);
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
   const [record, setRecord] = useForm<InventoryFiltersType>({});
@@ -193,7 +192,7 @@ export default function Inventory(props: InventoryProps): JSX.Element {
               record={record}
               setRecord={setRecord}
             />
-          ) : searchResults === null ? (
+          ) : unfilteredInventory === null ? (
             <CircularProgress />
           ) : (
             <Container maxWidth={false} className={classes.mainContainer}>
