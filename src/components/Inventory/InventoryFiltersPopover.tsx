@@ -1,4 +1,4 @@
-import { Grid, IconButton, Popover, Theme } from '@mui/material';
+import { Grid, IconButton, Popover, Theme, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useEffect, useState } from 'react';
 import Icon from 'src/components/common/icon/Icon';
@@ -76,6 +76,7 @@ export default function InventoryFiltersPopover({
   setFilters,
   organization,
 }: InventoryFiltersPopoverProps): JSX.Element {
+  const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const classes = useStyles({ isMobile });
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -155,6 +156,9 @@ export default function InventoryFiltersPopover({
         <div className={classes.popover}>
           <div className={classes.title}>{strings.FILTERS}</div>
           <Grid container spacing={2} className={classes.container}>
+            <Typography fontSize='16px' paddingLeft={theme.spacing(2)} color='#708284'>
+              {strings.NURSERIES}
+            </Typography>
             {getAllNurseries(organization).map((n) => (
               <Grid item xs={12} key={n.id}>
                 <Checkbox
