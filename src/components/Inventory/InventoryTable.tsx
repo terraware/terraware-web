@@ -54,7 +54,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
   };
 
   const getFilteredNurseryName = (facilityId: number) => {
-    const found = getAllNurseries(organization).find((n) => n.toString() === facilityId.toString());
+    const found = getAllNurseries(organization).find((n) => n.id.toString() === facilityId.toString());
     if (found) {
       return found.name;
     }
