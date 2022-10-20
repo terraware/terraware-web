@@ -144,21 +144,32 @@ export default function Inventory(props: InventoryProps): JSX.Element {
       searchValueChildren.push(facilityNameNode);
     }
 
-    filters.facilityIds?.forEach((id) => {
-      const newNode: FieldNodePayload = {
+    let nurseryFilter: FieldNodePayload;
+    if (filters.facilityIds && filters.facilityIds.length > 0) {
+      nurseryFilter = {
         operation: 'field',
         field: 'facilityInventories.facility_id',
         type: 'Exact',
-        values: [id],
+        values: filters.facilityIds.map((id) => id.toString()),
       };
-      searchValueChildren.push(newNode);
-    });
+    }
 
     if (searchValueChildren.length) {
-      params.search.children.push({
+      const searchValueNodes: FieldNodePayload = {
         operation: 'or',
         children: searchValueChildren,
-      });
+      };
+
+      if (nurseryFilter) {
+        params.search.children.push({
+          operation: 'and',
+          children: [nurseryFilter, searchValueNodes],
+        });
+      } else {
+        params.search.children.push(searchValueNodes);
+      }
+    } else if (nurseryFilter) {
+      params.search.children.push(nurseryFilter);
     }
 
     return params;

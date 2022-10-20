@@ -10,9 +10,9 @@ import { APP_PATHS } from 'src/constants';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 import InventoryCellRenderer from './InventoryCellRenderer';
 import InventoryFilters, { InventoryFiltersType } from './InventoryFiltersPopover';
-import Pill from '../Species/Pill';
+import Pill from 'src/components/Pill';
 import PageSnackbar from 'src/components/PageSnackbar';
-import { getAllNurseries } from 'src/utils/organization';
+import { getNurseryName, removeFilter } from './FilterUtils';
 
 const columns: TableColumnType[] = [
   { key: 'species_scientificName', name: strings.SPECIES, type: 'string' },
@@ -51,23 +51,6 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
 
   const onChangeSearch = (id: string, value: unknown) => {
     setTemporalSearchValue(value as string);
-  };
-
-  const getFilteredNurseryName = (facilityId: number) => {
-    const found = getAllNurseries(organization).find((n) => n.id.toString() === facilityId.toString());
-    if (found) {
-      return found.name;
-    }
-    return '';
-  };
-
-  const removeFilter = (id: number) => {
-    setFilters((prev) => {
-      const { facilityIds } = prev;
-      return {
-        facilityIds: facilityIds?.filter((val) => val !== id) || [],
-      };
-    });
   };
 
   return (
@@ -111,8 +94,8 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
           <Pill
             key={id}
             filter={strings.NURSERY}
-            value={getFilteredNurseryName(id)}
-            onRemoveFilter={() => removeFilter(id)}
+            value={getNurseryName(id, organization)}
+            onRemoveFilter={() => removeFilter(id, setFilters)}
           />
         ))}
       </Grid>
