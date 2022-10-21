@@ -335,7 +335,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
         const isV2 = featureEnabled('V2 Accessions');
         if (!isV2 && allValues?.state?.values) {
           allValues.state.values = allValues.state.values.filter(
-            (state) => ['Awaiting Processing', 'Used Up'].indexOf(state) === -1,
+            (state) => ['Awaiting Processing', 'Used Up'].indexOf(state) === -1
           );
         }
 
@@ -372,7 +372,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
       const seedCollectionLocation = {
         pathname: (isV2 ? APP_PATHS.ACCESSIONS2_ITEM : APP_PATHS.ACCESSIONS_ITEM).replace(
           ':accessionId',
-          row.id as string,
+          row.id as string
         ),
         // eslint-disable-next-line no-restricted-globals
         state: { from: location.pathname },
@@ -436,7 +436,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
         setDisplayColumnNames(newOrder);
       }
     },
-    [displayColumnNames, setDisplayColumnNames],
+    [displayColumnNames, setDisplayColumnNames]
   );
 
   const handleViewCollections = () => {

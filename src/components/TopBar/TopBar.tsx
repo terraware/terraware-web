@@ -42,10 +42,7 @@ export default function TopBar(props: TopBarProps): JSX.Element {
   const classes = useStyles({ isDesktop, fullWidth: props.fullWidth });
 
   return (
-    <AppBar
-      position='fixed'
-      className={classes.appBar}
-    >
+    <AppBar position='fixed' className={classes.appBar}>
       <Toolbar className={isDesktop ? classes.right : classes.mobile}>
         <div className={classes.flex}>{props.children}</div>
       </Toolbar>

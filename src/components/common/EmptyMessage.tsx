@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     fontWeight: 500,
     color: theme.palette.TwClrTxt,
     lineHeight: '20px',
-  }
+  },
 }));
 
 type RowItemProps = {
@@ -85,12 +85,8 @@ export default function EmptyMessage(props: EmptyMessageProps): JSX.Element {
           {rowItems.map((rowItem, index) => (
             <div className={classes.rowItem} key={index}>
               <div className={classes.rowItemInfo}>
-                <Typography className={classes.rowItemInfoTitle}>
-                  {rowItem.title}
-                </Typography>
-                <Typography className={classes.rowItemInfoText}>
-                  {rowItem.text}
-                </Typography>
+                <Typography className={classes.rowItemInfoTitle}>{rowItem.title}</Typography>
+                <Typography className={classes.rowItemInfoText}>{rowItem.text}</Typography>
               </div>
               <Button label={rowItem.buttonText} onClick={rowItem.onClick} />
             </div>

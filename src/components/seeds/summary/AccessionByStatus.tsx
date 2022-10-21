@@ -36,12 +36,8 @@ export default function AccessionByStatus({ label, status, quantity }: Props): J
       }}
     >
       <Box textAlign='center'>
-        <Typography className={classes.quantity}>
-          {quantity}
-        </Typography>
-        <Typography className={classes.label}>
-          {label}
-        </Typography>
+        <Typography className={classes.quantity}>{quantity}</Typography>
+        <Typography className={classes.label}>{label}</Typography>
       </Box>
     </Link>
   );

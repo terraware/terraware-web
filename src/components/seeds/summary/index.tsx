@@ -145,9 +145,7 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
                 <Box className={classes.emptyStateContainer}>
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Icon name='seedbankNav' className={classes.messageIcon} size='large' />
-                    <Typography className={classes.dashboardMessageText}>
-                      {strings.DASHBOARD_MESSAGE}
-                    </Typography>
+                    <Typography className={classes.dashboardMessageText}>{strings.DASHBOARD_MESSAGE}</Typography>
                   </Box>
                   <Button label={strings.GET_STARTED} onClick={() => history.push(APP_PATHS.ACCESSIONS)} />
                 </Box>
@@ -195,9 +193,7 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
                 </Grid>
                 <Grid item xs={12}>
                   <Box display='flex' alignContent='center' justifyContent='space-between' alignItems='center'>
-                    <Typography className={classes.accessionByStatusText}>
-                      {strings.ACCESSION_BY_STATUS}
-                    </Typography>
+                    <Typography className={classes.accessionByStatusText}>{strings.ACCESSION_BY_STATUS}</Typography>
                     <Link className={classes.accessionsLink} to={`${APP_PATHS.ACCESSIONS}?stage=}`}>
                       {strings.SEE_ALL_ACCESSIONS}
                     </Link>
