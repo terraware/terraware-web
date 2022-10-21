@@ -220,45 +220,6 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
             />
           ))}
         </Grid>
-        {selectedRows.length > 0 && (
-          <Box
-            sx={{
-              backgroundColor: '#F2F4F5',
-              display: 'flex',
-              flexDirection: 'row',
-              padding: `${theme.spacing(1)} ${theme.spacing(2)}`,
-              borderRadius: '4px',
-              alignSelf: 'stretch',
-              flexGrow: 0,
-              marginTop: theme.spacing(2),
-              marginBottom: theme.spacing(2),
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}
-          >
-            <Typography
-              sx={{
-                fontSize: '16px',
-                fontWeight: 400,
-                color: '#3A4445',
-              }}
-            >
-              {selectedRows.length === 1
-                ? strings.ROW_SELECTED
-                : strings.formatString(strings.ROWS_SELECTED, selectedRows.length)}
-            </Typography>
-            <Box>
-              <Button
-                id='delete-batch'
-                label={strings.DELETE}
-                onClick={() => setOpenDeleteModal(true)}
-                size='small'
-                type='destructive'
-                priority='secondary'
-              />
-            </Box>
-          </Box>
-        )}
         <Box marginTop={theme.spacing(2)}>
           <Table
             id='batches-table'
@@ -271,6 +232,10 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
             setSelectedRows={setSelectedRows}
             showCheckbox={true}
             isClickable={() => true}
+            showTopBar={true}
+            topBarButtons={[
+              { buttonType: 'destructive', buttonText: strings.DELETE, onButtonClick: () => setOpenDeleteModal(true) },
+            ]}
           />
         </Box>
       </Box>
