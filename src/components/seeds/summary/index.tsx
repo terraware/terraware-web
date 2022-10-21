@@ -1,4 +1,4 @@
-import { Container, Grid, CircularProgress, Box, Typography } from '@mui/material';
+import { Container, Grid, CircularProgress, Box, Typography, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import Cookies from 'cookies-js';
 import React, { useEffect, useState } from 'react';
@@ -18,9 +18,37 @@ import Icon from 'src/components/common/icon/Icon';
 import AccessionByStatus from './AccessionByStatus';
 import { Link, useHistory } from 'react-router-dom';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme: Theme) => ({
+  accessionByStatusText: {
+    fontSize: '20px',
+    color: theme.palette.TwClrTxt,
+    paddingBottom: '8px',
+    paddingLeft: '28px',
+  },
+  accessionsLink: {
+    textDecoration: 'none',
+    fontWeight: 500,
+    color: theme.palette.TwClrTxtBrand,
+    marginRight: '12px',
+  },
+  dashboardMessageText: {
+    color: theme.palette.TwClrTxt,
+    size: '20px',
+    paddingLeft: 1,
+  },
+  emptyStateContainer: {
+    background: theme.palette.TwClrBgSecondary,
+    borderRadius: '14px',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: theme.spacing(3, 4),
+  },
   mainContainer: {
     padding: '32px 0',
+  },
+  messageIcon: {
+    fill: theme.palette.TwClrIcn,
   },
   paper: {
     display: 'flex',
@@ -32,15 +60,6 @@ const useStyles = makeStyles(() => ({
     position: 'fixed',
     top: '50%',
     left: 'calc(50% + 100px)',
-  },
-  messageIcon: {
-    fill: '#3A4445',
-  },
-  accessionsLink: {
-    textDecoration: 'none',
-    fontWeight: 500,
-    color: '#0067C8',
-    marginRight: '12px',
   },
 }));
 
@@ -123,19 +142,10 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
           <Grid container spacing={3}>
             {isEmptyState === true && (
               <Grid item xs={12}>
-                <Box
-                  sx={{
-                    background: '#F2F4F5',
-                    borderRadius: '14px',
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    padding: (theme) => theme.spacing(3, 4),
-                  }}
-                >
+                <Box className={classes.emptyStateContainer}>
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Icon name='seedbankNav' className={classes.messageIcon} size='large' />
-                    <Typography sx={{ color: '#000000', size: '20px', paddingLeft: 1 }}>
+                    <Typography className={classes.dashboardMessageText}>
                       {strings.DASHBOARD_MESSAGE}
                     </Typography>
                   </Box>
@@ -185,7 +195,7 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
                 </Grid>
                 <Grid item xs={12}>
                   <Box display='flex' alignContent='center' justifyContent='space-between' alignItems='center'>
-                    <Typography fontSize='20px' color='#000000' paddingBottom='8px' paddingLeft='28px'>
+                    <Typography className={classes.accessionByStatusText}>
                       {strings.ACCESSION_BY_STATUS}
                     </Typography>
                     <Link className={classes.accessionsLink} to={`${APP_PATHS.ACCESSIONS}?stage=}`}>

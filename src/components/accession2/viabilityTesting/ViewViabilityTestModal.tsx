@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Box, Grid, Typography } from '@mui/material';
+import { Box, Grid, Theme, Typography } from '@mui/material';
 import { Button, DialogBox, IconTooltip } from '@terraware/web-components';
 import { Accession2 } from 'src/api/accessions2/accession';
 import strings from 'src/strings';
@@ -15,6 +15,18 @@ import TooltipLearnMoreModal, {
   LearnMoreModalContentTreatment,
   TooltipLearnMoreModalData,
 } from 'src/components/TooltipLearnMoreModal';
+import { makeStyles } from '@mui/styles';
+
+const useStyles = makeStyles((theme: Theme) => ({
+  dialogContainer: {
+    textAlign: 'left',
+    color: theme.palette.TwClrTxt,
+    fontSize: '14px',
+  },
+  titleStyle: {
+    color: theme.palette.TwClrTxtSecondary,
+  },
+}));
 
 export interface ViewViabilityTestModalProps {
   open: boolean;
@@ -27,13 +39,14 @@ export interface ViewViabilityTestModalProps {
 }
 
 export default function ViewViabilityTestModal(props: ViewViabilityTestModalProps): JSX.Element {
+  const classes = useStyles();
   const { onClose, open, accession, isEditable, viabilityTest, onEdit, reload } = props;
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
   const { isMobile } = useDeviceInfo();
 
   const [tooltipLearnMoreModalOpen, setTooltipLearnMoreModalOpen] = useState(false);
   const [tooltipLearnMoreModalData, setTooltipLearnMoreModalData] = useState<TooltipLearnMoreModalData | undefined>(
-    undefined
+    undefined,
   );
   const openTooltipLearnMoreModal = (data: TooltipLearnMoreModalData) => {
     setTooltipLearnMoreModalData(data);
@@ -49,10 +62,6 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
 
   const openEdit = () => {
     onEdit();
-  };
-
-  const titleStyle = {
-    color: '#859799',
   };
 
   const smallColumn = isMobile ? 6 : 4;
@@ -86,7 +95,7 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
         open={tooltipLearnMoreModalOpen}
         title={tooltipLearnMoreModalData?.title}
       />
-      <Grid container item xs={12} spacing={2} textAlign='left' color={'#000000'} fontSize='14px'>
+      <Grid container item xs={12} spacing={2} className={classes.dialogContainer}>
         <Grid item xs={12} display='flex'>
           <Grid xs={isEditable ? 6 : 12}>
             <Typography fontSize='20px'>
@@ -113,13 +122,13 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
         </Grid>
         <Grid item xs={12} display='flex'>
           <Grid xs={smallColumn}>
-            <Grid xs={12} sx={titleStyle}>
+            <Grid xs={12} className={classes.titleStyle}>
               {strings.TEST_METHOD}
             </Grid>
             <Grid xs={12}>{getFullTestType(viabilityTest.testType)}</Grid>
           </Grid>
           <Grid xs={smallColumn}>
-            <Grid xs={12} sx={titleStyle}>
+            <Grid xs={12} className={classes.titleStyle}>
               {strings.SEED_TYPE}
               <IconTooltip
                 title={
@@ -141,7 +150,7 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
           </Grid>
           {!isMobile && viabilityTest.testType === 'Cut' && (
             <Grid xs={smallColumn}>
-              <Grid xs={12} sx={titleStyle}>
+              <Grid xs={12} className={classes.titleStyle}>
                 {strings.STAFF}
               </Grid>
               <Grid xs={12}>{viabilityTest.withdrawnByName}</Grid>
@@ -149,7 +158,7 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
           )}
           {!isMobile && viabilityTest.testType !== 'Cut' && (
             <Grid xs={smallColumn}>
-              <Grid xs={12} sx={titleStyle}>
+              <Grid xs={12} className={classes.titleStyle}>
                 {strings.SUBSTRATE}
                 <IconTooltip
                   title={
@@ -174,7 +183,7 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
         <Grid item xs={12} display='flex'>
           {isMobile && viabilityTest.testType !== 'Cut' && (
             <Grid xs={smallColumn}>
-              <Grid xs={12} sx={titleStyle}>
+              <Grid xs={12} className={classes.titleStyle}>
                 {strings.SUBSTRATE}
                 <IconTooltip
                   title={
@@ -197,7 +206,7 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
           )}
           {viabilityTest.testType !== 'Cut' && (
             <Grid xs={smallColumn}>
-              <Grid xs={12} sx={titleStyle}>
+              <Grid xs={12} className={classes.titleStyle}>
                 {strings.TREATMENT}
                 <IconTooltip
                   title={
@@ -220,7 +229,7 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
           )}
           {!isMobile && viabilityTest.testType !== 'Cut' && (
             <Grid xs={smallColumn}>
-              <Grid xs={12} sx={titleStyle}>
+              <Grid xs={12} className={classes.titleStyle}>
                 {strings.STAFF}
               </Grid>
               <Grid xs={12}>{viabilityTest.withdrawnByName}</Grid>
@@ -230,7 +239,7 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
         {isMobile && (
           <Grid item xs={12} display='flex'>
             <Grid xs={smallColumn}>
-              <Grid xs={12} sx={titleStyle}>
+              <Grid xs={12} className={classes.titleStyle}>
                 {strings.STAFF}
               </Grid>
               <Grid xs={12}>{viabilityTest.withdrawnByName}</Grid>
@@ -244,13 +253,13 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
         >
           <Grid xs={12} display='flex'>
             <Grid xs={smallColumn}>
-              <Grid xs={12} sx={titleStyle}>
+              <Grid xs={12} className={classes.titleStyle}>
                 {strings.START_DATE}
               </Grid>
               <Grid xs={12}>{viabilityTest.startDate}</Grid>
             </Grid>
             <Grid xs={smallColumn}>
-              <Grid xs={12} sx={titleStyle}>
+              <Grid xs={12} className={classes.titleStyle}>
                 {viabilityTest.testType === 'Cut' ? strings.NUMBER_OF_SEEDS_FILLED_V2 : strings.NUMBER_OF_SEEDS_TESTED}
               </Grid>
               <Grid xs={12}>
@@ -262,20 +271,20 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
             <>
               <Grid xs={12} display='flex' paddingTop={2}>
                 <Grid xs={smallColumn}>
-                  <Grid xs={12} sx={titleStyle}>
+                  <Grid xs={12} className={classes.titleStyle}>
                     {strings.NUMBER_OF_SEEDS_COMPROMISED_V2}
                   </Grid>
                   <Grid xs={12}>{viabilityTest.seedsCompromised}</Grid>
                 </Grid>
                 <Grid xs={smallColumn}>
-                  <Grid xs={12} sx={titleStyle}>
+                  <Grid xs={12} className={classes.titleStyle}>
                     {strings.NUMBER_OF_SEEDS_EMPTY_V2}
                   </Grid>
                   <Grid xs={12}>{viabilityTest.seedsEmpty}</Grid>
                 </Grid>
               </Grid>
               <Grid xs={12} paddingTop={2}>
-                <Grid xs={12} sx={titleStyle}>
+                <Grid xs={12} className={classes.titleStyle}>
                   #{strings.TOTAL_SEEDS_TESTED}
                 </Grid>
                 <Grid xs={12}>{viabilityTest.seedsTested}</Grid>
@@ -286,13 +295,13 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
             return (
               <Grid xs={12} key={`observation-${index}`} display='flex' paddingTop={1}>
                 <Grid xs={smallColumn}>
-                  <Grid xs={12} sx={titleStyle}>
+                  <Grid xs={12} className={classes.titleStyle}>
                     {strings.CHECK_DATE}
                   </Grid>
                   <Grid xs={12}>{testResult.recordingDate}</Grid>
                 </Grid>
                 <Grid xs={smallColumn}>
-                  <Grid xs={12} sx={titleStyle}>
+                  <Grid xs={12} className={classes.titleStyle}>
                     {strings.NUMBER_OF_SEEDS_GERMINATED}
                   </Grid>
                   <Grid xs={12}>{testResult.seedsGerminated}</Grid>
@@ -307,7 +316,7 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
           </Grid>
         ) : null}
         <Grid item xs={12}>
-          <Grid xs={12} sx={titleStyle}>
+          <Grid xs={12} className={classes.titleStyle}>
             {strings.NOTES}
           </Grid>
           <Grid xs={12}>{viabilityTest.notes}</Grid>

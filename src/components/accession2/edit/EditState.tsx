@@ -1,14 +1,19 @@
 import React from 'react';
 import strings from 'src/strings';
-import { Box, Grid, Typography } from '@mui/material';
+import { Box, Grid, Theme, Typography } from '@mui/material';
 import { Icon, Select } from '@terraware/web-components';
 import { Accession2 } from 'src/api/accessions2/accession';
 import { ACCESSION_2_STATES } from 'src/types/Accession';
 import { makeStyles } from '@mui/styles';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme: Theme) => ({
   messageIcon: {
-    fill: '#3A4445',
+    fill: theme.palette.TwClrIcn,
+  },
+  messageText: {
+    color: theme.palette.TwClrTxt,
+    fontSize: '14px',
+    paddingLeft: 0.5,
   },
 }));
 
@@ -72,7 +77,7 @@ export default function EditState(props: EditStateProps): JSX.Element {
         {stateChanged && (
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Icon name='warning' className={classes.messageIcon} size='large' />
-            <Typography sx={{ color: '#000000', fontSize: '14px', paddingLeft: 0.5 }}>
+            <Typography className={classes.messageText}>
               {strings.UPDATE_STATUS_WARNING}
             </Typography>
           </Box>
