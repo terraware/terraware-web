@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Box, Grid, Typography } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button, DialogBox, IconTooltip } from '@terraware/web-components';
 import { Accession2 } from 'src/api/accessions2/accession';
 import strings from 'src/strings';
@@ -27,6 +27,7 @@ export interface ViewViabilityTestModalProps {
 }
 
 export default function ViewViabilityTestModal(props: ViewViabilityTestModalProps): JSX.Element {
+  const theme = useTheme();
   const { onClose, open, accession, isEditable, viabilityTest, onEdit, reload } = props;
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
   const { isMobile } = useDeviceInfo();
@@ -52,7 +53,7 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
   };
 
   const titleStyle = {
-    color: '#859799',
+    color: theme.palette.TwClrTxtSecondary,
   };
 
   const smallColumn = isMobile ? 6 : 4;
@@ -86,7 +87,7 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
         open={tooltipLearnMoreModalOpen}
         title={tooltipLearnMoreModalData?.title}
       />
-      <Grid container item xs={12} spacing={2} textAlign='left' color={'#000000'} fontSize='14px'>
+      <Grid container item xs={12} spacing={2} textAlign='left' color={theme.palette.TwClrTxt} fontSize='14px'>
         <Grid item xs={12} display='flex'>
           <Grid xs={isEditable ? 6 : 12}>
             <Typography fontSize='20px'>

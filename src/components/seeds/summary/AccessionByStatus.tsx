@@ -1,4 +1,4 @@
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, useTheme } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { AccessionState } from 'src/api/types/accessions';
 import { APP_PATHS } from 'src/constants';
@@ -12,6 +12,7 @@ interface Props {
 
 export default function AccessionByStatus({ label, status, quantity }: Props): JSX.Element {
   const { isMobile } = useDeviceInfo();
+  const theme = useTheme();
   return (
     <Link
       id={`update-${status}`}
@@ -21,15 +22,15 @@ export default function AccessionByStatus({ label, status, quantity }: Props): J
         padding: '22px 10px 40px 10px',
         width: isMobile ? '100%' : '20%',
         borderRadius: '10px',
-        border: '1px solid #E5E5E5',
+        border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
         margin: '12px',
       }}
     >
       <Box textAlign='center'>
-        <Typography color='#0067C8' fontSize='36px'>
+        <Typography color={theme.palette.TwClrTxtBrand} fontSize='36px'>
           {quantity}
         </Typography>
-        <Typography color='#000000' fontSize='16px'>
+        <Typography color={theme.palette.TwClrTxt} fontSize='16px'>
           {label}
         </Typography>
       </Box>
