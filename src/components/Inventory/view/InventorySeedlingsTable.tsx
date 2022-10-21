@@ -190,7 +190,7 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
           </Box>
           <InventoryFilters filters={filters} setFilters={setFilters} organization={organization} />
         </Box>
-        <Grid xs={12} display='flex' paddingTop={1}>
+        <Grid item xs={12} display='flex' paddingTop={1}>
           {filters.facilityIds?.map((id) => (
             <Pill
               key={id}

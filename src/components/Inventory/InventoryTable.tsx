@@ -112,7 +112,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
         <InventoryFilters filters={filters} setFilters={setFilters} organization={organization} />
       </Grid>
 
-      <Grid xs={12} display='flex' paddingLeft={3} paddingTop={1}>
+      <Grid item xs={12} display='flex' paddingLeft={3} paddingTop={1}>
         {filters.facilityIds?.map((id) => (
           <Pill
             key={id}
