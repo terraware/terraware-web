@@ -1,6 +1,6 @@
 import React from 'react';
 import strings from 'src/strings';
-import { Box, Grid, Theme, Typography } from '@mui/material';
+import { Box, Grid, Theme, Typography, useTheme } from '@mui/material';
 import { Icon, Select } from '@terraware/web-components';
 import { Accession2 } from 'src/api/accessions2/accession';
 import { ACCESSION_2_STATES } from 'src/types/Accession';
@@ -9,11 +9,6 @@ import { makeStyles } from '@mui/styles';
 const useStyles = makeStyles((theme: Theme) => ({
   messageIcon: {
     fill: theme.palette.TwClrIcn,
-  },
-  messageText: {
-    color: theme.palette.TwClrTxt,
-    fontSize: '14px',
-    paddingLeft: 0.5,
   },
 }));
 
@@ -26,6 +21,7 @@ export interface EditStateProps {
 
 export default function EditState(props: EditStateProps): JSX.Element {
   const classes = useStyles();
+  const theme = useTheme();
   const { accession, record, onChange, error } = props;
 
   const getStatesForCurrentState = () => {
@@ -69,15 +65,17 @@ export default function EditState(props: EditStateProps): JSX.Element {
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          padding: (theme) => theme.spacing(2, 1),
-          marginTop: (theme) => theme.spacing(4),
+          padding: theme.spacing(2, 1),
+          marginTop: theme.spacing(4),
           height: '74px',
         }}
       >
         {stateChanged && (
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Icon name='warning' className={classes.messageIcon} size='large' />
-            <Typography className={classes.messageText}>{strings.UPDATE_STATUS_WARNING}</Typography>
+            <Typography sx={{ color: theme.palette.TwClrTxt, fontSize: '14px', paddingLeft: 0.5 }}>
+              {strings.UPDATE_STATUS_WARNING}
+            </Typography>
           </Box>
         )}
       </Box>

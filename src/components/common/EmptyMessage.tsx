@@ -1,5 +1,5 @@
 import { makeStyles } from '@mui/styles';
-import { Theme, Typography } from '@mui/material';
+import { Theme, Typography, useTheme } from '@mui/material';
 import Button from 'src/components/common/button/Button';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
@@ -41,18 +41,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     textAlign: 'left',
     marginBottom: (props: StyleProps) => (props.isMobile ? theme.spacing(2) : 0),
   },
-  rowItemInfoTitle: {
-    fontSize: '16px',
-    fontWeight: 500,
-    color: theme.palette.TwClrTxt,
-    lineHeight: '20px',
-  },
-  rowItemInfoText: {
-    fontSize: '14px',
-    fontWeight: 500,
-    color: theme.palette.TwClrTxt,
-    lineHeight: '20px',
-  },
 }));
 
 type RowItemProps = {
@@ -73,6 +61,7 @@ type EmptyMessageProps = {
 
 export default function EmptyMessage(props: EmptyMessageProps): JSX.Element {
   const { title, text, buttonText, onClick, className, rowItems } = props;
+  const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const classes = useStyles({ isMobile });
 
@@ -85,8 +74,12 @@ export default function EmptyMessage(props: EmptyMessageProps): JSX.Element {
           {rowItems.map((rowItem, index) => (
             <div className={classes.rowItem} key={index}>
               <div className={classes.rowItemInfo}>
-                <Typography className={classes.rowItemInfoTitle}>{rowItem.title}</Typography>
-                <Typography className={classes.rowItemInfoText}>{rowItem.text}</Typography>
+                <Typography fontSize='16px' fontWeight={500} color={theme.palette.TwClrTxt} lineHeight='20px'>
+                  {rowItem.title}
+                </Typography>
+                <Typography fontSize='14px' fontWeight={500} color={theme.palette.TwClrTxt} lineHeight='20px'>
+                  {rowItem.text}
+                </Typography>
               </div>
               <Button label={rowItem.buttonText} onClick={rowItem.onClick} />
             </div>

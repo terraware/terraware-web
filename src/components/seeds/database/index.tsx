@@ -79,14 +79,6 @@ const useStyles = makeStyles((theme: Theme) => ({
       backgroundColor: `${theme.palette.common.black}!important`,
     },
   },
-  exportRecordsText: {
-    color: theme.palette.TwClrTxtBrand,
-    paddingLeft: 1,
-  },
-  customizeTableColsText: {
-    color: theme.palette.TwClrTxtBrand,
-    paddingLeft: 1,
-  },
   addAccession: {
     marginLeft: theme.spacing(2),
     color: theme.palette.common.white,
@@ -143,13 +135,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   rightAligned: {
     textAlign: 'right',
-  },
-  searchResultsSummaryContainer: {
-    background: theme.palette.TwClrBgSecondary,
-    display: 'flex',
-    color: theme.palette.TwClrTxt,
-    padding: 2,
-    flexWrap: 'wrap',
   },
 }));
 
@@ -543,11 +528,15 @@ export default function Database(props: DatabaseProps): JSX.Element {
         <MenuList sx={{ padding: theme.spacing(2, 0) }}>
           <MenuItem onClick={() => onDownloadReport()} id='download-report' sx={{ padding: theme.spacing(1, 2) }}>
             <Icon name='export' />
-            <Typography className={classes.exportRecordsText}>{strings.EXPORT_RECORDS}</Typography>
+            <Typography color={theme.palette.TwClrTxtBrand} paddingLeft={1}>
+              {strings.EXPORT_RECORDS}
+            </Typography>
           </MenuItem>
           <MenuItem onClick={() => onOpenEditColumnsModal()} id='edit-columns' sx={{ padding: theme.spacing(1, 2) }}>
             <Icon name='iconColumns' />
-            <Typography className={classes.customizeTableColsText}>{strings.CUSTOMIZE_TABLE_COLUMNS}</Typography>
+            <Typography color={theme.palette.TwClrTxtBrand} paddingLeft={1}>
+              {strings.CUSTOMIZE_TABLE_COLUMNS}
+            </Typography>
           </MenuItem>
         </MenuList>
       </Popover>
@@ -655,7 +644,15 @@ export default function Database(props: DatabaseProps): JSX.Element {
 
                   {searchSummaryResults && (
                     <Grid item xs={12}>
-                      <Box className={classes.searchResultsSummaryContainer}>
+                      <Box
+                        sx={{
+                          background: theme.palette.TwClrBgSecondary,
+                          display: 'flex',
+                          color: theme.palette.TwClrTxt,
+                          padding: 2,
+                          flexWrap: 'wrap',
+                        }}
+                      >
                         <Typography>{strings.TOTAL}</Typography>
                         <Box sx={{ paddingRight: '12px', display: 'flex' }}>
                           <Typography sx={{ paddingLeft: '4px', fontWeight: 500 }}>
