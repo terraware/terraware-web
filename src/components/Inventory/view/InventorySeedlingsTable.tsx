@@ -12,6 +12,9 @@ import useForm from 'src/utils/useForm';
 import Pill from 'src/components/Pill';
 import InventoryFilters, { InventoryFiltersType } from '../InventoryFiltersPopover';
 import { getNurseryName, removeFilter } from '../FilterUtils';
+import DeleteBatchesModal from './DeleteBatchesModal';
+import { deleteBatch } from 'src/api/batch/batch';
+import useSnackbar from 'src/utils/useSnackbar';
 
 const columns = (editable: boolean): TableColumnType[] => {
   const defaultColumns: TableColumnType[] = [
@@ -47,8 +50,11 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
   const [temporalSearchValue, setTemporalSearchValue] = useState<string>('');
   const [batches, setBatches] = useState<SearchResponseElement[]>([]);
   const [filters, setFilters] = useForm<InventoryFiltersType>({});
+  const [selectedRows, setSelectedRows] = useState<{ [key: string]: unknown }[]>([]);
+  const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
   const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
   const editable = !isContributor(organization);
+  const snackbar = useSnackbar();
 
   useEffect(() => {
     let activeRequests = true;
@@ -133,6 +139,17 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
     setTemporalSearchValue(value as string);
   };
 
+  const deleteSelectedBatches = () => {
+    const promises = selectedRows.map((r) => deleteBatch(r.id as number));
+    Promise.allSettled(promises).then((results) => {
+      if (results.some((result) => result.status === 'rejected')) {
+        snackbar.toastError();
+      }
+      reloadData();
+      setOpenDeleteModal(false);
+    });
+  };
+
   const addBatch = () => {
     // TODO
     reloadData();
@@ -144,13 +161,13 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
     return;
   };
 
-  const onSelect = () => {
-    // TODO
-    return;
-  };
-
   return (
     <Grid item xs={12} sx={{ marginTop: theme.spacing(1) }}>
+      <DeleteBatchesModal
+        open={openDeleteModal}
+        onClose={() => setOpenDeleteModal(false)}
+        onSubmit={deleteSelectedBatches}
+      />
       <Box
         sx={{
           display: 'flex',
@@ -211,7 +228,14 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
             orderBy='batchNumber'
             Renderer={BatchesCellRenderer}
             reloadData={reloadData}
-            onSelect={onSelect}
+            selectedRows={selectedRows}
+            setSelectedRows={setSelectedRows}
+            showCheckbox={true}
+            isClickable={() => true}
+            showTopBar={true}
+            topBarButtons={[
+              { buttonType: 'destructive', buttonText: strings.DELETE, onButtonClick: () => setOpenDeleteModal(true) },
+            ]}
           />
         </Box>
       </Box>
