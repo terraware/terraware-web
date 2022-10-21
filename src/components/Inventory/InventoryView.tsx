@@ -34,6 +34,7 @@ export default function InventoryView(props: InventoryViewProps): JSX.Element {
   const { species, organization } = props;
   const { speciesId } = useParams<{ speciesId: string }>();
   const [inventorySpecies, setInventorySpecies] = useState<Species>();
+  const [modified, setModified] = useState<number>(Date.now());
 
   const classes = useStyles();
   const theme = useTheme();
@@ -76,8 +77,13 @@ export default function InventoryView(props: InventoryViewProps): JSX.Element {
         </Grid>
         {speciesId && (
           <Grid item xs={12} sx={{ display: 'flex', flexDirection: 'column' }}>
-            <InventorySummary speciesId={Number(speciesId)} />
-            <InventorySeedlingsTable speciesId={Number(speciesId)} organization={organization} />
+            <InventorySummary speciesId={Number(speciesId)} modified={modified} />
+            <InventorySeedlingsTable
+              speciesId={Number(speciesId)}
+              organization={organization}
+              modified={modified}
+              setModified={setModified}
+            />
           </Grid>
         )}
       </Grid>

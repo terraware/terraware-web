@@ -9,10 +9,11 @@ import _ from 'lodash';
 
 interface InventorySummaryProps {
   speciesId: number;
+  modified: number;
 }
 
 export default function InventorySummary(props: InventorySummaryProps): JSX.Element {
-  const { speciesId } = props;
+  const { speciesId, modified } = props;
   const [summary, setSummary] = useState<SpeciesInventorySummary>();
 
   const theme = useTheme();
@@ -38,7 +39,7 @@ export default function InventorySummary(props: InventorySummaryProps): JSX.Elem
 
   useEffect(() => {
     reloadData();
-  }, [speciesId, reloadData]);
+  }, [speciesId, reloadData, modified]);
 
   const getData = () => {
     if (!summary) {

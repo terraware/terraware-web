@@ -36,10 +36,12 @@ const columns = (editable: boolean): TableColumnType[] => {
 interface InventorySeedslingsTableProps {
   speciesId: number;
   organization: ServerOrganization;
+  modified: number;
+  setModified: (val: number) => void;
 }
 
 export default function InventorySeedslingsTable(props: InventorySeedslingsTableProps): JSX.Element {
-  const { speciesId, organization } = props;
+  const { speciesId, organization, modified, setModified } = props;
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const [temporalSearchValue, setTemporalSearchValue] = useState<string>('');
@@ -121,7 +123,7 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
     return () => {
       activeRequests = false;
     };
-  }, [debouncedSearchTerm, organization.id, speciesId, filters.facilityIds]);
+  }, [debouncedSearchTerm, organization.id, speciesId, filters.facilityIds, modified]);
 
   const clearSearch = () => {
     setTemporalSearchValue('');
@@ -133,11 +135,12 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
 
   const addBatch = () => {
     // TODO
+    reloadData();
     return;
   };
 
   const reloadData = () => {
-    // TODO
+    setModified(Date.now());
     return;
   };
 
