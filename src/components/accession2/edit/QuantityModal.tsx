@@ -116,7 +116,8 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
 
   const hasChanged =
     (!statusEdit || accession.state !== record.state) &&
-    !_.isEqual(accession.remainingQuantity, record.remainingQuantity);
+    (!_.isEqual(accession.remainingQuantity, record.remainingQuantity) ||
+      !_.isEqual(accession.estimatedCount, record.estimatedCount));
 
   return (
     <>
