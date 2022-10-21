@@ -792,6 +792,10 @@ const strings = new LocalizedStrings({
     ADD_BATCH: 'Add Batch',
     SEEDLING_BATCH: 'Seedling Batch',
     EST_READY_DATE: 'Est. Ready Date',
+    ROW_SELECTED: '1 row selected.',
+    ROWS_SELECTED: '{0} rows selected.',
+    DELETE_SEEDLINGS_BATCHES_MSG: 'Are you sure you want to delete the seedlings batches?',
+    DELETE_SEEDLINGS_BATCHES: 'Delete Seedlings Batches',
   },
 });
 

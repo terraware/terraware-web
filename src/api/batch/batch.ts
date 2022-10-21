@@ -67,3 +67,29 @@ export const getBatch = async (batchId: number): Promise<GetBatchResponse> => {
 
   return response;
 };
+
+export type DeleteBatchServerResponse =
+  paths[typeof BATCH_ID_ENDPOINT]['delete']['responses'][200]['content']['application/json'];
+
+type DeleteBatchResponse = {
+  requestSucceeded: boolean;
+};
+
+export const deleteBatch = async (batchId: number): Promise<DeleteBatchResponse> => {
+  const response: DeleteBatchResponse = {
+    requestSucceeded: true,
+  };
+
+  try {
+    const serverResponse: DeleteBatchServerResponse = (
+      await axios.delete(BATCH_ID_ENDPOINT.replace('{id}', batchId.toString()))
+    ).data;
+    if (serverResponse.status === 'error') {
+      response.requestSucceeded = false;
+    }
+  } catch {
+    response.requestSucceeded = false;
+  }
+
+  return response;
+};
