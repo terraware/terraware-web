@@ -43,7 +43,7 @@ export default function NewBatchModal(props: NewBatchModalProps): JSX.Element {
     const newBatch: CreateBatchRequestPayload = {
       addedDate: getTodaysDateFormatted(),
       facilityId: undefined,
-      speciesId: speciesId,
+      speciesId,
       germinatingQuantity: undefined,
       notReadyQuantity: undefined,
       readyQuantity: undefined,
