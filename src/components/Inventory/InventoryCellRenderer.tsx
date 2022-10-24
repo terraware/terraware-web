@@ -4,10 +4,11 @@ import { Link } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
 import CellRenderer, { TableRowType } from '../common/table/TableCellRenderer';
 import { RendererProps } from '../common/table/types';
+import { Theme } from '@mui/material';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme: Theme) => ({
   link: {
-    color: '#0067C8',
+    color: theme.palette.TwClrTxtBrand,
   },
 }));
 

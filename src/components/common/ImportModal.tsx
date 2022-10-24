@@ -16,8 +16,8 @@ const useStyles = makeStyles((theme: Theme) => ({
     marginRight: theme.spacing(2),
   },
   dropContainer: {
-    background: '#F9FAFA',
-    border: '1px dashed #A9B7B8',
+    background: theme.palette.TwClrBg,
+    border: `1px dashed ${theme.palette.TwClrBrdrTertiary}`,
     borderRadius: '8px',
     display: 'flex',
     flexDirection: 'column',
@@ -28,19 +28,19 @@ const useStyles = makeStyles((theme: Theme) => ({
     display: 'none',
   },
   title: {
-    color: '#3A4445',
+    color: theme.palette.TwClrTxt,
     fontSize: '14px',
     fontWeight: 600,
     margin: '0 0 8px 0',
   },
   description: {
-    color: '#3A4445',
+    color: theme.palette.TwClrTxt,
     fontSize: '12px',
     fontWeight: 400,
     margin: 0,
   },
   link: {
-    color: '#0067C8',
+    color: theme.palette.TwClrTxtBrand,
     fontSize: '12px',
     fontWeight: 400,
     margin: 0,
@@ -55,7 +55,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   loadingText: {
     fontSie: '16px',
     margin: 0,
-    color: '#3A4445',
+    color: theme.palette.TwClrTxt,
   },
   spinnerContainer: {
     margin: '40px auto',

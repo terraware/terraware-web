@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(7),
     marginBottom: theme.spacing(6),
-    background: '#ffffff',
+    background: theme.palette.TwClrBg,
     height: 'calc(100% - 96px)',
     overflow: 'scroll',
   },
@@ -32,13 +32,13 @@ const useStyles = makeStyles((theme: Theme) => ({
     paddingBottom: theme.spacing(35),
   },
   backIcon: {
-    fill: '#007DF2',
+    fill: theme.palette.TwClrIcnBrand,
     marginRight: theme.spacing(1),
   },
   back: {
     display: 'flex',
     textDecoration: 'none',
-    color: '#0067C8',
+    color: theme.palette.TwClrTxtBrand,
     fontSize: '20px',
     alignItems: 'center',
   },
@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     alignItems: 'center',
   },
   label: {
-    color: '#5C6B6C',
+    color: theme.palette.TwClrTxtSecondary,
     lineHeight: '20px',
     fontFamily: '"Inter", sans-serif',
   },
@@ -60,7 +60,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     marginTop: '4px',
     '& .MuiOutlinedInput-root': {
       '& fieldset': {
-        borderColor: '#708284',
+        borderColor: theme.palette.TwClrBrdrSecondary,
       },
     },
   },
