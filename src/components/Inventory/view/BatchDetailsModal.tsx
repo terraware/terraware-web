@@ -10,7 +10,7 @@ import NurseryDropdown from '../NurseryDropdown';
 import { Batch, CreateBatchRequestPayload } from 'src/api/types/batch';
 import { createBatch, updateBatch } from 'src/api/batch/batch';
 
-export interface NewBatchModalProps {
+export interface BatchDetailsModalProps {
   open: boolean;
   onClose: () => void;
   reload: () => void;
@@ -19,7 +19,7 @@ export interface NewBatchModalProps {
   speciesId: number;
 }
 
-export default function NewBatchModal(props: NewBatchModalProps): JSX.Element {
+export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.Element {
   const { onClose, open, organization, reload, selectedBatch, speciesId } = props;
 
   const [record, setRecord, onChange] = useForm(selectedBatch);

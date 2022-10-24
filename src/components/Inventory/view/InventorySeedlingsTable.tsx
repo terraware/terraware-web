@@ -15,7 +15,7 @@ import { getNurseryName, removeFilter } from '../FilterUtils';
 import DeleteBatchesModal from './DeleteBatchesModal';
 import { deleteBatch } from 'src/api/batch/batch';
 import useSnackbar from 'src/utils/useSnackbar';
-import NewBatchModal from './NewBatchModal';
+import BatchDetailsModal from './BatchDetailsModal';
 import { Batch } from 'src/api/types/batch';
 
 const columns = (editable: boolean): TableColumnType[] => {
@@ -177,7 +177,7 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
 
   return (
     <Grid item xs={12} sx={{ marginTop: theme.spacing(1) }}>
-      <NewBatchModal
+      <BatchDetailsModal
         open={openNewBatchModal}
         reload={reloadData}
         onClose={() => {
