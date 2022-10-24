@@ -270,34 +270,6 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
             />
           </Box>
         </Box>
-        <Grid item xs={12} display='flex' paddingTop={1}>
-          {filters.facilityIds?.map((id) => (
-            <Pill
-              key={id}
-              filter={strings.NURSERY}
-              value={getNurseryName(id, organization)}
-              onRemoveFilter={() => removeFilter(id, setFilters)}
-            />
-          ))}
-        </Grid>
-        <Box marginTop={theme.spacing(2)}>
-          <Table
-            id='batches-table'
-            columns={columns(editable)}
-            rows={batches}
-            orderBy='batchNumber'
-            Renderer={BatchesCellRenderer}
-            reloadData={reloadData}
-            selectedRows={selectedRows}
-            setSelectedRows={setSelectedRows}
-            showCheckbox={true}
-            isClickable={() => true}
-            showTopBar={true}
-            topBarButtons={[
-              { buttonType: 'destructive', buttonText: strings.DELETE, onButtonClick: () => setOpenDeleteModal(true) },
-            ]}
-          />
-        </Box>
       </Grid>
     </Grid>
   );
