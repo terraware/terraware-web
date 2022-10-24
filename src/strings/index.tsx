@@ -797,6 +797,9 @@ const strings = new LocalizedStrings({
     EST_READY_DATE: 'Est. Ready Date',
     DELETE_SEEDLINGS_BATCHES_MSG: 'Are you sure you want to delete the seedlings batches?',
     DELETE_SEEDLINGS_BATCHES: 'Delete Seedlings Batches',
+    ADD_SEEDLING_BATCH: 'Add Seedling Batch',
+    NURSERY_REQUIRED: 'Nursery *',
+    SEEDLING_BATCH_DETAILS: 'Seedling Batch Details',
   },
 });
 

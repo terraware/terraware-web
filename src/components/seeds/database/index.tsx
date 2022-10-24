@@ -528,11 +528,15 @@ export default function Database(props: DatabaseProps): JSX.Element {
         <MenuList sx={{ padding: theme.spacing(2, 0) }}>
           <MenuItem onClick={() => onDownloadReport()} id='download-report' sx={{ padding: theme.spacing(1, 2) }}>
             <Icon name='export' />
-            <Typography sx={{ color: '#136BD3', paddingLeft: 1 }}>{strings.EXPORT_RECORDS}</Typography>
+            <Typography color={theme.palette.TwClrTxtBrand} paddingLeft={1}>
+              {strings.EXPORT_RECORDS}
+            </Typography>
           </MenuItem>
           <MenuItem onClick={() => onOpenEditColumnsModal()} id='edit-columns' sx={{ padding: theme.spacing(1, 2) }}>
             <Icon name='iconColumns' />
-            <Typography sx={{ color: '#136BD3', paddingLeft: 1 }}>{strings.CUSTOMIZE_TABLE_COLUMNS}</Typography>
+            <Typography color={theme.palette.TwClrTxtBrand} paddingLeft={1}>
+              {strings.CUSTOMIZE_TABLE_COLUMNS}
+            </Typography>
           </MenuItem>
         </MenuList>
       </Popover>
@@ -641,7 +645,13 @@ export default function Database(props: DatabaseProps): JSX.Element {
                   {searchSummaryResults && (
                     <Grid item xs={12}>
                       <Box
-                        sx={{ background: '#F2F4F5', display: 'flex', color: '#000000', padding: 2, flexWrap: 'wrap' }}
+                        sx={{
+                          background: theme.palette.TwClrBgSecondary,
+                          display: 'flex',
+                          color: theme.palette.TwClrTxt,
+                          padding: 2,
+                          flexWrap: 'wrap',
+                        }}
                       >
                         <Typography>{strings.TOTAL}</Typography>
                         <Box sx={{ paddingRight: '12px', display: 'flex' }}>

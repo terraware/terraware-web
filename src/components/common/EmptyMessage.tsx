@@ -1,5 +1,5 @@
 import { makeStyles } from '@mui/styles';
-import { Theme, Typography } from '@mui/material';
+import { Theme, Typography, useTheme } from '@mui/material';
 import Button from 'src/components/common/button/Button';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
@@ -9,8 +9,8 @@ interface StyleProps {
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
-    border: '1px solid #A9B7B8',
-    background: '#fff',
+    border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+    background: theme.palette.TwClrBg,
     padding: '24px',
     borderRadius: '8px',
     textAlign: 'center',
@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     marginTop: theme.spacing(4),
   },
   rowItem: {
-    borderTop: '1px solid #EDF0F1',
+    borderTop: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
     padding: theme.spacing(2),
     display: 'flex',
     flexDirection: (props: StyleProps) => (props.isMobile ? 'column' : 'row'),
@@ -61,6 +61,7 @@ type EmptyMessageProps = {
 
 export default function EmptyMessage(props: EmptyMessageProps): JSX.Element {
   const { title, text, buttonText, onClick, className, rowItems } = props;
+  const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const classes = useStyles({ isMobile });
 
@@ -73,10 +74,10 @@ export default function EmptyMessage(props: EmptyMessageProps): JSX.Element {
           {rowItems.map((rowItem, index) => (
             <div className={classes.rowItem} key={index}>
               <div className={classes.rowItemInfo}>
-                <Typography fontSize='16px' fontWeight={500} color='#000000' lineHeight='20px'>
+                <Typography fontSize='16px' fontWeight={500} color={theme.palette.TwClrTxt} lineHeight='20px'>
                   {rowItem.title}
                 </Typography>
-                <Typography fontSize='14px' fontWeight={500} color='#3A4445' lineHeight='20px'>
+                <Typography fontSize='14px' fontWeight={500} color={theme.palette.TwClrTxt} lineHeight='20px'>
                   {rowItem.text}
                 </Typography>
               </div>

@@ -1,4 +1,4 @@
-import { Container, Grid, CircularProgress, Box, Typography } from '@mui/material';
+import { Container, Grid, CircularProgress, Box, Typography, Theme, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import Cookies from 'cookies-js';
 import React, { useEffect, useState } from 'react';
@@ -18,9 +18,18 @@ import Icon from 'src/components/common/icon/Icon';
 import AccessionByStatus from './AccessionByStatus';
 import { Link, useHistory } from 'react-router-dom';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme: Theme) => ({
+  accessionsLink: {
+    textDecoration: 'none',
+    fontWeight: 500,
+    color: theme.palette.TwClrTxtBrand,
+    marginRight: '12px',
+  },
   mainContainer: {
     padding: '32px 0',
+  },
+  messageIcon: {
+    fill: theme.palette.TwClrIcn,
   },
   paper: {
     display: 'flex',
@@ -32,15 +41,6 @@ const useStyles = makeStyles(() => ({
     position: 'fixed',
     top: '50%',
     left: 'calc(50% + 100px)',
-  },
-  messageIcon: {
-    fill: '#3A4445',
-  },
-  accessionsLink: {
-    textDecoration: 'none',
-    fontWeight: 500,
-    color: '#0067C8',
-    marginRight: '12px',
   },
 }));
 
@@ -64,6 +64,7 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
   const errorOccurred = summary ? summary.errorOccurred : false;
   const [, setSelectedOrgInfo] = useRecoilState(seedsSummarySelectedOrgInfo);
   const { isMobile } = useDeviceInfo();
+  const theme = useTheme();
 
   useEffect(() => {
     if (organization) {
@@ -125,17 +126,17 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
               <Grid item xs={12}>
                 <Box
                   sx={{
-                    background: '#F2F4F5',
+                    background: theme.palette.TwClrBgSecondary,
                     borderRadius: '14px',
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center',
-                    padding: (theme) => theme.spacing(3, 4),
+                    padding: theme.spacing(3, 4),
                   }}
                 >
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Icon name='seedbankNav' className={classes.messageIcon} size='large' />
-                    <Typography sx={{ color: '#000000', size: '20px', paddingLeft: 1 }}>
+                    <Typography sx={{ color: theme.palette.TwClrTxt, size: '20px', paddingLeft: 1 }}>
                       {strings.DASHBOARD_MESSAGE}
                     </Typography>
                   </Box>
@@ -185,7 +186,7 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
                 </Grid>
                 <Grid item xs={12}>
                   <Box display='flex' alignContent='center' justifyContent='space-between' alignItems='center'>
-                    <Typography fontSize='20px' color='#000000' paddingBottom='8px' paddingLeft='28px'>
+                    <Typography fontSize='20px' color={theme.palette.TwClrTxt} paddingBottom='8px' paddingLeft='28px'>
                       {strings.ACCESSION_BY_STATUS}
                     </Typography>
                     <Link className={classes.accessionsLink} to={`${APP_PATHS.ACCESSIONS}?stage=}`}>

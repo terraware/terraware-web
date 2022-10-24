@@ -4,7 +4,7 @@ import { Button, Textfield, Table, TableColumnType } from '@terraware/web-compon
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
 import useDebounce from 'src/utils/useDebounce';
-import { search, SearchResponseElement } from 'src/api/search';
+import { search } from 'src/api/search';
 import BatchesCellRenderer from './BatchesCellRenderer';
 import { isContributor } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -15,6 +15,8 @@ import { getNurseryName, removeFilter } from '../FilterUtils';
 import DeleteBatchesModal from './DeleteBatchesModal';
 import { deleteBatch } from 'src/api/batch/batch';
 import useSnackbar from 'src/utils/useSnackbar';
+import BatchDetailsModal from './BatchDetailsModal';
+import { Batch } from 'src/api/types/batch';
 
 const columns = (editable: boolean): TableColumnType[] => {
   const defaultColumns: TableColumnType[] = [
@@ -48,10 +50,12 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const [temporalSearchValue, setTemporalSearchValue] = useState<string>('');
-  const [batches, setBatches] = useState<SearchResponseElement[]>([]);
+  const [batches, setBatches] = useState<Batch[]>([]);
   const [filters, setFilters] = useForm<InventoryFiltersType>({});
-  const [selectedRows, setSelectedRows] = useState<{ [key: string]: unknown }[]>([]);
+  const [selectedRows, setSelectedRows] = useState<Batch[]>([]);
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
+  const [openNewBatchModal, setOpenNewBatchModal] = useState<boolean>(false);
+  const [selectedBatch, setSelectedBatch] = useState<Batch>();
   const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
   const editable = !isContributor(organization);
   const snackbar = useSnackbar();
@@ -105,6 +109,7 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
           'readyQuantity',
           'totalQuantity',
           'totalQuantityWithdrawn',
+          'facility_id',
           'facility_name',
           'readyByDate',
           'addedDate',
@@ -118,7 +123,10 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
       });
 
       if (activeRequests) {
-        setBatches(searchResponse || []);
+        const batchesResults = searchResponse?.map((sr) => {
+          return { ...sr, facilityId: sr.facility_id } as Batch;
+        });
+        setBatches(batchesResults || []);
       }
     };
 
@@ -151,7 +159,8 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
   };
 
   const addBatch = () => {
-    // TODO
+    setSelectedBatch(undefined);
+    setOpenNewBatchModal(true);
     reloadData();
     return;
   };
@@ -161,54 +170,105 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
     return;
   };
 
+  const onBatchSelected = (batch: Batch) => {
+    setSelectedBatch(batch);
+    setOpenNewBatchModal(true);
+  };
+
   return (
     <Grid item xs={12} sx={{ marginTop: theme.spacing(1) }}>
+      <BatchDetailsModal
+        open={openNewBatchModal}
+        reload={reloadData}
+        onClose={() => {
+          setOpenNewBatchModal(false);
+        }}
+        organization={organization}
+        speciesId={speciesId}
+        selectedBatch={selectedBatch}
+      />
       <DeleteBatchesModal
         open={openDeleteModal}
         onClose={() => setOpenDeleteModal(false)}
         onSubmit={deleteSelectedBatches}
       />
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}
-      >
-        <Typography
+      <Grid item xs={12} sx={{ marginTop: theme.spacing(1) }}>
+        <Box
           sx={{
-            fontSize: '20px',
-            fontWeight: 600,
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
           }}
         >
-          {strings.SEEDLINGS_BATCHES}
-        </Typography>
-        {editable && (
-          <Button
-            id='new-batch'
-            icon='plus'
-            label={isMobile ? '' : strings.ADD_BATCH}
-            onClick={addBatch}
-            size='medium'
-          />
-        )}
-      </Box>
-      <Box marginTop={theme.spacing(3)}>
-        <Box display='flex' flexDirection='row'>
-          <Box width='300px'>
-            <Textfield
-              placeholder={strings.SEARCH}
-              iconLeft='search'
-              label=''
-              id='search'
-              type='text'
-              onChange={onChangeSearch}
-              value={temporalSearchValue}
-              iconRight='cancel'
-              onClickRightIcon={clearSearch}
+          <Typography
+            sx={{
+              fontSize: '20px',
+              fontWeight: 600,
+            }}
+          >
+            {strings.SEEDLINGS_BATCHES}
+          </Typography>
+          {editable && (
+            <Button
+              id='new-batch'
+              icon='plus'
+              label={isMobile ? '' : strings.ADD_BATCH}
+              onClick={addBatch}
+              size='medium'
+            />
+          )}
+        </Box>
+        <Box marginTop={theme.spacing(3)}>
+          <Box display='flex' flexDirection='row'>
+            <Box width='300px'>
+              <Textfield
+                placeholder={strings.SEARCH}
+                iconLeft='search'
+                label=''
+                id='search'
+                type='text'
+                onChange={onChangeSearch}
+                value={temporalSearchValue}
+                iconRight='cancel'
+                onClickRightIcon={clearSearch}
+              />
+            </Box>
+            <InventoryFilters filters={filters} setFilters={setFilters} organization={organization} />
+          </Box>
+          <Grid xs={12} display='flex' paddingTop={1}>
+            {filters.facilityIds?.map((id) => (
+              <Pill
+                key={id}
+                filter={strings.NURSERY}
+                value={getNurseryName(id, organization)}
+                onRemoveFilter={() => removeFilter(id, setFilters)}
+              />
+            ))}
+          </Grid>
+          <Box marginTop={theme.spacing(2)}>
+            <Table
+              id='batches-table'
+              columns={columns(editable)}
+              rows={batches}
+              orderBy='batchNumber'
+              Renderer={BatchesCellRenderer}
+              reloadData={reloadData}
+              selectedRows={selectedRows}
+              setSelectedRows={setSelectedRows}
+              showCheckbox={true}
+              isClickable={() => true}
+              showTopBar={true}
+              topBarButtons={[
+                {
+                  buttonType: 'destructive',
+                  buttonText: strings.DELETE,
+                  onButtonClick: () => setOpenDeleteModal(true),
+                },
+              ]}
+              onSelect={onBatchSelected}
+              controlledOnSelect={true}
             />
           </Box>
-          <InventoryFilters filters={filters} setFilters={setFilters} organization={organization} />
         </Box>
         <Grid item xs={12} display='flex' paddingTop={1}>
           {filters.facilityIds?.map((id) => (
@@ -238,7 +298,7 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
             ]}
           />
         </Box>
-      </Box>
+      </Grid>
     </Grid>
   );
 }

@@ -21,15 +21,15 @@ const useStyles = makeStyles((theme: Theme) => ({
     marginTop: theme.spacing(1),
   },
   buttonsContainer: {
-    background: '#F2F4F5',
+    background: theme.palette.TwClrBgSecondary,
     display: 'flex',
-    borderTop: '1px solid #A9B7B8',
+    borderTop: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
     padding: theme.spacing(2, 3),
     borderRadius: '0 0 6px 6px',
   },
   value: {
     fontSize: '14px',
-    color: '#000000',
+    color: theme.palette.TwClrTxt,
     fontWeight: 400,
     paddingTop: '4px',
   },
