@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     marginBottom: theme.spacing(8),
   },
   content: {
-    border: '1px solid #A9B7B8',
+    border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
     borderRadius: '8px',
     margin: 'auto',
     marginTop: `max(10vh, ${theme.spacing(8)}px)`,

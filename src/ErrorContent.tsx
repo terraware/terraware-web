@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { APP_PATHS, TERRAWARE_SUPPORT_LINK } from 'src/constants';
 import strings from 'src/strings';
 import { makeStyles } from '@mui/styles';
-import { Box, Grid, Typography } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import Button from './components/common/button/Button';
 
 interface StyleProps {
@@ -29,12 +29,13 @@ interface ErrorContentProps {
 
 export default function ErrorContent({ text, inApp }: ErrorContentProps) {
   const classes = useStyles({ inApp });
+  const theme = useTheme();
   const history = useHistory();
 
   return (
     <div className={classes.main}>
       <Grid container justifyContent='center'>
-        <Box sx={{ margin: '0 auto', color: '#FFFFFF', width: '550px', textAlign: 'center' }}>
+        <Box sx={{ margin: '0 auto', color: theme.palette.TwClrBg, width: '550px', textAlign: 'center' }}>
           <Typography sx={{ fontSize: '40px', fontWeight: 600, paddingBottom: '32px' }}>
             {strings.SOMETHING_WENT_WRONG_TITLE}
             {text && <div>{text}</div>}

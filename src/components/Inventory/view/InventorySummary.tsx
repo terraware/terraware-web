@@ -90,7 +90,7 @@ export default function InventorySummary(props: InventorySummaryProps): JSX.Elem
   return (
     <Box
       sx={{
-        backgroundColor: '#F2F4F5',
+        backgroundColor: theme.palette.TwClrBgSecondary,
         display: 'flex',
         flexDirection: isMobile ? 'column' : 'row',
         padding: theme.spacing(3),
@@ -117,7 +117,7 @@ export default function InventorySummary(props: InventorySummaryProps): JSX.Elem
               marginBottom: theme.spacing(isMobile ? 1 : 2),
               fontSize: '14px',
               fontWeight: 400,
-              color: '#5C6B6C',
+              color: theme.palette.TwClrTxtSecondary,
             }}
           >
             {datum.label}
@@ -126,7 +126,7 @@ export default function InventorySummary(props: InventorySummaryProps): JSX.Elem
             sx={{
               fontSize: '16px',
               fontWeight: 500,
-              color: '#3A4445',
+              color: theme.palette.TwClrTxt,
             }}
           >
             {datum.value}

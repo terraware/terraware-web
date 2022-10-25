@@ -15,9 +15,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     textAlign: 'left',
   },
   learnMoreLink: {
-    color: '#fff',
+    color: theme.palette.TwClrTxtInverse,
     fontSize: 'inherit',
-    textDecorationColor: '#fff',
+    textDecorationColor: theme.palette.TwClrTxtInverse,
     verticalAlign: 'text-top',
   },
 }));

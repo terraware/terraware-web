@@ -1,4 +1,4 @@
-import { Grid, IconButton, Popover } from '@mui/material';
+import { Grid, IconButton, Popover, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useEffect, useState } from 'react';
 import Icon from 'src/components/common/icon/Icon';
@@ -9,7 +9,7 @@ import { SpeciesFiltersType } from '.';
 import Button from '../common/button/Button';
 import Select from '../common/Select/Select';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme: Theme) => ({
   iconContainer: {
     borderRadius: 0,
     fontSize: '16px',
@@ -17,12 +17,12 @@ const useStyles = makeStyles(() => ({
     marginLeft: '8px',
   },
   icon: {
-    fill: '#3A4445',
+    fill: theme.palette.TwClrIcn,
     marginLeft: '8px',
   },
   popoverContainer: {
     '& .MuiPaper-root': {
-      border: '1px solid #A9B7B8',
+      border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
       borderRadius: '8px',
       overflow: 'visible',
     },
@@ -34,7 +34,7 @@ const useStyles = makeStyles(() => ({
   },
   title: {
     padding: '16px 24px',
-    background: '#F2F4F5',
+    background: theme.palette.TwClrBgSecondary,
     borderRadius: '8px',
     fontSize: '20px',
     fontWeight: 600,
@@ -43,7 +43,7 @@ const useStyles = makeStyles(() => ({
     padding: '24px',
   },
   footer: {
-    background: '#F2F4F5',
+    background: theme.palette.TwClrBgSecondary,
     padding: '16px 24px',
     display: 'flex',
     justifyContent: 'end',

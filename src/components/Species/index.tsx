@@ -1,4 +1,4 @@
-import { Container, Grid, IconButton } from '@mui/material';
+import { Container, Grid, IconButton, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
@@ -45,7 +45,7 @@ type SpeciesListProps = {
   species: Species[];
 };
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
     padding: '32px 0',
   },
@@ -91,7 +91,7 @@ const useStyles = makeStyles(() => ({
     marginRight: '8px',
   },
   icon: {
-    fill: '#3A4445',
+    fill: theme.palette.TwClrIcn,
   },
   headerIconContainer: {
     marginLeft: '12px',

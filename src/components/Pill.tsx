@@ -1,11 +1,11 @@
-import { IconButton } from '@mui/material';
+import { IconButton, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React from 'react';
 import Icon from 'src/components/common/icon/Icon';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme: Theme) => ({
   pill: {
-    background: '#CAD2D3',
+    background: theme.palette.TwClrBgTertiary,
     padding: '4px 4px 4px 12px',
     display: 'flex',
     borderRadius: '13px',
@@ -14,19 +14,19 @@ const useStyles = makeStyles(() => ({
   },
   filter: {
     fontSize: '12px',
-    color: '#3A4445',
+    color: theme.palette.TwClrTxt,
     fontWeight: 400,
     margin: 0,
   },
   value: {
     paddingLeft: '4px',
     fontSize: '12px',
-    color: '#3A4445',
+    color: theme.palette.TwClrTxt,
     fontWeight: 600,
     margin: 0,
   },
   icon: {
-    fill: '#3A4445',
+    fill: theme.palette.TwClrIcn,
     width: '9px',
     height: '9px',
     margin: '0 6px',

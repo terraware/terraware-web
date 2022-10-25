@@ -9,7 +9,7 @@ import ProblemTooltip from './ProblemTooltip';
 
 const useStyles = makeStyles((theme: Theme) => ({
   icon: {
-    fill: '#BD6931',
+    fill: theme.palette.TwClrIcnWarning,
   },
   iconContainer: {
     borderRadius: 0,
@@ -21,18 +21,18 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   customTooltip: {
     padding: 0,
-    background: '#ffffff',
-    border: '1px solid #bbb',
+    background: theme.palette.TwClrBg,
+    border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
     boxShadow: '0px 4px 8px rgba(58, 68, 69, 0.2)',
     borderRadius: '7px',
-    color: '#4B5758',
+    color: theme.palette.TwClrTxt,
     fontSize: '12px',
     maxWidth: '350px',
 
     '& .MuiTooltip-arrow': {
-      color: '#ffffff',
+      color: theme.palette.TwClrTxtInverse,
       '&:before': {
-        border: '1px solid #bbb',
+        border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
       },
     },
   },
