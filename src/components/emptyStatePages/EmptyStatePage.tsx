@@ -132,6 +132,7 @@ export default function EmptyStatePage({ pageName, organization, reloadData }: E
         title: dictionary.IMPORT_SPECIES_LIST,
         description: emptyStateStrings.IMPORT_SPECIES_DESCRIPTION,
         buttonText: strings.IMPORT_SPECIES,
+        buttonIcon: 'iconImport',
         onClickButton: () => {
           setImportSpeciesModalOpened(true);
         },
@@ -160,6 +161,7 @@ export default function EmptyStatePage({ pageName, organization, reloadData }: E
         title: strings.IMPORT_INVENTORY,
         description: emptyStateStrings.IMPORT_INVENTORY_DESCRIPTION,
         buttonText: strings.IMPORT_INVENTORY,
+        buttonIcon: 'iconImport',
         onClickButton: () => {
           return true;
         },
