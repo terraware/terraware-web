@@ -172,7 +172,7 @@ export default function CreateInventory(props: CreateInventoryProps): JSX.Elemen
                 onChange={onChange}
                 type='text'
                 label={strings.GERMINATING_QUANTITY_REQUIRED}
-                tooltipTitle={strings.GERMINATING_QUANTITY_TOOLTIP}
+                tooltipTitle={strings.TOOLTIP_GERMINATING_QUANTITY}
                 errorText={validateFields && !record.germinatingQuantity ? strings.REQUIRED_FIELD : ''}
               />
             </Grid>
@@ -186,7 +186,7 @@ export default function CreateInventory(props: CreateInventoryProps): JSX.Elemen
                 onChange={onChange}
                 type='text'
                 label={strings.NOT_READY_QUANTITY_REQUIRED}
-                tooltipTitle={strings.NOT_READY_QUANTITY_TOOLTIP}
+                tooltipTitle={strings.TOOLTIP_NOT_READY_QUANTITY}
                 errorText={validateFields && !record.notReadyQuantity ? strings.REQUIRED_FIELD : ''}
               />
             </Grid>
@@ -206,7 +206,7 @@ export default function CreateInventory(props: CreateInventoryProps): JSX.Elemen
                 onChange={onChange}
                 type='text'
                 label={strings.READY_QUANTITY_REQUIRED}
-                tooltipTitle={strings.READY_QUANTITY_TOOLTIP}
+                tooltipTitle={strings.TOOLTIP_READY_QUANTITY}
                 errorText={validateFields && !record.readyQuantity ? strings.REQUIRED_FIELD : ''}
               />
             </Grid>

@@ -17,7 +17,7 @@ const useStyles = makeStyles(() => ({
 
 export default function BatchesCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
   const classes = useStyles();
-  const { column, row, value, index } = props;
+  const { column, row, value, index, onRowClick } = props;
 
   const withdraw = () => {
     // TODO
@@ -26,7 +26,7 @@ export default function BatchesCellRenderer(props: RendererProps<TableRowType>):
 
   const createLinkToBatch = (iValue: React.ReactNode | unknown[]) => {
     return (
-      <Link component='button' className={classes.link + ' ' + classes.text}>
+      <Link component='button' className={classes.link + ' ' + classes.text} onClick={onRowClick}>
         {iValue}
       </Link>
     );

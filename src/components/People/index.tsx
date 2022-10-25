@@ -155,6 +155,8 @@ export default function PeopleList({ organization, reloadData, user }: PeopleLis
       });
 
       if (allRemoved) {
+        setRemovePeopleModalOpened(false);
+        setSelectedPeopleRows([]);
         if (reloadData) {
           reloadData();
         }

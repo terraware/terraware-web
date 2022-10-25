@@ -151,13 +151,13 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
         key: 'scientificName',
         name: strings.SCIENTIFIC_NAME,
         type: 'string',
-        tooltipTitle: strings.TOOLTIP_SPECIES_SCIENTIFIC_NAME,
+        tooltipTitle: strings.TOOLTIP_SCIENTIFIC_NAME,
       },
       {
         key: 'commonName',
         name: strings.COMMON_NAME,
         type: 'string',
-        tooltipTitle: strings.TOOLTIP_SPECIES_COMMON_NAME,
+        tooltipTitle: strings.TOOLTIP_COMMON_NAME,
       },
       { key: 'familyName', name: strings.FAMILY, type: 'string', tooltipTitle: strings.TOOLTIP_SPECIES_FAMILY },
       {
