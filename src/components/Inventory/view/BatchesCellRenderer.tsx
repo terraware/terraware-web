@@ -20,8 +20,9 @@ export default function BatchesCellRenderer(props: RendererProps<TableRowType>):
   const { column, row, value, index, onRowClick } = props;
 
   const withdraw = () => {
-    // TODO
-    return;
+    if (onRowClick) {
+      onRowClick();
+    }
   };
 
   const createLinkToBatch = (iValue: React.ReactNode | unknown[]) => {
