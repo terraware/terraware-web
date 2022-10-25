@@ -70,7 +70,6 @@ export default function WithdrawalsModal(props: WithdrawalsModalProps): JSX.Elem
 
   const hasErrors = () => {
     if (record) {
-      console.log(record.withdrawnDate);
       const missingRequiredField = MANDATORY_FIELDS.some((field: MandatoryField) => !record[field]);
       return missingRequiredField;
     }
