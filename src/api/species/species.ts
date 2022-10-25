@@ -88,6 +88,31 @@ export async function createSpecies(species: Species, organizationId: number): P
 }
 
 const PUT_SPECIES_ENDPOINT = '/api/v1/species/{speciesId}';
+export type GetSpeciesResponse = {
+  requestSucceeded: boolean;
+  species?: Species;
+};
+type GetOneSpeciesResponsePayload =
+  paths[typeof PUT_SPECIES_ENDPOINT]['get']['responses']['200']['content']['application/json'];
+type GetSpeciesQuery = paths[typeof PUT_SPECIES_ENDPOINT]['get']['parameters']['query'];
+
+export async function getSpecies(speciesId: number, organizationId: string): Promise<GetSpeciesResponse> {
+  const response: GetSpeciesResponse = { requestSucceeded: true };
+  const queryParams: GetSpeciesQuery = { organizationId };
+
+  try {
+    const endpoint = addQueryParams(PUT_SPECIES_ENDPOINT.replace('{speciesId}', `${speciesId}`), queryParams);
+    const serverResponse: GetOneSpeciesResponsePayload = (await axios.get(endpoint)).data;
+    response.species = serverResponse.species;
+    if (serverResponse.status === 'error') {
+      response.requestSucceeded = false;
+    }
+  } catch (error) {
+    response.requestSucceeded = false;
+  }
+  return response;
+}
+
 type PutSpeciesRequest = paths[typeof PUT_SPECIES_ENDPOINT]['put']['requestBody']['content']['application/json'];
 type SimpleSuccessResponsePayload =
   paths[typeof PUT_SPECIES_ENDPOINT]['put']['responses']['200']['content']['application/json'];

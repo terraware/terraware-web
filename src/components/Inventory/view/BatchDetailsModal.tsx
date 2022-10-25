@@ -1,4 +1,4 @@
-import { Divider, Grid, useTheme } from '@mui/material';
+import { Divider, Grid, Typography, useTheme } from '@mui/material';
 import { Button, DatePicker, DialogBox, Textfield } from '@terraware/web-components';
 import strings from 'src/strings';
 import useForm from 'src/utils/useForm';
@@ -8,7 +8,11 @@ import useSnackbar from 'src/utils/useSnackbar';
 import { getTodaysDateFormatted, useDeviceInfo } from '@terraware/web-components/utils';
 import NurseryDropdown from '../NurseryDropdown';
 import { Batch, CreateBatchRequestPayload } from 'src/api/types/batch';
-import { createBatch, updateBatch } from 'src/api/batch/batch';
+import { createBatch, updateBatch, updateBatchQuantities } from 'src/api/batch/batch';
+import { getSpecies } from 'src/api/species/species';
+import { Species } from 'src/types/Species';
+import { APP_PATHS } from 'src/constants';
+import { Link } from 'react-router-dom';
 
 export interface BatchDetailsModalProps {
   open: boolean;
@@ -29,15 +33,26 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
 
   const { isMobile } = useDeviceInfo();
   const [totalQuantity, setTotalQuantity] = useState(0);
+  const [speciesSelected, setSpeciesSelected] = useState<Species>();
+  const [facilityName, setFacilityName] = useState<string>();
 
   useEffect(() => {
     if (record) {
+      const populateSpecies = async () => {
+        const speciesResponse = await getSpecies(speciesId, organization.id.toString());
+        if (speciesResponse.requestSucceeded) {
+          setSpeciesSelected(speciesResponse.species);
+        }
+      };
+
       setTotalQuantity(
         (isNaN(record.notReadyQuantity) ? 0 : Number(record.notReadyQuantity)) +
           (isNaN(record.readyQuantity) ? 0 : Number(record.readyQuantity))
       );
+
+      populateSpecies();
     }
-  }, [record]);
+  }, [record, organization, speciesId]);
 
   useEffect(() => {
     const newBatch: CreateBatchRequestPayload = {
@@ -63,7 +78,14 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
     };
 
     setRecord(initBatch());
-  }, [selectedBatch, speciesId, setRecord]);
+
+    const foundFacility = organization?.facilities?.find(
+      (f) => f.id.toString() === selectedBatch?.facilityId.toString()
+    );
+    if (foundFacility) {
+      setFacilityName(foundFacility.name);
+    }
+  }, [selectedBatch, speciesId, setRecord, organization]);
 
   const MANDATORY_FIELDS = [
     'facilityId',
@@ -90,12 +112,14 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
       }
 
       let response;
+      let responseQuantities = { requestSucceeded: true };
       if (record.id === -1) {
         response = await createBatch(record);
       } else {
         response = await updateBatch(record);
+        responseQuantities = await updateBatchQuantities(record);
       }
-      if (response.requestSucceeded) {
+      if (response.requestSucceeded && responseQuantities.requestSucceeded) {
         reload();
         onCloseHandler();
       } else {
@@ -141,16 +165,71 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
           ]}
           scrolled={true}
         >
-          <Grid container item xs={12} spacing={2} textAlign='left'>
-            <Grid xs={12} padding={theme.spacing(1, 0, 1, 2)}>
-              <NurseryDropdown
-                label={strings.NURSERY_REQUIRED}
-                record={record}
-                setRecord={setRecord as unknown as React.Dispatch<React.SetStateAction<Batch>>}
-                organization={organization}
-                validate={validateFields}
-              />
+          {record.id !== -1 && (
+            <Grid container item xs={12} spacing={2} textAlign='left'>
+              <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
+                <Textfield
+                  id='scientificName'
+                  value={speciesSelected?.scientificName}
+                  onChange={onChange}
+                  type='text'
+                  label={strings.SPECIES}
+                  display={true}
+                />
+              </Grid>
+              <Grid item xs={gridSize()} sx={marginTop} paddingLeft={paddingSeparator}>
+                <Textfield
+                  id='commonName'
+                  value={speciesSelected?.commonName}
+                  onChange={onChange}
+                  type='text'
+                  label={strings.COMMON_NAME}
+                  display={true}
+                />
+              </Grid>
+              <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
+                <Textfield
+                  id='seedilingBatch'
+                  value={record.batchNumber}
+                  onChange={onChange}
+                  type='text'
+                  label={strings.SEEDLING_BATCH}
+                  display={true}
+                />
+              </Grid>
+              <Grid item xs={gridSize()} sx={marginTop} paddingLeft={paddingSeparator}>
+                <Typography sx={{ color: '#5C6B6C', fontSize: '14px' }}>{strings.ACCESSION_ID}</Typography>
+                {record.accessionId && (
+                  <Link to={APP_PATHS.ACCESSIONS2_ITEM.replace('accessionid', record.accessionId.toString())}>
+                    {record.accessionId}
+                  </Link>
+                )}
+              </Grid>
+              <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
+                <Textfield
+                  id='nursery'
+                  value={facilityName}
+                  onChange={onChange}
+                  type='text'
+                  label={strings.NURSERY}
+                  display={true}
+                />
+              </Grid>
             </Grid>
+          )}
+
+          <Grid container item xs={12} spacing={2} textAlign='left'>
+            {record.id === -1 && (
+              <Grid xs={12} padding={theme.spacing(1, 0, 1, 2)}>
+                <NurseryDropdown
+                  label={strings.NURSERY_REQUIRED}
+                  record={record}
+                  setRecord={setRecord as unknown as React.Dispatch<React.SetStateAction<Batch>>}
+                  organization={organization}
+                  validate={validateFields}
+                />
+              </Grid>
+            )}
             <Grid item xs={12} sx={marginTop}>
               <Divider />
             </Grid>
