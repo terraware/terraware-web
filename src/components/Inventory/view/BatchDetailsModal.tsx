@@ -8,7 +8,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 import { getTodaysDateFormatted, useDeviceInfo } from '@terraware/web-components/utils';
 import NurseryDropdown from '../NurseryDropdown';
 import { Batch, CreateBatchRequestPayload } from 'src/api/types/batch';
-import { createBatch, updateBatch } from 'src/api/batch/batch';
+import { createBatch, updateBatch, updateBatchQuantities } from 'src/api/batch/batch';
 import { getSpecies } from 'src/api/species/species';
 import { Species } from 'src/types/Species';
 import { APP_PATHS } from 'src/constants';
@@ -112,12 +112,14 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
       }
 
       let response;
+      let responseQuantities = { requestSucceeded: true };
       if (record.id === -1) {
         response = await createBatch(record);
       } else {
         response = await updateBatch(record);
+        responseQuantities = await updateBatchQuantities(record);
       }
-      if (response.requestSucceeded) {
+      if (response.requestSucceeded && responseQuantities.requestSucceeded) {
         reload();
         onCloseHandler();
       } else {
