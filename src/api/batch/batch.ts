@@ -95,6 +95,7 @@ export const deleteBatch = async (batchId: number): Promise<DeleteBatchResponse>
 };
 
 type UpdateBatchResponse = {
+  batch?: Batch;
   requestSucceeded: boolean;
   error?: string;
 };
@@ -107,6 +108,7 @@ export type UpdateBatchRequestPayload =
 
 export const updateBatch = async (batch: Batch): Promise<UpdateBatchResponse> => {
   const response: UpdateBatchResponse = {
+    batch: undefined,
     requestSucceeded: true,
   };
 
@@ -119,7 +121,9 @@ export const updateBatch = async (batch: Batch): Promise<UpdateBatchResponse> =>
     const serverResponse: UpdateBatchResponsePayload = (
       await axios.put(BATCH_ID_ENDPOINT.replace('{id}', batch.id.toString()), updateBatchRequestPayload)
     ).data;
-    if (serverResponse.status !== 'ok') {
+    if (serverResponse.status === 'ok') {
+      response.batch = serverResponse.batch;
+    } else {
       response.requestSucceeded = false;
     }
   } catch (e: any) {

@@ -117,7 +117,9 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
         response = await createBatch(record);
       } else {
         response = await updateBatch(record);
-        responseQuantities = await updateBatchQuantities(record);
+        if (response.batch) {
+          responseQuantities = await updateBatchQuantities({ ...record, version: response.batch.version });
+        }
       }
       if (response.requestSucceeded && responseQuantities.requestSucceeded) {
         reload();

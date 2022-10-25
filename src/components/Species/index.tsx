@@ -563,7 +563,8 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
               />
               <Button
                 id='import-species'
-                label={strings.IMPORT_SPECIES}
+                label={strings.IMPORT}
+                icon='iconImport'
                 onClick={onImportSpecies}
                 priority='secondary'
                 size='medium'
