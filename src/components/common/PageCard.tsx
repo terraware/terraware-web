@@ -1,4 +1,4 @@
-import { Box, Link, Typography } from '@mui/material';
+import { Box, Link, Theme, Typography, useTheme } from '@mui/material';
 import React from 'react';
 import Icon from './icon/Icon';
 import { IconName } from './icon/icons';
@@ -7,10 +7,10 @@ import Button from 'src/components/common/button/Button';
 import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme: Theme) => ({
   container: {
-    background: '#ffffff',
-    border: '1px solid #A9B7B8',
+    background: theme.palette.TwClrBg,
+    border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
     borderRadius: '8px',
     display: 'flex',
     flexDirection: 'column',
@@ -29,7 +29,7 @@ const useStyles = makeStyles(() => ({
     fontWeight: 600,
   },
   icon: {
-    fill: '#708284',
+    fill: theme.palette.TwClrIcnSecondary,
   },
   titleText: {
     fontSize: '20px',
@@ -69,6 +69,7 @@ export interface PageCardProps {
 
 export default function PageCard(props: PageCardProps): JSX.Element {
   const classes = useStyles();
+  const theme = useTheme();
   const { name, isNameBold, icon, description, linkText, link, linkStyle } = props;
   const { isMobile } = useDeviceInfo();
 
@@ -88,7 +89,7 @@ export default function PageCard(props: PageCardProps): JSX.Element {
         component='p'
         variant='h6'
         className={classes.description}
-        sx={{ fontSize: '16px', fontWeight: 400, lineHeight: '24px', height: '100%', color: '#3a4445' }}
+        sx={{ fontSize: '16px', fontWeight: 400, lineHeight: '24px', height: '100%', color: theme.palette.TwClrTxt }}
       >
         {description}
       </Typography>

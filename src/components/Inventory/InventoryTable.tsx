@@ -15,13 +15,33 @@ import PageSnackbar from 'src/components/PageSnackbar';
 import { getNurseryName, removeFilter } from './FilterUtils';
 
 const columns: TableColumnType[] = [
-  { key: 'species_scientificName', name: strings.SPECIES, type: 'string' },
-  { key: 'species_commonName', name: strings.COMMON_NAME, type: 'string' },
+  {
+    key: 'species_scientificName',
+    name: strings.SPECIES,
+    type: 'string',
+    tooltipTitle: strings.TOOLTIP_SCIENTIFIC_NAME,
+  },
+  {
+    key: 'species_commonName',
+    name: strings.COMMON_NAME,
+    type: 'string',
+    tooltipTitle: strings.TOOLTIP_COMMON_NAME,
+  },
   { key: 'facilityInventories', name: strings.NURSERIES, type: 'string' },
-  { key: 'germinatingQuantity', name: strings.GERMINATING, type: 'string' },
-  { key: 'notReadyQuantity', name: strings.NOT_READY, type: 'string' },
-  { key: 'readyQuantity', name: strings.READY, type: 'string' },
-  { key: 'totalQuantity', name: strings.TOTAL, type: 'string' },
+  {
+    key: 'germinatingQuantity',
+    name: strings.GERMINATING,
+    type: 'string',
+    tooltipTitle: strings.TOOLTIP_GERMINATING_QUANTITY,
+  },
+  {
+    key: 'notReadyQuantity',
+    name: strings.NOT_READY,
+    type: 'string',
+    tooltipTitle: strings.TOOLTIP_NOT_READY_QUANTITY,
+  },
+  { key: 'readyQuantity', name: strings.READY, type: 'string', tooltipTitle: strings.TOOLTIP_READY_QUANTITY },
+  { key: 'totalQuantity', name: strings.TOTAL, type: 'string', tooltipTitle: strings.TOOLTIP_TOTAL_QUANTITY },
 ];
 
 interface InventoryTableProps {
@@ -89,7 +109,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
         <InventoryFilters filters={filters} setFilters={setFilters} organization={organization} />
       </Grid>
 
-      <Grid xs={12} display='flex' paddingLeft={3} paddingTop={1}>
+      <Grid item xs={12} display='flex' paddingLeft={3} paddingTop={1}>
         {filters.facilityIds?.map((id) => (
           <Pill
             key={id}

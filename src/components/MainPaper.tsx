@@ -5,7 +5,7 @@ import React from 'react';
 const useStyles = makeStyles((theme: Theme) => ({
   paper: {
     padding: theme.spacing(2),
-    border: '1px solid #A9B7B8',
+    border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
     borderRadius: '8px',
     boxShadow: 'none',
   },

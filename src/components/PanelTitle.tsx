@@ -1,14 +1,14 @@
-import { Typography } from '@mui/material';
+import { Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { IconTooltip } from '@terraware/web-components';
 import React from 'react';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme: Theme) => ({
   panelTitle: {
     fontSize: '20px',
     lineHeight: '28px',
     fontWeight: 600,
-    color: '#3A4445',
+    color: theme.palette.TwClrTxt,
   },
 }));
 

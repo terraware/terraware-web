@@ -66,7 +66,7 @@ export default function ObservationsChart({ observations }: Props): JSX.Element 
                 gridLines: {
                   lineWidth: 0,
                   zeroLineWidth: 2,
-                  zeroLineColor: '#ccc',
+                  zeroLineColor: theme.palette.TwClrBrdrTertiary,
                 },
                 ticks: {
                   beginAtZero: true,

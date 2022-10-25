@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, LinearProgress, Switch, Stack, Grid } from '@mui/material';
+import { Box, LinearProgress, Switch, Stack, Grid, useTheme } from '@mui/material';
 import { getPreferences, updatePreferences } from 'src/api/preferences/preferences';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -11,6 +11,7 @@ type OptInFeaturesProps = {
 };
 
 export default function OptInFeatures({ refresh }: OptInFeaturesProps): JSX.Element {
+  const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const [preferences, setPreferences] = useState<{ [key: string]: boolean }>();
   const snackbar = useSnackbar();
@@ -77,10 +78,18 @@ export default function OptInFeatures({ refresh }: OptInFeaturesProps): JSX.Elem
   const gridStyle = (isDisclosure: boolean) => ({
     marginTop: isMobile ? '20px !important' : '0px !important',
     paddingTop: isMobile ? '20px !important' : 0,
-    borderLeft: isMobile ? 'none' : isDisclosure ? '1px solid #b86f6f' : '1px solid #ddd',
-    borderTop: isMobile ? (isDisclosure ? '1px solid #b86f6f' : '1px solid #ddd') : 'none',
+    borderLeft: isMobile
+      ? 'none'
+      : isDisclosure
+      ? `1px solid ${theme.palette.TwClrTxtDanger}`
+      : `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+    borderTop: isMobile
+      ? isDisclosure
+        ? `1px solid ${theme.palette.TwClrTxtDanger}`
+        : `1px solid ${theme.palette.TwClrBrdrTertiary}`
+      : 'none',
     fontSize: '14px',
-    color: isDisclosure ? '#b86f6f' : 'inherit',
+    color: isDisclosure ? theme.palette.TwClrTxtDanger : 'inherit',
   });
 
   return (
@@ -100,7 +109,7 @@ export default function OptInFeatures({ refresh }: OptInFeaturesProps): JSX.Elem
           <Box
             sx={{
               display: 'flex',
-              color: '#444',
+              color: theme.palette.TwClrTxt,
               fontWeight: 'bold',
               fontSize: '20px',
               marginBottom: '30px',
@@ -113,7 +122,7 @@ export default function OptInFeatures({ refresh }: OptInFeaturesProps): JSX.Elem
             <Stack
               spacing={2}
               sx={{
-                border: '1px solid #ddd',
+                border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
                 padding: '10px',
                 borderRadius: '5px',
                 backgroundColor: 'rgba(255,255,255,0.8)',
@@ -123,7 +132,7 @@ export default function OptInFeatures({ refresh }: OptInFeaturesProps): JSX.Elem
             >
               <Grid container spacing={0}>
                 <Grid item xs={gridSize()}>
-                  <Box sx={{ color: '#444', fontSize: '16px', whiteSpace: 'pre', alignSelf: 'center' }}>
+                  <Box sx={{ color: theme.palette.TwClrTxt, fontSize: '16px', whiteSpace: 'pre', alignSelf: 'center' }}>
                     <Switch
                       checked={preferences[f.preferenceName] === true}
                       onChange={(event) => savePreference(f, event.target.checked)}

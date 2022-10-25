@@ -241,7 +241,13 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
         <Grid
           item
           xs={12}
-          sx={{ background: '#F2F4F5', borderRadius: '16px', padding: 2, marginTop: 2, marginLeft: 1 }}
+          sx={{
+            background: theme.palette.TwClrBgSecondary,
+            borderRadius: '16px',
+            padding: 2,
+            marginTop: 2,
+            marginLeft: 1,
+          }}
         >
           <Grid xs={12} display='flex'>
             <Grid xs={smallColumn}>

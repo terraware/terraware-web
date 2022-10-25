@@ -6,6 +6,7 @@ import { SpeciesInventorySummary } from 'src/api/types/inventory';
 import { getSummary } from 'src/api/inventory/inventory';
 import useSnackbar from 'src/utils/useSnackbar';
 import _ from 'lodash';
+import { IconTooltip } from '@terraware/web-components';
 
 interface InventorySummaryProps {
   speciesId: number;
@@ -52,37 +53,37 @@ export default function InventorySummary(props: InventorySummaryProps): JSX.Elem
       {
         label: strings.GERMINATING_QUANTITY,
         value: germinatingQuantity,
-        tooltip: '',
+        tooltipTitle: strings.TOOLTIP_GERMINATING_QUANTITY,
       },
       {
         label: strings.NOT_READY_QUANTITY,
         value: notReadyQuantity,
-        tooltip: '',
+        tooltipTitle: strings.TOOLTIP_NOT_READY_QUANTITY,
       },
       {
         label: strings.READY_QUANTITY,
         value: readyQuantity,
-        tooltip: '',
+        tooltipTitle: strings.TOOLTIP_READY_QUANTITY,
       },
       {
         label: strings.TOTAL_QUANTITY,
         value: totalQuantity,
-        tooltip: '',
+        tooltipTitle: strings.TOOLTIP_TOTAL_QUANTITY,
       },
       {
         label: strings.TOTAL_WITHDRAWN,
         value: totalWithdrawn,
-        tooltip: '',
+        tooltipTitle: strings.TOOLTIP_TOTAL_QUANTITY,
       },
       {
         label: strings.LOSS_RATE,
         value: lossRate,
-        tooltip: '',
+        tooltipTitle: '',
       },
       {
         label: strings.NURSERIES,
         value: nurseries.map((i) => i.name).join(', '),
-        tooltip: '',
+        tooltipTitle: '',
       },
     ];
   };
@@ -90,7 +91,7 @@ export default function InventorySummary(props: InventorySummaryProps): JSX.Elem
   return (
     <Box
       sx={{
-        backgroundColor: '#F2F4F5',
+        backgroundColor: theme.palette.TwClrBgSecondary,
         display: 'flex',
         flexDirection: isMobile ? 'column' : 'row',
         padding: theme.spacing(3),
@@ -117,16 +118,19 @@ export default function InventorySummary(props: InventorySummaryProps): JSX.Elem
               marginBottom: theme.spacing(isMobile ? 1 : 2),
               fontSize: '14px',
               fontWeight: 400,
-              color: '#5C6B6C',
+              color: theme.palette.TwClrTxtSecondary,
+              '& svg': {
+                fill: theme.palette.TwClrTxtSecondary,
+              },
             }}
           >
-            {datum.label}
+            {datum.label} {datum.tooltipTitle && <IconTooltip title={datum.tooltipTitle} />}
           </Typography>
           <Typography
             sx={{
               fontSize: '16px',
               fontWeight: 500,
-              color: '#3A4445',
+              color: theme.palette.TwClrTxt,
             }}
           >
             {datum.value}

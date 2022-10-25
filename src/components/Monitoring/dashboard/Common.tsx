@@ -1,4 +1,5 @@
 import moment from 'moment';
+import theme from 'src/theme';
 
 export const TIME_PERIODS = ['Last 12 hours', 'Last 24 hours', 'Last 7 days', 'Last 30 days'];
 
@@ -77,29 +78,29 @@ type ChartPaletteType = {
 
 export const ChartPalette: ChartPaletteType = {
   SYSTEM_POWER: {
-    borderColor: '#0067C8' /* tw-clr-base-blue-600 */,
-    backgroundColor: '#007DF2' /* tw-clr-base-blue-500 */,
+    borderColor: theme.palette.TwClrBaseBlue600 as string,
+    backgroundColor: theme.palette.TwClrBaseBlue500 as string,
   },
   STATE_OF_CHARGE: {
-    borderColor: '#9A572B' /* tw-clr-base-orange-600 */,
-    backgroundColor: '#BD6931' /* tw-clr-base-orange-500 */,
+    borderColor: theme.palette.TwClrBaseOrange600 as string,
+    backgroundColor: theme.palette.TwClrBaseOrange500 as string,
   },
   TEMPERATURE: {
-    borderColor: '#9A572B' /* tw-clr-base-orange-600 */,
-    backgroundColor: '#BD6931' /* tw-clr-base-orange-500 */,
+    borderColor: theme.palette.TwClrBaseOrange600 as string,
+    backgroundColor: theme.palette.TwClrBaseOrange500 as string,
   },
   TEMPERATURE_THRESHOLD: {
-    borderColor: '#FAC4B1' /* tw-clr-base-orange-200 */,
-    backgroundColor: '#FCE5DE' /* tw-clr-base-orange-100 */,
-    fillColor: '#FCE5DE80' /* tw-clr-base-orange-100 @ 50% */,
+    borderColor: theme.palette.TwClrBaseOrange200 as string,
+    backgroundColor: theme.palette.TwClrBaseOrange100 as string,
+    fillColor: `${theme.palette.TwClrBaseOrange100 as string}80` /* 0x80: alpha channel = 0.5 */,
   },
   HUMIDITY: {
-    borderColor: '#0067C8' /* tw-clr-base-blue-600 */,
-    backgroundColor: '#007DF2' /* tw-clr-base-blue-500 */,
+    borderColor: theme.palette.TwClrBaseBlue600 as string,
+    backgroundColor: theme.palette.TwClrBaseBlue500 as string,
   },
   HUMIDITY_THRESHOLD: {
-    borderColor: '#BED0FF' /* tw-clr-base-blue-200 */,
-    backgroundColor: '#E2E9FF' /* tw-clr-base-blue-100 */,
-    fillColor: '#E2E9FF80' /* tw-clr-base-blue-100 @ 50% */,
+    borderColor: theme.palette.TwClrBaseBlue200 as string,
+    backgroundColor: theme.palette.TwClrBaseBlue100 as string,
+    fillColor: `${theme.palette.TwClrBaseBlue100 as string}80` /* 0x80: alpha channel = 0.5 */,
   },
 };

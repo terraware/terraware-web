@@ -1,5 +1,5 @@
 import { TabContext, TabList, TabPanel } from '@mui/lab';
-import { useTheme, Box, IconButton, Link, Tab, Typography } from '@mui/material';
+import { useTheme, Box, IconButton, Link, Tab, Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Button, Icon } from '@terraware/web-components';
 import moment from 'moment';
@@ -33,13 +33,13 @@ import ViewViabilityTestModal from '../viabilityTesting/ViewViabilityTestModal';
 import { getSeedBank, isContributor } from 'src/utils/organization';
 import _ from 'lodash';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme: Theme) => ({
   iconStyle: {
-    fill: '#3A4445',
+    fill: theme.palette.TwClrIcn,
   },
   editIcon: {
     display: 'none',
-    fill: '#3A4445',
+    fill: theme.palette.TwClrIcn,
   },
   fullSizeButton: {
     width: '100%',
@@ -133,7 +133,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
   const tabStyles = {
     textTransform: 'capitalize',
     '&.Mui-selected': {
-      color: '#3A4445',
+      color: themeObj.palette.TwClrTxt as string,
       fontWeight: 600,
     },
   };
@@ -146,7 +146,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
     return {
       ...tabStyles,
       '::after': {
-        background: '#D40002',
+        background: themeObj.palette.TwClrIcnDanger as string,
         content: '""',
         height: '10px',
         width: '10px',
@@ -204,41 +204,41 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
     switch (accession?.state) {
       case 'Awaiting Check-In':
         return {
-          background: '#FFF1F4',
-          border: '1px solid #FFBFD0',
-          color: '#CD0069',
+          background: themeObj.palette.TwClrBasePink050,
+          border: `1px solid ${themeObj.palette.TwClrBasePink200}`,
+          color: themeObj.palette.TwClrBasePink500,
         };
 
       case 'Awaiting Processing':
         return {
-          background: '#FFF1F1',
-          border: '1px solid #FFC1C1',
-          color: '#D40002',
+          background: themeObj.palette.TwClrBaseRed050,
+          border: `1px solid ${themeObj.palette.TwClrBaseRed200}`,
+          color: themeObj.palette.TwClrTxtDanger,
         };
       case 'Processing':
         return {
-          background: '#FEF2EE',
-          border: '1px solid #FAC4B1',
-          color: '#9A572B',
+          background: themeObj.palette.TwClrBaseOrange050,
+          border: `1px solid ${themeObj.palette.TwClrBaseOrange200}`,
+          color: themeObj.palette.TwClrBaseOrange500,
         };
       case 'Drying':
         return {
-          background: '#FEF3E1',
-          border: '1px solid #FBCA47',
-          color: '#9A7B25',
+          background: themeObj.palette.TwClrBaseYellow050,
+          border: `1px solid ${themeObj.palette.TwClrBaseOrange200}`,
+          color: themeObj.palette.TwClrBaseYellow500,
         };
       case 'In Storage': {
         return {
-          background: '#8CBA441A',
-          border: '1px solid #8CBA4480',
-          color: '#27764E',
+          background: themeObj.palette.TwClrBaseGreen050,
+          border: `1px solid ${themeObj.palette.TwClrBaseGreen200}`,
+          color: themeObj.palette.TwClrTxtSuccess,
         };
       }
       default: {
         return {
-          background: '#F2F4F5',
-          border: '1px solid #CAD2D3',
-          color: '#5C6B6C',
+          background: themeObj.palette.TwClrBgSecondary,
+          border: `1px solid ${themeObj.palette.TwClrBaseGray200}`,
+          color: themeObj.palette.TwClrTxtSecondary,
         };
       }
     }
@@ -442,10 +442,10 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
             </Box>
           )}
         </Box>
-        <Typography color='#343A40' fontSize='24px' fontStyle='italic' fontWeight={500}>
+        <Typography color={themeObj.palette.TwClrTxt} fontSize='24px' fontStyle='italic' fontWeight={500}>
           {accession?.speciesScientificName}
         </Typography>
-        <Typography color='#708284'>{accession?.speciesCommonName}</Typography>
+        <Typography color={themeObj.palette.TwClrTxtSecondary}>{accession?.speciesCommonName}</Typography>
         <PageSnackbar />
       </Box>
 
@@ -547,7 +547,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
 
       <Box display='flex' flexDirection={isMobile ? 'column' : 'row'} padding={isMobile ? themeObj.spacing(2, 0) : 0}>
         <Box sx={editableDynamicValuesProps}>
-          <Typography minWidth={isMobile ? '100px' : 0} fontSize='14px' color='#708284'>
+          <Typography minWidth={isMobile ? '100px' : 0} fontSize='14px' color={themeObj.palette.TwClrTxtSecondary}>
             {strings.QUANTITY}
           </Typography>
           {accession?.remainingQuantity?.quantity !== undefined ? (
@@ -571,13 +571,13 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
               + {strings.ADD}
             </Link>
           ) : (
-            <Typography color='#CAD2D3' sx={{ pointerEvents: 'none', fontSize: '20px' }}>
+            <Typography color={themeObj.palette.TwClrTxtTertiary} sx={{ pointerEvents: 'none', fontSize: '20px' }}>
               + {strings.ADD}
             </Typography>
           )}
         </Box>
         <Box sx={editableDynamicValuesProps}>
-          <Typography minWidth={isMobile ? '100px' : 0} fontSize='14px' color='#708284'>
+          <Typography minWidth={isMobile ? '100px' : 0} fontSize='14px' color={themeObj.palette.TwClrTxtSecondary}>
             {strings.AGE}
           </Typography>
           {accession?.collectedDate ? (
@@ -592,7 +592,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
           ) : null}
         </Box>
         <Box sx={editableDynamicValuesProps}>
-          <Typography minWidth={isMobile ? '100px' : 0} fontSize='14px' color='#708284'>
+          <Typography minWidth={isMobile ? '100px' : 0} fontSize='14px' color={themeObj.palette.TwClrTxtSecondary}>
             {strings.VIABILITY}
           </Typography>
           {accession?.viabilityPercent ? (
@@ -619,7 +619,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
               + {strings.ADD}
             </Link>
           ) : (
-            <Typography color='#CAD2D3' sx={{ pointerEvents: 'none', fontSize: '20px' }}>
+            <Typography color={themeObj.palette.TwClrTxtTertiary} sx={{ pointerEvents: 'none', fontSize: '20px' }}>
               + {strings.ADD}
             </Typography>
           )}

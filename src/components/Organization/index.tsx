@@ -1,4 +1,4 @@
-import { Container, Grid } from '@mui/material';
+import { Container, Grid, Theme } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
@@ -17,10 +17,10 @@ import { makeStyles } from '@mui/styles';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
     paddingTop: '24px',
-    background: '#ffffff',
+    background: theme.palette.TwClrBg,
     minHeight: 'calc(100vh - 64px)',
     display: 'flex',
     flexDirection: 'column',

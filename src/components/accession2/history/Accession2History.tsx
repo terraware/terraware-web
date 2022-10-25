@@ -50,7 +50,7 @@ export default function Accession2History(props: Accession2HistoryProps): JSX.El
           flexDirection='row'
           fontSize='15px'
           fontWeight={400}
-          color='#3A4445'
+          color={theme.palette.TwClrTxt}
           marginBottom={theme.spacing(3)}
           whiteSpace='break-spaces'
         >
