@@ -135,7 +135,7 @@ export default function EmptyStateContent(props: EmptyStateContentProps): JSX.El
       <div className={classes.listContainer}>
         {listItems.map((item) => {
           return (
-            <Grid item xs={12} key={item.title} className={`${classes.listItem}`}>
+            <Grid item xs={gridSize()} key={item.title} className={`${classes.listItem}`}>
               <Icon name={item.icon} className={classes.listItemIcon} />
               <p className={classes.listItemTitle}>{item.title}</p>
               <div>
