@@ -3,10 +3,11 @@ import React from 'react';
 import strings from 'src/strings';
 import Button from '../common/button/Button';
 import DialogBox from '../common/DialogBox/DialogBox';
+import { Theme } from '@mui/material';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme: Theme) => ({
   mainContent: {
-    color: '#3A4445',
+    color: theme.palette.TwClrTxt,
     fontSize: '16px',
   },
 }));

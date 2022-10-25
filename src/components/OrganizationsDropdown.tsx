@@ -1,4 +1,4 @@
-import { IconButton, List, ListItem, Popover } from '@mui/material';
+import { IconButton, List, ListItem, Popover, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useState } from 'react';
 import { useHistory } from 'react-router';
@@ -8,14 +8,14 @@ import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
 import AddNewOrganizationModal from './AddNewOrganizationModal';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme: Theme) => ({
   iconContainer: {
     borderRadius: 0,
     fontSize: '16px',
     height: '48px',
   },
   icon: {
-    fill: '#3A4445',
+    fill: theme.palette.TwClrIcn,
     marginLeft: '8px',
   },
 }));

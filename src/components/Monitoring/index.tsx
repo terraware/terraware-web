@@ -14,11 +14,11 @@ import { getPreferences, updatePreferences } from 'src/api/preferences/preferenc
 import SeedBankMonitoring from './SeedBankMonitoring';
 import Button from '../common/button/Button';
 import Title from '../common/Title';
-import { Box, Grid } from '@mui/material';
+import { Box, Grid, Theme } from '@mui/material';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageSnackbar from 'src/components/PageSnackbar';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme: Theme) => ({
   mainTitle: {
     display: 'flex',
     justifyContent: 'space-between',
@@ -36,7 +36,7 @@ const useStyles = makeStyles(() => ({
     margin: '0 1%',
     width: '1px',
     height: '32px',
-    backgroundColor: '#A9B7B8',
+    backgroundColor: theme.palette.TwClrBgTertiary,
   },
   seedBankLabel: {
     margin: '0 8px 0 0',

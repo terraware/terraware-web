@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Typography } from '@mui/material';
+import { Box, Theme, Typography, useTheme } from '@mui/material';
 import { Icon } from '@terraware/web-components';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
@@ -8,16 +8,17 @@ import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { getCutTestViabilityPercent } from './utils';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme: Theme) => ({
   syncIcon: {
     '& path': {
-      fill: '#BD6931',
+      fill: theme.palette.TwClrIcnWarning,
     },
   },
 }));
 
 export default function Renderer(props: RendererProps<TableRowType>): JSX.Element {
   const classes = useStyles();
+  const theme = useTheme();
   const { column, row, index } = props;
   const defaultProps = { column, row, index };
   const { isMobile } = useDeviceInfo();
@@ -27,7 +28,7 @@ export default function Renderer(props: RendererProps<TableRowType>): JSX.Elemen
     return <Typography sx={{ ...styleProps, cursor: 'pointer' }}>{iValue}</Typography>;
   };
 
-  const renderId = () => getValue(`#${row.id}`, { fontWeight: 600, color: '#0067C8' });
+  const renderId = () => getValue(`#${row.id}`, { fontWeight: 600, color: theme.palette.TwClrTxtBrand });
 
   const renderDate = () => {
     const { startDate, endDate } = row;
@@ -47,7 +48,7 @@ export default function Renderer(props: RendererProps<TableRowType>): JSX.Elemen
       }
     };
 
-    return getValue(label(), { color: '#708284' });
+    return getValue(label(), { color: theme.palette.TwClrTxtSecondary });
   };
 
   const renderMobileId = () => {

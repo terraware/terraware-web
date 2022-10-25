@@ -5,11 +5,11 @@ import strings from '../../src/strings';
 import { ReactComponent as AvatarIcon } from './avatar-default.svg';
 import Icon from './common/icon/Icon';
 import { APP_PATHS, TERRAFORMATION_PRIVACY_POLICY } from 'src/constants';
-import { IconButton, List, ListItem, Popover } from '@mui/material';
+import { IconButton, List, ListItem, Popover, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import useEnvironment from 'src/utils/useEnvironment';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme: Theme) => ({
   iconContainer: {
     height: '48px',
     borderRadius: 0,
@@ -20,12 +20,12 @@ const useStyles = makeStyles((theme) => ({
   },
   chevronDown: {
     marginLeft: '8px',
-    fill: '#3A4445',
+    fill: theme.palette.TwClrIcn,
   },
   userName: {
     fontSize: '16px',
     paddingLeft: '8px',
-    color: '#3A4445',
+    color: theme.palette.TwClrTxt,
   },
   popover: {
     '& .MuiPaper-rounded': {

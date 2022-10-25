@@ -507,7 +507,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
           </Grid>
 
           <Grid item xs={12}>
-            <Grid item sx={{ background: '#F2F4F5', borderRadius: '16px', padding: 3 }}>
+            <Grid item sx={{ background: theme.palette.TwClrBgSecondary, borderRadius: '16px', padding: 3 }}>
               <Box sx={{ display: isMobile ? 'block' : 'flex', alignItems: 'baseline' }} mb={2}>
                 <Grid item xs={12} marginBottom={isMobile ? 1 : 0}>
                   <DatePicker
@@ -569,7 +569,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
                     </Grid>
                   </Grid>
                   <Grid item xs={12} display='flex' alignItems='center' sx={{ paddingTop: 2 }}>
-                    <Typography sx={{ color: '#5C6B6C', paddingRight: 1, fontSize: '14px' }}>
+                    <Typography sx={{ color: theme.palette.TwClrTxtSecondary, paddingRight: 1, fontSize: '14px' }}>
                       # {strings.TOTAL_SEEDS_TESTED}:
                     </Typography>
                     <Typography>{totalSeedsTested}</Typography>
@@ -644,7 +644,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
                     sx={{
                       textDecoration: 'none',
                       fontSize: '16px',
-                      '&[disabled]': { color: '#0067C84D', pointerEvents: 'none' },
+                      '&[disabled]': { color: `${theme.palette.TwClrBaseBlue600}80`, pointerEvents: 'none' },
                       marginBottom: isMobile ? 1 : 0,
                       display: isMobile ? 'block' : 'initial',
                     }}

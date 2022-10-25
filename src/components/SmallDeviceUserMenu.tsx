@@ -10,6 +10,7 @@ import {
   Slide,
   Typography,
   Theme,
+  useTheme,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useState } from 'react';
@@ -41,7 +42,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     height: 'fit-content',
   },
   closeIcon: {
-    fill: '#708284',
+    fill: theme.palette.TwClrIcnSecondary,
     width: '27px',
     height: '27px',
   },
@@ -102,6 +103,7 @@ export default function SmallDeviceUserMenu({
   hasOrganizations,
 }: SmallDeviceUserMenuProps): JSX.Element | null {
   const classes = useStyles();
+  const theme = useTheme();
   const history = useHistory();
   const [newOrganizationModalOpened, setNewOrganizationModalOpened] = useState(false);
   const [open, setOpen] = React.useState(false);
@@ -178,7 +180,7 @@ export default function SmallDeviceUserMenu({
                   <Box sx={{ display: 'flex' }}>
                     <Box sx={{ display: 'flex' }}>
                       <AvatarIcon className={classes.internalIcon} />
-                      <Typography sx={{ paddingLeft: '8px', color: '#3A4445' }}>
+                      <Typography sx={{ paddingLeft: '8px', color: theme.palette.TwClrTxt }}>
                         {user?.firstName} {user?.lastName}
                       </Typography>
                     </Box>

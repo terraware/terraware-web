@@ -12,16 +12,16 @@ const useStyles = makeStyles((theme: Theme) => ({
   subheader: {
     paddingLeft: 0,
     paddingRight: 0,
-    borderBottom: '1px solid #A9B7B8',
+    borderBottom: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
     display: 'flex',
 
     borderRadius: (props: StyleProps) => (props.isMobile ? 'unset' : '7px 7px 0 0'),
-    backgroundColor: (props: StyleProps) => (props.isMobile ? '#FFFFFF' : '#F2F4F5'),
+    backgroundColor: (props: StyleProps) => (props.isMobile ? theme.palette.TwClrBg : theme.palette.TwClrBgSecondary),
   },
   title: {
     fontSize: '20px',
     fontWeight: 'bold',
-    color: '#3A4445',
+    color: theme.palette.TwClrTxt,
   },
   mainTitle: {
     display: 'flex',
@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   popover: {
     padding: 0,
-    borderTop: '1px solid #A9B7B8',
+    borderTop: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
     borderRadius: (props: StyleProps) => (props.isMobile ? 'unset' : '7px 7px 0 0'),
     height: '64px',
   },
@@ -42,9 +42,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     overflowX: 'visible',
     overflowY: 'visible',
     borderRadius: '7px',
-    borderLeft: '1px solid #A9B7B8',
-    borderRight: '1px solid #A9B7B8',
-    borderBottom: '1px solid #A9B7B8',
+    borderLeft: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+    borderRight: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+    borderBottom: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
     display: 'flex',
     flexDirection: 'column',
 
@@ -82,13 +82,13 @@ const useStyles = makeStyles((theme: Theme) => ({
     width: '16px',
     height: '16px',
     border: '2px solid transparent',
-    borderLeft: '2px solid #A9B7B8',
-    borderTop: '2px solid #A9B7B8',
+    borderLeft: `2px solid ${theme.palette.TwClrBrdrTertiary}`,
+    borderTop: `2px solid ${theme.palette.TwClrBrdrTertiary}`,
     top: '-8px',
     position: 'absolute',
     transform: 'rotate(45deg)',
     zIndex: 1400,
-    backgroundColor: '#F2F4F5',
+    backgroundColor: theme.palette.TwClrBgSecondary,
     boxSizing: 'border-box',
   },
   iconContainer: {
@@ -97,11 +97,11 @@ const useStyles = makeStyles((theme: Theme) => ({
     padding: 0,
   },
   icon: {
-    fill: '#3A4445',
+    fill: theme.palette.TwClrIcn,
     marginLeft: '8px',
   },
   iconClose: {
-    fill: '#708284',
+    fill: theme.palette.TwClrIcnSecondary,
     width: '22px',
     height: '22px',
   },
