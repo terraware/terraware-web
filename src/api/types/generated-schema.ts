@@ -345,10 +345,12 @@ export interface components {
       dryingEndDate?: string;
       /** Estimated number of seeds remaining. Absent if there isn't enough information to calculate an estimate. */
       estimatedCount?: number;
+      /** Estimated weight of seeds remaining. Absent if there isn't enough information to calculate an estimate. */
       estimatedWeight?: components["schemas"]["SeedQuantityPayload"];
       facilityId: number;
       /** Server-generated unique identifier for the accession. This is unique across all seed banks, but is not suitable for display to end users. */
       id: number;
+      /** Most recent user observation of seeds remaining in the accession. This is not directly editable; it is updated by the server whenever the "remainingQuantity" field is edited. */
       latestObservedQuantity?: components["schemas"]["SeedQuantityPayload"];
       /** Time of most recent user observation of seeds remaining in the accession. This is updated by the server whenever the "remainingQuantity" field is edited. */
       latestObservedTime?: string;
@@ -358,6 +360,7 @@ export interface components {
       /** Estimated number of plants the seeds were collected from. */
       plantsCollectedFrom?: number;
       receivedDate?: string;
+      /** Number or weight of seeds remaining for withdrawal and testing. May be calculated by the server after withdrawals. */
       remainingQuantity?: components["schemas"]["SeedQuantityPayload"];
       /** Which source of data this accession originally came from. */
       source?: "Web" | "Seed Collector App" | "File Import";
@@ -381,6 +384,7 @@ export interface components {
         | "Nursery";
       storageLocation?: string;
       subsetCount?: number;
+      /** Weight of subset of seeds. Units must be a weight measurement, not "Seeds". */
       subsetWeight?: components["schemas"]["SeedQuantityPayload"];
       viabilityPercent?: number;
       viabilityTests?: components["schemas"]["GetViabilityTestPayload"][];
@@ -559,7 +563,9 @@ export interface components {
       withdrawnByUserId?: number;
     };
     CreateNurseryTransferResponsePayload: {
+      /** Updated accession that includes a withdrawal for the nursery transfer. */
       accession: components["schemas"]["AccessionPayloadV2"];
+      /** Details of newly-created seedling batch. */
       batch: components["schemas"]["BatchPayload"];
       status: components["schemas"]["SuccessOrError"];
     };
@@ -654,6 +660,7 @@ export interface components {
       notes?: string;
       /** ID of the user who withdrew the seeds. Default is the current user's ID. If non-null, the current user must have permission to read the referenced user's membership details in the organization. */
       withdrawnByUserId?: number;
+      /** Quantity of seeds withdrawn. If this quantity is in weight and the remaining quantity of the accession is in seeds or vice versa, the accession must have a subset weight and count. */
       withdrawnQuantity?: components["schemas"]["SeedQuantityPayload"];
     };
     DeviceConfig: {
@@ -718,7 +725,6 @@ export interface components {
     ErrorDetails: {
       message: string;
     };
-    /** This organization's facilities. Only included if depth is "Facility". */
     FacilityPayload: {
       connectionState: "Not Connected" | "Connected" | "Configured";
       createdTime: string;
@@ -907,6 +913,7 @@ export interface components {
       date: string;
       /** Number of seeds withdrawn. Calculated by server. This is an estimate if "withdrawnQuantity" is a weight quantity and the accession has subset weight and count data. Absent if "withdrawnQuantity" is a weight quantity and the accession has no subset weight and count. */
       estimatedCount?: number;
+      /** Weight of seeds withdrawn. Calculated by server. This is an estimate if "withdrawnQuantity" is a seed count and the accession has subset weight and count data. Absent if "withdrawnQuantity" is a seed count and the accession has no subset weight and count. */
       estimatedWeight?: components["schemas"]["SeedQuantityPayload"];
       /** Server-assigned unique ID of this withdrawal. */
       id?: number;
@@ -927,6 +934,7 @@ export interface components {
       withdrawnByName?: string;
       /** ID of the user who withdrew the seeds. Only present if the current user has permission to list the users in the organization. V1 COMPATIBILITY: Also absent if the withdrawal was written with the v1 API and we haven't yet written the code to figure out which user ID to assign. */
       withdrawnByUserId?: number;
+      /** Quantity of seeds withdrawn. For viability testing withdrawals, this is always the same as the test's "seedsTested" value. */
       withdrawnQuantity?: components["schemas"]["SeedQuantityPayload"];
     };
     GetWithdrawalResponsePayload: {
@@ -1014,13 +1022,13 @@ export interface components {
       name: string;
       description?: string;
       configuration?: { [key: string]: unknown };
-      settings?: { [key: string]: { [key: string]: unknown } };
       type: string;
+      settings?: { [key: string]: { [key: string]: unknown } };
+      timeseriesName?: string;
+      deviceId?: number;
       lowerThreshold?: number;
       upperThreshold?: number;
       verbosity: number;
-      timeseriesName?: string;
-      deviceId?: number;
     };
     /** Search criterion that matches results that do not match a set of search criteria. */
     NotNodePayload: components["schemas"]["SearchNodePayload"] & {
@@ -1123,7 +1131,6 @@ export interface components {
       results: { [key: string]: unknown }[];
       cursor?: string;
     };
-    /** How to sort the search results. This controls both the order of the top-level results and the order of any lists of child objects. */
     SearchSortOrderElement: {
       field: string;
       direction?: "Ascending" | "Descending";
@@ -1267,15 +1274,15 @@ export interface components {
       status: components["schemas"]["SuccessOrError"];
     };
     /** Summary of important statistics about the seed bank for the Summary page. */
-    SummaryResponse: {
+    SummaryResponsePayload: {
       activeAccessions: number;
       species: number;
       /** Number of accessions in each state. */
       accessionsByState: { [key: string]: number };
+      /** Summary of the number of seeds remaining across all active accessions. */
       seedsRemaining: components["schemas"]["SeedCountSummaryPayload"];
       status: components["schemas"]["SuccessOrError"];
     };
-    /** Timeseries to query. May be from different devices. */
     TimeseriesIdPayload: {
       deviceId: number;
       timeseriesName: string;
@@ -1289,6 +1296,7 @@ export interface components {
       decimalPlaces?: number;
       /** Units of measure for values in this timeseries. */
       units?: string;
+      /** If any values have been recorded for the timeseries, the latest one. */
       latestValue?: components["schemas"]["TimeseriesValuePayload"];
     };
     TimeseriesValuePayload: {
@@ -1296,7 +1304,6 @@ export interface components {
       /** Value to record. If the timeseries is of type Numeric, this must be a decimal or integer value in string form. If the timeseries is of type Text, this can be an arbitrary string. */
       value: string;
     };
-    /** List of values that the server failed to record. Will not be included if all the values were recorded successfully. */
     TimeseriesValuesErrorPayload: {
       /** Device ID as specified in the failing request. */
       deviceId: number;
@@ -1333,6 +1340,7 @@ export interface components {
       /** Estimated number of plants the seeds were collected from. */
       plantsCollectedFrom?: number;
       receivedDate?: string;
+      /** Quantity of seeds remaining in the accession. If this is different than the existing value, it is considered a new observation, and the new value will override any previously-calculated remaining quantities. */
       remainingQuantity?: components["schemas"]["SeedQuantityPayload"];
       speciesId?: number;
       state?:
@@ -1349,6 +1357,7 @@ export interface components {
         | "Nursery";
       storageLocation?: string;
       subsetCount?: number;
+      /** Weight of subset of seeds. Units must be a weight measurement, not "Seeds". */
       subsetWeight?: components["schemas"]["SeedQuantityPayload"];
       viabilityPercent?: number;
     };
@@ -1478,6 +1487,7 @@ export interface components {
       notes?: string;
       /** ID of the user who withdrew the seeds. Default is the withdrawal's existing user ID. If non-null, the current user must have permission to read the referenced user's membership details in the organization. */
       withdrawnByUserId?: number;
+      /** Quantity of seeds withdrawn. For viability testing withdrawals, this is always the same as the test's "seedsTested" value. Otherwise, it is a user-supplied value. If this quantity is in weight and the remaining quantity of the accession is in seeds or vice versa, the accession must have a subset weight and count. */
       withdrawnQuantity?: components["schemas"]["SeedQuantityPayload"];
     };
     UploadFileResponsePayload: {
@@ -2940,7 +2950,7 @@ export interface operations {
       /** OK */
       200: {
         content: {
-          "application/json": components["schemas"]["SummaryResponse"];
+          "application/json": components["schemas"]["SummaryResponsePayload"];
         };
       };
     };

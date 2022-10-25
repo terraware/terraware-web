@@ -527,7 +527,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
       >
         <MenuList sx={{ padding: theme.spacing(2, 0) }}>
           <MenuItem onClick={() => onDownloadReport()} id='download-report' sx={{ padding: theme.spacing(1, 2) }}>
-            <Icon name='export' />
+            <Icon name='iconExport' />
             <Typography color={theme.palette.TwClrTxtBrand} paddingLeft={1}>
               {strings.EXPORT_RECORDS}
             </Typography>
@@ -542,7 +542,13 @@ export default function Database(props: DatabaseProps): JSX.Element {
       </Popover>
       {!isMobile && (
         <Box paddingRight={1} display='inline'>
-          <Button label={strings.IMPORT} size='medium' onClick={importAccessions} priority='secondary' />
+          <Button
+            label={strings.IMPORT}
+            icon='iconImport'
+            size='medium'
+            onClick={importAccessions}
+            priority='secondary'
+          />
         </Box>
       )}
     </>

@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   }),
   listItem: {
     flex: '1 1 auto',
-    maxWidth: '200px',
+    maxWidth: '205px',
     textAlign: 'center',
     margin: (props: EmptyStateStyleProps) => (props.isMobile ? theme.spacing(4, 3, 0, 3) : theme.spacing(0, 3)),
     '&:first-child': {
@@ -56,7 +56,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     padding: (props: EmptyStateStyleProps) => (props.isMobile ? '20px 0' : '0 5px'),
   },
   listItemIcon: {
-    width: '200px',
+    width: '205px',
     height: '128px',
     marginBottom: theme.spacing(2),
   },
@@ -135,7 +135,7 @@ export default function EmptyStateContent(props: EmptyStateContentProps): JSX.El
       <div className={classes.listContainer}>
         {listItems.map((item) => {
           return (
-            <Grid item xs={gridSize()} key={item.title} className={`${classes.listItem}`}>
+            <Grid item xs={12} key={item.title} className={`${classes.listItem}`}>
               <Icon name={item.icon} className={classes.listItemIcon} />
               <p className={classes.listItemTitle}>{item.title}</p>
               <div>
