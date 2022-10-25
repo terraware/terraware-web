@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(7),
     marginBottom: (props: StyleProps) => (props.isMobile ? theme.spacing(40) : theme.spacing(6)),
-    background: '#ffffff',
+    background: theme.palette.TwClrBg,
   },
 }));
 

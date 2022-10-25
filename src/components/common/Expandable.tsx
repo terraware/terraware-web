@@ -11,7 +11,7 @@ interface StyleProps {
 const useStyles = makeStyles((theme: Theme) => ({
   expandable: {
     borderRadius: '8px',
-    border: '1px solid #A9B7B8',
+    border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
     width: (props: StyleProps) => (props.isMobile ? '100%' : '584px'),
     padding: theme.spacing(1),
   },
@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     paddingLeft: `${theme.spacing(2)}px`,
   },
   icon: {
-    fill: '#3A4445',
+    fill: theme.palette.TwClrIcn,
   },
 }));
 

@@ -1,4 +1,4 @@
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, useTheme } from '@mui/material';
 import { Button, DialogBox } from '@terraware/web-components';
 import { Accession2, updateAccession2 } from 'src/api/accessions2/accession';
 import strings from 'src/strings';
@@ -16,6 +16,7 @@ export interface ViabilityResultModalProps {
 
 export default function ViabilityResultModal(props: ViabilityResultModalProps): JSX.Element {
   const { onClose, open, accession, reload, viabilityTest } = props;
+  const theme = useTheme();
 
   const snackbar = useSnackbar();
 
@@ -60,7 +61,7 @@ export default function ViabilityResultModal(props: ViabilityResultModalProps): 
       scrolled={true}
     >
       <Box padding={3}>
-        <Typography color='#859799'>{strings.VIABILITY_RESULT}</Typography>
+        <Typography color={theme.palette.TwClrTxtSecondary}>{strings.VIABILITY_RESULT}</Typography>
         <Typography fontSize='24px'>{getViabilityPercent()}%</Typography>
       </Box>
 

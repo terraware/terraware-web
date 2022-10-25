@@ -26,11 +26,11 @@ const useStyles = makeStyles((theme: Theme) => ({
     margin: '20px 0',
   },
   notificationIcon: {
-    fill: '#708284',
+    fill: theme.palette.TwClrIcnSecondary,
     margin: 'auto auto',
   },
   noNotifications: {
-    color: '#3A4445',
+    color: theme.palette.TwClrTxt,
     height: '107px',
     textAlign: 'center',
   },
@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     minWidth: '8px',
     height: '8px',
     borderRadius: '4px',
-    background: '#FE0003',
+    background: theme.palette.TwClrIcnDanger,
     position: 'absolute',
     left: '15px',
     top: '2px',
@@ -52,9 +52,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     overflowY: 'auto',
   },
   unreadNotification: {
-    backgroundColor: '#F0F4FF',
+    backgroundColor: theme.palette.TwClrBgBrandTertiary,
     '&.error': {
-      backgroundColor: '#FFF1F1',
+      backgroundColor: theme.palette.TwClrBgDangerTertiary,
     },
   },
   unreadNotificationIndicator: {
@@ -62,13 +62,13 @@ const useStyles = makeStyles((theme: Theme) => ({
     width: '8px',
     height: '8px',
     borderRadius: '4px',
-    backgroundColor: '#007DF2',
+    backgroundColor: theme.palette.TwClrIcnBrand,
   },
   notification: {
     display: 'flex',
     alignItems: 'flex-start',
     padding: (props: StyleProps) => (props.isMobile ? theme.spacing(1) : '8px 20px 8px 26px'),
-    borderBottom: '1px solid #A9B7B8',
+    borderBottom: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
     '&:last-child': {
       borderBottom: 'none',
     },
@@ -86,19 +86,19 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   notificationTitle: {
     display: 'block',
-    color: '#3A4445',
+    color: theme.palette.TwClrTxt,
     fontSize: '16px',
     fontWeight: 600,
     margin: '8px',
   },
   notificationBody: {
     display: 'block',
-    color: '#3A4445',
+    color: theme.palette.TwClrTxt,
     margin: '0px 8px',
   },
   notificationTimestamp: {
     display: 'block',
-    color: '#5C6B6C',
+    color: theme.palette.TwClrTxtSecondary,
     margin: '8px',
   },
   iconContainer: {
@@ -106,7 +106,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     fontSize: '16px',
   },
   icon: {
-    fill: '#3A4445',
+    fill: theme.palette.TwClrIcn,
   },
   notificationType: {
     margin: '12px 0',
@@ -117,16 +117,16 @@ const useStyles = makeStyles((theme: Theme) => ({
     height: '16px',
     fill: 'grey',
     '&.info': {
-      fill: '#708284',
+      fill: theme.palette.TwClrIcnSecondary,
     },
     '&.warning': {
-      fill: '#BD6931',
+      fill: theme.palette.TwClrIcnWarning,
     },
     '&.error': {
-      fill: '#FE0003',
+      fill: theme.palette.TwClrIcnDanger,
     },
     '&.success': {
-      fill: '#308F5F',
+      fill: theme.palette.TwClrIcnSuccess,
     },
   },
   notificationMenuWrapper: {

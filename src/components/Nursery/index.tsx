@@ -14,13 +14,13 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const useStyles = makeStyles((theme: Theme) => ({
   backIcon: {
-    fill: '#007DF2',
+    fill: theme.palette.TwClrIcnBrand,
     marginRight: theme.spacing(1),
   },
   back: {
     display: 'flex',
     textDecoration: 'none',
-    color: '#0067C8',
+    color: theme.palette.TwClrTxtBrand,
     fontSize: '20px',
     alignItems: 'center',
   },

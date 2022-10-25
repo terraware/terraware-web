@@ -25,7 +25,7 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
 
   const categoryStyle = {
-    color: '#708284',
+    color: theme.palette.TwClrTxtSecondary,
   };
 
   const gridRowStyle = {
@@ -35,7 +35,7 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
 
   const useStyles = makeStyles(() => ({
     folderIcon: {
-      fill: '#3A4445',
+      fill: theme.palette.TwClrIcn,
       marginRight: theme.spacing(1),
     },
   }));
@@ -158,7 +158,7 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
             <Grid item xs={gridRightSide}>
               {accession.collectionSiteName}
               {accession.collectionSiteLandowner ? (
-                <Typography color='#708284'>
+                <Typography color={theme.palette.TwClrTxtSecondary}>
                   ({strings.OWNER}: {accession.collectionSiteLandowner})
                 </Typography>
               ) : (

@@ -25,7 +25,7 @@ interface StyleProps {
 
 const useStyles = makeStyles((theme: Theme) => ({
   graphContainer: {
-    border: '1px solid #A9B7B8',
+    border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
     padding: '24px',
   },
   graphTitle: {

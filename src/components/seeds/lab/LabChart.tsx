@@ -73,7 +73,7 @@ export default function LabChart<T>({ row, rowName, defaultSort }: Props): JSX.E
                 gridLines: {
                   lineWidth: 0,
                   zeroLineWidth: 2,
-                  zeroLineColor: '#ccc',
+                  zeroLineColor: theme.palette.TwClrBrdrTertiary,
                 },
                 ticks: {
                   beginAtZero: true,

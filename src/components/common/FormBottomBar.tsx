@@ -12,7 +12,7 @@ interface StyleProps {
 const useStyles = makeStyles((theme: Theme) => ({
   bottomBar: {
     filter: 'drop-shadow(0px 0px 8px rgba(0, 0, 0, 0.2))',
-    background: '#ffffff',
+    background: theme.palette.TwClrBg,
     boxShadow: 'none',
     justifyContent: 'space-between',
     display: 'flex',
