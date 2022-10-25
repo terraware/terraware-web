@@ -2459,10 +2459,10 @@
   dependencies:
     defer-to-connect "^2.0.1"
 
-"@terraware/web-components@^1.0.48":
-  version "1.0.48"
-  resolved "https://registry.yarnpkg.com/@terraware/web-components/-/web-components-1.0.48.tgz#4f22d4c9891ff1d2581c1e254f13984308d4c208"
-  integrity sha512-ox5mi8xxI5SPAsOxSXsfCAu3oqOu309r63sQKwcy+HTqkrpa8b2RQgrfnClME/2hlqC5UC+0bguHSbf3bQLBbQ==
+"@terraware/web-components@^1.0.50":
+  version "1.0.50"
+  resolved "https://registry.yarnpkg.com/@terraware/web-components/-/web-components-1.0.50.tgz#f2bcfc8914d4ab03ac525cbfeca52efd0d88a19c"
+  integrity sha512-PRhoeEPgOLJcZ5AMQ1jyYoMraJ9eKD/+5jkvRoGg8qgDQuwnTiG85A5gSIl2hq+72tI7Xtf7IvyK7EvO2pBscA==
   dependencies:
     "@date-io/date-fns" "^2.14.0"
     "@date-io/moment" "^2.10.11"
@@ -9882,9 +9882,9 @@ module-deps@^6.0.0, module-deps@^6.2.3:
     xtend "^4.0.0"
 
 moment-timezone@^0.5.37:
-  version "0.5.37"
-  resolved "https://registry.yarnpkg.com/moment-timezone/-/moment-timezone-0.5.37.tgz#adf97f719c4e458fdb12e2b4e87b8bec9f4eef1e"
-  integrity sha512-uEDzDNFhfaywRl+vwXxffjjq1q0Vzr+fcQpQ1bU0kbzorfS7zVtZnCnGc8mhWmF39d4g4YriF6kwA75mJKE/Zg==
+  version "0.5.38"
+  resolved "https://registry.yarnpkg.com/moment-timezone/-/moment-timezone-0.5.38.tgz#9674a5397b8be7c13de820fd387d8afa0f725aad"
+  integrity sha512-nMIrzGah4+oYZPflDvLZUgoVUO4fvAqHstvG3xAUnMolWncuAiLDWNnJZj6EwJGMGfb1ZcuTFE6GI3hNOVWI/Q==
   dependencies:
     moment ">= 2.9.0"
 

@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   }),
   listItem: {
     flex: '1 1 auto',
-    maxWidth: '200px',
+    maxWidth: '205px',
     textAlign: 'center',
     margin: (props: EmptyStateStyleProps) => (props.isMobile ? theme.spacing(4, 3, 0, 3) : theme.spacing(0, 3)),
     '&:first-child': {
@@ -56,7 +56,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     padding: (props: EmptyStateStyleProps) => (props.isMobile ? '20px 0' : '0 5px'),
   },
   listItemIcon: {
-    width: '200px',
+    width: '205px',
     height: '128px',
     marginBottom: theme.spacing(2),
   },
