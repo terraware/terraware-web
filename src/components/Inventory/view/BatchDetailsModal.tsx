@@ -200,7 +200,9 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
                 />
               </Grid>
               <Grid item xs={gridSize()} sx={marginTop} paddingLeft={paddingSeparator}>
-                <Typography sx={{ color: '#5C6B6C', fontSize: '14px' }}>{strings.ACCESSION_ID}</Typography>
+                <Typography sx={{ color: theme.palette.TwClrTxtSecondary, fontSize: '14px' }}>
+                  {strings.ACCESSION_ID}
+                </Typography>
                 {record.accessionId && (
                   <Link to={APP_PATHS.ACCESSIONS2_ITEM.replace('accessionid', record.accessionId.toString())}>
                     {record.accessionId}
