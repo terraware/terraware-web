@@ -5,6 +5,7 @@ import { Button } from '@terraware/web-components';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
 import strings from 'src/strings';
+import stopPropagation from 'src/utils/stopPropagationEvent';
 
 const useStyles = makeStyles(() => ({
   link: {
@@ -19,15 +20,18 @@ export default function BatchesCellRenderer(props: RendererProps<TableRowType>):
   const classes = useStyles();
   const { column, row, value, index, onRowClick } = props;
 
-  const withdraw = () => {
+  const rowClick = (event?: React.SyntheticEvent) => {
     if (onRowClick) {
+      if (event) {
+        stopPropagation(event);
+      }
       onRowClick();
     }
   };
 
   const createLinkToBatch = (iValue: React.ReactNode | unknown[]) => {
     return (
-      <Link component='button' className={classes.link + ' ' + classes.text} onClick={onRowClick}>
+      <Link component='button' className={classes.link + ' ' + classes.text} onClick={rowClick}>
         {iValue}
       </Link>
     );
@@ -47,7 +51,7 @@ export default function BatchesCellRenderer(props: RendererProps<TableRowType>):
           <Button
             id='withdraw-batch'
             label={strings.WITHDRAW}
-            onClick={withdraw}
+            onClick={rowClick}
             size='small'
             priority='secondary'
             className={classes.text}
