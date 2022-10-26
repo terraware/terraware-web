@@ -279,12 +279,6 @@ const COLUMNS: DatabaseColumn[] = [
     filter: { type: 'number_range' },
   },
   {
-    key: 'latestViabilityPercent',
-    name: strings.MOST_RECENT_PERCENTAGE_VIABILITY,
-    type: 'number',
-    filter: { type: 'number_range' },
-  },
-  {
     key: 'bagNumber',
     name: strings.BAG_IDS,
     type: 'string',
@@ -363,7 +357,6 @@ const generalInventoryPreset: Preset = {
     'plantsCollectedFrom',
     'estimatedSeedsIncoming',
     'storageCondition',
-    'latestViabilityPercent',
   ],
 };
 
@@ -380,7 +373,6 @@ const seedStoragePreset: Preset = {
     'storageCondition',
     'storageLocationName',
     'storageNotes',
-    'latestViabilityPercent',
   ],
 };
 
@@ -403,7 +395,6 @@ const viabilitySummaryPreset: Preset = {
     'cutTestSeedsFilled',
     'cutTestSeedsEmpty',
     'cutTestSeedsCompromised',
-    'latestViabilityPercent',
   ],
 };
 
@@ -431,10 +422,4 @@ export const searchPresets = [
   germinationTestingPreset,
 ];
 
-export const RIGHT_ALIGNED_COLUMNS = [
-  'ageMonths',
-  'ageYears',
-  'estimatedWeightGrams',
-  'estimatedCount',
-  'latestViabilityPercent',
-];
+export const RIGHT_ALIGNED_COLUMNS = ['ageMonths', 'ageYears', 'estimatedWeightGrams', 'estimatedCount'];

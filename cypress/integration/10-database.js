@@ -94,7 +94,6 @@ describe('Database', () => {
         cy.get('#table-header-estimatedSeedsIncoming').contains('ESTIMATED SEEDS INCOMING');
         cy.get('#table-header-collectionSiteLandowner').contains('LANDOWNER');
         cy.get('#table-header-storageCondition').contains('STORAGE CONDITION');
-        cy.get('#table-header-latestViabilityPercent').contains('MOST RECENT % VIABILITY');
       });
 
       it('Default', () => {
@@ -143,7 +142,6 @@ describe('Database', () => {
         cy.get('#table-header-storageCondition').contains('STORAGE CONDITION');
         cy.get('#table-header-storageLocationName').contains('STORAGE LOCATION');
         cy.get('#table-header-storageNotes').contains('NOTES');
-        cy.get('#table-header-latestViabilityPercent').contains('MOST RECENT % VIABILITY');
       });
 
       it('Viability Summary', () => {
@@ -178,7 +176,6 @@ describe('Database', () => {
         cy.get('#table-header-viabilityTests_substrate').contains('VIABILITY SUBSTRATE');
         cy.get('#table-header-viabilityTests_percentGerminated').contains('% VIABILITY');
         cy.get('#table-header-cutTestSeedsCompromised').contains('NUMBER OF SEEDS COMPROMISED');
-        cy.get('#table-header-latestViabilityPercent').contains('MOST RECENT % VIABILITY');
       });
 
       it('Viability Testing To Do', () => {

@@ -90,7 +90,6 @@ const strings = new LocalizedStrings({
     DATE_OF_WITHDRAWAL: 'Date of Withdrawal',
     NUMBER_OF_SEEDS_WITHDRAWN: 'Seeds Withdrawn',
     DESTINATION: 'Destination',
-    NUMBER_OF_SEEDS_REMAINING: 'Seeds Remaining',
     PURPOSE: 'Purpose',
     TARGET_RH: 'Target %RH',
     SEED_TYPE: 'Seed Type',
