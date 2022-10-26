@@ -140,7 +140,6 @@ describe('Database', () => {
         cy.get('#table-header-receivedDate').contains('RECEIVED DATE');
         cy.get('#table-header-collectedDate').contains('COLLECTED DATE');
         cy.get('#table-header-estimatedSeedsIncoming').should('contain', 'ESTIMATED SEEDS INCOMING');
-        cy.get('#table-header-storageStartDate').should('contain', 'STORING START DATE');
         cy.get('#table-header-storageCondition').contains('STORAGE CONDITION');
         cy.get('#table-header-storageLocationName').contains('STORAGE LOCATION');
         cy.get('#table-header-storagePackets').contains('NUMBER OF STORAGE PACKETS');

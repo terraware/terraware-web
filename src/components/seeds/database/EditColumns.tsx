@@ -189,7 +189,7 @@ const sections: Section[] = [
   {
     name: 'Storing',
     options: [
-      [COLUMNS_INDEXED.storageStartDate, COLUMNS_INDEXED.storageCondition],
+      [COLUMNS_INDEXED.storageCondition],
       [COLUMNS_INDEXED.storagePackets, COLUMNS_INDEXED.storageLocationName],
       [COLUMNS_INDEXED.storageNotes],
     ],

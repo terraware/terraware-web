@@ -167,12 +167,6 @@ const COLUMNS: DatabaseColumn[] = [
   },
   { key: 'processingNotes', name: strings.NOTES, type: 'notes' },
   {
-    key: 'storageStartDate',
-    name: strings.STORING_START_DATE,
-    type: 'date',
-    filter: { type: 'date_range' },
-  },
-  {
     key: 'storageCondition',
     name: strings.STORAGE_CONDITION,
     type: 'string',
@@ -389,7 +383,6 @@ const seedStoragePreset: Preset = {
     'collectedDate',
     'receivedDate',
     'estimatedSeedsIncoming',
-    'storageStartDate',
     'storagePackets',
     'storageCondition',
     'storageLocationName',
