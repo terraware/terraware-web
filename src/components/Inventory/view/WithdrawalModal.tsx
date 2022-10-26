@@ -199,9 +199,9 @@ export default function WithdrawalsModal(props: WithdrawalsModalProps): JSX.Elem
               </FormControl>
             </Grid>
 
-            {record.batchWithdrawals.map((bw) => {
+            {record.batchWithdrawals.map((bw, index) => {
               return (
-                <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
+                <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator} key={`batch-${index}`}>
                   <Textfield
                     id='readyQuantityWithdrawn'
                     value={bw.readyQuantityWithdrawn}
