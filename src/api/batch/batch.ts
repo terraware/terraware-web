@@ -163,3 +163,41 @@ export const updateBatchQuantities = async (batch: Batch): Promise<UpdateBatchRe
   }
   return response;
 };
+
+const BATCH_WITHDRAWALS = '/api/v1/nursery/withdrawals';
+type CreateNurseryWithdrawalResponsePayload =
+  paths[typeof BATCH_WITHDRAWALS]['post']['responses'][200]['content']['application/json'];
+
+export type CreateNurseryWithdrawalRequestPayload =
+  paths[typeof BATCH_WITHDRAWALS]['post']['requestBody']['content']['application/json'];
+
+type CreateBatchWithdrawalResponse = {
+  withdrawalId: number | null;
+  requestSucceeded: boolean;
+  error?: string;
+};
+
+export async function createBatchWithdrawal(
+  createNurseryWithdrawalRequestPayload: CreateNurseryWithdrawalRequestPayload
+): Promise<CreateBatchWithdrawalResponse> {
+  const response: CreateBatchWithdrawalResponse = {
+    withdrawalId: null,
+    requestSucceeded: true,
+  };
+
+  try {
+    const serverResponse: CreateNurseryWithdrawalResponsePayload = (
+      await axios.post(BATCH_WITHDRAWALS, createNurseryWithdrawalRequestPayload)
+    ).data;
+    if (serverResponse.status === 'ok') {
+      response.withdrawalId = serverResponse.withdrawal.id;
+    } else {
+      response.requestSucceeded = false;
+    }
+  } catch (e: any) {
+    addError(e?.response?.data || {}, response);
+    response.requestSucceeded = false;
+  }
+
+  return response;
+}

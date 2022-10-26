@@ -800,6 +800,10 @@ const strings = new LocalizedStrings({
     ADD_SEEDLING_BATCH: 'Add Seedling Batch',
     NURSERY_REQUIRED: 'Nursery *',
     SEEDLING_BATCH_DETAILS: 'Seedling Batch Details',
+    WITHDRAW_QUANTITY_REQUIRED: 'Withdraw Quantity *',
+    WITHDRAW_DATE_REQUIRED: 'Withdraw Date *',
+    NURSERY_TRANSFER: 'Nursery Transfer',
+    DEAD: 'Dead',
   },
 });
 
