@@ -185,11 +185,7 @@ const sections: Section[] = [
   },
   {
     name: 'Storing',
-    options: [
-      [COLUMNS_INDEXED.storageCondition],
-      [COLUMNS_INDEXED.storageLocationName],
-      [COLUMNS_INDEXED.storageNotes],
-    ],
+    options: [[COLUMNS_INDEXED.storageCondition], [COLUMNS_INDEXED.storageLocationName]],
   },
   {
     name: 'Withdrawal',
