@@ -576,6 +576,8 @@ export interface components {
       facilityId: number;
       notes?: string;
       purpose: "Nursery Transfer" | "Dead" | "Out Plant" | "Other";
+      /** If purpose is "Nursery Transfer", the estimated ready-by date to use for the batches that are created at the other nursery. */
+      readyByDate?: string;
       withdrawnDate: string;
     };
     CreateNurseryWithdrawalResponsePayload: {
