@@ -95,6 +95,7 @@ export const deleteBatch = async (batchId: number): Promise<DeleteBatchResponse>
 };
 
 type UpdateBatchResponse = {
+  batch?: Batch;
   requestSucceeded: boolean;
   error?: string;
 };
@@ -102,14 +103,56 @@ type UpdateBatchResponse = {
 type UpdateBatchResponsePayload =
   paths[typeof BATCH_ID_ENDPOINT]['put']['responses'][200]['content']['application/json'];
 
+export type UpdateBatchRequestPayload =
+  paths[typeof BATCH_ID_ENDPOINT]['put']['requestBody']['content']['application/json'];
+
 export const updateBatch = async (batch: Batch): Promise<UpdateBatchResponse> => {
+  const response: UpdateBatchResponse = {
+    batch: undefined,
+    requestSucceeded: true,
+  };
+
+  try {
+    const updateBatchRequestPayload: UpdateBatchRequestPayload = {
+      notes: batch.notes,
+      readyByDate: batch.readyByDate,
+      version: batch.version,
+    };
+    const serverResponse: UpdateBatchResponsePayload = (
+      await axios.put(BATCH_ID_ENDPOINT.replace('{id}', batch.id.toString()), updateBatchRequestPayload)
+    ).data;
+    if (serverResponse.status === 'ok') {
+      response.batch = serverResponse.batch;
+    } else {
+      response.requestSucceeded = false;
+    }
+  } catch (e: any) {
+    addError(e?.response?.data || {}, response);
+    response.requestSucceeded = false;
+  }
+  return response;
+};
+
+const BATCH_QUANTITIES_ENDPOINT = '/api/v1/nursery/batches/{id}/quantities';
+export type UpdateBatchQuantitiesRequestPayload =
+  paths[typeof BATCH_QUANTITIES_ENDPOINT]['put']['requestBody']['content']['application/json'];
+export const updateBatchQuantities = async (batch: Batch): Promise<UpdateBatchResponse> => {
   const response: UpdateBatchResponse = {
     requestSucceeded: true,
   };
 
   try {
+    const updateBatchQuantitiesRequestPayload: UpdateBatchQuantitiesRequestPayload = {
+      germinatingQuantity: batch.germinatingQuantity,
+      notReadyQuantity: batch.notReadyQuantity,
+      readyQuantity: batch.readyQuantity,
+      version: batch.version,
+    };
     const serverResponse: UpdateBatchResponsePayload = (
-      await axios.put(BATCH_ID_ENDPOINT.replace('{id}', batch.id.toString()), batch)
+      await axios.put(
+        BATCH_QUANTITIES_ENDPOINT.replace('{id}', batch.id.toString()),
+        updateBatchQuantitiesRequestPayload
+      )
     ).data;
     if (serverResponse.status !== 'ok') {
       response.requestSucceeded = false;

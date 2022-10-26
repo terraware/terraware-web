@@ -3168,6 +3168,11 @@ export interface operations {
   };
   /** The uploaded file must be in CSV format. A template with the correct headers may be downloaded from the `/api/v1/species/uploads/template` endpoint. */
   uploadSpeciesList: {
+    parameters: {
+      query: {
+        organizationId: number;
+      };
+    };
     responses: {
       /** The file has been successfully received. It will be processed asynchronously; use the ID returned in the response payload to poll for its status using the `/api/v1/species/uploads/{uploadId}` GET endpoint. */
       200: {
@@ -3180,7 +3185,6 @@ export interface operations {
       content: {
         "multipart/form-data": {
           file: string;
-          organizationId?: unknown;
         };
       };
     };
@@ -3510,6 +3514,11 @@ export interface operations {
   };
   /** The uploaded file must be in CSV format. A template with the correct headers may be downloaded from the `/api/v2/seedbank/accessions/uploads/template` endpoint. */
   uploadAccessionsList: {
+    parameters: {
+      query: {
+        facilityId: number;
+      };
+    };
     responses: {
       /** The file has been successfully received. It will be processed asynchronously; use the ID returned in the response payload to poll for its status using the `/api/v2/seedbank/accessions/uploads/{uploadId}` GET endpoint. */
       200: {
@@ -3522,7 +3531,6 @@ export interface operations {
       content: {
         "multipart/form-data": {
           file: string;
-          facilityId?: unknown;
         };
       };
     };
