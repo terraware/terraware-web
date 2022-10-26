@@ -101,7 +101,7 @@ export async function getSpecies(speciesId: number, organizationId: string): Pro
   const queryParams: GetSpeciesQuery = { organizationId };
 
   try {
-    const endpoint = addQueryParams(SPECIES_ID_ENDPOINT.replace('{speciesId}', `${speciesId}`), queryParams);
+    const endpoint = addQueryParams(SPECIES_ID_ENDPOINT.replace('{speciesId}', speciesId.toString()), queryParams);
     const serverResponse: GetOneSpeciesResponsePayload = (await axios.get(endpoint)).data;
     response.species = serverResponse.species;
     if (serverResponse.status === 'error') {
