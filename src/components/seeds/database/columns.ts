@@ -165,7 +165,6 @@ const COLUMNS: DatabaseColumn[] = [
     name: strings.REMAINING_UNITS,
     type: 'string',
   },
-  { key: 'processingNotes', name: strings.NOTES, type: 'notes' },
   {
     key: 'storageCondition',
     name: strings.STORAGE_CONDITION,
