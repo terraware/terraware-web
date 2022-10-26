@@ -135,7 +135,7 @@ export default function WithdrawalsModal(props: WithdrawalsModalProps): JSX.Elem
     setRecord((previousRecord: CreateNurseryWithdrawalRequestPayload): CreateNurseryWithdrawalRequestPayload => {
       return {
         ...previousRecord,
-        destinationFacilityId: Number.parseInt(facilityId),
+        destinationFacilityId: Number.parseInt(facilityId, 10),
       };
     });
   };
@@ -273,10 +273,10 @@ export default function WithdrawalsModal(props: WithdrawalsModalProps): JSX.Elem
                       </Grid>
                       <Grid item xs={gridSize()} sx={marginTop} paddingLeft={paddingSeparator}>
                         <DatePicker
-                          id='estimatedReadyDate'
+                          id='readyByDate'
                           label={strings.ESTIMATED_READY_DATE}
                           aria-label={strings.ESTIMATED_READY_DATE}
-                          value={record.withdrawnDate}
+                          value={record.readyByDate}
                           onChange={changeDate}
                           errorText={validateFields && !record.withdrawnDate ? strings.REQUIRED_FIELD : ''}
                         />
