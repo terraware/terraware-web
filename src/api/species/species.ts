@@ -87,10 +87,35 @@ export async function createSpecies(species: Species, organizationId: number): P
   return response;
 }
 
-const PUT_SPECIES_ENDPOINT = '/api/v1/species/{speciesId}';
-type PutSpeciesRequest = paths[typeof PUT_SPECIES_ENDPOINT]['put']['requestBody']['content']['application/json'];
+const SPECIES_ID_ENDPOINT = '/api/v1/species/{speciesId}';
+export type GetSpeciesResponse = {
+  requestSucceeded: boolean;
+  species?: Species;
+};
+type GetOneSpeciesResponsePayload =
+  paths[typeof SPECIES_ID_ENDPOINT]['get']['responses']['200']['content']['application/json'];
+type GetSpeciesQuery = paths[typeof SPECIES_ID_ENDPOINT]['get']['parameters']['query'];
+
+export async function getSpecies(speciesId: number, organizationId: string): Promise<GetSpeciesResponse> {
+  const response: GetSpeciesResponse = { requestSucceeded: true };
+  const queryParams: GetSpeciesQuery = { organizationId };
+
+  try {
+    const endpoint = addQueryParams(SPECIES_ID_ENDPOINT.replace('{speciesId}', speciesId.toString()), queryParams);
+    const serverResponse: GetOneSpeciesResponsePayload = (await axios.get(endpoint)).data;
+    response.species = serverResponse.species;
+    if (serverResponse.status === 'error') {
+      response.requestSucceeded = false;
+    }
+  } catch (error) {
+    response.requestSucceeded = false;
+  }
+  return response;
+}
+
+type PutSpeciesRequest = paths[typeof SPECIES_ID_ENDPOINT]['put']['requestBody']['content']['application/json'];
 type SimpleSuccessResponsePayload =
-  paths[typeof PUT_SPECIES_ENDPOINT]['put']['responses']['200']['content']['application/json'];
+  paths[typeof SPECIES_ID_ENDPOINT]['put']['responses']['200']['content']['application/json'];
 /*
  * UpdateSpeciesResponse.species will always contain the data the caller attempted to write. The caller must examine
  * the requestSucceeded field to determine if the API call succeeded.
@@ -113,7 +138,7 @@ export async function updateSpecies(species: Species, organizationId: number): P
     seedStorageBehavior: species.seedStorageBehavior,
   };
   try {
-    const endpoint = PUT_SPECIES_ENDPOINT.replace('{speciesId}', `${species.id}`);
+    const endpoint = SPECIES_ID_ENDPOINT.replace('{speciesId}', `${species.id}`);
     const updateSpeciesNameResponse: SimpleSuccessResponsePayload = await axios.put(endpoint, speciesToUpdate);
     if (updateSpeciesNameResponse.status === 'error') {
       response.requestSucceeded = false;
@@ -128,10 +153,10 @@ export async function updateSpecies(species: Species, organizationId: number): P
 }
 
 type SpeciesDeleteResponse =
-  paths[typeof PUT_SPECIES_ENDPOINT]['delete']['responses'][200]['content']['application/json'];
+  paths[typeof SPECIES_ID_ENDPOINT]['delete']['responses'][200]['content']['application/json'];
 
 export async function deleteSpecies(speciesId: number, organizationId: number): Promise<SpeciesDeleteResponse> {
-  const endpoint = PUT_SPECIES_ENDPOINT.replace('{speciesId}', `${speciesId}`) + `?organizationId=${organizationId}`;
+  const endpoint = SPECIES_ID_ENDPOINT.replace('{speciesId}', `${speciesId}`) + `?organizationId=${organizationId}`;
   const response: SpeciesDeleteResponse = (await axios.delete(endpoint)).data;
 
   return response;

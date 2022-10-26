@@ -17,6 +17,7 @@ import { deleteBatch } from 'src/api/batch/batch';
 import useSnackbar from 'src/utils/useSnackbar';
 import BatchDetailsModal from './BatchDetailsModal';
 import { Batch } from 'src/api/types/batch';
+import WithdrawalModal from './WithdrawalModal';
 
 const columns = (editable: boolean): TableColumnType[] => {
   const defaultColumns: TableColumnType[] = [
@@ -55,6 +56,7 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
   const [selectedRows, setSelectedRows] = useState<Batch[]>([]);
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
   const [openNewBatchModal, setOpenNewBatchModal] = useState<boolean>(false);
+  const [openWithdrawalModal, setOpenWithdrawalModal] = useState<boolean>(false);
   const [selectedBatch, setSelectedBatch] = useState<Batch>();
   const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
   const editable = !isContributor(organization);
@@ -113,6 +115,7 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
           'facility_name',
           'readyByDate',
           'addedDate',
+          'version',
         ],
         sortOrder: [
           {
@@ -170,9 +173,13 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
     return;
   };
 
-  const onBatchSelected = (batch: Batch) => {
+  const onBatchSelected = (batch: Batch, fromColumn?: string) => {
     setSelectedBatch(batch);
-    setOpenNewBatchModal(true);
+    if (fromColumn === 'withdraw') {
+      setOpenWithdrawalModal(true);
+    } else {
+      setOpenNewBatchModal(true);
+    }
   };
 
   return (
@@ -187,6 +194,18 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
         speciesId={speciesId}
         selectedBatch={selectedBatch}
       />
+      {selectedBatch && (
+        <WithdrawalModal
+          open={openWithdrawalModal}
+          reload={reloadData}
+          onClose={() => {
+            setOpenWithdrawalModal(false);
+          }}
+          organization={organization}
+          speciesId={speciesId}
+          selectedBatch={selectedBatch}
+        />
+      )}
       <DeleteBatchesModal
         open={openDeleteModal}
         onClose={() => setOpenDeleteModal(false)}
