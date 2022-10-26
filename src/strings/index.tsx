@@ -106,7 +106,6 @@ const strings = new LocalizedStrings({
     VIABILITY_TESTING: 'Viability Testing',
     VIABILITY_TREATMENT: 'Viability Treatment',
     VIABILITY_START_DATE: 'Viability Start Date',
-    MOST_RECENT_VIABILITY_TEST_DATE: 'Most Recent Viability Test Date',
     PERCENTAGE_VIABILITY: '% Viability',
     VIABILITY_SUBSTRATE: 'Viability Substrate',
     NUMBER_OF_SEEDS_COMPROMISED_V2: '# Seeds Compromised',

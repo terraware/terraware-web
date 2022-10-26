@@ -285,12 +285,6 @@ const COLUMNS: DatabaseColumn[] = [
     filter: { type: 'number_range' },
   },
   {
-    key: 'latestViabilityTestDate',
-    name: strings.MOST_RECENT_VIABILITY_TEST_DATE,
-    type: 'date',
-    filter: { type: 'date_range' },
-  },
-  {
     key: 'viabilityTests_substrate',
     name: strings.VIABILITY_SUBSTRATE,
     type: 'number',
@@ -393,7 +387,6 @@ const generalInventoryPreset: Preset = {
     'plantsCollectedFrom',
     'estimatedSeedsIncoming',
     'storageCondition',
-    'latestViabilityTestDate',
     'latestViabilityPercent',
   ],
 };

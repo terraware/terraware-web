@@ -94,7 +94,6 @@ describe('Database', () => {
         cy.get('#table-header-estimatedSeedsIncoming').contains('ESTIMATED SEEDS INCOMING');
         cy.get('#table-header-collectionSiteLandowner').contains('LANDOWNER');
         cy.get('#table-header-storageCondition').contains('STORAGE CONDITION');
-        cy.get('#table-header-latestViabilityTestDate').contains('MOST RECENT VIABILITY TEST DATE');
         cy.get('#table-header-latestViabilityPercent').contains('MOST RECENT % VIABILITY');
       });
 
