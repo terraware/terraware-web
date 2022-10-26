@@ -178,12 +178,6 @@ const COLUMNS: DatabaseColumn[] = [
     type: 'string',
     filter: { type: 'multiple_selection' },
   },
-  {
-    key: 'storagePackets',
-    name: strings.NUMBER_OF_STORAGE_PACKETS,
-    type: 'number',
-    filter: { type: 'number_range' },
-  },
   { key: 'storageNotes', name: strings.NOTES, type: 'notes' },
   {
     key: 'withdrawalQuantity',
@@ -383,7 +377,6 @@ const seedStoragePreset: Preset = {
     'collectedDate',
     'receivedDate',
     'estimatedSeedsIncoming',
-    'storagePackets',
     'storageCondition',
     'storageLocationName',
     'storageNotes',
@@ -422,7 +415,6 @@ const germinationTestingPreset: Preset = {
     'active',
     'state',
     'collectedDate',
-    'storagePackets',
     'storageCondition',
     'storageLocationName',
     'storageNotes',

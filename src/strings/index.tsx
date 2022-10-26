@@ -87,7 +87,6 @@ const strings = new LocalizedStrings({
     STORING_START_DATE: 'Storing Start Date',
     STORAGE_CONDITION: 'Storage Condition',
     STORAGE_LOCATION: 'Storage Location',
-    NUMBER_OF_STORAGE_PACKETS: 'Number of Storage Packets',
     DATE_OF_WITHDRAWAL: 'Date of Withdrawal',
     NUMBER_OF_SEEDS_WITHDRAWN: 'Seeds Withdrawn',
     DESTINATION: 'Destination',
