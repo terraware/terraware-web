@@ -183,7 +183,7 @@ const sections: Section[] = [
     name: 'Processing and Drying',
     options: [
       [COLUMNS_INDEXED.totalQuantity, COLUMNS_INDEXED.viabilityTestType],
-      [COLUMNS_INDEXED.dryingEndDate, COLUMNS_INDEXED.targetStorageCondition, COLUMNS_INDEXED.processingNotes],
+      [COLUMNS_INDEXED.dryingEndDate, COLUMNS_INDEXED.processingNotes],
     ],
   },
   {

@@ -222,12 +222,6 @@ const COLUMNS: DatabaseColumn[] = [
     type: 'string',
     filter: { type: 'single_selection' },
   },
-  {
-    key: 'targetStorageCondition',
-    name: strings.TARGET_RH,
-    type: 'string',
-    filter: { type: 'multiple_selection' },
-  },
   { key: 'withdrawalNotes', name: strings.NOTES, type: 'notes' },
   {
     key: 'viabilityTests_type',
