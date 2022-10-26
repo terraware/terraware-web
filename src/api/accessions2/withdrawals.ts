@@ -38,3 +38,31 @@ export const postWithdrawal = async (
 
   return response;
 };
+
+const TRANSFER_TO_NURSERY = '/api/v2/seedbank/accessions/{accessionId}/transfers/nursery';
+
+export type TransferToNurseryRequestBody =
+  paths[typeof TRANSFER_TO_NURSERY]['post']['requestBody']['content']['application/json'];
+
+type NurseryTransferResponse = {
+  requestSucceeded: boolean;
+  error?: string;
+};
+
+export const transferToNursery = async (
+  request: TransferToNurseryRequestBody,
+  accessionId: number
+): Promise<NurseryTransferResponse> => {
+  const response: NurseryTransferResponse = {
+    requestSucceeded: true,
+  };
+
+  try {
+    await axios.post(TRANSFER_TO_NURSERY.replace('{accessionId}', accessionId.toString()), request);
+  } catch (e: any) {
+    response.requestSucceeded = false;
+    addError(e?.response?.data || {}, response);
+  }
+
+  return response;
+};

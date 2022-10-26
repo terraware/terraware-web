@@ -1,4 +1,4 @@
-import { paths } from './generated-schema';
+import { paths, components } from './generated-schema';
 const BATCHES = '/api/v1/nursery/batches';
 const BATCH_WITHDRAWALS = '/api/v1/nursery/withdrawals';
 
@@ -14,3 +14,6 @@ export type BatchWithdrawal =
 
 export type NurseryWithdrawalPurpose =
   paths[typeof BATCH_WITHDRAWALS]['post']['responses'][200]['content']['application/json']['withdrawal']['purpose'];
+
+export const schemas = 'schemas';
+export type NurseryTransfer = components[typeof schemas]['CreateNurseryTransferRequestPayload'];
