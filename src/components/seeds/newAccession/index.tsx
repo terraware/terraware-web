@@ -334,7 +334,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
               id='numberOfTrees'
               onChange={OnNumberOfTreesChange}
               type='number'
-              label={strings.NUMBER_OF_TREES}
+              label={strings.NUMBER_OF_PLANTS}
               min={0}
               helperText={getErrorText('numberOfTrees')}
               error={getErrorText('numberOfTrees') ? true : false}

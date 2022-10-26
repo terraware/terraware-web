@@ -90,7 +90,7 @@ describe('Database', () => {
         cy.get('#table-header-receivedDate').contains('RECEIVED DATE');
         cy.get('#table-header-collectedDate').contains('COLLECTED DATE');
         cy.get('#table-header-collectionSiteName').contains('SITE LOCATION');
-        cy.get('#table-header-treesCollectedFrom').contains('NUMBER OF TREES');
+        cy.get('#table-header-plantsCollectedFrom').contains('NUMBER OF PLANTS');
         cy.get('#table-header-estimatedSeedsIncoming').contains('ESTIMATED SEEDS INCOMING');
         cy.get('#table-header-collectionSiteLandowner').contains('LANDOWNER');
         cy.get('#table-header-storageCondition').contains('STORAGE CONDITION');

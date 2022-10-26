@@ -171,7 +171,7 @@ const sections: Section[] = [
         COLUMNS_INDEXED.estimatedCount,
       ],
       [
-        COLUMNS_INDEXED.treesCollectedFrom,
+        COLUMNS_INDEXED.plantsCollectedFrom,
         COLUMNS_INDEXED.bagNumber,
         COLUMNS_INDEXED.collectionSiteLandowner,
         COLUMNS_INDEXED.collectionNotes,
