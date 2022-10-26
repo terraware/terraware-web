@@ -135,12 +135,6 @@ const COLUMNS: DatabaseColumn[] = [
     filter: { type: 'date_range' },
   },
   {
-    key: 'dryingStartDate',
-    name: strings.DRYING_START_DATE,
-    type: 'date',
-    filter: { type: 'date_range' },
-  },
-  {
     key: 'processingMethod',
     name: strings.PROCESSING_METHOD,
     type: 'string',
