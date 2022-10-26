@@ -9,5 +9,8 @@ export type CreateBatchRequestPayload = paths[typeof BATCHES]['post']['requestBo
 export type NurseryWithdrawal =
   paths[typeof BATCH_WITHDRAWALS]['post']['responses'][200]['content']['application/json']['withdrawal'];
 
+export type BatchWithdrawal =
+  paths[typeof BATCH_WITHDRAWALS]['post']['responses'][200]['content']['application/json']['withdrawal']['batchWithdrawals'][0];
+
 export type NurseryWithdrawalPurpose =
   paths[typeof BATCH_WITHDRAWALS]['post']['responses'][200]['content']['application/json']['withdrawal']['purpose'];

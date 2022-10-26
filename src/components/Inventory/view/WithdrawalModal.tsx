@@ -3,10 +3,10 @@ import { Button, DatePicker, DialogBox, Textfield } from '@terraware/web-compone
 import strings from 'src/strings';
 import useForm from 'src/utils/useForm';
 import { ServerOrganization } from 'src/types/Organization';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import useSnackbar from 'src/utils/useSnackbar';
 import { getTodaysDateFormatted, useDeviceInfo } from '@terraware/web-components/utils';
-import { Batch, NurseryWithdrawalPurpose } from 'src/api/types/batch';
+import { Batch, BatchWithdrawal, NurseryWithdrawalPurpose } from 'src/api/types/batch';
 import { createBatchWithdrawal, CreateNurseryWithdrawalRequestPayload } from 'src/api/batch/batch';
 import { getSpecies } from 'src/api/species/species';
 import { Species } from 'src/types/Species';
@@ -25,7 +25,23 @@ export interface WithdrawalsModalProps {
 export default function WithdrawalsModal(props: WithdrawalsModalProps): JSX.Element {
   const { onClose, open, organization, reload, speciesId, selectedBatch } = props;
 
-  const [record, setRecord, onChange] = useForm<CreateNurseryWithdrawalRequestPayload | undefined>(undefined);
+  const initWithdrawalBatch = useMemo(() => {
+    const cleanWithdrawalBatch = {
+      batchWithdrawals: [
+        {
+          batchId: selectedBatch.id,
+          notReadyQuantityWithdrawn: 0,
+          readyQuantityWithdrawn: 0,
+        },
+      ],
+      facilityId: selectedBatch.facilityId,
+      purpose: 'Out Plant' as NurseryWithdrawalPurpose,
+      withdrawnDate: getTodaysDateFormatted(),
+    };
+    return cleanWithdrawalBatch;
+  }, [selectedBatch]);
+
+  const [record, setRecord, onChange] = useForm<CreateNurseryWithdrawalRequestPayload>(initWithdrawalBatch);
   const snackbar = useSnackbar();
   const theme = useTheme();
   const [validateFields, setValidateFields] = useState<boolean>(false);
@@ -34,36 +50,19 @@ export default function WithdrawalsModal(props: WithdrawalsModalProps): JSX.Elem
   const [speciesSelected, setSpeciesSelected] = useState<Species>();
 
   useEffect(() => {
-    if (record) {
-      const populateSpecies = async () => {
-        const speciesResponse = await getSpecies(speciesId, organization.id.toString());
-        if (speciesResponse.requestSucceeded) {
-          setSpeciesSelected(speciesResponse.species);
-        }
-      };
-
-      populateSpecies();
-    }
-  }, [record, organization, speciesId]);
-
-  useEffect(() => {
-    const initWithdrawalBatch = () => {
-      return {
-        batchWithdrawals: [
-          {
-            batchId: selectedBatch.id,
-            notReadyQuantityWithdrawn: 0,
-            readyQuantityWithdrawn: 0,
-          },
-        ],
-        facilityId: selectedBatch.facilityId,
-        purpose: 'Out Plant' as NurseryWithdrawalPurpose,
-        withdrawnDate: getTodaysDateFormatted(),
-      };
+    const populateSpecies = async () => {
+      const speciesResponse = await getSpecies(speciesId, organization.id.toString());
+      if (speciesResponse.requestSucceeded) {
+        setSpeciesSelected(speciesResponse.species);
+      }
     };
 
-    setRecord(initWithdrawalBatch());
-  }, [selectedBatch, setRecord]);
+    populateSpecies();
+  }, [organization, speciesId]);
+
+  useEffect(() => {
+    setRecord(initWithdrawalBatch);
+  }, [selectedBatch, setRecord, initWithdrawalBatch]);
 
   const MANDATORY_FIELDS = ['purpose', 'withdrawnDate'] as const;
   type MandatoryField = typeof MANDATORY_FIELDS[number];
@@ -114,6 +113,19 @@ export default function WithdrawalsModal(props: WithdrawalsModalProps): JSX.Elem
 
   const onChangePurpose = (event: React.ChangeEvent<HTMLInputElement>) => {
     onChange('purpose', (event.target as HTMLInputElement).value);
+  };
+
+  const onChangeQuantity = (id: keyof BatchWithdrawal, value: unknown) => {
+    if (selectedBatch && record?.batchWithdrawals) {
+      const newBatchWithdrawal = { ...record?.batchWithdrawals[0], [id]: value };
+
+      setRecord((previousRecord: CreateNurseryWithdrawalRequestPayload): CreateNurseryWithdrawalRequestPayload => {
+        return {
+          ...previousRecord,
+          batchWithdrawals: [newBatchWithdrawal],
+        };
+      });
+    }
   };
 
   return (
@@ -187,20 +199,20 @@ export default function WithdrawalsModal(props: WithdrawalsModalProps): JSX.Elem
               </FormControl>
             </Grid>
 
-            <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
-              <Textfield
-                id='readyQuantityWithdrawn'
-                value={record.batchWithdrawals[0].readyQuantityWithdrawn}
-                onChange={onChange}
-                type='text'
-                label={strings.WITHDRAW_QUANTITY_REQUIRED}
-                errorText={
-                  validateFields && record.batchWithdrawals[0].readyQuantityWithdrawn === 0
-                    ? strings.REQUIRED_FIELD
-                    : ''
-                }
-              />
-            </Grid>
+            {record.batchWithdrawals.map((bw, index) => {
+              return (
+                <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator} key={`batch-${index}`}>
+                  <Textfield
+                    id='readyQuantityWithdrawn'
+                    value={bw.readyQuantityWithdrawn}
+                    onChange={(id, value) => onChangeQuantity('readyQuantityWithdrawn', value)}
+                    type='text'
+                    label={strings.WITHDRAW_QUANTITY_REQUIRED}
+                    errorText={validateFields && bw.readyQuantityWithdrawn === 0 ? strings.REQUIRED_FIELD : ''}
+                  />
+                </Grid>
+              );
+            })}
 
             <Grid item xs={gridSize()} sx={marginTop} paddingLeft={paddingSeparator}>
               <DatePicker
