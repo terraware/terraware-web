@@ -227,17 +227,6 @@ export default function WithdrawalsModal(props: WithdrawalsModalProps): JSX.Elem
                     </Grid>
                   );
                 })}
-
-                <Grid item xs={gridSize()} sx={marginTop} paddingLeft={paddingSeparator}>
-                  <DatePicker
-                    id='withdrawnDate'
-                    label={strings.WITHDRAW_DATE_REQUIRED}
-                    aria-label={strings.WITHDRAW_DATE_REQUIRED}
-                    value={record.withdrawnDate}
-                    onChange={changeDate}
-                    errorText={validateFields && !record.withdrawnDate ? strings.REQUIRED_FIELD : ''}
-                  />
-                </Grid>
               </>
             )}
 
@@ -304,18 +293,24 @@ export default function WithdrawalsModal(props: WithdrawalsModalProps): JSX.Elem
                     </>
                   );
                 })}
-                <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
-                  <DatePicker
-                    id='withdrawnDate'
-                    label={strings.WITHDRAW_DATE_REQUIRED}
-                    aria-label={strings.WITHDRAW_DATE_REQUIRED}
-                    value={record.withdrawnDate}
-                    onChange={changeDate}
-                    errorText={validateFields && !record.withdrawnDate ? strings.REQUIRED_FIELD : ''}
-                  />
-                </Grid>
               </>
             )}
+            <Grid
+              item
+              xs={gridSize()}
+              sx={marginTop}
+              paddingRight={record.purpose !== 'Out Plant' ? paddingSeparator : 0}
+              paddingLeft={record.purpose === 'Out Plant' ? paddingSeparator : 0}
+            >
+              <DatePicker
+                id='withdrawnDate'
+                label={strings.WITHDRAW_DATE_REQUIRED}
+                aria-label={strings.WITHDRAW_DATE_REQUIRED}
+                value={record.withdrawnDate}
+                onChange={changeDate}
+                errorText={validateFields && !record.withdrawnDate ? strings.REQUIRED_FIELD : ''}
+              />
+            </Grid>
             <Grid padding={theme.spacing(3, 0, 1, 2)} xs={12}>
               <Textfield id='notes' value={record.notes} onChange={onChange} type='textarea' label={strings.NOTES} />
             </Grid>
