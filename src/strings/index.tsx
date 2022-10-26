@@ -804,6 +804,8 @@ const strings = new LocalizedStrings({
     WITHDRAW_DATE_REQUIRED: 'Withdraw Date *',
     NURSERY_TRANSFER: 'Nursery Transfer',
     DEAD: 'Dead',
+    DESTINATION_REQUIRED: 'Destination *',
+    WITHDRAW_QUANTITY: 'Withdraw Quantity',
   },
 });
 
