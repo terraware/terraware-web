@@ -69,10 +69,22 @@ export default function WithdrawalsModal(props: WithdrawalsModalProps): JSX.Elem
   const MANDATORY_FIELDS = ['purpose', 'withdrawnDate'] as const;
   type MandatoryField = typeof MANDATORY_FIELDS[number];
 
+  const validateBatchWithdrawal = () => {
+    if (record.batchWithdrawals && record.batchWithdrawals[0]) {
+      if (!record.batchWithdrawals[0].readyQuantityWithdrawn) {
+        return false;
+      }
+      return true;
+    }
+    return false;
+  };
+
   const hasErrors = () => {
     if (record) {
       const missingRequiredField = MANDATORY_FIELDS.some((field: MandatoryField) => !record[field]);
-      return missingRequiredField;
+      if (!missingRequiredField) {
+        return !validateBatchWithdrawal();
+      }
     }
     return true;
   };
@@ -211,7 +223,7 @@ export default function WithdrawalsModal(props: WithdrawalsModalProps): JSX.Elem
               </FormControl>
             </Grid>
 
-            {record.purpose === 'Out Plant' && (
+            {record.purpose === 'Out Plant' ? (
               <>
                 {record.batchWithdrawals.map((bw, index) => {
                   return (
@@ -228,24 +240,24 @@ export default function WithdrawalsModal(props: WithdrawalsModalProps): JSX.Elem
                   );
                 })}
               </>
-            )}
-
-            {record.purpose === 'Nursery Transfer' && (
+            ) : (
               <>
-                <Grid item xs={12} sx={marginTop}>
-                  <Dropdown
-                    id='facilityId'
-                    label={strings.DESTINATION_REQUIRED}
-                    selectedValue={record.destinationFacilityId?.toString()}
-                    options={getAllNurseries(organization).map((nursery) => ({
-                      label: nursery.name,
-                      value: nursery.id.toString(),
-                    }))}
-                    onChange={onChangeDestinationNursery}
-                    errorText={validateFields && !record.destinationFacilityId ? strings.REQUIRED_FIELD : ''}
-                    fullWidth={true}
-                  />
-                </Grid>
+                {record.purpose === 'Nursery Transfer' && (
+                  <Grid item xs={12} sx={marginTop}>
+                    <Dropdown
+                      id='facilityId'
+                      label={strings.DESTINATION_REQUIRED}
+                      selectedValue={record.destinationFacilityId?.toString()}
+                      options={getAllNurseries(organization).map((nursery) => ({
+                        label: nursery.name,
+                        value: nursery.id.toString(),
+                      }))}
+                      onChange={onChangeDestinationNursery}
+                      errorText={validateFields && !record.destinationFacilityId ? strings.REQUIRED_FIELD : ''}
+                      fullWidth={true}
+                    />
+                  </Grid>
+                )}
 
                 {record.batchWithdrawals.map((bw, index) => {
                   return (
