@@ -1,15 +1,5 @@
-c7cbfbf Sort by number, duh
-a3167c2 Kick off again
-dee4eb5 Cleanup
-189ef38 Cleanup
-2489670 Fetch all history
-8970890 Ignore
-330aed1 Try
-d25292b Fix
-10b9a88 Fix
-05243cb Fix
-1db28c2 Fix
-2d1a176 Test gh_pages deployment
+b70f4eb Deploy github page with commit history since last release (#669)
+9ca0acc SW-1886 Withdraw from seedbank for nursery transfer purposes  (#670)
 170326a SW-1880 Withdraw with Other/Dead purpose (#666)
 806891f SW-1885 Withdraw with Nursery Transfer purpose (#664)
 cd50dfb SW-2052 Disable click propagation from withdraw button and batch-number link (#665)

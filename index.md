@@ -1,3 +1,3 @@
 # Terraware Web
 
-* [Git log since last release](unreleased.log)
+- [Git log since last release](unreleased.log)
