@@ -262,7 +262,7 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
     return;
   };
 
-  const OnNumberOfTreesChange = (id: string, value: unknown) => {
+  const onNumberOfPlantsChange = (id: string, value: unknown) => {
     const newErrors = [...errors];
     const errorIndex = newErrors.findIndex((error) => error.id === id);
     if (Number(value) < 0) {
@@ -331,13 +331,13 @@ export function AccessionForm<T extends AccessionPostRequestBody>({
           <Grid item xs={gridSize()}>
             <TextField
               value={''}
-              id='numberOfTrees'
-              onChange={OnNumberOfTreesChange}
+              id='numberOfPlants'
+              onChange={onNumberOfPlantsChange}
               type='number'
-              label={strings.NUMBER_OF_TREES}
+              label={strings.NUMBER_OF_PLANTS}
               min={0}
-              helperText={getErrorText('numberOfTrees')}
-              error={getErrorText('numberOfTrees') ? true : false}
+              helperText={getErrorText('numberOfPlants')}
+              error={getErrorText('numberOfPlants') ? true : false}
               disabled={isPendingCheckIn || isContributor}
             />
           </Grid>

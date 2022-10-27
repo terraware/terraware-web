@@ -91,8 +91,8 @@ const COLUMNS: DatabaseColumn[] = [
     filter: { type: 'single_selection' },
   },
   {
-    key: 'treesCollectedFrom',
-    name: strings.NUMBER_OF_TREES,
+    key: 'plantsCollectedFrom',
+    name: strings.NUMBER_OF_PLANTS,
     type: 'number',
     filter: { type: 'number_range' },
   },
@@ -135,12 +135,6 @@ const COLUMNS: DatabaseColumn[] = [
     filter: { type: 'date_range' },
   },
   {
-    key: 'dryingStartDate',
-    name: strings.DRYING_START_DATE,
-    type: 'date',
-    filter: { type: 'date_range' },
-  },
-  {
     key: 'processingMethod',
     name: strings.PROCESSING_METHOD,
     type: 'string',
@@ -171,13 +165,6 @@ const COLUMNS: DatabaseColumn[] = [
     name: strings.REMAINING_UNITS,
     type: 'string',
   },
-  { key: 'processingNotes', name: strings.NOTES, type: 'notes' },
-  {
-    key: 'storageStartDate',
-    name: strings.STORING_START_DATE,
-    type: 'date',
-    filter: { type: 'date_range' },
-  },
   {
     key: 'storageCondition',
     name: strings.STORAGE_CONDITION,
@@ -190,13 +177,6 @@ const COLUMNS: DatabaseColumn[] = [
     type: 'string',
     filter: { type: 'multiple_selection' },
   },
-  {
-    key: 'storagePackets',
-    name: strings.NUMBER_OF_STORAGE_PACKETS,
-    type: 'number',
-    filter: { type: 'number_range' },
-  },
-  { key: 'storageNotes', name: strings.NOTES, type: 'notes' },
   {
     key: 'withdrawalQuantity',
     additionalKeys: ['withdrawalUnits'],
@@ -227,12 +207,6 @@ const COLUMNS: DatabaseColumn[] = [
     name: strings.PURPOSE,
     type: 'string',
     filter: { type: 'single_selection' },
-  },
-  {
-    key: 'targetStorageCondition',
-    name: strings.TARGET_RH,
-    type: 'string',
-    filter: { type: 'multiple_selection' },
   },
   { key: 'withdrawalNotes', name: strings.NOTES, type: 'notes' },
   {
@@ -285,12 +259,6 @@ const COLUMNS: DatabaseColumn[] = [
     filter: { type: 'number_range' },
   },
   {
-    key: 'latestViabilityTestDate',
-    name: strings.MOST_RECENT_VIABILITY_TEST_DATE,
-    type: 'date',
-    filter: { type: 'date_range' },
-  },
-  {
     key: 'viabilityTests_substrate',
     name: strings.VIABILITY_SUBSTRATE,
     type: 'number',
@@ -305,12 +273,6 @@ const COLUMNS: DatabaseColumn[] = [
   {
     key: 'cutTestSeedsCompromised',
     name: strings.NUMBER_OF_SEEDS_COMPROMISED,
-    type: 'number',
-    filter: { type: 'number_range' },
-  },
-  {
-    key: 'latestViabilityPercent',
-    name: strings.MOST_RECENT_PERCENTAGE_VIABILITY,
     type: 'number',
     filter: { type: 'number_range' },
   },
@@ -390,11 +352,9 @@ const generalInventoryPreset: Preset = {
     'receivedDate',
     'species_endangered',
     'species_rare',
-    'treesCollectedFrom',
+    'plantsCollectedFrom',
     'estimatedSeedsIncoming',
     'storageCondition',
-    'latestViabilityTestDate',
-    'latestViabilityPercent',
   ],
 };
 
@@ -408,12 +368,8 @@ const seedStoragePreset: Preset = {
     'collectedDate',
     'receivedDate',
     'estimatedSeedsIncoming',
-    'storageStartDate',
-    'storagePackets',
     'storageCondition',
     'storageLocationName',
-    'storageNotes',
-    'latestViabilityPercent',
   ],
 };
 
@@ -436,7 +392,6 @@ const viabilitySummaryPreset: Preset = {
     'cutTestSeedsFilled',
     'cutTestSeedsEmpty',
     'cutTestSeedsCompromised',
-    'latestViabilityPercent',
   ],
 };
 
@@ -448,10 +403,8 @@ const germinationTestingPreset: Preset = {
     'active',
     'state',
     'collectedDate',
-    'storagePackets',
     'storageCondition',
     'storageLocationName',
-    'storageNotes',
     'viabilityTests_type',
     'viabilityTests_startDate',
   ],
@@ -465,10 +418,4 @@ export const searchPresets = [
   germinationTestingPreset,
 ];
 
-export const RIGHT_ALIGNED_COLUMNS = [
-  'ageMonths',
-  'ageYears',
-  'estimatedWeightGrams',
-  'estimatedCount',
-  'latestViabilityPercent',
-];
+export const RIGHT_ALIGNED_COLUMNS = ['ageMonths', 'ageYears', 'estimatedWeightGrams', 'estimatedCount'];

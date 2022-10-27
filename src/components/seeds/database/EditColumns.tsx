@@ -171,7 +171,7 @@ const sections: Section[] = [
         COLUMNS_INDEXED.estimatedCount,
       ],
       [
-        COLUMNS_INDEXED.treesCollectedFrom,
+        COLUMNS_INDEXED.plantsCollectedFrom,
         COLUMNS_INDEXED.bagNumber,
         COLUMNS_INDEXED.collectionSiteLandowner,
         COLUMNS_INDEXED.collectionNotes,
@@ -181,18 +181,11 @@ const sections: Section[] = [
   },
   {
     name: 'Processing and Drying',
-    options: [
-      [COLUMNS_INDEXED.totalQuantity, COLUMNS_INDEXED.viabilityTestType, COLUMNS_INDEXED.dryingStartDate],
-      [COLUMNS_INDEXED.dryingEndDate, COLUMNS_INDEXED.targetStorageCondition, COLUMNS_INDEXED.processingNotes],
-    ],
+    options: [[COLUMNS_INDEXED.totalQuantity], [COLUMNS_INDEXED.viabilityTestType], [COLUMNS_INDEXED.dryingEndDate]],
   },
   {
     name: 'Storing',
-    options: [
-      [COLUMNS_INDEXED.storageStartDate, COLUMNS_INDEXED.storageCondition],
-      [COLUMNS_INDEXED.storagePackets, COLUMNS_INDEXED.storageLocationName],
-      [COLUMNS_INDEXED.storageNotes],
-    ],
+    options: [[COLUMNS_INDEXED.storageCondition], [COLUMNS_INDEXED.storageLocationName]],
   },
   {
     name: 'Withdrawal',
@@ -210,18 +203,16 @@ const sections: Section[] = [
         COLUMNS_INDEXED.viabilityTests_seedType,
         COLUMNS_INDEXED.viabilityTests_treatment,
         COLUMNS_INDEXED.cutTestSeedsFilled,
-        COLUMNS_INDEXED.viabilityTests_percentGerminated,
       ],
       [
         COLUMNS_INDEXED.viabilityTests_startDate,
         COLUMNS_INDEXED.viabilityTests_seedsSown,
         COLUMNS_INDEXED.viabilityTests_viabilityTestResults_seedsGerminated,
         COLUMNS_INDEXED.cutTestSeedsEmpty,
-        COLUMNS_INDEXED.latestViabilityPercent,
       ],
       [
-        COLUMNS_INDEXED.latestViabilityTestDate,
         COLUMNS_INDEXED.viabilityTests_substrate,
+        COLUMNS_INDEXED.viabilityTests_percentGerminated,
         COLUMNS_INDEXED.cutTestSeedsCompromised,
         COLUMNS_INDEXED.viabilityTests_notes,
       ],

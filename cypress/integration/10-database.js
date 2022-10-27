@@ -82,7 +82,7 @@ describe('Database', () => {
         cy.wait('@values2');
         cy.get('#editColumnsDialog').should('not.exist');
 
-        cy.get('#table-header').children().should('have.length', 15);
+        cy.get('#table-header').children().should('have.length', 13);
         cy.get('#table-header-accessionNumber').contains('ACCESSION');
         cy.get('#table-header-active').contains('ACTIVE/INACTIVE');
         cy.get('#table-header-state').contains('STAGE');
@@ -90,12 +90,10 @@ describe('Database', () => {
         cy.get('#table-header-receivedDate').contains('RECEIVED DATE');
         cy.get('#table-header-collectedDate').contains('COLLECTED DATE');
         cy.get('#table-header-collectionSiteName').contains('SITE LOCATION');
-        cy.get('#table-header-treesCollectedFrom').contains('NUMBER OF TREES');
+        cy.get('#table-header-plantsCollectedFrom').contains('NUMBER OF PLANTS');
         cy.get('#table-header-estimatedSeedsIncoming').contains('ESTIMATED SEEDS INCOMING');
         cy.get('#table-header-collectionSiteLandowner').contains('LANDOWNER');
         cy.get('#table-header-storageCondition').contains('STORAGE CONDITION');
-        cy.get('#table-header-latestViabilityTestDate').contains('MOST RECENT VIABILITY TEST DATE');
-        cy.get('#table-header-latestViabilityPercent').contains('MOST RECENT % VIABILITY');
       });
 
       it('Default', () => {
@@ -133,7 +131,7 @@ describe('Database', () => {
         cy.wait('@values');
         cy.get('#editColumnsDialog').should('not.exist');
 
-        cy.get('#table-header').children().should('have.length', 13);
+        cy.get('#table-header').children().should('have.length', 9);
         cy.get('#table-header-accessionNumber').contains('ACCESSION');
         cy.get('#table-header-active').contains('ACTIVE/INACTIVE');
         cy.get('#table-header-state').contains('STAGE');
@@ -141,12 +139,8 @@ describe('Database', () => {
         cy.get('#table-header-receivedDate').contains('RECEIVED DATE');
         cy.get('#table-header-collectedDate').contains('COLLECTED DATE');
         cy.get('#table-header-estimatedSeedsIncoming').should('contain', 'ESTIMATED SEEDS INCOMING');
-        cy.get('#table-header-storageStartDate').should('contain', 'STORING START DATE');
         cy.get('#table-header-storageCondition').contains('STORAGE CONDITION');
         cy.get('#table-header-storageLocationName').contains('STORAGE LOCATION');
-        cy.get('#table-header-storagePackets').contains('NUMBER OF STORAGE PACKETS');
-        cy.get('#table-header-storageNotes').contains('NOTES');
-        cy.get('#table-header-latestViabilityPercent').contains('MOST RECENT % VIABILITY');
       });
 
       it('Viability Summary', () => {
@@ -162,7 +156,7 @@ describe('Database', () => {
         cy.wait('@values');
         cy.get('#editColumnsDialog').should('not.exist');
 
-        cy.get('#table-header').children().should('have.length', 17);
+        cy.get('#table-header').children().should('have.length', 16);
         cy.get('#table-header-accessionNumber').contains('ACCESSION');
         cy.get('#table-header-active').contains('ACTIVE/INACTIVE');
         cy.get('#table-header-state').contains('STAGE');
@@ -181,7 +175,6 @@ describe('Database', () => {
         cy.get('#table-header-viabilityTests_substrate').contains('VIABILITY SUBSTRATE');
         cy.get('#table-header-viabilityTests_percentGerminated').contains('% VIABILITY');
         cy.get('#table-header-cutTestSeedsCompromised').contains('NUMBER OF SEEDS COMPROMISED');
-        cy.get('#table-header-latestViabilityPercent').contains('MOST RECENT % VIABILITY');
       });
 
       it('Viability Testing To Do', () => {
@@ -197,7 +190,7 @@ describe('Database', () => {
         cy.wait('@values');
         cy.get('#editColumnsDialog').should('not.exist');
 
-        cy.get('#table-header').children().should('have.length', 11);
+        cy.get('#table-header').children().should('have.length', 9);
         cy.get('#table-header-accessionNumber').contains('ACCESSION');
         cy.get('#table-header-active').contains('ACTIVE/INACTIVE');
         cy.get('#table-header-state').contains('STAGE');
@@ -205,8 +198,6 @@ describe('Database', () => {
         cy.get('#table-header-collectedDate').contains('COLLECTED DATE');
         cy.get('#table-header-storageCondition').contains('STORAGE CONDITION');
         cy.get('#table-header-storageLocationName').contains('STORAGE LOCATION');
-        cy.get('#table-header-storagePackets').contains('NUMBER OF STORAGE PACKETS');
-        cy.get('#table-header-storageNotes').contains('NOTES');
         cy.get('#table-header-viabilityTests_type').contains('VIABILITY TEST TYPE');
         cy.get('#table-header-viabilityTests_startDate').contains('VIABILITY START DATE');
       });
@@ -225,19 +216,17 @@ describe('Database', () => {
         cy.wait('@values');
         cy.get('#editColumnsDialog').should('not.exist');
 
-        cy.get('#table-header').children().should('have.length', 12);
+        cy.get('#table-header').children().should('have.length', 10);
         cy.get('#table-header > :nth-child(1)').contains('ACCESSION');
         cy.get('#table-header > :nth-child(2)').contains('SPECIES');
         cy.get('#table-header > :nth-child(3)').contains('ACTIVE/INACTIVE');
         cy.get('#table-header > :nth-child(4)').contains('STAGE');
         cy.get('#table-header > :nth-child(5)').contains('COLLECTED DATE');
-        cy.get('#table-header > :nth-child(6)').contains('NUMBER OF STORAGE PACKETS');
-        cy.get('#table-header > :nth-child(7)').contains('STORAGE CONDITION');
-        cy.get('#table-header > :nth-child(8)').contains('STORAGE LOCATION');
-        cy.get('#table-header > :nth-child(9)').contains('NOTES');
-        cy.get('#table-header > :nth-child(10)').contains('VIABILITY TEST TYPE');
-        cy.get('#table-header > :nth-child(11)').contains('VIABILITY START DATE');
-        cy.get('#table-header > :nth-child(12)').contains('RARE');
+        cy.get('#table-header > :nth-child(6)').contains('STORAGE CONDITION');
+        cy.get('#table-header > :nth-child(7)').contains('STORAGE LOCATION');
+        cy.get('#table-header > :nth-child(8)').contains('VIABILITY TEST TYPE');
+        cy.get('#table-header > :nth-child(9)').contains('VIABILITY START DATE');
+        cy.get('#table-header > :nth-child(10)').contains('RARE');
       });
     });
   });
