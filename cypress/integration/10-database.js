@@ -222,13 +222,11 @@ describe('Database', () => {
         cy.get('#table-header > :nth-child(3)').contains('ACTIVE/INACTIVE');
         cy.get('#table-header > :nth-child(4)').contains('STAGE');
         cy.get('#table-header > :nth-child(5)').contains('COLLECTED DATE');
-        cy.get('#table-header > :nth-child(6)').contains('NUMBER OF STORAGE PACKETS');
-        cy.get('#table-header > :nth-child(7)').contains('STORAGE CONDITION');
-        cy.get('#table-header > :nth-child(8)').contains('STORAGE LOCATION');
-        cy.get('#table-header > :nth-child(9)').contains('NOTES');
-        cy.get('#table-header > :nth-child(10)').contains('VIABILITY TEST TYPE');
-        cy.get('#table-header > :nth-child(11)').contains('VIABILITY START DATE');
-        cy.get('#table-header > :nth-child(12)').contains('RARE');
+        cy.get('#table-header > :nth-child(6)').contains('STORAGE CONDITION');
+        cy.get('#table-header > :nth-child(7)').contains('STORAGE LOCATION');
+        cy.get('#table-header > :nth-child(8)').contains('VIABILITY TEST TYPE');
+        cy.get('#table-header > :nth-child(9)').contains('VIABILITY START DATE');
+        cy.get('#table-header > :nth-child(10)').contains('RARE');
       });
     });
   });
