@@ -1,2 +1,3 @@
+74d4b1b SW-1978 Run git log script with bash to avoid permissions errors (#676)
 0933314 SW-2050: Accessions Page Columns (#667)
 9dd4d0a remove .swp file (#675)
