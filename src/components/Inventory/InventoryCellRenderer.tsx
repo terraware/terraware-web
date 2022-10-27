@@ -1,5 +1,5 @@
 import { makeStyles } from '@mui/styles';
-import React, { ReactElement } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
 import CellRenderer, { TableRowType } from '../common/table/TableCellRenderer';
