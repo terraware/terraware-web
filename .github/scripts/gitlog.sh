@@ -10,4 +10,4 @@ HEAD=${LAST_TAG_DESCRIBE##*g}
 echo "Last tag = "$LAST_TAG
 echo "Head = "$HEAD
 #git log $LAST_TAG..$HEAD --oneline
-git log $LAST_TAG..$HEAD --oneline > docs/unreleased.log
+git log $LAST_TAG..HEAD --oneline > docs/unreleased.log
