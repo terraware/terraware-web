@@ -6,7 +6,6 @@ import { ServerOrganization } from 'src/types/Organization';
 import useDebounce from 'src/utils/useDebounce';
 import { search } from 'src/api/search';
 import BatchesCellRenderer from './BatchesCellRenderer';
-import { isContributor } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useForm from 'src/utils/useForm';
 import Pill from 'src/components/Pill';
@@ -19,25 +18,18 @@ import BatchDetailsModal from './BatchDetailsModal';
 import { Batch } from 'src/api/types/batch';
 import WithdrawalModal from './WithdrawalModal';
 
-const columns = (editable: boolean): TableColumnType[] => {
-  const defaultColumns: TableColumnType[] = [
-    { key: 'batchNumber', name: strings.SEEDLING_BATCH, type: 'string' },
-    { key: 'germinatingQuantity', name: strings.GERMINATING, type: 'string' },
-    { key: 'notReadyQuantity', name: strings.NOT_READY, type: 'string' },
-    { key: 'readyQuantity', name: strings.READY, type: 'string' },
-    { key: 'totalQuantity', name: strings.TOTAL, type: 'string' },
-    { key: 'totalQuantityWithdrawn', name: strings.WITHDRAWN, type: 'string' },
-    { key: 'facility_name', name: strings.NURSERY, type: 'string' },
-    { key: 'readyByDate', name: strings.EST_READY_DATE, type: 'string' },
-    { key: 'addedDate', name: strings.DATE_ADDED, type: 'string' },
-  ];
-
-  if (editable) {
-    return [...defaultColumns, { key: 'withdraw', name: '', type: 'string' }];
-  } else {
-    return defaultColumns;
-  }
-};
+const columns: TableColumnType[] = [
+  { key: 'batchNumber', name: strings.SEEDLING_BATCH, type: 'string' },
+  { key: 'germinatingQuantity', name: strings.GERMINATING, type: 'string' },
+  { key: 'notReadyQuantity', name: strings.NOT_READY, type: 'string' },
+  { key: 'readyQuantity', name: strings.READY, type: 'string' },
+  { key: 'totalQuantity', name: strings.TOTAL, type: 'string' },
+  { key: 'totalQuantityWithdrawn', name: strings.WITHDRAWN, type: 'string' },
+  { key: 'facility_name', name: strings.NURSERY, type: 'string' },
+  { key: 'readyByDate', name: strings.EST_READY_DATE, type: 'string' },
+  { key: 'addedDate', name: strings.DATE_ADDED, type: 'string' },
+  { key: 'withdraw', name: '', type: 'string' },
+];
 
 interface InventorySeedslingsTableProps {
   speciesId: number;
@@ -59,7 +51,6 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
   const [openWithdrawalModal, setOpenWithdrawalModal] = useState<boolean>(false);
   const [selectedBatch, setSelectedBatch] = useState<Batch>();
   const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
-  const editable = !isContributor(organization);
   const snackbar = useSnackbar();
 
   useEffect(() => {
@@ -228,15 +219,13 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
           >
             {strings.SEEDLINGS_BATCHES}
           </Typography>
-          {editable && (
-            <Button
-              id='new-batch'
-              icon='plus'
-              label={isMobile ? '' : strings.ADD_BATCH}
-              onClick={addBatch}
-              size='medium'
-            />
-          )}
+          <Button
+            id='new-batch'
+            icon='plus'
+            label={isMobile ? '' : strings.ADD_BATCH}
+            onClick={addBatch}
+            size='medium'
+          />
         </Box>
         <Box marginTop={theme.spacing(3)}>
           <Box display='flex' flexDirection='row'>
@@ -268,7 +257,7 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
           <Box marginTop={theme.spacing(2)}>
             <Table
               id='batches-table'
-              columns={columns(editable)}
+              columns={columns}
               rows={batches}
               orderBy='batchNumber'
               Renderer={BatchesCellRenderer}
