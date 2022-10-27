@@ -480,21 +480,21 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const getEmptyState = () => {
     const emptyState = [];
 
-    if (!hasSpecies) {
-      emptyState.push({
-        title: strings.SPECIES,
-        text: emptyMessageStrings.ACCESSIONS_ONBOARDING_SPECIES_MSG,
-        buttonText: strings.GO_TO_SPECIES,
-        onClick: () => goTo(APP_PATHS.SPECIES),
-      });
-    }
-
     if (!hasSeedBanks) {
       emptyState.push({
-        title: strings.SEED_BANKS,
+        title: strings.ADD_SEED_BANKS,
         text: emptyMessageStrings.ACCESSIONS_ONBOARDING_SEEDBANKS_MSG,
         buttonText: strings.GO_TO_SEED_BANKS,
         onClick: () => goTo(APP_PATHS.SEED_BANKS),
+      });
+    }
+
+    if (!hasSpecies) {
+      emptyState.push({
+        title: strings.CREATE_SPECIES_LIST,
+        text: emptyMessageStrings.ACCESSIONS_ONBOARDING_SPECIES_MSG,
+        buttonText: strings.GO_TO_SPECIES,
+        onClick: () => goTo(APP_PATHS.SPECIES),
       });
     }
 

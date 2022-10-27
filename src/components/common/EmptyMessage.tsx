@@ -23,11 +23,14 @@ const useStyles = makeStyles((theme: Theme) => ({
     fontSize: '20px',
   },
   rowItemsContainer: {
-    marginTop: theme.spacing(4),
+    display: 'flex',
+    flexDirection: 'column',
+    marginTop: theme.spacing(5),
   },
   rowItem: {
-    borderTop: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
-    padding: theme.spacing(2),
+    borderTop: `1px solid ${theme.palette.TwClrBgTertiary}`,
+    padding: `${theme.spacing(3)} 0`,
+    margin: `0 ${theme.spacing(1)}`,
     display: 'flex',
     flexDirection: (props: StyleProps) => (props.isMobile ? 'column' : 'row'),
     justifyContent: 'space-between',
@@ -74,7 +77,7 @@ export default function EmptyMessage(props: EmptyMessageProps): JSX.Element {
           {rowItems.map((rowItem, index) => (
             <div className={classes.rowItem} key={index}>
               <div className={classes.rowItemInfo}>
-                <Typography fontSize='16px' fontWeight={500} color={theme.palette.TwClrTxt} lineHeight='20px'>
+                <Typography fontSize='16px' fontWeight={600} color={theme.palette.TwClrTxt} lineHeight='20px'>
                   {rowItem.title}
                 </Typography>
                 <Typography fontSize='14px' fontWeight={500} color={theme.palette.TwClrTxt} lineHeight='20px'>
