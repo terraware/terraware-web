@@ -203,7 +203,6 @@ const sections: Section[] = [
         COLUMNS_INDEXED.viabilityTests_seedType,
         COLUMNS_INDEXED.viabilityTests_treatment,
         COLUMNS_INDEXED.cutTestSeedsFilled,
-        COLUMNS_INDEXED.viabilityTests_percentGerminated,
       ],
       [
         COLUMNS_INDEXED.viabilityTests_startDate,
@@ -213,6 +212,7 @@ const sections: Section[] = [
       ],
       [
         COLUMNS_INDEXED.viabilityTests_substrate,
+        COLUMNS_INDEXED.viabilityTests_percentGerminated,
         COLUMNS_INDEXED.cutTestSeedsCompromised,
         COLUMNS_INDEXED.viabilityTests_notes,
       ],
