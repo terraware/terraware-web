@@ -82,7 +82,7 @@ describe('Database', () => {
         cy.wait('@values2');
         cy.get('#editColumnsDialog').should('not.exist');
 
-        cy.get('#table-header').children().should('have.length', 15);
+        cy.get('#table-header').children().should('have.length', 13);
         cy.get('#table-header-accessionNumber').contains('ACCESSION');
         cy.get('#table-header-active').contains('ACTIVE/INACTIVE');
         cy.get('#table-header-state').contains('STAGE');
@@ -131,7 +131,7 @@ describe('Database', () => {
         cy.wait('@values');
         cy.get('#editColumnsDialog').should('not.exist');
 
-        cy.get('#table-header').children().should('have.length', 13);
+        cy.get('#table-header').children().should('have.length', 9);
         cy.get('#table-header-accessionNumber').contains('ACCESSION');
         cy.get('#table-header-active').contains('ACTIVE/INACTIVE');
         cy.get('#table-header-state').contains('STAGE');
@@ -156,7 +156,7 @@ describe('Database', () => {
         cy.wait('@values');
         cy.get('#editColumnsDialog').should('not.exist');
 
-        cy.get('#table-header').children().should('have.length', 17);
+        cy.get('#table-header').children().should('have.length', 16);
         cy.get('#table-header-accessionNumber').contains('ACCESSION');
         cy.get('#table-header-active').contains('ACTIVE/INACTIVE');
         cy.get('#table-header-state').contains('STAGE');
@@ -190,7 +190,7 @@ describe('Database', () => {
         cy.wait('@values');
         cy.get('#editColumnsDialog').should('not.exist');
 
-        cy.get('#table-header').children().should('have.length', 11);
+        cy.get('#table-header').children().should('have.length', 9);
         cy.get('#table-header-accessionNumber').contains('ACCESSION');
         cy.get('#table-header-active').contains('ACTIVE/INACTIVE');
         cy.get('#table-header-state').contains('STAGE');
@@ -216,7 +216,7 @@ describe('Database', () => {
         cy.wait('@values');
         cy.get('#editColumnsDialog').should('not.exist');
 
-        cy.get('#table-header').children().should('have.length', 12);
+        cy.get('#table-header').children().should('have.length', 10);
         cy.get('#table-header > :nth-child(1)').contains('ACCESSION');
         cy.get('#table-header > :nth-child(2)').contains('SPECIES');
         cy.get('#table-header > :nth-child(3)').contains('ACTIVE/INACTIVE');
