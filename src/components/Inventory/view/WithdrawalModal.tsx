@@ -262,7 +262,13 @@ export default function WithdrawalsModal(props: WithdrawalsModalProps): JSX.Elem
                 {record.batchWithdrawals.map((bw, index) => {
                   return (
                     <>
-                      <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator} key={`batch-${index}`}>
+                      <Grid
+                        item
+                        xs={gridSize()}
+                        sx={marginTop}
+                        paddingRight={paddingSeparator}
+                        key={`batch-not-ready-${index}`}
+                      >
                         <Textfield
                           id='notReadyQuantityWithdrawn'
                           value={bw.notReadyQuantityWithdrawn}
@@ -282,7 +288,13 @@ export default function WithdrawalsModal(props: WithdrawalsModalProps): JSX.Elem
                           errorText={validateFields && !record.withdrawnDate ? strings.REQUIRED_FIELD : ''}
                         />
                       </Grid>
-                      <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator} key={`batch-${index}`}>
+                      <Grid
+                        item
+                        xs={gridSize()}
+                        sx={marginTop}
+                        paddingRight={paddingSeparator}
+                        key={`batch-ready-${index}`}
+                      >
                         <Textfield
                           id='readyQuantityWithdrawn'
                           value={bw.readyQuantityWithdrawn}
