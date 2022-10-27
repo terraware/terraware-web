@@ -19,7 +19,7 @@ export interface BatchDetailsModalProps {
   onClose: () => void;
   reload: () => void;
   organization: ServerOrganization;
-  selectedBatch: Batch | undefined;
+  selectedBatch: any;
   speciesId: number;
 }
 
@@ -203,9 +203,12 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
                 <Typography sx={{ color: theme.palette.TwClrTxtSecondary, fontSize: '14px' }}>
                   {strings.ACCESSION_ID}
                 </Typography>
-                {record.accessionId && (
-                  <Link to={APP_PATHS.ACCESSIONS2_ITEM.replace('accessionid', record.accessionId.toString())}>
-                    {record.accessionId}
+                {record.accession_id && (
+                  <Link
+                    to={APP_PATHS.ACCESSIONS2_ITEM.replace(':accessionId', record.accession_id.toString())}
+                    target='_blank'
+                  >
+                    {record.accession_id}
                   </Link>
                 )}
               </Grid>

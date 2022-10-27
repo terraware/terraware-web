@@ -116,6 +116,7 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
           'readyByDate',
           'addedDate',
           'version',
+          'accession_id',
         ],
         sortOrder: [
           {
