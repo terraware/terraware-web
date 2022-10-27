@@ -1,10 +1,11 @@
 import { makeStyles } from '@mui/styles';
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { Link } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
 import CellRenderer, { TableRowType } from '../common/table/TableCellRenderer';
 import { RendererProps } from '../common/table/types';
 import { Theme } from '@mui/material';
+import { TextTruncated } from '@terraware/web-components';
 
 const useStyles = makeStyles((theme: Theme) => ({
   link: {
@@ -17,11 +18,14 @@ export default function InventoryCellRenderer(props: RendererProps<TableRowType>
   const { column, row, value, index } = props;
 
   const getNurseriesNames = (nurseries: any[]) => {
-    let nurseriesNames = '';
-    nurseries.forEach((n) => {
-      nurseriesNames += n.facility_name;
-    });
-    return nurseriesNames;
+    return (
+      <TextTruncated
+        stringList={nurseries.map((n) => n.facility_name)}
+        maxLengthPx={250}
+        textStyle={{ fontSize: 14 }}
+        showAllStyle={{ padding: '17px', fontSize: 16 }}
+      />
+    );
   };
 
   const createLinkToInventoryDetail = (iValue: React.ReactNode | unknown[]) => {
