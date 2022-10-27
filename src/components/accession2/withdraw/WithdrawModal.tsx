@@ -5,8 +5,9 @@ import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import { Box, Grid, Link, useTheme } from '@mui/material';
 import { Checkbox, DatePicker, Select, SelectT, Textfield } from '@terraware/web-components';
 import { Accession2, Withdrawal2 } from 'src/api/accessions2/accession';
+import { NurseryTransfer } from 'src/api/types/batch';
 import useForm from 'src/utils/useForm';
-import { postWithdrawal } from 'src/api/accessions2/withdrawals';
+import { transferToNursery, postWithdrawal } from 'src/api/accessions2/withdrawals';
 import { postViabilityTest, ViabilityTestPostRequest } from 'src/api/accessions2/viabilityTest';
 import { WITHDRAWAL_PURPOSES } from 'src/utils/withdrawalPurposes';
 import { getOrganizationUsers } from 'src/api/organization/organization';
@@ -17,9 +18,10 @@ import { getTodaysDateFormatted, isInTheFuture } from '@terraware/web-components
 import { TREATMENTS, WITHDRAWAL_TYPES } from 'src/types/Accession';
 import useSnackbar from 'src/utils/useSnackbar';
 import { Dropdown } from '@terraware/web-components';
-import { isContributor } from 'src/utils/organization';
+import { isContributor, getAllNurseries } from 'src/utils/organization';
 import { renderUser } from 'src/utils/renderUser';
 import { getSubstratesAccordingToType } from 'src/utils/viabilityTest';
+import isEnabled from 'src/features';
 
 export interface WithdrawDialogProps {
   open: boolean;
@@ -32,6 +34,7 @@ export interface WithdrawDialogProps {
 
 export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element {
   const { onClose, open, accession, reload, organization, user } = props;
+  const nurseryEnabled = isEnabled('Nursery management');
 
   const newWithdrawal: Withdrawal2 = {
     purpose: 'Nursery',
@@ -41,12 +44,25 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
     notes: '',
   };
 
+  const nurseryTransfer: NurseryTransfer = {
+    date: getTodaysDateFormatted(),
+    destinationFacilityId: -1,
+    germinatingQuantity: 0,
+    notes: '',
+    notReadyQuantity: 0,
+    readyByDate: undefined,
+    readyQuantity: 0,
+    withdrawnByUserId: user.id,
+  };
+
   const newViabilityTesting: ViabilityTestPostRequest = {
     testType: 'Lab',
     seedsTested: 0,
   };
 
   const [record, setRecord, onChange] = useForm(newWithdrawal);
+  const [nurseryTransferRecord, setNurseryTransferRecord, onChangeNurseryTransfer] = useForm(nurseryTransfer);
+  const [isNurseryTransfer, setIsNurseryTransfer] = useState<boolean>(nurseryEnabled ? true : false);
   const [viabilityTesting, , onChangeViabilityTesting] = useForm(newViabilityTesting);
   const [users, setUsers] = useState<OrganizationUser[]>();
   const [withdrawAllSelected, setWithdrawAllSelected] = useState(false);
@@ -69,13 +85,19 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
   const saveWithdrawal = async () => {
     let response;
     if (record) {
-      if (!validateAmount()) {
+      const nurseryTransferInvalid = !validateNurseryTransfer();
+      const amountInvalid = !validateAmount();
+      if (
+        fieldsErrors.date ||
+        (isNurseryTransfer && fieldsErrors.readyByDate) ||
+        nurseryTransferInvalid ||
+        amountInvalid
+      ) {
         return;
       }
-      if (fieldsErrors.date) {
-        return;
-      }
-      if (record.purpose === 'Viability Testing') {
+      if (isNurseryTransfer) {
+        response = await transferToNursery(nurseryTransferRecord, accession.id);
+      } else if (record.purpose === 'Viability Testing') {
         viabilityTesting.seedsTested = record.withdrawnQuantity?.quantity || 0;
         viabilityTesting.startDate = record.date;
         response = await postViabilityTest(viabilityTesting, accession.id);
@@ -101,22 +123,27 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
     } else {
       setWithdrawAllSelected(false);
     }
-    if (record) {
-      setRecord({
-        ...record,
-        withdrawnQuantity:
-          value.toString().trim() === ''
-            ? undefined
-            : {
-                quantity: value || 0,
-                units: record.withdrawnQuantity?.units || accession.remainingQuantity?.units || 'Grams',
-              },
-      });
-    }
+
+    setRecord((prev) => ({
+      ...prev,
+      withdrawnQuantity:
+        value.toString().trim() === ''
+          ? undefined
+          : {
+              quantity: value || 0,
+              units: prev.withdrawnQuantity?.units || accession.remainingQuantity?.units || 'Grams',
+            },
+    }));
+
+    setNurseryTransferRecord((prev) => ({
+      ...prev,
+      germinatingQuantity: value.toString().trim() === '' ? 0 : value || 0,
+    }));
   };
 
   const onChangeUser = (newValue: OrganizationUser) => {
     onChange('withdrawnByUserId', newValue.id);
+    onChangeNurseryTransfer('withdrawnByUserId', newValue.id);
   };
 
   const onChangeUnit = (newValue: string) => {
@@ -157,37 +184,62 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
               }
             : undefined,
         });
+        setNurseryTransferRecord({
+          ...nurseryTransferRecord,
+          germinatingQuantity: accession.remainingQuantity?.quantity || 0,
+        });
       }
     } else {
       setRecord({
         ...record,
         withdrawnQuantity: undefined,
       });
+      setNurseryTransferRecord({
+        ...nurseryTransferRecord,
+        germinatingQuantity: 0,
+      });
     }
 
     setWithdrawAllSelected(withdrawAll);
   };
 
-  const validateDate = (value?: any) => {
-    if (!value) {
+  const validateDate = (id: string, value?: any) => {
+    if (!value && id === 'date') {
       setIndividualError('date', strings.REQUIRED_FIELD);
       return false;
     } else if (isNaN(value.getTime())) {
-      setIndividualError('date', strings.INVALID_DATE);
+      setIndividualError(id, strings.INVALID_DATE);
       return false;
-    } else if (isInTheFuture(value)) {
+    } else if (isInTheFuture(value) && id === 'date') {
       setIndividualError('date', strings.NO_FUTURE_DATES);
       return false;
     } else {
-      setIndividualError('date', '');
+      setIndividualError(id, '');
       return true;
     }
   };
 
   const onChangeDate = (id: string, value?: any) => {
-    const valid = validateDate(value);
+    const valid = validateDate(id, value);
     if (valid) {
-      onChange(id, value);
+      if (id === 'date') {
+        onChange(id, value);
+      }
+      onChangeNurseryTransfer(id, value);
+    }
+  };
+
+  const onChangeNotes = (id: string, value: unknown) => {
+    onChangeNurseryTransfer(id, value);
+    onChange(id, value);
+  };
+
+  const onChangePurpose = (value: string) => {
+    if (value === 'Nursery' && nurseryEnabled) {
+      setIsNurseryTransfer(true);
+    } else {
+      setIsNurseryTransfer(false);
+      onChange('purpose', value);
     }
   };
 
@@ -195,6 +247,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
     setWithdrawAllSelected(false);
     setIsNotesOpened(false);
     setRecord(newWithdrawal);
+    setNurseryTransferRecord(nurseryTransfer);
     onClose();
   };
 
@@ -203,6 +256,16 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
       ...prev,
       [id]: error,
     }));
+  };
+
+  const validateNurseryTransfer = () => {
+    if (isNurseryTransfer) {
+      if (nurseryTransferRecord.destinationFacilityId === -1) {
+        setIndividualError('destinationFacilityId', strings.REQUIRED_FIELD);
+        return false;
+      }
+    }
+    return true;
   };
 
   const validateAmount = () => {
@@ -251,12 +314,30 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
             label={strings.PURPOSE}
             placeholder={strings.SELECT}
             options={WITHDRAWAL_PURPOSES}
-            onChange={(value: string) => onChange('purpose', value)}
-            selectedValue={record?.purpose}
+            onChange={onChangePurpose}
+            selectedValue={isNurseryTransfer ? 'Nursery' : record?.purpose}
             fullWidth={true}
             readonly={true}
           />
         </Grid>
+        {isNurseryTransfer ? (
+          <>
+            <Grid item xs={12} paddingBottom={2}>
+              <Dropdown
+                id='destinationFacilityId'
+                label={strings.DESTINATION_REQUIRED}
+                selectedValue={nurseryTransferRecord.destinationFacilityId.toString()}
+                options={getAllNurseries(organization).map((nursery) => ({
+                  label: nursery.name,
+                  value: nursery.id.toString(),
+                }))}
+                onChange={(value) => onChangeNurseryTransfer('destinationFacilityId', value)}
+                errorText={fieldsErrors.destinationFacilityId}
+                fullWidth={true}
+              />
+            </Grid>
+          </>
+        ) : null}
         {record.purpose === 'Viability Testing' ? (
           <>
             <Grid item xs={12} paddingBottom={2}>
@@ -310,7 +391,9 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
               errorText={fieldsErrors.withdrawnQuantity}
             />
             <Box paddingLeft={1}>
-              {accession.remainingQuantity?.units === 'Seeds' || record.purpose === 'Viability Testing' ? (
+              {accession.remainingQuantity?.units === 'Seeds' ||
+              record.purpose === 'Viability Testing' ||
+              isNurseryTransfer ? (
                 <Box>{strings.CT}</Box>
               ) : (
                 <Dropdown
@@ -346,6 +429,20 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
             disabled={contributor}
           />
         </Grid>
+        {isNurseryTransfer ? (
+          <>
+            <Grid item xs={12} marginBottom={theme.spacing(2)}>
+              <DatePicker
+                id='readyByDate'
+                label={strings.ESTIMATED_READY_DATE}
+                aria-label={strings.ESTIMATED_READY_DATE}
+                value={nurseryTransfer.readyByDate}
+                onChange={onChangeDate}
+                errorText={fieldsErrors.readyByDate}
+              />
+            </Grid>
+          </>
+        ) : null}
         <Grid item xs={12}>
           <DatePicker
             id='date'
@@ -358,7 +455,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
         </Grid>
         <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
           {isNotesOpened ? (
-            <Textfield id='notes' value={record.notes} onChange={onChange} type='textarea' label={strings.NOTES} />
+            <Textfield id='notes' value={record.notes} onChange={onChangeNotes} type='textarea' label={strings.NOTES} />
           ) : (
             <Box display='flex' justifyContent='flex-start'>
               <Link sx={{ textDecoration: 'none' }} href='#' id='addNotes' onClick={() => setIsNotesOpened(true)}>
