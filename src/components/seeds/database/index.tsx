@@ -62,6 +62,8 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import featureEnabled from 'src/features';
 import ImportAccessionsModal from './ImportAccessionsModal';
 import { Icon } from '@terraware/web-components';
+import { downloadCsvTemplateHandler } from 'src/components/common/ImportModal';
+import { downloadAccessionsTemplate } from 'src/api/accessions2/accession';
 
 interface StyleProps {
   isMobile: boolean;
@@ -150,6 +152,7 @@ type DatabaseProps = {
   setDisplayColumnNames: (fields: string[]) => void;
   hasSeedBanks: boolean;
   hasSpecies: boolean;
+  reloadData?: () => void;
 };
 
 export default function Database(props: DatabaseProps): JSX.Element {
@@ -171,6 +174,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
     organization,
     hasSeedBanks,
     hasSpecies,
+    reloadData,
   } = props;
   const displayColumnDetails = displayColumnNames.map((name) => {
     const detail = { ...COLUMNS_INDEXED[name] };
@@ -479,6 +483,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
 
   const getEmptyState = () => {
     const emptyState = [];
+    const seedBanks = organization ? getAllSeedBanks(organization) : null;
 
     if (!hasSeedBanks) {
       emptyState.push({
@@ -495,6 +500,16 @@ export default function Database(props: DatabaseProps): JSX.Element {
         text: emptyMessageStrings.ACCESSIONS_ONBOARDING_SPECIES_MSG,
         buttonText: strings.GO_TO_SPECIES,
         onClick: () => goTo(APP_PATHS.SPECIES),
+        altItem:
+          seedBanks && seedBanks.length > 0
+            ? {
+                title: strings.IMPORT_ACCESSIONS_ALT_TITLE,
+                linkText: strings.IMPORT_ACCESSIONS_WITH_TEMPLATE,
+                onLinkClick: () => downloadCsvTemplateHandler(downloadAccessionsTemplate),
+                buttonText: strings.IMPORT_ACCESSIONS,
+                onClick: () => importAccessions(),
+              }
+            : undefined,
       });
     }
 
@@ -561,6 +576,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
           open={openImportModal}
           onClose={() => setOpenImportModal(false)}
           facility={selectedOrgInfo.selectedFacility}
+          reloadData={reloadData}
         />
       )}
       {organization && (

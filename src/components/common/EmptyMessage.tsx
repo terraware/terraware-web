@@ -1,7 +1,9 @@
+import React from 'react';
 import { makeStyles } from '@mui/styles';
-import { Theme, Typography, useTheme } from '@mui/material';
+import { Link, Theme, Typography, useTheme } from '@mui/material';
 import Button from 'src/components/common/button/Button';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import strings from 'src/strings';
 
 interface StyleProps {
   isMobile: boolean;
@@ -31,26 +33,46 @@ const useStyles = makeStyles((theme: Theme) => ({
     borderTop: `1px solid ${theme.palette.TwClrBgTertiary}`,
     padding: `${theme.spacing(3)} 0`,
     margin: `0 ${theme.spacing(1)}`,
-    display: 'flex',
-    flexDirection: (props: StyleProps) => (props.isMobile ? 'column' : 'row'),
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    '& > button': {
-      textAlign: 'center',
-      width: '152px',
-    },
   },
   rowItemInfo: {
     textAlign: 'left',
     marginBottom: (props: StyleProps) => (props.isMobile ? theme.spacing(2) : 0),
   },
+  rowItemGroup: {
+    display: 'flex',
+    flexDirection: (props: StyleProps) => (props.isMobile ? 'column' : 'row'),
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    flexGrow: 1,
+    '& > button': {
+      textAlign: 'center',
+      width: '160px',
+    },
+  },
+  itemLink: {
+    fontSize: '16px',
+    cursor: 'pointer',
+  },
+  or: {
+    textAlign: 'left',
+    margin: `${theme.spacing(2)} 0`,
+  },
 }));
 
-type RowItemProps = {
+type RowAltItem = {
+  title: string;
+  linkText: string;
+  onLinkClick: () => void;
+  buttonText: string;
+  onClick: () => void;
+};
+
+type RowItem = {
   title: string;
   text: string;
   buttonText: string;
   onClick: () => void;
+  altItem?: RowAltItem;
 };
 
 type EmptyMessageProps = {
@@ -59,7 +81,7 @@ type EmptyMessageProps = {
   buttonText?: string;
   onClick?: () => void;
   className?: string;
-  rowItems?: RowItemProps[];
+  rowItems?: RowItem[];
 };
 
 export default function EmptyMessage(props: EmptyMessageProps): JSX.Element {
@@ -76,15 +98,33 @@ export default function EmptyMessage(props: EmptyMessageProps): JSX.Element {
         <div className={classes.rowItemsContainer}>
           {rowItems.map((rowItem, index) => (
             <div className={classes.rowItem} key={index}>
-              <div className={classes.rowItemInfo}>
-                <Typography fontSize='16px' fontWeight={600} color={theme.palette.TwClrTxt} lineHeight='20px'>
-                  {rowItem.title}
-                </Typography>
-                <Typography fontSize='14px' fontWeight={500} color={theme.palette.TwClrTxt} lineHeight='20px'>
-                  {rowItem.text}
-                </Typography>
+              <div className={classes.rowItemGroup}>
+                <div className={classes.rowItemInfo}>
+                  <Typography fontSize='16px' fontWeight={600} color={theme.palette.TwClrTxt} lineHeight='20px'>
+                    {rowItem.title}
+                  </Typography>
+                  <Typography fontSize='14px' fontWeight={500} color={theme.palette.TwClrTxt} lineHeight='20px'>
+                    {rowItem.text}
+                  </Typography>
+                </div>
+                <Button label={rowItem.buttonText} onClick={rowItem.onClick} />
               </div>
-              <Button label={rowItem.buttonText} onClick={rowItem.onClick} />
+              {rowItem.altItem !== undefined ? (
+                <>
+                  <Typography className={classes.or}>- {strings.OR} -</Typography>
+                  <div className={classes.rowItemGroup}>
+                    <div className={classes.rowItemInfo}>
+                      <Typography fontSize='16px' fontWeight={600} color={theme.palette.TwClrTxt} lineHeight='20px'>
+                        {rowItem.altItem.title}
+                      </Typography>
+                      <Link onClick={rowItem.altItem.onLinkClick} className={classes.itemLink}>
+                        {rowItem.altItem.linkText}
+                      </Link>
+                    </div>
+                    <Button label={rowItem.altItem.buttonText} onClick={rowItem.altItem.onClick} priority='secondary' />
+                  </div>
+                </>
+              ) : null}
             </div>
           ))}
         </div>

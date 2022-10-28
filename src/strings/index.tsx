@@ -805,6 +805,8 @@ const strings = new LocalizedStrings({
     WITHDRAW_QUANTITY: 'Withdraw Quantity',
     CREATE_SPECIES_LIST: 'Create Species List',
     ADD_SEED_BANKS: 'Add Seed Banks',
+    IMPORT_ACCESSIONS_ALT_TITLE: 'Already have a seed accession database?',
+    IMPORT_ACCESSIONS_WITH_TEMPLATE: 'Import accessions using our CSV template',
   },
 });
 
