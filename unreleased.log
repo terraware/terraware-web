@@ -1,3 +1,4 @@
+d26ef48 SW-2027 allow importing accessions csv during onboarding  (#679)
 f08e763 SW-1978 Skip vercel deploy for gh-pages commits (#678)
 4a2f425 SW-2062 use 14px font-size in inventory table (#677)
 6fc67cd SW-1860 Nurseries with Show More in Inventory Table  (#674)
