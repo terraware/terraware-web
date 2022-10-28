@@ -86,6 +86,17 @@ export type ImportSpeciesModalProps = {
   importCompleteLabel: string;
   importingLabel: string;
   duplicatedLabel: string;
+  reloadData?: () => void;
+};
+
+export const downloadCsvTemplateHandler = async (templateApi: () => Promise<any>) => {
+  const apiResponse = await templateApi();
+  const csvContent = 'data:text/csv;charset=utf-8,' + apiResponse;
+  const encodedUri = encodeURI(csvContent);
+  const link = document.createElement('a');
+  link.setAttribute('href', encodedUri);
+  link.setAttribute('download', `template.csv`);
+  link.click();
 };
 
 export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.Element {
@@ -106,6 +117,7 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
     importCompleteLabel,
     importingLabel,
     duplicatedLabel,
+    reloadData,
   } = props;
   const [file, setFile] = useState<File>();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -137,16 +149,9 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
     if (setCheckDataModalOpen) {
       setCheckDataModalOpen(true);
     }
-  };
-
-  const downloadCsvTemplate = async () => {
-    const apiResponse = await templateApi();
-    const csvContent = 'data:text/csv;charset=utf-8,' + apiResponse;
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement('a');
-    link.setAttribute('href', encodedUri);
-    link.setAttribute('download', `template.csv`);
-    link.click();
+    if (reloadData) {
+      reloadData();
+    }
   };
 
   useEffect(() => {
@@ -342,7 +347,7 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
               <Link
                 href='#'
                 onClick={() => {
-                  downloadCsvTemplate();
+                  downloadCsvTemplateHandler(templateApi);
                 }}
               >
                 <p className={classes.link}>{strings.DOWNLOAD_CSV_TEMPLATE}</p>
