@@ -309,7 +309,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
         if (!accession.estimatedCount) {
           setIndividualError(
             'withdrawnQuantity',
-            isNurseryTransfer
+            nurseryTransfer
               ? strings.MISSING_SUBSET_WEIGHT_ERROR_NURSERY
               : strings.MISSING_SUBSET_WEIGHT_ERROR_VIABILITY_TEST
           );
