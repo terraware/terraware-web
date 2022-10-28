@@ -62,7 +62,7 @@ export default function EditColumnsDialog(props: Props): JSX.Element {
       scrolled
       onClose={handleCancel}
       open={open}
-      title={strings.EDIT_COLUMNS}
+      title={strings.CUSTOMIZE_TABLE_COLUMNS}
       size='x-large'
       middleButtons={[
         <Button
@@ -78,7 +78,7 @@ export default function EditColumnsDialog(props: Props): JSX.Element {
     >
       <Box textAlign='left'>
         <Typography component='p' sx={{ paddingBottom: '15px' }}>
-          {strings.EDIT_COLUMNS_DESCRIPTION}
+          {strings.CUSTOMIZE_TABLE_COLUMNS_DESCRIPTION}
         </Typography>
         <Typography component='p'>{strings.TEMPLATES}</Typography>
         <Grid container>
