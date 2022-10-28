@@ -44,7 +44,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
     notes: '',
   };
 
-  const nurseryTransfer: NurseryTransfer = {
+  const nurseryTransferWithdrawal: NurseryTransfer = {
     date: getTodaysDateFormatted(),
     destinationFacilityId: -1,
     germinatingQuantity: 0,
@@ -61,7 +61,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
   };
 
   const [record, setRecord, onChange] = useForm(newWithdrawal);
-  const [nurseryTransferRecord, setNurseryTransferRecord, onChangeNurseryTransfer] = useForm(nurseryTransfer);
+  const [nurseryTransferRecord, setNurseryTransferRecord, onChangeNurseryTransfer] = useForm(nurseryTransferWithdrawal);
   const [isNurseryTransfer, setIsNurseryTransfer] = useState<boolean>(nurseryEnabled ? true : false);
   const [viabilityTesting, , onChangeViabilityTesting] = useForm(newViabilityTesting);
   const [users, setUsers] = useState<OrganizationUser[]>();
@@ -86,7 +86,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
     let response;
     if (record) {
       const nurseryTransferInvalid = !validateNurseryTransfer();
-      const amountInvalid = !validateAmount();
+      const amountInvalid = !validateAmount(isNurseryTransfer, record.purpose);
       if (
         fieldsErrors.date ||
         (isNurseryTransfer && fieldsErrors.readyByDate) ||
@@ -139,6 +139,18 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
       ...prev,
       germinatingQuantity: value.toString().trim() === '' ? 0 : value || 0,
     }));
+
+    setIndividualError('withdrawnQuantity', '');
+    if (isNurseryTransfer || record.purpose === 'Viability Testing') {
+      if (!accession.estimatedCount) {
+        setIndividualError(
+          'withdrawnQuantity',
+          isNurseryTransfer
+            ? strings.MISSING_SUBSET_WEIGHT_ERROR_NURSERY
+            : strings.MISSING_SUBSET_WEIGHT_ERROR_VIABILITY_TEST
+        );
+      }
+    }
   };
 
   const onChangeUser = (newValue: OrganizationUser) => {
@@ -235,7 +247,13 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
   };
 
   const onChangePurpose = (value: string) => {
-    if (value === 'Nursery' && nurseryEnabled) {
+    const nurseryTransfer = value === 'Nursery' && nurseryEnabled;
+    if (value === 'Nursery' || value === 'Viability Testing') {
+      validateAmount(nurseryTransfer, value);
+    } else {
+      setIndividualError('withdrawnQuantity', '');
+    }
+    if (nurseryTransfer) {
       setIsNurseryTransfer(true);
     } else {
       setIsNurseryTransfer(false);
@@ -247,7 +265,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
     setWithdrawAllSelected(false);
     setIsNotesOpened(false);
     setRecord(newWithdrawal);
-    setNurseryTransferRecord(nurseryTransfer);
+    setNurseryTransferRecord(nurseryTransferWithdrawal);
     onClose();
   };
 
@@ -268,32 +286,42 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
     return true;
   };
 
-  const validateAmount = () => {
+  const validateAmount = (nurseryTransfer: boolean, purpose?: string) => {
     if (record.withdrawnQuantity?.quantity) {
       if (isNaN(record.withdrawnQuantity.quantity)) {
         setIndividualError('withdrawnQuantity', strings.INVALID_VALUE);
         return false;
-      } else {
-        if (Number(record.withdrawnQuantity.quantity) <= 0) {
-          setIndividualError('withdrawnQuantity', strings.INVALID_VALUE);
+      }
+      if (Number(record.withdrawnQuantity.quantity) <= 0) {
+        setIndividualError('withdrawnQuantity', strings.INVALID_VALUE);
+        return false;
+      }
+      if (
+        accession.remainingQuantity?.units &&
+        Number(record.withdrawnQuantity.units === accession.remainingQuantity.units)
+      ) {
+        if (record.withdrawnQuantity.quantity > accession.remainingQuantity?.quantity) {
+          setIndividualError('withdrawnQuantity', strings.WITHDRAWN_QUANTITY_ERROR);
           return false;
         }
-        if (
-          accession.remainingQuantity?.units &&
-          Number(record.withdrawnQuantity.units === accession.remainingQuantity.units)
-        ) {
-          if (record.withdrawnQuantity.quantity > accession.remainingQuantity?.quantity) {
-            setIndividualError('withdrawnQuantity', strings.WITHDRAWN_QUANTITY_ERROR);
-            return false;
-          }
+      }
+      if (nurseryTransfer || purpose === 'Viability Testing') {
+        if (!accession.estimatedCount) {
+          setIndividualError(
+            'withdrawnQuantity',
+            isNurseryTransfer
+              ? strings.MISSING_SUBSET_WEIGHT_ERROR_NURSERY
+              : strings.MISSING_SUBSET_WEIGHT_ERROR_VIABILITY_TEST
+          );
+          return false;
         }
       }
+      setIndividualError('withdrawnQuantity', '');
+      return true;
     } else {
       setIndividualError('withdrawnQuantity', strings.REQUIRED_FIELD);
       return false;
     }
-    setIndividualError('withdrawnQuantity', '');
-    return true;
   };
 
   return (
@@ -338,7 +366,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
             </Grid>
           </>
         ) : null}
-        {record.purpose === 'Viability Testing' ? (
+        {record.purpose === 'Viability Testing' && !isNurseryTransfer ? (
           <>
             <Grid item xs={12} paddingBottom={2}>
               <Select
@@ -436,7 +464,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
                 id='readyByDate'
                 label={strings.ESTIMATED_READY_DATE}
                 aria-label={strings.ESTIMATED_READY_DATE}
-                value={nurseryTransfer.readyByDate}
+                value={nurseryTransferRecord.readyByDate}
                 onChange={onChangeDate}
                 errorText={fieldsErrors.readyByDate}
               />
