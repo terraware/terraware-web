@@ -36,10 +36,12 @@ interface InventorySeedslingsTableProps {
   organization: ServerOrganization;
   modified: number;
   setModified: (val: number) => void;
+  openBatchNumber: string | null;
+  onUpdateOpenBatch: (batchNum: string | null) => void;
 }
 
 export default function InventorySeedslingsTable(props: InventorySeedslingsTableProps): JSX.Element {
-  const { speciesId, organization, modified, setModified } = props;
+  const { speciesId, organization, modified, setModified, openBatchNumber, onUpdateOpenBatch } = props;
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const [temporalSearchValue, setTemporalSearchValue] = useState<string>('');
@@ -134,6 +136,14 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
     };
   }, [debouncedSearchTerm, organization.id, speciesId, filters.facilityIds, modified]);
 
+  useEffect(() => {
+    const batch = batches.find((b) => b.batchNumber === openBatchNumber);
+    if (batch) {
+      setSelectedBatch(batch);
+      setOpenNewBatchModal(true);
+    }
+  }, [openBatchNumber, batches]);
+
   const clearSearch = () => {
     setTemporalSearchValue('');
   };
@@ -170,6 +180,7 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
     if (fromColumn === 'withdraw') {
       setOpenWithdrawalModal(true);
     } else {
+      onUpdateOpenBatch(batch.batchNumber);
       setOpenNewBatchModal(true);
     }
   };
@@ -180,6 +191,7 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
         open={openNewBatchModal}
         reload={reloadData}
         onClose={() => {
+          onUpdateOpenBatch(null);
           setOpenNewBatchModal(false);
         }}
         organization={organization}
