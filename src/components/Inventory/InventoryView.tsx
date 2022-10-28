@@ -1,7 +1,7 @@
 import { useTheme, Grid, Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useHistory, useParams } from 'react-router-dom';
 import { Icon } from '@terraware/web-components';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
@@ -10,6 +10,8 @@ import PageSnackbar from 'src/components/PageSnackbar';
 import { APP_PATHS } from 'src/constants';
 import { InventorySummary, InventorySeedlingsTable } from './view';
 import { Species } from 'src/types/Species';
+import useQuery from '../../utils/useQuery';
+import useStateLocation, { getLocation } from '../../utils/useStateLocation';
 
 const useStyles = makeStyles((theme: Theme) => ({
   backIcon: {
@@ -31,6 +33,10 @@ interface InventoryViewProps {
 }
 
 export default function InventoryView(props: InventoryViewProps): JSX.Element {
+  const query = useQuery();
+  const history = useHistory();
+  const location = useStateLocation();
+  const openBatchNumber = (query.get('batch') || '').toLowerCase();
   const { species, organization } = props;
   const { speciesId } = useParams<{ speciesId: string }>();
   const [inventorySpecies, setInventorySpecies] = useState<Species>();
@@ -53,6 +59,15 @@ export default function InventoryView(props: InventoryViewProps): JSX.Element {
     } else {
       return `${scientificName} (${commonName})`;
     }
+  };
+
+  const setBatchNumber = (batchNum: string | null) => {
+    if (batchNum === null) {
+      query.delete('batch');
+    } else {
+      query.set('batch', batchNum);
+    }
+    history.replace(getLocation(location.pathname, location, query.toString()));
   };
 
   return (
@@ -83,6 +98,8 @@ export default function InventoryView(props: InventoryViewProps): JSX.Element {
               organization={organization}
               modified={modified}
               setModified={setModified}
+              openBatchNumber={openBatchNumber}
+              onUpdateOpenBatch={setBatchNumber}
             />
           </Grid>
         )}
