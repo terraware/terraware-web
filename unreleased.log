@@ -1,3 +1,4 @@
+94fb146 SW-1888 Deeplink to Batch Details (#680)
 d26ef48 SW-2027 allow importing accessions csv during onboarding  (#679)
 f08e763 SW-1978 Skip vercel deploy for gh-pages commits (#678)
 4a2f425 SW-2062 use 14px font-size in inventory table (#677)
