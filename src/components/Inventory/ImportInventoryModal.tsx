@@ -1,0 +1,53 @@
+import React from 'react';
+import {
+  downloadSpeciesTemplate,
+  getUploadStatus,
+  resolveSpeciesUpload,
+  uploadSpeciesFile,
+} from 'src/api/species/species';
+import strings from 'src/strings';
+import { ServerOrganization } from 'src/types/Organization';
+import useForm from 'src/utils/useForm';
+import ImportModal from '../common/ImportModal';
+import NurseryDropdown from './NurseryDropdown';
+
+export type ImportInventoryModalProps = {
+  open: boolean;
+  onClose: (saved: boolean, snackbarMessage?: string) => void;
+  organization: ServerOrganization;
+};
+
+export const downloadCsvTemplate = async () => {
+  const apiResponse = await downloadSpeciesTemplate();
+  const csvContent = 'data:text/csv;charset=utf-8,' + apiResponse;
+  const encodedUri = encodeURI(csvContent);
+  const link = document.createElement('a');
+  link.setAttribute('href', encodedUri);
+  link.setAttribute('download', `template.csv`);
+  link.click();
+};
+
+export default function ImportInventoryModal(props: ImportInventoryModalProps): JSX.Element {
+  const { open, onClose, organization } = props;
+  const [record, setRecord] = useForm({ facilityId: undefined });
+
+  return (
+    <ImportModal
+      organization={organization}
+      onClose={onClose}
+      open={open}
+      title={strings.IMPORT_INVENTORY}
+      resolveApi={resolveSpeciesUpload}
+      uploaderTitle={strings.IMPORT_INVENTORY}
+      uploaderDescription={strings.IMPORT_INVENTORY_DESC}
+      uploadApi={uploadSpeciesFile}
+      templateApi={downloadSpeciesTemplate}
+      statusApi={getUploadStatus}
+      importCompleteLabel={strings.INVENTORY_IMPORT_COMPLETE}
+      importingLabel={strings.IMPORTING_INVENTORY}
+      duplicatedLabel={strings.DUPLICATED_INVENTORY}
+    >
+      <NurseryDropdown organization={organization} record={record} setRecord={setRecord} label={strings.NURSERY} />
+    </ImportModal>
+  );
+}

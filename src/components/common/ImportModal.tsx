@@ -1,4 +1,4 @@
-import { Link } from '@mui/material';
+import { Box, Link } from '@mui/material';
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useEffect, useRef, useState } from 'react';
@@ -86,6 +86,7 @@ export type ImportSpeciesModalProps = {
   importCompleteLabel: string;
   importingLabel: string;
   duplicatedLabel: string;
+  children?: React.ReactNode;
 };
 
 export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.Element {
@@ -106,6 +107,7 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
     importCompleteLabel,
     importingLabel,
     duplicatedLabel,
+    children,
   } = props;
   const [file, setFile] = useState<File>();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -331,6 +333,7 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
           : undefined
       }
     >
+      {children && <Box sx={{ paddingBottom: 3, color: '#3A4445' }}> {children} </Box>}
       <div ref={divRef} tabIndex={0}>
         {error && !loading && <p>{error}</p>}
         {!error && !loading && !completed && !warning && (

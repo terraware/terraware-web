@@ -803,6 +803,10 @@ const strings = new LocalizedStrings({
     DEAD: 'Dead',
     DESTINATION_REQUIRED: 'Destination *',
     WITHDRAW_QUANTITY: 'Withdraw Quantity',
+    IMPORT_INVENTORY_DESC: 'Browse or drag and drop a CSV with inventory data.',
+    INVENTORY_IMPORT_COMPLETE: 'Inventory data import complete!',
+    IMPORTING_INVENTORY: 'Importing inventory...this may take a few minutes.',
+    DUPLICATED_INVENTORY: 'We found {0} duplicated inventory:',
   },
 });
 
