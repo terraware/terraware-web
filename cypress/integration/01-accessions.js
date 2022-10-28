@@ -59,7 +59,7 @@ describe.skip('Accessions', () => {
       cy.get('#select-seed-bank').click().url().should('contain', '/accessions/new');
 
       cy.get('#species').type('Kousa Dogwood{downArrow}{enter}');
-      cy.get('#numberOfTrees').type('3');
+      cy.get('#numberOfPlants').type('3');
       cy.get('#founderId').type('234908098');
       cy.get('#collectionSource').click();
       cy.get('#Wild').click();
@@ -88,7 +88,7 @@ describe.skip('Accessions', () => {
       cy.get('#header-state').contains('Awaiting Check-In');
 
       cy.get('#species').should('have.value', 'Kousa Dogwood');
-      cy.get('#numberOfTrees').should('have.value', '3');
+      cy.get('#numberOfPlants').should('have.value', '3');
       cy.get('#founderId').should('have.value', '234908098');
       cy.get('#collectionSource + input').should('have.value', 'Wild');
       cy.get('#fieldNotes').should('have.value', 'Some notes');

@@ -76,18 +76,29 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
   return (
     <>
       <Grid item xs={3} sx={{ textAlign: 'right' }}>
-        {['Admin', 'Owner'].includes(organization.role) &&
-          (isMobile ? (
-            <Button id='new-inventory' icon='plus' onClick={() => goTo(APP_PATHS.INVENTORY_NEW)} size='medium' />
-          ) : (
+        {isMobile ? (
+          <Button id='new-inventory' icon='plus' onClick={() => goTo(APP_PATHS.INVENTORY_NEW)} size='medium' />
+        ) : (
+          <>
             <Button
-              id='new-inventory'
-              icon='plus'
-              label={strings.ADD_INVENTORY}
-              onClick={() => goTo(APP_PATHS.INVENTORY_NEW)}
+              id='import-inventory'
+              label={strings.IMPORT}
+              icon='iconImport'
+              onClick={() => true}
+              priority='secondary'
               size='medium'
             />
-          ))}
+            <Box sx={{ display: 'inline', paddingLeft: 1 }}>
+              <Button
+                id='new-inventory'
+                icon='plus'
+                label={strings.ADD_INVENTORY}
+                onClick={() => goTo(APP_PATHS.INVENTORY_NEW)}
+                size='medium'
+              />
+            </Box>
+          </>
+        )}
       </Grid>
       <Grid item xs={12}>
         <PageSnackbar />
