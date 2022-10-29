@@ -116,14 +116,6 @@ const COLUMNS: DatabaseColumn[] = [
   },
   { key: 'collectionNotes', name: strings.NOTES, type: 'notes' },
   {
-    key: 'totalQuantity',
-    additionalKeys: ['totalUnits'],
-    name: strings.SEEDS_TOTAL,
-    type: 'number',
-    filter: { type: 'count_weight' },
-    operation: 'or',
-  },
-  {
     key: 'totalUnits',
     name: strings.SEEDS_UNITS,
     type: 'string',
