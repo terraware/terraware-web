@@ -167,7 +167,7 @@ describe('Database', () => {
         cy.get('#table-header-viabilityTests_treatment').contains('VIABILITY TREATMENT');
         cy.get('#table-header-cutTestSeedsFilled').contains('NUMBER OF SEEDS FILLED');
         cy.get('#table-header-viabilityTests_notes').contains('NOTES');
-        cy.get('#table-header-viabilityTests_seedsSown').contains('SEEDS_TESTED');
+        cy.get('#table-header-viabilityTests_seedsSown').contains('# SEEDS TESTED');
         cy.get('#table-header-viabilityTests_viabilityTestResults_seedsGerminated').contains(
           'TOTAL OF SEEDS GERMINATED'
         );
