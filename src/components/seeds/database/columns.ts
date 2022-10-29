@@ -38,7 +38,7 @@ const COLUMNS: DatabaseColumn[] = [
   },
   {
     key: 'state',
-    name: strings.STAGE,
+    name: strings.STATUS,
     type: 'string',
     filter: { type: 'multiple_selection' },
   },
