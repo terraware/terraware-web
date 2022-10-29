@@ -165,15 +165,15 @@ describe('Database', () => {
         cy.get('#table-header-viabilityTests_type').contains('TEST METHOD');
         cy.get('#table-header-viabilityTests_seedType').contains('SEED TYPE');
         cy.get('#table-header-viabilityTests_treatment').contains('VIABILITY TREATMENT');
-        cy.get('#table-header-cutTestSeedsFilled').contains('NUMBER OF SEEDS FILLED');
+        cy.get('#table-header-viabilityTests_seedsFilled').contains('NUMBER OF SEEDS FILLED');
         cy.get('#table-header-viabilityTests_notes').contains('NOTES');
         cy.get('#table-header-viabilityTests_seedsSown').contains('# SEEDS TESTED');
         cy.get('#table-header-viabilityTests_viabilityTestResults_seedsGerminated').contains(
           'TOTAL OF SEEDS GERMINATED'
         );
-        cy.get('#table-header-cutTestSeedsEmpty').contains('NUMBER OF SEEDS EMPTY');
+        cy.get('#table-header-viabilityTests_seedsEmpty').contains('NUMBER OF SEEDS EMPTY');
         cy.get('#table-header-viabilityTests_substrate').contains('VIABILITY SUBSTRATE');
-        cy.get('#table-header-cutTestSeedsCompromised').contains('NUMBER OF SEEDS COMPROMISED');
+        cy.get('#table-header-viabilityTests_seedsCompromised').contains('NUMBER OF SEEDS COMPROMISED');
       });
 
       it('Viability Testing To Do', () => {

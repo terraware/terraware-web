@@ -59,8 +59,8 @@ export default function NewCutTest(props: Props): JSX.Element {
           <Grid container spacing={4}>
             <Grid item xs={12}>
               <TextField
-                id='cutTestSeedsFilled'
-                value={record.cutTestSeedsFilled}
+                id='viabilityTests_seedsFilled'
+                value={record.viabilityTests_seedsFilled}
                 onChange={onChange}
                 label={strings.FILLED_SEEDS}
                 aria-label='Filled seeds'
@@ -69,8 +69,8 @@ export default function NewCutTest(props: Props): JSX.Element {
             </Grid>
             <Grid item xs={12}>
               <TextField
-                id='cutTestSeedsEmpty'
-                value={record.cutTestSeedsEmpty}
+                id='viabilityTests_seedsEmpty'
+                value={record.viabilityTests_seedsEmpty}
                 onChange={onChange}
                 label={strings.EMPTY_SEEDS}
                 aria-label='Empty seeds'
@@ -79,8 +79,8 @@ export default function NewCutTest(props: Props): JSX.Element {
             </Grid>
             <Grid item xs={12}>
               <TextField
-                id='cutTestSeedsCompromised'
-                value={record.cutTestSeedsCompromised}
+                id='viabilityTests_seedsCompromised'
+                value={record.viabilityTests_seedsCompromised}
                 onChange={onChange}
                 label={strings.COMPROMISED_SEEDS}
                 aria-label='Compromised seeds'

@@ -282,9 +282,9 @@ describe.skip('Lab', () => {
   it('should add cut test', () => {
     cy.get('#cutTest #row1-edit').click();
 
-    cy.get('#cutTestSeedsFilled').type('15');
-    cy.get('#cutTestSeedsEmpty').type('50');
-    cy.get('#cutTestSeedsCompromised').type('10');
+    cy.get('#viabilityTests_seedsFilled').type('15');
+    cy.get('#viabilityTests_seedsEmpty').type('50');
+    cy.get('#viabilityTests_seedsCompromised').type('10');
 
     cy.intercept('GET', 'api/v1/seedbank/accessions/*').as('getAccession');
     cy.get('#saveCutTest').click();
@@ -298,7 +298,7 @@ describe.skip('Lab', () => {
   it('should modify cut test', () => {
     cy.get('#cutTest #row1-edit').click();
 
-    cy.get('#cutTestSeedsFilled').clear().type('500');
+    cy.get('#viabilityTests_seedsFilled').clear().type('500');
 
     cy.intercept('GET', 'api/v1/seedbank/accessions/*').as('getAccession');
     cy.get('#saveCutTest').click();

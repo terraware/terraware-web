@@ -208,7 +208,7 @@ const COLUMNS: DatabaseColumn[] = [
     filter: { type: 'multiple_selection' },
   },
   {
-    key: 'cutTestSeedsFilled',
+    key: 'viabilityTests_seedsFilled',
     name: strings.NUMBER_OF_SEEDS_FILLED,
     type: 'number',
     filter: { type: 'number_range' },
@@ -233,7 +233,7 @@ const COLUMNS: DatabaseColumn[] = [
     filter: { type: 'number_range' },
   },
   {
-    key: 'cutTestSeedsEmpty',
+    key: 'viabilityTests_seedsEmpty',
     name: strings.NUMBER_OF_SEEDS_EMPTY,
     type: 'number',
     filter: { type: 'number_range' },
@@ -245,7 +245,7 @@ const COLUMNS: DatabaseColumn[] = [
     filter: { type: 'multiple_selection' },
   },
   {
-    key: 'cutTestSeedsCompromised',
+    key: 'viabilityTests_seedsCompromised',
     name: strings.NUMBER_OF_SEEDS_COMPROMISED,
     type: 'number',
     filter: { type: 'number_range' },
@@ -362,9 +362,9 @@ const viabilitySummaryPreset: Preset = {
     'viabilityTests_treatment',
     'viabilityTests_notes',
     'viabilityTests_viabilityTestResults_seedsGerminated',
-    'cutTestSeedsFilled',
-    'cutTestSeedsEmpty',
-    'cutTestSeedsCompromised',
+    'viabilityTests_seedsFilled',
+    'viabilityTests_seedsEmpty',
+    'viabilityTests_seedsCompromised',
   ],
 };
 
