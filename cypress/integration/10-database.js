@@ -173,7 +173,6 @@ describe('Database', () => {
         );
         cy.get('#table-header-cutTestSeedsEmpty').contains('NUMBER OF SEEDS EMPTY');
         cy.get('#table-header-viabilityTests_substrate').contains('VIABILITY SUBSTRATE');
-        cy.get('#table-header-viabilityTests_percentGerminated').contains('% VIABILITY');
         cy.get('#table-header-cutTestSeedsCompromised').contains('NUMBER OF SEEDS COMPROMISED');
       });
 

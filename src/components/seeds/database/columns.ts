@@ -257,12 +257,6 @@ const COLUMNS: DatabaseColumn[] = [
     filter: { type: 'multiple_selection' },
   },
   {
-    key: 'viabilityTests_percentGerminated',
-    name: strings.PERCENTAGE_VIABILITY,
-    type: 'number',
-    filter: { type: 'number_range' },
-  },
-  {
     key: 'cutTestSeedsCompromised',
     name: strings.NUMBER_OF_SEEDS_COMPROMISED,
     type: 'number',
@@ -380,7 +374,6 @@ const viabilitySummaryPreset: Preset = {
     'viabilityTests_treatment',
     'viabilityTests_notes',
     'viabilityTests_viabilityTestResults_seedsGerminated',
-    'viabilityTests_percentGerminated',
     'cutTestSeedsFilled',
     'cutTestSeedsEmpty',
     'cutTestSeedsCompromised',
