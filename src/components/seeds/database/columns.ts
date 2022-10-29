@@ -62,7 +62,7 @@ const COLUMNS: DatabaseColumn[] = [
   },
   {
     key: 'collectedDate',
-    name: strings.COLLECTED_DATE,
+    name: strings.COLLECTION_DATE,
     type: 'date',
     filter: { type: 'date_range' },
   },
