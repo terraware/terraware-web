@@ -222,7 +222,7 @@ const COLUMNS: DatabaseColumn[] = [
   },
   {
     key: 'viabilityTests_seedsSown',
-    name: strings.NUMBER_OF_SEEDS_SOWN,
+    name: strings.NUMBER_OF_SEEDS_TESTED,
     type: 'number',
     filter: { type: 'number_range' },
   },
