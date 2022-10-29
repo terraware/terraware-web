@@ -159,7 +159,7 @@ const COLUMNS: DatabaseColumn[] = [
   },
   {
     key: 'storageLocationName',
-    name: strings.STORAGE_LOCATION,
+    name: strings.SUB_LOCATION,
     type: 'string',
     filter: { type: 'multiple_selection' },
   },
