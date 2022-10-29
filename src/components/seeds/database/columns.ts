@@ -189,12 +189,6 @@ const COLUMNS: DatabaseColumn[] = [
     filter: { type: 'date_range' },
   },
   {
-    key: 'withdrawalDestination',
-    name: strings.DESTINATION,
-    type: 'string',
-    filter: { type: 'multiple_selection' },
-  },
-  {
     key: 'withdrawalPurpose',
     name: strings.PURPOSE,
     type: 'string',

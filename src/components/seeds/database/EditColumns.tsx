@@ -191,8 +191,7 @@ const sections: Section[] = [
     name: 'Withdrawal',
     options: [
       [COLUMNS_INDEXED.withdrawalDate, COLUMNS_INDEXED.withdrawalQuantity],
-      [COLUMNS_INDEXED.withdrawalDestination, COLUMNS_INDEXED.withdrawalPurpose],
-      [COLUMNS_INDEXED.withdrawalNotes],
+      [COLUMNS_INDEXED.withdrawalPurpose, COLUMNS_INDEXED.withdrawalNotes],
     ],
   },
   {
