@@ -68,7 +68,7 @@ const COLUMNS: DatabaseColumn[] = [
   },
   {
     key: 'collectionSiteName',
-    name: strings.SITE_LOCATION,
+    name: strings.COLLECTING_SITE,
     type: 'string',
     filter: { type: 'search' },
   },
