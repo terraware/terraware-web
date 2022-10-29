@@ -191,7 +191,7 @@ const COLUMNS: DatabaseColumn[] = [
   { key: 'withdrawalNotes', name: strings.NOTES, type: 'notes' },
   {
     key: 'viabilityTests_type',
-    name: strings.VIABILITY_TEST_TYPE,
+    name: strings.TEST_METHOD,
     type: 'string',
     filter: { type: 'single_selection' },
   },
