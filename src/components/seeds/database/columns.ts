@@ -133,12 +133,6 @@ const COLUMNS: DatabaseColumn[] = [
     filter: { type: 'single_selection' },
   },
   {
-    key: 'viabilityTestType',
-    name: strings.VIABILITY_TEST_TYPE,
-    type: 'string',
-    filter: { type: 'single_selection' },
-  },
-  {
     key: 'dryingEndDate',
     name: strings.DRYING_END_DATE,
     type: 'string',
