@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
 import { Button, Table, TableColumnType } from '@terraware/web-components';
@@ -13,7 +13,6 @@ import InventoryFilters, { InventoryFiltersType } from './InventoryFiltersPopove
 import Pill from 'src/components/Pill';
 import PageSnackbar from 'src/components/PageSnackbar';
 import { getNurseryName, removeFilter } from './FilterUtils';
-import ImportInventoryModal from './ImportInventoryModal';
 
 const columns: TableColumnType[] = [
   {
