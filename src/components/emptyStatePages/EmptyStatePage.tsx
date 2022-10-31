@@ -20,6 +20,7 @@ import { isContributor } from 'src/utils/organization';
 import emptyMessageStrings from 'src/strings/emptyMessageModal';
 import EmptyMessage from 'src/components/common/EmptyMessage';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import ImportInventoryModal, { downloadInventoryCsvTemplate } from '../Inventory/ImportInventoryModal';
 
 interface StyleProps {
   isMobile: boolean;
@@ -119,8 +120,13 @@ export default function EmptyStatePage({ pageName, organization, reloadData }: E
     downloadCsvTemplate();
   };
 
+  const downloadInventoryCsvTemplateHandler = () => {
+    downloadInventoryCsvTemplate();
+  };
+
   const [addSpeciesModalOpened, setAddSpeciesModalOpened] = useState(false);
   const [importSpeciesModalOpened, setImportSpeciesModalOpened] = useState(false);
+  const [importInventoryModalOpened, setImportInventoryModalOpened] = useState(false);
 
   const NO_SPECIES_CONTENT: PageContent = {
     title1: strings.SPECIES,
@@ -163,10 +169,10 @@ export default function EmptyStatePage({ pageName, organization, reloadData }: E
         buttonText: strings.IMPORT_INVENTORY,
         buttonIcon: 'iconImport',
         onClickButton: () => {
-          return true;
+          setImportInventoryModalOpened(true);
         },
         linkText: emptyStateStrings.DOWNLOAD_CSV_TEMPLATE,
-        onLinkClick: downloadCsvTemplateHandler,
+        onLinkClick: downloadInventoryCsvTemplateHandler,
       },
       {
         icon: 'edit',
@@ -235,6 +241,19 @@ export default function EmptyStatePage({ pageName, organization, reloadData }: E
     }
   };
 
+  const onCloseImportInventoryModal = (saved: boolean, snackbarMessage?: string) => {
+    if (saved) {
+      if (reloadData) {
+        reloadData();
+      }
+      history.push(APP_PATHS.INVENTORY);
+    }
+    setImportInventoryModalOpened(false);
+    if (snackbarMessage) {
+      snackbar.toastSuccess(snackbarMessage);
+    }
+  };
+
   return (
     <TfMain>
       {organization && (
@@ -243,6 +262,11 @@ export default function EmptyStatePage({ pageName, organization, reloadData }: E
           <ImportSpeciesModal
             open={importSpeciesModalOpened}
             onClose={onCloseImportSpeciesModal}
+            organization={organization}
+          />
+          <ImportInventoryModal
+            open={importInventoryModalOpened}
+            onClose={onCloseImportInventoryModal}
             organization={organization}
           />
         </>

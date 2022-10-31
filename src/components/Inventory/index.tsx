@@ -195,7 +195,7 @@ export default function Inventory(props: InventoryProps): JSX.Element {
   return (
     <TfMain>
       <Grid container spacing={3}>
-        <Grid item xs={9}>
+        <Grid item xs={6}>
           <Typography fontSize='24px' fontWeight={600}>
             {strings.INVENTORY}
           </Typography>
@@ -216,7 +216,7 @@ export default function Inventory(props: InventoryProps): JSX.Element {
             </div>
           ) : (
             <Container maxWidth={false} className={classes.mainContainer}>
-              <EmptyStatePage pageName={'Inventory'} />
+              <EmptyStatePage pageName={'Inventory'} organization={organization} />
             </Container>
           )
         ) : (
