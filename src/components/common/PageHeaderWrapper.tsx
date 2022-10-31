@@ -1,22 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { makeStyles } from '@mui/styles';
-import { Theme } from '@mui/material';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { Box, useTheme } from '@mui/material';
 
 const TOP_BAR_HEIGHT = 64;
-
-const useStyles = makeStyles((theme: Theme) => ({
-  headerFixed: {
-    position: 'fixed',
-    top: `${TOP_BAR_HEIGHT}px`,
-    width: '-webkit-fill-available',
-    background: theme.palette.TwClrBg,
-    boxShadow: `0px 3px 3px -3px ${theme.palette.TwClrBaseGray200}`,
-    zIndex: 100,
-  },
-  hide: {
-    visibility: 'hidden',
-  },
-}));
 
 /**
  * children The child component which is the page header
@@ -28,7 +13,7 @@ interface Props {
 }
 
 export default function PageHeaderWrapper({ children, nextElement }: Props): JSX.Element {
-  const classes = useStyles();
+  const theme = useTheme();
   const ref = useRef<HTMLDivElement>(null);
   const [sticky, setSticky] = useState(false);
   const [scrollDown, setScrollDown] = useState(false);
@@ -64,9 +49,22 @@ export default function PageHeaderWrapper({ children, nextElement }: Props): JSX
     };
   }, [children, nextElement, height]);
 
+  const styles = useMemo<Record<string, any>>(
+    () => ({
+      visibility: scrollDown && sticky ? 'hidden' : 'visible',
+      position: sticky ? 'fixed' : undefined,
+      top: sticky ? `${TOP_BAR_HEIGHT}px` : undefined,
+      width: sticky ? '-webkit-fill-available' : undefined,
+      background: sticky ? theme.palette.TwClrBg : undefined,
+      boxShadow: sticky ? `0px 3px 3px -3px ${theme.palette.TwClrBaseGray200}` : undefined,
+      zIndex: sticky ? 100 : undefined,
+    }),
+    [theme, sticky, scrollDown]
+  );
+
   return (
-    <div ref={ref} className={`${sticky ? classes.headerFixed : ''} ${scrollDown && sticky ? classes.hide : ''}`}>
+    <Box ref={ref} sx={styles}>
       {children}
-    </div>
+    </Box>
   );
 }
