@@ -79,7 +79,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
     setImportSpeciesModalOpen(true);
   };
 
-  const onCloseImportSpeciesModal = (completed: boolean) => {
+  const onCloseImportSpeciesModal = () => {
     setImportSpeciesModalOpen(false);
   };
 

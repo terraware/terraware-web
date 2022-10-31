@@ -1,4 +1,4 @@
-import { Box, Link } from '@mui/material';
+import { Box, Link, useTheme } from '@mui/material';
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useEffect, useRef, useState } from 'react';
@@ -131,6 +131,7 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
   const [completed, setCompleted] = useState(false);
   const [warning, setWarning] = useState(false);
   const [uploadId, setUploadId] = useState<number>();
+  const theme = useTheme();
 
   const handleCancel = () => {
     onClose(completed);
@@ -339,7 +340,7 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
       }
     >
       {children && !error && !loading && !completed && !warning && (
-        <Box sx={{ paddingBottom: 3, color: '#3A4445', textAlign: 'left' }}> {children} </Box>
+        <Box sx={{ paddingBottom: 3, color: theme.palette.TwClrTxt, textAlign: 'left' }}> {children} </Box>
       )}
       <div ref={divRef} tabIndex={0}>
         {error && !loading && <p>{error}</p>}
