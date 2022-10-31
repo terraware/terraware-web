@@ -9,7 +9,7 @@ import Divisor from 'src/components/common/Divisor';
 import Dropdown from 'src/components/common/Dropdown';
 import TextField from 'src/components/common/TextField';
 import strings from 'src/strings';
-import { WEIGHT_UNITS } from '../../nursery/NewTest';
+import { WEIGHT_UNITS } from 'src/units';
 
 const useStyles = makeStyles((theme: Theme) => ({
   box: {

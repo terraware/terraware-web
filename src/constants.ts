@@ -4,14 +4,6 @@ export const TERRAFORMATION_PRIVACY_POLICY = 'https://www.terraformation.com/pri
 
 export enum APP_PATHS {
   ACCESSIONS = '/accessions',
-  ACCESSIONS_NEW = '/accessions1/new',
-  ACCESSIONS_ITEM_SEED_COLLECTION = '/accessions1/:accessionId/seed-collection',
-  ACCESSIONS_ITEM_PROCESSING_DRYING = '/accessions1/:accessionId/processing-drying',
-  ACCESSIONS_ITEM_STORAGE = '/accessions1/:accessionId/storage',
-  ACCESSIONS_ITEM_WITHDRAWAL = '/accessions1/:accessionId/withdrawal',
-  ACCESSIONS_ITEM_NURSERY = '/accessions1/:accessionId/nursery',
-  ACCESSIONS_ITEM_LAB = '/accessions1/:accessionId/lab',
-  ACCESSIONS_ITEM = '/accessions1/:accessionId',
   ACCESSIONS2_NEW = '/accessions/new',
   ACCESSIONS2_ITEM = '/accessions/:accessionId',
   ACCESSIONS2_EDIT = '/accessions/:accessionId/edit',

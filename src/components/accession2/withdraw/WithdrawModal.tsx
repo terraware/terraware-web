@@ -13,7 +13,7 @@ import { WITHDRAWAL_PURPOSES } from 'src/utils/withdrawalPurposes';
 import { getOrganizationUsers } from 'src/api/organization/organization';
 import { OrganizationUser, User } from 'src/types/User';
 import { ServerOrganization } from 'src/types/Organization';
-import { Unit, WEIGHT_UNITS_V2 } from 'src/components/seeds/nursery/NewTest';
+import { Unit, WEIGHT_UNITS_V2 } from 'src/units';
 import { getTodaysDateFormatted, isInTheFuture } from '@terraware/web-components/utils';
 import { TREATMENTS, WITHDRAWAL_TYPES } from 'src/types/Accession';
 import useSnackbar from 'src/utils/useSnackbar';

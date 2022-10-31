@@ -6,7 +6,7 @@ import { Box, Grid, Theme } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
 import { Accession2, updateAccession2 } from 'src/api/accessions2/accession';
 import { ServerOrganization } from 'src/types/Organization';
-import { Unit, WEIGHT_UNITS_V2 } from 'src/components/seeds/nursery/NewTest';
+import { Unit, WEIGHT_UNITS_V2 } from 'src/units';
 import useSnackbar from 'src/utils/useSnackbar';
 import { Dropdown } from '@terraware/web-components';
 import { makeStyles } from '@mui/styles';

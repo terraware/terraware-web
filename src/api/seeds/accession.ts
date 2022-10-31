@@ -3,18 +3,6 @@ import { accessionEndpoint, checkInEndpoint, photoEndpoint } from '../types/acce
 import { paths } from '../types/generated-schema';
 import { Accession2 } from 'src/api/accessions2/accession';
 
-export const getAccession = async (accessionId: number): Promise<any> => {
-  return null;
-};
-
-export const postAccession = async (accession: any): Promise<number> => {
-  return 0;
-};
-
-export const putAccession = async (accessionId: number, accession: unknown): Promise<void> => {
-  return;
-};
-
 export const getPhotoEndpoint = (accessionId: number, photoFilename: string): string => {
   return photoEndpoint.replace('{id}', `${accessionId}`).replace('{photoFilename}', `${photoFilename}`);
 };

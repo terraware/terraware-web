@@ -20,11 +20,9 @@ import Organization from 'src/components/Organization';
 import People from 'src/components/People';
 import PersonDetails from 'src/components/Person';
 import SpeciesList from 'src/components/Species';
-import Accession from 'src/components/seeds/accession';
 import CheckIn from 'src/components/seeds/checkin';
 import Database from 'src/components/seeds/database';
 import { defaultPreset as DefaultColumns } from 'src/components/seeds/database/columns';
-import NewAccession from 'src/components/seeds/newAccession';
 import SeedSummary from 'src/components/seeds/summary';
 import ToastSnackbar from 'src/components/ToastSnackbar';
 import TopBar from 'src/components/TopBar/TopBar';
@@ -392,14 +390,6 @@ export default function App() {
               </Route>
               <Route exact path={APP_PATHS.CHECKIN}>
                 <CheckIn organization={selectedOrganization} />
-              </Route>
-              {selectedOrganization && (
-                <Route exact path={APP_PATHS.ACCESSIONS_NEW}>
-                  <NewAccession organization={selectedOrganization} />
-                </Route>
-              )}
-              <Route path={APP_PATHS.ACCESSIONS_ITEM}>
-                <Accession organization={selectedOrganization} />
               </Route>
               <Route exact path={APP_PATHS.ACCESSIONS}>
                 <Database
