@@ -20,11 +20,9 @@ import Organization from 'src/components/Organization';
 import People from 'src/components/People';
 import PersonDetails from 'src/components/Person';
 import SpeciesList from 'src/components/Species';
-import Accession from 'src/components/seeds/accession';
 import CheckIn from 'src/components/seeds/checkin';
 import Database from 'src/components/seeds/database';
 import { defaultPreset as DefaultColumns } from 'src/components/seeds/database/columns';
-import NewAccession from 'src/components/seeds/newAccession';
 import SeedSummary from 'src/components/seeds/summary';
 import ToastSnackbar from 'src/components/ToastSnackbar';
 import TopBar from 'src/components/TopBar/TopBar';
@@ -105,7 +103,6 @@ export default function App() {
   const [preferencesOrg, setPreferencesOrg] = useState<{ [key: string]: unknown }>();
   const [notifications, setNotifications] = useState<Notifications>();
   const { isProduction } = useEnvironment();
-  const v2AccessionsEnabled = isRouteEnabled('V2 Accessions');
   const nurseryManagementEnabled = isRouteEnabled('Nursery management');
 
   // seedSearchCriteria describes which criteria to apply when searching accession data.
@@ -393,14 +390,6 @@ export default function App() {
               <Route exact path={APP_PATHS.CHECKIN}>
                 <CheckIn organization={selectedOrganization} />
               </Route>
-              {selectedOrganization && (
-                <Route exact path={APP_PATHS.ACCESSIONS_NEW}>
-                  <NewAccession organization={selectedOrganization} />
-                </Route>
-              )}
-              <Route path={APP_PATHS.ACCESSIONS_ITEM}>
-                <Accession organization={selectedOrganization} />
-              </Route>
               <Route exact path={APP_PATHS.ACCESSIONS}>
                 <Database
                   organization={selectedOrganization}
@@ -417,12 +406,12 @@ export default function App() {
                   reloadData={reloadData}
                 />
               </Route>
-              {v2AccessionsEnabled && selectedOrganization && (
+              {selectedOrganization && (
                 <Route exact path={APP_PATHS.ACCESSIONS2_NEW}>
                   <Accession2Create organization={selectedOrganization} />
                 </Route>
               )}
-              {v2AccessionsEnabled && selectedOrganization && user && (
+              {selectedOrganization && user && (
                 <Route path={APP_PATHS.ACCESSIONS2_ITEM}>
                   <Accession2View organization={selectedOrganization} user={user} />
                 </Route>

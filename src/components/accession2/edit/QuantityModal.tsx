@@ -7,7 +7,7 @@ import { Textfield } from '@terraware/web-components';
 import { Accession2, updateAccession2 } from 'src/api/accessions2/accession';
 import useForm from 'src/utils/useForm';
 import { ServerOrganization } from 'src/types/Organization';
-import { Unit, WEIGHT_UNITS_V2 } from 'src/components/seeds/nursery/NewTest';
+import { Unit, WEIGHT_UNITS_V2 } from 'src/units';
 import useSnackbar from 'src/utils/useSnackbar';
 import CalculatorModal from './CalculatorModal';
 import { Dropdown } from '@terraware/web-components';

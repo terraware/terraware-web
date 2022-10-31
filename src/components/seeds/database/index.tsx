@@ -59,7 +59,6 @@ import { isAdmin } from 'src/utils/organization';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import featureEnabled from 'src/features';
 import ImportAccessionsModal from './ImportAccessionsModal';
 import { Icon } from '@terraware/web-components';
 import { downloadCsvTemplateHandler } from 'src/components/common/ImportModal';
@@ -207,7 +206,6 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>();
   const [searchSummaryResults, setSearchSummaryResults] = useState<SearchSummaryResponsePayload | null>();
   const [unfilteredResults, setUnfilteredResults] = useState<SearchResponseElement[] | null>();
-  const [selectSeedBankModalOpen, setSelectSeedBankModalOpen] = useState<boolean>(false);
   const [selectSeedBankForImportModalOpen, setSelectSeedBankForImportModalOpen] = useState<boolean>(false);
   const [openImportModal, setOpenImportModal] = useState<boolean>(false);
 
@@ -321,13 +319,6 @@ export default function Database(props: DatabaseProps): JSX.Element {
         const singleAndMultiChoiceFields = filterSelectFields(searchColumns);
         const allValues = await getAllFieldValues(singleAndMultiChoiceFields, organization.id);
 
-        const isV2 = featureEnabled('V2 Accessions');
-        if (!isV2 && allValues?.state?.values) {
-          allValues.state.values = allValues.state.values.filter(
-            (state) => ['Awaiting Processing', 'Used Up'].indexOf(state) === -1
-          );
-        }
-
         if (activeRequests) {
           setFieldOptions(allValues);
         }
@@ -357,12 +348,8 @@ export default function Database(props: DatabaseProps): JSX.Element {
 
   const onSelect = (row: SearchResponseElement) => {
     if (row.id) {
-      const isV2 = featureEnabled('V2 Accessions');
       const seedCollectionLocation = {
-        pathname: (isV2 ? APP_PATHS.ACCESSIONS2_ITEM : APP_PATHS.ACCESSIONS_ITEM).replace(
-          ':accessionId',
-          row.id as string
-        ),
+        pathname: APP_PATHS.ACCESSIONS2_ITEM.replace(':accessionId', row.id as string),
         // eslint-disable-next-line no-restricted-globals
         state: { from: location.pathname },
       };
@@ -440,21 +427,8 @@ export default function Database(props: DatabaseProps): JSX.Element {
   };
 
   const goToNewAccession = () => {
-    if (featureEnabled('V2 Accessions')) {
-      const newAccessionLocation = getLocation(APP_PATHS.ACCESSIONS2_NEW, location);
-      history.push(newAccessionLocation);
-    } else {
-      setSelectSeedBankModalOpen(true);
-    }
-  };
-
-  const onSeedBankSelected = (selectedFacility: Facility | undefined) => {
-    setSelectSeedBankModalOpen(false);
-    if (selectedFacility) {
-      setSelectedOrgInfo({ ...selectedOrgInfo, selectedFacility });
-      const newAccessionLocation = getLocation(APP_PATHS.ACCESSIONS_NEW, location);
-      history.push(newAccessionLocation);
-    }
+    const newAccessionLocation = getLocation(APP_PATHS.ACCESSIONS2_NEW, location);
+    history.push(newAccessionLocation);
   };
 
   const onSeedBankForImportSelected = (selectedFacility: Facility | undefined) => {
@@ -583,8 +557,8 @@ export default function Database(props: DatabaseProps): JSX.Element {
         <>
           <SelectSeedBankModal
             organization={organization}
-            open={selectSeedBankModalOpen || selectSeedBankForImportModalOpen}
-            onClose={selectSeedBankModalOpen ? onSeedBankSelected : onSeedBankForImportSelected}
+            open={selectSeedBankForImportModalOpen}
+            onClose={onSeedBankForImportSelected}
           />
         </>
       )}

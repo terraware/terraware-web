@@ -27,7 +27,6 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import useStateLocation from 'src/utils/useStateLocation';
 import PageHeader from '../PageHeader';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import featureEnabled from 'src/features';
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
@@ -110,9 +109,8 @@ export default function CheckIn(props: CheckInProps): JSX.Element {
   };
 
   const goToAccession = (id: string) => {
-    const isV2 = featureEnabled('V2 Accessions');
     const accessionLocation = {
-      pathname: (isV2 ? APP_PATHS.ACCESSIONS2_ITEM : APP_PATHS.ACCESSIONS_ITEM).replace(':accessionId', id),
+      pathname: APP_PATHS.ACCESSIONS2_ITEM.replace(':accessionId', id),
       // eslint-disable-next-line no-restricted-globals
       state: { from: location.pathname },
     };
