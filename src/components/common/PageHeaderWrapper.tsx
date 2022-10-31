@@ -17,7 +17,7 @@ export default function PageHeaderWrapper({ children, nextElement }: Props): JSX
   const ref = useRef<HTMLDivElement>(null);
   const [sticky, setSticky] = useState(false);
   const [scrollDown, setScrollDown] = useState(false);
-  const [height, setHeight] = useState<number>();
+  const [height, setHeight] = useState<number>(0);
 
   useEffect(() => {
     if (ref.current) {
@@ -32,12 +32,18 @@ export default function PageHeaderWrapper({ children, nextElement }: Props): JSX
 
     let lastScrollY = 0;
     const handleScroll = (ev: Event) => {
-      const scrolled = window.scrollY > (height ?? 0);
       const delta = window.scrollY - lastScrollY;
-      setSticky(scrolled);
       setScrollDown(delta > 0);
+
+      const scrolledBelowHeader = window.scrollY > height;
+      /*
+       * If sticky was already set, and we are scrolling towards the top, don't unset it
+       * until we've reached the top of the page as long as we continue to scroll upward.
+       */
+      const shouldSetSticky = scrolledBelowHeader || (sticky && delta < 0 && window.scrollY > 0);
+      setSticky(shouldSetSticky);
       if (nextElement) {
-        nextElement.style.marginTop = `${scrolled ? height : 0}px`;
+        nextElement.style.marginTop = `${shouldSetSticky ? height : 0}px`;
       }
 
       lastScrollY = window.scrollY;
@@ -47,16 +53,18 @@ export default function PageHeaderWrapper({ children, nextElement }: Props): JSX
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [children, nextElement, height]);
+  }, [children, nextElement, height, sticky]);
 
   const styles = useMemo<Record<string, any>>(
     () => ({
-      visibility: scrollDown && sticky ? 'hidden' : 'visible',
-      position: sticky ? 'fixed' : undefined,
-      top: sticky ? `${TOP_BAR_HEIGHT}px` : undefined,
-      width: sticky ? '-webkit-fill-available' : undefined,
       background: sticky ? theme.palette.TwClrBg : undefined,
       boxShadow: sticky ? `0px 3px 3px -3px ${theme.palette.TwClrBaseGray200}` : undefined,
+      paddingTop: sticky ? theme.spacing(3) : undefined,
+      paddingRight: sticky ? theme.spacing(3) : undefined,
+      position: sticky ? 'fixed' : undefined,
+      top: sticky ? `${TOP_BAR_HEIGHT}px` : undefined,
+      visibility: scrollDown && sticky ? 'hidden' : 'visible',
+      width: sticky ? '-webkit-fill-available' : undefined,
       zIndex: sticky ? 100 : undefined,
     }),
     [theme, sticky, scrollDown]
