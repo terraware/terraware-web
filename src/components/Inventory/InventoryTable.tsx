@@ -51,10 +51,20 @@ interface InventoryTableProps {
   setTemporalSearchValue: React.Dispatch<React.SetStateAction<string>>;
   filters: InventoryFiltersType;
   setFilters: React.Dispatch<React.SetStateAction<InventoryFiltersType>>;
+  setImportInventoryModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function InventoryTable(props: InventoryTableProps): JSX.Element {
-  const { organization, results, setTemporalSearchValue, temporalSearchValue, filters, setFilters } = props;
+  const {
+    organization,
+    results,
+    setTemporalSearchValue,
+    temporalSearchValue,
+    filters,
+    setFilters,
+    setImportInventoryModalOpen,
+  } = props;
+
   const { isMobile } = useDeviceInfo();
   const history = useHistory();
 
@@ -73,9 +83,13 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
     setTemporalSearchValue(value as string);
   };
 
+  const onImportInventory = () => {
+    setImportInventoryModalOpen(true);
+  };
+
   return (
     <>
-      <Grid item xs={3} sx={{ textAlign: 'right' }}>
+      <Grid item xs={6} sx={{ textAlign: 'right' }}>
         {isMobile ? (
           <Button id='new-inventory' icon='plus' onClick={() => goTo(APP_PATHS.INVENTORY_NEW)} size='medium' />
         ) : (
@@ -84,7 +98,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
               id='import-inventory'
               label={strings.IMPORT}
               icon='iconImport'
-              onClick={() => true}
+              onClick={onImportInventory}
               priority='secondary'
               size='medium'
             />

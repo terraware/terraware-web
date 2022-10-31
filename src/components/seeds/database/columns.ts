@@ -38,7 +38,7 @@ const COLUMNS: DatabaseColumn[] = [
   },
   {
     key: 'state',
-    name: strings.STAGE,
+    name: strings.STATUS,
     type: 'string',
     filter: { type: 'multiple_selection' },
   },
@@ -62,13 +62,13 @@ const COLUMNS: DatabaseColumn[] = [
   },
   {
     key: 'collectedDate',
-    name: strings.COLLECTED_DATE,
+    name: strings.COLLECTION_DATE,
     type: 'date',
     filter: { type: 'date_range' },
   },
   {
     key: 'collectionSiteName',
-    name: strings.SITE_LOCATION,
+    name: strings.COLLECTING_SITE,
     type: 'string',
     filter: { type: 'search' },
   },
@@ -116,14 +116,6 @@ const COLUMNS: DatabaseColumn[] = [
   },
   { key: 'collectionNotes', name: strings.NOTES, type: 'notes' },
   {
-    key: 'totalQuantity',
-    additionalKeys: ['totalUnits'],
-    name: strings.SEEDS_TOTAL,
-    type: 'number',
-    filter: { type: 'count_weight' },
-    operation: 'or',
-  },
-  {
     key: 'totalUnits',
     name: strings.SEEDS_UNITS,
     type: 'string',
@@ -137,12 +129,6 @@ const COLUMNS: DatabaseColumn[] = [
   {
     key: 'processingMethod',
     name: strings.PROCESSING_METHOD,
-    type: 'string',
-    filter: { type: 'single_selection' },
-  },
-  {
-    key: 'viabilityTestType',
-    name: strings.VIABILITY_TEST_TYPE,
     type: 'string',
     filter: { type: 'single_selection' },
   },
@@ -173,7 +159,7 @@ const COLUMNS: DatabaseColumn[] = [
   },
   {
     key: 'storageLocationName',
-    name: strings.STORAGE_LOCATION,
+    name: strings.SUB_LOCATION,
     type: 'string',
     filter: { type: 'multiple_selection' },
   },
@@ -197,12 +183,6 @@ const COLUMNS: DatabaseColumn[] = [
     filter: { type: 'date_range' },
   },
   {
-    key: 'withdrawalDestination',
-    name: strings.DESTINATION,
-    type: 'string',
-    filter: { type: 'multiple_selection' },
-  },
-  {
     key: 'withdrawalPurpose',
     name: strings.PURPOSE,
     type: 'string',
@@ -211,7 +191,7 @@ const COLUMNS: DatabaseColumn[] = [
   { key: 'withdrawalNotes', name: strings.NOTES, type: 'notes' },
   {
     key: 'viabilityTests_type',
-    name: strings.VIABILITY_TEST_TYPE,
+    name: strings.TEST_METHOD,
     type: 'string',
     filter: { type: 'single_selection' },
   },
@@ -228,7 +208,7 @@ const COLUMNS: DatabaseColumn[] = [
     filter: { type: 'multiple_selection' },
   },
   {
-    key: 'cutTestSeedsFilled',
+    key: 'viabilityTests_seedsFilled',
     name: strings.NUMBER_OF_SEEDS_FILLED,
     type: 'number',
     filter: { type: 'number_range' },
@@ -242,7 +222,7 @@ const COLUMNS: DatabaseColumn[] = [
   },
   {
     key: 'viabilityTests_seedsSown',
-    name: strings.NUMBER_OF_SEEDS_SOWN,
+    name: strings.NUMBER_OF_SEEDS_TESTED,
     type: 'number',
     filter: { type: 'number_range' },
   },
@@ -253,7 +233,7 @@ const COLUMNS: DatabaseColumn[] = [
     filter: { type: 'number_range' },
   },
   {
-    key: 'cutTestSeedsEmpty',
+    key: 'viabilityTests_seedsEmpty',
     name: strings.NUMBER_OF_SEEDS_EMPTY,
     type: 'number',
     filter: { type: 'number_range' },
@@ -265,13 +245,7 @@ const COLUMNS: DatabaseColumn[] = [
     filter: { type: 'multiple_selection' },
   },
   {
-    key: 'viabilityTests_percentGerminated',
-    name: strings.PERCENTAGE_VIABILITY,
-    type: 'number',
-    filter: { type: 'number_range' },
-  },
-  {
-    key: 'cutTestSeedsCompromised',
+    key: 'viabilityTests_seedsCompromised',
     name: strings.NUMBER_OF_SEEDS_COMPROMISED,
     type: 'number',
     filter: { type: 'number_range' },
@@ -388,10 +362,9 @@ const viabilitySummaryPreset: Preset = {
     'viabilityTests_treatment',
     'viabilityTests_notes',
     'viabilityTests_viabilityTestResults_seedsGerminated',
-    'viabilityTests_percentGerminated',
-    'cutTestSeedsFilled',
-    'cutTestSeedsEmpty',
-    'cutTestSeedsCompromised',
+    'viabilityTests_seedsFilled',
+    'viabilityTests_seedsEmpty',
+    'viabilityTests_seedsCompromised',
   ],
 };
 

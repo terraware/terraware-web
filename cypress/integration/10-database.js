@@ -4,10 +4,10 @@ describe('Database', () => {
       cy.visit('/accessions');
       cy.get('#table-header').children().should('have.length', 8);
       cy.get('#table-header-accessionNumber').contains('ACCESSION');
-      cy.get('#table-header-state').contains('STAGE');
+      cy.get('#table-header-state').contains('STATUS');
       cy.get('#table-header-speciesName').contains('SPECIES');
-      cy.get('#table-header-collectedDate').contains('COLLECTED DATE');
-      cy.get('#table-header-collectionSiteName').contains('SITE LOCATION');
+      cy.get('#table-header-collectedDate').contains('COLLECTION DATE');
+      cy.get('#table-header-collectionSiteName').contains('COLLECTING SITE');
       cy.get('#table-header-ageMonths').contains('AGE (MONTH)');
       cy.get('#table-header-estimatedWeightGrams').contains('WEIGHT (G)');
       cy.get('#table-header-estimatedCount').contains('COUNT');
@@ -23,10 +23,10 @@ describe('Database', () => {
 
       cy.get('#table-header').children().should('have.length', 8);
       cy.get('#table-header-accessionNumber').contains('ACCESSION');
-      cy.get('#table-header-state').contains('STAGE');
+      cy.get('#table-header-state').contains('STATUS');
       cy.get('#table-header-speciesName').contains('SPECIES');
-      cy.get('#table-header-collectedDate').contains('COLLECTED DATE');
-      cy.get('#table-header-collectionSiteName').contains('SITE LOCATION');
+      cy.get('#table-header-collectedDate').contains('COLLECTION DATE');
+      cy.get('#table-header-collectionSiteName').contains('COLLECTING SITE');
       cy.get('#table-header-ageMonths').contains('AGE (MONTH)');
       cy.get('#table-header-estimatedWeightGrams').contains('WEIGHT (G)');
       cy.get('#table-header-estimatedCount').contains('COUNT');
@@ -52,8 +52,8 @@ describe('Database', () => {
 
       cy.get('#table-header').children().should('have.length', 9);
       cy.get('#table-header > :nth-child(1)').contains('ACCESSION');
-      cy.get('#table-header > :nth-child(2)').contains('STAGE');
-      cy.get('#table-header > :nth-child(3)').contains('SITE LOCATION');
+      cy.get('#table-header > :nth-child(2)').contains('STATUS');
+      cy.get('#table-header > :nth-child(3)').contains('COLLECTING SITE');
       cy.get('#table-header > :nth-child(4)').contains('AGE (MONTH');
       cy.get('#table-header > :nth-child(5)').contains('WEIGHT (G)');
       cy.get('#table-header > :nth-child(6)').contains('COUNT');
@@ -85,11 +85,11 @@ describe('Database', () => {
         cy.get('#table-header').children().should('have.length', 13);
         cy.get('#table-header-accessionNumber').contains('ACCESSION');
         cy.get('#table-header-active').contains('ACTIVE/INACTIVE');
-        cy.get('#table-header-state').contains('STAGE');
+        cy.get('#table-header-state').contains('STATUS');
         cy.get('#table-header-speciesName').contains('SPECIES');
         cy.get('#table-header-receivedDate').contains('RECEIVED DATE');
-        cy.get('#table-header-collectedDate').contains('COLLECTED DATE');
-        cy.get('#table-header-collectionSiteName').contains('SITE LOCATION');
+        cy.get('#table-header-collectedDate').contains('COLLECTION DATE');
+        cy.get('#table-header-collectionSiteName').contains('COLLECTING SITE');
         cy.get('#table-header-plantsCollectedFrom').contains('NUMBER OF PLANTS');
         cy.get('#table-header-estimatedSeedsIncoming').contains('ESTIMATED SEEDS INCOMING');
         cy.get('#table-header-collectionSiteLandowner').contains('LANDOWNER');
@@ -112,10 +112,10 @@ describe('Database', () => {
 
         cy.get('#table-header').children().should('have.length', 8);
         cy.get('#table-header-accessionNumber').contains('ACCESSION');
-        cy.get('#table-header-state').contains('STAGE');
+        cy.get('#table-header-state').contains('STATUS');
         cy.get('#table-header-speciesName').contains('SPECIES');
-        cy.get('#table-header-collectedDate').contains('COLLECTED DATE');
-        cy.get('#table-header-collectionSiteName').contains('SITE LOCATION');
+        cy.get('#table-header-collectedDate').contains('COLLECTION DATE');
+        cy.get('#table-header-collectionSiteName').contains('COLLECTING SITE');
       });
 
       it('Seed Storage Status', () => {
@@ -134,13 +134,13 @@ describe('Database', () => {
         cy.get('#table-header').children().should('have.length', 9);
         cy.get('#table-header-accessionNumber').contains('ACCESSION');
         cy.get('#table-header-active').contains('ACTIVE/INACTIVE');
-        cy.get('#table-header-state').contains('STAGE');
+        cy.get('#table-header-state').contains('STATUS');
         cy.get('#table-header-speciesName').contains('SPECIES');
         cy.get('#table-header-receivedDate').contains('RECEIVED DATE');
-        cy.get('#table-header-collectedDate').contains('COLLECTED DATE');
+        cy.get('#table-header-collectedDate').contains('COLLECTION DATE');
         cy.get('#table-header-estimatedSeedsIncoming').should('contain', 'ESTIMATED SEEDS INCOMING');
         cy.get('#table-header-storageCondition').contains('STORAGE CONDITION');
-        cy.get('#table-header-storageLocationName').contains('STORAGE LOCATION');
+        cy.get('#table-header-storageLocationName').contains('SUB-LOCATION');
       });
 
       it('Viability Summary', () => {
@@ -156,25 +156,24 @@ describe('Database', () => {
         cy.wait('@values');
         cy.get('#editColumnsDialog').should('not.exist');
 
-        cy.get('#table-header').children().should('have.length', 16);
+        cy.get('#table-header').children().should('have.length', 15);
         cy.get('#table-header-accessionNumber').contains('ACCESSION');
         cy.get('#table-header-active').contains('ACTIVE/INACTIVE');
-        cy.get('#table-header-state').contains('STAGE');
+        cy.get('#table-header-state').contains('STATUS');
         cy.get('#table-header-speciesName').contains('SPECIES');
-        cy.get('#table-header-collectedDate').contains('COLLECTED DATE');
-        cy.get('#table-header-viabilityTests_type').contains('VIABILITY TEST TYPE');
+        cy.get('#table-header-collectedDate').contains('COLLECTION DATE');
+        cy.get('#table-header-viabilityTests_type').contains('TEST METHOD');
         cy.get('#table-header-viabilityTests_seedType').contains('SEED TYPE');
         cy.get('#table-header-viabilityTests_treatment').contains('VIABILITY TREATMENT');
-        cy.get('#table-header-cutTestSeedsFilled').contains('NUMBER OF SEEDS FILLED');
+        cy.get('#table-header-viabilityTests_seedsFilled').contains('NUMBER OF SEEDS FILLED');
         cy.get('#table-header-viabilityTests_notes').contains('NOTES');
-        cy.get('#table-header-viabilityTests_seedsSown').contains('NUMBER OF SEEDS SOWN');
+        cy.get('#table-header-viabilityTests_seedsSown').contains('# SEEDS TESTED');
         cy.get('#table-header-viabilityTests_viabilityTestResults_seedsGerminated').contains(
           'TOTAL OF SEEDS GERMINATED'
         );
-        cy.get('#table-header-cutTestSeedsEmpty').contains('NUMBER OF SEEDS EMPTY');
+        cy.get('#table-header-viabilityTests_seedsEmpty').contains('NUMBER OF SEEDS EMPTY');
         cy.get('#table-header-viabilityTests_substrate').contains('VIABILITY SUBSTRATE');
-        cy.get('#table-header-viabilityTests_percentGerminated').contains('% VIABILITY');
-        cy.get('#table-header-cutTestSeedsCompromised').contains('NUMBER OF SEEDS COMPROMISED');
+        cy.get('#table-header-viabilityTests_seedsCompromised').contains('NUMBER OF SEEDS COMPROMISED');
       });
 
       it('Viability Testing To Do', () => {
@@ -193,12 +192,12 @@ describe('Database', () => {
         cy.get('#table-header').children().should('have.length', 9);
         cy.get('#table-header-accessionNumber').contains('ACCESSION');
         cy.get('#table-header-active').contains('ACTIVE/INACTIVE');
-        cy.get('#table-header-state').contains('STAGE');
+        cy.get('#table-header-state').contains('STATUS');
         cy.get('#table-header-speciesName').contains('SPECIES');
-        cy.get('#table-header-collectedDate').contains('COLLECTED DATE');
+        cy.get('#table-header-collectedDate').contains('COLLECTION DATE');
         cy.get('#table-header-storageCondition').contains('STORAGE CONDITION');
-        cy.get('#table-header-storageLocationName').contains('STORAGE LOCATION');
-        cy.get('#table-header-viabilityTests_type').contains('VIABILITY TEST TYPE');
+        cy.get('#table-header-storageLocationName').contains('SUB-LOCATION');
+        cy.get('#table-header-viabilityTests_type').contains('TEST METHOD');
         cy.get('#table-header-viabilityTests_startDate').contains('VIABILITY START DATE');
       });
 
@@ -220,11 +219,11 @@ describe('Database', () => {
         cy.get('#table-header > :nth-child(1)').contains('ACCESSION');
         cy.get('#table-header > :nth-child(2)').contains('SPECIES');
         cy.get('#table-header > :nth-child(3)').contains('ACTIVE/INACTIVE');
-        cy.get('#table-header > :nth-child(4)').contains('STAGE');
-        cy.get('#table-header > :nth-child(5)').contains('COLLECTED DATE');
+        cy.get('#table-header > :nth-child(4)').contains('STATUS');
+        cy.get('#table-header > :nth-child(5)').contains('COLLECTION DATE');
         cy.get('#table-header > :nth-child(6)').contains('STORAGE CONDITION');
-        cy.get('#table-header > :nth-child(7)').contains('STORAGE LOCATION');
-        cy.get('#table-header > :nth-child(8)').contains('VIABILITY TEST TYPE');
+        cy.get('#table-header > :nth-child(7)').contains('SUB-LOCATION');
+        cy.get('#table-header > :nth-child(8)').contains('TEST METHOD');
         cy.get('#table-header > :nth-child(9)').contains('VIABILITY START DATE');
         cy.get('#table-header > :nth-child(10)').contains('RARE');
       });
