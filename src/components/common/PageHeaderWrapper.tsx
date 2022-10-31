@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Box, useTheme } from '@mui/material';
 
 const TOP_BAR_HEIGHT = 64;
