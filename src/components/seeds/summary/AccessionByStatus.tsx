@@ -1,12 +1,11 @@
 import { Box, Typography, useTheme } from '@mui/material';
 import { Link } from 'react-router-dom';
-import { AccessionState } from 'src/api/types/accessions';
 import { APP_PATHS } from 'src/constants';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 interface Props {
   label: string;
-  status: AccessionState;
+  status: string;
   quantity: number | undefined;
 }
 
