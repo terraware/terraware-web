@@ -813,6 +813,8 @@ const strings = new LocalizedStrings({
     ADD_SEED_BANKS: 'Add Seed Banks',
     IMPORT_ACCESSIONS_ALT_TITLE: 'Already have a seed accession database?',
     IMPORT_ACCESSIONS_WITH_TEMPLATE: 'Import accessions using our CSV template',
+    IMPORT_INVENTORY_ALT_TITLE: 'Already have an inventory database?',
+    IMPORT_INVENTORY_WITH_TEMPLATE: 'Import inventory using our CSV template',
   },
 });
 

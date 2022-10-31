@@ -18,6 +18,9 @@ import { InventoryFiltersType } from './InventoryFiltersPopover';
 import useDebounce from 'src/utils/useDebounce';
 import useForm from 'src/utils/useForm';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
+import { downloadCsvTemplateHandler } from '../common/ImportModal';
+import { downloadInventoryTemplate } from 'src/api/inventory/inventory';
+import ImportInventoryModal from './ImportInventoryModal';
 
 interface StyleProps {
   isMobile: boolean;
@@ -56,6 +59,7 @@ export default function Inventory(props: InventoryProps): JSX.Element {
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
   const [filters, setFilters] = useForm<InventoryFiltersType>({});
+  const [importInventoryModalOpen, setImportInventoryModalOpen] = useState(false);
 
   const goTo = (appPath: string) => {
     const appPathLocation = {
@@ -64,15 +68,28 @@ export default function Inventory(props: InventoryProps): JSX.Element {
     history.push(appPathLocation);
   };
 
+  const importInventory = () => {
+    setImportInventoryModalOpen(true);
+  };
+
   const getEmptyState = () => {
     const emptyState = [];
 
     if (!hasSpecies) {
       emptyState.push({
-        title: strings.SPECIES,
+        title: strings.CREATE_SPECIES_LIST,
         text: emptyMessageStrings.INVENTORY_ONBOARDING_SPECIES_MSG,
         buttonText: strings.GO_TO_SPECIES,
         onClick: () => goTo(APP_PATHS.SPECIES),
+        altItem: hasNurseries
+          ? {
+              title: strings.IMPORT_INVENTORY_ALT_TITLE,
+              linkText: strings.IMPORT_INVENTORY_WITH_TEMPLATE,
+              onLinkClick: () => downloadCsvTemplateHandler(downloadInventoryTemplate),
+              buttonText: strings.IMPORT_INVENTORY,
+              onClick: () => importInventory(),
+            }
+          : undefined,
       });
     }
 
@@ -194,6 +211,11 @@ export default function Inventory(props: InventoryProps): JSX.Element {
 
   return (
     <TfMain>
+      <ImportInventoryModal
+        open={importInventoryModalOpen}
+        onClose={() => setImportInventoryModalOpen(false)}
+        organization={organization}
+      />
       <Grid container spacing={3}>
         <Grid item xs={6}>
           <Typography fontSize='24px' fontWeight={600}>
@@ -209,6 +231,7 @@ export default function Inventory(props: InventoryProps): JSX.Element {
               setTemporalSearchValue={setTemporalSearchValue}
               filters={filters}
               setFilters={setFilters}
+              setImportInventoryModalOpen={setImportInventoryModalOpen}
             />
           ) : unfilteredInventory === null ? (
             <div className={classes.spinnerContainer}>
