@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     flexDirection: 'column',
     padding: '24px',
   },
-  headerFloat: {
+  headerFixed: {
     position: 'fixed',
     top: `${TOP_BAR_HEIGHT}px`,
     width: '-webkit-fill-available',
@@ -52,7 +52,7 @@ export default function TfMain({ children, headerElement, contentElement, header
     const handleScroll = (ev: Event) => {
       if (window.scrollY > headerHeight) {
         const delta = window.scrollY - lastScrollY;
-        headerElement.className = `${headerClasses} ${classes.headerFloat} ${delta > 0 ? ' ' + classes.hide : ''}`;
+        headerElement.className = `${headerClasses} ${classes.headerFixed} ${delta > 0 ? ' ' + classes.hide : ''}`;
         contentElement.style.marginTop = `${headerHeight}px`;
       } else {
         headerElement.className = headerClasses;
@@ -66,7 +66,7 @@ export default function TfMain({ children, headerElement, contentElement, header
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [headerElement, contentElement, headerHeight, classes.headerFloat, classes.hide]);
+  }, [headerElement, contentElement, headerHeight, classes.headerFixed, classes.hide]);
 
   return <main className={classes.main}>{children}</main>;
 }
