@@ -3,7 +3,7 @@ import { useTheme, Box, IconButton, Link, Tab, Theme, Typography } from '@mui/ma
 import { makeStyles } from '@mui/styles';
 import { Button, Icon } from '@terraware/web-components';
 import moment from 'moment';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { Accession2, getAccession2 } from 'src/api/accessions2/accession';
 import { checkIn } from 'src/api/seeds/accession';
@@ -81,6 +81,8 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
   const snackbar = useSnackbar();
   const { isMobile } = useDeviceInfo();
   const themeObj = useTheme();
+  const headerRef = useRef(null);
+  const contentRef = useRef(null);
 
   const reloadData = useCallback(() => {
     const populateAccession = async () => {
@@ -325,7 +327,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
   const isAwaitingCheckin = accession?.state === 'Awaiting Check-In';
 
   return (
-    <TfMain>
+    <TfMain headerElement={headerRef.current} contentElement={contentRef.current} headerHeight={isMobile ? 108 : 124}>
       {accession && (
         <>
           {selectedTest && (
@@ -423,7 +425,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
           )}
         </>
       )}
-      <Box padding={isMobile ? themeObj.spacing(3, 0) : 3}>
+      <Box ref={headerRef} padding={isMobile ? themeObj.spacing(3, 0) : 3}>
         <Box display='flex' justifyContent='space-between' alignItems='center'>
           <Typography>{accession?.accessionNumber}</Typography>
           {!isMobile && userCanEdit && (
@@ -450,6 +452,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
       </Box>
 
       <Box
+        ref={contentRef}
         display='flex'
         alignItems={isMobile ? 'flex-start' : 'center'}
         flexDirection={isMobile ? 'column' : 'row'}
