@@ -807,6 +807,10 @@ const strings = new LocalizedStrings({
     INVENTORY_IMPORT_COMPLETE: 'Inventory data import complete!',
     IMPORTING_INVENTORY: 'Importing inventory...this may take a few minutes.',
     DUPLICATED_INVENTORY: 'We found {0} duplicated inventory:',
+    CREATE_SPECIES_LIST: 'Create Species List',
+    ADD_SEED_BANKS: 'Add Seed Banks',
+    IMPORT_ACCESSIONS_ALT_TITLE: 'Already have a seed accession database?',
+    IMPORT_ACCESSIONS_WITH_TEMPLATE: 'Import accessions using our CSV template',
   },
 });
 
