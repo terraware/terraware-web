@@ -338,7 +338,9 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
           : undefined
       }
     >
-      {children && <Box sx={{ paddingBottom: 3, color: '#3A4445' }}> {children} </Box>}
+      {children && !error && !loading && !completed && !warning && (
+        <Box sx={{ paddingBottom: 3, color: '#3A4445', textAlign: 'left' }}> {children} </Box>
+      )}
       <div ref={divRef} tabIndex={0}>
         {error && !loading && <p>{error}</p>}
         {!error && !loading && !completed && !warning && (

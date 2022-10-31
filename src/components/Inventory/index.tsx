@@ -216,7 +216,7 @@ export default function Inventory(props: InventoryProps): JSX.Element {
             </div>
           ) : (
             <Container maxWidth={false} className={classes.mainContainer}>
-              <EmptyStatePage pageName={'Inventory'} />
+              <EmptyStatePage pageName={'Inventory'} organization={organization} />
             </Container>
           )
         ) : (

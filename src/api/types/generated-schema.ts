@@ -111,6 +111,17 @@ export interface paths {
   "/api/v1/nursery/batches": {
     post: operations["createBatch"];
   };
+  "/api/v1/nursery/batches/uploads": {
+    /** The uploaded file must be in CSV format. A template with the correct headers may be downloaded from the `/api/v1/nursery/batches/uploads/template` endpoint. */
+    post: operations["uploadSeedlingBatchesList"];
+  };
+  "/api/v1/nursery/batches/uploads/template": {
+    get: operations["getSeedlingBatchesUploadTemplate"];
+  };
+  "/api/v1/nursery/batches/uploads/{uploadId}": {
+    /** Clients may poll this endpoint to monitor the progress of the file. */
+    get: operations["getSeedlingBatchesListUploadStatus"];
+  };
   "/api/v1/nursery/batches/{id}": {
     get: operations["getBatch"];
     put: operations["updateBatch"];
@@ -861,7 +872,6 @@ export interface components {
       status: components["schemas"]["SuccessOrError"];
     };
     GetUserPreferencesResponsePayload: {
-      /** The user's preferences, or null if no preferences have been stored yet. */
       preferences?: { [key: string]: unknown };
       status: components["schemas"]["SuccessOrError"];
     };
@@ -2403,6 +2413,55 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["CreateBatchRequestPayload"];
+      };
+    };
+  };
+  /** The uploaded file must be in CSV format. A template with the correct headers may be downloaded from the `/api/v1/nursery/batches/uploads/template` endpoint. */
+  uploadSeedlingBatchesList: {
+    parameters: {
+      query: {
+        facilityId: number;
+      };
+    };
+    responses: {
+      /** The file has been successfully received. It will be processed asynchronously; use the ID returned in the response payload to poll for its status using the `/api/v1/nursery/batches/uploads/{uploadId}` GET endpoint. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UploadFileResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "multipart/form-data": {
+          file: string;
+        };
+      };
+    };
+  };
+  getSeedlingBatchesUploadTemplate: {
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": string;
+        };
+      };
+    };
+  };
+  /** Clients may poll this endpoint to monitor the progress of the file. */
+  getSeedlingBatchesListUploadStatus: {
+    parameters: {
+      path: {
+        uploadId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetUploadStatusResponsePayload"];
+        };
       };
     };
   };
