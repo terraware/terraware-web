@@ -300,6 +300,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
                 type='text'
                 label={strings.TOTAL_QUANTITY}
                 display={true}
+                tooltipTitle={strings.TOOLTIP_TOTAL_QUANTITY}
               />
             </Grid>
 
