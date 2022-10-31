@@ -124,7 +124,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
             return false;
           }
         } else {
-          setIndividualError('seedsTested', strings.MISSING_SUBSET_WEIGHT_ERROR);
+          setIndividualError('seedsTested', strings.MISSING_SUBSET_WEIGHT_ERROR_VIABILITY_TEST);
           return false;
         }
       } else {
