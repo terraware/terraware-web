@@ -55,20 +55,17 @@ export default function PageHeaderWrapper({ children, nextElement }: Props): JSX
     };
   }, [children, nextElement, height, sticky]);
 
-  const styles = useMemo<Record<string, any>>(
-    () => ({
-      background: sticky ? theme.palette.TwClrBg : undefined,
-      boxShadow: sticky ? `0px 3px 3px -3px ${theme.palette.TwClrBaseGray200}` : undefined,
-      paddingTop: sticky ? theme.spacing(3) : undefined,
-      paddingRight: sticky ? theme.spacing(3) : undefined,
-      position: sticky ? 'fixed' : undefined,
-      top: sticky ? `${TOP_BAR_HEIGHT}px` : undefined,
-      visibility: scrollDown && sticky ? 'hidden' : 'visible',
-      width: sticky ? '-webkit-fill-available' : undefined,
-      zIndex: sticky ? 100 : undefined,
-    }),
-    [theme, sticky, scrollDown]
-  );
+  const styles: Record<string, any> = {
+    background: sticky ? theme.palette.TwClrBg : undefined,
+    boxShadow: sticky ? `0px 3px 3px -3px ${theme.palette.TwClrBaseGray200}` : undefined,
+    paddingTop: sticky ? theme.spacing(3) : undefined,
+    paddingRight: sticky ? theme.spacing(3) : undefined,
+    position: sticky ? 'fixed' : undefined,
+    top: sticky ? `${TOP_BAR_HEIGHT}px` : undefined,
+    visibility: scrollDown && sticky ? 'hidden' : 'visible',
+    width: sticky ? '-webkit-fill-available' : undefined,
+    zIndex: sticky ? 100 : undefined,
+  };
 
   return (
     <Box ref={ref} sx={styles}>
