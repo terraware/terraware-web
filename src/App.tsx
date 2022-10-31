@@ -103,7 +103,6 @@ export default function App() {
   const [preferencesOrg, setPreferencesOrg] = useState<{ [key: string]: unknown }>();
   const [notifications, setNotifications] = useState<Notifications>();
   const { isProduction } = useEnvironment();
-  const v2AccessionsEnabled = isRouteEnabled('V2 Accessions');
   const nurseryManagementEnabled = isRouteEnabled('Nursery management');
 
   // seedSearchCriteria describes which criteria to apply when searching accession data.
@@ -407,12 +406,12 @@ export default function App() {
                   reloadData={reloadData}
                 />
               </Route>
-              {v2AccessionsEnabled && selectedOrganization && (
+              {selectedOrganization && (
                 <Route exact path={APP_PATHS.ACCESSIONS2_NEW}>
                   <Accession2Create organization={selectedOrganization} />
                 </Route>
               )}
-              {v2AccessionsEnabled && selectedOrganization && user && (
+              {selectedOrganization && user && (
                 <Route path={APP_PATHS.ACCESSIONS2_ITEM}>
                   <Accession2View organization={selectedOrganization} user={user} />
                 </Route>

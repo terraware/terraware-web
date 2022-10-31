@@ -21,21 +21,6 @@ export type Feature = {
 // list of feature names and associated properties
 export const OPT_IN_FEATURES: Feature[] = [
   {
-    name: 'V2 Accessions',
-    preferenceName: 'enableUIV2Accessions',
-    active: false,
-    enabled: true,
-    allowInternalProduction: false,
-    description: [
-      'Shows V2 accession workflows (instead of V1).',
-      'You can switch between V2 and V1 flows by turning this option on or off.',
-    ],
-    disclosure: [
-      'Saving V2 accessions and re-editing them in V1 workflows may cause some data loss, and vice versa.',
-      'Withdrawal quantities tracked may appear different across V1/V2 workflows.',
-    ],
-  },
-  {
     name: 'Nursery management',
     preferenceName: 'enableUINursery',
     active: true,
