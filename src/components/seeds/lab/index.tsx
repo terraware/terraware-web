@@ -187,9 +187,9 @@ export default function Nursery({ accession, onSubmit, organization }: Props): J
 
   const createCutTestRow = () => {
     const cutTest = {
-      compromisedSeeds: accession.cutTestSeedsCompromised ?? '--',
-      emptySeeds: accession.cutTestSeedsEmpty ?? '--',
-      filledSeeds: accession.cutTestSeedsFilled ?? '--',
+      compromisedSeeds: accession.viabilityTests_seedsCompromised ?? '--',
+      emptySeeds: accession.viabilityTests_seedsEmpty ?? '--',
+      filledSeeds: accession.viabilityTests_seedsFilled ?? '--',
     };
     const cutTests = [];
     cutTests.push(cutTest);

@@ -181,7 +181,7 @@ const sections: Section[] = [
   },
   {
     name: 'Processing and Drying',
-    options: [[COLUMNS_INDEXED.totalQuantity], [COLUMNS_INDEXED.viabilityTestType], [COLUMNS_INDEXED.dryingEndDate]],
+    options: [[COLUMNS_INDEXED.dryingEndDate], [COLUMNS_INDEXED.remainingQuantity]],
   },
   {
     name: 'Storing',
@@ -191,8 +191,8 @@ const sections: Section[] = [
     name: 'Withdrawal',
     options: [
       [COLUMNS_INDEXED.withdrawalDate, COLUMNS_INDEXED.withdrawalQuantity],
-      [COLUMNS_INDEXED.withdrawalDestination, COLUMNS_INDEXED.remainingQuantity],
-      [COLUMNS_INDEXED.withdrawalPurpose, COLUMNS_INDEXED.withdrawalNotes],
+      [COLUMNS_INDEXED.withdrawalPurpose],
+      [COLUMNS_INDEXED.withdrawalNotes],
     ],
   },
   {
@@ -202,18 +202,17 @@ const sections: Section[] = [
         COLUMNS_INDEXED.viabilityTests_type,
         COLUMNS_INDEXED.viabilityTests_seedType,
         COLUMNS_INDEXED.viabilityTests_treatment,
-        COLUMNS_INDEXED.cutTestSeedsFilled,
+        COLUMNS_INDEXED.viabilityTests_seedsFilled,
       ],
       [
         COLUMNS_INDEXED.viabilityTests_startDate,
         COLUMNS_INDEXED.viabilityTests_seedsSown,
         COLUMNS_INDEXED.viabilityTests_viabilityTestResults_seedsGerminated,
-        COLUMNS_INDEXED.cutTestSeedsEmpty,
+        COLUMNS_INDEXED.viabilityTests_seedsEmpty,
       ],
       [
         COLUMNS_INDEXED.viabilityTests_substrate,
-        COLUMNS_INDEXED.viabilityTests_percentGerminated,
-        COLUMNS_INDEXED.cutTestSeedsCompromised,
+        COLUMNS_INDEXED.viabilityTests_seedsCompromised,
         COLUMNS_INDEXED.viabilityTests_notes,
       ],
     ],

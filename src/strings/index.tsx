@@ -77,7 +77,6 @@ const strings = new LocalizedStrings({
     ESTIMATED_SEEDS_INCOMING: 'Estimated Seeds Incoming',
     LANDOWNER: 'Landowner',
     PROCESSING_START_DATE: 'Processing Start Date',
-    SEEDS_TOTAL: 'Quantity of Seeds',
     SEEDS_UNITS: 'Units Quantity of Seeds',
     DRYING_START_DATE: 'Drying Start Date',
     PROCESSING_METHOD: 'Processing Method',
