@@ -1,3 +1,4 @@
+52fd526 SW-2065 Interactive Header (#686)
 2478e3a SW-2054 Allow nursery csv import without requiring species creation during onboarding (#688)
 8582c3c SW-2051: Dialog to add accession search columns has different title than its menu item
 ab4dca9 SW-1949 Implement csv import for inventory (#687)
