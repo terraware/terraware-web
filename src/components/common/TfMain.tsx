@@ -5,7 +5,7 @@ import { Theme } from '@mui/material';
 const useStyles = makeStyles((theme: Theme) => ({
   main: {
     background: theme.palette.TwClrBg,
-    minHeight: `calc(100vh - 64px)`,
+    minHeight: 'calc(100vh - 64px)',
     display: 'flex',
     flexDirection: 'column',
     padding: '24px',
