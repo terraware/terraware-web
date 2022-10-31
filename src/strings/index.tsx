@@ -656,7 +656,10 @@ const strings = new LocalizedStrings({
     CUSTOMIZE_TABLE_COLUMNS: 'Customize table columns',
     GO_TO_DASHBOARD: 'Go to Dashboard',
     DONE: 'Done',
-    MISSING_SUBSET_WEIGHT_ERROR: 'You must enter in a subset weight in order to create a viability test',
+    MISSING_SUBSET_WEIGHT_ERROR_VIABILITY_TEST:
+      'You must enter in a subset weight in order to create a viability test. This can be done by editing the quantity of this accession.',
+    MISSING_SUBSET_WEIGHT_ERROR_NURSERY:
+      'You must enter in a subset weight in order to withdraw to a nursery. This can be done by editing the quantity of this accession.',
     SET_UP: 'Set Up',
     SUBSET_ERROR: 'Subset weight should be less than seed weight',
     WITHDRAWN_QUANTITY_ERROR: 'Exceeds remaining quantity',
