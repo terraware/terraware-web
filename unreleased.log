@@ -1,3 +1,4 @@
+ab4dca9 SW-1949 Implement csv import for inventory (#687)
 9095a56 SW-2061 Show error when subset count is not available for accession withdrawal (#681)
 b231deb SW-1978 Remove script to check for gh-pages deployment (#683)
 94fb146 SW-1888 Deeplink to Batch Details (#680)
