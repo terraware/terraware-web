@@ -32,6 +32,7 @@ import { ViabilityTest } from 'src/api/types/accessions';
 import ViewViabilityTestModal from '../viabilityTesting/ViewViabilityTestModal';
 import { getSeedBank, isContributor } from 'src/utils/organization';
 import _ from 'lodash';
+import PageHeaderWrapper from '../../common/PageHeaderWrapper';
 
 const useStyles = makeStyles((theme: Theme) => ({
   iconStyle: {
@@ -81,7 +82,6 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
   const snackbar = useSnackbar();
   const { isMobile } = useDeviceInfo();
   const themeObj = useTheme();
-  const headerRef = useRef(null);
   const contentRef = useRef(null);
 
   const reloadData = useCallback(() => {
@@ -327,7 +327,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
   const isAwaitingCheckin = accession?.state === 'Awaiting Check-In';
 
   return (
-    <TfMain headerElement={headerRef.current} contentElement={contentRef.current} headerHeight={isMobile ? 108 : 124}>
+    <TfMain>
       {accession && (
         <>
           {selectedTest && (
@@ -425,31 +425,33 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
           )}
         </>
       )}
-      <Box ref={headerRef} padding={isMobile ? themeObj.spacing(3, 0) : 3}>
-        <Box display='flex' justifyContent='space-between' alignItems='center'>
-          <Typography>{accession?.accessionNumber}</Typography>
-          {!isMobile && userCanEdit && (
-            <Box display='flex' alignItems='center'>
-              <IconButton
-                sx={{ marginLeft: 3, height: '24px', marginRight: 1 }}
-                onClick={() => setOpenDeleteAccession(true)}
-              >
-                <Icon name='iconTrashCan' />
-              </IconButton>
-              {accession && isAwaitingCheckin ? (
-                <Button onClick={() => checkInAccession()} label={strings.CHECK_IN} size='medium' />
-              ) : (
-                renderWithdrawalButton()
-              )}
-            </Box>
-          )}
+      <PageHeaderWrapper nextElement={contentRef.current}>
+        <Box padding={isMobile ? themeObj.spacing(3, 0) : 3}>
+          <Box display='flex' justifyContent='space-between' alignItems='center'>
+            <Typography>{accession?.accessionNumber}</Typography>
+            {!isMobile && userCanEdit && (
+              <Box display='flex' alignItems='center'>
+                <IconButton
+                  sx={{ marginLeft: 3, height: '24px', marginRight: 1 }}
+                  onClick={() => setOpenDeleteAccession(true)}
+                >
+                  <Icon name='iconTrashCan' />
+                </IconButton>
+                {accession && isAwaitingCheckin ? (
+                  <Button onClick={() => checkInAccession()} label={strings.CHECK_IN} size='medium' />
+                ) : (
+                  renderWithdrawalButton()
+                )}
+              </Box>
+            )}
+          </Box>
+          <Typography color={themeObj.palette.TwClrTxt} fontSize='24px' fontStyle='italic' fontWeight={500}>
+            {accession?.speciesScientificName}
+          </Typography>
+          <Typography color={themeObj.palette.TwClrTxtSecondary}>{accession?.speciesCommonName}</Typography>
+          <PageSnackbar />
         </Box>
-        <Typography color={themeObj.palette.TwClrTxt} fontSize='24px' fontStyle='italic' fontWeight={500}>
-          {accession?.speciesScientificName}
-        </Typography>
-        <Typography color={themeObj.palette.TwClrTxtSecondary}>{accession?.speciesCommonName}</Typography>
-        <PageSnackbar />
-      </Box>
+      </PageHeaderWrapper>
 
       <Box
         ref={contentRef}
