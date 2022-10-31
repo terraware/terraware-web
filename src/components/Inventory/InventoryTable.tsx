@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
 import { Button, Table, TableColumnType } from '@terraware/web-components';
@@ -13,7 +13,6 @@ import InventoryFilters, { InventoryFiltersType } from './InventoryFiltersPopove
 import Pill from 'src/components/Pill';
 import PageSnackbar from 'src/components/PageSnackbar';
 import { getNurseryName, removeFilter } from './FilterUtils';
-import ImportInventoryModal from './ImportInventoryModal';
 
 const columns: TableColumnType[] = [
   {
@@ -52,11 +51,20 @@ interface InventoryTableProps {
   setTemporalSearchValue: React.Dispatch<React.SetStateAction<string>>;
   filters: InventoryFiltersType;
   setFilters: React.Dispatch<React.SetStateAction<InventoryFiltersType>>;
+  setImportInventoryModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function InventoryTable(props: InventoryTableProps): JSX.Element {
-  const { organization, results, setTemporalSearchValue, temporalSearchValue, filters, setFilters } = props;
-  const [importSpeciesModalOpen, setImportSpeciesModalOpen] = useState(false);
+  const {
+    organization,
+    results,
+    setTemporalSearchValue,
+    temporalSearchValue,
+    filters,
+    setFilters,
+    setImportInventoryModalOpen,
+  } = props;
+
   const { isMobile } = useDeviceInfo();
   const history = useHistory();
 
@@ -75,21 +83,12 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
     setTemporalSearchValue(value as string);
   };
 
-  const onImportSpecies = () => {
-    setImportSpeciesModalOpen(true);
-  };
-
-  const onCloseImportSpeciesModal = (completed: boolean) => {
-    setImportSpeciesModalOpen(false);
+  const onImportInventory = () => {
+    setImportInventoryModalOpen(true);
   };
 
   return (
     <>
-      <ImportInventoryModal
-        open={importSpeciesModalOpen}
-        onClose={onCloseImportSpeciesModal}
-        organization={organization}
-      />
       <Grid item xs={6} sx={{ textAlign: 'right' }}>
         {isMobile ? (
           <Button id='new-inventory' icon='plus' onClick={() => goTo(APP_PATHS.INVENTORY_NEW)} size='medium' />
@@ -99,7 +98,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
               id='import-inventory'
               label={strings.IMPORT}
               icon='iconImport'
-              onClick={onImportSpecies}
+              onClick={onImportInventory}
               priority='secondary'
               size='medium'
             />
