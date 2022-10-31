@@ -83,6 +83,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
     setTemporalSearchValue(value as string);
   };
 
+
   const onImportInventory = () => {
     setImportInventoryModalOpen(true);
   };
