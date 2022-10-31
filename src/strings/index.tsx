@@ -758,6 +758,7 @@ const strings = new LocalizedStrings({
     ADD_NURSERY: 'Add Nursery',
     NURSERY_ADDED: 'Nursery Added',
     GO_TO_NURSERIES: 'Go to Nurseries',
+    ADD_NURSERIES_ONBOARDING_TITLE: 'First, Add Nurseries',
     FRESH: 'Fresh',
     STORED: 'Stored',
     SAND_PETRI_DISH: 'Sand Petri Dish',
@@ -809,11 +810,12 @@ const strings = new LocalizedStrings({
     IMPORTING_INVENTORY: 'Importing inventory...this may take a few minutes.',
     DUPLICATED_INVENTORY: 'We found {0} duplicated inventory:',
     CREATE_SPECIES_LIST: 'Create Species List',
-    ADD_SEED_BANKS: 'Add Seed Banks',
+    ADD_SEED_BANKS_ONBOARDING_TITLE: 'First, Add Seed Banks',
+    DOWNLOAD_THE_CSV_TEMPLATE: 'Download the CSV template.',
     IMPORT_ACCESSIONS_ALT_TITLE: 'Already have a seed accession database?',
-    IMPORT_ACCESSIONS_WITH_TEMPLATE: 'Import accessions using our CSV template',
+    IMPORT_ACCESSIONS_WITH_TEMPLATE: 'Import accessions using our CSV template.',
     IMPORT_INVENTORY_ALT_TITLE: 'Already have an inventory database?',
-    IMPORT_INVENTORY_WITH_TEMPLATE: 'Import inventory using our CSV template',
+    IMPORT_INVENTORY_WITH_TEMPLATE: 'Import inventory using our CSV template.',
   },
 });
 

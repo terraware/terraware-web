@@ -75,30 +75,30 @@ export default function Inventory(props: InventoryProps): JSX.Element {
   const getEmptyState = () => {
     const emptyState = [];
 
+    if (!hasNurseries) {
+      emptyState.push({
+        title: strings.ADD_NURSERIES_ONBOARDING_TITLE,
+        text: emptyMessageStrings.INVENTORY_ONBOARDING_NURSERIES_MSG,
+        buttonText: strings.GO_TO_NURSERIES,
+        onClick: () => goTo(APP_PATHS.NURSERIES),
+      });
+    }
+
     if (!hasSpecies) {
       emptyState.push({
         title: strings.CREATE_SPECIES_LIST,
         text: emptyMessageStrings.INVENTORY_ONBOARDING_SPECIES_MSG,
         buttonText: strings.GO_TO_SPECIES,
         onClick: () => goTo(APP_PATHS.SPECIES),
-        altItem: hasNurseries
-          ? {
-              title: strings.IMPORT_INVENTORY_ALT_TITLE,
-              linkText: strings.IMPORT_INVENTORY_WITH_TEMPLATE,
-              onLinkClick: () => downloadCsvTemplateHandler(downloadInventoryTemplate),
-              buttonText: strings.IMPORT_INVENTORY,
-              onClick: () => importInventory(),
-            }
-          : undefined,
-      });
-    }
-
-    if (!hasNurseries) {
-      emptyState.push({
-        title: strings.NURSERIES,
-        text: emptyMessageStrings.INVENTORY_ONBOARDING_NURSERIES_MSG,
-        buttonText: strings.GO_TO_NURSERIES,
-        onClick: () => goTo(APP_PATHS.NURSERIES),
+        disabled: !hasNurseries,
+        altItem: {
+          title: strings.IMPORT_INVENTORY_ALT_TITLE,
+          text: strings.IMPORT_INVENTORY_WITH_TEMPLATE,
+          linkText: strings.DOWNLOAD_THE_CSV_TEMPLATE,
+          onLinkClick: () => downloadCsvTemplateHandler(downloadInventoryTemplate),
+          buttonText: strings.IMPORT_INVENTORY,
+          onClick: () => importInventory(),
+        },
       });
     }
 

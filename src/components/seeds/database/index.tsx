@@ -457,11 +457,10 @@ export default function Database(props: DatabaseProps): JSX.Element {
 
   const getEmptyState = () => {
     const emptyState = [];
-    const seedBanks = organization ? getAllSeedBanks(organization) : null;
 
     if (!hasSeedBanks) {
       emptyState.push({
-        title: strings.ADD_SEED_BANKS,
+        title: strings.ADD_SEED_BANKS_ONBOARDING_TITLE,
         text: emptyMessageStrings.ACCESSIONS_ONBOARDING_SEEDBANKS_MSG,
         buttonText: strings.GO_TO_SEED_BANKS,
         onClick: () => goTo(APP_PATHS.SEED_BANKS),
@@ -474,16 +473,15 @@ export default function Database(props: DatabaseProps): JSX.Element {
         text: emptyMessageStrings.ACCESSIONS_ONBOARDING_SPECIES_MSG,
         buttonText: strings.GO_TO_SPECIES,
         onClick: () => goTo(APP_PATHS.SPECIES),
-        altItem:
-          seedBanks && seedBanks.length > 0
-            ? {
-                title: strings.IMPORT_ACCESSIONS_ALT_TITLE,
-                linkText: strings.IMPORT_ACCESSIONS_WITH_TEMPLATE,
-                onLinkClick: () => downloadCsvTemplateHandler(downloadAccessionsTemplate),
-                buttonText: strings.IMPORT_ACCESSIONS,
-                onClick: () => importAccessions(),
-              }
-            : undefined,
+        disabled: !hasSeedBanks,
+        altItem: {
+          title: strings.IMPORT_ACCESSIONS_ALT_TITLE,
+          text: strings.IMPORT_ACCESSIONS_WITH_TEMPLATE,
+          linkText: strings.DOWNLOAD_THE_CSV_TEMPLATE,
+          onLinkClick: () => downloadCsvTemplateHandler(downloadAccessionsTemplate),
+          buttonText: strings.IMPORT_ACCESSIONS,
+          onClick: () => importAccessions(),
+        },
       });
     }
 

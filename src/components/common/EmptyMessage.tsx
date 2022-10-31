@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
   },
   itemLink: {
-    fontSize: '16px',
+    fontSize: '14px',
     cursor: 'pointer',
   },
   or: {
@@ -61,6 +61,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 type RowAltItem = {
   title: string;
+  text: string;
   linkText: string;
   onLinkClick: () => void;
   buttonText: string;
@@ -72,6 +73,7 @@ type RowItem = {
   text: string;
   buttonText: string;
   onClick: () => void;
+  disabled?: boolean;
   altItem?: RowAltItem;
 };
 
@@ -107,7 +109,7 @@ export default function EmptyMessage(props: EmptyMessageProps): JSX.Element {
                     {rowItem.text}
                   </Typography>
                 </div>
-                <Button label={rowItem.buttonText} onClick={rowItem.onClick} />
+                <Button label={rowItem.buttonText} onClick={rowItem.onClick} disabled={rowItem.disabled} />
               </div>
               {rowItem.altItem !== undefined ? (
                 <>
@@ -117,11 +119,19 @@ export default function EmptyMessage(props: EmptyMessageProps): JSX.Element {
                       <Typography fontSize='16px' fontWeight={600} color={theme.palette.TwClrTxt} lineHeight='20px'>
                         {rowItem.altItem.title}
                       </Typography>
+                      <Typography fontSize='14px' fontWeight={500} color={theme.palette.TwClrTxt} lineHeight='20px'>
+                        {rowItem.altItem.text}
+                      </Typography>
                       <Link onClick={rowItem.altItem.onLinkClick} className={classes.itemLink}>
                         {rowItem.altItem.linkText}
                       </Link>
                     </div>
-                    <Button label={rowItem.altItem.buttonText} onClick={rowItem.altItem.onClick} priority='secondary' />
+                    <Button
+                      label={rowItem.altItem.buttonText}
+                      onClick={rowItem.altItem.onClick}
+                      priority='secondary'
+                      disabled={rowItem.disabled}
+                    />
                   </div>
                 </>
               ) : null}
