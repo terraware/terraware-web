@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { User } from 'src/types/User';
 import strings from '../../src/strings';
-import { ReactComponent as AvatarIcon } from './avatar-default.svg';
 import Icon from './common/icon/Icon';
 import { APP_PATHS, TERRAFORMATION_PRIVACY_POLICY } from 'src/constants';
 import { IconButton, List, ListItem, Popover, Theme } from '@mui/material';

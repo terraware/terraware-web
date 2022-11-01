@@ -3,11 +3,6 @@ import { makeStyles } from '@mui/styles';
 import React from 'react';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
-interface StyleProps {
-  isDesktop?: boolean;
-  fullWidth?: boolean;
-}
-
 const useStyles = makeStyles((theme: Theme) => ({
   appBar: {
     background: theme.palette.TwClrBg,
