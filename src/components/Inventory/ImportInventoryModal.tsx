@@ -12,6 +12,7 @@ export type ImportInventoryModalProps = {
   open: boolean;
   onClose: (saved: boolean, snackbarMessage?: string) => void;
   organization: ServerOrganization;
+  reloadData?: () => void;
 };
 
 export const downloadInventoryCsvTemplate = async () => {
@@ -25,7 +26,7 @@ export const downloadInventoryCsvTemplate = async () => {
 };
 
 export default function ImportInventoryModal(props: ImportInventoryModalProps): JSX.Element {
-  const { open, onClose, organization } = props;
+  const { open, onClose, organization, reloadData } = props;
   const [record, setRecord] = useForm({ facilityId: -1 });
   const [selectedFacility, setSelectedFacility] = useState<Facility>();
 
@@ -51,6 +52,7 @@ export default function ImportInventoryModal(props: ImportInventoryModalProps): 
       importCompleteLabel={strings.INVENTORY_IMPORT_COMPLETE}
       importingLabel={strings.IMPORTING_INVENTORY}
       duplicatedLabel={strings.DUPLICATED_INVENTORY}
+      reloadData={reloadData}
     >
       <NurseryDropdown organization={organization} record={record} setRecord={setRecord} label={strings.NURSERY} />
     </ImportModal>

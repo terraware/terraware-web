@@ -215,6 +215,7 @@ export default function Inventory(props: InventoryProps): JSX.Element {
         open={importInventoryModalOpen}
         onClose={() => setImportInventoryModalOpen(false)}
         organization={organization}
+        reloadData={onApplyFilters}
       />
       <Grid container spacing={3}>
         <Grid item xs={6}>
@@ -239,7 +240,7 @@ export default function Inventory(props: InventoryProps): JSX.Element {
             </div>
           ) : (
             <Container maxWidth={false} className={classes.mainContainer}>
-              <EmptyStatePage pageName={'Inventory'} organization={organization} />
+              <EmptyStatePage pageName={'Inventory'} organization={organization} reloadData={onApplyFilters} />
             </Container>
           )
         ) : (
