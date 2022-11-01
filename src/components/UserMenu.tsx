@@ -58,7 +58,6 @@ export default function UserMenu({ user, reloadUser, hasOrganizations }: UserMen
   return (
     <div>
       <IconButton onClick={handleClick} size='small' className={classes.iconContainer}>
-        <AvatarIcon className={classes.icon} />
         <span className={classes.userName}>
           {user?.firstName} {user?.lastName}
         </span>

@@ -74,13 +74,6 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
 
   return isDesktop ? (
     <>
-      <NotificationsDropdown
-        notifications={props.notifications}
-        setNotifications={setNotifications}
-        organizationId={selectedOrganization?.id}
-        reloadOrganizationData={reloadOrganizationData}
-      />
-      <div className={classes.separator} />
       {organizations && organizations.length > 0 && (
         <>
           <OrganizationsDropdown
@@ -92,6 +85,13 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
           <div className={classes.separator} />
         </>
       )}
+      <NotificationsDropdown
+        notifications={props.notifications}
+        setNotifications={setNotifications}
+        organizationId={selectedOrganization?.id}
+        reloadOrganizationData={reloadOrganizationData}
+      />
+      <div className={classes.separator} />
       <UserMenu user={user} reloadUser={reloadUser} hasOrganizations={organizations && organizations.length > 0} />
     </>
   ) : (

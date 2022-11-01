@@ -13,8 +13,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     background: theme.palette.TwClrBg,
     color: theme.palette.TwClrTxt,
     boxShadow: '0px 2px 4px rgba(58, 68, 69, 0.2)',
-    left: (props: StyleProps) => (props.isDesktop && !props.fullWidth ? '200px' : 0),
-    width: (props: StyleProps) => (props.isDesktop && !props.fullWidth ? 'calc(100% - 200px)' : '100%'),
     minHeight: '64px',
   },
   flex: {

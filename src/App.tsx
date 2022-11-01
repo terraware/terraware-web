@@ -61,7 +61,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     overflow: 'auto',
   },
   contentWithNavBar: {
-    marginLeft: '200px',
   },
   navBarOpened: {
     '& .blurred': {
@@ -340,7 +339,20 @@ export default function App() {
     <StyledEngineProvider injectFirst>
       <CssBaseline />
       <ToastSnackbar />
-      <>
+      <TopBar>
+        <TopBarContent
+          notifications={notifications}
+          setNotifications={setNotifications}
+          organizations={organizations}
+          selectedOrganization={selectedOrganization}
+          setSelectedOrganization={setSelectedOrganization}
+          reloadOrganizationData={reloadData}
+          user={user}
+          reloadUser={reloadUser}
+          setShowNavBar={setShowNavBar}
+        />
+      </TopBar>
+      <div style={{ display: 'flex' }}>
         {showNavBar ? (
           <div className={type !== 'desktop' ? classes.navBarOpened : ''}>
             <div className='blurred'>
@@ -361,19 +373,6 @@ export default function App() {
             classes.content
           } scrollable-content`}
         >
-          <TopBar>
-            <TopBarContent
-              notifications={notifications}
-              setNotifications={setNotifications}
-              organizations={organizations}
-              selectedOrganization={selectedOrganization}
-              setSelectedOrganization={setSelectedOrganization}
-              reloadOrganizationData={reloadData}
-              user={user}
-              reloadUser={reloadUser}
-              setShowNavBar={setShowNavBar}
-            />
-          </TopBar>
           <ErrorBoundary setShowNavBar={setShowNavBar}>
             <Switch>
               {/* Routes, in order of their appearance down the side NavBar */}
@@ -584,7 +583,7 @@ export default function App() {
             </Switch>
           </ErrorBoundary>
         </div>
-      </>
+      </div>
     </StyledEngineProvider>
   );
 }
