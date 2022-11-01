@@ -31,6 +31,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   left: {
     display: 'flex',
     justifyContent: 'left',
+    alignItems: 'center',
   },
   center: {
     display: 'flex',
@@ -75,7 +76,10 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
 
   return isDesktop ? (
     <>
-      <div style={{ display: 'flex', alignItems: 'center', marginRight: 'auto' }}>
+      <div className={classes.left}>
+        <div className='logo'>
+          <Svg.Logo className={classes.logo} />
+        </div>
         {organizations && organizations.length > 0 && (
           <>
             <div className={classes.separator} />
@@ -88,7 +92,7 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
           </>
         )}
       </div>
-      <div style={{ display: 'flex', alignItems: 'center', marginLeft: 'auto' }}>
+      <div className={classes.right}>
         <NotificationsDropdown
           notifications={props.notifications}
           setNotifications={setNotifications}

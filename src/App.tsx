@@ -55,13 +55,26 @@ import InventoryCreate from './components/Inventory/InventoryCreate';
 import InventoryView from './components/Inventory/InventoryView';
 
 const useStyles = makeStyles((theme: Theme) => ({
+  container: {
+    '& .navbar': {
+      backgroundColor: 'transparent',
+      paddingTop: '64px',
+    },
+    '& .navbar .logo': {
+      display: 'none',
+    },
+    '& .navbar .nav-section': {
+      backgroundColor: 'transparent',
+    },
+    '& .navbar .nav-item': {
+      backgroundColor: 'transparent',
+    },
+  },
   content: {
     height: '100%',
-    paddingTop: '64px',
     overflow: 'auto',
   },
-  contentWithNavBar: {
-  },
+  contentWithNavBar: {},
   navBarOpened: {
     '& .blurred': {
       backdropFilter: 'blur(8px)',
@@ -352,7 +365,7 @@ export default function App() {
           setShowNavBar={setShowNavBar}
         />
       </TopBar>
-      <div style={{ display: 'flex' }}>
+      <div className={classes.container}>
         {showNavBar ? (
           <div className={type !== 'desktop' ? classes.navBarOpened : ''}>
             <div className='blurred'>
