@@ -218,6 +218,7 @@ export default function CreateInventory(props: CreateInventoryProps): JSX.Elemen
                 type='text'
                 label={strings.TOTAL_QUANTITY}
                 display={true}
+                tooltipTitle={strings.TOOLTIP_TOTAL_QUANTITY}
               />
             </Grid>
             <Grid item xs={12} sx={{ marginTop: theme.spacing(4) }}>
