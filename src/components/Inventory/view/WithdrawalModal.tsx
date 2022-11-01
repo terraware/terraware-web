@@ -6,7 +6,7 @@ import { ServerOrganization } from 'src/types/Organization';
 import { useEffect, useMemo, useState } from 'react';
 import useSnackbar from 'src/utils/useSnackbar';
 import { getTodaysDateFormatted, useDeviceInfo } from '@terraware/web-components/utils';
-import { Batch, BatchWithdrawal, NurseryWithdrawalPurpose } from 'src/api/types/batch';
+import { BatchWithdrawal, NurseryWithdrawalPurpose } from 'src/api/types/batch';
 import { createBatchWithdrawal, CreateNurseryWithdrawalRequestPayload } from 'src/api/batch/batch';
 import { getSpecies } from 'src/api/species/species';
 import { Species } from 'src/types/Species';
@@ -19,7 +19,7 @@ export interface WithdrawalsModalProps {
   onClose: () => void;
   reload: () => void;
   organization: ServerOrganization;
-  selectedBatch: Batch;
+  selectedBatch: any;
   speciesId: number;
 }
 
@@ -205,9 +205,9 @@ export default function WithdrawalsModal(props: WithdrawalsModalProps): JSX.Elem
             </Grid>
             <Grid item xs={gridSize()} sx={marginTop} paddingLeft={paddingSeparator}>
               <Typography sx={{ color: '#5C6B6C', fontSize: '14px' }}>{strings.ACCESSION_ID}</Typography>
-              {selectedBatch.accessionId && (
-                <Link to={APP_PATHS.ACCESSIONS2_ITEM.replace('accessionid', selectedBatch.accessionId.toString())}>
-                  {selectedBatch.accessionId}
+              {selectedBatch.accession_id && (
+                <Link to={APP_PATHS.ACCESSIONS2_ITEM.replace(':accessionId', selectedBatch.accession_id.toString())}>
+                  {selectedBatch.accession_accessionNumber}
                 </Link>
               )}
             </Grid>
@@ -259,82 +259,52 @@ export default function WithdrawalsModal(props: WithdrawalsModalProps): JSX.Elem
                   </Grid>
                 )}
 
-                {record.batchWithdrawals.map((bw, index) => {
-                  return (
-                    <>
-                      <Grid
-                        item
-                        xs={gridSize()}
-                        sx={marginTop}
-                        paddingRight={paddingSeparator}
-                        key={`batch-not-ready-${index}`}
-                      >
-                        <Textfield
-                          id='notReadyQuantityWithdrawn'
-                          value={bw.notReadyQuantityWithdrawn}
-                          onChange={(id, value) => onChangeQuantity('notReadyQuantityWithdrawn', value)}
-                          type='text'
-                          label={strings.NOT_READY_QUANTITY_REQUIRED}
-                          errorText={validateFields && bw.notReadyQuantityWithdrawn === 0 ? strings.REQUIRED_FIELD : ''}
-                        />
-                      </Grid>
-                      <Grid item xs={gridSize()} sx={marginTop} paddingLeft={paddingSeparator}>
-                        <DatePicker
-                          id='readyByDate'
-                          label={strings.ESTIMATED_READY_DATE}
-                          aria-label={strings.ESTIMATED_READY_DATE}
-                          value={record.readyByDate}
-                          onChange={changeDate}
-                          errorText={validateFields && !record.withdrawnDate ? strings.REQUIRED_FIELD : ''}
-                        />
-                      </Grid>
-                      <Grid
-                        item
-                        xs={gridSize()}
-                        sx={marginTop}
-                        paddingRight={paddingSeparator}
-                        key={`batch-ready-${index}`}
-                      >
-                        <Textfield
-                          id='readyQuantityWithdrawn'
-                          value={bw.readyQuantityWithdrawn}
-                          onChange={(id, value) => onChangeQuantity('readyQuantityWithdrawn', value)}
-                          type='text'
-                          label={strings.READY_QUANTITY_REQUIRED}
-                          errorText={validateFields && bw.readyQuantityWithdrawn === 0 ? strings.REQUIRED_FIELD : ''}
-                        />
-                      </Grid>
-                      <Grid item xs={gridSize()} sx={marginTop} paddingLeft={paddingSeparator}>
-                        <Textfield
-                          id='withdrawnQuantity'
-                          value={withdrawQuantity}
-                          onChange={onChange}
-                          type='text'
-                          label={strings.WITHDRAW_QUANTITY}
-                          display={true}
-                        />
-                      </Grid>
-                    </>
-                  );
-                })}
+                {record.batchWithdrawals.map((bw, index) => (
+                  <Grid container key={`batch-not-ready-${index}`} sx={{ marginLeft: theme.spacing(2) }}>
+                    <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
+                      <Textfield
+                        id='notReadyQuantityWithdrawn'
+                        value={bw.notReadyQuantityWithdrawn}
+                        onChange={(id, value) => onChangeQuantity('notReadyQuantityWithdrawn', value)}
+                        type='text'
+                        label={strings.NOT_READY_QUANTITY_REQUIRED}
+                        errorText={validateFields && bw.notReadyQuantityWithdrawn === 0 ? strings.REQUIRED_FIELD : ''}
+                      />
+                    </Grid>
+                    <Grid item xs={gridSize()} sx={marginTop} paddingLeft={paddingSeparator}>
+                      <Textfield
+                        id='readyQuantityWithdrawn'
+                        value={bw.readyQuantityWithdrawn}
+                        onChange={(id, value) => onChangeQuantity('readyQuantityWithdrawn', value)}
+                        type='text'
+                        label={strings.READY_QUANTITY_REQUIRED}
+                        errorText={validateFields && bw.readyQuantityWithdrawn === 0 ? strings.REQUIRED_FIELD : ''}
+                      />
+                    </Grid>
+                    <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
+                      <Textfield
+                        id='withdrawnQuantity'
+                        value={withdrawQuantity}
+                        onChange={onChange}
+                        type='text'
+                        label={strings.WITHDRAW_QUANTITY}
+                        display={true}
+                      />
+                    </Grid>
+                    <Grid item xs={gridSize()} sx={marginTop} paddingLeft={paddingSeparator}>
+                      <DatePicker
+                        id='withdrawnDate'
+                        label={strings.WITHDRAW_DATE_REQUIRED}
+                        aria-label={strings.WITHDRAW_DATE_REQUIRED}
+                        value={record.withdrawnDate}
+                        onChange={changeDate}
+                        errorText={validateFields && !record.withdrawnDate ? strings.REQUIRED_FIELD : ''}
+                      />
+                    </Grid>
+                  </Grid>
+                ))}
               </>
             )}
-            <Grid
-              item
-              xs={gridSize()}
-              sx={marginTop}
-              paddingRight={record.purpose !== 'Out Plant' ? paddingSeparator : 0}
-              paddingLeft={record.purpose === 'Out Plant' ? paddingSeparator : 0}
-            >
-              <DatePicker
-                id='withdrawnDate'
-                label={strings.WITHDRAW_DATE_REQUIRED}
-                aria-label={strings.WITHDRAW_DATE_REQUIRED}
-                value={record.withdrawnDate}
-                onChange={changeDate}
-                errorText={validateFields && !record.withdrawnDate ? strings.REQUIRED_FIELD : ''}
-              />
-            </Grid>
             <Grid padding={theme.spacing(3, 0, 1, 2)} xs={12}>
               <Textfield id='notes' value={record.notes} onChange={onChange} type='textarea' label={strings.NOTES} />
             </Grid>
