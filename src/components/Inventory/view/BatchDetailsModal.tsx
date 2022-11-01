@@ -208,7 +208,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
                     to={APP_PATHS.ACCESSIONS2_ITEM.replace(':accessionId', record.accession_id.toString())}
                     target='_blank'
                   >
-                    {record.accession_id}
+                    {record.accession_accessionNumber}
                   </Link>
                 )}
               </Grid>
