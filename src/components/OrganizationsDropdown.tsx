@@ -13,6 +13,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     borderRadius: 0,
     fontSize: '16px',
     height: '48px',
+    color: theme.palette.TwClrTxt,
   },
   icon: {
     fill: theme.palette.TwClrIcn,

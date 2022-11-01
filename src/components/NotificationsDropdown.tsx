@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     margin: '20px 0',
   },
   notificationIcon: {
-    fill: theme.palette.TwClrIcnSecondary,
+    fill: theme.palette.TwClrIcn,
     margin: 'auto auto',
   },
   noNotifications: {
