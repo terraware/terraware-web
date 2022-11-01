@@ -593,7 +593,7 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
             />
             <SpeciesFilters filters={record} setFilters={setRecord} />
             <IconButton onClick={downloadReportHandler} size='small' className={classes.iconContainer}>
-              <Icon name='export' />
+              <Icon name='iconExport' />
             </IconButton>
           </Grid>
           <Grid item xs={12} className={classes.searchBar}>
