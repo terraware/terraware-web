@@ -1,6 +1,8 @@
 import { IconButton, Theme, Grid } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import { Svg } from '@terraware/web-components';
 import React from 'react';
+
 import { Notifications } from 'src/types/Notifications';
 import { ServerOrganization } from 'src/types/Organization';
 import { User } from 'src/types/User';
@@ -8,7 +10,6 @@ import Icon from '../common/icon/Icon';
 import NotificationsDropdown from '../NotificationsDropdown';
 import OrganizationsDropdown from '../OrganizationsDropdown';
 import UserMenu from '../UserMenu';
-import { Svg } from '@terraware/web-components';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import SmallDeviceUserMenu from '../SmallDeviceUserMenu';
 
@@ -74,25 +75,29 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
 
   return isDesktop ? (
     <>
-      {organizations && organizations.length > 0 && (
-        <>
-          <OrganizationsDropdown
-            organizations={organizations}
-            selectedOrganization={selectedOrganization}
-            setSelectedOrganization={setSelectedOrganization}
-            reloadOrganizationData={reloadOrganizationData}
-          />
-          <div className={classes.separator} />
-        </>
-      )}
-      <NotificationsDropdown
-        notifications={props.notifications}
-        setNotifications={setNotifications}
-        organizationId={selectedOrganization?.id}
-        reloadOrganizationData={reloadOrganizationData}
-      />
-      <div className={classes.separator} />
-      <UserMenu user={user} reloadUser={reloadUser} hasOrganizations={organizations && organizations.length > 0} />
+      <div style={{ display: 'flex', alignItems: 'center', marginRight: 'auto' }}>
+        {organizations && organizations.length > 0 && (
+          <>
+            <div className={classes.separator} />
+            <OrganizationsDropdown
+              organizations={organizations}
+              selectedOrganization={selectedOrganization}
+              setSelectedOrganization={setSelectedOrganization}
+              reloadOrganizationData={reloadOrganizationData}
+            />
+          </>
+        )}
+      </div>
+      <div style={{ display: 'flex', alignItems: 'center', marginLeft: 'auto' }}>
+        <NotificationsDropdown
+          notifications={props.notifications}
+          setNotifications={setNotifications}
+          organizationId={selectedOrganization?.id}
+          reloadOrganizationData={reloadOrganizationData}
+        />
+        <div className={classes.separator} />
+        <UserMenu user={user} reloadUser={reloadUser} hasOrganizations={organizations && organizations.length > 0} />
+      </div>
     </>
   ) : (
     <Grid container className={classes.flex}>
