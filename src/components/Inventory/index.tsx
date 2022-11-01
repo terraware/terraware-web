@@ -77,7 +77,7 @@ export default function Inventory(props: InventoryProps): JSX.Element {
 
     if (!hasNurseries) {
       emptyState.push({
-        title: strings.ADD_NURSERIES_ONBOARDING_TITLE,
+        title: strings.ADD_NURSERIES,
         text: emptyMessageStrings.INVENTORY_ONBOARDING_NURSERIES_MSG,
         buttonText: strings.GO_TO_NURSERIES,
         onClick: () => goTo(APP_PATHS.NURSERIES),

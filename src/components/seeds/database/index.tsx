@@ -460,7 +460,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
 
     if (!hasSeedBanks) {
       emptyState.push({
-        title: strings.ADD_SEED_BANKS_ONBOARDING_TITLE,
+        title: strings.ADD_SEED_BANKS,
         text: emptyMessageStrings.ACCESSIONS_ONBOARDING_SEEDBANKS_MSG,
         buttonText: strings.GO_TO_SEED_BANKS,
         onClick: () => goTo(APP_PATHS.SEED_BANKS),
