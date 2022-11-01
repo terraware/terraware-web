@@ -209,11 +209,16 @@ export default function Inventory(props: InventoryProps): JSX.Element {
     onApplyFilters();
   }, [filters, onApplyFilters]);
 
+  const onCloseImportInventoryModal = () => {
+    onApplyFilters();
+    setImportInventoryModalOpen(false);
+  };
+
   return (
     <TfMain>
       <ImportInventoryModal
         open={importInventoryModalOpen}
-        onClose={() => setImportInventoryModalOpen(false)}
+        onClose={onCloseImportInventoryModal}
         organization={organization}
       />
       <Grid container spacing={3}>
@@ -239,7 +244,7 @@ export default function Inventory(props: InventoryProps): JSX.Element {
             </div>
           ) : (
             <Container maxWidth={false} className={classes.mainContainer}>
-              <EmptyStatePage pageName={'Inventory'} organization={organization} />
+              <EmptyStatePage pageName={'Inventory'} organization={organization} reloadData={onApplyFilters} />
             </Container>
           )
         ) : (
