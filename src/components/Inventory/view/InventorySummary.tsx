@@ -77,7 +77,7 @@ export default function InventorySummary(props: InventorySummaryProps): JSX.Elem
       },
       {
         label: strings.LOSS_RATE,
-        value: lossRate,
+        value: `${lossRate}%`,
         tooltipTitle: '',
       },
       {
