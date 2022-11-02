@@ -15,6 +15,7 @@ import { Theme } from '@mui/material';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageSnackbar from 'src/components/PageSnackbar';
 import useSnackbar from 'src/utils/useSnackbar';
+import TfMain from 'src/components/common/TfMain';
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
@@ -125,7 +126,7 @@ export default function SeedBankView({ organization, reloadOrganizationData }: S
   };
 
   return (
-    <>
+    <TfMain>
       <Container maxWidth={false} className={classes.mainContainer}>
         <Grid container spacing={3}>
           <Grid item xs={12}>
@@ -155,6 +156,6 @@ export default function SeedBankView({ organization, reloadOrganizationData }: S
         </Grid>
       </Container>
       <FormBottomBar onCancel={goToSeedBanks} onSave={saveSeedBank} />
-    </>
+    </TfMain>
   );
 }

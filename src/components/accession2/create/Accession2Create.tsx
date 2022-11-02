@@ -4,7 +4,7 @@ import strings from 'src/strings';
 import { APP_PATHS } from 'src/constants';
 import { ServerOrganization } from 'src/types/Organization';
 import useForm from 'src/utils/useForm';
-import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
+import { Container, Grid, Typography, useTheme } from '@mui/material';
 import { AccessionPostRequestBody, postAccession } from 'src/api/accessions2/accession';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import {
@@ -22,6 +22,7 @@ import Select from 'src/components/common/Select/Select';
 import { ACCESSION_2_CREATE_STATES } from 'src/types/Accession';
 import { getTodaysDateFormatted } from '@terraware/web-components/utils';
 import useSnackbar from 'src/utils/useSnackbar';
+import TfMain from 'src/components/common/TfMain';
 
 type CreateAccessionProps = {
   organization: ServerOrganization;
@@ -87,7 +88,7 @@ export default function CreateAccession(props: CreateAccessionProps): JSX.Elemen
   const gridSize = () => (isMobile ? 12 : 6);
 
   return (
-    <Box display='flex' flexDirection='column' marginTop={theme.spacing(5)} marginBottom={theme.spacing(25)}>
+    <TfMain>
       <Typography variant='h2' sx={{ fontSize: '24px', fontWeight: 'bold', margin: '0 auto' }}>
         {strings.ADD_AN_ACCESSION}
       </Typography>
@@ -177,6 +178,6 @@ export default function CreateAccession(props: CreateAccessionProps): JSX.Elemen
         </Grid>
       </Container>
       <FormBottomBar onCancel={goToAccessions} onSave={saveAccession} saveButtonText={strings.CREATE} />
-    </Box>
+    </TfMain>
   );
 }

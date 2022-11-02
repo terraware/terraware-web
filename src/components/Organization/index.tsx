@@ -1,6 +1,8 @@
-import { Container, Grid, Theme } from '@mui/material';
+import { Grid, Theme } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+
+import TfMain from '../common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
@@ -18,13 +20,6 @@ import { getDateDisplayValue } from '@terraware/web-components/utils';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const useStyles = makeStyles((theme: Theme) => ({
-  mainContainer: {
-    paddingTop: '24px',
-    background: theme.palette.TwClrBg,
-    minHeight: 'calc(100vh - 64px)',
-    display: 'flex',
-    flexDirection: 'column',
-  },
   titleWithButton: {
     display: 'flex',
     flexDirection: 'row',
@@ -97,10 +92,10 @@ export default function OrganizationView({ organization }: OrganizationViewProps
   };
 
   return (
-    <Container maxWidth={false} className={classes.mainContainer}>
+    <TfMain>
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          <h2 className={classes.title}>{strings.ORGANIZATION}</h2>
+          <h1 className={classes.title}>{strings.ORGANIZATION}</h1>
           <p>{strings.ORGANIZATION_DESC}</p>
         </Grid>
         <PageSnackbar />
@@ -168,6 +163,6 @@ export default function OrganizationView({ organization }: OrganizationViewProps
           <TfDivisor />
         </Grid>
       </Grid>
-    </Container>
+    </TfMain>
   );
 }

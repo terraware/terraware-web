@@ -4,8 +4,9 @@ import { Theme } from '@mui/material';
 
 const useStyles = makeStyles((theme: Theme) => ({
   main: {
-    background: theme.palette.TwClrBg,
-    minHeight: 'calc(100vh - 64px)',
+    // TODO: uncomment this line when updating to the new green color theme
+    // background: 'linear-gradient(180deg, #FBF9F9 0%, #EFF5EF 100%)',
+    minHeight: '100vh',
     display: 'flex',
     flexDirection: 'column',
     padding: '24px',

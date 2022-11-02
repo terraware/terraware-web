@@ -18,6 +18,7 @@ import FormBottomBar from '../common/FormBottomBar';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageSnackbar from 'src/components/PageSnackbar';
 import useSnackbar from 'src/utils/useSnackbar';
+import TfMain from 'src/components/common/TfMain';
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
@@ -219,7 +220,7 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
 
   // TODO: Handle the case where we cannot find the requested person to edit in the list of people.
   return (
-    <>
+    <TfMain>
       <Container maxWidth={false} className={classes.mainContainer}>
         <Grid container spacing={3} className={`${isMobile ? classes.mobileContainer : ''}`}>
           <Grid item xs={12}>
@@ -308,6 +309,6 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
         </Grid>
       </Container>
       <FormBottomBar onCancel={goToPeople} onSave={() => saveUser()} />
-    </>
+    </TfMain>
   );
 }

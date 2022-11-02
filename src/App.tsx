@@ -55,13 +55,29 @@ import InventoryCreate from './components/Inventory/InventoryCreate';
 import InventoryView from './components/Inventory/InventoryView';
 
 const useStyles = makeStyles((theme: Theme) => ({
+  container: {
+    '& .navbar': {
+      backgroundColor: 'transparent',
+      paddingTop: '64px',
+    },
+    '& .navbar .logo': {
+      display: 'none',
+    },
+    '& .navbar .nav-section, & .navbar .nav-item': {
+      backgroundColor: 'transparent',
+    },
+  },
   content: {
     height: '100%',
-    paddingTop: '64px',
     overflow: 'auto',
+    '& > div, & > main': {
+      paddingTop: '64px',
+    },
   },
   contentWithNavBar: {
-    marginLeft: '200px',
+    '& > div, & > main': {
+      paddingLeft: '200px',
+    },
   },
   navBarOpened: {
     '& .blurred': {
@@ -96,7 +112,8 @@ enum APIRequestStatus {
 }
 
 export default function App() {
-  const classes = useStyles();
+  const { isMobile, type } = useDeviceInfo();
+  const classes = useStyles({ isMobile });
   const query = useQuery();
   const location = useStateLocation();
   const [selectedOrganization, setSelectedOrganization] = useState<ServerOrganization>();
@@ -128,7 +145,6 @@ export default function App() {
   const [organizations, setOrganizations] = useState<ServerOrganization[]>();
   const [user, setUser] = useState<User>();
   const history = useHistory();
-  const { type } = useDeviceInfo();
   const [species, setSpecies] = useState<Species[]>([]);
   const [showNavBar, setShowNavBar] = useState(true);
 
@@ -340,7 +356,20 @@ export default function App() {
     <StyledEngineProvider injectFirst>
       <CssBaseline />
       <ToastSnackbar />
-      <>
+      <TopBar>
+        <TopBarContent
+          notifications={notifications}
+          setNotifications={setNotifications}
+          organizations={organizations}
+          selectedOrganization={selectedOrganization}
+          setSelectedOrganization={setSelectedOrganization}
+          reloadOrganizationData={reloadData}
+          user={user}
+          reloadUser={reloadUser}
+          setShowNavBar={setShowNavBar}
+        />
+      </TopBar>
+      <div className={classes.container}>
         {showNavBar ? (
           <div className={type !== 'desktop' ? classes.navBarOpened : ''}>
             <div className='blurred'>
@@ -361,19 +390,6 @@ export default function App() {
             classes.content
           } scrollable-content`}
         >
-          <TopBar>
-            <TopBarContent
-              notifications={notifications}
-              setNotifications={setNotifications}
-              organizations={organizations}
-              selectedOrganization={selectedOrganization}
-              setSelectedOrganization={setSelectedOrganization}
-              reloadOrganizationData={reloadData}
-              user={user}
-              reloadUser={reloadUser}
-              setShowNavBar={setShowNavBar}
-            />
-          </TopBar>
           <ErrorBoundary setShowNavBar={setShowNavBar}>
             <Switch>
               {/* Routes, in order of their appearance down the side NavBar */}
@@ -584,7 +600,7 @@ export default function App() {
             </Switch>
           </ErrorBoundary>
         </div>
-      </>
+      </div>
     </StyledEngineProvider>
   );
 }

@@ -1,6 +1,8 @@
 import { IconButton, Theme, Grid } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import { Svg } from '@terraware/web-components';
 import React from 'react';
+
 import { Notifications } from 'src/types/Notifications';
 import { ServerOrganization } from 'src/types/Organization';
 import { User } from 'src/types/User';
@@ -8,7 +10,6 @@ import Icon from '../common/icon/Icon';
 import NotificationsDropdown from '../NotificationsDropdown';
 import OrganizationsDropdown from '../OrganizationsDropdown';
 import UserMenu from '../UserMenu';
-import { Svg } from '@terraware/web-components';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import SmallDeviceUserMenu from '../SmallDeviceUserMenu';
 
@@ -30,6 +31,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   left: {
     display: 'flex',
     justifyContent: 'left',
+    alignItems: 'center',
   },
   center: {
     display: 'flex',
@@ -74,25 +76,32 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
 
   return isDesktop ? (
     <>
-      <NotificationsDropdown
-        notifications={props.notifications}
-        setNotifications={setNotifications}
-        organizationId={selectedOrganization?.id}
-        reloadOrganizationData={reloadOrganizationData}
-      />
-      <div className={classes.separator} />
-      {organizations && organizations.length > 0 && (
-        <>
-          <OrganizationsDropdown
-            organizations={organizations}
-            selectedOrganization={selectedOrganization}
-            setSelectedOrganization={setSelectedOrganization}
-            reloadOrganizationData={reloadOrganizationData}
-          />
-          <div className={classes.separator} />
-        </>
-      )}
-      <UserMenu user={user} reloadUser={reloadUser} hasOrganizations={organizations && organizations.length > 0} />
+      <div className={classes.left}>
+        <div className='logo'>
+          <Svg.Logo className={classes.logo} />
+        </div>
+        {organizations && organizations.length > 0 && (
+          <>
+            <div className={classes.separator} />
+            <OrganizationsDropdown
+              organizations={organizations}
+              selectedOrganization={selectedOrganization}
+              setSelectedOrganization={setSelectedOrganization}
+              reloadOrganizationData={reloadOrganizationData}
+            />
+          </>
+        )}
+      </div>
+      <div className={classes.right}>
+        <NotificationsDropdown
+          notifications={props.notifications}
+          setNotifications={setNotifications}
+          organizationId={selectedOrganization?.id}
+          reloadOrganizationData={reloadOrganizationData}
+        />
+        <div className={classes.separator} />
+        <UserMenu user={user} reloadUser={reloadUser} hasOrganizations={organizations && organizations.length > 0} />
+      </div>
     </>
   ) : (
     <Grid container className={classes.flex}>

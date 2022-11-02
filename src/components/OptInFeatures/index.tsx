@@ -5,6 +5,7 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
 import PageSnackbar from 'src/components/PageSnackbar';
 import { Feature, OPT_IN_FEATURES } from 'src/features';
+import TfMain from 'src/components/common/TfMain';
 
 type OptInFeaturesProps = {
   refresh?: () => void;
@@ -93,14 +94,7 @@ export default function OptInFeatures({ refresh }: OptInFeaturesProps): JSX.Elem
   });
 
   return (
-    <Box
-      sx={{
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        padding: '40px',
-      }}
-    >
+    <TfMain>
       <PageSnackbar />
       {preferences === undefined ? (
         <LinearProgress color='success' />
@@ -165,6 +159,6 @@ export default function OptInFeatures({ refresh }: OptInFeaturesProps): JSX.Elem
           ))}
         </Grid>
       )}
-    </Box>
+    </TfMain>
   );
 }

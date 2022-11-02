@@ -3,18 +3,11 @@ import { makeStyles } from '@mui/styles';
 import React from 'react';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
-interface StyleProps {
-  isDesktop?: boolean;
-  fullWidth?: boolean;
-}
-
 const useStyles = makeStyles((theme: Theme) => ({
   appBar: {
-    background: theme.palette.TwClrBg,
+    background: 'transparent',
     color: theme.palette.TwClrTxt,
-    boxShadow: '0px 2px 4px rgba(58, 68, 69, 0.2)',
-    left: (props: StyleProps) => (props.isDesktop && !props.fullWidth ? '200px' : 0),
-    width: (props: StyleProps) => (props.isDesktop && !props.fullWidth ? 'calc(100% - 200px)' : '100%'),
+    boxShadow: 'none',
     minHeight: '64px',
   },
   flex: {
@@ -24,9 +17,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     width: '100%',
     justifyContent: 'space-between',
   },
-  right: {
-    marginLeft: 'auto',
-  },
+  right: {},
   mobile: {
     minHeight: '64px',
   },
