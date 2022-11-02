@@ -54,10 +54,6 @@ import NurseryDetails from './components/Nursery';
 import InventoryCreate from './components/Inventory/InventoryCreate';
 import InventoryView from './components/Inventory/InventoryView';
 
-interface StyleProps {
-  isMobile?: boolean;
-}
-
 const useStyles = makeStyles((theme: Theme) => ({
   container: {
     '& .navbar': {
