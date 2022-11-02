@@ -217,7 +217,7 @@ export default function Inventory(props: InventoryProps): JSX.Element {
         organization={organization}
         reloadData={onApplyFilters}
       />
-      <Grid spacing={3}>
+      <Grid>
         <Grid item xs={6}>
           <Typography fontSize='24px' fontWeight={600}>
             {strings.INVENTORY}

@@ -7,12 +7,10 @@ import { SearchResponseElement } from 'src/api/search';
 import { useHistory } from 'react-router-dom';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import { APP_PATHS } from 'src/constants';
-import TextField from '@terraware/web-components/components/Textfield/Textfield';
 import InventoryCellRenderer from './InventoryCellRenderer';
-import InventoryFilters, { InventoryFiltersType } from './InventoryFiltersPopover';
-import Pill from 'src/components/Pill';
+import { InventoryFiltersType } from './InventoryFiltersPopover';
 import PageSnackbar from 'src/components/PageSnackbar';
-import { getNurseryName, removeFilter } from './FilterUtils';
+import Search from './Search';
 
 const columns: TableColumnType[] = [
   {
@@ -75,14 +73,6 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
     history.push(appPathLocation);
   };
 
-  const clearSearch = () => {
-    setTemporalSearchValue('');
-  };
-
-  const onChangeSearch = (id: string, value: unknown) => {
-    setTemporalSearchValue(value as string);
-  };
-
   const onImportInventory = () => {
     setImportInventoryModalOpen(true);
   };
@@ -117,33 +107,13 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
       <Grid item xs={12}>
         <PageSnackbar />
       </Grid>
-      <Grid item xs={12} marginTop={3} display='flex'>
-        <Box width='300px'>
-          <TextField
-            placeholder={strings.SEARCH}
-            iconLeft='search'
-            label=''
-            id='search'
-            type='text'
-            onChange={onChangeSearch}
-            value={temporalSearchValue}
-            iconRight='cancel'
-            onClickRightIcon={clearSearch}
-          />
-        </Box>
-        <InventoryFilters filters={filters} setFilters={setFilters} organization={organization} />
-      </Grid>
-
-      <Grid item xs={12} display='flex' paddingLeft={3} paddingTop={1}>
-        {filters.facilityIds?.map((id) => (
-          <Pill
-            key={id}
-            filter={strings.NURSERY}
-            value={getNurseryName(id, organization)}
-            onRemoveFilter={() => removeFilter(id, setFilters)}
-          />
-        ))}
-      </Grid>
+      <Search
+        organization={organization}
+        searchValue={temporalSearchValue}
+        onSearch={(val) => setTemporalSearchValue(val)}
+        filters={filters}
+        setFilters={setFilters}
+      />
       <Grid item xs={12}>
         <div>
           <Grid container spacing={4}>

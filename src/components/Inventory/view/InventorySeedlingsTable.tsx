@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Typography, Grid, Box, useTheme } from '@mui/material';
-import { Button, Textfield, Table, TableColumnType } from '@terraware/web-components';
+import { Button, Table, TableColumnType } from '@terraware/web-components';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
 import useDebounce from 'src/utils/useDebounce';
@@ -8,15 +8,14 @@ import { search } from 'src/api/search';
 import BatchesCellRenderer from './BatchesCellRenderer';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useForm from 'src/utils/useForm';
-import Pill from 'src/components/Pill';
-import InventoryFilters, { InventoryFiltersType } from '../InventoryFiltersPopover';
-import { getNurseryName, removeFilter } from '../FilterUtils';
+import { InventoryFiltersType } from '../InventoryFiltersPopover';
 import DeleteBatchesModal from './DeleteBatchesModal';
 import { deleteBatch } from 'src/api/batch/batch';
 import useSnackbar from 'src/utils/useSnackbar';
 import BatchDetailsModal from './BatchDetailsModal';
 import { Batch } from 'src/api/types/batch';
 import WithdrawalModal from './WithdrawalModal';
+import Search from '../Search';
 
 const columns: TableColumnType[] = [
   { key: 'batchNumber', name: strings.SEEDLING_BATCH, type: 'string' },
@@ -145,14 +144,6 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
     }
   }, [openBatchNumber, batches]);
 
-  const clearSearch = () => {
-    setTemporalSearchValue('');
-  };
-
-  const onChangeSearch = (id: string, value: unknown) => {
-    setTemporalSearchValue(value as string);
-  };
-
   const deleteSelectedBatches = () => {
     const promises = selectedRows.map((r) => deleteBatch(r.id as number));
     Promise.allSettled(promises).then((results) => {
@@ -240,57 +231,36 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
             size='medium'
           />
         </Box>
-        <Box marginTop={theme.spacing(3)}>
-          <Box display='flex' flexDirection='row'>
-            <Box width='300px'>
-              <Textfield
-                placeholder={strings.SEARCH}
-                iconLeft='search'
-                label=''
-                id='search'
-                type='text'
-                onChange={onChangeSearch}
-                value={temporalSearchValue}
-                iconRight='cancel'
-                onClickRightIcon={clearSearch}
-              />
-            </Box>
-            <InventoryFilters filters={filters} setFilters={setFilters} organization={organization} />
-          </Box>
-          <Grid xs={12} display='flex' paddingTop={1}>
-            {filters.facilityIds?.map((id) => (
-              <Pill
-                key={id}
-                filter={strings.NURSERY}
-                value={getNurseryName(id, organization)}
-                onRemoveFilter={() => removeFilter(id, setFilters)}
-              />
-            ))}
-          </Grid>
-          <Box marginTop={theme.spacing(2)}>
-            <Table
-              id='batches-table'
-              columns={columns}
-              rows={batches}
-              orderBy='batchNumber'
-              Renderer={BatchesCellRenderer}
-              reloadData={reloadData}
-              selectedRows={selectedRows}
-              setSelectedRows={setSelectedRows}
-              showCheckbox={true}
-              isClickable={() => true}
-              showTopBar={true}
-              topBarButtons={[
-                {
-                  buttonType: 'destructive',
-                  buttonText: strings.DELETE,
-                  onButtonClick: () => setOpenDeleteModal(true),
-                },
-              ]}
-              onSelect={onBatchSelected}
-              controlledOnSelect={true}
-            />
-          </Box>
+        <Search
+          organization={organization}
+          searchValue={temporalSearchValue}
+          onSearch={(val) => setTemporalSearchValue(val)}
+          filters={filters}
+          setFilters={setFilters}
+        />
+        <Box marginTop={theme.spacing(2)}>
+          <Table
+            id='batches-table'
+            columns={columns}
+            rows={batches}
+            orderBy='batchNumber'
+            Renderer={BatchesCellRenderer}
+            reloadData={reloadData}
+            selectedRows={selectedRows}
+            setSelectedRows={setSelectedRows}
+            showCheckbox={true}
+            isClickable={() => true}
+            showTopBar={true}
+            topBarButtons={[
+              {
+                buttonType: 'destructive',
+                buttonText: strings.DELETE,
+                onButtonClick: () => setOpenDeleteModal(true),
+              },
+            ]}
+            onSelect={onBatchSelected}
+            controlledOnSelect={true}
+          />
         </Box>
       </Grid>
     </Grid>
