@@ -29,8 +29,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     display: 'flex',
     flexDirection: 'column',
     padding: '24px',
-    paddingLeft: (props: StyleProps) => (props.isMobile ? '24px' : '200px'),
-    paddingTop: '64px',
   },
 }));
 

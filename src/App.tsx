@@ -54,6 +54,10 @@ import NurseryDetails from './components/Nursery';
 import InventoryCreate from './components/Inventory/InventoryCreate';
 import InventoryView from './components/Inventory/InventoryView';
 
+interface StyleProps {
+  isMobile?: boolean;
+}
+
 const useStyles = makeStyles((theme: Theme) => ({
   container: {
     '& .navbar': {
@@ -73,6 +77,10 @@ const useStyles = makeStyles((theme: Theme) => ({
   content: {
     height: '100%',
     overflow: 'auto',
+    '& > main': {
+      paddingLeft: (props: StyleProps) => (props.isMobile ? '24px' : '200px'),
+      paddingTop: '64px',
+    },
   },
   contentWithNavBar: {},
   navBarOpened: {
@@ -108,7 +116,8 @@ enum APIRequestStatus {
 }
 
 export default function App() {
-  const classes = useStyles();
+  const { isMobile, type } = useDeviceInfo();
+  const classes = useStyles({ isMobile });
   const query = useQuery();
   const location = useStateLocation();
   const [selectedOrganization, setSelectedOrganization] = useState<ServerOrganization>();
@@ -140,7 +149,6 @@ export default function App() {
   const [organizations, setOrganizations] = useState<ServerOrganization[]>();
   const [user, setUser] = useState<User>();
   const history = useHistory();
-  const { type } = useDeviceInfo();
   const [species, setSpecies] = useState<Species[]>([]);
   const [showNavBar, setShowNavBar] = useState(true);
 
