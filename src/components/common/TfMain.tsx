@@ -1,7 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@mui/styles';
 import { Theme } from '@mui/material';
-import { useDeviceInfo } from '@terraware/web-components/utils';
 
 const useStyles = makeStyles((theme: Theme) => ({
   main: {
@@ -19,8 +18,7 @@ interface Props {
 }
 
 export default function TfMain({ children }: Props): JSX.Element {
-  const { isMobile } = useDeviceInfo();
-  const classes = useStyles({ isMobile });
+  const classes = useStyles();
 
   return <main className={classes.main}>{children}</main>;
 }
