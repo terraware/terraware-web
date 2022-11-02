@@ -75,11 +75,14 @@ const useStyles = makeStyles((theme: Theme) => ({
     height: '100%',
     overflow: 'auto',
     '& > div, & > main': {
-      paddingLeft: (props: StyleProps) => (props.isMobile ? '24px' : '200px'),
       paddingTop: '64px',
     },
   },
-  contentWithNavBar: {},
+  contentWithNavBar: {
+    '& > div, & > main': {
+      paddingLeft: '200px',
+    },
+  },
   navBarOpened: {
     '& .blurred': {
       backdropFilter: 'blur(8px)',
