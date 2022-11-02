@@ -17,8 +17,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     width: '100%',
     justifyContent: 'space-between',
   },
-  right: {
-  },
+  right: {},
   mobile: {
     minHeight: '64px',
   },
