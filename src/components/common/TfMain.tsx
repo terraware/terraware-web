@@ -3,10 +3,6 @@ import { makeStyles } from '@mui/styles';
 import { Theme } from '@mui/material';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
-interface StyleProps {
-  isMobile?: boolean;
-}
-
 const useStyles = makeStyles((theme: Theme) => ({
   main: {
     background: 'linear-gradient(180deg, #FBF9F9 0%, #EFF5EF 100%)',

@@ -14,10 +14,6 @@ import { isAdmin } from 'src/utils/organization';
 import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
-interface StyleProps {
-  isMobile?: boolean;
-}
-
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
     padding: '20px 0',
