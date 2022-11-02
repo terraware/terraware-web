@@ -5,7 +5,8 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 
 const useStyles = makeStyles((theme: Theme) => ({
   main: {
-    background: 'linear-gradient(180deg, #FBF9F9 0%, #EFF5EF 100%)',
+    // TODO: uncomment this line when updating to the new green color theme
+    // background: 'linear-gradient(180deg, #FBF9F9 0%, #EFF5EF 100%)',
     minHeight: '100vh',
     display: 'flex',
     flexDirection: 'column',
