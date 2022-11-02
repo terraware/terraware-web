@@ -67,10 +67,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     '& .navbar .logo': {
       display: 'none',
     },
-    '& .navbar .nav-section': {
-      backgroundColor: 'transparent',
-    },
-    '& .navbar .nav-item': {
+    '& .navbar .nav-section, & .navbar .nav-item': {
       backgroundColor: 'transparent',
     },
   },
