@@ -9,7 +9,7 @@ interface StyleProps {
 
 const useStyles = makeStyles((theme: Theme) => ({
   main: {
-    background: theme.palette.TwClrBg,
+    background: 'linear-gradient(180deg, #FBF9F9 0%, #EFF5EF 100%)',
     minHeight: '100vh',
     display: 'flex',
     flexDirection: 'column',
