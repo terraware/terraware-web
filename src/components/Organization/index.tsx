@@ -20,13 +20,6 @@ import { getDateDisplayValue } from '@terraware/web-components/utils';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const useStyles = makeStyles((theme: Theme) => ({
-  mainContainer: {
-    // paddingTop: '24px',
-    // background: theme.palette.TwClrBg,
-    // minHeight: 'calc(100vh - 64px)',
-    // display: 'flex',
-    // flexDirection: 'column',
-  },
   titleWithButton: {
     display: 'flex',
     flexDirection: 'row',
@@ -100,7 +93,6 @@ export default function OrganizationView({ organization }: OrganizationViewProps
 
   return (
     <TfMain>
-      {/* <Container maxWidth={false} className={classes.mainContainer}> */}
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <h1 className={classes.title}>{strings.ORGANIZATION}</h1>
@@ -171,7 +163,6 @@ export default function OrganizationView({ organization }: OrganizationViewProps
           <TfDivisor />
         </Grid>
       </Grid>
-      {/* </Container> */}
     </TfMain>
   );
 }
