@@ -4,7 +4,7 @@ import strings from 'src/strings';
 import { APP_PATHS } from 'src/constants';
 import { ServerOrganization } from 'src/types/Organization';
 import useForm from 'src/utils/useForm';
-import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
+import { Container, Grid, Typography, useTheme } from '@mui/material';
 import { AccessionPostRequestBody, postAccession } from 'src/api/accessions2/accession';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import {
