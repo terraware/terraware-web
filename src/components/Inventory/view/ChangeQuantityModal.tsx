@@ -39,7 +39,7 @@ export default function ChangeQuantityModal(props: ChangeQuantityModalProps): JS
   };
 
   const onChangeMovedValue = (value: unknown) => {
-    if (value && !isNaN(value as number)) {
+    if (value && !isNaN(value as number) && (value as number) > 0) {
       const valueNumber = value as number;
       setMovedValue(valueNumber);
       if (type === 'germinating') {

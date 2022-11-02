@@ -28,8 +28,8 @@ const columns: TableColumnType[] = [
   { key: 'facility_name', name: strings.NURSERY, type: 'string' },
   { key: 'readyByDate', name: strings.EST_READY_DATE, type: 'string' },
   { key: 'addedDate', name: strings.DATE_ADDED, type: 'string' },
-  { key: 'withdraw', name: '', type: 'string' },
   { key: 'quantitiesMenu', name: '', type: 'string' },
+  { key: 'withdraw', name: '', type: 'string' },
 ];
 
 interface InventorySeedslingsTableProps {
