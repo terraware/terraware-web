@@ -1,3 +1,4 @@
+d450436 SW-2086 : Skip accession id in exported accession csv (#696)
 0f3f61b SW-2033 Extract inventory search/filter/pills into a reusable component (#697)
 26774af SW-2083 / SW-2082 : fix accession number display + remove ready-by-date from withdrawal form (#695)
 a607de9 SW-2080 fix mobile view of empty state inventory (#694)
