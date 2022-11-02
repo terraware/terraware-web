@@ -9,6 +9,7 @@ import { Batch } from 'src/api/types/batch';
 import { updateBatchQuantities } from 'src/api/batch/batch';
 import useSnackbar from 'src/utils/useSnackbar';
 import useForm from 'src/utils/useForm';
+import stopPropagation from 'src/utils/stopPropagationEvent';
 
 export interface ChangeQuantityModalProps {
   open: boolean;
@@ -66,55 +67,61 @@ export default function ChangeQuantityModal(props: ChangeQuantityModalProps): JS
     onClose();
   };
 
-  return (
-    <DialogBox
-      onClose={onCloseHandler}
-      open={open}
-      title={type === 'germinating' ? strings.CHANGE_GERMINATING_STATUS : strings.CHANGE_NOT_READY_STATUS}
-      size='medium'
-      middleButtons={[
-        <Button
-          label={strings.CANCEL}
-          priority='secondary'
-          type='passive'
-          onClick={onCloseHandler}
-          size='medium'
-          key='button-1'
-        />,
-        <Button label={strings.SAVE} type='productive' onClick={onSubmit} size='medium' key='button-2' />,
-      ]}
-    >
-      <Grid>
-        <Grid item xs={10} textAlign='left' display='flex'>
-          <Textfield
-            value={type === 'germinating' ? record.germinatingQuantity : record.notReadyQuantity}
-            display={true}
-            label={type === 'germinating' ? strings.GERMINATING : strings.NOT_READY}
-            id={'previousValue'}
-            type={'number'}
-          />
+  const handleClickAway = (event?: any) => {
+    stopPropagation(event);
+  };
 
-          <Box maxWidth='60px'>
+  return (
+    <div onClick={handleClickAway}>
+      <DialogBox
+        onClose={onCloseHandler}
+        open={open}
+        title={type === 'germinating' ? strings.CHANGE_GERMINATING_STATUS : strings.CHANGE_NOT_READY_STATUS}
+        size='medium'
+        middleButtons={[
+          <Button
+            label={strings.CANCEL}
+            priority='secondary'
+            type='passive'
+            onClick={onCloseHandler}
+            size='medium'
+            key='button-1'
+          />,
+          <Button label={strings.SAVE} type='productive' onClick={onSubmit} size='medium' key='button-2' />,
+        ]}
+      >
+        <Grid>
+          <Grid item xs={10} textAlign='left' display='flex'>
             <Textfield
-              value={movedValue}
-              label={strings.MOVE}
-              id={'movedValue'}
+              value={type === 'germinating' ? record.germinatingQuantity : record.notReadyQuantity}
+              display={true}
+              label={type === 'germinating' ? strings.GERMINATING : strings.NOT_READY}
+              id={'previousValue'}
               type={'number'}
-              onChange={(id, value) => onChangeMovedValue(value)}
             />
-          </Box>
-          <Box paddingLeft={1} paddingRight={3} paddingTop={4}>
-            <Icon name='iconArrowRight' />
-          </Box>
-          <Textfield
-            value={type === 'germinating' ? record.notReadyQuantity : record.readyQuantity}
-            display={true}
-            label={type === 'germinating' ? strings.NOT_READY : strings.READY}
-            id={'changedValue'}
-            type={'number'}
-          />
+
+            <Box maxWidth='60px'>
+              <Textfield
+                value={movedValue}
+                label={strings.MOVE}
+                id={'movedValue'}
+                type={'number'}
+                onChange={(id, value) => onChangeMovedValue(value)}
+              />
+            </Box>
+            <Box paddingLeft={1} paddingRight={3} paddingTop={4}>
+              <Icon name='iconArrowRight' />
+            </Box>
+            <Textfield
+              value={type === 'germinating' ? record.notReadyQuantity : record.readyQuantity}
+              display={true}
+              label={type === 'germinating' ? strings.NOT_READY : strings.READY}
+              id={'changedValue'}
+              type={'number'}
+            />
+          </Grid>
         </Grid>
-      </Grid>
-    </DialogBox>
+      </DialogBox>
+    </div>
   );
 }
