@@ -91,7 +91,7 @@ export default function ChangeQuantityModal(props: ChangeQuantityModalProps): JS
         ]}
       >
         <Grid>
-          <Grid item xs={10} textAlign='left' display='flex'>
+          <Grid item xs={11} textAlign='left' display='flex'>
             <Textfield
               value={type === 'germinating' ? record.germinatingQuantity : record.notReadyQuantity}
               display={true}
@@ -100,7 +100,7 @@ export default function ChangeQuantityModal(props: ChangeQuantityModalProps): JS
               type={'number'}
             />
 
-            <Box maxWidth='60px'>
+            <Box maxWidth='70px' marginLeft={2}>
               <Textfield
                 value={movedValue}
                 label={strings.MOVE}
