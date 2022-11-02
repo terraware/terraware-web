@@ -29,6 +29,7 @@ const columns: TableColumnType[] = [
   { key: 'readyByDate', name: strings.EST_READY_DATE, type: 'string' },
   { key: 'addedDate', name: strings.DATE_ADDED, type: 'string' },
   { key: 'withdraw', name: '', type: 'string' },
+  { key: 'quantitiesMenu', name: '', type: 'string' },
 ];
 
 interface InventorySeedslingsTableProps {
@@ -179,6 +180,8 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
     setSelectedBatch(batch);
     if (fromColumn === 'withdraw') {
       setOpenWithdrawalModal(true);
+    } else if (fromColumn === 'quantitiesMenu') {
+      reloadData();
     } else {
       onUpdateOpenBatch(batch.batchNumber);
       setOpenNewBatchModal(true);

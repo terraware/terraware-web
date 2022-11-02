@@ -816,6 +816,8 @@ const strings = new LocalizedStrings({
     IMPORT_ACCESSIONS_WITH_TEMPLATE: 'Import accessions using our CSV template.',
     IMPORT_INVENTORY_ALT_TITLE: 'Already have an inventory database?',
     IMPORT_INVENTORY_WITH_TEMPLATE: 'Import inventory using our CSV template.',
+    CHANGE_GERMINATING_STATUS: 'Change Germinating Status',
+    CHANGE_NOT_READY_STATUS: 'Change Not Ready Status',
   },
 });
 
