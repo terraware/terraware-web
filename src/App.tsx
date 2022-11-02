@@ -77,7 +77,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   content: {
     height: '100%',
     overflow: 'auto',
-    '& > main': {
+    '& > div, & > main': {
       paddingLeft: (props: StyleProps) => (props.isMobile ? '24px' : '200px'),
       paddingTop: '64px',
     },
