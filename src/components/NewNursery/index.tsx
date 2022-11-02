@@ -13,6 +13,7 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageSnackbar from 'src/components/PageSnackbar';
 import useSnackbar from 'src/utils/useSnackbar';
 import { getAllNurseries } from 'src/utils/organization';
+import TfMain from 'src/components/common/TfMain';
 
 type SiteViewProps = {
   organization: ServerOrganization;
@@ -89,7 +90,7 @@ export default function NurseryView({ organization, reloadOrganizationData }: Si
   };
 
   return (
-    <>
+    <TfMain>
       <Container maxWidth={false}>
         <Grid container spacing={3}>
           <Grid item xs={12}>
@@ -126,6 +127,6 @@ export default function NurseryView({ organization, reloadOrganizationData }: Si
         </Grid>
       </Container>
       <FormBottomBar onCancel={goToNurseries} onSave={saveNursery} />
-    </>
+    </TfMain>
   );
 }

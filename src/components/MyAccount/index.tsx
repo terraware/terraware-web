@@ -13,7 +13,6 @@ import useForm from 'src/utils/useForm';
 import FormBottomBar from '../common/FormBottomBar';
 import TextField from '../common/Textfield/Textfield';
 import TfDivisor from '../common/TfDivisor';
-import TfMain from '../common/TfMain';
 import AssignNewOwnerDialog from './AssignNewOwnerModal';
 import { getOrganizationUsers, leaveOrganization, listOrganizationRoles } from 'src/api/organization/organization';
 import LeaveOrganizationDialog from './LeaveOrganizationModal';
@@ -25,6 +24,7 @@ import { Grid, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
+import TfMain from 'src/components/common/TfMain';
 
 interface StyleProps {
   isMobile: boolean;
@@ -215,7 +215,7 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
   };
 
   return (
-    <>
+    <TfMain>
       {removedOrg && (
         <>
           <LeaveOrganizationDialog
@@ -344,6 +344,6 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
         </Grid>
       </TfMain>
       {edit && <FormBottomBar onCancel={onCancel} onSave={saveChanges} />}
-    </>
+    </TfMain>
   );
 }

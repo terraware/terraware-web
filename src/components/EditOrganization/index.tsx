@@ -16,6 +16,7 @@ import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageSnackbar from 'src/components/PageSnackbar';
 import useSnackbar from 'src/utils/useSnackbar';
+import TfMain from 'src/components/common/TfMain';
 
 interface StyleProps {
   isMobile: boolean;
@@ -129,7 +130,7 @@ export default function OrganizationView({ organization, reloadOrganizationData 
   };
 
   return (
-    <>
+    <TfMain>
       <Container maxWidth={false} className={classes.mainContainer}>
         <Grid container spacing={3}>
           <Grid item xs={12}>
@@ -182,6 +183,6 @@ export default function OrganizationView({ organization, reloadOrganizationData 
         </Grid>
       </Container>
       <FormBottomBar onCancel={goToOrganization} onSave={saveOrganization} />
-    </>
+    </TfMain>
   );
 }

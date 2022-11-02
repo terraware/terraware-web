@@ -14,6 +14,7 @@ import { DatePicker } from '@terraware/web-components';
 import { Species2Dropdown } from '../accession2/properties';
 import { createBatch, CreateBatchRequestPayload } from 'src/api/batch/batch';
 import NurseryDropdown from './NurseryDropdown';
+import TfMain from 'src/components/common/TfMain';
 
 type CreateInventoryProps = {
   organization: ServerOrganization;
@@ -99,7 +100,7 @@ export default function CreateInventory(props: CreateInventoryProps): JSX.Elemen
   };
 
   return (
-    <Box>
+    <TfMain>
       <Typography sx={{ paddingLeft: theme.spacing(3), fontWeight: 600, fontSize: '24px' }}>
         {strings.ADD_INVENTORY}
       </Typography>
@@ -227,6 +228,6 @@ export default function CreateInventory(props: CreateInventoryProps): JSX.Elemen
         </Container>
       </Box>
       <FormBottomBar onCancel={goToInventory} onSave={saveInventory} saveButtonText={strings.SAVE} />
-    </Box>
+    </TfMain>
   );
 }
