@@ -70,48 +70,11 @@ describe('Database', () => {
       cy.get('#more-options').click();
       cy.get('#edit-columns').click();
 
-      cy.get('#active').click();
-      // cy.get('#state').click(); already selected
-      cy.get('#facility_name').click();
-
-      // cy.get('#speciesName').click(); already selected
-      cy.get('#species_commonName').click();
-      cy.get('#species_familyName').click();
-      cy.get('#receivedDate').click();
-      // cy.get('#collectedDate').click(); already selected
-      // cy.get('#collectionSiteName').click(); already selected
-      cy.get('#species_endangered').click();
-      cy.get('#species_rare').click();
-      cy.get('#collectionSource').click();
-      cy.get('#ageYears').click();
-      // cy.get('#ageMonths').click(); already selected
-      // cy.get('#estimatedCount').click(); already selected
-      cy.get('#plantsCollectedFrom').click();
-      cy.get('#bagNumber').click();
-      cy.get('#collectionSiteLandowner').click();
-      cy.get('#collectionNotes').click();
-      // cy.get('#estimatedWeightGrams').click(); already selected
-
-      cy.get('#dryingEndDate').click();
-      cy.get('#remainingQuantity').click();
-      cy.get('#storageCondition').click();
-      cy.get('#storageLocationName').click();
-      cy.get('#withdrawalDate').click();
-      cy.get('#withdrawalQuantity').click();
-      cy.get('#withdrawalPurpose').click();
-      cy.get('#withdrawalNotes').click();
-
-      cy.get('#viabilityTests_type').click();
-      cy.get('#viabilityTests_seedType').click();
-      cy.get('#viabilityTests_treatment').click();
-      cy.get('#viabilityTests_seedsFilled').click();
-      cy.get('#viabilityTests_startDate').click();
-      cy.get('#viabilityTests_seedsSown').click();
-      cy.get('#viabilityTests_viabilityTestResults_seedsGerminated').click();
-      cy.get('#viabilityTests_seedsEmpty').click();
-      cy.get('#viabilityTests_substrate').click();
-      cy.get('#viabilityTests_seedsCompromised').click();
-      cy.get('#viabilityTests_notes').click();
+      cy.get('.MuiCheckbox-root').each((checkbox) => {
+        if (!checkbox.hasClass('Mui-checked')) {
+          checkbox.click();
+        }
+      });
 
       cy.get('#saveColumnsButton').click();
       cy.wait('@search');
