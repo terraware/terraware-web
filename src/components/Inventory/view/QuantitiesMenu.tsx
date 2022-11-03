@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { IconButton, MenuItem, MenuList, Popover, Typography, useTheme } from '@mui/material';
 import { Icon } from '@terraware/web-components';
 import strings from 'src/strings';
-import stopPropagation from 'src/utils/stopPropagationEvent';
 import { ModalValuesType } from './BatchesCellRenderer';
 
 export type QuantitiesMenuProps = {
@@ -16,7 +15,6 @@ export default function QuantitiesMenu(props: QuantitiesMenuProps): JSX.Element 
   const openMenu = Boolean(menuAnchorEl);
 
   const openMenuHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
-    stopPropagation(event);
     setMenuAnchorEl(event.currentTarget);
   };
 
@@ -25,7 +23,6 @@ export default function QuantitiesMenu(props: QuantitiesMenuProps): JSX.Element 
   };
 
   const openChangeQuantityHandler = (event: any, type: string) => {
-    stopPropagation(event);
     closeMenuHandler();
     setModalValues({
       openChangeQuantityModal: true,

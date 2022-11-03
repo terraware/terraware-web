@@ -252,7 +252,7 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
             selectedRows={selectedRows}
             setSelectedRows={setSelectedRows}
             showCheckbox={true}
-            isClickable={() => true}
+            isClickable={() => false}
             showTopBar={true}
             topBarButtons={[
               {

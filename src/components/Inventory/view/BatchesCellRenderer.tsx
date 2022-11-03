@@ -5,7 +5,6 @@ import { Button } from '@terraware/web-components';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
 import strings from 'src/strings';
-import stopPropagation from 'src/utils/stopPropagationEvent';
 import ChangeQuantityModal from './ChangeQuantityModal';
 import { Batch } from 'src/api/types/batch';
 import QuantitiesMenu from './QuantitiesMenu';
@@ -31,9 +30,6 @@ export default function BatchesCellRenderer(props: RendererProps<TableRowType>):
 
   const rowClick = (event?: React.SyntheticEvent) => {
     if (onRowClick) {
-      if (event) {
-        stopPropagation(event);
-      }
       onRowClick();
     }
   };
