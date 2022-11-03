@@ -1,3 +1,4 @@
+821d244 SW-2119 fix disabled appearance on dropdown components (#703)
 e6fe481 SW-2093 Use new table version and remove unnecessaries stopPropagations (#701)
 c5c4401 SW-2077 Animate and Delay Header (#700)
 2f69dcf SW-2074 Nursery Fast Follow - edit status of seedlings batch (#699)
