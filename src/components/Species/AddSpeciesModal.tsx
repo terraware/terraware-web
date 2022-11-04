@@ -222,7 +222,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
             options={optionsForName}
             label={strings.SCIENTIFIC_NAME_REQUIRED}
             aria-label={strings.SCIENTIFIC_NAME_REQUIRED}
-            readonly={false}
+            editable={true}
             fullWidth={true}
             warningText={
               showWarning && !initialSpecies && newScientificName && !nameFormatError

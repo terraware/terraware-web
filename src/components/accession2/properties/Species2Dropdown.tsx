@@ -108,7 +108,7 @@ export default function Species2Dropdown<T extends AccessionPostRequestBody>(
           selectedValue={selectedValue}
           toT={toT}
           fullWidth={true}
-          readonly={false}
+          editable={true}
           errorText={validate && !record.speciesId ? strings.REQUIRED_FIELD : ''}
         />
       </Grid>
