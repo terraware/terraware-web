@@ -62,6 +62,29 @@ describe('Database', () => {
       cy.get('#table-header > :nth-child(9)').contains('SEED BANKS');
     });
 
+    it('should select ALL the columns', () => {
+      cy.visit('/accessions');
+      cy.intercept('POST', '/api/v1/search').as('search');
+      cy.intercept('POST', '/api/v1/seedbank/values').as('values');
+
+      cy.get('#more-options').click();
+      cy.get('#edit-columns').click();
+
+      cy.get('.MuiCheckbox-root').each((checkbox) => {
+        if (!checkbox.hasClass('Mui-checked')) {
+          checkbox.click();
+        }
+      });
+
+      cy.get('#saveColumnsButton').click();
+      cy.wait('@search');
+      cy.wait('@values');
+      cy.get('#editColumnsDialog').should('not.exist');
+
+      cy.get('#table-header').children().should('have.length', 40);
+      cy.get('table tr').should('have.length', 4);
+    });
+
     context('Presets', () => {
       it('General Inventory', () => {
         cy.intercept('POST', '/api/v1/search').as('search');
