@@ -77,7 +77,7 @@ export default function SelectSeedBankModal(props: SelectSeedBankProps): JSX.Ele
             label={strings.SEED_BANK}
             aria-label={strings.SELECT_SEED_BANK}
             placeholder={strings.SELECT}
-            readonly={false}
+            allowEditingValue={true}
             fullWidth={true}
           />
         </Grid>
