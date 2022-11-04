@@ -26,7 +26,6 @@ export default function StorageLocationSelector(props: StorageLocationSelectorPr
       selectedValue={selectedStorageLocation}
       toT={(name: string) => ({ name } as Facility)}
       fullWidth={true}
-      readonly={true}
       errorText={errorText}
       tooltipTitle={strings.TOOLTIP_ACCESSIONS_LOCATION}
     />

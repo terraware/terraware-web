@@ -149,7 +149,6 @@ export default function SelectPVSystem(props: SelectPVSystemProps): JSX.Element 
             label={strings.PV_SYSTEM}
             aria-label={strings.PV_SYSTEM}
             placeholder={strings.SELECT}
-            readonly={true}
             fullWidth={true}
             errorText={showError ? strings.REQUIRED_FIELD : ''}
           />

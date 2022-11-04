@@ -164,7 +164,6 @@ export default function CreateAccession(props: CreateAccessionProps): JSX.Elemen
               selectedValue={record.state}
               onChange={(value: string) => onChange('state', value)}
               label={strings.PROCESSING_STATUS_REQUIRED}
-              readonly={true}
               options={ACCESSION_2_CREATE_STATES}
               fullWidth={true}
             />

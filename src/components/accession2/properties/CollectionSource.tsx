@@ -39,7 +39,6 @@ export default function CollectionSource(props: Props): JSX.Element {
       <Dropdown
         {...props}
         fullWidth={true}
-        readonly={true}
         tooltipTitle={
           <>
             {strings.TOOLTIP_ACCESSIONS_COLLECTION_SOURCE}

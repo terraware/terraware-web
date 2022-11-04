@@ -345,7 +345,6 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
             onChange={onChangePurpose}
             selectedValue={isNurseryTransfer ? 'Nursery' : record?.purpose}
             fullWidth={true}
-            readonly={true}
           />
         </Grid>
         {isNurseryTransfer ? (
@@ -376,7 +375,6 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
                 onChange={(value: string) => onChangeViabilityTesting('testType', value)}
                 selectedValue={viabilityTesting?.testType}
                 fullWidth={true}
-                readonly={true}
               />
             </Grid>
             <Grid item xs={12} paddingBottom={2}>
@@ -387,7 +385,6 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
                 onChange={(value: string) => onChangeViabilityTesting('substrate', value)}
                 selectedValue={viabilityTesting.substrate}
                 fullWidth={true}
-                readonly={true}
               />
             </Grid>
             <Grid item xs={12} paddingBottom={2}>
@@ -398,7 +395,6 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
                 onChange={(value: string) => onChangeViabilityTesting('treatment', value)}
                 selectedValue={viabilityTesting.treatment}
                 fullWidth={true}
-                readonly={true}
               />
             </Grid>
           </>

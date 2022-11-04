@@ -151,7 +151,6 @@ export default function SensorLocations(props: SensorLocationsProps): JSX.Elemen
               label={location.label}
               aria-label={location.label}
               placeholder={strings.SELECT}
-              readonly={true}
               fullWidth={true}
               errorText={showError && !assignedLocations[location.name] ? strings.REQUIRED_FIELD : ''}
             />

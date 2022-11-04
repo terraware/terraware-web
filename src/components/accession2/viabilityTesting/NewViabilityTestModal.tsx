@@ -419,7 +419,6 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
               onChange={(value: string) => onChange('seedType', value)}
               selectedValue={record?.seedType}
               fullWidth={true}
-              readonly={true}
               disabled={readOnly}
               tooltipTitle={
                 <>
@@ -446,7 +445,6 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
                   onChange={(value: string) => onChange('substrate', value)}
                   selectedValue={record?.substrate}
                   fullWidth={true}
-                  readonly={true}
                   disabled={readOnly}
                   tooltipTitle={
                     <>
@@ -471,7 +469,6 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
                   onChange={(value: string) => onChange('treatment', value)}
                   selectedValue={record?.treatment}
                   fullWidth={true}
-                  readonly={true}
                   disabled={readOnly}
                   tooltipTitle={
                     <>
