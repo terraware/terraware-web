@@ -244,7 +244,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
             options={optionsForCommonName}
             label={strings.COMMON_NAME}
             aria-label={strings.COMMON_NAME}
-            readonly={false}
+            editable={true}
             fullWidth={true}
             hideArrow={true}
             tooltipTitle={strings.TOOLTIP_COMMON_NAME}

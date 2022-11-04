@@ -20,7 +20,6 @@ export default function StorageSubLocationSelector(props: StorageSubLocationSele
       onChange={onChange}
       selectedValue={selectedStorageSubLocation}
       fullWidth={true}
-      readonly={true}
       tooltipTitle={strings.TOOLTIP_ACCESSIONS_SUBLOCATION}
     />
   );

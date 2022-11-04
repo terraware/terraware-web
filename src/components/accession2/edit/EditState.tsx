@@ -53,7 +53,6 @@ export default function EditState(props: EditStateProps): JSX.Element {
             onChange={(value: string) => onChange('state', value)}
             selectedValue={record?.state}
             fullWidth={true}
-            readonly={true}
             errorText={error}
           />
         </Grid>
