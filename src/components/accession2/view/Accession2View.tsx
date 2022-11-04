@@ -55,6 +55,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     marginRight: theme.spacing(1),
   },
   backToAccessions: {
+    fontSize: '20px',
     display: 'flex',
     textDecoration: 'none',
     color: theme.palette.TwClrTxtBrand,
