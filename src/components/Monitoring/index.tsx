@@ -77,7 +77,7 @@ export default function Monitoring(props: MonitoringProps): JSX.Element {
         history.push(APP_PATHS.SEED_BANK_MONITORING.replace(':seedBankId', seedBank.id.toString()));
       }
     },
-    [history],
+    [history]
   );
 
   const onChangeSeedBank = (newValue: string) => {
