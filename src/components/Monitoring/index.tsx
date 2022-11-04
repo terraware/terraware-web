@@ -14,7 +14,7 @@ import { getPreferences, updatePreferences } from 'src/api/preferences/preferenc
 import SeedBankMonitoring from './SeedBankMonitoring';
 import Button from '../common/button/Button';
 import Title from '../common/Title';
-import { Box, Grid, Theme } from '@mui/material';
+import { Box, Container, Grid, Theme } from '@mui/material';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageSnackbar from 'src/components/PageSnackbar';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
@@ -181,7 +181,7 @@ export default function Monitoring(props: MonitoringProps): JSX.Element {
 
             <PageSnackbar />
             {selectedSeedBank && monitoringPreferences && (
-              <div ref={contentRef}>
+              <Container ref={contentRef}>
                 <SeedBankMonitoring
                   monitoringPreferences={monitoringPreferences}
                   updatePreferences={(data) => updateMonitoringPreferences(data)}
@@ -189,7 +189,7 @@ export default function Monitoring(props: MonitoringProps): JSX.Element {
                   organization={organization}
                   reloadData={reloadData}
                 />
-              </div>
+              </Container>
             )}
           </Grid>
         </>
