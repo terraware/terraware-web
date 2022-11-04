@@ -2459,8 +2459,10 @@
   dependencies:
     defer-to-connect "^2.0.1"
 
-"@terraware/web-components@file:../web-components/dist":
+"@terraware/web-components@^1.0.61":
   version "1.0.61"
+  resolved "https://registry.yarnpkg.com/@terraware/web-components/-/web-components-1.0.61.tgz#9cad698fe49ac42570cc0add33fa7d31ed48afdb"
+  integrity sha512-0tv2vcP8AZkEHXiCAkJpNdESme9M/QXpnwWqFqa1siT+H0VtlGURt5Rggn4tFR/M26AjHQ3Nb4oIAXfOF05FZw==
   dependencies:
     "@date-io/date-fns" "^2.14.0"
     "@date-io/moment" "^2.10.11"
