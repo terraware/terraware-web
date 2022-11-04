@@ -146,4 +146,3 @@ jobs:
         with:
           issueList: ./docs/jiralist.txt
           transition: 'Released to Production'
-
