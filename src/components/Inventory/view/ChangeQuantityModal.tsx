@@ -31,7 +31,7 @@ export default function ChangeQuantityModal(props: ChangeQuantityModalProps): JS
       if (reload) {
         reload();
       }
-      onClose();
+      onCloseHandler();
     } else {
       snackbar.toastError(response.error);
     }
