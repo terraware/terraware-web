@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@mui/styles';
 import { Theme } from '@mui/material';
 import strings from 'src/strings';
@@ -28,19 +28,23 @@ export default function DetectAppVersion({ onNewVersion }: DetectAppVersionProps
   const [needsRefresh, setNeedsRefresh] = useState<boolean>(false);
   const currentAppVersion = process.env.REACT_APP_TERRAWARE_FE_BUILD_VERSION;
 
-  const checkVersion = useCallback(async () => {
-    const response = await getLatestAppVersion();
-    const isStale = !!response.version && response.version.toString().trim() !== currentAppVersion;
-    setNeedsRefresh(isStale);
-    if (isStale && onNewVersion) {
-      onNewVersion();
-    }
-    // this is needed to trigger the next useEffect, so we keep checking for app version
-    // (unless we have already decided app needs refresh)
-    setLastCheck(Date.now());
-  }, [currentAppVersion, onNewVersion]);
-
   useEffect(() => {
+    let active = true;
+    const checkVersion = async () => {
+      const response = await getLatestAppVersion();
+      if (!active) {
+        return;
+      }
+      const isStale = !!response.version && response.version.toString().trim() !== currentAppVersion;
+      setNeedsRefresh(isStale);
+      if (isStale && onNewVersion) {
+        onNewVersion();
+      }
+      // this is needed to trigger the next useEffect, so we keep checking for app version
+      // (unless we have already decided app needs refresh)
+      setLastCheck(Date.now());
+    };
+
     let timeoutVar: any = null;
     if (lastCheck === 0) {
       checkVersion();
@@ -51,8 +55,11 @@ export default function DetectAppVersion({ onNewVersion }: DetectAppVersionProps
         await checkVersion();
       }, ONE_MINUTE_INTERVAL_MS);
     }
-    return () => clearTimeout(timeoutVar);
-  }, [checkVersion, lastCheck, needsRefresh]);
+    return () => {
+      active = false;
+      clearTimeout(timeoutVar);
+    };
+  }, [lastCheck, needsRefresh, currentAppVersion, onNewVersion]);
 
   if (!needsRefresh) {
     return null;
