@@ -1,10 +1,10 @@
 import { TabContext, TabList, TabPanel } from '@mui/lab';
-import { useTheme, Box, IconButton, Link, Tab, Theme, Typography } from '@mui/material';
+import { useTheme, Box, IconButton, Link as LinkMUI, Tab, Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Button, Icon } from '@terraware/web-components';
 import moment from 'moment';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { Link, useHistory, useParams } from 'react-router-dom';
 import { Accession2, getAccession2 } from 'src/api/accessions2/accession';
 import { checkIn } from 'src/api/seeds/accession';
 import strings from 'src/strings';
@@ -33,6 +33,11 @@ import ViewViabilityTestModal from '../viabilityTesting/ViewViabilityTestModal';
 import { getSeedBank, isContributor } from 'src/utils/organization';
 import _ from 'lodash';
 import PageHeaderWrapper from '../../common/PageHeaderWrapper';
+import { APP_PATHS } from 'src/constants';
+
+interface StyleProps {
+  isMobile?: boolean;
+}
 
 const useStyles = makeStyles((theme: Theme) => ({
   iconStyle: {
@@ -44,6 +49,19 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   fullSizeButton: {
     width: '100%',
+  },
+  backIcon: {
+    fill: theme.palette.TwClrIcnBrand,
+    marginRight: theme.spacing(1),
+  },
+  backToAccessions: {
+    fontSize: '20px',
+    display: 'flex',
+    textDecoration: 'none',
+    color: theme.palette.TwClrTxtBrand,
+    alignItems: 'center',
+    marginLeft: (props: StyleProps) => (props.isMobile ? 0 : theme.spacing(3)),
+    marginTop: theme.spacing(2),
   },
 }));
 
@@ -78,9 +96,9 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
   const [age, setAge] = useState({ value: '', unit: '' });
   const { organization, user } = props;
   const userCanEdit = !isContributor(organization);
-  const classes = useStyles();
-  const snackbar = useSnackbar();
   const { isMobile } = useDeviceInfo();
+  const classes = useStyles({ isMobile });
+  const snackbar = useSnackbar();
   const themeObj = useTheme();
   const contentRef = useRef(null);
 
@@ -426,31 +444,39 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
         </>
       )}
       <PageHeaderWrapper nextElement={contentRef.current}>
-        <Box padding={isMobile ? themeObj.spacing(3, 0) : 3}>
-          <Box display='flex' justifyContent='space-between' alignItems='center'>
-            <Typography>{accession?.accessionNumber}</Typography>
-            {!isMobile && userCanEdit && (
-              <Box display='flex' alignItems='center'>
-                <IconButton
-                  sx={{ marginLeft: 3, height: '24px', marginRight: 1 }}
-                  onClick={() => setOpenDeleteAccession(true)}
-                >
-                  <Icon name='iconTrashCan' />
-                </IconButton>
-                {accession && isAwaitingCheckin ? (
-                  <Button onClick={() => checkInAccession()} label={strings.CHECK_IN} size='medium' />
-                ) : (
-                  renderWithdrawalButton()
-                )}
-              </Box>
-            )}
+        <>
+          <Box>
+            <Link id='back' to={APP_PATHS.ACCESSIONS} className={classes.backToAccessions}>
+              <Icon name='caretLeft' className={classes.backIcon} />
+              {strings.ACCESSIONS}
+            </Link>
           </Box>
-          <Typography color={themeObj.palette.TwClrTxt} fontSize='24px' fontStyle='italic' fontWeight={500}>
-            {accession?.speciesScientificName}
-          </Typography>
-          <Typography color={themeObj.palette.TwClrTxtSecondary}>{accession?.speciesCommonName}</Typography>
-          <PageSnackbar />
-        </Box>
+          <Box padding={isMobile ? themeObj.spacing(3, 0) : 3}>
+            <Box display='flex' justifyContent='space-between' alignItems='center'>
+              <Typography>{accession?.accessionNumber}</Typography>
+              {!isMobile && userCanEdit && (
+                <Box display='flex' alignItems='center'>
+                  <IconButton
+                    sx={{ marginLeft: 3, height: '24px', marginRight: 1 }}
+                    onClick={() => setOpenDeleteAccession(true)}
+                  >
+                    <Icon name='iconTrashCan' />
+                  </IconButton>
+                  {accession && isAwaitingCheckin ? (
+                    <Button onClick={() => checkInAccession()} label={strings.CHECK_IN} size='medium' />
+                  ) : (
+                    renderWithdrawalButton()
+                  )}
+                </Box>
+              )}
+            </Box>
+            <Typography color={themeObj.palette.TwClrTxt} fontSize='24px' fontStyle='italic' fontWeight={500}>
+              {accession?.speciesScientificName}
+            </Typography>
+            <Typography color={themeObj.palette.TwClrTxtSecondary}>{accession?.speciesCommonName}</Typography>
+            <PageSnackbar />
+          </Box>
+        </>
       </PageHeaderWrapper>
 
       <Box
@@ -572,9 +598,9 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
               )}
             </Box>
           ) : quantityEditable ? (
-            <Link sx={{ ...linkStyle, fontSize: '20px' }} onClick={() => setOpenQuantityModal(true)}>
+            <LinkMUI sx={{ ...linkStyle, fontSize: '20px' }} onClick={() => setOpenQuantityModal(true)}>
               + {strings.ADD}
-            </Link>
+            </LinkMUI>
           ) : (
             <Typography color={themeObj.palette.TwClrTxtTertiary} sx={{ pointerEvents: 'none', fontSize: '20px' }}>
               + {strings.ADD}
@@ -620,9 +646,9 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
               )}
             </Box>
           ) : viabilityEditable ? (
-            <Link sx={{ ...linkStyle, fontSize: '20px' }} onClick={() => setOpenViabilityModal(true)}>
+            <LinkMUI sx={{ ...linkStyle, fontSize: '20px' }} onClick={() => setOpenViabilityModal(true)}>
               + {strings.ADD}
-            </Link>
+            </LinkMUI>
           ) : (
             <Typography color={themeObj.palette.TwClrTxtTertiary} sx={{ pointerEvents: 'none', fontSize: '20px' }}>
               + {strings.ADD}
