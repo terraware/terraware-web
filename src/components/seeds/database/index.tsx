@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import useQuery from '../../../utils/useQuery';
 import {
@@ -63,6 +63,7 @@ import ImportAccessionsModal from './ImportAccessionsModal';
 import { Icon } from '@terraware/web-components';
 import { downloadCsvTemplateHandler } from 'src/components/common/ImportModal';
 import { downloadAccessionsTemplate } from 'src/api/accessions2/accession';
+import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 
 interface StyleProps {
   isMobile: boolean;
@@ -88,7 +89,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     color: theme.palette.common.white,
   },
   checkinMessage: {
-    marginBottom: theme.spacing(6),
+    marginBottom: theme.spacing(1),
   },
   checkInContent: {
     display: 'flex',
@@ -189,6 +190,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const [reportModalOpen, setReportModalOpen] = useState(false);
   const [pendingAccessions, setPendingAccessions] = useState<SearchResponseElement[] | null>();
   const [selectedOrgInfo, setSelectedOrgInfo] = useRecoilState(seedsDatabaseSelectedOrgInfo);
+  const contentRef = useRef(null);
 
   /*
    * fieldOptions is a list of records
@@ -572,70 +574,71 @@ export default function Database(props: DatabaseProps): JSX.Element {
             onClose={onCloseDownloadReportModal}
           />
         )}
-        <PageHeader
-          title=''
-          allowAll={true}
-          page={strings.ACCESSIONS}
-          parentPage={strings.SEEDS}
-          rightComponent={
-            isOnboarded ? (
-              <>
-                {getHeaderButtons()}
-                {organization &&
-                  (isMobile ? (
-                    <Button icon='plus' onClick={goToNewAccession} size='medium' id='newAccession' />
-                  ) : (
+        <PageHeaderWrapper nextElement={contentRef.current}>
+          <PageHeader
+            title=''
+            allowAll={true}
+            page={strings.ACCESSIONS}
+            parentPage={strings.SEEDS}
+            rightComponent={
+              isOnboarded ? (
+                <>
+                  {getHeaderButtons()}
+                  {organization &&
+                    (isMobile ? (
+                      <Button icon='plus' onClick={goToNewAccession} size='medium' id='newAccession' />
+                    ) : (
+                      <Button
+                        label={strings.NEW_ACCESSION}
+                        icon='plus'
+                        onClick={goToNewAccession}
+                        size='medium'
+                        id='newAccession'
+                      />
+                    ))}
+                </>
+              ) : undefined
+            }
+          >
+            {(fieldOptions === null || availableFieldOptions === null) && strings.GENERIC_ERROR}
+            {pendingAccessions && pendingAccessions.length > 0 && (
+              <Grid item xs={12} className={classes.checkinMessage}>
+                <Paper>
+                  <Grid item xs={12} className={classes.checkInContent}>
+                    <div>
+                      <span> {strings.CHECKIN_ACCESSIONS}</span>
+                      <p className={classes.checkInText}>
+                        {strings.formatString(strings.CHECK_IN_MESSAGE, pendingAccessions.length)}
+                      </p>
+                    </div>
                     <Button
-                      label={strings.NEW_ACCESSION}
-                      icon='plus'
-                      onClick={goToNewAccession}
-                      size='medium'
-                      id='newAccession'
+                      className={`${classes.checkInButton} ${isMobile ? 'mobile' : ''}`}
+                      onClick={handleViewCollections}
+                      id='viewCollections'
+                      label={strings.VIEW}
+                      priority='secondary'
+                      type='passive'
                     />
-                  ))}
-              </>
-            ) : undefined
-          }
-        >
-          {isOnboarded && availableFieldOptions && fieldOptions && (
-            <Filters
-              filters={searchCriteria}
-              availableValues={availableFieldOptions}
-              allValues={fieldOptions}
-              columns={displayColumnDetails}
-              onChange={onFilterChange}
-            />
-          )}
-          {(fieldOptions === null || availableFieldOptions === null) && strings.GENERIC_ERROR}
-        </PageHeader>
-        <Container maxWidth={false} className={classes.mainContainer}>
+                  </Grid>
+                </Paper>
+              </Grid>
+            )}
+          </PageHeader>
+        </PageHeaderWrapper>
+        <Container ref={contentRef} maxWidth={false} className={classes.mainContainer}>
           {organization && unfilteredResults ? (
             <Grid container>
               {isOnboarded ? (
                 <>
-                  {pendingAccessions && pendingAccessions.length > 0 && (
-                    <Grid item xs={12} className={classes.checkinMessage}>
-                      <Paper>
-                        <Grid item xs={12} className={classes.checkInContent}>
-                          <div>
-                            <span> {strings.CHECKIN_ACCESSIONS}</span>
-                            <p className={classes.checkInText}>
-                              {strings.formatString(strings.CHECK_IN_MESSAGE, pendingAccessions.length)}
-                            </p>
-                          </div>
-                          <Button
-                            className={`${classes.checkInButton} ${isMobile ? 'mobile' : ''}`}
-                            onClick={handleViewCollections}
-                            id='viewCollections'
-                            label={strings.VIEW}
-                            priority='secondary'
-                            type='passive'
-                          />
-                        </Grid>
-                      </Paper>
-                    </Grid>
+                  {isOnboarded && availableFieldOptions && fieldOptions && (
+                    <Filters
+                      filters={searchCriteria}
+                      availableValues={availableFieldOptions}
+                      allValues={fieldOptions}
+                      columns={displayColumnDetails}
+                      onChange={onFilterChange}
+                    />
                   )}
-
                   {searchSummaryResults && (
                     <Grid item xs={12}>
                       <Box

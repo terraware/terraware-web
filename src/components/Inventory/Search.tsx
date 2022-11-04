@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Box, useTheme } from '@mui/material';
+import { Grid, Box } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
@@ -17,10 +17,9 @@ interface SearchProps {
 
 export default function Search(props: SearchProps): JSX.Element {
   const { organization, searchValue, onSearch, filters, setFilters } = props;
-  const theme = useTheme();
 
   return (
-    <Box marginTop={theme.spacing(3)}>
+    <>
       <Box display='flex' flexDirection='row'>
         <Box width='300px'>
           <Textfield
@@ -47,6 +46,6 @@ export default function Search(props: SearchProps): JSX.Element {
           />
         ))}
       </Grid>
-    </Box>
+    </>
   );
 }

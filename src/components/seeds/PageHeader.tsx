@@ -13,6 +13,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     '&.MuiContainer-root': {
       paddingLeft: 0,
       paddingRight: 0,
+      paddingBottom: theme.spacing(2),
     },
   },
   container: {

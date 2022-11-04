@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import { Theme } from '@mui/material';
 import { makeStyles, withStyles } from '@mui/styles';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router';
 import { useRecoilState } from 'recoil';
 import { getPendingAccessions } from 'src/api/seeds/search';
@@ -27,6 +27,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import useStateLocation from 'src/utils/useStateLocation';
 import PageHeader from '../PageHeader';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
@@ -76,6 +77,7 @@ export default function CheckIn(props: CheckInProps): JSX.Element {
   const location = useStateLocation();
   const [pendingAccessions, setPendingAccessions] = useState<SearchResponseElement[] | null>();
   const [selectedOrgInfo, setSelectedOrgInfo] = useRecoilState(checkInSelectedOrgInfo);
+  const contentRef = useRef(null);
 
   useEffect(() => {
     const populatePendingAccessions = async () => {
@@ -122,16 +124,18 @@ export default function CheckIn(props: CheckInProps): JSX.Element {
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <TfMain>
-        <PageHeader
-          title={strings.CHECKIN_ACCESSIONS}
-          subtitle={getSubtitle()}
-          back={true}
-          backUrl={APP_PATHS.ACCESSIONS}
-          organization={organization}
-          selectedOrgInfo={selectedOrgInfo}
-          onChangeSelectedOrgInfo={(newValues) => setSelectedOrgInfo(newValues)}
-        />
-        <Container maxWidth={false} className={classes.mainContainer}>
+        <PageHeaderWrapper nextElement={contentRef.current}>
+          <PageHeader
+            title={strings.CHECKIN_ACCESSIONS}
+            subtitle={getSubtitle()}
+            back={true}
+            backUrl={APP_PATHS.ACCESSIONS}
+            organization={organization}
+            selectedOrgInfo={selectedOrgInfo}
+            onChangeSelectedOrgInfo={(newValues) => setSelectedOrgInfo(newValues)}
+          />
+        </PageHeaderWrapper>
+        <Container ref={contentRef} maxWidth={false} className={classes.mainContainer}>
           <Grid container>
             {pendingAccessionsById && (
               <Grid item xs={12}>
