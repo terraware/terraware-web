@@ -1,3 +1,4 @@
+a87f2c6 SW-1815 Fix unnecessary react update in app-version detector (#706)
 c9df5a0 Update web-components to fix dropdown bug (#707)
 fe490c5 SW-1835 Add a back button to accession detail page (#705)
 1da8ddf Use new editable prop on selects (#704)
