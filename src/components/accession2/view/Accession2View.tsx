@@ -54,7 +54,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     fill: theme.palette.TwClrIcnBrand,
     marginRight: theme.spacing(1),
   },
-  back: {
+  backToAccessions: {
     display: 'flex',
     textDecoration: 'none',
     color: theme.palette.TwClrTxtBrand,
@@ -445,7 +445,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
       <PageHeaderWrapper nextElement={contentRef.current}>
         <>
           <Box>
-            <Link id='back' to={APP_PATHS.ACCESSIONS} className={classes.back}>
+            <Link id='back' to={APP_PATHS.ACCESSIONS} className={classes.backToAccessions}>
               <Icon name='caretLeft' className={classes.backIcon} />
               {strings.ACCESSIONS}
             </Link>
