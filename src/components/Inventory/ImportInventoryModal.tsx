@@ -29,6 +29,7 @@ export default function ImportInventoryModal(props: ImportInventoryModalProps): 
   const { open, onClose, organization, reloadData } = props;
   const [record, setRecord] = useForm({ facilityId: -1 });
   const [selectedFacility, setSelectedFacility] = useState<Facility>();
+  const [validate, setValidate] = useState<boolean>(false);
 
   useEffect(() => {
     if (record && record.facilityId) {
@@ -37,10 +38,23 @@ export default function ImportInventoryModal(props: ImportInventoryModalProps): 
     }
   }, [record, organization]);
 
+  const isValid = () => {
+    setValidate(true);
+    if (!selectedFacility) {
+      return false;
+    }
+    return true;
+  };
+
+  const onCloseHandler = (saved: boolean, snackbarMessage?: string) => {
+    setValidate(false);
+    onClose(saved, snackbarMessage);
+  };
+
   return (
     <ImportModal
       facility={selectedFacility}
-      onClose={onClose}
+      onClose={onCloseHandler}
       open={open}
       title={strings.IMPORT_INVENTORY}
       resolveApi={resolveSpeciesUpload}
@@ -53,8 +67,16 @@ export default function ImportInventoryModal(props: ImportInventoryModalProps): 
       importingLabel={strings.IMPORTING_INVENTORY}
       duplicatedLabel={strings.DUPLICATED_INVENTORY}
       reloadData={reloadData}
+      isImportValid={isValid}
     >
-      <NurseryDropdown organization={organization} record={record} setRecord={setRecord} label={strings.NURSERY} />
+      <NurseryDropdown
+        organization={organization}
+        record={record}
+        setRecord={setRecord}
+        label={strings.NURSERY}
+        validate={validate}
+        isSelectionValid={(r) => r?.facilityId !== -1}
+      />
     </ImportModal>
   );
 }
