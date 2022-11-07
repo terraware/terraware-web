@@ -46,10 +46,15 @@ export default function ImportInventoryModal(props: ImportInventoryModalProps): 
     return true;
   };
 
+  const onCloseHandler = (saved: boolean, snackbarMessage?: string) => {
+    setValidate(false);
+    onClose(saved, snackbarMessage);
+  };
+
   return (
     <ImportModal
       facility={selectedFacility}
-      onClose={onClose}
+      onClose={onCloseHandler}
       open={open}
       title={strings.IMPORT_INVENTORY}
       resolveApi={resolveSpeciesUpload}
