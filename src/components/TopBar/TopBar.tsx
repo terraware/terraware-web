@@ -17,7 +17,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     width: '100%',
     justifyContent: 'space-between',
   },
-  right: {},
   mobile: {
     minHeight: '64px',
   },
@@ -34,7 +33,7 @@ export default function TopBar(props: TopBarProps): JSX.Element {
 
   return (
     <AppBar position='fixed' className={classes.appBar}>
-      <Toolbar className={isDesktop ? classes.right : classes.mobile}>
+      <Toolbar className={isDesktop ? undefined : classes.mobile}>
         <div className={classes.flex}>{props.children}</div>
       </Toolbar>
     </AppBar>

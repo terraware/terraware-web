@@ -54,11 +54,17 @@ import NurseryDetails from './components/Nursery';
 import InventoryCreate from './components/Inventory/InventoryCreate';
 import InventoryView from './components/Inventory/InventoryView';
 
+interface StyleProps {
+  isDesktop?: boolean;
+}
+
 const useStyles = makeStyles((theme: Theme) => ({
   container: {
     '& .navbar': {
       backgroundColor: 'transparent',
-      paddingTop: '64px',
+      paddingTop: (props: StyleProps) => (props.isDesktop ? '64px' : '8px'),
+      overflowY: 'auto',
+      zIndex: 1000,
     },
     '& .navbar .logo': {
       display: 'none',
@@ -112,8 +118,8 @@ enum APIRequestStatus {
 }
 
 export default function App() {
-  const { isMobile, type } = useDeviceInfo();
-  const classes = useStyles({ isMobile });
+  const { isDesktop, type } = useDeviceInfo();
+  const classes = useStyles({ isDesktop });
   const query = useQuery();
   const location = useStateLocation();
   const [selectedOrganization, setSelectedOrganization] = useState<ServerOrganization>();
