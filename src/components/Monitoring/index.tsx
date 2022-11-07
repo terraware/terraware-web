@@ -14,7 +14,7 @@ import { getPreferences, updatePreferences } from 'src/api/preferences/preferenc
 import SeedBankMonitoring from './SeedBankMonitoring';
 import Button from '../common/button/Button';
 import Title from '../common/Title';
-import { Box, Container, Grid, Theme } from '@mui/material';
+import { Box, Grid, Theme } from '@mui/material';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageSnackbar from 'src/components/PageSnackbar';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
@@ -33,6 +33,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     display: 'flex',
     alignItems: 'center',
     paddingBottom: theme.spacing(2),
+  },
+  contentContainer: {
+    width: '100%',
   },
   divider: {
     margin: '0 1%',
@@ -181,7 +184,7 @@ export default function Monitoring(props: MonitoringProps): JSX.Element {
 
             <PageSnackbar />
             {selectedSeedBank && monitoringPreferences && (
-              <Container ref={contentRef}>
+              <div ref={contentRef} className={classes.contentContainer}>
                 <SeedBankMonitoring
                   monitoringPreferences={monitoringPreferences}
                   updatePreferences={(data) => updateMonitoringPreferences(data)}
@@ -189,7 +192,7 @@ export default function Monitoring(props: MonitoringProps): JSX.Element {
                   organization={organization}
                   reloadData={reloadData}
                 />
-              </Container>
+              </div>
             )}
           </Grid>
         </>
