@@ -1,3 +1,4 @@
+cf945d1 SW-2076 Add PageHeaderWrapper to Pages (#712)
 6b13771 SW-2163 Don't persist quantity when changing inventory status (#711)
 d8c838c SW-2162 Fix readonly related dropdown errors (#709)
 a87f2c6 SW-1815 Fix unnecessary react update in app-version detector (#706)
