@@ -474,6 +474,25 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
               {accession?.speciesScientificName}
             </Typography>
             <Typography color={themeObj.palette.TwClrTxtSecondary}>{accession?.speciesCommonName}</Typography>
+            {isMobile && userCanEdit && (
+              <Box display='flex' alignItems='center' paddingRight={2} marginBottom={4} marginTop={2}>
+                <Box paddingLeft={2} width='100%'>
+                  {accession && isAwaitingCheckin ? (
+                    <Button
+                      onClick={() => checkInAccession()}
+                      label={strings.CHECK_IN}
+                      size='medium'
+                      className={classes.fullSizeButton}
+                    />
+                  ) : (
+                    renderWithdrawalButton(true)
+                  )}
+                </Box>
+                <IconButton sx={{ marginLeft: 3, height: '38px' }} onClick={() => setOpenDeleteAccession(true)}>
+                  <Icon name='iconTrashCan' />
+                </IconButton>
+              </Box>
+            )}
             <PageSnackbar />
           </Box>
         </>
@@ -656,26 +675,6 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
           )}
         </Box>
       </Box>
-
-      {isMobile && userCanEdit && (
-        <Box display='flex' alignItems='center' paddingRight={2} marginBottom={4} marginTop={2}>
-          <IconButton sx={{ marginLeft: 3, height: '38px' }} onClick={() => setOpenDeleteAccession(true)}>
-            <Icon name='iconTrashCan' />
-          </IconButton>
-          <Box paddingLeft={2} width='100%'>
-            {accession && isAwaitingCheckin ? (
-              <Button
-                onClick={() => checkInAccession()}
-                label={strings.CHECK_IN}
-                size='medium'
-                className={classes.fullSizeButton}
-              />
-            ) : (
-              renderWithdrawalButton(true)
-            )}
-          </Box>
-        </Box>
-      )}
 
       <Box sx={{ width: '100%' }}>
         <TabContext value={selectedTab}>

@@ -11,7 +11,7 @@ const DEBOUNCE_TIME = 500;
  * nextElement The HTMLElement immediately following the header element
  */
 interface Props {
-  children?: React.ReactChild;
+  children?: React.ReactChild | React.ReactChild[];
   nextElement?: HTMLElement | null;
 }
 
@@ -104,7 +104,7 @@ export default function PageHeaderWrapper({ children, nextElement }: Props): JSX
     top: debouncedSticky ? (debouncedScrollDown ? `${TOP_BAR_HEIGHT - height}px` : `${TOP_BAR_HEIGHT}px`) : undefined,
     visibility: debouncedSticky && debouncedScrollDown ? 'hidden' : 'visible',
     animation: anim,
-    width: debouncedSticky ? '-webkit-fill-available' : undefined,
+    width: '-webkit-fill-available',
     zIndex: debouncedSticky ? 100 : undefined,
   };
 

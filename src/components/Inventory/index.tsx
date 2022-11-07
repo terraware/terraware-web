@@ -1,6 +1,6 @@
-import { CircularProgress, Container, Grid, Theme, Typography } from '@mui/material';
+import { Box, CircularProgress, Container, Grid, Theme, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import strings from 'src/strings';
 import emptyMessageStrings from 'src/strings/emptyMessageModal';
@@ -21,6 +21,8 @@ import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import { downloadCsvTemplateHandler } from '../common/ImportModal';
 import { downloadInventoryTemplate } from 'src/api/inventory/inventory';
 import ImportInventoryModal from './ImportInventoryModal';
+import { Button } from '@terraware/web-components';
+import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 
 interface StyleProps {
   isMobile: boolean;
@@ -52,6 +54,7 @@ type InventoryProps = {
 export default function Inventory(props: InventoryProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const classes = useStyles({ isMobile });
+  const theme = useTheme();
   const history = useHistory();
   const { organization, hasNurseries, hasSpecies } = props;
   const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>();
@@ -60,6 +63,7 @@ export default function Inventory(props: InventoryProps): JSX.Element {
   const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
   const [filters, setFilters] = useForm<InventoryFiltersType>({});
   const [importInventoryModalOpen, setImportInventoryModalOpen] = useState(false);
+  const contentRef = useRef(null);
 
   const goTo = (appPath: string) => {
     const appPathLocation = {
@@ -218,49 +222,81 @@ export default function Inventory(props: InventoryProps): JSX.Element {
         reloadData={onApplyFilters}
       />
       <Grid>
-        <Grid item xs={6}>
-          <Typography fontSize='24px' fontWeight={600}>
-            {strings.INVENTORY}
-          </Typography>
-        </Grid>
-        {isOnboarded ? (
-          unfilteredInventory && unfilteredInventory.length > 0 ? (
-            <InventoryTable
-              organization={organization}
-              results={searchResults || []}
-              temporalSearchValue={temporalSearchValue}
-              setTemporalSearchValue={setTemporalSearchValue}
-              filters={filters}
-              setFilters={setFilters}
-              setImportInventoryModalOpen={setImportInventoryModalOpen}
-            />
-          ) : unfilteredInventory === null ? (
-            <div className={classes.spinnerContainer}>
-              <CircularProgress />
-            </div>
+        <PageHeaderWrapper nextElement={contentRef.current}>
+          <Box sx={{ paddingBottom: theme.spacing(3) }}>
+            <Grid item xs={6}>
+              <Typography fontSize='24px' fontWeight={600}>
+                {strings.INVENTORY}
+              </Typography>
+            </Grid>
+            {isOnboarded && unfilteredInventory && unfilteredInventory.length > 0 ? (
+              <Grid item xs={6} sx={{ textAlign: 'right' }}>
+                {isMobile ? (
+                  <Button id='new-inventory' icon='plus' onClick={() => goTo(APP_PATHS.INVENTORY_NEW)} size='medium' />
+                ) : (
+                  <>
+                    <Button
+                      id='import-inventory'
+                      label={strings.IMPORT}
+                      icon='iconImport'
+                      onClick={() => setImportInventoryModalOpen(true)}
+                      priority='secondary'
+                      size='medium'
+                    />
+                    <Box sx={{ display: 'inline', paddingLeft: 1 }}>
+                      <Button
+                        id='new-inventory'
+                        icon='plus'
+                        label={strings.ADD_INVENTORY}
+                        onClick={() => goTo(APP_PATHS.INVENTORY_NEW)}
+                        size='medium'
+                      />
+                    </Box>
+                  </>
+                )}
+              </Grid>
+            ) : null}
+          </Box>
+        </PageHeaderWrapper>
+        <div ref={contentRef}>
+          {isOnboarded ? (
+            unfilteredInventory && unfilteredInventory.length > 0 ? (
+              <InventoryTable
+                organization={organization}
+                results={searchResults || []}
+                temporalSearchValue={temporalSearchValue}
+                setTemporalSearchValue={setTemporalSearchValue}
+                filters={filters}
+                setFilters={setFilters}
+              />
+            ) : unfilteredInventory === null ? (
+              <div className={classes.spinnerContainer}>
+                <CircularProgress />
+              </div>
+            ) : (
+              <Container maxWidth={false} className={classes.mainContainer}>
+                <EmptyStatePage pageName={'Inventory'} organization={organization} reloadData={onApplyFilters} />
+              </Container>
+            )
           ) : (
             <Container maxWidth={false} className={classes.mainContainer}>
-              <EmptyStatePage pageName={'Inventory'} organization={organization} reloadData={onApplyFilters} />
+              <PageSnackbar />
+              {isAdmin(organization) ? (
+                <EmptyMessage
+                  className={classes.message}
+                  title={emptyMessageStrings.ONBOARDING_ADMIN_TITLE}
+                  rowItems={getEmptyState()}
+                />
+              ) : (
+                <EmptyMessage
+                  className={classes.message}
+                  title={emptyMessageStrings.REACH_OUT_TO_ADMIN_TITLE}
+                  text={emptyMessageStrings.NO_NURSERIES_NON_ADMIN_MSG}
+                />
+              )}
             </Container>
-          )
-        ) : (
-          <Container maxWidth={false} className={classes.mainContainer}>
-            <PageSnackbar />
-            {isAdmin(organization) ? (
-              <EmptyMessage
-                className={classes.message}
-                title={emptyMessageStrings.ONBOARDING_ADMIN_TITLE}
-                rowItems={getEmptyState()}
-              />
-            ) : (
-              <EmptyMessage
-                className={classes.message}
-                title={emptyMessageStrings.REACH_OUT_TO_ADMIN_TITLE}
-                text={emptyMessageStrings.NO_NURSERIES_NON_ADMIN_MSG}
-              />
-            )}
-          </Container>
-        )}
+          )}
+        </div>
       </Grid>
     </TfMain>
   );

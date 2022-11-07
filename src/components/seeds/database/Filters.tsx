@@ -21,7 +21,7 @@ interface StyleProps {
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
-    margin: theme.spacing(2, 0, 0, 0),
+    margin: theme.spacing(2, 0, 2, 0),
     padding: theme.spacing(0),
     display: 'flex',
     flexDirection: (props: StyleProps) => (props.isMobile ? 'column' : 'row'),

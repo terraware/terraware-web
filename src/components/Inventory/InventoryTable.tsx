@@ -1,12 +1,9 @@
 import React from 'react';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
-import { Button, Table, TableColumnType } from '@terraware/web-components';
-import { Box, Grid } from '@mui/material';
+import { Table, TableColumnType } from '@terraware/web-components';
+import { Grid } from '@mui/material';
 import { SearchResponseElement } from 'src/api/search';
-import { useHistory } from 'react-router-dom';
-import { useDeviceInfo } from '@terraware/web-components/utils';
-import { APP_PATHS } from 'src/constants';
 import InventoryCellRenderer from './InventoryCellRenderer';
 import { InventoryFiltersType } from './InventoryFiltersPopover';
 import PageSnackbar from 'src/components/PageSnackbar';
@@ -49,61 +46,13 @@ interface InventoryTableProps {
   setTemporalSearchValue: React.Dispatch<React.SetStateAction<string>>;
   filters: InventoryFiltersType;
   setFilters: React.Dispatch<React.SetStateAction<InventoryFiltersType>>;
-  setImportInventoryModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function InventoryTable(props: InventoryTableProps): JSX.Element {
-  const {
-    organization,
-    results,
-    setTemporalSearchValue,
-    temporalSearchValue,
-    filters,
-    setFilters,
-    setImportInventoryModalOpen,
-  } = props;
-
-  const { isMobile } = useDeviceInfo();
-  const history = useHistory();
-
-  const goTo = (appPath: string) => {
-    const appPathLocation = {
-      pathname: appPath,
-    };
-    history.push(appPathLocation);
-  };
-
-  const onImportInventory = () => {
-    setImportInventoryModalOpen(true);
-  };
+  const { organization, results, setTemporalSearchValue, temporalSearchValue, filters, setFilters } = props;
 
   return (
     <>
-      <Grid item xs={6} sx={{ textAlign: 'right' }}>
-        {isMobile ? (
-          <Button id='new-inventory' icon='plus' onClick={() => goTo(APP_PATHS.INVENTORY_NEW)} size='medium' />
-        ) : (
-          <>
-            <Button
-              id='import-inventory'
-              label={strings.IMPORT}
-              icon='iconImport'
-              onClick={onImportInventory}
-              priority='secondary'
-              size='medium'
-            />
-            <Box sx={{ display: 'inline', paddingLeft: 1 }}>
-              <Button
-                id='new-inventory'
-                icon='plus'
-                label={strings.ADD_INVENTORY}
-                onClick={() => goTo(APP_PATHS.INVENTORY_NEW)}
-                size='medium'
-              />
-            </Box>
-          </>
-        )}
-      </Grid>
       <Grid item xs={12}>
         <PageSnackbar />
       </Grid>

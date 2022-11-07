@@ -1,6 +1,6 @@
 import { Container, Grid, IconButton, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { deleteSpecies } from 'src/api/species/species';
 import Button from 'src/components/common/button/Button';
@@ -38,6 +38,7 @@ import TooltipLearnMoreModal, {
   LearnMoreLink,
   TooltipLearnMoreModalData,
 } from 'src/components/TooltipLearnMoreModal';
+import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 
 type SpeciesListProps = {
   organization: ServerOrganization;
@@ -121,6 +122,7 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
   const debouncedSearchTerm = useDebounce(searchValue, 250);
   const [results, setResults] = useState<Species[]>();
   const [record, setRecord] = useForm<SpeciesFiltersType>({});
+  const contentRef = useRef(null);
 
   const [tooltipLearnMoreModalOpen, setTooltipLearnMoreModalOpen] = useState(false);
   const [tooltipLearnMoreModalData, setTooltipLearnMoreModalData] = useState<TooltipLearnMoreModalData | undefined>(
@@ -549,35 +551,37 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
         title={tooltipLearnMoreModalData?.title}
       />
       <Grid container>
-        <Grid item xs={12} className={classes.titleContainer}>
-          <h1 className={classes.pageTitle}>{strings.SPECIES}</h1>
-          {species && species.length > 0 && !isMobile && userCanEdit && (
-            <div>
-              <Button
-                id='check-data'
-                label={strings.CHECK_DATA}
-                onClick={onCheckData}
-                priority='secondary'
-                size='medium'
-                className={classes.buttonSpace}
-              />
-              <Button
-                id='import-species'
-                label={strings.IMPORT}
-                icon='iconImport'
-                onClick={onImportSpecies}
-                priority='secondary'
-                size='medium'
-                className={classes.buttonSpace}
-              />
-              <Button id='add-species' label={strings.ADD_SPECIES} icon='plus' onClick={onNewSpecies} size='medium' />
-            </div>
-          )}
-          {isMobile && userCanEdit && <Button id='add-species' onClick={onNewSpecies} size='medium' icon='plus' />}
-        </Grid>
-        <p>{strings.SPECIES_DESCRIPTION}</p>
+        <PageHeaderWrapper nextElement={contentRef.current}>
+          <Grid item xs={12} className={classes.titleContainer}>
+            <h1 className={classes.pageTitle}>{strings.SPECIES}</h1>
+            {species && species.length > 0 && !isMobile && userCanEdit && (
+              <div>
+                <Button
+                  id='check-data'
+                  label={strings.CHECK_DATA}
+                  onClick={onCheckData}
+                  priority='secondary'
+                  size='medium'
+                  className={classes.buttonSpace}
+                />
+                <Button
+                  id='import-species'
+                  label={strings.IMPORT}
+                  icon='iconImport'
+                  onClick={onImportSpecies}
+                  priority='secondary'
+                  size='medium'
+                  className={classes.buttonSpace}
+                />
+                <Button id='add-species' label={strings.ADD_SPECIES} icon='plus' onClick={onNewSpecies} size='medium' />
+              </div>
+            )}
+            {isMobile && userCanEdit && <Button id='add-species' onClick={onNewSpecies} size='medium' icon='plus' />}
+          </Grid>
+          <p>{strings.SPECIES_DESCRIPTION}</p>
+        </PageHeaderWrapper>
         <PageSnackbar />
-        <Container maxWidth={false} className={classes.mainContainer}>
+        <Container ref={contentRef} maxWidth={false} className={classes.mainContainer}>
           <Grid item xs={12} className={classes.searchBar}>
             <TextField
               placeholder={strings.SEARCH_BY_NAME_OR_FAMILY}
