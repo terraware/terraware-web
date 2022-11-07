@@ -26,8 +26,7 @@ const useStyles = makeStyles((theme: Theme) => ({
         'url(/assets/mountain.png) no-repeat 0 100%/auto 233px, ' +
         'url(/assets/far-mountain.png) no-repeat 1012px 100%/auto 317px, ' +
         'url(/assets/background.png) no-repeat 100% 0/90% 633px, ' +
-        'linear-gradient(to bottom right, rgb(255, 255, 255) 0%, ' +
-        'rgb(199, 226, 234) 100%) no-repeat 0 0/auto',
+        'linear-gradient(180deg, #FBF9F9 0%, #EFF5EF 100%) no-repeat 0 0/auto',
     },
     [theme.breakpoints.up('xl')]: {
       background:
@@ -37,8 +36,7 @@ const useStyles = makeStyles((theme: Theme) => ({
         'url(/assets/mountain.png) no-repeat 0 100%/auto 233px, ' +
         'url(/assets/far-mountain.png) no-repeat 100% 100%/auto 317px, ' +
         'url(/assets/background.png) no-repeat 100% 0/90% 633px, ' +
-        'linear-gradient(to bottom right, rgb(255, 255, 255) 0%, ' +
-        'rgb(199, 226, 234) 100%) no-repeat 0 0/auto',
+        'linear-gradient(180deg, #FBF9F9 0%, #EFF5EF 100%) no-repeat 0 0/auto',
     },
     minHeight: '100vh',
     display: 'flex',
