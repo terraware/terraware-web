@@ -1,3 +1,4 @@
+ec36083 Fix Monitoring Display (#715)
 529cc65 SW-1416 Remove mapping from old withdrawal purpose to new (#708)
 cf945d1 SW-2076 Add PageHeaderWrapper to Pages (#712)
 6b13771 SW-2163 Don't persist quantity when changing inventory status (#711)
