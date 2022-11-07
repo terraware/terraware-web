@@ -10,8 +10,7 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 const useStyles = makeStyles((theme: Theme) => ({
   container: {
     background: theme.palette.TwClrBg,
-    border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
-    borderRadius: '8px',
+    borderRadius: '24px',
     display: 'flex',
     flexDirection: 'column',
     height: '100%',
@@ -43,10 +42,12 @@ const useStyles = makeStyles((theme: Theme) => ({
     height: '100%',
     fontWeight: 400,
   },
-  underlinedLink: {
+  link: {
     marginTop: '28px',
     display: 'block',
     fontSize: '16px',
+    color: theme.palette.TwClrTxtBrand,
+    textDecoration: 'none',
   },
   buttonLink: {
     fontSize: '14px',
@@ -94,7 +95,7 @@ export default function PageCard(props: PageCardProps): JSX.Element {
         {description}
       </Typography>
       {linkStyle === 'underline' && (
-        <Link className={classes.underlinedLink} component={RouterLink} to={link}>
+        <Link className={classes.link} component={RouterLink} to={link}>
           {linkText}
         </Link>
       )}

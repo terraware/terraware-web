@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import { getUser } from 'src/api/user/user';
 import PageCard from 'src/components/common/PageCard';
 import PageHeader from 'src/components/seeds/PageHeader';
-import TfDivisor from 'src/components/common/TfDivisor';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import homePageStrings from 'src/strings/homePage';
@@ -19,8 +18,28 @@ const useStyles = makeStyles((theme: Theme) => ({
     padding: '20px 0',
   },
   main: {
-    background:
-      'url(/assets/trees-right.png) no-repeat 100% 100%/auto 248px, url(/assets/trees-left.png) no-repeat 0 100%/auto 175px, url(/assets/water.png) repeat-x 0 100%/auto 142px, url(/assets/mountain.png) no-repeat 0 100%/auto 233px, url(/assets/far-mountain.png) no-repeat 100% 100%/auto 317px, url(/assets/background.png) no-repeat 100% 0/90% 633px, linear-gradient(to bottom right, rgb(255, 255, 255) 0%, rgb(199, 226, 234) 100%) no-repeat 0 0/auto',
+    [theme.breakpoints.down('xl')]: {
+      background:
+        'url(/assets/trees-right.png) no-repeat 879px 100%/auto 248px, ' +
+        'url(/assets/trees-left.png) no-repeat 0 100%/auto 175px, ' +
+        'url(/assets/water.png) repeat-x 0 100%/auto 142px, ' +
+        'url(/assets/mountain.png) no-repeat 0 100%/auto 233px, ' +
+        'url(/assets/far-mountain.png) no-repeat 1012px 100%/auto 317px, ' +
+        'url(/assets/background.png) no-repeat 100% 0/90% 633px, ' +
+        'linear-gradient(to bottom right, rgb(255, 255, 255) 0%, ' +
+        'rgb(199, 226, 234) 100%) no-repeat 0 0/auto',
+    },
+    [theme.breakpoints.up('xl')]: {
+      background:
+        'url(/assets/trees-right.png) no-repeat 100% 100%/auto 248px, ' +
+        'url(/assets/trees-left.png) no-repeat 0 100%/auto 175px, ' +
+        'url(/assets/water.png) repeat-x 0 100%/auto 142px, ' +
+        'url(/assets/mountain.png) no-repeat 0 100%/auto 233px, ' +
+        'url(/assets/far-mountain.png) no-repeat 100% 100%/auto 317px, ' +
+        'url(/assets/background.png) no-repeat 100% 0/90% 633px, ' +
+        'linear-gradient(to bottom right, rgb(255, 255, 255) 0%, ' +
+        'rgb(199, 226, 234) 100%) no-repeat 0 0/auto',
+    },
     minHeight: '100vh',
     display: 'flex',
     flexDirection: 'column',
@@ -103,9 +122,6 @@ export default function Home({ organizations, selectedOrganization, setSelectedO
                   linkText={strings.formatString(homePageStrings.GO_TO, strings.SEED_BANKS) as string}
                   linkStyle={'underline'}
                 />
-              </Grid>
-              <Grid item xs={12}>
-                <TfDivisor />
               </Grid>
             </>
           )}
