@@ -29,6 +29,7 @@ export default function ImportInventoryModal(props: ImportInventoryModalProps): 
   const { open, onClose, organization, reloadData } = props;
   const [record, setRecord] = useForm({ facilityId: -1 });
   const [selectedFacility, setSelectedFacility] = useState<Facility>();
+  const [validate, setValidate] = useState<boolean>(false);
 
   useEffect(() => {
     if (record && record.facilityId) {
@@ -36,6 +37,14 @@ export default function ImportInventoryModal(props: ImportInventoryModalProps): 
       setSelectedFacility(found);
     }
   }, [record, organization]);
+
+  const isValid = () => {
+    setValidate(true);
+    if (!selectedFacility) {
+      return false;
+    }
+    return true;
+  };
 
   return (
     <ImportModal
@@ -53,8 +62,15 @@ export default function ImportInventoryModal(props: ImportInventoryModalProps): 
       importingLabel={strings.IMPORTING_INVENTORY}
       duplicatedLabel={strings.DUPLICATED_INVENTORY}
       reloadData={reloadData}
+      isImportValid={isValid}
     >
-      <NurseryDropdown organization={organization} record={record} setRecord={setRecord} label={strings.NURSERY} />
+      <NurseryDropdown
+        organization={organization}
+        record={record}
+        setRecord={setRecord}
+        label={strings.NURSERY}
+        validate={validate}
+      />
     </ImportModal>
   );
 }

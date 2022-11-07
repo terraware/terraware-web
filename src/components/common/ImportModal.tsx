@@ -88,6 +88,7 @@ export type ImportSpeciesModalProps = {
   duplicatedLabel: string;
   children?: React.ReactNode;
   reloadData?: () => void;
+  isImportValid?: () => boolean;
 };
 
 export const downloadCsvTemplateHandler = async (templateApi: () => Promise<any>) => {
@@ -120,6 +121,7 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
     duplicatedLabel,
     children,
     reloadData,
+    isImportValid,
   } = props;
   const [file, setFile] = useState<File>();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -202,6 +204,9 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
   };
 
   const importDataHandler = async () => {
+    if (isImportValid && !isImportValid()) {
+      return;
+    }
     if (file) {
       setUploadId(undefined);
       setFileStatus(undefined);
