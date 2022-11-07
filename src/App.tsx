@@ -56,6 +56,7 @@ import InventoryView from './components/Inventory/InventoryView';
 
 const useStyles = makeStyles((theme: Theme) => ({
   container: {
+    background: 'linear-gradient(180deg, #FBF9F9 0%, #EFF5EF 100%)',
     '& .navbar': {
       backgroundColor: 'transparent',
       paddingTop: '64px',
