@@ -143,6 +143,7 @@ export default function CreateInventory(props: CreateInventoryProps): JSX.Elemen
                 record={record}
                 setRecord={setRecord}
                 validate={validateFields}
+                isSelectionValid={(r) => !!r?.facilityId}
                 label={strings.RECEIVING_NURSERY_REQUIRED}
               />
             </Grid>

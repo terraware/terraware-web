@@ -234,6 +234,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
                   setRecord={setRecord as unknown as React.Dispatch<React.SetStateAction<Batch>>}
                   organization={organization}
                   validate={validateFields}
+                  isSelectionValid={(r) => !!r?.facilityId}
                 />
               </Grid>
             )}

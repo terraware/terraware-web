@@ -75,6 +75,7 @@ export default function ImportInventoryModal(props: ImportInventoryModalProps): 
         setRecord={setRecord}
         label={strings.NURSERY}
         validate={validate}
+        isSelectionValid={(r) => r?.facilityId !== -1}
       />
     </ImportModal>
   );

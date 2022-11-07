@@ -10,6 +10,7 @@ interface NurseryDropdownProps<T extends AccessionPostRequestBody> {
   record: T;
   label: string;
   setRecord: React.Dispatch<React.SetStateAction<T>>;
+  isSelectionValid: (t: T) => boolean;
   disabled?: boolean;
   validate?: boolean;
 }
@@ -17,7 +18,7 @@ interface NurseryDropdownProps<T extends AccessionPostRequestBody> {
 export default function NurseryDropdown<T extends AccessionPostRequestBody>(
   props: NurseryDropdownProps<T>
 ): JSX.Element {
-  const { organization, label, setRecord, validate, record } = props;
+  const { organization, label, setRecord, validate, record, isSelectionValid } = props;
 
   const onChangeHandler = (facilityId: string) => {
     setRecord((previousRecord: T): T => {
@@ -35,7 +36,7 @@ export default function NurseryDropdown<T extends AccessionPostRequestBody>(
       selectedValue={record.facilityId?.toString()}
       options={getAllNurseries(organization).map((nursery) => ({ label: nursery.name, value: nursery.id.toString() }))}
       onChange={onChangeHandler}
-      errorText={validate && (!record.facilityId || record.facilityId === -1) ? strings.REQUIRED_FIELD : ''}
+      errorText={validate && !isSelectionValid(record) ? strings.REQUIRED_FIELD : ''}
       fullWidth={true}
     />
   );
