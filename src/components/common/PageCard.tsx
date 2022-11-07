@@ -46,6 +46,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     marginTop: '28px',
     display: 'block',
     fontSize: '16px',
+    fontWeight: 500,
     color: theme.palette.TwClrTxtBrand,
     textDecoration: 'none',
   },
@@ -65,7 +66,7 @@ export interface PageCardProps {
   description: string;
   linkText: string;
   link: string;
-  linkStyle: 'underline' | 'button';
+  linkStyle: 'plain' | 'button';
 }
 
 export default function PageCard(props: PageCardProps): JSX.Element {
@@ -94,7 +95,7 @@ export default function PageCard(props: PageCardProps): JSX.Element {
       >
         {description}
       </Typography>
-      {linkStyle === 'underline' && (
+      {linkStyle === 'plain' && (
         <Link className={classes.link} component={RouterLink} to={link}>
           {linkText}
         </Link>

@@ -108,7 +108,7 @@ export default function Home({ organizations, selectedOrganization, setSelectedO
                   description={homePageStrings.PEOPLE_CARD_DESCRIPTION}
                   link={APP_PATHS.PEOPLE}
                   linkText={strings.formatString(homePageStrings.GO_TO, strings.PEOPLE) as string}
-                  linkStyle={'underline'}
+                  linkStyle={'plain'}
                 />
               </Grid>
               <Grid item xs={primaryGridSize()}>
@@ -118,7 +118,7 @@ export default function Home({ organizations, selectedOrganization, setSelectedO
                   description={homePageStrings.SEED_BANKS_CARD_DESCRIPTION}
                   link={APP_PATHS.SEED_BANKS}
                   linkText={strings.formatString(homePageStrings.GO_TO, strings.SEED_BANKS) as string}
-                  linkStyle={'underline'}
+                  linkStyle={'plain'}
                 />
               </Grid>
             </>
@@ -130,7 +130,7 @@ export default function Home({ organizations, selectedOrganization, setSelectedO
               description={homePageStrings.SPECIES_CARD_DESCRIPTION}
               link={APP_PATHS.SPECIES}
               linkText={strings.formatString(homePageStrings.GO_TO, strings.SPECIES) as string}
-              linkStyle={'underline'}
+              linkStyle={'plain'}
             />
           </Grid>
           <Grid item xs={secondaryGridSize()}>
@@ -140,7 +140,7 @@ export default function Home({ organizations, selectedOrganization, setSelectedO
               description={homePageStrings.ACCESSIONS_CARD_DESCRIPTION}
               link={APP_PATHS.ACCESSIONS}
               linkText={strings.formatString(homePageStrings.GO_TO, strings.ACCESSIONS) as string}
-              linkStyle={'underline'}
+              linkStyle={'plain'}
             />
           </Grid>
           <Grid item xs={secondaryGridSize()}>
@@ -150,7 +150,7 @@ export default function Home({ organizations, selectedOrganization, setSelectedO
               description={homePageStrings.MONITORING_CARD_DESCRIPTION}
               link={APP_PATHS.MONITORING}
               linkText={strings.formatString(homePageStrings.GO_TO, strings.MONITORING) as string}
-              linkStyle={'underline'}
+              linkStyle={'plain'}
             />
           </Grid>
         </Grid>
