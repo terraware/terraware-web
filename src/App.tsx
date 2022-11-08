@@ -53,19 +53,20 @@ import Inventory from './components/Inventory';
 import NurseryDetails from './components/Nursery';
 import InventoryCreate from './components/Inventory/InventoryCreate';
 import InventoryView from './components/Inventory/InventoryView';
+import PlantingSites from './components/PlantingSites';
+
+interface StyleProps {
+  isDesktop?: boolean;
+}
 
 const useStyles = makeStyles((theme: Theme) => ({
   container: {
     background: 'linear-gradient(180deg, #FBF9F9 0%, #EFF5EF 100%)',
     '& .navbar': {
       backgroundColor: 'transparent',
-      paddingTop: '64px',
-    },
-    '& .navbar .logo': {
-      display: 'none',
-    },
-    '& .navbar .nav-section, & .navbar .nav-item': {
-      backgroundColor: 'transparent',
+      paddingTop: (props: StyleProps) => (props.isDesktop ? '64px' : '8px'),
+      overflowY: 'auto',
+      zIndex: 1000,
     },
   },
   content: {
@@ -113,8 +114,8 @@ enum APIRequestStatus {
 }
 
 export default function App() {
-  const { isMobile, type } = useDeviceInfo();
-  const classes = useStyles({ isMobile });
+  const { isDesktop, type } = useDeviceInfo();
+  const classes = useStyles({ isDesktop });
   const query = useQuery();
   const location = useStateLocation();
   const [selectedOrganization, setSelectedOrganization] = useState<ServerOrganization>();
@@ -122,6 +123,7 @@ export default function App() {
   const [notifications, setNotifications] = useState<Notifications>();
   const { isProduction } = useEnvironment();
   const nurseryManagementEnabled = isRouteEnabled('Nursery management');
+  const trackingEnabled = isRouteEnabled('Tracking V1');
 
   // seedSearchCriteria describes which criteria to apply when searching accession data.
   const [seedSearchCriteria, setSeedSearchCriteria] = useState<SearchCriteria>(DEFAULT_SEED_SEARCH_FILTERS);
@@ -544,6 +546,11 @@ export default function App() {
               {nurseryManagementEnabled && selectedOrganization && (
                 <Route path={APP_PATHS.INVENTORY_ITEM}>
                   <InventoryView organization={selectedOrganization} species={species} />
+                </Route>
+              )}
+              {trackingEnabled && (
+                <Route path={APP_PATHS.PLANTING_SITES}>
+                  <PlantingSites />
                 </Route>
               )}
               <Route exact path={APP_PATHS.CONTACT_US}>

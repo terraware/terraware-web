@@ -27,6 +27,15 @@ export const OPT_IN_FEATURES: Feature[] = [
     enabled: false,
     allowInternalProduction: false,
     description: ['Shows new nursery management workflows'],
+    disclosure: ['This is in QA.'],
+  },
+  {
+    name: 'Tracking V1',
+    preferenceName: 'enableTrackingV1',
+    active: true,
+    enabled: false,
+    allowInternalProduction: false,
+    description: ['Shows new tracking v1 workflows'],
     disclosure: ['This is WIP.'],
   },
   {
