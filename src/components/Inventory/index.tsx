@@ -51,6 +51,20 @@ type InventoryProps = {
   hasSpecies: boolean;
 };
 
+type FacilityName = {
+  facility_name: string;
+};
+
+type InventoryResult = {
+  species_id: string;
+  species_scientificName: string;
+  germinatingQuantity: string;
+  notReadyQuantity: string;
+  readyQuantity: string;
+  totalQuantity: string;
+  facilityInventories: FacilityName[];
+};
+
 export default function Inventory(props: InventoryProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const classes = useStyles({ isMobile });
@@ -201,11 +215,18 @@ export default function Inventory(props: InventoryProps): JSX.Element {
     const requestId = Math.random().toString();
     setRequestId('searchInventory', requestId);
     const apiSearchResults = await search(params);
-    if (params.search.children.length === 1) {
-      setUnfilteredInventory(apiSearchResults);
-    }
-    if (getRequestId('searchInventory') === requestId) {
-      setSearchResults(apiSearchResults);
+    const updatedResult = apiSearchResults?.map((result) => {
+      const resultTyped = result as InventoryResult;
+      const facilityInventoriesNames = resultTyped.facilityInventories.map((nursery) => nursery.facility_name);
+      return { ...result, facilityInventories: facilityInventoriesNames.join(',') };
+    });
+    if (updatedResult) {
+      if (params.search.children.length === 1) {
+        setUnfilteredInventory(updatedResult);
+      }
+      if (getRequestId('searchInventory') === requestId) {
+        setSearchResults(updatedResult);
+      }
     }
   }, [getParams]);
 

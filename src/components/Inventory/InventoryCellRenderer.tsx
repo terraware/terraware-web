@@ -23,10 +23,11 @@ export default function InventoryCellRenderer(props: RendererProps<TableRowType>
   const theme = useTheme();
   const { column, row, value, index } = props;
 
-  const getNurseriesNames = (nurseries: any[]) => {
+  const getNurseriesNames = (nurseries: string) => {
+    const nurseriesArray = nurseries.split(',');
     return (
       <TextTruncated
-        stringList={nurseries.map((n) => n.facility_name)}
+        stringList={nurseriesArray}
         maxLengthPx={COLUMN_WIDTH}
         textStyle={{ fontSize: 14 }}
         showAllStyle={{ padding: theme.spacing(2), fontSize: 16 }}
@@ -46,7 +47,7 @@ export default function InventoryCellRenderer(props: RendererProps<TableRowType>
     );
   };
 
-  if (column.key === 'facilityInventories' && Array.isArray(value)) {
+  if (column.key === 'facilityInventories' && typeof value === 'string') {
     return (
       <CellRenderer index={index} column={column} value={getNurseriesNames(value)} row={row} className={classes.text} />
     );
