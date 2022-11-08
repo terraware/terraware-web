@@ -818,6 +818,7 @@ const strings = new LocalizedStrings({
     IMPORT_INVENTORY_WITH_TEMPLATE: 'Import inventory using our CSV template.',
     CHANGE_GERMINATING_STATUS: 'Change Germinating Status',
     CHANGE_NOT_READY_STATUS: 'Change Not Ready Status',
+    PLANTING_SITES: 'Planting Sites',
   },
 });
 
