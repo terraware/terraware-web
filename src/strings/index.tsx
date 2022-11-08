@@ -11,7 +11,8 @@ const strings = new LocalizedStrings({
     SPECIES_NAME: 'Species Name',
     SEED_DASHBOARD: 'Seed Dashboard',
     DASHBOARD: 'Dashboard',
-    DASHBOARD_MESSAGE: 'Manage, track and analyze your seed inventories. ',
+    DASHBOARD_MESSAGE_TITLE: 'Add Accessions to See Data',
+    DASHBOARD_MESSAGE: 'Your seeds dashboard will automatically populate with data as you add accessions.',
     GET_STARTED: 'Get Started',
     DELETE_SPECIES: 'Delete Species',
     DELETE_CONFIRMATION_MODAL_MAIN_TEXT:

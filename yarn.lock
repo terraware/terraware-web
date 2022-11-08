@@ -2459,7 +2459,7 @@
   dependencies:
     defer-to-connect "^2.0.1"
 
-"@terraware/web-components@^2.0.0":
+"@terraware/web-components@^2.0.1":
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/@terraware/web-components/-/web-components-2.0.1.tgz#d3dba1617eb1e17a74fbcee3d6cb85217f0e3b01"
   integrity sha512-Ttdr2eW2W3De+74ex8ITtfXNVIFOmZ/7FkEOAjLCB4XpZLKk17/Lvs0kjbFnPlANNYFwrfM4dH7O/Be8SFLdkA==

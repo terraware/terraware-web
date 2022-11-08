@@ -19,17 +19,15 @@ export default function AccessionByStatus({ label, status, quantity }: Props): J
       style={{
         textDecoration: 'none',
         padding: '22px 10px 40px 10px',
-        width: isMobile ? '100%' : '20%',
-        borderRadius: '10px',
-        border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+        width: isMobile ? '100%' : '33%',
         margin: '12px',
       }}
     >
       <Box textAlign='center'>
-        <Typography color={theme.palette.TwClrTxtBrand} fontSize='36px'>
+        <Typography color={theme.palette.TwClrTxtBrand} fontSize='36px' fontWeight={600}>
           {quantity}
         </Typography>
-        <Typography color={theme.palette.TwClrTxt} fontSize='16px'>
+        <Typography color={theme.palette.TwClrTxt} fontSize='16px' fontWeight={500}>
           {label}
         </Typography>
       </Box>
