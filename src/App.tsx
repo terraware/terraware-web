@@ -53,6 +53,7 @@ import Inventory from './components/Inventory';
 import NurseryDetails from './components/Nursery';
 import InventoryCreate from './components/Inventory/InventoryCreate';
 import InventoryView from './components/Inventory/InventoryView';
+import PlantingSites from './components/PlantingSites';
 
 interface StyleProps {
   isDesktop?: boolean;
@@ -127,6 +128,7 @@ export default function App() {
   const [notifications, setNotifications] = useState<Notifications>();
   const { isProduction } = useEnvironment();
   const nurseryManagementEnabled = isRouteEnabled('Nursery management');
+  const tackingEnabled = isRouteEnabled('Tracking V1');
 
   // seedSearchCriteria describes which criteria to apply when searching accession data.
   const [seedSearchCriteria, setSeedSearchCriteria] = useState<SearchCriteria>(DEFAULT_SEED_SEARCH_FILTERS);
@@ -549,6 +551,11 @@ export default function App() {
               {nurseryManagementEnabled && selectedOrganization && (
                 <Route path={APP_PATHS.INVENTORY_ITEM}>
                   <InventoryView organization={selectedOrganization} species={species} />
+                </Route>
+              )}
+              {tackingEnabled && (
+                <Route path={APP_PATHS.PLANTING_SITES}>
+                  <PlantingSites />
                 </Route>
               )}
               <Route exact path={APP_PATHS.CONTACT_US}>
