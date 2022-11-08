@@ -128,7 +128,7 @@ export default function App() {
   const [notifications, setNotifications] = useState<Notifications>();
   const { isProduction } = useEnvironment();
   const nurseryManagementEnabled = isRouteEnabled('Nursery management');
-  const tackingEnabled = isRouteEnabled('Tracking V1');
+  const trackingEnabled = isRouteEnabled('Tracking V1');
 
   // seedSearchCriteria describes which criteria to apply when searching accession data.
   const [seedSearchCriteria, setSeedSearchCriteria] = useState<SearchCriteria>(DEFAULT_SEED_SEARCH_FILTERS);
@@ -553,7 +553,7 @@ export default function App() {
                   <InventoryView organization={selectedOrganization} species={species} />
                 </Route>
               )}
-              {tackingEnabled && (
+              {trackingEnabled && (
                 <Route path={APP_PATHS.PLANTING_SITES}>
                   <PlantingSites />
                 </Route>
