@@ -22,6 +22,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   accessionsLink: {
     textDecoration: 'none',
     fontWeight: 500,
+    fontSize: '16px',
     color: theme.palette.TwClrTxtBrand,
     marginRight: '12px',
   },
@@ -29,13 +30,17 @@ const useStyles = makeStyles((theme: Theme) => ({
     padding: '32px 0',
   },
   messageIcon: {
-    fill: theme.palette.TwClrIcn,
+    fill: theme.palette.TwClrIcnInfo,
   },
   paper: {
     display: 'flex',
     overflow: 'auto',
     flexDirection: 'column',
-    alignItems: 'center',
+    alignItems: 'start',
+    borderRadius: '24px',
+    border: 'none',
+    backgroundColor: theme.palette.TwClrBg,
+    padding: theme.spacing(3),
   },
   spinnerContainer: {
     position: 'fixed',
@@ -126,21 +131,43 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
               <Grid item xs={12}>
                 <Box
                   sx={{
-                    background: theme.palette.TwClrBgSecondary,
-                    borderRadius: '14px',
+                    background: theme.palette.TwClrBgInfoTertiary,
+                    border: `1px solid ${theme.palette.TwClrBrdrInfo}`,
+                    borderRadius: '16px',
                     display: 'flex',
                     justifyContent: 'space-between',
-                    alignItems: 'center',
-                    padding: theme.spacing(3, 4),
+                    alignItems: 'start',
+                    padding: theme.spacing(2.25, 6, 2.25, 2.25),
                   }}
                 >
-                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <Icon name='seedbankNav' className={classes.messageIcon} size='large' />
-                    <Typography sx={{ color: theme.palette.TwClrTxt, size: '20px', paddingLeft: 1 }}>
+                  <Box sx={{ flexGrow: 0, marginRight: '18px' }}>
+                    <Icon name='info' className={classes.messageIcon} size='large' />
+                  </Box>
+                  <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', alignItems: 'start' }}>
+                    <Typography
+                      sx={{
+                        color: theme.palette.TwClrTxt,
+                        fontWeight: 600,
+                        size: '16px',
+                        marginBottom: theme.spacing(1),
+                      }}
+                    >
+                      {strings.DASHBOARD_MESSAGE_TITLE}
+                    </Typography>
+                    <Typography
+                      sx={{
+                        color: theme.palette.TwClrTxt,
+                        fontWeight: 400,
+                        size: '16px',
+                        marginBottom: theme.spacing(2),
+                      }}
+                    >
                       {strings.DASHBOARD_MESSAGE}
                     </Typography>
+                    <Box sx={{ alignSelf: 'end' }}>
+                      <Button label={strings.GET_STARTED} onClick={() => history.push(APP_PATHS.ACCESSIONS)} />
+                    </Box>
                   </Box>
-                  <Button label={strings.GET_STARTED} onClick={() => history.push(APP_PATHS.ACCESSIONS)} />
                 </Box>
               </Grid>
             )}
@@ -151,6 +178,7 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
                     <SummaryPaper
                       id='seedCount'
                       title={strings.TOTAL_SEED_COUNT}
+                      icon='seedbankNav'
                       statistic={`${summary?.value?.seedsRemaining.total}${
                         summary?.value?.seedsRemaining && summary?.value?.seedsRemaining.unknownQuantityAccessions > 0
                           ? '+'
@@ -166,6 +194,7 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
                     <SummaryPaper
                       id='sessions'
                       title={strings.TOTAL_ACTIVE_ACCESSIONS}
+                      icon='seeds'
                       statistic={summary?.value?.activeAccessions}
                       loading={summary === undefined}
                       error={errorOccurred}
@@ -178,6 +207,7 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
                     <SummaryPaper
                       id='species'
                       title={strings.NUMBER_OF_SPECIES}
+                      icon='species'
                       statistic={summary?.value?.species}
                       loading={summary === undefined}
                       error={errorOccurred}
@@ -185,40 +215,65 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
                   </MainPaper>
                 </Grid>
                 <Grid item xs={12}>
-                  <Box display='flex' alignContent='center' justifyContent='space-between' alignItems='center'>
-                    <Typography fontSize='20px' color={theme.palette.TwClrTxt} paddingBottom='8px' paddingLeft='28px'>
-                      {strings.ACCESSION_BY_STATUS}
-                    </Typography>
+                  <Box
+                    sx={{
+                      backgroundColor: theme.palette.TwClrBg,
+                      border: 'none',
+                      borderRadius: '24px',
+                      padding: theme.spacing(3),
+                    }}
+                  >
+                    <Box display='flex' alignContent='center' alignItems='center'>
+                      <Icon name='futures' />
+                      <Typography
+                        fontSize='20px'
+                        fontWeight={600}
+                        color={theme.palette.TwClrTxt}
+                        paddingLeft={theme.spacing(1)}
+                      >
+                        {strings.ACCESSION_BY_STATUS}
+                      </Typography>
+                    </Box>
+                    <Grid container spacing={3} marginBottom={theme.spacing(3.5)}>
+                      <Grid item xs={cardGridSize()}>
+                        <AccessionByStatus
+                          label='Awaiting Check-in'
+                          status='Awaiting Check-In'
+                          quantity={summary.value?.accessionsByState['Awaiting Check-In']}
+                        />
+                      </Grid>
+                      <Grid item xs={cardGridSize()}>
+                        <AccessionByStatus
+                          label='Awaiting Processing'
+                          status='Awaiting Processing'
+                          quantity={summary.value?.accessionsByState['Awaiting Processing']}
+                        />
+                      </Grid>
+                      <Grid item xs={cardGridSize()}>
+                        <AccessionByStatus
+                          label='Processing'
+                          status='Processing'
+                          quantity={summary.value?.accessionsByState.Processing}
+                        />
+                      </Grid>
+                      <Grid item xs={cardGridSize()}>
+                        <AccessionByStatus
+                          label='Drying'
+                          status='Drying'
+                          quantity={summary.value?.accessionsByState.Drying}
+                        />
+                      </Grid>
+                      <Grid item xs={cardGridSize()}>
+                        <AccessionByStatus
+                          label='In Storage'
+                          status='In Storage'
+                          quantity={summary.value?.accessionsByState['In Storage']}
+                        />
+                      </Grid>
+                    </Grid>
                     <Link className={classes.accessionsLink} to={`${APP_PATHS.ACCESSIONS}?stage=}`}>
                       {strings.SEE_ALL_ACCESSIONS}
                     </Link>
-                  </Box>
-                  <Box display='flex' flexDirection={isMobile ? 'column' : 'row'}>
-                    <AccessionByStatus
-                      label='Awaiting Check-in'
-                      status='Awaiting Check-In'
-                      quantity={summary.value?.accessionsByState['Awaiting Check-In']}
-                    />
-                    <AccessionByStatus
-                      label='Awaiting Processing'
-                      status='Awaiting Processing'
-                      quantity={summary.value?.accessionsByState['Awaiting Processing']}
-                    />
-                    <AccessionByStatus
-                      label='Processing'
-                      status='Processing'
-                      quantity={summary.value?.accessionsByState.Processing}
-                    />
-                    <AccessionByStatus
-                      label='Drying'
-                      status='Drying'
-                      quantity={summary.value?.accessionsByState.Drying}
-                    />
-                    <AccessionByStatus
-                      label='In Storage'
-                      status='In Storage'
-                      quantity={summary.value?.accessionsByState['In Storage']}
-                    />
                   </Box>
                 </Grid>
               </Grid>
