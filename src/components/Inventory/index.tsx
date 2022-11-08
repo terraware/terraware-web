@@ -218,7 +218,7 @@ export default function Inventory(props: InventoryProps): JSX.Element {
     const updatedResult = apiSearchResults?.map((result) => {
       const resultTyped = result as InventoryResult;
       const facilityInventoriesNames = resultTyped.facilityInventories.map((nursery) => nursery.facility_name);
-      return { ...result, facilityInventories: facilityInventoriesNames.join(',') };
+      return { ...result, facilityInventories: facilityInventoriesNames.join('\r') };
     });
     if (updatedResult) {
       if (params.search.children.length === 1) {

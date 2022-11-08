@@ -24,7 +24,7 @@ export default function InventoryCellRenderer(props: RendererProps<TableRowType>
   const { column, row, value, index } = props;
 
   const getNurseriesNames = (nurseries: string) => {
-    const nurseriesArray = nurseries.split(',');
+    const nurseriesArray = nurseries.split('\r');
     return (
       <TextTruncated
         stringList={nurseriesArray}
