@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import { getUser } from 'src/api/user/user';
 import PageCard from 'src/components/common/PageCard';
 import PageHeader from 'src/components/seeds/PageHeader';
-import TfDivisor from 'src/components/common/TfDivisor';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import homePageStrings from 'src/strings/homePage';
@@ -19,8 +18,26 @@ const useStyles = makeStyles((theme: Theme) => ({
     padding: '20px 0',
   },
   main: {
-    background:
-      'url(/assets/trees-right.png) no-repeat 100% 100%/auto 248px, url(/assets/trees-left.png) no-repeat 0 100%/auto 175px, url(/assets/water.png) repeat-x 0 100%/auto 142px, url(/assets/mountain.png) no-repeat 0 100%/auto 233px, url(/assets/far-mountain.png) no-repeat 100% 100%/auto 317px, url(/assets/background.png) no-repeat 100% 0/90% 633px, linear-gradient(to bottom right, rgb(255, 255, 255) 0%, rgb(199, 226, 234) 100%) no-repeat 0 0/auto',
+    [theme.breakpoints.down('xl')]: {
+      background:
+        'url(/assets/home-bg-right-layer-z4.png) no-repeat 753px 100%/auto 285px, ' +
+        'url(/assets/home-bg-left-layer-z4.png) no-repeat 0 100%/auto 295px, ' +
+        'url(/assets/home-bg-water-z2.png) repeat-x 0 100%/auto 180px, ' +
+        'url(/assets/home-bg-left-z4.png) no-repeat 0 100%/auto 295px, ' +
+        'url(/assets/home-bg-right-z3.png) no-repeat 911px 100%/auto 400px, ' +
+        'url(/assets/background.png) no-repeat 100% 0/90% 633px, ' +
+        'linear-gradient(180deg, #FBF9F9 0%, #EFF5EF 100%) no-repeat 0 0/auto',
+    },
+    [theme.breakpoints.up('xl')]: {
+      background:
+        'url(/assets/home-bg-right-layer-z4.png) no-repeat 100% 100%/auto 285px, ' +
+        'url(/assets/home-bg-left-layer-z4.png) no-repeat 0 100%/auto 295px, ' +
+        'url(/assets/home-bg-water-z2.png) repeat-x 0 100%/auto 180px, ' +
+        'url(/assets/home-bg-left-z4.png) no-repeat 0 100%/auto 295px, ' +
+        'url(/assets/home-bg-right-z3.png) no-repeat 100% 100%/auto 400px, ' +
+        'url(/assets/background.png) no-repeat 100% 0/90% 633px, ' +
+        'linear-gradient(180deg, #FBF9F9 0%, #EFF5EF 100%) no-repeat 0 0/auto',
+    },
     minHeight: '100vh',
     display: 'flex',
     flexDirection: 'column',
@@ -91,7 +108,7 @@ export default function Home({ organizations, selectedOrganization, setSelectedO
                   description={homePageStrings.PEOPLE_CARD_DESCRIPTION}
                   link={APP_PATHS.PEOPLE}
                   linkText={strings.formatString(homePageStrings.GO_TO, strings.PEOPLE) as string}
-                  linkStyle={'underline'}
+                  linkStyle={'plain'}
                 />
               </Grid>
               <Grid item xs={primaryGridSize()}>
@@ -101,11 +118,8 @@ export default function Home({ organizations, selectedOrganization, setSelectedO
                   description={homePageStrings.SEED_BANKS_CARD_DESCRIPTION}
                   link={APP_PATHS.SEED_BANKS}
                   linkText={strings.formatString(homePageStrings.GO_TO, strings.SEED_BANKS) as string}
-                  linkStyle={'underline'}
+                  linkStyle={'plain'}
                 />
-              </Grid>
-              <Grid item xs={12}>
-                <TfDivisor />
               </Grid>
             </>
           )}
@@ -116,7 +130,7 @@ export default function Home({ organizations, selectedOrganization, setSelectedO
               description={homePageStrings.SPECIES_CARD_DESCRIPTION}
               link={APP_PATHS.SPECIES}
               linkText={strings.formatString(homePageStrings.GO_TO, strings.SPECIES) as string}
-              linkStyle={'underline'}
+              linkStyle={'plain'}
             />
           </Grid>
           <Grid item xs={secondaryGridSize()}>
@@ -126,7 +140,7 @@ export default function Home({ organizations, selectedOrganization, setSelectedO
               description={homePageStrings.ACCESSIONS_CARD_DESCRIPTION}
               link={APP_PATHS.ACCESSIONS}
               linkText={strings.formatString(homePageStrings.GO_TO, strings.ACCESSIONS) as string}
-              linkStyle={'underline'}
+              linkStyle={'plain'}
             />
           </Grid>
           <Grid item xs={secondaryGridSize()}>
@@ -136,7 +150,7 @@ export default function Home({ organizations, selectedOrganization, setSelectedO
               description={homePageStrings.MONITORING_CARD_DESCRIPTION}
               link={APP_PATHS.MONITORING}
               linkText={strings.formatString(homePageStrings.GO_TO, strings.MONITORING) as string}
-              linkStyle={'underline'}
+              linkStyle={'plain'}
             />
           </Grid>
         </Grid>
