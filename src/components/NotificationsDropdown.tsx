@@ -247,7 +247,7 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
     <div>
       <IconButton id='notifications-button' onClick={onIconClick}>
         <Badge id='notifications-badge' color='secondary' className={classes.notificationsBadgeWrapper}>
-          <Icon name='notification' className={classes.notificationIcon} />
+          <Icon name='notification' size='medium' className={classes.notificationIcon} />
           {hasUnseen() && <div className={classes.newNotificationsIndicator} />}
         </Badge>
       </IconButton>

@@ -60,7 +60,7 @@ export default function UserMenu({ user, reloadUser, hasOrganizations }: UserMen
         <span className={classes.userName}>
           {user?.firstName} {user?.lastName}
         </span>
-        <Icon name='chevronDown' className={classes.chevronDown} />
+        <Icon name='chevronDown' size='medium' className={classes.chevronDown} />
       </IconButton>
       <Popover
         id='simple-popover'

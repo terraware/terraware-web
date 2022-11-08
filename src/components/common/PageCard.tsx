@@ -76,7 +76,7 @@ export default function PageCard(props: PageCardProps): JSX.Element {
   return (
     <Box className={`${classes.container} ${isMobile ? '' : 'min-height'}`}>
       <div className={classes.title}>
-        <Icon name={icon} className={classes.icon} />
+        <Icon name={icon} size='medium' className={classes.icon} />
         <Typography
           component='p'
           className={`${classes.titleText} ${isNameBold ? classes.bold : ''}`}
