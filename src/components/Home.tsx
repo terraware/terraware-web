@@ -20,22 +20,20 @@ const useStyles = makeStyles((theme: Theme) => ({
   main: {
     [theme.breakpoints.down('xl')]: {
       background:
-        'url(/assets/home-bg-right-layer-z4.png) no-repeat 753px 100%/auto 285px, ' +
-        'url(/assets/home-bg-left-layer-z4.png) no-repeat 0 100%/auto 295px, ' +
-        'url(/assets/home-bg-water-z2.png) repeat-x 0 100%/auto 180px, ' +
-        'url(/assets/home-bg-left-z4.png) no-repeat 0 100%/auto 295px, ' +
-        'url(/assets/home-bg-right-z3.png) no-repeat 911px 100%/auto 400px, ' +
-        'url(/assets/background.png) no-repeat 100% 0/90% 633px, ' +
+        'url(/assets/home-bg-right-layer-z4.svg) no-repeat 753px 100%/auto 285px, ' +
+        'url(/assets/home-bg-left-layer-z4.svg) no-repeat 0 100%/auto 295px, ' +
+        'url(/assets/home-bg-water-z2.svg) repeat-x 0 100%/auto 180px, ' +
+        'url(/assets/home-bg-left-z4.svg) no-repeat 0 100%/auto 295px, ' +
+        'url(/assets/home-bg-right-z3.svg) no-repeat 911px 100%/auto 400px, ' +
         'linear-gradient(180deg, #FBF9F9 0%, #EFF5EF 100%) no-repeat 0 0/auto',
     },
     [theme.breakpoints.up('xl')]: {
       background:
-        'url(/assets/home-bg-right-layer-z4.png) no-repeat 100% 100%/auto 285px, ' +
-        'url(/assets/home-bg-left-layer-z4.png) no-repeat 0 100%/auto 295px, ' +
-        'url(/assets/home-bg-water-z2.png) repeat-x 0 100%/auto 180px, ' +
-        'url(/assets/home-bg-left-z4.png) no-repeat 0 100%/auto 295px, ' +
-        'url(/assets/home-bg-right-z3.png) no-repeat 100% 100%/auto 400px, ' +
-        'url(/assets/background.png) no-repeat 100% 0/90% 633px, ' +
+        'url(/assets/home-bg-right-layer-z4.svg) no-repeat 100% 100%/auto 285px, ' +
+        'url(/assets/home-bg-left-layer-z4.svg) no-repeat 0 100%/auto 295px, ' +
+        'url(/assets/home-bg-water-z2.svg) repeat-x 0 100%/auto 180px, ' +
+        'url(/assets/home-bg-left-z4.svg) no-repeat 0 100%/auto 295px, ' +
+        'url(/assets/home-bg-right-z3.svg) no-repeat 100% 100%/auto 400px, ' +
         'linear-gradient(180deg, #FBF9F9 0%, #EFF5EF 100%) no-repeat 0 0/auto',
     },
     minHeight: '100vh',
