@@ -20,21 +20,21 @@ const useStyles = makeStyles((theme: Theme) => ({
   main: {
     [theme.breakpoints.down('xl')]: {
       background:
-        'url(/assets/trees-right.png) no-repeat 879px 100%/auto 248px, ' +
-        'url(/assets/trees-left.png) no-repeat 0 100%/auto 175px, ' +
-        'url(/assets/water.png) repeat-x 0 100%/auto 142px, ' +
-        'url(/assets/mountain.png) no-repeat 0 100%/auto 233px, ' +
-        'url(/assets/far-mountain.png) no-repeat 1012px 100%/auto 317px, ' +
+        'url(/assets/home-bg-right-layer-z4.png) no-repeat 879px 100%/auto 285px, ' +
+        'url(/assets/home-bg-left-layer-z4.png) no-repeat 0 100%/auto 295px, ' +
+        'url(/assets/home-bg-water-z2.png) repeat-x 0 100%/auto 180px, ' +
+        'url(/assets/home-bg-left-z4.png) no-repeat 0 100%/auto 292px, ' +
+        'url(/assets/home-bg-right-z3.png) no-repeat 1012px 100%/auto 400px, ' +
         'url(/assets/background.png) no-repeat 100% 0/90% 633px, ' +
         'linear-gradient(180deg, #FBF9F9 0%, #EFF5EF 100%) no-repeat 0 0/auto',
     },
     [theme.breakpoints.up('xl')]: {
       background:
-        'url(/assets/trees-right.png) no-repeat 100% 100%/auto 248px, ' +
-        'url(/assets/trees-left.png) no-repeat 0 100%/auto 175px, ' +
-        'url(/assets/water.png) repeat-x 0 100%/auto 142px, ' +
-        'url(/assets/mountain.png) no-repeat 0 100%/auto 233px, ' +
-        'url(/assets/far-mountain.png) no-repeat 100% 100%/auto 317px, ' +
+        'url(/assets/home-bg-right-layer-z4.png) no-repeat 100% 100%/auto 285px, ' +
+        'url(/assets/home-bg-left-layer-z4.png) no-repeat 0 100%/auto 295px, ' +
+        'url(/assets/home-bg-water-z2.png) repeat-x 0 100%/auto 180px, ' +
+        'url(/assets/home-bg-left-z4.png) no-repeat 0 100%/auto 292px, ' +
+        'url(/assets/home-bg-right-z3.png) no-repeat 100% 100%/auto 400px, ' +
         'url(/assets/background.png) no-repeat 100% 0/90% 633px, ' +
         'linear-gradient(180deg, #FBF9F9 0%, #EFF5EF 100%) no-repeat 0 0/auto',
     },
