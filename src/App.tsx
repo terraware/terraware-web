@@ -67,12 +67,6 @@ const useStyles = makeStyles((theme: Theme) => ({
       overflowY: 'auto',
       zIndex: 1000,
     },
-    '& .navbar .logo': {
-      display: 'none',
-    },
-    '& .navbar .nav-section, & .navbar .nav-item': {
-      backgroundColor: 'transparent',
-    },
   },
   content: {
     height: '100%',
