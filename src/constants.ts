@@ -38,5 +38,5 @@ export enum APP_PATHS {
   WELCOME = '/welcome',
   MY_ACCOUNT = '/myaccount',
   MY_ACCOUNT_EDIT = '/myaccount/edit',
-  PLANTING_SITES = '/planting_sites',
+  PLANTING_SITES = '/planting-sites',
 }
