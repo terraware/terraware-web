@@ -38,6 +38,7 @@ export default function NavBar({ organization, setShowNavBar }: NavBarProps): JS
   const isSeedbanksRoute = useRouteMatch(APP_PATHS.SEED_BANKS + '/');
   const isNurseriesRoute = useRouteMatch(APP_PATHS.NURSERIES + '/');
   const isInventoryRoute = useRouteMatch(APP_PATHS.INVENTORY + '/');
+  const isPlantingSitesRoute = useRouteMatch(APP_PATHS.PLANTING_SITES + '/');
 
   const navigate = (url: string) => {
     history.push(url);
@@ -158,6 +159,16 @@ export default function NavBar({ organization, setShowNavBar }: NavBarProps): JS
                 closeAndNavigateTo(APP_PATHS.NURSERIES);
               }}
               id='nurseries'
+            />
+          )}
+          {isEnabled('Tracking V1') && (
+            <NavItem
+              label={strings.PLANTING_SITES}
+              selected={!!isPlantingSitesRoute}
+              onClick={() => {
+                closeAndNavigateTo(APP_PATHS.PLANTING_SITES);
+              }}
+              id='plantingSites'
             />
           )}
         </>
