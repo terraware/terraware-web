@@ -74,7 +74,7 @@ export default function OrganizationsDropdown({
       />
       <IconButton onClick={handleClick} size='small' className={classes.iconContainer}>
         <p>{selectedOrganization?.name}</p>
-        <Icon name='chevronDown' className={classes.icon} />
+        <Icon name='chevronDown' size='medium' className={classes.icon} />
       </IconButton>
       <Popover
         id='simple-popover'
