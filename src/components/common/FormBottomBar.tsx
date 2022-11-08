@@ -41,7 +41,7 @@ export default function FormBottomBar({ onCancel, onSave, cancelButtonText, save
     <AppBar
       position='fixed'
       color='primary'
-      style={{ top: 'auto', bottom: 0, right: 'auto' }}
+      style={{ top: 'auto', bottom: 0, right: 'auto', left: isDesktop ? 'auto' : 0 }}
       className={classes.bottomBar}
     >
       <Button
