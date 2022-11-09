@@ -72,11 +72,13 @@ const useStyles = makeStyles((theme: Theme) => ({
     height: '100%',
     overflow: 'auto',
     '& > div, & > main': {
+      paddingBottom: '160px',
       paddingTop: '96px',
     },
   },
   contentWithNavBar: {
     '& > div, & > main': {
+      paddingBottom: '96px',
       paddingLeft: '200px',
     },
   },
