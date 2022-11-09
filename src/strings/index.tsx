@@ -819,6 +819,10 @@ const strings = new LocalizedStrings({
     CHANGE_GERMINATING_STATUS: 'Change Germinating Status',
     CHANGE_NOT_READY_STATUS: 'Change Not Ready Status',
     PLANTING_SITES: 'Planting Sites',
+    ADD_A_PLANTING_SITE: 'Add a Planting Site',
+    ADD_A_PLANTING_SITE_SUBTITLE:
+      'Where do your plants take root? Set up your planting site so you can keep track of your plants’ progress.',
+    ADD_PLANTING_SITE: 'Add Planting Site',
   },
 });
 

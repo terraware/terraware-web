@@ -161,17 +161,17 @@ export default function NavBar({ organization, setShowNavBar }: NavBarProps): JS
               id='nurseries'
             />
           )}
-          {isEnabled('Tracking V1') && (
-            <NavItem
-              label={strings.PLANTING_SITES}
-              selected={!!isPlantingSitesRoute}
-              onClick={() => {
-                closeAndNavigateTo(APP_PATHS.PLANTING_SITES);
-              }}
-              id='plantingSites'
-            />
-          )}
         </>
+      )}
+      {isEnabled('Tracking V1') && (
+        <NavItem
+          label={strings.PLANTING_SITES}
+          selected={!!isPlantingSitesRoute}
+          onClick={() => {
+            closeAndNavigateTo(APP_PATHS.PLANTING_SITES);
+          }}
+          id='plantingSites'
+        />
       )}
 
       <NavFooter>

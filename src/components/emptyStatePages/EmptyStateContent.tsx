@@ -96,7 +96,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 export type ListItemContent = {
   icon: IconName;
-  title: string;
+  title?: string;
   description?: string;
   buttonText?: string;
   buttonIcon?: IconName;
@@ -137,7 +137,7 @@ export default function EmptyStateContent(props: EmptyStateContentProps): JSX.El
           return (
             <Grid item xs={gridSize()} key={item.title} className={`${classes.listItem}`}>
               <Icon name={item.icon} className={classes.listItemIcon} />
-              <p className={classes.listItemTitle}>{item.title}</p>
+              {item.title && <p className={classes.listItemTitle}>{item.title}</p>}
               <div>
                 <p className={item.buttonText ? classes.listItemDescriptionWithButton : classes.listItemDescription}>
                   {item.description}
