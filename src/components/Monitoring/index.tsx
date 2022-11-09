@@ -174,15 +174,15 @@ export default function Monitoring(props: MonitoringProps): JSX.Element {
                     </Grid>
                     {selectedSeedBank?.connectionState === 'Configured' ? (
                       <Grid item xs={2} display='flex' justifyContent='end'>
-                        <Button label={strings.REFRESH_DATA} onClick={reloadData} />
+                        <Button label={strings.REFRESH_DATA} size='medium' onClick={reloadData} />
                       </Grid>
                     ) : null}
                   </>
                 )}
               </Grid>
+              <PageSnackbar />
             </PageHeaderWrapper>
 
-            <PageSnackbar />
             {selectedSeedBank && monitoringPreferences && (
               <div ref={contentRef} className={classes.contentContainer}>
                 <SeedBankMonitoring

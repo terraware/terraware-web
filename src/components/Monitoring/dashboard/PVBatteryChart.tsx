@@ -11,6 +11,7 @@ import { ChartPalette, TIME_PERIODS, getTimePeriodParams, HumidityValues, getUni
 import { htmlLegendPlugin } from './htmlLegendPlugin';
 import 'chartjs-adapter-date-fns';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import Icon from '../../common/icon/Icon';
 
 declare global {
   interface Window {
@@ -25,13 +26,20 @@ interface StyleProps {
 
 const useStyles = makeStyles((theme: Theme) => ({
   graphContainer: {
-    border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+    backgroundColor: theme.palette.TwClrBg,
+    borderRadius: '24px',
     padding: '24px',
+  },
+  graphTitleContainer: {
+    display: 'flex',
+  },
+  graphTitleIcon: {
+    color: theme.palette.TwClrIcnSecondary,
   },
   graphTitle: {
     fontWeight: 600,
     fontSize: '20px',
-    margin: '0 0 24px 0',
+    margin: theme.spacing(0, 0, 3, 1),
   },
   dropDownsContainer: {
     display: 'flex',
@@ -223,7 +231,10 @@ export default function PVBatteryChart(props: PVBatteryChartProps): JSX.Element 
 
   return (
     <div className={classes.graphContainer}>
-      <p className={classes.graphTitle}>{strings.PV_BATTERY}</p>
+      <div className={classes.graphTitleContainer}>
+        <Icon name='futures' size='medium' className={classes.graphTitleIcon} />
+        <p className={classes.graphTitle}>{strings.PV_BATTERY}</p>
+      </div>
       <div className={classes.dropDownsContainer}>
         <Select
           options={TIME_PERIODS}
