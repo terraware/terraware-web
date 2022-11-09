@@ -32,6 +32,8 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   graphTitleContainer: {
     display: 'flex',
+    alignItems: 'center',
+    margin: theme.spacing(0, 0, 3, 1),
   },
   graphTitleIcon: {
     color: theme.palette.TwClrIcnSecondary,
@@ -39,7 +41,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   graphTitle: {
     fontWeight: 600,
     fontSize: '20px',
-    margin: theme.spacing(0, 0, 3, 1),
+    margin: theme.spacing(0, 1),
   },
   dropDownsContainer: {
     display: 'flex',

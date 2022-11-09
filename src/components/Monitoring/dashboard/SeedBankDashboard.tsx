@@ -25,12 +25,13 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   panelTitle: {
     display: 'flex',
+    alignItems: 'center',
     fontSize: '20px',
     fontWeight: 600,
+    margin: theme.spacing(0, 0, 3, 1),
 
     '& p': {
-      // margin: `0 0 ${theme.spacing(3)} 0`,
-      margin: theme.spacing(0, 0, 3, 1),
+      margin: theme.spacing(0, 1),
     },
   },
   panelIcon: {
