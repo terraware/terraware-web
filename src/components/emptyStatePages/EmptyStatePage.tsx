@@ -97,7 +97,6 @@ const NO_NURSERIES_CONTENT: PageContent = {
 };
 
 const NO_PLANTING_SITES_CONTENT: PageContent = {
-  title1: strings.PLANTING_SITES,
   title2: strings.ADD_A_PLANTING_SITE,
   subtitle: strings.ADD_A_PLANTING_SITE_SUBTITLE,
   listItems: [
