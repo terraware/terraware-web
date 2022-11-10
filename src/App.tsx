@@ -63,7 +63,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   container: {
     '& .navbar': {
       backgroundColor: 'transparent',
-      paddingTop: (props: StyleProps) => (props.isDesktop ? '64px' : '8px'),
+      paddingTop: (props: StyleProps) => (props.isDesktop ? '88px' : '8px'),
       overflowY: 'auto',
       zIndex: 1000,
     },
@@ -72,7 +72,8 @@ const useStyles = makeStyles((theme: Theme) => ({
     height: '100%',
     overflow: 'auto',
     '& > div, & > main': {
-      paddingTop: '64px',
+      paddingBottom: theme.spacing(25),
+      paddingTop: '96px',
     },
   },
   contentWithNavBar: {
