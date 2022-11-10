@@ -122,7 +122,6 @@ export default function App() {
   const [preferencesOrg, setPreferencesOrg] = useState<{ [key: string]: unknown }>();
   const [notifications, setNotifications] = useState<Notifications>();
   const { isProduction } = useEnvironment();
-  const nurseryManagementEnabled = isRouteEnabled('Nursery management');
   const trackingEnabled = isRouteEnabled('Tracking V1');
 
   // seedSearchCriteria describes which criteria to apply when searching accession data.
@@ -508,28 +507,23 @@ export default function App() {
                   {getSeedBanksView()}
                 </Route>
               )}
-
-              {nurseryManagementEnabled && selectedOrganization && (
+              {selectedOrganization && (
                 <Route exact path={APP_PATHS.NURSERIES_NEW}>
                   <NewNursery organization={selectedOrganization} reloadOrganizationData={reloadData} />
                 </Route>
               )}
-              {nurseryManagementEnabled && selectedOrganization && (
+              {selectedOrganization && (
                 <Route exact path={APP_PATHS.NURSERIES_EDIT}>
                   <NewNursery organization={selectedOrganization} reloadOrganizationData={reloadData} />
                 </Route>
               )}
-              {nurseryManagementEnabled && (
-                <Route path={APP_PATHS.NURSERIES_VIEW}>
-                  <NurseryDetails organization={selectedOrganization} />
-                </Route>
-              )}
-              {nurseryManagementEnabled && (
-                <Route exact path={APP_PATHS.NURSERIES}>
-                  {getNurseriesView()}
-                </Route>
-              )}
-              {nurseryManagementEnabled && selectedOrganization && (
+              <Route path={APP_PATHS.NURSERIES_VIEW}>
+                <NurseryDetails organization={selectedOrganization} />
+              </Route>
+              <Route exact path={APP_PATHS.NURSERIES}>
+                {getNurseriesView()}
+              </Route>
+              {selectedOrganization && (
                 <Route exact path={APP_PATHS.INVENTORY}>
                   <Inventory
                     organization={selectedOrganization}
@@ -538,12 +532,12 @@ export default function App() {
                   />
                 </Route>
               )}
-              {nurseryManagementEnabled && selectedOrganization && (
+              {selectedOrganization && (
                 <Route exact path={APP_PATHS.INVENTORY_NEW}>
                   <InventoryCreate organization={selectedOrganization} />
                 </Route>
               )}
-              {nurseryManagementEnabled && selectedOrganization && (
+              {selectedOrganization && (
                 <Route path={APP_PATHS.INVENTORY_ITEM}>
                   <InventoryView organization={selectedOrganization} species={species} />
                 </Route>

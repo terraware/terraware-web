@@ -21,15 +21,6 @@ export type Feature = {
 // list of feature names and associated properties
 export const OPT_IN_FEATURES: Feature[] = [
   {
-    name: 'Nursery management',
-    preferenceName: 'enableUINursery',
-    active: true,
-    enabled: true,
-    allowInternalProduction: false,
-    description: ['Shows new nursery management workflows'],
-    disclosure: ['This is in QA.'],
-  },
-  {
     name: 'Tracking V1',
     preferenceName: 'enableTrackingV1',
     active: true,
