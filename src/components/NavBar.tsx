@@ -106,20 +106,18 @@ export default function NavBar({ organization, setShowNavBar }: NavBarProps): JS
         }}
         id='monitoring'
       />
-      {isEnabled('Nursery management') && (
-        <>
-          <NavSection title={strings.SEEDLINGS.toUpperCase()} />
-          <NavItem
-            label={strings.INVENTORY}
-            icon='iconSeedling'
-            selected={!!isInventoryRoute}
-            onClick={() => {
-              closeAndNavigateTo(APP_PATHS.INVENTORY);
-            }}
-            id='inventory'
-          />
-        </>
-      )}
+      <>
+        <NavSection title={strings.SEEDLINGS.toUpperCase()} />
+        <NavItem
+          label={strings.INVENTORY}
+          icon='iconSeedling'
+          selected={!!isInventoryRoute}
+          onClick={() => {
+            closeAndNavigateTo(APP_PATHS.INVENTORY);
+          }}
+          id='inventory'
+        />
+      </>
       {role && ['Admin', 'Owner'].includes(role) && (
         <>
           <NavSection title={strings.SETTINGS.toUpperCase()} />
@@ -150,28 +148,26 @@ export default function NavBar({ organization, setShowNavBar }: NavBarProps): JS
             }}
             id='seedbanks'
           />
-          {isEnabled('Nursery management') && (
-            <NavItem
-              label={strings.NURSERIES}
-              icon='iconNursery'
-              selected={!!isNurseriesRoute}
-              onClick={() => {
-                closeAndNavigateTo(APP_PATHS.NURSERIES);
-              }}
-              id='nurseries'
-            />
-          )}
-          {isEnabled('Tracking V1') && (
-            <NavItem
-              label={strings.PLANTING_SITES}
-              selected={!!isPlantingSitesRoute}
-              onClick={() => {
-                closeAndNavigateTo(APP_PATHS.PLANTING_SITES);
-              }}
-              id='plantingSites'
-            />
-          )}
+          <NavItem
+            label={strings.NURSERIES}
+            icon='iconNursery'
+            selected={!!isNurseriesRoute}
+            onClick={() => {
+              closeAndNavigateTo(APP_PATHS.NURSERIES);
+            }}
+            id='nurseries'
+          />
         </>
+      )}
+      {isEnabled('Tracking V1') && (
+        <NavItem
+          label={strings.PLANTING_SITES}
+          selected={!!isPlantingSitesRoute}
+          onClick={() => {
+            closeAndNavigateTo(APP_PATHS.PLANTING_SITES);
+          }}
+          id='plantingSites'
+        />
       )}
 
       <NavFooter>
