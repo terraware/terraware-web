@@ -17,12 +17,15 @@ export default function MapComponent(props: MapProps): JSX.Element {
   const [zoom] = useState(9);
 
   useEffect(() => {
-    if (map.current) return; // initialize map only once
+    if (map.current) {
+      // initialize map only once
+      return;
+    }
     map.current = new mapboxgl.Map({
       container: mapContainer.current || '',
       style: 'mapbox://styles/mapbox/streets-v11',
       center: [lng, lat],
-      zoom: zoom,
+      zoom,
     });
   });
 
