@@ -119,6 +119,7 @@ export default function App() {
   const location = useStateLocation();
   const [selectedOrganization, setSelectedOrganization] = useState<ServerOrganization>();
   const [preferencesOrg, setPreferencesOrg] = useState<{ [key: string]: unknown }>();
+  const [orgScopedPreferences, setOrgScopedPreferences] = useState<{ [key: string]: unknown }>();
   const [notifications, setNotifications] = useState<Notifications>();
   const { isProduction } = useEnvironment();
   const nurseryManagementEnabled = isRouteEnabled('Nursery management');
@@ -205,7 +206,10 @@ export default function App() {
   const reloadOrgPreferences = useCallback(() => {
     const getOrgPreferences = async () => {
       if (selectedOrganization) {
-        await getPreferences(selectedOrganization.id);
+        const response = await getPreferences(selectedOrganization.id);
+        if (response.requestSucceeded) {
+          setOrgScopedPreferences(response.preferences);
+        }
       }
     };
     getOrgPreferences();
@@ -422,6 +426,7 @@ export default function App() {
                   hasSeedBanks={selectedOrgHasSeedBanks()}
                   hasSpecies={selectedOrgHasSpecies()}
                   reloadData={reloadData}
+                  orgScopedPreferences={orgScopedPreferences}
                 />
               </Route>
               {selectedOrganization && (

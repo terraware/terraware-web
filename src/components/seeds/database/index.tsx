@@ -64,6 +64,7 @@ import { Icon } from '@terraware/web-components';
 import { downloadCsvTemplateHandler } from 'src/components/common/ImportModal';
 import { downloadAccessionsTemplate } from 'src/api/accessions2/accession';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
+import { updatePreferences } from 'src/api/preferences/preferences';
 
 interface StyleProps {
   isMobile: boolean;
@@ -153,6 +154,7 @@ type DatabaseProps = {
   hasSeedBanks: boolean;
   hasSpecies: boolean;
   reloadData?: () => void;
+  orgScopedPreferences?: { [key: string]: unknown };
 };
 
 export default function Database(props: DatabaseProps): JSX.Element {
@@ -175,6 +177,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
     hasSeedBanks,
     hasSpecies,
     reloadData,
+    orgScopedPreferences,
   } = props;
   const displayColumnDetails = displayColumnNames.map((name) => {
     const detail = { ...COLUMNS_INDEXED[name] };
@@ -210,6 +213,26 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const [unfilteredResults, setUnfilteredResults] = useState<SearchResponseElement[] | null>();
   const [selectSeedBankForImportModalOpen, setSelectSeedBankForImportModalOpen] = useState<boolean>(false);
   const [openImportModal, setOpenImportModal] = useState<boolean>(false);
+
+  const updateSearchColumns = useCallback(
+    (columnNames?: string[]) => {
+      if (columnNames) {
+        const searchSelectedColumns = columnNames.reduce((acum, value) => {
+          acum.push(value);
+          const additionalColumns = COLUMNS_INDEXED[value].additionalKeys;
+          if (additionalColumns) {
+            return acum.concat(additionalColumns);
+          }
+
+          return acum;
+        }, [] as string[]);
+
+        setSearchColumns(searchSelectedColumns);
+        setDisplayColumnNames(columnNames);
+      }
+    },
+    [setDisplayColumnNames, setSearchColumns]
+  );
 
   useEffect(() => {
     // if url has stage=<accession state>, apply that filter
@@ -348,6 +371,12 @@ export default function Database(props: DatabaseProps): JSX.Element {
     };
   }, [searchCriteria, searchSortOrder, searchColumns, organization]);
 
+  useEffect(() => {
+    if (orgScopedPreferences?.accessionsColumns) {
+      updateSearchColumns(orgScopedPreferences.accessionsColumns as string[]);
+    }
+  }, [orgScopedPreferences, updateSearchColumns]);
+
   const onSelect = (row: SearchResponseElement) => {
     if (row.id) {
       const seedCollectionLocation = {
@@ -380,20 +409,12 @@ export default function Database(props: DatabaseProps): JSX.Element {
     setReportModalOpen(true);
   };
 
-  const onCloseEditColumnsModal = (columnsintern?: string[]) => {
-    if (columnsintern) {
-      const searchSelectedColumns = columnsintern.reduce((acum, value) => {
-        acum.push(value);
-        const additionalColumns = COLUMNS_INDEXED[value].additionalKeys;
-        if (additionalColumns) {
-          return acum.concat(additionalColumns);
-        }
-
-        return acum;
-      }, [] as string[]);
-
-      setSearchColumns(searchSelectedColumns);
-      setDisplayColumnNames(columnsintern);
+  const onCloseEditColumnsModal = (columnNames?: string[]) => {
+    if (columnNames) {
+      updateSearchColumns(columnNames);
+      if (organization?.id) {
+        updatePreferences('accessionsColumns', columnNames, organization.id);
+      }
     }
     setEditColumnsModalOpen(false);
   };
