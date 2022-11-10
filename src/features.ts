@@ -24,7 +24,7 @@ export const OPT_IN_FEATURES: Feature[] = [
     name: 'Nursery management',
     preferenceName: 'enableUINursery',
     active: true,
-    enabled: false,
+    enabled: true,
     allowInternalProduction: false,
     description: ['Shows new nursery management workflows'],
     disclosure: ['This is in QA.'],
