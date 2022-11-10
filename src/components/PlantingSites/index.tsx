@@ -1,13 +1,40 @@
 import { Box, Container, Grid, Typography } from '@mui/material';
 import { theme } from '@terraware/web-components';
-import { useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { search, SearchResponseElement } from 'src/api/search';
 import strings from 'src/strings';
+import { ServerOrganization } from 'src/types/Organization';
 import PageHeaderWrapper from '../common/PageHeaderWrapper';
 import TfMain from '../common/TfMain';
 import EmptyStatePage from '../emptyStatePages/EmptyStatePage';
 
-export default function PlantingSitesList(): JSX.Element {
+type PlantingSitesListProps = {
+  organization: ServerOrganization;
+};
+
+export default function PlantingSitesList(props: PlantingSitesListProps): JSX.Element {
+  const { organization } = props;
   const contentRef = useRef(null);
+  const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>();
+
+  const onSearch = useCallback(async () => {
+    const params = {
+      fields: ['boundary', 'id', 'name'],
+      prefix: 'plantingSites',
+      search: {
+        field: 'organization_id',
+        operation: 'field',
+        values: [organization.id],
+      },
+      count: 0,
+    };
+    const apiSearchResults = await search(params);
+    setSearchResults(apiSearchResults);
+  }, [organization]);
+
+  useEffect(() => {
+    onSearch();
+  }, [organization, onSearch]);
 
   return (
     <TfMain>
@@ -22,9 +49,11 @@ export default function PlantingSitesList(): JSX.Element {
       </PageHeaderWrapper>
       <Grid>
         <Box>
-          <Container sx={{ paddingY: 4 }}>
-            <EmptyStatePage pageName={'PlantingSites'} />
-          </Container>
+          {searchResults?.length === 0 && (
+            <Container sx={{ paddingY: 4 }}>
+              <EmptyStatePage pageName={'PlantingSites'} />
+            </Container>
+          )}
         </Box>
       </Grid>
     </TfMain>
