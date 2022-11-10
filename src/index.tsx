@@ -18,7 +18,9 @@ ReactDOM.render(
         <Router>
           <Switch>
             <Route path={APP_PATHS.ERROR}>
-              <AppError />
+              <ThemeProvider theme={theme}>
+                <AppError />
+              </ThemeProvider>
             </Route>
             <Route path={'*'}>
               <ThemeProvider theme={theme}>
