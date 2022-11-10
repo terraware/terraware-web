@@ -6,6 +6,7 @@ import { APP_PATHS } from 'src/constants';
 import CellRenderer, { TableRowType } from '../common/table/TableCellRenderer';
 import { RendererProps } from '../common/table/types';
 import { TextTruncated } from '@terraware/web-components';
+import strings from 'src/strings';
 
 const COLUMN_WIDTH = 250;
 
@@ -53,12 +54,12 @@ export default function InventoryCellRenderer(props: RendererProps<TableRowType>
     );
   }
 
-  if (column.key === 'species_scientificName' && row.species_id) {
+  if (column.key === 'species_scientificName') {
     return (
       <CellRenderer
         index={index}
         column={column}
-        value={createLinkToInventoryDetail(value)}
+        value={row.species_id ? createLinkToInventoryDetail(value) : `<${strings.DELETED_SPECIES}>`}
         row={row}
         className={classes.text}
       />
