@@ -53,8 +53,7 @@ import Inventory from './components/Inventory';
 import NurseryDetails from './components/Nursery';
 import InventoryCreate from './components/Inventory/InventoryCreate';
 import InventoryView from './components/Inventory/InventoryView';
-import PlantingSites from './components/PlantingSites';
-import CreatePlantingSite from './components/PlantingSites/PlantingSiteCreate';
+import { CreatePlantingSite, PlantingSitesList } from './components/PlantingSites';
 
 interface StyleProps {
   isDesktop?: boolean;
@@ -550,7 +549,7 @@ export default function App() {
               )}
               {trackingEnabled && selectedOrganization && (
                 <Route path={APP_PATHS.PLANTING_SITES}>
-                  <PlantingSites organization={selectedOrganization} />
+                  <PlantingSitesList organization={selectedOrganization} />
                 </Route>
               )}
               <Route exact path={APP_PATHS.CONTACT_US}>
