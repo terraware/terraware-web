@@ -212,6 +212,8 @@ export default function App() {
         }
       }
     };
+    // reset display columns so we don't spill them across orgs
+    setAccessionsDisplayColumns(DefaultColumns.fields);
     getOrgPreferences();
   }, [selectedOrganization]);
 
