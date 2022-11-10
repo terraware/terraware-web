@@ -21,7 +21,6 @@ import { Dropdown } from '@terraware/web-components';
 import { isContributor, getAllNurseries } from 'src/utils/organization';
 import { renderUser } from 'src/utils/renderUser';
 import { getSubstratesAccordingToType } from 'src/utils/viabilityTest';
-import isEnabled from 'src/features';
 
 export interface WithdrawDialogProps {
   open: boolean;
@@ -34,7 +33,6 @@ export interface WithdrawDialogProps {
 
 export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element {
   const { onClose, open, accession, reload, organization, user } = props;
-  const nurseryEnabled = isEnabled('Nursery management');
 
   const newWithdrawal: Withdrawal2 = {
     purpose: 'Nursery',
@@ -62,7 +60,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
 
   const [record, setRecord, onChange] = useForm(newWithdrawal);
   const [nurseryTransferRecord, setNurseryTransferRecord, onChangeNurseryTransfer] = useForm(nurseryTransferWithdrawal);
-  const [isNurseryTransfer, setIsNurseryTransfer] = useState<boolean>(nurseryEnabled ? true : false);
+  const [isNurseryTransfer, setIsNurseryTransfer] = useState<boolean>(true);
   const [viabilityTesting, , onChangeViabilityTesting] = useForm(newViabilityTesting);
   const [users, setUsers] = useState<OrganizationUser[]>();
   const [withdrawAllSelected, setWithdrawAllSelected] = useState(false);
@@ -247,7 +245,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
   };
 
   const onChangePurpose = (value: string) => {
-    const nurseryTransfer = value === 'Nursery' && nurseryEnabled;
+    const nurseryTransfer = value === 'Nursery';
     if (value === 'Nursery' || value === 'Viability Testing') {
       validateAmount(nurseryTransfer, value);
     } else {
