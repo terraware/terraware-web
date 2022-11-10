@@ -97,7 +97,7 @@ export default function PageHeaderWrapper({ children, nextElement }: Props): JSX
   }, [debouncedSticky, debouncedScrollDown, height]);
 
   const styles: Record<string, any> = {
-    background: debouncedSticky ? theme.palette.TwClrBg : undefined,
+    background: debouncedSticky ? '#FBF9F9' : undefined,
     boxShadow: debouncedSticky ? `0px 3px 3px -3px ${theme.palette.TwClrBaseGray200}` : undefined,
     paddingRight: debouncedSticky ? theme.spacing(3) : undefined,
     position: debouncedSticky ? 'fixed' : undefined,

@@ -17,29 +17,29 @@ import useQuery from '../../../utils/useQuery';
 import { TIME_PERIODS } from './Common';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
-interface StyleProps {
-  isDesktop: boolean;
-}
-
 const useStyles = makeStyles((theme: Theme) => ({
   graphContainer: {
-    border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
-    padding: '24px',
-    height: '179px',
+    backgroundColor: theme.palette.TwClrBg,
+    borderRadius: '24px',
+    padding: theme.spacing(3),
   },
   panelTitle: {
     display: 'flex',
+    alignItems: 'center',
     fontSize: '20px',
     fontWeight: 600,
-    justifyContent: 'space-between',
+    margin: theme.spacing(0, 0, 3, 1),
 
     '& p': {
-      margin: '0 0 32px 0',
+      margin: theme.spacing(0, 1),
     },
+  },
+  panelIcon: {
+    color: theme.palette.TwClrIcnSecondary,
   },
   panelValue: {
     fontWeight: 600,
-    fontSize: (props: StyleProps) => (props.isDesktop ? '48px' : '36px'),
+    fontSize: '32px',
     margin: 0,
   },
 }));
@@ -209,8 +209,8 @@ export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.El
       <Grid item xs={gridSize()}>
         <div className={classes.graphContainer}>
           <div className={classes.panelTitle}>
+            <Icon name='chargingBattery' size='medium' className={classes.panelIcon} />
             <p>{strings.PV_BATTERY_CHARGE}</p>
-            <Icon name='chargingBattery' />
           </div>
           <p className={classes.panelValue}>{batteryLevel || strings.NO_DATA_YET}</p>
         </div>
@@ -218,8 +218,8 @@ export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.El
       <Grid item xs={gridSize()}>
         <div className={classes.graphContainer}>
           <div className={classes.panelTitle}>
+            <Icon name='wifi' size='medium' className={classes.panelIcon} />
             <p>{strings.SEED_BANK_INTERNET}</p>
-            <Icon name='wifi' />
           </div>
           <p className={classes.panelValue}>{deviceManager?.isOnline ? strings.CONNECTED : strings.NOT_CONNECTED}</p>
         </div>
