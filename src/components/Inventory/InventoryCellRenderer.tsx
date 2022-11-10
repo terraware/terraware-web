@@ -53,7 +53,7 @@ export default function InventoryCellRenderer(props: RendererProps<TableRowType>
     );
   }
 
-  if (column.key === 'species_scientificName') {
+  if (column.key === 'species_scientificName' && row.species_id) {
     return (
       <CellRenderer
         index={index}
