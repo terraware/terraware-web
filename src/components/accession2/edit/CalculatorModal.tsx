@@ -59,6 +59,7 @@ export default function CalculatorModal(props: CalculatorModalProps): JSX.Elemen
   };
 
   const onCloseHandler = () => {
+    setSubsetError('');
     onClose();
   };
 
