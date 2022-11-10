@@ -101,7 +101,7 @@ const NO_PLANTING_SITES_CONTENT: PageContent = {
   subtitle: strings.ADD_A_PLANTING_SITE_SUBTITLE,
   listItems: [
     {
-      icon: 'blobbyIconNursery',
+      icon: 'blobbyIconSite',
     },
   ],
   buttonText: strings.ADD_PLANTING_SITE,

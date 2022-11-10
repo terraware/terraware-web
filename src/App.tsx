@@ -542,9 +542,9 @@ export default function App() {
                   <InventoryView organization={selectedOrganization} species={species} />
                 </Route>
               )}
-              {trackingEnabled && (
+              {trackingEnabled && selectedOrganization && (
                 <Route path={APP_PATHS.PLANTING_SITES}>
-                  <PlantingSites />
+                  <PlantingSites organization={selectedOrganization} />
                 </Route>
               )}
               <Route exact path={APP_PATHS.CONTACT_US}>

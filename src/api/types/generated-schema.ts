@@ -383,16 +383,11 @@ export interface components {
       speciesId?: number;
       state:
         | "Awaiting Check-In"
-        | "Pending"
         | "Awaiting Processing"
         | "Processing"
-        | "Processed"
         | "Drying"
-        | "Dried"
         | "In Storage"
-        | "Withdrawn"
-        | "Used Up"
-        | "Nursery";
+        | "Used Up";
       storageLocation?: string;
       subsetCount?: number;
       /** Weight of subset of seeds. Units must be a weight measurement, not "Seeds". */
@@ -452,7 +447,7 @@ export interface components {
     };
     BatchResponsePayload: {
       batch: components["schemas"]["BatchPayload"];
-      status: components["schemas"]["SuccessOrError"];
+      status?: components["schemas"]["SuccessOrError"];
     };
     BatchWithdrawalPayload: {
       batchId: number;
@@ -485,21 +480,16 @@ export interface components {
       speciesId?: number;
       state?:
         | "Awaiting Check-In"
-        | "Pending"
         | "Awaiting Processing"
         | "Processing"
-        | "Processed"
         | "Drying"
-        | "Dried"
         | "In Storage"
-        | "Withdrawn"
-        | "Used Up"
-        | "Nursery";
+        | "Used Up";
       storageLocation?: string;
     };
     CreateAccessionResponsePayloadV2: {
       accession: components["schemas"]["AccessionPayloadV2"];
-      status: components["schemas"]["SuccessOrError"];
+      status?: components["schemas"]["SuccessOrError"];
     };
     CreateAutomationRequestPayload: {
       facilityId: number;
@@ -515,7 +505,7 @@ export interface components {
     };
     CreateAutomationResponsePayload: {
       id: number;
-      status: components["schemas"]["SuccessOrError"];
+      status?: components["schemas"]["SuccessOrError"];
     };
     CreateBatchRequestPayload: {
       addedDate: string;
@@ -560,7 +550,7 @@ export interface components {
     };
     CreateFacilityResponsePayload: {
       id: number;
-      status: components["schemas"]["SuccessOrError"];
+      status?: components["schemas"]["SuccessOrError"];
     };
     CreateNurseryTransferRequestPayload: {
       date: string;
@@ -578,7 +568,7 @@ export interface components {
       accession: components["schemas"]["AccessionPayloadV2"];
       /** Details of newly-created seedling batch. */
       batch: components["schemas"]["BatchPayload"];
-      status: components["schemas"]["SuccessOrError"];
+      status?: components["schemas"]["SuccessOrError"];
     };
     CreateNurseryWithdrawalRequestPayload: {
       batchWithdrawals: components["schemas"]["BatchWithdrawalPayload"][];
@@ -594,7 +584,7 @@ export interface components {
     CreateNurseryWithdrawalResponsePayload: {
       batches: components["schemas"]["BatchPayload"][];
       withdrawal: components["schemas"]["NurseryWithdrawalPayload"];
-      status: components["schemas"]["SuccessOrError"];
+      status?: components["schemas"]["SuccessOrError"];
     };
     CreateOrganizationRequestPayload: {
       /** ISO 3166 alpha-2 code of organization's country. */
@@ -607,11 +597,11 @@ export interface components {
     CreateOrganizationUserResponsePayload: {
       /** The ID of the newly-added user. */
       id: number;
-      status: components["schemas"]["SuccessOrError"];
+      status?: components["schemas"]["SuccessOrError"];
     };
     CreateSpeciesResponsePayload: {
       id: number;
-      status: components["schemas"]["SuccessOrError"];
+      status?: components["schemas"]["SuccessOrError"];
     };
     CreateTimeseriesEntry: {
       /** ID of device that produces this timeseries. */
@@ -771,68 +761,68 @@ export interface components {
     GetAccessionHistoryResponsePayload: {
       /** History of changes in descending time order (newest first.) */
       history: components["schemas"]["AccessionHistoryEntryPayload"][];
-      status: components["schemas"]["SuccessOrError"];
+      status?: components["schemas"]["SuccessOrError"];
     };
     GetAccessionResponsePayloadV2: {
       accession: components["schemas"]["AccessionPayloadV2"];
-      status: components["schemas"]["SuccessOrError"];
+      status?: components["schemas"]["SuccessOrError"];
     };
     GetAutomationResponsePayload: {
       automation: components["schemas"]["AutomationPayload"];
-      status: components["schemas"]["SuccessOrError"];
+      status?: components["schemas"]["SuccessOrError"];
     };
     GetCurrentTimeResponsePayload: {
       currentTime: string;
-      status: components["schemas"]["SuccessOrError"];
+      status?: components["schemas"]["SuccessOrError"];
     };
     GetDeviceManagerResponsePayload: {
       manager: components["schemas"]["DeviceManagerPayload"];
-      status: components["schemas"]["SuccessOrError"];
+      status?: components["schemas"]["SuccessOrError"];
     };
     GetDeviceManagersResponsePayload: {
       /** List of device managers that match the conditions in the request. Empty if there were no matches, e.g., the requested short code didn't exist. */
       managers: components["schemas"]["DeviceManagerPayload"][];
-      status: components["schemas"]["SuccessOrError"];
+      status?: components["schemas"]["SuccessOrError"];
     };
     GetDeviceResponsePayload: {
       device: components["schemas"]["DeviceConfig"];
-      status: components["schemas"]["SuccessOrError"];
+      status?: components["schemas"]["SuccessOrError"];
     };
     GetFacilityResponse: {
       facility: components["schemas"]["FacilityPayload"];
-      status: components["schemas"]["SuccessOrError"];
+      status?: components["schemas"]["SuccessOrError"];
     };
     GetNotificationResponsePayload: {
       notification: components["schemas"]["NotificationPayload"];
-      status: components["schemas"]["SuccessOrError"];
+      status?: components["schemas"]["SuccessOrError"];
     };
     GetNotificationsCountResponsePayload: {
       notifications: components["schemas"]["NotificationCountPayload"][];
-      status: components["schemas"]["SuccessOrError"];
+      status?: components["schemas"]["SuccessOrError"];
     };
     GetNotificationsResponsePayload: {
       notifications: components["schemas"]["NotificationPayload"][];
-      status: components["schemas"]["SuccessOrError"];
+      status?: components["schemas"]["SuccessOrError"];
     };
     GetOrganizationResponsePayload: {
       organization: components["schemas"]["OrganizationPayload"];
-      status: components["schemas"]["SuccessOrError"];
+      status?: components["schemas"]["SuccessOrError"];
     };
     GetOrganizationUserResponsePayload: {
       user: components["schemas"]["OrganizationUserPayload"];
-      status: components["schemas"]["SuccessOrError"];
+      status?: components["schemas"]["SuccessOrError"];
     };
     GetSpeciesProblemResponsePayload: {
       problem: components["schemas"]["SpeciesProblemElement"];
-      status: components["schemas"]["SuccessOrError"];
+      status?: components["schemas"]["SuccessOrError"];
     };
     GetSpeciesResponsePayload: {
       species: components["schemas"]["SpeciesResponseElement"];
-      status: components["schemas"]["SuccessOrError"];
+      status?: components["schemas"]["SuccessOrError"];
     };
     GetSpeciesSummaryResponsePayload: {
       summary: components["schemas"]["SpeciesSummaryPayload"];
-      status: components["schemas"]["SuccessOrError"];
+      status?: components["schemas"]["SuccessOrError"];
     };
     GetTimeseriesHistoryRequestPayload: {
       /** Start of time range to query. If this is non-null, endTime must also be specified, and seconds must be null or absent. */
@@ -869,15 +859,15 @@ export interface components {
     };
     GetUploadStatusResponsePayload: {
       details: components["schemas"]["GetUploadStatusDetailsPayload"];
-      status: components["schemas"]["SuccessOrError"];
+      status?: components["schemas"]["SuccessOrError"];
     };
     GetUserPreferencesResponsePayload: {
       preferences?: { [key: string]: unknown };
-      status: components["schemas"]["SuccessOrError"];
+      status?: components["schemas"]["SuccessOrError"];
     };
     GetUserResponsePayload: {
       user: components["schemas"]["UserProfilePayload"];
-      status: components["schemas"]["SuccessOrError"];
+      status?: components["schemas"]["SuccessOrError"];
     };
     GetViabilityTestPayload: {
       accessionId: number;
@@ -919,7 +909,7 @@ export interface components {
     };
     GetViabilityTestResponsePayload: {
       viabilityTest: components["schemas"]["GetViabilityTestPayload"];
-      status: components["schemas"]["SuccessOrError"];
+      status?: components["schemas"]["SuccessOrError"];
     };
     GetWithdrawalPayload: {
       date: string;
@@ -951,11 +941,11 @@ export interface components {
     };
     GetWithdrawalResponsePayload: {
       withdrawal: components["schemas"]["GetWithdrawalPayload"];
-      status: components["schemas"]["SuccessOrError"];
+      status?: components["schemas"]["SuccessOrError"];
     };
     GetWithdrawalsResponsePayload: {
       withdrawals: components["schemas"]["GetWithdrawalPayload"][];
-      status: components["schemas"]["SuccessOrError"];
+      status?: components["schemas"]["SuccessOrError"];
     };
     ListAllFieldValuesRequestPayload: {
       facilityId?: number;
@@ -966,23 +956,23 @@ export interface components {
       results: {
         [key: string]: components["schemas"]["AllFieldValuesPayload"];
       };
-      status: components["schemas"]["SuccessOrError"];
+      status?: components["schemas"]["SuccessOrError"];
     };
     ListAutomationsResponsePayload: {
       automations: components["schemas"]["AutomationPayload"][];
-      status: components["schemas"]["SuccessOrError"];
+      status?: components["schemas"]["SuccessOrError"];
     };
     ListDeviceConfigsResponse: {
       devices: components["schemas"]["DeviceConfig"][];
-      status: components["schemas"]["SuccessOrError"];
+      status?: components["schemas"]["SuccessOrError"];
     };
     ListDeviceTemplatesResponsePayload: {
       templates: components["schemas"]["DeviceTemplatePayload"][];
-      status: components["schemas"]["SuccessOrError"];
+      status?: components["schemas"]["SuccessOrError"];
     };
     ListFacilitiesResponse: {
       facilities: components["schemas"]["FacilityPayload"][];
-      status: components["schemas"]["SuccessOrError"];
+      status?: components["schemas"]["SuccessOrError"];
     };
     ListFieldValuesRequestPayload: {
       facilityId?: number;
@@ -996,19 +986,19 @@ export interface components {
     };
     ListFieldValuesResponsePayload: {
       results: { [key: string]: components["schemas"]["FieldValuesPayload"] };
-      status: components["schemas"]["SuccessOrError"];
+      status?: components["schemas"]["SuccessOrError"];
     };
     ListOrganizationRolesResponsePayload: {
       roles: components["schemas"]["OrganizationRolePayload"][];
-      status: components["schemas"]["SuccessOrError"];
+      status?: components["schemas"]["SuccessOrError"];
     };
     ListOrganizationUsersResponsePayload: {
       users: components["schemas"]["OrganizationUserPayload"][];
-      status: components["schemas"]["SuccessOrError"];
+      status?: components["schemas"]["SuccessOrError"];
     };
     ListOrganizationsResponsePayload: {
       organizations: components["schemas"]["OrganizationPayload"][];
-      status: components["schemas"]["SuccessOrError"];
+      status?: components["schemas"]["SuccessOrError"];
     };
     ListPhotosResponseElement: {
       filename: string;
@@ -1016,19 +1006,19 @@ export interface components {
     };
     ListPhotosResponsePayload: {
       photos: components["schemas"]["ListPhotosResponseElement"][];
-      status: components["schemas"]["SuccessOrError"];
+      status?: components["schemas"]["SuccessOrError"];
     };
     ListSpeciesResponsePayload: {
       species: components["schemas"]["SpeciesResponseElement"][];
-      status: components["schemas"]["SuccessOrError"];
+      status?: components["schemas"]["SuccessOrError"];
     };
     ListTimeseriesResponsePayload: {
       timeseries: components["schemas"]["TimeseriesPayload"][];
-      status: components["schemas"]["SuccessOrError"];
+      status?: components["schemas"]["SuccessOrError"];
     };
     ListViabilityTestsResponsePayload: {
       viabilityTests: components["schemas"]["GetViabilityTestPayload"][];
-      status: components["schemas"]["SuccessOrError"];
+      status?: components["schemas"]["SuccessOrError"];
     };
     ModifyAutomationRequestPayload: {
       name: string;
@@ -1178,10 +1168,10 @@ export interface components {
     };
     SimpleErrorResponsePayload: {
       error: components["schemas"]["ErrorDetails"];
-      status: components["schemas"]["SuccessOrError"];
+      status?: components["schemas"]["SuccessOrError"];
     };
     SimpleSuccessResponsePayload: {
-      status: components["schemas"]["SuccessOrError"];
+      status?: components["schemas"]["SuccessOrError"];
     };
     SpeciesLookupCommonNamePayload: {
       name: string;
@@ -1204,7 +1194,7 @@ export interface components {
       names: string[];
       /** True if there were more matching names than could be included in the response. */
       partial: boolean;
-      status: components["schemas"]["SuccessOrError"];
+      status?: components["schemas"]["SuccessOrError"];
     };
     SpeciesProblemElement: {
       id: number;
@@ -1268,7 +1258,7 @@ export interface components {
     };
     StorageLocationsResponsePayload: {
       locations: components["schemas"]["StorageLocationDetails"][];
-      status: components["schemas"]["SuccessOrError"];
+      status?: components["schemas"]["SuccessOrError"];
     };
     /** Indicates of success or failure of the requested operation. */
     SuccessOrError: "ok" | "error";
@@ -1283,7 +1273,7 @@ export interface components {
       accessions: number;
       species: number;
       seedsRemaining: components["schemas"]["SeedCountSummaryPayload"];
-      status: components["schemas"]["SuccessOrError"];
+      status?: components["schemas"]["SuccessOrError"];
     };
     /** Summary of important statistics about the seed bank for the Summary page. */
     SummaryResponsePayload: {
@@ -1293,7 +1283,7 @@ export interface components {
       accessionsByState: { [key: string]: number };
       /** Summary of the number of seeds remaining across all active accessions. */
       seedsRemaining: components["schemas"]["SeedCountSummaryPayload"];
-      status: components["schemas"]["SuccessOrError"];
+      status?: components["schemas"]["SuccessOrError"];
     };
     TimeseriesIdPayload: {
       deviceId: number;
@@ -1357,16 +1347,11 @@ export interface components {
       speciesId?: number;
       state?:
         | "Awaiting Check-In"
-        | "Pending"
         | "Awaiting Processing"
         | "Processing"
-        | "Processed"
         | "Drying"
-        | "Dried"
         | "In Storage"
-        | "Withdrawn"
-        | "Used Up"
-        | "Nursery";
+        | "Used Up";
       storageLocation?: string;
       subsetCount?: number;
       /** Weight of subset of seeds. Units must be a weight measurement, not "Seeds". */
@@ -1375,7 +1360,7 @@ export interface components {
     };
     UpdateAccessionResponsePayloadV2: {
       accession: components["schemas"]["AccessionPayloadV2"];
-      status: components["schemas"]["SuccessOrError"];
+      status?: components["schemas"]["SuccessOrError"];
     };
     UpdateAutomationRequestPayload: {
       type: string;
@@ -1505,7 +1490,7 @@ export interface components {
     UploadFileResponsePayload: {
       /** ID of uploaded file. This may be used to poll for the file's status. */
       id: number;
-      status: components["schemas"]["SuccessOrError"];
+      status?: components["schemas"]["SuccessOrError"];
     };
     /** List of conditions that might cause the user to want to cancel the upload but that can be automatically resolved if desired. */
     UploadProblemPayload: {
@@ -1540,7 +1525,7 @@ export interface components {
     };
     VersionsResponsePayload: {
       versions: components["schemas"]["VersionsEntryPayload"][];
-      status: components["schemas"]["SuccessOrError"];
+      status?: components["schemas"]["SuccessOrError"];
     };
     ViabilityTestResultPayload: {
       recordingDate: string;
