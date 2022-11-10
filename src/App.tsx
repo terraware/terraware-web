@@ -54,6 +54,7 @@ import NurseryDetails from './components/Nursery';
 import InventoryCreate from './components/Inventory/InventoryCreate';
 import InventoryView from './components/Inventory/InventoryView';
 import PlantingSites from './components/PlantingSites';
+import CreatePlantingSite from './components/PlantingSites/PlantingSiteCreate';
 
 interface StyleProps {
   isDesktop?: boolean;
@@ -540,6 +541,11 @@ export default function App() {
               {selectedOrganization && (
                 <Route path={APP_PATHS.INVENTORY_ITEM}>
                   <InventoryView organization={selectedOrganization} species={species} />
+                </Route>
+              )}
+              {trackingEnabled && selectedOrganization && (
+                <Route path={APP_PATHS.PLANTING_SITES_NEW}>
+                  <CreatePlantingSite organization={selectedOrganization} />
                 </Route>
               )}
               {trackingEnabled && selectedOrganization && (
