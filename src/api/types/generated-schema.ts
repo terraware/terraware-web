@@ -255,6 +255,17 @@ export interface paths {
   "/api/v1/timeseries/values": {
     post: operations["recordTimeseriesValues"];
   };
+  "/api/v1/tracking/mapbox/token": {
+    get: operations["getMapboxToken"];
+  };
+  "/api/v1/tracking/sites": {
+    get: operations["listPlantingSites"];
+    post: operations["createPlantingSite"];
+  };
+  "/api/v1/tracking/sites/{id}": {
+    get: operations["getPlantingSite"];
+    put: operations["updatePlantingSite"];
+  };
   "/api/v1/users/me": {
     get: operations["getMyself"];
     put: operations["updateMyself"];
@@ -455,6 +466,15 @@ export interface components {
       notReadyQuantityWithdrawn: number;
       readyQuantityWithdrawn: number;
     };
+    /** Coordinate reference system used for X and Y coordinates in this geometry. By default, coordinates are in WGS 84, with longitude and latitude in degrees. In that case, this element is not present. Otherwise, it specifies which coordinate system to use. */
+    CRS: {
+      type: "name";
+      properties: components["schemas"]["CRSProperties"];
+    };
+    CRSProperties: {
+      /** Name of the coordinate reference system. This must be in the form EPSG:nnnn where nnnn is the numeric identifier of a coordinate system in the EPSG dataset. The default is Longitude/Latitude EPSG:4326, which is the coordinate system +for GeoJSON. */
+      name: string;
+    };
     ConnectDeviceManagerRequestPayload: {
       facilityId: number;
     };
@@ -596,6 +616,15 @@ export interface components {
     };
     CreateOrganizationUserResponsePayload: {
       /** The ID of the newly-added user. */
+      id: number;
+      status?: components["schemas"]["SuccessOrError"];
+    };
+    CreatePlantingSiteRequestPayload: {
+      description?: string;
+      name: string;
+      organizationId: number;
+    };
+    CreatePlantingSiteResponsePayload: {
       id: number;
       status?: components["schemas"]["SuccessOrError"];
     };
@@ -758,6 +787,24 @@ export interface components {
       longitude: number;
       accuracy?: number;
     };
+    /** GEOMETRY-FIX-TYPE-ON-CLIENT-SIDE */
+    Geometry: {
+      type:
+        | "Point"
+        | "LineString"
+        | "Polygon"
+        | "MultiPoint"
+        | "MultiLineString"
+        | "MultiPolygon"
+        | "GeometryCollection";
+      coordinates: number[];
+      crs?: components["schemas"]["CRS"];
+    };
+    GeometryCollection: components["schemas"]["Geometry"] & {
+      geometries?: components["schemas"]["Geometry"][];
+    } & {
+      geometries: unknown;
+    };
     GetAccessionHistoryResponsePayload: {
       /** History of changes in descending time order (newest first.) */
       history: components["schemas"]["AccessionHistoryEntryPayload"][];
@@ -792,6 +839,10 @@ export interface components {
       facility: components["schemas"]["FacilityPayload"];
       status?: components["schemas"]["SuccessOrError"];
     };
+    GetMapboxTokenResponsePayload: {
+      token: string;
+      status?: components["schemas"]["SuccessOrError"];
+    };
     GetNotificationResponsePayload: {
       notification: components["schemas"]["NotificationPayload"];
       status?: components["schemas"]["SuccessOrError"];
@@ -810,6 +861,10 @@ export interface components {
     };
     GetOrganizationUserResponsePayload: {
       user: components["schemas"]["OrganizationUserPayload"];
+      status?: components["schemas"]["SuccessOrError"];
+    };
+    GetPlantingSiteResponsePayload: {
+      site: components["schemas"]["PlantingSitePayload"];
       status?: components["schemas"]["SuccessOrError"];
     };
     GetSpeciesProblemResponsePayload: {
@@ -947,6 +1002,11 @@ export interface components {
       withdrawals: components["schemas"]["GetWithdrawalPayload"][];
       status?: components["schemas"]["SuccessOrError"];
     };
+    LineString: components["schemas"]["Geometry"] & {
+      coordinates?: number[][];
+    } & {
+      coordinates: unknown;
+    };
     ListAllFieldValuesRequestPayload: {
       facilityId?: number;
       fields: string[];
@@ -1008,6 +1068,10 @@ export interface components {
       photos: components["schemas"]["ListPhotosResponseElement"][];
       status?: components["schemas"]["SuccessOrError"];
     };
+    ListPlantingSitesResponsePayload: {
+      sites: components["schemas"]["PlantingSitePayload"][];
+      status?: components["schemas"]["SuccessOrError"];
+    };
     ListSpeciesResponsePayload: {
       species: components["schemas"]["SpeciesResponseElement"][];
       status?: components["schemas"]["SuccessOrError"];
@@ -1031,6 +1095,21 @@ export interface components {
       lowerThreshold?: number;
       upperThreshold?: number;
       verbosity: number;
+    };
+    MultiLineString: components["schemas"]["Geometry"] & {
+      coordinates?: number[][][];
+    } & {
+      coordinates: unknown;
+    };
+    MultiPoint: components["schemas"]["Geometry"] & {
+      coordinates?: number[][];
+    } & {
+      coordinates: unknown;
+    };
+    MultiPolygon: components["schemas"]["Geometry"] & {
+      coordinates?: number[][][][];
+    } & {
+      coordinates: unknown;
     };
     /** Search criterion that matches results that do not match a set of search criteria. */
     NotNodePayload: components["schemas"]["SearchNodePayload"] & {
@@ -1095,6 +1174,36 @@ export interface components {
       /** The user's last name. Not present if the user has been added to the organization but has not signed up for an account yet. */
       lastName?: string;
       role: "Contributor" | "Manager" | "Admin" | "Owner";
+    };
+    PlantingSitePayload: {
+      boundary?: components["schemas"]["Geometry"];
+      description?: string;
+      id: number;
+      name: string;
+      plantingZones?: components["schemas"]["PlantingZonePayload"][];
+    };
+    PlantingZonePayload: {
+      boundary: components["schemas"]["Geometry"];
+      id: number;
+      name: string;
+      plots: components["schemas"]["PlotPayload"][];
+    };
+    PlotPayload: {
+      boundary: components["schemas"]["Geometry"];
+      fullName: string;
+      id: number;
+      name: string;
+    };
+    Point: components["schemas"]["Geometry"] & {
+      /** A single position. In the terraware-server API, positions must always include 3 dimensions. The X and Y dimensions use the coordinate system specified by the crs field, and the Z dimension is in meters. */
+      coordinates?: number[];
+    } & {
+      coordinates: unknown;
+    };
+    Polygon: components["schemas"]["Geometry"] & {
+      coordinates?: number[][][];
+    } & {
+      coordinates: unknown;
     };
     RecordTimeseriesValuesRequestPayload: {
       timeseries: components["schemas"]["TimeseriesValuesPayload"][];
@@ -1427,6 +1536,10 @@ export interface components {
     };
     UpdateOrganizationUserRequestPayload: {
       role: "Contributor" | "Manager" | "Admin" | "Owner";
+    };
+    UpdatePlantingSiteRequestPayload: {
+      description?: string;
+      name: string;
     };
     UpdateUserPreferencesRequestPayload: {
       /** If present, update the user's per-organization preferences for this organization. If not present, update the user's global preferences. */
@@ -3463,6 +3576,95 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["RecordTimeseriesValuesRequestPayload"];
+      };
+    };
+  };
+  getMapboxToken: {
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetMapboxTokenResponsePayload"];
+        };
+      };
+      /** The server is not configured to return Mapbox tokens. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+      /** The server is temporarily unable to generate a new Mapbox token. */
+      503: {
+        content: {
+          "application/json": components["schemas"]["GetMapboxTokenResponsePayload"];
+        };
+      };
+    };
+  };
+  listPlantingSites: {
+    parameters: {
+      query: {
+        organizationId: number;
+        /** If true, include planting zones and plots for each site. */
+        full?: string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListPlantingSitesResponsePayload"];
+        };
+      };
+    };
+  };
+  createPlantingSite: {
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CreatePlantingSiteResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreatePlantingSiteRequestPayload"];
+      };
+    };
+  };
+  getPlantingSite: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetPlantingSiteResponsePayload"];
+        };
+      };
+    };
+  };
+  updatePlantingSite: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdatePlantingSiteRequestPayload"];
       };
     };
   };
