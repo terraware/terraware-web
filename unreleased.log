@@ -1,3 +1,4 @@
+65b88c1 SW-2208 handle inventory when species no longer exists (#734)
 b0a5556 Use search api for planting sites. Update site icon (#738)
 98d07fb SW-2207 Enable Nursery management feature in prod (#737)
 769435e SW-2118 Create a Map component (#733)
