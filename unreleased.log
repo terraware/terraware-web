@@ -1,3 +1,4 @@
+a9f095b SW-2215 Convert string values to number before comparing (#742)
 1a74f99 SW-2215 Clear subset weight error in calculate on close (#735)
 12e10c8 SW-2209 Render Error Page (#741)
 65f308e show <deleted species> in inventory where species was deleted (#740)
