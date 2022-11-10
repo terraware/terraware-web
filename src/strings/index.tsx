@@ -823,6 +823,7 @@ const strings = new LocalizedStrings({
     ADD_A_PLANTING_SITE_SUBTITLE:
       'Where do your plants take root? Set up your planting site so you can keep track of your plants’ progress.',
     ADD_PLANTING_SITE: 'Add Planting Site',
+    DELETED_SPECIES: 'deleted species',
   },
 });
 
