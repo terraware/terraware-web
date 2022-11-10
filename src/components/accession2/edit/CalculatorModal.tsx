@@ -37,7 +37,7 @@ export default function CalculatorModal(props: CalculatorModalProps): JSX.Elemen
 
   const validateFields = () => {
     if (record.subsetWeight?.units === record.remainingQuantity?.units) {
-      if ((record.subsetWeight?.quantity || 0) > (record.remainingQuantity?.quantity || 0)) {
+      if (+(record.subsetWeight?.quantity || 0) > +(record.remainingQuantity?.quantity || 0)) {
         setSubsetError(strings.SUBSET_ERROR);
         return false;
       }
