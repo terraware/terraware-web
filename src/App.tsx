@@ -120,6 +120,7 @@ export default function App() {
   const location = useStateLocation();
   const [selectedOrganization, setSelectedOrganization] = useState<ServerOrganization>();
   const [preferencesOrg, setPreferencesOrg] = useState<{ [key: string]: unknown }>();
+  const [orgScopedPreferences, setOrgScopedPreferences] = useState<{ [key: string]: unknown }>();
   const [notifications, setNotifications] = useState<Notifications>();
   const { isProduction } = useEnvironment();
   const trackingEnabled = isRouteEnabled('Tracking V1');
@@ -205,9 +206,14 @@ export default function App() {
   const reloadOrgPreferences = useCallback(() => {
     const getOrgPreferences = async () => {
       if (selectedOrganization) {
-        await getPreferences(selectedOrganization.id);
+        const response = await getPreferences(selectedOrganization.id);
+        if (response.requestSucceeded) {
+          setOrgScopedPreferences(response.preferences);
+        }
       }
     };
+    // reset display columns so we don't spill them across orgs
+    setAccessionsDisplayColumns(DefaultColumns.fields);
     getOrgPreferences();
   }, [selectedOrganization]);
 
@@ -422,6 +428,7 @@ export default function App() {
                   hasSeedBanks={selectedOrgHasSeedBanks()}
                   hasSpecies={selectedOrgHasSpecies()}
                   reloadData={reloadData}
+                  orgScopedPreferences={orgScopedPreferences}
                 />
               </Route>
               {selectedOrganization && (
