@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { addError } from '../accessions2/utils';
+import { addError } from '../utils';
 import { paths } from '../types/generated-schema';
 import { SpeciesInventorySummary } from '../types/inventory';
 import { GetUploadStatusResponsePayload, UploadFileResponse } from '../types/uploadFile';
