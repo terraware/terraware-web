@@ -1,4 +1,4 @@
-import CreatePlantingSite from './PlantingSitesList';
-import PlantingSitesList from './PlantingSiteCreate';
+import CreatePlantingSite from './PlantingSiteCreate';
+import PlantingSitesList from './PlantingSitesList';
 
 export { CreatePlantingSite, PlantingSitesList };
