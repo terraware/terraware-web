@@ -50,6 +50,10 @@ export default function CalculatorModal(props: CalculatorModalProps): JSX.Elemen
     if (validateFields()) {
       const response = await updateAccession2(record, true);
       if (response.requestSucceeded && response.accession) {
+        if (response.accession.estimatedCount?.toString() === '0') {
+          setSubsetError(strings.SUBSET_ERROR);
+          return;
+        }
         goToPrev();
         setRecord(response.accession);
       } else {
