@@ -7,7 +7,7 @@ import FormBottomBar from '../common/FormBottomBar';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import useForm from 'src/utils/useForm';
 import { PlantingSitePostRequestBody, postPlantingSite } from 'src/api/tracking/tracking';
-import { APP_PATHS } from 'src/constants';
+import { APP_PATHS, TERRAWARE_SUPPORT_LINK } from 'src/constants';
 import { Link, useHistory } from 'react-router-dom';
 import useSnackbar from 'src/utils/useSnackbar';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
@@ -99,7 +99,7 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
           <Grid item xs={gridSize()}>
             <TextField
               id='name'
-              label={strings.NAME}
+              label={strings.NAME_REQUIRED}
               type='text'
               onChange={onChange}
               value={record.name}
@@ -138,7 +138,11 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
                 {strings.IMPORT_BOUNDARIES_AND_PLOTS_DESCRIPTION}
               </Typography>
               <Box sx={{ paddingY: 2 }}>
-                <Button label={strings.CONTACT_US} onClick={() => true} size='medium' />
+                <Button
+                  label={strings.CONTACT_US}
+                  onClick={() => window.open(TERRAWARE_SUPPORT_LINK, '_blank')}
+                  size='medium'
+                />
               </Box>
             </Box>
           </Grid>
