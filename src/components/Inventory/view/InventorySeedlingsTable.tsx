@@ -111,6 +111,7 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
           'version',
           'accession_id',
           'accession_accessionNumber',
+          'notes',
         ],
         sortOrder: [
           {
