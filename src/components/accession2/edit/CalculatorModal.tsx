@@ -50,7 +50,11 @@ export default function CalculatorModal(props: CalculatorModalProps): JSX.Elemen
     if (validateFields()) {
       const response = await updateAccession2(record, true);
       if (response.requestSucceeded && response.accession) {
-        if (response.accession.estimatedCount?.toString() === '0') {
+        if (
+          response.accession.subsetWeight?.grams &&
+          response.accession.latestObservedQuantity?.grams &&
+          response.accession.subsetWeight?.grams > response.accession.latestObservedQuantity?.grams
+        ) {
           setSubsetError(strings.SUBSET_ERROR);
           return;
         }
