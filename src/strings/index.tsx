@@ -829,6 +829,8 @@ const strings = new LocalizedStrings({
     IMPORT_BOUNDARIES_AND_PLOTS: 'Import boundaries and plots',
     IMPORT_BOUNDARIES_AND_PLOTS_DESCRIPTION:
       'You’ll need to talk to your representative at Terraformation to import your map files to Terraware so you can work with your site’s boundaries and plots.',
+    PLANTING_ZONES: 'Planting Zones',
+    PLOTS: 'Plots',
   },
 });
 
