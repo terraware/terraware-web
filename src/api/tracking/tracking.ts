@@ -1,7 +1,7 @@
 import axios from 'axios';
 import addQueryParams from 'src/api/helpers/addQueryParams';
 import { paths } from '../types/generated-schema';
-import { addError } from './utils';
+import { addError } from '../utils';
 import { PlantingSite } from 'src/api/types/tracking';
 
 /**
@@ -21,7 +21,7 @@ type MapboxTokenResponse = {
 
 export const getMapboxToken = async (): Promise<MapboxTokenResponse> => {
   const response: MapboxTokenResponse = {
-    requestSucceded: true,
+    requestSucceeded: true,
   };
 
   try {
@@ -60,8 +60,8 @@ type ListPlantingSitesResponse = {
 };
 
 export const listPlantingSites = async (full?: boolean): Promise<ListPlantingSitesResponse> => {
-  const response: MapboxTokenResponse = {
-    requestSucceded: true,
+  const response: ListPlantingSitesResponse = {
+    requestSucceeded: true,
   };
 
   try {
@@ -100,8 +100,10 @@ type CreatePlantingSiteResponse = {
   error?: string;
 };
 
-export const postPlantingSite = async (plantingSite: PlantingSitePostRequestBody): Promise<CreatePlantingSiteResponse> => {
-  const response: CreatePantingSiteResponse = {
+export const postPlantingSite = async (
+  plantingSite: PlantingSitePostRequestBody
+): Promise<CreatePlantingSiteResponse> => {
+  const response: CreatePlantingSiteResponse = {
     requestSucceeded: true,
     id: 0,
   };
@@ -142,12 +144,12 @@ type PlantingSiteResponse = {
 };
 
 export const getPlantingSite = async (siteId: number): Promise<PlantingSiteResponse> => {
-  const response: MapboxTokenResponse = {
-    requestSucceded: true,
+  const response: PlantingSiteResponse = {
+    requestSucceeded: true,
   };
 
   try {
-    const endpoint = PLANTING_SITE_ENDPOINT.replace('{id}', siteId.toString();
+    const endpoint = PLANTING_SITE_ENDPOINT.replace('{id}', siteId.toString());
     const serverResponse: GetPlantingSiteResponsePayload = (await axios.get(endpoint)).data;
     if (serverResponse.status === 'error') {
       response.requestSucceeded = false;
@@ -167,7 +169,7 @@ export const getPlantingSite = async (siteId: number): Promise<PlantingSiteRespo
  * Update a planting site
  */
 
-type PlantingSiteUpdateResponse =
+type PlantingSitePutResponse =
   paths[typeof PLANTING_SITE_ENDPOINT]['put']['responses'][200]['content']['application/json'];
 
 export type PlantingSitePutRequestBody =
@@ -178,13 +180,16 @@ type UpdatePlantingSiteResponse = {
   error?: string;
 };
 
-export const updatePlantingSite = async (plantingSite: PlantingSitePutRequestBody): Promise<UpdatePlantingSiteResponse> => {
-  const response: UpdatePantingSiteResponse = {
+export const updatePlantingSite = async (
+  siteId: number,
+  plantingSite: PlantingSitePutRequestBody
+): Promise<UpdatePlantingSiteResponse> => {
+  const response: UpdatePlantingSiteResponse = {
     requestSucceeded: true,
   };
 
   try {
-    const endpoint = PLANTING_SITE_ENDPOINT.replace('{id}', siteId.toString();
+    const endpoint = PLANTING_SITE_ENDPOINT.replace('{id}', siteId.toString());
     const serverResponse: PlantingSitePutResponse = (await axios.put(endpoint, plantingSite)).data;
     if (serverResponse.status === 'error') {
       response.requestSucceeded = false;

@@ -16,4 +16,3 @@ export type MultiPoint = components[typeof schemas]['MultiPoint'];
 export type MultiLineString = components[typeof schemas]['MultiLineString'];
 export type MultiPolygon = components[typeof schemas]['MultiPolygon'];
 export type GeometryCollection = components[typeof schemas]['GeometryCollection'];
-
