@@ -116,7 +116,7 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
         )}
       </Grid>
 
-      <Grid item xs={6} className={`${classes.center} logo`}></Grid>
+      <Grid item xs={6} className={`${classes.center} logo`} />
 
       <Grid item xs={3} className={classes.right}>
         <NotificationsDropdown
