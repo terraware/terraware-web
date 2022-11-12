@@ -17,6 +17,9 @@ const useStyles = makeStyles((theme: Theme) => ({
   logo: {
     width: 137,
   },
+  backgroundLogo: {
+    background: 'url(/assets/logo.svg) no-repeat center/37px',
+  },
   separator: {
     width: '1px',
     height: '32px',
@@ -104,7 +107,7 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
       </div>
     </>
   ) : (
-    <Grid container className={classes.flex}>
+    <Grid container className={`${classes.flex}  ${classes.backgroundLogo}`}>
       <Grid item xs={3} className={classes.left}>
         {selectedOrganization && (
           <IconButton onClick={() => setShowNavBar(true)} size='small'>
@@ -113,9 +116,7 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
         )}
       </Grid>
 
-      <Grid item xs={6} className={`${classes.center} logo`}>
-        <Svg.Logo className={classes.logo} />
-      </Grid>
+      <Grid item xs={6} className={`${classes.center} logo`}></Grid>
 
       <Grid item xs={3} className={classes.right}>
         <NotificationsDropdown
