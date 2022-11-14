@@ -1,16 +1,5 @@
 import { TabContext, TabList, TabPanel } from '@mui/lab';
-import {
-  useTheme,
-  Box,
-  IconButton,
-  Link as LinkMUI,
-  Menu,
-  Tab,
-  Theme,
-  Typography,
-  Grid,
-  MenuItem,
-} from '@mui/material';
+import { useTheme, Box, Link as LinkMUI, Menu, Tab, Theme, Typography, Grid, MenuItem } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Button, Icon } from '@terraware/web-components';
 import moment from 'moment';
@@ -45,6 +34,7 @@ import { getSeedBank, isContributor } from 'src/utils/organization';
 import _ from 'lodash';
 import PageHeaderWrapper from '../../common/PageHeaderWrapper';
 import { APP_PATHS } from 'src/constants';
+import OverviewItemCard from '../../OverviewItemCard';
 
 interface StyleProps {
   isMobile?: boolean;
@@ -227,17 +217,9 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
   const getAbsoluteQuantity = () => {
     if (accession && accession.remainingQuantity) {
       if (accession.remainingQuantity.units === 'Seeds') {
-        return (
-          <Typography sx={overviewItemContentProps}>
-            {accession.remainingQuantity.quantity} {strings.CT}
-          </Typography>
-        );
+        return `${accession.remainingQuantity.quantity} ${strings.CT}`;
       } else {
-        return (
-          <Typography sx={overviewItemContentProps}>
-            {accession.remainingQuantity.grams} {strings.GRAMS}
-          </Typography>
-        );
+        return `${accession.remainingQuantity.grams} ${strings.GRAMS}`;
       }
     }
   };
@@ -289,19 +271,11 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
   const getEstimatedQuantity = () => {
     if (accession?.remainingQuantity?.units === 'Seeds') {
       if (accession.estimatedWeight?.grams) {
-        return (
-          <Typography sx={overviewItemContentProps}>
-            (~{accession.estimatedWeight?.grams} {strings.GRAMS})
-          </Typography>
-        );
+        return `~${accession.estimatedWeight?.grams} ${strings.GRAMS}`;
       }
     } else {
       if (accession?.estimatedCount) {
-        return (
-          <Typography sx={overviewItemContentProps}>
-            (~{accession?.estimatedCount} {strings.CT})
-          </Typography>
-        );
+        return `~${accession?.estimatedCount} ${strings.CT}`;
       }
     }
     return '';
@@ -344,53 +318,6 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
     );
   };
 
-  const iconProps = {
-    position: 'absolute',
-  };
-
-  const readOnlyProps = {
-    display: 'flex',
-    '&:hover .edit-icon': {
-      display: 'block',
-      ...iconProps,
-    },
-    '.edit-icon': {
-      display: isMobile ? 'block' : 'none',
-      ...iconProps,
-    },
-    alignItems: isMobile ? 'flex-start' : 'center',
-    justifyContent: isMobile ? 'space-between' : 'normal',
-    width: '100%',
-  };
-
-  const editableProps = {
-    ...readOnlyProps,
-    cursor: 'pointer',
-  };
-
-  const overviewItemProps = {
-    backgroundColor: `${themeObj.palette.TwClrBg}`,
-    display: 'flex',
-    flexDirection: 'column',
-    padding: themeObj.spacing(3),
-    borderRadius: '16px',
-    height: '100%',
-  };
-
-  const overviewItemLabelProps = {
-    color: themeObj.palette.TwClrTxtSecondary,
-    fontSize: '14px',
-    fontWeight: 400,
-    marginBottom: themeObj.spacing(1),
-  };
-
-  const overviewItemContentProps = {
-    color: themeObj.palette.TwClrTxt,
-    fontSize: '16px',
-    fontWeight: 600,
-    lineHeight: '24px',
-  };
-
   const tabHeaderProps = {
     borderBottom: 1,
     borderColor: 'divider',
@@ -420,8 +347,6 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
     }
     return 1;
   };
-
-  const spaceFiller = () => <Box sx={{ marginLeft: 1, height: '24px', width: 2 }} />;
 
   const quantityEditable = userCanEdit && (accession?.state === 'Drying' || accession?.state === 'In Storage');
   const viabilityEditable = userCanEdit && accession?.state !== 'Used Up';
@@ -582,12 +507,11 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
       >
         {accession?.state && (
           <Grid item xs={getOverviewGridSize(1)}>
-            <Box sx={overviewItemProps}>
-              <Typography sx={overviewItemLabelProps}>{strings.STATUS}</Typography>
-              <Box
-                sx={isAwaitingCheckin || !userCanEdit ? readOnlyProps : editableProps}
-                onClick={() => !isAwaitingCheckin && userCanEdit && setOpenEditStateModal(true)}
-              >
+            <OverviewItemCard
+              isEditable={!(isAwaitingCheckin || !userCanEdit)}
+              onClick={() => setOpenEditStateModal(true)}
+              title={strings.STATUS}
+              contents={
                 <Typography
                   paddingLeft={1}
                   sx={{
@@ -600,156 +524,112 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
                 >
                   {accession.state}
                 </Typography>
-                {!isAwaitingCheckin && userCanEdit ? (
-                  <IconButton sx={{ marginLeft: 1, height: '24px', width: '24px' }}>
-                    <Icon name='iconEdit' className={`${classes.editIcon} edit-icon`} />
-                  </IconButton>
-                ) : (
-                  spaceFiller()
-                )}
-              </Box>
-            </Box>
+              }
+            />
           </Grid>
         )}
         {isAwaitingCheckin && accession?.bagNumbers !== undefined && (
           <Grid item xs={getOverviewGridSize(1)}>
-            <Box sx={overviewItemProps}>
-              <Typography sx={overviewItemLabelProps}> {strings.BAG_ID}: </Typography>
-              <Typography sx={overviewItemContentProps}> {accession.bagNumbers.join(', ')} </Typography>
-            </Box>
+            <OverviewItemCard isEditable={false} title={strings.BAG_ID} contents={accession.bagNumbers.join(', ')} />
           </Grid>
         )}
         {accession?.facilityId !== undefined && (
           <Grid item xs={getOverviewGridSize(1)}>
-            <Box sx={overviewItemProps}>
-              <Typography sx={overviewItemLabelProps}>{strings.LOCATION}</Typography>
-              <Box
-                sx={userCanEdit ? editableProps : readOnlyProps}
-                onClick={() => userCanEdit && setOpenEditLocationModal(true)}
-              >
-                <Typography sx={overviewItemContentProps}>
+            <OverviewItemCard
+              isEditable={userCanEdit}
+              onClick={() => setOpenEditLocationModal(true)}
+              title={strings.LOCATION}
+              contents={
+                <Box>
                   {getSeedBank(organization, accession.facilityId)?.name}
                   {accession.storageLocation ? ` / ${accession.storageLocation}` : ''}
-                </Typography>
-                {userCanEdit ? (
-                  <IconButton sx={{ marginLeft: 1, height: '24px', width: '24px' }}>
-                    <Icon name='iconEdit' className={`${classes.editIcon} edit-icon`} />
-                  </IconButton>
-                ) : (
-                  spaceFiller()
-                )}
-              </Box>
-            </Box>
+                </Box>
+              }
+            />
           </Grid>
         )}
         {accession?.state === 'Drying' && (
           <Grid item xs={getOverviewGridSize(1)}>
-            <Box sx={overviewItemProps}>
-              <Typography sx={overviewItemLabelProps}>{strings.END_DRYING_REMINDER}</Typography>
-              <Box
-                sx={userCanEdit ? editableProps : readOnlyProps}
-                onClick={() => userCanEdit && setOpenEndDryingReminderModal(true)}
-              >
+            <OverviewItemCard
+              isEditable={userCanEdit}
+              onClick={() => setOpenEndDryingReminderModal(true)}
+              title={strings.END_DRYING_REMINDER}
+              contents={
                 <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                  <Typography sx={overviewItemContentProps}>
+                  <Box>
                     {accession?.dryingEndDate
                       ? `${moment(accession.dryingEndDate).fromNow()}`
                       : strings.END_DRYING_REMINDER_OFF}
-                  </Typography>
-                  <Typography sx={overviewItemContentProps}>
-                    {accession?.dryingEndDate ? ` (${accession.dryingEndDate})` : null}
-                  </Typography>
+                  </Box>
+                  <Box>{accession?.dryingEndDate ? ` (${accession.dryingEndDate})` : null}</Box>
                 </Box>
-                {userCanEdit ? (
-                  <IconButton sx={{ marginLeft: 1, height: '24px', width: '24px' }}>
-                    <Icon name='iconEdit' className={`${classes.editIcon} edit-icon`} />
-                  </IconButton>
-                ) : (
-                  spaceFiller()
-                )}
-              </Box>
-            </Box>
+              }
+            />
           </Grid>
         )}
         <Grid item xs={getOverviewGridSize(1)}>
-          <Box sx={overviewItemProps}>
-            <Typography sx={overviewItemLabelProps}>{strings.QUANTITY}</Typography>
-            {accession?.remainingQuantity?.quantity !== undefined ? (
-              <Box
-                sx={quantityEditable ? editableProps : readOnlyProps}
-                onClick={() => quantityEditable && setOpenQuantityModal(true)}
-              >
+          <OverviewItemCard
+            isEditable={quantityEditable}
+            hideEditIcon={accession?.remainingQuantity?.quantity === undefined}
+            onClick={() => setOpenQuantityModal(true)}
+            title={strings.QUANTITY}
+            contents={
+              accession?.remainingQuantity?.quantity !== undefined ? (
                 <Box display='flex' flexDirection='column'>
-                  {getAbsoluteQuantity()} {getEstimatedQuantity()}
+                  <Box>{getAbsoluteQuantity()}</Box>
+                  <Box>{getEstimatedQuantity()}</Box>
                 </Box>
-                {quantityEditable ? (
-                  <IconButton sx={{ marginLeft: 2, height: '24px', width: '24px' }}>
-                    <Icon name='iconEdit' className={`${classes.editIcon} edit-icon`} />
-                  </IconButton>
-                ) : (
-                  spaceFiller()
-                )}
-              </Box>
-            ) : quantityEditable ? (
-              <LinkMUI sx={{ ...linkStyle, fontSize: '14px' }} onClick={() => setOpenQuantityModal(true)}>
-                <Box display='flex' alignItems='center'>
-                  <Icon name='iconAdd' className={classes.addIconEnabled} />
-                  &nbsp;{strings.ADD}
-                </Box>
-              </LinkMUI>
-            ) : (
-              <Typography color={themeObj.palette.TwClrTxtTertiary} sx={{ pointerEvents: 'none', fontSize: '14px' }}>
-                <Box display='flex' alignItems='center'>
-                  <Icon name='iconAdd' className={classes.addIconDisabled} />
-                  &nbsp;{strings.ADD}
-                </Box>
-              </Typography>
-            )}
-          </Box>
+              ) : quantityEditable ? (
+                <LinkMUI sx={{ ...linkStyle, fontSize: '14px' }} onClick={() => setOpenQuantityModal(true)}>
+                  <Box display='flex' alignItems='center'>
+                    <Icon name='iconAdd' className={classes.addIconEnabled} />
+                    &nbsp;{strings.ADD}
+                  </Box>
+                </LinkMUI>
+              ) : (
+                <Typography color={themeObj.palette.TwClrTxtTertiary} sx={{ pointerEvents: 'none', fontSize: '14px' }}>
+                  <Box display='flex' alignItems='center'>
+                    <Icon name='iconAdd' className={classes.addIconDisabled} />
+                    &nbsp;{strings.ADD}
+                  </Box>
+                </Typography>
+              )
+            }
+          />
         </Grid>
         <Grid item xs={getOverviewGridSize(2)}>
-          <Box sx={overviewItemProps}>
-            <Typography sx={overviewItemLabelProps}>{strings.AGE}</Typography>
-            {accession?.collectedDate ? (
-              <Typography sx={overviewItemContentProps}>
-                {age.value} {age.unit}
-              </Typography>
-            ) : null}
-          </Box>
+          <OverviewItemCard
+            isEditable={false}
+            title={strings.AGE}
+            contents={accession?.collectedDate ? `${age.value} ${age.unit}` : null}
+          />
         </Grid>
         <Grid item xs={getOverviewGridSize(2)}>
-          <Box sx={overviewItemProps}>
-            <Typography sx={overviewItemLabelProps}>{strings.VIABILITY}</Typography>
-            {accession?.viabilityPercent ? (
-              <Box
-                sx={viabilityEditable ? editableProps : readOnlyProps}
-                onClick={() => viabilityEditable && setOpenViabilityModal(true)}
-              >
-                <Typography sx={overviewItemContentProps}>{accession?.viabilityPercent}%</Typography>
-                {viabilityEditable ? (
-                  <IconButton sx={{ marginLeft: 1, height: '24px', width: '24px' }}>
-                    <Icon name='iconEdit' className={`${classes.editIcon} edit-icon`} />
-                  </IconButton>
-                ) : (
-                  spaceFiller()
-                )}
-              </Box>
-            ) : viabilityEditable ? (
-              <LinkMUI sx={{ ...linkStyle, fontSize: '14px' }} onClick={() => setOpenViabilityModal(true)}>
-                <Box display='flex' alignItems='center'>
-                  <Icon name='iconAdd' className={classes.addIconEnabled} />
-                  &nbsp;{strings.ADD}
-                </Box>
-              </LinkMUI>
-            ) : (
-              <Typography color={themeObj.palette.TwClrTxtTertiary} sx={{ pointerEvents: 'none', fontSize: '14px' }}>
-                <Box display='flex' alignItems='center'>
-                  <Icon name='iconAdd' className={classes.addIconDisabled} />
-                  &nbsp;{strings.ADD}
-                </Box>
-              </Typography>
-            )}
-          </Box>
+          <OverviewItemCard
+            isEditable={viabilityEditable}
+            hideEditIcon={!accession?.viabilityPercent}
+            title={strings.VIABILITY}
+            onClick={() => setOpenViabilityModal(true)}
+            contents={
+              accession?.viabilityPercent ? (
+                `${accession?.viabilityPercent}%`
+              ) : viabilityEditable ? (
+                <LinkMUI sx={{ ...linkStyle, fontSize: '14px' }} onClick={() => setOpenViabilityModal(true)}>
+                  <Box display='flex' alignItems='center'>
+                    <Icon name='iconAdd' className={classes.addIconEnabled} />
+                    &nbsp;{strings.ADD}
+                  </Box>
+                </LinkMUI>
+              ) : (
+                <Typography color={themeObj.palette.TwClrTxtTertiary} sx={{ pointerEvents: 'none', fontSize: '14px' }}>
+                  <Box display='flex' alignItems='center'>
+                    <Icon name='iconAdd' className={classes.addIconDisabled} />
+                    &nbsp;{strings.ADD}
+                  </Box>
+                </Typography>
+              )
+            }
+          />
         </Grid>
       </Grid>
 
