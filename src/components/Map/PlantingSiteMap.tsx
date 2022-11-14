@@ -104,7 +104,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
 
   // fetch polygons and boundaries
   useEffect(() => {
-    const fetchPlantingSite = async () => {
+    const fetchPlantingSite = () => {
       const site = extractPlantingSite(plantingSite);
       const zones = extractPlantingZones(plantingSite) || [];
       const plots = extractPlots(plantingSite) || [];
