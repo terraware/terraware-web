@@ -92,7 +92,7 @@ export default function PlantingSiteView(): JSX.Element {
           </Grid>
           <Grid item xs={12}>
             {plantingSite?.boundary ? (
-              <PlantingSiteMap siteId={plantingSite.id} />
+              <PlantingSiteMap plantingSite={plantingSite} />
             ) : (
               <Box
                 sx={{
