@@ -1,4 +1,4 @@
-import { Box, Container, Grid, Typography } from '@mui/material';
+import { Box, CircularProgress, Container, Grid, Typography } from '@mui/material';
 import { Button, theme } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -82,20 +82,26 @@ export default function PlantingSitesList(props: PlantingSitesListProps): JSX.El
         </Box>
       </PageHeaderWrapper>
       <Grid>
-        <Box>
-          {searchResults?.length === 0 ? (
-            <Container sx={{ paddingY: 4 }}>
-              <EmptyStatePage pageName={'PlantingSites'} />
-            </Container>
-          ) : (
-            <PlantigSitesTable
-              organization={organization}
-              results={searchResults || []}
-              temporalSearchValue={temporalSearchValue}
-              setTemporalSearchValue={setTemporalSearchValue}
-            />
-          )}
-        </Box>
+        {searchResults ? (
+          <Box>
+            {searchResults?.length === 0 ? (
+              <Container sx={{ paddingY: 4 }}>
+                <EmptyStatePage pageName={'PlantingSites'} />
+              </Container>
+            ) : (
+              <PlantigSitesTable
+                organization={organization}
+                results={searchResults || []}
+                temporalSearchValue={temporalSearchValue}
+                setTemporalSearchValue={setTemporalSearchValue}
+              />
+            )}
+          </Box>
+        ) : (
+          <Box sx={{ position: 'fixed', top: '50%', left: '50%' }}>
+            <CircularProgress />
+          </Box>
+        )}
       </Grid>
     </TfMain>
   );
