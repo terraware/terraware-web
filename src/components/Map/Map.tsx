@@ -98,6 +98,7 @@ export default function Map(props: MapProps): JSX.Element {
 
     // handle error
     map.current.on('error', (event: any) => {
+try {
       if (event?.error?.status === 401) {
         // tslint:disable-next-line: no-console
         console.error('Mapbox token expired');
@@ -105,6 +106,10 @@ export default function Map(props: MapProps): JSX.Element {
           onTokenExpired();
         }
       }
+} catch(e) {
+  // tslint:disable-next-line: no-console
+  console.error('On Error', e);
+}
     });
 
     // fit to bounding box
