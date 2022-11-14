@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { Box, CircularProgress } from '@mui/material';
+import { Box, CircularProgress, useTheme } from '@mui/material';
 import { getMapboxToken, getPlantingSite } from 'src/api/tracking/tracking';
 import { Geometry, PlantingSite } from 'src/api/types/tracking';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -13,9 +13,14 @@ export type PlantingSiteMapProps = {
 
 export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Element {
   const { siteId } = props;
+  const theme = useTheme();
   const [snackbar] = useState(useSnackbar());
   const [token, setToken] = useState<string>();
   const [mapOptions, setMapOptions] = useState<MapOptions>();
+
+  const getFillColor = useCallback(() => {
+    return theme.palette.TwClrBaseWhite || 'white';
+  }, [theme.palette.TwClrBaseWhite]);
 
   const getPolygons = useCallback((boundary?: Geometry): MapGeometry => {
     if (!boundary) {
@@ -32,11 +37,11 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
         boundary: getPolygons(boundary),
         name: `site-${name}`,
         id: `site-${id}`,
-        fillColor: 'yellow',
-        fillOpacity: 0.5,
+        fillColor: getFillColor(),
+        fillOpacity: 0.1,
       };
     },
-    [getPolygons]
+    [getPolygons, getFillColor]
   );
 
   const extractPlantingZones = useCallback(
@@ -48,12 +53,12 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
           boundary: getPolygons(boundary),
           name: `zone-${name}`,
           id: `zone-${id}`,
-          fillColor: 'blue',
-          fillOpacity: 0.5,
+          fillColor: getFillColor(),
+          fillOpacity: 0.2,
         };
       });
     },
-    [getPolygons]
+    [getPolygons, getFillColor]
   );
 
   const extractPlots = useCallback(
@@ -67,8 +72,8 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
             boundary: getPolygons(boundary),
             name: `plot-${name}`,
             id: `plot-${id}`,
-            fillColor: 'green',
-            fillOpacity: 0.5,
+            fillColor: getFillColor(),
+            fillOpacity: 0.3,
             onClick: () => `
             ID ${id}
             Name ${fullName || name}
@@ -77,25 +82,24 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
         });
       });
     },
-    [getPolygons]
+    [getPolygons, getFillColor]
   );
 
   // fetch token
-  useEffect(() => {
-    // TODO: set timeout to refresh the token
-    const fetchToken = async () => {
-      if (token) {
-        return;
-      }
-      const response = await getMapboxToken();
-      if (response.requestSucceeded) {
-        setToken(response.token);
-      } else {
-        snackbar.toastError(response.error);
-      }
-    };
+  const fetchMapboxToken = useCallback(async () => {
+    const response = await getMapboxToken();
+    if (response.requestSucceeded) {
+      setToken(response.token);
+    } else {
+      snackbar.toastError(response.error);
+    }
+  }, [snackbar]);
 
-    fetchToken();
+  useEffect(() => {
+    if (token) {
+      return;
+    }
+    fetchMapboxToken();
   });
 
   // fetch polygons and boundaries
@@ -136,7 +140,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
 
   return (
     <Box>
-      <Map token={token} options={mapOptions} />
+      <Map token={token} options={mapOptions} onTokenExpired={fetchMapboxToken} />
     </Box>
   );
 }
