@@ -1,5 +1,16 @@
 import { TabContext, TabList, TabPanel } from '@mui/lab';
-import { useTheme, Box, IconButton, Link as LinkMUI, Tab, Theme, Typography } from '@mui/material';
+import {
+  useTheme,
+  Box,
+  IconButton,
+  Link as LinkMUI,
+  Menu,
+  Tab,
+  Theme,
+  Typography,
+  Grid,
+  MenuItem,
+} from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Button, Icon } from '@terraware/web-components';
 import moment from 'moment';
@@ -50,9 +61,22 @@ const useStyles = makeStyles((theme: Theme) => ({
   fullSizeButton: {
     width: '100%',
   },
+  actionMenuButton: {
+    marginLeft: theme.spacing(1),
+  },
   backIcon: {
     fill: theme.palette.TwClrIcnBrand,
     marginRight: theme.spacing(1),
+  },
+  addIconEnabled: {
+    fill: theme.palette.TwClrIcnBrand,
+    height: '20px',
+    width: '20px',
+  },
+  addIconDisabled: {
+    fill: theme.palette.TwClrBaseGray300,
+    height: '20px',
+    width: '20px',
   },
   backToAccessions: {
     fontSize: '20px',
@@ -92,11 +116,13 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
   const [openViabilityModal, setOpenViabilityModal] = useState(false);
   const [openNewViabilityTest, setOpenNewViabilityTest] = useState(false);
   const [openViewViabilityTestModal, setOpenViewViabilityTestModal] = useState(false);
+  const [actionMenuAnchorEl, setActionMenuAnchorEl] = useState<HTMLButtonElement | null>(null);
+  const openActionMenu = Boolean(actionMenuAnchorEl);
   const [selectedTest, setSelectedTest] = useState<ViabilityTest>();
   const [age, setAge] = useState({ value: '', unit: '' });
   const { organization, user } = props;
   const userCanEdit = !isContributor(organization);
-  const { isMobile } = useDeviceInfo();
+  const { isMobile, isTablet } = useDeviceInfo();
   const classes = useStyles({ isMobile });
   const snackbar = useSnackbar();
   const themeObj = useTheme();
@@ -179,6 +205,8 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
   };
 
   const linkStyle = {
+    color: themeObj.palette.TwClrTxtBrand,
+    fontWeight: 500,
     textDecoration: 'none',
     cursor: 'pointer',
   };
@@ -200,20 +228,14 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
     if (accession && accession.remainingQuantity) {
       if (accession.remainingQuantity.units === 'Seeds') {
         return (
-          <Typography display='flex' sx={{ marginRight: '5px', alignItems: 'baseline' }}>
-            <Typography sx={{ fontWeight: 600, marginRight: '5px', fontSize: '20px' }}>
-              {accession.remainingQuantity.quantity}
-            </Typography>
-            <Typography fontSize='14px'>{strings.CT}</Typography>
+          <Typography sx={overviewItemContentProps}>
+            {accession.remainingQuantity.quantity} {strings.CT}
           </Typography>
         );
       } else {
         return (
-          <Typography display='flex' sx={{ marginRight: '5px', alignItems: 'baseline' }}>
-            <Typography sx={{ fontWeight: 600, marginRight: '5px', fontSize: '20px' }}>
-              {accession.remainingQuantity.grams}
-            </Typography>
-            <Typography fontSize='14px'>{strings.GRAMS}</Typography>
+          <Typography sx={overviewItemContentProps}>
+            {accession.remainingQuantity.grams} {strings.GRAMS}
           </Typography>
         );
       }
@@ -268,7 +290,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
     if (accession?.remainingQuantity?.units === 'Seeds') {
       if (accession.estimatedWeight?.grams) {
         return (
-          <Typography fontSize='14px'>
+          <Typography sx={overviewItemContentProps}>
             (~{accession.estimatedWeight?.grams} {strings.GRAMS})
           </Typography>
         );
@@ -276,7 +298,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
     } else {
       if (accession?.estimatedCount) {
         return (
-          <Typography fontSize='14px'>
+          <Typography sx={overviewItemContentProps}>
             (~{accession?.estimatedCount} {strings.CT})
           </Typography>
         );
@@ -299,13 +321,35 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
     return null;
   };
 
+  const renderActionMenuButton = () => {
+    return (
+      <>
+        <Button
+          className={classes.actionMenuButton}
+          onClick={(ev) => ev && setActionMenuAnchorEl(ev.currentTarget)}
+          icon='menuVertical'
+          priority='secondary'
+        />
+        <Menu anchorEl={actionMenuAnchorEl} open={openActionMenu} onClose={() => setActionMenuAnchorEl(null)}>
+          <MenuItem
+            onClick={() => {
+              setActionMenuAnchorEl(null);
+              setOpenDeleteAccession(true);
+            }}
+          >
+            Delete
+          </MenuItem>
+        </Menu>
+      </>
+    );
+  };
+
   const iconProps = {
     position: 'absolute',
   };
 
   const readOnlyProps = {
     display: 'flex',
-    whiteSpace: 'pre',
     '&:hover .edit-icon': {
       display: 'block',
       ...iconProps,
@@ -316,7 +360,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
     },
     alignItems: isMobile ? 'flex-start' : 'center',
     justifyContent: isMobile ? 'space-between' : 'normal',
-    width: isMobile ? '100%' : 'auto',
+    width: '100%',
   };
 
   const editableProps = {
@@ -324,18 +368,57 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
     cursor: 'pointer',
   };
 
-  const editableParentProps = {
+  const overviewItemProps = {
+    backgroundColor: `${themeObj.palette.TwClrBg}`,
     display: 'flex',
-    padding: themeObj.spacing(0, isMobile ? 0 : 2, isMobile ? 3 : 0, isMobile ? 0 : 2),
-    alignItems: isMobile ? 'flex-start' : 'center',
-    width: isMobile ? '100%' : 'auto',
+    flexDirection: 'column',
+    padding: themeObj.spacing(3),
+    borderRadius: '16px',
+    height: '100%',
   };
 
-  const editableDynamicValuesProps = {
-    display: 'flex',
-    flexDirection: isMobile ? 'row' : 'column',
-    padding: isMobile ? themeObj.spacing(1, 0) : 4,
-    width: isMobile ? '100%' : 'auto',
+  const overviewItemLabelProps = {
+    color: themeObj.palette.TwClrTxtSecondary,
+    fontSize: '14px',
+    fontWeight: 400,
+    marginBottom: themeObj.spacing(1),
+  };
+
+  const overviewItemContentProps = {
+    color: themeObj.palette.TwClrTxt,
+    fontSize: '16px',
+    fontWeight: 600,
+    lineHeight: '24px',
+  };
+
+  const tabHeaderProps = {
+    borderBottom: 1,
+    borderColor: 'divider',
+    margin: isMobile ? 0 : themeObj.spacing(0, 4),
+  };
+
+  const tabPanelProps = {
+    borderRadius: isMobile ? '0 0 16px 16px' : '32px',
+    backgroundColor: themeObj.palette.TwClrBg,
+  };
+
+  const overviewItemCount =
+    (accession?.state ? 1 : 0) +
+    (accession?.state === 'Awaiting Check-In' && accession?.bagNumbers !== undefined ? 1 : 0) +
+    (accession?.facilityId !== undefined ? 1 : 0) +
+    (accession?.state === 'Drying' ? 1 : 0) +
+    3;
+
+  const getOverviewGridSize = (row: number) => {
+    if (isMobile) {
+      return 12;
+    } else if (isTablet) {
+      if (overviewItemCount < 6 && row === 2) {
+        return 6;
+      }
+      return 4;
+    }
+    return 1;
   };
 
   const spaceFiller = () => <Box sx={{ marginLeft: 1, height: '24px', width: 2 }} />;
@@ -456,17 +539,12 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
               <Typography>{accession?.accessionNumber}</Typography>
               {!isMobile && userCanEdit && (
                 <Box display='flex' alignItems='center'>
-                  <IconButton
-                    sx={{ marginLeft: 3, height: '24px', marginRight: 1 }}
-                    onClick={() => setOpenDeleteAccession(true)}
-                  >
-                    <Icon name='iconTrashCan' />
-                  </IconButton>
                   {accession && isAwaitingCheckin ? (
                     <Button onClick={() => checkInAccession()} label={strings.CHECK_IN} size='medium' />
                   ) : (
                     renderWithdrawalButton()
                   )}
+                  {renderActionMenuButton()}
                 </Box>
               )}
             </Box>
@@ -488,9 +566,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
                     renderWithdrawalButton(true)
                   )}
                 </Box>
-                <IconButton sx={{ marginLeft: 3, height: '38px' }} onClick={() => setOpenDeleteAccession(true)}>
-                  <Icon name='iconTrashCan' />
-                </IconButton>
+                {renderActionMenuButton()}
               </Box>
             )}
             <PageSnackbar />
@@ -498,200 +574,205 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
         </>
       </PageHeaderWrapper>
 
-      <Box
+      <Grid
+        container
         ref={contentRef}
-        display='flex'
-        alignItems={isMobile ? 'flex-start' : 'center'}
-        flexDirection={isMobile ? 'column' : 'row'}
-        padding={(theme) => theme.spacing(0, isMobile ? 0 : 1)}
+        spacing={themeObj.spacing(3)}
+        columns={!isMobile && !isTablet ? overviewItemCount : 12}
       >
         {accession?.state && (
-          <Box sx={editableParentProps}>
-            <Icon name='seedbankNav' className={classes.iconStyle} />
-            <Box
-              sx={isAwaitingCheckin || !userCanEdit ? readOnlyProps : editableProps}
-              onClick={() => !isAwaitingCheckin && userCanEdit && setOpenEditStateModal(true)}
-            >
-              <Typography
-                paddingLeft={1}
-                sx={{
-                  ...getStylesForState(),
-                  padding: themeObj.spacing(0.5, 1),
-                  borderRadius: '8px',
-                  fontSize: '14px',
-                  marginLeft: 1,
-                  marginTop: isMobile ? -0.5 : 0,
-                }}
+          <Grid item xs={getOverviewGridSize(1)}>
+            <Box sx={overviewItemProps}>
+              <Typography sx={overviewItemLabelProps}>{strings.STATUS}</Typography>
+              <Box
+                sx={isAwaitingCheckin || !userCanEdit ? readOnlyProps : editableProps}
+                onClick={() => !isAwaitingCheckin && userCanEdit && setOpenEditStateModal(true)}
               >
-                {accession.state}
-              </Typography>
-              {!isAwaitingCheckin && userCanEdit ? (
-                <IconButton sx={{ marginLeft: 1, height: '24px', width: '24px' }}>
-                  <Icon name='iconEdit' className={`${classes.editIcon} edit-icon`} />
-                </IconButton>
-              ) : (
-                spaceFiller()
-              )}
+                <Typography
+                  paddingLeft={1}
+                  sx={{
+                    ...getStylesForState(),
+                    padding: themeObj.spacing(0.5, 1),
+                    borderRadius: '8px',
+                    fontSize: '14px',
+                    marginTop: isMobile ? -0.5 : 0,
+                  }}
+                >
+                  {accession.state}
+                </Typography>
+                {!isAwaitingCheckin && userCanEdit ? (
+                  <IconButton sx={{ marginLeft: 1, height: '24px', width: '24px' }}>
+                    <Icon name='iconEdit' className={`${classes.editIcon} edit-icon`} />
+                  </IconButton>
+                ) : (
+                  spaceFiller()
+                )}
+              </Box>
             </Box>
-          </Box>
+          </Grid>
         )}
         {isAwaitingCheckin && accession?.bagNumbers !== undefined && (
-          <Box display='flex' margin={isMobile ? themeObj.spacing(0, 0, 3, 6) : themeObj.spacing(0, 6, 0, 2)}>
-            <Typography fontWeight={600}> {strings.BAG_ID}: </Typography>
-            <Typography paddingLeft={1}> {accession.bagNumbers.join(', ')} </Typography>
-          </Box>
+          <Grid item xs={getOverviewGridSize(1)}>
+            <Box sx={overviewItemProps}>
+              <Typography sx={overviewItemLabelProps}> {strings.BAG_ID}: </Typography>
+              <Typography sx={overviewItemContentProps}> {accession.bagNumbers.join(', ')} </Typography>
+            </Box>
+          </Grid>
         )}
         {accession?.facilityId !== undefined && (
-          <Box sx={editableParentProps}>
-            <Icon name='iconMyLocation' className={classes.iconStyle} />
-            <Box
-              sx={userCanEdit ? editableProps : readOnlyProps}
-              onClick={() => userCanEdit && setOpenEditLocationModal(true)}
-            >
-              <Typography paddingLeft={1} lineHeight={isMobile ? 1.2 : 1.5}>
-                {getSeedBank(organization, accession.facilityId)?.name}
-                {accession.storageLocation ? ` / ${accession.storageLocation}` : ''}
-              </Typography>
-              {userCanEdit ? (
-                <IconButton sx={{ marginLeft: 1, height: '24px', width: '24px' }}>
-                  <Icon name='iconEdit' className={`${classes.editIcon} edit-icon`} />
-                </IconButton>
-              ) : (
-                spaceFiller()
-              )}
+          <Grid item xs={getOverviewGridSize(1)}>
+            <Box sx={overviewItemProps}>
+              <Typography sx={overviewItemLabelProps}>{strings.LOCATION}</Typography>
+              <Box
+                sx={userCanEdit ? editableProps : readOnlyProps}
+                onClick={() => userCanEdit && setOpenEditLocationModal(true)}
+              >
+                <Typography sx={overviewItemContentProps}>
+                  {getSeedBank(organization, accession.facilityId)?.name}
+                  {accession.storageLocation ? ` / ${accession.storageLocation}` : ''}
+                </Typography>
+                {userCanEdit ? (
+                  <IconButton sx={{ marginLeft: 1, height: '24px', width: '24px' }}>
+                    <Icon name='iconEdit' className={`${classes.editIcon} edit-icon`} />
+                  </IconButton>
+                ) : (
+                  spaceFiller()
+                )}
+              </Box>
             </Box>
-          </Box>
+          </Grid>
         )}
         {accession?.state === 'Drying' && (
-          <Box sx={editableParentProps}>
-            <Icon name='notification' className={classes.iconStyle} />
-            <Box
-              sx={userCanEdit ? editableProps : readOnlyProps}
-              onClick={() => userCanEdit && setOpenEndDryingReminderModal(true)}
-            >
-              <Typography paddingLeft={1} lineHeight={isMobile ? 1.2 : 1.5}>
-                {accession?.dryingEndDate
-                  ? `${strings.END_DRYING_REMINDER} ${moment(accession.dryingEndDate).fromNow()}`
-                  : strings.END_DRYING_REMINDER_OFF}
-                {accession?.dryingEndDate ? (
-                  <Typography
-                    display={isMobile ? 'block' : 'inline-block'}
-                    lineHeight={isMobile ? 1.2 : 1.5}
-                    marginTop={isMobile ? 1 : 0}
-                  >
-                    {isMobile ? '' : ' '}({accession.dryingEndDate})
+          <Grid item xs={getOverviewGridSize(1)}>
+            <Box sx={overviewItemProps}>
+              <Typography sx={overviewItemLabelProps}>{strings.END_DRYING_REMINDER}</Typography>
+              <Box
+                sx={userCanEdit ? editableProps : readOnlyProps}
+                onClick={() => userCanEdit && setOpenEndDryingReminderModal(true)}
+              >
+                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                  <Typography sx={overviewItemContentProps}>
+                    {accession?.dryingEndDate
+                      ? `${moment(accession.dryingEndDate).fromNow()}`
+                      : strings.END_DRYING_REMINDER_OFF}
                   </Typography>
-                ) : null}
-              </Typography>
-              {userCanEdit ? (
-                <IconButton sx={{ marginLeft: 1, height: '24px', width: '24px' }}>
-                  <Icon name='iconEdit' className={`${classes.editIcon} edit-icon`} />
-                </IconButton>
-              ) : (
-                spaceFiller()
-              )}
+                  <Typography sx={overviewItemContentProps}>
+                    {accession?.dryingEndDate ? ` (${accession.dryingEndDate})` : null}
+                  </Typography>
+                </Box>
+                {userCanEdit ? (
+                  <IconButton sx={{ marginLeft: 1, height: '24px', width: '24px' }}>
+                    <Icon name='iconEdit' className={`${classes.editIcon} edit-icon`} />
+                  </IconButton>
+                ) : (
+                  spaceFiller()
+                )}
+              </Box>
             </Box>
-          </Box>
+          </Grid>
         )}
-      </Box>
-
-      <Box display='flex' flexDirection={isMobile ? 'column' : 'row'} padding={isMobile ? themeObj.spacing(2, 0) : 0}>
-        <Box sx={editableDynamicValuesProps}>
-          <Typography minWidth={isMobile ? '100px' : 0} fontSize='14px' color={themeObj.palette.TwClrTxtSecondary}>
-            {strings.QUANTITY}
-          </Typography>
-          {accession?.remainingQuantity?.quantity !== undefined ? (
-            <Box
-              sx={quantityEditable ? editableProps : readOnlyProps}
-              onClick={() => quantityEditable && setOpenQuantityModal(true)}
-            >
-              <Box display='flex' alignItems='baseline'>
-                {getAbsoluteQuantity()} {getEstimatedQuantity()}
+        <Grid item xs={getOverviewGridSize(1)}>
+          <Box sx={overviewItemProps}>
+            <Typography sx={overviewItemLabelProps}>{strings.QUANTITY}</Typography>
+            {accession?.remainingQuantity?.quantity !== undefined ? (
+              <Box
+                sx={quantityEditable ? editableProps : readOnlyProps}
+                onClick={() => quantityEditable && setOpenQuantityModal(true)}
+              >
+                <Box display='flex' flexDirection='column'>
+                  {getAbsoluteQuantity()} {getEstimatedQuantity()}
+                </Box>
+                {quantityEditable ? (
+                  <IconButton sx={{ marginLeft: 2, height: '24px', width: '24px' }}>
+                    <Icon name='iconEdit' className={`${classes.editIcon} edit-icon`} />
+                  </IconButton>
+                ) : (
+                  spaceFiller()
+                )}
               </Box>
-              {quantityEditable ? (
-                <IconButton sx={{ marginLeft: 2, height: '24px', width: '24px' }}>
-                  <Icon name='iconEdit' className={`${classes.editIcon} edit-icon`} />
-                </IconButton>
-              ) : (
-                spaceFiller()
-              )}
-            </Box>
-          ) : quantityEditable ? (
-            <LinkMUI sx={{ ...linkStyle, fontSize: '20px' }} onClick={() => setOpenQuantityModal(true)}>
-              + {strings.ADD}
-            </LinkMUI>
-          ) : (
-            <Typography color={themeObj.palette.TwClrTxtTertiary} sx={{ pointerEvents: 'none', fontSize: '20px' }}>
-              + {strings.ADD}
-            </Typography>
-          )}
-        </Box>
-        <Box sx={editableDynamicValuesProps}>
-          <Typography minWidth={isMobile ? '100px' : 0} fontSize='14px' color={themeObj.palette.TwClrTxtSecondary}>
-            {strings.AGE}
-          </Typography>
-          {accession?.collectedDate ? (
-            <Box display='flex' alignItems='baseline'>
-              <Typography fontSize='20px' fontWeight='600'>
-                {age.value}
+            ) : quantityEditable ? (
+              <LinkMUI sx={{ ...linkStyle, fontSize: '14px' }} onClick={() => setOpenQuantityModal(true)}>
+                <Box display='flex' alignItems='center'>
+                  <Icon name='iconAdd' className={classes.addIconEnabled} />
+                  &nbsp;{strings.ADD}
+                </Box>
+              </LinkMUI>
+            ) : (
+              <Typography color={themeObj.palette.TwClrTxtTertiary} sx={{ pointerEvents: 'none', fontSize: '14px' }}>
+                <Box display='flex' alignItems='center'>
+                  <Icon name='iconAdd' className={classes.addIconDisabled} />
+                  &nbsp;{strings.ADD}
+                </Box>
               </Typography>
-              <Typography fontSize='14px' marginLeft={1}>
-                {age.unit}
+            )}
+          </Box>
+        </Grid>
+        <Grid item xs={getOverviewGridSize(2)}>
+          <Box sx={overviewItemProps}>
+            <Typography sx={overviewItemLabelProps}>{strings.AGE}</Typography>
+            {accession?.collectedDate ? (
+              <Typography sx={overviewItemContentProps}>
+                {age.value} {age.unit}
               </Typography>
-            </Box>
-          ) : null}
-        </Box>
-        <Box sx={editableDynamicValuesProps}>
-          <Typography minWidth={isMobile ? '100px' : 0} fontSize='14px' color={themeObj.palette.TwClrTxtSecondary}>
-            {strings.VIABILITY}
-          </Typography>
-          {accession?.viabilityPercent ? (
-            <Box
-              sx={viabilityEditable ? editableProps : readOnlyProps}
-              onClick={() => viabilityEditable && setOpenViabilityModal(true)}
-            >
-              <Box display='flex' fontSize='14px' alignItems='baseline'>
-                <Typography fontWeight={500} fontSize='20px'>
-                  {accession?.viabilityPercent}
-                </Typography>
-                %
+            ) : null}
+          </Box>
+        </Grid>
+        <Grid item xs={getOverviewGridSize(2)}>
+          <Box sx={overviewItemProps}>
+            <Typography sx={overviewItemLabelProps}>{strings.VIABILITY}</Typography>
+            {accession?.viabilityPercent ? (
+              <Box
+                sx={viabilityEditable ? editableProps : readOnlyProps}
+                onClick={() => viabilityEditable && setOpenViabilityModal(true)}
+              >
+                <Typography sx={overviewItemContentProps}>{accession?.viabilityPercent}%</Typography>
+                {viabilityEditable ? (
+                  <IconButton sx={{ marginLeft: 1, height: '24px', width: '24px' }}>
+                    <Icon name='iconEdit' className={`${classes.editIcon} edit-icon`} />
+                  </IconButton>
+                ) : (
+                  spaceFiller()
+                )}
               </Box>
-              {viabilityEditable ? (
-                <IconButton sx={{ marginLeft: 1, height: '24px', width: '24px' }}>
-                  <Icon name='iconEdit' className={`${classes.editIcon} edit-icon`} />
-                </IconButton>
-              ) : (
-                spaceFiller()
-              )}
-            </Box>
-          ) : viabilityEditable ? (
-            <LinkMUI sx={{ ...linkStyle, fontSize: '20px' }} onClick={() => setOpenViabilityModal(true)}>
-              + {strings.ADD}
-            </LinkMUI>
-          ) : (
-            <Typography color={themeObj.palette.TwClrTxtTertiary} sx={{ pointerEvents: 'none', fontSize: '20px' }}>
-              + {strings.ADD}
-            </Typography>
-          )}
-        </Box>
-      </Box>
+            ) : viabilityEditable ? (
+              <LinkMUI sx={{ ...linkStyle, fontSize: '14px' }} onClick={() => setOpenViabilityModal(true)}>
+                <Box display='flex' alignItems='center'>
+                  <Icon name='iconAdd' className={classes.addIconEnabled} />
+                  &nbsp;{strings.ADD}
+                </Box>
+              </LinkMUI>
+            ) : (
+              <Typography color={themeObj.palette.TwClrTxtTertiary} sx={{ pointerEvents: 'none', fontSize: '14px' }}>
+                <Box display='flex' alignItems='center'>
+                  <Icon name='iconAdd' className={classes.addIconDisabled} />
+                  &nbsp;{strings.ADD}
+                </Box>
+              </Typography>
+            )}
+          </Box>
+        </Grid>
+      </Grid>
 
       <Box sx={{ width: '100%' }}>
         <TabContext value={selectedTab}>
-          <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+          <Box sx={tabHeaderProps}>
             <TabList onChange={(unused, value) => handleChange(value)}>
-              <Tab label={strings.DETAIL} value='detail' sx={tabStyles} />
+              <Tab
+                label={isMobile || isTablet ? strings.DETAILS : strings.ACCESSION_DETAILS}
+                value='detail'
+                sx={tabStyles}
+              />
               <Tab label={strings.HISTORY} value='history' sx={tabStyles} />
-              <Tab label={strings.VIABILITY_TESTING} value='viabilityTesting' sx={viabilityTestingStyle()} />
+              <Tab label={strings.VIABILITY_TESTS} value='viabilityTesting' sx={viabilityTestingStyle()} />
             </TabList>
           </Box>
-          <TabPanel value='detail' sx={{ paddingX: isMobile ? 0 : 3 }}>
+          <TabPanel value='detail' sx={tabPanelProps}>
             <DetailPanel accession={accession} organization={organization} reload={reloadData} />
           </TabPanel>
-          <TabPanel value='history' sx={{ paddingX: isMobile ? 0 : 3 }}>
+          <TabPanel value='history' sx={tabPanelProps}>
             {accession && <Accession2History accession={accession} />}
           </TabPanel>
-          <TabPanel value='viabilityTesting' sx={{ paddingX: isMobile ? 0 : 3 }}>
+          <TabPanel value='viabilityTesting' sx={tabPanelProps}>
             {accession && (
               <ViabilityTestingPanel
                 accession={accession}

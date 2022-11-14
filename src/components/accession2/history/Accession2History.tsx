@@ -40,24 +40,23 @@ export default function Accession2History(props: Accession2HistoryProps): JSX.El
 
   return (
     <Box display='flex' flexDirection='column'>
-      <Typography fontSize='16px' fontWeight={500} marginBottom={theme.spacing(3)}>
-        {strings.ACCESSION_HISTORY}
-      </Typography>
       {history.map((item, index) => (
         <Box
           key={index}
           display='flex'
           flexDirection='row'
-          fontSize='15px'
+          fontSize='14px'
           fontWeight={400}
           color={theme.palette.TwClrTxt}
-          marginBottom={theme.spacing(3)}
+          padding={theme.spacing(2, 0)}
           whiteSpace='break-spaces'
+          borderBottom={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
+          sx={{ '&:last-child': { border: 'none' } }}
         >
           <Typography whiteSpace='pre' marginRight={theme.spacing(3)}>
             {item.date}
           </Typography>
-          <Typography>
+          <Typography fontWeight={500}>
             {item.fullName || strings.NAME_UNKNOWN}&nbsp;{item.description}
           </Typography>
         </Box>
