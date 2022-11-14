@@ -115,7 +115,7 @@ export default function SmallDeviceUserMenu({
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef<HTMLButtonElement>(null);
   const { isProduction } = useEnvironment();
-  const iconLetter = user?.firstName?.charAt(0) || user?.lastName?.charAt(0);
+  const iconLetter = user?.firstName?.charAt(0) || user?.lastName?.charAt(0) || user?.email?.charAt(0);
 
   const navigate = (url: string) => {
     history.push(url);
