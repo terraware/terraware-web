@@ -34,7 +34,7 @@ export default function PlantingSiteView(): JSX.Element {
 
   useEffect(() => {
     const loadPlantingSite = async () => {
-      const response = await getPlantingSite(Number.parseInt(plantingSiteId));
+      const response = await getPlantingSite(Number.parseInt(plantingSiteId, 10));
       if (response.requestSucceeded) {
         setPlantingSite(response.site);
       }
@@ -92,7 +92,7 @@ export default function PlantingSiteView(): JSX.Element {
           <Grid item xs={12}>
             <Box
               sx={{
-                border: '1px solid #A9B7B8',
+                border: `1px solid ${theme.palette.ClrBaseGray300}`,
                 maxWidth: '800px',
                 margin: '0 auto',
                 textAlign: 'center',
