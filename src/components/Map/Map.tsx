@@ -1,6 +1,6 @@
 import { Box } from '@mui/material';
 import React, { useEffect, useRef } from 'react';
-import mapboxgl from '!mapbox-gl';
+import mapboxgl from 'mapbox-gl';
 import { MapOptions } from './MapModels';
 import { getLatLng } from './MapUtils';
 

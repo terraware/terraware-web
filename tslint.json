@@ -54,7 +54,8 @@
     "no-var-keyword": true,
     "ter-prefer-arrow-callback": true,
     "prefer-const": true,
-    "jsx-boolean-value": false
+    "jsx-boolean-value": false,
+    "import/no-webpack-loader-syntax": false
   },
   "linterOptions": {
     "exclude": ["src/api/types/generated-schema.ts", "src/api/types/generated-schema-seedbank.ts"]
