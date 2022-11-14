@@ -11,6 +11,7 @@ import { useEffect, useState } from 'react';
 import PageSnackbar from '../PageSnackbar';
 import { makeStyles } from '@mui/styles';
 import { PlantingSite } from 'src/api/types/tracking';
+import { PlantingSiteMap } from '../Map';
 
 const useStyles = makeStyles(() => ({
   backIcon: {
@@ -90,29 +91,33 @@ export default function PlantingSiteView(): JSX.Element {
             </Typography>
           </Grid>
           <Grid item xs={12}>
-            <Box
-              sx={{
-                border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
-                maxWidth: '800px',
-                margin: '0 auto',
-                textAlign: 'center',
-                paddingX: 5,
-              }}
-            >
-              <Typography fontSize='20px' fontWeight={600} margin={theme.spacing(3, 0)}>
-                {strings.IMPORT_BOUNDARIES_AND_PLOTS}
-              </Typography>
-              <Typography fontSize='16px' fontWeight={400} padding={theme.spacing(1, 0)}>
-                {strings.IMPORT_BOUNDARIES_AND_PLOTS_DESCRIPTION}
-              </Typography>
-              <Box sx={{ paddingY: 2 }}>
-                <Button
-                  label={strings.CONTACT_US}
-                  onClick={() => window.open(TERRAWARE_SUPPORT_LINK, '_blank')}
-                  size='medium'
-                />
+            {plantingSite?.boundary ? (
+              <PlantingSiteMap siteId={plantingSite.id} />
+            ) : (
+              <Box
+                sx={{
+                  border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+                  maxWidth: '800px',
+                  margin: '0 auto',
+                  textAlign: 'center',
+                  paddingX: 5,
+                }}
+              >
+                <Typography fontSize='20px' fontWeight={600} margin={theme.spacing(3, 0)}>
+                  {strings.IMPORT_BOUNDARIES_AND_PLOTS}
+                </Typography>
+                <Typography fontSize='16px' fontWeight={400} padding={theme.spacing(1, 0)}>
+                  {strings.IMPORT_BOUNDARIES_AND_PLOTS_DESCRIPTION}
+                </Typography>
+                <Box sx={{ paddingY: 2 }}>
+                  <Button
+                    label={strings.CONTACT_US}
+                    onClick={() => window.open(TERRAWARE_SUPPORT_LINK, '_blank')}
+                    size='medium'
+                  />
+                </Box>
               </Box>
-            </Box>
+            )}
           </Grid>
         </Grid>
       </Container>
