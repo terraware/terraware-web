@@ -36,7 +36,7 @@ export default function PlantingSitesList(props: PlantingSitesListProps): JSX.El
 
   const onSearch = useCallback(async () => {
     const params = {
-      fields: ['boundary', 'id', 'name', 'numPlantingZones', 'numPlots'],
+      fields: ['boundary', 'id', 'name', 'numPlantingZones', 'numPlots', 'description'],
       prefix: 'plantingSites',
       search: {
         operation: 'and',
@@ -47,10 +47,11 @@ export default function PlantingSitesList(props: PlantingSitesListProps): JSX.El
             values: [organization.id],
           },
           {
-            operation: 'field',
-            field: 'name',
-            type: 'Fuzzy',
-            values: [debouncedSearchTerm],
+            operation: 'or',
+            children: [
+              { operation: 'field', field: 'name', type: 'Fuzzy', values: [debouncedSearchTerm] },
+              { operation: 'field', field: 'description', type: 'Fuzzy', values: [debouncedSearchTerm] },
+            ],
           },
         ],
       },
