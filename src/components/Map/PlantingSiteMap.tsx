@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { Box, CircularProgress, useTheme } from '@mui/material';
-import { getMapboxToken, getPlantingSite } from 'src/api/tracking/tracking';
+import { getMapboxToken } from 'src/api/tracking/tracking';
 import { Geometry, PlantingSite } from 'src/api/types/tracking';
 import useSnackbar from 'src/utils/useSnackbar';
 import Map from './Map';
@@ -8,11 +8,11 @@ import { MapGeometry, MapOptions, MapSource } from './MapModels';
 import { getBoundingBox } from './MapUtils';
 
 export type PlantingSiteMapProps = {
-  siteId: number;
+  plantingSite: PlantingSite;
 };
 
 export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Element {
-  const { siteId } = props;
+  const { plantingSite } = props;
   const theme = useTheme();
   const [snackbar] = useState(useSnackbar());
   const [token, setToken] = useState<string>();
@@ -104,31 +104,25 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
 
   // fetch polygons and boundaries
   useEffect(() => {
-    const fetchPlantingSite = async () => {
-      const response = await getPlantingSite(siteId);
-      if (response.requestSucceeded && response.site) {
-        const site = extractPlantingSite(response.site);
-        const zones = extractPlantingZones(response.site) || [];
-        const plots = extractPlots(response.site) || [];
+    const fetchPlantingSite = () => {
+      const site = extractPlantingSite(plantingSite);
+      const zones = extractPlantingZones(plantingSite) || [];
+      const plots = extractPlots(plantingSite) || [];
 
-        const geometries: MapGeometry[] = [
-          site?.boundary,
-          ...zones.map((s) => s.boundary),
-          ...plots.map((s) => s.boundary),
-        ].filter((g) => g) as MapGeometry[];
+      const geometries: MapGeometry[] = [
+        site?.boundary,
+        ...zones.map((s) => s.boundary),
+        ...plots.map((s) => s.boundary),
+      ].filter((g) => g) as MapGeometry[];
 
-        setMapOptions({
-          bbox: getBoundingBox(geometries),
-          sources: [site, ...zones, ...plots],
-        });
-      } else {
-        setMapOptions(undefined);
-        snackbar.toastError(response.error);
-      }
+      setMapOptions({
+        bbox: getBoundingBox(geometries),
+        sources: [site, ...zones, ...plots],
+      });
     };
 
     fetchPlantingSite();
-  }, [siteId, snackbar, extractPlantingSite, extractPlantingZones, extractPlots]);
+  }, [plantingSite, snackbar, extractPlantingSite, extractPlantingZones, extractPlots]);
 
   if (!token || !mapOptions) {
     return (
