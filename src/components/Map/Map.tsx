@@ -26,7 +26,7 @@ export default function Map(props: MapProps): JSX.Element {
 
     map.current = new mapboxgl.Map({
       container: mapContainer.current || '',
-      style: 'mapbox://styles/mapbox/streets-v11',
+      style: 'mapbox://styles/mapbox/satellite-v9',
     });
 
     // show +/- zoom options only
