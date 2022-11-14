@@ -7,10 +7,11 @@ import { getLatLng } from './MapUtils';
 export type MapProps = {
   token: string;
   options: MapOptions;
+  onTokenExpired?: () => void;
 };
 
 export default function Map(props: MapProps): JSX.Element {
-  const { token, options } = props;
+  const { token, onTokenExpired, options } = props;
 
   const mapContainer = useRef(null);
   const map = useRef<mapboxgl.Map | null>(null);
@@ -95,9 +96,20 @@ export default function Map(props: MapProps): JSX.Element {
       });
     });
 
+    // handle error
+    map.current.on('error', (event: any) => {
+      if (event?.error?.status === 401) {
+        // tslint:disable-next-line: no-console
+        console.error('Mapbox token expired');
+        if (onTokenExpired) {
+          onTokenExpired();
+        }
+      }
+    });
+
     // fit to bounding box
     map.current.fitBounds([bbox.lowerLeft, bbox.upperRight], { padding: 20 });
-  }, [token, options]);
+  }, [token, onTokenExpired, options]);
 
   return (
     <Box>
