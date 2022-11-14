@@ -92,7 +92,7 @@ export default function PlantingSiteView(): JSX.Element {
           <Grid item xs={12}>
             <Box
               sx={{
-                border: `1px solid ${theme.palette.ClrBaseGray300}`,
+                border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
                 maxWidth: '800px',
                 margin: '0 auto',
                 textAlign: 'center',
