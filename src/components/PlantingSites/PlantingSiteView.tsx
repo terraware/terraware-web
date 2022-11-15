@@ -54,7 +54,7 @@ export default function PlantingSiteView(): JSX.Element {
 
   return (
     <TfMain>
-      <Container maxWidth={false} sx={{ display: 'flex' }}>
+      <Container maxWidth={false} sx={{ display: 'flex', flexDirection: plantingSite?.boundary ? 'row' : 'column' }}>
         <Grid container spacing={3}>
           <Grid item xs={12}>
             <Link id='back' to={APP_PATHS.PLANTING_SITES} className={classes.back}>
