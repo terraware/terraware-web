@@ -59,7 +59,7 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
   useEffect(() => {
     const fetchPlantingSite = async () => {
       if (plantingSiteId) {
-        const serverResponse = await getPlantingSite(Number.parseInt(plantingSiteId));
+        const serverResponse = await getPlantingSite(Number.parseInt(plantingSiteId, 10));
         if (serverResponse.requestSucceeded) {
           setSelectedPlantingSite(serverResponse.site);
         }
