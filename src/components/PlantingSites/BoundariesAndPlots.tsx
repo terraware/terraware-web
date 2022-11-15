@@ -1,4 +1,4 @@
-import { Typography, Grid, Box, CircularProgress } from '@mui/material';
+import { Typography, Box, CircularProgress } from '@mui/material';
 import { Button, theme } from '@terraware/web-components';
 import strings from 'src/strings';
 import { TERRAWARE_SUPPORT_LINK } from 'src/constants';
@@ -13,13 +13,13 @@ export default function BoundariesAndPlots(props: BoundariesAndPlotsProps): JSX.
   const { plantingSite } = props;
 
   return (
-    <>
-      <Grid item xs={12}>
+    <Box display='flex' flexGrow={plantingSite?.boundary ? 1 : 0} flexDirection='column' paddingTop={theme.spacing(3)}>
+      <Box display='flex' flexGrow={0}>
         <Typography fontSize='20px' fontWeight={600} margin={theme.spacing(3, 0)}>
           {strings.BOUNDARIES_AND_PLOTS}
         </Typography>
-      </Grid>
-      <Grid item xs={12} display='flex' flexGrow={1} height='100%' paddingBottom={theme.spacing(10)}>
+      </Box>
+      <Box display='flex' sx={{ flexGrow: 1 }}>
         {plantingSite ? (
           <>
             {plantingSite.boundary ? (
@@ -32,6 +32,7 @@ export default function BoundariesAndPlots(props: BoundariesAndPlotsProps): JSX.
                   margin: '0 auto',
                   textAlign: 'center',
                   paddingX: 5,
+                  marginTop: 3,
                 }}
               >
                 <Typography fontSize='20px' fontWeight={600} margin={theme.spacing(3, 0)}>
@@ -55,7 +56,7 @@ export default function BoundariesAndPlots(props: BoundariesAndPlotsProps): JSX.
             <CircularProgress />
           </Box>
         )}
-      </Grid>
-    </>
+      </Box>
+    </Box>
   );
 }

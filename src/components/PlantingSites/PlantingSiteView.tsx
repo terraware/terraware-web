@@ -62,8 +62,8 @@ export default function PlantingSiteView(): JSX.Element {
 
   return (
     <TfMain>
-      <Container maxWidth={false} sx={{ display: 'flex', flexDirection: plantingSite?.boundary ? 'row' : 'column' }}>
-        <Grid container spacing={3}>
+      <Container maxWidth={false} sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+        <Grid container spacing={3} flexGrow={0}>
           <Grid item xs={12}>
             <Link id='back' to={APP_PATHS.PLANTING_SITES} className={classes.back}>
               <Icon name='caretLeft' className={classes.backIcon} />
@@ -93,8 +93,8 @@ export default function PlantingSiteView(): JSX.Element {
               display={true}
             />
           </Grid>
-          {plantingSite && <BoundariesAndPlots plantingSite={plantingSite} />}
         </Grid>
+        {plantingSite && <BoundariesAndPlots plantingSite={plantingSite} />}
       </Container>
     </TfMain>
   );
