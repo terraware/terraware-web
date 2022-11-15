@@ -30,10 +30,11 @@ export type MapProps = {
   token: string;
   options: MapOptions;
   onTokenExpired?: () => void;
+  enablePopup?: boolean;
 };
 
 export default function Map(props: MapProps): JSX.Element {
-  const { token, onTokenExpired, options } = props;
+  const { token, onTokenExpired, options, enablePopup } = props;
   const [mapKey, setMapKey] = useState<number>(Date.now());
   const [geoData, setGeoData] = useState();
   const [layerIds, setLayerIds] = useState<string[]>([]);
@@ -125,8 +126,10 @@ export default function Map(props: MapProps): JSX.Element {
       })
       .filter((g) => g);
     setGeoData(geo as any);
-    setLayerIds(geo.map((g: any) => g.layer.id));
-  }, [options, geoData, setGeoData, token]);
+    if (enablePopup) {
+      setLayerIds(geo.map((g: any) => g.layer.id));
+    }
+  }, [options, geoData, setGeoData, token, enablePopup]);
 
   useEffect(() => {
     setMapKey(Date.now());
