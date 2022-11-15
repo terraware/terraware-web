@@ -47,6 +47,7 @@ const strings = new LocalizedStrings({
     SEEDS: 'Seeds',
     SEED: 'Seed',
     ACCESSIONS: 'Accessions',
+    ACCESSIONS_DATABASE_DESCRIPTION: 'Manage your accessions in Terraware.',
     OR: 'OR',
     FLORA: 'Flora',
     SEED_COLLECTION: 'Seed Collection',
