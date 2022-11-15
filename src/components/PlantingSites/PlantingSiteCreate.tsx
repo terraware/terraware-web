@@ -164,7 +164,7 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
               value={record.description}
             />
           </Grid>
-          <BoundariesAndPlots plantingSite={record} />
+          <BoundariesAndPlots plantingSite={selectedPlantingSite || record} />
         </Grid>
       </Container>
       <FormBottomBar onCancel={goToPlantingSites} onSave={savePlantingSite} />

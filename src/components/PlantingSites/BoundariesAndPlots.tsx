@@ -5,11 +5,11 @@ import { TERRAWARE_SUPPORT_LINK } from 'src/constants';
 import { PlantingSite } from 'src/api/types/tracking';
 import { PlantingSiteMap } from '../Map';
 
-type BondariesAndPlotsProps = {
+type BoundariesAndPlotsProps = {
   plantingSite: PlantingSite;
 };
 
-export default function BondariesAndPlots(props: BondariesAndPlotsProps): JSX.Element {
+export default function BoundariesAndPlots(props: BoundariesAndPlotsProps): JSX.Element {
   const { plantingSite } = props;
 
   return (
