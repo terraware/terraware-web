@@ -47,6 +47,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     top: '50%',
     left: 'calc(50% + 100px)',
   },
+  accessionsByStatusIcon: {
+    fill: theme.palette.TwClrIcnSecondary,
+  },
 }));
 
 Cookies.defaults = {
@@ -224,7 +227,7 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
                     }}
                   >
                     <Box display='flex' alignContent='center' alignItems='center'>
-                      <Icon name='futures' />
+                      <Icon name='futures' size='medium' className={classes.accessionsByStatusIcon} />
                       <Typography
                         fontSize='20px'
                         fontWeight={600}
