@@ -38,7 +38,6 @@ export type MapGeometry = number | number[] | number[][][][];
 
 export type MapSource = {
   id: string;
-  name: string;
   fillColor: string;
   fillOpacity: number;
   metadata: { [key: string]: any };

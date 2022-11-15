@@ -35,7 +35,6 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
       return {
         metadata: { id, name, description, type: 'site' },
         boundary: getPolygons(boundary),
-        name: `site-${name}`,
         id: `site-${id}`,
         fillColor: getFillColor(),
         fillOpacity: 0.1,
@@ -51,7 +50,6 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
         return {
           metadata: { id, name, type: 'zone' },
           boundary: getPolygons(boundary),
-          name: `zone-${name}`,
           id: `zone-${id}`,
           fillColor: getFillColor(),
           fillOpacity: 0.2,
@@ -70,7 +68,6 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
           return {
             metadata: { id, name, fullName, type: 'plot' },
             boundary: getPolygons(boundary),
-            name: `plot-${name}`,
             id: `plot-${id}`,
             fillColor: getFillColor(),
             fillOpacity: 0.3,

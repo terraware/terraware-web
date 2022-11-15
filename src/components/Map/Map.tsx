@@ -5,6 +5,16 @@ import ReactMapGL, { Layer, NavigationControl, Popup, Source } from 'react-map-g
 import { MapOptions } from './MapModels';
 import { useRenderFeature } from './MapRenderUtils';
 
+/**
+ * The following is needed to deal with a mapbox bug
+ * See: https://docs.mapbox.com/mapbox-gl-js/guides/install/#transpiling
+ */
+import mapboxgl from 'mapbox-gl';
+const mapboxImpl: any = mapboxgl;
+// @tslint
+// eslint-disable-next-line import/no-webpack-loader-syntax
+mapboxImpl.workerClass = require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker').default; /* tslint:disable-line */
+
 const navControlStyle = {
   right: 10,
   bottom: 25,
