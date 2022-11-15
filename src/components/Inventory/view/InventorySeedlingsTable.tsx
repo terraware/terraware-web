@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { Typography, Grid, Box, useTheme } from '@mui/material';
 import { Button, Table, TableColumnType } from '@terraware/web-components';
 import strings from 'src/strings';
@@ -16,6 +17,8 @@ import BatchDetailsModal from './BatchDetailsModal';
 import { Batch } from 'src/api/types/batch';
 import WithdrawalModal from './WithdrawalModal';
 import Search from '../Search';
+import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 
 const columns: TableColumnType[] = [
   { key: 'batchNumber', name: strings.SEEDLING_BATCH, type: 'string' },
@@ -54,6 +57,8 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
   const [selectedBatch, setSelectedBatch] = useState<Batch>();
   const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
   const snackbar = useSnackbar();
+  const history = useHistory();
+  const trackingEnabled = isEnabled('Tracking V1');
 
   useEffect(() => {
     let activeRequests = true;
@@ -172,7 +177,13 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
   const onBatchSelected = (batch: Batch, fromColumn?: string) => {
     setSelectedBatch(batch);
     if (fromColumn === 'withdraw') {
-      setOpenWithdrawalModal(true);
+      if (trackingEnabled) {
+        history.push({
+          pathname: APP_PATHS.BATCH_WITHDRAW.replace(':batchId', batch.id.toString()),
+        });
+      } else {
+        setOpenWithdrawalModal(true);
+      }
     } else if (fromColumn === 'quantitiesMenu') {
       reloadData();
     } else {

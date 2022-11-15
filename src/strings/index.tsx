@@ -826,6 +826,9 @@ const strings = new LocalizedStrings({
       'You’ll need to talk to your representative at Terraformation to import your map files to Terraware so you can work with your site’s boundaries and plots.',
     PLANTING_ZONES: 'Planting Zones',
     PLOTS: 'Plots',
+    WITHDRAW_FROM_BATCHES: 'Withdraw from Batches',
+    WITHDRAWAL_DETAILS: 'Withdrawal Details',
+    WITHDRAW_INSTRUCTIONS: 'Select a withdrawal purpose and enter the quantities from each batch to withdraw.',
   },
 });
 
