@@ -19,7 +19,7 @@ export default function BondariesAndPlots(props: BondariesAndPlotsProps): JSX.El
           {strings.BOUNDARIES_AND_PLOTS}
         </Typography>
       </Grid>
-      <Grid item xs={12}>
+      <Grid item xs={12} display='flex' flexGrow={1} height='100%' paddingBottom={theme.spacing(10)}>
         {plantingSite ? (
           <>
             {plantingSite.boundary ? (

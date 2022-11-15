@@ -1,10 +1,4 @@
 import { MapBoundingBox, MapGeometry } from './MapModels';
-import Coordinates from 'coordinate-parser';
-
-export const getLatLng = (x: number, y: number): [number, number] => {
-  const coords = new Coordinates(`${x}, ${y}`);
-  return [coords.getLatitude(), coords.getLongitude()];
-};
 
 export const getBoundingBox = (geometries: MapGeometry[]): MapBoundingBox => {
   let llx = 0;
@@ -63,7 +57,7 @@ export const getBoundingBox = (geometries: MapGeometry[]): MapBoundingBox => {
   geometries.forEach(scanGeometry);
 
   return {
-    lowerLeft: getLatLng(llx, lly),
-    upperRight: getLatLng(urx, ury),
+    lowerLeft: [llx, lly],
+    upperRight: [urx, ury],
   };
 };
