@@ -551,7 +551,7 @@ export default function App() {
                   <InventoryView organization={selectedOrganization} species={species} />
                 </Route>
               )}
-              {selectedOrganization && (
+              {trackingEnabled && selectedOrganization && (
                 <Route path={APP_PATHS.BATCH_WITHDRAW}>
                   <WithdrawBatch />
                 </Route>
