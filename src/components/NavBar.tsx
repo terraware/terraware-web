@@ -1,3 +1,4 @@
+import SubNavbar from '@terraware/web-components/components/Navbar/SubNavbar';
 import { useEffect, useState } from 'react';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 import Navbar from 'src/components/common/Navbar/Navbar';
@@ -77,47 +78,61 @@ export default function NavBar({ organization, setShowNavBar }: NavBarProps): JS
         }}
         id='speciesNb'
       />
-
-      <NavSection title={strings.SEEDS.toUpperCase()} />
+      <NavSection />
       <NavItem
-        label='Dashboard'
-        icon='dashboard'
-        selected={!!isAccessionDashboardRoute}
+        label='Seeds'
+        icon='seeds'
+        id='seeds'
         onClick={() => {
           closeAndNavigateTo(isAccessionDashboardRoute ? '' : APP_PATHS.SEEDS_DASHBOARD);
         }}
-        id='seeds-dashboard'
-      />
+      >
+        <SubNavbar>
+          <NavItem
+            label='Dashboard'
+            selected={!!isAccessionDashboardRoute}
+            onClick={() => {
+              closeAndNavigateTo(isAccessionDashboardRoute ? '' : APP_PATHS.SEEDS_DASHBOARD);
+            }}
+            id='seeds-dashboard'
+          />
+          <NavItem
+            label='Accessions'
+            selected={isAccessionsRoute || isCheckinRoute ? true : false}
+            onClick={() => {
+              closeAndNavigateTo(APP_PATHS.ACCESSIONS);
+            }}
+            id='accessions'
+          />
+          <NavItem
+            label={strings.MONITORING}
+            selected={!!isMonitoringRoute}
+            onClick={() => {
+              closeAndNavigateTo(APP_PATHS.MONITORING);
+            }}
+            id='monitoring'
+          />
+        </SubNavbar>
+      </NavItem>
       <NavItem
-        label='Accessions'
-        icon='seeds'
-        selected={isAccessionsRoute || isCheckinRoute ? true : false}
+        label='Seedlings'
+        icon='iconSeedling'
+        id='seedlings'
         onClick={() => {
-          closeAndNavigateTo(APP_PATHS.ACCESSIONS);
+          closeAndNavigateTo(APP_PATHS.INVENTORY);
         }}
-        id='accessions'
-      />
-      <NavItem
-        label={strings.MONITORING}
-        icon='monitoringNav'
-        selected={!!isMonitoringRoute}
-        onClick={() => {
-          closeAndNavigateTo(APP_PATHS.MONITORING);
-        }}
-        id='monitoring'
-      />
-      <>
-        <NavSection title={strings.SEEDLINGS.toUpperCase()} />
-        <NavItem
-          label={strings.INVENTORY}
-          icon='iconSeedling'
-          selected={!!isInventoryRoute}
-          onClick={() => {
-            closeAndNavigateTo(APP_PATHS.INVENTORY);
-          }}
-          id='inventory'
-        />
-      </>
+      >
+        <SubNavbar>
+          <NavItem
+            label={strings.INVENTORY}
+            selected={!!isInventoryRoute}
+            onClick={() => {
+              closeAndNavigateTo(APP_PATHS.INVENTORY);
+            }}
+            id='inventory'
+          />
+        </SubNavbar>
+      </NavItem>
       {role && ['Admin', 'Owner'].includes(role) && (
         <>
           <NavSection title={strings.SETTINGS.toUpperCase()} />
@@ -140,23 +155,34 @@ export default function NavBar({ organization, setShowNavBar }: NavBarProps): JS
             id='people'
           />
           <NavItem
-            label={strings.SEED_BANKS}
+            label='Locations'
             icon='seedbankNav'
-            selected={!!isSeedbanksRoute}
+            id='locations'
             onClick={() => {
               closeAndNavigateTo(APP_PATHS.SEED_BANKS);
             }}
-            id='seedbanks'
-          />
-          <NavItem
-            label={strings.NURSERIES}
-            icon='iconNursery'
-            selected={!!isNurseriesRoute}
-            onClick={() => {
-              closeAndNavigateTo(APP_PATHS.NURSERIES);
-            }}
-            id='nurseries'
-          />
+          >
+            <SubNavbar>
+              <NavItem
+                label={strings.SEED_BANKS}
+                icon='seedbankNav'
+                selected={!!isSeedbanksRoute}
+                onClick={() => {
+                  closeAndNavigateTo(APP_PATHS.SEED_BANKS);
+                }}
+                id='seedbanks'
+              />
+              <NavItem
+                label={strings.NURSERIES}
+                icon='iconNursery'
+                selected={!!isNurseriesRoute}
+                onClick={() => {
+                  closeAndNavigateTo(APP_PATHS.NURSERIES);
+                }}
+                id='nurseries'
+              />
+            </SubNavbar>
+          </NavItem>
         </>
       )}
       {isEnabled('Tracking V1') && (
