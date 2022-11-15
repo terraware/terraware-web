@@ -29,7 +29,7 @@ export default function SummaryPaper({ id, title, icon, statistic, loading, erro
   return (
     <>
       <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: theme.spacing(3) }}>
-        <Icon name={icon} className={classes.icon} />
+        <Icon name={icon} className={classes.icon} size='medium' />
         <PanelTitle title={title} gutterBottom={false} tooltipTitle={tooltipTitle} />
       </Box>
       {error && strings.GENERIC_ERROR}
