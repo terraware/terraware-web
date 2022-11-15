@@ -1,17 +1,17 @@
 import TfMain from 'src/components/common/TfMain';
-import { Typography, Container, Grid, Box, CircularProgress } from '@mui/material';
+import { Typography, Container, Grid } from '@mui/material';
 import { Button, Icon, theme } from '@terraware/web-components';
 import strings from 'src/strings';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import { getPlantingSite } from 'src/api/tracking/tracking';
-import { APP_PATHS, TERRAWARE_SUPPORT_LINK } from 'src/constants';
-import { Link, useParams } from 'react-router-dom';
+import { APP_PATHS } from 'src/constants';
+import { Link, useHistory, useParams } from 'react-router-dom';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 import { useEffect, useState } from 'react';
 import PageSnackbar from '../PageSnackbar';
 import { makeStyles } from '@mui/styles';
 import { PlantingSite } from 'src/api/types/tracking';
-import { PlantingSiteMap } from '../Map';
+import BoundariesAndPlots from './BoundariesAndPlots';
 
 const useStyles = makeStyles(() => ({
   backIcon: {
@@ -32,6 +32,7 @@ export default function PlantingSiteView(): JSX.Element {
   const classes = useStyles();
   const { plantingSiteId } = useParams<{ plantingSiteId: string }>();
   const [plantingSite, setPlantingSite] = useState<PlantingSite>();
+  const history = useHistory();
 
   useEffect(() => {
     const loadPlantingSite = async () => {
@@ -51,6 +52,13 @@ export default function PlantingSiteView(): JSX.Element {
     return 4;
   };
 
+  const goToEditPlantingSite = () => {
+    const editPlantingSiteLocation = {
+      pathname: APP_PATHS.PLANTING_SITES_EDIT.replace(':plantingSiteId', plantingSiteId),
+    };
+    history.push(editPlantingSiteLocation);
+  };
+
   return (
     <TfMain>
       <Container maxWidth={false}>
@@ -66,9 +74,9 @@ export default function PlantingSiteView(): JSX.Element {
               {plantingSite?.name}
             </Typography>
             {isMobile ? (
-              <Button icon='iconEdit' onClick={() => true} priority='secondary' />
+              <Button icon='iconEdit' onClick={goToEditPlantingSite} priority='secondary' />
             ) : (
-              <Button icon='iconEdit' label={strings.EDIT} onClick={() => true} priority='secondary' />
+              <Button icon='iconEdit' label={strings.EDIT} onClick={goToEditPlantingSite} priority='secondary' />
             )}
           </Grid>
           <PageSnackbar />
@@ -84,49 +92,7 @@ export default function PlantingSiteView(): JSX.Element {
               display={true}
             />
           </Grid>
-
-          <Grid item xs={12}>
-            <Typography fontSize='20px' fontWeight={600} margin={theme.spacing(3, 0)}>
-              {strings.BOUNDARIES_AND_PLOTS}
-            </Typography>
-          </Grid>
-          <Grid item xs={12}>
-            {plantingSite ? (
-              <>
-                {plantingSite.boundary ? (
-                  <PlantingSiteMap plantingSite={plantingSite} />
-                ) : (
-                  <Box
-                    sx={{
-                      border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
-                      maxWidth: '800px',
-                      margin: '0 auto',
-                      textAlign: 'center',
-                      paddingX: 5,
-                    }}
-                  >
-                    <Typography fontSize='20px' fontWeight={600} margin={theme.spacing(3, 0)}>
-                      {strings.IMPORT_BOUNDARIES_AND_PLOTS}
-                    </Typography>
-                    <Typography fontSize='16px' fontWeight={400} padding={theme.spacing(1, 0)}>
-                      {strings.IMPORT_BOUNDARIES_AND_PLOTS_DESCRIPTION}
-                    </Typography>
-                    <Box sx={{ paddingY: 2 }}>
-                      <Button
-                        label={strings.CONTACT_US}
-                        onClick={() => window.open(TERRAWARE_SUPPORT_LINK, '_blank')}
-                        size='medium'
-                      />
-                    </Box>
-                  </Box>
-                )}
-              </>
-            ) : (
-              <Box sx={{ position: 'fixed', top: '50%', left: '50%' }}>
-                <CircularProgress />
-              </Box>
-            )}
-          </Grid>
+          {plantingSite && <BoundariesAndPlots plantingSite={plantingSite} />}
         </Grid>
       </Container>
     </TfMain>
