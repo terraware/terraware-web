@@ -7,6 +7,7 @@ export enum APP_PATHS {
   ACCESSIONS2_NEW = '/accessions/new',
   ACCESSIONS2_ITEM = '/accessions/:accessionId',
   ACCESSIONS2_EDIT = '/accessions/:accessionId/edit',
+  BATCH_WITHDRAW = '/batch/:batchId/withdraw',
   CHECKIN = '/checkin',
   CONTACT_US = '/contactus',
   ERROR = '/error',
