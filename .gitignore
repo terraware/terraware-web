@@ -34,3 +34,6 @@ report.csv
 
 # build version file
 public/build-version.txt
+
+# ignore .vim swap files
+*.swp
