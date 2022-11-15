@@ -50,6 +50,7 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
   const [nameError, setNameError] = useState('');
   const classes = useStyles();
   const [selectedPlantingSite, setSelectedPlantingSite] = useState<PlantingSite>();
+  const [loaded, setLoaded] = useState(false);
 
   const defaultPlantingSite = (): PlantingSite => ({
     id: -1,
@@ -62,7 +63,10 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
         const serverResponse = await getPlantingSite(Number.parseInt(plantingSiteId, 10));
         if (serverResponse.requestSucceeded) {
           setSelectedPlantingSite(serverResponse.site);
+          setLoaded(true);
         }
+      } else {
+        setLoaded(true);
       }
     };
 
@@ -126,7 +130,7 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
 
   return (
     <TfMain>
-      <Container maxWidth={false}>
+      <Container maxWidth={false} sx={{ display: 'flex', flexDirection: record?.boundary ? 'row' : 'column' }}>
         <Grid container spacing={3}>
           <Grid item xs={12}>
             <Link id='back' to={APP_PATHS.PLANTING_SITES} className={classes.back}>
@@ -164,7 +168,7 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
               value={record.description}
             />
           </Grid>
-          <BoundariesAndPlots plantingSite={selectedPlantingSite || record} />
+          {loaded && <BoundariesAndPlots plantingSite={record} />}
         </Grid>
       </Container>
       <FormBottomBar onCancel={goToPlantingSites} onSave={savePlantingSite} />
