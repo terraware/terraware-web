@@ -556,6 +556,11 @@ export default function App() {
                 </Route>
               )}
               {trackingEnabled && selectedOrganization && (
+                <Route exact path={APP_PATHS.PLANTING_SITES_EDIT}>
+                  <CreatePlantingSite organization={selectedOrganization} />
+                </Route>
+              )}
+              {trackingEnabled && selectedOrganization && (
                 <Route exact path={APP_PATHS.PLANTING_SITES}>
                   <PlantingSitesList organization={selectedOrganization} />
                 </Route>

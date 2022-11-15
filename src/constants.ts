@@ -41,4 +41,5 @@ export enum APP_PATHS {
   PLANTING_SITES = '/planting-sites',
   PLANTING_SITES_NEW = '/planting-sites/new',
   PLANTING_SITES_VIEW = '/planting-sites/:plantingSiteId',
+  PLANTING_SITES_EDIT = '/planting-sites/:plantingSiteId/edit',
 }
