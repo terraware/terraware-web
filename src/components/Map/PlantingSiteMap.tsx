@@ -33,9 +33,8 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
     (site: PlantingSite): MapSource => {
       const { id, name, description, boundary } = site;
       return {
-        metadata: { id, name, description },
+        metadata: { id, name, description, type: 'site' },
         boundary: getPolygons(boundary),
-        name: `site-${name}`,
         id: `site-${id}`,
         fillColor: getFillColor(),
         fillOpacity: 0.1,
@@ -49,9 +48,8 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
       return site.plantingZones?.map((zone) => {
         const { id, name, boundary } = zone;
         return {
-          metadata: { id, name },
+          metadata: { id, name, type: 'zone' },
           boundary: getPolygons(boundary),
-          name: `zone-${name}`,
           id: `zone-${id}`,
           fillColor: getFillColor(),
           fillOpacity: 0.2,
@@ -68,16 +66,11 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
         return plots.map((plot) => {
           const { id, name, fullName, boundary } = plot;
           return {
-            metadata: { id, name, fullName },
+            metadata: { id, name, fullName, type: 'plot' },
             boundary: getPolygons(boundary),
-            name: `plot-${name}`,
             id: `plot-${id}`,
             fillColor: getFillColor(),
             fillOpacity: 0.3,
-            onClick: () => `
-            ID ${id}
-            Name ${fullName || name}
-          `,
           };
         });
       });
@@ -126,14 +119,14 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
 
   if (!token || !mapOptions) {
     return (
-      <Box sx={{ display: 'flex', flexGrow: 1 }}>
+      <Box sx={{ display: 'flex', flexGrow: 1, height: '100%' }}>
         <CircularProgress sx={{ margin: 'auto auto' }} />
       </Box>
     );
   }
 
   return (
-    <Box>
+    <Box sx={{ display: 'flex', flexGrow: 1, height: '100%' }}>
       <Map token={token} options={mapOptions} onTokenExpired={fetchMapboxToken} />
     </Box>
   );

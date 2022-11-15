@@ -136,6 +136,14 @@ export interface paths {
   "/api/v1/nursery/withdrawals": {
     post: operations["createBatchWithdrawal"];
   };
+  "/api/v1/nursery/withdrawals/{withdrawalId}/photos": {
+    get: operations["listWithdrawalPhotos"];
+    post: operations["uploadWithdrawalPhoto"];
+  };
+  "/api/v1/nursery/withdrawals/{withdrawalId}/photos/{photoId}": {
+    /** Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio. */
+    get: operations["getWithdrawalPhoto"];
+  };
   "/api/v1/organizations": {
     /** Lists all organizations the user can access. */
     get: operations["listOrganizations"];
@@ -590,6 +598,10 @@ export interface components {
       batch: components["schemas"]["BatchPayload"];
       status?: components["schemas"]["SuccessOrError"];
     };
+    CreateNurseryWithdrawalPhotoResponsePayload: {
+      id: number;
+      status?: components["schemas"]["SuccessOrError"];
+    };
     CreateNurseryWithdrawalRequestPayload: {
       batchWithdrawals: components["schemas"]["BatchWithdrawalPayload"][];
       /** If purpose is "Nursery Transfer", the ID of the facility to transfer to. Must be in the same organization as the originating facility. Not allowed for purposes other than "Nursery Transfer". */
@@ -679,16 +691,7 @@ export interface components {
     };
     CreateWithdrawalRequestPayload: {
       date?: string;
-      purpose?:
-        | "Propagation"
-        | "Outreach or Education"
-        | "Research"
-        | "Broadcast"
-        | "Share with Another Site"
-        | "Other"
-        | "Viability Testing"
-        | "Out-planting"
-        | "Nursery";
+      purpose?: "Other" | "Viability Testing" | "Out-planting" | "Nursery";
       notes?: string;
       /** ID of the user who withdrew the seeds. Default is the current user's ID. If non-null, the current user must have permission to read the referenced user's membership details in the organization. */
       withdrawnByUserId?: number;
@@ -974,16 +977,7 @@ export interface components {
       estimatedWeight?: components["schemas"]["SeedQuantityPayload"];
       /** Server-assigned unique ID of this withdrawal. */
       id?: number;
-      purpose?:
-        | "Propagation"
-        | "Outreach or Education"
-        | "Research"
-        | "Broadcast"
-        | "Share with Another Site"
-        | "Other"
-        | "Viability Testing"
-        | "Out-planting"
-        | "Nursery";
+      purpose?: "Other" | "Viability Testing" | "Out-planting" | "Nursery";
       notes?: string;
       /** If this withdrawal is of purpose "Viability Testing", the ID of the test it is associated with. */
       viabilityTestId?: number;
@@ -1088,8 +1082,8 @@ export interface components {
       name: string;
       description?: string;
       configuration?: { [key: string]: unknown };
-      type: string;
       settings?: { [key: string]: { [key: string]: unknown } };
+      type: string;
       timeseriesName?: string;
       deviceId?: number;
       lowerThreshold?: number;
@@ -1584,16 +1578,7 @@ export interface components {
     };
     UpdateWithdrawalRequestPayload: {
       date?: string;
-      purpose?:
-        | "Propagation"
-        | "Outreach or Education"
-        | "Research"
-        | "Broadcast"
-        | "Share with Another Site"
-        | "Other"
-        | "Viability Testing"
-        | "Out-planting"
-        | "Nursery";
+      purpose?: "Other" | "Viability Testing" | "Out-planting" | "Nursery";
       notes?: string;
       /** ID of the user who withdrew the seeds. Default is the withdrawal's existing user ID. If non-null, the current user must have permission to read the referenced user's membership details in the organization. */
       withdrawnByUserId?: number;
@@ -2684,6 +2669,72 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["CreateNurseryWithdrawalRequestPayload"];
+      };
+    };
+  };
+  listWithdrawalPhotos: {
+    parameters: {
+      path: {
+        withdrawalId: number;
+      };
+    };
+    responses: {
+      /** The withdrawal does not exist. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  uploadWithdrawalPhoto: {
+    parameters: {
+      path: {
+        withdrawalId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CreateNurseryWithdrawalPhotoResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": {
+          file: string;
+        };
+      };
+    };
+  };
+  /** Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio. */
+  getWithdrawalPhoto: {
+    parameters: {
+      path: {
+        withdrawalId: number;
+        photoId: number;
+      };
+      query: {
+        /** Maximum desired width in pixels. If neither this nor maxHeight is specified, the full-sized original image will be returned. If this is specified, an image no wider than this will be returned. The image may be narrower than this value if needed to preserve the aspect ratio of the original. */
+        maxWidth?: string;
+        /** Maximum desired height in pixels. If neither this nor maxWidth is specified, the full-sized original image will be returned. If this is specified, an image no taller than this will be returned. The image may be shorter than this value if needed to preserve the aspect ratio of the original. */
+        maxHeight?: string;
+      };
+    };
+    responses: {
+      /** The photo was successfully retrieved. */
+      200: {
+        content: {
+          "image/jpeg": string;
+        };
+      };
+      /** The withdrawal does not exist, or does not have a photo with the requested ID. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
       };
     };
   };
