@@ -43,7 +43,6 @@ export type MapSource = {
   fillOpacity: number;
   metadata: { [key: string]: any };
   boundary: MapGeometry;
-  onClick?: () => string;
 };
 
 export type MapBoundingBox = {

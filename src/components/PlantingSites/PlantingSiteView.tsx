@@ -1,6 +1,6 @@
 import TfMain from 'src/components/common/TfMain';
-import { Typography, Container, Grid, Box, CircularProgress } from '@mui/material';
-import { Button, Icon, theme } from '@terraware/web-components';
+import { Typography, Container, Grid, Box, CircularProgress, Theme, useTheme } from '@mui/material';
+import { Button, Icon } from '@terraware/web-components';
 import strings from 'src/strings';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import { getPlantingSite } from 'src/api/tracking/tracking';
@@ -13,7 +13,7 @@ import { makeStyles } from '@mui/styles';
 import { PlantingSite } from 'src/api/types/tracking';
 import { PlantingSiteMap } from '../Map';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme: Theme) => ({
   backIcon: {
     fill: theme.palette.TwClrIcnBrand,
     marginRight: theme.spacing(1),
@@ -30,6 +30,7 @@ const useStyles = makeStyles(() => ({
 export default function PlantingSiteView(): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const classes = useStyles();
+  const theme = useTheme();
   const { plantingSiteId } = useParams<{ plantingSiteId: string }>();
   const [plantingSite, setPlantingSite] = useState<PlantingSite>();
 
@@ -53,7 +54,7 @@ export default function PlantingSiteView(): JSX.Element {
 
   return (
     <TfMain>
-      <Container maxWidth={false}>
+      <Container maxWidth={false} sx={{ display: 'flex' }}>
         <Grid container spacing={3}>
           <Grid item xs={12}>
             <Link id='back' to={APP_PATHS.PLANTING_SITES} className={classes.back}>
@@ -90,7 +91,7 @@ export default function PlantingSiteView(): JSX.Element {
               {strings.BOUNDARIES_AND_PLOTS}
             </Typography>
           </Grid>
-          <Grid item xs={12}>
+          <Grid item xs={12} display='flex' flexGrow={1} height='100%' paddingBottom={theme.spacing(10)}>
             {plantingSite ? (
               <>
                 {plantingSite.boundary ? (

@@ -1,8 +1,21 @@
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Box } from '@mui/material';
-import React, { useEffect, useRef } from 'react';
-import mapboxgl from 'mapbox-gl';
+import 'mapbox-gl/dist/mapbox-gl.css';
+import ReactMapGL, { Layer, NavigationControl, Popup, Source } from 'react-map-gl';
 import { MapOptions } from './MapModels';
 import { getLatLng } from './MapUtils';
+import { useRenderFeature } from './MapRenderUtils';
+
+const navControlStyle = {
+  right: 10,
+  bottom: 25,
+};
+
+type PopupInfo = {
+  lng: number;
+  lat: number;
+  properties: any;
+};
 
 export type MapProps = {
   token: string;
@@ -12,32 +25,57 @@ export type MapProps = {
 
 export default function Map(props: MapProps): JSX.Element {
   const { token, onTokenExpired, options } = props;
+  const [mapKey, setMapKey] = useState<number>(Date.now());
+  const [geoData, setGeoData] = useState();
+  const [layerIds, setLayerIds] = useState<string[]>([]);
+  const [popupInfo, setPopupInfo] = useState<PopupInfo | null>(null);
+  const mapRef = useRef<any | null>(null);
+  const renderFeature = useRenderFeature();
 
-  const mapContainer = useRef(null);
-  const map = useRef<mapboxgl.Map | null>(null);
+  const onMapLoad = useCallback(() => {
+    const { bbox } = options;
+    // fit to bounding box
+    if (mapRef?.current !== undefined) {
+      const mapInstance: any = mapRef.current.getMap();
+      mapInstance.fitBounds([bbox.lowerLeft, bbox.upperRight], { padding: 20 });
+    }
+  }, [options]);
+
+  const onMapError = useCallback(
+    (event: any) => {
+      if (event?.error?.status === 401) {
+        // tslint:disable-next-line: no-console
+        console.error('Mapbox token expired');
+        if (onTokenExpired) {
+          onTokenExpired();
+        }
+      }
+    },
+    [onTokenExpired]
+  );
+
+  const onMapClick = useCallback((event: any) => {
+    const { lat, lng } = event.lngLat;
+    if (event?.features[0]?.properties) {
+      const { properties } = event.features[0];
+      setPopupInfo({
+        lng,
+        lat,
+        properties,
+      });
+    }
+  }, []);
 
   useEffect(() => {
-    const { bbox, sources } = options;
-    if (map.current) {
-      // clean up map if we need to recreate it based on new props
-      map.current.remove();
+    const { sources } = options;
+    if (geoData) {
+      return;
     }
-
-    mapboxgl.accessToken = token;
-
-    map.current = new mapboxgl.Map({
-      container: mapContainer.current || '',
-      style: 'mapbox://styles/mapbox/satellite-v9',
-    });
-
-    // show +/- zoom options only
-    map.current.addControl(new mapboxgl.NavigationControl({ showCompass: false }), 'bottom-right');
-
     // initialize sources
-    map.current.on('load', () => {
-      sources.forEach((source) => {
+    const geo = sources
+      .map((source) => {
         if (!source.boundary || !Array.isArray(source.boundary)) {
-          return;
+          return null;
         }
         const multiPolygons = (source.boundary as (number | number[][][])[])
           .map((geom) => {
@@ -52,12 +90,10 @@ export default function Map(props: MapProps): JSX.Element {
           .filter((geom) => !!geom) as number[][][][];
 
         if (!multiPolygons.length) {
-          return;
+          return null;
         }
 
-        // add polygons
-        map.current?.addSource(source.name, {
-          type: 'geojson',
+        return {
           data: {
             type: 'FeatureCollection',
             features: multiPolygons.map((multiPolygon) => {
@@ -71,49 +107,55 @@ export default function Map(props: MapProps): JSX.Element {
               };
             }),
           },
-        });
-
-        // add layer
-        map.current?.addLayer({
-          id: source.id,
-          type: 'fill',
-          source: source.name,
-          paint: {
-            'fill-color': source.fillColor,
-            'fill-opacity': source.fillOpacity,
+          layer: {
+            id: source.id,
+            type: 'fill',
+            paint: {
+              'fill-color': source.fillColor,
+              'fill-opacity': source.fillOpacity,
+            },
           },
-          filter: ['==', '$type', 'Polygon'],
-        });
+        };
+      })
+      .filter((g) => g);
+    setGeoData(geo as any);
+    setLayerIds(geo.map((g: any) => g.layer.id));
+  }, [options, geoData, setGeoData, token]);
 
-        // add click event handler
-        if (map.current !== null && source.onClick) {
-          const mapInstance = map.current;
-          const onClick = source.onClick;
-          mapInstance.on('click', source.id, (e) => {
-            new mapboxgl.Popup().setLngLat(e.lngLat).setHTML(onClick()).addTo(mapInstance);
-          });
-        }
-      });
-    });
-
-    // handle error
-    map.current.on('error', (event: any) => {
-      if (event?.error?.status === 401) {
-        // tslint:disable-next-line: no-console
-        console.error('Mapbox token expired');
-        if (onTokenExpired) {
-          onTokenExpired();
-        }
-      }
-    });
-
-    // fit to bounding box
-    map.current.fitBounds([bbox.lowerLeft, bbox.upperRight], { padding: 20 });
-  }, [token, onTokenExpired, options]);
+  useEffect(() => {
+    setMapKey(Date.now());
+  }, [token]);
 
   return (
-    <Box>
-      <Box ref={mapContainer} sx={{ height: '400px' }} />
+    <Box sx={{ display: 'flex', flexGrow: 1, height: '100%', minHeight: 100 }}>
+      <ReactMapGL
+        key={mapKey}
+        ref={mapRef}
+        mapboxAccessToken={token}
+        mapStyle='mapbox://styles/mapbox/satellite-v9'
+        interactiveLayerIds={layerIds}
+        onLoad={onMapLoad}
+        onError={onMapError}
+        onClick={onMapClick}
+      >
+        {geoData &&
+          (geoData as any[]).map((geo: any, index) => (
+            <Source type='geojson' key={index} data={geo.data}>
+              <Layer {...geo.layer} />
+            </Source>
+          ))}
+        <NavigationControl showCompass={false} style={navControlStyle} position='bottom-right' />
+        {popupInfo && (
+          <Popup
+            anchor='top'
+            longitude={Number(popupInfo.lng)}
+            latitude={Number(popupInfo.lat)}
+            onClose={() => setPopupInfo(null)}
+          >
+            {renderFeature(popupInfo.properties)}
+          </Popup>
+        )}
+      </ReactMapGL>
     </Box>
   );
 }
