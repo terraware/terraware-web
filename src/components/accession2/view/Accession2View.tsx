@@ -570,7 +570,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
         <Grid item xs={getOverviewGridSize(1)}>
           <OverviewItemCard
             isEditable={quantityEditable}
-            hideEditIcon={accession?.remainingQuantity?.quantity === undefined}
+            hideEditIcon={accession?.remainingQuantity?.quantity === undefined && !isMobile}
             onClick={() => setOpenQuantityModal(true)}
             title={strings.QUANTITY}
             contents={
@@ -607,7 +607,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
         <Grid item xs={getOverviewGridSize(2)}>
           <OverviewItemCard
             isEditable={viabilityEditable}
-            hideEditIcon={!accession?.viabilityPercent}
+            hideEditIcon={!accession?.viabilityPercent && !isMobile}
             title={strings.VIABILITY}
             onClick={() => setOpenViabilityModal(true)}
             contents={

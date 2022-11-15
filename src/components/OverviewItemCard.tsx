@@ -73,22 +73,17 @@ export default function OverviewItemCard({
         </Typography>
         <Box
           sx={{
-            display: 'flex',
             alignItems: isMobile ? 'flex-start' : 'center',
+            color: theme.palette.TwClrTxt,
+            display: 'flex',
+            fontSize: '16px',
+            fontWeight: 600,
             justifyContent: isMobile ? 'space-between' : 'normal',
+            lineHeight: '24px',
             width: '100%',
           }}
         >
-          <Box
-            sx={{
-              color: theme.palette.TwClrTxt,
-              fontSize: '16px',
-              fontWeight: 600,
-              lineHeight: '24px',
-            }}
-          >
-            {contents}
-          </Box>
+          {contents}
         </Box>
       </Box>
       {isEditable && !hideEditIcon ? (
