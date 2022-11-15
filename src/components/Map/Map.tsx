@@ -3,7 +3,6 @@ import { Box } from '@mui/material';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import ReactMapGL, { Layer, NavigationControl, Popup, Source } from 'react-map-gl';
 import { MapOptions } from './MapModels';
-import { getLatLng } from './MapUtils';
 import { useRenderFeature } from './MapRenderUtils';
 
 const navControlStyle = {
@@ -82,10 +81,7 @@ export default function Map(props: MapProps): JSX.Element {
             if (!Array.isArray(geom)) {
               return null;
             }
-            const g = geom as number[][][];
-            return g.map((gg) => {
-              return gg.map((coord) => getLatLng(coord[0], coord[1]));
-            });
+            return geom as number[][][];
           })
           .filter((geom) => !!geom) as number[][][][];
 
