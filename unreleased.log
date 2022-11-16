@@ -1,3 +1,4 @@
+4c2c037 SW-2268 Fix double-load of map, fix map height (#769)
 0d17c56 SW-2267 reduce # of fetches to BE for accession, in accession view (#766)
 9b4b210 Remove .swp file - accidental commit (#765)
 556881d SW-2141 Empty routing/component for single batch withdraw flow (#764)
