@@ -15,22 +15,28 @@ import TextField from '../common/Textfield/Textfield';
 import { search, SearchNodePayload } from 'src/api/search';
 import useDebounce from 'src/utils/useDebounce';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
-import { Grid } from '@mui/material';
+import { Grid, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme: Theme) => ({
   title: {
     marginTop: 0,
     marginBottom: 0,
     fontSize: '24px',
+    fontWeight: 600,
   },
   centered: {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'flex-end',
-    marginBottom: '16px',
+    marginBottom: '32px',
+  },
+  contentContainer: {
+    backgroundColor: theme.palette.TwClrBg,
+    padding: theme.spacing(3),
+    borderRadius: '32px',
   },
   searchField: {
     width: '300px',
@@ -158,36 +164,38 @@ export default function SeedBanksList({ organization }: SeedBanksListProps): JSX
             ))}
         </Grid>
         <PageSnackbar />
-        <Grid item xs={12} className={classes.searchBar}>
-          <TextField
-            placeholder={strings.SEARCH}
-            iconLeft='search'
-            label=''
-            id='search'
-            type='text'
-            className={classes.searchField}
-            onChange={onChangeSearch}
-            value={temporalSearchValue}
-            iconRight='cancel'
-            onClickRightIcon={clearSearch}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <div>
-            <Grid container spacing={4}>
-              <Grid item xs={12}>
-                {seedBanks && (
-                  <Table
-                    id='seed-banks-table'
-                    columns={columns}
-                    rows={results || seedBanks}
-                    orderBy='name'
-                    Renderer={SeedBanksCellRenderer}
-                  />
-                )}
+        <Grid container className={classes.contentContainer}>
+          <Grid item xs={12} className={classes.searchBar}>
+            <TextField
+              placeholder={strings.SEARCH}
+              iconLeft='search'
+              label=''
+              id='search'
+              type='text'
+              className={classes.searchField}
+              onChange={onChangeSearch}
+              value={temporalSearchValue}
+              iconRight='cancel'
+              onClickRightIcon={clearSearch}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <div>
+              <Grid container spacing={4}>
+                <Grid item xs={12}>
+                  {seedBanks && (
+                    <Table
+                      id='seed-banks-table'
+                      columns={columns}
+                      rows={results || seedBanks}
+                      orderBy='name'
+                      Renderer={SeedBanksCellRenderer}
+                    />
+                  )}
+                </Grid>
               </Grid>
-            </Grid>
-          </div>
+            </div>
+          </Grid>
         </Grid>
       </Grid>
     </TfMain>
