@@ -31,11 +31,13 @@ export type MapProps = {
   options: MapOptions;
   onTokenExpired?: () => void;
   enablePopup?: boolean;
+  // changes to mapId will re-create the map, needed for new token refreshes
+  // since mapbox token is not reactive
+  mapId?: string;
 };
 
 export default function Map(props: MapProps): JSX.Element {
-  const { token, onTokenExpired, options, enablePopup } = props;
-  const [mapKey, setMapKey] = useState<number>(Date.now());
+  const { token, onTokenExpired, options, enablePopup, mapId } = props;
   const [geoData, setGeoData] = useState();
   const [layerIds, setLayerIds] = useState<string[]>([]);
   const [popupInfo, setPopupInfo] = useState<PopupInfo | null>(null);
@@ -131,14 +133,10 @@ export default function Map(props: MapProps): JSX.Element {
     }
   }, [options, geoData, setGeoData, token, enablePopup]);
 
-  useEffect(() => {
-    setMapKey(Date.now());
-  }, [token]);
-
   return (
-    <Box sx={{ display: 'flex', flexGrow: 1, height: '100%', minHeight: 100 }}>
+    <Box sx={{ display: 'flex', flexGrow: 1, height: '100%', minHeight: 250 }}>
       <ReactMapGL
-        key={mapKey}
+        key={mapId}
         ref={mapRef}
         mapboxAccessToken={token}
         mapStyle='mapbox://styles/mapbox/satellite-v9'

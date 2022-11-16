@@ -6,6 +6,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 import Map from './Map';
 import { MapGeometry, MapOptions, MapSource } from './MapModels';
 import { getBoundingBox } from './MapUtils';
+import _ from 'lodash';
 
 export type PlantingSiteMapProps = {
   plantingSite: PlantingSite;
@@ -17,6 +18,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
   const [snackbar] = useState(useSnackbar());
   const [token, setToken] = useState<string>();
   const [mapOptions, setMapOptions] = useState<MapOptions>();
+  const [mapId, setMapId] = useState<string>();
 
   const getFillColor = useCallback(() => {
     return theme.palette.TwClrBaseWhite || 'white';
@@ -83,6 +85,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
     const response = await getMapboxToken();
     if (response.requestSucceeded) {
       setToken(response.token);
+      setMapId(Date.now.toString());
     } else {
       snackbar.toastError(response.error);
     }
@@ -108,14 +111,18 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
         ...plots.map((s) => s.boundary),
       ].filter((g) => g) as MapGeometry[];
 
-      setMapOptions({
+      const newMapOptions = {
         bbox: getBoundingBox(geometries),
         sources: [site, ...zones, ...plots],
-      });
+      };
+
+      if (!_.isEqual(newMapOptions, mapOptions)) {
+        setMapOptions(newMapOptions);
+      }
     };
 
     fetchPlantingSite();
-  }, [plantingSite, snackbar, extractPlantingSite, extractPlantingZones, extractPlots]);
+  }, [plantingSite, snackbar, extractPlantingSite, extractPlantingZones, extractPlots, mapOptions]);
 
   if (!token || !mapOptions) {
     return (
@@ -126,8 +133,8 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
   }
 
   return (
-    <Box sx={{ display: 'flex', flexGrow: 1, height: '100%' }}>
-      <Map token={token} options={mapOptions} onTokenExpired={fetchMapboxToken} />
+    <Box sx={{ display: 'flex', flexGrow: 1 }}>
+      <Map token={token} options={mapOptions} onTokenExpired={fetchMapboxToken} mapId={mapId} />
     </Box>
   );
 }

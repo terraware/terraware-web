@@ -130,51 +130,53 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
 
   return (
     <TfMain>
-      <Container maxWidth={false} sx={{ display: 'flex', flexDirection: record?.boundary ? 'row' : 'column' }}>
+      <Container maxWidth={false} sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
         {loaded && (
-          <Grid container spacing={3}>
-            <Grid item xs={12}>
-              <Link id='back' to={APP_PATHS.PLANTING_SITES} className={classes.back}>
-                <Icon name='caretLeft' className={classes.backIcon} />
-                {strings.PLANTING_SITES}
-              </Link>
-            </Grid>
-            <Grid item xs={12}>
-              <Typography
-                fontSize={selectedPlantingSite ? '20px' : '24px'}
-                fontWeight={600}
-                margin={theme.spacing(1, 0)}
-              >
-                {record.id !== -1 && selectedPlantingSite ? selectedPlantingSite.name : strings.ADD_PLANTING_SITE}
-              </Typography>
-              {record.id === -1 && (
-                <Typography fontSize='14px' fontWeight={400} margin={theme.spacing(0, 0, 3, 0)}>
-                  {strings.ADD_PLANTING_SITE_DESCRIPTION}
+          <>
+            <Grid container spacing={3} flexGrow={0}>
+              <Grid item xs={12}>
+                <Link id='back' to={APP_PATHS.PLANTING_SITES} className={classes.back}>
+                  <Icon name='caretLeft' className={classes.backIcon} />
+                  {strings.PLANTING_SITES}
+                </Link>
+              </Grid>
+              <Grid item xs={12}>
+                <Typography
+                  fontSize={selectedPlantingSite ? '20px' : '24px'}
+                  fontWeight={600}
+                  margin={theme.spacing(1, 0)}
+                >
+                  {record.id !== -1 && selectedPlantingSite ? selectedPlantingSite.name : strings.ADD_PLANTING_SITE}
                 </Typography>
-              )}
-            </Grid>
-            <PageSnackbar />
-            <Grid item xs={gridSize()}>
-              <TextField
-                id='name'
-                label={strings.NAME_REQUIRED}
-                type='text'
-                onChange={onChange}
-                value={record.name}
-                errorText={record.name ? '' : nameError}
-              />
-            </Grid>
-            <Grid item xs={gridSize()}>
-              <TextField
-                id='description'
-                label={strings.DESCRIPTION}
-                type='textarea'
-                onChange={onChange}
-                value={record.description}
-              />
+                {record.id === -1 && (
+                  <Typography fontSize='14px' fontWeight={400} margin={theme.spacing(0, 0, 3, 0)}>
+                    {strings.ADD_PLANTING_SITE_DESCRIPTION}
+                  </Typography>
+                )}
+              </Grid>
+              <PageSnackbar />
+              <Grid item xs={gridSize()}>
+                <TextField
+                  id='name'
+                  label={strings.NAME_REQUIRED}
+                  type='text'
+                  onChange={onChange}
+                  value={record.name}
+                  errorText={record.name ? '' : nameError}
+                />
+              </Grid>
+              <Grid item xs={gridSize()}>
+                <TextField
+                  id='description'
+                  label={strings.DESCRIPTION}
+                  type='textarea'
+                  onChange={onChange}
+                  value={record.description}
+                />
+              </Grid>
             </Grid>
             <BoundariesAndPlots plantingSite={record} />
-          </Grid>
+          </>
         )}
       </Container>
       <FormBottomBar onCancel={goToPlantingSites} onSave={savePlantingSite} />
