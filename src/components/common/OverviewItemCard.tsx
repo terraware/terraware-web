@@ -1,7 +1,7 @@
-import { Box, IconButton, Theme, Typography, useTheme } from '@mui/material';
+import { Box, Theme, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Icon } from '@terraware/web-components';
-import useDeviceInfo from '../utils/useDeviceInfo';
+import useDeviceInfo from '../../utils/useDeviceInfo';
 
 const useStyles = makeStyles((theme: Theme) => ({
   editIcon: {
@@ -87,11 +87,11 @@ export default function OverviewItemCard({
         </Box>
       </Box>
       {isEditable && !hideEditIcon ? (
-        <IconButton sx={{ marginLeft: 1, height: '24px', width: '24px' }}>
+        <Box sx={{ marginLeft: 1, height: '16px', width: '16px' }}>
           <Icon name='iconEdit' className={`${classes.editIcon} edit-icon`} />
-        </IconButton>
+        </Box>
       ) : (
-        <Box sx={{ marginLeft: 1, height: '24px', width: 2 }} />
+        <Box sx={{ marginLeft: 1, height: '16px', width: 2 }} />
       )}
     </Box>
   );

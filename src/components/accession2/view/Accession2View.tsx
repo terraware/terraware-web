@@ -34,11 +34,7 @@ import { getSeedBank, isContributor } from 'src/utils/organization';
 import _ from 'lodash';
 import PageHeaderWrapper from '../../common/PageHeaderWrapper';
 import { APP_PATHS } from 'src/constants';
-import OverviewItemCard from '../../OverviewItemCard';
-
-interface StyleProps {
-  isMobile?: boolean;
-}
+import OverviewItemCard from '../../common/OverviewItemCard';
 
 const useStyles = makeStyles((theme: Theme) => ({
   iconStyle: {
@@ -56,7 +52,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   backIcon: {
     fill: theme.palette.TwClrIcnBrand,
-    marginRight: theme.spacing(1),
+    marginRight: '4px',
   },
   addIconEnabled: {
     fill: theme.palette.TwClrIcnBrand,
@@ -69,12 +65,13 @@ const useStyles = makeStyles((theme: Theme) => ({
     width: '20px',
   },
   backToAccessions: {
-    fontSize: '20px',
+    fontSize: '14px',
+    fontWeight: 500,
     display: 'flex',
     textDecoration: 'none',
     color: theme.palette.TwClrTxtBrand,
     alignItems: 'center',
-    marginLeft: (props: StyleProps) => (props.isMobile ? 0 : theme.spacing(3)),
+    marginLeft: 0,
     marginTop: theme.spacing(2),
   },
 }));
@@ -167,10 +164,13 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
   };
 
   const tabStyles = {
+    fontSize: '14px',
+    padding: themeObj.spacing(1, 2),
+    minHeight: themeObj.spacing(4.5),
     textTransform: 'capitalize',
     '&.Mui-selected': {
-      color: themeObj.palette.TwClrTxt as string,
-      fontWeight: 600,
+      color: themeObj.palette.TwClrTxtBrand as string,
+      fontWeight: 500,
     },
   };
 
@@ -287,7 +287,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
         <Button
           onClick={() => setOpenWithdrawModal(true)}
           label={strings.WITHDRAW}
-          size='medium'
+          size='small'
           className={fullSize ? classes.fullSizeButton : ''}
         />
       );
@@ -303,6 +303,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
           onClick={(ev) => ev && setActionMenuAnchorEl(ev.currentTarget)}
           icon='menuVertical'
           priority='secondary'
+          size='small'
         />
         <Menu anchorEl={actionMenuAnchorEl} open={openActionMenu} onClose={() => setActionMenuAnchorEl(null)}>
           <MenuItem
@@ -455,17 +456,22 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
         <>
           <Box>
             <Link id='back' to={APP_PATHS.ACCESSIONS} className={classes.backToAccessions}>
-              <Icon name='caretLeft' className={classes.backIcon} />
+              <Icon name='caretLeft' className={classes.backIcon} size='small' />
               {strings.ACCESSIONS}
             </Link>
           </Box>
-          <Box padding={isMobile ? themeObj.spacing(3, 0) : 3}>
+          <Box padding={isMobile ? themeObj.spacing(3, 0, 1, 0) : themeObj.spacing(3, 3, 1, 3)}>
+            <Typography color={themeObj.palette.TwClrTxt} fontSize='14px'>
+              {accession?.accessionNumber}
+            </Typography>
             <Box display='flex' justifyContent='space-between' alignItems='center'>
-              <Typography>{accession?.accessionNumber}</Typography>
+              <Typography color={themeObj.palette.TwClrTxt} fontSize='20px' fontStyle='italic' fontWeight={600}>
+                {accession?.speciesScientificName}
+              </Typography>
               {!isMobile && userCanEdit && (
                 <Box display='flex' alignItems='center'>
                   {accession && isAwaitingCheckin ? (
-                    <Button onClick={() => checkInAccession()} label={strings.CHECK_IN} size='medium' />
+                    <Button onClick={() => checkInAccession()} label={strings.CHECK_IN} size='small' />
                   ) : (
                     renderWithdrawalButton()
                   )}
@@ -473,12 +479,11 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
                 </Box>
               )}
             </Box>
-            <Typography color={themeObj.palette.TwClrTxt} fontSize='24px' fontStyle='italic' fontWeight={500}>
-              {accession?.speciesScientificName}
+            <Typography color={themeObj.palette.TwClrTxt} fontSize='14px'>
+              {accession?.speciesCommonName}
             </Typography>
-            <Typography color={themeObj.palette.TwClrTxtSecondary}>{accession?.speciesCommonName}</Typography>
             {isMobile && userCanEdit && (
-              <Box display='flex' alignItems='center' paddingRight={2} marginBottom={4} marginTop={2}>
+              <Box display='flex' alignItems='center' paddingRight={2} marginTop={2}>
                 <Box paddingLeft={2} width='100%'>
                   {accession && isAwaitingCheckin ? (
                     <Button
@@ -504,6 +509,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
         ref={contentRef}
         spacing={themeObj.spacing(3)}
         columns={!isMobile && !isTablet ? overviewItemCount : 12}
+        marginBottom={themeObj.spacing(3)}
       >
         {accession?.state && (
           <Grid item xs={getOverviewGridSize(1)}>
@@ -636,7 +642,17 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
       <Box sx={{ width: '100%' }}>
         <TabContext value={selectedTab}>
           <Box sx={tabHeaderProps}>
-            <TabList onChange={(unused, value) => handleChange(value)}>
+            <TabList
+              sx={{ minHeight: themeObj.spacing(4.5) }}
+              onChange={(unused, value) => handleChange(value)}
+              TabIndicatorProps={{
+                style: {
+                  background: themeObj.palette.TwClrBgBrand,
+                  height: '4px',
+                  borderRadius: '4px 4px 0 0',
+                },
+              }}
+            >
               <Tab
                 label={isMobile || isTablet ? strings.DETAILS : strings.ACCESSION_DETAILS}
                 value='detail'

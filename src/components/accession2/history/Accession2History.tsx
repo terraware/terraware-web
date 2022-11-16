@@ -53,7 +53,7 @@ export default function Accession2History(props: Accession2HistoryProps): JSX.El
           borderBottom={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
           sx={{ '&:last-child': { border: 'none' } }}
         >
-          <Typography whiteSpace='pre' marginRight={theme.spacing(3)}>
+          <Typography color={theme.palette.TwClrTxtSecondary} whiteSpace='pre' marginRight={theme.spacing(3)}>
             {item.date}
           </Typography>
           <Typography fontWeight={500}>
