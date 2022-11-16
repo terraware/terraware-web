@@ -139,7 +139,7 @@ export default function Map(props: MapProps): JSX.Element {
                   'text-color': source.annotation.textColor,
                 },
                 layout: {
-                  'text-field': ['get', 'name'],
+                  'text-field': ['get', source.annotation.textField],
                   'text-anchor': 'center',
                   'text-allow-overlap': false,
                   'text-size': source.annotation.textSize,
