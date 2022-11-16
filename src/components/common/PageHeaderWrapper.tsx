@@ -100,6 +100,7 @@ export default function PageHeaderWrapper({ children, nextElement }: Props): JSX
     background: debouncedSticky ? theme.palette.TwClrBg : undefined,
     boxShadow: debouncedSticky ? `0px 3px 3px -3px ${theme.palette.TwClrBaseGray200}` : undefined,
     paddingRight: debouncedSticky ? theme.spacing(3) : undefined,
+    paddingTop: debouncedSticky ? theme.spacing(4) : undefined,
     position: debouncedSticky ? 'fixed' : undefined,
     top: debouncedSticky ? (debouncedScrollDown ? `${TOP_BAR_HEIGHT - height}px` : `${TOP_BAR_HEIGHT}px`) : undefined,
     visibility: debouncedSticky && debouncedScrollDown ? 'hidden' : 'visible',
