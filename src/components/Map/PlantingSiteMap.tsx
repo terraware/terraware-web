@@ -31,7 +31,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
         return {
           fillColor,
           fillOpacity,
-          lineColor: '#3F9188',
+          lineColor: '#3F9188', // tokens not available today
           lineWidth: 1,
         };
       } else if (objectType === 'zone') {
