@@ -101,6 +101,7 @@ export default function Map(props: MapProps): JSX.Element {
         }
 
         return {
+          isInteractive: source.isInteractive,
           data: {
             type: 'FeatureCollection',
             features: multiPolygons.map((multiPolygon) => {
@@ -115,19 +116,41 @@ export default function Map(props: MapProps): JSX.Element {
             }),
           },
           layer: {
-            id: source.id,
+            id: `${source.id}-fill`,
             type: 'fill',
             paint: {
               'fill-color': source.fillColor,
               'fill-opacity': source.fillOpacity,
             },
           },
+          layerOutline: {
+            id: `${source.id}-outline`,
+            type: 'line',
+            paint: {
+              'line-color': source.lineColor,
+              'line-width': source.lineWidth,
+            },
+          },
+          textAnnotation: source.annotation
+            ? {
+                id: `${source.id}-annotation`,
+                type: 'symbol',
+                paint: {
+                  'text-color': source.annotation.textColor,
+                },
+                layout: {
+                  'text-field': ['get', source.annotation.textField],
+                  'text-anchor': 'center',
+                  'text-size': source.annotation.textSize,
+                },
+              }
+            : null,
         };
       })
       .filter((g) => g);
     setGeoData(geo as any);
     if (popupRenderer) {
-      setLayerIds(geo.map((g: any) => g.layer.id));
+      setLayerIds(geo.filter((g: any) => g.isInteractive).map((g: any) => g.layer.id));
     }
   }, [options, geoData, setGeoData, token, popupRenderer]);
 
@@ -147,6 +170,8 @@ export default function Map(props: MapProps): JSX.Element {
           (geoData as any[]).map((geo: any, index) => (
             <Source type='geojson' key={index} data={geo.data}>
               <Layer {...geo.layer} />
+              {geo.textAnnotation && <Layer {...geo.textAnnotation} />}
+              <Layer {...geo.layerOutline} />
             </Source>
           ))}
         <NavigationControl showCompass={false} style={navControlStyle} position='bottom-right' />

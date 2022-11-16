@@ -22,9 +22,37 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
   const [mapId, setMapId] = useState<string>();
   const popupRenderer: MapPopupRenderer = useDefaultPopupRenderer();
 
-  const getFillColor = useCallback(() => {
-    return theme.palette.TwClrBaseWhite || 'white';
-  }, [theme.palette.TwClrBaseWhite]);
+  const getRenderAttributes = useCallback(
+    (objectType: 'site' | 'zone' | 'plot') => {
+      const fillColor = theme.palette.TwClrBaseWhite || 'white';
+      const fillOpacity = 0.1;
+
+      if (objectType === 'site') {
+        return {
+          fillColor,
+          fillOpacity,
+          lineColor: '#3F9188', // tokens not available today
+          lineWidth: 1,
+        };
+      } else if (objectType === 'zone') {
+        return {
+          fillColor,
+          fillOpacity,
+          lineColor: '#86BA3E', // tokens not available today
+          lineWidth: 4,
+        };
+      } else {
+        // plot
+        return {
+          fillColor,
+          fillOpacity,
+          lineColor: '#A4B5C6', // tokens not available today
+          lineWidth: 2,
+        };
+      }
+    },
+    [theme.palette.TwClrBaseWhite]
+  );
 
   const getPolygons = useCallback((boundary?: Geometry): MapGeometry => {
     if (!boundary) {
@@ -36,35 +64,48 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
   const extractPlantingSite = useCallback(
     (site: PlantingSite): MapSource => {
       const { id, name, description, boundary } = site;
+      const renderAttributes = getRenderAttributes('site');
+      const { fillColor, fillOpacity, lineColor, lineWidth } = renderAttributes;
+
       return {
         properties: { id, name, description, type: 'site' },
         boundary: getPolygons(boundary),
         id: `site-${id}`,
-        fillColor: getFillColor(),
-        fillOpacity: 0.1,
+        fillColor,
+        fillOpacity,
+        lineColor,
+        lineWidth,
       };
     },
-    [getPolygons, getFillColor]
+    [getPolygons, getRenderAttributes]
   );
 
   const extractPlantingZones = useCallback(
     (site: PlantingSite): MapSource[] | undefined => {
+      const renderAttributes = getRenderAttributes('zone');
+      const { fillColor, fillOpacity, lineColor, lineWidth } = renderAttributes;
+
       return site.plantingZones?.map((zone) => {
         const { id, name, boundary } = zone;
         return {
           properties: { id, name, type: 'zone' },
           boundary: getPolygons(boundary),
           id: `zone-${id}`,
-          fillColor: getFillColor(),
-          fillOpacity: 0.2,
+          fillColor,
+          fillOpacity,
+          lineColor,
+          lineWidth,
         };
       });
     },
-    [getPolygons, getFillColor]
+    [getPolygons, getRenderAttributes]
   );
 
   const extractPlots = useCallback(
     (site: PlantingSite): MapSource[] | undefined => {
+      const renderAttributes = getRenderAttributes('plot');
+      const { fillColor, fillOpacity, lineColor, lineWidth } = renderAttributes;
+
       return site.plantingZones?.flatMap((zone) => {
         const { plots } = zone;
         return plots.map((plot) => {
@@ -73,13 +114,21 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
             properties: { id, name, fullName, type: 'plot' },
             boundary: getPolygons(boundary),
             id: `plot-${id}`,
-            fillColor: getFillColor(),
-            fillOpacity: 0.3,
+            fillColor,
+            fillOpacity,
+            lineColor,
+            lineWidth,
+            isInteractive: true,
+            annotation: {
+              textField: 'fullName',
+              textColor: fillColor,
+              textSize: 10, // no tokens available yet
+            },
           };
         });
       });
     },
-    [getPolygons, getFillColor]
+    [getPolygons, getRenderAttributes]
   );
 
   // fetch token
@@ -115,7 +164,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
 
       const newMapOptions = {
         bbox: getBoundingBox(geometries),
-        sources: [site, ...zones, ...plots],
+        sources: [site, ...plots, ...zones],
       };
 
       if (!_.isEqual(newMapOptions, mapOptions)) {
