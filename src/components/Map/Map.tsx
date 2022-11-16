@@ -115,11 +115,19 @@ export default function Map(props: MapProps): JSX.Element {
             }),
           },
           layer: {
-            id: source.id,
+            id: `${source.id}-fill`,
             type: 'fill',
             paint: {
               'fill-color': source.fillColor,
               'fill-opacity': source.fillOpacity,
+            },
+          },
+          layerOutline: {
+            id: `${source.id}-outline`,
+            type: 'line',
+            paint: {
+              'line-color': source.lineColor,
+              'line-width': source.lineWidth,
             },
           },
         };
@@ -147,6 +155,7 @@ export default function Map(props: MapProps): JSX.Element {
           (geoData as any[]).map((geo: any, index) => (
             <Source type='geojson' key={index} data={geo.data}>
               <Layer {...geo.layer} />
+              <Layer {...geo.layerOutline} />
             </Source>
           ))}
         <NavigationControl showCompass={false} style={navControlStyle} position='bottom-right' />

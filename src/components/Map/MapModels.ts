@@ -42,6 +42,8 @@ export type MapSource = {
   id: string;
   fillColor: string;
   fillOpacity: number;
+  lineColor: string;
+  lineWidth: number;
   properties: MapSourceProperties;
   boundary: MapGeometry;
 };
