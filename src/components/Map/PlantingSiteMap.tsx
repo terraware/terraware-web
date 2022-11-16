@@ -39,7 +39,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
           fillColor,
           fillOpacity,
           lineColor: '#86BA3E', // tokens not available today
-          lineWidth: 3,
+          lineWidth: 4,
         };
       } else {
         // plot
@@ -82,7 +82,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
 
   const extractPlantingZones = useCallback(
     (site: PlantingSite): MapSource[] | undefined => {
-      const renderAttributes = getRenderAttributes('site');
+      const renderAttributes = getRenderAttributes('zone');
       const { fillColor, fillOpacity, lineColor, lineWidth } = renderAttributes;
 
       return site.plantingZones?.map((zone) => {
@@ -103,7 +103,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
 
   const extractPlots = useCallback(
     (site: PlantingSite): MapSource[] | undefined => {
-      const renderAttributes = getRenderAttributes('site');
+      const renderAttributes = getRenderAttributes('plot');
       const { fillColor, fillOpacity, lineColor, lineWidth } = renderAttributes;
 
       return site.plantingZones?.flatMap((zone) => {
@@ -118,6 +118,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
             fillOpacity,
             lineColor,
             lineWidth,
+            isInteractive: true,
           };
         });
       });
@@ -158,7 +159,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
 
       const newMapOptions = {
         bbox: getBoundingBox(geometries),
-        sources: [site, ...zones, ...plots],
+        sources: [site, ...plots, ...zones],
       };
 
       if (!_.isEqual(newMapOptions, mapOptions)) {

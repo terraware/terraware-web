@@ -46,6 +46,7 @@ export type MapSource = {
   lineWidth: number;
   properties: MapSourceProperties;
   boundary: MapGeometry;
+  isInteractive?: boolean;
 };
 
 export type MapBoundingBox = {

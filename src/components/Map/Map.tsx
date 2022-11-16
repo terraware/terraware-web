@@ -101,6 +101,7 @@ export default function Map(props: MapProps): JSX.Element {
         }
 
         return {
+          isInteractive: source.isInteractive,
           data: {
             type: 'FeatureCollection',
             features: multiPolygons.map((multiPolygon) => {
@@ -135,7 +136,7 @@ export default function Map(props: MapProps): JSX.Element {
       .filter((g) => g);
     setGeoData(geo as any);
     if (popupRenderer) {
-      setLayerIds(geo.map((g: any) => g.layer.id));
+      setLayerIds(geo.filter((g: any) => g.isInteractive).map((g: any) => g.layer.id));
     }
   }, [options, geoData, setGeoData, token, popupRenderer]);
 
