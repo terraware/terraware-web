@@ -141,7 +141,6 @@ export default function Map(props: MapProps): JSX.Element {
                 layout: {
                   'text-field': ['get', source.annotation.textField],
                   'text-anchor': 'center',
-                  'text-allow-overlap': false,
                   'text-size': source.annotation.textSize,
                 },
               }
