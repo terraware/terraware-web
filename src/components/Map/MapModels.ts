@@ -38,6 +38,12 @@ export type MapGeometry = number | number[] | number[][][][];
 
 export type MapSourceProperties = { [key: string]: any };
 
+export type MapAnnotation = {
+  textField: string; // property field whose value to render as annotation
+  textSize: number;
+  textColor: string;
+};
+
 export type MapSource = {
   id: string;
   fillColor: string;
@@ -47,6 +53,8 @@ export type MapSource = {
   properties: MapSourceProperties;
   boundary: MapGeometry;
   isInteractive?: boolean;
+  // property name to render as a polygon annotation
+  annotation?: MapAnnotation;
 };
 
 export type MapBoundingBox = {

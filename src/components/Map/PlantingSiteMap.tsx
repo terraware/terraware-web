@@ -119,6 +119,11 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
             lineColor,
             lineWidth,
             isInteractive: true,
+            annotation: {
+              textField: 'fullName',
+              textColor: fillColor,
+              textSize: 10, // no tokens available yet
+            },
           };
         });
       });

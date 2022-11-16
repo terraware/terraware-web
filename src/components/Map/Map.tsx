@@ -131,6 +131,21 @@ export default function Map(props: MapProps): JSX.Element {
               'line-width': source.lineWidth,
             },
           },
+          textAnnotation: source.annotation
+            ? {
+                id: `${source.id}-annotation`,
+                type: 'symbol',
+                paint: {
+                  'text-color': source.annotation.textColor,
+                },
+                layout: {
+                  'text-field': ['get', 'name'],
+                  'text-anchor': 'center',
+                  'text-allow-overlap': false,
+                  'text-size': source.annotation.textSize,
+                },
+              }
+            : null,
         };
       })
       .filter((g) => g);
@@ -156,6 +171,7 @@ export default function Map(props: MapProps): JSX.Element {
           (geoData as any[]).map((geo: any, index) => (
             <Source type='geojson' key={index} data={geo.data}>
               <Layer {...geo.layer} />
+              {geo.textAnnotation && <Layer {...geo.textAnnotation} />}
               <Layer {...geo.layerOutline} />
             </Source>
           ))}
