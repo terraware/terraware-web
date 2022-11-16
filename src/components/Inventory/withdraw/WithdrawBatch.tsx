@@ -12,7 +12,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 export default function WithdrawBatch(): JSX.Element {
   const [batch, setBatch] = useState<Batch>();
-  const [snackbar] = useState(useSnackbar());
+  const snackbar = useSnackbar();
   const { isMobile } = useDeviceInfo();
   const history = useHistory();
   const theme = useTheme();

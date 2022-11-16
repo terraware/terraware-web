@@ -15,7 +15,7 @@ export type PlantingSiteMapProps = {
 export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Element {
   const { plantingSite } = props;
   const theme = useTheme();
-  const [snackbar] = useState(useSnackbar());
+  const snackbar = useSnackbar();
   const [token, setToken] = useState<string>();
   const [mapOptions, setMapOptions] = useState<MapOptions>();
   const [mapId, setMapId] = useState<string>();
