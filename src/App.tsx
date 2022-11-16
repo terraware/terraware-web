@@ -553,7 +553,7 @@ export default function App() {
               )}
               {trackingEnabled && selectedOrganization && (
                 <Route path={APP_PATHS.BATCH_WITHDRAW}>
-                  <WithdrawBatch />
+                  <WithdrawBatch organization={selectedOrganization} />
                 </Route>
               )}
               {trackingEnabled && selectedOrganization && (
