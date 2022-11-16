@@ -1,3 +1,4 @@
+5ddb66f SW-2274 Define a popup renderer prop for Map (#770)
 09051ca SW-2270 Make snackbar less mutating (#772)
 3d03d4f Single seedling batch withdrawal (nursery transfer, dead, other) (#771)
 4c2c037 SW-2268 Fix double-load of map, fix map height (#769)
