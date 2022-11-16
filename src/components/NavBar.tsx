@@ -165,7 +165,6 @@ export default function NavBar({ organization, setShowNavBar }: NavBarProps): JS
             <SubNavbar>
               <NavItem
                 label={strings.SEED_BANKS}
-                icon='seedbankNav'
                 selected={!!isSeedbanksRoute}
                 onClick={() => {
                   closeAndNavigateTo(APP_PATHS.SEED_BANKS);
@@ -174,7 +173,6 @@ export default function NavBar({ organization, setShowNavBar }: NavBarProps): JS
               />
               <NavItem
                 label={strings.NURSERIES}
-                icon='iconNursery'
                 selected={!!isNurseriesRoute}
                 onClick={() => {
                   closeAndNavigateTo(APP_PATHS.NURSERIES);
