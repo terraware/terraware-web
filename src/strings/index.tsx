@@ -829,6 +829,8 @@ const strings = new LocalizedStrings({
     WITHDRAW_FROM_BATCHES: 'Withdraw from Batches',
     WITHDRAWAL_DETAILS: 'Withdrawal Details',
     WITHDRAW_INSTRUCTIONS: 'Select a withdrawal purpose and enter the quantities from each batch to withdraw.',
+    TO_NURSERY_REQUIRED: 'To: Nursery *',
+    FROM_NURSERY: 'From: Nursery',
   },
 });
 
