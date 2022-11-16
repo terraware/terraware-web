@@ -100,7 +100,7 @@ export default function CreateAccession(props: CreateAccessionProps): JSX.Elemen
           paddingLeft: theme.spacing(4),
           paddingRight: theme.spacing(4),
           paddingTop: theme.spacing(5),
-          paddingBottom: theme.spacing(5),
+          paddingBottom: theme.spacing(25),
         }}
       >
         <Grid container>

@@ -68,7 +68,7 @@ interface StyleProps {
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
-    padding: '32px 0',
+    padding: '32px 0 0 0',
   },
   downloadReport: {
     background: theme.palette.common.black,
@@ -585,7 +585,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
           >
             {(fieldOptions === null || availableFieldOptions === null) && strings.GENERIC_ERROR}
             {pendingAccessions && pendingAccessions.length > 0 && (
-              <Grid item xs={12} className={classes.checkinMessage}>
+              <Grid item xs={12}>
                 <Message
                   type='page'
                   priority='info'
