@@ -2,8 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Box } from '@mui/material';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import ReactMapGL, { Layer, NavigationControl, Popup, Source } from 'react-map-gl';
-import { MapOptions } from './MapModels';
-import { useRenderFeature } from './MapRenderUtils';
+import { MapOptions, MapPopupRenderer } from './MapModels';
 
 /**
  * The following is needed to deal with a mapbox bug
@@ -30,19 +29,18 @@ export type MapProps = {
   token: string;
   options: MapOptions;
   onTokenExpired?: () => void;
-  enablePopup?: boolean;
+  popupRenderer?: MapPopupRenderer;
   // changes to mapId will re-create the map, needed for new token refreshes
   // since mapbox token is not reactive
   mapId?: string;
 };
 
 export default function Map(props: MapProps): JSX.Element {
-  const { token, onTokenExpired, options, enablePopup, mapId } = props;
+  const { token, onTokenExpired, options, popupRenderer, mapId } = props;
   const [geoData, setGeoData] = useState();
   const [layerIds, setLayerIds] = useState<string[]>([]);
   const [popupInfo, setPopupInfo] = useState<PopupInfo | null>(null);
   const mapRef = useRef<any | null>(null);
-  const renderFeature = useRenderFeature();
 
   const onMapLoad = useCallback(() => {
     const { bbox } = options;
@@ -112,7 +110,7 @@ export default function Map(props: MapProps): JSX.Element {
                   type: 'Polygon',
                   coordinates: multiPolygon,
                 },
-                properties: source.metadata,
+                properties: source.properties,
               };
             }),
           },
@@ -128,10 +126,10 @@ export default function Map(props: MapProps): JSX.Element {
       })
       .filter((g) => g);
     setGeoData(geo as any);
-    if (enablePopup) {
+    if (popupRenderer) {
       setLayerIds(geo.map((g: any) => g.layer.id));
     }
-  }, [options, geoData, setGeoData, token, enablePopup]);
+  }, [options, geoData, setGeoData, token, popupRenderer]);
 
   return (
     <Box sx={{ display: 'flex', flexGrow: 1, height: '100%', minHeight: 250 }}>
@@ -152,14 +150,14 @@ export default function Map(props: MapProps): JSX.Element {
             </Source>
           ))}
         <NavigationControl showCompass={false} style={navControlStyle} position='bottom-right' />
-        {popupInfo && (
+        {popupInfo && popupRenderer && (
           <Popup
             anchor='top'
             longitude={Number(popupInfo.lng)}
             latitude={Number(popupInfo.lat)}
             onClose={() => setPopupInfo(null)}
           >
-            {renderFeature(popupInfo.properties)}
+            {popupRenderer(popupInfo.properties)}
           </Popup>
         )}
       </ReactMapGL>

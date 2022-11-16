@@ -4,9 +4,10 @@ import { getMapboxToken } from 'src/api/tracking/tracking';
 import { Geometry, PlantingSite } from 'src/api/types/tracking';
 import useSnackbar from 'src/utils/useSnackbar';
 import Map from './Map';
-import { MapGeometry, MapOptions, MapSource } from './MapModels';
+import { MapGeometry, MapOptions, MapPopupRenderer, MapSource } from './MapModels';
 import { getBoundingBox } from './MapUtils';
 import _ from 'lodash';
+import { useDefaultPopupRenderer } from './MapRenderUtils';
 
 export type PlantingSiteMapProps = {
   plantingSite: PlantingSite;
@@ -19,6 +20,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
   const [token, setToken] = useState<string>();
   const [mapOptions, setMapOptions] = useState<MapOptions>();
   const [mapId, setMapId] = useState<string>();
+  const popupRenderer: MapPopupRenderer = useDefaultPopupRenderer();
 
   const getFillColor = useCallback(() => {
     return theme.palette.TwClrBaseWhite || 'white';
@@ -35,7 +37,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
     (site: PlantingSite): MapSource => {
       const { id, name, description, boundary } = site;
       return {
-        metadata: { id, name, description, type: 'site' },
+        properties: { id, name, description, type: 'site' },
         boundary: getPolygons(boundary),
         id: `site-${id}`,
         fillColor: getFillColor(),
@@ -50,7 +52,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
       return site.plantingZones?.map((zone) => {
         const { id, name, boundary } = zone;
         return {
-          metadata: { id, name, type: 'zone' },
+          properties: { id, name, type: 'zone' },
           boundary: getPolygons(boundary),
           id: `zone-${id}`,
           fillColor: getFillColor(),
@@ -68,7 +70,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
         return plots.map((plot) => {
           const { id, name, fullName, boundary } = plot;
           return {
-            metadata: { id, name, fullName, type: 'plot' },
+            properties: { id, name, fullName, type: 'plot' },
             boundary: getPolygons(boundary),
             id: `plot-${id}`,
             fillColor: getFillColor(),
@@ -134,7 +136,13 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
 
   return (
     <Box sx={{ display: 'flex', flexGrow: 1 }}>
-      <Map token={token} options={mapOptions} onTokenExpired={fetchMapboxToken} mapId={mapId} />
+      <Map
+        token={token}
+        options={mapOptions}
+        onTokenExpired={fetchMapboxToken}
+        mapId={mapId}
+        popupRenderer={popupRenderer}
+      />
     </Box>
   );
 }
