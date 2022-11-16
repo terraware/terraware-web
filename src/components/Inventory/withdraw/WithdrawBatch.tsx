@@ -31,7 +31,7 @@ type WithdrawBatchProps = {
 export default function WithdrawBatch(props: WithdrawBatchProps): JSX.Element {
   const { organization } = props;
   const [batch, setBatch] = useState<Batch>();
-  const snackbar = useSnackbar();
+  const [snackbar] = useState(useSnackbar());
   const { isMobile } = useDeviceInfo();
   const history = useHistory();
   const theme = useTheme();
