@@ -36,11 +36,13 @@ export type MapGeometry = number | number[] | number[][][][];
  * ]
  */
 
+export type MapSourceProperties = { [key: string]: any };
+
 export type MapSource = {
   id: string;
   fillColor: string;
   fillOpacity: number;
-  metadata: { [key: string]: any };
+  properties: MapSourceProperties;
   boundary: MapGeometry;
 };
 
@@ -53,3 +55,8 @@ export type MapOptions = {
   bbox: MapBoundingBox;
   sources: MapSource[];
 };
+
+/**
+ * Render a popup based on properties
+ */
+export type MapPopupRenderer = (properties: MapSourceProperties) => JSX.Element;

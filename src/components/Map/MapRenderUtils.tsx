@@ -1,9 +1,13 @@
 import { Box, Typography, useTheme } from '@mui/material';
+import { MapPopupRenderer, MapSourceProperties } from './MapModels';
 
-export function useRenderFeature() {
+/*
+ * Example of a map popup renderer
+ */
+export function useDefaultPopupRenderer(): MapPopupRenderer {
   const theme = useTheme();
 
-  return (data: any): JSX.Element => {
+  return (data: MapSourceProperties): JSX.Element => {
     const { type, id, fullName, name } = data;
 
     return (
