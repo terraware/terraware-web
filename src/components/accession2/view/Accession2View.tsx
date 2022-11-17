@@ -452,7 +452,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
           )}
         </>
       )}
-      <PageHeaderWrapper nextElement={contentRef.current}>
+      <PageHeaderWrapper nextElement={contentRef.current} nextElementInitialMargin={-24}>
         <>
           <Box>
             <Link id='back' to={APP_PATHS.ACCESSIONS} className={classes.backToAccessions}>
@@ -460,7 +460,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
               {strings.ACCESSIONS}
             </Link>
           </Box>
-          <Box padding={isMobile ? themeObj.spacing(3, 0, 1, 0) : themeObj.spacing(3, 3, 1, 3)}>
+          <Box padding={isMobile ? themeObj.spacing(3, 0, 4, 0) : themeObj.spacing(3, 3, 4, 3)}>
             <Typography color={themeObj.palette.TwClrTxt} fontSize='14px'>
               {accession?.accessionNumber}
             </Typography>

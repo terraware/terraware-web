@@ -34,7 +34,7 @@ export default function OverviewItemCard({
       sx={{
         alignItems: 'flex-start',
         backgroundColor: `${theme.palette.TwClrBg}`,
-        borderRadius: '16px',
+        borderRadius: '24px',
         display: 'flex',
         height: '100%',
         justifyContent: 'space-between',
@@ -59,6 +59,7 @@ export default function OverviewItemCard({
         sx={{
           display: 'flex',
           flexDirection: 'column',
+          flexBasis: 'fit-content',
         }}
       >
         <Typography

@@ -13,9 +13,10 @@ const DEBOUNCE_TIME = 500;
 interface Props {
   children?: React.ReactChild | React.ReactChild[];
   nextElement?: HTMLElement | null;
+  nextElementInitialMargin?: number;
 }
 
-export default function PageHeaderWrapper({ children, nextElement }: Props): JSX.Element {
+export default function PageHeaderWrapper({ children, nextElement, nextElementInitialMargin = 0 }: Props): JSX.Element {
   const theme = useTheme();
   const ref = useRef<HTMLDivElement>(null);
   const [sticky, setSticky] = useState(false);
@@ -59,9 +60,9 @@ export default function PageHeaderWrapper({ children, nextElement }: Props): JSX
 
   useLayoutEffect(() => {
     if (nextElement) {
-      nextElement.style.marginTop = `${debouncedSticky ? height : 0}px`;
+      nextElement.style.marginTop = `${nextElementInitialMargin + (debouncedSticky ? height : 0)}px`;
     }
-  }, [nextElement, height, debouncedSticky]);
+  }, [nextElement, height, debouncedSticky, nextElementInitialMargin]);
 
   useLayoutEffect(() => {
     const headerMotionIn = keyframes`
