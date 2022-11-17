@@ -107,11 +107,11 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
   const openActionMenu = Boolean(actionMenuAnchorEl);
   const [selectedTest, setSelectedTest] = useState<ViabilityTest>();
   const [age, setAge] = useState({ value: '', unit: '' });
+  const [snackbar] = useState(useSnackbar());
   const { organization, user } = props;
   const userCanEdit = !isContributor(organization);
   const { isMobile, isTablet } = useDeviceInfo();
   const classes = useStyles({ isMobile });
-  const snackbar = useSnackbar();
   const themeObj = useTheme();
   const contentRef = useRef(null);
 

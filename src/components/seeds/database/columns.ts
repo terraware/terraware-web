@@ -114,7 +114,7 @@ const COLUMNS: DatabaseColumn[] = [
     type: 'string',
     filter: { type: 'search' },
   },
-  { key: 'collectionNotes', name: strings.NOTES, type: 'notes' },
+  { key: 'collectionSiteNotes', name: strings.NOTES, type: 'notes' },
   {
     key: 'totalUnits',
     name: strings.SEEDS_UNITS,

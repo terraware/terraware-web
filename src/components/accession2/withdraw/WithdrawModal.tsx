@@ -196,7 +196,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
         });
         setNurseryTransferRecord({
           ...nurseryTransferRecord,
-          germinatingQuantity: accession.remainingQuantity?.quantity || 0,
+          germinatingQuantity: accession.estimatedCount ? accession.estimatedCount : 0,
         });
       }
     } else {
@@ -409,7 +409,11 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
               id='withdrawnQuantity'
               onChange={(id, value) => onChangeWithdrawnQuantity(value as number)}
               type='text'
-              value={record.withdrawnQuantity?.quantity.toString()}
+              value={
+                isNurseryTransfer
+                  ? nurseryTransferRecord.germinatingQuantity
+                  : record.withdrawnQuantity?.quantity.toString()
+              }
               errorText={fieldsErrors.withdrawnQuantity}
             />
             <Box paddingLeft={1}>

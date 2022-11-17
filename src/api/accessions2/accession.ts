@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { GetUploadStatusResponsePayload, ResolveResponse, UploadFileResponse } from '../types/uploadFile';
 import { paths } from '../types/generated-schema';
-import { addError } from './utils';
+import { addError } from '../utils';
 
 const ACCESSIONS2_ROOT_ENDPOINT = '/api/v2/seedbank/accessions';
 const ACCESSIONS2_ENDPOINT = '/api/v2/seedbank/accessions/{id}';

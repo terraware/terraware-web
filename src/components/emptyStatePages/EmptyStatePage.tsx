@@ -106,7 +106,7 @@ const NO_PLANTING_SITES_CONTENT: PageContent = {
   ],
   buttonText: strings.ADD_PLANTING_SITE,
   buttonIcon: 'plus',
-  linkLocation: APP_PATHS.NURSERIES_NEW,
+  linkLocation: APP_PATHS.PLANTING_SITES_NEW,
 };
 
 type EmptyStatePageProps = {
