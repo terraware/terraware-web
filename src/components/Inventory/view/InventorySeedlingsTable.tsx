@@ -19,6 +19,7 @@ import WithdrawalModal from './WithdrawalModal';
 import Search from '../Search';
 import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
+import { TopBarButton } from '@terraware/web-components/components/table';
 
 const columns: TableColumnType[] = [
   { key: 'batchNumber', name: strings.SEEDLING_BATCH, type: 'string' },
@@ -193,6 +194,42 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
     }
   };
 
+  const areAllFromSameNursery = () => {
+    const initialNurseryId = selectedRows[0].facilityId;
+    const otherNursery = selectedRows.some((row) => row.facilityId.toString() !== initialNurseryId.toString());
+    return !otherNursery;
+  };
+
+  const getSelectedRowsAsQueryParams = () => {
+    const batchIds = selectedRows.map((row) => `batchId=${row.id}`);
+    return `?${batchIds.join('&')}`;
+  };
+
+  const bulkWithdrawSelectedRows = () => {
+    history.push({
+      pathname: APP_PATHS.BATCH_WITHDRAW,
+      search: getSelectedRowsAsQueryParams(),
+    });
+  };
+
+  const getTopBarButtons = () => {
+    const topBarButtons: TopBarButton[] = [];
+    topBarButtons.push({
+      buttonType: 'destructive',
+      buttonText: strings.DELETE,
+      onButtonClick: () => setOpenDeleteModal(true),
+    });
+
+    if (selectedRows.length > 1 && areAllFromSameNursery()) {
+      topBarButtons.push({
+        buttonType: 'passive',
+        buttonText: strings.WITHDRAW,
+        onButtonClick: () => bulkWithdrawSelectedRows(),
+      });
+    }
+    return topBarButtons;
+  };
+
   return (
     <Grid item xs={12} sx={{ marginTop: theme.spacing(1) }}>
       <BatchDetailsModal
@@ -267,13 +304,7 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
             showCheckbox={true}
             isClickable={() => false}
             showTopBar={true}
-            topBarButtons={[
-              {
-                buttonType: 'destructive',
-                buttonText: strings.DELETE,
-                onButtonClick: () => setOpenDeleteModal(true),
-              },
-            ]}
+            topBarButtons={getTopBarButtons()}
             onSelect={onBatchSelected}
             controlledOnSelect={true}
           />
