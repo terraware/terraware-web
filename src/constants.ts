@@ -22,6 +22,7 @@ export enum APP_PATHS {
   INVENTORY = '/inventory',
   INVENTORY_NEW = '/inventory/new',
   INVENTORY_ITEM = '/inventory/:speciesId',
+  INVENTORY_WITHDRAW = '/inventory/withdraw',
   OPT_IN = '/opt-in',
   ORGANIZATION_EDIT = '/organization/edit',
   ORGANIZATION = '/organization',

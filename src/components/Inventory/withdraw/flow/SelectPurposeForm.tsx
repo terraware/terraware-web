@@ -28,10 +28,10 @@ import { getAllNurseries, getNurseriesById } from 'src/utils/organization';
 type SelectPurposeFormProps = {
   organization: ServerOrganization;
   onNext: () => void;
-  batchesIds: string[];
+  batchIds: string[];
 };
 export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.Element {
-  const { organization, batchesIds } = props;
+  const { organization, batchIds } = props;
   const [batch, setBatch] = useState<Batch>();
   const [snackbar] = useState(useSnackbar());
   const { isMobile } = useDeviceInfo();
@@ -72,7 +72,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   };
 
   useEffect(() => {
-    const batchId = batchesIds[0];
+    const batchId = batchIds[0];
     const fetchBatch = async () => {
       const response = await getBatch(Number(batchId));
       if (response.requestSucceeded && response.batch) {
@@ -97,7 +97,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     if (batchId) {
       fetchBatch();
     }
-  }, [batchesIds, snackbar, setRecord]);
+  }, [batchIds, snackbar, setRecord]);
 
   const setIndividualError = (id: string, error?: string) => {
     setFieldsErrors((prev) => ({
