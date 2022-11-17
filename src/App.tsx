@@ -55,7 +55,10 @@ import InventoryCreate from './components/Inventory/InventoryCreate';
 import InventoryView from './components/Inventory/InventoryView';
 import { CreatePlantingSite, PlantingSitesList } from './components/PlantingSites';
 import PlantingSiteView from './components/PlantingSites/PlantingSiteView';
-import WithdrawBatch from './components/Inventory/withdraw/WithdrawBatch';
+import {
+  BatchBulkWithdrawWrapperComponent,
+  SpeciesBulkWithdrawWrapperComponent,
+} from './components/Inventory/withdraw';
 
 interface StyleProps {
   isDesktop?: boolean;
@@ -552,8 +555,13 @@ export default function App() {
                 </Route>
               )}
               {trackingEnabled && selectedOrganization && (
+                <Route path={APP_PATHS.INVENTORY_WITHDRAW}>
+                  <SpeciesBulkWithdrawWrapperComponent organization={selectedOrganization} />
+                </Route>
+              )}
+              {trackingEnabled && selectedOrganization && (
                 <Route path={APP_PATHS.BATCH_WITHDRAW}>
-                  <WithdrawBatch organization={selectedOrganization} />
+                  <BatchBulkWithdrawWrapperComponent organization={selectedOrganization} />
                 </Route>
               )}
               {trackingEnabled && selectedOrganization && (

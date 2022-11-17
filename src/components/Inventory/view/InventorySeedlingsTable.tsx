@@ -179,7 +179,8 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
     if (fromColumn === 'withdraw') {
       if (trackingEnabled) {
         history.push({
-          pathname: APP_PATHS.BATCH_WITHDRAW.replace(':batchId', batch.id.toString()),
+          pathname: APP_PATHS.BATCH_WITHDRAW,
+          search: `?batchId=${batch.id.toString()}`,
         });
       } else {
         setOpenWithdrawalModal(true);

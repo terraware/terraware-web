@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import strings from 'src/strings';
 import { APP_PATHS } from 'src/constants';
 import {
@@ -25,17 +25,18 @@ import { ServerOrganization } from 'src/types/Organization';
 import { DatePicker, Dropdown, Textfield } from '@terraware/web-components';
 import { getAllNurseries, getNurseriesById } from 'src/utils/organization';
 
-type WithdrawBatchProps = {
+type SelectPurposeFormProps = {
   organization: ServerOrganization;
+  onNext: () => void;
+  batchIds: string[];
 };
-export default function WithdrawBatch(props: WithdrawBatchProps): JSX.Element {
-  const { organization } = props;
+export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.Element {
+  const { organization, batchIds } = props;
   const [batch, setBatch] = useState<Batch>();
   const [snackbar] = useState(useSnackbar());
   const { isMobile } = useDeviceInfo();
   const history = useHistory();
   const theme = useTheme();
-  const { batchId } = useParams<{ batchId: string }>();
   const newWithdrawal: CreateNurseryWithdrawalRequestPayload = {
     purpose: 'Out Plant',
     facilityId: -1,
@@ -71,6 +72,7 @@ export default function WithdrawBatch(props: WithdrawBatchProps): JSX.Element {
   };
 
   useEffect(() => {
+    const batchId = batchIds[0];
     const fetchBatch = async () => {
       const response = await getBatch(Number(batchId));
       if (response.requestSucceeded && response.batch) {
@@ -95,7 +97,7 @@ export default function WithdrawBatch(props: WithdrawBatchProps): JSX.Element {
     if (batchId) {
       fetchBatch();
     }
-  }, [batchId, snackbar, setRecord]);
+  }, [batchIds, snackbar, setRecord]);
 
   const setIndividualError = (id: string, error?: string) => {
     setFieldsErrors((prev) => ({
