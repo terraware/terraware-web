@@ -1,6 +1,6 @@
-import { Box, Grid, IconButton, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { Icon } from '@terraware/web-components';
+import { Button, Icon } from '@terraware/web-components';
 import { useEffect, useState } from 'react';
 import { Accession2 } from 'src/api/accessions2/accession';
 import strings from 'src/strings';
@@ -26,11 +26,19 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
 
   const categoryStyle = {
     color: theme.palette.TwClrTxtSecondary,
+    fontSize: '14px',
+    fontWeight: 400,
+  };
+
+  const valueStyle = {
+    color: theme.palette.TwClrTxt,
+    fontSize: '14px',
+    fontWeight: 500,
   };
 
   const gridRowStyle = {
     display: isMobile ? 'block' : 'flex',
-    padding: theme.spacing(2, 0),
+    marginBottom: theme.spacing(3),
   };
 
   const useStyles = makeStyles(() => ({
@@ -40,7 +48,6 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
     },
   }));
 
-  const mainStructureSize = isMobile ? 12 : 9;
   const gridLeftSide = isMobile ? 12 : 2;
   const gridRightSide = isMobile ? 12 : 10;
   const [photosModalOpened, setPhotosModalOpened] = useState(false);
@@ -113,33 +120,12 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
         selectedSlide={selectedSlide}
       />
       <Grid container>
-        {isMobile ? (
-          <Grid item xs={12} display='flex' justifyContent='space-between'>
-            <Typography fontSize='16px' fontWeight={500}>
-              {strings.ACCESSION_DETAIL}
-            </Typography>
-            {userCanEdit ? (
-              <IconButton sx={{ marginLeft: 3, height: '24px' }} onClick={() => setOpenEditAccessionModal(true)}>
-                <Icon name='iconEdit' />
-              </IconButton>
-            ) : (
-              spaceFiller()
-            )}
-          </Grid>
-        ) : null}
-        <Grid item xs={mainStructureSize}>
-          {!isMobile && (
-            <Grid item xs={12}>
-              <Typography fontSize='16px' fontWeight={500}>
-                {strings.ACCESSION_DETAIL}
-              </Typography>
-            </Grid>
-          )}
+        <Grid item xs={9}>
           <Grid item xs={12} sx={gridRowStyle}>
             <Grid item xs={gridLeftSide} sx={categoryStyle}>
               {strings.COLLECTION_DATE}
             </Grid>
-            <Grid item xs={gridRightSide}>
+            <Grid item xs={gridRightSide} sx={valueStyle}>
               {accession.collectedDate}
             </Grid>
           </Grid>
@@ -147,7 +133,7 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
             <Grid item xs={gridLeftSide} sx={categoryStyle}>
               {strings.COLLECTOR}
             </Grid>
-            <Grid item xs={gridRightSide}>
+            <Grid item xs={gridRightSide} sx={valueStyle}>
               {accession.collectors && accession.collectors.length > 0 ? accession.collectors[0] : ''}
             </Grid>
           </Grid>
@@ -155,7 +141,7 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
             <Grid item xs={gridLeftSide} sx={categoryStyle}>
               {strings.COLLECTING_LOCATION}
             </Grid>
-            <Grid item xs={gridRightSide}>
+            <Grid item xs={gridRightSide} sx={valueStyle}>
               {accession.collectionSiteName}
               {accession.collectionSiteLandowner ? (
                 <Typography color={theme.palette.TwClrTxtSecondary}>
@@ -192,7 +178,7 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
             <Grid item xs={gridLeftSide} sx={categoryStyle}>
               {strings.PLANT_LABEL}
             </Grid>
-            <Grid item xs={gridRightSide}>
+            <Grid item xs={gridRightSide} sx={valueStyle}>
               {`${strings.COLLECTED_FROM}${numPlants === undefined ? '' : ' ' + numPlants}${
                 collectionSource && collectionSource !== 'Other' ? ' ' + collectionSource : ''
               } ${isNotPlural ? strings.PLANT : strings.PLANTS}`}
@@ -211,7 +197,7 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
             <Grid item xs={gridLeftSide} sx={categoryStyle}>
               {strings.PHOTOS}
             </Grid>
-            <Grid item xs={gridRightSide} display='flex'>
+            <Grid item xs={gridRightSide} sx={valueStyle} display='flex'>
               {accession.photoFilenames?.map((file, index) => {
                 return (
                   <Box paddingRight={theme.spacing(2)} key={`photo-${index}`}>
@@ -231,17 +217,18 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
         </Grid>
 
         <Grid />
-        {!isMobile ? (
-          <Grid item xs={3}>
-            {userCanEdit ? (
-              <IconButton sx={{ marginLeft: 3, height: '24px' }} onClick={() => setOpenEditAccessionModal(true)}>
-                <Icon name='iconEdit' />
-              </IconButton>
-            ) : (
-              spaceFiller()
-            )}
-          </Grid>
-        ) : null}
+        <Grid item xs={3} sx={{ display: 'flex', justifyContent: 'end' }}>
+          {userCanEdit ? (
+            <Button
+              onClick={() => setOpenEditAccessionModal(true)}
+              icon='iconEdit'
+              label={isMobile ? '' : strings.EDIT}
+              priority='secondary'
+            />
+          ) : (
+            spaceFiller()
+          )}
+        </Grid>
       </Grid>
     </>
   ) : (

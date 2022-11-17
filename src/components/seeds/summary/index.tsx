@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     marginRight: '12px',
   },
   mainContainer: {
-    padding: '32px 0',
+    padding: 0,
   },
   messageIcon: {
     fill: theme.palette.TwClrIcnInfo,

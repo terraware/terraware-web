@@ -73,7 +73,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     height: '100%',
     overflow: 'auto',
     '& > div, & > main': {
-      paddingBottom: theme.spacing(25),
       paddingTop: '96px',
     },
   },

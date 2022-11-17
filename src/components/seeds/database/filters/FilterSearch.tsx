@@ -48,6 +48,7 @@ export default function Search(props: Props): JSX.Element {
     <div className={classes.box}>
       <TextField
         id={props.field ?? ''}
+        autoFocus={true}
         placeholder={strings.SEARCH}
         variant='outlined'
         value={search}
