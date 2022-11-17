@@ -201,14 +201,8 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
   };
 
   const getSelectedRowsAsQueryParams = () => {
-    const queries = selectedRows.map((row, index) => {
-      if (index === 0) {
-        return `?batchId=${row.id}`;
-      } else {
-        return `&batchId=${row.id}`;
-      }
-    });
-    return queries.join('');
+    const batchIds = selectedRows.map((row) => `batchId=${row.id}`);
+    return `?${batchIds.join('&')}`;
   };
 
   const bulkWithdrawSelectedRows = () => {
