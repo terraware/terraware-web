@@ -13,6 +13,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     '&.MuiContainer-root': {
       paddingLeft: 0,
       paddingRight: 0,
+      paddingBottom: theme.spacing(4),
     },
   },
   container: {
@@ -117,7 +118,7 @@ export default function PageHeader({
             </div>
           )}
           <div className={classes.mainContent}>
-            <Box padding={theme.spacing(0, 3, 3, 3)}>
+            <Box padding={theme.spacing(0, 3, children ? 3 : 0, 3)}>
               <Box display='flex' justifyContent='space-between' alignItems='center'>
                 <Typography
                   id='title'
@@ -129,9 +130,11 @@ export default function PageHeader({
                 </Typography>
                 {!!rightComponent && <div>{rightComponent}</div>}
               </Box>
-              <Typography id='subtitle' variant='h6' className={classes.subtitle}>
-                {subtitle}
-              </Typography>
+              {subtitle && (
+                <Typography id='subtitle' variant='h6' className={classes.subtitle}>
+                  {subtitle}
+                </Typography>
+              )}
             </Box>
             <PageSnackbar />
             {children}

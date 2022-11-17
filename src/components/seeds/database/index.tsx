@@ -68,7 +68,7 @@ interface StyleProps {
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
-    padding: '32px 0 0 0',
+    padding: 0,
   },
   downloadReport: {
     background: theme.palette.common.black,
