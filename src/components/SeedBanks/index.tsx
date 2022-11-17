@@ -151,7 +151,7 @@ export default function SeedBanksList({ organization }: SeedBanksListProps): JSX
       <Box sx={{ paddingLeft: theme.spacing(3) }}>
         <Grid container spacing={3}>
           <PageHeaderWrapper nextElement={contentRef.current}>
-            <Grid container spacing={3}>
+            <Grid container spacing={3} paddingLeft={theme.spacing(3)}>
               <Grid item xs={8}>
                 <h1 className={classes.title}>{strings.SEED_BANKS}</h1>
               </Grid>
