@@ -1,3 +1,4 @@
+7d26149 Add Padding to Match Main Padding (#776)
 81b137e Revert "SW-2270 Make snackbar less mutating (#772)" (#774)
 10949ba SW-2259 / SW-2260 Render fills, outlines and labels for map polygons (#773)
 5ddb66f SW-2274 Define a popup renderer prop for Map (#770)
