@@ -313,6 +313,7 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
 
   return (
     <DialogBox
+      scrolled={true}
       onClose={handleCancel}
       open={open}
       title={title}
