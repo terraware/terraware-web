@@ -1,3 +1,4 @@
+2fc0408 SW-2282 Make list of errors scrollable (#778)
 7dafb15 Bulk withdrawal refactor (#777)
 7d26149 Add Padding to Match Main Padding (#776)
 81b137e Revert "SW-2270 Make snackbar less mutating (#772)" (#774)
