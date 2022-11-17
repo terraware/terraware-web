@@ -549,14 +549,14 @@ export default function App() {
                   <InventoryCreate organization={selectedOrganization} />
                 </Route>
               )}
-              {selectedOrganization && (
-                <Route path={APP_PATHS.INVENTORY_ITEM}>
-                  <InventoryView organization={selectedOrganization} species={species} />
-                </Route>
-              )}
               {trackingEnabled && selectedOrganization && (
                 <Route path={APP_PATHS.INVENTORY_WITHDRAW}>
                   <SpeciesBulkWithdrawWrapperComponent organization={selectedOrganization} />
+                </Route>
+              )}
+              {selectedOrganization && (
+                <Route path={APP_PATHS.INVENTORY_ITEM}>
+                  <InventoryView organization={selectedOrganization} species={species} />
                 </Route>
               )}
               {trackingEnabled && selectedOrganization && (
