@@ -53,7 +53,12 @@ import Inventory from './components/Inventory';
 import NurseryDetails from './components/Nursery';
 import InventoryCreate from './components/Inventory/InventoryCreate';
 import InventoryView from './components/Inventory/InventoryView';
-import PlantingSites from './components/PlantingSites';
+import { CreatePlantingSite, PlantingSitesList } from './components/PlantingSites';
+import PlantingSiteView from './components/PlantingSites/PlantingSiteView';
+import {
+  BatchBulkWithdrawWrapperComponent,
+  SpeciesBulkWithdrawWrapperComponent,
+} from './components/Inventory/withdraw';
 
 interface StyleProps {
   isDesktop?: boolean;
@@ -120,6 +125,7 @@ export default function App() {
   const location = useStateLocation();
   const [selectedOrganization, setSelectedOrganization] = useState<ServerOrganization>();
   const [preferencesOrg, setPreferencesOrg] = useState<{ [key: string]: unknown }>();
+  const [orgScopedPreferences, setOrgScopedPreferences] = useState<{ [key: string]: unknown }>();
   const [notifications, setNotifications] = useState<Notifications>();
   const { isProduction } = useEnvironment();
   const trackingEnabled = isRouteEnabled('Tracking V1');
@@ -205,9 +211,14 @@ export default function App() {
   const reloadOrgPreferences = useCallback(() => {
     const getOrgPreferences = async () => {
       if (selectedOrganization) {
-        await getPreferences(selectedOrganization.id);
+        const response = await getPreferences(selectedOrganization.id);
+        if (response.requestSucceeded) {
+          setOrgScopedPreferences(response.preferences);
+        }
       }
     };
+    // reset display columns so we don't spill them across orgs
+    setAccessionsDisplayColumns(DefaultColumns.fields);
     getOrgPreferences();
   }, [selectedOrganization]);
 
@@ -422,6 +433,7 @@ export default function App() {
                   hasSeedBanks={selectedOrgHasSeedBanks()}
                   hasSpecies={selectedOrgHasSpecies()}
                   reloadData={reloadData}
+                  orgScopedPreferences={orgScopedPreferences}
                 />
               </Route>
               {selectedOrganization && (
@@ -537,14 +549,39 @@ export default function App() {
                   <InventoryCreate organization={selectedOrganization} />
                 </Route>
               )}
+              {trackingEnabled && selectedOrganization && (
+                <Route path={APP_PATHS.INVENTORY_WITHDRAW}>
+                  <SpeciesBulkWithdrawWrapperComponent organization={selectedOrganization} />
+                </Route>
+              )}
               {selectedOrganization && (
                 <Route path={APP_PATHS.INVENTORY_ITEM}>
                   <InventoryView organization={selectedOrganization} species={species} />
                 </Route>
               )}
               {trackingEnabled && selectedOrganization && (
-                <Route path={APP_PATHS.PLANTING_SITES}>
-                  <PlantingSites organization={selectedOrganization} />
+                <Route path={APP_PATHS.BATCH_WITHDRAW}>
+                  <BatchBulkWithdrawWrapperComponent organization={selectedOrganization} />
+                </Route>
+              )}
+              {trackingEnabled && selectedOrganization && (
+                <Route exact path={APP_PATHS.PLANTING_SITES_NEW}>
+                  <CreatePlantingSite organization={selectedOrganization} />
+                </Route>
+              )}
+              {trackingEnabled && selectedOrganization && (
+                <Route exact path={APP_PATHS.PLANTING_SITES_EDIT}>
+                  <CreatePlantingSite organization={selectedOrganization} />
+                </Route>
+              )}
+              {trackingEnabled && selectedOrganization && (
+                <Route exact path={APP_PATHS.PLANTING_SITES}>
+                  <PlantingSitesList organization={selectedOrganization} />
+                </Route>
+              )}
+              {trackingEnabled && selectedOrganization && (
+                <Route path={APP_PATHS.PLANTING_SITES_VIEW}>
+                  <PlantingSiteView />
                 </Route>
               )}
               <Route exact path={APP_PATHS.CONTACT_US}>

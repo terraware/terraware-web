@@ -136,6 +136,14 @@ export interface paths {
   "/api/v1/nursery/withdrawals": {
     post: operations["createBatchWithdrawal"];
   };
+  "/api/v1/nursery/withdrawals/{withdrawalId}/photos": {
+    get: operations["listWithdrawalPhotos"];
+    post: operations["uploadWithdrawalPhoto"];
+  };
+  "/api/v1/nursery/withdrawals/{withdrawalId}/photos/{photoId}": {
+    /** Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio. */
+    get: operations["getWithdrawalPhoto"];
+  };
   "/api/v1/organizations": {
     /** Lists all organizations the user can access. */
     get: operations["listOrganizations"];
@@ -254,6 +262,17 @@ export interface paths {
   };
   "/api/v1/timeseries/values": {
     post: operations["recordTimeseriesValues"];
+  };
+  "/api/v1/tracking/mapbox/token": {
+    get: operations["getMapboxToken"];
+  };
+  "/api/v1/tracking/sites": {
+    get: operations["listPlantingSites"];
+    post: operations["createPlantingSite"];
+  };
+  "/api/v1/tracking/sites/{id}": {
+    get: operations["getPlantingSite"];
+    put: operations["updatePlantingSite"];
   };
   "/api/v1/users/me": {
     get: operations["getMyself"];
@@ -455,6 +474,15 @@ export interface components {
       notReadyQuantityWithdrawn: number;
       readyQuantityWithdrawn: number;
     };
+    /** Coordinate reference system used for X and Y coordinates in this geometry. By default, coordinates are in WGS 84, with longitude and latitude in degrees. In that case, this element is not present. Otherwise, it specifies which coordinate system to use. */
+    CRS: {
+      type: "name";
+      properties: components["schemas"]["CRSProperties"];
+    };
+    CRSProperties: {
+      /** Name of the coordinate reference system. This must be in the form EPSG:nnnn where nnnn is the numeric identifier of a coordinate system in the EPSG dataset. The default is Longitude/Latitude EPSG:4326, which is the coordinate system +for GeoJSON. */
+      name: string;
+    };
     ConnectDeviceManagerRequestPayload: {
       facilityId: number;
     };
@@ -570,6 +598,10 @@ export interface components {
       batch: components["schemas"]["BatchPayload"];
       status?: components["schemas"]["SuccessOrError"];
     };
+    CreateNurseryWithdrawalPhotoResponsePayload: {
+      id: number;
+      status?: components["schemas"]["SuccessOrError"];
+    };
     CreateNurseryWithdrawalRequestPayload: {
       batchWithdrawals: components["schemas"]["BatchWithdrawalPayload"][];
       /** If purpose is "Nursery Transfer", the ID of the facility to transfer to. Must be in the same organization as the originating facility. Not allowed for purposes other than "Nursery Transfer". */
@@ -596,6 +628,15 @@ export interface components {
     };
     CreateOrganizationUserResponsePayload: {
       /** The ID of the newly-added user. */
+      id: number;
+      status?: components["schemas"]["SuccessOrError"];
+    };
+    CreatePlantingSiteRequestPayload: {
+      description?: string;
+      name: string;
+      organizationId: number;
+    };
+    CreatePlantingSiteResponsePayload: {
       id: number;
       status?: components["schemas"]["SuccessOrError"];
     };
@@ -650,16 +691,7 @@ export interface components {
     };
     CreateWithdrawalRequestPayload: {
       date?: string;
-      purpose?:
-        | "Propagation"
-        | "Outreach or Education"
-        | "Research"
-        | "Broadcast"
-        | "Share with Another Site"
-        | "Other"
-        | "Viability Testing"
-        | "Out-planting"
-        | "Nursery";
+      purpose?: "Other" | "Viability Testing" | "Out-planting" | "Nursery";
       notes?: string;
       /** ID of the user who withdrew the seeds. Default is the current user's ID. If non-null, the current user must have permission to read the referenced user's membership details in the organization. */
       withdrawnByUserId?: number;
@@ -758,6 +790,24 @@ export interface components {
       longitude: number;
       accuracy?: number;
     };
+    /** GEOMETRY-FIX-TYPE-ON-CLIENT-SIDE */
+    Geometry: {
+      type:
+        | "Point"
+        | "LineString"
+        | "Polygon"
+        | "MultiPoint"
+        | "MultiLineString"
+        | "MultiPolygon"
+        | "GeometryCollection";
+      coordinates: number[];
+      crs?: components["schemas"]["CRS"];
+    };
+    GeometryCollection: components["schemas"]["Geometry"] & {
+      geometries?: components["schemas"]["Geometry"][];
+    } & {
+      geometries: unknown;
+    };
     GetAccessionHistoryResponsePayload: {
       /** History of changes in descending time order (newest first.) */
       history: components["schemas"]["AccessionHistoryEntryPayload"][];
@@ -792,6 +842,10 @@ export interface components {
       facility: components["schemas"]["FacilityPayload"];
       status?: components["schemas"]["SuccessOrError"];
     };
+    GetMapboxTokenResponsePayload: {
+      token: string;
+      status?: components["schemas"]["SuccessOrError"];
+    };
     GetNotificationResponsePayload: {
       notification: components["schemas"]["NotificationPayload"];
       status?: components["schemas"]["SuccessOrError"];
@@ -810,6 +864,10 @@ export interface components {
     };
     GetOrganizationUserResponsePayload: {
       user: components["schemas"]["OrganizationUserPayload"];
+      status?: components["schemas"]["SuccessOrError"];
+    };
+    GetPlantingSiteResponsePayload: {
+      site: components["schemas"]["PlantingSitePayload"];
       status?: components["schemas"]["SuccessOrError"];
     };
     GetSpeciesProblemResponsePayload: {
@@ -919,16 +977,7 @@ export interface components {
       estimatedWeight?: components["schemas"]["SeedQuantityPayload"];
       /** Server-assigned unique ID of this withdrawal. */
       id?: number;
-      purpose?:
-        | "Propagation"
-        | "Outreach or Education"
-        | "Research"
-        | "Broadcast"
-        | "Share with Another Site"
-        | "Other"
-        | "Viability Testing"
-        | "Out-planting"
-        | "Nursery";
+      purpose?: "Other" | "Viability Testing" | "Out-planting" | "Nursery";
       notes?: string;
       /** If this withdrawal is of purpose "Viability Testing", the ID of the test it is associated with. */
       viabilityTestId?: number;
@@ -946,6 +995,11 @@ export interface components {
     GetWithdrawalsResponsePayload: {
       withdrawals: components["schemas"]["GetWithdrawalPayload"][];
       status?: components["schemas"]["SuccessOrError"];
+    };
+    LineString: components["schemas"]["Geometry"] & {
+      coordinates?: number[][];
+    } & {
+      coordinates: unknown;
     };
     ListAllFieldValuesRequestPayload: {
       facilityId?: number;
@@ -1008,6 +1062,10 @@ export interface components {
       photos: components["schemas"]["ListPhotosResponseElement"][];
       status?: components["schemas"]["SuccessOrError"];
     };
+    ListPlantingSitesResponsePayload: {
+      sites: components["schemas"]["PlantingSitePayload"][];
+      status?: components["schemas"]["SuccessOrError"];
+    };
     ListSpeciesResponsePayload: {
       species: components["schemas"]["SpeciesResponseElement"][];
       status?: components["schemas"]["SuccessOrError"];
@@ -1024,13 +1082,28 @@ export interface components {
       name: string;
       description?: string;
       configuration?: { [key: string]: unknown };
-      type: string;
       settings?: { [key: string]: { [key: string]: unknown } };
+      type: string;
       timeseriesName?: string;
       deviceId?: number;
       lowerThreshold?: number;
       upperThreshold?: number;
       verbosity: number;
+    };
+    MultiLineString: components["schemas"]["Geometry"] & {
+      coordinates?: number[][][];
+    } & {
+      coordinates: unknown;
+    };
+    MultiPoint: components["schemas"]["Geometry"] & {
+      coordinates?: number[][];
+    } & {
+      coordinates: unknown;
+    };
+    MultiPolygon: components["schemas"]["Geometry"] & {
+      coordinates?: number[][][][];
+    } & {
+      coordinates: unknown;
     };
     /** Search criterion that matches results that do not match a set of search criteria. */
     NotNodePayload: components["schemas"]["SearchNodePayload"] & {
@@ -1095,6 +1168,36 @@ export interface components {
       /** The user's last name. Not present if the user has been added to the organization but has not signed up for an account yet. */
       lastName?: string;
       role: "Contributor" | "Manager" | "Admin" | "Owner";
+    };
+    PlantingSitePayload: {
+      boundary?: components["schemas"]["Geometry"];
+      description?: string;
+      id: number;
+      name: string;
+      plantingZones?: components["schemas"]["PlantingZonePayload"][];
+    };
+    PlantingZonePayload: {
+      boundary: components["schemas"]["Geometry"];
+      id: number;
+      name: string;
+      plots: components["schemas"]["PlotPayload"][];
+    };
+    PlotPayload: {
+      boundary: components["schemas"]["Geometry"];
+      fullName: string;
+      id: number;
+      name: string;
+    };
+    Point: components["schemas"]["Geometry"] & {
+      /** A single position. In the terraware-server API, positions must always include 3 dimensions. The X and Y dimensions use the coordinate system specified by the crs field, and the Z dimension is in meters. */
+      coordinates?: number[];
+    } & {
+      coordinates: unknown;
+    };
+    Polygon: components["schemas"]["Geometry"] & {
+      coordinates?: number[][][];
+    } & {
+      coordinates: unknown;
     };
     RecordTimeseriesValuesRequestPayload: {
       timeseries: components["schemas"]["TimeseriesValuesPayload"][];
@@ -1428,6 +1531,10 @@ export interface components {
     UpdateOrganizationUserRequestPayload: {
       role: "Contributor" | "Manager" | "Admin" | "Owner";
     };
+    UpdatePlantingSiteRequestPayload: {
+      description?: string;
+      name: string;
+    };
     UpdateUserPreferencesRequestPayload: {
       /** If present, update the user's per-organization preferences for this organization. If not present, update the user's global preferences. */
       organizationId?: number;
@@ -1471,16 +1578,7 @@ export interface components {
     };
     UpdateWithdrawalRequestPayload: {
       date?: string;
-      purpose?:
-        | "Propagation"
-        | "Outreach or Education"
-        | "Research"
-        | "Broadcast"
-        | "Share with Another Site"
-        | "Other"
-        | "Viability Testing"
-        | "Out-planting"
-        | "Nursery";
+      purpose?: "Other" | "Viability Testing" | "Out-planting" | "Nursery";
       notes?: string;
       /** ID of the user who withdrew the seeds. Default is the withdrawal's existing user ID. If non-null, the current user must have permission to read the referenced user's membership details in the organization. */
       withdrawnByUserId?: number;
@@ -2574,6 +2672,72 @@ export interface operations {
       };
     };
   };
+  listWithdrawalPhotos: {
+    parameters: {
+      path: {
+        withdrawalId: number;
+      };
+    };
+    responses: {
+      /** The withdrawal does not exist. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  uploadWithdrawalPhoto: {
+    parameters: {
+      path: {
+        withdrawalId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CreateNurseryWithdrawalPhotoResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": {
+          file: string;
+        };
+      };
+    };
+  };
+  /** Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio. */
+  getWithdrawalPhoto: {
+    parameters: {
+      path: {
+        withdrawalId: number;
+        photoId: number;
+      };
+      query: {
+        /** Maximum desired width in pixels. If neither this nor maxHeight is specified, the full-sized original image will be returned. If this is specified, an image no wider than this will be returned. The image may be narrower than this value if needed to preserve the aspect ratio of the original. */
+        maxWidth?: string;
+        /** Maximum desired height in pixels. If neither this nor maxWidth is specified, the full-sized original image will be returned. If this is specified, an image no taller than this will be returned. The image may be shorter than this value if needed to preserve the aspect ratio of the original. */
+        maxHeight?: string;
+      };
+    };
+    responses: {
+      /** The photo was successfully retrieved. */
+      200: {
+        content: {
+          "image/jpeg": string;
+        };
+      };
+      /** The withdrawal does not exist, or does not have a photo with the requested ID. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
   /** Lists all organizations the user can access. */
   listOrganizations: {
     parameters: {
@@ -3463,6 +3627,95 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["RecordTimeseriesValuesRequestPayload"];
+      };
+    };
+  };
+  getMapboxToken: {
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetMapboxTokenResponsePayload"];
+        };
+      };
+      /** The server is not configured to return Mapbox tokens. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+      /** The server is temporarily unable to generate a new Mapbox token. */
+      503: {
+        content: {
+          "application/json": components["schemas"]["GetMapboxTokenResponsePayload"];
+        };
+      };
+    };
+  };
+  listPlantingSites: {
+    parameters: {
+      query: {
+        organizationId: number;
+        /** If true, include planting zones and plots for each site. */
+        full?: string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListPlantingSitesResponsePayload"];
+        };
+      };
+    };
+  };
+  createPlantingSite: {
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CreatePlantingSiteResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreatePlantingSiteRequestPayload"];
+      };
+    };
+  };
+  getPlantingSite: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetPlantingSiteResponsePayload"];
+        };
+      };
+    };
+  };
+  updatePlantingSite: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdatePlantingSiteRequestPayload"];
       };
     };
   };

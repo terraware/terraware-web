@@ -7,6 +7,7 @@ export enum APP_PATHS {
   ACCESSIONS2_NEW = '/accessions/new',
   ACCESSIONS2_ITEM = '/accessions/:accessionId',
   ACCESSIONS2_EDIT = '/accessions/:accessionId/edit',
+  BATCH_WITHDRAW = '/batch/withdraw',
   CHECKIN = '/checkin',
   CONTACT_US = '/contactus',
   ERROR = '/error',
@@ -21,6 +22,7 @@ export enum APP_PATHS {
   INVENTORY = '/inventory',
   INVENTORY_NEW = '/inventory/new',
   INVENTORY_ITEM = '/inventory/:speciesId',
+  INVENTORY_WITHDRAW = '/inventory/withdraw',
   OPT_IN = '/opt-in',
   ORGANIZATION_EDIT = '/organization/edit',
   ORGANIZATION = '/organization',
@@ -39,4 +41,7 @@ export enum APP_PATHS {
   MY_ACCOUNT = '/myaccount',
   MY_ACCOUNT_EDIT = '/myaccount/edit',
   PLANTING_SITES = '/planting-sites',
+  PLANTING_SITES_NEW = '/planting-sites/new',
+  PLANTING_SITES_VIEW = '/planting-sites/:plantingSiteId',
+  PLANTING_SITES_EDIT = '/planting-sites/:plantingSiteId/edit',
 }

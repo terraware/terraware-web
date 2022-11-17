@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
 import { Table, TableColumnType } from '@terraware/web-components';
@@ -7,6 +8,8 @@ import { SearchResponseElement } from 'src/api/search';
 import InventoryCellRenderer from './InventoryCellRenderer';
 import { InventoryFiltersType } from './InventoryFiltersPopover';
 import PageSnackbar from 'src/components/PageSnackbar';
+import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import Search from './Search';
 
 const columns: TableColumnType[] = [
@@ -50,6 +53,22 @@ interface InventoryTableProps {
 
 export default function InventoryTable(props: InventoryTableProps): JSX.Element {
   const { organization, results, setTemporalSearchValue, temporalSearchValue, filters, setFilters } = props;
+  const [selectedRows, setSelectedRows] = useState<any[]>([]);
+  const history = useHistory();
+  const trackingEnabled = isEnabled('Tracking V1');
+
+  const withdrawInventory = () => {
+    const speciesIds = selectedRows.filter((row) => row.species_id).map((row) => `speciesId=${row.species_id}`);
+    if (!speciesIds.length) {
+      // we can't handle deleted inventory today
+      return;
+    }
+
+    history.push({
+      pathname: APP_PATHS.INVENTORY_WITHDRAW,
+      search: `?${speciesIds.join('&')}`,
+    });
+  };
 
   return (
     <>
@@ -73,6 +92,18 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                 rows={results}
                 orderBy='species_scientificName'
                 Renderer={InventoryCellRenderer}
+                isClickable={(row) => row.species_id}
+                selectedRows={selectedRows}
+                setSelectedRows={setSelectedRows}
+                showCheckbox={trackingEnabled}
+                showTopBar={true}
+                topBarButtons={[
+                  {
+                    buttonType: 'passive',
+                    buttonText: strings.WITHDRAW,
+                    onButtonClick: withdrawInventory,
+                  },
+                ]}
               />
             </Grid>
           </Grid>
