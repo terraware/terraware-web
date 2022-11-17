@@ -15,7 +15,7 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
-    padding: '20px 0',
+    padding: 0,
   },
   main: {
     [theme.breakpoints.down('xl')]: {

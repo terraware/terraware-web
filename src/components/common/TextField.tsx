@@ -10,6 +10,7 @@ const useStyles = makeStyles(() => ({
 
 export interface Props {
   id: string;
+  autoFocus?: boolean;
   value: unknown | null;
   onChange: (id: string, value: unknown) => void;
   type?: React.InputHTMLAttributes<unknown>['type'];
@@ -35,6 +36,7 @@ export default function TextField(props: Props): JSX.Element {
   return (
     <MUITextField
       id={props.id}
+      autoFocus={props.autoFocus}
       value={props.value ?? ''}
       onChange={onChange}
       type={props.type}

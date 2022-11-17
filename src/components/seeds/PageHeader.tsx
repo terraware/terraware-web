@@ -5,7 +5,7 @@ import useStateLocation, { getLocation } from '../../utils/useStateLocation';
 import { SelectedOrgInfo, ServerOrganization } from 'src/types/Organization';
 import PageSnackbar from 'src/components/PageSnackbar';
 import { ArrowBack } from '@mui/icons-material';
-import { Container, Grid, Fab, Box, Typography, Theme } from '@mui/material';
+import { Container, Grid, Fab, Box, Typography, Theme, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     '&.MuiContainer-root': {
       paddingLeft: 0,
       paddingRight: 0,
-      paddingBottom: theme.spacing(2),
+      paddingBottom: theme.spacing(4),
     },
   },
   container: {
@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   subtitle: {
     fontWeight: 400,
-    paddingTop: '16px',
+    paddingTop: theme.spacing(1.5),
     fontSize: '14px',
     lineHeight: '20px',
   },
@@ -79,6 +79,7 @@ export default function PageHeader({
   titleClassName,
 }: Props): JSX.Element {
   const classes = useStyles();
+  const theme = useTheme();
   const history = useHistory();
   const location = useStateLocation();
 
@@ -117,20 +118,24 @@ export default function PageHeader({
             </div>
           )}
           <div className={classes.mainContent}>
-            <Box display='flex' justifyContent='space-between' alignItems='center'>
-              <Typography
-                id='title'
-                variant='h4'
-                className={`${classes.pageTitle} ${titleClassName}`}
-                sx={{ fontSize: '24px', lineHeight: '32px', fontWeight: 600 }}
-              >
-                {title || getPageHeading()}
-              </Typography>
-              {!!rightComponent && <div>{rightComponent}</div>}
+            <Box padding={theme.spacing(0, 3, children ? 3 : 0, 3)}>
+              <Box display='flex' justifyContent='space-between' alignItems='center'>
+                <Typography
+                  id='title'
+                  variant='h4'
+                  className={`${classes.pageTitle} ${titleClassName}`}
+                  sx={{ fontSize: '24px', lineHeight: '32px', fontWeight: 600 }}
+                >
+                  {title || getPageHeading()}
+                </Typography>
+                {!!rightComponent && <div>{rightComponent}</div>}
+              </Box>
+              {subtitle && (
+                <Typography id='subtitle' variant='h6' className={classes.subtitle}>
+                  {subtitle}
+                </Typography>
+              )}
             </Box>
-            <Typography id='subtitle' variant='h6' className={classes.subtitle}>
-              {subtitle}
-            </Typography>
             <PageSnackbar />
             {children}
           </div>
