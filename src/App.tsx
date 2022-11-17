@@ -55,8 +55,10 @@ import InventoryCreate from './components/Inventory/InventoryCreate';
 import InventoryView from './components/Inventory/InventoryView';
 import { CreatePlantingSite, PlantingSitesList } from './components/PlantingSites';
 import PlantingSiteView from './components/PlantingSites/PlantingSiteView';
-import BatchBulkWithdrawWrapperComponent from './components/Inventory/withdraw/BatchBulkWithdrawWrapperComponent';
-import SpeciesBulkWithdrawWrapperComponent from './components/Inventory/withdraw/SpeciesBulkWithdrawWrapperComponent';
+import {
+  BatchBulkWithdrawWrapperComponent,
+  SpeciesBulkWithdrawWrapperComponent,
+} from './components/Inventory/withdraw';
 
 interface StyleProps {
   isDesktop?: boolean;
