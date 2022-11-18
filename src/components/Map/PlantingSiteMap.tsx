@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { Box, CircularProgress, useTheme } from '@mui/material';
+import hexRgb from 'hex-rgb';
 import { getMapboxToken } from 'src/api/tracking/tracking';
 import { Geometry, PlantingSite } from 'src/api/types/tracking';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -24,34 +25,41 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
 
   const getRenderAttributes = useCallback(
     (objectType: 'site' | 'zone' | 'plot') => {
-      const fillColor = theme.palette.TwClrBaseWhite || 'white';
-      const fillOpacity = 0.1;
+      const getRgbaFromHex = (hex: string, opacity: number) => {
+        const rgba = hexRgb(hex, { alpha: opacity, format: 'object' });
+        const { red, green, blue, alpha } = rgba;
+        return `rgba(${red}, ${green}, ${blue}, ${alpha})`;
+      };
 
       if (objectType === 'site') {
         return {
-          fillColor,
-          fillOpacity,
-          lineColor: '#3F9188', // tokens not available today
+          fillColor: getRgbaFromHex(theme.palette.TwClrBasePurple200 as string, 0.2),
+          lineColor: theme.palette.TwClrBasePurple300 as string,
           lineWidth: 1,
         };
       } else if (objectType === 'zone') {
         return {
-          fillColor,
-          fillOpacity,
-          lineColor: '#86BA3E', // tokens not available today
-          lineWidth: 4,
+          fillColor: getRgbaFromHex(theme.palette.TwClrBaseGreen200 as string, 0.2),
+          lineColor: theme.palette.TwClrBaseGreen300 as string,
+          lineWidth: 1,
         };
       } else {
         // plot
         return {
-          fillColor,
-          fillOpacity,
-          lineColor: '#A4B5C6', // tokens not available today
-          lineWidth: 2,
+          fillColor: getRgbaFromHex(theme.palette.TwClrBaseBlue200 as string, 0.2),
+          lineColor: theme.palette.TwClrBaseBlue300 as string,
+          lineWidth: 1,
         };
       }
     },
-    [theme.palette.TwClrBaseWhite]
+    [
+      theme.palette.TwClrBasePurple200,
+      theme.palette.TwClrBasePurple300,
+      theme.palette.TwClrBaseGreen200,
+      theme.palette.TwClrBaseGreen300,
+      theme.palette.TwClrBaseBlue200,
+      theme.palette.TwClrBaseBlue300,
+    ]
   );
 
   const getPolygons = useCallback((boundary?: Geometry): MapGeometry => {
@@ -65,16 +73,12 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
     (site: PlantingSite): MapSource => {
       const { id, name, description, boundary } = site;
       const renderAttributes = getRenderAttributes('site');
-      const { fillColor, fillOpacity, lineColor, lineWidth } = renderAttributes;
 
       return {
         properties: { id, name, description, type: 'site' },
         boundary: getPolygons(boundary),
         id: `site-${id}`,
-        fillColor,
-        fillOpacity,
-        lineColor,
-        lineWidth,
+        ...renderAttributes,
       };
     },
     [getPolygons, getRenderAttributes]
@@ -83,7 +87,6 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
   const extractPlantingZones = useCallback(
     (site: PlantingSite): MapSource[] | undefined => {
       const renderAttributes = getRenderAttributes('zone');
-      const { fillColor, fillOpacity, lineColor, lineWidth } = renderAttributes;
 
       return site.plantingZones?.map((zone) => {
         const { id, name, boundary } = zone;
@@ -91,10 +94,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
           properties: { id, name, type: 'zone' },
           boundary: getPolygons(boundary),
           id: `zone-${id}`,
-          fillColor,
-          fillOpacity,
-          lineColor,
-          lineWidth,
+          ...renderAttributes,
         };
       });
     },
@@ -104,7 +104,6 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
   const extractPlots = useCallback(
     (site: PlantingSite): MapSource[] | undefined => {
       const renderAttributes = getRenderAttributes('plot');
-      const { fillColor, fillOpacity, lineColor, lineWidth } = renderAttributes;
 
       return site.plantingZones?.flatMap((zone) => {
         const { plots } = zone;
@@ -114,21 +113,18 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
             properties: { id, name, fullName, type: 'plot' },
             boundary: getPolygons(boundary),
             id: `plot-${id}`,
-            fillColor,
-            fillOpacity,
-            lineColor,
-            lineWidth,
+            ...renderAttributes,
             isInteractive: true,
             annotation: {
               textField: 'fullName',
-              textColor: fillColor,
-              textSize: 10, // no tokens available yet
+              textColor: theme.palette.TwClrBaseWhite as string,
+              textSize: 10,
             },
           };
         });
       });
     },
-    [getPolygons, getRenderAttributes]
+    [getPolygons, getRenderAttributes, theme.palette.TwClrBaseWhite]
   );
 
   // fetch token
