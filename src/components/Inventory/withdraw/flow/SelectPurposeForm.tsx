@@ -23,7 +23,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 import { getTodaysDateFormatted, isInTheFuture } from '@terraware/web-components/utils';
 import { ServerOrganization } from 'src/types/Organization';
 import { DatePicker, Dropdown, Textfield } from '@terraware/web-components';
-import { getAllNurseries } from 'src/utils/organization';
+import { getAllNurseries, isContributor } from 'src/utils/organization';
 import { DropdownItem } from '@terraware/web-components/components/Dropdown';
 
 type SelectPurposeFormProps = {
@@ -39,7 +39,8 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const { isMobile } = useDeviceInfo();
   const history = useHistory();
   const theme = useTheme();
-  const [isNurseryTransfer, setIsNurseryTransfer] = useState(false);
+  const contributor = isContributor(organization);
+  const [isNurseryTransfer, setIsNurseryTransfer] = useState(contributor ? true : false);
   const [fieldsErrors, setFieldsErrors] = useState<{ [key: string]: string | undefined }>({});
   const [localRecords, setLocalRecords] = useState<NurseryWithdrawal[]>([]);
   const [selectedNursery, setSelectedNursery] = useState<string>();
@@ -74,7 +75,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
       batches.forEach((batch, index) => {
         const withdrawalBatch: NurseryWithdrawal = {
           id: -1,
-          purpose: 'Out Plant',
+          purpose: contributor ? 'Nursery Transfer' : 'Out Plant',
           facilityId: batch.facilityId,
           withdrawnDate: getTodaysDateFormatted(),
           batchWithdrawals: [
@@ -92,7 +93,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     if (batches) {
       populateWithdrawals();
     }
-  }, [batches, snackbar, setLocalRecords]);
+  }, [batches, snackbar, setLocalRecords, contributor]);
 
   const setIndividualError = (id: string, error?: string) => {
     setFieldsErrors((prev) => ({
@@ -213,7 +214,9 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                     {strings.PURPOSE}
                   </FormLabel>
                   <RadioGroup name='radio-buttons-purpose' value={localRecords[0]?.purpose} onChange={onChangePurpose}>
-                    <FormControlLabel value='Out Plant' control={<Radio />} label={strings.OUTPLANT} />
+                    {!contributor && (
+                      <FormControlLabel value='Out Plant' control={<Radio />} label={strings.OUTPLANT} />
+                    )}
                     <FormControlLabel value='Nursery Transfer' control={<Radio />} label={strings.NURSERY_TRANSFER} />
                     <FormControlLabel value='Dead' control={<Radio />} label={strings.DEAD} />
                     <FormControlLabel value='Other' control={<Radio />} label={strings.OTHER} />
