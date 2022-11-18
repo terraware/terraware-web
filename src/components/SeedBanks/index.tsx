@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import Button from 'src/components/common/button/Button';
 import Table from 'src/components/common/table';
@@ -15,22 +15,29 @@ import TextField from '../common/Textfield/Textfield';
 import { search, SearchNodePayload } from 'src/api/search';
 import useDebounce from 'src/utils/useDebounce';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
-import { Grid } from '@mui/material';
+import { Box, Grid, Theme, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import PageHeaderWrapper from '../common/PageHeaderWrapper';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme: Theme) => ({
   title: {
     marginTop: 0,
     marginBottom: 0,
     fontSize: '24px',
+    fontWeight: 600,
   },
   centered: {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'flex-end',
-    marginBottom: '16px',
+    marginBottom: '32px',
+  },
+  contentContainer: {
+    backgroundColor: theme.palette.TwClrBg,
+    padding: theme.spacing(3),
+    borderRadius: '32px',
   },
   searchField: {
     width: '300px',
@@ -52,12 +59,14 @@ type SeedBanksListProps = {
 
 export default function SeedBanksList({ organization }: SeedBanksListProps): JSX.Element {
   const classes = useStyles();
+  const theme = useTheme();
   const history = useHistory();
   const [seedBanks, setSeedBanks] = useState<Facility[]>();
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
   const [results, setResults] = useState<Facility[]>();
   const { isMobile } = useDeviceInfo();
+  const contentRef = useRef(null);
 
   useEffect(() => {
     const getSeedBanks = () => {
@@ -139,57 +148,65 @@ export default function SeedBanksList({ organization }: SeedBanksListProps): JSX
 
   return (
     <TfMain>
-      <Grid container spacing={3}>
-        <Grid item xs={8}>
-          <h1 className={classes.title}>{strings.SEED_BANKS}</h1>
-        </Grid>
-        <Grid item xs={4} className={classes.centered}>
-          {['Admin', 'Owner'].includes(organization.role) &&
-            (isMobile ? (
-              <Button id='new-facility' icon='plus' onClick={goToNewSeedBank} size='medium' />
-            ) : (
-              <Button
-                id='new-facility'
-                icon='plus'
-                label={strings.ADD_SEED_BANK}
-                onClick={goToNewSeedBank}
-                size='medium'
-              />
-            ))}
-        </Grid>
-        <PageSnackbar />
-        <Grid item xs={12} className={classes.searchBar}>
-          <TextField
-            placeholder={strings.SEARCH}
-            iconLeft='search'
-            label=''
-            id='search'
-            type='text'
-            className={classes.searchField}
-            onChange={onChangeSearch}
-            value={temporalSearchValue}
-            iconRight='cancel'
-            onClickRightIcon={clearSearch}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <div>
-            <Grid container spacing={4}>
-              <Grid item xs={12}>
-                {seedBanks && (
-                  <Table
-                    id='seed-banks-table'
-                    columns={columns}
-                    rows={results || seedBanks}
-                    orderBy='name'
-                    Renderer={SeedBanksCellRenderer}
-                  />
-                )}
+      <Box sx={{ paddingLeft: theme.spacing(3) }}>
+        <Grid container spacing={3} sx={{ marginTop: 0 }}>
+          <PageHeaderWrapper nextElement={contentRef.current}>
+            <Grid container spacing={3} sx={{ paddingTop: 0 }}>
+              <Grid item xs={8}>
+                <h1 className={classes.title}>{strings.SEED_BANKS}</h1>
+              </Grid>
+              <Grid item xs={4} className={classes.centered}>
+                {['Admin', 'Owner'].includes(organization.role) &&
+                  (isMobile ? (
+                    <Button id='new-facility' icon='plus' onClick={goToNewSeedBank} size='medium' />
+                  ) : (
+                    <Button
+                      id='new-facility'
+                      icon='plus'
+                      label={strings.ADD_SEED_BANK}
+                      onClick={goToNewSeedBank}
+                      size='medium'
+                    />
+                  ))}
               </Grid>
             </Grid>
-          </div>
+            <PageSnackbar />
+          </PageHeaderWrapper>
+          <Grid container className={classes.contentContainer} ref={contentRef}>
+            <Grid item xs={12} className={classes.searchBar}>
+              <TextField
+                placeholder={strings.SEARCH}
+                iconLeft='search'
+                label=''
+                id='search'
+                type='text'
+                className={classes.searchField}
+                onChange={onChangeSearch}
+                value={temporalSearchValue}
+                iconRight='cancel'
+                onClickRightIcon={clearSearch}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <div>
+                <Grid container spacing={4}>
+                  <Grid item xs={12}>
+                    {seedBanks && (
+                      <Table
+                        id='seed-banks-table'
+                        columns={columns}
+                        rows={results || seedBanks}
+                        orderBy='name'
+                        Renderer={SeedBanksCellRenderer}
+                      />
+                    )}
+                  </Grid>
+                </Grid>
+              </div>
+            </Grid>
+          </Grid>
         </Grid>
-      </Grid>
+      </Box>
     </TfMain>
   );
 }
