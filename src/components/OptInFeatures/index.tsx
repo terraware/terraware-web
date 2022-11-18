@@ -172,6 +172,7 @@ export default function OptInFeatures({ refresh }: OptInFeaturesProps): JSX.Elem
               title={strings.ADD_PHOTOS_REQUIRED}
               description={strings.ADD_PHOTOS_DESCRIPTION}
               onPhotosChanged={onPhotosChanged}
+              multipleSelection={true}
             />
           </Box>
         </Grid>

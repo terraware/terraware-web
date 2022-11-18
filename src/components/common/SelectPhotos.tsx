@@ -40,6 +40,7 @@ type SelectPhotosProps = {
   title: string;
   description: string;
   onPhotosChanged: (photos: File[]) => void;
+  multipleSelection?: boolean;
   error?: {
     title?: string;
     text: string;
@@ -47,7 +48,7 @@ type SelectPhotosProps = {
 };
 
 export default function SelectPhotos(props: SelectPhotosProps): JSX.Element {
-  const { title, description, onPhotosChanged, error } = props;
+  const { title, description, onPhotosChanged, multipleSelection, error } = props;
   const classes = useStyles();
   const [files, setFiles] = useState<File[]>([]);
   const [filesData, setFilesData] = useState<string[]>([]);
@@ -55,8 +56,19 @@ export default function SelectPhotos(props: SelectPhotosProps): JSX.Element {
   const divRef = useRef<HTMLDivElement>(null);
   const theme = useTheme();
 
-  const addFile = (file: File) => {
-    updateSelection([...files, file]);
+  const addFiles = (fileList: FileList) => {
+    const newFiles: File[] = [];
+
+    for (let i = 0; i < fileList.length; i++) {
+      const fileItem = fileList.item(i);
+      if (fileItem) {
+        newFiles.push(fileItem);
+      }
+    }
+
+    if (newFiles.length) {
+      updateSelection([...files, ...newFiles]);
+    }
   };
 
   const removeFileAtIndex = (index: number) => {
@@ -72,7 +84,7 @@ export default function SelectPhotos(props: SelectPhotosProps): JSX.Element {
 
   const dropHandler = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
-    addFile(event.dataTransfer.files[0]);
+    addFiles(event.dataTransfer.files);
   };
 
   const enableDropping = (event: React.DragEvent<HTMLDivElement>) => {
@@ -85,8 +97,8 @@ export default function SelectPhotos(props: SelectPhotosProps): JSX.Element {
   };
 
   const onFileChosen = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.currentTarget.files && event.currentTarget.files[0]) {
-      addFile(event.currentTarget.files[0]);
+    if (event.currentTarget.files) {
+      addFiles(event.currentTarget.files);
     }
   };
 
@@ -157,6 +169,7 @@ export default function SelectPhotos(props: SelectPhotosProps): JSX.Element {
           className={classes.hiddenInput}
           onChange={onFileChosen}
           accept='image/jpeg,image/png'
+          multiple={multipleSelection || false}
         />
         <Button
           onClick={onChooseFileHandler}
