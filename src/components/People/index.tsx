@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import {
   deleteOrganization,
@@ -22,18 +22,23 @@ import AssignNewOwnerDialog from '../MyAccount/AssignNewOwnerModal';
 import DeleteOrgDialog from '../MyAccount/DeleteOrgModal';
 import CannotRemovePeopleDialog from './CannotRemovePeopleModal';
 import { updateOrganizationUser } from 'src/api/user/user';
-import { Grid, Theme } from '@mui/material';
+import { Grid, Theme, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
+import PageHeaderWrapper from '../common/PageHeaderWrapper';
 
 const useStyles = makeStyles((theme: Theme) => ({
   title: {
-    marginTop: 0,
+    margin: 0,
     fontSize: '24px',
+    fontWeight: 600,
   },
   mainContent: {
-    paddingTop: theme.spacing(4),
+    padding: theme.spacing(3),
+    backgroundColor: theme.palette.TwClrBg,
+    borderRadius: '32px',
+    minWidth: 'fit-content',
   },
   centered: {
     display: 'flex',
@@ -59,6 +64,7 @@ type PeopleListProps = {
 
 export default function PeopleList({ organization, reloadData, user }: PeopleListProps): JSX.Element {
   const classes = useStyles();
+  const theme = useTheme();
   const history = useHistory();
   const [people, setPeople] = useState<OrganizationUser[]>();
   const [selectedPeopleRows, setSelectedPeopleRows] = useState<OrganizationUser[]>([]);
@@ -70,6 +76,7 @@ export default function PeopleList({ organization, reloadData, user }: PeopleLis
   const [newOwner, setNewOwner] = useState<OrganizationUser>();
   const snackbar = useSnackbar();
   const { isMobile } = useDeviceInfo();
+  const contentRef = useRef(null);
 
   useEffect(() => {
     const populatePeople = async () => {
@@ -115,7 +122,7 @@ export default function PeopleList({ organization, reloadData, user }: PeopleLis
                   return false;
                 }
                 return true;
-              })
+              }),
             );
             if (assignNewOwnerModalOpened) {
               setAssignNewOwnerModalOpened(false);
@@ -229,19 +236,22 @@ export default function PeopleList({ organization, reloadData, user }: PeopleLis
           />
         </>
       )}
-      <Grid container spacing={3}>
-        <Grid item xs={8}>
-          <h1 className={classes.title}>{strings.PEOPLE}</h1>
-          <p>{strings.PEOPLE_DESCRIPTION}</p>
+      <PageHeaderWrapper nextElement={contentRef.current} nextElementInitialMargin={-24}>
+        <Grid container paddingBottom={theme.spacing(4)} paddingLeft={isMobile ? 0 : theme.spacing(3)}>
+          <Grid item xs={8}>
+            <h1 className={classes.title}>{strings.PEOPLE}</h1>
+          </Grid>
+          <Grid item xs={4} className={classes.centered}>
+            {isMobile ? (
+              <Button id='new-person' icon='plus' onClick={goToNewPerson} size='medium' />
+            ) : (
+              <Button id='new-person' label={strings.ADD_PERSON} icon='plus' onClick={goToNewPerson} size='medium' />
+            )}
+          </Grid>
+          <PageSnackbar />
         </Grid>
-        <Grid item xs={4} className={classes.centered}>
-          {isMobile ? (
-            <Button id='new-person' icon='plus' onClick={goToNewPerson} size='medium' />
-          ) : (
-            <Button id='new-person' label={strings.ADD_PERSON} icon='plus' onClick={goToNewPerson} size='medium' />
-          )}
-        </Grid>
-        <PageSnackbar />
+      </PageHeaderWrapper>
+      <Grid container spacing={3} ref={contentRef}>
         <Grid item xs={12}>
           <div className={classes.mainContent}>
             <Grid container spacing={4}>
