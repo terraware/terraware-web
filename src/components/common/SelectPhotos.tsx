@@ -158,8 +158,7 @@ export default function SelectPhotos(props: SelectPhotosProps): JSX.Element {
           ref={inputRef}
           className={classes.hiddenInput}
           onChange={onFileChosen}
-          accept={isMobile ? 'image/*' : 'image/jpeg,image/png'}
-          capture='environment'
+          accept={isMobile ? 'image/jpeg,image/png' : 'image/jpeg,image/png'}
         />
         <Button
           onClick={onChooseFileHandler}
