@@ -41,14 +41,14 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
         return {
           fillColor: getRgbaFromHex(theme.palette.TwClrBaseGreen200 as string, 0.2),
           lineColor: theme.palette.TwClrBaseGreen300 as string,
-          lineWidth: 4,
+          lineWidth: 1,
         };
       } else {
         // plot
         return {
           fillColor: getRgbaFromHex(theme.palette.TwClrBaseBlue200 as string, 0.2),
           lineColor: theme.palette.TwClrBaseBlue300 as string,
-          lineWidth: 2,
+          lineWidth: 1,
         };
       }
     },
