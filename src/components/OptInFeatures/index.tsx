@@ -167,7 +167,7 @@ export default function OptInFeatures({ refresh }: OptInFeaturesProps): JSX.Elem
               </Grid>
             </Stack>
           ))}
-          <Box display='flex' margin='50px auto'>
+          <Box display='flex' margin='50px auto' maxWidth={800}>
             <SelectPhotos
               title={strings.ADD_PHOTOS_REQUIRED}
               description={strings.ADD_PHOTOS_DESCRIPTION}
