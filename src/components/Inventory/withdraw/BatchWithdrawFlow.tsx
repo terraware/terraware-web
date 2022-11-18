@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { search } from 'src/api/search';
 import { NurseryWithdrawal } from 'src/api/types/batch';
 import { ServerOrganization } from 'src/types/Organization';
 import useForm from 'src/utils/useForm';
@@ -16,7 +17,49 @@ type BatchWithdrawFlowProps = {
 export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.Element {
   const { organization, batchIds } = props;
   const [flowState, setFlowState] = useState<FlowStates>('purpose');
-  const [record, setRecord] = useForm<NurseryWithdrawal[]>([]);
+  const [records, setRecords] = useForm<NurseryWithdrawal[]>([]);
+  const [batches, setBatches] = useState<any[]>();
+
+  useEffect(() => {
+    const populateBatches = async () => {
+      const searchResponse = await search({
+        prefix: 'batches',
+        search: {
+          operation: 'and',
+          children: [
+            {
+              operation: 'field',
+              field: 'id',
+              values: batchIds,
+            },
+          ],
+        },
+        fields: [
+          'id',
+          'batchNumber',
+          'germinatingQuantity',
+          'notReadyQuantity',
+          'readyQuantity',
+          'totalQuantity',
+          'totalQuantityWithdrawn',
+          'facility_id',
+          'facility_name',
+          'readyByDate',
+          'addedDate',
+          'version',
+          'accession_id',
+          'accession_accessionNumber',
+          'notes',
+        ],
+        count: 1000,
+      });
+
+      if (searchResponse) {
+        setBatches(searchResponse);
+      }
+    };
+    populateBatches();
+  }, [batchIds]);
 
   const onPurposeSelected = () => {
     if (batchIds.length === 1) {
@@ -32,13 +75,13 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
 
   return (
     <>
-      {flowState === 'purpose' && (
+      {flowState === 'purpose' && batches && (
         <SelectPurposeForm
           onNext={onPurposeSelected}
           organization={organization}
-          batchIds={batchIds}
-          record={record}
-          setRecord={setRecord}
+          batches={batches}
+          records={records}
+          setRecords={setRecords}
         />
       )}
       {flowState === 'select batches' && <SelectBatches onNext={onBatchesSelected} organization={organization} />}

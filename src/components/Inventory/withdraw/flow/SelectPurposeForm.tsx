@@ -19,30 +19,30 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import FormBottomBar from 'src/components/common/FormBottomBar';
 import TfMain from 'src/components/common/TfMain';
 import { NurseryWithdrawal } from 'src/api/types/batch';
-import { getBatch } from 'src/api/batch/batch';
 import useSnackbar from 'src/utils/useSnackbar';
 import { getTodaysDateFormatted, isInTheFuture } from '@terraware/web-components/utils';
 import { ServerOrganization } from 'src/types/Organization';
 import { DatePicker, Dropdown, Textfield } from '@terraware/web-components';
-import { getAllNurseries, getNurseriesById } from 'src/utils/organization';
+import { getAllNurseries } from 'src/utils/organization';
+import { DropdownItem } from '@terraware/web-components/components/Dropdown';
 
 type SelectPurposeFormProps = {
   organization: ServerOrganization;
   onNext: () => void;
-  batchIds: string[];
-  record: NurseryWithdrawal[];
-  setRecord: React.Dispatch<React.SetStateAction<NurseryWithdrawal[]>>;
+  batches: any[];
+  records: NurseryWithdrawal[];
+  setRecords: React.Dispatch<React.SetStateAction<NurseryWithdrawal[]>>;
 };
 export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.Element {
-  const { organization, batchIds, record, setRecord, onNext } = props;
+  const { organization, records, setRecords, onNext, batches } = props;
   const [snackbar] = useState(useSnackbar());
   const { isMobile } = useDeviceInfo();
   const history = useHistory();
   const theme = useTheme();
   const [isNurseryTransfer, setIsNurseryTransfer] = useState(false);
   const [fieldsErrors, setFieldsErrors] = useState<{ [key: string]: string | undefined }>({});
-  const [loaded, setLoadad] = useState(false);
-  const [firstBatch, setFirstBatch] = useState<NurseryWithdrawal>();
+  const [localRecords, setLocalRecords] = useState<NurseryWithdrawal[]>([]);
+  const [selectedNursery, setSelectedNursery] = useState<string>();
 
   const goToInventory = () => {
     const pathname = APP_PATHS.INVENTORY;
@@ -51,19 +51,11 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   };
 
   const updateFieldForAll = (field: keyof NurseryWithdrawal, value: any) => {
-    setFirstBatch((previousRecord: NurseryWithdrawal | undefined): NurseryWithdrawal | undefined => {
-      if (previousRecord) {
-        return {
-          ...previousRecord,
-          [field]: value,
-        };
-      }
-    });
-    const updated = record.map((iRecord) => {
+    const updated = localRecords.map((iRecord) => {
       return { ...iRecord, [field]: value };
     });
 
-    setRecord(updated);
+    setLocalRecords(updated);
   };
 
   const onChangePurpose = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -78,41 +70,28 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   useEffect(() => {
     const fetchBatches = () => {
       const withdrawalBatches: NurseryWithdrawal[] = [];
-      batchIds.forEach(async (batchId, index) => {
-        const response = await getBatch(Number(batchId));
-        if (response.requestSucceeded && response.batch) {
-          const withdrawalBatch: NurseryWithdrawal = {
-            id: -1,
-            purpose: 'Out Plant',
-            facilityId: response.batch.facilityId,
-            withdrawnDate: getTodaysDateFormatted(),
-            batchWithdrawals: [
-              {
-                batchId: response.batch.id,
-                notReadyQuantityWithdrawn: response.batch.notReadyQuantity,
-                readyQuantityWithdrawn: response.batch.readyQuantity,
-              },
-            ],
-          };
-          if (index === 0) {
-            setFirstBatch(withdrawalBatch);
-          }
-          withdrawalBatches.push(withdrawalBatch);
-        } else {
-          snackbar.toastError(response.error);
-        }
+      batches.forEach((batch, index) => {
+        const withdrawalBatch: NurseryWithdrawal = {
+          id: -1,
+          purpose: 'Out Plant',
+          facilityId: batch.facilityId,
+          withdrawnDate: getTodaysDateFormatted(),
+          batchWithdrawals: [
+            {
+              batchId: batch.id,
+              notReadyQuantityWithdrawn: batch.notReadyQuantity,
+              readyQuantityWithdrawn: batch.readyQuantity,
+            },
+          ],
+        };
+        withdrawalBatches.push(withdrawalBatch);
       });
-      setRecord(withdrawalBatches);
+      setLocalRecords(withdrawalBatches);
     };
-
-    fetchBatches();
-  }, [batchIds, snackbar, setRecord]);
-
-  useEffect(() => {
-    if (record.length > 0) {
-      setLoadad(true);
+    if (batches) {
+      fetchBatches();
     }
-  }, [record]);
+  }, [batches, snackbar, setLocalRecords]);
 
   const setIndividualError = (id: string, error?: string) => {
     setFieldsErrors((prev) => ({
@@ -146,7 +125,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
 
   const validateNurseryTransfer = () => {
     if (isNurseryTransfer) {
-      if (record[0].destinationFacilityId === -1) {
+      if (localRecords[0].destinationFacilityId === -1) {
         setIndividualError('destinationFacilityId', strings.REQUIRED_FIELD);
         return false;
       }
@@ -154,15 +133,45 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     return true;
   };
 
+  const validateSelectedNursery = () => {
+    if (!selectedNursery) {
+      setIndividualError('fromFacilityId', strings.REQUIRED_FIELD);
+      return false;
+    }
+    return true;
+  };
+
   const saveWithdrawal = async () => {
-    if (record) {
+    if (localRecords) {
       const nurseryTransferInvalid = !validateNurseryTransfer();
-      if (fieldsErrors.withdrawDate || nurseryTransferInvalid) {
+      const selectedNurseryInvalid = !validateSelectedNursery();
+      if (fieldsErrors.withdrawDate || nurseryTransferInvalid || selectedNurseryInvalid) {
         return;
       }
     }
 
+    setRecords(localRecords.filter((rcd) => rcd.facilityId.toString() === selectedNursery));
+
     onNext();
+  };
+
+  const onChangeFromNursery = (facilityIdSelected: string) => {
+    setSelectedNursery(facilityIdSelected);
+    setRecords(records.filter((localR) => localR.facilityId.toString() === facilityIdSelected));
+  };
+
+  const getNurseriesOptions = () => {
+    const nurseriesOptions: DropdownItem[] = [];
+    batches.forEach((bat) => {
+      const exists = nurseriesOptions.find((no) => no.value === bat.facility_id);
+      if (!exists) {
+        nurseriesOptions.push({ label: bat.facility_name, value: bat.facility_id });
+      }
+    });
+    if (nurseriesOptions.length === 1 && !selectedNursery) {
+      setSelectedNursery(nurseriesOptions[0].value);
+    }
+    return nurseriesOptions;
   };
 
   return (
@@ -182,7 +191,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
         }}
       >
         <Grid container minWidth={isMobile ? 0 : 700}>
-          {firstBatch ? (
+          {localRecords && localRecords.length > 0 ? (
             <Grid item xs={12}>
               <Typography variant='h2' sx={{ fontSize: '18px', fontWeight: 'bold', marginBottom: theme.spacing(2) }}>
                 {strings.WITHDRAWAL_DETAILS}
@@ -190,8 +199,10 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
               <Typography>{strings.WITHDRAW_INSTRUCTIONS}</Typography>
               <Grid xs={12} padding={theme.spacing(4, 0, 0, 2)}>
                 <FormControl>
-                  <FormLabel sx={{ color: '#5C6B6C', fontSize: '14px' }}>{strings.PURPOSE}</FormLabel>
-                  <RadioGroup name='radio-buttons-purpose' value={firstBatch?.purpose} onChange={onChangePurpose}>
+                  <FormLabel sx={{ color: theme.palette.TwClrTxtSecondary, fontSize: '14px' }}>
+                    {strings.PURPOSE}
+                  </FormLabel>
+                  <RadioGroup name='radio-buttons-purpose' value={localRecords[0]?.purpose} onChange={onChangePurpose}>
                     <FormControlLabel value='Out Plant' control={<Radio />} label={strings.OUTPLANT} />
                     <FormControlLabel value='Nursery Transfer' control={<Radio />} label={strings.NURSERY_TRANSFER} />
                     <FormControlLabel value='Dead' control={<Radio />} label={strings.DEAD} />
@@ -203,15 +214,13 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
               <Grid display='flex'>
                 <Grid item xs={isNurseryTransfer ? 6 : 12} sx={{ marginTop: theme.spacing(2) }} paddingRight={1}>
                   <Dropdown
-                    id='from'
+                    id='fromFacilityId'
                     label={strings.FROM_NURSERY}
-                    selectedValue={firstBatch.facilityId.toString()}
-                    options={[getNurseriesById(organization, firstBatch.facilityId)].map((nursery) => ({
-                      label: nursery.name,
-                      value: nursery.id.toString(),
-                    }))}
-                    onChange={() => true}
+                    selectedValue={selectedNursery}
+                    options={getNurseriesOptions()}
+                    onChange={(newValue) => onChangeFromNursery(newValue)}
                     fullWidth={true}
+                    errorText={fieldsErrors.fromFacilityId}
                   />
                 </Grid>
 
@@ -220,7 +229,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                     <Dropdown
                       id='destinationFacilityId'
                       label={strings.TO_NURSERY_REQUIRED}
-                      selectedValue={firstBatch.destinationFacilityId?.toString()}
+                      selectedValue={localRecords[0].destinationFacilityId?.toString()}
                       options={getAllNurseries(organization).map((nursery) => ({
                         label: nursery.name,
                         value: nursery.id.toString(),
@@ -237,7 +246,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                   id='withdrawnDate'
                   label={strings.WITHDRAW_DATE_REQUIRED}
                   aria-label={strings.WITHDRAW_DATE_REQUIRED}
-                  value={firstBatch.withdrawnDate}
+                  value={localRecords[0].withdrawnDate}
                   onChange={onChangeDate}
                   errorText={fieldsErrors.withdrawnDate}
                 />
@@ -245,7 +254,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
               <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
                 <Textfield
                   id='notes'
-                  value={firstBatch.notes}
+                  value={localRecords[0].notes}
                   onChange={(id, value) => updateFieldForAll('notes', value)}
                   type='textarea'
                   label={strings.NOTES}
