@@ -42,6 +42,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const [isNurseryTransfer, setIsNurseryTransfer] = useState(false);
   const [fieldsErrors, setFieldsErrors] = useState<{ [key: string]: string | undefined }>({});
   const [loaded, setLoadad] = useState(false);
+  const [firstBatch, setFirstBatch] = useState<NurseryWithdrawal>();
 
   const goToInventory = () => {
     const pathname = APP_PATHS.INVENTORY;
@@ -50,6 +51,14 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   };
 
   const updateFieldForAll = (field: keyof NurseryWithdrawal, value: any) => {
+    setFirstBatch((previousRecord: NurseryWithdrawal | undefined): NurseryWithdrawal | undefined => {
+      if (previousRecord) {
+        return {
+          ...previousRecord,
+          [field]: value,
+        };
+      }
+    });
     const updated = record.map((iRecord) => {
       return { ...iRecord, [field]: value };
     });
@@ -69,7 +78,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   useEffect(() => {
     const fetchBatches = () => {
       const withdrawalBatches: NurseryWithdrawal[] = [];
-      batchIds.forEach(async (batchId) => {
+      batchIds.forEach(async (batchId, index) => {
         const response = await getBatch(Number(batchId));
         if (response.requestSucceeded && response.batch) {
           const withdrawalBatch: NurseryWithdrawal = {
@@ -85,6 +94,9 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
               },
             ],
           };
+          if (index === 0) {
+            setFirstBatch(withdrawalBatch);
+          }
           withdrawalBatches.push(withdrawalBatch);
         } else {
           snackbar.toastError(response.error);
@@ -170,7 +182,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
         }}
       >
         <Grid container minWidth={isMobile ? 0 : 700}>
-          {loaded ? (
+          {firstBatch ? (
             <Grid item xs={12}>
               <Typography variant='h2' sx={{ fontSize: '18px', fontWeight: 'bold', marginBottom: theme.spacing(2) }}>
                 {strings.WITHDRAWAL_DETAILS}
@@ -179,7 +191,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
               <Grid xs={12} padding={theme.spacing(4, 0, 0, 2)}>
                 <FormControl>
                   <FormLabel sx={{ color: '#5C6B6C', fontSize: '14px' }}>{strings.PURPOSE}</FormLabel>
-                  <RadioGroup name='radio-buttons-purpose' value={record[0]?.purpose} onChange={onChangePurpose}>
+                  <RadioGroup name='radio-buttons-purpose' value={firstBatch?.purpose} onChange={onChangePurpose}>
                     <FormControlLabel value='Out Plant' control={<Radio />} label={strings.OUTPLANT} />
                     <FormControlLabel value='Nursery Transfer' control={<Radio />} label={strings.NURSERY_TRANSFER} />
                     <FormControlLabel value='Dead' control={<Radio />} label={strings.DEAD} />
@@ -193,8 +205,8 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                   <Dropdown
                     id='from'
                     label={strings.FROM_NURSERY}
-                    selectedValue={record[0].facilityId.toString()}
-                    options={[getNurseriesById(organization, record[0].facilityId)].map((nursery) => ({
+                    selectedValue={firstBatch.facilityId.toString()}
+                    options={[getNurseriesById(organization, firstBatch.facilityId)].map((nursery) => ({
                       label: nursery.name,
                       value: nursery.id.toString(),
                     }))}
@@ -208,7 +220,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                     <Dropdown
                       id='destinationFacilityId'
                       label={strings.TO_NURSERY_REQUIRED}
-                      selectedValue={record[0].destinationFacilityId?.toString()}
+                      selectedValue={firstBatch.destinationFacilityId?.toString()}
                       options={getAllNurseries(organization).map((nursery) => ({
                         label: nursery.name,
                         value: nursery.id.toString(),
@@ -225,7 +237,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                   id='withdrawnDate'
                   label={strings.WITHDRAW_DATE_REQUIRED}
                   aria-label={strings.WITHDRAW_DATE_REQUIRED}
-                  value={record[0].withdrawnDate}
+                  value={firstBatch.withdrawnDate}
                   onChange={onChangeDate}
                   errorText={fieldsErrors.withdrawnDate}
                 />
@@ -233,7 +245,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
               <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
                 <Textfield
                   id='notes'
-                  value={record[0].notes}
+                  value={firstBatch.notes}
                   onChange={(id, value) => updateFieldForAll('notes', value)}
                   type='textarea'
                   label={strings.NOTES}
