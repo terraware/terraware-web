@@ -43,6 +43,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const [fieldsErrors, setFieldsErrors] = useState<{ [key: string]: string | undefined }>({});
   const [localRecords, setLocalRecords] = useState<NurseryWithdrawal[]>([]);
   const [selectedNursery, setSelectedNursery] = useState<string>();
+  const [destinationNurseriesOptions, setDestinationNurseriesOptions] = useState<DropdownItem[]>();
 
   const goToInventory = () => {
     const pathname = APP_PATHS.INVENTORY;
@@ -99,6 +100,14 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
       [id]: error,
     }));
   };
+
+  useEffect(() => {
+    const allNurseries = getAllNurseries(organization);
+    const destinationNurseries = allNurseries.filter((nursery) => nursery.id.toString() !== selectedNursery);
+    setDestinationNurseriesOptions(
+      destinationNurseries.map((nursery) => ({ label: nursery.name, value: nursery.id.toString() }))
+    );
+  }, [selectedNursery, organization]);
 
   const validateDate = (id: string, value?: any) => {
     if (!value && id === 'date') {
@@ -231,10 +240,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                       id='destinationFacilityId'
                       label={strings.TO_NURSERY_REQUIRED}
                       selectedValue={localRecords[0].destinationFacilityId?.toString()}
-                      options={getAllNurseries(organization).map((nursery) => ({
-                        label: nursery.name,
-                        value: nursery.id.toString(),
-                      }))}
+                      options={destinationNurseriesOptions}
                       onChange={(value) => updateFieldForAll('destinationFacilityId', value)}
                       errorText={fieldsErrors.destinationFacilityId}
                       fullWidth={true}
