@@ -6,6 +6,8 @@ import useSnackbar from 'src/utils/useSnackbar';
 import PageSnackbar from 'src/components/PageSnackbar';
 import { Feature, OPT_IN_FEATURES } from 'src/features';
 import TfMain from 'src/components/common/TfMain';
+import SelectPhotos from 'src/components/common/SelectPhotos';
+import strings from 'src/strings';
 
 type OptInFeaturesProps = {
   refresh?: () => void;
@@ -93,6 +95,14 @@ export default function OptInFeatures({ refresh }: OptInFeaturesProps): JSX.Elem
     color: isDisclosure ? theme.palette.TwClrTxtDanger : 'inherit',
   });
 
+  /**
+   * REMOVE
+   */
+  const onPhotosChanged = (files: File[]) => {
+    // tslint:disable-next-line: no-console
+    console.log('onPhotosChanged', files);
+  };
+
   return (
     <TfMain>
       <PageSnackbar />
@@ -157,6 +167,13 @@ export default function OptInFeatures({ refresh }: OptInFeaturesProps): JSX.Elem
               </Grid>
             </Stack>
           ))}
+          <Box display='flex' margin='50px auto'>
+            <SelectPhotos
+              title={strings.ADD_PHOTOS_REQUIRED}
+              description={strings.ADD_PHOTOS_DESCRIPTION}
+              onPhotosChanged={onPhotosChanged}
+            />
+          </Box>
         </Grid>
       )}
     </TfMain>
