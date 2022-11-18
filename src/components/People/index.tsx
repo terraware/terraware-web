@@ -122,7 +122,7 @@ export default function PeopleList({ organization, reloadData, user }: PeopleLis
                   return false;
                 }
                 return true;
-              }),
+              })
             );
             if (assignNewOwnerModalOpened) {
               setAssignNewOwnerModalOpened(false);
