@@ -110,18 +110,28 @@ export default function NurseriesList({ organization }: NurseriesListProps): JSX
               (isMobile ? (
                 <Button id='new-nursery' icon='plus' onClick={goToNewNursery} size='medium' />
               ) : (
-                <Button id='new-nursery' icon='plus' label={strings.ADD_NURSERY} onClick={goToNewNursery} size='medium' />
+                <Button
+                  id='new-nursery'
+                  icon='plus'
+                  label={strings.ADD_NURSERY}
+                  onClick={goToNewNursery}
+                  size='medium'
+                />
               ))}
           </Grid>
           <PageSnackbar />
         </Grid>
       </PageHeaderWrapper>
-      <Grid container ref={contentRef} sx={{
-        backgroundColor: theme.palette.TwClrBg,
-        borderRadius: '32px',
-        padding: theme.spacing(3),
-        minWidth: 'fit-content'
-      }}>
+      <Grid
+        container
+        ref={contentRef}
+        sx={{
+          backgroundColor: theme.palette.TwClrBg,
+          borderRadius: '32px',
+          padding: theme.spacing(3),
+          minWidth: 'fit-content',
+        }}
+      >
         <Grid item xs={12}>
           <Box width='300px'>
             <TextField
