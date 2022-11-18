@@ -6,6 +6,7 @@ import { ErrorBox } from '@terraware/web-components';
 import strings from 'src/strings';
 import Button from 'src/components/common/button/Button';
 import Icon from 'src/components/common/icon/Icon';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const useStyles = makeStyles((theme: Theme) => ({
   removePhoto: {
@@ -54,6 +55,7 @@ export default function SelectPhotos(props: SelectPhotosProps): JSX.Element {
   const inputRef = useRef<HTMLInputElement>(null);
   const divRef = useRef<HTMLDivElement>(null);
   const theme = useTheme();
+  const { isMobile } = useDeviceInfo();
 
   const addFile = (file: File) => {
     updateSelection([...files, file]);
@@ -156,7 +158,7 @@ export default function SelectPhotos(props: SelectPhotosProps): JSX.Element {
           ref={inputRef}
           className={classes.hiddenInput}
           onChange={onFileChosen}
-          accept='image/jpeg,image/png'
+          accept={isMobile ? 'image/*' : 'image/jpeg,image/png'}
           capture='environment'
         />
         <Button
