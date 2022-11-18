@@ -34,7 +34,7 @@ type SelectPurposeFormProps = {
   setRecords: React.Dispatch<React.SetStateAction<NurseryWithdrawal[]>>;
 };
 export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.Element {
-  const { organization, records, setRecords, onNext, batches } = props;
+  const { organization, setRecords, onNext, batches } = props;
   const [snackbar] = useState(useSnackbar());
   const { isMobile } = useDeviceInfo();
   const history = useHistory();
@@ -68,7 +68,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   };
 
   useEffect(() => {
-    const fetchBatches = () => {
+    const populateWithdrawals = () => {
       const withdrawalBatches: NurseryWithdrawal[] = [];
       batches.forEach((batch, index) => {
         const withdrawalBatch: NurseryWithdrawal = {
@@ -89,7 +89,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
       setLocalRecords(withdrawalBatches);
     };
     if (batches) {
-      fetchBatches();
+      populateWithdrawals();
     }
   }, [batches, snackbar, setLocalRecords]);
 
@@ -141,7 +141,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     return true;
   };
 
-  const saveWithdrawal = async () => {
+  const onNextHandler = async () => {
     if (localRecords) {
       const nurseryTransferInvalid = !validateNurseryTransfer();
       const selectedNurseryInvalid = !validateSelectedNursery();
@@ -157,21 +157,22 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
 
   const onChangeFromNursery = (facilityIdSelected: string) => {
     setSelectedNursery(facilityIdSelected);
-    setRecords(records.filter((localR) => localR.facilityId.toString() === facilityIdSelected));
   };
 
   const getNurseriesOptions = () => {
-    const nurseriesOptions: DropdownItem[] = [];
-    batches.forEach((bat) => {
-      const exists = nurseriesOptions.find((no) => no.value === bat.facility_id);
-      if (!exists) {
-        nurseriesOptions.push({ label: bat.facility_name, value: bat.facility_id });
+    const nurseries = batches.reduce((acc, batch) => {
+      if (!acc[batch.facility_id.toString()]) {
+        acc[batch.facility_id.toString()] = { label: batch.facility_name, value: batch.facility_id };
       }
-    });
-    if (nurseriesOptions.length === 1 && !selectedNursery) {
-      setSelectedNursery(nurseriesOptions[0].value);
+      return acc;
+    }, {});
+
+    const options: DropdownItem[] = Object.values(nurseries);
+
+    if (options.length === 1 && !selectedNursery) {
+      setSelectedNursery(options[0].value);
     }
-    return nurseriesOptions;
+    return options;
   };
 
   return (
@@ -268,7 +269,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
           )}
         </Grid>
       </Container>
-      <FormBottomBar onCancel={goToInventory} onSave={saveWithdrawal} saveButtonText={strings.NEXT} />
+      <FormBottomBar onCancel={goToInventory} onSave={onNextHandler} saveButtonText={strings.NEXT} />
     </TfMain>
   );
 }

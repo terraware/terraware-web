@@ -1,3 +1,5 @@
+import { Box, CircularProgress } from '@mui/material';
+import { theme } from '@terraware/web-components';
 import React, { useEffect, useState } from 'react';
 import { search } from 'src/api/search';
 import { NurseryWithdrawal } from 'src/api/types/batch';
@@ -73,9 +75,17 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
     setFlowState('photos');
   };
 
+  if (!batches) {
+    return (
+      <Box display='flex' justifyContent='center' padding={theme.spacing(5)}>
+        <CircularProgress />
+      </Box>
+    );
+  }
+
   return (
     <>
-      {flowState === 'purpose' && batches && (
+      {flowState === 'purpose' && (
         <SelectPurposeForm
           onNext={onPurposeSelected}
           organization={organization}
