@@ -103,9 +103,9 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
 
   useEffect(() => {
     const allNurseries = getAllNurseries(organization);
-    const destinantionNurseries = allNurseries.filter((nur) => nur.id.toString() !== selectedNursery);
+    const destinationNurseries = allNurseries.filter((nursery) => nursery.id.toString() !== selectedNursery);
     setDestinationNurseriesOptions(
-      destinantionNurseries.map((nursery) => ({ label: nursery.name, value: nursery.id.toString() }))
+      destinationNurseries.map((nursery) => ({ label: nursery.name, value: nursery.id.toString() }))
     );
   }, [selectedNursery, organization]);
 
