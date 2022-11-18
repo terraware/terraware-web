@@ -67,7 +67,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   };
 
   useEffect(() => {
-    const fetchBatches = async () => {
+    const fetchBatches = () => {
       const withdrawalBatches: NurseryWithdrawal[] = [];
       batchIds.forEach(async (batchId) => {
         const response = await getBatch(Number(batchId));
