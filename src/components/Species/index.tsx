@@ -1,4 +1,15 @@
-import { Container, Grid, IconButton, Theme } from '@mui/material';
+import {
+  Box,
+  Container,
+  Grid,
+  IconButton,
+  MenuItem,
+  MenuList,
+  Popover,
+  Theme,
+  Typography,
+  useTheme,
+} from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useRecoilState } from 'recoil';
@@ -48,7 +59,10 @@ type SpeciesListProps = {
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
-    padding: '32px 0',
+    padding: theme.spacing(3),
+    backgroundColor: theme.palette.TwClrBg,
+    borderRadius: '32px',
+    minWidth: 'fit-content',
   },
   pageTitle: {
     fontSize: '24px',
@@ -60,6 +74,8 @@ const useStyles = makeStyles((theme: Theme) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
+    paddingBottom: theme.spacing(4),
+    paddingLeft: theme.spacing(3),
   },
   createSpeciesMessage: {
     margin: '0 auto',
@@ -92,7 +108,10 @@ const useStyles = makeStyles((theme: Theme) => ({
     marginRight: '8px',
   },
   icon: {
-    fill: theme.palette.TwClrIcn,
+    fill: theme.palette.TwClrIcnSecondary,
+  },
+  actionMenuIcon: {
+    fill: theme.palette.TwClrTxtBrand,
   },
   headerIconContainer: {
     marginLeft: '12px',
@@ -110,6 +129,7 @@ type SpeciesCS = Species & { conservationStatus?: string };
 
 export default function SpeciesList({ organization, reloadData, species }: SpeciesListProps): JSX.Element {
   const classes = useStyles();
+  const theme = useTheme();
   const [selectedSpecies, setSelectedSpecies] = useState<Species>();
   const [selectedSpeciesRows, setSelectedSpeciesRows] = useState<Species[]>([]);
   const [editSpeciesModalOpen, setEditSpeciesModalOpen] = useState(false);
@@ -457,6 +477,12 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
       });
   };
 
+  const noFilters =
+    record.endangered === undefined &&
+    record.rare === undefined &&
+    record.growthForm === undefined &&
+    record.seedStorageBehavior === undefined;
+
   const onImportSpecies = () => {
     setImportSpeciesModalOpen(true);
   };
@@ -517,6 +543,72 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
     columns,
   ]);
 
+  const [actionMenuAnchorEl, setActionMenuAnchorEl] = React.useState<HTMLButtonElement | null>(null);
+  const actionMenuOpen = Boolean(actionMenuAnchorEl);
+  const actionMenuId = actionMenuOpen ? 'simple-popover' : undefined;
+
+  const handleClickActionMenuButton = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setActionMenuAnchorEl(event.currentTarget);
+  };
+
+  const handleCloseActionMenu = () => {
+    setActionMenuAnchorEl(null);
+  };
+
+  const getHeaderButtons = () => (
+    <>
+      <Box marginLeft={1} display='inline'>
+        <Button
+          id='more-options'
+          icon='iconMenuHorizontal'
+          onClick={(event) => event && handleClickActionMenuButton(event)}
+          priority='secondary'
+          size='medium'
+        />
+      </Box>
+
+      <Popover
+        id={actionMenuId}
+        open={actionMenuOpen}
+        anchorEl={actionMenuAnchorEl}
+        onClose={handleCloseActionMenu}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+      >
+        <MenuList sx={{ padding: theme.spacing(2, 0) }}>
+          <MenuItem
+            onClick={() => {
+              handleCloseActionMenu();
+              onCheckData();
+            }}
+            id='check-data'
+            sx={{ padding: theme.spacing(1, 2) }}
+          >
+            <Icon name='warning' className={classes.actionMenuIcon} />
+            <Typography color={theme.palette.TwClrTxtBrand} paddingLeft={1}>
+              {strings.CHECK_DATA}
+            </Typography>
+          </MenuItem>
+          <MenuItem
+            onClick={() => {
+              handleCloseActionMenu();
+              onImportSpecies();
+            }}
+            id='import-species'
+            sx={{ padding: theme.spacing(1, 2) }}
+          >
+            <Icon name='iconImport' className={classes.actionMenuIcon} />
+            <Typography color={theme.palette.TwClrTxtBrand} paddingLeft={1}>
+              {strings.IMPORT}
+            </Typography>
+          </MenuItem>
+        </MenuList>
+      </Popover>
+    </>
+  );
+
   return (
     <TfMain>
       <CheckDataModal
@@ -556,31 +648,14 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
             <h1 className={classes.pageTitle}>{strings.SPECIES}</h1>
             {species && species.length > 0 && !isMobile && userCanEdit && (
               <div>
-                <Button
-                  id='check-data'
-                  label={strings.CHECK_DATA}
-                  onClick={onCheckData}
-                  priority='secondary'
-                  size='medium'
-                  className={classes.buttonSpace}
-                />
-                <Button
-                  id='import-species'
-                  label={strings.IMPORT}
-                  icon='iconImport'
-                  onClick={onImportSpecies}
-                  priority='secondary'
-                  size='medium'
-                  className={classes.buttonSpace}
-                />
                 <Button id='add-species' label={strings.ADD_SPECIES} icon='plus' onClick={onNewSpecies} size='medium' />
+                {getHeaderButtons()}
               </div>
             )}
             {isMobile && userCanEdit && <Button id='add-species' onClick={onNewSpecies} size='medium' icon='plus' />}
           </Grid>
-          <p>{strings.SPECIES_DESCRIPTION}</p>
+          <PageSnackbar />
         </PageHeaderWrapper>
-        <PageSnackbar />
         <Container ref={contentRef} maxWidth={false} className={classes.mainContainer}>
           <Grid item xs={12} className={classes.searchBar}>
             <TextField
@@ -597,10 +672,10 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
             />
             <SpeciesFilters filters={record} setFilters={setRecord} />
             <IconButton onClick={downloadReportHandler} size='small' className={classes.iconContainer}>
-              <Icon name='iconExport' />
+              <Icon name='iconExport' size='medium' className={classes.icon} />
             </IconButton>
           </Grid>
-          <Grid item xs={12} className={classes.searchBar}>
+          <Grid item xs={12} className={noFilters ? '' : classes.searchBar}>
             {record.growthForm && (
               <Pill
                 filter={strings.GROWTH_FORM}
