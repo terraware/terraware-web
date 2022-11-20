@@ -132,7 +132,7 @@ export default function NurseriesList({ organization }: NurseriesListProps): JSX
           minWidth: 'fit-content',
         }}
       >
-        <Grid item xs={12}>
+        <Grid item xs={12} marginBottom={theme.spacing(2)}>
           <Box width='300px'>
             <TextField
               placeholder={strings.SEARCH}
