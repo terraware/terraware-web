@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+
+import { makeStyles } from '@mui/styles';
 import strings from 'src/strings';
 import {
   Container,
@@ -20,6 +22,14 @@ import { getAllNurseries, isContributor } from 'src/utils/organization';
 import { DropdownItem } from '@terraware/web-components/components/Dropdown';
 import FormBottomBar from 'src/components/common/FormBottomBar';
 
+const useStyles = makeStyles(() => ({
+  withdrawnQuantity: {
+    '&> #withdrawnQuantity': {
+      height: '44px',
+    },
+  },
+}));
+
 type SelectPurposeFormProps = {
   organization: ServerOrganization;
   onNext: (withdrawal: NurseryWithdrawal) => void;
@@ -28,16 +38,20 @@ type SelectPurposeFormProps = {
   onCancel: () => void;
   saveText: string;
 };
+
 export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.Element {
   const { organization, nurseryWithdrawal, onNext, batches, onCancel, saveText } = props;
-  const { isMobile } = useDeviceInfo();
-  const theme = useTheme();
   const contributor = isContributor(organization);
   const [isNurseryTransfer, setIsNurseryTransfer] = useState(contributor ? true : false);
   const [fieldsErrors, setFieldsErrors] = useState<{ [key: string]: string | undefined }>({});
   const [localRecord, setLocalRecord] = useState<NurseryWithdrawal>(nurseryWithdrawal);
   const [selectedNursery, setSelectedNursery] = useState<string>();
   const [destinationNurseriesOptions, setDestinationNurseriesOptions] = useState<DropdownItem[]>();
+  const [isSingleBatch] = useState<boolean>(batches.length === 1);
+  const [withdrawnQuantity, setWithdrawnQuantity] = useState<number>();
+  const { isMobile } = useDeviceInfo();
+  const theme = useTheme();
+  const classes = useStyles();
 
   const updateField = (field: keyof NurseryWithdrawal, value: any) => {
     setLocalRecord((prev) => ({
@@ -103,10 +117,19 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     return true;
   };
 
+  const validateWithdrawnQuantity = () => {
+    if (!withdrawnQuantity && isSingleBatch && localRecord.purpose === 'Out Plant') {
+      setIndividualError('withdrawnQuantity', strings.REQUIRED_FIELD);
+      return false;
+    }
+    return true;
+  };
+
   const onNextHandler = () => {
     const nurseryTransferInvalid = !validateNurseryTransfer();
     const selectedNurseryInvalid = !validateSelectedNursery();
-    if (fieldsErrors.withdrawDate || nurseryTransferInvalid || selectedNurseryInvalid) {
+    const withdrawnQuantityInvalid = !validateWithdrawnQuantity();
+    if (fieldsErrors.withdrawDate || nurseryTransferInvalid || selectedNurseryInvalid || withdrawnQuantityInvalid) {
       return;
     }
 
@@ -185,7 +208,12 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
             </Grid>
 
             <Grid display='flex'>
-              <Grid item xs={isNurseryTransfer ? 6 : 12} sx={{ marginTop: theme.spacing(2) }} paddingRight={1}>
+              <Grid
+                item
+                xs={isNurseryTransfer && !isMobile ? 6 : 12}
+                sx={{ marginTop: theme.spacing(2) }}
+                paddingRight={1}
+              >
                 <Dropdown
                   id='fromFacilityId'
                   label={strings.FROM_NURSERY}
@@ -198,7 +226,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
               </Grid>
 
               {isNurseryTransfer && (
-                <Grid item xs={6} sx={{ marginTop: theme.spacing(2) }} paddingLeft={1}>
+                <Grid item xs={isMobile ? 12 : 6} sx={{ marginTop: theme.spacing(2) }} paddingLeft={1}>
                   <Dropdown
                     id='destinationFacilityId'
                     label={strings.TO_NURSERY_REQUIRED}
@@ -211,15 +239,30 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                 </Grid>
               )}
             </Grid>
-            <Grid item xs={6} sx={{ marginTop: theme.spacing(2) }}>
-              <DatePicker
-                id='withdrawnDate'
-                label={strings.WITHDRAW_DATE_REQUIRED}
-                aria-label={strings.WITHDRAW_DATE_REQUIRED}
-                value={localRecord.withdrawnDate}
-                onChange={onChangeDate}
-                errorText={fieldsErrors.withdrawnDate}
-              />
+            <Grid display='flex'>
+              {isSingleBatch && localRecord.purpose === 'Out Plant' && (
+                <Grid item xs={isMobile ? 12 : 6} sx={{ marginTop: theme.spacing(2), marginRight: theme.spacing(2) }}>
+                  <Textfield
+                    label={strings.WITHDRAW_QUANTITY_REQUIRED}
+                    id='withdrawnQuantity'
+                    onChange={(id: string, value: unknown) => setWithdrawnQuantity(value as number)}
+                    type='text'
+                    value={withdrawnQuantity}
+                    errorText={fieldsErrors.withdrawnQuantity}
+                    className={classes.withdrawnQuantity}
+                  />
+                </Grid>
+              )}
+              <Grid item xs={isMobile ? 12 : 6} sx={{ marginTop: theme.spacing(2) }}>
+                <DatePicker
+                  id='withdrawnDate'
+                  label={strings.WITHDRAW_DATE_REQUIRED}
+                  aria-label={strings.WITHDRAW_DATE_REQUIRED}
+                  value={localRecord.withdrawnDate}
+                  onChange={onChangeDate}
+                  errorText={fieldsErrors.withdrawnDate}
+                />
+              </Grid>
             </Grid>
             <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
               <Textfield

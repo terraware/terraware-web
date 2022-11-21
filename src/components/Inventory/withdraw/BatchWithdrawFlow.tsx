@@ -8,7 +8,9 @@ import { search } from 'src/api/search';
 import { NurseryWithdrawal } from 'src/api/types/batch';
 import { ServerOrganization } from 'src/types/Organization';
 import { isContributor } from 'src/utils/organization';
+import { createBatchWithdrawal, uploadWithdrawalPhoto } from 'src/api/batch/batch';
 import { getTodaysDateFormatted } from '@terraware/web-components/utils';
+import useSnackbar from 'src/utils/useSnackbar';
 import useForm from 'src/utils/useForm';
 import AddPhotos from './flow/AddPhotos';
 import SelectBatchesWithdrawnQuantity from './flow/SelectBatchesWithdrawnQuantity';
@@ -33,6 +35,7 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
     withdrawnDate: getTodaysDateFormatted(),
   });
   const [batches, setBatches] = useState<any[]>();
+  const snackbar = useSnackbar();
   const history = useHistory();
 
   useEffect(() => {
@@ -89,8 +92,35 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
     setFlowState('photos');
   };
 
-  const onPhotosSelected = (file: File[]) => {
-    // post withdrawal here
+  const withdraw = async (photos: File[]) => {
+    // first create the withdrawal
+    const response = await createBatchWithdrawal(record);
+    if (!response.requestSucceeded) {
+      snackbar.toastError(response.error);
+      return;
+    }
+
+    const { withdrawalId } = response;
+    if (withdrawalId && photos.length) {
+      // upload photos
+      const uploadPhotoPromises = photos.map((photo) => uploadWithdrawalPhoto(withdrawalId, photo));
+      try {
+        const promiseResponses = await Promise.allSettled(uploadPhotoPromises);
+        promiseResponses.forEach((promiseResponse) => {
+          if (promiseResponse.status === 'rejected') {
+            // tslint:disable-next-line: no-console
+            console.error(promiseResponse.reason);
+          }
+        });
+      } catch (e) {
+        // swallow error
+      }
+    }
+
+    // set snackbar with status
+    snackbar.toastSuccess(strings.SAVE_CHANGES); // TODO set status as per design
+    // redirect to inventory
+    goToInventory();
   };
 
   const goToInventory = () => {
@@ -133,7 +163,7 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
       )}
       {flowState === 'photos' && (
         <AddPhotos
-          onNext={onPhotosSelected}
+          onNext={withdraw}
           withdrawalPurpose={record.purpose}
           onCancel={goToInventory}
           saveText={strings.WITHDRAW}

@@ -131,9 +131,10 @@ export default function SelectPhotos(props: SelectPhotosProps): JSX.Element {
               <Box
                 key={index}
                 position='relative'
-                height={120}
+                height={122}
                 marginRight={theme.spacing(3)}
                 marginTop={theme.spacing(1)}
+                border={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
               >
                 <Button
                   icon='iconTrashCan'
