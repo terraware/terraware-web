@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useTheme, Grid } from '@mui/material';
+import { Grid } from '@mui/material';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { SpeciesInventorySummary } from 'src/api/types/inventory';
