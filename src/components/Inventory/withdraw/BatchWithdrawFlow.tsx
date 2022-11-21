@@ -11,10 +11,9 @@ import { isContributor } from 'src/utils/organization';
 import { getTodaysDateFormatted } from '@terraware/web-components/utils';
 import useForm from 'src/utils/useForm';
 import AddPhotos from './flow/AddPhotos';
-import SelectBatches from './flow/SelectBatches';
+import SelectBatchesWithdrawnQuantity from './flow/SelectBatchesWithdrawnQuantity';
 import SelectPurposeForm from './flow/SelectPurposeForm';
 import TfMain from 'src/components/common/TfMain';
-import FormBottomBar from 'src/components/common/FormBottomBar';
 
 type FlowStates = 'purpose' | 'select batches' | 'photos';
 
@@ -34,7 +33,6 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
     withdrawnDate: getTodaysDateFormatted(),
   });
   const [batches, setBatches] = useState<any[]>();
-  const [validateFlow, setValidateFlow] = useState<boolean>(false);
   const history = useHistory();
 
   useEffect(() => {
@@ -78,12 +76,7 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
     populateBatches();
   }, [batchIds]);
 
-  const onErrors = () => {
-    setValidateFlow(false);
-  };
-
   const onWithdrawalConfigured = (withdrawal: NurseryWithdrawal) => {
-    setValidateFlow(false);
     setRecord(withdrawal);
     if (batchIds.length === 1) {
       setFlowState('photos');
@@ -93,12 +86,11 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
   };
 
   const onBatchesSelected = () => {
-    setValidateFlow(false);
     setFlowState('photos');
   };
 
   const onPhotosSelected = (file: File[]) => {
-    setValidateFlow(false);
+    // post withdrawal here
   };
 
   const goToInventory = () => {
@@ -127,26 +119,26 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
           organization={organization}
           batches={batches}
           nurseryWithdrawal={record}
-          validate={validateFlow}
-          onErrors={onErrors}
+          onCancel={goToInventory}
+          saveText={strings.NEXT}
         />
       )}
       {flowState === 'select batches' && (
-        <SelectBatches onNext={onBatchesSelected} organization={organization} validate={validateFlow} />
+        <SelectBatchesWithdrawnQuantity
+          onNext={onBatchesSelected}
+          organization={organization}
+          onCancel={goToInventory}
+          saveText={strings.NEXT}
+        />
       )}
       {flowState === 'photos' && (
         <AddPhotos
           onNext={onPhotosSelected}
           withdrawalPurpose={record.purpose}
-          validate={validateFlow}
-          onErrors={onErrors}
+          onCancel={goToInventory}
+          saveText={strings.WITHDRAW}
         />
       )}
-      <FormBottomBar
-        onCancel={goToInventory}
-        onSave={() => setValidateFlow(true)}
-        saveButtonText={flowState === 'photos' ? strings.WITHDRAW : strings.NEXT}
-      />
     </TfMain>
   );
 }
