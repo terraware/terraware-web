@@ -7,6 +7,11 @@ import strings from 'src/strings';
 import Button from 'src/components/common/button/Button';
 import Icon from 'src/components/common/icon/Icon';
 
+export type ErrorType = {
+  title: string;
+  text: string;
+};
+
 const useStyles = makeStyles((theme: Theme) => ({
   removePhoto: {
     position: 'absolute',
@@ -41,10 +46,7 @@ type SelectPhotosProps = {
   description: string;
   onPhotosChanged: (photos: File[]) => void;
   multipleSelection?: boolean;
-  error?: {
-    title?: string;
-    text: string;
-  };
+  error?: ErrorType;
 };
 
 export default function SelectPhotos(props: SelectPhotosProps): JSX.Element {

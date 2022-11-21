@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useCallback, useEffect, useState } from 'react';
 import strings from 'src/strings';
-import { APP_PATHS } from 'src/constants';
 import {
   Container,
   FormControl,
@@ -14,8 +12,6 @@ import {
   useTheme,
 } from '@mui/material';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import FormBottomBar from 'src/components/common/FormBottomBar';
-import TfMain from 'src/components/common/TfMain';
 import { NurseryWithdrawal } from 'src/api/types/batch';
 import { isInTheFuture } from '@terraware/web-components/utils';
 import { ServerOrganization } from 'src/types/Organization';
@@ -28,11 +24,12 @@ type SelectPurposeFormProps = {
   onNext: (withdrawal: NurseryWithdrawal) => void;
   batches: any[];
   nurseryWithdrawal: NurseryWithdrawal;
+  validate: boolean;
+  onErrors: () => void;
 };
 export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.Element {
-  const { organization, nurseryWithdrawal, onNext, batches } = props;
+  const { organization, nurseryWithdrawal, onNext, batches, validate, onErrors } = props;
   const { isMobile } = useDeviceInfo();
-  const history = useHistory();
   const theme = useTheme();
   const contributor = isContributor(organization);
   const [isNurseryTransfer, setIsNurseryTransfer] = useState(contributor ? true : false);
@@ -40,12 +37,6 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const [localRecord, setLocalRecord] = useState<NurseryWithdrawal>(nurseryWithdrawal);
   const [selectedNursery, setSelectedNursery] = useState<string>();
   const [destinationNurseriesOptions, setDestinationNurseriesOptions] = useState<DropdownItem[]>();
-
-  const goToInventory = () => {
-    const pathname = APP_PATHS.INVENTORY;
-
-    history.push({ pathname });
-  };
 
   const updateField = (field: keyof NurseryWithdrawal, value: any) => {
     setLocalRecord((prev) => ({
@@ -70,14 +61,6 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     }));
   };
 
-  useEffect(() => {
-    const allNurseries = getAllNurseries(organization);
-    const destinationNurseries = allNurseries.filter((nursery) => nursery.id.toString() !== selectedNursery);
-    setDestinationNurseriesOptions(
-      destinationNurseries.map((nursery) => ({ label: nursery.name, value: nursery.id.toString() }))
-    );
-  }, [selectedNursery, organization]);
-
   const validateDate = (id: string, value?: any) => {
     if (!value && id === 'date') {
       setIndividualError('date', strings.REQUIRED_FIELD);
@@ -101,7 +84,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     }
   };
 
-  const validateNurseryTransfer = () => {
+  const validateNurseryTransfer = useCallback(() => {
     if (isNurseryTransfer) {
       if (localRecord.destinationFacilityId === -1) {
         setIndividualError('destinationFacilityId', strings.REQUIRED_FIELD);
@@ -109,20 +92,21 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
       }
     }
     return true;
-  };
+  }, [isNurseryTransfer, localRecord]);
 
-  const validateSelectedNursery = () => {
+  const validateSelectedNursery = useCallback(() => {
     if (!selectedNursery) {
       setIndividualError('fromFacilityId', strings.REQUIRED_FIELD);
       return false;
     }
     return true;
-  };
+  }, [selectedNursery]);
 
-  const onNextHandler = async () => {
+  const onNextHandler = useCallback(() => {
     const nurseryTransferInvalid = !validateNurseryTransfer();
     const selectedNurseryInvalid = !validateSelectedNursery();
     if (fieldsErrors.withdrawDate || nurseryTransferInvalid || selectedNurseryInvalid) {
+      onErrors();
       return;
     }
 
@@ -137,7 +121,16 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
           readyQuantityWithdrawn: batch.readyQuantity,
         })),
     });
-  };
+  }, [
+    localRecord,
+    batches,
+    fieldsErrors,
+    onNext,
+    selectedNursery,
+    validateNurseryTransfer,
+    validateSelectedNursery,
+    onErrors,
+  ]);
 
   const onChangeFromNursery = (facilityIdSelected: string) => {
     setSelectedNursery(facilityIdSelected);
@@ -159,11 +152,26 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     return options;
   };
 
+  const validateSelection = useCallback(() => {
+    if (validate) {
+      onNextHandler();
+    }
+  }, [validate, onNextHandler]);
+
+  useEffect(() => {
+    validateSelection();
+  }, [validateSelection, localRecord]);
+
+  useEffect(() => {
+    const allNurseries = getAllNurseries(organization);
+    const destinationNurseries = allNurseries.filter((nursery) => nursery.id.toString() !== selectedNursery);
+    setDestinationNurseriesOptions(
+      destinationNurseries.map((nursery) => ({ label: nursery.name, value: nursery.id.toString() }))
+    );
+  }, [selectedNursery, organization]);
+
   return (
-    <TfMain>
-      <Typography variant='h2' sx={{ fontSize: '24px', fontWeight: 'bold' }}>
-        {strings.WITHDRAW_FROM_BATCHES}
-      </Typography>
+    <>
       <Container
         maxWidth={false}
         sx={{
@@ -244,7 +252,6 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
           </Grid>
         </Grid>
       </Container>
-      <FormBottomBar onCancel={goToInventory} onSave={onNextHandler} saveButtonText={strings.NEXT} />
-    </TfMain>
+    </>
   );
 }

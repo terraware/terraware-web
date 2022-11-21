@@ -1,6 +1,9 @@
-import { Box, CircularProgress } from '@mui/material';
+import { Box, CircularProgress, Typography } from '@mui/material';
+import { useHistory } from 'react-router-dom';
 import { theme } from '@terraware/web-components';
 import React, { useEffect, useState } from 'react';
+import strings from 'src/strings';
+import { APP_PATHS } from 'src/constants';
 import { search } from 'src/api/search';
 import { NurseryWithdrawal } from 'src/api/types/batch';
 import { ServerOrganization } from 'src/types/Organization';
@@ -10,6 +13,8 @@ import useForm from 'src/utils/useForm';
 import AddPhotos from './flow/AddPhotos';
 import SelectBatches from './flow/SelectBatches';
 import SelectPurposeForm from './flow/SelectPurposeForm';
+import TfMain from 'src/components/common/TfMain';
+import FormBottomBar from 'src/components/common/FormBottomBar';
 
 type FlowStates = 'purpose' | 'select batches' | 'photos';
 
@@ -29,6 +34,8 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
     withdrawnDate: getTodaysDateFormatted(),
   });
   const [batches, setBatches] = useState<any[]>();
+  const [validateFlow, setValidateFlow] = useState<boolean>(false);
+  const history = useHistory();
 
   useEffect(() => {
     const populateBatches = async () => {
@@ -71,7 +78,12 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
     populateBatches();
   }, [batchIds]);
 
+  const onErrors = () => {
+    setValidateFlow(false);
+  };
+
   const onWithdrawalConfigured = (withdrawal: NurseryWithdrawal) => {
+    setValidateFlow(false);
     setRecord(withdrawal);
     if (batchIds.length === 1) {
       setFlowState('photos');
@@ -81,7 +93,18 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
   };
 
   const onBatchesSelected = () => {
+    setValidateFlow(false);
     setFlowState('photos');
+  };
+
+  const onPhotosSelected = (file: File[]) => {
+    setValidateFlow(false);
+  };
+
+  const goToInventory = () => {
+    const pathname = APP_PATHS.INVENTORY;
+
+    history.push({ pathname });
   };
 
   if (!batches) {
@@ -93,24 +116,37 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
   }
 
   return (
-    <>
+    <TfMain>
+      <Typography variant='h2' sx={{ fontSize: '24px', fontWeight: 'bold' }}>
+        {strings.WITHDRAW_FROM_BATCHES}
+      </Typography>
+
       {flowState === 'purpose' && (
         <SelectPurposeForm
           onNext={onWithdrawalConfigured}
           organization={organization}
           batches={batches}
           nurseryWithdrawal={record}
+          validate={validateFlow}
+          onErrors={onErrors}
         />
       )}
-      {flowState === 'select batches' && <SelectBatches onNext={onBatchesSelected} organization={organization} />}
+      {flowState === 'select batches' && (
+        <SelectBatches onNext={onBatchesSelected} organization={organization} validate={validateFlow} />
+      )}
       {flowState === 'photos' && (
         <AddPhotos
-          onNext={() => {
-            return;
-          }}
-          organization={organization}
+          onNext={onPhotosSelected}
+          withdrawalPurpose={record.purpose}
+          validate={validateFlow}
+          onErrors={onErrors}
         />
       )}
-    </>
+      <FormBottomBar
+        onCancel={goToInventory}
+        onSave={() => setValidateFlow(true)}
+        saveButtonText={flowState === 'photos' ? strings.WITHDRAW : strings.NEXT}
+      />
+    </TfMain>
   );
 }
