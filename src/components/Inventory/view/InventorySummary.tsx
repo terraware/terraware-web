@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useTheme, Box, Typography } from '@mui/material';
+import { useTheme, Grid } from '@mui/material';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { SpeciesInventorySummary } from 'src/api/types/inventory';
 import { getSummary } from 'src/api/inventory/inventory';
 import useSnackbar from 'src/utils/useSnackbar';
 import _ from 'lodash';
-import { IconTooltip } from '@terraware/web-components';
+import OverviewItemCard from '../../common/OverviewItemCard';
 
 interface InventorySummaryProps {
   speciesId: number;
@@ -16,8 +16,6 @@ interface InventorySummaryProps {
 export default function InventorySummary(props: InventorySummaryProps): JSX.Element {
   const { speciesId, modified } = props;
   const [summary, setSummary] = useState<SpeciesInventorySummary>();
-
-  const theme = useTheme();
   const snackbar = useSnackbar();
   const { isMobile } = useDeviceInfo();
 
@@ -52,91 +50,61 @@ export default function InventorySummary(props: InventorySummaryProps): JSX.Elem
     return [
       {
         label: strings.GERMINATING_QUANTITY,
-        value: germinatingQuantity,
+        value: germinatingQuantity.toString(),
         tooltipTitle: strings.TOOLTIP_GERMINATING_QUANTITY,
+        gridColumns: isMobile ? 12 : 3,
       },
       {
         label: strings.NOT_READY_QUANTITY,
-        value: notReadyQuantity,
+        value: notReadyQuantity.toString(),
         tooltipTitle: strings.TOOLTIP_NOT_READY_QUANTITY,
+        gridColumns: isMobile ? 12 : 3,
       },
       {
         label: strings.READY_QUANTITY,
-        value: readyQuantity,
+        value: readyQuantity.toString(),
         tooltipTitle: strings.TOOLTIP_READY_QUANTITY,
+        gridColumns: isMobile ? 12 : 3,
       },
       {
         label: strings.TOTAL_QUANTITY,
-        value: totalQuantity,
+        value: totalQuantity.toString(),
         tooltipTitle: strings.TOOLTIP_TOTAL_QUANTITY,
+        gridColumns: isMobile ? 12 : 3,
       },
       {
         label: strings.TOTAL_WITHDRAWN,
-        value: totalWithdrawn,
+        value: totalWithdrawn.toString(),
         tooltipTitle: strings.TOOLTIP_TOTAL_QUANTITY,
+        gridColumns: isMobile ? 12 : 4,
       },
       {
         label: strings.LOSS_RATE,
         value: `${lossRate}%`,
         tooltipTitle: '',
+        gridColumns: isMobile ? 12 : 4,
       },
       {
         label: strings.NURSERIES,
         value: nurseries.map((i) => i.name).join(', '),
         tooltipTitle: '',
+        gridColumns: isMobile ? 12 : 4,
       },
     ];
   };
 
   return (
-    <Box
-      sx={{
-        backgroundColor: theme.palette.TwClrBgSecondary,
-        display: 'flex',
-        flexDirection: isMobile ? 'column' : 'row',
-        padding: theme.spacing(3),
-        alignItems: 'flex-start',
-        borderRadius: theme.spacing(2),
-        alignSelf: 'stretch',
-        flexGrow: 0,
-        marginBottom: theme.spacing(3),
-        justifyContent: 'space-between',
-      }}
-    >
+    <Grid container spacing={3}>
       {getData().map((datum) => (
-        <Box
-          key={datum.label}
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            marginRight: isMobile ? 0 : theme.spacing(2),
-            marginBottom: isMobile ? theme.spacing(2) : 0,
-          }}
-        >
-          <Typography
-            sx={{
-              marginBottom: theme.spacing(isMobile ? 1 : 2),
-              fontSize: '14px',
-              fontWeight: 400,
-              color: theme.palette.TwClrTxtSecondary,
-              '& svg': {
-                fill: theme.palette.TwClrTxtSecondary,
-              },
-            }}
-          >
-            {datum.label} {datum.tooltipTitle && <IconTooltip title={datum.tooltipTitle} />}
-          </Typography>
-          <Typography
-            sx={{
-              fontSize: '16px',
-              fontWeight: 500,
-              color: theme.palette.TwClrTxt,
-            }}
-          >
-            {datum.value}
-          </Typography>
-        </Box>
+        <Grid key={datum.label} item xs={datum.gridColumns}>
+          <OverviewItemCard
+            isEditable={false}
+            title={datum.label}
+            titleInfoTooltip={datum.tooltipTitle}
+            contents={datum.value}
+          />
+        </Grid>
       ))}
-    </Box>
+    </Grid>
   );
 }

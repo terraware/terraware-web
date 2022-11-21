@@ -1,6 +1,6 @@
 import { useTheme, Grid, Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import { Icon } from '@terraware/web-components';
 import strings from 'src/strings';
@@ -12,6 +12,7 @@ import { InventorySummary, InventorySeedlingsTable } from './view';
 import { Species } from 'src/types/Species';
 import useQuery from '../../utils/useQuery';
 import useStateLocation, { getLocation } from '../../utils/useStateLocation';
+import PageHeaderWrapper from '../common/PageHeaderWrapper';
 
 const useStyles = makeStyles((theme: Theme) => ({
   backIcon: {
@@ -22,7 +23,8 @@ const useStyles = makeStyles((theme: Theme) => ({
     display: 'flex',
     textDecoration: 'none',
     color: theme.palette.TwClrTxtBrand,
-    fontSize: '20px',
+    fontSize: '14px',
+    fontWeight: 500,
     alignItems: 'center',
   },
 }));
@@ -41,6 +43,7 @@ export default function InventoryView(props: InventoryViewProps): JSX.Element {
   const { speciesId } = useParams<{ speciesId: string }>();
   const [inventorySpecies, setInventorySpecies] = useState<Species>();
   const [modified, setModified] = useState<number>(Date.now());
+  const contentRef = useRef(null);
 
   const classes = useStyles();
   const theme = useTheme();
@@ -72,24 +75,30 @@ export default function InventoryView(props: InventoryViewProps): JSX.Element {
 
   return (
     <TfMain>
-      <Link id='back' to={APP_PATHS.INVENTORY} className={classes.back}>
-        <Icon name='caretLeft' className={classes.backIcon} />
-        {strings.INVENTORY}
-      </Link>
-      <Grid container>
-        <Typography
-          sx={{
-            marginTop: theme.spacing(4),
-            marginBottom: theme.spacing(3),
-            fontSize: '24px',
-            fontWeight: 600,
-          }}
-        >
-          {getSpeciesLabel()}
-        </Typography>
-        <Grid item xs={12}>
-          <PageSnackbar />
+      <PageHeaderWrapper nextElement={contentRef.current}>
+        <Link id='back' to={APP_PATHS.INVENTORY} className={classes.back}>
+          <Icon name='caretLeft' className={classes.backIcon} size='small' />
+          {strings.INVENTORY}
+        </Link>
+        <Grid container>
+          <Typography
+            sx={{
+              marginTop: theme.spacing(3),
+              marginBottom: theme.spacing(4),
+              paddingLeft: theme.spacing(3),
+              fontSize: '20px',
+              fontWeight: 600,
+              fontStyle: 'italic',
+            }}
+          >
+            {getSpeciesLabel()}
+          </Typography>
+          <Grid item xs={12}>
+            <PageSnackbar />
+          </Grid>
         </Grid>
+      </PageHeaderWrapper>
+      <Grid container ref={contentRef}>
         {speciesId && (
           <Grid item xs={12} sx={{ display: 'flex', flexDirection: 'column' }}>
             <InventorySummary speciesId={Number(speciesId)} modified={modified} />
