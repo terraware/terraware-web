@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+
+import { makeStyles } from '@mui/styles';
 import strings from 'src/strings';
-import { APP_PATHS } from 'src/constants';
 import {
   Container,
   FormControl,
@@ -14,90 +14,60 @@ import {
   useTheme,
 } from '@mui/material';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import FormBottomBar from 'src/components/common/FormBottomBar';
-import TfMain from 'src/components/common/TfMain';
-import { Batch } from 'src/api/types/batch';
-import { createBatchWithdrawal, CreateNurseryWithdrawalRequestPayload, getBatch } from 'src/api/batch/batch';
-import useSnackbar from 'src/utils/useSnackbar';
-import useForm from 'src/utils/useForm';
-import { getTodaysDateFormatted, isInTheFuture } from '@terraware/web-components/utils';
+import { NurseryWithdrawal } from 'src/api/types/batch';
+import { isInTheFuture } from '@terraware/web-components/utils';
 import { ServerOrganization } from 'src/types/Organization';
 import { DatePicker, Dropdown, Textfield } from '@terraware/web-components';
-import { getAllNurseries, getNurseriesById } from 'src/utils/organization';
+import { getAllNurseries, isContributor } from 'src/utils/organization';
+import { DropdownItem } from '@terraware/web-components/components/Dropdown';
+import FormBottomBar from 'src/components/common/FormBottomBar';
+
+const useStyles = makeStyles(() => ({
+  withdrawnQuantity: {
+    '&> #withdrawnQuantity': {
+      height: '44px',
+    },
+  },
+}));
 
 type SelectPurposeFormProps = {
   organization: ServerOrganization;
-  onNext: () => void;
-  batchIds: string[];
+  onNext: (withdrawal: NurseryWithdrawal) => void;
+  batches: any[];
+  nurseryWithdrawal: NurseryWithdrawal;
+  onCancel: () => void;
+  saveText: string;
 };
+
 export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.Element {
-  const { organization, batchIds } = props;
-  const [batch, setBatch] = useState<Batch>();
-  const [snackbar] = useState(useSnackbar());
-  const { isMobile } = useDeviceInfo();
-  const history = useHistory();
-  const theme = useTheme();
-  const newWithdrawal: CreateNurseryWithdrawalRequestPayload = {
-    purpose: 'Out Plant',
-    facilityId: -1,
-    withdrawnDate: getTodaysDateFormatted(),
-    batchWithdrawals: [
-      {
-        batchId: -1,
-        notReadyQuantityWithdrawn: 0,
-        readyQuantityWithdrawn: 0,
-      },
-    ],
-  };
-
-  const [record, setRecord, onChange] = useForm<CreateNurseryWithdrawalRequestPayload>(newWithdrawal);
-  const [isNurseryTransfer, setIsNurseryTransfer] = useState(false);
+  const { organization, nurseryWithdrawal, onNext, batches, onCancel, saveText } = props;
+  const contributor = isContributor(organization);
+  const [isNurseryTransfer, setIsNurseryTransfer] = useState(contributor ? true : false);
   const [fieldsErrors, setFieldsErrors] = useState<{ [key: string]: string | undefined }>({});
+  const [localRecord, setLocalRecord] = useState<NurseryWithdrawal>(nurseryWithdrawal);
+  const [selectedNursery, setSelectedNursery] = useState<string>();
+  const [destinationNurseriesOptions, setDestinationNurseriesOptions] = useState<DropdownItem[]>();
+  const [isSingleBatch] = useState<boolean>(batches.length === 1);
+  const [withdrawnQuantity, setWithdrawnQuantity] = useState<number>();
+  const { isMobile } = useDeviceInfo();
+  const theme = useTheme();
+  const classes = useStyles();
 
-  const goToInventory = () => {
-    const pathname = batch
-      ? APP_PATHS.INVENTORY_ITEM.replace(':speciesId', batch.speciesId.toString())
-      : APP_PATHS.INVENTORY;
-
-    history.push({ pathname });
+  const updateField = (field: keyof NurseryWithdrawal, value: any) => {
+    setLocalRecord((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
   };
 
   const onChangePurpose = (event: React.ChangeEvent<HTMLInputElement>) => {
-    onChange('purpose', (event.target as HTMLInputElement).value);
+    updateField('purpose', (event.target as HTMLInputElement).value);
     if ((event.target as HTMLInputElement).value === 'Nursery Transfer') {
       setIsNurseryTransfer(true);
     } else {
       setIsNurseryTransfer(false);
     }
   };
-
-  useEffect(() => {
-    const batchId = batchIds[0];
-    const fetchBatch = async () => {
-      const response = await getBatch(Number(batchId));
-      if (response.requestSucceeded && response.batch) {
-        setBatch(response.batch);
-        setRecord({
-          purpose: 'Out Plant',
-          facilityId: response.batch.facilityId,
-          withdrawnDate: getTodaysDateFormatted(),
-          batchWithdrawals: [
-            {
-              batchId: response.batch.id,
-              notReadyQuantityWithdrawn: 0,
-              readyQuantityWithdrawn: 0,
-            },
-          ],
-        });
-      } else {
-        snackbar.toastError(response.error);
-      }
-    };
-
-    if (batchId) {
-      fetchBatch();
-    }
-  }, [batchIds, snackbar, setRecord]);
 
   const setIndividualError = (id: string, error?: string) => {
     setFieldsErrors((prev) => ({
@@ -125,15 +95,13 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const onChangeDate = (id: string, value?: any) => {
     const valid = validateDate(id, value);
     if (valid) {
-      if (id === 'date') {
-        onChange(id, value);
-      }
+      updateField('withdrawnDate', value);
     }
   };
 
   const validateNurseryTransfer = () => {
     if (isNurseryTransfer) {
-      if (record.destinationFacilityId === -1) {
+      if (!localRecord.destinationFacilityId) {
         setIndividualError('destinationFacilityId', strings.REQUIRED_FIELD);
         return false;
       }
@@ -141,29 +109,75 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     return true;
   };
 
-  const saveWithdrawal = async () => {
-    if (record) {
-      const nurseryTransferInvalid = !validateNurseryTransfer();
-      if (fieldsErrors.withdrawDate || nurseryTransferInvalid) {
-        return;
-      }
-
-      const response = await createBatchWithdrawal(record);
-
-      if (response.requestSucceeded) {
-        goToInventory();
-        snackbar.pageSuccess(strings.CHANGES_SAVED);
-      } else {
-        snackbar.toastError(response.error);
-      }
+  const validateSelectedNursery = () => {
+    if (!selectedNursery) {
+      setIndividualError('fromFacilityId', strings.REQUIRED_FIELD);
+      return false;
     }
+    return true;
   };
 
+  const validateWithdrawnQuantity = () => {
+    if (!withdrawnQuantity && isSingleBatch && localRecord.purpose === 'Out Plant') {
+      setIndividualError('withdrawnQuantity', strings.REQUIRED_FIELD);
+      return false;
+    }
+    return true;
+  };
+
+  const onNextHandler = () => {
+    const nurseryTransferInvalid = !validateNurseryTransfer();
+    const selectedNurseryInvalid = !validateSelectedNursery();
+    const withdrawnQuantityInvalid = !validateWithdrawnQuantity();
+    if (fieldsErrors.withdrawDate || nurseryTransferInvalid || selectedNurseryInvalid || withdrawnQuantityInvalid) {
+      return;
+    }
+
+    const isSingleOutplant = isSingleBatch && localRecord.purpose === 'Out Plant';
+
+    onNext({
+      ...localRecord,
+      facilityId: Number(selectedNursery as string),
+      batchWithdrawals: batches
+        .filter((batch) => batch.facility_id.toString() === selectedNursery)
+        .map((batch) => ({
+          batchId: batch.id,
+          notReadyQuantityWithdrawn: isSingleOutplant ? 0 : batch.notReadyQuantity,
+          readyQuantityWithdrawn: isSingleOutplant ? withdrawnQuantity : batch.readyQuantity,
+        })),
+    });
+  };
+
+  const onChangeFromNursery = (facilityIdSelected: string) => {
+    setSelectedNursery(facilityIdSelected);
+  };
+
+  const getNurseriesOptions = () => {
+    const nurseries = batches.reduce((acc, batch) => {
+      if (!acc[batch.facility_id.toString()]) {
+        acc[batch.facility_id.toString()] = { label: batch.facility_name, value: batch.facility_id };
+      }
+      return acc;
+    }, {});
+
+    const options: DropdownItem[] = Object.values(nurseries);
+
+    if (options.length === 1 && !selectedNursery) {
+      setSelectedNursery(options[0].value);
+    }
+    return options;
+  };
+
+  useEffect(() => {
+    const allNurseries = getAllNurseries(organization);
+    const destinationNurseries = allNurseries.filter((nursery) => nursery.id.toString() !== selectedNursery);
+    setDestinationNurseriesOptions(
+      destinationNurseries.map((nursery) => ({ label: nursery.name, value: nursery.id.toString() }))
+    );
+  }, [selectedNursery, organization]);
+
   return (
-    <TfMain>
-      <Typography variant='h2' sx={{ fontSize: '24px', fontWeight: 'bold' }}>
-        {strings.WITHDRAW_FROM_BATCHES}
-      </Typography>
+    <>
       <Container
         maxWidth={false}
         sx={{
@@ -183,9 +197,11 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
             <Typography>{strings.WITHDRAW_INSTRUCTIONS}</Typography>
             <Grid xs={12} padding={theme.spacing(4, 0, 0, 2)}>
               <FormControl>
-                <FormLabel sx={{ color: '#5C6B6C', fontSize: '14px' }}>{strings.PURPOSE}</FormLabel>
-                <RadioGroup name='radio-buttons-purpose' value={record?.purpose} onChange={onChangePurpose}>
-                  <FormControlLabel value='Out Plant' control={<Radio />} label={strings.OUTPLANT} />
+                <FormLabel sx={{ color: theme.palette.TwClrTxtSecondary, fontSize: '14px' }}>
+                  {strings.PURPOSE}
+                </FormLabel>
+                <RadioGroup name='radio-buttons-purpose' value={localRecord.purpose} onChange={onChangePurpose}>
+                  {!contributor && <FormControlLabel value='Out Plant' control={<Radio />} label={strings.OUTPLANT} />}
                   <FormControlLabel value='Nursery Transfer' control={<Radio />} label={strings.NURSERY_TRANSFER} />
                   <FormControlLabel value='Dead' control={<Radio />} label={strings.DEAD} />
                   <FormControlLabel value='Other' control={<Radio />} label={strings.OTHER} />
@@ -194,56 +210,75 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
             </Grid>
 
             <Grid display='flex'>
-              {batch && (
-                <Grid item xs={isNurseryTransfer ? 6 : 12} sx={{ marginTop: theme.spacing(2) }} paddingRight={1}>
-                  <Dropdown
-                    id='from'
-                    label={strings.FROM_NURSERY}
-                    selectedValue={batch.facilityId.toString()}
-                    options={[getNurseriesById(organization, batch.facilityId)].map((nursery) => ({
-                      label: nursery.name,
-                      value: nursery.id.toString(),
-                    }))}
-                    onChange={(value) => onChange('destinationFacilityId', value)}
-                    fullWidth={true}
-                  />
-                </Grid>
-              )}
+              <Grid
+                item
+                xs={isNurseryTransfer && !isMobile ? 6 : 12}
+                sx={{ marginTop: theme.spacing(2) }}
+                paddingRight={1}
+              >
+                <Dropdown
+                  id='fromFacilityId'
+                  label={strings.FROM_NURSERY}
+                  selectedValue={selectedNursery}
+                  options={getNurseriesOptions()}
+                  onChange={(newValue) => onChangeFromNursery(newValue)}
+                  fullWidth={true}
+                  errorText={fieldsErrors.fromFacilityId}
+                />
+              </Grid>
 
               {isNurseryTransfer && (
-                <Grid item xs={6} sx={{ marginTop: theme.spacing(2) }} paddingLeft={1}>
+                <Grid item xs={isMobile ? 12 : 6} sx={{ marginTop: theme.spacing(2) }} paddingLeft={1}>
                   <Dropdown
                     id='destinationFacilityId'
                     label={strings.TO_NURSERY_REQUIRED}
-                    selectedValue={record.destinationFacilityId?.toString()}
-                    options={getAllNurseries(organization).map((nursery) => ({
-                      label: nursery.name,
-                      value: nursery.id.toString(),
-                    }))}
-                    onChange={(value) => onChange('destinationFacilityId', value)}
+                    selectedValue={localRecord.destinationFacilityId?.toString()}
+                    options={destinationNurseriesOptions}
+                    onChange={(value) => updateField('destinationFacilityId', value)}
                     errorText={fieldsErrors.destinationFacilityId}
                     fullWidth={true}
                   />
                 </Grid>
               )}
             </Grid>
-            <Grid item xs={6} sx={{ marginTop: theme.spacing(2) }}>
-              <DatePicker
-                id='withdrawnDate'
-                label={strings.WITHDRAW_DATE_REQUIRED}
-                aria-label={strings.WITHDRAW_DATE_REQUIRED}
-                value={record.withdrawnDate}
-                onChange={onChangeDate}
-                errorText={fieldsErrors.withdrawnDate}
-              />
+            <Grid display='flex'>
+              {isSingleBatch && localRecord.purpose === 'Out Plant' && (
+                <Grid item xs={isMobile ? 12 : 6} sx={{ marginTop: theme.spacing(2), marginRight: theme.spacing(2) }}>
+                  <Textfield
+                    label={strings.WITHDRAW_QUANTITY_REQUIRED}
+                    id='withdrawnQuantity'
+                    onChange={(id: string, value: unknown) => setWithdrawnQuantity(value as number)}
+                    type='text'
+                    value={withdrawnQuantity}
+                    errorText={fieldsErrors.withdrawnQuantity}
+                    className={classes.withdrawnQuantity}
+                  />
+                </Grid>
+              )}
+              <Grid item xs={isMobile ? 12 : 6} sx={{ marginTop: theme.spacing(2) }}>
+                <DatePicker
+                  id='withdrawnDate'
+                  label={strings.WITHDRAW_DATE_REQUIRED}
+                  aria-label={strings.WITHDRAW_DATE_REQUIRED}
+                  value={localRecord.withdrawnDate}
+                  onChange={onChangeDate}
+                  errorText={fieldsErrors.withdrawnDate}
+                />
+              </Grid>
             </Grid>
             <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
-              <Textfield id='notes' value={record.notes} onChange={onChange} type='textarea' label={strings.NOTES} />
+              <Textfield
+                id='notes'
+                value={localRecord.notes}
+                onChange={(id, value) => updateField('notes', value)}
+                type='textarea'
+                label={strings.NOTES}
+              />
             </Grid>
           </Grid>
         </Grid>
       </Container>
-      <FormBottomBar onCancel={goToInventory} onSave={saveWithdrawal} saveButtonText={strings.NEXT} />
-    </TfMain>
+      <FormBottomBar onCancel={onCancel} onSave={onNextHandler} saveButtonText={saveText} />
+    </>
   );
 }
