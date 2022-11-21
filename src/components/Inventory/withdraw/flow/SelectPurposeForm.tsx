@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-
+import React, { useCallback, useEffect, useState } from 'react';
 import { makeStyles } from '@mui/styles';
 import strings from 'src/strings';
 import {
@@ -10,19 +9,25 @@ import {
   Grid,
   Radio,
   RadioGroup,
+  Theme,
   Typography,
   useTheme,
 } from '@mui/material';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import { NurseryWithdrawal } from 'src/api/types/batch';
+import { NurseryWithdrawalRequest } from 'src/api/types/batch';
 import { isInTheFuture } from '@terraware/web-components/utils';
 import { ServerOrganization } from 'src/types/Organization';
+import { APP_PATHS } from 'src/constants';
+import Divisor from 'src/components/common/Divisor';
 import { DatePicker, Dropdown, Textfield } from '@terraware/web-components';
 import { getAllNurseries, isContributor } from 'src/utils/organization';
+import { listPlantingSites } from 'src/api/tracking/tracking';
+import { PlantingSite, Plot } from 'src/api/types/tracking';
+import useSnackbar from 'src/utils/useSnackbar';
 import { DropdownItem } from '@terraware/web-components/components/Dropdown';
 import FormBottomBar from 'src/components/common/FormBottomBar';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme: Theme) => ({
   withdrawnQuantity: {
     '&> #withdrawnQuantity': {
       height: '44px',
@@ -32,9 +37,9 @@ const useStyles = makeStyles(() => ({
 
 type SelectPurposeFormProps = {
   organization: ServerOrganization;
-  onNext: (withdrawal: NurseryWithdrawal) => void;
+  onNext: (withdrawal: NurseryWithdrawalRequest) => void;
   batches: any[];
-  nurseryWithdrawal: NurseryWithdrawal;
+  nurseryWithdrawal: NurseryWithdrawalRequest;
   onCancel: () => void;
   saveText: string;
 };
@@ -43,30 +48,91 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const { organization, nurseryWithdrawal, onNext, batches, onCancel, saveText } = props;
   const contributor = isContributor(organization);
   const [isNurseryTransfer, setIsNurseryTransfer] = useState(contributor ? true : false);
+  const [isOutplant, setIsOutplant] = useState(nurseryWithdrawal.purpose === 'Out Plant');
   const [fieldsErrors, setFieldsErrors] = useState<{ [key: string]: string | undefined }>({});
-  const [localRecord, setLocalRecord] = useState<NurseryWithdrawal>(nurseryWithdrawal);
+  const [localRecord, setLocalRecord] = useState<NurseryWithdrawalRequest>(nurseryWithdrawal);
   const [selectedNursery, setSelectedNursery] = useState<string>();
   const [destinationNurseriesOptions, setDestinationNurseriesOptions] = useState<DropdownItem[]>();
   const [isSingleBatch] = useState<boolean>(batches.length === 1);
   const [withdrawnQuantity, setWithdrawnQuantity] = useState<number>();
+  const [plantingSites, setPlantingSites] = useState<PlantingSite[]>([]);
+  const [zones, setZones] = useState<any[]>([]);
+  const [plots, setPlots] = useState<any[]>([]);
+  const [zoneId, setZoneId] = useState<string | undefined>();
+  const [snackbar] = useState(useSnackbar());
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const classes = useStyles();
 
-  const updateField = (field: keyof NurseryWithdrawal, value: any) => {
+  const updateField = (field: keyof NurseryWithdrawalRequest, value: any) => {
     setLocalRecord((prev) => ({
       ...prev,
       [field]: value,
     }));
   };
 
+  const fetchPlantingSites = useCallback(async () => {
+    if (plantingSites.length) {
+      return;
+    }
+    const response = await listPlantingSites(organization.id, true);
+    if (response.requestSucceeded && response.sites) {
+      setPlantingSites(response.sites);
+    } else {
+      snackbar.toastError(response.error);
+    }
+  }, [organization.id, plantingSites, snackbar]);
+
   const onChangePurpose = (event: React.ChangeEvent<HTMLInputElement>) => {
-    updateField('purpose', (event.target as HTMLInputElement).value);
-    if ((event.target as HTMLInputElement).value === 'Nursery Transfer') {
+    const value = (event.target as HTMLInputElement).value;
+    updateField('purpose', value);
+    if (value === 'Nursery Transfer') {
       setIsNurseryTransfer(true);
     } else {
       setIsNurseryTransfer(false);
     }
+    const outplant = value === 'Out Plant';
+    setIsOutplant(outplant);
+    if (outplant) {
+      fetchPlantingSites();
+    }
+  };
+
+  const onChangePlantingSite = (value: string) => {
+    updateField('plotId', undefined); // clear plot id when there's a new planting site id
+    updateField('plantingSiteId', value);
+    setZoneId(undefined);
+    const plantingSite = plantingSites.find((site) => site.id.toString() === value.toString());
+    if (!plantingSite) {
+      return;
+    }
+    if (plantingSite.plantingZones) {
+      setZones(
+        plantingSite.plantingZones.map((plantingZone) => ({
+          value: plantingZone.id.toString(),
+          label: plantingZone.name,
+          plots: plantingZone.plots,
+        }))
+      );
+    } else {
+      setZones([]);
+    }
+    setPlots([]);
+  };
+
+  const onChangePlantingZone = (value: string) => {
+    updateField('plotId', undefined); // clear plot id when there's a new planting zone id
+    setZoneId(value);
+    const plantingZone = zones.find((zone) => zone.value.toString() === value);
+    if (!plantingZone) {
+      setPlots([]);
+    }
+    setPlots(
+      plantingZone.plots.map((plot: Plot) => ({
+        label: plot.fullName || plot.name,
+        value: plot.id.toString(),
+      }))
+    );
   };
 
   const setIndividualError = (id: string, error?: string) => {
@@ -118,25 +184,65 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   };
 
   const validateWithdrawnQuantity = () => {
-    if (!withdrawnQuantity && isSingleBatch && localRecord.purpose === 'Out Plant') {
+    if (!withdrawnQuantity && isSingleBatch && isOutplant) {
       setIndividualError('withdrawnQuantity', strings.REQUIRED_FIELD);
       return false;
     }
+    setIndividualError('withdrawnQuantity', '');
     return true;
+  };
+
+  const validatePlantingSitePlot = () => {
+    setIndividualError('plantingSiteId', '');
+    setIndividualError('zoneId', '');
+    setIndividualError('plotId', '');
+
+    if (!isOutplant) {
+      return true;
+    }
+
+    if (!localRecord.plantingSiteId) {
+      setIndividualError('plantingSiteId', strings.REQUIRED_FIELD);
+    }
+
+    if (!zones.length) {
+      // zone/plot not required if site has no zones/plots
+      return !!localRecord.plantingSiteId;
+    }
+
+    if (!zoneId) {
+      setIndividualError('zoneId', strings.REQUIRED_FIELD);
+    }
+
+    if (!localRecord.plotId) {
+      setIndividualError('plotId', strings.REQUIRED_FIELD);
+    }
+
+    return localRecord.plantingSiteId && localRecord.plotId;
   };
 
   const onNextHandler = () => {
     const nurseryTransferInvalid = !validateNurseryTransfer();
     const selectedNurseryInvalid = !validateSelectedNursery();
     const withdrawnQuantityInvalid = !validateWithdrawnQuantity();
-    if (fieldsErrors.withdrawDate || nurseryTransferInvalid || selectedNurseryInvalid || withdrawnQuantityInvalid) {
+    const plantingSitePlotInvalid = !validatePlantingSitePlot();
+    if (
+      fieldsErrors.withdrawDate ||
+      nurseryTransferInvalid ||
+      selectedNurseryInvalid ||
+      withdrawnQuantityInvalid ||
+      plantingSitePlotInvalid
+    ) {
       return;
     }
 
-    const isSingleOutplant = isSingleBatch && localRecord.purpose === 'Out Plant';
+    const isSingleOutplant = isSingleBatch && isOutplant;
 
     onNext({
       ...localRecord,
+      destinationFacilityId: isNurseryTransfer ? localRecord.destinationFacilityId : undefined,
+      plantingSiteId: isOutplant ? localRecord.plantingSiteId : undefined,
+      plotId: isOutplant ? localRecord.plotId : undefined,
       facilityId: Number(selectedNursery as string),
       batchWithdrawals: batches
         .filter((batch) => batch.facility_id.toString() === selectedNursery)
@@ -168,13 +274,25 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     return options;
   };
 
+  const getPlantingSitesOptions = () => {
+    return plantingSites.map((plantingSite) => ({
+      label: plantingSite.name,
+      value: plantingSite.id.toString(),
+    }));
+  };
+
+  const gridSize = () => (isMobile ? 12 : 6);
+
   useEffect(() => {
     const allNurseries = getAllNurseries(organization);
     const destinationNurseries = allNurseries.filter((nursery) => nursery.id.toString() !== selectedNursery);
     setDestinationNurseriesOptions(
       destinationNurseries.map((nursery) => ({ label: nursery.name, value: nursery.id.toString() }))
     );
-  }, [selectedNursery, organization]);
+    if (isOutplant) {
+      fetchPlantingSites();
+    }
+  }, [selectedNursery, organization, fetchPlantingSites, isOutplant]);
 
   return (
     <>
@@ -218,6 +336,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
               >
                 <Dropdown
                   id='fromFacilityId'
+                  placeholder={strings.SELECT}
                   label={strings.FROM_NURSERY}
                   selectedValue={selectedNursery}
                   options={getNurseriesOptions()}
@@ -228,9 +347,10 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
               </Grid>
 
               {isNurseryTransfer && (
-                <Grid item xs={isMobile ? 12 : 6} sx={{ marginTop: theme.spacing(2) }} paddingLeft={1}>
+                <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }} paddingLeft={1}>
                   <Dropdown
                     id='destinationFacilityId'
+                    placeholder={strings.SELECT}
                     label={strings.TO_NURSERY_REQUIRED}
                     selectedValue={localRecord.destinationFacilityId?.toString()}
                     options={destinationNurseriesOptions}
@@ -241,9 +361,59 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                 </Grid>
               )}
             </Grid>
+            {isOutplant && (
+              <>
+                <Divisor mt={3} />
+                <Grid xs={12}>
+                  <Dropdown
+                    id='plantingSiteId'
+                    placeholder={strings.SELECT}
+                    label={strings.TO_PLANTING_SITE}
+                    selectedValue={localRecord.plantingSiteId?.toString()}
+                    options={getPlantingSitesOptions()}
+                    onChange={(value) => onChangePlantingSite(value)}
+                    fullWidth={true}
+                    errorText={fieldsErrors.plantingSiteId}
+                    tooltipTitle={
+                      <a href={APP_PATHS.PLANTING_SITES} target='_blank' rel='noreferrer'>
+                        {strings.VIEW_SITES_ZONES_PLOTS}
+                      </a>
+                    }
+                  />
+                </Grid>
+                <Grid display='flex' margin={theme.spacing(3, 0, 2)}>
+                  <Grid xs={gridSize()} marginRight={theme.spacing(2)}>
+                    <Dropdown
+                      id='plantingSiteId'
+                      placeholder={strings.SELECT}
+                      label={strings.PLANTING_ZONE}
+                      selectedValue={zoneId?.toString()}
+                      options={zones}
+                      onChange={(value) => onChangePlantingZone(value)}
+                      fullWidth={true}
+                      errorText={fieldsErrors.zoneId}
+                      disabled={!zones.length}
+                    />
+                  </Grid>
+                  <Grid xs={gridSize()}>
+                    <Dropdown
+                      id='plantingSiteId'
+                      placeholder={strings.SELECT}
+                      label={strings.PLOT}
+                      selectedValue={localRecord.plotId?.toString()}
+                      options={plots}
+                      onChange={(value) => updateField('plotId', value)}
+                      fullWidth={true}
+                      errorText={fieldsErrors.plotId}
+                      disabled={!plots.length}
+                    />
+                  </Grid>
+                </Grid>
+              </>
+            )}
             <Grid display='flex'>
-              {isSingleBatch && localRecord.purpose === 'Out Plant' && (
-                <Grid item xs={isMobile ? 12 : 6} sx={{ marginTop: theme.spacing(2), marginRight: theme.spacing(2) }}>
+              {isSingleBatch && isOutplant && (
+                <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2), marginRight: theme.spacing(2) }}>
                   <Textfield
                     label={strings.WITHDRAW_QUANTITY_REQUIRED}
                     id='withdrawnQuantity'
@@ -255,7 +425,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                   />
                 </Grid>
               )}
-              <Grid item xs={isMobile ? 12 : 6} sx={{ marginTop: theme.spacing(2) }}>
+              <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }}>
                 <DatePicker
                   id='withdrawnDate'
                   label={strings.WITHDRAW_DATE_REQUIRED}
