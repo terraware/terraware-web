@@ -1,13 +1,21 @@
-import { Box, CircularProgress } from '@mui/material';
+import { Box, CircularProgress, Typography } from '@mui/material';
+import { useHistory } from 'react-router-dom';
 import { theme } from '@terraware/web-components';
 import React, { useEffect, useState } from 'react';
+import strings from 'src/strings';
+import { APP_PATHS } from 'src/constants';
 import { search } from 'src/api/search';
 import { NurseryWithdrawal } from 'src/api/types/batch';
 import { ServerOrganization } from 'src/types/Organization';
+import { isContributor } from 'src/utils/organization';
+import { createBatchWithdrawal, uploadWithdrawalPhoto } from 'src/api/batch/batch';
+import { getTodaysDateFormatted } from '@terraware/web-components/utils';
+import useSnackbar from 'src/utils/useSnackbar';
 import useForm from 'src/utils/useForm';
 import AddPhotos from './flow/AddPhotos';
-import SelectBatches from './flow/SelectBatches';
+import SelectBatchesWithdrawnQuantity from './flow/SelectBatchesWithdrawnQuantity';
 import SelectPurposeForm from './flow/SelectPurposeForm';
+import TfMain from 'src/components/common/TfMain';
 
 type FlowStates = 'purpose' | 'select batches' | 'photos';
 
@@ -19,8 +27,16 @@ type BatchWithdrawFlowProps = {
 export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.Element {
   const { organization, batchIds } = props;
   const [flowState, setFlowState] = useState<FlowStates>('purpose');
-  const [records, setRecords] = useForm<NurseryWithdrawal[]>([]);
+  const [record, setRecord] = useForm<NurseryWithdrawal>({
+    id: -1,
+    batchWithdrawals: [],
+    facilityId: -1,
+    purpose: isContributor(organization) ? 'Nursery Transfer' : 'Out Plant',
+    withdrawnDate: getTodaysDateFormatted(),
+  });
   const [batches, setBatches] = useState<any[]>();
+  const snackbar = useSnackbar();
+  const history = useHistory();
 
   useEffect(() => {
     const populateBatches = async () => {
@@ -63,7 +79,8 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
     populateBatches();
   }, [batchIds]);
 
-  const onPurposeSelected = () => {
+  const onWithdrawalConfigured = (withdrawal: NurseryWithdrawal) => {
+    setRecord(withdrawal);
     if (batchIds.length === 1) {
       setFlowState('photos');
     } else {
@@ -75,6 +92,43 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
     setFlowState('photos');
   };
 
+  const withdraw = async (photos: File[]) => {
+    // first create the withdrawal
+    const response = await createBatchWithdrawal(record);
+    if (!response.requestSucceeded) {
+      snackbar.toastError(response.error);
+      return;
+    }
+
+    const { withdrawalId } = response;
+    if (withdrawalId && photos.length) {
+      // upload photos
+      const uploadPhotoPromises = photos.map((photo) => uploadWithdrawalPhoto(withdrawalId, photo));
+      try {
+        const promiseResponses = await Promise.allSettled(uploadPhotoPromises);
+        promiseResponses.forEach((promiseResponse) => {
+          if (promiseResponse.status === 'rejected') {
+            // tslint:disable-next-line: no-console
+            console.error(promiseResponse.reason);
+          }
+        });
+      } catch (e) {
+        // swallow error
+      }
+    }
+
+    // set snackbar with status
+    snackbar.toastSuccess(strings.SAVE_CHANGES); // TODO set status as per design
+    // redirect to inventory
+    goToInventory();
+  };
+
+  const goToInventory = () => {
+    const pathname = APP_PATHS.INVENTORY;
+
+    history.push({ pathname });
+  };
+
   if (!batches) {
     return (
       <Box display='flex' justifyContent='center' padding={theme.spacing(5)}>
@@ -84,18 +138,37 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
   }
 
   return (
-    <>
+    <TfMain>
+      <Typography variant='h2' sx={{ fontSize: '24px', fontWeight: 'bold' }}>
+        {strings.WITHDRAW_FROM_BATCHES}
+      </Typography>
+
       {flowState === 'purpose' && (
         <SelectPurposeForm
-          onNext={onPurposeSelected}
+          onNext={onWithdrawalConfigured}
           organization={organization}
           batches={batches}
-          records={records}
-          setRecords={setRecords}
+          nurseryWithdrawal={record}
+          onCancel={goToInventory}
+          saveText={strings.NEXT}
         />
       )}
-      {flowState === 'select batches' && <SelectBatches onNext={onBatchesSelected} organization={organization} />}
-      {flowState === 'photos' && <AddPhotos onNext={onPurposeSelected} organization={organization} />}
-    </>
+      {flowState === 'select batches' && (
+        <SelectBatchesWithdrawnQuantity
+          onNext={onBatchesSelected}
+          organization={organization}
+          onCancel={goToInventory}
+          saveText={strings.NEXT}
+        />
+      )}
+      {flowState === 'photos' && (
+        <AddPhotos
+          onNext={withdraw}
+          withdrawalPurpose={record.purpose}
+          onCancel={goToInventory}
+          saveText={strings.WITHDRAW}
+        />
+      )}
+    </TfMain>
   );
 }
