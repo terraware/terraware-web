@@ -20,7 +20,7 @@ export default function Search(props: SearchProps): JSX.Element {
 
   return (
     <>
-      <Box display='flex' flexDirection='row'>
+      <Box display='flex' flexDirection='row' alignItems='center' marginBottom={filters.facilityIds?.length ? 2 : 0}>
         <Box width='300px'>
           <Textfield
             placeholder={strings.SEARCH}
@@ -36,7 +36,7 @@ export default function Search(props: SearchProps): JSX.Element {
         </Box>
         <InventoryFilters filters={filters} setFilters={setFilters} organization={organization} />
       </Box>
-      <Grid xs={12} display='flex' paddingTop={1}>
+      <Grid xs={12} display='flex'>
         {filters.facilityIds?.map((id) => (
           <Pill
             key={id}

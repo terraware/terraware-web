@@ -32,7 +32,7 @@ export default function SpeciesBulkWithdrawWrapperComponent(
               {
                 operation: 'field',
                 field: 'species_id',
-                values: [speciesIds.join(',')],
+                values: speciesIds,
               },
             ],
           },

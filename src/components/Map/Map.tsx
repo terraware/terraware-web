@@ -120,7 +120,6 @@ export default function Map(props: MapProps): JSX.Element {
             type: 'fill',
             paint: {
               'fill-color': source.fillColor,
-              'fill-opacity': source.fillOpacity,
             },
           },
           layerOutline: {

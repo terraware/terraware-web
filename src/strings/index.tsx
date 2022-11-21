@@ -834,6 +834,13 @@ const strings = new LocalizedStrings({
     WITHDRAW_INSTRUCTIONS: 'Select a withdrawal purpose and enter the quantities from each batch to withdraw.',
     TO_NURSERY_REQUIRED: 'To: Nursery *',
     FROM_NURSERY: 'From: Nursery',
+    UPLOAD_PHOTO: 'Upload Photo...',
+    UPLOAD_PHOTOS: 'Upload Photo(s)',
+    UPLOAD_PHOTO_DESCRIPTION: 'Browse or drag and drop a file (JPG, PNG).',
+    ADD_PHOTOS_REQUIRED: 'Add Photos *',
+    ADD_PHOTOS: 'Add Photos',
+    ADD_PHOTOS_DESCRIPTION:
+      'Take a photo (or photos) of the batches that will be planted at the selected plot. Be sure to include the entire withdrawal in the photo(s).',
   },
 });
 

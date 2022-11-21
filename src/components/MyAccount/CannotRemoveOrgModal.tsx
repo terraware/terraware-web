@@ -24,6 +24,7 @@ export default function CannotRemoveOrgDialog(props: CannotRemoveOrgDialogProps)
         <Button label={strings.DELETE} type='destructive' onClick={onSubmit} key='button-2' />,
       ]}
       message={strings.CANNOT_REMOVE_MSG}
+      skrim={true}
     />
   );
 }
