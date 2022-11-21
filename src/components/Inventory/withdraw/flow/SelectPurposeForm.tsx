@@ -87,7 +87,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
 
   const validateNurseryTransfer = () => {
     if (isNurseryTransfer) {
-      if (localRecord.destinationFacilityId === -1) {
+      if (!localRecord.destinationFacilityId) {
         setIndividualError('destinationFacilityId', strings.REQUIRED_FIELD);
         return false;
       }
