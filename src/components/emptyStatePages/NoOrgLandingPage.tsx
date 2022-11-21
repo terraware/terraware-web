@@ -15,12 +15,12 @@ interface StyleProps {
 
 const useStyles = makeStyles((theme: Theme) => ({
   main: {
-    padding: '88px 24px 24px',
-    minHeight: '100vh',
-    display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center',
+    display: 'flex',
     flexDirection: 'column',
+    justifyContent: 'center',
+    minHeight: '100vh',
+    padding: '88px 24px 24px',
     [theme.breakpoints.down('xl')]: {
       background:
         'url(/assets/home-bg-right-layer-z4.svg) no-repeat 753px 100%/auto 285px, ' +
