@@ -1,6 +1,6 @@
 import { Box, Theme, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { Icon } from '@terraware/web-components';
+import { Icon, IconTooltip } from '@terraware/web-components';
 import useDeviceInfo from '../../utils/useDeviceInfo';
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -15,6 +15,7 @@ type OverviewItemCardProps = {
   hideEditIcon?: boolean;
   onClick?: () => void;
   title: string;
+  titleInfoTooltip?: React.ReactNode;
   contents: JSX.Element | string | null;
 };
 
@@ -23,6 +24,7 @@ export default function OverviewItemCard({
   hideEditIcon,
   onClick,
   title,
+  titleInfoTooltip,
   contents,
 }: OverviewItemCardProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
@@ -70,7 +72,7 @@ export default function OverviewItemCard({
             marginBottom: theme.spacing(1),
           }}
         >
-          {title}
+          {title} {titleInfoTooltip && <IconTooltip title={titleInfoTooltip} />}
         </Typography>
         <Box
           sx={{

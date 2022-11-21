@@ -22,12 +22,11 @@ const useStyles = makeStyles((theme: Theme) => ({
   iconContainer: {
     borderRadius: 0,
     fontSize: '16px',
-    height: '48px',
     marginLeft: '8px',
+    padding: 0,
   },
   icon: {
-    fill: '#3A4445',
-    marginLeft: '8px',
+    fill: theme.palette.TwClrIcnSecondary,
   },
   popoverContainer: {
     '& .MuiPaper-root': {
@@ -135,8 +134,8 @@ export default function InventoryFiltersPopover({
 
   return (
     <div>
-      <IconButton onClick={handleClick} size='small' className={classes.iconContainer}>
-        <Icon name='filter' />
+      <IconButton onClick={handleClick} size='medium' className={classes.iconContainer}>
+        <Icon name='filter' className={classes.icon} size='medium' />
       </IconButton>
       <Popover
         id='simple-popover'
