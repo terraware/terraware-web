@@ -4,6 +4,8 @@ import React, { useEffect, useState } from 'react';
 import { search } from 'src/api/search';
 import { NurseryWithdrawal } from 'src/api/types/batch';
 import { ServerOrganization } from 'src/types/Organization';
+import { isContributor } from 'src/utils/organization';
+import { getTodaysDateFormatted } from '@terraware/web-components/utils';
 import useForm from 'src/utils/useForm';
 import AddPhotos from './flow/AddPhotos';
 import SelectBatches from './flow/SelectBatches';
@@ -19,7 +21,13 @@ type BatchWithdrawFlowProps = {
 export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.Element {
   const { organization, batchIds } = props;
   const [flowState, setFlowState] = useState<FlowStates>('purpose');
-  const [records, setRecords] = useForm<NurseryWithdrawal[]>([]);
+  const [record, setRecord] = useForm<NurseryWithdrawal>({
+    id: -1,
+    batchWithdrawals: [],
+    facilityId: -1,
+    purpose: isContributor(organization) ? 'Nursery Transfer' : 'Out Plant',
+    withdrawnDate: getTodaysDateFormatted(),
+  });
   const [batches, setBatches] = useState<any[]>();
 
   useEffect(() => {
@@ -63,7 +71,8 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
     populateBatches();
   }, [batchIds]);
 
-  const onPurposeSelected = () => {
+  const onWithdrawalConfigured = (withdrawal: NurseryWithdrawal) => {
+    setRecord(withdrawal);
     if (batchIds.length === 1) {
       setFlowState('photos');
     } else {
@@ -87,15 +96,21 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
     <>
       {flowState === 'purpose' && (
         <SelectPurposeForm
-          onNext={onPurposeSelected}
+          onNext={onWithdrawalConfigured}
           organization={organization}
           batches={batches}
-          records={records}
-          setRecords={setRecords}
+          nurseryWithdrawal={record}
         />
       )}
       {flowState === 'select batches' && <SelectBatches onNext={onBatchesSelected} organization={organization} />}
-      {flowState === 'photos' && <AddPhotos onNext={onPurposeSelected} organization={organization} />}
+      {flowState === 'photos' && (
+        <AddPhotos
+          onNext={() => {
+            return;
+          }}
+          organization={organization}
+        />
+      )}
     </>
   );
 }
