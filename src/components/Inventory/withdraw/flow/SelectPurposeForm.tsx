@@ -381,8 +381,8 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                     }
                   />
                 </Grid>
-                <Grid display='flex' margin={theme.spacing(3, 0, 2)}>
-                  <Grid xs={gridSize()} marginRight={theme.spacing(2)}>
+                <Grid display='flex' margin={theme.spacing(1, 0, 2)} flexDirection={isMobile ? 'column' : 'row'}>
+                  <Grid xs={gridSize()} margin={theme.spacing(2, isMobile ? 0 : 2, 0, 0)}>
                     <Dropdown
                       id='plantingSiteId'
                       placeholder={strings.SELECT}
@@ -395,7 +395,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                       disabled={!zones.length}
                     />
                   </Grid>
-                  <Grid xs={gridSize()}>
+                  <Grid xs={gridSize()} margin={theme.spacing(2, 0, 0)}>
                     <Dropdown
                       id='plantingSiteId'
                       placeholder={strings.SELECT}
