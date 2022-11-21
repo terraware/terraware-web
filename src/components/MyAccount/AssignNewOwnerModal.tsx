@@ -41,6 +41,7 @@ export default function AssignNewOwnerDialog(props: AssignNewOwnerDialogProps): 
         <Button label={strings.CANCEL} priority='secondary' type='passive' onClick={onClose} key='button-1' />,
         <Button label={strings.ASSIGN} onClick={onSubmit} key='button-2' />,
       ]}
+      skrim={true}
     >
       <div>
         <p>{strings.ASSIGN_NEW_OWNER_DESC}</p>
