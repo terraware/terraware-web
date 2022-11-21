@@ -1,8 +1,8 @@
-import { Box, Grid, Typography } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button, Table, TableColumnType } from '@terraware/web-components';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 import { useDeviceInfo } from '@terraware/web-components/utils';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { search, SearchNodePayload } from 'src/api/search';
 import { Facility, FacilityType } from 'src/api/types/facilities';
@@ -14,6 +14,7 @@ import useDebounce from 'src/utils/useDebounce';
 import TfMain from '../common/TfMain';
 import PageSnackbar from '../PageSnackbar';
 import NurseriesCellRenderer from './TableCellRenderer';
+import PageHeaderWrapper from '../common/PageHeaderWrapper';
 
 type NurseriesListProps = {
   organization: ServerOrganization;
@@ -25,11 +26,13 @@ const columns: TableColumnType[] = [
 ];
 
 export default function NurseriesList({ organization }: NurseriesListProps): JSX.Element {
+  const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const history = useHistory();
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
   const [results, setResults] = useState<Facility[]>();
+  const contentRef = useRef(null);
 
   const goToNewNursery = () => {
     const newNurseryLocation = {
@@ -95,22 +98,41 @@ export default function NurseriesList({ organization }: NurseriesListProps): JSX
 
   return (
     <TfMain>
-      <Grid container spacing={3}>
-        <Grid item xs={9}>
-          <Typography fontSize='24px' fontWeight={600}>
-            {strings.NURSERIES}
-          </Typography>
+      <PageHeaderWrapper nextElement={contentRef.current}>
+        <Grid container paddingBottom={theme.spacing(4)} paddingLeft={isMobile ? 0 : theme.spacing(3)}>
+          <Grid item xs={9} alignItems='center'>
+            <Typography fontSize='24px' fontWeight={600}>
+              {strings.NURSERIES}
+            </Typography>
+          </Grid>
+          <Grid item xs={3} sx={{ textAlign: 'right' }}>
+            {['Admin', 'Owner'].includes(organization.role) &&
+              (isMobile ? (
+                <Button id='new-nursery' icon='plus' onClick={goToNewNursery} size='medium' />
+              ) : (
+                <Button
+                  id='new-nursery'
+                  icon='plus'
+                  label={strings.ADD_NURSERY}
+                  onClick={goToNewNursery}
+                  size='medium'
+                />
+              ))}
+          </Grid>
+          <PageSnackbar />
         </Grid>
-        <Grid item xs={3} sx={{ textAlign: 'right' }}>
-          {['Admin', 'Owner'].includes(organization.role) &&
-            (isMobile ? (
-              <Button id='new-nursery' icon='plus' onClick={goToNewNursery} size='medium' />
-            ) : (
-              <Button id='new-nursery' icon='plus' label={strings.ADD_NURSERY} onClick={goToNewNursery} size='medium' />
-            ))}
-        </Grid>
-        <PageSnackbar />
-        <Grid item xs={12} marginTop={3}>
+      </PageHeaderWrapper>
+      <Grid
+        container
+        ref={contentRef}
+        sx={{
+          backgroundColor: theme.palette.TwClrBg,
+          borderRadius: '32px',
+          padding: theme.spacing(3),
+          minWidth: 'fit-content',
+        }}
+      >
+        <Grid item xs={12} marginBottom={theme.spacing(2)}>
           <Box width='300px'>
             <TextField
               placeholder={strings.SEARCH}
@@ -126,21 +148,15 @@ export default function NurseriesList({ organization }: NurseriesListProps): JSX
           </Box>
         </Grid>
         <Grid item xs={12}>
-          <div>
-            <Grid container spacing={4}>
-              <Grid item xs={12}>
-                {results && (
-                  <Table
-                    id='nurseries-table'
-                    columns={columns}
-                    rows={results}
-                    orderBy='name'
-                    Renderer={NurseriesCellRenderer}
-                  />
-                )}
-              </Grid>
-            </Grid>
-          </div>
+          {results && (
+            <Table
+              id='nurseries-table'
+              columns={columns}
+              rows={results}
+              orderBy='name'
+              Renderer={NurseriesCellRenderer}
+            />
+          )}
         </Grid>
       </Grid>
     </TfMain>
