@@ -19,8 +19,8 @@ const useStyles = makeStyles((theme: Theme) => ({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
-    minHeight: '100vh',
-    padding: '88px 24px 24px',
+    minHeight: 'calc(100vh - 88px)',
+    padding: (props: StyleProps) => (props.isMobile ? '88px 24px 24px' : '64px 24px 24px'),
     [theme.breakpoints.down('xl')]: {
       background:
         'url(/assets/home-bg-right-layer-z4.svg) no-repeat 753px 100%/auto 285px, ' +
@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
     background: theme.palette.TwClrBg,
     borderRadius: '24px',
-    margin: 'auto',
+    margin: '0 auto',
     maxWidth: '900px',
     padding: (props: StyleProps) => (props.isMobile ? '24px 26px' : '40px 26px'),
   },
