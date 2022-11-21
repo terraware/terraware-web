@@ -7,10 +7,15 @@ import dictionary from 'src/strings/dictionary';
 import { Container, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import PageSnackbar from 'src/components/PageSnackbar';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+
+interface StyleProps {
+  isMobile?: boolean;
+}
 
 const useStyles = makeStyles((theme: Theme) => ({
   main: {
-    paddingTop: '64px',
+    padding: '88px 24px 24px',
     minHeight: '100vh',
     display: 'flex',
     alignItems: 'center',
@@ -36,9 +41,11 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
   },
   mainContainer: {
-    maxWidth: '1500px',
+    background: theme.palette.TwClrBg,
+    borderRadius: '24px',
     margin: 'auto',
-    marginTop: `max(40px, calc(50% - 1500px/2))`,
+    maxWidth: '900px',
+    padding: (props: StyleProps) => (props.isMobile ? '24px 26px' : '40px 26px'),
   },
 }));
 
@@ -61,7 +68,8 @@ type LandingPageProps = {
 };
 
 export default function NoOrgLandingPage(props: LandingPageProps): JSX.Element {
-  const classes = useStyles();
+  const { isMobile } = useDeviceInfo();
+  const classes = useStyles({ isMobile });
   const [isOrgModalOpen, setIsOrgModalOpen] = useState<boolean>(false);
 
   return (
