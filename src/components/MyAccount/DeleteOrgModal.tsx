@@ -25,6 +25,7 @@ export default function DeleteOrgDialog(props: DeleteOrgDialogProps): JSX.Elemen
         <Button label={strings.DELETE} type='destructive' icon='iconTrashCan' onClick={onSubmit} key='button-2' />,
       ]}
       message={strings.formatString(strings.DELETE_ORGANIZATION_MSG, orgName)}
+      skrim={true}
     />
   );
 }

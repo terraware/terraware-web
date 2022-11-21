@@ -46,6 +46,7 @@ export default function DeleteSpeciesDialog(props: DeleteSpeciesDialogProps): JS
           key='button-2'
         />,
       ]}
+      skrim={true}
     >
       <p className={classes.mainContent}>{strings.DELETE_CONFIRMATION_MODAL_MAIN_TEXT}</p>
     </DialogBox>
