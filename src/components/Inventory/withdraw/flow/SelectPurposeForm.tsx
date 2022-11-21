@@ -133,6 +133,8 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
       return;
     }
 
+    const isSingleOutplant = isSingleBatch && localRecord.purpose === 'Out Plant';
+
     onNext({
       ...localRecord,
       facilityId: Number(selectedNursery as string),
@@ -140,8 +142,8 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
         .filter((batch) => batch.facility_id.toString() === selectedNursery)
         .map((batch) => ({
           batchId: batch.id,
-          notReadyQuantityWithdrawn: batch.notReadyQuantity,
-          readyQuantityWithdrawn: batch.readyQuantity,
+          notReadyQuantityWithdrawn: isSingleOutplant ? 0 : batch.notReadyQuantity,
+          readyQuantityWithdrawn: isSingleOutplant ? withdrawnQuantity : batch.readyQuantity,
         })),
     });
   };
