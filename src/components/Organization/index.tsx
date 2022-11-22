@@ -74,15 +74,15 @@ export default function OrganizationView({ organization }: OrganizationViewProps
 
   return (
     <TfMain>
-      <Box margin={theme.spacing(0, 0, 4, 3)}>
+      <Box margin={theme.spacing(0, 3, 4, 3)}>
         <Box display='flex' justifyContent='space-between' alignItems='center' marginBottom={theme.spacing(1)}>
           <Typography margin={0} fontSize='24px' fontWeight={600}>
             {strings.ORGANIZATION}
           </Typography>
           <Button
             icon='iconEdit'
-            label={isMobile ? undefined : strings.EDIT}
-            priority='secondary'
+            label={isMobile ? undefined : strings.EDIT_ORGANIZATION}
+            priority='primary'
             size='medium'
             onClick={goToEditOrganization}
           />
