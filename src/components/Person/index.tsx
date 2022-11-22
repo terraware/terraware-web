@@ -91,7 +91,7 @@ export default function PersonDetails({ organization }: PersonDetailsProps): JSX
 
   return (
     <TfMain>
-      <Grid container padding={theme.spacing(0, 3, 4, 3)}>
+      <Grid container padding={theme.spacing(0, 0, 4, 0)}>
         <Grid item xs={12}>
           <Link id='back' to={APP_PATHS.PEOPLE} className={classes.back}>
             <Icon name='caretLeft' className={classes.backIcon} size='small' />
@@ -100,7 +100,7 @@ export default function PersonDetails({ organization }: PersonDetailsProps): JSX
             </Typography>
           </Link>
         </Grid>
-        <Grid item xs={12} className={classes.titleWithButton}>
+        <Grid item xs={12} padding={theme.spacing(0, 3)} className={classes.titleWithButton}>
           <Grid item xs={9}>
             <Typography
               fontSize='20px'
