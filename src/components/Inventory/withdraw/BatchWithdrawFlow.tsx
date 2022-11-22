@@ -22,10 +22,11 @@ type FlowStates = 'purpose' | 'select batches' | 'photos';
 type BatchWithdrawFlowProps = {
   organization: ServerOrganization;
   batchIds: string[];
+  sourcePage?: string;
 };
 
 export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.Element {
-  const { organization, batchIds } = props;
+  const { organization, batchIds, sourcePage } = props;
   const [flowState, setFlowState] = useState<FlowStates>('purpose');
   const [record, setRecord] = useForm<NurseryWithdrawal>({
     id: -1,
@@ -124,9 +125,11 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
   };
 
   const goToInventory = () => {
-    const pathname = APP_PATHS.INVENTORY;
-
-    history.push({ pathname });
+    if (sourcePage && sourcePage.startsWith(APP_PATHS.INVENTORY)) {
+      history.push({ pathname: sourcePage });
+    } else {
+      history.push({ pathname: APP_PATHS.INVENTORY });
+    }
   };
 
   if (!batches) {
