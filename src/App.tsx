@@ -448,7 +448,16 @@ export default function App() {
                 </Route>
               )}
               {selectedOrganization && (
-                <Route path={APP_PATHS.MONITORING}>
+                <Route exact path={APP_PATHS.MONITORING}>
+                  <Monitoring
+                    organization={selectedOrganization}
+                    hasSeedBanks={selectedOrgHasSeedBanks()}
+                    reloadData={reloadData}
+                  />
+                </Route>
+              )}
+              {selectedOrganization && (
+                <Route exact path={APP_PATHS.SEED_BANK_MONITORING}>
                   <Monitoring
                     organization={selectedOrganization}
                     hasSeedBanks={selectedOrgHasSeedBanks()}
@@ -523,6 +532,11 @@ export default function App() {
               )}
               {trackingEnabled && selectedOrganization && (
                 <Route path={APP_PATHS.PLANTS_DASHBOARD}>
+                  <PlantsDashboard organization={selectedOrganization} />
+                </Route>
+              )}
+              {trackingEnabled && selectedOrganization && (
+                <Route path={APP_PATHS.PLANTING_SITE_DASHBOARD}>
                   <PlantsDashboard organization={selectedOrganization} />
                 </Route>
               )}
