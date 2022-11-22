@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { ServerOrganization } from 'src/types/Organization';
 import useQuery from 'src/utils/useQuery';
+import { APP_PATHS } from 'src/constants';
 import BatchWithdrawFlow from './BatchWithdrawFlow';
 
 type BatchBulkWithdrawWrapperComponentProps = {
@@ -11,13 +13,21 @@ export default function BatchBulkWithdrawWrapperComponent(
 ): JSX.Element | null {
   const { organization } = props;
   const [batchIds, setBatchIds] = useState<string[]>();
+  const [source, setSource] = useState<string | null>();
   const query = useQuery();
+  const history = useHistory();
 
   useEffect(() => {
     if (query.getAll('batchId').length > 0) {
       setBatchIds(query.getAll('batchId'));
+      setSource(query.get('source'));
+    } else {
+      // invalid url params
+      history.push({ pathname: APP_PATHS.INVENTORY });
     }
-  }, [query]);
+  }, [query, history]);
 
-  return batchIds ? <BatchWithdrawFlow batchIds={batchIds} organization={organization} /> : null;
+  return batchIds ? (
+    <BatchWithdrawFlow batchIds={batchIds} organization={organization} sourcePage={source || undefined} />
+  ) : null;
 }
