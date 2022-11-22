@@ -239,19 +239,17 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
 
   return (
     <Grid item xs={12} sx={{ marginTop: theme.spacing(1) }}>
-      {openNewBatchModal && (
-        <BatchDetailsModal
-          open={openNewBatchModal}
-          reload={reloadData}
-          onClose={() => {
-            onUpdateOpenBatch(null);
-            setOpenNewBatchModal(false);
-          }}
-          organization={organization}
-          speciesId={speciesId}
-          selectedBatch={selectedBatch}
-        />
-      )}
+      <BatchDetailsModal
+        open={openNewBatchModal}
+        reload={reloadData}
+        onClose={() => {
+          onUpdateOpenBatch(null);
+          setOpenNewBatchModal(false);
+        }}
+        organization={organization}
+        speciesId={speciesId}
+        selectedBatch={selectedBatch}
+      />
       {selectedBatch && (
         <WithdrawalModal
           open={openWithdrawalModal}
