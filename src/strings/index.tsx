@@ -847,6 +847,9 @@ const strings = new LocalizedStrings({
     BATCHES_PLURAL: 'batches',
     SEEDLINGS_SINGULAR: 'seedling',
     SEEDLINGS_PLURAL: 'seedlings',
+    NO_BATCHES_TO_WITHDRAW_FROM: 'There are no batches with withdrawable quantities.',
+    PHOTOS_REQUIRED: 'Photos Required',
+    PHOTOS_OUTPLANT_DESCRIPTION: 'Outplant withdrawals require photos.',
   },
 });
 
