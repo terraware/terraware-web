@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import strings from 'src/strings';
 import { APP_PATHS } from 'src/constants';
 import { search } from 'src/api/search';
-import { NurseryWithdrawal } from 'src/api/types/batch';
+import { NurseryWithdrawalRequest } from 'src/api/types/batch';
 import { ServerOrganization } from 'src/types/Organization';
 import { isContributor } from 'src/utils/organization';
 import { createBatchWithdrawal, uploadWithdrawalPhoto } from 'src/api/batch/batch';
@@ -27,8 +27,7 @@ type BatchWithdrawFlowProps = {
 export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.Element {
   const { organization, batchIds } = props;
   const [flowState, setFlowState] = useState<FlowStates>('purpose');
-  const [record, setRecord] = useForm<NurseryWithdrawal>({
-    id: -1,
+  const [record, setRecord] = useForm<NurseryWithdrawalRequest>({
     batchWithdrawals: [],
     facilityId: -1,
     purpose: isContributor(organization) ? 'Nursery Transfer' : 'Out Plant',
@@ -79,7 +78,7 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
     populateBatches();
   }, [batchIds]);
 
-  const onWithdrawalConfigured = (withdrawal: NurseryWithdrawal) => {
+  const onWithdrawalConfigured = (withdrawal: NurseryWithdrawalRequest) => {
     setRecord(withdrawal);
     if (batchIds.length === 1) {
       setFlowState('photos');
