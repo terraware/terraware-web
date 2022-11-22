@@ -7,20 +7,45 @@ import dictionary from 'src/strings/dictionary';
 import { Container, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import PageSnackbar from 'src/components/PageSnackbar';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+
+interface StyleProps {
+  isMobile?: boolean;
+}
 
 const useStyles = makeStyles((theme: Theme) => ({
   main: {
-    paddingTop: '64px',
-    minHeight: '100vh',
-    display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center',
+    display: 'flex',
     flexDirection: 'column',
+    justifyContent: 'center',
+    minHeight: 'calc(100vh - 88px)',
+    padding: (props: StyleProps) => (props.isMobile ? '88px 24px 24px' : '64px 24px 24px'),
+    [theme.breakpoints.down('xl')]: {
+      background:
+        'url(/assets/home-bg-right-layer-z4.svg) no-repeat 753px 100%/auto 285px, ' +
+        'url(/assets/home-bg-left-layer-z4.svg) no-repeat 0 100%/auto 295px, ' +
+        'url(/assets/home-bg-water-z2.svg) repeat-x 0 100%/auto 180px, ' +
+        'url(/assets/home-bg-left-z4.svg) no-repeat 0 100%/auto 295px, ' +
+        'url(/assets/home-bg-right-z3.svg) no-repeat 911px 100%/auto 400px, ' +
+        'linear-gradient(180deg, #FBF9F9 0%, #EFF5EF 100%) no-repeat 0 0/auto',
+    },
+    [theme.breakpoints.up('xl')]: {
+      background:
+        'url(/assets/home-bg-right-layer-z4.svg) no-repeat 100% 100%/auto 285px, ' +
+        'url(/assets/home-bg-left-layer-z4.svg) no-repeat 0 100%/auto 295px, ' +
+        'url(/assets/home-bg-water-z2.svg) repeat-x 0 100%/auto 180px, ' +
+        'url(/assets/home-bg-left-z4.svg) no-repeat 0 100%/auto 295px, ' +
+        'url(/assets/home-bg-right-z3.svg) no-repeat 100% 100%/auto 400px, ' +
+        'linear-gradient(180deg, #FBF9F9 0%, #EFF5EF 100%) no-repeat 0 0/auto',
+    },
   },
   mainContainer: {
-    maxWidth: '1500px',
-    margin: 'auto',
-    marginTop: `max(40px, calc(50% - 1500px/2))`,
+    background: theme.palette.TwClrBg,
+    borderRadius: '24px',
+    margin: '0 auto',
+    maxWidth: '900px',
+    padding: (props: StyleProps) => (props.isMobile ? '24px 26px' : '40px 26px'),
   },
 }));
 
@@ -43,7 +68,8 @@ type LandingPageProps = {
 };
 
 export default function NoOrgLandingPage(props: LandingPageProps): JSX.Element {
-  const classes = useStyles();
+  const { isMobile } = useDeviceInfo();
+  const classes = useStyles({ isMobile });
   const [isOrgModalOpen, setIsOrgModalOpen] = useState<boolean>(false);
 
   return (
