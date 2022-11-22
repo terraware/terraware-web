@@ -411,7 +411,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                 </Grid>
               </>
             )}
-            <Grid display='flex'>
+            <Grid display='flex' flexDirection={isMobile ? 'column' : 'row'}>
               {isSingleBatch && isOutplant && (
                 <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2), marginRight: theme.spacing(2) }}>
                   <Textfield
