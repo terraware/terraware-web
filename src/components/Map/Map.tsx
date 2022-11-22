@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Box } from '@mui/material';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import ReactMapGL, { Layer, NavigationControl, Popup, Source } from 'react-map-gl';
@@ -40,6 +40,8 @@ export default function Map(props: MapProps): JSX.Element {
   const [geoData, setGeoData] = useState();
   const [layerIds, setLayerIds] = useState<string[]>([]);
   const [popupInfo, setPopupInfo] = useState<PopupInfo | null>(null);
+  const [zooming, setZooming] = useState<boolean>(false);
+  const [zoomed, setZoomed] = useState<boolean>(false);
   const mapRef = useRef<any | null>(null);
 
   const onMapLoad = useCallback(() => {
@@ -47,6 +49,7 @@ export default function Map(props: MapProps): JSX.Element {
     // fit to bounding box
     if (mapRef?.current !== undefined) {
       const mapInstance: any = mapRef.current.getMap();
+      setZooming(true);
       mapInstance.fitBounds([bbox.lowerLeft, bbox.upperRight], { padding: 20 });
     }
   }, [options]);
@@ -76,9 +79,17 @@ export default function Map(props: MapProps): JSX.Element {
     }
   }, []);
 
+  const onZoomEnd = (data: any) => {
+    if (!zooming) {
+      return;
+    }
+    setZooming(false);
+    setZoomed(true);
+  };
+
   useEffect(() => {
     const { sources } = options;
-    if (geoData) {
+    if (geoData || !zoomed) {
       return;
     }
     // initialize sources
@@ -138,6 +149,8 @@ export default function Map(props: MapProps): JSX.Element {
                   'text-color': source.annotation.textColor,
                 },
                 layout: {
+                  'text-allow-overlap': false,
+                  'text-ignore-placement': false,
                   'text-field': ['get', source.annotation.textField],
                   'text-anchor': 'center',
                   'text-size': source.annotation.textSize,
@@ -151,7 +164,20 @@ export default function Map(props: MapProps): JSX.Element {
     if (popupRenderer) {
       setLayerIds(geo.filter((g: any) => g.isInteractive).map((g: any) => g.layer.id));
     }
-  }, [options, geoData, setGeoData, token, popupRenderer]);
+  }, [options, geoData, setGeoData, token, popupRenderer, zoomed]);
+
+  const mapSources = useMemo(() => {
+    if (!geoData) {
+      return null;
+    }
+    return (geoData as any[]).map((geo: any, index) => (
+      <Source type='geojson' key={index} data={geo.data}>
+        {geo.layer !== null && <Layer {...geo.layer} />}
+        {geo.textAnnotation !== null && <Layer {...geo.textAnnotation} />}
+        {geo.layerOutline !== null && <Layer {...geo.layerOutline} />}
+      </Source>
+    ));
+  }, [geoData]);
 
   return (
     <Box sx={{ display: 'flex', flexGrow: 1, height: '100%', minHeight: 250 }}>
@@ -159,20 +185,14 @@ export default function Map(props: MapProps): JSX.Element {
         key={mapId}
         ref={mapRef}
         mapboxAccessToken={token}
-        mapStyle='mapbox://styles/mapbox/satellite-v9'
+        mapStyle='mapbox://styles/mapbox/satellite-v9?optimize=true'
         interactiveLayerIds={layerIds}
         onLoad={onMapLoad}
         onError={onMapError}
         onClick={onMapClick}
+        onZoomEnd={onZoomEnd}
       >
-        {geoData &&
-          (geoData as any[]).map((geo: any, index) => (
-            <Source type='geojson' key={index} data={geo.data}>
-              <Layer {...geo.layer} />
-              {geo.textAnnotation && <Layer {...geo.textAnnotation} />}
-              <Layer {...geo.layerOutline} />
-            </Source>
-          ))}
+        {mapSources}
         <NavigationControl showCompass={false} style={navControlStyle} position='bottom-right' />
         {popupInfo && popupRenderer && (
           <Popup
