@@ -85,11 +85,11 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
     },
     {
       key: 'notReadyQuantityWithdrawn',
-      name: strings.NOT_READY,
+      name: strings.NOT_READY_QUANTITY,
       type: 'string',
     },
-    { key: 'readyQuantityWithdrawn', name: strings.READY, type: 'string' },
-    { key: 'totalQuantity', name: strings.TOTAL, type: 'string' },
+    { key: 'readyQuantityWithdrawn', name: strings.READY_QUANTITY, type: 'string' },
+    { key: 'totalQuantity', name: strings.TOTAL_QUANTITY, type: 'string' },
     {
       key: 'totalWithdraw',
       name: strings.TOTAL_WITHDRAW,
@@ -97,10 +97,32 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
     },
   ];
 
+  const outplantColumns: TableColumnType[] = [
+    {
+      key: 'batchNumber',
+      name: strings.SEEDLING_BATCH,
+      type: 'string',
+    },
+    {
+      key: 'facilityName',
+      name: strings.NURSERY,
+      type: 'string',
+    },
+    {
+      key: 'readyQuantity',
+      name: strings.READY_QUANTITY,
+      type: 'string',
+    },
+    { key: 'outplantReadyQuantityWithdrawn', name: strings.WITHDRAW, type: 'string' },
+  ];
+
   const onEditHandler = (batch: BatchWithdrawalForTable, fromColumn?: string, value?: string) => {
     setRecord((previousRecord: BatchWithdrawalForTable[]): BatchWithdrawalForTable[] => {
       const recordToBeEdited = previousRecord.find((bw) => bw.batchId === batch.batchId);
       if (recordToBeEdited && fromColumn) {
+        if (fromColumn === 'outplantReadyQuantityWithdrawn') {
+          fromColumn = 'readyQuantityWithdrawn';
+        }
         const indexOfRecordToBeEdited = previousRecord.indexOf(recordToBeEdited);
         const newRecord = [...previousRecord];
         newRecord.splice(indexOfRecordToBeEdited, 1, { ...recordToBeEdited, [fromColumn]: value });
@@ -140,7 +162,7 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
                     {record.length > 0 && (
                       <Table
                         id='inventory-table'
-                        columns={columns}
+                        columns={nurseryWithdrawal.purpose === 'Out Plant' ? outplantColumns : columns}
                         rows={record.filter((rec) => rec.speciesId === iSpecies.id)}
                         Renderer={WithdrawalBatchesCellRenderer}
                         orderBy={'batchId'}

@@ -66,6 +66,20 @@ export default function WithdrawalBatchesCellRenderer(props: RendererProps<Table
     }
   };
 
+  const createReadyOutplantInput = (iValue: React.ReactNode | unknown[]) => {
+    if (onRowClick) {
+      return (
+        <TextField
+          id='readyQuantityWithdrawn'
+          type='text'
+          onChange={(id, value) => onRowClick(value as string)}
+          value={row.readyQuantityWithdrawn}
+          label={''}
+        />
+      );
+    }
+  };
+
   if (column.key === 'batchNumber') {
     return (
       <CellRenderer
@@ -114,6 +128,18 @@ export default function WithdrawalBatchesCellRenderer(props: RendererProps<Table
         index={index}
         column={column}
         value={+row.readyQuantityWithdrawn + +row.notReadyQuantityWithdrawn}
+        row={row}
+        className={classes.text}
+      />
+    );
+  }
+
+  if (column.key === 'outplantReadyQuantityWithdrawn') {
+    return (
+      <CellRenderer
+        index={index}
+        column={column}
+        value={createReadyOutplantInput(value)}
         row={row}
         className={classes.text}
       />
