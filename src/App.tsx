@@ -59,6 +59,7 @@ import {
   BatchBulkWithdrawWrapperComponent,
   SpeciesBulkWithdrawWrapperComponent,
 } from './components/Inventory/withdraw';
+import PlantsDashboard from './components/Plants';
 
 interface StyleProps {
   isDesktop?: boolean;
@@ -527,6 +528,16 @@ export default function App() {
               {selectedOrganization && (
                 <Route exact path={APP_PATHS.NURSERIES_EDIT}>
                   <NewNursery organization={selectedOrganization} reloadOrganizationData={reloadData} />
+                </Route>
+              )}
+              {trackingEnabled && selectedOrganization && (
+                <Route path={APP_PATHS.PLANTS_DASHBOARD}>
+                  <PlantsDashboard organization={selectedOrganization} />
+                </Route>
+              )}
+              {trackingEnabled && selectedOrganization && (
+                <Route path={APP_PATHS.PLANTING_SITE_DASHBOARD}>
+                  <PlantsDashboard organization={selectedOrganization} />
                 </Route>
               )}
               <Route path={APP_PATHS.NURSERIES_VIEW}>
