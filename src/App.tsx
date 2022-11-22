@@ -396,7 +396,7 @@ export default function App() {
                 <NavBar
                   organization={selectedOrganization}
                   setShowNavBar={setShowNavBar}
-                  backgroundTransparent={location.pathname === APP_PATHS.HOME}
+                  backgroundTransparent={location.pathname.startsWith(APP_PATHS.HOME)}
                 />
               )}
             </div>
