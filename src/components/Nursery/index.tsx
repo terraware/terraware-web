@@ -1,4 +1,4 @@
-import { Container, Grid, Theme, Typography } from '@mui/material';
+import { Grid, Theme, Typography, useTheme } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
@@ -11,6 +11,8 @@ import Button from '../common/button/Button';
 import { Facility } from 'src/api/types/facilities';
 import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import TfMain from '../common/TfMain';
+import PageSnackbar from '../PageSnackbar';
 
 const useStyles = makeStyles((theme: Theme) => ({
   backIcon: {
@@ -36,6 +38,7 @@ type NurseryDetailsProps = {
   organization?: ServerOrganization;
 };
 export default function NurseryDetails({ organization }: NurseryDetailsProps): JSX.Element {
+  const theme = useTheme();
   const { nurseryId } = useParams<{ nurseryId: string }>();
   const [nursery, setNursery] = useState<Facility>();
   const history = useHistory();
@@ -69,24 +72,42 @@ export default function NurseryDetails({ organization }: NurseryDetailsProps): J
   };
 
   return (
-    <Container maxWidth={false}>
-      <Grid container spacing={3}>
-        <Grid item xs={12} marginTop={3}>
+    <TfMain>
+      <Grid container padding={theme.spacing(0, 0, 4, 0)}>
+        <Grid item xs={12} marginBottom={theme.spacing(3)}>
           <Link id='back' to={APP_PATHS.NURSERIES} className={classes.back}>
-            <Icon name='caretLeft' className={classes.backIcon} />
-            {strings.NURSERIES}
+            <Icon name='caretLeft' className={classes.backIcon} size='small' />
+            <Typography fontSize='14px' fontWeight={500}>
+              {strings.NURSERIES}
+            </Typography>
           </Link>
         </Grid>
-        <Grid item xs={12} className={classes.titleWithButton}>
+        <Grid item xs={12} padding={theme.spacing(0, 3)} className={classes.titleWithButton}>
           <Typography fontSize='20px' fontWeight={600}>
             {nursery?.name}
           </Typography>
-          {isMobile ? (
-            <Button icon='iconEdit' priority='secondary' onClick={goToEditNursery} />
-          ) : (
-            <Button icon='iconEdit' label={strings.EDIT} priority='secondary' onClick={goToEditNursery} />
-          )}
+          <Button
+            icon='iconEdit'
+            label={isMobile ? undefined : strings.EDIT}
+            priority='primary'
+            size='medium'
+            onClick={goToEditNursery}
+          />
         </Grid>
+        <Grid item xs={12}>
+          <PageSnackbar />
+        </Grid>
+      </Grid>
+
+      <Grid
+        container
+        sx={{
+          backgroundColor: theme.palette.TwClrBg,
+          borderRadius: '32px',
+          padding: theme.spacing(3),
+          margin: 0,
+        }}
+      >
         <Grid item xs={gridSize()}>
           <TextField label={strings.NAME} id='name' type='text' value={nursery?.name} display={true} />
         </Grid>
@@ -100,6 +121,6 @@ export default function NurseryDetails({ organization }: NurseryDetailsProps): J
           />
         </Grid>
       </Grid>
-    </Container>
+    </TfMain>
   );
 }
