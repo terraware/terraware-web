@@ -88,7 +88,7 @@ export default function NurseryDetails({ organization }: NurseryDetailsProps): J
           </Typography>
           <Button
             icon='iconEdit'
-            label={isMobile ? undefined : strings.EDIT}
+            label={isMobile ? undefined : strings.EDIT_NURSERY}
             priority='primary'
             size='medium'
             onClick={goToEditNursery}

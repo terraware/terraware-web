@@ -87,7 +87,7 @@ export default function SeedBankDetails({ organization }: SeedBankDetailsProps):
           </Typography>
           <Button
             icon='iconEdit'
-            label={isMobile ? undefined : strings.EDIT}
+            label={isMobile ? undefined : strings.EDIT_SEED_BANK}
             priority='primary'
             size='medium'
             onClick={goToEditSeedBank}
