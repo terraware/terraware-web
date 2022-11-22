@@ -17,7 +17,6 @@ import PageSnackbar from 'src/components/PageSnackbar';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
-
 type OrganizationViewProps = {
   organization?: ServerOrganization;
 };
@@ -93,12 +92,15 @@ export default function OrganizationView({ organization }: OrganizationViewProps
         </Typography>
         <PageSnackbar />
       </Box>
-      <Grid container sx={{
-        backgroundColor: theme.palette.TwClrBg,
-        borderRadius: '32px',
-        padding: theme.spacing(3),
-        margin: 0,
-      }}>
+      <Grid
+        container
+        sx={{
+          backgroundColor: theme.palette.TwClrBg,
+          borderRadius: '32px',
+          padding: theme.spacing(3),
+          margin: 0,
+        }}
+      >
         <Grid item xs={gridSize()} paddingBottom={theme.spacing(4)}>
           <TextField
             label={strings.ORGANIZATION_NAME}
