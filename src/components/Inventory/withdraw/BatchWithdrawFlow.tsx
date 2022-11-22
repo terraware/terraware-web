@@ -35,7 +35,7 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
     withdrawnDate: getTodaysDateFormatted(),
   });
   const [batches, setBatches] = useState<any[]>();
-  const snackbar = useSnackbar();
+  const [snackbar] = useState(useSnackbar());
   const history = useHistory();
 
   useEffect(() => {
@@ -73,11 +73,15 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
       });
 
       if (searchResponse) {
-        setBatches(searchResponse);
+        const withdrawable = searchResponse.filter((batch) => Number(batch.totalQuantity) > 0);
+        if (!withdrawable.length) {
+          snackbar.toastError(strings.NO_BATCHES_TO_WITHDRAW_FROM); // temporary until we have a solution from design
+        }
+        setBatches(withdrawable);
       }
     };
     populateBatches();
-  }, [batchIds]);
+  }, [batchIds, snackbar]);
 
   const onWithdrawalConfigured = (withdrawal: NurseryWithdrawalRequest) => {
     setRecord(withdrawal);
@@ -94,6 +98,15 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
 
   const withdraw = async (photos: File[]) => {
     // first create the withdrawal
+    record.batchWithdrawals = record.batchWithdrawals.filter((batchWithdrawal) => {
+      return Number(batchWithdrawal.readyQuantityWithdrawn) + Number(batchWithdrawal.notReadyQuantityWithdrawn) > 0;
+    });
+
+    if (record.batchWithdrawals.length === 0) {
+      snackbar.toastError(strings.NO_BATCHES_TO_WITHDRAW_FROM); // temporary until we have a solution from design
+      return;
+    }
+
     const response = await createBatchWithdrawal(record);
     if (!response.requestSucceeded) {
       snackbar.toastError(response.error);

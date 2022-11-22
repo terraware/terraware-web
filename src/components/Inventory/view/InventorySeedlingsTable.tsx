@@ -14,7 +14,6 @@ import DeleteBatchesModal from './DeleteBatchesModal';
 import { deleteBatch } from 'src/api/batch/batch';
 import useSnackbar from 'src/utils/useSnackbar';
 import BatchDetailsModal from './BatchDetailsModal';
-import { Batch } from 'src/api/types/batch';
 import WithdrawalModal from './WithdrawalModal';
 import Search from '../Search';
 import { APP_PATHS } from 'src/constants';
@@ -49,13 +48,13 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const [temporalSearchValue, setTemporalSearchValue] = useState<string>('');
-  const [batches, setBatches] = useState<Batch[]>([]);
+  const [batches, setBatches] = useState<any[]>([]);
   const [filters, setFilters] = useForm<InventoryFiltersType>({});
-  const [selectedRows, setSelectedRows] = useState<Batch[]>([]);
+  const [selectedRows, setSelectedRows] = useState<any[]>([]);
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
   const [openNewBatchModal, setOpenNewBatchModal] = useState<boolean>(false);
   const [openWithdrawalModal, setOpenWithdrawalModal] = useState<boolean>(false);
-  const [selectedBatch, setSelectedBatch] = useState<Batch>();
+  const [selectedBatch, setSelectedBatch] = useState<any>();
   const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
   const snackbar = useSnackbar();
   const history = useHistory();
@@ -129,7 +128,7 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
 
       if (activeRequests) {
         const batchesResults = searchResponse?.map((sr) => {
-          return { ...sr, facilityId: sr.facility_id } as Batch;
+          return { ...sr, facilityId: sr.facility_id };
         });
         setBatches(batchesResults || []);
       }
@@ -175,7 +174,7 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
     return;
   };
 
-  const onBatchSelected = (batch: Batch, fromColumn?: string) => {
+  const onBatchSelected = (batch: any, fromColumn?: string) => {
     setSelectedBatch(batch);
     if (fromColumn === 'withdraw') {
       if (trackingEnabled) {
@@ -200,6 +199,14 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
     return !otherNursery;
   };
 
+  const selectionHasWithdrawableQuantities = () => {
+    return selectedRows.some((row) => Number(row.totalQuantity) > 0);
+  };
+
+  const isSelectionBulkWithdrawable = () => {
+    return areAllFromSameNursery() && selectionHasWithdrawableQuantities();
+  };
+
   const getSelectedRowsAsQueryParams = () => {
     const batchIds = selectedRows.map((row) => `batchId=${row.id}`);
     return `?${batchIds.join('&')}&source=${window.location.pathname}`;
@@ -220,7 +227,7 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
       onButtonClick: () => setOpenDeleteModal(true),
     });
 
-    if (selectedRows.length > 1 && areAllFromSameNursery()) {
+    if (selectedRows.length > 1 && isSelectionBulkWithdrawable()) {
       topBarButtons.push({
         buttonType: 'passive',
         buttonText: strings.WITHDRAW,
@@ -232,17 +239,19 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
 
   return (
     <Grid item xs={12} sx={{ marginTop: theme.spacing(1) }}>
-      <BatchDetailsModal
-        open={openNewBatchModal}
-        reload={reloadData}
-        onClose={() => {
-          onUpdateOpenBatch(null);
-          setOpenNewBatchModal(false);
-        }}
-        organization={organization}
-        speciesId={speciesId}
-        selectedBatch={selectedBatch}
-      />
+      {openNewBatchModal && (
+        <BatchDetailsModal
+          open={openNewBatchModal}
+          reload={reloadData}
+          onClose={() => {
+            onUpdateOpenBatch(null);
+            setOpenNewBatchModal(false);
+          }}
+          organization={organization}
+          speciesId={speciesId}
+          selectedBatch={selectedBatch}
+        />
+      )}
       {selectedBatch && (
         <WithdrawalModal
           open={openWithdrawalModal}

@@ -6,10 +6,11 @@ import { ModalValuesType } from './BatchesCellRenderer';
 
 export type QuantitiesMenuProps = {
   setModalValues: React.Dispatch<React.SetStateAction<ModalValuesType>>;
+  batch: any;
 };
 
 export default function QuantitiesMenu(props: QuantitiesMenuProps): JSX.Element {
-  const { setModalValues } = props;
+  const { setModalValues, batch } = props;
   const theme = useTheme();
   const [menuAnchorEl, setMenuAnchorEl] = useState<HTMLButtonElement | null>(null);
   const openMenu = Boolean(menuAnchorEl);
@@ -46,6 +47,7 @@ export default function QuantitiesMenu(props: QuantitiesMenuProps): JSX.Element 
             id='change-germinating'
             onClick={(event) => openChangeQuantityHandler(event, 'germinating')}
             sx={{ padding: theme.spacing(1, 2) }}
+            disabled={Number(batch.germinatingQuantity) === 0}
           >
             <Typography color={theme.palette.TwClrBaseGray800} paddingLeft={1}>
               {strings.CHANGE_GERMINATING_STATUS}
@@ -55,6 +57,7 @@ export default function QuantitiesMenu(props: QuantitiesMenuProps): JSX.Element 
             id='change-not-ready'
             onClick={(event) => openChangeQuantityHandler(event, 'not-ready')}
             sx={{ padding: theme.spacing(1, 2) }}
+            disabled={Number(batch.notReadyQuantity) === 0}
           >
             <Typography color={theme.palette.TwClrBaseGray800} paddingLeft={1}>
               {strings.CHANGE_NOT_READY_STATUS}
