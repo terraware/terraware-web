@@ -126,7 +126,7 @@ export default function NavBar({ organization, setShowNavBar }: NavBarProps): JS
           <NavSection title={strings.PLANTS.toUpperCase()} />
           <NavItem
             label={strings.DASHBOARD}
-            icon='iconSeedling'
+            icon='iconRestorationSite'
             selected={!!isPlantsDashboardRoute}
             onClick={() => {
               closeAndNavigateTo(APP_PATHS.PLANTS_DASHBOARD);
