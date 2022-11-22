@@ -1,4 +1,4 @@
-import { Grid, IconButton, Popover, Theme, Typography, useTheme } from '@mui/material';
+import { Box, Grid, IconButton, Popover, Theme, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useEffect, useState } from 'react';
 import Icon from 'src/components/common/icon/Icon';
@@ -49,6 +49,8 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   container: {
     padding: '24px',
+    maxHeight: 'calc(100vh - 150px)',
+    overflow: 'auto',
   },
   footer: {
     background: '#F2F4F5',
@@ -154,22 +156,24 @@ export default function InventoryFiltersPopover({
       >
         <div className={classes.popover}>
           <div className={classes.title}>{strings.FILTERS}</div>
-          <Grid container spacing={2} className={classes.container}>
-            <Typography fontSize='16px' paddingLeft={theme.spacing(2)} color='#708284'>
-              {strings.NURSERIES}
-            </Typography>
-            {getAllNurseries(organization).map((n) => (
-              <Grid item xs={12} key={n.id}>
-                <Checkbox
-                  id={n.id.toString()}
-                  name={n.name}
-                  label={n.name}
-                  value={hasFilter(n.id)}
-                  onChange={onChange}
-                />
-              </Grid>
-            ))}
-          </Grid>
+          <Box className={classes.container}>
+            <Grid container spacing={2}>
+              <Typography fontSize='16px' paddingLeft={theme.spacing(2)} color='#708284'>
+                {strings.NURSERIES}
+              </Typography>
+              {getAllNurseries(organization).map((n) => (
+                <Grid item xs={12} key={n.id}>
+                  <Checkbox
+                    id={n.id.toString()}
+                    name={n.name}
+                    label={n.name}
+                    value={hasFilter(n.id)}
+                    onChange={onChange}
+                  />
+                </Grid>
+              ))}
+            </Grid>
+          </Box>
           <div className={classes.footer}>
             <Button label='Reset' onClick={onReset} size='medium' priority='secondary' type='passive' />
             <Button label='Done' onClick={onDone} size='medium' />
