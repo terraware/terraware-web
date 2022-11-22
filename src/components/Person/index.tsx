@@ -124,7 +124,7 @@ export default function PersonDetails({ organization }: PersonDetailsProps): JSX
               />
             ) : (
               <Button
-                label={strings.EDIT}
+                label={strings.EDIT_PERSON}
                 icon='iconEdit'
                 priority='primary'
                 size='medium'
