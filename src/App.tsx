@@ -3,6 +3,7 @@ import { CircularProgress, CssBaseline, Slide, StyledEngineProvider, Theme } fro
 import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import { Redirect, Route, Switch } from 'react-router-dom';
+import hexRgb from 'hex-rgb';
 import useQuery from './utils/useQuery';
 import useStateLocation, { getLocation } from './utils/useStateLocation';
 import { getOrganizations } from 'src/api/organization/organization';
@@ -66,7 +67,13 @@ interface StyleProps {
 
 const useStyles = makeStyles((theme: Theme) => ({
   container: {
-    background: 'linear-gradient(180deg, #FBF9F9 0%, #EFF5EF 100%)',
+    backgroundColor: theme.palette.TwClrBaseGray025,
+    backgroundImage:
+      'linear-gradient(180deg,' +
+      `${hexRgb(`${theme.palette.TwClrBaseGreen050}`, { alpha: 0, format: 'css' })} 0%,` +
+      `${hexRgb(`${theme.palette.TwClrBaseGreen050}`, { alpha: 0.4, format: 'css' })} 100%)`,
+    backgroundAttachment: 'fixed',
+    minHeight: '100vh',
     '& .navbar': {
       backgroundColor: 'transparent',
       paddingTop: (props: StyleProps) => (props.isDesktop ? '88px' : '8px'),
