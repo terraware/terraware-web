@@ -98,7 +98,7 @@ export default function PageHeaderWrapper({ children, nextElement, nextElementIn
   }, [debouncedSticky, debouncedScrollDown, height]);
 
   const styles: Record<string, any> = {
-    background: debouncedSticky ? '#FBF9F9' : undefined,
+    background: debouncedSticky ? theme.palette.TwClrBaseGray025 : undefined,
     boxShadow: debouncedSticky ? `0px 3px 3px -3px ${theme.palette.TwClrBaseGray200}` : undefined,
     paddingRight: debouncedSticky ? theme.spacing(4) : undefined,
     paddingTop: debouncedSticky ? theme.spacing(4) : undefined,

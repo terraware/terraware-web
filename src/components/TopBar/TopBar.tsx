@@ -5,7 +5,7 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const useStyles = makeStyles((theme: Theme) => ({
   appBar: {
-    background: '#FBF9F9',
+    background: theme.palette.TwClrBaseGray025,
     color: theme.palette.TwClrTxt,
     boxShadow: 'none',
     minHeight: '64px',
