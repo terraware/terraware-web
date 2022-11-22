@@ -59,6 +59,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     backgroundColor: theme.palette.TwClrBg,
     borderRadius: '32px',
     padding: theme.spacing(3),
+    minWidth: 'fit-content',
   },
   actionMenuIcon: {
     fill: theme.palette.TwClrTxtBrand,
