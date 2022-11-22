@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { addError } from '../utils';
 import { paths } from '../types/generated-schema';
-import { Batch } from '../types/batch';
+import { Batch, NurseryWithdrawal } from '../types/batch';
 
 const BATCHES = '/api/v1/nursery/batches';
 type CreateBatchResponsePayload = paths[typeof BATCHES]['post']['responses'][200]['content']['application/json'];
@@ -172,7 +172,7 @@ export type CreateNurseryWithdrawalRequestPayload =
   paths[typeof BATCH_WITHDRAWALS]['post']['requestBody']['content']['application/json'];
 
 type CreateBatchWithdrawalResponse = {
-  withdrawalId: number | null;
+  withdrawal: NurseryWithdrawal | null;
   requestSucceeded: boolean;
   error?: string;
 };
@@ -181,7 +181,7 @@ export async function createBatchWithdrawal(
   createNurseryWithdrawalRequestPayload: CreateNurseryWithdrawalRequestPayload
 ): Promise<CreateBatchWithdrawalResponse> {
   const response: CreateBatchWithdrawalResponse = {
-    withdrawalId: null,
+    withdrawal: null,
     requestSucceeded: true,
   };
 
@@ -190,7 +190,7 @@ export async function createBatchWithdrawal(
       await axios.post(BATCH_WITHDRAWALS, createNurseryWithdrawalRequestPayload)
     ).data;
     if (serverResponse.status === 'ok') {
-      response.withdrawalId = serverResponse.withdrawal.id;
+      response.withdrawal = serverResponse.withdrawal;
     } else {
       response.requestSucceeded = false;
     }

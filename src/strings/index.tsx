@@ -844,6 +844,14 @@ const strings = new LocalizedStrings({
     PLOT: 'Plot',
     SELECT_BATCHES: 'Select Batches',
     TOTAL_WITHDRAW: 'Total Withdraw',
+    BATCH_WITHDRAW_SUCCESS: '{0} {1} for a total of {2} {3} withdrawn.',
+    BATCHES_SINGULAR: 'batch',
+    BATCHES_PLURAL: 'batches',
+    SEEDLINGS_SINGULAR: 'seedling',
+    SEEDLINGS_PLURAL: 'seedlings',
+    NO_BATCHES_TO_WITHDRAW_FROM: 'There are no batches with withdrawable quantities.',
+    PHOTOS_REQUIRED: 'Photos Required',
+    PHOTOS_OUTPLANT_DESCRIPTION: 'Outplant withdrawals require photos.',
   },
 });
 

@@ -37,6 +37,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     marginTop: theme.spacing(3),
   },
   error: {
+    width: '100%',
     marginBottom: theme.spacing(2),
   },
 }));
