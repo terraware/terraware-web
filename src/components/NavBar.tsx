@@ -39,6 +39,9 @@ export default function NavBar({ organization, setShowNavBar }: NavBarProps): JS
   const isNurseriesRoute = useRouteMatch(APP_PATHS.NURSERIES + '/');
   const isInventoryRoute = useRouteMatch(APP_PATHS.INVENTORY + '/');
   const isPlantingSitesRoute = useRouteMatch(APP_PATHS.PLANTING_SITES + '/');
+  const isPlantsDashboardRoute = useRouteMatch(APP_PATHS.PLANTS_DASHBOARD + '/');
+
+  const trackingEnabled = isEnabled('Tracking V1');
 
   const navigate = (url: string) => {
     history.push(url);
@@ -118,6 +121,20 @@ export default function NavBar({ organization, setShowNavBar }: NavBarProps): JS
           id='inventory'
         />
       </>
+      {trackingEnabled && (
+        <>
+          <NavSection title={strings.PLANTS.toUpperCase()} />
+          <NavItem
+            label={strings.DASHBOARD}
+            icon='iconSeedling'
+            selected={!!isPlantsDashboardRoute}
+            onClick={() => {
+              closeAndNavigateTo(APP_PATHS.PLANTS_DASHBOARD);
+            }}
+            id='plants-dashboard'
+          />
+        </>
+      )}
       {role && ['Admin', 'Owner'].includes(role) && (
         <>
           <NavSection title={strings.SETTINGS.toUpperCase()} />
@@ -159,7 +176,7 @@ export default function NavBar({ organization, setShowNavBar }: NavBarProps): JS
           />
         </>
       )}
-      {isEnabled('Tracking V1') && (
+      {trackingEnabled && (
         <NavItem
           label={strings.PLANTING_SITES}
           selected={!!isPlantingSitesRoute}
