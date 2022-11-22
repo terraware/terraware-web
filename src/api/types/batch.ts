@@ -17,3 +17,4 @@ export type NurseryWithdrawalPurpose =
 
 export const schemas = 'schemas';
 export type NurseryTransfer = components[typeof schemas]['CreateNurseryTransferRequestPayload'];
+export type NurseryWithdrawalRequest = components[typeof schemas]['CreateNurseryWithdrawalRequestPayload'];

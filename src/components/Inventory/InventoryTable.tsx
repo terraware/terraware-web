@@ -66,7 +66,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
 
     history.push({
       pathname: APP_PATHS.INVENTORY_WITHDRAW,
-      search: `?${speciesIds.join('&')}`,
+      search: `?${speciesIds.join('&')}&source=${window.location.pathname}`,
     });
   };
 

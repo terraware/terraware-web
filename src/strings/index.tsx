@@ -841,6 +841,10 @@ const strings = new LocalizedStrings({
     ADD_PHOTOS: 'Add Photos',
     ADD_PHOTOS_DESCRIPTION:
       'Take a photo (or photos) of the batches that will be planted at the selected plot. Be sure to include the entire withdrawal in the photo(s).',
+    TO_PLANTING_SITE: 'To: Planting Site',
+    VIEW_SITES_ZONES_PLOTS: 'View Sites, Zones, and Plots on a map.',
+    PLANTING_ZONE: 'Planting Zone',
+    PLOT: 'Plot',
   },
 });
 

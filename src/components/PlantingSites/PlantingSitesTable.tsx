@@ -56,7 +56,7 @@ export default function PlantingSitesTable(props: PlantingSitesTableProps): JSX.
           <Grid container spacing={4}>
             <Grid item xs={12}>
               <Table
-                id='plantig-sites-table'
+                id='planting-sites-table'
                 columns={columns}
                 rows={results}
                 orderBy='name'

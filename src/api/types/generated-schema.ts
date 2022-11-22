@@ -608,6 +608,10 @@ export interface components {
       destinationFacilityId?: number;
       facilityId: number;
       notes?: string;
+      /** If purpose is "Out Plant", the ID of the planting site to which the seedlings were delivered. */
+      plantingSiteId?: number;
+      /** If purpose is "Out Plant", the ID of the plot to which the seedlings were delivered. Must be specified if the planting site has plots, but must be omitted or set to null if the planting site has no plots. */
+      plotId?: number;
       purpose: "Nursery Transfer" | "Dead" | "Out Plant" | "Other";
       /** If purpose is "Nursery Transfer", the estimated ready-by date to use for the batches that are created at the other nursery. */
       readyByDate?: string;
@@ -615,6 +619,8 @@ export interface components {
     };
     CreateNurseryWithdrawalResponsePayload: {
       batches: components["schemas"]["BatchPayload"][];
+      /** If the withdrawal was an outplanting to a planting site, the delivery that was created. Not present for other withdrawal purposes. */
+      delivery?: components["schemas"]["DeliveryPayload"];
       withdrawal: components["schemas"]["NurseryWithdrawalPayload"];
       status?: components["schemas"]["SuccessOrError"];
     };
@@ -697,6 +703,10 @@ export interface components {
       withdrawnByUserId?: number;
       /** Quantity of seeds withdrawn. If this quantity is in weight and the remaining quantity of the accession is in seeds or vice versa, the accession must have a subset weight and count. */
       withdrawnQuantity?: components["schemas"]["SeedQuantityPayload"];
+    };
+    /** If the withdrawal was an outplanting to a planting site, the delivery that was created. Not present for other withdrawal purposes. */
+    DeliveryPayload: {
+      id: number;
     };
     DeviceConfig: {
       /** Unique identifier of this device. */
@@ -1082,13 +1092,13 @@ export interface components {
       name: string;
       description?: string;
       configuration?: { [key: string]: unknown };
-      settings?: { [key: string]: { [key: string]: unknown } };
       type: string;
-      timeseriesName?: string;
-      deviceId?: number;
+      settings?: { [key: string]: { [key: string]: unknown } };
       lowerThreshold?: number;
       upperThreshold?: number;
       verbosity: number;
+      timeseriesName?: string;
+      deviceId?: number;
     };
     MultiLineString: components["schemas"]["Geometry"] & {
       coordinates?: number[][][];
@@ -2703,7 +2713,7 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": {
+        "multipart/form-data": {
           file: string;
         };
       };
@@ -2728,6 +2738,7 @@ export interface operations {
       200: {
         content: {
           "image/jpeg": string;
+          "image/png": string;
         };
       };
       /** The withdrawal does not exist, or does not have a photo with the requested ID. */
@@ -3074,6 +3085,7 @@ export interface operations {
       200: {
         content: {
           "image/jpeg": string;
+          "image/png": string;
         };
       };
       /** The accession does not exist, or does not have a photo with the requested filename. */

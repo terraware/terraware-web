@@ -181,7 +181,7 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
       if (trackingEnabled) {
         history.push({
           pathname: APP_PATHS.BATCH_WITHDRAW,
-          search: `?batchId=${batch.id.toString()}`,
+          search: `?batchId=${batch.id.toString()}&source=${window.location.pathname}`,
         });
       } else {
         setOpenWithdrawalModal(true);
@@ -202,7 +202,7 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
 
   const getSelectedRowsAsQueryParams = () => {
     const batchIds = selectedRows.map((row) => `batchId=${row.id}`);
-    return `?${batchIds.join('&')}`;
+    return `?${batchIds.join('&')}&source=${window.location.pathname}`;
   };
 
   const bulkWithdrawSelectedRows = () => {
