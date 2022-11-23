@@ -1,3 +1,4 @@
+eed9b93 SW-2355 Fix withdraw batch quantities view styling issues (#811)
 4b9ad89 SW-2145 Implement page that accepts withdrawn quantity information grouped by Species/Batch-Number (#801)
 a9c7559 SW-2351 Fix rendering performance issues on planting site maps (#807)
 24bab17 SW-2309 / SW-2310 - Nav menu and routing for Plants/Dashboard (#803)
