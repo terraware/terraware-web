@@ -303,6 +303,7 @@ const strings = new LocalizedStrings({
     PEOPLE: 'People',
     CHECK_IN_MESSAGE:
       '{0} new accessions should have been dropped off at the seed bank. Please verify their arrival and check them in.',
+    ACCESSIONS_TO_BE_CHECKED_IN: 'There are {0} accessions to check in.',
     SPECIES_DESCRIPTION: 'Manage your organization’s species list for planning, operation and reporting.',
     NAME: 'Name',
     NAME_REQUIRED: 'Name *',

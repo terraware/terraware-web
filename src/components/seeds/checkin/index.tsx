@@ -1,16 +1,6 @@
-import {
-  Container,
-  Grid,
-  Paper,
-  Table,
-  TableBody,
-  TableCell as MuiTableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-} from '@mui/material';
+import { Box, Container, Grid, useTheme } from '@mui/material';
 import { Theme } from '@mui/material';
-import { makeStyles, withStyles } from '@mui/styles';
+import { makeStyles } from '@mui/styles';
 import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router';
 import { useRecoilState } from 'recoil';
@@ -28,10 +18,11 @@ import useStateLocation from 'src/utils/useStateLocation';
 import PageHeader from '../PageHeader';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
+import TextField from '../../common/Textfield/Textfield';
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
-    padding: '32px 0',
+    padding: 0,
   },
   downloadReport: {
     background: theme.palette.common.black,
@@ -58,20 +49,14 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-const TableCell = withStyles({
-  root: {
-    borderBottom: 'none',
-    padding: '6px',
-  },
-})(MuiTableCell);
-
 export type CheckInProps = {
   organization?: ServerOrganization;
 };
 
 export default function CheckIn(props: CheckInProps): JSX.Element {
-  const { isDesktop } = useDeviceInfo();
+  const { isMobile } = useDeviceInfo();
   const classes = useStyles();
+  const theme = useTheme();
   const { organization } = props;
   const history = useHistory();
   const location = useStateLocation();
@@ -106,7 +91,7 @@ export default function CheckIn(props: CheckInProps): JSX.Element {
 
   const getSubtitle = () => {
     if (pendingAccessions) {
-      return `${pendingAccessions.length} ${strings.ACCESSIONS_TOTAL}`;
+      return strings.formatString(strings.ACCESSIONS_TO_BE_CHECKED_IN, pendingAccessions.length);
     }
   };
 
@@ -136,55 +121,70 @@ export default function CheckIn(props: CheckInProps): JSX.Element {
           />
         </PageHeaderWrapper>
         <Container ref={contentRef} maxWidth={false} className={classes.mainContainer}>
-          <Grid container>
+          <Grid container spacing={3}>
             {pendingAccessionsById && (
               <Grid item xs={12}>
-                <div>
-                  {pendingAccessionsById.map((result) => {
-                    return (
-                      <TableContainer
-                        component={Paper}
-                        key={result.accessionNumber as number}
-                        style={{ padding: '24px', marginBottom: '32px' }}
-                      >
-                        <Table aria-label='simple table'>
-                          <TableHead className={classes.tableHead}>
-                            <TableRow>
-                              <TableCell className={classes.title}>{result.bagNumber as string}</TableCell>
-                            </TableRow>
-                            <TableRow>
-                              <TableCell>{strings.ACCESSION}</TableCell>
-                              <TableCell>{strings.SPECIES}</TableCell>
-                              <TableCell>{strings.SITE_LOCATION}</TableCell>
-                              <TableCell>{strings.COLLECTED_DATE}</TableCell>
-                              <TableCell>{strings.RECEIVED_DATE}</TableCell>
-                            </TableRow>
-                          </TableHead>
-                          <TableBody>
-                            <TableRow>
-                              <TableCell component='th' scope='row'>
-                                {result.accessionNumber as string}
-                              </TableCell>
-                              <TableCell>{result.speciesName as string}</TableCell>
-                              <TableCell>{result.collectionSiteName as string}</TableCell>
-                              <TableCell>{result.collectedDate as string}</TableCell>
-                              <TableCell>{result.receivedDate as string}</TableCell>
-                              <TableCell>
-                                <Button
-                                  onClick={() => goToAccession(result.id! as string)}
-                                  id='viewCollections'
-                                  label={isDesktop ? strings.VIEW_ACCESSION : strings.VIEW}
-                                  priority='secondary'
-                                  type='passive'
-                                />
-                              </TableCell>
-                            </TableRow>
-                          </TableBody>
-                        </Table>
-                      </TableContainer>
-                    );
-                  })}
-                </div>
+                {pendingAccessionsById.map((result) => {
+                  return (
+                    <Grid container key={result.accessionNumber as string} columns={16} sx={{
+                      backgroundColor: theme.palette.TwClrBg,
+                      borderRadius: '24px',
+                      padding: theme.spacing(3),
+                      marginBottom: theme.spacing(3),
+                      '&:last-of-type': {
+                        marginBottom: 0,
+                      },
+                    }}>
+                      <Grid item xs={isMobile ? 16 : 3} marginBottom={isMobile ? theme.spacing(3) : 0}>
+                        {isMobile ? (
+                          <Box display='flex' justifyContent='space-between'>
+                            <TextField label={strings.ACCESSION} id='accession' type='text'
+                                       value={result.accessionNumber as string} display={true} />
+                            <Button
+                              onClick={() => goToAccession(result.id! as string)}
+                              id='viewCollections'
+                              label={strings.VIEW}
+                              priority='secondary'
+                              type='productive'
+                            />
+                          </Box>
+                        ) : (
+                          <TextField label={strings.ACCESSION} id='accession' type='text'
+                                     value={result.accessionNumber as string} display={true} />
+                        )}
+                      </Grid>
+                      <Grid item xs={isMobile ? 16 : 3} marginBottom={isMobile ? theme.spacing(3) : 0}>
+                        <TextField label={strings.SPECIES} id='species' type='text' value={result.speciesName as string}
+                                   display={true} />
+                      </Grid>
+                      <Grid item xs={isMobile ? 16 : 3} marginBottom={isMobile ? theme.spacing(3) : 0}>
+                        <TextField label={strings.SITE_LOCATION} id='location' type='text'
+                                   value={result.collectionSiteName as string} display={true} />
+                      </Grid>
+                      <Grid item xs={isMobile ? 16 : 3} marginBottom={isMobile ? theme.spacing(3) : 0}>
+                        <TextField label={strings.COLLECTED_DATE} id='collected' type='text'
+                                   value={result.collectedDate as string} display={true} />
+                      </Grid>
+                      <Grid item xs={isMobile ? 16 : 3}>
+                        <TextField label={strings.RECEIVED_DATE} id='received' type='text'
+                                   value={result.receivedDate as string} display={true} />
+                      </Grid>
+                      {!isMobile && (
+                        <Grid item xs={1}>
+                          <Box height='100%' display='flex' alignItems='center' justifyContent='flex-end'>
+                            <Button
+                              onClick={() => goToAccession(result.id! as string)}
+                              id='viewCollections'
+                              label={strings.VIEW}
+                              priority='secondary'
+                              type='productive'
+                            />
+                          </Box>
+                        </Grid>
+                      )}
+                    </Grid>
+                  );
+                })}
               </Grid>
             )}
           </Grid>
