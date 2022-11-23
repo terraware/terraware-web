@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Box } from '@mui/material';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import ReactMapGL, { Layer, NavigationControl, Popup, Source } from 'react-map-gl';
@@ -81,39 +81,49 @@ export default function Map(props: MapProps): JSX.Element {
     if (geoData) {
       return;
     }
-    // initialize sources
+
+    /**
+     * Initialize sources - we want ONE source per data type, eg. one source containing all geometries for zones.
+     * Creating multiple sources, one per zone or one per plot, is unnecessarily and will create performance bottlenecks.
+     * Leverage data-drive rendering using properties in the features and mapbox supported properties:
+     *  eg. 'text-field': ['get', source.annotation.textField]
+     */
     const geo = sources
       .map((source) => {
-        if (!source.boundary || !Array.isArray(source.boundary)) {
-          return null;
-        }
-        const multiPolygons = (source.boundary as (number | number[][][])[])
-          .map((geom) => {
-            if (!Array.isArray(geom)) {
+        const features = source.objectData
+          .map((data) => {
+            if (!data.boundary || !Array.isArray(data.boundary)) {
               return null;
             }
-            return geom as number[][][];
-          })
-          .filter((geom) => !!geom) as number[][][][];
+            const multiPolygons = (data.boundary as (number | number[][][])[])
+              .map((geom) => {
+                if (!Array.isArray(geom)) {
+                  return null;
+                }
+                return geom as number[][][];
+              })
+              .filter((geom) => !!geom) as number[][][][];
 
-        if (!multiPolygons.length) {
-          return null;
-        }
+            if (!multiPolygons.length) {
+              return null;
+            }
+            return multiPolygons.map((multiPolygon) => ({
+              type: 'Feature',
+              geometry: {
+                type: 'Polygon',
+                coordinates: multiPolygon,
+              },
+              properties: data.properties,
+            }));
+          })
+          .filter((f) => f)
+          .flatMap((f) => f);
 
         return {
           isInteractive: source.isInteractive,
           data: {
             type: 'FeatureCollection',
-            features: multiPolygons.map((multiPolygon) => {
-              return {
-                type: 'Feature',
-                geometry: {
-                  type: 'Polygon',
-                  coordinates: multiPolygon,
-                },
-                properties: source.properties,
-              };
-            }),
+            features,
           },
           layer: {
             id: `${source.id}-fill`,
@@ -138,6 +148,8 @@ export default function Map(props: MapProps): JSX.Element {
                   'text-color': source.annotation.textColor,
                 },
                 layout: {
+                  'text-allow-overlap': false,
+                  'text-ignore-placement': false,
                   'text-field': ['get', source.annotation.textField],
                   'text-anchor': 'center',
                   'text-size': source.annotation.textSize,
@@ -153,26 +165,34 @@ export default function Map(props: MapProps): JSX.Element {
     }
   }, [options, geoData, setGeoData, token, popupRenderer]);
 
+  const mapSources = useMemo(() => {
+    if (!geoData) {
+      return null;
+    }
+    const sources = (geoData as any[]).map((geo: any, index) => (
+      <Source type='geojson' key={index} data={geo.data}>
+        {geo.textAnnotation && <Layer {...geo.textAnnotation} />}
+        {geo.layerOutline && <Layer {...geo.layerOutline} />}
+        {geo.layer && <Layer {...geo.layer} />}
+      </Source>
+    ));
+
+    return sources;
+  }, [geoData]);
+
   return (
     <Box sx={{ display: 'flex', flexGrow: 1, height: '100%', minHeight: 250 }}>
       <ReactMapGL
         key={mapId}
         ref={mapRef}
         mapboxAccessToken={token}
-        mapStyle='mapbox://styles/mapbox/satellite-v9'
+        mapStyle='mapbox://styles/mapbox/satellite-v9?optimize=true'
         interactiveLayerIds={layerIds}
         onLoad={onMapLoad}
         onError={onMapError}
         onClick={onMapClick}
       >
-        {geoData &&
-          (geoData as any[]).map((geo: any, index) => (
-            <Source type='geojson' key={index} data={geo.data}>
-              <Layer {...geo.layer} />
-              {geo.textAnnotation && <Layer {...geo.textAnnotation} />}
-              <Layer {...geo.layerOutline} />
-            </Source>
-          ))}
+        {mapSources}
         <NavigationControl showCompass={false} style={navControlStyle} position='bottom-right' />
         {popupInfo && popupRenderer && (
           <Popup

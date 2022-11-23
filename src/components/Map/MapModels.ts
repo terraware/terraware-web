@@ -44,13 +44,17 @@ export type MapAnnotation = {
   textColor: string;
 };
 
+export type MapObjectData = {
+  properties: MapSourceProperties;
+  boundary: MapGeometry;
+};
+
 export type MapSource = {
   id: string;
   fillColor: string;
   lineColor: string;
   lineWidth: number;
-  properties: MapSourceProperties;
-  boundary: MapGeometry;
+  objectData: MapObjectData[];
   isInteractive?: boolean;
   // property name to render as a polygon annotation
   annotation?: MapAnnotation;
