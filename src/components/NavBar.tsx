@@ -14,8 +14,13 @@ import NavFooter from './common/Navbar/NavFooter';
 type NavBarProps = {
   organization?: ServerOrganization;
   setShowNavBar: React.Dispatch<React.SetStateAction<boolean>>;
+  backgroundTransparent?: boolean;
 };
-export default function NavBar({ organization, setShowNavBar }: NavBarProps): JSX.Element | null {
+export default function NavBar({
+  organization,
+  setShowNavBar,
+  backgroundTransparent,
+}: NavBarProps): JSX.Element | null {
   const [role, setRole] = useState<AllOrganizationRoles>();
   const { isDesktop } = useDeviceInfo();
 
@@ -61,7 +66,7 @@ export default function NavBar({ organization, setShowNavBar }: NavBarProps): JS
   };
 
   return (
-    <Navbar setShowNavBar={setShowNavBar}>
+    <Navbar setShowNavBar={setShowNavBar} backgroundTransparent={backgroundTransparent}>
       <NavItem
         label='Home'
         icon='home'
