@@ -106,7 +106,7 @@ export default function SeedBankDetails({ organization }: SeedBankDetailsProps):
           margin: 0,
         }}
       >
-        <Grid item xs={gridSize()}>
+        <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
           <TextField label={strings.NAME_REQUIRED} id='name' type='text' value={seedBank?.name} display={true} />
         </Grid>
         <Grid item xs={gridSize()}>

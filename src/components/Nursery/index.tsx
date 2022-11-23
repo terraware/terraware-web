@@ -108,7 +108,7 @@ export default function NurseryDetails({ organization }: NurseryDetailsProps): J
           margin: 0,
         }}
       >
-        <Grid item xs={gridSize()}>
+        <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
           <TextField label={strings.NAME} id='name' type='text' value={nursery?.name} display={true} />
         </Grid>
         <Grid item xs={gridSize()}>
