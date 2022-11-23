@@ -158,7 +158,7 @@ export default function WithdrawalsModal(props: WithdrawalsModalProps): JSX.Elem
         <DialogBox
           onClose={onCloseHandler}
           open={open}
-          title={strings.WITHDRAW}
+          title={strings.WITHDRAW_SEEDLINGS}
           size='large'
           middleButtons={[
             <Button

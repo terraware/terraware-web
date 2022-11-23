@@ -1086,12 +1086,12 @@ export interface components {
       description?: string;
       configuration?: { [key: string]: unknown };
       settings?: { [key: string]: { [key: string]: unknown } };
+      timeseriesName?: string;
+      deviceId?: number;
       type: string;
       lowerThreshold?: number;
       upperThreshold?: number;
       verbosity: number;
-      timeseriesName?: string;
-      deviceId?: number;
     };
     MultiPolygon: {
       coordinates: number[][][][];

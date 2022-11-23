@@ -430,6 +430,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
             accession={accession}
             organization={organization}
             reload={reloadData}
+            title={accession?.remainingQuantity?.quantity !== undefined ? strings.EDIT_QUANTITY : strings.ADD_QUANTITY}
           />
           {openViabilityModal && (
             <ViabilityModal
@@ -439,6 +440,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
               reload={reloadData}
               setNewViabilityTestOpened={setOpenNewViabilityTest}
               changeTab={handleChange}
+              title={accession?.viabilityPercent ? strings.EDIT_VIABILITY : strings.ADD_VIABILITY}
             />
           )}
         </>

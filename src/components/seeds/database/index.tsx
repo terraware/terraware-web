@@ -539,7 +539,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
           <MenuItem onClick={() => onDownloadReport()} id='download-report' sx={{ padding: theme.spacing(1, 2) }}>
             <Icon name='iconExport' />
             <Typography color={theme.palette.TwClrTxtBrand} paddingLeft={1}>
-              {strings.EXPORT_RECORDS}
+              {strings.EXPORT}
             </Typography>
           </MenuItem>
           <MenuItem onClick={() => onOpenEditColumnsModal()} id='edit-columns' sx={{ padding: theme.spacing(1, 2) }}>

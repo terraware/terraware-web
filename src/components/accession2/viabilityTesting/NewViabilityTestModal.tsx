@@ -384,7 +384,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
       <DialogBox
         onClose={onCloseHandler}
         open={open}
-        title={strings.VIABILITY_TEST}
+        title={record?.id !== -1 ? strings.EDIT_VIABILITY_TEST : strings.ADD_VIABILITY_TEST}
         size='large'
         middleButtons={[
           <Button label={strings.CANCEL} type='passive' onClick={onCloseHandler} priority='secondary' key='button-1' />,
