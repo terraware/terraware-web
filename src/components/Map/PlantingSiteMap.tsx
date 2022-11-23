@@ -131,9 +131,9 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
         id: 'plots',
         isInteractive: true,
         annotation: {
-          textField: 'fullName',
+          textField: 'name',
           textColor: theme.palette.TwClrBaseWhite as string,
-          textSize: 10,
+          textSize: 16,
         },
         ...renderAttributes,
       };
@@ -187,8 +187,8 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
 
   if (!token || !mapOptions) {
     return (
-      <Box sx={{ display: 'flex', flexGrow: 1, height: '100%' }}>
-        <CircularProgress sx={{ margin: 'auto auto' }} />
+      <Box sx={{ display: 'flex', flexGrow: 1, height: '100%', margin: 'auto' }}>
+        <CircularProgress sx={{ margin: 'auto' }} />
       </Box>
     );
   }
