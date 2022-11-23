@@ -1,12 +1,12 @@
 import React from 'react';
 import Title from '../common/Title';
-import { useHistory } from 'react-router-dom';
-import useStateLocation, { getLocation } from '../../utils/useStateLocation';
+import { Link } from 'react-router-dom';
 import { SelectedOrgInfo, ServerOrganization } from 'src/types/Organization';
 import PageSnackbar from 'src/components/PageSnackbar';
-import { ArrowBack } from '@mui/icons-material';
-import { Container, Grid, Fab, Box, Typography, Theme, useTheme } from '@mui/material';
+import { Container, Grid, Box, Typography, Theme, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import { Icon } from '@terraware/web-components';
+import strings from '../../strings';
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
@@ -34,11 +34,21 @@ const useStyles = makeStyles((theme: Theme) => ({
     display: 'flex',
   },
   back: {
-    marginTop: theme.spacing(4),
+    marginBottom: theme.spacing(3),
   },
   backIcon: {
-    marginRight: theme.spacing(4),
-    backgroundColor: theme.palette.common.white,
+    fill: theme.palette.TwClrIcnBrand,
+    marginRight: '4px',
+  },
+  backToAccessions: {
+    fontSize: '14px',
+    fontWeight: 500,
+    display: 'flex',
+    textDecoration: 'none',
+    color: theme.palette.TwClrTxtBrand,
+    alignItems: 'center',
+    marginLeft: 0,
+    marginBottom: theme.spacing(3),
   },
   mainContent: {
     width: '100%',
@@ -80,8 +90,6 @@ export default function PageHeader({
 }: Props): JSX.Element {
   const classes = useStyles();
   const theme = useTheme();
-  const history = useHistory();
-  const location = useStateLocation();
 
   const getPageHeading = () => {
     if (page && parentPage) {
@@ -92,31 +100,20 @@ export default function PageHeader({
   return (
     <Container maxWidth={false} className={classes.mainContainer}>
       <Grid container spacing={0} className={classes.container}>
+        <Grid item xs={12}>
+          {back && backUrl && (
+            <Link id='back' to={backUrl} className={classes.backToAccessions} replace={back}>
+              <Icon name='caretLeft' className={classes.backIcon} size='small' />
+              {strings.ACCESSIONS}
+            </Link>
+          )}
+        </Grid>
         {page && parentPage && title && (
           <Grid item xs={12}>
             {getPageHeading()}
           </Grid>
         )}
         <Grid item xs={12} className={classes.flex}>
-          {back && (
-            <div className={classes.back}>
-              <Fab
-                id='close'
-                size='small'
-                aria-label='close'
-                className={classes.backIcon}
-                onClick={() => {
-                  if (backUrl) {
-                    history.push(getLocation(backUrl, location));
-                  } else {
-                    history.go(-1);
-                  }
-                }}
-              >
-                <ArrowBack />
-              </Fab>
-            </div>
-          )}
           <div className={classes.mainContent}>
             <Box padding={theme.spacing(0, 3, children ? 3 : 0, 3)}>
               <Box display='flex' justifyContent='space-between' alignItems='center'>
