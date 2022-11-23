@@ -68,7 +68,7 @@ interface StyleProps {
 const useStyles = makeStyles((theme: Theme) => ({
   container: {
     '& .navbar': {
-      backgroundColor: 'transparent',
+      backgroundColor: theme.palette.TwClrBg,
       paddingTop: (props: StyleProps) => (props.isDesktop ? '88px' : '8px'),
       overflowY: 'auto',
       zIndex: 1000,
@@ -394,7 +394,11 @@ export default function App() {
                   </div>
                 </Slide>
               ) : (
-                <NavBar organization={selectedOrganization} setShowNavBar={setShowNavBar} />
+                <NavBar
+                  organization={selectedOrganization}
+                  setShowNavBar={setShowNavBar}
+                  backgroundTransparent={location.pathname.startsWith(APP_PATHS.HOME)}
+                />
               )}
             </div>
           </div>

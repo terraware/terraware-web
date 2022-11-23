@@ -842,6 +842,8 @@ const strings = new LocalizedStrings({
     VIEW_SITES_ZONES_PLOTS: 'View Sites, Zones, and Plots on a map.',
     PLANTING_ZONE: 'Planting Zone',
     PLOT: 'Plot',
+    SELECT_BATCHES: 'Select Batches',
+    TOTAL_WITHDRAW: 'Total Withdraw',
     BATCH_WITHDRAW_SUCCESS: '{0} {1} for a total of {2} {3} withdrawn.',
     BATCHES_SINGULAR: 'batch',
     BATCHES_PLURAL: 'batches',
@@ -860,6 +862,7 @@ const strings = new LocalizedStrings({
     EDIT_STATUS: 'Edit Status',
     EDIT_LOCATION: 'Edit Location',
     ADD_VIABILITY_TEST: 'Add Viability Test',
+    WITHDRAWAL_BATCHES_MISSING_QUANTITY_ERROR: 'Enter a quantity in at least one seedlings batch row.',
   },
 });
 

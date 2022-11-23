@@ -68,6 +68,9 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
           'accession_id',
           'accession_accessionNumber',
           'notes',
+          'species_id',
+          'species_scientificName',
+          'species_commonName',
         ],
         count: 1000,
       });
@@ -92,7 +95,8 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
     }
   };
 
-  const onBatchesSelected = () => {
+  const onBatchesSelected = (withdrawal: NurseryWithdrawalRequest) => {
+    setRecord(withdrawal);
     setFlowState('photos');
   };
 
@@ -199,6 +203,8 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
           organization={organization}
           onCancel={goToInventory}
           saveText={strings.NEXT}
+          batches={batches}
+          nurseryWithdrawal={record}
         />
       )}
       {flowState === 'photos' && (

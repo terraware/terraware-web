@@ -136,6 +136,9 @@ export interface paths {
   "/api/v1/nursery/withdrawals": {
     post: operations["createBatchWithdrawal"];
   };
+  "/api/v1/nursery/withdrawals/{withdrawalId}": {
+    get: operations["getNurseryWithdrawal"];
+  };
   "/api/v1/nursery/withdrawals/{withdrawalId}/photos": {
     get: operations["listWithdrawalPhotos"];
     post: operations["uploadWithdrawalPhoto"];
@@ -262,6 +265,12 @@ export interface paths {
   };
   "/api/v1/timeseries/values": {
     post: operations["recordTimeseriesValues"];
+  };
+  "/api/v1/tracking/deliveries/{id}": {
+    get: operations["getDelivery"];
+  };
+  "/api/v1/tracking/deliveries/{id}/reassign": {
+    post: operations["reassignDelivery"];
   };
   "/api/v1/tracking/mapbox/token": {
     get: operations["getMapboxToken"];
@@ -617,13 +626,6 @@ export interface components {
       readyByDate?: string;
       withdrawnDate: string;
     };
-    CreateNurseryWithdrawalResponsePayload: {
-      batches: components["schemas"]["BatchPayload"][];
-      /** If the withdrawal was an outplanting to a planting site, the delivery that was created. Not present for other withdrawal purposes. */
-      delivery?: components["schemas"]["DeliveryPayload"];
-      withdrawal: components["schemas"]["NurseryWithdrawalPayload"];
-      status?: components["schemas"]["SuccessOrError"];
-    };
     CreateOrganizationRequestPayload: {
       /** ISO 3166 alpha-2 code of organization's country. */
       countryCode?: string;
@@ -707,6 +709,9 @@ export interface components {
     /** If the withdrawal was an outplanting to a planting site, the delivery that was created. Not present for other withdrawal purposes. */
     DeliveryPayload: {
       id: number;
+      plantings: components["schemas"]["PlantingPayload"][];
+      plantingSiteId: number;
+      withdrawalId: number;
     };
     DeviceConfig: {
       /** Unique identifier of this device. */
@@ -800,24 +805,6 @@ export interface components {
       longitude: number;
       accuracy?: number;
     };
-    /** GEOMETRY-FIX-TYPE-ON-CLIENT-SIDE */
-    Geometry: {
-      type:
-        | "Point"
-        | "LineString"
-        | "Polygon"
-        | "MultiPoint"
-        | "MultiLineString"
-        | "MultiPolygon"
-        | "GeometryCollection";
-      coordinates: number[];
-      crs?: components["schemas"]["CRS"];
-    };
-    GeometryCollection: components["schemas"]["Geometry"] & {
-      geometries?: components["schemas"]["Geometry"][];
-    } & {
-      geometries: unknown;
-    };
     GetAccessionHistoryResponsePayload: {
       /** History of changes in descending time order (newest first.) */
       history: components["schemas"]["AccessionHistoryEntryPayload"][];
@@ -833,6 +820,10 @@ export interface components {
     };
     GetCurrentTimeResponsePayload: {
       currentTime: string;
+      status?: components["schemas"]["SuccessOrError"];
+    };
+    GetDeliveryResponsePayload: {
+      delivery: components["schemas"]["DeliveryPayload"];
       status?: components["schemas"]["SuccessOrError"];
     };
     GetDeviceManagerResponsePayload: {
@@ -866,6 +857,13 @@ export interface components {
     };
     GetNotificationsResponsePayload: {
       notifications: components["schemas"]["NotificationPayload"][];
+      status?: components["schemas"]["SuccessOrError"];
+    };
+    GetNurseryWithdrawalResponsePayload: {
+      batches: components["schemas"]["BatchPayload"][];
+      /** If the withdrawal was an outplanting to a planting site, the delivery that was created. Not present for other withdrawal purposes. */
+      delivery?: components["schemas"]["DeliveryPayload"];
+      withdrawal: components["schemas"]["NurseryWithdrawalPayload"];
       status?: components["schemas"]["SuccessOrError"];
     };
     GetOrganizationResponsePayload: {
@@ -1006,11 +1004,6 @@ export interface components {
       withdrawals: components["schemas"]["GetWithdrawalPayload"][];
       status?: components["schemas"]["SuccessOrError"];
     };
-    LineString: components["schemas"]["Geometry"] & {
-      coordinates?: number[][];
-    } & {
-      coordinates: unknown;
-    };
     ListAllFieldValuesRequestPayload: {
       facilityId?: number;
       fields: string[];
@@ -1092,28 +1085,18 @@ export interface components {
       name: string;
       description?: string;
       configuration?: { [key: string]: unknown };
-      type: string;
       settings?: { [key: string]: { [key: string]: unknown } };
       timeseriesName?: string;
       deviceId?: number;
+      type: string;
       lowerThreshold?: number;
       upperThreshold?: number;
       verbosity: number;
     };
-    MultiLineString: components["schemas"]["Geometry"] & {
-      coordinates?: number[][][];
-    } & {
-      coordinates: unknown;
-    };
-    MultiPoint: components["schemas"]["Geometry"] & {
-      coordinates?: number[][];
-    } & {
-      coordinates: unknown;
-    };
-    MultiPolygon: components["schemas"]["Geometry"] & {
-      coordinates?: number[][][][];
-    } & {
-      coordinates: unknown;
+    MultiPolygon: {
+      coordinates: number[][][][];
+      type: "MultiPolygon";
+      crs?: components["schemas"]["CRS"];
     };
     /** Search criterion that matches results that do not match a set of search criteria. */
     NotNodePayload: components["schemas"]["SearchNodePayload"] & {
@@ -1179,35 +1162,44 @@ export interface components {
       lastName?: string;
       role: "Contributor" | "Manager" | "Admin" | "Owner";
     };
+    PlantingPayload: {
+      id: number;
+      /** If type is "Reassignment To", the reassignment notes, if any. */
+      notes?: string;
+      /** Number of plants planted or reassigned. If type is "Reassignment From", this will be negative. */
+      numPlants: number;
+      plotId?: number;
+      speciesId: number;
+      type: "Delivery" | "Reassignment From" | "Reassignment To";
+    };
     PlantingSitePayload: {
-      boundary?: components["schemas"]["Geometry"];
+      boundary?: components["schemas"]["MultiPolygon"];
       description?: string;
       id: number;
       name: string;
       plantingZones?: components["schemas"]["PlantingZonePayload"][];
     };
     PlantingZonePayload: {
-      boundary: components["schemas"]["Geometry"];
+      boundary: components["schemas"]["MultiPolygon"];
       id: number;
       name: string;
       plots: components["schemas"]["PlotPayload"][];
     };
     PlotPayload: {
-      boundary: components["schemas"]["Geometry"];
+      boundary: components["schemas"]["MultiPolygon"];
       fullName: string;
       id: number;
       name: string;
     };
-    Point: components["schemas"]["Geometry"] & {
-      /** A single position. In the terraware-server API, positions must always include 3 dimensions. The X and Y dimensions use the coordinate system specified by the crs field, and the Z dimension is in meters. */
-      coordinates?: number[];
-    } & {
-      coordinates: unknown;
+    ReassignDeliveryRequestPayload: {
+      reassignments: components["schemas"]["ReassignmentPayload"][];
     };
-    Polygon: components["schemas"]["Geometry"] & {
-      coordinates?: number[][][];
-    } & {
-      coordinates: unknown;
+    ReassignmentPayload: {
+      fromPlantingId: number;
+      /** Number of plants to reassign from the planting's original plot to the new one. Must be less than or equal to the number of plants in the original planting. */
+      numPlants: number;
+      notes?: string;
+      toPlotId: number;
     };
     RecordTimeseriesValuesRequestPayload: {
       timeseries: components["schemas"]["TimeseriesValuesPayload"][];
@@ -2672,13 +2664,28 @@ export interface operations {
       /** OK */
       200: {
         content: {
-          "application/json": components["schemas"]["CreateNurseryWithdrawalResponsePayload"];
+          "application/json": components["schemas"]["GetNurseryWithdrawalResponsePayload"];
         };
       };
     };
     requestBody: {
       content: {
         "application/json": components["schemas"]["CreateNurseryWithdrawalRequestPayload"];
+      };
+    };
+  };
+  getNurseryWithdrawal: {
+    parameters: {
+      path: {
+        withdrawalId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetNurseryWithdrawalResponsePayload"];
+        };
       };
     };
   };
@@ -3639,6 +3646,41 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["RecordTimeseriesValuesRequestPayload"];
+      };
+    };
+  };
+  getDelivery: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetDeliveryResponsePayload"];
+        };
+      };
+    };
+  };
+  reassignDelivery: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ReassignDeliveryRequestPayload"];
       };
     };
   };
