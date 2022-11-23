@@ -136,46 +136,55 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
 
   const validateQuantities = () => {
     let noErrors = true;
+    let newRecords: BatchWithdrawalForTable[] = [];
     if (nurseryWithdrawal.purpose === 'Out Plant') {
-      record.forEach((rec) => {
+      newRecords = record.map((rec) => {
+        let readyQuantityWithdrawnError = '';
         if (!rec.readyQuantityWithdrawn) {
-          rec.error.readyQuantityWithdrawn = strings.REQUIRED_FIELD;
+          readyQuantityWithdrawnError = strings.REQUIRED_FIELD;
           noErrors = false;
-          return;
-        } else {
-          if (rec.readyQuantityWithdrawn > rec.readyQuantity) {
-            rec.error.readyQuantityWithdrawn = strings.WITHDRAWN_QUANTITY_ERROR;
-            noErrors = false;
-            return;
-          } else {
-            rec.error.readyQuantityWithdrawn = '';
-          }
-        }
-      });
-    } else {
-      record.forEach((rec) => {
-        if (!rec.readyQuantityWithdrawn && !rec.notReadyQuantityWithdrawn) {
-          rec.error.readyQuantityWithdrawn = strings.REQUIRED_FIELD;
-          noErrors = false;
-          return;
         } else {
           if (+rec.readyQuantityWithdrawn > +rec.readyQuantity) {
-            rec.error.readyQuantityWithdrawn = strings.WITHDRAWN_QUANTITY_ERROR;
+            readyQuantityWithdrawnError = strings.WITHDRAWN_QUANTITY_ERROR;
             noErrors = false;
-            return;
           } else {
             rec.error.readyQuantityWithdrawn = '';
           }
-          if (+rec.notReadyQuantityWithdrawn > rec.notReadyQuantity) {
-            rec.error.notReadyQuantityWithdrawn = strings.WITHDRAWN_QUANTITY_ERROR;
+        }
+        return { ...rec, error: { readyQuantityWithdrawn: readyQuantityWithdrawnError } };
+      });
+    } else {
+      newRecords = record.map((rec) => {
+        let readyQuantityWithdrawnError = '';
+        let notReadyQuantityWithdrawnError = '';
+        if (!rec.readyQuantityWithdrawn && !rec.notReadyQuantityWithdrawn) {
+          readyQuantityWithdrawnError = strings.REQUIRED_FIELD;
+          noErrors = false;
+        } else {
+          if (+rec.readyQuantityWithdrawn > +rec.readyQuantity) {
+            readyQuantityWithdrawnError = strings.WITHDRAWN_QUANTITY_ERROR;
             noErrors = false;
-            return;
           } else {
-            rec.error.notReadyQuantityWithdrawn = '';
+            readyQuantityWithdrawnError = '';
+          }
+          if (+rec.notReadyQuantityWithdrawn > rec.notReadyQuantity) {
+            notReadyQuantityWithdrawnError = strings.WITHDRAWN_QUANTITY_ERROR;
+            noErrors = false;
+          } else {
+            notReadyQuantityWithdrawnError = '';
           }
         }
+        return {
+          ...rec,
+          error: {
+            readyQuantityWithdrawn: readyQuantityWithdrawnError,
+            notReadyQuantityWithdrawn: notReadyQuantityWithdrawnError,
+          },
+        };
       });
     }
+
+    setRecord(newRecords);
 
     return noErrors;
   };
