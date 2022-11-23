@@ -77,7 +77,12 @@ export default function Accession2GPS(props: Accession2GPSProps): JSX.Element {
     return (
       <Grid item xs={12} marginTop={theme.spacing(2)}>
         <Box display='flex' justifyContent='flex-start'>
-          <Link sx={{ textDecoration: 'none' }} href='#' id='addGPS' onClick={() => setIsOpen(true)}>
+          <Link
+            sx={{ color: theme.palette.TwClrTxtBrand, textDecoration: 'none' }}
+            href='#'
+            id='addGPS'
+            onClick={() => setIsOpen(true)}
+          >
             {strings.ADD_GPS_COORDINATES}
           </Link>
         </Box>
@@ -117,7 +122,7 @@ export default function Accession2GPS(props: Accession2GPSProps): JSX.Element {
       ))}
       <Box display='flex' justifyContent='flex-end'>
         <Link
-          sx={{ textDecoration: 'none' }}
+          sx={{ color: theme.palette.TwClrTxtBrand, textDecoration: 'none' }}
           href='#'
           id='addGpsCoordsButton'
           onClick={(event: React.SyntheticEvent) => {
