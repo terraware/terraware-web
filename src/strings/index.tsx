@@ -852,7 +852,7 @@ const strings = new LocalizedStrings({
     NO_BATCHES_TO_WITHDRAW_FROM: 'There are no batches with withdrawable quantities.',
     PHOTOS_REQUIRED: 'Photos Required',
     PHOTOS_OUTPLANT_DESCRIPTION: 'Outplant withdrawals require photos.',
-    WITHDRAWAL_BATCHES_MISSING_QUANTITY_ERROR: 'Enter a quantity in at least one seedling batch row.',
+    WITHDRAWAL_BATCHES_MISSING_QUANTITY_ERROR: 'Enter a quantity in at least one seedlings batch row.',
   },
 });
 
