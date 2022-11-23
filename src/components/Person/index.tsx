@@ -1,4 +1,4 @@
-import { Container, Grid } from '@mui/material';
+import { Grid, Typography, useTheme } from '@mui/material';
 import { Theme } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { Link, useHistory, useParams } from 'react-router-dom';
@@ -14,14 +14,9 @@ import { makeStyles } from '@mui/styles';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageSnackbar from 'src/components/PageSnackbar';
+import TfMain from '../common/TfMain';
 
 const useStyles = makeStyles((theme: Theme) => ({
-  mainContainer: {
-    height: '100%',
-    paddingTop: theme.spacing(4),
-    paddingBottom: theme.spacing(4),
-    background: theme.palette.TwClrBg,
-  },
   backIcon: {
     fill: theme.palette.TwClrIcnBrand,
     marginRight: theme.spacing(1),
@@ -32,15 +27,13 @@ const useStyles = makeStyles((theme: Theme) => ({
     color: theme.palette.TwClrTxtBrand,
     fontSize: '20px',
     alignItems: 'center',
+    marginBottom: theme.spacing(3),
   },
   titleWithButton: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-  },
-  email: {
-    wordBreak: 'break-all',
   },
   editButton: {
     float: 'right',
@@ -53,6 +46,7 @@ type PersonDetailsProps = {
 
 export default function PersonDetails({ organization }: PersonDetailsProps): JSX.Element {
   const classes = useStyles();
+  const theme = useTheme();
   const history = useHistory();
   const { personId } = useParams<{ personId: string }>();
   const [person, setPerson] = useState<OrganizationUser>();
@@ -96,26 +90,44 @@ export default function PersonDetails({ organization }: PersonDetailsProps): JSX
   };
 
   return (
-    <Container maxWidth={false} className={classes.mainContainer}>
-      <Grid container spacing={3}>
+    <TfMain>
+      <Grid container padding={theme.spacing(0, 0, 4, 0)}>
         <Grid item xs={12}>
           <Link id='back' to={APP_PATHS.PEOPLE} className={classes.back}>
-            <Icon name='caretLeft' className={classes.backIcon} />
-            {strings.PEOPLE}
+            <Icon name='caretLeft' className={classes.backIcon} size='small' />
+            <Typography fontSize='14px' fontWeight={500}>
+              {strings.PEOPLE}
+            </Typography>
           </Link>
         </Grid>
-        <Grid item xs={12} className={classes.titleWithButton}>
+        <Grid item xs={12} padding={theme.spacing(0, 3)} className={classes.titleWithButton}>
           <Grid item xs={9}>
-            {isMobile ? <h3 className={classes.email}>{person?.email}</h3> : <h2>{person?.email}</h2>}
+            <Typography
+              fontSize='20px'
+              fontWeight={600}
+              margin={0}
+              sx={{
+                wordBreak: 'break-all',
+              }}
+            >
+              {person?.email}
+            </Typography>
           </Grid>
           <Grid item xs={3}>
             {isMobile ? (
-              <Button icon='iconEdit' priority='secondary' onClick={goToEditPerson} className={classes.editButton} />
+              <Button
+                icon='iconEdit'
+                priority='primary'
+                size='medium'
+                onClick={goToEditPerson}
+                className={classes.editButton}
+              />
             ) : (
               <Button
-                label={strings.EDIT}
+                label={strings.EDIT_PERSON}
                 icon='iconEdit'
-                priority='secondary'
+                priority='primary'
+                size='medium'
                 onClick={goToEditPerson}
                 className={classes.editButton}
               />
@@ -125,23 +137,31 @@ export default function PersonDetails({ organization }: PersonDetailsProps): JSX
         <Grid item xs={12}>
           <PageSnackbar />
         </Grid>
-        <Grid item xs={gridSize()}>
+      </Grid>
+      <Grid
+        container
+        sx={{
+          backgroundColor: theme.palette.TwClrBg,
+          borderRadius: '32px',
+          padding: theme.spacing(3),
+        }}
+      >
+        <Grid item xs={gridSize()} paddingBottom={theme.spacing(4)}>
           <TextField label={strings.EMAIL} id='email' type='text' value={person?.email} display={true} />
         </Grid>
-        <Grid item xs={gridSize()}>
+        <Grid item xs={gridSize()} paddingBottom={theme.spacing(4)}>
           <TextField label={strings.FIRST_NAME} id='firstName' type='text' value={person?.firstName} display={true} />
         </Grid>
-        <Grid item xs={gridSize()}>
+        <Grid item xs={gridSize()} paddingBottom={theme.spacing(4)}>
           <TextField label={strings.LAST_NAME} id='lastName' type='text' value={person?.lastName} display={true} />
         </Grid>
-        <Grid item xs={gridSize()}>
+        <Grid item xs={gridSize()} paddingBottom={isMobile ? theme.spacing(4) : 0}>
           <TextField label={strings.ROLE} id='role' type='text' value={person?.role} display={true} />
         </Grid>
         <Grid item xs={gridSize()}>
           <TextField label={strings.DATE_ADDED} id='addedTime' type='text' value={getDateAdded()} display={true} />
         </Grid>
-        <Grid item xs={gridSize()} />
       </Grid>
-    </Container>
+    </TfMain>
   );
 }
