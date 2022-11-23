@@ -1,6 +1,6 @@
 // flattened info for shapes relating to planting site data
 
-export type MapGeometry = number | number[] | number[][][][];
+export type MapGeometry = number[][][][];
 
 /**
  * Example of a boundary:

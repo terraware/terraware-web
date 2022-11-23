@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { Box, CircularProgress, useTheme } from '@mui/material';
 import hexRgb from 'hex-rgb';
 import { getMapboxToken } from 'src/api/tracking/tracking';
-import { Geometry, PlantingSite } from 'src/api/types/tracking';
+import { MultiPolygon, PlantingSite } from 'src/api/types/tracking';
 import useSnackbar from 'src/utils/useSnackbar';
 import Map from './Map';
 import { MapGeometry, MapOptions, MapPopupRenderer, MapSource } from './MapModels';
@@ -62,7 +62,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
     ]
   );
 
-  const getPolygons = useCallback((boundary?: Geometry): MapGeometry => {
+  const getPolygons = useCallback((boundary?: MultiPolygon): MapGeometry => {
     if (!boundary) {
       return [];
     }

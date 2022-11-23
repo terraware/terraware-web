@@ -95,7 +95,7 @@ export default function Map(props: MapProps): JSX.Element {
             if (!data.boundary || !Array.isArray(data.boundary)) {
               return null;
             }
-            const multiPolygons = (data.boundary as (number | number[][][])[])
+            const multiPolygons = (data.boundary as number[][][][])
               .map((geom) => {
                 if (!Array.isArray(geom)) {
                   return null;
