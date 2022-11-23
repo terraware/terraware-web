@@ -13,6 +13,13 @@ const useStyles = makeStyles(() => ({
       fontSize: '14px',
     },
   },
+  input: {
+    maxWidth: '88px',
+
+    '& label': {
+      whiteSpace: 'break-spaces',
+    },
+  },
 }));
 
 export default function WithdrawalBatchesCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
@@ -35,7 +42,7 @@ export default function WithdrawalBatchesCellRenderer(props: RendererProps<Table
   const createQuantityInput = (id: string, valueProperty: string) => {
     if (onRowClick) {
       return (
-        <Box display='flex' alignItems='center'>
+        <Box display='flex' alignItems={row.error[id] ? 'start' : 'center'}>
           <TextField
             id={id}
             type='text'
@@ -43,8 +50,11 @@ export default function WithdrawalBatchesCellRenderer(props: RendererProps<Table
             value={row[id]}
             label={''}
             errorText={row.error[id]}
+            className={classes.input}
           />
-          <Typography paddingLeft={1}>/ {row[valueProperty]} </Typography>
+          <Typography paddingLeft={1} paddingTop={row.error[id] ? '10px' : 0}>
+            / {row[valueProperty]}
+          </Typography>
         </Box>
       );
     }
@@ -60,6 +70,7 @@ export default function WithdrawalBatchesCellRenderer(props: RendererProps<Table
           value={row.readyQuantityWithdrawn}
           label={''}
           errorText={row.error.readyQuantityWithdrawn}
+          className={classes.input}
         />
       );
     }

@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Grid, Typography, useTheme } from '@mui/material';
+import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
 import { ServerOrganization } from 'src/types/Organization';
 import FormBottomBar from 'src/components/common/FormBottomBar';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import strings from 'src/strings';
 import { NurseryWithdrawalRequest } from 'src/api/types/batch';
-import { Table, TableColumnType } from '@terraware/web-components';
+import { ErrorBox, Table, TableColumnType } from '@terraware/web-components';
 import WithdrawalBatchesCellRenderer from './WithdrawalBatchesCellRenderer';
 import useForm from 'src/utils/useForm';
+import { makeStyles } from '@mui/styles';
 
 type SelectBatchesWithdrawnQuantityProps = {
   organization: ServerOrganization;
@@ -30,12 +31,22 @@ type BatchWithdrawalForTable = {
   error: { [key: string]: string | undefined };
 };
 
+const useStyles = makeStyles(() => ({
+  error: {
+    '& .error-box--container': {
+      alignItems: 'center',
+    },
+  },
+}));
+
 export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps): JSX.Element {
   const { onNext, onCancel, saveText, batches, nurseryWithdrawal, organization } = props;
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const [species, setSpecies] = useState<any>([]);
   const [record, setRecord] = useForm<BatchWithdrawalForTable[]>([]);
+  const [errorPageMessage, setErrorPageMessage] = useState('');
+  const classes = useStyles();
 
   useEffect(() => {
     const transformBatchesForTable = () => {
@@ -137,42 +148,62 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
     let noErrors = true;
     let newRecords: BatchWithdrawalForTable[] = [];
     if (nurseryWithdrawal.purpose === 'Out Plant') {
+      let unsetValues = 0;
       newRecords = record.map((rec) => {
         let readyQuantityWithdrawnError = '';
-        if (!rec.readyQuantityWithdrawn) {
-          readyQuantityWithdrawnError = strings.REQUIRED_FIELD;
-          noErrors = false;
-        } else {
+        if (rec.readyQuantityWithdrawn) {
           if (+rec.readyQuantityWithdrawn > +rec.readyQuantity) {
             readyQuantityWithdrawnError = strings.WITHDRAWN_QUANTITY_ERROR;
             noErrors = false;
           } else {
             rec.error.readyQuantityWithdrawn = '';
           }
+        } else {
+          unsetValues++;
         }
+
+        if (unsetValues === record.length) {
+          setErrorPageMessage(strings.WITHDRAWAL_BATCHES_MISSING_QUANTITY_ERROR);
+          noErrors = false;
+        } else {
+          setErrorPageMessage('');
+        }
+
         return { ...rec, error: { readyQuantityWithdrawn: readyQuantityWithdrawnError } };
       });
     } else {
+      let unsetValues = 0;
       newRecords = record.map((rec) => {
         let readyQuantityWithdrawnError = '';
         let notReadyQuantityWithdrawnError = '';
-        if (!rec.readyQuantityWithdrawn && !rec.notReadyQuantityWithdrawn) {
-          readyQuantityWithdrawnError = strings.REQUIRED_FIELD;
-          noErrors = false;
-        } else {
+        if (rec.readyQuantityWithdrawn) {
           if (+rec.readyQuantityWithdrawn > +rec.readyQuantity) {
             readyQuantityWithdrawnError = strings.WITHDRAWN_QUANTITY_ERROR;
             noErrors = false;
           } else {
             readyQuantityWithdrawnError = '';
           }
+        } else {
+          unsetValues++;
+        }
+        if (rec.notReadyQuantityWithdrawn) {
           if (+rec.notReadyQuantityWithdrawn > rec.notReadyQuantity) {
             notReadyQuantityWithdrawnError = strings.WITHDRAWN_QUANTITY_ERROR;
             noErrors = false;
           } else {
             notReadyQuantityWithdrawnError = '';
           }
+        } else {
+          unsetValues++;
         }
+
+        if (unsetValues === record.length * 2) {
+          setErrorPageMessage(strings.WITHDRAWAL_BATCHES_MISSING_QUANTITY_ERROR);
+          noErrors = false;
+        } else {
+          setErrorPageMessage('');
+        }
+
         return {
           ...rec,
           error: {
@@ -206,6 +237,11 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
 
   return (
     <>
+      {errorPageMessage && (
+        <Box sx={{ marginTop: 5, marginBottom: 3 }}>
+          <ErrorBox text={errorPageMessage} className={classes.error} />
+        </Box>
+      )}
       <Container
         maxWidth={false}
         sx={{
@@ -214,7 +250,7 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
       >
         <Grid container minWidth={isMobile ? 0 : 700}>
           <Grid item xs={12}>
-            <Typography variant='h2' sx={{ fontSize: '18px', fontWeight: 'bold', marginBottom: theme.spacing(2) }}>
+            <Typography variant='h2' sx={{ fontSize: '20px', fontWeight: 'bold', marginBottom: theme.spacing(2) }}>
               {strings.SELECT_BATCHES}
             </Typography>
           </Grid>
@@ -225,12 +261,12 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
                   <Grid item xs={12}>
                     <Typography
                       variant='h2'
-                      sx={{ fontSize: '18px', fontWeight: 'bold', marginBottom: theme.spacing(2) }}
+                      sx={{ fontSize: '16px', fontWeight: 600, marginBottom: theme.spacing(2), paddingTop: 1 }}
                     >
                       {iSpecies.scientificName} {iSpecies.commonName ? `(${iSpecies.commonName})` : null}
                     </Typography>
                   </Grid>
-                  <Grid item xs={12}>
+                  <Grid item xs={12} marginBottom={5}>
                     {record.length > 0 && (
                       <Table
                         id='inventory-table'
