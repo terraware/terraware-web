@@ -396,6 +396,8 @@ const strings = new LocalizedStrings({
     GROWTH_FORM: 'Growth Form',
     CONSERV_STATUS: 'Conserv. Status',
     EDIT: 'Edit',
+    EDIT_SEED_BANK: 'Edit Seed Bank',
+    EDIT_NURSERY: 'Edit Nursery',
     SEARCH_BY_NAME_OR_FAMILY: 'Search by name or family...',
     SETTINGS: 'Settings',
     MARK_ALL_AS_READ: 'Mark All As Read',
