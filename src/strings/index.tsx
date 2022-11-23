@@ -860,6 +860,7 @@ const strings = new LocalizedStrings({
     ADD_QUANTITY: "Add Quantity",
     EDIT_STATUS: "Edit Status",
     EDIT_LOCATION: "Edit Location",
+    ADD_VIABILITY_TEST: "Add Viability Test",
   },
 });
 
