@@ -17,8 +17,8 @@ const useStyles = makeStyles((theme: Theme) => ({
     position: 'absolute',
     width: theme.spacing(3),
     height: theme.spacing(3),
-    top: -6,
-    right: -6,
+    top: -10,
+    right: -10,
     backgroundColor: theme.palette.TwClrBgDanger,
     '& > svg': {
       position: 'relative',
@@ -39,6 +39,13 @@ const useStyles = makeStyles((theme: Theme) => ({
   error: {
     width: '100%',
     marginBottom: theme.spacing(2),
+  },
+  thumbnail: {
+    margin: 'auto auto',
+    objectFit: 'contain',
+    display: 'flex',
+    maxWidth: '120px',
+    maxHeight: '120px',
   },
 }));
 
@@ -133,6 +140,7 @@ export default function SelectPhotos(props: SelectPhotosProps): JSX.Element {
                 key={index}
                 position='relative'
                 height={122}
+                width={122}
                 marginRight={theme.spacing(3)}
                 marginTop={theme.spacing(1)}
                 border={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
@@ -143,7 +151,7 @@ export default function SelectPhotos(props: SelectPhotosProps): JSX.Element {
                   size='small'
                   className={classes.removePhoto}
                 />
-                <img height='120px' src={fileData} alt={files[index]?.name} />
+                <img height='120px' src={fileData} alt={files[index]?.name} className={classes.thumbnail} />
               </Box>
             ))}
           </Box>
