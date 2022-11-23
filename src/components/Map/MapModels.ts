@@ -44,7 +44,11 @@ export type MapAnnotation = {
   textColor: string;
 };
 
-export type MapObjectData = {
+/**
+ * A renderable map entity
+ * eg. site, zone, plot
+ */
+export type MapEntity = {
   properties: MapSourceProperties;
   boundary: MapGeometry;
 };
@@ -54,7 +58,7 @@ export type MapSource = {
   fillColor: string;
   lineColor: string;
   lineWidth: number;
-  objectData: MapObjectData[];
+  entities: MapEntity[];
   isInteractive?: boolean;
   // property name to render as a polygon annotation
   annotation?: MapAnnotation;

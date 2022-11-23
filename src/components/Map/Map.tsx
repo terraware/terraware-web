@@ -90,7 +90,7 @@ export default function Map(props: MapProps): JSX.Element {
      */
     const geo = sources
       .map((source) => {
-        const features = source.objectData
+        const features = source.entities
           .map((data) => {
             if (!data.boundary || !Array.isArray(data.boundary)) {
               return null;

@@ -75,7 +75,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
       const renderAttributes = getRenderAttributes('site');
 
       return {
-        objectData: [
+        entities: [
           {
             properties: { id, name, description, type: 'site' },
             boundary: getPolygons(boundary),
@@ -102,7 +102,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
         }) || [];
 
       return {
-        objectData: zonesData,
+        entities: zonesData,
         id: 'zones',
         ...renderAttributes,
       };
@@ -127,7 +127,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
         }) || [];
 
       return {
-        objectData: allPlotsData.flatMap((f) => f),
+        entities: allPlotsData.flatMap((f) => f),
         id: 'plots',
         isInteractive: true,
         annotation: {
@@ -167,9 +167,9 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
       const plots = extractPlots(plantingSite);
 
       const geometries: MapGeometry[] = [
-        site.objectData[0]?.boundary,
-        ...(zones?.objectData.map((s) => s.boundary) || []),
-        ...(plots?.objectData.map((s) => s.boundary) || []),
+        site.entities[0]?.boundary,
+        ...(zones?.entities.map((s) => s.boundary) || []),
+        ...(plots?.entities.map((s) => s.boundary) || []),
       ].filter((g) => g) as MapGeometry[];
 
       const newMapOptions = {
