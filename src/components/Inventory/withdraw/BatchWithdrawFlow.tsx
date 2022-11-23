@@ -95,7 +95,8 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
     }
   };
 
-  const onBatchesSelected = () => {
+  const onBatchesSelected = (withdrawal: NurseryWithdrawalRequest) => {
+    setRecord(withdrawal);
     setFlowState('photos');
   };
 

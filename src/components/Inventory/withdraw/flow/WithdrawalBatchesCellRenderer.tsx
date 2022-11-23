@@ -32,35 +32,19 @@ export default function WithdrawalBatchesCellRenderer(props: RendererProps<Table
     );
   };
 
-  const createNotReadyInput = (iValue: React.ReactNode | unknown[]) => {
+  const createQuantityInput = (id: string, valueProperty: string) => {
     if (onRowClick) {
       return (
         <Box display='flex' alignItems='center'>
           <TextField
-            id='notReadyQuantityWithdrawn'
+            id={id}
             type='text'
-            onChange={(id, value) => onRowClick(value as string)}
-            value={row.notReadyQuantityWithdrawn}
+            onChange={(_, newValue) => onRowClick(newValue as string)}
+            value={row[id]}
             label={''}
+            errorText={row.error[id]}
           />
-          <Typography paddingLeft={1}>/ {row.notReadyQuantity} </Typography>
-        </Box>
-      );
-    }
-  };
-
-  const createReadyInput = (iValue: React.ReactNode | unknown[]) => {
-    if (onRowClick) {
-      return (
-        <Box display='flex' alignItems='center'>
-          <TextField
-            id='readyQuantityWithdrawn'
-            type='text'
-            onChange={(id, value) => onRowClick(value as string)}
-            value={row.readyQuantityWithdrawn}
-            label={''}
-          />
-          <Typography paddingLeft={1}>/ {row.readyQuantity} </Typography>
+          <Typography paddingLeft={1}>/ {row[valueProperty]} </Typography>
         </Box>
       );
     }
@@ -72,9 +56,10 @@ export default function WithdrawalBatchesCellRenderer(props: RendererProps<Table
         <TextField
           id='readyQuantityWithdrawn'
           type='text'
-          onChange={(id, value) => onRowClick(value as string)}
+          onChange={(_, newValue) => onRowClick(newValue as string)}
           value={row.readyQuantityWithdrawn}
           label={''}
+          errorText={row.error.readyQuantityWithdrawn}
         />
       );
     }
@@ -94,7 +79,13 @@ export default function WithdrawalBatchesCellRenderer(props: RendererProps<Table
 
   if (column.key === 'readyQuantityWithdrawn') {
     return (
-      <CellRenderer index={index} column={column} value={createReadyInput(value)} row={row} className={classes.text} />
+      <CellRenderer
+        index={index}
+        column={column}
+        value={createQuantityInput('readyQuantityWithdrawn', 'readyQuantity')}
+        row={row}
+        className={classes.text}
+      />
     );
   }
 
@@ -103,7 +94,7 @@ export default function WithdrawalBatchesCellRenderer(props: RendererProps<Table
       <CellRenderer
         index={index}
         column={column}
-        value={createNotReadyInput(value)}
+        value={createQuantityInput('notReadyQuantityWithdrawn', 'notReadyQuantity')}
         row={row}
         className={classes.text}
       />

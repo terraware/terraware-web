@@ -11,7 +11,7 @@ import useForm from 'src/utils/useForm';
 
 type SelectBatchesWithdrawnQuantityProps = {
   organization: ServerOrganization;
-  onNext: () => void;
+  onNext: (withdrawal: NurseryWithdrawalRequest) => void;
   onCancel: () => void;
   saveText: string;
   batches: any[];
@@ -27,6 +27,7 @@ type BatchWithdrawalForTable = {
   readyQuantity: number;
   speciesId: number;
   facilityName: string;
+  error: { [key: string]: string | undefined };
 };
 
 export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps): JSX.Element {
@@ -52,6 +53,7 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
             batchNumber: associatedBatch.batchNumber,
             speciesId: associatedBatch.species_id,
             facilityName: associatedBatch.facility_name,
+            error: {},
           });
 
           if (!speciesFromBatches[associatedBatch.species_id]) {
@@ -132,6 +134,68 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
     });
   };
 
+  const validateQuantities = () => {
+    let noErrors = true;
+    if (nurseryWithdrawal.purpose === 'Out Plant') {
+      record.forEach((rec) => {
+        if (!rec.readyQuantityWithdrawn) {
+          rec.error.readyQuantityWithdrawn = strings.REQUIRED_FIELD;
+          noErrors = false;
+          return;
+        } else {
+          if (rec.readyQuantityWithdrawn > rec.readyQuantity) {
+            rec.error.readyQuantityWithdrawn = strings.WITHDRAWN_QUANTITY_ERROR;
+            noErrors = false;
+            return;
+          } else {
+            rec.error.readyQuantityWithdrawn = '';
+          }
+        }
+      });
+    } else {
+      record.forEach((rec) => {
+        if (!rec.readyQuantityWithdrawn && !rec.notReadyQuantityWithdrawn) {
+          rec.error.readyQuantityWithdrawn = strings.REQUIRED_FIELD;
+          noErrors = false;
+          return;
+        } else {
+          if (+rec.readyQuantityWithdrawn > +rec.readyQuantity) {
+            rec.error.readyQuantityWithdrawn = strings.WITHDRAWN_QUANTITY_ERROR;
+            noErrors = false;
+            return;
+          } else {
+            rec.error.readyQuantityWithdrawn = '';
+          }
+          if (+rec.notReadyQuantityWithdrawn > rec.notReadyQuantity) {
+            rec.error.notReadyQuantityWithdrawn = strings.WITHDRAWN_QUANTITY_ERROR;
+            noErrors = false;
+            return;
+          } else {
+            rec.error.notReadyQuantityWithdrawn = '';
+          }
+        }
+      });
+    }
+
+    return noErrors;
+  };
+
+  const onNextHandler = () => {
+    const validQuantities = validateQuantities();
+
+    if (validQuantities) {
+      const newBatchWithdrawals = record.map((rec) => {
+        return {
+          batchId: rec.batchId,
+          notReadyQuantityWithdrawn: rec.notReadyQuantityWithdrawn,
+          readyQuantityWithdrawn: rec.readyQuantityWithdrawn,
+        };
+      });
+
+      onNext({ ...nurseryWithdrawal, batchWithdrawals: newBatchWithdrawals });
+    }
+  };
+
   return (
     <>
       <Container
@@ -177,7 +241,7 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
             })}
         </Grid>
       </Container>
-      <FormBottomBar onCancel={onCancel} onSave={onNext} saveButtonText={saveText} />
+      <FormBottomBar onCancel={onCancel} onSave={onNextHandler} saveButtonText={saveText} />
     </>
   );
 }
