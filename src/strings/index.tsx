@@ -851,6 +851,7 @@ const strings = new LocalizedStrings({
     NO_BATCHES_TO_WITHDRAW_FROM: 'There are no batches with withdrawable quantities.',
     PHOTOS_REQUIRED: 'Photos Required',
     PHOTOS_OUTPLANT_DESCRIPTION: 'Outplant withdrawals require photos.',
+    WITHDRAW_SEEDLINGS: "Withdraw Seedlings",
   },
 });
 
