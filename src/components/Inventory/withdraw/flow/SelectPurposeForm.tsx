@@ -248,8 +248,8 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
         .filter((batch) => batch.facility_id.toString() === selectedNursery)
         .map((batch) => ({
           batchId: batch.id,
-          notReadyQuantityWithdrawn: 0,
-          readyQuantityWithdrawn: isSingleOutplant ? withdrawnQuantity : (0 as any),
+          notReadyQuantityWithdrawn: isSingleOutplant ? 0 : isSingleBatch ? batch.notReadyQuantity : 0,
+          readyQuantityWithdrawn: isSingleOutplant ? withdrawnQuantity : isSingleBatch ? batch.readyQuantity : 0,
         })),
     });
   };

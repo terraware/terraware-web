@@ -40,8 +40,7 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
   useEffect(() => {
     const transformBatchesForTable = () => {
       const speciesFromBatches: { [x: string]: { id: number; scientificName: string; commonName: string } } = {};
-      let batchesForTable: BatchWithdrawalForTable[] = [];
-      batchesForTable = nurseryWithdrawal.batchWithdrawals.reduce((acc, bw) => {
+      const batchesForTable: BatchWithdrawalForTable[] = nurseryWithdrawal.batchWithdrawals.reduce((acc, bw) => {
         const associatedBatch = batches.find((batch) => batch.id.toString() === bw.batchId.toString());
         if (associatedBatch) {
           acc.push({
@@ -65,7 +64,7 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
           }
         }
         return acc;
-      }, batchesForTable);
+      }, [] as BatchWithdrawalForTable[]);
 
       setRecord(batchesForTable);
       setSpecies(Object.values(speciesFromBatches));
