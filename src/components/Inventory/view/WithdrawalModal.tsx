@@ -6,7 +6,7 @@ import { ServerOrganization } from 'src/types/Organization';
 import { useEffect, useMemo, useState } from 'react';
 import useSnackbar from 'src/utils/useSnackbar';
 import { getTodaysDateFormatted, useDeviceInfo } from '@terraware/web-components/utils';
-import { BatchWithdrawal, NurseryWithdrawalPurpose } from 'src/api/types/batch';
+import { BatchWithdrawal, NurseryWithdrawalPurposes } from 'src/api/types/batch';
 import { createBatchWithdrawal, CreateNurseryWithdrawalRequestPayload } from 'src/api/batch/batch';
 import { getSpecies } from 'src/api/species/species';
 import { Species } from 'src/types/Species';
@@ -26,6 +26,7 @@ export interface WithdrawalsModalProps {
 export default function WithdrawalsModal(props: WithdrawalsModalProps): JSX.Element {
   const { onClose, open, organization, reload, speciesId, selectedBatch } = props;
   const [withdrawQuantity, setWithdrawQuantity] = useState(0);
+  const { OUTPLANT, NURSERY_TRANSFER, DEAD, OTHER } = NurseryWithdrawalPurposes;
 
   const initWithdrawalBatch = useMemo(() => {
     const cleanWithdrawalBatch = {
@@ -37,11 +38,11 @@ export default function WithdrawalsModal(props: WithdrawalsModalProps): JSX.Elem
         },
       ],
       facilityId: selectedBatch.facilityId,
-      purpose: 'Out Plant' as NurseryWithdrawalPurpose,
+      purpose: OUTPLANT,
       withdrawnDate: getTodaysDateFormatted(),
     };
     return cleanWithdrawalBatch;
-  }, [selectedBatch]);
+  }, [selectedBatch, OUTPLANT]);
 
   const [record, setRecord, onChange] = useForm<CreateNurseryWithdrawalRequestPayload>(initWithdrawalBatch);
   const snackbar = useSnackbar();
@@ -215,15 +216,15 @@ export default function WithdrawalsModal(props: WithdrawalsModalProps): JSX.Elem
               <FormControl>
                 <FormLabel sx={{ color: '#5C6B6C', fontSize: '14px' }}>{strings.PURPOSE}</FormLabel>
                 <RadioGroup name='radio-buttons-purpose' value={record.purpose} onChange={onChangePurpose}>
-                  <FormControlLabel value='Out Plant' control={<Radio />} label={strings.OUTPLANT} />
-                  <FormControlLabel value='Nursery Transfer' control={<Radio />} label={strings.NURSERY_TRANSFER} />
-                  <FormControlLabel value='Dead' control={<Radio />} label={strings.DEAD} />
-                  <FormControlLabel value='Other' control={<Radio />} label={strings.OTHER} />
+                  <FormControlLabel value={OUTPLANT} control={<Radio />} label={strings.OUTPLANT} />
+                  <FormControlLabel value={NURSERY_TRANSFER} control={<Radio />} label={strings.NURSERY_TRANSFER} />
+                  <FormControlLabel value={DEAD} control={<Radio />} label={strings.DEAD} />
+                  <FormControlLabel value={OTHER} control={<Radio />} label={strings.OTHER} />
                 </RadioGroup>
               </FormControl>
             </Grid>
 
-            {record.purpose === 'Out Plant' ? (
+            {record.purpose === OUTPLANT ? (
               <>
                 {record.batchWithdrawals.map((bw, index) => {
                   return (
@@ -242,7 +243,7 @@ export default function WithdrawalsModal(props: WithdrawalsModalProps): JSX.Elem
               </>
             ) : (
               <>
-                {record.purpose === 'Nursery Transfer' && (
+                {record.purpose === NURSERY_TRANSFER && (
                   <Grid item xs={12} sx={marginTop}>
                     <Dropdown
                       id='facilityId'
@@ -299,8 +300,8 @@ export default function WithdrawalsModal(props: WithdrawalsModalProps): JSX.Elem
               item
               xs={gridSize()}
               sx={marginTop}
-              paddingRight={record.purpose !== 'Out Plant' ? paddingSeparator : 0}
-              paddingLeft={record.purpose === 'Out Plant' ? paddingSeparator : 0}
+              paddingRight={record.purpose !== OUTPLANT ? paddingSeparator : 0}
+              paddingLeft={record.purpose === OUTPLANT ? paddingSeparator : 0}
             >
               <DatePicker
                 id='withdrawnDate'

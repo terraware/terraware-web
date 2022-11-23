@@ -15,6 +15,13 @@ export type BatchWithdrawal =
 export type NurseryWithdrawalPurpose =
   paths[typeof BATCH_WITHDRAWALS]['post']['responses'][200]['content']['application/json']['withdrawal']['purpose'];
 
-export const schemas = 'schemas';
+export const NurseryWithdrawalPurposes: { [key: string]: NurseryWithdrawalPurpose } = {
+  OUTPLANT: 'Out Plant',
+  NURSERY_TRANSFER: 'Nursery Transfer',
+  DEAD: 'Dead',
+  OTHER: 'Other',
+};
+
+const schemas = 'schemas';
 export type NurseryTransfer = components[typeof schemas]['CreateNurseryTransferRequestPayload'];
 export type NurseryWithdrawalRequest = components[typeof schemas]['CreateNurseryWithdrawalRequestPayload'];
