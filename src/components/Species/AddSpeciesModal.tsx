@@ -177,7 +177,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
       scrolled
       onClose={handleCancel}
       open={open}
-      title={initialSpecies ? strings.EDIT_SPECIES : strings.ADD_A_SPECIES}
+      title={initialSpecies ? strings.EDIT_SPECIES : strings.ADD_SPECIES}
       size={'large'}
       middleButtons={[
         <Button
