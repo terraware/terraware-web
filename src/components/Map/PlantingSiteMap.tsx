@@ -75,9 +75,13 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
       const renderAttributes = getRenderAttributes('site');
 
       return {
-        properties: { id, name, description, type: 'site' },
-        boundary: getPolygons(boundary),
-        id: `site-${id}`,
+        entities: [
+          {
+            properties: { id, name, description, type: 'site' },
+            boundary: getPolygons(boundary),
+          },
+        ],
+        id: 'sites',
         ...renderAttributes,
       };
     },
@@ -85,44 +89,54 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
   );
 
   const extractPlantingZones = useCallback(
-    (site: PlantingSite): MapSource[] | undefined => {
+    (site: PlantingSite): MapSource => {
       const renderAttributes = getRenderAttributes('zone');
 
-      return site.plantingZones?.map((zone) => {
-        const { id, name, boundary } = zone;
-        return {
-          properties: { id, name, type: 'zone' },
-          boundary: getPolygons(boundary),
-          id: `zone-${id}`,
-          ...renderAttributes,
-        };
-      });
+      const zonesData =
+        site.plantingZones?.map((zone) => {
+          const { id, name, boundary } = zone;
+          return {
+            properties: { id, name, type: 'zone' },
+            boundary: getPolygons(boundary),
+          };
+        }) || [];
+
+      return {
+        entities: zonesData,
+        id: 'zones',
+        ...renderAttributes,
+      };
     },
     [getPolygons, getRenderAttributes]
   );
 
   const extractPlots = useCallback(
-    (site: PlantingSite): MapSource[] | undefined => {
+    (site: PlantingSite): MapSource => {
       const renderAttributes = getRenderAttributes('plot');
 
-      return site.plantingZones?.flatMap((zone) => {
-        const { plots } = zone;
-        return plots.map((plot) => {
-          const { id, name, fullName, boundary } = plot;
-          return {
-            properties: { id, name, fullName, type: 'plot' },
-            boundary: getPolygons(boundary),
-            id: `plot-${id}`,
-            ...renderAttributes,
-            isInteractive: true,
-            annotation: {
-              textField: 'fullName',
-              textColor: theme.palette.TwClrBaseWhite as string,
-              textSize: 10,
-            },
-          };
-        });
-      });
+      const allPlotsData =
+        site.plantingZones?.flatMap((zone) => {
+          const { plots } = zone;
+          return plots.map((plot) => {
+            const { id, name, fullName, boundary } = plot;
+            return {
+              properties: { id, name, fullName, type: 'plot' },
+              boundary: getPolygons(boundary),
+            };
+          });
+        }) || [];
+
+      return {
+        entities: allPlotsData.flatMap((f) => f),
+        id: 'plots',
+        isInteractive: true,
+        annotation: {
+          textField: 'name',
+          textColor: theme.palette.TwClrBaseWhite as string,
+          textSize: 16,
+        },
+        ...renderAttributes,
+      };
     },
     [getPolygons, getRenderAttributes, theme.palette.TwClrBaseWhite]
   );
@@ -149,18 +163,18 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
   useEffect(() => {
     const fetchPlantingSite = () => {
       const site = extractPlantingSite(plantingSite);
-      const zones = extractPlantingZones(plantingSite) || [];
-      const plots = extractPlots(plantingSite) || [];
+      const zones = extractPlantingZones(plantingSite);
+      const plots = extractPlots(plantingSite);
 
       const geometries: MapGeometry[] = [
-        site?.boundary,
-        ...zones.map((s) => s.boundary),
-        ...plots.map((s) => s.boundary),
+        site.entities[0]?.boundary,
+        ...(zones?.entities.map((s) => s.boundary) || []),
+        ...(plots?.entities.map((s) => s.boundary) || []),
       ].filter((g) => g) as MapGeometry[];
 
       const newMapOptions = {
         bbox: getBoundingBox(geometries),
-        sources: [site, ...plots, ...zones],
+        sources: [site, plots, zones],
       };
 
       if (!_.isEqual(newMapOptions, mapOptions)) {
@@ -173,8 +187,8 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
 
   if (!token || !mapOptions) {
     return (
-      <Box sx={{ display: 'flex', flexGrow: 1, height: '100%' }}>
-        <CircularProgress sx={{ margin: 'auto auto' }} />
+      <Box sx={{ display: 'flex', flexGrow: 1, height: '100%', margin: 'auto' }}>
+        <CircularProgress sx={{ margin: 'auto' }} />
       </Box>
     );
   }
