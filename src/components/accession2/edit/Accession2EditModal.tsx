@@ -67,7 +67,7 @@ export default function Accession2EditModal(props: Accession2EditModalProps): JS
     <DialogBox
       onClose={onCloseHandler}
       open={open}
-      title={strings.ACCESSION_DETAIL}
+      title={strings.EDIT_ACCESSION_DETAIL}
       size='x-large'
       middleButtons={[
         <Button label={strings.CANCEL} type='passive' onClick={onCloseHandler} priority='secondary' key='button-1' />,

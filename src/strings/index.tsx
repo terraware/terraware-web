@@ -852,6 +852,14 @@ const strings = new LocalizedStrings({
     PHOTOS_REQUIRED: 'Photos Required',
     PHOTOS_OUTPLANT_DESCRIPTION: 'Outplant withdrawals require photos.',
     WITHDRAW_SEEDLINGS: "Withdraw Seedlings",
+    EDIT_VIABILITY_TEST: "Edit Viability Test",
+    EDIT_ACCESSION_DETAIL: "Edit Accession Detail",
+    EDIT_VIABILITY: "Edit Viability",
+    ADD_VIABILITY: "Add Viability",
+    EDIT_QUANTITY: "Edit Quantity",
+    ADD_QUANTITY: "Add Quantity",
+    EDIT_STATUS: "Edit Status",
+    EDIT_LOCATION: "Edit Location",
   },
 });
 
