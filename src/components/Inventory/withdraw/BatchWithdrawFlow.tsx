@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import strings from 'src/strings';
 import { APP_PATHS } from 'src/constants';
 import { search } from 'src/api/search';
-import { NurseryWithdrawalRequest } from 'src/api/types/batch';
+import { NurseryWithdrawalRequest, NurseryWithdrawal } from 'src/api/types/batch';
 import { ServerOrganization } from 'src/types/Organization';
 import { isContributor } from 'src/utils/organization';
 import { createBatchWithdrawal, uploadWithdrawalPhoto } from 'src/api/batch/batch';
@@ -35,7 +35,7 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
     withdrawnDate: getTodaysDateFormatted(),
   });
   const [batches, setBatches] = useState<any[]>();
-  const snackbar = useSnackbar();
+  const [snackbar] = useState(useSnackbar());
   const history = useHistory();
 
   useEffect(() => {
@@ -68,16 +68,23 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
           'accession_id',
           'accession_accessionNumber',
           'notes',
+          'species_id',
+          'species_scientificName',
+          'species_commonName',
         ],
         count: 1000,
       });
 
       if (searchResponse) {
-        setBatches(searchResponse);
+        const withdrawable = searchResponse.filter((batch) => Number(batch.totalQuantity) > 0);
+        if (!withdrawable.length) {
+          snackbar.toastError(strings.NO_BATCHES_TO_WITHDRAW_FROM); // temporary until we have a solution from design
+        }
+        setBatches(withdrawable);
       }
     };
     populateBatches();
-  }, [batchIds]);
+  }, [batchIds, snackbar]);
 
   const onWithdrawalConfigured = (withdrawal: NurseryWithdrawalRequest) => {
     setRecord(withdrawal);
@@ -88,22 +95,32 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
     }
   };
 
-  const onBatchesSelected = () => {
+  const onBatchesSelected = (withdrawal: NurseryWithdrawalRequest) => {
+    setRecord(withdrawal);
     setFlowState('photos');
   };
 
   const withdraw = async (photos: File[]) => {
     // first create the withdrawal
+    record.batchWithdrawals = record.batchWithdrawals.filter((batchWithdrawal) => {
+      return Number(batchWithdrawal.readyQuantityWithdrawn) + Number(batchWithdrawal.notReadyQuantityWithdrawn) > 0;
+    });
+
+    if (record.batchWithdrawals.length === 0) {
+      snackbar.toastError(strings.NO_BATCHES_TO_WITHDRAW_FROM); // temporary until we have a solution from design
+      return;
+    }
+
     const response = await createBatchWithdrawal(record);
     if (!response.requestSucceeded) {
       snackbar.toastError(response.error);
       return;
     }
 
-    const { withdrawalId } = response;
-    if (withdrawalId && photos.length) {
+    const { withdrawal } = response;
+    if (photos.length) {
       // upload photos
-      const uploadPhotoPromises = photos.map((photo) => uploadWithdrawalPhoto(withdrawalId, photo));
+      const uploadPhotoPromises = photos.map((photo) => uploadWithdrawalPhoto(withdrawal!.id, photo));
       try {
         const promiseResponses = await Promise.allSettled(uploadPhotoPromises);
         promiseResponses.forEach((promiseResponse) => {
@@ -118,9 +135,34 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
     }
 
     // set snackbar with status
-    snackbar.toastSuccess(strings.SAVE_CHANGES); // TODO set status as per design
+    snackbar.toastSuccess(getFormattedSuccessMessage(withdrawal as NurseryWithdrawal));
     // redirect to inventory
     goToInventory();
+  };
+
+  const getFormattedSuccessMessage = (withdrawal: NurseryWithdrawal): string => {
+    const numBatches = withdrawal.batchWithdrawals?.length;
+    const totalWithdrawn = withdrawal.batchWithdrawals?.reduce((total, batchWithdrawal) => {
+      const { germinatingQuantityWithdrawn, notReadyQuantityWithdrawn, readyQuantityWithdrawn } = batchWithdrawal;
+      if (germinatingQuantityWithdrawn) {
+        total += germinatingQuantityWithdrawn;
+      }
+      if (notReadyQuantityWithdrawn) {
+        total += notReadyQuantityWithdrawn;
+      }
+      if (readyQuantityWithdrawn) {
+        total += readyQuantityWithdrawn;
+      }
+      return total;
+    }, 0);
+
+    return strings.formatString(
+      strings.BATCH_WITHDRAW_SUCCESS,
+      numBatches,
+      numBatches === 1 ? strings.BATCHES_SINGULAR : (strings.BATCHES_PLURAL as any),
+      totalWithdrawn,
+      totalWithdrawn === 1 ? strings.SEEDLINGS_SINGULAR : (strings.SEEDLINGS_PLURAL as any)
+    ) as string;
   };
 
   const goToInventory = () => {
@@ -161,6 +203,8 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
           organization={organization}
           onCancel={goToInventory}
           saveText={strings.NEXT}
+          batches={batches}
+          nurseryWithdrawal={record}
         />
       )}
       {flowState === 'photos' && (

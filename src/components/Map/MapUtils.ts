@@ -44,9 +44,6 @@ export const getBoundingBox = (geometries: MapGeometry[]): MapBoundingBox => {
     if (!Array.isArray(geom) || !geom.length) {
       return;
     }
-    if (!Array.isArray(geom[0])) {
-      scanArray(geom as number[]);
-    }
     (geom as number[][][][]).forEach((polygonList) => {
       polygonList.forEach((polygon) => {
         polygon.forEach(scanArray);

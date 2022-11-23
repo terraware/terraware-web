@@ -50,7 +50,7 @@ export default function DownloadReportModal(props: DownloadReportModalProps): JS
     <DialogBox
       onClose={handleCancel}
       open={open}
-      title={strings.REPORT}
+      title={strings.EXPORT_RECORDS}
       size='medium'
       middleButtons={[
         <Button
@@ -61,7 +61,7 @@ export default function DownloadReportModal(props: DownloadReportModalProps): JS
           key='button-1'
           id='cancel'
         />,
-        <Button label={strings.DOWNLOAD} onClick={handleOk} key='button-2' id='downloadButton' />,
+        <Button label={strings.EXPORT} onClick={handleOk} key='button-2' id='downloadButton' />,
       ]}
       message={strings.DOWNLOAD_REPORT_DESCRIPTION}
     >

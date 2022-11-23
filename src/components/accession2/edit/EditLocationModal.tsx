@@ -79,7 +79,7 @@ export default function EditLocationModal(props: EditLocationModalProps): JSX.El
     <DialogBox
       onClose={onCloseHandler}
       open={open}
-      title={strings.LOCATION}
+      title={strings.EDIT_LOCATION}
       size='large'
       middleButtons={[
         <Button label={strings.CANCEL} type='passive' onClick={onCloseHandler} priority='secondary' key='button-1' />,
