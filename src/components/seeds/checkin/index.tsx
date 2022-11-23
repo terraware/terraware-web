@@ -126,20 +126,30 @@ export default function CheckIn(props: CheckInProps): JSX.Element {
               <Grid item xs={12}>
                 {pendingAccessionsById.map((result) => {
                   return (
-                    <Grid container key={result.accessionNumber as string} columns={16} sx={{
-                      backgroundColor: theme.palette.TwClrBg,
-                      borderRadius: '24px',
-                      padding: theme.spacing(3),
-                      marginBottom: theme.spacing(3),
-                      '&:last-of-type': {
-                        marginBottom: 0,
-                      },
-                    }}>
+                    <Grid
+                      container
+                      key={result.accessionNumber as string}
+                      columns={16}
+                      sx={{
+                        backgroundColor: theme.palette.TwClrBg,
+                        borderRadius: '24px',
+                        padding: theme.spacing(3),
+                        marginBottom: theme.spacing(3),
+                        '&:last-of-type': {
+                          marginBottom: 0,
+                        },
+                      }}
+                    >
                       <Grid item xs={isMobile ? 16 : 3} marginBottom={isMobile ? theme.spacing(3) : 0}>
                         {isMobile ? (
                           <Box display='flex' justifyContent='space-between'>
-                            <TextField label={strings.ACCESSION} id='accession' type='text'
-                                       value={result.accessionNumber as string} display={true} />
+                            <TextField
+                              label={strings.ACCESSION}
+                              id='accession'
+                              type='text'
+                              value={result.accessionNumber as string}
+                              display={true}
+                            />
                             <Button
                               onClick={() => goToAccession(result.id! as string)}
                               id='viewCollections'
@@ -149,25 +159,50 @@ export default function CheckIn(props: CheckInProps): JSX.Element {
                             />
                           </Box>
                         ) : (
-                          <TextField label={strings.ACCESSION} id='accession' type='text'
-                                     value={result.accessionNumber as string} display={true} />
+                          <TextField
+                            label={strings.ACCESSION}
+                            id='accession'
+                            type='text'
+                            value={result.accessionNumber as string}
+                            display={true}
+                          />
                         )}
                       </Grid>
                       <Grid item xs={isMobile ? 16 : 3} marginBottom={isMobile ? theme.spacing(3) : 0}>
-                        <TextField label={strings.SPECIES} id='species' type='text' value={result.speciesName as string}
-                                   display={true} />
+                        <TextField
+                          label={strings.SPECIES}
+                          id='species'
+                          type='text'
+                          value={result.speciesName as string}
+                          display={true}
+                        />
                       </Grid>
                       <Grid item xs={isMobile ? 16 : 3} marginBottom={isMobile ? theme.spacing(3) : 0}>
-                        <TextField label={strings.SITE_LOCATION} id='location' type='text'
-                                   value={result.collectionSiteName as string} display={true} />
+                        <TextField
+                          label={strings.SITE_LOCATION}
+                          id='location'
+                          type='text'
+                          value={result.collectionSiteName as string}
+                          display={true}
+                        />
                       </Grid>
                       <Grid item xs={isMobile ? 16 : 3} marginBottom={isMobile ? theme.spacing(3) : 0}>
-                        <TextField label={strings.COLLECTED_DATE} id='collected' type='text'
-                                   value={result.collectedDate as string} display={true} />
+                        <TextField
+                          label={strings.COLLECTED_DATE}
+                          id='collected'
+                          type='text'
+                          value={result.collectedDate as string}
+                          display={true}
+                        />
                       </Grid>
                       <Grid item xs={isMobile ? 16 : 3}>
-                        <TextField label={strings.RECEIVED_DATE} id='received' type='text'
-                                   value={result.receivedDate as string} display={true} />
+                        <TextField
+                          label={strings.RECEIVED_DATE}
+                          id='received'
+                          type='text'
+                          value={result.receivedDate as string}
+                          display={true}
+                        />
                       </Grid>
                       {!isMobile && (
                         <Grid item xs={1}>

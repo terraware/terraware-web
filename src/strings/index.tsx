@@ -294,7 +294,6 @@ const strings = new LocalizedStrings({
     OZ: 'oz',
     GOT_IT: 'Got It!',
     VIEW: 'View',
-    ACCESSIONS_TOTAL: 'Accessions Total',
     CHECKIN_ACCESSIONS: 'Check In Accessions',
     VIEW_ACCESSION: 'View accession',
     CHECKING_IN: 'Checking In...',
