@@ -1,3 +1,4 @@
+13f9b8e SW-2256 Add auto-focus to seed database search popover (#816)
 bdeed7d SW-2192 Lots of minor copy changes requested by design team (#812)
 95253d6 Manage NavBar Transparency (#790)
 706946a SW-2261 Update map polygon types with recent backend changes that removes points/lines/etc. (#814)
