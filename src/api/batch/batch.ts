@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { addError } from '../utils';
 import { paths } from '../types/generated-schema';
-import { Batch } from '../types/batch';
+import { Batch, NurseryWithdrawal } from '../types/batch';
 
 const BATCHES = '/api/v1/nursery/batches';
 type CreateBatchResponsePayload = paths[typeof BATCHES]['post']['responses'][200]['content']['application/json'];
@@ -172,7 +172,7 @@ export type CreateNurseryWithdrawalRequestPayload =
   paths[typeof BATCH_WITHDRAWALS]['post']['requestBody']['content']['application/json'];
 
 type CreateBatchWithdrawalResponse = {
-  withdrawalId: number | null;
+  withdrawal: NurseryWithdrawal | null;
   requestSucceeded: boolean;
   error?: string;
 };
@@ -181,7 +181,7 @@ export async function createBatchWithdrawal(
   createNurseryWithdrawalRequestPayload: CreateNurseryWithdrawalRequestPayload
 ): Promise<CreateBatchWithdrawalResponse> {
   const response: CreateBatchWithdrawalResponse = {
-    withdrawalId: null,
+    withdrawal: null,
     requestSucceeded: true,
   };
 
@@ -190,7 +190,48 @@ export async function createBatchWithdrawal(
       await axios.post(BATCH_WITHDRAWALS, createNurseryWithdrawalRequestPayload)
     ).data;
     if (serverResponse.status === 'ok') {
-      response.withdrawalId = serverResponse.withdrawal.id;
+      response.withdrawal = serverResponse.withdrawal;
+    } else {
+      response.requestSucceeded = false;
+    }
+  } catch (e: any) {
+    addError(e?.response?.data || {}, response);
+    response.requestSucceeded = false;
+  }
+
+  return response;
+}
+
+const WITHDRAWAL_PHOTOS_ENDPOINT = '/api/v1/nursery/withdrawals/{withdrawalId}/photos';
+type UploadWithdrawalPhotoResponsePayload =
+  paths[typeof WITHDRAWAL_PHOTOS_ENDPOINT]['post']['responses'][200]['content']['application/json'];
+
+type UploadWithdrawalPhotoResponse = {
+  photoId: number | null;
+  requestSucceeded: boolean;
+  error?: string;
+};
+
+export async function uploadWithdrawalPhoto(withdrawalId: number, file: File): Promise<UploadWithdrawalPhotoResponse> {
+  const response: UploadWithdrawalPhotoResponse = {
+    photoId: null,
+    requestSucceeded: true,
+  };
+
+  const formData = new FormData();
+  formData.append('file', file);
+  const config = {
+    headers: {
+      'content-type': 'multipart/form-data',
+    },
+  };
+
+  try {
+    const serverResponse: UploadWithdrawalPhotoResponsePayload = (
+      await axios.post(WITHDRAWAL_PHOTOS_ENDPOINT.replace('{withdrawalId}', withdrawalId.toString()), formData, config)
+    ).data;
+    if (serverResponse.status === 'ok') {
+      response.photoId = serverResponse.id;
     } else {
       response.requestSucceeded = false;
     }

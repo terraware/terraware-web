@@ -1,26 +1,42 @@
-import { Box, CircularProgress } from '@mui/material';
+import { Box, CircularProgress, Typography } from '@mui/material';
+import { useHistory } from 'react-router-dom';
 import { theme } from '@terraware/web-components';
 import React, { useEffect, useState } from 'react';
+import strings from 'src/strings';
+import { APP_PATHS } from 'src/constants';
 import { search } from 'src/api/search';
-import { NurseryWithdrawal } from 'src/api/types/batch';
+import { NurseryWithdrawalRequest, NurseryWithdrawal } from 'src/api/types/batch';
 import { ServerOrganization } from 'src/types/Organization';
+import { isContributor } from 'src/utils/organization';
+import { createBatchWithdrawal, uploadWithdrawalPhoto } from 'src/api/batch/batch';
+import { getTodaysDateFormatted } from '@terraware/web-components/utils';
+import useSnackbar from 'src/utils/useSnackbar';
 import useForm from 'src/utils/useForm';
 import AddPhotos from './flow/AddPhotos';
-import SelectBatches from './flow/SelectBatches';
+import SelectBatchesWithdrawnQuantity from './flow/SelectBatchesWithdrawnQuantity';
 import SelectPurposeForm from './flow/SelectPurposeForm';
+import TfMain from 'src/components/common/TfMain';
 
 type FlowStates = 'purpose' | 'select batches' | 'photos';
 
 type BatchWithdrawFlowProps = {
   organization: ServerOrganization;
   batchIds: string[];
+  sourcePage?: string;
 };
 
 export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.Element {
-  const { organization, batchIds } = props;
+  const { organization, batchIds, sourcePage } = props;
   const [flowState, setFlowState] = useState<FlowStates>('purpose');
-  const [records, setRecords] = useForm<NurseryWithdrawal[]>([]);
+  const [record, setRecord] = useForm<NurseryWithdrawalRequest>({
+    batchWithdrawals: [],
+    facilityId: -1,
+    purpose: isContributor(organization) ? 'Nursery Transfer' : 'Out Plant',
+    withdrawnDate: getTodaysDateFormatted(),
+  });
   const [batches, setBatches] = useState<any[]>();
+  const [snackbar] = useState(useSnackbar());
+  const history = useHistory();
 
   useEffect(() => {
     const populateBatches = async () => {
@@ -57,13 +73,18 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
       });
 
       if (searchResponse) {
-        setBatches(searchResponse);
+        const withdrawable = searchResponse.filter((batch) => Number(batch.totalQuantity) > 0);
+        if (!withdrawable.length) {
+          snackbar.toastError(strings.NO_BATCHES_TO_WITHDRAW_FROM); // temporary until we have a solution from design
+        }
+        setBatches(withdrawable);
       }
     };
     populateBatches();
-  }, [batchIds]);
+  }, [batchIds, snackbar]);
 
-  const onPurposeSelected = () => {
+  const onWithdrawalConfigured = (withdrawal: NurseryWithdrawalRequest) => {
+    setRecord(withdrawal);
     if (batchIds.length === 1) {
       setFlowState('photos');
     } else {
@@ -75,6 +96,79 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
     setFlowState('photos');
   };
 
+  const withdraw = async (photos: File[]) => {
+    // first create the withdrawal
+    record.batchWithdrawals = record.batchWithdrawals.filter((batchWithdrawal) => {
+      return Number(batchWithdrawal.readyQuantityWithdrawn) + Number(batchWithdrawal.notReadyQuantityWithdrawn) > 0;
+    });
+
+    if (record.batchWithdrawals.length === 0) {
+      snackbar.toastError(strings.NO_BATCHES_TO_WITHDRAW_FROM); // temporary until we have a solution from design
+      return;
+    }
+
+    const response = await createBatchWithdrawal(record);
+    if (!response.requestSucceeded) {
+      snackbar.toastError(response.error);
+      return;
+    }
+
+    const { withdrawal } = response;
+    if (photos.length) {
+      // upload photos
+      const uploadPhotoPromises = photos.map((photo) => uploadWithdrawalPhoto(withdrawal!.id, photo));
+      try {
+        const promiseResponses = await Promise.allSettled(uploadPhotoPromises);
+        promiseResponses.forEach((promiseResponse) => {
+          if (promiseResponse.status === 'rejected') {
+            // tslint:disable-next-line: no-console
+            console.error(promiseResponse.reason);
+          }
+        });
+      } catch (e) {
+        // swallow error
+      }
+    }
+
+    // set snackbar with status
+    snackbar.toastSuccess(getFormattedSuccessMessage(withdrawal as NurseryWithdrawal));
+    // redirect to inventory
+    goToInventory();
+  };
+
+  const getFormattedSuccessMessage = (withdrawal: NurseryWithdrawal): string => {
+    const numBatches = withdrawal.batchWithdrawals?.length;
+    const totalWithdrawn = withdrawal.batchWithdrawals?.reduce((total, batchWithdrawal) => {
+      const { germinatingQuantityWithdrawn, notReadyQuantityWithdrawn, readyQuantityWithdrawn } = batchWithdrawal;
+      if (germinatingQuantityWithdrawn) {
+        total += germinatingQuantityWithdrawn;
+      }
+      if (notReadyQuantityWithdrawn) {
+        total += notReadyQuantityWithdrawn;
+      }
+      if (readyQuantityWithdrawn) {
+        total += readyQuantityWithdrawn;
+      }
+      return total;
+    }, 0);
+
+    return strings.formatString(
+      strings.BATCH_WITHDRAW_SUCCESS,
+      numBatches,
+      numBatches === 1 ? strings.BATCHES_SINGULAR : (strings.BATCHES_PLURAL as any),
+      totalWithdrawn,
+      totalWithdrawn === 1 ? strings.SEEDLINGS_SINGULAR : (strings.SEEDLINGS_PLURAL as any)
+    ) as string;
+  };
+
+  const goToInventory = () => {
+    if (sourcePage && sourcePage.startsWith(APP_PATHS.INVENTORY)) {
+      history.push({ pathname: sourcePage });
+    } else {
+      history.push({ pathname: APP_PATHS.INVENTORY });
+    }
+  };
+
   if (!batches) {
     return (
       <Box display='flex' justifyContent='center' padding={theme.spacing(5)}>
@@ -84,18 +178,37 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
   }
 
   return (
-    <>
+    <TfMain>
+      <Typography variant='h2' sx={{ fontSize: '24px', fontWeight: 'bold' }}>
+        {strings.WITHDRAW_FROM_BATCHES}
+      </Typography>
+
       {flowState === 'purpose' && (
         <SelectPurposeForm
-          onNext={onPurposeSelected}
+          onNext={onWithdrawalConfigured}
           organization={organization}
           batches={batches}
-          records={records}
-          setRecords={setRecords}
+          nurseryWithdrawal={record}
+          onCancel={goToInventory}
+          saveText={strings.NEXT}
         />
       )}
-      {flowState === 'select batches' && <SelectBatches onNext={onBatchesSelected} organization={organization} />}
-      {flowState === 'photos' && <AddPhotos onNext={onPurposeSelected} organization={organization} />}
-    </>
+      {flowState === 'select batches' && (
+        <SelectBatchesWithdrawnQuantity
+          onNext={onBatchesSelected}
+          organization={organization}
+          onCancel={goToInventory}
+          saveText={strings.NEXT}
+        />
+      )}
+      {flowState === 'photos' && (
+        <AddPhotos
+          onNext={withdraw}
+          withdrawalPurpose={record.purpose}
+          onCancel={goToInventory}
+          saveText={strings.WITHDRAW}
+        />
+      )}
+    </TfMain>
   );
 }

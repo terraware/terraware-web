@@ -59,16 +59,13 @@ type ListPlantingSitesResponse = {
   error?: string;
 };
 
-export const listPlantingSites = async (full?: boolean): Promise<ListPlantingSitesResponse> => {
+export const listPlantingSites = async (organizationId: number, full?: boolean): Promise<ListPlantingSitesResponse> => {
   const response: ListPlantingSitesResponse = {
     requestSucceeded: true,
   };
 
   try {
-    let endpoint = PLANTING_SITES_ENDPOINT;
-    if (full) {
-      endpoint = addQueryParams(endpoint, { full: true });
-    }
+    const endpoint = addQueryParams(PLANTING_SITES_ENDPOINT, { organizationId, full: full || false });
     const serverResponse: ListPlantingSitesResponsePayload = (await axios.get(endpoint)).data;
     if (serverResponse.status === 'error') {
       response.requestSucceeded = false;

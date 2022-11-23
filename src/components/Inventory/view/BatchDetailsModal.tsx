@@ -85,7 +85,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
     if (foundFacility) {
       setFacilityName(foundFacility.name);
     }
-  }, [selectedBatch, speciesId, setRecord, organization]);
+  }, [selectedBatch, speciesId, setRecord, organization, open]);
 
   const MANDATORY_FIELDS = [
     'facilityId',

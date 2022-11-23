@@ -20,7 +20,7 @@ export default function PlantingSitesCellRenderer(props: RendererProps<TableRowT
   const theme = useTheme();
   const { column, row, value, index } = props;
 
-  const createLinkToPlantigSiteView = (iValue: React.ReactNode | unknown[]) => {
+  const createLinkToPlantingSiteView = (iValue: React.ReactNode | unknown[]) => {
     return (
       <Link
         to={APP_PATHS.PLANTING_SITES_VIEW.replace(':plantingSiteId', row.id.toString())}
@@ -37,7 +37,7 @@ export default function PlantingSitesCellRenderer(props: RendererProps<TableRowT
       <CellRenderer
         index={index}
         column={column}
-        value={createLinkToPlantigSiteView(value)}
+        value={createLinkToPlantingSiteView(value)}
         row={row}
         className={classes.text}
       />

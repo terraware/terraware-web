@@ -11,7 +11,7 @@ import useDebounce from 'src/utils/useDebounce';
 import PageHeaderWrapper from '../common/PageHeaderWrapper';
 import TfMain from '../common/TfMain';
 import EmptyStatePage from '../emptyStatePages/EmptyStatePage';
-import PlantigSitesTable from './PlantigSitesTable';
+import PlantingSitesTable from './PlantingSitesTable';
 
 type PlantingSitesListProps = {
   organization: ServerOrganization;
@@ -107,7 +107,7 @@ export default function PlantingSitesList(props: PlantingSitesListProps): JSX.El
                 <EmptyStatePage pageName={'PlantingSites'} />
               </Container>
             ) : (
-              <PlantigSitesTable
+              <PlantingSitesTable
                 organization={organization}
                 results={searchResults || []}
                 temporalSearchValue={temporalSearchValue}
