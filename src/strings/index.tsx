@@ -842,6 +842,8 @@ const strings = new LocalizedStrings({
     VIEW_SITES_ZONES_PLOTS: 'View Sites, Zones, and Plots on a map.',
     PLANTING_ZONE: 'Planting Zone',
     PLOT: 'Plot',
+    SELECT_BATCHES: 'Select Batches',
+    TOTAL_WITHDRAW: 'Total Withdraw',
     BATCH_WITHDRAW_SUCCESS: '{0} {1} for a total of {2} {3} withdrawn.',
     BATCHES_SINGULAR: 'batch',
     BATCHES_PLURAL: 'batches',
