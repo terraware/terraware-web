@@ -235,7 +235,7 @@ export default function Inventory(props: InventoryProps): JSX.Element {
   }, [filters, onApplyFilters]);
 
   return (
-    <TfMain>
+    <TfMain backgroundImageVisible={true}>
       <ImportInventoryModal
         open={importInventoryModalOpen}
         onClose={() => setImportInventoryModalOpen(false)}
@@ -296,7 +296,12 @@ export default function Inventory(props: InventoryProps): JSX.Element {
               </div>
             ) : (
               <Container maxWidth={false} className={classes.mainContainer}>
-                <EmptyStatePage pageName={'Inventory'} organization={organization} reloadData={onApplyFilters} />
+                <EmptyStatePage
+                  backgroundImageVisible={false}
+                  pageName={'Inventory'}
+                  organization={organization}
+                  reloadData={onApplyFilters}
+                />
               </Container>
             )
           ) : (

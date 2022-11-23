@@ -117,7 +117,7 @@ type EmptyStatePageProps = {
 };
 
 export default function EmptyStatePage({
-  backgroundImageVisible,
+  backgroundImageVisible = true,
   pageName,
   organization,
   reloadData,
