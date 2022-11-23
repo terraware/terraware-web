@@ -29,6 +29,7 @@ interface StyleProps {
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
     marginBottom: theme.spacing(8),
+    padding: '0',
   },
   content: {
     background: theme.palette.TwClrBg,

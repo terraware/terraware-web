@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     minHeight: '100vh',
     display: 'flex',
     flexDirection: 'column',
-    padding: (props: StyleProps) => (props.isMobile ? '32px 8px' : '32px'),
+    padding: (props: StyleProps) => (props.isMobile ? '32px 24px' : '32px'),
     [theme.breakpoints.down('xl')]: {
       background: (props: StyleProps) =>
         !props.backgroundImageVisible
