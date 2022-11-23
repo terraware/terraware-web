@@ -310,7 +310,12 @@ export function SimplePopover({
         />
       )}
       {popover?.col.filter?.type === 'search' && (
-        <Search field={popover?.col.key} autoFocus={true} onChange={onFilterChange} values={filters[popover?.col.key]?.values ?? []} />
+        <Search
+          field={popover?.col.key}
+          autoFocus={true}
+          onChange={onFilterChange}
+          values={filters[popover?.col.key]?.values ?? []}
+        />
       )}
       {popover?.col.filter?.type === 'date_range' && (
         <DateRange
