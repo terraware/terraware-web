@@ -38,7 +38,7 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
   const [record, setRecord] = useForm<BatchWithdrawalForTable[]>([]);
 
   useEffect(() => {
-    const transformBatchesForTable = async () => {
+    const transformBatchesForTable = () => {
       const speciesFromBatches: { [x: string]: { id: number; scientificName: string; commonName: string } } = {};
       let batchesForTable: BatchWithdrawalForTable[] = [];
       batchesForTable = nurseryWithdrawal.batchWithdrawals.reduce((acc, bw) => {
