@@ -15,8 +15,13 @@ import NavFooter from './common/Navbar/NavFooter';
 type NavBarProps = {
   organization?: ServerOrganization;
   setShowNavBar: React.Dispatch<React.SetStateAction<boolean>>;
+  backgroundTransparent?: boolean;
 };
-export default function NavBar({ organization, setShowNavBar }: NavBarProps): JSX.Element | null {
+export default function NavBar({
+  organization,
+  setShowNavBar,
+  backgroundTransparent,
+}: NavBarProps): JSX.Element | null {
   const [role, setRole] = useState<AllOrganizationRoles>();
   const { isDesktop } = useDeviceInfo();
 
@@ -40,6 +45,9 @@ export default function NavBar({ organization, setShowNavBar }: NavBarProps): JS
   const isNurseriesRoute = useRouteMatch(APP_PATHS.NURSERIES + '/');
   const isInventoryRoute = useRouteMatch(APP_PATHS.INVENTORY + '/');
   const isPlantingSitesRoute = useRouteMatch(APP_PATHS.PLANTING_SITES + '/');
+  const isPlantsDashboardRoute = useRouteMatch(APP_PATHS.PLANTS_DASHBOARD + '/');
+
+  const trackingEnabled = isEnabled('Tracking V1');
 
   const navigate = (url: string) => {
     history.push(url);
@@ -59,7 +67,7 @@ export default function NavBar({ organization, setShowNavBar }: NavBarProps): JS
   };
 
   return (
-    <Navbar setShowNavBar={setShowNavBar}>
+    <Navbar setShowNavBar={setShowNavBar} backgroundTransparent={backgroundTransparent}>
       <NavItem
         label='Home'
         icon='home'
@@ -121,18 +129,42 @@ export default function NavBar({ organization, setShowNavBar }: NavBarProps): JS
         onClick={() => {
           closeAndNavigateTo(APP_PATHS.INVENTORY);
         }}
-      >
-        <SubNavbar>
+      />
+      <NavItem
+        label={strings.MONITORING}
+        icon='monitoringNav'
+        selected={!!isMonitoringRoute}
+        onClick={() => {
+          closeAndNavigateTo(APP_PATHS.MONITORING);
+        }}
+        id='monitoring'
+      />
+      <>
+        <NavSection title={strings.SEEDLINGS.toUpperCase()} />
+        <NavItem
+          label={strings.INVENTORY}
+          icon='iconSeedling'
+          selected={!!isInventoryRoute}
+          onClick={() => {
+            closeAndNavigateTo(APP_PATHS.INVENTORY);
+          }}
+          id='inventory'
+        />
+      </>
+      {trackingEnabled && (
+        <>
+          <NavSection title={strings.PLANTS.toUpperCase()} />
           <NavItem
-            label={strings.INVENTORY}
-            selected={!!isInventoryRoute}
+            label={strings.DASHBOARD}
+            icon='iconRestorationSite'
+            selected={!!isPlantsDashboardRoute}
             onClick={() => {
-              closeAndNavigateTo(APP_PATHS.INVENTORY);
+              closeAndNavigateTo(APP_PATHS.PLANTS_DASHBOARD);
             }}
-            id='inventory'
+            id='plants-dashboard'
           />
-        </SubNavbar>
-      </NavItem>
+        </>
+      )}
       {role && ['Admin', 'Owner'].includes(role) && (
         <>
           <NavSection title={strings.SETTINGS.toUpperCase()} />
@@ -183,7 +215,7 @@ export default function NavBar({ organization, setShowNavBar }: NavBarProps): JS
           </NavItem>
         </>
       )}
-      {isEnabled('Tracking V1') && (
+      {trackingEnabled && (
         <NavItem
           label={strings.PLANTING_SITES}
           selected={!!isPlantingSitesRoute}

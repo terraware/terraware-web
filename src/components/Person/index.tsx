@@ -146,16 +146,16 @@ export default function PersonDetails({ organization }: PersonDetailsProps): JSX
           padding: theme.spacing(3),
         }}
       >
-        <Grid item xs={gridSize()} paddingBottom={theme.spacing(4)}>
+        <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
           <TextField label={strings.EMAIL} id='email' type='text' value={person?.email} display={true} />
         </Grid>
-        <Grid item xs={gridSize()} paddingBottom={theme.spacing(4)}>
+        <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
           <TextField label={strings.FIRST_NAME} id='firstName' type='text' value={person?.firstName} display={true} />
         </Grid>
-        <Grid item xs={gridSize()} paddingBottom={theme.spacing(4)}>
+        <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
           <TextField label={strings.LAST_NAME} id='lastName' type='text' value={person?.lastName} display={true} />
         </Grid>
-        <Grid item xs={gridSize()} paddingBottom={isMobile ? theme.spacing(4) : 0}>
+        <Grid item xs={gridSize()} paddingBottom={isMobile ? theme.spacing(2) : 0}>
           <TextField label={strings.ROLE} id='role' type='text' value={person?.role} display={true} />
         </Grid>
         <Grid item xs={gridSize()}>
