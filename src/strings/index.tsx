@@ -863,6 +863,7 @@ const strings = new LocalizedStrings({
     EDIT_LOCATION: 'Edit Location',
     ADD_VIABILITY_TEST: 'Add Viability Test',
     WITHDRAWAL_BATCHES_MISSING_QUANTITY_ERROR: 'Enter a quantity in at least one seedlings batch row.',
+    PLANTING_SITE: 'Planting Site',
   },
 });
 
