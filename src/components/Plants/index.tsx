@@ -7,6 +7,19 @@ import { Select } from '@terraware/web-components';
 import { listPlantingSites } from 'src/api/tracking/tracking';
 import { PlantingSite } from 'src/api/types/tracking';
 import { useDeviceInfo } from '@terraware/web-components/utils';
+import { search } from 'src/api/search';
+
+type Population = {
+  species_scientificName: string;
+  species_commonName: string;
+  totalPlants: number;
+};
+
+type PlantingSitesPlotsSearch = {
+  id: string;
+  fullName: string;
+  populations: Population[];
+};
 
 type PlantsDashboardProps = {
   organization: ServerOrganization;
@@ -28,6 +41,50 @@ export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Elemen
     };
     populatePlantingSites();
   }, [organization]);
+
+  useEffect(() => {
+    const populateResults = async () => {
+      const serverResponse: PlantingSitesPlotsSearch[] | null = (await search({
+        prefix: 'plantingSites.plantingZones.plots',
+        fields: [
+          'id',
+          'fullName',
+          'populations.species_scientificName',
+          'populations.species_commonName',
+          'populations.totalPlants',
+        ],
+        search: {
+          operation: 'field',
+          field: 'plantingSite_id',
+          values: selectedPlantingSite?.id,
+        },
+        count: 0,
+      })) as unknown as PlantingSitesPlotsSearch[] | null;
+
+      if (serverResponse) {
+        let totalPlantsOfSite = 0;
+        serverResponse.forEach((plot) => {
+          plot.populations.forEach((population) => {
+            totalPlantsOfSite += population.totalPlants;
+          });
+        });
+
+        // @ts-ignore
+        const plantsPerSpecies: { [key: string]: number } = serverResponse.reduce((acc, plot) => {
+          plot.populations.forEach((population) => {
+            if (acc[population.species_scientificName]) {
+              acc[population.species_scientificName] += population.totalPlants;
+            } else {
+              acc[population.species_scientificName] = population.totalPlants;
+            }
+          });
+          return acc;
+        }, {} as { [key: string]: number });
+      }
+    };
+
+    populateResults();
+  }, [selectedPlantingSite]);
 
   const onChangePlantingSite = (newValue: string) => {
     setSelectedPlantingSite(plantingSites.find((ps) => ps.name === newValue));
