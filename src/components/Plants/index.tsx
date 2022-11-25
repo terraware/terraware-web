@@ -65,7 +65,7 @@ export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Elemen
 
         if (serverResponse) {
           let totalPlantsOfSite = 0;
-          // @ts-ignore
+          // eslint-disable-next-line
           const plantsPerSpecies: { [key: string]: number } = serverResponse.reduce((acc, plot) => {
             if (plot.populations) {
               plot.populations.forEach((population) => {
