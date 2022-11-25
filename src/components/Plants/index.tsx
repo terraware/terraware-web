@@ -29,6 +29,7 @@ export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Elemen
   const { organization } = props;
   const [selectedPlantingSite, setSelectedPlantingSite] = useState<PlantingSite>();
   const [plantingSites, setPlantingSites] = useState<PlantingSite[]>([]);
+  const [, setTotalPlants] = useState<number>();
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
 
@@ -44,42 +45,44 @@ export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Elemen
 
   useEffect(() => {
     const populateResults = async () => {
-      const serverResponse: PlantingSitesPlotsSearch[] | null = (await search({
-        prefix: 'plantingSites.plantingZones.plots',
-        fields: [
-          'id',
-          'fullName',
-          'populations.species_scientificName',
-          'populations.species_commonName',
-          'populations.totalPlants',
-        ],
-        search: {
-          operation: 'field',
-          field: 'plantingSite_id',
-          values: selectedPlantingSite?.id,
-        },
-        count: 0,
-      })) as unknown as PlantingSitesPlotsSearch[] | null;
+      if (selectedPlantingSite) {
+        const serverResponse: PlantingSitesPlotsSearch[] | null = (await search({
+          prefix: 'plantingSites.plantingZones.plots',
+          fields: [
+            'id',
+            'fullName',
+            'populations.species_scientificName',
+            'populations.species_commonName',
+            'populations.totalPlants',
+          ],
+          search: {
+            operation: 'field',
+            field: 'plantingSite_id',
+            values: [selectedPlantingSite.id],
+          },
+          count: 0,
+        })) as unknown as PlantingSitesPlotsSearch[] | null;
 
-      if (serverResponse) {
-        let totalPlantsOfSite = 0;
-        serverResponse.forEach((plot) => {
-          plot.populations.forEach((population) => {
-            totalPlantsOfSite += population.totalPlants;
-          });
-        });
-
-        // @ts-ignore
-        const plantsPerSpecies: { [key: string]: number } = serverResponse.reduce((acc, plot) => {
-          plot.populations.forEach((population) => {
-            if (acc[population.species_scientificName]) {
-              acc[population.species_scientificName] += population.totalPlants;
-            } else {
-              acc[population.species_scientificName] = population.totalPlants;
+        if (serverResponse) {
+          let totalPlantsOfSite = 0;
+          // @ts-ignore
+          const plantsPerSpecies: { [key: string]: number } = serverResponse.reduce((acc, plot) => {
+            if (plot.populations) {
+              plot.populations.forEach((population) => {
+                totalPlantsOfSite = +totalPlantsOfSite + +population.totalPlants;
+                if (acc[population.species_scientificName]) {
+                  acc[population.species_scientificName] =
+                    +acc[population.species_scientificName] + +population.totalPlants;
+                } else {
+                  acc[population.species_scientificName] = +population.totalPlants;
+                }
+              });
             }
-          });
-          return acc;
-        }, {} as { [key: string]: number });
+            return acc;
+          }, {} as { [key: string]: number });
+
+          setTotalPlants(totalPlantsOfSite);
+        }
       }
     };
 
