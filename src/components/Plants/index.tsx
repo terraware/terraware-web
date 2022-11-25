@@ -29,7 +29,7 @@ export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Elemen
   const { organization } = props;
   const [selectedPlantingSite, setSelectedPlantingSite] = useState<PlantingSite>();
   const [plantingSites, setPlantingSites] = useState<PlantingSite[]>([]);
-  const [, setTotalPlants] = useState<number>();
+  const [totalPlants, setTotalPlants] = useState<number>();
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
 
@@ -133,7 +133,11 @@ export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Elemen
         <Grid item xs={isMobile ? 12 : 6} sx={{ paddingLeft: 1 }}>
           <Box sx={borderCardStyle}>
             <Typography sx={cardTitleStyle}>{strings.TOTAL_NUMBER_OF_PLANTS}</Typography>
-            <Box style={cardElementStyle} />
+            <Box style={cardElementStyle}>
+              <Typography fontSize='48px' fontWeight={600}>
+                {totalPlants}
+              </Typography>
+            </Box>
           </Box>
           <Box sx={borderCardStyle}>
             <Typography sx={cardTitleStyle}>{strings.NUMBER_OF_PLANTS_BY_SPECIES}</Typography>
