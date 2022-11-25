@@ -8,6 +8,9 @@ import { listPlantingSites } from 'src/api/tracking/tracking';
 import { PlantingSite } from 'src/api/types/tracking';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import { search } from 'src/api/search';
+import { Chart } from 'chart.js';
+import { makeStyles } from '@mui/styles';
+import { generateRandomColors } from 'src/utils/generateRandomColor';
 
 type Population = {
   species_scientificName: string;
@@ -25,6 +28,12 @@ type PlantsDashboardProps = {
   organization: ServerOrganization;
 };
 
+const useStyles = makeStyles(() => ({
+  chart: {
+    height: '180px',
+  },
+}));
+
 export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Element {
   const { organization } = props;
   const [selectedPlantingSite, setSelectedPlantingSite] = useState<PlantingSite>();
@@ -32,6 +41,9 @@ export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Elemen
   const [totalPlants, setTotalPlants] = useState<number>();
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
+  const chartRef = React.useRef<HTMLCanvasElement>(null);
+  const [plantsBySpecies, setPlantsBySpecies] = useState<{ [key: string]: number }>();
+  const classes = useStyles();
 
   useEffect(() => {
     const populatePlantingSites = async () => {
@@ -82,6 +94,7 @@ export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Elemen
           }, {} as { [key: string]: number });
 
           setTotalPlants(totalPlantsOfSite);
+          setPlantsBySpecies(plantsPerSpecies);
         }
       }
     };
@@ -108,6 +121,58 @@ export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Elemen
   const cardElementStyle = {
     marginTop: theme.spacing(3),
   };
+
+  React.useEffect(() => {
+    const ctx = chartRef?.current?.getContext('2d');
+    if (ctx && plantsBySpecies) {
+      const colors = generateRandomColors(Object.keys(plantsBySpecies).length);
+      const data = plantsBySpecies;
+      const myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: Object.keys(data),
+          datasets: [
+            {
+              data: Object.values(data),
+              barThickness: 50, // number (pixels) or 'flex'
+              backgroundColor: colors,
+            },
+          ],
+        },
+        options: {
+          maintainAspectRatio: false,
+          layout: {
+            padding: {
+              left: 0,
+              right: 0,
+              top: 10,
+            },
+          },
+          plugins: {
+            legend: {
+              display: false,
+            },
+          },
+          scales: {
+            y: {
+              ticks: {
+                callback: (value, index, ticks) => {
+                  if (+value % 1 === 0) {
+                    return value;
+                  }
+                },
+              },
+            },
+          },
+        },
+      });
+      // when component unmounts
+      return () => {
+        myChart.destroy();
+      };
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [plantsBySpecies]);
 
   return (
     <TfMain>
@@ -141,7 +206,9 @@ export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Elemen
           </Box>
           <Box sx={borderCardStyle}>
             <Typography sx={cardTitleStyle}>{strings.NUMBER_OF_PLANTS_BY_SPECIES}</Typography>
-            <Box style={cardElementStyle} />
+            <Box style={cardElementStyle}>
+              <canvas id='plantsBySpecies' ref={chartRef} className={classes.chart} />
+            </Box>
           </Box>
           <Box sx={borderCardStyle}>
             <Typography sx={cardTitleStyle}>{strings.NUMBER_OF_PLANTS_BY_PLOT_AND_SPECIES}</Typography>
