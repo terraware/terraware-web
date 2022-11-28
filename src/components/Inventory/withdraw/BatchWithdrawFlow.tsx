@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import strings from 'src/strings';
 import { APP_PATHS } from 'src/constants';
 import { search } from 'src/api/search';
-import { NurseryWithdrawalRequest, NurseryWithdrawal } from 'src/api/types/batch';
+import { NurseryWithdrawalRequest, NurseryWithdrawal, NurseryWithdrawalPurposes } from 'src/api/types/batch';
 import { ServerOrganization } from 'src/types/Organization';
 import { isContributor } from 'src/utils/organization';
 import { createBatchWithdrawal, uploadWithdrawalPhoto } from 'src/api/batch/batch';
@@ -27,11 +27,12 @@ type BatchWithdrawFlowProps = {
 
 export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.Element {
   const { organization, batchIds, sourcePage } = props;
+  const { OUTPLANT, NURSERY_TRANSFER } = NurseryWithdrawalPurposes;
   const [flowState, setFlowState] = useState<FlowStates>('purpose');
   const [record, setRecord] = useForm<NurseryWithdrawalRequest>({
     batchWithdrawals: [],
     facilityId: -1,
-    purpose: isContributor(organization) ? 'Nursery Transfer' : 'Out Plant',
+    purpose: isContributor(organization) ? NURSERY_TRANSFER : OUTPLANT,
     withdrawnDate: getTodaysDateFormatted(),
   });
   const [batches, setBatches] = useState<any[]>();
