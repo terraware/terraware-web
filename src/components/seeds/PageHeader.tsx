@@ -5,15 +5,20 @@ import { SelectedOrgInfo, ServerOrganization } from 'src/types/Organization';
 import PageSnackbar from 'src/components/PageSnackbar';
 import { Container, Grid, Box, Typography, Theme, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { Icon } from '@terraware/web-components';
 import strings from '../../strings';
+
+interface StyleProps {
+  isMobile: boolean;
+}
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
     '&.MuiContainer-root': {
       paddingLeft: 0,
       paddingRight: 0,
-      paddingBottom: theme.spacing(4),
+      paddingBottom: (props: StyleProps) => (props.isMobile ? theme.spacing(4) : theme.spacing(10)),
     },
   },
   container: {
@@ -88,7 +93,8 @@ export default function PageHeader({
   showFacility,
   titleClassName,
 }: Props): JSX.Element {
-  const classes = useStyles();
+  const { isMobile } = useDeviceInfo();
+  const classes = useStyles({ isMobile });
   const theme = useTheme();
 
   const getPageHeading = () => {

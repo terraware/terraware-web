@@ -29,6 +29,7 @@ const useStyles = makeStyles((theme: Theme) => ({
         'url(/assets/home-bg-left-z4.svg) no-repeat 0 100%/auto 295px, ' +
         'url(/assets/home-bg-right-z3.svg) no-repeat 911px 100%/auto 400px, ' +
         'linear-gradient(180deg, #FBF9F9 0%, #EFF5EF 100%) no-repeat 0 0/auto',
+      backgroundAttachment: 'fixed',
     },
     [theme.breakpoints.up('xl')]: {
       background:
@@ -38,6 +39,7 @@ const useStyles = makeStyles((theme: Theme) => ({
         'url(/assets/home-bg-left-z4.svg) no-repeat 0 100%/auto 295px, ' +
         'url(/assets/home-bg-right-z3.svg) no-repeat 100% 100%/auto 400px, ' +
         'linear-gradient(180deg, #FBF9F9 0%, #EFF5EF 100%) no-repeat 0 0/auto',
+      backgroundAttachment: 'fixed',
     },
   },
   mainContainer: {
