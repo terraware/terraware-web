@@ -4,6 +4,7 @@ import strings from 'src/strings';
 import SelectPhotos, { ErrorType } from 'src/components/common/SelectPhotos';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import FormBottomBar from 'src/components/common/FormBottomBar';
+import { NurseryWithdrawalPurposes } from 'src/api/types/batch';
 
 type AddPhotosProps = {
   withdrawalPurpose: string;
@@ -15,7 +16,7 @@ export default function AddPhotos(props: AddPhotosProps): JSX.Element {
   const { withdrawalPurpose, onNext, onCancel, saveText } = props;
   const [photos, setPhotos] = useState<File[]>([]);
   const [error, setError] = useState<ErrorType | undefined>();
-  const [photosRequired] = useState<boolean>(withdrawalPurpose === 'Out Plant');
+  const [photosRequired] = useState<boolean>(withdrawalPurpose === NurseryWithdrawalPurposes.OUTPLANT);
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
 
