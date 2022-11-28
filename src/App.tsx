@@ -542,12 +542,12 @@ export default function App() {
                 </Route>
               )}
               {trackingEnabled && selectedOrganization && (
-                <Route path={APP_PATHS.PLANTS_DASHBOARD}>
+                <Route exact path={APP_PATHS.PLANTS_DASHBOARD}>
                   <PlantsDashboard organization={selectedOrganization} />
                 </Route>
               )}
               {trackingEnabled && selectedOrganization && (
-                <Route path={APP_PATHS.PLANTING_SITE_DASHBOARD}>
+                <Route exact path={APP_PATHS.PLANTING_SITE_DASHBOARD}>
                   <PlantsDashboard organization={selectedOrganization} />
                 </Route>
               )}

@@ -15,6 +15,7 @@ interface Props {
   field: string;
   onChange: (filter: FieldNodePayload) => void;
   values: (string | null)[];
+  autoFocus: boolean;
 }
 
 export default function Search(props: Props): JSX.Element {
@@ -52,6 +53,7 @@ export default function Search(props: Props): JSX.Element {
         placeholder={strings.SEARCH}
         variant='outlined'
         value={search}
+        autoFocus={props.autoFocus}
         InputProps={{
           startAdornment: (
             <InputAdornment position='start'>
