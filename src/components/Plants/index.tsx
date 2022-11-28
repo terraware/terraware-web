@@ -19,7 +19,7 @@ type PlantsDashboardProps = {
 export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Element {
   const { organization } = props;
   const [selectedPlantingSite, setSelectedPlantingSite] = useState<PlantingSite>();
-  const [plantingSites, setPlantingSites] = useState<PlantingSite[]>([]);
+  const [plantingSites, setPlantingSites] = useState<PlantingSite[]>();
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const { plantingSiteId } = useParams<{ plantingSiteId: string }>();
@@ -48,7 +48,7 @@ export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Elemen
   );
 
   useEffect(() => {
-    if (plantingSites.length) {
+    if (plantingSites && plantingSites.length) {
       const plantingSiteIdToUse = plantingSiteId;
       const requestedPlantingSite = plantingSites.find((ps) => ps?.id === parseInt(plantingSiteIdToUse, 10));
       const plantingSiteToUse = requestedPlantingSite || plantingSites[0];
@@ -61,33 +61,44 @@ export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Elemen
   }, [plantingSites, plantingSiteId, setActivePlantingSite]);
 
   const onChangePlantingSite = (newValue: string) => {
-    setActivePlantingSite(plantingSites.find((ps) => ps.name === newValue));
+    if (plantingSites) {
+      setActivePlantingSite(plantingSites.find((ps) => ps.name === newValue));
+    }
   };
 
   return (
     <TfMain>
-      <Grid item xs={12} display={isMobile ? 'block' : 'flex'}>
-        <Typography sx={{ fontSize: '24px', fontWeight: 600, alignItems: 'center' }}>{strings.DASHBOARD}</Typography>
-        {!isMobile && (
-          <Box sx={{ margin: '0 1%', width: '1px', height: '32px', backgroundColor: theme.palette.TwClrBgTertiary }} />
-        )}
-        <Box display='flex' alignItems='center' paddingTop={isMobile ? 2 : 0}>
-          <Typography sx={{ paddingRight: 1, fontSize: '16px', fontWeight: 500 }}>{strings.PLANTING_SITE}</Typography>
-          {plantingSites ? (
-            <Select
-              options={plantingSites.map((ps) => ps?.name || '')}
-              onChange={onChangePlantingSite}
-              selectedValue={selectedPlantingSite?.name}
-              placeholder={strings.SELECT}
-            />
-          ) : (
-            <Box sx={{ position: 'fixed', top: '50%', left: '50%' }}>
-              <CircularProgress />
+      {plantingSites ? (
+        <>
+          <Grid item xs={12} display={isMobile ? 'block' : 'flex'}>
+            <Typography sx={{ fontSize: '24px', fontWeight: 600, alignItems: 'center' }}>
+              {strings.DASHBOARD}
+            </Typography>
+            {!isMobile && (
+              <Box
+                sx={{ margin: '0 1%', width: '1px', height: '32px', backgroundColor: theme.palette.TwClrBgTertiary }}
+              />
+            )}
+            <Box display='flex' alignItems='center' paddingTop={isMobile ? 2 : 0}>
+              <Typography sx={{ paddingRight: 1, fontSize: '16px', fontWeight: 500 }}>
+                {strings.PLANTING_SITE}
+              </Typography>
+
+              <Select
+                options={plantingSites.map((ps) => ps?.name || '')}
+                onChange={onChangePlantingSite}
+                selectedValue={selectedPlantingSite?.name}
+                placeholder={strings.SELECT}
+              />
             </Box>
-          )}
+          </Grid>
+          <PlantingSiteDetails selectedPlantingSite={selectedPlantingSite} />
+        </>
+      ) : (
+        <Box sx={{ position: 'fixed', top: '50%', left: '50%' }}>
+          <CircularProgress />
         </Box>
-      </Grid>
-      <PlantingSiteDetails selectedPlantingSite={selectedPlantingSite} />
+      )}
     </TfMain>
   );
 }
