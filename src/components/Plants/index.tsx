@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { ServerOrganization } from 'src/types/Organization';
 import strings from 'src/strings';
 import TfMain from 'src/components/common/TfMain';
-import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { Box, CircularProgress, Grid, Typography, useTheme } from '@mui/material';
 import { Select } from '@terraware/web-components';
 import { listPlantingSites } from 'src/api/tracking/tracking';
 import { PlantingSite } from 'src/api/types/tracking';
@@ -73,12 +73,18 @@ export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Elemen
         )}
         <Box display='flex' alignItems='center' paddingTop={isMobile ? 2 : 0}>
           <Typography sx={{ paddingRight: 1, fontSize: '16px', fontWeight: 500 }}>{strings.PLANTING_SITE}</Typography>
-          <Select
-            options={plantingSites.map((ps) => ps?.name || '')}
-            onChange={onChangePlantingSite}
-            selectedValue={selectedPlantingSite?.name}
-            placeholder={strings.SELECT}
-          />
+          {plantingSites ? (
+            <Select
+              options={plantingSites.map((ps) => ps?.name || '')}
+              onChange={onChangePlantingSite}
+              selectedValue={selectedPlantingSite?.name}
+              placeholder={strings.SELECT}
+            />
+          ) : (
+            <Box sx={{ position: 'fixed', top: '50%', left: '50%' }}>
+              <CircularProgress />
+            </Box>
+          )}
         </Box>
       </Grid>
       <PlantingSiteDetails selectedPlantingSite={selectedPlantingSite} />
