@@ -292,7 +292,7 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
             className={classes.spacing}
             key='mb-1'
           />,
-          <Button onClick={importDataHandler} icon='iconImport' label={strings.IMPORT_DATA} key='mb-2' />,
+          <Button onClick={importDataHandler} label={strings.IMPORT} key='mb-2' />,
         ];
       }
     }
