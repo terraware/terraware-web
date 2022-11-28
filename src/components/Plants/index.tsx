@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { ServerOrganization } from 'src/types/Organization';
 import strings from 'src/strings';
 import TfMain from 'src/components/common/TfMain';
@@ -7,6 +7,9 @@ import { Select } from '@terraware/web-components';
 import { listPlantingSites } from 'src/api/tracking/tracking';
 import { PlantingSite } from 'src/api/types/tracking';
 import { useDeviceInfo } from '@terraware/web-components/utils';
+import { useHistory, useParams } from 'react-router-dom';
+import { APP_PATHS } from 'src/constants';
+import useSnackbar from 'src/utils/useSnackbar';
 
 type PlantsDashboardProps = {
   organization: ServerOrganization;
@@ -18,20 +21,18 @@ export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Elemen
   const [plantingSites, setPlantingSites] = useState<PlantingSite[]>([]);
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
+  const { plantingSiteId } = useParams<{ plantingSiteId: string }>();
+  const history = useHistory();
+  const [snackbar] = useState(useSnackbar());
 
-  useEffect(() => {
-    const populatePlantingSites = async () => {
-      const serverResponse = await listPlantingSites(organization.id);
-      if (serverResponse.requestSucceeded) {
-        setPlantingSites(serverResponse.sites ?? []);
+  const setActivePlantingSite = useCallback(
+    (site: PlantingSite | undefined) => {
+      if (site) {
+        history.push(APP_PATHS.PLANTING_SITE_DASHBOARD.replace(':plantingSiteId', site.id.toString()));
       }
-    };
-    populatePlantingSites();
-  }, [organization]);
-
-  const onChangePlantingSite = (newValue: string) => {
-    setSelectedPlantingSite(plantingSites.find((ps) => ps.name === newValue));
-  };
+    },
+    [history]
+  );
 
   const borderCardStyle = {
     border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
@@ -47,6 +48,35 @@ export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Elemen
 
   const cardElementStyle = {
     marginTop: theme.spacing(3),
+  };
+
+  useEffect(() => {
+    const populatePlantingSites = async () => {
+      const serverResponse = await listPlantingSites(organization.id);
+      if (serverResponse.requestSucceeded) {
+        setPlantingSites(serverResponse.sites ?? []);
+      } else {
+        snackbar.toastError(serverResponse.error);
+      }
+    };
+    populatePlantingSites();
+  }, [organization.id, snackbar]);
+
+  useEffect(() => {
+    if (plantingSites.length) {
+      const plantingSiteIdToUse = plantingSiteId;
+      const requestedPlantingSite = plantingSites.find((ps) => ps?.id === parseInt(plantingSiteIdToUse, 10));
+      const plantingSiteToUse = requestedPlantingSite || plantingSites[0];
+      if (plantingSiteToUse.id.toString() === plantingSiteId) {
+        setSelectedPlantingSite(plantingSiteToUse);
+      } else {
+        setActivePlantingSite(plantingSiteToUse);
+      }
+    }
+  }, [plantingSites, plantingSiteId, setActivePlantingSite]);
+
+  const onChangePlantingSite = (newValue: string) => {
+    setActivePlantingSite(plantingSites.find((ps) => ps.name === newValue));
   };
 
   return (

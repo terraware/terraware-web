@@ -14,7 +14,7 @@ import {
   useTheme,
 } from '@mui/material';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import { NurseryWithdrawalRequest } from 'src/api/types/batch';
+import { NurseryWithdrawalRequest, NurseryWithdrawalPurposes } from 'src/api/types/batch';
 import { isInTheFuture } from '@terraware/web-components/utils';
 import { ServerOrganization } from 'src/types/Organization';
 import { APP_PATHS } from 'src/constants';
@@ -46,9 +46,10 @@ type SelectPurposeFormProps = {
 
 export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.Element {
   const { organization, nurseryWithdrawal, onNext, batches, onCancel, saveText } = props;
+  const { OUTPLANT, NURSERY_TRANSFER, DEAD, OTHER } = NurseryWithdrawalPurposes;
   const contributor = isContributor(organization);
   const [isNurseryTransfer, setIsNurseryTransfer] = useState(contributor ? true : false);
-  const [isOutplant, setIsOutplant] = useState(nurseryWithdrawal.purpose === 'Out Plant');
+  const [isOutplant, setIsOutplant] = useState(nurseryWithdrawal.purpose === OUTPLANT);
   const [fieldsErrors, setFieldsErrors] = useState<{ [key: string]: string | undefined }>({});
   const [localRecord, setLocalRecord] = useState<NurseryWithdrawalRequest>(nurseryWithdrawal);
   const [selectedNursery, setSelectedNursery] = useState<string>();
@@ -86,12 +87,12 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const onChangePurpose = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = (event.target as HTMLInputElement).value;
     updateField('purpose', value);
-    if (value === 'Nursery Transfer') {
+    if (value === NURSERY_TRANSFER) {
       setIsNurseryTransfer(true);
     } else {
       setIsNurseryTransfer(false);
     }
-    const outplant = value === 'Out Plant';
+    const outplant = value === OUTPLANT;
     setIsOutplant(outplant);
     if (outplant) {
       fetchPlantingSites();
@@ -319,10 +320,10 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                   {strings.PURPOSE}
                 </FormLabel>
                 <RadioGroup name='radio-buttons-purpose' value={localRecord.purpose} onChange={onChangePurpose}>
-                  {!contributor && <FormControlLabel value='Out Plant' control={<Radio />} label={strings.OUTPLANT} />}
-                  <FormControlLabel value='Nursery Transfer' control={<Radio />} label={strings.NURSERY_TRANSFER} />
-                  <FormControlLabel value='Dead' control={<Radio />} label={strings.DEAD} />
-                  <FormControlLabel value='Other' control={<Radio />} label={strings.OTHER} />
+                  {!contributor && <FormControlLabel value={OUTPLANT} control={<Radio />} label={strings.OUTPLANT} />}
+                  <FormControlLabel value={NURSERY_TRANSFER} control={<Radio />} label={strings.NURSERY_TRANSFER} />
+                  <FormControlLabel value={DEAD} control={<Radio />} label={strings.DEAD} />
+                  <FormControlLabel value={OTHER} control={<Radio />} label={strings.OTHER} />
                 </RadioGroup>
               </FormControl>
             </Grid>
