@@ -248,8 +248,8 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
         .filter((batch) => batch.facility_id.toString() === selectedNursery)
         .map((batch) => ({
           batchId: batch.id,
-          notReadyQuantityWithdrawn: isSingleOutplant ? 0 : batch.notReadyQuantity,
-          readyQuantityWithdrawn: isSingleOutplant ? withdrawnQuantity : batch.readyQuantity,
+          notReadyQuantityWithdrawn: isSingleOutplant ? 0 : isSingleBatch ? batch.notReadyQuantity : 0,
+          readyQuantityWithdrawn: isSingleOutplant ? withdrawnQuantity : isSingleBatch ? batch.readyQuantity : 0,
         })),
     });
   };
@@ -411,7 +411,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                 </Grid>
               </>
             )}
-            <Grid display='flex'>
+            <Grid display='flex' flexDirection={isMobile ? 'column' : 'row'}>
               {isSingleBatch && isOutplant && (
                 <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2), marginRight: theme.spacing(2) }}>
                   <Textfield

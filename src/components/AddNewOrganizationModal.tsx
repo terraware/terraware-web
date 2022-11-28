@@ -124,11 +124,11 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
     <DialogBox
       onClose={onCancelWrapper}
       open={open}
-      title={strings.ADD_NEW_ORGANIZATION}
+      title={strings.ADD_ORGANIZATION}
       size='medium'
       middleButtons={[
         <Button label={strings.CANCEL} priority='secondary' type='passive' onClick={onCancelWrapper} key='button-1' />,
-        <Button label={strings.CREATE} onClick={saveOrganization} key='button-2' />,
+        <Button label={strings.SAVE} onClick={saveOrganization} key='button-2' />,
       ]}
     >
       <Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'>

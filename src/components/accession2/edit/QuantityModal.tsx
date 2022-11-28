@@ -28,6 +28,7 @@ export interface QuantityModalProps {
   reload: () => void;
   organization: ServerOrganization;
   statusEdit?: boolean;
+  title: string;
 }
 
 export default function QuantityModal(props: QuantityModalProps): JSX.Element {
@@ -134,7 +135,7 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
       <DialogBox
         onClose={onCloseHandler}
         open={open && !isCalculatorOpened}
-        title={statusEdit ? strings.STATUS : strings.QUANTITY}
+        title={props.title}
         size='small'
         middleButtons={[
           <Button label={strings.CANCEL} type='passive' onClick={onCloseHandler} priority='secondary' key='button-1' />,

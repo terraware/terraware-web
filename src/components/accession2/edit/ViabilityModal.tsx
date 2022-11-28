@@ -16,6 +16,7 @@ export interface ViabilityDialogProps {
   reload: () => void;
   setNewViabilityTestOpened: React.Dispatch<React.SetStateAction<boolean>>;
   changeTab: (newValue: string) => void;
+  title: string;
 }
 
 export default function ViabilityDialog(props: ViabilityDialogProps): JSX.Element {
@@ -66,7 +67,7 @@ export default function ViabilityDialog(props: ViabilityDialogProps): JSX.Elemen
       <DialogBox
         onClose={onCloseHandler}
         open={open}
-        title={strings.VIABILITY}
+        title={props.title}
         size='small'
         middleButtons={[
           <Button label={strings.CANCEL} type='passive' onClick={onCloseHandler} priority='secondary' key='button-1' />,

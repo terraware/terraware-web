@@ -30,6 +30,8 @@ export enum APP_PATHS {
   PEOPLE_EDIT = '/people/:personId/edit',
   PEOPLE_VIEW = '/people/:personId',
   PEOPLE = '/people',
+  PLANTS_DASHBOARD = '/plants/dashboard',
+  PLANTING_SITE_DASHBOARD = '/plants/dashboard/:plantingSiteId',
   SEED_BANKS = '/seedbanks',
   SEED_BANKS_EDIT = '/seedbanks/:seedBankId/edit',
   SEED_BANKS_NEW = '/seedbanks/new',

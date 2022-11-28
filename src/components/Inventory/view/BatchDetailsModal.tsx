@@ -85,7 +85,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
     if (foundFacility) {
       setFacilityName(foundFacility.name);
     }
-  }, [selectedBatch, speciesId, setRecord, organization]);
+  }, [selectedBatch, speciesId, setRecord, organization, open]);
 
   const MANDATORY_FIELDS = [
     'facilityId',
@@ -163,7 +163,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
               priority='secondary'
               key='button-1'
             />,
-            <Button onClick={saveBatch} label={record.id === -1 ? strings.ADD_BATCH : strings.SAVE} key='button-2' />,
+            <Button onClick={saveBatch} label={strings.SAVE} key='button-2' />,
           ]}
           scrolled={true}
         >

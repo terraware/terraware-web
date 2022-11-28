@@ -61,6 +61,7 @@ export default function BatchesCellRenderer(props: RendererProps<TableRowType>):
               size='small'
               priority='secondary'
               className={classes.text}
+              disabled={Number(row.totalQuantity) === 0}
             />
           }
         />
@@ -87,7 +88,7 @@ export default function BatchesCellRenderer(props: RendererProps<TableRowType>):
               row={row as Batch}
               reload={onRowClick}
             />
-            <QuantitiesMenu setModalValues={setModalValues} />
+            <QuantitiesMenu setModalValues={setModalValues} batch={row} />
           </>
         }
       />

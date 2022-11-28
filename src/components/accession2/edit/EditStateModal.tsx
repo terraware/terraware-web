@@ -45,6 +45,7 @@ export default function EditStateModal(props: EditStateModalProps): JSX.Element 
         organization={organization}
         reload={reload}
         statusEdit={true}
+        title={strings.EDIT_STATUS}
       />
     );
   }
@@ -53,7 +54,7 @@ export default function EditStateModal(props: EditStateModalProps): JSX.Element 
     <DialogBox
       onClose={onClose}
       open={open}
-      title={strings.STATUS}
+      title={strings.EDIT_STATUS}
       size='small'
       middleButtons={[
         <Button label={strings.CANCEL} type='passive' onClick={onClose} priority='secondary' key='button-1' />,

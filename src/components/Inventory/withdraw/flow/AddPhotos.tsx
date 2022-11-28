@@ -25,7 +25,7 @@ export default function AddPhotos(props: AddPhotosProps): JSX.Element {
 
   const onNextHandler = () => {
     if (photosRequired && !photos.length) {
-      setError({ title: strings.REQUIRED_FIELD, text: strings.REQUIRED_FIELD }); // TODO, clean this up
+      setError({ title: strings.PHOTOS_REQUIRED, text: strings.PHOTOS_OUTPLANT_DESCRIPTION });
     } else {
       setError(undefined);
       onNext(photos);

@@ -1,6 +1,6 @@
 // flattened info for shapes relating to planting site data
 
-export type MapGeometry = number | number[] | number[][][][];
+export type MapGeometry = number[][][][];
 
 /**
  * Example of a boundary:
@@ -44,13 +44,21 @@ export type MapAnnotation = {
   textColor: string;
 };
 
+/**
+ * A renderable map entity
+ * eg. site, zone, plot
+ */
+export type MapEntity = {
+  properties: MapSourceProperties;
+  boundary: MapGeometry;
+};
+
 export type MapSource = {
   id: string;
   fillColor: string;
   lineColor: string;
   lineWidth: number;
-  properties: MapSourceProperties;
-  boundary: MapGeometry;
+  entities: MapEntity[];
   isInteractive?: boolean;
   // property name to render as a polygon annotation
   annotation?: MapAnnotation;
