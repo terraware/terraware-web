@@ -7,9 +7,22 @@ import { Select } from '@terraware/web-components';
 import { listPlantingSites } from 'src/api/tracking/tracking';
 import { PlantingSite } from 'src/api/types/tracking';
 import { useDeviceInfo } from '@terraware/web-components/utils';
+import { search } from 'src/api/search';
 import { useHistory, useParams } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
 import useSnackbar from 'src/utils/useSnackbar';
+
+type Population = {
+  species_scientificName: string;
+  species_commonName: string;
+  totalPlants: number;
+};
+
+type PlantingSitesPlotsSearch = {
+  id: string;
+  fullName: string;
+  populations: Population[];
+};
 
 type PlantsDashboardProps = {
   organization: ServerOrganization;
@@ -19,20 +32,12 @@ export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Elemen
   const { organization } = props;
   const [selectedPlantingSite, setSelectedPlantingSite] = useState<PlantingSite>();
   const [plantingSites, setPlantingSites] = useState<PlantingSite[]>([]);
+  const [, setTotalPlants] = useState<number>();
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const { plantingSiteId } = useParams<{ plantingSiteId: string }>();
   const history = useHistory();
   const [snackbar] = useState(useSnackbar());
-
-  const setActivePlantingSite = useCallback(
-    (site: PlantingSite | undefined) => {
-      if (site) {
-        history.push(APP_PATHS.PLANTING_SITE_DASHBOARD.replace(':plantingSiteId', site.id.toString()));
-      }
-    },
-    [history]
-  );
 
   const borderCardStyle = {
     border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
@@ -49,6 +54,61 @@ export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Elemen
   const cardElementStyle = {
     marginTop: theme.spacing(3),
   };
+
+  useEffect(() => {
+    const populateResults = async () => {
+      if (selectedPlantingSite) {
+        const serverResponse: PlantingSitesPlotsSearch[] | null = (await search({
+          prefix: 'plantingSites.plantingZones.plots',
+          fields: [
+            'id',
+            'fullName',
+            'populations.species_scientificName',
+            'populations.species_commonName',
+            'populations.totalPlants',
+          ],
+          search: {
+            operation: 'field',
+            field: 'plantingSite_id',
+            values: [selectedPlantingSite.id],
+          },
+          count: 0,
+        })) as unknown as PlantingSitesPlotsSearch[] | null;
+
+        if (serverResponse) {
+          let totalPlantsOfSite = 0;
+          // eslint-disable-next-line
+          const plantsPerSpecies: { [key: string]: number } = serverResponse.reduce((acc, plot) => {
+            if (plot.populations) {
+              plot.populations.forEach((population) => {
+                totalPlantsOfSite = +totalPlantsOfSite + +population.totalPlants;
+                if (acc[population.species_scientificName]) {
+                  acc[population.species_scientificName] =
+                    +acc[population.species_scientificName] + +population.totalPlants;
+                } else {
+                  acc[population.species_scientificName] = +population.totalPlants;
+                }
+              });
+            }
+            return acc;
+          }, {} as { [key: string]: number });
+
+          setTotalPlants(totalPlantsOfSite);
+        }
+      }
+    };
+
+    populateResults();
+  }, [selectedPlantingSite]);
+
+  const setActivePlantingSite = useCallback(
+    (site: PlantingSite | undefined) => {
+      if (site) {
+        history.push(APP_PATHS.PLANTING_SITE_DASHBOARD.replace(':plantingSiteId', site.id.toString()));
+      }
+    },
+    [history]
+  );
 
   useEffect(() => {
     const populatePlantingSites = async () => {
