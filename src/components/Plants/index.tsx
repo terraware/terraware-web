@@ -7,7 +7,6 @@ import { Select } from '@terraware/web-components';
 import { listPlantingSites } from 'src/api/tracking/tracking';
 import { PlantingSite } from 'src/api/types/tracking';
 import { useDeviceInfo } from '@terraware/web-components/utils';
-import useSnackbar from 'src/utils/useSnackbar';
 import { useHistory, useParams } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
 
