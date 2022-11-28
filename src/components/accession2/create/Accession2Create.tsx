@@ -29,8 +29,8 @@ type CreateAccessionProps = {
 };
 
 const SubTitleStyle = {
-  fontSize: '18px',
-  fontWeight: 'bold',
+  fontSize: '20px',
+  fontWeight: 600,
 };
 
 const defaultAccession = (): AccessionPostRequestBody =>
@@ -89,7 +89,7 @@ export default function CreateAccession(props: CreateAccessionProps): JSX.Elemen
 
   return (
     <TfMain>
-      <Typography variant='h2' sx={{ fontSize: '24px', fontWeight: 'bold', margin: '0 auto' }}>
+      <Typography variant='h2' sx={{ fontSize: '24px', fontWeight: 600, marginBottom: theme.spacing(4) }}>
         {strings.ADD_AN_ACCESSION}
       </Typography>
       <Container
@@ -97,16 +97,19 @@ export default function CreateAccession(props: CreateAccessionProps): JSX.Elemen
         sx={{
           margin: '0 auto',
           width: isMobile ? '100%' : '640px',
-          paddingLeft: theme.spacing(4),
-          paddingRight: theme.spacing(4),
-          paddingTop: theme.spacing(5),
-          paddingBottom: theme.spacing(25),
+          backgroundColor: theme.palette.TwClrBg,
+          borderRadius: '32px',
+          padding: theme.spacing(3),
+          marginBottom: isMobile ? theme.spacing(32) : theme.spacing(25),
         }}
       >
         <Grid container>
-          <Grid item xs={12}>
+          <Grid item xs={12} display='flex' flexDirection='column'>
             <Typography variant='h2' sx={SubTitleStyle}>
               {strings.SEED_COLLECTION_DETAIL}
+            </Typography>
+            <Typography padding={theme.spacing(1, 0)} fontSize='14px' fontWeight={400}>
+              {strings.SEED_COLLECTION_DETAIL_DESC}
             </Typography>
           </Grid>
           <Grid item xs={12} sx={marginTop}>
@@ -152,11 +155,6 @@ export default function CreateAccession(props: CreateAccessionProps): JSX.Elemen
           <Accession2PlantSiteDetails record={record} onChange={onChange} />
         </Grid>
         <Grid container>
-          <Grid item xs={12} sx={{ marginTop: theme.spacing(4) }}>
-            <Typography variant='h2' sx={SubTitleStyle}>
-              {strings.SEED_PROCESSING_DETAIL}
-            </Typography>
-          </Grid>
           <CollectedReceivedDate2 record={record} onChange={onChange} type='received' validate={validateFields} />
           <Grid item xs={12} sx={marginTop}>
             <Select

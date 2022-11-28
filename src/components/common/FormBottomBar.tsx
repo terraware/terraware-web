@@ -11,8 +11,16 @@ interface StyleProps {
 
 const useStyles = makeStyles((theme: Theme) => ({
   bottomBar: {
-    filter: 'drop-shadow(0px 0px 8px rgba(0, 0, 0, 0.2))',
-    background: theme.palette.TwClrBg,
+    background:
+      `linear-gradient(to right, ${theme.palette.TwClrBaseGray025}00,` +
+      `${theme.palette.TwClrBaseGray025}80, ${theme.palette.TwClrBaseGray025}80,` +
+      `${theme.palette.TwClrBaseGray025}00)`,
+    backdropFilter: 'blur(16px)',
+    borderTop: '1px solid',
+    borderImage:
+      `linear-gradient(to right, ${theme.palette.TwClrBaseGray300}00,` +
+      `${theme.palette.TwClrBaseGray300}FF, ${theme.palette.TwClrBaseGray300}FF,` +
+      `${theme.palette.TwClrBaseGray300}FF, ${theme.palette.TwClrBaseGray300}00) 1`,
     boxShadow: 'none',
     justifyContent: 'space-between',
     display: 'flex',
