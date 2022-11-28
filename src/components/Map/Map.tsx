@@ -49,6 +49,7 @@ export default function Map(props: MapProps): JSX.Element {
     // fit to bounding box
     if (mapRef?.current !== undefined) {
       const mapInstance: any = mapRef.current.getMap();
+      setZoomEnd(false);
       setZoomBegin(true);
       mapInstance.fitBounds([bbox.lowerLeft, bbox.upperRight], { padding: 20 });
     }
