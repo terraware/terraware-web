@@ -34,6 +34,22 @@ export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Elemen
     [history]
   );
 
+  const borderCardStyle = {
+    border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+    marginBottom: 2,
+    borderRadius: '8px',
+    padding: 3,
+  };
+
+  const cardTitleStyle = {
+    fontSize: '20px',
+    fontWeight: 600,
+  };
+
+  const cardElementStyle = {
+    marginTop: theme.spacing(3),
+  };
+
   useEffect(() => {
     const populatePlantingSites = async () => {
       const serverResponse = await listPlantingSites(organization.id);
@@ -79,6 +95,25 @@ export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Elemen
             placeholder={strings.SELECT}
           />
         </Box>
+      </Grid>
+      <Grid container display='flex' marginTop={6}>
+        <Grid item xs={isMobile ? 12 : 6} sx={{ paddingRight: 1, paddingBottom: isMobile ? 2 : 0 }}>
+          Map
+        </Grid>
+        <Grid item xs={isMobile ? 12 : 6} sx={{ paddingLeft: 1 }}>
+          <Box sx={borderCardStyle}>
+            <Typography sx={cardTitleStyle}>{strings.TOTAL_NUMBER_OF_PLANTS}</Typography>
+            <Box style={cardElementStyle} />
+          </Box>
+          <Box sx={borderCardStyle}>
+            <Typography sx={cardTitleStyle}>{strings.NUMBER_OF_PLANTS_BY_SPECIES}</Typography>
+            <Box style={cardElementStyle} />
+          </Box>
+          <Box sx={borderCardStyle}>
+            <Typography sx={cardTitleStyle}>{strings.NUMBER_OF_PLANTS_BY_PLOT_AND_SPECIES}</Typography>
+            <Box style={cardElementStyle} />
+          </Box>
+        </Grid>
       </Grid>
     </TfMain>
   );

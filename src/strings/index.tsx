@@ -864,6 +864,9 @@ const strings = new LocalizedStrings({
     ADD_VIABILITY_TEST: 'Add Viability Test',
     WITHDRAWAL_BATCHES_MISSING_QUANTITY_ERROR: 'Enter a quantity in at least one seedlings batch row.',
     PLANTING_SITE: 'Planting Site',
+    TOTAL_NUMBER_OF_PLANTS: 'Total Number of Plants',
+    NUMBER_OF_PLANTS_BY_SPECIES: 'Number of Plants by Species',
+    NUMBER_OF_PLANTS_BY_PLOT_AND_SPECIES: 'Number of Plants by Plot and Species',
   },
 });
 
