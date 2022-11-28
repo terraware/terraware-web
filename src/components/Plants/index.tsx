@@ -11,11 +11,12 @@ import { search } from 'src/api/search';
 import { Chart } from 'chart.js';
 import { makeStyles } from '@mui/styles';
 import { generateRandomColors } from 'src/utils/generateRandomColor';
+import SpeciesByPlotChart from './SpeciesByPlotChart';
 import { useHistory, useParams } from 'react-router-dom';
-import { APP_PATHS } from 'src/constants';
 import useSnackbar from 'src/utils/useSnackbar';
+import { APP_PATHS } from 'src/constants';
 
-type Population = {
+export type Population = {
   species_scientificName: string;
   species_commonName: string;
   totalPlants: number;
@@ -50,6 +51,8 @@ export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Elemen
   const chartRef = React.useRef<HTMLCanvasElement>(null);
   const [plantsBySpecies, setPlantsBySpecies] = useState<{ [key: string]: number }>();
   const classes = useStyles();
+  const [selectedPlot, setSelectedPlot] = useState<PlantingSitesPlotsSearch>();
+  const [plots, setPlots] = useState<PlantingSitesPlotsSearch[]>();
 
   useEffect(() => {
     const populatePlantingSites = async () => {
@@ -100,8 +103,8 @@ export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Elemen
         })) as unknown as PlantingSitesPlotsSearch[] | null;
 
         if (serverResponse) {
+          setPlots(serverResponse);
           let totalPlantsOfSite = 0;
-          // eslint-disable-next-line
           const plantsPerSpecies: { [key: string]: number } = serverResponse.reduce((acc, plot) => {
             if (plot.populations) {
               plot.populations.forEach((population) => {
@@ -201,7 +204,14 @@ export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Elemen
   }, [plantsBySpecies]);
 
   const onChangePlantingSite = (newValue: string) => {
+    setSelectedPlot(undefined);
     setActivePlantingSite(plantingSites.find((ps) => ps.name === newValue));
+  };
+
+  const onChangePlot = (newValue: string) => {
+    if (plots) {
+      setSelectedPlot(plots.find((p) => p.fullName === newValue));
+    }
   };
 
   return (
@@ -238,6 +248,25 @@ export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Elemen
             <Typography sx={cardTitleStyle}>{strings.NUMBER_OF_PLANTS_BY_SPECIES}</Typography>
             <Box style={cardElementStyle}>
               <canvas id='plantsBySpecies' ref={chartRef} className={classes.chart} />
+            </Box>
+          </Box>
+          <Box sx={borderCardStyle}>
+            <Typography sx={cardTitleStyle}>{strings.NUMBER_OF_PLANTS_BY_PLOT_AND_SPECIES}</Typography>
+            <Box style={cardElementStyle}>
+              {plots && (
+                <Box display='flex' alignItems='center'>
+                  <Typography fontSize='16px' fontWeight={500} marginRight={1}>
+                    {strings.PLOT}
+                  </Typography>
+                  <Select
+                    options={plots.map((plot) => plot.fullName || '')}
+                    onChange={onChangePlot}
+                    selectedValue={selectedPlot?.fullName}
+                    placeholder={strings.SELECT}
+                  />
+                </Box>
+              )}
+              {selectedPlot && <SpeciesByPlotChart chartData={selectedPlot.populations} />}
             </Box>
             <Box style={cardElementStyle} />
           </Box>
