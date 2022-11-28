@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { ServerOrganization } from 'src/types/Organization';
 import strings from 'src/strings';
 import TfMain from 'src/components/common/TfMain';
@@ -7,6 +7,9 @@ import { Select } from '@terraware/web-components';
 import { listPlantingSites } from 'src/api/tracking/tracking';
 import { PlantingSite } from 'src/api/types/tracking';
 import { useDeviceInfo } from '@terraware/web-components/utils';
+import useSnackbar from 'src/utils/useSnackbar';
+import { useHistory, useParams } from 'react-router-dom';
+import { APP_PATHS } from 'src/constants';
 
 type PlantsDashboardProps = {
   organization: ServerOrganization;
@@ -18,6 +21,17 @@ export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Elemen
   const [plantingSites, setPlantingSites] = useState<PlantingSite[]>([]);
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
+  const { plantingSiteId } = useParams<{ plantingSiteId: string }>();
+  const history = useHistory();
+
+  const setActivePlantingSite = useCallback(
+    (site: PlantingSite | undefined) => {
+      if (site) {
+        history.push(APP_PATHS.PLANTING_SITE_DASHBOARD.replace(':plantingSiteId', site.id.toString()));
+      }
+    },
+    [history]
+  );
 
   useEffect(() => {
     const populatePlantingSites = async () => {
@@ -27,10 +41,23 @@ export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Elemen
       }
     };
     populatePlantingSites();
-  }, [organization]);
+  }, [organization.id]);
+
+  useEffect(() => {
+    if (plantingSites.length) {
+      const plantingSiteIdToUse = plantingSiteId;
+      const requestedPlantingSite = plantingSites.find((ps) => ps?.id === parseInt(plantingSiteIdToUse, 10));
+      const plantingSiteToUse = requestedPlantingSite || plantingSites[0];
+      if (plantingSiteToUse.id.toString() === plantingSiteId) {
+        setSelectedPlantingSite(plantingSiteToUse);
+      } else {
+        setActivePlantingSite(plantingSiteToUse);
+      }
+    }
+  }, [plantingSites, plantingSiteId, setActivePlantingSite]);
 
   const onChangePlantingSite = (newValue: string) => {
-    setSelectedPlantingSite(plantingSites.find((ps) => ps.name === newValue));
+    setActivePlantingSite(plantingSites.find((ps) => ps.name === newValue));
   };
 
   return (
