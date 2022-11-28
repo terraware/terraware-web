@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { ServerOrganization } from 'src/types/Organization';
 import strings from 'src/strings';
 import TfMain from 'src/components/common/TfMain';
@@ -8,6 +8,9 @@ import { listPlantingSites } from 'src/api/tracking/tracking';
 import { PlantingSite } from 'src/api/types/tracking';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import { search } from 'src/api/search';
+import { useHistory, useParams } from 'react-router-dom';
+import { APP_PATHS } from 'src/constants';
+import useSnackbar from 'src/utils/useSnackbar';
 
 type Population = {
   species_scientificName: string;
@@ -32,16 +35,25 @@ export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Elemen
   const [, setTotalPlants] = useState<number>();
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
+  const { plantingSiteId } = useParams<{ plantingSiteId: string }>();
+  const history = useHistory();
+  const [snackbar] = useState(useSnackbar());
 
-  useEffect(() => {
-    const populatePlantingSites = async () => {
-      const serverResponse = await listPlantingSites(organization.id);
-      if (serverResponse.requestSucceeded) {
-        setPlantingSites(serverResponse.sites ?? []);
-      }
-    };
-    populatePlantingSites();
-  }, [organization]);
+  const borderCardStyle = {
+    border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+    marginBottom: 2,
+    borderRadius: '8px',
+    padding: 3,
+  };
+
+  const cardTitleStyle = {
+    fontSize: '20px',
+    fontWeight: 600,
+  };
+
+  const cardElementStyle = {
+    marginTop: theme.spacing(3),
+  };
 
   useEffect(() => {
     const populateResults = async () => {
@@ -89,24 +101,42 @@ export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Elemen
     populateResults();
   }, [selectedPlantingSite]);
 
+  const setActivePlantingSite = useCallback(
+    (site: PlantingSite | undefined) => {
+      if (site) {
+        history.push(APP_PATHS.PLANTING_SITE_DASHBOARD.replace(':plantingSiteId', site.id.toString()));
+      }
+    },
+    [history]
+  );
+
+  useEffect(() => {
+    const populatePlantingSites = async () => {
+      const serverResponse = await listPlantingSites(organization.id);
+      if (serverResponse.requestSucceeded) {
+        setPlantingSites(serverResponse.sites ?? []);
+      } else {
+        snackbar.toastError(serverResponse.error);
+      }
+    };
+    populatePlantingSites();
+  }, [organization.id, snackbar]);
+
+  useEffect(() => {
+    if (plantingSites.length) {
+      const plantingSiteIdToUse = plantingSiteId;
+      const requestedPlantingSite = plantingSites.find((ps) => ps?.id === parseInt(plantingSiteIdToUse, 10));
+      const plantingSiteToUse = requestedPlantingSite || plantingSites[0];
+      if (plantingSiteToUse.id.toString() === plantingSiteId) {
+        setSelectedPlantingSite(plantingSiteToUse);
+      } else {
+        setActivePlantingSite(plantingSiteToUse);
+      }
+    }
+  }, [plantingSites, plantingSiteId, setActivePlantingSite]);
+
   const onChangePlantingSite = (newValue: string) => {
-    setSelectedPlantingSite(plantingSites.find((ps) => ps.name === newValue));
-  };
-
-  const borderCardStyle = {
-    border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
-    marginBottom: 2,
-    borderRadius: '8px',
-    padding: 3,
-  };
-
-  const cardTitleStyle = {
-    fontSize: '20px',
-    fontWeight: 600,
-  };
-
-  const cardElementStyle = {
-    marginTop: theme.spacing(3),
+    setActivePlantingSite(plantingSites.find((ps) => ps.name === newValue));
   };
 
   return (
