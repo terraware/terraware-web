@@ -7,52 +7,24 @@ import { Select } from '@terraware/web-components';
 import { listPlantingSites } from 'src/api/tracking/tracking';
 import { PlantingSite } from 'src/api/types/tracking';
 import { useDeviceInfo } from '@terraware/web-components/utils';
-import { search } from 'src/api/search';
-import { Chart } from 'chart.js';
-import { makeStyles } from '@mui/styles';
-import { generateRandomColors } from 'src/utils/generateRandomColor';
-import SpeciesByPlotChart from './SpeciesByPlotChart';
 import { useHistory, useParams } from 'react-router-dom';
 import useSnackbar from 'src/utils/useSnackbar';
 import { APP_PATHS } from 'src/constants';
-
-export type Population = {
-  species_scientificName: string;
-  species_commonName: string;
-  totalPlants: number;
-};
-
-type PlantingSitesPlotsSearch = {
-  id: string;
-  fullName: string;
-  populations: Population[];
-};
+import PlantingSiteDetails from './PlantingSiteDetails';
 
 type PlantsDashboardProps = {
   organization: ServerOrganization;
 };
 
-const useStyles = makeStyles(() => ({
-  chart: {
-    height: '180px',
-  },
-}));
-
 export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Element {
   const { organization } = props;
   const [selectedPlantingSite, setSelectedPlantingSite] = useState<PlantingSite>();
   const [plantingSites, setPlantingSites] = useState<PlantingSite[]>([]);
-  const [totalPlants, setTotalPlants] = useState<number>();
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const { plantingSiteId } = useParams<{ plantingSiteId: string }>();
   const history = useHistory();
   const [snackbar] = useState(useSnackbar());
-  const chartRef = React.useRef<HTMLCanvasElement>(null);
-  const [plantsBySpecies, setPlantsBySpecies] = useState<{ [key: string]: number }>();
-  const classes = useStyles();
-  const [selectedPlot, setSelectedPlot] = useState<PlantingSitesPlotsSearch>();
-  const [plots, setPlots] = useState<PlantingSitesPlotsSearch[]>();
 
   useEffect(() => {
     const populatePlantingSites = async () => {
@@ -65,69 +37,6 @@ export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Elemen
     };
     populatePlantingSites();
   }, [organization.id, snackbar]);
-
-  const borderCardStyle = {
-    border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
-    marginBottom: 2,
-    borderRadius: '8px',
-    padding: 3,
-  };
-
-  const cardTitleStyle = {
-    fontSize: '20px',
-    fontWeight: 600,
-  };
-
-  const cardElementStyle = {
-    marginTop: theme.spacing(3),
-  };
-
-  useEffect(() => {
-    const populateResults = async () => {
-      if (selectedPlantingSite) {
-        const serverResponse: PlantingSitesPlotsSearch[] | null = (await search({
-          prefix: 'plantingSites.plantingZones.plots',
-          fields: [
-            'id',
-            'fullName',
-            'populations.species_scientificName',
-            'populations.species_commonName',
-            'populations.totalPlants',
-          ],
-          search: {
-            operation: 'field',
-            field: 'plantingSite_id',
-            values: [selectedPlantingSite.id],
-          },
-          count: 0,
-        })) as unknown as PlantingSitesPlotsSearch[] | null;
-
-        if (serverResponse) {
-          setPlots(serverResponse);
-          let totalPlantsOfSite = 0;
-          const plantsPerSpecies: { [key: string]: number } = serverResponse.reduce((acc, plot) => {
-            if (plot.populations) {
-              plot.populations.forEach((population) => {
-                totalPlantsOfSite = +totalPlantsOfSite + +population.totalPlants;
-                if (acc[population.species_scientificName]) {
-                  acc[population.species_scientificName] =
-                    +acc[population.species_scientificName] + +population.totalPlants;
-                } else {
-                  acc[population.species_scientificName] = +population.totalPlants;
-                }
-              });
-            }
-            return acc;
-          }, {} as { [key: string]: number });
-
-          setTotalPlants(totalPlantsOfSite);
-          setPlantsBySpecies(plantsPerSpecies);
-        }
-      }
-    };
-
-    populateResults();
-  }, [selectedPlantingSite]);
 
   const setActivePlantingSite = useCallback(
     (site: PlantingSite | undefined) => {
@@ -151,67 +60,8 @@ export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Elemen
     }
   }, [plantingSites, plantingSiteId, setActivePlantingSite]);
 
-  React.useEffect(() => {
-    const ctx = chartRef?.current?.getContext('2d');
-    if (ctx && plantsBySpecies) {
-      const colors = generateRandomColors(Object.keys(plantsBySpecies).length);
-      const data = plantsBySpecies;
-      const myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: Object.keys(data),
-          datasets: [
-            {
-              data: Object.values(data),
-              barThickness: 50, // number (pixels) or 'flex'
-              backgroundColor: colors,
-            },
-          ],
-        },
-        options: {
-          maintainAspectRatio: false,
-          layout: {
-            padding: {
-              left: 0,
-              right: 0,
-              top: 10,
-            },
-          },
-          plugins: {
-            legend: {
-              display: false,
-            },
-          },
-          scales: {
-            y: {
-              ticks: {
-                callback: (value, index, ticks) => {
-                  if (+value % 1 === 0) {
-                    return value;
-                  }
-                },
-              },
-            },
-          },
-        },
-      });
-      // when component unmounts
-      return () => {
-        myChart.destroy();
-      };
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [plantsBySpecies]);
-
   const onChangePlantingSite = (newValue: string) => {
-    setSelectedPlot(undefined);
     setActivePlantingSite(plantingSites.find((ps) => ps.name === newValue));
-  };
-
-  const onChangePlot = (newValue: string) => {
-    if (plots) {
-      setSelectedPlot(plots.find((p) => p.fullName === newValue));
-    }
   };
 
   return (
@@ -231,51 +81,7 @@ export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Elemen
           />
         </Box>
       </Grid>
-      <Grid container display='flex' marginTop={6}>
-        <Grid item xs={isMobile ? 12 : 6} sx={{ paddingRight: 1, paddingBottom: isMobile ? 2 : 0 }}>
-          Map
-        </Grid>
-        <Grid item xs={isMobile ? 12 : 6} sx={{ paddingLeft: 1 }}>
-          <Box sx={borderCardStyle}>
-            <Typography sx={cardTitleStyle}>{strings.TOTAL_NUMBER_OF_PLANTS}</Typography>
-            <Box style={cardElementStyle}>
-              <Typography fontSize='48px' fontWeight={600}>
-                {totalPlants}
-              </Typography>
-            </Box>
-          </Box>
-          <Box sx={borderCardStyle}>
-            <Typography sx={cardTitleStyle}>{strings.NUMBER_OF_PLANTS_BY_SPECIES}</Typography>
-            <Box style={cardElementStyle}>
-              <canvas id='plantsBySpecies' ref={chartRef} className={classes.chart} />
-            </Box>
-          </Box>
-          <Box sx={borderCardStyle}>
-            <Typography sx={cardTitleStyle}>{strings.NUMBER_OF_PLANTS_BY_PLOT_AND_SPECIES}</Typography>
-            <Box style={cardElementStyle}>
-              {plots && (
-                <Box display='flex' alignItems='center'>
-                  <Typography fontSize='16px' fontWeight={500} marginRight={1}>
-                    {strings.PLOT}
-                  </Typography>
-                  <Select
-                    options={plots.map((plot) => plot.fullName || '')}
-                    onChange={onChangePlot}
-                    selectedValue={selectedPlot?.fullName}
-                    placeholder={strings.SELECT}
-                  />
-                </Box>
-              )}
-              {selectedPlot && <SpeciesByPlotChart chartData={selectedPlot.populations} />}
-            </Box>
-            <Box style={cardElementStyle} />
-          </Box>
-          <Box sx={borderCardStyle}>
-            <Typography sx={cardTitleStyle}>{strings.NUMBER_OF_PLANTS_BY_PLOT_AND_SPECIES}</Typography>
-            <Box style={cardElementStyle} />
-          </Box>
-        </Grid>
-      </Grid>
+      <PlantingSiteDetails selectedPlantingSite={selectedPlantingSite} />
     </TfMain>
   );
 }
