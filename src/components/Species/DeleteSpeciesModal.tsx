@@ -37,14 +37,7 @@ export default function DeleteSpeciesDialog(props: DeleteSpeciesDialogProps): JS
           size='medium'
           key='button-1'
         />,
-        <Button
-          label={strings.DELETE}
-          icon='iconTrashCan'
-          type='destructive'
-          onClick={onSubmit}
-          size='medium'
-          key='button-2'
-        />,
+        <Button label={strings.DELETE} type='destructive' onClick={onSubmit} size='medium' key='button-2' />,
       ]}
     >
       <p className={classes.mainContent}>{strings.DELETE_CONFIRMATION_MODAL_MAIN_TEXT}</p>
