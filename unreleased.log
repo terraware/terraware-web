@@ -1,3 +1,4 @@
+2ea6238 SW-2360 Empty placeholder cards for maps and charts in the dashboard (#819)
 8562efd SW-2314 Add title and dropdown of planting sites to select current planting site (#818)
 609a76e SW-2055 Replace usage of React logo in terraware (#820)
 91ca6cc SW-2353 Extract withdrawal purposes into constants/types (#815)
