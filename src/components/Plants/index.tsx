@@ -9,6 +9,7 @@ import { PlantingSite } from 'src/api/types/tracking';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import { useHistory, useParams } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
+import useSnackbar from 'src/utils/useSnackbar';
 
 type PlantsDashboardProps = {
   organization: ServerOrganization;
@@ -22,6 +23,7 @@ export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Elemen
   const { isMobile } = useDeviceInfo();
   const { plantingSiteId } = useParams<{ plantingSiteId: string }>();
   const history = useHistory();
+  const [snackbar] = useState(useSnackbar());
 
   const setActivePlantingSite = useCallback(
     (site: PlantingSite | undefined) => {
@@ -37,10 +39,12 @@ export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Elemen
       const serverResponse = await listPlantingSites(organization.id);
       if (serverResponse.requestSucceeded) {
         setPlantingSites(serverResponse.sites ?? []);
+      } else {
+        snackbar.toastError();
       }
     };
     populatePlantingSites();
-  }, [organization.id]);
+  }, [organization.id, snackbar]);
 
   useEffect(() => {
     if (plantingSites.length) {
