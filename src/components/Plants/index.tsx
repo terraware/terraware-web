@@ -8,6 +8,9 @@ import { listPlantingSites } from 'src/api/tracking/tracking';
 import { PlantingSite } from 'src/api/types/tracking';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import { search } from 'src/api/search';
+import { Chart } from 'chart.js';
+import { makeStyles } from '@mui/styles';
+import { generateRandomColors } from 'src/utils/generateRandomColor';
 import { useHistory, useParams } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -28,6 +31,12 @@ type PlantsDashboardProps = {
   organization: ServerOrganization;
 };
 
+const useStyles = makeStyles(() => ({
+  chart: {
+    height: '180px',
+  },
+}));
+
 export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Element {
   const { organization } = props;
   const [selectedPlantingSite, setSelectedPlantingSite] = useState<PlantingSite>();
@@ -38,6 +47,21 @@ export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Elemen
   const { plantingSiteId } = useParams<{ plantingSiteId: string }>();
   const history = useHistory();
   const [snackbar] = useState(useSnackbar());
+  const chartRef = React.useRef<HTMLCanvasElement>(null);
+  const [plantsBySpecies, setPlantsBySpecies] = useState<{ [key: string]: number }>();
+  const classes = useStyles();
+
+  useEffect(() => {
+    const populatePlantingSites = async () => {
+      const serverResponse = await listPlantingSites(organization.id);
+      if (serverResponse.requestSucceeded) {
+        setPlantingSites(serverResponse.sites ?? []);
+      } else {
+        snackbar.toastError(serverResponse.error);
+      }
+    };
+    populatePlantingSites();
+  }, [organization.id, snackbar]);
 
   const borderCardStyle = {
     border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
@@ -94,6 +118,7 @@ export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Elemen
           }, {} as { [key: string]: number });
 
           setTotalPlants(totalPlantsOfSite);
+          setPlantsBySpecies(plantsPerSpecies);
         }
       }
     };
@@ -111,18 +136,6 @@ export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Elemen
   );
 
   useEffect(() => {
-    const populatePlantingSites = async () => {
-      const serverResponse = await listPlantingSites(organization.id);
-      if (serverResponse.requestSucceeded) {
-        setPlantingSites(serverResponse.sites ?? []);
-      } else {
-        snackbar.toastError(serverResponse.error);
-      }
-    };
-    populatePlantingSites();
-  }, [organization.id, snackbar]);
-
-  useEffect(() => {
     if (plantingSites.length) {
       const plantingSiteIdToUse = plantingSiteId;
       const requestedPlantingSite = plantingSites.find((ps) => ps?.id === parseInt(plantingSiteIdToUse, 10));
@@ -134,6 +147,58 @@ export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Elemen
       }
     }
   }, [plantingSites, plantingSiteId, setActivePlantingSite]);
+
+  React.useEffect(() => {
+    const ctx = chartRef?.current?.getContext('2d');
+    if (ctx && plantsBySpecies) {
+      const colors = generateRandomColors(Object.keys(plantsBySpecies).length);
+      const data = plantsBySpecies;
+      const myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: Object.keys(data),
+          datasets: [
+            {
+              data: Object.values(data),
+              barThickness: 50, // number (pixels) or 'flex'
+              backgroundColor: colors,
+            },
+          ],
+        },
+        options: {
+          maintainAspectRatio: false,
+          layout: {
+            padding: {
+              left: 0,
+              right: 0,
+              top: 10,
+            },
+          },
+          plugins: {
+            legend: {
+              display: false,
+            },
+          },
+          scales: {
+            y: {
+              ticks: {
+                callback: (value, index, ticks) => {
+                  if (+value % 1 === 0) {
+                    return value;
+                  }
+                },
+              },
+            },
+          },
+        },
+      });
+      // when component unmounts
+      return () => {
+        myChart.destroy();
+      };
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [plantsBySpecies]);
 
   const onChangePlantingSite = (newValue: string) => {
     setActivePlantingSite(plantingSites.find((ps) => ps.name === newValue));
@@ -171,6 +236,9 @@ export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Elemen
           </Box>
           <Box sx={borderCardStyle}>
             <Typography sx={cardTitleStyle}>{strings.NUMBER_OF_PLANTS_BY_SPECIES}</Typography>
+            <Box style={cardElementStyle}>
+              <canvas id='plantsBySpecies' ref={chartRef} className={classes.chart} />
+            </Box>
             <Box style={cardElementStyle} />
           </Box>
           <Box sx={borderCardStyle}>
