@@ -4,7 +4,7 @@ import { ServerOrganization } from 'src/types/Organization';
 import FormBottomBar from 'src/components/common/FormBottomBar';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import strings from 'src/strings';
-import { NurseryWithdrawalRequest } from 'src/api/types/batch';
+import { NurseryWithdrawalRequest, NurseryWithdrawalPurposes } from 'src/api/types/batch';
 import { ErrorBox, Table, TableColumnType } from '@terraware/web-components';
 import WithdrawalBatchesCellRenderer from './WithdrawalBatchesCellRenderer';
 import useForm from 'src/utils/useForm';
@@ -41,6 +41,7 @@ const useStyles = makeStyles(() => ({
 
 export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps): JSX.Element {
   const { onNext, onCancel, saveText, batches, nurseryWithdrawal, organization } = props;
+  const { OUTPLANT } = NurseryWithdrawalPurposes;
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const [species, setSpecies] = useState<any>([]);
@@ -147,7 +148,7 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
   const validateQuantities = () => {
     let noErrors = true;
     let newRecords: BatchWithdrawalForTable[] = [];
-    if (nurseryWithdrawal.purpose === 'Out Plant') {
+    if (nurseryWithdrawal.purpose === OUTPLANT) {
       let unsetValues = 0;
       newRecords = record.map((rec) => {
         let readyQuantityWithdrawnError = '';
@@ -270,7 +271,7 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
                     {record.length > 0 && (
                       <Table
                         id='inventory-table'
-                        columns={nurseryWithdrawal.purpose === 'Out Plant' ? outplantColumns : columns}
+                        columns={nurseryWithdrawal.purpose === OUTPLANT ? outplantColumns : columns}
                         rows={record.filter((rec) => rec.speciesId === iSpecies.id)}
                         Renderer={WithdrawalBatchesCellRenderer}
                         orderBy={'batchId'}

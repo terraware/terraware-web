@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { ServerOrganization } from 'src/types/Organization';
 import strings from 'src/strings';
 import TfMain from 'src/components/common/TfMain';
@@ -12,6 +12,9 @@ import { Chart } from 'chart.js';
 import { makeStyles } from '@mui/styles';
 import { generateRandomColors } from 'src/utils/generateRandomColor';
 import SpeciesByPlotChart from './SpeciesByPlotChart';
+import { useHistory, useParams } from 'react-router-dom';
+import useSnackbar from 'src/utils/useSnackbar';
+import { APP_PATHS } from 'src/constants';
 
 export type Population = {
   species_scientificName: string;
@@ -42,21 +45,42 @@ export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Elemen
   const [totalPlants, setTotalPlants] = useState<number>();
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
+  const { plantingSiteId } = useParams<{ plantingSiteId: string }>();
+  const history = useHistory();
+  const [snackbar] = useState(useSnackbar());
   const chartRef = React.useRef<HTMLCanvasElement>(null);
   const [plantsBySpecies, setPlantsBySpecies] = useState<{ [key: string]: number }>();
+  const classes = useStyles();
   const [selectedPlot, setSelectedPlot] = useState<PlantingSitesPlotsSearch>();
   const [plots, setPlots] = useState<PlantingSitesPlotsSearch[]>();
-  const classes = useStyles();
 
   useEffect(() => {
     const populatePlantingSites = async () => {
       const serverResponse = await listPlantingSites(organization.id);
       if (serverResponse.requestSucceeded) {
         setPlantingSites(serverResponse.sites ?? []);
+      } else {
+        snackbar.toastError(serverResponse.error);
       }
     };
     populatePlantingSites();
-  }, [organization]);
+  }, [organization.id, snackbar]);
+
+  const borderCardStyle = {
+    border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+    marginBottom: 2,
+    borderRadius: '8px',
+    padding: 3,
+  };
+
+  const cardTitleStyle = {
+    fontSize: '20px',
+    fontWeight: 600,
+  };
+
+  const cardElementStyle = {
+    marginTop: theme.spacing(3),
+  };
 
   useEffect(() => {
     const populateResults = async () => {
@@ -105,32 +129,27 @@ export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Elemen
     populateResults();
   }, [selectedPlantingSite]);
 
-  const onChangePlantingSite = (newValue: string) => {
-    setSelectedPlot(undefined);
-    setSelectedPlantingSite(plantingSites.find((ps) => ps.name === newValue));
-  };
+  const setActivePlantingSite = useCallback(
+    (site: PlantingSite | undefined) => {
+      if (site) {
+        history.push(APP_PATHS.PLANTING_SITE_DASHBOARD.replace(':plantingSiteId', site.id.toString()));
+      }
+    },
+    [history]
+  );
 
-  const onChangePlot = (newValue: string) => {
-    if (plots) {
-      setSelectedPlot(plots.find((p) => p.fullName === newValue));
+  useEffect(() => {
+    if (plantingSites.length) {
+      const plantingSiteIdToUse = plantingSiteId;
+      const requestedPlantingSite = plantingSites.find((ps) => ps?.id === parseInt(plantingSiteIdToUse, 10));
+      const plantingSiteToUse = requestedPlantingSite || plantingSites[0];
+      if (plantingSiteToUse.id.toString() === plantingSiteId) {
+        setSelectedPlantingSite(plantingSiteToUse);
+      } else {
+        setActivePlantingSite(plantingSiteToUse);
+      }
     }
-  };
-
-  const borderCardStyle = {
-    border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
-    marginBottom: 2,
-    borderRadius: '8px',
-    padding: 3,
-  };
-
-  const cardTitleStyle = {
-    fontSize: '20px',
-    fontWeight: 600,
-  };
-
-  const cardElementStyle = {
-    marginTop: theme.spacing(3),
-  };
+  }, [plantingSites, plantingSiteId, setActivePlantingSite]);
 
   React.useEffect(() => {
     const ctx = chartRef?.current?.getContext('2d');
@@ -183,6 +202,17 @@ export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Elemen
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [plantsBySpecies]);
+
+  const onChangePlantingSite = (newValue: string) => {
+    setSelectedPlot(undefined);
+    setActivePlantingSite(plantingSites.find((ps) => ps.name === newValue));
+  };
+
+  const onChangePlot = (newValue: string) => {
+    if (plots) {
+      setSelectedPlot(plots.find((p) => p.fullName === newValue));
+    }
+  };
 
   return (
     <TfMain>
@@ -238,6 +268,11 @@ export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Elemen
               )}
               {selectedPlot && <SpeciesByPlotChart chartData={selectedPlot.populations} />}
             </Box>
+            <Box style={cardElementStyle} />
+          </Box>
+          <Box sx={borderCardStyle}>
+            <Typography sx={cardTitleStyle}>{strings.NUMBER_OF_PLANTS_BY_PLOT_AND_SPECIES}</Typography>
+            <Box style={cardElementStyle} />
           </Box>
         </Grid>
       </Grid>
