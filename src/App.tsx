@@ -60,6 +60,7 @@ import {
   BatchBulkWithdrawWrapperComponent,
   SpeciesBulkWithdrawWrapperComponent,
 } from './components/Inventory/withdraw';
+import PlantsDashboard from './components/Plants';
 
 interface StyleProps {
   isDesktop?: boolean;
@@ -75,7 +76,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     backgroundAttachment: 'fixed',
     minHeight: '100vh',
     '& .navbar': {
-      backgroundColor: 'transparent',
+      backgroundColor: theme.palette.TwClrBg,
       paddingTop: (props: StyleProps) => (props.isDesktop ? '88px' : '8px'),
       overflowY: 'auto',
       zIndex: 1000,
@@ -400,7 +401,11 @@ export default function App() {
                   </div>
                 </Slide>
               ) : (
-                <NavBar organization={selectedOrganization} setShowNavBar={setShowNavBar} />
+                <NavBar
+                  organization={selectedOrganization}
+                  setShowNavBar={setShowNavBar}
+                  backgroundTransparent={location.pathname.startsWith(APP_PATHS.HOME)}
+                />
               )}
             </div>
           </div>
@@ -534,6 +539,16 @@ export default function App() {
               {selectedOrganization && (
                 <Route exact path={APP_PATHS.NURSERIES_EDIT}>
                   <NewNursery organization={selectedOrganization} reloadOrganizationData={reloadData} />
+                </Route>
+              )}
+              {trackingEnabled && selectedOrganization && (
+                <Route path={APP_PATHS.PLANTS_DASHBOARD}>
+                  <PlantsDashboard organization={selectedOrganization} />
+                </Route>
+              )}
+              {trackingEnabled && selectedOrganization && (
+                <Route path={APP_PATHS.PLANTING_SITE_DASHBOARD}>
+                  <PlantsDashboard organization={selectedOrganization} />
                 </Route>
               )}
               <Route path={APP_PATHS.NURSERIES_VIEW}>

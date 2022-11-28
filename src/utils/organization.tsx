@@ -30,7 +30,7 @@ export const getAllNurseries = (organization: ServerOrganization): Facility[] =>
   return getFacilitiesByType(organization, 'Nursery');
 };
 
-export const getNurseriesById = (organization: ServerOrganization, id: number): Facility => {
+export const getNurseryById = (organization: ServerOrganization, id: number): Facility => {
   const allNurseries = getAllNurseries(organization);
   const found = allNurseries.filter((nurs) => nurs.id === id);
   return found[0];

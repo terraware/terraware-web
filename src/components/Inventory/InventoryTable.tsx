@@ -71,6 +71,10 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
     });
   };
 
+  const isSelectionWithdrawable = () => {
+    return selectedRows.some((row) => Number(row.totalQuantity) > 0);
+  };
+
   return (
     <>
       <Grid item xs={12}>
@@ -85,25 +89,37 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
           setFilters={setFilters}
         />
       </Box>
-      <Table
-        id='inventory-table'
-        columns={columns}
-        rows={results}
-        orderBy='species_scientificName'
-        Renderer={InventoryCellRenderer}
-        isClickable={(row) => trackingEnabled && row.species_id}
-        selectedRows={selectedRows}
-        setSelectedRows={setSelectedRows}
-        showCheckbox={trackingEnabled}
-        showTopBar={true}
-        topBarButtons={[
-          {
-            buttonType: 'passive',
-            buttonText: strings.WITHDRAW,
-            onButtonClick: withdrawInventory,
-          },
-        ]}
-      />
+      <Grid item xs={12}>
+        <div>
+          <Grid container spacing={4}>
+            <Grid item xs={12}>
+              <Table
+                id='inventory-table'
+                columns={columns}
+                rows={results}
+                orderBy='species_scientificName'
+                Renderer={InventoryCellRenderer}
+                isClickable={(row) => row.species_id}
+                selectedRows={selectedRows}
+                setSelectedRows={setSelectedRows}
+                showCheckbox={trackingEnabled}
+                showTopBar={true}
+                topBarButtons={
+                  isSelectionWithdrawable()
+                    ? [
+                        {
+                          buttonType: 'passive',
+                          buttonText: strings.WITHDRAW,
+                          onButtonClick: withdrawInventory,
+                        },
+                      ]
+                    : []
+                }
+              />
+            </Grid>
+          </Grid>
+        </div>
+      </Grid>
     </>
   );
 }
