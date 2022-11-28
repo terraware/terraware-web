@@ -72,7 +72,7 @@ const NO_SEEDBANKS_CONTENT: PageContent = {
   listItems: [
     {
       icon: 'blobbyIconSeedBank',
-      title: strings.SEED_BANK_SETUP,
+      title: '',
       description: '',
     },
   ],
