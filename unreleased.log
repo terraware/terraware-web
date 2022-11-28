@@ -1,3 +1,4 @@
+deb54c2 Refactor plants dashboard components to be cleaner (#828)
 1e9e19e SW-2191 Remove trash can icon from delete buttons on modals (#826)
 d89c786 SW-2194 Remove "data" and the [import icon] in import dialog boxes (#827)
 8583bef SW-2278 Show plot labels only after zoomed in (#825)
