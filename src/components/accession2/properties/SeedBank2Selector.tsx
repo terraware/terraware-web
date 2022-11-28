@@ -60,6 +60,7 @@ export default function SeedBank2Selector(props: SeedBank2SelectorProps): JSX.El
           selectedStorageSubLocation={record.storageLocation}
           storageSubLocations={storageLocations.map((obj) => obj.storageLocation)}
           onChange={(value: string) => onChange('storageLocation', value)}
+          disabled={!record.facilityId}
         />
       </Grid>
     </Grid>

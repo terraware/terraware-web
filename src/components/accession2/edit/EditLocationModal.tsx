@@ -101,6 +101,7 @@ export default function EditLocationModal(props: EditLocationModalProps): JSX.El
             selectedStorageSubLocation={record.storageLocation}
             storageSubLocations={storageLocations.map((obj) => obj.storageLocation)}
             onChange={(value: string) => onChange('storageLocation', value)}
+            disabled={!record.facilityId}
           />
         </Grid>
       </Grid>
