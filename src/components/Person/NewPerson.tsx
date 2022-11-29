@@ -1,10 +1,9 @@
-import { Container, Grid, Theme } from '@mui/material';
+import { Box, Grid, Theme, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
-import TfDivisor from '../common/TfDivisor';
 import { OrganizationUser } from 'src/types/User';
 import TextField from '../common/Textfield/Textfield';
 import useForm from 'src/utils/useForm';
@@ -21,59 +20,9 @@ import useSnackbar from 'src/utils/useSnackbar';
 import TfMain from 'src/components/common/TfMain';
 
 const useStyles = makeStyles((theme: Theme) => ({
-  mainContainer: {
-    paddingTop: theme.spacing(4),
-    paddingBottom: theme.spacing(7),
-    marginBottom: theme.spacing(6),
-    background: theme.palette.TwClrBg,
-    height: 'calc(100% - 96px)',
-    overflow: 'scroll',
-  },
-  mobileContainer: {
-    paddingBottom: theme.spacing(35),
-  },
-  backIcon: {
-    fill: theme.palette.TwClrIcnBrand,
-    marginRight: theme.spacing(1),
-  },
-  back: {
-    display: 'flex',
-    textDecoration: 'none',
-    color: theme.palette.TwClrTxtBrand,
-    fontSize: '20px',
-    alignItems: 'center',
-  },
-  value: {
-    fontSize: '16px',
-  },
-  titleWithButton: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  label: {
-    color: theme.palette.TwClrTxtSecondary,
-    lineHeight: '20px',
-    fontFamily: '"Inter", sans-serif',
-  },
-  datePicker: {
-    marginTop: '4px',
-    '& .MuiOutlinedInput-root': {
-      '& fieldset': {
-        borderColor: theme.palette.TwClrBrdrSecondary,
-      },
-    },
-  },
-  blockCheckbox: {
-    display: 'block',
-  },
-  generalTitle: {
-    fontSize: '20px',
-    marginBottom: '8px',
-  },
   titleSubtitle: {
     marginTop: '8px',
+    marginBottom: 0,
   },
   title: {
     marginBottom: '8px',
@@ -87,6 +36,7 @@ type PersonViewProps = {
 
 export default function PersonView({ organization, reloadOrganizationData }: PersonViewProps): JSX.Element {
   const classes = useStyles();
+  const theme = useTheme();
   const history = useHistory();
   const [emailError, setEmailError] = useState('');
   const snackbar = useSnackbar();
@@ -95,7 +45,7 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
   const [people, setPeople] = useState<OrganizationUser[]>();
   const { personId } = useParams<{ personId: string }>();
   const [personSelectedToEdit, setPersonSelectedToEdit] = useState<OrganizationUser>();
-  const { isMobile } = useDeviceInfo();
+  const { isMobile, isTablet } = useDeviceInfo();
 
   const [newPerson, setNewPerson, onChange] = useForm<OrganizationUser>({
     id: -1,
@@ -212,46 +162,51 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
   };
 
   const gridSize = () => {
-    if (isMobile) {
+    if (isMobile || isTablet) {
       return 12;
     }
     return 4;
   };
 
+  const roleSelectSize = () => {
+    if (isMobile) {
+      return '100%';
+    } else if (isTablet) {
+      return '50%';
+    }
+
+    return '33%';
+  };
+
   // TODO: Handle the case where we cannot find the requested person to edit in the list of people.
   return (
     <TfMain>
-      <Container maxWidth={false} className={classes.mainContainer}>
-        <Grid container spacing={3} className={`${isMobile ? classes.mobileContainer : ''}`}>
-          <Grid item xs={12}>
-            {isMobile ? (
-              <h3 className={classes.title}>
-                {personSelectedToEdit ? personSelectedToEdit.email : strings.ADD_PERSON}
-              </h3>
-            ) : (
-              <h2 className={classes.title}>
-                {personSelectedToEdit ? personSelectedToEdit.email : strings.ADD_PERSON}
-              </h2>
-            )}
-            {!personSelectedToEdit ? <p className={classes.titleSubtitle}>{strings.ADD_PERSON_DESC}</p> : null}
-            <PageSnackbar />
-            {pageError === 'REPEATED_EMAIL' && repeatedEmail && (
-              <ErrorBox
-                text={strings.ALREADY_INVITED_PERSON_ERROR}
-                buttonText={strings.GO_TO_PROFILE}
-                onClick={goToProfile}
-              />
-            )}
-            {pageError === 'INVALID_EMAIL' && (
-              <ErrorBox title={strings.UNABLE_TO_ADD_PERSON} text={strings.FIX_HIGHLIGHTED_FIELDS} />
-            )}
-          </Grid>
-          {!personSelectedToEdit ? (
-            <Grid item xs={12}>
-              <h3 className={classes.generalTitle}>{strings.GENERAL}</h3>
-              <p className={classes.titleSubtitle}>{strings.ADD_PERSON_GENERAL_DESC}</p>
-            </Grid>
-          ) : null}
+      <Grid container marginBottom={theme.spacing(4)} paddingLeft={theme.spacing(3)}>
+        <Grid item xs={12}>
+          <h2 className={classes.title}>{personSelectedToEdit ? personSelectedToEdit.email : strings.ADD_PERSON}</h2>
+          {!personSelectedToEdit ? <p className={classes.titleSubtitle}>{strings.ADD_PERSON_DESC}</p> : null}
+          <PageSnackbar />
+          {pageError === 'REPEATED_EMAIL' && repeatedEmail && (
+            <ErrorBox
+              text={strings.ALREADY_INVITED_PERSON_ERROR}
+              buttonText={strings.GO_TO_PROFILE}
+              onClick={goToProfile}
+            />
+          )}
+          {pageError === 'INVALID_EMAIL' && (
+            <ErrorBox title={strings.UNABLE_TO_ADD_PERSON} text={strings.FIX_HIGHLIGHTED_FIELDS} />
+          )}
+        </Grid>
+      </Grid>
+      <Box
+        sx={{
+          backgroundColor: theme.palette.TwClrBg,
+          borderRadius: '32px',
+          padding: theme.spacing(3),
+          marginBottom: isMobile ? theme.spacing(32) : theme.spacing(25),
+        }}
+      >
+        <Grid container spacing={3}>
           <Grid item xs={gridSize()}>
             <TextField
               id='email'
@@ -283,15 +238,17 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
               value={newPerson.lastName}
             />
           </Grid>
-          <Grid item xs={12}>
+        </Grid>
+        <Box display='flex' flexDirection='column' marginTop={theme.spacing(9)}>
+          <Box>
             <p>{strings.ROLES_INFO}</p>
             <ul>
               <li>{strings.CONTRIBUTOR_INFO}</li>
               <li>{strings.MANAGER_INFO}</li>
               <li>{strings.ADMIN_INFO}</li>
             </ul>
-          </Grid>
-          <Grid item xs={gridSize()}>
+          </Box>
+          <Box width={roleSelectSize()}>
             <Select
               id='role'
               label={strings.ROLE_REQUIRED}
@@ -301,13 +258,9 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
               selectedValue={newPerson.role}
               fullWidth
             />
-          </Grid>
-          <Grid item xs={12} />
-          <Grid item xs={12}>
-            <TfDivisor />
-          </Grid>
-        </Grid>
-      </Container>
+          </Box>
+        </Box>
+      </Box>
       <FormBottomBar onCancel={goToPeople} onSave={() => saveUser()} />
     </TfMain>
   );
