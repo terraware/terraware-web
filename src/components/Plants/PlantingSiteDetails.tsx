@@ -5,7 +5,7 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 import { search } from 'src/api/search';
 import SpeciesByPlotChart from './SpeciesByPlotChart';
 import TotalCount from './TotalCount';
-import PlantingSiteMap from './PlantingSiteMap';
+import PlantingSiteDashboardMap from './PlantingSiteDashboardMap';
 import PlantBySpeciesChart from './PlantBySpeciesChart';
 
 export type Population = {
@@ -14,14 +14,16 @@ export type Population = {
   totalPlants: number;
 };
 
-export type PlantingSitesPlotsSearch = {
+export type PlantingSitesPlots = {
   id: string;
   fullName: string;
   populations: Population[];
 };
 
 type PlantingSiteDetailsProps = {
-  selectedPlantingSite?: PlantingSite;
+  plantingSite?: PlantingSite;
+  updatePlotPreferences: (plotId: string) => void;
+  lastPlot?: any;
 };
 
 export const cardTitleStyle = {
@@ -30,12 +32,12 @@ export const cardTitleStyle = {
 };
 
 export default function PlantingSiteDetails(props: PlantingSiteDetailsProps): JSX.Element {
-  const { selectedPlantingSite } = props;
+  const { plantingSite, updatePlotPreferences, lastPlot } = props;
   const [totalPlants, setTotalPlants] = useState<number>();
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const [plantsBySpecies, setPlantsBySpecies] = useState<{ [key: string]: number }>();
-  const [plots, setPlots] = useState<PlantingSitesPlotsSearch[]>();
+  const [plots, setPlots] = useState<PlantingSitesPlots[]>();
 
   const borderCardStyle = {
     border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
@@ -44,10 +46,16 @@ export default function PlantingSiteDetails(props: PlantingSiteDetailsProps): JS
     padding: 3,
   };
 
+  const mapCardStyle = {
+    border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+    marginBottom: 2,
+    borderRadius: '8px',
+  };
+
   useEffect(() => {
     const populateResults = async () => {
-      if (selectedPlantingSite) {
-        const serverResponse: PlantingSitesPlotsSearch[] | null = (await search({
+      if (plantingSite) {
+        const serverResponse: PlantingSitesPlots[] | null = (await search({
           prefix: 'plantingSites.plantingZones.plots',
           fields: [
             'id',
@@ -59,10 +67,10 @@ export default function PlantingSiteDetails(props: PlantingSiteDetailsProps): JS
           search: {
             operation: 'field',
             field: 'plantingSite_id',
-            values: [selectedPlantingSite.id],
+            values: [plantingSite.id],
           },
           count: 0,
-        })) as unknown as PlantingSitesPlotsSearch[] | null;
+        })) as unknown as PlantingSitesPlots[] | null;
 
         if (serverResponse) {
           setPlots(serverResponse);
@@ -89,12 +97,14 @@ export default function PlantingSiteDetails(props: PlantingSiteDetailsProps): JS
     };
 
     populateResults();
-  }, [selectedPlantingSite]);
+  }, [plantingSite]);
 
   return (
     <Grid container display='flex' marginTop={6}>
-      <PlantingSiteMap plots={plots} />
-      <Grid item xs={isMobile ? 12 : 6} sx={{ paddingLeft: 1 }}>
+      <Grid item xs={isMobile ? 12 : 6} sx={mapCardStyle}>
+        <PlantingSiteDashboardMap plots={plots} siteId={plantingSite?.id} />
+      </Grid>
+      <Grid item xs={isMobile ? 12 : 6} sx={{ paddingLeft: isMobile ? 0 : 2 }}>
         <Box sx={borderCardStyle}>
           <TotalCount totalCount={totalPlants} />
         </Box>
@@ -102,7 +112,7 @@ export default function PlantingSiteDetails(props: PlantingSiteDetailsProps): JS
           <PlantBySpeciesChart plantsBySpecies={plantsBySpecies} />
         </Box>
         <Box sx={borderCardStyle}>
-          <SpeciesByPlotChart plots={plots} />
+          <SpeciesByPlotChart plots={plots} updatePlotPreferences={updatePlotPreferences} lastPlot={lastPlot} />
         </Box>
       </Grid>
     </Grid>

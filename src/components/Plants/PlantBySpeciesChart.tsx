@@ -1,10 +1,10 @@
 import Chart from 'chart.js/auto';
 import React from 'react';
 import { makeStyles } from '@mui/styles';
-import { generateRandomColors } from 'src/utils/generateRandomColor';
 import { Box, Typography, useTheme } from '@mui/material';
 import { cardTitleStyle } from './PlantingSiteDetails';
 import strings from 'src/strings';
+import { generateTerrawareRandomColors } from 'src/utils/generateRandomColor';
 
 const useStyles = makeStyles(() => ({
   chart: {
@@ -24,7 +24,7 @@ export default function PlantBySpeciesChart({ plantsBySpecies }: PlantBySpeciesC
   React.useEffect(() => {
     const ctx = chartRef?.current?.getContext('2d');
     if (ctx && plantsBySpecies) {
-      const colors = generateRandomColors(Object.keys(plantsBySpecies).length);
+      const colors = generateTerrawareRandomColors(theme, Object.keys(plantsBySpecies).length);
       const data = plantsBySpecies;
       const myChart = new Chart(ctx, {
         type: 'bar',
@@ -50,6 +50,9 @@ export default function PlantBySpeciesChart({ plantsBySpecies }: PlantBySpeciesC
           plugins: {
             legend: {
               display: false,
+            },
+            tooltip: {
+              displayColors: false,
             },
           },
           scales: {
