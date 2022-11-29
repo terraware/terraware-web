@@ -159,7 +159,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
       return;
     }
     fetchMapboxToken();
-  });
+  }, [plantingSite.id, fetchMapboxToken, token]);
 
   // fetch polygons and boundaries
   useEffect(() => {
