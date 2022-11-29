@@ -51,6 +51,9 @@ export default function PlantBySpeciesChart({ plantsBySpecies }: PlantBySpeciesC
             legend: {
               display: false,
             },
+            tooltip: {
+              displayColors: false,
+            },
           },
           scales: {
             y: {
