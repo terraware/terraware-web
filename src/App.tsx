@@ -91,7 +91,7 @@ const useStyles = makeStyles((theme: Theme) => ({
       zIndex: 1000,
       '&::-webkit-scrollbar-thumb': {
         backgroundColor: theme.palette.TwClrBgGhostActive,
-      }
+      },
     },
   },
   content: {
