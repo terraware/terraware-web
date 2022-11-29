@@ -1,7 +1,7 @@
 import Chart from 'chart.js/auto';
 import React, { useState } from 'react';
 import { makeStyles } from '@mui/styles';
-import { generateRandomColors } from 'src/utils/generateRandomColor';
+import { generateTerrawareRandomColors } from 'src/utils/generateRandomColor';
 import { Box, Typography, useTheme } from '@mui/material';
 import { cardTitleStyle, PlantingSitesPlotsSearch } from './PlantingSiteDetails';
 import strings from 'src/strings';
@@ -37,7 +37,7 @@ export default function SpeciesByPlotChart({ plots }: Props): JSX.Element {
     const populations = selectedPlot?.populations;
     const ctx = chartRef?.current?.getContext('2d');
     if (ctx && populations) {
-      const colors = generateRandomColors(populations.length);
+      const colors = generateTerrawareRandomColors(theme, populations.length);
       const data = populations;
       const myChart = new Chart(ctx, {
         type: 'bar',
