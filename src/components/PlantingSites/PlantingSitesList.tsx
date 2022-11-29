@@ -35,6 +35,16 @@ export default function PlantingSitesList(props: PlantingSitesListProps): JSX.El
   };
 
   const onSearch = useCallback(async () => {
+    const searchField = debouncedSearchTerm
+      ? {
+          operation: 'or',
+          children: [
+            { operation: 'field', field: 'name', type: 'Fuzzy', values: [debouncedSearchTerm] },
+            { operation: 'field', field: 'description', type: 'Fuzzy', values: [debouncedSearchTerm] },
+          ],
+        }
+      : null;
+
     const params = {
       fields: ['boundary', 'id', 'name', 'numPlantingZones', 'numPlots', 'description'],
       prefix: 'plantingSites',
@@ -46,17 +56,16 @@ export default function PlantingSitesList(props: PlantingSitesListProps): JSX.El
             operation: 'field',
             values: [organization.id],
           },
-          {
-            operation: 'or',
-            children: [
-              { operation: 'field', field: 'name', type: 'Fuzzy', values: [debouncedSearchTerm] },
-              { operation: 'field', field: 'description', type: 'Fuzzy', values: [debouncedSearchTerm] },
-            ],
-          },
         ],
       },
       count: 0,
     };
+
+    if (searchField) {
+      const children: any = params.search.children;
+      children.push(searchField);
+    }
+
     const apiSearchResults = await search(params);
     if (!debouncedSearchTerm) {
       setPlantingSites(apiSearchResults);
