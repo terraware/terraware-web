@@ -309,7 +309,7 @@ export default function Inventory(props: InventoryProps): JSX.Element {
   );
 
   return (
-    <TfMain backgroundImageVisible={true}>
+    <TfMain backgroundImageVisible={!isOnboarded}>
       <ImportInventoryModal
         open={importInventoryModalOpen}
         onClose={() => setImportInventoryModalOpen(false)}
