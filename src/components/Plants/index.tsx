@@ -68,9 +68,11 @@ export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Elemen
 
   if (!plantingSites) {
     return (
-      <Box sx={{ position: 'fixed', top: '50%', left: '50%' }}>
-        <CircularProgress />
-      </Box>
+      <TfMain>
+        <Box sx={{ position: 'fixed', top: '50%', left: '50%' }}>
+          <CircularProgress />
+        </Box>
+      </TfMain>
     );
   }
 
