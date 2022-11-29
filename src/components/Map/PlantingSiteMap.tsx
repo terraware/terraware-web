@@ -12,10 +12,12 @@ import { useDefaultPopupRenderer } from './MapRenderUtils';
 
 export type PlantingSiteMapProps = {
   plantingSite: PlantingSite;
+  // style overrides
+  style?: object;
 };
 
-export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Element {
-  const { plantingSite } = props;
+export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Element | null {
+  const { plantingSite, style } = props;
   const theme = useTheme();
   const [snackbar] = useState(useSnackbar());
   const [token, setToken] = useState<string>();
@@ -157,7 +159,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
       return;
     }
     fetchMapboxToken();
-  });
+  }, [plantingSite.id, fetchMapboxToken, token]);
 
   // fetch polygons and boundaries
   useEffect(() => {
@@ -193,6 +195,14 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
     );
   }
 
+  const hasPolygons = mapOptions.sources.some((source) => {
+    return source.entities.some((entity) => entity.boundary.length);
+  });
+
+  if (!hasPolygons) {
+    return null;
+  }
+
   return (
     <Box sx={{ display: 'flex', flexGrow: 1 }}>
       <Map
@@ -201,6 +211,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
         onTokenExpired={fetchMapboxToken}
         mapId={mapId}
         popupRenderer={popupRenderer}
+        style={style}
       />
     </Box>
   );
