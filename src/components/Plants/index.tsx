@@ -58,7 +58,9 @@ export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Elemen
           lastDashboardPlantingSite = response.preferences.lastDashboardPlantingSite;
         }
         const plantingSiteIdToUse = plantingSiteId || lastDashboardPlantingSite.plantingSiteId;
-        const requestedPlantingSite = plantingSites.find((ps) => ps?.id === parseInt(plantingSiteIdToUse, 10));
+        const requestedPlantingSite = plantingSites.find(
+          (plantingSite) => plantingSite?.id === parseInt(plantingSiteIdToUse, 10)
+        );
         const plantingSiteToUse = requestedPlantingSite || plantingSites[0];
 
         if (plantingSiteToUse.id !== lastDashboardPlantingSite.plantingSiteId) {
