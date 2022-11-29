@@ -33,10 +33,12 @@ export type MapProps = {
   // changes to mapId will re-create the map, needed for new token refreshes
   // since mapbox token is not reactive
   mapId?: string;
+  // style overrides
+  style?: object;
 };
 
 export default function Map(props: MapProps): JSX.Element {
-  const { token, onTokenExpired, options, popupRenderer, mapId } = props;
+  const { token, onTokenExpired, options, popupRenderer, mapId, style } = props;
   const [geoData, setGeoData] = useState();
   const [layerIds, setLayerIds] = useState<string[]>([]);
   const [popupInfo, setPopupInfo] = useState<PopupInfo | null>(null);
@@ -206,6 +208,7 @@ export default function Map(props: MapProps): JSX.Element {
         onError={onMapError}
         onClick={onMapClick}
         onZoomEnd={onZoomEnd}
+        style={style}
       >
         {mapSources}
         <NavigationControl showCompass={false} style={navControlStyle} position='bottom-right' />
@@ -215,8 +218,10 @@ export default function Map(props: MapProps): JSX.Element {
             longitude={Number(popupInfo.lng)}
             latitude={Number(popupInfo.lat)}
             onClose={() => setPopupInfo(null)}
+            style={popupRenderer.style}
+            className={popupRenderer.className}
           >
-            {popupRenderer(popupInfo.properties)}
+            {popupRenderer.render(popupInfo.properties)}
           </Popup>
         )}
       </ReactMapGL>

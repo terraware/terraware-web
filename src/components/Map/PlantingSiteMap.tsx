@@ -8,20 +8,22 @@ import Map from './Map';
 import { MapGeometry, MapOptions, MapPopupRenderer, MapSource } from './MapModels';
 import { getBoundingBox } from './MapUtils';
 import _ from 'lodash';
-import { useDefaultPopupRenderer } from './MapRenderUtils';
 
 export type PlantingSiteMapProps = {
   plantingSite: PlantingSite;
+  // style overrides
+  style?: object;
+  // context on-click renderer
+  contextRenderer?: MapPopupRenderer;
 };
 
-export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Element {
-  const { plantingSite } = props;
+export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Element | null {
+  const { plantingSite, style, contextRenderer } = props;
   const theme = useTheme();
   const [snackbar] = useState(useSnackbar());
   const [token, setToken] = useState<string>();
   const [mapOptions, setMapOptions] = useState<MapOptions>();
   const [mapId, setMapId] = useState<string>();
-  const popupRenderer: MapPopupRenderer = useDefaultPopupRenderer();
 
   const getRenderAttributes = useCallback(
     (objectType: 'site' | 'zone' | 'plot') => {
@@ -157,7 +159,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
       return;
     }
     fetchMapboxToken();
-  });
+  }, [plantingSite.id, fetchMapboxToken, token]);
 
   // fetch polygons and boundaries
   useEffect(() => {
@@ -193,6 +195,14 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
     );
   }
 
+  const hasPolygons = mapOptions.sources?.some((source) => {
+    return source.entities?.some((entity) => entity?.boundary?.length);
+  });
+
+  if (!hasPolygons) {
+    return null;
+  }
+
   return (
     <Box sx={{ display: 'flex', flexGrow: 1 }}>
       <Map
@@ -200,7 +210,8 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
         options={mapOptions}
         onTokenExpired={fetchMapboxToken}
         mapId={mapId}
-        popupRenderer={popupRenderer}
+        popupRenderer={contextRenderer}
+        style={style}
       />
     </Box>
   );

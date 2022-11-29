@@ -1,11 +1,11 @@
 import Chart from 'chart.js/auto';
 import React, { useState } from 'react';
 import { makeStyles } from '@mui/styles';
-import { generateRandomColors } from 'src/utils/generateRandomColor';
+import { generateTerrawareRandomColors } from 'src/utils/generateRandomColor';
 import { Box, Typography, useTheme } from '@mui/material';
-import { cardTitleStyle, PlantingSitesPlotsSearch } from './PlantingSiteDetails';
+import { cardTitleStyle, PlantingSitesPlots } from './PlantingSiteDetails';
 import strings from 'src/strings';
-import { Select } from '@terraware/web-components';
+import { Dropdown } from '@terraware/web-components';
 
 const useStyles = makeStyles(() => ({
   chart: {
@@ -14,30 +14,41 @@ const useStyles = makeStyles(() => ({
 }));
 
 export interface Props {
-  plots?: PlantingSitesPlotsSearch[];
+  plots?: PlantingSitesPlots[];
+  updatePlotPreferences: (plotId: string) => void;
+  lastPlot?: string;
 }
 
-export default function SpeciesByPlotChart({ plots }: Props): JSX.Element {
+export default function SpeciesByPlotChart(props: Props): JSX.Element {
+  const { plots, updatePlotPreferences, lastPlot } = props;
   const classes = useStyles();
   const chartRef = React.useRef<HTMLCanvasElement>(null);
-  const [selectedPlot, setSelectedPlot] = useState<PlantingSitesPlotsSearch>();
+  const [selectedPlot, setSelectedPlot] = useState<PlantingSitesPlots>();
   const theme = useTheme();
 
   const onChangePlot = (newValue: string) => {
     if (plots) {
-      setSelectedPlot(plots.find((p) => p.fullName === newValue));
+      const plot = plots.find((p) => p.id.toString() === newValue.toString());
+      if (plot) {
+        setSelectedPlot(plot);
+        updatePlotPreferences(plot.id);
+      }
     }
   };
 
   React.useEffect(() => {
-    setSelectedPlot(undefined);
-  }, [plots]);
+    if (!plots?.length) {
+      return;
+    }
+    const plot = plots.find((p) => p.id.toString() === lastPlot?.toString());
+    setSelectedPlot(plot || plots[0]);
+  }, [lastPlot, plots]);
 
   React.useEffect(() => {
     const populations = selectedPlot?.populations;
     const ctx = chartRef?.current?.getContext('2d');
     if (ctx && populations) {
-      const colors = generateRandomColors(populations.length);
+      const colors = generateTerrawareRandomColors(theme, populations.length);
       const data = populations;
       const myChart = new Chart(ctx, {
         type: 'bar',
@@ -63,6 +74,9 @@ export default function SpeciesByPlotChart({ plots }: Props): JSX.Element {
           plugins: {
             legend: {
               display: false,
+            },
+            tooltip: {
+              displayColors: false,
             },
           },
           scales: {
@@ -95,11 +109,11 @@ export default function SpeciesByPlotChart({ plots }: Props): JSX.Element {
             <Typography fontSize='16px' fontWeight={500} marginRight={1}>
               {strings.PLOT}
             </Typography>
-            <Select
-              options={plots.map((plot) => plot.fullName || '')}
-              onChange={onChangePlot}
-              selectedValue={selectedPlot?.fullName}
+            <Dropdown
+              options={plots.map((plot) => ({ value: plot.id, label: plot.fullName }))}
               placeholder={strings.SELECT}
+              onChange={onChangePlot}
+              selectedValue={selectedPlot?.id}
             />
           </Box>
         )}
