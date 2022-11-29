@@ -4,7 +4,7 @@ name: docs
 on:
   push:
     branches:
-      - main
+      - edwardsa/license-test
 
 concurrency:
   group: ${{ github.ref }}-${{ github.workflow }}
@@ -27,6 +27,24 @@ jobs:
 
       - name: Set environment
         run: ./.github/scripts/set-environment.sh
+
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - uses: actions/cache@v2
+        id: yarn-cache
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Install dependencies
+        run: yarn
+
+      - name: Output License Report
+        run: yarn license-report
 
       - name: Output git log since last release
         run: bash ./.github/scripts/gitlog.sh
