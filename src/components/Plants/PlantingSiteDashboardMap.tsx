@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Box } from '@mui/material';
 import { PlantingSite } from 'src/api/types/tracking';
 import { getPlantingSite } from 'src/api/tracking/tracking';
 import useSnackbar from 'src/utils/useSnackbar';
 import { PlantingSitesPlots } from './PlantingSiteDetails';
-import { PlantingSiteMap } from 'src/components/Map';
+import { PlantingSiteMap, useSpeciesPlantsRenderer } from 'src/components/Map';
 
 type PlantingSiteDashboardMapProps = {
   siteId?: number;
@@ -12,9 +12,22 @@ type PlantingSiteDashboardMapProps = {
 };
 
 export default function PlantingSiteDashboardMap(props: PlantingSiteDashboardMapProps): JSX.Element {
-  const { siteId } = props;
+  const { plots, siteId } = props;
   const [snackbar] = useState(useSnackbar());
   const [plantingSite, setPlantingSite] = useState<PlantingSite>();
+
+  const plotsWithPlants = useMemo(() => {
+    if (!plots) {
+      return [];
+    }
+
+    return plots.reduce((accumulator: any, plot) => {
+      if (plot.populations?.length) {
+        accumulator[plot.id.toString()] = plot.populations;
+      }
+      return accumulator;
+    }, {});
+  }, [plots]);
 
   useEffect(() => {
     if (!siteId) {
@@ -33,9 +46,18 @@ export default function PlantingSiteDashboardMap(props: PlantingSiteDashboardMap
     fetchPlantingSite();
   }, [siteId, snackbar]);
 
+  const contextRenderer = useSpeciesPlantsRenderer(plotsWithPlants);
+
   return (
     <Box display='flex' height='100%'>
-      {plantingSite && <PlantingSiteMap plantingSite={plantingSite} key={siteId} style={{ borderRadius: '8px' }} />}
+      {plantingSite && (
+        <PlantingSiteMap
+          plantingSite={plantingSite}
+          key={siteId}
+          style={{ borderRadius: '8px' }}
+          contextRenderer={contextRenderer}
+        />
+      )}
     </Box>
   );
 }

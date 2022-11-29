@@ -218,8 +218,10 @@ export default function Map(props: MapProps): JSX.Element {
             longitude={Number(popupInfo.lng)}
             latitude={Number(popupInfo.lat)}
             onClose={() => setPopupInfo(null)}
+            style={popupRenderer.style}
+            className={popupRenderer.className}
           >
-            {popupRenderer(popupInfo.properties)}
+            {popupRenderer.render(popupInfo.properties)}
           </Popup>
         )}
       </ReactMapGL>
