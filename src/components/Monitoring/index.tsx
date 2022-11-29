@@ -133,7 +133,7 @@ export default function Monitoring(props: MonitoringProps): JSX.Element {
   const getPageHeading = () => <Title page={strings.MONITORING} parentPage={strings.SEEDS} />;
 
   return (
-    <TfMain>
+    <TfMain backgroundImageVisible={!hasSeedBanks}>
       {hasSeedBanks ? (
         <>
           <Grid container>
