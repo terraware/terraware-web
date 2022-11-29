@@ -15,9 +15,12 @@ const useStyles = makeStyles(() => ({
 
 export interface Props {
   plots?: PlantingSitesPlots[];
+  updatePlotPreferences: (plotId: string) => void;
+  lastPlot?: string;
 }
 
-export default function SpeciesByPlotChart({ plots }: Props): JSX.Element {
+export default function SpeciesByPlotChart(props: Props): JSX.Element {
+  const { plots, updatePlotPreferences, lastPlot } = props;
   const classes = useStyles();
   const chartRef = React.useRef<HTMLCanvasElement>(null);
   const [selectedPlot, setSelectedPlot] = useState<PlantingSitesPlots>();
@@ -26,12 +29,17 @@ export default function SpeciesByPlotChart({ plots }: Props): JSX.Element {
   const onChangePlot = (newValue: string) => {
     if (plots) {
       setSelectedPlot(plots.find((p) => p.fullName === newValue));
+      updatePlotPreferences(newValue);
     }
   };
 
   React.useEffect(() => {
-    setSelectedPlot(undefined);
-  }, [plots]);
+    if (lastPlot) {
+      setSelectedPlot(plots?.find((p) => p.fullName === lastPlot));
+    } else {
+      setSelectedPlot(undefined);
+    }
+  }, [lastPlot, plots]);
 
   React.useEffect(() => {
     const populations = selectedPlot?.populations;

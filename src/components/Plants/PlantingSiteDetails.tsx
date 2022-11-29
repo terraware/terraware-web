@@ -22,6 +22,8 @@ export type PlantingSitesPlots = {
 
 type PlantingSiteDetailsProps = {
   plantingSite?: PlantingSite;
+  updatePlotPreferences: (plotId: string) => void;
+  lastPlot?: any;
 };
 
 export const cardTitleStyle = {
@@ -30,7 +32,7 @@ export const cardTitleStyle = {
 };
 
 export default function PlantingSiteDetails(props: PlantingSiteDetailsProps): JSX.Element {
-  const { plantingSite } = props;
+  const { plantingSite, updatePlotPreferences, lastPlot } = props;
   const [totalPlants, setTotalPlants] = useState<number>();
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
@@ -110,7 +112,7 @@ export default function PlantingSiteDetails(props: PlantingSiteDetailsProps): JS
           <PlantBySpeciesChart plantsBySpecies={plantsBySpecies} />
         </Box>
         <Box sx={borderCardStyle}>
-          <SpeciesByPlotChart plots={plots} />
+          <SpeciesByPlotChart plots={plots} updatePlotPreferences={updatePlotPreferences} lastPlot={lastPlot} />
         </Box>
       </Grid>
     </Grid>
