@@ -129,28 +129,18 @@ export default function NavBar({
         onClick={() => {
           closeAndNavigateTo(APP_PATHS.INVENTORY);
         }}
-      />
-      <NavItem
-        label={strings.MONITORING}
-        icon='monitoringNav'
-        selected={!!isMonitoringRoute}
-        onClick={() => {
-          closeAndNavigateTo(APP_PATHS.MONITORING);
-        }}
-        id='monitoring'
-      />
-      <>
-        <NavSection title={strings.SEEDLINGS.toUpperCase()} />
-        <NavItem
-          label={strings.INVENTORY}
-          icon='iconSeedling'
-          selected={!!isInventoryRoute}
-          onClick={() => {
-            closeAndNavigateTo(APP_PATHS.INVENTORY);
-          }}
-          id='inventory'
-        />
-      </>
+      >
+        <SubNavbar>
+          <NavItem
+            label={strings.INVENTORY}
+            selected={!!isInventoryRoute}
+            onClick={() => {
+              closeAndNavigateTo(APP_PATHS.INVENTORY);
+            }}
+            id='inventory'
+          />
+        </SubNavbar>
+      </NavItem>
       {trackingEnabled && (
         <>
           <NavSection title={strings.PLANTS.toUpperCase()} />
