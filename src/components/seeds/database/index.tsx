@@ -106,8 +106,8 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   message: {
     margin: '0 auto',
-    marginTop: '10%',
     maxWidth: '800px',
+    padding: '48px',
     width: '800px',
   },
   checkInText: {

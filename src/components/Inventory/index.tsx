@@ -46,8 +46,8 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   message: {
     margin: '0 auto',
-    marginTop: '10%',
     maxWidth: '800px',
+    padding: '48px',
     width: (props: StyleProps) => (props.isMobile ? 'auto' : '800px'),
   },
   spinnerContainer: {
