@@ -25,6 +25,7 @@ import BoundariesAndPlots from './BoundariesAndPlots';
 
 type CreatePlantingSiteProps = {
   organization: ServerOrganization;
+  reloadPlantingSites: () => void;
 };
 
 const useStyles = makeStyles(() => ({
@@ -43,7 +44,7 @@ const useStyles = makeStyles(() => ({
 
 export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
-  const { organization } = props;
+  const { organization, reloadPlantingSites } = props;
   const { plantingSiteId } = useParams<{ plantingSiteId: string }>();
   const history = useHistory();
   const snackbar = useSnackbar();
@@ -115,6 +116,7 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
 
     if (response.requestSucceeded) {
       snackbar.toastSuccess(strings.CHANGES_SAVED);
+      reloadPlantingSites();
       goToPlantingSites();
     } else {
       snackbar.toastError();
