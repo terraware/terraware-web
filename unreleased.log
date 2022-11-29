@@ -1,3 +1,4 @@
+5fca6ac SW-2375 Save last visited planting site and plot in user preferences (#833)
 becd30d SW-2319 Add plants count by species popup to map in plants dashboard (#834)
 0895b7b SW-2322 Pick colors for the bar chart from base color 300s (#831)
 9dc1473 SW-2374 Remove legend box from chart tooltip (#832)
