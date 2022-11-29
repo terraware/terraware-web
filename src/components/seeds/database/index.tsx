@@ -565,7 +565,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
           />
         </>
       )}
-      <TfMain>
+      <TfMain backgroundImageVisible={!isOnboarded}>
         <EditColumns open={editColumnsModalOpen} value={displayColumnNames} onClose={onCloseEditColumnsModal} />
         {organization && (
           <DownloadReportModal
