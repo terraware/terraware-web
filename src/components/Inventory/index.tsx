@@ -56,7 +56,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     left: '50%',
   },
   contentContainer: {
-    backgroundColor: theme.palette.TwClrBg,
     borderRadius: '32px',
     padding: theme.spacing(3),
     minWidth: 'fit-content',
