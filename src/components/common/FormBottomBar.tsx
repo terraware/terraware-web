@@ -31,9 +31,16 @@ export interface Props {
   onSave: () => void;
   cancelButtonText?: string;
   saveButtonText?: string;
+  saveDisabled?: boolean;
 }
 
-export default function FormBottomBar({ onCancel, onSave, cancelButtonText, saveButtonText }: Props): JSX.Element {
+export default function FormBottomBar({
+  onCancel,
+  onSave,
+  cancelButtonText,
+  saveButtonText,
+  saveDisabled,
+}: Props): JSX.Element {
   const { isMobile, isDesktop } = useDeviceInfo();
   const classes = useStyles({ isMobile, isDesktop });
 
@@ -52,7 +59,13 @@ export default function FormBottomBar({ onCancel, onSave, cancelButtonText, save
         type='passive'
         className={classes.button}
       />
-      <Button size='medium' label={saveButtonText || 'Save'} onClick={onSave} className={classes.button} />
+      <Button
+        size='medium'
+        label={saveButtonText || 'Save'}
+        onClick={onSave}
+        className={classes.button}
+        disabled={saveDisabled}
+      />
     </AppBar>
   );
 }
