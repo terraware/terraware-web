@@ -11,6 +11,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import useSnackbar from 'src/utils/useSnackbar';
 import { APP_PATHS } from 'src/constants';
 import PlantingSiteDetails from './PlantingSiteDetails';
+import { getPreferences, updatePreferences } from 'src/api/preferences/preferences';
 
 type PlantsDashboardProps = {
   organization: ServerOrganization;
@@ -25,6 +26,7 @@ export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Elemen
   const { plantingSiteId } = useParams<{ plantingSiteId: string }>();
   const history = useHistory();
   const [snackbar] = useState(useSnackbar());
+  const [plantsDashboardPreferences, setPlantsDashboardPreferences] = useState<{ [key: string]: unknown }>();
 
   useEffect(() => {
     const populatePlantingSites = async () => {
@@ -48,17 +50,33 @@ export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Elemen
   );
 
   useEffect(() => {
-    if (plantingSites && plantingSites.length) {
-      const plantingSiteIdToUse = plantingSiteId;
-      const requestedPlantingSite = plantingSites.find((ps) => ps?.id === parseInt(plantingSiteIdToUse, 10));
-      const plantingSiteToUse = requestedPlantingSite || plantingSites[0];
-      if (plantingSiteToUse.id.toString() === plantingSiteId) {
-        setSelectedPlantingSite(plantingSiteToUse);
-      } else {
-        setActivePlantingSite(plantingSiteToUse);
+    const initializePlantingSite = async () => {
+      if (plantingSites && plantingSites.length) {
+        let lastDashboardPlantingSite: any = {};
+        const response = await getPreferences(organization.id);
+        if (response.requestSucceeded && response.preferences?.lastDashboardPlantingSite) {
+          lastDashboardPlantingSite = response.preferences.lastDashboardPlantingSite;
+        }
+        const plantingSiteIdToUse = plantingSiteId || lastDashboardPlantingSite.plantingSiteId;
+        const requestedPlantingSite = plantingSites.find(
+          (plantingSite) => plantingSite?.id === parseInt(plantingSiteIdToUse, 10)
+        );
+        const plantingSiteToUse = requestedPlantingSite || plantingSites[0];
+
+        if (plantingSiteToUse.id !== lastDashboardPlantingSite.plantingSiteId) {
+          lastDashboardPlantingSite = { plantingSiteId: plantingSiteToUse.id };
+          updatePreferences('lastDashboardPlantingSite', lastDashboardPlantingSite, organization.id);
+        }
+        setPlantsDashboardPreferences(lastDashboardPlantingSite);
+        if (plantingSiteToUse.id.toString() === plantingSiteId) {
+          setSelectedPlantingSite(plantingSiteToUse);
+        } else {
+          setActivePlantingSite(plantingSiteToUse);
+        }
       }
-    }
-  }, [plantingSites, plantingSiteId, setActivePlantingSite]);
+    };
+    initializePlantingSite();
+  }, [plantingSites, plantingSiteId, setActivePlantingSite, organization.id]);
 
   const onChangePlantingSite = (newValue: string) => {
     if (plantingSites) {
@@ -73,6 +91,11 @@ export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Elemen
       </TfMain>
     );
   }
+
+  const updatePlantsDashboardPreferences = (data: { [key: string]: unknown }) => {
+    setPlantsDashboardPreferences(data);
+    updatePreferences('lastDashboardPlantingSite', data, organization.id);
+  };
 
   return (
     <TfMain>
@@ -92,7 +115,11 @@ export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Elemen
           />
         </Box>
       </Grid>
-      <PlantingSiteDetails plantingSite={selectedPlantingSite} />
+      <PlantingSiteDetails
+        plantingSite={selectedPlantingSite}
+        updatePlotPreferences={(plotId) => updatePlantsDashboardPreferences({ ...plantsDashboardPreferences, plotId })}
+        lastPlot={plantsDashboardPreferences?.plotId}
+      />
     </TfMain>
   );
 }
