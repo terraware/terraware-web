@@ -70,7 +70,7 @@ export default function Monitoring(props: SeedBankMonitoringProps): JSX.Element 
                 <EmptyStateContent
                   title={strings.SET_UP_YOUR_SENSOR_KIT}
                   subtitle={strings.SET_UP_YOUR_SENSOR_KIT_MSG}
-                  listItems={[{ icon: 'monitoring', title: strings.SENSOR_KIT_SET_UP }]}
+                  listItems={[{ icon: 'monitoring' }]}
                   buttonText={strings.SET_UP}
                   onClickButton={() => setOnboarding(true)}
                   styles={EMPTY_STATE_CONTENT_STYLES}
