@@ -64,6 +64,9 @@ export default function SpeciesByPlotChart({ plots }: Props): JSX.Element {
             legend: {
               display: false,
             },
+            tooltip: {
+              displayColors: false,
+            },
           },
           scales: {
             y: {
