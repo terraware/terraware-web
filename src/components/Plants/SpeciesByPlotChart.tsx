@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { makeStyles } from '@mui/styles';
 import { generateRandomColors } from 'src/utils/generateRandomColor';
 import { Box, Typography, useTheme } from '@mui/material';
-import { cardTitleStyle, PlantingSitesPlotsSearch } from './PlantingSiteDetails';
+import { cardTitleStyle, PlantingSitesPlots } from './PlantingSiteDetails';
 import strings from 'src/strings';
 import { Select } from '@terraware/web-components';
 
@@ -14,13 +14,13 @@ const useStyles = makeStyles(() => ({
 }));
 
 export interface Props {
-  plots?: PlantingSitesPlotsSearch[];
+  plots?: PlantingSitesPlots[];
 }
 
 export default function SpeciesByPlotChart({ plots }: Props): JSX.Element {
   const classes = useStyles();
   const chartRef = React.useRef<HTMLCanvasElement>(null);
-  const [selectedPlot, setSelectedPlot] = useState<PlantingSitesPlotsSearch>();
+  const [selectedPlot, setSelectedPlot] = useState<PlantingSitesPlots>();
   const theme = useTheme();
 
   const onChangePlot = (newValue: string) => {
