@@ -867,6 +867,7 @@ const strings = new LocalizedStrings({
     TOTAL_NUMBER_OF_PLANTS: 'Total Number of Plants',
     NUMBER_OF_PLANTS_BY_SPECIES: 'Number of Plants by Species',
     NUMBER_OF_PLANTS_BY_PLOT_AND_SPECIES: 'Number of Plants by Plot and Species',
+    NO_PLANTS: 'No Plants',
   },
 });
 

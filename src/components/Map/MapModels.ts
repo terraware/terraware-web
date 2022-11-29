@@ -77,4 +77,8 @@ export type MapOptions = {
 /**
  * Render a popup based on properties
  */
-export type MapPopupRenderer = (properties: MapSourceProperties) => JSX.Element;
+export type MapPopupRenderer = {
+  render: (properties: MapSourceProperties) => JSX.Element;
+  style?: object;
+  className?: string;
+};
