@@ -46,8 +46,8 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   message: {
     margin: '0 auto',
-    marginTop: '10%',
     maxWidth: '800px',
+    padding: '48px',
     width: (props: StyleProps) => (props.isMobile ? 'auto' : '800px'),
   },
   spinnerContainer: {
@@ -56,7 +56,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     left: '50%',
   },
   contentContainer: {
-    backgroundColor: theme.palette.TwClrBg,
     borderRadius: '32px',
     padding: theme.spacing(3),
     minWidth: 'fit-content',
@@ -309,7 +308,7 @@ export default function Inventory(props: InventoryProps): JSX.Element {
   );
 
   return (
-    <TfMain backgroundImageVisible={true}>
+    <TfMain backgroundImageVisible={!isOnboarded}>
       <ImportInventoryModal
         open={importInventoryModalOpen}
         onClose={() => setImportInventoryModalOpen(false)}

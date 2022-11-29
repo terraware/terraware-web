@@ -11,10 +11,9 @@ interface StyleProps {
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
-    border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
     background: theme.palette.TwClrBg,
     padding: '24px',
-    borderRadius: '8px',
+    borderRadius: '24px',
     textAlign: 'center',
   },
   text: {

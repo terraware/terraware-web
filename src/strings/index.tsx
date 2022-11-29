@@ -448,7 +448,6 @@ const strings = new LocalizedStrings({
       "If your seed bank was built by Terraformation, it is equipped with a sensor kit that you can remotely monitor things like the seed bank's temperature and humidity. To set this up, you'll need to connect your seed bank to the Terraware web app. This may take up to 30 minutes.",
     START_SET_UP: 'Start Setup',
     NEXT: 'Next',
-    SENSOR_KIT_SET_UP: 'Sensor Kit Set Up',
     TEMPERATURE_AND_HUMIDITY_SENSOR_DATA: 'Temperature & Humidity Sensor Data',
     TIME_PERIOD: 'Time Period',
     REFRESH_DATA: 'Refresh Data',

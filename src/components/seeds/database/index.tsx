@@ -106,8 +106,8 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   message: {
     margin: '0 auto',
-    marginTop: '10%',
     maxWidth: '800px',
+    padding: '48px',
     width: '800px',
   },
   checkInText: {
@@ -565,7 +565,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
           />
         </>
       )}
-      <TfMain>
+      <TfMain backgroundImageVisible={!isOnboarded}>
         <EditColumns open={editColumnsModalOpen} value={displayColumnNames} onClose={onCloseEditColumnsModal} />
         {organization && (
           <DownloadReportModal
