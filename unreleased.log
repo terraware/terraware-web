@@ -1,3 +1,4 @@
+f93936a SW-2401 / SW-2398 / SW-2399 Empty state updates (#844)
 042fd8e SW-2381 Refactor plants dashboard charts for reusability (#841)
 69c04b3 SW-2345 Show error on select-purpose-form if ouptlant has no ready seedlings (#840)
 008cfdf SW-2384/SW-2385 Fix fuzzy searches that were using empty strings (#837)
