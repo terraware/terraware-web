@@ -17,6 +17,9 @@ export default function PlantBySpeciesChart({ plantsBySpecies }: PlantBySpeciesC
     if (plantsBySpecies) {
       setLabels(Object.keys(plantsBySpecies));
       setValues(Object.values(plantsBySpecies));
+    } else {
+      setLabels(undefined);
+      setValues(undefined);
     }
   }, [plantsBySpecies]);
 
