@@ -5,9 +5,9 @@ const useStyles = makeStyles(() => ({
   titleContainer: {
     display: 'flex',
     alignItems: 'center',
+    width: '100%',
   },
-  title: {},
-  selectedSection: {
+  title: {
     fontWeight: 600,
     fontSize: 24,
   },
@@ -22,11 +22,9 @@ export default function Title({ page }: TitleProps): JSX.Element {
 
   return (
     <div className={classes.titleContainer}>
-      <div className={classes.title}>
-        <Typography className={classes.selectedSection} variant='h1'>
-          {page}
-        </Typography>
-      </div>
+      <Typography className={classes.title} variant='h1'>
+        {page}
+      </Typography>
     </div>
   );
 }
