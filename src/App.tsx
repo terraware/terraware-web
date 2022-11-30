@@ -408,6 +408,10 @@ export default function App() {
     if (
       location.pathname.startsWith(APP_PATHS.HOME) ||
       (location.pathname.startsWith(APP_PATHS.SPECIES) && !selectedOrgHasSpecies()) ||
+      (location.pathname.startsWith(APP_PATHS.ACCESSIONS) &&
+        (!selectedOrgHasSeedBanks() || !selectedOrgHasSpecies())) ||
+      (location.pathname.startsWith(APP_PATHS.MONITORING) && !selectedOrgHasSeedBanks()) ||
+      (location.pathname.startsWith(APP_PATHS.INVENTORY) && (!selectedOrgHasNurseries() || !selectedOrgHasSpecies())) ||
       (location.pathname.startsWith(APP_PATHS.SEED_BANKS) && !selectedOrgHasSeedBanks()) ||
       (location.pathname.startsWith(APP_PATHS.NURSERIES) && !selectedOrgHasNurseries()) ||
       (location.pathname.startsWith(APP_PATHS.PLANTING_SITES) && !selectedOrgHasPlantingSites())
