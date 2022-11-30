@@ -101,19 +101,26 @@ export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Elemen
     <TfMain>
       <Grid item xs={12} display={isMobile ? 'block' : 'flex'}>
         <Typography sx={{ fontSize: '24px', fontWeight: 600, alignItems: 'center' }}>{strings.DASHBOARD}</Typography>
-        {!isMobile && (
-          <Box sx={{ margin: '0 1%', width: '1px', height: '32px', backgroundColor: theme.palette.TwClrBgTertiary }} />
+        {plantingSites.length > 0 && (
+          <>
+            {!isMobile && (
+              <Box
+                sx={{ margin: '0 1%', width: '1px', height: '32px', backgroundColor: theme.palette.TwClrBgTertiary }}
+              />
+            )}
+            <Box display='flex' alignItems='center' paddingTop={isMobile ? 2 : 0}>
+              <Typography sx={{ paddingRight: 1, fontSize: '16px', fontWeight: 500 }}>
+                {strings.PLANTING_SITE}
+              </Typography>
+              <Select
+                options={plantingSites.map((ps) => ps?.name || '')}
+                onChange={onChangePlantingSite}
+                selectedValue={selectedPlantingSite?.name}
+                placeholder={strings.SELECT}
+              />
+            </Box>
+          </>
         )}
-        <Box display='flex' alignItems='center' paddingTop={isMobile ? 2 : 0}>
-          <Typography sx={{ paddingRight: 1, fontSize: '16px', fontWeight: 500 }}>{strings.PLANTING_SITE}</Typography>
-
-          <Select
-            options={plantingSites.map((ps) => ps?.name || '')}
-            onChange={onChangePlantingSite}
-            selectedValue={selectedPlantingSite?.name}
-            placeholder={strings.SELECT}
-          />
-        </Box>
       </Grid>
       <PlantingSiteDetails
         plantingSite={selectedPlantingSite}
