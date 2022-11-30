@@ -22,9 +22,7 @@ export default function PlantingSiteDashboardMap(props: PlantingSiteDashboardMap
     }
 
     return plots.reduce((accumulator: any, plot) => {
-      if (plot.populations?.length) {
-        accumulator[plot.id.toString()] = plot.populations;
-      }
+      accumulator[plot.id.toString()] = plot.populations;
       return accumulator;
     }, {});
   }, [plots]);
