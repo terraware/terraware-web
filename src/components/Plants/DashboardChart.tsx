@@ -1,8 +1,8 @@
-import Chart from 'chart.js/auto';
 import React from 'react';
 import { makeStyles } from '@mui/styles';
 import { useTheme } from '@mui/material';
 import { generateTerrawareRandomColors } from 'src/utils/generateRandomColor';
+import { BarElement, Chart } from 'chart.js';
 
 const useStyles = makeStyles(() => ({
   chart: {
@@ -15,6 +15,13 @@ export interface DashboardChartProps {
   chartLabels?: string[];
   chartValues?: number[];
 }
+
+BarElement.prototype.inRange = function (chartX: number, chartY: number) {
+  const width = BarElement.prototype.getProps(['width']).width;
+  const base = BarElement.prototype.getProps(['base']).base;
+
+  return chartX >= this.x - width / 2 && chartX <= this.x + width / 2 && chartY >= this.y && chartY <= base + 5;
+};
 
 export default function DashboardChart(props: DashboardChartProps): JSX.Element {
   const { chartId, chartLabels, chartValues } = props;
