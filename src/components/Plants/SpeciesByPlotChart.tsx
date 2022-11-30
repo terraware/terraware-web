@@ -28,6 +28,7 @@ export default function SpeciesByPlotChart(props: Props): JSX.Element {
 
   React.useEffect(() => {
     if (!plots?.length) {
+      setSelectedPlot(undefined);
       return;
     }
     const plot = plots.find((p) => p.id.toString() === lastPlot?.toString());
