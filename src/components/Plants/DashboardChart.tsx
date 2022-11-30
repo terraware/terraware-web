@@ -12,8 +12,8 @@ const useStyles = makeStyles(() => ({
 
 export interface DashboardChartProps {
   chartId: string;
-  chartLabels: string[];
-  chartValues: number[];
+  chartLabels?: string[];
+  chartValues?: number[];
 }
 
 export default function DashboardChart(props: DashboardChartProps): JSX.Element {
@@ -24,8 +24,8 @@ export default function DashboardChart(props: DashboardChartProps): JSX.Element 
 
   React.useEffect(() => {
     const ctx = chartRef?.current?.getContext('2d');
-    if (ctx && chartLabels && chartValues) {
-      const colors = generateTerrawareRandomColors(theme, chartLabels.length);
+    if (ctx) {
+      const colors = generateTerrawareRandomColors(theme, chartLabels?.length || 0);
       const myChart = new Chart(ctx, {
         type: 'bar',
         data: {

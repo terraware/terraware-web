@@ -51,17 +51,13 @@ export default function SpeciesByPlotChart(props: Props): JSX.Element {
             />
           </Box>
         )}
-        {selectedPlot && (
-          <Box sx={{ height: '180px', marginTop: 2 }}>
-            {selectedPlot && selectedPlot.populations && (
-              <DashboardChart
-                chartId='speciesByPlotChart'
-                chartLabels={selectedPlot.populations.map((population) => population.species_scientificName)}
-                chartValues={selectedPlot.populations.map((population) => population.totalPlants)}
-              />
-            )}
-          </Box>
-        )}
+        <Box sx={{ height: '180px', marginTop: 2 }}>
+          <DashboardChart
+            chartId='speciesByPlotChart'
+            chartLabels={selectedPlot?.populations?.map((population) => population.species_scientificName)}
+            chartValues={selectedPlot?.populations?.map((population) => population.totalPlants)}
+          />
+        </Box>
       </Box>
     </>
   );

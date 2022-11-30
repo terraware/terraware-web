@@ -24,7 +24,7 @@ export default function PlantBySpeciesChart({ plantsBySpecies }: PlantBySpeciesC
     <>
       <Typography sx={cardTitleStyle}>{strings.NUMBER_OF_PLANTS_BY_SPECIES}</Typography>
       <Box sx={{ marginTop: theme.spacing(3) }}>
-        {labels && values && <DashboardChart chartId='plantsBySpecies' chartLabels={labels} chartValues={values} />}
+        <DashboardChart chartId='plantsBySpecies' chartLabels={labels} chartValues={values} />
       </Box>
     </>
   );
