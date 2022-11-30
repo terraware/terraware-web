@@ -1,17 +1,9 @@
-import Chart from 'chart.js/auto';
 import React, { useState } from 'react';
-import { makeStyles } from '@mui/styles';
-import { generateTerrawareRandomColors } from 'src/utils/generateRandomColor';
 import { Box, Typography, useTheme } from '@mui/material';
 import { cardTitleStyle, PlantingSitesPlots } from './PlantingSiteDetails';
 import strings from 'src/strings';
 import { Dropdown } from '@terraware/web-components';
-
-const useStyles = makeStyles(() => ({
-  chart: {
-    height: '180px',
-  },
-}));
+import DashboardChart from './DashboardChart';
 
 export interface Props {
   plots?: PlantingSitesPlots[];
@@ -21,8 +13,6 @@ export interface Props {
 
 export default function SpeciesByPlotChart(props: Props): JSX.Element {
   const { plots, updatePlotPreferences, lastPlot } = props;
-  const classes = useStyles();
-  const chartRef = React.useRef<HTMLCanvasElement>(null);
   const [selectedPlot, setSelectedPlot] = useState<PlantingSitesPlots>();
   const theme = useTheme();
 
@@ -44,62 +34,6 @@ export default function SpeciesByPlotChart(props: Props): JSX.Element {
     setSelectedPlot(plot || plots[0]);
   }, [lastPlot, plots]);
 
-  React.useEffect(() => {
-    const populations = selectedPlot?.populations;
-    const ctx = chartRef?.current?.getContext('2d');
-    if (ctx && populations) {
-      const colors = generateTerrawareRandomColors(theme, populations.length);
-      const data = populations;
-      const myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: data.map((population) => population.species_scientificName),
-          datasets: [
-            {
-              data: data.map((population) => population.totalPlants),
-              barThickness: 50,
-              backgroundColor: colors,
-            },
-          ],
-        },
-        options: {
-          maintainAspectRatio: false,
-          layout: {
-            padding: {
-              left: 0,
-              right: 0,
-              top: 10,
-            },
-          },
-          plugins: {
-            legend: {
-              display: false,
-            },
-            tooltip: {
-              displayColors: false,
-            },
-          },
-          scales: {
-            y: {
-              ticks: {
-                callback: (value, index, ticks) => {
-                  if (+value % 1 === 0) {
-                    return value;
-                  }
-                },
-              },
-            },
-          },
-        },
-      });
-      // when component unmounts
-      return () => {
-        myChart.destroy();
-      };
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedPlot]);
-
   return (
     <>
       <Typography sx={cardTitleStyle}>{strings.NUMBER_OF_PLANTS_BY_PLOT_AND_SPECIES}</Typography>
@@ -119,7 +53,13 @@ export default function SpeciesByPlotChart(props: Props): JSX.Element {
         )}
         {selectedPlot && (
           <Box sx={{ height: '180px', marginTop: 2 }}>
-            <canvas id='speciesByPlotChart' ref={chartRef} className={classes.chart} />
+            {selectedPlot && selectedPlot.populations && (
+              <DashboardChart
+                chartId='speciesByPlotChart'
+                chartLabels={selectedPlot.populations.map((population) => population.species_scientificName)}
+                chartValues={selectedPlot.populations.map((population) => population.totalPlants)}
+              />
+            )}
           </Box>
         )}
       </Box>
