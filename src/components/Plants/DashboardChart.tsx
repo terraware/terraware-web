@@ -58,11 +58,7 @@ export default function DashboardChart(props: DashboardChartProps): JSX.Element 
           scales: {
             y: {
               ticks: {
-                callback: (value, index, ticks) => {
-                  if (+value % 1 === 0) {
-                    return value;
-                  }
-                },
+                precision: 0,
               },
             },
           },
