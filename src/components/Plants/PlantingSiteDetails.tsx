@@ -37,7 +37,8 @@ export default function PlantingSiteDetails(props: PlantingSiteDetailsProps): JS
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const [plantsBySpecies, setPlantsBySpecies] = useState<{ [key: string]: number }>();
-  const [plots, setPlots] = useState<PlantingSitesPlots[]>();
+  const [plotsWithPlants, setPlotsWithPlants] = useState<PlantingSitesPlots[]>();
+  const [hasPlots, setHasPlots] = useState<boolean>(false);
 
   const borderCardStyle = {
     border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
@@ -73,12 +74,12 @@ export default function PlantingSiteDetails(props: PlantingSiteDetailsProps): JS
         })) as unknown as PlantingSitesPlots[] | null;
 
         if (serverResponse) {
-          const plotsWithPlants = serverResponse
+          const validPlots = serverResponse
             .filter((plot) => plot?.populations?.length > 0)
             .sort((a, b) => a.fullName.localeCompare(b.fullName));
-          setPlots(plotsWithPlants);
+          setPlotsWithPlants(validPlots);
           let totalPlantsOfSite = 0;
-          const plantsPerSpecies: { [key: string]: number } = plotsWithPlants.reduce((acc, plot) => {
+          const plantsPerSpecies: { [key: string]: number } = validPlots.reduce((acc, plot) => {
             plot.populations.forEach((population) => {
               totalPlantsOfSite = +totalPlantsOfSite + +population.totalPlants;
               if (acc[population.species_scientificName]) {
@@ -93,6 +94,7 @@ export default function PlantingSiteDetails(props: PlantingSiteDetailsProps): JS
 
           setTotalPlants(totalPlantsOfSite);
           setPlantsBySpecies(plantsPerSpecies);
+          setHasPlots(serverResponse.length > 0);
         }
       }
     };
@@ -101,20 +103,26 @@ export default function PlantingSiteDetails(props: PlantingSiteDetailsProps): JS
   }, [plantingSite]);
 
   return (
-    <Grid container display='flex' marginTop={6}>
-      <Grid item xs={isMobile ? 12 : 6} sx={mapCardStyle}>
-        <PlantingSiteDashboardMap plots={plots} siteId={plantingSite?.id} />
+    <Grid container display='flex' marginTop={6} flexGrow={1}>
+      <Grid item xs={isMobile ? 12 : 8} sx={mapCardStyle}>
+        <PlantingSiteDashboardMap plots={plotsWithPlants} siteId={plantingSite?.id} />
       </Grid>
-      <Grid item xs={isMobile ? 12 : 6} sx={{ paddingLeft: isMobile ? 0 : 2 }}>
-        <Box sx={borderCardStyle}>
+      <Grid item xs={isMobile ? 12 : 4} sx={{ paddingLeft: isMobile ? 0 : 2 }}>
+        <Box sx={{ ...borderCardStyle, minHeight: '160px' }}>
           <TotalCount totalCount={totalPlants} />
         </Box>
-        <Box sx={borderCardStyle}>
+        <Box sx={{ ...borderCardStyle, minHeight: '240px' }}>
           <PlantBySpeciesChart plantsBySpecies={plantsBySpecies} />
         </Box>
-        <Box sx={borderCardStyle}>
-          <SpeciesByPlotChart plots={plots} updatePlotPreferences={updatePlotPreferences} lastPlot={lastPlot} />
-        </Box>
+        {(!plantingSite || hasPlots) && (
+          <Box sx={{ ...borderCardStyle, minHeight: '240px' }}>
+            <SpeciesByPlotChart
+              plots={plotsWithPlants}
+              updatePlotPreferences={updatePlotPreferences}
+              lastPlot={lastPlot}
+            />
+          </Box>
+        )}
       </Grid>
     </Grid>
   );

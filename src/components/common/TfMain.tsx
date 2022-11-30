@@ -15,10 +15,11 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 interface Props {
   children?: React.ReactNode;
+  moreScreen?: boolean;
 }
 
-export default function TfMain({ children }: Props): JSX.Element {
+export default function TfMain({ children, moreScreen }: Props): JSX.Element {
   const classes = useStyles();
 
-  return <main className={classes.main}>{children}</main>;
+  return <main className={`${classes.main} ${moreScreen ? 'moreScreen' : ''}`}>{children}</main>;
 }

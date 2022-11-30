@@ -49,10 +49,11 @@ export default function PlantingSiteDashboardMap(props: PlantingSiteDashboardMap
   }, [siteId, snackbar]);
 
   const contextRenderer = useSpeciesPlantsRenderer(plotsMap);
+  const hasPolygons = plantingSite && plantingSite.boundary && plantingSite.boundary.coordinates?.length > 0;
 
   return (
     <Box display='flex' height='100%'>
-      {plantingSite ? (
+      {hasPolygons ? (
         <PlantingSiteMap plantingSite={plantingSite} key={siteId} style={MAP_STYLE} contextRenderer={contextRenderer} />
       ) : (
         <GenericMap style={MAP_STYLE} />
