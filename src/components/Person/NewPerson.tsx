@@ -27,6 +27,12 @@ const useStyles = makeStyles((theme: Theme) => ({
   title: {
     marginBottom: '8px',
   },
+  roleDescription: {
+    margin: 0,
+  },
+  rolesList: {
+    margin: 0,
+  },
 }));
 
 type PersonViewProps = {
@@ -45,7 +51,7 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
   const [people, setPeople] = useState<OrganizationUser[]>();
   const { personId } = useParams<{ personId: string }>();
   const [personSelectedToEdit, setPersonSelectedToEdit] = useState<OrganizationUser>();
-  const { isMobile, isTablet } = useDeviceInfo();
+  const { isDesktop, isMobile, isTablet } = useDeviceInfo();
 
   const [newPerson, setNewPerson, onChange] = useForm<OrganizationUser>({
     id: -1,
@@ -239,16 +245,16 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
             />
           </Grid>
         </Grid>
-        <Box display='flex' flexDirection='column' marginTop={theme.spacing(9)}>
+        <Box display='flex' flexDirection='column' marginTop={isDesktop ? theme.spacing(9) : theme.spacing(4)}>
           <Box>
-            <p>{strings.ROLES_INFO}</p>
-            <ul>
+            <p className={classes.roleDescription}>{strings.ROLES_INFO}</p>
+            <ul className={classes.rolesList}>
               <li>{strings.CONTRIBUTOR_INFO}</li>
               <li>{strings.MANAGER_INFO}</li>
               <li>{strings.ADMIN_INFO}</li>
             </ul>
           </Box>
-          <Box width={roleSelectSize()}>
+          <Box width={roleSelectSize()} marginTop={theme.spacing(4)}>
             <Select
               id='role'
               label={strings.ROLE_REQUIRED}
