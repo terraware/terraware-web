@@ -133,7 +133,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
         id: 'plots',
         isInteractive: true,
         annotation: {
-          textField: 'name',
+          textField: 'fullName',
           textColor: theme.palette.TwClrBaseWhite as string,
           textSize: 16,
         },
@@ -193,14 +193,6 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
         <CircularProgress sx={{ margin: 'auto' }} />
       </Box>
     );
-  }
-
-  const hasPolygons = mapOptions.sources?.some((source) => {
-    return source.entities?.some((entity) => entity?.boundary?.length);
-  });
-
-  if (!hasPolygons) {
-    return null;
   }
 
   return (

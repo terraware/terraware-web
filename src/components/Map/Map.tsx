@@ -47,9 +47,13 @@ export default function Map(props: MapProps): JSX.Element {
   const mapRef = useRef<any | null>(null);
 
   const onMapLoad = useCallback(() => {
-    const { bbox } = options;
-    // fit to bounding box
-    if (mapRef?.current !== undefined) {
+    const { bbox, sources } = options;
+    const hasEntities = sources?.some((source) => {
+      return source.entities?.some((entity) => entity?.boundary?.length);
+    });
+
+    // fit to bounding box if we have geometries
+    if (hasEntities && mapRef?.current !== undefined) {
       const mapInstance: any = mapRef.current.getMap();
       setZoomEnd(false);
       setZoomBegin(true);

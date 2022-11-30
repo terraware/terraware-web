@@ -16,15 +16,13 @@ export default function PlantingSiteDashboardMap(props: PlantingSiteDashboardMap
   const [snackbar] = useState(useSnackbar());
   const [plantingSite, setPlantingSite] = useState<PlantingSite>();
 
-  const plotsWithPlants = useMemo(() => {
+  const plotsMap = useMemo(() => {
     if (!plots) {
       return [];
     }
 
     return plots.reduce((accumulator: any, plot) => {
-      if (plot.populations?.length) {
-        accumulator[plot.id.toString()] = plot.populations;
-      }
+      accumulator[plot.id.toString()] = plot.populations;
       return accumulator;
     }, {});
   }, [plots]);
@@ -46,7 +44,7 @@ export default function PlantingSiteDashboardMap(props: PlantingSiteDashboardMap
     fetchPlantingSite();
   }, [siteId, snackbar]);
 
-  const contextRenderer = useSpeciesPlantsRenderer(plotsWithPlants);
+  const contextRenderer = useSpeciesPlantsRenderer(plotsMap);
 
   return (
     <Box display='flex' height='100%'>
