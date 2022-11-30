@@ -101,9 +101,9 @@
     ]
   },
   "devDependencies": {
-    "@cypress/code-coverage": "^3.9.9",
+    "@cypress/code-coverage": "^3.10.0",
     "@cypress/instrument-cra": "^1.4.0",
-    "cypress": "^8.7.0",
+    "cypress": "^12.3.0",
     "esm": "^3.2.25",
     "express": "^4.18.2",
     "http-proxy-middleware": "^2.0.1",
