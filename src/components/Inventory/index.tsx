@@ -55,11 +55,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     top: '50%',
     left: '50%',
   },
-  contentContainer: {
-    borderRadius: '32px',
-    padding: theme.spacing(3),
-    minWidth: 'fit-content',
-  },
   actionMenuIcon: {
     fill: theme.palette.TwClrTxtBrand,
   },
@@ -254,6 +249,8 @@ export default function Inventory(props: InventoryProps): JSX.Element {
     onApplyFilters();
   }, [filters, onApplyFilters]);
 
+  const shouldShowTable = isOnboarded && unfilteredInventory && unfilteredInventory.length > 0;
+
   const [actionMenuAnchorEl, setActionMenuAnchorEl] = React.useState<HTMLButtonElement | null>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
   const actionMenuId = actionMenuOpen ? 'simple-popover' : undefined;
@@ -346,7 +343,15 @@ export default function Inventory(props: InventoryProps): JSX.Element {
           </Grid>
         </Box>
       </PageHeaderWrapper>
-      <div ref={contentRef} className={classes.contentContainer}>
+      <Box
+        ref={contentRef}
+        sx={{
+          backgroundColor: shouldShowTable ? theme.palette.TwClrBg : undefined,
+          borderRadius: '32px',
+          padding: theme.spacing(3),
+          minWidth: 'fit-content',
+        }}
+      >
         {isOnboarded ? (
           unfilteredInventory && unfilteredInventory.length > 0 ? (
             <InventoryTable
@@ -389,7 +394,7 @@ export default function Inventory(props: InventoryProps): JSX.Element {
             )}
           </Container>
         )}
-      </div>
+      </Box>
     </TfMain>
   );
 }
