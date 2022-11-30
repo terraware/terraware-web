@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { makeStyles } from '@mui/styles';
 import strings from 'src/strings';
 import {
-  Box,
   Container,
   FormControl,
   FormControlLabel,
@@ -20,22 +19,20 @@ import { isInTheFuture } from '@terraware/web-components/utils';
 import { ServerOrganization } from 'src/types/Organization';
 import { APP_PATHS } from 'src/constants';
 import Divisor from 'src/components/common/Divisor';
-import { DatePicker, Dropdown, Textfield, Icon } from '@terraware/web-components';
+import { DatePicker, Dropdown, Textfield } from '@terraware/web-components';
 import { getAllNurseries, isContributor } from 'src/utils/organization';
 import { listPlantingSites } from 'src/api/tracking/tracking';
 import { PlantingSite, Plot } from 'src/api/types/tracking';
 import useSnackbar from 'src/utils/useSnackbar';
 import { DropdownItem } from '@terraware/web-components/components/Dropdown';
 import FormBottomBar from 'src/components/common/FormBottomBar';
+import ErrorMessage from 'src/components/common/ErrorMessage';
 
 const useStyles = makeStyles((theme: Theme) => ({
   withdrawnQuantity: {
     '&> #withdrawnQuantity': {
       height: '44px',
     },
-  },
-  errorIcon: {
-    fill: theme.palette.TwClrTxtDanger,
   },
 }));
 
@@ -353,14 +350,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                   <FormControlLabel value={DEAD} control={<Radio />} label={strings.DEAD} />
                   <FormControlLabel value={OTHER} control={<Radio />} label={strings.OTHER} />
                 </RadioGroup>
-                {noReadySeedlings && (
-                  <Box display='flex' flexDirection='row' alignItems='center'>
-                    <Icon name='error' className={classes.errorIcon} />
-                    <Typography marginLeft={1} fontWeight={500} fontSize='14px' color={theme.palette.TwClrTxtDanger}>
-                      {strings.OUTPLANTS_REQUIRE_READY_SEEDLINGS}
-                    </Typography>
-                  </Box>
-                )}
+                {noReadySeedlings && <ErrorMessage message={strings.OUTPLANTS_REQUIRE_READY_SEEDLINGS} />}
               </FormControl>
             </Grid>
 
