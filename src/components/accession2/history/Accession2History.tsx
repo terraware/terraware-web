@@ -40,6 +40,9 @@ export default function Accession2History(props: Accession2HistoryProps): JSX.El
 
   return (
     <Box display='flex' flexDirection='column'>
+      <Typography fontSize='16px' fontWeight={600} marginBottom={theme.spacing(3.5)}>
+        {strings.HISTORY}
+      </Typography>
       {history.map((item, index) => (
         <Box
           key={index}
