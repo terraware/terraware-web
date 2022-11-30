@@ -1,4 +1,4 @@
-import { useTheme, Box } from '@mui/material';
+import { useTheme, Box, Typography } from '@mui/material';
 import { Button } from '@terraware/web-components';
 import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
@@ -35,7 +35,16 @@ export default function ViabilityTestingDatabase(props: ViabilityTestingDatabase
 
   return (
     <Box display='flex' flexDirection='column'>
-      <Box display='flex' flexDirection='row' justifyContent='end' alignItems='center' marginBottom={theme.spacing(3)}>
+      <Box
+        display='flex'
+        flexDirection='row'
+        justifyContent='space-between'
+        alignItems='center'
+        marginBottom={theme.spacing(3)}
+      >
+        <Typography fontSize='16px' fontWeight={600}>
+          {strings.VIABILITY_TESTS}
+        </Typography>
         {canAddTest ? (
           <Button
             priority='secondary'

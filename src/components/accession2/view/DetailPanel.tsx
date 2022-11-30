@@ -24,6 +24,12 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
 
+  const headerStyle = {
+    fontSize: '16px',
+    fontWeight: 600,
+    marginBottom: theme.spacing(3.5),
+  };
+
   const categoryStyle = {
     color: theme.palette.TwClrTxtSecondary,
     fontSize: '14px',
@@ -121,6 +127,9 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
       />
       <Grid container>
         <Grid item xs={9}>
+          <Grid item xs={12} sx={headerStyle}>
+            {strings.ACCESSION_DETAILS}
+          </Grid>
           <Grid item xs={12} sx={gridRowStyle}>
             <Grid item xs={gridLeftSide} sx={categoryStyle}>
               {strings.COLLECTION_DATE}
