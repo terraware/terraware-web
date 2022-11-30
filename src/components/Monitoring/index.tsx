@@ -32,6 +32,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     margin: '0 auto',
     marginTop: (props: StyleProps) => (props.isMobile ? '32px' : '80px'),
     maxWidth: '800px',
+    padding: '24px 48px 48px',
   },
   titleContainer: {
     display: 'flex',
