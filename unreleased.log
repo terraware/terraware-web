@@ -1,3 +1,4 @@
+042fd8e SW-2381 Refactor plants dashboard charts for reusability (#841)
 69c04b3 SW-2345 Show error on select-purpose-form if ouptlant has no ready seedlings (#840)
 008cfdf SW-2384/SW-2385 Fix fuzzy searches that were using empty strings (#837)
 5fca6ac SW-2375 Save last visited planting site and plot in user preferences (#833)
