@@ -4,7 +4,11 @@ import { PlantingSite } from 'src/api/types/tracking';
 import { getPlantingSite } from 'src/api/tracking/tracking';
 import useSnackbar from 'src/utils/useSnackbar';
 import { PlantingSitesPlots } from './PlantingSiteDetails';
-import { PlantingSiteMap, useSpeciesPlantsRenderer } from 'src/components/Map';
+import { GenericMap, PlantingSiteMap, useSpeciesPlantsRenderer } from 'src/components/Map';
+
+const MAP_STYLE = {
+  borderRadius: '8px',
+};
 
 type PlantingSiteDashboardMapProps = {
   siteId?: number;
@@ -48,13 +52,10 @@ export default function PlantingSiteDashboardMap(props: PlantingSiteDashboardMap
 
   return (
     <Box display='flex' height='100%'>
-      {plantingSite && (
-        <PlantingSiteMap
-          plantingSite={plantingSite}
-          key={siteId}
-          style={{ borderRadius: '8px' }}
-          contextRenderer={contextRenderer}
-        />
+      {plantingSite ? (
+        <PlantingSiteMap plantingSite={plantingSite} key={siteId} style={MAP_STYLE} contextRenderer={contextRenderer} />
+      ) : (
+        <GenericMap style={MAP_STYLE} />
       )}
     </Box>
   );
