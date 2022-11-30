@@ -26,6 +26,7 @@ import { PlantingSite, Plot } from 'src/api/types/tracking';
 import useSnackbar from 'src/utils/useSnackbar';
 import { DropdownItem } from '@terraware/web-components/components/Dropdown';
 import FormBottomBar from 'src/components/common/FormBottomBar';
+import ErrorMessage from 'src/components/common/ErrorMessage';
 
 const useStyles = makeStyles((theme: Theme) => ({
   withdrawnQuantity: {
@@ -61,6 +62,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const [plots, setPlots] = useState<any[]>([]);
   const [zoneId, setZoneId] = useState<string | undefined>();
   const [snackbar] = useState(useSnackbar());
+  const [noReadySeedlings, setNoReadySeedlings] = useState<boolean>(false);
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const classes = useStyles();
@@ -295,6 +297,29 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     }
   }, [selectedNursery, organization, fetchPlantingSites, isOutplant]);
 
+  useEffect(() => {
+    if (localRecord.purpose === OUTPLANT) {
+      const hasReadyQuantities = batches.some((batch) => {
+        if (selectedNursery && batch.facility_id.toString() !== selectedNursery) {
+          return false;
+        }
+        return Number(batch.readyQuantity) > 0;
+      });
+
+      if (!hasReadyQuantities) {
+        if (!noReadySeedlings) {
+          setNoReadySeedlings(true);
+          snackbar.toastError(
+            strings.NO_SEEDLINGS_AVAILABLE_TO_OUTPLANT_DESCRIPTION,
+            strings.NO_SEEDLINGS_AVAILABLE_TO_OUTPLANT_TITLE
+          );
+        }
+        return;
+      }
+    }
+    setNoReadySeedlings(false);
+  }, [localRecord.purpose, noReadySeedlings, snackbar, selectedNursery, OUTPLANT, batches]);
+
   return (
     <>
       <Container
@@ -325,6 +350,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                   <FormControlLabel value={DEAD} control={<Radio />} label={strings.DEAD} />
                   <FormControlLabel value={OTHER} control={<Radio />} label={strings.OTHER} />
                 </RadioGroup>
+                {noReadySeedlings && <ErrorMessage message={strings.OUTPLANTS_REQUIRE_READY_SEEDLINGS} />}
               </FormControl>
             </Grid>
 
@@ -449,7 +475,12 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
           </Grid>
         </Grid>
       </Container>
-      <FormBottomBar onCancel={onCancel} onSave={onNextHandler} saveButtonText={saveText} />
+      <FormBottomBar
+        onCancel={onCancel}
+        onSave={onNextHandler}
+        saveButtonText={saveText}
+        saveDisabled={noReadySeedlings}
+      />
     </>
   );
 }
