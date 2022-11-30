@@ -48,6 +48,7 @@ export default function SpeciesByPlotChart(props: Props): JSX.Element {
               placeholder={strings.SELECT}
               onChange={onChangePlot}
               selectedValue={selectedPlot?.id}
+              disabled={plots.length === 0}
             />
           </Box>
         )}

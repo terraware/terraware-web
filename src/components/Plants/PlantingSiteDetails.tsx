@@ -73,20 +73,21 @@ export default function PlantingSiteDetails(props: PlantingSiteDetailsProps): JS
         })) as unknown as PlantingSitesPlots[] | null;
 
         if (serverResponse) {
-          setPlots(serverResponse);
+          const plotsWithPlants = serverResponse
+            .filter((plot) => plot?.populations?.length > 0)
+            .sort((a, b) => a.fullName.localeCompare(b.fullName));
+          setPlots(plotsWithPlants);
           let totalPlantsOfSite = 0;
-          const plantsPerSpecies: { [key: string]: number } = serverResponse.reduce((acc, plot) => {
-            if (plot.populations) {
-              plot.populations.forEach((population) => {
-                totalPlantsOfSite = +totalPlantsOfSite + +population.totalPlants;
-                if (acc[population.species_scientificName]) {
-                  acc[population.species_scientificName] =
-                    +acc[population.species_scientificName] + +population.totalPlants;
-                } else {
-                  acc[population.species_scientificName] = +population.totalPlants;
-                }
-              });
-            }
+          const plantsPerSpecies: { [key: string]: number } = plotsWithPlants.reduce((acc, plot) => {
+            plot.populations.forEach((population) => {
+              totalPlantsOfSite = +totalPlantsOfSite + +population.totalPlants;
+              if (acc[population.species_scientificName]) {
+                acc[population.species_scientificName] =
+                  +acc[population.species_scientificName] + +population.totalPlants;
+              } else {
+                acc[population.species_scientificName] = +population.totalPlants;
+              }
+            });
             return acc;
           }, {} as { [key: string]: number });
 
