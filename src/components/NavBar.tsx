@@ -45,6 +45,7 @@ export default function NavBar({
   const isInventoryRoute = useRouteMatch(APP_PATHS.INVENTORY + '/');
   const isPlantingSitesRoute = useRouteMatch(APP_PATHS.PLANTING_SITES + '/');
   const isPlantsDashboardRoute = useRouteMatch(APP_PATHS.PLANTS_DASHBOARD + '/');
+  const isWithdrawalLogRoute = useRouteMatch(APP_PATHS.NURSERY_WITHDRAWALS + '/');
 
   const trackingEnabled = isEnabled('Tracking V1');
 
@@ -122,6 +123,14 @@ export default function NavBar({
           selected={!!isInventoryRoute}
           onClick={() => {
             closeAndNavigateTo(APP_PATHS.INVENTORY);
+          }}
+          id='inventory'
+        />
+        <NavItem
+          label={strings.WITHDRAWAL_LOG}
+          selected={!!isWithdrawalLogRoute}
+          onClick={() => {
+            closeAndNavigateTo(APP_PATHS.NURSERY_WITHDRAWALS);
           }}
           id='inventory'
         />

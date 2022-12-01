@@ -46,4 +46,7 @@ export enum APP_PATHS {
   PLANTING_SITES_NEW = '/planting-sites/new',
   PLANTING_SITES_VIEW = '/planting-sites/:plantingSiteId',
   PLANTING_SITES_EDIT = '/planting-sites/:plantingSiteId/edit',
+  NURSERY_WITHDRAWALS = '/nursery/withdrawals',
+  NURSERY_WITHDRAWALS_DETAILS = '/nursery/withdrawals/:withdrawalId',
+  NURSERY_REASSIGNMENT = '/nursery/reassignment/:deliveryId',
 }

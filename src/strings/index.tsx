@@ -873,6 +873,7 @@ const strings = new LocalizedStrings({
       'There are no batches selected with seedlings that are "ready." Select another withdraw purpose or cancel and select a different batch.',
     OUTPLANTS_REQUIRE_READY_SEEDLINGS: 'Outplants require batches with seedlings that are "ready."',
     EDIT_QUANTITY_DISABLED: 'Currently, you may only input a quantity when the status is "Drying" or “In Storage.”',
+    WITHDRAWAL_LOG: 'Withdrawal Log',
   },
 });
 
