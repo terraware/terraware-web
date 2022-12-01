@@ -126,14 +126,16 @@ export default function NavBar({
           }}
           id='inventory'
         />
-        <NavItem
-          label={strings.WITHDRAWAL_LOG}
-          selected={!!isWithdrawalLogRoute}
-          onClick={() => {
-            closeAndNavigateTo(APP_PATHS.NURSERY_WITHDRAWALS);
-          }}
-          id='inventory'
-        />
+        {trackingEnabled && (
+          <NavItem
+            label={strings.WITHDRAWAL_LOG}
+            selected={!!isWithdrawalLogRoute}
+            onClick={() => {
+              closeAndNavigateTo(APP_PATHS.NURSERY_WITHDRAWALS);
+            }}
+            id='inventory'
+          />
+        )}
       </>
       {trackingEnabled && (
         <>
