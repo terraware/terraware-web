@@ -27,7 +27,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     marginBottom: theme.spacing(6),
     background: theme.palette.TwClrBg,
     height: 'calc(100% - 96px)',
-    overflow: 'scroll',
   },
   mobileContainer: {
     paddingBottom: theme.spacing(35),
