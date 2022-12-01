@@ -1,3 +1,4 @@
+3591d61 Fix temporary rendering of a generic map in plants dashboard (#856)
 03b4d56 SW-2410 Planting site map should start with the site boundary (#854)
 511fdb0 SW-2390 Fix mapbox token expiration behavior (#853)
 fc2f2fd SW-2300 Add tooltip for disabled quantity field in the accession detail page (#851)
