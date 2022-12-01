@@ -19,6 +19,10 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageSnackbar from 'src/components/PageSnackbar';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 
+interface StyleProps {
+  isMobile: boolean;
+}
+
 const useStyles = makeStyles((theme: Theme) => ({
   mainTitle: {
     display: 'flex',
@@ -26,13 +30,15 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   message: {
     margin: '0 auto',
-    marginTop: '10%',
+    marginTop: (props: StyleProps) => (props.isMobile ? '32px' : '80px'),
     maxWidth: '800px',
+    padding: '24px 48px 48px',
   },
   titleContainer: {
     display: 'flex',
     alignItems: 'center',
     paddingBottom: theme.spacing(2),
+    paddingLeft: theme.spacing(3),
   },
   contentContainer: {
     width: '100%',
@@ -58,7 +64,7 @@ type MonitoringProps = {
 
 export default function Monitoring(props: MonitoringProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
-  const classes = useStyles();
+  const classes = useStyles({ isMobile });
   const history = useHistory();
   const { organization, hasSeedBanks, reloadData } = props;
   const [selectedSeedBank, setSelectedSeedBank] = useState<Facility>();
@@ -134,9 +140,9 @@ export default function Monitoring(props: MonitoringProps): JSX.Element {
 
   return (
     <TfMain backgroundImageVisible={!hasSeedBanks}>
-      {hasSeedBanks ? (
-        <>
-          <Grid container>
+      <Grid container>
+        {hasSeedBanks ? (
+          <>
             <PageHeaderWrapper nextElement={contentRef.current}>
               <Grid item xs={12} className={isMobile ? '' : classes.titleContainer}>
                 {isMobile ? (
@@ -194,31 +200,31 @@ export default function Monitoring(props: MonitoringProps): JSX.Element {
                 />
               </div>
             )}
+          </>
+        ) : isAdmin(organization) ? (
+          <Grid item xs={12} className={isMobile ? '' : classes.titleContainer} flexDirection='column'>
+            {getPageHeading()}
+            <PageSnackbar />
+            <EmptyMessage
+              className={classes.message}
+              title={emptyMessageStrings.NO_SEEDBANKS_ADMIN_TITLE}
+              text={emptyMessageStrings.NO_SEEDBANKS_MONITORING_ADMIN_MSG}
+              buttonText={strings.GO_TO_SEED_BANKS}
+              onClick={goToSeedBanks}
+            />
           </Grid>
-        </>
-      ) : isAdmin(organization) ? (
-        <>
-          {getPageHeading()}
-          <PageSnackbar />
-          <EmptyMessage
-            className={classes.message}
-            title={emptyMessageStrings.NO_SEEDBANKS_ADMIN_TITLE}
-            text={emptyMessageStrings.NO_SEEDBANKS_MONITORING_ADMIN_MSG}
-            buttonText={strings.GO_TO_SEED_BANKS}
-            onClick={goToSeedBanks}
-          />
-        </>
-      ) : (
-        <>
-          {getPageHeading()}
-          <PageSnackbar />
-          <EmptyMessage
-            className={classes.message}
-            title={emptyMessageStrings.REACH_OUT_TO_ADMIN_TITLE}
-            text={emptyMessageStrings.NO_SEEDBANKS_MONITORING_NON_ADMIN_MSG}
-          />
-        </>
-      )}
+        ) : (
+          <Grid item xs={12} className={isMobile ? '' : classes.titleContainer} flexDirection='column'>
+            {getPageHeading()}
+            <PageSnackbar />
+            <EmptyMessage
+              className={classes.message}
+              title={emptyMessageStrings.REACH_OUT_TO_ADMIN_TITLE}
+              text={emptyMessageStrings.NO_SEEDBANKS_MONITORING_NON_ADMIN_MSG}
+            />
+          </Grid>
+        )}
+      </Grid>
     </TfMain>
   );
 }

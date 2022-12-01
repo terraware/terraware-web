@@ -121,7 +121,11 @@ export default function EmptyMessage(props: EmptyMessageProps): JSX.Element {
                       <Typography fontSize='14px' fontWeight={500} color={theme.palette.TwClrTxt} lineHeight='20px'>
                         {rowItem.altItem.text}
                       </Typography>
-                      <Link onClick={rowItem.altItem.onLinkClick} className={classes.itemLink}>
+                      <Link
+                        color={theme.palette.TwClrTxtBrand}
+                        onClick={rowItem.altItem.onLinkClick}
+                        className={classes.itemLink}
+                      >
                         {rowItem.altItem.linkText}
                       </Link>
                     </div>

@@ -88,8 +88,6 @@ const NO_NURSERIES_CONTENT: PageContent = {
   listItems: [
     {
       icon: 'blobbyIconNursery',
-      title: strings.INVENTORY_DATA,
-      description: strings.INVENTORY_DATA_DESCRIPTION,
     },
   ],
   buttonText: strings.ADD_NURSERY,
