@@ -2,7 +2,7 @@ import React from 'react';
 import { makeStyles } from '@mui/styles';
 import { useTheme } from '@mui/material';
 import { generateTerrawareRandomColors } from 'src/utils/generateRandomColor';
-import { BarElement, Chart } from 'chart.js';
+import { Chart } from 'chart.js';
 
 const useStyles = makeStyles(() => ({
   chart: {
