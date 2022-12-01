@@ -42,6 +42,7 @@ export default function DashboardChart(props: DashboardChartProps): JSX.Element 
               data: chartValues,
               barThickness: 50, // number (pixels) or 'flex'
               backgroundColor: colors,
+              borderSkipped: false,
             },
           ],
         },
