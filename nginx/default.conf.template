@@ -42,7 +42,7 @@ server {
     # /swagger-ui/ = Interactive API browser
     # /v3/ = OpenAPI user interface
 
-    location ~ ^/(actuator/health|admin/|api/|sso/|swagger-ui|v3/) {
+    location ~ ^/(actuator/health|admin([/?]|$)|api/|sso/|swagger-ui|v3/) {
         proxy_pass ${SERVER_URL};
         proxy_set_header Host $http_host;
     }
