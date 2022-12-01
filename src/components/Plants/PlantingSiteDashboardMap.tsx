@@ -4,7 +4,11 @@ import { PlantingSite } from 'src/api/types/tracking';
 import { getPlantingSite } from 'src/api/tracking/tracking';
 import useSnackbar from 'src/utils/useSnackbar';
 import { PlantingSitesPlots } from './PlantingSiteDetails';
-import { PlantingSiteMap, useSpeciesPlantsRenderer } from 'src/components/Map';
+import { GenericMap, PlantingSiteMap, useSpeciesPlantsRenderer } from 'src/components/Map';
+
+const MAP_STYLE = {
+  borderRadius: '8px',
+};
 
 type PlantingSiteDashboardMapProps = {
   siteId?: number;
@@ -16,15 +20,13 @@ export default function PlantingSiteDashboardMap(props: PlantingSiteDashboardMap
   const [snackbar] = useState(useSnackbar());
   const [plantingSite, setPlantingSite] = useState<PlantingSite>();
 
-  const plotsWithPlants = useMemo(() => {
+  const plotsMap = useMemo(() => {
     if (!plots) {
       return [];
     }
 
     return plots.reduce((accumulator: any, plot) => {
-      if (plot.populations?.length) {
-        accumulator[plot.id.toString()] = plot.populations;
-      }
+      accumulator[plot.id.toString()] = plot.populations;
       return accumulator;
     }, {});
   }, [plots]);
@@ -46,17 +48,20 @@ export default function PlantingSiteDashboardMap(props: PlantingSiteDashboardMap
     fetchPlantingSite();
   }, [siteId, snackbar]);
 
-  const contextRenderer = useSpeciesPlantsRenderer(plotsWithPlants);
+  const contextRenderer = useSpeciesPlantsRenderer(plotsMap);
+  const hasPolygons = plantingSite && plantingSite.boundary && plantingSite.boundary.coordinates?.length > 0;
 
   return (
     <Box display='flex' height='100%'>
-      {plantingSite && (
+      {hasPolygons ? (
         <PlantingSiteMap
           plantingSite={plantingSite}
-          key={siteId}
-          style={{ borderRadius: '8px' }}
+          key={plantingSite?.id}
+          style={MAP_STYLE}
           contextRenderer={contextRenderer}
         />
+      ) : (
+        <GenericMap style={MAP_STYLE} />
       )}
     </Box>
   );

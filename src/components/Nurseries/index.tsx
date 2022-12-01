@@ -51,19 +51,21 @@ export default function NurseriesList({ organization }: NurseriesListProps): JSX
 
   useEffect(() => {
     const refreshSearch = async () => {
+      const searchField = debouncedSearchTerm
+        ? {
+            operation: 'or',
+            children: [
+              { operation: 'field', field: 'name', type: 'Fuzzy', values: [debouncedSearchTerm] },
+              { operation: 'field', field: 'description', type: 'Fuzzy', values: [debouncedSearchTerm] },
+            ],
+          }
+        : null;
       const params: SearchNodePayload = {
         prefix: 'facilities',
         fields: ['id', 'name', 'description', 'type', 'organization_id'],
         search: {
           operation: 'and',
           children: [
-            {
-              operation: 'or',
-              children: [
-                { operation: 'field', field: 'name', type: 'Fuzzy', values: [debouncedSearchTerm] },
-                { operation: 'field', field: 'description', type: 'Fuzzy', values: [debouncedSearchTerm] },
-              ],
-            },
             { operation: 'field', field: 'type', type: 'Exact', values: ['Nursery'] },
             {
               operation: 'field',
@@ -75,6 +77,9 @@ export default function NurseriesList({ organization }: NurseriesListProps): JSX
         },
         count: 0,
       };
+      if (searchField) {
+        params.search.children.push(searchField);
+      }
       const requestId = Math.random().toString();
       setRequestId('searchNurseries', requestId);
       const searchResults = await search(params);

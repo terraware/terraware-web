@@ -131,7 +131,7 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
   };
 
   return (
-    <TfMain>
+    <TfMain moreScreen={true}>
       <Container maxWidth={false} sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
         {loaded && (
           <>

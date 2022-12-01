@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Box } from '@mui/material';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import ReactMapGL, { Layer, NavigationControl, Popup, Source } from 'react-map-gl';
@@ -42,20 +42,6 @@ export default function Map(props: MapProps): JSX.Element {
   const [geoData, setGeoData] = useState();
   const [layerIds, setLayerIds] = useState<string[]>([]);
   const [popupInfo, setPopupInfo] = useState<PopupInfo | null>(null);
-  const [zoomBegin, setZoomBegin] = useState<boolean>(false);
-  const [zoomEnd, setZoomEnd] = useState<boolean>(false);
-  const mapRef = useRef<any | null>(null);
-
-  const onMapLoad = useCallback(() => {
-    const { bbox } = options;
-    // fit to bounding box
-    if (mapRef?.current !== undefined) {
-      const mapInstance: any = mapRef.current.getMap();
-      setZoomEnd(false);
-      setZoomBegin(true);
-      mapInstance.fitBounds([bbox.lowerLeft, bbox.upperRight], { padding: 20 });
-    }
-  }, [options]);
 
   const onMapError = useCallback(
     (event: any) => {
@@ -63,12 +49,11 @@ export default function Map(props: MapProps): JSX.Element {
         // tslint:disable-next-line: no-console
         console.error('Mapbox token expired');
         if (onTokenExpired) {
-          setZoomEnd(false);
           onTokenExpired();
         }
       }
     },
-    [onTokenExpired, setZoomEnd]
+    [onTokenExpired]
   );
 
   const onMapClick = useCallback((event: any) => {
@@ -82,15 +67,6 @@ export default function Map(props: MapProps): JSX.Element {
       });
     }
   }, []);
-
-  const onZoomEnd = () => {
-    if (zoomBegin) {
-      // if zoom end happens on our fitBounds call, mark zoom as ended
-      // so we can start showing labels
-      setZoomBegin(false);
-      setZoomEnd(true);
-    }
-  };
 
   useEffect(() => {
     const { sources } = options;
@@ -187,27 +163,32 @@ export default function Map(props: MapProps): JSX.Element {
     }
     const sources = (geoData as any[]).map((geo: any, index) => (
       <Source type='geojson' key={index} data={geo.data}>
-        {zoomEnd && geo.textAnnotation && <Layer {...geo.textAnnotation} />}
+        {geo.textAnnotation && <Layer {...geo.textAnnotation} />}
         {geo.layerOutline && <Layer {...geo.layerOutline} />}
         {geo.layer && <Layer {...geo.layer} />}
       </Source>
     ));
 
     return sources;
-  }, [geoData, zoomEnd]);
+  }, [geoData]);
+
+  const hasEntities = options.sources?.some((source) => {
+    return source.entities?.some((entity) => entity?.boundary?.length);
+  });
 
   return (
     <Box sx={{ display: 'flex', flexGrow: 1, height: '100%', minHeight: 250 }}>
       <ReactMapGL
         key={mapId}
-        ref={mapRef}
         mapboxAccessToken={token}
         mapStyle='mapbox://styles/mapbox/satellite-v9?optimize=true'
+        initialViewState={{
+          bounds: hasEntities ? [options.bbox.lowerLeft, options.bbox.upperRight] : undefined,
+          fitBoundsOptions: hasEntities ? { padding: 20 } : undefined,
+        }}
         interactiveLayerIds={layerIds}
-        onLoad={onMapLoad}
         onError={onMapError}
         onClick={onMapClick}
-        onZoomEnd={onZoomEnd}
         style={style}
       >
         {mapSources}

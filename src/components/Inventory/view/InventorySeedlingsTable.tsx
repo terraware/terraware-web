@@ -64,14 +64,18 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
     let activeRequests = true;
 
     const getSearchFields = () => {
-      const fields = [
-        {
-          operation: 'field',
-          field: 'facility_name',
-          type: 'Fuzzy',
-          values: [debouncedSearchTerm],
-        },
-      ];
+      // Skip fuzzy search on empty strings since the query will be
+      // expensive and results will be the same as not adding the fuzzy search
+      const fields = debouncedSearchTerm
+        ? [
+            {
+              operation: 'field',
+              field: 'facility_name',
+              type: 'Fuzzy',
+              values: [debouncedSearchTerm],
+            },
+          ]
+        : [];
 
       if (filters.facilityIds && filters.facilityIds.length > 0) {
         fields.push({
@@ -85,7 +89,8 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
     };
 
     const populateResults = async () => {
-      const searchResponse = await search({
+      const searchFields = getSearchFields();
+      const searchParams = {
         prefix: 'batches',
         search: {
           operation: 'and',
@@ -96,8 +101,10 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
               values: [speciesId.toString()],
             },
             {
-              operation: 'and',
-              children: getSearchFields(),
+              operation: 'field',
+              field: 'species_organization_id',
+              values: [organization.id.toString()],
+              type: 'Exact',
             },
           ],
         },
@@ -124,7 +131,17 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
           },
         ],
         count: 1000,
-      });
+      };
+
+      if (searchFields.length) {
+        const children: any = searchParams.search.children;
+        children.push({
+          operation: 'and',
+          children: searchFields,
+        });
+      }
+
+      const searchResponse = await search(searchParams);
 
       if (activeRequests) {
         const batchesResults = searchResponse?.map((sr) => {

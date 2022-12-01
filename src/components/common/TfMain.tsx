@@ -45,11 +45,12 @@ const useStyles = makeStyles((theme: Theme) => ({
 interface Props {
   backgroundImageVisible?: boolean;
   children?: React.ReactNode;
+  moreScreen?: boolean;
 }
 
-export default function TfMain({ backgroundImageVisible, children }: Props): JSX.Element {
+export default function TfMain({ backgroundImageVisible, children, moreScreen }: Props): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const classes = useStyles({ backgroundImageVisible, isMobile });
 
-  return <main className={classes.main}>{children}</main>;
+  return <main className={`${classes.main} ${moreScreen ? 'moreScreen' : ''}`}>{children}</main>;
 }

@@ -1,7 +1,7 @@
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { useTheme, Box, Link as LinkMUI, Menu, Tab, Theme, Typography, Grid, MenuItem } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { Button, Icon } from '@terraware/web-components';
+import { Button, Icon, IconTooltip } from '@terraware/web-components';
 import moment from 'moment';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link, useHistory, useParams } from 'react-router-dom';
@@ -581,6 +581,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
             hideEditIcon={accession?.remainingQuantity?.quantity === undefined && !isMobile}
             onClick={() => setOpenQuantityModal(true)}
             title={strings.QUANTITY}
+            titleInfoTooltip={!quantityEditable && strings.EDIT_QUANTITY_DISABLED}
             contents={
               accession?.remainingQuantity?.quantity !== undefined ? (
                 <Box display='flex' flexDirection='column'>

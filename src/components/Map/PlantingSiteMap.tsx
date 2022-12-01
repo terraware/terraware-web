@@ -1,10 +1,9 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { Box, CircularProgress, useTheme } from '@mui/material';
 import hexRgb from 'hex-rgb';
-import { getMapboxToken } from 'src/api/tracking/tracking';
 import { MultiPolygon, PlantingSite } from 'src/api/types/tracking';
 import useSnackbar from 'src/utils/useSnackbar';
-import Map from './Map';
+import GenericMap from './GenericMap';
 import { MapGeometry, MapOptions, MapPopupRenderer, MapSource } from './MapModels';
 import { getBoundingBox } from './MapUtils';
 import _ from 'lodash';
@@ -21,9 +20,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
   const { plantingSite, style, contextRenderer } = props;
   const theme = useTheme();
   const [snackbar] = useState(useSnackbar());
-  const [token, setToken] = useState<string>();
   const [mapOptions, setMapOptions] = useState<MapOptions>();
-  const [mapId, setMapId] = useState<string>();
 
   const getRenderAttributes = useCallback(
     (objectType: 'site' | 'zone' | 'plot') => {
@@ -133,7 +130,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
         id: 'plots',
         isInteractive: true,
         annotation: {
-          textField: 'name',
+          textField: 'fullName',
           textColor: theme.palette.TwClrBaseWhite as string,
           textSize: 16,
         },
@@ -142,24 +139,6 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
     },
     [getPolygons, getRenderAttributes, theme.palette.TwClrBaseWhite]
   );
-
-  // fetch token
-  const fetchMapboxToken = useCallback(async () => {
-    const response = await getMapboxToken();
-    if (response.requestSucceeded) {
-      setToken(response.token);
-      setMapId(Date.now.toString());
-    } else {
-      snackbar.toastError(response.error);
-    }
-  }, [snackbar]);
-
-  useEffect(() => {
-    if (token) {
-      return;
-    }
-    fetchMapboxToken();
-  }, [plantingSite.id, fetchMapboxToken, token]);
 
   // fetch polygons and boundaries
   useEffect(() => {
@@ -187,7 +166,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
     fetchPlantingSite();
   }, [plantingSite, snackbar, extractPlantingSite, extractPlantingZones, extractPlots, mapOptions]);
 
-  if (!token || !mapOptions) {
+  if (!mapOptions) {
     return (
       <Box sx={{ display: 'flex', flexGrow: 1, height: '100%', margin: 'auto' }}>
         <CircularProgress sx={{ margin: 'auto' }} />
@@ -195,24 +174,9 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
     );
   }
 
-  const hasPolygons = mapOptions.sources?.some((source) => {
-    return source.entities?.some((entity) => entity?.boundary?.length);
-  });
-
-  if (!hasPolygons) {
-    return null;
-  }
-
   return (
     <Box sx={{ display: 'flex', flexGrow: 1 }}>
-      <Map
-        token={token}
-        options={mapOptions}
-        onTokenExpired={fetchMapboxToken}
-        mapId={mapId}
-        popupRenderer={contextRenderer}
-        style={style}
-      />
+      <GenericMap options={mapOptions} contextRenderer={contextRenderer} style={style} />
     </Box>
   );
 }
