@@ -3,7 +3,6 @@ import {
   CircularProgress,
   Container,
   Grid,
-  Paper,
   Popover,
   Typography,
   MenuList,
@@ -22,8 +21,6 @@ import {
   getAllFieldValues,
   getPendingAccessions,
   searchFieldValues,
-  searchSummary,
-  SearchSummaryResponsePayload,
 } from 'src/api/seeds/search';
 import {
   convertToSearchNodePayload,
@@ -60,7 +57,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import ImportAccessionsModal from './ImportAccessionsModal';
-import { Icon } from '@terraware/web-components';
+import { Icon, Message } from '@terraware/web-components';
 import { downloadCsvTemplateHandler } from 'src/components/common/ImportModal';
 import { downloadAccessionsTemplate } from 'src/api/accessions2/accession';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
@@ -72,7 +69,7 @@ interface StyleProps {
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
-    padding: '32px 0',
+    padding: 0,
   },
   downloadReport: {
     background: theme.palette.common.black,
@@ -109,8 +106,8 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   message: {
     margin: '0 auto',
-    marginTop: '10%',
     maxWidth: '800px',
+    padding: '48px',
     width: '800px',
   },
   checkInText: {
@@ -209,7 +206,6 @@ export default function Database(props: DatabaseProps): JSX.Element {
    */
   const [availableFieldOptions, setAvailableFieldOptions] = useState<FieldValuesMap | null>();
   const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>();
-  const [searchSummaryResults, setSearchSummaryResults] = useState<SearchSummaryResponsePayload | null>();
   const [unfilteredResults, setUnfilteredResults] = useState<SearchResponseElement[] | null>();
   const [selectSeedBankForImportModalOpen, setSelectSeedBankForImportModalOpen] = useState<boolean>(false);
   const [openImportModal, setOpenImportModal] = useState<boolean>(false);
@@ -348,22 +344,11 @@ export default function Database(props: DatabaseProps): JSX.Element {
           setFieldOptions(allValues);
         }
       };
-
-      const populateSearchSummary = async () => {
-        const apiResponse = await searchSummary({
-          search: convertToSearchNodePayload(searchCriteria, organization.id),
-        });
-
-        if (activeRequests) {
-          setSearchSummaryResults(apiResponse);
-        }
-      };
       populateUnfilteredResults();
       populateSearchResults();
       populateAvailableFieldOptions();
       populatePendingAccessions();
       populateFieldOptions();
-      populateSearchSummary();
     }
 
     return () => {
@@ -515,7 +500,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
 
   const getHeaderButtons = () => (
     <>
-      <Box marginRight={1} display='inline'>
+      <Box marginLeft={1} display='inline'>
         <Button
           id='more-options'
           icon='iconMenuHorizontal'
@@ -536,6 +521,14 @@ export default function Database(props: DatabaseProps): JSX.Element {
         }}
       >
         <MenuList sx={{ padding: theme.spacing(2, 0) }}>
+          {!isMobile && (
+            <MenuItem onClick={importAccessions} id='import-accessions' sx={{ padding: theme.spacing(1, 2) }}>
+              <Icon name='iconImport' />
+              <Typography color={theme.palette.TwClrTxtBrand} paddingLeft={1}>
+                {strings.IMPORT}
+              </Typography>
+            </MenuItem>
+          )}
           <MenuItem onClick={() => onDownloadReport()} id='download-report' sx={{ padding: theme.spacing(1, 2) }}>
             <Icon name='iconExport' />
             <Typography color={theme.palette.TwClrTxtBrand} paddingLeft={1}>
@@ -550,17 +543,6 @@ export default function Database(props: DatabaseProps): JSX.Element {
           </MenuItem>
         </MenuList>
       </Popover>
-      {!isMobile && (
-        <Box paddingRight={1} display='inline'>
-          <Button
-            label={strings.IMPORT}
-            icon='iconImport'
-            size='medium'
-            onClick={importAccessions}
-            priority='secondary'
-          />
-        </Box>
-      )}
     </>
   );
 
@@ -583,7 +565,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
           />
         </>
       )}
-      <TfMain>
+      <TfMain backgroundImageVisible={!isOnboarded}>
         <EditColumns open={editColumnsModalOpen} value={displayColumnNames} onClose={onCloseEditColumnsModal} />
         {organization && (
           <DownloadReportModal
@@ -598,13 +580,13 @@ export default function Database(props: DatabaseProps): JSX.Element {
         <PageHeaderWrapper nextElement={contentRef.current}>
           <PageHeader
             title=''
+            subtitle={strings.ACCESSIONS_DATABASE_DESCRIPTION}
             allowAll={true}
             page={strings.ACCESSIONS}
             parentPage={strings.SEEDS}
             rightComponent={
               isOnboarded ? (
                 <>
-                  {getHeaderButtons()}
                   {organization &&
                     (isMobile ? (
                       <Button icon='plus' onClick={goToNewAccession} size='medium' id='newAccession' />
@@ -617,31 +599,30 @@ export default function Database(props: DatabaseProps): JSX.Element {
                         id='newAccession'
                       />
                     ))}
+                  {getHeaderButtons()}
                 </>
               ) : undefined
             }
           >
             {(fieldOptions === null || availableFieldOptions === null) && strings.GENERIC_ERROR}
             {pendingAccessions && pendingAccessions.length > 0 && (
-              <Grid item xs={12} className={classes.checkinMessage}>
-                <Paper>
-                  <Grid item xs={12} className={classes.checkInContent}>
-                    <div>
-                      <span> {strings.CHECKIN_ACCESSIONS}</span>
-                      <p className={classes.checkInText}>
-                        {strings.formatString(strings.CHECK_IN_MESSAGE, pendingAccessions.length)}
-                      </p>
-                    </div>
+              <Grid item xs={12}>
+                <Message
+                  type='page'
+                  priority='info'
+                  title={strings.CHECKIN_ACCESSIONS}
+                  body={strings.formatString(strings.CHECK_IN_MESSAGE, pendingAccessions.length).toString()}
+                  pageButtons={[
                     <Button
-                      className={`${classes.checkInButton} ${isMobile ? 'mobile' : ''}`}
-                      onClick={handleViewCollections}
-                      id='viewCollections'
+                      key='1'
                       label={strings.VIEW}
+                      onClick={handleViewCollections}
+                      size='small'
                       priority='secondary'
                       type='passive'
-                    />
-                  </Grid>
-                </Paper>
+                    />,
+                  ]}
+                />
               </Grid>
             )}
           </PageHeader>
@@ -651,73 +632,40 @@ export default function Database(props: DatabaseProps): JSX.Element {
             <Grid container>
               {isOnboarded ? (
                 <>
-                  {isOnboarded && availableFieldOptions && fieldOptions && (
-                    <Filters
-                      filters={searchCriteria}
-                      availableValues={availableFieldOptions}
-                      allValues={fieldOptions}
-                      columns={displayColumnDetails}
-                      onChange={onFilterChange}
-                    />
-                  )}
-                  {searchSummaryResults && (
-                    <Grid item xs={12}>
-                      <Box
-                        sx={{
-                          background: theme.palette.TwClrBgSecondary,
-                          display: 'flex',
-                          color: theme.palette.TwClrTxt,
-                          padding: 2,
-                          flexWrap: 'wrap',
-                        }}
-                      >
-                        <Typography>{strings.TOTAL}</Typography>
-                        <Box sx={{ paddingRight: '12px', display: 'flex' }}>
-                          <Typography sx={{ paddingLeft: '4px', fontWeight: 500 }}>
-                            {searchSummaryResults.accessions}
-                          </Typography>
-                          <Typography sx={{ paddingLeft: '4px' }}>
-                            {searchSummaryResults.accessions === 1
-                              ? strings.ACCESSION.toLowerCase()
-                              : strings.ACCESSIONS.toLowerCase()}
-                          </Typography>
-                        </Box>
-                        <Box sx={{ paddingRight: '12px', display: 'flex' }}>
-                          <Typography sx={{ fontWeight: 500 }}>{searchSummaryResults.species}</Typography>
-                          <Typography sx={{ paddingLeft: '4px' }}>{strings.SPECIES.toLowerCase()}</Typography>
-                        </Box>
-                        <Box sx={{ paddingRight: '12px', display: 'flex' }}>
-                          <Typography sx={{ fontWeight: 500 }}>{`${searchSummaryResults.seedsRemaining.total}${
-                            searchSummaryResults.seedsRemaining &&
-                            searchSummaryResults.seedsRemaining.unknownQuantityAccessions > 0
-                              ? '+'
-                              : ''
-                          }`}</Typography>
-                          <Typography sx={{ paddingLeft: '4px' }}>
-                            {searchSummaryResults.seedsRemaining.total === 1
-                              ? strings.SEED.toLowerCase()
-                              : strings.SEEDS.toLowerCase()}
-                          </Typography>
-                        </Box>
-                      </Box>
-                    </Grid>
-                  )}
                   <Grid item xs={12}>
-                    {searchResults && (
-                      <Table
-                        columns={displayColumnDetails}
-                        rows={searchResults}
-                        orderBy={searchSortOrder.field}
-                        order={searchSortOrder.direction === 'Ascending' ? 'asc' : 'desc'}
-                        Renderer={SearchCellRenderer}
-                        onSelect={onSelect}
-                        sortHandler={onSortChange}
-                        isInactive={isInactive}
-                        onReorderEnd={onReorderEnd}
-                      />
-                    )}
-                    {searchResults === undefined && <CircularProgress />}
-                    {searchResults === null && strings.GENERIC_ERROR}
+                    <Box
+                      sx={{
+                        backgroundColor: theme.palette.TwClrBg,
+                        borderRadius: '32px',
+                        padding: theme.spacing(3),
+                        minWidth: 'fit-content',
+                      }}
+                    >
+                      {isOnboarded && availableFieldOptions && fieldOptions && (
+                        <Filters
+                          filters={searchCriteria}
+                          availableValues={availableFieldOptions}
+                          allValues={fieldOptions}
+                          columns={displayColumnDetails}
+                          onChange={onFilterChange}
+                        />
+                      )}
+                      {searchResults && (
+                        <Table
+                          columns={displayColumnDetails}
+                          rows={searchResults}
+                          orderBy={searchSortOrder.field}
+                          order={searchSortOrder.direction === 'Ascending' ? 'asc' : 'desc'}
+                          Renderer={SearchCellRenderer}
+                          onSelect={onSelect}
+                          sortHandler={onSortChange}
+                          isInactive={isInactive}
+                          onReorderEnd={onReorderEnd}
+                        />
+                      )}
+                      {searchResults === undefined && <CircularProgress />}
+                      {searchResults === null && strings.GENERIC_ERROR}
+                    </Box>
                   </Grid>
                 </>
               ) : isAdmin(organization) ? (

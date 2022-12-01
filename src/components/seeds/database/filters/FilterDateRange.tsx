@@ -72,6 +72,7 @@ export default function DateRange(props: Props): JSX.Element {
         <Grid item xs={5}>
           <DatePicker
             id='startDate'
+            autoFocus={true}
             value={startDate}
             onChange={onChangeDate}
             label={strings.START}

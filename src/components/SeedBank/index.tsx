@@ -1,11 +1,10 @@
-import { Container, Grid, Theme } from '@mui/material';
+import { Grid, Theme, Typography, useTheme } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
 import Icon from '../common/icon/Icon';
-import TfDivisor from '../common/TfDivisor';
 import { getAllSeedBanks } from 'src/utils/organization';
 import TextField from '../common/Textfield/Textfield';
 import Button from '../common/button/Button';
@@ -13,14 +12,9 @@ import { Facility } from 'src/api/types/facilities';
 import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageSnackbar from 'src/components/PageSnackbar';
+import TfMain from '../common/TfMain';
 
 const useStyles = makeStyles((theme: Theme) => ({
-  mainContainer: {
-    height: '-webkit-fill-available',
-    paddingTop: theme.spacing(4),
-    paddingBottom: theme.spacing(4),
-    background: theme.palette.TwClrBg,
-  },
   backIcon: {
     fill: theme.palette.TwClrIcnBrand,
     marginRight: theme.spacing(1),
@@ -29,7 +23,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     display: 'flex',
     textDecoration: 'none',
     color: theme.palette.TwClrTxtBrand,
-    fontSize: '20px',
     alignItems: 'center',
   },
   titleWithButton: {
@@ -44,6 +37,7 @@ type SeedBankDetailsProps = {
   organization?: ServerOrganization;
 };
 export default function SeedBankDetails({ organization }: SeedBankDetailsProps): JSX.Element {
+  const theme = useTheme();
   const { seedBankId } = useParams<{ seedBankId: string }>();
   const [seedBank, setSeedBank] = useState<Facility>();
   const history = useHistory();
@@ -77,26 +71,42 @@ export default function SeedBankDetails({ organization }: SeedBankDetailsProps):
   };
 
   return (
-    <Container maxWidth={false} className={classes.mainContainer}>
-      <Grid container spacing={3}>
-        <Grid item xs={12}>
+    <TfMain>
+      <Grid container padding={theme.spacing(0, 0, 4, 0)}>
+        <Grid item xs={12} marginBottom={theme.spacing(3)}>
           <Link id='back' to={APP_PATHS.SEED_BANKS} className={classes.back}>
-            <Icon name='caretLeft' className={classes.backIcon} />
-            {strings.SEED_BANKS}
+            <Icon name='caretLeft' className={classes.backIcon} size='small' />
+            <Typography fontSize='14px' fontWeight={500}>
+              {strings.SEED_BANKS}
+            </Typography>
           </Link>
         </Grid>
-        <Grid item xs={12} className={classes.titleWithButton}>
-          <h2>{seedBank?.name}</h2>
-          {isMobile ? (
-            <Button icon='iconEdit' priority='secondary' onClick={goToEditSeedBank} />
-          ) : (
-            <Button icon='iconEdit' label={strings.EDIT} priority='secondary' onClick={goToEditSeedBank} />
-          )}
+        <Grid item xs={12} padding={theme.spacing(0, 3)} className={classes.titleWithButton}>
+          <Typography fontSize='20px' fontWeight={600} margin={0}>
+            {seedBank?.name}
+          </Typography>
+          <Button
+            icon='iconEdit'
+            label={isMobile ? undefined : strings.EDIT_SEED_BANK}
+            priority='primary'
+            size='medium'
+            onClick={goToEditSeedBank}
+          />
         </Grid>
         <Grid item xs={12}>
           <PageSnackbar />
         </Grid>
-        <Grid item xs={gridSize()}>
+      </Grid>
+      <Grid
+        container
+        sx={{
+          backgroundColor: theme.palette.TwClrBg,
+          borderRadius: '32px',
+          padding: theme.spacing(3),
+          margin: 0,
+        }}
+      >
+        <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
           <TextField label={strings.NAME_REQUIRED} id='name' type='text' value={seedBank?.name} display={true} />
         </Grid>
         <Grid item xs={gridSize()}>
@@ -108,24 +118,7 @@ export default function SeedBankDetails({ organization }: SeedBankDetailsProps):
             display={true}
           />
         </Grid>
-        <Grid item xs={12}>
-          <h2>{strings.SENSOR_KIT}</h2>
-          <p>
-            {seedBank?.connectionState === 'Configured'
-              ? strings.formatString(
-                  strings.SENSOR_KIT_HAS_BEEN_SET_UP,
-                  <Link to={APP_PATHS.MONITORING}>{strings.MONITORING}</Link>
-                )
-              : strings.formatString(
-                  strings.SENSOR_KIT_READY_TO_SET_UP,
-                  <Link to={`${APP_PATHS.MONITORING}/${seedBankId}`}>{strings.MONITORING}</Link>
-                )}
-          </p>
-        </Grid>
-        <Grid item xs={12}>
-          <TfDivisor />
-        </Grid>
       </Grid>
-    </Container>
+    </TfMain>
   );
 }

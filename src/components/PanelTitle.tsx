@@ -1,4 +1,4 @@
-import { Theme, Typography } from '@mui/material';
+import { Box, Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { IconTooltip } from '@terraware/web-components';
 import React from 'react';
@@ -23,8 +23,11 @@ export default function PanelTitle({ title, id, gutterBottom, tooltipTitle }: Pr
   const classes = useStyles();
 
   return (
-    <Typography variant='h6' className={classes.panelTitle} id={id} gutterBottom={gutterBottom}>
-      {title} {tooltipTitle && <IconTooltip title={tooltipTitle} />}
-    </Typography>
+    <Box sx={{ display: 'flex', alignItems: 'end' }}>
+      <Typography variant='h6' className={classes.panelTitle} id={id} gutterBottom={gutterBottom}>
+        {title}
+      </Typography>
+      {tooltipTitle && <IconTooltip title={tooltipTitle} />}
+    </Box>
   );
 }

@@ -1,5 +1,4 @@
-import { Container, Grid } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
@@ -11,37 +10,10 @@ import FormBottomBar from '../common/FormBottomBar';
 import { getAllSeedBanks } from 'src/utils/organization';
 import { Facility } from 'src/api/types/facilities';
 import { createFacility, updateFacility } from 'src/api/facility/facility';
-import { Theme } from '@mui/material';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageSnackbar from 'src/components/PageSnackbar';
 import useSnackbar from 'src/utils/useSnackbar';
 import TfMain from 'src/components/common/TfMain';
-
-const useStyles = makeStyles((theme: Theme) => ({
-  mainContainer: {
-    height: '-webkit-fill-available',
-    paddingTop: theme.spacing(4),
-    paddingBottom: theme.spacing(7),
-    marginBottom: theme.spacing(6),
-    background: theme.palette.TwClrBg,
-  },
-  backIcon: {
-    fill: theme.palette.TwClrIcnBrand,
-    marginRight: theme.spacing(1),
-  },
-  back: {
-    display: 'flex',
-    textDecoration: 'none',
-    color: theme.palette.TwClrTxtBrand,
-    fontSize: '20px',
-    alignItems: 'center',
-  },
-  label: {
-    color: theme.palette.TwClrTxtSecondary,
-    lineHeight: '20px',
-    fontFamily: '"Inter", sans-serif',
-  },
-}));
 
 type SiteViewProps = {
   organization: ServerOrganization;
@@ -49,6 +21,7 @@ type SiteViewProps = {
 };
 
 export default function SeedBankView({ organization, reloadOrganizationData }: SiteViewProps): JSX.Element {
+  const theme = useTheme();
   const [nameError, setNameError] = useState('');
   const [descriptionError, setDescriptionError] = useState('');
   const snackbar = useSnackbar();
@@ -68,10 +41,8 @@ export default function SeedBankView({ organization, reloadOrganizationData }: S
     if (isMobile) {
       return 12;
     }
-    return 4;
+    return 6;
   };
-
-  const classes = useStyles();
 
   useEffect(() => {
     const seedBanks = getAllSeedBanks(organization);
@@ -127,12 +98,20 @@ export default function SeedBankView({ organization, reloadOrganizationData }: S
 
   return (
     <TfMain>
-      <Container maxWidth={false} className={classes.mainContainer}>
+      <Box marginBottom={theme.spacing(4)} paddingLeft={theme.spacing(3)}>
+        <Typography fontSize='24px' fontWeight={600}>
+          {selectedSeedBank ? selectedSeedBank?.name : strings.ADD_SEED_BANK}
+        </Typography>
+        <PageSnackbar />
+      </Box>
+      <Box
+        sx={{
+          backgroundColor: theme.palette.TwClrBg,
+          borderRadius: '32px',
+          padding: theme.spacing(3),
+        }}
+      >
         <Grid container spacing={3}>
-          <Grid item xs={12}>
-            {selectedSeedBank ? <h2>{selectedSeedBank?.name}</h2> : <h2>{strings.ADD_SEED_BANK}</h2>}
-          </Grid>
-          <PageSnackbar />
           <Grid item xs={gridSize()}>
             <TextField
               id='name'
@@ -154,7 +133,7 @@ export default function SeedBankView({ organization, reloadOrganizationData }: S
             />
           </Grid>
         </Grid>
-      </Container>
+      </Box>
       <FormBottomBar onCancel={goToSeedBanks} onSave={saveSeedBank} />
     </TfMain>
   );

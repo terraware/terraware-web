@@ -27,11 +27,13 @@ const useStyles = makeStyles((theme: Theme) => ({
     marginTop: '10%',
   },
   notSetUpContent: {
-    border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
-    borderRadius: '8px',
+    background: theme.palette.TwClrBg,
+    border: `1px solid transparent`,
+    borderRadius: '24px',
     margin: 'auto',
     marginTop: `max(10vh, ${theme.spacing(8)}px)`,
     maxWidth: '800px',
+    padding: '24px',
   },
 }));
 
@@ -68,7 +70,7 @@ export default function Monitoring(props: SeedBankMonitoringProps): JSX.Element 
                 <EmptyStateContent
                   title={strings.SET_UP_YOUR_SENSOR_KIT}
                   subtitle={strings.SET_UP_YOUR_SENSOR_KIT_MSG}
-                  listItems={[{ icon: 'monitoring', title: strings.SENSOR_KIT_SET_UP }]}
+                  listItems={[{ icon: 'monitoring' }]}
                   buttonText={strings.SET_UP}
                   onClickButton={() => setOnboarding(true)}
                   styles={EMPTY_STATE_CONTENT_STYLES}

@@ -7,10 +7,11 @@ type StorageSubLocationSelectorProps = {
   selectedStorageSubLocation?: string;
   storageSubLocations: string[];
   onChange: (value: string) => void;
+  disabled?: boolean;
 };
 
 export default function StorageSubLocationSelector(props: StorageSubLocationSelectorProps): JSX.Element {
-  const { label, selectedStorageSubLocation, storageSubLocations, onChange } = props;
+  const { label, selectedStorageSubLocation, storageSubLocations, onChange, disabled } = props;
 
   return (
     <Select
@@ -21,6 +22,7 @@ export default function StorageSubLocationSelector(props: StorageSubLocationSele
       selectedValue={selectedStorageSubLocation}
       fullWidth={true}
       tooltipTitle={strings.TOOLTIP_ACCESSIONS_SUBLOCATION}
+      disabled={disabled}
     />
   );
 }

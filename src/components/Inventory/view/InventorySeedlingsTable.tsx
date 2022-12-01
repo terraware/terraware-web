@@ -255,7 +255,17 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
   };
 
   return (
-    <Grid item xs={12} sx={{ marginTop: theme.spacing(1) }}>
+    <Grid
+      item
+      xs={12}
+      sx={{
+        backgroundColor: theme.palette.TwClrBg,
+        borderRadius: '32px',
+        marginTop: theme.spacing(3),
+        minWidth: 'fit-content',
+        padding: theme.spacing(3),
+      }}
+    >
       <BatchDetailsModal
         open={openNewBatchModal}
         reload={reloadData}
@@ -290,6 +300,7 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
+            marginBottom: theme.spacing(4),
           }}
         >
           <Typography
@@ -305,7 +316,7 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
             icon='plus'
             label={isMobile ? '' : strings.ADD_BATCH}
             onClick={addBatch}
-            size='medium'
+            size='small'
           />
         </Box>
         <Search

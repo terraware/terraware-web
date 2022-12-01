@@ -3,6 +3,7 @@ import { CircularProgress, CssBaseline, Slide, StyledEngineProvider, Theme } fro
 import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import { Redirect, Route, Switch } from 'react-router-dom';
+import hexRgb from 'hex-rgb';
 import useQuery from './utils/useQuery';
 import useStateLocation, { getLocation } from './utils/useStateLocation';
 import { getOrganizations } from 'src/api/organization/organization';
@@ -60,6 +61,8 @@ import {
   SpeciesBulkWithdrawWrapperComponent,
 } from './components/Inventory/withdraw';
 import PlantsDashboard from './components/Plants';
+import { listPlantingSites } from './api/tracking/tracking';
+import { PlantingSite } from './api/types/tracking';
 
 interface StyleProps {
   isDesktop?: boolean;
@@ -67,18 +70,34 @@ interface StyleProps {
 
 const useStyles = makeStyles((theme: Theme) => ({
   container: {
+    backgroundColor: theme.palette.TwClrBaseGray025,
+    backgroundImage:
+      'linear-gradient(180deg,' +
+      `${hexRgb(`${theme.palette.TwClrBaseGreen050}`, { alpha: 0, format: 'css' })} 0%,` +
+      `${hexRgb(`${theme.palette.TwClrBaseGreen050}`, { alpha: 0.4, format: 'css' })} 100%)`,
+    backgroundAttachment: 'fixed',
+    minHeight: '100vh',
     '& .navbar': {
-      backgroundColor: theme.palette.TwClrBg,
+      backgroundColor: theme.palette.TwClrBaseGray025,
+      backgroundImage:
+        'linear-gradient(180deg,' +
+        `${hexRgb(`${theme.palette.TwClrBaseGreen050}`, { alpha: 0, format: 'css' })} 0%,` +
+        `${hexRgb(`${theme.palette.TwClrBaseGreen050}`, { alpha: 0.4, format: 'css' })} 100%)`,
+      backgroundAttachment: 'fixed',
+      paddingRight: (props: StyleProps) => (props.isDesktop ? '8px' : undefined),
       paddingTop: (props: StyleProps) => (props.isDesktop ? '88px' : '8px'),
       overflowY: 'auto',
+      width: (props: StyleProps) => (props.isDesktop ? '180px' : undefined),
       zIndex: 1000,
+      '&::-webkit-scrollbar-thumb': {
+        backgroundColor: theme.palette.TwClrBgGhostActive,
+      },
     },
   },
   content: {
     height: '100%',
     overflow: 'auto',
     '& > div, & > main': {
-      paddingBottom: theme.spacing(25),
       paddingTop: '96px',
     },
     '& > .moreScreen': {
@@ -88,7 +107,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   contentWithNavBar: {
     '& > div, & > main': {
-      paddingLeft: '200px',
+      paddingLeft: '190px',
     },
   },
   navBarOpened: {
@@ -159,6 +178,7 @@ export default function App() {
   const [user, setUser] = useState<User>();
   const history = useHistory();
   const [species, setSpecies] = useState<Species[]>([]);
+  const [plantingSites, setPlantingSites] = useState<PlantingSite[]>([]);
   const [showNavBar, setShowNavBar] = useState(true);
 
   const reloadData = useCallback(async (selectedOrgId?: number) => {
@@ -202,6 +222,22 @@ export default function App() {
   useEffect(() => {
     reloadSpecies();
   }, [reloadSpecies]);
+
+  const reloadTracking = useCallback(() => {
+    const populatePlantingSites = async () => {
+      if (selectedOrganization) {
+        const response = await listPlantingSites(selectedOrganization.id, false);
+        if (response.requestSucceeded) {
+          setPlantingSites(response.sites || []);
+        }
+      }
+    };
+    populatePlantingSites();
+  }, [selectedOrganization]);
+
+  useEffect(() => {
+    reloadTracking();
+  }, [reloadTracking]);
 
   const reloadPreferences = useCallback(() => {
     const getUserPreferences = async () => {
@@ -356,6 +392,8 @@ export default function App() {
 
   const selectedOrgHasNurseries = (): boolean => selectedOrgHasFacilityType('Nursery');
 
+  const selectedOrgHasPlantingSites = (): boolean => plantingSites.length > 0;
+
   const getSeedBanksView = (): JSX.Element => {
     if (selectedOrganization && selectedOrgHasSeedBanks()) {
       return <SeedBanks organization={selectedOrganization} />;
@@ -368,6 +406,24 @@ export default function App() {
       return <Nurseries organization={selectedOrganization} />;
     }
     return <EmptyStatePage pageName={'Nurseries'} />;
+  };
+
+  const viewHasBackgroundImage = (): boolean => {
+    if (
+      location.pathname.startsWith(APP_PATHS.HOME) ||
+      (location.pathname.startsWith(APP_PATHS.SPECIES) && !selectedOrgHasSpecies()) ||
+      (location.pathname.startsWith(APP_PATHS.ACCESSIONS) &&
+        (!selectedOrgHasSeedBanks() || !selectedOrgHasSpecies())) ||
+      (location.pathname.startsWith(APP_PATHS.MONITORING) && !selectedOrgHasSeedBanks()) ||
+      (location.pathname.startsWith(APP_PATHS.INVENTORY) && (!selectedOrgHasNurseries() || !selectedOrgHasSpecies())) ||
+      (location.pathname.startsWith(APP_PATHS.SEED_BANKS) && !selectedOrgHasSeedBanks()) ||
+      (location.pathname.startsWith(APP_PATHS.NURSERIES) && !selectedOrgHasNurseries()) ||
+      (location.pathname.startsWith(APP_PATHS.PLANTING_SITES) && !selectedOrgHasPlantingSites())
+    ) {
+      return true;
+    }
+
+    return false;
   };
 
   return (
@@ -401,7 +457,7 @@ export default function App() {
                 <NavBar
                   organization={selectedOrganization}
                   setShowNavBar={setShowNavBar}
-                  backgroundTransparent={location.pathname.startsWith(APP_PATHS.HOME)}
+                  backgroundTransparent={viewHasBackgroundImage()}
                 />
               )}
             </div>
@@ -585,12 +641,12 @@ export default function App() {
               )}
               {trackingEnabled && selectedOrganization && (
                 <Route exact path={APP_PATHS.PLANTING_SITES_NEW}>
-                  <CreatePlantingSite organization={selectedOrganization} />
+                  <CreatePlantingSite organization={selectedOrganization} reloadPlantingSites={reloadTracking} />
                 </Route>
               )}
               {trackingEnabled && selectedOrganization && (
                 <Route exact path={APP_PATHS.PLANTING_SITES_EDIT}>
-                  <CreatePlantingSite organization={selectedOrganization} />
+                  <CreatePlantingSite organization={selectedOrganization} reloadPlantingSites={reloadTracking} />
                 </Route>
               )}
               {trackingEnabled && selectedOrganization && (

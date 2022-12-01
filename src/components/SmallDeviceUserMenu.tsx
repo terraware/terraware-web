@@ -21,16 +21,22 @@ import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
 import { User } from 'src/types/User';
 import AddNewOrganizationModal from './AddNewOrganizationModal';
-import { ReactComponent as AvatarIcon } from './avatar-default.svg';
 import Icon from './common/icon/Icon';
 import useEnvironment from 'src/utils/useEnvironment';
 
 const useStyles = makeStyles((theme: Theme) => ({
   icon: {
-    width: '32px',
+    alignItems: 'center',
+    backgroundColor: '#F1F0EC',
+    borderRadius: '50%',
+    color: theme.palette.TwClrTxt,
+    display: 'flex',
+    fontWeight: 500,
     height: '32px',
+    justifyContent: 'center',
+    width: '32px',
   },
-  internalIcon: {
+  largeIcon: {
     width: '48px',
     height: '48px',
   },
@@ -109,6 +115,7 @@ export default function SmallDeviceUserMenu({
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef<HTMLButtonElement>(null);
   const { isProduction } = useEnvironment();
+  const iconLetter = user?.firstName?.charAt(0) || user?.lastName?.charAt(0) || user?.email?.charAt(0);
 
   const navigate = (url: string) => {
     history.push(url);
@@ -157,7 +164,7 @@ export default function SmallDeviceUserMenu({
         reloadOrganizationData={reloadOrganizationData}
       />
       <Button ref={anchorRef} id='composition-button' onClick={handleToggle} className={classes.avatarButton}>
-        <AvatarIcon className={classes.icon} />
+        <div className={classes.icon}>{iconLetter}</div>
       </Button>
       <div className='blurred'>
         <Popper
@@ -179,7 +186,7 @@ export default function SmallDeviceUserMenu({
                 >
                   <Box sx={{ display: 'flex' }}>
                     <Box sx={{ display: 'flex' }}>
-                      <AvatarIcon className={classes.internalIcon} />
+                      <div className={`${classes.icon} ${classes.largeIcon}`}>{iconLetter}</div>
                       <Typography sx={{ paddingLeft: '8px', color: theme.palette.TwClrTxt }}>
                         {user?.firstName} {user?.lastName}
                       </Typography>

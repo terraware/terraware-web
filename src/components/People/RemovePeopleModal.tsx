@@ -30,6 +30,7 @@ export default function RemovePeopleDialog(props: RemovePeopleDialogProps): JSX.
           ? dictionary.REMOVE_PEOPLE_DESC
           : strings.formatString(dictionary.REMOVE_PERSON_DESC, removedPeople[0].firstName || '')
       }
+      skrim={true}
     />
   );
 }

@@ -357,6 +357,7 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
             <p className={classes.description}>{file ? strings.FILE_SELECTED : uploaderDescription}</p>
             {!file && (
               <Link
+                color={theme.palette.TwClrTxtBrand}
                 href='#'
                 onClick={() => {
                   downloadCsvTemplateHandler(templateApi);

@@ -78,7 +78,7 @@ export default function Collectors2({ organizationId, id, collectors = [''], onC
       ))}
       <Box display='flex' justifyContent='flex-end'>
         <Link
-          sx={{ textDecoration: 'none' }}
+          sx={{ color: theme.palette.TwClrTxtBrand, textDecoration: 'none' }}
           href='#'
           id='addCollectorButton'
           onClick={(event: React.SyntheticEvent) => {

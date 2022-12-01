@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Theme, Grid } from '@mui/material';
+import { Container, Theme, Grid, useTheme } from '@mui/material';
 import Button from 'src/components/common/button/Button';
 import Icon from 'src/components/common/icon/Icon';
 import { IconName } from 'src/components/common/icon/icons';
@@ -120,6 +120,7 @@ export default function EmptyStateContent(props: EmptyStateContentProps): JSX.El
   const { title, subtitle, listItems, buttonText, buttonIcon, onClickButton, footnote, styles } = props;
   const { isMobile } = useDeviceInfo();
   const classes = useStyles({ ...styles, isMobile });
+  const theme = useTheme();
 
   const gridSize = () => {
     if (isMobile) {
@@ -133,9 +134,9 @@ export default function EmptyStateContent(props: EmptyStateContentProps): JSX.El
       <h1 className={classes.title}>{title}</h1>
       <p className={classes.subtitle}>{subtitle}</p>
       <div className={classes.listContainer}>
-        {listItems.map((item) => {
+        {listItems.map((item, index) => {
           return (
-            <Grid item xs={gridSize()} key={item.title} className={`${classes.listItem}`}>
+            <Grid item xs={gridSize()} key={`${item.title}-${index}`} className={`${classes.listItem}`}>
               <Icon name={item.icon} className={classes.listItemIcon} />
               {item.title && <p className={classes.listItemTitle}>{item.title}</p>}
               <div>
@@ -143,7 +144,7 @@ export default function EmptyStateContent(props: EmptyStateContentProps): JSX.El
                   {item.description}
                 </p>
                 {item.linkText && item.onLinkClick && (
-                  <Link onClick={item.onLinkClick} className={classes.itemLink}>
+                  <Link onClick={item.onLinkClick} className={classes.itemLink} color={theme.palette.TwClrTxtBrand}>
                     {item.linkText}
                   </Link>
                 )}

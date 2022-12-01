@@ -78,7 +78,7 @@ export default function PlantingSitesList(props: PlantingSitesListProps): JSX.El
   }, [organization, onSearch]);
 
   return (
-    <TfMain>
+    <TfMain backgroundImageVisible={true}>
       <PageHeaderWrapper nextElement={contentRef.current}>
         <Box sx={{ paddingBottom: theme.spacing(3), display: 'flex', justifyContent: 'space-between' }}>
           <Grid item xs={6}>
@@ -113,7 +113,7 @@ export default function PlantingSitesList(props: PlantingSitesListProps): JSX.El
           <Box>
             {plantingSites?.length === 0 ? (
               <Container sx={{ paddingY: 4 }}>
-                <EmptyStatePage pageName={'PlantingSites'} />
+                <EmptyStatePage backgroundImageVisible={false} pageName={'PlantingSites'} />
               </Container>
             ) : (
               <PlantingSitesTable

@@ -9,6 +9,7 @@ import { Theme } from '@mui/material';
 const useStyles = makeStyles((theme: Theme) => ({
   link: {
     color: theme.palette.TwClrTxtBrand,
+    textDecoration: 'none',
   },
 }));
 

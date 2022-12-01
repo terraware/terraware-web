@@ -45,6 +45,7 @@ export default function DeleteBatchesModal(props: DeleteBatchesModalProps): JSX.
           key='button-2'
         />,
       ]}
+      skrim={true}
     >
       <p className={classes.mainContent}>{strings.DELETE_SEEDLINGS_BATCHES_MSG}</p>
     </DialogBox>

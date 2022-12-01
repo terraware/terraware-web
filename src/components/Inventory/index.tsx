@@ -1,4 +1,15 @@
-import { Box, CircularProgress, Container, Grid, Theme, Typography, useTheme } from '@mui/material';
+import {
+  Box,
+  CircularProgress,
+  Container,
+  Grid,
+  MenuItem,
+  MenuList,
+  Popover,
+  Theme,
+  Typography,
+  useTheme,
+} from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
@@ -23,6 +34,7 @@ import { downloadInventoryTemplate } from 'src/api/inventory/inventory';
 import ImportInventoryModal from './ImportInventoryModal';
 import { Button } from '@terraware/web-components';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
+import Icon from '../common/icon/Icon';
 
 interface StyleProps {
   isMobile: boolean;
@@ -34,14 +46,17 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   message: {
     margin: '0 auto',
-    marginTop: '10%',
     maxWidth: '800px',
+    padding: '48px',
     width: (props: StyleProps) => (props.isMobile ? 'auto' : '800px'),
   },
   spinnerContainer: {
     position: 'fixed',
     top: '50%',
     left: '50%',
+  },
+  actionMenuIcon: {
+    fill: theme.palette.TwClrTxtBrand,
   },
 }));
 
@@ -234,17 +249,72 @@ export default function Inventory(props: InventoryProps): JSX.Element {
     onApplyFilters();
   }, [filters, onApplyFilters]);
 
+  const shouldShowTable = isOnboarded && unfilteredInventory && unfilteredInventory.length > 0;
+
+  const [actionMenuAnchorEl, setActionMenuAnchorEl] = React.useState<HTMLButtonElement | null>(null);
+  const actionMenuOpen = Boolean(actionMenuAnchorEl);
+  const actionMenuId = actionMenuOpen ? 'simple-popover' : undefined;
+
+  const handleClickActionMenuButton = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setActionMenuAnchorEl(event.currentTarget);
+  };
+
+  const handleCloseActionMenu = () => {
+    setActionMenuAnchorEl(null);
+  };
+
+  const getHeaderButtons = () => (
+    <>
+      <Box marginLeft={1} display='inline'>
+        <Button
+          id='more-options'
+          icon='iconMenuHorizontal'
+          onClick={(event) => event && handleClickActionMenuButton(event)}
+          priority='secondary'
+          size='medium'
+        />
+      </Box>
+
+      <Popover
+        id={actionMenuId}
+        open={actionMenuOpen}
+        anchorEl={actionMenuAnchorEl}
+        onClose={handleCloseActionMenu}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+      >
+        <MenuList sx={{ padding: theme.spacing(2, 0) }}>
+          <MenuItem
+            onClick={() => {
+              handleCloseActionMenu();
+              setImportInventoryModalOpen(true);
+            }}
+            id='import-species'
+            sx={{ padding: theme.spacing(1, 2) }}
+          >
+            <Icon name='iconImport' className={classes.actionMenuIcon} />
+            <Typography color={theme.palette.TwClrTxtBrand} paddingLeft={1}>
+              {strings.IMPORT}
+            </Typography>
+          </MenuItem>
+        </MenuList>
+      </Popover>
+    </>
+  );
+
   return (
-    <TfMain>
+    <TfMain backgroundImageVisible={!isOnboarded}>
       <ImportInventoryModal
         open={importInventoryModalOpen}
         onClose={() => setImportInventoryModalOpen(false)}
         organization={organization}
         reloadData={onApplyFilters}
       />
-      <Grid>
-        <PageHeaderWrapper nextElement={contentRef.current}>
-          <Box sx={{ paddingBottom: theme.spacing(3) }}>
+      <PageHeaderWrapper nextElement={contentRef.current}>
+        <Box sx={{ paddingBottom: theme.spacing(4), paddingLeft: theme.spacing(3) }}>
+          <Grid container>
             <Grid item xs={6}>
               <Typography fontSize='24px' fontWeight={600}>
                 {strings.INVENTORY}
@@ -256,14 +326,6 @@ export default function Inventory(props: InventoryProps): JSX.Element {
                   <Button id='new-inventory' icon='plus' onClick={() => goTo(APP_PATHS.INVENTORY_NEW)} size='medium' />
                 ) : (
                   <>
-                    <Button
-                      id='import-inventory'
-                      label={strings.IMPORT}
-                      icon='iconImport'
-                      onClick={() => setImportInventoryModalOpen(true)}
-                      priority='secondary'
-                      size='medium'
-                    />
                     <Box sx={{ display: 'inline', paddingLeft: 1 }}>
                       <Button
                         id='new-inventory'
@@ -273,52 +335,66 @@ export default function Inventory(props: InventoryProps): JSX.Element {
                         size='medium'
                       />
                     </Box>
+                    {getHeaderButtons()}
                   </>
                 )}
               </Grid>
             ) : null}
-          </Box>
-        </PageHeaderWrapper>
-        <div ref={contentRef}>
-          {isOnboarded ? (
-            unfilteredInventory && unfilteredInventory.length > 0 ? (
-              <InventoryTable
-                organization={organization}
-                results={searchResults || []}
-                temporalSearchValue={temporalSearchValue}
-                setTemporalSearchValue={setTemporalSearchValue}
-                filters={filters}
-                setFilters={setFilters}
-              />
-            ) : unfilteredInventory === null ? (
-              <div className={classes.spinnerContainer}>
-                <CircularProgress />
-              </div>
-            ) : (
-              <Container maxWidth={false} className={classes.mainContainer}>
-                <EmptyStatePage pageName={'Inventory'} organization={organization} reloadData={onApplyFilters} />
-              </Container>
-            )
+          </Grid>
+        </Box>
+      </PageHeaderWrapper>
+      <Box
+        ref={contentRef}
+        sx={{
+          backgroundColor: shouldShowTable ? theme.palette.TwClrBg : undefined,
+          borderRadius: '32px',
+          padding: theme.spacing(3),
+          minWidth: 'fit-content',
+        }}
+      >
+        {isOnboarded ? (
+          unfilteredInventory && unfilteredInventory.length > 0 ? (
+            <InventoryTable
+              organization={organization}
+              results={searchResults || []}
+              temporalSearchValue={temporalSearchValue}
+              setTemporalSearchValue={setTemporalSearchValue}
+              filters={filters}
+              setFilters={setFilters}
+            />
+          ) : unfilteredInventory === null ? (
+            <div className={classes.spinnerContainer}>
+              <CircularProgress />
+            </div>
           ) : (
             <Container maxWidth={false} className={classes.mainContainer}>
-              <PageSnackbar />
-              {isAdmin(organization) ? (
-                <EmptyMessage
-                  className={classes.message}
-                  title={emptyMessageStrings.ONBOARDING_ADMIN_TITLE}
-                  rowItems={getEmptyState()}
-                />
-              ) : (
-                <EmptyMessage
-                  className={classes.message}
-                  title={emptyMessageStrings.REACH_OUT_TO_ADMIN_TITLE}
-                  text={emptyMessageStrings.NO_NURSERIES_NON_ADMIN_MSG}
-                />
-              )}
+              <EmptyStatePage
+                backgroundImageVisible={false}
+                pageName={'Inventory'}
+                organization={organization}
+                reloadData={onApplyFilters}
+              />
             </Container>
-          )}
-        </div>
-      </Grid>
+          )
+        ) : (
+          <Container maxWidth={false} className={classes.mainContainer}>
+            <PageSnackbar />
+            {isAdmin(organization) ? (
+              <EmptyMessage
+                className={classes.message}
+                title={emptyMessageStrings.ONBOARDING_ADMIN_TITLE}
+                rowItems={getEmptyState()}
+              />
+            ) : (
+              <EmptyMessage
+                className={classes.message}
+                title={emptyMessageStrings.REACH_OUT_TO_ADMIN_TITLE}
+                text={emptyMessageStrings.NO_NURSERIES_NON_ADMIN_MSG}
+              />
+            )}
+          </Container>
+        )}
+      </Box>
     </TfMain>
   );
 }

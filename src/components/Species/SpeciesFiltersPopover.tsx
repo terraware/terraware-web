@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     marginLeft: '8px',
   },
   icon: {
-    fill: theme.palette.TwClrIcn,
+    fill: theme.palette.TwClrIcnSecondary,
     marginLeft: '8px',
   },
   popoverContainer: {
@@ -110,7 +110,7 @@ export default function SpeciesFiltersPopover({ filters, setFilters }: SpeciesFi
   return (
     <div>
       <IconButton onClick={handleClick} size='small' className={classes.iconContainer}>
-        <Icon name='filter' />
+        <Icon name='filter' size='medium' className={classes.icon} />
       </IconButton>
       <Popover
         id='simple-popover'

@@ -24,7 +24,12 @@ export default function Accession2PlantSiteDetails(props: Accession2PlantSiteDet
     return (
       <Grid item xs={12} marginTop={theme.spacing(2)}>
         <Box display='flex' justifyContent='flex-start'>
-          <Link sx={{ textDecoration: 'none' }} href='#' id='addPlantSiteDescription' onClick={() => setIsOpen(true)}>
+          <Link
+            sx={{ color: theme.palette.TwClrTxtBrand, textDecoration: 'none' }}
+            href='#'
+            id='addPlantSiteDescription'
+            onClick={() => setIsOpen(true)}
+          >
             {strings.ADD_PLANT_SITE_DESCRIPTION}
           </Link>
         </Box>

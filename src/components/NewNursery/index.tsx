@@ -1,4 +1,4 @@
-import { Container, Grid, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
@@ -41,7 +41,7 @@ export default function NurseryView({ organization, reloadOrganizationData }: Si
     if (isMobile) {
       return 12;
     }
-    return 4;
+    return 6;
   };
 
   useEffect(() => {
@@ -91,19 +91,20 @@ export default function NurseryView({ organization, reloadOrganizationData }: Si
 
   return (
     <TfMain>
-      <Container maxWidth={false}>
+      <Box marginBottom={theme.spacing(4)} paddingLeft={theme.spacing(3)}>
+        <Typography fontSize='24px' fontWeight={600}>
+          {selectedNursery ? selectedNursery.name : strings.ADD_NURSERY}
+        </Typography>
+        <PageSnackbar />
+      </Box>
+      <Box
+        sx={{
+          backgroundColor: theme.palette.TwClrBg,
+          borderRadius: '32px',
+          padding: theme.spacing(3),
+        }}
+      >
         <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <Typography fontSize='24px' fontWeight={600} margin={theme.spacing(3, 0)}>
-              {selectedNursery ? selectedNursery.name : strings.ADD_NURSERY}
-            </Typography>
-          </Grid>
-          <PageSnackbar />
-          <Grid item xs={12}>
-            <Typography fontSize='20px' fontWeight={600}>
-              {strings.GENERAL}
-            </Typography>
-          </Grid>
           <Grid item xs={gridSize()}>
             <TextField
               id='name'
@@ -125,7 +126,7 @@ export default function NurseryView({ organization, reloadOrganizationData }: Si
             />
           </Grid>
         </Grid>
-      </Container>
+      </Box>
       <FormBottomBar onCancel={goToNurseries} onSave={saveNursery} />
     </TfMain>
   );
