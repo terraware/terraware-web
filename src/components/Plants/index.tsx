@@ -84,7 +84,7 @@ export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Elemen
     }
   };
 
-  if (!plantingSites) {
+  if (!plantingSites || (plantingSites.length && !selectedPlantingSite)) {
     return (
       <TfMain>
         <CircularProgress sx={{ margin: 'auto' }} />
