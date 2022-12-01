@@ -17,8 +17,8 @@ export interface DashboardChartProps {
 }
 
 BarElement.prototype.inRange = function (chartX: number, chartY: number) {
-  const width = BarElement.prototype.getProps(['width']).width;
-  const base = BarElement.prototype.getProps(['base']).base;
+  const width = this.getProps(['width']).width;
+  const base = this.getProps(['base']).base;
 
   return chartX >= this.x - width / 2 && chartX <= this.x + width / 2 && chartY >= this.y && chartY <= base + 5;
 };
