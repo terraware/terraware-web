@@ -1,3 +1,4 @@
+41970ec SW-2299 Remove double scroll bar when opening dropdown (#850)
 3092743 SW-2296 Add role column to the Organization table under My Account (#849)
 fdb1f35 SW-2383 Show small values in chart when the range of values is wide (#843)
 5ccb9d7 SW-2397 / SW-2405 More empty state updates for plants dashboard  (#848)
