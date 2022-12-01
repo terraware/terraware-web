@@ -1,7 +1,7 @@
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { useTheme, Box, IconButton, Link as LinkMUI, Tab, Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { Button, Icon } from '@terraware/web-components';
+import { Button, Icon, IconTooltip } from '@terraware/web-components';
 import moment from 'moment';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link, useHistory, useParams } from 'react-router-dom';
@@ -601,6 +601,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
         <Box sx={editableDynamicValuesProps}>
           <Typography minWidth={isMobile ? '100px' : 0} fontSize='14px' color={themeObj.palette.TwClrTxtSecondary}>
             {strings.QUANTITY}
+            {!quantityEditable && <IconTooltip title={strings.EDIT_QUANTITY_DISABLED} />}
           </Typography>
           {accession?.remainingQuantity?.quantity !== undefined ? (
             <Box
