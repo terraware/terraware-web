@@ -38,7 +38,7 @@ export default function GenericMap({ style }: GenericMapProps): JSX.Element | nu
       return;
     }
     fetchMapboxToken();
-  });
+  }, [mapId, token, fetchMapboxToken]);
 
   if (!token) {
     return (

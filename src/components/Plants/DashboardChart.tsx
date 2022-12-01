@@ -6,7 +6,7 @@ import { generateTerrawareRandomColors } from 'src/utils/generateRandomColor';
 
 const useStyles = makeStyles(() => ({
   chart: {
-    height: '180px',
+    minHeight: '200px',
   },
 }));
 

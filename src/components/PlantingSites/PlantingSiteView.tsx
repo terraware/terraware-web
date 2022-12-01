@@ -61,7 +61,7 @@ export default function PlantingSiteView(): JSX.Element {
   };
 
   return (
-    <TfMain>
+    <TfMain moreScreen={true}>
       <Container maxWidth={false} sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
         <Grid container spacing={3} flexGrow={0}>
           <Grid item xs={12}>
