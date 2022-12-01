@@ -1,7 +1,7 @@
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { useTheme, Box, Link as LinkMUI, Menu, Tab, Theme, Typography, Grid, MenuItem } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { Button, Icon, IconTooltip } from '@terraware/web-components';
+import { Button, Icon } from '@terraware/web-components';
 import moment from 'moment';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link, useHistory, useParams } from 'react-router-dom';
