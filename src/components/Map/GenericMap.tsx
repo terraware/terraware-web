@@ -27,7 +27,7 @@ export default function GenericMap({ style }: GenericMapProps): JSX.Element | nu
     const response = await getMapboxToken();
     if (response.requestSucceeded) {
       setToken(response.token);
-      setMapId(Date.now.toString());
+      setMapId(Date.now().toString());
     } else {
       snackbar.toastError(response.error);
     }

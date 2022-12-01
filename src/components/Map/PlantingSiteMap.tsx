@@ -148,7 +148,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
     const response = await getMapboxToken();
     if (response.requestSucceeded) {
       setToken(response.token);
-      setMapId(Date.now.toString());
+      setMapId(Date.now().toString());
     } else {
       snackbar.toastError(response.error);
     }

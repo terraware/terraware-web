@@ -54,7 +54,12 @@ export default function PlantingSiteDashboardMap(props: PlantingSiteDashboardMap
   return (
     <Box display='flex' height='100%'>
       {hasPolygons ? (
-        <PlantingSiteMap plantingSite={plantingSite} key={siteId} style={MAP_STYLE} contextRenderer={contextRenderer} />
+        <PlantingSiteMap
+          plantingSite={plantingSite}
+          key={plantingSite?.id}
+          style={MAP_STYLE}
+          contextRenderer={contextRenderer}
+        />
       ) : (
         <GenericMap style={MAP_STYLE} />
       )}
