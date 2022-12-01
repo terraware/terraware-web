@@ -3,7 +3,7 @@ import { Box, CircularProgress } from '@mui/material';
 import { getMapboxToken } from 'src/api/tracking/tracking';
 import useSnackbar from 'src/utils/useSnackbar';
 import Map from './Map';
-import { MapOptions } from './MapModels';
+import { MapOptions, MapPopupRenderer } from './MapModels';
 
 const DUMMY_MAP_OPTIONS: MapOptions = {
   bbox: {
@@ -14,31 +14,43 @@ const DUMMY_MAP_OPTIONS: MapOptions = {
 };
 
 type GenericMapProps = {
+  contextRenderer?: MapPopupRenderer;
+  options?: MapOptions;
   style?: object;
 };
 
-export default function GenericMap({ style }: GenericMapProps): JSX.Element | null {
+export default function GenericMap({ contextRenderer, options, style }: GenericMapProps): JSX.Element | null {
   const [snackbar] = useState(useSnackbar());
   const [token, setToken] = useState<string>();
   const [mapId, setMapId] = useState<string>();
+  const [tokenPromise, setTokenPromise] = useState<Promise<void>>();
 
   // fetch token
   const fetchMapboxToken = useCallback(async () => {
     const response = await getMapboxToken();
     if (response.requestSucceeded) {
       setToken(response.token);
-      setMapId(Date.now.toString());
+      setMapId(Date.now().toString());
     } else {
       snackbar.toastError(response.error);
     }
   }, [snackbar]);
 
-  useEffect(() => {
-    if (token) {
+  const refreshToken = useCallback(() => {
+    const promise = fetchMapboxToken();
+    setTokenPromise(promise);
+  }, [fetchMapboxToken]);
+
+  const getToken = useCallback(() => {
+    if (tokenPromise) {
       return;
     }
-    fetchMapboxToken();
-  }, [mapId, token, fetchMapboxToken]);
+    refreshToken();
+  }, [tokenPromise, refreshToken]);
+
+  useEffect(() => {
+    getToken();
+  }, [getToken]);
 
   if (!token) {
     return (
@@ -50,7 +62,14 @@ export default function GenericMap({ style }: GenericMapProps): JSX.Element | nu
 
   return (
     <Box sx={{ display: 'flex', flexGrow: 1 }}>
-      <Map token={token} options={DUMMY_MAP_OPTIONS} onTokenExpired={fetchMapboxToken} mapId={mapId} style={style} />
+      <Map
+        token={token}
+        options={options || DUMMY_MAP_OPTIONS}
+        onTokenExpired={refreshToken}
+        mapId={mapId}
+        style={style}
+        popupRenderer={contextRenderer}
+      />
     </Box>
   );
 }
