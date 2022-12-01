@@ -245,7 +245,7 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
             />
           </Grid>
         </Grid>
-        <Box display='flex' flexDirection='column' marginTop={isDesktop ? theme.spacing(9) : theme.spacing(4)}>
+        <Box display='flex' flexDirection='column' marginTop={isDesktop ? theme.spacing(3) : theme.spacing(4)}>
           <Box>
             <p className={classes.roleDescription}>{strings.ROLES_INFO}</p>
             <ul className={classes.rolesList}>
