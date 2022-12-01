@@ -35,7 +35,7 @@ export async function listNurseryWithdrawals(
     ],
     search: convertToSearchNodePayload(searchCriteria, organizationId),
     sortOrder: [{ field: 'id', direction: 'Ascending' }],
-    count: 1000,
+    count,
   };
 
   const data = await search(searchParams);
