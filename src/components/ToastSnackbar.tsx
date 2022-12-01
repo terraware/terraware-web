@@ -9,10 +9,10 @@ import { Message } from '@terraware/web-components';
 const useStyles = makeStyles((theme: Theme) => ({
   mainSnackbar: {
     '&.MuiSnackbar-anchorOriginTopCenter': {
-      top: '75px',
+      top: '32px',
     },
     '&.MuiSnackbar-anchorOriginBottomCenter': {
-      bottom: '64px',
+      bottom: '32px',
     },
   },
   toastContainer: {
