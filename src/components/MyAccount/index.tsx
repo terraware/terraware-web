@@ -58,6 +58,7 @@ const columns: TableColumnType[] = [
   { key: 'name', name: strings.ORGANIZATION_NAME, type: 'string' },
   { key: 'description', name: strings.DESCRIPTION, type: 'string' },
   { key: 'totalUsers', name: strings.PEOPLE, type: 'string' },
+  { key: 'role', name: strings.ROLE, type: 'string' },
 ];
 
 type MyAccountProps = {
