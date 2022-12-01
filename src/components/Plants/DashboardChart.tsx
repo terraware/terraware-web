@@ -1,8 +1,8 @@
-import Chart from 'chart.js/auto';
 import React from 'react';
 import { makeStyles } from '@mui/styles';
 import { useTheme } from '@mui/material';
 import { generateTerrawareRandomColors } from 'src/utils/generateRandomColor';
+import { Chart } from 'chart.js';
 
 const useStyles = makeStyles(() => ({
   chart: {
@@ -35,6 +35,7 @@ export default function DashboardChart(props: DashboardChartProps): JSX.Element 
               data: chartValues,
               barThickness: 50, // number (pixels) or 'flex'
               backgroundColor: colors,
+              minBarLength: 3,
             },
           ],
         },
@@ -58,11 +59,7 @@ export default function DashboardChart(props: DashboardChartProps): JSX.Element 
           scales: {
             y: {
               ticks: {
-                callback: (value, index, ticks) => {
-                  if (+value % 1 === 0) {
-                    return value;
-                  }
-                },
+                precision: 0,
               },
             },
           },
