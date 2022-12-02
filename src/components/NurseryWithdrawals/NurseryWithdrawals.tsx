@@ -17,7 +17,6 @@ import useForm from 'src/utils/useForm';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import NurseryWithdrawalsFiltersPopover from './NurseryWithdrawalsFiltersPopover';
 import Pill from '../Pill';
-import { getNurseryName } from '../Inventory/FilterUtils';
 import { getAllNurseries } from 'src/utils/organization';
 
 export type NurseryWithdrawalsFiltersType = {
@@ -163,11 +162,7 @@ export default function NurseryWithdrawals(props: NurseryWithdrawalsProps): JSX.
     onApplyFilters();
   }, [filters, onApplyFilters]);
 
-  const removeFilter = (
-    filter: keyof NurseryWithdrawalsFiltersType,
-    value: string,
-    setFilters: React.Dispatch<React.SetStateAction<NurseryWithdrawalsFiltersType>>
-  ) => {
+  const removeFilter = (filter: keyof NurseryWithdrawalsFiltersType, value: string) => {
     setFilters((prev) => {
       const oldValue = prev[filter];
       return {
@@ -177,7 +172,7 @@ export default function NurseryWithdrawals(props: NurseryWithdrawalsProps): JSX.
     });
   };
 
-  const getNurseryName = (facilityId: string, organization: ServerOrganization) => {
+  const getNurseryName = (facilityId: string) => {
     const found = getAllNurseries(organization).find((n) => n.id.toString() === facilityId.toString());
     if (found) {
       return found.name;
@@ -222,15 +217,15 @@ export default function NurseryWithdrawals(props: NurseryWithdrawalsProps): JSX.
               />
               <NurseryWithdrawalsFiltersPopover filters={filters} setFilters={setFilters} organization={organization} />
               <Grid xs={12} display='flex'>
-                {(Object.keys(filters) as Array<keyof typeof filters>).map(
+                {(Object.keys(filters) as (keyof typeof filters)[]).map(
                   (filter: keyof NurseryWithdrawalsFiltersType) => {
                     return filters[filter]?.map((value) => {
                       return (
                         <Pill
                           key={value}
                           filter={filter}
-                          value={filter === 'fromNurseryIds' ? getNurseryName(value, organization) : value}
-                          onRemoveFilter={() => removeFilter(filter, value, setFilters)}
+                          value={filter === 'fromNurseryIds' ? getNurseryName(value) : value}
+                          onRemoveFilter={() => removeFilter(filter, value)}
                         />
                       );
                     });
