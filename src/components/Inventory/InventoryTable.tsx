@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
 import { Table, TableColumnType } from '@terraware/web-components';
-import { Grid } from '@mui/material';
+import { Box, Grid, useTheme } from '@mui/material';
 import { SearchResponseElement } from 'src/api/search';
 import InventoryCellRenderer from './InventoryCellRenderer';
 import { InventoryFiltersType } from './InventoryFiltersPopover';
@@ -56,6 +56,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
   const history = useHistory();
   const trackingEnabled = isEnabled('Tracking V1');
+  const theme = useTheme();
 
   const withdrawInventory = () => {
     const speciesIds = selectedRows.filter((row) => row.species_id).map((row) => `speciesId=${row.species_id}`);
@@ -79,13 +80,15 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
       <Grid item xs={12}>
         <PageSnackbar />
       </Grid>
-      <Search
-        organization={organization}
-        searchValue={temporalSearchValue}
-        onSearch={(val) => setTemporalSearchValue(val)}
-        filters={filters}
-        setFilters={setFilters}
-      />
+      <Box marginBottom={theme.spacing(2)}>
+        <Search
+          organization={organization}
+          searchValue={temporalSearchValue}
+          onSearch={(val) => setTemporalSearchValue(val)}
+          filters={filters}
+          setFilters={setFilters}
+        />
+      </Box>
       <Grid item xs={12}>
         <div>
           <Grid container spacing={4}>

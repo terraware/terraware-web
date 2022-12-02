@@ -23,6 +23,7 @@ export default function CannotRemovePeopleDialog(props: CannotRemovePeopleDialog
         <Button label={strings.DELETE} icon='iconTrashCan' type='destructive' onClick={onSubmit} key='button-2' />,
       ]}
       message={strings.CANNOT_REMOVE_MSG}
+      skrim={true}
     />
   );
 }

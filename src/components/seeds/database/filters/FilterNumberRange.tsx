@@ -66,7 +66,14 @@ export default function NumberRange(props: Props): JSX.Element {
     <div className={classes.box}>
       <Grid container spacing={4}>
         <Grid item xs={5}>
-          <TextField id='minValue' value={minValue} onChange={onChange} label='Min' onKeyPress={(e) => onEnter(e)} />
+          <TextField
+            autoFocus={true}
+            id='minValue'
+            value={minValue}
+            onChange={onChange}
+            label='Min'
+            onKeyPress={(e) => onEnter(e)}
+          />
         </Grid>
         <Grid item xs={1} className={classes.flexContainer}>
           <ArrowForward />

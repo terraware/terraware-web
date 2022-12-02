@@ -25,6 +25,7 @@ export default function LeaveOrganizationDialog(props: LeaveOrganizationDialogPr
         <Button label={strings.LEAVE_AND_SAVE} type='destructive' onClick={onSubmit} key='button-2' />,
       ]}
       message={strings.formatString(strings.REMOVING_ORG_WARNING, orgName)}
+      skrim={true}
     />
   );
 }

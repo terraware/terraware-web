@@ -28,15 +28,16 @@ interface StyleProps {
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
-    padding: '24px',
     marginBottom: theme.spacing(8),
+    padding: '0',
   },
   content: {
-    border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
-    borderRadius: '8px',
+    background: theme.palette.TwClrBg,
+    borderRadius: '24px',
     margin: 'auto',
     marginTop: `max(10vh, ${theme.spacing(8)}px)`,
     maxWidth: '800px',
+    padding: '24px',
   },
   message: {
     margin: '0 auto',
@@ -71,7 +72,7 @@ const NO_SEEDBANKS_CONTENT: PageContent = {
   listItems: [
     {
       icon: 'blobbyIconSeedBank',
-      title: strings.SEED_BANK_SETUP,
+      title: '',
       description: '',
     },
   ],
@@ -87,8 +88,6 @@ const NO_NURSERIES_CONTENT: PageContent = {
   listItems: [
     {
       icon: 'blobbyIconNursery',
-      title: strings.INVENTORY_DATA,
-      description: strings.INVENTORY_DATA_DESCRIPTION,
     },
   ],
   buttonText: strings.ADD_NURSERY,
@@ -110,12 +109,18 @@ const NO_PLANTING_SITES_CONTENT: PageContent = {
 };
 
 type EmptyStatePageProps = {
+  backgroundImageVisible?: boolean;
   pageName: 'Species' | 'SeedBanks' | 'Nurseries' | 'Inventory' | 'PlantingSites';
   organization?: ServerOrganization;
   reloadData?: () => void;
 };
 
-export default function EmptyStatePage({ pageName, organization, reloadData }: EmptyStatePageProps): JSX.Element {
+export default function EmptyStatePage({
+  backgroundImageVisible = true,
+  pageName,
+  organization,
+  reloadData,
+}: EmptyStatePageProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const classes = useStyles({ isMobile });
   const history = useHistory();
@@ -270,7 +275,7 @@ export default function EmptyStatePage({ pageName, organization, reloadData }: E
   };
 
   return (
-    <TfMain>
+    <TfMain backgroundImageVisible={backgroundImageVisible}>
       {organization && (
         <>
           <AddSpeciesModal open={addSpeciesModalOpened} onClose={onCloseEditSpeciesModal} organization={organization} />

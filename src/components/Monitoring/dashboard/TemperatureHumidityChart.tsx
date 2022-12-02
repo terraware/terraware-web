@@ -2,6 +2,7 @@ import { makeStyles } from '@mui/styles';
 import React, { useEffect, useState } from 'react';
 import strings from 'src/strings';
 import Select from '../../common/Select/Select';
+import Icon from '../../common/icon/Icon';
 import { Chart } from 'chart.js';
 import { Device } from 'src/types/Device';
 import { getTimeseriesHistory } from 'src/api/timeseries/timeseries';
@@ -25,16 +26,29 @@ interface StyleProps {
 
 const useStyles = makeStyles((theme: Theme) => ({
   graphContainer: {
-    border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+    backgroundColor: theme.palette.TwClrBg,
+    borderRadius: '24px',
     padding: '24px',
+  },
+  graphTitleContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    margin: theme.spacing(0, 0, 3, 1),
+  },
+  graphTitleIcon: {
+    color: theme.palette.TwClrIcnSecondary,
   },
   graphTitle: {
     fontWeight: 600,
     fontSize: '20px',
-    margin: '0 0 24px 0',
+    margin: theme.spacing(0, 1),
   },
   dropDownsContainer: {
     display: 'flex',
+  },
+  dropDowns: {
+    display: 'block',
+    margin: theme.spacing(0, 2, 2, 0),
   },
   chartContainer: {
     marginTop: '40px',
@@ -428,15 +442,20 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
 
   return (
     <div className={classes.graphContainer}>
-      <p className={classes.graphTitle}>{strings.TEMPERATURE_AND_HUMIDITY_SENSOR_DATA}</p>
+      <div className={classes.graphTitleContainer}>
+        <Icon name='futures' size='medium' className={classes.graphTitleIcon} />
+        <p className={classes.graphTitle}>{strings.TEMPERATURE_AND_HUMIDITY_SENSOR_DATA}</p>
+      </div>
       <div className={isMobile ? '' : classes.dropDownsContainer}>
         <Select
+          className={classes.dropDowns}
           options={availableLocations?.filter((location) => location.type === 'sensor').map((aL) => aL.name)}
           selectedValue={selectedLocation?.name}
           onChange={onChangeLocation}
           label={strings.LOCATION}
         />
         <Select
+          className={classes.dropDowns}
           options={TIME_PERIODS}
           onChange={onChangeSelectedPeriod}
           selectedValue={selectedPeriod}

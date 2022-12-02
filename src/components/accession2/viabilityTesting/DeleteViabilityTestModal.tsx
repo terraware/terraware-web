@@ -40,6 +40,7 @@ export default function DeleteViabilityTestModal(props: DeleteViabilityTestModal
         <Button onClick={deleteHandler} type='destructive' label={strings.DELETE} key='button-2' />,
       ]}
       message={strings.formatString(strings.DELETE_VIABILITY_TEST_MESSAGE, viabilityTest.id.toString())}
+      skrim={true}
     >
       <Typography sx={{ paddingTop: 3 }}>{strings.ARE_YOU_SURE}</Typography>
     </DialogBox>

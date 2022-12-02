@@ -9,7 +9,7 @@ const terrawareColors = (theme: Theme) => [
   theme.palette.TwClrBaseOrange300,
   theme.palette.TwClrBasePink300,
   theme.palette.TwClrBaseGray300,
-  theme.palette.TwClrBaseTeal300,
+  theme.palette.TwClrBaseLightGreen300,
 ];
 
 const generateRandomColor = () => {

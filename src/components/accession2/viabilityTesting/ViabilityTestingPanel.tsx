@@ -1,10 +1,19 @@
-import { Box, Typography } from '@mui/material';
-import { Button } from '@terraware/web-components';
+import { Box, Theme, Typography, useTheme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import { Button, Icon } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import { Accession2 } from 'src/api/accessions2/accession';
 import { ViabilityTest } from 'src/api/types/accessions';
 import strings from 'src/strings';
 import ViabilityTestingDatabase from './ViabilityTestingDatabase';
+
+const useStyles = makeStyles((theme: Theme) => ({
+  icon: {
+    width: '180px',
+    height: '115px',
+    margin: `${theme.spacing(2)} 0`,
+  },
+}));
 
 type ViabilityTestingPanelProps = {
   accession: Accession2;
@@ -16,8 +25,10 @@ type ViabilityTestingPanelProps = {
 };
 
 export default function ViabilityTestingPanel(props: ViabilityTestingPanelProps): JSX.Element {
+  const classes = useStyles();
   const { accession, canAddTest, setNewViabilityTestOpened, setSelectedTest, setViewViabilityTestModalOpened } = props;
   const { isMobile } = useDeviceInfo();
+  const theme = useTheme();
 
   const onTestSelected = (test: ViabilityTest) => {
     setSelectedTest(test);
@@ -36,16 +47,16 @@ export default function ViabilityTestingPanel(props: ViabilityTestingPanelProps)
           />
         </Box>
       ) : (
-        <Box width={isMobile ? '100%' : '420px'} textAlign='center' sx={{ margin: '0 auto', paddingTop: 4 }}>
+        <Box
+          width={isMobile ? '100%' : '700px'}
+          textAlign='center'
+          sx={{ margin: '0 auto', padding: theme.spacing(9, 0) }}
+        >
           <Typography>{strings.VIABILITY_TESTING_EMPTY_MESSAGE}</Typography>
+          <Icon name='blobbyIconSeedBank' className={classes.icon} />
           {canAddTest ? (
-            <Box sx={{ marginTop: 4 }}>
-              <Button
-                priority='secondary'
-                label={strings.ADD_TEST}
-                icon='plus'
-                onClick={() => setNewViabilityTestOpened(true)}
-              />
+            <Box>
+              <Button priority='secondary' label={strings.ADD_TEST} onClick={() => setNewViabilityTestOpened(true)} />
             </Box>
           ) : null}
         </Box>

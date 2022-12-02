@@ -42,8 +42,8 @@ export default function ViabilityTestingDatabase(props: ViabilityTestingDatabase
         alignItems='center'
         marginBottom={theme.spacing(3)}
       >
-        <Typography fontSize='16px' fontWeight={500}>
-          {strings.VIABILITY_TESTING}
+        <Typography fontSize='16px' fontWeight={600}>
+          {strings.VIABILITY_TESTS}
         </Typography>
         {canAddTest ? (
           <Button

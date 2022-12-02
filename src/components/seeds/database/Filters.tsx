@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     flexDirection: (props: StyleProps) => (props.isMobile ? 'column' : 'row'),
   },
   pill: {
-    margin: theme.spacing(1, 1.5, 0, 0),
+    marginRight: theme.spacing(1.5),
     height: '32px',
     display: 'inline-block',
     marginBottom: (props: StyleProps) => (props.isDesktop ? 0 : theme.spacing(1)),
