@@ -96,20 +96,14 @@ export default function NurseryWithdrawals(props: NurseryWithdrawalsProps): JSX.
               />
             </Grid>
             <Grid item xs={12}>
-              <div>
-                <Grid container spacing={4}>
-                  <Grid item xs={12}>
-                    <Table
-                      id='withdrawal-log'
-                      columns={columns}
-                      rows={nurseryWithdrawals || []}
-                      Renderer={WithdrawalLogRenderer}
-                      orderBy={'name'}
-                      onSelect={onWithdrawalClicked}
-                    />
-                  </Grid>
-                </Grid>
-              </div>
+              <Table
+                id='withdrawal-log'
+                columns={columns}
+                rows={nurseryWithdrawals || []}
+                Renderer={WithdrawalLogRenderer}
+                orderBy={'name'}
+                onSelect={onWithdrawalClicked}
+              />
             </Grid>
           </Grid>
         </Grid>

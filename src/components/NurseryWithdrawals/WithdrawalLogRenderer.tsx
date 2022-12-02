@@ -31,11 +31,12 @@ export default function WithdrawalLogRenderer(props: RendererProps<TableRowType>
   };
 
   const createLinkToNurseryWithdrawalDetail = (iValue: React.ReactNode | unknown[]) => {
-    const nurseryWithdrawalDetailLocation = {
-      pathname: APP_PATHS.NURSERY_WITHDRAWALS_DETAILS.replace(':withdrawalId', row.id.toString()),
-    };
+    const nurseryWithdrawalDetailLocation = APP_PATHS.NURSERY_WITHDRAWALS_DETAILS.replace(
+      ':withdrawalId',
+      row.id.toString()
+    );
     return (
-      <Link to={nurseryWithdrawalDetailLocation.pathname} className={classes.link}>
+      <Link to={nurseryWithdrawalDetailLocation} className={classes.link}>
         {iValue}
       </Link>
     );
