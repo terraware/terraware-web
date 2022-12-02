@@ -9,3 +9,6 @@ export type Plot = components[typeof schemas]['PlotPayload'];
 
 // geometry and types of geometries
 export type MultiPolygon = components[typeof schemas]['MultiPolygon'];
+
+// delivery
+export type Delivery = components[typeof schemas]['DeliveryPayload'];

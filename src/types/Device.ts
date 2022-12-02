@@ -22,6 +22,6 @@ export type DeviceTemplate = {
   protocol?: string;
   address?: string;
   port?: number;
-  settings?: { [key: string]: { [key: string]: unknown } };
+  settings?: { [key: string]: unknown };
   verbosity?: number;
 };

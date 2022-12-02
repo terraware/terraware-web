@@ -5,13 +5,13 @@
 
 export interface paths {
   "/api/v1/automations": {
-    get: operations["listAutomations_2"];
-    post: operations["createAutomation_2"];
+    get: operations["listAutomations"];
+    post: operations["createAutomation"];
   };
   "/api/v1/automations/{automationId}": {
-    get: operations["getAutomation_2"];
-    put: operations["updateAutomation_2"];
-    delete: operations["deleteAutomation_2"];
+    get: operations["getAutomation"];
+    put: operations["updateAutomation"];
+    delete: operations["deleteAutomation"];
   };
   "/api/v1/automations/{automationId}/trigger": {
     post: operations["postAutomationTrigger"];
@@ -50,15 +50,6 @@ export interface paths {
   "/api/v1/facilities/{facilityId}/alert/send": {
     post: operations["sendFacilityAlert"];
   };
-  "/api/v1/facilities/{facilityId}/automations": {
-    get: operations["listAutomations_1"];
-    post: operations["createAutomation_1"];
-  };
-  "/api/v1/facilities/{facilityId}/automations/{automationId}": {
-    get: operations["getAutomation_1"];
-    put: operations["updateAutomation_1"];
-    delete: operations["deleteAutomation_1"];
-  };
   "/api/v1/facilities/{facilityId}/configured": {
     /** After connecting a device manager and finishing any necessary configuration of the facility's devices, send this request to enable processing of timeseries values and alerts from the device manager. Only valid if the facility's connection state is `Connected`. */
     post: operations["postConfigured_1"];
@@ -76,15 +67,6 @@ export interface paths {
   };
   "/api/v1/facility/{facilityId}/alert/send": {
     post: operations["sendFacilityAlert_1"];
-  };
-  "/api/v1/facility/{facilityId}/automations": {
-    get: operations["listAutomations"];
-    post: operations["createAutomation"];
-  };
-  "/api/v1/facility/{facilityId}/automations/{automationId}": {
-    get: operations["getAutomation"];
-    put: operations["updateAutomation"];
-    delete: operations["deleteAutomation"];
   };
   "/api/v1/facility/{facilityId}/configured": {
     /** After connecting a device manager and finishing any necessary configuration of the facility's devices, send this request to enable processing of timeseries values and alerts from the device manager. Only valid if the facility's connection state is `Connected`. */
@@ -443,12 +425,18 @@ export interface components {
     AutomationPayload: {
       id: number;
       facilityId: number;
+      type: string;
       /** Short human-readable name of this automation. */
       name: string;
       /** Human-readable description of this automation. */
       description?: string;
+      deviceId?: number;
+      timeseriesName?: string;
+      verbosity: number;
+      lowerThreshold?: number;
+      upperThreshold?: number;
       /** Client-defined configuration data for this automation. */
-      configuration?: { [key: string]: unknown };
+      settings?: { [key: string]: unknown };
     };
     AutomationTriggerRequestPayload: {
       /** For automations that are triggered by changes to timeseries values, the value that triggered the automation. */
@@ -475,7 +463,7 @@ export interface components {
     };
     BatchResponsePayload: {
       batch: components["schemas"]["BatchPayload"];
-      status?: components["schemas"]["SuccessOrError"];
+      status: components["schemas"]["SuccessOrError"];
     };
     BatchWithdrawalPayload: {
       batchId: number;
@@ -526,7 +514,7 @@ export interface components {
     };
     CreateAccessionResponsePayloadV2: {
       accession: components["schemas"]["AccessionPayloadV2"];
-      status?: components["schemas"]["SuccessOrError"];
+      status: components["schemas"]["SuccessOrError"];
     };
     CreateAutomationRequestPayload: {
       facilityId: number;
@@ -538,11 +526,11 @@ export interface components {
       verbosity?: number;
       lowerThreshold?: number;
       upperThreshold?: number;
-      settings?: { [key: string]: { [key: string]: unknown } };
+      settings?: { [key: string]: unknown };
     };
     CreateAutomationResponsePayload: {
       id: number;
-      status?: components["schemas"]["SuccessOrError"];
+      status: components["schemas"]["SuccessOrError"];
     };
     CreateBatchRequestPayload: {
       addedDate: string;
@@ -587,7 +575,7 @@ export interface components {
     };
     CreateFacilityResponsePayload: {
       id: number;
-      status?: components["schemas"]["SuccessOrError"];
+      status: components["schemas"]["SuccessOrError"];
     };
     CreateNurseryTransferRequestPayload: {
       date: string;
@@ -605,11 +593,11 @@ export interface components {
       accession: components["schemas"]["AccessionPayloadV2"];
       /** Details of newly-created seedling batch. */
       batch: components["schemas"]["BatchPayload"];
-      status?: components["schemas"]["SuccessOrError"];
+      status: components["schemas"]["SuccessOrError"];
     };
     CreateNurseryWithdrawalPhotoResponsePayload: {
       id: number;
-      status?: components["schemas"]["SuccessOrError"];
+      status: components["schemas"]["SuccessOrError"];
     };
     CreateNurseryWithdrawalRequestPayload: {
       batchWithdrawals: components["schemas"]["BatchWithdrawalPayload"][];
@@ -637,7 +625,7 @@ export interface components {
     CreateOrganizationUserResponsePayload: {
       /** The ID of the newly-added user. */
       id: number;
-      status?: components["schemas"]["SuccessOrError"];
+      status: components["schemas"]["SuccessOrError"];
     };
     CreatePlantingSiteRequestPayload: {
       description?: string;
@@ -646,11 +634,11 @@ export interface components {
     };
     CreatePlantingSiteResponsePayload: {
       id: number;
-      status?: components["schemas"]["SuccessOrError"];
+      status: components["schemas"]["SuccessOrError"];
     };
     CreateSpeciesResponsePayload: {
       id: number;
-      status?: components["schemas"]["SuccessOrError"];
+      status: components["schemas"]["SuccessOrError"];
     };
     CreateTimeseriesEntry: {
       /** ID of device that produces this timeseries. */
@@ -732,7 +720,6 @@ export interface components {
       address?: string;
       /** Port number if relevant for the protocol. */
       port?: number;
-      /** Protocol- and device-specific custom settings. This is an arbitrary JSON object; the exact settings depend on the device type. */
       settings?: { [key: string]: unknown };
       /** Level of diagnostic information to log. */
       verbosity?: number;
@@ -763,7 +750,7 @@ export interface components {
       protocol?: string;
       address?: string;
       port?: number;
-      settings?: { [key: string]: { [key: string]: unknown } };
+      settings?: { [key: string]: unknown };
       verbosity?: number;
     };
     DeviceUnresponsiveRequestPayload: {
@@ -808,87 +795,87 @@ export interface components {
     GetAccessionHistoryResponsePayload: {
       /** History of changes in descending time order (newest first.) */
       history: components["schemas"]["AccessionHistoryEntryPayload"][];
-      status?: components["schemas"]["SuccessOrError"];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetAccessionResponsePayloadV2: {
       accession: components["schemas"]["AccessionPayloadV2"];
-      status?: components["schemas"]["SuccessOrError"];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetAutomationResponsePayload: {
       automation: components["schemas"]["AutomationPayload"];
-      status?: components["schemas"]["SuccessOrError"];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetCurrentTimeResponsePayload: {
       currentTime: string;
-      status?: components["schemas"]["SuccessOrError"];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetDeliveryResponsePayload: {
       delivery: components["schemas"]["DeliveryPayload"];
-      status?: components["schemas"]["SuccessOrError"];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetDeviceManagerResponsePayload: {
       manager: components["schemas"]["DeviceManagerPayload"];
-      status?: components["schemas"]["SuccessOrError"];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetDeviceManagersResponsePayload: {
       /** List of device managers that match the conditions in the request. Empty if there were no matches, e.g., the requested short code didn't exist. */
       managers: components["schemas"]["DeviceManagerPayload"][];
-      status?: components["schemas"]["SuccessOrError"];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetDeviceResponsePayload: {
       device: components["schemas"]["DeviceConfig"];
-      status?: components["schemas"]["SuccessOrError"];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetFacilityResponse: {
       facility: components["schemas"]["FacilityPayload"];
-      status?: components["schemas"]["SuccessOrError"];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetMapboxTokenResponsePayload: {
       token: string;
-      status?: components["schemas"]["SuccessOrError"];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetNotificationResponsePayload: {
       notification: components["schemas"]["NotificationPayload"];
-      status?: components["schemas"]["SuccessOrError"];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetNotificationsCountResponsePayload: {
       notifications: components["schemas"]["NotificationCountPayload"][];
-      status?: components["schemas"]["SuccessOrError"];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetNotificationsResponsePayload: {
       notifications: components["schemas"]["NotificationPayload"][];
-      status?: components["schemas"]["SuccessOrError"];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetNurseryWithdrawalResponsePayload: {
       batches: components["schemas"]["BatchPayload"][];
       /** If the withdrawal was an outplanting to a planting site, the delivery that was created. Not present for other withdrawal purposes. */
       delivery?: components["schemas"]["DeliveryPayload"];
       withdrawal: components["schemas"]["NurseryWithdrawalPayload"];
-      status?: components["schemas"]["SuccessOrError"];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetOrganizationResponsePayload: {
       organization: components["schemas"]["OrganizationPayload"];
-      status?: components["schemas"]["SuccessOrError"];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetOrganizationUserResponsePayload: {
       user: components["schemas"]["OrganizationUserPayload"];
-      status?: components["schemas"]["SuccessOrError"];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetPlantingSiteResponsePayload: {
       site: components["schemas"]["PlantingSitePayload"];
-      status?: components["schemas"]["SuccessOrError"];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetSpeciesProblemResponsePayload: {
       problem: components["schemas"]["SpeciesProblemElement"];
-      status?: components["schemas"]["SuccessOrError"];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetSpeciesResponsePayload: {
       species: components["schemas"]["SpeciesResponseElement"];
-      status?: components["schemas"]["SuccessOrError"];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetSpeciesSummaryResponsePayload: {
       summary: components["schemas"]["SpeciesSummaryPayload"];
-      status?: components["schemas"]["SuccessOrError"];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetTimeseriesHistoryRequestPayload: {
       /** Start of time range to query. If this is non-null, endTime must also be specified, and seconds must be null or absent. */
@@ -925,15 +912,16 @@ export interface components {
     };
     GetUploadStatusResponsePayload: {
       details: components["schemas"]["GetUploadStatusDetailsPayload"];
-      status?: components["schemas"]["SuccessOrError"];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetUserPreferencesResponsePayload: {
+      /** The user's preferences, or null if no preferences have been stored yet. */
       preferences?: { [key: string]: unknown };
-      status?: components["schemas"]["SuccessOrError"];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetUserResponsePayload: {
       user: components["schemas"]["UserProfilePayload"];
-      status?: components["schemas"]["SuccessOrError"];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetViabilityTestPayload: {
       accessionId: number;
@@ -975,7 +963,7 @@ export interface components {
     };
     GetViabilityTestResponsePayload: {
       viabilityTest: components["schemas"]["GetViabilityTestPayload"];
-      status?: components["schemas"]["SuccessOrError"];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetWithdrawalPayload: {
       date: string;
@@ -998,11 +986,11 @@ export interface components {
     };
     GetWithdrawalResponsePayload: {
       withdrawal: components["schemas"]["GetWithdrawalPayload"];
-      status?: components["schemas"]["SuccessOrError"];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetWithdrawalsResponsePayload: {
       withdrawals: components["schemas"]["GetWithdrawalPayload"][];
-      status?: components["schemas"]["SuccessOrError"];
+      status: components["schemas"]["SuccessOrError"];
     };
     ListAllFieldValuesRequestPayload: {
       facilityId?: number;
@@ -1013,23 +1001,23 @@ export interface components {
       results: {
         [key: string]: components["schemas"]["AllFieldValuesPayload"];
       };
-      status?: components["schemas"]["SuccessOrError"];
+      status: components["schemas"]["SuccessOrError"];
     };
     ListAutomationsResponsePayload: {
       automations: components["schemas"]["AutomationPayload"][];
-      status?: components["schemas"]["SuccessOrError"];
+      status: components["schemas"]["SuccessOrError"];
     };
     ListDeviceConfigsResponse: {
       devices: components["schemas"]["DeviceConfig"][];
-      status?: components["schemas"]["SuccessOrError"];
+      status: components["schemas"]["SuccessOrError"];
     };
     ListDeviceTemplatesResponsePayload: {
       templates: components["schemas"]["DeviceTemplatePayload"][];
-      status?: components["schemas"]["SuccessOrError"];
+      status: components["schemas"]["SuccessOrError"];
     };
     ListFacilitiesResponse: {
       facilities: components["schemas"]["FacilityPayload"][];
-      status?: components["schemas"]["SuccessOrError"];
+      status: components["schemas"]["SuccessOrError"];
     };
     ListFieldValuesRequestPayload: {
       facilityId?: number;
@@ -1043,19 +1031,19 @@ export interface components {
     };
     ListFieldValuesResponsePayload: {
       results: { [key: string]: components["schemas"]["FieldValuesPayload"] };
-      status?: components["schemas"]["SuccessOrError"];
+      status: components["schemas"]["SuccessOrError"];
     };
     ListOrganizationRolesResponsePayload: {
       roles: components["schemas"]["OrganizationRolePayload"][];
-      status?: components["schemas"]["SuccessOrError"];
+      status: components["schemas"]["SuccessOrError"];
     };
     ListOrganizationUsersResponsePayload: {
       users: components["schemas"]["OrganizationUserPayload"][];
-      status?: components["schemas"]["SuccessOrError"];
+      status: components["schemas"]["SuccessOrError"];
     };
     ListOrganizationsResponsePayload: {
       organizations: components["schemas"]["OrganizationPayload"][];
-      status?: components["schemas"]["SuccessOrError"];
+      status: components["schemas"]["SuccessOrError"];
     };
     ListPhotosResponseElement: {
       filename: string;
@@ -1063,35 +1051,23 @@ export interface components {
     };
     ListPhotosResponsePayload: {
       photos: components["schemas"]["ListPhotosResponseElement"][];
-      status?: components["schemas"]["SuccessOrError"];
+      status: components["schemas"]["SuccessOrError"];
     };
     ListPlantingSitesResponsePayload: {
       sites: components["schemas"]["PlantingSitePayload"][];
-      status?: components["schemas"]["SuccessOrError"];
+      status: components["schemas"]["SuccessOrError"];
     };
     ListSpeciesResponsePayload: {
       species: components["schemas"]["SpeciesResponseElement"][];
-      status?: components["schemas"]["SuccessOrError"];
+      status: components["schemas"]["SuccessOrError"];
     };
     ListTimeseriesResponsePayload: {
       timeseries: components["schemas"]["TimeseriesPayload"][];
-      status?: components["schemas"]["SuccessOrError"];
+      status: components["schemas"]["SuccessOrError"];
     };
     ListViabilityTestsResponsePayload: {
       viabilityTests: components["schemas"]["GetViabilityTestPayload"][];
-      status?: components["schemas"]["SuccessOrError"];
-    };
-    ModifyAutomationRequestPayload: {
-      name: string;
-      description?: string;
-      configuration?: { [key: string]: unknown };
-      settings?: { [key: string]: { [key: string]: unknown } };
-      timeseriesName?: string;
-      deviceId?: number;
-      type: string;
-      lowerThreshold?: number;
-      upperThreshold?: number;
-      verbosity: number;
+      status: components["schemas"]["SuccessOrError"];
     };
     MultiPolygon: {
       coordinates: number[][][][];
@@ -1273,10 +1249,10 @@ export interface components {
     };
     SimpleErrorResponsePayload: {
       error: components["schemas"]["ErrorDetails"];
-      status?: components["schemas"]["SuccessOrError"];
+      status: components["schemas"]["SuccessOrError"];
     };
     SimpleSuccessResponsePayload: {
-      status?: components["schemas"]["SuccessOrError"];
+      status: components["schemas"]["SuccessOrError"];
     };
     SpeciesLookupCommonNamePayload: {
       name: string;
@@ -1299,7 +1275,7 @@ export interface components {
       names: string[];
       /** True if there were more matching names than could be included in the response. */
       partial: boolean;
-      status?: components["schemas"]["SuccessOrError"];
+      status: components["schemas"]["SuccessOrError"];
     };
     SpeciesProblemElement: {
       id: number;
@@ -1363,7 +1339,7 @@ export interface components {
     };
     StorageLocationsResponsePayload: {
       locations: components["schemas"]["StorageLocationDetails"][];
-      status?: components["schemas"]["SuccessOrError"];
+      status: components["schemas"]["SuccessOrError"];
     };
     /** Indicates of success or failure of the requested operation. */
     SuccessOrError: "ok" | "error";
@@ -1378,7 +1354,7 @@ export interface components {
       accessions: number;
       species: number;
       seedsRemaining: components["schemas"]["SeedCountSummaryPayload"];
-      status?: components["schemas"]["SuccessOrError"];
+      status: components["schemas"]["SuccessOrError"];
     };
     /** Summary of important statistics about the seed bank for the Summary page. */
     SummaryResponsePayload: {
@@ -1388,7 +1364,7 @@ export interface components {
       accessionsByState: { [key: string]: number };
       /** Summary of the number of seeds remaining across all active accessions. */
       seedsRemaining: components["schemas"]["SeedCountSummaryPayload"];
-      status?: components["schemas"]["SuccessOrError"];
+      status: components["schemas"]["SuccessOrError"];
     };
     TimeseriesIdPayload: {
       deviceId: number;
@@ -1465,7 +1441,7 @@ export interface components {
     };
     UpdateAccessionResponsePayloadV2: {
       accession: components["schemas"]["AccessionPayloadV2"];
-      status?: components["schemas"]["SuccessOrError"];
+      status: components["schemas"]["SuccessOrError"];
     };
     UpdateAutomationRequestPayload: {
       type: string;
@@ -1476,7 +1452,7 @@ export interface components {
       verbosity?: number;
       lowerThreshold?: number;
       upperThreshold?: number;
-      settings?: { [key: string]: { [key: string]: unknown } };
+      settings?: { [key: string]: unknown };
     };
     UpdateBatchQuantitiesRequestPayload: {
       germinatingQuantity: number;
@@ -1590,7 +1566,7 @@ export interface components {
     UploadFileResponsePayload: {
       /** ID of uploaded file. This may be used to poll for the file's status. */
       id: number;
-      status?: components["schemas"]["SuccessOrError"];
+      status: components["schemas"]["SuccessOrError"];
     };
     /** List of conditions that might cause the user to want to cancel the upload but that can be automatically resolved if desired. */
     UploadProblemPayload: {
@@ -1625,7 +1601,7 @@ export interface components {
     };
     VersionsResponsePayload: {
       versions: components["schemas"]["VersionsEntryPayload"][];
-      status?: components["schemas"]["SuccessOrError"];
+      status: components["schemas"]["SuccessOrError"];
     };
     ViabilityTestResultPayload: {
       recordingDate: string;
@@ -1635,7 +1611,7 @@ export interface components {
 }
 
 export interface operations {
-  listAutomations_2: {
+  listAutomations: {
     parameters: {
       query: {
         deviceId?: number;
@@ -1651,7 +1627,7 @@ export interface operations {
       };
     };
   };
-  createAutomation_2: {
+  createAutomation: {
     responses: {
       /** OK */
       200: {
@@ -1666,7 +1642,7 @@ export interface operations {
       };
     };
   };
-  getAutomation_2: {
+  getAutomation: {
     parameters: {
       path: {
         automationId: number;
@@ -1681,7 +1657,7 @@ export interface operations {
       };
     };
   };
-  updateAutomation_2: {
+  updateAutomation: {
     parameters: {
       path: {
         automationId: number;
@@ -1701,7 +1677,7 @@ export interface operations {
       };
     };
   };
-  deleteAutomation_2: {
+  deleteAutomation: {
     parameters: {
       path: {
         automationId: number;
@@ -1977,124 +1953,6 @@ export interface operations {
       };
     };
   };
-  listAutomations_1: {
-    parameters: {
-      path: {
-        facilityId: number;
-      };
-    };
-    responses: {
-      /** Success */
-      200: {
-        content: {
-          "application/json": components["schemas"]["ListAutomationsResponsePayload"];
-        };
-      };
-      /** The facility does not exist or is not accessible. */
-      404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-    };
-  };
-  createAutomation_1: {
-    parameters: {
-      path: {
-        facilityId: number;
-      };
-    };
-    responses: {
-      /** Success */
-      200: {
-        content: {
-          "application/json": components["schemas"]["CreateAutomationResponsePayload"];
-        };
-      };
-      /** The facility does not exist or is not accessible. */
-      404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["ModifyAutomationRequestPayload"];
-      };
-    };
-  };
-  getAutomation_1: {
-    parameters: {
-      path: {
-        facilityId: number;
-        automationId: number;
-      };
-    };
-    responses: {
-      /** Success */
-      200: {
-        content: {
-          "application/json": components["schemas"]["GetAutomationResponsePayload"];
-        };
-      };
-      /** The requested resource was not found. */
-      404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-    };
-  };
-  updateAutomation_1: {
-    parameters: {
-      path: {
-        facilityId: number;
-        automationId: number;
-      };
-    };
-    responses: {
-      /** The requested operation succeeded. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-        };
-      };
-      /** The requested resource was not found. */
-      404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["ModifyAutomationRequestPayload"];
-      };
-    };
-  };
-  deleteAutomation_1: {
-    parameters: {
-      path: {
-        facilityId: number;
-        automationId: number;
-      };
-    };
-    responses: {
-      /** The requested operation succeeded. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-        };
-      };
-      /** The requested resource was not found. */
-      404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-    };
-  };
   /** After connecting a device manager and finishing any necessary configuration of the facility's devices, send this request to enable processing of timeseries values and alerts from the device manager. Only valid if the facility's connection state is `Connected`. */
   postConfigured_1: {
     parameters: {
@@ -2221,124 +2079,6 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["SendFacilityAlertRequestPayload"];
-      };
-    };
-  };
-  listAutomations: {
-    parameters: {
-      path: {
-        facilityId: number;
-      };
-    };
-    responses: {
-      /** Success */
-      200: {
-        content: {
-          "application/json": components["schemas"]["ListAutomationsResponsePayload"];
-        };
-      };
-      /** The facility does not exist or is not accessible. */
-      404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-    };
-  };
-  createAutomation: {
-    parameters: {
-      path: {
-        facilityId: number;
-      };
-    };
-    responses: {
-      /** Success */
-      200: {
-        content: {
-          "application/json": components["schemas"]["CreateAutomationResponsePayload"];
-        };
-      };
-      /** The facility does not exist or is not accessible. */
-      404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["ModifyAutomationRequestPayload"];
-      };
-    };
-  };
-  getAutomation: {
-    parameters: {
-      path: {
-        facilityId: number;
-        automationId: number;
-      };
-    };
-    responses: {
-      /** Success */
-      200: {
-        content: {
-          "application/json": components["schemas"]["GetAutomationResponsePayload"];
-        };
-      };
-      /** The requested resource was not found. */
-      404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-    };
-  };
-  updateAutomation: {
-    parameters: {
-      path: {
-        facilityId: number;
-        automationId: number;
-      };
-    };
-    responses: {
-      /** The requested operation succeeded. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-        };
-      };
-      /** The requested resource was not found. */
-      404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["ModifyAutomationRequestPayload"];
-      };
-    };
-  };
-  deleteAutomation: {
-    parameters: {
-      path: {
-        facilityId: number;
-        automationId: number;
-      };
-    };
-    responses: {
-      /** The requested operation succeeded. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-        };
-      };
-      /** The requested resource was not found. */
-      404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
       };
     };
   };
