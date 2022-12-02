@@ -61,6 +61,7 @@ import {
   SpeciesBulkWithdrawWrapperComponent,
 } from './components/Inventory/withdraw';
 import PlantsDashboard from './components/Plants';
+import { NurseryWithdrawals, NurseryWithdrawalsDetails, NurseryReassignment } from './components/NurseryWithdrawals';
 import { listPlantingSites } from './api/tracking/tracking';
 import { PlantingSite } from './api/types/tracking';
 
@@ -657,6 +658,21 @@ export default function App() {
               {trackingEnabled && selectedOrganization && (
                 <Route path={APP_PATHS.PLANTING_SITES_VIEW}>
                   <PlantingSiteView />
+                </Route>
+              )}
+              {trackingEnabled && selectedOrganization && (
+                <Route exact path={APP_PATHS.NURSERY_WITHDRAWALS}>
+                  <NurseryWithdrawals organization={selectedOrganization} />
+                </Route>
+              )}
+              {trackingEnabled && selectedOrganization && (
+                <Route exact path={APP_PATHS.NURSERY_WITHDRAWALS_DETAILS}>
+                  <NurseryWithdrawalsDetails organization={selectedOrganization} />
+                </Route>
+              )}
+              {trackingEnabled && selectedOrganization && (
+                <Route exact path={APP_PATHS.NURSERY_REASSIGNMENT}>
+                  <NurseryReassignment organization={selectedOrganization} />
                 </Route>
               )}
               <Route exact path={APP_PATHS.CONTACT_US}>
