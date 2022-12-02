@@ -876,6 +876,8 @@ const strings = new LocalizedStrings({
     OUTPLANTS_REQUIRE_READY_SEEDLINGS: 'Outplants require batches with seedlings that are "ready."',
     EDIT_QUANTITY_DISABLED: 'Currently, you may only input a quantity when the status is "Drying" or “In Storage.”',
     WITHDRAWAL_LOG: 'Withdrawal Log',
+    TO_PLOT: 'To: Plot',
+    REASSIGN: 'Reassign',
   },
 });
 
