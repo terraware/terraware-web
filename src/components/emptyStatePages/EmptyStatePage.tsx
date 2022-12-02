@@ -45,6 +45,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     maxWidth: '800px',
     width: (props: StyleProps) => (props.isMobile ? 'auto' : '800px'),
   },
+  spacer: {
+    padding: theme.spacing(3),
+  },
 }));
 
 export const EMPTY_STATE_CONTENT_STYLES = {
@@ -274,6 +277,10 @@ export default function EmptyStatePage({
     }
   };
 
+  const spacer = () => {
+    return <div className={classes.spacer} />;
+  };
+
   return (
     <TfMain backgroundImageVisible={backgroundImageVisible}>
       {organization && (
@@ -291,7 +298,12 @@ export default function EmptyStatePage({
           />
         </>
       )}
-      {content.title1 && <PageHeader title={content.title1} subtitle='' />}
+      {content.title1 && (
+        <>
+          <PageHeader title={content.title1} subtitle='' />
+          {!isMobile && spacer()}
+        </>
+      )}
       {content.listItems.length === 0 && content.linkLocation === undefined ? (
         <EmptyMessage className={classes.message} title={content.title2} text={content.subtitle} />
       ) : (

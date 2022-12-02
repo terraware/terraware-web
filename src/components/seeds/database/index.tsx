@@ -546,6 +546,10 @@ export default function Database(props: DatabaseProps): JSX.Element {
     </>
   );
 
+  const emptyStateSpacer = () => {
+    return <Grid item xs={12} padding={theme.spacing(3)} />;
+  };
+
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       {selectedOrgInfo.selectedFacility && (
@@ -669,17 +673,23 @@ export default function Database(props: DatabaseProps): JSX.Element {
                   </Grid>
                 </>
               ) : isAdmin(organization) ? (
-                <EmptyMessage
-                  className={classes.message}
-                  title={emptyMessageStrings.ONBOARDING_ADMIN_TITLE}
-                  rowItems={getEmptyState()}
-                />
+                <>
+                  {!isMobile && emptyStateSpacer()}
+                  <EmptyMessage
+                    className={classes.message}
+                    title={emptyMessageStrings.ONBOARDING_ADMIN_TITLE}
+                    rowItems={getEmptyState()}
+                  />
+                </>
               ) : (
-                <EmptyMessage
-                  className={classes.message}
-                  title={emptyMessageStrings.REACH_OUT_TO_ADMIN_TITLE}
-                  text={emptyMessageStrings.NO_SEEDBANKS_NON_ADMIN_MSG}
-                />
+                <>
+                  {!isMobile && emptyStateSpacer()}
+                  <EmptyMessage
+                    className={classes.message}
+                    title={emptyMessageStrings.REACH_OUT_TO_ADMIN_TITLE}
+                    text={emptyMessageStrings.NO_SEEDBANKS_NON_ADMIN_MSG}
+                  />
+                </>
               )}
             </Grid>
           ) : (
