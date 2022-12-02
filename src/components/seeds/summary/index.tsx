@@ -131,7 +131,7 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
         {organization && summary ? (
           <Grid container spacing={3}>
             {isEmptyState === true && (
-              <Grid item xs={12}>
+              <Grid item xs={12} paddingBottom={theme.spacing(1)}>
                 <Box
                   sx={{
                     background: theme.palette.TwClrBgInfoTertiary,

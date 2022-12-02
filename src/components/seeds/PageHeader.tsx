@@ -9,16 +9,12 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { Icon } from '@terraware/web-components';
 import strings from '../../strings';
 
-interface StyleProps {
-  isMobile: boolean;
-}
-
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
     '&.MuiContainer-root': {
       paddingLeft: 0,
       paddingRight: 0,
-      paddingBottom: (props: StyleProps) => (props.isMobile ? theme.spacing(4) : theme.spacing(10)),
+      paddingBottom: theme.spacing(4),
     },
   },
   container: {
@@ -93,8 +89,7 @@ export default function PageHeader({
   showFacility,
   titleClassName,
 }: Props): JSX.Element {
-  const { isMobile } = useDeviceInfo();
-  const classes = useStyles({ isMobile });
+  const classes = useStyles();
   const theme = useTheme();
 
   const getPageHeading = () => {
