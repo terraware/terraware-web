@@ -2446,10 +2446,10 @@
   dependencies:
     defer-to-connect "^2.0.1"
 
-"@terraware/web-components@^2.0.25":
-  version "2.0.25"
-  resolved "https://registry.yarnpkg.com/@terraware/web-components/-/web-components-2.0.25.tgz#e26ac62fa9ce64d65fd484b0e1fef114a2a63229"
-  integrity sha512-+bZ2nfP4u7d3wVkgitMIU4Yf3OptiWgiACDYFyfd6XHTI0qCPGFGK8h4RKD+WESPJ18h9Qgw0jnPURV4zkxqYQ==
+"@terraware/web-components@^2.0.26":
+  version "2.0.26"
+  resolved "https://registry.yarnpkg.com/@terraware/web-components/-/web-components-2.0.26.tgz#819df0fe82c84a1449d5b2cdbd3ab57a6924c502"
+  integrity sha512-mR5nITYeVmBjQLGt6NlXdzD+jzebuHnhqZuwfxS83FUDZRfAlqxgURkU4TNqyHz4vZgli+Uvxa3E2yuJ/82GVw==
   dependencies:
     "@date-io/date-fns" "^2.14.0"
     "@date-io/moment" "^2.10.11"
@@ -2470,7 +2470,7 @@
     react-sortable-hoc "^2.0.0"
     sass "^1.35.1"
     tinycolor2 "^1.4.2"
-    web-vitals "^1.0.1"
+    web-vitals "^3.0.0"
 
 "@testing-library/dom@^7.28.1":
   version "7.31.2"
@@ -14389,6 +14389,11 @@ web-vitals@^1.0.1:
   version "1.1.2"
   resolved "https://registry.npmjs.org/web-vitals/-/web-vitals-1.1.2.tgz"
   integrity sha512-PFMKIY+bRSXlMxVAQ+m2aw9c/ioUYfDgrYot0YUa+/xa0sakubWhSDyxAKwzymvXVdF4CZI71g06W+mqhzu6ig==
+
+web-vitals@^3.0.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/web-vitals/-/web-vitals-3.1.0.tgz#a6f5156cb6c7fee562da46078540265ac2cd2d16"
+  integrity sha512-zCeQ+bOjWjJbXv5ZL0r8Py3XP2doCQMZXNKlBGfUjPAVZWokApdeF/kFlK1peuKlCt8sL9TFkKzyXE9/cmNJQA==
 
 webidl-conversions@^3.0.0:
   version "3.0.1"
