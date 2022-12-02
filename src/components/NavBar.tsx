@@ -219,19 +219,19 @@ export default function NavBar({
                 }}
                 id='nurseries'
               />
+              {trackingEnabled && (
+                <NavItem
+                  label={strings.PLANTING_SITES}
+                  selected={!!isPlantingSitesRoute}
+                  onClick={() => {
+                    closeAndNavigateTo(APP_PATHS.PLANTING_SITES);
+                  }}
+                  id='plantingSites'
+                />
+              )}
             </SubNavbar>
           </NavItem>
         </>
-      )}
-      {trackingEnabled && (
-        <NavItem
-          label={strings.PLANTING_SITES}
-          selected={!!isPlantingSitesRoute}
-          onClick={() => {
-            closeAndNavigateTo(APP_PATHS.PLANTING_SITES);
-          }}
-          id='plantingSites'
-        />
       )}
 
       <NavFooter>
