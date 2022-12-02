@@ -5,7 +5,6 @@ import { SelectedOrgInfo, ServerOrganization } from 'src/types/Organization';
 import PageSnackbar from 'src/components/PageSnackbar';
 import { Container, Grid, Box, Typography, Theme, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { Icon } from '@terraware/web-components';
 import strings from '../../strings';
 
@@ -59,7 +58,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 interface Props {
   title?: string | string[];
   subtitle?: string | React.ReactNode;
-  children?: React.ReactNode;
+  children?: React.ReactNode[];
   rightComponent?: React.ReactNode;
   page?: string;
   parentPage?: string;
@@ -116,7 +115,7 @@ export default function PageHeader({
         )}
         <Grid item xs={12} className={classes.flex}>
           <div className={classes.mainContent}>
-            <Box padding={theme.spacing(0, 3, children ? 3 : 0, 3)}>
+            <Box padding={theme.spacing(0, 3, children?.some((el) => el) ? 3 : 0, 3)}>
               <Box display='flex' justifyContent='space-between' alignItems='center'>
                 <Typography
                   id='title'
