@@ -1,6 +1,6 @@
 import { Box, Grid, Theme, Typography, useTheme } from '@mui/material';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
 import PageHeaderWrapper from '../common/PageHeaderWrapper';
@@ -8,10 +8,22 @@ import TfMain from '../common/TfMain';
 import { makeStyles } from '@mui/styles';
 import { Table, TableColumnType } from '@terraware/web-components';
 import { listNurseryWithdrawals } from 'src/api/tracking/withdrawals';
-import { SearchResponseElement } from 'src/api/search';
+import { FieldNodePayload, SearchResponseElement } from 'src/api/search';
 import WithdrawalLogRenderer from './WithdrawalLogRenderer';
 import { APP_PATHS } from 'src/constants';
 import { useHistory } from 'react-router-dom';
+import useDebounce from 'src/utils/useDebounce';
+import useForm from 'src/utils/useForm';
+import { getRequestId, setRequestId } from 'src/utils/requestsId';
+import NurseryWithdrawalsFiltersPopover from './NurseryWithdrawalsFiltersPopover';
+import Pill from '../Pill';
+import { getNurseryName } from '../Inventory/FilterUtils';
+import { getAllNurseries } from 'src/utils/organization';
+
+export type NurseryWithdrawalsFiltersType = {
+  fromNurseryIds?: string[];
+  purposes?: string[];
+};
 
 type NurseryWithdrawalsProps = {
   organization: ServerOrganization;
@@ -40,7 +52,12 @@ export default function NurseryWithdrawals(props: NurseryWithdrawalsProps): JSX.
   const contentRef = useRef(null);
   const classes = useStyles();
   const [nurseryWithdrawals, setNurseryWithdrawals] = useState<SearchResponseElement[]>();
+
+  const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>();
   const history = useHistory();
+  const [searchValue, setSearchValue] = useState('');
+  const debouncedSearchTerm = useDebounce(searchValue, 250);
+  const [filters, setFilters] = useForm<NurseryWithdrawalsFiltersType>({});
 
   useEffect(() => {
     const getNurseryWithdrawals = async () => {
@@ -59,6 +76,113 @@ export default function NurseryWithdrawals(props: NurseryWithdrawalsProps): JSX.
     history.push({
       pathname: APP_PATHS.NURSERY_REASSIGNMENT.replace(':deliveryId', withdrawal.delivery_id),
     });
+  };
+
+  const getSearchChildren = useCallback(() => {
+    const finalSearchValueChildren: FieldNodePayload[] = [];
+    const searchValueChildren: FieldNodePayload[] = [];
+    if (debouncedSearchTerm) {
+      const fromNurseryNode: FieldNodePayload = {
+        operation: 'field',
+        field: 'facility_name',
+        type: 'Fuzzy',
+        values: [debouncedSearchTerm],
+      };
+      searchValueChildren.push(fromNurseryNode);
+
+      const destinationNurseryNode: FieldNodePayload = {
+        operation: 'field',
+        field: 'destinationName',
+        type: 'Fuzzy',
+        values: [debouncedSearchTerm],
+      };
+      searchValueChildren.push(destinationNurseryNode);
+
+      const speciesNameNode: FieldNodePayload = {
+        operation: 'field',
+        field: 'batchWithdrawals.batch_species_scientificName',
+        type: 'Fuzzy',
+        values: [debouncedSearchTerm],
+      };
+      searchValueChildren.push(speciesNameNode);
+    }
+
+    let nurseryFilter: FieldNodePayload;
+    if (filters.fromNurseryIds && filters.fromNurseryIds.length > 0) {
+      nurseryFilter = {
+        operation: 'field',
+        field: 'facility_id',
+        type: 'Exact',
+        values: filters.fromNurseryIds.map((id) => id.toString()),
+      };
+    }
+
+    if (filters.purposes && filters.purposes.length > 0) {
+      nurseryFilter = {
+        operation: 'field',
+        field: 'purpose',
+        type: 'Exact',
+        values: filters.purposes,
+      };
+    }
+
+    if (searchValueChildren.length) {
+      const searchValueNodes: FieldNodePayload = {
+        operation: 'or',
+        children: searchValueChildren,
+      };
+
+      if (nurseryFilter) {
+        finalSearchValueChildren.push({
+          operation: 'and',
+          children: [nurseryFilter, searchValueNodes],
+        });
+      } else {
+        finalSearchValueChildren.push(searchValueNodes);
+      }
+    } else if (nurseryFilter) {
+      finalSearchValueChildren.push(nurseryFilter);
+    }
+
+    return finalSearchValueChildren;
+  }, [filters, debouncedSearchTerm]);
+
+  const onApplyFilters = useCallback(async () => {
+    const searchChildren: FieldNodePayload[] = getSearchChildren();
+    const requestId = Math.random().toString();
+    setRequestId('searchWithdrawals', requestId);
+    const apiSearchResults = await listNurseryWithdrawals(organization.id, searchChildren);
+    if (apiSearchResults) {
+      if (getRequestId('searchWithdrawals') === requestId) {
+        setSearchResults(apiSearchResults);
+      }
+    }
+  }, [getSearchChildren, organization.id]);
+
+  useEffect(() => {
+    onApplyFilters();
+  }, [filters, onApplyFilters]);
+
+  const removeFilter = (
+    filter: keyof NurseryWithdrawalsFiltersType,
+    value: string,
+    setFilters: React.Dispatch<React.SetStateAction<NurseryWithdrawalsFiltersType>>
+  ) => {
+    setFilters((prev) => {
+      const oldValue = prev[filter];
+      return {
+        ...prev,
+        [filter]: oldValue?.filter((val) => val !== value) || [],
+      };
+    });
+  };
+
+  const getNurseryName = (facilityId: string, organization: ServerOrganization) => {
+    const found = getAllNurseries(organization).find((n) => n.id.toString() === facilityId.toString());
+    if (found) {
+      return found.name;
+    }
+    return '';
   };
 
   return (
@@ -93,13 +217,32 @@ export default function NurseryWithdrawals(props: NurseryWithdrawalsProps): JSX.
                 type='text'
                 className={classes.searchField}
                 iconRight='cancel'
+                value={searchValue}
+                onChange={(_id, value) => setSearchValue(value as string)}
               />
+              <NurseryWithdrawalsFiltersPopover filters={filters} setFilters={setFilters} organization={organization} />
+              <Grid xs={12} display='flex'>
+                {(Object.keys(filters) as Array<keyof typeof filters>).map(
+                  (filter: keyof NurseryWithdrawalsFiltersType) => {
+                    return filters[filter]?.map((value) => {
+                      return (
+                        <Pill
+                          key={value}
+                          filter={filter}
+                          value={filter === 'fromNurseryIds' ? getNurseryName(value, organization) : value}
+                          onRemoveFilter={() => removeFilter(filter, value, setFilters)}
+                        />
+                      );
+                    });
+                  }
+                )}
+              </Grid>
             </Grid>
             <Grid item xs={12}>
               <Table
                 id='withdrawal-log'
                 columns={columns}
-                rows={nurseryWithdrawals || []}
+                rows={searchResults || nurseryWithdrawals || []}
                 Renderer={WithdrawalLogRenderer}
                 orderBy={'name'}
                 onSelect={onWithdrawalClicked}

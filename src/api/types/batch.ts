@@ -22,6 +22,8 @@ export const NurseryWithdrawalPurposes: { [key: string]: NurseryWithdrawalPurpos
   OTHER: 'Other',
 };
 
+export const NurseryWithdrawalPurposesValues = Object.values(NurseryWithdrawalPurposes);
+
 const schemas = 'schemas';
 export type NurseryTransfer = components[typeof schemas]['CreateNurseryTransferRequestPayload'];
 export type NurseryWithdrawalRequest = components[typeof schemas]['CreateNurseryWithdrawalRequestPayload'];
