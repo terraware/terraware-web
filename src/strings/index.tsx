@@ -567,7 +567,7 @@ const strings = new LocalizedStrings({
     PLANT_DESCRIPTION: 'Plant Description',
     OPT_IN: 'Opt-In Features',
     PLANT: 'plant',
-    PLANTS: 'plants',
+    PLANTS: 'Plants',
     OR_SEED_WEIGHT: 'or Seed Weight',
     WEIGHT_TO_COUNT_CALCULATOR: 'Weight to Count Calculator',
     SUBSET_COUNT: 'Subset Count',
