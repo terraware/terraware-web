@@ -99,7 +99,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                 rows={results}
                 orderBy='species_scientificName'
                 Renderer={InventoryCellRenderer}
-                isClickable={() => false}
+                isClickable={(row) => row.species_id}
                 selectedRows={selectedRows}
                 setSelectedRows={setSelectedRows}
                 showCheckbox={trackingEnabled}
@@ -115,7 +115,6 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                       ]
                     : []
                 }
-                controlledOnSelect={true}
               />
             </Grid>
           </Grid>
