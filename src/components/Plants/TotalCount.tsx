@@ -14,7 +14,7 @@ export default function TotalCount(props: TotalCountProps): JSX.Element {
     <>
       <Typography sx={cardTitleStyle}>{strings.TOTAL_NUMBER_OF_PLANTS}</Typography>
       <Box sx={{ marginTop: theme.spacing(3) }}>
-        <Typography fontSize='48px' fontWeight={600}>
+        <Typography fontSize='32px' fontWeight={600}>
           {totalCount || 0}
         </Typography>
       </Box>
