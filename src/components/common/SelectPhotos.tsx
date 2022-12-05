@@ -6,6 +6,7 @@ import { ErrorBox } from '@terraware/web-components';
 import strings from 'src/strings';
 import Button from 'src/components/common/button/Button';
 import Icon from 'src/components/common/icon/Icon';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 export type ErrorType = {
   title: string;
@@ -59,6 +60,7 @@ type SelectPhotosProps = {
 
 export default function SelectPhotos(props: SelectPhotosProps): JSX.Element {
   const { title, description, onPhotosChanged, multipleSelection, error } = props;
+  const { isMobile } = useDeviceInfo();
   const classes = useStyles();
   const [files, setFiles] = useState<File[]>([]);
   const [filesData, setFilesData] = useState<string[]>([]);
@@ -124,7 +126,16 @@ export default function SelectPhotos(props: SelectPhotosProps): JSX.Element {
   }, [files]);
 
   return (
-    <Box ref={divRef} tabIndex={0} width='100%'>
+    <Box
+      ref={divRef}
+      tabIndex={0}
+      width='100%'
+      sx={{
+        backgroundColor: theme.palette.TwClrBg,
+        borderRadius: theme.spacing(4),
+        padding: theme.spacing(3),
+      }}
+    >
       <Box>
         <Typography fontSize={20} fontWeight={600}>
           {title}
@@ -141,7 +152,7 @@ export default function SelectPhotos(props: SelectPhotosProps): JSX.Element {
                 position='relative'
                 height={122}
                 width={122}
-                marginRight={theme.spacing(3)}
+                marginRight={isMobile ? theme.spacing(2) : theme.spacing(3)}
                 marginTop={theme.spacing(1)}
                 border={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
               >
@@ -173,7 +184,7 @@ export default function SelectPhotos(props: SelectPhotosProps): JSX.Element {
           {strings.UPLOAD_PHOTOS}
         </Typography>
         <Typography color={theme.palette.TwClrTxt} fontSize={12} fontWeight={400} margin={0}>
-          {strings.UPLOAD_PHOTO_DESCRIPTION}
+          {isMobile ? strings.UPLOAD_PHOTO_MOBILE_DESCRIPTION : strings.UPLOAD_PHOTO_DESCRIPTION}
         </Typography>
         <input
           type='file'

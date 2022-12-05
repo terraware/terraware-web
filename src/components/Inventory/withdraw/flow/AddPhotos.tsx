@@ -40,10 +40,10 @@ export default function AddPhotos(props: AddPhotosProps): JSX.Element {
         sx={{
           margin: '0 auto',
           width: isMobile ? '100%' : '640px',
-          paddingLeft: theme.spacing(4),
-          paddingRight: theme.spacing(4),
+          paddingLeft: theme.spacing(isMobile ? 1 : 4),
+          paddingRight: theme.spacing(isMobile ? 1 : 4),
           paddingTop: theme.spacing(5),
-          paddingBottom: theme.spacing(5),
+          paddingBottom: theme.spacing(isMobile ? 20 : 5),
         }}
       >
         <SelectPhotos
