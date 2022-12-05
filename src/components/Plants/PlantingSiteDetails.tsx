@@ -40,17 +40,16 @@ export default function PlantingSiteDetails(props: PlantingSiteDetailsProps): JS
   const [plotsWithPlants, setPlotsWithPlants] = useState<PlantingSitesPlots[]>();
   const [hasPlots, setHasPlots] = useState<boolean>(false);
 
-  const borderCardStyle = {
-    border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+  const widgetCardStyle = {
+    backgroundColor: theme.palette.TwClrBg,
     marginBottom: 2,
-    borderRadius: '8px',
+    borderRadius: '24px',
     padding: 3,
   };
 
   const mapCardStyle = {
-    border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
     marginBottom: 2,
-    borderRadius: '8px',
+    borderRadius: '24px',
   };
 
   useEffect(() => {
@@ -108,14 +107,14 @@ export default function PlantingSiteDetails(props: PlantingSiteDetailsProps): JS
         <PlantingSiteDashboardMap plots={plotsWithPlants} siteId={plantingSite?.id} />
       </Grid>
       <Grid item xs={isMobile ? 12 : 4} sx={{ paddingLeft: isMobile ? 0 : 2 }}>
-        <Box sx={{ ...borderCardStyle, minHeight: '160px' }}>
+        <Box sx={{ ...widgetCardStyle, minHeight: '160px' }}>
           <TotalCount totalCount={totalPlants} />
         </Box>
-        <Box sx={{ ...borderCardStyle, minHeight: '240px' }}>
+        <Box sx={{ ...widgetCardStyle, minHeight: '240px' }}>
           <PlantBySpeciesChart plantsBySpecies={plantsBySpecies} />
         </Box>
         {(!plantingSite || hasPlots) && (
-          <Box sx={{ ...borderCardStyle, minHeight: '240px' }}>
+          <Box sx={{ ...widgetCardStyle, minHeight: '240px' }}>
             <SpeciesByPlotChart
               plots={plotsWithPlants}
               updatePlotPreferences={updatePlotPreferences}
