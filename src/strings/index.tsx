@@ -821,7 +821,6 @@ const strings = new LocalizedStrings({
       'Where do your plants take root? Set up your planting site so you can keep track of your plants’ progress.',
     ADD_PLANTING_SITE: 'Add Planting Site',
     DELETED_SPECIES: 'deleted species',
-    ADD_PLANTING_SITE_DESCRIPTION: 'Enter the planting site’s information below.',
     BOUNDARIES_AND_PLOTS: 'Boundaries and Plots',
     IMPORT_BOUNDARIES_AND_PLOTS: 'Import boundaries and plots',
     IMPORT_BOUNDARIES_AND_PLOTS_DESCRIPTION:
