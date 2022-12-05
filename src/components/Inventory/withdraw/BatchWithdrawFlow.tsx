@@ -184,7 +184,7 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
 
   return (
     <TfMain>
-      <Typography variant='h2' sx={{ fontSize: '24px', fontWeight: 'bold' }}>
+      <Typography variant='h2' sx={{ fontSize: '24px', fontWeight: 'bold', paddingLeft: theme.spacing(3) }}>
         {strings.WITHDRAW_FROM_BATCHES}
       </Typography>
 
