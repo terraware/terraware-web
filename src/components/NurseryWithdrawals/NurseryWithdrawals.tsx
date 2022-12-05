@@ -315,6 +315,7 @@ export default function NurseryWithdrawals(props: NurseryWithdrawalsProps): JSX.
                 Renderer={WithdrawalLogRenderer}
                 orderBy={'name'}
                 onSelect={onWithdrawalClicked}
+                controlledOnSelect={true}
               />
             </Grid>
           </Grid>
