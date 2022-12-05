@@ -878,6 +878,7 @@ const strings = new LocalizedStrings({
     TO_PLOT: 'To: Plot',
     REASSIGN: 'Reassign',
     EDIT_PLANTING_SITE: 'Edit Planting Site',
+    SPECIES_ERROR_SEARCH: "Couldn't load species list for search",
   },
 });
 
