@@ -15,7 +15,7 @@ export default function BoundariesAndPlots(props: BoundariesAndPlotsProps): JSX.
   return (
     <Box display='flex' flexGrow={plantingSite?.boundary ? 1 : 0} flexDirection='column' paddingTop={theme.spacing(3)}>
       <Box display='flex' flexGrow={0}>
-        <Typography fontSize='20px' fontWeight={600} margin={theme.spacing(3, 0)}>
+        <Typography fontSize='16px' fontWeight={600} margin={theme.spacing(3, 0)}>
           {strings.BOUNDARIES_AND_PLOTS}
         </Typography>
       </Box>
