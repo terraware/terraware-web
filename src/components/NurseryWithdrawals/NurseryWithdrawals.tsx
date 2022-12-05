@@ -18,10 +18,14 @@ import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import NurseryWithdrawalsFiltersPopover from './NurseryWithdrawalsFiltersPopover';
 import Pill from '../Pill';
 import { getAllNurseries } from 'src/utils/organization';
+import { getAllSpecies } from 'src/api/species/species';
+import { Species } from 'src/types/Species';
 
 export type NurseryWithdrawalsFiltersType = {
   fromNurseryIds?: string[];
   purposes?: string[];
+  destinationNames?: string[];
+  speciesId?: string[];
 };
 
 type NurseryWithdrawalsProps = {
@@ -50,32 +54,28 @@ export default function NurseryWithdrawals(props: NurseryWithdrawalsProps): JSX.
   const theme = useTheme();
   const contentRef = useRef(null);
   const classes = useStyles();
-  const [nurseryWithdrawals, setNurseryWithdrawals] = useState<SearchResponseElement[]>();
-
   const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>();
   const history = useHistory();
   const [searchValue, setSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(searchValue, 250);
   const [filters, setFilters] = useForm<NurseryWithdrawalsFiltersType>({});
-
-  useEffect(() => {
-    const getNurseryWithdrawals = async () => {
-      if (organization) {
-        const withdrawals = await listNurseryWithdrawals(organization.id, []);
-        if (withdrawals) {
-          setNurseryWithdrawals(withdrawals);
-        }
-      }
-    };
-
-    getNurseryWithdrawals();
-  }, [organization]);
+  const [species, setSpecies] = useState<Species[]>();
 
   const onWithdrawalClicked = (withdrawal: any) => {
     history.push({
       pathname: APP_PATHS.NURSERY_REASSIGNMENT.replace(':deliveryId', withdrawal.delivery_id),
     });
   };
+
+  useEffect(() => {
+    const populateSpecies = async () => {
+      const result = await getAllSpecies(organization.id);
+      if (result.requestSucceeded) {
+        setSpecies(result.species);
+      }
+    };
+    populateSpecies();
+  }, [organization]);
 
   const getSearchChildren = useCallback(() => {
     const finalSearchValueChildren: FieldNodePayload[] = [];
@@ -106,6 +106,7 @@ export default function NurseryWithdrawals(props: NurseryWithdrawalsProps): JSX.
       searchValueChildren.push(speciesNameNode);
     }
 
+    const filterValueChildren: FieldNodePayload[] = [];
     let nurseryFilter: FieldNodePayload;
     if (filters.fromNurseryIds && filters.fromNurseryIds.length > 0) {
       nurseryFilter = {
@@ -115,14 +116,49 @@ export default function NurseryWithdrawals(props: NurseryWithdrawalsProps): JSX.
         values: filters.fromNurseryIds.map((id) => id.toString()),
       };
     }
+    if (nurseryFilter) {
+      filterValueChildren.push(nurseryFilter);
+    }
 
+    let purposeFilter: FieldNodePayload;
     if (filters.purposes && filters.purposes.length > 0) {
-      nurseryFilter = {
+      purposeFilter = {
         operation: 'field',
         field: 'purpose',
         type: 'Exact',
         values: filters.purposes,
       };
+    }
+    if (purposeFilter) {
+      filterValueChildren.push(purposeFilter);
+    }
+
+    let destinationFilter: FieldNodePayload;
+    if (filters.destinationNames && filters.destinationNames.length > 0) {
+      destinationFilter = {
+        operation: 'field',
+        field: 'destinationName',
+        type: 'Exact',
+        values: filters.destinationNames,
+      };
+    }
+
+    if (destinationFilter) {
+      filterValueChildren.push(destinationFilter);
+    }
+
+    let speciesFilter: FieldNodePayload;
+    if (filters.speciesId && filters.speciesId.length > 0) {
+      speciesFilter = {
+        operation: 'field',
+        field: 'batchWithdrawals.batch_species_id',
+        type: 'Exact',
+        values: filters.speciesId,
+      };
+    }
+
+    if (speciesFilter) {
+      filterValueChildren.push(speciesFilter);
     }
 
     if (searchValueChildren.length) {
@@ -131,16 +167,25 @@ export default function NurseryWithdrawals(props: NurseryWithdrawalsProps): JSX.
         children: searchValueChildren,
       };
 
-      if (nurseryFilter) {
+      if (filterValueChildren.length) {
+        const filterValueNodes: FieldNodePayload = {
+          operation: 'or',
+          children: filterValueChildren,
+        };
+
         finalSearchValueChildren.push({
           operation: 'and',
-          children: [nurseryFilter, searchValueNodes],
+          children: [filterValueNodes, searchValueNodes],
         });
       } else {
         finalSearchValueChildren.push(searchValueNodes);
       }
-    } else if (nurseryFilter) {
-      finalSearchValueChildren.push(nurseryFilter);
+    } else if (filterValueChildren.length) {
+      const filterValueNodes: FieldNodePayload = {
+        operation: 'or',
+        children: filterValueChildren,
+      };
+      finalSearchValueChildren.push(filterValueNodes);
     }
 
     return finalSearchValueChildren;
@@ -180,6 +225,45 @@ export default function NurseryWithdrawals(props: NurseryWithdrawalsProps): JSX.
     return '';
   };
 
+  const geSpeciesScientificName = (speciesId: string) => {
+    const selectedSpecies = species?.find((iSpecies) => iSpecies.id.toString() === speciesId);
+    return selectedSpecies?.scientificName || '';
+  };
+
+  const getValueForPill = (filter: keyof NurseryWithdrawalsFiltersType, value: string) => {
+    switch (filter) {
+      case 'fromNurseryIds': {
+        return getNurseryName(value);
+      }
+      case 'speciesId': {
+        return geSpeciesScientificName(value);
+      }
+      default: {
+        return value;
+      }
+    }
+  };
+
+  const getFilterName = (filter: keyof NurseryWithdrawalsFiltersType) => {
+    switch (filter) {
+      case 'fromNurseryIds': {
+        return strings.FROM_NURSERY;
+      }
+      case 'speciesId': {
+        return strings.SPECIES;
+      }
+      case 'destinationNames': {
+        return strings.DESTINATION;
+      }
+      case 'purposes': {
+        return strings.PURPOSE;
+      }
+      default: {
+        return filter;
+      }
+    }
+  };
+
   return (
     <TfMain>
       <Box sx={{ paddingLeft: theme.spacing(3) }}>
@@ -203,7 +287,7 @@ export default function NurseryWithdrawals(props: NurseryWithdrawalsProps): JSX.
             }}
             ref={contentRef}
           >
-            <Grid item xs={12} sx={{ display: 'flex', marginBottom: '16px' }}>
+            <Grid item xs={12} sx={{ display: 'flex', marginBottom: '16px', alignItems: 'center' }}>
               <TextField
                 placeholder={strings.SEARCH}
                 iconLeft='search'
@@ -215,29 +299,33 @@ export default function NurseryWithdrawals(props: NurseryWithdrawalsProps): JSX.
                 value={searchValue}
                 onChange={(_id, value) => setSearchValue(value as string)}
               />
-              <NurseryWithdrawalsFiltersPopover filters={filters} setFilters={setFilters} organization={organization} />
-              <Grid xs={12} display='flex'>
-                {(Object.keys(filters) as (keyof typeof filters)[]).map(
-                  (filter: keyof NurseryWithdrawalsFiltersType) => {
-                    return filters[filter]?.map((value) => {
-                      return (
-                        <Pill
-                          key={value}
-                          filter={filter}
-                          value={filter === 'fromNurseryIds' ? getNurseryName(value) : value}
-                          onRemoveFilter={() => removeFilter(filter, value)}
-                        />
-                      );
-                    });
-                  }
-                )}
-              </Grid>
+              <NurseryWithdrawalsFiltersPopover
+                filters={filters}
+                setFilters={setFilters}
+                organization={organization}
+                species={species}
+              />
             </Grid>
+            <Grid xs={12} display='flex' sx={{ marginBottom: 2 }}>
+              {(Object.keys(filters) as (keyof typeof filters)[]).map((filter: keyof NurseryWithdrawalsFiltersType) => {
+                return filters[filter]?.map((value) => {
+                  return (
+                    <Pill
+                      key={value}
+                      filter={getFilterName(filter)}
+                      value={getValueForPill(filter, value)}
+                      onRemoveFilter={() => removeFilter(filter, value)}
+                    />
+                  );
+                });
+              })}
+            </Grid>
+
             <Grid item xs={12}>
               <Table
                 id='withdrawal-log'
                 columns={columns}
-                rows={searchResults || nurseryWithdrawals || []}
+                rows={searchResults || []}
                 Renderer={WithdrawalLogRenderer}
                 orderBy={'name'}
                 onSelect={onWithdrawalClicked}

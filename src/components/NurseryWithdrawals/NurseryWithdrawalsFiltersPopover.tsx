@@ -11,6 +11,9 @@ import { getAllNurseries } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { NurseryWithdrawalsFiltersType } from './NurseryWithdrawals';
 import { NurseryWithdrawalPurposesValues } from 'src/api/types/batch';
+import { listPlantingSites } from 'src/api/tracking/tracking';
+import { PlantingSite } from 'src/api/types/tracking';
+import { Species } from 'src/types/Species';
 
 export type InventoryFiltersType = {
   facilityIds?: number[];
@@ -32,7 +35,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   popoverContainer: {
     '& .MuiPaper-root': {
-      border: '1px solid #A9B7B8',
+      border: `1px solid ${theme.palette.TwClrBaseGray300}`,
       borderRadius: '8px',
       overflow: 'visible',
     },
@@ -44,7 +47,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   title: {
     padding: '16px 24px',
-    background: '#F2F4F5',
+    background: theme.palette.TwClrBgSecondary,
     borderRadius: '8px',
     fontSize: '20px',
     fontWeight: 600,
@@ -55,7 +58,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     overflow: 'auto',
   },
   footer: {
-    background: '#F2F4F5',
+    background: theme.palette.TwClrBgSecondary,
     padding: '16px 24px',
     display: 'flex',
     justifyContent: 'end',
@@ -72,18 +75,22 @@ type NurseryWithdrawalsFiltersPopoverProps = {
   filters: NurseryWithdrawalsFiltersType;
   setFilters: React.Dispatch<React.SetStateAction<NurseryWithdrawalsFiltersType>>;
   organization: ServerOrganization;
+  species?: Species[];
 };
 
 export default function NurseryWithdrawalsFiltersPopover({
   filters,
   setFilters,
   organization,
+  species,
 }: NurseryWithdrawalsFiltersPopoverProps): JSX.Element {
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const classes = useStyles({ isMobile });
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [temporalRecord, setTemporalRecord] = useForm<NurseryWithdrawalsFiltersType>({});
+  const [plantingSites, setPlantingSites] = useState<PlantingSite[]>();
+
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -94,6 +101,16 @@ export default function NurseryWithdrawalsFiltersPopover({
   useEffect(() => {
     setTemporalRecord(filters);
   }, [filters, setTemporalRecord]);
+
+  useEffect(() => {
+    const populatePlantingSites = async () => {
+      const result = await listPlantingSites(organization.id);
+      if (result.requestSucceeded) {
+        setPlantingSites(result.sites);
+      }
+    };
+    populatePlantingSites();
+  }, [organization]);
 
   const onReset = () => {
     setFilters({
@@ -162,7 +179,7 @@ export default function NurseryWithdrawalsFiltersPopover({
           <div className={classes.title}>{strings.FILTERS}</div>
           <Box className={classes.container}>
             <Grid container spacing={2}>
-              <Grid item xs={12}>
+              <Grid item xs={6}>
                 <Typography fontSize='16px' paddingLeft={theme.spacing(2)} color='#708284'>
                   {strings.FROM_NURSERY}
                 </Typography>
@@ -178,7 +195,7 @@ export default function NurseryWithdrawalsFiltersPopover({
                   </Grid>
                 ))}
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={6}>
                 <Typography fontSize='16px' paddingLeft={theme.spacing(2)} color='#708284'>
                   {strings.PURPOSE}
                 </Typography>
@@ -190,6 +207,38 @@ export default function NurseryWithdrawalsFiltersPopover({
                       label={purpose}
                       value={hasFilter('purposes', purpose)}
                       onChange={(id, value) => onChangeHandler(id, value, 'purposes')}
+                    />
+                  </Grid>
+                ))}
+              </Grid>
+              <Grid item xs={6}>
+                <Typography fontSize='16px' paddingLeft={theme.spacing(2)} color='#708284'>
+                  {strings.DESTINATION}
+                </Typography>
+                {plantingSites?.map((plantingSite) => (
+                  <Grid item xs={12} key={plantingSite.id}>
+                    <Checkbox
+                      id={plantingSite.name.toString()}
+                      name={plantingSite.name}
+                      label={plantingSite.name}
+                      value={hasFilter('destinationNames', plantingSite.name)}
+                      onChange={(id, value) => onChangeHandler(id, value, 'destinationNames')}
+                    />
+                  </Grid>
+                ))}
+              </Grid>
+              <Grid item xs={6}>
+                <Typography fontSize='16px' paddingLeft={theme.spacing(2)} color='#708284'>
+                  {strings.SPECIES}
+                </Typography>
+                {species?.map((iSpecies) => (
+                  <Grid item xs={12} key={iSpecies.id}>
+                    <Checkbox
+                      id={iSpecies.id.toString()}
+                      name={iSpecies.scientificName}
+                      label={iSpecies.scientificName}
+                      value={hasFilter('speciesId', iSpecies.id)}
+                      onChange={(id, value) => onChangeHandler(id, value, 'speciesId')}
                     />
                   </Grid>
                 ))}
