@@ -1,9 +1,8 @@
-import { Box, Grid } from '@mui/material';
+import { Box, Grid, useTheme } from '@mui/material';
 import { Table, TableColumnType, Textfield } from '@terraware/web-components';
 import { SearchResponseElement } from 'src/api/search';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
-import PageSnackbar from '../PageSnackbar';
 import PlantingSitesCellRenderer from './PlantingSitesCellRenderer';
 
 const columns: TableColumnType[] = [
@@ -30,12 +29,16 @@ interface PlantingSitesTableProps {
 
 export default function PlantingSitesTable(props: PlantingSitesTableProps): JSX.Element {
   const { results, setTemporalSearchValue, temporalSearchValue } = props;
+  const theme = useTheme();
 
   return (
-    <>
-      <Grid item xs={12}>
-        <PageSnackbar />
-      </Grid>
+    <Box
+      sx={{
+        backgroundColor: theme.palette.TwClrBg,
+        padding: theme.spacing(3),
+        borderRadius: '32px',
+      }}
+    >
       <Box display='flex' flexDirection='row'>
         <Box width='300px'>
           <Textfield
@@ -66,6 +69,6 @@ export default function PlantingSitesTable(props: PlantingSitesTableProps): JSX.
           </Grid>
         </div>
       </Grid>
-    </>
+    </Box>
   );
 }
