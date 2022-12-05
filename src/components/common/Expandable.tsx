@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     borderRadius: '16px',
     backgroundColor: theme.palette.TwClrBg,
     width: (props: StyleProps) => (props.isMobile ? '100%' : '584px'),
-    padding: theme.spacing(1),
+    padding: theme.spacing(3),
   },
   disabledExpandable: {
     opacity: 0.4,
