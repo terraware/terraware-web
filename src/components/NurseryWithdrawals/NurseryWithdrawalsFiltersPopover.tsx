@@ -14,6 +14,7 @@ import { NurseryWithdrawalPurposesValues } from 'src/api/types/batch';
 import { listPlantingSites } from 'src/api/tracking/tracking';
 import { PlantingSite } from 'src/api/types/tracking';
 import { Species } from 'src/types/Species';
+import useSnackbar from 'src/utils/useSnackbar';
 
 export type InventoryFiltersType = {
   facilityIds?: number[];
@@ -90,6 +91,7 @@ export default function NurseryWithdrawalsFiltersPopover({
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [temporalRecord, setTemporalRecord] = useForm<NurseryWithdrawalsFiltersType>({});
   const [plantingSites, setPlantingSites] = useState<PlantingSite[]>();
+  const [snackbar] = useState(useSnackbar());
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -107,6 +109,8 @@ export default function NurseryWithdrawalsFiltersPopover({
       const result = await listPlantingSites(organization.id);
       if (result.requestSucceeded) {
         setPlantingSites(result.sites);
+      } else {
+        snackbar.toastError(result.error);
       }
     };
     populatePlantingSites();
@@ -180,7 +184,7 @@ export default function NurseryWithdrawalsFiltersPopover({
           <Box className={classes.container}>
             <Grid container spacing={2}>
               <Grid item xs={6}>
-                <Typography fontSize='16px' paddingLeft={theme.spacing(2)} color='#708284'>
+                <Typography fontSize='16px' paddingLeft={theme.spacing(2)} color={theme.palette.TwClrBaseGray500}>
                   {strings.FROM_NURSERY}
                 </Typography>
                 {getAllNurseries(organization).map((n) => (
@@ -196,7 +200,7 @@ export default function NurseryWithdrawalsFiltersPopover({
                 ))}
               </Grid>
               <Grid item xs={6}>
-                <Typography fontSize='16px' paddingLeft={theme.spacing(2)} color='#708284'>
+                <Typography fontSize='16px' paddingLeft={theme.spacing(2)} color={theme.palette.TwClrBaseGray500}>
                   {strings.PURPOSE}
                 </Typography>
                 {NurseryWithdrawalPurposesValues.map((purpose) => (
@@ -212,7 +216,7 @@ export default function NurseryWithdrawalsFiltersPopover({
                 ))}
               </Grid>
               <Grid item xs={6}>
-                <Typography fontSize='16px' paddingLeft={theme.spacing(2)} color='#708284'>
+                <Typography fontSize='16px' paddingLeft={theme.spacing(2)} color={theme.palette.TwClrBaseGray500}>
                   {strings.DESTINATION}
                 </Typography>
                 {plantingSites?.map((plantingSite) => (
@@ -228,7 +232,7 @@ export default function NurseryWithdrawalsFiltersPopover({
                 ))}
               </Grid>
               <Grid item xs={6}>
-                <Typography fontSize='16px' paddingLeft={theme.spacing(2)} color='#708284'>
+                <Typography fontSize='16px' paddingLeft={theme.spacing(2)} color={theme.palette.TwClrBaseGray500}>
                   {strings.SPECIES}
                 </Typography>
                 {species?.map((iSpecies) => (

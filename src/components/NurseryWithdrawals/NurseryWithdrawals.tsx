@@ -20,6 +20,7 @@ import Pill from '../Pill';
 import { getAllNurseries } from 'src/utils/organization';
 import { getAllSpecies } from 'src/api/species/species';
 import { Species } from 'src/types/Species';
+import useSnackbar from 'src/utils/useSnackbar';
 
 export type NurseryWithdrawalsFiltersType = {
   fromNurseryIds?: string[];
@@ -60,6 +61,7 @@ export default function NurseryWithdrawals(props: NurseryWithdrawalsProps): JSX.
   const debouncedSearchTerm = useDebounce(searchValue, 250);
   const [filters, setFilters] = useForm<NurseryWithdrawalsFiltersType>({});
   const [species, setSpecies] = useState<Species[]>();
+  const [snackbar] = useState(useSnackbar());
 
   const onWithdrawalClicked = (withdrawal: any) => {
     history.push({
@@ -72,6 +74,8 @@ export default function NurseryWithdrawals(props: NurseryWithdrawalsProps): JSX.
       const result = await getAllSpecies(organization.id);
       if (result.requestSucceeded) {
         setSpecies(result.species);
+      } else {
+        snackbar.toastError();
       }
     };
     populateSpecies();
@@ -107,58 +111,40 @@ export default function NurseryWithdrawals(props: NurseryWithdrawalsProps): JSX.
     }
 
     const filterValueChildren: FieldNodePayload[] = [];
-    let nurseryFilter: FieldNodePayload;
     if (filters.fromNurseryIds && filters.fromNurseryIds.length > 0) {
-      nurseryFilter = {
+      filterValueChildren.push({
         operation: 'field',
         field: 'facility_id',
         type: 'Exact',
         values: filters.fromNurseryIds.map((id) => id.toString()),
-      };
-    }
-    if (nurseryFilter) {
-      filterValueChildren.push(nurseryFilter);
+      });
     }
 
-    let purposeFilter: FieldNodePayload;
     if (filters.purposes && filters.purposes.length > 0) {
-      purposeFilter = {
+      filterValueChildren.push({
         operation: 'field',
         field: 'purpose',
         type: 'Exact',
         values: filters.purposes,
-      };
-    }
-    if (purposeFilter) {
-      filterValueChildren.push(purposeFilter);
+      });
     }
 
-    let destinationFilter: FieldNodePayload;
     if (filters.destinationNames && filters.destinationNames.length > 0) {
-      destinationFilter = {
+      filterValueChildren.push({
         operation: 'field',
         field: 'destinationName',
         type: 'Exact',
         values: filters.destinationNames,
-      };
+      });
     }
 
-    if (destinationFilter) {
-      filterValueChildren.push(destinationFilter);
-    }
-
-    let speciesFilter: FieldNodePayload;
     if (filters.speciesId && filters.speciesId.length > 0) {
-      speciesFilter = {
+      filterValueChildren.push({
         operation: 'field',
         field: 'batchWithdrawals.batch_species_id',
         type: 'Exact',
         values: filters.speciesId,
-      };
-    }
-
-    if (speciesFilter) {
-      filterValueChildren.push(speciesFilter);
+      });
     }
 
     if (searchValueChildren.length) {
