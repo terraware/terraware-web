@@ -1,3 +1,4 @@
+70e68d0 SW-2438 Avoid selecting the row when clicking on "# more" (#868)
 cc71e0a SW-2433: Update Navigation Items so Items are Correctly Nested (#863)
 97cc1d2 Species names rendering on withdrawal log table (#867)
 4089f91 SW-2334 Search and filters to withdrawal log table (#861)
