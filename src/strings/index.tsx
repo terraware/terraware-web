@@ -878,6 +878,7 @@ const strings = new LocalizedStrings({
     WITHDRAWAL_LOG: 'Withdrawal Log',
     TO_PLOT: 'To: Plot',
     REASSIGN: 'Reassign',
+    EDIT_PLANTING_SITE: 'Edit Planting Site',
   },
 });
 

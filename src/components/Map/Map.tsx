@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Box } from '@mui/material';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import ReactMapGL, { Layer, NavigationControl, Popup, Source } from 'react-map-gl';
+import ReactMapGL, { AttributionControl, Layer, NavigationControl, Popup, Source } from 'react-map-gl';
 import { MapOptions, MapPopupRenderer } from './MapModels';
 
 /**
@@ -15,8 +15,8 @@ const mapboxImpl: any = mapboxgl;
 mapboxImpl.workerClass = require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker').default; /* tslint:disable-line */
 
 const navControlStyle = {
-  right: 10,
-  bottom: 25,
+  marginRight: '5px',
+  marginBottom: '20px',
 };
 
 type PopupInfo = {
@@ -190,9 +190,11 @@ export default function Map(props: MapProps): JSX.Element {
         onError={onMapError}
         onClick={onMapClick}
         style={style}
+        attributionControl={false}
       >
         {mapSources}
         <NavigationControl showCompass={false} style={navControlStyle} position='bottom-right' />
+        <AttributionControl compact={true} style={{ marginRight: '5px' }} />
         {popupInfo && popupRenderer && (
           <Popup
             anchor='top'
