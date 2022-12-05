@@ -246,19 +246,33 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
       <Container
         maxWidth={false}
         sx={{
-          padding: 3,
+          paddingBottom: theme.spacing(isMobile ? 20 : 5),
         }}
       >
         <Grid container minWidth={isMobile ? 0 : 700}>
           <Grid item xs={12}>
-            <Typography variant='h2' sx={{ fontSize: '20px', fontWeight: 'bold', marginBottom: theme.spacing(2) }}>
+            <Typography
+              variant='h2'
+              sx={{ fontSize: '20px', fontWeight: 'bold', margin: theme.spacing(5, 5, 5, isMobile ? 3 : 5) }}
+            >
               {strings.SELECT_BATCHES}
             </Typography>
           </Grid>
           {species &&
             species.map((iSpecies: any) => {
               return (
-                <>
+                <Grid
+                  key={iSpecies.id}
+                  display='flex'
+                  flexDirection='column'
+                  flexGrow={1}
+                  sx={{
+                    backgroundColor: theme.palette.TwClrBg,
+                    borderRadius: theme.spacing(4),
+                    padding: theme.spacing(3),
+                    margin: theme.spacing(0, 3, 3, isMobile ? 0 : 3),
+                  }}
+                >
                   <Grid item xs={12}>
                     <Typography
                       variant='h2'
@@ -281,7 +295,7 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
                       />
                     )}
                   </Grid>
-                </>
+                </Grid>
               );
             })}
         </Grid>
