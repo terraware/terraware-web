@@ -1,4 +1,4 @@
-import { Box, CircularProgress, Container, Grid, Typography } from '@mui/material';
+import { Box, CircularProgress, Grid, Typography } from '@mui/material';
 import { Button, theme } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -8,9 +8,10 @@ import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
 import useDebounce from 'src/utils/useDebounce';
-import PageHeaderWrapper from '../common/PageHeaderWrapper';
-import TfMain from '../common/TfMain';
-import EmptyStatePage from '../emptyStatePages/EmptyStatePage';
+import PageSnackbar from 'src/components/PageSnackbar';
+import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
+import TfMain from 'src/components/common/TfMain';
+import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
 import PlantingSitesTable from './PlantingSitesTable';
 
 type PlantingSitesListProps = {
@@ -77,10 +78,14 @@ export default function PlantingSitesList(props: PlantingSitesListProps): JSX.El
     onSearch();
   }, [organization, onSearch]);
 
+  if (plantingSites && !plantingSites.length) {
+    return <EmptyStatePage backgroundImageVisible={true} pageName={'PlantingSites'} />;
+  }
+
   return (
-    <TfMain backgroundImageVisible={true}>
+    <TfMain>
       <PageHeaderWrapper nextElement={contentRef.current}>
-        <Box sx={{ paddingBottom: theme.spacing(3), display: 'flex', justifyContent: 'space-between' }}>
+        <Box sx={{ padding: theme.spacing(0, 0, 4, 3), display: 'flex', justifyContent: 'space-between' }}>
           <Grid item xs={6}>
             <Typography fontSize='24px' fontWeight={600}>
               {strings.PLANTING_SITES}
@@ -108,26 +113,21 @@ export default function PlantingSitesList(props: PlantingSitesListProps): JSX.El
           ) : null}
         </Box>
       </PageHeaderWrapper>
-      <Grid>
+      <Grid item xs={12}>
+        <PageSnackbar />
+      </Grid>
+      <Grid display='flex' flexDirection={isMobile ? 'row' : 'column'} flexGrow={1}>
         {plantingSites ? (
-          <Box>
-            {plantingSites?.length === 0 ? (
-              <Container sx={{ paddingY: 4 }}>
-                <EmptyStatePage backgroundImageVisible={false} pageName={'PlantingSites'} />
-              </Container>
-            ) : (
-              <PlantingSitesTable
-                organization={organization}
-                results={searchResults || []}
-                temporalSearchValue={temporalSearchValue}
-                setTemporalSearchValue={setTemporalSearchValue}
-              />
-            )}
+          <Box display='flex' flexDirection='column'>
+            <PlantingSitesTable
+              organization={organization}
+              results={searchResults || []}
+              temporalSearchValue={temporalSearchValue}
+              setTemporalSearchValue={setTemporalSearchValue}
+            />
           </Box>
         ) : (
-          <Box sx={{ position: 'fixed', top: '50%', left: '50%' }}>
-            <CircularProgress />
-          </Box>
+          <CircularProgress sx={{ margin: 'auto' }} />
         )}
       </Grid>
     </TfMain>
