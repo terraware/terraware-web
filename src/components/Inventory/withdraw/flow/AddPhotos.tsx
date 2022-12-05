@@ -38,8 +38,9 @@ export default function AddPhotos(props: AddPhotosProps): JSX.Element {
       <Container
         maxWidth={false}
         sx={{
+          display: 'flex',
           margin: '0 auto',
-          width: isMobile ? '100%' : '640px',
+          width: isMobile ? '100%' : '700px',
           paddingLeft: theme.spacing(isMobile ? 1 : 4),
           paddingRight: theme.spacing(isMobile ? 1 : 4),
           paddingTop: theme.spacing(5),
