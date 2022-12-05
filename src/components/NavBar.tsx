@@ -153,18 +153,25 @@ export default function NavBar({
         </SubNavbar>
       </NavItem>
       {trackingEnabled && (
-        <>
-          <NavSection title={strings.PLANTS.toUpperCase()} />
-          <NavItem
-            label={strings.DASHBOARD}
-            icon='iconRestorationSite'
-            selected={!!isPlantsDashboardRoute}
-            onClick={() => {
-              closeAndNavigateTo(APP_PATHS.PLANTS_DASHBOARD);
-            }}
-            id='plants-dashboard'
-          />
-        </>
+        <NavItem
+          label={strings.PLANTS}
+          icon='iconRestorationSite'
+          id='plants'
+          onClick={() => {
+            closeAndNavigateTo(APP_PATHS.PLANTS_DASHBOARD);
+          }}
+        >
+          <SubNavbar>
+            <NavItem
+              label={strings.DASHBOARD}
+              selected={!!isPlantsDashboardRoute}
+              onClick={() => {
+                closeAndNavigateTo(APP_PATHS.PLANTS_DASHBOARD);
+              }}
+              id='plants-dashboard'
+            />
+          </SubNavbar>
+        </NavItem>
       )}
       {role && ['Admin', 'Owner'].includes(role) && (
         <>
@@ -212,19 +219,19 @@ export default function NavBar({
                 }}
                 id='nurseries'
               />
+              {trackingEnabled && (
+                <NavItem
+                  label={strings.PLANTING_SITES}
+                  selected={!!isPlantingSitesRoute}
+                  onClick={() => {
+                    closeAndNavigateTo(APP_PATHS.PLANTING_SITES);
+                  }}
+                  id='plantingSites'
+                />
+              )}
             </SubNavbar>
           </NavItem>
         </>
-      )}
-      {trackingEnabled && (
-        <NavItem
-          label={strings.PLANTING_SITES}
-          selected={!!isPlantingSitesRoute}
-          onClick={() => {
-            closeAndNavigateTo(APP_PATHS.PLANTING_SITES);
-          }}
-          id='plantingSites'
-        />
       )}
 
       <NavFooter>

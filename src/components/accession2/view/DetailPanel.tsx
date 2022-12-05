@@ -190,7 +190,7 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
             <Grid item xs={gridRightSide} sx={valueStyle}>
               {`${strings.COLLECTED_FROM}${numPlants === undefined ? '' : ' ' + numPlants}${
                 collectionSource && collectionSource !== 'Other' ? ' ' + collectionSource : ''
-              } ${isNotPlural ? strings.PLANT : strings.PLANTS}`}
+              } ${isNotPlural ? strings.PLANT : strings.PLANTS.toLowerCase()}`}
               {accession.plantId ? <Typography>{`${strings.PLANT_ID}: ${accession.plantId}`}</Typography> : ''}
               {accession.notes ? (
                 <Box marginTop={2} display='flex'>
