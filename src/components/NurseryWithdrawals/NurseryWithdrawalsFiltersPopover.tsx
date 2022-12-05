@@ -114,7 +114,7 @@ export default function NurseryWithdrawalsFiltersPopover({
       }
     };
     populatePlantingSites();
-  }, [organization]);
+  }, [organization, snackbar]);
 
   const onReset = () => {
     setFilters({

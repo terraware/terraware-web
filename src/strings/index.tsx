@@ -878,6 +878,7 @@ const strings = new LocalizedStrings({
     WITHDRAWAL_LOG: 'Withdrawal Log',
     TO_PLOT: 'To: Plot',
     REASSIGN: 'Reassign',
+    SPECIES_ERROR_SEARCH: "Couldn't load species list for search",
   },
 });
 

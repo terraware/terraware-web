@@ -75,11 +75,11 @@ export default function NurseryWithdrawals(props: NurseryWithdrawalsProps): JSX.
       if (result.requestSucceeded) {
         setSpecies(result.species);
       } else {
-        snackbar.toastError();
+        snackbar.toastError(strings.SPECIES_ERROR_SEARCH);
       }
     };
     populateSpecies();
-  }, [organization]);
+  }, [organization, snackbar]);
 
   const getSearchChildren = useCallback(() => {
     const finalSearchValueChildren: FieldNodePayload[] = [];
