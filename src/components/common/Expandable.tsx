@@ -10,8 +10,8 @@ interface StyleProps {
 
 const useStyles = makeStyles((theme: Theme) => ({
   expandable: {
-    borderRadius: '8px',
-    border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+    borderRadius: '16px',
+    backgroundColor: theme.palette.TwClrBg,
     width: (props: StyleProps) => (props.isMobile ? '100%' : '584px'),
     padding: theme.spacing(1),
   },

@@ -13,14 +13,14 @@ import { Facility } from 'src/api/types/facilities';
 import { getPreferences, updatePreferences } from 'src/api/preferences/preferences';
 import SeedBankMonitoring from './SeedBankMonitoring';
 import Button from '../common/button/Button';
-import Title from '../common/Title';
-import { Box, Grid, Theme } from '@mui/material';
+import { Box, Grid, Theme, Typography } from '@mui/material';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageSnackbar from 'src/components/PageSnackbar';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 
 interface StyleProps {
   isMobile: boolean;
+  isDesktop: boolean;
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -38,13 +38,14 @@ const useStyles = makeStyles((theme: Theme) => ({
     display: 'flex',
     alignItems: 'center',
     paddingBottom: theme.spacing(2),
-    paddingLeft: theme.spacing(3),
+    paddingLeft: (props: StyleProps) => theme.spacing(props.isDesktop ? 3 : 0),
+    paddingTop: (props: StyleProps) => theme.spacing(props.isMobile ? 2 : 0),
   },
   contentContainer: {
     width: '100%',
   },
   divider: {
-    margin: '0 1%',
+    margin: theme.spacing(0, 2),
     width: '1px',
     height: '32px',
     backgroundColor: theme.palette.TwClrBgTertiary,
@@ -63,8 +64,8 @@ type MonitoringProps = {
 };
 
 export default function Monitoring(props: MonitoringProps): JSX.Element {
-  const { isMobile } = useDeviceInfo();
-  const classes = useStyles({ isMobile });
+  const { isDesktop, isMobile } = useDeviceInfo();
+  const classes = useStyles({ isDesktop, isMobile });
   const history = useHistory();
   const { organization, hasSeedBanks, reloadData } = props;
   const [selectedSeedBank, setSelectedSeedBank] = useState<Facility>();
@@ -136,7 +137,11 @@ export default function Monitoring(props: MonitoringProps): JSX.Element {
     updatePreferences('lastMonitoringSeedBank', data, organization.id); // no need to wait for response
   };
 
-  const getPageHeading = () => <Title page={strings.MONITORING} parentPage={strings.SEEDS} />;
+  const getPageHeading = () => (
+    <Typography fontSize='24px' fontWeight={600}>
+      {strings.MONITORING}
+    </Typography>
+  );
 
   return (
     <TfMain backgroundImageVisible={!hasSeedBanks}>
