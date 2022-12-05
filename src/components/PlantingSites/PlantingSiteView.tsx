@@ -1,5 +1,5 @@
 import TfMain from 'src/components/common/TfMain';
-import { Typography, Container, Grid, Theme, useTheme } from '@mui/material';
+import { Typography, Grid, Theme, useTheme } from '@mui/material';
 import { Button, Icon } from '@terraware/web-components';
 import strings from 'src/strings';
 import { useDeviceInfo } from '@terraware/web-components/utils';
@@ -22,7 +22,13 @@ const useStyles = makeStyles((theme: Theme) => ({
     display: 'flex',
     textDecoration: 'none',
     color: theme.palette.TwClrTxtBrand,
-    fontSize: '20px',
+    fontSize: '14px',
+    alignItems: 'center',
+  },
+  titleWithButton: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
   },
 }));
@@ -61,41 +67,56 @@ export default function PlantingSiteView(): JSX.Element {
   };
 
   return (
-    <TfMain moreScreen={true}>
-      <Container maxWidth={false} sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-        <Grid container spacing={3} flexGrow={0}>
-          <Grid item xs={12}>
-            <Link id='back' to={APP_PATHS.PLANTING_SITES} className={classes.back}>
-              <Icon name='caretLeft' className={classes.backIcon} />
+    <TfMain>
+      <Grid container padding={theme.spacing(0, 0, 4, 0)}>
+        <Grid item xs={12} marginBottom={theme.spacing(3)}>
+          <Link id='back' to={APP_PATHS.PLANTING_SITES} className={classes.back}>
+            <Icon name='caretLeft' className={classes.backIcon} size='small' />
+            <Typography fontSize='14px' fontWeight={500}>
               {strings.PLANTING_SITES}
-            </Link>
-          </Grid>
-          <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'space-between' }}>
-            <Typography fontSize='20px' fontWeight={600} margin={theme.spacing(1, 0)}>
-              {plantingSite?.name}
             </Typography>
-            {isMobile ? (
-              <Button icon='iconEdit' onClick={goToEditPlantingSite} priority='secondary' />
-            ) : (
-              <Button icon='iconEdit' label={strings.EDIT} onClick={goToEditPlantingSite} priority='secondary' />
-            )}
-          </Grid>
-          <PageSnackbar />
-          <Grid item xs={gridSize()}>
-            <TextField id='name' label={strings.NAME} type='text' value={plantingSite?.name} display={true} />
-          </Grid>
-          <Grid item xs={gridSize()}>
-            <TextField
-              id='description'
-              label={strings.DESCRIPTION}
-              type='textarea'
-              value={plantingSite?.description}
-              display={true}
-            />
-          </Grid>
+          </Link>
         </Grid>
-        {plantingSite && <BoundariesAndPlots plantingSite={plantingSite} />}
-      </Container>
+        <Grid item xs={12} padding={theme.spacing(0, 3)} className={classes.titleWithButton}>
+          <Typography fontSize='20px' fontWeight={600}>
+            {plantingSite?.name}
+          </Typography>
+          <Button
+            icon='iconEdit'
+            label={isMobile ? undefined : strings.EDIT_PLANTING_SITE}
+            priority='primary'
+            size='medium'
+            onClick={goToEditPlantingSite}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <PageSnackbar />
+        </Grid>
+      </Grid>
+
+      <Grid
+        container
+        sx={{
+          backgroundColor: theme.palette.TwClrBg,
+          borderRadius: '32px',
+          padding: theme.spacing(3),
+          margin: 0,
+        }}
+      >
+        <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
+          <TextField label={strings.NAME} id='name' type='text' value={plantingSite?.name} display={true} />
+        </Grid>
+        <Grid item xs={gridSize()}>
+          <TextField
+            label={strings.DESCRIPTION}
+            id='description'
+            type='text'
+            value={plantingSite?.description}
+            display={true}
+          />
+        </Grid>
+      </Grid>
+      {plantingSite && <BoundariesAndPlots plantingSite={plantingSite} />}
     </TfMain>
   );
 }

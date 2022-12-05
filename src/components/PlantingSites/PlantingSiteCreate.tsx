@@ -1,7 +1,6 @@
 import { ServerOrganization } from 'src/types/Organization';
 import TfMain from 'src/components/common/TfMain';
-import { Typography, Container, Grid } from '@mui/material';
-import { Icon, theme } from '@terraware/web-components';
+import { Typography, Box, Container, Grid, useTheme } from '@mui/material';
 import strings from 'src/strings';
 import FormBottomBar from '../common/FormBottomBar';
 import { useDeviceInfo } from '@terraware/web-components/utils';
@@ -14,12 +13,11 @@ import {
   updatePlantingSite,
 } from 'src/api/tracking/tracking';
 import { APP_PATHS } from 'src/constants';
-import { Link, useHistory, useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import useSnackbar from 'src/utils/useSnackbar';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 import { useEffect, useState } from 'react';
 import PageSnackbar from '../PageSnackbar';
-import { makeStyles } from '@mui/styles';
 import { PlantingSite } from 'src/api/types/tracking';
 import BoundariesAndPlots from './BoundariesAndPlots';
 
@@ -28,28 +26,14 @@ type CreatePlantingSiteProps = {
   reloadPlantingSites: () => void;
 };
 
-const useStyles = makeStyles(() => ({
-  backIcon: {
-    fill: theme.palette.TwClrIcnBrand,
-    marginRight: theme.spacing(1),
-  },
-  back: {
-    display: 'flex',
-    textDecoration: 'none',
-    color: theme.palette.TwClrTxtBrand,
-    fontSize: '20px',
-    alignItems: 'center',
-  },
-}));
-
 export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
+  const theme = useTheme();
   const { organization, reloadPlantingSites } = props;
   const { plantingSiteId } = useParams<{ plantingSiteId: string }>();
   const history = useHistory();
   const snackbar = useSnackbar();
   const [nameError, setNameError] = useState('');
-  const classes = useStyles();
   const [selectedPlantingSite, setSelectedPlantingSite] = useState<PlantingSite>();
   const [loaded, setLoaded] = useState(false);
 
@@ -127,22 +111,19 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
     if (isMobile) {
       return 12;
     }
-    return 4;
+    return 6;
   };
 
   return (
-    <TfMain moreScreen={true}>
-      <Container maxWidth={false} sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+    <TfMain>
+      <Container
+        maxWidth={false}
+        sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1, paddingBottom: theme.spacing(isMobile ? 20 : 10) }}
+      >
         {loaded && (
           <>
-            <Grid container spacing={3} flexGrow={0}>
-              <Grid item xs={12}>
-                <Link id='back' to={APP_PATHS.PLANTING_SITES} className={classes.back}>
-                  <Icon name='caretLeft' className={classes.backIcon} />
-                  {strings.PLANTING_SITES}
-                </Link>
-              </Grid>
-              <Grid item xs={12}>
+            <Grid container spacing={3} flexGrow={0} display='flex' flexDirection='column'>
+              <Box paddingLeft={theme.spacing(3)} marginBottom={theme.spacing(4)} display='flex' flexDirection='column'>
                 <Typography
                   fontSize={selectedPlantingSite ? '20px' : '24px'}
                   fontWeight={600}
@@ -150,32 +131,37 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
                 >
                   {record.id !== -1 && selectedPlantingSite ? selectedPlantingSite.name : strings.ADD_PLANTING_SITE}
                 </Typography>
-                {record.id === -1 && (
-                  <Typography fontSize='14px' fontWeight={400} margin={theme.spacing(0, 0, 3, 0)}>
-                    {strings.ADD_PLANTING_SITE_DESCRIPTION}
-                  </Typography>
-                )}
-              </Grid>
+              </Box>
               <PageSnackbar />
-              <Grid item xs={gridSize()}>
-                <TextField
-                  id='name'
-                  label={strings.NAME_REQUIRED}
-                  type='text'
-                  onChange={onChange}
-                  value={record.name}
-                  errorText={record.name ? '' : nameError}
-                />
-              </Grid>
-              <Grid item xs={gridSize()}>
-                <TextField
-                  id='description'
-                  label={strings.DESCRIPTION}
-                  type='textarea'
-                  onChange={onChange}
-                  value={record.description}
-                />
-              </Grid>
+              <Box
+                sx={{
+                  backgroundColor: theme.palette.TwClrBg,
+                  borderRadius: '32px',
+                  padding: theme.spacing(3),
+                }}
+              >
+                <Grid container spacing={3} flexGrow={0}>
+                  <Grid item xs={gridSize()}>
+                    <TextField
+                      id='name'
+                      label={strings.NAME_REQUIRED}
+                      type='text'
+                      onChange={onChange}
+                      value={record.name}
+                      errorText={record.name ? '' : nameError}
+                    />
+                  </Grid>
+                  <Grid item xs={gridSize()}>
+                    <TextField
+                      id='description'
+                      label={strings.DESCRIPTION}
+                      type='textarea'
+                      onChange={onChange}
+                      value={record.description}
+                    />
+                  </Grid>
+                </Grid>
+              </Box>
             </Grid>
             <BoundariesAndPlots plantingSite={record} />
           </>

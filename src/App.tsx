@@ -101,10 +101,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     '& > div, & > main': {
       paddingTop: '96px',
     },
-    '& > .moreScreen': {
-      paddingBottom: theme.spacing(10),
-      paddingTop: '96px',
-    },
   },
   contentWithNavBar: {
     '& > div, & > main': {

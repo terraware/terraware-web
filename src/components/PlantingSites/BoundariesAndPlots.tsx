@@ -23,7 +23,7 @@ export default function BoundariesAndPlots(props: BoundariesAndPlotsProps): JSX.
         {plantingSite ? (
           <>
             {plantingSite.boundary ? (
-              <PlantingSiteMap plantingSite={plantingSite} />
+              <PlantingSiteMap plantingSite={plantingSite} style={{ borderRadius: '24px' }} />
             ) : (
               <Box
                 sx={{
@@ -31,8 +31,10 @@ export default function BoundariesAndPlots(props: BoundariesAndPlotsProps): JSX.
                   maxWidth: '800px',
                   margin: '0 auto',
                   textAlign: 'center',
-                  paddingX: 5,
                   marginTop: 3,
+                  backgroundColor: theme.palette.TwClrBg,
+                  borderRadius: '32px',
+                  padding: theme.spacing(3),
                 }}
               >
                 <Typography fontSize='20px' fontWeight={600} margin={theme.spacing(3, 0)}>
