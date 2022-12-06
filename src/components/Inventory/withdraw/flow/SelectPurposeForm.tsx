@@ -207,6 +207,26 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     return true;
   };
 
+  const validateReadyAndNotReadyQuantities = () => {
+    let bothValids = true;
+    if (isSingleBatch && !isOutplant) {
+      if (!notReadyQuantityWithdrawn && notReadyQuantityWithdrawn !== 0) {
+        setIndividualError('notReadyQuantityWithdrawn', strings.REQUIRED_FIELD);
+        bothValids = false;
+      } else {
+        setIndividualError('notReadyQuantityWithdrawn', '');
+      }
+
+      if (!readyQuantityWithdrawn && readyQuantityWithdrawn !== 0) {
+        setIndividualError('readyQuantityWithdrawn', strings.REQUIRED_FIELD);
+        bothValids = false;
+      } else {
+        setIndividualError('readyQuantityWithdrawn', '');
+      }
+    }
+    return bothValids;
+  };
+
   const validatePlantingSitePlot = () => {
     setIndividualError('plantingSiteId', '');
     setIndividualError('zoneId', '');
@@ -241,12 +261,14 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     const selectedNurseryInvalid = !validateSelectedNursery();
     const withdrawnQuantityInvalid = !validateWithdrawnQuantity();
     const plantingSitePlotInvalid = !validatePlantingSitePlot();
+    const readyAndNotReadyInvalid = !validateReadyAndNotReadyQuantities();
     if (
       fieldsErrors.withdrawDate ||
       nurseryTransferInvalid ||
       selectedNurseryInvalid ||
       withdrawnQuantityInvalid ||
-      plantingSitePlotInvalid
+      plantingSitePlotInvalid ||
+      readyAndNotReadyInvalid
     ) {
       return;
     }
@@ -498,6 +520,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                         value={notReadyQuantityWithdrawn}
                         tooltipTitle={strings.TOOLTIP_NOT_READY_QUANTITY}
                         className={classes.notReadyQuantityWithdrawn}
+                        errorText={fieldsErrors.notReadyQuantityWithdrawn}
                       />
                     </Grid>
                     <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }} paddingLeft={isMobile ? 0 : 1}>
@@ -520,9 +543,10 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                         value={readyQuantityWithdrawn}
                         tooltipTitle={strings.TOOLTIP_READY_QUANTITY}
                         className={classes.readyQuantityWithdrawn}
+                        errorText={fieldsErrors.readyQuantityWithdrawn}
                       />
                     </Grid>
-                    <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }} paddingLeft={1}>
+                    <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }} paddingLeft={isMobile ? 0 : 1}>
                       <Textfield
                         label={strings.WITHDRAW_QUANTITY}
                         id='withdrawQuantity'
