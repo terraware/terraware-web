@@ -42,13 +42,13 @@ export default function PlantingSiteDetails(props: PlantingSiteDetailsProps): JS
 
   const widgetCardStyle = {
     backgroundColor: theme.palette.TwClrBg,
-    marginBottom: 2,
+    marginBottom: 3,
     borderRadius: '24px',
     padding: 3,
   };
 
   const mapCardStyle = {
-    marginBottom: 2,
+    marginBottom: 3,
     borderRadius: '24px',
   };
 
@@ -106,7 +106,7 @@ export default function PlantingSiteDetails(props: PlantingSiteDetailsProps): JS
       <Grid item xs={isMobile ? 12 : 8} sx={mapCardStyle}>
         <PlantingSiteDashboardMap plots={plotsWithPlants} siteId={plantingSite?.id} />
       </Grid>
-      <Grid item xs={isMobile ? 12 : 4} sx={{ paddingLeft: isMobile ? 0 : 2 }}>
+      <Grid item xs={isMobile ? 12 : 4} sx={{ paddingLeft: isMobile ? 0 : 3 }}>
         <Box sx={{ ...widgetCardStyle, minHeight: '160px' }}>
           <TotalCount totalCount={totalPlants} />
         </Box>
