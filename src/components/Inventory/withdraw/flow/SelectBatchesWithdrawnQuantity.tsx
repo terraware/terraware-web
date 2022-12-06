@@ -253,7 +253,7 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
           <Grid item xs={12}>
             <Typography
               variant='h2'
-              sx={{ fontSize: '20px', fontWeight: 'bold', margin: theme.spacing(5, 5, 5, isMobile ? 3 : 5) }}
+              sx={{ fontSize: '20px', fontWeight: 'bold', margin: theme.spacing(4, 3, 3, isMobile ? 3 : 5) }}
             >
               {strings.SELECT_BATCHES}
             </Typography>
