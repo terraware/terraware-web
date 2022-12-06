@@ -183,7 +183,7 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
     }
   };
 
-  const getSpinner = () => {
+  const getSpinner = (withBackground = false) => {
     return (
       <Box
         sx={{
@@ -192,8 +192,8 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
           right: 0,
           top: 0,
           bottom: 0,
-          backgroundColor: theme.palette.TwClrBgBrandGhostHover,
-          zIndex: 100,
+          backgroundColor: withBackground ? theme.palette.TwClrBgBrandGhostHover : 'none',
+          zIndex: 2000,
         }}
       >
         <Box
@@ -216,7 +216,7 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
 
   return (
     <TfMain>
-      {withdrawInProgress && getSpinner()}
+      {withdrawInProgress && getSpinner(true)}
       <Typography variant='h2' sx={{ fontSize: '24px', fontWeight: 'bold', paddingLeft: theme.spacing(3) }}>
         {strings.WITHDRAW_FROM_BATCHES}
       </Typography>
