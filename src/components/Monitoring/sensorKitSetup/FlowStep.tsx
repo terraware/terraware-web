@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     lineHeight: '28px',
   },
   flowContent: {
-    padding: theme.spacing(2),
+    marginTop: theme.spacing(2),
   },
   flowFooter: {
     display: 'flex',
@@ -35,12 +35,11 @@ const useStyles = makeStyles((theme: Theme) => ({
   titleContainer: {
     display: 'flex',
     alignItems: 'center',
-    paddingLeft: theme.spacing(2),
   },
   gridItem: {
     display: 'flex',
     justifyContent: 'center',
-    marginBottom: theme.spacing(2),
+    marginBottom: theme.spacing(3),
   },
   errorBox: {
     width: '100%',
@@ -48,6 +47,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   button: {
     marginLeft: (props: StyleProps) => theme.spacing(props.isMobile ? 1 : 3),
+    marginBottom: '4px',
   },
 }));
 
