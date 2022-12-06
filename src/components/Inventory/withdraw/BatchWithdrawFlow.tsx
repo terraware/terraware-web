@@ -36,6 +36,7 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
     withdrawnDate: getTodaysDateFormatted(),
   });
   const [batches, setBatches] = useState<any[]>();
+  const [withdrawInProgress, setWithdrawInProgress] = useState<boolean>(false);
   const [snackbar] = useState(useSnackbar());
   const history = useHistory();
 
@@ -102,6 +103,10 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
   };
 
   const withdraw = async (photos: File[]) => {
+    if (withdrawInProgress) {
+      return;
+    }
+
     // first create the withdrawal
     record.batchWithdrawals = record.batchWithdrawals.filter((batchWithdrawal) => {
       return Number(batchWithdrawal.readyQuantityWithdrawn) + Number(batchWithdrawal.notReadyQuantityWithdrawn) > 0;
@@ -112,9 +117,12 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
       return;
     }
 
+    setWithdrawInProgress(true);
+
     const response = await createBatchWithdrawal(record);
     if (!response.requestSucceeded) {
       snackbar.toastError(response.error);
+      setWithdrawInProgress(false);
       return;
     }
 
@@ -135,6 +143,7 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
       }
     }
 
+    setWithdrawInProgress(false);
     // set snackbar with status
     snackbar.toastSuccess(getFormattedSuccessMessage(withdrawal as NurseryWithdrawal));
     // redirect to inventory
@@ -174,16 +183,40 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
     }
   };
 
-  if (!batches) {
+  const getSpinner = () => {
     return (
-      <Box display='flex' justifyContent='center' padding={theme.spacing(5)}>
-        <CircularProgress />
+      <Box
+        sx={{
+          position: 'absolute',
+          left: 0,
+          right: 0,
+          top: 0,
+          bottom: 0,
+          backgroundColor: theme.palette.TwClrBgBrandGhostHover,
+          zIndex: 100,
+        }}
+      >
+        <Box
+          display='flex'
+          justifyContent='center'
+          alignItems='center'
+          padding={theme.spacing(5)}
+          flexDirection='column'
+          height='100%'
+        >
+          <CircularProgress />
+        </Box>
       </Box>
     );
+  };
+
+  if (!batches) {
+    return getSpinner();
   }
 
   return (
     <TfMain>
+      {withdrawInProgress && getSpinner()}
       <Typography variant='h2' sx={{ fontSize: '24px', fontWeight: 'bold', paddingLeft: theme.spacing(3) }}>
         {strings.WITHDRAW_FROM_BATCHES}
       </Typography>
