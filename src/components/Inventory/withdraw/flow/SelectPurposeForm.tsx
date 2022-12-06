@@ -34,6 +34,16 @@ const useStyles = makeStyles((theme: Theme) => ({
       height: '44px',
     },
   },
+  notReadyQuantityWithdrawn: {
+    '&> #notReadyQuantityWithdrawn': {
+      height: '44px',
+    },
+  },
+  readyQuantityWithdrawn: {
+    '&> #readyQuantityWithdrawn': {
+      height: '44px',
+    },
+  },
 }));
 
 type SelectPurposeFormProps = {
@@ -57,6 +67,8 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const [destinationNurseriesOptions, setDestinationNurseriesOptions] = useState<DropdownItem[]>();
   const [isSingleBatch] = useState<boolean>(batches.length === 1);
   const [withdrawnQuantity, setWithdrawnQuantity] = useState<number>();
+  const [readyQuantityWithdrawn, setReadyQuantityWithdrawn] = useState<number>();
+  const [notReadyQuantityWithdrawn, setNotReadyQuantityWithdrawn] = useState<number>();
   const [plantingSites, setPlantingSites] = useState<PlantingSite[]>([]);
   const [zones, setZones] = useState<any[]>([]);
   const [plots, setPlots] = useState<any[]>([]);
@@ -247,16 +259,17 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
       plantingSiteId: isOutplant ? localRecord.plantingSiteId : undefined,
       plotId: isOutplant ? localRecord.plotId : undefined,
       facilityId: Number(selectedNursery as string),
-      batchWithdrawals:
-        isSingleBatch && !isSingleOutplant
-          ? localRecord.batchWithdrawals
-          : batches
-              .filter((batch) => batch.facility_id.toString() === selectedNursery)
-              .map((batch) => ({
-                batchId: batch.id,
-                notReadyQuantityWithdrawn: 0,
-                readyQuantityWithdrawn: isSingleOutplant ? withdrawnQuantity || 0 : 0,
-              })),
+      batchWithdrawals: batches
+        .filter((batch) => batch.facility_id.toString() === selectedNursery)
+        .map((batch) => ({
+          batchId: batch.id,
+          notReadyQuantityWithdrawn: isSingleOutplant ? 0 : isSingleBatch ? notReadyQuantityWithdrawn || 0 : 0,
+          readyQuantityWithdrawn: isSingleOutplant
+            ? withdrawnQuantity || 0
+            : isSingleBatch
+            ? readyQuantityWithdrawn || 0
+            : 0,
+        })),
     });
   };
 
@@ -301,6 +314,13 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   }, [selectedNursery, organization, fetchPlantingSites, isOutplant]);
 
   useEffect(() => {
+    setWithdrawnQuantity(
+      (readyQuantityWithdrawn ? +readyQuantityWithdrawn : 0) +
+        (notReadyQuantityWithdrawn ? +notReadyQuantityWithdrawn : 0)
+    );
+  }, [readyQuantityWithdrawn, notReadyQuantityWithdrawn]);
+
+  useEffect(() => {
     if (localRecord.purpose === OUTPLANT) {
       const hasReadyQuantities = batches.some((batch) => {
         if (selectedNursery && batch.facility_id.toString() !== selectedNursery) {
@@ -322,24 +342,6 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     }
     setNoReadySeedlings(false);
   }, [localRecord.purpose, noReadySeedlings, snackbar, selectedNursery, OUTPLANT, batches]);
-
-  const onChangeSingleQuantity = (id: string, value: number) => {
-    setLocalRecord((previousRecord) => {
-      let modifiedBatch = {
-        batchId: batches[0].id,
-        notReadyQuantityWithdrawn: 0,
-        readyQuantityWithdrawn: 0,
-        [id]: value,
-      };
-      if (previousRecord.batchWithdrawals && previousRecord.batchWithdrawals[0]) {
-        modifiedBatch = { ...previousRecord.batchWithdrawals[0], [id]: value };
-      }
-
-      setWithdrawnQuantity(+modifiedBatch.notReadyQuantityWithdrawn + +modifiedBatch.readyQuantityWithdrawn);
-
-      return { ...previousRecord, batchWithdrawals: [modifiedBatch] };
-    });
-  };
 
   return (
     <>
@@ -484,65 +486,55 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
               )}
             </Grid>
             <>
-              {
-                isSingleBatch && !isOutplant && (
-                  // localRecord.batchWithdrawals.map((bw, index) => {
-                  //   return (
-                  <>
-                    <Grid display='flex' flexDirection={isMobile ? 'column' : 'row'}>
-                      <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }} paddingRight={1}>
-                        <Textfield
-                          label={strings.NOT_READY_QUANTITY}
-                          id='notReadyQuantityWithdrawn'
-                          onChange={(id: string, value: unknown) => onChangeSingleQuantity(id, value as number)}
-                          type='text'
-                          value={
-                            localRecord.batchWithdrawals && localRecord.batchWithdrawals[0]
-                              ? localRecord.batchWithdrawals[0].notReadyQuantityWithdrawn
-                              : 0
-                          }
-                        />
-                      </Grid>
-                      <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }} paddingLeft={1}>
-                        <DatePicker
-                          id='withdrawnDate'
-                          label={strings.ESTIMATED_READY_DATE}
-                          aria-label={strings.ESTIMATED_READY_DATE}
-                          value={localRecord.readyByDate}
-                          onChange={onChangeDate}
-                        />
-                      </Grid>
+              {isSingleBatch && !isOutplant && (
+                <>
+                  <Grid display='flex' flexDirection={isMobile ? 'column' : 'row'}>
+                    <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }} paddingRight={isMobile ? 0 : 1}>
+                      <Textfield
+                        label={strings.NOT_READY_QUANTITY}
+                        id='notReadyQuantityWithdrawn'
+                        onChange={(id: string, value: unknown) => setNotReadyQuantityWithdrawn(value as number)}
+                        type='text'
+                        value={notReadyQuantityWithdrawn}
+                        tooltipTitle={strings.TOOLTIP_NOT_READY_QUANTITY}
+                        className={classes.notReadyQuantityWithdrawn}
+                      />
                     </Grid>
-                    <Grid display='flex' flexDirection={isMobile ? 'column' : 'row'}>
-                      <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }} paddingRight={1}>
-                        <Textfield
-                          label={strings.READY_QUANTITY}
-                          id='readyQuantityWithdrawn'
-                          onChange={(id: string, value: unknown) => onChangeSingleQuantity(id, value as number)}
-                          type='text'
-                          value={
-                            localRecord.batchWithdrawals && localRecord.batchWithdrawals[0]
-                              ? localRecord.batchWithdrawals && localRecord.batchWithdrawals[0].readyQuantityWithdrawn
-                              : 0
-                          }
-                        />
-                      </Grid>
-                      <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }} paddingLeft={1}>
-                        <Textfield
-                          label={strings.WITHDRAW_QUANTITY}
-                          id='withdrawQuantity'
-                          onChange={(id: string, value: unknown) => setWithdrawnQuantity(value as number)}
-                          type='text'
-                          value={withdrawnQuantity}
-                          display={true}
-                        />
-                      </Grid>
+                    <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }} paddingLeft={isMobile ? 0 : 1}>
+                      <DatePicker
+                        id='withdrawnDate'
+                        label={strings.ESTIMATED_READY_DATE}
+                        aria-label={strings.ESTIMATED_READY_DATE}
+                        value={localRecord.readyByDate}
+                        onChange={onChangeDate}
+                      />
                     </Grid>
-                  </>
-                )
-                // );
-                // })
-              }
+                  </Grid>
+                  <Grid display='flex' flexDirection={isMobile ? 'column' : 'row'}>
+                    <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }} paddingRight={1}>
+                      <Textfield
+                        label={strings.READY_QUANTITY}
+                        id='readyQuantityWithdrawn'
+                        onChange={(id: string, value: unknown) => setReadyQuantityWithdrawn(value as number)}
+                        type='text'
+                        value={readyQuantityWithdrawn}
+                        tooltipTitle={strings.TOOLTIP_READY_QUANTITY}
+                        className={classes.readyQuantityWithdrawn}
+                      />
+                    </Grid>
+                    <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }} paddingLeft={1}>
+                      <Textfield
+                        label={strings.WITHDRAW_QUANTITY}
+                        id='withdrawQuantity'
+                        onChange={(id: string, value: unknown) => setWithdrawnQuantity(value as number)}
+                        type='text'
+                        value={withdrawnQuantity}
+                        display={true}
+                      />
+                    </Grid>
+                  </Grid>
+                </>
+              )}
               <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }}>
                 <DatePicker
                   id='withdrawnDate'
