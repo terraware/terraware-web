@@ -513,7 +513,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                   <Grid display='flex' flexDirection={isMobile ? 'column' : 'row'}>
                     <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }} paddingRight={isMobile ? 0 : 1}>
                       <Textfield
-                        label={strings.NOT_READY_QUANTITY}
+                        label={strings.NOT_READY_QUANTITY_REQUIRED}
                         id='notReadyQuantityWithdrawn'
                         onChange={(id: string, value: unknown) => setNotReadyQuantityWithdrawn(value as number)}
                         type='text'
@@ -536,7 +536,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                   <Grid display='flex' flexDirection={isMobile ? 'column' : 'row'}>
                     <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }} paddingRight={1}>
                       <Textfield
-                        label={strings.READY_QUANTITY}
+                        label={strings.READY_QUANTITY_REQUIRED}
                         id='readyQuantityWithdrawn'
                         onChange={(id: string, value: unknown) => setReadyQuantityWithdrawn(value as number)}
                         type='text'
