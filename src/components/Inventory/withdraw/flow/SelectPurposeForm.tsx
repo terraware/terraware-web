@@ -325,21 +325,30 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
       <Container
         maxWidth={false}
         sx={{
+          display: 'flex',
           margin: '0 auto',
-          width: isMobile ? '100%' : '640px',
-          paddingLeft: theme.spacing(4),
-          paddingRight: theme.spacing(4),
+          width: isMobile ? '100%' : '700px',
+          paddingLeft: theme.spacing(isMobile ? 0 : 4),
+          paddingRight: theme.spacing(isMobile ? 0 : 4),
           paddingTop: theme.spacing(5),
-          paddingBottom: theme.spacing(5),
+          paddingBottom: isMobile ? '185px' : '105px',
         }}
       >
-        <Grid container minWidth={isMobile ? 0 : 700}>
+        <Grid
+          container
+          width={isMobile ? '100%' : '700px'}
+          sx={{
+            backgroundColor: theme.palette.TwClrBg,
+            borderRadius: theme.spacing(4),
+            padding: theme.spacing(3),
+          }}
+        >
           <Grid item xs={12}>
             <Typography variant='h2' sx={{ fontSize: '18px', fontWeight: 'bold', marginBottom: theme.spacing(2) }}>
               {strings.WITHDRAWAL_DETAILS}
             </Typography>
             <Typography>{strings.WITHDRAW_INSTRUCTIONS}</Typography>
-            <Grid xs={12} padding={theme.spacing(4, 0, 0, 2)}>
+            <Grid xs={12} padding={theme.spacing(4, 0, 0)}>
               <FormControl>
                 <FormLabel sx={{ color: theme.palette.TwClrTxtSecondary, fontSize: '14px' }}>
                   {strings.PURPOSE}

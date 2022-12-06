@@ -99,7 +99,7 @@ export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Elemen
 
   return (
     <TfMain>
-      <Grid item xs={12} display={isMobile ? 'block' : 'flex'}>
+      <Grid item xs={12} display={isMobile ? 'block' : 'flex'} paddingLeft={theme.spacing(3)}>
         <Typography sx={{ fontSize: '24px', fontWeight: 600, alignItems: 'center' }}>{strings.DASHBOARD}</Typography>
         {plantingSites.length > 0 && (
           <>

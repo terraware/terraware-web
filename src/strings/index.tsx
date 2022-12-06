@@ -835,10 +835,13 @@ const strings = new LocalizedStrings({
     UPLOAD_PHOTO: 'Upload Photo...',
     UPLOAD_PHOTOS: 'Upload Photo(s)',
     UPLOAD_PHOTO_DESCRIPTION: 'Browse or drag and drop a file (JPG, PNG).',
+    UPLOAD_PHOTO_MOBILE_DESCRIPTION: 'Browse files (JPG, PNG).',
     ADD_PHOTOS_REQUIRED: 'Add Photos *',
     ADD_PHOTOS: 'Add Photos',
+    ADD_PHOTOS_REQUIRED_OUTPLANT: 'Photos are required for Outplant withdrawals.',
     ADD_PHOTOS_DESCRIPTION:
       'Take a photo (or photos) of the batches that will be planted at the selected plot. Be sure to include the entire withdrawal in the photo(s).',
+    ADD_PHOTOS_DESCRIPTION_OPTIONAL: 'Take an optional photo (or photos) of the batches.',
     TO_PLANTING_SITE: 'To: Planting Site',
     VIEW_SITES_ZONES_PLOTS: 'View Sites, Zones, and Plots on a map.',
     PLANTING_ZONE: 'Planting Zone',

@@ -58,12 +58,12 @@ const useStyles = makeStyles((theme: Theme) => ({
   listItemIcon: {
     width: '205px',
     height: '128px',
-    marginBottom: theme.spacing(2),
   },
   listItemTitle: {
     fontWeight: 'bold',
     lineHeight: '20px',
     margin: '0 auto',
+    marginTop: theme.spacing(2),
   },
   listItemDescription: {
     margin: '0 auto',
