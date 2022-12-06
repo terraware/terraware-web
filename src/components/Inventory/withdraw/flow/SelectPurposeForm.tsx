@@ -34,6 +34,16 @@ const useStyles = makeStyles((theme: Theme) => ({
       height: '44px',
     },
   },
+  notReadyQuantityWithdrawn: {
+    '&> #notReadyQuantityWithdrawn': {
+      height: '44px',
+    },
+  },
+  readyQuantityWithdrawn: {
+    '&> #readyQuantityWithdrawn': {
+      height: '44px',
+    },
+  },
 }));
 
 type SelectPurposeFormProps = {
@@ -57,6 +67,8 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const [destinationNurseriesOptions, setDestinationNurseriesOptions] = useState<DropdownItem[]>();
   const [isSingleBatch] = useState<boolean>(batches.length === 1);
   const [withdrawnQuantity, setWithdrawnQuantity] = useState<number>();
+  const [readyQuantityWithdrawn, setReadyQuantityWithdrawn] = useState<number>();
+  const [notReadyQuantityWithdrawn, setNotReadyQuantityWithdrawn] = useState<number>();
   const [plantingSites, setPlantingSites] = useState<PlantingSite[]>([]);
   const [zones, setZones] = useState<any[]>([]);
   const [plots, setPlots] = useState<any[]>([]);
@@ -195,6 +207,26 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     return true;
   };
 
+  const validateReadyAndNotReadyQuantities = () => {
+    let bothValid = true;
+    if (isSingleBatch && !isOutplant) {
+      if (!notReadyQuantityWithdrawn && notReadyQuantityWithdrawn !== 0) {
+        setIndividualError('notReadyQuantityWithdrawn', strings.REQUIRED_FIELD);
+        bothValid = false;
+      } else {
+        setIndividualError('notReadyQuantityWithdrawn', '');
+      }
+
+      if (!readyQuantityWithdrawn && readyQuantityWithdrawn !== 0) {
+        setIndividualError('readyQuantityWithdrawn', strings.REQUIRED_FIELD);
+        bothValid = false;
+      } else {
+        setIndividualError('readyQuantityWithdrawn', '');
+      }
+    }
+    return bothValid;
+  };
+
   const validatePlantingSitePlot = () => {
     setIndividualError('plantingSiteId', '');
     setIndividualError('zoneId', '');
@@ -229,12 +261,14 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     const selectedNurseryInvalid = !validateSelectedNursery();
     const withdrawnQuantityInvalid = !validateWithdrawnQuantity();
     const plantingSitePlotInvalid = !validatePlantingSitePlot();
+    const readyAndNotReadyInvalid = !validateReadyAndNotReadyQuantities();
     if (
       fieldsErrors.withdrawDate ||
       nurseryTransferInvalid ||
       selectedNurseryInvalid ||
       withdrawnQuantityInvalid ||
-      plantingSitePlotInvalid
+      plantingSitePlotInvalid ||
+      readyAndNotReadyInvalid
     ) {
       return;
     }
@@ -251,8 +285,12 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
         .filter((batch) => batch.facility_id.toString() === selectedNursery)
         .map((batch) => ({
           batchId: batch.id,
-          notReadyQuantityWithdrawn: isSingleOutplant ? 0 : isSingleBatch ? batch.notReadyQuantity : 0,
-          readyQuantityWithdrawn: isSingleOutplant ? withdrawnQuantity : isSingleBatch ? batch.readyQuantity : 0,
+          notReadyQuantityWithdrawn: isSingleOutplant ? 0 : isSingleBatch ? notReadyQuantityWithdrawn || 0 : 0,
+          readyQuantityWithdrawn: isSingleOutplant
+            ? withdrawnQuantity || 0
+            : isSingleBatch
+            ? readyQuantityWithdrawn || 0
+            : 0,
         })),
     });
   };
@@ -296,6 +334,13 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
       fetchPlantingSites();
     }
   }, [selectedNursery, organization, fetchPlantingSites, isOutplant]);
+
+  useEffect(() => {
+    setWithdrawnQuantity(
+      (readyQuantityWithdrawn ? +readyQuantityWithdrawn : 0) +
+        (notReadyQuantityWithdrawn ? +notReadyQuantityWithdrawn : 0)
+    );
+  }, [readyQuantityWithdrawn, notReadyQuantityWithdrawn]);
 
   useEffect(() => {
     if (localRecord.purpose === OUTPLANT) {
@@ -461,6 +506,59 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                   />
                 </Grid>
               )}
+            </Grid>
+            <>
+              {isSingleBatch && !isOutplant && (
+                <>
+                  <Grid display='flex' flexDirection={isMobile ? 'column' : 'row'}>
+                    <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }} paddingRight={isMobile ? 0 : 1}>
+                      <Textfield
+                        label={strings.NOT_READY_QUANTITY}
+                        id='notReadyQuantityWithdrawn'
+                        onChange={(id: string, value: unknown) => setNotReadyQuantityWithdrawn(value as number)}
+                        type='text'
+                        value={notReadyQuantityWithdrawn}
+                        tooltipTitle={strings.TOOLTIP_NOT_READY_QUANTITY}
+                        className={classes.notReadyQuantityWithdrawn}
+                        errorText={fieldsErrors.notReadyQuantityWithdrawn}
+                      />
+                    </Grid>
+                    <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }} paddingLeft={isMobile ? 0 : 1}>
+                      <DatePicker
+                        id='withdrawnDate'
+                        label={strings.ESTIMATED_READY_DATE}
+                        aria-label={strings.ESTIMATED_READY_DATE}
+                        value={localRecord.readyByDate}
+                        onChange={onChangeDate}
+                      />
+                    </Grid>
+                  </Grid>
+                  <Grid display='flex' flexDirection={isMobile ? 'column' : 'row'}>
+                    <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }} paddingRight={1}>
+                      <Textfield
+                        label={strings.READY_QUANTITY}
+                        id='readyQuantityWithdrawn'
+                        onChange={(id: string, value: unknown) => setReadyQuantityWithdrawn(value as number)}
+                        type='text'
+                        value={readyQuantityWithdrawn}
+                        tooltipTitle={strings.TOOLTIP_READY_QUANTITY}
+                        className={classes.readyQuantityWithdrawn}
+                        errorText={fieldsErrors.readyQuantityWithdrawn}
+                      />
+                    </Grid>
+                    <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }} paddingLeft={isMobile ? 0 : 1}>
+                      <Textfield
+                        label={strings.WITHDRAW_QUANTITY}
+                        id='withdrawQuantity'
+                        onChange={(id: string, value: unknown) => setWithdrawnQuantity(value as number)}
+                        type='text'
+                        value={withdrawnQuantity}
+                        display={true}
+                      />
+                    </Grid>
+                  </Grid>
+                </>
+              )}
               <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }}>
                 <DatePicker
                   id='withdrawnDate'
@@ -471,7 +569,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                   errorText={fieldsErrors.withdrawnDate}
                 />
               </Grid>
-            </Grid>
+            </>
             <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
               <Textfield
                 id='notes'
