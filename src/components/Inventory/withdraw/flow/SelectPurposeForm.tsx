@@ -247,13 +247,16 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
       plantingSiteId: isOutplant ? localRecord.plantingSiteId : undefined,
       plotId: isOutplant ? localRecord.plotId : undefined,
       facilityId: Number(selectedNursery as string),
-      batchWithdrawals: batches
-        .filter((batch) => batch.facility_id.toString() === selectedNursery)
-        .map((batch) => ({
-          batchId: batch.id,
-          notReadyQuantityWithdrawn: isSingleOutplant ? 0 : isSingleBatch ? batch.notReadyQuantity : 0,
-          readyQuantityWithdrawn: isSingleOutplant ? withdrawnQuantity : isSingleBatch ? batch.readyQuantity : 0,
-        })),
+      batchWithdrawals:
+        isSingleBatch && !isSingleOutplant
+          ? localRecord.batchWithdrawals
+          : batches
+              .filter((batch) => batch.facility_id.toString() === selectedNursery)
+              .map((batch) => ({
+                batchId: batch.id,
+                notReadyQuantityWithdrawn: 0,
+                readyQuantityWithdrawn: isSingleOutplant ? withdrawnQuantity || 0 : 0,
+              })),
     });
   };
 
@@ -319,6 +322,24 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     }
     setNoReadySeedlings(false);
   }, [localRecord.purpose, noReadySeedlings, snackbar, selectedNursery, OUTPLANT, batches]);
+
+  const onChangeSingleQuantity = (id: string, value: number) => {
+    setLocalRecord((previousRecord) => {
+      let modifiedBatch = {
+        batchId: batches[0].id,
+        notReadyQuantityWithdrawn: 0,
+        readyQuantityWithdrawn: 0,
+        [id]: value,
+      };
+      if (previousRecord.batchWithdrawals && previousRecord.batchWithdrawals[0]) {
+        modifiedBatch = { ...previousRecord.batchWithdrawals[0], [id]: value };
+      }
+
+      setWithdrawnQuantity(+modifiedBatch.notReadyQuantityWithdrawn + +modifiedBatch.readyQuantityWithdrawn);
+
+      return { ...previousRecord, batchWithdrawals: [modifiedBatch] };
+    });
+  };
 
   return (
     <>
@@ -461,6 +482,67 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                   />
                 </Grid>
               )}
+            </Grid>
+            <>
+              {
+                isSingleBatch && !isOutplant && (
+                  // localRecord.batchWithdrawals.map((bw, index) => {
+                  //   return (
+                  <>
+                    <Grid display='flex' flexDirection={isMobile ? 'column' : 'row'}>
+                      <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }} paddingRight={1}>
+                        <Textfield
+                          label={strings.NOT_READY_QUANTITY}
+                          id='notReadyQuantityWithdrawn'
+                          onChange={(id: string, value: unknown) => onChangeSingleQuantity(id, value as number)}
+                          type='text'
+                          value={
+                            localRecord.batchWithdrawals && localRecord.batchWithdrawals[0]
+                              ? localRecord.batchWithdrawals[0].notReadyQuantityWithdrawn
+                              : 0
+                          }
+                        />
+                      </Grid>
+                      <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }} paddingLeft={1}>
+                        <DatePicker
+                          id='withdrawnDate'
+                          label={strings.ESTIMATED_READY_DATE}
+                          aria-label={strings.ESTIMATED_READY_DATE}
+                          value={localRecord.readyByDate}
+                          onChange={onChangeDate}
+                        />
+                      </Grid>
+                    </Grid>
+                    <Grid display='flex' flexDirection={isMobile ? 'column' : 'row'}>
+                      <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }} paddingRight={1}>
+                        <Textfield
+                          label={strings.READY_QUANTITY}
+                          id='readyQuantityWithdrawn'
+                          onChange={(id: string, value: unknown) => onChangeSingleQuantity(id, value as number)}
+                          type='text'
+                          value={
+                            localRecord.batchWithdrawals && localRecord.batchWithdrawals[0]
+                              ? localRecord.batchWithdrawals && localRecord.batchWithdrawals[0].readyQuantityWithdrawn
+                              : 0
+                          }
+                        />
+                      </Grid>
+                      <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }} paddingLeft={1}>
+                        <Textfield
+                          label={strings.WITHDRAW_QUANTITY}
+                          id='withdrawQuantity'
+                          onChange={(id: string, value: unknown) => setWithdrawnQuantity(value as number)}
+                          type='text'
+                          value={withdrawnQuantity}
+                          display={true}
+                        />
+                      </Grid>
+                    </Grid>
+                  </>
+                )
+                // );
+                // })
+              }
               <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }}>
                 <DatePicker
                   id='withdrawnDate'
@@ -471,7 +553,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                   errorText={fieldsErrors.withdrawnDate}
                 />
               </Grid>
-            </Grid>
+            </>
             <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
               <Textfield
                 id='notes'
