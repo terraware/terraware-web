@@ -208,23 +208,23 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   };
 
   const validateReadyAndNotReadyQuantities = () => {
-    let bothValids = true;
+    let bothValid = true;
     if (isSingleBatch && !isOutplant) {
       if (!notReadyQuantityWithdrawn && notReadyQuantityWithdrawn !== 0) {
         setIndividualError('notReadyQuantityWithdrawn', strings.REQUIRED_FIELD);
-        bothValids = false;
+        bothValid = false;
       } else {
         setIndividualError('notReadyQuantityWithdrawn', '');
       }
 
       if (!readyQuantityWithdrawn && readyQuantityWithdrawn !== 0) {
         setIndividualError('readyQuantityWithdrawn', strings.REQUIRED_FIELD);
-        bothValids = false;
+        bothValid = false;
       } else {
         setIndividualError('readyQuantityWithdrawn', '');
       }
     }
-    return bothValids;
+    return bothValid;
   };
 
   const validatePlantingSitePlot = () => {
