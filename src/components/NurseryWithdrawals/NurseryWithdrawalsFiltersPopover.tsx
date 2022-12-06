@@ -155,7 +155,12 @@ export default function NurseryWithdrawalsFiltersPopover({
     setTemporalRecord((prev) => {
       return {
         ...prev,
-        withdrawnDates: [prev.withdrawnDates && prev.withdrawnDates[0] ? prev.withdrawnDates[0] : value, value],
+        withdrawnDates: [
+          prev.withdrawnDates && prev.withdrawnDates[0]
+            ? prev.withdrawnDates[0]
+            : moment(new Date(0)).format('YYYY-MM-DD'),
+          value,
+        ],
       };
     });
   };
