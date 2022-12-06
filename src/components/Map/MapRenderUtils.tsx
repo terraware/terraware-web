@@ -7,6 +7,7 @@ const useStyles = makeStyles(() => ({
   popup: {
     '& > .mapboxgl-popup-content': {
       borderRadius: '8px',
+      padding: '10px',
     },
   },
 }));
@@ -21,7 +22,20 @@ export function useSpeciesPlantsRenderer(plotsWithPlants: any): MapPopupRenderer
   const textStyle = {
     fontWeight: 400,
     fontSize: '16px',
-    color: theme.palette.TwClrBaseBlack,
+    color: theme.palette.TwClrBaseBlack as string,
+  };
+
+  const quantityStyle = {
+    ...textStyle,
+    textAlign: 'right',
+    marginRight: theme.spacing(1),
+  };
+
+  const speciesStyle = {
+    ...textStyle,
+    textAlign: 'left',
+    marginLeft: theme.spacing(1),
+    overflowWrap: 'anywhere',
   };
 
   return {
@@ -39,18 +53,20 @@ export function useSpeciesPlantsRenderer(plotsWithPlants: any): MapPopupRenderer
       }
 
       return (
-        <Box display='flex' flexDirection='column'>
-          {populations.map((population: any, index: number) => (
-            <Box key={index} display='flex' flexDirection='row'>
-              <Box sx={{ textAlign: 'right', marginRight: 2, minWidth: '50px' }}>
-                <Typography sx={textStyle}>{population.totalPlants}</Typography>
-              </Box>
-              <Box sx={{ textAlign: 'left', overflowWrap: 'anywhere' }}>
-                <Typography sx={textStyle}>{population.species_scientificName}</Typography>
-              </Box>
-            </Box>
-          ))}
-        </Box>
+        <table>
+          <tbody>
+            {populations.map((population: any, index: number) => (
+              <tr key={index}>
+                <td>
+                  <Typography sx={quantityStyle}>{population.totalPlants}</Typography>
+                </td>
+                <td>
+                  <Typography sx={speciesStyle}>{population.species_scientificName}</Typography>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       );
     },
   };
