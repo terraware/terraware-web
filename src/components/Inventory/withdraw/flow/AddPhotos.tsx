@@ -44,13 +44,17 @@ export default function AddPhotos(props: AddPhotosProps): JSX.Element {
           paddingLeft: theme.spacing(isMobile ? 1 : 4),
           paddingRight: theme.spacing(isMobile ? 1 : 4),
           paddingTop: theme.spacing(5),
-          paddingBottom: theme.spacing(isMobile ? 20 : 5),
+          paddingBottom: isMobile ? '185px' : '105px',
         }}
       >
         <SelectPhotos
           onPhotosChanged={onPhotosChanged}
           title={photosRequired ? strings.ADD_PHOTOS_REQUIRED : strings.ADD_PHOTOS}
-          description={strings.ADD_PHOTOS_DESCRIPTION}
+          description={
+            photosRequired
+              ? [strings.ADD_PHOTOS_REQUIRED_OUTPLANT, strings.ADD_PHOTOS_DESCRIPTION]
+              : strings.ADD_PHOTOS_DESCRIPTION_OPTIONAL
+          }
           multipleSelection={true}
           error={error}
         />

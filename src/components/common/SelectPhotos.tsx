@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 type SelectPhotosProps = {
   title: string;
-  description: string;
+  description: string | string[];
   onPhotosChanged: (photos: File[]) => void;
   multipleSelection?: boolean;
   error?: ErrorType;
@@ -141,7 +141,7 @@ export default function SelectPhotos(props: SelectPhotosProps): JSX.Element {
           {title}
         </Typography>
         <Typography fontSize={14} fontWeight={400} marginTop={theme.spacing(1)} marginBottom={theme.spacing(2)}>
-          {description}
+          {Array.isArray(description) ? description.map((txt, i) => <div key={i}>{txt}</div>) : description}
         </Typography>
         {error && <ErrorBox title={error.title} text={error.text} className={classes.error} />}
         {filesData.length > 0 && (
@@ -172,7 +172,7 @@ export default function SelectPhotos(props: SelectPhotosProps): JSX.Element {
         onDrop={dropHandler}
         onDragOver={enableDropping}
         border={`1px dashed ${theme.palette.TwClrBrdrTertiary}`}
-        borderRadius={theme.spacing(1)}
+        borderRadius={theme.spacing(2)}
         display='flex'
         flexDirection='column'
         alignItems='center'

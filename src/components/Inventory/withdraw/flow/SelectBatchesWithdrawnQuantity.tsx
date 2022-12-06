@@ -246,15 +246,12 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
       <Container
         maxWidth={false}
         sx={{
-          paddingBottom: theme.spacing(isMobile ? 20 : 5),
+          paddingBottom: isMobile ? '185px' : '105px',
         }}
       >
         <Grid container minWidth={isMobile ? 0 : 700}>
           <Grid item xs={12}>
-            <Typography
-              variant='h2'
-              sx={{ fontSize: '20px', fontWeight: 'bold', margin: theme.spacing(4, 3, 3, isMobile ? 3 : 5) }}
-            >
+            <Typography sx={{ fontSize: '20px', fontWeight: 'bold', margin: theme.spacing(4, 3, 3) }}>
               {strings.SELECT_BATCHES}
             </Typography>
           </Grid>
@@ -270,7 +267,7 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
                     backgroundColor: theme.palette.TwClrBg,
                     borderRadius: theme.spacing(4),
                     padding: theme.spacing(3),
-                    margin: theme.spacing(0, 3, 3, isMobile ? 0 : 3),
+                    margin: theme.spacing(0, 3, 3, 0),
                   }}
                 >
                   <Grid item xs={12}>

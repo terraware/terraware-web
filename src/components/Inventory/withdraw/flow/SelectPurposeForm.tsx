@@ -331,7 +331,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
           paddingLeft: theme.spacing(isMobile ? 0 : 4),
           paddingRight: theme.spacing(isMobile ? 0 : 4),
           paddingTop: theme.spacing(5),
-          paddingBottom: theme.spacing(isMobile ? 20 : 5),
+          paddingBottom: isMobile ? '185px' : '105px',
         }}
       >
         <Grid
@@ -348,7 +348,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
               {strings.WITHDRAWAL_DETAILS}
             </Typography>
             <Typography>{strings.WITHDRAW_INSTRUCTIONS}</Typography>
-            <Grid xs={12} padding={theme.spacing(4, 0, 0, 2)}>
+            <Grid xs={12} padding={theme.spacing(4, 0, 0)}>
               <FormControl>
                 <FormLabel sx={{ color: theme.palette.TwClrTxtSecondary, fontSize: '14px' }}>
                   {strings.PURPOSE}
