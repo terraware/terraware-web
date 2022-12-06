@@ -6,7 +6,7 @@ import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
 import useForm from 'src/utils/useForm';
 import Button from '../common/button/Button';
-import { Checkbox } from '@terraware/web-components';
+import { Checkbox, DatePicker } from '@terraware/web-components';
 import { getAllNurseries } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { NurseryWithdrawalsFiltersType } from './NurseryWithdrawals';
@@ -15,6 +15,8 @@ import { listPlantingSites } from 'src/api/tracking/tracking';
 import { PlantingSite } from 'src/api/types/tracking';
 import { Species } from 'src/types/Species';
 import useSnackbar from 'src/utils/useSnackbar';
+import moment from 'moment';
+import { getTodaysDateFormatted } from '@terraware/web-components/utils';
 
 export type InventoryFiltersType = {
   facilityIds?: number[];
@@ -42,7 +44,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
   },
   popover: {
-    width: (props: StyleProps) => (props.isMobile ? '350px' : '478px'),
+    width: (props: StyleProps) => (props.isMobile ? '350px' : '600px'),
     paddingTop: 0,
     borderRadius: '8px',
   },
@@ -137,6 +139,32 @@ export default function NurseryWithdrawalsFiltersPopover({
     });
   };
 
+  const addStartDate = (value: string) => {
+    setTemporalRecord((prev) => {
+      return {
+        ...prev,
+        withdrawnDates: [
+          value,
+          prev.withdrawnDates && prev.withdrawnDates[1] ? prev.withdrawnDates[1] : getTodaysDateFormatted(),
+        ],
+      };
+    });
+  };
+
+  const addEndDate = (value: string) => {
+    setTemporalRecord((prev) => {
+      return {
+        ...prev,
+        withdrawnDates: [
+          prev.withdrawnDates && prev.withdrawnDates[0]
+            ? prev.withdrawnDates[0]
+            : moment(new Date(0)).format('YYYY-MM-DD'),
+          value,
+        ],
+      };
+    });
+  };
+
   const removeFilter = (filter: keyof NurseryWithdrawalsFiltersType, itemChanged: string) => {
     setTemporalRecord((prev) => {
       const oldValues = prev[filter];
@@ -157,6 +185,20 @@ export default function NurseryWithdrawalsFiltersPopover({
 
   const hasFilter = (filterId: keyof NurseryWithdrawalsFiltersType, value: number | string) => {
     return temporalRecord[filterId]?.some((n) => n.toString() === value.toString()) === true;
+  };
+
+  const onChangeDate = (id: string, value?: any) => {
+    const date = new Date(value);
+    if (isNaN(date.getTime())) {
+      return;
+    } else {
+      const valueFormatted = moment(value).format('YYYY-MM-DD');
+      if (id === 'startDate') {
+        addStartDate(valueFormatted);
+      } else {
+        addEndDate(valueFormatted);
+      }
+    }
   };
 
   return (
@@ -183,8 +225,8 @@ export default function NurseryWithdrawalsFiltersPopover({
           <div className={classes.title}>{strings.FILTERS}</div>
           <Box className={classes.container}>
             <Grid container spacing={2}>
-              <Grid item xs={6}>
-                <Typography fontSize='16px' paddingLeft={theme.spacing(2)} color={theme.palette.TwClrBaseGray500}>
+              <Grid item xs={4}>
+                <Typography fontSize='16px' color={theme.palette.TwClrBaseGray500}>
                   {strings.FROM_NURSERY}
                 </Typography>
                 {getAllNurseries(organization).map((n) => (
@@ -199,8 +241,8 @@ export default function NurseryWithdrawalsFiltersPopover({
                   </Grid>
                 ))}
               </Grid>
-              <Grid item xs={6}>
-                <Typography fontSize='16px' paddingLeft={theme.spacing(2)} color={theme.palette.TwClrBaseGray500}>
+              <Grid item xs={4}>
+                <Typography fontSize='16px' color={theme.palette.TwClrBaseGray500}>
                   {strings.PURPOSE}
                 </Typography>
                 {NurseryWithdrawalPurposesValues.map((purpose) => (
@@ -215,8 +257,27 @@ export default function NurseryWithdrawalsFiltersPopover({
                   </Grid>
                 ))}
               </Grid>
+              <Grid item xs={4}>
+                <Typography fontSize='16px' color={theme.palette.TwClrBaseGray500}>
+                  {strings.WITHDRAWN_DATE}
+                </Typography>
+                <DatePicker
+                  id='startDate'
+                  label={strings.START}
+                  aria-label={strings.DATE}
+                  value={temporalRecord.withdrawnDates ? temporalRecord.withdrawnDates[0] : ''}
+                  onChange={onChangeDate}
+                />
+                <DatePicker
+                  id='endDate'
+                  label={strings.END}
+                  aria-label={strings.DATE}
+                  value={temporalRecord.withdrawnDates ? temporalRecord.withdrawnDates[1] : ''}
+                  onChange={onChangeDate}
+                />
+              </Grid>
               <Grid item xs={6}>
-                <Typography fontSize='16px' paddingLeft={theme.spacing(2)} color={theme.palette.TwClrBaseGray500}>
+                <Typography fontSize='16px' color={theme.palette.TwClrBaseGray500}>
                   {strings.DESTINATION}
                 </Typography>
                 {plantingSites?.map((plantingSite) => (
@@ -232,7 +293,7 @@ export default function NurseryWithdrawalsFiltersPopover({
                 ))}
               </Grid>
               <Grid item xs={6}>
-                <Typography fontSize='16px' paddingLeft={theme.spacing(2)} color={theme.palette.TwClrBaseGray500}>
+                <Typography fontSize='16px' color={theme.palette.TwClrBaseGray500}>
                   {strings.SPECIES}
                 </Typography>
                 {species?.map((iSpecies) => (

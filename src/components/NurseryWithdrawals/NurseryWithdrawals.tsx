@@ -27,6 +27,7 @@ export type NurseryWithdrawalsFiltersType = {
   purposes?: string[];
   destinationNames?: string[];
   speciesId?: string[];
+  withdrawnDates?: string[];
 };
 
 type NurseryWithdrawalsProps = {
@@ -147,6 +148,15 @@ export default function NurseryWithdrawals(props: NurseryWithdrawalsProps): JSX.
       });
     }
 
+    if (filters.withdrawnDates && filters.withdrawnDates.length > 0) {
+      filterValueChildren.push({
+        operation: 'field',
+        field: 'withdrawnDate',
+        type: 'Range',
+        values: filters.withdrawnDates,
+      });
+    }
+
     if (searchValueChildren.length) {
       const searchValueNodes: FieldNodePayload = {
         operation: 'or',
@@ -243,6 +253,9 @@ export default function NurseryWithdrawals(props: NurseryWithdrawalsProps): JSX.
       }
       case 'purposes': {
         return strings.PURPOSE;
+      }
+      case 'withdrawnDates': {
+        return strings.WITHDRAWN_DATE;
       }
       default: {
         return filter;
