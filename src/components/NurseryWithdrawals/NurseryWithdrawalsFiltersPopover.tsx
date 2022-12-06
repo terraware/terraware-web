@@ -192,11 +192,11 @@ export default function NurseryWithdrawalsFiltersPopover({
     if (isNaN(date.getTime())) {
       return;
     } else {
-      const valueFormated = moment(value).format('YYYY-MM-DD');
+      const valueFormatted = moment(value).format('YYYY-MM-DD');
       if (id === 'startDate') {
-        addStartDate(valueFormated);
+        addStartDate(valueFormatted);
       } else {
-        addEndDate(valueFormated);
+        addEndDate(valueFormatted);
       }
     }
   };

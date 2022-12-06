@@ -255,7 +255,7 @@ export default function NurseryWithdrawals(props: NurseryWithdrawalsProps): JSX.
         return strings.PURPOSE;
       }
       case 'withdrawnDates': {
-        return strings.DATE;
+        return strings.WITHDRAWN_DATE;
       }
       default: {
         return filter;
