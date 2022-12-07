@@ -126,6 +126,7 @@ export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Elemen
         plantingSite={selectedPlantingSite}
         updatePlotPreferences={(plotId) => updatePlantsDashboardPreferences({ ...plantsDashboardPreferences, plotId })}
         lastPlot={plantsDashboardPreferences?.plotId}
+        organization={organization}
       />
     </TfMain>
   );

@@ -7,6 +7,7 @@ import SpeciesByPlotChart from './SpeciesByPlotChart';
 import TotalCount from './TotalCount';
 import PlantingSiteDashboardMap from './PlantingSiteDashboardMap';
 import PlantBySpeciesChart from './PlantBySpeciesChart';
+import { ServerOrganization } from 'src/types/Organization';
 
 export type Population = {
   species_scientificName: string;
@@ -24,6 +25,7 @@ type PlantingSiteDetailsProps = {
   plantingSite?: PlantingSite;
   updatePlotPreferences: (plotId: string) => void;
   lastPlot?: any;
+  organization: ServerOrganization;
 };
 
 export const cardTitleStyle = {
@@ -32,7 +34,7 @@ export const cardTitleStyle = {
 };
 
 export default function PlantingSiteDetails(props: PlantingSiteDetailsProps): JSX.Element {
-  const { plantingSite, updatePlotPreferences, lastPlot } = props;
+  const { plantingSite, updatePlotPreferences, lastPlot, organization } = props;
   const [totalPlants, setTotalPlants] = useState<number>();
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
@@ -104,7 +106,7 @@ export default function PlantingSiteDetails(props: PlantingSiteDetailsProps): JS
   return (
     <Grid container display='flex' marginTop={6} flexGrow={1}>
       <Grid item xs={isMobile ? 12 : 8} sx={mapCardStyle}>
-        <PlantingSiteDashboardMap plots={plotsWithPlants} siteId={plantingSite?.id} />
+        <PlantingSiteDashboardMap plots={plotsWithPlants} siteId={plantingSite?.id} organization={organization} />
       </Grid>
       <Grid item xs={isMobile ? 12 : 4} sx={{ paddingLeft: isMobile ? 0 : 3 }}>
         <Box sx={{ ...widgetCardStyle, minHeight: '160px' }}>
