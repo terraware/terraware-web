@@ -1,4 +1,4 @@
-import { Box, Link, useTheme } from '@mui/material';
+import { Box, useTheme } from '@mui/material';
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useEffect, useRef, useState } from 'react';
@@ -10,6 +10,7 @@ import Button from './button/Button';
 import DialogBox from './DialogBox/DialogBox';
 import Icon from './icon/Icon';
 import ProgressCircle from './ProgressCircle/ProgressCircle';
+import Link from 'src/components/common/Link';
 
 const useStyles = makeStyles((theme: Theme) => ({
   spacing: {
@@ -35,12 +36,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   description: {
     color: theme.palette.TwClrTxt,
-    fontSize: '12px',
-    fontWeight: 400,
-    margin: 0,
-  },
-  link: {
-    color: theme.palette.TwClrTxtBrand,
     fontSize: '12px',
     fontWeight: 400,
     margin: 0,
@@ -357,13 +352,12 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
             <p className={classes.description}>{file ? strings.FILE_SELECTED : uploaderDescription}</p>
             {!file && (
               <Link
-                color={theme.palette.TwClrTxtBrand}
-                href='#'
+                fontSize='12px'
                 onClick={() => {
                   downloadCsvTemplateHandler(templateApi);
                 }}
               >
-                <p className={classes.link}>{strings.DOWNLOAD_CSV_TEMPLATE}</p>
+                {strings.DOWNLOAD_CSV_TEMPLATE}
               </Link>
             )}
             <input type='file' ref={inputRef} className={classes.hiddenInput} onChange={onFileChosen} />

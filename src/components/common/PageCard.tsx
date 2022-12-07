@@ -1,12 +1,13 @@
-import { Box, Link, Theme, Typography, useTheme } from '@mui/material';
+import { Box, Theme, Typography, useTheme } from '@mui/material';
 import React from 'react';
 import Icon from './icon/Icon';
 import { IconName } from './icon/icons';
-import { useHistory, Link as RouterLink } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import Button from 'src/components/common/button/Button';
 import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import stopPropagation from 'src/utils/stopPropagationEvent';
+import Link from './Link';
 
 export type LinkStyle = 'plain' | 'button';
 
@@ -53,9 +54,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   link: {
     display: 'block',
     fontSize: '16px',
-    fontWeight: 500,
-    color: theme.palette.TwClrTxtBrand,
-    textDecoration: 'none',
   },
   buttonLink: {
     fontSize: '14px',
@@ -118,7 +116,7 @@ export default function PageCard(props: PageCardProps): JSX.Element {
       </Typography>
       {linkStyle === 'plain' && (
         <Box onClick={stopBubblingEvent} marginTop='28px'>
-          <Link className={classes.link} component={RouterLink} to={link}>
+          <Link className={classes.link} to={link}>
             {linkText}
           </Link>
         </Box>

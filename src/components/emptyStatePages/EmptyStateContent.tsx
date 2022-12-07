@@ -1,11 +1,11 @@
 import React from 'react';
-import { Container, Theme, Grid, useTheme } from '@mui/material';
+import { Container, Theme, Grid } from '@mui/material';
 import Button from 'src/components/common/button/Button';
 import Icon from 'src/components/common/icon/Icon';
 import { IconName } from 'src/components/common/icon/icons';
-import { Link } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import Link from 'src/components/common/Link';
 
 type EmptyStateStyleProps = {
   titleFontSize: string;
@@ -88,10 +88,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   subButton: {
     marginTop: theme.spacing(2),
   },
-  itemLink: {
-    fontSize: '12px',
-    cursor: 'pointer',
-  },
 }));
 
 export type ListItemContent = {
@@ -120,7 +116,6 @@ export default function EmptyStateContent(props: EmptyStateContentProps): JSX.El
   const { title, subtitle, listItems, buttonText, buttonIcon, onClickButton, footnote, styles } = props;
   const { isMobile } = useDeviceInfo();
   const classes = useStyles({ ...styles, isMobile });
-  const theme = useTheme();
 
   const gridSize = () => {
     if (isMobile) {
@@ -144,7 +139,7 @@ export default function EmptyStateContent(props: EmptyStateContentProps): JSX.El
                   {item.description}
                 </p>
                 {item.linkText && item.onLinkClick && (
-                  <Link onClick={item.onLinkClick} className={classes.itemLink} color={theme.palette.TwClrTxtBrand}>
+                  <Link onClick={item.onLinkClick} fontSize='12px'>
                     {item.linkText}
                   </Link>
                 )}
