@@ -105,7 +105,12 @@ export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Elemen
           <>
             {!isMobile && (
               <Box
-                sx={{ margin: '0 1%', width: '1px', height: '32px', backgroundColor: theme.palette.TwClrBgTertiary }}
+                sx={{
+                  margin: theme.spacing(0, 2),
+                  width: '1px',
+                  height: '32px',
+                  backgroundColor: theme.palette.TwClrBgTertiary,
+                }}
               />
             )}
             <Box display='flex' alignItems='center' paddingTop={isMobile ? 2 : 0}>
