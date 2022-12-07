@@ -883,6 +883,12 @@ const strings = new LocalizedStrings({
     EDIT_PLANTING_SITE: 'Edit Planting Site',
     SPECIES_ERROR_SEARCH: "Couldn't load species list for search",
     WITHDRAWN_DATE: 'Withdrawn Date',
+    REASSIGN_SEEDLINGS: 'Reassign Seedlings',
+    REASSIGN_SEEDLINGS_DESCRIPTION:
+      'Enter the new plot, new quantity, and notes for the species you want to reassign seedlings for. The seedlings for rows you leave empty will not be reassigned.',
+    ZONE: 'Zone',
+    ORIGINAL_PLOT: 'Original Plot',
+    NEW_PLOT: 'New Plot',
   },
 });
 
