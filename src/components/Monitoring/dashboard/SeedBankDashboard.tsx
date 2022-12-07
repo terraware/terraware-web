@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
   },
   panelIcon: {
-    color: theme.palette.TwClrIcnSecondary,
+    fill: theme.palette.TwClrIcnSecondary,
   },
   panelValue: {
     fontWeight: 600,
