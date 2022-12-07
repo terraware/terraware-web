@@ -1,3 +1,4 @@
+cecf050 SW-2482 Fix ghost area where page card was not clickable (#888)
 14dff33 Fix message appearing on plot maps (#886)
 228e194 SW-2445 Add quantity validations for single single withdrawal (#887)
 8f6a0f7 SW-2468 Add messages to empty state generic map (#885)
