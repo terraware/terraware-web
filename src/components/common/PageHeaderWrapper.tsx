@@ -99,7 +99,6 @@ export default function PageHeaderWrapper({ children, nextElement, nextElementIn
 
   const styles: Record<string, any> = {
     background: debouncedSticky ? theme.palette.TwClrBaseGray025 : undefined,
-    boxShadow: debouncedSticky ? `0px 3px 3px -3px ${theme.palette.TwClrBaseGray200}` : undefined,
     paddingRight: debouncedSticky ? theme.spacing(4) : undefined,
     paddingTop: debouncedSticky ? theme.spacing(4) : undefined,
     position: debouncedSticky ? 'fixed' : undefined,
@@ -108,6 +107,9 @@ export default function PageHeaderWrapper({ children, nextElement, nextElementIn
     animation: anim,
     width: '-webkit-fill-available',
     zIndex: debouncedSticky ? 100 : undefined,
+    '& > div': {
+      boxShadow: debouncedSticky ? `0px 3px 3px -3px ${theme.palette.TwClrBaseGray200}` : undefined,
+    },
   };
 
   return (
