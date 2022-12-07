@@ -36,11 +36,11 @@ export type MapProps = {
   mapId?: string;
   // style overrides
   style?: object;
-  topMessage?: string;
+  bannerMessage?: string;
 };
 
 export default function Map(props: MapProps): JSX.Element {
-  const { token, onTokenExpired, options, popupRenderer, mapId, style, topMessage } = props;
+  const { token, onTokenExpired, options, popupRenderer, mapId, style, bannerMessage } = props;
   const [geoData, setGeoData] = useState();
   const [layerIds, setLayerIds] = useState<string[]>([]);
   const [popupInfo, setPopupInfo] = useState<PopupInfo | null>(null);
@@ -180,7 +180,7 @@ export default function Map(props: MapProps): JSX.Element {
 
   return (
     <Box sx={{ display: 'flex', flexGrow: 1, height: '100%', minHeight: 250, position: 'relative' }}>
-      {topMessage && <MapBanner message={topMessage} />}
+      {bannerMessage && <MapBanner message={bannerMessage} />}
       <ReactMapGL
         key={mapId}
         mapboxAccessToken={token}
