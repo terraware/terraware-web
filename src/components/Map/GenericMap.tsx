@@ -4,9 +4,6 @@ import { getMapboxToken } from 'src/api/tracking/tracking';
 import useSnackbar from 'src/utils/useSnackbar';
 import Map from './Map';
 import { MapOptions, MapPopupRenderer } from './MapModels';
-import { isContributor } from 'src/utils/organization';
-import { ServerOrganization } from 'src/types/Organization';
-import strings from 'src/strings';
 
 const DUMMY_MAP_OPTIONS: MapOptions = {
   bbox: {
@@ -20,20 +17,19 @@ type GenericMapProps = {
   contextRenderer?: MapPopupRenderer;
   options?: MapOptions;
   style?: object;
-  organization?: ServerOrganization;
+  topMessage?: string;
 };
 
 export default function GenericMap({
   contextRenderer,
   options,
   style,
-  organization,
+  topMessage,
 }: GenericMapProps): JSX.Element | null {
   const [snackbar] = useState(useSnackbar());
   const [token, setToken] = useState<string>();
   const [mapId, setMapId] = useState<string>();
   const [tokenPromise, setTokenPromise] = useState<Promise<void>>();
-  const contributor = isContributor(organization);
 
   // fetch token
   const fetchMapboxToken = useCallback(async () => {
@@ -79,7 +75,7 @@ export default function GenericMap({
         mapId={mapId}
         style={style}
         popupRenderer={contextRenderer}
-        topMessage={contributor ? strings.GENERIC_MAP_MESSAGE_CONTRIBUTOR : strings.GENERIC_MAP_MESSAGE_ADMIN}
+        topMessage={topMessage}
       />
     </Box>
   );

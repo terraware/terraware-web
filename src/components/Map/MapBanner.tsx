@@ -14,7 +14,7 @@ export default function MapBanner({ message }: MapBannerProps): JSX.Element | nu
       <Box
         sx={{
           position: 'absolute',
-          zIndex: 5,
+          zIndex: 2,
           top: '16px',
           left: '50%',
           transform: 'translate(-50%, 0)',

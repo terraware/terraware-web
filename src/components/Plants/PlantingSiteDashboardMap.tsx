@@ -7,6 +7,8 @@ import { PlantingSitesPlots } from './PlantingSiteDetails';
 import { GenericMap, PlantingSiteMap, useSpeciesPlantsRenderer } from 'src/components/Map';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { ServerOrganization } from 'src/types/Organization';
+import { isContributor } from 'src/utils/organization';
+import strings from 'src/strings';
 
 const MAP_STYLE = {
   borderRadius: '24px',
@@ -23,6 +25,7 @@ export default function PlantingSiteDashboardMap(props: PlantingSiteDashboardMap
   const { isMobile } = useDeviceInfo();
   const [snackbar] = useState(useSnackbar());
   const [plantingSite, setPlantingSite] = useState<PlantingSite>();
+  const contributor = isContributor(organization);
 
   const plotsMap = useMemo(() => {
     if (!plots) {
@@ -67,7 +70,10 @@ export default function PlantingSiteDashboardMap(props: PlantingSiteDashboardMap
           contextRenderer={contextRenderer}
         />
       ) : isMobile ? null : (
-        <GenericMap style={MAP_STYLE} organization={organization} />
+        <GenericMap
+          style={MAP_STYLE}
+          topMessage={contributor ? strings.GENERIC_MAP_MESSAGE_CONTRIBUTOR : strings.GENERIC_MAP_MESSAGE_ADMIN}
+        />
       )}
     </Box>
   );
