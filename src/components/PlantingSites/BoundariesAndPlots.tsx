@@ -27,7 +27,6 @@ export default function BoundariesAndPlots(props: BoundariesAndPlotsProps): JSX.
             ) : (
               <Box
                 sx={{
-                  border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
                   maxWidth: '800px',
                   margin: '0 auto',
                   textAlign: 'center',

@@ -34,6 +34,10 @@ const useStyles = makeStyles((theme: Theme) => ({
     maxWidth: '800px',
     padding: '24px 48px 48px',
   },
+  titleRootContainer: {
+    display: 'flex',
+    alignItems: 'center',
+  },
   titleContainer: {
     display: 'flex',
     alignItems: 'center',
@@ -149,7 +153,7 @@ export default function Monitoring(props: MonitoringProps): JSX.Element {
         {hasSeedBanks ? (
           <>
             <PageHeaderWrapper nextElement={contentRef.current}>
-              <Grid item xs={12} className={isMobile ? '' : classes.titleContainer}>
+              <Grid item xs={12} className={isMobile ? '' : classes.titleRootContainer}>
                 {isMobile ? (
                   <>
                     <Box display='flex'>
