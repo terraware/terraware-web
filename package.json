@@ -69,7 +69,7 @@
     "cy": "TZ=UTC cypress open",
     "e2e": "start-server-and-test start:dev http://localhost:3000 cy:run && yarn e2e:report",
     "e2e:report": "npx nyc report --reporter=text",
-    "license-report": "license-report --only=prod --department.value=terraware --relatedTo.value=terraware-web --output=html > license-report.html",
+    "license-report": "license-report --only=prod --department.value=terraware --relatedTo.value=terraware-web --output=html > docs/license-report.html",
     "lint": "tslint --project tsconfig.json",
     "ts": "tsc --project ./tsconfig.json",
     "format": "prettier --write .",
