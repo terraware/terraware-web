@@ -9,7 +9,7 @@ import { MapOptions, MapPopupRenderer } from './MapModels';
  * See: https://docs.mapbox.com/mapbox-gl-js/guides/install/#transpiling
  */
 import mapboxgl from 'mapbox-gl';
-import MapTopMessage from './MapTopMessage';
+import MapBanner from './MapBanner';
 const mapboxImpl: any = mapboxgl;
 // @tslint
 // eslint-disable-next-line import/no-webpack-loader-syntax
@@ -180,7 +180,7 @@ export default function Map(props: MapProps): JSX.Element {
 
   return (
     <Box sx={{ display: 'flex', flexGrow: 1, height: '100%', minHeight: 250, position: 'relative' }}>
-      {topMessage && <MapTopMessage message={topMessage} />}
+      {topMessage && <MapBanner message={topMessage} />}
       <ReactMapGL
         key={mapId}
         mapboxAccessToken={token}

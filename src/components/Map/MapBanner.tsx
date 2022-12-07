@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { Box } from '@mui/material';
 import { Message } from '@terraware/web-components';
 
-type MapTopMessageProps = {
+type MapBannerProps = {
   message: string;
 };
 
-export default function MapTopMessage({ message }: MapTopMessageProps): JSX.Element | null {
+export default function MapBanner({ message }: MapBannerProps): JSX.Element | null {
   const [showMessage, setShowMessage] = useState(true);
 
   if (showMessage) {
