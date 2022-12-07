@@ -59,7 +59,7 @@ export default function Expandable(props: ExpandableProps): JSX.Element {
     <div className={classes.expandable + ' ' + (disabled ? classes.disabledExpandable : '')}>
       <div className={classes.titleExpandable}>
         <span>{title}</span>
-        <IconButton onClick={() => setOpen(!open)} disabled={disabled} className={classes.button}>
+        <IconButton onClick={() => setOpen(!open)} disabled={disabled} className={classes.button} disableRipple>
           <Icon name={open ? 'chevronUp' : 'chevronDown'} className={classes.icon} />
         </IconButton>
       </div>
