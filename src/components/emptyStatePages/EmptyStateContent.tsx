@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Theme, Grid, useTheme } from '@mui/material';
+import { Container, Theme, Grid } from '@mui/material';
 import Button from 'src/components/common/button/Button';
 import Icon from 'src/components/common/icon/Icon';
 import { IconName } from 'src/components/common/icon/icons';
@@ -116,7 +116,6 @@ export default function EmptyStateContent(props: EmptyStateContentProps): JSX.El
   const { title, subtitle, listItems, buttonText, buttonIcon, onClickButton, footnote, styles } = props;
   const { isMobile } = useDeviceInfo();
   const classes = useStyles({ ...styles, isMobile });
-  const theme = useTheme();
 
   const gridSize = () => {
     if (isMobile) {
