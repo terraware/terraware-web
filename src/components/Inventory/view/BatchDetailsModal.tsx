@@ -12,7 +12,7 @@ import { createBatch, updateBatch, updateBatchQuantities } from 'src/api/batch/b
 import { getSpecies } from 'src/api/species/species';
 import { Species } from 'src/types/Species';
 import { APP_PATHS } from 'src/constants';
-import { Link } from 'react-router-dom';
+import Link from 'src/components/common/Link';
 
 export interface BatchDetailsModalProps {
   open: boolean;

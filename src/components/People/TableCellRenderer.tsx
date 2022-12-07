@@ -1,30 +1,17 @@
 import React from 'react';
-import { makeStyles } from '@mui/styles';
-import { Link } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
 import CellRenderer, { TableRowType } from '../common/table/TableCellRenderer';
 import { RendererProps } from '../common/table/types';
-import { Theme } from '@mui/material';
-
-const useStyles = makeStyles((theme: Theme) => ({
-  link: {
-    color: theme.palette.TwClrTxtBrand,
-  },
-}));
+import Link from '../common/Link';
 
 export default function Renderer(props: RendererProps<TableRowType>): JSX.Element {
-  const classes = useStyles();
   const { column, row, value, index } = props;
 
   const createLinkToPerson = (iValue: React.ReactNode | unknown[]) => {
     const personLocation = {
       pathname: APP_PATHS.PEOPLE_VIEW.replace(':personId', row.id.toString()),
     };
-    return (
-      <Link to={personLocation.pathname} className={classes.link}>
-        {iValue}
-      </Link>
-    );
+    return <Link to={personLocation.pathname}>{iValue}</Link>;
   };
 
   if (column.key === 'firstName' || column.key === 'lastName') {
