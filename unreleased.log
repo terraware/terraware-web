@@ -1,3 +1,4 @@
+8f6a0f7 SW-2468 Add messages to empty state generic map (#885)
 90277bb SW-2484 Introduce a generic/consistent Link component and use in batches (#883)
 a20f590 Use new web-components version to fix visual updates (#884)
 70bfc2b SW-2482 Home page cards should redirect user to target page (#881)
