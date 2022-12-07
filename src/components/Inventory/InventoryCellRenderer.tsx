@@ -1,10 +1,10 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { makeStyles } from '@mui/styles';
 import { useTheme } from '@mui/material';
 import { APP_PATHS } from 'src/constants';
-import CellRenderer, { TableRowType } from '../common/table/TableCellRenderer';
-import { RendererProps } from '../common/table/types';
+import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
+import { RendererProps } from 'src/components/common/table/types';
+import Link from 'src/components/common/Link';
 import { TextTruncated } from '@terraware/web-components';
 import strings from 'src/strings';
 
@@ -38,11 +38,7 @@ export default function InventoryCellRenderer(props: RendererProps<TableRowType>
 
   const createLinkToInventoryDetail = (iValue: React.ReactNode | unknown[]) => {
     return (
-      <Link
-        to={APP_PATHS.INVENTORY_ITEM.replace(':speciesId', row.species_id.toString())}
-        style={{ color: theme.palette.TwClrTxtBrand }}
-        className={classes.text}
-      >
+      <Link to={APP_PATHS.INVENTORY_ITEM.replace(':speciesId', row.species_id.toString())} className={classes.text}>
         {iValue}
       </Link>
     );

@@ -1,18 +1,16 @@
 import { makeStyles } from '@mui/styles';
 import React, { useState } from 'react';
-import { Link, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { Button } from '@terraware/web-components';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
+import Link from 'src/components/common/Link';
 import strings from 'src/strings';
 import ChangeQuantityModal from './ChangeQuantityModal';
 import { Batch } from 'src/api/types/batch';
 import QuantitiesMenu from './QuantitiesMenu';
 
 const useStyles = makeStyles(() => ({
-  link: {
-    color: '#0067C8',
-  },
   text: {
     fontSize: '14px',
   },
@@ -35,11 +33,7 @@ export default function BatchesCellRenderer(props: RendererProps<TableRowType>):
   };
 
   const createLinkToBatch = (iValue: React.ReactNode | unknown[]) => {
-    return (
-      <Link component='button' className={classes.link + ' ' + classes.text} onClick={rowClick}>
-        {iValue}
-      </Link>
-    );
+    return <Link onClick={rowClick}>{iValue}</Link>;
   };
 
   const createText = (iValue: React.ReactNode | unknown[]) => {
