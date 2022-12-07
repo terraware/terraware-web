@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     margin: theme.spacing(0, 0, 3, 1),
   },
   graphTitleIcon: {
-    color: theme.palette.TwClrIcnSecondary,
+    fill: theme.palette.TwClrIcnSecondary,
   },
   graphTitle: {
     fontWeight: 600,
