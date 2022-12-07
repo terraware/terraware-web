@@ -51,7 +51,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     fontWeight: 400,
   },
   link: {
-    marginTop: '28px',
     display: 'block',
     fontSize: '16px',
     fontWeight: 500,
@@ -118,7 +117,7 @@ export default function PageCard(props: PageCardProps): JSX.Element {
         {description}
       </Typography>
       {linkStyle === 'plain' && (
-        <Box onClick={stopBubblingEvent}>
+        <Box onClick={stopBubblingEvent} marginTop='28px'>
           <Link className={classes.link} component={RouterLink} to={link}>
             {linkText}
           </Link>
