@@ -1,10 +1,10 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { makeStyles } from '@mui/styles';
-import { Box, Typography, useTheme } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { APP_PATHS } from 'src/constants';
 import { CellRenderer, RendererProps, TableRowType } from '@terraware/web-components';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
+import Link from 'src/components/common/Link';
 
 const useStyles = makeStyles(() => ({
   text: {
@@ -24,16 +24,11 @@ const useStyles = makeStyles(() => ({
 
 export default function WithdrawalBatchesCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
   const classes = useStyles();
-  const theme = useTheme();
   const { column, row, value, index, onRowClick } = props;
 
   const createLinkToBatchDetail = (iValue: React.ReactNode | unknown[]) => {
     return (
-      <Link
-        to={`${APP_PATHS.INVENTORY_ITEM.replace(':speciesId', row.speciesId.toString())}?batch=${iValue}`}
-        style={{ color: theme.palette.TwClrTxtBrand }}
-        className={classes.text}
-      >
+      <Link to={`${APP_PATHS.INVENTORY_ITEM.replace(':speciesId', row.speciesId.toString())}?batch=${iValue}`}>
         {iValue}
       </Link>
     );

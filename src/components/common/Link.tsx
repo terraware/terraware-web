@@ -9,6 +9,7 @@ export type LinkProps = {
   onClick?: (e?: React.MouseEvent) => void;
   className?: string;
   fontSize?: string | number;
+  target?: string;
 };
 
 type StyleProps = {
@@ -28,20 +29,20 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 export default function Link(props: LinkProps): JSX.Element {
-  const { to, children, className, onClick, fontSize } = props;
+  const { to, children, className, onClick, fontSize, target } = props;
   const classes = useStyles({ fontSize: fontSize || '14px' });
   const classNameToUse = `${classes.link} ${className || ''}`;
 
   if (to) {
     return (
-      <RouterLink to={to} className={classNameToUse}>
+      <RouterLink to={to} className={classNameToUse} target={target}>
         {children}
       </RouterLink>
     );
   }
 
   return (
-    <MuiLink component='button' className={classNameToUse} onClick={onClick}>
+    <MuiLink component='button' className={classNameToUse} onClick={onClick} target={target}>
       {children}
     </MuiLink>
   );

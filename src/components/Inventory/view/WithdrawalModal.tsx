@@ -11,8 +11,8 @@ import { createBatchWithdrawal, CreateNurseryWithdrawalRequestPayload } from 'sr
 import { getSpecies } from 'src/api/species/species';
 import { Species } from 'src/types/Species';
 import { APP_PATHS } from 'src/constants';
-import { Link } from 'react-router-dom';
 import { getAllNurseries } from 'src/utils/organization';
+import Link from 'src/components/common/Link';
 
 export interface WithdrawalsModalProps {
   open: boolean;
