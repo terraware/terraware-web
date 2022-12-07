@@ -8,12 +8,17 @@ export type LinkProps = {
   to?: string;
   onClick?: (e?: React.MouseEvent) => void;
   className?: string;
+  fontSize?: string | number;
+};
+
+type StyleProps = {
+  fontSize: string | number;
 };
 
 const useStyles = makeStyles((theme: Theme) => ({
   link: {
     color: theme.palette.TwClrTxtBrand,
-    fontSize: '14px',
+    fontSize: (props: StyleProps) => props.fontSize,
     fontWeight: 600,
     textDecoration: 'none',
     '&:hover': {
@@ -23,8 +28,8 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 export default function Link(props: LinkProps): JSX.Element {
-  const { to, children, className, onClick } = props;
-  const classes = useStyles();
+  const { to, children, className, onClick, fontSize } = props;
+  const classes = useStyles({ fontSize: fontSize || '14px' });
   const classNameToUse = `${classes.link} ${className || ''}`;
 
   if (to) {
