@@ -181,6 +181,7 @@ export default function NurseryReassignment(props: NurseryReassignmentProps): JS
               rows={plantings}
               Renderer={reassignmentRenderer}
               orderBy='species'
+              showPagination={false}
             />
           </Card>
           <FormBottomBar onCancel={goToWithdrawals} onSave={reassign} saveButtonText={strings.REASSIGN} />
