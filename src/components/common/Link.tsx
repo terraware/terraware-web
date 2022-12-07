@@ -20,6 +20,7 @@ type StyleProps = {
 const useStyles = makeStyles((theme: Theme) => ({
   link: {
     color: theme.palette.TwClrTxtBrand,
+    fontFamily: 'Inter',
     fontSize: (props: StyleProps) => props.fontSize,
     fontWeight: 500,
     textDecoration: 'none',
