@@ -1,3 +1,4 @@
+a20f590 Use new web-components version to fix visual updates (#884)
 70bfc2b SW-2482 Home page cards should redirect user to target page (#881)
 fad64dc SW-2483 Icons on the sensor monitoring page should be using the secondary color token (#882)
 6626676 SW-2427 Intermediate effort of reassignment flow (#879)
