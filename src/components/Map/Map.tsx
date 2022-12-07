@@ -9,6 +9,7 @@ import { MapOptions, MapPopupRenderer } from './MapModels';
  * See: https://docs.mapbox.com/mapbox-gl-js/guides/install/#transpiling
  */
 import mapboxgl from 'mapbox-gl';
+import MapBanner from './MapBanner';
 const mapboxImpl: any = mapboxgl;
 // @tslint
 // eslint-disable-next-line import/no-webpack-loader-syntax
@@ -35,10 +36,11 @@ export type MapProps = {
   mapId?: string;
   // style overrides
   style?: object;
+  topMessage?: string;
 };
 
 export default function Map(props: MapProps): JSX.Element {
-  const { token, onTokenExpired, options, popupRenderer, mapId, style } = props;
+  const { token, onTokenExpired, options, popupRenderer, mapId, style, topMessage } = props;
   const [geoData, setGeoData] = useState();
   const [layerIds, setLayerIds] = useState<string[]>([]);
   const [popupInfo, setPopupInfo] = useState<PopupInfo | null>(null);
@@ -177,7 +179,8 @@ export default function Map(props: MapProps): JSX.Element {
   });
 
   return (
-    <Box sx={{ display: 'flex', flexGrow: 1, height: '100%', minHeight: 250 }}>
+    <Box sx={{ display: 'flex', flexGrow: 1, height: '100%', minHeight: 250, position: 'relative' }}>
+      {topMessage && <MapBanner message={topMessage} />}
       <ReactMapGL
         key={mapId}
         mapboxAccessToken={token}

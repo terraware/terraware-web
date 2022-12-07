@@ -6,6 +6,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 import { PlantingSitesPlots } from './PlantingSiteDetails';
 import { GenericMap, PlantingSiteMap, useSpeciesPlantsRenderer } from 'src/components/Map';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import { ServerOrganization } from 'src/types/Organization';
 
 const MAP_STYLE = {
   borderRadius: '24px',
@@ -14,10 +15,11 @@ const MAP_STYLE = {
 type PlantingSiteDashboardMapProps = {
   siteId?: number;
   plots?: PlantingSitesPlots[];
+  organization: ServerOrganization;
 };
 
 export default function PlantingSiteDashboardMap(props: PlantingSiteDashboardMapProps): JSX.Element {
-  const { plots, siteId } = props;
+  const { plots, siteId, organization } = props;
   const { isMobile } = useDeviceInfo();
   const [snackbar] = useState(useSnackbar());
   const [plantingSite, setPlantingSite] = useState<PlantingSite>();
@@ -65,7 +67,7 @@ export default function PlantingSiteDashboardMap(props: PlantingSiteDashboardMap
           contextRenderer={contextRenderer}
         />
       ) : isMobile ? null : (
-        <GenericMap style={MAP_STYLE} />
+        <GenericMap style={MAP_STYLE} organization={organization} />
       )}
     </Box>
   );
