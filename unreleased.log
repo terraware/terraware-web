@@ -1,4 +1,4 @@
-5c20384 Try publishing license report to github pages
+cdb2c0c SW-2352 Publish license report automatically via github pages (#878)
 49d394b Add required to ready and not ready fields (#877)
 009ea64 SW-2445 Include quantities in single Withdrawal form (#874)
 d00b31d SW-2469 Add spinner when withdraw is happening (#876)
