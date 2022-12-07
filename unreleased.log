@@ -1,3 +1,4 @@
+c2b6339 SW-2432: Fix Contact Us Navigation Item is Difficult to See (#891)
 11e34ed Use new Link component on inventory/people and location pages (#890)
 f30a772 SW-2475 Update link styles on Home and Species pages (#889)
 cecf050 SW-2482 Fix ghost area where page card was not clickable (#888)
