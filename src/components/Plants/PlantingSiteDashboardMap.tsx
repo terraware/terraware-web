@@ -72,7 +72,7 @@ export default function PlantingSiteDashboardMap(props: PlantingSiteDashboardMap
       ) : isMobile ? null : (
         <GenericMap
           style={MAP_STYLE}
-          topMessage={contributor ? strings.GENERIC_MAP_MESSAGE_CONTRIBUTOR : strings.GENERIC_MAP_MESSAGE_ADMIN}
+          bannerMessage={contributor ? strings.GENERIC_MAP_MESSAGE_CONTRIBUTOR : strings.GENERIC_MAP_MESSAGE_ADMIN}
         />
       )}
     </Box>

@@ -17,14 +17,14 @@ type GenericMapProps = {
   contextRenderer?: MapPopupRenderer;
   options?: MapOptions;
   style?: object;
-  topMessage?: string;
+  bannerMessage?: string;
 };
 
 export default function GenericMap({
   contextRenderer,
   options,
   style,
-  topMessage,
+  bannerMessage,
 }: GenericMapProps): JSX.Element | null {
   const [snackbar] = useState(useSnackbar());
   const [token, setToken] = useState<string>();
@@ -75,7 +75,7 @@ export default function GenericMap({
         mapId={mapId}
         style={style}
         popupRenderer={contextRenderer}
-        topMessage={topMessage}
+        bannerMessage={bannerMessage}
       />
     </Box>
   );
