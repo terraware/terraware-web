@@ -214,14 +214,24 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
         setIndividualError('notReadyQuantityWithdrawn', strings.REQUIRED_FIELD);
         bothValid = false;
       } else {
-        setIndividualError('notReadyQuantityWithdrawn', '');
+        if (notReadyQuantityWithdrawn > batches[0].notReadyQuantity) {
+          setIndividualError('notReadyQuantityWithdrawn', strings.WITHDRAWN_QUANTITY_ERROR);
+          bothValid = false;
+        } else {
+          setIndividualError('notReadyQuantityWithdrawn', '');
+        }
       }
 
       if (!readyQuantityWithdrawn && readyQuantityWithdrawn !== 0) {
         setIndividualError('readyQuantityWithdrawn', strings.REQUIRED_FIELD);
         bothValid = false;
       } else {
-        setIndividualError('readyQuantityWithdrawn', '');
+        if (readyQuantityWithdrawn > batches[0].readyQuantity) {
+          setIndividualError('readyQuantityWithdrawn', strings.WITHDRAWN_QUANTITY_ERROR);
+          bothValid = false;
+        } else {
+          setIndividualError('readyQuantityWithdrawn', '');
+        }
       }
     }
     return bothValid;
