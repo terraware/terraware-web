@@ -16,14 +16,11 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import Button from 'src/components/common/button/Button';
 import Icon from 'src/components/common/icon/Icon';
 import AccessionByStatus from './AccessionByStatus';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
+import Link from 'src/components/common/Link';
 
 const useStyles = makeStyles((theme: Theme) => ({
   accessionsLink: {
-    textDecoration: 'none',
-    fontWeight: 500,
-    fontSize: '16px',
-    color: theme.palette.TwClrTxtBrand,
     marginRight: '12px',
   },
   mainContainer: {
@@ -274,7 +271,7 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
                         />
                       </Grid>
                     </Grid>
-                    <Link className={classes.accessionsLink} to={`${APP_PATHS.ACCESSIONS}?stage=}`}>
+                    <Link className={classes.accessionsLink} to={`${APP_PATHS.ACCESSIONS}?stage=}`} fontSize='16px'>
                       {strings.SEE_ALL_ACCESSIONS}
                     </Link>
                   </Box>

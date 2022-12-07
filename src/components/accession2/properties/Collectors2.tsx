@@ -1,10 +1,11 @@
 import { Close } from '@mui/icons-material';
-import { useTheme, Box, IconButton, Link } from '@mui/material';
+import { useTheme, Box, IconButton } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { getCollectors } from 'src/api/seeds/search';
 import Autocomplete from 'src/components/common/Autocomplete';
 import strings from 'src/strings';
 import preventDefaultEvent from 'src/utils/preventDefaultEvent';
+import Link from 'src/components/common/Link';
 
 interface Props {
   organizationId: number;
@@ -78,13 +79,14 @@ export default function Collectors2({ organizationId, id, collectors = [''], onC
       ))}
       <Box display='flex' justifyContent='flex-end'>
         <Link
-          sx={{ color: theme.palette.TwClrTxtBrand, textDecoration: 'none' }}
-          href='#'
           id='addCollectorButton'
-          onClick={(event: React.SyntheticEvent) => {
-            preventDefaultEvent(event);
+          onClick={(event?: React.SyntheticEvent) => {
+            if (event) {
+              preventDefaultEvent(event);
+            }
             onAddCollector();
           }}
+          fontSize='16px'
         >
           + {strings.ADD}
         </Link>

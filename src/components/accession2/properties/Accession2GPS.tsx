@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import strings from 'src/strings';
 import { Close } from '@mui/icons-material';
-import { Link, Grid, Box, IconButton, useTheme } from '@mui/material';
+import { Grid, Box, IconButton, useTheme } from '@mui/material';
 import { AccessionPostRequestBody } from 'src/api/accessions2/accession';
 import Textfield from 'src/components/common/Textfield/Textfield';
 import { Geolocation } from 'src/api/types/accessions';
 import preventDefaultEvent from 'src/utils/preventDefaultEvent';
 import Coordinates from 'coordinate-parser';
 import _ from 'lodash';
+import Link from 'src/components/common/Link';
 
 type Accession2GPSProps = {
   record: AccessionPostRequestBody;
@@ -77,12 +78,7 @@ export default function Accession2GPS(props: Accession2GPSProps): JSX.Element {
     return (
       <Grid item xs={12} marginTop={theme.spacing(2)}>
         <Box display='flex' justifyContent='flex-start'>
-          <Link
-            sx={{ color: theme.palette.TwClrTxtBrand, textDecoration: 'none' }}
-            href='#'
-            id='addGPS'
-            onClick={() => setIsOpen(true)}
-          >
+          <Link id='addGPS' onClick={() => setIsOpen(true)} fontSize='16px'>
             {strings.ADD_GPS_COORDINATES}
           </Link>
         </Box>
@@ -122,13 +118,14 @@ export default function Accession2GPS(props: Accession2GPSProps): JSX.Element {
       ))}
       <Box display='flex' justifyContent='flex-end'>
         <Link
-          sx={{ color: theme.palette.TwClrTxtBrand, textDecoration: 'none' }}
-          href='#'
           id='addGpsCoordsButton'
-          onClick={(event: React.SyntheticEvent) => {
-            preventDefaultEvent(event);
+          onClick={(event?: React.SyntheticEvent) => {
+            if (event) {
+              preventDefaultEvent(event);
+            }
             onAddGpsCoords();
           }}
+          fontSize='16px'
         >
           + {strings.ADD}
         </Link>

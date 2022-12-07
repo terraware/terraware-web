@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import strings from 'src/strings';
-import { Link, Grid, Box, useTheme } from '@mui/material';
+import { Grid, Box, useTheme } from '@mui/material';
 import { AccessionPostRequestBody } from 'src/api/accessions2/accession';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import Textfield from 'src/components/common/Textfield/Textfield';
 import { CollectionSource } from './';
+import Link from 'src/components/common/Link';
 
 type Accession2PlantSiteDetailsProps = {
   record: AccessionPostRequestBody;
@@ -24,12 +25,7 @@ export default function Accession2PlantSiteDetails(props: Accession2PlantSiteDet
     return (
       <Grid item xs={12} marginTop={theme.spacing(2)}>
         <Box display='flex' justifyContent='flex-start'>
-          <Link
-            sx={{ color: theme.palette.TwClrTxtBrand, textDecoration: 'none' }}
-            href='#'
-            id='addPlantSiteDescription'
-            onClick={() => setIsOpen(true)}
-          >
+          <Link id='addPlantSiteDescription' onClick={() => setIsOpen(true)} fontSize='16px'>
             {strings.ADD_PLANT_SITE_DESCRIPTION}
           </Link>
         </Box>
