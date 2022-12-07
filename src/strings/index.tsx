@@ -886,6 +886,12 @@ const strings = new LocalizedStrings({
     GENERIC_MAP_MESSAGE_ADMIN: 'To see your plants on this map, please add a shapefile.',
     GENERIC_MAP_MESSAGE_CONTRIBUTOR:
       'To see your plants on this map, you need to add a shapefile. Please reach out to an administrator from your organization.',
+    REASSIGN_SEEDLINGS: 'Reassign Seedlings',
+    REASSIGN_SEEDLINGS_DESCRIPTION:
+      'Enter the new plot, new quantity, and notes for the species you want to reassign seedlings for. The seedlings for rows you leave empty will not be reassigned.',
+    ZONE: 'Zone',
+    ORIGINAL_PLOT: 'Original Plot',
+    NEW_PLOT: 'New Plot',
   },
 });
 

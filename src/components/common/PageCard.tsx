@@ -2,15 +2,23 @@ import { Box, Link, Theme, Typography, useTheme } from '@mui/material';
 import React from 'react';
 import Icon from './icon/Icon';
 import { IconName } from './icon/icons';
-import { Link as RouterLink } from 'react-router-dom';
+import { useHistory, Link as RouterLink } from 'react-router-dom';
 import Button from 'src/components/common/button/Button';
 import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import stopPropagation from 'src/utils/stopPropagationEvent';
+
+export type LinkStyle = 'plain' | 'button';
+
+type StyleProps = {
+  linkStyle: LinkStyle;
+};
 
 const useStyles = makeStyles((theme: Theme) => ({
   container: {
     background: theme.palette.TwClrBg,
     borderRadius: '24px',
+    cursor: (props: StyleProps) => (props.linkStyle === 'plain' ? 'pointer' : 'default'),
     display: 'flex',
     flexDirection: 'column',
     height: '100%',
@@ -66,17 +74,31 @@ export interface PageCardProps {
   description: string;
   linkText: string;
   link: string;
-  linkStyle: 'plain' | 'button';
+  linkStyle: LinkStyle;
 }
 
 export default function PageCard(props: PageCardProps): JSX.Element {
-  const classes = useStyles();
-  const theme = useTheme();
   const { name, isNameBold, icon, description, linkText, link, linkStyle } = props;
+  const classes = useStyles({ linkStyle });
+  const theme = useTheme();
+  const history = useHistory();
   const { isMobile } = useDeviceInfo();
 
+  const stopBubblingEvent = (event?: React.MouseEvent) => {
+    if (event) {
+      stopPropagation(event);
+    }
+  };
+
+  const goToPage = (event?: React.MouseEvent) => {
+    if (linkStyle === 'button') {
+      return;
+    }
+    history.push({ pathname: link });
+  };
+
   return (
-    <Box className={`${classes.container} ${isMobile ? '' : 'min-height'}`}>
+    <Box className={`${classes.container} ${isMobile ? '' : 'min-height'}`} onClick={goToPage}>
       <div className={classes.title}>
         <Icon name={icon} size='medium' className={classes.icon} />
         <Typography
@@ -96,9 +118,11 @@ export default function PageCard(props: PageCardProps): JSX.Element {
         {description}
       </Typography>
       {linkStyle === 'plain' && (
-        <Link className={classes.link} component={RouterLink} to={link}>
-          {linkText}
-        </Link>
+        <Box onClick={stopBubblingEvent}>
+          <Link className={classes.link} component={RouterLink} to={link}>
+            {linkText}
+          </Link>
+        </Box>
       )}
       {linkStyle === 'button' && (
         <Button
