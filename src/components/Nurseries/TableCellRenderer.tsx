@@ -8,11 +8,7 @@ export default function NurseriesCellRenderer(props: RendererProps<TableRowType>
   const { column, row, value, index } = props;
 
   const createLinkToNursery = (iValue: React.ReactNode | unknown[]) => {
-    return (
-      <Link fontSize='16px' to={APP_PATHS.NURSERIES_VIEW.replace(':nurseryId', row.id.toString())}>
-        {iValue}
-      </Link>
-    );
+    return <Link to={APP_PATHS.NURSERIES_VIEW.replace(':nurseryId', row.id.toString())}>{iValue}</Link>;
   };
 
   if (column.key === 'name') {
