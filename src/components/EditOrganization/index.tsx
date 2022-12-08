@@ -1,4 +1,4 @@
-import { Container, Grid, Theme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
@@ -12,24 +12,10 @@ import { Country, Subdivision } from 'src/types/Country';
 import { searchCountries } from 'src/api/country/country';
 import { updateOrganization } from 'src/api/organization/organization';
 import { getCountryByCode, getSubdivisionByCode } from 'src/utils/country';
-import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageSnackbar from 'src/components/PageSnackbar';
 import useSnackbar from 'src/utils/useSnackbar';
 import TfMain from 'src/components/common/TfMain';
-
-interface StyleProps {
-  isMobile: boolean;
-}
-
-const useStyles = makeStyles((theme: Theme) => ({
-  mainContainer: {
-    paddingTop: theme.spacing(4),
-    paddingBottom: theme.spacing(7),
-    marginBottom: (props: StyleProps) => (props.isMobile ? theme.spacing(40) : theme.spacing(6)),
-    background: theme.palette.TwClrBg,
-  },
-}));
 
 type OrganizationViewProps = {
   organization: ServerOrganization;
@@ -37,8 +23,8 @@ type OrganizationViewProps = {
 };
 
 export default function OrganizationView({ organization, reloadOrganizationData }: OrganizationViewProps): JSX.Element {
+  const theme = useTheme();
   const { isMobile } = useDeviceInfo();
-  const classes = useStyles({ isMobile });
   const [organizationRecord, setOrganizationRecord, onChange] = useForm<ServerOrganization>(organization);
   const [nameError, setNameError] = useState('');
   const [countries, setCountries] = useState<Country[]>();
@@ -126,62 +112,70 @@ export default function OrganizationView({ organization, reloadOrganizationData 
     if (isMobile) {
       return 12;
     }
-    return 4;
+    return 6;
   };
 
   return (
     <TfMain>
-      <Container maxWidth={false} className={classes.mainContainer}>
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <h2>{strings.ORGANIZATION}</h2>
-            <p>{strings.ORGANIZATION_DESC}</p>
-            <PageSnackbar />
-          </Grid>
-          <Grid item xs={gridSize()}>
-            <TextField
-              id='name'
-              label={strings.ORGANIZATION_NAME_REQUIRED}
-              type='text'
-              onChange={onChange}
-              value={organizationRecord.name}
-              errorText={organizationRecord.name ? '' : nameError}
-            />
-          </Grid>
-          <Grid item xs={gridSize()}>
-            <TextField
-              id='description'
-              label={strings.DESCRIPTION}
-              type='textarea'
-              onChange={onChange}
-              value={organizationRecord.description}
-            />
-          </Grid>
-          {isMobile === false && <Grid item xs={4} />}
-          <Grid item xs={gridSize()}>
+      <Box margin={theme.spacing(0, 3, 4, 3)}>
+        <Box display='flex' flexDirection='column' justifyContent='space-between' marginBottom={theme.spacing(1)}>
+          <Typography margin={0} fontSize='24px' fontWeight={600}>
+            {strings.ORGANIZATION}
+          </Typography>
+          <PageSnackbar />
+        </Box>
+      </Box>
+      <Grid
+        container
+        sx={{
+          backgroundColor: theme.palette.TwClrBg,
+          borderRadius: '32px',
+          padding: theme.spacing(3),
+          marginBottom: isMobile ? theme.spacing(40) : theme.spacing(6),
+        }}
+      >
+        <Grid item xs={gridSize()} paddingBottom={theme.spacing(4)}>
+          <TextField
+            id='name'
+            label={strings.ORGANIZATION_NAME_REQUIRED}
+            type='text'
+            onChange={onChange}
+            value={organizationRecord.name}
+            errorText={organizationRecord.name ? '' : nameError}
+          />
+        </Grid>
+        <Grid item xs={gridSize()} paddingLeft={isMobile ? 0 : theme.spacing(2)} paddingBottom={theme.spacing(4)}>
+          <TextField
+            id='description'
+            label={strings.DESCRIPTION}
+            type='textarea'
+            onChange={onChange}
+            value={organizationRecord.description}
+          />
+        </Grid>
+        <Grid item xs={gridSize()} paddingBottom={isMobile ? theme.spacing(4) : 0}>
+          <Select
+            label={strings.COUNTRY}
+            id='countyCode'
+            onChange={onChangeCountry}
+            options={countries?.map((country) => country.name)}
+            selectedValue={getSelectedCountry()?.name}
+            fullWidth
+          />
+        </Grid>
+        {getSelectedCountry()?.subdivisions && (
+          <Grid item xs={gridSize()} paddingLeft={isMobile ? 0 : theme.spacing(2)}>
             <Select
-              label={strings.COUNTRY}
-              id='countyCode'
-              onChange={onChangeCountry}
-              options={countries?.map((country) => country.name)}
-              selectedValue={getSelectedCountry()?.name}
+              label={strings.STATE}
+              id='countySubdivisionCode'
+              onChange={onChangeSubdivision}
+              options={getSelectedCountry()?.subdivisions.map((subdivision) => subdivision.name)}
+              selectedValue={getSelectedSubdivision()?.name}
               fullWidth
             />
           </Grid>
-          {getSelectedCountry()?.subdivisions && (
-            <Grid item xs={gridSize()}>
-              <Select
-                label={strings.STATE}
-                id='countySubdivisionCode'
-                onChange={onChangeSubdivision}
-                options={getSelectedCountry()?.subdivisions.map((subdivision) => subdivision.name)}
-                selectedValue={getSelectedSubdivision()?.name}
-                fullWidth
-              />
-            </Grid>
-          )}
-        </Grid>
-      </Container>
+        )}
+      </Grid>
       <FormBottomBar onCancel={goToOrganization} onSave={saveOrganization} />
     </TfMain>
   );
