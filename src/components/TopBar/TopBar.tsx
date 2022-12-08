@@ -37,6 +37,8 @@ export default function TopBar(props: TopBarProps): JSX.Element {
         className={isDesktop ? undefined : classes.mobile}
         disableGutters={true}
         sx={{
+          paddingBottom: '24px',
+          paddingTop: '24px',
           paddingLeft: '32px',
           paddingRight: '32px',
         }}
