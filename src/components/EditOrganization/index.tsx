@@ -1,4 +1,4 @@
-import { Box, Container, Grid, Theme, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
@@ -12,24 +12,10 @@ import { Country, Subdivision } from 'src/types/Country';
 import { searchCountries } from 'src/api/country/country';
 import { updateOrganization } from 'src/api/organization/organization';
 import { getCountryByCode, getSubdivisionByCode } from 'src/utils/country';
-import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageSnackbar from 'src/components/PageSnackbar';
 import useSnackbar from 'src/utils/useSnackbar';
 import TfMain from 'src/components/common/TfMain';
-
-interface StyleProps {
-  isMobile: boolean;
-}
-
-const useStyles = makeStyles((theme: Theme) => ({
-  mainContainer: {
-    paddingTop: theme.spacing(4),
-    paddingBottom: theme.spacing(7),
-    marginBottom: (props: StyleProps) => (props.isMobile ? theme.spacing(40) : theme.spacing(6)),
-    background: theme.palette.TwClrBg,
-  },
-}));
 
 type OrganizationViewProps = {
   organization: ServerOrganization;
@@ -39,7 +25,6 @@ type OrganizationViewProps = {
 export default function OrganizationView({ organization, reloadOrganizationData }: OrganizationViewProps): JSX.Element {
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
-  const classes = useStyles({ isMobile });
   const [organizationRecord, setOrganizationRecord, onChange] = useForm<ServerOrganization>(organization);
   const [nameError, setNameError] = useState('');
   const [countries, setCountries] = useState<Country[]>();
@@ -146,7 +131,7 @@ export default function OrganizationView({ organization, reloadOrganizationData 
           backgroundColor: theme.palette.TwClrBg,
           borderRadius: '32px',
           padding: theme.spacing(3),
-          marginBottom: '160px',
+          marginBottom: isMobile ? theme.spacing(40) : theme.spacing(6),
         }}
       >
         <Grid item xs={gridSize()} paddingBottom={theme.spacing(4)}>
