@@ -159,7 +159,7 @@ export default function OrganizationView({ organization, reloadOrganizationData 
             errorText={organizationRecord.name ? '' : nameError}
           />
         </Grid>
-        <Grid item xs={gridSize()} paddingLeft={!isMobile ? theme.spacing(2) : 0} paddingBottom={theme.spacing(4)}>
+        <Grid item xs={gridSize()} paddingLeft={isMobile ? 0 : theme.spacing(2)} paddingBottom={theme.spacing(4)}>
           <TextField
             id='description'
             label={strings.DESCRIPTION}
@@ -168,7 +168,7 @@ export default function OrganizationView({ organization, reloadOrganizationData 
             value={organizationRecord.description}
           />
         </Grid>
-        <Grid item xs={gridSize()} paddingBottom={theme.spacing(4)}>
+        <Grid item xs={gridSize()} paddingBottom={isMobile ? theme.spacing(4) : 0}>
           <Select
             label={strings.COUNTRY}
             id='countyCode'
@@ -179,7 +179,7 @@ export default function OrganizationView({ organization, reloadOrganizationData 
           />
         </Grid>
         {getSelectedCountry()?.subdivisions && (
-          <Grid item xs={gridSize()} paddingLeft={!isMobile ? theme.spacing(2) : 0}>
+          <Grid item xs={gridSize()} paddingLeft={isMobile ? 0 : theme.spacing(2)}>
             <Select
               label={strings.STATE}
               id='countySubdivisionCode'
