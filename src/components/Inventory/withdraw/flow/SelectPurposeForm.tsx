@@ -199,9 +199,16 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   };
 
   const validateWithdrawnQuantity = () => {
-    if (!withdrawnQuantity && isSingleBatch && isOutplant) {
-      setIndividualError('withdrawnQuantity', strings.REQUIRED_FIELD);
-      return false;
+    if (isSingleBatch && isOutplant) {
+      if (withdrawnQuantity) {
+        if (isNaN(withdrawnQuantity)) {
+          setIndividualError('withdrawnQuantity', strings.INVALID_VALUE);
+          return false;
+        }
+      } else {
+        setIndividualError('withdrawnQuantity', strings.REQUIRED_FIELD);
+        return false;
+      }
     }
     setIndividualError('withdrawnQuantity', '');
     return true;
@@ -214,11 +221,16 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
         setIndividualError('notReadyQuantityWithdrawn', strings.REQUIRED_FIELD);
         bothValid = false;
       } else {
-        if (notReadyQuantityWithdrawn > batches[0].notReadyQuantity) {
-          setIndividualError('notReadyQuantityWithdrawn', strings.WITHDRAWN_QUANTITY_ERROR);
+        if (isNaN(notReadyQuantityWithdrawn)) {
+          setIndividualError('notReadyQuantityWithdrawn', strings.INVALID_VALUE);
           bothValid = false;
         } else {
-          setIndividualError('notReadyQuantityWithdrawn', '');
+          if (+notReadyQuantityWithdrawn > +batches[0].notReadyQuantity) {
+            setIndividualError('notReadyQuantityWithdrawn', strings.WITHDRAWN_QUANTITY_ERROR);
+            bothValid = false;
+          } else {
+            setIndividualError('notReadyQuantityWithdrawn', '');
+          }
         }
       }
 
@@ -226,11 +238,16 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
         setIndividualError('readyQuantityWithdrawn', strings.REQUIRED_FIELD);
         bothValid = false;
       } else {
-        if (readyQuantityWithdrawn > batches[0].readyQuantity) {
-          setIndividualError('readyQuantityWithdrawn', strings.WITHDRAWN_QUANTITY_ERROR);
+        if (isNaN(readyQuantityWithdrawn)) {
+          setIndividualError('readyQuantityWithdrawn', strings.INVALID_VALUE);
           bothValid = false;
         } else {
-          setIndividualError('readyQuantityWithdrawn', '');
+          if (+readyQuantityWithdrawn > +batches[0].readyQuantity) {
+            setIndividualError('readyQuantityWithdrawn', strings.WITHDRAWN_QUANTITY_ERROR);
+            bothValid = false;
+          } else {
+            setIndividualError('readyQuantityWithdrawn', '');
+          }
         }
       }
     }
