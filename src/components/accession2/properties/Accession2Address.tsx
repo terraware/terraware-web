@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import strings from 'src/strings';
-import { Link, Grid, Box, useTheme } from '@mui/material';
+import { Grid, Box, useTheme } from '@mui/material';
 import { AccessionPostRequestBody } from 'src/api/accessions2/accession';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import Textfield from 'src/components/common/Textfield/Textfield';
@@ -8,6 +8,7 @@ import Autocomplete from 'src/components/common/Autocomplete';
 import { searchCountries } from 'src/api/country/country';
 import { getCountryByCode, getSubdivisionByCode } from 'src/utils/country';
 import { Country } from 'src/types/Country';
+import Link from 'src/components/common/Link';
 
 type Accession2AddressProps = {
   record: AccessionPostRequestBody;
@@ -83,12 +84,7 @@ export default function Accession2Address(props: Accession2AddressProps): JSX.El
     return (
       <Grid item xs={12} marginTop={theme.spacing(2)}>
         <Box display='flex' justifyContent='flex-start'>
-          <Link
-            sx={{ color: theme.palette.TwClrTxtBrand, textDecoration: 'none' }}
-            href='#'
-            id='addAddress'
-            onClick={() => setIsOpen(true)}
-          >
+          <Link id='addAddress' onClick={() => setIsOpen(true)} fontSize='16px'>
             {strings.ADD_ADDRESS}
           </Link>
         </Box>

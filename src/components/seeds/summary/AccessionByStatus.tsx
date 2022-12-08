@@ -2,6 +2,7 @@ import { Box, Typography, useTheme } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import TwLink from 'src/components/common/Link';
 
 interface Props {
   label: string;
@@ -24,9 +25,15 @@ export default function AccessionByStatus({ label, status, quantity }: Props): J
       }}
     >
       <Box textAlign='center'>
-        <Typography color={theme.palette.TwClrTxtBrand} fontSize='36px' fontWeight={600}>
-          {quantity}
-        </Typography>
+        <TwLink
+          onClick={() => {
+            return;
+          }}
+        >
+          <Typography color={theme.palette.TwClrTxtBrand} fontSize='36px' fontWeight={600}>
+            {quantity}
+          </Typography>
+        </TwLink>
         <Typography color={theme.palette.TwClrTxt} fontSize='16px' fontWeight={500}>
           {label}
         </Typography>

@@ -1,9 +1,10 @@
 import React from 'react';
 import { makeStyles } from '@mui/styles';
-import { Link, Theme, Typography, useTheme } from '@mui/material';
+import { Theme, Typography, useTheme } from '@mui/material';
 import Button from 'src/components/common/button/Button';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import strings from 'src/strings';
+import Link from 'src/components/common/Link';
 
 interface StyleProps {
   isMobile: boolean;
@@ -47,10 +48,6 @@ const useStyles = makeStyles((theme: Theme) => ({
       textAlign: 'center',
       width: '160px',
     },
-  },
-  itemLink: {
-    fontSize: '14px',
-    cursor: 'pointer',
   },
   or: {
     textAlign: 'left',
@@ -121,13 +118,7 @@ export default function EmptyMessage(props: EmptyMessageProps): JSX.Element {
                       <Typography fontSize='14px' fontWeight={500} color={theme.palette.TwClrTxt} lineHeight='20px'>
                         {rowItem.altItem.text}
                       </Typography>
-                      <Link
-                        color={theme.palette.TwClrTxtBrand}
-                        onClick={rowItem.altItem.onLinkClick}
-                        className={classes.itemLink}
-                      >
-                        {rowItem.altItem.linkText}
-                      </Link>
+                      <Link onClick={rowItem.altItem.onLinkClick}>{rowItem.altItem.linkText}</Link>
                     </div>
                     <Button
                       label={rowItem.altItem.buttonText}
