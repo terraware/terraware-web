@@ -108,7 +108,12 @@ export default function PageHeaderWrapper({ children, nextElement, nextElementIn
     width: '-webkit-fill-available',
     zIndex: debouncedSticky ? 100 : undefined,
     '& > div': {
-      boxShadow: debouncedSticky ? `0px 3px 3px -3px ${theme.palette.TwClrBaseGray200}` : undefined,
+      borderBottom: '1px solid',
+      borderImage:
+        `linear-gradient(to right, ${theme.palette.TwClrBaseGray300}00,` +
+        `${theme.palette.TwClrBaseGray300}FF, ${theme.palette.TwClrBaseGray300}FF,` +
+        `${theme.palette.TwClrBaseGray300}FF, ${theme.palette.TwClrBaseGray300}00) 1`,
+      boxShadow: 'none',
     },
   };
 
