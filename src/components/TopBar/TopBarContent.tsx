@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   separator: {
     width: '1px',
     height: '32px',
-    backgroundColor: theme.palette.gray[200],
+    backgroundColor: theme.palette.TwClrBaseGray300,
     marginRight: '16px',
     marginLeft: '16px',
   },

@@ -86,7 +86,7 @@ const useStyles = makeStyles((theme: Theme) => ({
         `${hexRgb(`${theme.palette.TwClrBaseGreen050}`, { alpha: 0.4, format: 'css' })} 100%)`,
       backgroundAttachment: 'fixed',
       paddingRight: (props: StyleProps) => (props.isDesktop ? '8px' : undefined),
-      paddingTop: (props: StyleProps) => (props.isDesktop ? '88px' : '8px'),
+      paddingTop: (props: StyleProps) => (props.isDesktop ? '96px' : '8px'),
       overflowY: 'auto',
       width: (props: StyleProps) => (props.isDesktop ? '180px' : undefined),
       zIndex: 1000,
