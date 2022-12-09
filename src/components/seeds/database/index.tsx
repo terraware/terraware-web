@@ -503,7 +503,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
       <Box marginLeft={1} display='inline'>
         <Button
           id='more-options'
-          icon='iconMenuHorizontal'
+          icon='menuVertical'
           onClick={(event) => event && handleClick(event)}
           priority='secondary'
           size='medium'
