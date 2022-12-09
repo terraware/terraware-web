@@ -7,6 +7,7 @@ import strings from 'src/strings';
 import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { getCutTestViabilityPercent } from './utils';
+import Link from 'src/components/common/Link';
 
 const useStyles = makeStyles((theme: Theme) => ({
   syncIcon: {
@@ -28,7 +29,16 @@ export default function Renderer(props: RendererProps<TableRowType>): JSX.Elemen
     return <Typography sx={{ ...styleProps, cursor: 'pointer' }}>{iValue}</Typography>;
   };
 
-  const renderId = () => getValue(`#${row.id}`, { fontWeight: 600, color: theme.palette.TwClrTxtBrand });
+  const renderId = () => (
+    <Link
+      onClick={() => {
+        return;
+      }}
+      fontSize='16px'
+    >
+      #{row.id}
+    </Link>
+  );
 
   const renderDate = () => {
     const { startDate, endDate } = row;
