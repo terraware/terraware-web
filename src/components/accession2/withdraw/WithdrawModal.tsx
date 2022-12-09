@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import strings from 'src/strings';
 import Button from 'src/components/common/button/Button';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
-import { Box, Grid, Link, useTheme } from '@mui/material';
+import { Box, Grid, useTheme } from '@mui/material';
 import { Checkbox, DatePicker, Select, SelectT, Textfield } from '@terraware/web-components';
 import { Accession2, Withdrawal2 } from 'src/api/accessions2/accession';
 import { NurseryTransfer } from 'src/api/types/batch';
@@ -21,6 +21,7 @@ import { Dropdown } from '@terraware/web-components';
 import { isContributor, getAllNurseries } from 'src/utils/organization';
 import { renderUser } from 'src/utils/renderUser';
 import { getSubstratesAccordingToType } from 'src/utils/viabilityTest';
+import AddLink from 'src/components/common/AddLink';
 
 export interface WithdrawDialogProps {
   open: boolean;
@@ -484,9 +485,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
             <Textfield id='notes' value={record.notes} onChange={onChangeNotes} type='textarea' label={strings.NOTES} />
           ) : (
             <Box display='flex' justifyContent='flex-start'>
-              <Link sx={{ textDecoration: 'none' }} href='#' id='addNotes' onClick={() => setIsNotesOpened(true)}>
-                + {strings.ADD_NOTES}
-              </Link>
+              <AddLink id='addNotes' onClick={() => setIsNotesOpened(true)} text={strings.ADD_NOTES} large={true} />
             </Box>
           )}
         </Grid>
