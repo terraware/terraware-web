@@ -2,12 +2,13 @@ import React, { useEffect } from 'react';
 import strings from 'src/strings';
 import Button from 'src/components/common/button/Button';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
-import { Box, Grid, Link, Typography } from '@mui/material';
+import { Box, Grid, Typography } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
 import { Accession2, updateAccession2 } from 'src/api/accessions2/accession';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 import { preventDefaultEvent } from '@terraware/web-components/utils';
+import Link from 'src/components/common/Link';
 
 export interface ViabilityDialogProps {
   open: boolean;
@@ -92,13 +93,14 @@ export default function ViabilityDialog(props: ViabilityDialogProps): JSX.Elemen
           </Grid>
           <Grid item xs={12}>
             <Link
-              href='#'
               id='addViabilityTestButton'
-              onClick={(event: React.SyntheticEvent) => {
-                preventDefaultEvent(event);
+              onClick={(event: any) => {
+                if (event) {
+                  preventDefaultEvent(event);
+                }
                 onAddViabilityTest();
               }}
-              sx={{ textDecoration: 'none' }}
+              fontSize='16px'
             >
               {strings.ADD_A_VIABILITY_TEST}
             </Link>

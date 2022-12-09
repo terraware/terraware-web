@@ -8,7 +8,7 @@ import Autocomplete from 'src/components/common/Autocomplete';
 import { searchCountries } from 'src/api/country/country';
 import { getCountryByCode, getSubdivisionByCode } from 'src/utils/country';
 import { Country } from 'src/types/Country';
-import Link from 'src/components/common/Link';
+import AddLink from 'src/components/common/AddLink';
 
 type Accession2AddressProps = {
   record: AccessionPostRequestBody;
@@ -84,9 +84,7 @@ export default function Accession2Address(props: Accession2AddressProps): JSX.El
     return (
       <Grid item xs={12} marginTop={theme.spacing(2)}>
         <Box display='flex' justifyContent='flex-start'>
-          <Link id='addAddress' onClick={() => setIsOpen(true)} fontSize='16px'>
-            {strings.ADD_ADDRESS}
-          </Link>
+          <AddLink id='addAddress' onClick={() => setIsOpen(true)} large={true} text={strings.ADD_ADDRESS} />
         </Box>
       </Grid>
     );
@@ -109,7 +107,7 @@ export default function Accession2Address(props: Accession2AddressProps): JSX.El
             <Autocomplete
               id='collectionSiteCountryCode'
               selected={getSelectedCountry()?.name || temporalCountryValue}
-              onChange={(index, value) => onChangeCountry(value)}
+              onChange={(index, value: any) => onChangeCountry(value)}
               label={strings.COUNTRY}
               values={countries?.map((country) => country.name) || []}
               freeSolo={true}
@@ -119,7 +117,7 @@ export default function Accession2Address(props: Accession2AddressProps): JSX.El
             <Autocomplete
               id='collectionSiteCountrySubdivision'
               selected={getSelectedSubdivision()?.name || temporalSubValue}
-              onChange={(index, value) => onChangeSubdivision(value)}
+              onChange={(index, value: any) => onChangeSubdivision(value)}
               label={strings.STATE_PROVINCE_REGION}
               values={getSelectedCountry()?.subdivisions?.map((subdivision) => subdivision.name) || []}
               freeSolo={true}

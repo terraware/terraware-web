@@ -1,4 +1,4 @@
-import { Box, Grid, IconButton, Link, Typography, useTheme } from '@mui/material';
+import { Box, Grid, IconButton, Typography, useTheme } from '@mui/material';
 import { Button, Checkbox, DatePicker, DialogBox, Select, SelectT, Textfield } from '@terraware/web-components';
 import { Accession2 } from 'src/api/accessions2/accession';
 import { putViabilityTest, ViabilityTestPostRequest } from 'src/api/accessions2/viabilityTest';
@@ -27,6 +27,7 @@ import TooltipLearnMoreModal, {
   LearnMoreModalContentTreatment,
   TooltipLearnMoreModalData,
 } from 'src/components/TooltipLearnMoreModal';
+import AddLink from 'src/components/common/AddLink';
 
 export interface NewViabilityTestModalProps {
   open: boolean;
@@ -631,24 +632,16 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
                     justifyContent: 'space-between',
                   }}
                 >
-                  <Link
-                    component='button'
+                  <AddLink
                     id='addResultButton'
                     onClick={(event: React.SyntheticEvent) => {
                       preventDefaultEvent(event);
                       onAddResult();
                     }}
-                    sx={{
-                      textDecoration: 'none',
-                      fontSize: '16px',
-                      '&[disabled]': { color: `${theme.palette.TwClrBaseBlue600}80`, pointerEvents: 'none' },
-                      marginBottom: isMobile ? 1 : 0,
-                      display: isMobile ? 'block' : 'initial',
-                    }}
                     disabled={testCompleted || readOnly}
-                  >
-                    + {strings.ADD_OBSERVATION}
-                  </Link>
+                    large={true}
+                    text={strings.ADD_OBSERVATION}
+                  />
                   {record?.testResults && record.testResults.length > 0 && (
                     <Checkbox
                       label={strings.MARK_AS_COMPLETE}

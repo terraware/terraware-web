@@ -8,7 +8,7 @@ import { Geolocation } from 'src/api/types/accessions';
 import preventDefaultEvent from 'src/utils/preventDefaultEvent';
 import Coordinates from 'coordinate-parser';
 import _ from 'lodash';
-import Link from 'src/components/common/Link';
+import AddLink from 'src/components/common/AddLink';
 
 type Accession2GPSProps = {
   record: AccessionPostRequestBody;
@@ -78,9 +78,7 @@ export default function Accession2GPS(props: Accession2GPSProps): JSX.Element {
     return (
       <Grid item xs={12} marginTop={theme.spacing(2)}>
         <Box display='flex' justifyContent='flex-start'>
-          <Link id='addGPS' onClick={() => setIsOpen(true)} fontSize='16px'>
-            {strings.ADD_GPS_COORDINATES}
-          </Link>
+          <AddLink id='addGPS' onClick={() => setIsOpen(true)} large={true} text={strings.ADD_GPS_COORDINATES} />
         </Box>
       </Grid>
     );
@@ -117,7 +115,7 @@ export default function Accession2GPS(props: Accession2GPSProps): JSX.Element {
         </Box>
       ))}
       <Box display='flex' justifyContent='flex-end'>
-        <Link
+        <AddLink
           id='addGpsCoordsButton'
           onClick={(event?: React.SyntheticEvent) => {
             if (event) {
@@ -125,10 +123,9 @@ export default function Accession2GPS(props: Accession2GPSProps): JSX.Element {
             }
             onAddGpsCoords();
           }}
-          fontSize='16px'
-        >
-          + {strings.ADD}
-        </Link>
+          large={true}
+          text={strings.ADD}
+        />
       </Box>
     </Box>
   );
