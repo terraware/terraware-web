@@ -880,6 +880,7 @@ const strings = new LocalizedStrings({
     WITHDRAWAL_LOG: 'Withdrawal Log',
     TO_PLOT: 'To: Plot',
     REASSIGN: 'Reassign',
+    REASSIGNMENT: 'Reassignment',
     EDIT_PLANTING_SITE: 'Edit Planting Site',
     SPECIES_ERROR_SEARCH: "Couldn't load species list for search",
     WITHDRAWN_DATE: 'Withdrawn Date',

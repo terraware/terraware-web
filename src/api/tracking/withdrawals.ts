@@ -81,13 +81,13 @@ type NurseryWithdrawalResponse = {
   error?: string;
 };
 
-export const getNurseryWithdrawal = async (withdrawalId: number): Promise<NurseryWithdrawalResponse> => {
+export const getNurseryWithdrawal = async (withdrawalId: string): Promise<NurseryWithdrawalResponse> => {
   const response: NurseryWithdrawalResponse = {
     requestSucceeded: true,
   };
 
   try {
-    const endpoint = NURSERY_WITHDRAWAL_ENDPOINT.replace('{withdrawalId}', withdrawalId.toString());
+    const endpoint = NURSERY_WITHDRAWAL_ENDPOINT.replace('{withdrawalId}', withdrawalId);
     const serverResponse: GetNurseryWithdrawalResponsePayload = (await axios.get(endpoint)).data;
     if (serverResponse.status === 'error') {
       response.requestSucceeded = false;
