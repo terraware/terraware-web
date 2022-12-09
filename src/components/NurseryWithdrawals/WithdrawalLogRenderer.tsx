@@ -64,7 +64,7 @@ export default function WithdrawalLogRenderer(props: RendererProps<TableRowType>
   }
 
   if (column.key === 'hasReassignments') {
-    if (row.purpose === OUTPLANT) {
+    if (row.purpose === OUTPLANT && row.plotNames) {
       return (
         <>
           <CellRenderer

@@ -28,6 +28,11 @@ export type ReassignmentRendererProps = {
 
 export default function ReassignmentRenderer({ plots, zones }: ReassignmentRendererProps) {
   return function ReassignmentlCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
+    const { column } = props;
+
+    if (column.key === 'newPlot') {
+    }
+
     return <CellRenderer {...props} />;
   };
 }
