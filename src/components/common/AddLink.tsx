@@ -8,7 +8,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     fill: theme.palette.TwClrIcnBrand,
   },
   disabledIcon: {
-    fill: theme.palette.TwClrBaseGray300,
+    opacity: 0.5,
   },
   largeIcon: {
     height: '20px',
