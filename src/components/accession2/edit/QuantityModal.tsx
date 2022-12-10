@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import strings from 'src/strings';
 import Button from 'src/components/common/button/Button';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
-import { Box, Grid, Link, Theme, useTheme } from '@mui/material';
+import { Box, Grid, Theme, useTheme } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
 import { Accession2, updateAccession2 } from 'src/api/accessions2/accession';
 import useForm from 'src/utils/useForm';
@@ -11,6 +11,7 @@ import { Unit, WEIGHT_UNITS_V2 } from 'src/units';
 import useSnackbar from 'src/utils/useSnackbar';
 import CalculatorModal from './CalculatorModal';
 import { Dropdown } from '@terraware/web-components';
+import Link from 'src/components/common/Link';
 import EditState from './EditState';
 import _ from 'lodash';
 import { makeStyles } from '@mui/styles';
@@ -188,8 +189,8 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
           <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
             {!isCalculatorOpened ? (
               <Box display='flex' justifyContent='flex-start'>
-                <Link sx={{ textDecoration: 'none' }} href='#' id='addNotes' onClick={openCalculator}>
-                  {`${strings.WEIGHT_TO_COUNT_CALCULATOR} ->`}
+                <Link id='addNotes' onClick={openCalculator} fontSize='16px'>
+                  {`${strings.WEIGHT_TO_COUNT_CALCULATOR}`}
                 </Link>
               </Box>
             ) : null}

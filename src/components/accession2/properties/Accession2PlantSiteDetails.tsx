@@ -5,7 +5,7 @@ import { AccessionPostRequestBody } from 'src/api/accessions2/accession';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import Textfield from 'src/components/common/Textfield/Textfield';
 import { CollectionSource } from './';
-import Link from 'src/components/common/Link';
+import AddLink from 'src/components/common/AddLink';
 
 type Accession2PlantSiteDetailsProps = {
   record: AccessionPostRequestBody;
@@ -25,9 +25,12 @@ export default function Accession2PlantSiteDetails(props: Accession2PlantSiteDet
     return (
       <Grid item xs={12} marginTop={theme.spacing(2)}>
         <Box display='flex' justifyContent='flex-start'>
-          <Link id='addPlantSiteDescription' onClick={() => setIsOpen(true)} fontSize='16px'>
-            {strings.ADD_PLANT_SITE_DESCRIPTION}
-          </Link>
+          <AddLink
+            id='addPlantSiteDescription'
+            onClick={() => setIsOpen(true)}
+            large={true}
+            text={strings.ADD_PLANT_SITE_DESCRIPTION}
+          />
         </Box>
       </Grid>
     );

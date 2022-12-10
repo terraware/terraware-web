@@ -33,7 +33,16 @@ export default function TopBar(props: TopBarProps): JSX.Element {
 
   return (
     <AppBar position='fixed' className={classes.appBar}>
-      <Toolbar className={isDesktop ? undefined : classes.mobile}>
+      <Toolbar
+        className={isDesktop ? undefined : classes.mobile}
+        disableGutters={true}
+        sx={{
+          paddingBottom: '24px',
+          paddingTop: '24px',
+          paddingLeft: '32px',
+          paddingRight: '32px',
+        }}
+      >
         <div className={classes.flex}>{props.children}</div>
       </Toolbar>
     </AppBar>

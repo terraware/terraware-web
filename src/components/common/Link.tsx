@@ -11,6 +11,7 @@ export type LinkProps = {
   fontSize?: string | number;
   target?: string;
   id?: string;
+  disabled?: boolean;
 };
 
 type StyleProps = {
@@ -31,7 +32,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 export default function Link(props: LinkProps): JSX.Element {
-  const { to, children, className, onClick, fontSize, target, id } = props;
+  const { to, children, className, onClick, fontSize, target, id, disabled } = props;
   const classes = useStyles({ fontSize: fontSize || '14px' });
   const classNameToUse = `${classes.link} ${className || ''}`;
 
@@ -44,7 +45,17 @@ export default function Link(props: LinkProps): JSX.Element {
   }
 
   return (
-    <MuiLink component='button' className={classNameToUse} onClick={onClick} target={target} id={id}>
+    <MuiLink
+      component='button'
+      className={classNameToUse}
+      onClick={onClick}
+      target={target}
+      id={id}
+      disabled={disabled}
+      sx={{
+        opacity: disabled ? 0.5 : 1,
+      }}
+    >
       {children}
     </MuiLink>
   );

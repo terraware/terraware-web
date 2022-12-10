@@ -5,7 +5,7 @@ import { getCollectors } from 'src/api/seeds/search';
 import Autocomplete from 'src/components/common/Autocomplete';
 import strings from 'src/strings';
 import preventDefaultEvent from 'src/utils/preventDefaultEvent';
-import Link from 'src/components/common/Link';
+import AddLink from 'src/components/common/AddLink';
 
 interface Props {
   organizationId: number;
@@ -78,7 +78,7 @@ export default function Collectors2({ organizationId, id, collectors = [''], onC
         </Box>
       ))}
       <Box display='flex' justifyContent='flex-end'>
-        <Link
+        <AddLink
           id='addCollectorButton'
           onClick={(event?: React.SyntheticEvent) => {
             if (event) {
@@ -86,10 +86,9 @@ export default function Collectors2({ organizationId, id, collectors = [''], onC
             }
             onAddCollector();
           }}
-          fontSize='16px'
-        >
-          + {strings.ADD}
-        </Link>
+          large={true}
+          text={strings.ADD}
+        />
       </Box>
     </>
   );

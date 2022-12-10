@@ -560,7 +560,7 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
       <Box marginLeft={1} display='inline'>
         <Button
           id='more-options'
-          icon='iconMenuHorizontal'
+          icon='menuVertical'
           onClick={(event) => event && handleClickActionMenuButton(event)}
           priority='secondary'
           size='medium'
