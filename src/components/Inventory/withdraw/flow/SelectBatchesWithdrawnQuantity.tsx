@@ -249,7 +249,7 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
           paddingBottom: isMobile ? '185px' : '105px',
         }}
       >
-        <Grid container minWidth={isMobile ? 0 : 700}>
+        <Grid container minWidth={isMobile ? 0 : 700} sx={{ flexDirection: 'column' }}>
           <Grid item xs={12}>
             <Typography sx={{ fontSize: '20px', fontWeight: 'bold', margin: theme.spacing(4, 3, 3) }}>
               {strings.SELECT_BATCHES}

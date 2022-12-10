@@ -892,6 +892,8 @@ const strings = new LocalizedStrings({
     ZONE: 'Zone',
     ORIGINAL_PLOT: 'Original Plot',
     NEW_PLOT: 'New Plot',
+    NO_REASSIGNMENTS: 'No Reassignments',
+    NO_REASSIGNMENTS_TEXT: 'Select a new plot with quantity in at least one seedlings batch row.',
   },
 });
 
