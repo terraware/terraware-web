@@ -7,6 +7,7 @@ import { Delivery } from 'src/api/types/tracking';
 import { getDelivery } from 'src/api/tracking/deliveries';
 import { getPlantingSite } from 'src/api/tracking/tracking';
 import { getAllSpecies } from 'src/api/species/species';
+import { reassignPlantings } from 'src/api/tracking/deliveries';
 import useSnackbar from 'src/utils/useSnackbar';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import strings from 'src/strings';
@@ -18,6 +19,7 @@ import FormBottomBar from 'src/components/common/FormBottomBar';
 import ReassignmentRenderer, { Reassignment, PlotInfo } from './ReassignmentRenderer';
 import PageSnackbar from 'src/components/PageSnackbar';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
+import BusySpinner from 'src/components/common/BusySpinner';
 
 const columns: TableColumnType[] = [
   { key: 'species', name: strings.SPECIES, type: 'string' },
@@ -48,6 +50,7 @@ export default function NurseryReassignment(props: NurseryReassignmentProps): JS
   const [siteName, setSiteName] = useState<string>();
   const [reassignments, setReassignments] = useState<{ [plotId: string]: Reassignment }>({});
   const [noReassignments, setNoReassignments] = useState<boolean>(false);
+  const [reassigning, setReassigning] = useState<boolean>(false);
   const contentRef = useRef(null);
 
   // populate map of species id to scientific name
@@ -121,16 +124,45 @@ export default function NurseryReassignment(props: NurseryReassignmentProps): JS
     history.push({ pathname: APP_PATHS.NURSERY_WITHDRAWALS });
   };
 
-  const reassign = () => {
+  const reassign = async () => {
     // get all reassignments that have a valid quantity
     setNoReassignments(false);
+    let hasErrors = false;
     const validReassignments = plantings
       .map((planting) => planting?.reassignment)
-      .filter((reassignment: any) => reassignment.quantity > 0 && !reassignment.error.quantity);
+      .filter((reassignment: any) => {
+        if (reassignment.error.quantity) {
+          hasErrors = true;
+          return false;
+        }
+        return Number(reassignment.quantity) > 0 && reassignment.newPlot;
+      });
+
+    if (hasErrors) {
+      return;
+    }
 
     if (!validReassignments.length) {
       setNoReassignments(true);
       return;
+    }
+
+    const request = {
+      reassignments: validReassignments.map((reassignment) => ({
+        fromPlantingId: reassignment!.plantingId,
+        numPlants: Number(reassignment!.quantity),
+        toPlotId: Number(reassignment!.newPlot!.id),
+        notes: reassignment?.notes,
+      })),
+    };
+
+    setReassigning(true);
+    const response = await reassignPlantings(delivery!.id, request);
+    setReassigning(false);
+    if (response.requestSucceeded) {
+      goToWithdrawals();
+    } else {
+      snackbar.toastError(response.error);
     }
   };
 
@@ -199,6 +231,7 @@ export default function NurseryReassignment(props: NurseryReassignmentProps): JS
           minWidth='fit-content'
           ref={contentRef}
         >
+          {reassigning && <BusySpinner withSkrim={true} />}
           <Card>
             <Table
               id='reassignments'

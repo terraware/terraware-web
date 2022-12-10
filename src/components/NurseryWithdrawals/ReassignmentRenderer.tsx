@@ -26,7 +26,7 @@ export type PlotInfo = {
 export type Reassignment = {
   plantingId: number;
   newPlot?: PlotInfo;
-  quantity?: number;
+  quantity?: string;
   notes?: string;
   error: object;
 };
@@ -50,7 +50,7 @@ export default function ReassignmentRenderer({ plots, setReassignment }: Reassig
 
     const otherPlots = plots
       .filter((otherPlot) => plot.id !== otherPlot.id)
-      .map((otherPlot) => ({ value: otherPlot.id, label: otherPlot.name }));
+      .map((otherPlot) => ({ ...otherPlot, value: otherPlot.id, label: otherPlot.name }));
 
     const onUpdateQuantity = (unused: string, value: any) => {
       if (value === '') {
@@ -63,7 +63,7 @@ export default function ReassignmentRenderer({ plots, setReassignment }: Reassig
       } else {
         reassignment.error.quantity = '';
       }
-      updateReassignment('quantity', quantityValue);
+      updateReassignment('quantity', value);
     };
 
     if (column.key === 'newPlot') {
@@ -92,7 +92,7 @@ export default function ReassignmentRenderer({ plots, setReassignment }: Reassig
       const value = (
         <Textfield
           id={`quantity_${plantingId}`}
-          type='number'
+          type='text'
           onChange={onUpdateQuantity}
           value={quantity}
           label={''}

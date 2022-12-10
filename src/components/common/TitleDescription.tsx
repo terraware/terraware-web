@@ -10,7 +10,7 @@ export default function TitleDescription({ title, description, style }: TitleDes
   const theme = useTheme();
 
   return (
-    <Box padding={theme.spacing(0, 0, 3, 3)} sx={style}>
+    <Box padding={theme.spacing(0, 0, 4, 3)} sx={style}>
       <Typography fontSize='24px' fontWeight={600} lineHeight='32px'>
         {title}
       </Typography>
