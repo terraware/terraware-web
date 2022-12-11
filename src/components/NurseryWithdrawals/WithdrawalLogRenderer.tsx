@@ -60,7 +60,7 @@ export default function WithdrawalLogRenderer(props: RendererProps<TableRowType>
   }
 
   if (column.key === 'plotNames' && value) {
-    return <CellRenderer index={index} column={column} value={getTruncated((value as string).split(','))} row={row} />;
+    return <CellRenderer index={index} column={column} value={getTruncated([value])} row={row} />;
   }
 
   if (column.key === 'withdrawnDate') {
