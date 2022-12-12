@@ -1,4 +1,5 @@
 import { Box, Grid, IconButton, Typography, useTheme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import { Button, Checkbox, DatePicker, DialogBox, Select, SelectT, Textfield } from '@terraware/web-components';
 import { Accession2 } from 'src/api/accessions2/accession';
 import { putViabilityTest, ViabilityTestPostRequest } from 'src/api/accessions2/viabilityTest';
@@ -29,6 +30,12 @@ import TooltipLearnMoreModal, {
 } from 'src/components/TooltipLearnMoreModal';
 import AddLink from 'src/components/common/AddLink';
 
+const useStyles = makeStyles(() => ({
+  checkbox: {
+    marginTop: 0,
+  },
+}));
+
 export interface NewViabilityTestModalProps {
   open: boolean;
   accession: Accession2;
@@ -41,6 +48,7 @@ export interface NewViabilityTestModalProps {
 
 export default function NewViabilityTestModal(props: NewViabilityTestModalProps): JSX.Element {
   const { onClose, open, accession, organization, user, reload, viabilityTest } = props;
+  const classes = useStyles();
 
   const [record, setRecord, onChange] = useForm(viabilityTest);
   const [users, setUsers] = useState<OrganizationUser[]>();
@@ -103,6 +111,13 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
 
     setRecord(initViabilityTest());
   }, [viabilityTest, setRecord, accession, user]);
+
+  useEffect(() => {
+    const newTestCompleted = viabilityTest?.endDate !== undefined;
+    if (newTestCompleted && !testCompleted) {
+      setTestCompleted(true);
+    }
+  }, [viabilityTest?.endDate, testCompleted]);
 
   const setIndividualError = (id: string, error?: string) => {
     setViabilityFieldsErrors((prev) => ({
@@ -646,10 +661,11 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
                     <Checkbox
                       label={strings.MARK_AS_COMPLETE}
                       onChange={(id, value) => markTestAsComplete(value)}
-                      id='markAsCompplete'
-                      name='markAsCompplete'
+                      id='markAsComplete'
+                      name='markAsComplete'
                       value={testCompleted}
                       disabled={readOnly}
+                      className={classes.checkbox}
                     />
                   )}
                 </Box>
