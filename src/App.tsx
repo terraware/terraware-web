@@ -663,7 +663,7 @@ export default function App() {
               )}
               {trackingEnabled && selectedOrganization && (
                 <Route exact path={APP_PATHS.NURSERY_WITHDRAWALS_DETAILS}>
-                  <NurseryWithdrawalsDetails organization={selectedOrganization} />
+                  <NurseryWithdrawalsDetails organization={selectedOrganization} species={species} />
                 </Route>
               )}
               {trackingEnabled && selectedOrganization && (
