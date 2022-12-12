@@ -76,6 +76,7 @@ export default function ReassignmentRenderer({ plots, setReassignment }: Reassig
               updateReassignment('newPlot', newPlotValue);
             }
           }}
+          isEqual={(option: any, selected: any) => option?.value === selected?.value}
           label={''}
           values={otherPlots}
           freeSolo={false}

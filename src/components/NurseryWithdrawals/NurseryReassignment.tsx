@@ -107,7 +107,7 @@ export default function NurseryReassignment(props: NurseryReassignmentProps): JS
         const zone = response.site.plantingZones?.find((otherZone) =>
           otherZone.plots?.some((plot) => plotIds.indexOf(plot.id) !== -1)
         );
-        if (!zone || !zone.plots) {
+        if (!zone) {
           return;
         }
         setPlots(zone.plots.map((plot) => ({ id: plot.id.toString(), name: plot.fullName })));
