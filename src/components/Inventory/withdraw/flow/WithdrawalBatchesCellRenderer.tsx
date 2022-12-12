@@ -3,7 +3,7 @@ import { makeStyles } from '@mui/styles';
 import { Box, Typography } from '@mui/material';
 import { APP_PATHS } from 'src/constants';
 import { CellRenderer, RendererProps, TableRowType } from '@terraware/web-components';
-import TextField from '@terraware/web-components/components/Textfield/Textfield';
+import { Textfield } from '@terraware/web-components';
 import Link from 'src/components/common/Link';
 
 const useStyles = makeStyles(() => ({
@@ -38,7 +38,7 @@ export default function WithdrawalBatchesCellRenderer(props: RendererProps<Table
     if (onRowClick) {
       return (
         <Box display='flex' alignItems={row.error[id] ? 'start' : 'center'}>
-          <TextField
+          <Textfield
             id={id}
             type='text'
             onChange={(_, newValue) => onRowClick(newValue as string)}
@@ -58,7 +58,7 @@ export default function WithdrawalBatchesCellRenderer(props: RendererProps<Table
   const createReadyOutplantInput = (iValue: React.ReactNode | unknown[]) => {
     if (onRowClick) {
       return (
-        <TextField
+        <Textfield
           id='readyQuantityWithdrawn'
           type='text'
           onChange={(_, newValue) => onRowClick(newValue as string)}

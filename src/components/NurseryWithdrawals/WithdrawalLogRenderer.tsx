@@ -44,19 +44,23 @@ export default function WithdrawalLogRenderer(props: RendererProps<TableRowType>
     );
   };
 
-  const getSpeciesScientificNames = (scienfiticNames: any) => {
+  const getTruncated = (inputValues: any) => {
     return (
       <TextTruncated
-        stringList={scienfiticNames}
+        stringList={inputValues}
         maxLengthPx={COLUMN_WIDTH}
         textStyle={{ fontSize: 14 }}
-        showAllStyle={{ padding: theme.spacing(2), fontSize: 16 }}
+        showAllStyle={{ padding: theme.spacing(2), fontSize: 14 }}
       />
     );
   };
 
   if (column.key === 'speciesScientificNames') {
-    return <CellRenderer index={index} column={column} value={getSpeciesScientificNames(value)} row={row} />;
+    return <CellRenderer index={index} column={column} value={getTruncated(value)} row={row} />;
+  }
+
+  if (column.key === 'plotNames' && value) {
+    return <CellRenderer index={index} column={column} value={getTruncated([value])} row={row} />;
   }
 
   if (column.key === 'withdrawnDate') {
@@ -64,7 +68,7 @@ export default function WithdrawalLogRenderer(props: RendererProps<TableRowType>
   }
 
   if (column.key === 'hasReassignments') {
-    if (row.purpose === OUTPLANT) {
+    if (row.purpose === OUTPLANT && row.plotNames) {
       return (
         <>
           <CellRenderer

@@ -31,7 +31,7 @@ export default function InventoryCellRenderer(props: RendererProps<TableRowType>
         stringList={nurseriesArray}
         maxLengthPx={COLUMN_WIDTH}
         textStyle={{ fontSize: 14 }}
-        showAllStyle={{ padding: theme.spacing(2), fontSize: 16 }}
+        showAllStyle={{ padding: theme.spacing(2), fontSize: 14 }}
       />
     );
   };

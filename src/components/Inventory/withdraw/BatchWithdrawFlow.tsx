@@ -1,4 +1,4 @@
-import { Box, CircularProgress, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { useHistory } from 'react-router-dom';
 import { theme } from '@terraware/web-components';
 import React, { useEffect, useState } from 'react';
@@ -16,6 +16,7 @@ import AddPhotos from './flow/AddPhotos';
 import SelectBatchesWithdrawnQuantity from './flow/SelectBatchesWithdrawnQuantity';
 import SelectPurposeForm from './flow/SelectPurposeForm';
 import TfMain from 'src/components/common/TfMain';
+import BusySpinner from 'src/components/common/BusySpinner';
 
 type FlowStates = 'purpose' | 'select batches' | 'photos';
 
@@ -183,40 +184,13 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
     }
   };
 
-  const getSpinner = (withBackground = false) => {
-    return (
-      <Box
-        sx={{
-          position: 'absolute',
-          left: 0,
-          right: 0,
-          top: 0,
-          bottom: 0,
-          backgroundColor: withBackground ? theme.palette.TwClrBgBrandGhostHover : 'none',
-          zIndex: 2000,
-        }}
-      >
-        <Box
-          display='flex'
-          justifyContent='center'
-          alignItems='center'
-          padding={theme.spacing(5)}
-          flexDirection='column'
-          height='100%'
-        >
-          <CircularProgress />
-        </Box>
-      </Box>
-    );
-  };
-
   if (!batches) {
-    return getSpinner();
+    return <BusySpinner />;
   }
 
   return (
     <TfMain>
-      {withdrawInProgress && getSpinner(true)}
+      {withdrawInProgress && <BusySpinner withSkrim={true} />}
       <Typography variant='h2' sx={{ fontSize: '24px', fontWeight: 'bold', paddingLeft: theme.spacing(3) }}>
         {strings.WITHDRAW_FROM_BATCHES}
       </Typography>

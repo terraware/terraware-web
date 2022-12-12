@@ -1,12 +1,13 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import { Box, CircularProgress, useTheme } from '@mui/material';
-import { Table, TableColumnType } from '@terraware/web-components';
+import { Box, CircularProgress, Grid, useTheme } from '@mui/material';
+import { ErrorBox, Table, TableColumnType } from '@terraware/web-components';
 import { ServerOrganization } from 'src/types/Organization';
-import { Delivery, Plot } from 'src/api/types/tracking';
+import { Delivery } from 'src/api/types/tracking';
 import { getDelivery } from 'src/api/tracking/deliveries';
 import { getPlantingSite } from 'src/api/tracking/tracking';
 import { getAllSpecies } from 'src/api/species/species';
+import { reassignPlantings } from 'src/api/tracking/deliveries';
 import useSnackbar from 'src/utils/useSnackbar';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import strings from 'src/strings';
@@ -15,12 +16,15 @@ import TfMain from 'src/components/common/TfMain';
 import TitleDescription from 'src/components/common/TitleDescription';
 import Card from 'src/components/common/Card';
 import FormBottomBar from 'src/components/common/FormBottomBar';
-import ReassignmentRenderer, { PlotsMap, ZonesMap } from './ReassignmentRenderer';
+import ReassignmentRenderer, { Reassignment, PlotInfo } from './ReassignmentRenderer';
+import PageSnackbar from 'src/components/PageSnackbar';
+import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
+import BusySpinner from 'src/components/common/BusySpinner';
 
 const columns: TableColumnType[] = [
   { key: 'species', name: strings.SPECIES, type: 'string' },
-  { key: 'plantingSite', name: strings.PLANTING_SITE, type: 'string' },
-  { key: 'zone', name: strings.ZONE, type: 'string' },
+  { key: 'siteName', name: strings.PLANTING_SITE, type: 'string' },
+  { key: 'zoneName', name: strings.ZONE, type: 'string' },
   { key: 'originalPlot', name: strings.ORIGINAL_PLOT, type: 'string' },
   { key: 'newPlot', name: strings.NEW_PLOT, type: 'string' },
   { key: 'numPlants', name: strings.QUANTITY, type: 'number' },
@@ -41,9 +45,13 @@ export default function NurseryReassignment(props: NurseryReassignmentProps): JS
   const [snackbar] = useState(useSnackbar());
   const [speciesMap, setSpeciesMap] = useState<{ [id: string]: string }>();
   const [delivery, setDelivery] = useState<Delivery>();
-  const [plots, setPlots] = useState<PlotsMap>();
-  const [zones, setZones] = useState<ZonesMap>();
+  const [plots, setPlots] = useState<PlotInfo[]>();
+  const [zoneName, setZoneName] = useState<string>();
   const [siteName, setSiteName] = useState<string>();
+  const [reassignments, setReassignments] = useState<{ [plotId: string]: Reassignment }>({});
+  const [noReassignments, setNoReassignments] = useState<boolean>(false);
+  const [reassigning, setReassigning] = useState<boolean>(false);
+  const contentRef = useRef(null);
 
   // populate map of species id to scientific name
   useEffect(() => {
@@ -96,27 +104,14 @@ export default function NurseryReassignment(props: NurseryReassignmentProps): JS
       const response = await getPlantingSite(delivery.plantingSiteId);
       if (response.requestSucceeded && response.site) {
         setSiteName(response.site.name);
-        const zoneList = response.site.plantingZones?.filter((zone) =>
-          zone.plots?.filter((plot) => plotIds.indexOf(plot.id) !== -1)
+        const zone = response.site.plantingZones?.find((otherZone) =>
+          otherZone.plots?.some((plot) => plotIds.indexOf(plot.id) !== -1)
         );
-        if (!zoneList?.length) {
+        if (!zone) {
           return;
         }
-        const zonesMap: ZonesMap = {};
-        setPlots(
-          zoneList.reduce((acc: any, zone: any) => {
-            const zonePlots = zone.plots;
-            if (zonePlots) {
-              zonePlots.forEach(
-                (plot: Plot) =>
-                  (zonesMap[plot.id.toString()] = { id: zone.id, name: zone.name, plotName: plot.fullName })
-              );
-              acc[zone.id.toString()] = zonePlots.map((plot: Plot) => ({ id: plot.id, fullName: plot.fullName }));
-            }
-            return acc;
-          }, {})
-        );
-        setZones(zonesMap);
+        setPlots(zone.plots.map((plot) => ({ id: plot.id.toString(), name: plot.fullName })));
+        setZoneName(zone.name);
       } else {
         snackbar.toastError(response.error);
       }
@@ -129,9 +124,46 @@ export default function NurseryReassignment(props: NurseryReassignmentProps): JS
     history.push({ pathname: APP_PATHS.NURSERY_WITHDRAWALS });
   };
 
-  const reassign = () => {
-    // do nothing for now
-    return;
+  const reassign = async () => {
+    // get all reassignments that have a valid quantity
+    setNoReassignments(false);
+    let hasErrors = false;
+    const validReassignments = plantings
+      .map((planting) => planting?.reassignment)
+      .filter((reassignment: any) => {
+        if (reassignment.error.quantity) {
+          hasErrors = true;
+          return false;
+        }
+        return Number(reassignment.quantity) > 0 && reassignment.newPlot;
+      });
+
+    if (hasErrors) {
+      return;
+    }
+
+    if (!validReassignments.length) {
+      setNoReassignments(true);
+      return;
+    }
+
+    const request = {
+      reassignments: validReassignments.map((reassignment) => ({
+        fromPlantingId: reassignment!.plantingId,
+        numPlants: Number(reassignment!.quantity),
+        toPlotId: Number(reassignment!.newPlot!.id),
+        notes: reassignment?.notes,
+      })),
+    };
+
+    setReassigning(true);
+    const response = await reassignPlantings(delivery!.id, request);
+    setReassigning(false);
+    if (response.requestSucceeded) {
+      goToWithdrawals();
+    } else {
+      snackbar.toastError(response.error);
+    }
   };
 
   const plantings = useMemo(() => {
@@ -140,45 +172,71 @@ export default function NurseryReassignment(props: NurseryReassignmentProps): JS
     }
 
     return delivery.plantings
-      .filter((planting) => planting.type === 'Delivery' && planting.plotId)
       .map((planting) => {
-        if (!planting.plotId || !speciesMap || !zones) {
-          return planting;
+        if (planting.type !== 'Delivery' || !planting.plotId || !speciesMap) {
+          return null;
         }
+
+        const plot = plots?.find((plotInfo) => plotInfo.id === planting.plotId?.toString());
+        if (!plot) {
+          return null;
+        }
+
         return {
           ...planting,
-          species: speciesMap[planting.speciesId],
-          zone: zones[planting.plotId]?.name,
-          plantingSite: siteName,
-          originalPlot: zones[planting.plotId]?.plotName,
+          species: speciesMap![planting.speciesId],
+          zoneName,
+          siteName,
+          plot,
+          reassignment: reassignments[planting.id] || { plantingId: planting.id, error: {}, notes: '' },
         };
-      });
-  }, [delivery, siteName, speciesMap, zones]);
+      })
+      .filter((planting) => !!planting);
+  }, [delivery, siteName, speciesMap, zoneName, plots, reassignments]);
 
   const reassignmentRenderer = useMemo(
     () =>
       ReassignmentRenderer({
-        plots: plots || {},
-        zones: zones || {},
+        plots: plots || [],
+        setReassignment: (reassignment: Reassignment) =>
+          setReassignments((current) => {
+            const newReassignments = { ...current };
+            newReassignments[reassignment.plantingId] = reassignment;
+            return newReassignments;
+          }),
       }),
-    [plots, zones]
+    [plots]
   );
 
   return (
     <TfMain>
-      <TitleDescription title={strings.REASSIGN_SEEDLINGS} description={strings.REASSIGN_SEEDLINGS_DESCRIPTION} />
-      {zones ? (
+      <PageHeaderWrapper nextElement={contentRef.current}>
+        <TitleDescription title={strings.REASSIGN_SEEDLINGS} description={strings.REASSIGN_SEEDLINGS_DESCRIPTION} />
+      </PageHeaderWrapper>
+      <Grid item xs={12}>
+        <PageSnackbar />
+      </Grid>
+      {noReassignments && (
+        <Box sx={{ marginTop: 3, marginBottom: 3 }}>
+          <ErrorBox title={strings.NO_REASSIGNMENTS} text={strings.NO_REASSIGNMENTS_TEXT} />
+        </Box>
+      )}
+      {plots ? (
         <Box
           paddingBottom={isMobile ? '185px' : '105px'}
+          paddingRight={theme.spacing(3)}
           display='flex'
           flexDirection={isMobile ? 'row' : 'column'}
           marginTop={theme.spacing(3)}
+          minWidth='fit-content'
+          ref={contentRef}
         >
+          {reassigning && <BusySpinner withSkrim={true} />}
           <Card>
             <Table
               id='reassignments'
               columns={columns}
-              rows={plantings}
+              rows={plantings as any[]}
               Renderer={reassignmentRenderer}
               orderBy='species'
               showPagination={false}

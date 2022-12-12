@@ -3,8 +3,9 @@ import TextField from '@terraware/web-components/components/Textfield/Textfield'
 import { useCallback, useEffect, useRef, useState } from 'react';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
-import PageHeaderWrapper from '../common/PageHeaderWrapper';
-import TfMain from '../common/TfMain';
+import PageSnackbar from 'src/components/PageSnackbar';
+import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
+import TfMain from 'src/components/common/TfMain';
 import { makeStyles } from '@mui/styles';
 import { Table, TableColumnType } from '@terraware/web-components';
 import { listNurseryWithdrawals } from 'src/api/tracking/withdrawals';
@@ -276,6 +277,9 @@ export default function NurseryWithdrawals(props: NurseryWithdrawalsProps): JSX.
               </Grid>
             </Grid>
           </PageHeaderWrapper>
+          <Grid item xs={12}>
+            <PageSnackbar />
+          </Grid>
           <Grid
             container
             sx={{

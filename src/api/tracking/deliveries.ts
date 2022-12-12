@@ -56,9 +56,9 @@ type ReassignResponse = {
   error?: string;
 };
 
-export const reassignPlanting = async (
+export const reassignPlantings = async (
   deliveryId: number,
-  reassignment: ReassignPostRequestBody
+  reassignmentsRequest: ReassignPostRequestBody
 ): Promise<ReassignResponse> => {
   const response: ReassignResponse = {
     requestSucceeded: true,
@@ -66,7 +66,7 @@ export const reassignPlanting = async (
 
   try {
     const endpoint = REASSIGN_ENDPOINT.replace('{id}', deliveryId.toString());
-    const serverResponse: ReassignPostResponse = (await axios.post(endpoint, reassignment)).data;
+    const serverResponse: ReassignPostResponse = (await axios.post(endpoint, reassignmentsRequest)).data;
     if (serverResponse.status === 'error') {
       response.requestSucceeded = false;
       addError(serverResponse, response);
