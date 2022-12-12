@@ -1,27 +1,28 @@
 import { Link, useHistory, useParams } from 'react-router-dom';
 import { ServerOrganization } from 'src/types/Organization';
-import TfMain from '../common/TfMain';
+import TfMain from 'src/components/common/TfMain';
 import { Box, Tab, Theme, Typography, useTheme } from '@mui/material';
-import { APP_PATHS } from '../../constants';
+import { APP_PATHS } from 'src/constants';
 import { Button, Icon } from '@terraware/web-components';
-import strings from '../../strings';
-import PageSnackbar from '../PageSnackbar';
-import PageHeaderWrapper from '../common/PageHeaderWrapper';
+import strings from 'src/strings';
+import PageSnackbar from 'src/components/PageSnackbar';
+import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import { useEffect, useRef, useState } from 'react';
-import useDeviceInfo from '../../utils/useDeviceInfo';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { makeStyles } from '@mui/styles';
-import { getNurseryWithdrawal } from '../../api/tracking/withdrawals';
-import { Batch, NurseryWithdrawal } from '../../api/types/batch';
-import { Delivery } from '../../api/types/tracking';
-import useSnackbar from '../../utils/useSnackbar';
+import { getNurseryWithdrawal, listNurseryWithdrawals } from 'src/api/tracking/withdrawals';
+import { Batch, NurseryWithdrawal } from 'src/api/types/batch';
+import { Delivery } from 'src/api/types/tracking';
+import useSnackbar from 'src/utils/useSnackbar';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
-import useQuery from '../../utils/useQuery';
-import useStateLocation, { getLocation } from '../../utils/useStateLocation';
+import useQuery from 'src/utils/useQuery';
+import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import WithdrawalTabPanelContent from './WithdrawalDetails/WithdrawalTabPanelContent';
 import ReassignmentTabPanelContent from './WithdrawalDetails/ReassignmentTabPanelContent';
 import NurseryTransferContent from './WithdrawalDetails/NurseryTransferContent';
 import DeadContent from './WithdrawalDetails/DeadContent';
 import OtherContent from './WithdrawalDetails/OtherContent';
+import { Species } from 'src/types/Species';
 
 const useStyles = makeStyles((theme: Theme) => ({
   backIcon: {
@@ -42,11 +43,28 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 const TABS = ['withdrawal', 'reassignment'];
 
+export interface WithdrawalSummary {
+  id: string;
+  delivery_id: string;
+  withdrawnDate: string;
+  purpose: string;
+  facilityName: string;
+  destinationName: string;
+  plotNames: string;
+  scientificNames: string[];
+  totalWithdrawn: number;
+  hasReassignments: boolean;
+}
+
 type NurseryWithdrawalsDetailsProps = {
   organization: ServerOrganization;
+  species: Species[];
 };
 
-export default function NurseryWithdrawalsDetails({ organization }: NurseryWithdrawalsDetailsProps): JSX.Element {
+export default function NurseryWithdrawalsDetails({
+  organization,
+  species,
+}: NurseryWithdrawalsDetailsProps): JSX.Element {
   const classes = useStyles();
   const theme = useTheme();
   const { withdrawalId } = useParams<{ withdrawalId: string }>();
@@ -62,25 +80,52 @@ export default function NurseryWithdrawalsDetails({ organization }: NurseryWithd
   const [selectedTab, setSelectedTab] = useState(preselectedTab);
 
   const [withdrawal, setWithdrawal] = useState<NurseryWithdrawal | undefined>(undefined);
+  const [withdrawalSummary, setWithdrawalSummary] = useState<WithdrawalSummary | undefined>(undefined);
   const [delivery, setDelivery] = useState<Delivery | undefined>(undefined);
   const [batches, setBatches] = useState<Batch[] | undefined>(undefined);
   useEffect(() => {
     const updateWithdrawal = async () => {
-      const withdrawalResponse = await getNurseryWithdrawal(withdrawalId);
+      const withdrawalResponse = await getNurseryWithdrawal(Number(withdrawalId));
       if (!withdrawalResponse.requestSucceeded || withdrawalResponse.error) {
         setWithdrawal(undefined);
         setDelivery(undefined);
         setBatches(undefined);
-        snackbar.toastError(`An Error Occurred: ${withdrawalResponse.error}`);
+        snackbar.toastError(withdrawalResponse.error);
       } else {
         setWithdrawal(withdrawalResponse.withdrawal);
         setDelivery(withdrawalResponse.delivery);
         setBatches(withdrawalResponse.batches);
       }
+      // get summary information
+      const apiSearchResults = await listNurseryWithdrawals(organization.id, [
+        {
+          operation: 'field',
+          field: 'id',
+          type: 'Exact',
+          values: [withdrawalId],
+        },
+      ]);
+      if (apiSearchResults && apiSearchResults.length > 0) {
+        const withdrawalSummaryRecord = apiSearchResults[0];
+        setWithdrawalSummary({
+          id: withdrawalSummaryRecord.id as string,
+          delivery_id: withdrawalSummaryRecord.delivery_id as string,
+          withdrawnDate: withdrawalSummaryRecord.withdrawnDate as string,
+          purpose: withdrawalSummaryRecord.purpose as string,
+          facilityName: withdrawalSummaryRecord.facilityName as string,
+          destinationName: withdrawalSummaryRecord.destinationName as string,
+          plotNames: withdrawalSummaryRecord.plotNames as string,
+          scientificNames: withdrawalSummaryRecord.speciesScientificNames as string[],
+          totalWithdrawn: Number(withdrawalSummaryRecord.totalWithdrawn),
+          hasReassignments: Boolean(withdrawalSummaryRecord.hasReassignments),
+        });
+      }
     };
 
     updateWithdrawal();
-  }, [withdrawalId, snackbar]);
+  }, [organization.id, withdrawalId, snackbar]);
+
+  console.log(withdrawalSummary);
 
   useEffect(() => {
     setSelectedTab((query.get('tab') || 'withdrawal') as string);
@@ -128,7 +173,13 @@ export default function NurseryWithdrawalsDetails({ organization }: NurseryWithd
               {withdrawal?.withdrawnDate}
             </Typography>
             {withdrawal?.purpose === 'Out Plant' && (
-              <Button size='medium' priority='secondary' onClick={() => undefined} label={strings.REASSIGN} />
+              <Button
+                size='medium'
+                priority='secondary'
+                onClick={() => undefined}
+                label={strings.REASSIGN}
+                disabled={withdrawalSummary?.hasReassignments}
+              />
             )}
           </Box>
           <PageSnackbar />
@@ -162,7 +213,9 @@ export default function NurseryWithdrawalsDetails({ organization }: NurseryWithd
             <TabPanel value='withdrawal' sx={contentPanelProps}>
               <WithdrawalTabPanelContent
                 organization={organization}
+                species={species}
                 withdrawal={withdrawal}
+                withdrawalSummary={withdrawalSummary}
                 delivery={delivery}
                 batches={batches}
               />

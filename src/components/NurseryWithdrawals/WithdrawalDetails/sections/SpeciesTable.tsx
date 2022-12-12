@@ -1,9 +1,8 @@
 import { Table, TableColumnType } from '@terraware/web-components';
 import { useEffect, useState } from 'react';
 import strings from 'src/strings';
-import { Delivery } from '../../../../api/types/tracking';
-import { getSpecies } from '../../../../api/species/species';
-import { ServerOrganization } from '../../../../types/Organization';
+import { Delivery } from 'src/api/types/tracking';
+import { Species } from 'src/types/Species';
 
 const columns: TableColumnType[] = [
   { key: 'species', name: strings.SPECIES, type: 'string' },
@@ -12,24 +11,24 @@ const columns: TableColumnType[] = [
 ];
 
 type SpeciesTableSectionProps = {
-  organization: ServerOrganization;
+  species: Species[];
   delivery?: Delivery;
 };
 
-export default function SpeciesTable({ organization, delivery }: SpeciesTableSectionProps): JSX.Element {
+export default function SpeciesTable({ species, delivery }: SpeciesTableSectionProps): JSX.Element {
   const [rowData, setRowData] = useState<{ [p: string]: unknown }[]>([]);
 
   useEffect(() => {
     const rows: { [p: string]: unknown }[] = [];
-    delivery?.plantings?.forEach(async (planting) => {
+    delivery?.plantings?.forEach((planting) => {
       rows.push({
-        species: (await getSpecies(planting.speciesId, organization.id.toString()))?.species?.scientificName ?? '',
+        species: species?.find((sp) => sp?.id === planting?.speciesId)?.scientificName ?? '',
         to_plot: planting.plotId?.toString(),
         quantity: planting.numPlants.toString(),
       });
     });
     setRowData(rows);
-  }, [delivery, organization]);
+  }, [delivery, species]);
 
   return <Table id='withdrawal-details-species' columns={columns} rows={rowData} orderBy={'name'} />;
 }
