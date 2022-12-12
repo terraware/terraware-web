@@ -125,8 +125,6 @@ export default function NurseryWithdrawalsDetails({
     updateWithdrawal();
   }, [organization.id, withdrawalId, snackbar]);
 
-  console.log(withdrawalSummary);
-
   useEffect(() => {
     setSelectedTab((query.get('tab') || 'withdrawal') as string);
   }, [query]);
