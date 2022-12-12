@@ -1,12 +1,11 @@
 import React from 'react';
 import Title from '../common/Title';
-import { Link } from 'react-router-dom';
 import { SelectedOrgInfo, ServerOrganization } from 'src/types/Organization';
 import PageSnackbar from 'src/components/PageSnackbar';
 import { Container, Grid, Box, Typography, Theme, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { Icon } from '@terraware/web-components';
 import strings from '../../strings';
+import BackToLink from 'src/components/common/BackToLink';
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
@@ -36,17 +35,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   back: {
     marginBottom: theme.spacing(3),
   },
-  backIcon: {
-    fill: theme.palette.TwClrIcnBrand,
-    marginRight: '4px',
-  },
   backToAccessions: {
-    fontSize: '14px',
-    fontWeight: 500,
-    display: 'flex',
-    textDecoration: 'none',
-    color: theme.palette.TwClrTxtBrand,
-    alignItems: 'center',
     marginLeft: 0,
     marginBottom: theme.spacing(3),
   },
@@ -102,10 +91,13 @@ export default function PageHeader({
       <Grid container spacing={0} className={classes.container}>
         <Grid item xs={12}>
           {back && backUrl && (
-            <Link id='back' to={backUrl} className={classes.backToAccessions} replace={back}>
-              <Icon name='caretLeft' className={classes.backIcon} size='small' />
-              {strings.ACCESSIONS}
-            </Link>
+            <BackToLink
+              id='back'
+              to={backUrl}
+              className={classes.backToAccessions}
+              replace={back}
+              name={strings.ACCESSIONS}
+            />
           )}
         </Grid>
         {page && parentPage && title && (

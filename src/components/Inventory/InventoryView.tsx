@@ -1,8 +1,6 @@
-import { useTheme, Grid, Theme, Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { useTheme, Grid, Typography } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
-import { Link, useHistory, useParams } from 'react-router-dom';
-import { Icon } from '@terraware/web-components';
+import { useHistory, useParams } from 'react-router-dom';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
 import TfMain from 'src/components/common/TfMain';
@@ -13,21 +11,7 @@ import { Species } from 'src/types/Species';
 import useQuery from '../../utils/useQuery';
 import useStateLocation, { getLocation } from '../../utils/useStateLocation';
 import PageHeaderWrapper from '../common/PageHeaderWrapper';
-
-const useStyles = makeStyles((theme: Theme) => ({
-  backIcon: {
-    fill: theme.palette.TwClrIcnBrand,
-    marginRight: theme.spacing(1),
-  },
-  back: {
-    display: 'flex',
-    textDecoration: 'none',
-    color: theme.palette.TwClrTxtBrand,
-    fontSize: '14px',
-    fontWeight: 500,
-    alignItems: 'center',
-  },
-}));
+import BackToLink from 'src/components/common/BackToLink';
 
 interface InventoryViewProps {
   organization: ServerOrganization;
@@ -44,8 +28,6 @@ export default function InventoryView(props: InventoryViewProps): JSX.Element {
   const [inventorySpecies, setInventorySpecies] = useState<Species>();
   const [modified, setModified] = useState<number>(Date.now());
   const contentRef = useRef(null);
-
-  const classes = useStyles();
   const theme = useTheme();
 
   useEffect(() => {
@@ -76,10 +58,7 @@ export default function InventoryView(props: InventoryViewProps): JSX.Element {
   return (
     <TfMain>
       <PageHeaderWrapper nextElement={contentRef.current}>
-        <Link id='back' to={APP_PATHS.INVENTORY} className={classes.back}>
-          <Icon name='caretLeft' className={classes.backIcon} size='small' />
-          {strings.INVENTORY}
-        </Link>
+        <BackToLink id='back' name={strings.INVENTORY} to={APP_PATHS.INVENTORY} />
         <Grid container>
           <Typography
             sx={{

@@ -1,9 +1,9 @@
-import { Link, useHistory, useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { ServerOrganization } from 'src/types/Organization';
 import TfMain from 'src/components/common/TfMain';
 import { Box, Tab, Theme, Typography, useTheme } from '@mui/material';
 import { APP_PATHS } from 'src/constants';
-import { Button, Icon } from '@terraware/web-components';
+import { Button } from '@terraware/web-components';
 import strings from 'src/strings';
 import PageSnackbar from 'src/components/PageSnackbar';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
@@ -23,19 +23,10 @@ import NurseryTransferContent from './WithdrawalDetails/NurseryTransferContent';
 import DeadContent from './WithdrawalDetails/DeadContent';
 import OtherContent from './WithdrawalDetails/OtherContent';
 import { Species } from 'src/types/Species';
+import BackToLink from 'src/components/common/BackToLink';
 
 const useStyles = makeStyles((theme: Theme) => ({
-  backIcon: {
-    fill: theme.palette.TwClrIcnBrand,
-    marginRight: '4px',
-  },
   backToWithdrawals: {
-    fontSize: '14px',
-    fontWeight: 500,
-    display: 'flex',
-    textDecoration: 'none',
-    color: theme.palette.TwClrTxtBrand,
-    alignItems: 'center',
     marginLeft: 0,
     marginTop: theme.spacing(2),
   },
@@ -156,10 +147,12 @@ export default function NurseryWithdrawalsDetails({
       <PageHeaderWrapper nextElement={contentRef.current} nextElementInitialMargin={-24}>
         <Box marginBottom={theme.spacing(4)}>
           <Box>
-            <Link id='back' to={APP_PATHS.NURSERY_WITHDRAWALS} className={classes.backToWithdrawals}>
-              <Icon name='caretLeft' className={classes.backIcon} size='small' />
-              {strings.WITHDRAWAL_LOG}
-            </Link>
+            <BackToLink
+              id='back'
+              to={APP_PATHS.NURSERY_WITHDRAWALS}
+              className={classes.backToWithdrawals}
+              name={strings.WITHDRAWAL_LOG}
+            />
           </Box>
           <Box
             padding={isMobile ? theme.spacing(3, 0, 4, 0) : theme.spacing(3, 3, 4, 3)}
