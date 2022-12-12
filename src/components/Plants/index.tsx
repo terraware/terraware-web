@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { ServerOrganization } from 'src/types/Organization';
 import strings from 'src/strings';
 import TfMain from 'src/components/common/TfMain';
@@ -12,6 +12,8 @@ import useSnackbar from 'src/utils/useSnackbar';
 import { APP_PATHS } from 'src/constants';
 import PlantingSiteDetails from './PlantingSiteDetails';
 import { getPreferences, updatePreferences } from 'src/api/preferences/preferences';
+import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
+import PageSnackbar from 'src/components/PageSnackbar';
 
 type PlantsDashboardProps = {
   organization: ServerOrganization;
@@ -27,6 +29,7 @@ export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Elemen
   const history = useHistory();
   const [snackbar] = useState(useSnackbar());
   const [plantsDashboardPreferences, setPlantsDashboardPreferences] = useState<{ [key: string]: unknown }>();
+  const contentRef = useRef(null);
 
   useEffect(() => {
     const populatePlantingSites = async () => {
@@ -99,40 +102,55 @@ export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Elemen
 
   return (
     <TfMain>
-      <Grid item xs={12} display={isMobile ? 'block' : 'flex'} paddingLeft={theme.spacing(3)}>
-        <Typography sx={{ fontSize: '24px', fontWeight: 600, alignItems: 'center' }}>{strings.DASHBOARD}</Typography>
-        {plantingSites.length > 0 && (
-          <>
-            {!isMobile && (
-              <Box
-                sx={{
-                  margin: theme.spacing(0, 2),
-                  width: '1px',
-                  height: '32px',
-                  backgroundColor: theme.palette.TwClrBgTertiary,
-                }}
-              />
-            )}
-            <Box display='flex' alignItems='center' paddingTop={isMobile ? 2 : 0}>
-              <Typography sx={{ paddingRight: 1, fontSize: '16px', fontWeight: 500 }}>
-                {strings.PLANTING_SITE}
-              </Typography>
-              <Select
-                options={plantingSites.map((ps) => ps?.name || '')}
-                onChange={onChangePlantingSite}
-                selectedValue={selectedPlantingSite?.name}
-                placeholder={strings.SELECT}
-              />
-            </Box>
-          </>
-        )}
+      <PageHeaderWrapper nextElement={contentRef.current}>
+        <Grid
+          item
+          xs={12}
+          display={isMobile ? 'block' : 'flex'}
+          paddingLeft={theme.spacing(3)}
+          marginBottom={theme.spacing(4)}
+        >
+          <Typography sx={{ fontSize: '24px', fontWeight: 600, alignItems: 'center' }}>{strings.DASHBOARD}</Typography>
+          {plantingSites.length > 0 && (
+            <>
+              {!isMobile && (
+                <Box
+                  sx={{
+                    margin: theme.spacing(0, 2),
+                    width: '1px',
+                    height: '32px',
+                    backgroundColor: theme.palette.TwClrBgTertiary,
+                  }}
+                />
+              )}
+              <Box display='flex' alignItems='center' paddingTop={isMobile ? 2 : 0}>
+                <Typography sx={{ paddingRight: 1, fontSize: '16px', fontWeight: 500 }}>
+                  {strings.PLANTING_SITE}
+                </Typography>
+                <Select
+                  options={plantingSites.map((ps) => ps?.name || '')}
+                  onChange={onChangePlantingSite}
+                  selectedValue={selectedPlantingSite?.name}
+                  placeholder={strings.SELECT}
+                />
+              </Box>
+            </>
+          )}
+        </Grid>
+      </PageHeaderWrapper>
+      <Grid item xs={12}>
+        <PageSnackbar />
       </Grid>
-      <PlantingSiteDetails
-        plantingSite={selectedPlantingSite}
-        updatePlotPreferences={(plotId) => updatePlantsDashboardPreferences({ ...plantsDashboardPreferences, plotId })}
-        lastPlot={plantsDashboardPreferences?.plotId}
-        organization={organization}
-      />
+      <Box ref={contentRef}>
+        <PlantingSiteDetails
+          plantingSite={selectedPlantingSite}
+          updatePlotPreferences={(plotId) =>
+            updatePlantsDashboardPreferences({ ...plantsDashboardPreferences, plotId })
+          }
+          lastPlot={plantsDashboardPreferences?.plotId}
+          organization={organization}
+        />
+      </Box>
     </TfMain>
   );
 }

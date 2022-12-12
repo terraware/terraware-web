@@ -104,7 +104,7 @@ export default function PlantingSiteDetails(props: PlantingSiteDetailsProps): JS
   }, [plantingSite]);
 
   return (
-    <Grid container display='flex' marginTop={6} flexGrow={1}>
+    <Grid container display='flex' flexGrow={1}>
       <Grid item xs={isMobile ? 12 : 8} sx={mapCardStyle}>
         <PlantingSiteDashboardMap plots={plotsWithPlants} siteId={plantingSite?.id} organization={organization} />
       </Grid>
