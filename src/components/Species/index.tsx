@@ -1,15 +1,4 @@
-import {
-  Box,
-  Container,
-  Grid,
-  IconButton,
-  MenuItem,
-  MenuList,
-  Popover,
-  Theme,
-  Typography,
-  useTheme,
-} from '@mui/material';
+import { Box, Container, Grid, IconButton, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useRecoilState } from 'recoil';
@@ -50,6 +39,8 @@ import TooltipLearnMoreModal, {
   TooltipLearnMoreModalData,
 } from 'src/components/TooltipLearnMoreModal';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
+import PopoverMenu from '../common/PopoverMenu';
+import { DropdownItem } from '@terraware/web-components/components/Dropdown';
 
 type SpeciesListProps = {
   organization: ServerOrganization;
@@ -110,9 +101,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   icon: {
     fill: theme.palette.TwClrIcnSecondary,
   },
-  actionMenuIcon: {
-    fill: theme.palette.TwClrTxtBrand,
-  },
   headerIconContainer: {
     marginLeft: '12px',
   },
@@ -129,7 +117,6 @@ type SpeciesCS = Species & { conservationStatus?: string };
 
 export default function SpeciesList({ organization, reloadData, species }: SpeciesListProps): JSX.Element {
   const classes = useStyles();
-  const theme = useTheme();
   const [selectedSpecies, setSelectedSpecies] = useState<Species>();
   const [selectedSpeciesRows, setSelectedSpeciesRows] = useState<Species[]>([]);
   const [editSpeciesModalOpen, setEditSpeciesModalOpen] = useState(false);
@@ -543,16 +530,32 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
     columns,
   ]);
 
-  const [actionMenuAnchorEl, setActionMenuAnchorEl] = React.useState<HTMLButtonElement | null>(null);
-  const actionMenuOpen = Boolean(actionMenuAnchorEl);
-  const actionMenuId = actionMenuOpen ? 'simple-popover' : undefined;
+  const [actionMenuAnchorEl, setActionMenuAnchorEl] = React.useState<HTMLElement | null>(null);
 
-  const handleClickActionMenuButton = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClickActionMenuButton = (event: React.MouseEvent<HTMLElement>) => {
     setActionMenuAnchorEl(event.currentTarget);
   };
 
   const handleCloseActionMenu = () => {
     setActionMenuAnchorEl(null);
+  };
+
+  const onItemClick = (selectedItem: DropdownItem) => {
+    switch (selectedItem.value) {
+      case 'checkData': {
+        handleCloseActionMenu();
+        onCheckData();
+        break;
+      }
+      case 'import': {
+        handleCloseActionMenu();
+        onImportSpecies();
+        break;
+      }
+      default: {
+        handleCloseActionMenu();
+      }
+    }
   };
 
   const getHeaderButtons = () => (
@@ -566,46 +569,15 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
           size='medium'
         />
       </Box>
-
-      <Popover
-        id={actionMenuId}
-        open={actionMenuOpen}
-        anchorEl={actionMenuAnchorEl}
-        onClose={handleCloseActionMenu}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left',
-        }}
-      >
-        <MenuList sx={{ padding: theme.spacing(2, 0) }}>
-          <MenuItem
-            onClick={() => {
-              handleCloseActionMenu();
-              onCheckData();
-            }}
-            id='check-data'
-            sx={{ padding: theme.spacing(1, 2) }}
-          >
-            <Icon name='warning' className={classes.actionMenuIcon} />
-            <Typography color={theme.palette.TwClrTxtBrand} paddingLeft={1}>
-              {strings.CHECK_DATA}
-            </Typography>
-          </MenuItem>
-          <MenuItem
-            onClick={() => {
-              handleCloseActionMenu();
-              onImportSpecies();
-            }}
-            id='import-species'
-            sx={{ padding: theme.spacing(1, 2) }}
-          >
-            <Icon name='iconImport' className={classes.actionMenuIcon} />
-            <Typography color={theme.palette.TwClrTxtBrand} paddingLeft={1}>
-              {strings.IMPORT}
-            </Typography>
-          </MenuItem>
-        </MenuList>
-      </Popover>
+      <PopoverMenu
+        items={[
+          { label: strings.CHECK_DATA, value: 'checkData' },
+          { label: strings.IMPORT, value: 'import' },
+        ]}
+        handleClick={onItemClick}
+        anchorElement={actionMenuAnchorEl}
+        setAnchorElement={setActionMenuAnchorEl}
+      />
     </>
   );
 
