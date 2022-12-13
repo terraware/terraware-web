@@ -19,14 +19,14 @@ import { isInTheFuture } from '@terraware/web-components/utils';
 import { ServerOrganization } from 'src/types/Organization';
 import { APP_PATHS } from 'src/constants';
 import Divisor from 'src/components/common/Divisor';
-import { DatePicker, Dropdown, Textfield } from '@terraware/web-components';
+import { DatePicker, Dropdown, Textfield, DropdownItem } from '@terraware/web-components';
 import { getAllNurseries, isContributor } from 'src/utils/organization';
 import { listPlantingSites } from 'src/api/tracking/tracking';
-import { PlantingSite, Plot } from 'src/api/types/tracking';
+import { PlantingSite } from 'src/api/types/tracking';
 import useSnackbar from 'src/utils/useSnackbar';
-import { DropdownItem } from '@terraware/web-components/components/Dropdown';
 import FormBottomBar from 'src/components/common/FormBottomBar';
 import ErrorMessage from 'src/components/common/ErrorMessage';
+import PlotSelector from 'src/components/PlotSelector';
 
 const useStyles = makeStyles((theme: Theme) => ({
   withdrawnQuantity: {
@@ -71,8 +71,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const [notReadyQuantityWithdrawn, setNotReadyQuantityWithdrawn] = useState<number>();
   const [plantingSites, setPlantingSites] = useState<PlantingSite[]>([]);
   const [zones, setZones] = useState<any[]>([]);
-  const [plots, setPlots] = useState<any[]>([]);
-  const [zoneId, setZoneId] = useState<string | undefined>();
+  const [zoneId, setZoneId] = useState<number>();
   const [snackbar] = useState(useSnackbar());
   const [noReadySeedlings, setNoReadySeedlings] = useState<boolean>(false);
   const { isMobile } = useDeviceInfo();
@@ -116,38 +115,18 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const onChangePlantingSite = (value: string) => {
     updateField('plotId', undefined); // clear plot id when there's a new planting site id
     updateField('plantingSiteId', value);
-    setZoneId(undefined);
     const plantingSite = plantingSites.find((site) => site.id.toString() === value.toString());
-    if (!plantingSite) {
-      return;
-    }
-    if (plantingSite.plantingZones) {
-      setZones(
-        plantingSite.plantingZones.map((plantingZone) => ({
-          value: plantingZone.id.toString(),
-          label: plantingZone.name,
-          plots: plantingZone.plots,
-        }))
-      );
-    } else {
-      setZones([]);
-    }
-    setPlots([]);
+    setZones(plantingSite?.plantingZones || []);
+    setZoneId(undefined);
   };
 
-  const onChangePlantingZone = (value: string) => {
+  const onChangePlantingZone = (value: any) => {
+    setZoneId(value?.id);
     updateField('plotId', undefined); // clear plot id when there's a new planting zone id
-    setZoneId(value);
-    const plantingZone = zones.find((zone) => zone.value.toString() === value);
-    if (!plantingZone) {
-      setPlots([]);
-    }
-    setPlots(
-      plantingZone.plots.map((plot: Plot) => ({
-        label: plot.fullName || plot.name,
-        value: plot.id.toString(),
-      }))
-    );
+  };
+
+  const onChangePlot = (value: any) => {
+    updateField('plotId', value?.id);
   };
 
   const setIndividualError = (id: string, error?: string) => {
@@ -489,34 +468,13 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                     }
                   />
                 </Grid>
-                <Grid display='flex' margin={theme.spacing(1, 0, 2)} flexDirection={isMobile ? 'column' : 'row'}>
-                  <Grid xs={gridSize()} margin={theme.spacing(2, isMobile ? 0 : 2, 0, 0)}>
-                    <Dropdown
-                      id='plantingSiteId'
-                      placeholder={strings.SELECT}
-                      label={strings.PLANTING_ZONE}
-                      selectedValue={zoneId?.toString()}
-                      options={zones}
-                      onChange={(value) => onChangePlantingZone(value)}
-                      fullWidth={true}
-                      errorText={fieldsErrors.zoneId}
-                      disabled={!zones.length}
-                    />
-                  </Grid>
-                  <Grid xs={gridSize()} margin={theme.spacing(2, 0, 0)}>
-                    <Dropdown
-                      id='plantingSiteId'
-                      placeholder={strings.SELECT}
-                      label={strings.PLOT}
-                      selectedValue={localRecord.plotId?.toString()}
-                      options={plots}
-                      onChange={(value) => updateField('plotId', value)}
-                      fullWidth={true}
-                      errorText={fieldsErrors.plotId}
-                      disabled={!plots.length}
-                    />
-                  </Grid>
-                </Grid>
+                <PlotSelector
+                  zones={zones}
+                  onZoneSelected={onChangePlantingZone}
+                  onPlotSelected={onChangePlot}
+                  zoneError={fieldsErrors.zoneId}
+                  plotError={fieldsErrors.plotId}
+                />
               </>
             )}
             <Grid display='flex' flexDirection={isMobile ? 'column' : 'row'}>
