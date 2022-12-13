@@ -1,6 +1,6 @@
 import { IconButton, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { DropdownItem } from '@terraware/web-components/components/Dropdown';
+import { DropdownItem } from '@terraware/web-components';
 import React, { useState } from 'react';
 import { useHistory } from 'react-router';
 import Icon from 'src/components/common/icon/Icon';
@@ -65,9 +65,13 @@ export default function OrganizationsDropdown({
   };
 
   const changeOrganization = (selectedItem: DropdownItem) => {
-    const found = organizations?.find((org) => org.id.toString() === selectedItem.value);
-    if (found) {
-      selectOrganization(found);
+    if (selectedItem.value === '0') {
+      openNewOrganizationModal();
+    } else {
+      const found = organizations?.find((org) => org.id.toString() === selectedItem.value);
+      if (found) {
+        selectOrganization(found);
+      }
     }
   };
 
@@ -83,12 +87,11 @@ export default function OrganizationsDropdown({
         <Icon name='chevronDown' size='medium' className={classes.icon} />
       </IconButton>
       <PopoverMenu
-        items={
-          organizations?.map((organization) => ({ label: organization.name, value: organization.id.toString() })) || []
-        }
+        sections={[
+          organizations?.map((organization) => ({ label: organization.name, value: organization.id.toString() })) || [],
+          [{ label: strings.CREATE_NEW_ORGANIZATION, value: '0' }],
+        ]}
         handleClick={changeOrganization}
-        otherItems={[{ label: strings.CREATE_NEW_ORGANIZATION, value: '0' }]}
-        otherItemClick={openNewOrganizationModal}
         anchorElement={anchorEl}
         setAnchorElement={setAnchorEl}
       />

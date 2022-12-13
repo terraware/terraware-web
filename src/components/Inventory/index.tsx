@@ -23,7 +23,7 @@ import { downloadInventoryTemplate } from 'src/api/inventory/inventory';
 import ImportInventoryModal from './ImportInventoryModal';
 import { Button } from '@terraware/web-components';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
-import { DropdownItem } from '@terraware/web-components/components/Dropdown';
+import { DropdownItem } from '@terraware/web-components';
 import PopoverMenu from '../common/PopoverMenu';
 
 interface StyleProps {
@@ -277,7 +277,7 @@ export default function Inventory(props: InventoryProps): JSX.Element {
       </Box>
 
       <PopoverMenu
-        items={[{ label: strings.IMPORT, value: 'import' }]}
+        sections={[[{ label: strings.IMPORT, value: 'import' }]]}
         handleClick={onItemClick}
         anchorElement={actionMenuAnchorEl}
         setAnchorElement={setActionMenuAnchorEl}

@@ -52,7 +52,7 @@ import { downloadCsvTemplateHandler } from 'src/components/common/ImportModal';
 import { downloadAccessionsTemplate } from 'src/api/accessions2/accession';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import { updatePreferences } from 'src/api/preferences/preferences';
-import { DropdownItem } from '@terraware/web-components/components/Dropdown';
+import { DropdownItem } from '@terraware/web-components';
 import PopoverMenu from 'src/components/common/PopoverMenu';
 
 interface StyleProps {
@@ -522,10 +522,12 @@ export default function Database(props: DatabaseProps): JSX.Element {
       </Box>
 
       <PopoverMenu
-        items={[
-          { label: strings.IMPORT, value: 'import' },
-          { label: strings.EXPORT, value: 'export' },
-          { label: strings.CUSTOMIZE_TABLE_COLUMNS, value: 'tableColumns' },
+        sections={[
+          [
+            { label: strings.IMPORT, value: 'import' },
+            { label: strings.EXPORT, value: 'export' },
+            { label: strings.CUSTOMIZE_TABLE_COLUMNS, value: 'tableColumns' },
+          ],
         ]}
         handleClick={onItemClick}
         anchorElement={anchorEl}

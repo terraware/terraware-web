@@ -8,7 +8,7 @@ import { IconButton, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import useEnvironment from 'src/utils/useEnvironment';
 import PopoverMenu from './common/PopoverMenu';
-import { DropdownItem } from '@terraware/web-components/components/Dropdown';
+import { DropdownItem } from '@terraware/web-components';
 
 const useStyles = makeStyles((theme: Theme) => ({
   iconContainer: {
@@ -95,7 +95,7 @@ export default function UserMenu({ user, reloadUser, hasOrganizations }: UserMen
         <Icon name='chevronDown' size='medium' className={classes.chevronDown} />
       </IconButton>
       <PopoverMenu
-        items={getMenuItems()}
+        sections={[getMenuItems()]}
         handleClick={onItemClick}
         anchorElement={anchorEl}
         setAnchorElement={setAnchorEl}

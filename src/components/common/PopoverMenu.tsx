@@ -1,18 +1,16 @@
 import React from 'react';
 import { ListItem, MenuItem, MenuList, Popover, useTheme } from '@mui/material';
-import { DropdownItem } from '@terraware/web-components/components/Dropdown';
+import { DropdownItem } from '@terraware/web-components';
 
 type PopoverMenuProps = {
-  items: DropdownItem[] | [];
+  sections: DropdownItem[][];
   handleClick: (item: DropdownItem) => void;
-  otherItems?: DropdownItem[];
-  otherItemClick?: (item: DropdownItem) => void;
   anchorElement: HTMLElement | null;
   setAnchorElement: React.Dispatch<React.SetStateAction<HTMLElement | null>>;
 };
 
 export default function PopoverMenu(props: PopoverMenuProps): JSX.Element {
-  const { items, handleClick, anchorElement, setAnchorElement, otherItems, otherItemClick } = props;
+  const { sections, handleClick, anchorElement, setAnchorElement } = props;
   const theme = useTheme();
 
   const handleClose = () => {
@@ -54,31 +52,29 @@ export default function PopoverMenu(props: PopoverMenuProps): JSX.Element {
       }}
     >
       <MenuList sx={{ padding: 0 }}>
-        {items?.map((item, index) => {
-          return (
-            <MenuItem onClick={() => handleClick(item)} key={`option-${index}`} sx={itemStyles} disableRipple={true}>
-              {item.label}
-            </MenuItem>
-          );
+        {sections?.map((section, index) => {
+          let elements: JSX.Element[] = [];
+          if (index > 0) {
+            elements.push(<ListItem>---</ListItem>);
+          }
+          elements = [
+            ...elements,
+            ...section.map((item, index) => {
+              return (
+                <MenuItem
+                  onClick={() => handleClick(item)}
+                  key={`option-${index}`}
+                  sx={itemStyles}
+                  disableRipple={true}
+                >
+                  {item.label}
+                </MenuItem>
+              );
+            }),
+          ];
+          return elements;
         })}
       </MenuList>
-      {otherItems && otherItemClick && (
-        <>
-          <ListItem>---</ListItem>
-          {otherItems?.map((item, index) => {
-            return (
-              <MenuItem
-                onClick={() => otherItemClick(item)}
-                key={`other-option-${index}`}
-                sx={itemStyles}
-                disableRipple={true}
-              >
-                {item.label}
-              </MenuItem>
-            );
-          })}
-        </>
-      )}
     </Popover>
   );
 }

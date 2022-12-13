@@ -40,7 +40,7 @@ import TooltipLearnMoreModal, {
 } from 'src/components/TooltipLearnMoreModal';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import PopoverMenu from '../common/PopoverMenu';
-import { DropdownItem } from '@terraware/web-components/components/Dropdown';
+import { DropdownItem } from '@terraware/web-components';
 
 type SpeciesListProps = {
   organization: ServerOrganization;
@@ -570,9 +570,11 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
         />
       </Box>
       <PopoverMenu
-        items={[
-          { label: strings.CHECK_DATA, value: 'checkData' },
-          { label: strings.IMPORT, value: 'import' },
+        sections={[
+          [
+            { label: strings.CHECK_DATA, value: 'checkData' },
+            { label: strings.IMPORT, value: 'import' },
+          ],
         ]}
         handleClick={onItemClick}
         anchorElement={actionMenuAnchorEl}
