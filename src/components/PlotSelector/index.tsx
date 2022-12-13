@@ -28,19 +28,19 @@ export type PlotSelectorProps = {
   zones: ZoneInfo[];
   onPlotSelected: (plot?: PlotInfo) => void;
   onZoneSelected?: (zone?: ZoneInfo) => void;
-  initialSelectedPlotId?: number;
   zoneError?: string;
   plotError?: string;
   horizontalLayout?: boolean;
+  siteId?: string | number | undefined;
 };
 
 export default function PlotSelector(props: PlotSelectorProps): JSX.Element {
-  const { zones, onZoneSelected, onPlotSelected, initialSelectedPlotId, zoneError, plotError, horizontalLayout } =
-    props;
+  const { zones, onZoneSelected, onPlotSelected, zoneError, plotError, horizontalLayout, siteId } = props;
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const classes = useStyles();
 
+  const [siteKey, setSiteKey] = useState<string | number | undefined>();
   const [selectedZone, setSelectedZone] = useState<ZoneInfo>();
   const [selectedPlot, setSelectedPlot] = useState<PlotInfo>();
 
@@ -64,14 +64,10 @@ export default function PlotSelector(props: PlotSelectorProps): JSX.Element {
   };
 
   useEffect(() => {
-    let foundPlot;
-    const zoneWithPlot = zones.find((zone) => {
-      foundPlot = zone?.plots?.find((plot) => plot.id.toString() === initialSelectedPlotId?.toString());
-      return !!foundPlot;
-    });
-    setSelectedZone(zoneWithPlot);
-    setSelectedPlot(foundPlot);
-  }, [initialSelectedPlotId, zones]);
+    setSelectedZone(undefined);
+    setSelectedPlot(undefined);
+    setSiteKey(siteId);
+  }, [siteId]);
 
   const gridSize = () => (isMobile ? 12 : 6);
 
@@ -103,6 +99,7 @@ export default function PlotSelector(props: PlotSelectorProps): JSX.Element {
       >
         {horizontalLayout && horizontalLabel(strings.ZONE)}
         <Autocomplete
+          key={siteKey}
           id='zone'
           placeholder={strings.SELECT}
           label={horizontalLayout ? '' : strings.ZONE}
