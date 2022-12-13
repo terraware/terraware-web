@@ -42,7 +42,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   titleContainer: {
     display: 'flex',
     alignItems: 'center',
-    // paddingBottom: theme.spacing(2),
     paddingLeft: (props: StyleProps) => theme.spacing(props.isDesktop ? 3 : 0),
     paddingTop: (props: StyleProps) => theme.spacing(props.isMobile ? 2 : 0),
   },
