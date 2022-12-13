@@ -2,8 +2,10 @@ import React from 'react';
 import { ListItem, MenuItem, MenuList, Popover, useTheme } from '@mui/material';
 import { DropdownItem } from '@terraware/web-components';
 
+type Section = DropdownItem[];
+
 type PopoverMenuProps = {
-  sections: DropdownItem[][];
+  sections: Section[];
   handleClick: (item: DropdownItem) => void;
   anchorElement: HTMLElement | null;
   setAnchorElement: React.Dispatch<React.SetStateAction<HTMLElement | null>>;
