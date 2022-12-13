@@ -78,6 +78,7 @@ export default function ReassignmentRenderer({ plots, setReassignment }: Reassig
           }}
           isEqual={(option: any, selected: any) => option?.value === selected?.value}
           label={''}
+          placeholder={strings.SELECT}
           values={otherPlots}
           freeSolo={false}
           hideClearIcon={true}
