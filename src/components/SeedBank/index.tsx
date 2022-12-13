@@ -1,10 +1,9 @@
 import { Grid, Theme, Typography, useTheme } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { Link, useHistory, useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
-import Icon from '../common/icon/Icon';
 import { getAllSeedBanks } from 'src/utils/organization';
 import TextField from '../common/Textfield/Textfield';
 import Button from '../common/button/Button';
@@ -13,18 +12,9 @@ import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageSnackbar from 'src/components/PageSnackbar';
 import TfMain from '../common/TfMain';
+import BackToLink from 'src/components/common/BackToLink';
 
 const useStyles = makeStyles((theme: Theme) => ({
-  backIcon: {
-    fill: theme.palette.TwClrIcnBrand,
-    marginRight: theme.spacing(1),
-  },
-  back: {
-    display: 'flex',
-    textDecoration: 'none',
-    color: theme.palette.TwClrTxtBrand,
-    alignItems: 'center',
-  },
   titleWithButton: {
     display: 'flex',
     flexDirection: 'row',
@@ -74,12 +64,7 @@ export default function SeedBankDetails({ organization }: SeedBankDetailsProps):
     <TfMain>
       <Grid container padding={theme.spacing(0, 0, 4, 0)}>
         <Grid item xs={12} marginBottom={theme.spacing(3)}>
-          <Link id='back' to={APP_PATHS.SEED_BANKS} className={classes.back}>
-            <Icon name='caretLeft' className={classes.backIcon} size='small' />
-            <Typography fontSize='14px' fontWeight={500}>
-              {strings.SEED_BANKS}
-            </Typography>
-          </Link>
+          <BackToLink id='back' to={APP_PATHS.SEED_BANKS} name={strings.SEED_BANKS} />
         </Grid>
         <Grid item xs={12} padding={theme.spacing(0, 3)} className={classes.titleWithButton}>
           <Typography fontSize='20px' fontWeight={600} margin={0}>

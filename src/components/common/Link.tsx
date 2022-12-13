@@ -12,6 +12,7 @@ export type LinkProps = {
   target?: string;
   id?: string;
   disabled?: boolean;
+  replace?: boolean;
 };
 
 type StyleProps = {
@@ -32,13 +33,13 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 export default function Link(props: LinkProps): JSX.Element {
-  const { to, children, className, onClick, fontSize, target, id, disabled } = props;
+  const { to, children, className, onClick, fontSize, target, id, disabled, replace } = props;
   const classes = useStyles({ fontSize: fontSize || '14px' });
   const classNameToUse = `${classes.link} ${className || ''}`;
 
   if (to) {
     return (
-      <RouterLink to={to} className={classNameToUse} target={target} id={id}>
+      <RouterLink to={to} className={classNameToUse} target={target} id={id} replace={replace}>
         {children}
       </RouterLink>
     );

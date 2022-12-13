@@ -1,10 +1,9 @@
 import { Grid, Typography, useTheme } from '@mui/material';
 import { Theme } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { Link, useHistory, useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { getOrganizationUsers } from 'src/api/organization/organization';
 import Button from 'src/components/common/button/Button';
-import Icon from 'src/components/common/icon/Icon';
 import TextField from 'src/components/common/Textfield/Textfield';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
@@ -15,18 +14,10 @@ import { getDateDisplayValue } from '@terraware/web-components/utils';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageSnackbar from 'src/components/PageSnackbar';
 import TfMain from '../common/TfMain';
+import BackToLink from 'src/components/common/BackToLink';
 
 const useStyles = makeStyles((theme: Theme) => ({
-  backIcon: {
-    fill: theme.palette.TwClrIcnBrand,
-    marginRight: theme.spacing(1),
-  },
   back: {
-    display: 'flex',
-    textDecoration: 'none',
-    color: theme.palette.TwClrTxtBrand,
-    fontSize: '20px',
-    alignItems: 'center',
     marginBottom: theme.spacing(3),
   },
   titleWithButton: {
@@ -93,12 +84,7 @@ export default function PersonDetails({ organization }: PersonDetailsProps): JSX
     <TfMain>
       <Grid container padding={theme.spacing(0, 0, 4, 0)}>
         <Grid item xs={12}>
-          <Link id='back' to={APP_PATHS.PEOPLE} className={classes.back}>
-            <Icon name='caretLeft' className={classes.backIcon} size='small' />
-            <Typography fontSize='14px' fontWeight={500}>
-              {strings.PEOPLE}
-            </Typography>
-          </Link>
+          <BackToLink id='back' to={APP_PATHS.PEOPLE} className={classes.back} name={strings.PEOPLE} />
         </Grid>
         <Grid item xs={12} padding={theme.spacing(0, 3)} className={classes.titleWithButton}>
           <Grid item xs={9}>
