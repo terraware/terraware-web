@@ -1,30 +1,20 @@
 import TfMain from 'src/components/common/TfMain';
 import { Typography, Grid, Theme, useTheme } from '@mui/material';
-import { Button, Icon } from '@terraware/web-components';
+import { Button } from '@terraware/web-components';
 import strings from 'src/strings';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import { getPlantingSite } from 'src/api/tracking/tracking';
 import { APP_PATHS } from 'src/constants';
-import { Link, useHistory, useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 import { useEffect, useState } from 'react';
 import PageSnackbar from '../PageSnackbar';
 import { makeStyles } from '@mui/styles';
 import { PlantingSite } from 'src/api/types/tracking';
 import BoundariesAndPlots from './BoundariesAndPlots';
+import BackToLink from 'src/components/common/BackToLink';
 
 const useStyles = makeStyles((theme: Theme) => ({
-  backIcon: {
-    fill: theme.palette.TwClrIcnBrand,
-    marginRight: theme.spacing(1),
-  },
-  back: {
-    display: 'flex',
-    textDecoration: 'none',
-    color: theme.palette.TwClrTxtBrand,
-    fontSize: '14px',
-    alignItems: 'center',
-  },
   titleWithButton: {
     display: 'flex',
     flexDirection: 'row',
@@ -70,12 +60,7 @@ export default function PlantingSiteView(): JSX.Element {
     <TfMain>
       <Grid container padding={theme.spacing(0, 0, 4, 0)}>
         <Grid item xs={12} marginBottom={theme.spacing(3)}>
-          <Link id='back' to={APP_PATHS.PLANTING_SITES} className={classes.back}>
-            <Icon name='caretLeft' className={classes.backIcon} size='small' />
-            <Typography fontSize='14px' fontWeight={500}>
-              {strings.PLANTING_SITES}
-            </Typography>
-          </Link>
+          <BackToLink id='back' to={APP_PATHS.PLANTING_SITES} name={strings.PLANTING_SITES} />
         </Grid>
         <Grid item xs={12} padding={theme.spacing(0, 3)} className={classes.titleWithButton}>
           <Typography fontSize='20px' fontWeight={600}>

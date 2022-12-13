@@ -4,7 +4,7 @@ import { makeStyles } from '@mui/styles';
 import { Button, Icon } from '@terraware/web-components';
 import moment from 'moment';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Link, useHistory, useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { Accession2, getAccession2 } from 'src/api/accessions2/accession';
 import { checkIn } from 'src/api/seeds/accession';
 import strings from 'src/strings';
@@ -35,6 +35,7 @@ import _ from 'lodash';
 import PageHeaderWrapper from '../../common/PageHeaderWrapper';
 import { APP_PATHS } from 'src/constants';
 import OverviewItemCard from '../../common/OverviewItemCard';
+import BackToLink from 'src/components/common/BackToLink';
 
 const useStyles = makeStyles((theme: Theme) => ({
   iconStyle: {
@@ -50,10 +51,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   actionMenuButton: {
     marginLeft: theme.spacing(1),
   },
-  backIcon: {
-    fill: theme.palette.TwClrIcnBrand,
-    marginRight: '4px',
-  },
   addIconEnabled: {
     fill: theme.palette.TwClrIcnBrand,
     height: '20px',
@@ -65,12 +62,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     width: '20px',
   },
   backToAccessions: {
-    fontSize: '14px',
-    fontWeight: 500,
-    display: 'flex',
-    textDecoration: 'none',
-    color: theme.palette.TwClrTxtBrand,
-    alignItems: 'center',
     marginLeft: 0,
     marginTop: theme.spacing(2),
   },
@@ -457,10 +448,12 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
       <PageHeaderWrapper nextElement={contentRef.current} nextElementInitialMargin={-24}>
         <>
           <Box>
-            <Link id='back' to={APP_PATHS.ACCESSIONS} className={classes.backToAccessions}>
-              <Icon name='caretLeft' className={classes.backIcon} size='small' />
-              {strings.ACCESSIONS}
-            </Link>
+            <BackToLink
+              id='back'
+              to={APP_PATHS.ACCESSIONS}
+              className={classes.backToAccessions}
+              name={strings.ACCESSIONS}
+            />
           </Box>
           <Box padding={isMobile ? themeObj.spacing(3, 0, 4, 0) : themeObj.spacing(3, 3, 4, 3)}>
             <Typography color={themeObj.palette.TwClrTxt} fontSize='14px'>
