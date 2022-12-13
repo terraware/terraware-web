@@ -14,7 +14,16 @@ export interface Props {
 export default function SpeciesByPlotChart(props: Props): JSX.Element {
   const { plots, updatePlotPreferences, lastPlot } = props;
   const [selectedPlot, setSelectedPlot] = useState<PlantingSitesPlots>();
+  const [labels, setLabels] = useState<string[]>();
+  const [values, setValues] = useState<number[]>();
   const theme = useTheme();
+
+  React.useEffect(() => {
+    if (selectedPlot) {
+      setLabels(selectedPlot?.populations?.map((population) => population.species_scientificName));
+      setValues(selectedPlot?.populations?.map((population) => population.totalPlants));
+    }
+  }, [selectedPlot]);
 
   const onChangePlot = (newValue: string) => {
     if (plots) {
@@ -54,11 +63,7 @@ export default function SpeciesByPlotChart(props: Props): JSX.Element {
           </Box>
         )}
         <Box sx={{ height: '180px', marginTop: 2 }}>
-          <DashboardChart
-            chartId='speciesByPlotChart'
-            chartLabels={selectedPlot?.populations?.map((population) => population.species_scientificName)}
-            chartValues={selectedPlot?.populations?.map((population) => population.totalPlants)}
-          />
+          <DashboardChart chartId='speciesByPlotChart' chartLabels={labels} chartValues={values} />
         </Box>
       </Box>
     </>
