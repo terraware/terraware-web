@@ -99,7 +99,13 @@ export default function PageHeaderWrapper({ children, nextElement, nextElementIn
 
   const styles: Record<string, any> = {
     background: debouncedSticky ? theme.palette.TwClrBaseGray025 : undefined,
-    boxShadow: debouncedSticky ? `0px 3px 3px -3px ${theme.palette.TwClrBaseGray200}` : undefined,
+    borderBottom: debouncedSticky ? '1px solid' : '1px transparent',
+    borderImage: debouncedSticky
+      ? `linear-gradient(to right, ${theme.palette.TwClrBaseGray300}00,` +
+        `${theme.palette.TwClrBaseGray300}FF, ${theme.palette.TwClrBaseGray300}FF,` +
+        `${theme.palette.TwClrBaseGray300}FF, ${theme.palette.TwClrBaseGray300}00) 1`
+      : undefined,
+    boxShadow: 'none',
     paddingRight: debouncedSticky ? theme.spacing(4) : undefined,
     paddingTop: debouncedSticky ? theme.spacing(4) : undefined,
     position: debouncedSticky ? 'fixed' : undefined,
