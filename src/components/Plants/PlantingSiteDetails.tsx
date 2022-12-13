@@ -67,9 +67,19 @@ export default function PlantingSiteDetails(props: PlantingSiteDetailsProps): JS
             'populations.totalPlants',
           ],
           search: {
-            operation: 'field',
-            field: 'plantingSite_id',
-            values: [plantingSite.id],
+            operation: 'and',
+            children: [
+              {
+                operation: 'field',
+                field: 'plantingSite_id',
+                values: [plantingSite.id],
+              },
+              {
+                operation: 'field',
+                field: 'populations.species_organization_id',
+                values: [organization.id],
+              },
+            ],
           },
           count: 0,
         })) as unknown as PlantingSitesPlots[] | null;
@@ -101,7 +111,7 @@ export default function PlantingSiteDetails(props: PlantingSiteDetailsProps): JS
     };
 
     populateResults();
-  }, [plantingSite]);
+  }, [plantingSite, organization.id]);
 
   return (
     <Grid container display='flex' flexGrow={1}>
