@@ -52,7 +52,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
 
   const [record, setRecord, onChange] = useForm(viabilityTest);
   const [users, setUsers] = useState<OrganizationUser[]>();
-  const [testCompleted, setTestCompleted] = useState<boolean>(viabilityTest?.endDate !== undefined);
+  const [testCompleted, setTestCompleted] = useState<boolean>(false);
   const [totalSeedsTested, setTotalSeedsTested] = useState(0);
   const [openViabilityResultModal, setOpenViabilityResultModal] = useState(false);
   const [savedRecord, setSavedRecord] = useState<ViabilityTest>();
@@ -62,7 +62,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
   const [validateFields, setValidateFields] = useState<boolean>(false);
   const [viabilityFieldsErrors, setViabilityFieldsErrors] = useState<{ [key: string]: string | undefined }>({});
 
-  const readOnly = !!viabilityTest?.endDate;
+  const readOnly = !!viabilityTest?.endDate && !!(viabilityTest?.testResults && viabilityTest?.testResults?.length > 0);
   const { isMobile } = useDeviceInfo();
 
   const [tooltipLearnMoreModalOpen, setTooltipLearnMoreModalOpen] = useState(false);
@@ -114,10 +114,11 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
 
   useEffect(() => {
     const newTestCompleted = viabilityTest?.endDate !== undefined;
-    if (newTestCompleted && !testCompleted) {
+    const hasTestResults = viabilityTest?.testResults && viabilityTest?.testResults?.length > 0;
+    if (newTestCompleted && hasTestResults && !testCompleted) {
       setTestCompleted(true);
     }
-  }, [viabilityTest?.endDate, testCompleted]);
+  }, [viabilityTest?.endDate, viabilityTest?.testResults, testCompleted]);
 
   const setIndividualError = (id: string, error?: string) => {
     setViabilityFieldsErrors((prev) => ({
@@ -317,6 +318,10 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
       const updatedResults = [...record.testResults];
       updatedResults.splice(index, 1);
       onChange('testResults', updatedResults);
+      if (updatedResults.length === 0) {
+        onChange('endDate', undefined);
+        setTestCompleted(false);
+      }
     }
   };
 

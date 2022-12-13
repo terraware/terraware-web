@@ -97,7 +97,7 @@ export default function Renderer(props: RendererProps<TableRowType>): JSX.Elemen
       return getCutTestViabilityPercent(row);
     };
 
-    if (testType !== 'Cut' && (!row.endDate || row.viabilityPercent === undefined)) {
+    if (testType !== 'Cut' && (!row.endDate || row.viabilityPercent === undefined || !row.testResults?.length)) {
       return (
         <CellRenderer {...defaultProps} value={getValue(<Icon name='iconSynced' className={classes.syncIcon} />)} />
       );
