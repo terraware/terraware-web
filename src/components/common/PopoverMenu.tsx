@@ -61,11 +61,11 @@ export default function PopoverMenu(props: PopoverMenuProps): JSX.Element {
           }
           elements = [
             ...elements,
-            ...section.map((item, index) => {
+            ...section.map((item, itemIndex) => {
               return (
                 <MenuItem
                   onClick={() => handleClick(item)}
-                  key={`option-${index}`}
+                  key={`option-${itemIndex}`}
                   sx={itemStyles}
                   disableRipple={true}
                 >
