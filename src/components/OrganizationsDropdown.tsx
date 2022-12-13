@@ -1,5 +1,6 @@
-import { IconButton, List, ListItem, Popover, Theme } from '@mui/material';
+import { IconButton, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import { DropdownItem } from '@terraware/web-components';
 import React, { useState } from 'react';
 import { useHistory } from 'react-router';
 import Icon from 'src/components/common/icon/Icon';
@@ -7,6 +8,7 @@ import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
 import AddNewOrganizationModal from './AddNewOrganizationModal';
+import PopoverMenu from './common/PopoverMenu';
 
 const useStyles = makeStyles((theme: Theme) => ({
   iconContainer: {
@@ -41,9 +43,6 @@ export default function OrganizationsDropdown({
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
 
   const selectOrganization = (newlySelectedOrg: ServerOrganization) => {
     setSelectedOrganization((currentlySelectedOrg: ServerOrganization | undefined) => {
@@ -65,6 +64,17 @@ export default function OrganizationsDropdown({
     setNewOrganizationModalOpened(true);
   };
 
+  const changeOrganization = (selectedItem: DropdownItem) => {
+    if (selectedItem.value === '0') {
+      openNewOrganizationModal();
+    } else {
+      const found = organizations?.find((org) => org.id.toString() === selectedItem.value);
+      if (found) {
+        selectOrganization(found);
+      }
+    }
+  };
+
   return (
     <div>
       <AddNewOrganizationModal
@@ -76,34 +86,15 @@ export default function OrganizationsDropdown({
         <p>{selectedOrganization?.name}</p>
         <Icon name='chevronDown' size='medium' className={classes.icon} />
       </IconButton>
-      <Popover
-        id='simple-popover'
-        open={Boolean(anchorEl)}
-        anchorEl={anchorEl}
-        onClose={handleClose}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'center',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'center',
-        }}
-      >
-        <List id='organizations-popover'>
-          {organizations?.map((organization) => {
-            return (
-              <ListItem button onClick={() => selectOrganization(organization)} key={organization.id}>
-                {organization.name}
-              </ListItem>
-            );
-          })}
-          <ListItem>---</ListItem>
-          <ListItem button onClick={openNewOrganizationModal}>
-            {strings.CREATE_NEW_ORGANIZATION}
-          </ListItem>
-        </List>
-      </Popover>
+      <PopoverMenu
+        sections={[
+          organizations?.map((organization) => ({ label: organization.name, value: organization.id.toString() })) || [],
+          [{ label: strings.CREATE_NEW_ORGANIZATION, value: '0' }],
+        ]}
+        handleClick={changeOrganization}
+        anchorElement={anchorEl}
+        setAnchorElement={setAnchorEl}
+      />
     </div>
   );
 }

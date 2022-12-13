@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { User } from 'src/types/User';
 import strings from '../../src/strings';
 import Icon from './common/icon/Icon';
 import { APP_PATHS, TERRAFORMATION_PRIVACY_POLICY } from 'src/constants';
-import { IconButton, List, ListItem, Popover, Theme } from '@mui/material';
+import { IconButton, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import useEnvironment from 'src/utils/useEnvironment';
+import PopoverMenu from './common/PopoverMenu';
+import { DropdownItem } from '@terraware/web-components';
 
 const useStyles = makeStyles((theme: Theme) => ({
   iconContainer: {
@@ -26,11 +28,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     paddingLeft: '8px',
     color: theme.palette.TwClrTxt,
   },
-  popover: {
-    '& .MuiPaper-rounded': {
-      minWidth: '200px',
-    },
-  },
 }));
 
 type UserMenuProps = {
@@ -42,6 +39,7 @@ export default function UserMenu({ user, reloadUser, hasOrganizations }: UserMen
   const classes = useStyles();
   const { isProduction } = useEnvironment();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const history = useHistory();
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -54,6 +52,40 @@ export default function UserMenu({ user, reloadUser, hasOrganizations }: UserMen
     window.location.href = `/sso/logout`;
   };
 
+  const onItemClick = (selectedItem: DropdownItem) => {
+    switch (selectedItem.value) {
+      case 'privacyPolicy': {
+        handleClose();
+        window.open(TERRAFORMATION_PRIVACY_POLICY, '_blank');
+        break;
+      }
+      case 'logOut': {
+        handleClose();
+        onHandleLogout();
+        break;
+      }
+      default: {
+        handleClose();
+        history.push(selectedItem.value);
+        break;
+      }
+    }
+  };
+
+  const getMenuItems = () => {
+    const items: DropdownItem[] = [
+      { label: strings.MY_ACCOUNT, value: APP_PATHS.MY_ACCOUNT },
+      { label: strings.PRIVACY_POLICY, value: 'privacyPolicy' },
+      { label: strings.LOG_OUT, value: 'logOut' },
+    ];
+
+    if (!isProduction && hasOrganizations) {
+      items.splice(1, 0, { label: strings.OPT_IN, value: APP_PATHS.OPT_IN });
+    }
+
+    return items;
+  };
+
   return (
     <div>
       <IconButton onClick={handleClick} size='small' className={classes.iconContainer}>
@@ -62,45 +94,12 @@ export default function UserMenu({ user, reloadUser, hasOrganizations }: UserMen
         </span>
         <Icon name='chevronDown' size='medium' className={classes.chevronDown} />
       </IconButton>
-      <Popover
-        id='simple-popover'
-        open={Boolean(anchorEl)}
-        anchorEl={anchorEl}
-        onClose={handleClose}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'center',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'center',
-        }}
-        className={classes.popover}
-      >
-        <List id='notifications-popover'>
-          {hasOrganizations && (
-            <ListItem component={Link} to={APP_PATHS.MY_ACCOUNT} onClick={handleClose}>
-              {strings.MY_ACCOUNT}
-            </ListItem>
-          )}
-          {!isProduction && hasOrganizations && (
-            <ListItem component={Link} to={APP_PATHS.OPT_IN} onClick={handleClose}>
-              {strings.OPT_IN}
-            </ListItem>
-          )}
-          <ListItem
-            component={Link}
-            to={{ pathname: TERRAFORMATION_PRIVACY_POLICY }}
-            target='_blank'
-            onClick={handleClose}
-          >
-            {strings.PRIVACY_POLICY}
-          </ListItem>
-          <ListItem button onClick={onHandleLogout}>
-            {strings.LOG_OUT}
-          </ListItem>
-        </List>
-      </Popover>
+      <PopoverMenu
+        sections={[getMenuItems()]}
+        handleClick={onItemClick}
+        anchorElement={anchorEl}
+        setAnchorElement={setAnchorEl}
+      />
     </div>
   );
 }

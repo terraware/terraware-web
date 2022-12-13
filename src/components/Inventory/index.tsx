@@ -1,15 +1,4 @@
-import {
-  Box,
-  CircularProgress,
-  Container,
-  Grid,
-  MenuItem,
-  MenuList,
-  Popover,
-  Theme,
-  Typography,
-  useTheme,
-} from '@mui/material';
+import { Box, CircularProgress, Container, Grid, Theme, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
@@ -34,7 +23,8 @@ import { downloadInventoryTemplate } from 'src/api/inventory/inventory';
 import ImportInventoryModal from './ImportInventoryModal';
 import { Button } from '@terraware/web-components';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
-import Icon from '../common/icon/Icon';
+import { DropdownItem } from '@terraware/web-components';
+import PopoverMenu from '../common/PopoverMenu';
 
 interface StyleProps {
   isMobile: boolean;
@@ -251,16 +241,27 @@ export default function Inventory(props: InventoryProps): JSX.Element {
 
   const shouldShowTable = isOnboarded && unfilteredInventory && unfilteredInventory.length > 0;
 
-  const [actionMenuAnchorEl, setActionMenuAnchorEl] = React.useState<HTMLButtonElement | null>(null);
-  const actionMenuOpen = Boolean(actionMenuAnchorEl);
-  const actionMenuId = actionMenuOpen ? 'simple-popover' : undefined;
+  const [actionMenuAnchorEl, setActionMenuAnchorEl] = React.useState<HTMLElement | null>(null);
 
-  const handleClickActionMenuButton = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClickActionMenuButton = (event: React.MouseEvent<HTMLElement>) => {
     setActionMenuAnchorEl(event.currentTarget);
   };
 
   const handleCloseActionMenu = () => {
     setActionMenuAnchorEl(null);
+  };
+
+  const onItemClick = (selectedItem: DropdownItem) => {
+    switch (selectedItem.value) {
+      case 'import': {
+        handleCloseActionMenu();
+        setImportInventoryModalOpen(true);
+        break;
+      }
+      default: {
+        handleCloseActionMenu();
+      }
+    }
   };
 
   const getHeaderButtons = () => (
@@ -275,32 +276,12 @@ export default function Inventory(props: InventoryProps): JSX.Element {
         />
       </Box>
 
-      <Popover
-        id={actionMenuId}
-        open={actionMenuOpen}
-        anchorEl={actionMenuAnchorEl}
-        onClose={handleCloseActionMenu}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left',
-        }}
-      >
-        <MenuList sx={{ padding: theme.spacing(2, 0) }}>
-          <MenuItem
-            onClick={() => {
-              handleCloseActionMenu();
-              setImportInventoryModalOpen(true);
-            }}
-            id='import-species'
-            sx={{ padding: theme.spacing(1, 2) }}
-          >
-            <Icon name='iconImport' className={classes.actionMenuIcon} />
-            <Typography color={theme.palette.TwClrTxtBrand} paddingLeft={1}>
-              {strings.IMPORT}
-            </Typography>
-          </MenuItem>
-        </MenuList>
-      </Popover>
+      <PopoverMenu
+        sections={[[{ label: strings.IMPORT, value: 'import' }]]}
+        handleClick={onItemClick}
+        anchorElement={actionMenuAnchorEl}
+        setAnchorElement={setActionMenuAnchorEl}
+      />
     </>
   );
 
