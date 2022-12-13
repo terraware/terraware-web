@@ -13,7 +13,7 @@ import { Facility } from 'src/api/types/facilities';
 import { getPreferences, updatePreferences } from 'src/api/preferences/preferences';
 import SeedBankMonitoring from './SeedBankMonitoring';
 import Button from '../common/button/Button';
-import { Box, Grid, Theme, Typography } from '@mui/material';
+import { Box, Grid, Theme, Typography, useTheme } from '@mui/material';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageSnackbar from 'src/components/PageSnackbar';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
@@ -41,7 +41,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   titleContainer: {
     display: 'flex',
     alignItems: 'center',
-    paddingBottom: theme.spacing(2),
     paddingLeft: (props: StyleProps) => theme.spacing(props.isDesktop ? 3 : 0),
     paddingTop: (props: StyleProps) => theme.spacing(props.isMobile ? 2 : 0),
   },
@@ -70,6 +69,7 @@ type MonitoringProps = {
 export default function Monitoring(props: MonitoringProps): JSX.Element {
   const { isDesktop, isMobile } = useDeviceInfo();
   const classes = useStyles({ isDesktop, isMobile });
+  const theme = useTheme();
   const history = useHistory();
   const { organization, hasSeedBanks, reloadData } = props;
   const [selectedSeedBank, setSelectedSeedBank] = useState<Facility>();
@@ -152,8 +152,8 @@ export default function Monitoring(props: MonitoringProps): JSX.Element {
       <Grid container>
         {hasSeedBanks ? (
           <>
-            <PageHeaderWrapper nextElement={contentRef.current}>
-              <Grid item xs={12} className={isMobile ? '' : classes.titleRootContainer}>
+            <PageHeaderWrapper nextElement={contentRef.current} nextElementInitialMargin={-24}>
+              <Grid item xs={12} marginBottom={theme.spacing(4)} className={isMobile ? '' : classes.titleRootContainer}>
                 {isMobile ? (
                   <>
                     <Box display='flex'>
