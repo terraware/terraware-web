@@ -10,7 +10,7 @@ import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import { useEffect, useRef, useState } from 'react';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { makeStyles } from '@mui/styles';
-import { getNurseryWithdrawal, listNurseryWithdrawals } from 'src/api/tracking/withdrawals';
+import { getNurseryWithdrawal } from 'src/api/tracking/withdrawals';
 import { Batch, NurseryWithdrawal } from 'src/api/types/batch';
 import { Delivery } from 'src/api/types/tracking';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -43,19 +43,6 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 const TABS = ['withdrawal', 'reassignment'];
 
-export interface WithdrawalSummary {
-  id: string;
-  delivery_id: string;
-  withdrawnDate: string;
-  purpose: string;
-  facilityName: string;
-  destinationName: string;
-  plotNames: string;
-  scientificNames: string[];
-  totalWithdrawn: number;
-  hasReassignments: boolean;
-}
-
 type NurseryWithdrawalsDetailsProps = {
   organization: ServerOrganization;
   species: Species[];
@@ -80,7 +67,6 @@ export default function NurseryWithdrawalsDetails({
   const [selectedTab, setSelectedTab] = useState(preselectedTab);
 
   const [withdrawal, setWithdrawal] = useState<NurseryWithdrawal | undefined>(undefined);
-  const [withdrawalSummary, setWithdrawalSummary] = useState<WithdrawalSummary | undefined>(undefined);
   const [delivery, setDelivery] = useState<Delivery | undefined>(undefined);
   const [batches, setBatches] = useState<Batch[] | undefined>(undefined);
   useEffect(() => {
@@ -96,30 +82,6 @@ export default function NurseryWithdrawalsDetails({
         setDelivery(withdrawalResponse.delivery);
         setBatches(withdrawalResponse.batches);
       }
-      // get summary information
-      const apiSearchResults = await listNurseryWithdrawals(organization.id, [
-        {
-          operation: 'field',
-          field: 'id',
-          type: 'Exact',
-          values: [withdrawalId],
-        },
-      ]);
-      if (apiSearchResults && apiSearchResults.length > 0) {
-        const withdrawalSummaryRecord = apiSearchResults[0];
-        setWithdrawalSummary({
-          id: withdrawalSummaryRecord.id as string,
-          delivery_id: withdrawalSummaryRecord.delivery_id as string,
-          withdrawnDate: withdrawalSummaryRecord.withdrawnDate as string,
-          purpose: withdrawalSummaryRecord.purpose as string,
-          facilityName: withdrawalSummaryRecord.facilityName as string,
-          destinationName: withdrawalSummaryRecord.destinationName as string,
-          plotNames: withdrawalSummaryRecord.plotNames as string,
-          scientificNames: withdrawalSummaryRecord.speciesScientificNames as string[],
-          totalWithdrawn: Number(withdrawalSummaryRecord.totalWithdrawn),
-          hasReassignments: Boolean(withdrawalSummaryRecord.hasReassignments),
-        });
-      }
     };
 
     updateWithdrawal();
@@ -128,6 +90,12 @@ export default function NurseryWithdrawalsDetails({
   useEffect(() => {
     setSelectedTab((query.get('tab') || 'withdrawal') as string);
   }, [query]);
+
+  const hasReassignments =
+    delivery?.plantings?.reduce(
+      (acc, pl) => acc || pl.type === 'Reassignment From' || pl.type === 'Reassignment To',
+      false
+    ) ?? false;
 
   const tabStyles = {
     fontSize: '14px',
@@ -176,7 +144,7 @@ export default function NurseryWithdrawalsDetails({
                 priority='secondary'
                 onClick={() => undefined}
                 label={strings.REASSIGN}
-                disabled={withdrawalSummary?.hasReassignments}
+                disabled={hasReassignments}
               />
             )}
           </Box>
@@ -213,7 +181,6 @@ export default function NurseryWithdrawalsDetails({
                 organization={organization}
                 species={species}
                 withdrawal={withdrawal}
-                withdrawalSummary={withdrawalSummary}
                 delivery={delivery}
                 batches={batches}
               />

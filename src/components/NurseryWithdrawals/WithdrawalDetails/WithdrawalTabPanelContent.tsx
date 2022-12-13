@@ -7,14 +7,14 @@ import { Delivery } from 'src/api/types/tracking';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import { ServerOrganization } from 'src/types/Organization';
+import { useEffect, useState } from 'react';
+import { getPlantingSite } from 'src/api/tracking/tracking';
 import { Species } from 'src/types/Species';
-import { WithdrawalSummary } from '../NurseryWithdrawalsDetails';
 
 type WithdrawalTabPanelContentProps = {
   organization: ServerOrganization;
   species: Species[];
   withdrawal?: NurseryWithdrawal;
-  withdrawalSummary?: WithdrawalSummary;
   delivery?: Delivery;
   batches?: Batch[];
 };
@@ -23,11 +23,23 @@ export default function WithdrawalTabPanelContent({
   organization,
   species,
   withdrawal,
-  withdrawalSummary,
   delivery,
 }: WithdrawalTabPanelContentProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
+  const [siteName, setSiteName] = useState('');
+
+  useEffect(() => {
+    const getPlantingSiteData = async () => {
+      if (delivery?.plantingSiteId) {
+        const res = await getPlantingSite(delivery.plantingSiteId);
+        if (res.requestSucceeded && res.site) {
+          setSiteName(res.site.name);
+        }
+      }
+    };
+    getPlantingSiteData();
+  }, [delivery]);
 
   const facilityName = organization?.facilities?.find((f) => f.id === withdrawal?.facilityId)?.name;
   const overviewCardData = [
@@ -41,7 +53,7 @@ export default function WithdrawalTabPanelContent({
     },
     {
       title: strings.QUANTITY,
-      data: withdrawalSummary?.totalWithdrawn?.toString() ?? '',
+      data: delivery?.plantings?.reduce((acc, planting) => acc + planting.numPlants, 0)?.toString() ?? '',
     },
     {
       title: strings.FROM_NURSERY,
@@ -49,11 +61,15 @@ export default function WithdrawalTabPanelContent({
     },
     {
       title: strings.DESTINATION,
-      data: withdrawalSummary?.destinationName ?? '',
+      data: siteName,
     },
     {
       title: strings.TO_PLOT,
-      data: withdrawalSummary?.plotNames ?? '',
+      data:
+        delivery?.plantings?.reduce(
+          (acc, planting) => (acc.length === 0 ? `${planting.plotId ?? ''}` : acc + `, ${planting.plotId ?? ''}`),
+          ''
+        ) ?? '',
     },
     {
       title: strings.NOTES,
