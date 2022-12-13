@@ -12,10 +12,11 @@ import PopoverMenu from './common/PopoverMenu';
 
 const useStyles = makeStyles((theme: Theme) => ({
   iconContainer: {
-    borderRadius: 0,
+    borderRadius: '16px',
     fontSize: '16px',
     height: '48px',
     color: theme.palette.TwClrTxt,
+    padding: theme.spacing(1.5, 2),
   },
   icon: {
     fill: theme.palette.TwClrIcn,

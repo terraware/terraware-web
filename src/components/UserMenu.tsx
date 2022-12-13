@@ -13,7 +13,8 @@ import { DropdownItem } from '@terraware/web-components';
 const useStyles = makeStyles((theme: Theme) => ({
   iconContainer: {
     height: '48px',
-    borderRadius: 0,
+    borderRadius: '16px',
+    padding: theme.spacing(1.5, 2),
   },
   icon: {
     width: '32px',
