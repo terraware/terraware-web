@@ -16,7 +16,7 @@ describe('Database', () => {
     it('should handle cancel edit columns action', () => {
       cy.visit('/accessions');
       cy.get('#more-options').click();
-      cy.get('#edit-columns').click();
+      cy.get('.MuiList-root > :nth-child(3)').click();
 
       cy.get('#cancel').click();
       cy.get('#editColumnsDialog').should('not.exist');
@@ -38,7 +38,7 @@ describe('Database', () => {
       cy.intercept('POST', '/api/v1/seedbank/values').as('values');
 
       cy.get('#more-options').click();
-      cy.get('#edit-columns').click();
+      cy.get('.MuiList-root > :nth-child(3)').click();
 
       cy.get('#speciesName').click();
       cy.get('#receivedDate').click();
@@ -68,7 +68,7 @@ describe('Database', () => {
       cy.intercept('POST', '/api/v1/seedbank/values').as('values');
 
       cy.get('#more-options').click();
-      cy.get('#edit-columns').click();
+      cy.get('.MuiList-root > :nth-child(3)').click();
 
       cy.get('.MuiCheckbox-root').each((checkbox) => {
         if (!checkbox.hasClass('Mui-checked')) {
@@ -97,7 +97,7 @@ describe('Database', () => {
         cy.intercept('POST', '/api/v1/seedbank/values').as('values2');
 
         cy.get('#more-options').click();
-        cy.get('#edit-columns').click();
+        cy.get('.MuiList-root > :nth-child(3)').click();
 
         cy.get('#General\\ Inventory').click();
         cy.get('#saveColumnsButton').click();
@@ -124,7 +124,7 @@ describe('Database', () => {
         cy.intercept('POST', '/api/v1/seedbank/values').as('values');
 
         cy.get('#more-options').click();
-        cy.get('#edit-columns').click();
+        cy.get('.MuiList-root > :nth-child(3)').click();
 
         cy.get('#General\\ Inventory').click();
         cy.get('#Default').click();
@@ -146,7 +146,7 @@ describe('Database', () => {
         cy.intercept('POST', '/api/v1/seedbank/values').as('values');
 
         cy.get('#more-options').click();
-        cy.get('#edit-columns').click();
+        cy.get('.MuiList-root > :nth-child(3)').click();
 
         cy.get('#Seed\\ Storage\\ Status').click();
         cy.get('#saveColumnsButton').click();
@@ -171,7 +171,7 @@ describe('Database', () => {
         cy.intercept('POST', '/api/v1/seedbank/values').as('values');
 
         cy.get('#more-options').click();
-        cy.get('#edit-columns').click();
+        cy.get('.MuiList-root > :nth-child(3)').click();
 
         cy.get('#Viability\\ Summary').click();
         cy.get('#saveColumnsButton').click();
@@ -204,7 +204,7 @@ describe('Database', () => {
         cy.intercept('POST', '/api/v1/seedbank/values').as('values');
 
         cy.get('#more-options').click();
-        cy.get('#edit-columns').click();
+        cy.get('.MuiList-root > :nth-child(3)').click();
 
         cy.get('#Viability\\ Testing\\ To\\ Do').click();
         cy.get('#saveColumnsButton').click();
@@ -229,7 +229,7 @@ describe('Database', () => {
         cy.intercept('POST', '/api/v1/seedbank/values').as('values');
 
         cy.get('#more-options').click();
-        cy.get('#edit-columns').click();
+        cy.get('.MuiList-root > :nth-child(3)').click();
 
         cy.get('#Viability\\ Testing\\ To\\ Do').click();
         cy.get('#species_rare').click();
@@ -264,7 +264,7 @@ describe('Database', () => {
       cy.intercept('POST', '/api/v1/search').as('search-c');
       cy.intercept('POST', '/api/v1/seedbank/values').as('values-c');
       cy.get('#more-options').click();
-      cy.get('#edit-columns').click();
+      cy.get('.MuiList-root > :nth-child(3)').click();
       cy.get('#active').click();
       cy.get('#saveColumnsButton').click();
       cy.wait('@search-c');
@@ -363,7 +363,7 @@ describe('Database', () => {
       cy.intercept('POST', '/api/v1/search').as('postReport');
 
       cy.get('#more-options').click();
-      cy.get('#download-report').click();
+      cy.get('.MuiList-root > :nth-child(2)').click();
       cy.get('#reportName').type('report');
 
       cy.get('#downloadButton').click();
@@ -374,7 +374,7 @@ describe('Database', () => {
       cy.intercept('POST', '/api/v1/search').as('search-c');
       cy.intercept('POST', '/api/v1/seedbank/values').as('values-c');
       cy.get('#more-options').click();
-      cy.get('#edit-columns').click();
+      cy.get('.MuiList-root > :nth-child(3)').click();
       cy.get('#remainingQuantity').click();
       cy.get('#totalQuantity').click();
       cy.get('#saveColumnsButton').click();
@@ -601,7 +601,7 @@ describe('Database', () => {
       cy.intercept('POST', '/api/v1/search').as('search-c');
       cy.intercept('POST', '/api/v1/seedbank/values').as('values-c');
       cy.get('#more-options').click();
-      cy.get('#edit-columns').click();
+      cy.get('.MuiList-root > :nth-child(3)').click();
       cy.get('#active').click();
       cy.get('#saveColumnsButton').click();
       cy.wait('@search-c');
@@ -651,7 +651,7 @@ describe('Database', () => {
       cy.intercept('POST', '/api/v1/seedbank/values').as('values2');
 
       cy.get('#more-options').click();
-      cy.get('#edit-columns').click();
+      cy.get('.MuiList-root > :nth-child(3)').click();
       cy.get('#species_rare').click();
       cy.get('#saveColumnsButton').click();
       cy.get('#editColumnsDialog').should('not.exist');

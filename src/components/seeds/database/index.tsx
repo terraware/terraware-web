@@ -1,14 +1,4 @@
-import {
-  Box,
-  CircularProgress,
-  Container,
-  Grid,
-  Popover,
-  Typography,
-  MenuList,
-  MenuItem,
-  useTheme,
-} from '@mui/material';
+import { Box, CircularProgress, Container, Grid, useTheme } from '@mui/material';
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
@@ -57,11 +47,13 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import ImportAccessionsModal from './ImportAccessionsModal';
-import { Icon, Message } from '@terraware/web-components';
+import { Message } from '@terraware/web-components';
 import { downloadCsvTemplateHandler } from 'src/components/common/ImportModal';
 import { downloadAccessionsTemplate } from 'src/api/accessions2/accession';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import { updatePreferences } from 'src/api/preferences/preferences';
+import { DropdownItem } from '@terraware/web-components';
+import PopoverMenu from 'src/components/common/PopoverMenu';
 
 interface StyleProps {
   isMobile: boolean;
@@ -451,11 +443,9 @@ export default function Database(props: DatabaseProps): JSX.Element {
     setSelectSeedBankForImportModalOpen(true);
   };
 
-  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
-  const open = Boolean(anchorEl);
-  const id = open ? 'simple-popover' : undefined;
+  const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -498,6 +488,27 @@ export default function Database(props: DatabaseProps): JSX.Element {
 
   const isOnboarded = hasSeedBanks && hasSpecies;
 
+  const onItemClick = (selectedItem: DropdownItem) => {
+    switch (selectedItem.value) {
+      case 'import': {
+        handleClose();
+        setSelectSeedBankForImportModalOpen(true);
+        break;
+      }
+      case 'export': {
+        onDownloadReport();
+        break;
+      }
+      case 'tableColumns': {
+        onOpenEditColumnsModal();
+        break;
+      }
+      default: {
+        handleClose();
+      }
+    }
+  };
+
   const getHeaderButtons = () => (
     <>
       <Box marginLeft={1} display='inline'>
@@ -510,39 +521,18 @@ export default function Database(props: DatabaseProps): JSX.Element {
         />
       </Box>
 
-      <Popover
-        id={id}
-        open={open}
-        anchorEl={anchorEl}
-        onClose={handleClose}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left',
-        }}
-      >
-        <MenuList sx={{ padding: theme.spacing(2, 0) }}>
-          {!isMobile && (
-            <MenuItem onClick={importAccessions} id='import-accessions' sx={{ padding: theme.spacing(1, 2) }}>
-              <Icon name='iconImport' />
-              <Typography color={theme.palette.TwClrTxtBrand} paddingLeft={1}>
-                {strings.IMPORT}
-              </Typography>
-            </MenuItem>
-          )}
-          <MenuItem onClick={() => onDownloadReport()} id='download-report' sx={{ padding: theme.spacing(1, 2) }}>
-            <Icon name='iconExport' />
-            <Typography color={theme.palette.TwClrTxtBrand} paddingLeft={1}>
-              {strings.EXPORT}
-            </Typography>
-          </MenuItem>
-          <MenuItem onClick={() => onOpenEditColumnsModal()} id='edit-columns' sx={{ padding: theme.spacing(1, 2) }}>
-            <Icon name='iconColumns' />
-            <Typography color={theme.palette.TwClrTxtBrand} paddingLeft={1}>
-              {strings.CUSTOMIZE_TABLE_COLUMNS}
-            </Typography>
-          </MenuItem>
-        </MenuList>
-      </Popover>
+      <PopoverMenu
+        sections={[
+          [
+            { label: strings.IMPORT, value: 'import' },
+            { label: strings.EXPORT, value: 'export' },
+            { label: strings.CUSTOMIZE_TABLE_COLUMNS, value: 'tableColumns' },
+          ],
+        ]}
+        handleClick={onItemClick}
+        anchorElement={anchorEl}
+        setAnchorElement={setAnchorEl}
+      />
     </>
   );
 
