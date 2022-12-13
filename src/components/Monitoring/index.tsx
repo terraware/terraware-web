@@ -37,11 +37,12 @@ const useStyles = makeStyles((theme: Theme) => ({
   titleRootContainer: {
     display: 'flex',
     alignItems: 'center',
+    paddingBottom: theme.spacing(4),
   },
   titleContainer: {
     display: 'flex',
     alignItems: 'center',
-    paddingBottom: theme.spacing(2),
+    // paddingBottom: theme.spacing(2),
     paddingLeft: (props: StyleProps) => theme.spacing(props.isDesktop ? 3 : 0),
     paddingTop: (props: StyleProps) => theme.spacing(props.isMobile ? 2 : 0),
   },
@@ -152,7 +153,7 @@ export default function Monitoring(props: MonitoringProps): JSX.Element {
       <Grid container>
         {hasSeedBanks ? (
           <>
-            <PageHeaderWrapper nextElement={contentRef.current}>
+            <PageHeaderWrapper nextElement={contentRef.current} nextElementInitialMargin={-24}>
               <Grid item xs={12} className={isMobile ? '' : classes.titleRootContainer}>
                 {isMobile ? (
                   <>
