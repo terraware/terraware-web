@@ -51,6 +51,7 @@ export type MapAnnotation = {
 export type MapEntity = {
   properties: MapSourceProperties;
   boundary: MapGeometry;
+  id: number;
 };
 
 export type MapSource = {

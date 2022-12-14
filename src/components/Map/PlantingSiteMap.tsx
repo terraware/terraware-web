@@ -78,6 +78,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
           {
             properties: { id, name, description, type: 'site' },
             boundary: getPolygons(boundary),
+            id,
           },
         ],
         id: 'sites',
@@ -97,6 +98,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
           return {
             properties: { id, name, type: 'zone' },
             boundary: getPolygons(boundary),
+            id,
           };
         }) || [];
 
@@ -121,6 +123,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
             return {
               properties: { id, name, fullName, type: 'plot' },
               boundary: getPolygons(boundary),
+              id,
             };
           });
         }) || [];

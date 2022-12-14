@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Box } from '@mui/material';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import ReactMapGL, { AttributionControl, Layer, NavigationControl, Popup, Source } from 'react-map-gl';
@@ -44,6 +44,9 @@ export default function Map(props: MapProps): JSX.Element {
   const [geoData, setGeoData] = useState();
   const [layerIds, setLayerIds] = useState<string[]>([]);
   const [popupInfo, setPopupInfo] = useState<PopupInfo | null>(null);
+  const [hoveredStateId, setHoveredStateId] = useState();
+  const [clickedStateId, setClickedStateId] = useState();
+  const mapRef = useRef(null);
 
   const onMapError = useCallback(
     (event: any) => {
@@ -67,8 +70,33 @@ export default function Map(props: MapProps): JSX.Element {
         lat,
         properties,
       });
+      setClickedStateId(properties.id);
+    } else {
+      setClickedStateId(undefined);
     }
   }, []);
+
+  const onLoad = () => {
+    const map: any = mapRef && mapRef.current;
+    if (!map) {
+      return;
+    }
+    const { sources } = options;
+    sources
+      .filter(source => source.isInteractive)
+      .forEach(source => {
+        map.on('mousemove', `${source.id}-fill`, (e: any) => {
+          if (!e.features.length || !e.features[0].properties) {
+            setHoveredStateId(undefined);
+            return;
+          }
+          setHoveredStateId(e.features[0].properties.id);
+        });
+        map.on('mouseleave', `${source.id}-fill`, (e: any) => {
+          setHoveredStateId(undefined);
+        });
+      });
+  };
 
   useEffect(() => {
     const { sources } = options;
@@ -108,6 +136,7 @@ export default function Map(props: MapProps): JSX.Element {
                 coordinates: multiPolygon,
               },
               properties: data.properties,
+              id: data.id,
             }));
           })
           .filter((f) => f)
@@ -194,6 +223,8 @@ export default function Map(props: MapProps): JSX.Element {
         onClick={onMapClick}
         style={style}
         attributionControl={false}
+        onLoad={onLoad}
+        ref={mapRef}
       >
         {mapSources}
         <NavigationControl showCompass={false} style={navControlStyle} position='bottom-right' />
@@ -203,7 +234,10 @@ export default function Map(props: MapProps): JSX.Element {
             anchor='top'
             longitude={Number(popupInfo.lng)}
             latitude={Number(popupInfo.lat)}
-            onClose={() => setPopupInfo(null)}
+            onClose={() => {
+              setPopupInfo(null);
+              setClickedStateId(undefined);
+            }}
             style={popupRenderer.style}
             className={popupRenderer.className}
           >
