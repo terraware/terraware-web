@@ -1,3 +1,4 @@
+59d9449 SW-2493 / SW-2495 Plot selector component with search/autocomplete (#914)
 a4d1bfc SW-2481: Page header styling fixes (#893)
 344c301 SW-2440 Avoid species by plot chart re-draws (#912)
 f391cfe SW-2517 Show completed tests as 'marked as complete' (#907)
