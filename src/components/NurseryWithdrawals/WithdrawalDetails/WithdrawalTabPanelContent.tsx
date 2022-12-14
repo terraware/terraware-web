@@ -80,7 +80,7 @@ export default function WithdrawalTabPanelContent({
         <SpeciesTable species={species} delivery={delivery} />
       </Box>
       <Box marginTop={theme.spacing(4)}>
-        <Photos />
+        <Photos withdrawalId={withdrawal?.id} />
       </Box>
     </Box>
   );

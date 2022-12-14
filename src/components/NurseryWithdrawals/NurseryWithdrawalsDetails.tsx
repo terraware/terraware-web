@@ -137,6 +137,8 @@ export default function NurseryWithdrawalsDetails({
     padding: theme.spacing(3),
   };
 
+  const hasPlots = delivery?.plantings?.some((planting) => planting.plotId) ?? false;
+
   const handleTabChange = (newValue: string) => {
     query.set('tab', newValue);
     history.push(getLocation(location.pathname, location, query.toString()));
@@ -163,7 +165,7 @@ export default function NurseryWithdrawalsDetails({
             <Typography color={theme.palette.TwClrTxt} fontSize='20px' fontWeight={600} fontStyle='italic'>
               {withdrawal?.withdrawnDate}
             </Typography>
-            {withdrawal?.purpose === 'Out Plant' && (
+            {withdrawal?.purpose === 'Out Plant' && hasPlots && (
               <Button
                 size='medium'
                 priority='secondary'

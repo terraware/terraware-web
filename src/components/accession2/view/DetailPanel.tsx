@@ -10,7 +10,7 @@ import { getCountryByCode, getSubdivisionByCode } from 'src/utils/country';
 import { Country } from 'src/types/Country';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import Accession2EditModal from '../edit/Accession2EditModal';
-import ViewPhotosModal from './ViewPhotosModal';
+import ViewPhotosModal from 'src/components/common/ViewPhotosModal';
 import { isContributor } from 'src/utils/organization';
 
 type DetailPanelProps = {
@@ -119,8 +119,9 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
         reload={reload}
       />
       <ViewPhotosModal
-        accessionId={accession.id.toString()}
-        photosNames={accession.photoFilenames || []}
+        photosUrls={
+          accession.photoFilenames?.map((file) => `/api/v1/seedbank/accessions/${accession.id}/photos/${file}`) || []
+        }
         open={photosModalOpened}
         onClose={() => setPhotosModalOpened(false)}
         selectedSlide={selectedSlide}
