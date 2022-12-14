@@ -67,19 +67,9 @@ export default function PlantingSiteDetails(props: PlantingSiteDetailsProps): JS
             'populations.totalPlants',
           ],
           search: {
-            operation: 'and',
-            children: [
-              {
-                operation: 'field',
-                field: 'plantingSite_id',
-                values: [plantingSite.id],
-              },
-              {
-                operation: 'field',
-                field: 'populations.species_organization_id',
-                values: [organization.id],
-              },
-            ],
+            operation: 'field',
+            field: 'plantingSite_id',
+            values: [plantingSite.id],
           },
           count: 0,
         })) as unknown as PlantingSitesPlots[] | null;
