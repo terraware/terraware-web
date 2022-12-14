@@ -9,6 +9,7 @@ import isEnabled from 'src/features';
 import strings from 'src/strings';
 import dictionary from 'src/strings/dictionary';
 import { AllOrganizationRoles, ServerOrganization } from 'src/types/Organization';
+import { hasNurseryWithdrawals } from 'src/api/tracking/withdrawals';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import NavFooter from './common/Navbar/NavFooter';
 
@@ -23,13 +24,8 @@ export default function NavBar({
   backgroundTransparent,
 }: NavBarProps): JSX.Element | null {
   const [role, setRole] = useState<AllOrganizationRoles>();
+  const [showNurseryWithdrawals, setShowNurseryWithdrawals] = useState<boolean>(false);
   const { isDesktop } = useDeviceInfo();
-
-  useEffect(() => {
-    if (organization) {
-      setRole(organization.role);
-    }
-  }, [organization]);
   const history = useHistory();
 
   const isAccessionDashboardRoute = useRouteMatch(APP_PATHS.SEEDS_DASHBOARD + '/');
@@ -66,6 +62,22 @@ export default function NavBar({
       setShowNavBar(false);
     }
   };
+
+  useEffect(() => {
+    let activeContext = true;
+    setShowNurseryWithdrawals(false);
+    if (organization) {
+      setRole(organization.role);
+      hasNurseryWithdrawals(organization.id).then((result) => {
+        if (activeContext) {
+          setShowNurseryWithdrawals(result);
+        }
+      });
+    }
+    return () => {
+      activeContext = false;
+    };
+  }, [organization]);
 
   return (
     <Navbar setShowNavBar={setShowNavBar} backgroundTransparent={backgroundTransparent}>
@@ -140,7 +152,7 @@ export default function NavBar({
             }}
             id='inventory'
           />
-          {trackingEnabled && (
+          {trackingEnabled && showNurseryWithdrawals && (
             <NavItem
               label={strings.WITHDRAWAL_LOG}
               selected={!!isWithdrawalLogRoute}

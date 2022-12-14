@@ -1069,6 +1069,10 @@ export interface components {
       viabilityTests: components["schemas"]["GetViabilityTestPayload"][];
       status: components["schemas"]["SuccessOrError"];
     };
+    ListWithdrawalPhotosResponsePayload: {
+      photos: components["schemas"]["NurseryWithdrawalPhotoPayload"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
     MultiPolygon: {
       coordinates: number[][][][];
       type: "MultiPolygon";
@@ -1103,6 +1107,9 @@ export interface components {
       notes?: string;
       purpose: "Nursery Transfer" | "Dead" | "Out Plant" | "Other";
       withdrawnDate: string;
+    };
+    NurseryWithdrawalPhotoPayload: {
+      id: number;
     };
     /** Search criterion that matches results that meet any of a set of other search criteria. That is, if the list of children is x, y, and z, this will require x OR y OR z. */
     OrNodePayload: components["schemas"]["SearchNodePayload"];
@@ -2436,6 +2443,12 @@ export interface operations {
       };
     };
     responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListWithdrawalPhotosResponsePayload"];
+        };
+      };
       /** The withdrawal does not exist. */
       404: {
         content: {
