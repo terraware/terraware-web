@@ -216,9 +216,10 @@ export default function Database(props: DatabaseProps): JSX.Element {
         }, [] as string[]);
 
         setSearchColumns(searchSelectedColumns);
+        setDisplayColumnNames(columnNames);
       }
     },
-    [setSearchColumns]
+    [setSearchColumns, setDisplayColumnNames]
   );
 
   useEffect(() => {
