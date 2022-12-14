@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Box, Grid, useTheme } from '@mui/material';
 import { PlantingSite } from 'src/api/types/tracking';
 import { useDeviceInfo } from '@terraware/web-components/utils';
@@ -15,10 +15,16 @@ export type Population = {
   totalPlants: number;
 };
 
-export type PlantingSitesPlots = {
+export type PlantingSitePlot = {
   id: string;
   fullName: string;
   populations: Population[];
+};
+
+export type PlantingSiteZone = {
+  id: string;
+  name: string;
+  plots: PlantingSitePlot[];
 };
 
 type PlantingSiteDetailsProps = {
@@ -39,8 +45,8 @@ export default function PlantingSiteDetails(props: PlantingSiteDetailsProps): JS
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const [plantsBySpecies, setPlantsBySpecies] = useState<{ [key: string]: number }>();
-  const [plotsWithPlants, setPlotsWithPlants] = useState<PlantingSitesPlots[]>();
-  const [hasPlots, setHasPlots] = useState<boolean>(false);
+  const [zonesWithPlants, setZonesWithPlants] = useState<PlantingSiteZone[]>();
+  const [hasZones, setHasZones] = useState<boolean>(false);
 
   const widgetCardStyle = {
     backgroundColor: theme.palette.TwClrBg,
@@ -57,14 +63,17 @@ export default function PlantingSiteDetails(props: PlantingSiteDetailsProps): JS
   useEffect(() => {
     const populateResults = async () => {
       if (plantingSite) {
-        const serverResponse: PlantingSitesPlots[] | null = (await search({
-          prefix: 'plantingSites.plantingZones.plots',
+        const serverResponse: PlantingSiteZone[] | null = (await search({
+          prefix: 'plantingSites.plantingZones',
           fields: [
+            'plots.id',
+            'plots.fullName',
+            'plots.populations.species_scientificName',
+            'plots.populations.species_commonName',
+            'plots.populations.species_organization_id',
+            'plots.populations.totalPlants',
             'id',
-            'fullName',
-            'populations.species_scientificName',
-            'populations.species_commonName',
-            'populations.totalPlants',
+            'name',
           ],
           search: {
             operation: 'field',
@@ -72,36 +81,54 @@ export default function PlantingSiteDetails(props: PlantingSiteDetailsProps): JS
             values: [plantingSite.id],
           },
           count: 0,
-        })) as unknown as PlantingSitesPlots[] | null;
+        })) as unknown as PlantingSiteZone[] | null;
 
         if (serverResponse) {
-          const validPlots = serverResponse
-            .filter((plot) => plot?.populations?.length > 0)
-            .sort((a, b) => a.fullName.localeCompare(b.fullName));
-          setPlotsWithPlants(validPlots);
+          const validZones = serverResponse
+            .filter((zone) => zone.plots?.some((plot) => plot?.populations?.length > 0))
+            .sort((a, b) => a.name.localeCompare(b.name))
+            .map((zone) => {
+              const plots = zone?.plots
+                ?.filter((plot) => plot?.populations?.length > 0)
+                .sort((a, b) => a.fullName.localeCompare(b.fullName));
+              return { ...zone, plots };
+            });
+
+          setZonesWithPlants(validZones);
           let totalPlantsOfSite = 0;
-          const plantsPerSpecies: { [key: string]: number } = validPlots.reduce((acc, plot) => {
-            plot.populations.forEach((population) => {
-              totalPlantsOfSite = +totalPlantsOfSite + +population.totalPlants;
-              if (acc[population.species_scientificName]) {
-                acc[population.species_scientificName] =
-                  +acc[population.species_scientificName] + +population.totalPlants;
-              } else {
-                acc[population.species_scientificName] = +population.totalPlants;
-              }
+          const plantsPerSpecies: { [key: string]: number } = validZones.reduce((acc, zone) => {
+            zone.plots.forEach((plot) => {
+              plot.populations.forEach((population) => {
+                totalPlantsOfSite = +totalPlantsOfSite + +population.totalPlants;
+                if (acc[population.species_scientificName]) {
+                  acc[population.species_scientificName] =
+                    +acc[population.species_scientificName] + +population.totalPlants;
+                } else {
+                  acc[population.species_scientificName] = +population.totalPlants;
+                }
+              });
             });
             return acc;
           }, {} as { [key: string]: number });
 
           setTotalPlants(totalPlantsOfSite);
           setPlantsBySpecies(plantsPerSpecies);
-          setHasPlots(serverResponse.length > 0);
+          setHasZones(serverResponse.length > 0);
+        } else {
+          setHasZones(false);
         }
       }
     };
 
     populateResults();
   }, [plantingSite, organization.id]);
+
+  const plotsWithPlants = useMemo(() => {
+    if (!zonesWithPlants) {
+      return [];
+    }
+    return zonesWithPlants.flatMap((zone) => zone.plots);
+  }, [zonesWithPlants]);
 
   return (
     <Grid container display='flex' flexGrow={1}>
@@ -115,10 +142,11 @@ export default function PlantingSiteDetails(props: PlantingSiteDetailsProps): JS
         <Box sx={{ ...widgetCardStyle, minHeight: '240px' }}>
           <PlantBySpeciesChart plantsBySpecies={plantsBySpecies} />
         </Box>
-        {(!plantingSite || hasPlots) && (
+        {(!plantingSite || hasZones) && (
           <Box sx={{ ...widgetCardStyle, minHeight: '240px' }}>
             <SpeciesByPlotChart
-              plots={plotsWithPlants}
+              siteId={plantingSite?.id}
+              zones={zonesWithPlants}
               updatePlotPreferences={updatePlotPreferences}
               lastPlot={lastPlot}
             />
