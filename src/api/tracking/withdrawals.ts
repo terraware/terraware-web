@@ -104,3 +104,40 @@ export const getNurseryWithdrawal = async (withdrawalId: number): Promise<Nurser
 
   return response;
 };
+
+/**
+ * List Photo IDs for a Withdrawal ID
+ */
+
+const NURSERY_WITHDRAWAL_LIST_PHOTOS_ENDPOINT = '/api/v1/nursery/withdrawals/{withdrawalId}/photos';
+
+type GetNurseryWithdrawalListPhotosResponsePayload =
+  paths[typeof NURSERY_WITHDRAWAL_LIST_PHOTOS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
+
+type NurseryWithdrawalListPhotosResponse = {
+  requestSucceeded: boolean;
+  error?: string;
+  photoIds?: { id: number }[];
+};
+
+export const getWithdrawalPhotosList = async (withdrawalId: number): Promise<NurseryWithdrawalListPhotosResponse> => {
+  const response: NurseryWithdrawalListPhotosResponse = {
+    requestSucceeded: true,
+  };
+
+  try {
+    const endpoint = NURSERY_WITHDRAWAL_LIST_PHOTOS_ENDPOINT.replace('{withdrawalId}', withdrawalId.toString());
+    const serverResponse: GetNurseryWithdrawalListPhotosResponsePayload = (await axios.get(endpoint)).data;
+    if (serverResponse.status === 'error') {
+      response.requestSucceeded = false;
+      addError(serverResponse, response);
+    } else {
+      response.photoIds = serverResponse.photos;
+    }
+  } catch (e: any) {
+    response.requestSucceeded = false;
+    addError(e?.response?.data || {}, response);
+  }
+
+  return response;
+};

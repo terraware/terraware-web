@@ -9,13 +9,12 @@ import { Box } from '@mui/material';
 export interface ViewPhotosDialogProps {
   open: boolean;
   onClose: () => void;
-  photosNames: string[];
-  accessionId: string;
+  photosUrls: string[];
   selectedSlide: number;
 }
 
 export default function ViewPhotosDialog(props: ViewPhotosDialogProps): JSX.Element {
-  const { onClose, open, photosNames, accessionId, selectedSlide } = props;
+  const { onClose, open, photosUrls, selectedSlide } = props;
   const [isPreviousDisabled, setIsPreviousDisabled] = useState(false);
   const [isNextDisabled, setIsNextDisabled] = useState(false);
 
@@ -29,7 +28,7 @@ export default function ViewPhotosDialog(props: ViewPhotosDialogProps): JSX.Elem
 
   const disableButtons = () => {
     if (myCarousel.current) {
-      if (myCarousel.current.state.currentSlide + 1 >= photosNames.length) {
+      if (myCarousel.current.state.currentSlide + 1 >= photosUrls.length) {
         setIsNextDisabled(true);
       } else {
         setIsNextDisabled(false);
@@ -95,10 +94,10 @@ export default function ViewPhotosDialog(props: ViewPhotosDialogProps): JSX.Elem
           ssr={true}
           afterChange={disableButtons}
         >
-          {photosNames.map((photoName, i) => (
+          {photosUrls.map((url, i) => (
             <div key={`photo-${i}-container`}>
-              <a href={`/api/v1/seedbank/accessions/${accessionId}/photos/${photoName}`} target='blank'>
-                <img src={`/api/v1/seedbank/accessions/${accessionId}/photos/${photoName}?maxHeight=500`} alt='' />
+              <a href={url} target='blank'>
+                <img src={`${url}?maxHeight=500`} alt='' />
               </a>
             </div>
           ))}
