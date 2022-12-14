@@ -3,7 +3,7 @@ import { Box } from '@mui/material';
 import { PlantingSite } from 'src/api/types/tracking';
 import { getPlantingSite } from 'src/api/tracking/tracking';
 import useSnackbar from 'src/utils/useSnackbar';
-import { PlantingSitesPlots } from './PlantingSiteDetails';
+import { PlantingSitePlot } from './PlantingSiteDetails';
 import { GenericMap, PlantingSiteMap, useSpeciesPlantsRenderer } from 'src/components/Map';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { ServerOrganization } from 'src/types/Organization';
@@ -16,7 +16,7 @@ const MAP_STYLE = {
 
 type PlantingSiteDashboardMapProps = {
   siteId?: number;
-  plots?: PlantingSitesPlots[];
+  plots?: PlantingSitePlot[];
   organization: ServerOrganization;
 };
 

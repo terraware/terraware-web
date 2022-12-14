@@ -14,12 +14,12 @@ const useStyles = makeStyles(() => ({
 }));
 
 export type PlotInfo = {
-  id: number;
+  id: number | string;
   fullName: string;
 };
 
 export type ZoneInfo = {
-  id: number;
+  id: number | string;
   name: string;
   plots?: PlotInfo[];
 };
@@ -74,7 +74,14 @@ export default function PlotSelector(props: PlotSelectorProps): JSX.Element {
   const isEqual = (optionA: any, optionB: any) => optionA.value.toString() === optionB.value.toString();
 
   const horizontalLabel = (text: string) => (
-    <Typography fontSize='16px' fontWeight={500} color={theme.palette.ClrTextFill} marginRight={theme.spacing(1)}>
+    <Typography
+      fontSize='16px'
+      fontWeight={500}
+      color={theme.palette.ClrTextFill}
+      marginRight={theme.spacing(1)}
+      minWidth={isMobile ? '40px' : 'auto'}
+      textAlign='right'
+    >
       {text}
     </Typography>
   );
