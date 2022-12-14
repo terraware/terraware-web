@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@mui/styles';
-import { Theme } from '@mui/material';
+import { Box, Typography, Theme } from '@mui/material';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
 import { Autocomplete, Textfield } from '@terraware/web-components';
@@ -91,15 +91,20 @@ export default function ReassignmentRenderer({ plots, setReassignment }: Reassig
 
     if (column.key === 'reassign') {
       const value = (
-        <Textfield
-          id={`quantity_${plantingId}`}
-          type='text'
-          onChange={onUpdateQuantity}
-          value={quantity}
-          label={''}
-          errorText={error.quantity}
-          className={classes.input}
-        />
+        <Box display='flex' alignItems={error.quantity ? 'start' : 'center'}>
+          <Textfield
+            id={`quantity_${plantingId}`}
+            type='text'
+            onChange={onUpdateQuantity}
+            value={quantity}
+            label={''}
+            errorText={error.quantity}
+            className={classes.input}
+          />
+          <Typography paddingLeft={1} paddingTop={error.quantity ? '10px' : 0}>
+            / {numPlants}
+          </Typography>
+        </Box>
       );
 
       return <CellRenderer {...props} value={value} />;
