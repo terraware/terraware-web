@@ -24,6 +24,7 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
 import TfMain from 'src/components/common/TfMain';
 import PageHeaderWrapper from '../common/PageHeaderWrapper';
+import TitleDescription from '../common/TitleDescription';
 
 const columns: TableColumnType[] = [
   { key: 'name', name: strings.ORGANIZATION_NAME, type: 'string' },
@@ -225,18 +226,11 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
           marginBottom={theme.spacing(4)}
           paddingLeft={theme.spacing(3)}
         >
-          <Box>
-            <Typography marginBottom={theme.spacing(1.5)} fontSize='24px' fontWeight={600}>
-              {strings.MY_ACCOUNT}
-            </Typography>
-            <Typography fontSize='14px' fontWeight={400}>
-              {strings.MY_ACCOUNT_DESC}
-            </Typography>
-          </Box>
+          <TitleDescription title={strings.MY_ACCOUNT} description={strings.MY_ACCOUNT_DESC} style={{ padding: 0 }} />
           <Button
             id='edit-account'
             icon='iconEdit'
-            label={isMobile ? strings.EDIT : dictionary.EDIT_ACCOUNT}
+            label={isMobile ? '' : dictionary.EDIT_ACCOUNT}
             onClick={() => history.push(APP_PATHS.MY_ACCOUNT_EDIT)}
             size='medium'
             priority='primary'
