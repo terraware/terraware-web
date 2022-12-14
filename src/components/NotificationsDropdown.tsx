@@ -139,8 +139,6 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 type NotificationsDropdownProps = {
-  notifications?: Notifications;
-  setNotifications: (notifications?: Notifications) => void;
   organizationId?: number;
   reloadOrganizationData: (selectedOrgId?: number) => void;
 };
@@ -148,10 +146,11 @@ type NotificationsDropdownProps = {
 export default function NotificationsDropdown(props: NotificationsDropdownProps): JSX.Element {
   const classes = useStyles({});
   const history = useHistory();
-  const { notifications, setNotifications, organizationId, reloadOrganizationData } = props;
+  const { organizationId, reloadOrganizationData } = props;
   // notificationsInterval value is only being used when it is set.
   const [anchorEl, setAnchorEl] = useState<Element | null>(null);
   const [lastSeen, setLastSeen] = useState<number>(0);
+  const [notifications, setNotifications] = useState<Notifications>();
 
   const populateNotifications = useCallback(async () => {
     const notificationsData = await getNotifications();
@@ -165,7 +164,7 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
       return dateB.getTime() - dateA.getTime();
     });
     setNotifications(notificationsData);
-  }, [setNotifications, organizationId]);
+  }, [organizationId]);
 
   useEffect(() => {
     // Update notifications now.
