@@ -56,7 +56,13 @@ export default function Photos({ withdrawalId }: PhotosSectionProps): JSX.Elemen
       </Typography>
       <Box display='flex' flexWrap='wrap'>
         {photoUrls.map((photoUrl, index) => (
-          <Box key={index} marginRight={theme.spacing(3)} marginTop={theme.spacing(2)}>
+          <Box
+            key={index}
+            marginRight={theme.spacing(3)}
+            marginTop={theme.spacing(2)}
+            maxWidth='500px'
+            overflow='hidden'
+          >
             <img
               src={`${photoUrl}?maxHeight=250`}
               alt={`${index}`}
