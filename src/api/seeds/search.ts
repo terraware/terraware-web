@@ -1,6 +1,6 @@
 import axios from '..';
 import { paths } from 'src/api/types/generated-schema';
-import { COLUMNS_INDEXED, DatabaseColumn } from 'src/components/seeds/database/columns';
+import { COLUMNS_INDEXED } from 'src/components/seeds/database/columns';
 import {
   SearchCriteria,
   SearchRequestPayload,
@@ -9,6 +9,7 @@ import {
   convertToSearchNodePayload,
   search,
 } from 'src/api/search';
+import { DatabaseColumn } from '@terraware/web-components/components/table/types';
 
 export const DEFAULT_SEED_SEARCH_FILTERS = {};
 export const DEFAULT_SEED_SEARCH_SORT_ORDER = { field: 'receivedDate', direction: 'Descending' } as SearchSortOrder;

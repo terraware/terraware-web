@@ -216,10 +216,9 @@ export default function Database(props: DatabaseProps): JSX.Element {
         }, [] as string[]);
 
         setSearchColumns(searchSelectedColumns);
-        setDisplayColumnNames(columnNames);
       }
     },
-    [setDisplayColumnNames, setSearchColumns]
+    [setSearchColumns]
   );
 
   useEffect(() => {
@@ -403,17 +402,10 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const isInactive = (row: SearchResponseElement) => {
     return false;
   };
-  const onReorderEnd = useCallback(
-    ({ oldIndex, newIndex }) => {
-      if (newIndex !== 0 && oldIndex !== 0) {
-        const newOrder = [...displayColumnNames];
-        const moved = newOrder.splice(oldIndex, 1);
-        newOrder.splice(newIndex, 0, moved[0]);
-        setDisplayColumnNames(newOrder);
-      }
-    },
-    [displayColumnNames, setDisplayColumnNames]
-  );
+
+  const reorderEndHandler = (newOrder: string[]) => {
+    setDisplayColumnNames(newOrder);
+  };
 
   const handleViewCollections = () => {
     history.push(APP_PATHS.CHECKIN);
@@ -654,7 +646,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
                           onSelect={onSelect}
                           sortHandler={onSortChange}
                           isInactive={isInactive}
-                          onReorderEnd={onReorderEnd}
+                          onReorderEnd={reorderEndHandler}
                         />
                       )}
                       {searchResults === undefined && <CircularProgress />}
