@@ -2,9 +2,9 @@ import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React from 'react';
 import Checkbox from '../../../common/Checkbox';
-import { Option } from '../columns';
 import { FieldNodePayload } from '../../../../api/search';
 import strings from 'src/strings';
+import { Option } from '@terraware/web-components/components/table/types';
 
 const useStyles = makeStyles((theme: Theme) => ({
   box: {

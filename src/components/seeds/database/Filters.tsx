@@ -5,7 +5,6 @@ import React from 'react';
 import { FieldNodePayload, FieldValuesPayload, OrNodePayload, SearchNodePayload } from 'src/api/search';
 import strings from 'src/strings';
 import preventDefaultEvent from 'src/utils/preventDefaultEvent';
-import { DatabaseColumn, Option } from './columns';
 import FilterCountWeight from './filters/FilterCountWeight';
 import DateRange from './filters/FilterDateRange';
 import MultipleSelection from './filters/FilterMultipleSelection';
@@ -13,6 +12,7 @@ import FilterNumberRange from './filters/FilterNumberRange';
 import Search from './filters/FilterSearch';
 import SingleSelection from './filters/FilterSingleSelection';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import { DatabaseColumn, Option } from '@terraware/web-components/components/table/types';
 
 interface StyleProps {
   isMobile?: boolean;
