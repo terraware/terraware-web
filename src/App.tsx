@@ -30,7 +30,6 @@ import TopBar from 'src/components/TopBar/TopBar';
 import TopBarContent from 'src/components/TopBar/TopBarContent';
 import { APP_PATHS } from 'src/constants';
 import ErrorBoundary from 'src/ErrorBoundary';
-import { Notifications } from 'src/types/Notifications';
 import { ServerOrganization } from 'src/types/Organization';
 import { User } from 'src/types/User';
 import { FacilityType } from 'src/api/types/facilities';
@@ -147,7 +146,6 @@ export default function App() {
   const [selectedOrganization, setSelectedOrganization] = useState<ServerOrganization>();
   const [preferencesOrg, setPreferencesOrg] = useState<{ [key: string]: unknown }>();
   const [orgScopedPreferences, setOrgScopedPreferences] = useState<{ [key: string]: unknown }>();
-  const [notifications, setNotifications] = useState<Notifications>();
   const { isProduction } = useEnvironment();
   const trackingEnabled = isRouteEnabled('Tracking V1');
 
@@ -340,8 +338,6 @@ export default function App() {
         <StyledEngineProvider injectFirst>
           <TopBar fullWidth={true}>
             <TopBarContent
-              notifications={notifications}
-              setNotifications={setNotifications}
               organizations={organizations}
               selectedOrganization={selectedOrganization}
               setSelectedOrganization={setSelectedOrganization}
@@ -429,8 +425,6 @@ export default function App() {
       <ToastSnackbar />
       <TopBar>
         <TopBarContent
-          notifications={notifications}
-          setNotifications={setNotifications}
           organizations={organizations}
           selectedOrganization={selectedOrganization}
           setSelectedOrganization={setSelectedOrganization}

@@ -3,7 +3,6 @@ import { makeStyles } from '@mui/styles';
 import { Svg } from '@terraware/web-components';
 import React from 'react';
 
-import { Notifications } from 'src/types/Notifications';
 import { ServerOrganization } from 'src/types/Organization';
 import { User } from 'src/types/User';
 import Icon from '../common/icon/Icon';
@@ -48,8 +47,6 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 type TopBarProps = {
-  notifications?: Notifications;
-  setNotifications: (notifications?: Notifications) => void;
   organizations?: ServerOrganization[];
   setSelectedOrganization: React.Dispatch<React.SetStateAction<ServerOrganization | undefined>>;
   selectedOrganization?: ServerOrganization;
@@ -62,7 +59,6 @@ type TopBarProps = {
 export default function TopBarContent(props: TopBarProps): JSX.Element | null {
   const classes = useStyles();
   const {
-    setNotifications,
     setSelectedOrganization,
     selectedOrganization,
     organizations,
@@ -97,8 +93,6 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
       </div>
       <div className={classes.right}>
         <NotificationsDropdown
-          notifications={props.notifications}
-          setNotifications={setNotifications}
           organizationId={selectedOrganization?.id}
           reloadOrganizationData={reloadOrganizationData}
         />
@@ -120,8 +114,6 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
 
       <Grid item xs={3} className={classes.right}>
         <NotificationsDropdown
-          notifications={props.notifications}
-          setNotifications={setNotifications}
           organizationId={selectedOrganization?.id}
           reloadOrganizationData={reloadOrganizationData}
         />
