@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { updateOrganizationUser, updateUserProfile } from 'src/api/user/user';
 import Button from 'src/components/common/button/Button';
@@ -12,7 +12,6 @@ import { OrganizationUser, User } from 'src/types/User';
 import useForm from 'src/utils/useForm';
 import FormBottomBar from '../common/FormBottomBar';
 import TextField from '../common/Textfield/Textfield';
-import TfDivisor from '../common/TfDivisor';
 import AssignNewOwnerDialog from './AssignNewOwnerModal';
 import { getOrganizationUsers, leaveOrganization, listOrganizationRoles } from 'src/api/organization/organization';
 import LeaveOrganizationDialog from './LeaveOrganizationModal';
@@ -20,39 +19,12 @@ import CannotRemoveOrgDialog from './CannotRemoveOrgModal';
 import DeleteOrgDialog from './DeleteOrgModal';
 import { deleteOrganization } from '../../api/organization/organization';
 import Checkbox from '../common/Checkbox';
-import { Grid, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
 import TfMain from 'src/components/common/TfMain';
-
-interface StyleProps {
-  isMobile: boolean;
-}
-
-const useStyles = makeStyles((theme: Theme) => ({
-  title: {
-    marginTop: 0,
-    fontSize: '24px',
-  },
-  titleContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-  },
-  centered: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'flex-end',
-  },
-  organizationsHeading: {
-    marginBottom: 0,
-  },
-  editContainer: {
-    marginBottom: (props: StyleProps) => (props.isMobile ? theme.spacing(16) : theme.spacing(8)),
-  },
-}));
+import PageHeaderWrapper from '../common/PageHeaderWrapper';
+import TitleDescription from '../common/TitleDescription';
 
 const columns: TableColumnType[] = [
   { key: 'name', name: strings.ORGANIZATION_NAME, type: 'string' },
@@ -71,7 +43,7 @@ type MyAccountProps = {
 
 export default function MyAccount({ user, organizations, edit, reloadUser, reloadData }: MyAccountProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
-  const classes = useStyles({ isMobile });
+  const theme = useTheme();
   const [selectedRows, setSelectedRows] = useState<ServerOrganization[]>([]);
   const [personOrganizations, setPersonOrganizations] = useState<ServerOrganization[]>([]);
   const history = useHistory();
@@ -84,6 +56,7 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
   const [newOwner, setNewOwner] = useState<OrganizationUser>();
   const [orgPeople, setOrgPeople] = useState<OrganizationUser[]>();
   const snackbar = useSnackbar();
+  const contentRef = useRef(null);
 
   useEffect(() => {
     if (organizations) {
@@ -246,25 +219,39 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
           />
         </>
       )}
-      <TfMain>
-        <Grid container spacing={3} className={edit ? classes.editContainer : ''}>
-          <Grid item xs={12} className={classes.titleContainer}>
-            <Grid item xs={7}>
-              <h1 className={classes.title}>{strings.MY_ACCOUNT}</h1>
-              <p>{strings.MY_ACCOUNT_DESC}</p>
-            </Grid>
-            <Grid item xs={5} className={classes.centered}>
-              <Button
-                id='edit-account'
-                label={isMobile ? strings.EDIT : dictionary.EDIT_ACCOUNT}
-                onClick={() => history.push(APP_PATHS.MY_ACCOUNT_EDIT)}
-                size='medium'
-                priority='secondary'
-              />
-            </Grid>
-          </Grid>
+      <PageHeaderWrapper nextElement={contentRef.current}>
+        <Box
+          display='flex'
+          justifyContent='space-between'
+          marginBottom={theme.spacing(4)}
+          paddingLeft={theme.spacing(3)}
+        >
+          <TitleDescription title={strings.MY_ACCOUNT} description={strings.MY_ACCOUNT_DESC} style={{ padding: 0 }} />
+          <Button
+            id='edit-account'
+            icon='iconEdit'
+            label={isMobile ? '' : dictionary.EDIT_ACCOUNT}
+            onClick={() => history.push(APP_PATHS.MY_ACCOUNT_EDIT)}
+            size='medium'
+            priority='primary'
+          />
+        </Box>
+      </PageHeaderWrapper>
+      <Box
+        ref={contentRef}
+        sx={{
+          backgroundColor: theme.palette.TwClrBg,
+          padding: theme.spacing(3),
+          borderRadius: '32px',
+          minWidth: 'fit-content',
+          marginBottom: edit ? (isMobile ? theme.spacing(16) : theme.spacing(8)) : 0,
+        }}
+      >
+        <Grid container spacing={3}>
           <Grid item xs={12}>
-            <h2>{dictionary.GENERAL}</h2>
+            <Typography fontSize='20px' fontWeight={600}>
+              {dictionary.GENERAL}
+            </Typography>
           </Grid>
           <Grid item xs={isMobile ? 12 : 4}>
             <TextField
@@ -296,12 +283,12 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
               readonly={true}
             />
           </Grid>
+          <Grid item xs={12} />
           <Grid item xs={12}>
-            <TfDivisor />
-          </Grid>
-          <Grid item xs={12}>
-            <h2>{dictionary.NOTIFICATIONS}</h2>
-            <p>{strings.MY_ACCOUNT_NOTIFICATIONS_DESC}</p>
+            <Typography fontSize='20px' fontWeight={600} marginBottom={theme.spacing(1.5)}>
+              {dictionary.NOTIFICATIONS}
+            </Typography>
+            <Typography fontSize='14px'>{strings.MY_ACCOUNT_NOTIFICATIONS_DESC}</Typography>
           </Grid>
           <Grid item xs={12}>
             <Checkbox
@@ -313,11 +300,11 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
               onChange={onChange}
             />
           </Grid>
+          <Grid item xs={12} />
           <Grid item xs={12}>
-            <TfDivisor />
-          </Grid>
-          <Grid item xs={12}>
-            <h2 className={classes.organizationsHeading}>{dictionary.ORGANIZATIONS}</h2>
+            <Typography fontSize='20px' fontWeight={600}>
+              {dictionary.ORGANIZATIONS}
+            </Typography>
           </Grid>
           <Grid item xs={12}>
             <div>
@@ -343,7 +330,7 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
             </div>
           </Grid>
         </Grid>
-      </TfMain>
+      </Box>
       {edit && <FormBottomBar onCancel={onCancel} onSave={saveChanges} />}
     </TfMain>
   );
