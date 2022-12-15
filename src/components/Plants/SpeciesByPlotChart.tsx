@@ -24,12 +24,15 @@ export default function SpeciesByPlotChart(props: Props): JSX.Element {
   const onChangeZone = (zone: ZoneInfo | undefined) => {
     if (zones && zone) {
       const foundZone = zones.find((plantingZone) => plantingZone.id.toString() === zone.id.toString());
+      const defaultPlot = foundZone && foundZone.plots ? foundZone.plots[0] : undefined;
       setSelectedZone(foundZone);
+      setSelectedPlot(defaultPlot);
       if (setPlantsDashboardPreferences && foundZone) {
-        setPlantsDashboardPreferences({ ...plantsDashboardPreferences, zoneId: foundZone.id, plotId: undefined });
+        setPlantsDashboardPreferences({ ...plantsDashboardPreferences, zoneId: foundZone.id, plotId: defaultPlot?.id });
       }
     } else {
       setSelectedZone(undefined);
+      setSelectedPlot(undefined);
       setPlantsDashboardPreferences({ ...plantsDashboardPreferences, zoneId: undefined, plotId: undefined });
     }
   };
@@ -38,8 +41,8 @@ export default function SpeciesByPlotChart(props: Props): JSX.Element {
     if (plot && selectedZone) {
       const plotFound = selectedZone.plots.find((plantingPlot) => plantingPlot.id.toString() === plot.id.toString());
       setSelectedPlot(plotFound);
-      if (setPlantsDashboardPreferences && plotFound) {
-        setPlantsDashboardPreferences({ ...plantsDashboardPreferences, plotId: plotFound.id });
+      if (setPlantsDashboardPreferences) {
+        setPlantsDashboardPreferences({ ...plantsDashboardPreferences, plotId: plotFound?.id });
       }
     } else {
       setSelectedPlot(undefined);
@@ -60,6 +63,7 @@ export default function SpeciesByPlotChart(props: Props): JSX.Element {
 
   useEffect(() => {
     if (!zones?.length) {
+      setSelectedZone(undefined);
       setSelectedPlot(undefined);
       return;
     }

@@ -59,10 +59,7 @@ export default function PlotSelector(props: PlotSelectorProps): JSX.Element {
 
   const onChangeZone = (zone: any) => {
     const foundZone = zones.find((zoneItem) => zoneItem.id.toString() === zone?.value?.toString());
-    onPlotSelected(undefined);
-    if (foundZone) {
-      onZoneSelected(foundZone);
-    }
+    onZoneSelected(foundZone);
   };
 
   const onChangePlot = (plot: any) => {
