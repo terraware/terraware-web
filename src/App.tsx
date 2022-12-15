@@ -222,7 +222,7 @@ export default function App() {
   const reloadTracking = useCallback(() => {
     const populatePlantingSites = async () => {
       if (selectedOrganization) {
-        const response = await listPlantingSites(selectedOrganization.id, false);
+        const response = await listPlantingSites(selectedOrganization.id, true);
         if (response.requestSucceeded) {
           setPlantingSites(response.sites || []);
         }

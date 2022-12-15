@@ -43,16 +43,7 @@ export default function OutplantWithdrawalTable({
             speciesPlotMap[sp][plot] = pl.numPlants;
             return;
           }
-          switch (pl.type) {
-            case 'Reassignment From':
-              speciesPlotMap[sp][plot] -= pl.numPlants;
-              break;
-            case 'Delivery':
-            case 'Reassignment To':
-            default:
-              speciesPlotMap[sp][plot] += pl.numPlants;
-              break;
-          }
+          speciesPlotMap[sp][plot] += pl.numPlants;
         });
 
       // transform into table rows
