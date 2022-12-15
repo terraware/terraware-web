@@ -117,6 +117,8 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const onChangePlantingSite = (value: string) => {
     updateField('plotId', undefined); // clear plot id when there's a new planting site id
     updateField('plantingSiteId', value);
+    setSelectedZone(undefined);
+    setSelectedPlot(undefined);
     const plantingSite = plantingSites.find((site) => site.id.toString() === value.toString());
     setZones(plantingSite?.plantingZones || []);
     setZoneId(undefined);

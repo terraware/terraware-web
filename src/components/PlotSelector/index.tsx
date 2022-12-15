@@ -73,15 +73,13 @@ export default function PlotSelector(props: PlotSelectorProps): JSX.Element {
   useEffect(() => {
     if (siteKey !== siteId) {
       setSiteKey(siteId);
-      onZoneSelected(undefined);
-      onPlotSelected(undefined);
     }
-  }, [siteId, onZoneSelected, onPlotSelected, siteKey]);
+  }, [siteId, siteKey]);
 
   const gridSize = () => (isMobile ? 12 : 6);
 
   const isEqual = (optionA: any, optionB: any) => {
-    if (optionA?.value && optionB.value) {
+    if (optionA?.value && optionB?.value) {
       return optionA.value === optionB.value;
     }
     return false;

@@ -39,6 +39,7 @@ export default function SpeciesByPlotChart(props: Props): JSX.Element {
       }
     } else {
       setSelectedZone(undefined);
+      setPlantsDashboardPreferences({ ...plantsDashboardPreferences, zoneId: undefined, plotId: undefined });
     }
   };
 
