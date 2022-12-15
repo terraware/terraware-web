@@ -29,9 +29,9 @@ export type PlantingSiteZone = {
 
 type PlantingSiteDetailsProps = {
   plantingSite?: PlantingSite;
-  updatePlotPreferences: (plotId: string) => void;
-  lastPlot?: any;
   organization: ServerOrganization;
+  plantsDashboardPreferences?: { [key: string]: unknown };
+  setPlantsDashboardPreferences: React.Dispatch<React.SetStateAction<{ [key: string]: unknown } | undefined>>;
 };
 
 export const cardTitleStyle = {
@@ -40,7 +40,7 @@ export const cardTitleStyle = {
 };
 
 export default function PlantingSiteDetails(props: PlantingSiteDetailsProps): JSX.Element {
-  const { plantingSite, updatePlotPreferences, lastPlot, organization } = props;
+  const { plantingSite, organization, plantsDashboardPreferences, setPlantsDashboardPreferences } = props;
   const [totalPlants, setTotalPlants] = useState<number>();
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
@@ -148,8 +148,8 @@ export default function PlantingSiteDetails(props: PlantingSiteDetailsProps): JS
             <SpeciesByPlotChart
               siteId={plantingSite?.id}
               zones={zonesWithPlants}
-              updatePlotPreferences={updatePlotPreferences}
-              lastPlot={lastPlot}
+              plantsDashboardPreferences={plantsDashboardPreferences}
+              setPlantsDashboardPreferences={setPlantsDashboardPreferences}
             />
           </Box>
         )}
