@@ -15,13 +15,14 @@ const MAP_STYLE = {
 };
 
 type PlantingSiteDashboardMapProps = {
-  siteId?: number;
-  plots?: PlantingSitePlot[];
   organization: ServerOrganization;
+  plots?: PlantingSitePlot[];
+  selectedPlotId?: number;
+  siteId?: number;
 };
 
 export default function PlantingSiteDashboardMap(props: PlantingSiteDashboardMapProps): JSX.Element {
-  const { plots, siteId, organization } = props;
+  const { organization, plots, selectedPlotId, siteId } = props;
   const { isMobile } = useDeviceInfo();
   const [snackbar] = useState(useSnackbar());
   const [plantingSite, setPlantingSite] = useState<PlantingSite>();
@@ -68,6 +69,7 @@ export default function PlantingSiteDashboardMap(props: PlantingSiteDashboardMap
           key={plantingSite?.id}
           style={MAP_STYLE}
           contextRenderer={contextRenderer}
+          selectedPlotId={selectedPlotId}
         />
       ) : isMobile || !plots ? null : (
         <GenericMap

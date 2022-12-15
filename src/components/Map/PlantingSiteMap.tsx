@@ -1,10 +1,10 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Box, CircularProgress, useTheme } from '@mui/material';
 import hexRgb from 'hex-rgb';
 import { MultiPolygon, PlantingSite } from 'src/api/types/tracking';
 import useSnackbar from 'src/utils/useSnackbar';
 import GenericMap from './GenericMap';
-import { MapGeometry, MapOptions, MapPopupRenderer, MapSource } from './MapModels';
+import { MapEntityId, MapGeometry, MapOptions, MapPopupRenderer, MapSource } from './MapModels';
 import { getBoundingBox } from './MapUtils';
 import _ from 'lodash';
 
@@ -14,10 +14,12 @@ export type PlantingSiteMapProps = {
   style?: object;
   // context on-click renderer
   contextRenderer?: MapPopupRenderer;
+  // selected plot
+  selectedPlotId?: number;
 };
 
 export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Element | null {
-  const { plantingSite, style, contextRenderer } = props;
+  const { plantingSite, style, contextRenderer, selectedPlotId } = props;
   const theme = useTheme();
   const [snackbar] = useState(useSnackbar());
   const [mapOptions, setMapOptions] = useState<MapOptions>();
@@ -165,6 +167,8 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
     fetchPlantingSite();
   }, [plantingSite, snackbar, extractPlantingSite, extractPlantingZones, extractPlots, mapOptions]);
 
+  const activeEntity: MapEntityId = useMemo(() => ({ sourceId: 'plots', id: selectedPlotId }), [selectedPlotId]);
+
   if (!mapOptions) {
     return (
       <Box sx={{ display: 'flex', flexGrow: 1, height: '100%', margin: 'auto' }}>
@@ -175,7 +179,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
 
   return (
     <Box sx={{ display: 'flex', flexGrow: 1 }}>
-      <GenericMap options={mapOptions} contextRenderer={contextRenderer} style={style} />
+      <GenericMap options={mapOptions} contextRenderer={contextRenderer} style={style} activeEntity={activeEntity} />
     </Box>
   );
 }

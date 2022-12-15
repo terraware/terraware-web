@@ -86,3 +86,11 @@ export type MapPopupRenderer = {
   style?: object;
   className?: string;
 };
+
+/**
+ * Model an identifiable entity
+ */
+export type MapEntityId = {
+  id?: number; // id of entity, undefined for unknown
+  sourceId: string; // source type of entity 'plot', 'zone', 'site', etc.
+};

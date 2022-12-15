@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Typography, useTheme } from '@mui/material';
 import { cardTitleStyle, PlantingSiteZone, PlantingSitePlot } from './PlantingSiteDetails';
 import strings from 'src/strings';
@@ -10,25 +10,16 @@ export interface Props {
   zones?: PlantingSiteZone[];
   plantsDashboardPreferences?: { [key: string]: unknown };
   setPlantsDashboardPreferences: React.Dispatch<React.SetStateAction<{ [key: string]: unknown } | undefined>>;
+  setSelectedPlotId: (id?: number) => void;
 }
 
 export default function SpeciesByPlotChart(props: Props): JSX.Element {
-  const { siteId, zones, plantsDashboardPreferences, setPlantsDashboardPreferences } = props;
+  const { siteId, zones, plantsDashboardPreferences, setPlantsDashboardPreferences, setSelectedPlotId } = props;
   const [selectedPlot, setSelectedPlot] = useState<PlantingSitePlot>();
   const [selectedZone, setSelectedZone] = useState<PlantingSiteZone>();
   const [labels, setLabels] = useState<string[]>();
   const [values, setValues] = useState<number[]>();
   const theme = useTheme();
-
-  React.useEffect(() => {
-    if (selectedPlot) {
-      setLabels(selectedPlot?.populations?.map((population) => population.species_scientificName));
-      setValues(selectedPlot?.populations?.map((population) => population.totalPlants));
-    } else {
-      setLabels([]);
-      setValues([]);
-    }
-  }, [selectedPlot]);
 
   const onChangeZone = (zone: ZoneInfo | undefined) => {
     if (zones && zone) {
@@ -54,7 +45,19 @@ export default function SpeciesByPlotChart(props: Props): JSX.Element {
     }
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
+    if (selectedPlot) {
+      setLabels(selectedPlot?.populations?.map((population) => population.species_scientificName));
+      setValues(selectedPlot?.populations?.map((population) => population.totalPlants));
+      setSelectedPlotId(Number(selectedPlot.id));
+    } else {
+      setLabels([]);
+      setValues([]);
+      setSelectedPlotId(undefined);
+    }
+  }, [selectedPlot, setSelectedPlotId]);
+
+  useEffect(() => {
     if (!zones?.length) {
       setSelectedPlot(undefined);
       return;

@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Box } from '@mui/material';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import ReactMapGL, { AttributionControl, Layer, NavigationControl, Popup, Source } from 'react-map-gl';
-import { MapSource, MapOptions, MapPopupRenderer } from './MapModels';
+import { MapSource, MapEntityId, MapOptions, MapPopupRenderer } from './MapModels';
 
 /**
  * The following is needed to deal with a mapbox bug
@@ -38,13 +38,16 @@ export type MapProps = {
   // style overrides
   style?: object;
   bannerMessage?: string;
+  // active map entity
+  activeEntity?: MapEntityId;
 };
 
 export default function Map(props: MapProps): JSX.Element {
-  const { token, onTokenExpired, options, popupRenderer, mapId, style, bannerMessage } = props;
+  const { token, onTokenExpired, options, popupRenderer, mapId, style, bannerMessage, activeEntity } = props;
   const [geoData, setGeoData] = useState();
   const [layerIds, setLayerIds] = useState<string[]>([]);
   const [popupInfo, setPopupInfo] = useState<PopupInfo | null>(null);
+  const [deferredActiveEntity, setDeferredActiveEntity] = useState<MapEntityId | undefined>();
   const mapRef = useRef(null);
   const hoverStateId: { [key: string]: number | undefined } = useMemo(() => ({}), []);
   const selectStateId: { [key: string]: number | undefined } = useMemo(() => ({}), []);
@@ -76,11 +79,12 @@ export default function Map(props: MapProps): JSX.Element {
     [onTokenExpired]
   );
 
-  const updateFeatureState = useCallback((featureVar, property, sourceId: string, id?: number) => {
+  const updateFeatureState = useCallback((featureVar: any, property: string, mapEntityId: MapEntityId) => {
     const map: any = mapRef && mapRef.current;
     if (!map) {
       return;
     }
+    const { id, sourceId } = mapEntityId;
     // clear previous
     if (featureVar[sourceId] && id !== featureVar[sourceId]) {
       map.setFeatureState({ source: sourceId, id: featureVar[sourceId] }, { [property]: false });
@@ -104,7 +108,7 @@ export default function Map(props: MapProps): JSX.Element {
           properties,
           sourceId,
         });
-        updateFeatureState(selectStateId, 'select', sourceId, id);
+        updateFeatureState(selectStateId, 'select', { sourceId, id });
       }
     },
     [updateFeatureState, selectStateId]
@@ -129,12 +133,17 @@ export default function Map(props: MapProps): JSX.Element {
             return;
           }
           const newId = e.features[0].id;
-          updateFeatureState(hoverStateId, 'hover', source.id, newId);
+          updateFeatureState(hoverStateId, 'hover', { sourceId: source.id, id: newId });
         });
         map.on('mouseleave', `${source.id}-fill`, () => {
-          updateFeatureState(hoverStateId, 'hover', source.id);
+          updateFeatureState(hoverStateId, 'hover', { sourceId: source.id });
         });
       });
+
+    if (deferredActiveEntity) {
+      updateFeatureState(activeStateId, 'active', deferredActiveEntity);
+      setDeferredActiveEntity(undefined);
+    }
   };
 
   useEffect(() => {
@@ -244,6 +253,16 @@ export default function Map(props: MapProps): JSX.Element {
     }
   }, [options, geoData, setGeoData, token, popupRenderer]);
 
+  useEffect(() => {
+    if (activeEntity) {
+      if (!mapRef || !mapRef.current) {
+        setDeferredActiveEntity(activeEntity);
+      } else {
+        updateFeatureState(activeStateId, 'active', activeEntity);
+      }
+    }
+  }, [activeEntity, activeStateId, updateFeatureState]);
+
   const mapSources = useMemo(() => {
     if (!geoData) {
       return null;
@@ -293,7 +312,7 @@ export default function Map(props: MapProps): JSX.Element {
             latitude={Number(popupInfo.lat)}
             onClose={() => {
               setPopupInfo(null);
-              updateFeatureState(selectStateId, 'select', popupInfo.sourceId);
+              updateFeatureState(selectStateId, 'select', { sourceId: popupInfo.sourceId });
             }}
             style={popupRenderer.style}
             className={popupRenderer.className}
