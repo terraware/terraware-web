@@ -32,33 +32,29 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
 
       if (objectType === 'site') {
         return {
-          fillColor: getRgbaFromHex(theme.palette.TwClrBasePurple200 as string, 0.2),
-          lineColor: theme.palette.TwClrBasePurple300 as string,
-          lineWidth: 1,
+          fillColor: getRgbaFromHex(theme.palette.TwClrBaseGreen300 as string, 0.2),
+          lineColor: theme.palette.TwClrBaseGreen300 as string,
+          lineWidth: 2,
         };
       } else if (objectType === 'zone') {
         return {
-          fillColor: getRgbaFromHex(theme.palette.TwClrBaseGreen200 as string, 0.2),
-          lineColor: theme.palette.TwClrBaseGreen300 as string,
-          lineWidth: 1,
+          fillColor: 'transparent',
+          lineColor: theme.palette.TwClrBaseLightGreen300 as string,
+          lineWidth: 4,
         };
       } else {
         // plot
         return {
-          fillColor: getRgbaFromHex(theme.palette.TwClrBaseBlue200 as string, 0.2),
+          fillColor: getRgbaFromHex(theme.palette.TwClrBaseBlue300 as string, 0.2),
+          hoverFillColor: getRgbaFromHex(theme.palette.TwClrBaseBlue300 as string, 0.4),
+          selectFillColor: getRgbaFromHex(theme.palette.TwClrBaseBlue300 as string, 0.6),
+          activeFillColor: getRgbaFromHex(theme.palette.TwClrBaseBlue300 as string, 0.6),
           lineColor: theme.palette.TwClrBaseBlue300 as string,
-          lineWidth: 1,
+          lineWidth: 2,
         };
       }
     },
-    [
-      theme.palette.TwClrBasePurple200,
-      theme.palette.TwClrBasePurple300,
-      theme.palette.TwClrBaseGreen200,
-      theme.palette.TwClrBaseGreen300,
-      theme.palette.TwClrBaseBlue200,
-      theme.palette.TwClrBaseBlue300,
-    ]
+    [theme.palette.TwClrBaseGreen300, theme.palette.TwClrBaseLightGreen300, theme.palette.TwClrBaseBlue300]
   );
 
   const getPolygons = useCallback((boundary?: MultiPolygon): MapGeometry => {
@@ -78,6 +74,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
           {
             properties: { id, name, description, type: 'site' },
             boundary: getPolygons(boundary),
+            id,
           },
         ],
         id: 'sites',
@@ -97,6 +94,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
           return {
             properties: { id, name, type: 'zone' },
             boundary: getPolygons(boundary),
+            id,
           };
         }) || [];
 
@@ -121,6 +119,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
             return {
               properties: { id, name, fullName, type: 'plot' },
               boundary: getPolygons(boundary),
+              id,
             };
           });
         }) || [];

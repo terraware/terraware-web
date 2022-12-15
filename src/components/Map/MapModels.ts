@@ -51,6 +51,7 @@ export type MapAnnotation = {
 export type MapEntity = {
   properties: MapSourceProperties;
   boundary: MapGeometry;
+  id: number;
 };
 
 export type MapSource = {
@@ -62,6 +63,9 @@ export type MapSource = {
   isInteractive?: boolean;
   // property name to render as a polygon annotation
   annotation?: MapAnnotation;
+  activeFillColor?: string;
+  hoverFillColor?: string;
+  selectFillColor?: string;
 };
 
 export type MapBoundingBox = {
