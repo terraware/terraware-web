@@ -33,16 +33,12 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
       if (objectType === 'site') {
         return {
           fillColor: getRgbaFromHex(theme.palette.TwClrBaseGreen300 as string, 0.2),
-          hoverFillColor: 'transparent',
-          selectFillColor: 'transparent',
           lineColor: theme.palette.TwClrBaseGreen300 as string,
           lineWidth: 2,
         };
       } else if (objectType === 'zone') {
         return {
           fillColor: 'transparent',
-          hoverFillColor: 'transparent',
-          selectFillColor: 'transparent',
           lineColor: theme.palette.TwClrBaseLightGreen300 as string,
           lineWidth: 4,
         };
@@ -52,6 +48,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
           fillColor: getRgbaFromHex(theme.palette.TwClrBaseBlue300 as string, 0.2),
           hoverFillColor: getRgbaFromHex(theme.palette.TwClrBaseBlue300 as string, 0.4),
           selectFillColor: getRgbaFromHex(theme.palette.TwClrBaseBlue300 as string, 0.6),
+          activeFillColor: getRgbaFromHex(theme.palette.TwClrBaseBlue300 as string, 0.6),
           lineColor: theme.palette.TwClrBaseBlue300 as string,
           lineWidth: 2,
         };

@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Box } from '@mui/material';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import ReactMapGL, { AttributionControl, Layer, NavigationControl, Popup, Source } from 'react-map-gl';
-import { MapOptions, MapPopupRenderer } from './MapModels';
+import { MapSource, MapOptions, MapPopupRenderer } from './MapModels';
 
 /**
  * The following is needed to deal with a mapbox bug
@@ -48,6 +48,20 @@ export default function Map(props: MapProps): JSX.Element {
   const mapRef = useRef(null);
   const hoverStateId: { [key: string]: number | undefined } = useMemo(() => ({}), []);
   const selectStateId: { [key: string]: number | undefined } = useMemo(() => ({}), []);
+  const activeStateId: { [key: string]: number | undefined } = useMemo(() => ({}), []);
+
+  const getFillColor = (source: MapSource, type: 'active' | 'select' | 'hover' | 'default') => {
+    switch (type) {
+      case 'active':
+        return source.activeFillColor || source.fillColor;
+      case 'select':
+        return source.selectFillColor || source.fillColor;
+      case 'hover':
+        return source.hoverFillColor || source.fillColor;
+      default:
+        return source.fillColor;
+    }
+  };
 
   const onMapError = useCallback(
     (event: any) => {
@@ -68,7 +82,7 @@ export default function Map(props: MapProps): JSX.Element {
       return;
     }
     // clear previous
-    if (featureVar[sourceId]) {
+    if (id !== featureVar[sourceId]) {
       map.setFeatureState({ source: sourceId, id: featureVar[sourceId] }, { [property]: false });
     }
     // set new
@@ -103,6 +117,7 @@ export default function Map(props: MapProps): JSX.Element {
     }
     Object.keys(hoverStateId).forEach((key) => delete hoverStateId[key]);
     Object.keys(selectStateId).forEach((key) => delete selectStateId[key]);
+    Object.keys(activeStateId).forEach((key) => delete activeStateId[key]);
 
     const { sources } = options;
     sources
@@ -181,13 +196,18 @@ export default function Map(props: MapProps): JSX.Element {
                 // Use a case-expression to decide which color to use for fill
                 // see https://docs.mapbox.com/mapbox-gl-js/style-spec/expressions/#case
                 // and, https://docs.mapbox.com/mapbox-gl-js/api/map/#map#setfeaturestate
-                // if selected, use select color, else if hover, user hover color, else use default color
+                // if active, use active color
+                // else if selected, use select color
+                // else if hover, user hover color
+                // else use default fill color
                 'case',
+                ['boolean', ['feature-state', 'active'], false],
+                getFillColor(source, 'active'),
                 ['boolean', ['feature-state', 'select'], false],
-                source.selectFillColor,
+                getFillColor(source, 'select'),
                 ['boolean', ['feature-state', 'hover'], false],
-                source.hoverFillColor,
-                source.fillColor,
+                getFillColor(source, 'hover'),
+                getFillColor(source, 'default'),
               ],
             },
           },

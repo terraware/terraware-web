@@ -57,14 +57,15 @@ export type MapEntity = {
 export type MapSource = {
   id: string;
   fillColor: string;
-  hoverFillColor: string;
-  selectFillColor: string;
   lineColor: string;
   lineWidth: number;
   entities: MapEntity[];
   isInteractive?: boolean;
   // property name to render as a polygon annotation
   annotation?: MapAnnotation;
+  activeFillColor?: string;
+  hoverFillColor?: string;
+  selectFillColor?: string;
 };
 
 export type MapBoundingBox = {
