@@ -47,6 +47,7 @@ export default function PlantingSiteDetails(props: PlantingSiteDetailsProps): JS
   const [plantsBySpecies, setPlantsBySpecies] = useState<{ [key: string]: number }>();
   const [zonesWithPlants, setZonesWithPlants] = useState<PlantingSiteZone[]>();
   const [hasZones, setHasZones] = useState<boolean>(false);
+  const [selectedPlotId, setSelectedPlotId] = useState<number | undefined>();
 
   const widgetCardStyle = {
     backgroundColor: theme.palette.TwClrBg,
@@ -134,7 +135,12 @@ export default function PlantingSiteDetails(props: PlantingSiteDetailsProps): JS
   return (
     <Grid container display='flex' flexGrow={1}>
       <Grid item xs={isMobile ? 12 : 8} sx={mapCardStyle}>
-        <PlantingSiteDashboardMap plots={plotsWithPlants} siteId={plantingSite?.id} organization={organization} />
+        <PlantingSiteDashboardMap
+          plots={plotsWithPlants}
+          siteId={plantingSite?.id}
+          organization={organization}
+          selectedPlotId={selectedPlotId}
+        />
       </Grid>
       <Grid item xs={isMobile ? 12 : 4} sx={{ paddingLeft: isMobile ? 0 : 3 }}>
         <Box sx={{ ...widgetCardStyle, minHeight: '160px' }}>
@@ -146,10 +152,10 @@ export default function PlantingSiteDetails(props: PlantingSiteDetailsProps): JS
         {(!plantingSite || hasZones) && (
           <Box sx={{ ...widgetCardStyle, minHeight: '240px' }}>
             <SpeciesByPlotChart
-              siteId={plantingSite?.id}
               zones={zonesWithPlants}
               plantsDashboardPreferences={plantsDashboardPreferences}
               setPlantsDashboardPreferences={setPlantsDashboardPreferences}
+              setSelectedPlotId={(id?: number) => setSelectedPlotId(id)}
             />
           </Box>
         )}

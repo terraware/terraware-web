@@ -146,7 +146,9 @@ export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Elemen
         <PlantingSiteDetails
           plantingSite={selectedPlantingSite}
           plantsDashboardPreferences={plantsDashboardPreferences}
-          setPlantsDashboardPreferences={setPlantsDashboardPreferences}
+          setPlantsDashboardPreferences={(newPreferences) => {
+            setPlantsDashboardPreferences((oldPreferences) => ({ ...oldPreferences, ...newPreferences }));
+          }}
           organization={organization}
         />
       </Box>

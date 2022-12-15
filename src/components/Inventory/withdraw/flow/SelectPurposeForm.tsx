@@ -126,6 +126,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
 
   const onChangePlantingZone = (value: any) => {
     setSelectedZone(value);
+    setSelectedPlot(undefined);
     setZoneId(value?.id);
     updateField('plotId', undefined); // clear plot id when there's a new planting zone id
   };
@@ -475,7 +476,6 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                   />
                 </Grid>
                 <PlotSelector
-                  siteId={localRecord.plantingSiteId}
                   zones={zones}
                   onZoneSelected={onChangePlantingZone}
                   onPlotSelected={onChangePlot}

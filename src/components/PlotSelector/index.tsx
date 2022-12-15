@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Grid, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Autocomplete } from '@terraware/web-components';
@@ -31,50 +31,31 @@ export type PlotSelectorProps = {
   zoneError?: string;
   plotError?: string;
   horizontalLayout?: boolean;
-  siteId?: string | number | undefined;
   selectedPlot?: PlotInfo;
   selectedZone?: ZoneInfo;
 };
 
 export default function PlotSelector(props: PlotSelectorProps): JSX.Element {
-  const {
-    zones,
-    onZoneSelected,
-    onPlotSelected,
-    zoneError,
-    plotError,
-    horizontalLayout,
-    siteId,
-    selectedPlot,
-    selectedZone,
-  } = props;
+  const { zones, onZoneSelected, onPlotSelected, zoneError, plotError, horizontalLayout, selectedPlot, selectedZone } =
+    props;
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const classes = useStyles();
 
-  const [siteKey, setSiteKey] = useState<string | number | undefined>();
-
-  const zoneToDropdownItem = (zone?: ZoneInfo) => (zone ? { label: zone.name, value: zone.id } : undefined);
-  const plotToDropdownItem = (plot?: PlotInfo) => (plot ? { label: plot.fullName, value: plot.id } : undefined);
+  const zoneToDropdownItem = (zone?: ZoneInfo) =>
+    zone ? { label: zone.name, value: zone.id } : { label: ' ', value: '' };
+  const plotToDropdownItem = (plot?: PlotInfo) =>
+    plot ? { label: plot.fullName, value: plot.id } : { label: ' ', value: '' };
 
   const onChangeZone = (zone: any) => {
     const foundZone = zones.find((zoneItem) => zoneItem.id.toString() === zone?.value?.toString());
-    onPlotSelected(undefined);
-    if (foundZone) {
-      onZoneSelected(foundZone);
-    }
+    onZoneSelected(foundZone);
   };
 
   const onChangePlot = (plot: any) => {
     const foundPlot = selectedZone?.plots?.find((plotItem) => plotItem.id.toString() === plot?.value?.toString());
     onPlotSelected(foundPlot);
   };
-
-  useEffect(() => {
-    if (siteKey !== siteId) {
-      setSiteKey(siteId);
-    }
-  }, [siteId, siteKey]);
 
   const gridSize = () => (isMobile ? 12 : 6);
 
@@ -118,7 +99,6 @@ export default function PlotSelector(props: PlotSelectorProps): JSX.Element {
       >
         {horizontalLayout && horizontalLabel(strings.ZONE)}
         <Autocomplete
-          key={siteKey}
           id='zone'
           placeholder={strings.SELECT}
           label={horizontalLayout ? '' : strings.ZONE}
@@ -135,7 +115,6 @@ export default function PlotSelector(props: PlotSelectorProps): JSX.Element {
       <Grid xs={gridSize()} margin={theme.spacing(2, 0, 0)} sx={horizontalLayout ? horizontalStyle : {}}>
         {horizontalLayout && horizontalLabel(strings.PLOT)}
         <Autocomplete
-          key={selectedZone?.id}
           id='plot'
           placeholder={strings.SELECT}
           label={horizontalLayout ? '' : strings.PLOT}
