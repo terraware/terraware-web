@@ -82,7 +82,7 @@ export default function Map(props: MapProps): JSX.Element {
       return;
     }
     // clear previous
-    if (id !== featureVar[sourceId]) {
+    if (featureVar[sourceId] && id !== featureVar[sourceId]) {
       map.setFeatureState({ source: sourceId, id: featureVar[sourceId] }, { [property]: false });
     }
     // set new
