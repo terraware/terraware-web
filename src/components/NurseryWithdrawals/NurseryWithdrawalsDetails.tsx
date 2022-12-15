@@ -50,11 +50,13 @@ export interface WithdrawalSummary {
 type NurseryWithdrawalsDetailsProps = {
   organization: ServerOrganization;
   species: Species[];
+  plotNames: Record<number, string>;
 };
 
 export default function NurseryWithdrawalsDetails({
   organization,
   species,
+  plotNames,
 }: NurseryWithdrawalsDetailsProps): JSX.Element {
   const classes = useStyles();
   const theme = useTheme();
@@ -207,6 +209,7 @@ export default function NurseryWithdrawalsDetails({
               <WithdrawalTabPanelContent
                 organization={organization}
                 species={species}
+                plotNames={plotNames}
                 withdrawal={withdrawal}
                 withdrawalSummary={withdrawalSummary}
                 delivery={delivery}
@@ -214,7 +217,15 @@ export default function NurseryWithdrawalsDetails({
               />
             </TabPanel>
             <TabPanel value='reassignment' sx={contentPanelProps}>
-              <ReassignmentTabPanelContent />
+              <ReassignmentTabPanelContent
+                organization={organization}
+                species={species}
+                plotNames={plotNames}
+                withdrawal={withdrawal}
+                withdrawalSummary={withdrawalSummary}
+                delivery={delivery}
+                batches={batches}
+              />
             </TabPanel>
           </TabContext>
         )}
