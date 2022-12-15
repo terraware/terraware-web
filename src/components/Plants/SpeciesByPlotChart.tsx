@@ -6,7 +6,6 @@ import DashboardChart from './DashboardChart';
 import PlotSelector, { PlotInfo, ZoneInfo } from 'src/components/PlotSelector';
 
 export interface Props {
-  siteId?: string | number | undefined;
   zones?: PlantingSiteZone[];
   plantsDashboardPreferences?: { [key: string]: unknown };
   setPlantsDashboardPreferences: React.Dispatch<React.SetStateAction<{ [key: string]: unknown } | undefined>>;
@@ -14,7 +13,7 @@ export interface Props {
 }
 
 export default function SpeciesByPlotChart(props: Props): JSX.Element {
-  const { siteId, zones, plantsDashboardPreferences, setPlantsDashboardPreferences, setSelectedPlotId } = props;
+  const { zones, plantsDashboardPreferences, setPlantsDashboardPreferences, setSelectedPlotId } = props;
   const [selectedPlot, setSelectedPlot] = useState<PlantingSitePlot>();
   const [selectedZone, setSelectedZone] = useState<PlantingSiteZone>();
   const [labels, setLabels] = useState<string[]>();
@@ -86,7 +85,6 @@ export default function SpeciesByPlotChart(props: Props): JSX.Element {
         {zones && (
           <PlotSelector
             zones={zones as ZoneInfo[]}
-            siteId={siteId}
             onZoneSelected={onChangeZone}
             onPlotSelected={onChangePlot}
             horizontalLayout={true}

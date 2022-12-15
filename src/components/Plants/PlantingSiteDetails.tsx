@@ -152,7 +152,6 @@ export default function PlantingSiteDetails(props: PlantingSiteDetailsProps): JS
         {(!plantingSite || hasZones) && (
           <Box sx={{ ...widgetCardStyle, minHeight: '240px' }}>
             <SpeciesByPlotChart
-              siteId={plantingSite?.id}
               zones={zonesWithPlants}
               plantsDashboardPreferences={plantsDashboardPreferences}
               setPlantsDashboardPreferences={setPlantsDashboardPreferences}

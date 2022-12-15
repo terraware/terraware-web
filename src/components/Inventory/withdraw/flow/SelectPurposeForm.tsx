@@ -476,7 +476,6 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                   />
                 </Grid>
                 <PlotSelector
-                  siteId={localRecord.plantingSiteId}
                   zones={zones}
                   onZoneSelected={onChangePlantingZone}
                   onPlotSelected={onChangePlot}
