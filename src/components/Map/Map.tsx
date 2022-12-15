@@ -194,6 +194,7 @@ export default function Map(props: MapProps): JSX.Element {
         onClick={onMapClick}
         style={style}
         attributionControl={false}
+        onRender={(event) => event.target.resize()}
       >
         {mapSources}
         <NavigationControl showCompass={false} style={navControlStyle} position='bottom-right' />
