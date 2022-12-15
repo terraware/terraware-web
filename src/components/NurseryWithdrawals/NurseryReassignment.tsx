@@ -27,7 +27,6 @@ const columns: TableColumnType[] = [
   { key: 'zoneName', name: strings.ZONE, type: 'string' },
   { key: 'originalPlot', name: strings.ORIGINAL_PLOT, type: 'string' },
   { key: 'newPlot', name: strings.NEW_PLOT, type: 'string' },
-  { key: 'numPlants', name: strings.QUANTITY, type: 'number' },
   { key: 'reassign', name: strings.REASSIGN, type: 'string' },
   { key: 'notes', name: strings.NOTES, type: 'string' },
 ];

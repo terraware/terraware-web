@@ -281,6 +281,7 @@ export default function Map(props: MapProps): JSX.Element {
         attributionControl={false}
         onLoad={onLoad}
         ref={mapRef}
+        onRender={(event) => event.target.resize()}
       >
         {mapSources}
         <NavigationControl showCompass={false} style={navControlStyle} position='bottom-right' />

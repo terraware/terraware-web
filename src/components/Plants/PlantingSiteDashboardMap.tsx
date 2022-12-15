@@ -69,7 +69,7 @@ export default function PlantingSiteDashboardMap(props: PlantingSiteDashboardMap
           style={MAP_STYLE}
           contextRenderer={contextRenderer}
         />
-      ) : isMobile ? null : (
+      ) : isMobile || !plots ? null : (
         <GenericMap
           style={MAP_STYLE}
           bannerMessage={contributor ? strings.GENERIC_MAP_MESSAGE_CONTRIBUTOR : strings.GENERIC_MAP_MESSAGE_ADMIN}

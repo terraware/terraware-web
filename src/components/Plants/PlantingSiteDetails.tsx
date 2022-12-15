@@ -58,6 +58,7 @@ export default function PlantingSiteDetails(props: PlantingSiteDetailsProps): JS
   const mapCardStyle = {
     marginBottom: 3,
     borderRadius: '24px',
+    flexGrow: 1,
   };
 
   useEffect(() => {

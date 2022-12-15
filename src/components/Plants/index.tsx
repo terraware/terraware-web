@@ -141,7 +141,7 @@ export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Elemen
       <Grid item xs={12}>
         <PageSnackbar />
       </Grid>
-      <Box ref={contentRef}>
+      <Box ref={contentRef} display='flex' flexGrow={1}>
         <PlantingSiteDetails
           plantingSite={selectedPlantingSite}
           updatePlotPreferences={(plotId) =>
