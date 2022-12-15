@@ -27,51 +27,65 @@ export type ZoneInfo = {
 export type PlotSelectorProps = {
   zones: ZoneInfo[];
   onPlotSelected: (plot?: PlotInfo) => void;
-  onZoneSelected?: (zone?: ZoneInfo) => void;
+  onZoneSelected: (zone?: ZoneInfo) => void;
   zoneError?: string;
   plotError?: string;
   horizontalLayout?: boolean;
   siteId?: string | number | undefined;
+  selectedPlot?: PlotInfo;
+  selectedZone?: ZoneInfo;
 };
 
 export default function PlotSelector(props: PlotSelectorProps): JSX.Element {
-  const { zones, onZoneSelected, onPlotSelected, zoneError, plotError, horizontalLayout, siteId } = props;
+  const {
+    zones,
+    onZoneSelected,
+    onPlotSelected,
+    zoneError,
+    plotError,
+    horizontalLayout,
+    siteId,
+    selectedPlot,
+    selectedZone,
+  } = props;
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const classes = useStyles();
 
   const [siteKey, setSiteKey] = useState<string | number | undefined>();
-  const [selectedZone, setSelectedZone] = useState<ZoneInfo>();
-  const [selectedPlot, setSelectedPlot] = useState<PlotInfo>();
 
   const zoneToDropdownItem = (zone?: ZoneInfo) => (zone ? { label: zone.name, value: zone.id } : undefined);
   const plotToDropdownItem = (plot?: PlotInfo) => (plot ? { label: plot.fullName, value: plot.id } : undefined);
 
   const onChangeZone = (zone: any) => {
     const foundZone = zones.find((zoneItem) => zoneItem.id.toString() === zone?.value?.toString());
-    setSelectedPlot(undefined);
-    setSelectedZone(foundZone);
     onPlotSelected(undefined);
-    if (onZoneSelected) {
+    if (foundZone) {
       onZoneSelected(foundZone);
     }
   };
 
   const onChangePlot = (plot: any) => {
     const foundPlot = selectedZone?.plots?.find((plotItem) => plotItem.id.toString() === plot?.value?.toString());
-    setSelectedPlot(foundPlot || undefined);
     onPlotSelected(foundPlot);
   };
 
   useEffect(() => {
-    setSelectedZone(undefined);
-    setSelectedPlot(undefined);
-    setSiteKey(siteId);
-  }, [siteId]);
+    if (siteKey !== siteId) {
+      setSiteKey(siteId);
+      onZoneSelected(undefined);
+      onPlotSelected(undefined);
+    }
+  }, [siteId, onZoneSelected, onPlotSelected, siteKey]);
 
   const gridSize = () => (isMobile ? 12 : 6);
 
-  const isEqual = (optionA: any, optionB: any) => optionA.value.toString() === optionB.value.toString();
+  const isEqual = (optionA: any, optionB: any) => {
+    if (optionA?.value && optionB.value) {
+      return optionA.value === optionB.value;
+    }
+    return false;
+  };
 
   const horizontalLabel = (text: string) => (
     <Typography

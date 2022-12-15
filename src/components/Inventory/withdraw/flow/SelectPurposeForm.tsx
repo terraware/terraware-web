@@ -26,7 +26,7 @@ import { PlantingSite } from 'src/api/types/tracking';
 import useSnackbar from 'src/utils/useSnackbar';
 import FormBottomBar from 'src/components/common/FormBottomBar';
 import ErrorMessage from 'src/components/common/ErrorMessage';
-import PlotSelector from 'src/components/PlotSelector';
+import PlotSelector, { PlotInfo, ZoneInfo } from 'src/components/PlotSelector';
 
 const useStyles = makeStyles((theme: Theme) => ({
   withdrawnQuantity: {
@@ -77,6 +77,8 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const classes = useStyles();
+  const [selectedPlot, setSelectedPlot] = useState<PlotInfo>();
+  const [selectedZone, setSelectedZone] = useState<ZoneInfo>();
 
   const updateField = (field: keyof NurseryWithdrawalRequest, value: any) => {
     setLocalRecord((prev) => ({
@@ -121,11 +123,13 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   };
 
   const onChangePlantingZone = (value: any) => {
+    setSelectedZone(value);
     setZoneId(value?.id);
     updateField('plotId', undefined); // clear plot id when there's a new planting zone id
   };
 
   const onChangePlot = (value: any) => {
+    setSelectedPlot(value);
     updateField('plotId', value?.id);
   };
 
@@ -475,6 +479,8 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                   onPlotSelected={onChangePlot}
                   zoneError={fieldsErrors.zoneId}
                   plotError={fieldsErrors.plotId}
+                  selectedPlot={selectedPlot}
+                  selectedZone={selectedZone}
                 />
               </>
             )}

@@ -32,6 +32,12 @@ export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Elemen
   const contentRef = useRef(null);
 
   useEffect(() => {
+    if (plantsDashboardPreferences) {
+      updatePreferences('lastDashboardPlantingSite', plantsDashboardPreferences, organization.id);
+    }
+  }, [plantsDashboardPreferences, organization.id]);
+
+  useEffect(() => {
     const populatePlantingSites = async () => {
       const serverResponse = await listPlantingSites(organization.id);
       if (serverResponse.requestSucceeded) {
@@ -95,11 +101,6 @@ export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Elemen
     );
   }
 
-  const updatePlantsDashboardPreferences = (data: { [key: string]: unknown }) => {
-    setPlantsDashboardPreferences(data);
-    updatePreferences('lastDashboardPlantingSite', data, organization.id);
-  };
-
   return (
     <TfMain>
       <PageHeaderWrapper nextElement={contentRef.current}>
@@ -141,13 +142,11 @@ export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Elemen
       <Grid item xs={12}>
         <PageSnackbar />
       </Grid>
-      <Box ref={contentRef} display='flex' flexGrow={1}>
+      <Box ref={contentRef}>
         <PlantingSiteDetails
           plantingSite={selectedPlantingSite}
-          updatePlotPreferences={(plotId) =>
-            updatePlantsDashboardPreferences({ ...plantsDashboardPreferences, plotId })
-          }
-          lastPlot={plantsDashboardPreferences?.plotId}
+          plantsDashboardPreferences={plantsDashboardPreferences}
+          setPlantsDashboardPreferences={setPlantsDashboardPreferences}
           organization={organization}
         />
       </Box>
