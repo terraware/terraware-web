@@ -15,7 +15,7 @@ export default function TitleDescription({ title, description, style }: TitleDes
         {title}
       </Typography>
       {description && (
-        <Typography fontSize='16px' fontWeight={400} lineHeight='24px' marginTop={1}>
+        <Typography fontSize='14px' fontWeight={400} lineHeight='24px' marginTop={1}>
           {description}
         </Typography>
       )}
