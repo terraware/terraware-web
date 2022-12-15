@@ -57,6 +57,8 @@ export type MapEntity = {
 export type MapSource = {
   id: string;
   fillColor: string;
+  hoverFillColor: string;
+  selectFillColor: string;
   lineColor: string;
   lineWidth: number;
   entities: MapEntity[];

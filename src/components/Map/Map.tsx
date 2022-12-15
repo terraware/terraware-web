@@ -24,6 +24,7 @@ type PopupInfo = {
   lng: number;
   lat: number;
   properties: any;
+  sourceId: string;
 };
 
 export type MapProps = {
@@ -44,9 +45,9 @@ export default function Map(props: MapProps): JSX.Element {
   const [geoData, setGeoData] = useState();
   const [layerIds, setLayerIds] = useState<string[]>([]);
   const [popupInfo, setPopupInfo] = useState<PopupInfo | null>(null);
-  const [hoveredStateId, setHoveredStateId] = useState();
-  const [clickedStateId, setClickedStateId] = useState();
   const mapRef = useRef(null);
+  const hoverStateId: { [key: string]: number | undefined } = useMemo(() => ({}), []);
+  const selectStateId: { [key: string]: number | undefined } = useMemo(() => ({}), []);
 
   const onMapError = useCallback(
     (event: any) => {
@@ -61,39 +62,62 @@ export default function Map(props: MapProps): JSX.Element {
     [onTokenExpired]
   );
 
-  const onMapClick = useCallback((event: any) => {
-    const { lat, lng } = event.lngLat;
-    if (event?.features[0]?.properties) {
-      const { properties } = event.features[0];
-      setPopupInfo({
-        lng,
-        lat,
-        properties,
-      });
-      setClickedStateId(properties.id);
-    } else {
-      setClickedStateId(undefined);
+  const updateFeatureState = useCallback((featureVar, property, sourceId: string, id?: number) => {
+    const map: any = mapRef && mapRef.current;
+    if (!map) {
+      return;
     }
+    // clear previous
+    if (featureVar[sourceId]) {
+      map.setFeatureState({ source: sourceId, id: featureVar[sourceId] }, { [property]: false });
+    }
+    // set new
+    if (id) {
+      map.setFeatureState({ source: sourceId, id }, { [property]: true });
+    }
+    featureVar[sourceId] = id;
   }, []);
+
+  const onMapClick = useCallback(
+    (event: any) => {
+      const { lat, lng } = event.lngLat;
+      if (event?.features[0]?.properties) {
+        const { id, properties, layer } = event.features[0];
+        const sourceId = layer.id.replace(/-fill$/, '');
+        setPopupInfo({
+          lng,
+          lat,
+          properties,
+          sourceId,
+        });
+        updateFeatureState(selectStateId, 'select', sourceId, id);
+      }
+    },
+    [updateFeatureState, selectStateId]
+  );
 
   const onLoad = () => {
     const map: any = mapRef && mapRef.current;
     if (!map) {
       return;
     }
+    Object.keys(hoverStateId).forEach((key) => delete hoverStateId[key]);
+    Object.keys(selectStateId).forEach((key) => delete selectStateId[key]);
+
     const { sources } = options;
     sources
-      .filter(source => source.isInteractive)
-      .forEach(source => {
-        map.on('mousemove', `${source.id}-fill`, (e: any) => {
+      .filter((source) => source.isInteractive)
+      .forEach((source) => {
+        const layerId = `${source.id}-fill`;
+        map.on('mousemove', layerId, (e: any) => {
           if (!e.features.length || !e.features[0].properties) {
-            setHoveredStateId(undefined);
             return;
           }
-          setHoveredStateId(e.features[0].properties.id);
+          const newId = e.features[0].id;
+          updateFeatureState(hoverStateId, 'hover', source.id, newId);
         });
-        map.on('mouseleave', `${source.id}-fill`, (e: any) => {
-          setHoveredStateId(undefined);
+        map.on('mouseleave', `${source.id}-fill`, () => {
+          updateFeatureState(hoverStateId, 'hover', source.id);
         });
       });
   };
@@ -143,6 +167,7 @@ export default function Map(props: MapProps): JSX.Element {
           .flatMap((f) => f);
 
         return {
+          id: source.id,
           isInteractive: source.isInteractive,
           data: {
             type: 'FeatureCollection',
@@ -152,7 +177,18 @@ export default function Map(props: MapProps): JSX.Element {
             id: `${source.id}-fill`,
             type: 'fill',
             paint: {
-              'fill-color': source.fillColor,
+              'fill-color': [
+                // Use a case-expression to decide which color to use for fill
+                // see https://docs.mapbox.com/mapbox-gl-js/style-spec/expressions/#case
+                // and, https://docs.mapbox.com/mapbox-gl-js/api/map/#map#setfeaturestate
+                // if selected, use select color, else if hover, user hover color, else use default color
+                'case',
+                ['boolean', ['feature-state', 'select'], false],
+                source.selectFillColor,
+                ['boolean', ['feature-state', 'hover'], false],
+                source.hoverFillColor,
+                source.fillColor,
+              ],
             },
           },
           layerOutline: {
@@ -193,7 +229,7 @@ export default function Map(props: MapProps): JSX.Element {
       return null;
     }
     const sources = (geoData as any[]).map((geo: any, index) => (
-      <Source type='geojson' key={index} data={geo.data}>
+      <Source type='geojson' key={index} data={geo.data} id={geo.id}>
         {geo.textAnnotation && <Layer {...geo.textAnnotation} />}
         {geo.layerOutline && <Layer {...geo.layerOutline} />}
         {geo.layer && <Layer {...geo.layer} />}
@@ -236,7 +272,7 @@ export default function Map(props: MapProps): JSX.Element {
             latitude={Number(popupInfo.lat)}
             onClose={() => {
               setPopupInfo(null);
-              setClickedStateId(undefined);
+              updateFeatureState(selectStateId, 'select', popupInfo.sourceId);
             }}
             style={popupRenderer.style}
             className={popupRenderer.className}
