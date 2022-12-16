@@ -110,7 +110,7 @@ export default function NurseryWithdrawalsDetails({
           plotNames: withdrawalSummaryRecord.plotNames as string,
           scientificNames: withdrawalSummaryRecord.speciesScientificNames as string[],
           totalWithdrawn: Number(withdrawalSummaryRecord.totalWithdrawn),
-          hasReassignments: Boolean(withdrawalSummaryRecord.hasReassignments),
+          hasReassignments: withdrawalSummaryRecord.hasReassignments === 'true',
         });
       }
     };
@@ -140,6 +140,14 @@ export default function NurseryWithdrawalsDetails({
   };
 
   const hasPlots = delivery?.plantings?.some((planting) => planting.plotId) ?? false;
+
+  const handleReassign = () => {
+    if (delivery) {
+      history.push({
+        pathname: APP_PATHS.NURSERY_REASSIGNMENT.replace(':deliveryId', delivery.id.toString()),
+      });
+    }
+  };
 
   const handleTabChange = (newValue: string) => {
     query.set('tab', newValue);
@@ -171,7 +179,7 @@ export default function NurseryWithdrawalsDetails({
               <Button
                 size='medium'
                 priority='secondary'
-                onClick={() => undefined}
+                onClick={handleReassign}
                 label={strings.REASSIGN}
                 disabled={withdrawalSummary?.hasReassignments}
               />
