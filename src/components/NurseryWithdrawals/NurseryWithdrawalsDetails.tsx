@@ -137,6 +137,8 @@ export default function NurseryWithdrawalsDetails({
     borderRadius: '32px',
     backgroundColor: theme.palette.TwClrBg,
     padding: theme.spacing(3),
+    // needed to fit in mobile view
+    minWidth: 'fit-content',
   };
 
   const hasPlots = delivery?.plantings?.some((planting) => planting.plotId) ?? false;
