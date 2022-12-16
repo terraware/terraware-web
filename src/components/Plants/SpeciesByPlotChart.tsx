@@ -77,6 +77,11 @@ export default function SpeciesByPlotChart(props: Props): JSX.Element {
       return;
     }
 
+    if (selectedZone && zones.some((zoneInfo) => zoneInfo.id.toString() === selectedZone.id.toString())) {
+      // this site was already processed, we got here because the preferences were updated
+      return;
+    }
+
     const lastZone = plantsDashboardPreferences?.zoneId as string;
     const zone = zones.find((z) => z.id.toString() === lastZone?.toString());
     const zoneToBeSelected = zone || zones[0];
@@ -86,7 +91,7 @@ export default function SpeciesByPlotChart(props: Props): JSX.Element {
     const plots = zoneToBeSelected.plots;
     const plot = plots.find((p) => p.id.toString() === lastPlot?.toString());
     setSelectedPlot(plot || plots[0]);
-  }, [plantsDashboardPreferences, zones]);
+  }, [plantsDashboardPreferences, zones, selectedZone]);
 
   return (
     <>
