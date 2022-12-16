@@ -62,6 +62,7 @@ export default function Photos({ withdrawalId }: PhotosSectionProps): JSX.Elemen
             marginTop={theme.spacing(2)}
             maxWidth='500px'
             overflow='hidden'
+            sx={{ cursor: 'pointer' }}
           >
             <img
               src={`${photoUrl}?maxHeight=250`}
