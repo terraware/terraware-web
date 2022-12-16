@@ -10,7 +10,7 @@ const columns: TableColumnType[] = [
   { key: 'quantity', name: strings.QUANTITY, type: 'string' },
 ];
 
-type SpeciesTableSectionProps = {
+type OutplantWithdrawalTableProps = {
   species: Species[];
   plotNames: Record<number, string>;
   delivery?: Delivery;
@@ -20,7 +20,7 @@ export default function OutplantWithdrawalTable({
   species,
   plotNames,
   delivery,
-}: SpeciesTableSectionProps): JSX.Element {
+}: OutplantWithdrawalTableProps): JSX.Element {
   const [rowData, setRowData] = useState<{ [p: string]: unknown }[]>([]);
 
   useEffect(() => {
@@ -33,10 +33,10 @@ export default function OutplantWithdrawalTable({
     const speciesPlotMap: Record<number, Record<number, number>> = {};
     const rows: { [p: string]: unknown }[] = [];
     for (const sp of speciesList) {
-      // for each species add the number of plants in each plot
+      // for each species add the number of plants in each plot for delivery type plantings
       speciesPlotMap[sp] = {};
       delivery?.plantings
-        ?.filter((pl) => pl.speciesId === sp)
+        ?.filter((pl) => pl.speciesId === sp && pl.type === 'Delivery')
         .forEach((pl) => {
           const plot = pl.plotId ?? -1;
           if (!speciesPlotMap[sp][plot]) {
@@ -58,7 +58,7 @@ export default function OutplantWithdrawalTable({
     }
 
     setRowData(rows);
-  }, [delivery, species]);
+  }, [delivery, species, plotNames]);
 
-  return <Table id='withdrawal-details-species' columns={columns} rows={rowData} orderBy={'name'} />;
+  return <Table id='outplant-withdrawal-table' columns={columns} rows={rowData} orderBy={'name'} />;
 }
